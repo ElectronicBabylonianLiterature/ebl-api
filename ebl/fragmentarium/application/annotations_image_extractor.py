@@ -87,7 +87,7 @@ class AnnotationImageExtractor:
     def _(self, line_number: LineNumber, number: int):
         return number == line_number.number
 
-    @_is_matching_number.register(LineNumberRange)
+    @_is_matching_number.register(LineNumberRange)  # pyre-ignore[56]
     def _(self, line_number: LineNumberRange, number: int):
         return line_number.start.number <= number <= line_number.end.number
 
