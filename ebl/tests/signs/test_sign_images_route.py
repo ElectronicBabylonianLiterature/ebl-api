@@ -28,7 +28,7 @@ def test_signs_get(
         AnnotationsFactory.build(fragment_number="K.2", annotations=[annotation])
     )
 
-    result = client.simulate_get(f"/signs/signName/images")
+    result = client.simulate_get('/signs/signName/images')
 
     assert len(result.json) > 0
     result_json = result.json[0]
