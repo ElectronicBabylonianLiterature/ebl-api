@@ -1,4 +1,4 @@
-from typing import List, Sequence, Dict
+from typing import List, Sequence, Dict, Union, Tuple
 
 import pydash
 import pymongo
@@ -265,6 +265,100 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> Dict[str, MuseumNumber]:
+
+        def retrieve_all_sorted_by_prefix(prefix: Union[str, Dict[str, str]]) -> Dict:
+            return self._fragments.aggregate(
+                [
+                    {"$project": {"_id": 0, "museumNumber": 1}},
+                    {"$match": {"museumNumber.prefix": prefix}},
+                ]
+            )
+
+        def find_prev_and_next(cursor: Dict, museum_number: MuseumNumber) -> Tuple[Union[MuseumNumber, None], Union[MuseumNumber, None]]:
+            current = None
+            for cursor_elem in cursor:
+                cursor_elem =
+
+
+
+        all_same_prefix = retrieve_all_sorted_by_prefix(museum_number.prefix)
+        length = len(all_museum_number_ordered)
+        index = pydash.find_index(
+            all_museum_number_ordered, lambda x: str(x) == str(museum_number)
+        )
+        print(index)
+        print(all_museum_number_ordered[index])
+        print(isinstance(museum_number, MuseumNumber))
+        print(museum_number)
+        print(len(all_museum_number_ordered))
+        if index != -1:
+            return {
+                "next": all_museum_number_ordered[index + 1]
+                if index < length - 1
+                else all_museum_number_ordered[0],
+                "previous": all_museum_number_ordered[index - 1]
+                if index - 1 >= 0
+                else all_museum_number_ordered[-1],
+            }
+        else:
+            raise NotFoundError("Could not retrieve any fragments")
+
+
+
+
+        all_museum_number_ordered = [
+            *museum_numbers_prefix_order_1,
+            *museum_numbers_numbers,
+            *museum_numbers_prefix_order_2,
+            *museum_numbers_alphabet,
+        ]
+        length = len(all_museum_number_ordered)
+
+        index = pydash.find_index(
+            all_museum_number_ordered, lambda x: str(x) == str(museum_number)
+        )
+        print(index)
+        print(all_museum_number_ordered[index])
+        print(isinstance(museum_number, MuseumNumber))
+        print(museum_number)
+        print(len(all_museum_number_ordered))
+        if index != -1:
+            return {
+                "next": all_museum_number_ordered[index + 1]
+                if index < length - 1
+                else all_museum_number_ordered[0],
+                "previous": all_museum_number_ordered[index - 1]
+                if index - 1 >= 0
+                else all_museum_number_ordered[-1],
+            }
+        else:
+            raise NotFoundError("Could not retrieve any fragments")
+
+
+
+
+
+
+
+
+
+
+            cursor = self._fragments.aggregate(
+                [
+                    {"$project": {"_id": 0, "museumNumber": 1}},
+                    {"$match": {"museumNumber.prefix": {"$regex": "\d*"}}},
+                ]
+            )
+            museum_numbers_numbers = sorted(
+                MuseumNumberSchema(many=True).load(
+                    fragment["museumNumber"] for fragment in cursor
+                )
+            )
+
+
+
+
+
         cursor = self._fragments.aggregate(
             [
                 {"$project": {"_id": 0, "museumNumber": 1}},
@@ -321,33 +415,7 @@ class MongoFragmentRepository(FragmentRepository):
                 fragment["museumNumber"] for fragment in cursor
             )
         )
-        all_museum_number_ordered = [
-            *museum_numbers_prefix_order_1,
-            *museum_numbers_numbers,
-            *museum_numbers_prefix_order_2,
-            *museum_numbers_alphabet,
-        ]
-        length = len(all_museum_number_ordered)
 
-        index = pydash.find_index(
-            all_museum_number_ordered, lambda x: str(x) == str(museum_number)
-        )
-        print(index)
-        print(all_museum_number_ordered[index])
-        print(isinstance(museum_number, MuseumNumber))
-        print(museum_number)
-        print(len(all_museum_number_ordered))
-        if index != -1:
-            return {
-                "next": all_museum_number_ordered[index + 1]
-                if index < length - 1
-                else all_museum_number_ordered[0],
-                "previous": all_museum_number_ordered[index - 1]
-                if index - 1 >= 0
-                else all_museum_number_ordered[-1],
-            }
-        else:
-            raise NotFoundError("Could not retrieve any fragments")
 
     def update_references(self, fragment):
         self._fragments.update_one(
