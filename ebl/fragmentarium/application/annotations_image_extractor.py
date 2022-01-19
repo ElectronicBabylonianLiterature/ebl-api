@@ -65,14 +65,14 @@ class AnnotationImageExtractor:
         )
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
-        bounding_boxes = BoundingBox.from_annotations(
+        bounding_box = BoundingBox.from_annotations(
             image.size[0], image.size[1], [annotation]
         )[0]
         area = (
-            bounding_boxes.top_left_x,
-            bounding_boxes.top_left_y,
-            bounding_boxes.top_left_x + bounding_boxes.width,
-            bounding_boxes.top_left_y + bounding_boxes.height,
+            bounding_box.top_left_x,
+            bounding_box.top_left_y,
+            bounding_box.top_left_x + bounding_box.width,
+            bounding_box.top_left_y + bounding_box.height,
         )
         cropped_image = image.crop(area)
         buf = io.BytesIO()
