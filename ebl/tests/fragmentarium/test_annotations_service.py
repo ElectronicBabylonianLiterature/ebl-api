@@ -3,17 +3,18 @@ from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import AnnotationsFactory
 
 SCHEMA = AnnotationsSchema()
 
 
 def test_generate_annotations(
-    annotations_repository, photo_repository, changelog, when, photo_jpeg
+    annotations_repository, photo_repository, changelog, when
 ):
     fragment_number = MuseumNumber.of("X.0")
 
-    image_file = photo_jpeg
+    image_file = create_test_photo("K.2")
 
     when(photo_repository).query_by_file_name(f"{fragment_number}.jpg").thenReturn(
         image_file

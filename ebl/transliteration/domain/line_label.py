@@ -3,7 +3,9 @@ from typing import Optional
 import attr
 
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
-from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.line_number import (
+    AbstractLineNumber,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)

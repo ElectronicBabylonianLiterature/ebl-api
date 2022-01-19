@@ -1,4 +1,5 @@
-from typing import List
+import re
+from typing import List, Sequence
 
 from marshmallow import EXCLUDE
 from pymongo.database import Database
@@ -41,3 +42,24 @@ class MongoAnnotationsRepository(AnnotationsRepository):
             {"annotations": {"$exists": True, "$ne": []}}
         )
         return AnnotationsSchema().load(result, unknown=EXCLUDE, many=True)
+
+    def find_by_sign(self, sign: str) -> Sequence[Annotations]:
+        query = {"$regex": re.escape(sign), "$options": "i"}
+        result = self._collection.aggregate(
+            [
+                {"$match": {"annotations.data.signName": query}},
+                {
+                    "$project": {
+                        "fragmentNumber": 1,
+                        "annotations": {
+                            "$filter": {
+                                "input": "$annotations",
+                                "as": "annotation",
+                                "cond": {"$eq": ["$$annotation.data.signName", sign]},
+                            }
+                        },
+                    }
+                },
+            ]
+        )
+        return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)
