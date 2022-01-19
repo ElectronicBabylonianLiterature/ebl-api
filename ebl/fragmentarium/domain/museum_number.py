@@ -23,7 +23,7 @@ def _require_suffix_if_contains_period(
         raise ValueError(f"If {attribute} contains period suffix cannot be empty.")
 
 
-PREFIX_ORER: Mapping[str, int] = {
+PREFIX_ORDER: Mapping[str, int] = {
     "K": 1,
     "Sm": 2,
     "DT": 3,
@@ -64,7 +64,7 @@ class MuseumNumber:
         return (
             NUMBER_PREFIX_ORDER
             if self.prefix.isnumeric()
-            else PREFIX_ORER.get(self.prefix, DEFAULT_PREFIX_ORDER),
+            else PREFIX_ORDER.get(self.prefix, DEFAULT_PREFIX_ORDER),
             int(self.prefix) if self.prefix.isnumeric() else 0,
             self.prefix,
         )

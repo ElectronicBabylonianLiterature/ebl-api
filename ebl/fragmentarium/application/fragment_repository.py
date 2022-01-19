@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Dict
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -76,7 +76,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_next_and_previous_fragment(self, number: MuseumNumber) -> dict:
+    def query_next_and_previous_fragment(self, number: MuseumNumber) -> Dict[str, MuseumNumber]:
         ...
 
     @abstractmethod

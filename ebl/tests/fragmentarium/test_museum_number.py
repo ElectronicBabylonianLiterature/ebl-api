@@ -103,6 +103,10 @@ def test_order_equal() -> None:
     )
 
 
+def test_order():
+    assert bool(MuseumNumber.of("BM.0") < MuseumNumber.of("1841-07-26.63")) == False
+
+
 @pytest.mark.parametrize("prefix", PREFIXES)
 def test_order_prefix(prefix: str) -> None:
     number = "B"
