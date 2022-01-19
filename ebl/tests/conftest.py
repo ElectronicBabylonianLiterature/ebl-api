@@ -2,6 +2,7 @@ import datetime
 import io
 import json
 import uuid
+from pathlib import Path
 from typing import Any, Mapping, Sequence, Union
 
 import attr
@@ -204,7 +205,7 @@ class FakeFile(File):
         self._file.close()
 
     def read(self, size=-1):
-        return self._file.getvalue()
+        return self._file.read(size)
 
 
 class TestFilesRepository(GridFsFileRepository):
@@ -255,20 +256,15 @@ def photo():
 
 
 def create_test_photo(number: Union[MuseumNumber, str]):
-    image = Image.open("ebl/tests/test_image.jpeg")
+    image = Image.open(Path(__file__).parent.resolve() / "test_image.jpeg")
     buf = io.BytesIO()
     image.save(buf, format="JPEG")
     return FakeFile(f"{number}.jpg", buf.getvalue(), {})
 
 
 @pytest.fixture
-def photo_jpeg():
-    return create_test_photo("K.2")
-
-
-@pytest.fixture
-def photo_repository(database, photo, photo_jpeg):
-    return TestFilesRepository(database, "photos", photo, photo_jpeg)
+def photo_repository(database, photo):
+    return TestFilesRepository(database, "photos", photo, create_test_photo("K.2"))
 
 
 @pytest.fixture

@@ -4,6 +4,7 @@ from ebl.fragmentarium.application.annotations_image_extractor import (
     AnnotationImageExtractor,
     CroppedAnnotation,
 )
+from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
@@ -89,7 +90,6 @@ def test_cropped_images_from_sign(
     photo_repository,
     fragment_repository,
     when,
-    photo_jpeg,
     text_with_labels,
 ):
 
@@ -113,7 +113,7 @@ def test_cropped_images_from_sign(
     (
         when(photo_repository)
         .query_by_file_name(f"{annotation.fragment_number}.jpg")
-        .thenReturn(photo_jpeg)
+        .thenReturn(create_test_photo("K.2"))
     )
 
     result = image_extractor.cropped_images_from_sign(sign)
