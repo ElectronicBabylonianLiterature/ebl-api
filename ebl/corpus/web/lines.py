@@ -3,10 +3,12 @@ from typing import Tuple
 import falcon
 from marshmallow import Schema, fields, post_load
 
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiLineSchema
 from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.errors import NotFoundError
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
@@ -35,7 +37,7 @@ class LinesImportSchema(Schema):
 
 
 class LinesResource:
-    def __init__(self, corpus):
+    def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
@@ -58,7 +60,7 @@ class LinesResource:
 
 
 class LinesImportResource:
-    def __init__(self, corpus):
+    def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
     @falcon.before(require_scope, "write:texts")
@@ -78,3 +80,27 @@ class LinesImportResource:
             chapter_id, req.media["atf"], req.context.user
         )
         resp.media = ApiChapterSchema().dump(updated_chapter)
+
+
+class LineResource:
+    def __init__(self, corpus: Corpus):
+        self._corpus = corpus
+
+    @falcon.before(require_scope, "read:texts")
+    def on_get(
+        self,
+        _,
+        resp: falcon.Response,
+        genre: str,
+        category: str,
+        index: str,
+        stage: str,
+        name: str,
+        number: str,
+    ) -> None:
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        chapter = self._corpus.find_chapter(chapter_id)
+        try:
+            resp.media = ApiLineSchema().dump(chapter.lines[int(number)])
+        except (IndexError, ValueError) as error:
+            raise NotFoundError(f"{chapter.id_} line {number} not found.") from error
