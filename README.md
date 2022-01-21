@@ -89,13 +89,14 @@ pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 pipenv run black ebl --check
 pipenv run lint
 pipenv run pyre check
-pipenv run pytest
+pipenv run pytest  
 pipenv run pytest -n auto  # Run tests in parallel.
-pipenv run test            # Run tests with coverage (slow in PyPy).
+pipenv run test            # Run tests in parallel with coverage (slow in PyPy).
 ```
 
 See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
-for more information on parallel tests.
+for more information on parallel tests. To avoid race condition when running
+the tests in parallel run `pipenv run python -m ebl.tests.downloader`.
 
 ## Database
 

@@ -43,6 +43,9 @@ jobs:
         if: success() || steps.install.outcome == 'success'
         run: pipenv run pyre check
 
+      - name: Download
+        run: pipenv run python -m ebl.tests.downloader
+
       - name: Unit Tests
         id: unit_tests
         env:
