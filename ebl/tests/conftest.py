@@ -14,7 +14,6 @@ from falcon import testing
 from falcon_auth import NoneAuthBackend
 from marshmallow import EXCLUDE
 from pymongo_inmemory import MongoClient
-from pymongo_inmemory.downloader import download
 
 import ebl.app
 import ebl.context
@@ -60,8 +59,6 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
-
-download()
 
 
 @pytest.fixture(scope="session")
