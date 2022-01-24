@@ -178,3 +178,7 @@ def test_order_suffix(suffix: str) -> None:
             )
         ),
     )
+
+
+def test_order_123() -> None:
+    assert MuseumNumber.of("BM.1") > MuseumNumber.of("1841-07-26.63")

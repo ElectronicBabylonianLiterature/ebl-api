@@ -59,11 +59,17 @@ class MuseumNumber:
         else:
             return f"{self.prefix}.{self.number}"
 
+    def _prefix_is_numeric(self, prefix: str):
+        prefix_stripped = "".join([char for char in prefix if char.isdigit()])
+        return True if prefix_stripped.isnumeric() else False
+
+
+
     @property
     def _prefix_order(self) -> Tuple[int, int, str]:
         return (
             NUMBER_PREFIX_ORDER
-            if self.prefix.isnumeric()
+            if self._prefix_is_numeric(self.prefix)
             else PREFIX_ORDER.get(self.prefix, DEFAULT_PREFIX_ORDER),
             int(self.prefix) if self.prefix.isnumeric() else 0,
             self.prefix,

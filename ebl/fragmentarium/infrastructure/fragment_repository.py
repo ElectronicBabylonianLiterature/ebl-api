@@ -1,6 +1,8 @@
+import operator
 import re
-from typing import List, Sequence, Dict, Union, Tuple
+from typing import List, Sequence, Dict, Union, Tuple, Optional
 
+import pydash
 import pymongo
 from marshmallow import EXCLUDE
 
@@ -266,71 +268,93 @@ class MongoFragmentRepository(FragmentRepository):
         self, museum_number: MuseumNumber
     ) -> Dict[str, MuseumNumber]:
 
-        def find_prev_and_next(
-            prefix_or_regex: Union[str, Dict[str, str]]
-        ) -> Tuple[Union[MuseumNumber, None], Union[MuseumNumber, None]]:
-            cursor = self._fragments.aggregate(
+        def retrieve_all_museum_number_by_prefix(regex: str):
+            return self._fragments.aggregate(
                 [
                     {"$project": {"_id": 0, "museumNumber": 1}},
-                    {"$match": {"museumNumber.prefix": prefix_or_regex}},
+                    {
+                        "$match": {
+                            "museumNumber.prefix": {"$regex": regex, "$options": "i"}
+                        }
+                    },
                 ]
             )
+
+        def find_adjacent_museum_number_from_list(museum_number: MuseumNumber, cursor, revert_order=False):
+            comp = operator.lt if not revert_order else operator.gt
             current_prev = None
             current_next = None
             for current_cursor in cursor:
-                current_museum_number = MuseumNumberSchema().load(current_cursor["museumNumber"])
-
-                if current_museum_number < museum_number:
+                current_museum_number = MuseumNumberSchema().load(
+                    current_cursor["museumNumber"]
+                )
+                if comp(current_museum_number, museum_number):
                     if not current_prev or current_museum_number > current_prev:
                         current_prev = current_museum_number
-                if museum_number < current_museum_number:
+                if comp(museum_number, current_museum_number):
                     if not current_next or current_museum_number < current_next:
                         current_next = current_museum_number
             return current_prev, current_next
 
+        def find_prev_and_next(museum_number: MuseumNumber, regex: str, revert_order = False):
+            cursor = retrieve_all_museum_number_by_prefix(regex)
+            return find_adjacent_museum_number_from_list(museum_number, cursor, revert_order)
 
         def get_prefix_order_number(prefix: str) -> int:
             for order_elem in ORDER:
-                regex, order_number, query = order_elem
+                regex, order_number = order_elem
                 match = re.match(regex, prefix.lower())
                 if match:
                     return order_number
             raise ValueError("Prefix doesn't match any of the expected Prefixes")
 
+        def get_adjacent_prefix(prefix: str, counter: int) -> str:
+            return ORDER[(get_prefix_order_number(prefix) + counter) % len(ORDER)][0]
 
-        def get_next_and_previous_prefix(prefix: str, counter: int) -> str:
-            return ORDER[(get_prefix_order_number(prefix) + counter) % len(ORDER)][2]
 
         ORDER = [
-            ("^k$", 0, "K"),
-            ("^sm$", 1, "SM"),
-            ("^dt$", 2, "DT"),
-            ("^rm$", 3, "RM"),
-            ("^rm\-ii$", 4, "Rm-II"),
-            (r"^[^a-zA-Z]*$", 5, {"$regex": r"^[^a-zA-Z]*$"}),
-            ("^bm$", 6, "BM"),
-            ("^cbs$", 7, "CBS"),
-            ("^um$", 8, "UM"),
-            ("^n$", 9, "N"),
-            (r"/^[abcdefghijlmopqrstuvwxyz]$/", 10, {"$regex": r"/^[abcdefghijlmopqrstuvwxyz]$/i"}),
+            ("^k$", 0),
+            ("^sm$", 1),
+            ("^dt$", 2),
+            ("^rm$", 3),
+            ("^rm\-ii$", 4),
+            (r"^[^a-z]*$", 5),
+            ("^bm$", 6),
+            ("^cbs$", 7),
+            ("^um$", 8),
+            ("^n$", 9),
+            (r"^[abcdefghijlmopqrstuvwxyz]$", 10),
         ]
         prefix = museum_number.prefix
-        query = ORDER[get_prefix_order_number(prefix)][2]
+        query = ORDER[get_prefix_order_number(prefix)][0]
 
-        prev, next = find_prev_and_next(query)
+        prev, next = find_prev_and_next(museum_number, query)
 
-        if not prev:
-            prev, _ = find_prev_and_next(
-                get_next_and_previous_prefix(prefix, -1)
-            )
-        if not next:
-            _, next = find_prev_and_next(
-                get_next_and_previous_prefix(prefix, 1)
-            )
+        def is_order_reverted(order_number:int, adjacent_order_number:int, prev_or_next:int):
+            if prev_or_next == 1:
+                return True if adjacent_order_number < order_number else False
+            else:
+                return  True if adjacent_order_number > order_number else False
 
-        if not prev or not next:
+
+        def iterate_until_found(
+            adjacent_museum_number: Optional[MuseumNumber], counter: int
+        ) -> MuseumNumber:
+            order_number = get_prefix_order_number(prefix)
+            for i in range(len(ORDER)):
+                if not adjacent_museum_number:
+                    regex_query = get_adjacent_prefix(prefix, (i + 1) * counter)
+                    current_query_order = pydash.find_index(ORDER, lambda x: x[0] == regex_query)
+                    is_reverted = is_order_reverted(order_number, current_query_order, counter)
+                    adjacent_museum_number = find_prev_and_next(museum_number, regex_query, is_reverted)[0 if counter == -1 else 1]
+                else:
+                    return adjacent_museum_number
             raise NotFoundError("Could not retrieve any fragments")
-        return {"previous": prev, "next": next}
+
+        return {
+            "previous": iterate_until_found(prev, -1),
+            "next": iterate_until_found(next, 1),
+        }
 
     def update_references(self, fragment):
         self._fragments.update_one(
