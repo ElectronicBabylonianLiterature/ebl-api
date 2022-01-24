@@ -289,12 +289,14 @@ class MongoFragmentRepository(FragmentRepository):
                 current_museum_number = MuseumNumberSchema().load(
                     current_cursor["museumNumber"]
                 )
-                if comp(current_museum_number, museum_number):
-                    if not current_prev or current_museum_number > current_prev:
-                        current_prev = current_museum_number
-                if comp(museum_number, current_museum_number):
-                    if not current_next or current_museum_number < current_next:
-                        current_next = current_museum_number
+                if comp(current_museum_number, museum_number) and (
+                    not current_prev or current_museum_number > current_prev
+                ):
+                    current_prev = current_museum_number
+                if comp(museum_number, current_museum_number) and (
+                    not current_next or current_museum_number < current_next
+                ):
+                    current_next = current_museum_number
             return current_prev, current_next
 
         def find_prev_and_next(
@@ -308,8 +310,7 @@ class MongoFragmentRepository(FragmentRepository):
         def get_prefix_order_number(prefix: str) -> int:
             for order_elem in ORDER:
                 regex, order_number = order_elem
-                match = re.match(regex, prefix.lower())
-                if match:
+                if match := re.match(regex, prefix.lower()):
                     return order_number
             raise ValueError("Prefix doesn't match any of the expected Prefixes")
 
@@ -338,9 +339,9 @@ class MongoFragmentRepository(FragmentRepository):
             order_number: int, adjacent_order_number: int, prev_or_next: int
         ):
             if prev_or_next == 1:
-                return True if adjacent_order_number < order_number else False
+                return adjacent_order_number < order_number
             else:
-                return True if adjacent_order_number > order_number else False
+                return adjacent_order_number > order_number
 
         def iterate_until_found(
             adjacent_museum_number: Optional[MuseumNumber], counter: int
