@@ -310,7 +310,7 @@ class MongoFragmentRepository(FragmentRepository):
         def get_prefix_order_number(prefix: str) -> int:
             for order_elem in ORDER:
                 regex, order_number = order_elem
-                if match := re.match(regex, prefix.lower()):
+                if re.match(regex, prefix.lower()):
                     return order_number
             raise ValueError("Prefix doesn't match any of the expected Prefixes")
 
