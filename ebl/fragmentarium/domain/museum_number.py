@@ -80,8 +80,7 @@ class MuseumNumber:
     @staticmethod
     def of(source: str) -> "MuseumNumber":
         pattern = re.compile(r"(.+?)\.([^.]+)(?:\.([^.]+))?")
-        match = pattern.fullmatch(source)
-        if match:
+        if match := pattern.fullmatch(source):
             return MuseumNumber(match.group(1), match.group(2), match.group(3) or "")
         else:
             raise ValueError(f"'{source}' is not a valid museum number.")
