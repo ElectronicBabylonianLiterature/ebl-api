@@ -77,7 +77,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_next_and_previous_fragment(
-        self, number: MuseumNumber
+        self, museum_number: MuseumNumber
     ) -> Dict[str, MuseumNumber]:
         ...
 

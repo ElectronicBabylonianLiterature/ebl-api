@@ -1,6 +1,6 @@
 import operator
 import re
-from typing import List, Sequence, Dict, Union, Tuple, Optional
+from typing import List, Sequence, Dict, Optional
 
 import pydash
 import pymongo
@@ -267,7 +267,6 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> Dict[str, MuseumNumber]:
-
         def retrieve_all_museum_number_by_prefix(regex: str):
             return self._fragments.aggregate(
                 [
@@ -280,7 +279,9 @@ class MongoFragmentRepository(FragmentRepository):
                 ]
             )
 
-        def find_adjacent_museum_number_from_list(museum_number: MuseumNumber, cursor, revert_order=False):
+        def find_adjacent_museum_number_from_list(
+            museum_number: MuseumNumber, cursor, revert_order=False
+        ):
             comp = operator.lt if not revert_order else operator.gt
             current_prev = None
             current_next = None
@@ -296,9 +297,13 @@ class MongoFragmentRepository(FragmentRepository):
                         current_next = current_museum_number
             return current_prev, current_next
 
-        def find_prev_and_next(museum_number: MuseumNumber, regex: str, revert_order = False):
+        def find_prev_and_next(
+            museum_number: MuseumNumber, regex: str, revert_order=False
+        ):
             cursor = retrieve_all_museum_number_by_prefix(regex)
-            return find_adjacent_museum_number_from_list(museum_number, cursor, revert_order)
+            return find_adjacent_museum_number_from_list(
+                museum_number, cursor, revert_order
+            )
 
         def get_prefix_order_number(prefix: str) -> int:
             for order_elem in ORDER:
@@ -311,31 +316,31 @@ class MongoFragmentRepository(FragmentRepository):
         def get_adjacent_prefix(prefix: str, counter: int) -> str:
             return ORDER[(get_prefix_order_number(prefix) + counter) % len(ORDER)][0]
 
-
         ORDER = [
             ("^k$", 0),
             ("^sm$", 1),
             ("^dt$", 2),
             ("^rm$", 3),
-            ("^rm\-ii$", 4),
-            (r"^[^a-z]*$", 5),
+            (r"^rm\-ii$", 4),
+            (r"^\d*$", 5),
             ("^bm$", 6),
             ("^cbs$", 7),
             ("^um$", 8),
             ("^n$", 9),
-            (r"^[abcdefghijlmopqrstuvwxyz]$", 10),
+            (r"^[abcdefghijlmopqrstuvwxyz]$|^((?!^\d*$).)*$", 10),
         ]
         prefix = museum_number.prefix
         query = ORDER[get_prefix_order_number(prefix)][0]
 
         prev, next = find_prev_and_next(museum_number, query)
 
-        def is_order_reverted(order_number:int, adjacent_order_number:int, prev_or_next:int):
+        def is_order_reverted(
+            order_number: int, adjacent_order_number: int, prev_or_next: int
+        ):
             if prev_or_next == 1:
                 return True if adjacent_order_number < order_number else False
             else:
-                return  True if adjacent_order_number > order_number else False
-
+                return True if adjacent_order_number > order_number else False
 
         def iterate_until_found(
             adjacent_museum_number: Optional[MuseumNumber], counter: int
@@ -344,9 +349,15 @@ class MongoFragmentRepository(FragmentRepository):
             for i in range(len(ORDER)):
                 if not adjacent_museum_number:
                     regex_query = get_adjacent_prefix(prefix, (i + 1) * counter)
-                    current_query_order = pydash.find_index(ORDER, lambda x: x[0] == regex_query)
-                    is_reverted = is_order_reverted(order_number, current_query_order, counter)
-                    adjacent_museum_number = find_prev_and_next(museum_number, regex_query, is_reverted)[0 if counter == -1 else 1]
+                    current_query_order = pydash.find_index(
+                        ORDER, lambda x: x[0] == regex_query
+                    )
+                    is_reverted = is_order_reverted(
+                        order_number, current_query_order, counter
+                    )
+                    adjacent_museum_number = find_prev_and_next(
+                        museum_number, regex_query, is_reverted
+                    )[0 if counter == -1 else 1]
                 else:
                     return adjacent_museum_number
             raise NotFoundError("Could not retrieve any fragments")
