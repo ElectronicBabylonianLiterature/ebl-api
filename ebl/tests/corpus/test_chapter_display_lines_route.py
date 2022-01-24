@@ -3,7 +3,7 @@ import pytest
 
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.text import Text
-from ebl.corpus.web.chapter_schemas import ApiLineSchema
+from ebl.corpus.web.display_schemas import LineDetailsSchema
 from ebl.tests.corpus.support import create_chapter_url, allow_references
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 
@@ -31,12 +31,14 @@ def test_get(client, text_repository, text, chapter, bibliography, url):
     text_repository.create(text)
     text_repository.create_chapter(chapter)
     allow_references(chapter, bibliography)
+    schema = LineDetailsSchema()
+    schema.context["chapter"] = chapter
 
     get_result = client.simulate_get(f"{url}/0")
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.headers["Access-Control-Allow-Origin"] == "*"
-    assert get_result.json == ApiLineSchema().dump(chapter.lines[0])
+    assert get_result.json == schema.dump(chapter.lines[0])
 
 
 def test_chapter_not_found(client, text_repository, text, chapter, url):
