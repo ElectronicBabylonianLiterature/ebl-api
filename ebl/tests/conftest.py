@@ -392,6 +392,7 @@ def word():
         "roots": ["wb'", "'b'"],
         "pos": ["V"],
         "guideWord": "meaning",
+        "arabicGuideWord": "meaning",
         "oraccWords": [{"lemma": "oracc lemma", "guideWord": "oracc meaning"}],
         "origin": "test",
         "akkadischeGlossareUndIndices": [
