@@ -1,6 +1,6 @@
 import operator
 import re
-from typing import List, Sequence, Dict, Optional
+from typing import List, Sequence, Optional
 
 import pydash
 import pymongo
@@ -14,6 +14,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -266,7 +267,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
-    ) -> Dict[str, MuseumNumber]:
+    ) -> FragmentPagerInfo:
         def retrieve_all_museum_number_by_prefix(regex: str):
             return self._fragments.aggregate(
                 [
@@ -363,10 +364,9 @@ class MongoFragmentRepository(FragmentRepository):
                     return adjacent_museum_number
             raise NotFoundError("Could not retrieve any fragments")
 
-        return {
-            "previous": iterate_until_found(prev, -1),
-            "next": iterate_until_found(next, 1),
-        }
+        return FragmentPagerInfo(
+            iterate_until_found(prev, -1), iterate_until_found(next, 1)
+        )
 
     def update_references(self, fragment):
         self._fragments.update_one(

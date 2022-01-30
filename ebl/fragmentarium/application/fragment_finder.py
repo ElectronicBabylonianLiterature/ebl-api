@@ -1,4 +1,4 @@
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dictionary.application.dictionary import Dictionary
@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -94,7 +95,7 @@ class FragmentFinder:
             folio_name, folio_number, number
         )
 
-    def fragment_pager(self, number: MuseumNumber) -> Dict[str, MuseumNumber]:
+    def fragment_pager(self, number: MuseumNumber) -> FragmentPagerInfo:
         return self._repository.query_next_and_previous_fragment(number)
 
     def find_folio(self, folio: Folio) -> File:
