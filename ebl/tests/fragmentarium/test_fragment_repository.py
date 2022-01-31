@@ -208,7 +208,7 @@ def test_query_next_and_previous_fragment(query, expected, fragment_repository):
         MuseumNumber.of(query)
     )
     assert results.previous == MuseumNumber.of(expected[0])
-    assert results.previous == MuseumNumber.of(expected[1])
+    assert results.next == MuseumNumber.of(expected[1])
 
 
 def test_query_next_and_previous_fragment_exception(fragment_repository):
