@@ -2,40 +2,41 @@ import pytest
 
 from ebl.dispatcher import DispatchError, create_dispatcher
 
-COMMANDS = {
-    frozenset(["a"]): lambda value: f"a_{''.join(value.values())}",
-    frozenset(["b"]): lambda value: f"b_{''.join(value.values())}",
-    frozenset(["a", "b"]): lambda value: f"a_b_{''.join(value.values())}",
-}
+COMMANDS = [lambda a: f"a: {a}", lambda b: f"b: {b}", lambda a, b: f"a: {a}, b: {b}"]
 DISPATCH = create_dispatcher(COMMANDS)
 
 
 @pytest.mark.parametrize(
-    "parameter, results",
+    "parameters, results",
     [
-        ({"a": "value"}, "a_value"),
-        ({"b": "value"}, "b_value"),
-        ({"a": "value1", "b": "value2"}, "a_b_value1value2"),
+        ({"a": "value"}, "a: value"),
+        ({"b": "value"}, "b: value"),
+        ({"a": "value1", "b": "value2"}, "a: value1, b: value2"),
     ],
 )
-def test_valid_params(parameter, results):
-    assert DISPATCH(parameter) == results
+def test_valid_parameters(parameters, results):
+    assert DISPATCH(parameters) == results
 
 
 @pytest.mark.parametrize(
-    "parameters", [{}, {"invalid": "parameter"}, {"a": "a", "b": "b", "c": "c"}]
+    "parameters",
+    [{}, {"invalid": "parameter"}, {"a": "a", "b": "b", "invalid": "parameter"}],
 )
-def test_invalid_params(parameters):
+def test_invalid_parameters(parameters):
     with pytest.raises(DispatchError):
         DISPATCH(parameters)
 
 
+def test_duplicate_parameters():
+    with pytest.raises(DispatchError):
+        create_dispatcher([lambda duplicate: False, lambda duplicate: True])
+
+
 def test_key_error_from_command():
-    parameter = "parameter"
     message = "An error occurred in the command."
 
-    def raise_error(_):
+    def raise_error():
         raise KeyError(message)
 
     with pytest.raises(KeyError, match=message):
-        create_dispatcher({frozenset({parameter}): raise_error})({parameter: "value"})
+        create_dispatcher([raise_error])({})

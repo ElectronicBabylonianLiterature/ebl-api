@@ -12,24 +12,18 @@ from ebl.users.web.require_scope import require_scope
 class SignsSearch:
     def __init__(self, signs: SignRepository):
         self._dispatch = create_dispatcher(
-            {
-                frozenset(
-                    ["listsName", "listsNumber"]
-                ): lambda params: signs.search_by_lists_name(
-                    params["listsName"], params["listsNumber"]
+            [
+                lambda listsName, listsNumber: signs.search_by_lists_name(
+                    listsName, listsNumber
                 ),
-                frozenset(["value", "subIndex"]): lambda params: signs.search_all(
-                    params["value"], params["subIndex"]
+                lambda value, subIndex: signs.search_all(value, subIndex),
+                lambda value, isIncludeHomophones, subIndex: signs.search_include_homophones(
+                    value
                 ),
-                frozenset(
-                    ["value", "isIncludeHomophones", "subIndex"]
-                ): lambda params: signs.search_include_homophones(params["value"]),
-                frozenset(
-                    ["value", "subIndex", "isComposite"]
-                ): lambda params: signs.search_composite_signs(
-                    params["value"], params["subIndex"]
+                lambda value, subIndex, isComposite: signs.search_composite_signs(
+                    value, subIndex
                 ),
-            }
+            ]
         )
 
     @staticmethod

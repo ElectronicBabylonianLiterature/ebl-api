@@ -23,37 +23,31 @@ class FragmentSearch:
         transliteration_query_factory: TransliterationQueryFactory,
     ):
         self._dispatch = create_dispatcher(
-            {
-                frozenset(
-                    ["id", "pages"]
-                ): lambda value: finder.search_references_in_fragment_infos(
-                    *self._validate_pages(**value)
+            [
+                lambda id, pages: finder.search_references_in_fragment_infos(
+                    *self._validate_pages(id, pages)
                 ),
-                frozenset(["number"]): lambda value: finder.search(**value),
-                frozenset(["random"]): lambda _: finder.find_random(),
-                frozenset(["interesting"]): lambda _: finder.find_interesting(),
-                frozenset(["latest"]): lambda _: fragmentarium.find_latest(),
-                frozenset(
-                    ["needsRevision"]
-                ): lambda _: fragmentarium.find_needs_revision(),
-                frozenset(
-                    ["transliteration"]
-                ): lambda value: finder.search_transliteration(
-                    transliteration_query_factory.create(**value)
+                lambda number: finder.search(number),
+                lambda random: finder.find_random(),
+                lambda interesting: finder.find_interesting(),
+                lambda latest: fragmentarium.find_latest(),
+                lambda needsRevision: fragmentarium.find_needs_revision(),
+                lambda transliteration: finder.search_transliteration(
+                    transliteration_query_factory.create(transliteration)
                 ),
-            }
+            ]
         )
 
     @staticmethod
     def _validate_pages(id: str, pages: Union[str, None]) -> Tuple[str, str]:
-        if pages:
-            try:
-                int(pages)
-                return id, pages
-            except ValueError:
-                raise DataError(f'Pages "{pages}" not numeric.')
-        else:
+        if not pages:
             return id, ""
+
+        try:
+            int(pages)
+            return id, pages
+        except ValueError:
+            raise DataError(f'Pages "{pages}" not numeric.')
 
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
