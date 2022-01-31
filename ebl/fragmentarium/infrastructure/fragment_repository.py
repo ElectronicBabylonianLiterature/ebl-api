@@ -1,9 +1,5 @@
-import operator
-import re
-from typing import List, Sequence, Optional, Tuple
+from typing import List, Sequence
 
-import attr
-import pydash
 import pymongo
 from marshmallow import EXCLUDE
 
@@ -20,6 +16,9 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure import collections
+from ebl.fragmentarium.infrastructure.ordering_museum_numbers import (
+    OrderingMuseumNumbers,
+)
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -36,93 +35,6 @@ from ebl.mongo_collection import MongoCollection
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
-
-
-@attr.attrs(auto_attribs=True, frozen=True)
-class OrderingMuseumNumbers:
-    _ORDER = [
-        ("^k$", 0),
-        ("^sm$", 1),
-        ("^dt$", 2),
-        ("^rm$", 3),
-        (r"^rm\-ii$", 4),
-        (r"^\d*$", 5),
-        ("^bm$", 6),
-        ("^cbs$", 7),
-        ("^um$", 8),
-        ("^n$", 9),
-        (r"^[abcdefghijlmopqrstuvwxyz]$|^((?!^\d*$).)*$", 10),
-    ]
-    ORDER_SIZE = len(_ORDER)
-
-    def get_order_element_by_prefix(self, prefix: str) -> Tuple[str, int]:
-        for order_elem in self._ORDER:
-            regex, order_number = order_elem
-            if re.match(regex, prefix.lower()):
-                return regex, order_number
-        raise ValueError("Prefix doesn't match any of the expected Prefixes")
-
-    def get_adjacent_prefix(self, prefix: str, counter: int) -> str:
-        regex, order_number = self.get_order_element_by_prefix(prefix)
-        return self._ORDER[(order_number + counter) % self.ORDER_SIZE][0]
-
-    def _is_order_reverted(
-        self, order_number: int, adjacent_order_number: int, prev_or_next: int
-    ):
-        return (
-            adjacent_order_number < order_number
-            if prev_or_next == 1
-            else adjacent_order_number > order_number
-        )
-
-    def find_adjacent_museum_number_from_list(
-        self, museum_number: MuseumNumber, cursor, revert_order=False
-    ):
-        comp = operator.lt if not revert_order else operator.gt
-        current_prev = None
-        current_next = None
-        for current_cursor in cursor:
-            current_museum_number = MuseumNumberSchema().load(
-                current_cursor["museumNumber"]
-            )
-            if comp(current_museum_number, museum_number) and (
-                not current_prev or current_museum_number > current_prev
-            ):
-                current_prev = current_museum_number
-            if comp(museum_number, current_museum_number) and (
-                not current_next or current_museum_number < current_next
-            ):
-                current_next = current_museum_number
-        return current_prev, current_next
-
-    def iterate_until_found(
-        self,
-        museum_number: MuseumNumber,
-        retrieve_all_museum_numbers_by_prefix,
-        prefix: str,
-        adjacent_museum_number: Optional[MuseumNumber],
-        counter: int,
-    ) -> MuseumNumber:
-        _, order_number = self.get_order_element_by_prefix(prefix)
-        for i in range(self.ORDER_SIZE):
-            if not adjacent_museum_number:
-                regex_query = self.get_adjacent_prefix(prefix, (i + 1) * counter)
-                current_query_order = pydash.find_index(
-                    self._ORDER, lambda x: x[0] == regex_query
-                )
-                is_reverted = self._is_order_reverted(
-                    order_number, current_query_order, counter
-                )
-
-                museum_numbers_by_prefix = retrieve_all_museum_numbers_by_prefix(
-                    regex_query
-                )
-                adjacent_museum_number = self.find_adjacent_museum_number_from_list(
-                    museum_number, museum_numbers_by_prefix, is_reverted
-                )[0 if counter == -1 else 1]
-            else:
-                return adjacent_museum_number
-        raise NotFoundError("Could not retrieve any fragments")
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -364,8 +276,11 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-        ordering_museum = OrderingMuseumNumbers()
+
         prefix = museum_number.prefix
+        ordering_museum = OrderingMuseumNumbers(
+            museum_number, prefix, self._retrieve_all_museum_numbers_by_prefix
+        )
         regex_query, _ = ordering_museum.get_order_element_by_prefix(prefix)
         museum_numbers_by_prefix = self._retrieve_all_museum_numbers_by_prefix(
             regex_query
@@ -375,18 +290,9 @@ class MongoFragmentRepository(FragmentRepository):
             museum_number, museum_numbers_by_prefix
         )
 
-        iterate_until_found = (
-            lambda adjacent, counter: ordering_museum.iterate_until_found(
-                museum_number,
-                self._retrieve_all_museum_numbers_by_prefix,
-                prefix,
-                adjacent,
-                counter,
-            )
-        )
-
         return FragmentPagerInfo(
-            iterate_until_found(prev, -1), iterate_until_found(next, 1)
+            ordering_museum.iterate_until_found(prev, -1),
+            ordering_museum.iterate_until_found(next, 1),
         )
 
     def update_references(self, fragment):

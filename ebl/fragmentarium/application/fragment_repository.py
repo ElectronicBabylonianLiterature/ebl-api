@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict
+from typing import List
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
