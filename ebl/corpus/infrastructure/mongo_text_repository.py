@@ -5,9 +5,15 @@ import pymongo
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
-from ebl.corpus.application.schemas import ChapterSchema, ManuscriptSchema, TextSchema
+from ebl.corpus.application.schemas import (
+    ChapterSchema,
+    LineSchema,
+    ManuscriptSchema,
+    TextSchema,
+)
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION, TEXTS_COLLECTION
@@ -28,6 +34,10 @@ def text_not_found(id_: TextId) -> Exception:
 
 def chapter_not_found(id_: ChapterId) -> Exception:
     return NotFoundError(f"Chapter {id_} not found.")
+
+
+def line_not_found(id_: ChapterId, number: int) -> Exception:
+    return NotFoundError(f"Chapter {id_} line {number} not found.")
 
 
 class MongoTextRepository(TextRepository):
@@ -122,6 +132,20 @@ class MongoTextRepository(TextRepository):
             raise text_not_found(id_.text_id) from error
         except StopIteration as error:
             raise chapter_not_found(id_) from error
+
+    def find_line(self, id_: ChapterId, number: int) -> Line:
+        try:
+            chapters = self._chapters.aggregate(
+                [
+                    {"$match": chapter_id_query(id_)},
+                    {"$unwind": "$lines"},
+                    {"$replaceRoot": {"newRoot": "$lines"}},
+                    {"$skip": number},
+                ]
+            )
+            return LineSchema().load(next(chapters))
+        except StopIteration as error:
+            raise line_not_found(id_, number) from error
 
     def list(self) -> List[Text]:
         return TextSchema().load(

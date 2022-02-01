@@ -14,11 +14,12 @@ from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
-from ebl.errors import Defect, NotFoundError, DataError
+from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
@@ -46,6 +47,10 @@ class TextRepository(ABC):
 
     @abstractmethod
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+        ...
+
+    @abstractmethod(callable)
+    def find_line(self, id_: ChapterId, number: int) -> Line:
         ...
 
     @abstractmethod

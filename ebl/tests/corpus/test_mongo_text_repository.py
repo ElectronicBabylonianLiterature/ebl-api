@@ -153,6 +153,24 @@ def test_finding_chapter_for_display(database, text_repository) -> None:
     ) == ChapterDisplay.of_chapter(TEXT, CHAPTER)
 
 
+def test_finding_line(database, text_repository) -> None:
+    when_chapter_in_collection(database)
+
+    assert text_repository.find_line(CHAPTER.id_, 0) == CHAPTER.lines[0]
+
+
+def test_finding_line_not_found(database, text_repository) -> None:
+    when_chapter_in_collection(database)
+
+    with pytest.raises(NotFoundError):
+        text_repository.find_line(CHAPTER.id_, len(CHAPTER.lines))
+
+
+def test_finding_line_chapter_not_found(database, text_repository) -> None:
+    with pytest.raises(NotFoundError):
+        text_repository.find_line(CHAPTER.id_, 0)
+
+
 def test_updating_chapter(database, text_repository) -> None:
     updated_chapter = attr.evolve(
         CHAPTER, lines=tuple(), manuscripts=tuple(), signs=tuple()
