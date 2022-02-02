@@ -7,7 +7,13 @@ from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 
 def find_manuscript(line: ManuscriptLine, context: dict) -> Manuscript:
-    return context["chapter"].get_manuscript(line.manuscript_id)
+    return next(
+        (
+            manuscript
+            for manuscript in context["manuscripts"]
+            if manuscript.id == line.manuscript_id
+        )
+    )
 
 
 class ManuscriptLineDisplaySchema(Schema):
