@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence
+from typing import List, Sequence, Tuple
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_hydrator import ChapterHydartor
@@ -49,7 +49,7 @@ class TextRepository(ABC):
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         ...
 
-    @abstractmethod(callable)
+    @abstractmethod
     def find_line(self, id_: ChapterId, number: int) -> Line:
         ...
 
@@ -98,6 +98,11 @@ class Corpus:
 
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         return self._repository.find_chapter_for_display(id_)
+
+    def find_line(
+        self, id_: ChapterId, number: int
+    ) -> Tuple[Line, Sequence[Manuscript]]:
+        return self._repository.find_line(id_, number), self.find_manuscripts(id_)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
         return self._hydrate_manuscripts(
