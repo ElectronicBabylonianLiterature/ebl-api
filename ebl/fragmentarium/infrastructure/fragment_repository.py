@@ -262,45 +262,45 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
+    def _find_adjacent_museum_number_from_list(self,
+            museum_number: MuseumNumber, cursor, is_endpoint=False
+    ):
+        first = None
+        last = None
+        current_prev = None
+        current_next = None
+        for current_cursor in cursor:
+            current_museum_number = MuseumNumberSchema().load(
+                current_cursor["museumNumber"]
+            )
+            if current_museum_number < museum_number and (
+                    not current_prev or current_museum_number > current_prev
+            ):
+                current_prev = current_museum_number
+            if museum_number < current_museum_number and (
+                    not current_next or current_museum_number < current_next
+            ):
+                current_next = current_museum_number
+
+            if is_endpoint:
+                if first is None or current_museum_number < first:
+                    first = current_museum_number
+                if last is None or current_museum_number > last:
+                    last = current_museum_number
+        if is_endpoint:
+            return current_prev or last, current_next or first
+        return current_prev, current_next
+
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
+
         self.query_by_museum_number(museum_number)
-
-        def find_adjacent_museum_number(
-            museum_number: MuseumNumber, cursor, is_endpoint=False
-        ):
-            first = None
-            last = None
-            current_prev = None
-            current_next = None
-            for current_cursor in cursor:
-                current_museum_number = MuseumNumberSchema().load(
-                    current_cursor["museumNumber"]
-                )
-                if current_museum_number < museum_number and (
-                    not current_prev or current_museum_number > current_prev
-                ):
-                    current_prev = current_museum_number
-                if museum_number < current_museum_number and (
-                    not current_next or current_museum_number < current_next
-                ):
-                    current_next = current_museum_number
-
-                if is_endpoint:
-                    if first is None or current_museum_number < first:
-                        first = current_museum_number
-                    if last is None or current_museum_number > last:
-                        last = current_museum_number
-            if is_endpoint:
-                return current_prev or last, current_next or first
-            return current_prev, current_next
-
         museum_numbers_by_prefix = self._fragments.find_many(
             {"museumNumber.prefix": museum_number.prefix},
             projection={"museumNumber": True},
         )
-        prev, next = find_adjacent_museum_number(
+        prev, next = self._find_adjacent_museum_number_from_list(
             museum_number, museum_numbers_by_prefix
         )
         if prev and next:
@@ -309,7 +309,7 @@ class MongoFragmentRepository(FragmentRepository):
         all_museum_numbers = self._fragments.find_many(
             {}, projection={"museumNumber": True}
         )
-        prev, next = find_adjacent_museum_number(
+        prev, next = self._find_adjacent_museum_number_from_list(
             museum_number, all_museum_numbers, True
         )
         return FragmentPagerInfo(prev, next)
