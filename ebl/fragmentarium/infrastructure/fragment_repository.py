@@ -262,8 +262,8 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
-    def _find_adjacent_museum_number_from_list(self,
-            museum_number: MuseumNumber, cursor, is_endpoint=False
+    def _find_adjacent_museum_number_from_list(
+        self, museum_number: MuseumNumber, cursor, is_endpoint=False
     ):
         first = None
         last = None
@@ -274,11 +274,11 @@ class MongoFragmentRepository(FragmentRepository):
                 current_cursor["museumNumber"]
             )
             if current_museum_number < museum_number and (
-                    not current_prev or current_museum_number > current_prev
+                not current_prev or current_museum_number > current_prev
             ):
                 current_prev = current_museum_number
             if museum_number < current_museum_number and (
-                    not current_next or current_museum_number < current_next
+                not current_next or current_museum_number < current_next
             ):
                 current_next = current_museum_number
 
