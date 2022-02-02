@@ -265,6 +265,8 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
+        self.query_by_museum_number(museum_number)
+
         def find_adjacent_museum_number(
             museum_number: MuseumNumber, cursor, is_endpoint=False
         ):
