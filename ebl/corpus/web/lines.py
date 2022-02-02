@@ -100,10 +100,10 @@ class LineResource:
         number: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        chapter = self._corpus.find_chapter(chapter_id)
-        schema = LineDetailsSchema()
-        schema.context["chapter"] = chapter
+
         try:
-            resp.media = schema.dump(chapter.lines[int(number)])
+            line, manuscripts = self._corpus.find_line(chapter_id, int(number))
+            schema = LineDetailsSchema(context={"manuscripts": manuscripts})
+            resp.media = schema.dump(line)
         except (IndexError, ValueError) as error:
-            raise NotFoundError(f"{chapter.id_} line {number} not found.") from error
+            raise NotFoundError(f"{chapter_id} line {number} not found.") from error

@@ -144,6 +144,22 @@ def test_find_chapter_for_display(corpus, text_repository, when) -> None:
     assert corpus.find_chapter_for_display(CHAPTER.id_) == chapter_display
 
 
+def test_find_line(corpus, text_repository, bibliography, when) -> None:
+    number = 0
+    when(text_repository).find_line(CHAPTER.id_, number).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS.lines[number]
+    )
+    when(text_repository).query_manuscripts_by_chapter(CHAPTER.id_).thenReturn(
+        CHAPTER.manuscripts
+    )
+    expect_bibliography(bibliography, when)
+
+    assert corpus.find_line(CHAPTER.id_, number) == (
+        CHAPTER.lines[number],
+        CHAPTER.manuscripts,
+    )
+
+
 def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
     expect_bibliography(bibliography, when)
     when(text_repository).query_manuscripts_by_chapter(CHAPTER.id_).thenReturn(

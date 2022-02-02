@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence
+from typing import List, Sequence, Tuple
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_hydrator import ChapterHydartor
@@ -14,11 +14,12 @@ from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo
+from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
-from ebl.errors import Defect, NotFoundError, DataError
+from ebl.errors import DataError, Defect, NotFoundError
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
@@ -46,6 +47,10 @@ class TextRepository(ABC):
 
     @abstractmethod
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+        ...
+
+    @abstractmethod
+    def find_line(self, id_: ChapterId, number: int) -> Line:
         ...
 
     @abstractmethod
@@ -93,6 +98,11 @@ class Corpus:
 
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         return self._repository.find_chapter_for_display(id_)
+
+    def find_line(
+        self, id_: ChapterId, number: int
+    ) -> Tuple[Line, Sequence[Manuscript]]:
+        return self._repository.find_line(id_, number), self.find_manuscripts(id_)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
         return self._hydrate_manuscripts(
