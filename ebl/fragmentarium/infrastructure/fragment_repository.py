@@ -1,4 +1,5 @@
-from typing import List, Sequence
+import operator
+from typing import List, Sequence, Tuple, Callable, Optional
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -262,6 +263,33 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
+    def _compare_within_two_museum_numbers(
+        self,
+        museum_number: MuseumNumber,
+        current_museum_number: MuseumNumber,
+        current_prev_or_next: Optional[MuseumNumber],
+        comp: Callable[[MuseumNumber, MuseumNumber], bool],
+    ) -> Optional[MuseumNumber]:
+        if comp(current_museum_number, museum_number) and (
+            not current_prev_or_next
+            or comp(current_prev_or_next, current_museum_number)
+        ):
+            return current_museum_number
+        else:
+            return current_prev_or_next
+
+    def _compare_museum_numbers(
+        self,
+        first: Optional[MuseumNumber],
+        last: Optional[MuseumNumber],
+        current_museum_number: MuseumNumber,
+    ) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
+        if first is None or current_museum_number < first:
+            first = current_museum_number
+        if last is None or current_museum_number > last:
+            last = current_museum_number
+        return first, last
+
     def _find_adjacent_museum_number_from_list(
         self, museum_number: MuseumNumber, cursor, is_endpoint=False
     ):
@@ -273,22 +301,21 @@ class MongoFragmentRepository(FragmentRepository):
             current_museum_number = MuseumNumberSchema().load(
                 current_cursor["museumNumber"]
             )
-            if current_museum_number < museum_number and (
-                not current_prev or current_museum_number > current_prev
-            ):
-                current_prev = current_museum_number
-            if museum_number < current_museum_number and (
-                not current_next or current_museum_number < current_next
-            ):
-                current_next = current_museum_number
+            current_prev = self._compare_within_two_museum_numbers(
+                museum_number, current_museum_number, current_prev, operator.lt
+            )
+            current_next = self._compare_within_two_museum_numbers(
+                museum_number, current_museum_number, current_next, operator.gt
+            )
 
             if is_endpoint:
-                if first is None or current_museum_number < first:
-                    first = current_museum_number
-                if last is None or current_museum_number > last:
-                    last = current_museum_number
+                first, last = self._compare_museum_numbers(
+                    first, last, current_museum_number
+                )
+
         if is_endpoint:
-            return current_prev or last, current_next or first
+            current_prev = current_prev or last
+            current_next = current_next or first
         return current_prev, current_next
 
     def query_next_and_previous_fragment(
