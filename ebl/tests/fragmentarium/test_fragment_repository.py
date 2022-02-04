@@ -158,32 +158,57 @@ def test_find_random(fragment_repository):
 
 def test_folio_pager_exception(fragment_repository):
     with pytest.raises(NotFoundError):
-        query = "1841-07-26, 57"
-        fragment_repository.query_next_and_previous_fragment(query)
+        museum_number = MuseumNumber.of("1841-07-26.54")
+        fragment_repository.query_next_and_previous_folio("test", "test", museum_number)
 
 
-FRAGMENTS = ["1841-07-26.54", "1841-07-26.57", "1841-07-26.63"]
+FRAGMENTS = [
+    "DT.1",
+    "Rm-II.1",
+    "1841.54",
+    "1841.57",
+    "1841.63",
+    "BM.0",
+    "CBS.0",
+    "UM.0",
+    "N.0",
+    "N.1",
+    "1841-57.54",
+    "1841-57.57",
+    "1841-57.63",
+    "U.0.a",
+    "U.0.b",
+    "U.0.c",
+    "X.0",
+    "X.1",
+]
 
 
 @pytest.mark.parametrize(
-    "query,  existing,expected",
+    "query, expected",
     [
-        ("1841-07-26.57", FRAGMENTS, ["1841-07-26.54", "1841-07-26.63"]),
-        ("1841-07-26.63", FRAGMENTS, ["1841-07-26.57", "1841-07-26.54"]),
-        ("1841-07-26.54", FRAGMENTS, ["1841-07-26.63", "1841-07-26.57"]),
-        ("1841-07-26.54", FRAGMENTS[:2], ["1841-07-26.57", "1841-07-26.57"]),
+        ("1841.63", ["1841.57", "BM.0"]),
+        ("1841.54", ["Rm-II.1", "1841.57"]),
+        ("DT.1", ["X.1", "Rm-II.1"]),
+        ("CBS.0", ["BM.0", "UM.0"]),
+        ("X.1", ["X.0", "DT.1"]),
+        ("N.1", ["N.0", "1841-57.54"]),
+        ("1841-57.57", ["1841-57.54", "1841-57.63"]),
+        ("1841-57.63", ["1841-57.57", "U.0.a"]),
+        ("U.0.b", ["U.0.a", "U.0.c"]),
     ],
 )
-def test_query_next_and_previous_fragment(
-    query, existing, expected, fragment_repository
-):
-    for fragmentNumber in existing:
+def test_query_next_and_previous_fragment(query, expected, fragment_repository):
+    for fragmentNumber in FRAGMENTS:
         fragment_repository.create(
             FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
 
-    results = list(fragment_repository.query_next_and_previous_fragment(query).values())
-    assert results == expected
+    results = fragment_repository.query_next_and_previous_fragment(
+        MuseumNumber.of(query)
+    )
+    assert results.previous == MuseumNumber.of(expected[0])
+    assert results.next == MuseumNumber.of(expected[1])
 
 
 def test_query_next_and_previous_fragment_exception(fragment_repository):

@@ -4,6 +4,7 @@ from typing import List
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -76,7 +77,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_next_and_previous_fragment(self, number: MuseumNumber) -> dict:
+    def query_next_and_previous_fragment(
+        self, museum_number: MuseumNumber
+    ) -> FragmentPagerInfo:
         ...
 
     @abstractmethod

@@ -5,11 +5,14 @@ from ebl.tests.factories.fragment import FragmentFactory
 
 
 def test_get_fragment_pager(client, fragmentarium):
-    fragment = FragmentFactory.build(number=MuseumNumber("X", "1"))
-    fragmentarium.create(fragment)
-    result = client.simulate_get(f"/fragments/{fragment.number}/pager")
+    fragment_0 = FragmentFactory.build(number=MuseumNumber("X", "0"))
+    fragment_1 = FragmentFactory.build(number=MuseumNumber("X", "1"))
+    fragment_2 = FragmentFactory.build(number=MuseumNumber("X", "2"))
+    for fragment in [fragment_0, fragment_1, fragment_2]:
+        fragmentarium.create(fragment)
+    result = client.simulate_get(f"/fragments/{fragment_1.number}/pager")
 
-    assert result.json == {"next": "X.1", "previous": "X.1"}
+    assert result.json == {"next": "X.2", "previous": "X.0"}
     assert result.status == falcon.HTTP_OK
     assert result.headers["Access-Control-Allow-Origin"] == "*"
 
