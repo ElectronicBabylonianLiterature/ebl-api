@@ -17,9 +17,13 @@ def find_manuscript(line: ManuscriptLine, context: dict) -> Manuscript:
 
 
 class ManuscriptLineDisplaySchema(Schema):
-    siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
+    siglum_disambiguator = fields.Function(
+        lambda line, context: find_manuscript(line, context).siglum_disambiguator,
+        data_key="siglumDisambiguator",
+    )
     period_modifier = fields.Function(
         lambda line, context: find_manuscript(line, context).period_modifier.value,
+        data_key="periodModifier",
     )
     period = fields.Function(
         lambda line, context: find_manuscript(line, context).period.long_name,
