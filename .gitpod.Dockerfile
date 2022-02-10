@@ -1,4 +1,4 @@
-FROM gitpod/workspace-mongodb
+FROM gitpod/workspace-mongodb:legacy-dazzle-v1
 
 # Install custom tools, runtime, etc. using apt-get
 # More information: https://www.gitpod.io/docs/config-docker/
