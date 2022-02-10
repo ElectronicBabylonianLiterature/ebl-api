@@ -14,7 +14,7 @@ RUN pyenv global $PYTHON_VERSION
 RUN python -m ensurepip
 RUN python -m pip install --upgrade pip
 
-RUN curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python -
+RUN brew install pdm
 RUN pdm --pep582 bash >> ~/.bash_profile
 # RUN sudo pdm completion bash > /etc/bash_completion.d/pdm.bash-completion
 
