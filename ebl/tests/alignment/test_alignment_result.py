@@ -1,4 +1,4 @@
-from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from alignment.vocabulary import Vocabulary
 
 from ebl.alignment.domain.result import AlignmentResult
 from ebl.alignment.domain.sequence import NamedSequence
@@ -10,7 +10,7 @@ def test_alignment_result() -> None:
     sequence_2 = NamedSequence.of_signs("name2", "ABZ002", vocabulary)
     score = 10
     alignments = []
-    result = AlignmentResult(  # pyre-ignore[19]
+    result = AlignmentResult(
         score, sequence_1, sequence_2, alignments
     )
 

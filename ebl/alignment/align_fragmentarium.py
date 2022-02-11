@@ -6,7 +6,7 @@ import sys
 import time
 from typing import Iterable, List, Tuple
 
-from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from alignment.vocabulary import Vocabulary
 from joblib import Parallel, delayed
 import pydash
 from tqdm import tqdm
@@ -62,8 +62,8 @@ def to_dict(
         return {
             **common,
             "score": alignment.score,
-            "preserved identity": round(alignment.percentPreservedIdentity(), 2),
-            "preserved similarity": round(alignment.percentPreservedSimilarity(), 2),
+            "preserved identity": round(alignment.percentPreservedIdentity(), 2),  # pyre-ignore[16]
+            "preserved similarity": round(alignment.percentPreservedSimilarity(), 2),  # pyre-ignore[16]
         }
     else:
         return {**common, "score": result.score}

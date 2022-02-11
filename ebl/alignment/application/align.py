@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
-from alignment.sequencealigner import GlobalSequenceAligner  # pyre-ignore[21]
-from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from alignment.sequencealigner import GlobalSequenceAligner
+from alignment.vocabulary import Vocabulary
 
 from ebl.alignment.domain.sequence import NamedSequence
 from ebl.alignment.domain.scoring import EblScoring
@@ -11,12 +11,12 @@ from ebl.alignment.domain.result import AlignmentResult
 def align_pair(
     first: NamedSequence,
     second: NamedSequence,
-    vocabulary: Vocabulary,  # pyre-ignore[11]
+    vocabulary: Vocabulary,
 ) -> AlignmentResult:
     scoring = EblScoring(vocabulary)
     aligner = GlobalSequenceAligner(scoring, True)
     score, alignments = aligner.align(first.sequence, second.sequence, backtrace=True)
-    return AlignmentResult(  # pyre-ignore[19]
+    return AlignmentResult(
         score,
         first,
         second,

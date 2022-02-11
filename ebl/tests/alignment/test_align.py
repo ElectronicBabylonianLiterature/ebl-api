@@ -1,4 +1,4 @@
-from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from alignment.vocabulary import Vocabulary
 from hamcrest import assert_that, has_properties, contains_exactly
 
 from ebl.alignment.application.align import align, align_pair
