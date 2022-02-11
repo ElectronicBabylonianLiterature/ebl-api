@@ -3,6 +3,7 @@ from typing import Iterable, Sequence, Type
 from lark.lexer import Token
 from lark.tree import Tree
 from lark.visitors import v_args
+import pydash
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
@@ -95,7 +96,7 @@ class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
     def ebl_atf_text_line__normalized_modifiers(
         self, modifiers: Iterable[Flag]
     ) -> Sequence[Flag]:
-        return tuple(set(modifiers))
+        return tuple(pydash.uniq(modifiers))
 
     @v_args(inline=True)
     def ebl_atf_text_line__normalized_modifier(self, modifier: Token) -> Flag:
