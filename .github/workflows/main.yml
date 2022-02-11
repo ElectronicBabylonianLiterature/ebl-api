@@ -28,7 +28,7 @@ jobs:
       - name: Install
         id: install
         run: |
-          curl -sSL https://install.python-poetry.org | python3 -
+          curl -sSL https://install.python-poetry.org | python -
           poetry install
 
       - name: Lint

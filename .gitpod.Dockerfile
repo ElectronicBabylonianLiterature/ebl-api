@@ -15,7 +15,7 @@ RUN pyenv global $PYTHON_VERSION
 ENV PIP_USER=no
 RUN python -m ensurepip
 RUN pip install --upgrade pip
-RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN curl -sSL https://install.python-poetry.org | python -
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
