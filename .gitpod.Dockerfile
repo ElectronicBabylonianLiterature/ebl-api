@@ -12,8 +12,6 @@ RUN pyenv update
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
 
-# See: https://github.com/gitpod-io/gitpod/issues/479
-ENV PIP_USER=no
 RUN python -m ensurepip
 RUN python -m pip install --upgrade pip poetry
 
