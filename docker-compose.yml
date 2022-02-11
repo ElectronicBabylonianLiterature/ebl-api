@@ -14,7 +14,6 @@ services:
       - SENTRY_ENVIRONMENT
     volumes:
       - ./ebl:/usr/src/ebl/ebl
-    command:  ["pipenv", "run", "waitress-serve", "--port=8000", "--call", "ebl.app:get_app"]
     restart: always
   mongo:
     image: mongo
