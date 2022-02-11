@@ -28,29 +28,29 @@ jobs:
       - name: Install
         id: install
         run: |
-          pip install pipenv
-          pipenv install --dev --deploy
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry install
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
-        run: pipenv run lint
+        run: poetry run flake8 ebl
       
       - name: Code Style
         if: success() || steps.install.outcome == 'success'
-        run: pipenv run black ebl --check
+        run: poetry run black ebl --check
 
       - name: Type Check
         if: success() || steps.install.outcome == 'success'
-        run: pipenv run pyre check
+        run: poetry run pyre check
 
       - name: Download
-        run: pipenv run python -m ebl.tests.downloader
+        run: poetry run python -m ebl.tests.downloader
 
       - name: Unit Tests
         id: unit_tests
         env:
           CI: true
-        run: pipenv run test
+        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -n auto
           
       - uses: paambaati/codeclimate-action@v2.7.4
         if: success() || steps.unit_tests.outcome == 'failure'
