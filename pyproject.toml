@@ -26,14 +26,13 @@ marshmallow-oneofschema = "*"
 singledispatchmethod = "*"
 pycryptodomex = "*"
 cryptography = "==3.3.2"
-newrelic = "*"
-alignment = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"
+pillow = "*"
+alignment = {git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 
 [tool.poetry.dev-dependencies]
 pytest = "*"
 pytest-cov = "*"
 freezegun = "*"
-pytest-watch = "*"
 pytest-mockito = "*"
 factory-boy = "*"
 flake8 = "*"
@@ -43,9 +42,7 @@ httpretty = "*"
 pyre-check = "==0.0.60"
 black = "*"
 pymongo-inmemory = "*"
-pillow = "*"
 pytest-xdist = "*"
-
 
 [tool.poetry.scripts]
 test = "pytest --cov=ebl --cov-report term --cov-report xml"
@@ -54,7 +51,6 @@ start = "waitress-serve --port=8000 --call ebl.app:get_app"
 lint = "flake8 ebl"
 format  = "black ebl"
 type = "pyre check"
-
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
