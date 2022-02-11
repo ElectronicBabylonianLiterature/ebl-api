@@ -10,9 +10,7 @@ def test_alignment_result() -> None:
     sequence_2 = NamedSequence.of_signs("name2", "ABZ002", vocabulary)
     score = 10
     alignments = []
-    result = AlignmentResult(
-        score, sequence_1, sequence_2, alignments
-    )
+    result = AlignmentResult(score, sequence_1, sequence_2, alignments)
 
     assert result.score == score
     assert result.a == sequence_1

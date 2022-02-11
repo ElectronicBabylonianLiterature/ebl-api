@@ -34,12 +34,8 @@ class NamedSequence:
     sequence: EncodedSequence
 
     @staticmethod
-    def of_signs(
-        name, signs: str, vocabulary: Vocabulary
-    ) -> "NamedSequence":
-        return NamedSequence(
-            name, vocabulary.encodeSequence(make_sequence(signs))
-        )
+    def of_signs(name, signs: str, vocabulary: Vocabulary) -> "NamedSequence":
+        return NamedSequence(name, vocabulary.encodeSequence(make_sequence(signs)))
 
     @staticmethod
     def of_fragment(fragment: Fragment, vocabulary: Vocabulary) -> "NamedSequence":
