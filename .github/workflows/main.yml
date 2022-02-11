@@ -51,20 +51,20 @@ jobs:
         run: poetry run python -m ebl.tests.downloader
 
       - name: Unit Tests
-        if: matrix.python-version != '3.7'
+        if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           CI: true
         run: poetry run pytest -n auto
 
       - name: Unit Tests with Coverage
         id: unit_tests
-        if: matrix.python-version == '3.7'
+        if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           CI: true
         run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -n auto
           
       - uses: paambaati/codeclimate-action@v2.7.4
-        if: matrix.python-version == '3.7' && (success() || steps.unit_tests.outcome == 'failure')
+        if: ${{ !startsWith(matrix.python-version, 'pypy') && (success() || steps.unit_tests.outcome == 'failure') }}
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       
