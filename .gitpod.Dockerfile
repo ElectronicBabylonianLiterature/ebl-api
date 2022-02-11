@@ -14,7 +14,8 @@ RUN pyenv global $PYTHON_VERSION
 # See: https://github.com/gitpod-io/gitpod/issues/479
 ENV PIP_USER=no
 RUN python -m ensurepip
-RUN pip install --upgrade pip poetry
+RUN pip install --upgrade pip
+RUN curl -sSL https://install.python-poetry.org | python3 -
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4
