@@ -126,7 +126,7 @@ class MongoFragmentRepository(FragmentRepository):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}
         if pages:
             match["references"]["$elemMatch"]["pages"] = {
-                "$regex": fr".*?(^|[^\d]){pages}([^\d]|$).*?"
+                "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
             }
         cursor = self._fragments.find_many(match, projection={"joins": False})
         return self._map_fragments(cursor)
