@@ -31,7 +31,6 @@ def test_search_fragment(get_number, client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(fragment)]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
 
@@ -70,7 +69,6 @@ def test_search_references(client, fragmentarium, bibliography, user):
     assert result.json == ApiFragmentInfoSchema(many=True).dump(
         [FragmentInfo.of(fragment_expected)]
     )
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
 
@@ -101,7 +99,6 @@ def test_search_signs(client, fragmentarium, sign_repository, signs):
             transliterated_fragment, (("6'. [...] x# mu ta-ma;-tu₂",),)
         )
     ]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
 
@@ -109,7 +106,6 @@ def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):
     result = client.simulate_get("/fragments", params={"transliteration": "$ invalid"})
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
 
@@ -121,7 +117,6 @@ def test_random(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
 
@@ -135,7 +130,6 @@ def test_interesting(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(interesting_fragment)]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert "Cache-Control" not in result.headers
 
 
@@ -147,7 +141,6 @@ def test_latest(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
@@ -159,7 +152,6 @@ def test_needs_revision(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert result.headers["Cache-Control"] == "private, max-age=600"
 
 

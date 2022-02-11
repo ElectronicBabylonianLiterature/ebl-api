@@ -14,7 +14,6 @@ def test_get_fragment_pager(client, fragmentarium):
 
     assert result.json == {"next": "X.2", "previous": "X.0"}
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_get_fragment_pager_invalid_id(client):
@@ -33,7 +32,6 @@ def test_get_folio_pager(client, fragmentarium):
         "previous": {"fragmentNumber": str(fragment.number), "folioNumber": "1"},
     }
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_get_folio_pager_invalid_id(client):

@@ -17,7 +17,6 @@ from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.corpus.web.bootstrap import create_corpus_routes
-from ebl.cors_component import CorsComponent
 from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
@@ -75,9 +74,9 @@ def create_context():
     )
 
 
-def create_api(context: Context) -> falcon.App :
+def create_api(context: Context) -> falcon.App:
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
-    api = falcon.App(middleware=[CorsComponent(), auth_middleware])
+    api = falcon.App(cors_enable=True, middleware=auth_middleware)
     ebl.error_handler.set_up(api)
     return api
 

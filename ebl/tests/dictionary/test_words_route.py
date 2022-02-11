@@ -17,7 +17,6 @@ def test_get_word(client, saved_word):
 
     assert result.json == saved_word
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_word_not_found(client):
@@ -32,7 +31,6 @@ def test_search_word(client, saved_word):
 
     assert result.json == [saved_word]
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_search_word_lemma(client, saved_word):
@@ -41,7 +39,6 @@ def test_search_word_lemma(client, saved_word):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [saved_word]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_search_word_no_query(client):

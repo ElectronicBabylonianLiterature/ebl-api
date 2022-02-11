@@ -39,4 +39,3 @@ def test_signs_get(
     assert result_json["label"] == "i Stone wig Stone wig 2"
 
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"

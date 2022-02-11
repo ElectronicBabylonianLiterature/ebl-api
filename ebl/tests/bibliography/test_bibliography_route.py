@@ -25,12 +25,10 @@ def test_get_entry(client, saved_entry):
 
     assert result.json == saved_entry
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_get_entry_not_found(client):
-    id_ = "not found"
-    result = client.simulate_get(f"/bibliography/{id_}")
+    result = client.simulate_get('/bibliography/not found')
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
@@ -124,4 +122,3 @@ def test_search(client, saved_entry, params):
 
     assert result.json == [saved_entry]
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"

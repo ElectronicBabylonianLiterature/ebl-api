@@ -21,7 +21,6 @@ def test_search_fragment(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [[expected_word]]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_search_fragment_no_query(client):

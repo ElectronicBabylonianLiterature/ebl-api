@@ -20,7 +20,6 @@ def test_find_annotations(client):
 
     expected_json = AnnotationsSchema().dump(annotations)
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert result.json == expected_json
 
 
@@ -52,7 +51,6 @@ def test_generate_annotations(client, photo_repository):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert result.json is not None
     assert result.json["fragmentNumber"] == "K.2"
     assert result.json["annotations"][0]["geometry"]["x"] == 0.0

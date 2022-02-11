@@ -16,7 +16,6 @@ def test_get(client, fragmentarium, user):
         transliterated_fragment.number == MuseumNumber("K", "1"),
     )
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_get_invalid_id(client):

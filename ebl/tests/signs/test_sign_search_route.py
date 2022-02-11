@@ -12,7 +12,6 @@ def test_signs_get(client, sign_repository):
 
     assert result.json == SignDtoSchema().dump(sign)
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_signs_not_found(client):
