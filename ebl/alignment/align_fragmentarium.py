@@ -63,10 +63,10 @@ def to_dict(
             **common,
             "score": alignment.score,
             "preserved identity": round(
-                alignment.percentPreservedIdentity(), 2  # pyre-ignore[16]
+                alignment.percentPreservedIdentity(), 2
             ),
             "preserved similarity": round(
-                alignment.percentPreservedSimilarity(), 2  # pyre-ignore[16]
+                alignment.percentPreservedSimilarity(), 2
             ),
         }
     else:

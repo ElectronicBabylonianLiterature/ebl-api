@@ -1,5 +1,5 @@
 from typing import Callable, Generator, Tuple
-from alignment.sequencealigner import Scoring, GapScoring  # pyre-ignore[21]
+from alignment.sequencealigner import Scoring, GapScoring
 from alignment.vocabulary import Vocabulary
 
 from ebl.alignment.domain.sequence import UNCLEAR_OR_UNKNOWN_SIGN, LINE_BREAK
@@ -62,7 +62,7 @@ def is_variant(first_decoded: str, second_decoded: str) -> bool:
     return VARIANT_SEPARATOR in first_decoded or VARIANT_SEPARATOR in second_decoded
 
 
-class EblScoring(GapScoring, Scoring):  # pyre-ignore[11]
+class EblScoring(GapScoring, Scoring):
     def __init__(self, vocabulary: Vocabulary):
         self.vocabulary = vocabulary
         self.line_break = vocabulary.encode(LINE_BREAK)
