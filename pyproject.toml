@@ -1,10 +1,12 @@
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "ebl-api"
+version = "0.1.0"
+description = ""
+authors = []
 
-[packages]
-falcon = "~=2.0.0"
+[tool.poetry.dependencies]
+python = "3.7.*"
+falcon = "^2.0.0"
 falcon-auth = "*"
 pymongo = "*"
 pydash = "*"
@@ -23,14 +25,14 @@ tqdm = "*"
 marshmallow-oneofschema = "*"
 singledispatchmethod = "*"
 pycryptodomex = "*"
-cryptography = "==3.3.2"
-alignment = {editable = true, ref = "master", git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
+cryptography = "3.3.2"
+pillow = "*"
+alignment = {git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 
-[dev-packages]
+[tool.poetry.dev-dependencies]
 pytest = "*"
 pytest-cov = "*"
 freezegun = "*"
-pytest-watch = "*"
 pytest-mockito = "*"
 factory-boy = "*"
 flake8 = "*"
@@ -40,19 +42,16 @@ httpretty = "*"
 pyre-check = "==0.0.60"
 black = "*"
 pymongo-inmemory = "*"
-pillow = "*"
 pytest-xdist = "*"
 
-[requires]
-python_version = "3.7"
-
-[scripts]
-test = "pytest --cov=ebl --cov-report term --cov-report xml -n auto"
+[tool.poetry.scripts]
+test = "pytest --cov=ebl --cov-report term --cov-report xml"
 test-watch = "ptw --runner \"pytest --cov=ebl --cov-report term --cov-report xml\""
 start = "waitress-serve --port=8000 --call ebl.app:get_app"
 lint = "flake8 ebl"
 format  = "black ebl"
 type = "pyre check"
 
-[pipenv]
-allow_prereleases = true
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

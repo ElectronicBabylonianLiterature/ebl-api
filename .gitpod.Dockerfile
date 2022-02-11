@@ -8,10 +8,12 @@ RUN sudo apt-get update \
     && sudo rm -rf /var/lib/apt/lists/*
 
 ARG PYTHON_VERSION=pypy3.7-7.3.5
+RUN pyenv update
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
+
 RUN python -m ensurepip
-RUN python -m pip install --upgrade pip pipenv
+RUN python -m pip install --upgrade pip poetry
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4

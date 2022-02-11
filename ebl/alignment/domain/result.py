@@ -1,7 +1,7 @@
 from typing import List
 
 import attr
-from alignment.sequencealigner import SequenceAlignment  # pyre-ignore[21]
+from alignment.sequencealigner import SequenceAlignment
 
 from ebl.alignment.domain.sequence import NamedSequence
 
@@ -11,4 +11,4 @@ class AlignmentResult:
     score: int
     a: NamedSequence
     b: NamedSequence
-    alignments: List[SequenceAlignment]  # pyre-ignore[11]
+    alignments: List[SequenceAlignment]

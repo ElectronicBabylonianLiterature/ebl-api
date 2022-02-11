@@ -22,8 +22,8 @@ Requirements:
 * [PyPy3.7](https://www.pypy.org) & pip
 
 ```shell script
-pip install pipenv
-pipenv install --dev
+pip install poetry
+poetry install
 ```
 
 The following are needed to run application:
@@ -86,17 +86,17 @@ pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 ## Running the tests
 
 ```shell script
-pipenv run black ebl --check
-pipenv run lint
-pipenv run pyre check
-pipenv run pytest  
-pipenv run pytest -n auto  # Run tests in parallel.
-pipenv run test            # Run tests in parallel with coverage (slow in PyPy).
+poetry run black ebl --check
+poetry run flake8
+poetry run pyre check
+poetry run pytest  
+poetry run pytest -n auto  # Run tests in parallel.
+poetry run --cov=ebl --cov-report term --cov-report xml -n auto  # Run tests in parallel with coverage (slow in PyPy).
 ```
 
 See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
 for more information on parallel tests. To avoid race condition when running
-the tests in parallel run `pipenv run python -m ebl.tests.downloader`.
+the tests in parallel run `poetry run python -m ebl.tests.downloader`.
 
 ## Database
 
@@ -218,7 +218,7 @@ SENTRY_ENVIRONMENT=<development or production>
 ### Locally
 
 ```shell script
-pipenv run start
+poetry run waitress-serve --port=8000 --call ebl.app:get_app
 ```
 
 ### Docker image
@@ -301,14 +301,14 @@ saved to `invalid_fragments.tsv`.
 The script can be run locally:
 
 ```shell script
-pipenv run python -m ebl.fragmentarium.update_fragments
+poetry run python -m ebl.fragmentarium.update_fragments
 ```
 
 , as stand alone container:
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-updater ebl/api pipenv run python -m ebl.fragmentarium.update_fragments
+docker run --rm -it --env-file=.env --name ebl-updater ebl/api poetry run python -m ebl.fragmentarium.update_fragments
 ```
 
 , or with `docker-compose`:
@@ -326,14 +326,14 @@ as is. Transliterations are not reparsed.
 The script can be run locally:
 
 ```shell script
-pipenv run python -m ebl.corpus.update_texts
+poetry run python -m ebl.corpus.update_texts
 ```
 
 , as stand alone container:
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api pipenv run python -m ebl.corpus.update_texts
+docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api poetry run python -m ebl.corpus.update_texts
 ```
 
 ### Alignment
@@ -356,14 +356,14 @@ The scripts accepts the following arguments:
 The script can be run locally:
 
 ```shell script
-pipenv run python -m ebl.alignment.align_fragmentarium
+poetry run python -m ebl.alignment.align_fragmentarium
 ```
 
 or as stand alone container:
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api pipenv run python -m ebl.alignment.align_fragmentarium
+docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api poetry run python -m ebl.alignment.align_fragmentarium
 ```
 
 ### Steps to update the production database
@@ -387,7 +387,7 @@ Importing and conversion of external .atf files which are encoded according to t
 To run use:
 <!-- usage -->
 ```sh-session
-pipenv run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
+poetry run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
 
 ```
 <!-- usagestop -->
@@ -405,9 +405,9 @@ pipenv run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g 
 Example calls:
 
 ```sh-session
-pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "atf_importer"
-pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_cdli_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "CDLI"
-pipenv run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
+poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "atf_importer"
+poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_cdli_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "CDLI"
+poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
 ```
 
 #### Troubleshooting

@@ -1,4 +1,4 @@
-from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from alignment.vocabulary import Vocabulary
 import pytest
 
 from ebl.alignment.domain.scoring import EblScoring

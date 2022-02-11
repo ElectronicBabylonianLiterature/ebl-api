@@ -6,7 +6,7 @@ import sys
 import time
 from typing import Iterable, List, Tuple
 
-from alignment.vocabulary import Vocabulary  # pyre-ignore[21]
+from alignment.vocabulary import Vocabulary
 from joblib import Parallel, delayed
 import pydash
 from tqdm import tqdm
