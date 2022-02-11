@@ -9,7 +9,7 @@ from ebl.signs.web.signs import SignsResource
 from ebl.signs.web.sign_images import SignsImageResource
 
 
-def create_signs_routes(api: falcon.API, context: Context):
+def create_signs_routes(api: falcon.App, context: Context):
     signs_search = SignsSearch(context.sign_repository)
     signs = SignsResource(context.sign_repository)
     signs_images = SignsImageResource(

@@ -20,7 +20,7 @@ class AnnotationResource:
             )
             resp.media = AnnotationsSchema().dump(annotations)
         else:
-            raise falcon.HTTPUnprocessableEntity("Fragment numbers do not match.")
+            raise falcon.HTTPUnprocessableEntity(description="Fragment numbers do not match.")
 
     @falcon.before(require_scope, "read:fragments")
     @validate(None, AnnotationsSchema())

@@ -1,5 +1,4 @@
 import json
-from urllib import parse
 
 import falcon
 import pytest
@@ -28,7 +27,7 @@ def test_word_not_found(client):
 
 
 def test_search_word(client, saved_word):
-    lemma = parse.quote_plus(" ".join(saved_word["lemma"]))
+    lemma = " ".join(saved_word["lemma"])
     result = client.simulate_get("/words", params={"query": lemma})
 
     assert result.json == [saved_word]
@@ -37,7 +36,7 @@ def test_search_word(client, saved_word):
 
 
 def test_search_word_lemma(client, saved_word):
-    lemma = parse.quote_plus(saved_word["lemma"][0][:2])
+    lemma = saved_word["lemma"][0][:2]
     result = client.simulate_get("/words", params={"lemma": lemma})
 
     assert result.status == falcon.HTTP_OK

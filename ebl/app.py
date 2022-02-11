@@ -75,9 +75,9 @@ def create_context():
     )
 
 
-def create_api(context: Context) -> falcon.API:
+def create_api(context: Context) -> falcon.App :
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
-    api = falcon.API(middleware=[CorsComponent(), auth_middleware])
+    api = falcon.App(middleware=[CorsComponent(), auth_middleware])
     ebl.error_handler.set_up(api)
     return api
 

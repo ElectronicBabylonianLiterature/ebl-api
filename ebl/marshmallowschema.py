@@ -13,7 +13,7 @@ def validate(req_schema: Optional[Schema] = None, resp_schema: Optional[Schema] 
                 errors = req_schema.validate(req.media)
                 if errors:
                     raise falcon.HTTPBadRequest(
-                        "Request data failed validation", description=errors
+                        title="Request data failed validation", description=errors
                     )
 
             result = func(self, req, resp, *args, **kwargs)

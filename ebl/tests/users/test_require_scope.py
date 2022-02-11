@@ -20,7 +20,7 @@ def do_get(scope):
 
     auth_backend = NoneAuthBackend(user_loader)
     auth_middleware = FalconAuthMiddleware(auth_backend)
-    api = falcon.API(middleware=[auth_middleware])
+    api = falcon.App(middleware=[auth_middleware])
     api.add_route("/test", TestResource())
     client = testing.TestClient(api)
 
@@ -42,7 +42,7 @@ def test_require_scope_not_present():
 def test_require_scope_no_user():
     auth_backend = NoneAuthBackend(lambda: None)
     auth_middleware = FalconAuthMiddleware(auth_backend)
-    api = falcon.API(middleware=[auth_middleware])
+    api = falcon.App(middleware=[auth_middleware])
     api.add_route("/test", TestResource())
     client = testing.TestClient(api)
 
