@@ -117,11 +117,8 @@ class EblScoring(GapScoring, Scoring):
     def _get_variant_score(self, first_decoded: str, second_decoded: str) -> int:
         result = []
         for first_part in first_decoded.split(VARIANT_SEPARATOR):
-            for second_part in second_decoded.split(VARIANT_SEPARATOR):
-                result.append(
-                    self(
+            result.extend(self(
                         self.vocabulary.encode(first_part),
                         self.vocabulary.encode(second_part),
-                    )
-                )
+                    ) for second_part in second_decoded.split(VARIANT_SEPARATOR))
         return max(result)
