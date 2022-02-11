@@ -62,12 +62,8 @@ def to_dict(
         return {
             **common,
             "score": alignment.score,
-            "preserved identity": round(
-                alignment.percentPreservedIdentity(), 2
-            ),
-            "preserved similarity": round(
-                alignment.percentPreservedSimilarity(), 2
-            ),
+            "preserved identity": round(alignment.percentPreservedIdentity(), 2),
+            "preserved similarity": round(alignment.percentPreservedSimilarity(), 2),
         }
     else:
         return {**common, "score": result.score}
