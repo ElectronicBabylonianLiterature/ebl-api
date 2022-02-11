@@ -967,8 +967,8 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.7"
-content-hash = "9a8040b086e36e33c7e0357cafbcb8116df1f1f6589e0e4782c270b639f7b480"
+python-versions = "3.7.*"
+content-hash = "0970d6e90f6336b09b7150bd8e77a8b97793f144842b24a1f2b7ecdc4fddbfe1"
 
 [metadata.files]
 alignment = []
