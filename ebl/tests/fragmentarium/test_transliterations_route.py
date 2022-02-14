@@ -36,7 +36,6 @@ def test_update_transliteration(client, fragmentarium, user, database):
     }
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment.number}")

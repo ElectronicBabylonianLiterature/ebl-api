@@ -14,5 +14,4 @@ def test_get(client, text_repository):
     result = client.simulate_get(create_chapter_url(chapter, "/extant_lines"))
 
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
     assert result.json == ExtantLinesSchema().dump(chapter)["extantLines"]

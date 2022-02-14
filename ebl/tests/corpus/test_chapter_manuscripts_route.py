@@ -31,7 +31,6 @@ def test_get(client, bibliography, text_repository):
     get_result = client.simulate_get(create_chapter_url(chapter, "/manuscripts"))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_chapter_dto(chapter)["manuscripts"]
 
 
@@ -62,13 +61,11 @@ def test_updating(client, bibliography, sign_repository, signs, text_repository)
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == create_chapter_dto(updated_chapter)
 
     get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_chapter_dto(updated_chapter)
 
 

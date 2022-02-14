@@ -12,7 +12,6 @@ def test_signs_get(client, sign_repository):
 
     assert result.json == SignDtoSchema().dump(sign)
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_signs_not_found(client):
@@ -91,7 +90,6 @@ def test_signs_search_route(params, expected, client, sign_repository, signs):
         sign_repository.create(sign)
     get_result = client.simulate_get("/signs", params=params)
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == expected
 
 
@@ -100,4 +98,3 @@ def test_signs_search_route_error(client, sign_repository, signs):
         sign_repository.create(sign)
     get_result = client.simulate_get("/signs", params={"signs": "P₂"})
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"

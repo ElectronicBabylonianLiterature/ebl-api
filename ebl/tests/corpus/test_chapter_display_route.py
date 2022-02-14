@@ -36,7 +36,6 @@ def test_get(client, text_repository, text, chapter, url):
     get_result = client.simulate_get(url)
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == ChapterDisplaySchema().dump(chapter_display)
 
 

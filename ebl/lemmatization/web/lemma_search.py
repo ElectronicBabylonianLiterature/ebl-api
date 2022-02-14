@@ -15,11 +15,13 @@ def get_parameters(params: dict) -> Tuple[str, bool]:
             else False
         )
         return (word, is_normalized)
-    except KeyError:
+    except KeyError as error:
         raise falcon.HTTPUnprocessableEntity(
-            f"Invalid value {params.get('isNormalized')} for isNormalized. "
-            "Expected true or false."
-        )
+            description=(
+                f"Invalid value {params.get('isNormalized')} for isNormalized. "
+                "Expected true or false."
+            )
+        ) from error
 
 
 class LemmaSearch:

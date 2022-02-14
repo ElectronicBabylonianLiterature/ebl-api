@@ -1,5 +1,4 @@
 import json
-from urllib import parse
 
 import falcon
 import pytest
@@ -18,7 +17,6 @@ def test_get_word(client, saved_word):
 
     assert result.json == saved_word
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_word_not_found(client):
@@ -28,21 +26,19 @@ def test_word_not_found(client):
 
 
 def test_search_word(client, saved_word):
-    lemma = parse.quote_plus(" ".join(saved_word["lemma"]))
+    lemma = " ".join(saved_word["lemma"])
     result = client.simulate_get("/words", params={"query": lemma})
 
     assert result.json == [saved_word]
     assert result.status == falcon.HTTP_OK
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_search_word_lemma(client, saved_word):
-    lemma = parse.quote_plus(saved_word["lemma"][0][:2])
+    lemma = saved_word["lemma"][0][:2]
     result = client.simulate_get("/words", params={"lemma": lemma})
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [saved_word]
-    assert result.headers["Access-Control-Allow-Origin"] == "*"
 
 
 def test_search_word_no_query(client):
@@ -73,7 +69,6 @@ def test_update_word(transform, client, saved_word, user, database):
     post_result = client.simulate_post(f"/words/{unique_lemma}", body=body)
 
     assert post_result.status == falcon.HTTP_NO_CONTENT
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
 
     get_result = client.simulate_get(f"/words/{unique_lemma}")
 

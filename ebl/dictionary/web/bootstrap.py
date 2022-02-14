@@ -6,7 +6,7 @@ from ebl.dictionary.web.word_search import WordSearch
 from ebl.dictionary.web.words import WordsResource
 
 
-def create_dictionary_routes(api: falcon.API, context: Context):
+def create_dictionary_routes(api: falcon.App, context: Context):
     dictionary = Dictionary(context.word_repository, context.changelog)
     words = WordsResource(dictionary)
     word_search = WordSearch(dictionary)

@@ -97,7 +97,6 @@ def test_updating_alignment(
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == expected_chapter
 
     get_result = client.simulate_get(create_chapter_url(chapter))

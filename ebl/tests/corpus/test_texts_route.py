@@ -21,7 +21,6 @@ def test_get_text(client, bibliography, sign_repository, signs, text_repository)
     )
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_dto(text)
 
 
@@ -52,7 +51,6 @@ def test_listing_texts(client, bibliography, sign_repository, signs, text_reposi
     get_result = client.simulate_get("/texts")
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == [create_dto(first_text), create_dto(second_text)]
 
 
@@ -65,7 +63,6 @@ def test_searching_texts(client, bibliography, sign_repository, signs, text_repo
     get_result = client.simulate_get("/textsearch?transliteration=ku")
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == [
         ChapterInfoSchema().dump(
             ChapterInfo.of(chapter, TransliterationQuery([["KU"]]))

@@ -31,4 +31,3 @@ def test_get(photo_status, line_art_status, detail_line_art_status, client):
             detail_line_art_url if STATUSES[detail_line_art_status] else None
         ),
     }
-    assert result.headers["Access-Control-Allow-Origin"] == "*"

@@ -6,7 +6,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = "3.7.*"
-falcon = "^2.0.0"
+falcon = "^3.0.1"
 falcon-auth = "*"
 pymongo = "*"
 pydash = "*"
@@ -25,7 +25,7 @@ tqdm = "*"
 marshmallow-oneofschema = "*"
 singledispatchmethod = "*"
 pycryptodomex = "*"
-cryptography = "3.3.2"
+cryptography = "^36.0.1"
 pillow = "*"
 alignment = {git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 

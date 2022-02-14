@@ -16,7 +16,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 
 
-def create_corpus_routes(api: falcon.API, context: Context):
+def create_corpus_routes(api: falcon.App, context: Context):
     corpus = Corpus(
         context.text_repository,
         context.get_bibliography(),
