@@ -6,8 +6,6 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
 def test_fragment_matcher_route(client, fragmentarium, user):
-    fragment_id = "X.15"
-
     fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.15"))
     fragment_2 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.326"),
@@ -21,13 +19,12 @@ def test_fragment_matcher_route(client, fragmentarium, user):
     }
     fragmentarium.create(fragment_1)
     fragmentarium.create(fragment_2)
-    get_result = client.simulate_get(f"/fragments/{fragment_id}/match")
+    get_result = client.simulate_get(f'/fragments/X.15/match')
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == expected_score
 
 
 def test_fragment_matcher_route_error(client, fragmentarium, user):
-    faulty_fragment_id = "X.-1"
     fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     fragment_2 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.1"),
@@ -35,5 +32,5 @@ def test_fragment_matcher_route_error(client, fragmentarium, user):
     )
     fragmentarium.create(fragment_1)
     fragmentarium.create(fragment_2)
-    get_result = client.simulate_get(f"/fragments/{faulty_fragment_id}/match")
+    get_result = client.simulate_get(f'/fragments/X.-1/match')
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

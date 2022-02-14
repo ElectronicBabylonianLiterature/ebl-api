@@ -10,8 +10,7 @@ def validate(req_schema: Optional[Schema] = None, resp_schema: Optional[Schema] 
         @wraps(func)
         def wrapper(self, req, resp, *args, **kwargs):
             if req_schema is not None:
-                errors = req_schema.validate(req.media)
-                if errors:
+                if errors := req_schema.validate(req.media):
                     raise falcon.HTTPBadRequest(
                         title="Request data failed validation", description=errors
                     )
