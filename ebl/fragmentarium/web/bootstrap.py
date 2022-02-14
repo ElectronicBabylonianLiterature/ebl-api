@@ -48,7 +48,10 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         FragmentMatcher(context.fragment_repository)
     )
     fragment_search = FragmentSearch(
-        fragmentarium, finder, context.get_transliteration_query_factory()
+        fragmentarium,
+        finder,
+        context.get_transliteration_query_factory(),
+        context.cache,
     )
     genres = GenresResource()
     lemmatization = LemmatizationResource(updater)
