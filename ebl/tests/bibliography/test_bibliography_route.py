@@ -28,7 +28,7 @@ def test_get_entry(client, saved_entry):
 
 
 def test_get_entry_not_found(client):
-    result = client.simulate_get('/bibliography/not found')
+    result = client.simulate_get("/bibliography/not found")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 
