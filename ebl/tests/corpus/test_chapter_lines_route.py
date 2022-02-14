@@ -49,13 +49,11 @@ def test_updating(
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == create_chapter_dto(updated_chapter)
 
     get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_chapter_dto(updated_chapter)
 
 
@@ -93,13 +91,11 @@ def test_updating_strophic_information(
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == create_chapter_dto(updated_chapter)
 
     get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_chapter_dto(updated_chapter)
 
 
@@ -243,13 +239,11 @@ def test_importing(client, bibliography, sign_repository, signs, text_repository
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == create_chapter_dto(updated_chapter)
 
     get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == create_chapter_dto(updated_chapter)
 
 

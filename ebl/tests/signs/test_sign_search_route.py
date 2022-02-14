@@ -90,7 +90,6 @@ def test_signs_search_route(params, expected, client, sign_repository, signs):
         sign_repository.create(sign)
     get_result = client.simulate_get("/signs", params=params)
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == expected
 
 
@@ -99,4 +98,3 @@ def test_signs_search_route_error(client, sign_repository, signs):
         sign_repository.create(sign)
     get_result = client.simulate_get("/signs", params={"signs": "P₂"})
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"

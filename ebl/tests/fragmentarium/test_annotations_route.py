@@ -75,7 +75,6 @@ def test_update(client):
     expected_json = AnnotationsSchema().dump(annotations)
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(

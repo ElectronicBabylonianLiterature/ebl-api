@@ -69,7 +69,6 @@ def test_update_word(transform, client, saved_word, user, database):
     post_result = client.simulate_post(f"/words/{unique_lemma}", body=body)
 
     assert post_result.status == falcon.HTTP_NO_CONTENT
-    assert post_result.headers["Access-Control-Allow-Origin"] == "*"
 
     get_result = client.simulate_get(f"/words/{unique_lemma}")
 

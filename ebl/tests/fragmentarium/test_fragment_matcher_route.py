@@ -23,7 +23,6 @@ def test_fragment_matcher_route(client, fragmentarium, user):
     fragmentarium.create(fragment_2)
     get_result = client.simulate_get(f"/fragments/{fragment_id}/match")
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.headers["Access-Control-Allow-Origin"] == "*"
     assert get_result.json == expected_score
 
 
