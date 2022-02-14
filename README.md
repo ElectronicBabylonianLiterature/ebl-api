@@ -213,6 +213,7 @@ MONGODB_DB=<MongoDB database. Optional, authentication database will be used as 
 EBL_AI_API=<AI API URL. If you do not have access to and do not need the AI API use a safe dummy value.>
 SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
+CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used as default.>
 ```
 
 ### Locally

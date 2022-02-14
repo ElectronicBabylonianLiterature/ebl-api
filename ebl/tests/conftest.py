@@ -12,6 +12,7 @@ from PIL import Image
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
+from falcon_caching import Cache
 from marshmallow import EXCLUDE
 from pymongo_inmemory import MongoClient
 
@@ -334,6 +335,7 @@ def context(
         text_repository=text_repository,
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
+        cache=Cache({"CACHE_TYPE": "null"}),
     )
 
 

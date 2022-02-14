@@ -1,5 +1,6 @@
 import attr
 from falcon_auth.backends import AuthBackend
+from falcon_caching import Cache
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
@@ -36,6 +37,7 @@ class Context:
     text_repository: MongoTextRepository
     annotations_repository: AnnotationsRepository
     lemma_repository: LemmaRepository
+    cache: Cache
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)
