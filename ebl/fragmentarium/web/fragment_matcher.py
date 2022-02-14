@@ -19,4 +19,4 @@ class FragmentMatcherResource:
                 self.fragment_matcher.rank_line_to_vec(number)
             )
         except (ValueError, NotFoundError) as error:
-            raise DataError(error)
+            raise DataError(error) from error
