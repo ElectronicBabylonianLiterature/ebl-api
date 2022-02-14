@@ -18,7 +18,7 @@ from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
-from ebl.fragmentarium.web.statistics import StatisticsResource
+from ebl.fragmentarium.web.statistics import make_statistics_resource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
 
 
@@ -40,7 +40,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.changelog,
     )
 
-    statistics = StatisticsResource(fragmentarium)
+    statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
     fragment_genre = FragmentGenreResource(updater)
 
