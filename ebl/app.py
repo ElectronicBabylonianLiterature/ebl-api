@@ -1,12 +1,10 @@
 import os
 from base64 import b64decode
-import json
 
 import falcon
 import sentry_sdk
 from Cryptodome.PublicKey import RSA
 from falcon_auth import FalconAuthMiddleware
-from falcon_caching import Cache
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
@@ -14,6 +12,7 @@ from sentry_sdk.integrations.falcon import FalconIntegration
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
+from ebl.cache import create_cache
 from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
@@ -59,8 +58,7 @@ def create_context():
         os.environ["AUTH0_ISSUER"],
         set_sentry_user,
     )
-    cache_config = json.loads(os.environ.get("CACHE_CONFIG", '{"CACHE_TYPE": "null"}'))
-    cache = Cache(config=cache_config)
+    cache = create_cache()
     return Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=auth_backend,
