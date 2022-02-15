@@ -12,6 +12,7 @@ from PIL import Image
 from dictdiffer import diff
 from falcon import testing
 from falcon_auth import NoneAuthBackend
+from falcon_caching import Cache
 from marshmallow import EXCLUDE
 from pymongo_inmemory import MongoClient
 
@@ -334,6 +335,7 @@ def context(
         text_repository=text_repository,
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
+        cache=Cache({"CACHE_TYPE": "null"}),
     )
 
 
@@ -347,6 +349,14 @@ def client(context):
 def guest_client(context):
     api = ebl.app.create_app(
         attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
+    )
+    return testing.TestClient(api)
+
+
+@pytest.fixture
+def cached_client(context):
+    api = ebl.app.create_app(
+        attr.evolve(context, cache=Cache(config={"CACHE_TYPE": "simple"}))
     )
     return testing.TestClient(api)
 

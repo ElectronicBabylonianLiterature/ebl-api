@@ -12,6 +12,7 @@ from sentry_sdk.integrations.falcon import FalconIntegration
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
+from ebl.cache import create_cache
 from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
@@ -57,6 +58,7 @@ def create_context():
         os.environ["AUTH0_ISSUER"],
         set_sentry_user,
     )
+    cache = create_cache()
     return Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=auth_backend,
@@ -71,12 +73,15 @@ def create_context():
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
+        cache=cache,
     )
 
 
 def create_api(context: Context) -> falcon.App:
     auth_middleware = FalconAuthMiddleware(context.auth_backend)
-    api = falcon.App(cors_enable=True, middleware=auth_middleware)
+    api = falcon.App(
+        cors_enable=True, middleware=[auth_middleware, context.cache.middleware]
+    )
     ebl.error_handler.set_up(api)
     return api
 
