@@ -1,3 +1,5 @@
+import json
+
 import falcon
 from falcon_caching import Cache
 
@@ -14,7 +16,8 @@ def make_statistics_resource(cache: Cache, fragmentarium: Fragmentarium):
 
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, _req, resp: falcon.Response) -> None:
-            resp.media = self._fragmentarium.statistics()
+            # Falcon-Caching 1.0.1 does not cache resp.media.
+            resp.text = json.dumps(self._fragmentarium.statistics())
             resp.cache_control = ["public", f"max-age={DEFAULT_TIMEOUT}"]
 
     return StatisticsResource(fragmentarium)
