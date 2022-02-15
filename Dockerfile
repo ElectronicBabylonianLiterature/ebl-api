@@ -1,7 +1,5 @@
 FROM pypy:3.7
 
-RUN apt-get update
-RUN apt-get install libmemcached-dev -y
 RUN pip install poetry
 
 EXPOSE 8000
@@ -11,7 +9,6 @@ WORKDIR /usr/src/ebl
 COPY pyproject.toml ./
 COPY poetry.* ./
 RUN poetry install --no-root --no-dev
-RUN poetry add pylibmc
 
 COPY ./ebl ./ebl
 
