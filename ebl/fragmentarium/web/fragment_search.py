@@ -3,7 +3,7 @@ from typing import Tuple, Union
 import falcon
 from falcon_caching import Cache
 
-from ebl.cache import DEFAULT_TIMEOUT
+from ebl.cache import DEFAULT_TIMEOUT, cache_control
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -67,8 +67,10 @@ class FragmentSearch:
             return id, ""
 
     @falcon.before(require_scope, "read:fragments")
+    @cache_control(
+        ["private", "max-age=600"],
+        when=lambda req, _: req.params.keys() <= CACHED_COMMANDS,
+    )
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         infos = self._dispatch(req.params)
         resp.media = ApiFragmentInfoSchema(many=True).dump(infos)
-        if req.params.keys() <= CACHED_COMMANDS:
-            resp.cache_control = ["private", "max-age=600"]

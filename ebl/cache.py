@@ -1,8 +1,9 @@
 from functools import wraps
 import json
 import os
-from typing import Sequence
+from typing import Callable, Sequence
 
+from falcon import Request, Response
 from falcon_caching import Cache
 
 
@@ -19,15 +20,17 @@ def create_cache() -> Cache:
     return Cache(config=load_config())
 
 
-def cache_control(directives: Sequence[str]):
+def cache_control(
+    directives: Sequence[str],
+    when: Callable[[Request, Response], bool] = lambda _req, _resp: True,
+):
     def decorator(function):
         @wraps(function)
-        def wrapper(self, req, resp, *args, **kwargs):
-            result = function(self, req, resp, *args, **kwargs)
+        def wrapper(self, req: Request, resp: Response, *args, **kwargs):
+            if when(req, resp):
+                resp.cache_control = directives
 
-            resp.cache_control = directives
-
-            return result
+            return function(self, req, resp, *args, **kwargs)
 
         return wrapper
 
