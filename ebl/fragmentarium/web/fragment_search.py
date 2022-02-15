@@ -57,14 +57,13 @@ class FragmentSearch:
 
     @staticmethod
     def _validate_pages(id: str, pages: Union[str, None]) -> Tuple[str, str]:
-        if pages:
-            try:
-                int(pages)
-                return id, pages
-            except ValueError as error:
-                raise DataError(f'Pages "{pages}" not numeric.') from error
-        else:
+        if not pages:
             return id, ""
+        try:
+            int(pages)
+            return id, pages
+        except ValueError as error:
+            raise DataError(f'Pages "{pages}" not numeric.') from error
 
     @falcon.before(require_scope, "read:fragments")
     @cache_control(  # pyre-ignore[56]
