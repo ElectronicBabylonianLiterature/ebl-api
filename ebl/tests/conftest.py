@@ -354,6 +354,14 @@ def guest_client(context):
 
 
 @pytest.fixture
+def cached_client(context):
+    api = ebl.app.create_app(
+        attr.evolve(context, cache=Cache(config={"CACHE_TYPE": "simple"}))
+    )
+    return testing.TestClient(api)
+
+
+@pytest.fixture
 def text_with_labels():
     return Text.of_iterable(
         [
