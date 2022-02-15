@@ -58,7 +58,7 @@ The project includes a Visual Studio Code
 can be used locally or in
 [Codespaces](https://code.visualstudio.com/docs/remote/codespaces).
 
-## Codestyle
+### Codestyle
 
 Use [Black](https://black.readthedocs.io/en/stable/) codestyle and
 [PEP8 naming conventions](https://www.python.org/dev/peps/pep-0008/#naming-conventions).
@@ -199,6 +199,31 @@ The users should `eblName` property in the `user_metadata`. E.g.:
 ### Sentry
 
 An organization and project need to be setup in Sentry. *DSN* under *Client Keys* is needed for the for the environment variables (see below).
+
+## Caching
+
+[Falcon-Caching](https://falcon-caching.readthedocs.io/) middleware can be used for caching.
+See the documentation for more information. Configuration is read from `CACHE_CONFIG` environment variable.
+
+```shell script
+CACHE_CONFIG=='{"CACHE_TYPE": "simple"}' poetry run waitress-serve --port=8000 --call ebl.app:get_app
+```
+
+`cache-control` decorator can be used to add Cache-Control header to responses.
+
+```python
+@cache_control(['public', 'max-age=600'])
+def on_get(self, req, resp):
+    ...
+```
+
+A method to control when the header is added can be passed as the second argument.
+
+```python
+@cache_control(['public', 'max-age=600'], lambda req, resp: req.auth is None)
+def on_get(self, req, resp):
+    ...
+```
 
 ## Running the application
 
