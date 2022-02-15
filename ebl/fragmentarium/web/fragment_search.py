@@ -67,7 +67,7 @@ class FragmentSearch:
             return id, ""
 
     @falcon.before(require_scope, "read:fragments")
-    @cache_control(
+    @cache_control(  # pyre-ignore[56]
         ["private", "max-age=600"],
         when=lambda req, _: req.params.keys() <= CACHED_COMMANDS,
     )

@@ -1,9 +1,8 @@
-from functools import wraps
 import json
 import os
 from typing import Callable, Sequence
 
-from falcon import Request, Response
+from falcon import after, Request, Response
 from falcon_caching import Cache
 
 
@@ -24,14 +23,8 @@ def cache_control(
     directives: Sequence[str],
     when: Callable[[Request, Response], bool] = lambda _req, _resp: True,
 ):
-    def decorator(function):
-        @wraps(function)
-        def wrapper(self, req: Request, resp: Response, *args, **kwargs):
-            if when(req, resp):
-                resp.cache_control = directives
+    def add_header(req, resp, _resource):
+        if when(req, resp):
+            resp.cache_control = directives
 
-            return function(self, req, resp, *args, **kwargs)
-
-        return wrapper
-
-    return decorator
+    return after(add_header)
