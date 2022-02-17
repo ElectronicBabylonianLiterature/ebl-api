@@ -206,7 +206,7 @@ An organization and project need to be setup in Sentry. *DSN* under *Client Keys
 See the documentation for more information. Configuration is read from `CACHE_CONFIG` environment variable.
 
 ```shell script
-CACHE_CONFIG=='{"CACHE_TYPE": "simple"}' poetry run waitress-serve --port=8000 --call ebl.app:get_app
+CACHE_CONFIG='{"CACHE_TYPE": "simple"}' poetry run waitress-serve --port=8000 --call ebl.app:get_app
 ```
 
 `cache-control` decorator can be used to add Cache-Control header to responses.
