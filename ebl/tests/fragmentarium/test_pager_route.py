@@ -14,6 +14,7 @@ def test_get_fragment_pager(client, fragmentarium):
 
     assert result.json == {"next": "X.2", "previous": "X.0"}
     assert result.status == falcon.HTTP_OK
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_get_fragment_pager_invalid_id(client):
