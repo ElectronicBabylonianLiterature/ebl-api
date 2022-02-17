@@ -11,7 +11,7 @@ from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
 from ebl.fragmentarium.web.fragment_matcher import FragmentMatcherResource
-from ebl.fragmentarium.web.fragment_pager import FragmentPagerResource
+from ebl.fragmentarium.web.fragment_pager import make_fragment_pager_resource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsResource
 from ebl.fragmentarium.web.genres import GenresResource
@@ -60,7 +60,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         updater, context.get_transliteration_update_factory()
     )
     annotations = AnnotationResource(annotations_service)
-    fragment_pager = FragmentPagerResource(finder)
+    fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
