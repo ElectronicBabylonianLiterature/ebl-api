@@ -14,6 +14,21 @@ def test_get_fragment_pager(client, fragmentarium):
 
     assert result.json == {"next": "X.2", "previous": "X.0"}
     assert result.status == falcon.HTTP_OK
+    assert result.headers["Cache-Control"] == "private, max-age=600"
+
+
+def test_get_fragment_pager_cache(cached_client, fragmentarium):
+    fragment_0 = FragmentFactory.build(number=MuseumNumber("X", "0"))
+    fragment_1 = FragmentFactory.build(number=MuseumNumber("X", "3"))
+    for fragment in [fragment_0, fragment_1]:
+        fragmentarium.create(fragment)
+
+    first_result = cached_client.simulate_get(f"/fragments/{fragment_1.number}/pager")
+    fragmentarium.create(FragmentFactory.build(number=MuseumNumber("X", "2")))
+    second_result = cached_client.simulate_get(f"/fragments/{fragment_1.number}/pager")
+
+    assert first_result.json == second_result.json
+    assert first_result.status == second_result.status
 
 
 def test_get_fragment_pager_invalid_id(client):
