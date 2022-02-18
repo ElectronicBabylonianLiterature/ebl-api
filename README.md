@@ -209,6 +209,14 @@ See the documentation for more information. Configuration is read from `CACHE_CO
 CACHE_CONFIG='{"CACHE_TYPE": "simple"}' poetry run waitress-serve --port=8000 --call ebl.app:get_app
 ```
 
+Falcon-Caching v1.0.1 does not cache `media`. `text` must be used.
+
+```python
+@cache.cached(timeout=DEFAULT_TIMEOUT)
+def on_get(self, req, resp):
+    resp.text = ...
+```
+
 `cache-control` decorator can be used to add Cache-Control header to responses.
 
 ```python
