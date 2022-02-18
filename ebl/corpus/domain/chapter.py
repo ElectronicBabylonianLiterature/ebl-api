@@ -1,4 +1,4 @@
-from enum import Enum, unique
+from enum import Enum, unique, auto
 from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
@@ -64,6 +64,27 @@ class ChapterId:
         return f"{self.text_id} {self.stage.abbreviation} {self.name}"
 
 
+class AuthorRole(Enum):
+    EDITOR = auto()
+    REVISION = auto()
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Author:
+    name: str
+    prefix: str
+    role: AuthorRole
+    orcid_number: str
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Translator:
+    name: str
+    prefix: str
+    orcid_number: str
+    language: str
+
+
 def make_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
     return next(
         (
@@ -101,6 +122,8 @@ class Chapter:
         ],
     )
     signs: Sequence[str] = tuple()
+    authors: Sequence[Author] = tuple()
+    translators: Sequence[Translator] = tuple()
     parser_version: str = ""
 
     @property
@@ -140,8 +163,8 @@ class Chapter:
             return next(
                 manuscript for manuscript in self.manuscripts if manuscript.id == id_
             )
-        except StopIteration:
-            raise NotFoundError(f"No manuscripts with id {id_}.")
+        except StopIteration as error:
+            raise NotFoundError(f"No manuscripts with id {id_}.") from error
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines

@@ -1,7 +1,15 @@
 import attr
 import pytest
 
-from ebl.corpus.domain.chapter import Chapter, Classification, ExtantLine, TextLineEntry
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Classification,
+    ExtantLine,
+    TextLineEntry,
+    Author,
+    AuthorRole,
+    Translator,
+)
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -108,6 +116,9 @@ LINE_VARIANT_3 = LineVariant(
 )
 LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
+AUTHORS = (Author("Author", "Test", AuthorRole.EDITOR, ""),)
+TRANSLATORS = (Translator("Author", "Test", "", "en"),)
+
 TEXT_ID = TextId(GENRE, CATEGORY, INDEX)
 CHAPTER = Chapter(
     TEXT_ID,
@@ -135,6 +146,8 @@ CHAPTER = Chapter(
     (MUSEUM_NUMBER,),
     (LINE_1, LINE_2, LINE_3),
     SIGNS,
+    AUTHORS,
+    TRANSLATORS,
 )
 
 
@@ -169,6 +182,8 @@ def test_constructor_sets_correct_fields():
     assert CHAPTER.lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
     assert CHAPTER.lines[0].translation == TRANSLATION
     assert CHAPTER.signs == SIGNS
+    assert CHAPTER.authors == AUTHORS
+    assert CHAPTER.translators == TRANSLATORS
 
 
 def test_duplicate_ids_are_invalid():

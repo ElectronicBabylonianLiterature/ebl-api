@@ -224,6 +224,8 @@ class ChapterSchema(Schema):
             tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
             tuple(data["signs"]),
+            tuple(),
+            tuple(),
             data["parser_version"],
         )
 
