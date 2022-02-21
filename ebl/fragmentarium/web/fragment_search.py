@@ -26,8 +26,8 @@ class FragmentSearch:
         cache: Cache,
     ):
         @cache.memoize(DEFAULT_TIMEOUT)
-        def find_interesting(_):
-            return finder.find_interesting()
+        def find_needs_revision(_):
+            return fragmentarium.find_needs_revision()
 
         @cache.memoize(DEFAULT_TIMEOUT)
         def find_latest(_):
@@ -42,11 +42,9 @@ class FragmentSearch:
                 ),
                 frozenset(["number"]): lambda value: finder.search(**value),
                 frozenset(["random"]): lambda _: finder.find_random(),
-                frozenset(["interesting"]): find_interesting,
+                frozenset(["interesting"]): lambda _: finder.find_interesting(),
                 frozenset(["latest"]): find_latest,
-                frozenset(
-                    ["needsRevision"]
-                ): lambda _: fragmentarium.find_needs_revision(),
+                frozenset(["needsRevision"]): find_needs_revision,
                 frozenset(
                     ["transliteration"]
                 ): lambda value: finder.search_transliteration(
