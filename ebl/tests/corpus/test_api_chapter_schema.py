@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
+from ebl.corpus.application.schemas import AuthorSchema, TranslatorSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiManuscriptSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -53,6 +54,8 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         "name": chapter.name,
         "order": chapter.order,
         "signs": list(chapter.signs),
+        "authors": AuthorSchema().dump(chapter.authors, many=True),
+        "translators": TranslatorSchema().dump(chapter.translators, many=True),
         "parserVersion": chapter.parser_version,
         "manuscripts": ApiManuscriptSchema(
             exclude=[] if include_documents else ["joins"]

@@ -3,8 +3,8 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.schemas import ChapterSchema
-from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.application.schemas import AuthorSchema, ChapterSchema, TranslatorSchema
+from ebl.corpus.domain.chapter import Author, AuthorRole, Chapter, Translator
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -33,7 +33,6 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.translation_line import TranslationLine
-
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
@@ -82,6 +81,8 @@ def to_dict(chapter: Chapter, include_documents=False):
         "name": chapter.name,
         "order": chapter.order,
         "signs": list(chapter.signs),
+        "authors": AuthorSchema().dump(chapter.authors, many=True),
+        "translators": TranslatorSchema().dump(chapter.translators, many=True),
         "parserVersion": chapter.parser_version,
         "manuscripts": [
             {
@@ -151,9 +152,35 @@ def to_dict(chapter: Chapter, include_documents=False):
     }
 
 
-def test_dump():
+def test_dump() -> None:
     assert ChapterSchema().dump(CHAPTER) == to_dict(CHAPTER)
 
 
-def test_load():
+def test_load() -> None:
     assert ChapterSchema().load(to_dict(CHAPTER)) == strip_documents(CHAPTER)
+
+
+def test_author_schema() -> None:
+    author = Author("name", "prefix", AuthorRole.EDITOR, "0000-0000-0000-0000")
+    serialized = {
+        "name": author.name,
+        "prefix": author.prefix,
+        "role": author.role.name,
+        "orcidNumber": author.orcid_number,
+    }
+
+    assert AuthorSchema().dump(author) == serialized
+    assert AuthorSchema().load(serialized) == author
+
+
+def test_translator_schema() -> None:
+    translator = Translator("name", "prefix", "0000-0000-0000-0000", "en")
+    serialized = {
+        "name": translator.name,
+        "prefix": translator.prefix,
+        "orcidNumber": translator.orcid_number,
+        "language": translator.language,
+    }
+
+    assert TranslatorSchema().dump(translator) == serialized
+    assert TranslatorSchema().load(serialized) == translator

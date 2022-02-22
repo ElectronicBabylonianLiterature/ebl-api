@@ -1,7 +1,13 @@
 import factory.fuzzy
 import pydash
 
-from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Classification,
+    Author,
+    AuthorRole,
+    Translator,
+)
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -158,6 +164,26 @@ class TextIdFactory(factory.Factory):
     index = factory.Sequence(lambda n: n)
 
 
+class AuthorFactory(factory.Factory):
+    class Meta:
+        model = Author
+
+    name = factory.Faker("word")
+    prefix = factory.Faker("word")
+    role = factory.fuzzy.FuzzyChoice(AuthorRole)
+    orcid_number = ""
+
+
+class TranslatorFactory(factory.Factory):
+    class Meta:
+        model = Translator
+
+    name = factory.Faker("word")
+    prefix = factory.Faker("word")
+    orcid_number = ""
+    language = factory.fuzzy.FuzzyChoice(["en", "ar", "de"])
+
+
 class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
@@ -175,6 +201,8 @@ class ChapterFactory(factory.Factory):
         [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
     )
     signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",)
+    authors = factory.List([factory.SubFactory(AuthorFactory)], TupleFactory)
+    translators = factory.List([factory.SubFactory(TranslatorFactory)], TupleFactory)
     parser_version = ""
 
 
