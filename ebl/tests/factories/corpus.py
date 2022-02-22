@@ -4,9 +4,6 @@ import pydash
 from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
-    Author,
-    AuthorRole,
-    Translator,
 )
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
@@ -16,6 +13,7 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
+from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber

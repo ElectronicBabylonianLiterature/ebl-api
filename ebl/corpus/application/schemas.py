@@ -10,11 +10,8 @@ from marshmallow import (
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import (
-    Author,
-    AuthorRole,
     Chapter,
     Classification,
-    Translator,
 )
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
@@ -26,6 +23,7 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_non_standard_text,
     is_invalid_standard_text,
 )
+from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema

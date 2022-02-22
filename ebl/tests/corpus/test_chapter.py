@@ -6,9 +6,6 @@ from ebl.corpus.domain.chapter import (
     Classification,
     ExtantLine,
     TextLineEntry,
-    Author,
-    AuthorRole,
-    Translator,
 )
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
@@ -19,6 +16,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
     Siglum,
 )
+from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber

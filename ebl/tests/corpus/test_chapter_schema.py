@@ -4,7 +4,8 @@ from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
 )
 from ebl.corpus.application.schemas import AuthorSchema, ChapterSchema, TranslatorSchema
-from ebl.corpus.domain.chapter import Author, AuthorRole, Chapter, Translator
+from ebl.corpus.domain.chapter import Chapter
+from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory

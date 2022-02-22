@@ -1,4 +1,4 @@
-from enum import Enum, unique, auto
+from enum import Enum, unique
 from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
 
 import attr
@@ -7,6 +7,7 @@ import pydash
 from ebl.corpus.domain.extant_line import ExtantLine
 from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.record import Author, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
@@ -62,27 +63,6 @@ class ChapterId:
 
     def __str__(self) -> str:
         return f"{self.text_id} {self.stage.abbreviation} {self.name}"
-
-
-class AuthorRole(Enum):
-    EDITOR = auto()
-    REVISION = auto()
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Author:
-    name: str
-    prefix: str
-    role: AuthorRole
-    orcid_number: str
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Translator:
-    name: str
-    prefix: str
-    orcid_number: str
-    language: str
 
 
 def make_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
