@@ -3,6 +3,7 @@ import attr
 
 from ebl.corpus.domain.chapter import ChapterId, Chapter
 from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.record import Author, Translator
 from ebl.corpus.domain.text import Text
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
@@ -58,6 +59,8 @@ class ChapterDisplay:
     text_name: str
     is_single_stage: bool
     lines: Sequence[LineDisplay]
+    authors: Sequence[Author]
+    translators: Sequence[Translator]
 
     @property
     def title(self) -> Sequence[MarkupPart]:
@@ -70,4 +73,6 @@ class ChapterDisplay:
             text.name,
             not text.has_multiple_stages,
             tuple(map(LineDisplay.of_line, chapter.lines)),
+            chapter.authors,
+            chapter.translators,
         )
