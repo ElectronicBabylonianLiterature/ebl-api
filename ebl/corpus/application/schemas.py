@@ -9,6 +9,7 @@ from marshmallow import (
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.application.id_schemas import TextIdSchema
+from ebl.corpus.application.record_schemas import AuthorSchema, TranslatorSchema
 from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
@@ -23,13 +24,12 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_non_standard_text,
     is_invalid_standard_text,
 )
-from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.schemas import NameEnum, ValueEnum
+from ebl.schemas import ValueEnum
 from ebl.transliteration.application.label_schemas import labels
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
@@ -194,30 +194,6 @@ class LineSchema(Schema):
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["translation"]),
-        )
-
-
-class AuthorSchema(Schema):
-    name = fields.String(required=True)
-    prefix = fields.String(required=True)
-    role = NameEnum(AuthorRole, required=True)
-    orcid_number = fields.String(required=True, data_key="orcidNumber")
-
-    @post_load
-    def make_author(self, data: dict, **kwargs) -> Author:
-        return Author(data["name"], data["prefix"], data["role"], data["orcid_number"])
-
-
-class TranslatorSchema(Schema):
-    name = fields.String(required=True)
-    prefix = fields.String(required=True)
-    orcid_number = fields.String(required=True, data_key="orcidNumber")
-    language = fields.String(required=True)
-
-    @post_load
-    def make_translator(self, data: dict, **kwargs) -> Translator:
-        return Translator(
-            data["name"], data["prefix"], data["orcid_number"], data["language"]
         )
 
 

@@ -105,8 +105,8 @@ class MongoTextRepository(TextRepository):
                 )
             )
             return TextSchema().load(mongo_text)
-        except StopIteration:
-            raise text_not_found(id_)
+        except StopIteration as error:
+            raise text_not_found(id_) from error
 
     def find_chapter(self, id_: ChapterId) -> Chapter:
         try:
@@ -114,8 +114,8 @@ class MongoTextRepository(TextRepository):
                 chapter_id_query(id_), projection={"_id": False}
             )
             return ChapterSchema().load(chapter)
-        except NotFoundError:
-            raise chapter_not_found(id_)
+        except NotFoundError as error:
+            raise chapter_not_found(id_) from error
 
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         try:
@@ -198,8 +198,8 @@ class MongoTextRepository(TextRepository):
                 )["manuscripts"],
                 many=True,
             )
-        except NotFoundError:
-            raise chapter_not_found(id_)
+        except NotFoundError as error:
+            raise chapter_not_found(id_) from error
 
     def query_manuscripts_with_joins_by_chapter(
         self, id_: ChapterId
@@ -218,5 +218,5 @@ class MongoTextRepository(TextRepository):
                 ),
                 many=True,
             )
-        except NotFoundError:
-            raise chapter_not_found(id_)
+        except NotFoundError as error:
+            raise chapter_not_found(id_) from error

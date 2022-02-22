@@ -176,5 +176,13 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                 },
             }
         },
-        {"$project": {"_id": False, "id": True, "lines": True}},
+        {
+            "$project": {
+                "_id": False,
+                "id": True,
+                "lines": True,
+                "authors": True,
+                "translators": True,
+            }
+        },
     ]
