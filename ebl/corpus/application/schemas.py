@@ -9,7 +9,10 @@ from marshmallow import (
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.corpus.domain.chapter import Chapter, Classification
+from ebl.corpus.domain.chapter import (
+    Chapter,
+    Classification,
+)
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -20,12 +23,13 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_non_standard_text,
     is_invalid_standard_text,
 )
+from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.schemas import ValueEnum
+from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.label_schemas import labels
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
@@ -193,6 +197,30 @@ class LineSchema(Schema):
         )
 
 
+class AuthorSchema(Schema):
+    name = fields.String(required=True)
+    prefix = fields.String(required=True)
+    role = NameEnum(AuthorRole, required=True)
+    orcid_number = fields.String(required=True, data_key="orcidNumber")
+
+    @post_load
+    def make_author(self, data: dict, **kwargs) -> Author:
+        return Author(data["name"], data["prefix"], data["role"], data["orcid_number"])
+
+
+class TranslatorSchema(Schema):
+    name = fields.String(required=True)
+    prefix = fields.String(required=True)
+    orcid_number = fields.String(required=True, data_key="orcidNumber")
+    language = fields.String(required=True)
+
+    @post_load
+    def make_translator(self, data: dict, **kwargs) -> Translator:
+        return Translator(
+            data["name"], data["prefix"], data["orcid_number"], data["language"]
+        )
+
+
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnum(Classification, required=True)
@@ -209,6 +237,8 @@ class ChapterSchema(Schema):
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
     signs = fields.List(fields.String(), load_default=tuple())
+    authors = fields.Nested(AuthorSchema, many=True, load_default=tuple())
+    translators = fields.Nested(TranslatorSchema, many=True, load_default=tuple())
     parser_version = fields.String(load_default="", data_key="parserVersion")
 
     @post_load
@@ -224,6 +254,8 @@ class ChapterSchema(Schema):
             tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
             tuple(data["signs"]),
+            tuple(data["authors"]),
+            tuple(data["translators"]),
             data["parser_version"],
         )
 

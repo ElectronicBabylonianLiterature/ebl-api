@@ -7,6 +7,7 @@ import pydash
 from ebl.corpus.domain.extant_line import ExtantLine
 from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.record import Author, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
@@ -101,6 +102,8 @@ class Chapter:
         ],
     )
     signs: Sequence[str] = tuple()
+    authors: Sequence[Author] = tuple()
+    translators: Sequence[Translator] = tuple()
     parser_version: str = ""
 
     @property
@@ -140,8 +143,8 @@ class Chapter:
             return next(
                 manuscript for manuscript in self.manuscripts if manuscript.id == id_
             )
-        except StopIteration:
-            raise NotFoundError(f"No manuscripts with id {id_}.")
+        except StopIteration as error:
+            raise NotFoundError(f"No manuscripts with id {id_}.") from error
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines
