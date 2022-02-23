@@ -4,7 +4,7 @@ from marshmallow import (
     post_load,
 )
 
-from ebl.corpus.domain.record import Author, AuthorRole, Translator
+from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.schemas import NameEnum
 
 
@@ -29,4 +29,16 @@ class TranslatorSchema(Schema):
     def make_translator(self, data: dict, **kwargs) -> Translator:
         return Translator(
             data["name"], data["prefix"], data["orcid_number"], data["language"]
+        )
+
+
+class RecordSchema(Schema):
+    authors = fields.Nested(AuthorSchema, many=True, required=True)
+    translators = fields.Nested(TranslatorSchema, many=True, required=True)
+    publication_date = fields.String(required=True, data_key="publicationDate")
+
+    @post_load
+    def make_record(self, data: dict, **kwargs) -> Record:
+        return Record(
+            tuple(data["authors"]), tuple(data["translators"]), data["publication_date"]
         )

@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from typing import Sequence
 
 import attr
 
@@ -22,3 +23,10 @@ class Translator:
     prefix: str
     orcid_number: str
     language: str
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Record:
+    authors: Sequence[Author] = tuple()
+    translators: Sequence[Translator] = tuple()
+    publication_date: str = ""
