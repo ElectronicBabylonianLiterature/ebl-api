@@ -7,7 +7,7 @@ import pydash
 from ebl.corpus.domain.extant_line import ExtantLine
 from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
-from ebl.corpus.domain.record import Author, Translator
+from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.errors import NotFoundError
@@ -102,8 +102,7 @@ class Chapter:
         ],
     )
     signs: Sequence[str] = tuple()
-    authors: Sequence[Author] = tuple()
-    translators: Sequence[Translator] = tuple()
+    record: Record = Record()
     parser_version: str = ""
 
     @property

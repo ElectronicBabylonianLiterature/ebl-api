@@ -181,8 +181,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                 "_id": False,
                 "id": True,
                 "lines": True,
-                "authors": True,
-                "translators": True,
+                "record": True,
             }
         },
     ]

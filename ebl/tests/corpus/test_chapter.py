@@ -16,7 +16,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
     Siglum,
 )
-from ebl.corpus.domain.record import Author, AuthorRole, Translator
+from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -114,8 +114,11 @@ LINE_VARIANT_3 = LineVariant(
 )
 LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
-AUTHORS = (Author("Author", "Test", AuthorRole.EDITOR, ""),)
-TRANSLATORS = (Translator("Author", "Test", "", "en"),)
+RECORD = Record(
+    (Author("Author", "Test", AuthorRole.EDITOR, ""),),
+    (Translator("Author", "Test", "", "en"),),
+    "",
+)
 
 TEXT_ID = TextId(GENRE, CATEGORY, INDEX)
 CHAPTER = Chapter(
@@ -144,8 +147,7 @@ CHAPTER = Chapter(
     (MUSEUM_NUMBER,),
     (LINE_1, LINE_2, LINE_3),
     SIGNS,
-    AUTHORS,
-    TRANSLATORS,
+    RECORD,
 )
 
 
@@ -180,8 +182,7 @@ def test_constructor_sets_correct_fields():
     assert CHAPTER.lines[0].is_beginning_of_section == IS_BEGINNING_OF_SECTION
     assert CHAPTER.lines[0].translation == TRANSLATION
     assert CHAPTER.signs == SIGNS
-    assert CHAPTER.authors == AUTHORS
-    assert CHAPTER.translators == TRANSLATORS
+    assert CHAPTER.record == RECORD
 
 
 def test_duplicate_ids_are_invalid():

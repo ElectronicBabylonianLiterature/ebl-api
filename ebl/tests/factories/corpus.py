@@ -13,7 +13,7 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
-from ebl.corpus.domain.record import Author, AuthorRole, Translator
+from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -182,6 +182,15 @@ class TranslatorFactory(factory.Factory):
     language = factory.fuzzy.FuzzyChoice(["en", "ar", "de"])
 
 
+class RecordFactory(factory.Factory):
+    class Meta:
+        model = Record
+
+    authors = factory.List([factory.SubFactory(AuthorFactory)], TupleFactory)
+    translators = factory.List([factory.SubFactory(TranslatorFactory)], TupleFactory)
+    publication_date = "2020-05-11T07:46:47.743916"
+
+
 class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
@@ -199,8 +208,7 @@ class ChapterFactory(factory.Factory):
         [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
     )
     signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",)
-    authors = factory.List([factory.SubFactory(AuthorFactory)], TupleFactory)
-    translators = factory.List([factory.SubFactory(TranslatorFactory)], TupleFactory)
+    record = factory.SubFactory(RecordFactory)
     parser_version = ""
 
 

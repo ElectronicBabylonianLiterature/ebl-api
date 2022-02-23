@@ -3,7 +3,12 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.schemas import AuthorSchema, ChapterSchema, TranslatorSchema
+from ebl.corpus.application.schemas import ChapterSchema
+from ebl.corpus.application.record_schemas import (
+    AuthorSchema,
+    RecordSchema,
+    TranslatorSchema,
+)
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.record import Author, AuthorRole, Translator
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
@@ -82,8 +87,7 @@ def to_dict(chapter: Chapter, include_documents=False):
         "name": chapter.name,
         "order": chapter.order,
         "signs": list(chapter.signs),
-        "authors": AuthorSchema().dump(chapter.authors, many=True),
-        "translators": TranslatorSchema().dump(chapter.translators, many=True),
+        "record": RecordSchema().dump(chapter.record),
         "parserVersion": chapter.parser_version,
         "manuscripts": [
             {

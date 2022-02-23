@@ -9,7 +9,7 @@ from marshmallow import (
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.corpus.application.record_schemas import AuthorSchema, TranslatorSchema
+from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
@@ -24,6 +24,7 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_non_standard_text,
     is_invalid_standard_text,
 )
+from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
@@ -213,8 +214,7 @@ class ChapterSchema(Schema):
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
     signs = fields.List(fields.String(), load_default=tuple())
-    authors = fields.Nested(AuthorSchema, many=True, load_default=tuple())
-    translators = fields.Nested(TranslatorSchema, many=True, load_default=tuple())
+    record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
 
     @post_load
@@ -230,8 +230,7 @@ class ChapterSchema(Schema):
             tuple(data["uncertain_fragments"]),
             tuple(data["lines"]),
             tuple(data["signs"]),
-            tuple(data["authors"]),
-            tuple(data["translators"]),
+            data["record"],
             data["parser_version"],
         )
 
