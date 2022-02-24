@@ -25,7 +25,13 @@ Requirements:
 pip install poetry
 poetry install
 ```
-
+If `libcst` installation fails (because a binary wheel is not available for Linux/Windows + Pypy) you need to install Rust toolchain.
+Installation on Arch Linux
+```shell script
+sudo pacman -S rustup
+rustu default stable
+rustc #verify installation
+```
 The following are needed to run application:
 
 * MongoDB 4.4.4
