@@ -347,15 +347,21 @@ class MongoFragmentRepository(FragmentRepository):
                 museum_number, all_museum_numbers, True
             )
 
-        end = time()
-        print(museum_number)
-        print(f"Total time {end - start}")
-        print(f"Per Iterations {sum(iteration) / len(iteration)}")
-        print(f"Load Schema {sum(load_schema) / len(load_schema)}")
-        print(f"Total {sum(total_iter) / len(total_iter)}")
-
         prev = MuseumNumber( prev["prefix"], prev["number"], prev["suffix"])
         next = MuseumNumber(next["prefix"], next["number"],  next["suffix"])
+
+
+        print(museum_number)
+        print(f"Per Iterations {sum(iteration) / len(iteration)}")
+        print(f"Load Schema {sum(load_schema) / len(load_schema)}")
+        print(f"List of find adjacent numbers method excecutions: {total_iter}")
+        print(f"Avg Find Adjacent Numbers Method {sum(total_iter) / len(total_iter)}")
+        print(f"Total time {time() - start}")
+        print()
+
+        total_iter.clear()
+        iteration.clear()
+        load_schema.clear()
         return FragmentPagerInfo(prev, next)
 
     def update_references(self, fragment):
