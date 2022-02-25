@@ -211,12 +211,6 @@ def test_query_next_and_previous_fragment(query, expected, fragment_repository):
     assert results.next == MuseumNumber.of(expected[1])
 
 
-def test_query_next_and_previous_fragment_exception(fragment_repository):
-    query = MuseumNumber.of("1841-07-26.57")
-    with pytest.raises(NotFoundError):
-        fragment_repository.query_next_and_previous_fragment(query)
-
-
 def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
     fragment_repository.create(fragment)
