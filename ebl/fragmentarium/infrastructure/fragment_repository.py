@@ -1,6 +1,5 @@
 import operator
-from time import time
-from typing import List, Sequence, Tuple, Callable, Optional, cast
+from typing import List, Sequence, Tuple, Callable, Optional
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -31,9 +30,6 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 
-total_iter = []
-load_schema = []
-iteration = []
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
@@ -74,23 +70,17 @@ def _find_adjacent_museum_number_from_sequence(
     current_prev = None
     current_next = None
     museum_number = {"number": museum_number.number, "prefix": museum_number.prefix, "suffix": museum_number.suffix}
-    s0 = time()
     for current_cursor in cursor:
-        s1 = time()
         current_museum_number = current_cursor["museumNumber"]
-
-        load_schema.append(time() - s1)
-
         current_prev = _compare_within_two_museum_numbers(
             museum_number, current_museum_number, current_prev, operator.lt
         )
         current_next = _compare_within_two_museum_numbers(
             museum_number, current_museum_number, current_next, operator.gt
         )
-        iteration.append(time() - s1)
         if is_endpoint:
             first, last = _compare_museum_numbers(first, last, current_museum_number)
-    total_iter.append(time() - s0)
+
     if is_endpoint:
         current_prev = current_prev or last
         current_next = current_next or first
@@ -328,9 +318,6 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-
-        start = time()
-
         museum_numbers_by_prefix = self._fragments.find_many(
             {"museumNumber.prefix": museum_number.prefix},
             projection={"museumNumber": True},
@@ -345,12 +332,6 @@ class MongoFragmentRepository(FragmentRepository):
             prev, next = _find_adjacent_museum_number_from_sequence(
                 museum_number, all_museum_numbers, True
             )
-
-        end = time()
-        print(f"Total time {end - start}")
-        print(f"Per Iterations {sum(iteration) / len(iteration)}")
-        print(f"Load Schema {sum(load_schema) / len(load_schema)}")
-        print(f"Total {sum(total_iter) / len(total_iter)}")
 
         prev = MuseumNumber( prev["prefix"], prev["number"], prev["suffix"])
         next = MuseumNumber(next["prefix"], next["number"],  next["suffix"])
