@@ -1,5 +1,6 @@
 import functools
 import math
+import operator
 import re
 from typing import Mapping, Tuple
 
@@ -36,6 +37,30 @@ PREFIX_ORDER: Mapping[str, int] = {
 }
 NUMBER_PREFIX_ORDER: int = 6
 DEFAULT_PREFIX_ORDER: int = 11
+
+
+
+
+
+
+def spread(museum_number):
+    number = museum_number["number"]
+    prefix = museum_number["prefix"]
+    suffix = museum_number.get("suffix", "")
+    return (
+        *(NUMBER_PREFIX_ORDER
+          if prefix.isnumeric()
+          else PREFIX_ORDER.get(prefix, DEFAULT_PREFIX_ORDER),
+          int(prefix) if prefix.isnumeric() else 0,
+          prefix),
+        *(int(number) if number.isnumeric() else math.inf, number),
+        *(int(suffix) if suffix.isnumeric() else math.inf, suffix)
+    )
+
+def compare_museum_number(first, second, comparator = operator.lt)->bool:
+    return comparator(spread(first), spread(second))
+
+
 
 
 @functools.total_ordering
