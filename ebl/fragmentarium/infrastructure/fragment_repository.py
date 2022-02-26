@@ -1,5 +1,4 @@
 import operator
-from time import time
 from typing import List, Sequence, Tuple, Callable, Optional
 
 import pymongo
@@ -40,7 +39,7 @@ def has_none_values(dictionary: dict) -> bool:
 
 
 def _compare_within_two_museum_numbers(
-    museum_number: MuseumNumber,
+    museum_number: dict[st],
     current_museum_number: MuseumNumber,
     current_prev_or_next: Optional[MuseumNumber],
     comparator: Callable[[MuseumNumber, MuseumNumber], bool],
@@ -74,12 +73,8 @@ def _find_adjacent_museum_number_from_sequence(
     current_prev = None
     current_next = None
     museum_number = {"number": museum_number.number, "prefix": museum_number.prefix, "suffix": museum_number.suffix}
-    s0 = time()
     for current_cursor in cursor:
-        s1 = time()
         current_museum_number = current_cursor["museumNumber"]
-
-        load_schema.append(time() - s1)
 
         current_prev = _compare_within_two_museum_numbers(
             museum_number, current_museum_number, current_prev, operator.lt
@@ -90,11 +85,9 @@ def _find_adjacent_museum_number_from_sequence(
 
         if is_endpoint:
             first, last = _compare_museum_numbers(first, last, current_museum_number)
-        iteration.append(time() - s1)
     if is_endpoint:
         current_prev = current_prev or last
         current_next = current_next or first
-    total_iter.append(time() - s0)
     return current_prev, current_next
 
 
@@ -330,8 +323,6 @@ class MongoFragmentRepository(FragmentRepository):
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
 
-        start = time()
-
         museum_numbers_by_prefix = self._fragments.find_many(
             {"museumNumber.prefix": museum_number.prefix},
             projection={"museumNumber": True},
@@ -347,21 +338,10 @@ class MongoFragmentRepository(FragmentRepository):
                 museum_number, all_museum_numbers, True
             )
 
-        prev = MuseumNumber( prev["prefix"], prev["number"], prev["suffix"])
+        prev = MuseumNumber(prev["prefix"], prev["number"], prev["suffix"])
         next = MuseumNumber(next["prefix"], next["number"],  next["suffix"])
 
 
-        print(museum_number)
-        print(f"Per Iterations {sum(iteration) / len(iteration)}")
-        print(f"Load Schema {sum(load_schema) / len(load_schema)}")
-        print(f"List of find adjacent numbers method excecutions: {total_iter}")
-        print(f"Avg Find Adjacent Numbers Method {sum(total_iter) / len(total_iter)}")
-        print(f"Total time {time() - start}")
-        print()
-
-        total_iter.clear()
-        iteration.clear()
-        load_schema.clear()
         return FragmentPagerInfo(prev, next)
 
     def update_references(self, fragment):
