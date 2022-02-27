@@ -1,8 +1,7 @@
 import functools
 import math
-import operator
 import re
-from typing import Mapping, Tuple, Union, Dict, TypedDict
+from typing import Mapping, Tuple
 
 import attr
 
@@ -38,33 +37,6 @@ PREFIX_ORDER: Mapping[str, int] = {
 NUMBER_PREFIX_ORDER: int = 6
 DEFAULT_PREFIX_ORDER: int = 11
 
-def prefix_order(prefix: str) -> Tuple[int, int, str]:
-   return NUMBER_PREFIX_ORDER if prefix.isnumeric() else PREFIX_ORDER.get(prefix, DEFAULT_PREFIX_ORDER), int(prefix) if prefix.isnumeric() else 0, prefix
-
-def number_order(number: str) -> Tuple[float, str]:
-    return int(number) if number.isnumeric() else math.inf, number
-
-
-def suffix_order(suffix: str) -> Tuple[float, str]:
-    return int(suffix) if suffix.isnumeric() else math.inf, suffix
-
-def convert_to_order_number(prefix: str,number: str, suffix:str) -> Tuple[int, int, str]:
-    prefix_order_number = prefix_order(prefix)
-    number_order_number = number_order(number)
-    suffix_order_number = suffix_order(suffix)
-    return (*prefix_order_number, *number_order_number, *suffix_order_number)
-
-class MuseumNumberDict(TypedDict):
-    prefix: str
-    number: str
-    suffix: str
-
-def compare_museum_number(first: MuseumNumberDict, second: MuseumNumberDict, comparator = operator.lt)->bool:
-    return comparator(convert_to_order_number(**first), convert_to_order_number(**second))
-
-
-
-
 
 @functools.total_ordering
 @attr.s(auto_attribs=True, frozen=True, order=False)
@@ -75,8 +47,8 @@ class MuseumNumber:
 
     def __lt__(self, other):
         return (
-            convert_to_order_number(self.prefix, self.number, self.suffix)
-            <  convert_to_order_number(other.prefix, other.number, other.suffix)
+            (*self._prefix_order, *self._number_order, *self._suffix_order)
+            < (*other._prefix_order, *other._number_order, *other._suffix_order)
             if isinstance(other, MuseumNumber)
             else NotImplemented
         )
@@ -86,6 +58,24 @@ class MuseumNumber:
             return f"{self.prefix}.{self.number}.{self.suffix}"
         else:
             return f"{self.prefix}.{self.number}"
+
+    @property
+    def _prefix_order(self) -> Tuple[int, int, str]:
+        return (
+            NUMBER_PREFIX_ORDER
+            if self.prefix.isnumeric()
+            else PREFIX_ORDER.get(self.prefix, DEFAULT_PREFIX_ORDER),
+            int(self.prefix) if self.prefix.isnumeric() else 0,
+            self.prefix,
+        )
+
+    @property
+    def _number_order(self) -> Tuple[float, str]:
+        return (int(self.number) if self.number.isnumeric() else math.inf, self.number)
+
+    @property
+    def _suffix_order(self) -> Tuple[float, str]:
+        return (int(self.suffix) if self.suffix.isnumeric() else math.inf, self.suffix)
 
     @staticmethod
     def of(source: str) -> "MuseumNumber":

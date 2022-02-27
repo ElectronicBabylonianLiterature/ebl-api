@@ -1,5 +1,5 @@
 import operator
-from typing import List, Sequence, Tuple, Callable, Optional
+from typing import List, Sequence, Tuple, Callable, Optional, cast
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -15,7 +15,7 @@ from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchem
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber, compare_museum_number
+from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure import collections
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -30,23 +30,20 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 
-total_iter = []
-load_schema = []
-iteration = []
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
 def _compare_within_two_museum_numbers(
-    museum_number: dict[st],
+    museum_number: MuseumNumber,
     current_museum_number: MuseumNumber,
     current_prev_or_next: Optional[MuseumNumber],
     comparator: Callable[[MuseumNumber, MuseumNumber], bool],
 ) -> Optional[MuseumNumber]:
-    if compare_museum_number(current_museum_number, museum_number, comparator) and (
+    if comparator(current_museum_number, museum_number) and (
         not current_prev_or_next
-        or compare_museum_number(current_prev_or_next, current_museum_number, comparator)
+        or comparator(current_prev_or_next, current_museum_number)
     ):
         return current_museum_number
     else:
@@ -58,9 +55,9 @@ def _compare_museum_numbers(
     last: Optional[MuseumNumber],
     current_museum_number: MuseumNumber,
 ) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
-    if first is None or compare_museum_number(current_museum_number, first):
+    if first is None or current_museum_number < first:
         first = current_museum_number
-    if last is None or  compare_museum_number(last, current_museum_number):
+    if last is None or current_museum_number > last:
         last = current_museum_number
     return first, last
 
@@ -72,9 +69,15 @@ def _find_adjacent_museum_number_from_sequence(
     last = None
     current_prev = None
     current_next = None
-    museum_number = {"number": museum_number.number, "prefix": museum_number.prefix, "suffix": museum_number.suffix}
     for current_cursor in cursor:
-        current_museum_number = current_cursor["museumNumber"]
+        museum_number_dict = current_cursor["museumNumber"]
+        # Not use MuseumNumber().load(current_current["museumNumber"]) because of
+        # performance reasons
+        current_museum_number = MuseumNumber(
+            prefix=museum_number_dict["prefix"],
+            number=museum_number_dict["number"],
+            suffix=museum_number_dict["suffix"],
+        )
 
         current_prev = _compare_within_two_museum_numbers(
             museum_number, current_museum_number, current_prev, operator.lt
@@ -85,6 +88,7 @@ def _find_adjacent_museum_number_from_sequence(
 
         if is_endpoint:
             first, last = _compare_museum_numbers(first, last, current_museum_number)
+
     if is_endpoint:
         current_prev = current_prev or last
         current_next = current_next or first
@@ -319,9 +323,44 @@ class MongoFragmentRepository(FragmentRepository):
         else:
             return result
 
+    def query_museum_numbers(self, prefix: str, number_regex: str) -> Sequence[dict]:
+        return self._fragments.find_many(
+            {
+                "museumNumber.prefix": prefix,
+                "museumNumber.number": {"$regex": number_regex},
+            },
+            projection={"museumNumber": True},
+        )
+
+    def _query_next_and_previous_fragment(
+        self, museum_number
+    ) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
+        same_museum_numbers = self.query_museum_numbers(
+            museum_number.prefix, rf"{museum_number.number}[^\d]*"
+        )
+        preeceding_museum_numbers = self.query_museum_numbers(
+            museum_number.prefix, rf"{int(museum_number.number) - 1}[^\d]*"
+        )
+        following_museum_numbers = self.query_museum_numbers(
+            museum_number.prefix, rf"{int(museum_number.number) + 1}[^\d]*"
+        )
+        return _find_adjacent_museum_number_from_sequence(
+            museum_number,
+            [
+                *same_museum_numbers,
+                *preeceding_museum_numbers,
+                *following_museum_numbers,
+            ],
+        )
+
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
+
+        if museum_number.number.isnumeric():
+            prev, next = self._query_next_and_previous_fragment(museum_number)
+            if prev and next:
+                return FragmentPagerInfo(prev, next)
 
         museum_numbers_by_prefix = self._fragments.find_many(
             {"museumNumber.prefix": museum_number.prefix},
@@ -337,12 +376,7 @@ class MongoFragmentRepository(FragmentRepository):
             prev, next = _find_adjacent_museum_number_from_sequence(
                 museum_number, all_museum_numbers, True
             )
-
-        prev = MuseumNumber(prev["prefix"], prev["number"], prev["suffix"])
-        next = MuseumNumber(next["prefix"], next["number"],  next["suffix"])
-
-
-        return FragmentPagerInfo(prev, next)
+        return FragmentPagerInfo(cast(MuseumNumber, prev), cast(MuseumNumber, next))
 
     def update_references(self, fragment):
         self._fragments.update_one(
