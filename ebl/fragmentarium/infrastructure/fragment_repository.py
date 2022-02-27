@@ -88,7 +88,6 @@ def _find_adjacent_museum_number_from_sequence(
 
         if is_endpoint:
             first, last = _compare_museum_numbers(first, last, current_museum_number)
-
     if is_endpoint:
         current_prev = current_prev or last
         current_next = current_next or first
