@@ -1,5 +1,7 @@
 import base64
 import io
+from time import time
+
 from singledispatchmethod import singledispatchmethod
 from io import BytesIO
 from typing import Sequence, NewType
@@ -126,13 +128,20 @@ class AnnotationImageExtractor:
         return cropped_annotations
 
     def cropped_images_from_sign(self, sign: str) -> Sequence[CroppedAnnotation]:
+        s = time()
         annotations = self._annotations_repository.find_by_sign(sign)
+        print(f"Retrieve Annotations: {time() - s}")
         cropped_annotations = []
-        for single_annotation in annotations:
+        for single_annotation in annotations[:15]:
+            s1 = time()
             fragment_number = single_annotation.fragment_number
+
             cropped_annotations.extend(
                 self._cropped_image_from_annotations(
                     fragment_number, single_annotation.annotations
                 )
             )
+
+            print(f"{len(cropped_annotations)} Per Iterations: {time() - s1}")
+        print(f"All: {time() - s}")
         return cropped_annotations
