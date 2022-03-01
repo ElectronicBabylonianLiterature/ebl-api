@@ -35,7 +35,7 @@ def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
-def _compare_within_two_museum_numbers(
+def _select_museum_between_two_values(
     museum_number: MuseumNumber,
     current_museum_number: MuseumNumber,
     current_prev_or_next: Optional[MuseumNumber],
@@ -50,16 +50,11 @@ def _compare_within_two_museum_numbers(
         return current_prev_or_next
 
 
-def _compare_museum_numbers(
-    first: Optional[MuseumNumber],
-    last: Optional[MuseumNumber],
-    current_museum_number: MuseumNumber,
-) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
-    if first is None or current_museum_number < first:
-        first = current_museum_number
-    if last is None or current_museum_number > last:
-        last = current_museum_number
-    return first, last
+def _min_max_museum_numbers(
+    museum_numbers: Sequence[Optional[MuseumNumber]],
+) -> Tuple[MuseumNumber, MuseumNumber]:
+    sorted_museum_numbers = sorted(cast(Sequence[MuseumNumber], filter(lambda x: x is not None, museum_numbers)))
+    return min(sorted_museum_numbers), max(sorted_museum_numbers)
 
 
 def _find_adjacent_museum_number_from_sequence(
@@ -79,15 +74,15 @@ def _find_adjacent_museum_number_from_sequence(
             suffix=museum_number_dict["suffix"],
         )
 
-        current_prev = _compare_within_two_museum_numbers(
+        current_prev = _select_museum_between_two_values(
             museum_number, current_museum_number, current_prev, operator.lt
         )
-        current_next = _compare_within_two_museum_numbers(
+        current_next = _select_museum_between_two_values(
             museum_number, current_museum_number, current_next, operator.gt
         )
 
         if is_endpoint:
-            first, last = _compare_museum_numbers(first, last, current_museum_number)
+            first, last = _min_max_museum_numbers([first, last, current_museum_number])
     if is_endpoint:
         current_prev = current_prev or last
         current_next = current_next or first
