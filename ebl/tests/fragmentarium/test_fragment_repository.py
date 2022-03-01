@@ -162,59 +162,54 @@ def test_folio_pager_exception(fragment_repository):
         fragment_repository.query_next_and_previous_folio("test", "test", museum_number)
 
 
-FRAGMENTS = [
-    "DT.1",
-    "Rm-II.1",
-    "1841.54",
-    "1841.57",
-    "1841.63",
-    "BM.0",
-    "CBS.0",
-    "UM.0",
-    "N.0",
-    "N.1",
-    "1841-57.54",
-    "1841-57.57",
-    "1841-57.63",
-    "U.0.a",
-    "U.0.b",
-    "U.0.c",
-    "X.0",
-    "X.1",
-]
-
-
 @pytest.mark.parametrize(
-    "query, expected",
+    "museum_numbers",
     [
-        ("1841.63", ["1841.57", "BM.0"]),
-        ("1841.54", ["Rm-II.1", "1841.57"]),
-        ("DT.1", ["X.1", "Rm-II.1"]),
-        ("CBS.0", ["BM.0", "UM.0"]),
-        ("X.1", ["X.0", "DT.1"]),
-        ("N.1", ["N.0", "1841-57.54"]),
-        ("1841-57.57", ["1841-57.54", "1841-57.63"]),
-        ("1841-57.63", ["1841-57.57", "U.0.a"]),
-        ("U.0.b", ["U.0.a", "U.0.c"]),
+        [
+            "K.1a",
+            "K.1b",
+            "K.1c",
+            "DT.1",
+            "Rm-II.1",
+            "1840.10",
+            "1840.11",
+            "1840.12",
+            "1841.54",
+            "1841.57",
+            "1841.63",
+            "BM.0",
+            "CBS.0",
+            "UM.0",
+            "N.0",
+            "N.1",
+            "1841-57.54",
+            "1841-57.57",
+            "1841-57.63",
+            "Asb.p",
+            "Asb.q",
+            "Asb.z",
+            "Ashm-1878.1",
+            "U.0.a",
+            "U.0.b",
+            "U.0.c",
+            "X.0",
+            "X.1",
+        ]
     ],
 )
-def test_query_next_and_previous_fragment(query, expected, fragment_repository):
-    for fragmentNumber in FRAGMENTS:
+def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
+    for fragmentNumber in museum_numbers:
         fragment_repository.create(
             FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
-
-    results = fragment_repository.query_next_and_previous_fragment(
-        MuseumNumber.of(query)
-    )
-    assert results.previous == MuseumNumber.of(expected[0])
-    assert results.next == MuseumNumber.of(expected[1])
-
-
-def test_query_next_and_previous_fragment_exception(fragment_repository):
-    query = MuseumNumber.of("1841-07-26.57")
-    with pytest.raises(NotFoundError):
-        fragment_repository.query_next_and_previous_fragment(query)
+    for museum_number in museum_numbers:
+        results = fragment_repository.query_next_and_previous_fragment(
+            MuseumNumber.of(museum_number)
+        )
+        previous_index = (museum_numbers.index(museum_number) - 1) % len(museum_numbers)
+        next_index = (museum_numbers.index(museum_number) + 1) % len(museum_numbers)
+        assert results.previous == MuseumNumber.of(museum_numbers[previous_index])
+        assert results.next == MuseumNumber.of(museum_numbers[next_index])
 
 
 def test_update_transliteration_with_record(fragment_repository, user):
