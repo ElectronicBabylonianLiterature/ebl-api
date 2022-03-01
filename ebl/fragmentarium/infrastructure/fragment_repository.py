@@ -53,7 +53,9 @@ def _select_museum_between_two_values(
 def _min_max_museum_numbers(
     museum_numbers: Sequence[Optional[MuseumNumber]],
 ) -> Tuple[MuseumNumber, MuseumNumber]:
-    sorted_museum_numbers = sorted(cast(Sequence[MuseumNumber], filter(lambda x: x is not None, museum_numbers)))
+    sorted_museum_numbers = sorted(
+        cast(Sequence[MuseumNumber], filter(lambda x: x is not None, museum_numbers))
+    )
     return min(sorted_museum_numbers), max(sorted_museum_numbers)
 
 
