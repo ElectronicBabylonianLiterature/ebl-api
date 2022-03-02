@@ -251,6 +251,9 @@ SENTRY_ENVIRONMENT=<development or production>
 CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used as default.>
 ```
 
+Poetry does not support .env-files. The environment variables need to be configured in the shell. 
+Alternatively and external program can be used to handle the file e.g. [direnv](https://direnv.net/). 
+
 ### Locally
 
 ```shell script
