@@ -252,7 +252,7 @@ CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used 
 ```
 
 Poetry does not support .env-files. The environment variables need to be configured in the shell. 
-Alternatively and external program can be used to handle the file e.g. [direnv](https://direnv.net/). 
+Alternatively and external program can be used to handle the file e.g. [direnv](https://direnv.net/) or [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv). 
 
 ### Locally
 
