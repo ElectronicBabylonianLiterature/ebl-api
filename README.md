@@ -53,13 +53,6 @@ select extensions and a local MongoDB. Click the button below, configure the
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
 
-### Visual Studio Code
-
-The project includes a Visual Studio Code
-[development container](https://code.visualstudio.com/docs/remote/containers) which
-can be used locally or in
-[Codespaces](https://code.visualstudio.com/docs/remote/codespaces).
-
 ### Codestyle
 
 Use [Black](https://black.readthedocs.io/en/stable/) codestyle and
