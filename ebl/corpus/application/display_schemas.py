@@ -5,6 +5,7 @@ from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_schemas import TranslationLineSchema
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
@@ -24,7 +25,7 @@ class LineDisplaySchema(Schema):
     )
     reconstruction = fields.List(fields.Nested(OneOfTokenSchema), load_default=tuple())
     translation = fields.List(
-        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple(), allow_none=True
+        fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
     )
 
     @post_load

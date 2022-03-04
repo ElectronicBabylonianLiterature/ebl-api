@@ -1,4 +1,5 @@
-from typing import Iterable, Sequence
+from typing import Sequence
+
 import attr
 
 from ebl.corpus.domain.chapter import ChapterId, Chapter
@@ -15,7 +16,7 @@ from ebl.transliteration.domain.markup import MarkupPart, to_title
 
 
 def get_default_translation(
-    translations: Iterable[TranslationLine],
+    translations: Sequence[TranslationLine],
 ) -> Sequence[MarkupPart]:
     return next(
         (
@@ -34,11 +35,11 @@ class LineDisplay:
     is_beginning_of_section: bool
     intertext: Sequence[MarkupPart]
     reconstruction: Sequence[Token]
-    translation: Sequence[MarkupPart]
+    translation: Sequence[TranslationLine]
 
     @property
     def title(self) -> Sequence[MarkupPart]:
-        return to_title(self.translation)
+        return to_title(get_default_translation(self.translation))
 
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
@@ -49,7 +50,7 @@ class LineDisplay:
             line.is_beginning_of_section,
             first_variant.intertext,
             first_variant.reconstruction,
-            get_default_translation(line.translation),
+            line.translation,
         )
 
 
