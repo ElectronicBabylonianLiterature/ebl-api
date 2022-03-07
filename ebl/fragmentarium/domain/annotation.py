@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Sequence
+from typing import Sequence, Optional, NewType
 from uuid import uuid4
 
 import attr
@@ -34,10 +34,21 @@ class AnnotationData:
     sign_name: str
 
 
+Base64 = NewType("Base64", str)
+
+
+@attr.attrs(auto_attribs=True, frozen=True)
+class CroppedAnnotationImage:
+    image: Base64
+    script: str
+    label: str
+
+
 @attr.attrs(auto_attribs=True, frozen=True)
 class Annotation:
     geometry: Geometry
     data: AnnotationData
+    image: Optional[CroppedAnnotationImage] = None
 
     @classmethod
     def from_prediction(cls, geometry: Geometry) -> "Annotation":

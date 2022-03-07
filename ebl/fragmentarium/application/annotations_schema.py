@@ -34,9 +34,20 @@ class AnnotationDataSchema(Schema):
         return AnnotationData(**data)
 
 
+class CroppedAnnotationImageSchema(Schema):
+    image = fields.Str(required=True)
+    script = fields.Str(required=True)
+    label = fields.Str(required=True)
+
+    @post_load
+    def make_cropped_annotation_image(self, data, **kwargs):
+        return CroppedAnnotationImageSchema(**data)
+
+
 class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
+    image = fields.Nested(CroppedAnnotationImageSchema(), missing=None)
 
     @post_load
     def make_annotation(self, data, **kwargs):

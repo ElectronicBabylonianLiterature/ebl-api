@@ -6,6 +6,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     Geometry,
     AnnotationValueType,
+    CroppedAnnotationImage,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -43,6 +44,20 @@ class AnnotationFactory(factory.Factory):
 
     geometry = factory.SubFactory(GeometryFactory)
     data = factory.SubFactory(AnnotationDataFactory)
+    image = None
+
+
+class CroppedImageFactory(factory.Factory):
+    class Meta:
+        model = CroppedAnnotationImage
+
+    image = factory.Faker("word")
+    script = factory.Faker("word")
+    label = factory.Faker("word")
+
+
+class AnnotationFactoryWithImage(AnnotationFactory):
+    image = factory.SubFactory(CroppedImageFactory)
 
 
 class AnnotationsFactory(factory.Factory):
