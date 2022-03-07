@@ -25,7 +25,8 @@ Requirements:
 pip install poetry
 poetry install
 ```
-If `libcst` installation fails (because a binary wheel is not available for Linux/Windows + Pypy) you may need to install 
+
+If `libcst` installation fails (because a binary wheel is not available for Linux/Windows + Pypy) you may need to install
 the [rust compiler](https://www.rust-lang.org/tools/install) to solve it.
 
 The following are needed to run application:
@@ -86,7 +87,7 @@ poetry run flake8
 poetry run pyre check
 poetry run pytest  
 poetry run pytest -n auto  # Run tests in parallel.
-poetry run --cov=ebl --cov-report term --cov-report xml -n auto  # Run tests in parallel with coverage (slow in PyPy).
+poetry run --cov=ebl --cov-report term --cov-report xml # Run tests with coverage (slow in PyPy).
 ```
 
 See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
@@ -244,8 +245,9 @@ SENTRY_ENVIRONMENT=<development or production>
 CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used as default.>
 ```
 
-Poetry does not support .env-files. The environment variables need to be configured in the shell. 
-Alternatively and external program can be used to handle the file e.g. [direnv](https://direnv.net/) or [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv). 
+Poetry does not support .env-files. The environment variables need to be configured in the shell.
+Alternatively and external program can be used to handle the file e.g. [direnv](https://direnv.net/)
+or [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv).
 
 ### Locally
 
