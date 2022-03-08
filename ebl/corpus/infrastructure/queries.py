@@ -148,6 +148,18 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                                     0,
                                 ]
                             },
+                            "note": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.note",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
                         },
                     }
                 },
