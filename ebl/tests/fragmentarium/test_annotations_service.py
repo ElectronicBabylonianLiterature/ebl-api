@@ -45,20 +45,9 @@ SCHEMA = AnnotationsSchema()
 def test_format_line_label(
     line_label,
     expected,
-    annotations_repository,
-    photo_repository,
-    fragment_repository,
-    changelog,
+    annotations_service
 ):
-    service = AnnotationsService(
-        EblAiClient(""),
-        annotations_repository,
-        photo_repository,
-        changelog,
-        fragment_repository,
-        photo_repository,
-    )
-    assert service._format_label(line_label) == expected
+    assert annotations_service._format_label(line_label) == expected
 
 
 @pytest.mark.parametrize(
@@ -90,39 +79,19 @@ def test_line_label_match_line_number(
     line_label,
     line_number,
     expected,
-    fragment_repository,
-    changelog,
-    annotations_repository,
-    photo_repository,
+    annotations_service,
 ):
-    service = AnnotationsService(
-        EblAiClient(""),
-        annotations_repository,
-        photo_repository,
-        changelog,
-        fragment_repository,
-        photo_repository,
-    )
-    assert service._is_matching_number(line_label, line_number) == expected
+    assert annotations_service._is_matching_number(line_label, line_number) == expected
 
 
 def test_cropped_images_from_sign(
     annotations_repository,
-    photo_repository,
-    changelog,
     fragment_repository,
+    photo_repository,
     when,
     text_with_labels,
+    annotations_service
 ):
-    service = AnnotationsService(
-        EblAiClient(""),
-        annotations_repository,
-        photo_repository,
-        changelog,
-        fragment_repository,
-        photo_repository,
-    )
-
     single_annotation = AnnotationFactory.build(
         data=AnnotationDataFactory.build(path=[2, 0, 0])
     )
@@ -140,7 +109,7 @@ def test_cropped_images_from_sign(
         .thenReturn(create_test_photo("K.2"))
     )
 
-    result = service._cropped_image_from_annotations(annotation)
+    result = annotations_service._cropped_image_from_annotations(annotation)
     for annotation in result.annotations:
         assert annotation.image.script == fragment.script
         assert annotation.image.label == "i Stone wig Stone wig 2"
@@ -177,29 +146,19 @@ def test_generate_annotations(
 
 def test_find(
     annotations_repository,
-    photo_repository,
-    changelog,
-    when,
-    fragment_repository,
-    file_repository,
+    annotations_service,
+    when
 ):
     annotations = AnnotationsFactory.build()
     when(annotations_repository).query_by_museum_number(
         annotations.fragment_number
     ).thenReturn(annotations)
-    service = AnnotationsService(
-        EblAiClient(""),
-        annotations_repository,
-        photo_repository,
-        changelog,
-        fragment_repository,
-        photo_repository,
-    )
 
-    assert service.find(annotations.fragment_number) == annotations
+    assert annotations_service.find(annotations.fragment_number) == annotations
 
 
 def test_update(
+    annotations_service,
     annotations_repository,
     photo_repository,
     fragment_repository,
@@ -233,16 +192,7 @@ def test_update(
         .query_by_file_name(f"{annotations.fragment_number}.jpg")
         .thenReturn(create_test_photo("K.2"))
     )
-
-    service = AnnotationsService(
-        EblAiClient(""),
-        annotations_repository,
-        photo_repository,
-        changelog,
-        fragment_repository,
-        photo_repository,
-    )
-    result = service.update(updated_annotations, user)
+    result = annotations_service.update(updated_annotations, user)
     assert result.fragment_number == updated_annotations.fragment_number
     for result_annotation, annotation in zip(
         result.annotations, updated_annotations.annotations

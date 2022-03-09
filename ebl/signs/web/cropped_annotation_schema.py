@@ -6,3 +6,5 @@ class CroppedAnnotationSchema(Schema):
     fragment_number = fields.String(required=True)
     script = fields.String(required=True)
     label = fields.String(required=True)
+
+

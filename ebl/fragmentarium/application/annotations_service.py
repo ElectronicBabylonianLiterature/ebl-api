@@ -1,5 +1,8 @@
 import base64
 import io
+from typing import Tuple, Sequence
+from uuid import uuid4
+
 from singledispatchmethod import singledispatchmethod
 from io import BytesIO
 
@@ -11,12 +14,13 @@ from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.cropped_sign_image import Base64
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.sign_images_repository import CroppedSignImage, SignImagesRepository
 from ebl.fragmentarium.domain.annotation import (
     Annotations,
     Annotation,
     BoundingBox,
-    Base64,
     CroppedAnnotationImage,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
@@ -37,6 +41,7 @@ class AnnotationsService:
     _changelog: Changelog
     _fragments_repository: FragmentRepository
     _photos_repository: FileRepository
+    _sign_images_repository: SignImagesRepository
 
     def generate_annotations(
         self, number: MuseumNumber, threshold: float = 0.3
@@ -67,7 +72,7 @@ class AnnotationsService:
 
     def _cropped_image_from_annotation(
         self, annotation: Annotation, image: Image.Image
-    ) -> Base64:
+    ) -> CroppedSignImage:
         bounding_box = BoundingBox.from_annotations(
             image.size[0], image.size[1], [annotation]
         )[0]
@@ -80,7 +85,7 @@ class AnnotationsService:
         cropped_image = image.crop(area)
         buf = io.BytesIO()
         cropped_image.save(buf, format="PNG")
-        return Base64(base64.b64encode(buf.getvalue()).decode("utf-8"))
+        return CroppedSignImage(uuid4().hex, Base64(base64.b64encode(buf.getvalue()).decode("utf-8")))
 
     @singledispatchmethod
     def _is_matching_number(self, line_number: AbstractLineNumber, number: int) -> bool:
@@ -94,7 +99,8 @@ class AnnotationsService:
     def _(self, line_number: LineNumberRange, number: int):
         return line_number.start.number <= number <= line_number.end.number
 
-    def _cropped_image_from_annotations(self, annotations: Annotations) -> Annotations:
+    def _cropped_image_from_annotations(self, annotations: Annotations) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
+        cropped_sign_images = []
         cropped_annotations = []
         fragment = self._fragments_repository.query_by_museum_number(
             annotations.fragment_number
@@ -118,17 +124,18 @@ class AnnotationsService:
                 None,
             )
             cropped_image = self._cropped_image_from_annotation(annotation, image)
+            cropped_sign_images.append(cropped_image)
             cropped_annotations.append(
                 attr.evolve(
                     annotation,
                     image=CroppedAnnotationImage(
-                        cropped_image,
+                        cropped_image.sign_id,
                         script,
                         self._format_label(label) if label else "",
                     ),
                 )
             )
-        return attr.evolve(annotations, annotations=cropped_annotations)
+        return attr.evolve(annotations, annotations=cropped_annotations), cropped_sign_images
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
         old_annotations = self._annotations_repository.query_by_museum_number(
@@ -142,6 +149,16 @@ class AnnotationsService:
             {"_id": _id, **schema.dump(old_annotations)},
             {"_id": _id, **schema.dump(annotations)},
         )
-        annotations_with_image = self._cropped_image_from_annotations(annotations)
-        self._annotations_repository.create_or_update(annotations_with_image)
-        return annotations_with_image
+        annotations_with_image_ids, cropped_sign_images = self._cropped_image_from_annotations(annotations)
+        self._annotations_repository.create_or_update(annotations_with_image_ids)
+        self._sign_images_repository.create_or_update(cropped_sign_images)
+        return annotations_with_image_ids
+
+    def update_(self, annotations: Annotations) -> Annotations:
+        annotations_with_image_ids, cropped_sign_images = self._cropped_image_from_annotations(annotations)
+        self._annotations_repository.create_or_update(annotations_with_image_ids)
+        self._sign_images_repository.create_or_update(cropped_sign_images)
+        return annotations_with_image_ids
+
+
+

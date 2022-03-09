@@ -29,6 +29,7 @@ from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
+from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
@@ -41,6 +42,7 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
+from ebl.fragmentarium.infrastructure.sign_images_repository import MongoSignImagesRepository
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
@@ -160,7 +162,6 @@ def fragment_repository(database):
 def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
     return Fragmentarium(fragment_repository)
 
-
 @pytest.fixture
 def fragment_finder(
     fragment_repository, dictionary, photo_repository, file_repository, bibliography
@@ -277,6 +278,21 @@ def annotations_repository(database):
 def lemma_repository(database):
     return MongoLemmaRepository(database)
 
+@pytest.fixture
+def sign_images_repository(database):
+    return MongoSignImagesRepository(database)
+
+@pytest.fixture
+def annotations_service(annotations_repository, photo_repository, changelog, fragment_repository, sign_images_repository):
+    return AnnotationsService(
+        EblAiClient(""),
+        annotations_repository,
+        photo_repository,
+        changelog,
+        fragment_repository,
+        photo_repository,
+        sign_images_repository
+    )
 
 @pytest.fixture
 def user() -> User:

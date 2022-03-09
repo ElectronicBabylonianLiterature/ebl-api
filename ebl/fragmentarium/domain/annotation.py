@@ -34,12 +34,12 @@ class AnnotationData:
     sign_name: str
 
 
-Base64 = NewType("Base64", str)
+
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedAnnotationImage:
-    image: Base64
+    image_id: str
     script: str
     label: str
 
