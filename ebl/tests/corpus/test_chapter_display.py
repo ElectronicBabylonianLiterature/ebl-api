@@ -25,6 +25,7 @@ def test_line_display_of_line() -> None:
         line.variants[0].reconstruction,
         translation_lines,
         line.variants[0].note,
+        line.variants[0].parallel_lines,
     )
     assert line_display.title == make_title(translation_lines)
 
