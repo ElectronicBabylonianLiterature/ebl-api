@@ -160,6 +160,18 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                                     0,
                                 ]
                             },
+                            "parallelLines": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.parallelLines",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
                         },
                     }
                 },

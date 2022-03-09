@@ -12,6 +12,7 @@ from ebl.transliteration.application.line_schemas import (
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
+from ebl.transliteration.application.one_of_line_schema import ParallelLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
@@ -31,6 +32,9 @@ class LineDisplaySchema(Schema):
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
     )
     note = fields.Nested(NoteLineSchema, allow_none=True, load_default=None)
+    parallel_lines = fields.Nested(
+        ParallelLineSchema, data_key="parallelLines", many=True, load_default=tuple()
+    )
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> LineDisplay:
@@ -42,6 +46,7 @@ class LineDisplaySchema(Schema):
             tuple(data["reconstruction"]),
             tuple(data["translation"] or []),
             data["note"],
+            tuple(data["parallel_lines"]),
         )
 
 

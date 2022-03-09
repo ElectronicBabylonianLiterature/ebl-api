@@ -7,6 +7,7 @@ from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import Text
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
@@ -38,6 +39,7 @@ class LineDisplay:
     reconstruction: Sequence[Token]
     translation: Sequence[TranslationLine]
     note: Optional[NoteLine]
+    parallel_lines: Sequence[ParallelLine]
 
     @property
     def title(self) -> Sequence[MarkupPart]:
@@ -54,6 +56,7 @@ class LineDisplay:
             first_variant.reconstruction,
             line.translation,
             first_variant.note,
+            first_variant.parallel_lines,
         )
 
 
