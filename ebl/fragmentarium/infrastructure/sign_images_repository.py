@@ -2,8 +2,15 @@ from typing import Sequence
 
 from pymongo.database import Database
 
-from ebl.fragmentarium.application.sign_images_repository import SignImagesRepository, CroppedSignImage, \
-    CroppedSignImageSchema
+from ebl.fragmentarium.application.cropped_sign_image import Base64
+from ebl.fragmentarium.application.cropped_sign_image_schema import (
+    CroppedSignOnlyImageSchema,
+)
+from ebl.fragmentarium.application.sign_images_repository import (
+    SignImagesRepository,
+    CroppedSignImage,
+    CroppedSignImageSchema,
+)
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "sign_images"
@@ -20,10 +27,7 @@ class MongoSignImagesRepository(SignImagesRepository):
                 True,
             )
 
-    def query(self, sign_id: str) -> CroppedSignImage:
-        return CroppedSignImageSchema().load(self._collection.find_one({"sign_id": sign_id}))
-
-
-
-
-
+    def query(self, image_id: str) -> CroppedSignImage:
+        return CroppedSignImageSchema().load(
+            self._collection.find_one({"_id": image_id})
+        )

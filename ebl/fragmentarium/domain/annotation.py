@@ -34,9 +34,6 @@ class AnnotationData:
     sign_name: str
 
 
-
-
-
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedAnnotationImage:
     image_id: str
@@ -53,7 +50,7 @@ class Annotation:
     @classmethod
     def from_prediction(cls, geometry: Geometry) -> "Annotation":
         data = AnnotationData(uuid4().hex, "", AnnotationValueType.PREDICTED, [], "")
-        return cls(geometry, data)
+        return cls(geometry, data, None)
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

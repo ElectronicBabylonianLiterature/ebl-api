@@ -42,11 +42,7 @@ SCHEMA = AnnotationsSchema()
         ),
     ],
 )
-def test_format_line_label(
-    line_label,
-    expected,
-    annotations_service
-):
+def test_format_line_label(line_label, expected, annotations_service):
     assert annotations_service._format_label(line_label) == expected
 
 
@@ -90,7 +86,7 @@ def test_cropped_images_from_sign(
     photo_repository,
     when,
     text_with_labels,
-    annotations_service
+    annotations_service,
 ):
     single_annotation = AnnotationFactory.build(
         data=AnnotationDataFactory.build(path=[2, 0, 0])
@@ -144,11 +140,7 @@ def test_generate_annotations(
     assert annotations == expected
 
 
-def test_find(
-    annotations_repository,
-    annotations_service,
-    when
-):
+def test_find(annotations_repository, annotations_service, when):
     annotations = AnnotationsFactory.build()
     when(annotations_repository).query_by_museum_number(
         annotations.fragment_number

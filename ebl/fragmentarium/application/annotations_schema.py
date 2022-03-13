@@ -5,7 +5,8 @@ from ebl.fragmentarium.domain.annotation import (
     AnnotationData,
     Annotation,
     Annotations,
-    AnnotationValueType, CroppedAnnotationImage,
+    AnnotationValueType,
+    CroppedAnnotationImage,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.schemas import ValueEnum
@@ -34,14 +35,6 @@ class AnnotationDataSchema(Schema):
         return AnnotationData(**data)
 
 
-class CroppedAnnotationImageSchema(Schema):
-    image = fields.Raw(required=True)
-    script = fields.Str(required=True)
-    label = fields.Str(required=True)
-
-    @post_load
-    def make_cropped_annotation_image(self, data, **kwargs):
-        return CroppedAnnotationImage(**data)
 
 
 class AnnotationSchema(Schema):
