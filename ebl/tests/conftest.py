@@ -38,12 +38,12 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
+    MongoCroppedSignImagesRepository,
+)
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
-)
-from ebl.fragmentarium.infrastructure.sign_images_repository import (
-    MongoSignImagesRepository,
 )
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
@@ -98,6 +98,11 @@ def word_repository(database):
 @pytest.fixture
 def dictionary(word_repository, changelog):
     return Dictionary(word_repository, changelog)
+
+
+@pytest.fixture
+def cropped_sign_images_repository(database):
+    return MongoCroppedSignImagesRepository(database)
 
 
 @pytest.fixture
@@ -283,17 +288,12 @@ def lemma_repository(database):
 
 
 @pytest.fixture
-def sign_images_repository(database):
-    return MongoSignImagesRepository(database)
-
-
-@pytest.fixture
 def annotations_service(
     annotations_repository,
     photo_repository,
     changelog,
     fragment_repository,
-    sign_images_repository,
+    cropped_sign_images_repository,
 ):
     return AnnotationsService(
         EblAiClient(""),
@@ -302,7 +302,7 @@ def annotations_service(
         changelog,
         fragment_repository,
         photo_repository,
-        sign_images_repository,
+        cropped_sign_images_repository,
     )
 
 
@@ -335,6 +335,7 @@ def user() -> User:
 @pytest.fixture
 def context(
     ebl_ai_client,
+    cropped_sign_images_repository,
     word_repository,
     sign_repository,
     file_repository,
@@ -352,6 +353,7 @@ def context(
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=NoneAuthBackend(lambda: user),
+        cropped_sign_images_repository=cropped_sign_images_repository,
         word_repository=word_repository,
         sign_repository=sign_repository,
         public_file_repository=file_repository,

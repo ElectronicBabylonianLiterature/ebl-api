@@ -6,7 +6,7 @@ import httpretty
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.tests.factories.annotation import AnnotationsFactory
+from ebl.tests.factories.annotation import AnnotationsFactory, AnnotationFactory
 
 
 def test_find_annotations(client):
@@ -66,9 +66,12 @@ def test_find_not_allowed(guest_client):
 
 
 def test_update(client):
-    annotations = AnnotationsFactory.build()
+    annotation_1 = AnnotationFactory(cropped_sign=None)
+    annotation_2 = AnnotationFactory(cropped_sign=None)
+    annotations = AnnotationsFactory.build(annotations=[annotation_1, annotation_2])
     fragment_number = annotations.fragment_number
-    body = AnnotationsSchema().dumps(annotations)
+    body = AnnotationsSchema().dump(annotations)
+    x = AnnotationsSchema().load(body)
     url = f"/fragments/{fragment_number}/annotations"
     post_result = client.simulate_post(url, body=body)
 

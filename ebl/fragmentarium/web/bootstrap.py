@@ -40,6 +40,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.changelog,
         context.fragment_repository,
         context.photo_repository,
+        context.cropped_sign_images_repository,
     )
 
     statistics = make_statistics_resource(context.cache, fragmentarium)

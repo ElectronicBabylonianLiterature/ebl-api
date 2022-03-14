@@ -23,6 +23,9 @@ from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
+from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
+    MongoCroppedSignImagesRepository,
+)
 from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
@@ -62,6 +65,7 @@ def create_context():
     return Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=auth_backend,
+        cropped_sign_images_repository=MongoCroppedSignImagesRepository(database),
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
         public_file_repository=GridFsFileRepository(database, "fs"),

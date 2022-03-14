@@ -3,7 +3,6 @@ from typing import List
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium
-from ebl.transliteration.domain.translation_line import DEFAULT_LANGUAGE
 
 
 def chapter_id_query(id_: ChapterId) -> dict:
@@ -124,29 +123,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                             "number": "$$line.number",
                             "isSecondLineOfParallelism": "$$line.isSecondLineOfParallelism",
                             "isBeginningOfSection": "$$line.isBeginningOfSection",
-                            "translation": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": {
-                                                "$filter": {
-                                                    "input": "$$line.translation",
-                                                    "as": "translation",
-                                                    "cond": {
-                                                        "eq": [
-                                                            "$$translation.language",
-                                                            DEFAULT_LANGUAGE,
-                                                        ]
-                                                    },
-                                                }
-                                            },
-                                            "as": "en_translation",
-                                            "in": "$$en_translation.parts",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
+                            "translation": "$$line.translation",
                             "intertext": {
                                 "$arrayElemAt": [
                                     {
@@ -166,6 +143,30 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                                             "input": "$$line.variants",
                                             "as": "variant",
                                             "in": "$$variant.reconstruction",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
+                            "note": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.note",
+                                        }
+                                    },
+                                    0,
+                                ]
+                            },
+                            "parallelLines": {
+                                "$arrayElemAt": [
+                                    {
+                                        "$map": {
+                                            "input": "$$line.variants",
+                                            "as": "variant",
+                                            "in": "$$variant.parallelLines",
                                         }
                                     },
                                     0,

@@ -1,9 +1,10 @@
 from enum import Enum
-from typing import Sequence, Optional, NewType
+from typing import Sequence, Optional
 from uuid import uuid4
 
 import attr
 
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
 
@@ -35,17 +36,10 @@ class AnnotationData:
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
-class CroppedAnnotationImage:
-    image_id: str
-    script: str
-    label: str
-
-
-@attr.attrs(auto_attribs=True, frozen=True)
 class Annotation:
     geometry: Geometry
     data: AnnotationData
-    image: Optional[CroppedAnnotationImage] = None
+    cropped_sign: Optional[CroppedSign]
 
     @classmethod
     def from_prediction(cls, geometry: Geometry) -> "Annotation":

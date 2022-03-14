@@ -105,14 +105,22 @@ def test_cropped_images_from_sign(
         .thenReturn(create_test_photo("K.2"))
     )
 
-    result = annotations_service._cropped_image_from_annotations(annotation)
-    for annotation in result.annotations:
-        assert annotation.image.script == fragment.script
-        assert annotation.image.label == "i Stone wig Stone wig 2"
+    annotations, cropped_images = annotations_service._cropped_image_from_annotations(
+        annotation
+    )
+    for annotation, cropped_image in zip(annotations.annotations, cropped_images):
+        assert annotation.cropped_sign.image_id == cropped_image.image_id
+        assert annotation.cropped_sign.script == fragment.script
+        assert annotation.cropped_sign.label == "i Stone wig Stone wig 2"
 
 
 def test_generate_annotations(
-    annotations_repository, photo_repository, changelog, when, fragment_repository
+    annotations_repository,
+    photo_repository,
+    changelog,
+    when,
+    fragment_repository,
+    cropped_sign_images_repository,
 ):
     fragment_number = MuseumNumber.of("X.0")
 
@@ -129,6 +137,7 @@ def test_generate_annotations(
         changelog,
         fragment_repository,
         photo_repository,
+        cropped_sign_images_repository,
     )
     expected = Annotations(fragment_number, tuple())
     when(ebl_ai_client).generate_annotations(fragment_number, image_file, 0).thenReturn(
@@ -168,7 +177,7 @@ def test_update(
         annotations
     )
     when(annotations_repository).create_or_update(...).thenReturn()
-    when(changelog).create(
+    when(changelog).create_or_update(
         "annotations",
         user.profile,
         {"_id": str(fragment_number), **SCHEMA.dump(annotations)},
@@ -191,4 +200,4 @@ def test_update(
     ):
         assert result_annotation.geometry == annotation.geometry
         assert result_annotation.data == annotation.data
-        assert result_annotation.image is not None
+        assert result_annotation.cropped_sign is not None

@@ -1,12 +1,12 @@
 import factory.fuzzy
 
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
     AnnotationData,
     Annotations,
     Geometry,
     AnnotationValueType,
-    CroppedAnnotationImage,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 
@@ -38,26 +38,22 @@ class AnnotationDataFactory(factory.Factory):
     )
 
 
+class CroppedSignFactory(factory.Factory):
+    class Meta:
+        model = CroppedSign
+
+    image_id = factory.Faker("word")
+    script = factory.Faker("word")
+    label = factory.Faker("word")
+
+
 class AnnotationFactory(factory.Factory):
     class Meta:
         model = Annotation
 
     geometry = factory.SubFactory(GeometryFactory)
     data = factory.SubFactory(AnnotationDataFactory)
-    image = None
-
-
-class CroppedImageFactory(factory.Factory):
-    class Meta:
-        model = CroppedAnnotationImage
-
-    image = factory.Faker("word")
-    script = factory.Faker("word")
-    label = factory.Faker("word")
-
-
-class AnnotationFactoryWithImage(AnnotationFactory):
-    image = factory.SubFactory(CroppedImageFactory)
+    cropped_sign = factory.SubFactory(CroppedSignFactory)
 
 
 class AnnotationsFactory(factory.Factory):
@@ -68,3 +64,4 @@ class AnnotationsFactory(factory.Factory):
     annotations = factory.List(
         [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory)]
     )
+

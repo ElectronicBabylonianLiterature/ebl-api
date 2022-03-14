@@ -12,8 +12,10 @@ if __name__ == "__main__":
         context.fragment_repository,
         context.photo_repository,
     )
-    for i, annotation in enumerate(annotations):
+    for counter, annotation in enumerate(annotations):
+        print(f"Lenght {len(annotations)}")
         try:
+            print(counter)
             print(annotation.fragment_number)
             service.update_(annotation)
             print()

@@ -1,12 +1,12 @@
-from marshmallow import Schema, fields, post_load
-
+from marshmallow import Schema, fields, post_load, post_dump
+import pydash
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,
     Annotation,
     Annotations,
     AnnotationValueType,
-    CroppedAnnotationImage,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.schemas import ValueEnum
@@ -35,21 +35,30 @@ class AnnotationDataSchema(Schema):
         return AnnotationData(**data)
 
 
-
-
 class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
-    image = fields.Nested(CroppedAnnotationImageSchema(), missing=None)
+    cropped_sign = fields.Nested(
+        CroppedSignSchema(), missing=None, data_key="croppedSign"
+    )
+
 
     @post_load
     def make_annotation(self, data, **kwargs):
         return Annotation(**data)
 
 
+    @post_dump
+    def dump(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
+
+
+
+
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
-    annotations = fields.Nested(AnnotationSchema, many=True, required=True)
+    annotations = fields.List(fields.Nested(AnnotationSchema()), required=True)
 
     @post_load
     def make_annotation(self, data, **kwargs):
