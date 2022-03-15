@@ -145,12 +145,9 @@ if __name__ == "__main__":
     numbers = find_transliterated(create_context_().fragment_repository)
     pool = multiprocessing.Pool(processes=workers)
 
-    states = [
-        result
-        for result in tqdm(
+    states = list(tqdm(
             pool.imap_unordered(update_fragment, numbers), total=len(numbers)
-        )
-    ]
+        ))
     final_state = reduce(
         lambda accumulator, state: accumulator.merge(state), states, State()
     )
