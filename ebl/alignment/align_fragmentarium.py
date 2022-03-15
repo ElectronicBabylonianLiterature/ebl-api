@@ -1,14 +1,12 @@
 import argparse
 import csv
 import re
-import math
+from multiprocessing import Pool
 import sys
 import time
 from typing import Iterable, List, Tuple
 
 from alignment.vocabulary import Vocabulary
-from joblib import Parallel, delayed
-import pydash
 from tqdm import tqdm
 
 from ebl.alignment.application.align import align
@@ -70,32 +68,25 @@ def to_dict(
 
 
 def align_fragment(
-    fragment: Fragment, chapters: Iterable[Tuple[Text, Chapter]], min_score: int
-) -> List[dict]:
-    return [
-        to_dict(fragment, text, chapter, result)
-        for (text, chapter) in chapters
-        for result in align_fragment_and_chapter(fragment, chapter)
-        if result.score >= min_score
-    ]
-
-
-def align_chunk(
-    id_: int,
-    numbers: Iterable[MuseumNumber],
+    number: MuseumNumber,
     chapters: Iterable[Tuple[Text, Chapter]],
     max_lines: int,
     min_score: int,
 ) -> List[dict]:
     sys.setrecursionlimit(50000)
     context = create_context()
-    results: List[dict] = []
-    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        fragment = context.fragment_repository.query_by_museum_number(number)
-        if fragment.text.number_of_lines <= max_lines:
-            results.extend(align_fragment(fragment, chapters, min_score))
+    fragment = context.fragment_repository.query_by_museum_number(number)
 
-    return results
+    return (
+        [
+            to_dict(fragment, text, chapter, result)
+            for (text, chapter) in chapters
+            for result in align_fragment_and_chapter(fragment, chapter)
+            if result.score >= min_score
+        ]
+        if fragment.text.number_of_lines <= max_lines
+        else []
+    )
 
 
 def load_chapters(context: Context) -> List[Tuple[Text, Chapter]]:
@@ -143,12 +134,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "-w", "--workers", type=int, default=4, help="Number of parallel workers."
     )
-    parser.add_argument(
-        "-t",
-        "--threads",
-        action="store_true",
-        help="Use threads instead of processes for workers.",
-    )
+
     return parser.parse_args()
 
 
@@ -156,27 +142,26 @@ if __name__ == "__main__":
     args = parse_arguments()
     start = args.skip
     end = args.skip + args.limit
-    prefer = "threads" if args.threads else None
 
     context = create_context()
     fragments = context.fragment_repository
 
     t0 = time.time()
 
-    fragment_numbers = fragments.query_transliterated_numbers()
+    fragment_numbers = fragments.query_transliterated_numbers()[start:end]
     chapters = load_chapters(context)
 
-    chunk_size = math.ceil(args.limit / args.workers)
-    chunks = pydash.chunk(fragment_numbers[start:end], chunk_size)
+    def partial_align(number):
+        return align_fragment(number, chapters, args.max_lines, args.min_score)
 
-    results = Parallel(n_jobs=args.workers, prefer=prefer)(
-        delayed(align_chunk)(index, subset, chapters, args.max_lines, args.min_score)
-        for index, subset in enumerate(chunks)
-    )
+    with Pool(processes=args.workers) as pool, open(
+        args.output, "w", encoding="utf-8"
+    ) as file:
+        results = tqdm(
+            pool.imap_unordered(partial_align, fragment_numbers),
+            total=len(fragment_numbers),
+        )
 
-    t = time.time()
-
-    with open(args.output, "w", encoding="utf-8") as file:
         fieldnames = [
             "fragment",
             "text id",
@@ -190,8 +175,10 @@ if __name__ == "__main__":
         ]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
-        for chunk in results:
-            for result in chunk:
+
+        for fragment_results in results:
+            for result in fragment_results:
                 writer.writerow(result)
 
+    t = time.time()
     print(f"\nTime: {round((t-t0)/60, 2)} min")

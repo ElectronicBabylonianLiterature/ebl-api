@@ -1,11 +1,9 @@
 import argparse
-import math
 from functools import reduce
-from typing import Iterable, List
+from multiprocessing import Pool
+from typing import List
 
 import attr
-import pydash
-from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from ebl.app import create_context
@@ -56,7 +54,7 @@ class State:
         )
 
 
-def update_texts(numbers: Iterable[TextId], id_: int) -> State:
+def update(number) -> State:
     context = create_context()
     corpus = Corpus(
         context.text_repository,
@@ -65,18 +63,18 @@ def update_texts(numbers: Iterable[TextId], id_: int) -> State:
         context.sign_repository,
     )
     state = State()
-    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
-        text = corpus.find(number)
-        try:
-            update_text(corpus, text)
-            state.add_updated()
-        except Exception as error:
-            state.add_error(error, text)
+    text = corpus.find(number)
+
+    try:
+        update_text(corpus, text)
+        state.add_updated()
+    except Exception as error:
+        state.add_error(error, text)
 
     return state
 
 
-def create_chunks(number_of_chunks) -> Iterable[Iterable[TextId]]:
+def get_text_ids() -> List[TextId]:
     context = create_context()
     corpus = Corpus(
         context.text_repository,
@@ -84,9 +82,7 @@ def create_chunks(number_of_chunks) -> Iterable[Iterable[TextId]]:
         context.changelog,
         context.sign_repository,
     )
-    numbers = [text.id for text in corpus.list()]
-    chunk_size = math.ceil(len(numbers) / number_of_chunks)
-    return pydash.chunk(numbers, chunk_size)
+    return [text.id for text in corpus.list()]
 
 
 if __name__ == "__main__":
@@ -96,24 +92,17 @@ if __name__ == "__main__":
         "--workers",
         type=int,
         help="number of parallel workers to perform migration",
-    )
-    parser.add_argument(
-        "-t",
-        "--threads",
-        action="store_true",
-        help="use threads instead of processes for workers",
+        default=4,
     )
     args = parser.parse_args()
-    workers = args.workers or 4
-    prefer = "threads" if args.threads else None
 
-    chunks = create_chunks(workers)
-    states = Parallel(n_jobs=workers, prefer=prefer)(
-        delayed(update_texts)(subset, index) for index, subset in enumerate(chunks)
-    )
-    final_state = reduce(
-        lambda accumulator, state: accumulator.merge(state), states, State()
-    )
+    numbers = get_text_ids()[:2]
+
+    with Pool(processes=args.workers) as pool:
+        states = tqdm(pool.imap_unordered(update, numbers), total=len(numbers))
+        final_state = reduce(
+            lambda accumulator, state: accumulator.merge(state), states, State()
+        )
 
     with open("invalid_texts.tsv", "w", encoding="utf-8") as file:
         file.write(final_state.to_tsv())
