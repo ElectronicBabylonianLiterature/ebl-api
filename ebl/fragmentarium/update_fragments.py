@@ -1,11 +1,11 @@
 import argparse
 import math
+import multiprocessing
 from functools import reduce
-from typing import Callable, Iterable, List, Sequence
+from typing import List, Sequence
 
 import attr
 import pydash
-from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from ebl.app import create_context
@@ -101,24 +101,21 @@ class State:
         )
 
 
-def update_fragments(
-    numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
-) -> State:
-    context = context_factory()
+def update_fragment(number: MuseumNumber) -> State:
+    context = create_context_()
     fragment_repository = context.fragment_repository
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
-    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
+    try:
+        fragment = fragment_repository.query_by_museum_number(number)
         try:
-            fragment = fragment_repository.query_by_museum_number(number)
-            try:
-                update_fragment(transliteration_factory, updater, fragment)
-                state.add_updated()
-            except Exception as error:
-                state.add_error(error, fragment)
+            update_fragment(transliteration_factory, updater, fragment)
+            state.add_updated()
         except Exception as error:
-            state.add_querying_error(error, number)
+            state.add_error(error, fragment)
+    except Exception as error:
+        state.add_querying_error(error, number)
 
     return state
 
@@ -132,7 +129,7 @@ def create_context_() -> Context:
 
 
 def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
-    numbers = find_transliterated(create_context_().fragment_repository)
+
     chunk_size = math.ceil(len(numbers) / number_of_chunks)
     return pydash.chunk(numbers, chunk_size)
 
@@ -145,11 +142,15 @@ if __name__ == "__main__":
     args = parser.parse_args()
     workers = args.workers or 6
 
-    chunks = create_chunks(workers)
-    states = Parallel(n_jobs=workers)(
-        delayed(update_fragments)(subset, index, create_context_)
-        for index, subset in enumerate(chunks)
-    )
+    numbers = find_transliterated(create_context_().fragment_repository)
+    pool = multiprocessing.Pool(processes=workers)
+
+    states = [
+        result
+        for result in tqdm(
+            pool.imap_unordered(update_fragment, numbers), total=len(numbers)
+        )
+    ]
     final_state = reduce(
         lambda accumulator, state: accumulator.merge(state), states, State()
     )
