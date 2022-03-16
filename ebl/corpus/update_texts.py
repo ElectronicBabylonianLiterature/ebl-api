@@ -21,9 +21,7 @@ def update_text(corpus: Corpus, text: Text) -> None:
         chapter = corpus.find_chapter(chapter_id)
         corpus.update_lines(
             chapter_id,
-            LinesUpdate(
-                [], set(), {index: line for index, line in enumerate(chapter.lines)}
-            ),
+            LinesUpdate([], set(), dict(enumerate(chapter.lines))),
             user,
         )
 

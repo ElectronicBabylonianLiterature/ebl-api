@@ -46,8 +46,7 @@ class AlignmentVisitor(TokenVisitor):
             self.alignments.append(word.alignment)
 
     def validate(self):
-        duplicates = pydash.duplicates(self.alignments)
-        if duplicates:
+        if duplicates := pydash.duplicates(self.alignments):
             raise AlignmentError(duplicates)
 
 
