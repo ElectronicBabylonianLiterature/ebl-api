@@ -53,7 +53,7 @@ class LineDisplaySchema(Schema):
 class ChapterDisplaySchema(Schema):
     id_ = fields.Nested(ChapterIdSchema, required=True, data_key="id")
     text_name = fields.String(required=True, data_key="textName")
-    text_doi = fields.String(data_key="textDoi")
+    text_doi = fields.String(data_key="textDoi", load_default="")
     is_single_stage = fields.Boolean(required=True, data_key="isSingleStage")
     title = fields.List(fields.Nested(OneOfNoteLinePartSchema), dump_only=True)
     lines = fields.Nested(LineDisplaySchema, many=True, required=True)
