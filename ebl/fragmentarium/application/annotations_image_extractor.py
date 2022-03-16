@@ -1,7 +1,6 @@
 import base64
+from functools import singledispatchmethod
 import io
-from singledispatchmethod import singledispatchmethod
-from io import BytesIO
 from typing import Sequence, NewType
 
 import attr
@@ -64,7 +63,7 @@ class AnnotationImageExtractor:
             f"{fragment_number}.jpg"
         )
         image_bytes = fragment_image.read()
-        image = Image.open(BytesIO(image_bytes), mode="r")
+        image = Image.open(io.BytesIO(image_bytes), mode="r")
         bounding_box = BoundingBox.from_annotations(
             image.size[0], image.size[1], [annotation]
         )[0]
@@ -87,7 +86,7 @@ class AnnotationImageExtractor:
     def _(self, line_number: LineNumber, number: int):
         return number == line_number.number
 
-    @_is_matching_number.register(LineNumberRange)  # pyre-ignore[56]
+    @_is_matching_number.register(LineNumberRange)
     def _(self, line_number: LineNumberRange, number: int):
         return line_number.start.number <= number <= line_number.end.number
 

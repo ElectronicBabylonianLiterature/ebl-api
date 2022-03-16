@@ -1,7 +1,7 @@
+from functools import singledispatchmethod
 from typing import Optional, Sequence, cast
 
 import pydash
-from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -85,7 +85,7 @@ class TextValidator(ChapterVisitor):
     def visit(self, item: ChapterItem) -> None:
         pass
 
-    @visit.register(Chapter)  # pyre-ignore[56]
+    @visit.register(Chapter)
     def _visit_chapter(self, chapter: Chapter) -> None:
         self._chapter = chapter
 
@@ -103,18 +103,18 @@ class TextValidator(ChapterVisitor):
         if invalid_lines:
             raise DataError(f"Invalid signs on lines: {', '.join(invalid_lines)}.")
 
-    @visit.register(Line)  # pyre-ignore[56]
+    @visit.register(Line)
     def _visit_line(self, line: Line) -> None:
         self._line = line
         for variant in line.variants:
             self.visit(variant)
 
-    @visit.register(LineVariant)  # pyre-ignore[56]
+    @visit.register(LineVariant)
     def _visit_line_variant(self, variant: LineVariant) -> None:
         for manuscript_line in variant.manuscripts:
             self.visit(manuscript_line)
 
-    @visit.register(ManuscriptLine)  # pyre-ignore[56]
+    @visit.register(ManuscriptLine)
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         try:
             alignment_validator = AlignmentVisitor()

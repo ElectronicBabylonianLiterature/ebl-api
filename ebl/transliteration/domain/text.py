@@ -1,8 +1,8 @@
+from functools import singledispatchmethod
 from itertools import combinations, groupby, zip_longest
 from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, cast
 
 import attr
-from singledispatchmethod import singledispatchmethod
 
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.merger import Merger
@@ -52,7 +52,7 @@ class LabelsValidator:
     def _(self, line: TextLine) -> None:
         self._index += 1
 
-    @_validate_line.register(TranslationLine)  # pyre-ignore[56]
+    @_validate_line.register(TranslationLine)
     def _(self, line: TranslationLine) -> None:
         if self._index < 0:
             self._errors.append('Translation "{line.atf}" before any text line.')

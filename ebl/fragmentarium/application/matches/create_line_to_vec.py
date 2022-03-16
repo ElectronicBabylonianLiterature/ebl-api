@@ -2,7 +2,7 @@ from functools import reduce, singledispatch
 from typing import Sequence, Tuple
 
 import attr
-from singledispatchmethod import singledispatchmethod
+from functools import singledispatchmethod
 
 from ebl.fragmentarium.domain.line_to_vec_encoding import (
     LineToVecEncoding,
@@ -124,7 +124,7 @@ class LineSplits:
     def add_line(self, line: Line) -> "LineSplits":
         return LineSplits(self._add_to_split(line), self._last_line_number)
 
-    @add_line.register(TextLine)  # pyre-ignore[56]
+    @add_line.register(TextLine)
     def _(self, line: TextLine) -> "LineSplits":
         current_line_number = get_line_number(line.line_number)
         splits = (
