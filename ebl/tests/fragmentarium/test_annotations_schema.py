@@ -44,10 +44,12 @@ SERIALIZED = {
     ],
 }
 
+
 @attr.attrs(auto_attribs=True, frozen=True)
 class Uhu:
-    x: any
-    y: any
+    x: str
+    y: str
+
 
 class UhuSchema(Schema):
     x = fields.String()
