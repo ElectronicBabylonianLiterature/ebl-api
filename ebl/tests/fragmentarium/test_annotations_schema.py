@@ -1,3 +1,6 @@
+import attr
+from marshmallow import Schema, fields, post_dump
+
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
@@ -40,6 +43,24 @@ SERIALIZED = {
         }
     ],
 }
+
+@attr.attrs(auto_attribs=True, frozen=True)
+class Uhu:
+    x: any
+    y: any
+
+class UhuSchema(Schema):
+    x = fields.String()
+    y = fields.String()
+
+    @post_dump
+    def dump(self, data, **kwargs):
+        return data
+
+
+def test_dump123():
+    x = UhuSchema().dump(Uhu("y", "x"))
+    assert x == {"x": "y", "y": "x"}
 
 
 def test_load():
