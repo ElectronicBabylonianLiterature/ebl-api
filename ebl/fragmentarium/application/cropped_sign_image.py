@@ -42,8 +42,6 @@ class CroppedSignSchema(Schema):
         return CroppedSign(data["imageId"], data["script"], data["label"])
 
 
-
-
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedAnnotation(CroppedSign):
     fragment_number: MuseumNumber

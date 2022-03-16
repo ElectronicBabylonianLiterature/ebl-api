@@ -74,7 +74,6 @@ SERIALIZED_NO_SIGN = {
 
 def test_load():
     assert AnnotationsSchema().load(SERIALIZED) == ANNOTATIONS
-    x = AnnotationsSchema().load(SERIALIZED_NO_SIGN)
     assert AnnotationsSchema().load(SERIALIZED_NO_SIGN) == ANNOTATIONS_NO_CROPPED_SIGN
 
 def test_dump():

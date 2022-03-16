@@ -42,11 +42,9 @@ class AnnotationSchema(Schema):
         CroppedSignSchema(), missing=None, data_key="croppedSign"
     )
 
-
     @post_load
     def make_annotation(self, data, **kwargs):
         return Annotation(**data)
-
 
     @post_dump
     def dump(self, data, **kwargs):
@@ -58,7 +56,7 @@ class AnnotationSchema(Schema):
 
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
-    annotations = fields.List(fields.Nested(AnnotationSchema()), required=True)
+    annotations = fields.List(fields.Nested(AnnotationSchema(), required=True))
 
     @post_load
     def make_annotation(self, data, **kwargs):
