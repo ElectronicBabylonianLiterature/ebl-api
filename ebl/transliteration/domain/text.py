@@ -81,8 +81,7 @@ class Text:
 
     @lines.validator
     def _validate_extents(self, _, value: Sequence[Line]) -> None:
-        errors = LabelsValidator(self).get_errors(value)
-        if errors:
+        if errors := LabelsValidator(self).get_errors(value):
             raise ValueError(" ".join(errors))
 
     @property
