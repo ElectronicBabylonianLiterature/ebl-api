@@ -7,7 +7,7 @@ RUN sudo apt-get update \
         mongo-tools \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=pypy3.8-7.3.7
+ARG PYTHON_VERSION=pypy3.8-7.3.8
 RUN pyenv update
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
