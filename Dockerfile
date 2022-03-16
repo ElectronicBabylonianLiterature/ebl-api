@@ -1,4 +1,4 @@
-FROM pypy:3.7
+FROM pypy:3.8
 
 RUN pip install poetry
 
