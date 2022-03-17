@@ -26,7 +26,9 @@ UNCERTAIN_FRAGMENTS = (UncertainFragment(MuseumNumber("X", "1"), True),)
 CHAPTER = ChapterListing(STAGE, CHAPTER_NAME, TRANSLATION, UNCERTAIN_FRAGMENTS)
 
 
-TEXT = Text(GENRE, CATEGORY, INDEX, NAME, HAS_DOI, VERSES, APPROXIMATE, INTRO, (CHAPTER,))
+TEXT = Text(
+    GENRE, CATEGORY, INDEX, NAME, HAS_DOI, VERSES, APPROXIMATE, INTRO, (CHAPTER,)
+)
 
 
 def test_text_constructor_sets_correct_fields() -> None:
