@@ -11,6 +11,7 @@ if __name__ == "__main__":
         context.changelog,
         context.fragment_repository,
         context.photo_repository,
+        context.cropped_sign_images_repository,
     )
     for counter, annotation in enumerate(annotations):
         print(f"Lenght {len(annotations)}")

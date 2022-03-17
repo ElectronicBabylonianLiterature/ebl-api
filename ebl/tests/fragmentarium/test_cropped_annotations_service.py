@@ -8,8 +8,12 @@ from ebl.tests.factories.annotation import (
 )
 
 
-def test_find_annotations_by_sign(annotations_repository, when):
-    service = CroppedAnnotationService(annotations_repository)
+def test_find_annotations_by_sign(
+    annotations_repository, cropped_sign_images_repository, when
+):
+    service = CroppedAnnotationService(
+        annotations_repository, cropped_sign_images_repository
+    )
     annotation = AnnotationFactory.build_batch(2)
     annotations = [AnnotationsFactory.build(annotations=annotation)]
 

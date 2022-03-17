@@ -14,6 +14,7 @@ class CroppedSignImage:
 
 
 class CroppedSignImageSchema(Schema):
+    image_id = fields.Str(required=True)
     image = fields.Str(required=True)
 
     @post_load
@@ -21,8 +22,8 @@ class CroppedSignImageSchema(Schema):
         return CroppedSignImage(data["_id"], data["image"])
 
     @post_dump
-    def dump(self, data: CroppedSignImage, **kwargs):
-        return {"_id": data.image_id, "image": data.image}
+    def cropped_sign_image_dump(self, data: CroppedSignImage, **kwargs):
+        return {"_id": data["image_id"], "image": data["image"]}
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

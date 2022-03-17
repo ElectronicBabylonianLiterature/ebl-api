@@ -159,6 +159,7 @@ class AnnotationsService:
             {"_id": _id, **schema.dump(old_annotations)},
             {"_id": _id, **schema.dump(annotations)},
         )
+
         (
             annotations_with_image_ids,
             cropped_sign_images,

@@ -47,11 +47,8 @@ class AnnotationSchema(Schema):
         return Annotation(**data)
 
     @post_dump
-    def dump(self, data, **kwargs):
+    def filter_none(self, data, **kwargs):
         return pydash.omit_by(data, pydash.is_none)
-
-
-
 
 
 class AnnotationsSchema(Schema):

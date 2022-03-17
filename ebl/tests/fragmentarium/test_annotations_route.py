@@ -6,7 +6,9 @@ import httpretty
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import AnnotationsFactory, AnnotationFactory
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
 def test_find_annotations(client):
@@ -65,26 +67,37 @@ def test_find_not_allowed(guest_client):
     assert result.status == falcon.HTTP_FORBIDDEN
 
 
-def test_update(client):
+def test_update(client, fragment_repository, photo_repository):
+    number = MuseumNumber.of("K.123")
     annotation_1 = AnnotationFactory(cropped_sign=None)
     annotation_2 = AnnotationFactory(cropped_sign=None)
-    annotations = AnnotationsFactory.build(annotations=[annotation_1, annotation_2])
-    fragment_number = annotations.fragment_number
+    annotations = AnnotationsFactory.build(
+        fragment_number=number, annotations=[annotation_1, annotation_2]
+    )
+    fragment = TransliteratedFragmentFactory.build(number=number)
+    fragment_repository.create(fragment)
+    photo_repository._create(create_test_photo(number))
+
     body = AnnotationsSchema().dump(annotations)
-    x = AnnotationsSchema().load(body)
-    url = f"/fragments/{fragment_number}/annotations"
-    post_result = client.simulate_post(url, body=body)
+    url = f"/fragments/{number}/annotations"
+    post_result = client.simulate_post(url, body=json.dumps(body))
 
     expected_json = AnnotationsSchema().dump(annotations)
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.json == expected_json
+    assert post_result.json["fragmentNumber"] == expected_json["fragmentNumber"]
+    for annotation, expected_annotation in zip(
+        post_result.json["annotations"], expected_json["annotations"]
+    ):
+        assert annotation["geometry"] == expected_annotation["geometry"]
+        assert annotation["data"] == expected_annotation["data"]
+        assert annotation["croppedSign"] is not None
 
     get_result = client.simulate_get(
-        f"/fragments/{fragment_number}/annotations",
+        f"/fragments/{number}/annotations",
         params={"generateAnnotations": False},
     )
-    assert get_result.json == expected_json
+    assert get_result.json == post_result.json
 
 
 def test_update_number_mismatch(client):

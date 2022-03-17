@@ -64,4 +64,3 @@ class AnnotationsFactory(factory.Factory):
     annotations = factory.List(
         [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory)]
     )
-
