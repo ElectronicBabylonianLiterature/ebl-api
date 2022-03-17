@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, post_dump
+from marshmallow import Schema, fields, post_load, post_dump, EXCLUDE
 import pydash
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
 from ebl.fragmentarium.domain.annotation import (
@@ -36,6 +36,9 @@ class AnnotationDataSchema(Schema):
 
 
 class AnnotationSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
     cropped_sign = fields.Nested(

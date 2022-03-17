@@ -41,7 +41,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         result = self._collection.find_many(
             {"annotations": {"$exists": True, "$ne": []}}
         )
-        return AnnotationsSchema().load(result, unknown=EXCLUDE, many=True)
+        return AnnotationsSchema(unknown=EXCLUDE).load(result, many=True)
 
     def find_by_sign(self, sign: str) -> Sequence[Annotations]:
         query = {"$regex": re.escape(sign), "$options": "i"}
