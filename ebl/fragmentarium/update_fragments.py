@@ -1,11 +1,9 @@
 import argparse
-import math
 from functools import reduce
-from typing import Callable, Iterable, List, Sequence
+from multiprocessing import Pool
+from typing import List
 
 import attr
-import pydash
-from joblib import Parallel, delayed
 from tqdm import tqdm
 
 from ebl.app import create_context
@@ -101,24 +99,21 @@ class State:
         )
 
 
-def update_fragments(
-    numbers: Iterable[MuseumNumber], id_: int, context_factory: Callable[[], Context]
-) -> State:
-    context = context_factory()
+def update(number: MuseumNumber) -> State:
+    context = create_context_()
     fragment_repository = context.fragment_repository
     transliteration_factory = context.get_transliteration_update_factory()
     updater = context.get_fragment_updater()
     state = State()
-    for number in tqdm(numbers, desc=f"Chunk #{id_}", position=id_):
+    try:
+        fragment = fragment_repository.query_by_museum_number(number)
         try:
-            fragment = fragment_repository.query_by_museum_number(number)
-            try:
-                update_fragment(transliteration_factory, updater, fragment)
-                state.add_updated()
-            except Exception as error:
-                state.add_error(error, fragment)
+            update_fragment(transliteration_factory, updater, fragment)
+            state.add_updated()
         except Exception as error:
-            state.add_querying_error(error, number)
+            state.add_error(error, fragment)
+    except Exception as error:
+        state.add_querying_error(error, str(number))
 
     return state
 
@@ -131,28 +126,24 @@ def create_context_() -> Context:
     return context
 
 
-def create_chunks(number_of_chunks) -> Sequence[Sequence[str]]:
-    numbers = find_transliterated(create_context_().fragment_repository)
-    chunk_size = math.ceil(len(numbers) / number_of_chunks)
-    return pydash.chunk(numbers, chunk_size)
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "-w", "--workers", type=int, help="Number of threads to perform migration"
+        "-w",
+        "--workers",
+        type=int,
+        help="Number of threads to perform migration",
+        default=6,
     )
     args = parser.parse_args()
-    workers = args.workers or 6
 
-    chunks = create_chunks(workers)
-    states = Parallel(n_jobs=workers)(
-        delayed(update_fragments)(subset, index, create_context_)
-        for index, subset in enumerate(chunks)
-    )
-    final_state = reduce(
-        lambda accumulator, state: accumulator.merge(state), states, State()
-    )
+    numbers = find_transliterated(create_context_().fragment_repository)
+
+    with Pool(processes=args.workers) as pool:
+        states = tqdm(pool.imap_unordered(update, numbers), total=len(numbers))
+        final_state = reduce(
+            lambda accumulator, state: accumulator.merge(state), states, State()
+        )
 
     with open("invalid_fragments.tsv", "w", encoding="utf-8") as file:
         file.write(final_state.to_tsv())

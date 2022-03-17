@@ -1,7 +1,7 @@
+from functools import singledispatchmethod
 from typing import Optional, TypeVar
 
 import attr
-from singledispatchmethod import singledispatchmethod
 
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import AbstractWord
@@ -33,7 +33,7 @@ class AlignmentToken:
         else:
             raise AlignmentError(f"Incompatible alignment {self} for token {token}.")
 
-    @apply.register(AbstractWord)  # pyre-ignore[56]
+    @apply.register(AbstractWord)
     def _(self, token: A) -> A:
         if token.value == self.value and (token.alignable or self.alignment is None):
             return token.set_alignment(self.alignment, self.variant)

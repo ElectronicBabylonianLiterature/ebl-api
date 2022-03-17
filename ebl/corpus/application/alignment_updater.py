@@ -1,7 +1,7 @@
+from functools import singledispatchmethod
 from typing import List
 
 import attr
-from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
@@ -48,7 +48,7 @@ class AlignmentUpdater(ChapterUpdater):
     def visit(self, item: ChapterItem) -> None:
         super().visit(item)
 
-    @visit.register(Line)  # pyre-ignore[56]
+    @visit.register(Line)
     def _visit_line(self, line: Line) -> None:
         alignment_variants = self._alignment.get_number_of_variants(self.line_index)
         line_variants = len(line.variants)
@@ -64,7 +64,7 @@ class AlignmentUpdater(ChapterUpdater):
         self._lines.append(attr.evolve(line, variants=tuple(self._variants)))
         self._variants = []
 
-    @visit.register(LineVariant)  # pyre-ignore[56]
+    @visit.register(LineVariant)
     def _visit_line_variant(self, variant: LineVariant) -> None:
         alignment_manuscripts = self._alignment.get_number_of_manuscripts(
             self.line_index, self.variant_index
@@ -84,7 +84,7 @@ class AlignmentUpdater(ChapterUpdater):
         )
         self._manuscript_lines = []
 
-    @visit.register(ManuscriptLine)  # pyre-ignore[56]
+    @visit.register(ManuscriptLine)
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         updated_line = manuscript_line.line.update_alignment(
             self.current_alignment.alignment

@@ -1,7 +1,7 @@
+from functools import singledispatchmethod
 from typing import cast, Iterable, List, Optional, Sequence
 
 import attr
-from singledispatchmethod import singledispatchmethod
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
@@ -27,7 +27,7 @@ class ChapterHydartor(ChapterVisitor):
     def visit(self, item: ChapterItem) -> None:
         pass
 
-    @visit.register(Chapter)  # pyre-ignore[56]
+    @visit.register(Chapter)
     def _visit_chapter(self, chapter: Chapter) -> None:
         for manuscript in chapter.manuscripts:
             self.visit(manuscript)
@@ -35,7 +35,7 @@ class ChapterHydartor(ChapterVisitor):
         self._chapter = attr.evolve(chapter, manuscripts=tuple(self._manuscripts))
         self._manuscripts = []
 
-    @visit.register(Manuscript)  # pyre-ignore[56]
+    @visit.register(Manuscript)
     def _visit_manuscript(self, manuscript: Manuscript) -> None:
         self._manuscripts.append(self.hydrate_manuscript(manuscript))
 

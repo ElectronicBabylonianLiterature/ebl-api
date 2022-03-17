@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
+from functools import singledispatchmethod
 from typing import Optional, cast
-
-from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
 from ebl.errors import DataError, Defect
@@ -26,7 +25,7 @@ class ChapterUpdater(ABC, ChapterVisitor):
     def visit(self, item: ChapterItem) -> None:
         pass
 
-    @visit.register(Chapter)  # pyre-ignore[56]
+    @visit.register(Chapter)
     def _visit_chapter(self, chapter: Chapter) -> None:
         self._validate_chapter(chapter)
         self._visit_manuscripts(chapter)

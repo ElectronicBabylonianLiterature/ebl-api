@@ -1,7 +1,7 @@
+from functools import singledispatchmethod
 from typing import List, Sequence
 
 import attr
-from singledispatchmethod import singledispatchmethod
 
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
@@ -51,7 +51,7 @@ class LemmatizationUpdater(ChapterUpdater):
     def visit(self, item: ChapterItem) -> None:
         super().visit(item)
 
-    @visit.register(Line)  # pyre-ignore[56]
+    @visit.register(Line)
     def _visit_line(self, line: Line) -> None:
         for variant in line.variants:
             self.visit(variant)
@@ -62,7 +62,7 @@ class LemmatizationUpdater(ChapterUpdater):
         else:
             raise LemmatizationError()
 
-    @visit.register(LineVariant)  # pyre-ignore[56]
+    @visit.register(LineVariant)
     def _visit_line_variant(self, variant: LineVariant) -> None:
         for manuscript_line in variant.manuscripts:
             self.visit(manuscript_line)
@@ -90,7 +90,7 @@ class LemmatizationUpdater(ChapterUpdater):
         else:
             raise LemmatizationError()
 
-    @visit.register(ManuscriptLine)  # pyre-ignore[56]
+    @visit.register(ManuscriptLine)
     def _visit_manuscript_line(self, manuscript_line: ManuscriptLine) -> None:
         updated_line = manuscript_line.line.update_lemmatization(
             self.current_lemmatization
