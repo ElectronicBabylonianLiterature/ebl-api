@@ -37,7 +37,7 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
