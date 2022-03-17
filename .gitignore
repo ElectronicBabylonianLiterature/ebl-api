@@ -125,3 +125,6 @@ line_to_vec_ranking_results
 
 #Annotations (Bounding Boxes and Images)
 annotations
+
+# Task
+Taskfile.yml
