@@ -19,7 +19,7 @@
 
 Requirements:
 
-* [PyPy3.7](https://www.pypy.org) & pip
+* [PyPy3.8](https://www.pypy.org) & pip
 
 ```shell script
 pip install poetry
