@@ -6,6 +6,7 @@ from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.parallel_line import ParallelFragment
 from ebl.users.domain.user import User
 
 
@@ -22,9 +23,15 @@ class FragmentDtoSchema(FragmentSchema):
 
 
 def create_response_dto(fragment: Fragment, user: User, has_photo: bool):
-    return FragmentDtoSchema(context={"user": user, "has_photo": has_photo}).dump(
+    dto = FragmentDtoSchema(context={"user": user, "has_photo": has_photo}).dump(
         fragment
     )
+
+    for line in dto["text"]["lines"]:
+        if line["type"] == ParallelFragment.__name__:
+            line["exists"] = False
+
+    return dto
 
 
 def parse_museum_number(number: str) -> MuseumNumber:

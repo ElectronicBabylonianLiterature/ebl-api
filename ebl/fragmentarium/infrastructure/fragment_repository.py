@@ -29,6 +29,7 @@ from ebl.fragmentarium.infrastructure.queries import (
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.domain.parallel_line import ParallelFragment
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -174,7 +175,17 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
         try:
-            return FragmentSchema(unknown=EXCLUDE).load(next(data))
+            fragment_data = next(data)
+            for line in fragment_data["text"]["lines"]:
+                if line["type"] == ParallelFragment.__name__:
+                    line["exists"] = (
+                        self._fragments.count_documents(
+                            museum_number_is(line["museumNumber"])
+                        )
+                        > 0
+                    )
+
+            return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 

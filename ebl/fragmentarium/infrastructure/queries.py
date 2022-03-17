@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -13,8 +13,12 @@ NUMBER_OF_NEEDS_REVISION: int = 20
 PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 10
 
 
-def museum_number_is(number: MuseumNumber) -> dict:
-    serialized = MuseumNumberSchema().dump(number)
+def museum_number_is(number: Union[MuseumNumber, dict]) -> dict:
+    serialized = (
+        MuseumNumberSchema().dump(number)
+        if isinstance(number, MuseumNumber)
+        else number
+    )
     return {f"museumNumber.{key}": value for key, value in serialized.items()}
 
 

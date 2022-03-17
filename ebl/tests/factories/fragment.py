@@ -308,7 +308,9 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
             ),
-            ParallelFragment(False, MuseumNumber.of("K.1"), True, None, LineNumber(1)),
+            ParallelFragment(
+                False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
+            ),
         )
     )
     signs = (
@@ -521,6 +523,8 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
             ),
-            ParallelFragment(False, MuseumNumber.of("K.1"), True, None, LineNumber(1)),
+            ParallelFragment(
+                False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
+            ),
         )
     )
