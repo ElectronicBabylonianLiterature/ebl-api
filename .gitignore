@@ -128,3 +128,4 @@ annotations
 
 # Task
 Taskfile.yml
+.task
