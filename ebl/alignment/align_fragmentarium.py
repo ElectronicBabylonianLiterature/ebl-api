@@ -2,7 +2,7 @@ import argparse
 import csv
 from functools import partial
 import re
-from multiprocessing import Pool
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import sys
 import time
 from typing import Iterable, List, Tuple
@@ -134,6 +134,12 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "-w", "--workers", type=int, default=4, help="Number of parallel workers."
     )
+    parser.add_argument(
+        "-t",
+        "--threads",
+        action="store_true",
+        help="Use threads instead of processes.",
+    )
 
     return parser.parse_args()
 
@@ -151,11 +157,13 @@ if __name__ == "__main__":
     fragment_numbers = fragments.query_transliterated_numbers()[start:end]
     chapters = load_chapters(context)
 
-    with Pool(processes=args.workers) as pool, open(
+    Executor = ThreadPoolExecutor if args.threads else ProcessPoolExecutor
+
+    with Executor(max_workers=args.workers) as executor, open(
         args.output, "w", encoding="utf-8"
     ) as file:
         results = tqdm(
-            pool.imap_unordered(
+            executor.map(
                 partial(
                     align_fragment,
                     chapters=chapters,
