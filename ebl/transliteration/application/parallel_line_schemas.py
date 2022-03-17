@@ -18,6 +18,10 @@ from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.genre import Genre
 
 
+def exists() -> fields.Boolean:
+    return fields.Boolean(allow_none=True, load_default=None)
+
+
 class ParallelLineSchema(LineBaseSchema):
     prefix = fields.Constant("//")
     content = fields.Function(
@@ -37,6 +41,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
+    exists = exists()
 
     @post_load
     def make_line(self, data, **kwargs) -> ParallelFragment:
@@ -46,6 +51,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["has_duplicates"],
             data["surface"],
             data["line_number"],
+            data["exists"],
         )
 
 
@@ -66,11 +72,16 @@ class ParallelTextSchema(ParallelLineSchema):
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
+    exists = exists()
 
     @post_load
     def make_line(self, data, **kwargs) -> ParallelText:
         return ParallelText(
-            data["has_cf"], data["text"], data["chapter"], data["line_number"]
+            data["has_cf"],
+            data["text"],
+            data["chapter"],
+            data["line_number"],
+            data["exists"],
         )
 
 

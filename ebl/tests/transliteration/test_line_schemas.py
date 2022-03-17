@@ -546,6 +546,7 @@ LINES = [
             True,
             SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
             LineNumber(1),
+            True,
         ),
         {
             "type": "ParallelFragment",
@@ -562,6 +563,7 @@ LINES = [
                 "text": "",
             },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+            "exists": True,
         },
     ),
     (
@@ -570,6 +572,7 @@ LINES = [
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
+            True,
         ),
         {
             "type": "ParallelText",
@@ -588,6 +591,7 @@ LINES = [
                 "name": "name",
             },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+            "exists": True,
         },
     ),
     (
@@ -711,11 +715,38 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
         },
     ),
     (
+        ParallelFragment(
+            True,
+            MuseumNumber.of("K.1"),
+            True,
+            SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+            LineNumber(1),
+            None,
+        ),
+        {
+            "type": "ParallelFragment",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. F K.1 &d o! 1"))],
+            "displayValue": "cf. F K.1 &d o! 1",
+            "hasCf": True,
+            "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
+            "hasDuplicates": True,
+            "surface": {
+                "status": ["CORRECTION"],
+                "surface": "OBVERSE",
+                "abbreviation": "o",
+                "text": "",
+            },
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
         ParallelText(
             True,
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
+            None,
         ),
         {
             "type": "ParallelText",
