@@ -1,5 +1,6 @@
 import argparse
 import csv
+from functools import partial
 import re
 from multiprocessing import Pool
 import sys
@@ -150,14 +151,19 @@ if __name__ == "__main__":
     fragment_numbers = fragments.query_transliterated_numbers()[start:end]
     chapters = load_chapters(context)
 
-    def partial_align(number):
-        return align_fragment(number, chapters, args.max_lines, args.min_score)
-
     with Pool(processes=args.workers) as pool, open(
         args.output, "w", encoding="utf-8"
     ) as file:
         results = tqdm(
-            pool.imap_unordered(partial_align, fragment_numbers),
+            pool.imap_unordered(
+                partial(
+                    align_fragment,
+                    chapters=chapters,
+                    max_lines=args.max_lines,
+                    min_score=args.min_score,
+                ),
+                fragment_numbers,
+            ),
             total=len(fragment_numbers),
         )
 
