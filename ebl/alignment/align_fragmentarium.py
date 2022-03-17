@@ -18,7 +18,7 @@ from ebl.context import Context
 from ebl.corpus.domain.chapter import ChapterId, Chapter
 from ebl.corpus.domain.text import Text
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def has_clear_signs(signs: str) -> bool:

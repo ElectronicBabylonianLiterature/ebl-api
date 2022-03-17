@@ -2,7 +2,7 @@ from marshmallow import Schema, fields, post_load, validate
 
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.label_schemas import SurfaceLabelSchema
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema

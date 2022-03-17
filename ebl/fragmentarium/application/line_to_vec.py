@@ -3,7 +3,7 @@ from typing import Tuple
 import attr
 
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)

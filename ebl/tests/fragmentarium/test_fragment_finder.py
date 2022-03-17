@@ -4,7 +4,7 @@ from mockito import spy2, unstub, verifyZeroInteractions
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery

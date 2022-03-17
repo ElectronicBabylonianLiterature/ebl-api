@@ -16,7 +16,7 @@ from ebl.corpus.domain.manuscript import (
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.atf import Flag, Ruling, Status, Surface

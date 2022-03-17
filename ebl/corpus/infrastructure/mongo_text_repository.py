@@ -27,11 +27,10 @@ from ebl.fragmentarium.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.fragmentarium.infrastructure.queries import (
     is_in_fragmentarium,
     join_joins,
-    museum_number_is,
 )
 from ebl.mongo_collection import MongoCollection
-from ebl.transliteration.domain.parallel_line import ParallelFragment
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.infrastructure.parallel_lines import inject_exists
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -131,14 +130,9 @@ class MongoTextRepository(TextRepository):
             chapter = next(chapters)
 
             for line in chapter["lines"]:
-                for parallel in line["parallelLines"]:
-                    if parallel["type"] == ParallelFragment.__name__:
-                        parallel["exists"] = (
-                            self._fragments.count_documents(
-                                museum_number_is(parallel["museumNumber"])
-                            )
-                            > 0
-                        )
+                line["parallelLines"] = inject_exists(
+                    line["parallelLines"], self._fragments
+                )
 
             return ChapterDisplaySchema().load(
                 {

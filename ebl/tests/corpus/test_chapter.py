@@ -19,7 +19,7 @@ from ebl.corpus.domain.manuscript import (
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.transliteration.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine

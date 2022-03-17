@@ -20,7 +20,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DataError, Defect, NotFoundError
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User

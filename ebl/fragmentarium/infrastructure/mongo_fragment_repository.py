@@ -11,11 +11,11 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure import collections
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -25,11 +25,11 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_random,
     fragment_is,
     join_joins,
-    museum_number_is,
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
-from ebl.transliteration.domain.parallel_line import ParallelFragment
+from ebl.transliteration.infrastructure.parallel_lines import inject_exists
+from ebl.transliteration.infrastructure.queries import museum_number_is
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -176,14 +176,9 @@ class MongoFragmentRepository(FragmentRepository):
         )
         try:
             fragment_data = next(data)
-            for line in fragment_data["text"]["lines"]:
-                if line["type"] == ParallelFragment.__name__:
-                    line["exists"] = (
-                        self._fragments.count_documents(
-                            museum_number_is(line["museumNumber"])
-                        )
-                        > 0
-                    )
+            fragment_data["text"]["lines"] = inject_exists(
+                fragment_data["text"]["lines"], self._fragments
+            )
 
             return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:

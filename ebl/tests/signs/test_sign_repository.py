@@ -4,8 +4,8 @@ from marshmallow import EXCLUDE
 from ebl.errors import NotFoundError
 from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 COLLECTION = "signs"
 

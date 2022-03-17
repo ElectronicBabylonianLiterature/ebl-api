@@ -3,7 +3,7 @@ from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding

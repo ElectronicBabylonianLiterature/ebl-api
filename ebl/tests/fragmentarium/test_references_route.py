@@ -4,7 +4,7 @@ import falcon
 import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory

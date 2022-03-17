@@ -9,7 +9,7 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.translation_line import TranslationLine
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)

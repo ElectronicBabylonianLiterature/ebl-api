@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 

@@ -8,7 +8,7 @@ from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, UncuratedReference
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     ColumnAtLine,

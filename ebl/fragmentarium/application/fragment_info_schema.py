@@ -4,7 +4,7 @@ from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
     ApiReferenceSchema,
 )
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 
 

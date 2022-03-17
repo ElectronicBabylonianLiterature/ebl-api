@@ -23,7 +23,9 @@ from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import MongoFragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )

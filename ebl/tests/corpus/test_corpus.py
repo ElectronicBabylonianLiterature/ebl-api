@@ -13,7 +13,7 @@ from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import DataError, Defect, NotFoundError
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.tests.corpus.support import ANY_USER
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory

@@ -9,7 +9,7 @@ from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,

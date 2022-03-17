@@ -2,7 +2,7 @@ from hamcrest.core import assert_that, all_of
 from hamcrest.library import equal_to, greater_than, less_than
 import pytest
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PREFIX = "K"
 NUMBER = "1"

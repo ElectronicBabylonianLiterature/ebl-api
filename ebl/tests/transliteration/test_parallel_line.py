@@ -2,7 +2,7 @@ import pytest
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf, Status, Surface
 from ebl.transliteration.domain.genre import Genre

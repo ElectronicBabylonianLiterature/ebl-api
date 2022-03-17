@@ -9,7 +9,7 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization

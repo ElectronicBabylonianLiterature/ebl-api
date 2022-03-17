@@ -3,7 +3,7 @@ from typing import Optional, Tuple, cast
 
 import attr
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.labels import SurfaceLabel

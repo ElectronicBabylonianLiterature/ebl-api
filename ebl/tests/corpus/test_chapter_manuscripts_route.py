@@ -11,7 +11,7 @@ from ebl.corpus.domain.manuscript import (
     PeriodModifier,
     Provenance,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.domain.stage import Stage

@@ -12,7 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import (
     Lemmatization,
