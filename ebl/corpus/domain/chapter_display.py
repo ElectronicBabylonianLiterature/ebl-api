@@ -78,6 +78,7 @@ class ChapterDisplay:
         return ChapterDisplay(
             chapter.id_,
             text.name,
+            text.doi,
             not text.has_multiple_stages,
             tuple(map(LineDisplay.of_line, chapter.lines)),
             chapter.record,
