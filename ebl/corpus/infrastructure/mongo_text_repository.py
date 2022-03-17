@@ -23,8 +23,14 @@ from ebl.corpus.infrastructure.queries import (
     join_chapters,
 )
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
+from ebl.fragmentarium.infrastructure.collections import FRAGMENTS_COLLECTION
+from ebl.fragmentarium.infrastructure.queries import (
+    is_in_fragmentarium,
+    join_joins,
+    museum_number_is,
+)
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.domain.parallel_line import ParallelFragment
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
@@ -44,6 +50,7 @@ class MongoTextRepository(TextRepository):
     def __init__(self, database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
+        self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
 
     def create_indexes(self) -> None:
         self._texts.create_index(
@@ -121,9 +128,21 @@ class MongoTextRepository(TextRepository):
         try:
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
+            chapter = next(chapters)
+
+            for line in chapter["lines"]:
+                for parallel in line["parallelLines"]:
+                    if parallel["type"] == ParallelFragment.__name__:
+                        parallel["exists"] = (
+                            self._fragments.count_documents(
+                                museum_number_is(parallel["museumNumber"])
+                            )
+                            > 0
+                        )
+
             return ChapterDisplaySchema().load(
                 {
-                    **next(chapters),
+                    **chapter,
                     "textName": text.name,
                     "isSingleStage": not text.has_multiple_stages,
                 }
