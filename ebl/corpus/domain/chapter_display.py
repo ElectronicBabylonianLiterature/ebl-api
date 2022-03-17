@@ -64,6 +64,7 @@ class LineDisplay:
 class ChapterDisplay:
     id_: ChapterId
     text_name: str
+    text_doi: str
     is_single_stage: bool
     lines: Sequence[LineDisplay]
     record: Record
