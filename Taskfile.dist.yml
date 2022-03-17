@@ -1,0 +1,32 @@
+version: '3'
+
+dotenv: ['.env']
+
+tasks:
+  test-all:
+    cmds:
+      - task: format
+        vars: {CLI_ARGS: "--check"}
+      - task: lint
+      - task: type
+      - task: test
+
+  test:
+    cmds:
+      - poetry run pytest {{.CLI_ARGS}}
+
+  lint:
+    cmds:
+      - poetry run flake8 ebl
+  
+  type:
+    cmds:
+      - poetry run pyre check
+  
+  format:
+    cmds:
+      - poetry run black ebl {{.CLI_ARGS}}
+
+  start:
+    cmds:
+      - poetry run waitress-serve --port=8000 --call ebl.app:get_app

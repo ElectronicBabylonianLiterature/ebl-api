@@ -7,6 +7,8 @@ RUN sudo apt-get update \
         mongo-tools \
     && sudo rm -rf /var/lib/apt/lists/*
 
+RUN brew install go-task/tap/go-task
+
 ARG PYTHON_VERSION=pypy3.8-7.3.8
 RUN pyenv update
 RUN pyenv install $PYTHON_VERSION
