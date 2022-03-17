@@ -230,7 +230,7 @@ class TextFactory(factory.Factory):
     category = factory.Sequence(lambda n: n)
     index = factory.Sequence(lambda n: n)
     name = factory.Faker("sentence")
-    doi = factory.Faker("sentence")
+    has_doi = factory.Iterator([True, False])
     number_of_verses = factory.fuzzy.FuzzyInteger(1, 10000)
     approximate_verses = factory.Iterator([True, False])
     intro = factory.Faker("sentence")

@@ -29,7 +29,7 @@ def to_dict(chapter: ChapterDisplay, missing_intertext: bool = False, missing_tr
             },
         },
         "textName": chapter.text_name,
-        "textDoi": chapter.text_doi,
+        "textHasDoi": chapter.text_has_doi,
         "isSingleStage": chapter.is_single_stage,
         "lines": [
             {

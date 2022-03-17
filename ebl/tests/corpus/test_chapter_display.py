@@ -39,7 +39,7 @@ def test_chapter_display_of_chapter() -> None:
     assert chapter_display == ChapterDisplay(
         chapter.id_,
         text.name,
-        text.doi,
+        text.has_doi,
         not text.has_multiple_stages,
         tuple(LineDisplay.of_line(line) for line in chapter.lines),
         chapter.record,

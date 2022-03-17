@@ -64,7 +64,7 @@ class LineDisplay:
 class ChapterDisplay:
     id_: ChapterId
     text_name: str
-    text_doi: str
+    text_has_doi: bool
     is_single_stage: bool
     lines: Sequence[LineDisplay]
     record: Record
@@ -78,7 +78,7 @@ class ChapterDisplay:
         return ChapterDisplay(
             chapter.id_,
             text.name,
-            text.doi,
+            text.has_doi,
             not text.has_multiple_stages,
             tuple(map(LineDisplay.of_line, chapter.lines)),
             chapter.record,
