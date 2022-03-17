@@ -167,12 +167,3 @@ class AnnotationsService:
         self._annotations_repository.create_or_update(annotations_with_image_ids)
         self._cropped_sign_images_repository.create(cropped_sign_images)
         return annotations_with_image_ids
-
-    def update_(self, annotations: Annotations) -> Annotations:
-        (
-            annotations_with_image_ids,
-            cropped_sign_images,
-        ) = self._cropped_image_from_annotations(annotations)
-        self._annotations_repository.create_or_update(annotations_with_image_ids)
-        self._cropped_sign_images_repository.create_or_update(cropped_sign_images)
-        return annotations_with_image_ids

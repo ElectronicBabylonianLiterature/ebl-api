@@ -22,7 +22,7 @@ class CroppedSignImageSchema(Schema):
         return CroppedSignImage(data["_id"], data["image"])
 
     @post_dump
-    def cropped_sign_image_dump(self, data: CroppedSignImage, **kwargs):
+    def cropped_sign_image_dump(self, data, **kwargs):
         return {"_id": data["image_id"], "image": data["image"]}
 
 
