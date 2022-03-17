@@ -49,6 +49,7 @@ class ParallelFragment(ParallelLine):
     has_duplicates: bool
     surface: Optional[SurfaceLabel]
     line_number: AbstractLineNumber
+    exists: Optional[bool] = None
 
     @property
     def display_value(self) -> str:
@@ -68,6 +69,7 @@ class ParallelText(ParallelLine):
     text: TextId
     chapter: Optional[ChapterName]
     line_number: AbstractLineNumber
+    exists: Optional[bool] = None
 
     @property
     def display_value(self) -> str:
