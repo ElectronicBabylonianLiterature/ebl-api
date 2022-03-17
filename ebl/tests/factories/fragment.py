@@ -3,7 +3,7 @@ from typing import Sequence
 import factory
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, UncuratedReference

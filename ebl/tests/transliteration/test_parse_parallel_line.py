@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.genre import Genre

@@ -3,7 +3,7 @@ import pytest
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema

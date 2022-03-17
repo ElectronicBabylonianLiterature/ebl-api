@@ -1,7 +1,7 @@
 from ebl.corpus.domain.chapter import Classification, make_title
-from ebl.corpus.domain.stage import Stage
+from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.markup import StringPart

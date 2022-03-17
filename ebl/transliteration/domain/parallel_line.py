@@ -3,14 +3,14 @@ from typing import Optional, Tuple, cast
 
 import attr
 
-from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text_id import TextId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.stage import Stage
+from ebl.transliteration.domain.text_id import TextId
 
 
 @attr.s(auto_attribs=True, frozen=True)

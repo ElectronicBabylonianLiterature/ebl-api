@@ -14,7 +14,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
-from ebl.corpus.domain.stage import Stage
+from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -41,7 +41,7 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.genre import Genre
 

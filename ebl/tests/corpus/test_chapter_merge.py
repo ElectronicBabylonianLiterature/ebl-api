@@ -1,11 +1,11 @@
 import attr
 import pytest
 
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.corpus.domain.stage import Stage
+from ebl.transliteration.domain.stage import Stage
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf import Surface
