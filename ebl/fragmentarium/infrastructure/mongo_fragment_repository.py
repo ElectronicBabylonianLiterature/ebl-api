@@ -1,8 +1,8 @@
 import operator
-from typing import List, Sequence, Tuple, Callable, Optional, cast
+from typing import Callable, List, Optional, Sequence, Tuple, cast
 
-import pymongo
 from marshmallow import EXCLUDE
+import pymongo
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.errors import NotFoundError
@@ -11,12 +11,10 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.infrastructure import collections
+from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -28,6 +26,12 @@ from ebl.fragmentarium.infrastructure.queries import (
     number_is,
 )
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.infrastructure.collections import (
+    CHAPTERS_COLLECTION,
+    FRAGMENTS_COLLECTION,
+)
 from ebl.transliteration.infrastructure.parallel_lines import inject_exists
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
@@ -94,8 +98,9 @@ def _find_adjacent_museum_number_from_sequence(
 
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
-        self._fragments = MongoCollection(database, collections.FRAGMENTS_COLLECTION)
-        self._joins = MongoCollection(database, collections.JOINS_COLLECTION)
+        self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
+        self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -177,7 +182,7 @@ class MongoFragmentRepository(FragmentRepository):
         try:
             fragment_data = next(data)
             fragment_data["text"]["lines"] = inject_exists(
-                fragment_data["text"]["lines"], self._fragments
+                fragment_data["text"]["lines"], self._fragments, self._chapters
             )
 
             return FragmentSchema(unknown=EXCLUDE).load(fragment_data)

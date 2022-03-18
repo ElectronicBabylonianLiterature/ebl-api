@@ -10,6 +10,7 @@ from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.joins import Join
+from ebl.transliteration.domain.parallel_line import ParallelFragment, ParallelText
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -79,6 +80,9 @@ def test_update_transliteration_merge_lemmatization(
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
+    for line in expected_json["text"]["lines"]:
+        if line["type"] in [ParallelFragment.__name__, ParallelText.__name__]:
+            line["exists"] = False
 
     post_result = client.simulate_post(
         f"/fragments/{lemmatized_fragment.number}/transliteration",
@@ -110,9 +114,7 @@ def test_update_transliteration_invalid_atf(client, fragmentarium):
     }
 
 
-def test_update_transliteration_not_lowest_join(
-    client, fragmentarium, fragment_repository
-) -> None:
+def test_update_transliteration_not_lowest_join(client, fragment_repository) -> None:
     number = MuseumNumber("X", "2")
     fragment = FragmentFactory.build(number=number)
     fragment_repository.create_join([[Join(number)], [Join(MuseumNumber("X", "1"))]])

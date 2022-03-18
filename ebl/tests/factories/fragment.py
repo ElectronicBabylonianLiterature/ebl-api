@@ -307,6 +307,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 TextId(CorpusGenre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
+                False,
             ),
             ParallelFragment(
                 False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
@@ -522,6 +523,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 TextId(CorpusGenre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
+                False,
             ),
             ParallelFragment(
                 False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False

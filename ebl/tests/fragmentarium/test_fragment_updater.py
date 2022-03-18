@@ -44,11 +44,11 @@ def test_update_transliteration(
     expected_fragment = transliterated_fragment.update_transliteration(
         transliteration, user
     )
-
     (
         when(fragment_repository)
         .query_by_museum_number(number)
         .thenReturn(transliterated_fragment)
+        .thenReturn(expected_fragment)
     )
     when(changelog).create(
         "fragments",
@@ -61,6 +61,7 @@ def test_update_transliteration(
     updated_fragment = fragment_updater.update_transliteration(
         number, transliteration, user, ignore_lowest_join
     )
+
     assert updated_fragment == (expected_fragment, False)
 
 
@@ -108,7 +109,12 @@ def test_update_genres(fragment_updater, user, fragment_repository, changelog, w
     genres = (Genre(["ARCHIVAL", "Administrative"], False),)
     expected_fragment = fragment.set_genres(genres)
 
-    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(fragment)
+        .thenReturn(expected_fragment)
+    )
     when(changelog).create(
         "fragments",
         user.profile,
@@ -135,6 +141,7 @@ def test_update_lemmatization(
         when(fragment_repository)
         .query_by_museum_number(number)
         .thenReturn(transliterated_fragment)
+        .thenReturn(expected_fragment)
     )
     when(changelog).create(
         "fragments",

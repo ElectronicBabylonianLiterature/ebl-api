@@ -46,7 +46,10 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return (
+            self._repository.query_by_museum_number(number),
+            self._photos.query_if_file_exists(f"{number}.jpg"),
+        )
 
     def update_genres(
         self, number: MuseumNumber, genres: Sequence[Genre], user: User
@@ -57,7 +60,10 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_genres(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return (
+            self._repository.query_by_museum_number(number),
+            self._photos.query_if_file_exists(f"{number}.jpg"),
+        )
 
     def update_lemmatization(
         self, number: MuseumNumber, lemmatization: Lemmatization, user: User
@@ -68,7 +74,10 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_lemmatization(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return (
+            self._repository.query_by_museum_number(number),
+            self._photos.query_if_file_exists(f"{number}.jpg"),
+        )
 
     def update_references(
         self, number: MuseumNumber, references: Sequence[Reference], user: User

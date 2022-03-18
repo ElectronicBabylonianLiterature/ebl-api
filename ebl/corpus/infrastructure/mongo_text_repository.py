@@ -16,20 +16,20 @@ from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
-from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION, TEXTS_COLLECTION
 from ebl.corpus.infrastructure.queries import (
     aggregate_chapter_display,
     chapter_id_query,
     join_chapters,
 )
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.infrastructure.collections import FRAGMENTS_COLLECTION
-from ebl.fragmentarium.infrastructure.queries import (
-    is_in_fragmentarium,
-    join_joins,
-)
+from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.infrastructure.collections import (
+    CHAPTERS_COLLECTION,
+    FRAGMENTS_COLLECTION,
+    TEXTS_COLLECTION,
+)
 from ebl.transliteration.infrastructure.parallel_lines import inject_exists
 
 
@@ -131,7 +131,7 @@ class MongoTextRepository(TextRepository):
 
             for line in chapter["lines"]:
                 line["parallelLines"] = inject_exists(
-                    line["parallelLines"], self._fragments
+                    line["parallelLines"], self._fragments, self._chapters
                 )
 
             return ChapterDisplaySchema().load(

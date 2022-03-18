@@ -1,8 +1,8 @@
 from typing import List
 
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium
+from ebl.transliteration.infrastructure.collections import CHAPTERS_COLLECTION
 
 
 def chapter_id_query(id_: ChapterId) -> dict:
