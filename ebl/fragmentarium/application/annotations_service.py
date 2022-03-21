@@ -22,7 +22,8 @@ from ebl.fragmentarium.application.cropped_sign_images_repository import (
 from ebl.fragmentarium.domain.annotation import (
     Annotations,
     Annotation,
-    BoundingBox, AnnotationValueType,
+    BoundingBox,
+    AnnotationValueType,
 )
 from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.line_label import LineLabel
@@ -116,21 +117,24 @@ class AnnotationsService:
         for annotation in annotations.annotations:
             script = fragment.script
             labels = fragment.text.labels
-            label = next(
-                (
-                    label
-                    for label in labels
-                    if self._is_matching_number(
-                        label.line_number, annotation.data.path[0]
-                    )
-                ),
-                None,
-            ) if annotation.data.type != AnnotationValueType.BLANK else ""
+            label = (
+                next(
+                    (
+                        label
+                        for label in labels
+                        if self._is_matching_number(
+                            label.line_number, annotation.data.path[0]
+                        )
+                    ),
+                    None,
+                )
+                if annotation.data.type != AnnotationValueType.BLANK
+                else None
+            )
 
             cropped_image_base64 = self._cropped_image_from_annotation(
                 annotation, image
             )
-
 
             image_id = str(bson.ObjectId())
 

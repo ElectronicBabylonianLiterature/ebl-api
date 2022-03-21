@@ -15,6 +15,7 @@ if __name__ == "__main__":
     )
     print(f"Lenght {len(annotations)}")
     for counter, annotation in enumerate(annotations):
+        print(counter)
         service.migrate(annotation)
 
     print("Update annotations completed!")
