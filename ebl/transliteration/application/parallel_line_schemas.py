@@ -73,6 +73,12 @@ class ParallelTextSchema(ParallelLineSchema):
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
     exists = exists()
+    implicit_chapter = fields.Nested(
+        ChapterNameSchema,
+        load_default=None,
+        allow_none=True,
+        data_key="implicitChapter",
+    )
 
     @post_load
     def make_line(self, data, **kwargs) -> ParallelText:
@@ -82,6 +88,7 @@ class ParallelTextSchema(ParallelLineSchema):
             data["chapter"],
             data["line_number"],
             data["exists"],
+            data["implicit_chapter"],
         )
 
 

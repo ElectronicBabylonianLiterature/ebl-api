@@ -573,6 +573,7 @@ LINES = [
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
             True,
+            ChapterName(Stage.OLD_BABYLONIAN, "implicit", "name"),
         ),
         {
             "type": "ParallelText",
@@ -592,6 +593,11 @@ LINES = [
             },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
             "exists": True,
+            "implicitChapter": {
+                "stage": "Old Babylonian",
+                "version": "implicit",
+                "name": "name",
+            },
         },
     ),
     (
@@ -746,6 +752,7 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
+            None,
             None,
         ),
         {

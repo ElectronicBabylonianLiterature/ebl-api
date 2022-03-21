@@ -70,6 +70,7 @@ class ParallelText(ParallelLine):
     chapter: Optional[ChapterName]
     line_number: AbstractLineNumber
     exists: Optional[bool] = None
+    implicit_chapter: Optional[ChapterName] = None
 
     @property
     def display_value(self) -> str:
