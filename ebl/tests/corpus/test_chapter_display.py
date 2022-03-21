@@ -9,9 +9,10 @@ from ebl.transliteration.domain.translation_line import (
 
 
 def test_line_display_of_line() -> None:
+    expected_translation = (StringPart("foo"),)
     translation_lines = (
         TranslationLine((StringPart("bar"),), "de", None),
-        TranslationLine((StringPart("foo"),), DEFAULT_LANGUAGE, None),
+        TranslationLine(expected_translation, DEFAULT_LANGUAGE, None),
     )
     line = LineFactory.build(translation=translation_lines)
 
@@ -23,9 +24,7 @@ def test_line_display_of_line() -> None:
         line.is_beginning_of_section,
         line.variants[0].intertext,
         line.variants[0].reconstruction,
-        translation_lines,
-        line.variants[0].note,
-        line.variants[0].parallel_lines,
+        expected_translation,
     )
     assert line_display.title == make_title(translation_lines)
 

@@ -7,7 +7,6 @@ from ebl.tests.factories.corpus import (
     TextFactory,
 )
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
-from ebl.transliteration.application.line_schemas import NoteLineSchema
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
@@ -44,7 +43,6 @@ def to_dict(chapter: ChapterDisplay, missing_intertext: bool = False, missing_tr
                 "translation": None if missing_translation else OneOfNoteLinePartSchema().dump(
                     line.translation, many=True
                 ),
-                "note": line.note and NoteLineSchema().dump(line.none)
             }
             for line in chapter.lines
         ],

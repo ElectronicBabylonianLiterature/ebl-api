@@ -1,13 +1,10 @@
-from typing import Optional, Sequence
-
+from typing import Iterable, Sequence
 import attr
 
 from ebl.corpus.domain.chapter import ChapterId, Chapter
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import Text
-from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
@@ -18,7 +15,7 @@ from ebl.transliteration.domain.markup import MarkupPart, to_title
 
 
 def get_default_translation(
-    translations: Sequence[TranslationLine],
+    translations: Iterable[TranslationLine],
 ) -> Sequence[MarkupPart]:
     return next(
         (
@@ -37,13 +34,11 @@ class LineDisplay:
     is_beginning_of_section: bool
     intertext: Sequence[MarkupPart]
     reconstruction: Sequence[Token]
-    translation: Sequence[TranslationLine]
-    note: Optional[NoteLine]
-    parallel_lines: Sequence[ParallelLine]
+    translation: Sequence[MarkupPart]
 
     @property
     def title(self) -> Sequence[MarkupPart]:
-        return to_title(get_default_translation(self.translation))
+        return to_title(self.translation)
 
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
@@ -54,9 +49,7 @@ class LineDisplay:
             line.is_beginning_of_section,
             first_variant.intertext,
             first_variant.reconstruction,
-            line.translation,
-            first_variant.note,
-            first_variant.parallel_lines,
+            get_default_translation(line.translation),
         )
 
 
