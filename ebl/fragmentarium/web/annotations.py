@@ -19,7 +19,6 @@ class AnnotationResource:
                 AnnotationsSchema().load(req.media), req.context.user
             )
             resp.media = AnnotationsSchema().dump(annotations)
-            print()
         else:
             raise falcon.HTTPUnprocessableEntity(
                 description="Fragment numbers do not match."

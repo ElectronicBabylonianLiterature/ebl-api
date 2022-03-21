@@ -176,7 +176,7 @@ def test_update(
     when(annotations_repository).query_by_museum_number(fragment_number).thenReturn(
         annotations
     )
-    when(annotations_repository).create_or_update(...).thenReturn()
+    when(annotations_repository).create_or_update(updated_annotations).thenReturn()
     when(changelog).create(
         "annotations",
         user.profile,

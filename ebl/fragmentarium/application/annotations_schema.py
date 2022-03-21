@@ -39,7 +39,7 @@ class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
     cropped_sign = fields.Nested(
-        CroppedSignSchema(), missing=None, data_key="croppedSign"
+        CroppedSignSchema(), data_key="croppedSign"
     )
 
     @post_load
