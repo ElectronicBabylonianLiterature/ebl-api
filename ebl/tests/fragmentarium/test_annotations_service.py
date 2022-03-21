@@ -176,13 +176,8 @@ def test_update(
     when(annotations_repository).query_by_museum_number(fragment_number).thenReturn(
         annotations
     )
-    when(annotations_repository).create_or_update(updated_annotations).thenReturn()
-    when(changelog).create(
-        "annotations",
-        user.profile,
-        {"_id": str(fragment_number), **SCHEMA.dump(annotations)},
-        {"_id": str(fragment_number), **SCHEMA.dump(updated_annotations)},
-    ).thenReturn()
+    when(annotations_repository).create_or_update(...).thenReturn()
+    when(changelog).create(...).thenReturn()
     (
         when(fragment_repository)
         .query_by_museum_number(annotations.fragment_number)
@@ -200,4 +195,4 @@ def test_update(
     ):
         assert result_annotation.geometry == annotation.geometry
         assert result_annotation.data == annotation.data
-        assert result_annotation.cropped_sign is not None
+        assert result_annotation.cropped_sign != annotation.cropped_sign

@@ -30,7 +30,7 @@ def test_signs_get(
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
     )
-    cropped_sign_images_repository.create(
+    cropped_sign_images_repository.create_many(
         [
             CroppedSignImage(
                 annotation.cropped_sign.image_id, Base64("test-base64-string")

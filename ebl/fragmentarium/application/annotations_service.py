@@ -157,17 +157,16 @@ class AnnotationsService:
         )
         _id = str(annotations.fragment_number)
         schema = AnnotationsSchema()
-        self._changelog.create(
-            "annotations",
-            user.profile,
-            {"_id": _id, **schema.dump(old_annotations)},
-            {"_id": _id, **schema.dump(annotations)},
-        )
-
         (
             annotations_with_image_ids,
             cropped_sign_images,
         ) = self._cropped_image_from_annotations(annotations)
         self._annotations_repository.create_or_update(annotations_with_image_ids)
         self._cropped_sign_images_repository.create_many(cropped_sign_images)
+        self._changelog.create(
+            "annotations",
+            user.profile,
+            {"_id": _id, **schema.dump(old_annotations)},
+            {"_id": _id, **schema.dump(annotations_with_image_ids)},
+        )
         return annotations_with_image_ids
