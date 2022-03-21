@@ -6,7 +6,7 @@ from typing import Tuple, Sequence
 import attr
 import bson.objectid
 from PIL import Image
-from singledispatchmethod import singledispatchmethod
+from functools import singledispatchmethod
 
 from ebl.changelog import Changelog
 from ebl.ebl_ai_client import EblAiClient
