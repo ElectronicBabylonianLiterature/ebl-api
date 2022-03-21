@@ -27,10 +27,11 @@ from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
-    FRAGMENTS_COLLECTION,
     TEXTS_COLLECTION,
 )
-from ebl.transliteration.infrastructure.parallel_lines import inject_exists
+from ebl.transliteration.infrastructure.parallel_lines import (
+    MongoParalallelLineInjector,
+)
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -49,7 +50,7 @@ class MongoTextRepository(TextRepository):
     def __init__(self, database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
-        self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
+        self._injector = MongoParalallelLineInjector(database)
 
     def create_indexes(self) -> None:
         self._texts.create_index(
@@ -130,8 +131,8 @@ class MongoTextRepository(TextRepository):
             chapter = next(chapters)
 
             for line in chapter["lines"]:
-                line["parallelLines"] = inject_exists(
-                    line["parallelLines"], self._fragments, self._chapters
+                line["parallelLines"] = self._injector.inject_exists(
+                    line["parallelLines"]
                 )
 
             return ChapterDisplaySchema().load(
