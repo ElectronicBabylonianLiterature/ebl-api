@@ -7,7 +7,7 @@ import pytest
 @pytest.fixture
 def saved_word(dictionary, word):
     word = {**word}
-    dictionary.create_many(word)
+    dictionary.create(word)
     return word
 
 

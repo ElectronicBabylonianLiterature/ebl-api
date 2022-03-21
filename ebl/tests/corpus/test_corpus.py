@@ -59,7 +59,7 @@ def expect_invalid_references(bibliography, when) -> None:
 
 def expect_signs(signs, sign_repository) -> None:
     for sign in signs:
-        sign_repository.create_many(sign)
+        sign_repository.create(sign)
 
 
 def expect_chapter_update(
@@ -77,7 +77,7 @@ def expect_chapter_update(
     when(text_repository).update(CHAPTER.id_, updated_chapter).thenReturn(
         updated_chapter
     )
-    when(changelog).create_many(
+    when(changelog).create(
         CHAPTERS_COLLECTION,
         user.profile,
         {**ChapterSchema().dump(old_chapter), "_id": old_chapter.id_.to_tuple()},

@@ -9,12 +9,12 @@ ANY_USER = Guest()
 def allow_references(chapter, bibliography):
     for manuscript in chapter.manuscripts:
         for reference in manuscript.references:
-            bibliography.create_many(reference.document, ANY_USER)
+            bibliography.create(reference.document, ANY_USER)
 
 
 def allow_signs(signs, sign_list):
     for sign in signs:
-        sign_list.create_many(sign)
+        sign_list.create(sign)
 
 
 def create_chapter_dto(chapter: Chapter) -> dict:

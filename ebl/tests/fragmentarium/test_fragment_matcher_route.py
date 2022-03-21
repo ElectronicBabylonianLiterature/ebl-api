@@ -19,8 +19,8 @@ def test_fragment_matcher_route(client, fragmentarium, user):
             {"museumNumber": "X.326", "script": fragment_2.script, "score": 5}
         ],
     }
-    fragmentarium.create_many(fragment_1)
-    fragmentarium.create_many(fragment_2)
+    fragmentarium.create(fragment_1)
+    fragmentarium.create(fragment_2)
     get_result = client.simulate_get(f"/fragments/{fragment_id}/match")
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == expected_score
@@ -33,7 +33,7 @@ def test_fragment_matcher_route_error(client, fragmentarium, user):
         number=MuseumNumber.of("X.1"),
         line_to_vec=(LineToVecEncoding.from_list([1, 1, 2]),),
     )
-    fragmentarium.create_many(fragment_1)
-    fragmentarium.create_many(fragment_2)
+    fragmentarium.create(fragment_1)
+    fragmentarium.create(fragment_2)
     get_result = client.simulate_get(f"/fragments/{faulty_fragment_id}/match")
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

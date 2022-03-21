@@ -26,7 +26,7 @@ def expected_fragment_info_dto(fragment, lines=tuple()):
 )
 def test_search_fragment(get_number, client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragmentarium.create_many(fragment)
+    fragmentarium.create(fragment)
     result = client.simulate_get("/fragments", params={"number": get_number(fragment)})
 
     assert result.status == falcon.HTTP_OK
@@ -43,8 +43,8 @@ def test_search_fragment_not_found(client):
 def test_search_references(client, fragmentarium, bibliography, user):
     bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
     bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
-    bibliography.create_many(bib_entry_1, user)
-    bibliography.create_many(bib_entry_2, user)
+    bibliography.create(bib_entry_1, user)
+    bibliography.create(bib_entry_2, user)
 
     fragment = FragmentFactory.build(
         references=(
@@ -52,7 +52,7 @@ def test_search_references(client, fragmentarium, bibliography, user):
             ReferenceFactory.build(id="RN.1"),
         )
     )
-    fragmentarium.create_many(fragment)
+    fragmentarium.create(fragment)
     result = client.simulate_get(
         "/fragments",
         params={"id": fragment.references[0].id, "pages": fragment.references[0].pages},
@@ -76,7 +76,7 @@ def test_search_references_invalid_query(client, fragmentarium):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
-    fragmentarium.create_many(fragment)
+    fragmentarium.create(fragment)
     reference_id = fragment.references[0].id
     reference_pages = "should be a number"
     result = client.simulate_get(
@@ -87,9 +87,9 @@ def test_search_references_invalid_query(client, fragmentarium):
 
 def test_search_signs(client, fragmentarium, sign_repository, signs):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create_many(transliterated_fragment)
+    fragmentarium.create(transliterated_fragment)
     for sign in signs:
-        sign_repository.create_many(sign)
+        sign_repository.create(sign)
 
     result = client.simulate_get("/fragments", params={"transliteration": "ma-tu₂"})
 
@@ -111,7 +111,7 @@ def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):
 
 def test_random(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create_many(transliterated_fragment)
+    fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get("/fragments", params={"random": True})
 
@@ -124,7 +124,7 @@ def test_interesting(client, fragmentarium):
     interesting_fragment = InterestingFragmentFactory.build(
         number=MuseumNumber("K", "1")
     )
-    fragmentarium.create_many(interesting_fragment)
+    fragmentarium.create(interesting_fragment)
 
     result = client.simulate_get("/fragments", params={"interesting": True})
 
@@ -135,7 +135,7 @@ def test_interesting(client, fragmentarium):
 
 def test_latest(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create_many(transliterated_fragment)
+    fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get("/fragments", params={"latest": True})
 
@@ -146,7 +146,7 @@ def test_latest(client, fragmentarium):
 
 def test_needs_revision(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create_many(transliterated_fragment)
+    fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get("/fragments", params={"needsRevision": True})
 

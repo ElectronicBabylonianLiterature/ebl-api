@@ -7,7 +7,7 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 def test_get(client, fragmentarium, user):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create_many(transliterated_fragment)
+    fragmentarium.create(transliterated_fragment)
     result = client.simulate_get(f"/fragments/{transliterated_fragment.number}")
 
     assert result.json == create_response_dto(

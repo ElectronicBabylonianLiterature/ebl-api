@@ -13,8 +13,8 @@ def test_search_fragment(
 ):
     expected_word = {**word, "_id": lemma}
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragmentarium.create_many(lemmatized_fragment)
-    dictionary.create_many(expected_word)
+    fragmentarium.create(lemmatized_fragment)
+    dictionary.create(expected_word)
     result = client.simulate_get(
         "/lemmas", params={"word": query_word, "isNormalized": is_normalized}
     )

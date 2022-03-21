@@ -58,24 +58,24 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
 
 def test_query_lemmas(fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create_many(lemmatized_fragment)
-    fragment_repository.create_many(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert lemma_repository.query_lemmas("GI₆", False) == [["ginâ I"]]
 
 
 def test_query_lemmas_normalized(fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create_many(lemmatized_fragment)
-    fragment_repository.create_many(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert lemma_repository.query_lemmas("ana", True) == [["normalized I"]]
 
 
 def test_query_lemmas_multiple(fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create_many(lemmatized_fragment)
-    fragment_repository.create_many(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.create(lemmatized_fragment)
+    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
 
     assert lemma_repository.query_lemmas("ana", False) == [["ana II"], ["ana I"]]
 
@@ -154,7 +154,7 @@ def test_query_lemmas_ignores_in_value(
         ),
         signs="DIŠ",
     )
-    fragment_repository.create_many(fragment)
+    fragment_repository.create(fragment)
 
     assert lemma_repository.query_lemmas("ana", False) == expected
 
@@ -162,7 +162,7 @@ def test_query_lemmas_ignores_in_value(
 @pytest.mark.parametrize("is_normalized", [False, True])
 def test_query_lemmas_not_found(is_normalized, fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create_many(lemmatized_fragment)
+    fragment_repository.create(lemmatized_fragment)
     assert lemma_repository.query_lemmas("aklu", is_normalized) == []
 
 

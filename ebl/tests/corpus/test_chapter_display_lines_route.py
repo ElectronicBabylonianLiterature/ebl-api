@@ -28,7 +28,7 @@ def url(chapter: Chapter) -> str:
 
 
 def test_get(client, text_repository, text, chapter, bibliography, url):
-    text_repository.create_many(text)
+    text_repository.create(text)
     text_repository.create_chapter(chapter)
     allow_references(chapter, bibliography)
     schema = LineDetailsSchema(context={"manuscripts": chapter.manuscripts})
@@ -40,7 +40,7 @@ def test_get(client, text_repository, text, chapter, bibliography, url):
 
 
 def test_chapter_not_found(client, text_repository, text, chapter, url):
-    text_repository.create_many(text)
+    text_repository.create(text)
 
     result = client.simulate_get(f"{url}/0")
 
@@ -48,7 +48,7 @@ def test_chapter_not_found(client, text_repository, text, chapter, url):
 
 
 def test_line_not_found(client, text_repository, chapter, bibliography, url):
-    text_repository.create_many(text)
+    text_repository.create(text)
     text_repository.create_chapter(chapter)
     allow_references(chapter, bibliography)
 
@@ -58,7 +58,7 @@ def test_line_not_found(client, text_repository, chapter, bibliography, url):
 
 
 def test_invalid_line(client, text_repository, chapter, bibliography, url):
-    text_repository.create_many(text)
+    text_repository.create(text)
     text_repository.create_chapter(chapter)
     allow_references(chapter, bibliography)
 

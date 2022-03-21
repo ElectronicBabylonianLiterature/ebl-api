@@ -23,14 +23,14 @@ def test_signs_get(
     fragment = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("K.2"), text=text_with_labels
     )
-    fragment_repository.create_many(fragment)
+    fragment_repository.create(fragment)
 
     annotation_data = AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0])
     cropped_sign = CroppedSignFactory.build(script=fragment.script)
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
     )
-    cropped_sign_images_repository.create_many(
+    cropped_sign_images_repository.create(
         [
             CroppedSignImage(
                 annotation.cropped_sign.image_id, Base64("test-base64-string")

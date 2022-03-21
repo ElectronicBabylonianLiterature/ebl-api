@@ -70,7 +70,7 @@ SCHEMA = FragmentSchema()
 
 def test_create(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build()
-    fragment_id = fragment_repository.create_many(fragment)
+    fragment_id = fragment_repository.create(fragment)
 
     assert fragment_id == str(fragment.number)
     assert database[COLLECTION].find_one(
@@ -136,7 +136,7 @@ def test_query_by_museum_number_references(
     reference = ReferenceFactory.build(with_document=True)
     fragment = LemmatizedFragmentFactory.build(references=(reference,))
     database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
-    bibliography_repository.create_many(reference.document)
+    bibliography_repository.create(reference.document)
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 
@@ -149,7 +149,7 @@ def test_find_random(fragment_repository):
     fragment = FragmentFactory.build()
     transliterated_fragment = TransliteratedFragmentFactory.build()
     for a_fragment in fragment, transliterated_fragment:
-        fragment_repository.create_many(a_fragment)
+        fragment_repository.create(a_fragment)
 
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
@@ -199,7 +199,7 @@ def test_folio_pager_exception(fragment_repository):
 )
 def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
     for fragmentNumber in museum_numbers:
-        fragment_repository.create_many(
+        fragment_repository.create(
             FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
     for museum_number in museum_numbers:
@@ -214,7 +214,7 @@ def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
 
 def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
-    fragment_repository.create_many(fragment)
+    fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
         TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"), user
     )
@@ -233,7 +233,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
 
 def test_update_genres(fragment_repository):
     fragment = FragmentFactory.build(genres=tuple())
-    fragment_repository.create_many(fragment)
+    fragment_repository.create(fragment)
     updated_fragment = fragment.set_genres(
         (Genre(["ARCHIVAL", "Administrative"], False),)
     )
@@ -245,7 +245,7 @@ def test_update_genres(fragment_repository):
 
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create_many(transliterated_fragment)
+    fragment_repository.create(transliterated_fragment)
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
     lemmatization = Lemmatization(tokens)
@@ -405,8 +405,8 @@ SEARCH_SIGNS_DATA = [
 @pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
 def test_search_signs(signs, is_match, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create_many(transliterated_fragment)
-    fragment_repository.create_many(FragmentFactory.build())
+    fragment_repository.create(transliterated_fragment)
+    fragment_repository.create(FragmentFactory.build())
 
     result = fragment_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
@@ -457,7 +457,7 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
 def test_update_references(fragment_repository):
     reference = ReferenceFactory.build()
     fragment = FragmentFactory.build()
-    fragment_repository.create_many(fragment)
+    fragment_repository.create(fragment)
     references = (reference,)
     updated_fragment = fragment.set_references(references)
 

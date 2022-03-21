@@ -9,7 +9,7 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 
 def test_create_query(sign_repository, signs):
     for sign in signs:
-        sign_repository.create_many(sign)
+        sign_repository.create(sign)
 
     factory = TransliterationQueryFactory(sign_repository)
     atf = "šu\ngid₂"

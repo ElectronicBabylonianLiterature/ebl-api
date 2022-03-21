@@ -8,7 +8,7 @@ COLLECTION = "words"
 
 
 def test_create_and_find(database, dictionary, word):
-    word_id = dictionary.create_many(word)
+    word_id = dictionary.create(word)
 
     assert dictionary.find(word_id) == word
 
@@ -20,8 +20,8 @@ def test_word_not_found(dictionary):
 
 def test_search_finds_all_homonyms(dictionary, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
-    dictionary.create_many(word)
-    dictionary.create_many(another_word)
+    dictionary.create(word)
+    dictionary.create(another_word)
 
     assert dictionary.search(" ".join(word["lemma"])) == [word, another_word]
 
@@ -33,16 +33,16 @@ def test_search_finds_by_meaning(dictionary, word):
         "homonym": "II",
         "meaning": "not matching",
     }
-    dictionary.create_many(word)
-    dictionary.create_many(another_word)
+    dictionary.create(word)
+    dictionary.create(another_word)
 
     assert dictionary.search(word["meaning"][1:4]) == [word]
 
 
 def test_search_finds_duplicates(dictionary, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
-    dictionary.create_many(word)
-    dictionary.create_many(another_word)
+    dictionary.create(word)
+    dictionary.create(another_word)
 
     assert dictionary.search(word["meaning"][1:4]) == [word, another_word]
 
@@ -53,7 +53,7 @@ def test_search_not_found(dictionary):
 
 def test_update(dictionary, word, user):
     new_lemma = ["new"]
-    word_id = dictionary.create_many(word)
+    word_id = dictionary.create(word)
     updated_word = pydash.defaults({"lemma": new_lemma}, word)
 
     dictionary.update(updated_word, user)
@@ -63,7 +63,7 @@ def test_update(dictionary, word, user):
 
 @freeze_time("2018-09-07 15:41:24.032")
 def test_changelog(dictionary, word, user, database, make_changelog_entry):
-    word_id = dictionary.create_many(word)
+    word_id = dictionary.create(word)
     updated_word = pydash.defaults({"lemma": ["new"]}, word)
     dictionary.update(updated_word, user)
 

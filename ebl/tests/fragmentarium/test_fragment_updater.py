@@ -50,7 +50,7 @@ def test_update_transliteration(
         .query_by_museum_number(number)
         .thenReturn(transliterated_fragment)
     )
-    when(changelog).create_many(
+    when(changelog).create(
         "fragments",
         user.profile,
         {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
@@ -109,7 +109,7 @@ def test_update_genres(fragment_updater, user, fragment_repository, changelog, w
     expected_fragment = fragment.set_genres(genres)
 
     (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
-    when(changelog).create_many(
+    when(changelog).create(
         "fragments",
         user.profile,
         {"_id": str(number), **SCHEMA.dump(fragment)},
@@ -136,7 +136,7 @@ def test_update_lemmatization(
         .query_by_museum_number(number)
         .thenReturn(transliterated_fragment)
     )
-    when(changelog).create_many(
+    when(changelog).create(
         "fragments",
         user.profile,
         {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
@@ -179,7 +179,7 @@ def test_update_references(
         .thenReturn(expected_fragment)
     )
     when(fragment_repository).update_references(expected_fragment).thenReturn()
-    when(changelog).create_many(
+    when(changelog).create(
         "fragments",
         user.profile,
         {"_id": str(number), **SCHEMA.dump(fragment)},

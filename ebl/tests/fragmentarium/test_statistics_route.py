@@ -17,7 +17,7 @@ def test_get_statistics(guest_client):
 def test_get_statistics_cache(cached_client, fragmentarium):
     first_result = cached_client.simulate_get(PATH)
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create_many(transliterated_fragment)
+    fragmentarium.create(transliterated_fragment)
     second_result = cached_client.simulate_get(PATH)
 
     assert second_result.json == first_result.json

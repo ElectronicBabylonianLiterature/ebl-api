@@ -177,7 +177,7 @@ def test_update(
         annotations
     )
     when(annotations_repository).create_or_update(updated_annotations).thenReturn()
-    when(changelog).create_many(
+    when(changelog).create(
         "annotations",
         user.profile,
         {"_id": str(fragment_number), **SCHEMA.dump(annotations)},

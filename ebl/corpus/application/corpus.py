@@ -206,4 +206,4 @@ class Corpus:
     def _create_changelog(self, old: Chapter, new: Chapter, user: User) -> None:
         old_dict: dict = {**ChapterSchema().dump(old), "_id": old.id_.to_tuple()}
         new_dict: dict = {**ChapterSchema().dump(new), "_id": new.id_.to_tuple()}
-        self._changelog.create_many(COLLECTION, user.profile, old_dict, new_dict)
+        self._changelog.create(COLLECTION, user.profile, old_dict, new_dict)
