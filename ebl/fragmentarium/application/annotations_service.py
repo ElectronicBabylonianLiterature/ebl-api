@@ -97,7 +97,7 @@ class AnnotationsService:
     def _(self, line_number: LineNumber, number: int):
         return number == line_number.number
 
-    @_is_matching_number.register(LineNumberRange)  # pyre-ignore[56]
+    @_is_matching_number.register(LineNumberRange)
     def _(self, line_number: LineNumberRange, number: int):
         return line_number.start.number <= number <= line_number.end.number
 
