@@ -7,7 +7,7 @@ COLLECTION = "words"
 
 
 def test_create(database, word_repository, word):
-    word_id = word_repository.create(word)
+    word_id = word_repository.create_many(word)
 
     assert database[COLLECTION].find_one({"_id": word_id}) == word
 
@@ -63,7 +63,7 @@ def test_search_not_found(word_repository):
 
 def test_update(word_repository, word):
     new_lemma = ["new"]
-    word_id = word_repository.create(word)
+    word_id = word_repository.create_many(word)
     updated_word = pydash.defaults({"lemma": new_lemma}, word)
 
     word_repository.update(updated_word)

@@ -1,6 +1,7 @@
-from typing import Any, cast
+from typing import Any, cast, Sequence
 
 import inflect
+from bson import ObjectId
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
@@ -18,6 +19,9 @@ class MongoCollection:
         self.__database = database
         self.__collection = collection
         self.__resource_noun = singlar(collection)
+
+    def insert_many(self, documents: Sequence[dict]) -> Sequence[ObjectId]:
+        return self.__get_collection().insert_many(documents).inserted_ids
 
     def insert_one(self, document):
         try:

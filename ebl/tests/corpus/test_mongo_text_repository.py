@@ -53,7 +53,7 @@ def when_chapter_in_collection(database, chapter=CHAPTER) -> None:
 
 
 def test_creating_text(database, text_repository) -> None:
-    text_repository.create(TEXT)
+    text_repository.create_many(TEXT)
 
     inserted_text = database[TEXTS_COLLECTION].find_one(
         {"category": TEXT.category, "index": TEXT.index}, projection={"_id": False}
@@ -78,18 +78,18 @@ def test_creating_chapter(database, text_repository) -> None:
 
 def test_it_is_not_possible_to_create_duplicate_texts(text_repository) -> None:
     text_repository.create_indexes()
-    text_repository.create(TEXT)
+    text_repository.create_many(TEXT)
 
     with pytest.raises(DuplicateError):
-        text_repository.create(TEXT)
+        text_repository.create_many(TEXT)
 
 
 def test_it_is_not_possible_to_create_duplicate_chapters(text_repository) -> None:
     text_repository.create_indexes()
-    text_repository.create(CHAPTER)
+    text_repository.create_many(CHAPTER)
 
     with pytest.raises(DuplicateError):
-        text_repository.create(CHAPTER)
+        text_repository.create_many(CHAPTER)
 
 
 def test_finding_text(
@@ -107,9 +107,9 @@ def test_finding_text(
     chapter = attr.evolve(CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMET,))
     when_text_in_collection(database, text)
     when_chapter_in_collection(database, chapter)
-    fragment_repository.create(Fragment(UNCERTAIN_FRAGMET))
+    fragment_repository.create_many(Fragment(UNCERTAIN_FRAGMET))
     for reference in text.references:
-        bibliography_repository.create(reference.document)
+        bibliography_repository.create_many(reference.document)
 
     assert text_repository.find(text.id) == text
 
@@ -133,7 +133,7 @@ def test_listing_texts(database, text_repository, bibliography_repository) -> No
     when_chapter_in_collection(database)
     when_chapter_in_collection(database, another_chapter)
     for reference in TEXT.references:
-        bibliography_repository.create(reference.document)
+        bibliography_repository.create_many(reference.document)
 
     assert text_repository.list() == [TEXT, another_text]
 
@@ -225,7 +225,7 @@ def test_query_manuscripts_with_joins_by_chapter_no_joins(
 def test_query_manuscripts_with_joins_is_in_fragmentarium(
     database, text_repository, fragment_repository
 ) -> None:
-    fragment_repository.create(FragmentFactory.build(number=MUSEUM_NUMBER))
+    fragment_repository.create_many(FragmentFactory.build(number=MUSEUM_NUMBER))
     when_chapter_in_collection(database)
 
     assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == [

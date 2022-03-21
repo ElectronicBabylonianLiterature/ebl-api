@@ -69,7 +69,7 @@ def test_create(
     bibliography_entry = BibliographyEntryFactory.build()
     (
         when(changelog)
-        .create(
+        .create_many(
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
@@ -77,9 +77,9 @@ def test_create(
         )
         .thenReturn()
     )
-    (when(bibliography_repository).create(bibliography_entry).thenReturn())
+    (when(bibliography_repository).create_many(bibliography_entry).thenReturn())
 
-    bibliography.create(bibliography_entry, user)
+    bibliography.create_many(bibliography_entry, user)
 
 
 def test_create_duplicate(
@@ -93,7 +93,7 @@ def test_create_duplicate(
     bibliography_entry = BibliographyEntryFactory.build()
     (
         when(changelog)
-        .create(
+        .create_many(
             COLLECTION,
             user.profile,
             {"_id": bibliography_entry["id"]},
@@ -101,9 +101,13 @@ def test_create_duplicate(
         )
         .thenReturn()
     )
-    (when(bibliography_repository).create(bibliography_entry).thenRaise(DuplicateError))
+    (
+        when(bibliography_repository)
+        .create_many(bibliography_entry)
+        .thenRaise(DuplicateError)
+    )
     with pytest.raises(DuplicateError):
-        bibliography.create(bibliography_entry, user)
+        bibliography.create_many(bibliography_entry, user)
 
 
 def test_entry_not_found(bibliography, bibliography_repository, when):
@@ -133,7 +137,7 @@ def test_update(
     )
     (
         when(changelog)
-        .create(
+        .create_many(
             COLLECTION,
             user.profile,
             create_mongo_bibliography_entry(),
@@ -171,7 +175,7 @@ def test_validate_references_invalid(
     valid_reference = ReferenceFactory.build(with_document=True)
     first_invalid = ReferenceFactory.build(with_document=True)
     second_invalid = ReferenceFactory.build(with_document=True)
-    bibliography.create(valid_reference.document, user)
+    bibliography.create_many(valid_reference.document, user)
     (when(bibliography).find(valid_reference.id).thenReturn(valid_reference))
     (when(bibliography).find(first_invalid.id).thenRaise(NotFoundError))
     (when(bibliography).find(second_invalid.id).thenRaise(NotFoundError))

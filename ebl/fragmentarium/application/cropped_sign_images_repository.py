@@ -10,5 +10,5 @@ class CroppedSignImagesRepository(ABC):
         ...
 
     @abstractmethod
-    def create(self, cropped_sign_image: Sequence[CroppedSignImage]) -> None:
+    def create_many(self, cropped_sign_images: Sequence[CroppedSignImage]) -> None:
         ...

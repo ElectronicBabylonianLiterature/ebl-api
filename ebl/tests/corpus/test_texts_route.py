@@ -14,7 +14,7 @@ def create_dto(text):
 
 def test_get_text(client, bibliography, sign_repository, signs, text_repository):
     text = TextFactory.build(chapters=tuple(), references=tuple())
-    text_repository.create(text)
+    text_repository.create_many(text)
 
     get_result = client.simulate_get(
         f"/texts/{text.genre.value}/{text.category}/{text.index}"
@@ -45,8 +45,8 @@ def test_invalid_index(client):
 def test_listing_texts(client, bibliography, sign_repository, signs, text_repository):
     first_text = TextFactory.build(chapters=tuple(), references=tuple())
     second_text = TextFactory.build(chapters=tuple(), references=tuple())
-    text_repository.create(first_text)
-    text_repository.create(second_text)
+    text_repository.create_many(first_text)
+    text_repository.create_many(second_text)
 
     get_result = client.simulate_get("/texts")
 

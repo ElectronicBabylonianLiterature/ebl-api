@@ -15,7 +15,7 @@ INVALID_ENTRIES = [
 @pytest.fixture
 def saved_entry(bibliography, user):
     bibliography_entry = BibliographyEntryFactory.build()
-    bibliography.create(bibliography_entry, user)
+    bibliography.create_many(bibliography_entry, user)
     return bibliography_entry
 
 

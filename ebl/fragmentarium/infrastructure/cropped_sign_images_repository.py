@@ -16,10 +16,9 @@ class MongoCroppedSignImagesRepository(CroppedSignImagesRepository):
     def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
 
-    def create(self, cropped_sign_image: Sequence[CroppedSignImage]) -> None:
-        schema = CroppedSignImageSchema()
-        for element in cropped_sign_image:
-            self._collection.insert_one(schema.dump(element))
+    def create_many(self, cropped_sign_images: Sequence[CroppedSignImage]) -> None:
+        schema = CroppedSignImageSchema(many=True)
+        self._collection.insert_many(schema.dump(cropped_sign_images))
 
     def query_by_id(self, image_id: str) -> CroppedSignImage:
         return CroppedSignImageSchema().load(

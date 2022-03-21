@@ -38,9 +38,7 @@ class AnnotationDataSchema(Schema):
 class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
-    cropped_sign = fields.Nested(
-        CroppedSignSchema(), data_key="croppedSign"
-    )
+    cropped_sign = fields.Nested(CroppedSignSchema(), data_key="croppedSign")
 
     @post_load
     def make_annotation(self, data, **kwargs):

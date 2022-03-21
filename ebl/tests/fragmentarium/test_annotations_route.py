@@ -75,7 +75,7 @@ def test_update(client, fragment_repository, photo_repository):
         fragment_number=number, annotations=[annotation_1, annotation_2]
     )
     fragment = TransliteratedFragmentFactory.build(number=number)
-    fragment_repository.create(fragment)
+    fragment_repository.create_many(fragment)
     photo_repository._create(create_test_photo(number))
 
     body = AnnotationsSchema().dump(annotations)

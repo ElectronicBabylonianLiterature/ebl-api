@@ -7,7 +7,7 @@ from ebl.transliteration.domain.sign import Sign, SignName
 
 def test_signs_get(client, sign_repository):
     sign = Sign(SignName("test"))
-    sign_repository.create(sign)
+    sign_repository.create_many(sign)
     result = client.simulate_get(f"/signs/{sign.name}")
 
     assert result.json == SignDtoSchema().dump(sign)
@@ -87,7 +87,7 @@ def test_signs_not_found(client):
 )
 def test_signs_search_route(params, expected, client, sign_repository, signs):
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.create_many(sign)
     get_result = client.simulate_get("/signs", params=params)
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == expected
@@ -95,6 +95,6 @@ def test_signs_search_route(params, expected, client, sign_repository, signs):
 
 def test_signs_search_route_error(client, sign_repository, signs):
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.create_many(sign)
     get_result = client.simulate_get("/signs", params={"signs": "P₂"})
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

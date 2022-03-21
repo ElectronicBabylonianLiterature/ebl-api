@@ -11,7 +11,7 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 
 def test_create(sign_repository, signs):
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.create_many(sign)
 
     factory = TransliterationUpdateFactory(sign_repository)
     atf = Atf("1. šu gid₂")

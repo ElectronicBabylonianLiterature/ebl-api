@@ -153,7 +153,7 @@ def sign_si_2(mongo_sign_si_2):
 
 
 def test_create(database, sign_repository, sign_igi):
-    sign_name = sign_repository.create(sign_igi)
+    sign_name = sign_repository.create_many(sign_igi)
 
     assert database[COLLECTION].find_one({"_id": sign_name}) == SignSchema().dump(
         sign_igi

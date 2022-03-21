@@ -45,7 +45,7 @@ class TransliterationResource:
 
     def _create_transliteration(self, media):
         try:
-            return self._transliteration_factory.create(
+            return self._transliteration_factory.create_many(
                 Atf(media["transliteration"]), media["notes"]
             )
         except ValueError as error:

@@ -28,7 +28,7 @@ def test_deserialize_lemmatization():
 
 def test_update_lemmatization(client, fragmentarium, user, database):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    fragmentarium.create_many(transliterated_fragment)
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
     lemmatization = Lemmatization(tokens)
@@ -89,7 +89,7 @@ def test_update_lemmatization_invalid_number(client):
 )
 def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     url = f"/fragments/{fragment.number}/lemmatization"
 
     post_result = client.simulate_post(url, body=body)
@@ -99,7 +99,7 @@ def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
 
 def test_update_lemmatization_atf_change(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    fragmentarium.create_many(transliterated_fragment)
     dto = LemmatizationSchema().dump(transliterated_fragment.text.lemmatization)
     dto["lemmatization"][0][0]["value"] = "ana"
     url = f"/fragments/{transliterated_fragment.number}/lemmatization"

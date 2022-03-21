@@ -29,7 +29,7 @@ def url(chapter: Chapter) -> str:
 
 
 def test_get(client, text_repository, text, chapter, url):
-    text_repository.create(text)
+    text_repository.create_many(text)
     text_repository.create_chapter(chapter)
     chapter_display = ChapterDisplay.of_chapter(text, chapter)
 
@@ -40,7 +40,7 @@ def test_get(client, text_repository, text, chapter, url):
 
 
 def test_text_not_found(client, text_repository, text, chapter, url):
-    text_repository.create(text)
+    text_repository.create_many(text)
 
     result = client.simulate_get(url)
 

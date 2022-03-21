@@ -9,7 +9,7 @@ def test_get_fragment_pager(client, fragmentarium):
     fragment_1 = FragmentFactory.build(number=MuseumNumber("X", "1"))
     fragment_2 = FragmentFactory.build(number=MuseumNumber("X", "2"))
     for fragment in [fragment_0, fragment_1, fragment_2]:
-        fragmentarium.create(fragment)
+        fragmentarium.create_many(fragment)
     result = client.simulate_get(f"/fragments/{fragment_1.number}/pager")
 
     assert result.json == {"next": "X.2", "previous": "X.0"}
@@ -21,10 +21,10 @@ def test_get_fragment_pager_cache(cached_client, fragmentarium):
     fragment_0 = FragmentFactory.build(number=MuseumNumber("X", "0"))
     fragment_1 = FragmentFactory.build(number=MuseumNumber("X", "3"))
     for fragment in [fragment_0, fragment_1]:
-        fragmentarium.create(fragment)
+        fragmentarium.create_many(fragment)
 
     first_result = cached_client.simulate_get(f"/fragments/{fragment_1.number}/pager")
-    fragmentarium.create(FragmentFactory.build(number=MuseumNumber("X", "2")))
+    fragmentarium.create_many(FragmentFactory.build(number=MuseumNumber("X", "2")))
     second_result = cached_client.simulate_get(f"/fragments/{fragment_1.number}/pager")
 
     assert first_result.json == second_result.json
@@ -39,7 +39,7 @@ def test_get_fragment_pager_invalid_id(client):
 
 def test_get_folio_pager(client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     result = client.simulate_get(f"/fragments/{fragment.number}/pager/WGL/1")
 
     assert result.json == {
@@ -57,7 +57,7 @@ def test_get_folio_pager_invalid_id(client):
 
 def test_get_folio_pager_no_access_to_folio(client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     result = client.simulate_get(f"/fragments/{fragment.number}/pager/XXX/1")
 
     assert result.status == falcon.HTTP_FORBIDDEN

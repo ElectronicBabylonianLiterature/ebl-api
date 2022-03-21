@@ -15,7 +15,7 @@ from ebl.fragmentarium.domain.joins import Join
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     updates = {"transliteration": "$ (the transliteration)", "notes": "some notes"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
@@ -65,13 +65,13 @@ def test_update_transliteration_merge_lemmatization(
 ):
 
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.create_many(sign)
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragmentarium.create(lemmatized_fragment)
+    fragmentarium.create_many(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
     lines[1] = new_transliteration
     updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
-    updated_transliteration = transliteration_factory.create(
+    updated_transliteration = transliteration_factory.create_many(
         updates["transliteration"], updates["notes"]
     )
     expected_json = create_response_dto(
@@ -96,7 +96,7 @@ def test_update_transliteration_merge_lemmatization(
 
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     updates = {"transliteration": "1. kururu", "notes": ""}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
@@ -160,7 +160,7 @@ def test_update_transliteration_invalid(client):
 )
 def test_update_transliteration_invalid_entity(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     url = f"/fragments/{fragment.number}/transliteration"
 
     post_result = client.simulate_post(url, body=body)

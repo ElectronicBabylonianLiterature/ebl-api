@@ -58,7 +58,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
 )
 def test_signs_visitor(text: str, expected: Sequence[str], sign_repository, signs):
     for sign in signs:
-        sign_repository.create(sign)
+        sign_repository.create_many(sign)
 
     visitor = SignsVisitor(sign_repository)
     parse_line(f"1. {text}").accept(visitor)

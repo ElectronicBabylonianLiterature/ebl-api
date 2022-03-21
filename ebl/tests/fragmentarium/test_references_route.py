@@ -15,9 +15,9 @@ ANY_USER = Guest()
 
 def test_update_references(client, fragmentarium, bibliography, user):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     reference = ReferenceFactory.build(with_document=True)
-    bibliography.create(reference.document, ANY_USER)
+    bibliography.create_many(reference.document, ANY_USER)
     references = [ReferenceSchema().dump(reference)]
     body = json.dumps({"references": references})
     url = f"/fragments/{fragment.number}/references"
@@ -81,7 +81,7 @@ def test_update_references_invalid_museum_number(client):
 )
 def test_update_references_invalid_reference(client, fragmentarium, body):
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     url = f"/fragments/{fragment.number}/references"
 
     post_result = client.simulate_post(url, body=body)
@@ -92,7 +92,7 @@ def test_update_references_invalid_reference(client, fragmentarium, body):
 def test_update_references_invalid_id(client, fragmentarium):
     reference = ReferenceFactory.build(with_document=True)
     fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
+    fragmentarium.create_many(fragment)
     body = json.dumps({"references": [ReferenceSchema().dump(reference)]})
     url = f"/fragments/{fragment.number}/references"
     post_result = client.simulate_post(url, body=body)
