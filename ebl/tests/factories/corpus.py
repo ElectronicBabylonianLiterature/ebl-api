@@ -14,6 +14,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
+from ebl.tests.factories.ids import TextIdFactory
 from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -41,7 +42,6 @@ from ebl.transliteration.domain.tokens import (
     ValueToken,
 )
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.genre import Genre
 
@@ -151,15 +151,6 @@ class LineFactory(factory.Factory):
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")
     translation = (TranslationLine((StringPart("foo"),), "en", None),)
-
-
-class TextIdFactory(factory.Factory):
-    class Meta:
-        model = TextId
-
-    genre = factory.fuzzy.FuzzyChoice(Genre)
-    category = factory.Sequence(lambda n: n)
-    index = factory.Sequence(lambda n: n)
 
 
 class AuthorFactory(factory.Factory):

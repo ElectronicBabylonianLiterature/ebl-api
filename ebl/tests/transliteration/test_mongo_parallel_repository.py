@@ -17,11 +17,6 @@ TEXT_ID: TextId = TextIdFactory.build()
 CHAPTER_NAME: ChapterName = ChapterName(Stage.OLD_ASSYRIAN, "new and improved", "I")
 
 
-@pytest.fixture
-def repository(database: Database) -> MongoParallelRepository:
-    return MongoParallelRepository(database)
-
-
 def test_fragment_exists_true(
     database: Database, repository: MongoParallelRepository
 ) -> None:

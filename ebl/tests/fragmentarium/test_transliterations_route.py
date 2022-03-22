@@ -1,4 +1,5 @@
 import json
+import attr
 
 import falcon
 import pytest
@@ -10,7 +11,6 @@ from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.joins import Join
-from ebl.transliteration.domain.parallel_line import ParallelFragment, ParallelText
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -62,6 +62,7 @@ def test_update_transliteration_merge_lemmatization(
     signs,
     sign_repository,
     transliteration_factory,
+    parallel_line_injector,
     user,
 ):
 
@@ -75,14 +76,21 @@ def test_update_transliteration_merge_lemmatization(
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
+    updated_fragment = lemmatized_fragment.update_transliteration(
+        updated_transliteration, user
+    )
+    expected_fragment = attr.evolve(
+        updated_fragment,
+        text=attr.evolve(
+            updated_fragment.text,
+            lines=parallel_line_injector.inject(updated_fragment.text.lines),
+        ),
+    )
     expected_json = create_response_dto(
-        lemmatized_fragment.update_transliteration(updated_transliteration, user),
+        expected_fragment,
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
-    for line in expected_json["text"]["lines"]:
-        if line["type"] in [ParallelFragment.__name__, ParallelText.__name__]:
-            line["exists"] = False
 
     post_result = client.simulate_post(
         f"/fragments/{lemmatized_fragment.number}/transliteration",

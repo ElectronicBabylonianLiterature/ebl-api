@@ -14,6 +14,7 @@ from falcon import testing
 from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
 from marshmallow import EXCLUDE
+from pymongo.database import Database
 from pymongo_inmemory import MongoClient
 
 import ebl.app
@@ -60,6 +61,10 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.infrastructure.parallel_lines import (
+    MongoParallelLineInjector,
+    MongoParallelRepository,
+)
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -485,3 +490,15 @@ def create_mongo_bibliography_entry():
         )
 
     return _from_bibliography_entry
+
+
+@pytest.fixture
+def parallel_repository(database: Database) -> MongoParallelRepository:
+    return MongoParallelRepository(database)
+
+
+@pytest.fixture
+def parallel_line_injector(
+    parallel_repository: MongoParallelRepository,
+) -> MongoParallelLineInjector:
+    return MongoParallelLineInjector(parallel_repository)

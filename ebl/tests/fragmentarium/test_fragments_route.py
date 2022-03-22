@@ -1,24 +1,28 @@
+import attr
 import falcon
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.parallel_line import ParallelFragment, ParallelText
 
 
-def test_get(client, fragmentarium, user):
+def test_get(client, fragmentarium, parallel_line_injector, user):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
     result = client.simulate_get(f"/fragments/{transliterated_fragment.number}")
 
-    expected = create_response_dto(
+    expected_fragment = attr.evolve(
         transliterated_fragment,
+        text=attr.evolve(
+            transliterated_fragment.text,
+            lines=parallel_line_injector.inject(transliterated_fragment.text.lines),
+        ),
+    )
+    expected = create_response_dto(
+        expected_fragment,
         user,
         transliterated_fragment.number == MuseumNumber("K", "1"),
     )
-    for line in expected["text"]["lines"]:
-        if line["type"] in (ParallelFragment.__name__, ParallelText.__name__):
-            line["exists"] = False
 
     assert result.json == expected
     assert result.status == falcon.HTTP_OK
