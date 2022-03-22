@@ -1,5 +1,6 @@
 import operator
 from typing import Callable, List, Optional, Sequence, Tuple, cast
+import attr
 
 from marshmallow import EXCLUDE
 import pymongo
@@ -183,8 +184,14 @@ class MongoFragmentRepository(FragmentRepository):
             fragment_data["text"]["lines"] = self._injector.inject_exists(
                 fragment_data["text"]["lines"]
             )
-
-            return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
+            fragment = FragmentSchema(unknown=EXCLUDE).load(fragment_data)
+            return attr.evolve(
+                fragment,
+                text=attr.evolve(
+                    fragment.text,
+                    lines=self._injector.inject_exists(fragment.text.lines),
+                ),
+            )
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 

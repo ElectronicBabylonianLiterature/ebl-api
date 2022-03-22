@@ -1,4 +1,5 @@
 from typing import List
+import attr
 
 import pymongo
 
@@ -128,19 +129,22 @@ class MongoTextRepository(TextRepository):
         try:
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
-            chapter = next(chapters)
-
-            for line in chapter["lines"]:
-                line["parallelLines"] = self._injector.inject_exists(
-                    line["parallelLines"]
-                )
-
-            return ChapterDisplaySchema().load(
+            chapter = ChapterDisplaySchema().load(
                 {
-                    **chapter,
+                    **next(chapters),
                     "textName": text.name,
                     "isSingleStage": not text.has_multiple_stages,
                 }
+            )
+            return attr.evolve(
+                chapter,
+                lines=tuple(
+                    attr.evolve(
+                        line,
+                        parallel_lines=self._injector.inject_exists(line.parallel_lines),
+                    )
+                    for line in chapter.lines
+                ),
             )
         except NotFoundError as error:
             raise text_not_found(id_.text_id) from error
