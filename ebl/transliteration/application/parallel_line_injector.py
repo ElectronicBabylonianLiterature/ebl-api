@@ -7,7 +7,7 @@ from ebl.transliteration.domain.line import Line
 T = TypeVar("T", bound=Line)
 
 
-class ParalallelLineInjector(ABC):
+class ParallelLineInjector(ABC):
     @abstractmethod
-    def inject_exists(self, lines: Sequence[T]) -> Sequence[T]:
+    def inject(self, lines: Sequence[T]) -> Sequence[T]:
         ...

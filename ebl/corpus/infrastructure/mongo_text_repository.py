@@ -31,7 +31,7 @@ from ebl.transliteration.infrastructure.collections import (
     TEXTS_COLLECTION,
 )
 from ebl.transliteration.infrastructure.parallel_lines import (
-    MongoParalallelLineInjector,
+    MongoParallelLineInjector,
 )
 
 
@@ -51,7 +51,7 @@ class MongoTextRepository(TextRepository):
     def __init__(self, database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
-        self._injector = MongoParalallelLineInjector(database)
+        self._injector = MongoParallelLineInjector(database)
 
     def create_indexes(self) -> None:
         self._texts.create_index(
@@ -141,7 +141,7 @@ class MongoTextRepository(TextRepository):
                 lines=tuple(
                     attr.evolve(
                         line,
-                        parallel_lines=self._injector.inject_exists(line.parallel_lines),
+                        parallel_lines=self._injector.inject(line.parallel_lines),
                     )
                     for line in chapter.lines
                 ),

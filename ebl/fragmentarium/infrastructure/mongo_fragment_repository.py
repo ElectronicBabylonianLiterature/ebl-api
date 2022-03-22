@@ -31,7 +31,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.parallel_lines import (
-    MongoParalallelLineInjector,
+    MongoParallelLineInjector,
 )
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
@@ -100,7 +100,7 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
-        self._injector = MongoParalallelLineInjector(database)
+        self._injector = MongoParallelLineInjector(database)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -181,7 +181,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
         try:
             fragment_data = next(data)
-            fragment_data["text"]["lines"] = self._injector.inject_exists(
+            fragment_data["text"]["lines"] = self._injector.inject(
                 fragment_data["text"]["lines"]
             )
             fragment = FragmentSchema(unknown=EXCLUDE).load(fragment_data)
@@ -189,7 +189,7 @@ class MongoFragmentRepository(FragmentRepository):
                 fragment,
                 text=attr.evolve(
                     fragment.text,
-                    lines=self._injector.inject_exists(fragment.text.lines),
+                    lines=self._injector.inject(fragment.text.lines),
                 ),
             )
         except StopIteration as error:
