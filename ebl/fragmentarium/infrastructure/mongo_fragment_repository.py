@@ -28,10 +28,11 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
-from ebl.transliteration.infrastructure.parallel_lines import (
-    MongoParallelLineInjector,
+from ebl.transliteration.infrastructure.mongo_parallel_repository import (
+    MongoParallelRepository,
 )
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
@@ -100,7 +101,7 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
-        self._injector = MongoParallelLineInjector.create(database)
+        self._injector = ParallelLineInjector(MongoParallelRepository(database))
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -181,9 +182,6 @@ class MongoFragmentRepository(FragmentRepository):
         )
         try:
             fragment_data = next(data)
-            fragment_data["text"]["lines"] = self._injector.inject(
-                fragment_data["text"]["lines"]
-            )
             fragment = FragmentSchema(unknown=EXCLUDE).load(fragment_data)
             return attr.evolve(
                 fragment,

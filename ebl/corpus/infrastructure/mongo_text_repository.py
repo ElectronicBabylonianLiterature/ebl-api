@@ -25,13 +25,14 @@ from ebl.corpus.infrastructure.queries import (
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
     TEXTS_COLLECTION,
 )
-from ebl.transliteration.infrastructure.parallel_lines import (
-    MongoParallelLineInjector,
+from ebl.transliteration.infrastructure.mongo_parallel_repository import (
+    MongoParallelRepository,
 )
 
 
@@ -51,7 +52,7 @@ class MongoTextRepository(TextRepository):
     def __init__(self, database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
-        self._injector = MongoParallelLineInjector.create(database)
+        self._injector = ParallelLineInjector(MongoParallelRepository(database))
 
     def create_indexes(self) -> None:
         self._texts.create_index(

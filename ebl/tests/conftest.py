@@ -37,6 +37,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
@@ -61,8 +62,7 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.infrastructure.parallel_lines import (
-    MongoParallelLineInjector,
+from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
 from ebl.users.domain.user import User
@@ -500,5 +500,5 @@ def parallel_repository(database: Database) -> MongoParallelRepository:
 @pytest.fixture
 def parallel_line_injector(
     parallel_repository: MongoParallelRepository,
-) -> MongoParallelLineInjector:
-    return MongoParallelLineInjector(parallel_repository)
+) -> ParallelLineInjector:
+    return ParallelLineInjector(parallel_repository)
