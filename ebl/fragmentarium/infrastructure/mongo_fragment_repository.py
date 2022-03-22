@@ -100,7 +100,7 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
-        self._injector = MongoParallelLineInjector(database)
+        self._injector = MongoParallelLineInjector.create(database)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(

@@ -51,7 +51,7 @@ class MongoTextRepository(TextRepository):
     def __init__(self, database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
-        self._injector = MongoParallelLineInjector(database)
+        self._injector = MongoParallelLineInjector.create(database)
 
     def create_indexes(self) -> None:
         self._texts.create_index(

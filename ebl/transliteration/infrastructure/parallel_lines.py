@@ -3,6 +3,7 @@ from typing import Sequence, cast
 
 import attr
 from pymongo.database import Database
+from ebl.errors import NotFoundError
 
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.parallel_line_injector import (
@@ -24,7 +25,7 @@ from ebl.transliteration.infrastructure.collections import (
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
 
-class ParallelRepository:
+class MongoParallelRepository:
     _fragments: MongoCollection
     _chapters: MongoCollection
 
@@ -36,23 +37,26 @@ class ParallelRepository:
         return self._fragments.count_documents(museum_number_is(museum_number)) > 0
 
     def find_implicit_chapter(self, text_id: TextId) -> ChapterName:
-        chapter = next(
-            self._chapters.find_many(
-                {
-                    "textId.genre": text_id.genre.value,
-                    "textId.category": text_id.category,
-                    "textId.index": text_id.index,
-                },
-                sort=[("order", 1)],
-                projection={
-                    "_id": False,
-                    "stage": True,
-                    "name": True,
-                    "version": True,
-                },
+        try:
+            chapter = next(
+                self._chapters.find_many(
+                    {
+                        "textId.genre": text_id.genre.value,
+                        "textId.category": text_id.category,
+                        "textId.index": text_id.index,
+                    },
+                    sort=[("order", 1)],
+                    projection={
+                        "_id": False,
+                        "stage": True,
+                        "name": True,
+                        "version": True,
+                    },
+                )
             )
-        )
-        return ChapterNameSchema().load(chapter)
+            return ChapterNameSchema().load(chapter)
+        except StopIteration as error:
+            raise NotFoundError(f"No chapters found for text {text_id}.") from error
 
     def chapter_exists(self, text_id: TextId, chapter_name: ChapterName) -> bool:
         return (
@@ -70,10 +74,10 @@ class ParallelRepository:
 
 
 class MongoParallelLineInjector(ParallelLineInjector):
-    _repository: ParallelRepository
+    _repository: MongoParallelRepository
 
-    def __init__(self, database: Database):
-        self._repository = ParallelRepository(database)
+    def __init__(self, repository: MongoParallelRepository):
+        self._repository = repository
 
     def inject(self, lines: Sequence[T]) -> Sequence[T]:
         return tuple(self._inject_line(line) for line in lines)
@@ -106,5 +110,9 @@ class MongoParallelLineInjector(ParallelLineInjector):
                     ),
                 )
             )
-        except (StopIteration, IndexError):
+        except NotFoundError:
             return attr.evolve(line, exists=False)
+
+    @staticmethod
+    def create(database: Database) -> "MongoParallelLineInjector":
+        return MongoParallelLineInjector(MongoParallelRepository(database))
