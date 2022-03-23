@@ -12,6 +12,7 @@ from ebl.transliteration.domain.parallel_line import (
     ParallelFragment,
     ParallelText,
 )
+from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_id import TextId
 
 
@@ -40,6 +41,9 @@ class ParallelLineInjector:
 
     def inject(self, lines: Sequence[T]) -> Sequence[T]:
         return tuple(self._inject_line(line) for line in lines)
+
+    def inject_transliteration(self, transliteration: Text) -> Text:
+        return attr.evolve(transliteration, lines=self.inject(transliteration.lines))
 
     @singledispatchmethod
     def _inject_line(self, line: T) -> T:
