@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Sequence, Tuple
 
+import attr
+
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.chapter_hydrator import ChapterHydartor
 from ebl.corpus.application.chapter_updater import ChapterUpdater
@@ -20,6 +22,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DataError, Defect, NotFoundError
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
@@ -83,11 +86,13 @@ class Corpus:
         bibliography,
         changelog,
         sign_repository: SignRepository,
+        parallel_injector: ParallelLineInjector,
     ):
         self._repository: TextRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
         self._sign_repository = sign_repository
+        self._parallel_injector = parallel_injector
 
     def find(self, id_: TextId) -> Text:
         return self._repository.find(id_)
@@ -97,7 +102,7 @@ class Corpus:
         return self._hydrate_references(chapter)
 
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
-        return self._repository.find_chapter_for_display(id_)
+        return self._inject_parallels(self._repository.find_chapter_for_display(id_))
 
     def find_line(
         self, id_: ChapterId, number: int
@@ -207,3 +212,15 @@ class Corpus:
         old_dict: dict = {**ChapterSchema().dump(old), "_id": old.id_.to_tuple()}
         new_dict: dict = {**ChapterSchema().dump(new), "_id": new.id_.to_tuple()}
         self._changelog.create(COLLECTION, user.profile, old_dict, new_dict)
+
+    def _inject_parallels(self, chapter: ChapterDisplay) -> ChapterDisplay:
+        return attr.evolve(
+            chapter,
+            lines=tuple(
+                attr.evolve(
+                    line,
+                    parallel_lines=self._parallel_injector.inject(line.parallel_lines),
+                )
+                for line in chapter.lines
+            ),
+        )

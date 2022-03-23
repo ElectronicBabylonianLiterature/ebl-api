@@ -147,15 +147,33 @@ def transliteration_factory(sign_repository):
 
 
 @pytest.fixture
+def parallel_repository(database: Database) -> MongoParallelRepository:
+    return MongoParallelRepository(database)
+
+
+@pytest.fixture
+def parallel_line_injector(
+    parallel_repository: MongoParallelRepository,
+) -> ParallelLineInjector:
+    return ParallelLineInjector(parallel_repository)
+
+
+@pytest.fixture
 def text_repository(database):
     return MongoTextRepository(database)
 
 
 @pytest.fixture
 def corpus(
-    text_repository, bibliography, changelog, transliteration_factory, sign_repository
+    text_repository, bibliography, changelog, sign_repository, parallel_line_injector
 ):
-    return Corpus(text_repository, bibliography, changelog, sign_repository)
+    return Corpus(
+        text_repository,
+        bibliography,
+        changelog,
+        sign_repository,
+        parallel_line_injector,
+    )
 
 
 @pytest.fixture
@@ -164,7 +182,7 @@ def fragment_repository(database):
 
 
 @pytest.fixture
-def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
+def fragmentarium(fragment_repository):
     return Fragmentarium(fragment_repository)
 
 
@@ -325,8 +343,8 @@ def context(
     bibliography_repository,
     annotations_repository,
     lemma_repository,
-    database,
     user,
+    parallel_line_injector,
 ):
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
@@ -343,6 +361,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
+        parallel_line_injector=parallel_line_injector,
     )
 
 
@@ -490,15 +509,3 @@ def create_mongo_bibliography_entry():
         )
 
     return _from_bibliography_entry
-
-
-@pytest.fixture
-def parallel_repository(database: Database) -> MongoParallelRepository:
-    return MongoParallelRepository(database)
-
-
-@pytest.fixture
-def parallel_line_injector(
-    parallel_repository: MongoParallelRepository,
-) -> ParallelLineInjector:
-    return ParallelLineInjector(parallel_repository)

@@ -1,10 +1,7 @@
 import factory.fuzzy
 import pydash
 
-from ebl.corpus.domain.chapter import (
-    Chapter,
-    Classification,
-)
+from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
@@ -14,18 +11,23 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
-from ebl.tests.factories.ids import TextIdFactory
-from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
+from ebl.tests.factories.ids import TextIdFactory
+from ebl.tests.factories.parallel_line import (
+    ParallelCompositionFactory,
+    ParallelFragmentFactory,
+    ParallelTextFactory,
+)
 from ebl.transliteration.domain.atf import Flag, Ruling, Status, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.markup import StringPart
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
@@ -33,6 +35,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 )
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.stage import Stage
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
@@ -41,9 +44,8 @@ from ebl.transliteration.domain.tokens import (
     UnknownNumberOfSigns,
     ValueToken,
 )
-from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.translation_line import TranslationLine
-from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.word_tokens import Word
 
 
 class ManuscriptFactory(factory.Factory):
@@ -134,6 +136,14 @@ class LineVariantFactory(factory.Factory):
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
     manuscripts = factory.List([factory.SelfAttribute("..manuscript")], TupleFactory)
     intertext = factory.fuzzy.FuzzyChoice([tuple(), (StringPart("bar"),)])
+    parallel_lines = factory.List(
+        [
+            factory.SubFactory(ParallelCompositionFactory),
+            factory.SubFactory(ParallelTextFactory),
+            factory.SubFactory(ParallelFragmentFactory),
+        ],
+        TupleFactory,
+    )
 
 
 class LineFactory(factory.Factory):

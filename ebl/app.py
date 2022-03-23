@@ -36,6 +36,10 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
+from ebl.transliteration.application.parallel_line_injector import (
+    ParallelLineInjector,
+    ParallelRepository,
+)
 
 from ebl.users.infrastructure.auth0 import Auth0Backend
 
@@ -76,6 +80,7 @@ def create_context():
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
         cache=cache,
+        parallel_line_injector=ParallelLineInjector(ParallelRepository(database)),
     )
 
 

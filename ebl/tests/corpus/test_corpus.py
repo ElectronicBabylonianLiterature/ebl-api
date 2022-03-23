@@ -135,13 +135,25 @@ def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
     assert corpus.find_chapter(CHAPTER.id_) == CHAPTER
 
 
-def test_find_chapter_for_display(corpus, text_repository, when) -> None:
+def test_find_chapter_for_display(
+    corpus, text_repository, parallel_line_injector, when
+) -> None:
     chapter_display = ChapterDisplay.of_chapter(TEXT, CHAPTER)
+    injected_chapter_display = attr.evolve(
+        chapter_display,
+        lines=tuple(
+            attr.evolve(
+                line,
+                parallel_lines=parallel_line_injector.inject(line.parallel_lines),
+            )
+            for line in chapter_display.lines
+        ),
+    )
     when(text_repository).find_chapter_for_display(CHAPTER.id_).thenReturn(
         chapter_display
     )
 
-    assert corpus.find_chapter_for_display(CHAPTER.id_) == chapter_display
+    assert corpus.find_chapter_for_display(CHAPTER.id_) == injected_chapter_display
 
 
 def test_find_line(corpus, text_repository, bibliography, when) -> None:

@@ -1,7 +1,7 @@
 from typing import List
-import attr
 
 import pymongo
+from pymongo.database import Database
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
@@ -25,14 +25,10 @@ from ebl.corpus.infrastructure.queries import (
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
-from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
     TEXTS_COLLECTION,
-)
-from ebl.transliteration.infrastructure.mongo_parallel_repository import (
-    MongoParallelRepository,
 )
 
 
@@ -49,10 +45,9 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
 
 
 class MongoTextRepository(TextRepository):
-    def __init__(self, database):
+    def __init__(self, database: Database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
-        self._injector = ParallelLineInjector(MongoParallelRepository(database))
 
     def create_indexes(self) -> None:
         self._texts.create_index(
@@ -130,22 +125,12 @@ class MongoTextRepository(TextRepository):
         try:
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
-            chapter = ChapterDisplaySchema().load(
+            return ChapterDisplaySchema().load(
                 {
                     **next(chapters),
                     "textName": text.name,
                     "isSingleStage": not text.has_multiple_stages,
                 }
-            )
-            return attr.evolve(
-                chapter,
-                lines=tuple(
-                    attr.evolve(
-                        line,
-                        parallel_lines=self._injector.inject(line.parallel_lines),
-                    )
-                    for line in chapter.lines
-                ),
             )
         except NotFoundError as error:
             raise text_not_found(id_.text_id) from error

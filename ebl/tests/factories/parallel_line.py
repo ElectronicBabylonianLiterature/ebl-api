@@ -6,7 +6,11 @@ from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-from ebl.transliteration.domain.parallel_line import ParallelFragment, ParallelText
+from ebl.transliteration.domain.parallel_line import (
+    ParallelComposition,
+    ParallelFragment,
+    ParallelText,
+)
 
 
 class ParallelFragmentFactory(factory.Factory):
@@ -33,3 +37,12 @@ class ParallelTextFactory(factory.Factory):
     line_number = LineNumber(1)
     exists = None
     implicit_chapter = None
+
+
+class ParallelCompositionFactory(factory.Factory):
+    class Meta:
+        model = ParallelComposition
+
+    has_cf = factory.Faker("boolean")
+    name = factory.Faker("sentence")
+    line_number = LineNumber(1)
