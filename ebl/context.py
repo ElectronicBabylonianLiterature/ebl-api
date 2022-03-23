@@ -50,6 +50,7 @@ class Context:
             self.changelog,
             self.get_bibliography(),
             self.photo_repository,
+            self.parallel_line_injector,
         )
 
     def get_transliteration_update_factory(self):

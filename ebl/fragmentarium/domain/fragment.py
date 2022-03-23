@@ -80,6 +80,9 @@ class Fragment:
     def set_references(self, references: Sequence[Reference]) -> "Fragment":
         return attr.evolve(self, references=references)
 
+    def set_text(self, text: Text) -> "Fragment":
+        return attr.evolve(self, text=text)
+
     def update_lowest_join_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":

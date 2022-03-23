@@ -201,9 +201,19 @@ def fragment_matcher(fragment_repository):
 
 
 @pytest.fixture
-def fragment_updater(fragment_repository, changelog, bibliography, photo_repository):
+def fragment_updater(
+    fragment_repository,
+    changelog,
+    bibliography,
+    photo_repository,
+    parallel_line_injector,
+):
     return FragmentUpdater(
-        fragment_repository, changelog, bibliography, photo_repository
+        fragment_repository,
+        changelog,
+        bibliography,
+        photo_repository,
+        parallel_line_injector,
     )
 
 

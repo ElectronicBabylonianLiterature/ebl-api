@@ -12,6 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
+from ebl.tests.factories.parallel_line import ParallelCompositionFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import (
@@ -261,6 +262,14 @@ def test_set_references():
     updated_fragment = fragment.set_references(references)
 
     assert updated_fragment.references == references
+
+
+def test_set_text():
+    fragment = FragmentFactory.build()
+    text = Text((ParallelCompositionFactory.build(),))
+    updated_fragment = fragment.set_text(text)
+
+    assert updated_fragment.text == text
 
 
 GET_MATCHING_LINES_DATA = [
