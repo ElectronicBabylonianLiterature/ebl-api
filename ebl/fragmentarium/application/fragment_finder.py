@@ -8,6 +8,7 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -20,6 +21,7 @@ class FragmentFinder:
         dictionary: Dictionary,
         photos: FileRepository,
         folios: FileRepository,
+        parallel_injector: ParallelLineInjector,
     ):
 
         self._bibliography = bibliography
@@ -27,10 +29,14 @@ class FragmentFinder:
         self._dictionary = dictionary
         self._photos = photos
         self._folios = folios
+        self._parallel_injector = parallel_injector
 
     def find(self, number: MuseumNumber) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
         return (
-            self._repository.query_by_museum_number(number),
+            fragment.set_text(
+                self._parallel_injector.inject_transliteration(fragment.text)
+            ),
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 

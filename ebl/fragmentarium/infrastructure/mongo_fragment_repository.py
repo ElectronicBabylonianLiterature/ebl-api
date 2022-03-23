@@ -1,6 +1,5 @@
 import operator
 from typing import Callable, List, Optional, Sequence, Tuple, cast
-import attr
 
 from marshmallow import EXCLUDE
 import pymongo
@@ -28,12 +27,8 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
-from ebl.transliteration.infrastructure.mongo_parallel_repository import (
-    MongoParallelRepository,
-)
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
 
@@ -101,7 +96,6 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
-        self._injector = ParallelLineInjector(MongoParallelRepository(database))
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -182,14 +176,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
         try:
             fragment_data = next(data)
-            fragment = FragmentSchema(unknown=EXCLUDE).load(fragment_data)
-            return attr.evolve(
-                fragment,
-                text=attr.evolve(
-                    fragment.text,
-                    lines=self._injector.inject(fragment.text.lines),
-                ),
-            )
+            return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 

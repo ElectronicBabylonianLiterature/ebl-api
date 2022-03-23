@@ -31,6 +31,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         Dictionary(context.word_repository, context.changelog),
         context.photo_repository,
         context.folio_repository,
+        context.parallel_line_injector,
     )
     updater = context.get_fragment_updater()
     annotations_service = AnnotationsService(

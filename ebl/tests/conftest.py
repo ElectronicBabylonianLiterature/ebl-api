@@ -188,10 +188,20 @@ def fragmentarium(fragment_repository):
 
 @pytest.fixture
 def fragment_finder(
-    fragment_repository, dictionary, photo_repository, file_repository, bibliography
+    fragment_repository,
+    dictionary,
+    photo_repository,
+    file_repository,
+    bibliography,
+    parallel_line_injector,
 ):
     return FragmentFinder(
-        bibliography, fragment_repository, dictionary, photo_repository, file_repository
+        bibliography,
+        fragment_repository,
+        dictionary,
+        photo_repository,
+        file_repository,
+        parallel_line_injector,
     )
 
 
