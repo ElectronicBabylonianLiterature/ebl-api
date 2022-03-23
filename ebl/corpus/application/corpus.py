@@ -4,7 +4,9 @@ from typing import List, Sequence, Tuple
 import attr
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
-from ebl.corpus.application.chapter_hydrator import ChapterHydartor
+from ebl.corpus.application.manuscript_reference_injector import (
+    ManuscriptReferenceInjector,
+)
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
@@ -99,7 +101,7 @@ class Corpus:
 
     def find_chapter(self, id_: ChapterId) -> Chapter:
         chapter = self._repository.find_chapter(id_)
-        return self._hydrate_references(chapter)
+        return self._inject_references(chapter)
 
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         return self._inject_parallels(self._repository.find_chapter_for_display(id_))
@@ -110,21 +112,21 @@ class Corpus:
         return self._repository.find_line(id_, number), self.find_manuscripts(id_)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
-        return self._hydrate_manuscripts(
+        return self._inject_references_to_manuscripts(
             self._repository.query_manuscripts_by_chapter(id_)
         )
 
     def find_manuscripts_with_joins(self, id_: ChapterId) -> Sequence[Manuscript]:
-        return self._hydrate_manuscripts(
+        return self._inject_references_to_manuscripts(
             self._repository.query_manuscripts_with_joins_by_chapter(id_)
         )
 
-    def _hydrate_manuscripts(
+    def _inject_references_to_manuscripts(
         self, manuscripts: Sequence[Manuscript]
     ) -> Sequence[Manuscript]:
-        hydrator = ChapterHydartor(self._bibliography)
+        injector = ManuscriptReferenceInjector(self._bibliography)
         try:
-            return tuple(map(hydrator.hydrate_manuscript, manuscripts))
+            return tuple(map(injector.inject_manuscript, manuscripts))
         except NotFoundError as error:
             raise Defect(error) from error
 
@@ -159,9 +161,9 @@ class Corpus:
         user: User,
     ) -> Chapter:
         try:
-            hydrator = ChapterHydartor(self._bibliography)
+            injector = ManuscriptReferenceInjector(self._bibliography)
             manuscripts = tuple(
-                hydrator.hydrate_manuscript(manuscript) for manuscript in manuscripts
+                injector.inject_manuscript(manuscript) for manuscript in manuscripts
             )
         except NotFoundError as error:
             raise DataError(error) from error
@@ -200,11 +202,11 @@ class Corpus:
     def _validate_chapter(self, chapter: Chapter) -> None:
         TextValidator().visit(chapter)
 
-    def _hydrate_references(self, chapter: Chapter) -> Chapter:
+    def _inject_references(self, chapter: Chapter) -> Chapter:
         try:
-            hydrator = ChapterHydartor(self._bibliography)
-            hydrator.visit(chapter)
-            return hydrator.chapter
+            injector = ManuscriptReferenceInjector(self._bibliography)
+            injector.visit(chapter)
+            return injector.chapter
         except NotFoundError as error:
             raise Defect(error) from error
 

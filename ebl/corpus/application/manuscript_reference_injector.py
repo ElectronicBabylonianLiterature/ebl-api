@@ -10,7 +10,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import Defect
 
 
-class ChapterHydartor(ChapterVisitor):
+class ManuscriptReferenceInjector(ChapterVisitor):
     def __init__(self, bibliography: Bibliography):
         self._bibliography: Bibliography = bibliography
         self._chapter: Optional[Chapter] = None
@@ -37,17 +37,17 @@ class ChapterHydartor(ChapterVisitor):
 
     @visit.register(Manuscript)
     def _visit_manuscript(self, manuscript: Manuscript) -> None:
-        self._manuscripts.append(self.hydrate_manuscript(manuscript))
+        self._manuscripts.append(self.inject_manuscript(manuscript))
 
-    def hydrate_manuscript(self, manuscript: Manuscript) -> Manuscript:
-        references = self._hydrate_references(manuscript.references)
+    def inject_manuscript(self, manuscript: Manuscript) -> Manuscript:
+        references = self._inject_references(manuscript.references)
         return attr.evolve(manuscript, references=references)
 
-    def _hydrate_references(
+    def _inject_references(
         self, references: Iterable[Reference]
     ) -> Sequence[Reference]:
-        return tuple(self._hydrate_reference(reference) for reference in references)
+        return tuple(self._inject_reference(reference) for reference in references)
 
-    def _hydrate_reference(self, reference: Reference) -> Reference:
+    def _inject_reference(self, reference: Reference) -> Reference:
         document = self._bibliography.find(reference.id)
         return attr.evolve(reference, document=document)
