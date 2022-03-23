@@ -98,4 +98,5 @@ class WordSchema(Schema):
     akkadischeGlossareUndIndices = fields.Nested(
         AkkadischeGlossareUndIndicesSchema, load_default=None, many=True
     )
+    cdaAddenda = fields.String()
     origin = fields.String(required=True)

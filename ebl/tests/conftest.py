@@ -414,6 +414,7 @@ def word():
                 "agiID": "agiID",
             }
         ],
+        "cdaAddenda": "additions",
     }
 
 

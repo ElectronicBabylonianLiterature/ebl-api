@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, EXCLUDE
 
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
@@ -35,6 +35,9 @@ class AnnotationDataSchema(Schema):
 
 
 class AnnotationSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
 
@@ -44,6 +47,9 @@ class AnnotationSchema(Schema):
 
 
 class AnnotationsSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
     annotations = fields.Nested(AnnotationSchema, many=True, required=True)
 
