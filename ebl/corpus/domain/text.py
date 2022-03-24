@@ -36,6 +36,7 @@ class Text:
     category: int
     index: int
     name: str
+    has_doi: bool
     number_of_verses: int
     approximate_verses: bool
     intro: str

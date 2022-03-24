@@ -129,6 +129,7 @@ class MongoTextRepository(TextRepository):
                 {
                     **next(chapters),
                     "textName": text.name,
+                    "textHasDoi": text.has_doi,
                     "isSingleStage": not text.has_multiple_stages,
                 }
             )

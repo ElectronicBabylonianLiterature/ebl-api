@@ -272,6 +272,7 @@ class TextSchema(Schema):
     category = fields.Integer(required=True, validate=validate.Range(min=0))
     index = fields.Integer(required=True, validate=validate.Range(min=0))
     name = fields.String(required=True, validate=validate.Length(min=1))
+    has_doi = fields.Boolean(load_default=False, data_key="hasDoi")
     number_of_verses = fields.Integer(
         required=True, data_key="numberOfVerses", validate=validate.Range(min=0)
     )
@@ -287,6 +288,7 @@ class TextSchema(Schema):
             data["category"],
             data["index"],
             data["name"],
+            data["has_doi"],
             data["number_of_verses"],
             data["approximate_verses"],
             data["intro"],
