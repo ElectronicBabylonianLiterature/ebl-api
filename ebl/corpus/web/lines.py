@@ -102,7 +102,7 @@ class LineResource:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
 
         try:
-            line, manuscripts = self._corpus.find_line(chapter_id, int(number))
+            line, manuscripts = self._corpus.find_line(chapter_id, int(number)) # TODO: get line variants
             schema = LineDetailsSchema(context={"manuscripts": manuscripts})
             resp.media = schema.dump(line)
         except (IndexError, ValueError) as error:
