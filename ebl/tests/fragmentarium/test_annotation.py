@@ -6,7 +6,7 @@ from ebl.fragmentarium.domain.annotation import (
     BoundingBoxPrediction,
     AnnotationValueType,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 HEIGHT = 3.5
 WIDTH = 0.32

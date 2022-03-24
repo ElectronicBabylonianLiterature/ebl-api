@@ -1,6 +1,6 @@
 import falcon
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,

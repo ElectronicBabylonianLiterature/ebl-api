@@ -2,7 +2,7 @@ from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import AnnotationsFactory
 

@@ -6,7 +6,7 @@ import pytest
 from ebl.ebl_ai_client import EblAiClient, BoundingBoxPredictionSchema, EblAiApiError
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import BoundingBoxPrediction
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.conftest import create_test_photo
 
 SCHEMA = AnnotationsSchema()

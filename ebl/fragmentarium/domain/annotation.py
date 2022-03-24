@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import attr
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

@@ -25,10 +25,10 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_standard_text,
 )
 from ebl.corpus.domain.record import Record
-from ebl.corpus.domain.stage import Stage
+from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.label_schemas import labels

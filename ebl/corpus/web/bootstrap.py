@@ -22,6 +22,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
         context.get_bibliography(),
         context.changelog,
         context.sign_repository,
+        context.parallel_line_injector,
     )
     context.text_repository.create_indexes()
 

@@ -7,7 +7,8 @@ from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment, Genre
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
@@ -22,12 +23,14 @@ class FragmentUpdater:
         changelog: Changelog,
         bibliography: Bibliography,
         photos: FileRepository,
+        parallel_injector: ParallelLineInjector,
     ):
 
         self._repository = repository
         self._changelog = changelog
         self._bibliography = bibliography
         self._photos = photos
+        self._parallel_injector = parallel_injector
 
     def update_transliteration(
         self,
@@ -46,7 +49,7 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_transliteration(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return self._create_result(updated_fragment)
 
     def update_genres(
         self, number: MuseumNumber, genres: Sequence[Genre], user: User
@@ -57,7 +60,7 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_genres(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return self._create_result(updated_fragment)
 
     def update_lemmatization(
         self, number: MuseumNumber, lemmatization: Lemmatization, user: User
@@ -68,7 +71,7 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_lemmatization(updated_fragment)
 
-        return (updated_fragment, self._photos.query_if_file_exists(f"{number}.jpg"))
+        return self._create_result(updated_fragment)
 
     def update_references(
         self, number: MuseumNumber, references: Sequence[Reference], user: User
@@ -81,9 +84,14 @@ class FragmentUpdater:
         self._create_changlelog(user, fragment, updated_fragment)
         self._repository.update_references(updated_fragment)
 
+        return self._create_result(self._repository.query_by_museum_number(number))
+
+    def _create_result(self, fragment: Fragment) -> Tuple[Fragment, bool]:
         return (
-            self._repository.query_by_museum_number(number),
-            self._photos.query_if_file_exists(f"{number}.jpg"),
+            fragment.set_text(
+                self._parallel_injector.inject_transliteration(fragment.text)
+            ),
+            self._photos.query_if_file_exists(f"{fragment.number}.jpg"),
         )
 
     def _create_changlelog(

@@ -10,7 +10,7 @@ from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.annotation import BoundingBox, Annotation
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.line_number import (
     AbstractLineNumber,

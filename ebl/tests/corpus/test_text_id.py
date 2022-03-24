@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.genre import Genre
 
 

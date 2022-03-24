@@ -1,5 +1,5 @@
 from ebl.transliteration.domain.atf import Atf
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.sign import (
     Sign,
     SignListRecord,

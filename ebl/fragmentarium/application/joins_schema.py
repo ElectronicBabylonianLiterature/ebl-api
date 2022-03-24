@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, post_load
 
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Join, Joins
 
 

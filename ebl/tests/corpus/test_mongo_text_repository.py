@@ -4,12 +4,12 @@ import pytest
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.text import UncertainFragment
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,

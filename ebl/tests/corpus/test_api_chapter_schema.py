@@ -4,7 +4,7 @@ from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiManuscriptSchema
 from ebl.corpus.domain.chapter import Chapter
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,

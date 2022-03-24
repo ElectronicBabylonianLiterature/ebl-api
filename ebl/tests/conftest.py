@@ -14,6 +14,7 @@ from falcon import testing
 from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
 from marshmallow import EXCLUDE
+from pymongo.database import Database
 from pymongo_inmemory import MongoClient
 
 import ebl.app
@@ -36,8 +37,11 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
@@ -58,6 +62,9 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.infrastructure.mongo_parallel_repository import (
+    MongoParallelRepository,
+)
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -140,15 +147,33 @@ def transliteration_factory(sign_repository):
 
 
 @pytest.fixture
+def parallel_repository(database: Database) -> MongoParallelRepository:
+    return MongoParallelRepository(database)
+
+
+@pytest.fixture
+def parallel_line_injector(
+    parallel_repository: MongoParallelRepository,
+) -> ParallelLineInjector:
+    return ParallelLineInjector(parallel_repository)
+
+
+@pytest.fixture
 def text_repository(database):
     return MongoTextRepository(database)
 
 
 @pytest.fixture
 def corpus(
-    text_repository, bibliography, changelog, transliteration_factory, sign_repository
+    text_repository, bibliography, changelog, sign_repository, parallel_line_injector
 ):
-    return Corpus(text_repository, bibliography, changelog, sign_repository)
+    return Corpus(
+        text_repository,
+        bibliography,
+        changelog,
+        sign_repository,
+        parallel_line_injector,
+    )
 
 
 @pytest.fixture
@@ -157,16 +182,26 @@ def fragment_repository(database):
 
 
 @pytest.fixture
-def fragmentarium(fragment_repository, changelog, dictionary, bibliography):
+def fragmentarium(fragment_repository):
     return Fragmentarium(fragment_repository)
 
 
 @pytest.fixture
 def fragment_finder(
-    fragment_repository, dictionary, photo_repository, file_repository, bibliography
+    fragment_repository,
+    dictionary,
+    photo_repository,
+    file_repository,
+    bibliography,
+    parallel_line_injector,
 ):
     return FragmentFinder(
-        bibliography, fragment_repository, dictionary, photo_repository, file_repository
+        bibliography,
+        fragment_repository,
+        dictionary,
+        photo_repository,
+        file_repository,
+        parallel_line_injector,
     )
 
 
@@ -176,9 +211,19 @@ def fragment_matcher(fragment_repository):
 
 
 @pytest.fixture
-def fragment_updater(fragment_repository, changelog, bibliography, photo_repository):
+def fragment_updater(
+    fragment_repository,
+    changelog,
+    bibliography,
+    photo_repository,
+    parallel_line_injector,
+):
     return FragmentUpdater(
-        fragment_repository, changelog, bibliography, photo_repository
+        fragment_repository,
+        changelog,
+        bibliography,
+        photo_repository,
+        parallel_line_injector,
     )
 
 
@@ -318,8 +363,8 @@ def context(
     bibliography_repository,
     annotations_repository,
     lemma_repository,
-    database,
     user,
+    parallel_line_injector,
 ):
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
@@ -336,6 +381,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
+        parallel_line_injector=parallel_line_injector,
     )
 
 

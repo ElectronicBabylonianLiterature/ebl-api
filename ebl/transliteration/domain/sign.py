@@ -3,7 +3,7 @@ from typing import NewType, Optional, Sequence
 import attr
 
 from ebl.transliteration.domain.atf import Atf
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 SignName = NewType("SignName", str)
 
