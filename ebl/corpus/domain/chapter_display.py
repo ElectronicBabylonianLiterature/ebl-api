@@ -35,6 +35,7 @@ class LineDisplay:
     number: AbstractLineNumber
     is_second_line_of_parallelism: bool
     is_beginning_of_section: bool
+    variants: list #TODO: Add schema
     intertext: Sequence[MarkupPart]
     reconstruction: Sequence[Token]
     translation: Sequence[TranslationLine]
@@ -48,10 +49,12 @@ class LineDisplay:
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
         first_variant = line.variants[0]
+        # TODO: Change to display all variants
         return LineDisplay(
             line.number,
             line.is_second_line_of_parallelism,
             line.is_beginning_of_section,
+            line.variants,
             first_variant.intertext,
             first_variant.reconstruction,
             line.translation,
