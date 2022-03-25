@@ -110,6 +110,7 @@ def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
 
 
 def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
+    # TODO: return all line variant data, not just the first element.
     return [
         {"$match": chapter_id_query(id_)},
         {
@@ -124,6 +125,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                             "isSecondLineOfParallelism": "$$line.isSecondLineOfParallelism",
                             "isBeginningOfSection": "$$line.isBeginningOfSection",
                             "translation": "$$line.translation",
+                            "variants": "$$line.variants",
                             "intertext": {
                                 "$arrayElemAt": [
                                     {

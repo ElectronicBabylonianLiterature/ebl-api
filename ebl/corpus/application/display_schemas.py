@@ -2,6 +2,7 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
+from ebl.corpus.application.schemas import LineVariantSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -24,6 +25,9 @@ class LineDisplaySchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
+    variants = fields.Nested(
+        LineVariantSchema, many=True, required=True
+    )
     intertext = fields.List(
         fields.Nested(OneOfNoteLinePartSchema), load_default=tuple(), allow_none=True
     )
@@ -42,6 +46,7 @@ class LineDisplaySchema(Schema):
             data["number"],
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
+            data["variants"],
             tuple(data["intertext"] or []),
             tuple(data["reconstruction"]),
             tuple(data["translation"] or []),
