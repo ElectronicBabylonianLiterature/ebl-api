@@ -10,6 +10,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -25,13 +26,19 @@ from ebl.transliteration.domain.parallel_line import (
                 True,
                 MuseumNumber.of("K.1"),
                 True,
-                SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+                Labels(
+                    surface=SurfaceLabel.from_label(
+                        atf.Surface.OBVERSE, [atf.Status.CORRECTION]
+                    )
+                ),
                 LineNumber(1),
             ),
         ),
         (
             "// F K.1 1",
-            ParallelFragment(False, MuseumNumber.of("K.1"), False, None, LineNumber(1)),
+            ParallelFragment(
+                False, MuseumNumber.of("K.1"), False, Labels(), LineNumber(1)
+            ),
         ),
         (
             '// cf. L I.1 OB "my name" 1',

@@ -8,6 +8,7 @@ from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import LabelTransformer
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -23,7 +24,7 @@ class ParallelLineTransformer(LabelTransformer):
             cf is not None,
             museum_number,
             duplicates is not None,
-            surface_label,
+            Labels(surface=surface_label),
             line_number,
         )
 

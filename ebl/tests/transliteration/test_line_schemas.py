@@ -47,6 +47,7 @@ from ebl.transliteration.domain.markup import (
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -544,7 +545,11 @@ LINES = [
             True,
             MuseumNumber.of("K.1"),
             True,
-            SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+            Labels(
+                surface=SurfaceLabel.from_label(
+                    atf.Surface.OBVERSE, [atf.Status.CORRECTION]
+                )
+            ),
             LineNumber(1),
             True,
         ),
@@ -725,7 +730,11 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
             True,
             MuseumNumber.of("K.1"),
             True,
-            SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+            Labels(
+                surface=SurfaceLabel.from_label(
+                    atf.Surface.OBVERSE, [atf.Status.CORRECTION]
+                )
+            ),
             LineNumber(1),
             None,
         ),

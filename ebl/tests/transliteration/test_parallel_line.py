@@ -10,33 +10,34 @@ from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
 )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
-    "cf,duplicates,surface,display_value",
+@pytest.mark.parametrize(
+    "cf,duplicates,labels,display_value",
     [
         (
             True,
             True,
-            SurfaceLabel((Status.CORRECTION,), Surface.OBVERSE),
+            Labels(surface=SurfaceLabel((Status.CORRECTION,), Surface.OBVERSE)),
             "cf. F K.1 &d o! 1",
         ),
-        (False, False, None, "F K.1 1"),
+        (False, False, Labels(), "F K.1 1"),
     ],
 )
-def test_parallel_fragment(cf, duplicates, surface, display_value) -> None:
+def test_parallel_fragment(cf, duplicates, labels, display_value) -> None:
     museum_number = MuseumNumber.of("K.1")
     line_number = LineNumber(1)
-    line = ParallelFragment(cf, museum_number, duplicates, surface, line_number)
+    line = ParallelFragment(cf, museum_number, duplicates, labels, line_number)
 
     assert line.has_cf is cf
     assert line.museum_number == museum_number
     assert line.has_duplicates is duplicates
-    assert line.surface == surface
+    assert line.labels == labels
     assert line.line_number == line_number
 
     assert line.display_value == display_value
