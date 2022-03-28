@@ -241,10 +241,6 @@ def to_sub_index(number: Optional[int]) -> str:
 
 
 def sub_index_to_int(string: Optional[str]) -> Optional[int]:
-    return (
-        1
-        if not string
-        else None
+    return (None
         if string == "ₓ"
-        else int(unicodedata.normalize("NFKC", string))
-    )
+        else int(unicodedata.normalize("NFKC", string))) if string else 1
