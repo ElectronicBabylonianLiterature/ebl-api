@@ -18,13 +18,21 @@ from ebl.transliteration.domain.parallel_line import (
 class ParallelLineTransformer(LabelTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__parallel_fragment(
-        self, _prefix, cf, museum_number, duplicates, surface_label, line_number
+        self,
+        _prefix,
+        cf,
+        museum_number,
+        duplicates,
+        object_label,
+        surface_label,
+        column_label,
+        line_number,
     ) -> ParallelFragment:
         return ParallelFragment(
             cf is not None,
             museum_number,
             duplicates is not None,
-            Labels(surface=surface_label),
+            Labels(object_label, surface_label, column_label),
             line_number,
         )
 

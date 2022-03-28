@@ -19,7 +19,7 @@ LANGUAGE: "akk" | "sux" | "es"
 
 
 ?parallel_line: parallel_fragment | parallel_text | parallel_composition
-parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [surface_label " "] line_number
+parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [object_label " "] [surface_label " "]  [column_label " "] line_number
 !museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
 DUPLICATES: "&d"
 parallel_text: PARALLEL_LINE_PREFIX [CF] text_id " "  [chapter_name " "] line_number
@@ -328,6 +328,13 @@ GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "
 labels: surface_label " " column_label
       | surface_label
       | column_label
+
+object_label: (TABLET | ENVELOPE | PRIMS | BULLA) status
+TABLET: "tablet"
+ENVELOPE: "envelope"
+PRIMS: "prism"
+BULLA: "bulla"
+
 column_label: ROMAN_NUMERAL status
 ROMAN_NUMERAL: /[ivxlcdm]+/
 CAPITAL_ROMAN_NUMERAL: /[IVXLCDM]+/

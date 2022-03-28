@@ -1,4 +1,3 @@
-import re
 from abc import ABC, abstractmethod
 from typing import Iterable, Sequence, Tuple, Union
 
@@ -80,7 +79,6 @@ class Label(ABC):
 
 @attr.s(auto_attribs=True, frozen=True)
 class ColumnLabel(Label):
-
     column: int
 
     @staticmethod
@@ -88,8 +86,8 @@ class ColumnLabel(Label):
         return ColumnLabel(status, roman.fromRoman(column.upper()))  # pyre-fixme[6]
 
     @staticmethod
-    def from_int(column: int, status: Iterable[Status] = tuple()) -> "ColumnLabel":
-        return ColumnLabel(status, column)  # pyre-fixme[6]
+    def from_int(column: int, status: Sequence[Status] = tuple()) -> "ColumnLabel":
+        return ColumnLabel(status, column)
 
     @property
     def abbreviation(self) -> str:
@@ -105,7 +103,6 @@ class ColumnLabel(Label):
 
 @attr.s(auto_attribs=True, frozen=True)
 class SurfaceLabel(Label):
-
     surface: Surface
     text: str = attr.ib(default="")
 
@@ -118,9 +115,9 @@ class SurfaceLabel(Label):
 
     @staticmethod
     def from_label(
-        surface: Surface, status: Iterable[Status] = tuple(), text: str = ""
+        surface: Surface, status: Sequence[Status] = tuple(), text: str = ""
     ) -> "SurfaceLabel":
-        return SurfaceLabel(status, surface, text)  # pyre-fixme[6]
+        return SurfaceLabel(status, surface, text)
 
     @property
     def abbreviation(self) -> str:
@@ -144,7 +141,6 @@ class SurfaceLabel(Label):
 
 @attr.s(auto_attribs=True, frozen=True)
 class ObjectLabel(Label):
-
     object: Object
     text: str = attr.ib(default="")
 
@@ -152,6 +148,12 @@ class ObjectLabel(Label):
     def _check_text(self, attribute, value) -> None:
         if value and self.object not in [Object.OBJECT, Object.FRAGMENT]:
             raise ValueError("Non-empty text is only allowed for OBJECT and FRAGMENT.")
+
+    @staticmethod
+    def from_object(
+        object: Object, status: Sequence[Status] = tuple(), text: str = ""
+    ) -> "ObjectLabel":
+        return ObjectLabel(status, object, text)
 
     @property
     def abbreviation(self) -> str:
@@ -172,13 +174,6 @@ class ObjectLabel(Label):
 LINE_NUMBER_EXPRESSION = r"[^\s]+"
 
 
-def is_sequence_of_non_space_characters(_instance, _attribute, value) -> None:
-    if not re.fullmatch(LINE_NUMBER_EXPRESSION, value):
-        raise ValueError(
-            f'Line number "{value}" is not a sequence of ' "non-space characters."
-        )
-
-
 class LabelTransformer(Transformer):
     def labels(self, children) -> Sequence[Label]:
         return tuple(children)
@@ -191,10 +186,17 @@ class LabelTransformer(Transformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__surface_label(
-        self, surface: Surface, status: Sequence[Status]
+        self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
-        surface = Surface.from_label(surface)  # pyre-ignore[6]
-        return SurfaceLabel.from_label(surface, status)
+        return SurfaceLabel.from_label(
+            Surface.from_label(surface), status  # pyre-ignore[6]
+        )
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__object_label(
+        self, object_: Token, status: Sequence[Status]
+    ) -> ObjectLabel:
+        return ObjectLabel.from_object(Object(object_), status)
 
     def ebl_atf_text_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)

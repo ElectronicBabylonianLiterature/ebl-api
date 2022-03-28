@@ -183,7 +183,10 @@ stage = 'Ur3' | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA'
 version  = '"', { any-character }-, '"';
 chapter =  '"', { any-character }-, '"';
 
-parallel-fragment = 'F ', museum-number, [ '&d ' ], ' ', [ surface-label, ' ' ],
+parallel-fragment = 'F ', museum-number, ' ', [ '&d ' ],
+                    [ object-label, ' ' ],
+                    [ surface-label, ' ' ],
+                    [ column-label, ' ' ],
                     line-number;
 museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 ```
@@ -688,9 +691,10 @@ The ATF should be parseable using the specification above. In addition,
 all readings and signs must be correct according to our sign list. Sometimes
 when the validation or parsing logic is updated existing transliterations can
 become invalid. It should still be possible to load these transliterations, but
-saving them results in an error until the syntax is corrected. 
-In addition, line numbers (`column|surface|object` + `line-number` (+ `prime`))
-should be unique.
+saving them results in an error until the syntax is corrected.
+
+In addition, the combination of object, surface, column and line number
+should be unique for each text line.
 
 ## Labels
 
@@ -703,6 +707,8 @@ roman-numeral = { 'i' | 'v' | 'x' | 'l' | 'c' | 'd' | 'm' }-;
 
 surface-label = ( 'o' | 'r' | 'b.e.' | 'e.' | 'l.e.' | 'r.e.' | 't.e.' ),
                 { status };
+
+object-label = ( 'tablet' | 'envelope' | 'prism' | 'bulla') { status }
 ```
 
 See: [Labels](http://oracc.museum.upenn.edu/doc/help/editinginatf/labels/index.html)
