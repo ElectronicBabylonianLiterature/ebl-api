@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validate
+from marshmallow import Schema, fields, post_dump, post_load, validate
 
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
@@ -56,7 +56,10 @@ class ParallelFragmentSchema(ParallelLineSchema):
         MuseumNumberSchema, required=True, data_key="museumNumber"
     )
     has_duplicates = fields.Boolean(data_key="hasDuplicates", required=True)
-    labels = fields.Pluck(LabelsSchema, "surface", data_key="surface", allow_none=True)
+    labels = fields.Nested(LabelsSchema)
+    surface = fields.Nested(
+        SurfaceLabelSchema, allow_none=True, load_default=None, load_only=True
+    )
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
@@ -68,10 +71,14 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["has_cf"],
             data["museum_number"],
             data["has_duplicates"],
-            data["labels"] or Labels(),
+            data.get("labels", Labels(surface=data["surface"])),
             data["line_number"],
             data["exists"],
         )
+
+    @post_dump
+    def add_surface(self, data, **kwargs) -> dict:
+        return {**data, "surface": data["labels"]["surface"]}
 
 
 class ChapterNameSchema(Schema):

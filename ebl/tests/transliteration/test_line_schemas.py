@@ -567,6 +567,16 @@ LINES = [
                 "abbreviation": "o",
                 "text": "",
             },
+            "labels": {
+                "object": None,
+                "surface": {
+                    "status": ["CORRECTION"],
+                    "surface": "OBVERSE",
+                    "abbreviation": "o",
+                    "text": "",
+                },
+                "column": None,
+            },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
             "exists": True,
         },
@@ -736,7 +746,7 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
                 )
             ),
             LineNumber(1),
-            None,
+            True,
         ),
         {
             "type": "ParallelFragment",
@@ -751,6 +761,41 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
                 "surface": "OBVERSE",
                 "abbreviation": "o",
                 "text": "",
+            },
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+            "exists": True,
+        },
+    ),
+    (
+        ParallelFragment(
+            True,
+            MuseumNumber.of("K.1"),
+            True,
+            Labels(
+                surface=SurfaceLabel.from_label(
+                    atf.Surface.OBVERSE, [atf.Status.CORRECTION]
+                )
+            ),
+            LineNumber(1),
+            None,
+        ),
+        {
+            "type": "ParallelFragment",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. F K.1 &d o! 1"))],
+            "displayValue": "cf. F K.1 &d o! 1",
+            "hasCf": True,
+            "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
+            "hasDuplicates": True,
+            "labels": {
+                "object": None,
+                "surface": {
+                    "status": ["CORRECTION"],
+                    "surface": "OBVERSE",
+                    "abbreviation": "o",
+                    "text": "",
+                },
+                "column": None,
             },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
         },
