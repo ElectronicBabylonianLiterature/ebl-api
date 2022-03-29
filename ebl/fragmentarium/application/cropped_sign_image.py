@@ -4,7 +4,7 @@ from typing import NewType
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 Base64 = NewType("Base64", str)
 

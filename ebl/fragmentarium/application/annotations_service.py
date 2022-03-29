@@ -19,8 +19,9 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+
 from ebl.transliteration.domain.line_label import LineLabel
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
 

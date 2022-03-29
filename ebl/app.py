@@ -26,7 +26,6 @@ from ebl.files.web.bootstrap import create_files_route
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
-from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )

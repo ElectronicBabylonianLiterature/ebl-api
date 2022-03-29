@@ -10,6 +10,7 @@ import pydash
 import pytest
 from PIL import Image
 from dictdiffer import diff
+
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
@@ -38,18 +39,14 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
-from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
-    MongoFragmentRepository,
-)
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
-from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
+)
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
 )
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
@@ -59,10 +56,12 @@ from ebl.signs.infrastructure.mongo_sign_repository import (
     SignSchema,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text

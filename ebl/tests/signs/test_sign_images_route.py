@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
@@ -9,6 +9,7 @@ from ebl.tests.factories.annotation import (
     CroppedSignFactory,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_signs_get(
