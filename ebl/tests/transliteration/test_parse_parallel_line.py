@@ -71,6 +71,10 @@ from ebl.transliteration.domain.parallel_line import (
             "// Lex I.1 1",
             ParallelText(False, TextId(Genre.LEXICOGRAPHY, 1, 1), None, LineNumber(1)),
         ),
+        (
+            "// Med I.1 1",
+            ParallelText(False, TextId(Genre.MEDICINE, 1, 1), None, LineNumber(1)),
+        ),
         ("// cf. (name 1)", ParallelComposition(True, "name", LineNumber(1))),
         ("// (name 1)", ParallelComposition(False, "name", LineNumber(1))),
     ],
