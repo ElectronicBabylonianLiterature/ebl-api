@@ -24,8 +24,8 @@ parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES 
 DUPLICATES: "&d"
 parallel_text: PARALLEL_LINE_PREFIX [CF] text_id " "  [chapter_name " "] line_number
 text_id: GENRE " " CATEGORY "." INT
-GENRE: "Lex" | "L" | "D"
-CATEGORY: "0" | /I{1,3}/
+GENRE: "Lex" | "Med" | "L" | "D"
+CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
 chapter_name: STAGE " " [quoted_string " "] quoted_string 
 quoted_string: "\"" /./+ "\""
 STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" | "Hel" | "Par" | "Unc" | "SB"
@@ -329,7 +329,8 @@ labels: surface_label " " column_label
       | surface_label
       | column_label
 column_label: ROMAN_NUMERAL status
-ROMAN_NUMERAL: /[ivx]+/
+ROMAN_NUMERAL: /[ivxlcdm]+/
+CAPITAL_ROMAN_NUMERAL: /[IVXLCDM]+/
 
 surface_label: (OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP) status
 OBVERSE: "o"

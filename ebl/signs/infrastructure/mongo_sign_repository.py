@@ -16,7 +16,7 @@ from ebl.transliteration.domain.sign import (
     Fossey,
 )
 
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 COLLECTION = "signs"
 

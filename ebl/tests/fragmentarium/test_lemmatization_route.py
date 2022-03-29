@@ -3,7 +3,7 @@ import json
 import falcon
 import pytest
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.fragmentarium.web.lemmatizations import LemmatizationSchema
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken

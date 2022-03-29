@@ -3,9 +3,9 @@ import pytest
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text_id import TextId
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -546,6 +546,7 @@ LINES = [
             True,
             SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
             LineNumber(1),
+            True,
         ),
         {
             "type": "ParallelFragment",
@@ -562,6 +563,7 @@ LINES = [
                 "text": "",
             },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+            "exists": True,
         },
     ),
     (
@@ -570,6 +572,8 @@ LINES = [
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
+            True,
+            ChapterName(Stage.OLD_BABYLONIAN, "implicit", "name"),
         ),
         {
             "type": "ParallelText",
@@ -588,6 +592,12 @@ LINES = [
                 "name": "name",
             },
             "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+            "exists": True,
+            "implicitChapter": {
+                "stage": "Old Babylonian",
+                "version": "implicit",
+                "name": "name",
+            },
         },
     ),
     (
@@ -711,11 +721,39 @@ EXTRA_LINES_FOR_LOAD_LINE_TEST = [
         },
     ),
     (
+        ParallelFragment(
+            True,
+            MuseumNumber.of("K.1"),
+            True,
+            SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+            LineNumber(1),
+            None,
+        ),
+        {
+            "type": "ParallelFragment",
+            "prefix": "//",
+            "content": [OneOfTokenSchema().dump(ValueToken.of("cf. F K.1 &d o! 1"))],
+            "displayValue": "cf. F K.1 &d o! 1",
+            "hasCf": True,
+            "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
+            "hasDuplicates": True,
+            "surface": {
+                "status": ["CORRECTION"],
+                "surface": "OBVERSE",
+                "abbreviation": "o",
+                "text": "",
+            },
+            "lineNumber": OneOfLineNumberSchema().dump(LineNumber(1)),
+        },
+    ),
+    (
         ParallelText(
             True,
             TextId(Genre.LITERATURE, 1, 1),
             ChapterName(Stage.OLD_BABYLONIAN, "version", "name"),
             LineNumber(1),
+            None,
+            None,
         ),
         {
             "type": "ParallelText",

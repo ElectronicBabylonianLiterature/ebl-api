@@ -4,7 +4,7 @@ from ebl.fragmentarium.application.fragment_matcher import (
 )
 from ebl.fragmentarium.application.line_to_vec import LineToVecScore, LineToVecEntry
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import FragmentFactory
 
 

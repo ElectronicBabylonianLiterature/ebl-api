@@ -1,2 +1,3 @@
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
+FRAGMENTS_COLLECTION = "fragments"

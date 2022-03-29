@@ -3,12 +3,12 @@ from typing import Sequence
 import factory
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, UncuratedReference
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
     ColumnAtLine,
@@ -307,8 +307,11 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 TextId(CorpusGenre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
+                False,
             ),
-            ParallelFragment(False, MuseumNumber.of("K.1"), True, None, LineNumber(1)),
+            ParallelFragment(
+                False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
+            ),
         )
     )
     signs = (
@@ -520,7 +523,10 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 TextId(CorpusGenre.LITERATURE, 1, 1),
                 ChapterName(Stage.OLD_BABYLONIAN, "", "my name"),
                 LineNumber(1),
+                False,
             ),
-            ParallelFragment(False, MuseumNumber.of("K.1"), True, None, LineNumber(1)),
+            ParallelFragment(
+                False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
+            ),
         )
     )

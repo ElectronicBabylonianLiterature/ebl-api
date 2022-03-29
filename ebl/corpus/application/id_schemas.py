@@ -1,8 +1,8 @@
 from marshmallow import Schema, fields, post_load, validate
 
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.stage import Stage
+from ebl.transliteration.domain.text_id import TextId
 from ebl.schemas import ValueEnum
 from ebl.transliteration.domain.genre import Genre
 

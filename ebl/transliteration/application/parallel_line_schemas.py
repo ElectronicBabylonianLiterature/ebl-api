@@ -2,7 +2,7 @@ from marshmallow import Schema, fields, post_load, validate
 
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import NameEnum, ValueEnum
 from ebl.transliteration.application.label_schemas import SurfaceLabelSchema
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -16,6 +16,10 @@ from ebl.transliteration.domain.parallel_line import (
 )
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.genre import Genre
+
+
+def exists() -> fields.Boolean:
+    return fields.Boolean(allow_none=True, load_default=None)
 
 
 class ParallelLineSchema(LineBaseSchema):
@@ -37,6 +41,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
+    exists = exists()
 
     @post_load
     def make_line(self, data, **kwargs) -> ParallelFragment:
@@ -46,6 +51,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["has_duplicates"],
             data["surface"],
             data["line_number"],
+            data["exists"],
         )
 
 
@@ -66,11 +72,23 @@ class ParallelTextSchema(ParallelLineSchema):
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
+    exists = exists()
+    implicit_chapter = fields.Nested(
+        ChapterNameSchema,
+        load_default=None,
+        allow_none=True,
+        data_key="implicitChapter",
+    )
 
     @post_load
     def make_line(self, data, **kwargs) -> ParallelText:
         return ParallelText(
-            data["has_cf"], data["text"], data["chapter"], data["line_number"]
+            data["has_cf"],
+            data["text"],
+            data["chapter"],
+            data["line_number"],
+            data["exists"],
+            data["implicit_chapter"],
         )
 
 

@@ -1,10 +1,11 @@
 import json
+import attr
 
 import falcon
 import pytest
 from freezegun import freeze_time
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
@@ -61,6 +62,7 @@ def test_update_transliteration_merge_lemmatization(
     signs,
     sign_repository,
     transliteration_factory,
+    parallel_line_injector,
     user,
 ):
 
@@ -74,8 +76,18 @@ def test_update_transliteration_merge_lemmatization(
     updated_transliteration = transliteration_factory.create(
         updates["transliteration"], updates["notes"]
     )
+    updated_fragment = lemmatized_fragment.update_transliteration(
+        updated_transliteration, user
+    )
+    expected_fragment = attr.evolve(
+        updated_fragment,
+        text=attr.evolve(
+            updated_fragment.text,
+            lines=parallel_line_injector.inject(updated_fragment.text.lines),
+        ),
+    )
     expected_json = create_response_dto(
-        lemmatized_fragment.update_transliteration(updated_transliteration, user),
+        expected_fragment,
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
@@ -110,9 +122,7 @@ def test_update_transliteration_invalid_atf(client, fragmentarium):
     }
 
 
-def test_update_transliteration_not_lowest_join(
-    client, fragmentarium, fragment_repository
-) -> None:
+def test_update_transliteration_not_lowest_join(client, fragment_repository) -> None:
     number = MuseumNumber("X", "2")
     fragment = FragmentFactory.build(number=number)
     fragment_repository.create_join([[Join(number)], [Join(MuseumNumber("X", "1"))]])

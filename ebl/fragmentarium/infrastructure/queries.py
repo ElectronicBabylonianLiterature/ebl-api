@@ -1,21 +1,16 @@
 from typing import List
 
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.infrastructure import collections
-
+from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
+from ebl.transliteration.infrastructure.queries import museum_number_is
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
 NUMBER_OF_NEEDS_REVISION: int = 20
 PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 10
-
-
-def museum_number_is(number: MuseumNumber) -> dict:
-    serialized = MuseumNumberSchema().dump(number)
-    return {f"museumNumber.{key}": value for key, value in serialized.items()}
 
 
 def fragment_is(fragment: Fragment) -> dict:
@@ -192,7 +187,7 @@ def is_in_fragmentarium(local_field: str, as_: str) -> List[dict]:
     return [
         {
             "$lookup": {
-                "from": collections.FRAGMENTS_COLLECTION,
+                "from": FRAGMENTS_COLLECTION,
                 "let": {"number": f"${local_field}"},
                 "pipeline": [
                     {
@@ -233,7 +228,7 @@ def join_joins() -> List[dict]:
     return [
         {
             "$lookup": {
-                "from": collections.JOINS_COLLECTION,
+                "from": JOINS_COLLECTION,
                 "let": {"number": "$museumNumber"},
                 "pipeline": [
                     {

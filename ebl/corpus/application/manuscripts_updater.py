@@ -6,7 +6,7 @@ from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.application.signs_updater import SignsUpdater
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.sign_repository import SignRepository
 
 

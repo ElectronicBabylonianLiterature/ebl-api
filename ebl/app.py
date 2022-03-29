@@ -30,6 +30,9 @@ from ebl.fragmentarium.infrastructure.fragment_repository import MongoFragmentRe
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
 )
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.fragmentarium.web.bootstrap import create_fragmentarium_routes
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
@@ -37,7 +40,10 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
-
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
+from ebl.transliteration.infrastructure.mongo_parallel_repository import (
+    MongoParallelRepository,
+)
 from ebl.users.infrastructure.auth0 import Auth0Backend
 
 
@@ -78,6 +84,7 @@ def create_context():
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
         cache=cache,
+        parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
     )
 
 

@@ -1,8 +1,8 @@
 import pytest
 
 from ebl.corpus.domain.chapter import Stage
-from ebl.corpus.domain.text_id import TextId
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text_id import TextId
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import SurfaceLabel
@@ -70,6 +70,10 @@ from ebl.transliteration.domain.parallel_line import (
         (
             "// Lex I.1 1",
             ParallelText(False, TextId(Genre.LEXICOGRAPHY, 1, 1), None, LineNumber(1)),
+        ),
+        (
+            "// Med I.1 1",
+            ParallelText(False, TextId(Genre.MEDICINE, 1, 1), None, LineNumber(1)),
         ),
         ("// cf. (name 1)", ParallelComposition(True, "name", LineNumber(1))),
         ("// (name 1)", ParallelComposition(False, "name", LineNumber(1))),

@@ -59,6 +59,7 @@ def update(number) -> State:
         context.get_bibliography(),
         context.changelog,
         context.sign_repository,
+        context.parallel_line_injector,
     )
     state = State()
     text = corpus.find(number)
@@ -79,6 +80,7 @@ def get_text_ids() -> List[TextId]:
         context.get_bibliography(),
         context.changelog,
         context.sign_repository,
+        context.parallel_line_injector,
     )
     return [text.id for text in corpus.list()]
 

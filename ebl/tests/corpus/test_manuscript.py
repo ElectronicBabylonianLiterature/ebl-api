@@ -1,6 +1,6 @@
 import pytest
 from ebl.corpus.domain.manuscript import Manuscript, ManuscriptType, Period, Provenance
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]

@@ -11,8 +11,8 @@ from ebl.corpus.application.record_schemas import (
 )
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.record import Author, AuthorRole, Translator
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,

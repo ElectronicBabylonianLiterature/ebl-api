@@ -3,7 +3,7 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecScore
 from ebl.fragmentarium.application.line_to_vec_ranking_schema import (
     LineToVecRankingSchema,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_line_to_vec_ranking_schema():

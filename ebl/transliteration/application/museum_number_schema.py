@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, post_load, validate
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 class MuseumNumberSchema(Schema):

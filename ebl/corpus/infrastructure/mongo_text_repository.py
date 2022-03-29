@@ -1,6 +1,7 @@
 from typing import List
 
 import pymongo
+from pymongo.database import Database
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
@@ -16,7 +17,6 @@ from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.text import Text, TextId
-from ebl.corpus.infrastructure.collections import CHAPTERS_COLLECTION, TEXTS_COLLECTION
 from ebl.corpus.infrastructure.queries import (
     aggregate_chapter_display,
     chapter_id_query,
@@ -26,6 +26,10 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.infrastructure.collections import (
+    CHAPTERS_COLLECTION,
+    TEXTS_COLLECTION,
+)
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -41,7 +45,7 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
 
 
 class MongoTextRepository(TextRepository):
-    def __init__(self, database):
+    def __init__(self, database: Database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
 
@@ -125,6 +129,7 @@ class MongoTextRepository(TextRepository):
                 {
                     **next(chapters),
                     "textName": text.name,
+                    "textHasDoi": text.has_doi,
                     "isSingleStage": not text.has_multiple_stages,
                 }
             )

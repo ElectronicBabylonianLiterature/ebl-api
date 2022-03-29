@@ -1,8 +1,8 @@
 from ebl.corpus.domain.chapter import Classification, make_title
-from ebl.corpus.domain.stage import Stage
+from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
-from ebl.corpus.domain.text_id import TextId
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text_id import TextId
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.translation_line import TranslationLine
@@ -11,6 +11,7 @@ GENRE = Genre.LITERATURE
 CATEGORY = 1
 INDEX = 2
 NAME = "Palm & Vine"
+HAS_DOI = True
 VERSES = 100
 APPROXIMATE = True
 CLASSIFICATION = Classification.ANCIENT
@@ -25,7 +26,9 @@ UNCERTAIN_FRAGMENTS = (UncertainFragment(MuseumNumber("X", "1"), True),)
 CHAPTER = ChapterListing(STAGE, CHAPTER_NAME, TRANSLATION, UNCERTAIN_FRAGMENTS)
 
 
-TEXT = Text(GENRE, CATEGORY, INDEX, NAME, VERSES, APPROXIMATE, INTRO, (CHAPTER,))
+TEXT = Text(
+    GENRE, CATEGORY, INDEX, NAME, HAS_DOI, VERSES, APPROXIMATE, INTRO, (CHAPTER,)
+)
 
 
 def test_text_constructor_sets_correct_fields() -> None:
@@ -34,6 +37,7 @@ def test_text_constructor_sets_correct_fields() -> None:
     assert TEXT.category == CATEGORY
     assert TEXT.index == INDEX
     assert TEXT.name == NAME
+    assert TEXT.has_doi == HAS_DOI
     assert TEXT.number_of_verses == VERSES
     assert TEXT.approximate_verses == APPROXIMATE
     assert TEXT.intro == INTRO
