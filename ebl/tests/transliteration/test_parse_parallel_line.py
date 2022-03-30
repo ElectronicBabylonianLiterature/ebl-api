@@ -5,11 +5,12 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.genre import Genre
-from ebl.transliteration.domain.labels import SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -20,18 +21,26 @@ from ebl.transliteration.domain.parallel_line import (
     "line,expected_line",
     [
         (
-            "// cf. F K.1 &d o! 1",
+            "// cf. F K.1 &d tablet* o! iii? 1",
             ParallelFragment(
                 True,
                 MuseumNumber.of("K.1"),
                 True,
-                SurfaceLabel.from_label(atf.Surface.OBVERSE, [atf.Status.CORRECTION]),
+                Labels(
+                    ObjectLabel.from_object(atf.Object.TABLET, [atf.Status.COLLATION]),
+                    SurfaceLabel.from_label(
+                        atf.Surface.OBVERSE, [atf.Status.CORRECTION]
+                    ),
+                    ColumnLabel.from_int(3, [atf.Status.UNCERTAIN]),
+                ),
                 LineNumber(1),
             ),
         ),
         (
             "// F K.1 1",
-            ParallelFragment(False, MuseumNumber.of("K.1"), False, None, LineNumber(1)),
+            ParallelFragment(
+                False, MuseumNumber.of("K.1"), False, Labels(), LineNumber(1)
+            ),
         ),
         (
             '// cf. L I.1 OB "my name" 1',

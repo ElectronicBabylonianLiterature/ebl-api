@@ -39,6 +39,7 @@ from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -310,7 +311,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                 False,
             ),
             ParallelFragment(
-                False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
+                False, MuseumNumber.of("K.1"), True, Labels(), LineNumber(1), False
             ),
         )
     )
@@ -526,7 +527,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                 False,
             ),
             ParallelFragment(
-                False, MuseumNumber.of("K.1"), True, None, LineNumber(1), False
+                False, MuseumNumber.of("K.1"), True, Labels(), LineNumber(1), False
             ),
         )
     )
