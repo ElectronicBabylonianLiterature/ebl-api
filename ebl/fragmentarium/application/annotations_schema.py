@@ -1,5 +1,6 @@
-from marshmallow import Schema, fields, post_load, EXCLUDE
-
+from marshmallow import Schema, fields, post_load, post_dump
+import pydash
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,
@@ -35,23 +36,24 @@ class AnnotationDataSchema(Schema):
 
 
 class AnnotationSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
+    cropped_sign = fields.Nested(
+        CroppedSignSchema(), load_default=None, data_key="croppedSign"
+    )
 
     @post_load
     def make_annotation(self, data, **kwargs):
         return Annotation(**data)
 
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
 
 class AnnotationsSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
-    annotations = fields.Nested(AnnotationSchema, many=True, required=True)
+    annotations = fields.List(fields.Nested(AnnotationSchema(), required=True))
 
     @post_load
     def make_annotation(self, data, **kwargs):

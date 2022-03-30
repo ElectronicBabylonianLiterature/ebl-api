@@ -19,6 +19,10 @@ class AbstractLineNumber(ABC):
     def atf(self) -> str:
         return f"{self.label}."
 
+    @abstractmethod
+    def is_matching_number(self, number: int) -> bool:
+        ...
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineNumber(AbstractLineNumber):
@@ -38,6 +42,9 @@ class LineNumber(AbstractLineNumber):
     def is_beginning_of_side(self) -> bool:
         return self.number == 1 and not self.has_prime and self.prefix_modifier is None
 
+    def is_matching_number(self, number: int) -> bool:
+        return number == self.number
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineNumberRange(AbstractLineNumber):
@@ -51,3 +58,6 @@ class LineNumberRange(AbstractLineNumber):
     @property
     def is_beginning_of_side(self) -> bool:
         return self.start.is_beginning_of_side
+
+    def is_matching_number(self, number: int) -> bool:
+        return self.start.number <= number <= self.end.number

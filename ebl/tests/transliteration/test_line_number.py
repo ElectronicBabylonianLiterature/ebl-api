@@ -47,3 +47,17 @@ def test_line_number_range(start: LineNumber, end: LineNumber) -> None:
     assert line_number.atf == f"{label}."
     assert line_number.label == label
     assert line_number.is_beginning_of_side == start.is_beginning_of_side
+
+
+@pytest.mark.parametrize(
+    "line_number, matching_number, expected",
+    [
+        (LineNumber(1), 1, True),
+        (LineNumber(2), 1, False),
+        (LineNumberRange(LineNumber(1), LineNumber(3)), 1, True),
+        (LineNumberRange(LineNumber(1), LineNumber(3)), 2, True),
+        (LineNumberRange(LineNumber(1), LineNumber(3)), 4, False),
+    ],
+)
+def test_is_line_matching_number(line_number, matching_number, expected):
+    assert line_number.is_matching_number(matching_number) == expected

@@ -1,3 +1,4 @@
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,
@@ -21,7 +22,13 @@ ID = "1234"
 SIGN_NAME = "KUR"
 DATA = AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME)
 
-ANNOTATION = Annotation(GEOMETRY, DATA)
+IMAGE_ID = "image-id"
+SCRIPT = "script"
+LABEL = "label"
+
+CROPPED_SIGN = CroppedSign(IMAGE_ID, SCRIPT, LABEL)
+
+ANNOTATION = Annotation(GEOMETRY, DATA, CROPPED_SIGN)
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
 ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION])

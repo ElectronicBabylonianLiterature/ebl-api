@@ -1,9 +1,13 @@
+import base64
+import io
+from PIL import Image
 from enum import Enum
-from typing import Sequence
+from typing import Sequence, Optional
 from uuid import uuid4
 
 import attr
 
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSign, Base64
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -38,11 +42,27 @@ class AnnotationData:
 class Annotation:
     geometry: Geometry
     data: AnnotationData
+    cropped_sign: Optional[CroppedSign]
+
+    def crop_image(self, image: Image.Image) -> Base64:
+        bounding_box = BoundingBox.from_annotations(
+            image.size[0], image.size[1], [self]
+        )[0]
+        area = (
+            bounding_box.top_left_x,
+            bounding_box.top_left_y,
+            bounding_box.top_left_x + bounding_box.width,
+            bounding_box.top_left_y + bounding_box.height,
+        )
+        cropped_image = image.crop(area)
+        buf = io.BytesIO()
+        cropped_image.save(buf, format="PNG")
+        return Base64(base64.b64encode(buf.getvalue()).decode("utf-8"))
 
     @classmethod
     def from_prediction(cls, geometry: Geometry) -> "Annotation":
         data = AnnotationData(uuid4().hex, "", AnnotationValueType.PREDICTED, [], "")
-        return cls(geometry, data)
+        return cls(geometry, data, None)
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

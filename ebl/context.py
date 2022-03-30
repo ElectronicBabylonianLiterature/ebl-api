@@ -15,6 +15,9 @@ from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
+    MongoCroppedSignImagesRepository,
+)
 from ebl.lemmatization.application.suggestion_finder import LemmaRepository
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -27,6 +30,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 class Context:
     ebl_ai_client: EblAiClient
     auth_backend: AuthBackend
+    cropped_sign_images_repository: MongoCroppedSignImagesRepository
     word_repository: WordRepository
     sign_repository: SignRepository
     public_file_repository: FileRepository
