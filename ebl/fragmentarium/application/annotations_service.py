@@ -25,7 +25,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
 
-@attr.attrs(auto_attribs=True)
+@attr.attrs(auto_attribs=True, frozen=True)
 class AnnotationsService:
     _ebl_ai_client: EblAiClient
     _annotations_repository: AnnotationsRepository

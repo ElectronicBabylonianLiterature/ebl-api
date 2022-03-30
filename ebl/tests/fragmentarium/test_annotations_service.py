@@ -5,8 +5,6 @@ from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.cropped_sign_image import Base64, CroppedSignImage
 from ebl.fragmentarium.domain.annotation import Annotations
-
-
 from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
@@ -117,32 +115,46 @@ def test_update(
     text_with_labels,
 ):
     fragment_number = MuseumNumber("K", "1")
+    fragment = TransliteratedFragmentFactory(
+        number=fragment_number, text=text_with_labels
+    )
 
     old_annotations = AnnotationsFactory.build(fragment_number=fragment_number)
 
-    annotation = AnnotationFactory.build(cropped_sign=None)
+    data = AnnotationDataFactory.build(path=[2, 0, 0])
+    annotation = AnnotationFactory.build(cropped_sign=None, data=data)
     annotations = AnnotationsFactory.build(
         fragment_number=fragment_number, annotations=[annotation]
-    )
-
-    expected_cropped_sign_images = [CroppedSignImage("test-id", Base64("test-image"))]
-    annotation_cropped_sign = attr.evolve(
-        annotation, cropped_sign=CroppedSignFactory.build()
-    )
-    expected_annotations = attr.evolve(
-        annotations, annotations=[annotation_cropped_sign]
-    )
-
-    when(annotations_service)._cropped_image_from_annotations(annotations).thenReturn(
-        (expected_annotations, expected_cropped_sign_images)
     )
 
     when(annotations_repository).query_by_museum_number(fragment_number).thenReturn(
         old_annotations
     )
+    image = create_test_photo("K.2")
+    when(fragment_repository).query_by_museum_number(fragment_number).thenReturn(
+        fragment
+    )
+    (
+        when(photo_repository)
+        .query_by_file_name(f"{annotations.fragment_number}.jpg")
+        .thenReturn(image)
+    )
+
+    expected_cropped_sign_image = CroppedSignImage("test-id", Base64("test-image"))
+    annotation_cropped_sign = attr.evolve(
+        annotation,
+        cropped_sign=CroppedSignFactory.build(
+            image_id="test-id", script=fragment.script, label="i Stone wig Stone wig 2"
+        ),
+    )
+    expected_annotations = attr.evolve(
+        annotations, annotations=[annotation_cropped_sign]
+    )
+    when(CroppedSignImage).create(...).thenReturn(expected_cropped_sign_image)
+
     when(annotations_repository).create_or_update(expected_annotations).thenReturn()
     when(cropped_sign_images_repository).create_many(
-        expected_cropped_sign_images
+        [expected_cropped_sign_image]
     ).thenReturn()
     schema = AnnotationsSchema()
     when(changelog).create(
