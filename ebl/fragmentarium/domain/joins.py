@@ -1,7 +1,7 @@
 from typing import Optional, Sequence
 import attr
 import pydash
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)

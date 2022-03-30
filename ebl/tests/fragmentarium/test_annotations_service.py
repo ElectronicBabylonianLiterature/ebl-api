@@ -1,83 +1,28 @@
+import attr
+
 from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
+from ebl.fragmentarium.application.cropped_sign_image import Base64, CroppedSignImage
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
-
-
-import pytest
-
 from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
     AnnotationDataFactory,
+    CroppedSignFactory,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
-from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
-from ebl.transliteration.domain.line_label import LineLabel
-from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 SCHEMA = AnnotationsSchema()
 
 
-@pytest.mark.parametrize(
-    "line_label, expected",
-    [
-        (
-            LineLabel(
-                ColumnLabel.from_int(1),
-                SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
-                ObjectLabel([], atf.Object.OBJECT, "Stone wig"),
-                LineNumber(2),
-            ),
-            "i Stone wig Stone wig 2",
-        ),
-        (
-            LineLabel(
-                None, None, None, LineNumberRange(LineNumber(1, True), LineNumber(3))
-            ),
-            "1'-3",
-        ),
-    ],
-)
-def test_format_line_label(line_label, expected, annotations_service):
-    assert annotations_service._format_label(line_label) == expected
-
-
-@pytest.mark.parametrize(
-    "line_label, line_number, expected",
-    [
-        (
-            LineNumber(2),
-            2,
-            True,
-        ),
-        (
-            LineNumber(2),
-            1,
-            False,
-        ),
-        (
-            LineNumberRange(LineNumber(1, True), LineNumber(3)),
-            2,
-            True,
-        ),
-        (
-            LineNumberRange(LineNumber(1, True), LineNumber(3)),
-            4,
-            False,
-        ),
-    ],
-)
-def test_line_label_match_line_number(
-    line_label,
-    line_number,
-    expected,
-    annotations_service,
-):
-    assert annotations_service._is_matching_number(line_label, line_number) == expected
+def test_label_by_line_number(text_with_labels, annotations_service):
+    assert (
+        annotations_service._label_by_line_number(2, text_with_labels.labels)
+        == "i Stone wig Stone wig 2"
+    )
 
 
 def test_cropped_images_from_sign(
@@ -163,41 +108,61 @@ def test_update(
     annotations_repository,
     photo_repository,
     fragment_repository,
+    cropped_sign_images_repository,
     when,
     user,
     changelog,
     text_with_labels,
 ):
     fragment_number = MuseumNumber("K", "1")
-    annotations = AnnotationsFactory.build(fragment_number=fragment_number)
-    updated_annotations = AnnotationsFactory.build(fragment_number=fragment_number)
-
-    fragment = TransliteratedFragmentFactory.build(text=text_with_labels)
-    when(annotations_repository).query_by_museum_number(fragment_number).thenReturn(
-        annotations
+    fragment = TransliteratedFragmentFactory(
+        number=fragment_number, text=text_with_labels
     )
-    when(annotations_repository).create_or_update(...).thenReturn()
-    when(changelog).create(
-        "annotations",
-        user.profile,
-        {"_id": str(fragment_number), **SCHEMA.dump(annotations)},
-        {"_id": str(fragment_number), **SCHEMA.dump(updated_annotations)},
-    ).thenReturn()
-    (
-        when(fragment_repository)
-        .query_by_museum_number(annotations.fragment_number)
-        .thenReturn(fragment)
+
+    old_annotations = AnnotationsFactory.build(fragment_number=fragment_number)
+
+    data = AnnotationDataFactory.build(path=[2, 0, 0])
+    annotation = AnnotationFactory.build(cropped_sign=None, data=data)
+    annotations = AnnotationsFactory.build(
+        fragment_number=fragment_number, annotations=[annotation]
+    )
+
+    when(annotations_repository).query_by_museum_number(fragment_number).thenReturn(
+        old_annotations
+    )
+    image = create_test_photo("K.2")
+    when(fragment_repository).query_by_museum_number(fragment_number).thenReturn(
+        fragment
     )
     (
         when(photo_repository)
         .query_by_file_name(f"{annotations.fragment_number}.jpg")
-        .thenReturn(create_test_photo("K.2"))
+        .thenReturn(image)
     )
-    result = annotations_service.update(updated_annotations, user)
-    assert result.fragment_number == updated_annotations.fragment_number
-    for result_annotation, annotation in zip(
-        result.annotations, updated_annotations.annotations
-    ):
-        assert result_annotation.geometry == annotation.geometry
-        assert result_annotation.data == annotation.data
-        assert result_annotation.cropped_sign is not None
+
+    expected_cropped_sign_image = CroppedSignImage("test-id", Base64("test-image"))
+    annotation_cropped_sign = attr.evolve(
+        annotation,
+        cropped_sign=CroppedSignFactory.build(
+            image_id="test-id", script=fragment.script, label="i Stone wig Stone wig 2"
+        ),
+    )
+    expected_annotations = attr.evolve(
+        annotations, annotations=[annotation_cropped_sign]
+    )
+    when(CroppedSignImage).create(...).thenReturn(expected_cropped_sign_image)
+
+    when(annotations_repository).create_or_update(expected_annotations).thenReturn()
+    when(cropped_sign_images_repository).create_many(
+        [expected_cropped_sign_image]
+    ).thenReturn()
+    schema = AnnotationsSchema()
+    when(changelog).create(
+        "annotations",
+        user.profile,
+        {"_id": str(fragment_number), **schema.dump(old_annotations)},
+        {"_id": str(fragment_number), **schema.dump(expected_annotations)},
+    ).thenReturn()
+
+    result = annotations_service.update(annotations, user)
+    assert result == expected_annotations

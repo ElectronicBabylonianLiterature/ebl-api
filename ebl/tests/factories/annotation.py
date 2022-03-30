@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationValueType,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 class GeometryFactory(factory.Factory):

@@ -1,7 +1,7 @@
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 
 

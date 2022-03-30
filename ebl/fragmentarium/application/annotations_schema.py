@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.schemas import ValueEnum
 
 
@@ -42,7 +42,7 @@ class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
     cropped_sign = fields.Nested(
-        CroppedSignSchema(), missing=None, data_key="croppedSign"
+        CroppedSignSchema(), load_default=None, data_key="croppedSign"
     )
 
     @post_load

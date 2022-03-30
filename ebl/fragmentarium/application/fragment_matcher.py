@@ -9,7 +9,7 @@ from ebl.fragmentarium.application.matches.line_to_vec_score import (
     score_weighted,
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def sort_scores_to_list(results: List[LineToVecScore]) -> List[LineToVecScore]:

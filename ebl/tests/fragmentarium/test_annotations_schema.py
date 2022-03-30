@@ -7,7 +7,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 HEIGHT = 34.5
 WIDTH = 100.0
@@ -27,15 +27,10 @@ ANNOTATION = Annotation(
     AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME),
     CroppedSign(IMAGE_ID, SCRIPT, LABEL),
 )
-ANNOTATION_NO_CROPPED_SIGN = Annotation(
-    Geometry(X, Y, WIDTH, HEIGHT),
-    AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME),
-    None,
-)
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
 ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION])
-ANNOTATIONS_NO_CROPPED_SIGN = Annotations(MUSEUM_NUMBER, [ANNOTATION_NO_CROPPED_SIGN])
+
 
 SERIALIZED = {
     "fragmentNumber": str(MUSEUM_NUMBER),
@@ -54,28 +49,10 @@ SERIALIZED = {
     ],
 }
 
-SERIALIZED_NO_SIGN = {
-    "fragmentNumber": str(MUSEUM_NUMBER),
-    "annotations": [
-        {
-            "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
-            "data": {
-                "id": ID,
-                "value": VALUE,
-                "type": "HasSign",
-                "signName": SIGN_NAME,
-                "path": PATH,
-            },
-        }
-    ],
-}
-
 
 def test_load():
     assert AnnotationsSchema().load(SERIALIZED) == ANNOTATIONS
-    assert AnnotationsSchema().load(SERIALIZED_NO_SIGN) == ANNOTATIONS_NO_CROPPED_SIGN
 
 
 def test_dump():
     assert AnnotationsSchema().dump(ANNOTATIONS) == SERIALIZED
-    assert AnnotationsSchema().dump(ANNOTATIONS_NO_CROPPED_SIGN) == SERIALIZED_NO_SIGN

@@ -8,7 +8,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -22,6 +22,7 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.parallel_line import ParallelFragment
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -137,6 +138,24 @@ def test_query_by_museum_number_references(
     fragment = LemmatizedFragmentFactory.build(references=(reference,))
     database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
     bibliography_repository.create(reference.document)
+    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+
+
+def test_query_by_parallel_line_exists(database, fragment_repository):
+    parallel_number = MuseumNumber.of("K.1")
+    fragment = FragmentFactory.build(
+        text=Text(
+            (ParallelFragment(False, parallel_number, True, None, LineNumber(1), True),)
+        )
+    )
+    parallel_fragment = FragmentFactory.build(number=parallel_number)
+    database[COLLECTION].insert_many(
+        [
+            FragmentSchema(exclude=["joins"]).dump(fragment),
+            FragmentSchema(exclude=["joins"]).dump(parallel_fragment),
+        ]
+    )
+
     assert fragment_repository.query_by_museum_number(fragment.number) == fragment
 
 

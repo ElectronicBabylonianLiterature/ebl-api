@@ -1,5 +1,5 @@
 from hamcrest import assert_that, has_properties
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.joins import Join, Joins
 from hamcrest.library import contains_exactly
 from hamcrest.core.core.isequal import equal_to

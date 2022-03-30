@@ -19,7 +19,8 @@
 
 Requirements:
 
-* [PyPy3.7](https://www.pypy.org) & pip
+* [PyPy3.8](https://www.pypy.org) & pip
+* [Task](https://taskfile.dev/)
 
 ```shell script
 pip install poetry
@@ -82,12 +83,14 @@ pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 ## Running the tests
 
 ```shell script
-poetry run black ebl --check
-poetry run flake8
-poetry run pyre check
-poetry run pytest  
-poetry run pytest -n auto  # Run tests in parallel.
-poetry run --cov=ebl --cov-report term --cov-report xml # Run tests with coverage (slow in PyPy).
+task format  # Format all files.
+task format -- --check  # Check file formatting.
+task lint  # Run linter.
+task type  # Run type check
+task test  # Run tests.  
+task test -- -n auto  # Run tests in parallel.
+task test -- --cov=ebl --cov-report term --cov-report xml  # Run tests with coverage (slow in PyPy).
+task test-all  # Run format, lint and type checks, and tests.
 ```
 
 See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
@@ -245,13 +248,16 @@ SENTRY_ENVIRONMENT=<development or production>
 CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used as default.>
 ```
 
-Poetry does not support .env-files. The environment variables need to be configured in the shell.
-Alternatively and external program can be used to handle the file e.g. [direnv](https://direnv.net/)
-or [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv).
+Poetry does not support .env-files. The environment variables need to be configured in the shell,
+unless ran via [Task](https://taskfile.dev/). Alternatively and external program can be used to 
+handle the file e.g. [direnv](https://direnv.net/) or
+[Set-PsEnv](https://github.com/rajivharris/Set-PsEnv).
 
 ### Locally
 
 ```shell script
+task start
+# or
 poetry run waitress-serve --port=8000 --call ebl.app:get_app
 ```
 

@@ -19,6 +19,7 @@ from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
 from ebl.lemmatization.application.suggestion_finder import LemmaRepository
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
@@ -42,6 +43,7 @@ class Context:
     annotations_repository: AnnotationsRepository
     lemma_repository: LemmaRepository
     cache: Cache
+    parallel_line_injector: ParallelLineInjector
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)
@@ -52,6 +54,7 @@ class Context:
             self.changelog,
             self.get_bibliography(),
             self.photo_repository,
+            self.parallel_line_injector,
         )
 
     def get_transliteration_update_factory(self):

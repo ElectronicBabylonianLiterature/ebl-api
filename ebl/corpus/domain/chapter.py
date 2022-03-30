@@ -8,10 +8,10 @@ from ebl.corpus.domain.extant_line import ExtantLine
 from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.record import Record
-from ebl.corpus.domain.stage import Stage
-from ebl.corpus.domain.text_id import TextId
+from ebl.transliteration.domain.stage import Stage
+from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
 from ebl.transliteration.domain.markup import MarkupPart, to_title
 from ebl.transliteration.domain.translation_line import (

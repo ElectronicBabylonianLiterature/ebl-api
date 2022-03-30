@@ -7,7 +7,7 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.files.application.file_repository import File
 from ebl.fragmentarium.domain.annotation import Annotations, BoundingBoxPrediction
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 class EblAiApiError(Exception):

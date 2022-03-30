@@ -5,7 +5,7 @@ from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
 

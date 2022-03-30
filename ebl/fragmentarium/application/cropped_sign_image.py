@@ -1,8 +1,10 @@
+import uuid
 from typing import NewType
-from marshmallow import Schema, fields, post_load, post_dump
-import attr
 
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+import attr
+from marshmallow import Schema, fields, post_load, post_dump
+
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 Base64 = NewType("Base64", str)
 
@@ -11,6 +13,10 @@ Base64 = NewType("Base64", str)
 class CroppedSignImage:
     image_id: str
     image: Base64
+
+    @classmethod
+    def create(cls, image: Base64) -> "CroppedSignImage":
+        return cls(str(uuid.uuid4()), image)
 
 
 class CroppedSignImageSchema(Schema):

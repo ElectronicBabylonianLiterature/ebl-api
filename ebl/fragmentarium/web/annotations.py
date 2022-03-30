@@ -12,14 +12,13 @@ class AnnotationResource:
         self._annotation_service = annotation_service
 
     @falcon.before(require_scope, "annotate:fragments")
-    @validate(AnnotationsSchema(), AnnotationsSchema())
+    @validate(AnnotationsSchema())
     def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):
         if number == req.media.get("fragmentNumber"):
             annotations = self._annotation_service.update(
                 AnnotationsSchema().load(req.media), req.context.user
             )
             resp.media = AnnotationsSchema().dump(annotations)
-            print()
         else:
             raise falcon.HTTPUnprocessableEntity(
                 description="Fragment numbers do not match."

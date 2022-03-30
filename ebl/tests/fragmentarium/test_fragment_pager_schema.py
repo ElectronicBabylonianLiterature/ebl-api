@@ -2,7 +2,7 @@ from ebl.fragmentarium.application.fragment_pager_info_schema import (
     FragmentPagerInfoSchema,
 )
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_schema():

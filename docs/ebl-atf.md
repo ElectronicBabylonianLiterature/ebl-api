@@ -175,7 +175,9 @@ parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
 
 parallel-text = genre, ' ', category, '.', index, ' ',
                 [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
-genre = 'L'
+genre = 'L' | 'D' | 'Lex' | 'Med'
+category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
+           (* Must be a valid numeral. *)
 stage = 'Ur3' | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA'
       | 'NB'  | 'LB'  | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
 version  = '"', { any-character }-, '"';
@@ -686,7 +688,9 @@ The ATF should be parseable using the specification above. In addition,
 all readings and signs must be correct according to our sign list. Sometimes
 when the validation or parsing logic is updated existing transliterations can
 become invalid. It should still be possible to load these transliterations, but
-saving them results in an error until the syntax is corrected.
+saving them results in an error until the syntax is corrected. 
+In addition, line numbers (`column|surface|object` + `line-number` (+ `prime`))
+should be unique.
 
 ## Labels
 

@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
@@ -9,6 +9,7 @@ from ebl.tests.factories.annotation import (
     CroppedSignFactory,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_signs_get(
@@ -30,7 +31,7 @@ def test_signs_get(
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
     )
-    cropped_sign_images_repository.create(
+    cropped_sign_images_repository.create_many(
         [
             CroppedSignImage(
                 annotation.cropped_sign.image_id, Base64("test-base64-string")

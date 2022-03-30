@@ -9,6 +9,15 @@ def collection(database):
     return MongoCollection(database, "collection")
 
 
+def test_create_many_and_find_by_id(collection):
+    documents = [{"data": "payload-1"}, {"data": "payload-2"}]
+
+    insert_ids = collection.insert_many(documents)
+    assert [
+        collection.find_one_by_id(insert_id) for insert_id in insert_ids
+    ] == documents
+
+
 def test_create_and_find_by_id(collection):
     document = {"data": "payload"}
     insert_id = collection.insert_one(document)

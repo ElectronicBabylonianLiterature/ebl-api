@@ -4,22 +4,30 @@ from mockito import spy2, unstub, verifyZeroInteractions
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 @pytest.mark.parametrize("has_photo", [True, False])
-def test_find_with_photo(
-    has_photo, fragment_finder, fragment_repository, photo_repository, when
+def test_find(
+    has_photo,
+    fragment_finder,
+    fragment_repository,
+    photo_repository,
+    parallel_line_injector,
+    when,
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
     (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
+    expected_fragment = fragment.set_text(
+        parallel_line_injector.inject_transliteration(fragment.text)
+    )
 
-    assert fragment_finder.find(number) == (fragment, has_photo)
+    assert fragment_finder.find(number) == (expected_fragment, has_photo)
 
 
 def test_find_not_found(fragment_finder, fragment_repository, when):

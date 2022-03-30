@@ -1,4 +1,4 @@
-from typing import Any, cast
+from typing import Any, cast, Sequence
 
 import inflect
 from pymongo.collection import Collection
@@ -18,6 +18,9 @@ class MongoCollection:
         self.__database = database
         self.__collection = collection
         self.__resource_noun = singlar(collection)
+
+    def insert_many(self, documents: Sequence[dict]):
+        return self.__get_collection().insert_many(documents).inserted_ids
 
     def insert_one(self, document):
         try:
