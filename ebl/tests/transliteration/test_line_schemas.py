@@ -561,12 +561,6 @@ LINES = [
             "hasCf": True,
             "museumNumber": MuseumNumberSchema().dump(MuseumNumber.of("K.1")),
             "hasDuplicates": True,
-            "surface": {
-                "status": ["CORRECTION"],
-                "surface": "OBVERSE",
-                "abbreviation": "o",
-                "text": "",
-            },
             "labels": {
                 "object": None,
                 "surface": {

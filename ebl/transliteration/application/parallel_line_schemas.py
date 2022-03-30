@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_dump, post_load, validate
+from marshmallow import Schema, fields, post_load, validate
 
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
@@ -75,10 +75,6 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["line_number"],
             data["exists"],
         )
-
-    @post_dump
-    def add_surface(self, data, **kwargs) -> dict:
-        return {**data, "surface": data["labels"]["surface"]}
 
 
 class ChapterNameSchema(Schema):
