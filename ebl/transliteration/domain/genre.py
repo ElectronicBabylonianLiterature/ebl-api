@@ -6,3 +6,4 @@ class Genre(Enum):
     LITERATURE = "L"
     DIVINATION = "D"
     LEXICOGRAPHY = "Lex"
+    MEDICINE = "Med"

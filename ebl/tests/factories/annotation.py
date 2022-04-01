@@ -1,5 +1,6 @@
 import factory.fuzzy
 
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
     AnnotationData,
@@ -37,12 +38,22 @@ class AnnotationDataFactory(factory.Factory):
     )
 
 
+class CroppedSignFactory(factory.Factory):
+    class Meta:
+        model = CroppedSign
+
+    image_id = factory.Faker("word")
+    script = factory.Faker("word")
+    label = factory.Faker("word")
+
+
 class AnnotationFactory(factory.Factory):
     class Meta:
         model = Annotation
 
     geometry = factory.SubFactory(GeometryFactory)
     data = factory.SubFactory(AnnotationDataFactory)
+    cropped_sign = factory.SubFactory(CroppedSignFactory)
 
 
 class AnnotationsFactory(factory.Factory):

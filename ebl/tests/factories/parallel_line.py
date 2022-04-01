@@ -7,10 +7,22 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 from ebl.transliteration.domain.parallel_line import (
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
 )
+
+
+class LabelsFactory(factory.Factory):
+    class Meta:
+        model = Labels
+
+    object = None
+    surface = factory.fuzzy.FuzzyChoice(
+        [None, SurfaceLabel.from_label(Surface.OBVERSE)]
+    )
+    column = None
 
 
 class ParallelFragmentFactory(factory.Factory):
@@ -20,9 +32,7 @@ class ParallelFragmentFactory(factory.Factory):
     has_cf = factory.Faker("boolean")
     museum_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     has_duplicates = factory.Faker("boolean")
-    surface = factory.fuzzy.FuzzyChoice(
-        [None, SurfaceLabel.from_label(Surface.OBVERSE)]
-    )
+    labels = factory.SubFactory(LabelsFactory)
     line_number = LineNumber(1)
     exists = None
 

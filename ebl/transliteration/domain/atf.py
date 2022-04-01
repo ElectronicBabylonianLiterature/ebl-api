@@ -8,7 +8,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "6.0.0"
+ATF_PARSER_VERSION = "6.1.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -242,9 +242,7 @@ def to_sub_index(number: Optional[int]) -> str:
 
 def sub_index_to_int(string: Optional[str]) -> Optional[int]:
     return (
-        1
-        if not string
-        else None
-        if string == "ₓ"
-        else int(unicodedata.normalize("NFKC", string))
+        (None if string == "ₓ" else int(unicodedata.normalize("NFKC", string)))
+        if string
+        else 1
     )

@@ -10,6 +10,7 @@ import pydash
 import pytest
 from PIL import Image
 from dictdiffer import diff
+
 from falcon import testing
 from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
@@ -30,6 +31,7 @@ from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
+from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
@@ -37,13 +39,14 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
-from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
-    MongoFragmentRepository,
+from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
+    MongoCroppedSignImagesRepository,
 )
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
+)
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
 )
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
@@ -53,10 +56,12 @@ from ebl.signs.infrastructure.mongo_sign_repository import (
     SignSchema,
 )
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, ObjectAtLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
@@ -101,6 +106,11 @@ def word_repository(database):
 @pytest.fixture
 def dictionary(word_repository, changelog):
     return Dictionary(word_repository, changelog)
+
+
+@pytest.fixture
+def cropped_sign_images_repository(database):
+    return MongoCroppedSignImagesRepository(database)
 
 
 @pytest.fixture
@@ -324,6 +334,25 @@ def lemma_repository(database):
 
 
 @pytest.fixture
+def annotations_service(
+    annotations_repository,
+    photo_repository,
+    changelog,
+    fragment_repository,
+    cropped_sign_images_repository,
+):
+    return AnnotationsService(
+        EblAiClient(""),
+        annotations_repository,
+        photo_repository,
+        changelog,
+        fragment_repository,
+        photo_repository,
+        cropped_sign_images_repository,
+    )
+
+
+@pytest.fixture
 def user() -> User:
     return Auth0User(
         {
@@ -352,6 +381,7 @@ def user() -> User:
 @pytest.fixture
 def context(
     ebl_ai_client,
+    cropped_sign_images_repository,
     word_repository,
     sign_repository,
     file_repository,
@@ -369,6 +399,7 @@ def context(
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=NoneAuthBackend(lambda: user),
+        cropped_sign_images_repository=cropped_sign_images_repository,
         word_repository=word_repository,
         sign_repository=sign_repository,
         public_file_repository=file_repository,

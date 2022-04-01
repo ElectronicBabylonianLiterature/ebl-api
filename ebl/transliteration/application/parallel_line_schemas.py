@@ -4,12 +4,17 @@ from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.schemas import NameEnum, ValueEnum
-from ebl.transliteration.application.label_schemas import SurfaceLabelSchema
+from ebl.transliteration.application.label_schemas import (
+    ColumnLabelSchema,
+    ObjectLabelSchema,
+    SurfaceLabelSchema,
+)
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
+    Labels,
     ParallelComposition,
     ParallelFragment,
     ParallelText,
@@ -32,12 +37,29 @@ class ParallelLineSchema(LineBaseSchema):
     has_cf = fields.Boolean(data_key="hasCf", required=True)
 
 
+class LabelsSchema(Schema):
+    object = fields.Nested(ObjectLabelSchema, allow_none=True, load_default=None)
+    surface = fields.Nested(SurfaceLabelSchema, allow_none=True, load_default=None)
+    column = fields.Nested(ColumnLabelSchema, allow_none=True, load_default=None)
+
+    @post_load
+    def make_labels(self, data, **kwargs) -> Labels:
+        return Labels(
+            data.get("object"),
+            data.get("surface"),
+            data.get("column"),
+        )
+
+
 class ParallelFragmentSchema(ParallelLineSchema):
     museum_number = fields.Nested(
         MuseumNumberSchema, required=True, data_key="museumNumber"
     )
     has_duplicates = fields.Boolean(data_key="hasDuplicates", required=True)
-    surface = fields.Nested(SurfaceLabelSchema, required=True, allow_none=True)
+    labels = fields.Nested(LabelsSchema)
+    surface = fields.Nested(
+        SurfaceLabelSchema, allow_none=True, load_default=None, load_only=True
+    )
     line_number = fields.Nested(
         OneOfLineNumberSchema, required=True, data_key="lineNumber"
     )
@@ -49,7 +71,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
             data["has_cf"],
             data["museum_number"],
             data["has_duplicates"],
-            data["surface"],
+            data.get("labels", Labels(surface=data["surface"])),
             data["line_number"],
             data["exists"],
         )

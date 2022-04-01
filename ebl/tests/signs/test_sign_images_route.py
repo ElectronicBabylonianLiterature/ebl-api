@@ -1,12 +1,15 @@
 import falcon
 
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
+
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
     AnnotationDataFactory,
+    CroppedSignFactory,
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_signs_get(
@@ -16,6 +19,7 @@ def test_signs_get(
     when,
     fragment_repository,
     text_with_labels,
+    cropped_sign_images_repository,
 ):
     fragment = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("K.2"), text=text_with_labels
@@ -23,7 +27,17 @@ def test_signs_get(
     fragment_repository.create(fragment)
 
     annotation_data = AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0])
-    annotation = AnnotationFactory.build(data=annotation_data)
+    cropped_sign = CroppedSignFactory.build(script=fragment.script)
+    annotation = AnnotationFactory.build(
+        data=annotation_data, cropped_sign=cropped_sign
+    )
+    cropped_sign_images_repository.create_many(
+        [
+            CroppedSignImage(
+                annotation.cropped_sign.image_id, Base64("test-base64-string")
+            )
+        ]
+    )
     annotations_repository.create_or_update(
         AnnotationsFactory.build(fragment_number="K.2", annotations=[annotation])
     )
@@ -34,8 +48,8 @@ def test_signs_get(
     result_json = result.json[0]
 
     assert result_json["fragmentNumber"] == str(fragment.number)
-    assert isinstance(result_json["image"], str)
-    assert result_json["script"] == fragment.script
-    assert result_json["label"] == "i Stone wig Stone wig 2"
+    assert result_json["image"] == "test-base64-string"
+    assert result_json["script"] == cropped_sign.script
+    assert result_json["label"] == cropped_sign.label
 
     assert result.status == falcon.HTTP_OK
