@@ -3,6 +3,10 @@ version: '3'
 dotenv: ['.env']
 
 tasks:
+  mycommit:
+    cmds:
+      - git add --all && git commit -m "{{.CLI_ARGS}}" && git push
+
   test-all:
     cmds:
       - task: format
