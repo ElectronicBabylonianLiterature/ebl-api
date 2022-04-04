@@ -96,7 +96,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    numbers = get_text_ids()[:2]
+    numbers = get_text_ids()
 
     with Pool(processes=args.workers) as pool:
         states = tqdm(pool.imap_unordered(update, numbers), total=len(numbers))
