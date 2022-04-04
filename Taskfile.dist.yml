@@ -3,7 +3,7 @@ version: '3'
 dotenv: ['.env']
 
 tasks:
-  mycommit:
+  cp:
     cmds:
       - poetry run black ebl
       - task: lint

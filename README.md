@@ -79,6 +79,10 @@ Dependencies can be analyzed with
 ```shell script
 pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 ```
+## Custom Git Shortcut
+```shell script
+task cp --- commit-message  # Runs black, flake8 and pyre-check and git add, commit and push
+```
 
 ## Running the tests
 
