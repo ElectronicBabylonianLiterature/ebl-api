@@ -5,6 +5,9 @@ dotenv: ['.env']
 tasks:
   mycommit:
     cmds:
+      - poetry run black ebl
+      - task: lint
+      - task: type
       - git add --all && git commit -m "{{.CLI_ARGS}}" && git push
 
   test-all:
