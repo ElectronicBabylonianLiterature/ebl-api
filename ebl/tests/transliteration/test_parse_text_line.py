@@ -60,7 +60,7 @@ def test_parser_version(parser, version):
     assert parser("1. kur").parser_version == version
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "line,expected_tokens",
     [
         (
@@ -1227,7 +1227,7 @@ def test_parse_dividers() -> None:
     assert parse_atf_lark(line).lines == Text.of_iterable(expected_tokens).lines
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "code,expected_language",
     [
         ("%ma", Language.AKKADIAN),

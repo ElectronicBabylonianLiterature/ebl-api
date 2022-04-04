@@ -499,7 +499,7 @@ def test_updating_manuscripts(
     )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "manuscripts",
     [
         tuple(),

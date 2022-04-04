@@ -74,7 +74,7 @@ LINE = Line(
 )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "old,new,expected",
     [
         (LINE, LINE, LINE),

@@ -1,13 +1,12 @@
 import itertools
-from typing import Mapping, Sequence, cast
+from typing import Mapping, Sequence
 
 import pydash
 
+import ebl.corpus.domain.chapter
 from ebl.corpus.domain.line import Line, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.translation_line import Extent
-import ebl.corpus.domain.chapter
 
 
 def validate_manuscript_ids(_instance, _attribute, value: Sequence[Manuscript]) -> None:
@@ -44,7 +43,7 @@ def _validate_extents(
         for index, line in enumerate(value)
         for translation in line.translation
         if translation.extent
-        and line_numbers.get(cast(Extent, translation.extent).number, -1) <= index
+        and line_numbers.get(translation.extent.number, -1) <= index
     ]
 
     if errors:
@@ -64,9 +63,7 @@ def _validate_extent_ranges(
                             index,
                             (
                                 translation.extent
-                                and line_numbers[
-                                    cast(Extent, translation.extent).number
-                                ]
+                                and line_numbers[translation.extent.number]
                                 or index
                             )
                             + 1,

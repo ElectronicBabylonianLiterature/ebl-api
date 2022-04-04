@@ -5,7 +5,7 @@ import pytest
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "line_number,number,has_prime,prefix,suffix,label,is_beginning",
     [
         (LineNumber(1), 1, False, None, None, "1", True),

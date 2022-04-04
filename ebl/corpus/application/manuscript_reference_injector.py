@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import cast, Iterable, List, Optional, Sequence
+from typing import Iterable, List, Optional, Sequence
 
 import attr
 
@@ -21,7 +21,7 @@ class ManuscriptReferenceInjector(ChapterVisitor):
         if self._chapter is None:
             raise Defect("Trying to access chapter before a chapter was visited.")
         else:
-            return cast(Chapter, self._chapter)
+            return self._chapter
 
     @singledispatchmethod
     def visit(self, item: ChapterItem) -> None:

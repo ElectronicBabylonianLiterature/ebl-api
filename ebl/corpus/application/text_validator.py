@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import Optional, Sequence, cast
+from typing import Optional, Sequence
 
 import pydash
 
@@ -54,10 +54,7 @@ def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter)
     return (
         f"{siglum} colophon {entry.line.atf}"
         if entry.source is None
-        else (
-            f"{chapter.lines[cast(int, entry.source)].number.atf}"
-            f" {siglum} {entry.line.atf}"
-        )
+        else (f"{chapter.lines[entry.source].number.atf}" f" {siglum} {entry.line.atf}")
     )
 
 
@@ -71,14 +68,14 @@ class TextValidator(ChapterVisitor):
         if self._line is None:
             raise Defect("Trying to access line before a line was visited.")
 
-        return cast(Line, self._line)
+        return self._line
 
     @property
     def chapter(self) -> Chapter:
         if self._chapter is None:
             raise Defect("Trying to access chapter before a chapter was visited.")
 
-        return cast(Chapter, self._chapter)
+        return self._chapter
 
     @singledispatchmethod
     def visit(self, item: ChapterItem) -> None:

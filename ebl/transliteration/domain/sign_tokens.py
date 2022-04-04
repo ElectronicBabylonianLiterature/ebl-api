@@ -88,7 +88,7 @@ class NamedSign(AbstractSign):
     def clean_value(self) -> str:
         sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
-        sign = f"({self.sign.value})" if self.sign else ""  # pyre-ignore[16]
+        sign = f"({self.sign.value})" if self.sign else ""
         return f"{self.name}{sub_index}{modifiers}{sign}"
 
     @property
@@ -104,7 +104,7 @@ class NamedSign(AbstractSign):
         sub_index = to_sub_index(self.sub_index)
         modifiers = "".join(self.modifiers)
         flags = "".join(self.string_flags)
-        sign = f"({self.sign.value})" if self.sign else ""  # pyre-ignore[16]
+        sign = f"({self.sign.value})" if self.sign else ""
         return f"{name}{sub_index}{modifiers}{flags}{sign}"
 
     def accept(self, visitor: TokenVisitor) -> None:
