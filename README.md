@@ -225,6 +225,24 @@ def on_get(self, req, resp):
     ...
 ```
 
+### Authentication and Authorization
+
+[Auth0](https://auth0.com) and [falcon-auth](https://github.com/vertexcover-io/falcon-auth)
+are used for authentication and authorization. 
+
+An endpoint can be protected using `require_scope`:
+
+```python
+import falcon
+from ebl.users.web.require_scope import require_scope
+
+@falcon.before(require_scope, "read:texts")
+def on_get(self, req, resp):
+    ...
+```
+
+If more complex checks are required the user is available in `req.context.user`.
+
 ## Running the application
 
 The application reads the configuration from following environment variables:
