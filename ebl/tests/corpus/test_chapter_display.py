@@ -21,12 +21,14 @@ def test_line_display_of_line() -> None:
         line.number,
         line.is_second_line_of_parallelism,
         line.is_beginning_of_section,
+        line.variants,
         line.variants[0].intertext,
         line.variants[0].reconstruction,
         translation_lines,
         line.variants[0].note,
         line.variants[0].parallel_lines,
     )
+
     assert line_display.title == make_title(translation_lines)
 
 
