@@ -93,7 +93,7 @@ class WordSchema(Schema):
     roots = fields.List(fields.String())
     pos = fields.List(fields.String(), required=True)
     guideWord = fields.String(validate=Length(1), required=True)
-    arabicGuideWord = fields.String(validate=Length(1), required=True)
+    arabicGuideWord = fields.String(required=True)
     oraccWords = fields.Nested(OraccWordSchema, required=True, many=True)
     akkadischeGlossareUndIndices = fields.Nested(
         AkkadischeGlossareUndIndicesSchema, load_default=None, many=True
