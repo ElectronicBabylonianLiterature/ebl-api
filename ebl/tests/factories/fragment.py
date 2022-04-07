@@ -88,6 +88,7 @@ class FragmentFactory(factory.Factory):
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
+    edited_in_oracc_project = factory.Faker(["dcclt"])
     accession = factory.Sequence(lambda n: f"accession-{n}")
     museum = factory.Faker("word")
     collection = factory.Faker("word")
