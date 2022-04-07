@@ -25,7 +25,7 @@ def test_create_response_dto(user):
             "accession": lemmatized_fragment.accession,
             "cdliNumber": lemmatized_fragment.cdli_number,
             "bmIdNumber": lemmatized_fragment.bm_id_number,
-            "editedInOraccProject": list(reference.lemmatized_fragment.edited_in_oracc_project),
+            "editedInOraccProject": list(lemmatized_fragment.edited_in_oracc_project),
             "publication": lemmatized_fragment.publication,
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
