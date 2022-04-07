@@ -54,7 +54,7 @@ class Fragment:
     accession: str = ""
     cdli_number: str = ""
     bm_id_number: str = ""
-    edited_in_oracc_project: Sequence[str] = tuple()
+    edited_in_oracc_project: str = ""
     publication: str = ""
     description: str = ""
     collection: str = ""
