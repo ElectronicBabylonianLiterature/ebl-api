@@ -148,7 +148,7 @@ def test_finding_chapter_for_display(database, text_repository) -> None:
     when_text_in_collection(database)
     when_chapter_in_collection(database)
 
-    assert text_repository.find_chapter_for_display(
+    assert text_repository.find_chapter_for_display( # TODO: Fix assertion error here
         CHAPTER.id_
     ) == ChapterDisplay.of_chapter(TEXT, CHAPTER)
 
