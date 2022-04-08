@@ -16,7 +16,7 @@ from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
-from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
@@ -221,8 +221,22 @@ class Corpus:
             lines=tuple(
                 attr.evolve(
                     line,
-                    parallel_lines=self._parallel_injector.inject(line.variants[0].parallel_lines),
+                    variants=self._inject_parallels_variants(line),
                 )
                 for line in chapter.lines
+            ),
+        )
+
+    def _inject_parallels_variants(self, line: LineDisplay) -> LineDisplay:
+        return attr.evolve(
+            line,
+            variants=list(
+                attr.evolve(
+                    variant,
+                    parallel_lines=self._parallel_injector.inject(
+                        variant.parallel_lines
+                    ),
+                )
+                for variant in line.variants
             ),
         )
