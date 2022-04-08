@@ -144,7 +144,15 @@ def test_find_chapter_for_display(
         lines=tuple(
             attr.evolve(
                 line,
-                parallel_lines=parallel_line_injector.inject(line.parallel_lines),
+                variants=tuple(
+                    attr.evolve(
+                        variant,
+                        parallel_lines=parallel_line_injector.inject(
+                            variant.parallel_lines
+                        ),
+                    )
+                    for variant in line.variants
+                ),
             )
             for line in chapter_display.lines
         ),
