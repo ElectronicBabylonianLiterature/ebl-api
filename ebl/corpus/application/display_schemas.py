@@ -28,16 +28,8 @@ class LineDisplaySchema(Schema):
     variants = fields.Nested(
         LineVariantSchema, many=True, required=True
     )
-    intertext = fields.List(
-        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple(), allow_none=True
-    )
-    reconstruction = fields.List(fields.Nested(OneOfTokenSchema), load_default=tuple())
     translation = fields.List(
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
-    )
-    note = fields.Nested(NoteLineSchema, allow_none=True, load_default=None)
-    parallel_lines = fields.Nested(
-        ParallelLineSchema, data_key="parallelLines", many=True, load_default=tuple()
     )
 
     @post_load
@@ -47,11 +39,7 @@ class LineDisplaySchema(Schema):
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             data["variants"],
-            tuple(data["intertext"] or []),
-            tuple(data["reconstruction"]),
             tuple(data["translation"] or []),
-            data["note"],
-            tuple(data["parallel_lines"]),
         )
 
 

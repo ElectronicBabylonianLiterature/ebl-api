@@ -1,9 +1,9 @@
-from typing import Optional, Sequence
+from typing import Optional, Sequence, List
 
 import attr
 
 from ebl.corpus.domain.chapter import ChapterId, Chapter
-from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line import Line, LineVariant
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import Text
 from ebl.transliteration.domain.note_line import NoteLine
@@ -35,12 +35,8 @@ class LineDisplay:
     number: AbstractLineNumber
     is_second_line_of_parallelism: bool
     is_beginning_of_section: bool
-    variants: list #TODO: Add schema
-    intertext: Sequence[MarkupPart]
-    reconstruction: Sequence[Token]
+    variants: List[LineVariant]
     translation: Sequence[TranslationLine]
-    note: Optional[NoteLine]
-    parallel_lines: Sequence[ParallelLine]
 
     @property
     def title(self) -> Sequence[MarkupPart]:
@@ -48,18 +44,12 @@ class LineDisplay:
 
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
-        first_variant = line.variants[0]
-        # TODO: Change to display all variants
         return LineDisplay(
             line.number,
             line.is_second_line_of_parallelism,
             line.is_beginning_of_section,
             line.variants,
-            first_variant.intertext,
-            first_variant.reconstruction,
             line.translation,
-            first_variant.note,
-            first_variant.parallel_lines,
         )
 
 
