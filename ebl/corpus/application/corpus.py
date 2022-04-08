@@ -221,7 +221,7 @@ class Corpus:
             lines=tuple(
                 attr.evolve(
                     line,
-                    parallel_lines=self._parallel_injector.inject(line.parallel_lines),
+                    parallel_lines=self._parallel_injector.inject(line.variants[0].parallel_lines),
                 )
                 for line in chapter.lines
             ),

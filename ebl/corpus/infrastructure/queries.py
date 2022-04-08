@@ -110,7 +110,7 @@ def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
 
 
 def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
-    # TODO: return all line variant data, not just the first element.
+    # TODO: cleanup, remove first variant mappings?
     return [
         {"$match": chapter_id_query(id_)},
         {
@@ -126,54 +126,6 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                             "isBeginningOfSection": "$$line.isBeginningOfSection",
                             "translation": "$$line.translation",
                             "variants": "$$line.variants",
-                            "intertext": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.intertext",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
-                            "reconstruction": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.reconstruction",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
-                            "note": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.note",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
-                            "parallelLines": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.parallelLines",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
                         },
                     }
                 },
