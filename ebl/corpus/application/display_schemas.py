@@ -26,7 +26,7 @@ class LineDisplaySchema(Schema):
         required=True, data_key="isBeginningOfSection"
     )
     variants = fields.List(
-        fields.Nested(LineVariantSchema), many=True, required=True
+        fields.Nested(LineVariantSchema, many=True), required=True
     )
     translation = fields.List(
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
