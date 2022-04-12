@@ -176,9 +176,9 @@ class LineVariantSchema(Schema):
 
 class LineSchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
-    variants = fields.List(fields.Nested(
+    variants = fields.Nested(
         LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
-    ))
+    )
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )

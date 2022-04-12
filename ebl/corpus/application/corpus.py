@@ -230,7 +230,7 @@ class Corpus:
     def _inject_parallels_variants(self, line: LineDisplay) -> LineDisplay:
         return attr.evolve(
             line,
-            variants=list(
+            variants=tuple(
                 attr.evolve(
                     variant,
                     parallel_lines=self._parallel_injector.inject(

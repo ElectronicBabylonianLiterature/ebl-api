@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, List
+from typing import Optional, Sequence
 
 import attr
 
@@ -35,7 +35,7 @@ class LineDisplay:
     number: AbstractLineNumber
     is_second_line_of_parallelism: bool
     is_beginning_of_section: bool
-    variants: List[LineVariant]
+    variants: Sequence[LineVariant]
     translation: Sequence[TranslationLine]
 
     @property

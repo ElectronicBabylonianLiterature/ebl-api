@@ -25,9 +25,7 @@ class LineDisplaySchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    variants = fields.List(
-        fields.Nested(LineVariantSchema, many=True), required=True
-    )
+    variants = fields.Nested(LineVariantSchema, many=True, required=True)
     translation = fields.List(
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
     )
@@ -38,7 +36,7 @@ class LineDisplaySchema(Schema):
             data["number"],
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            data["variants"],
+            tuple(data["variants"]),
             tuple(data["translation"] or []),
         )
 
@@ -49,7 +47,7 @@ class ChapterDisplaySchema(Schema):
     text_has_doi = fields.Boolean(data_key="textHasDoi", load_default=False)
     is_single_stage = fields.Boolean(required=True, data_key="isSingleStage")
     title = fields.List(fields.Nested(OneOfNoteLinePartSchema), dump_only=True)
-    lines = fields.List(fields.Nested(LineDisplaySchema), many=True, required=True)
+    lines = fields.Nested(LineDisplaySchema, many=True, required=True)
     record = fields.Nested(RecordSchema, load_default=Record())
 
     @post_load
