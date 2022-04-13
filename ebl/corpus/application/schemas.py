@@ -52,9 +52,21 @@ from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
 
 
+class OldSiglumSchema(Schema):
+    siglum = fields.String(required=True)
+    reference = fields.Nested(ReferenceSchema, required=True)
+
+
 class ManuscriptSchema(Schema):
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
+    old_siglum = fields.Nested(
+        OldSiglumSchema,
+        required=False,
+        data_key="oldSiglum",
+        many=True,
+        load_default=tuple(),
+    )
     museum_number: fields.Field = fields.Nested(
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
@@ -109,6 +121,7 @@ class ManuscriptSchema(Schema):
         return Manuscript(
             data["id"],
             data["siglum_disambiguator"],
+            data["old_siglum"],
             data["museum_number"],
             data["accession"],
             data["period_modifier"],

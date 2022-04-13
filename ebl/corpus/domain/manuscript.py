@@ -118,6 +118,12 @@ class Siglum:
         )
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class OldSiglum:
+    siglum: str = ""
+    reference: Optional[Reference] = None
+
+
 def is_invalid_standard_text(provenance, period, type_) -> bool:
     return provenance is Provenance.STANDARD_TEXT and (
         period is not Period.NONE or type_ is not ManuscriptType.NONE
@@ -134,6 +140,7 @@ def is_invalid_non_standard_text(provenance, period, type_) -> bool:
 class Manuscript:
     id: int
     siglum_disambiguator: str = ""
+    old_siglum: Sequence[OldSiglum] = tuple()
     museum_number: Optional[MuseumNumber] = None
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
