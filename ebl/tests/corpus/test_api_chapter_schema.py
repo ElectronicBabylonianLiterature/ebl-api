@@ -2,7 +2,11 @@ from typing import Tuple
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.record_schemas import RecordSchema
-from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiManuscriptSchema
+from ebl.corpus.web.chapter_schemas import (
+    ApiChapterSchema,
+    ApiManuscriptSchema,
+    ApiOldSiglumSchema,
+)
 from ebl.corpus.domain.chapter import Chapter
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -133,6 +137,7 @@ def test_serialize_manuscript() -> None:
     assert ApiManuscriptSchema().dump(manuscript) == {
         "id": manuscript.id,
         "siglumDisambiguator": manuscript.siglum_disambiguator,
+        "oldSiglum": ApiOldSiglumSchema().dump(manuscript.old_siglum, many=True),
         "museumNumber": str(manuscript.museum_number)
         if manuscript.museum_number
         else "",
@@ -151,13 +156,16 @@ def test_serialize_manuscript() -> None:
 
 
 def test_deserialize_manuscript() -> None:
-    references = (ReferenceFactory.build(with_document=False),)
+    references = (ReferenceFactory.build(with_document=True),)
     manuscript = ManuscriptFactory.build(references=references)
     assert (
         ApiManuscriptSchema().load(
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
+                "oldSiglum": ApiOldSiglumSchema().dump(
+                    manuscript.old_siglum, many=True
+                ),
                 "museumNumber": str(manuscript.museum_number)
                 if manuscript.museum_number
                 else "",

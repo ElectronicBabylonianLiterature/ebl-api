@@ -3,7 +3,7 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
     ReferenceSchema,
 )
-from ebl.corpus.application.schemas import ChapterSchema
+from ebl.corpus.application.schemas import ChapterSchema, OldSiglumSchema
 from ebl.corpus.application.record_schemas import (
     AuthorSchema,
     RecordSchema,
@@ -11,6 +11,7 @@ from ebl.corpus.application.record_schemas import (
 )
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.record import Author, AuthorRole, Translator
+from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -93,6 +94,9 @@ def to_dict(chapter: Chapter, include_documents=False):
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
+                "oldSiglum": (
+                    ApiOldSiglumSchema if include_documents else OldSiglumSchema
+                )().dump(manuscript.old_siglum, many=True),
                 "museumNumber": (
                     (str(manuscript.museum_number) if manuscript.museum_number else "")
                     if include_documents
