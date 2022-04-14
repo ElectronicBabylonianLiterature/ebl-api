@@ -16,7 +16,7 @@ from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
-from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
+from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate

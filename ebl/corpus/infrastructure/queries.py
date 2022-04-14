@@ -110,7 +110,6 @@ def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
 
 
 def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
-    # TODO: cleanup, remove first variant mappings?
     return [
         {"$match": chapter_id_query(id_)},
         {

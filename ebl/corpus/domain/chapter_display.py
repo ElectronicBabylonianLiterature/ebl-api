@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Sequence
 
 import attr
 
@@ -6,14 +6,11 @@ from ebl.corpus.domain.chapter import ChapterId, Chapter
 from ebl.corpus.domain.line import Line, LineVariant
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import Text
-from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
 )
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.markup import MarkupPart, to_title
 
 

@@ -7,14 +7,11 @@ from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
-    NoteLineSchema,
     TranslationLineSchema,
 )
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
-from ebl.transliteration.application.one_of_line_schema import ParallelLineSchema
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
 class LineDisplaySchema(Schema):
