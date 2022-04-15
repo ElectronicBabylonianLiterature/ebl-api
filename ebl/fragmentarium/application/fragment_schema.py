@@ -77,6 +77,9 @@ class FragmentSchema(Schema):
     accession = fields.String(required=True)
     cdli_number = fields.String(required=True, data_key="cdliNumber")
     bm_id_number = fields.String(required=True, data_key="bmIdNumber")
+    edited_in_oracc_project = fields.String(
+        required=True, data_key="editedInOraccProject"
+    )
     publication = fields.String(required=True)
     description = fields.String(required=True)
     collection = fields.String(required=True)
