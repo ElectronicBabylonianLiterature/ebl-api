@@ -369,34 +369,42 @@ def test_search_finds_by_cdli(database, fragment_repository):
         str(fragment.number)
     ) == [fragment]
 
+def test_search_fragmentarium_number(database, fragment_repository):
+    fragment = FragmentFactory.build()
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
+
+    assert fragment_repository.query_fragmentarium(
+        str(fragment.number)
+    ) == [fragment]
+
 
 def test_search_not_found(fragment_repository):
-    assert (fragment_repository.query_by_fragment_cdli_or_accession_number("K.1")) == []
+    assert (fragment_repository.query_fragmentarium("K.1")) == []
 
 
-def test_search_reference_id(database, fragment_repository):
+def test_search_fragmentarium_reference_id(database, fragment_repository):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id, None
-        )
+        fragment_repository.query_fragmentarium(id=fragment.references[0].id)
     ) == [fragment]
 
 
 @pytest.mark.parametrize(
     "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
 )
-def test_search_reference_id_and_pages(pages, database, fragment_repository):
+def test_search_fragmentarium_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id, "163"
+        fragment_repository.query_fragmentarium(
+            id=fragment.references[0].id, pages="163"
         )
     ) == [fragment]
 
@@ -410,8 +418,8 @@ def test_empty_result_search_reference_id_and_pages(
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id, "163"
+        fragment_repository.query_fragmentarium(
+            id=fragment.references[0].id, pages="163"
         )
     ) == []
 
@@ -431,7 +439,7 @@ def test_search_signs(signs, is_match, fragment_repository):
     fragment_repository.create(transliterated_fragment)
     fragment_repository.create(FragmentFactory.build())
 
-    result = fragment_repository.query_by_transliteration(TransliterationQuery(signs))
+    result = fragment_repository.query_fragmentarium(transliteration=TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
     assert result == expected
 

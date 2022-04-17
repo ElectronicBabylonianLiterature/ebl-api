@@ -27,7 +27,9 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.transliteration_query_factory import TransliterationQueryFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
@@ -179,6 +181,28 @@ class MongoFragmentRepository(FragmentRepository):
             return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
+
+
+    def query_fragmentarium(self, number: str = "", transliteration: Optional[TransliterationQuery] = None , id: str = "", pages: str = "") -> Sequence[dict]:
+        number_query = number_is(number) if number else {}
+        signs_query = {}
+        if transliteration:
+            if not transliteration.is_empty():
+                signs_query = {"signs": {"$regex": transliteration.regexp}}
+
+        id_query = {}
+        if id:
+            id_query = {"references": {"$elemMatch": {"id": id}}}
+            if pages:
+                id_query["references"]["$elemMatch"]["pages"] = {
+                    "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
+                }
+        cursor = self._fragments.find_many(
+            {**number_query, **signs_query, **id_query}, limit=100, projection={"joins": False}
+        )
+        return self._map_fragments(cursor)
+
+
 
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}
