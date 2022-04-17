@@ -1,12 +1,11 @@
 import pytest
-from mockito import spy2, unstub, verifyZeroInteractions
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
@@ -77,19 +76,9 @@ def test_fragment_finder(fragment_finder, fragment_repository, when):
     assert fragment_finder.fragment_pager(fragment_number) == expected
 
 
-def test_search(fragment_finder, fragment_repository, when):
-    fragment = FragmentFactory.build()
-    query = fragment.number
-    (
-        when(fragment_repository)
-        .query_by_fragment_cdli_or_accession_number(query)
-        .thenReturn([fragment])
-    )
-
-    assert fragment_finder.search(query) == [FragmentInfo.of(fragment)]
-
-
-def test_inject_document_in_fragment_infos(fragment_finder, when, bibliography):
+def test_search_fragmentarium_inject_document_in_fragment_infos(
+    fragment_finder, when, bibliography
+):
     bibliography_entry = BibliographyEntryFactory.build()
     fragment_1 = FragmentInfo.of(
         FragmentFactory.build(
@@ -116,17 +105,29 @@ def test_inject_document_in_fragment_infos(fragment_finder, when, bibliography):
     )
     (
         when(fragment_finder)
-        .search_references("id", "pages")
+        .search("", None, "id", "pages")
         .thenReturn([fragment_1, fragment_2])
     )
     (when(bibliography).find("RN.0").thenReturn(bibliography_entry))
     (when(bibliography).find("RN.1").thenReturn(bibliography_entry))
     (when(bibliography).find("RN.2").thenReturn(bibliography_entry))
 
-    assert fragment_finder.search_references_in_fragment_infos("id", "pages") == [
+    assert fragment_finder.search_fragmentarium("", None, "id", "pages") == [
         fragment_expected_1,
         fragment_expected_2,
     ]
+
+
+def test_search(fragment_finder, fragment_repository, when):
+    fragment = FragmentFactory.build()
+    query = fragment.number
+    (
+        when(fragment_repository)
+        .query_fragmentarium(query, None, "", "")
+        .thenReturn([fragment])
+    )
+
+    assert fragment_finder.search(query, None, "", "") == [FragmentInfo.of(fragment)]
 
 
 def test_fragment_search_references(fragment_finder, fragment_repository, when):
@@ -147,7 +148,9 @@ def test_fragment_search_references(fragment_finder, fragment_repository, when):
     ]
 
 
-def test_search_transliteration(fragment_finder, fragment_repository, when):
+def test_search_fragmentarium_transliteration(
+    fragment_finder, fragment_repository, when
+):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     sign_matrix = [["MA", "UD"]]
     query = TransliterationQuery(sign_matrix)
@@ -155,7 +158,7 @@ def test_search_transliteration(fragment_finder, fragment_repository, when):
 
     (
         when(fragment_repository)
-        .query_by_transliteration(query)
+        .query_fragmentarium("", query, "", "")
         .thenReturn(matching_fragments)
     )
 
@@ -163,23 +166,12 @@ def test_search_transliteration(fragment_finder, fragment_repository, when):
     expected = [
         FragmentInfo.of(fragment, expected_lines) for fragment in matching_fragments
     ]
-    assert fragment_finder.search_transliteration(query) == expected
+    assert fragment_finder.search_fragmentarium("", query, "", "") == expected
 
 
 @pytest.mark.parametrize(
     "query, expected", [([[""]], []), ([[""], [""]], []), ([["", ""]], [])]
 )
-def test_search_transliteration_empty(
-    query, expected, fragment_finder, fragment_repository
-):
-    spy2(fragment_repository.query_by_transliteration)
-    query = TransliterationQuery(query)
-    test_result = fragment_finder.search_transliteration(query)
-    verifyZeroInteractions(fragment_repository)
-    assert test_result == expected
-    unstub()
-
-
 def test_find_photo(fragment_finder, photo, photo_repository, when):
     number = "K.1"
     file_name = f"{number}.jpg"

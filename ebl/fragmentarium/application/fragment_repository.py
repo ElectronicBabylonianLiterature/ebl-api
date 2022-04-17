@@ -31,16 +31,6 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_id_and_page_in_references(
-        self, id_: str, pages: str
-    ) -> List[Fragment]:
-        ...
-
-    @abstractmethod
-    def query_by_fragment_cdli_or_accession_number(self, number: str) -> List[Fragment]:
-        ...
-
-    @abstractmethod
     def query_random_by_transliterated(self) -> List[Fragment]:
         ...
 
@@ -54,10 +44,6 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_by_transliterated_not_revised_by_other(self) -> List[FragmentInfo]:
-        ...
-
-    @abstractmethod
-    def query_by_transliteration(self, query: TransliterationQuery) -> List[Fragment]:
         ...
 
     @abstractmethod
@@ -98,5 +84,11 @@ class FragmentRepository(ABC):
     def update_references(self, fragment: Fragment) -> None:
         ...
 
-    def query_fragmentarium(self, number: str = "", transliteration: Optional[TransliterationQuery] = None , id: str = "", pages: str = ""):
+    def query_fragmentarium(
+        self,
+        number: str = "",
+        transliteration: Optional[TransliterationQuery] = None,
+        id: str = "",
+        pages: str = "",
+    ):
         ...

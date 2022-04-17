@@ -359,25 +359,13 @@ def test_search_finds_by_accession(database, fragment_repository):
     ) == [fragment]
 
 
-def test_search_finds_by_cdli(database, fragment_repository):
-    fragment = FragmentFactory.build()
-    database[COLLECTION].insert_many(
-        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
-    )
-
-    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
-        str(fragment.number)
-    ) == [fragment]
-
 def test_search_fragmentarium_number(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many(
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert fragment_repository.query_fragmentarium(
-        str(fragment.number)
-    ) == [fragment]
+    assert fragment_repository.query_fragmentarium(str(fragment.number)) == [fragment]
 
 
 def test_search_not_found(fragment_repository):
@@ -389,9 +377,9 @@ def test_search_fragmentarium_reference_id(database, fragment_repository):
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
-    assert (
-        fragment_repository.query_fragmentarium(id=fragment.references[0].id)
-    ) == [fragment]
+    assert (fragment_repository.query_fragmentarium(id=fragment.references[0].id)) == [
+        fragment
+    ]
 
 
 @pytest.mark.parametrize(
@@ -439,7 +427,9 @@ def test_search_signs(signs, is_match, fragment_repository):
     fragment_repository.create(transliterated_fragment)
     fragment_repository.create(FragmentFactory.build())
 
-    result = fragment_repository.query_fragmentarium(transliteration=TransliterationQuery(signs))
+    result = fragment_repository.query_fragmentarium(
+        transliteration=TransliterationQuery(signs)
+    )
     expected = [transliterated_fragment] if is_match else []
     assert result == expected
 
