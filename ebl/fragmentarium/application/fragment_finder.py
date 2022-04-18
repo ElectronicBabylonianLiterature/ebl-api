@@ -75,7 +75,7 @@ class FragmentFinder:
                 fragment_infos_with_documents.append(
                     fragment_info.set_references(references_with_documents)
                 )
-                return fragment_infos_with_documents
+            return fragment_infos_with_documents
         return fragment_infos
 
     def find_random(self) -> List[FragmentInfo]:

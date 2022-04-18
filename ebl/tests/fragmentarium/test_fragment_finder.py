@@ -130,24 +130,6 @@ def test_search(fragment_finder, fragment_repository, when):
     assert fragment_finder.search(query, None, "", "") == [FragmentInfo.of(fragment)]
 
 
-def test_fragment_search_references(fragment_finder, fragment_repository, when):
-    fragment = FragmentFactory.build(
-        references=(ReferenceFactory(), ReferenceFactory())
-    )
-
-    references_id = fragment.references[0].id
-    references_pages = fragment.references[0].pages
-
-    (
-        when(fragment_repository)
-        .query_by_id_and_page_in_references(references_id, references_pages)
-        .thenReturn([fragment])
-    )
-    assert fragment_finder.search_references(references_id, references_pages) == [
-        FragmentInfo.of(fragment)
-    ]
-
-
 def test_search_fragmentarium_transliteration(
     fragment_finder, fragment_repository, when
 ):
@@ -169,9 +151,6 @@ def test_search_fragmentarium_transliteration(
     assert fragment_finder.search_fragmentarium("", query, "", "") == expected
 
 
-@pytest.mark.parametrize(
-    "query, expected", [([[""]], []), ([[""], [""]], []), ([["", ""]], [])]
-)
 def test_find_photo(fragment_finder, photo, photo_repository, when):
     number = "K.1"
     file_name = f"{number}.jpg"
