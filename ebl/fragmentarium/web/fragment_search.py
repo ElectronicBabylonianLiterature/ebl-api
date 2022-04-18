@@ -78,6 +78,5 @@ class FragmentSearch:
         when=lambda req, _: req.params.keys() <= CACHED_COMMANDS,
     )
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        print(req.params)
         infos = self._dispatch(req.params)
         resp.media = ApiFragmentInfoSchema(many=True).dump(infos)

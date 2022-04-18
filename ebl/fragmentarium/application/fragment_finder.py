@@ -65,18 +65,17 @@ class FragmentFinder:
         pages: str,
     ) -> List[FragmentInfo]:
         fragment_infos = self.search(number, transliteration, id, pages)
-        if id:
-            fragment_infos_with_documents = []
-            for fragment_info in fragment_infos:
-                references_with_documents = [
-                    reference.set_document(self._bibliography.find(reference.id))
-                    for reference in fragment_info.references
-                ]
-                fragment_infos_with_documents.append(
-                    fragment_info.set_references(references_with_documents)
-                )
-            return fragment_infos_with_documents
-        return fragment_infos
+
+        fragment_infos_with_documents = []
+        for fragment_info in fragment_infos:
+            references_with_documents = [
+                reference.set_document(self._bibliography.find(reference.id))
+                for reference in fragment_info.references
+            ]
+            fragment_infos_with_documents.append(
+                fragment_info.set_references(references_with_documents)
+            )
+        return fragment_infos_with_documents
 
     def find_random(self) -> List[FragmentInfo]:
         return list(
