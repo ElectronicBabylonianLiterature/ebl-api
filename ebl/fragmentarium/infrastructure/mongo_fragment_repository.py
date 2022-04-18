@@ -201,12 +201,23 @@ class MongoFragmentRepository(FragmentRepository):
                 id_query["references"]["$elemMatch"]["pages"] = {
                     "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
                 }
+        x = {**number_query, **signs_query, **id_query}
         cursor = self._fragments.find_many(
             {**number_query, **signs_query, **id_query},
             limit=100,
             projection={"joins": False},
         )
         return self._map_fragments(cursor)
+
+    def query_by_id_and_page_in_references(self, id_: str, pages: str):
+        match: dict = {"references": {"$elemMatch": {"id": id_}}}
+        if pages:
+            match["references"]["$elemMatch"]["pages"] = {
+                "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
+            }
+        cursor = self._fragments.find_many(match, projection={"joins": False})
+        return self._map_fragments(cursor)
+
 
     def query_random_by_transliterated(self):
         cursor = self._fragments.aggregate(

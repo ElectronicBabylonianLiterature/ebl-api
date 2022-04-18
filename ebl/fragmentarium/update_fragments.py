@@ -133,7 +133,7 @@ if __name__ == "__main__":
         "--workers",
         type=int,
         help="Number of threads to perform migration",
-        default=6,
+        default=12,
     )
     args = parser.parse_args()
 
