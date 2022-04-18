@@ -63,9 +63,9 @@ class FragmentSearch:
 
     @staticmethod
     def _validate_pages(id: str, pages: str) -> Tuple[str, str]:
-        if pages and not id:
-            raise DataError("Name, Year or Title required")
-        if pages and id:
+        if pages:
+            if not id:
+                raise DataError("Name, Year or Title required")
             try:
                 int(pages)
             except ValueError as error:
