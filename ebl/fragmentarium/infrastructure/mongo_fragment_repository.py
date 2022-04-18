@@ -190,9 +190,8 @@ class MongoFragmentRepository(FragmentRepository):
     ) -> Sequence[dict]:
         number_query = number_is(number) if number else {}
         signs_query = {}
-        if transliteration:
-            if not transliteration.is_empty():
-                signs_query = {"signs": {"$regex": transliteration.regexp}}
+        if transliteration and not transliteration.is_empty():
+            signs_query = {"signs": {"$regex": transliteration.regexp}}
 
         id_query = {}
         if id:
