@@ -1,3 +1,3 @@
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
-FRAGMENTS_COLLECTION = "fragments_copy"
+FRAGMENTS_COLLECTION = "fragments"
