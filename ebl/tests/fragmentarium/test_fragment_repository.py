@@ -337,35 +337,15 @@ def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_lines() == 0
 
 
-def test_search_finds_by_id(database, fragment_repository):
-    fragment = FragmentFactory.build()
-    database[COLLECTION].insert_many(
-        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
-    )
-
-    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
-        str(fragment.number)
-    ) == [fragment]
-
-
-def test_search_finds_by_accession(database, fragment_repository):
-    fragment = FragmentFactory.build()
-    database[COLLECTION].insert_many(
-        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
-    )
-
-    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
-        str(fragment.number)
-    ) == [fragment]
-
-
 def test_query_fragmentarium_number(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many(
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert fragment_repository.query_fragmentarium(str(fragment.number)) == [fragment]
+    assert fragment_repository.query_fragmentarium(number=str(fragment.number)) == [
+        fragment
+    ]
 
 
 def test_query_fragmentarium_not_found(fragment_repository):
@@ -391,8 +371,8 @@ def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_by_id_and_page_in_references(
-            fragment.references[0].id, "163"
+        fragment_repository.query_fragmentarium(
+            id=fragment.references[0].id, pages="163"
         )
     ) == [fragment]
 
