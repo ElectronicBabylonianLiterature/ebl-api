@@ -99,4 +99,5 @@ class WordSchema(Schema):
         AkkadischeGlossareUndIndicesSchema, load_default=None, many=True
     )
     cdaAddenda = fields.String()
+    supplementsAkkadianDictionaries = fields.String()
     origin = fields.String(required=True)
