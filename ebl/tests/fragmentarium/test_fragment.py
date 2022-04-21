@@ -54,6 +54,11 @@ def test_bm_id_number():
     assert fragment.bm_id_number == "bmId-2"
 
 
+def test_edited_in_oracc_project():
+    fragment = FragmentFactory.build(edited_in_oracc_project="dcclt")
+    assert fragment.edited_in_oracc_project == "dcclt"
+
+
 def test_publication():
     fragment = FragmentFactory.build(publication="publication")
     assert fragment.publication == "publication"
