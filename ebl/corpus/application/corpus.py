@@ -130,6 +130,11 @@ class Corpus:
         except NotFoundError as error:
             raise Defect(error) from error
 
+    # TODO: 
+    # - Profile the queries to check what takes most time (VMProf, cProfile - https://www.pypy.org/performance.html)
+    # - Create chapter info directly from the database.
+    # - Try to adjust the query level to look for line.
+
     def search_transliteration(self, query: TransliterationQuery) -> List[ChapterInfo]:
         return (
             []
