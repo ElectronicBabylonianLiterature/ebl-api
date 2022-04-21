@@ -1,5 +1,5 @@
 import operator
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Callable, List, Optional, Sequence, Tuple, cast, Dict, Any
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -193,7 +193,7 @@ class MongoFragmentRepository(FragmentRepository):
         if transliteration and not transliteration.is_empty():
             signs_query = {"signs": {"$regex": transliteration.regexp}}
 
-        id_query = {}
+        id_query: Dict[Any, Any] = {}
         if id:
             id_query = {"references": {"$elemMatch": {"id": id}}}
             if pages:
