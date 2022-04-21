@@ -674,10 +674,10 @@ def test_importing_lines(
     atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
     updated_chapter = attr.evolve(
         CHAPTER,
-        lines=(
+        lines=(  # pyre-ignore[60]
             *CHAPTER.lines,
             *parse_chapter(atf, CHAPTER.manuscripts),
-        ),  # pyre-ignore[60]
+        ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
