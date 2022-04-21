@@ -1,5 +1,5 @@
 import operator
-from typing import Callable, List, Optional, Sequence, Tuple, cast, Dict, Any
+from typing import Callable, List, Optional, Sequence, Tuple, cast
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -189,17 +189,17 @@ class MongoFragmentRepository(FragmentRepository):
         pages: str = "",
     ) -> Sequence[dict]:
         number_query = number_is(number) if number else {}
-        signs_query = {}
-        if transliteration and not transliteration.is_empty():
-            signs_query = {"signs": {"$regex": transliteration.regexp}}
+        signs_query = (
+            {"signs": {"$regex": transliteration.regexp}}
+            if transliteration and not transliteration.is_empty()
+            else {}
+        )
 
-        id_query: Dict[Any, Any] = {}
-        if id:
-            id_query = {"references": {"$elemMatch": {"id": id}}}
-            if pages:
-                id_query["references"]["$elemMatch"]["pages"] = {
-                    "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
-                }
+        id_query = {"references": {"$elemMatch": {"id": id}}} if id else dict()
+        if id and pages:
+            id_query["references"]["$elemMatch"]["pages"] = {
+                "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
+            }
         cursor = self._fragments.find_many(
             {**number_query, **signs_query, **id_query},
             limit=100,
