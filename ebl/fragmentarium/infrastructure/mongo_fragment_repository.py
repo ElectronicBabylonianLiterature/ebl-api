@@ -1,5 +1,5 @@
 import operator
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Callable, List, Optional, Sequence, Tuple, cast, Dict
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -181,6 +181,28 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
+    def query_fragmentarium_create_query(
+        self,
+        number: str = "",
+        transliteration: Optional[TransliterationQuery] = None,
+        id: str = "",
+        pages: str = "",
+    ) -> dict:
+        number_query = number_is(number) if number else {}
+        signs_query = (
+            {"signs": {"$regex": transliteration.regexp}}
+            if transliteration and not transliteration.is_empty()
+            else {}
+        )
+        id_query: Dict[str, Dict] = dict()
+        if id:
+            id_query = {"references": {"$elemMatch": {"id": id}}}
+            if pages:
+                id_query["references"]["$elemMatch"]["pages"] = {
+                    "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
+                }
+        return {**number_query, **signs_query, **id_query}
+
     def query_fragmentarium(
         self,
         number: str = "",
@@ -188,20 +210,8 @@ class MongoFragmentRepository(FragmentRepository):
         id: str = "",
         pages: str = "",
     ) -> Sequence[dict]:
-        number_query = number_is(number) if number else {}
-        signs_query = (
-            {"signs": {"$regex": transliteration.regexp}}
-            if transliteration and not transliteration.is_empty()
-            else {}
-        )
-
-        id_query = {"references": {"$elemMatch": {"id": id}}} if id else dict()
-        if id and pages:
-            id_query["references"]["$elemMatch"]["pages"] = {
-                "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
-            }
         cursor = self._fragments.find_many(
-            {**number_query, **signs_query, **id_query},
+            self.query_fragmentarium_create_query(number, transliteration, id, pages),
             limit=100,
             projection={"joins": False},
         )
