@@ -198,7 +198,7 @@ class Chapter:
     ) -> Sequence[TextLineEntry]:
         def create_entry(line: Line, index: int) -> Optional[TextLineEntry]:
             text_line = line.get_manuscript_text_line(manuscript.id)
-            return text_line and TextLineEntry(text_line, index)
+            return TextLineEntry(text_line, index) if text_line else None
 
         return (
             pydash.chain(self.lines)

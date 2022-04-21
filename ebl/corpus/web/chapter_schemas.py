@@ -165,7 +165,7 @@ def _parse_recontsruction(
         text, note, parallel_lines = _split_reconstruction(reconstruction)
         return (
             parse_reconstructed_line(text),
-            note and parse_note_line(note),
+            parse_note_line(note) if note else None,
             tuple(parse_parallel_line(line) for line in parallel_lines),
         )
     except (*PARSE_ERRORS, ValueError) as error:

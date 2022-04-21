@@ -49,10 +49,10 @@ class Annotation:
             image.size[0], image.size[1], [self]
         )[0]
         area = (
-            bounding_box.top_left_x,
-            bounding_box.top_left_y,
-            bounding_box.top_left_x + bounding_box.width,
-            bounding_box.top_left_y + bounding_box.height,
+            int(bounding_box.top_left_x),
+            int(bounding_box.top_left_y),
+            int(bounding_box.top_left_x + bounding_box.width),
+            int(bounding_box.top_left_y + bounding_box.height),
         )
         cropped_image = image.crop(area)
         buf = io.BytesIO()

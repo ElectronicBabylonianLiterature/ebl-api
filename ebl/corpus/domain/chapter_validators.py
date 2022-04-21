@@ -62,9 +62,8 @@ def _validate_extent_ranges(
                         range(
                             index,
                             (
-                                translation.extent
-                                and line_numbers[translation.extent.number]
-                                or index
+                                line_numbers[translation.extent.number] if translation.extent else index
+
                             )
                             + 1,
                         )
