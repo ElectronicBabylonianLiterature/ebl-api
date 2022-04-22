@@ -88,7 +88,7 @@ def test_updating_invalid_reference(
     manuscript = {
         "id": chapter.manuscripts[0].id,
         "siglumDisambiguator": "1c",
-        "oldSiglum": [],
+        "oldSigla": [],
         "museumNumber": "X.1",
         "accession": "",
         "periodModifier": PeriodModifier.NONE.value,
@@ -141,7 +141,7 @@ AMBIGUOUS_MANUSCRIPTS = {
         {
             "id": 1,
             "siglumDisambiguator": "1c",
-            "oldSiglum": [],
+            "oldSigla": [],
             "museumNumber": "X.1",
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
@@ -156,7 +156,7 @@ AMBIGUOUS_MANUSCRIPTS = {
         {
             "id": 2,
             "siglumDisambiguator": "1c",
-            "oldSiglum": [],
+            "oldSigla": [],
             "museumNumber": "X.2",
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
@@ -178,7 +178,7 @@ INVALID_MUSEUM_NUMBER = {
         {
             "id": 1,
             "siglumDisambiguator": "1c",
-            "oldSiglum": [],
+            "oldSigla": [],
             "museumNumber": "invalid",
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
@@ -200,7 +200,7 @@ INVALID_PROVENANCE = {
         {
             "id": 1,
             "siglumDisambiguator": "1c",
-            "oldSiglum": [],
+            "oldSigla": [],
             "museumNumber": "invalid",
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,

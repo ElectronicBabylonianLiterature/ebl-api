@@ -137,7 +137,7 @@ def test_serialize_manuscript() -> None:
     assert ApiManuscriptSchema().dump(manuscript) == {
         "id": manuscript.id,
         "siglumDisambiguator": manuscript.siglum_disambiguator,
-        "oldSiglum": ApiOldSiglumSchema().dump(manuscript.old_siglum, many=True),
+        "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
         "museumNumber": str(manuscript.museum_number)
         if manuscript.museum_number
         else "",
@@ -163,9 +163,7 @@ def test_deserialize_manuscript() -> None:
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
-                "oldSiglum": ApiOldSiglumSchema().dump(
-                    manuscript.old_siglum, many=True
-                ),
+                "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
                 "museumNumber": str(manuscript.museum_number)
                 if manuscript.museum_number
                 else "",

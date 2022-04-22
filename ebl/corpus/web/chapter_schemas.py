@@ -67,12 +67,12 @@ class ApiOldSiglumSchema(OldSiglumSchema):
 
 
 class ApiManuscriptSchema(ManuscriptSchema):
-    old_siglum = fields.Nested(
+    old_sigla = fields.Nested(
         ApiOldSiglumSchema,
         many=True,
         required=False,
         load_default=tuple(),
-        data_key="oldSiglum",
+        data_key="oldSigla",
     )
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
     colophon = fields.Function(

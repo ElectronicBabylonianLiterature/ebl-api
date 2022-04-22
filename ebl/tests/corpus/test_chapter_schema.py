@@ -94,9 +94,9 @@ def to_dict(chapter: Chapter, include_documents=False):
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
-                "oldSiglum": (
+                "oldSigla": (
                     ApiOldSiglumSchema if include_documents else OldSiglumSchema
-                )().dump(manuscript.old_siglum, many=True),
+                )().dump(manuscript.old_sigla, many=True),
                 "museumNumber": (
                     (str(manuscript.museum_number) if manuscript.museum_number else "")
                     if include_documents

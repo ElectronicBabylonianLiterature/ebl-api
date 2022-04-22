@@ -65,10 +65,10 @@ class OldSiglumSchema(Schema):
 class ManuscriptSchema(Schema):
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
-    old_siglum = fields.Nested(
+    old_sigla = fields.Nested(
         OldSiglumSchema,
         required=False,
-        data_key="oldSiglum",
+        data_key="oldSigla",
         many=True,
         load_default=tuple(),
     )
@@ -126,7 +126,7 @@ class ManuscriptSchema(Schema):
         return Manuscript(
             data["id"],
             data["siglum_disambiguator"],
-            tuple(data["old_siglum"]),
+            tuple(data["old_sigla"]),
             data["museum_number"],
             data["accession"],
             data["period_modifier"],

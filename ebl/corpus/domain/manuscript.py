@@ -140,7 +140,7 @@ def is_invalid_non_standard_text(provenance, period, type_) -> bool:
 class Manuscript:
     id: int
     siglum_disambiguator: str = ""
-    old_siglum: Sequence[OldSiglum] = tuple()
+    old_sigla: Sequence[OldSiglum] = tuple()
     museum_number: Optional[MuseumNumber] = None
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE

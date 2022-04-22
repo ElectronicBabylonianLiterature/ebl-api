@@ -53,7 +53,7 @@ CHAPTER_NAME = "IIc"
 ORDER = 1
 MANUSCRIPT_ID = 9001
 SIGLUM_DISAMBIGUATOR = "1c"
-OLD_SIGLUM = (OldSiglumFactory.build(),)
+OLD_SIGLA = (OldSiglumFactory.build(),)
 MUSEUM_NUMBER = MuseumNumber("BM", "x")
 ACCESSION = ""
 PERIOD_MODIFIER = PeriodModifier.LATE
@@ -134,7 +134,7 @@ CHAPTER = Chapter(
         Manuscript(
             MANUSCRIPT_ID,
             SIGLUM_DISAMBIGUATOR,
-            OLD_SIGLUM,
+            OLD_SIGLA,
             MUSEUM_NUMBER,
             ACCESSION,
             PERIOD_MODIFIER,
@@ -167,7 +167,7 @@ def test_constructor_sets_correct_fields():
         PROVENANCE, PERIOD, TYPE, SIGLUM_DISAMBIGUATOR
     )
     assert CHAPTER.manuscripts[0].siglum_disambiguator == SIGLUM_DISAMBIGUATOR
-    assert CHAPTER.manuscripts[0].old_siglum == OLD_SIGLUM
+    assert CHAPTER.manuscripts[0].old_sigla == OLD_SIGLA
     assert CHAPTER.manuscripts[0].museum_number == MUSEUM_NUMBER
     assert CHAPTER.manuscripts[0].accession == ACCESSION
     assert CHAPTER.manuscripts[0].period_modifier == PERIOD_MODIFIER
@@ -208,7 +208,7 @@ def test_duplicate_sigla_are_invalid():
                 Manuscript(
                     MANUSCRIPT_ID,
                     siglum_disambiguator=SIGLUM_DISAMBIGUATOR,
-                    old_siglum=OLD_SIGLUM,
+                    old_sigla=OLD_SIGLA,
                     period=PERIOD,
                     provenance=PROVENANCE,
                     type=TYPE,
@@ -216,7 +216,7 @@ def test_duplicate_sigla_are_invalid():
                 Manuscript(
                     MANUSCRIPT_ID + 1,
                     siglum_disambiguator=SIGLUM_DISAMBIGUATOR,
-                    old_siglum=OLD_SIGLUM,
+                    old_sigla=OLD_SIGLA,
                     period=PERIOD,
                     provenance=PROVENANCE,
                     type=TYPE,
@@ -438,7 +438,7 @@ def test_extant_lines_mixed_sides() -> None:
     manuscript = Manuscript(
         MANUSCRIPT_ID,
         siglum_disambiguator="1",
-        old_siglum=tuple(),
+        old_sigla=tuple(),
         period_modifier=PeriodModifier.NONE,
         period=Period.LATE_BABYLONIAN,
         provenance=Provenance.BABYLON,
