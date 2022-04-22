@@ -76,6 +76,10 @@ def strip_documents(chapter: Chapter) -> Chapter:
 
 
 def to_dict(chapter: Chapter, include_documents=False):
+
+    OLD_SIGLUM_SCHEMA = ApiOldSiglumSchema if include_documents else OldSiglumSchema
+    REFERENCE_SCHEMA = ApiReferenceSchema if include_documents else ReferenceSchema
+
     return {
         "textId": {
             "genre": chapter.text_id.genre.value,
@@ -94,9 +98,7 @@ def to_dict(chapter: Chapter, include_documents=False):
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
-                "oldSigla": (
-                    ApiOldSiglumSchema if include_documents else OldSiglumSchema
-                )().dump(manuscript.old_sigla, many=True),
+                "oldSigla": OLD_SIGLUM_SCHEMA().dump(manuscript.old_sigla, many=True),
                 "museumNumber": (
                     (str(manuscript.museum_number) if manuscript.museum_number else "")
                     if include_documents
@@ -111,9 +113,7 @@ def to_dict(chapter: Chapter, include_documents=False):
                 "notes": manuscript.notes,
                 "colophon": TextSchema().dump(manuscript.colophon),
                 "unplacedLines": TextSchema().dump(manuscript.unplaced_lines),
-                "references": (
-                    ApiReferenceSchema if include_documents else ReferenceSchema
-                )().dump(manuscript.references, many=True),
+                "references": REFERENCE_SCHEMA().dump(manuscript.references, many=True),
             }
             for manuscript in chapter.manuscripts
         ],

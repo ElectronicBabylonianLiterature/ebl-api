@@ -156,7 +156,7 @@ def test_serialize_manuscript() -> None:
 
 
 def test_deserialize_manuscript() -> None:
-    references = (ReferenceFactory.build(with_document=True),)
+    references = (ReferenceFactory.build(with_document=False),)
     manuscript = ManuscriptFactory.build(references=references)
     assert (
         ApiManuscriptSchema().load(
