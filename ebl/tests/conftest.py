@@ -492,6 +492,7 @@ def word():
             }
         ],
         "cdaAddenda": "additions",
+        "supplementsAkkadianDictionaries": "new stuff",
     }
 
 

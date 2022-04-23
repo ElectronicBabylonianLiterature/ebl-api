@@ -8,9 +8,7 @@
 ## Table of contents
 
 * [Setup](#setup)
-* [Running the tests](#running-the-tests)
-* [Database](#database)
-* [Configuring services](#configuring-services)
+* [Development](#development)
 * [Running the application](#running-the-application)
 * [Updating data](#updating-data)
 * [Acknowledgements](#acknowledgements)
@@ -37,95 +35,6 @@ The following are needed to run application:
 * [Auth0](https://auth0.com)
 * [Sentry](https://sentry.io)
 * Docker (optional, see [Running the application](#running-the-application))
-
-Depending on your system you might need to configure [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory).
-E.g. for Ubuntu add the following environment variables:
-
-```dotenv
-PYMONGOIM__MONGO_VERSION=4.4
-PYMONGOIM__OPERATING_SYSTEM=ubuntu
-```
-
-### Gitpod
-
-The project comes with a [Gitpod](https://www.gitpod.io) configuration including
-select extensions and a local MongoDB. Click the button below, configure the
-[environment variables](https://www.gitpod.io/docs/environment-variables/)
-(, import the data if you wish to use the local DB) and you are good to go.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
-
-### Codestyle
-
-Use [Black](https://black.readthedocs.io/en/stable/) codestyle and
-[PEP8 naming conventions](https://www.python.org/dev/peps/pep-0008/#naming-conventions).
-Line length is 88, and bugbear B950 is used instead of E501.
-PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
-disabled.
-
-Use type hints in new code and add the to old code when making changes.
-
-### Package dependencies
-
-* Avoid directed package dependency cycles.
-* Domain packages should depend only on other domain packages.
-* Application packages should depend only on application and domain packages.
-* Web, infrastructure, etc. should depend only on application and domain packges.
-* All packages can depend on common modules in the top-level ebl package.
-
-Dependencies can be analyzed with
-[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
-
-```shell script
-pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
-```
-
-## Running the tests
-
-```shell script
-task format  # Format all files.
-task format -- --check  # Check file formatting.
-task lint  # Run linter.
-task type  # Run type check
-task test  # Run tests.  
-task test -- -n auto  # Run tests in parallel.
-task test -- --cov=ebl --cov-report term --cov-report xml  # Run tests with coverage (slow in PyPy).
-task test-all  # Run format, lint and type checks, and tests.
-```
-
-See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
-for more information on parallel tests. To avoid race condition when running
-the tests in parallel run `poetry run python -m ebl.tests.downloader`.
-
-## Database
-
-See
-[dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser),
-[proper-name-importer](https://github.com/ElectronicBabylonianLiterature/proper-name-importer),
-[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser), and
-[sign-list-parser](https://github.com/ElectronicBabylonianLiterature/sign-list-parser)
-about generating the initial data. There have been chnages to the database structure since the
-scripts were initally used and they most likely require updates to work with latest version
-of the API.
-
-`pull-db.sh` script can be used to pull a database from an another MongoDB instance to
-your development MongoDB. It will use `mongodump` and `mongorestore` to get
-all data except `changelog` collection, and `photos` and `folios` buckets.
-
-To make the use less tedious the scripts reads defaults from the following
-environment varaiables:
-
-```dotenv
-PULL_DB_DEFAULT_SOURCE_HOST=<source MongoDB host>
-PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
-PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
-```
-
-The test use [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory) for tests.
-Depending on your OS it might be necessary to configure it in order to get the correct version
-of MongoDB.
-
-## Configuring services
 
 ### Auth0
 
@@ -199,7 +108,97 @@ The users should `eblName` property in the `user_metadata`. E.g.:
 
 An organization and project need to be setup in Sentry. *DSN* under *Client Keys* is needed for the for the environment variables (see below).
 
-## Caching
+## Development
+
+The project comes with a [Gitpod](https://www.gitpod.io) configuration including
+select extensions and a local MongoDB. Click the button below, configure the
+[environment variables](https://www.gitpod.io/docs/environment-variables/)
+(, import the data if you wish to use the local DB) and you are good to go.
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
+
+### Running the tests
+
+```shell script
+task format  # Format all files.
+task format -- --check  # Check file formatting.
+task lint  # Run linter.
+task type  # Run type check
+task test  # Run tests.  
+task test -- -n auto  # Run tests in parallel.
+task test -- --cov=ebl --cov-report term --cov-report xml  # Run tests with coverage (slow in PyPy).
+task test-all  # Run format, lint and type checks, and tests.
+```
+
+See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
+for more information on parallel tests. To avoid race condition when running
+the tests in parallel run `poetry run python -m ebl.tests.downloader`.
+
+## Custom Git Shortcut
+
+```shell script
+task cp --- commit-message  # Runs black, flake8 and pyre-check and git add, commit and push
+```
+
+### Codestyle
+
+Use [Black](https://black.readthedocs.io/en/stable/) codestyle and
+[PEP8 naming conventions](https://www.python.org/dev/peps/pep-0008/#naming-conventions).
+Line length is 88, and bugbear B950 is used instead of E501.
+PEP8 checks should be enabled in PyCharm, but E501, E203, and E231 should be
+disabled.
+
+Use type hints in new code and add the to old code when making changes.
+
+### Package dependencies
+
+* Avoid directed package dependency cycles.
+* Domain packages should depend only on other domain packages.
+* Application packages should depend only on application and domain packages.
+* Web, infrastructure, etc. should depend only on application and domain packges.
+* All packages can depend on common modules in the top-level ebl package.
+
+Dependencies can be analyzed with
+[pydepgraph](https://github.com/stefano-maggiolo/pydepgraph):
+
+```shell script
+pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
+```
+
+### Database
+
+See
+[dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser),
+[proper-name-importer](https://github.com/ElectronicBabylonianLiterature/proper-name-importer),
+[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser), and
+[sign-list-parser](https://github.com/ElectronicBabylonianLiterature/sign-list-parser)
+about generating the initial data. There have been chanages to the database structure since the
+scripts were initally used and they most likely require updates to work with latest version
+of the API.
+
+`pull-db.sh` script can be used to pull a database from an another MongoDB instance to
+your development MongoDB. It will use `mongodump` and `mongorestore` to get
+all data except `changelog` collection, and `photos` and `folios` buckets.
+
+To make the use less tedious the scripts reads defaults from the following
+environment varaiables:
+
+```dotenv
+PULL_DB_DEFAULT_SOURCE_HOST=<source MongoDB host>
+PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
+PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
+```
+
+The test use [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory) for tests.
+Depending on your OS it might be necessary to configure it in order to get the correct version
+of MongoDB. E.g. for Ubuntu add the following environment variables:
+
+```dotenv
+PYMONGOIM__MONGO_VERSION=4.4
+PYMONGOIM__OPERATING_SYSTEM=ubuntu
+```
+
+### Caching
 
 [Falcon-Caching](https://falcon-caching.readthedocs.io/) middleware can be used for caching.
 See the documentation for more information. Configuration is read from `CACHE_CONFIG` environment variable.
@@ -231,6 +230,24 @@ A method to control when the header is added can be passed as the second argumen
 def on_get(self, req, resp):
     ...
 ```
+
+### Authentication and Authorization
+
+[Auth0](https://auth0.com) and [falcon-auth](https://github.com/vertexcover-io/falcon-auth)
+are used for authentication and authorization. 
+
+An endpoint can be protected using `require_scope`:
+
+```python
+import falcon
+from ebl.users.web.require_scope import require_scope
+
+@falcon.before(require_scope, "read:texts")
+def on_get(self, req, resp):
+    ...
+```
+
+If more complex checks are required the user is available in `req.context.user`.
 
 ## Running the application
 

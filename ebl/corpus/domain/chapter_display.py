@@ -1,19 +1,16 @@
-from typing import Optional, Sequence
+from typing import Sequence
 
 import attr
 
 from ebl.corpus.domain.chapter import ChapterId, Chapter
-from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line import Line, LineVariant
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import Text
-from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
 )
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.markup import MarkupPart, to_title
 
 
@@ -35,11 +32,8 @@ class LineDisplay:
     number: AbstractLineNumber
     is_second_line_of_parallelism: bool
     is_beginning_of_section: bool
-    intertext: Sequence[MarkupPart]
-    reconstruction: Sequence[Token]
+    variants: Sequence[LineVariant]
     translation: Sequence[TranslationLine]
-    note: Optional[NoteLine]
-    parallel_lines: Sequence[ParallelLine]
 
     @property
     def title(self) -> Sequence[MarkupPart]:
@@ -47,16 +41,12 @@ class LineDisplay:
 
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
-        first_variant = line.variants[0]
         return LineDisplay(
             line.number,
             line.is_second_line_of_parallelism,
             line.is_beginning_of_section,
-            first_variant.intertext,
-            first_variant.reconstruction,
+            line.variants,
             line.translation,
-            first_variant.note,
-            first_variant.parallel_lines,
         )
 
 
