@@ -1,38 +1,47 @@
 from marshmallow import Schema, fields
-
-from ebl.corpus.application.schemas import labels
-from ebl.corpus.domain.line import ManuscriptLine
-from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.corpus.application.schemas import (
+    labels,
+    OldSiglumSchema,
+)
 
+def get_old_sigla(line, context):
+    m = context["manuscripts"][line.manuscript_id]
+    sigs = m.old_sigla
 
-def find_manuscript(line: ManuscriptLine, context: dict) -> Manuscript:
-    return next(
-        (
-            manuscript
-            for manuscript in context["manuscripts"]
-            if manuscript.id == line.manuscript_id
-        )
-    )
-
+    return OldSiglumSchema().dump(sigs, many=True)
 
 class ManuscriptLineDisplaySchema(Schema):
+    old_sigla = fields.Function(
+        lambda line, context: OldSiglumSchema().dump(
+            context["manuscripts"][line.manuscript_id].old_sigla, many=True
+        ),
+        data_key="oldSigla",
+    )
     siglum_disambiguator = fields.Function(
-        lambda line, context: find_manuscript(line, context).siglum_disambiguator,
+        lambda line, context: context["manuscripts"][
+            line.manuscript_id
+        ].siglum_disambiguator,
         data_key="siglumDisambiguator",
     )
     period_modifier = fields.Function(
-        lambda line, context: find_manuscript(line, context).period_modifier.value,
+        lambda line, context: context["manuscripts"][
+            line.manuscript_id
+        ].period_modifier.value,
         data_key="periodModifier",
     )
     period = fields.Function(
-        lambda line, context: find_manuscript(line, context).period.long_name,
+        lambda line, context: context["manuscripts"][
+            line.manuscript_id
+        ].period.long_name,
     )
     provenance = fields.Function(
-        lambda line, context: find_manuscript(line, context).provenance.long_name,
+        lambda line, context: context["manuscripts"][
+            line.manuscript_id
+        ].provenance.long_name,
     )
     type = fields.Function(
-        lambda line, context: find_manuscript(line, context).type.long_name,
+        lambda line, context: context["manuscripts"][line.manuscript_id].type.long_name,
     )
     labels = labels()
     line = fields.Nested(OneOfLineSchema, required=True)
