@@ -23,6 +23,7 @@ class AbstractWord(Token):
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
     variant: Optional["AbstractWord"] = None
+    has_variant_alignment: bool = False
 
     @property
     @abstractmethod
@@ -128,9 +129,17 @@ class Word(AbstractWord):
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
+        has_variant_alignment: bool = False,
     ) -> W:
         return cls(
-            frozenset(), erasure, unique_lemma, alignment, parts, variant, language
+            frozenset(),
+            erasure,
+            unique_lemma,
+            alignment,
+            parts,
+            variant,
+            has_variant_alignment,
+            language,
         )
 
     @property

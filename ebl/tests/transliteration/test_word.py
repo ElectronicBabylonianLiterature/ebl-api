@@ -72,6 +72,7 @@ def test_defaults() -> None:
     assert word.erasure == ErasureState.NONE
     assert word.alignment is None
     assert word.variant is None
+    assert word.has_variant_alignment is False
 
 
 @pytest.mark.parametrize(  # pyre-ignore[56]
