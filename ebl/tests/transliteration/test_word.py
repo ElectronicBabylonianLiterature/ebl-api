@@ -74,7 +74,7 @@ def test_defaults() -> None:
     assert word.variant is None
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "language,unique_lemma",
     [
         (Language.SUMERIAN, (WordId("ku II"), WordId("aklu I"))),
@@ -183,7 +183,7 @@ def test_set_unique_lemma_empty() -> None:
     assert word.set_unique_lemma(lemma) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "word",
     [
         Word.of([Reading.of_name("mu")]),
@@ -210,7 +210,7 @@ def test_set_alignment() -> None:
     assert word.set_alignment(alignment, variant) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "old,new,expected",
     [
         (

@@ -3,7 +3,7 @@ from ebl.corpus.domain.manuscript import Manuscript, ManuscriptType, Period, Pro
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "provenance,period,type_",
     [
         (Provenance.STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.NONE),

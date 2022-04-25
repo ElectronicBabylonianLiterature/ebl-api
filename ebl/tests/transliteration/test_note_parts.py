@@ -23,7 +23,7 @@ def test_bibliography_part_escape() -> None:
     assert part.value == f"@bib{{{escaped}@{escaped}}}"
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "type,pages,note,lines",
     [
         (ReferenceType.EDITION, "1", "", tuple()),

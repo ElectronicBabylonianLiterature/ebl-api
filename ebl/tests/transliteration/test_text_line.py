@@ -30,7 +30,7 @@ from ebl.transliteration.domain.word_tokens import LoneDeterminative, Word
 LINE_NUMBER = LineNumber(1)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "code,language",
     [
         ("%ma", Language.AKKADIAN),
@@ -164,7 +164,7 @@ def test_text_line_atf_gloss() -> None:
     assert line.atf == f"{line.line_number.atf} {{(mu bu)}}"
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "erasure,expected",
     [
         ([Erasure.open(), Erasure.center(), Erasure.close()], "°\\°"),

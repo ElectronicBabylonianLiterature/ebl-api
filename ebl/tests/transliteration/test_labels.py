@@ -87,19 +87,16 @@ def test_parse_labels_invalud(labels) -> None:
         parse_labels(labels)
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize("label,status,_,model", LABELS + UNPARSEABLE_LABELS)
 def test_abbreviation(label, status, _, model) -> None:
     assert model.abbreviation == label
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize("label,status,_,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_value(label, status, _, model) -> None:
     assert model.to_value() == f"{label}{status}"
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize("_, status,atf,model", LABELS + UNPARSEABLE_LABELS)
 def test_label_to_atf(_, status, atf, model) -> None:
     assert model.to_atf() == f"{atf}{status}"

@@ -23,7 +23,7 @@ def test_is_beginning_of_side(line, is_beginning) -> None:
     assert line.is_beginning_of_side is is_beginning
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "paratext,is_end",
     [
         (tuple(), False),

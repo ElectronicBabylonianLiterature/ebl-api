@@ -4,7 +4,7 @@ from ebl.transliteration.domain.stage import Stage
 from ebl.tests.factories.corpus import ChapterListingFactory, TextFactory
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "chapters,expected",
     [
         (tuple(), False),
