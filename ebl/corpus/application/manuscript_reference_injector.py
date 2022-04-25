@@ -41,7 +41,13 @@ class ManuscriptReferenceInjector(ChapterVisitor):
 
     def inject_manuscript(self, manuscript: Manuscript) -> Manuscript:
         references = self._inject_references(manuscript.references)
-        return attr.evolve(manuscript, references=references)
+        old_sigla = tuple(
+            attr.evolve(
+                old_siglum, reference=self._inject_reference(old_siglum.reference)
+            )
+            for old_siglum in manuscript.old_sigla
+        )
+        return attr.evolve(manuscript, references=references, old_sigla=old_sigla)
 
     def _inject_references(
         self, references: Iterable[Reference]

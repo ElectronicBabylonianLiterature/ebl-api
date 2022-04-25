@@ -4,6 +4,9 @@ from ebl.corpus.application.schemas import (
     labels,
     OldSiglumSchema,
 )
+from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
+
 
 def get_old_sigla(line, context):
     m = context["manuscripts"][line.manuscript_id]
@@ -11,12 +14,18 @@ def get_old_sigla(line, context):
 
     return OldSiglumSchema().dump(sigs, many=True)
 
+
 class ManuscriptLineDisplaySchema(Schema):
     old_sigla = fields.Function(
-        lambda line, context: OldSiglumSchema().dump(
+        lambda line, context: ApiOldSiglumSchema().dump(
             context["manuscripts"][line.manuscript_id].old_sigla, many=True
         ),
         data_key="oldSigla",
+    )
+    references = fields.Function(
+        lambda line, context: ApiReferenceSchema().dump(
+            context["manuscripts"][line.manuscript_id].references, many=True
+        ),
     )
     siglum_disambiguator = fields.Function(
         lambda line, context: context["manuscripts"][
