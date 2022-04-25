@@ -1,4 +1,4 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dictionary.application.dictionary import Dictionary
@@ -42,15 +42,15 @@ class FragmentFinder:
 
     def search(
         self,
+        transliteration: TransliterationQuery,
         number: str,
-        transliteration: Optional[TransliterationQuery],
         id: str,
         pages: str,
     ) -> List[FragmentInfo]:
         query_results = self._repository.query_fragmentarium(
-            number, transliteration, id, pages
+            transliteration, number, id, pages
         )
-        if not transliteration or transliteration.is_empty():
+        if transliteration.is_empty():
             return list(map(FragmentInfo.of, query_results))
         return [
             FragmentInfo.of(fragment, fragment.get_matching_lines(transliteration))
@@ -59,12 +59,12 @@ class FragmentFinder:
 
     def search_fragmentarium(
         self,
+        transliteration: TransliterationQuery,
         number: str,
-        transliteration: Optional[TransliterationQuery],
         id: str,
         pages: str,
     ) -> List[FragmentInfo]:
-        fragment_infos = self.search(number, transliteration, id, pages)
+        fragment_infos = self.search(transliteration, number, id, pages)
 
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:

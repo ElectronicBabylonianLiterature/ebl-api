@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -86,8 +86,8 @@ class FragmentRepository(ABC):
 
     def query_fragmentarium(
         self,
+        transliteration: TransliterationQuery,
         number: str = "",
-        transliteration: Optional[TransliterationQuery] = None,
         id: str = "",
         pages: str = "",
     ):

@@ -5,6 +5,9 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.transliteration.application.transliteration_query_factory import (
+    TransliterationQueryFactory,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -123,11 +126,15 @@ def test_search(fragment_finder, fragment_repository, when):
     query = fragment.number
     (
         when(fragment_repository)
-        .query_fragmentarium(query, None, "", "")
+        .query_fragmentarium(
+            TransliterationQueryFactory.create_empty(), str(query), "", ""
+        )
         .thenReturn([fragment])
     )
 
-    assert fragment_finder.search(query, None, "", "") == [FragmentInfo.of(fragment)]
+    assert fragment_finder.search(
+        TransliterationQueryFactory.create_empty(), str(query), "", ""
+    ) == [FragmentInfo.of(fragment)]
 
 
 def test_search_fragmentarium_transliteration(
@@ -140,7 +147,7 @@ def test_search_fragmentarium_transliteration(
 
     (
         when(fragment_repository)
-        .query_fragmentarium("", query, "", "")
+        .query_fragmentarium(query, "", "", "")
         .thenReturn(matching_fragments)
     )
 
@@ -148,7 +155,7 @@ def test_search_fragmentarium_transliteration(
     expected = [
         FragmentInfo.of(fragment, expected_lines) for fragment in matching_fragments
     ]
-    assert fragment_finder.search_fragmentarium("", query, "", "") == expected
+    assert fragment_finder.search_fragmentarium(query, "", "", "") == expected
 
 
 def test_find_photo(fragment_finder, photo, photo_repository, when):

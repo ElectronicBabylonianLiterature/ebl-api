@@ -1,14 +1,13 @@
 import attr
 import pytest
 
-
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -18,9 +17,13 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.transliteration.application.transliteration_query_factory import (
+    TransliterationQueryFactory,
+)
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.parallel_line import Labels, ParallelFragment
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
@@ -29,7 +32,6 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.fragmentarium.domain.joins import Join, Joins
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
@@ -343,13 +345,17 @@ def test_query_fragmentarium_number(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert fragment_repository.query_fragmentarium(number=str(fragment.number)) == [
-        fragment
-    ]
+    assert fragment_repository.query_fragmentarium(
+        TransliterationQueryFactory.create_empty(), number=str(fragment.number)
+    ) == [fragment]
 
 
 def test_query_fragmentarium_not_found(fragment_repository):
-    assert (fragment_repository.query_fragmentarium("K.1")) == []
+    assert (
+        fragment_repository.query_fragmentarium(
+            TransliterationQueryFactory.create_empty(), "K.1"
+        )
+    ) == []
 
 
 def test_query_fragmentarium_reference_id(database, fragment_repository):
@@ -357,9 +363,11 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
-    assert (fragment_repository.query_fragmentarium(id=fragment.references[0].id)) == [
-        fragment
-    ]
+    assert (
+        fragment_repository.query_fragmentarium(
+            TransliterationQueryFactory.create_empty(), id=fragment.references[0].id
+        )
+    ) == [fragment]
 
 
 @pytest.mark.parametrize(
@@ -372,7 +380,9 @@ def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
         fragment_repository.query_fragmentarium(
-            id=fragment.references[0].id, pages="163"
+            TransliterationQueryFactory.create_empty(),
+            id=fragment.references[0].id,
+            pages="163",
         )
     ) == [fragment]
 
@@ -387,7 +397,9 @@ def test_empty_result_query_reference_id_and_pages(
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
         fragment_repository.query_fragmentarium(
-            id=fragment.references[0].id, pages="163"
+            TransliterationQueryFactory.create_empty(),
+            id=fragment.references[0].id,
+            pages="163",
         )
     ) == []
 

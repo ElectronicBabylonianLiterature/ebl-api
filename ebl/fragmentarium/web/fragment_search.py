@@ -1,4 +1,4 @@
-from typing import Tuple, Optional
+from typing import Tuple
 
 import falcon
 from falcon_caching import Cache
@@ -51,15 +51,15 @@ class FragmentSearch:
 
     def _parse_fragmentarium_search(
         self, number: str, transliteration: str, id: str, pages: str
-    ) -> Tuple[str, Optional[TransliterationQuery], str, str]:
+    ) -> Tuple[TransliterationQuery, str, str, str]:
         parsed_transliteration = (
             self._transliteration_query_factory.create(transliteration)
             if transliteration
-            else None
+            else self._transliteration_query_factory.create_empty()
         )
         validated_id, validated_pages = self._validate_pages(id, pages)
 
-        return number, parsed_transliteration, validated_id, validated_pages
+        return parsed_transliteration, number, validated_id, validated_pages
 
     @staticmethod
     def _validate_pages(id: str, pages: str) -> Tuple[str, str]:

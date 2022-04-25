@@ -181,20 +181,20 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
-    def query_fragmentarium_create_query(
+    def _query_fragmentarium_create_query(
         self,
+        transliteration: TransliterationQuery,
         number: str = "",
-        transliteration: Optional[TransliterationQuery] = None,
         id: str = "",
         pages: str = "",
     ) -> dict:
         number_query = number_is(number) if number else {}
         signs_query = (
             {"signs": {"$regex": transliteration.regexp}}
-            if transliteration and not transliteration.is_empty()
+            if not transliteration.is_empty()
             else {}
         )
-        id_query: Dict[str, Dict] = dict()
+        id_query: Dict[str, Dict] = {}
         if id:
             id_query = {"references": {"$elemMatch": {"id": id}}}
             if pages:
@@ -205,13 +205,13 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_fragmentarium(
         self,
+        transliteration: TransliterationQuery,
         number: str = "",
-        transliteration: Optional[TransliterationQuery] = None,
         id: str = "",
         pages: str = "",
     ) -> Sequence[dict]:
         cursor = self._fragments.find_many(
-            self.query_fragmentarium_create_query(number, transliteration, id, pages),
+            self._query_fragmentarium_create_query(transliteration, number, id, pages),
             limit=100,
             projection={"joins": False},
         )
