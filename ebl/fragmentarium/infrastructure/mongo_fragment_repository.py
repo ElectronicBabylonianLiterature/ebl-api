@@ -185,7 +185,7 @@ class MongoFragmentRepository(FragmentRepository):
         self,
         transliteration: TransliterationQuery,
         number: str = "",
-        id: str = "",
+        bibliography_id: str = "",
         pages: str = "",
     ) -> dict:
         number_query = number_is(number) if number else {}
@@ -195,8 +195,8 @@ class MongoFragmentRepository(FragmentRepository):
             else {}
         )
         id_query: Dict[str, Dict] = {}
-        if id:
-            id_query = {"references": {"$elemMatch": {"id": id}}}
+        if bibliography_id:
+            id_query = {"references": {"$elemMatch": {"id": bibliography_id}}}
             if pages:
                 id_query["references"]["$elemMatch"]["pages"] = {
                     "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
@@ -207,11 +207,11 @@ class MongoFragmentRepository(FragmentRepository):
         self,
         transliteration: TransliterationQuery,
         number: str = "",
-        id: str = "",
+        bibliography_id: str = "",
         pages: str = "",
     ) -> Sequence[dict]:
         cursor = self._fragments.find_many(
-            self._query_fragmentarium_create_query(transliteration, number, id, pages),
+            self._query_fragmentarium_create_query(transliteration, number, bibliography_id, pages),
             limit=100,
             projection={"joins": False},
         )

@@ -44,11 +44,11 @@ class FragmentFinder:
         self,
         transliteration: TransliterationQuery,
         number: str,
-        id: str,
+        bibliography_id: str,
         pages: str,
     ) -> List[FragmentInfo]:
         query_results = self._repository.query_fragmentarium(
-            transliteration, number, id, pages
+            transliteration, number, bibliography_id, pages
         )
         if transliteration.is_empty():
             return list(map(FragmentInfo.of, query_results))
@@ -61,10 +61,10 @@ class FragmentFinder:
         self,
         transliteration: TransliterationQuery,
         number: str,
-        id: str,
+        bibliography_id: str,
         pages: str,
     ) -> List[FragmentInfo]:
-        fragment_infos = self.search(transliteration, number, id, pages)
+        fragment_infos = self.search(transliteration, number, bibliography_id, pages)
 
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:

@@ -365,7 +365,7 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
         fragment_repository.query_fragmentarium(
-            TransliterationQueryFactory.create_empty(), id=fragment.references[0].id
+            TransliterationQueryFactory.create_empty(), bibliography_id=fragment.references[0].id
         )
     ) == [fragment]
 
@@ -381,7 +381,7 @@ def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
     assert (
         fragment_repository.query_fragmentarium(
             TransliterationQueryFactory.create_empty(),
-            id=fragment.references[0].id,
+            bibliography_id=fragment.references[0].id,
             pages="163",
         )
     ) == [fragment]
@@ -398,7 +398,7 @@ def test_empty_result_query_reference_id_and_pages(
     assert (
         fragment_repository.query_fragmentarium(
             TransliterationQueryFactory.create_empty(),
-            id=fragment.references[0].id,
+            bibliography_id=fragment.references[0].id,
             pages="163",
         )
     ) == []
@@ -451,7 +451,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
     result = fragment_repository.query_fragmentarium(
         number=str(transliterated_fragment.number),
         transliteration=TransliterationQuery([["DIŠ", "UD"]]),
-        id=transliterated_fragment.references[0].id,
+        bibliography_id=transliterated_fragment.references[0].id,
         pages=pages,
     )
     assert result == [transliterated_fragment]
@@ -470,7 +470,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references_not_found
     result = fragment_repository.query_fragmentarium(
         number=str(transliterated_fragment.number),
         transliteration=TransliterationQuery([["DIŠ", "UD"]]),
-        id=transliterated_fragment.references[0].id,
+        bibliography_id=transliterated_fragment.references[0].id,
         pages=f"{pages}123",
     )
     assert result == []
