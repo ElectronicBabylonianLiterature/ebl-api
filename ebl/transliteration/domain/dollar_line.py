@@ -99,10 +99,7 @@ class ScopeContainer:
 
     @staticmethod
     def to_value(enum) -> str:
-        if isinstance(enum, atf.Surface):
-            return enum.atf
-        else:
-            return enum.value
+        return enum.atf if isinstance(enum, atf.Surface) else enum.value
 
 
 Range = Tuple[int, int]
