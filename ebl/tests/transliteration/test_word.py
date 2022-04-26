@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import pytest
 
@@ -24,7 +24,7 @@ from ebl.transliteration.domain.tokens import (
     Variant,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
-from ebl.transliteration.domain.word_tokens import ErasureState, Word
+from ebl.transliteration.domain.word_tokens import AbstractWord, ErasureState, Word
 
 LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
     (Word.of([Reading.of_name("un")]), True),
@@ -157,6 +157,14 @@ def test_lemmatizable(word, expected) -> None:
 @pytest.mark.parametrize("word,_", LEMMATIZABLE_TEST_WORDS)
 def test_alignable(word, _) -> None:
     assert word.alignable == word.lemmatizable
+
+
+@pytest.mark.parametrize("variant,expected", [
+    (Word.of([Reading.of("rs")]), True),
+    (None, False),
+])
+def test_has_variant(variant: Optional[AbstractWord], expected: bool) -> None:
+    assert Word.of([Reading.of("kur")], variant=variant).has_variant is expected
 
 
 def test_set_language() -> None:

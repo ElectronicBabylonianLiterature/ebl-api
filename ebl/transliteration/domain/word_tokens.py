@@ -48,6 +48,10 @@ class AbstractWord(Token):
         )
 
     @property
+    def has_variant(self) -> bool:
+        return self.variant is not None
+
+    @property
     def lemmatizable(self) -> bool:
         non_lemmatizables = [
             atf.VARIANT_SEPARATOR,
