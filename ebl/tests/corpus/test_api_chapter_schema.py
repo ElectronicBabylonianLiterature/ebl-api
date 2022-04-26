@@ -18,7 +18,6 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 
 
@@ -86,7 +85,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                                     label.to_value() for label in manuscript_line.labels
                                 ],
                                 "number": manuscript_line.line.line_number.atf[:-1]
-                                if isinstance(manuscript_line.line, TextLine)
+                                if not manuscript_line.is_empty
                                 else "",
                                 "atf": "\n".join(
                                     [
@@ -94,7 +93,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                                             len(manuscript_line.line.line_number.atf)
                                             + 1 :
                                         ]
-                                        if isinstance(manuscript_line.line, TextLine)
+                                        if not manuscript_line.is_empty
                                         else "",
                                         *[
                                             line.atf

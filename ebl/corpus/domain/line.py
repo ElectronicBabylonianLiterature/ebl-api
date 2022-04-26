@@ -36,7 +36,7 @@ class ManuscriptLine:
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
             (self.manuscript_id, self.labels, cast(TextLine, self.line).line_number)
-            if isinstance(self.line, TextLine)
+            if not self.is_empty
             else None
         )
 
@@ -44,7 +44,7 @@ class ManuscriptLine:
     def is_beginning_of_side(self) -> bool:
         return (
             cast(TextLine, self.line).line_number.is_beginning_of_side
-            if isinstance(self.line, TextLine)
+            if not self.is_empty
             else False
         )
 
@@ -53,6 +53,10 @@ class ManuscriptLine:
         return any(
             line.is_end_of for line in self.paratext if isinstance(line, DollarLine)
         )
+
+    @property
+    def is_empty(self) -> bool:
+        return isinstance(self.line, EmptyLine)
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
