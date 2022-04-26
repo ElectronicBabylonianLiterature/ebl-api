@@ -121,7 +121,7 @@ class Siglum:
 @attr.s(auto_attribs=True, frozen=True)
 class OldSiglum:
     siglum: str
-    reference: Optional[Reference]
+    reference: Reference
 
 
 def is_invalid_standard_text(provenance, period, type_) -> bool:

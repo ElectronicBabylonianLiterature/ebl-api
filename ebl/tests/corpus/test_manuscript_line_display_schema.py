@@ -3,12 +3,9 @@ from ebl.corpus.domain.manuscript import OldSiglum
 from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
 from ebl.corpus.web.display_schemas import ManuscriptLineDisplaySchema
 from ebl.tests.bibliography.test_reference import create_reference_with_document
-from ebl.tests.factories.corpus import ChapterFactory, OldSiglumFactory
+from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.bibliography.application.reference_schema import (
-    ApiReferenceSchema,
-    ReferenceSchema,
-)
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 

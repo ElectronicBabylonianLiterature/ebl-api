@@ -54,7 +54,7 @@ class OldSiglumFactory(factory.Factory):
         model = OldSiglum
 
     siglum = factory.Faker("word")
-    reference = factory.SubFactory(ReferenceFactory)
+    reference = factory.SubFactory(ReferenceFactory, with_document=True)
 
 
 class ManuscriptFactory(factory.Factory):

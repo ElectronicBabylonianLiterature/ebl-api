@@ -69,6 +69,13 @@ def strip_documents(chapter: Chapter) -> Chapter:
                     attr.evolve(reference, document=None)
                     for reference in MANUSCRIPT.references
                 ),
+                old_sigla=tuple(
+                    attr.evolve(
+                        old_siglum,
+                        reference=attr.evolve(old_siglum.reference, document=None),
+                    )
+                    for old_siglum in manuscript.old_sigla
+                ),
             )
             for manuscript in chapter.manuscripts
         ),
