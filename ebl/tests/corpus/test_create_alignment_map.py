@@ -11,7 +11,7 @@ def _make_sequence(values: List[str]) -> List[Token]:
     return [AkkadianWord.of((ValueToken.of(value),)) for value in values]
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "old,new,expected",
     [
         (["kur"], ["kur"], [0]),

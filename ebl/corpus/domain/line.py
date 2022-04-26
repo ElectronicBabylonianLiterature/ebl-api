@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple, Union, cast
+from typing import Optional, Sequence, Tuple, Union
 
 import attr
 import pydash
@@ -18,8 +18,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.translation_line import Extent, TranslationLine
-
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
 
@@ -35,7 +34,7 @@ class ManuscriptLine:
     @property
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
-            (self.manuscript_id, self.labels, cast(TextLine, self.line).line_number)
+            (self.manuscript_id, self.labels, self.line.line_number)
             if isinstance(self.line, TextLine)
             else None
         )
@@ -43,7 +42,7 @@ class ManuscriptLine:
     @property
     def is_beginning_of_side(self) -> bool:
         return (
-            cast(TextLine, self.line).line_number.is_beginning_of_side
+            self.line.line_number.is_beginning_of_side
             if isinstance(self.line, TextLine)
             else False
         )
@@ -91,7 +90,7 @@ class LineVariant:
     @property
     def manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [
-            cast(ManuscriptLineLabel, manuscript_line.label)
+            manuscript_line.label
             for manuscript_line in self.manuscripts
             if manuscript_line.label
         ]
@@ -143,7 +142,7 @@ class Line:
 
     @translation.validator
     def _validate_translations(self, _, value: Sequence[TranslationLine]) -> None:
-        if any(line.extent and cast(Extent, line.extent).labels for line in value):
+        if any(line.extent and line.extent.labels for line in value):
             raise ValueError("Labels are not allowed in line translations.")
 
     @property

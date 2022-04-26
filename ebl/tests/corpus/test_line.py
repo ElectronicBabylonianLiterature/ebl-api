@@ -62,7 +62,7 @@ def test_line_variant_constructor():
     assert LINE_VARIANT.manuscripts[0].omitted_words == OMITTED_WORDS
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "labels",
     [
         (ColumnLabel.from_label("i"), ColumnLabel.from_label("ii")),

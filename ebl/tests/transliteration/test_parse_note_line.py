@@ -27,7 +27,7 @@ def expected_language_part(language: Language, transliteration: str) -> Language
     return LanguagePart.of_transliteration(language, parse_text(transliteration))
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,expected",
     [
         ("this is a note ", (StringPart("this is a note "),)),

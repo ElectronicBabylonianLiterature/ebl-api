@@ -8,7 +8,7 @@ from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "parts,language,extent,prefix,translation",
     [
         ((StringPart("foo"), StringPart("bar")), "en", None, "#tr.en", "foobar"),

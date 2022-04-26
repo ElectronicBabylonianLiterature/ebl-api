@@ -511,7 +511,7 @@ def test_updating_manuscripts(
     )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "manuscripts",
     [
         tuple(),
@@ -686,7 +686,10 @@ def test_importing_lines(
     atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
     updated_chapter = attr.evolve(
         CHAPTER,
-        lines=(*CHAPTER.lines, *parse_chapter(atf, CHAPTER.manuscripts)),
+        lines=(  # pyre-ignore[60]
+            *CHAPTER.lines,
+            *parse_chapter(atf, CHAPTER.manuscripts),
+        ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )

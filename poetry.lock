@@ -354,6 +354,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "intervaltree"
+version = "3.1.0"
+description = "Editable interval tree data structure for Python 2 and 3"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+sortedcontainers = ">=2.0,<3.0"
+
+[[package]]
 name = "jsonschema"
 version = "4.4.0"
 description = "An implementation of JSON Schema validation for Python"
@@ -585,6 +596,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
+name = "pygments"
+version = "2.11.2"
+description = "Pygments is a syntax highlighting package written in Python."
+category = "dev"
+optional = false
+python-versions = ">=3.5"
+
+[[package]]
 name = "pyhamcrest"
 version = "2.0.3"
 description = "Hamcrest framework for matcher objects"
@@ -653,7 +672,7 @@ diagrams = ["jinja2", "railroad-diagrams"]
 
 [[package]]
 name = "pyre-check"
-version = "0.0.60"
+version = "0.9.10"
 description = "A performant type checker for Python"
 category = "dev"
 optional = false
@@ -663,11 +682,12 @@ python-versions = ">=3.6"
 async-generator = "*"
 click = "*"
 dataclasses-json = "*"
-libcst = ">=0.3.6"
+intervaltree = "*"
+libcst = "*"
 psutil = "*"
 pyre-extensions = "*"
-pywatchman = "*"
 tabulate = "*"
+testslide = ">=2.7.0"
 typing-extensions = "*"
 
 [[package]]
@@ -780,14 +800,6 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,>=2.7"
 six = ">=1.5"
 
 [[package]]
-name = "pywatchman"
-version = "1.4.1"
-description = "Watchman client for python"
-category = "dev"
-optional = false
-python-versions = "*"
-
-[[package]]
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
@@ -839,7 +851,7 @@ python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
 
 [[package]]
 name = "sentry-sdk"
-version = "1.5.7"
+version = "1.5.8"
 description = "Python client for Sentry (https://sentry.io)"
 category = "main"
 optional = false
@@ -877,6 +889,14 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "sortedcontainers"
+version = "2.4.0"
+description = "Sorted Containers -- Sorted List, Sorted Dict, Sorted Set"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "tabulate"
 version = "0.8.9"
 description = "Pretty-print tabular data"
@@ -886,6 +906,22 @@ python-versions = "*"
 
 [package.extras]
 widechars = ["wcwidth"]
+
+[[package]]
+name = "testslide"
+version = "2.7.0"
+description = "A test framework for Python that makes mocking and iterating over code with tests a breeze"
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+psutil = ">=5.6.7"
+Pygments = ">=2.2.0"
+typeguard = ">=2.10.0"
+
+[package.extras]
+build = ["black", "coverage", "coveralls", "flake8", "isort (>=5.1,<6.0)", "mypy (==0.782)", "ipython", "sphinx", "sphinx-autobuild", "sphinx-kr-theme", "twine"]
 
 [[package]]
 name = "tomli"
@@ -910,6 +946,18 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 dev = ["py-make (>=0.1.0)", "twine", "wheel"]
 notebook = ["ipywidgets (>=6)"]
 telegram = ["requests"]
+
+[[package]]
+name = "typeguard"
+version = "2.13.3"
+description = "Run-time type checker for Python"
+category = "dev"
+optional = false
+python-versions = ">=3.5.3"
+
+[package.extras]
+doc = ["sphinx-rtd-theme", "sphinx-autodoc-typehints (>=1.2.0)"]
+test = ["pytest", "typing-extensions", "mypy"]
 
 [[package]]
 name = "typing-extensions"
@@ -979,7 +1027,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "3.8.*"
-content-hash = "9a4d60f6e331759681eba2b6feb5951bf25012e1d30964dd5e1c064cc470421c"
+content-hash = "e3e12f7b2f0f60fe6d4f49dc3fe2ef1e5a80a84b8d90750c9340a5aa695c96ec"
 
 [metadata.files]
 alignment = []
@@ -1244,6 +1292,9 @@ iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
 ]
+intervaltree = [
+    {file = "intervaltree-3.1.0.tar.gz", hash = "sha256:902b1b88936918f9b2a19e0e5eb7ccb430ae45cde4f39ea4b36932920d33952d"},
+]
 jsonschema = [
     {file = "jsonschema-4.4.0-py3-none-any.whl", hash = "sha256:77281a1f71684953ee8b3d488371b162419767973789272434bbc3f29d9c8823"},
     {file = "jsonschema-4.4.0.tar.gz", hash = "sha256:636694eb41b3535ed608fe04129f26542b59ed99808b4f688aa32dcf55317a83"},
@@ -1478,6 +1529,10 @@ pyflakes = [
     {file = "pyflakes-2.4.0-py2.py3-none-any.whl", hash = "sha256:3bb3a3f256f4b7968c9c788781e4ff07dce46bdf12339dcda61053375426ee2e"},
     {file = "pyflakes-2.4.0.tar.gz", hash = "sha256:05a85c2872edf37a4ed30b0cce2f6093e1d0581f8c19d7393122da7e25b2b24c"},
 ]
+pygments = [
+    {file = "Pygments-2.11.2-py3-none-any.whl", hash = "sha256:44238f1b60a76d78fc8ca0528ee429702aae011c265fe6a8dd8b63049ae41c65"},
+    {file = "Pygments-2.11.2.tar.gz", hash = "sha256:4e426f72023d88d03b2fa258de560726ce890ff3b630f88c21cbb8b2503b8c6a"},
+]
 pyhamcrest = [
     {file = "PyHamcrest-2.0.3-py3-none-any.whl", hash = "sha256:c29dc977154c49e17c30d1ed49a0a6e31cb0dc7bcf733ac4aa9cb58519c2b00c"},
     {file = "PyHamcrest-2.0.3.tar.gz", hash = "sha256:dfb19cf6d71743e086fbb761ed7faea5aacbc8ec10c17a08b93ecde39192a3db"},
@@ -1580,9 +1635,9 @@ pyparsing = [
     {file = "pyparsing-3.0.7.tar.gz", hash = "sha256:18ee9022775d270c55187733956460083db60b37d0d0fb357445f3094eed3eea"},
 ]
 pyre-check = [
-    {file = "pyre-check-0.0.60.tar.gz", hash = "sha256:2a2112315f3a5670d4de9dd95773207b1f5e70b432a47208c50462edea6c16d3"},
-    {file = "pyre_check-0.0.60-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:4b153b57a6512c3b8fdda17f5b7d8756f99a180b08b0b38a730bdc0e07a38980"},
-    {file = "pyre_check-0.0.60-py3-none-manylinux1_x86_64.whl", hash = "sha256:76de7d42ffaecc4e6400968d9c8ca8279678c522609a4a5e51eb8e9a303a9202"},
+    {file = "pyre-check-0.9.10.tar.gz", hash = "sha256:d3a5e66fc6e7fa998fcf2c74dbe92746bb6907aaaccfa9e1c88ab591b2c85684"},
+    {file = "pyre_check-0.9.10-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:fb127422a07c86240367739bde704b8da3144b0d3fbd68af937fee445c040f33"},
+    {file = "pyre_check-0.9.10-py3-none-manylinux1_x86_64.whl", hash = "sha256:472e53fbb4e463ecd1e3e6c9c0d25ad0d99a3d596a643f11c6070745a36fac81"},
 ]
 pyre-extensions = [
     {file = "pyre-extensions-0.0.27.tar.gz", hash = "sha256:767607736d5d2da4db3377e016746776a195987fb3c61c7b38b442160e67771f"},
@@ -1634,9 +1689,6 @@ python-dateutil = [
     {file = "python-dateutil-2.8.2.tar.gz", hash = "sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86"},
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
-pywatchman = [
-    {file = "pywatchman-1.4.1.tar.gz", hash = "sha256:d0047eb275deafb0011eda0a1a815fbd9742478c3d2b5ad6956d300e447dc2f9"},
-]
 pyyaml = [
     {file = "PyYAML-6.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d4db7c7aef085872ef65a8fd7d6d09a14ae91f691dec3e87ee5ee0539d516f53"},
     {file = "PyYAML-6.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:9df7ed3b3d2e0ecfe09e14741b857df43adb5a3ddadc919a2d94fbdf78fea53c"},
@@ -1685,16 +1737,23 @@ roman = [
     {file = "roman-3.3.tar.gz", hash = "sha256:2c46ac8db827d34e4fa9ccc0577e7f0b0d84f16ffe112351bd4f1ec2eb12d73f"},
 ]
 sentry-sdk = [
-    {file = "sentry-sdk-1.5.7.tar.gz", hash = "sha256:aa52da941c56b5a76fd838f8e9e92a850bf893a9eb1e33ffce6c21431d07ee30"},
-    {file = "sentry_sdk-1.5.7-py2.py3-none-any.whl", hash = "sha256:411a8495bd18cf13038e5749e4710beb4efa53da6351f67b4c2f307c2d9b6d49"},
+    {file = "sentry-sdk-1.5.8.tar.gz", hash = "sha256:38fd16a92b5ef94203db3ece10e03bdaa291481dd7e00e77a148aa0302267d47"},
+    {file = "sentry_sdk-1.5.8-py2.py3-none-any.whl", hash = "sha256:32af1a57954576709242beb8c373b3dbde346ac6bd616921def29d68846fb8c3"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
 ]
+sortedcontainers = [
+    {file = "sortedcontainers-2.4.0-py2.py3-none-any.whl", hash = "sha256:a163dcaede0f1c021485e957a39245190e74249897e2ae4b2aa38595db237ee0"},
+    {file = "sortedcontainers-2.4.0.tar.gz", hash = "sha256:25caa5a06cc30b6b83d11423433f65d1f9d76c4c6a0c90e3379eaa43b9bfdb88"},
+]
 tabulate = [
     {file = "tabulate-0.8.9-py3-none-any.whl", hash = "sha256:d7c013fe7abbc5e491394e10fa845f8f32fe54f8dc60c6622c6cf482d25d47e4"},
     {file = "tabulate-0.8.9.tar.gz", hash = "sha256:eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7"},
+]
+testslide = [
+    {file = "TestSlide-2.7.0.tar.gz", hash = "sha256:23ece0b9f5b704b33b978e9c8797936034516adc3c4743ebdaed664aa700c3cb"},
 ]
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},
@@ -1703,6 +1762,10 @@ tomli = [
 tqdm = [
     {file = "tqdm-4.62.3-py2.py3-none-any.whl", hash = "sha256:8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c"},
     {file = "tqdm-4.62.3.tar.gz", hash = "sha256:d359de7217506c9851b7869f3708d8ee53ed70a1b8edbba4dbcb47442592920d"},
+]
+typeguard = [
+    {file = "typeguard-2.13.3-py3-none-any.whl", hash = "sha256:5e3e3be01e887e7eafae5af63d1f36c849aaa94e3a0112097312aabfa16284f1"},
+    {file = "typeguard-2.13.3.tar.gz", hash = "sha256:00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.1.1-py3-none-any.whl", hash = "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"},
