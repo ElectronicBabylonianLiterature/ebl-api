@@ -8,9 +8,11 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
+from ebl.fragmentarium.application.fragmentarium_search_query import (
+    FragmentariumSearchQuery,
+)
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentFinder:
@@ -40,31 +42,21 @@ class FragmentFinder:
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
-    def search(
-        self,
-        transliteration: TransliterationQuery,
-        number: str,
-        bibliography_id: str,
-        pages: str,
-    ) -> List[FragmentInfo]:
-        query_results = self._repository.query_fragmentarium(
-            transliteration, number, bibliography_id, pages
-        )
-        if transliteration.is_empty():
+    def search(self, query: FragmentariumSearchQuery) -> List[FragmentInfo]:
+        query_results = self._repository.query_fragmentarium(query)
+        if query.transliteration.is_empty():
             return list(map(FragmentInfo.of, query_results))
         return [
-            FragmentInfo.of(fragment, fragment.get_matching_lines(transliteration))
+            FragmentInfo.of(
+                fragment, fragment.get_matching_lines(query.transliteration)
+            )
             for fragment in query_results
         ]
 
     def search_fragmentarium(
-        self,
-        transliteration: TransliterationQuery,
-        number: str,
-        bibliography_id: str,
-        pages: str,
+        self, query: FragmentariumSearchQuery
     ) -> List[FragmentInfo]:
-        fragment_infos = self.search(transliteration, number, bibliography_id, pages)
+        fragment_infos = self.search(query)
 
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:

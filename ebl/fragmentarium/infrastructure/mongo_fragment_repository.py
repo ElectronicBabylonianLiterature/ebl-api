@@ -9,6 +9,9 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragmentarium_search_query import (
+    FragmentariumSearchQuery,
+)
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
@@ -28,7 +31,6 @@ from ebl.fragmentarium.infrastructure.queries import (
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
@@ -181,37 +183,28 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
+    @staticmethod
     def _query_fragmentarium_create_query(
-        self,
-        transliteration: TransliterationQuery,
-        number: str = "",
-        bibliography_id: str = "",
-        pages: str = "",
+        query: FragmentariumSearchQuery,
     ) -> dict:
-        number_query = number_is(number) if number else {}
+        number_query = number_is(query.number) if query.number else {}
         signs_query = (
-            {"signs": {"$regex": transliteration.regexp}}
-            if not transliteration.is_empty()
+            {"signs": {"$regex": query.transliteration.regexp}}
+            if not query.transliteration.is_empty()
             else {}
         )
         id_query: Dict[str, Dict] = {}
-        if bibliography_id:
-            id_query = {"references": {"$elemMatch": {"id": bibliography_id}}}
-            if pages:
+        if query.bibliography_id:
+            id_query = {"references": {"$elemMatch": {"id": query.bibliography_id}}}
+            if query.pages:
                 id_query["references"]["$elemMatch"]["pages"] = {
-                    "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
+                    "$regex": rf".*?(^|[^\d]){query.pages}([^\d]|$).*?"
                 }
         return {**number_query, **signs_query, **id_query}
 
-    def query_fragmentarium(
-        self,
-        transliteration: TransliterationQuery,
-        number: str = "",
-        bibliography_id: str = "",
-        pages: str = "",
-    ) -> Sequence[dict]:
+    def query_fragmentarium(self, query: FragmentariumSearchQuery) -> Sequence[dict]:
         cursor = self._fragments.find_many(
-            self._query_fragmentarium_create_query(transliteration, number, bibliography_id, pages),
+            self._query_fragmentarium_create_query(query),
             limit=100,
             projection={"joins": False},
         )

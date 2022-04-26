@@ -9,10 +9,12 @@ from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
+from ebl.fragmentarium.application.fragmentarium_search_query import (
+    FragmentariumSearchQuery,
+)
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.web.require_scope import require_scope
 
 CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
@@ -40,7 +42,7 @@ class FragmentSearch:
                 frozenset(
                     ["number", "transliteration", "id", "pages"]
                 ): lambda value: finder.search_fragmentarium(
-                    *self._parse_fragmentarium_search(**value)
+                    self._parse_fragmentarium_search(**value)
                 ),
                 frozenset(["random"]): lambda _: finder.find_random(),
                 frozenset(["interesting"]): lambda _: finder.find_interesting(),
@@ -51,7 +53,7 @@ class FragmentSearch:
 
     def _parse_fragmentarium_search(
         self, number: str, transliteration: str, id: str, pages: str
-    ) -> Tuple[TransliterationQuery, str, str, str]:
+    ) -> FragmentariumSearchQuery:
         parsed_transliteration = (
             self._transliteration_query_factory.create(transliteration)
             if transliteration
@@ -59,7 +61,9 @@ class FragmentSearch:
         )
         validated_id, validated_pages = self._validate_pages(id, pages)
 
-        return parsed_transliteration, number, validated_id, validated_pages
+        return FragmentariumSearchQuery(
+            number, parsed_transliteration, validated_id, validated_pages
+        )
 
     @staticmethod
     def _validate_pages(id: str, pages: str) -> Tuple[str, str]:

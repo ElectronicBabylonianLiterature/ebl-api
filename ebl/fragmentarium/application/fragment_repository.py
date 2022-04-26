@@ -5,8 +5,10 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
+from ebl.fragmentarium.application.fragmentarium_search_query import (
+    FragmentariumSearchQuery,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentRepository(ABC):
@@ -84,11 +86,5 @@ class FragmentRepository(ABC):
     def update_references(self, fragment: Fragment) -> None:
         ...
 
-    def query_fragmentarium(
-        self,
-        transliteration: TransliterationQuery,
-        number: str = "",
-        id: str = "",
-        pages: str = "",
-    ):
+    def query_fragmentarium(self, query: FragmentariumSearchQuery):
         ...
