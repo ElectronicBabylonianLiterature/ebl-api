@@ -1,12 +1,10 @@
-from typing import Sequence
-
 import pytest
 
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
-from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
+from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
@@ -62,22 +60,6 @@ def test_line_variant_constructor():
     assert LINE_VARIANT.manuscripts[0].omitted_words == OMITTED_WORDS
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
-    "labels",
-    [
-        (ColumnLabel.from_label("i"), ColumnLabel.from_label("ii")),
-        (
-            SurfaceLabel.from_label(Surface.OBVERSE),
-            SurfaceLabel.from_label(Surface.REVERSE),
-        ),
-        (ColumnLabel.from_label("i"), SurfaceLabel.from_label(Surface.REVERSE)),
-    ],
-)
-def test_invalid_labels(labels: Sequence[Label]):
-    with pytest.raises(ValueError):
-        ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine(LineNumber(1)))
-
-
 def test_invalid_reconstruction():
     with pytest.raises(ValueError):
         Line(
@@ -86,38 +68,3 @@ def test_invalid_reconstruction():
             False,
             False,
         )
-
-
-def test_update_manuscript_alignment():
-    word1 = Word.of(
-        [Reading.of_name("ku")], alignment=0, variant=Word.of([Reading.of_name("uk")])
-    )
-    word2 = Word.of(
-        [Reading.of_name("ra")], alignment=1, variant=Word.of([Reading.of_name("ar")])
-    )
-    word3 = Word.of(
-        [Reading.of_name("pa")], alignment=2, variant=Word.of([Reading.of_name("ap")])
-    )
-    manuscript = ManuscriptLine(
-        MANUSCRIPT_ID,
-        LABELS,
-        TextLine(LineNumber(1), (word1, word2, word3)),
-        PARATEXT,
-        (1, 3),
-    )
-    expected = ManuscriptLine(
-        MANUSCRIPT_ID,
-        LABELS,
-        TextLine(
-            LineNumber(1),
-            (
-                word1.set_alignment(None, None),
-                word2.set_alignment(0, word2.variant),
-                word3.set_alignment(None, None),
-            ),
-        ),
-        PARATEXT,
-        (0,),
-    )
-
-    assert manuscript.update_alignments([None, 0]) == expected

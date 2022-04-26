@@ -159,12 +159,15 @@ def test_alignable(word, _) -> None:
     assert word.alignable == word.lemmatizable
 
 
-@pytest.mark.parametrize("variant,expected", [
-    (Word.of([Reading.of("rs")]), True),
-    (None, False),
-])
+@pytest.mark.parametrize(  # pyre-ignore[56]
+    "variant,expected",
+    [
+        (Word.of([Reading.of_name("ra")]), True),
+        (None, False),
+    ],
+)
 def test_has_variant(variant: Optional[AbstractWord], expected: bool) -> None:
-    assert Word.of([Reading.of("kur")], variant=variant).has_variant is expected
+    assert Word.of([Reading.of_name("kur")], variant=variant).has_variant is expected
 
 
 def test_set_language() -> None:

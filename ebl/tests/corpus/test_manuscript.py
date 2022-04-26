@@ -12,7 +12,7 @@ from ebl.transliteration.domain.text_line import TextLine
 
 @pytest.mark.parametrize(
     "line,expected",
-    [(EmptyLine(), True), (TextLine(LineNumber("X", 1)), False)],
+    [(EmptyLine(), True), (TextLine(LineNumber(1)), False)],
 )
 def test_is_empty(line: Union[TextLine, EmptyLine], expected: bool) -> None:
     assert ManuscriptLineFactory.build(line=line).is_empty is expected
