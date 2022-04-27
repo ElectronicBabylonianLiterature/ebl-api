@@ -40,7 +40,7 @@ class FragmentSearch:
         self._dispatch = create_dispatcher(
             {
                 frozenset(
-                    ["number", "transliteration", "id", "pages"]
+                    ["number", "transliteration", "bibliographyId", "pages"]
                 ): lambda value: finder.search_fragmentarium(
                     self._parse_fragmentarium_search(**value)
                 ),
@@ -52,14 +52,14 @@ class FragmentSearch:
         )
 
     def _parse_fragmentarium_search(
-        self, number: str, transliteration: str, id: str, pages: str
+        self, number: str, transliteration: str, bibliographyId: str, pages: str
     ) -> FragmentariumSearchQuery:
         parsed_transliteration = (
             self._transliteration_query_factory.create(transliteration)
             if transliteration
             else self._transliteration_query_factory.create_empty()
         )
-        validated_id, validated_pages = self._validate_pages(id, pages)
+        validated_id, validated_pages = self._validate_pages(bibliographyId, pages)
 
         return FragmentariumSearchQuery(
             number, parsed_transliteration, validated_id, validated_pages
