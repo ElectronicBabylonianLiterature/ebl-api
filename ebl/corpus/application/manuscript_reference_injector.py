@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import Iterable, List, Optional, Sequence, Tuple
+from typing import Iterable, List, Optional, Sequence
 
 import attr
 
@@ -53,7 +53,7 @@ class ManuscriptReferenceInjector(ChapterVisitor):
         document = self._bibliography.find(reference.id)
         return attr.evolve(reference, document=document)
 
-    def _inject_old_sigla(self, old_sigla: Tuple[OldSiglum]) -> Tuple[OldSiglum]:
+    def _inject_old_sigla(self, old_sigla: Sequence[OldSiglum]) -> Sequence[OldSiglum]:
         return tuple(
             attr.evolve(
                 old_siglum, reference=self._inject_reference(old_siglum.reference)
