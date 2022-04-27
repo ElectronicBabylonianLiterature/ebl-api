@@ -87,7 +87,7 @@ def strip_documents(chapter: Chapter) -> Chapter:
 
 def get_museum_number(manuscript: Manuscript, include_documents: bool):
     if include_documents:
-        return str(getattr(manuscript, "museum_number", ""))
+        return getattr(manuscript, "museum_number", "")
 
     return manuscript.museum_number and MuseumNumberSchema().dump(
         manuscript.museum_number
