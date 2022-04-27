@@ -92,7 +92,10 @@ class AbstractWord(Token):
         )
 
     def merge(self, token: T) -> T:
-        return self._merge_word(token) if isinstance(token, AbstractWord) else token
+        if isinstance(token, AbstractWord):
+            return self._merge_word(token)
+        else:
+            return token
 
     def _merge_word(self, token: A) -> A:
         is_compatible = self._is_compatible(token)
