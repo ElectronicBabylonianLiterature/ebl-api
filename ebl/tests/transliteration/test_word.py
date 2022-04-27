@@ -113,6 +113,7 @@ def test_word(language, unique_lemma) -> None:
         "parts": OneOfTokenSchema().dump(parts, many=True),
         "alignment": 1,
         "variant": OneOfWordSchema().dump(variant),
+        "hasVariantAlignment": word.has_variant_alignment,
     }
 
     assert_token_serialization(word, serialized)

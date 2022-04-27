@@ -356,6 +356,9 @@ class BaseWordSchema(BaseTokenSchema):
     variant = fields.Nested(
         lambda: OneOfWordSchema(), allow_none=True, load_default=None
     )
+    has_variant_alignment = fields.Boolean(
+        load_default=False, data_key="hasVariantAlignment"
+    )
 
 
 class WordSchema(BaseWordSchema):
@@ -368,6 +371,7 @@ class WordSchema(BaseWordSchema):
             data["erasure"],
             data["alignment"],
             data["variant"],
+            data["has_variant_alignment"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -385,6 +389,7 @@ class LoneDeterminativeSchema(BaseWordSchema):
             data["erasure"],
             data["alignment"],
             data["variant"],
+            data["has_variant_alignment"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -486,6 +491,7 @@ class AkkadianWordSchema(BaseWordSchema):
             tuple(data["unique_lemma"]),
             data["alignment"],
             data["variant"],
+            data["has_variant_alignment"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
@@ -533,6 +539,7 @@ class GreekWordSchema(BaseWordSchema):
             data["alignment"],
             data["variant"],
             data["erasure"],
+            data["has_variant_alignment"],
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
