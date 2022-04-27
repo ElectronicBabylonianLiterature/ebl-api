@@ -193,13 +193,15 @@ class MongoFragmentRepository(FragmentRepository):
             if not query.transliteration.is_empty()
             else {}
         )
-        id_query: Dict[str, Dict] = {}
-        if query.bibliography_id:
-            id_query = {"references": {"$elemMatch": {"id": query.bibliography_id}}}
-            if query.pages:
-                id_query["references"]["$elemMatch"]["pages"] = {
-                    "$regex": rf".*?(^|[^\d]){query.pages}([^\d]|$).*?"
-                }
+        id_query = (
+            {"references": {"$elemMatch": {"id": query.bibliography_id}}}
+            if query.bibliography_id
+            else {}
+        )
+        if query.pages:
+            id_query["references"]["$elemMatch"]["pages"] = {
+                "$regex": rf".*?(^|[^\d]){query.pages}([^\d]|$).*?"
+            }
         return {**number_query, **signs_query, **id_query}
 
     def query_fragmentarium(self, query: FragmentariumSearchQuery) -> Sequence[dict]:
