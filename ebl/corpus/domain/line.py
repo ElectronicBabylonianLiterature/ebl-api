@@ -37,17 +37,21 @@ class ManuscriptLine:
     @property
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
-            (self.manuscript_id, self.labels, cast(TextLine, self.line).line_number)
-            if not self.is_empty
-            else None
+            None
+            if self.is_empty
+            else (
+                self.manuscript_id,
+                self.labels,
+                cast(TextLine, self.line).line_number,
+            )
         )
 
     @property
     def is_beginning_of_side(self) -> bool:
         return (
-            cast(TextLine, self.line).line_number.is_beginning_of_side
-            if not self.is_empty
-            else False
+            False
+            if self.is_empty
+            else cast(TextLine, self.line).line_number.is_beginning_of_side
         )
 
     @property
@@ -104,14 +108,14 @@ class LineVariant:
 
     @property
     def _variant_alignments(self) -> Set[Optional[int]]:
-        return set(
+        return {
             manuscript_token.alignment
             for manuscript in self.manuscripts
             for manuscript_token in cast(TextLine, manuscript.line).content
             if not manuscript.is_empty
             if isinstance(manuscript_token, AbstractWord)
             and manuscript_token.has_variant
-        )
+        }
 
     def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
         return (

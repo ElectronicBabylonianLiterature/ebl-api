@@ -58,7 +58,9 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         "manuscripts": ApiManuscriptSchema(
             exclude=[] if include_documents else ["joins"]
         ).dump(chapter.manuscripts, many=True),
-        "uncertainFragments": [str(number) for number in chapter.uncertain_fragments],
+        "uncertainFragments": [
+            str(number) for number in chapter.uncertain_fragments
+        ],
         "lines": [
             {
                 "number": line.number.label,
@@ -67,7 +69,9 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                         "reconstruction": "".join(
                             [
                                 convert_to_atf(None, variant.reconstruction),
-                                f"\n{variant.note.atf}" if variant.note else "",
+                                f"\n{variant.note.atf}"
+                                if variant.note
+                                else "",
                                 *[
                                     f"\n{parallel_line.atf}"
                                     for parallel_line in variant.parallel_lines
@@ -77,36 +81,41 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                         "reconstructionTokens": OneOfTokenSchema().dump(
                             variant.reconstruction, many=True
                         ),
-                        "intertext": "".join(part.value for part in variant.intertext),
+                        "intertext": "".join(
+                            part.value for part in variant.intertext
+                        ),
                         "manuscripts": [
                             {
                                 "manuscriptId": manuscript_line.manuscript_id,
                                 "labels": [
-                                    label.to_value() for label in manuscript_line.labels
+                                    label.to_value()
+                                    for label in manuscript_line.labels
                                 ],
-                                "number": manuscript_line.line.line_number.atf[:-1]
-                                if not manuscript_line.is_empty
-                                else "",
+                                "number": ""
+                                if manuscript_line.is_empty
+                                else manuscript_line.line.line_number.atf[:-1],
                                 "atf": "\n".join(
                                     [
-                                        manuscript_line.line.atf[
-                                            len(manuscript_line.line.line_number.atf)
+                                        ""
+                                        if manuscript_line.is_empty
+                                        else manuscript_line.line.atf[
+                                            len(
+                                                manuscript_line.line.line_number.atf
+                                            )
                                             + 1 :
-                                        ]
-                                        if not manuscript_line.is_empty
-                                        else "",
+                                        ],
                                         *[
                                             line.atf
                                             for line in manuscript_line.paratext
                                         ],
                                     ]
                                 ).strip(),
-                                "atfTokens": (
-                                    OneOfLineSchema().dump(manuscript_line.line)[
-                                        "content"
-                                    ]
+                                "atfTokens": OneOfLineSchema().dump(
+                                    manuscript_line.line
+                                )["content"],
+                                "omittedWords": list(
+                                    manuscript_line.omitted_words
                                 ),
-                                "omittedWords": list(manuscript_line.omitted_words),
                             }
                             for manuscript_line in variant.manuscripts
                         ],
@@ -122,6 +131,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
             for line in chapter.lines
         ],
     }
+
 
     return chapter, dto
 

@@ -83,20 +83,20 @@ class ApiManuscriptSchema(ManuscriptSchema):
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:
     return (
-        cast(TextLine, manuscript_line.line).line_number.label
-        if not manuscript_line.is_empty
-        else ""
+        ""
+        if manuscript_line.is_empty
+        else cast(TextLine, manuscript_line.line).line_number.label
     )
 
 
 def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
     return "\n".join(
         [
-            manuscript_line.line.atf[
+            ""
+            if manuscript_line.is_empty
+            else manuscript_line.line.atf[
                 len(cast(TextLine, manuscript_line.line).line_number.atf) + 1 :
-            ]
-            if not manuscript_line.is_empty
-            else "",
+            ],
             *[line.atf for line in manuscript_line.paratext],
         ]
     ).strip()
