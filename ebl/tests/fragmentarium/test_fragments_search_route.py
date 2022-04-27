@@ -32,7 +32,7 @@ def test_search_fragmentarium_number(get_number, client, fragmentarium):
         params={
             "number": get_number(fragment),
             "transliteration": "",
-            "id": "",
+            "bibliographyId": "",
             "pages": "",
         },
     )
@@ -45,7 +45,12 @@ def test_search_fragmentarium_number(get_number, client, fragmentarium):
 def test_search_fragmentarium_number_not_found(client):
     result = client.simulate_get(
         "/fragments",
-        params={"number": "K.1", "transliteration": "", "id": "", "pages": ""},
+        params={
+            "number": "K.1",
+            "transliteration": "",
+            "bibliographyId": "",
+            "pages": "",
+        },
     )
 
     assert result.json == []
@@ -69,7 +74,7 @@ def test_search_fragmentarium_references(client, fragmentarium, bibliography, us
         params={
             "number": "",
             "transliteration": "",
-            "id": fragment.references[0].id,
+            "bibliographyId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
         },
     )
@@ -100,7 +105,7 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
         params={
             "number": "",
             "transliteration": "",
-            "id": reference_id,
+            "bibliographyId": reference_id,
             "pages": reference_pages,
         },
     )
@@ -117,7 +122,12 @@ def test_search_fragmentarium_transliteration(
 
     result = client.simulate_get(
         "/fragments",
-        params={"number": "", "transliteration": "ma-tu₂", "pages": "", "id": ""},
+        params={
+            "number": "",
+            "transliteration": "ma-tu₂",
+            "pages": "",
+            "bibliographyId": "",
+        },
     )
 
     assert result.status == falcon.HTTP_OK
@@ -153,7 +163,7 @@ def test_search_fragmentarium_combined_query(
         params={
             "number": str(fragment.number),
             "transliteration": "ma-tu₂",
-            "id": fragment.references[0].id,
+            "bibliographyId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
         },
     )
@@ -177,7 +187,12 @@ def test_search_fragmentarium_combined_query(
 def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):
     result = client.simulate_get(
         "/fragments",
-        params={"number": "", "transliteration": "$ invalid", "id": "", "pages": ""},
+        params={
+            "number": "",
+            "transliteration": "$ invalid",
+            "bibliographyId": "",
+            "pages": "",
+        },
     )
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
