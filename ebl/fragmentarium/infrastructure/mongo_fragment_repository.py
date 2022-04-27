@@ -189,10 +189,11 @@ class MongoFragmentRepository(FragmentRepository):
     ) -> dict:
         number_query = number_is(query.number) if query.number else {}
         signs_query = (
-            {"signs": {"$regex": query.transliteration.regexp}}
-            if not query.transliteration.is_empty()
-            else {}
+            {}
+            if query.transliteration.is_empty()
+            else {"signs": {"$regex": query.transliteration.regexp}}
         )
+
         id_query = (
             {"references": {"$elemMatch": {"id": query.bibliography_id}}}
             if query.bibliography_id
