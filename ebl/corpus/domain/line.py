@@ -151,7 +151,7 @@ class LineVariant:
             other,
             reconstruction=merged_reconstruction,
             manuscripts=tuple(merged_manuscripts),
-        )
+        ).set_has_variant_aligment()
 
     def set_has_variant_aligment(self) -> "LineVariant":
         variant_alignments = self._variant_alignments
@@ -225,6 +225,14 @@ class Line:
             .reject(pydash.is_none)
             .head()
             .value()
+        )
+
+    def set_has_variant_aligment(self) -> "Line":
+        return attr.evolve(
+            self,
+            variants=tuple(
+                variant.set_has_variant_aligment() for variant in self.variants
+            ),
         )
 
     def merge(self, other: "Line") -> "Line":
