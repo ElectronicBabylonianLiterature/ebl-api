@@ -8,11 +8,9 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 class FragmentFinder:
@@ -42,22 +40,18 @@ class FragmentFinder:
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
-    def search(self, query: FragmentariumSearchQuery) -> List[FragmentInfo]:
-        query_results = self._repository.query_fragmentarium(query)
-        if query.transliteration.is_empty():
-            return list(map(FragmentInfo.of, query_results))
-        return [
-            FragmentInfo.of(
-                fragment, fragment.get_matching_lines(query.transliteration)
+    def search(self, number: str) -> List[FragmentInfo]:
+        return list(
+            map(
+                FragmentInfo.of,
+                self._repository.query_by_fragment_cdli_or_accession_number(number),
             )
-            for fragment in query_results
-        ]
+        )
 
-    def search_fragmentarium(
-        self, query: FragmentariumSearchQuery
+    def search_references_in_fragment_infos(
+        self, id: str, pages: str
     ) -> List[FragmentInfo]:
-        fragment_infos = self.search(query)
-
+        fragment_infos = self.search_references(id, pages)
         fragment_infos_with_documents = []
         for fragment_info in fragment_infos:
             references_with_documents = [
@@ -68,6 +62,27 @@ class FragmentFinder:
                 fragment_info.set_references(references_with_documents)
             )
         return fragment_infos_with_documents
+
+    def search_references(
+        self, reference_id: str, reference_pages: str
+    ) -> List[FragmentInfo]:
+        return list(
+            map(
+                FragmentInfo.of,
+                self._repository.query_by_id_and_page_in_references(
+                    reference_id, reference_pages
+                ),
+            )
+        )
+
+    def search_transliteration(self, query: TransliterationQuery) -> List[FragmentInfo]:
+        if query.is_empty():
+            return []
+        else:
+            return [
+                FragmentInfo.of(fragment, fragment.get_matching_lines(query))
+                for fragment in self._repository.query_by_transliteration(query)
+            ]
 
     def find_random(self) -> List[FragmentInfo]:
         return list(

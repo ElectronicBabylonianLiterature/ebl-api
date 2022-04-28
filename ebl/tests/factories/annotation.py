@@ -17,8 +17,8 @@ class GeometryFactory(factory.Factory):
 
     x = factory.fuzzy.FuzzyFloat(0, 100)
     y = factory.fuzzy.FuzzyFloat(0, 100)
-    width = factory.fuzzy.FuzzyFloat(10, 100)
-    height = factory.fuzzy.FuzzyFloat(10, 100)
+    width = factory.fuzzy.FuzzyFloat(0, 100)
+    height = factory.fuzzy.FuzzyFloat(0, 100)
 
 
 class AnnotationDataFactory(factory.Factory):
