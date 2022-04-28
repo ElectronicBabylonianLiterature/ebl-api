@@ -30,5 +30,5 @@ class LinesUpdater(ChapterUpdater):
                     lines=(*self._lines, *self._lines_update.new),
                     parser_version=ATF_PARSER_VERSION,
                 )
-            ).set_has_variant_aligment()
+            )
         )

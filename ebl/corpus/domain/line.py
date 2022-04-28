@@ -224,14 +224,6 @@ class Line:
             .value()
         )
 
-    def set_has_variant_aligment(self) -> "Line":
-        return attr.evolve(
-            self,
-            variants=tuple(
-                variant.set_has_variant_aligment() for variant in self.variants
-            ),
-        )
-
     def merge(self, other: "Line") -> "Line":
         def inner_merge(old: LineVariant, new: LineVariant) -> LineVariant:
             return old.merge(new)

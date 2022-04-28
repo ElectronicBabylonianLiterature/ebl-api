@@ -174,12 +174,6 @@ class Chapter:
             pydash.is_empty,
         )
 
-    def set_has_variant_aligment(self) -> "Chapter":
-        return attr.evolve(
-            self,
-            lines=tuple(line.set_has_variant_aligment() for line in self.lines),
-        )
-
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
             return old.merge(new)
