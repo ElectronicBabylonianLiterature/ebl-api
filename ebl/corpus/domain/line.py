@@ -1,4 +1,5 @@
-from typing import Optional, Sequence, Tuple, Union
+from functools import singledispatch
+from typing import Optional, Sequence, Set, Tuple, Union, cast
 
 import attr
 import pydash
@@ -19,6 +20,8 @@ from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.translation_line import TranslationLine
+from ebl.transliteration.domain.word_tokens import AbstractWord
+
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
 
@@ -52,6 +55,10 @@ class ManuscriptLine:
         return any(
             line.is_end_of for line in self.paratext if isinstance(line, DollarLine)
         )
+
+    @property
+    def is_empty(self) -> bool:
+        return isinstance(self.line, EmptyLine)
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -95,6 +102,17 @@ class LineVariant:
             if manuscript_line.label
         ]
 
+    @property
+    def _variant_alignments(self) -> Set[Optional[int]]:
+        return {
+            manuscript_token.alignment
+            for manuscript in self.manuscripts
+            for manuscript_token in cast(TextLine, manuscript.line).content
+            if isinstance(manuscript.line, TextLine)
+            if isinstance(manuscript_token, AbstractWord)
+            if manuscript_token.has_variant
+        }
+
     def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
         return (
             pydash.chain(self.manuscripts)
@@ -129,6 +147,25 @@ class LineVariant:
             other,
             reconstruction=merged_reconstruction,
             manuscripts=tuple(merged_manuscripts),
+        ).set_has_variant_aligment()
+
+    def set_has_variant_aligment(self) -> "LineVariant":
+        variant_alignments = self._variant_alignments
+
+        @singledispatch
+        def set_flag(token: Token, index: int) -> Token:
+            return token
+
+        @set_flag.register(AbstractWord)
+        def _(token: AbstractWord, index: int) -> AbstractWord:
+            return token.set_has_variant_alignment(index in variant_alignments)
+
+        return attr.evolve(
+            self,
+            reconstruction=tuple(
+                set_flag(token, index)
+                for index, token in enumerate(self.reconstruction)
+            ),
         )
 
 

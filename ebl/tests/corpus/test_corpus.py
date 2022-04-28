@@ -1,3 +1,5 @@
+from typing import cast
+
 import attr
 import pytest
 
@@ -26,7 +28,7 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, LanguageShift, ValueToken
-from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 
 
 CHAPTERS_COLLECTION = "chapters"
@@ -233,11 +235,31 @@ def test_update_chapter(
     )
 
 
+@pytest.mark.parametrize(
+    "variant",
+    [
+        None,
+        Word.of(
+            [
+                Reading.of_name("ku"),
+            ]
+        ),
+    ],
+)
 def test_updating_alignment(
-    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+    variant,
+    corpus,
+    text_repository,
+    bibliography,
+    changelog,
+    signs,
+    sign_repository,
+    user,
+    when,
 ) -> None:
-    aligmnet = 0
-    omitted_words = (1,)
+    aligmnet = 1
+    omitted_words = (6,)
+    has_variant_alignment = variant is not None
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
@@ -246,6 +268,14 @@ def test_updating_alignment(
                 variants=(
                     attr.evolve(
                         CHAPTER.lines[0].variants[0],
+                        reconstruction=(
+                            CHAPTER.lines[0].variants[0].reconstruction[0],
+                            cast(
+                                AbstractWord,
+                                CHAPTER.lines[0].variants[0].reconstruction[1],
+                            ).set_has_variant_alignment(has_variant_alignment),
+                            *CHAPTER.lines[0].variants[0].reconstruction[2:],
+                        ),
                         manuscripts=(
                             attr.evolve(
                                 CHAPTER.lines[0].variants[0].manuscripts[0],
@@ -266,6 +296,7 @@ def test_updating_alignment(
                                                 BrokenAway.close(),
                                             ],
                                             alignment=aligmnet,
+                                            variant=variant,
                                         ),
                                     ),
                                 ),
@@ -294,7 +325,8 @@ def test_updating_alignment(
             (
                 (
                     ManuscriptLineAlignment(
-                        (AlignmentToken("ku-[nu-ši]", aligmnet),), omitted_words
+                        (AlignmentToken("ku-[nu-ši]", aligmnet, variant),),
+                        omitted_words,
                     ),
                 ),
             ),

@@ -23,6 +23,7 @@ class AbstractWord(Token):
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
     variant: Optional["AbstractWord"] = None
+    has_variant_alignment: bool = False
 
     @property
     @abstractmethod
@@ -45,6 +46,10 @@ class AbstractWord(Token):
             for part in self.parts
             if part.erasure != ErasureState.ERASED
         )
+
+    @property
+    def has_variant(self) -> bool:
+        return self.variant is not None
 
     @property
     def lemmatizable(self) -> bool:
@@ -72,6 +77,9 @@ class AbstractWord(Token):
         self: A, alignment: Optional[int], variant: Optional["AbstractWord"]
     ) -> A:
         return attr.evolve(self, alignment=alignment, variant=variant)
+
+    def set_has_variant_alignment(self: A, has_variant_alignment) -> A:
+        return attr.evolve(self, has_variant_alignment=has_variant_alignment)
 
     def update_alignment(self: A, alignment_map) -> A:
         new_alignment = (
@@ -128,9 +136,17 @@ class Word(AbstractWord):
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
+        has_variant_alignment: bool = False,
     ) -> W:
         return cls(
-            frozenset(), erasure, unique_lemma, alignment, parts, variant, language
+            frozenset(),
+            erasure,
+            unique_lemma,
+            alignment,
+            parts,
+            variant,
+            has_variant_alignment,
+            language,
         )
 
     @property
