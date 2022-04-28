@@ -103,7 +103,8 @@ class LineResource:
 
         try:
             line, manuscripts = self._corpus.find_line(chapter_id, int(number))
-            schema = LineDetailsSchema(context={"manuscripts": manuscripts})
+            MANUSCRIPTS_BY_ID = {m.id: m for m in manuscripts}
+            schema = LineDetailsSchema(context={"manuscripts": MANUSCRIPTS_BY_ID})
             resp.media = schema.dump(line)
         except (IndexError, ValueError) as error:
             raise NotFoundError(f"{chapter_id} line {number} not found.") from error

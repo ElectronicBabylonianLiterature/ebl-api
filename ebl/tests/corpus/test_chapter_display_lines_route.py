@@ -31,7 +31,8 @@ def test_get(client, text_repository, text, chapter, bibliography, url):
     text_repository.create(text)
     text_repository.create_chapter(chapter)
     allow_references(chapter, bibliography)
-    schema = LineDetailsSchema(context={"manuscripts": chapter.manuscripts})
+    MANUSCRIPTS_BY_ID = {m.id: m for m in chapter.manuscripts}
+    schema = LineDetailsSchema(context={"manuscripts": MANUSCRIPTS_BY_ID})
 
     get_result = client.simulate_get(f"{url}/0")
 

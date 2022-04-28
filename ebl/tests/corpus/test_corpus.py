@@ -53,6 +53,10 @@ def expect_bibliography(bibliography, when) -> None:
     for manuscript in CHAPTER.manuscripts:
         for reference in manuscript.references:
             (when(bibliography).find(reference.id).thenReturn(reference.document))
+        for old_siglum in manuscript.old_sigla:
+            (when(bibliography)).find(old_siglum.reference.id).thenReturn(
+                old_siglum.reference.document
+            )
 
 
 def expect_invalid_references(bibliography, when) -> None:

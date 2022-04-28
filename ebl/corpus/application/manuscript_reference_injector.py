@@ -6,7 +6,7 @@ import attr
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
-from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
 from ebl.errors import Defect
 
 
@@ -41,7 +41,8 @@ class ManuscriptReferenceInjector(ChapterVisitor):
 
     def inject_manuscript(self, manuscript: Manuscript) -> Manuscript:
         references = self._inject_references(manuscript.references)
-        return attr.evolve(manuscript, references=references)
+        old_sigla = self._inject_old_sigla(manuscript.old_sigla)
+        return attr.evolve(manuscript, references=references, old_sigla=old_sigla)
 
     def _inject_references(
         self, references: Iterable[Reference]
@@ -51,3 +52,11 @@ class ManuscriptReferenceInjector(ChapterVisitor):
     def _inject_reference(self, reference: Reference) -> Reference:
         document = self._bibliography.find(reference.id)
         return attr.evolve(reference, document=document)
+
+    def _inject_old_sigla(self, old_sigla: Sequence[OldSiglum]) -> Sequence[OldSiglum]:
+        return tuple(
+            attr.evolve(
+                old_siglum, reference=self._inject_reference(old_siglum.reference)
+            )
+            for old_siglum in old_sigla
+        )

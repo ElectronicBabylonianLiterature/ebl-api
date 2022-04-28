@@ -8,6 +8,7 @@ from ebl.corpus.application.schemas import (
     ChapterSchema,
     LineVariantSchema,
     ManuscriptSchema,
+    OldSiglumSchema,
     labels,
     manuscript_id,
 )
@@ -61,7 +62,18 @@ def _deserialize_transliteration(value):
         raise ValidationError(f"Invalid colophon: {value}.", "colophon") from error
 
 
+class ApiOldSiglumSchema(OldSiglumSchema):
+    reference = fields.Nested(ApiReferenceSchema, required=True)
+
+
 class ApiManuscriptSchema(ManuscriptSchema):
+    old_sigla = fields.Nested(
+        ApiOldSiglumSchema,
+        many=True,
+        required=False,
+        load_default=tuple(),
+        data_key="oldSigla",
+    )
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
     colophon = fields.Function(
         lambda manuscript: manuscript.colophon.atf,

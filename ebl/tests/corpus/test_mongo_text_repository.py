@@ -34,7 +34,11 @@ CHAPTER = ChapterFactory.build(
     name=TEXT.chapters[0].name,
     manuscripts=(
         ManuscriptFactory.build(
-            id=1, museum_number=MUSEUM_NUMBER, accession="", references=tuple()
+            id=1,
+            museum_number=MUSEUM_NUMBER,
+            accession="",
+            references=tuple(),
+            old_sigla=tuple(),
         ),
     ),
     lines=(
