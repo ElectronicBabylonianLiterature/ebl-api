@@ -1,7 +1,10 @@
-from ebl.corpus.application.schemas import OldSiglumSchema
+from ebl.corpus.application.schemas import OldSiglumSchema, ManuscriptLineSchema
 from ebl.corpus.domain.manuscript import OldSiglum
-from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
-from ebl.corpus.web.display_schemas import ManuscriptLineDisplaySchema
+from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, ApiOldSiglumSchema
+from ebl.corpus.web.display_schemas import (
+    ManuscriptLineDisplay,
+    ManuscriptLineDisplaySchema,
+)
 from ebl.tests.bibliography.test_reference import create_reference_with_document
 from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
@@ -55,20 +58,23 @@ def test_api_old_siglum_schema() -> None:
 
 def test_serialize():
     chapter = ChapterFactory.build()
-    line = chapter.lines[0].variants[0].manuscripts[0]
-    manuscript = chapter.get_manuscript(line.manuscript_id)
-    MANUSCRIPTS_BY_ID = {m.id: m for m in chapter.manuscripts}
-    schema = ManuscriptLineDisplaySchema(context={"manuscripts": MANUSCRIPTS_BY_ID})
+    manuscript_line = chapter.lines[0].variants[0].manuscripts[0]
+    manuscript = chapter.get_manuscript(manuscript_line.manuscript_id)
+    manuscript_line_display = ManuscriptLineDisplay.from_manuscript_line(
+        manuscript, manuscript_line
+    )
+    schema = ManuscriptLineDisplaySchema()
 
-    assert schema.dump(line) == {
+    assert schema.dump(manuscript_line_display) == {
         "siglumDisambiguator": manuscript.siglum_disambiguator,
         "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
         "periodModifier": manuscript.period_modifier.value,
         "period": manuscript.period.long_name,
         "provenance": manuscript.provenance.long_name,
         "type": manuscript.type.long_name,
-        "labels": [label.to_value() for label in line.labels],
-        "line": OneOfLineSchema().dump(line.line),
-        "paratext": OneOfLineSchema().dump(line.paratext, many=True),
+        "labels": [label.to_value() for label in manuscript_line.labels],
+        "line": ManuscriptLineSchema().dump(manuscript_line),
+        "paratext": OneOfLineSchema().dump(manuscript_line.paratext, many=True),
         "references": ApiReferenceSchema().dump(manuscript.references, many=True),
+        "manuscript": ApiManuscriptSchema().dump(manuscript),
     }
