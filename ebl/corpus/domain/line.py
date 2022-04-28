@@ -108,9 +108,9 @@ class LineVariant:
             manuscript_token.alignment
             for manuscript in self.manuscripts
             for manuscript_token in cast(TextLine, manuscript.line).content
-            if not manuscript.is_empty
+            if isinstance(manuscript.line, TextLine)
             if isinstance(manuscript_token, AbstractWord)
-            and manuscript_token.has_variant
+            if manuscript_token.has_variant
         }
 
     def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
