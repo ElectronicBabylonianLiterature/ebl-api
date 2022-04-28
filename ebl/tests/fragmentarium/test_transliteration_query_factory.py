@@ -7,6 +7,10 @@ from ebl.transliteration.application.transliteration_query_factory import (
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
+def test_create_empty():
+    assert TransliterationQueryFactory.create_empty().is_empty() is True
+
+
 def test_create_query(sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
