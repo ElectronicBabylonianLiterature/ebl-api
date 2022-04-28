@@ -74,6 +74,86 @@ LINE = Line(
 )
 
 
+@pytest.mark.parametrize(
+    "old,new,expected",
+    [
+        (
+            LineVariant(
+                (
+                    AkkadianWord.of(
+                        (ValueToken.of("buāru"),), has_variant_alignmnet=True
+                    ),
+                ),
+                manuscripts=(
+                    ManuscriptLine(
+                        MANUSCRIPT_ID,
+                        LABELS,
+                        TextLine(
+                            LineNumber(1),
+                            (
+                                Word.of(
+                                    [Reading.of_name("kur")],
+                                    alignment=0,
+                                    variant=Word.of([Reading.of_name("kur")]),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            LineVariant(
+                (
+                    AkkadianWord.of(
+                        (ValueToken.of("kurkur"),), has_variant_alignmnet=False
+                    ),
+                ),
+                manuscripts=(
+                    ManuscriptLine(
+                        MANUSCRIPT_ID,
+                        LABELS,
+                        TextLine(
+                            LineNumber(1),
+                            (
+                                Word.of(
+                                    [Reading.of_name("kur")],
+                                    alignment=None,
+                                    variant=None,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            LineVariant(
+                (
+                    AkkadianWord.of(
+                        (ValueToken.of("kurkur"),), has_variant_alignmnet=True
+                    ),
+                ),
+                manuscripts=(
+                    ManuscriptLine(
+                        MANUSCRIPT_ID,
+                        LABELS,
+                        TextLine(
+                            LineNumber(1),
+                            (
+                                Word.of(
+                                    [Reading.of_name("kur")],
+                                    alignment=0,
+                                    variant=Word.of([Reading.of_name("kur")]),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ],
+)
+def test_merge_line_variant(old, new, expected):
+    assert old.merge(new) == expected
+
+
 @pytest.mark.parametrize(  # pyre-ignore[56]
     "old,new,expected",
     [
