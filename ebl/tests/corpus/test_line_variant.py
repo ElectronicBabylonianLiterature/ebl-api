@@ -56,7 +56,7 @@ def test_invalid_enclosures() -> None:
         LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple())
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "word,expected",
     [
         (

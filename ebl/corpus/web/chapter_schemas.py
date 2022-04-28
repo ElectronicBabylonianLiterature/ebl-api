@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple, cast
+from typing import Optional, Sequence, Tuple
 
 from lark.exceptions import ParseError, UnexpectedInput
 from marshmallow import EXCLUDE, Schema, ValidationError, fields, post_load, validate
@@ -13,7 +13,8 @@ from ebl.corpus.application.schemas import (
 )
 from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.parser import parse_paratext
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
+from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
@@ -30,16 +31,15 @@ from ebl.transliteration.domain.lark_parser import (
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.markup import MarkupPart
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
-from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token
-from ebl.fragmentarium.application.joins_schema import JoinsSchema
-from ebl.fragmentarium.domain.joins import Joins
+from ebl.transliteration.domain.translation_line import TranslationLine
 
 
 class MuseumNumberString(fields.String):
@@ -83,20 +83,18 @@ class ApiManuscriptSchema(ManuscriptSchema):
 
 def _serialize_number(manuscript_line: ManuscriptLine) -> str:
     return (
-        ""
-        if manuscript_line.is_empty
-        else cast(TextLine, manuscript_line.line).line_number.label
+        manuscript_line.line.line_number.label
+        if isinstance(manuscript_line.line, TextLine)
+        else ""
     )
 
 
 def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
     return "\n".join(
         [
-            ""
-            if manuscript_line.is_empty
-            else manuscript_line.line.atf[
-                len(cast(TextLine, manuscript_line.line).line_number.atf) + 1 :
-            ],
+            manuscript_line.line.atf[len(manuscript_line.line.line_number.atf) + 1 :]
+            if isinstance(manuscript_line.line, TextLine)
+            else "",
             *[line.atf for line in manuscript_line.paratext],
         ]
     ).strip()
@@ -167,7 +165,7 @@ def _parse_recontsruction(
         text, note, parallel_lines = _split_reconstruction(reconstruction)
         return (
             parse_reconstructed_line(text),
-            note and parse_note_line(note),
+            parse_note_line(note) if note else None,
             tuple(parse_parallel_line(line) for line in parallel_lines),
         )
     except (*PARSE_ERRORS, ValueError) as error:

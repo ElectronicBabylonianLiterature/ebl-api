@@ -113,7 +113,7 @@ def test_order_prefix(prefix: str) -> None:
     assert_that(
         MuseumNumber(prefix, number, suffix),
         all_of(
-            *(
+            *(  # pyre-ignore[60]
                 *(
                     less_than(MuseumNumber(another, number, suffix))
                     for another in larger
@@ -138,7 +138,7 @@ def test_order_number(number: str) -> None:
     assert_that(
         MuseumNumber(prefix, number, suffix),
         all_of(
-            *(
+            *(  # pyre-ignore[60]
                 *(
                     less_than(MuseumNumber(prefix, another, suffix))
                     for another in larger
@@ -162,7 +162,7 @@ def test_order_suffix(suffix: str) -> None:
     assert_that(
         MuseumNumber(prefix, number, suffix),
         all_of(
-            *(
+            *(  # pyre-ignore[60]
                 *(
                     less_than(MuseumNumber(prefix, number, another))
                     for another in larger

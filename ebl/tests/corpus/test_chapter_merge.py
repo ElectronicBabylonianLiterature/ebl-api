@@ -154,7 +154,7 @@ def test_merge_line_variant(old, new, expected):
     assert old.merge(new) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "old,new,expected",
     [
         (LINE, LINE, LINE),

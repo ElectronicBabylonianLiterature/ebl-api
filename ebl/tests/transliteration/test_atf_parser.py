@@ -25,7 +25,7 @@ def test_parser_version(parser, version):
     assert parser("1. kur").parser_version == version
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "line,expected_tokens",
     [
         ("", []),

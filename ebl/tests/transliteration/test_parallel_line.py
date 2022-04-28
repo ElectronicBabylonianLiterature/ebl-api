@@ -45,7 +45,7 @@ def test_parallel_fragment(cf, duplicates, labels, display_value) -> None:
     assert line.lemmatization == (LemmatizationToken(display_value),)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "cf,chapter,display_value",
     [
         (

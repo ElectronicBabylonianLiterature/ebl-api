@@ -1,6 +1,6 @@
 from functools import singledispatchmethod
 from itertools import combinations, groupby, zip_longest
-from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, cast
+from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type
 
 import attr
 
@@ -58,7 +58,7 @@ class LabelsValidator:
             self._errors.append('Translation "{line.atf}" before any text line.')
 
         if line.extent:
-            self._validate_extent(line, cast(Extent, line.extent))
+            self._validate_extent(line, line.extent)
         else:
             self._ranges.append(
                 (line.language, set(range(self._index, self._index + 1)))

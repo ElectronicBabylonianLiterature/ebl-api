@@ -18,7 +18,7 @@ def test_is_empty(line: Union[TextLine, EmptyLine], expected: bool) -> None:
     assert ManuscriptLineFactory.build(line=line).is_empty is expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "provenance,period,type_",
     [
         (Provenance.STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.NONE),

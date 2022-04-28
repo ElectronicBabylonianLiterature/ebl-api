@@ -19,7 +19,7 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
@@ -37,21 +37,17 @@ class ManuscriptLine:
     @property
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
-            None
-            if self.is_empty
-            else (
-                self.manuscript_id,
-                self.labels,
-                cast(TextLine, self.line).line_number,
-            )
+            (self.manuscript_id, self.labels, self.line.line_number)
+            if isinstance(self.line, TextLine)
+            else None
         )
 
     @property
     def is_beginning_of_side(self) -> bool:
         return (
-            False
-            if self.is_empty
-            else cast(TextLine, self.line).line_number.is_beginning_of_side
+            self.line.line_number.is_beginning_of_side
+            if isinstance(self.line, TextLine)
+            else False
         )
 
     @property
@@ -101,7 +97,7 @@ class LineVariant:
     @property
     def manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [
-            cast(ManuscriptLineLabel, manuscript_line.label)
+            manuscript_line.label
             for manuscript_line in self.manuscripts
             if manuscript_line.label
         ]
@@ -183,7 +179,7 @@ class Line:
 
     @translation.validator
     def _validate_translations(self, _, value: Sequence[TranslationLine]) -> None:
-        if any(line.extent and cast(Extent, line.extent).labels for line in value):
+        if any(line.extent and line.extent.labels for line in value):
             raise ValueError("Labels are not allowed in line translations.")
 
     @property

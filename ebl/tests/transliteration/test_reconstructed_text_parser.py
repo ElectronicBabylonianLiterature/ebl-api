@@ -37,7 +37,7 @@ def assert_parse_error(parser, text):
         parser(text)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "text,expected",
     [
         (
@@ -460,7 +460,6 @@ def test_invalid_break(text) -> None:
 WORD = AkkadianWord.of((ValueToken.of("ibnû"),))
 
 
-# pyre-ignore[56]
 @pytest.mark.parametrize(
     "text,expected",
     [

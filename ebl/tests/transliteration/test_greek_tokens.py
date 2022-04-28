@@ -21,7 +21,7 @@ def test_greek_letter() -> None:
     assert_token_serialization(greek_letter, serialized)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "word,expected,language,lemmatizable,alignable",
     [
         (

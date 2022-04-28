@@ -20,7 +20,7 @@ def test_apply() -> None:
     assert alignment.apply(word) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "word",
     [
         Word.of([Reading.of_name("mu")]),

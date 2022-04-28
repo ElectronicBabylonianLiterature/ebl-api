@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import singledispatchmethod
-from typing import Optional, cast
+from typing import Optional
 
 from ebl.corpus.domain.chapter import Chapter, ChapterItem, ChapterVisitor
 from ebl.errors import DataError, Defect
@@ -13,7 +13,7 @@ class ChapterUpdater(ABC, ChapterVisitor):
     def update(self, chapter: Chapter) -> Chapter:
         self.visit(chapter)
         if self._chapter is not None:
-            return cast(Chapter, self._chapter)
+            return self._chapter
         else:
             raise Defect("Result chapter was not set.")
 

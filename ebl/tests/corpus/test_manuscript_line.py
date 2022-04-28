@@ -17,7 +17,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "labels",
     [
         (ColumnLabel.from_label("i"), ColumnLabel.from_label("ii")),
@@ -46,7 +46,7 @@ def test_is_beginning_of_side(line, is_beginning) -> None:
     assert line.is_beginning_of_side is is_beginning
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "paratext,is_end",
     [
         (tuple(), False),
