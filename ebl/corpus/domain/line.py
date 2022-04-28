@@ -162,10 +162,7 @@ class LineVariant:
 
         @set_flag.register(AbstractWord)
         def _(token: AbstractWord, index: int) -> AbstractWord:
-            return attr.evolve(
-                token,
-                has_variant_alignment=index in variant_alignments,
-            )
+            return token.set_has_variant_alignment(index in variant_alignments)
 
         return attr.evolve(
             self,

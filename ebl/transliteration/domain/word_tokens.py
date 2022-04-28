@@ -78,6 +78,9 @@ class AbstractWord(Token):
     ) -> A:
         return attr.evolve(self, alignment=alignment, variant=variant)
 
+    def set_has_variant_alignment(self: A, has_variant_alignment) -> A:
+        return attr.evolve(self, has_variant_alignment=has_variant_alignment)
+
     def update_alignment(self: A, alignment_map) -> A:
         new_alignment = (
             alignment_map[self.alignment]
