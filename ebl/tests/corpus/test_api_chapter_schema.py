@@ -22,7 +22,6 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 
 
@@ -89,28 +88,26 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                                 "labels": [
                                     label.to_value() for label in manuscript_line.labels
                                 ],
-                                "number": manuscript_line.line.line_number.atf[:-1]
-                                if isinstance(manuscript_line.line, TextLine)
-                                else "",
+                                "number": ""
+                                if manuscript_line.is_empty
+                                else manuscript_line.line.line_number.atf[:-1],
                                 "atf": "\n".join(
                                     [
-                                        manuscript_line.line.atf[
+                                        ""
+                                        if manuscript_line.is_empty
+                                        else manuscript_line.line.atf[
                                             len(manuscript_line.line.line_number.atf)
                                             + 1 :
-                                        ]
-                                        if isinstance(manuscript_line.line, TextLine)
-                                        else "",
+                                        ],
                                         *[
                                             line.atf
                                             for line in manuscript_line.paratext
                                         ],
                                     ]
                                 ).strip(),
-                                "atfTokens": (
-                                    OneOfLineSchema().dump(manuscript_line.line)[
-                                        "content"
-                                    ]
-                                ),
+                                "atfTokens": OneOfLineSchema().dump(
+                                    manuscript_line.line
+                                )["content"],
                                 "omittedWords": list(manuscript_line.omitted_words),
                             }
                             for manuscript_line in variant.manuscripts

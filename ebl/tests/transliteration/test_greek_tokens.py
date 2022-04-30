@@ -51,7 +51,7 @@ def test_greek_letter() -> None:
         ),
     ],
 )
-def test_akkadian_word(
+def test_greek_word(
     word: GreekWord,
     expected: str,
     language: Language,
@@ -75,5 +75,6 @@ def test_akkadian_word(
         "alignable": alignable,
         "normalized": word.normalized,
         "language": language.name,
+        "hasVariantAlignment": word.has_variant_alignment,
     }
     assert_token_serialization(word, serialized)

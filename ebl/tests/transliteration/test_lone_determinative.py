@@ -49,6 +49,7 @@ def test_lone_determinative(language):
         "alignable": lone_determinative.lemmatizable,
         "erasure": ErasureState.NONE.name,
         "parts": OneOfTokenSchema().dump(parts, many=True),
+        "hasVariantAlignment": lone_determinative.has_variant_alignment,
     }
     assert_token_serialization(lone_determinative, serialized)
 
