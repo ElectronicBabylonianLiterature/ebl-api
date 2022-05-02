@@ -12,10 +12,6 @@ class TransliterationQueryFactory:
     def __init__(self, sign_repositoy: SignRepository) -> None:
         self._sign_repositoy = sign_repositoy
 
-    @staticmethod
-    def create_empty() -> TransliterationQuery:
-        return TransliterationQuery([])
-
     def create(self, transliteration: str) -> TransliterationQuery:
         signs = [self._create_signs(line) for line in transliteration.split("\n")]
         return TransliterationQuery(signs)

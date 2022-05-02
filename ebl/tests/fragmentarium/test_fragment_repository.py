@@ -1,16 +1,14 @@
 import attr
 import pytest
 
+
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Genre
-from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -23,7 +21,6 @@ from ebl.tests.factories.fragment import (
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.parallel_line import Labels, ParallelFragment
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
@@ -32,6 +29,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.fragmentarium.domain.joins import Join, Joins
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
@@ -339,31 +337,51 @@ def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_lines() == 0
 
 
-def test_query_fragmentarium_number(database, fragment_repository):
+def test_search_finds_by_id(database, fragment_repository):
     fragment = FragmentFactory.build()
     database[COLLECTION].insert_many(
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(number=fragment.number)
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
     ) == [fragment]
 
 
-def test_query_fragmentarium_not_found(fragment_repository):
-    assert (
-        fragment_repository.query_fragmentarium(FragmentariumSearchQuery(number="K.1"))
-    ) == []
+def test_search_finds_by_accession(database, fragment_repository):
+    fragment = FragmentFactory.build()
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
+
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
+    ) == [fragment]
 
 
-def test_query_fragmentarium_reference_id(database, fragment_repository):
+def test_search_finds_by_cdli(database, fragment_repository):
+    fragment = FragmentFactory.build()
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
+    )
+
+    assert fragment_repository.query_by_fragment_cdli_or_accession_number(
+        str(fragment.number)
+    ) == [fragment]
+
+
+def test_search_not_found(fragment_repository):
+    assert (fragment_repository.query_by_fragment_cdli_or_accession_number("K.1")) == []
+
+
+def test_search_reference_id(database, fragment_repository):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_fragmentarium(
-            FragmentariumSearchQuery(bibliography_id=fragment.references[0].id)
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, None
         )
     ) == [fragment]
 
@@ -371,23 +389,20 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
 @pytest.mark.parametrize(
     "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
 )
-def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
+def test_search_reference_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_fragmentarium(
-            FragmentariumSearchQuery(
-                bibliography_id=fragment.references[0].id,
-                pages="163",
-            )
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, "163"
         )
     ) == [fragment]
 
 
 @pytest.mark.parametrize("pages", ["1631", "1163", "116311"])
-def test_empty_result_query_reference_id_and_pages(
+def test_empty_result_search_reference_id_and_pages(
     pages, database, fragment_repository
 ):
     fragment = FragmentFactory.build(
@@ -395,11 +410,8 @@ def test_empty_result_query_reference_id_and_pages(
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query_fragmentarium(
-            FragmentariumSearchQuery(
-                bibliography_id=fragment.references[0].id,
-                pages="163",
-            )
+        fragment_repository.query_by_id_and_page_in_references(
+            fragment.references[0].id, "163"
         )
     ) == []
 
@@ -414,72 +426,14 @@ SEARCH_SIGNS_DATA = [
 
 
 @pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
-def test_query_fragmentarium_transliteration(signs, is_match, fragment_repository):
+def test_search_signs(signs, is_match, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
     fragment_repository.create(FragmentFactory.build())
 
-    result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(transliteration=TransliterationQuery(signs))
-    )
+    result = fragment_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [transliterated_fragment] if is_match else []
     assert result == expected
-
-
-def test_query_fragmentarium_transliteration_and_number(fragment_repository):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
-
-    result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            number=transliterated_fragment.number,
-            transliteration=TransliterationQuery([["DIŠ", "UD"]]),
-        )
-    )
-    assert result == [transliterated_fragment]
-
-
-def test_query_fragmentarium_transliteration_and_number_and_references(
-    fragment_repository,
-):
-    pages = "163"
-    transliterated_fragment = TransliteratedFragmentFactory.build(
-        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
-    )
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
-
-    result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            number=transliterated_fragment.number,
-            transliteration=TransliterationQuery([["DIŠ", "UD"]]),
-            bibliography_id=transliterated_fragment.references[0].id,
-            pages=pages,
-        )
-    )
-    assert result == [transliterated_fragment]
-
-
-def test_query_fragmentarium_transliteration_and_number_and_references_not_found(
-    fragment_repository,
-):
-    pages = "163"
-    transliterated_fragment = TransliteratedFragmentFactory.build(
-        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
-    )
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
-
-    result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            number=transliterated_fragment.number,
-            transliteration=TransliterationQuery([["DIŠ", "UD"]]),
-            bibliography_id=transliterated_fragment.references[0].id,
-            pages=f"{pages}123",
-        )
-    )
-    assert result == []
 
 
 def test_find_transliterated(database, fragment_repository):
