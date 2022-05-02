@@ -46,9 +46,9 @@ class ManuscriptLineDisplay:
         return cls(
             manuscript,
             manuscript_line.line,
+            manuscript.siglum_disambiguator,
             manuscript.old_sigla,
             manuscript.references,
-            manuscript.siglum_disambiguator,
             manuscript.period_modifier.value,
             manuscript.period.long_name,
             manuscript.provenance.long_name,
