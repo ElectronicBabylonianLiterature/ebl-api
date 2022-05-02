@@ -73,7 +73,7 @@ def test_serialize():
         "provenance": manuscript.provenance.long_name,
         "type": manuscript.type.long_name,
         "labels": [label.to_value() for label in manuscript_line.labels],
-        "line": ManuscriptLineSchema().dump(manuscript_line),
+        "line": OneOfLineSchema().dump(manuscript_line.line),
         "paratext": OneOfLineSchema().dump(manuscript_line.paratext, many=True),
         "references": ApiReferenceSchema().dump(manuscript.references, many=True),
         "manuscript": ApiManuscriptSchema().dump(manuscript),

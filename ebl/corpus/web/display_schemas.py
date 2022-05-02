@@ -11,7 +11,9 @@ from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from operator import attrgetter
 
 from ebl.transliteration.domain.dollar_line import DollarLine
+from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.text_line import TextLine
 
 
 def get_manuscript_field(field_name):
@@ -23,7 +25,7 @@ def get_manuscript_field(field_name):
 @attr.s(frozen=True, auto_attribs=True)
 class ManuscriptLineDisplay:
     manuscript: Manuscript
-    line: ManuscriptLine
+    line: Union[TextLine, EmptyLine]
     old_sigla: Sequence[OldSiglum]
     references: Sequence[Reference]
     siglum_disambiguator: str
@@ -35,10 +37,12 @@ class ManuscriptLineDisplay:
     paratext: Sequence[Union[DollarLine, NoteLine]]
 
     @classmethod
-    def from_manuscript_line(cls, manuscript: Manuscript, line: Line):
+    def from_manuscript_line(
+        cls, manuscript: Manuscript, manuscript_line: ManuscriptLine
+    ):
         return cls(
             manuscript,
-            line,
+            manuscript_line.line,
             manuscript.old_sigla,
             manuscript.references,
             manuscript.siglum_disambiguator,
@@ -46,8 +50,8 @@ class ManuscriptLineDisplay:
             manuscript.period.long_name,
             manuscript.provenance.long_name,
             manuscript.type.long_name,
-            [label.to_value() for label in line.labels],
-            line.paratext,
+            [label.to_value() for label in manuscript_line.labels],
+            manuscript_line.paratext,
         )
 
 
@@ -90,7 +94,7 @@ class LineDetails:
 
 class ManuscriptLineDisplaySchema(Schema):
     # line is a top level line (< variants < manuscripts[MLines])
-    line = fields.Nested(ManuscriptLineSchema, required=True)
+    line = fields.Nested(OneOfLineSchema, required=True)
     manuscript = fields.Nested(ApiManuscriptSchema, required=True)
     old_sigla = fields.Nested(ApiOldSiglumSchema, many=True, data_key="oldSigla")
     references = fields.Nested(ApiReferenceSchema, many=True)
