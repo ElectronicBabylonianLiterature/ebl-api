@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 import falcon
 from falcon_caching import Cache
@@ -9,9 +9,6 @@ from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
@@ -36,45 +33,35 @@ class FragmentSearch:
         def find_latest(_):
             return fragmentarium.find_latest()
 
-        self._transliteration_query_factory = transliteration_query_factory
         self._dispatch = create_dispatcher(
             {
                 frozenset(
-                    ["number", "transliteration", "bibliographyId", "pages"]
-                ): lambda value: finder.search_fragmentarium(
-                    self._parse_fragmentarium_search(**value)
+                    ["id", "pages"]
+                ): lambda value: finder.search_references_in_fragment_infos(
+                    *self._validate_pages(**value)
                 ),
+                frozenset(["number"]): lambda value: finder.search(**value),
                 frozenset(["random"]): lambda _: finder.find_random(),
                 frozenset(["interesting"]): lambda _: finder.find_interesting(),
                 frozenset(["latest"]): find_latest,
                 frozenset(["needsRevision"]): find_needs_revision,
+                frozenset(
+                    ["transliteration"]
+                ): lambda value: finder.search_transliteration(
+                    transliteration_query_factory.create(**value)
+                ),
             }
         )
 
-    def _parse_fragmentarium_search(
-        self, number: str, transliteration: str, bibliographyId: str, pages: str
-    ) -> FragmentariumSearchQuery:
-        parsed_transliteration = (
-            self._transliteration_query_factory.create(transliteration)
-            if transliteration
-            else self._transliteration_query_factory.create_empty()
-        )
-        validated_id, validated_pages = self._validate_pages(bibliographyId, pages)
-
-        return FragmentariumSearchQuery(
-            number, parsed_transliteration, validated_id, validated_pages
-        )
-
     @staticmethod
-    def _validate_pages(id: str, pages: str) -> Tuple[str, str]:
-        if pages:
-            if not id:
-                raise DataError("Name, Year or Title required")
-            try:
-                int(pages)
-            except ValueError as error:
-                raise DataError(f'Pages "{pages}" not numeric.') from error
-        return id, pages
+    def _validate_pages(id: str, pages: Union[str, None]) -> Tuple[str, str]:
+        if not pages:
+            return id, ""
+        try:
+            int(pages)
+            return id, pages
+        except ValueError as error:
+            raise DataError(f'Pages "{pages}" not numeric.') from error
 
     @falcon.before(require_scope, "read:fragments")
     @cache_control(
