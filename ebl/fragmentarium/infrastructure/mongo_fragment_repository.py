@@ -1,14 +1,17 @@
 import operator
 from typing import Callable, List, Optional, Sequence, Tuple, cast
 
-from marshmallow import EXCLUDE
 import pymongo
+from marshmallow import EXCLUDE
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragmentarium_search_query import (
+    FragmentariumSearchQuery,
+)
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
@@ -180,6 +183,36 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
+    @staticmethod
+    def _query_fragmentarium_create_query(
+        query: FragmentariumSearchQuery,
+    ) -> dict:
+        number_query = number_is(query.number) if query.number else {}
+        signs_query = (
+            {}
+            if query.transliteration.is_empty()
+            else {"signs": {"$regex": query.transliteration.regexp}}
+        )
+
+        id_query = (
+            {"references": {"$elemMatch": {"id": query.bibliography_id}}}
+            if query.bibliography_id
+            else {}
+        )
+        if query.pages:
+            id_query["references"]["$elemMatch"]["pages"] = {
+                "$regex": rf".*?(^|[^\d]){query.pages}([^\d]|$).*?"
+            }
+        return {**number_query, **signs_query, **id_query}
+
+    def query_fragmentarium(self, query: FragmentariumSearchQuery) -> Sequence[dict]:
+        cursor = self._fragments.find_many(
+            self._query_fragmentarium_create_query(query),
+            limit=100,
+            projection={"joins": False},
+        )
+        return self._map_fragments(cursor)
+
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}
         if pages:
@@ -187,13 +220,6 @@ class MongoFragmentRepository(FragmentRepository):
                 "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
             }
         cursor = self._fragments.find_many(match, projection={"joins": False})
-        return self._map_fragments(cursor)
-
-    def query_by_fragment_cdli_or_accession_number(self, number):
-        cursor = self._fragments.find_many(
-            number_is(number), projection={"joins": False}
-        )
-
         return self._map_fragments(cursor)
 
     def query_random_by_transliterated(self):
@@ -245,12 +271,6 @@ class MongoFragmentRepository(FragmentRepository):
             allowDiskUse=True,
         )
         return FragmentInfoSchema(many=True).load(cursor)
-
-    def query_by_transliteration(self, query):
-        cursor = self._fragments.find_many(
-            {"signs": {"$regex": query.regexp}}, limit=100, projection={"joins": False}
-        )
-        return self._map_fragments(cursor)
 
     def update_transliteration(self, fragment):
         self._fragments.update_one(
