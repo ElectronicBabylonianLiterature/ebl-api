@@ -26,15 +26,18 @@ def get_manuscript_field(field_name):
 class ManuscriptLineDisplay:
     manuscript: Manuscript
     line: Union[TextLine, EmptyLine]
+    siglum_disambiguator: str
     old_sigla: Sequence[OldSiglum]
     references: Sequence[Reference]
-    siglum_disambiguator: str
     period_modifier: str
     period: str
     provenance: str
     type: str
     labels: Sequence[str]
     paratext: Sequence[Union[DollarLine, NoteLine]]
+    museum_number: str
+    accession: str
+    is_in_fragmentarium: bool
 
     @classmethod
     def from_manuscript_line(
@@ -52,6 +55,9 @@ class ManuscriptLineDisplay:
             manuscript.type.long_name,
             [label.to_value() for label in manuscript_line.labels],
             manuscript_line.paratext,
+            str(manuscript.museum_number) if manuscript.museum_number else "",
+            manuscript.accession,
+            manuscript.is_in_fragmentarium,
         )
 
 
@@ -95,7 +101,7 @@ class LineDetails:
 class ManuscriptLineDisplaySchema(Schema):
     # line is a top level line (< variants < manuscripts[MLines])
     line = fields.Nested(OneOfLineSchema, required=True)
-    manuscript = fields.Nested(ApiManuscriptSchema, required=True)
+    manuscript = fields.Nested(ApiManuscriptSchema, required=True, load_only=True)
     old_sigla = fields.Nested(ApiOldSiglumSchema, many=True, data_key="oldSigla")
     references = fields.Nested(ApiReferenceSchema, many=True)
     siglum_disambiguator = fields.String(data_key="siglumDisambiguator")
@@ -105,6 +111,9 @@ class ManuscriptLineDisplaySchema(Schema):
     type = fields.String()
     labels = fields.List(fields.String())
     paratext = fields.Nested(OneOfLineSchema, many=True, required=True)
+    museum_number = fields.String(data_key="museumNumber")
+    accession = fields.String()
+    is_in_fragmentarium = fields.Bool(data_key="isInFragmentarium")
 
     @post_load
     def make_manuscript_line_display(self, data, **kwargs) -> ManuscriptLineDisplay:
