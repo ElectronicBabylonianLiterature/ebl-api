@@ -124,54 +124,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                             "isSecondLineOfParallelism": "$$line.isSecondLineOfParallelism",
                             "isBeginningOfSection": "$$line.isBeginningOfSection",
                             "translation": "$$line.translation",
-                            "intertext": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.intertext",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
-                            "reconstruction": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.reconstruction",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
-                            "note": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.note",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
-                            "parallelLines": {
-                                "$arrayElemAt": [
-                                    {
-                                        "$map": {
-                                            "input": "$$line.variants",
-                                            "as": "variant",
-                                            "in": "$$variant.parallelLines",
-                                        }
-                                    },
-                                    0,
-                                ]
-                            },
+                            "variants": "$$line.variants",
                         },
                     }
                 },

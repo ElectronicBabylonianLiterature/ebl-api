@@ -38,7 +38,7 @@ from ebl.transliteration.domain.word_tokens import (
 )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,expected",
     [
         ("...", Word.of([UnknownNumberOfSigns.of()])),
@@ -752,7 +752,7 @@ def test_word(atf, expected) -> None:
     assert parse_word(atf) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "atf,expected",
     [
         (

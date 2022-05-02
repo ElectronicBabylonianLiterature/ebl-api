@@ -80,7 +80,9 @@ class AlignmentUpdater(ChapterUpdater):
             self.visit(manuscript_line)
 
         self._variants.append(
-            attr.evolve(variant, manuscripts=tuple(self._manuscript_lines))
+            attr.evolve(
+                variant, manuscripts=tuple(self._manuscript_lines)
+            ).set_has_variant_aligment()
         )
         self._manuscript_lines = []
 

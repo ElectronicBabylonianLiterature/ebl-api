@@ -26,7 +26,7 @@ BIBLIOGRAPHY_PART = BibliographyPart(
 )
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "part,expected",
     [
         (
@@ -45,7 +45,7 @@ def test_part_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
     assert part.rstrip() == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "part,expected",
     [
         (StringPart(TEXT), StringPart(TEXT.title())),
@@ -58,7 +58,7 @@ def test_part_title_case(part: MarkupPart, expected: MarkupPart) -> None:
     assert part.title_case() == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "parts,expected",
     [
         (tuple(), tuple()),
@@ -73,7 +73,7 @@ def test_rstrip(parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]) -> 
     assert rstrip(parts) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "parts,expected",
     [(tuple(), tuple()), ([StringPart("foo bar")], (StringPart("Foo Bar"),))],
 )
@@ -83,8 +83,6 @@ def test_title_case(
     assert title_case(parts) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
-    "parts", [tuple(), [StringPart("foo-- bar--")]]
-)
+@pytest.mark.parametrize("parts", [tuple(), [StringPart("foo-- bar--")]])
 def test_to_title(parts: Sequence[MarkupPart]) -> None:
     assert to_title(parts) == title_case(rstrip(parts))

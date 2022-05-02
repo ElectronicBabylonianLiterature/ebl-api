@@ -69,7 +69,15 @@ class GreekWord(AbstractWord):
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
         erasure: ErasureState = ErasureState.NONE,
+        has_variant_alignmnet: bool = False,
     ) -> "GreekWord":
         return GreekWord(
-            frozenset(), erasure, unique_lemma, alignment, parts, variant, language
+            frozenset(),
+            erasure,
+            unique_lemma,
+            alignment,
+            parts,
+            variant,
+            has_variant_alignmnet,
+            language,
         )

@@ -39,7 +39,6 @@ def parse_siglum(siglum):
 @pytest.mark.parametrize(
     "provenance", [Provenance.URUK, Provenance.UR, Provenance.PERIPHERY]
 )
-#  pyre-ignore[56]
 @pytest.mark.parametrize("type_", [ManuscriptType.SCHOOL, ManuscriptType.LIBRARY])
 @pytest.mark.parametrize("disambiquator", ["", "a"])
 def test_parse_siglum(
@@ -120,7 +119,7 @@ def parse_reconstruction(atf):
     return parse_chapter(atf, MANUSCRIPTS, "reconstruction")
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "lines,expected",
     [
         (["1. kur"], (parse_text_line("1. kur"), None, tuple())),
@@ -277,7 +276,7 @@ def test_parse_translation(lines, expected) -> None:
     assert parse_chapter_line(atf) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "lines,expected",
     [
         (["1. kur"], (parse_chapter_line("1. kur"),)),

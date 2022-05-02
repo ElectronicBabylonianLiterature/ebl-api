@@ -27,7 +27,7 @@ class LinesUpdater(ChapterUpdater):
             chapter.merge(
                 attr.evolve(
                     chapter,
-                    lines=(*self._lines, *self._lines_update.new),
+                    lines=(*self._lines, *self._lines_update.new),  # pyre-ignore[60]
                     parser_version=ATF_PARSER_VERSION,
                 )
             )

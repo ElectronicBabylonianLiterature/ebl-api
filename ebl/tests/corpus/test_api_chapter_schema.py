@@ -2,7 +2,11 @@ from typing import Tuple
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.record_schemas import RecordSchema
-from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiManuscriptSchema
+from ebl.corpus.web.chapter_schemas import (
+    ApiChapterSchema,
+    ApiManuscriptSchema,
+    ApiOldSiglumSchema,
+)
 from ebl.corpus.domain.chapter import Chapter
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -18,7 +22,6 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.parallel_line import ParallelComposition
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 
 
@@ -85,28 +88,26 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                                 "labels": [
                                     label.to_value() for label in manuscript_line.labels
                                 ],
-                                "number": manuscript_line.line.line_number.atf[:-1]
-                                if isinstance(manuscript_line.line, TextLine)
-                                else "",
+                                "number": ""
+                                if manuscript_line.is_empty
+                                else manuscript_line.line.line_number.atf[:-1],
                                 "atf": "\n".join(
                                     [
-                                        manuscript_line.line.atf[
+                                        ""
+                                        if manuscript_line.is_empty
+                                        else manuscript_line.line.atf[
                                             len(manuscript_line.line.line_number.atf)
                                             + 1 :
-                                        ]
-                                        if isinstance(manuscript_line.line, TextLine)
-                                        else "",
+                                        ],
                                         *[
                                             line.atf
                                             for line in manuscript_line.paratext
                                         ],
                                     ]
                                 ).strip(),
-                                "atfTokens": (
-                                    OneOfLineSchema().dump(manuscript_line.line)[
-                                        "content"
-                                    ]
-                                ),
+                                "atfTokens": OneOfLineSchema().dump(
+                                    manuscript_line.line
+                                )["content"],
                                 "omittedWords": list(manuscript_line.omitted_words),
                             }
                             for manuscript_line in variant.manuscripts
@@ -133,6 +134,7 @@ def test_serialize_manuscript() -> None:
     assert ApiManuscriptSchema().dump(manuscript) == {
         "id": manuscript.id,
         "siglumDisambiguator": manuscript.siglum_disambiguator,
+        "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
         "museumNumber": str(manuscript.museum_number)
         if manuscript.museum_number
         else "",
@@ -158,6 +160,7 @@ def test_deserialize_manuscript() -> None:
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
+                "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
                 "museumNumber": str(manuscript.museum_number)
                 if manuscript.museum_number
                 else "",

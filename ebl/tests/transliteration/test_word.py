@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 import pytest
 
@@ -24,7 +24,7 @@ from ebl.transliteration.domain.tokens import (
     Variant,
 )
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
-from ebl.transliteration.domain.word_tokens import ErasureState, Word
+from ebl.transliteration.domain.word_tokens import AbstractWord, ErasureState, Word
 
 LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
     (Word.of([Reading.of_name("un")]), True),
@@ -72,9 +72,10 @@ def test_defaults() -> None:
     assert word.erasure == ErasureState.NONE
     assert word.alignment is None
     assert word.variant is None
+    assert word.has_variant_alignment is False
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "language,unique_lemma",
     [
         (Language.SUMERIAN, (WordId("ku II"), WordId("aklu I"))),
@@ -112,6 +113,7 @@ def test_word(language, unique_lemma) -> None:
         "parts": OneOfTokenSchema().dump(parts, many=True),
         "alignment": 1,
         "variant": OneOfWordSchema().dump(variant),
+        "hasVariantAlignment": word.has_variant_alignment,
     }
 
     assert_token_serialization(word, serialized)
@@ -158,6 +160,17 @@ def test_alignable(word, _) -> None:
     assert word.alignable == word.lemmatizable
 
 
+@pytest.mark.parametrize(
+    "variant,expected",
+    [
+        (Word.of([Reading.of_name("ra")]), True),
+        (None, False),
+    ],
+)
+def test_has_variant(variant: Optional[AbstractWord], expected: bool) -> None:
+    assert Word.of([Reading.of_name("kur")], variant=variant).has_variant is expected
+
+
 def test_set_language() -> None:
     unique_lemma = (WordId("aklu I"),)
     language = Language.SUMERIAN
@@ -183,7 +196,7 @@ def test_set_unique_lemma_empty() -> None:
     assert word.set_unique_lemma(lemma) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "word",
     [
         Word.of([Reading.of_name("mu")]),
@@ -210,7 +223,7 @@ def test_set_alignment() -> None:
     assert word.set_alignment(alignment, variant) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "old,new,expected",
     [
         (

@@ -2,18 +2,16 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
+from ebl.corpus.application.schemas import LineVariantSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 from ebl.transliteration.application.line_schemas import (
-    NoteLineSchema,
     TranslationLineSchema,
 )
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
-from ebl.transliteration.application.one_of_line_schema import ParallelLineSchema
-from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 
 
 class LineDisplaySchema(Schema):
@@ -24,16 +22,9 @@ class LineDisplaySchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    intertext = fields.List(
-        fields.Nested(OneOfNoteLinePartSchema), load_default=tuple(), allow_none=True
-    )
-    reconstruction = fields.List(fields.Nested(OneOfTokenSchema), load_default=tuple())
+    variants = fields.Nested(LineVariantSchema, many=True, required=True)
     translation = fields.List(
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
-    )
-    note = fields.Nested(NoteLineSchema, allow_none=True, load_default=None)
-    parallel_lines = fields.Nested(
-        ParallelLineSchema, data_key="parallelLines", many=True, load_default=tuple()
     )
 
     @post_load
@@ -42,11 +33,8 @@ class LineDisplaySchema(Schema):
             data["number"],
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
-            tuple(data["intertext"] or []),
-            tuple(data["reconstruction"]),
+            tuple(data["variants"]),
             tuple(data["translation"] or []),
-            data["note"],
-            tuple(data["parallel_lines"]),
         )
 
 

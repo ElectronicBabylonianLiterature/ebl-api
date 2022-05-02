@@ -96,7 +96,7 @@ def test_unclear_sign_with_flags() -> None:
     assert_token_serialization(sign, serialized)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "name_parts,sub_index,modifiers,flags,sign,expected_value,expected_clean_value,"
     "expected_name",
     [
@@ -205,7 +205,7 @@ def test_reading(
     assert_token_serialization(reading, serialized)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "name_parts,sub_index,modifiers,flags,sign,surrogate,expected_value,"
     "expected_clean_value,expected_name",
     [
@@ -334,7 +334,7 @@ def test_logogram(
     assert_token_serialization(logogram, serialized)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "name_parts,modifiers,flags,sign,expected_value,expected_clean_value,expected_name",
     [
         ((ValueToken.of("1"),), [], [], None, "1", "1", "1"),
@@ -441,7 +441,7 @@ def test_compound_grapheme() -> None:
     assert_token_serialization(compound, serialized)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "name,modifiers,flags,expected_value,expected_clean_value",
     [
         ("KUR12₁", [], [], "KUR12₁", "KUR12₁"),
