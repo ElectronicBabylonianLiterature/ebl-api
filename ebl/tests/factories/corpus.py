@@ -13,6 +13,7 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.text import ChapterListing, Text
+from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
 from ebl.tests.factories.ids import TextIdFactory
@@ -57,9 +58,39 @@ class OldSiglumFactory(factory.Factory):
     reference = factory.SubFactory(ReferenceFactory, with_document=True)
 
 
+class JoinFactory(factory.Factory):
+    class Meta:
+        model = Join
+
+    museum_number = factory.Sequence(
+        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
+    )
+    is_checked = factory.Faker("boolean")
+    joined_by = factory.Faker("word")
+    date = factory.Faker("date")
+    note = factory.Faker("sentence")
+    legacy_data = factory.Faker("sentence")
+    is_in_fragmentarium = factory.Faker("boolean")
+
+
+class JoinsFactory(factory.Factory):
+    class Meta:
+        model = Joins
+
+    fragments = factory.List([factory.List([factory.SubFactory(JoinFactory)])])
+
+
 class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
+    
+    class Params:
+        with_joins = factory.Trait(
+            joins = factory.SubFactory(JoinsFactory)
+        )
+        # with_old_sigla = factory.Trait(
+        #     old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
+        # )
 
     id = factory.Sequence(lambda n: n + 1)
     siglum_disambiguator = factory.Faker("word")

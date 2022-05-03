@@ -109,7 +109,7 @@ class Corpus:
     def find_line(
         self, id_: ChapterId, number: int
     ) -> Tuple[Line, Sequence[Manuscript]]:
-        return self._repository.find_line(id_, number), self.find_manuscripts(id_)
+        return self._repository.find_line(id_, number), self.find_manuscripts_with_joins(id_)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
         return self._inject_references_to_manuscripts(

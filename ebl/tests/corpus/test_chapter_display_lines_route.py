@@ -6,7 +6,7 @@ from ebl.corpus.application.manuscript_reference_injector import (
 
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.text import Text
-from ebl.corpus.web.display_schemas import LineDetails, LineDetailsSchema
+from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
 from ebl.errors import Defect, NotFoundError
 from ebl.tests.corpus.support import create_chapter_url, allow_references
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
@@ -39,7 +39,7 @@ def _make_line_details(chapter, bibliography):
     except NotFoundError as error:
         raise Defect(error) from error
 
-    return LineDetails.from_line_manuscripts(chapter.lines[0], manuscripts)
+    return LineDetailsDisplay.from_line_manuscripts(chapter.lines[0], manuscripts)
 
 
 def test_get(client, text_repository, text, chapter, bibliography, url):
@@ -52,7 +52,7 @@ def test_get(client, text_repository, text, chapter, bibliography, url):
     get_result = client.simulate_get(f"{url}/0")
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == LineDetailsSchema().dump(line_details)
+    assert get_result.json == LineDetailsDisplaySchema().dump(line_details)
 
 
 def test_chapter_not_found(client, text_repository, text, chapter, url):

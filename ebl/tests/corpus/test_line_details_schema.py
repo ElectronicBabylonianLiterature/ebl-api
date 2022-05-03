@@ -1,8 +1,7 @@
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
-from ebl.corpus.application.schemas import ManuscriptLineSchema
-from ebl.corpus.domain.line import ManuscriptLine
-from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, ApiOldSiglumSchema
-from ebl.corpus.web.display_schemas import LineDetails, LineDetailsSchema
+from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
+from ebl.corpus.web.display_schemas import JoinDisplaySchema, LineDetailsDisplay, LineDetailsDisplaySchema
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -14,7 +13,7 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
-MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
+MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES, with_joins=True)
 MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
 LINE = LineFactory.build(
     variants=(
@@ -25,7 +24,7 @@ LINE = LineFactory.build(
 )
 CHAPTER = ChapterFactory.build(manuscripts=(MANUSCRIPT,), lines=(LINE,))
 
-LINE_DETAILS = LineDetails.from_line_manuscripts(LINE, (MANUSCRIPT,))
+LINE_DETAILS = LineDetailsDisplay.from_line_manuscripts(LINE, (MANUSCRIPT,))
 
 SERIALIZED_LINE_DETAILS: dict = {
     "variants": [
@@ -33,7 +32,6 @@ SERIALIZED_LINE_DETAILS: dict = {
             "manuscripts": [
                 {
                     "line": OneOfLineSchema().dump(MANUSCRIPT_LINE.line),
-                    "manuscript": ApiManuscriptSchema().dump(MANUSCRIPT),
                     "oldSigla": ApiOldSiglumSchema().dump(
                         MANUSCRIPT.old_sigla, many=True
                     ),
@@ -49,6 +47,12 @@ SERIALIZED_LINE_DETAILS: dict = {
                     "paratext": OneOfLineSchema().dump(
                         MANUSCRIPT_LINE.paratext, many=True
                     ),
+                    "museumNumber": str(MANUSCRIPT.museum_number)
+                    if MANUSCRIPT.museum_number
+                    else "",
+                    "isInFragmentarium": MANUSCRIPT.is_in_fragmentarium,
+                    "accession": MANUSCRIPT.accession,
+                    "joins": JoinDisplaySchema().dump(MANUSCRIPT.joins, many=True),
                 }
             ]
         }
@@ -57,4 +61,4 @@ SERIALIZED_LINE_DETAILS: dict = {
 
 
 def test_serialize() -> None:
-    assert LineDetailsSchema().dump(LINE_DETAILS) == SERIALIZED_LINE_DETAILS
+    assert LineDetailsDisplaySchema().dump(LINE_DETAILS) == SERIALIZED_LINE_DETAILS

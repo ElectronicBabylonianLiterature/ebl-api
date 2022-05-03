@@ -4,8 +4,9 @@ from marshmallow import Schema, fields, post_load
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.line import Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
+from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.corpus.application.schemas import ManuscriptLineSchema, labels
 from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, ApiOldSiglumSchema
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from operator import attrgetter
@@ -38,6 +39,7 @@ class ManuscriptLineDisplay:
     museum_number: str
     accession: str
     is_in_fragmentarium: bool
+    joins: Sequence[Sequence[Join]]
 
     @classmethod
     def from_manuscript_line(
@@ -58,11 +60,12 @@ class ManuscriptLineDisplay:
             str(manuscript.museum_number) if manuscript.museum_number else "",
             manuscript.accession,
             manuscript.is_in_fragmentarium,
+            manuscript.joins.fragments,
         )
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class VariantDisplay:
+class LineVariantDisplay:
     manuscripts: Sequence[ManuscriptLineDisplay]
 
     @classmethod
@@ -82,24 +85,32 @@ class VariantDisplay:
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class LineDetails:
-    variants: Sequence[VariantDisplay]
-    # old_line_number: str = ""
+class LineDetailsDisplay:
+    variants: Sequence[LineVariantDisplay]
 
     @classmethod
     def from_line_manuscripts(cls, line: Line, manuscripts: Sequence[Manuscript]):
         MANUSCRIPTS_BY_ID = {m.id: m for m in manuscripts}
 
         variant_displays = [
-            VariantDisplay.from_line_variant(v, MANUSCRIPTS_BY_ID)
+            LineVariantDisplay.from_line_variant(v, MANUSCRIPTS_BY_ID)
             for v in line.variants
         ]
 
         return cls(variants=variant_displays)
 
 
+class JoinDisplaySchema(Schema):
+    museum_number = fields.Nested(
+        MuseumNumberSchema, required=True, data_key="museumNumber"
+    )
+    is_checked = fields.Boolean(required=True, data_key="isChecked")
+    is_in_fragmentarium = fields.Boolean(
+        load_default=False, data_key="isInFragmentarium"
+    )
+
+
 class ManuscriptLineDisplaySchema(Schema):
-    # line is a top level line (< variants < manuscripts[MLines])
     line = fields.Nested(OneOfLineSchema, required=True)
     manuscript = fields.Nested(ApiManuscriptSchema, required=True, load_only=True)
     old_sigla = fields.Nested(ApiOldSiglumSchema, many=True, data_key="oldSigla")
@@ -114,16 +125,16 @@ class ManuscriptLineDisplaySchema(Schema):
     museum_number = fields.String(data_key="museumNumber")
     accession = fields.String()
     is_in_fragmentarium = fields.Bool(data_key="isInFragmentarium")
+    joins = fields.List(fields.List(fields.Nested(JoinDisplaySchema)))
 
     @post_load
     def make_manuscript_line_display(self, data, **kwargs) -> ManuscriptLineDisplay:
         return ManuscriptLineDisplay(**data)
 
 
-class VariantDisplaySchema(Schema):
+class LineVariantDisplaySchema(Schema):
     manuscripts = fields.Nested(ManuscriptLineDisplaySchema, many=True, required=True)
 
 
-class LineDetailsSchema(Schema):
-    # Add old_line_number
-    variants = fields.Nested(VariantDisplaySchema, many=True, required=True)
+class LineDetailsDisplaySchema(Schema):
+    variants = fields.Nested(LineVariantDisplaySchema, many=True, required=True)
