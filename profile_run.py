@@ -15,7 +15,7 @@ while True:
     test = 0
     if test == 5 or time.time() > timeout:
         break
-    test = test - 1
+    test -= 1
 
 import subprocess
 
