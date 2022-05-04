@@ -16,7 +16,9 @@ from ebl.tests.factories.corpus import (
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
-MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES, with_joins=True)
+MANUSCRIPT = ManuscriptFactory.build(
+    references=REFERENCES, with_joins=True, with_old_sigla=True
+)
 MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
 LINE = LineFactory.build(
     variants=(

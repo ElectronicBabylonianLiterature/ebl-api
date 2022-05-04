@@ -27,7 +27,7 @@ from ebl.fragmentarium.application.joins_schema import JoinsSchema
 
 def create(include_documents: bool) -> Tuple[Chapter, dict]:
     references = (ReferenceFactory.build(with_document=include_documents),)
-    manuscript = ManuscriptFactory.build(references=references)
+    manuscript = ManuscriptFactory.build(references=references, with_old_sigla=True)
 
     first_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
     second_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
@@ -130,7 +130,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
 
 def test_serialize_manuscript() -> None:
     references = (ReferenceFactory.build(with_document=True),)
-    manuscript = ManuscriptFactory.build(references=references)
+    manuscript = ManuscriptFactory.build(references=references, with_old_sigla=True)
     assert ApiManuscriptSchema().dump(manuscript) == {
         "id": manuscript.id,
         "siglumDisambiguator": manuscript.siglum_disambiguator,
@@ -154,7 +154,7 @@ def test_serialize_manuscript() -> None:
 
 def test_deserialize_manuscript() -> None:
     references = (ReferenceFactory.build(with_document=False),)
-    manuscript = ManuscriptFactory.build(references=references)
+    manuscript = ManuscriptFactory.build(references=references, with_old_sigla=True)
     assert (
         ApiManuscriptSchema().load(
             {

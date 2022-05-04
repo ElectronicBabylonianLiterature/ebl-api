@@ -86,13 +86,13 @@ class ManuscriptFactory(factory.Factory):
 
     class Params:
         with_joins = factory.Trait(joins=factory.SubFactory(JoinsFactory))
-        # with_old_sigla = factory.Trait(
-        #     old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
-        # )
+        with_old_sigla = factory.Trait(
+            old_sigla=factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
+        )
 
     id = factory.Sequence(lambda n: n + 1)
     siglum_disambiguator = factory.Faker("word")
-    old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
+    # old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
     museum_number = factory.Sequence(
         lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
     )

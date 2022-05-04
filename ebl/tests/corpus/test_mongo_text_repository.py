@@ -38,7 +38,6 @@ CHAPTER = ChapterFactory.build(
             museum_number=MUSEUM_NUMBER,
             accession="",
             references=tuple(),
-            old_sigla=tuple(),
         ),
     ),
     lines=(

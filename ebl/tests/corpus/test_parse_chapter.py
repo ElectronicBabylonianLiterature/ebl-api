@@ -25,9 +25,9 @@ from ebl.transliteration.domain.line_number import LineNumber
 
 UNKNOWN_MANUSCRIPT: Manuscript = ManuscriptFactory.build()
 MANUSCRIPTS: Sequence[Manuscript] = (
-    ManuscriptFactory.build(),
-    ManuscriptFactory.build(),
-    ManuscriptFactory.build(),
+    ManuscriptFactory.build(with_old_sigla=True),
+    ManuscriptFactory.build(with_old_sigla=True),
+    ManuscriptFactory.build(with_old_sigla=True),
 )
 
 

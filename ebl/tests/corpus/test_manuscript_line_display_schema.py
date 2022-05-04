@@ -74,9 +74,7 @@ def test_api_old_siglum_schema() -> None:
 def test_serialize() -> None:
     chapter = ChapterFactory.build(
         manuscripts=(
-            ManuscriptFactory.build(
-                id=1, references=(REFERENCE,), with_joins=True, old_sigla=tuple()
-            ),
+            ManuscriptFactory.build(id=1, references=(REFERENCE,), with_joins=True),
         )
     )
     manuscript_line = chapter.lines[0].variants[0].manuscripts[0]
