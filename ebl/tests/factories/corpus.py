@@ -92,7 +92,6 @@ class ManuscriptFactory(factory.Factory):
 
     id = factory.Sequence(lambda n: n + 1)
     siglum_disambiguator = factory.Faker("word")
-    # old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
     museum_number = factory.Sequence(
         lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
     )

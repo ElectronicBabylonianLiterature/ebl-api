@@ -1,6 +1,6 @@
 from typing import Union, Sequence
 import attr
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.line import Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
@@ -119,10 +119,6 @@ class ManuscriptLineDisplaySchema(Schema):
     accession = fields.String()
     is_in_fragmentarium = fields.Bool(data_key="isInFragmentarium")
     joins = fields.List(fields.List(fields.Nested(JoinDisplaySchema)))
-
-    @post_load
-    def make_manuscript_line_display(self, data, **kwargs) -> ManuscriptLineDisplay:
-        return ManuscriptLineDisplay(**data)
 
 
 class LineVariantDisplaySchema(Schema):

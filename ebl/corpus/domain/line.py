@@ -82,7 +82,6 @@ class LineVariant:
         converter=pydash.flow(set_enclosure_type, set_language)
     )
     note: Optional[NoteLine] = None
-    # manuscript_lines
     manuscripts: Sequence[ManuscriptLine] = tuple()
     parallel_lines: Sequence[ParallelLine] = tuple()
     intertext: Sequence[MarkupPart] = tuple()
