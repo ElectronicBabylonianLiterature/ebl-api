@@ -3,7 +3,7 @@ from typing import Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.domain.fragment import Fragment, Lines
+from ebl.fragmentarium.domain.fragment import Fragment, Lines, Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 
@@ -18,6 +18,7 @@ class FragmentInfo:
     editor: str
     edition_date: str
     references: Sequence[Reference] = tuple()
+    genres: Sequence[Genre] = tuple()
 
     def set_references(self, references: Sequence[Reference]) -> "FragmentInfo":
         return attr.evolve(self, references=tuple(references))

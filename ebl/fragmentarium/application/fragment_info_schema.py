@@ -1,9 +1,13 @@
+from typing import Sequence
+
 from marshmallow import Schema, fields, post_load
 
 from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
     ApiReferenceSchema,
 )
+from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.domain.fragment import Genre
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 
@@ -19,6 +23,7 @@ class FragmentInfoSchema(Schema):
         fields.List(fields.String()), data_key="matchingLines", load_default=tuple()
     )
     references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
+    genres = fields.Nested(GenreSchema, many=True, load_default=tuple())
 
     @post_load
     def make_fragment_info(self, data, **kwargs):
