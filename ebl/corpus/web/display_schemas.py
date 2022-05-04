@@ -64,7 +64,7 @@ class LineVariantDisplay:
     @classmethod
     def from_line_variant(cls, line_variant, manuscripts_by_id):
 
-        manuscript_line_displays = list()
+        manuscript_line_displays = []
 
         for manuscript_line in line_variant.manuscripts:
             FULL_MANUSCRIPT = manuscripts_by_id[manuscript_line.manuscript_id]
