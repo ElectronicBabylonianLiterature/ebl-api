@@ -197,7 +197,7 @@ def test_find_line_with_manuscript_joins(
     when(text_repository).find_line(CHAPTER.id_, number).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS.lines[number]
     )
-    assert corpus.find_line(CHAPTER.id_, number, with_manuscript_joins=True) == (
+    assert corpus.find_line_with_manuscript_joins(CHAPTER.id_, number) == (
         CHAPTER.lines[number],
         CHAPTER.manuscripts,
     )

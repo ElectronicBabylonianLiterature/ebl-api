@@ -102,8 +102,8 @@ class LineResource:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
 
         try:
-            line, manuscripts = self._corpus.find_line(
-                chapter_id, int(number), with_manuscript_joins=True
+            line, manuscripts = self._corpus.find_line_with_manuscript_joins(
+                chapter_id, int(number)
             )
             line_details = LineDetailsDisplay.from_line_manuscripts(line, manuscripts)
             resp.media = LineDetailsDisplaySchema().dump(line_details)

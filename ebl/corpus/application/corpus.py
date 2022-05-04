@@ -107,15 +107,16 @@ class Corpus:
         return self._inject_parallels(self._repository.find_chapter_for_display(id_))
 
     def find_line(
-        self, id_: ChapterId, number: int, with_manuscript_joins: bool = False
+        self, id_: ChapterId, number: int
+    ) -> Tuple[Line, Sequence[Manuscript]]:
+        return self._repository.find_line(id_, number), self.find_manuscripts(id_)
+
+    def find_line_with_manuscript_joins(
+        self, id_: ChapterId, number: int
     ) -> Tuple[Line, Sequence[Manuscript]]:
         return self._repository.find_line(
             id_, number
-        ), self.find_manuscripts_with_joins(
-            id_
-        ) if with_manuscript_joins else self.find_manuscripts(
-            id_
-        )
+        ), self.find_manuscripts_with_joins(id_)
 
     def find_manuscripts(self, id_: ChapterId) -> Sequence[Manuscript]:
         return self._inject_references_to_manuscripts(
