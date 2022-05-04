@@ -40,3 +40,11 @@ tasks:
       - ./ebl/**/*.lark
     cmds:
       - poetry run waitress-serve --port=8000 --call ebl.app:get_app
+
+  start-profiler:
+    sources:
+      - ./ebl/**/*.py
+      - ./ebl/**/*.lark
+    cmds:
+      - python -m cProfile -o application.prof profile_run.py
+      - poetry run gprof2dot -f pstats application.prof | dot -Tpng -o profiler_viz.png

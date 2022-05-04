@@ -130,6 +130,7 @@ annotations
 Taskfile.yml
 .task
 
-# Profilers
-palanteer/
+# Profiling
 profile.log
+application.prof
+profiler_viz.png

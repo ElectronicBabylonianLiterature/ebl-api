@@ -1,29 +1,12 @@
-import os
-
-print(os.getpid())
-#os.system("poetry run waitress-serve --port=8000 --call ebl.app:get_app")
-#print(os.getpid())
-
-# python -m cProfile -o cProfile.log -m poetry run waitress-serve --port=8000 --call ebl.app:get_app
-
-# ps -aux
-# poetry run py-spy top -s -i poetry run python ./profile_run.py
-
-import time
-timeout = time.time() + 60*5   # 5 minutes from now
-while True:
-    test = 0
-    if test == 5 or time.time() > timeout:
-        break
-    test = test - 1
-
 import subprocess
 
-subprocess.call(["poetry", "run", "waitress-serve", "--port=8000", "--call", "ebl.app:get_app"])
+# Make .prof file:
+# python -m cProfile -o application.prof profile_run.py
 
+# Vizualize file
+# poetry run gprof2dot -f pstats application.prof | dot -Tpng -o profiler_viz.png
 
-#from ebl.app import get_app
-#from waitress import serve
-
-#if __name__ == "__main__":
-#    serve(get_app, port=8000)
+if __name__ == "__main__":
+    subprocess.call(
+        ["poetry", "run", "waitress-serve", "--port=8000", "--call", "ebl.app:get_app"]
+    )
