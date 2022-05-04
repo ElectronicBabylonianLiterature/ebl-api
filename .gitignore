@@ -132,3 +132,4 @@ Taskfile.yml
 
 # Profilers
 palanteer/
+profile.log
