@@ -6,12 +6,15 @@ from ebl.corpus.web.display_schemas import (
     ManuscriptLineDisplay,
     ManuscriptLineDisplaySchema,
 )
-# from ebl.tests.bibliography.test_reference import REFERENCE, create_reference_with_document
+
 from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema, ReferenceSchema
+from ebl.bibliography.application.reference_schema import (
+    ApiReferenceSchema,
+    ReferenceSchema,
+)
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
-from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 ID = BibliographyId("RN.1")
 TYPE: ReferenceType = ReferenceType.EDITION
@@ -29,7 +32,9 @@ SERIALIZED_REFERENCE: dict = {
     "linesCited": list(LINES_CITED),
 }
 
-REFERENCE_WITH_DOCUMENT = Reference(BIBLIOGRAPHY_ENTRY["id"], TYPE, PAGES, NOTES, LINES_CITED, BIBLIOGRAPHY_ENTRY)
+REFERENCE_WITH_DOCUMENT = Reference(
+    BIBLIOGRAPHY_ENTRY["id"], TYPE, PAGES, NOTES, LINES_CITED, BIBLIOGRAPHY_ENTRY
+)
 SERIALIZED_REFERENCE_WITH_DOCUMENT: dict = {
     **SERIALIZED_REFERENCE,
     "id": REFERENCE_WITH_DOCUMENT.id,
@@ -37,18 +42,18 @@ SERIALIZED_REFERENCE_WITH_DOCUMENT: dict = {
 }
 
 
-
 def test_old_siglum_schema() -> None:
     OLD_SIGLUM = OldSiglum("siglum_string", REFERENCE)
-    SERIALIZED_OLD_SIGLUM = {"reference": ReferenceSchema().dump(REFERENCE), "siglum": OLD_SIGLUM.siglum}
+    SERIALIZED_OLD_SIGLUM = {
+        "reference": ReferenceSchema().dump(REFERENCE),
+        "siglum": OLD_SIGLUM.siglum,
+    }
 
     assert OldSiglumSchema().dump(OLD_SIGLUM) == SERIALIZED_OLD_SIGLUM
     assert OldSiglumSchema().load(SERIALIZED_OLD_SIGLUM) == OLD_SIGLUM
 
 
 def test_api_old_siglum_schema() -> None:
-    # bibliography_entry = BibliographyEntryFactory.build()
-    # reference_with_document = create_reference_with_document(bibliography_entry)
     OLD_SIGLUM_WITH_DOCUMENT = OldSiglum("siglum_string", REFERENCE_WITH_DOCUMENT)
 
     SERIALIZED_OLD_SIGLUM_WITH_DOCUMENT = {
@@ -56,14 +61,22 @@ def test_api_old_siglum_schema() -> None:
         "siglum": OLD_SIGLUM_WITH_DOCUMENT.siglum,
     }
 
-    assert ApiOldSiglumSchema().dump(OLD_SIGLUM_WITH_DOCUMENT) == SERIALIZED_OLD_SIGLUM_WITH_DOCUMENT
-    assert ApiOldSiglumSchema().load(SERIALIZED_OLD_SIGLUM_WITH_DOCUMENT) == OLD_SIGLUM_WITH_DOCUMENT
+    assert (
+        ApiOldSiglumSchema().dump(OLD_SIGLUM_WITH_DOCUMENT)
+        == SERIALIZED_OLD_SIGLUM_WITH_DOCUMENT
+    )
+    assert (
+        ApiOldSiglumSchema().load(SERIALIZED_OLD_SIGLUM_WITH_DOCUMENT)
+        == OLD_SIGLUM_WITH_DOCUMENT
+    )
 
 
 def test_serialize() -> None:
     chapter = ChapterFactory.build(
         manuscripts=(
-            ManuscriptFactory.build(id=1, references=(REFERENCE,), with_joins=True, old_sigla=tuple()),
+            ManuscriptFactory.build(
+                id=1, references=(REFERENCE,), with_joins=True, old_sigla=tuple()
+            ),
         )
     )
     manuscript_line = chapter.lines[0].variants[0].manuscripts[0]
@@ -72,12 +85,6 @@ def test_serialize() -> None:
         manuscript, manuscript_line
     )
     schema = ManuscriptLineDisplaySchema()
-
-    for m in manuscript.joins.fragments:
-        for j in m:
-            print(j)
-            print(JoinDisplaySchema().dump(j))
-            print()
 
     assert schema.dump(manuscript_line_display) == {
         "siglumDisambiguator": manuscript.siglum_disambiguator,
@@ -95,5 +102,8 @@ def test_serialize() -> None:
         else "",
         "isInFragmentarium": manuscript.is_in_fragmentarium,
         "accession": manuscript.accession,
-        "joins": [[JoinDisplaySchema().dump(join) for join in fragment] for fragment in manuscript.joins.fragments],
+        "joins": [
+            [JoinDisplaySchema().dump(join) for join in fragment]
+            for fragment in manuscript.joins.fragments
+        ],
     }

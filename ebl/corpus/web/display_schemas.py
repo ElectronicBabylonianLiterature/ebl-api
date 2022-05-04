@@ -4,23 +4,16 @@ from marshmallow import Schema, fields, post_load
 from ebl.bibliography.domain.reference import Reference
 from ebl.corpus.domain.line import Line, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
-from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.domain.joins import Join
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, ApiOldSiglumSchema
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
-from operator import attrgetter
 
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text_line import TextLine
-
-
-def get_manuscript_field(field_name):
-    return lambda line, context: attrgetter(field_name)(
-        context["manuscripts"][line.manuscript_id]
-    )
 
 
 @attr.s(frozen=True, auto_attribs=True)

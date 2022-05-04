@@ -1,7 +1,10 @@
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.web.chapter_schemas import ApiOldSiglumSchema
-from ebl.corpus.web.display_schemas import JoinDisplaySchema, LineDetailsDisplay, LineDetailsDisplaySchema
-from ebl.fragmentarium.application.joins_schema import JoinsSchema
+from ebl.corpus.web.display_schemas import (
+    JoinDisplaySchema,
+    LineDetailsDisplay,
+    LineDetailsDisplaySchema,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -52,7 +55,10 @@ SERIALIZED_LINE_DETAILS: dict = {
                     else "",
                     "isInFragmentarium": MANUSCRIPT.is_in_fragmentarium,
                     "accession": MANUSCRIPT.accession,
-                    "joins": JoinDisplaySchema().dump(MANUSCRIPT.joins, many=True),
+                    "joins": [
+                        [JoinDisplaySchema().dump(join) for join in fragment]
+                        for fragment in MANUSCRIPT.joins.fragments
+                    ],
                 }
             ]
         }

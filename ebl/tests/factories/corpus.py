@@ -83,11 +83,9 @@ class JoinsFactory(factory.Factory):
 class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
-    
+
     class Params:
-        with_joins = factory.Trait(
-            joins = factory.SubFactory(JoinsFactory)
-        )
+        with_joins = factory.Trait(joins=factory.SubFactory(JoinsFactory))
         # with_old_sigla = factory.Trait(
         #     old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
         # )
