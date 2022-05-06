@@ -16,6 +16,7 @@ RUN pyenv global $PYTHON_VERSION
 
 RUN python -m ensurepip
 RUN python -m pip install --upgrade pip poetry
+RUN sudo -E /workspace/ebl-api/.venv/bin/pip install --upgrade pip poetry
 
 ENV NODE_OPTIONS=--experimental-worker
 ENV PYMONGOIM__MONGO_VERSION=4.4

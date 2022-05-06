@@ -1,4 +1,6 @@
-import subprocess
+#import subprocess
+from waitress import serve
+from ebl.app import get_app
 
 # Make .prof file:
 # python -m cProfile -o application.prof profile_run.py
@@ -7,26 +9,23 @@ import subprocess
 # check running proccesses:
 # ps aux
 
-# Vizualize file
-# (install graphviz:  sudo apt install graphviz)
-# poetry run gprof2dot -f pstats application.prof | dot -Tpng -o profiler_viz.png
-# poetry run python -m cProfile -o poetry run python waitress-serve --port=8000 --call ebl.app:get_app
+# sudo -E RUST_BACKTRACE=full /workspace/ebl-api/.venv/bin/py-spy top -s poetry run /workspace/ebl-api/.venv/bin/python3 profile_run.py
 
-# sudo poetry run py-spy top -s poetry run .profile_run.py
+# sudo py-spy top -s poetry run python3 profile_run.py
 
-# sudo /workspace/ebl-api/.venv/bin/py-spy top -s sudo /workspace/ebl-api/.venv/bin/pypy3 profile_run.py 
-# sudo -E /workspace/ebl-api/.venv/bin/py-spy top -s -i poetry run /workspace/ebl-api/.venv/bin/pypy3 profile_run.py
+# sudo -E RUST_BACKTRACE=full /workspace/ebl-api/.venv/bin/py-spy top -s /workspace/ebl-api/.venv/bin/poetry run /workspace/ebl-api/.venv/bin/python3 profile_run.py
 
-# /workspace/ebl-api/.venv/bin/pypy3
+# sudo env "PATH=$PATH RUST_BACKTRACE=full" /workspace/ebl-api/.venv/bin/py-spy top -s poetry run /workspace/ebl-api/.venv/bin/python3 profile_run.py
 
-# sudo poetry run py-spy top -p 5559
+# sudo env "PATH=$PATH RUST_BACKTRACE=full" /workspace/ebl-api/.venv/bin/py-spy top -s poetry run /workspace/ebl-api/.venv/bin/python3 profile_run.py
 
-# sudo poetry run py-spy top poetry run /workspace/ebl-api/.venv/bin/pypy3 /workspace/ebl-api/.venv/bin/waitress-serve --port=8000 --call ebl.app:get_app
-
-# (works, but no subprocesses are exposed:)
-# sudo poetry run py-spy top poetry run pypi profile_run.py
+# sudo env "PATH=$PATH" py-spy top -s poetry run /workspace/ebl-api/.venv/bin/python3 profile_run.py
 
 if __name__ == "__main__":
-    subprocess.call(
-        ["poetry", "run", "waitress-serve", "--port=8000", "--call", "ebl.app:get_app"]
-    )
+    pass
+    serve(get_app(), port=8000)
+#    while True:
+#        print('--')
+#    subprocess.call(
+#        ["poetry", "run", "waitress-serve", "--port=8000", "--call", "ebl.app:get_app"]
+#    )
