@@ -18,6 +18,7 @@ from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
+    OldSiglum,
     Period,
     PeriodModifier,
     Provenance,
@@ -52,9 +53,25 @@ from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
 
 
+class OldSiglumSchema(Schema):
+    siglum = fields.String(required=True)
+    reference = fields.Nested(ReferenceSchema, required=True)
+
+    @post_load
+    def make_old_siglum(self, data, **kwargs) -> OldSiglum:
+        return OldSiglum(**data)
+
+
 class ManuscriptSchema(Schema):
     id = fields.Integer(required=True)
     siglum_disambiguator = fields.String(required=True, data_key="siglumDisambiguator")
+    old_sigla = fields.Nested(
+        OldSiglumSchema,
+        required=False,
+        data_key="oldSigla",
+        many=True,
+        load_default=tuple(),
+    )
     museum_number: fields.Field = fields.Nested(
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
     )
@@ -109,6 +126,7 @@ class ManuscriptSchema(Schema):
         return Manuscript(
             data["id"],
             data["siglum_disambiguator"],
+            tuple(data["old_sigla"]),
             data["museum_number"],
             data["accession"],
             data["period_modifier"],

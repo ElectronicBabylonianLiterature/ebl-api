@@ -17,7 +17,7 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 CHAPTER_DISPLAY = ChapterDisplay.of_chapter(TextFactory.build(), ChapterFactory.build())
 
 
-def to_dict(chapter: ChapterDisplay, missing_intertext: bool = False, missing_translation: bool = False) -> dict:
+def to_dict(chapter: ChapterDisplay, missing_translation: bool = False) -> dict:
     return {
         "id": {
             "stage": chapter.id_.stage.value,
@@ -36,16 +36,21 @@ def to_dict(chapter: ChapterDisplay, missing_intertext: bool = False, missing_tr
                 "number": OneOfLineNumberSchema().dump(line.number),
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
-                "intertext": None if missing_intertext else OneOfNoteLinePartSchema().dump(
-                    line.intertext, many=True
-                ),
-                "reconstruction": OneOfTokenSchema().dump(
-                    line.reconstruction, many=True
-                ),
-                "translation": None if missing_translation else OneOfNoteLinePartSchema().dump(
-                    line.translation, many=True
-                ),
-                "note": line.note and NoteLineSchema().dump(line.none)
+                "variants": [
+                    {
+                        "intertext": OneOfNoteLinePartSchema().dump(
+                            variant.intertext, many=True
+                        ),
+                        "reconstruction": OneOfTokenSchema().dump(
+                            variant.reconstruction, many=True
+                        ),
+                        "note": variant.note and NoteLineSchema().dump(variant.none),
+                    }
+                    for variant in line.variants
+                ],
+                "translation": None
+                if missing_translation
+                else OneOfNoteLinePartSchema().dump(line.translation, many=True),
             }
             for line in chapter.lines
         ],
@@ -64,7 +69,10 @@ def test_load():
 
 
 def test_load_missing_dat():
-    chapter_display = attr.evolve(CHAPTER_DISPLAY, lines=(
-        attr.evolve(CHAPTER_DISPLAY.lines[0], reconstrcution=tuple(), translation=tuple())
-    ))
-    assert ChapterDisplaySchema().load(to_dict(chapter_display, True, True)) == chapter_display
+    chapter_display = attr.evolve(
+        CHAPTER_DISPLAY,
+        lines=(attr.evolve(CHAPTER_DISPLAY.lines[0], translation=tuple())),
+    )
+    assert (
+        ChapterDisplaySchema().load(to_dict(chapter_display, True)) == chapter_display
+    )

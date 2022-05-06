@@ -1,4 +1,5 @@
-from typing import Optional, Sequence, Tuple, Union, cast
+from functools import singledispatch
+from typing import Optional, Sequence, Set, Tuple, Union, cast
 
 import attr
 import pydash
@@ -18,7 +19,8 @@ from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_tokens
 from ebl.transliteration.domain.tokens import Token
-from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.translation_line import TranslationLine
+from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
@@ -35,7 +37,7 @@ class ManuscriptLine:
     @property
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
-            (self.manuscript_id, self.labels, cast(TextLine, self.line).line_number)
+            (self.manuscript_id, self.labels, self.line.line_number)
             if isinstance(self.line, TextLine)
             else None
         )
@@ -43,7 +45,7 @@ class ManuscriptLine:
     @property
     def is_beginning_of_side(self) -> bool:
         return (
-            cast(TextLine, self.line).line_number.is_beginning_of_side
+            self.line.line_number.is_beginning_of_side
             if isinstance(self.line, TextLine)
             else False
         )
@@ -53,6 +55,10 @@ class ManuscriptLine:
         return any(
             line.is_end_of for line in self.paratext if isinstance(line, DollarLine)
         )
+
+    @property
+    def is_empty(self) -> bool:
+        return isinstance(self.line, EmptyLine)
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -91,10 +97,21 @@ class LineVariant:
     @property
     def manuscript_line_labels(self) -> Sequence[ManuscriptLineLabel]:
         return [
-            cast(ManuscriptLineLabel, manuscript_line.label)
+            manuscript_line.label
             for manuscript_line in self.manuscripts
             if manuscript_line.label
         ]
+
+    @property
+    def _variant_alignments(self) -> Set[Optional[int]]:
+        return {
+            manuscript_token.alignment
+            for manuscript in self.manuscripts
+            for manuscript_token in cast(TextLine, manuscript.line).content
+            if isinstance(manuscript.line, TextLine)
+            if isinstance(manuscript_token, AbstractWord)
+            if manuscript_token.has_variant
+        }
 
     def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
         return (
@@ -130,6 +147,25 @@ class LineVariant:
             other,
             reconstruction=merged_reconstruction,
             manuscripts=tuple(merged_manuscripts),
+        ).set_has_variant_aligment()
+
+    def set_has_variant_aligment(self) -> "LineVariant":
+        variant_alignments = self._variant_alignments
+
+        @singledispatch
+        def set_flag(token: Token, index: int) -> Token:
+            return token
+
+        @set_flag.register(AbstractWord)
+        def _(token: AbstractWord, index: int) -> AbstractWord:
+            return token.set_has_variant_alignment(index in variant_alignments)
+
+        return attr.evolve(
+            self,
+            reconstruction=tuple(
+                set_flag(token, index)
+                for index, token in enumerate(self.reconstruction)
+            ),
         )
 
 
@@ -143,7 +179,7 @@ class Line:
 
     @translation.validator
     def _validate_translations(self, _, value: Sequence[TranslationLine]) -> None:
-        if any(line.extent and cast(Extent, line.extent).labels for line in value):
+        if any(line.extent and line.extent.labels for line in value):
             raise ValueError("Labels are not allowed in line translations.")
 
     @property

@@ -10,6 +10,8 @@ def allow_references(chapter, bibliography):
     for manuscript in chapter.manuscripts:
         for reference in manuscript.references:
             bibliography.create(reference.document, ANY_USER)
+        for old_siglum in manuscript.old_sigla:
+            bibliography.create(old_siglum.reference.document, ANY_USER)
 
 
 def allow_signs(signs, sign_list):

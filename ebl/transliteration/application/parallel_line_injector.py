@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from functools import singledispatchmethod
-from typing import Sequence, TypeVar, cast
+from typing import Sequence, TypeVar
 
 import attr
 
@@ -14,7 +14,6 @@ from ebl.transliteration.domain.parallel_line import (
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_id import TextId
-
 
 T = TypeVar("T", bound=Line)
 
@@ -68,9 +67,7 @@ class ParallelLineInjector:
                 if line.chapter is None
                 else attr.evolve(
                     line,
-                    exists=self._repository.chapter_exists(
-                        line.text, cast(ChapterName, line.chapter)
-                    ),
+                    exists=self._repository.chapter_exists(line.text, line.chapter),
                 )
             )
         except NotFoundError:

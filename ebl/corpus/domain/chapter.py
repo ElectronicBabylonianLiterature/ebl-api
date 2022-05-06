@@ -1,27 +1,26 @@
 from enum import Enum, unique
-from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, cast
+from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union
 
 import attr
 import pydash
 
+import ebl.corpus.domain.chapter_validators as validators
 from ebl.corpus.domain.extant_line import ExtantLine
 from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.record import Record
-from ebl.transliteration.domain.stage import Stage
-from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import NotFoundError
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.merger import Merger
 from ebl.transliteration.domain.markup import MarkupPart, to_title
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.stage import Stage
+from ebl.transliteration.domain.text_id import TextId
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
 )
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-import ebl.corpus.domain.chapter_validators as validators
-
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
 
@@ -148,7 +147,7 @@ class Chapter:
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines
         matching_indices = {
-            cast(int, line.source)
+            line.source
             for index, numbers in enumerate(self._match(query))
             for start, end in numbers
             for line in text_lines[index][start : end + 1]
@@ -199,7 +198,7 @@ class Chapter:
     ) -> Sequence[TextLineEntry]:
         def create_entry(line: Line, index: int) -> Optional[TextLineEntry]:
             text_line = line.get_manuscript_text_line(manuscript.id)
-            return text_line and TextLineEntry(text_line, index)
+            return TextLineEntry(text_line, index) if text_line else None
 
         return (
             pydash.chain(self.lines)

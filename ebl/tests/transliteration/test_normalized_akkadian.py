@@ -18,7 +18,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 from ebl.transliteration.domain.tokens import Joiner, UnknownNumberOfSigns, ValueToken
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "word,expected,lemmatizable",
     [
         (AkkadianWord.of((ValueToken.of("ibnû"),)), "ibnû", True),
@@ -101,6 +101,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
         "alignable": lemmatizable,
         "normalized": True,
         "language": "AKKADIAN",
+        "hasVariantAlignment": word.has_variant_alignment,
     }
     assert_token_serialization(word, serialized)
 
@@ -140,7 +141,7 @@ def test_set_alignment_empty() -> None:
     assert word.set_alignment(None, None) == expected
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "caesura,is_uncertain,value",
     [(Caesura.certain(), False, "||"), (Caesura.uncertain(), True, "(||)")],
 )
@@ -152,7 +153,7 @@ def test_caesura(caesura: Caesura, is_uncertain: bool, value: str) -> None:
     assert_token_serialization(caesura, serialized)
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "separator,is_uncertain,value",
     [
         (MetricalFootSeparator.certain(), False, "|"),

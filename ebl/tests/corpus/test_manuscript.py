@@ -1,9 +1,24 @@
+from typing import Union
+
 import pytest
+
 from ebl.corpus.domain.manuscript import Manuscript, ManuscriptType, Period, Provenance
+from ebl.tests.factories.corpus import ManuscriptLineFactory
+from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text_line import TextLine
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
+    "line,expected",
+    [(EmptyLine(), True), (TextLine(LineNumber(1)), False)],
+)
+def test_is_empty(line: Union[TextLine, EmptyLine], expected: bool) -> None:
+    assert ManuscriptLineFactory.build(line=line).is_empty is expected
+
+
+@pytest.mark.parametrize(
     "provenance,period,type_",
     [
         (Provenance.STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.NONE),

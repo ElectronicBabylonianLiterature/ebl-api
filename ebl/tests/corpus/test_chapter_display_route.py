@@ -38,7 +38,15 @@ def test_get(client, text_repository, parallel_line_injector, text, chapter, url
         lines=tuple(
             attr.evolve(
                 line,
-                parallel_lines=parallel_line_injector.inject(line.parallel_lines),
+                variants=tuple(
+                    attr.evolve(
+                        variant,
+                        parallel_lines=parallel_line_injector.inject(
+                            variant.parallel_lines
+                        ),
+                    )
+                    for variant in line.variants
+                ),
             )
             for line in chapter_display.lines
         ),

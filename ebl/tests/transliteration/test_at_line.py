@@ -15,7 +15,7 @@ from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.atf import Atf
 
 
-@pytest.mark.parametrize(  # pyre-ignore[56]
+@pytest.mark.parametrize(
     "parts,parts_text", [(tuple(), ""), ((StringPart("a"), StringPart("b c")), " ab c")]
 )
 def test_at_line_heading(parts, parts_text) -> None:

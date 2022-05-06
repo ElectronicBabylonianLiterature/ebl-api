@@ -6,6 +6,7 @@ from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
+    OldSiglum,
     Period,
     PeriodModifier,
     Provenance,
@@ -48,12 +49,21 @@ from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 
 
+class OldSiglumFactory(factory.Factory):
+    class Meta:
+        model = OldSiglum
+
+    siglum = factory.Faker("word")
+    reference = factory.SubFactory(ReferenceFactory, with_document=True)
+
+
 class ManuscriptFactory(factory.Factory):
     class Meta:
         model = Manuscript
 
     id = factory.Sequence(lambda n: n + 1)
     siglum_disambiguator = factory.Faker("word")
+    old_sigla = factory.List([factory.SubFactory(OldSiglumFactory)], TupleFactory)
     museum_number = factory.Sequence(
         lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
     )
