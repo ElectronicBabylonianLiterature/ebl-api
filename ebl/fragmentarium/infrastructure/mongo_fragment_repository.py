@@ -206,7 +206,9 @@ class MongoFragmentRepository(FragmentRepository):
             }
         return {**number_query, **signs_query, **id_query}
 
-    def query_fragmentarium(self, query: FragmentariumSearchQuery) -> Sequence[Fragment]:
+    def query_fragmentarium(
+        self, query: FragmentariumSearchQuery
+    ) -> Sequence[Fragment]:
         cursor = self._fragments.find_many(
             self._query_fragmentarium_create_query(query),
             limit=100,
