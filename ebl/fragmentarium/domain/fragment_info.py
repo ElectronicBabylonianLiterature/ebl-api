@@ -51,4 +51,5 @@ class FragmentInfo:
             first_transliteration.user,
             first_transliteration.date,
             fragment.references,
+            fragment.genres
         )
