@@ -103,6 +103,7 @@ def test_create_fragment_info_dto():
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",
         "references": [],
+        "genres": []
     }
 
 
