@@ -1,5 +1,3 @@
-from typing import Sequence
-
 from marshmallow import Schema, fields, post_load
 
 from ebl.bibliography.application.reference_schema import (
@@ -7,9 +5,8 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
 )
 from ebl.fragmentarium.application.genre_schema import GenreSchema
-from ebl.fragmentarium.domain.fragment import Genre
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 
 class FragmentInfoSchema(Schema):
