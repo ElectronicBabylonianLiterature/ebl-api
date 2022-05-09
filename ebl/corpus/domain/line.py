@@ -75,6 +75,9 @@ class ManuscriptLine:
             ),
         )
 
+    def get_line_content(self) -> Sequence[Token]:
+        return tuple() if self.is_empty else cast(TextLine, self.line).content
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineVariant:
@@ -107,8 +110,7 @@ class LineVariant:
         return {
             manuscript_token.alignment
             for manuscript in self.manuscripts
-            for manuscript_token in cast(TextLine, manuscript.line).content
-            if isinstance(manuscript.line, TextLine)
+            for manuscript_token in manuscript.get_line_content()
             if isinstance(manuscript_token, AbstractWord)
             if manuscript_token.has_variant
         }

@@ -16,6 +16,16 @@ from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 
+WORD1 = Word.of(
+    [Reading.of_name("ku")], alignment=0, variant=Word.of([Reading.of_name("uk")])
+)
+WORD2 = Word.of(
+    [Reading.of_name("ra")], alignment=1, variant=Word.of([Reading.of_name("ar")])
+)
+WORD3 = Word.of(
+    [Reading.of_name("pa")], alignment=2, variant=Word.of([Reading.of_name("ap")])
+)
+
 
 @pytest.mark.parametrize(
     "labels",
@@ -70,19 +80,10 @@ def test_is_end_of_side(
 
 
 def test_update_manuscript_alignment():
-    word1 = Word.of(
-        [Reading.of_name("ku")], alignment=0, variant=Word.of([Reading.of_name("uk")])
-    )
-    word2 = Word.of(
-        [Reading.of_name("ra")], alignment=1, variant=Word.of([Reading.of_name("ar")])
-    )
-    word3 = Word.of(
-        [Reading.of_name("pa")], alignment=2, variant=Word.of([Reading.of_name("ap")])
-    )
     manuscript = ManuscriptLine(
         9001,
         tuple(),
-        TextLine(LineNumber(1), (word1, word2, word3)),
+        TextLine(LineNumber(1), (WORD1, WORD2, WORD3)),
         tuple(),
         (1, 3),
     )
@@ -91,12 +92,25 @@ def test_update_manuscript_alignment():
         line=TextLine(
             LineNumber(1),
             (
-                word1.set_alignment(None, None),
-                word2.set_alignment(0, word2.variant),
-                word3.set_alignment(None, None),
+                WORD1.set_alignment(None, None),
+                WORD2.set_alignment(0, WORD2.variant),
+                WORD3.set_alignment(None, None),
             ),
         ),
         omitted_words=(0,),
     )
 
     assert manuscript.update_alignments([None, 0]) == expected
+
+
+def test_get_textline_content():
+    textline = TextLine(LineNumber(1), (WORD1, WORD2, WORD3))
+    manuscript = ManuscriptLineFactory.build(line=textline)
+
+    assert len(manuscript.get_line_content()) > 0
+
+
+def test_get_emptyline_content():
+    manuscript = ManuscriptLineFactory.build(line=EmptyLine())
+
+    assert manuscript.get_line_content() == tuple()
