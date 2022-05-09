@@ -22,7 +22,6 @@ from ebl.app import get_app
 # sudo env "PATH=$PATH" py-spy top -s poetry run /workspace/ebl-api/.venv/bin/python3 profile_run.py
 
 if __name__ == "__main__":
-    pass
     serve(get_app(), port=8000)
 #    while True:
 #        print('--')

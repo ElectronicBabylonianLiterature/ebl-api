@@ -15,7 +15,7 @@ class TransliterationQuery:
     regexp: str
 
     def is_empty(self) -> bool:
-        return "".join(token for row in self._signs for token in row).strip() == ""
+        return not "".join(token for row in self._signs for token in row).strip()
 
     def match(self, signs: str) -> Sequence[Tuple[int, int]]:
         return [
