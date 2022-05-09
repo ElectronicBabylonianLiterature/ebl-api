@@ -1,3 +1,4 @@
+import re
 from typing import Sequence, cast
 
 from ebl.errors import DataError
@@ -6,6 +7,20 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_line
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+
+
+def create_sign_regexp(sign):
+    return r"[^\s]+" if sign == "*" else rf"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
+
+
+def create_line_regexp(line):
+    signs_regexp = " ".join(create_sign_regexp(sign) for sign in line)
+    return rf"(?<![^|\s]){signs_regexp}"
+
+
+def create_query_regexp(signs: Sequence[Sequence[str]]) -> str:
+    lines_regexp = r"( .*)?\n.*".join(create_line_regexp(line) for line in signs)
+    return rf"{lines_regexp}(?![^|\s])"
 
 
 class TransliterationQueryFactory:
@@ -18,7 +33,7 @@ class TransliterationQueryFactory:
 
     def create(self, transliteration: str) -> TransliterationQuery:
         signs = [self._create_signs(line) for line in transliteration.split("\n")]
-        return TransliterationQuery(signs)
+        return TransliterationQuery(signs, create_query_regexp(signs))
 
     def _create_signs(self, line: str) -> Sequence[str]:
         visitor = SignsVisitor(self._sign_repositoy)

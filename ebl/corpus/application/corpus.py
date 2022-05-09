@@ -136,6 +136,7 @@ class Corpus:
     # - Try to adjust the query level to look for line.
 
     def search_transliteration(self, query: TransliterationQuery) -> List[ChapterInfo]:
+        print('search', query)
         return (
             []
             if query.is_empty()
