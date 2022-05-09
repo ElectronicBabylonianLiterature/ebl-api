@@ -10,11 +10,9 @@ def test_get(client, text_repository):
     chapter = ChapterFactory.build(
         lines=tuple(),
         manuscripts=(
-            ManuscriptFactory.build(references=tuple(), old_sigla=tuple()),
-            ManuscriptFactory.build(
-                unplaced_lines=Text(), references=tuple(), old_sigla=tuple()
-            ),
-            ManuscriptFactory.build(references=tuple(), old_sigla=tuple()),
+            ManuscriptFactory.build(references=tuple()),
+            ManuscriptFactory.build(unplaced_lines=Text(), references=tuple()),
+            ManuscriptFactory.build(references=tuple()),
         ),
     )
     text_repository.create_chapter(chapter)

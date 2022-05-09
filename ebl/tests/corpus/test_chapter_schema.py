@@ -44,7 +44,7 @@ from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.translation_line import TranslationLine
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
-MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES)
+MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES, with_old_sigla=True)
 UNCERTAIN_FRAGMENTS = (MuseumNumber.of("K.1"),)
 FIRST_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)
 SECOND_MANUSCRIPT_LINE = ManuscriptLineFactory.build(manuscript_id=MANUSCRIPT.id)

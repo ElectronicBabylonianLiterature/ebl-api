@@ -7,9 +7,7 @@ from ebl.tests.factories.corpus import ChapterFactory, ManuscriptFactory
 
 def test_get(client, text_repository):
     chapter = ChapterFactory.build(
-        manuscripts=(
-            ManuscriptFactory.build(id=1, references=tuple(), old_sigla=tuple()),
-        )
+        manuscripts=(ManuscriptFactory.build(id=1, references=tuple()),)
     )
     text_repository.create_chapter(chapter)
 

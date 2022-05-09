@@ -7,7 +7,7 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiLineSchema
-from ebl.corpus.web.display_schemas import LineDetailsSchema
+from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.errors import NotFoundError
 from ebl.marshmallowschema import validate
@@ -102,9 +102,10 @@ class LineResource:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
 
         try:
-            line, manuscripts = self._corpus.find_line(chapter_id, int(number))
-            MANUSCRIPTS_BY_ID = {m.id: m for m in manuscripts}
-            schema = LineDetailsSchema(context={"manuscripts": MANUSCRIPTS_BY_ID})
-            resp.media = schema.dump(line)
+            line, manuscripts = self._corpus.find_line_with_manuscript_joins(
+                chapter_id, int(number)
+            )
+            line_details = LineDetailsDisplay.from_line_manuscripts(line, manuscripts)
+            resp.media = LineDetailsDisplaySchema().dump(line_details)
         except (IndexError, ValueError) as error:
             raise NotFoundError(f"{chapter_id} line {number} not found.") from error

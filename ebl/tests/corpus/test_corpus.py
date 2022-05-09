@@ -186,6 +186,23 @@ def test_find_line(corpus, text_repository, bibliography, when) -> None:
     )
 
 
+def test_find_line_with_manuscript_joins(
+    corpus, text_repository, bibliography, when
+) -> None:
+    expect_bibliography(bibliography, when)
+    when(text_repository).query_manuscripts_with_joins_by_chapter(
+        CHAPTER.id_
+    ).thenReturn(CHAPTER.manuscripts)
+    number = 0
+    when(text_repository).find_line(CHAPTER.id_, number).thenReturn(
+        CHAPTER_WITHOUT_DOCUMENTS.lines[number]
+    )
+    assert corpus.find_line_with_manuscript_joins(CHAPTER.id_, number) == (
+        CHAPTER.lines[number],
+        CHAPTER.manuscripts,
+    )
+
+
 def test_find_manuscripts(corpus, text_repository, bibliography, when) -> None:
     expect_bibliography(bibliography, when)
     when(text_repository).query_manuscripts_by_chapter(CHAPTER.id_).thenReturn(
