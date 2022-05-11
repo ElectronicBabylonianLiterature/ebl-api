@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Sequence
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -86,5 +86,7 @@ class FragmentRepository(ABC):
     def update_references(self, fragment: Fragment) -> None:
         ...
 
-    def query_fragmentarium(self, query: FragmentariumSearchQuery):
+    def query_fragmentarium(
+        self, query: FragmentariumSearchQuery
+    ) -> Sequence[Fragment]:
         ...

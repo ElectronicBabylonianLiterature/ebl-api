@@ -21,6 +21,7 @@ def test_of():
         matching_lines,
         "",
         "",
+        genres=FRAGMENT.genres,
     )
 
 
@@ -35,6 +36,7 @@ def test_of_with_references():
         "",
         "",
         FRAGMENT_WITH_REFERENCES.references,
+        genres=FRAGMENT_WITH_REFERENCES.genres,
     )
 
 
@@ -69,6 +71,7 @@ def test_of_with_record():
         matching_lines,
         "This User",
         "2018-06-20T00:00:00.000Z",
+        genres=FRAGMENT.genres,
     )
 
 

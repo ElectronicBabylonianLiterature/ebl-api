@@ -14,6 +14,7 @@ from ebl.fragmentarium.application.fragmentarium_search_query import (
 )
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
@@ -205,7 +206,9 @@ class MongoFragmentRepository(FragmentRepository):
             }
         return {**number_query, **signs_query, **id_query}
 
-    def query_fragmentarium(self, query: FragmentariumSearchQuery) -> Sequence[dict]:
+    def query_fragmentarium(
+        self, query: FragmentariumSearchQuery
+    ) -> Sequence[Fragment]:
         cursor = self._fragments.find_many(
             self._query_fragmentarium_create_query(query),
             limit=100,
@@ -402,5 +405,5 @@ class MongoFragmentRepository(FragmentRepository):
             {"$set": FragmentSchema(only=("references",)).dump(fragment)},
         )
 
-    def _map_fragments(self, cursor):
+    def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)

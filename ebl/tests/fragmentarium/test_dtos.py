@@ -4,6 +4,7 @@ import pytest
 
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
+from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
@@ -103,6 +104,7 @@ def test_create_fragment_info_dto():
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",
         "references": [],
+        "genres": GenreSchema().dump(lemmatized_fragment.genres, many=True),
     }
 
 

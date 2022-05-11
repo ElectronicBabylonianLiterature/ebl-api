@@ -1,3 +1,4 @@
+import attr
 import falcon
 import pytest
 
@@ -241,7 +242,9 @@ def test_needs_revision(client, fragmentarium):
     result = client.simulate_get("/fragments", params={"needsRevision": True})
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
+    assert result.json == [
+        expected_fragment_info_dto(attr.evolve(transliterated_fragment, genres=tuple()))
+    ]
     assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
