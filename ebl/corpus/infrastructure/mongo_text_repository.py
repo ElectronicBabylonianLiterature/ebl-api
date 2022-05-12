@@ -44,6 +44,9 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
     return NotFoundError(f"Chapter {id_} line {number} not found.")
 
 
+import time
+
+
 class MongoTextRepository(TextRepository):
     def __init__(self, database: Database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
@@ -186,14 +189,21 @@ class MongoTextRepository(TextRepository):
         )
 
     def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
-        return ChapterSchema().load(
+        timeBefore = time.perf_counter()
+        print("starting query")
+        query = (
             self._chapters.find_many(
                 {"signs": {"$regex": query.regexp}},
                 projection={"_id": False},
                 limit=100,
             ),
+        )
+        result = ChapterSchema().load(
+            query,
             many=True,
         )
+        print("query done in", time.perf_counter() - timeBefore, "seconds")
+        return result
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
