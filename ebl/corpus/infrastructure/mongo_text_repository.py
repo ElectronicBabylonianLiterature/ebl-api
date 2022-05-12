@@ -2,6 +2,7 @@ from typing import List
 
 import pymongo
 from pymongo.database import Database
+import copy
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
@@ -45,6 +46,7 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
 
 
 import time
+import json
 
 
 class MongoTextRepository(TextRepository):
@@ -189,20 +191,44 @@ class MongoTextRepository(TextRepository):
         )
 
     def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
+
         timeBefore = time.perf_counter()
         print("starting query")
-        query = (
-            self._chapters.find_many(
-                {"signs": {"$regex": query.regexp}},
-                projection={"_id": False},
-                limit=100,
-            ),
-        )
-        result = ChapterSchema().load(
-            query,
-            many=True,
+        query_result = self._chapters.find_many(
+            {"signs": {"$regex": query.regexp}},
+            projection={"_id": False},
+            limit=100,
         )
         print("query done in", time.perf_counter() - timeBefore, "seconds")
+        timeBefore = time.perf_counter()
+        filtered_query_result = []
+        for q in query_result:
+            print(q["name"], q["textId"], q.keys())
+            manuscript_matches = [
+                (idx, list(dict.fromkeys(query.match(signs))))
+                for idx, signs in enumerate(q["signs"])
+                if query.match(signs)
+            ]
+            lines = []
+            for idx, matches in manuscript_matches:
+                for start, end in matches:
+                    lines += [
+                        line
+                        for line in q["lines"]
+                        if line not in lines
+                        and "number" in line["number"].keys()
+                        and line["number"]["number"] - 1 >= start
+                        and line["number"]["number"] - 1 <= end
+                    ]
+            q["lines"] = lines
+            print("!!!", len(q["lines"]), manuscript_matches)
+            filtered_query_result.append(q)
+
+        result = ChapterSchema().load(
+            filtered_query_result,
+            many=True,
+        )
+        print("deserialization done in", time.perf_counter() - timeBefore, "seconds")
         return result
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:

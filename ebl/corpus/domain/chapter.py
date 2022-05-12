@@ -145,6 +145,7 @@ class Chapter:
             raise NotFoundError(f"No manuscripts with id {id_}.") from error
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
+        return self.lines
         text_lines = self.text_lines
         matching_indices = {
             line.source
