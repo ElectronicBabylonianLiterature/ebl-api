@@ -145,6 +145,7 @@ class Chapter:
             raise NotFoundError(f"No manuscripts with id {id_}.") from error
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
+        #TODO: replace with proper function that does not depend on the number of lines
         return self.lines
         text_lines = self.text_lines
         matching_indices = {
@@ -160,7 +161,6 @@ class Chapter:
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
         text_lines = self.text_lines
-
         return pydash.omit_by(
             {
                 self.manuscripts[index].id: [

@@ -14,7 +14,7 @@ from ebl.alignment.domain.scoring import EblScoring
         ("#", "ABZ002", -10),
         ("X", "X", 3),
         ("ABZ001", "X", -3),
-        ("ABZ001/ABZ545/ABZ002", "ABZ003/ABZ545/ABZ001", 16),
+        ("001/ABZ545/ABZ002", "ABZ003/ABZ545/ABZ001", 16),
         ("ABZ545/ABZ002", "ABZ003/ABZ597", 7),
         ("ABZ001/ABZ002", "ABZ003/ABZ004", -5),
     ],
