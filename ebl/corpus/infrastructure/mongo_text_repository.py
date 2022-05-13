@@ -2,6 +2,7 @@ from typing import List
 
 import pymongo
 from pymongo.database import Database
+from pymongo.collection import Collection
 import copy
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
@@ -194,42 +195,56 @@ class MongoTextRepository(TextRepository):
 
         timeBefore = time.perf_counter()
         print("starting query")
-        query_result = self._chapters.find_many(
+        cursor = self._chapters.find_many(
             {"signs": {"$regex": query.regexp}},
             projection={"_id": False},
             limit=100,
         )
         print("query done in", time.perf_counter() - timeBefore, "seconds")
         timeBefore = time.perf_counter()
-        filtered_query_result = []
-        for q in query_result:
-            print(q["name"], q["textId"], q.keys())
-            manuscript_matches = [
-                (idx, list(dict.fromkeys(query.match(signs))))
-                for idx, signs in enumerate(q["signs"])
-                if query.match(signs)
-            ]
-            lines = []
-            for idx, matches in manuscript_matches:
-                for start, end in matches:
-                    lines += [
-                        line
-                        for line in q["lines"]
-                        if line not in lines
-                        and "number" in line["number"].keys()
-                        and line["number"]["number"] - 1 >= start
-                        and line["number"]["number"] - 1 <= end
-                    ]
-            q["lines"] = lines
-            print("!!!", len(q["lines"]), manuscript_matches)
-            filtered_query_result.append(q)
-
         result = ChapterSchema().load(
-            filtered_query_result,
+            self._filter_query_by_transliteration(query, cursor),
             many=True,
         )
         print("deserialization done in", time.perf_counter() - timeBefore, "seconds")
         return result
+
+    def _filter_query_by_transliteration(
+        self, query: TransliterationQuery, cursor: Collection
+    ) -> List:
+        _cursor = []
+        for q in cursor:
+            print(q["name"], q["textId"], q.keys())
+            manuscript_matches = [
+                (
+                    idx,
+                    list(dict.fromkeys(query.match(signs))),
+                    q["manuscripts"][idx]["colophon"]["numberOfLines"],
+                    q["manuscripts"][idx]["unplacedLines"]["numberOfLines"],
+                )
+                for idx, signs in enumerate(q["signs"])
+                if query.match(signs)
+            ]
+            lines = []
+            for (
+                idx,
+                matches,
+                colophon_lines_number,
+                unplaced_lines_number,
+            ) in manuscript_matches:
+                lines_difference = colophon_lines_number + unplaced_lines_number
+                for start, end in matches:
+                    start -= lines_difference
+                    end -= lines_difference
+                    lines += [
+                        line
+                        for lineIdx, line in enumerate(q["lines"])
+                        if line not in lines and lineIdx >= start and lineIdx <= end
+                    ]
+            q["lines"] = lines #sorted(lines, key=lambda l: l["number"]["number"])
+            print("!!!", len(q["lines"]), manuscript_matches)
+            _cursor.append(q)
+        return _cursor
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
