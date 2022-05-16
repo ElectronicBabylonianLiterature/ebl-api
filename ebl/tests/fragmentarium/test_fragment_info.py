@@ -4,21 +4,22 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 FRAGMENT = FragmentFactory.build()
 FRAGMENT_WITH_REFERENCES = FragmentFactory.build(
     references=(ReferenceFactory.build(), ReferenceFactory.build())
 )
+MATCHING_LINES = parse_atf_lark("1. kur")
 
 
 def test_of():
-    matching_lines = (("1. kur",),)
-    assert FragmentInfo.of(FRAGMENT, matching_lines) == FragmentInfo(
+    assert FragmentInfo.of(FRAGMENT, MATCHING_LINES) == FragmentInfo(
         FRAGMENT.number,
         FRAGMENT.accession,
         FRAGMENT.script,
         FRAGMENT.description,
-        matching_lines,
+        MATCHING_LINES,
         "",
         "",
         genres=FRAGMENT.genres,
@@ -26,13 +27,12 @@ def test_of():
 
 
 def test_of_with_references():
-    matching_lines = (("1. kur",),)
-    assert FragmentInfo.of(FRAGMENT_WITH_REFERENCES, matching_lines) == FragmentInfo(
+    assert FragmentInfo.of(FRAGMENT_WITH_REFERENCES, MATCHING_LINES) == FragmentInfo(
         FRAGMENT_WITH_REFERENCES.number,
         FRAGMENT_WITH_REFERENCES.accession,
         FRAGMENT_WITH_REFERENCES.script,
         FRAGMENT_WITH_REFERENCES.description,
-        matching_lines,
+        MATCHING_LINES,
         "",
         "",
         FRAGMENT_WITH_REFERENCES.references,
@@ -62,13 +62,12 @@ def test_of_with_record():
             )
         ),
     )
-    matching_lines = (("1. kur",),)
-    assert FragmentInfo.of(fragment, matching_lines) == FragmentInfo(
+    assert FragmentInfo.of(fragment, MATCHING_LINES) == FragmentInfo(
         FRAGMENT.number,
         FRAGMENT.accession,
         FRAGMENT.script,
         FRAGMENT.description,
-        matching_lines,
+        MATCHING_LINES,
         "This User",
         "2018-06-20T00:00:00.000Z",
         genres=FRAGMENT.genres,
@@ -76,4 +75,4 @@ def test_of_with_record():
 
 
 def test_of_defaults():
-    assert FragmentInfo.of(FRAGMENT).matching_lines == tuple()
+    assert FragmentInfo.of(FRAGMENT).matching_lines is None

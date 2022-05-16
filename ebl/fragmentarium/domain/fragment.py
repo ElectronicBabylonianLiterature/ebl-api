@@ -2,6 +2,7 @@ from itertools import groupby
 from typing import Optional, Sequence, Tuple
 
 import attr
+import pydash
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
@@ -9,15 +10,13 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
-
-Lines = Sequence[Sequence[str]]
 
 
 class NotLowestJoinError(ValueError):
@@ -116,11 +115,11 @@ class Fragment:
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)
 
-    def get_matching_lines(self, query: TransliterationQuery) -> Lines:
+    def get_matching_lines(self, query: TransliterationQuery):
         line_numbers = query.match(self.signs)
-        lines = [line.atf for line in self.text.text_lines]
 
-        return tuple(
-            tuple(lines[numbers[0] : numbers[1] + 1])
+        match = [
+            (self.text.text_lines[numbers[0] : numbers[1] + 1])
             for numbers, _ in groupby(line_numbers)
-        )
+        ]
+        return Text(lines=tuple(pydash.flatten(match)))

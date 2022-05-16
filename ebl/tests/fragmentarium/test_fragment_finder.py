@@ -8,6 +8,7 @@ from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -151,7 +152,7 @@ def test_search_fragmentarium_transliteration(
         .thenReturn(matching_fragments)
     )
 
-    expected_lines = (("6'. [...] x# mu ta-ma;-tu₂",),)
+    expected_lines = parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
     expected = [
         FragmentInfo.of(fragment, expected_lines) for fragment in matching_fragments
     ]

@@ -6,6 +6,7 @@ from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -91,8 +92,8 @@ def test_create_response_dto(user):
 
 def test_create_fragment_info_dto():
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    line = "1. kur"
-    info = FragmentInfo.of(lemmatized_fragment, ((line,),))
+    line = parse_atf_lark("1. kur")
+    info = FragmentInfo.of(lemmatized_fragment, line)
     record_entry = lemmatized_fragment.record.entries[0]
     is_transliteration = record_entry.type == RecordType.TRANSLITERATION
     assert ApiFragmentInfoSchema().dump(info) == {
@@ -100,7 +101,7 @@ def test_create_fragment_info_dto():
         "accession": info.accession,
         "script": info.script,
         "description": info.description,
-        "matchingLines": [[line]],
+        "matchingLines": TextSchema().dump(line),
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",
         "references": [],
