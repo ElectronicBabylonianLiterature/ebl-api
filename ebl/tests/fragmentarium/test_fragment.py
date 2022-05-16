@@ -291,8 +291,8 @@ GET_MATCHING_LINES_DATA = [
     ),
     (
         [["MA"]],
-        """2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n
-        3'. [... k]i-du u ba-ma-t[a ...]\n6'. [...] x mu ta-ma-tu₂""",
+        """2'. [...] GI₆ ana GI₆ u₄-m[a ...]
+3'. [... k]i-du u ba-ma-t[a ...]\n6'. [...] x mu ta-ma-tu₂""",
     ),
     (
         [["MA"], ["TA"]],
