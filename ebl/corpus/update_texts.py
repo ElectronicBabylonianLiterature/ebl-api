@@ -92,7 +92,7 @@ if __name__ == "__main__":
         "--workers",
         type=int,
         help="number of parallel workers to perform migration",
-        default=8,
+        default=4,
     )
     args = parser.parse_args()
 
