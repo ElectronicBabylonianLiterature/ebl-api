@@ -45,7 +45,7 @@ class DerivedSchema(Schema):
 
 
 class DerivedFromSchema(Schema):
-    lemma = fields.List(fields.String(), required=True)
+    lemma = fields.List(fields.String())
     notes = notes()
     homonym = homonym()
 
@@ -87,7 +87,7 @@ class WordSchema(Schema):
     derived = fields.List(
         fields.List(fields.Nested(DerivedSchema), validate=Length(1)), required=True
     )
-    derivedFrom = fields.Nested(DerivedSchema, allow_none=True)
+    derivedFrom = fields.Nested(DerivedSchema, required=True, allow_none=True)
     amplifiedMeanings = fields.Nested(AmplifiedMeaningSchema, required=True, many=True)
     source = fields.String()
     roots = fields.List(fields.String())
