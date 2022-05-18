@@ -103,6 +103,8 @@ class Chapter:
     signs: Sequence[str] = tuple()
     record: Record = Record()
     parser_version: str = ""
+    is_filtered_query: bool = False
+    colophon_lines_in_query: dict = dict()
 
     @property
     def id_(self) -> ChapterId:
@@ -145,8 +147,8 @@ class Chapter:
             raise NotFoundError(f"No manuscripts with id {id_}.") from error
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
-        #TODO: replace with proper function that does not depend on the number of lines
-        return self.lines
+        if self.is_filtered_query:
+            return self.lines
         text_lines = self.text_lines
         matching_indices = {
             line.source
@@ -160,6 +162,16 @@ class Chapter:
     def get_matching_colophon_lines(
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
+        if self.is_filtered_query:
+            matching_colophon_lines = {}
+            for manuscript in self.manuscripts:
+                if manuscript.id in self.colophon_lines_in_query.keys():
+                    matching_colophon_lines[manuscript.id] = [
+                        manuscript.colophon.lines[idx]
+                        for idx in self.colophon_lines_in_query[manuscript.id]
+                    ]
+            return matching_colophon_lines
+
         text_lines = self.text_lines
         return pydash.omit_by(
             {
