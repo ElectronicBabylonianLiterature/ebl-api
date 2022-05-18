@@ -234,6 +234,8 @@ class ChapterSchema(Schema):
     signs = fields.List(fields.String(), load_default=tuple())
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
+    is_filtered_query = fields.Bool(load_default=False)
+    colophon_lines_in_query = fields.Dict(load_default=dict())
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
@@ -250,6 +252,8 @@ class ChapterSchema(Schema):
             tuple(data["signs"]),
             data["record"],
             data["parser_version"],
+            data["is_filtered_query"],
+            dict(data["colophon_lines_in_query"]),
         )
 
 

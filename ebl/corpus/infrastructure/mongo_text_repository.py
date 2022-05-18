@@ -47,7 +47,62 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
 
 
 import time
-import json
+
+
+def filter_query_by_transliteration(
+    query: TransliterationQuery, cursor: Collection
+) -> List:
+    _cursor = []
+    for chapter in cursor:
+        manuscript_matches = [
+            (
+                chapter["manuscripts"][idx]["id"],
+                list(dict.fromkeys(query.match(signs))),
+                [
+                    lineIdx
+                    for lineIdx, line in enumerate(chapter["lines"])
+                    for variant in line["variants"]
+                    for manuscript in variant["manuscripts"]
+                    if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
+                ],
+            )
+            for idx, signs in enumerate(chapter["signs"])
+            if query.match(signs)
+        ]
+        text_lines, colophon_lines_idxs = find_chapter_query_lines(
+            manuscript_matches, chapter["lines"]
+        )
+        chapter["lines"] = sorted(text_lines, key=lambda l: chapter["lines"].index(l))
+        chapter["is_filtered_query"] = True
+        chapter["colophon_lines_in_query"] = colophon_lines_idxs
+        _cursor.append(chapter)
+    return _cursor
+
+
+def find_chapter_query_lines(
+    manuscript_matches: List, chapter_lines: List
+) -> (List, dict):
+    text_lines = []
+    colophon_lines_idxs = {}
+    for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
+        for start, end in matches:
+            for manuscript_line_idx in range(start, end + 1):
+                manuscript_text_lines_length = len(lines_idxs_in_manuscript)
+                if manuscript_line_idx < manuscript_text_lines_length:
+                    line_idx = lines_idxs_in_manuscript[manuscript_line_idx]
+                    line = chapter_lines[line_idx]
+                    if line not in text_lines:
+                        text_lines.append(line)
+                else:
+                    if manuscript_id not in colophon_lines_idxs.keys():
+                        colophon_lines_idxs[manuscript_id] = [
+                            manuscript_line_idx - manuscript_text_lines_length
+                        ]
+                    else:
+                        colophon_lines_idxs[manuscript_id] += [
+                            manuscript_line_idx - manuscript_text_lines_length
+                        ]
+    return text_lines, colophon_lines_idxs
 
 
 class MongoTextRepository(TextRepository):
@@ -203,48 +258,11 @@ class MongoTextRepository(TextRepository):
         print("query done in", time.perf_counter() - timeBefore, "seconds")
         timeBefore = time.perf_counter()
         result = ChapterSchema().load(
-            self._filter_query_by_transliteration(query, cursor),
+            filter_query_by_transliteration(query, cursor),
             many=True,
         )
         print("deserialization done in", time.perf_counter() - timeBefore, "seconds")
         return result
-
-    def _filter_query_by_transliteration(
-        self, query: TransliterationQuery, cursor: Collection
-    ) -> List:
-        _cursor = []
-        for q in cursor:
-            print(q["name"], q["textId"], q.keys())
-            manuscript_matches = [
-                (
-                    idx,
-                    list(dict.fromkeys(query.match(signs))),
-                    q["manuscripts"][idx]["colophon"]["numberOfLines"],
-                    q["manuscripts"][idx]["unplacedLines"]["numberOfLines"],
-                )
-                for idx, signs in enumerate(q["signs"])
-                if query.match(signs)
-            ]
-            lines = []
-            for (
-                idx,
-                matches,
-                colophon_lines_number,
-                unplaced_lines_number,
-            ) in manuscript_matches:
-                lines_difference = colophon_lines_number + unplaced_lines_number
-                for start, end in matches:
-                    start -= lines_difference
-                    end -= lines_difference
-                    lines += [
-                        line
-                        for lineIdx, line in enumerate(q["lines"])
-                        if line not in lines and lineIdx >= start and lineIdx <= end
-                    ]
-            q["lines"] = lines #sorted(lines, key=lambda l: l["number"]["number"])
-            print("!!!", len(q["lines"]), manuscript_matches)
-            _cursor.append(q)
-        return _cursor
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
