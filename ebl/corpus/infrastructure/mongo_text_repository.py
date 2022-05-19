@@ -195,11 +195,10 @@ class MongoTextRepository(TextRepository):
             projection={"_id": False},
             limit=100,
         )
-        result = ChapterSchema().load(
+        return ChapterSchema().load(
             filter_query_by_transliteration(query, cursor),
             many=True,
         )
-        return result
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
