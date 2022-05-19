@@ -10,6 +10,7 @@ from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
 
 import althaia
+
 althaia.patch()
 
 import ebl.error_handler
