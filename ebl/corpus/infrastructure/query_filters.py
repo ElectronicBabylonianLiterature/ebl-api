@@ -43,21 +43,20 @@ def find_chapter_query_lines(
     text_lines = []
     colophon_lines_idxs = {}
     for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
+        manuscript_text_lines_length = len(lines_idxs_in_manuscript)
         for start, end in matches:
             for manuscript_line_idx in range(start, end + 1):
-                manuscript_text_lines_length = len(lines_idxs_in_manuscript)
                 if manuscript_line_idx < manuscript_text_lines_length:
                     line_idx = lines_idxs_in_manuscript[manuscript_line_idx]
                     line = chapter_lines[line_idx]
                     if line not in text_lines:
                         text_lines.append(line)
+                elif manuscript_id in colophon_lines_idxs:
+                    colophon_lines_idxs[manuscript_id] += [
+                        manuscript_line_idx - manuscript_text_lines_length
+                    ]
                 else:
-                    if manuscript_id not in colophon_lines_idxs.keys():
-                        colophon_lines_idxs[manuscript_id] = [
-                            manuscript_line_idx - manuscript_text_lines_length
-                        ]
-                    else:
-                        colophon_lines_idxs[manuscript_id] += [
-                            manuscript_line_idx - manuscript_text_lines_length
-                        ]
+                    colophon_lines_idxs[manuscript_id] = [
+                        manuscript_line_idx - manuscript_text_lines_length
+                    ]
     return text_lines, colophon_lines_idxs
