@@ -151,9 +151,7 @@ class Chapter:
             return self.lines
         return self._get_matching_lines_complete(query)
 
-    def _get_matching_lines(
-        self, query: TransliterationQuery
-    ) -> Sequence[Line]:
+    def _get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines
         matching_indices = {
             line.source
