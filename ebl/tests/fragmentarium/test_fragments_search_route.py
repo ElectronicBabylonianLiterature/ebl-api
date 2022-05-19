@@ -10,10 +10,11 @@ from ebl.tests.factories.fragment import (
     InterestingFragmentFactory,
     TransliteratedFragmentFactory,
 )
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def expected_fragment_info_dto(fragment, lines=tuple()):
+def expected_fragment_info_dto(fragment, lines=None):
     return ApiFragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
 
 
@@ -134,7 +135,7 @@ def test_search_fragmentarium_transliteration(
     assert result.status == falcon.HTTP_OK
     assert result.json == [
         expected_fragment_info_dto(
-            transliterated_fragment, (("6'. [...] x# mu ta-ma;-tu₂",),)
+            transliterated_fragment, parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
         )
     ]
     assert "Cache-Control" not in result.headers
@@ -179,7 +180,7 @@ def test_search_fragmentarium_combined_query(
     )
     assert result.json == [
         expected_fragment_info_dto(
-            fragment_expected, (("6'. [...] x# mu ta-ma;-tu₂",),)
+            fragment_expected, parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
         )
     ]
     assert "Cache-Control" not in result.headers

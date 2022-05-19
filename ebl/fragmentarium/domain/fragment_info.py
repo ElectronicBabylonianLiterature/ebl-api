@@ -1,11 +1,12 @@
-from typing import Sequence
+from typing import Sequence, Optional
 
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.domain.fragment import Fragment, Lines, Genre
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.fragment import Fragment, Genre
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text import Text
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -14,7 +15,7 @@ class FragmentInfo:
     accession: str
     script: str
     description: str
-    matching_lines: Lines
+    matching_lines: Optional[Text]
     editor: str
     edition_date: str
     references: Sequence[Reference] = tuple()
@@ -24,7 +25,7 @@ class FragmentInfo:
         return attr.evolve(self, references=tuple(references))
 
     @staticmethod
-    def of(fragment: Fragment, matching_lines: Lines = tuple()) -> "FragmentInfo":
+    def of(fragment: Fragment, matching_lines: Optional[Text] = None) -> "FragmentInfo":
         def is_transliteration(entry: RecordEntry) -> bool:
             return entry.type == RecordType.TRANSLITERATION
 
