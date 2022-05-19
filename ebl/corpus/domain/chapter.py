@@ -149,9 +149,9 @@ class Chapter:
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         if self.is_filtered_query:
             return self.lines
-        return self.get_matching_lines_complete(query)
+        return self._get_matching_lines_complete(query)
 
-    def get_matching_lines_complete(
+    def _get_matching_lines(
         self, query: TransliterationQuery
     ) -> Sequence[Line]:
         text_lines = self.text_lines
@@ -168,10 +168,10 @@ class Chapter:
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
         if self.is_filtered_query:
-            return self.get_matching_colophon_lines_filtered(query)
-        return get_matching_colophon_lines_complete(query)
+            return self._get_matching_colophon_lines_filtered(query)
+        return self._get_matching_colophon_lines(query)
 
-    def get_matching_colophon_lines_complete(
+    def _get_matching_colophon_lines(
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
         text_lines = self.text_lines
@@ -188,14 +188,16 @@ class Chapter:
             pydash.is_empty,
         )
 
-    def get_matching_colophon_lines_filtered(
+    def _get_matching_colophon_lines_filtered(
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
         matching_colophon_lines = {}
         for manuscript in self.manuscripts:
             if manuscript.id in self.colophon_lines_in_query.keys():
                 colophon_lines = [
-                    l for l in manuscript.colophon.lines if isinstance(l, TextLine)
+                    line
+                    for line in manuscript.colophon.lines
+                    if isinstance(line, TextLine)
                 ]
                 matching_colophon_lines[manuscript.id] = [
                     colophon_lines[idx]

@@ -8,11 +8,7 @@ from falcon_auth import FalconAuthMiddleware
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
-
 import althaia
-
-althaia.patch()
-
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
@@ -48,6 +44,8 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
 from ebl.users.infrastructure.auth0 import Auth0Backend
+
+althaia.patch()
 
 
 def decode_certificate(encoded_certificate):
