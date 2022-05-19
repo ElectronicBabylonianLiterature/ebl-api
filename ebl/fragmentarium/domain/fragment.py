@@ -115,7 +115,7 @@ class Fragment:
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)
 
-    def get_matching_lines(self, query: TransliterationQuery):
+    def get_matching_lines(self, query: TransliterationQuery) -> Text:
         line_numbers = query.match(self.signs)
 
         match = [

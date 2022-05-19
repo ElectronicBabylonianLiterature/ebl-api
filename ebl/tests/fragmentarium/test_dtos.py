@@ -92,8 +92,8 @@ def test_create_response_dto(user):
 
 def test_create_fragment_info_dto():
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    line = parse_atf_lark("1. kur")
-    info = FragmentInfo.of(lemmatized_fragment, line)
+    text = parse_atf_lark("1. kur")
+    info = FragmentInfo.of(lemmatized_fragment, text)
     record_entry = lemmatized_fragment.record.entries[0]
     is_transliteration = record_entry.type == RecordType.TRANSLITERATION
     assert ApiFragmentInfoSchema().dump(info) == {
@@ -101,7 +101,7 @@ def test_create_fragment_info_dto():
         "accession": info.accession,
         "script": info.script,
         "description": info.description,
-        "matchingLines": TextSchema().dump(line),
+        "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",
         "references": [],

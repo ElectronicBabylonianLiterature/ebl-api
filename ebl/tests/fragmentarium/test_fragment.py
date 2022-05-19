@@ -324,5 +324,5 @@ def test_get_matching_lines(query, expected):
     )
 
     query = TransliterationQuery(query)
-    lines = transliterated_fragment.get_matching_lines(query)
-    assert lines == parse_atf_lark(expected)
+    matching_text = transliterated_fragment.get_matching_lines(query)
+    assert matching_text == parse_atf_lark(expected)
