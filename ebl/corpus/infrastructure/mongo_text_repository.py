@@ -2,8 +2,6 @@ from typing import List
 
 import pymongo
 from pymongo.database import Database
-from pymongo.collection import Collection
-import copy
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
