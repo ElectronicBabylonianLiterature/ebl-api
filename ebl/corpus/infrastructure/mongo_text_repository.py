@@ -34,6 +34,7 @@ from ebl.transliteration.infrastructure.collections import (
 )
 from ebl.corpus.infrastructure.query_filters import filter_query_by_transliteration
 
+
 def text_not_found(id_: TextId) -> Exception:
     return NotFoundError(f"Text {id_} not found.")
 
@@ -44,9 +45,6 @@ def chapter_not_found(id_: ChapterId) -> Exception:
 
 def line_not_found(id_: ChapterId, number: int) -> Exception:
     return NotFoundError(f"Chapter {id_} line {number} not found.")
-
-
-import time
 
 
 class MongoTextRepository(TextRepository):
@@ -192,20 +190,15 @@ class MongoTextRepository(TextRepository):
 
     def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
 
-        timeBefore = time.perf_counter()
-        print("starting query")
         cursor = self._chapters.find_many(
             {"signs": {"$regex": query.regexp}},
             projection={"_id": False},
             limit=100,
         )
-        print("query done in", time.perf_counter() - timeBefore, "seconds")
-        timeBefore = time.perf_counter()
         result = ChapterSchema().load(
             filter_query_by_transliteration(query, cursor),
             many=True,
         )
-        print("deserialization done in", time.perf_counter() - timeBefore, "seconds")
         return result
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
