@@ -149,6 +149,11 @@ class Chapter:
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         if self.is_filtered_query:
             return self.lines
+        return self.get_matching_lines_complete(query)
+
+    def get_matching_lines_complete(
+        self, query: TransliterationQuery
+    ) -> Sequence[Line]:
         text_lines = self.text_lines
         matching_indices = {
             line.source
@@ -164,7 +169,11 @@ class Chapter:
     ) -> Mapping[int, Sequence[TextLine]]:
         if self.is_filtered_query:
             return self.get_matching_colophon_lines_filtered(query)
+        return get_matching_colophon_lines_complete(query)
 
+    def get_matching_colophon_lines_complete(
+        self, query: TransliterationQuery
+    ) -> Mapping[int, Sequence[TextLine]]:
         text_lines = self.text_lines
         return pydash.omit_by(
             {
