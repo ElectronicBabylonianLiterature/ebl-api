@@ -54,21 +54,7 @@ def filter_query_by_transliteration(
 ) -> List:
     _cursor = []
     for chapter in cursor:
-        manuscript_matches = [
-            (
-                chapter["manuscripts"][idx]["id"],
-                list(dict.fromkeys(query.match(signs))),
-                [
-                    lineIdx
-                    for lineIdx, line in enumerate(chapter["lines"])
-                    for variant in line["variants"]
-                    for manuscript in variant["manuscripts"]
-                    if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
-                ],
-            )
-            for idx, signs in enumerate(chapter["signs"])
-            if query.match(signs)
-        ]
+        manuscript_matches = find_manuscript_matches(query, chapter)
         text_lines, colophon_lines_idxs = find_chapter_query_lines(
             manuscript_matches, chapter["lines"]
         )
@@ -77,6 +63,24 @@ def filter_query_by_transliteration(
         chapter["colophon_lines_in_query"] = colophon_lines_idxs
         _cursor.append(chapter)
     return _cursor
+
+
+def find_manuscript_matches(query: TransliterationQuery, chapter) -> List:
+    return [
+        (
+            chapter["manuscripts"][idx]["id"],
+            list(dict.fromkeys(query.match(signs))),
+            [
+                lineIdx
+                for lineIdx, line in enumerate(chapter["lines"])
+                for variant in line["variants"]
+                for manuscript in variant["manuscripts"]
+                if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
+            ],
+        )
+        for idx, signs in enumerate(chapter["signs"])
+        if query.match(signs)
+    ]
 
 
 def find_chapter_query_lines(
