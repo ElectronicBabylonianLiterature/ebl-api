@@ -1,4 +1,4 @@
-from typing import List
+from typing import Tuple, List
 from pymongo.collection import Collection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -39,7 +39,7 @@ def find_manuscript_matches(query: TransliterationQuery, chapter) -> List:
 
 def find_chapter_query_lines(
     manuscript_matches: List, chapter_lines: List
-) -> (List, dict):
+) -> Tuple[List, dict]:
     text_lines = []
     colophon_lines_idxs = {}
     for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
@@ -58,7 +58,7 @@ def find_lines_in_range(
     lines_info: tuple,
     text_lines: List,
     colophon_lines_idxs: dict,
-) -> (List, dict):
+) -> Tuple[List, dict]:
     start, end = match
     manuscript_id, lines_idxs_in_manuscript, chapter_lines = lines_info
     manuscript_text_lines_length = len(lines_idxs_in_manuscript)
