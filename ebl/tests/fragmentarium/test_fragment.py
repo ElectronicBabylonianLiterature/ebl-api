@@ -278,30 +278,27 @@ def test_set_text():
 
 
 GET_MATCHING_LINES_DATA = [
-    ([["KU", "NU"]], [["1'. [...-ku]-nu-ši [...]"]]),
-    ([["U", "BA", "MA"]], [["3'. [... k]i-du u ba-ma-t[a ...]"]]),
-    ([["GI₆"]], [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]"]]),
+    ([["KU", "NU"]], "1'. [...-ku]-nu-ši [...]"),
+    ([["U", "BA", "MA"]], "3'. [... k]i-du u ba-ma-t[a ...]"),
+    ([["GI₆"]], "2'. [...] GI₆ ana GI₆ u₄-m[a ...]"),
     (
         [["GI₆", "DIŠ"], ["U", "BA", "MA"]],
-        [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]"]],
+        "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n3'. [... k]i-du u ba-ma-t[a ...]",
     ),
     (
         [["NU", "IGI"], ["GI₆", "DIŠ"]],
-        [["1'. [...-ku]-nu-ši [...]", "2'. [...] GI₆ ana GI₆ u₄-m[a ...]"]],
+        "1'. [...-ku]-nu-ši [...]\n2'. [...] GI₆ ana GI₆ u₄-m[a ...]",
     ),
     (
         [["MA"]],
-        [
-            ["2'. [...] GI₆ ana GI₆ u₄-m[a ...]"],
-            ["3'. [... k]i-du u ba-ma-t[a ...]"],
-            ["6'. [...] x mu ta-ma-tu₂"],
-        ],
+        """2'. [...] GI₆ ana GI₆ u₄-m[a ...]
+3'. [... k]i-du u ba-ma-t[a ...]\n6'. [...] x mu ta-ma-tu₂""",
     ),
     (
         [["MA"], ["TA"]],
-        [["2'. [...] GI₆ ana GI₆ u₄-m[a ...]", "3'. [... k]i-du u ba-ma-t[a ...]"]],
+        "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n3'. [... k]i-du u ba-ma-t[a ...]",
     ),
-    ([["BU"]], [["7'. šu/gid"]]),
+    ([["BU"]], "7'. šu/gid"),
 ]
 
 
@@ -327,5 +324,5 @@ def test_get_matching_lines(query, expected):
     )
 
     query = TransliterationQuery(query)
-    lines = transliterated_fragment.get_matching_lines(query)
-    assert lines == tuple(map(tuple, expected))
+    matching_text = transliterated_fragment.get_matching_lines(query)
+    assert matching_text == parse_atf_lark(expected)
