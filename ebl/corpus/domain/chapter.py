@@ -163,14 +163,7 @@ class Chapter:
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
         if self.is_filtered_query:
-            matching_colophon_lines = {}
-            for manuscript in self.manuscripts:
-                if manuscript.id in self.colophon_lines_in_query.keys():
-                    matching_colophon_lines[manuscript.id] = [
-                        manuscript.colophon.lines[idx]
-                        for idx in self.colophon_lines_in_query[manuscript.id]
-                    ]
-            return matching_colophon_lines
+            return self.get_matching_colophon_lines_filtered(query)
 
         text_lines = self.text_lines
         return pydash.omit_by(
@@ -185,6 +178,21 @@ class Chapter:
             },
             pydash.is_empty,
         )
+
+    def get_matching_colophon_lines_filtered(
+        self, query: TransliterationQuery
+    ) -> Mapping[int, Sequence[TextLine]]:
+        matching_colophon_lines = {}
+        for manuscript in self.manuscripts:
+            if manuscript.id in self.colophon_lines_in_query.keys():
+                colophon_lines = [
+                    l for l in manuscript.colophon.lines if isinstance(l, TextLine)
+                ]
+                matching_colophon_lines[manuscript.id] = [
+                    colophon_lines[idx]
+                    for idx in self.colophon_lines_in_query[manuscript.id]
+                ]
+        return matching_colophon_lines
 
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
