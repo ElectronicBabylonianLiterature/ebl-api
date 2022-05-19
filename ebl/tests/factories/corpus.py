@@ -249,6 +249,8 @@ class ChapterFactory(factory.Factory):
     signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",)
     record = factory.SubFactory(RecordFactory)
     parser_version = ""
+    is_filtered_query = False
+    colophon_lines_in_query = {}
 
 
 class ChapterListingFactory(factory.Factory):

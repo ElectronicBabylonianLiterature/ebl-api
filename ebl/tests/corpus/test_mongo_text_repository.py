@@ -44,6 +44,8 @@ CHAPTER = ChapterFactory.build(
         LineFactory.build(manuscript_id=1, translation=TEXT.chapters[0].translation),
     ),
     uncertain_fragments=tuple(),
+    is_filtered_query=False,
+    colophon_lines_in_query=dict(),
 )
 
 
@@ -196,8 +198,9 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
 )
 def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     text_repository.create_chapter(CHAPTER)
-
+    # TODO: Adjust this to match Chapter with filtered lines
     result = text_repository.query_by_transliteration(TransliterationQuery(signs))
+    print(result)
     expected = [CHAPTER] if is_match else []
     assert result == expected
 
