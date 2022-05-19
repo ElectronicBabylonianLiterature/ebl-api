@@ -149,7 +149,7 @@ class Chapter:
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         if self.is_filtered_query:
             return self.lines
-        return self._get_matching_lines_complete(query)
+        return self._get_matching_lines(query)
 
     def _get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         text_lines = self.text_lines
