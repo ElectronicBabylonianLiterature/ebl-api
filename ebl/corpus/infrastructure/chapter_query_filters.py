@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Mapping
 from pymongo.collection import Collection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
@@ -19,21 +19,25 @@ def filter_query_by_transliteration(
     return _cursor
 
 
-def find_manuscript_matches(query: TransliterationQuery, chapter) -> List:
+def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> List:
     return [
         (
             chapter["manuscripts"][idx]["id"],
             list(dict.fromkeys(query.match(signs))),
-            [
-                lineIdx
-                for lineIdx, line in enumerate(chapter["lines"])
-                for variant in line["variants"]
-                for manuscript in variant["manuscripts"]
-                if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
-            ],
+            get_line_indexes(chapter, idx),
         )
         for idx, signs in enumerate(chapter["signs"])
         if query.match(signs)
+    ]
+
+
+def get_line_indexes(chapter: Mapping, idx: int) -> List:
+    return [
+        lineIdx
+        for lineIdx, line in enumerate(chapter["lines"])
+        for variant in line["variants"]
+        for manuscript in variant["manuscripts"]
+        if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
     ]
 
 
