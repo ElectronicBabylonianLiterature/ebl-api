@@ -30,7 +30,9 @@ from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
     TEXTS_COLLECTION,
 )
-from ebl.corpus.infrastructure.query_filters import filter_query_by_transliteration
+from ebl.corpus.infrastructure.chapter_query_filters import (
+    filter_query_by_transliteration,
+)
 
 
 def text_not_found(id_: TextId) -> Exception:

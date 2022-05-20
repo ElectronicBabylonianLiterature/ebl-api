@@ -63,13 +63,37 @@ def find_lines_in_range(
     manuscript_id, lines_idxs_in_manuscript, chapter_lines = lines_info
     manuscript_text_lines_length = len(lines_idxs_in_manuscript)
     for manuscript_line_idx in range(start, end + 1):
-        if manuscript_line_idx < manuscript_text_lines_length:
-            line_idx = lines_idxs_in_manuscript[manuscript_line_idx]
-            line = chapter_lines[line_idx]
-            if line not in text_lines:
-                text_lines.append(line)
-        else:
-            colophon_lines_idxs.setdefault(str(manuscript_id), []).append(
-                manuscript_line_idx - manuscript_text_lines_length
-            )
+        text_lines, colophon_lines_idxs = collect_matching_lines(
+            (
+                manuscript_id,
+                manuscript_line_idx,
+                manuscript_text_lines_length,
+                lines_idxs_in_manuscript,
+                chapter_lines,
+            ),
+            text_lines,
+            colophon_lines_idxs,
+        )
+    return text_lines, colophon_lines_idxs
+
+
+def collect_matching_lines(
+    lines_info: tuple, text_lines: List, colophon_lines_idxs: dict
+) -> Tuple[List, dict]:
+    (
+        manuscript_id,
+        manuscript_line_idx,
+        manuscript_text_lines_length,
+        lines_idxs_in_manuscript,
+        chapter_lines,
+    ) = lines_info
+    if manuscript_line_idx < manuscript_text_lines_length:
+        line_idx = lines_idxs_in_manuscript[manuscript_line_idx]
+        line = chapter_lines[line_idx]
+        if line not in text_lines:
+            text_lines.append(line)
+    else:
+        colophon_lines_idxs.setdefault(str(manuscript_id), []).append(
+            manuscript_line_idx - manuscript_text_lines_length
+        )
     return text_lines, colophon_lines_idxs
