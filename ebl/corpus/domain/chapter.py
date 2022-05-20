@@ -191,24 +191,29 @@ class Chapter:
         for manuscript in self.manuscripts:
             manuscript_id = str(manuscript.id)
             if manuscript_id in self.colophon_lines_in_query.keys():
-                matching_colophon_lines = self._select_matching_colophon_lines_filtered(
-                    manuscript_id, manuscript.colophon.lines, matching_colophon_lines
-                )
+                matching_colophon_lines = {
+                    **matching_colophon_lines,
+                    **self._select_matching_colophon_lines_filtered(
+                        manuscript_id,
+                        manuscript.colophon.lines,
+                    ),
+                }
         return matching_colophon_lines
 
     def _select_matching_colophon_lines_filtered(
         self,
         manuscript_id: str,
         manuscript_colophon_lines: Sequence,
-        matching_colophon_lines: dict,
     ) -> Mapping[int, Sequence[TextLine]]:
         colophon_lines = [
             line for line in manuscript_colophon_lines if isinstance(line, TextLine)
         ]
-        matching_colophon_lines[int(manuscript_id)] = [
-            colophon_lines[idx] for idx in self.colophon_lines_in_query[manuscript_id]
-        ]
-        return matching_colophon_lines
+        return {
+            int(manuscript_id): [
+                colophon_lines[idx]
+                for idx in self.colophon_lines_in_query[manuscript_id]
+            ]
+        }
 
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
