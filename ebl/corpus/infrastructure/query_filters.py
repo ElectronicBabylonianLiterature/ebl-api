@@ -69,7 +69,7 @@ def find_lines_in_range(
             if line not in text_lines:
                 text_lines.append(line)
         else:
-            colophon_lines_idxs.setdefault(manuscript_id, []).append(
+            colophon_lines_idxs.setdefault(str(manuscript_id), []).append(
                 manuscript_line_idx - manuscript_text_lines_length
             )
     return text_lines, colophon_lines_idxs

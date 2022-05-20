@@ -191,7 +191,8 @@ class Chapter:
     ) -> Mapping[int, Sequence[TextLine]]:
         matching_colophon_lines = {}
         for manuscript in self.manuscripts:
-            if manuscript.id in self.colophon_lines_in_query.keys():
+            manuscript_id = str(manuscript.id)
+            if manuscript_id in self.colophon_lines_in_query.keys():
                 colophon_lines = [
                     line
                     for line in manuscript.colophon.lines
@@ -199,7 +200,7 @@ class Chapter:
                 ]
                 matching_colophon_lines[manuscript.id] = [
                     colophon_lines[idx]
-                    for idx in self.colophon_lines_in_query[manuscript.id]
+                    for idx in self.colophon_lines_in_query[manuscript_id]
                 ]
         return matching_colophon_lines
 
