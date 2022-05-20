@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union
+from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
 
 import attr
 import pydash
@@ -149,18 +149,19 @@ class Chapter:
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
         if self.is_filtered_query:
             return self.lines
-        return self._get_matching_lines(query)
+        return [
+            self.lines[index]
+            for index in sorted(self._get_matching_line_indexes(query))
+        ]
 
-    def _get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
-        text_lines = self.text_lines
-        matching_indices = {
+    def _get_matching_line_indexes(self, query: TransliterationQuery) -> Set[int]:
+        return {
             line.source
             for index, numbers in enumerate(self._match(query))
             for start, end in numbers
-            for line in text_lines[index][start : end + 1]
+            for line in self.text_lines[index][start : end + 1]
             if line.source is not None
         }
-        return [self.lines[index] for index in sorted(matching_indices)]
 
     def get_matching_colophon_lines(
         self, query: TransliterationQuery
