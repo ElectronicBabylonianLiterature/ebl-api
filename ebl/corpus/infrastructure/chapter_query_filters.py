@@ -24,7 +24,7 @@ def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> Li
         (
             chapter["manuscripts"][idx]["id"],
             list(dict.fromkeys(query.match(signs))),
-            get_line_indexes(chapter, idx),
+            list(dict.fromkeys(get_line_indexes(chapter, idx))),
         )
         for idx, signs in enumerate(chapter["signs"])
         if query.match(signs)
