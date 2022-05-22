@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence
+from typing import List, Sequence, Tuple
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -88,5 +88,5 @@ class FragmentRepository(ABC):
 
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
-    ) -> Sequence[Fragment]:
+    ) -> Tuple[Sequence[Fragment], int]:
         ...

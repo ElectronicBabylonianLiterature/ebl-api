@@ -1,9 +1,16 @@
+from typing import Dict
+
 import attr
 import falcon
 import pytest
 
-from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
+from ebl.fragmentarium.application.fragment_info_schema import (
+    ApiFragmentInfoSchema,
+    ApiFragmentInfosPaginationSchema,
+)
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -14,8 +21,14 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
-def expected_fragment_info_dto(fragment, lines=None):
-    return ApiFragmentInfoSchema().dump(FragmentInfo.of(fragment, lines))
+def expected_fragment_info_dto(fragment: Fragment, text=None) -> Dict:
+    return ApiFragmentInfoSchema().dump(FragmentInfo.of(fragment, text))
+
+
+def expected_fragment_infos_pagination_dto(
+    fragment_infos_pagination: FragmentInfosPagination,
+) -> Dict:
+    return ApiFragmentInfosPaginationSchema().dump(fragment_infos_pagination)
 
 
 @pytest.mark.parametrize(
@@ -36,11 +49,15 @@ def test_search_fragmentarium_number(get_number, client, fragmentarium):
             "transliteration": "",
             "bibliographyId": "",
             "pages": "",
+            "paginationIndex": 0,
         },
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [expected_fragment_info_dto(fragment)]
+    assert result.json == expected_fragment_infos_pagination_dto(
+        FragmentInfosPagination([FragmentInfo.of(fragment)], 1)
+    )
+
     assert "Cache-Control" not in result.headers
 
 
@@ -52,10 +69,13 @@ def test_search_fragmentarium_number_not_found(client):
             "transliteration": "",
             "bibliographyId": "",
             "pages": "",
+            "paginationIndex": 0,
         },
     )
 
-    assert result.json == []
+    assert result.json == expected_fragment_infos_pagination_dto(
+        FragmentInfosPagination([], 0)
+    )
 
 
 def test_search_fragmentarium_references(client, fragmentarium, bibliography, user):
@@ -78,6 +98,7 @@ def test_search_fragmentarium_references(client, fragmentarium, bibliography, us
             "transliteration": "",
             "bibliographyId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
+            "paginationIndex": 0,
         },
     )
 
@@ -89,8 +110,8 @@ def test_search_fragmentarium_references(client, fragmentarium, bibliography, us
             fragment.references[1].set_document(bib_entry_2),
         ]
     )
-    assert result.json == ApiFragmentInfoSchema(many=True).dump(
-        [FragmentInfo.of(fragment_expected)]
+    assert result.json == expected_fragment_infos_pagination_dto(
+        FragmentInfosPagination([FragmentInfo.of(fragment_expected)], 1)
     )
     assert "Cache-Control" not in result.headers
 
@@ -109,6 +130,7 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
             "transliteration": "",
             "bibliographyId": reference_id,
             "pages": reference_pages,
+            "paginationIndex": 0,
         },
     )
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -117,8 +139,16 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
 def test_search_fragmentarium_transliteration(
     client, fragmentarium, sign_repository, signs
 ):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
+    transliterated_fragment_1 = TransliteratedFragmentFactory.build()
+    transliterated_fragment_2 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.123")
+    )
+    for transliterated_fragment in [
+        transliterated_fragment_1,
+        transliterated_fragment_2,
+    ]:
+        fragmentarium.create(transliterated_fragment)
+
     for sign in signs:
         sign_repository.create(sign)
 
@@ -129,15 +159,27 @@ def test_search_fragmentarium_transliteration(
             "transliteration": "ma-tu₂",
             "pages": "",
             "bibliographyId": "",
+            "paginationIndex": 0,
         },
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == [
-        expected_fragment_info_dto(
-            transliterated_fragment, parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
+    assert result.json == expected_fragment_infos_pagination_dto(
+        FragmentInfosPagination(
+            [
+                FragmentInfo.of(
+                    transliterated_fragment_1,
+                    parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂"),
+                ),
+                FragmentInfo.of(
+                    transliterated_fragment_2,
+                    parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂"),
+                ),
+            ],
+            2,
         )
-    ]
+    )
+
     assert "Cache-Control" not in result.headers
 
 
@@ -167,6 +209,7 @@ def test_search_fragmentarium_combined_query(
             "transliteration": "ma-tu₂",
             "bibliographyId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
+            "paginationIndex": 0,
         },
     )
 
@@ -178,11 +221,16 @@ def test_search_fragmentarium_combined_query(
             fragment.references[1].set_document(bib_entry_2),
         ]
     )
-    assert result.json == [
-        expected_fragment_info_dto(
-            fragment_expected, parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
+    assert result.json == expected_fragment_infos_pagination_dto(
+        FragmentInfosPagination(
+            [
+                FragmentInfo.of(
+                    fragment_expected, parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
+                )
+            ],
+            1,
         )
-    ]
+    )
     assert "Cache-Control" not in result.headers
 
 
@@ -194,6 +242,7 @@ def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):
             "transliteration": "$ invalid",
             "bibliographyId": "",
             "pages": "",
+            "paginationIndex": 0,
         },
     )
 
