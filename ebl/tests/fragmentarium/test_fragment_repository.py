@@ -402,7 +402,7 @@ def test_empty_result_query_reference_id_and_pages(
                 pages="163",
             )
         )
-    ) == ([],0)
+    ) == ([], 0)
 
 
 SEARCH_SIGNS_DATA = [
@@ -425,6 +425,26 @@ def test_query_fragmentarium_transliteration(signs, is_match, fragment_repositor
     )
     expected = ([transliterated_fragment], 1) if is_match else ([], 0)
     assert result == expected
+
+
+def test_query_fragmentarium_pagination(fragment_repository):
+    transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
+    for fragment in transliterated_fragments:
+        fragment_repository.create(fragment)
+
+    result_first_page = fragment_repository.query_fragmentarium(
+        FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
+    )
+    expected_first_page = (transliterated_fragments[:100], 115)
+    assert result_first_page == expected_first_page
+
+    result_second_page = fragment_repository.query_fragmentarium(
+        FragmentariumSearchQuery(
+            transliteration=TransliterationQuery([["KU"]]), paginationIndex=1
+        )
+    )
+    expected_second_page = (transliterated_fragments[100:], 115)
+    assert result_second_page == expected_second_page
 
 
 def test_query_fragmentarium_transliteration_and_number(fragment_repository):
