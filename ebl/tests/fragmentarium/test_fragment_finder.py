@@ -6,6 +6,7 @@ from ebl.fragmentarium.application.fragmentarium_search_query import (
 )
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
+from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -110,7 +111,7 @@ def test_search_fragmentarium_inject_document_in_fragment_infos(
     (
         when(fragment_finder)
         .search(FragmentariumSearchQuery(bibliography_id="id", pages="pages"))
-        .thenReturn([fragment_1, fragment_2])
+        .thenReturn(FragmentInfosPagination([fragment_1, fragment_2], 2))
     )
     (when(bibliography).find("RN.0").thenReturn(bibliography_entry))
     (when(bibliography).find("RN.1").thenReturn(bibliography_entry))
@@ -118,10 +119,13 @@ def test_search_fragmentarium_inject_document_in_fragment_infos(
 
     assert fragment_finder.search_fragmentarium(
         FragmentariumSearchQuery(bibliography_id="id", pages="pages")
-    ) == [
-        fragment_expected_1,
-        fragment_expected_2,
-    ]
+    ) == FragmentInfosPagination(
+        [
+            fragment_expected_1,
+            fragment_expected_2,
+        ],
+        2,
+    )
 
 
 def test_search(fragment_finder, fragment_repository, when):
@@ -130,12 +134,15 @@ def test_search(fragment_finder, fragment_repository, when):
     (
         when(fragment_repository)
         .query_fragmentarium(FragmentariumSearchQuery(number=query))
-        .thenReturn([fragment])
+        .thenReturn(([fragment], 1))
     )
 
-    assert fragment_finder.search(FragmentariumSearchQuery(number=query)) == [
-        FragmentInfo.of(fragment)
-    ]
+    assert fragment_finder.search(
+        FragmentariumSearchQuery(number=query)
+    ) == FragmentInfosPagination(
+        [FragmentInfo.of(fragment)],
+        1,
+    )
 
 
 def test_search_fragmentarium_transliteration(
@@ -149,13 +156,14 @@ def test_search_fragmentarium_transliteration(
     (
         when(fragment_repository)
         .query_fragmentarium(FragmentariumSearchQuery(transliteration=query))
-        .thenReturn(matching_fragments)
+        .thenReturn((matching_fragments, 1))
     )
 
     expected_lines = parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
-    expected = [
-        FragmentInfo.of(fragment, expected_lines) for fragment in matching_fragments
-    ]
+    expected = FragmentInfosPagination(
+        [FragmentInfo.of(fragment, expected_lines) for fragment in matching_fragments],
+        1,
+    )
     assert (
         fragment_finder.search_fragmentarium(
             FragmentariumSearchQuery(transliteration=query)

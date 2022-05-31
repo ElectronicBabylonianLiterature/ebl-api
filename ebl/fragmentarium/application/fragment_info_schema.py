@@ -5,6 +5,7 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
 )
 from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
 
@@ -26,3 +27,17 @@ class FragmentInfoSchema(Schema):
 class ApiFragmentInfoSchema(FragmentInfoSchema):
     number = fields.String(dump_only=True)
     references = fields.Nested(ApiReferenceSchema, many=True, required=True)
+
+
+class ApiFragmentInfosPaginationSchema(Schema):
+    class Meta:
+        model = FragmentInfosPagination
+
+    fragment_infos = fields.Nested(
+        ApiFragmentInfoSchema,
+        many=True,
+        required=True,
+        dump_only=True,
+        data_key="fragmentInfos",
+    )
+    total_count = fields.Integer(required=True, dump_only=True, data_key="totalCount")

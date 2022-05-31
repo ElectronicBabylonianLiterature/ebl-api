@@ -14,3 +14,4 @@ class FragmentariumSearchQuery:
     )
     bibliography_id: str = ""
     pages: str = ""
+    paginationIndex: int = 0
