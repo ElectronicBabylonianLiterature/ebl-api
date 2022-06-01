@@ -208,13 +208,17 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
-    ) -> Sequence[Fragment]:
-        cursor = self._fragments.find_many(
-            self._query_fragmentarium_create_query(query),
-            limit=100,
-            projection={"joins": False},
+    ) -> Tuple[Sequence[Fragment], int]:
+        mongo_query = self._query_fragmentarium_create_query(query)
+        cursor = (
+            self._fragments.find_many(
+                mongo_query,
+                projection={"joins": False},
+            )
+            .skip(100 * query.paginationIndex)
+            .limit(100)
         )
-        return self._map_fragments(cursor)
+        return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
 
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}

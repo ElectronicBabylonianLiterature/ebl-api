@@ -347,13 +347,13 @@ def test_query_fragmentarium_number(database, fragment_repository):
 
     assert fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(number=fragment.number)
-    ) == [fragment]
+    ) == ([fragment], 1)
 
 
 def test_query_fragmentarium_not_found(fragment_repository):
     assert (
         fragment_repository.query_fragmentarium(FragmentariumSearchQuery(number="K.1"))
-    ) == []
+    ) == ([], 0)
 
 
 def test_query_fragmentarium_reference_id(database, fragment_repository):
@@ -365,7 +365,7 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
         fragment_repository.query_fragmentarium(
             FragmentariumSearchQuery(bibliography_id=fragment.references[0].id)
         )
-    ) == [fragment]
+    ) == ([fragment], 1)
 
 
 @pytest.mark.parametrize(
@@ -383,13 +383,14 @@ def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
                 pages="163",
             )
         )
-    ) == [fragment]
+    ) == ([fragment], 1)
 
 
 @pytest.mark.parametrize("pages", ["1631", "1163", "116311"])
 def test_empty_result_query_reference_id_and_pages(
     pages, database, fragment_repository
 ):
+
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
@@ -401,7 +402,7 @@ def test_empty_result_query_reference_id_and_pages(
                 pages="163",
             )
         )
-    ) == []
+    ) == ([], 0)
 
 
 SEARCH_SIGNS_DATA = [
@@ -422,8 +423,28 @@ def test_query_fragmentarium_transliteration(signs, is_match, fragment_repositor
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery(signs))
     )
-    expected = [transliterated_fragment] if is_match else []
+    expected = ([transliterated_fragment], 1) if is_match else ([], 0)
     assert result == expected
+
+
+def test_query_fragmentarium_pagination(fragment_repository):
+    transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
+    for fragment in transliterated_fragments:
+        fragment_repository.create(fragment)
+
+    result_first_page = fragment_repository.query_fragmentarium(
+        FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
+    )
+    expected_first_page = (transliterated_fragments[:100], 115)
+    assert result_first_page == expected_first_page
+
+    result_second_page = fragment_repository.query_fragmentarium(
+        FragmentariumSearchQuery(
+            transliteration=TransliterationQuery([["KU"]]), paginationIndex=1
+        )
+    )
+    expected_second_page = (transliterated_fragments[100:], 115)
+    assert result_second_page == expected_second_page
 
 
 def test_query_fragmentarium_transliteration_and_number(fragment_repository):
@@ -437,7 +458,7 @@ def test_query_fragmentarium_transliteration_and_number(fragment_repository):
             transliteration=TransliterationQuery([["DIŠ", "UD"]]),
         )
     )
-    assert result == [transliterated_fragment]
+    assert result == ([transliterated_fragment], 1)
 
 
 def test_query_fragmentarium_transliteration_and_number_and_references(
@@ -458,7 +479,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
             pages=pages,
         )
     )
-    assert result == [transliterated_fragment]
+    assert result == ([transliterated_fragment], 1)
 
 
 def test_query_fragmentarium_transliteration_and_number_and_references_not_found(
@@ -479,7 +500,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references_not_found
             pages=f"{pages}123",
         )
     )
-    assert result == []
+    assert result == ([], 0)
 
 
 def test_find_transliterated(database, fragment_repository):
