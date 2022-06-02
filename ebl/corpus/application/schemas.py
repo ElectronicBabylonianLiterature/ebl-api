@@ -51,7 +51,7 @@ from ebl.transliteration.application.text_schema import (
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.text import Text as Transliteration
-
+from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
 
 class OldSiglumSchema(Schema):
     siglum = fields.String(required=True)
@@ -235,7 +235,7 @@ class ChapterSchema(Schema):
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
     is_filtered_query = fields.Bool(load_default=False)
-    colophon_lines_in_query = fields.Dict(load_default=dict())
+    colophon_lines_in_query = ChapterQueryColophonLines
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:

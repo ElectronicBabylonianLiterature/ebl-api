@@ -167,7 +167,9 @@ class Chapter:
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
         if self.is_filtered_query:
-            return self._get_matching_colophon_lines_filtered()
+            return self.colophon_lines_in_query.get_matching_lines(
+                self.manuscripts
+            )  # _get_matching_colophon_lines_filtered()
         return self._get_matching_colophon_lines(query)
 
     def _get_matching_colophon_lines(
@@ -187,6 +189,7 @@ class Chapter:
             pydash.is_empty,
         )
 
+    """
     def _get_matching_colophon_lines_filtered(self) -> Mapping[int, Sequence[TextLine]]:
         matching_colophon_lines = {}
         for manuscript in self.manuscripts:
@@ -215,6 +218,7 @@ class Chapter:
                 if idx < len(colophon_lines)
             ]
         }
+    """
 
     def merge(self, other: "Chapter") -> "Chapter":
         def inner_merge(old: Line, new: Line) -> Line:
