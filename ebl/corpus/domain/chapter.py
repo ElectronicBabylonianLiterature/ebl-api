@@ -190,12 +190,11 @@ class Chapter:
     def _get_matching_colophon_lines_filtered(self) -> Mapping[int, Sequence[TextLine]]:
         matching_colophon_lines = {}
         for manuscript in self.manuscripts:
-            manuscript_id = str(manuscript.id)
-            if manuscript_id in self.colophon_lines_in_query.keys():
+            if manuscript.id in self.colophon_lines_in_query:
                 matching_colophon_lines = {
                     **matching_colophon_lines,
                     **self._select_matching_colophon_lines_filtered(
-                        manuscript_id,
+                        manuscript.id,
                         manuscript.colophon.lines,
                     ),
                 }
@@ -203,16 +202,17 @@ class Chapter:
 
     def _select_matching_colophon_lines_filtered(
         self,
-        manuscript_id: str,
+        manuscript_id: int,
         manuscript_colophon_lines: Sequence,
     ) -> Mapping[int, Sequence[TextLine]]:
         colophon_lines = [
             line for line in manuscript_colophon_lines if isinstance(line, TextLine)
         ]
         return {
-            int(manuscript_id): [
+            manuscript_id: [
                 colophon_lines[idx]
                 for idx in self.colophon_lines_in_query[manuscript_id]
+                if idx < len(colophon_lines)
             ]
         }
 

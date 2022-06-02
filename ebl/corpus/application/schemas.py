@@ -253,7 +253,7 @@ class ChapterSchema(Schema):
             data["record"],
             data["parser_version"],
             data["is_filtered_query"],
-            dict(data["colophon_lines_in_query"]),
+            data["colophon_lines_in_query"],
         )
 
 
