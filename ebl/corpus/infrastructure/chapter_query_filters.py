@@ -12,7 +12,9 @@ def filter_query_by_transliteration(
         text_lines, colophon_lines_idxs = find_chapter_query_lines(
             manuscript_matches, chapter["lines"]
         )
-        chapter["lines"] = sorted(text_lines, key=lambda l: chapter["lines"].index(l))
+        chapter["lines"] = sorted(
+            text_lines, key=lambda line: chapter["lines"].index(line)
+        )
         chapter["is_filtered_query"] = True
         chapter["colophon_lines_in_query"] = colophon_lines_idxs
         _cursor.append(chapter)
@@ -20,14 +22,17 @@ def filter_query_by_transliteration(
 
 
 def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> List:
+    match_indexes = [
+        (query.match(signs), idx) for idx, signs in enumerate(chapter["signs"])
+    ]
     return [
         (
             chapter["manuscripts"][idx]["id"],
-            list(dict.fromkeys(query.match(signs))),
+            dict.fromkeys(match),
             list(dict.fromkeys(get_line_indexes(chapter, idx))),
         )
-        for idx, signs in enumerate(chapter["signs"])
-        if query.match(signs)
+        for match, idx in match_indexes
+        if match
     ]
 
 
@@ -38,6 +43,7 @@ def get_line_indexes(chapter: Mapping, idx: int) -> List:
         for variant in line["variants"]
         for manuscript in variant["manuscripts"]
         if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
+        and manuscript["line"]["type"]=="TextLine"
     ]
 
 
@@ -97,7 +103,7 @@ def collect_matching_lines(
         if line not in text_lines:
             text_lines.append(line)
     else:
-        colophon_lines_idxs.setdefault(str(manuscript_id), []).append(
+        colophon_lines_idxs.setdefault(manuscript_id, []).append(
             manuscript_line_idx - manuscript_text_lines_length
         )
     return text_lines, colophon_lines_idxs
