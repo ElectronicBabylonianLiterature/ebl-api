@@ -21,6 +21,7 @@ from ebl.transliteration.domain.translation_line import (
     TranslationLine,
 )
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
 
@@ -104,7 +105,7 @@ class Chapter:
     record: Record = Record()
     parser_version: str = ""
     is_filtered_query: bool = False
-    colophon_lines_in_query: dict = dict()
+    colophon_lines_in_query: ChapterQueryColophonLines = attr.ib(default=dict())
 
     @property
     def id_(self) -> ChapterId:
