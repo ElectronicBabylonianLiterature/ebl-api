@@ -18,6 +18,7 @@ def filter_query_by_transliteration(
         )
         chapter["is_filtered_query"] = True
         chapter["colophon_lines_in_query"] = colophon_lines
+        #print('!', colophon_lines)
         _cursor.append(chapter)
     return _cursor
 
@@ -50,9 +51,9 @@ def get_line_indexes(chapter: Mapping, idx: int) -> List:
 
 def find_chapter_query_lines(
     manuscript_matches: List, chapter_lines: List
-) -> Tuple[List, ChapterQueryColophonLines]:
+) -> Tuple[List, Mapping[int, List[int]]]:
     text_lines = []
-    colophon_lines = ChapterQueryColophonLines()
+    colophon_lines = {}
     for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
         for match in matches:
             text_lines, colophon_lines = find_lines_in_range(
@@ -68,8 +69,8 @@ def find_lines_in_range(
     match: tuple,
     lines_info: tuple,
     text_lines: List,
-    colophon_lines: ChapterQueryColophonLines,
-) -> Tuple[List, ChapterQueryColophonLines]:
+    colophon_lines: Mapping[int, List[int]],
+) -> Tuple[List, Mapping[int, List[int]]]:
     start, end = match
     manuscript_id, lines_idxs_in_manuscript, chapter_lines = lines_info
     manuscript_text_lines_length = len(lines_idxs_in_manuscript)
@@ -89,8 +90,8 @@ def find_lines_in_range(
 
 
 def collect_matching_lines(
-    lines_info: tuple, text_lines: List, colophon_lines: ChapterQueryColophonLines
-) -> Tuple[List, ChapterQueryColophonLines]:
+    lines_info: tuple, text_lines: List, colophon_lines: Mapping[int, List[int]]
+) -> Tuple[List, Mapping[int, List[int]]]:
     (
         manuscript_id,
         manuscript_line_idx,
@@ -104,7 +105,7 @@ def collect_matching_lines(
         if line not in text_lines:
             text_lines.append(line)
     else:
-        colophon_lines.add_manuscript_line(
-            manuscript_id, manuscript_line_idx - manuscript_text_lines_length
+        colophon_lines.setdefault(manuscript_id, []).append(
+            manuscript_line_idx - manuscript_text_lines_length
         )
     return text_lines, colophon_lines
