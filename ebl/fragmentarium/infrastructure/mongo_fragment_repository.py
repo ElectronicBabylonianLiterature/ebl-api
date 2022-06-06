@@ -219,7 +219,10 @@ class MongoFragmentRepository(FragmentRepository):
             )
             .sort([("script", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
             .skip(LIMIT * query.paginationIndex)
-            .limit(LIMIT).collation(Collation(locale="en", numericOrdering=True, alternate="shifted"))
+            .limit(LIMIT)
+            .collation(
+                Collation(locale="en", numericOrdering=True, alternate="shifted")
+            )
         )
         return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
 
