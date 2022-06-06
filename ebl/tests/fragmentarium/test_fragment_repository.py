@@ -459,8 +459,8 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
 
 
 def test_query_fragmentarium_pagination(fragment_repository):
-    fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
-    transliterated_fragments = [fragment_1, *[attr.evolve(fragment_1, number=MuseumNumber.of(f"X.{i+1}")) for i in range(114)]]
+    fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
+    transliterated_fragments = [fragment_0, *[attr.evolve(fragment_0, number=MuseumNumber.of(f"X.{i+1}")) for i in range(39)]]
 
     for fragment in transliterated_fragments:
         fragment_repository.create(fragment)
@@ -468,7 +468,7 @@ def test_query_fragmentarium_pagination(fragment_repository):
     result_first_page = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
     )
-    expected_first_page = (transliterated_fragments[:100], 115)
+    expected_first_page = (transliterated_fragments[:30], 40)
     assert result_first_page == expected_first_page
 
     result_second_page = fragment_repository.query_fragmentarium(
@@ -476,7 +476,7 @@ def test_query_fragmentarium_pagination(fragment_repository):
             transliteration=TransliterationQuery([["KU"]]), paginationIndex=1
         )
     )
-    expected_second_page = (transliterated_fragments[100:], 115)
+    expected_second_page = (transliterated_fragments[30:], 40)
     assert result_second_page == expected_second_page
 
 

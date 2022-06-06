@@ -34,13 +34,11 @@ from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepositor
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
-from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
@@ -138,12 +136,6 @@ class TestSignRepository(MongoSignRepository):
         return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
 
 
-class TestFragmentRepository(MongoFragmentRepository):
-    def create_many(self, fragments: Sequence[Fragment]) -> None:
-        schema = FragmentSchema(many=True)
-        self._fragments.insert_many(schema.dump(fragments))
-
-
 @pytest.fixture
 def bibliography_repository(database):
     return TestBibliographyRepository(database)
@@ -196,7 +188,7 @@ def corpus(
 
 @pytest.fixture
 def fragment_repository(database):
-    return TestFragmentRepository(database)
+    return MongoFragmentRepository(database)
 
 
 @pytest.fixture
