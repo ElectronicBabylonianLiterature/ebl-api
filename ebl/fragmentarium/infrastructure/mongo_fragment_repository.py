@@ -215,6 +215,7 @@ class MongoFragmentRepository(FragmentRepository):
                 mongo_query,
                 projection={"joins": False},
             )
+            .sort([("script", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
             .skip(100 * query.paginationIndex)
             .limit(100)
         )

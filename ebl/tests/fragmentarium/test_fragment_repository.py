@@ -427,6 +427,37 @@ def test_query_fragmentarium_transliteration(signs, is_match, fragment_repositor
     assert result == expected
 
 
+def test_query_fragmentarium_sorting(signs, fragment_repository):
+    transliterated_fragment_0 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.2"), script="A"
+    )
+    transliterated_fragment_1 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.0"), script="B"
+    )
+    transliterated_fragment_2 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.1"), script="B"
+    )
+    for fragment in [
+        transliterated_fragment_0,
+        transliterated_fragment_1,
+        transliterated_fragment_2,
+    ]:
+        fragment_repository.create(fragment)
+
+    result = fragment_repository.query_fragmentarium(
+        FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
+    )
+    expected = (
+        [
+            transliterated_fragment_0,
+            transliterated_fragment_1,
+            transliterated_fragment_2,
+        ],
+        3,
+    )
+    assert result == expected
+
+
 def test_query_fragmentarium_pagination(fragment_repository):
     transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
     for fragment in transliterated_fragments:
