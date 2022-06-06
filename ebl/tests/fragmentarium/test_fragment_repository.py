@@ -442,7 +442,7 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
         transliterated_fragment_1,
         transliterated_fragment_2,
     ]:
-        fragment_repository.create(fragment)
+        fragment_repository.create_many(fragment)
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
@@ -459,7 +459,9 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
 
 
 def test_query_fragmentarium_pagination(fragment_repository):
-    transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
+    fragment_1 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
+    transliterated_fragments = [fragment_1, *[attr.evolve(fragment_1, number=MuseumNumber.of(f"X.{i+1}")) for i in range(114)]]
+
     for fragment in transliterated_fragments:
         fragment_repository.create(fragment)
 

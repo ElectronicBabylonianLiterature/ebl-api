@@ -209,6 +209,7 @@ class MongoFragmentRepository(FragmentRepository):
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
     ) -> Tuple[Sequence[Fragment], int]:
+        LIMIT = 100
         mongo_query = self._query_fragmentarium_create_query(query)
         cursor = (
             self._fragments.find_many(
@@ -216,8 +217,8 @@ class MongoFragmentRepository(FragmentRepository):
                 projection={"joins": False},
             )
             .sort([("script", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
-            .skip(100 * query.paginationIndex)
-            .limit(100)
+            .skip(LIMIT * query.paginationIndex)
+            .limit(LIMIT)
         )
         return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
 
