@@ -447,11 +447,13 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
         number=MuseumNumber.of("X.1"), script="B"
     )
 
-    fragment_repository.create_many([
-        transliterated_fragment_0,
-        transliterated_fragment_1,
-        transliterated_fragment_2,
-    ])
+    fragment_repository.create_many(
+        [
+            transliterated_fragment_0,
+            transliterated_fragment_1,
+            transliterated_fragment_2,
+        ]
+    )
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
