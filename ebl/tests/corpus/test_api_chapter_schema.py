@@ -124,7 +124,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
             for line in chapter.lines
         ],
         "is_filtered_query": False,
-        "colophon_lines_in_query": {},
+        "colophon_lines_in_query": {"colophon_lines_in_query": {}},
     }
 
     return chapter, dto
