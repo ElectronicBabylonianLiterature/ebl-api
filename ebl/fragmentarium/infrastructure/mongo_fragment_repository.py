@@ -156,6 +156,15 @@ class MongoFragmentRepository(FragmentRepository):
             }
         )
 
+    def create_many(self, fragments: Sequence[Fragment]) -> Sequence[str]:
+        schema = FragmentSchema(exclude=["joins"])
+        return self._fragments.insert_many(
+            [
+                {"_id": str(fragment.number), **schema.dump(fragment)}
+                for fragment in fragments
+            ]
+        )
+
     def create_join(self, joins: Sequence[Sequence[Join]]) -> None:
         self._joins.insert_one(
             {
