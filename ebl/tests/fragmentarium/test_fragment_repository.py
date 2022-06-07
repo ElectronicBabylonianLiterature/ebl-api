@@ -470,8 +470,6 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
 
 
 def test_query_fragmentarium_pagination(fragment_repository):
-    transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
-    fragment_repository.create_many(transliterated_fragments)
     fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     transliterated_fragments = [
         fragment_0,
