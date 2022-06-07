@@ -436,14 +436,55 @@ def test_query_fragmentarium_transliteration(signs, is_match, fragment_repositor
     assert result == expected
 
 
+def test_query_fragmentarium_sorting(signs, fragment_repository):
+    transliterated_fragment_0 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.2"), script="A"
+    )
+    transliterated_fragment_1 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.0"), script="B"
+    )
+    transliterated_fragment_2 = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.1"), script="B"
+    )
+
+    fragment_repository.create_many(
+        [
+            transliterated_fragment_0,
+            transliterated_fragment_1,
+            transliterated_fragment_2,
+        ]
+    )
+
+    result = fragment_repository.query_fragmentarium(
+        FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
+    )
+    expected = (
+        [
+            transliterated_fragment_0,
+            transliterated_fragment_1,
+            transliterated_fragment_2,
+        ],
+        3,
+    )
+    assert result == expected
+
+
 def test_query_fragmentarium_pagination(fragment_repository):
-    transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
+    fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
+    transliterated_fragments = [
+        fragment_0,
+        *[
+            attr.evolve(fragment_0, number=MuseumNumber.of(f"X.{i+1}"))
+            for i in range(39)
+        ],
+    ]
+
     fragment_repository.create_many(transliterated_fragments)
 
     result_first_page = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
     )
-    expected_first_page = (transliterated_fragments[:100], 115)
+    expected_first_page = (transliterated_fragments[:30], 40)
     assert result_first_page == expected_first_page
 
     result_second_page = fragment_repository.query_fragmentarium(
@@ -451,7 +492,7 @@ def test_query_fragmentarium_pagination(fragment_repository):
             transliteration=TransliterationQuery([["KU"]]), paginationIndex=1
         )
     )
-    expected_second_page = (transliterated_fragments[100:], 115)
+    expected_second_page = (transliterated_fragments[30:], 40)
     assert result_second_page == expected_second_page
 
 
