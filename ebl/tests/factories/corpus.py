@@ -250,7 +250,7 @@ class ChapterFactory(factory.Factory):
     record = factory.SubFactory(RecordFactory)
     parser_version = ""
     is_filtered_query = False
-    colophon_lines_in_query = {}
+    colophon_lines_in_query = {"colophon_lines_in_query": {}}
 
 
 class ChapterListingFactory(factory.Factory):

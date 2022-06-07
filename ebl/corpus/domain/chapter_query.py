@@ -53,3 +53,4 @@ class ChapterQueryColophonLinesSchema(Schema):
     @post_load
     def make_colophon_lines(self, data: dict, **kwargs) -> ChapterQueryColophonLines:
         return ChapterQueryColophonLines(data["colophon_lines_in_query"])
+

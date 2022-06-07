@@ -45,7 +45,7 @@ CHAPTER = ChapterFactory.build(
     ),
     uncertain_fragments=tuple(),
     is_filtered_query=False,
-    colophon_lines_in_query=dict(),
+    colophon_lines_in_query={"colophon_lines_in_query": {}},
 )
 CHAPTER_FILTERED_QUERY = ChapterFactory.build(
     text_id=TEXT.id,
@@ -64,7 +64,7 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
     ),
     uncertain_fragments=tuple(),
     is_filtered_query=True,
-    colophon_lines_in_query={1: [0]},
+    colophon_lines_in_query={"colophon_lines_in_query": {1: [0]}},
 )
 
 
