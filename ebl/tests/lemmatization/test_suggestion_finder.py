@@ -58,24 +58,21 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
 
 def test_query_lemmas(fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.create_many([ANOTHER_LEMMATIZED_FRAGMENT, lemmatized_fragment])
 
     assert lemma_repository.query_lemmas("GI₆", False) == [["ginâ I"]]
 
 
 def test_query_lemmas_normalized(fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.create_many([lemmatized_fragment, ANOTHER_LEMMATIZED_FRAGMENT])
 
     assert lemma_repository.query_lemmas("ana", True) == [["normalized I"]]
 
 
 def test_query_lemmas_multiple(fragment_repository, lemma_repository):
     lemmatized_fragment = LemmatizedFragmentFactory.build()
-    fragment_repository.create(lemmatized_fragment)
-    fragment_repository.create(ANOTHER_LEMMATIZED_FRAGMENT)
+    fragment_repository.create_many([lemmatized_fragment, ANOTHER_LEMMATIZED_FRAGMENT])
 
     assert lemma_repository.query_lemmas("ana", False) == [["ana II"], ["ana I"]]
 

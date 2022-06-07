@@ -81,6 +81,17 @@ def test_create(database, fragment_repository):
     ) == FragmentSchema(exclude=["joins"]).dump(fragment)
 
 
+def test_create_many(database, fragment_repository):
+    fragments = LemmatizedFragmentFactory.build_batch(2)
+    fragment_ids = fragment_repository.create_many(fragments)
+
+    for fragment in fragments:
+        assert str(fragment.number) in fragment_ids
+        assert database[COLLECTION].find_one(
+            {"_id": str(fragment.number)}, projection={"_id": False}
+        ) == FragmentSchema(exclude=["joins"]).dump(fragment)
+
+
 def test_create_join(database, fragment_repository):
     first_join = JoinFactory.build()
     second_join = JoinFactory.build()
@@ -171,10 +182,9 @@ def test_fragment_not_found(fragment_repository):
 
 
 def test_find_random(fragment_repository):
-    fragment = FragmentFactory.build()
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    for a_fragment in fragment, transliterated_fragment:
-        fragment_repository.create(a_fragment)
+
+    fragment_repository.create_many([FragmentFactory.build(), transliterated_fragment])
 
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
@@ -417,8 +427,7 @@ SEARCH_SIGNS_DATA = [
 @pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
 def test_query_fragmentarium_transliteration(signs, is_match, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
+    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery(signs))
@@ -437,12 +446,12 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.1"), script="B"
     )
-    for fragment in [
+
+    fragment_repository.create_many([
         transliterated_fragment_0,
         transliterated_fragment_1,
         transliterated_fragment_2,
-    ]:
-        fragment_repository.create(fragment)
+    ])
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
@@ -459,6 +468,8 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
 
 
 def test_query_fragmentarium_pagination(fragment_repository):
+    transliterated_fragments = TransliteratedFragmentFactory.build_batch(115)
+    fragment_repository.create_many(transliterated_fragments)
     fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     transliterated_fragments = [
         fragment_0,
@@ -468,8 +479,7 @@ def test_query_fragmentarium_pagination(fragment_repository):
         ],
     ]
 
-    for fragment in transliterated_fragments:
-        fragment_repository.create(fragment)
+    fragment_repository.create_many(transliterated_fragments)
 
     result_first_page = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
@@ -488,8 +498,7 @@ def test_query_fragmentarium_pagination(fragment_repository):
 
 def test_query_fragmentarium_transliteration_and_number(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
+    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
@@ -507,8 +516,8 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
     transliterated_fragment = TransliteratedFragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
+
+    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
@@ -528,8 +537,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references_not_found
     transliterated_fragment = TransliteratedFragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
     )
-    fragment_repository.create(transliterated_fragment)
-    fragment_repository.create(FragmentFactory.build())
+    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
@@ -549,18 +557,8 @@ def test_find_transliterated(database, fragment_repository):
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.2")
     )
-    database[COLLECTION].insert_many(
-        [
-            {
-                **SCHEMA.dump(transliterated_fragment_2),
-                "_id": str(transliterated_fragment_2.number),
-            },
-            SCHEMA.dump(FragmentFactory.build()),
-            {
-                **SCHEMA.dump(transliterated_fragment_1),
-                "_id": str(transliterated_fragment_1.number),
-            },
-        ]
+    fragment_repository.create_many(
+        [transliterated_fragment_1, transliterated_fragment_2]
     )
 
     assert fragment_repository.query_transliterated_numbers() == [

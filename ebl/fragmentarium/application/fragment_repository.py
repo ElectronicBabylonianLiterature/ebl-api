@@ -21,6 +21,10 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def create_many(self, fragments: Sequence[Fragment]) -> Sequence[str]:
+        ...
+
+    @abstractmethod
     def count_transliterated_fragments(self) -> int:
         ...
 
