@@ -43,20 +43,13 @@ class ChapterQueryColophonLines:
         }
 
 
-class ColophonIndexesSchema(Schema):
-    index = fields.Int
-
-
 class ChapterQueryColophonLinesSchema(Schema):
     colophon_lines_in_query = fields.Mapping(
         keys=fields.Int(),
-        values=fields.List(
-            fields.Int()
-        ),
+        values=fields.List(fields.Int()),
         load_default=dict(),
     )
 
     @post_load
     def make_colophon_lines(self, data: dict, **kwargs) -> ChapterQueryColophonLines:
-        #print(data, kwargs)
-        return ChapterQueryColophonLines(data)
+        return ChapterQueryColophonLines(data["colophon_lines_in_query"])
