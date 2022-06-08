@@ -9,14 +9,14 @@ from ebl.transliteration.domain.text_line import TextLine
 
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterQueryColophonLines:
-    colophon_lines_in_query: Mapping[int, Sequence[int]] = dict()
+    colophon_lines_in_query: Mapping[str, Sequence[int]] = dict()
 
     def get_matching_lines(
         self, manuscripts: Sequence[Manuscript]
     ) -> Mapping[int, Sequence[TextLine]]:
         matching_colophon_lines = {}
         for manuscript in manuscripts:
-            if manuscript.id in self.colophon_lines_in_query:
+            if str(manuscript.id) in self.colophon_lines_in_query:
                 matching_colophon_lines = {
                     **matching_colophon_lines,
                     **self.select_matching_colophon_lines_filtered(
@@ -37,7 +37,7 @@ class ChapterQueryColophonLines:
         return {
             manuscript_id: [
                 colophon_lines[idx]
-                for idx in self.colophon_lines_in_query[manuscript_id]
+                for idx in self.colophon_lines_in_query[str(manuscript_id)]
                 if idx < len(colophon_lines)
             ]
         }
@@ -45,7 +45,7 @@ class ChapterQueryColophonLines:
 
 class ChapterQueryColophonLinesSchema(Schema):
     colophon_lines_in_query = fields.Mapping(
-        keys=fields.Int(),
+        keys=fields.Str(),
         values=fields.List(fields.Int()),
         load_default=dict(),
     )
@@ -53,4 +53,3 @@ class ChapterQueryColophonLinesSchema(Schema):
     @post_load
     def make_colophon_lines(self, data: dict, **kwargs) -> ChapterQueryColophonLines:
         return ChapterQueryColophonLines(data["colophon_lines_in_query"])
-
