@@ -237,7 +237,7 @@ class ChapterSchema(Schema):
     parser_version = fields.String(load_default="", data_key="parserVersion")
     is_filtered_query = fields.Bool(load_default=False)
     colophon_lines_in_query = fields.Nested(
-        ChapterQueryColophonLinesSchema, load_default=dict()
+        ChapterQueryColophonLinesSchema, load_default={"colophon_lines_in_query": dict()}
     )
 
     @post_load
