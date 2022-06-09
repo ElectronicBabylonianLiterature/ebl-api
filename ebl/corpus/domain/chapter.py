@@ -105,7 +105,9 @@ class Chapter:
     record: Record = Record()
     parser_version: str = ""
     is_filtered_query: bool = False
-    colophon_lines_in_query: ChapterQueryColophonLines = attr.ib(default=dict())
+    colophon_lines_in_query: ChapterQueryColophonLines = attr.ib(
+        default=ChapterQueryColophonLines()
+    )
 
     @property
     def id_(self) -> ChapterId:
