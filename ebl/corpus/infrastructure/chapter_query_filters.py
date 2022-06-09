@@ -17,7 +17,7 @@ def filter_query_by_transliteration(
             text_lines, key=lambda line: chapter["lines"].index(line)
         )
         chapter["is_filtered_query"] = True
-        chapter["colophon_lines_in_query"] = { "colophon_lines_in_query": colophon_lines}
+        chapter["colophon_lines_in_query"] = {"colophon_lines_in_query": colophon_lines}
         _cursor.append(chapter)
     return _cursor
 
@@ -104,7 +104,7 @@ def collect_matching_lines(
         if line not in text_lines:
             text_lines.append(line)
     else:
-        colophon_lines.setdefault(manuscript_id, []).append(
+        colophon_lines.setdefault(str(manuscript_id), []).append(
             manuscript_line_idx - manuscript_text_lines_length
         )
     return text_lines, colophon_lines
