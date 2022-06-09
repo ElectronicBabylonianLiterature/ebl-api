@@ -29,7 +29,7 @@ def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> Li
         (
             chapter["manuscripts"][idx]["id"],
             dict.fromkeys(match),
-            remove_duplicates(get_line_indexes(chapter, idx)),
+            get_line_indexes(chapter, idx),
         )
         for match, idx in match_indexes
         if match
@@ -37,13 +37,22 @@ def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> Li
 
 
 def get_line_indexes(chapter: Mapping, idx: int) -> List:
+    return remove_duplicates(
+        [
+            lineIdx
+            for lineIdx, manuscript in get_all_line_manuscript_indexes(chapter)
+            if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
+            and manuscript["line"]["type"] == "TextLine"
+        ]
+    )
+
+
+def get_all_line_manuscript_indexes(chapter: Mapping) -> List:
     return [
-        lineIdx
+        (lineIdx, manuscript)
         for lineIdx, line in enumerate(chapter["lines"])
         for variant in line["variants"]
         for manuscript in variant["manuscripts"]
-        if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
-        and manuscript["line"]["type"] == "TextLine"
     ]
 
 
