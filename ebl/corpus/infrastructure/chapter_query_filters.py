@@ -29,28 +29,22 @@ def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> Li
         (
             chapter["manuscripts"][idx]["id"],
             dict.fromkeys(match),
-            get_line_indexes(chapter, idx),
+            remove_duplicates(get_line_indexes(chapter, idx)),
         )
         for match, idx in match_indexes
         if match
     ]
 
 
-def remove_duplicates(lst: List) -> List:
-    return list(dict.fromkeys(lst))
-
-
 def get_line_indexes(chapter: Mapping, idx: int) -> List:
-    return remove_duplicates(
-        [
-            lineIdx
-            for lineIdx, line in enumerate(chapter["lines"])
-            for variant in line["variants"]
-            for manuscript in variant["manuscripts"]
-            if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
-            and manuscript["line"]["type"] == "TextLine"
-        ]
-    )
+    return [
+        lineIdx
+        for lineIdx, line in enumerate(chapter["lines"])
+        for variant in line["variants"]
+        for manuscript in variant["manuscripts"]
+        if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
+        and manuscript["line"]["type"] == "TextLine"
+    ]
 
 
 def find_chapter_query_lines(
@@ -113,3 +107,7 @@ def collect_matching_lines(
             manuscript_line_idx - manuscript_text_lines_length
         )
     return text_lines, colophon_lines
+
+
+def remove_duplicates(lst: List) -> List:
+    return list(dict.fromkeys(lst))
