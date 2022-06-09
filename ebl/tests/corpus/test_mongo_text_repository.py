@@ -65,7 +65,9 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
     ),
     uncertain_fragments=tuple(),
     is_filtered_query=True,
-    colophon_lines_in_query=ChapterQueryColophonLinesFactory.build(),
+    colophon_lines_in_query=ChapterQueryColophonLinesFactory.build(
+        colophon_lines_in_query={"1": [0]}
+    ),
 )
 
 
@@ -220,6 +222,9 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
     result = text_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
+    if expected != []:
+        print("!", result[0].colophon_lines_in_query)
+        print("!!", expected[0].colophon_lines_in_query)
     assert result == expected
 
 
