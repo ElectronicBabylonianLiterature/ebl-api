@@ -1,10 +1,9 @@
 import attr
-from typing import Mapping, Sequence
+from typing import Mapping, Sequence, Union
 from marshmallow import Schema, fields, post_load
 from ebl.corpus.domain.line import Line
-from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.text_line import TextLine, L
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.transliteration.domain.text_line import TextLine
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -21,7 +20,7 @@ class ChapterQueryColophonLines:
                     **matching_colophon_lines,
                     **self.select_matching_colophon_lines_filtered(
                         manuscript.id,
-                        manuscript.colophon.lines,
+                        self.filter_text_lines(manuscript.colophon.lines),
                     ),
                 }
         return matching_colophon_lines
@@ -29,11 +28,8 @@ class ChapterQueryColophonLines:
     def select_matching_colophon_lines_filtered(
         self,
         manuscript_id: int,
-        manuscript_colophon_lines: Sequence[Line],
+        colophon_lines: Sequence[TextLine],
     ) -> Mapping[int, Sequence[TextLine]]:
-        colophon_lines = [
-            line for line in manuscript_colophon_lines if isinstance(line, TextLine)
-        ]
         return {
             manuscript_id: [
                 colophon_lines[idx]
@@ -41,6 +37,13 @@ class ChapterQueryColophonLines:
                 if idx < len(colophon_lines)
             ]
         }
+
+    def filter_text_lines(
+        self, manuscript_colophon_lines: Sequence[Union["TextLine", L]]
+    ) -> Sequence[TextLine]:
+        return [
+            line for line in manuscript_colophon_lines if isinstance(line, TextLine)
+        ]
 
 
 class ChapterQueryColophonLinesSchema(Schema):

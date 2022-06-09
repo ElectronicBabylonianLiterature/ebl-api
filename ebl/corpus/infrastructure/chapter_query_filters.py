@@ -1,7 +1,6 @@
-from typing import Tuple, List, Mapping
+from typing import Tuple, List, Dict, Mapping
 from pymongo.collection import Collection
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
 
 
 def filter_query_by_transliteration(
@@ -30,7 +29,7 @@ def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> Li
         (
             chapter["manuscripts"][idx]["id"],
             dict.fromkeys(match),
-            list(dict.fromkeys(get_line_indexes(chapter, idx))),
+            get_line_indexes(chapter, idx),
         )
         for match, idx in match_indexes
         if match
@@ -38,19 +37,23 @@ def find_manuscript_matches(query: TransliterationQuery, chapter: Mapping) -> Li
 
 
 def get_line_indexes(chapter: Mapping, idx: int) -> List:
-    return [
-        lineIdx
-        for lineIdx, line in enumerate(chapter["lines"])
-        for variant in line["variants"]
-        for manuscript in variant["manuscripts"]
-        if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
-        and manuscript["line"]["type"] == "TextLine"
-    ]
+    return list(
+        dict.fromkeys(
+            [
+                lineIdx
+                for lineIdx, line in enumerate(chapter["lines"])
+                for variant in line["variants"]
+                for manuscript in variant["manuscripts"]
+                if manuscript["manuscriptId"] == chapter["manuscripts"][idx]["id"]
+                and manuscript["line"]["type"] == "TextLine"
+            ]
+        )
+    )
 
 
 def find_chapter_query_lines(
     manuscript_matches: List, chapter_lines: List
-) -> Tuple[List, Mapping[int, List[int]]]:
+) -> Tuple[List, Dict[str, List[int]]]:
     text_lines = []
     colophon_lines = {}
     for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
@@ -68,8 +71,8 @@ def find_lines_in_range(
     match: tuple,
     lines_info: tuple,
     text_lines: List,
-    colophon_lines: Mapping[int, List[int]],
-) -> Tuple[List, Mapping[int, List[int]]]:
+    colophon_lines: Dict[str, List[int]],
+) -> Tuple[List, Dict[str, List[int]]]:
     start, end = match
     manuscript_id, lines_idxs_in_manuscript, chapter_lines = lines_info
     manuscript_text_lines_length = len(lines_idxs_in_manuscript)
@@ -89,8 +92,8 @@ def find_lines_in_range(
 
 
 def collect_matching_lines(
-    lines_info: tuple, text_lines: List, colophon_lines: Mapping[int, List[int]]
-) -> Tuple[List, Mapping[int, List[int]]]:
+    lines_info: tuple, text_lines: List, colophon_lines: Dict[str, List[int]]
+) -> Tuple[List, Dict[str, List[int]]]:
     (
         manuscript_id,
         manuscript_line_idx,

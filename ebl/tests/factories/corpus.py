@@ -49,7 +49,6 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
-from random import randint
 
 
 class OldSiglumFactory(factory.Factory):
