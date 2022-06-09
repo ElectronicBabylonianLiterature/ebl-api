@@ -43,6 +43,7 @@ def chapter_not_found(id_: ChapterId) -> Exception:
 def line_not_found(id_: ChapterId, number: int) -> Exception:
     return NotFoundError(f"Chapter {id_} line {number} not found.")
 
+from time import time
 
 class MongoTextRepository(TextRepository):
     def __init__(self, database: Database):
@@ -92,6 +93,7 @@ class MongoTextRepository(TextRepository):
 
     def find(self, id_: TextId) -> Text:
         try:
+            t0 = time()
             mongo_text = next(
                 self._texts.aggregate(
                     [
@@ -108,7 +110,10 @@ class MongoTextRepository(TextRepository):
                     ]
                 )
             )
-            return TextSchema().load(mongo_text)
+            t = TextSchema().load(mongo_text)
+            print('finding texts took', time()-t0)
+            return t
+
         except StopIteration as error:
             raise text_not_found(id_) from error
 
@@ -117,7 +122,10 @@ class MongoTextRepository(TextRepository):
             chapter = self._chapters.find_one(
                 chapter_id_query(id_), projection={"_id": False}
             )
-            return ChapterSchema().load(chapter)
+            t0 = time()
+            c = ChapterSchema().load(chapter)
+            print('finding chapters took', time()-t0)
+            return c
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
@@ -125,7 +133,8 @@ class MongoTextRepository(TextRepository):
         try:
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
-            return ChapterDisplaySchema().load(
+            t0 = time()
+            cds = ChapterDisplaySchema().load(
                 {
                     **next(chapters),
                     "textName": text.name,
@@ -133,6 +142,8 @@ class MongoTextRepository(TextRepository):
                     "isSingleStage": not text.has_multiple_stages,
                 }
             )
+            print('finding chapters for display took', time()-t0)
+            return cds
         except NotFoundError as error:
             raise text_not_found(id_.text_id) from error
         except StopIteration as error:
@@ -148,12 +159,16 @@ class MongoTextRepository(TextRepository):
                     {"$skip": number},
                 ]
             )
-            return LineSchema().load(next(chapters))
+            t0 = time()
+            l = LineSchema().load(next(chapters))
+            print('finding lines took', time()-t0)
+            return l
         except StopIteration as error:
             raise line_not_found(id_, number) from error
 
     def list(self) -> List[Text]:
-        return TextSchema().load(
+        t0 = time()
+        text_list = TextSchema().load(
             self._texts.aggregate(
                 [
                     *join_reference_documents(),
@@ -168,6 +183,8 @@ class MongoTextRepository(TextRepository):
             ),
             many=True,
         )
+        print('finding chapters took', time()-t0)
+        return text_list
 
     def update(self, id_: ChapterId, chapter: Chapter) -> None:
         self._chapters.update_one(
