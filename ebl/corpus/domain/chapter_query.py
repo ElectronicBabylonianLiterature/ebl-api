@@ -1,7 +1,6 @@
 import attr
 from typing import Mapping, Sequence, Union
 from marshmallow import Schema, fields, post_load
-from ebl.corpus.domain.line import Line
 from ebl.transliteration.domain.text_line import TextLine, L
 from ebl.corpus.domain.manuscript import Manuscript
 
