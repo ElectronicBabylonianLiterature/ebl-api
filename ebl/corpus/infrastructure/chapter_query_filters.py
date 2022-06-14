@@ -15,8 +15,8 @@ def filter_query_by_transliteration(
         chapter["lines"] = sorted(
             text_lines, key=lambda line: chapter["lines"].index(line)
         )
-        chapter["is_filtered_query"] = True
-        chapter["colophon_lines_in_query"] = {"colophon_lines_in_query": colophon_lines}
+        chapter["isFilteredQuery"] = True
+        chapter["colophonLinesInQuery"] = {"colophonLinesInQuery": colophon_lines}
         _cursor.append(chapter)
     return _cursor
 

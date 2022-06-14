@@ -50,6 +50,7 @@ class ChapterQueryColophonLinesSchema(Schema):
         keys=fields.Str(),
         values=fields.List(fields.Int()),
         load_default=dict(),
+        data_key="colophonLinesInQuery"
     )
 
     @post_load
