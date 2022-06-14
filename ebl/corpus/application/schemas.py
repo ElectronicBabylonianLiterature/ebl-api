@@ -244,7 +244,6 @@ class ChapterSchema(Schema):
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
-        print(data.keys())
         return Chapter(
             data["text_id"],
             Classification(data["classification"]),
