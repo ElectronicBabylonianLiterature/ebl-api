@@ -235,14 +235,16 @@ class ChapterSchema(Schema):
     signs = fields.List(fields.String(), load_default=tuple())
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
-    is_filtered_query = fields.Bool(load_default=False)
+    is_filtered_query = fields.Bool(load_default=False, data_key="isFilteredQuery")
     colophon_lines_in_query = fields.Nested(
         ChapterQueryColophonLinesSchema,
-        load_default={"colophon_lines_in_query": dict()},
+        load_default={"colophonLinesInQuery": dict()},
+        data_key="colophonLinesInQuery",
     )
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> Chapter:
+        print(data.keys())
         return Chapter(
             data["text_id"],
             Classification(data["classification"]),
