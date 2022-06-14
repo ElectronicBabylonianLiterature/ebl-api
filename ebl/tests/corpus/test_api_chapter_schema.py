@@ -16,6 +16,7 @@ from ebl.tests.factories.corpus import (
     LineVariantFactory,
     ManuscriptFactory,
     ManuscriptLineFactory,
+    ChapterQueryColophonLinesFactory,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
@@ -44,6 +45,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         manuscripts=(manuscript,),
         uncertain_fragments=(MuseumNumber.of("K.1"),),
         lines=(line,),
+        colophon_lines_in_query=ChapterQueryColophonLinesFactory.build(),
     )
     dto = {
         "textId": {
@@ -123,6 +125,8 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
             }
             for line in chapter.lines
         ],
+        "isFilteredQuery": False,
+        "colophonLinesInQuery": {"colophonLinesInQuery": {}},
     }
 
     return chapter, dto

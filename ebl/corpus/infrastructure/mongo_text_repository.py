@@ -30,6 +30,9 @@ from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
     TEXTS_COLLECTION,
 )
+from ebl.corpus.infrastructure.chapter_query_filters import (
+    filter_query_by_transliteration,
+)
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -186,12 +189,14 @@ class MongoTextRepository(TextRepository):
         )
 
     def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
+
+        cursor = self._chapters.find_many(
+            {"signs": {"$regex": query.regexp}},
+            projection={"_id": False},
+            limit=100,
+        )
         return ChapterSchema().load(
-            self._chapters.find_many(
-                {"signs": {"$regex": query.regexp}},
-                projection={"_id": False},
-                limit=100,
-            ),
+            filter_query_by_transliteration(query, cursor),
             many=True,
         )
 

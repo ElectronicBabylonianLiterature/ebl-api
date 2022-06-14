@@ -172,6 +172,8 @@ def to_dict(chapter: Chapter, include_documents=False):
             }
             for line in chapter.lines
         ],
+        "isFilteredQuery": False,
+        "colophonLinesInQuery": {"colophonLinesInQuery": {}},
     }
 
 

@@ -48,6 +48,7 @@ from ebl.transliteration.domain.tokens import (
 )
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
 
 
 class OldSiglumFactory(factory.Factory):
@@ -230,6 +231,13 @@ class RecordFactory(factory.Factory):
     publication_date = "2020-05-11T07:46:47.743916"
 
 
+class ChapterQueryColophonLinesFactory(factory.Factory):
+    class Meta:
+        model = ChapterQueryColophonLines
+
+    colophon_lines_in_query = factory.Dict({})
+
+
 class ChapterFactory(factory.Factory):
     class Meta:
         model = Chapter
@@ -249,6 +257,8 @@ class ChapterFactory(factory.Factory):
     signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",)
     record = factory.SubFactory(RecordFactory)
     parser_version = ""
+    is_filtered_query = False
+    colophon_lines_in_query = factory.SubFactory(ChapterQueryColophonLinesFactory)
 
 
 class ChapterListingFactory(factory.Factory):

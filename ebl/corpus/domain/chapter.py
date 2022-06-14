@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union
+from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
 
 import attr
 import pydash
@@ -21,6 +21,7 @@ from ebl.transliteration.domain.translation_line import (
     TranslationLine,
 )
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
 
@@ -103,6 +104,10 @@ class Chapter:
     signs: Sequence[str] = tuple()
     record: Record = Record()
     parser_version: str = ""
+    is_filtered_query: bool = False
+    colophon_lines_in_query: ChapterQueryColophonLines = attr.ib(
+        default=ChapterQueryColophonLines()
+    )
 
     @property
     def id_(self) -> ChapterId:
@@ -145,21 +150,33 @@ class Chapter:
             raise NotFoundError(f"No manuscripts with id {id_}.") from error
 
     def get_matching_lines(self, query: TransliterationQuery) -> Sequence[Line]:
-        text_lines = self.text_lines
-        matching_indices = {
+        if self.is_filtered_query:
+            return self.lines
+        return [
+            self.lines[index]
+            for index in sorted(self._get_matching_line_indexes(query))
+        ]
+
+    def _get_matching_line_indexes(self, query: TransliterationQuery) -> Set[int]:
+        return {
             line.source
             for index, numbers in enumerate(self._match(query))
             for start, end in numbers
-            for line in text_lines[index][start : end + 1]
+            for line in self.text_lines[index][start : end + 1]
             if line.source is not None
         }
-        return [self.lines[index] for index in sorted(matching_indices)]
 
     def get_matching_colophon_lines(
         self, query: TransliterationQuery
     ) -> Mapping[int, Sequence[TextLine]]:
-        text_lines = self.text_lines
+        if self.is_filtered_query:
+            return self.colophon_lines_in_query.get_matching_lines(self.manuscripts)
+        return self._get_matching_colophon_lines(query)
 
+    def _get_matching_colophon_lines(
+        self, query: TransliterationQuery
+    ) -> Mapping[int, Sequence[TextLine]]:
+        text_lines = self.text_lines
         return pydash.omit_by(
             {
                 self.manuscripts[index].id: [
