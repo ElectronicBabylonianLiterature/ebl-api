@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Union
 
 import attr
 
@@ -15,7 +15,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 @attr.s(auto_attribs=True, frozen=True)
 class UncertainFragment:
     museum_number: MuseumNumber
-    is_in_fragmentarium: bool
+    is_in_fragmentarium: Union[bool, None]
 
 
 @attr.s(auto_attribs=True, frozen=True)

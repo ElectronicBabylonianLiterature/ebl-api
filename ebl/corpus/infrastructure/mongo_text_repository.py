@@ -95,7 +95,7 @@ class MongoTextRepository(TextRepository):
 
     def find(self, id_: TextId) -> Text:
         try:
-            return next(
+            mongo_text = next(
                 self._texts.aggregate(
                     [
                         {
@@ -111,6 +111,7 @@ class MongoTextRepository(TextRepository):
                     ]
                 )
             )
+            return TextSchema().load(mongo_text)
 
         except StopIteration as error:
             raise text_not_found(id_) from error

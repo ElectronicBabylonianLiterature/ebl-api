@@ -266,10 +266,12 @@ class UncertainFragmentSchema(Schema):
     museum_number = fields.Nested(
         MuseumNumberSchema, required=True, data_key="museumNumber"
     )
-    is_in_fragmentarium = fields.Boolean(required=True, data_key="isInFragmentarium")
+    is_in_fragmentarium = fields.Boolean(
+        load_default=None, data_key="isInFragmentarium"
+    )
 
     @post_load
-    def make_uncertai_fragment(self, data: dict, **kwargs) -> UncertainFragment:
+    def make_uncertain_fragment(self, data: dict, **kwargs) -> UncertainFragment:
         return UncertainFragment(data["museum_number"], data["is_in_fragmentarium"])
 
 

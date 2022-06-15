@@ -23,10 +23,11 @@ def join_uncertain_fragments(check_fragmentarium: bool = False) -> List[dict]:
                 "preserveNullAndEmptyArrays": True,
             }
         },
-        *(is_in_fragmentarium("uncertainFragments", "isInFragmentarium")
-          if check_fragmentarium
-          else [{"$set": {"isInFragmentarium": "false"}}]
-          ),
+        *(
+            is_in_fragmentarium("uncertainFragments", "isInFragmentarium")
+            if check_fragmentarium
+            else [{"$set": {"isInFragmentarium": None}}]
+        ),
         {
             "$group": {
                 "_id": "$_id",

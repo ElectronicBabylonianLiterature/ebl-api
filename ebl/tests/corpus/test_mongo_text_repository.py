@@ -27,7 +27,7 @@ CHAPTERS_COLLECTION = "chapters"
 JOINS_COLLECTION = "joins"
 MANUSCRIPT_ID = 1
 MUSEUM_NUMBER = MuseumNumber("X", "1")
-UNCERTAIN_FRAGMET = MuseumNumber("X", "2")
+UNCERTAIN_FRAGMENT = MuseumNumber("X", "2")
 TEXT = TextFactory.build()
 CHAPTER = ChapterFactory.build(
     text_id=TEXT.id,
@@ -127,14 +127,14 @@ def test_finding_text(
         chapters=(
             attr.evolve(
                 TEXT.chapters[0],
-                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMET, True),),
+                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMENT, None),),
             ),
         ),
     )
-    chapter = attr.evolve(CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMET,))
+    chapter = attr.evolve(CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMENT,))
     when_text_in_collection(database, text)
     when_chapter_in_collection(database, chapter)
-    fragment_repository.create(Fragment(UNCERTAIN_FRAGMET))
+    fragment_repository.create(Fragment(UNCERTAIN_FRAGMENT))
     for reference in text.references:
         bibliography_repository.create(reference.document)
 
