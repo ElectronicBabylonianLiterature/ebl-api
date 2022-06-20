@@ -1,7 +1,6 @@
 from typing import List
 
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium
 from ebl.transliteration.infrastructure.collections import CHAPTERS_COLLECTION
 
 
@@ -15,7 +14,7 @@ def chapter_id_query(id_: ChapterId) -> dict:
     }
 
 
-def join_uncertain_fragments(check_fragmentarium: bool = False) -> List[dict]:
+def join_uncertain_fragments() -> List[dict]:
     return [
         {
             "$unwind": {
@@ -23,18 +22,12 @@ def join_uncertain_fragments(check_fragmentarium: bool = False) -> List[dict]:
                 "preserveNullAndEmptyArrays": True,
             }
         },
-        *(
-            is_in_fragmentarium("uncertainFragments", "isInFragmentarium")
-            if check_fragmentarium
-            else [{"$set": {"isInFragmentarium": None}}]
-        ),
         {
             "$group": {
                 "_id": "$_id",
                 "uncertainFragments": {
                     "$push": {
                         "museumNumber": "$uncertainFragments",
-                        "isInFragmentarium": "$isInFragmentarium",
                     }
                 },
                 "root": {"$first": "$$ROOT"},

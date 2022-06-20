@@ -127,7 +127,7 @@ def test_finding_text(
         chapters=(
             attr.evolve(
                 TEXT.chapters[0],
-                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMENT, None),),
+                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMENT),),
             ),
         ),
     )
