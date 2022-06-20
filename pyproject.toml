@@ -44,6 +44,7 @@ pyre-check = "0.9.10"
 black = "*"
 pymongo-inmemory = "*"
 pytest-xdist = "*"
+autopep8 = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -112,6 +112,7 @@ class MongoTextRepository(TextRepository):
                 )
             )
             return TextSchema().load(mongo_text)
+
         except StopIteration as error:
             raise text_not_found(id_) from error
 
