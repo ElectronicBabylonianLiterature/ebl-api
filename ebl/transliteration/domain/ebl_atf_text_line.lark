@@ -210,10 +210,10 @@ logogram_name: logogram_name_part (broken_away logogram_name_part)*
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
-VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "g" | "h"
-               | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p" | "q"
-               | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û" | "w"
-               | "z" | "ḫ" | "ʾ"
+VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "f" | "g"
+               | "h" | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p"
+               | "q" | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û"
+               | "w" | "z" | "ḫ" | "ʾ" | "½"
 LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
                    | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
                    | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
