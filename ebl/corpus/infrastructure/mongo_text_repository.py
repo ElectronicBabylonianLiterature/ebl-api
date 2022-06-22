@@ -6,12 +6,15 @@ from pymongo.database import Database
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
     LineSchema,
     ManuscriptSchema,
     TextSchema,
+    ManuscriptAttestationSchema,
 )
+
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.line import Line
@@ -21,7 +24,9 @@ from ebl.corpus.infrastructure.queries import (
     aggregate_chapter_display,
     chapter_id_query,
     join_chapters,
+    join_text,
 )
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
@@ -230,3 +235,31 @@ class MongoTextRepository(TextRepository):
             )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
+
+    def query_corpus_by_manuscript(self, number: str):
+        manuscript_match = {
+            "manuscripts.museumNumber": MuseumNumberSchema().dump(
+                MuseumNumber.of(number)
+            )
+        }
+        cursor = self._chapters.aggregate(
+            [
+                {"$unwind": "$manuscripts"},
+                {"$match": manuscript_match},
+                {
+                    "$replaceRoot": {
+                        "newRoot": {
+                            "chapterId": {
+                                "textId": "$textId",
+                                "stage": "$stage",
+                                "name": "$name",
+                            },
+                            "manuscript": "$manuscripts",
+                        }
+                    }
+                },
+                *join_text(),
+                {"$unwind": "$text"},
+            ]
+        )
+        return ManuscriptAttestationSchema().load(cursor, many=True)

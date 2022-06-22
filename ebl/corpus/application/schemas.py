@@ -8,7 +8,7 @@ from marshmallow import (
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.corpus.application.id_schemas import TextIdSchema
+from ebl.corpus.application.id_schemas import TextIdSchema, ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -25,6 +25,7 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_non_standard_text,
     is_invalid_standard_text,
 )
+from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
@@ -321,4 +322,20 @@ class TextSchema(Schema):
             data["intro"],
             tuple(data["chapters"]),
             tuple(data["references"]),
+        )
+
+
+class ManuscriptAttestationSchema(Schema):
+    text = fields.Nested(TextSchema)
+    chapter_id = fields.Nested(ChapterIdSchema, data_key="chapterId")
+    manuscript = fields.Nested(ManuscriptSchema)
+
+    @post_load
+    def make_manuscript_attestation(
+        self, data: dict, **kwargs
+    ) -> ManuscriptAttestation:
+        return Manuscript(
+            data["text"],
+            data["chapter_id"],
+            data["manuscript"],
         )

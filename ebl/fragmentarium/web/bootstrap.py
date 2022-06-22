@@ -20,6 +20,8 @@ from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import make_statistics_resource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
+from ebl.corpus.web.chapters import ChaptersDisplayByManuscriptResource
+from ebl.corpus.application.corpus import Corpus
 
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
@@ -42,6 +44,13 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository,
         context.photo_repository,
         context.cropped_sign_images_repository,
+    )
+    corpus = Corpus(
+        context.text_repository,
+        context.get_bibliography(),
+        context.changelog,
+        context.sign_repository,
+        context.parallel_line_injector,
     )
 
     statistics = make_statistics_resource(context.cache, fragmentarium)
@@ -68,6 +77,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
+    chapters = ChaptersDisplayByManuscriptResource(corpus)
 
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}/match", fragment_matcher)
@@ -79,6 +89,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     api.add_route("/fragments/{number}/transliteration", transliteration)
     api.add_route("/fragments/{number}/annotations", annotations)
     api.add_route("/fragments/{number}/photo", photo)
+    api.add_route("/fragments/{number}/corpus", chapters)
     api.add_route("/genres", genres)
     api.add_route("/statistics", statistics)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)

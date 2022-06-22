@@ -2,7 +2,10 @@ from typing import List
 
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium
-from ebl.transliteration.infrastructure.collections import CHAPTERS_COLLECTION
+from ebl.transliteration.infrastructure.collections import (
+    CHAPTERS_COLLECTION,
+    TEXTS_COLLECTION,
+)
 
 
 def chapter_id_query(id_: ChapterId) -> dict:
@@ -138,4 +141,46 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                 "record": True,
             }
         },
+    ]
+
+
+def join_text() -> List[dict]:
+    return [
+        {
+            "$lookup": {
+                "from": TEXTS_COLLECTION,
+                "let": {"textId": "$chapterId.textId"},
+                "pipeline": [
+                    {
+                        "$match": {
+                            "$expr": {
+                                "$and": [
+                                    {
+                                        "$eq": [
+                                            "$genre",
+                                            "$$textId.genre",
+                                        ]
+                                    },
+                                    {
+                                        "$eq": [
+                                            "$category",
+                                            "$$textId.category",
+                                        ]
+                                    },
+                                    {
+                                        "$eq": [
+                                            "$index",
+                                            "$$textId.index",
+                                        ]
+                                    },
+                                ]
+                            }
+                        }
+                    },
+                    *join_chapters(False),
+                    {"$limit": 1},
+                ],
+                "as": "text",
+            },
+        }
     ]

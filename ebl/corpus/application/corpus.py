@@ -75,6 +75,10 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
+    def query_corpus_by_manuscript(self, number: MuseumNumber) -> List[Chapter]:
+        ...
+
+    @abstractmethod
     def query_manuscripts_with_joins_by_chapter(
         self, id_: ChapterId
     ) -> Sequence[Manuscript]:
@@ -127,6 +131,9 @@ class Corpus:
         return self._inject_references_to_manuscripts(
             self._repository.query_manuscripts_with_joins_by_chapter(id_)
         )
+
+    def search_corpus_by_manuscript(self, number: str) -> List[Chapter]:
+        return self._repository.query_corpus_by_manuscript(number)
 
     def _inject_references_to_manuscripts(
         self, manuscripts: Sequence[Manuscript]
