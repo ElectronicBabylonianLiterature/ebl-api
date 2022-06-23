@@ -22,7 +22,7 @@ TRANSLATION = (
     TranslationLine([StringPart("not the title")], "de"),
     TranslationLine([StringPart("the title,")], "en"),
 )
-UNCERTAIN_FRAGMENTS = (UncertainFragment(MuseumNumber("X", "1"), True),)
+UNCERTAIN_FRAGMENTS = (UncertainFragment(MuseumNumber("X", "1")),)
 CHAPTER = ChapterListing(STAGE, CHAPTER_NAME, TRANSLATION, UNCERTAIN_FRAGMENTS)
 
 

@@ -35,8 +35,5 @@ tasks:
       - poetry run black ebl {{.CLI_ARGS}}
 
   start:
-    sources:
-      - ./ebl/**/*.py
-      - ./ebl/**/*.lark
     cmds:
       - poetry run waitress-serve --port=8000 --call ebl.app:get_app
