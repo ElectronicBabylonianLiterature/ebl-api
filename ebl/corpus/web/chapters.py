@@ -60,4 +60,6 @@ class ChaptersDisplayByManuscriptResource:
         number: str,
     ) -> None:
         manuscript_attestations = self._corpus.search_corpus_by_manuscript(number)
-        resp.media = ManuscriptAttestationSchema().dump(manuscript_attestations, many=True)
+        resp.media = ManuscriptAttestationSchema().dump(
+            manuscript_attestations, many=True
+        )

@@ -326,15 +326,15 @@ class TextSchema(Schema):
 
 
 class ManuscriptAttestationSchema(Schema):
-    text = fields.Nested(TextSchema)
-    chapter_id = fields.Nested(ChapterIdSchema, data_key="chapterId")
-    manuscript = fields.Nested(ManuscriptSchema)
+    text = fields.Nested(TextSchema, required=True)
+    chapter_id = fields.Nested(ChapterIdSchema, data_key="chapterId", required=True)
+    manuscript = fields.Nested(ManuscriptSchema, required=True)
 
     @post_load
     def make_manuscript_attestation(
         self, data: dict, **kwargs
     ) -> ManuscriptAttestation:
-        return Manuscript(
+        return ManuscriptAttestation(
             data["text"],
             data["chapter_id"],
             data["manuscript"],
