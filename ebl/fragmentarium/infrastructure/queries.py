@@ -224,7 +224,7 @@ def is_in_fragmentarium(local_field: str, as_: str) -> List[dict]:
     ]
 
 
-def join_joins() -> List[dict]:
+def join_joins(check_fragmentarium: bool = True) -> List[dict]:
     return [
         {
             "$lookup": {
@@ -267,8 +267,12 @@ def join_joins() -> List[dict]:
                     },
                     {"$limit": 1},
                     {"$unwind": "$fragments"},
-                    *is_in_fragmentarium(
-                        "fragments.museumNumber", "fragments.isInFragmentarium"
+                    *(
+                        is_in_fragmentarium(
+                            "fragments.museumNumber", "fragments.isInFragmentarium"
+                        )
+                        if check_fragmentarium
+                        else [{"$set": {"is_in_fragmentarium": "null"}}]
                     ),
                     {
                         "$group": {

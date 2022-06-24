@@ -238,15 +238,24 @@ class MongoTextRepository(TextRepository):
             raise chapter_not_found(id_) from error
 
     def query_corpus_by_manuscript(self, number: str):
-        manuscript_match = {
-            "manuscripts.museumNumber": MuseumNumberSchema().dump(
-                MuseumNumber.of(number)
-            )
-        }
+
+        _number = MuseumNumberSchema().dump(MuseumNumber.of(number))
         cursor = self._chapters.aggregate(
             [
                 {"$unwind": "$manuscripts"},
-                {"$match": manuscript_match},
+                {"$set": {"museumNumber": "$manuscripts.museumNumber"}},
+                *join_joins(False),
+                {"$unwind": "$joins"},
+                {"$set": {"manuscripts.joins": "$joins"}},
+                {
+                    "$match": {
+                        "$or": [
+                            {"manuscripts.museumNumber": _number},
+                            {"manuscripts.joins.museumNumber": _number},
+                        ]
+                    }
+                },
+                {"$set": {"manuscripts.joins": ["$joins"]}},
                 {
                     "$replaceRoot": {
                         "newRoot": {
