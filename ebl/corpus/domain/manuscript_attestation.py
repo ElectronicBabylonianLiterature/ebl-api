@@ -11,5 +11,5 @@ class ManuscriptAttestation:
     manuscript: Manuscript
 
     @property
-    def siglum(self) -> Siglum:
-        return self.manuscript.siglum
+    def manuscriptSiglum(self) -> Siglum:
+        return str(self.manuscript.siglum)
