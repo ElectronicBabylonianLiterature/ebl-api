@@ -237,25 +237,14 @@ class MongoTextRepository(TextRepository):
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
-    def query_corpus_by_manuscript(self, number: str):
-
-        _number = MuseumNumberSchema().dump(MuseumNumber.of(number))
+    def query_corpus_by_manuscript(self, number: List[MuseumNumber]):
+        _numbers = MuseumNumberSchema().dump(number, many=True)
         cursor = self._chapters.aggregate(
             [
                 {"$unwind": "$manuscripts"},
-                {"$set": {"museumNumber": "$manuscripts.museumNumber"}},
-                *join_joins(False),
-                {"$unwind": "$joins"},
-                {"$set": {"manuscripts.joins": "$joins"}},
                 {
-                    "$match": {
-                        "$or": [
-                            {"manuscripts.museumNumber": _number},
-                            {"manuscripts.joins.museumNumber": _number},
-                        ]
-                    }
+                    "$match": {"manuscripts.museumNumber": {"$in" : _numbers}},
                 },
-                {"$set": {"manuscripts.joins": ["$joins"]}},
                 {
                     "$replaceRoot": {
                         "newRoot": {

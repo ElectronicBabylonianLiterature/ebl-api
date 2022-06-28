@@ -77,7 +77,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
-    chapters = ChaptersDisplayByManuscriptResource(corpus)
+    chapters = ChaptersDisplayByManuscriptResource(corpus, finder)
 
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}/match", fragment_matcher)
