@@ -1,6 +1,6 @@
 import attr
-from ebl.corpus.domain.text import ChapterListing, Text
-from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.text import Text
+from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.chapter import ChapterId
 
 
@@ -11,5 +11,5 @@ class ManuscriptAttestation:
     manuscript: Manuscript
 
     @property
-    def manuscript_siglum(self) -> Siglum:
+    def manuscript_siglum(self) -> str:
         return str(self.manuscript.siglum)

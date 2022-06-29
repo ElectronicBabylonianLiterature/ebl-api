@@ -328,7 +328,10 @@ class ManuscriptAttestationSchema(Schema):
     text = fields.Nested(TextSchema, required=True)
     chapter_id = fields.Nested(ChapterIdSchema, data_key="chapterId", required=True)
     manuscript = fields.Nested(ManuscriptSchema, required=True)
-    manuscript_siglum = fields.String(load_default="", data_key="manuscriptSiglum",)
+    manuscript_siglum = fields.String(
+        load_default="",
+        data_key="manuscriptSiglum",
+    )
 
     @post_load
     def make_manuscript_attestation(

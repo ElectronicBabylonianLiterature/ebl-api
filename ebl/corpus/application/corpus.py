@@ -26,6 +26,7 @@ from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
@@ -75,7 +76,9 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def query_corpus_by_manuscript(self, number: MuseumNumber) -> List[Chapter]:
+    def query_corpus_by_manuscript(
+        self, museum_numbers: List[MuseumNumber]
+    ) -> List[ManuscriptAttestation]:
         ...
 
     @abstractmethod
@@ -132,8 +135,10 @@ class Corpus:
             self._repository.query_manuscripts_with_joins_by_chapter(id_)
         )
 
-    def search_corpus_by_manuscript(self, number: str) -> List[Chapter]:
-        return self._repository.query_corpus_by_manuscript(number)
+    def search_corpus_by_manuscript(
+        self, museum_numbers: List[MuseumNumber]
+    ) -> List[ManuscriptAttestation]:
+        return self._repository.query_corpus_by_manuscript(museum_numbers)
 
     def _inject_references_to_manuscripts(
         self, manuscripts: Sequence[Manuscript]

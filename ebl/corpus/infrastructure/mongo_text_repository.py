@@ -38,6 +38,7 @@ from ebl.transliteration.infrastructure.collections import (
 from ebl.corpus.infrastructure.chapter_query_filters import (
     filter_query_by_transliteration,
 )
+from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -237,13 +238,18 @@ class MongoTextRepository(TextRepository):
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
-    def query_corpus_by_manuscript(self, number: List[MuseumNumber]):
-        _numbers = MuseumNumberSchema().dump(number, many=True)
+    def query_corpus_by_manuscript(
+        self, museum_numbers: List[MuseumNumber]
+    ) -> List[ManuscriptAttestation]:
         cursor = self._chapters.aggregate(
             [
                 {"$unwind": "$manuscripts"},
                 {
-                    "$match": {"manuscripts.museumNumber": {"$in" : _numbers}},
+                    "$match": {
+                        "manuscripts.museumNumber": {
+                            "$in": MuseumNumberSchema().dump(museum_numbers, many=True)
+                        }
+                    },
                 },
                 {
                     "$replaceRoot": {

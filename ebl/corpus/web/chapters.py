@@ -8,7 +8,6 @@ from ebl.corpus.application.schemas import ManuscriptAttestationSchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 
 class ChaptersResource:
@@ -65,8 +64,12 @@ class ChaptersDisplayByManuscriptResource:
     ) -> None:
         museum_number = MuseumNumber.of(number)
         fragment = self._fragment_finder.find(museum_number)[0]
-        museum_numbers = [join.museum_number for join in flatten_deep(fragment.joins.fragments)]
-        manuscript_attestations = self._corpus.search_corpus_by_manuscript(museum_numbers)
+        museum_numbers = [
+            join.museum_number for join in flatten_deep(fragment.joins.fragments)
+        ]
+        manuscript_attestations = self._corpus.search_corpus_by_manuscript(
+            museum_numbers
+        )
         resp.media = ManuscriptAttestationSchema().dump(
             manuscript_attestations, many=True
         )
