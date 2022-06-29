@@ -293,6 +293,7 @@ class TextFactory(factory.Factory):
 class ManuscriptAttestationFactory(factory.Factory):
     class Meta:
         model = ManuscriptAttestation
+
     class Params:
         chapter = factory.SubFactory(ChapterFactory)
 
