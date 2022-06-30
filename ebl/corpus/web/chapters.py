@@ -64,8 +64,10 @@ class ChaptersDisplayByManuscriptResource:
     ) -> None:
         museum_number = MuseumNumber.of(number)
         fragment = self._fragment_finder.find(museum_number)[0]
-        museum_numbers = [
-            join.museum_number for join in flatten_deep(fragment.joins.fragments)
+        museum_numbers = [museum_number] + [
+            join.museum_number
+            for join in flatten_deep(fragment.joins.fragments)
+            if join.museum_number != museum_number
         ]
         manuscript_attestations = self._corpus.search_corpus_by_manuscript(
             museum_numbers

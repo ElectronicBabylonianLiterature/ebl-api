@@ -317,5 +317,3 @@ def test_search_fragment_no_query(client):
 def test_search_invalid_params(client, parameters):
     result = client.simulate_get("/fragments", params=parameters)
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-# TODO: Add manuscript/corpus test

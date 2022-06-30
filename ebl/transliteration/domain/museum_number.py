@@ -59,6 +59,16 @@ class MuseumNumber:
         else:
             return f"{self.prefix}.{self.number}"
 
+    def __eq__(self, other):
+        if not isinstance(other, MyClass):
+            return NotImplemented
+
+        return (
+            self.prefix == other.prefix
+            and self.number == other.number
+            and self.suffix == other.suffix
+        )
+
     @property
     def _prefix_order(self) -> Tuple[int, int, str]:
         return (
