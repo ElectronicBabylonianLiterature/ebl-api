@@ -1,11 +1,7 @@
 import falcon
-import pytest
-import attr
-import json
 
 from ebl.corpus.application.schemas import ManuscriptAttestationSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.corpus.domain.chapter import Chapter
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.factories.corpus import (
     TextFactory,

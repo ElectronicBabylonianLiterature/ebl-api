@@ -60,7 +60,7 @@ class MuseumNumber:
             return f"{self.prefix}.{self.number}"
 
     def __eq__(self, other):
-        if not isinstance(other, MyClass):
+        if not isinstance(other, MuseumNumber):
             return NotImplemented
 
         return (
