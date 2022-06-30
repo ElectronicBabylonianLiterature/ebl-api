@@ -70,7 +70,9 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
         colophon_lines_in_query={"1": [0]}
     ),
 )
-MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.create(
+
+
+MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.build(
     text=attr.evolve(TEXT, references=()),
     chapter_id=CHAPTER.id_,
     manuscript=CHAPTER.manuscripts[0],
