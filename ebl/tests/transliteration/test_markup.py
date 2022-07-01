@@ -12,6 +12,7 @@ from ebl.transliteration.domain.markup import (
     StringPart,
     rstrip,
     title_case,
+    titlecase,
     to_title,
 )
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
@@ -48,8 +49,8 @@ def test_part_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
 @pytest.mark.parametrize(
     "part,expected",
     [
-        (StringPart(TEXT), StringPart(TEXT.title())),
-        (EmphasisPart(TEXT), EmphasisPart(TEXT.title())),
+        (StringPart(TEXT), StringPart(titlecase(TEXT))),
+        (EmphasisPart(TEXT), EmphasisPart(titlecase(TEXT))),
         (LANGUAGE_PART, LANGUAGE_PART),
         (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
     ],
