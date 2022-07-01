@@ -10,7 +10,7 @@ from ebl.transliteration.domain.translation_line import (
     DEFAULT_LANGUAGE,
     TranslationLine,
 )
-from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.line_number import AbstractLineNumber, OldLineNumber
 from ebl.transliteration.domain.markup import MarkupPart, to_title
 
 
@@ -30,6 +30,7 @@ def get_default_translation(
 @attr.s(frozen=True, auto_attribs=True)
 class LineDisplay:
     number: AbstractLineNumber
+    old_line_numbers: Sequence[OldLineNumber]
     is_second_line_of_parallelism: bool
     is_beginning_of_section: bool
     variants: Sequence[LineVariant]
@@ -43,6 +44,7 @@ class LineDisplay:
     def of_line(line: Line) -> "LineDisplay":
         return LineDisplay(
             line.number,
+            tuple(),
             line.is_second_line_of_parallelism,
             line.is_beginning_of_section,
             line.variants,

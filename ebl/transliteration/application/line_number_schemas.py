@@ -3,7 +3,13 @@ from typing import Mapping, Type
 from marshmallow import EXCLUDE, Schema, fields, post_load, validate
 from marshmallow_oneofschema import OneOfSchema
 
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
+
+
+class OldLineNumberSchema(Schema):
+    number = fields.String(required=True)
+    reference = fields.Nested(ReferenceSchema, required=True)
 
 
 class LineNumberSchema(Schema):
