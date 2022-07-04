@@ -64,17 +64,17 @@ class ChaptersByManuscriptResource:
     ) -> None:
         try:
             museum_number = MuseumNumber.of(number)
-            fragment = self._fragment_finder.find(museum_number)[0]
-            museum_numbers = [
-                join.museum_number for join in flatten_deep(fragment.joins.fragments)
-            ] or [museum_number]
-            manuscript_attestations = self._corpus.search_corpus_by_manuscript(
-                museum_numbers
-            )
-            resp.media = ManuscriptAttestationSchema().dump(
-                manuscript_attestations, many=True
-            )
         except ValueError as error:
             raise DataError(
                 f'Invalid museum number.'
             ) from error
+        fragment = self._fragment_finder.find(museum_number)[0]
+        museum_numbers = [
+            join.museum_number for join in flatten_deep(fragment.joins.fragments)
+        ] or [museum_number]
+        manuscript_attestations = self._corpus.search_corpus_by_manuscript(
+            museum_numbers
+        )
+        resp.media = ManuscriptAttestationSchema().dump(
+            manuscript_attestations, many=True
+        )
