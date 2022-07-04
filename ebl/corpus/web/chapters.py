@@ -50,7 +50,7 @@ class ChaptersDisplayResource:
         resp.media = ChapterDisplaySchema().dump(chapter)
 
 
-class ChaptersDisplayByManuscriptResource:
+class ChaptersByManuscriptResource:
     def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
         self._corpus = corpus
         self._fragment_finder = fragment_finder
@@ -62,16 +62,19 @@ class ChaptersDisplayByManuscriptResource:
         resp: falcon.Response,
         number: str,
     ) -> None:
-        museum_number = MuseumNumber.of(number)
-        fragment = self._fragment_finder.find(museum_number)[0]
-        museum_numbers = [museum_number] + [
-            join.museum_number
-            for join in flatten_deep(fragment.joins.fragments)
-            if join.museum_number != museum_number
-        ]
-        manuscript_attestations = self._corpus.search_corpus_by_manuscript(
-            museum_numbers
-        )
-        resp.media = ManuscriptAttestationSchema().dump(
-            manuscript_attestations, many=True
-        )
+        try:
+            museum_number = MuseumNumber.of(number)
+            fragment = self._fragment_finder.find(museum_number)[0]
+            museum_numbers = [
+                join.museum_number for join in flatten_deep(fragment.joins.fragments)
+            ] or [museum_number]
+            manuscript_attestations = self._corpus.search_corpus_by_manuscript(
+                museum_numbers
+            )
+            resp.media = ManuscriptAttestationSchema().dump(
+                manuscript_attestations, many=True
+            )
+        except ValueError as error:
+            raise DataError(
+                f'Invalid museum number.'
+            ) from error

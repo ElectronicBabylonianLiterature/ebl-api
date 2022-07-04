@@ -20,7 +20,7 @@ from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import make_statistics_resource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
-from ebl.corpus.web.chapters import ChaptersDisplayByManuscriptResource
+from ebl.corpus.web.chapters import ChaptersByManuscriptResource
 from ebl.corpus.application.corpus import Corpus
 
 
@@ -77,7 +77,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
-    chapters = ChaptersDisplayByManuscriptResource(corpus, finder)
+    chapters = ChaptersByManuscriptResource(corpus, finder)
 
     api.add_route("/fragments", fragment_search)
     api.add_route("/fragments/{number}/match", fragment_matcher)
