@@ -8,6 +8,7 @@ from ebl.corpus.application.schemas import ManuscriptAttestationSchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.errors import DataError
 
 
 class ChaptersResource:
@@ -65,9 +66,7 @@ class ChaptersByManuscriptResource:
         try:
             museum_number = MuseumNumber.of(number)
         except ValueError as error:
-            raise DataError(
-                f'Invalid museum number.'
-            ) from error
+            raise DataError(f"Invalid museum number {number}.") from error
         fragment = self._fragment_finder.find(museum_number)[0]
         museum_numbers = [
             join.museum_number for join in flatten_deep(fragment.joins.fragments)
