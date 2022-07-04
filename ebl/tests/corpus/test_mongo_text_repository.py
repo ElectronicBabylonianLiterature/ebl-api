@@ -72,13 +72,6 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
 )
 
 
-MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.build(
-    text=attr.evolve(TEXT, references=()),
-    chapter_id=CHAPTER.id_,
-    manuscript=CHAPTER.manuscripts[0],
-)
-
-
 def when_text_in_collection(database, text=TEXT) -> None:
     database[TEXTS_COLLECTION].insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
@@ -287,6 +280,12 @@ def test_query_corpus_by_manuscript(database, text_repository) -> None:
     when_text_in_collection(database, text=attr.evolve(TEXT, references=()))
     when_chapter_in_collection(database)
 
+    expected_manuscript_attestation = ManuscriptAttestationFactory.build(
+        text=attr.evolve(TEXT, references=()),
+        chapter_id=CHAPTER.id_,
+        manuscript=CHAPTER.manuscripts[0],
+    )
+
     assert text_repository.query_corpus_by_manuscript(
         [CHAPTER.manuscripts[0].museum_number]
-    ) == [MANUSCRIPT_ATTESTATION]
+    ) == [expected_manuscript_attestation]

@@ -35,7 +35,6 @@ MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.build(
 
 
 def test_search_fragment_attestations_in_corpus(client, fragmentarium, text_repository):
-
     fragmentarium.create(FRAGMENT)
     text_repository.create(TEXT)
     text_repository.create_chapter(CHAPTER)
