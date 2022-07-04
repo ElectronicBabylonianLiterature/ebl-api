@@ -3,13 +3,21 @@ from typing import Mapping, Type
 from marshmallow import EXCLUDE, Schema, fields, post_load, validate
 from marshmallow_oneofschema import OneOfSchema
 
-from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
+from ebl.transliteration.domain.line_number import (
+    LineNumber,
+    LineNumberRange,
+    OldLineNumber,
+)
 
 
 class OldLineNumberSchema(Schema):
     number = fields.String(required=True)
-    reference = fields.Nested(ReferenceSchema, required=True)
+    reference = fields.Nested(ApiReferenceSchema, required=True)
+
+    @post_load
+    def make_old_line_number(self, data: dict, **kwargs) -> OldLineNumber:
+        return OldLineNumber(data["number"], data["reference"])
 
 
 class LineNumberSchema(Schema):

@@ -33,7 +33,10 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.schemas import ValueEnum
 from ebl.transliteration.application.label_schemas import labels
-from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_number_schemas import (
+    OneOfLineNumberSchema,
+    OldLineNumberSchema,
+)
 from ebl.transliteration.application.line_schemas import (
     NoteLineSchema,
     TranslationLineSchema,
@@ -195,6 +198,9 @@ class LineVariantSchema(Schema):
 
 class LineSchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
+    old_line_numbers = fields.Nested(
+        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=tuple()
+    )
     variants = fields.Nested(
         LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
     )
