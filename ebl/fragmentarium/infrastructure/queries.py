@@ -267,8 +267,10 @@ def join_joins() -> List[dict]:
                     },
                     {"$limit": 1},
                     {"$unwind": "$fragments"},
-                    *is_in_fragmentarium(
-                        "fragments.museumNumber", "fragments.isInFragmentarium"
+                    *(
+                        is_in_fragmentarium(
+                            "fragments.museumNumber", "fragments.isInFragmentarium"
+                        )
                     ),
                     {
                         "$group": {
