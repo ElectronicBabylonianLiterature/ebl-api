@@ -1,10 +1,14 @@
 import falcon
-
+from pydash.arrays import flatten_deep
 from ebl.corpus.application.corpus import Corpus
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
+from ebl.corpus.application.schemas import ManuscriptAttestationSchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.errors import DataError
 
 
 class ChaptersResource:
@@ -45,3 +49,31 @@ class ChaptersDisplayResource:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         chapter = self._corpus.find_chapter_for_display(chapter_id)
         resp.media = ChapterDisplaySchema().dump(chapter)
+
+
+class ChaptersByManuscriptResource:
+    def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
+        self._corpus = corpus
+        self._fragment_finder = fragment_finder
+
+    @falcon.before(require_scope, "read:texts")
+    def on_get(
+        self,
+        req: falcon.Request,
+        resp: falcon.Response,
+        number: str,
+    ) -> None:
+        try:
+            museum_number = MuseumNumber.of(number)
+        except ValueError as error:
+            raise DataError(f"Invalid museum number {number}.") from error
+        fragment = self._fragment_finder.find(museum_number)[0]
+        museum_numbers = [
+            join.museum_number for join in flatten_deep(fragment.joins.fragments)
+        ] or [museum_number]
+        manuscript_attestations = self._corpus.search_corpus_by_manuscript(
+            museum_numbers
+        )
+        resp.media = ManuscriptAttestationSchema().dump(
+            manuscript_attestations, many=True
+        )
