@@ -59,6 +59,17 @@ class MuseumNumber:
         else:
             return f"{self.prefix}.{self.number}"
 
+    def __eq__(self, other):
+        return (
+            (
+                self.prefix == other.prefix
+                and self.number == other.number
+                and self.suffix == other.suffix
+            )
+            if isinstance(other, MuseumNumber)
+            else NotImplemented
+        )
+
     @property
     def _prefix_order(self) -> Tuple[int, int, str]:
         return (
@@ -79,8 +90,7 @@ class MuseumNumber:
 
     @staticmethod
     def of(source: str) -> "MuseumNumber":
-        match = re.compile(r"(.+?)\.([^.]+)(?:\.([^.]+))?").fullmatch(source)
-        if match:
-            return MuseumNumber(match.group(1), match.group(2), match.group(3) or "")
+        if match := re.compile(r"(.+?)\.([^.]+)(?:\.([^.]+))?").fullmatch(source):
+            return MuseumNumber(match[1], match[2], match[3] or "")
         else:
             raise ValueError(f"'{source}' is not a valid museum number.")

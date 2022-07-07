@@ -16,6 +16,7 @@ from ebl.tests.factories.corpus import (
     ManuscriptFactory,
     TextFactory,
     ChapterQueryColophonLinesFactory,
+    ManuscriptAttestationFactory,
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
@@ -273,3 +274,18 @@ def test_query_manuscripts_with_joins_by_chapter(database, text_repository) -> N
     assert text_repository.query_manuscripts_with_joins_by_chapter(CHAPTER.id_) == [
         attr.evolve(CHAPTER.manuscripts[0], joins=Joins(((join,),)))
     ]
+
+
+def test_query_corpus_by_manuscript(database, text_repository) -> None:
+    when_text_in_collection(database, text=attr.evolve(TEXT, references=()))
+    when_chapter_in_collection(database)
+
+    expected_manuscript_attestation = ManuscriptAttestationFactory.build(
+        text=attr.evolve(TEXT, references=()),
+        chapter_id=CHAPTER.id_,
+        manuscript=CHAPTER.manuscripts[0],
+    )
+
+    assert text_repository.query_corpus_by_manuscript(
+        [CHAPTER.manuscripts[0].museum_number]
+    ) == [expected_manuscript_attestation]

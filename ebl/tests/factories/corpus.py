@@ -49,6 +49,7 @@ from ebl.transliteration.domain.tokens import (
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
+from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 
 
 class OldSiglumFactory(factory.Factory):
@@ -287,3 +288,15 @@ class TextFactory(factory.Factory):
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )
+
+
+class ManuscriptAttestationFactory(factory.Factory):
+    class Meta:
+        model = ManuscriptAttestation
+
+    class Params:
+        chapter = factory.SubFactory(ChapterFactory)
+
+    text = factory.SubFactory(TextFactory)
+    chapter_id = factory.SelfAttribute("chapter.id_")
+    manuscript = factory.SubFactory(ManuscriptFactory)
