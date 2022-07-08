@@ -59,7 +59,7 @@ class TextPart(MarkupPart):
     def title_case(self: TP) -> TP:
         if self.convert_to_title:
             return attr.evolve(self, text=titlecase(self.text))
-        
+
         return self
 
 
