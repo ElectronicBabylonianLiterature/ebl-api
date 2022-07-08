@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 import re
-from typing import Iterable, Pattern, Sequence, Tuple, TypeVar
+from typing import Iterable, Pattern, Sequence, Tuple, TypeVar, Optional
 
 import attr
 
@@ -51,12 +51,16 @@ class MarkupPart(ABC):
 @attr.s(frozen=True, auto_attribs=True)
 class TextPart(MarkupPart):
     text: str
+    convert_to_title: Optional[bool] = True
 
     def rstrip(self: TP) -> TP:
         return attr.evolve(self, text=self.text.rstrip(PUNCTUATION))
 
     def title_case(self: TP) -> TP:
-        return attr.evolve(self, text=titlecase(self.text))
+        if self.convert_to_title:
+            return attr.evolve(self, text=titlecase(self.text))
+        
+        return self
 
 
 @attr.s(frozen=True, auto_attribs=True)

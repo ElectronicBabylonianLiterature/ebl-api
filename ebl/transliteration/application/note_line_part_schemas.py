@@ -17,18 +17,24 @@ from ebl.transliteration.domain.markup import (
 
 class StringPartSchema(Schema):
     text = fields.String(required=True)
+    convert_to_title = fields.Boolean(
+        data_key="convertToTitle", load_default=True, load_only=True
+    )
 
     @post_load
     def make_part(self, data, **kwargs) -> StringPart:
-        return StringPart(data["text"])
+        return StringPart(data["text"], data["convert_to_title"])
 
 
 class EmphasisPartSchema(Schema):
     text = fields.String(required=True)
+    convert_to_title = fields.Boolean(
+        data_key="convertToTitle", load_default=True, load_only=True
+    )
 
     @post_load
     def make_part(self, data, **kwargs) -> EmphasisPart:
-        return EmphasisPart(data["text"])
+        return EmphasisPart(data["text"], data["convert_to_title"])
 
 
 class LanguagePartSchema(Schema):
