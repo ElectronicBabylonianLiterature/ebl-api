@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 import pymongo
 from pymongo.database import Database
@@ -195,17 +195,20 @@ class MongoTextRepository(TextRepository):
             },
         )
 
-    def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
+    def query_by_transliteration(self, query: TransliterationQuery, pagination_index: int) -> Tuple[List[Chapter], int]:
+        LIMIT = 30
+        query = {"signs": {"$regex": query.regexp}},
 
         cursor = self._chapters.find_many(
-            {"signs": {"$regex": query.regexp}},
+            query,
             projection={"_id": False},
-            limit=100,
-        )
+        ).skip(LIMIT * pagination_index).limit(LIMIT)
+
         return ChapterSchema().load(
             filter_query_by_transliteration(query, cursor),
             many=True,
-        )
+        ), self._texts.count_documents(query)
+
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:

@@ -27,3 +27,9 @@ class ChapterInfo:
             matching_lines,
             matching_colophon_lines,
         )
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ChapterInfosPagination:
+    chapter_infos = Sequence[ChapterInfo]
+    total_count= int

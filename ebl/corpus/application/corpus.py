@@ -17,7 +17,7 @@ from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
-from ebl.corpus.domain.chapter_info import ChapterInfo
+from ebl.corpus.domain.chapter_info import ChapterInfo, ChapterInfosPagination
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
@@ -68,7 +68,7 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
+    def query_by_transliteration(self, query: TransliterationQuery, pagination_index: int) -> List[Chapter]:
         ...
 
     @abstractmethod
@@ -149,13 +149,13 @@ class Corpus:
         except NotFoundError as error:
             raise Defect(error) from error
 
-    def search_transliteration(self, query: TransliterationQuery) -> List[ChapterInfo]:
+    def search_transliteration(self, query: TransliterationQuery, pagination_index: number) -> List[ChapterInfosPagination]:
         return (
             []
             if query.is_empty()
             else [
                 ChapterInfo.of(chapter, query)
-                for chapter in self._repository.query_by_transliteration(query)
+                for chapter in self._repository.query_by_transliteration(query, number)
             ]
         )
 
