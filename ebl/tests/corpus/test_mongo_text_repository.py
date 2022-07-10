@@ -221,9 +221,9 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
 )
 def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
-    result = text_repository.query_by_transliteration(TransliterationQuery(signs), 0)
+    result = text_repository.query_by_transliteration(TransliterationQuery(signs))
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
-    assert result == (expected, len(expected))
+    assert result == expected
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:

@@ -1,12 +1,8 @@
 import falcon
-
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.web.chapter_info_schema import (
-    ChapterInfosPaginationSchema,
-)
+from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema, ChapterInfosPaginationSchema
 from ebl.corpus.web.text_schema import ApiTextSchema
 from ebl.corpus.web.text_utils import create_text_id
-from ebl.errors import DataError
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
@@ -47,10 +43,5 @@ class TextSearchResource:
         query = self._transliteration_query_factory.create(
             req.params["transliteration"]
         )
-        try:
-            pagination_index = int(req.params["paginationIndex"])
-            chapters = self._corpus.search_transliteration(query, pagination_index)
-            print()
-        except Exception as error:
-            raise DataError("Pagination Index has to be a number") from error
-        resp.media = ChapterInfosPaginationSchema().dump(chapters)
+        chapters = self._corpus.search_transliteration(query, req.params["paginationIndex"])
+        resp.media = ChapterInfosPaginationSchema().dump(chapters, many=True)

@@ -68,9 +68,7 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_transliteration(
-        self, query: TransliterationQuery, pagination_index: int
-    ) -> Tuple[Sequence[Chapter], int]:
+    def query_by_transliteration(self, query: TransliterationQuery, pagination_index: int) -> List[Chapter]:
         ...
 
     @abstractmethod
@@ -151,18 +149,15 @@ class Corpus:
         except NotFoundError as error:
             raise Defect(error) from error
 
-    def search_transliteration(
-        self, query: TransliterationQuery, pagination_index: int
-    ) -> ChapterInfosPagination:
-        if query.is_empty():
-            return ChapterInfosPagination([], 0)
-        else:
-            chapters, total_count = self._repository.query_by_transliteration(
-                query, pagination_index
-            )
-            return ChapterInfosPagination(
-                [ChapterInfo.of(chapter, query) for chapter in chapters], total_count
-            )
+    def search_transliteration(self, query: TransliterationQuery, pagination_index: number) -> List[ChapterInfosPagination]:
+        return (
+            []
+            if query.is_empty()
+            else [
+                ChapterInfo.of(chapter, query)
+                for chapter in self._repository.query_by_transliteration(query, number)
+            ]
+        )
 
     def list(self) -> List[Text]:
         return self._repository.list()
