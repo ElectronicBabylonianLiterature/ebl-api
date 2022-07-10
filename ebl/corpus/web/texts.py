@@ -1,6 +1,6 @@
 import falcon
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema, ChapterInfosPaginationSchema
+from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
 from ebl.corpus.web.text_schema import ApiTextSchema
 from ebl.corpus.web.text_utils import create_text_id
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -43,5 +43,5 @@ class TextSearchResource:
         query = self._transliteration_query_factory.create(
             req.params["transliteration"]
         )
-        chapters = self._corpus.search_transliteration(query, req.params["paginationIndex"])
-        resp.media = ChapterInfosPaginationSchema().dump(chapters, many=True)
+        chapters = self._corpus.search_transliteration(query)
+        resp.media = ChapterInfoSchema().dump(chapters, many=True)
