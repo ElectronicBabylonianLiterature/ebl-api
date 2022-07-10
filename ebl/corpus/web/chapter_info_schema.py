@@ -18,9 +18,13 @@ class ChapterInfoSchema(Schema):
         data_key="matchingColophonLines",
     )
 
+
 class ChapterInfosPaginationSchema(Schema):
-    chapter_infos = fields.Nested(ChapterInfoSchema,  many=True,
+    chapter_infos = fields.Nested(
+        ChapterInfoSchema,
+        many=True,
         required=True,
         dump_only=True,
-        data_key="fragmentInfos",)
+        data_key="chapterInfos",
+    )
     total_count = fields.Integer(required=True, dump_only=True, data_key="totalCount")
