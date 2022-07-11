@@ -156,13 +156,12 @@ class Corpus:
     ) -> ChapterInfosPagination:
         if query.is_empty():
             return ChapterInfosPagination([], 0)
-        else:
-            chapters, total_count = self._repository.query_by_transliteration(
-                query, pagination_index
-            )
-            return ChapterInfosPagination(
-                [ChapterInfo.of(chapter, query) for chapter in chapters], total_count
-            )
+        chapters, total_count = self._repository.query_by_transliteration(
+            query, pagination_index
+        )
+        return ChapterInfosPagination(
+            [ChapterInfo.of(chapter, query) for chapter in chapters], total_count
+        )
 
     def list(self) -> List[Text]:
         return self._repository.list()
