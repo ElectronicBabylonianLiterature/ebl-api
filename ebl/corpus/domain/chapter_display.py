@@ -39,6 +39,14 @@ class LineDisplay:
     def title(self) -> Sequence[MarkupPart]:
         return to_title(get_default_translation(self.translation))
 
+    @property
+    def atf(self) -> str:
+        atf_line_variants = []
+        translation = '\n'.join([translation.atf for translation in self.translation])
+        for reconstruction, manuscripts in [variant.atf_parts for variant in self.variants]:
+            atf_line_variants.append(f'{self.number.atf} {reconstruction}\n{translation}\n{manuscripts}')
+        return '\n'.join(atf_line_variants)
+
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
         return LineDisplay(
@@ -62,6 +70,10 @@ class ChapterDisplay:
     @property
     def title(self) -> Sequence[MarkupPart]:
         return self.lines[0].title if self.lines else tuple()
+
+    @property
+    def atf(self) -> str:
+        return '\n'.join([line.atf for line in self.lines])
 
     @staticmethod
     def of_chapter(text: Text, chapter: Chapter) -> "ChapterDisplay":

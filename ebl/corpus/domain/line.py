@@ -35,12 +35,32 @@ class ManuscriptLine:
     omitted_words: Sequence[int] = tuple()
 
     @property
+    def atf(self) -> str:
+        label = f'{self.atf_label} ' if self.atf_label else self.atf_label
+        return f'{label}{self.line.atf}'
+
+    @property
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
             (self.manuscript_id, self.labels, self.line.line_number)
             if isinstance(self.line, TextLine)
             else None
         )
+
+    @property
+    def atf_label(self) -> str:
+        # TODO: normalize to match eBL conventions.
+        if not self.label:
+            return ''
+        _label = []
+        for label_element in pydash.arrays.flatten(self.label):
+            if hasattr(label_element, 'to_atf'):
+                _label.append(label_element.to_atf())
+            elif hasattr(label_element, 'atf'):
+                _label.append(label_element.atf)
+            else:
+                _label.append(str(label_element))
+        return ' '.join(_label)
 
     @property
     def is_beginning_of_side(self) -> bool:
@@ -92,6 +112,12 @@ class LineVariant:
     @reconstruction.validator
     def validate_reconstruction(self, _, value):
         validate(value)
+
+    @property
+    def atf_parts(self) -> Sequence[str]:
+        reconstruction = ' '.join([token.value for token in self.reconstruction])
+        manuscripts = '\n'.join([manuscript.atf for manuscript in self.manuscripts])
+        return (reconstruction, manuscripts)
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
