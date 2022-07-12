@@ -49,8 +49,7 @@ class TextSearchResource:
         )
         try:
             pagination_index = int(req.params["paginationIndex"])
-            chapters = self._corpus.search_transliteration(query, pagination_index)
-            print()
         except Exception as error:
             raise DataError("Pagination Index has to be a number") from error
+        chapters = self._corpus.search_transliteration(query, pagination_index)
         resp.media = ChapterInfosPaginationSchema().dump(chapters)
