@@ -207,6 +207,7 @@ class MongoTextRepository(TextRepository):
             )
             .skip(LIMIT * pagination_index)
             .limit(LIMIT)
+            .allow_disk_use(True)
         )
 
         return ChapterSchema().load(
