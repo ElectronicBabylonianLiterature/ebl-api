@@ -20,9 +20,9 @@ def escape(unescaped: str) -> str:
     return SPECIAL_CHARACTERS.sub(lambda match: f"\\{match.group(0)}", unescaped)
 
 
-def titlecase(s):
+def titlecase(text: str) -> str:
     return re.sub(
-        r"[A-Za-z]+(['’][A-Za-z]+)?", lambda word: word.group(0).capitalize(), s
+        r"[A-Za-z]+(['’][A-Za-z]+)?", lambda word: word.group(0).capitalize(), text
     )
 
 
