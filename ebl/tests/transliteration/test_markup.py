@@ -19,12 +19,8 @@ from ebl.transliteration.domain.sign_tokens import Divider, Reading
 
 PUNCTUATION = ";,:.-–—"
 TEXT = "sed nec tortor varius, iaculis."
-LONG_TEXT = (
-    "Enkidu’s legs grew weary, whose [herd was] on [the move]"
-)
-LONG_TEXT_TITLECASE = (
-    "Enkidu’s Legs Grew Weary, Whose [Herd Was] On [The Move]"
-)
+LONG_TEXT = "Enkidu’s legs grew weary, whose [herd was] on [the move]"
+LONG_TEXT_TITLECASE = "Enkidu’s Legs Grew Weary, Whose [Herd Was] On [The Move]"
 LANGUAGE_PART = LanguagePart(
     Language.AKKADIAN, [Reading.of_name("kur"), Divider.of(":")]
 )
@@ -53,13 +49,13 @@ def test_part_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
 
 
 @pytest.mark.parametrize(
-    "parts,expected",
+    "text,expected",
     [
-        (titlecase(LONG_TEXT), LONG_TEXT_TITLECASE),
+        (LONG_TEXT, LONG_TEXT_TITLECASE),
     ],
 )
-def test_titlecase(parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]) -> None:
-    assert titlecase(parts) == expected
+def test_titlecase(text: str, expected: str) -> None:
+    assert titlecase(text) == expected
 
 
 @pytest.mark.parametrize(
