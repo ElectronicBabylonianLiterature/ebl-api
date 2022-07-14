@@ -60,11 +60,14 @@ def test_searching_texts(client, bibliography, sign_repository, signs, text_repo
     allow_references(chapter, bibliography)
     text_repository.create_chapter(chapter)
 
-    get_result = client.simulate_get("/textsearch?transliteration=ku")
+    get_result = client.simulate_get("/textsearch?transliteration=ku&paginationIndex=0")
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == [
-        ChapterInfoSchema().dump(
-            ChapterInfo.of(chapter, TransliterationQuery([["KU"]]))
-        )
-    ]
+    assert get_result.json == {
+        "chapterInfos": [
+            ChapterInfoSchema().dump(
+                ChapterInfo.of(chapter, TransliterationQuery([["KU"]]))
+            )
+        ],
+        "totalCount": 1,
+    }
