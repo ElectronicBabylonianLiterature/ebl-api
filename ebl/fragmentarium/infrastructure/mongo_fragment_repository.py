@@ -231,7 +231,8 @@ class MongoFragmentRepository(FragmentRepository):
             .limit(LIMIT)
             .collation(
                 Collation(locale="en", numericOrdering=True, alternate="shifted")
-            ).allow_disk_use(True)
+            )
+            .allow_disk_use(True)
         )
         return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
 
