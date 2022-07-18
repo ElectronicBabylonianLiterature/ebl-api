@@ -337,6 +337,9 @@ def test_text_lines() -> None:
         ]
     ]
 
+def test_text_atf() -> None:
+    print('!!!\n'+CHAPTER.atf)
+    assert CHAPTER.atf == 'xxx'
 
 def test_invalid_extent() -> None:
     with pytest.raises(ValueError):

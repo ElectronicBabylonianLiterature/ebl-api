@@ -46,6 +46,7 @@ class ChapterDisplaySchema(Schema):
     title = fields.List(fields.Nested(OneOfNoteLinePartSchema), dump_only=True)
     lines = fields.Nested(LineDisplaySchema, many=True, required=True)
     record = fields.Nested(RecordSchema, load_default=Record())
+    atf = fields.String(required=True)
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> ChapterDisplay:
@@ -56,4 +57,5 @@ class ChapterDisplaySchema(Schema):
             data["is_single_stage"],
             tuple(data["lines"]),
             data["record"],
+            data["atf"],
         )

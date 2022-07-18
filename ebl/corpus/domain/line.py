@@ -1,5 +1,5 @@
 from functools import singledispatch
-from typing import Optional, Sequence, Set, Tuple, Union, cast
+from typing import Optional, Sequence, Set, Tuple, Union, cast, Callable
 
 import attr
 import pydash
@@ -21,6 +21,7 @@ from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_t
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import AbstractWord
+from ebl.corpus.domain.manuscript import Manuscript, Siglum
 
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
@@ -35,11 +36,6 @@ class ManuscriptLine:
     omitted_words: Sequence[int] = tuple()
 
     @property
-    def atf(self) -> str:
-        label = f'{self.atf_label} ' if self.atf_label else self.atf_label
-        return f'{label}{self.line.atf}'
-
-    @property
     def label(self) -> Optional[ManuscriptLineLabel]:
         return (
             (self.manuscript_id, self.labels, self.line.line_number)
@@ -48,19 +44,10 @@ class ManuscriptLine:
         )
 
     @property
-    def atf_label(self) -> str:
-        # TODO: normalize to match eBL conventions.
-        if not self.label:
+    def line_prefix_atf(self) -> str:
+        if not self.labels:
             return ''
-        _label = []
-        for label_element in pydash.arrays.flatten(self.label):
-            if hasattr(label_element, 'to_atf'):
-                _label.append(label_element.to_atf())
-            elif hasattr(label_element, 'atf'):
-                _label.append(label_element.atf)
-            else:
-                _label.append(str(label_element))
-        return ' '.join(_label)
+        return ' '.join([label_element.to_value() for label_element in self.labels if hasattr(label_element, 'to_value')])
 
     @property
     def is_beginning_of_side(self) -> bool:
@@ -79,6 +66,13 @@ class ManuscriptLine:
     @property
     def is_empty(self) -> bool:
         return isinstance(self.line, EmptyLine)
+
+    def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
+        siglum = get_manuscript(self.manuscript_id).siglum
+        line_prefix = f'{self.line_prefix_atf} ' if self.line_prefix_atf else ''
+        paratext = "\n".join([paratext.atf for paratext in self.paratext])
+        paratext = f'\n{paratext}' if self.paratext else ''
+        return f'{siglum} {line_prefix}{self.line.atf}{paratext}'
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -114,10 +108,21 @@ class LineVariant:
         validate(value)
 
     @property
-    def atf_parts(self) -> Sequence[str]:
-        reconstruction = ' '.join([token.value for token in self.reconstruction])
-        manuscripts = '\n'.join([manuscript.atf for manuscript in self.manuscripts])
-        return (reconstruction, manuscripts)
+    def reconstruction_atf(self) -> str:
+        return '%n ' + ' '.join([token.value for token in self.reconstruction])
+
+    @property
+    def parallels_atf(self) -> str:
+        return '\n'.join(
+            [parallel.atf for parallel in self.parallel_lines]) if self.parallel_lines else ''
+
+    def get_manuscript_lines_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
+        return '\n'.join([manuscript_line.get_atf(get_manuscript) for manuscript_line in self.manuscripts])
+
+    @property
+    def intertext_atf(self) -> str:
+        # TODO: Check if this is correct & necessary.
+        return '$ ' + ' '.join([intertext.value for intertext in self.intertext]) if self.intertext else ''
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
@@ -210,6 +215,15 @@ class Line:
         if any(line.extent and line.extent.labels for line in value):
             raise ValueError("Labels are not allowed in line translations.")
 
+    def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
+        line_atf_parts = []
+        for variant, translation in zip(self.variants, self.translation):
+            reconstruction = f'{self.number.atf} {variant.reconstruction_atf}'
+            atf_blocks = [reconstruction, variant.parallels_atf, translation.atf,
+                          variant.intertext_atf, variant.get_manuscript_lines_atf(get_manuscript)]
+            line_atf_parts.append('\n'.join([atf for atf in atf_blocks if atf]))
+        return '\n\n'.join(line_atf_parts)
+
     @property
     def manuscript_ids(self) -> Sequence[int]:
         return [
@@ -235,7 +249,7 @@ class Line:
             .value()
         )
         if manuscript_line is None:
-            raise ValueError(f"No line foun for mauscript {manuscript_id}.")
+            raise ValueError(f"No line found for manuscript {manuscript_id}.")
         else:
             return manuscript_line
 
