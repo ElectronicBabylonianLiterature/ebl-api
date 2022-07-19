@@ -337,9 +337,22 @@ def test_text_lines() -> None:
         ]
     ]
 
+
 def test_text_atf() -> None:
-    print('!!!\n'+CHAPTER.atf)
-    assert CHAPTER.atf == 'xxx'
+    atf = ("1. %n buāru\n"
+           "// (a composition 7)\n"
+           "#tr.en: foo\n"
+           "NinOB1c o 1. ku\n"
+           "#note: note\n"
+           "$ single ruling\n"
+           "\n"
+           "2. %n buāru\n"
+           "NinOB1c \n"
+           "\n"
+           "3. %n buāru\n"
+           "NinOB1c 3. ku")
+    assert CHAPTER.atf == atf
+
 
 def test_invalid_extent() -> None:
     with pytest.raises(ValueError):

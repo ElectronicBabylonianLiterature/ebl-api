@@ -216,13 +216,16 @@ class Line:
             raise ValueError("Labels are not allowed in line translations.")
 
     def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
-        line_atf_parts = []
-        for variant, translation in zip(self.variants, self.translation):
+        line_atf_blocks = []
+        for index, variant in enumerate(self.variants):
             reconstruction = f'{self.number.atf} {variant.reconstruction_atf}'
-            atf_blocks = [reconstruction, variant.parallels_atf, translation.atf,
+            translation = self.translation[index].atf if len(
+                self.translation) > index else ''
+            atf_blocks = [reconstruction, variant.parallels_atf, translation,
                           variant.intertext_atf, variant.get_manuscript_lines_atf(get_manuscript)]
-            line_atf_parts.append('\n'.join([atf for atf in atf_blocks if atf]))
-        return '\n\n'.join(line_atf_parts)
+            line_atf_blocks.append(
+                '\n'.join([atf_block for atf_block in atf_blocks if atf_block]))
+        return '\n\n'.join(line_atf_blocks)
 
     @property
     def manuscript_ids(self) -> Sequence[int]:

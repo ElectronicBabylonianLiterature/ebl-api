@@ -126,7 +126,8 @@ class Chapter:
         return self.get_atf()
     
     def get_atf(self) -> Atf:
-        return '\n\n'.join([line.get_atf(self.get_manuscript) for line in self.lines])
+        atf_lines = [line.get_atf(self.get_manuscript) for line in self.lines]
+        return '\n\n'.join([atf_line for atf_line in atf_lines])
 
     @property
     def invalid_lines(self) -> Sequence[Tuple[Siglum, TextLineEntry]]:
