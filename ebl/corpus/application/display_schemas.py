@@ -2,7 +2,7 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
-from ebl.corpus.application.schemas import LineVariantSchema
+from ebl.corpus.application.schemas import LineVariantSchema, ManuscriptSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
@@ -46,7 +46,8 @@ class ChapterDisplaySchema(Schema):
     title = fields.List(fields.Nested(OneOfNoteLinePartSchema), dump_only=True)
     lines = fields.Nested(LineDisplaySchema, many=True, required=True)
     record = fields.Nested(RecordSchema, load_default=Record())
-    atf = fields.String(required=True)
+    manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
+    atf = fields.String(dump_only=True)
 
     @post_load
     def make_chapter(self, data: dict, **kwargs) -> ChapterDisplay:
@@ -57,5 +58,5 @@ class ChapterDisplaySchema(Schema):
             data["is_single_stage"],
             tuple(data["lines"]),
             data["record"],
-            data["atf"],
+            tuple(data["manuscripts"]),
         )

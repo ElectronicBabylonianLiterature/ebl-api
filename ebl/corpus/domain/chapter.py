@@ -22,7 +22,6 @@ from ebl.transliteration.domain.translation_line import (
 )
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
-from ebl.transliteration.domain.atf import Atf
 
 ChapterItem = Union["Chapter", Manuscript, Line, ManuscriptLine]
 
@@ -122,12 +121,8 @@ class Chapter:
         ]
 
     @property
-    def atf(self) -> Atf:
-        return self.get_atf()
-    
-    def get_atf(self) -> Atf:
-        atf_lines = [line.get_atf(self.get_manuscript) for line in self.lines]
-        return '\n\n'.join([atf_line for atf_line in atf_lines])
+    def atf(self) -> str:
+        return "\n\n".join([line.get_atf(self.get_manuscript) for line in self.lines])
 
     @property
     def invalid_lines(self) -> Sequence[Tuple[Siglum, TextLineEntry]]:

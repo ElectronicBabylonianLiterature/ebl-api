@@ -339,18 +339,20 @@ def test_text_lines() -> None:
 
 
 def test_text_atf() -> None:
-    atf = ("1. %n buāru\n"
-           "// (a composition 7)\n"
-           "#tr.en: foo\n"
-           "NinOB1c o 1. ku\n"
-           "#note: note\n"
-           "$ single ruling\n"
-           "\n"
-           "2. %n buāru\n"
-           "\n"
-           "3. %n buāru\n"
-           "NinOB1c 3. ku")
-    assert CHAPTER.atf == atf
+    expected_atf = (
+        "1. %n buāru\n"
+        "// (a composition 7)\n"
+        "#tr.en: foo\n"
+        "NinOB1c o 1. ku\n"
+        "#note: note\n"
+        "$ single ruling\n"
+        "\n"
+        "2. %n buāru\n"
+        "\n"
+        "3. %n buāru\n"
+        "NinOB1c 3. ku"
+    )
+    assert CHAPTER.atf == expected_atf
 
 
 def test_invalid_extent() -> None:

@@ -51,6 +51,7 @@ def test_get(client, text_repository, parallel_line_injector, text, chapter, url
             for line in chapter_display.lines
         ),
     )
+
     get_result = client.simulate_get(url)
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == ChapterDisplaySchema().dump(injected_chapter_display)

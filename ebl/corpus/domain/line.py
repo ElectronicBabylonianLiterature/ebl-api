@@ -21,7 +21,7 @@ from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_t
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import AbstractWord
-from ebl.corpus.domain.manuscript import Manuscript, Siglum
+from ebl.corpus.domain.manuscript import Manuscript
 
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
@@ -46,8 +46,14 @@ class ManuscriptLine:
     @property
     def line_prefix_atf(self) -> str:
         if not self.labels:
-            return ''
-        return ' '.join([label_element.to_value() for label_element in self.labels if hasattr(label_element, 'to_value')])
+            return ""
+        return " ".join(
+            [
+                label_element.to_value()
+                for label_element in self.labels
+                if hasattr(label_element, "to_value")
+            ]
+        )
 
     @property
     def is_beginning_of_side(self) -> bool:
@@ -69,12 +75,12 @@ class ManuscriptLine:
 
     def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
         if self.is_empty:
-            return ''
+            return ""
         siglum = get_manuscript(self.manuscript_id).siglum
-        line_prefix = f'{self.line_prefix_atf} ' if self.line_prefix_atf else ''
+        line_prefix = f"{self.line_prefix_atf} " if self.line_prefix_atf else ""
         paratext = "\n".join([paratext.atf for paratext in self.paratext])
-        paratext = f'\n{paratext}' if self.paratext else ''
-        return f'{siglum} {line_prefix}{self.line.atf}{paratext}'
+        paratext = f"\n{paratext}" if self.paratext else ""
+        return f"{siglum} {line_prefix}{self.line.atf}{paratext}"
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -111,20 +117,25 @@ class LineVariant:
 
     @property
     def reconstruction_atf(self) -> str:
-        return '%n ' + ' '.join([token.value for token in self.reconstruction])
+        return "%n " + " ".join([token.value for token in self.reconstruction])
 
     @property
     def parallels_atf(self) -> str:
-        return '\n'.join(
-            [parallel.atf for parallel in self.parallel_lines]) if self.parallel_lines else ''
+        return (
+            "\n".join([parallel.atf for parallel in self.parallel_lines])
+            if self.parallel_lines
+            else ""
+        )
 
-    def get_manuscript_lines_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
-        return '\n'.join([manuscript_line.get_atf(get_manuscript) for manuscript_line in self.manuscripts])
-
-    @property
-    def intertext_atf(self) -> str:
-        # TODO: Check if this is correct & necessary.
-        return '$ ' + ' '.join([intertext.value for intertext in self.intertext]) if self.intertext else ''
+    def get_manuscript_lines_atf(
+        self, get_manuscript: Callable[[int], Manuscript]
+    ) -> str:
+        return "\n".join(
+            [
+                manuscript_line.get_atf(get_manuscript)
+                for manuscript_line in self.manuscripts
+            ]
+        )
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
@@ -220,14 +231,20 @@ class Line:
     def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
         line_atf_blocks = []
         for index, variant in enumerate(self.variants):
-            reconstruction = f'{self.number.atf} {variant.reconstruction_atf}'
-            translation = self.translation[index].atf if len(
-                self.translation) > index else ''
-            atf_blocks = [reconstruction, variant.parallels_atf, translation,
-                          variant.intertext_atf, variant.get_manuscript_lines_atf(get_manuscript)]
+            reconstruction = f"{self.number.atf} {variant.reconstruction_atf}"
+            translation = (
+                self.translation[index].atf if len(self.translation) > index else ""
+            )
+            atf_blocks = [
+                reconstruction,
+                variant.parallels_atf,
+                translation,
+                variant.get_manuscript_lines_atf(get_manuscript),
+            ]
             line_atf_blocks.append(
-                '\n'.join([atf_block for atf_block in atf_blocks if atf_block]))
-        return '\n\n'.join(line_atf_blocks)
+                "\n".join([atf_block for atf_block in atf_blocks if atf_block])
+            )
+        return "\n\n".join(line_atf_blocks)
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
