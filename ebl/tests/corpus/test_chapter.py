@@ -347,7 +347,6 @@ def test_text_atf() -> None:
            "$ single ruling\n"
            "\n"
            "2. %n buāru\n"
-           "NinOB1c \n"
            "\n"
            "3. %n buāru\n"
            "NinOB1c 3. ku")

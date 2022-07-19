@@ -68,6 +68,8 @@ class ManuscriptLine:
         return isinstance(self.line, EmptyLine)
 
     def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
+        if self.is_empty:
+            return ''
         siglum = get_manuscript(self.manuscript_id).siglum
         line_prefix = f'{self.line_prefix_atf} ' if self.line_prefix_atf else ''
         paratext = "\n".join([paratext.atf for paratext in self.paratext])
