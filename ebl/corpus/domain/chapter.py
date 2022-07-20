@@ -121,10 +121,6 @@ class Chapter:
         ]
 
     @property
-    def atf(self) -> str:
-        return "\n\n".join([line.get_atf(self.get_manuscript) for line in self.lines])
-
-    @property
     def invalid_lines(self) -> Sequence[Tuple[Siglum, TextLineEntry]]:
         text_lines = self.text_lines
         return [

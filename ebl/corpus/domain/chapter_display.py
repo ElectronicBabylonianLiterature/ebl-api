@@ -15,6 +15,7 @@ from ebl.transliteration.domain.markup import MarkupPart, to_title
 from ebl.corpus.domain.manuscript import Manuscript
 import ebl.corpus.domain.chapter_validators as validators
 from ebl.errors import NotFoundError
+from ebl.transliteration.domain.atf import Atf
 
 
 def get_default_translation(
@@ -42,7 +43,7 @@ class LineDisplay:
     def title(self) -> Sequence[MarkupPart]:
         return to_title(get_default_translation(self.translation))
 
-    def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> str:
+    def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> Atf:
         line_atf_blocks = []
         for index, variant in enumerate(self.variants):
             reconstruction = f"{self.number.atf} {variant.reconstruction_atf}"
@@ -58,7 +59,7 @@ class LineDisplay:
             line_atf_blocks.append(
                 "\n".join([atf_block for atf_block in atf_blocks if atf_block])
             )
-        return "\n\n".join(line_atf_blocks)
+        return Atf("\n\n".join(line_atf_blocks))
 
     @staticmethod
     def of_line(line: Line) -> "LineDisplay":
@@ -92,8 +93,29 @@ class ChapterDisplay:
         return self.lines[0].title if self.lines else tuple()
 
     @property
-    def atf(self) -> str:
-        return "\n\n".join([line.get_atf(self.get_manuscript) for line in self.lines])
+    def atf(self) -> Atf:
+        atf_name = (
+            f"{self.id_.text_id} {self.text_name} "
+            f"{self.id_.stage.abbreviation} {self.id_.name}"
+        )
+        atf_header = f"&X000001 = {atf_name}"
+        atf_meta = "\n".join(
+            [atf_header, "#project: eblo"]
+            + [
+                f"#atf: {declaration}"
+                for declaration in [
+                    "lang akk-x-stdbab",
+                    "use unicode",
+                    "use math",
+                    "use legacy",
+                ]
+            ]
+        )
+        return Atf(
+            "\n\n".join(
+                [atf_meta] + [line.get_atf(self.get_manuscript) for line in self.lines]
+            )
+        )
 
     def get_manuscript(self, id_: int) -> Manuscript:
         try:
