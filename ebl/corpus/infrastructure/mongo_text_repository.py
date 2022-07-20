@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Sequence
 
 import pymongo
 from pymongo.database import Database
@@ -195,17 +195,25 @@ class MongoTextRepository(TextRepository):
             },
         )
 
-    def query_by_transliteration(self, query: TransliterationQuery) -> List[Chapter]:
-
-        cursor = self._chapters.find_many(
-            {"signs": {"$regex": query.regexp}},
-            projection={"_id": False},
-            limit=100,
+    def query_by_transliteration(
+        self, query: TransliterationQuery, pagination_index: int
+    ) -> Tuple[Sequence[Chapter], int]:
+        LIMIT = 30
+        mongo_query = {"signs": {"$regex": query.regexp}}
+        cursor = (
+            self._chapters.find_many(
+                mongo_query,
+                projection={"_id": False},
+            )
+            .skip(LIMIT * pagination_index)
+            .limit(LIMIT)
+            .allow_disk_use(True)
         )
+
         return ChapterSchema().load(
             filter_query_by_transliteration(query, cursor),
             many=True,
-        )
+        ), self._chapters.count_documents(mongo_query)
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
