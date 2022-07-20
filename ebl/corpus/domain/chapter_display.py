@@ -51,9 +51,9 @@ class LineDisplay:
                 self.translation[index].atf if len(self.translation) > index else ""
             )
             atf_blocks = [
+                translation,
                 reconstruction,
                 variant.parallels_atf,
-                translation,
                 variant.get_manuscript_lines_atf(get_manuscript),
             ]
             line_atf_blocks.append(

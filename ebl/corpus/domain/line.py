@@ -122,7 +122,7 @@ class LineVariant:
 
     @property
     def reconstruction_atf(self) -> Atf:
-        return Atf("%n " + " ".join([token.value for token in self.reconstruction]))
+        return Atf(" ".join([token.value for token in self.reconstruction]))
 
     @property
     def parallels_atf(self) -> Atf:
@@ -135,14 +135,11 @@ class LineVariant:
     def get_manuscript_lines_atf(
         self, get_manuscript: Callable[[int], Manuscript]
     ) -> Atf:
-        return Atf(
-            "\n".join(
-                [
-                    manuscript_line.get_atf(get_manuscript)
-                    for manuscript_line in self.manuscripts
-                ]
-            )
-        )
+        atf_lines = [
+            manuscript_line.get_atf(get_manuscript)
+            for manuscript_line in self.manuscripts
+        ]
+        return Atf("\n".join([atf_line for atf_line in atf_lines if atf_line]))
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
