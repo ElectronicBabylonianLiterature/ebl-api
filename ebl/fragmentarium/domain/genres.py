@@ -93,7 +93,7 @@ genres = (
     ("CANONICAL", "Divination", "Physiognomy", "Alamdimmû," "aḫû excerpt series"),
     ("CANONICAL", "Divination", "Physiognomy", "Alamdimmû", "Šumma Ea liballiṭka"),
     ("CANONICAL", "Divination", "Teratological"),
-    ("CANONICAL", "Divination", "Teratological", "Šumma izbu Principal Commentary"),
+    ("CANONICAL", "Divination", "Teratological", "Šumma izbu Principal Commentary),
     ("CANONICAL", "Divination", "Teratological", "Šumma izbu"),
     ("CANONICAL", "Divination", "Terrestrial"),
     ("CANONICAL", "Divination", "Terrestrial", "Šumma ālu"),
