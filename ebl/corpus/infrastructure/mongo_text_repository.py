@@ -253,8 +253,17 @@ class MongoTextRepository(TextRepository):
             [
                 {"$unwind": "$manuscripts"},
                 {
+                    "$set": {
+                        "museumNumbers": {
+                            "prefix": "$manuscripts.museumNumber.prefix",
+                            "number": "$manuscripts.museumNumber.number",
+                            "suffix": "$manuscripts.museumNumber.suffix",
+                        }
+                    }
+                },
+                {
                     "$match": {
-                        "manuscripts.museumNumber": {
+                        "museumNumbers": {
                             "$in": MuseumNumberSchema().dump(museum_numbers, many=True)
                         }
                     },
