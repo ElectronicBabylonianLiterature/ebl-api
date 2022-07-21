@@ -180,6 +180,7 @@ genres = (
     ("CANONICAL", "Lexicography", "Vocabularies", "Šarru"),
     ("CANONICAL", "Literature"),
     ("CANONICAL", "Literature", "Hymns"),
+    ("CANONICAL", "Literature", "Hymns", "Divine"),
     ("CANONICAL", "Literature", "Hymns", "Divine", "Bulluṭsa-rabi’s Hymn to Gula"),
     ("CANONICAL", "Literature", "Hymns", "Divine", "Great Prayer to Šamaš"),
     ("CANONICAL", "Literature", "Hymns", "Divine", "Hymn to Ištar (“Ištar 2”)"),
