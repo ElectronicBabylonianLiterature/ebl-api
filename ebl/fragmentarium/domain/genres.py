@@ -225,6 +225,7 @@ genres = (
     ("CANONICAL", "Literature", "Monologue and dialogue", "Instructions"),
     ("CANONICAL", "Literature", "Monologue and dialogue", "Love"),
     ("CANONICAL", "Literature", "Monologue and dialogue", "Ludlul bēl nēmeqi"),
+    ("CANONICAL", "Literature", "Monologue and dialogue", "Monologues"),
     ("CANONICAL", "Literature", "Monologue and dialogue", "Proverbs"),
     (
         "CANONICAL",
