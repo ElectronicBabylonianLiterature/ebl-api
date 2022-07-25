@@ -49,11 +49,9 @@ class ManuscriptLine:
         return (
             Atf(
                 " ".join(
-                    [
-                        label_element.to_value()
-                        for label_element in self.labels
-                        if hasattr(label_element, "to_value")
-                    ]
+                    label_element.to_value()
+                    for label_element in self.labels
+                    if hasattr(label_element, "to_value")
                 )
             )
             if self.labels
@@ -127,7 +125,7 @@ class LineVariant:
     @property
     def parallels_atf(self) -> Atf:
         return (
-            Atf("\n".join([parallel.atf for parallel in self.parallel_lines]))
+            Atf("\n".join(parallel.atf for parallel in self.parallel_lines))
             if self.parallel_lines
             else Atf("")
         )
@@ -139,7 +137,7 @@ class LineVariant:
             manuscript_line.get_atf(get_manuscript)
             for manuscript_line in self.manuscripts
         ]
-        return Atf("\n".join([atf_line for atf_line in atf_lines if atf_line]))
+        return Atf("\n".join(atf_line for atf_line in atf_lines if atf_line))
 
     @property
     def manuscript_ids(self) -> Sequence[int]:

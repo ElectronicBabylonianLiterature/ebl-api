@@ -57,7 +57,7 @@ class LineDisplay:
                 variant.get_manuscript_lines_atf(get_manuscript),
             ]
             line_atf_blocks.append(
-                "\n".join([atf_block for atf_block in atf_blocks if atf_block])
+                "\n".join(atf_block for atf_block in atf_blocks if atf_block)
             )
         return Atf("\n\n".join(line_atf_blocks))
 
