@@ -287,5 +287,5 @@ def test_query_corpus_by_manuscript(database, text_repository) -> None:
     )
 
     assert text_repository.query_corpus_by_manuscript(
-        [CHAPTER.manuscripts[0].museum_number]
+        [MuseumNumber("K", "27")]
     ) == [expected_manuscript_attestation]
