@@ -249,6 +249,14 @@ class MongoTextRepository(TextRepository):
     def query_corpus_by_manuscript(
         self, museum_numbers: List[MuseumNumber]
     ) -> List[ManuscriptAttestation]:
+        _museum_numbers = [
+            {
+                "prefix": museum_number["prefix"],
+                "number": museum_number["number"],
+                "suffix": museum_number["suffix"],
+            }
+            for museum_number in MuseumNumberSchema().dump(museum_numbers, many=True)
+        ]
         cursor = self._chapters.aggregate(
             [
                 {"$unwind": "$manuscripts"},
@@ -262,11 +270,7 @@ class MongoTextRepository(TextRepository):
                     }
                 },
                 {
-                    "$match": {
-                        "museumNumbers": {
-                            "$in": MuseumNumberSchema().dump(museum_numbers, many=True)
-                        }
-                    },
+                    "$match": {"museumNumbers": {"$in": _museum_numbers}},
                 },
                 {
                     "$replaceRoot": {
