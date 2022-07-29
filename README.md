@@ -134,6 +134,8 @@ See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
 for more information on parallel tests. To avoid race condition when running
 the tests in parallel run `poetry run python -m ebl.tests.downloader`.
 
+⚠️ Sometimes test results may differ for PyPy and non-PyPy Python (the latter is used for some automatic checks in this repository). If tests fail with non-PyPy Python alone, make sure to install and use the same Python version for debugging.
+
 ## Custom Git Shortcut
 
 ```shell script

@@ -129,6 +129,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                         },
                     }
                 },
+                "manuscripts": "$manuscripts",
             }
         },
         {
@@ -137,6 +138,7 @@ def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
                 "id": True,
                 "lines": True,
                 "record": True,
+                "manuscripts": True,
             }
         },
     ]
