@@ -12,12 +12,15 @@ from ebl.transliteration.domain.markup import (
     StringPart,
     rstrip,
     title_case,
+    titlecase,
     to_title,
 )
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
 
 PUNCTUATION = ";,:.-–—"
 TEXT = "sed nec tortor varius, iaculis."
+LONG_TEXT = "Enkidu’s legs grew weary, whose [herd was] on [the move]"
+LONG_TEXT_TITLECASE = "Enkidu’s Legs Grew Weary, Whose [Herd Was] On [The Move]"
 LANGUAGE_PART = LanguagePart(
     Language.AKKADIAN, [Reading.of_name("kur"), Divider.of(":")]
 )
@@ -46,10 +49,24 @@ def test_part_rstrip(part: MarkupPart, expected: MarkupPart) -> None:
 
 
 @pytest.mark.parametrize(
+    "text,expected",
+    [
+        (LONG_TEXT, LONG_TEXT_TITLECASE),
+    ],
+)
+def test_titlecase(text: str, expected: str) -> None:
+    assert titlecase(text) == expected
+
+
+@pytest.mark.parametrize(
     "part,expected",
     [
-        (StringPart(TEXT), StringPart(TEXT.title())),
-        (EmphasisPart(TEXT), EmphasisPart(TEXT.title())),
+        (StringPart(TEXT), StringPart(titlecase(TEXT))),
+        (EmphasisPart(TEXT), EmphasisPart(titlecase(TEXT))),
+        (
+            StringPart(LONG_TEXT),
+            StringPart(LONG_TEXT_TITLECASE),
+        ),
         (LANGUAGE_PART, LANGUAGE_PART),
         (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
     ],
@@ -78,6 +95,24 @@ def test_rstrip(parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]) -> 
     [(tuple(), tuple()), ([StringPart("foo bar")], (StringPart("Foo Bar"),))],
 )
 def test_title_case(
+    parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]
+) -> None:
+    assert title_case(parts) == expected
+
+
+@pytest.mark.parametrize(
+    "parts,expected",
+    [
+        (
+            [StringPart("t"), EmphasisPart("["), StringPart("igris")],
+            [StringPart("T"), EmphasisPart("["), StringPart("igris")],
+        ),
+    ],
+)
+@pytest.mark.xfail(
+    reason="Token-internal StringParts are always capitalized but in this case shouldn't."
+)
+def test_context_aware_title_case(
     parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]
 ) -> None:
     assert title_case(parts) == expected

@@ -20,6 +20,12 @@ def escape(unescaped: str) -> str:
     return SPECIAL_CHARACTERS.sub(lambda match: f"\\{match.group(0)}", unescaped)
 
 
+def titlecase(text: str) -> str:
+    return re.sub(
+        r"[A-Za-z]+(['’][A-Za-z]+)?", lambda word: word.group(0).capitalize(), text
+    )
+
+
 MP = TypeVar("MP", bound="MarkupPart")
 TP = TypeVar("TP", bound="TextPart")
 
@@ -50,7 +56,7 @@ class TextPart(MarkupPart):
         return attr.evolve(self, text=self.text.rstrip(PUNCTUATION))
 
     def title_case(self: TP) -> TP:
-        return attr.evolve(self, text=self.text.title())
+        return attr.evolve(self, text=titlecase(self.text))
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -133,7 +139,7 @@ def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]
 
 
 def rstrip(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
-    return tuple([*parts[:-1], parts[-1].rstrip()]) if parts else parts
+    return tuple([*parts[:-1], parts[-1].rstrip()]) if parts else parts  # sourcery skip
 
 
 def title_case(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
