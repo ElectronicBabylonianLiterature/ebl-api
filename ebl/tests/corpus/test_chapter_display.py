@@ -42,5 +42,6 @@ def test_chapter_display_of_chapter() -> None:
         not text.has_multiple_stages,
         tuple(LineDisplay.of_line(line) for line in chapter.lines),
         chapter.record,
+        chapter.manuscripts,
     )
     assert chapter_display.title == make_title(chapter.lines[0].translation)

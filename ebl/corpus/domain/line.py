@@ -1,5 +1,5 @@
 from functools import singledispatch
-from typing import Optional, Sequence, Set, Tuple, Union, cast
+from typing import Optional, Sequence, Set, Tuple, Union, cast, Callable
 
 import attr
 import pydash
@@ -21,6 +21,8 @@ from ebl.transliteration.domain.text_line import AlignmentMap, TextLine, merge_t
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import AbstractWord
+from ebl.corpus.domain.manuscript import Manuscript
+from ebl.transliteration.domain.atf import Atf
 
 
 ManuscriptLineLabel = Tuple[int, Sequence[Label], AbstractLineNumber]
@@ -43,6 +45,20 @@ class ManuscriptLine:
         )
 
     @property
+    def line_prefix_atf(self) -> Atf:
+        return (
+            Atf(
+                " ".join(
+                    label_element.to_value()
+                    for label_element in self.labels
+                    if hasattr(label_element, "to_value")
+                )
+            )
+            if self.labels
+            else Atf("")
+        )
+
+    @property
     def is_beginning_of_side(self) -> bool:
         return (
             self.line.line_number.is_beginning_of_side
@@ -59,6 +75,15 @@ class ManuscriptLine:
     @property
     def is_empty(self) -> bool:
         return isinstance(self.line, EmptyLine)
+
+    def get_atf(self, get_manuscript: Callable[[int], Manuscript]) -> Atf:
+        if self.is_empty:
+            return Atf("")
+        siglum = get_manuscript(self.manuscript_id).siglum
+        line_prefix = f"{self.line_prefix_atf} " if self.line_prefix_atf else ""
+        paratext = "\n".join([paratext.atf for paratext in self.paratext])
+        paratext = f"\n{paratext}" if self.paratext else ""
+        return Atf(f"{siglum} {line_prefix}{self.line.atf}{paratext}")
 
     def merge(self, other: "ManuscriptLine") -> "ManuscriptLine":
         merged_line = self.line.merge(other.line)
@@ -92,6 +117,27 @@ class LineVariant:
     @reconstruction.validator
     def validate_reconstruction(self, _, value):
         validate(value)
+
+    @property
+    def reconstruction_atf(self) -> Atf:
+        return Atf(" ".join([token.value for token in self.reconstruction]))
+
+    @property
+    def parallels_atf(self) -> Atf:
+        return (
+            Atf("\n".join(parallel.atf for parallel in self.parallel_lines))
+            if self.parallel_lines
+            else Atf("")
+        )
+
+    def get_manuscript_lines_atf(
+        self, get_manuscript: Callable[[int], Manuscript]
+    ) -> Atf:
+        atf_lines = [
+            manuscript_line.get_atf(get_manuscript)
+            for manuscript_line in self.manuscripts
+        ]
+        return Atf("\n".join(atf_line for atf_line in atf_lines if atf_line))
 
     @property
     def manuscript_ids(self) -> Sequence[int]:
@@ -209,7 +255,7 @@ class Line:
             .value()
         )
         if manuscript_line is None:
-            raise ValueError(f"No line foun for mauscript {manuscript_id}.")
+            raise ValueError(f"No line found for manuscript {manuscript_id}.")
         else:
             return manuscript_line
 
