@@ -22,7 +22,9 @@ def escape(unescaped: str) -> str:
 
 def titlecase(text: str) -> str:
     return re.sub(
-        r"[A-Za-z]+(['’][A-Za-z]+)?", lambda word: word.group(0).capitalize(), text
+        r"[A-Za-zŠṬḪṢšṭḫṣ]+([\[\]'’][A-Za-zšṭḫṣ]+)?",
+        lambda word: word.group(0).capitalize(),
+        text,
     )
 
 
