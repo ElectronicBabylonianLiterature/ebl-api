@@ -69,6 +69,10 @@ def test_titlecase(text: str, expected: str) -> None:
         ),
         (LANGUAGE_PART, LANGUAGE_PART),
         (BIBLIOGRAPHY_PART, BIBLIOGRAPHY_PART),
+        (
+            StringPart("ṣome špecial cḫaracterš ḫere and ṭhere"),
+            StringPart("Ṣome Špecial Cḫaracterš Ḫere And Ṭhere"),
+        ),
     ],
 )
 def test_part_title_case(part: MarkupPart, expected: MarkupPart) -> None:
