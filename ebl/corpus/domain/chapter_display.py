@@ -66,7 +66,7 @@ class LineDisplay:
     def of_line(line: Line) -> "LineDisplay":
         return LineDisplay(
             line.number,
-            tuple(),
+            line.old_line_numbers,
             line.is_second_line_of_parallelism,
             line.is_beginning_of_section,
             line.variants,

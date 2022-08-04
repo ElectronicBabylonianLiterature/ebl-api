@@ -117,6 +117,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                     }
                     for variant in line.variants
                 ],
+                "oldLineNumbers": [],
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
                 "translation": "\n".join(

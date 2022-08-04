@@ -218,6 +218,7 @@ class LineSchema(Schema):
         return Line(
             data["number"],
             tuple(data["variants"]),
+            tuple(data["old_line_numbers"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["translation"]),

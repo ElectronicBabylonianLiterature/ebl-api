@@ -16,6 +16,7 @@ from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
 from ebl.corpus.domain.parser import parse_paratext
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
+from ebl.transliteration.application.line_number_schemas import OldLineNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
@@ -240,6 +241,9 @@ def deserialize_translation(atf: str) -> Sequence[TranslationLine]:
 
 class ApiLineSchema(Schema):
     number = LineNumberString(required=True)
+    old_line_numbers = fields.Nested(
+        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=tuple()
+    )
     variants = fields.Nested(
         ApiLineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
     )
@@ -260,6 +264,7 @@ class ApiLineSchema(Schema):
         return Line(
             data["number"],
             tuple(data["variants"]),
+            tuple(data["old_line_numbers"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             data["translation"],

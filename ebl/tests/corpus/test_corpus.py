@@ -766,6 +766,7 @@ def test_merging_lines(
     )
     is_second_line_of_parallelism = False
     is_beginning_of_section = False
+    old_line_numbers = tuple()
     text_line = TextLine.of_iterable(
         LineNumber(1),
         (
@@ -787,6 +788,7 @@ def test_merging_lines(
                 (ManuscriptLine(manuscript_id, tuple(), text_line),),
             ),
         ),
+        old_line_numbers,
         not is_second_line_of_parallelism,
         not is_beginning_of_section,
     )
@@ -807,6 +809,7 @@ def test_merging_lines(
                 ),
             ),
         ),
+        old_line_numbers,
         is_second_line_of_parallelism,
         is_beginning_of_section,
     )
@@ -849,6 +852,7 @@ def test_merging_lines(
                                 ),
                             ),
                         ),
+                        old_line_numbers,
                         is_second_line_of_parallelism,
                         is_beginning_of_section,
                     )
