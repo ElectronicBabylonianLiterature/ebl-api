@@ -19,6 +19,7 @@ from ebl.tests.factories.corpus import (
     ChapterQueryColophonLinesFactory,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
+from ebl.transliteration.application.line_number_schemas import OldLineNumberSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
@@ -32,19 +33,26 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
 
     first_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
     second_manuscript_line = ManuscriptLineFactory.build(manuscript_id=manuscript.id)
-    line = LineFactory.build(
+    variants = (
+        LineVariantFactory.build(
+            manuscripts=(first_manuscript_line, second_manuscript_line),
+            parallel_lines=(ParallelComposition(False, "name", LineNumber(1)),),
+        ),
+    )
+    line = LineFactory.build(variants=variants)
+    line_with_old_line_numbers = LineFactory.build(
+        with_old_line_numbers=True,
         variants=(
             LineVariantFactory.build(
-                manuscripts=(first_manuscript_line, second_manuscript_line),
-                parallel_lines=(ParallelComposition(False, "name", LineNumber(1)),),
+                manuscripts=(ManuscriptLineFactory.build(manuscript_id=manuscript.id),)
             ),
-        )
+        ),
     )
 
     chapter = ChapterFactory.build(
         manuscripts=(manuscript,),
         uncertain_fragments=(MuseumNumber.of("K.1"),),
-        lines=(line,),
+        lines=(line, line_with_old_line_numbers),
         colophon_lines_in_query=ChapterQueryColophonLinesFactory.build(),
     )
     dto = {
@@ -68,6 +76,9 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         "lines": [
             {
                 "number": line.number.label,
+                "oldLineNumbers": OldLineNumberSchema().dump(
+                    line.old_line_numbers, many=True
+                ),
                 "variants": [
                     {
                         "reconstruction": "".join(
@@ -117,7 +128,6 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                     }
                     for variant in line.variants
                 ],
-                "oldLineNumbers": [],
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
                 "translation": "\n".join(

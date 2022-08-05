@@ -27,7 +27,7 @@ from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
-from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.line_number import LineNumber, OldLineNumber
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.normalized_akkadian import (
@@ -186,6 +186,14 @@ class LineVariantFactory(factory.Factory):
     )
 
 
+class OldLineNumberFactory(factory.Factory):
+    class Meta:
+        model = OldLineNumber
+
+    number = factory.Faker("word")
+    reference = factory.SubFactory(ReferenceFactory, with_document=True)
+
+
 class LineFactory(factory.Factory):
     class Meta:
         model = Line
@@ -194,6 +202,11 @@ class LineFactory(factory.Factory):
         manuscript_id = factory.Sequence(lambda n: n)
         variant = factory.SubFactory(
             LineVariantFactory, manuscript_id=factory.SelfAttribute("..manuscript_id")
+        )
+        with_old_line_numbers = factory.Trait(
+            old_line_numbers=factory.List(
+                [factory.SubFactory(OldLineNumberFactory)], TupleFactory
+            )
         )
 
     number = factory.Sequence(lambda n: LineNumber(n))
