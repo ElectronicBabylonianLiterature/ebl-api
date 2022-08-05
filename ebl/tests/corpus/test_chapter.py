@@ -69,6 +69,7 @@ UNPLACED_LINES = Transliteration.of_iterable(
 )
 REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumber(1)
+OLD_LINE_NUMBERS = tuple()
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
@@ -98,6 +99,7 @@ LINE_VARIANT_1 = LineVariant(
 LINE_1 = Line(
     LINE_NUMBER,
     (LINE_VARIANT_1,),
+    OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
     TRANSLATION,
@@ -244,6 +246,7 @@ def test_missing_manuscripts_are_invalid():
                             ),
                         ),
                     ),
+                    OLD_LINE_NUMBERS,
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                 ),
@@ -274,6 +277,7 @@ def test_missing_manuscripts_are_invalid():
                             ),
                         ),
                     ),
+                    OLD_LINE_NUMBERS,
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                 ),
@@ -292,6 +296,7 @@ def test_missing_manuscripts_are_invalid():
                             (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1),),
                         ),
                     ),
+                    OLD_LINE_NUMBERS,
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                 ),
@@ -304,6 +309,7 @@ def test_missing_manuscripts_are_invalid():
                             (ManuscriptLine(MANUSCRIPT_ID, LABELS, MANUSCRIPT_TEXT_1),),
                         ),
                     ),
+                    OLD_LINE_NUMBERS,
                     IS_SECOND_LINE_OF_PARALLELISM,
                     IS_BEGINNING_OF_SECTION,
                 ),

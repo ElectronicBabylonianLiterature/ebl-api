@@ -164,6 +164,7 @@ def to_dict(chapter: Chapter, include_documents=False):
                     }
                     for variant in line.variants
                 ],
+                "oldLineNumbers": [],
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
                 "translation": TranslationLineSchema().dump(

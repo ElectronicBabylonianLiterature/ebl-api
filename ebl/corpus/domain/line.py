@@ -13,7 +13,7 @@ from ebl.transliteration.domain.label_validator import validate_labels
 from ebl.transliteration.domain.labels import Label
 from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import EmptyLine
-from ebl.transliteration.domain.line_number import AbstractLineNumber
+from ebl.transliteration.domain.line_number import AbstractLineNumber, OldLineNumber
 from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
@@ -221,6 +221,7 @@ class LineVariant:
 class Line:
     number: AbstractLineNumber
     variants: Sequence[LineVariant]
+    old_line_numbers: Sequence[OldLineNumber] = attr.ib(default=tuple())
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
     translation: Sequence[TranslationLine] = attr.ib(default=tuple())

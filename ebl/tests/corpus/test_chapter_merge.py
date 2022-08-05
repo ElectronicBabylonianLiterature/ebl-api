@@ -66,9 +66,11 @@ RECONSTRUCTION_WITHOUT_LEMMA = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 NOTE = None
+OLD_LINE_NUMBERS = tuple()
 LINE = Line(
     LineNumber(1),
     (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
+    OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
 )
@@ -194,6 +196,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -233,6 +236,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -274,6 +278,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -282,6 +287,7 @@ def test_merge_line_variant(old, new, expected):
             Line(
                 LineNumber(1),
                 (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -294,6 +300,7 @@ def test_merge_line_variant(old, new, expected):
                         (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -310,6 +317,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -351,6 +359,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -366,6 +375,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -383,6 +393,7 @@ def test_merge_line_variant(old, new, expected):
                         ),
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -391,14 +402,23 @@ def test_merge_line_variant(old, new, expected):
             Line(
                 LineNumber(1),
                 (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
             Line(
-                LineNumber(1), (LineVariant(RECONSTRUCTION, NOTE, tuple()),), True, True
+                LineNumber(1),
+                (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
+                OLD_LINE_NUMBERS,
+                True,
+                True,
             ),
             Line(
-                LineNumber(1), (LineVariant(RECONSTRUCTION, NOTE, tuple()),), True, True
+                LineNumber(1),
+                (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
+                OLD_LINE_NUMBERS,
+                True,
+                True,
             ),
         ),
         (
@@ -409,6 +429,7 @@ def test_merge_line_variant(old, new, expected):
                         RECONSTRUCTION, NoteLine((StringPart("a note"),)), tuple()
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -419,6 +440,7 @@ def test_merge_line_variant(old, new, expected):
                         RECONSTRUCTION, NoteLine((StringPart("new note"),)), tuple()
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -429,6 +451,7 @@ def test_merge_line_variant(old, new, expected):
                         RECONSTRUCTION, NoteLine((StringPart("new note"),)), tuple()
                     ),
                 ),
+                OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
@@ -523,6 +546,7 @@ NEW_LINE = Line(
             (ManuscriptLine(MANUSCRIPT_ID, LABELS, NEW_TEXT_LINE),),
         ),
     ),
+    OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
 )
@@ -541,6 +565,7 @@ ANOTHER_NEW_LINE = Line(
             ),
         ),
     ),
+    OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
 )
@@ -560,6 +585,7 @@ NEW_PARATEXT = Line(
             ),
         ),
     ),
+    OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
 )
@@ -578,6 +604,7 @@ OLD_LINE = Line(
             ),
         ),
     ),
+    OLD_LINE_NUMBERS,
     IS_SECOND_LINE_OF_PARALLELISM,
     IS_BEGINNING_OF_SECTION,
 )

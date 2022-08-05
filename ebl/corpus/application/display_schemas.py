@@ -5,7 +5,10 @@ from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.application.schemas import LineVariantSchema, ManuscriptSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
 from ebl.corpus.domain.record import Record
-from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
+from ebl.transliteration.application.line_number_schemas import (
+    OneOfLineNumberSchema,
+    OldLineNumberSchema,
+)
 from ebl.transliteration.application.line_schemas import (
     TranslationLineSchema,
 )
@@ -16,6 +19,9 @@ from ebl.transliteration.application.note_line_part_schemas import (
 
 class LineDisplaySchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
+    old_line_numbers = fields.Nested(
+        OldLineNumberSchema, many=True, data_key="oldLineNumbers", load_default=tuple()
+    )
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
     )
@@ -31,6 +37,7 @@ class LineDisplaySchema(Schema):
     def make_line(self, data: dict, **kwargs) -> LineDisplay:
         return LineDisplay(
             data["number"],
+            tuple(data["old_line_numbers"]),
             data["is_second_line_of_parallelism"],
             data["is_beginning_of_section"],
             tuple(data["variants"]),

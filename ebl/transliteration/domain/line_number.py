@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Optional
+from ebl.bibliography.domain.reference import Reference
 
 import attr
 
@@ -61,3 +62,9 @@ class LineNumberRange(AbstractLineNumber):
 
     def is_matching_number(self, number: int) -> bool:
         return self.start.number <= number <= self.end.number
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class OldLineNumber:
+    number: str
+    reference: Reference
