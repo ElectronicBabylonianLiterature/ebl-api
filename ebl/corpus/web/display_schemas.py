@@ -2,7 +2,7 @@ from typing import Union, Sequence
 import attr
 from marshmallow import Schema, fields
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.domain.line import Line, ManuscriptLine
+from ebl.corpus.domain.line import Line, ManuscriptLine, LineVariant
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
 from ebl.fragmentarium.domain.joins import Join
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -33,6 +33,7 @@ class ManuscriptLineDisplay:
     accession: str
     is_in_fragmentarium: bool
     joins: Sequence[Sequence[Join]]
+    omitted_words: Sequence[int] = tuple()
 
     @classmethod
     def from_manuscript_line(
@@ -54,6 +55,7 @@ class ManuscriptLineDisplay:
             manuscript.accession,
             manuscript.is_in_fragmentarium,
             manuscript.joins.fragments,
+            manuscript_line.omitted_words,
         )
 
 
@@ -62,7 +64,7 @@ class LineVariantDisplay:
     manuscripts: Sequence[ManuscriptLineDisplay]
 
     @classmethod
-    def from_line_variant(cls, line_variant, manuscripts_by_id):
+    def from_line_variant(cls, line_variant: LineVariant, manuscripts_by_id):
 
         manuscript_line_displays = []
 
@@ -86,8 +88,8 @@ class LineDetailsDisplay:
         MANUSCRIPTS_BY_ID = {m.id: m for m in manuscripts}
 
         variant_displays = [
-            LineVariantDisplay.from_line_variant(v, MANUSCRIPTS_BY_ID)
-            for v in line.variants
+            LineVariantDisplay.from_line_variant(variant, MANUSCRIPTS_BY_ID)
+            for variant in line.variants
         ]
 
         return cls(variants=variant_displays)
@@ -119,6 +121,9 @@ class ManuscriptLineDisplaySchema(Schema):
     accession = fields.String()
     is_in_fragmentarium = fields.Bool(data_key="isInFragmentarium")
     joins = fields.List(fields.List(fields.Nested(JoinDisplaySchema)))
+    omitted_words = fields.List(
+        fields.Integer(), required=True, data_key="omittedWords"
+    )
 
 
 class LineVariantDisplaySchema(Schema):
