@@ -20,6 +20,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.genre import Genre
+from ebl.tests.factories.corpus import OldLineNumberFactory
 
 MANUSCRIPT_ID = 1
 LABELS = (ColumnLabel.from_int(1),)
@@ -66,7 +67,7 @@ RECONSTRUCTION_WITHOUT_LEMMA = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 NOTE = None
-OLD_LINE_NUMBERS = tuple()
+OLD_LINE_NUMBERS = OldLineNumberFactory.build()
 LINE = Line(
     LineNumber(1),
     (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
