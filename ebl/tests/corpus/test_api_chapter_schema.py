@@ -19,7 +19,7 @@ from ebl.tests.factories.corpus import (
     ChapterQueryColophonLinesFactory,
 )
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
-from ebl.transliteration.application.line_number_schemas import OldLineNumberSchema
+from ebl.transliteration.application.line_number_schemas import ApiOldLineNumberSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
 from ebl.transliteration.domain.line_number import LineNumber
@@ -76,7 +76,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         "lines": [
             {
                 "number": line.number.label,
-                "oldLineNumbers": OldLineNumberSchema().dump(
+                "oldLineNumbers": ApiOldLineNumberSchema().dump(
                     line.old_line_numbers, many=True
                 ),
                 "variants": [

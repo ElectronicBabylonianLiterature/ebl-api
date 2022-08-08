@@ -42,6 +42,10 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.parallel_line import ParallelComposition
 from ebl.transliteration.domain.translation_line import TranslationLine
+from ebl.transliteration.application.line_number_schemas import (
+    OldLineNumberSchema,
+    ApiOldLineNumberSchema,
+)
 
 REFERENCES = (ReferenceFactory.build(with_document=True),)
 MANUSCRIPT = ManuscriptFactory.build(references=REFERENCES, with_old_sigla=True)
@@ -56,8 +60,16 @@ LINE_VARIANT = LineVariantFactory.build(
 )
 TRANSLATION_LINE = TranslationLine((StringPart("foo"),), "en", None)
 LINE = LineFactory.build(variants=(LINE_VARIANT,), translation=(TRANSLATION_LINE,))
+LINE_WITH_OLD_LINE_NUMBERS = LineFactory.build(
+    with_old_line_numbers=True,
+)
 CHAPTER = ChapterFactory.build(
-    manuscripts=(MANUSCRIPT,), uncertain_fragments=UNCERTAIN_FRAGMENTS, lines=(LINE,)
+    manuscripts=(MANUSCRIPT,),
+    uncertain_fragments=UNCERTAIN_FRAGMENTS,
+    lines=(
+        LINE,
+        LINE_WITH_OLD_LINE_NUMBERS,
+    ),
 )
 
 
@@ -82,6 +94,19 @@ def strip_documents(chapter: Chapter) -> Chapter:
             )
             for manuscript in chapter.manuscripts
         ),
+        lines=tuple(
+            attr.evolve(
+                line,
+                old_line_numbers=tuple(
+                    attr.evolve(
+                        old_line_number,
+                        reference=strip_document(old_line_number.reference),
+                    )
+                    for old_line_number in line.old_line_numbers
+                ),
+            )
+            for line in chapter.lines
+        ),
     )
 
 
@@ -98,6 +123,9 @@ def to_dict(chapter: Chapter, include_documents=False):
 
     OLD_SIGLUM_SCHEMA = ApiOldSiglumSchema if include_documents else OldSiglumSchema
     REFERENCE_SCHEMA = ApiReferenceSchema if include_documents else ReferenceSchema
+    Old_LINE_NUMBER_SCHEMA = (
+        ApiOldLineNumberSchema if include_documents else OldLineNumberSchema
+    )
 
     return {
         "textId": {
@@ -164,7 +192,9 @@ def to_dict(chapter: Chapter, include_documents=False):
                     }
                     for variant in line.variants
                 ],
-                "oldLineNumbers": [],
+                "oldLineNumbers": Old_LINE_NUMBER_SCHEMA().dump(
+                    line.old_line_numbers, many=True
+                ),
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
                 "translation": TranslationLineSchema().dump(
