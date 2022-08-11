@@ -161,6 +161,14 @@ class LineVariant:
             if manuscript_token.has_variant
         }
 
+    @property
+    def _omitted_words(self) -> Set[Optional[int]]:
+        return {
+            index
+            for manuscript in self.manuscripts
+            for index in manuscript.omitted_words
+        }
+
     def get_manuscript_line(self, manuscript_id: int) -> Optional[ManuscriptLine]:
         return (
             pydash.chain(self.manuscripts)
@@ -199,6 +207,7 @@ class LineVariant:
 
     def set_has_variant_aligment(self) -> "LineVariant":
         variant_alignments = self._variant_alignments
+        omitted_words = self._omitted_words
 
         @singledispatch
         def set_flag(token: Token, index: int) -> Token:
@@ -206,7 +215,9 @@ class LineVariant:
 
         @set_flag.register(AbstractWord)
         def _(token: AbstractWord, index: int) -> AbstractWord:
-            return token.set_has_variant_alignment(index in variant_alignments)
+            return token.set_has_variant_alignment(
+                index in variant_alignments.union(omitted_words)
+            )
 
         return attr.evolve(
             self,
