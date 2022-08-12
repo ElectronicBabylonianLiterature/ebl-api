@@ -278,7 +278,7 @@ def test_updating_alignment(
     user,
     when,
 ) -> None:
-    aligmnet = 1
+    alignment = 1
     omitted_words = (6,)
     has_variant_alignment = variant is not None
     updated_chapter = attr.evolve(
@@ -316,7 +316,7 @@ def test_updating_alignment(
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=aligmnet,
+                                            alignment=alignment,
                                             variant=variant,
                                         ),
                                     ),
@@ -346,7 +346,7 @@ def test_updating_alignment(
             (
                 (
                     ManuscriptLineAlignment(
-                        (AlignmentToken("ku-[nu-ši]", aligmnet, variant),),
+                        (AlignmentToken("ku-[nu-ši]", alignment, variant),),
                         omitted_words,
                     ),
                 ),
