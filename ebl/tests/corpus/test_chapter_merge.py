@@ -83,7 +83,7 @@ LINE = Line(
             LineVariant(
                 (
                     AkkadianWord.of(
-                        (ValueToken.of("buāru"),), has_variant_alignmnet=True
+                        (ValueToken.of("buāru"),), has_variant_alignment=True
                     ),
                 ),
                 manuscripts=(
@@ -106,7 +106,7 @@ LINE = Line(
             LineVariant(
                 (
                     AkkadianWord.of(
-                        (ValueToken.of("kurkur"),), has_variant_alignmnet=False
+                        (ValueToken.of("kurkur"),), has_variant_alignment=False
                     ),
                 ),
                 manuscripts=(
@@ -129,7 +129,7 @@ LINE = Line(
             LineVariant(
                 (
                     AkkadianWord.of(
-                        (ValueToken.of("kurkur"),), has_variant_alignmnet=True
+                        (ValueToken.of("kurkur"),), has_variant_alignment=True
                     ),
                 ),
                 manuscripts=(

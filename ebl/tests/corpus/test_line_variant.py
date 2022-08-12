@@ -95,7 +95,7 @@ def test_set_has_variant_aligment(word: AbstractWord, expected: bool) -> None:
         INTERTEXT,
     )
     expected_reconstruction = (
-        AkkadianWord.of((ValueToken.of("buāru"),), has_variant_alignmnet=expected),
+        AkkadianWord.of((ValueToken.of("buāru"),), has_variant_alignment=expected),
     )
     expected_variant = attr.evolve(line_variant, reconstruction=expected_reconstruction)
     assert line_variant.set_has_variant_aligment() == expected_variant

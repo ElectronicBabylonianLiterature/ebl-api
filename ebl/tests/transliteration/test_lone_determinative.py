@@ -50,6 +50,7 @@ def test_lone_determinative(language):
         "erasure": ErasureState.NONE.name,
         "parts": OneOfTokenSchema().dump(parts, many=True),
         "hasVariantAlignment": lone_determinative.has_variant_alignment,
+        "hasOmittedAlignment": lone_determinative.has_omitted_alignment,
     }
     assert_token_serialization(lone_determinative, serialized)
 

@@ -207,7 +207,6 @@ class LineVariant:
 
     def set_has_variant_aligment(self) -> "LineVariant":
         variant_alignments = self._variant_alignments
-        omitted_words = self._omitted_words
 
         @singledispatch
         def set_flag(token: Token, index: int) -> Token:
@@ -215,9 +214,26 @@ class LineVariant:
 
         @set_flag.register(AbstractWord)
         def _(token: AbstractWord, index: int) -> AbstractWord:
-            return token.set_has_variant_alignment(
-                index in variant_alignments.union(omitted_words)
-            )
+            return token.set_has_variant_alignment(index in variant_alignments)
+
+        return attr.evolve(
+            self,
+            reconstruction=tuple(
+                set_flag(token, index)
+                for index, token in enumerate(self.reconstruction)
+            ),
+        )
+
+    def set_has_omitted_aligment(self) -> "LineVariant":
+        omitted_alignments = self._omitted_words
+
+        @singledispatch
+        def set_flag(token: Token, index: int) -> Token:
+            return token
+
+        @set_flag.register(AbstractWord)
+        def _(token: AbstractWord, index: int) -> AbstractWord:
+            return token.set_has_omitted_alignment(index in omitted_alignments)
 
         return attr.evolve(
             self,
