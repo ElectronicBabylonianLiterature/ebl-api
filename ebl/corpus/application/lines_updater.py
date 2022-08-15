@@ -9,10 +9,10 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
 class LinesUpdater(ChapterUpdater):
-    def __init__(self, lines: LinesUpdate, sing_repository: SignRepository):
+    def __init__(self, lines: LinesUpdate, sign_repository: SignRepository):
         super().__init__()
         self._lines_update = lines
-        self._sign_updater = SignsUpdater(sing_repository)
+        self._sign_updater = SignsUpdater(sign_repository)
         self._lines = []
 
     def _visit_lines(self, chapter: Chapter) -> None:

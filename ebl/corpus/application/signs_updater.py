@@ -11,8 +11,8 @@ from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepo
 
 
 class SignsUpdater:
-    def __init__(self, sing_repository: SignRepository):
-        self._sing_repository = MemoizingSignRepository(sing_repository)
+    def __init__(self, sign_repository: SignRepository):
+        self._sign_repository = MemoizingSignRepository(sign_repository)
 
     def update(self, chapter: Chapter) -> Chapter:
         return attr.evolve(chapter, signs=self._create_signs(chapter))
@@ -27,6 +27,6 @@ class SignsUpdater:
         return "\n".join(self._map_line(line) for line in lines)
 
     def _map_line(self, line: TextLine) -> str:
-        visitor = SignsVisitor(self._sing_repository)
+        visitor = SignsVisitor(self._sign_repository)
         line.accept(visitor)
         return WORD_SEPARATOR.join(visitor.result)
