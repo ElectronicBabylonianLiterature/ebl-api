@@ -199,11 +199,15 @@ class LineVariant:
         merged_manuscripts = Merger(repr, merge_manuscript).merge(
             self.manuscripts, other.manuscripts
         )
-        return attr.evolve(
-            other,
-            reconstruction=merged_reconstruction,
-            manuscripts=tuple(merged_manuscripts),
-        ).set_has_variant_aligment()
+        return (
+            attr.evolve(
+                other,
+                reconstruction=merged_reconstruction,
+                manuscripts=tuple(merged_manuscripts),
+            )
+            .set_has_variant_aligment()
+            .set_has_omitted_aligment()
+        )
 
     def set_has_variant_aligment(self) -> "LineVariant":
         variant_alignments = self._variant_alignments

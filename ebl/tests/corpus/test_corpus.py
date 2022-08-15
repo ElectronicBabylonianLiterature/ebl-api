@@ -281,6 +281,17 @@ def test_updating_alignment(
     alignment = 1
     omitted_words = (6,)
     has_variant_alignment = variant is not None
+    updated_reconstruction = tuple(
+        cast(
+            AbstractWord,
+            token,
+        )
+        .set_has_variant_alignment(has_variant_alignment and index == alignment)
+        .set_has_omitted_alignment(index in omitted_words)
+        if index in (*omitted_words, alignment)
+        else token
+        for index, token in enumerate(CHAPTER.lines[0].variants[0].reconstruction)
+    )
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
@@ -289,14 +300,7 @@ def test_updating_alignment(
                 variants=(
                     attr.evolve(
                         CHAPTER.lines[0].variants[0],
-                        reconstruction=(
-                            CHAPTER.lines[0].variants[0].reconstruction[0],
-                            cast(
-                                AbstractWord,
-                                CHAPTER.lines[0].variants[0].reconstruction[1],
-                            ).set_has_variant_alignment(has_variant_alignment),
-                            *CHAPTER.lines[0].variants[0].reconstruction[2:],
-                        ),
+                        reconstruction=updated_reconstruction,
                         manuscripts=(
                             attr.evolve(
                                 CHAPTER.lines[0].variants[0].manuscripts[0],
@@ -594,6 +598,11 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
 def test_updating_lines_edit(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
+    omitted_words = tuple(
+        index
+        for manuscript in CHAPTER.lines[0].variants[0].manuscripts
+        for index in manuscript.omitted_words
+    )
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
@@ -623,6 +632,17 @@ def test_updating_lines_edit(
                                     ),
                                 ),
                             ),
+                        ),
+                        reconstruction=tuple(
+                            cast(
+                                AbstractWord,
+                                token,
+                            ).set_has_omitted_alignment(True)
+                            if index in omitted_words
+                            else token
+                            for index, token in enumerate(
+                                CHAPTER.lines[0].variants[0].reconstruction
+                            )
                         ),
                     ),
                 ),
