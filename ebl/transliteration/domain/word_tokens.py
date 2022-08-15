@@ -98,7 +98,7 @@ class AbstractWord(Token):
             variant=None if new_alignment is None else self.variant,
         )
 
-    def merge(self, token: T) -> T:
+    def merge(self, token: T) -> T:  # sourcery skip
         if isinstance(token, AbstractWord):
             return self._merge_word(token)
         else:
