@@ -12,7 +12,7 @@ class LinesUpdater(ChapterUpdater):
     def __init__(self, lines: LinesUpdate, sing_repository: SignRepository):
         super().__init__()
         self._lines_update = lines
-        self._sing_updater = SignsUpdater(sing_repository)
+        self._sign_updater = SignsUpdater(sing_repository)
         self._lines = []
 
     def _visit_lines(self, chapter: Chapter) -> None:
@@ -23,7 +23,7 @@ class LinesUpdater(ChapterUpdater):
                 self._lines.append(line)
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
-        return self._sing_updater.update(
+        return self._sign_updater.update(
             chapter.merge(
                 attr.evolve(
                     chapter,
