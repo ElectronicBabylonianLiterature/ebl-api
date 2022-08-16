@@ -7,7 +7,9 @@ from ebl.corpus.domain.chapter import (
     ExtantLine,
     TextLineEntry,
 )
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
@@ -122,6 +124,11 @@ RECORD = Record(
     (Author("Author", "Test", AuthorRole.EDITOR, ""),),
     (Translator("Author", "Test", "", "en"),),
     "",
+)
+
+LINE_WITH_OLD_LINE_NUMBERS = Line(
+    LineNumber(4),
+    (LINE_VARIANT_1,),
 )
 
 TEXT_ID = TextId(GENRE, CATEGORY, INDEX)

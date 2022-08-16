@@ -3,7 +3,8 @@ from typing import Sequence, Callable
 import attr
 
 from ebl.corpus.domain.chapter import ChapterId, Chapter
-from ebl.corpus.domain.line import Line, LineVariant
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import Text
 from ebl.transliteration.domain.translation_line import (

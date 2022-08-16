@@ -10,7 +10,9 @@ from ebl.corpus.application.lemmatization import (
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter_display import ChapterDisplay
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.dictionary.domain.word import WordId

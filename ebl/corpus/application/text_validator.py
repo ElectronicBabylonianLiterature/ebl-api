@@ -9,7 +9,9 @@ from ebl.corpus.domain.chapter import (
     ChapterVisitor,
     TextLineEntry,
 )
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import Siglum
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError

@@ -2,7 +2,8 @@ from typing import Sequence
 import attr
 import pytest
 
-from ebl.corpus.domain.line import LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.tests.factories.corpus import (
     LineVariantFactory,
     ManuscriptLineFactory,
