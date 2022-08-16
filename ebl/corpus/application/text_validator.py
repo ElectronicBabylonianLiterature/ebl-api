@@ -93,12 +93,10 @@ class TextValidator(ChapterVisitor):
         for line in chapter.lines:
             self.visit(line)
 
-        invalid_lines: Sequence[str] = [
+        if invalid_lines := [
             create_error_message(siglum, entry, chapter)
             for siglum, entry in chapter.invalid_lines
-        ]
-
-        if invalid_lines:
+        ]:
             raise DataError(f"Invalid signs on lines: {', '.join(invalid_lines)}.")
 
     @visit.register(Line)
