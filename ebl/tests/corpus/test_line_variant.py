@@ -1,8 +1,12 @@
+from typing import Sequence
 import attr
 import pytest
 
 from ebl.corpus.domain.line import LineVariant, ManuscriptLine
-from ebl.tests.factories.corpus import ManuscriptLineFactory
+from ebl.tests.factories.corpus import (
+    LineVariantFactory,
+    ManuscriptLineFactory,
+)
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
@@ -99,3 +103,28 @@ def test_set_has_variant_aligment(word: AbstractWord, expected: bool) -> None:
     )
     expected_variant = attr.evolve(line_variant, reconstruction=expected_reconstruction)
     assert line_variant.set_has_variant_aligment() == expected_variant
+
+
+@pytest.mark.parametrize(
+    "omitted_words,expected",
+    [
+        (tuple(), (False, False, False)),
+        ((1, 2), (False, True, True)),
+    ],
+)
+def test_set_has_omitted_aligment(
+    omitted_words: Sequence[int], expected: Sequence[bool]
+) -> None:
+    manuscript_line = ManuscriptLineFactory.build(omitted_words=omitted_words)
+    line_variant = LineVariantFactory.build(
+        reconstruction=(WORD, WORD, WORD),
+        manuscripts=(manuscript_line,),
+    )
+
+    assert (
+        tuple(
+            token.has_omitted_alignment
+            for token in line_variant.set_has_omitted_aligment().reconstruction
+        )
+        == expected
+    )
