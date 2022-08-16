@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import Optional, Sequence
+from typing import Optional
 
 import pydash
 
