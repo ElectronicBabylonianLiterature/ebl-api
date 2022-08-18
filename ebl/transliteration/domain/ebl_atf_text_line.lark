@@ -206,17 +206,18 @@ sub_index: [SUB_INDEX]
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
 logogram_name: logogram_name_part (broken_away logogram_name_part)*
-!number_name_head:  "1".."9" "0".."9"* | "½"
+!number_name_head:  "0".."9" "0".."9"* | "½"
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "f" | "g"
-               | "h" | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n" | "p"
-               | "q" | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū" | "û"
-               | "w" | "z" | "ḫ" | "ʾ"
-LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "H" | "I"
-                   | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R" | "S"
-                   | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ" | "ʾ"
+               | "ĝ" | "h" | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n"
+               | "p" | "q" | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū"
+               | "û" | "w" | "z" | "ḫ" | "ʾ"
+LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "Ĝ" | "H"
+                   | "I" | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R"
+                   | "S" | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ"
+                   | "ʾ"
 
 ?any_grapheme: compound_grapheme | grapheme
 compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
