@@ -862,8 +862,6 @@ def test_invalid_lone_determinative(atf) -> None:
         ":-sal",
         "gam/:" "//sal",
         "Š[A₃?...]",
-        "0",
-        "01",
         "|KU]R|",
         "|KUR.[KUR|",
         "-kur",
