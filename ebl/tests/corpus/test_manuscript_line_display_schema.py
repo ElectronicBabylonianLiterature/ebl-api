@@ -104,4 +104,5 @@ def test_serialize() -> None:
             [JoinDisplaySchema().dump(join) for join in fragment]
             for fragment in manuscript.joins.fragments
         ],
+        "omittedWords": list(manuscript_line.omitted_words),
     }

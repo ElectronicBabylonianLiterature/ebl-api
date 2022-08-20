@@ -61,6 +61,7 @@ SERIALIZED_LINE_DETAILS: dict = {
                         [JoinDisplaySchema().dump(join) for join in fragment]
                         for fragment in MANUSCRIPT.joins.fragments
                     ],
+                    "omittedWords": list(MANUSCRIPT_LINE.omitted_words),
                 }
             ]
         }
