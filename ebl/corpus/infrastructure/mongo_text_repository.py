@@ -215,6 +215,22 @@ class MongoTextRepository(TextRepository):
             many=True,
         ), self._chapters.count_documents(mongo_query)
 
+    def query_by_lemma(self, lemma: str) -> Sequence[Chapter]:
+        mongo_query = {
+            "$or": [
+                {"lines.variants.reconstruction.uniqueLemma": [lemma]},
+                {"lines.variants.manuscripts.line.content.uniqueLemma": [lemma]},
+            ],
+        }
+
+        return ChapterSchema().load(
+            self._chapters.find_many(
+                mongo_query,
+                projection={"_id": False},
+            ),
+            many=True,
+        )
+
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
             return ManuscriptSchema().load(

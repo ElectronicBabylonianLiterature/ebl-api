@@ -1,9 +1,13 @@
 import attr
 import pytest
+from ebl.corpus.application.corpus import TextRepository
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.text import UncertainFragment
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
@@ -13,14 +17,19 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
+    LineVariantFactory,
     ManuscriptFactory,
+    ManuscriptLineFactory,
     TextFactory,
     ChapterQueryColophonLinesFactory,
     ManuscriptAttestationFactory,
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.word_tokens import Word
 
 
 TEXTS_COLLECTION = "texts"
@@ -224,6 +233,67 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     result = text_repository.query_by_transliteration(TransliterationQuery(signs), 0)
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
     assert result == (expected, len(expected))
+
+
+def test_query_by_lemma(text_repository: TextRepository) -> None:
+    manuscript = ManuscriptFactory.build()
+    lemma = ("qanû I",)
+
+    chapter_lemma_in_reconstruction = ChapterFactory.build(
+        manuscripts=(manuscript,),
+        lines=(
+            LineFactory.build(
+                variants=(
+                    LineVariantFactory.build(
+                        manuscripts=(
+                            ManuscriptLineFactory.build(manuscript_id=manuscript.id),
+                        ),
+                        reconstruction=(
+                            AkkadianWord.of(
+                                (ValueToken.of("buāru"),), unique_lemma=lemma
+                            ),
+                        ),
+                    ),
+                )
+            ),
+        ),
+    )
+
+    chapter_lemma_in_manuscripts = ChapterFactory.build(
+        manuscripts=(manuscript,),
+        lines=(
+            LineFactory.build(
+                variants=(
+                    LineVariantFactory.build(
+                        manuscripts=(
+                            ManuscriptLineFactory.build(
+                                manuscript_id=manuscript.id,
+                                line=TextLine.of_iterable(
+                                    LineNumber(1),
+                                    [
+                                        Word.of(
+                                            [Reading.of_name("bu")], unique_lemma=lemma
+                                        )
+                                    ],
+                                ),
+                            ),
+                        ),
+                        reconstruction=(
+                            AkkadianWord.of(
+                                (ValueToken.of("buāru"),), unique_lemma=tuple()
+                            ),
+                        ),
+                    ),
+                )
+            ),
+        ),
+    )
+
+    text_repository.create_chapter(chapter_lemma_in_reconstruction)
+    text_repository.create_chapter(chapter_lemma_in_manuscripts)
+    result = text_repository.query_by_lemma(lemma[0])
+    assert len(result) == 99
+    assert result == "expected value"
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
