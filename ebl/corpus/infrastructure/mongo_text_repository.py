@@ -218,8 +218,8 @@ class MongoTextRepository(TextRepository):
     def query_by_lemma(self, lemma: str) -> Sequence[Chapter]:
         mongo_query = {
             "$or": [
-                {"lines.variants.reconstruction.uniqueLemma": [lemma]},
-                {"lines.variants.manuscripts.line.content.uniqueLemma": [lemma]},
+                {"lines.variants.reconstruction.uniqueLemma": lemma},
+                {"lines.variants.manuscripts.line.content.uniqueLemma": lemma},
             ],
         }
 

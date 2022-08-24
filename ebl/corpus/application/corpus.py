@@ -74,6 +74,10 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
+    def query_by_lemma(self, lemma: str) -> Sequence[Chapter]:
+        ...
+
+    @abstractmethod
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]:
         ...
 

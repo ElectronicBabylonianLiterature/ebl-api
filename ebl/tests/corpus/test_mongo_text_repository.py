@@ -5,6 +5,7 @@ from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.text import UncertainFragment
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.sign_tokens import Reading
@@ -237,63 +238,71 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
 
 def test_query_by_lemma(text_repository: TextRepository) -> None:
     manuscript = ManuscriptFactory.build()
-    lemma = ("qanû I",)
+    lemma = "qanû I"
 
-    chapter_lemma_in_reconstruction = ChapterFactory.build(
-        manuscripts=(manuscript,),
-        lines=(
-            LineFactory.build(
-                variants=(
-                    LineVariantFactory.build(
-                        manuscripts=(
-                            ManuscriptLineFactory.build(manuscript_id=manuscript.id),
-                        ),
-                        reconstruction=(
-                            AkkadianWord.of(
-                                (ValueToken.of("buāru"),), unique_lemma=lemma
+    chapters_with_lemmas = [
+        ChapterFactory.build(
+            manuscripts=(manuscript,),
+            lines=(
+                LineFactory.build(
+                    variants=(
+                        LineVariantFactory.build(
+                            manuscripts=(
+                                ManuscriptLineFactory.build(
+                                    manuscript_id=manuscript.id
+                                ),
                             ),
-                        ),
-                    ),
-                )
-            ),
-        ),
-    )
-
-    chapter_lemma_in_manuscripts = ChapterFactory.build(
-        manuscripts=(manuscript,),
-        lines=(
-            LineFactory.build(
-                variants=(
-                    LineVariantFactory.build(
-                        manuscripts=(
-                            ManuscriptLineFactory.build(
-                                manuscript_id=manuscript.id,
-                                line=TextLine.of_iterable(
-                                    LineNumber(1),
-                                    [
-                                        Word.of(
-                                            [Reading.of_name("bu")], unique_lemma=lemma
-                                        )
-                                    ],
+                            reconstruction=(
+                                AkkadianWord.of(
+                                    (ValueToken.of("buāru"),),
+                                    unique_lemma=[WordId(lemma)],
                                 ),
                             ),
                         ),
-                        reconstruction=(
-                            AkkadianWord.of(
-                                (ValueToken.of("buāru"),), unique_lemma=tuple()
-                            ),
-                        ),
-                    ),
-                )
+                    )
+                ),
             ),
         ),
-    )
+        ChapterFactory.build(
+            manuscripts=(manuscript,),
+            lines=(
+                LineFactory.build(
+                    variants=(
+                        LineVariantFactory.build(
+                            manuscripts=(
+                                ManuscriptLineFactory.build(
+                                    manuscript_id=manuscript.id,
+                                    line=TextLine.of_iterable(
+                                        LineNumber(1),
+                                        [
+                                            Word.of(
+                                                [Reading.of_name("bu")],
+                                                unique_lemma=[WordId(lemma)],
+                                            )
+                                        ],
+                                    ),
+                                ),
+                            ),
+                            reconstruction=(
+                                AkkadianWord.of(
+                                    (ValueToken.of("buāru"),), unique_lemma=tuple()
+                                ),
+                            ),
+                        ),
+                    )
+                ),
+            ),
+        ),
+    ]
 
-    text_repository.create_chapter(chapter_lemma_in_reconstruction)
-    text_repository.create_chapter(chapter_lemma_in_manuscripts)
-    result = text_repository.query_by_lemma(lemma[0])
-    assert len(result) == 99
-    assert result == "expected value"
+    for chapter in chapters_with_lemmas:
+        text_repository.create_chapter(chapter)
+
+    result = text_repository.query_by_lemma(lemma)
+
+    assert set(chapter.id_ for chapter in result) == set(
+        chapter.id_ for chapter in chapters_with_lemmas
+    )
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
