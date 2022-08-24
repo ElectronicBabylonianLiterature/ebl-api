@@ -77,3 +77,14 @@ class ChaptersByManuscriptResource:
         resp.media = ManuscriptAttestationSchema().dump(
             manuscript_attestations, many=True
         )
+
+
+class ChaptersByLemmaResource:
+    def __init__(self, corpus: Corpus):
+        self._corpus = corpus
+
+    @falcon.before(require_scope, "read:texts")
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        resp.media = ApiChapterSchema().dump(
+            self._corpus.search_lemma(req.params["lemma"]), many=True
+        )

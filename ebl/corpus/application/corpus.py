@@ -167,6 +167,14 @@ class Corpus:
             [ChapterInfo.of(chapter, query) for chapter in chapters], total_count
         )
 
+    def search_lemma(self, query: str) -> Sequence[Chapter]:
+        if not query:
+            return []
+
+        chapters = self._repository.query_by_lemma(query)
+
+        return chapters
+
     def list(self) -> List[Text]:
         return self._repository.list()
 

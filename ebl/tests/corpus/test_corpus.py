@@ -172,6 +172,13 @@ def test_find_chapter_for_display(
     assert corpus.find_chapter_for_display(CHAPTER.id_) == injected_chapter_display
 
 
+def test_search_lemma(corpus, text_repository, when) -> None:
+    lemma = "testlemma I"
+    when(text_repository).query_by_lemma(lemma).thenReturn([CHAPTER])
+
+    assert corpus.search_lemma(lemma) == [CHAPTER]
+
+
 def test_find_line(corpus, text_repository, bibliography, when) -> None:
     number = 0
     when(text_repository).find_line(CHAPTER.id_, number).thenReturn(
