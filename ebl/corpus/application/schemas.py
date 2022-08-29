@@ -226,6 +226,11 @@ class LineSchema(Schema):
             tuple(data["translation"]),
         )
 
+class DictionaryLineSchema(Schema):
+    text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
+    line = fields.Nested(LineSchema, required=True)
+
+    
 
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")

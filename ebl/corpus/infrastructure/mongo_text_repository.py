@@ -9,6 +9,7 @@ from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
+    DictionaryLineSchema,
     LineSchema,
     ManuscriptSchema,
     TextSchema,
@@ -215,7 +216,7 @@ class MongoTextRepository(TextRepository):
             many=True,
         ), self._chapters.count_documents(mongo_query)
 
-    def query_by_lemma(self, lemma: str) -> Sequence[Chapter]:
+    def query_by_lemma(self, lemma: str):
         mongo_query = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
@@ -223,10 +224,17 @@ class MongoTextRepository(TextRepository):
             ],
         }
 
-        return ChapterSchema().load(
-            self._chapters.find_many(
-                mongo_query,
-                projection={"_id": False},
+        return DictionaryLineSchema().load(
+            self._chapters.aggregate(
+                [
+                    {"$match": mongo_query},
+                    {"$project": {"_id": False, "lines": True, "textId": True}},
+                    {"$unwind": "$lines"},
+                    {
+                        "$match": mongo_query
+                    },
+                    {"$project": {"textId": True, "line": "$lines"}}
+                ]
             ),
             many=True,
         )

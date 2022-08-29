@@ -12,7 +12,7 @@ from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
-from ebl.corpus.application.schemas import ChapterSchema
+from ebl.corpus.application.schemas import ChapterSchema, DictionaryLineSchema
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
@@ -74,7 +74,7 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_lemma(self, lemma: str) -> Sequence[Chapter]:
+    def query_by_lemma(self, lemma: str) -> Sequence[DictionaryLineSchema]:
         ...
 
     @abstractmethod
