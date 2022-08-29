@@ -2,6 +2,7 @@ from marshmallow import Schema, fields
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.web.chapter_schemas import ApiLineSchema
+from ebl.transliteration.application.line_schemas import TextLineSchema
 
 
 class LineSchema(Schema):
@@ -14,7 +15,7 @@ class ChapterInfoSchema(Schema):
     matching_lines = fields.Nested(ApiLineSchema, many=True, data_key="matchingLines")
     matching_colophon_lines = fields.Mapping(
         fields.String(),
-        fields.Pluck(LineSchema, "atf", many=True),
+        fields.Nested(TextLineSchema, many=True),
         data_key="matchingColophonLines",
     )
 

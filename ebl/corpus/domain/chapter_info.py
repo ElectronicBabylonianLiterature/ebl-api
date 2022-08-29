@@ -21,6 +21,7 @@ class ChapterInfo:
         matching_lines = chapter.get_matching_lines(query)
         matching_colophon_lines = chapter.get_matching_colophon_lines(query)
 
+
         return ChapterInfo(
             chapter.id_,
             {manuscript.id: manuscript.siglum for manuscript in chapter.manuscripts},
