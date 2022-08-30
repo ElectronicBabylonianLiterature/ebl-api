@@ -229,14 +229,24 @@ class MongoTextRepository(TextRepository):
             self._chapters.aggregate(
                 [
                     {"$match": mongo_query},
-                    {"$project": {"_id": False, "lines": True, "textId": True}},
+                    {
+                        "$project": {
+                            "_id": False,
+                            "lines": True,
+                            "name": True,
+                            "textId": True,
+                        }
+                    },
                     {"$unwind": "$lines"},
                     {"$match": mongo_query},
-                    text_title_query("$textId.genre", "$textId.category", "$textId.index"),
+                    text_title_query(
+                        "$textId.genre", "$textId.category", "$textId.index"
+                    ),
                     {
                         "$project": {
                             "textId": True,
                             "textName": {"$first": "$textName.name"},
+                            "name": True,
                             "line": "$lines",
                         }
                     },
