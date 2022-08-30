@@ -229,6 +229,7 @@ class LineSchema(Schema):
 class DictionaryLineSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     line = fields.Nested(LineSchema, required=True)
+    text_name = fields.String(required=True, data_key="textName")
 
     
 

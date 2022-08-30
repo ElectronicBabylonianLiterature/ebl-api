@@ -1,6 +1,7 @@
 from typing import List
 
 from ebl.corpus.domain.chapter import ChapterId
+from ebl.transliteration.domain.genre import Genre
 
 from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
@@ -185,3 +186,31 @@ def join_text() -> List[dict]:
             },
         }
     ]
+
+
+def text_title_query(genre: Genre, category: int, index: int) -> dict:
+    return {
+        "$lookup": {
+            "from": "texts",
+            "let": {
+                "genre": genre,
+                "category": category,
+                "index": index,
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {
+                            "$and": [
+                                {"$eq": ["$genre", "$$genre"]},
+                                {"$eq": ["$category", "$$category"]},
+                                {"$eq": ["$index", "$$index"]},
+                            ]
+                        }
+                    }
+                },
+                {"$project": {"_id": False, "name": True}},
+            ],
+            "as": "textName",
+        }
+    }

@@ -26,6 +26,7 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_chapters,
     join_text,
+    text_title_query,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import NotFoundError
@@ -230,10 +231,15 @@ class MongoTextRepository(TextRepository):
                     {"$match": mongo_query},
                     {"$project": {"_id": False, "lines": True, "textId": True}},
                     {"$unwind": "$lines"},
+                    {"$match": mongo_query},
+                    text_title_query("$textId.genre", "$textId.category", "$textId.index"),
                     {
-                        "$match": mongo_query
+                        "$project": {
+                            "textId": True,
+                            "textName": {"$first": "$textName.name"},
+                            "line": "$lines",
+                        }
                     },
-                    {"$project": {"textId": True, "line": "$lines"}}
                 ]
             ),
             many=True,
