@@ -85,6 +85,10 @@ class ChaptersByLemmaResource:
 
     @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        try:
+            pagination_index = int(req.params["paginationIndex"])
+        except ValueError as error:
+            raise DataError("Pagination Index has to be a number") from error
         resp.media = DictionaryLineSchema().dump(
-            self._corpus.search_lemma(req.params["lemma"]), many=True
+            self._corpus.search_lemma(req.params["lemma"], pagination_index), many=True
         )

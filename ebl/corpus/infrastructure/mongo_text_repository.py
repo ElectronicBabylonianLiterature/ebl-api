@@ -217,7 +217,8 @@ class MongoTextRepository(TextRepository):
             many=True,
         ), self._chapters.count_documents(mongo_query)
 
-    def query_by_lemma(self, lemma: str):
+    def query_by_lemma(self, lemma: str, pagination_index: int):
+        LIMIT = 3
         mongo_query = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
@@ -242,6 +243,8 @@ class MongoTextRepository(TextRepository):
                     text_title_query(
                         "$textId.genre", "$textId.category", "$textId.index"
                     ),
+                    {"$skip": LIMIT * pagination_index},
+                    {"$limit": LIMIT},
                     {
                         "$project": {
                             "textId": True,
