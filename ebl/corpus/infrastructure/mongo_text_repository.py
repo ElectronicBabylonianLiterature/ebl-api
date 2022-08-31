@@ -246,7 +246,7 @@ class MongoTextRepository(TextRepository):
                         "$project": {
                             "textId": True,
                             "textName": {"$first": "$textName.name"},
-                            "name": True,
+                            "chapterName": "$name",
                             "line": "$lines",
                         }
                     },
