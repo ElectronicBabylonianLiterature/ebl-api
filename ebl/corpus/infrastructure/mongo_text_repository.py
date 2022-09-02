@@ -240,9 +240,7 @@ class MongoTextRepository(TextRepository):
                     },
                     {"$unwind": "$lines"},
                     {"$match": mongo_query},
-                    text_title_query(
-                        "$textId.genre", "$textId.category", "$textId.index"
-                    ),
+                    text_title_query(),
                     {"$skip": LIMIT * pagination_index},
                     {"$limit": LIMIT},
                     {

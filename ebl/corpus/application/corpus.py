@@ -74,7 +74,9 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_lemma(self, lemma: str, pagination_index: int) -> Sequence[DictionaryLineSchema]:
+    def query_by_lemma(
+        self, lemma: str, pagination_index: int
+    ) -> Sequence[DictionaryLineSchema]:
         ...
 
     @abstractmethod
@@ -167,7 +169,9 @@ class Corpus:
             [ChapterInfo.of(chapter, query) for chapter in chapters], total_count
         )
 
-    def search_lemma(self, query: str, pagination_index: int) -> Sequence[Chapter]:
+    def search_lemma(
+        self, query: str, pagination_index: int
+    ) -> Sequence[DictionaryLineSchema]:
         if not query:
             return []
 

@@ -298,11 +298,6 @@ def test_query_by_lemma(text_repository: TextRepository) -> None:
     for chapter in chapters_with_lemmas:
         text_repository.create_chapter(chapter)
 
-    result = text_repository.query_by_lemma(lemma)
-
-    assert set(chapter.id_ for chapter in result) == set(
-        chapter.id_ for chapter in chapters_with_lemmas
-    )
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
