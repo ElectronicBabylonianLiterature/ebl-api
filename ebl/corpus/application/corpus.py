@@ -173,11 +173,7 @@ class Corpus:
     def search_lemma(
         self, query: str, pagination_index: int
     ) -> Sequence[DictionaryLine]:
-        return (
-            self._repository.query_by_lemma(query, pagination_index)
-            if query
-            else []
-        )
+        return self._repository.query_by_lemma(query, pagination_index) if query else []
 
     def list(self) -> List[Text]:
         return self._repository.list()
