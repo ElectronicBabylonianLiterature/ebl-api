@@ -3,6 +3,7 @@ import pytest
 from ebl.corpus.application.corpus import TextRepository
 
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
+from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.text import UncertainFragment
 from ebl.dictionary.domain.word import WordId
@@ -80,6 +81,8 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
         colophon_lines_in_query={"1": [0]}
     ),
 )
+LEMMA_MANUSCRIPT = ManuscriptFactory.build()
+QUERY_LEMMA = "qanû I"
 
 
 def when_text_in_collection(database, text=TEXT) -> None:
@@ -236,26 +239,25 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     assert result == (expected, len(expected))
 
 
-def test_query_by_lemma(text_repository: TextRepository) -> None:
-    manuscript = ManuscriptFactory.build()
-    lemma = "qanû I"
-
-    chapters_with_lemmas = [
+@pytest.mark.parametrize(
+    "chapter",
+    [
         ChapterFactory.build(
-            manuscripts=(manuscript,),
+            text_id=TEXT.id,
+            manuscripts=(LEMMA_MANUSCRIPT,),
             lines=(
                 LineFactory.build(
                     variants=(
                         LineVariantFactory.build(
                             manuscripts=(
                                 ManuscriptLineFactory.build(
-                                    manuscript_id=manuscript.id
+                                    manuscript_id=LEMMA_MANUSCRIPT.id
                                 ),
                             ),
                             reconstruction=(
                                 AkkadianWord.of(
                                     (ValueToken.of("buāru"),),
-                                    unique_lemma=[WordId(lemma)],
+                                    unique_lemma=[WordId(QUERY_LEMMA)],
                                 ),
                             ),
                         ),
@@ -264,20 +266,21 @@ def test_query_by_lemma(text_repository: TextRepository) -> None:
             ),
         ),
         ChapterFactory.build(
-            manuscripts=(manuscript,),
+            text_id=TEXT.id,
+            manuscripts=(LEMMA_MANUSCRIPT,),
             lines=(
                 LineFactory.build(
                     variants=(
                         LineVariantFactory.build(
                             manuscripts=(
                                 ManuscriptLineFactory.build(
-                                    manuscript_id=manuscript.id,
+                                    manuscript_id=LEMMA_MANUSCRIPT.id,
                                     line=TextLine.of_iterable(
                                         LineNumber(1),
                                         [
                                             Word.of(
                                                 [Reading.of_name("bu")],
-                                                unique_lemma=[WordId(lemma)],
+                                                unique_lemma=[WordId(QUERY_LEMMA)],
                                             )
                                         ],
                                     ),
@@ -293,11 +296,16 @@ def test_query_by_lemma(text_repository: TextRepository) -> None:
                 ),
             ),
         ),
-    ]
+    ],
+)
+def test_query_by_lemma(text_repository: TextRepository, chapter: Chapter) -> None:
+    text_repository.create(TEXT)
+    text_repository.create_chapter(chapter)
 
-    for chapter in chapters_with_lemmas:
-        text_repository.create_chapter(chapter)
-
+    assert (
+        text_repository.query_by_lemma(QUERY_LEMMA, pagination_index=0)[0]["text_id"]
+        == chapter.text_id
+    )
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
