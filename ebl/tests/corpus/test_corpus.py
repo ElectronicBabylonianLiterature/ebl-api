@@ -8,7 +8,7 @@ from ebl.corpus.application.lemmatization import (
     ChapterLemmatization,
     LineVariantLemmatization,
 )
-from ebl.corpus.application.schemas import ChapterSchema, DictionaryLineSchema
+from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.line import Line
