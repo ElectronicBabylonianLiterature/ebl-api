@@ -4,7 +4,10 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
-from ebl.corpus.application.schemas import DictionaryLineSchema, ManuscriptAttestationSchema
+from ebl.corpus.application.schemas import (
+    DictionaryLineSchema,
+    ManuscriptAttestationSchema,
+)
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.domain.museum_number import MuseumNumber

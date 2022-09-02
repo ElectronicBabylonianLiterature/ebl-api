@@ -1,3 +1,4 @@
+from typing import List
 import attr
 import pytest
 from ebl.corpus.application.corpus import TextRepository
@@ -240,72 +241,88 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
 
 
 @pytest.mark.parametrize(
-    "chapter",
+    "chapter,lemma_id,expected",
     [
-        ChapterFactory.build(
-            text_id=TEXT.id,
-            manuscripts=(LEMMA_MANUSCRIPT,),
-            lines=(
-                LineFactory.build(
-                    variants=(
-                        LineVariantFactory.build(
-                            manuscripts=(
-                                ManuscriptLineFactory.build(
-                                    manuscript_id=LEMMA_MANUSCRIPT.id
+        (
+            ChapterFactory.build(
+                text_id=TEXT.id,
+                manuscripts=(LEMMA_MANUSCRIPT,),
+                lines=(
+                    LineFactory.build(
+                        variants=(
+                            LineVariantFactory.build(
+                                manuscripts=(
+                                    ManuscriptLineFactory.build(
+                                        manuscript_id=LEMMA_MANUSCRIPT.id
+                                    ),
                                 ),
-                            ),
-                            reconstruction=(
-                                AkkadianWord.of(
-                                    (ValueToken.of("buāru"),),
-                                    unique_lemma=[WordId(QUERY_LEMMA)],
-                                ),
-                            ),
-                        ),
-                    )
-                ),
-            ),
-        ),
-        ChapterFactory.build(
-            text_id=TEXT.id,
-            manuscripts=(LEMMA_MANUSCRIPT,),
-            lines=(
-                LineFactory.build(
-                    variants=(
-                        LineVariantFactory.build(
-                            manuscripts=(
-                                ManuscriptLineFactory.build(
-                                    manuscript_id=LEMMA_MANUSCRIPT.id,
-                                    line=TextLine.of_iterable(
-                                        LineNumber(1),
-                                        [
-                                            Word.of(
-                                                [Reading.of_name("bu")],
-                                                unique_lemma=[WordId(QUERY_LEMMA)],
-                                            )
-                                        ],
+                                reconstruction=(
+                                    AkkadianWord.of(
+                                        (ValueToken.of("buāru"),),
+                                        unique_lemma=[WordId(QUERY_LEMMA)],
                                     ),
                                 ),
                             ),
-                            reconstruction=(
-                                AkkadianWord.of(
-                                    (ValueToken.of("buāru"),), unique_lemma=tuple()
-                                ),
-                            ),
-                        ),
-                    )
+                        )
+                    ),
                 ),
             ),
+            QUERY_LEMMA,
+            [TEXT.id],
         ),
+        (
+            ChapterFactory.build(
+                text_id=TEXT.id,
+                manuscripts=(LEMMA_MANUSCRIPT,),
+                lines=(
+                    LineFactory.build(
+                        variants=(
+                            LineVariantFactory.build(
+                                manuscripts=(
+                                    ManuscriptLineFactory.build(
+                                        manuscript_id=LEMMA_MANUSCRIPT.id,
+                                        line=TextLine.of_iterable(
+                                            LineNumber(1),
+                                            [
+                                                Word.of(
+                                                    [Reading.of_name("bu")],
+                                                    unique_lemma=[WordId(QUERY_LEMMA)],
+                                                )
+                                            ],
+                                        ),
+                                    ),
+                                ),
+                                reconstruction=(
+                                    AkkadianWord.of(
+                                        (ValueToken.of("buāru"),), unique_lemma=tuple()
+                                    ),
+                                ),
+                            ),
+                        )
+                    ),
+                ),
+            ),
+            QUERY_LEMMA,
+            [TEXT.id],
+        ),
+        (CHAPTER, "definitely not a lemma", []),
     ],
 )
-def test_query_by_lemma(text_repository: TextRepository, chapter: Chapter) -> None:
+def test_query_by_lemma(
+    text_repository: TextRepository,
+    chapter: Chapter,
+    lemma_id: str,
+    expected: List[str],
+) -> None:
     text_repository.create(TEXT)
     text_repository.create_chapter(chapter)
 
-    assert (
-        text_repository.query_by_lemma(QUERY_LEMMA, pagination_index=0)[0]["text_id"]
-        == chapter.text_id
-    )
+    assert [
+        dictionary_line["text_id"]
+        for dictionary_line in text_repository.query_by_lemma(
+            lemma_id, pagination_index=0
+        )
+    ] == expected
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
