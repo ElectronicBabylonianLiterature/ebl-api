@@ -11,6 +11,7 @@ from ebl.corpus.application.lemmatization import (
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
@@ -175,12 +176,13 @@ def test_find_chapter_for_display(
 
 def test_search_lemma(corpus, text_repository, when) -> None:
     lemma = "testlemma I"
-    dictionary_line = {
-        "textId": TextIdSchema().dump(TEXT.id),
-        "chapterName": CHAPTER.name,
-        "line": CHAPTER.lines[0],
-        "textName": TEXT.name,
-    }
+    dictionary_line = DictionaryLine(
+        TextIdSchema().dump(TEXT.id),
+        CHAPTER.name,
+        CHAPTER.lines[0],
+        TEXT.name,
+    )
+
     when(text_repository).query_by_lemma(lemma, 0).thenReturn([dictionary_line])
 
     assert corpus.search_lemma(lemma, 0) == [dictionary_line]

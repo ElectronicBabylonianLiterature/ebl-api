@@ -6,6 +6,7 @@ from pymongo.database import Database
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
@@ -217,7 +218,9 @@ class MongoTextRepository(TextRepository):
             many=True,
         ), self._chapters.count_documents(mongo_query)
 
-    def query_by_lemma(self, lemma: str, pagination_index: int):
+    def query_by_lemma(
+        self, lemma: str, pagination_index: int
+    ) -> Sequence[DictionaryLine]:
         LIMIT = 3
         mongo_query = {
             "$or": [

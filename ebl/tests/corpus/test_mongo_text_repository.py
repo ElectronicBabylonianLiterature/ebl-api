@@ -318,10 +318,8 @@ def test_query_by_lemma(
     text_repository.create_chapter(chapter)
 
     assert [
-        dictionary_line["text_id"]
-        for dictionary_line in text_repository.query_by_lemma(
-            lemma_id, pagination_index=0
-        )
+        dictionary_line.text_id
+        for dictionary_line in text_repository.query_by_lemma(lemma_id, 0)
     ] == expected
 
 

@@ -14,6 +14,7 @@ from ebl.corpus.domain.chapter import (
     Chapter,
     Classification,
 )
+from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
@@ -229,11 +230,17 @@ class LineSchema(Schema):
 
 class DictionaryLineSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
+    text_name = fields.String(required=True, data_key="textName")
     chapter_name = fields.String(
         required=True, validate=validate.Length(min=1), data_key="chapterName"
     )
     line = fields.Nested(LineSchema, required=True)
-    text_name = fields.String(required=True, data_key="textName")
+
+    @post_load
+    def make_dictionary_line(self, data: dict, **kwargs) -> DictionaryLine:
+        return DictionaryLine(
+            data["text_id"], data["text_name"], data["chapter_name"], data["line"]
+        )
 
 
 class ChapterSchema(Schema):

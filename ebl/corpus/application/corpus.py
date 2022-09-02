@@ -12,12 +12,13 @@ from ebl.corpus.application.lemmatization import ChapterLemmatization
 from ebl.corpus.application.lemmatization_updater import LemmatizationUpdater
 from ebl.corpus.application.lines_updater import LinesUpdater
 from ebl.corpus.application.manuscripts_updater import ManuscriptUpdater
-from ebl.corpus.application.schemas import ChapterSchema, DictionaryLineSchema
+from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.application.text_validator import TextValidator
 from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo, ChapterInfosPagination
+from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
@@ -76,7 +77,7 @@ class TextRepository(ABC):
     @abstractmethod
     def query_by_lemma(
         self, lemma: str, pagination_index: int
-    ) -> Sequence[DictionaryLineSchema]:
+    ) -> Sequence[DictionaryLine]:
         ...
 
     @abstractmethod
@@ -171,7 +172,7 @@ class Corpus:
 
     def search_lemma(
         self, query: str, pagination_index: int
-    ) -> Sequence[DictionaryLineSchema]:
+    ) -> Sequence[DictionaryLine]:
         if not query:
             return []
 
