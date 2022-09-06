@@ -27,6 +27,10 @@ class TransliterationQueryFactory:
         return visitor.result
 
     def _parse_line(self, line: str) -> TextLine:
+        # ToDo:
+        # - Check if implementing regex here for wildcards is reasonable (`TextLine` serialization might make this hardly possible).
+        # - If regex is not a solution, rearrange to generate a list of line variants that is passed to the query.
+        # - Another, hybrid approach would be generating regex from a list of `TextLine` for the mongo query itself.
         try:
             return cast(TextLine, parse_line(f"1. {line}"))
         except PARSE_ERRORS:
