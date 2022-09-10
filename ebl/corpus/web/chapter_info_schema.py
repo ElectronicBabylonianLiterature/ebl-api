@@ -5,10 +5,6 @@ from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.transliteration.application.line_schemas import TextLineSchema
 
 
-class LineSchema(Schema):
-    atf = fields.String()
-
-
 class ChapterInfoSchema(Schema):
     id_ = fields.Nested(ChapterIdSchema, data_key="id")
     siglums = fields.Mapping(fields.String(), fields.String())
