@@ -6,7 +6,8 @@ from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
-from ebl.corpus.domain.text import UncertainFragment
+from ebl.corpus.domain.dictionary_line import DictionaryLine
+from ebl.corpus.domain.text import Text, UncertainFragment
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
@@ -41,7 +42,8 @@ JOINS_COLLECTION = "joins"
 MANUSCRIPT_ID = 1
 MUSEUM_NUMBER = MuseumNumber("X", "1")
 UNCERTAIN_FRAGMENT = MuseumNumber("X", "2")
-TEXT = TextFactory.build()
+TEXT: Text = TextFactory.build()
+LITERATURE_TEXT: Text = TextFactory.build(genre=Genre.LITERATURE)
 CHAPTER = ChapterFactory.build(
     text_id=TEXT.id,
     stage=TEXT.chapters[0].stage,
@@ -84,6 +86,58 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
 )
 LEMMA_MANUSCRIPT = ManuscriptFactory.build()
 QUERY_LEMMA = "qanû I"
+CHAPTER_WITH_QUERY_LEMMA: Chapter = ChapterFactory.build(
+    text_id=LITERATURE_TEXT.id,
+    manuscripts=(LEMMA_MANUSCRIPT,),
+    lines=(
+        LineFactory.build(
+            variants=(
+                LineVariantFactory.build(
+                    manuscripts=(
+                        ManuscriptLineFactory.build(manuscript_id=LEMMA_MANUSCRIPT.id),
+                    ),
+                    reconstruction=(
+                        AkkadianWord.of(
+                            (ValueToken.of("qane"),),
+                            unique_lemma=(WordId(QUERY_LEMMA),),
+                        ),
+                    ),
+                ),
+            )
+        ),
+    ),
+)
+CHAPTER_WITH_MANUSCRIPT_LEMMA: Chapter = ChapterFactory.build(
+    text_id=TEXT.id,
+    manuscripts=(LEMMA_MANUSCRIPT,),
+    lines=(
+        LineFactory.build(
+            variants=(
+                LineVariantFactory.build(
+                    manuscripts=(
+                        ManuscriptLineFactory.build(
+                            manuscript_id=LEMMA_MANUSCRIPT.id,
+                            line=TextLine.of_iterable(
+                                LineNumber(1),
+                                [
+                                    Word.of(
+                                        [Reading.of_name("bu")],
+                                        unique_lemma=(WordId(QUERY_LEMMA),),
+                                    )
+                                ],
+                            ),
+                        ),
+                    ),
+                    reconstruction=(
+                        AkkadianWord.of(
+                            (ValueToken.of("buāru"),), unique_lemma=tuple()
+                        ),
+                    ),
+                ),
+            )
+        ),
+    ),
+)
 
 
 def when_text_in_collection(database, text=TEXT) -> None:
@@ -240,87 +294,54 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     assert result == (expected, len(expected))
 
 
+def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
+    return DictionaryLine(
+        text.id,
+        text.name,
+        chapter.name,
+        chapter.lines[0],
+    )
+
+
 @pytest.mark.parametrize(
-    "chapter,lemma_id,expected",
+    "text,chapter,lemma_id,genre,expected",
     [
         (
-            ChapterFactory.build(
-                text_id=TEXT.id,
-                manuscripts=(LEMMA_MANUSCRIPT,),
-                lines=(
-                    LineFactory.build(
-                        variants=(
-                            LineVariantFactory.build(
-                                manuscripts=(
-                                    ManuscriptLineFactory.build(
-                                        manuscript_id=LEMMA_MANUSCRIPT.id
-                                    ),
-                                ),
-                                reconstruction=(
-                                    AkkadianWord.of(
-                                        (ValueToken.of("buāru"),),
-                                        unique_lemma=[WordId(QUERY_LEMMA)],
-                                    ),
-                                ),
-                            ),
-                        )
-                    ),
-                ),
-            ),
+            LITERATURE_TEXT,
+            CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
-            [TEXT.id],
+            None,
+            [make_dictionary_line(LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA)],
         ),
         (
-            ChapterFactory.build(
-                text_id=TEXT.id,
-                manuscripts=(LEMMA_MANUSCRIPT,),
-                lines=(
-                    LineFactory.build(
-                        variants=(
-                            LineVariantFactory.build(
-                                manuscripts=(
-                                    ManuscriptLineFactory.build(
-                                        manuscript_id=LEMMA_MANUSCRIPT.id,
-                                        line=TextLine.of_iterable(
-                                            LineNumber(1),
-                                            [
-                                                Word.of(
-                                                    [Reading.of_name("bu")],
-                                                    unique_lemma=[WordId(QUERY_LEMMA)],
-                                                )
-                                            ],
-                                        ),
-                                    ),
-                                ),
-                                reconstruction=(
-                                    AkkadianWord.of(
-                                        (ValueToken.of("buāru"),), unique_lemma=tuple()
-                                    ),
-                                ),
-                            ),
-                        )
-                    ),
-                ),
-            ),
+            TEXT,
+            CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
-            [TEXT.id],
+            Genre.DIVINATION,
+            [],
         ),
-        (CHAPTER, "definitely not a lemma", []),
+        (
+            TEXT,
+            CHAPTER_WITH_MANUSCRIPT_LEMMA,
+            QUERY_LEMMA,
+            None,
+            [make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA)],
+        ),
+        (TEXT, CHAPTER, "definitely not a lemma", None, []),
     ],
 )
 def test_query_by_lemma(
     text_repository: TextRepository,
+    text: Text,
     chapter: Chapter,
     lemma_id: str,
+    genre: Genre,
     expected: List[str],
 ) -> None:
-    text_repository.create(TEXT)
+    text_repository.create(text)
     text_repository.create_chapter(chapter)
 
-    assert [
-        dictionary_line.text_id
-        for dictionary_line in text_repository.query_by_lemma(lemma_id, 0)
-    ] == expected
+    assert text_repository.query_by_lemma(lemma_id, 0, genre) == expected
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:

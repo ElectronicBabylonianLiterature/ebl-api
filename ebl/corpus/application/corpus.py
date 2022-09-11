@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 import attr
 
@@ -26,6 +26,7 @@ from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -76,7 +77,7 @@ class TextRepository(ABC):
 
     @abstractmethod
     def query_by_lemma(
-        self, lemma: str, pagination_index: int
+        self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
         ...
 
@@ -171,9 +172,13 @@ class Corpus:
         )
 
     def search_lemma(
-        self, query: str, pagination_index: int
+        self, query: str, pagination_index: int, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
-        return self._repository.query_by_lemma(query, pagination_index) if query else []
+        return (
+            self._repository.query_by_lemma(query, pagination_index, genre)
+            if query
+            else []
+        )
 
     def list(self) -> List[Text]:
         return self._repository.list()
