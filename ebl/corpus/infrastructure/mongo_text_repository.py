@@ -27,7 +27,7 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_chapters,
     join_text,
-    text_title_query,
+    join_text_title,
 )
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -246,7 +246,7 @@ class MongoTextRepository(TextRepository):
                 },
                 {"$unwind": "$lines"},
                 {"$match": lemma_query},
-                text_title_query(),
+                join_text_title(),
                 {"$skip": LIMIT * pagination_index},
                 {"$limit": LIMIT},
                 {

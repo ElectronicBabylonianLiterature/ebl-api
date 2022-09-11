@@ -187,7 +187,7 @@ def join_text() -> List[dict]:
     ]
 
 
-def text_title_query() -> dict:
+def join_text_title() -> dict:
     return {
         "$lookup": {
             "from": "texts",
