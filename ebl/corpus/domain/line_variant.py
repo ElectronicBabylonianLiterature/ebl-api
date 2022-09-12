@@ -121,11 +121,11 @@ class LineVariant:
                 reconstruction=merged_reconstruction,
                 manuscripts=tuple(merged_manuscripts),
             )
-            .set_has_variant_aligment()
-            .set_has_omitted_aligment()
+            .set_has_variant_alignment()
+            .set_has_omitted_alignment()
         )
 
-    def set_has_variant_aligment(self) -> "LineVariant":
+    def set_has_variant_alignment(self) -> "LineVariant":
         variant_alignments = self._variant_alignments
 
         @singledispatch
@@ -144,7 +144,7 @@ class LineVariant:
             ),
         )
 
-    def set_has_omitted_aligment(self) -> "LineVariant":
+    def set_has_omitted_alignment(self) -> "LineVariant":
         omitted_alignments = self._omitted_words
 
         @singledispatch
