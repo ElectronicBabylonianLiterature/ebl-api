@@ -18,9 +18,25 @@ class LinesUpdater(ChapterUpdater):
     def _visit_lines(self, chapter: Chapter) -> None:
         for index, line in enumerate(chapter.lines):
             if index in self._lines_update.edited:
-                self._lines.append(self._lines_update.edited[index])
+                edited_line = self._lines_update.edited[index]
+                self._lines.append(
+                    attr.evolve(
+                        edited_line,
+                        variants=tuple(
+                            variant.set_alignment_flags()
+                            for variant in edited_line.variants
+                        ),
+                    )
+                )
             elif index not in self._lines_update.deleted:
-                self._lines.append(line)
+                self._lines.append(
+                    attr.evolve(
+                        line,
+                        variants=tuple(
+                            variant.set_alignment_flags() for variant in line.variants
+                        ),
+                    )
+                )
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
         return self._sign_updater.update(

@@ -115,26 +115,23 @@ class LineVariant:
         merged_manuscripts = Merger(repr, merge_manuscript).merge(
             self.manuscripts, other.manuscripts
         )
-        return (
-            attr.evolve(
-                other,
-                reconstruction=merged_reconstruction,
-                manuscripts=tuple(merged_manuscripts),
-            )
-            .set_has_variant_alignment()
-            .set_has_omitted_alignment()
-        )
+        return attr.evolve(
+            other,
+            reconstruction=merged_reconstruction,
+            manuscripts=tuple(merged_manuscripts),
+        ).set_alignment_flags()
+
+    def set_alignment_flags(self) -> "LineVariant":
+        return self.set_has_variant_alignment().set_has_omitted_alignment()
 
     def set_has_variant_alignment(self) -> "LineVariant":
-        variant_alignments = self._variant_alignments
-
         @singledispatch
         def set_flag(token: Token, index: int) -> Token:
             return token
 
         @set_flag.register(AbstractWord)
         def _(token: AbstractWord, index: int) -> AbstractWord:
-            return token.set_has_variant_alignment(index in variant_alignments)
+            return token.set_has_variant_alignment(index in self._variant_alignments)
 
         return attr.evolve(
             self,
@@ -145,15 +142,13 @@ class LineVariant:
         )
 
     def set_has_omitted_alignment(self) -> "LineVariant":
-        omitted_alignments = self._omitted_words
-
         @singledispatch
         def set_flag(token: Token, index: int) -> Token:
             return token
 
         @set_flag.register(AbstractWord)
         def _(token: AbstractWord, index: int) -> AbstractWord:
-            return token.set_has_omitted_alignment(index in omitted_alignments)
+            return token.set_has_omitted_alignment(index in self._omitted_words)
 
         return attr.evolve(
             self,

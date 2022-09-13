@@ -32,7 +32,16 @@ def test_updating(
     text_repository.create_chapter(chapter)
     updated_chapter = attr.evolve(
         chapter,
-        lines=(attr.evolve(chapter.lines[0], number=LineNumber(1, True)),),
+        lines=(
+            attr.evolve(
+                chapter.lines[0],
+                number=LineNumber(1, True),
+                variants=tuple(
+                    variant.set_alignment_flags()
+                    for variant in chapter.lines[0].variants
+                ),
+            ),
+        ),
         parser_version=ATF_PARSER_VERSION,
     )
 
@@ -73,6 +82,10 @@ def test_updating_strophic_information(
                     0
                 ].is_second_line_of_parallelism,
                 is_beginning_of_section=not chapter.lines[0].is_beginning_of_section,
+                variants=tuple(
+                    variant.set_alignment_flags()
+                    for variant in chapter.lines[0].variants
+                ),
             ),
         ),
         parser_version=ATF_PARSER_VERSION,
@@ -228,7 +241,18 @@ def test_importing(client, bibliography, sign_repository, signs, text_repository
 
     updated_chapter = attr.evolve(
         chapter,
-        lines=(*chapter.lines, *parse_chapter(atf, chapter.manuscripts)),
+        lines=(
+            *(
+                attr.evolve(
+                    line,
+                    variants=tuple(
+                        variant.set_alignment_flags() for variant in line.variants
+                    ),
+                )
+                for line in chapter.lines
+            ),
+            *parse_chapter(atf, chapter.manuscripts),
+        ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
