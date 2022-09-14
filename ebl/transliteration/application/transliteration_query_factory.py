@@ -1,4 +1,5 @@
 from typing import Sequence, cast
+import re
 
 from ebl.errors import DataError
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -17,6 +18,14 @@ class TransliterationQueryFactory:
         return TransliterationQuery([])
 
     def create(self, transliteration: str) -> TransliterationQuery:
+        print('! t !', transliteration)
+        # ToDo:
+        # - Introduce wildcards here
+        #    - A new class / classes might be practical (?)
+        #    - Types are:
+        #       - ? = any one sign
+        #       - [a|b] = alternative signs (e.g. [bu|ba])
+        #       - * = any sign or sequence of signs before a \n
         signs = [self._create_signs(line) for line in transliteration.split("\n")]
         return TransliterationQuery(signs)
 
@@ -35,3 +44,74 @@ class TransliterationQueryFactory:
             return cast(TextLine, parse_line(f"1. {line}"))
         except PARSE_ERRORS:
             raise DataError("Invalid transliteration query.")
+
+
+wildcard_matchers: dict = {
+    "alternative": r"\[[^\]]*\|[^\]]*]",
+    "any sign": r"\?",
+    "any sign+": r"\*",
+}
+
+all_wildcards = '|'.join(
+    [f'({wildcard_re})' for wildcard_re in wildcard_matchers.values()])
+
+
+def classify(element: str):
+    for name, regex in wildcard_matchers.items():
+        if re.match(regex, element):
+            return name
+    return "text"
+
+
+transliteration = '[a|]-na * qi2-bi2-ma ?-ma'
+
+
+class TransliterationQueryElement:
+
+    string: str
+    type: str
+
+    def __init__(self, string: str, type: str):
+        self.type = type
+        self.string = string
+
+    @ property
+    def re(self) -> re:
+        ...
+
+
+class TransliterationQueryText(TransliterationQueryElement):
+    pass
+
+
+class TransliterationQueryWildCard(TransliterationQueryElement):
+    pass
+
+
+class TransliterationQueryLine:
+
+    elements: Sequence[TransliterationQueryElement]
+
+    def __init__(self, transliteration: str):
+        self.elements = self.create(transliteration)
+        print(self.elements)
+
+    def create(self, transliteration: str) -> Sequence[TransliterationQueryElement]:
+        elements: Sequence[TransliterationQueryElement] = []
+        for segment in [seg for seg in re.split(all_wildcards, transliteration) if seg]:
+            segment_type = classify(segment)
+            if segment_type != 'text':
+                element = TransliterationQueryWildCard(
+                    **{"string": segment, "type": segment_type})
+            else:
+                element = TransliterationQueryText(
+                    **{"string": segment, "type": segment_type})
+            elements.append(element)
+        return elements
+
+    @property
+    def re(self) -> re:
+        return
+
+
+TransliterationQueryLine(**{"transliteration": transliteration})

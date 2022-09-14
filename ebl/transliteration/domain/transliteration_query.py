@@ -9,8 +9,13 @@ def create_sign_regexp(sign):
     return r"[^\s]+" if sign == "*" else rf"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
 
 
+def create_signs_fork_regexp(signs: Sequence):
+    return '(?:' + ''.join([create_sign_regexp(sign) if sign != '|' else sign for sign in signs]) + ')'
+
+
 def create_line_regexp(line):
-    signs_regexp = " ".join(create_sign_regexp(sign) for sign in line)
+    signs_regexp = " ".join(create_sign_regexp(sign) if type(
+        sign) == str else create_signs_fork_regexp(sign) for sign in line)
     return rf"(?<![^|\s]){signs_regexp}"
 
 
@@ -24,10 +29,17 @@ class TransliterationQuery:
 
     @property
     def regexp(self) -> str:
+        '''
         lines_regexp = r"( .*)?\n.*".join(
             create_line_regexp(line) for line in self._signs
         )
+        return rf"{lines_regexp}(?![^|\s])"
+        '''
 
+        # a|i-na
+        lines_regexp = r"( .*)?\n.*".join(
+            create_line_regexp(line) for line in [[['ABZ579', '|', 'ABZ142'], 'ABZ70']]
+        )
         return rf"{lines_regexp}(?![^|\s])"
 
     def is_empty(self) -> bool:
