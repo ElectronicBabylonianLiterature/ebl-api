@@ -69,3 +69,9 @@ class Line:
 
         merged_variants = Merger(repr, inner_merge).merge(self.variants, other.variants)
         return attr.evolve(other, variants=tuple(merged_variants))
+
+    def set_variant_alignment_flags(self) -> "Line":
+        return attr.evolve(
+            self,
+            variants=tuple(variant.set_alignment_flags() for variant in self.variants),
+        )

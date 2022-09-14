@@ -625,7 +625,7 @@ def test_updating_lines_edit(
         CHAPTER,
         lines=(
             attr.evolve(
-                CHAPTER.lines[0],
+                CHAPTER.lines[0].set_variant_alignment_flags(),
                 number=LineNumber(1, True),
                 variants=(
                     attr.evolve(
@@ -664,7 +664,7 @@ def test_updating_lines_edit(
                         ),
                     ),
                 ),
-            ),
+            ).set_variant_alignment_flags(),
         ),
         signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
@@ -722,7 +722,7 @@ def test_updating_lines_add(
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
-            CHAPTER.lines[0],
+            CHAPTER.lines[0].set_variant_alignment_flags(),
             attr.evolve(
                 CHAPTER.lines[0],
                 number=LineNumber(2, True),
@@ -740,7 +740,7 @@ def test_updating_lines_add(
                         ),
                     ),
                 ),
-            ),
+            ).set_variant_alignment_flags(),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nABZ075\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
@@ -774,7 +774,7 @@ def test_importing_lines(
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(  # pyre-ignore[60]
-            *CHAPTER.lines,
+            *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
             *parse_chapter(atf, CHAPTER.manuscripts),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),

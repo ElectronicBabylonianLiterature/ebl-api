@@ -78,14 +78,14 @@ class ManuscriptLine:
         merged_line = self.line.merge(other.line)
         return attr.evolve(other, line=merged_line)
 
-    def update_alignments(self, aligment_map: AlignmentMap) -> "ManuscriptLine":
+    def update_alignments(self, alignment_map: AlignmentMap) -> "ManuscriptLine":
         return attr.evolve(
             self,
-            line=self.line.update_alignments(aligment_map),
+            line=self.line.update_alignments(alignment_map),
             omitted_words=tuple(
-                aligment_map[index]
+                alignment_map[index]
                 for index in self.omitted_words
-                if index < len(aligment_map) and aligment_map[index] is not None
+                if index < len(alignment_map) and alignment_map[index] is not None
             ),
         )
 
