@@ -126,11 +126,6 @@ RECORD = Record(
     "",
 )
 
-LINE_WITH_OLD_LINE_NUMBERS = Line(
-    LineNumber(4),
-    (LINE_VARIANT_1,),
-)
-
 TEXT_ID = TextId(GENRE, CATEGORY, INDEX)
 CHAPTER = Chapter(
     TEXT_ID,
