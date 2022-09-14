@@ -7,8 +7,8 @@ from ebl.transliteration.domain.text import TextLine
 
 
 class TransliterationUpdateFactory:
-    def __init__(self, sing_repository: SignRepository):
-        self._sing_repository = sing_repository
+    def __init__(self, sign_repository: SignRepository):
+        self._sign_repository = sign_repository
 
     def create(self, atf: Atf, notes: str = "") -> TransliterationUpdate:
         text = parse_atf_lark(atf)
@@ -16,6 +16,6 @@ class TransliterationUpdateFactory:
         return TransliterationUpdate(text, notes, signs)
 
     def _map_line(self, line: TextLine) -> str:
-        visitor = SignsVisitor(self._sing_repository)
+        visitor = SignsVisitor(self._sign_repository)
         line.accept(visitor)
         return WORD_SEPARATOR.join(visitor.result)

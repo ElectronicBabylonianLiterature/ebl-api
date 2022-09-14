@@ -3,7 +3,9 @@ import pytest
 
 from ebl.transliteration.domain.text_id import TextId
 from ebl.corpus.domain.chapter import Chapter, Classification
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.stage import Stage
 from ebl.dictionary.domain.word import WordId
@@ -83,7 +85,7 @@ LINE = Line(
             LineVariant(
                 (
                     AkkadianWord.of(
-                        (ValueToken.of("buāru"),), has_variant_alignmnet=True
+                        (ValueToken.of("buāru"),), has_variant_alignment=True
                     ),
                 ),
                 manuscripts=(
@@ -106,7 +108,7 @@ LINE = Line(
             LineVariant(
                 (
                     AkkadianWord.of(
-                        (ValueToken.of("kurkur"),), has_variant_alignmnet=False
+                        (ValueToken.of("kurkur"),), has_variant_alignment=False
                     ),
                 ),
                 manuscripts=(
@@ -129,7 +131,7 @@ LINE = Line(
             LineVariant(
                 (
                     AkkadianWord.of(
-                        (ValueToken.of("kurkur"),), has_variant_alignmnet=True
+                        (ValueToken.of("kurkur"),), has_variant_alignment=True
                     ),
                 ),
                 manuscripts=(

@@ -73,6 +73,7 @@ def test_defaults() -> None:
     assert word.alignment is None
     assert word.variant is None
     assert word.has_variant_alignment is False
+    assert word.has_omitted_alignment is False
 
 
 @pytest.mark.parametrize(
@@ -114,6 +115,7 @@ def test_word(language, unique_lemma) -> None:
         "alignment": 1,
         "variant": OneOfWordSchema().dump(variant),
         "hasVariantAlignment": word.has_variant_alignment,
+        "hasOmittedAlignment": word.has_omitted_alignment,
     }
 
     assert_token_serialization(word, serialized)

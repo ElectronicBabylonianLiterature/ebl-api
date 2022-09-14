@@ -9,21 +9,23 @@ from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
 class LinesUpdater(ChapterUpdater):
-    def __init__(self, lines: LinesUpdate, sing_repository: SignRepository):
+    def __init__(self, lines: LinesUpdate, sign_repository: SignRepository):
         super().__init__()
         self._lines_update = lines
-        self._sing_updater = SignsUpdater(sing_repository)
+        self._sign_updater = SignsUpdater(sign_repository)
         self._lines = []
 
     def _visit_lines(self, chapter: Chapter) -> None:
         for index, line in enumerate(chapter.lines):
             if index in self._lines_update.edited:
-                self._lines.append(self._lines_update.edited[index])
+                self._lines.append(
+                    self._lines_update.edited[index].set_variant_alignment_flags()
+                )
             elif index not in self._lines_update.deleted:
-                self._lines.append(line)
+                self._lines.append(line.set_variant_alignment_flags())
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
-        return self._sing_updater.update(
+        return self._sign_updater.update(
             chapter.merge(
                 attr.evolve(
                     chapter,

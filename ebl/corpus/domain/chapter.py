@@ -6,7 +6,8 @@ import pydash
 
 import ebl.corpus.domain.chapter_validators as validators
 from ebl.corpus.domain.extant_line import ExtantLine
-from ebl.corpus.domain.line import Line, ManuscriptLine, ManuscriptLineLabel
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLineLabel, ManuscriptLine
 from ebl.corpus.domain.manuscript import Manuscript, Siglum
 from ebl.corpus.domain.record import Record
 from ebl.errors import NotFoundError

@@ -24,6 +24,7 @@ class AbstractWord(Token):
     _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
     variant: Optional["AbstractWord"] = None
     has_variant_alignment: bool = False
+    has_omitted_alignment: bool = False
 
     @property
     @abstractmethod
@@ -78,8 +79,11 @@ class AbstractWord(Token):
     ) -> A:
         return attr.evolve(self, alignment=alignment, variant=variant)
 
-    def set_has_variant_alignment(self: A, has_variant_alignment) -> A:
+    def set_has_variant_alignment(self: A, has_variant_alignment: bool) -> A:
         return attr.evolve(self, has_variant_alignment=has_variant_alignment)
+
+    def set_has_omitted_alignment(self: A, has_omitted_alignment: bool) -> A:
+        return attr.evolve(self, has_omitted_alignment=has_omitted_alignment)
 
     def update_alignment(self: A, alignment_map) -> A:
         new_alignment = (
@@ -94,7 +98,7 @@ class AbstractWord(Token):
             variant=None if new_alignment is None else self.variant,
         )
 
-    def merge(self, token: T) -> T:
+    def merge(self, token: T) -> T:  # sourcery skip
         if isinstance(token, AbstractWord):
             return self._merge_word(token)
         else:
@@ -137,6 +141,7 @@ class Word(AbstractWord):
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
         has_variant_alignment: bool = False,
+        has_omitted_alignment: bool = False,
     ) -> W:
         return cls(
             frozenset(),
@@ -146,6 +151,7 @@ class Word(AbstractWord):
             parts,
             variant,
             has_variant_alignment,
+            has_omitted_alignment,
             language,
         )
 

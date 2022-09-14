@@ -1,4 +1,5 @@
 import json
+from typing import cast
 
 import attr
 import falcon
@@ -11,7 +12,7 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner
-from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 from ebl.tests.corpus.support import allow_references, allow_signs, create_chapter_url
 
 
@@ -83,6 +84,17 @@ def test_updating_alignment(
                                 ),
                                 omitted_words=omitted_words,
                             ),
+                        ),
+                        reconstruction=tuple(
+                            cast(
+                                AbstractWord,
+                                token,
+                            ).set_has_omitted_alignment(True)
+                            if index in omitted_words
+                            else token
+                            for index, token in enumerate(
+                                chapter.lines[0].variants[0].reconstruction
+                            )
                         ),
                     ),
                 ),
