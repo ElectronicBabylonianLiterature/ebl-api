@@ -52,7 +52,8 @@ class AkkadianWord(AbstractWord):
         unique_lemma: Lemma = tuple(),
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
-        has_variant_alignmnet: bool = False,
+        has_variant_alignment: bool = False,
+        has_omitted_alignment: bool = False,
     ) -> "AkkadianWord":
         return AkkadianWord(
             frozenset(),
@@ -61,7 +62,8 @@ class AkkadianWord(AbstractWord):
             alignment,
             parts,
             variant,
-            has_variant_alignmnet,
+            has_variant_alignment,
+            has_omitted_alignment,
             modifier,
         )
 

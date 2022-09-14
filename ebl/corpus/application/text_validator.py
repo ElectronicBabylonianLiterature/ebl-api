@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from typing import Optional, Sequence
+from typing import Optional
 
 import pydash
 
@@ -9,7 +9,9 @@ from ebl.corpus.domain.chapter import (
     ChapterVisitor,
     TextLineEntry,
 )
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import Siglum
 from ebl.errors import DataError, Defect
 from ebl.transliteration.domain.alignment import AlignmentError
@@ -91,12 +93,10 @@ class TextValidator(ChapterVisitor):
         for line in chapter.lines:
             self.visit(line)
 
-        invalid_lines: Sequence[str] = [
+        if invalid_lines := [
             create_error_message(siglum, entry, chapter)
             for siglum, entry in chapter.invalid_lines
-        ]
-
-        if invalid_lines:
+        ]:
             raise DataError(f"Invalid signs on lines: {', '.join(invalid_lines)}.")
 
     @visit.register(Line)

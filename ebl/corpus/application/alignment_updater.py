@@ -6,7 +6,9 @@ import attr
 from ebl.corpus.application.chapter_updater import ChapterUpdater
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter import Chapter, ChapterItem
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.transliteration.domain.alignment import AlignmentError
 
 
@@ -82,7 +84,7 @@ class AlignmentUpdater(ChapterUpdater):
         self._variants.append(
             attr.evolve(
                 variant, manuscripts=tuple(self._manuscript_lines)
-            ).set_has_variant_aligment()
+            ).set_alignment_flags()
         )
         self._manuscript_lines = []
 

@@ -69,7 +69,8 @@ class GreekWord(AbstractWord):
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
         erasure: ErasureState = ErasureState.NONE,
-        has_variant_alignmnet: bool = False,
+        has_variant_alignment: bool = False,
+        has_omitted_alignment: bool = False,
     ) -> "GreekWord":
         return GreekWord(
             frozenset(),
@@ -78,6 +79,7 @@ class GreekWord(AbstractWord):
             alignment,
             parts,
             variant,
-            has_variant_alignmnet,
+            has_variant_alignment,
+            has_omitted_alignment,
             language,
         )

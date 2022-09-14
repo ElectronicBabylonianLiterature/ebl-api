@@ -15,15 +15,15 @@ class ManuscriptUpdater(ChapterUpdater):
         self,
         manuscripts: Sequence[Manuscript],
         uncertain_fragments: Sequence[MuseumNumber],
-        sing_repository: SignRepository,
+        sign_repository: SignRepository,
     ):
         super().__init__()
         self._manuscripts = manuscripts
         self._uncertain_fragments = uncertain_fragments
-        self._sing_updater = SignsUpdater(sing_repository)
+        self._sign_updater = SignsUpdater(sign_repository)
 
     def _update_chapter(self, chapter: Chapter) -> Chapter:
-        return self._sing_updater.update(
+        return self._sign_updater.update(
             attr.evolve(
                 chapter,
                 manuscripts=self._manuscripts,

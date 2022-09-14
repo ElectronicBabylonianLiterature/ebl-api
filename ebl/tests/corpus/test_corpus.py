@@ -10,7 +10,9 @@ from ebl.corpus.application.lemmatization import (
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter_display import ChapterDisplay
-from ebl.corpus.domain.line import Line, LineVariant, ManuscriptLine
+from ebl.corpus.domain.line import Line
+from ebl.corpus.domain.manuscript_line import ManuscriptLine
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.dictionary.domain.word import WordId
@@ -278,9 +280,20 @@ def test_updating_alignment(
     user,
     when,
 ) -> None:
-    aligmnet = 1
+    alignment = 1
     omitted_words = (6,)
     has_variant_alignment = variant is not None
+    updated_reconstruction = tuple(
+        cast(
+            AbstractWord,
+            token,
+        )
+        .set_has_variant_alignment(has_variant_alignment and index == alignment)
+        .set_has_omitted_alignment(index in omitted_words)
+        if index in (*omitted_words, alignment)
+        else token
+        for index, token in enumerate(CHAPTER.lines[0].variants[0].reconstruction)
+    )
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
@@ -289,14 +302,7 @@ def test_updating_alignment(
                 variants=(
                     attr.evolve(
                         CHAPTER.lines[0].variants[0],
-                        reconstruction=(
-                            CHAPTER.lines[0].variants[0].reconstruction[0],
-                            cast(
-                                AbstractWord,
-                                CHAPTER.lines[0].variants[0].reconstruction[1],
-                            ).set_has_variant_alignment(has_variant_alignment),
-                            *CHAPTER.lines[0].variants[0].reconstruction[2:],
-                        ),
+                        reconstruction=updated_reconstruction,
                         manuscripts=(
                             attr.evolve(
                                 CHAPTER.lines[0].variants[0].manuscripts[0],
@@ -316,7 +322,7 @@ def test_updating_alignment(
                                                 Reading.of_name("ši"),
                                                 BrokenAway.close(),
                                             ],
-                                            alignment=aligmnet,
+                                            alignment=alignment,
                                             variant=variant,
                                         ),
                                     ),
@@ -346,7 +352,7 @@ def test_updating_alignment(
             (
                 (
                     ManuscriptLineAlignment(
-                        (AlignmentToken("ku-[nu-ši]", aligmnet, variant),),
+                        (AlignmentToken("ku-[nu-ši]", alignment, variant),),
                         omitted_words,
                     ),
                 ),
@@ -594,11 +600,16 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
 def test_updating_lines_edit(
     corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
 ) -> None:
+    omitted_words = tuple(
+        index
+        for manuscript in CHAPTER.lines[0].variants[0].manuscripts
+        for index in manuscript.omitted_words
+    )
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
             attr.evolve(
-                CHAPTER.lines[0],
+                CHAPTER.lines[0].set_variant_alignment_flags(),
                 number=LineNumber(1, True),
                 variants=(
                     attr.evolve(
@@ -624,9 +635,20 @@ def test_updating_lines_edit(
                                 ),
                             ),
                         ),
+                        reconstruction=tuple(
+                            cast(
+                                AbstractWord,
+                                token,
+                            ).set_has_omitted_alignment(True)
+                            if index in omitted_words
+                            else token
+                            for index, token in enumerate(
+                                CHAPTER.lines[0].variants[0].reconstruction
+                            )
+                        ),
                     ),
                 ),
-            ),
+            ).set_variant_alignment_flags(),
         ),
         signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
@@ -684,7 +706,7 @@ def test_updating_lines_add(
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(
-            CHAPTER.lines[0],
+            CHAPTER.lines[0].set_variant_alignment_flags(),
             attr.evolve(
                 CHAPTER.lines[0],
                 number=LineNumber(2, True),
@@ -702,7 +724,7 @@ def test_updating_lines_add(
                         ),
                     ),
                 ),
-            ),
+            ).set_variant_alignment_flags(),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nABZ075\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
@@ -736,7 +758,7 @@ def test_importing_lines(
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(  # pyre-ignore[60]
-            *CHAPTER.lines,
+            *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
             *parse_chapter(atf, CHAPTER.manuscripts),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
