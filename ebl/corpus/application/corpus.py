@@ -18,7 +18,7 @@ from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo, ChapterInfosPagination
-from ebl.corpus.domain.dictionary_line import DictionaryLine
+from ebl.corpus.domain.dictionary_line import DictionaryLine, DictionaryLinePagination
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
@@ -78,7 +78,7 @@ class TextRepository(ABC):
     @abstractmethod
     def query_by_lemma(
         self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
-    ) -> Sequence[DictionaryLine]:
+    ) -> Tuple[Sequence[DictionaryLine], int]:
         ...
 
     @abstractmethod
@@ -173,11 +173,13 @@ class Corpus:
 
     def search_lemma(
         self, query: str, pagination_index: int, genre: Optional[Genre] = None
-    ) -> Sequence[DictionaryLine]:
+    ) -> DictionaryLinePagination:
         return (
-            self._repository.query_by_lemma(query, pagination_index, genre)
+            DictionaryLinePagination(
+                *self._repository.query_by_lemma(query, pagination_index, genre)
+            )
             if query
-            else []
+            else DictionaryLinePagination([], 0)
         )
 
     def list(self) -> List[Text]:

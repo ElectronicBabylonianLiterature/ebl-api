@@ -221,7 +221,7 @@ class MongoTextRepository(TextRepository):
 
     def query_by_lemma(
         self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
-    ) -> Sequence[DictionaryLine]:
+    ) -> Tuple[Sequence[DictionaryLine], int]:
         LIMIT = 3
         lemma_query = {
             "$or": [
@@ -263,7 +263,7 @@ class MongoTextRepository(TextRepository):
         return DictionaryLineSchema().load(
             lemma_lines,
             many=True,
-        )
+        ), self._chapters.count_documents(lemma_query)
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:

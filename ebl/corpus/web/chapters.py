@@ -1,11 +1,12 @@
 import falcon
 from pydash.arrays import flatten_deep
 from ebl.corpus.application.corpus import Corpus
+from ebl.transliteration.domain.genre import Genre
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.application.schemas import (
-    DictionaryLineSchema,
+    DictionaryLinePaginationSchema,
     ManuscriptAttestationSchema,
 )
 from ebl.corpus.web.text_utils import create_chapter_id
@@ -92,9 +93,9 @@ class ChaptersByLemmaResource:
             pagination_index = int(req.params["paginationIndex"])
         except ValueError as error:
             raise DataError("Pagination Index has to be a number") from error
-        resp.media = DictionaryLineSchema().dump(
+        resp.media = DictionaryLinePaginationSchema().dump(
             self._corpus.search_lemma(
-                req.params["lemma"], pagination_index, req.params.get("genre")
+                req.params["lemma"], pagination_index, Genre(req.params.get("genre"))
             ),
             many=True,
         )

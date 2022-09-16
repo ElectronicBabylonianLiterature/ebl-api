@@ -243,6 +243,17 @@ class DictionaryLineSchema(Schema):
         )
 
 
+class DictionaryLinePaginationSchema(Schema):
+    dictionary_line = fields.Nested(
+        DictionaryLineSchema,
+        required=True,
+        many=True,
+        dump_only=True,
+        data_key="dictionaryLine",
+    )
+    total_count = fields.Integer(required=True, dump_only=True, data_key="totalCount")
+
+
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnum(Classification, required=True)
