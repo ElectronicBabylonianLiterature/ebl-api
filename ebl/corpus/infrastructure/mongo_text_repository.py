@@ -198,7 +198,7 @@ class MongoTextRepository(TextRepository):
     def query_by_transliteration(
         self, query: TransliterationQuery, pagination_index: int
     ) -> Tuple[Sequence[Chapter], int]:
-        print('!', str(query.regexp))
+        print("!", str(query.regexp))
         LIMIT = 30
         mongo_query = {"signs": {"$regex": query.regexp}}
         cursor = (

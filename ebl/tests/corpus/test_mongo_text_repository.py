@@ -21,6 +21,7 @@ from ebl.tests.factories.corpus import (
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.tests.conftest import sign_repository
 
 
 TEXTS_COLLECTION = "texts"
@@ -221,7 +222,8 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
 )
 def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
-    result = text_repository.query_by_transliteration(TransliterationQuery(signs), 0)
+    result = text_repository.query_by_transliteration(
+        string=" ".join(sign.name for sign in signs), sign_repository=sign_repository)
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
     assert result == (expected, len(expected))
 
