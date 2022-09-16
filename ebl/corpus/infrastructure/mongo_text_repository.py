@@ -260,10 +260,27 @@ class MongoTextRepository(TextRepository):
             ]
         )
 
-        return DictionaryLineSchema().load(
-            lemma_lines,
-            many=True,
-        ), self._chapters.count_documents(lemma_query)
+        total_count = self._chapters.aggregate(
+            [
+                {"$match": lemma_query},
+                {
+                    "$project": {
+                        "_id": False,
+                        "lines": True,
+                    }
+                },
+                {"$unwind": "$lines"},
+                {"$count": "line_count"},
+            ]
+        )
+
+        return (
+            DictionaryLineSchema().load(
+                lemma_lines,
+                many=True,
+            ),
+            next(total_count, {}).get("line_count", 0),
+        )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
