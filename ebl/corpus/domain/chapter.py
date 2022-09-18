@@ -84,6 +84,7 @@ class Chapter:
     stage: Stage = Stage.NEO_ASSYRIAN
     version: str = ""
     name: str = ""
+    text_name: str = ""
     order: int = 0
     manuscripts: Sequence[Manuscript] = attr.ib(
         default=tuple(),

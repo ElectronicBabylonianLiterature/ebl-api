@@ -1,6 +1,7 @@
 from typing import List, Tuple, Sequence
 
 import pymongo
+from marshmallow import fields
 from pymongo.database import Database
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
@@ -196,24 +197,37 @@ class MongoTextRepository(TextRepository):
         )
 
     def query_by_transliteration(
-        self, query: TransliterationQuery, pagination_index: int
+            self, query: TransliterationQuery, pagination_index: int
     ) -> Tuple[Sequence[Chapter], int]:
         LIMIT = 30
         mongo_query = {"signs": {"$regex": query.regexp}}
         cursor = (
-            self._chapters.find_many(
-                mongo_query,
-                projection={"_id": False},
+            self._chapters.aggregate([
+                {"$match": mongo_query},
+                {"$lookup":
+                    {
+                        "from": "texts",
+                        "pipeline": [
+                            {"$match": {
+                                "genre": "L",
+                                "category": 99,
+                                "index": 99
+                            }},
+                            {"$project": {"name": 1, "_id": 0}}
+                        ],
+                        "as": "textNames"
+                    }
+                },
+                {"$project": {"_id": False}},
+                {"$addFields": {"textName": {"$first": "$textNames"}}},
+                {"$addFields": {"textName": "$textName.name"}},
+                {"$project": {"textNames": False}},
+                {"$skip": LIMIT * pagination_index},
+                {"$limit": LIMIT},
+            ], allowDiskUse=True
             )
-            .skip(LIMIT * pagination_index)
-            .limit(LIMIT)
-            .allow_disk_use(True)
         )
-
-        return ChapterSchema().load(
-            filter_query_by_transliteration(query, cursor),
-            many=True,
-        ), self._chapters.count_documents(mongo_query)
+        return ChapterSchema().load(filter_query_by_transliteration(query, cursor), many=True), self._chapters.count_documents(mongo_query)
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:

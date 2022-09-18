@@ -233,6 +233,7 @@ class ChapterSchema(Schema):
     stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
+    text_name = fields.String(data_key="textName")
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
     uncertain_fragments: fields.Field = fields.Nested(
@@ -260,6 +261,7 @@ class ChapterSchema(Schema):
             Stage(data["stage"]),
             data["version"],
             data["name"],
+            data.get("text_name", ""),
             data["order"],
             tuple(data["manuscripts"]),
             tuple(data["uncertain_fragments"]),
