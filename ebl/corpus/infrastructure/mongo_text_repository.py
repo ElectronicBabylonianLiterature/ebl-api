@@ -197,25 +197,32 @@ class MongoTextRepository(TextRepository):
         )
 
     def query_by_transliteration(
-            self, query: TransliterationQuery, pagination_index: int
+        self, query: TransliterationQuery, pagination_index: int
     ) -> Tuple[Sequence[Chapter], int]:
         LIMIT = 30
         mongo_query = {"signs": {"$regex": query.regexp}}
-        cursor = (
-            self._chapters.aggregate([
+        cursor = self._chapters.aggregate(
+            [
                 {"$match": mongo_query},
-                {"$lookup":
-                    {
+                {
+                    "$lookup": {
                         "from": "texts",
+                        "let": {"chapterGenre": "$textId.genre", "chapterCategory": "$textId.category", "chapterIndex": "$textId.index"},
                         "pipeline": [
-                            {"$match": {
-                                "genre": "L",
-                                "category": 99,
-                                "index": 99
-                            }},
-                            {"$project": {"name": 1, "_id": 0}}
+                            {
+                                "$match": {
+                                    "$expr": {
+                                        "$and": [
+                                            {"$eq": ["$genre", "$$chapterGenre"]},
+                                            {"$eq": ["$category", "$$chapterCategory"]},
+                                            {"$eq": ["$index", "$$chapterIndex"]},
+                                        ]
+                                    }
+                                }
+                            },
+                            {"$project": {"name": 1, "_id": 0}},
                         ],
-                        "as": "textNames"
+                        "as": "textNames",
                     }
                 },
                 {"$project": {"_id": False}},
@@ -224,10 +231,12 @@ class MongoTextRepository(TextRepository):
                 {"$project": {"textNames": False}},
                 {"$skip": LIMIT * pagination_index},
                 {"$limit": LIMIT},
-            ], allowDiskUse=True
-            )
+            ],
+            allowDiskUse=True,
         )
-        return ChapterSchema().load(filter_query_by_transliteration(query, cursor), many=True), self._chapters.count_documents(mongo_query)
+        return ChapterSchema().load(
+            filter_query_by_transliteration(query, cursor), many=True
+        ), self._chapters.count_documents(mongo_query)
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:

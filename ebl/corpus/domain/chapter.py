@@ -84,7 +84,6 @@ class Chapter:
     stage: Stage = Stage.NEO_ASSYRIAN
     version: str = ""
     name: str = ""
-    text_name: str = ""
     order: int = 0
     manuscripts: Sequence[Manuscript] = attr.ib(
         default=tuple(),
@@ -110,6 +109,7 @@ class Chapter:
     colophon_lines_in_query: ChapterQueryColophonLines = attr.ib(
         default=ChapterQueryColophonLines()
     )
+    text_name: str = ""
 
     @property
     def id_(self) -> ChapterId:
