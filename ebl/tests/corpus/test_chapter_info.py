@@ -31,6 +31,7 @@ def test_of() -> None:
 def test_chapter_info_schema() -> None:
     dump = ChapterInfoSchema().dump(CHAPTER_INFO)
     assert dump["id"] == ChapterIdSchema().dump(CHAPTER_INFO.id_)
+    assert dump["textName"] == ""
     assert dump["siglums"] == {str(k): str(v) for k, v in CHAPTER_INFO.siglums.items()}
     assert dump["matchingLines"] == ApiLineSchema(many=True).dump(
         CHAPTER_INFO.matching_lines
