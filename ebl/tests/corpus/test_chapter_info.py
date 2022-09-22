@@ -18,6 +18,7 @@ CHAPTER_INFO = ChapterInfo.of(CHAPTER, QUERY)
 def test_of() -> None:
     assert CHAPTER_INFO == ChapterInfo(
         CHAPTER.id_,
+        CHAPTER.text_name,
         {CHAPTER.manuscripts[0].id: CHAPTER.manuscripts[0].siglum},
         [CHAPTER.lines[0]],
         {

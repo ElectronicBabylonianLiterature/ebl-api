@@ -2,7 +2,14 @@ from marshmallow import Schema, fields
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.web.chapter_schemas import ApiLineSchema
-from ebl.transliteration.application.line_schemas import TextLineSchema
+from ebl.transliteration.application.line_schemas import TextLineSchema, \
+    TranslationLineSchema
+
+
+class ChapterInfoLineSchema(ApiLineSchema):
+    translation = fields.List(
+        fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
+    )
 
 
 class ChapterInfoSchema(Schema):
