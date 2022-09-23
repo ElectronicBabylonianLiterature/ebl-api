@@ -3,7 +3,7 @@ from typing import cast
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_info import ChapterInfo
-from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
+from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema, ChapterInfoLineSchema
 from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.application.line_schemas import TextLineSchema
@@ -34,7 +34,7 @@ def test_chapter_info_schema() -> None:
     assert dump["id"] == ChapterIdSchema().dump(CHAPTER_INFO.id_)
     assert dump["textName"] == ""
     assert dump["siglums"] == {str(k): str(v) for k, v in CHAPTER_INFO.siglums.items()}
-    assert dump["matchingLines"] == ApiLineSchema(many=True).dump(
+    assert dump["matchingLines"] == ChapterInfoLineSchema(many=True).dump(
         CHAPTER_INFO.matching_lines
     )
     assert dump["matchingColophonLines"] == {

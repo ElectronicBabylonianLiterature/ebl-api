@@ -1,13 +1,11 @@
 from typing import List, Tuple, Sequence
 
 import pymongo
-from marshmallow import fields
 from pymongo.database import Database
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
     LineSchema,
@@ -15,31 +13,31 @@ from ebl.corpus.application.schemas import (
     TextSchema,
     ManuscriptAttestationSchema,
 )
-
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
+from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.infrastructure.chapter_query_filters import (
+    filter_query_by_transliteration,
+)
 from ebl.corpus.infrastructure.queries import (
     aggregate_chapter_display,
     chapter_id_query,
     join_chapters,
     join_text,
 )
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
     TEXTS_COLLECTION,
 )
-from ebl.corpus.infrastructure.chapter_query_filters import (
-    filter_query_by_transliteration,
-)
-from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 
 
 def text_not_found(id_: TextId) -> Exception:
@@ -207,7 +205,11 @@ class MongoTextRepository(TextRepository):
                 {
                     "$lookup": {
                         "from": "texts",
-                        "let": {"chapterGenre": "$textId.genre", "chapterCategory": "$textId.category", "chapterIndex": "$textId.index"},
+                        "let": {
+                            "chapterGenre": "$textId.genre",
+                            "chapterCategory": "$textId.category",
+                            "chapterIndex": "$textId.index",
+                        },
                         "pipeline": [
                             {
                                 "$match": {
