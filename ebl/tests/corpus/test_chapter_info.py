@@ -4,7 +4,6 @@ from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_info import ChapterInfo
 from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema, ChapterInfoLineSchema
-from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.text_line import TextLine
