@@ -226,6 +226,17 @@ def test_query_by_transliteration(signs, is_match, text_repository) -> None:
     assert result == (expected, len(expected))
 
 
+def test_query_by_transliteration_lookup(text_repository) -> None:
+    chapter = attr.evolve(
+        CHAPTER_FILTERED_QUERY, text_id=TextId(TEXT.genre, TEXT.category, TEXT.index)
+    )
+    text_repository.create(TEXT)
+    text_repository.create_chapter(chapter)
+    result = text_repository.query_by_transliteration(TransliterationQuery([["KU"]]), 0)
+    expected = [attr.evolve(CHAPTER_FILTERED_QUERY, text_name=TEXT.name)]
+    assert result == (expected, len(expected))
+
+
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
     when_chapter_in_collection(database)
 
