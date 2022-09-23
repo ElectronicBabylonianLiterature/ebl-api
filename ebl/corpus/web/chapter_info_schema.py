@@ -9,7 +9,7 @@ from ebl.transliteration.application.line_schemas import (
 
 
 class ChapterInfoLineSchema(ApiLineSchema):
-    translation = fields.List(# pyre-ignore[15]
+    translation = fields.List(  # pyre-ignore[15]
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
     )
 
@@ -18,7 +18,9 @@ class ChapterInfoSchema(Schema):
     id_ = fields.Nested(ChapterIdSchema, data_key="id")
     text_name = fields.String(data_key="textName")
     siglums = fields.Mapping(fields.String(), fields.String())
-    matching_lines = fields.Nested(ChapterInfoLineSchema, many=True, data_key="matchingLines")
+    matching_lines = fields.Nested(
+        ChapterInfoLineSchema, many=True, data_key="matchingLines"
+    )
     matching_colophon_lines = fields.Mapping(
         fields.String(),
         fields.Nested(TextLineSchema, many=True),
