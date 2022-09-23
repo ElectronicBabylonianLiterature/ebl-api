@@ -7,8 +7,8 @@ class TransliterationQueryFactory:
         self._sign_repository = sign_repository
 
     @staticmethod
-    def create_empty(self) -> TransliterationQuery:
-        return TransliterationQuery(string="", sign_repository=self._sign_repository)
+    def create_empty() -> TransliterationQuery:
+        return TransliterationQuery(string="", sign_repository=None)
 
     def create(self, transliteration: str) -> TransliterationQuery:
         return TransliterationQuery(string=transliteration, sign_repository=self._sign_repository)

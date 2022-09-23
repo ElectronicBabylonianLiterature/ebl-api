@@ -16,9 +16,11 @@ def test_create_query(sign_repository, signs):
         sign_repository.create(sign)
 
     factory = TransliterationQueryFactory(sign_repository)
-    atf = "šu\ngid₂"
+    atf = "šu\ngid₂\nBU"
 
-    assert factory.create(atf) == TransliterationQuery([["ŠU"], ["BU"]])
+    query = TransliterationQuery(string="ŠU\nBU", sign_repository=sign_repository)
+    factory_query = factory.create(atf)
+    assert factory_query.regexp == query.regexp
 
 
 def test_create_query_invalid(sign_repository):

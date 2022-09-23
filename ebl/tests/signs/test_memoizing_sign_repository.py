@@ -1,4 +1,4 @@
-from ebl.signs.infrastructure.menoizing_sign_repository import MemoizingSignRepository
+from ebl.signs.infrastructure.memoizing_sign_repository import MemoizingSignRepository
 
 
 def test_find_memoization(sign_repository, signs, when):

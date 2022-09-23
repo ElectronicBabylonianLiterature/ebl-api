@@ -21,7 +21,6 @@ from ebl.tests.factories.corpus import (
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.tests.conftest import sign_repository
 
 
 TEXTS_COLLECTION = "texts"
@@ -218,12 +217,12 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
 
 @pytest.mark.parametrize(
     "signs,is_match",
-    [([["KU"]], True), ([["ABZ075"], ["KU"]], True), ([["UD"]], False)],
+    [("KU", True), ("ABZ075\nKU", True), ("UD", False)],
 )
-def test_query_by_transliteration(signs, is_match, text_repository) -> None:
+def test_query_by_transliteration(signs, is_match, text_repository, sign_repository) -> None:
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
-    result = text_repository.query_by_transliteration(
-        string=" ".join(sign.name for sign in signs), sign_repository=sign_repository)
+    result = text_repository.query_by_transliteration(query=TransliterationQuery(
+        string=signs, sign_repository=sign_repository), pagination_index=0)
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
     assert result == (expected, len(expected))
 

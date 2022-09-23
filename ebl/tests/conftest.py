@@ -55,6 +55,7 @@ from ebl.signs.infrastructure.mongo_sign_repository import (
     MongoSignRepository,
     SignSchema,
 )
+from ebl.transliteration.domain.sign import SignName
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain import atf
@@ -134,6 +135,9 @@ class TestSignRepository(MongoSignRepository):
 
     def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
+
+    def find(self, name: SignName) -> Sign:
+        return SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))
 
 
 @pytest.fixture

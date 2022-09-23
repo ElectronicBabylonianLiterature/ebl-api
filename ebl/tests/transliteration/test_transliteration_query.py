@@ -5,19 +5,20 @@ import pytest
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 REGEXP_DATA = [
-    ([["DU", "U"]], True),
-    ([["KU"]], True),
-    ([["UD"]], True),
-    ([["GI₆", "DIŠ"], ["U", "BA", "MA"]], True),
-    ([["ŠU"]], True),
-    ([["IGI", "UD"]], False),
-    ([["|U.BA|"]], False),
+    ("DU U", True),
+    ("KU", True),
+    ("UD", True),
+    ("GI₆ DIŠ\nU BA MA", True),
+    ("ŠU", True),
+    ("IGI UD", False),
+    ("|U.BA|", False),
 ]
 
 
 @pytest.mark.parametrize("signs,is_match", REGEXP_DATA)
-def test_regexp(signs, is_match):
-    query = TransliterationQuery(signs)
+def test_regexp(signs, is_match, sign_repository):
+    query = TransliterationQuery(
+        string=signs, sign_repository=sign_repository)
     match = re.search(
         query.regexp,
         "KU NU IGI\n"
@@ -34,16 +35,14 @@ def test_regexp(signs, is_match):
 
 
 GET_IS_SEQUENCE_EMPTY_DATA = [
-    ([[]], True),
-    ([[""]], True),
-    ([["MA"], ["TA"]], False),
-    ([[""], [""]], True),
-    ([["", ""]], True),
-    ([[""], ["ABZ001"]], False),
+    ("", True),
+    ("MA TA", False),
+    ("\n", True),
+    ("\nABZ001", False),
 ]
 
 
 @pytest.mark.parametrize("query, expected", GET_IS_SEQUENCE_EMPTY_DATA)
-def test_is_sequence_empty(query, expected):
-    query = TransliterationQuery(query)
+def test_is_sequence_empty(query, expected, sign_repository):
+    query = TransliterationQuery(string=query, sign_repository=sign_repository)
     assert expected == query.is_empty()

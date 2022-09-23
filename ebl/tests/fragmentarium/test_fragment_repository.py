@@ -416,27 +416,28 @@ def test_empty_result_query_reference_id_and_pages(
 
 
 SEARCH_SIGNS_DATA = [
-    ([["DIŠ", "UD"]], True),
-    ([["KU"]], True),
-    ([["UD"]], True),
-    ([["MI", "DIŠ"], ["ABZ411", "BA", "MA"]], True),
-    ([["IGI", "UD"]], False),
+    ("DIŠ UD", True),
+    ("KU", True),
+    ("UD", True),
+    ("MI DIŠ\nABZ411 BA MA", True),
+    ("IGI UD", False),
 ]
 
 
 @pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
-def test_query_fragmentarium_transliteration(signs, is_match, fragment_repository):
+def test_query_fragmentarium_transliteration(signs, is_match, fragment_repository, sign_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(transliteration=TransliterationQuery(signs))
+        FragmentariumSearchQuery(transliteration=TransliterationQuery(
+            string=signs, sign_repository=sign_repository))
     )
     expected = ([transliterated_fragment], 1) if is_match else ([], 0)
     assert result == expected
 
 
-def test_query_fragmentarium_sorting(signs, fragment_repository):
+def test_query_fragmentarium_sorting(signs, fragment_repository, sign_repository):
     transliterated_fragment_0 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.2"), script="A"
     )
@@ -456,7 +457,8 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
     )
 
     result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
+        FragmentariumSearchQuery(transliteration=TransliterationQuery(
+            string="KU", sign_repository=sign_repository))
     )
     expected = (
         [
@@ -469,7 +471,7 @@ def test_query_fragmentarium_sorting(signs, fragment_repository):
     assert result == expected
 
 
-def test_query_fragmentarium_pagination(fragment_repository):
+def test_query_fragmentarium_pagination(fragment_repository, sign_repository):
     fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     transliterated_fragments = [
         fragment_0,
@@ -482,28 +484,33 @@ def test_query_fragmentarium_pagination(fragment_repository):
     fragment_repository.create_many(transliterated_fragments)
 
     result_first_page = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(transliteration=TransliterationQuery([["KU"]]))
+        FragmentariumSearchQuery(transliteration=TransliterationQuery(
+            string="KU", sign_repository=sign_repository))
     )
     expected_first_page = (transliterated_fragments[:30], 40)
     assert result_first_page == expected_first_page
 
     result_second_page = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
-            transliteration=TransliterationQuery([["KU"]]), paginationIndex=1
+            transliteration=TransliterationQuery(
+                string="KU", sign_repository=sign_repository),
+            paginationIndex=1
         )
     )
     expected_second_page = (transliterated_fragments[30:], 40)
     assert result_second_page == expected_second_page
 
 
-def test_query_fragmentarium_transliteration_and_number(fragment_repository):
+def test_query_fragmentarium_transliteration_and_number(fragment_repository, sign_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
             number=transliterated_fragment.number,
-            transliteration=TransliterationQuery([["DIŠ", "UD"]]),
+            transliteration=TransliterationQuery(
+                string="DIŠ UD", sign_repository=sign_repository
+            ),
         )
     )
     assert result == ([transliterated_fragment], 1)
@@ -511,6 +518,7 @@ def test_query_fragmentarium_transliteration_and_number(fragment_repository):
 
 def test_query_fragmentarium_transliteration_and_number_and_references(
     fragment_repository,
+    sign_repository
 ):
     pages = "163"
     transliterated_fragment = TransliteratedFragmentFactory.build(
@@ -522,7 +530,8 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
             number=transliterated_fragment.number,
-            transliteration=TransliterationQuery([["DIŠ", "UD"]]),
+            transliteration=TransliterationQuery(
+                string="DIŠ UD", sign_repository=sign_repository),
             bibliography_id=transliterated_fragment.references[0].id,
             pages=pages,
         )
@@ -532,6 +541,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
 
 def test_query_fragmentarium_transliteration_and_number_and_references_not_found(
     fragment_repository,
+    sign_repository
 ):
     pages = "163"
     transliterated_fragment = TransliteratedFragmentFactory.build(
@@ -542,7 +552,9 @@ def test_query_fragmentarium_transliteration_and_number_and_references_not_found
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
             number=transliterated_fragment.number,
-            transliteration=TransliterationQuery([["DIŠ", "UD"]]),
+            transliteration=TransliterationQuery(
+                string="DIŠ UD", sign_repository=sign_repository
+            ),
             bibliography_id=transliterated_fragment.references[0].id,
             pages=f"{pages}123",
         )

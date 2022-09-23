@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 import attr
 from itertools import chain
-from typing import Sequence, Tuple, cast, Dict
+from typing import Sequence, Tuple, cast, Dict, Optional
 from collections import OrderedDict
 from ebl.errors import DataError
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -42,7 +42,7 @@ def get_line_number(signs: str, position: int) -> int:
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
 
-    _sign_repository: SignRepository
+    _sign_repository: SignRepository | None
     string: str
     wildcard_matchers: Dict[str, str] = OrderedDict(
         {
@@ -52,8 +52,8 @@ class TransliterationQuery:
         }
     )
 
-    def __init__(self, string: str, sign_repository: SignRepository) -> None:
-        self._sign_repository = sign_repository
+    def __init__(self, string: str, sign_repository: Optional[SignRepository]=None) -> None:
+        self._sign_repository = sign_repository if sign_repository else None
         self.string = string
 
     @property
@@ -79,7 +79,7 @@ class TransliterationQuery:
     def is_empty(self) -> bool:
         return self.regexp == r""
 
-    def children_regexp(self, string: str ='') -> str:
+    def children_regexp(self, string: str = '') -> str:
         return r"".join(child.regexp for child in self.create_children(string))
 
     def create_children(self, string: str = '') -> Sequence[TransliterationQuery]:
@@ -116,9 +116,12 @@ class TransliterationQuery:
         )
 
     def _create_signs(self) -> Sequence[str]:
+        if not self._sign_repository:
+            return []
         visitor = SignsVisitor(self._sign_repository)
         self._parse_line(self.string).accept(visitor)
-
+        print(visitor)
+        print(visitor.result)
         return visitor.result
 
     def create_sign_regexp(self, sign: str) -> str:
@@ -164,11 +167,11 @@ class TransliterationQueryWildCard(TransliterationQuery):
             alternative_strings = self.string.strip("[]").split("|")
             for alt_string in alternative_strings:
                 self.create_children(alt_string)
-            return r"WC"
+            return r"WC alt"
         if self.type == "any sign":
-            return r"WC"
+            return r"WC any"
         if self.type == "any sign+":
-            return r"WC"
+            return r"WC any\+"
         return ""
 
 
