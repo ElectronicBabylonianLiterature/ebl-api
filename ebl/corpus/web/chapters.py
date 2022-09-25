@@ -93,9 +93,13 @@ class ChaptersByLemmaResource:
             pagination_index = int(req.params["paginationIndex"])
         except ValueError as error:
             raise DataError("Pagination Index has to be a number") from error
+
+        genre_key = req.params.get("genre")
         resp.media = DictionaryLinePaginationSchema().dump(
             self._corpus.search_lemma(
-                req.params["lemma"], pagination_index, Genre(req.params.get("genre"))
+                req.params["lemma"],
+                pagination_index,
+                genre_key if genre_key is None else Genre(genre_key),
             ),
             many=True,
         )
