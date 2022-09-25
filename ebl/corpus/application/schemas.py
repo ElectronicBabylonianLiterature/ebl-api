@@ -244,14 +244,13 @@ class DictionaryLineSchema(Schema):
 
 
 class DictionaryLinePaginationSchema(Schema):
-    dictionary_line = fields.Nested(
+    dictionary_lines = fields.Nested(
         DictionaryLineSchema,
         required=True,
         many=True,
-        dump_only=True,
-        data_key="dictionaryLine",
+        data_key="dictionaryLines",
     )
-    total_count = fields.Integer(required=True, dump_only=True, data_key="totalCount")
+    total_count = fields.Integer(required=True, data_key="totalCount")
 
 
 class ChapterSchema(Schema):
