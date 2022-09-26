@@ -11,4 +11,6 @@ class TransliterationQueryFactory:
         return TransliterationQuery(string="", sign_repository=None)
 
     def create(self, transliteration: str) -> TransliterationQuery:
-        return TransliterationQuery(string=transliteration, sign_repository=self._sign_repository)
+        return TransliterationQuery(
+            string=transliteration, sign_repository=self._sign_repository
+        )

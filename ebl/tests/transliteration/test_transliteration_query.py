@@ -17,8 +17,7 @@ REGEXP_DATA = [
 
 @pytest.mark.parametrize("signs,is_match", REGEXP_DATA)
 def test_regexp(signs, is_match, sign_repository):
-    query = TransliterationQuery(
-        string=signs, sign_repository=sign_repository)
+    query = TransliterationQuery(string=signs, sign_repository=sign_repository)
     match = re.search(
         query.regexp,
         "KU NU IGI\n"

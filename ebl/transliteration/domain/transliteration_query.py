@@ -52,7 +52,9 @@ class TransliterationQuery:
         }
     )
 
-    def __init__(self, string: str, sign_repository: Optional[SignRepository]=None) -> None:
+    def __init__(
+        self, string: str, sign_repository: Optional[SignRepository] = None
+    ) -> None:
         self._sign_repository = sign_repository if sign_repository else None
         self.string = string
 
@@ -79,16 +81,14 @@ class TransliterationQuery:
     def is_empty(self) -> bool:
         return self.regexp == r""
 
-    def children_regexp(self, string: str = '') -> str:
+    def children_regexp(self, string: str = "") -> str:
         return r"".join(child.regexp for child in self.create_children(string))
 
-    def create_children(self, string: str = '') -> Sequence[TransliterationQuery]:
+    def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
         children: Sequence[TransliterationQuery] = []
         if not string:
             string = self.string
-        for segment in [
-            seg for seg in re.split(self.all_wildcards, string) if seg
-        ]:
+        for segment in [seg for seg in re.split(self.all_wildcards, string) if seg]:
             segment_type = self.classify(segment)
             if segment_type == "lines":
                 children += [
@@ -128,8 +128,8 @@ class TransliterationQuery:
         return rf"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
 
     def _parse_line(self, line: str) -> TextLine:
-        line = line.strip(' -.')
-        print(['!', line])
+        line = line.strip(" -.")
+        print(["!", line])
         try:
             return cast(TextLine, parse_line(f"1. {line}"))
         except PARSE_ERRORS:
@@ -145,7 +145,9 @@ class TransliterationQuery:
             string=string, sign_repository=self._sign_repository
         )
 
-    def make_transliteration_query_wildcard(self, string: str) -> TransliterationQueryWildCard:
+    def make_transliteration_query_wildcard(
+        self, string: str
+    ) -> TransliterationQueryWildCard:
         return TransliterationQueryWildCard(
             string=string, sign_repository=self._sign_repository
         )
@@ -176,7 +178,6 @@ class TransliterationQueryWildCard(TransliterationQuery):
 
 
 class TransliterationQueryLine(TransliterationQuery):
-
     @property
     def regexp(self) -> str:
         return rf"(?<![^|\s]){self.children_regexp()}"

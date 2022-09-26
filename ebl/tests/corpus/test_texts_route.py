@@ -66,7 +66,10 @@ def test_searching_texts(client, bibliography, sign_repository, signs, text_repo
     assert get_result.json == {
         "chapterInfos": [
             ChapterInfoSchema().dump(
-                ChapterInfo.of(chapter, TransliterationQuery([["KU"]]))
+                ChapterInfo.of(
+                    chapter,
+                    TransliterationQuery(string="KU", sign_repository=sign_repository),
+                )
             )
         ],
         "totalCount": 1,

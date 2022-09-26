@@ -16,7 +16,7 @@ def test_create_query(sign_repository, signs):
         sign_repository.create(sign)
 
     factory = TransliterationQueryFactory(sign_repository)
-    atf = "šu\ngid₂\nBU"
+    atf = "šu\ngid₂"
 
     query = TransliterationQuery(string="ŠU\nBU", sign_repository=sign_repository)
     factory_query = factory.create(atf)

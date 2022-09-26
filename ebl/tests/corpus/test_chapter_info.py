@@ -13,6 +13,7 @@ from ebl.tests.conftest import sign_repository
 
 CHAPTER: Chapter = ChapterFactory.build()
 
+
 def test_of(sign_repository) -> None:
     QUERY = TransliterationQuery(string="KU", sign_repository=sign_repository)
     CHAPTER_INFO = ChapterInfo.of(CHAPTER, QUERY)
