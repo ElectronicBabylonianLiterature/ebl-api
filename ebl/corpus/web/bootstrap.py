@@ -3,7 +3,11 @@ import falcon
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.alignments import AlignmentResource
-from ebl.corpus.web.chapters import ChaptersDisplayResource, ChaptersResource
+from ebl.corpus.web.chapters import (
+    ChaptersByLemmaResource,
+    ChaptersDisplayResource,
+    ChaptersResource,
+)
 from ebl.corpus.web.colophons import ColophonsResource
 from ebl.corpus.web.extant_lines import ExtantLinesResource
 from ebl.corpus.web.lemmatizations import LemmatizationResource
@@ -34,6 +38,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     chapters = ChaptersResource(corpus)
     chapters_display = ChaptersDisplayResource(corpus)
     chapters_line = LineResource(corpus)
+    chapters_by_lemma = ChaptersByLemmaResource(corpus)
     alignment = AlignmentResource(corpus)
     manuscript_lemmatization = LemmatizationResource(corpus)
     manuscript = ManuscriptsResource(corpus)
@@ -61,3 +66,4 @@ def create_corpus_routes(api: falcon.App, context: Context):
     api.add_route(f"{chapter_url}/colophons", colophons)
     api.add_route(f"{chapter_url}/unplaced_lines", unplaced_lines)
     api.add_route(f"{chapter_url}/extant_lines", extant_lines)
+    api.add_route("/lemmasearch", chapters_by_lemma)

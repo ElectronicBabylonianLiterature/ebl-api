@@ -185,3 +185,31 @@ def join_text() -> List[dict]:
             },
         }
     ]
+
+
+def join_text_title() -> dict:
+    return {
+        "$lookup": {
+            "from": "texts",
+            "let": {
+                "genre": "$textId.genre",
+                "category": "$textId.category",
+                "index": "$textId.index",
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {
+                            "$and": [
+                                {"$eq": ["$genre", "$$genre"]},
+                                {"$eq": ["$category", "$$category"]},
+                                {"$eq": ["$index", "$$index"]},
+                            ]
+                        }
+                    }
+                },
+                {"$project": {"_id": False, "name": True}},
+            ],
+            "as": "textName",
+        }
+    }

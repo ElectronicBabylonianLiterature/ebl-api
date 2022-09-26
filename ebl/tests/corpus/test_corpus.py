@@ -2,6 +2,8 @@ from typing import cast
 
 import attr
 import pytest
+from ebl.corpus.application.id_schemas import TextIdSchema
+from ebl.corpus.application.corpus import Corpus
 
 from ebl.corpus.application.lemmatization import (
     ChapterLemmatization,
@@ -10,6 +12,7 @@ from ebl.corpus.application.lemmatization import (
 from ebl.corpus.application.schemas import ChapterSchema
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.dictionary_line import DictionaryLine, DictionaryLinePagination
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
@@ -170,6 +173,24 @@ def test_find_chapter_for_display(
     )
 
     assert corpus.find_chapter_for_display(CHAPTER.id_) == injected_chapter_display
+
+
+def test_search_lemma(corpus: Corpus, text_repository, when) -> None:
+    lemma = "testlemma I"
+    dictionary_line = DictionaryLine(
+        TextIdSchema().dump(TEXT.id),
+        CHAPTER.name,
+        CHAPTER.lines[0],
+        TEXT.name,
+    )
+
+    when(text_repository).query_by_lemma(lemma, 0, None).thenReturn(
+        ([dictionary_line], 1)
+    )
+
+    assert corpus.search_lemma(lemma, 0, None) == DictionaryLinePagination(
+        [dictionary_line], 1
+    )
 
 
 def test_find_line(corpus, text_repository, bibliography, when) -> None:
