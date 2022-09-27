@@ -64,10 +64,16 @@ class TransliterationQuery:
         return rf"{separator}".join(child.regexp for child in children)
 
     def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
-        children: Sequence[TransliterationQuery] = []
         if not string:
             string = self.string
-        for segment in [seg for seg in re.split(self.all_wildcards, string) if seg]:
+        segments = [seg for seg in re.split(self.all_wildcards, string) if seg]
+        return self.get_children_from_segments(segments)
+
+    def get_children_from_segments(
+        self, segments: Sequence[str]
+    ) -> Sequence[TransliterationQuery]:
+        children: Sequence[TransliterationQuery] = []
+        for segment in segments:
             segment_type = self.classify(segment)
             if segment_type == "lines":
                 children += [
