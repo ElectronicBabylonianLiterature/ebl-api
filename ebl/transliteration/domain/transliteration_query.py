@@ -41,7 +41,10 @@ class TransliterationQuery:
 
     @property
     def regexp(self) -> str:
-        return self.children_regexp(self.string)
+        string = self.string.strip(" -.\n")
+        if not string:
+            return ""
+        return self.children_regexp(string)
 
     @property
     def type(self) -> str:
@@ -60,7 +63,7 @@ class TransliterationQuery:
         return r"|".join(f"({regexp})" for regexp in self.wildcard_matchers.values())
 
     def is_empty(self) -> bool:
-        return self.regexp == r""
+        return not self.regexp
 
     def children_regexp(self, string: str = "") -> str:
         children = self.create_children(string)
@@ -75,7 +78,6 @@ class TransliterationQuery:
             string = self.string
         for segment in [seg for seg in re.split(self.all_wildcards, string) if seg]:
             segment_type = self.classify(segment)
-            print("segment_type", segment_type, segment)
             if segment_type == "lines":
                 children += [
                     self.make_transliteration_query_line(line)
@@ -125,7 +127,6 @@ class TransliterationQuery:
 
     def _parse_line(self, line: str) -> TextLine:
         line = line.strip(" -.")
-        print(["!", line])
         try:
             return cast(TextLine, parse_line(f"1. {line}"))
         except PARSE_ERRORS:
@@ -162,15 +163,21 @@ class TransliterationQueryWildCard(TransliterationQuery):
     @property
     def regexp(self) -> str:
         if self.type == "alternative":
-            alternative_strings = self.string.strip("[]").split("|")
-            for alt_string in alternative_strings:
-                self.create_children(alt_string)
-            return r"WC alt"
+            return self.regexp_alternative()
         if self.type == "any sign":
-            return r"WC any"
+            return r"([^\s]+\/)*[^ ]+(\/[^\s]+)*"
         if self.type == "any sign+":
-            return r"WC any\+"
+            return r"([^\s]+\/)*[^ ]+(\/[^\s]+)*.*"
         return ""
+
+    def regexp_alternative(self) -> str:
+        alternative_strings = self.string.strip("[]").split("|")
+        alternative_queries = [
+            "".join(child.regexp for child in self.create_children(alternative_string))
+            for alternative_string in alternative_strings
+        ]
+        regexp = r'|'.join(alternative_queries)
+        return rf'({regexp})'
 
 
 class TransliterationQueryLine(TransliterationQuery):

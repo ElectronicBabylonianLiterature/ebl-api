@@ -295,7 +295,7 @@ GET_MATCHING_LINES_DATA = [
 3'. [... k]i-du u ba-ma-t[a ...]\n6'. [...] x mu ta-ma-tu₂""",
     ),
     (
-        "MA TA",
+        "MA\nTA",
         "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n3'. [... k]i-du u ba-ma-t[a ...]",
     ),
     ("BU", "7'. šu/gid"),
@@ -327,12 +327,5 @@ def test_get_matching_lines(string, expected, sign_repository, signs):
 
     query = TransliterationQuery(string=string, sign_repository=sign_repository)
     matching_text = transliterated_fragment.get_matching_lines(query)
-    """
-    import re
-    print("!! string (in array)", [string])
-    print('!! fragment signs (in array)', [transliterated_fragment.signs])
-    print("!! regexp", query.regexp)
-    print("!! regexp match", [match for match in re.finditer(query.regexp, transliterated_fragment.signs)])
-    print("!! matching_text", matching_text)
-    """
+
     assert matching_text == parse_atf_lark(expected)

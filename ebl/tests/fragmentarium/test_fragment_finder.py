@@ -146,11 +146,13 @@ def test_search(fragment_finder, fragment_repository, when):
 
 
 def test_search_fragmentarium_transliteration(
-    fragment_finder, fragment_repository, when
+    fragment_finder, fragment_repository, sign_repository, signs, when
 ):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    sign_matrix = [["MA", "UD"]]
-    query = TransliterationQuery(sign_matrix)
+    string = "MA UD"
+    query = TransliterationQuery(string=string, sign_repository=sign_repository)
     matching_fragments = [transliterated_fragment]
 
     (

@@ -55,7 +55,6 @@ from ebl.signs.infrastructure.mongo_sign_repository import (
     MongoSignRepository,
     SignSchema,
 )
-from ebl.transliteration.domain.sign import SignName
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain import atf
