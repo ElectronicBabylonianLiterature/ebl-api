@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 import attr
 
@@ -18,6 +18,7 @@ from ebl.corpus.domain.alignment import Alignment
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter_info import ChapterInfo, ChapterInfosPagination
+from ebl.corpus.domain.dictionary_line import DictionaryLine, DictionaryLinePagination
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
@@ -25,6 +26,7 @@ from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -71,6 +73,12 @@ class TextRepository(ABC):
     def query_by_transliteration(
         self, query: TransliterationQuery, pagination_index: int
     ) -> Tuple[Sequence[Chapter], int]:
+        ...
+
+    @abstractmethod
+    def query_by_lemma(
+        self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
+    ) -> Tuple[Sequence[DictionaryLine], int]:
         ...
 
     @abstractmethod
@@ -161,6 +169,17 @@ class Corpus:
         )
         return ChapterInfosPagination(
             [ChapterInfo.of(chapter, query) for chapter in chapters], total_count
+        )
+
+    def search_lemma(
+        self, query: str, pagination_index: int, genre: Optional[Genre] = None
+    ) -> DictionaryLinePagination:
+        return (
+            DictionaryLinePagination(
+                *self._repository.query_by_lemma(query, pagination_index, genre)
+            )
+            if query
+            else DictionaryLinePagination([], 0)
         )
 
     def list(self) -> List[Text]:

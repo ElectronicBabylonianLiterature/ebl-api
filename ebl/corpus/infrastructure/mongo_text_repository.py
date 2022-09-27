@@ -1,4 +1,4 @@
-from typing import List, Tuple, Sequence
+from typing import List, Optional, Tuple, Sequence
 
 import pymongo
 from pymongo.database import Database
@@ -6,9 +6,11 @@ from pymongo.database import Database
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
+from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
+    DictionaryLineSchema,
     LineSchema,
     ManuscriptSchema,
     TextSchema,
@@ -25,7 +27,9 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_chapters,
     join_text,
+    join_text_title,
 )
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
@@ -214,6 +218,69 @@ class MongoTextRepository(TextRepository):
             filter_query_by_transliteration(query, cursor),
             many=True,
         ), self._chapters.count_documents(mongo_query)
+
+    def query_by_lemma(
+        self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
+    ) -> Tuple[Sequence[DictionaryLine], int]:
+        LIMIT = 3
+        lemma_query = {
+            "$or": [
+                {"lines.variants.reconstruction.uniqueLemma": lemma},
+                {"lines.variants.manuscripts.line.content.uniqueLemma": lemma},
+            ],
+        }
+
+        if genre is not None:
+            lemma_query["textId.genre"] = genre.value
+
+        lemma_lines = self._chapters.aggregate(
+            [
+                {"$match": lemma_query},
+                {
+                    "$project": {
+                        "_id": False,
+                        "lines": True,
+                        "name": True,
+                        "textId": True,
+                    }
+                },
+                {"$unwind": "$lines"},
+                {"$match": lemma_query},
+                join_text_title(),
+                {"$skip": LIMIT * pagination_index},
+                {"$limit": LIMIT},
+                {
+                    "$project": {
+                        "textId": True,
+                        "textName": {"$first": "$textName.name"},
+                        "chapterName": "$name",
+                        "line": "$lines",
+                    }
+                },
+            ]
+        )
+
+        total_count = self._chapters.aggregate(
+            [
+                {"$match": lemma_query},
+                {
+                    "$project": {
+                        "_id": False,
+                        "lines": True,
+                    }
+                },
+                {"$unwind": "$lines"},
+                {"$count": "line_count"},
+            ]
+        )
+
+        return (
+            DictionaryLineSchema().load(
+                lemma_lines,
+                many=True,
+            ),
+            next(total_count, {}).get("line_count", 0),
+        )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
