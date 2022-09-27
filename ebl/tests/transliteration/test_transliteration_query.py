@@ -15,9 +15,11 @@ REGEXP_DATA = [
 ]
 
 
-@pytest.mark.parametrize("signs,is_match", REGEXP_DATA)
-def test_regexp(signs, is_match, sign_repository):
-    query = TransliterationQuery(string=signs, sign_repository=sign_repository)
+@pytest.mark.parametrize("string,is_match", REGEXP_DATA)
+def test_regexp(string, is_match, sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+    query = TransliterationQuery(string=string, sign_repository=sign_repository)
     match = re.search(
         query.regexp,
         "KU NU IGI\n"
@@ -37,11 +39,11 @@ GET_IS_SEQUENCE_EMPTY_DATA = [
     ("", True),
     ("MA TA", False),
     ("\n", True),
-    ("\nABZ001", False),
+    ("\nAŠ", False),
 ]
 
 
-@pytest.mark.parametrize("query, expected", GET_IS_SEQUENCE_EMPTY_DATA)
-def test_is_sequence_empty(query, expected, sign_repository):
-    query = TransliterationQuery(string=query, sign_repository=sign_repository)
+@pytest.mark.parametrize("string, expected", GET_IS_SEQUENCE_EMPTY_DATA)
+def test_is_sequence_empty(string, expected, sign_repository):
+    query = TransliterationQuery(string=string, sign_repository=sign_repository)
     assert expected == query.is_empty()

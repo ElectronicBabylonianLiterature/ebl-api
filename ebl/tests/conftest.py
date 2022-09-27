@@ -136,9 +136,6 @@ class TestSignRepository(MongoSignRepository):
     def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         return [SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))]
 
-    def find(self, name: SignName) -> Sign:
-        return SignSchema(unknown=EXCLUDE).load(self._collection.find_one({}))
-
 
 @pytest.fixture
 def bibliography_repository(database):
@@ -528,9 +525,9 @@ def signs():
             ("P₂", [(":", 1)], [("ABZ", "377n1")]),
             ("KU", [("ku", 1)], [("KWU", "869")]),
             ("NU", [("nu", 1)], [("ABZ", "075")]),
-            ("IGI", [("ši", 1)], [("HZL", "288"), ("ABZ", "207a/207b X")]),
-            ("DIŠ", [("ana", 1), ("1", 1)], []),
-            ("UD", [("u", 4), ("tu", 2)], []),
+            ("IGI", [("ši", 1), ("igi", 1)], [("HZL", "288"), ("ABZ", "207a/207b X")]),
+            ("DIŠ", [("ana", 1), ("1", 1), ('diš', 1)], []),
+            ("UD", [('ud', 1), ("u", 4), ("tu", 2)], []),
             ("MI", [("mi", 1), ("gi", 6)], []),
             ("KI", [("ki", 1)], []),
             ("DU", [("du", 1)], []),

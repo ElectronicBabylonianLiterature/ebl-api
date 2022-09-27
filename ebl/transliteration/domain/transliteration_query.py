@@ -11,31 +11,12 @@ from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_line
 from ebl.transliteration.domain.text_line import TextLine
 
 """
-def create_sign_regexp(sign):
-    return r"[^\s]+" if sign == "*" else rf"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
-
-
 def create_signs_fork_regexp(signs: Sequence):
     return (
         "(?:"
         + "".join([create_sign_regexp(sign) if sign != "|" else sign for sign in signs])
         + ")"
     )
-
-
-def create_line_regexp(line):
-    signs_regexp = " ".join(
-        create_sign_regexp(sign)
-        if type(sign) == str
-        else create_signs_fork_regexp(sign)
-        for sign in line
-    )
-    return rf"(?<![^|\s]){signs_regexp}"
-
-
-
-def get_line_number(signs: str, position: int) -> int:
-    return len([char for char in chain.from_iterable(signs[:position]) if char == "\n"])
 """
 
 
@@ -82,7 +63,9 @@ class TransliterationQuery:
         return self.regexp == r""
 
     def children_regexp(self, string: str = "") -> str:
-        return r"".join(child.regexp for child in self.create_children(string))
+        children = self.create_children(string)
+        separator = r"( .*)?\n.*" if children!=[] and children[0].type == "line" else ""
+        return rf"{separator}".join(child.regexp for child in children)
 
     def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
         children: Sequence[TransliterationQuery] = []
@@ -90,38 +73,42 @@ class TransliterationQuery:
             string = self.string
         for segment in [seg for seg in re.split(self.all_wildcards, string) if seg]:
             segment_type = self.classify(segment)
+            print("segment_type", segment_type, segment)
             if segment_type == "lines":
                 children += [
                     self.make_transliteration_query_line(line)
                     for line in segment.split("\n")
                 ]
-            elif segment_type != "text":
-                children += [self.make_transliteration_query_wildcard(segment)]
-            else:
+            elif segment_type == "text":
                 children += [self.make_transliteration_query_text(segment)]
+            else:
+                children += [self.make_transliteration_query_wildcard(segment)]
         return children
 
-    def match(self, signs: str) -> Sequence[Tuple[int, int]]:
+    def match(self, transliteration: str) -> Sequence[Tuple[int, int]]:
         return [
             (
-                self.get_line_number(signs, match.start()),
-                self.get_line_number(signs, match.end()),
+                self.get_line_number(transliteration, match.start()),
+                self.get_line_number(transliteration, match.end()),
             )
-            for match in re.finditer(self.regexp, signs)
+            for match in re.finditer(re.compile(self.regexp, re.MULTILINE), transliteration)
         ]
 
-    def get_line_number(self, signs: str, position: int) -> int:
+    def get_line_number(self, transliteration: str, position: int) -> int:
         return len(
-            [char for char in chain.from_iterable(signs[:position]) if char == "\n"]
+            [char for char in chain.from_iterable(
+                transliteration[:position]) if char == "\n"]
         )
 
-    def _create_signs(self) -> Sequence[str]:
+    def _standardize_transliteration(self, transliteration: str) -> str:
+        return '\n'.join(" ".join(self._create_signs(line)) for line in transliteration.split('\n'))
+
+    def _create_signs(self, string: str = '') -> Sequence[str]:
         if not self._sign_repository:
             return []
+        string = string if string else self.string
         visitor = SignsVisitor(self._sign_repository)
-        self._parse_line(self.string).accept(visitor)
-        print(visitor)
-        print(visitor.result)
+        self._parse_line(string).accept(visitor)
         return visitor.result
 
     def create_sign_regexp(self, sign: str) -> str:
@@ -181,3 +168,7 @@ class TransliterationQueryLine(TransliterationQuery):
     @property
     def regexp(self) -> str:
         return rf"(?<![^|\s]){self.children_regexp()}"
+    
+    @property
+    def type(self) -> str:
+        return "line"

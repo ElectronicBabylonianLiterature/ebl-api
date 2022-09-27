@@ -278,7 +278,7 @@ def test_set_text():
 
 
 GET_MATCHING_LINES_DATA = [
-    ("KU\nNU", "1'. [...-ku]-nu-ši [...]"),
+    ("KU NU", "1'. [...-ku]-nu-ši [...]"),
     ("U BA MA", "3'. [... k]i-du u ba-ma-t[a ...]"),
     ("GI₆", "2'. [...] GI₆ ana GI₆ u₄-m[a ...]"),
     (
@@ -295,7 +295,7 @@ GET_MATCHING_LINES_DATA = [
 3'. [... k]i-du u ba-ma-t[a ...]\n6'. [...] x mu ta-ma-tu₂""",
     ),
     (
-        "MA\nTA",
+        "MA TA",
         "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n3'. [... k]i-du u ba-ma-t[a ...]",
     ),
     ("BU", "7'. šu/gid"),
@@ -303,7 +303,9 @@ GET_MATCHING_LINES_DATA = [
 
 
 @pytest.mark.parametrize("string,expected", GET_MATCHING_LINES_DATA)
-def test_get_matching_lines(string, expected, sign_repository):
+def test_get_matching_lines(string, expected, sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment = FragmentFactory.build(
         text=parse_atf_lark(
             Atf(
@@ -316,13 +318,21 @@ def test_get_matching_lines(string, expected, sign_repository):
                 "7'. šu/gid"
             )
         ),
-        signs="KU NU IGI\n"
-        "GI₆ DIŠ GI₆ UD MA\n"
-        "KI DU U BA MA TA\n"
+        signs="KU ABZ075 ABZ207a\\u002F207b\\u0020X\n"
+        "MI DIŠ MI UD MA\n"
+        "KI DU ABZ411 BA MA TA\n"
         "X MU TA MA UD\n"
         "ŠU/BU",
     )
 
     query = TransliterationQuery(string=string, sign_repository=sign_repository)
     matching_text = transliterated_fragment.get_matching_lines(query)
+    """
+    import re
+    print("!! string (in array)", [string])
+    print('!! fragment signs (in array)', [transliterated_fragment.signs])
+    print("!! regexp", query.regexp)
+    print("!! regexp match", [match for match in re.finditer(query.regexp, transliterated_fragment.signs)])
+    print("!! matching_text", matching_text)
+    """
     assert matching_text == parse_atf_lark(expected)

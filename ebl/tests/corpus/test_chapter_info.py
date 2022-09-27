@@ -9,12 +9,13 @@ from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.application.line_schemas import TextLineSchema
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.tests.conftest import sign_repository
 
 CHAPTER: Chapter = ChapterFactory.build()
 
 
-def test_of(sign_repository) -> None:
+def test_of(sign_repository, signs) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
     QUERY = TransliterationQuery(string="KU", sign_repository=sign_repository)
     CHAPTER_INFO = ChapterInfo.of(CHAPTER, QUERY)
     assert CHAPTER_INFO == ChapterInfo(
@@ -29,7 +30,9 @@ def test_of(sign_repository) -> None:
     )
 
 
-def test_chapter_info_schema(sign_repository) -> None:
+def test_chapter_info_schema(sign_repository, signs) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
     QUERY = TransliterationQuery(string="KU", sign_repository=sign_repository)
     CHAPTER_INFO = ChapterInfo.of(CHAPTER, QUERY)
     dump = ChapterInfoSchema().dump(CHAPTER_INFO)

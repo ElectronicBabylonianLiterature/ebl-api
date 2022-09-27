@@ -419,30 +419,36 @@ SEARCH_SIGNS_DATA = [
     ("DIŠ UD", True),
     ("KU", True),
     ("UD", True),
-    ("MI DIŠ\nABZ411 BA MA", True),
+    ("MI DIŠ\nU BA MA", True),
     ("IGI UD", False),
 ]
 
 
-@pytest.mark.parametrize("signs,is_match", SEARCH_SIGNS_DATA)
+@pytest.mark.parametrize("string,is_match", SEARCH_SIGNS_DATA)
 def test_query_fragmentarium_transliteration(
-    signs, is_match, fragment_repository, sign_repository
+    string, is_match, fragment_repository, sign_repository, signs
 ):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
+    query = TransliterationQuery(
+        string=string, sign_repository=sign_repository
+    )
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
-            transliteration=TransliterationQuery(
-                string=signs, sign_repository=sign_repository
-            )
+            transliteration=query
         )
     )
     expected = ([transliterated_fragment], 1) if is_match else ([], 0)
+
     assert result == expected
 
 
-def test_query_fragmentarium_sorting(signs, fragment_repository, sign_repository):
+def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment_0 = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.2"), script="A"
     )
@@ -479,7 +485,9 @@ def test_query_fragmentarium_sorting(signs, fragment_repository, sign_repository
     assert result == expected
 
 
-def test_query_fragmentarium_pagination(fragment_repository, sign_repository):
+def test_query_fragmentarium_pagination(fragment_repository, sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
     fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
     transliterated_fragments = [
         fragment_0,
@@ -514,8 +522,10 @@ def test_query_fragmentarium_pagination(fragment_repository, sign_repository):
 
 
 def test_query_fragmentarium_transliteration_and_number(
-    fragment_repository, sign_repository
+    fragment_repository, sign_repository, signs
 ):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
@@ -531,8 +541,10 @@ def test_query_fragmentarium_transliteration_and_number(
 
 
 def test_query_fragmentarium_transliteration_and_number_and_references(
-    fragment_repository, sign_repository
+    fragment_repository, sign_repository, signs
 ):
+    for sign in signs:
+        sign_repository.create(sign)
     pages = "163"
     transliterated_fragment = TransliteratedFragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
@@ -554,8 +566,10 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
 
 
 def test_query_fragmentarium_transliteration_and_number_and_references_not_found(
-    fragment_repository, sign_repository
+    fragment_repository, sign_repository, signs
 ):
+    for sign in signs:
+        sign_repository.create(sign)
     pages = "163"
     transliterated_fragment = TransliteratedFragmentFactory.build(
         references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
