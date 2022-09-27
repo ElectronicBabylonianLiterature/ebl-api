@@ -433,13 +433,9 @@ def test_query_fragmentarium_transliteration(
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
-    query = TransliterationQuery(
-        string=string, sign_repository=sign_repository
-    )
+    query = TransliterationQuery(string=string, sign_repository=sign_repository)
     result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            transliteration=query
-        )
+        FragmentariumSearchQuery(transliteration=query)
     )
     expected = ([transliterated_fragment], 1) if is_match else ([], 0)
 

@@ -64,7 +64,9 @@ class TransliterationQuery:
 
     def children_regexp(self, string: str = "") -> str:
         children = self.create_children(string)
-        separator = r"( .*)?\n.*" if children!=[] and children[0].type == "line" else ""
+        separator = (
+            r"( .*)?\n.*" if children != [] and children[0].type == "line" else ""
+        )
         return rf"{separator}".join(child.regexp for child in children)
 
     def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
@@ -91,19 +93,26 @@ class TransliterationQuery:
                 self.get_line_number(transliteration, match.start()),
                 self.get_line_number(transliteration, match.end()),
             )
-            for match in re.finditer(re.compile(self.regexp, re.MULTILINE), transliteration)
+            for match in re.finditer(
+                re.compile(self.regexp, re.MULTILINE), transliteration
+            )
         ]
 
     def get_line_number(self, transliteration: str, position: int) -> int:
         return len(
-            [char for char in chain.from_iterable(
-                transliteration[:position]) if char == "\n"]
+            [
+                char
+                for char in chain.from_iterable(transliteration[:position])
+                if char == "\n"
+            ]
         )
 
     def _standardize_transliteration(self, transliteration: str) -> str:
-        return '\n'.join(" ".join(self._create_signs(line)) for line in transliteration.split('\n'))
+        return "\n".join(
+            " ".join(self._create_signs(line)) for line in transliteration.split("\n")
+        )
 
-    def _create_signs(self, string: str = '') -> Sequence[str]:
+    def _create_signs(self, string: str = "") -> Sequence[str]:
         if not self._sign_repository:
             return []
         string = string if string else self.string
@@ -168,7 +177,7 @@ class TransliterationQueryLine(TransliterationQuery):
     @property
     def regexp(self) -> str:
         return rf"(?<![^|\s]){self.children_regexp()}"
-    
+
     @property
     def type(self) -> str:
         return "line"

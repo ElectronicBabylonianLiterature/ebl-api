@@ -62,6 +62,6 @@ def test_signs_visitor(text: str, expected: Sequence[str], sign_repository, sign
 
     visitor = SignsVisitor(sign_repository)
     parse_line(f"1. {text}").accept(visitor)
-    
-    print(text, '! visitor test !', visitor.result, 'vs.', expected)
+
+    print(text, "! visitor test !", visitor.result, "vs.", expected)
     assert visitor.result == expected
