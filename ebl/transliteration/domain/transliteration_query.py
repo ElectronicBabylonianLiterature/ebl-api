@@ -10,15 +10,6 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_line
 from ebl.transliteration.domain.text_line import TextLine
 
-"""
-def create_signs_fork_regexp(signs: Sequence):
-    return (
-        "(?:"
-        + "".join([create_sign_regexp(sign) if sign != "|" else sign for sign in signs])
-        + ")"
-    )
-"""
-
 
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQuery:
@@ -176,8 +167,8 @@ class TransliterationQueryWildCard(TransliterationQuery):
             "".join(child.regexp for child in self.create_children(alternative_string))
             for alternative_string in alternative_strings
         ]
-        regexp = r'|'.join(alternative_queries)
-        return rf'({regexp})'
+        regexp = r"|".join(alternative_queries)
+        return rf"(?:{regexp})"
 
 
 class TransliterationQueryLine(TransliterationQuery):

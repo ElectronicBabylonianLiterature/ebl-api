@@ -11,7 +11,7 @@ REGEXP_DATA = [
     ("GI₆ DIŠ\nU BA MA", True),
     ("ŠU", True),
     ("IGI UD", False),
-    ("|U.BA| DU", False), # TODO: Fix composite signs (?)
+    ("|U.BA| DU", False),  # TODO: Fix composite signs (?)
 ]
 
 
