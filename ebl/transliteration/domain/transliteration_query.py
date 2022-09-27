@@ -27,15 +27,13 @@ class TransliterationQuery:
     def __init__(
         self, string: str, sign_repository: Optional[SignRepository] = None
     ) -> None:
-        self._sign_repository = sign_repository if sign_repository else None
+        self._sign_repository = sign_repository or None
         self.string = string
 
     @property
     def regexp(self) -> str:
         string = self.string.strip(" -.\n")
-        if not string:
-            return ""
-        return self.children_regexp(string)
+        return self.children_regexp(string) if string else ""
 
     @property
     def type(self) -> str:
@@ -44,10 +42,14 @@ class TransliterationQuery:
     def classify(self, string: str) -> str:
         if "\n" in string:
             return "lines"
-        for name, regex in self.wildcard_matchers.items():
-            if re.match(regex, string):
-                return name
-        return "text"
+        return next(
+            (
+                name
+                for name, regex in self.wildcard_matchers.items()
+                if re.match(regex, string)
+            ),
+            "text",
+        )
 
     @property
     def all_wildcards(self) -> str:
@@ -114,7 +116,7 @@ class TransliterationQuery:
     def _create_signs(self, string: str = "") -> Sequence[str]:
         if not self._sign_repository:
             return []
-        string = string if string else self.string
+        string = string or self.string
         visitor = SignsVisitor(self._sign_repository)
         self._parse_line(string).accept(visitor)
         return visitor.result
@@ -163,9 +165,7 @@ class TransliterationQueryWildCard(TransliterationQuery):
             return self.regexp_alternative()
         if self.type == "any sign":
             return r"([^\s]+\/)*[^ ]+(\/[^\s]+)*"
-        if self.type == "any sign+":
-            return r"([^\s]+\/)*[^ ]+(\/[^\s]+)*.*"
-        return ""
+        return r"([^\s]+\/)*[^ ]+(\/[^\s]+)*.*" if self.type == "any sign+" else ""
 
     def regexp_alternative(self) -> str:
         alternative_strings = self.string.strip("[]").split("|")
