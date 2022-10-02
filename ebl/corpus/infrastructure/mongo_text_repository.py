@@ -222,7 +222,7 @@ class MongoTextRepository(TextRepository):
     def query_by_lemma(
         self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
-        LIMIT = 3
+        LIMIT = 10
         lemma_query = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
