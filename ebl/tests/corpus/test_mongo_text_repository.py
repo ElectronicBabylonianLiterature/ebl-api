@@ -1,4 +1,4 @@
-from typing import Sequence, Tuple
+from typing import Sequence
 import attr
 import pytest
 from ebl.corpus.application.corpus import TextRepository
@@ -299,6 +299,7 @@ def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
         text.id,
         text.name,
         chapter.name,
+        chapter.stage,
         chapter.lines[0],
     )
 
@@ -311,23 +312,23 @@ def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
             CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
             None,
-            ([make_dictionary_line(LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA)], 1),
+            [make_dictionary_line(LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA)],
         ),
         (
             TEXT,
             CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
             Genre.DIVINATION,
-            ([], 0),
+            [],
         ),
         (
             TEXT,
             CHAPTER_WITH_MANUSCRIPT_LEMMA,
             QUERY_LEMMA,
             None,
-            ([make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA)], 1),
+            [make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA)],
         ),
-        (TEXT, CHAPTER, "definitely not a lemma", None, ([], 0)),
+        (TEXT, CHAPTER, "definitely not a lemma", None, []),
     ],
 )
 def test_query_by_lemma(
@@ -336,7 +337,7 @@ def test_query_by_lemma(
     chapter: Chapter,
     lemma_id: str,
     genre: Genre,
-    expected: Tuple[Sequence[DictionaryLine], int],
+    expected: Sequence[DictionaryLine],
 ) -> None:
     text_repository.create(text)
     text_repository.create_chapter(chapter)
