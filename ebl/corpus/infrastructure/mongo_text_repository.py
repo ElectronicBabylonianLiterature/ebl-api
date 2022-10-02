@@ -221,7 +221,7 @@ class MongoTextRepository(TextRepository):
 
     def query_by_lemma(
         self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
-    ) -> Tuple[Sequence[DictionaryLine], int]:
+    ) -> Sequence[DictionaryLine]:
         LIMIT = 3
         lemma_query = {
             "$or": [
@@ -241,6 +241,7 @@ class MongoTextRepository(TextRepository):
                         "_id": False,
                         "lines": True,
                         "name": True,
+                        "stage": True,
                         "textId": True,
                     }
                 },
@@ -254,32 +255,16 @@ class MongoTextRepository(TextRepository):
                         "textId": True,
                         "textName": {"$first": "$textName.name"},
                         "chapterName": "$name",
+                        "stage": True,
                         "line": "$lines",
                     }
                 },
             ]
         )
 
-        total_count = self._chapters.aggregate(
-            [
-                {"$match": lemma_query},
-                {
-                    "$project": {
-                        "_id": False,
-                        "lines": True,
-                    }
-                },
-                {"$unwind": "$lines"},
-                {"$count": "line_count"},
-            ]
-        )
-
-        return (
-            DictionaryLineSchema().load(
-                lemma_lines,
-                many=True,
-            ),
-            next(total_count, {}).get("line_count", 0),
+        return DictionaryLineSchema().load(
+            lemma_lines,
+            many=True,
         )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:

@@ -6,7 +6,7 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.application.schemas import (
-    DictionaryLinePaginationSchema,
+    DictionaryLineSchema,
     ManuscriptAttestationSchema,
 )
 from ebl.corpus.web.text_utils import create_chapter_id
@@ -95,7 +95,8 @@ class ChaptersByLemmaResource:
             raise DataError("Pagination Index has to be a number") from error
 
         genre_key = req.params.get("genre")
-        resp.media = DictionaryLinePaginationSchema().dump(
+
+        resp.media = DictionaryLineSchema().dump(
             self._corpus.search_lemma(
                 req.params["lemma"],
                 pagination_index,
