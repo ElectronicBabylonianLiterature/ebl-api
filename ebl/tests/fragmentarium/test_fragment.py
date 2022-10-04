@@ -326,6 +326,6 @@ def test_get_matching_lines(string, expected, sign_repository, signs):
     )
 
     query = TransliterationQuery(string=string, sign_repository=sign_repository)
+    print("!! QQ", query)
     matching_text = transliterated_fragment.get_matching_lines(query)
-
     assert matching_text == parse_atf_lark(expected)
