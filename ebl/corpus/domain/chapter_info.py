@@ -12,6 +12,7 @@ from ebl.transliteration.domain.text_line import TextLine
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterInfo:
     id_: ChapterId
+    text_name: str
     siglums: Mapping[int, Siglum]
     matching_lines: Sequence[Line]
     matching_colophon_lines: Mapping[int, Sequence[TextLine]]
@@ -23,6 +24,7 @@ class ChapterInfo:
 
         return ChapterInfo(
             chapter.id_,
+            chapter.text_name,
             {manuscript.id: manuscript.siglum for manuscript in chapter.manuscripts},
             matching_lines,
             matching_colophon_lines,
