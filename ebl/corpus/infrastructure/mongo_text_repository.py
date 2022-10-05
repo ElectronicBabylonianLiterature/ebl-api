@@ -6,8 +6,6 @@ from pymongo.database import Database
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
-from ebl.corpus.domain.dictionary_line import DictionaryLine
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
     DictionaryLineSchema,
@@ -18,6 +16,7 @@ from ebl.corpus.application.schemas import (
 )
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
@@ -32,12 +31,11 @@ from ebl.corpus.infrastructure.queries import (
     join_text,
     join_text_title,
 )
-from ebl.transliteration.domain.genre import Genre
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.infrastructure.collections import (
