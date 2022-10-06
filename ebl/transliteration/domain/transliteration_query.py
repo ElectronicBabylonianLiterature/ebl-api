@@ -44,8 +44,7 @@ class TransliterationQuery:
 
     def _regexp(self) -> str:
         string = self.string.strip(" -.\n")
-        regexp = self.children_regexp(string) if string else ""
-        return regexp
+        return self.children_regexp(string) if string else ""
 
     def _classify(self, string: str) -> Type:
         if "\n" in string:
