@@ -15,7 +15,6 @@ from ebl.transliteration.domain.text_line import TextLine
 class Type(Enum):
     UNDEFINED = None
     LINES = "lines"
-    LINE = "line"
     TEXT = "text"
     ALTERNATIVE = "alternative"
     ANY_SIGN = "any sign"
@@ -84,22 +83,17 @@ class TransliterationQuery:
         self, segments: Sequence[str]
     ) -> List[TransliterationQuery]:
         children: List[TransliterationQuery] = []
-        # print("segments", segments)
         for segment in segments:
             segment_type = self._classify(segment)
             if segment_type == Type.LINES:
-                # print("! lines !", segment, '>', segments, self)
                 children.extend(
                     self.make_transliteration_query_line(line)
                     for line in segment.split("\n")
                 )
-                # print(print("! line children !", children))
             elif segment_type in wildcard_matchers:
                 children.append(self.make_transliteration_query_wildcard(segment))
             else:
-                # print("! text !", segment, self)
                 children.append(self.make_transliteration_query_text(segment))
-
         return children
 
     def match(self, transliteration: str) -> Sequence[Tuple[int, int]]:
@@ -155,14 +149,16 @@ class TransliterationQueryText(TransliterationQuery):
         if not self.sign_repository:
             return []
         visitor = SignsVisitor(self.sign_repository)
-        self._parse_line(transliteration).accept(visitor)
+        self._parse(transliteration).accept(visitor)
+        
         return visitor.result
 
-    def _parse_line(self, line: str) -> TextLine:
-        line = line.strip(" -.")
+    def _parse(self, transliteration: str) -> TextLine:
+        transliteration = transliteration.strip(" -.")
         try:
-            return cast(TextLine, parse_line(f"1. {line}"))
+            return cast(TextLine, parse_line(f"1. {transliteration}"))
         except PARSE_ERRORS:
+
             raise DataError("Invalid transliteration query.")
 
 
@@ -190,10 +186,4 @@ class TransliterationQueryWildCard(TransliterationQuery):
 @attr.s(auto_attribs=True)
 class TransliterationQueryLine(TransliterationQuery):
     def _regexp(self) -> str:
-        string = f"{self.string}"
-        print(
-            "line regexp",
-            [self.children_regexp(string)],
-            rf"(?<![^|\s]){self.children_regexp(string, True)}",
-        )
-        return rf"(?<![^|\s]){self.children_regexp(string, True)}"
+        return rf"(?<![^|\s]){self.children_regexp(self.string, True)}"

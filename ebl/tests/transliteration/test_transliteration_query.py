@@ -11,7 +11,8 @@ REGEXP_DATA = [
     ("GI₆ DIŠ\nU BA MA", True),
     ("ŠU", True),
     ("IGI UD", False),
-    ("|U.BA| DU", False),  # TODO: Fix composite signs (?)
+    ("|U.BA|", True),
+    ("|U.BA| BA", False),
 ]
 
 
@@ -28,7 +29,6 @@ def test_regexp(string, is_match, sign_repository, signs):
         "X MU TA MA UD\n"
         "ŠU/BU",
     )
-
     if is_match:
         assert match is not None
     else:
