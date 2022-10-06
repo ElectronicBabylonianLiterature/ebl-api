@@ -149,7 +149,7 @@ class TransliterationQueryText(TransliterationQuery):
             return []
         visitor = SignsVisitor(self.sign_repository)
         self._parse(transliteration).accept(visitor)
-        
+
         return visitor.result
 
     def _parse(self, transliteration: str) -> TextLine:
