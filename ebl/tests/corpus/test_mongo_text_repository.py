@@ -1,23 +1,19 @@
 from typing import Sequence, Tuple
+
 import attr
 import pytest
-from ebl.corpus.application.corpus import TextRepository
 
+from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.text import Text, UncertainFragment
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -30,11 +26,15 @@ from ebl.tests.factories.corpus import (
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
-
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -349,6 +349,17 @@ def test_query_by_lemma(
     text_repository.create_chapter(chapter)
 
     assert text_repository.query_by_lemma(lemma_id, 0, genre) == expected
+
+
+def test_query_by_transliteration_lookup(text_repository) -> None:
+    chapter = attr.evolve(
+        CHAPTER_FILTERED_QUERY, text_id=TextId(TEXT.genre, TEXT.category, TEXT.index)
+    )
+    text_repository.create(TEXT)
+    text_repository.create_chapter(chapter)
+    result = text_repository.query_by_transliteration(TransliterationQuery([["KU"]]), 0)
+    expected = [attr.evolve(CHAPTER_FILTERED_QUERY, text_name=TEXT.name)]
+    assert result == (expected, len(expected))
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:

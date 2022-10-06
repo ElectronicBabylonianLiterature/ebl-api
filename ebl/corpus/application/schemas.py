@@ -259,6 +259,7 @@ class ChapterSchema(Schema):
     stage = ValueEnum(Stage, required=True)
     version = fields.String(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
+    text_name = fields.String(data_key="textName", load_only=True, missing="")
     order = fields.Integer(required=True)
     manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
     uncertain_fragments: fields.Field = fields.Nested(
@@ -295,6 +296,7 @@ class ChapterSchema(Schema):
             data["parser_version"],
             data["is_filtered_query"],
             data["colophon_lines_in_query"],
+            data["text_name"],
         )
 
 
