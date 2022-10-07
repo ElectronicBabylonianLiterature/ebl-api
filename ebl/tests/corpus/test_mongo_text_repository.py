@@ -35,6 +35,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -284,12 +285,21 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
 
 
 @pytest.mark.parametrize(
-    "signs,is_match",
-    [([["KU"]], True), ([["ABZ075"], ["KU"]], True), ([["UD"]], False)],
+    "string,is_match",
+    [("KU", True), ("NU\nKU", True), ("UD", False)],
 )
-def test_query_by_transliteration(signs, is_match, text_repository) -> None:
+def test_query_by_transliteration(
+    string, is_match, text_repository, sign_repository, signs
+) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
-    result = text_repository.query_by_transliteration(TransliterationQuery(signs), 0)
+    result = text_repository.query_by_transliteration(
+        query=TransliterationQuery(
+            string=string, visitor=SignsVisitor(sign_repository)
+        ),
+        pagination_index=0,
+    )
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
     assert result == (expected, len(expected))
 
@@ -344,13 +354,20 @@ def test_query_by_lemma(
     assert text_repository.query_by_lemma(lemma_id, 0, genre) == expected
 
 
-def test_query_by_transliteration_lookup(text_repository) -> None:
+def test_query_by_transliteration_lookup(
+    text_repository, sign_repository, signs
+) -> None:
+
+    for sign in signs:
+        sign_repository.create(sign)
     chapter = attr.evolve(
         CHAPTER_FILTERED_QUERY, text_id=TextId(TEXT.genre, TEXT.category, TEXT.index)
     )
     text_repository.create(TEXT)
     text_repository.create_chapter(chapter)
-    result = text_repository.query_by_transliteration(TransliterationQuery([["KU"]]), 0)
+    result = text_repository.query_by_transliteration(
+        TransliterationQuery(string="KU", visitor=SignsVisitor(sign_repository)), 0
+    )
     expected = [attr.evolve(CHAPTER_FILTERED_QUERY, text_name=TEXT.name)]
     assert result == (expected, len(expected))
 

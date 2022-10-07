@@ -31,6 +31,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
 def test_number():
@@ -278,32 +279,34 @@ def test_set_text():
 
 
 GET_MATCHING_LINES_DATA = [
-    ([["KU", "NU"]], "1'. [...-ku]-nu-ši [...]"),
-    ([["U", "BA", "MA"]], "3'. [... k]i-du u ba-ma-t[a ...]"),
-    ([["GI₆"]], "2'. [...] GI₆ ana GI₆ u₄-m[a ...]"),
+    ("KU NU", "1'. [...-ku]-nu-ši [...]"),
+    ("U BA MA", "3'. [... k]i-du u ba-ma-t[a ...]"),
+    ("GI₆", "2'. [...] GI₆ ana GI₆ u₄-m[a ...]"),
     (
-        [["GI₆", "DIŠ"], ["U", "BA", "MA"]],
+        "GI₆ DIŠ\nU BA MA",
         "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n3'. [... k]i-du u ba-ma-t[a ...]",
     ),
     (
-        [["NU", "IGI"], ["GI₆", "DIŠ"]],
+        "NU IGI\nGI₆ DIŠ",
         "1'. [...-ku]-nu-ši [...]\n2'. [...] GI₆ ana GI₆ u₄-m[a ...]",
     ),
     (
-        [["MA"]],
+        "MA",
         """2'. [...] GI₆ ana GI₆ u₄-m[a ...]
 3'. [... k]i-du u ba-ma-t[a ...]\n6'. [...] x mu ta-ma-tu₂""",
     ),
     (
-        [["MA"], ["TA"]],
+        "MA\nTA",
         "2'. [...] GI₆ ana GI₆ u₄-m[a ...]\n3'. [... k]i-du u ba-ma-t[a ...]",
     ),
-    ([["BU"]], "7'. šu/gid"),
+    ("BU", "7'. šu/gid"),
 ]
 
 
-@pytest.mark.parametrize("query,expected", GET_MATCHING_LINES_DATA)
-def test_get_matching_lines(query, expected):
+@pytest.mark.parametrize("string,expected", GET_MATCHING_LINES_DATA)
+def test_get_matching_lines(string, expected, sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment = FragmentFactory.build(
         text=parse_atf_lark(
             Atf(
@@ -316,13 +319,13 @@ def test_get_matching_lines(query, expected):
                 "7'. šu/gid"
             )
         ),
-        signs="KU NU IGI\n"
-        "GI₆ DIŠ GI₆ UD MA\n"
-        "KI DU U BA MA TA\n"
+        signs="KU ABZ075 ABZ207a\\u002F207b\\u0020X\n"
+        "MI DIŠ MI UD MA\n"
+        "KI DU ABZ411 BA MA TA\n"
         "X MU TA MA UD\n"
         "ŠU/BU",
     )
 
-    query = TransliterationQuery(query)
+    query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     matching_text = transliterated_fragment.get_matching_lines(query)
     assert matching_text == parse_atf_lark(expected)
