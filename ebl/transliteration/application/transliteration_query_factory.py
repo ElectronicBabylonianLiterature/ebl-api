@@ -12,9 +12,9 @@ class TransliterationQueryFactory:
     def create_empty() -> TransliterationQuery:
         return TransliterationQuery(string="", sign_repository=None)
 
-    def create(self, transliteration: str) -> TransliterationQuery:
+    def create(self, string: str) -> TransliterationQuery:
         query = TransliterationQuery(
-            string=transliteration, sign_repository=self._sign_repository
+            string=string, sign_repository=self._sign_repository
         )
         try:
             query.regexp

@@ -13,6 +13,15 @@ REGEXP_DATA = [
     ("IGI UD", False),
     ("|U.BA|", True),
     ("|U.BA| BA", False),
+    ("BA ? TA", True),
+    ("MU ? TA", False),
+    ("KI * TA", True),
+    ("KI * DU", False),
+    ("[UD|TA|NU] MA", True),
+    ("[UD|BA] NU", False),
+    ("[UD|TA|NU] MA\nKI", True),
+    ("[UD|TA|NU] MA\nKI * BA", True),
+    ("[UD|TA|NU] MA\nKI * NU", False),
 ]
 
 

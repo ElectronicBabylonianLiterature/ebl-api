@@ -15,6 +15,7 @@ from ebl.transliteration.domain.text_line import TextLine
 class Type(Enum):
     UNDEFINED = None
     LINES = "lines"
+    LINE = "line"
     TEXT = "text"
     ALTERNATIVE = "alternative"
     ANY_SIGN = "any sign"
@@ -39,12 +40,12 @@ class TransliterationQuery:
     regexp: str = attr.ib(init=False)
 
     def __attrs_post_init__(self) -> None:
+        self.string = self.string.strip(" -.\n")
         self.type = self._classify(self.string)
         self.regexp = self._regexp()
 
     def _regexp(self) -> str:
-        string = self.string.strip(" -.\n")
-        return self.children_regexp(string) if string else ""
+        return self.children_regexp(self.string) if self.string else ""
 
     def _classify(self, string: str) -> Type:
         if "\n" in string:
@@ -53,7 +54,7 @@ class TransliterationQuery:
             (
                 type
                 for type, regex in wildcard_matchers.items()
-                if re.match(regex, string)
+                if re.match(rf"^{regex}$", string)
             ),
             Type.TEXT,
         )
@@ -65,8 +66,17 @@ class TransliterationQuery:
     def is_empty(self) -> bool:
         return not self.regexp
 
-    def children_regexp(self, string: str = "", lines: bool = False) -> str:
-        children = self.create_children(string)
+    def children_regexp(self, string: str = "") -> str:
+        children = (
+            (
+                [
+                    self.make_transliteration_query_line(line)
+                    for line in string.split("\n")
+                ]
+            )
+            if self.type == Type.LINES
+            else self.create_children(string)
+        )
         if children == []:
             return r""
         separator = r"( .*)?\n.*" if self.type == Type.LINES else " "
@@ -75,7 +85,11 @@ class TransliterationQuery:
     def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
         if not string:
             string = self.string
-        segments = [seg for seg in re.split(self.all_wildcards, string) if seg]
+        segments = [
+            seg.strip(" -.")
+            for seg in re.split(self.all_wildcards, string)
+            if seg and seg.strip(" -.")
+        ]
         return self.get_children_from_segments(segments)
 
     def get_children_from_segments(
@@ -84,12 +98,7 @@ class TransliterationQuery:
         children: List[TransliterationQuery] = []
         for segment in segments:
             segment_type = self._classify(segment)
-            if segment_type == Type.LINES:
-                children.extend(
-                    self.make_transliteration_query_line(line)
-                    for line in segment.split("\n")
-                )
-            elif segment_type in wildcard_matchers:
+            if segment_type in wildcard_matchers:
                 children.append(self.make_transliteration_query_wildcard(segment))
             else:
                 children.append(self.make_transliteration_query_text(segment))
@@ -157,7 +166,6 @@ class TransliterationQueryText(TransliterationQuery):
         try:
             return cast(TextLine, parse_line(f"1. {transliteration}"))
         except PARSE_ERRORS:
-
             raise DataError("Invalid transliteration query.")
 
 
@@ -184,5 +192,11 @@ class TransliterationQueryWildCard(TransliterationQuery):
 
 @attr.s(auto_attribs=True)
 class TransliterationQueryLine(TransliterationQuery):
+    def _classify(self, string: str) -> Type:
+        return Type.LINE
+
     def _regexp(self) -> str:
-        return rf"(?<![^|\s]){self.children_regexp(self.string, True)}"
+        content = TransliterationQuery(
+            string=self.string, sign_repository=self.sign_repository
+        )
+        return rf"(?<![^|\s]){content.regexp}"
