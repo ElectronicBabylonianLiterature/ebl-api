@@ -45,7 +45,7 @@ class TransliterationQuery:
         self.regexp = self._regexp()
 
     def _regexp(self) -> str:
-        return self.children_regexp(self.string) if self.string else ""
+        return self.children_regexp(self.string) if self.string else r""
 
     def _classify(self, string: str) -> Type:
         if "\n" in string:
@@ -67,22 +67,22 @@ class TransliterationQuery:
         return not self.regexp
 
     def children_regexp(self, string: str = "") -> str:
-        children = (
-            (
-                [
-                    self.make_transliteration_query_line(line)
-                    for line in string.split("\n")
-                ]
-            )
-            if self.type == Type.LINES
-            else self.create_children(string)
-        )
+        children = self.create_children(string)
         if children == []:
             return r""
-        separator = r"( .*)?\n.*" if self.type == Type.LINES else " "
+        separator = r"( .*)?\n.*" if self.type == Type.LINES else r" "
         return rf"{separator}".join(child.regexp for child in children)
 
     def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
+        return (
+            [self.make_transliteration_query_line(line) for line in string.split("\n")]
+            if self.type == Type.LINES
+            else self.create_inline_children(string)
+        )
+
+    def create_inline_children(
+        self, string: str = ""
+    ) -> Sequence[TransliterationQuery]:
         if not string:
             string = self.string
         segments = [
