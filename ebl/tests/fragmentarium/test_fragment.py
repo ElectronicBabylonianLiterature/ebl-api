@@ -31,6 +31,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
 def test_number():
@@ -325,6 +326,6 @@ def test_get_matching_lines(string, expected, sign_repository, signs):
         "ŠU/BU",
     )
 
-    query = TransliterationQuery(string=string, sign_repository=sign_repository)
+    query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     matching_text = transliterated_fragment.get_matching_lines(query)
     assert matching_text == parse_atf_lark(expected)

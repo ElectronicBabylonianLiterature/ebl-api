@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import auto, Enum
-from typing import AbstractSet, Optional, Sequence, Type, TypeVar
+from typing import AbstractSet, Any, Optional, Sequence, Type, TypeVar
 
 import attr
 
@@ -93,6 +93,12 @@ class TokenVisitor(ABC):
 
     def visit_caesura(self, caesura) -> None:
         self.visit(caesura)
+
+    @property
+    def result(self) -> Sequence:
+        return []
+
+    _standardizations = []
 
 
 class ErasureState(Enum):

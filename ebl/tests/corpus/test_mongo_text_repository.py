@@ -35,6 +35,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -294,7 +295,9 @@ def test_query_by_transliteration(
         sign_repository.create(sign)
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
     result = text_repository.query_by_transliteration(
-        query=TransliterationQuery(string=string, sign_repository=sign_repository),
+        query=TransliterationQuery(
+            string=string, visitor=SignsVisitor(sign_repository)
+        ),
         pagination_index=0,
     )
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
@@ -363,7 +366,7 @@ def test_query_by_transliteration_lookup(
     text_repository.create(TEXT)
     text_repository.create_chapter(chapter)
     result = text_repository.query_by_transliteration(
-        TransliterationQuery(string="KU", sign_repository=sign_repository), 0
+        TransliterationQuery(string="KU", visitor=SignsVisitor(sign_repository)), 0
     )
     expected = [attr.evolve(CHAPTER_FILTERED_QUERY, text_name=TEXT.name)]
     assert result == (expected, len(expected))

@@ -3,6 +3,7 @@ import re
 import pytest
 
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 REGEXP_DATA = [
     ("DU U", True),
@@ -29,7 +30,8 @@ REGEXP_DATA = [
 def test_regexp(string, is_match, sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
-    query = TransliterationQuery(string=string, sign_repository=sign_repository)
+    visitor = SignsVisitor(sign_repository)
+    query = TransliterationQuery(string=string, visitor=visitor)
     match = re.search(
         query.regexp,
         "KU NU IGI\n"
@@ -54,5 +56,5 @@ GET_IS_SEQUENCE_EMPTY_DATA = [
 
 @pytest.mark.parametrize("string, expected", GET_IS_SEQUENCE_EMPTY_DATA)
 def test_is_sequence_empty(string, expected, sign_repository):
-    query = TransliterationQuery(string=string, sign_repository=sign_repository)
+    query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     assert expected == query.is_empty()

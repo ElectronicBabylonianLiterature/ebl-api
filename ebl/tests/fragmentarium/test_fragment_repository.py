@@ -32,6 +32,7 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Joiner, ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
@@ -433,7 +434,7 @@ def test_query_fragmentarium_transliteration(
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
 
-    query = TransliterationQuery(string=string, sign_repository=sign_repository)
+    query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(transliteration=query)
     )
@@ -466,7 +467,7 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     result = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
             transliteration=TransliterationQuery(
-                string="KU", sign_repository=sign_repository
+                string="KU", visitor=SignsVisitor(sign_repository)
             )
         )
     )
@@ -498,7 +499,7 @@ def test_query_fragmentarium_pagination(fragment_repository, sign_repository, si
     result_first_page = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
             transliteration=TransliterationQuery(
-                string="KU", sign_repository=sign_repository
+                string="KU", visitor=SignsVisitor(sign_repository)
             )
         )
     )
@@ -508,7 +509,7 @@ def test_query_fragmentarium_pagination(fragment_repository, sign_repository, si
     result_second_page = fragment_repository.query_fragmentarium(
         FragmentariumSearchQuery(
             transliteration=TransliterationQuery(
-                string="KU", sign_repository=sign_repository
+                string="KU", visitor=SignsVisitor(sign_repository)
             ),
             paginationIndex=1,
         )
@@ -529,7 +530,7 @@ def test_query_fragmentarium_transliteration_and_number(
         FragmentariumSearchQuery(
             number=transliterated_fragment.number,
             transliteration=TransliterationQuery(
-                string="DIŠ UD", sign_repository=sign_repository
+                string="DIŠ UD", visitor=SignsVisitor(sign_repository)
             ),
         )
     )
@@ -552,7 +553,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
         FragmentariumSearchQuery(
             number=transliterated_fragment.number,
             transliteration=TransliterationQuery(
-                string="DIŠ UD", sign_repository=sign_repository
+                string="DIŠ UD", visitor=SignsVisitor(sign_repository)
             ),
             bibliography_id=transliterated_fragment.references[0].id,
             pages=pages,
@@ -576,7 +577,7 @@ def test_query_fragmentarium_transliteration_and_number_and_references_not_found
         FragmentariumSearchQuery(
             number=transliterated_fragment.number,
             transliteration=TransliterationQuery(
-                string="DIŠ UD", sign_repository=sign_repository
+                string="DIŠ UD", visitor=SignsVisitor(sign_repository)
             ),
             bibliography_id=transliterated_fragment.references[0].id,
             pages=f"{pages}123",

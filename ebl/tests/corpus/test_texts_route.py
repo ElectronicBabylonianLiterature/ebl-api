@@ -6,6 +6,7 @@ from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
 from ebl.tests.corpus.support import allow_references, allow_signs
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
 def create_dto(text):
@@ -68,7 +69,9 @@ def test_searching_texts(client, bibliography, sign_repository, signs, text_repo
             ChapterInfoSchema().dump(
                 ChapterInfo.of(
                     chapter,
-                    TransliterationQuery(string="KU", sign_repository=sign_repository),
+                    TransliterationQuery(
+                        string="KU", visitor=SignsVisitor(sign_repository)
+                    ),
                 )
             )
         ],

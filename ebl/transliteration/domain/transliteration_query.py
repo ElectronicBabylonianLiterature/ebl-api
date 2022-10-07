@@ -2,17 +2,13 @@ from __future__ import annotations
 import re
 import attr
 from itertools import chain
-from typing import cast, Sequence, Tuple, List, Optional
+from typing import cast, Sequence, Tuple, List, Optional, Callable
 from enum import Enum
 from collections import OrderedDict
 from ebl.errors import DataError
-from ebl.transliteration.domain import lark_parser
-from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.application.signs_visitor import SignsVisitor
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_line
 from ebl.transliteration.domain.text_line import TextLine
-
-PARSE_ERRORS = lark_parser.PARSE_ERRORS
-parse_line = lark_parser.parse_line
+from ebl.transliteration.domain.tokens import TokenVisitor
 
 
 class Type(Enum):
@@ -38,7 +34,7 @@ wildcard_matchers: OrderedDict[Type, str] = OrderedDict(
 class TransliterationQuery:
 
     string: str
-    sign_repository: Optional[SignRepository]
+    visitor: TokenVisitor
     type: Type = attr.ib(init=False)
     regexp: str = attr.ib(init=False)
 
@@ -48,9 +44,11 @@ class TransliterationQuery:
         self.regexp = self._regexp()
 
     def _regexp(self) -> str:
-        return self.children_regexp(self.string) if self.string else r""
+        return self.children_regexp(self.string) if not self.is_empty() else r""
 
     def _classify(self, string: str) -> Type:
+        if not string:
+            return Type.UNDEFINED
         if "\n" in string:
             return Type.LINES
         return next(
@@ -67,7 +65,7 @@ class TransliterationQuery:
         return r"|".join(f"({regexp})" for regexp in wildcard_matchers.values())
 
     def is_empty(self) -> bool:
-        return not self.regexp
+        return self.type == Type.UNDEFINED or not self.string
 
     def children_regexp(self, string: str = "") -> str:
         children = self.create_children(string)
@@ -128,21 +126,15 @@ class TransliterationQuery:
         )
 
     def make_transliteration_query_line(self, string: str) -> TransliterationQueryLine:
-        return TransliterationQueryLine(
-            string=string, sign_repository=self.sign_repository
-        )
+        return TransliterationQueryLine(string=string, visitor=self.visitor)
 
     def make_transliteration_query_text(self, string: str) -> TransliterationQueryText:
-        return TransliterationQueryText(
-            string=string, sign_repository=self.sign_repository
-        )
+        return TransliterationQueryText(string=string, visitor=self.visitor)
 
     def make_transliteration_query_wildcard(
         self, string: str
     ) -> TransliterationQueryWildCard:
-        return TransliterationQueryWildCard(
-            string=string, sign_repository=self.sign_repository
-        )
+        return TransliterationQueryWildCard(string=string, visitor=self.visitor)
 
 
 @attr.s(auto_attribs=True)
@@ -157,12 +149,11 @@ class TransliterationQueryText(TransliterationQuery):
         return rf"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
 
     def _create_signs(self, transliteration: str) -> Sequence[str]:
-        if not self.sign_repository:
+        if not transliteration:
             return []
-        visitor = SignsVisitor(self.sign_repository)
-        self._parse(transliteration).accept(visitor)
-
-        return visitor.result
+        self.visitor._standardizations = []
+        self._parse(transliteration).accept(self.visitor)
+        return self.visitor.result
 
     def _parse(self, transliteration: str) -> TextLine:
         transliteration = transliteration.strip(" -.")
@@ -199,7 +190,17 @@ class TransliterationQueryLine(TransliterationQuery):
         return Type.LINE
 
     def _regexp(self) -> str:
-        content = TransliterationQuery(
-            string=self.string, sign_repository=self.sign_repository
-        )
+        content = TransliterationQuery(string=self.string, visitor=self.visitor)
         return rf"(?<![^|\s]){content.regexp}"
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class TransliterationQueryEmpty(TransliterationQuery):
+
+    string: str = ""
+    visitor: TokenVisitor = TokenVisitor()
+    type: Type = Type.UNDEFINED
+    regexp: str = r""
+
+    def __attrs_post_init__(self) -> None:
+        pass
