@@ -44,7 +44,7 @@ class TransliterationQuery:
         self.regexp = self._regexp()
 
     def _regexp(self) -> str:
-        return self.children_regexp(self.string) if not self.is_empty() else r""
+        return r"" if self.is_empty() else self.children_regexp(self.string)
 
     def _classify(self, string: str) -> Type:
         if not string:
