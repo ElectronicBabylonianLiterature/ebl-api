@@ -2,7 +2,7 @@ from __future__ import annotations
 import re
 import attr
 from itertools import chain
-from typing import cast, Sequence, Tuple, List, Optional, Callable
+from typing import cast, Sequence, Tuple, List
 from enum import Enum
 from collections import OrderedDict
 from ebl.errors import DataError

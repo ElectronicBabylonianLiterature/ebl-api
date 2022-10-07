@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import auto, Enum
-from typing import AbstractSet, Any, Optional, Sequence, Type, TypeVar
+from typing import AbstractSet, Optional, Sequence, Type, TypeVar
 
 import attr
 

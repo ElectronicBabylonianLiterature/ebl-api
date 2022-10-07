@@ -5,7 +5,6 @@ from ebl.transliteration.domain.transliteration_query import (
 )
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
 from ebl.errors import DataError
-from ebl.transliteration.domain.tokens import TokenVisitor
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
