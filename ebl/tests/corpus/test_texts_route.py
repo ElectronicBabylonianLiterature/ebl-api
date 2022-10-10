@@ -43,7 +43,7 @@ def test_invalid_index(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_listing_texts(client, bibliography, sign_repository, signs, text_repository):
+def test_listing_texts(client, bibliography, text_repository):
     first_text = TextFactory.build(chapters=tuple(), references=tuple())
     second_text = TextFactory.build(chapters=tuple(), references=tuple())
     text_repository.create(first_text)
