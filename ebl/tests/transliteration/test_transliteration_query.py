@@ -10,10 +10,15 @@ REGEXP_DATA = [
     ("KU", True),
     ("UD", True),
     ("GI₆ DIŠ\nU BA MA", True),
+    ("DU BANSUR", False),
     ("ŠU", True),
     ("IGI UD", False),
     ("|U.BA|", True),
     ("|U.BA| BA", False),
+    ("BA ? TA", True),
+    ("BA ŠU", True),
+    ("BA BU", True),
+    ("BA TA", False),
     ("BA ? TA", True),
     ("MU ? TA", False),
     ("KI * TA", True),
@@ -38,7 +43,7 @@ def test_regexp(string, is_match, sign_repository, signs):
         "MI DIŠ MI UD MA\n"
         "KI DU ABZ411 BA MA TA\n"
         "X MU TA MA UD\n"
-        "ŠU/BU",
+        "BA ŠU/BU",
     )
     if is_match:
         assert match is not None
