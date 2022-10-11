@@ -1,12 +1,15 @@
 from typing import Union, Sequence
 import attr
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 from ebl.bibliography.domain.reference import Reference
+from ebl.corpus.application.id_schemas import TextIdSchema
+from ebl.corpus.application.schemas import LineSchema
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
 from ebl.fragmentarium.domain.joins import Join
+from ebl.schemas import ValueEnum
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, ApiOldSiglumSchema
@@ -15,6 +18,7 @@ from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.stage import Stage
 from ebl.transliteration.domain.text_line import TextLine
 
 
@@ -68,15 +72,12 @@ class LineVariantDisplay:
     @classmethod
     def from_line_variant(cls, line_variant: LineVariant, manuscripts_by_id):
 
-        manuscript_line_displays = []
-
-        for manuscript_line in line_variant.manuscripts:
-            FULL_MANUSCRIPT = manuscripts_by_id[manuscript_line.manuscript_id]
-            manuscript_line_displays.append(
-                ManuscriptLineDisplay.from_manuscript_line(
-                    FULL_MANUSCRIPT, manuscript_line
-                )
+        manuscript_line_displays = [
+            ManuscriptLineDisplay.from_manuscript_line(
+                manuscripts_by_id[manuscript_line.manuscript_id], manuscript_line
             )
+            for manuscript_line in line_variant.manuscripts
+        ]
 
         return cls(manuscripts=manuscript_line_displays)
 
@@ -87,10 +88,10 @@ class LineDetailsDisplay:
 
     @classmethod
     def from_line_manuscripts(cls, line: Line, manuscripts: Sequence[Manuscript]):
-        MANUSCRIPTS_BY_ID = {m.id: m for m in manuscripts}
+        manuscripts_by_id = {m.id: m for m in manuscripts}
 
         variant_displays = [
-            LineVariantDisplay.from_line_variant(variant, MANUSCRIPTS_BY_ID)
+            LineVariantDisplay.from_line_variant(variant, manuscripts_by_id)
             for variant in line.variants
         ]
 
@@ -134,3 +135,14 @@ class LineVariantDisplaySchema(Schema):
 
 class LineDetailsDisplaySchema(Schema):
     variants = fields.Nested(LineVariantDisplaySchema, many=True, required=True)
+
+
+class DictionaryLineDisplaySchema(Schema):
+    text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
+    text_name = fields.String(required=True, data_key="textName")
+    chapter_name = fields.String(
+        required=True, validate=validate.Length(min=1), data_key="chapterName"
+    )
+    stage = ValueEnum(Stage, required=True)
+    line = fields.Nested(LineSchema, required=True)
+    line_details = fields.Nested(LineDetailsDisplaySchema, required=True)

@@ -236,6 +236,7 @@ class DictionaryLineSchema(Schema):
     )
     stage = ValueEnum(Stage, required=True)
     line = fields.Nested(LineSchema, required=True)
+    manuscripts = fields.Nested(ManuscriptSchema, required=True, many=True)
 
     @post_load
     def make_dictionary_line(self, data: dict, **kwargs) -> DictionaryLine:
@@ -245,6 +246,7 @@ class DictionaryLineSchema(Schema):
             data["chapter_name"],
             data["stage"],
             data["line"],
+            tuple(data["manuscripts"]),
         )
 
 

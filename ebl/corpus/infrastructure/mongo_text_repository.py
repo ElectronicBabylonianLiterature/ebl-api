@@ -243,6 +243,7 @@ class MongoTextRepository(TextRepository):
                         "name": True,
                         "stage": True,
                         "textId": True,
+                        "manuscripts": True,
                     }
                 },
                 {"$unwind": "$lines"},
@@ -257,6 +258,7 @@ class MongoTextRepository(TextRepository):
                         "chapterName": "$name",
                         "stage": True,
                         "line": "$lines",
+                        "manuscripts": True,
                     }
                 },
             ]
