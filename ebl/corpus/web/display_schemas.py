@@ -145,4 +145,6 @@ class DictionaryLineDisplaySchema(Schema):
     )
     stage = ValueEnum(Stage, required=True)
     line = fields.Nested(LineSchema, required=True)
-    line_details = fields.Nested(LineDetailsDisplaySchema, required=True)
+    line_details = fields.Nested(
+        LineDetailsDisplaySchema, required=True, data_key="lineDetails"
+    )
