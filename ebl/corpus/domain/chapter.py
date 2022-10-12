@@ -109,6 +109,7 @@ class Chapter:
     colophon_lines_in_query: ChapterQueryColophonLines = attr.ib(
         default=ChapterQueryColophonLines()
     )
+    text_name: str = ""
 
     @property
     def id_(self) -> ChapterId:

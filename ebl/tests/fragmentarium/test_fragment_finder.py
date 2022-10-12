@@ -12,6 +12,7 @@ from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragment
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
 @pytest.mark.parametrize("has_photo", [True, False])
@@ -130,15 +131,15 @@ def test_search_fragmentarium_inject_document_in_fragment_infos(
 
 def test_search(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    query = fragment.number
+    number = fragment.number
     (
         when(fragment_repository)
-        .query_fragmentarium(FragmentariumSearchQuery(number=query))
+        .query_fragmentarium(FragmentariumSearchQuery(number=number))
         .thenReturn(([fragment], 1))
     )
 
     assert fragment_finder.search(
-        FragmentariumSearchQuery(number=query)
+        FragmentariumSearchQuery(number=number)
     ) == FragmentInfosPagination(
         [FragmentInfo.of(fragment)],
         1,
@@ -146,11 +147,14 @@ def test_search(fragment_finder, fragment_repository, when):
 
 
 def test_search_fragmentarium_transliteration(
-    fragment_finder, fragment_repository, when
+    fragment_finder, fragment_repository, sign_repository, signs, when
 ):
+    for sign in signs:
+        sign_repository.create(sign)
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    sign_matrix = [["MA", "UD"]]
-    query = TransliterationQuery(sign_matrix)
+    string = "MA UD"
+
+    query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     matching_fragments = [transliterated_fragment]
 
     (

@@ -94,6 +94,12 @@ class TokenVisitor(ABC):
     def visit_caesura(self, caesura) -> None:
         self.visit(caesura)
 
+    @property
+    def result(self) -> Sequence:
+        return []
+
+    _standardizations = []
+
 
 class ErasureState(Enum):
     NONE = auto()

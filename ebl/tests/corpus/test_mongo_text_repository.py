@@ -1,23 +1,18 @@
 from typing import Sequence
 import attr
 import pytest
-from ebl.corpus.application.corpus import TextRepository
 
+from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.text import Text, UncertainFragment
 from ebl.dictionary.domain.word import WordId
-from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
-from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.text_id import TextId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -30,11 +25,16 @@ from ebl.tests.factories.corpus import (
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
-
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -284,12 +284,21 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
 
 
 @pytest.mark.parametrize(
-    "signs,is_match",
-    [([["KU"]], True), ([["ABZ075"], ["KU"]], True), ([["UD"]], False)],
+    "string,is_match",
+    [("KU", True), ("NU\nKU", True), ("UD", False)],
 )
-def test_query_by_transliteration(signs, is_match, text_repository) -> None:
+def test_query_by_transliteration(
+    string, is_match, text_repository, sign_repository, signs
+) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
     text_repository.create_chapter(CHAPTER_FILTERED_QUERY)
-    result = text_repository.query_by_transliteration(TransliterationQuery(signs), 0)
+    result = text_repository.query_by_transliteration(
+        query=TransliterationQuery(
+            string=string, visitor=SignsVisitor(sign_repository)
+        ),
+        pagination_index=0,
+    )
     expected = [CHAPTER_FILTERED_QUERY] if is_match else []
     assert result == (expected, len(expected))
 
@@ -343,6 +352,24 @@ def test_query_by_lemma(
     text_repository.create_chapter(chapter)
 
     assert text_repository.query_by_lemma(lemma_id, 0, genre) == expected
+
+
+def test_query_by_transliteration_lookup(
+    text_repository, sign_repository, signs
+) -> None:
+
+    for sign in signs:
+        sign_repository.create(sign)
+    chapter = attr.evolve(
+        CHAPTER_FILTERED_QUERY, text_id=TextId(TEXT.genre, TEXT.category, TEXT.index)
+    )
+    text_repository.create(TEXT)
+    text_repository.create_chapter(chapter)
+    result = text_repository.query_by_transliteration(
+        TransliterationQuery(string="KU", visitor=SignsVisitor(sign_repository)), 0
+    )
+    expected = [attr.evolve(CHAPTER_FILTERED_QUERY, text_name=TEXT.name)]
+    assert result == (expected, len(expected))
 
 
 def test_query_manuscripts_by_chapter(database, text_repository) -> None:
