@@ -24,9 +24,6 @@ class FragmentsResource:
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
         fragment, has_photo = self._finder.find(parse_museum_number(number))
-        #scopes: Sequence[
-        #    str
-        #] = []  # fragment.scopes # ToDo: retrieve scope from Fragment
         if fragment.scopes:
             check_fragment_scope(req.context.user, fragment.scopes)
         resp.media = create_response_dto(fragment, user, has_photo)
