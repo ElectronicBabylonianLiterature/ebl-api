@@ -50,9 +50,9 @@ class Genre:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Scope(Enum):
-    CIAC = "caic"
-    SIPPARLIBRARY = "sipparlibrary"
-    URUKLBU = "uruklbu"
+    CAIC = "CAIC"
+    SIPPARLIBRARY = "SIPPARLIBRARY"
+    URUKLBU = "URUKLBU"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -80,7 +80,7 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
-    scopes: Optional[Sequence[Scope]] = [Scope.CIAC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
+    scopes: Optional[Sequence[Scope]] = [Scope.CAIC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
 
     @property
     def is_lowest_join(self) -> bool:

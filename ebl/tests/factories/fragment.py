@@ -105,7 +105,6 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
-    scopes = []
 
 
 class InterestingFragmentFactory(FragmentFactory):

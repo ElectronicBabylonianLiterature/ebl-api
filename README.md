@@ -63,11 +63,9 @@ Folio scopes need to have the following format:
 
 `read:<Folio name>-folios`
 
-Fragments can have the follwoing additional scopes:
+Fragments can have additional scopes in the following format:
 
-`read:caic-fragments`
-`read:sipparlibrary-fragments`
-`read:uruklbu-fragments`
+`read:<Fragment group>-fragments`
 
 #### Rules
 
