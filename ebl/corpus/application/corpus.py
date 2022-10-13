@@ -174,7 +174,13 @@ class Corpus:
     def search_lemma(
         self, query: str, pagination_index: int, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
-        return self._repository.query_by_lemma(query, pagination_index, genre)
+        return tuple(
+            attr.evolve(
+                line,
+                manuscripts=self._inject_references_to_manuscripts(line.manuscripts),
+            )
+            for line in self._repository.query_by_lemma(query, pagination_index, genre)
+        )
 
     def list(self) -> List[Text]:
         return self._repository.list()
