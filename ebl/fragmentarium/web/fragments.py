@@ -10,10 +10,8 @@ from ebl.fragmentarium.domain.fragment import Scope
 
 
 def check_fragment_scope(user: User, scopes: Sequence[Scope]):
-    for scope_group in scopes:
-        scope = f"read:{scope_group.value}-fragments"
-        if not user.has_scope(scope):
-            raise falcon.HTTPForbidden()
+    if not user.can_read_fragment([scope_group.value for scope_group in scopes]):
+        raise falcon.HTTPForbidden()
 
 
 class FragmentsResource:

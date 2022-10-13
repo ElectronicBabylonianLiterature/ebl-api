@@ -383,6 +383,14 @@ def user() -> User:
 
 
 @pytest.fixture
+def basic_fragmentarium_permissions_user(user) -> User:
+    user._access_token["scope"] = [
+        "read:fragments",
+    ]
+    return user
+
+
+@pytest.fixture
 def context(
     ebl_ai_client,
     cropped_sign_images_repository,
@@ -430,6 +438,19 @@ def client(context):
 def guest_client(context):
     api = ebl.app.create_app(
         attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
+    )
+    return testing.TestClient(api)
+
+
+@pytest.fixture
+def basic_fragmentarium_permissions_client(
+    context, basic_fragmentarium_permissions_user
+):
+    api = ebl.app.create_app(
+        attr.evolve(
+            context,
+            auth_backend=NoneAuthBackend(lambda: basic_fragmentarium_permissions_user),
+        )
     )
     return testing.TestClient(api)
 
