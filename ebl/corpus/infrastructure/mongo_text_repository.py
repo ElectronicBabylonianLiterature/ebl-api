@@ -24,6 +24,9 @@ from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.chapter_query_filters import (
     filter_query_by_transliteration,
 )
+from ebl.corpus.infrastructure.manuscript_lemma_filter import (
+    filter_manuscripts_by_lemma,
+)
 from ebl.corpus.infrastructure.queries import (
     aggregate_chapter_display,
     chapter_id_query,
@@ -274,6 +277,7 @@ class MongoTextRepository(TextRepository):
                 {"$unwind": "$lines"},
                 {"$match": lemma_query},
                 join_text_title(),
+                filter_manuscripts_by_lemma(lemma),
                 {"$skip": LIMIT * pagination_index},
                 {"$limit": LIMIT},
                 {
