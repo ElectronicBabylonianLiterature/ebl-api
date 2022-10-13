@@ -85,6 +85,7 @@ def test_create_response_dto(user):
                 ]
                 for line_to_vec_encodings in lemmatized_fragment.line_to_vec
             ],
+            "scopes": lemmatized_fragment.scopes,
         },
         pydash.is_none,
     )

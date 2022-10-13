@@ -15,20 +15,17 @@ def check_fragment_scope(user: User, scopes: Sequence[str]):
             raise falcon.HTTPForbidden()
 
 
-SCOPES = ["caic", "sipparlibrary", "uruklbu"]
-
-
 class FragmentsResource:
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 
     @falcon.before(require_scope, "read:fragments")
-    def on_get(
-        self, req: Request, resp: Response, number: str
-    ):
-        scopes: Sequence[str] = []  # ToDo: retrieve scope from Fragment
-        if scopes:
-            check_fragment_scope(req.context.user, scopes)
+    def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
         fragment, has_photo = self._finder.find(parse_museum_number(number))
+        #scopes: Sequence[
+        #    str
+        #] = []  # fragment.scopes # ToDo: retrieve scope from Fragment
+        if fragment.scopes:
+            check_fragment_scope(req.context.user, fragment.scopes)
         resp.media = create_response_dto(fragment, user, has_photo)

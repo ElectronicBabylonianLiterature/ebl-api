@@ -1,5 +1,6 @@
 from itertools import groupby
 from typing import Optional, Sequence, Tuple
+from enum import Enum
 
 import attr
 import pydash
@@ -48,6 +49,13 @@ class Genre:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class Scope(Enum):
+    CIAC = "caic"
+    SIPPARLIBRARY = "sipparlibrary"
+    URUKLBU = "uruklbu"
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
     accession: str = ""
@@ -72,6 +80,7 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
+    scopes: Optional[Sequence[Scope]] = [Scope.CIAC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
 
     @property
     def is_lowest_join(self) -> bool:

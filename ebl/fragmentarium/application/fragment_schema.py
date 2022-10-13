@@ -107,6 +107,7 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
+    scopes = fields.Nested(ReferenceSchema, many=True, load_default=list())
 
     @post_load
     def make_fragment(self, data, **kwargs):

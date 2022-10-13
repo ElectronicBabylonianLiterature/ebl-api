@@ -59,9 +59,15 @@ has to be base64 encoded before being added to the environment variable.
 `create:texts`,
 `annotate:fragments`,
 
-Folio scopes need to have the following format.
+Folio scopes need to have the following format:
 
 `read:<Folio name>-folios`
+
+Fragments can have the follwoing additional scopes:
+
+`read:caic-fragments`
+`read:sipparlibrary-fragments`
+`read:uruklbu-fragments`
 
 #### Rules
 
@@ -236,7 +242,7 @@ def on_get(self, req, resp):
 ### Authentication and Authorization
 
 [Auth0](https://auth0.com) and [falcon-auth](https://github.com/vertexcover-io/falcon-auth)
-are used for authentication and authorization. 
+are used for authentication and authorization.
 
 An endpoint can be protected using `require_scope`:
 
@@ -268,7 +274,7 @@ CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used 
 ```
 
 Poetry does not support .env-files. The environment variables need to be configured in the shell,
-unless ran via [Task](https://taskfile.dev/). Alternatively and external program can be used to 
+unless ran via [Task](https://taskfile.dev/). Alternatively and external program can be used to
 handle the file e.g. [direnv](https://direnv.net/) or
 [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv).
 
