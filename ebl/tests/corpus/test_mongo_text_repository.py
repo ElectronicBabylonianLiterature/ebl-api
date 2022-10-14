@@ -303,13 +303,37 @@ def test_query_by_transliteration(
     assert result == (expected, len(expected))
 
 
-def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
+def make_dictionary_line(text: Text, chapter: Chapter, lemma: str) -> DictionaryLine:
+    line = chapter.lines[0]
     return DictionaryLine(
         text.id,
         text.name,
         chapter.name,
         chapter.stage,
-        chapter.lines[0],
+        attr.evolve(
+            line,
+            variants=tuple(
+                attr.evolve(
+                    variant,
+                    manuscripts=tuple(
+                        manuscript
+                        for manuscript in variant.manuscripts
+                        if manuscript.has_lemma(lemma)
+                    ),
+                )
+                for variant in line.variants
+            ),
+        ),
+        tuple(
+            attr.evolve(
+                manuscript,
+                references=tuple(
+                    attr.evolve(reference, document=None)
+                    for reference in manuscript.references
+                ),
+            )
+            for manuscript in chapter.manuscripts
+        ),
     )
 
 
@@ -321,7 +345,11 @@ def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
             CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
             None,
-            [make_dictionary_line(LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA)],
+            [
+                make_dictionary_line(
+                    LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA, QUERY_LEMMA
+                )
+            ],
         ),
         (
             TEXT,
@@ -335,7 +363,7 @@ def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
             CHAPTER_WITH_MANUSCRIPT_LEMMA,
             QUERY_LEMMA,
             None,
-            [make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA)],
+            [make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA, QUERY_LEMMA)],
         ),
         (TEXT, CHAPTER, "definitely not a lemma", None, []),
     ],
