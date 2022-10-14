@@ -379,7 +379,7 @@ def test_query_by_lemma(
     text_repository.create(text)
     text_repository.create_chapter(chapter)
 
-    assert text_repository.query_by_lemma(lemma_id, 0, genre) == expected
+    assert text_repository.query_by_lemma(lemma_id, genre) == expected
 
 
 def test_query_by_transliteration_lookup(

@@ -3,7 +3,6 @@ from pydash.arrays import flatten_deep
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
 from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
-from ebl.transliteration.domain.genre import Genre
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
@@ -90,17 +89,9 @@ class ChaptersByLemmaResource:
 
     @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        try:
-            pagination_index = int(req.params["paginationIndex"])
-        except ValueError as error:
-            raise DataError("Pagination Index has to be a number") from error
-
-        genre_key = req.params.get("genre")
-
         dictionary_lines = self._corpus.search_lemma(
             req.params["lemma"],
-            pagination_index,
-            genre_key if genre_key is None else Genre(genre_key),
+            req.params.get("genre"),
         )
 
         resp.media = DictionaryLineDisplaySchema().dump(

@@ -248,7 +248,7 @@ class MongoTextRepository(TextRepository):
         ), self._chapters.count_documents(mongo_query)
 
     def query_by_lemma(
-        self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
+        self, lemma: str, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
         LIMIT = 10
         lemma_query = {
@@ -278,7 +278,6 @@ class MongoTextRepository(TextRepository):
                 {"$match": lemma_query},
                 join_text_title(),
                 filter_manuscripts_by_lemma(lemma),
-                {"$skip": LIMIT * pagination_index},
                 {"$limit": LIMIT},
                 {
                     "$project": {

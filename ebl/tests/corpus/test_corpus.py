@@ -185,9 +185,9 @@ def test_search_lemma(corpus: Corpus, text_repository, when) -> None:
         CHAPTER.lines[0],
     )
 
-    when(text_repository).query_by_lemma(lemma, 0, None).thenReturn([dictionary_line])
+    when(text_repository).query_by_lemma(lemma, None).thenReturn((dictionary_line,))
 
-    assert corpus.search_lemma(lemma, 0, None) == [dictionary_line]
+    assert corpus.search_lemma(lemma, None) == (dictionary_line,)
 
 
 def test_find_line(corpus, text_repository, bibliography, when) -> None:
