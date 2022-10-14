@@ -6,6 +6,7 @@ from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
 from ebl.tests.corpus.support import allow_references, allow_signs
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
 def create_dto(text):
@@ -42,7 +43,7 @@ def test_invalid_index(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_listing_texts(client, bibliography, sign_repository, signs, text_repository):
+def test_listing_texts(client, bibliography, text_repository):
     first_text = TextFactory.build(chapters=tuple(), references=tuple())
     second_text = TextFactory.build(chapters=tuple(), references=tuple())
     text_repository.create(first_text)
@@ -66,8 +67,14 @@ def test_searching_texts(client, bibliography, sign_repository, signs, text_repo
     assert get_result.json == {
         "chapterInfos": [
             ChapterInfoSchema().dump(
-                ChapterInfo.of(chapter, TransliterationQuery([["KU"]]))
+                ChapterInfo.of(
+                    chapter,
+                    TransliterationQuery(
+                        string="KU", visitor=SignsVisitor(sign_repository)
+                    ),
+                )
             )
         ],
         "totalCount": 1,
     }
+    assert get_result.headers["Cache-Control"] == "private, max-age=600"
