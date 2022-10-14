@@ -297,7 +297,9 @@ def test_update_lemmatization(fragment_repository):
 def test_update_introduction(fragment_repository: FragmentRepository):
     fragment: Fragment = FragmentFactory.build(introduction="")
     fragment_repository.create(fragment)
-    updated_fragment = fragment.set_introduction("Background information about this fragment")
+    updated_fragment = fragment.set_introduction(
+        "Background information about this fragment"
+    )
     fragment_repository.update_introduction(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
