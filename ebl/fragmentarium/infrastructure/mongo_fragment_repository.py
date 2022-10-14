@@ -317,6 +317,12 @@ class MongoFragmentRepository(FragmentRepository):
             {"$set": FragmentSchema(only=("text",)).dump(fragment)},
         )
 
+    def update_introduction(self, fragment):
+        self._fragments.update_one(
+            fragment_is(fragment),
+            {"$set": FragmentSchema(only=("introduction",)).dump(fragment)},
+        )
+
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
         sort_ascending = {"$sort": {"key": 1}}
         sort_descending = {"$sort": {"key": -1}}

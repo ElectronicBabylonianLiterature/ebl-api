@@ -105,6 +105,7 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
+    introduction = factory.Faker("text")
 
 
 class InterestingFragmentFactory(FragmentFactory):

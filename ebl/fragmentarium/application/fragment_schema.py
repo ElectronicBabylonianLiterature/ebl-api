@@ -107,6 +107,7 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
+    introduction = fields.String(required=True)
 
     @post_load
     def make_fragment(self, data, **kwargs):

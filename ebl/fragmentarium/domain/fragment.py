@@ -72,6 +72,7 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
+    introduction: str = ""
 
     @property
     def is_lowest_join(self) -> bool:
