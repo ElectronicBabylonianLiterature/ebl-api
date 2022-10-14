@@ -105,7 +105,7 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
-    scopes = [Scope.CAIC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
+    authorized_scopes = [Scope.CAIC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
 
 
 class InterestingFragmentFactory(FragmentFactory):

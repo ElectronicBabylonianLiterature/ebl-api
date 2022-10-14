@@ -17,7 +17,7 @@ class FragmentDtoSchema(FragmentSchema):
     references = fields.Nested(ApiReferenceSchema, many=True)
 
     class Meta:
-        exclude = ("scopes",)
+        exclude = ("authorized_scopes",)
 
     @pre_dump
     def filter_folios(self, data, **kwargs):

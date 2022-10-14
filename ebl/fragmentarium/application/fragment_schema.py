@@ -112,7 +112,7 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
-    scopes = fields.List(ValueEnum(Scope))
+    authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
 
     @post_load
     def make_fragment(self, data, **kwargs):
@@ -121,8 +121,8 @@ class FragmentSchema(Schema):
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
-        if "scopes" in data:
-            data["scopes"] = list(data["scopes"])
+        if "authorized_scopes" in data:
+            data["authorized_scopes"] = list(data["authorized_scopes"])
         return Fragment(**data)
 
     @post_dump

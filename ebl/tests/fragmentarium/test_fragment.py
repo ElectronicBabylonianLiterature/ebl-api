@@ -177,8 +177,8 @@ def test_invalid_genre():
 
 def test_scopes():
     scopes = ["CAIC"]
-    fragment = FragmentFactory.build(scopes=scopes)
-    assert fragment.scopes == scopes
+    fragment = FragmentFactory.build(authorized_scopes=scopes)
+    assert fragment.authorized_scopes == scopes
 
 
 @freeze_time("2018-09-07 15:41:24.032")

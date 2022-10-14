@@ -80,7 +80,7 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
-    scopes: Optional[Sequence[Scope]] = [Scope.CAIC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
+    authorized_scopes: Optional[Sequence[Scope]] = list()
 
     @property
     def is_lowest_join(self) -> bool:
