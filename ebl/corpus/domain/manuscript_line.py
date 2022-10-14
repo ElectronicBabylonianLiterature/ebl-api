@@ -91,3 +91,9 @@ class ManuscriptLine:
 
     def get_line_content(self) -> Sequence[Token]:
         return tuple() if self.is_empty else cast(TextLine, self.line).content
+
+    def has_lemma(self, lemma: str) -> bool:
+        return any(
+            lemma in getattr(token, "unique_lemma", [])
+            for token in self.get_line_content()
+        )
