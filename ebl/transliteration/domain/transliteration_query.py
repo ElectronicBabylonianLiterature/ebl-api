@@ -29,6 +29,17 @@ wildcard_matchers: OrderedDict[Type, str] = OrderedDict(
     }
 )
 
+# ToDo:
+# - Fix circular import
+"""
+The fragment aligner (ebl.alignment.align_fragmentarium) does not work any longer. It has the following error:
+```
+from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+ImportError: cannot import name 'TransliterationQuery' from partially initialized module 
+'ebl.transliteration.domain.transliteration_query' (most likely due to a circular import) 
+(D:\Git\ebl\transliteration\domain\transliteration_query.py)
+```
+"""
 
 @attr.s(auto_attribs=True)
 class TransliterationQuery:
