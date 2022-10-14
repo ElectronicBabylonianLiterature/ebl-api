@@ -3,13 +3,14 @@ import pytest
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.fragmentarium_search_query import (
     FragmentariumSearchQuery,
 )
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.domain.fragment import Genre
+from ebl.fragmentarium.domain.fragment import Fragment, Genre
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
@@ -288,6 +289,16 @@ def test_update_lemmatization(fragment_repository):
 
     fragment_repository.update_lemmatization(updated_fragment)
     result = fragment_repository.query_by_museum_number(transliterated_fragment.number)
+
+    assert result == updated_fragment
+
+
+def test_update_introduction(fragment_repository: FragmentRepository):
+    fragment: Fragment = FragmentFactory.build(introduction="")
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_introduction("Background information about this fragment")
+    fragment_repository.update_introduction(updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
 

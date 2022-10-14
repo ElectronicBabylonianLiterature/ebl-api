@@ -89,6 +89,10 @@ class FragmentRepository(ABC):
     @abstractmethod
     def update_references(self, fragment: Fragment) -> None:
         ...
+    
+    @abstractmethod
+    def update_introduction(self, fragment: Fragment) -> None:
+        ...
 
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
