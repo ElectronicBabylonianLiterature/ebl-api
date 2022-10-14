@@ -41,6 +41,7 @@ ImportError: cannot import name 'TransliterationQuery' from partially initialize
 ```
 """
 
+
 @attr.s(auto_attribs=True)
 class TransliterationQuery:
 
