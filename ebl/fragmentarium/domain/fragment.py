@@ -83,7 +83,7 @@ class Fragment:
 
     def set_text(self, text: Text) -> "Fragment":
         return attr.evolve(self, text=text)
-    
+
     def set_introduction(self, introduction: str) -> "Fragment":
         return attr.evolve(self, introduction=introduction)
 
