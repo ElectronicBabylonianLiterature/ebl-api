@@ -1,15 +1,13 @@
 from typing import Union, Sequence
 import attr
-from marshmallow import Schema, fields, validate
+from marshmallow import Schema, fields
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.corpus.application.schemas import LineSchema
+from ebl.corpus.application.schemas import DictionaryLineSchema
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import Manuscript, OldSiglum
 from ebl.fragmentarium.domain.joins import Join
-from ebl.schemas import ValueEnum
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.corpus.web.chapter_schemas import ApiManuscriptSchema, ApiOldSiglumSchema
@@ -18,7 +16,6 @@ from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.stage import Stage
 from ebl.transliteration.domain.text_line import TextLine
 
 
@@ -137,14 +134,8 @@ class LineDetailsDisplaySchema(Schema):
     variants = fields.Nested(LineVariantDisplaySchema, many=True, required=True)
 
 
-class DictionaryLineDisplaySchema(Schema):
-    text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
-    text_name = fields.String(required=True, data_key="textName")
-    chapter_name = fields.String(
-        required=True, validate=validate.Length(min=1), data_key="chapterName"
-    )
-    stage = ValueEnum(Stage, required=True)
-    line = fields.Nested(LineSchema, required=True)
+class DictionaryLineDisplaySchema(DictionaryLineSchema):
+    manuscripts = None
     line_details = fields.Nested(
         LineDetailsDisplaySchema, required=True, data_key="lineDetails"
     )
