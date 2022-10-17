@@ -107,6 +107,7 @@ class Fragment:
             self,
             text=text,
             notes=transliteration.notes,
+            introduction=transliteration.introduction,
             signs=transliteration.signs,
             record=record,
             line_to_vec=create_line_to_vec(text.lines),

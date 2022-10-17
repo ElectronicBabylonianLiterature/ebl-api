@@ -300,7 +300,14 @@ class MongoFragmentRepository(FragmentRepository):
             fragment_is(fragment),
             {
                 "$set": FragmentSchema(
-                    only=("text", "notes", "signs", "record", "line_to_vec")
+                    only=(
+                        "text",
+                        "notes",
+                        "signs",
+                        "record",
+                        "introduction",
+                        "line_to_vec",
+                    )
                 ).dump(fragment)
             },
         )

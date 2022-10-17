@@ -46,7 +46,7 @@ class TransliterationResource:
     def _create_transliteration(self, media):
         try:
             return self._transliteration_factory.create(
-                Atf(media["transliteration"]), media["notes"]
+                Atf(media["transliteration"]), media["notes"], media.get("introduction", "")
             )
         except ValueError as error:
             raise DataError(error) from error
