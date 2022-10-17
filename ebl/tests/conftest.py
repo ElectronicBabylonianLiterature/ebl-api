@@ -372,7 +372,6 @@ def user() -> User:
                 "read:texts",
                 "write:texts",
                 "create:texts",
-                "create:texts",
             ]
         },
         lambda: {
