@@ -132,6 +132,3 @@ Taskfile.yml
 
 # Core dumps
 core.*
-
-# Mongo DB Playgrounds
-*.mongodb
