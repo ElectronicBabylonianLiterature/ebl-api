@@ -10,6 +10,7 @@ from ebl.corpus.application.schemas import (
     ManuscriptAttestationSchema,
 )
 from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.transliteration.domain.genre import Genre
 from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import DataError
@@ -89,9 +90,10 @@ class ChaptersByLemmaResource:
 
     @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        genre = req.params.get("genre")
         dictionary_lines = self._corpus.search_lemma(
             req.params["lemma"],
-            req.params.get("genre"),
+            None if genre is None else Genre(genre),
         )
 
         resp.media = DictionaryLineDisplaySchema().dump(
