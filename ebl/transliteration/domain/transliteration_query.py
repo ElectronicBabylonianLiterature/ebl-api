@@ -146,7 +146,7 @@ class TransliterationQueryText(TransliterationQuery):
         return rf"(?<![^|\s]){signs_regexp}"
 
     def _create_sign_regexp(self, sign: str) -> str:
-        return rf"([^\s]+\/)*{re.escape(sign)}(\/[^\s]+)*"
+        return rf"([^\s]+\/)*{re.escape(sign)}(?![^\s\/])"
 
     def _create_signs(self, transliteration: str) -> Sequence[str]:
         if not transliteration:
