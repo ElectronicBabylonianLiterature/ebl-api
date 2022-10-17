@@ -69,3 +69,29 @@ def test_can_read_folio(scopes, folio_name, expected):
     user = Auth0User({"scope": scopes}, create_default_profile)
 
     assert user.can_read_folio(folio_name) == expected
+
+
+@pytest.mark.parametrize(
+    "user_scope,scopes,expected",
+    [
+        (
+            [
+                "read:CAIC-fragments",
+                "read:SIPPARLIBRARY-fragments",
+                "read:URUKLBU-fragments",
+            ],
+            ["CAIC", "SIPPARLIBRARY", "URUKLBU"],
+            True,
+        ),
+        (
+            ["read:SIPPARLIBRARY-fragments", "read:URUKLBU-fragments"],
+            ["CAIC", "SIPPARLIBRARY", "URUKLBU"],
+            False,
+        ),
+        (["read:SIPPARLIBRARY-fragments"], ["CAIC"], False),
+        ([], [], True),
+    ],
+)
+def test_can_read_fragment(user_scope, scopes, expected):
+    user = Auth0User({"scope": user_scope}, create_default_profile)
+    assert user.can_read_fragment(scopes) == expected
