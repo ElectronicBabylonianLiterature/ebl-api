@@ -17,3 +17,11 @@ def test_ebl_name():
 
 def test_can_read_folio():
     assert USER.can_read_folio("write:WGL-folios") is False
+
+
+def test_can_read_fragment():
+    assert USER.can_read_fragment([]) is True
+
+
+def test_can_read_fragment_restricted():
+    assert USER.can_read_fragment(["CAIC"]) is False
