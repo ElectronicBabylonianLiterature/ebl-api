@@ -51,6 +51,17 @@ class FragmentUpdater:
 
         return self._create_result(updated_fragment)
 
+    def update_introduction(
+        self, number: MuseumNumber, introduction: str, user: User
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
+        updated_fragment = fragment.set_introduction(introduction)
+
+        self._create_changlelog(user, fragment, updated_fragment)
+        self._repository.update_introduction(updated_fragment)
+
+        return self._create_result(updated_fragment)
+
     def update_genres(
         self, number: MuseumNumber, genres: Sequence[Genre], user: User
     ) -> Tuple[Fragment, bool]:
