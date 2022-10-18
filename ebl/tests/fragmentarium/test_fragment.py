@@ -175,12 +175,6 @@ def test_invalid_genre():
         Genre(["xyz", "wrq"], False)
 
 
-def test_scopes():
-    scopes = ["CAIC"]
-    fragment = FragmentFactory.build(authorized_scopes=scopes)
-    assert fragment.authorized_scopes == scopes
-
-
 @freeze_time("2018-09-07 15:41:24.032")
 def test_add_transliteration(user):
     fragment = FragmentFactory.build()

@@ -10,10 +10,7 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
-from ebl.tests.factories.fragment import (
-    JoinFactory,
-    LemmatizedFragmentFactory,
-)
+from ebl.tests.factories.fragment import JoinFactory, LemmatizedFragmentFactory
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.fragment_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins

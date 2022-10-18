@@ -16,9 +16,6 @@ class FragmentDtoSchema(FragmentSchema):
     )
     references = fields.Nested(ApiReferenceSchema, many=True)
 
-    class Meta:
-        exclude = ("authorized_scopes",)
-
     @pre_dump
     def filter_folios(self, data, **kwargs):
         return attr.evolve(data, folios=data.folios.filter(self.context["user"]))

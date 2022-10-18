@@ -2,7 +2,7 @@ import attr
 import falcon
 
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -38,21 +38,3 @@ def test_get_not_found(client):
     result = client.simulate_get("/fragments/unknown.number")
 
     assert result.status == falcon.HTTP_NOT_FOUND
-
-
-def test_get_guest_scope(guest_client, fragmentarium):
-    fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
-    result = guest_client.simulate_get(f"/fragments/{fragment.number}")
-
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
-def test_get_fragment_no_access(basic_fragmentarium_permissions_client, fragmentarium):
-    fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
-    result = basic_fragmentarium_permissions_client.simulate_get(
-        f"/fragments/{fragment.number}"
-    )
-
-    assert result.status == falcon.HTTP_FORBIDDEN
