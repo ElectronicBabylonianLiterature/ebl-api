@@ -5,7 +5,12 @@ from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Fragment, Measure, UncuratedReference
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    Measure,
+    UncuratedReference,
+    Scope,
+)
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
@@ -107,6 +112,7 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
+    authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
     introduction = fields.String(load_default="")
 
     @post_load
@@ -116,6 +122,8 @@ class FragmentSchema(Schema):
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
+        if "authorized_scopes" in data:
+            data["authorized_scopes"] = list(data["authorized_scopes"])
         return Fragment(**data)
 
     @post_dump

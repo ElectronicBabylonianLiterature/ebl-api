@@ -1,15 +1,16 @@
 import falcon
 from pydash.arrays import flatten_deep
 from ebl.corpus.application.corpus import Corpus
-from ebl.transliteration.domain.genre import Genre
+from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
+from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.application.schemas import (
-    DictionaryLinePaginationSchema,
     ManuscriptAttestationSchema,
 )
 from ebl.corpus.web.text_utils import create_chapter_id
+from ebl.transliteration.domain.genre import Genre
 from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import DataError
@@ -89,17 +90,16 @@ class ChaptersByLemmaResource:
 
     @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        try:
-            pagination_index = int(req.params["paginationIndex"])
-        except ValueError as error:
-            raise DataError("Pagination Index has to be a number") from error
+        genre = req.params.get("genre")
+        dictionary_lines = self._corpus.search_lemma(
+            req.params["lemma"],
+            None if genre is None else Genre(genre),
+        )
 
-        genre_key = req.params.get("genre")
-        resp.media = DictionaryLinePaginationSchema().dump(
-            self._corpus.search_lemma(
-                req.params["lemma"],
-                pagination_index,
-                genre_key if genre_key is None else Genre(genre_key),
-            ),
+        resp.media = DictionaryLineDisplaySchema().dump(
+            [
+                DictionaryLineDisplay.from_dictionary_line(line)
+                for line in dictionary_lines
+            ],
             many=True,
         )
