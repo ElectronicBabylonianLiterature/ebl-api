@@ -11,7 +11,6 @@ class TransliterationUpdate:
     text: Text = Text()
     notes: str = ""
     signs: str = attr.ib(default="")
-    introduction: str = ""
 
     @signs.validator
     def _check_signs(self, _attribute, value) -> None:

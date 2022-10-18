@@ -10,10 +10,10 @@ class TransliterationUpdateFactory:
     def __init__(self, sign_repository: SignRepository):
         self._sign_repository = sign_repository
 
-    def create(self, atf: Atf, notes: str = "", introduction: str = "") -> TransliterationUpdate:
+    def create(self, atf: Atf, notes: str = "") -> TransliterationUpdate:
         text = parse_atf_lark(atf)
         signs = "\n".join(self._map_line(line) for line in text.text_lines)
-        return TransliterationUpdate(text, notes, signs, introduction)
+        return TransliterationUpdate(text, notes, signs)
 
     def _map_line(self, line: TextLine) -> str:
         visitor = SignsVisitor(self._sign_repository)
