@@ -2,6 +2,7 @@ from typing import Union, Sequence
 import attr
 from marshmallow import Schema, fields
 from ebl.bibliography.domain.reference import Reference
+from ebl.corpus.application.schemas import DictionaryLineSchema
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
@@ -68,15 +69,12 @@ class LineVariantDisplay:
     @classmethod
     def from_line_variant(cls, line_variant: LineVariant, manuscripts_by_id):
 
-        manuscript_line_displays = []
-
-        for manuscript_line in line_variant.manuscripts:
-            FULL_MANUSCRIPT = manuscripts_by_id[manuscript_line.manuscript_id]
-            manuscript_line_displays.append(
-                ManuscriptLineDisplay.from_manuscript_line(
-                    FULL_MANUSCRIPT, manuscript_line
-                )
+        manuscript_line_displays = [
+            ManuscriptLineDisplay.from_manuscript_line(
+                manuscripts_by_id[manuscript_line.manuscript_id], manuscript_line
             )
+            for manuscript_line in line_variant.manuscripts
+        ]
 
         return cls(manuscripts=manuscript_line_displays)
 
@@ -87,10 +85,10 @@ class LineDetailsDisplay:
 
     @classmethod
     def from_line_manuscripts(cls, line: Line, manuscripts: Sequence[Manuscript]):
-        MANUSCRIPTS_BY_ID = {m.id: m for m in manuscripts}
+        manuscripts_by_id = {m.id: m for m in manuscripts}
 
         variant_displays = [
-            LineVariantDisplay.from_line_variant(variant, MANUSCRIPTS_BY_ID)
+            LineVariantDisplay.from_line_variant(variant, manuscripts_by_id)
             for variant in line.variants
         ]
 
@@ -134,3 +132,10 @@ class LineVariantDisplaySchema(Schema):
 
 class LineDetailsDisplaySchema(Schema):
     variants = fields.Nested(LineVariantDisplaySchema, many=True, required=True)
+
+
+class DictionaryLineDisplaySchema(DictionaryLineSchema):
+    manuscripts = None
+    line_details = fields.Nested(
+        LineDetailsDisplaySchema, required=True, data_key="lineDetails"
+    )

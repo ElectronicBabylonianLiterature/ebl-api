@@ -1,5 +1,4 @@
-from typing import Sequence, Tuple
-
+from typing import Sequence
 import attr
 import pytest
 
@@ -304,12 +303,37 @@ def test_query_by_transliteration(
     assert result == (expected, len(expected))
 
 
-def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
+def make_dictionary_line(text: Text, chapter: Chapter, lemma: str) -> DictionaryLine:
+    line = chapter.lines[0]
     return DictionaryLine(
         text.id,
         text.name,
         chapter.name,
-        chapter.lines[0],
+        chapter.stage,
+        attr.evolve(
+            line,
+            variants=tuple(
+                attr.evolve(
+                    variant,
+                    manuscripts=tuple(
+                        manuscript
+                        for manuscript in variant.manuscripts
+                        if manuscript.has_lemma(lemma)
+                    ),
+                )
+                for variant in line.variants
+            ),
+        ),
+        tuple(
+            attr.evolve(
+                manuscript,
+                references=tuple(
+                    attr.evolve(reference, document=None)
+                    for reference in manuscript.references
+                ),
+            )
+            for manuscript in chapter.manuscripts
+        ),
     )
 
 
@@ -321,23 +345,27 @@ def make_dictionary_line(text: Text, chapter: Chapter) -> DictionaryLine:
             CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
             None,
-            ([make_dictionary_line(LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA)], 1),
+            [
+                make_dictionary_line(
+                    LITERATURE_TEXT, CHAPTER_WITH_QUERY_LEMMA, QUERY_LEMMA
+                )
+            ],
         ),
         (
             TEXT,
             CHAPTER_WITH_QUERY_LEMMA,
             QUERY_LEMMA,
             Genre.DIVINATION,
-            ([], 0),
+            [],
         ),
         (
             TEXT,
             CHAPTER_WITH_MANUSCRIPT_LEMMA,
             QUERY_LEMMA,
             None,
-            ([make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA)], 1),
+            [make_dictionary_line(TEXT, CHAPTER_WITH_MANUSCRIPT_LEMMA, QUERY_LEMMA)],
         ),
-        (TEXT, CHAPTER, "definitely not a lemma", None, ([], 0)),
+        (TEXT, CHAPTER, "definitely not a lemma", None, []),
     ],
 )
 def test_query_by_lemma(
@@ -346,12 +374,12 @@ def test_query_by_lemma(
     chapter: Chapter,
     lemma_id: str,
     genre: Genre,
-    expected: Tuple[Sequence[DictionaryLine], int],
+    expected: Sequence[DictionaryLine],
 ) -> None:
     text_repository.create(text)
     text_repository.create_chapter(chapter)
 
-    assert text_repository.query_by_lemma(lemma_id, 0, genre) == expected
+    assert text_repository.query_by_lemma(lemma_id, genre) == expected
 
 
 def test_query_by_transliteration_lookup(

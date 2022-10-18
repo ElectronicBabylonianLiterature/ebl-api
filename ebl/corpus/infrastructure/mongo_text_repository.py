@@ -24,6 +24,9 @@ from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.chapter_query_filters import (
     filter_query_by_transliteration,
 )
+from ebl.corpus.infrastructure.manuscript_lemma_filter import (
+    filter_manuscripts_by_lemma,
+)
 from ebl.corpus.infrastructure.queries import (
     aggregate_chapter_display,
     chapter_id_query,
@@ -245,9 +248,9 @@ class MongoTextRepository(TextRepository):
         ), self._chapters.count_documents(mongo_query)
 
     def query_by_lemma(
-        self, lemma: str, pagination_index: int, genre: Optional[Genre] = None
-    ) -> Tuple[Sequence[DictionaryLine], int]:
-        LIMIT = 3
+        self, lemma: str, genre: Optional[Genre] = None
+    ) -> Sequence[DictionaryLine]:
+        LIMIT = 10
         lemma_query = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
@@ -266,45 +269,32 @@ class MongoTextRepository(TextRepository):
                         "_id": False,
                         "lines": True,
                         "name": True,
+                        "stage": True,
                         "textId": True,
+                        "manuscripts": True,
                     }
                 },
                 {"$unwind": "$lines"},
                 {"$match": lemma_query},
                 join_text_title(),
-                {"$skip": LIMIT * pagination_index},
+                filter_manuscripts_by_lemma(lemma),
                 {"$limit": LIMIT},
                 {
                     "$project": {
                         "textId": True,
                         "textName": {"$first": "$textName.name"},
                         "chapterName": "$name",
+                        "stage": True,
                         "line": "$lines",
+                        "manuscripts": True,
                     }
                 },
             ]
         )
 
-        total_count = self._chapters.aggregate(
-            [
-                {"$match": lemma_query},
-                {
-                    "$project": {
-                        "_id": False,
-                        "lines": True,
-                    }
-                },
-                {"$unwind": "$lines"},
-                {"$count": "line_count"},
-            ]
-        )
-
-        return (
-            DictionaryLineSchema().load(
-                lemma_lines,
-                many=True,
-            ),
-            next(total_count, {}).get("line_count", 0),
+        return DictionaryLineSchema().load(
+            lemma_lines,
+            many=True,
         )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
