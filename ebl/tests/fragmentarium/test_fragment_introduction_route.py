@@ -2,6 +2,7 @@ import json
 
 import falcon
 import pytest
+from ebl.fragmentarium.domain.fragment import Introduction
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory
@@ -12,16 +13,22 @@ from ebl.transliteration.domain.markup import StringPart
     "parameters",
     [
         {
-            "old_introduction": (StringPart(""),),
-            "new_introduction": (StringPart("A new introduction"),),
+            "old_introduction": Introduction("", tuple()),
+            "new_introduction": Introduction(
+                "A new introduction",
+                (StringPart("A new introduction"),),
+            ),
         },
         {
-            "old_introduction": (StringPart("An old introduction"),),
-            "new_introduction": (StringPart(""),),
+            "old_introduction": Introduction(
+                "An old introduction",
+                (StringPart("An old introduction"),),
+            ),
+            "new_introduction": Introduction("", tuple()),
         },
         {
-            "old_introduction": (StringPart(""),),
-            "new_introduction": (StringPart(""),),
+            "old_introduction": Introduction("", tuple()),
+            "new_introduction": Introduction("", tuple()),
         },
     ],
 )
@@ -29,7 +36,7 @@ def test_update_introduction(client, fragmentarium, user, database, parameters):
     fragment = FragmentFactory.build(introduction=parameters["old_introduction"])
     fragment_number = fragmentarium.create(fragment)
     update = {
-        "introduction": "".join(part.value for part in parameters["new_introduction"])
+        "introduction": parameters["new_introduction"].text
     }
     post_result = client.simulate_post(
         f"/fragments/{fragment_number}/introduction", body=json.dumps(update)

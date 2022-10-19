@@ -10,7 +10,7 @@ from ebl.fragmentarium.application.fragmentarium_search_query import (
 )
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.domain.fragment import Fragment, Genre
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
@@ -24,7 +24,6 @@ from ebl.tests.factories.fragment import (
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
-from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.parallel_line import Labels, ParallelFragment
@@ -296,11 +295,9 @@ def test_update_lemmatization(fragment_repository):
 
 
 def test_update_introduction(fragment_repository: FragmentRepository):
-    fragment: Fragment = FragmentFactory.build(introduction="")
+    fragment: Fragment = FragmentFactory.build(introduction=Introduction("", tuple()))
     fragment_repository.create(fragment)
-    updated_fragment = fragment.set_introduction(
-        (StringPart("Background information about this fragment"),)
-    )
+    updated_fragment = fragment.set_introduction("Introduction")
     fragment_repository.update_introduction(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 

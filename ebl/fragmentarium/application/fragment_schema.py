@@ -1,6 +1,5 @@
 import pydash
-from typing import Sequence
-from marshmallow import Schema, ValidationError, fields, post_dump, post_load
+from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -8,6 +7,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
+    Introduction,
     Measure,
     UncuratedReference,
     Scope,
@@ -15,11 +15,12 @@ from ebl.fragmentarium.domain.fragment import (
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
+from ebl.transliteration.application.note_line_part_schemas import (
+    OneOfNoteLinePartSchema,
+)
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_markup
-from ebl.transliteration.domain.markup import MarkupPart
 
 
 class MeasureSchema(Schema):
@@ -80,13 +81,13 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
-def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
-    try:
-        return parse_markup(introduction) if introduction else tuple()
-    except PARSE_ERRORS as error:
-        raise ValidationError(
-            f"Invalid introduction: {introduction}. {error}"
-        ) from error
+class IntroductionSchema(Schema):
+    text = fields.String(required=True)
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
+
+    @post_load
+    def make_introduction(self, data, **kwargs):
+        return Introduction(data["text"], tuple(data["parts"]))
 
 
 class FragmentSchema(Schema):
@@ -125,11 +126,7 @@ class FragmentSchema(Schema):
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
-    introduction = fields.Function(
-        lambda fragment: "".join(part.value for part in fragment.introduction),
-        parse_introduction,
-        load_default="",
-    )
+    introduction = fields.Nested(IntroductionSchema)
 
     @post_load
     def make_fragment(self, data, **kwargs):

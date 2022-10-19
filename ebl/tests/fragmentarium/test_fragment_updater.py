@@ -6,7 +6,6 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, NotLowestJoinError
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
@@ -230,7 +229,7 @@ def test_update_introduction(
 ):
     fragment: Fragment = FragmentFactory.build()
     number = fragment.number
-    introduction = (StringPart("Test introduction"),)
+    introduction = "Test introduction"
     updated_fragment = fragment.set_introduction(introduction)
     when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
     when(changelog).create(

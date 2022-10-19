@@ -19,6 +19,18 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
+from typing import Sequence
+from marshmallow import ValidationError
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_markup
+from ebl.transliteration.domain.markup import MarkupPart
+
+def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
+    try:
+        return parse_markup(introduction) if introduction else tuple()
+    except PARSE_ERRORS as error:
+        raise ValidationError(
+            f"Invalid introduction: {introduction}. {error}"
+        ) from error
 
 
 class NotLowestJoinError(ValueError):
@@ -57,6 +69,12 @@ class Scope(Enum):
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class Introduction:
+    text: str
+    parts: Tuple[MarkupPart]
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
     accession: str = ""
@@ -82,7 +100,7 @@ class Fragment:
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
     authorized_scopes: Optional[Sequence[Scope]] = list()
-    introduction: Sequence[MarkupPart] = tuple()
+    introduction: Optional[Introduction] = None
 
     @property
     def is_lowest_join(self) -> bool:
@@ -94,8 +112,15 @@ class Fragment:
     def set_text(self, text: Text) -> "Fragment":
         return attr.evolve(self, text=text)
 
-    def set_introduction(self, introduction: Sequence[MarkupPart]) -> "Fragment":
-        return attr.evolve(self, introduction=introduction)
+    def set_introduction(self, introduction: str) -> "Fragment":
+        return attr.evolve(
+            self,
+            introduction=attr.evolve(
+                self.introduction,
+                text=introduction,
+                parts=parse_introduction(introduction),
+            ),
+        )
 
     def update_lowest_join_transliteration(
         self, transliteration: TransliterationUpdate, user: User
