@@ -228,7 +228,7 @@ def test_update_introduction(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    introduction = 'Test introduction'
+    introduction = "Test introduction"
     updated_fragment = fragment.set_introduction(introduction)
     when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
     when(changelog).create(
