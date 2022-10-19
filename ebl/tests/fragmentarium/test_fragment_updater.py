@@ -221,3 +221,23 @@ def test_update_references_invalid(
 
     with pytest.raises(DataError):
         fragment_updater.update_references(number, references, user)
+
+
+def test_update_introduction(
+    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    introduction = 'Test introduction'
+    updated_fragment = fragment.set_introduction(introduction)
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_introduction(updated_fragment).thenReturn()
+
+    result = fragment_updater.update_introduction(number, introduction, user)
+    assert result == (updated_fragment, False)
