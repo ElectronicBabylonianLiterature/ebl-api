@@ -8,19 +8,12 @@ from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
 from ebl.fragmentarium.domain.fragment import NotLowestJoinError
 
-INTRODUCTION_DTO_SCHEMA = {
-    "type": "object",
-    "properties": {"introduction": {"type": "string"}},
-    "required": ["introduction"],
-}
-
 
 class IntroductionResource:
     def __init__(self, updater: FragmentUpdater):
         self._updater = updater
 
     @falcon.before(require_scope, "transliterate:fragments")
-    @validate(INTRODUCTION_DTO_SCHEMA)
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:
             user = req.context.user
