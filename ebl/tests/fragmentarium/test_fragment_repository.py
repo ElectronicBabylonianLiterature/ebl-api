@@ -24,6 +24,7 @@ from ebl.tests.factories.fragment import (
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
+from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
 from ebl.transliteration.domain.parallel_line import Labels, ParallelFragment
@@ -298,7 +299,7 @@ def test_update_introduction(fragment_repository: FragmentRepository):
     fragment: Fragment = FragmentFactory.build(introduction="")
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_introduction(
-        "Background information about this fragment"
+        (StringPart("Background information about this fragment"),)
     )
     fragment_repository.update_introduction(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)

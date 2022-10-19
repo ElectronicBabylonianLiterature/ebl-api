@@ -3,8 +3,10 @@ import pytest
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Genre, NotLowestJoinError
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, NotLowestJoinError
 from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
@@ -224,11 +226,11 @@ def test_update_references_invalid(
 
 
 def test_update_introduction(
-    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+    fragment_updater: FragmentUpdater, user, fragment_repository, changelog, when
 ):
-    fragment = FragmentFactory.build()
+    fragment: Fragment = FragmentFactory.build()
     number = fragment.number
-    introduction = "Test introduction"
+    introduction = (StringPart("Test introduction"),)
     updated_fragment = fragment.set_introduction(introduction)
     when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
     when(changelog).create(

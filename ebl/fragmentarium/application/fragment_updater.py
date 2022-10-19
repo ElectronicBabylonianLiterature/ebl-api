@@ -8,6 +8,7 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment, Genre
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
+from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
@@ -52,7 +53,7 @@ class FragmentUpdater:
         return self._create_result(updated_fragment)
 
     def update_introduction(
-        self, number: MuseumNumber, introduction: str, user: User
+        self, number: MuseumNumber, introduction: Sequence[MarkupPart], user: User
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_introduction(introduction)

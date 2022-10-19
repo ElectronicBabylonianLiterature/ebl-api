@@ -1,5 +1,6 @@
 import pydash
-from marshmallow import Schema, fields, post_dump, post_load
+from typing import Sequence
+from marshmallow import Schema, ValidationError, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -17,6 +18,8 @@ from ebl.schemas import ValueEnum
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_markup
+from ebl.transliteration.domain.markup import MarkupPart
 
 
 class MeasureSchema(Schema):
@@ -77,6 +80,15 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
+def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
+    try:
+        return parse_markup(introduction) if introduction else tuple()
+    except PARSE_ERRORS as error:
+        raise ValidationError(
+            f"Invalid introduction: {introduction}. {error}"
+        ) from error
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
@@ -113,7 +125,11 @@ class FragmentSchema(Schema):
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
-    introduction = fields.String(load_default="")
+    introduction = fields.Function(
+        lambda fragment: "".join(part.value for part in fragment.introduction),
+        parse_introduction,
+        load_default="",
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):

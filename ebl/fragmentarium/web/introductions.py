@@ -1,6 +1,7 @@
 import falcon
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
+from ebl.fragmentarium.application.fragment_schema import parse_introduction
 
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -25,7 +26,9 @@ class IntroductionResource:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_introduction(
-                parse_museum_number(number), req.media.get("introduction", ""), user
+                parse_museum_number(number),
+                parse_introduction(req.media["introduction"]),
+                user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
 

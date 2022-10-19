@@ -305,7 +305,6 @@ class MongoFragmentRepository(FragmentRepository):
                         "notes",
                         "signs",
                         "record",
-                        "introduction",
                         "line_to_vec",
                     )
                 ).dump(fragment)

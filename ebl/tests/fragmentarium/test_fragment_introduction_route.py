@@ -5,35 +5,38 @@ import pytest
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory
+from ebl.transliteration.domain.markup import StringPart
 
 
 @pytest.mark.parametrize(
     "parameters",
     [
         {
-            "old_introduction": "",
-            "new_introduction": "A new introduction",
+            "old_introduction": (StringPart(""),),
+            "new_introduction": (StringPart("A new introduction"),),
         },
         {
-            "old_introduction": "An old introduction",
-            "new_introduction": "",
+            "old_introduction": (StringPart("An old introduction"),),
+            "new_introduction": (StringPart(""),),
         },
         {
-            "old_introduction": "",
-            "new_introduction": "",
+            "old_introduction": (StringPart(""),),
+            "new_introduction": (StringPart(""),),
         },
     ],
 )
 def test_update_introduction(client, fragmentarium, user, database, parameters):
     fragment = FragmentFactory.build(introduction=parameters["old_introduction"])
     fragment_number = fragmentarium.create(fragment)
-    updates = {"introduction": parameters["new_introduction"]}
+    update = {
+        "introduction": "".join(part.value for part in parameters["new_introduction"])
+    }
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/introduction", body=json.dumps(updates)
+        f"/fragments/{fragment_number}/introduction", body=json.dumps(update)
     )
     expected_json = {
         **create_response_dto(
-            fragment.set_introduction(updates["introduction"]),
+            fragment.set_introduction(parameters["new_introduction"]),
             user,
             fragment.number == "K.1",
         )

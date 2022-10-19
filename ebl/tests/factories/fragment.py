@@ -106,7 +106,7 @@ class FragmentFactory(factory.Factory):
         ]
     )
     authorized_scopes = [Scope.CAIC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
-    introduction = factory.Faker("text")
+    introduction = (StringPart("Introduction"),)
 
 
 class InterestingFragmentFactory(FragmentFactory):
