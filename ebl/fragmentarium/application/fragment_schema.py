@@ -14,6 +14,7 @@ from ebl.fragmentarium.domain.fragment import (
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
+from ebl.transliteration.application.note_line_part_schemas import OneOfNoteLinePartSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
@@ -113,13 +114,16 @@ class FragmentSchema(Schema):
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
-    introduction = fields.String(load_default="")
+    introduction = fields.Nested(
+        OneOfNoteLinePartSchema, many=True, load_default=tuple()
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
+        data["introduction"] = tuple(data["introduction"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         if "authorized_scopes" in data:
