@@ -14,7 +14,6 @@ from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
-from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
@@ -82,7 +81,7 @@ class Fragment:
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
     authorized_scopes: Optional[Sequence[Scope]] = list()
-    introduction: Sequence[MarkupPart] = tuple()
+    introduction: str = ""
 
     @property
     def is_lowest_join(self) -> bool:
