@@ -81,19 +81,24 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     folios = FoliosResource(finder)
     chapters = ChaptersByManuscriptResource(corpus, finder)
 
-    api.add_route("/fragments", fragment_search)
-    api.add_route("/fragments/{number}/match", fragment_matcher)
-    api.add_route("/fragments/{number}/genres", fragment_genre)
-    api.add_route("/fragments/{number}", fragments)
-    api.add_route("/fragments/{number}/pager", fragment_pager)
-    api.add_route("/fragments/{number}/lemmatization", lemmatization)
-    api.add_route("/fragments/{number}/references", references)
-    api.add_route("/fragments/{number}/transliteration", transliteration)
-    api.add_route("/fragments/{number}/introduction", introduction)
-    api.add_route("/fragments/{number}/annotations", annotations)
-    api.add_route("/fragments/{number}/photo", photo)
-    api.add_route("/fragments/{number}/corpus", chapters)
-    api.add_route("/genres", genres)
-    api.add_route("/statistics", statistics)
-    api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
-    api.add_route("/folios/{name}/{number}", folios)
+    routes = [
+        ("/fragments", fragment_search),
+        ("/fragments/{number}/match", fragment_matcher),
+        ("/fragments/{number}/genres", fragment_genre),
+        ("/fragments/{number}", fragments),
+        ("/fragments/{number}/pager", fragment_pager),
+        ("/fragments/{number}/lemmatization", lemmatization),
+        ("/fragments/{number}/references", references),
+        ("/fragments/{number}/transliteration", transliteration),
+        ("/fragments/{number}/introduction", introduction),
+        ("/fragments/{number}/annotations", annotations),
+        ("/fragments/{number}/photo", photo),
+        ("/fragments/{number}/corpus", chapters),
+        ("/genres", genres),
+        ("/statistics", statistics),
+        ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
+        ("/folios/{name}/{number}", folios),
+    ]
+
+    for uri, resource in routes:
+        api.add_route(uri, resource)
