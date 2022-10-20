@@ -11,7 +11,7 @@ from ebl.transliteration.domain.dollar_line import (
 )
 
 
-class DollarLineTransfomer(Transformer):
+class DollarLineTransformer(Transformer):
     def ebl_atf_dollar_line__free_text(self, content):
         return "".join(content)
 
