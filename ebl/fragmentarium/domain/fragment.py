@@ -19,10 +19,9 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
-from typing import Sequence
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_markup
-from ebl.transliteration.domain.markup import MarkupPart
+
 
 def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
     try:
