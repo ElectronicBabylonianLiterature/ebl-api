@@ -100,7 +100,7 @@ class Fragment:
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
     authorized_scopes: Optional[Sequence[Scope]] = list()
-    introduction: Optional[Introduction] = None
+    introduction: Introduction = Introduction("", tuple())
 
     @property
     def is_lowest_join(self) -> bool:

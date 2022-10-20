@@ -126,7 +126,7 @@ class FragmentSchema(Schema):
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
-    introduction = fields.Nested(IntroductionSchema)
+    introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
 
     @post_load
     def make_fragment(self, data, **kwargs):
