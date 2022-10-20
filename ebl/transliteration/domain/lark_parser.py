@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import Sequence, Tuple, Type
+from typing import Sequence
 
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
@@ -32,13 +32,7 @@ from ebl.transliteration.domain.translation_line_transformer import (
     TranslationLineTransformer,
 )
 from ebl.transliteration.domain.word_tokens import Word
-
-PARSE_ERRORS: Tuple[Type[Exception], ...] = (
-    UnexpectedInput,
-    ParseError,
-    VisitError,
-    EnclosureError,
-)
+from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 
 
 class LineTransformer(

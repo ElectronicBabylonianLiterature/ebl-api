@@ -3,7 +3,7 @@ from ebl.transliteration.domain.transliteration_query import (
     TransliterationQuery,
     TransliterationQueryEmpty,
 )
-from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
+from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from ebl.errors import DataError
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 
