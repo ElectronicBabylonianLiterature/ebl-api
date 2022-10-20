@@ -63,20 +63,20 @@ class FragmentSearch:
                         "paginationIndex",
                     ]
                 ): lambda value: self._search_fragmentarium(finder, value),
-                frozenset(["random"]): lambda _: self.api_fragment_info_schema.dump(
+                frozenset(["random"]): lambda _: self.api_fragment_info_schema.dumps(
                     finder.find_random()
                 ),
                 frozenset(
                     ["interesting"]
-                ): lambda _: self.api_fragment_info_schema.dump(
+                ): lambda _: self.api_fragment_info_schema.dumps(
                     finder.find_interesting()
                 ),
-                frozenset(["latest"]): lambda x: self.api_fragment_info_schema.dump(
+                frozenset(["latest"]): lambda x: self.api_fragment_info_schema.dumps(
                     find_latest(x)
                 ),
                 frozenset(
                     ["needsRevision"]
-                ): lambda x: self.api_fragment_info_schema.dump(find_needs_revision(x)),
+                ): lambda x: self.api_fragment_info_schema.dumps(find_needs_revision(x)),
             }
         )
 
@@ -84,7 +84,7 @@ class FragmentSearch:
         fragment_infos_pagination = finder.search_fragmentarium(
             self._parse_fragmentarium_search(**query)
         )
-        return self.api_fragment_infos_pagination_schema.dump(fragment_infos_pagination)
+        return self.api_fragment_infos_pagination_schema.dumps(fragment_infos_pagination)
 
     def _parse_fragmentarium_search(
         self,

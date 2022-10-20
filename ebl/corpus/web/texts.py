@@ -66,6 +66,6 @@ def make_text_search_resource(
             except ValueError as error:
                 raise DataError("Pagination Index has to be a number") from error
             chapters = self._corpus.search_transliteration(query, pagination_index)
-            resp.text = ChapterInfosPaginationSchema().dump(chapters)
+            resp.text = ChapterInfosPaginationSchema().dumps(chapters)
 
     return TextSearchResource(corpus, transliteration_query_factory)
