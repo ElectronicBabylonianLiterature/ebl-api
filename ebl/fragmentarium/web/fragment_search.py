@@ -20,7 +20,17 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.users.web.require_scope import require_scope
 
-CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
+CACHED_COMMANDS = frozenset(
+    {
+        "latest",
+        "needsRevision",
+        "number",
+        "transliteration",
+        "bibliographyId",
+        "pages",
+        "paginationIndex",
+    }
+)
 
 
 class FragmentSearch:
@@ -128,4 +138,4 @@ class FragmentSearch:
         when=lambda req, _: req.params.keys() <= CACHED_COMMANDS,
     )
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        resp.media = self._dispatch(req.params)
+        resp.text = self._dispatch(req.params)

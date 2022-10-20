@@ -8,7 +8,7 @@ from falcon_caching import Cache
 
 DEFAULT_TIMEOUT: int = 600
 CONFIG_ENVIRONMENT_VARIABLE: str = "CACHE_CONFIG"
-DEFAULT_CONFIG: str = '{"CACHE_TYPE": "null"}'
+DEFAULT_CONFIG: str = '{"CACHE_TYPE": "simple"}'
 
 
 def load_config() -> dict:
