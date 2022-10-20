@@ -15,9 +15,7 @@ from ebl.corpus.domain.manuscript import (
 from ebl.transliteration.domain.line_transformer import LineTransformer
 
 
-class ChapterTransformer(
-    LineTransformer
-):
+class ChapterTransformer(LineTransformer):
     def __init__(self, manuscripts: Iterable[Manuscript]):
         self._manuscripts = {
             manuscript.siglum: manuscript.id for manuscript in manuscripts
