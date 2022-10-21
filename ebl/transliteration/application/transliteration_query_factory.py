@@ -3,8 +3,6 @@ from ebl.transliteration.domain.transliteration_query import (
     TransliterationQuery,
     TransliterationQueryEmpty,
 )
-from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
-from ebl.errors import DataError
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
@@ -18,8 +16,5 @@ class TransliterationQueryFactory:
 
     def create(self, string: str) -> TransliterationQuery:
         query = TransliterationQuery(string=string, visitor=self.visitor)
-        try:
-            query.regexp
-            return query
-        except PARSE_ERRORS:
-            raise DataError("Invalid transliteration query.")
+        query.regexp
+        return query
