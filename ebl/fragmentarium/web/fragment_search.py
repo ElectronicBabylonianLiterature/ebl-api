@@ -76,7 +76,9 @@ class FragmentSearch:
                 ),
                 frozenset(
                     ["needsRevision"]
-                ): lambda x: self.api_fragment_info_schema.dumps(find_needs_revision(x)),
+                ): lambda x: self.api_fragment_info_schema.dumps(
+                    find_needs_revision(x)
+                ),
             }
         )
 
@@ -84,7 +86,9 @@ class FragmentSearch:
         fragment_infos_pagination = finder.search_fragmentarium(
             self._parse_fragmentarium_search(**query)
         )
-        return self.api_fragment_infos_pagination_schema.dumps(fragment_infos_pagination)
+        return self.api_fragment_infos_pagination_schema.dumps(
+            fragment_infos_pagination
+        )
 
     def _parse_fragmentarium_search(
         self,
