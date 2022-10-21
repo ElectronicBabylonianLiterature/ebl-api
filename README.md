@@ -1,4 +1,4 @@
-# Electronic Babylonian Literature API
+# Electronic Babylonian Library API
 
 ![Build Status](https://github.com/ElectronicBabylonianLiterature/ebl-api/workflows/CI/badge.svg?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/63fd8d8e40b2066cb42b/test_coverage)](https://codeclimate.com/github/ElectronicBabylonianLiterature/ebl-api/test_coverage)
