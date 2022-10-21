@@ -19,6 +19,7 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+from ebl.transliteration.domain.introduction_line_transformer import IntroductionLineTransformer
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Reading
@@ -65,6 +66,9 @@ NOTE_LINE_PARSER = Lark.open(
 )
 MARKUP_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
+)
+INTRODUCTION_PARSER = Lark.open(
+    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="introduction_line"
 )
 PARALLEL_LINE_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
@@ -124,6 +128,10 @@ def parse_note_line(atf: str) -> NoteLine:
 def parse_markup(atf: str) -> Sequence[MarkupPart]:
     tree = MARKUP_PARSER.parse(atf)
     return LineTransformer().transform(tree)
+
+def parse_introduction_line(atf: str) -> Sequence[MarkupPart]:
+    tree = INTRODUCTION_PARSER.parse(atf)
+    return IntroductionLineTransformer().transform(tree)
 
 
 def parse_parallel_line(atf: str) -> ParallelLine:

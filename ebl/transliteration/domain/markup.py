@@ -136,6 +136,13 @@ class BibliographyPart(MarkupPart):
         return BibliographyPart(Reference(id, ReferenceType.DISCUSSION, pages))
 
 
+@attr.s(frozen=True, auto_attribs=True)
+class ParagraphSeparatorPart(TextPart):
+    
+    @property
+    def value(self) -> str:
+        return self.text
+
 def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
     return tuple(parts)
 

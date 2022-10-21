@@ -1,0 +1,10 @@
+%import common.CR
+%import common.LF
+
+introduction_line: (string_part | emphasis_part | paragraph_part)+
+string_part: text
+emphasis_part: "@i{" text "}"
+text: /[^@{}\n\r]+/+
+paragraph_part: _NEWLINE _NEWLINE+
+_NEWLINE: (CR? LF)
+
