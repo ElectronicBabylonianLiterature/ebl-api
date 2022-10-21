@@ -25,15 +25,7 @@ from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
-
-
-def get_line_transformer():
-    from ebl.transliteration.domain.line_transformer import LineTransformer
-
-    return LineTransformer
-
-
-LineTransformer = get_line_transformer()
+from ebl.transliteration.domain.line_transformer import LineTransformer
 
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
