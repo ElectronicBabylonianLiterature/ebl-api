@@ -234,12 +234,19 @@ class DictionaryLineSchema(Schema):
     chapter_name = fields.String(
         required=True, validate=validate.Length(min=1), data_key="chapterName"
     )
+    stage = ValueEnum(Stage, required=True)
     line = fields.Nested(LineSchema, required=True)
+    manuscripts = fields.Nested(ManuscriptSchema, required=True, many=True)
 
     @post_load
     def make_dictionary_line(self, data: dict, **kwargs) -> DictionaryLine:
         return DictionaryLine(
-            data["text_id"], data["text_name"], data["chapter_name"], data["line"]
+            data["text_id"],
+            data["text_name"],
+            data["chapter_name"],
+            data["stage"],
+            data["line"],
+            tuple(data["manuscripts"]),
         )
 
 
