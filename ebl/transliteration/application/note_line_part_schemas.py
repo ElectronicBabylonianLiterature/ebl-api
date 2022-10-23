@@ -50,11 +50,9 @@ class BibliographyPartSchema(Schema):
 
 
 class ParagraphSeparatorPartSchema(Schema):
-    text = fields.String(default="\n\n")
-
     @post_load
     def make_part(self, data, **kwargs) -> ParagraphSeparatorPart:
-        return ParagraphSeparatorPart("\n\n")
+        return ParagraphSeparatorPart()
 
 
 class OneOfNoteLinePartSchema(OneOfSchema):

@@ -39,7 +39,7 @@ class IntroductionLineTransformer(Transformer):
         return StringPart(text)
     
     @v_args(inline=True)
-    def ebl_atf_introduction_line__text(self, children) -> StringPart:
+    def ebl_atf_introduction_line__text(self, children) -> str:
         return "".join(children)
 
     @v_args(inline=True)
@@ -53,7 +53,7 @@ class IntroductionLineTransformer(Transformer):
     def ebl_atf_introduction_line__paragraph_part(
         self, _
     ) -> ParagraphSeparatorPart:
-        return ParagraphSeparatorPart("PARAGRAPH")
+        return ParagraphSeparatorPart()
 
     def empty_line(self, _):
         return EmptyLine()
