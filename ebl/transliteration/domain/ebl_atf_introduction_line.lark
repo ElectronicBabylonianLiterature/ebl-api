@@ -1,10 +1,12 @@
 %import common.CR
 %import common.LF
 
-introduction_line: (string_part | emphasis_part | paragraph_part)+
+introduction_line: (string_part | emphasis_part | paragraph_part | bibliography_part)+
 string_part: text
 emphasis_part: "@i{" text "}"
 text: /[^@{}\n\r]+/+
 paragraph_part: _NEWLINE _NEWLINE+
+bibliography_part: "@bib{" escaped_text "@" escaped_text "}"
+escaped_text: (/[^@{}\\\n\r]/ | ("\\" /[@{}\\]/))+
 _NEWLINE: (CR? LF)
 
