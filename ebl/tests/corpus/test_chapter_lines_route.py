@@ -14,7 +14,7 @@ from ebl.tests.corpus.support import (
     create_chapter_dto,
     create_chapter_url,
 )
-from ebl.tests.factories.corpus import ChapterFactory
+from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.text_line import TextLine
@@ -22,44 +22,73 @@ from ebl.transliteration.domain.text_line import TextLine
 
 EMPTY_EDIT_DTO = {"new": [], "deleted": [], "edited": []}
 
-
-def test_updating(
-    client, bibliography, sign_repository, signs, text_repository
-) -> None:
-    allow_signs(signs, sign_repository)
-    chapter = ChapterFactory.build()
-    allow_references(chapter, bibliography)
-    text_repository.create_chapter(chapter)
-    updated_chapter = attr.evolve(
-        chapter,
+CHAPTER = ChapterFactory.build()
+UPDATED_CHAPTER = attr.evolve(
+        CHAPTER,
         lines=(
             attr.evolve(
-                chapter.lines[0],
+                CHAPTER.lines[0],
                 number=LineNumber(1, True),
             ).set_variant_alignment_flags(),
         ),
         parser_version=ATF_PARSER_VERSION,
     )
 
-    body = {
+EDITED = [
+            {"index": index, "line": line}
+            for index, line in enumerate(create_chapter_dto(UPDATED_CHAPTER)["lines"])
+        ]
+BODY_UPDATING = {
         "new": [],
         "deleted": [],
-        "edited": [
-            {"index": index, "line": line}
-            for index, line in enumerate(create_chapter_dto(updated_chapter)["lines"])
-        ],
+        "edited": EDITED,
     }
-    post_result = client.simulate_post(
-        create_chapter_url(chapter, "/lines"), body=json.dumps(body)
+def test_updating_cached(
+    cached_client, bibliography, sign_repository, signs, text_repository
+) -> None:
+    allow_signs(signs, sign_repository)
+    text = TextFactory.build(
+        genre=CHAPTER.text_id.genre,
+        category=CHAPTER.text_id.category,
+        index=CHAPTER.text_id.index,
+    )
+    text_repository.create(text)
+    allow_references(CHAPTER, bibliography)
+    text_repository.create_chapter(CHAPTER)
+
+    first_result = cached_client.simulate_get(create_chapter_url(CHAPTER, "/display"))
+    assert first_result.status == falcon.HTTP_OK
+
+    post_result = cached_client.simulate_post(
+        create_chapter_url(CHAPTER, "/lines"), body=json.dumps(BODY_UPDATING)
     )
 
     assert post_result.status == falcon.HTTP_OK
-    assert post_result.json == create_chapter_dto(updated_chapter)
+    assert post_result.json == create_chapter_dto(UPDATED_CHAPTER)
 
-    get_result = client.simulate_get(create_chapter_url(chapter))
+    second_result = cached_client.simulate_get(create_chapter_url(CHAPTER, "/display"))
+
+    assert second_result.status == falcon.HTTP_OK
+    assert first_result.json != second_result.json
+
+def test_updating(
+    client, bibliography, sign_repository, signs, text_repository
+) -> None:
+    allow_signs(signs, sign_repository)
+    allow_references(CHAPTER, bibliography)
+    text_repository.create_chapter(CHAPTER)
+
+    post_result = client.simulate_post(
+        create_chapter_url(CHAPTER, "/lines"), body=json.dumps(BODY_UPDATING)
+    )
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.json == create_chapter_dto(UPDATED_CHAPTER)
+
+    get_result = client.simulate_get(create_chapter_url(CHAPTER))
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == create_chapter_dto(updated_chapter)
+    assert get_result.json == create_chapter_dto(UPDATED_CHAPTER)
 
 
 def test_updating_strophic_information(
