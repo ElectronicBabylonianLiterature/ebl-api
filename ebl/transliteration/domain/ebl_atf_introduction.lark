@@ -1,7 +1,7 @@
 %import common.CR
 %import common.LF
 
-introduction_line: (string_part | emphasis_part | paragraph_part | bibliography_part | language_part )+
+introduction: (string_part | emphasis_part | paragraph_part | bibliography_part | language_part )+
 string_part: text
 emphasis_part: "@i{" text "}"
 language_part: "@" LANGUAGE "{" text "}"

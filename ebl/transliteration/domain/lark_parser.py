@@ -19,7 +19,7 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
-from ebl.transliteration.domain.introduction_line_transformer import IntroductionLineTransformer
+from ebl.transliteration.domain.ebl_atf_introduction import IntroductionLineTransformer
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Reading
