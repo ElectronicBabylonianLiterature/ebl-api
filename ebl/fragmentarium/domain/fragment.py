@@ -21,7 +21,9 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
-from ebl.transliteration.domain.lark_parser import parse_introduction as _parse_introduction
+from ebl.transliteration.domain.lark_parser import (
+    parse_introduction as _parse_introduction,
+)
 
 
 def parse_introduction(introduction: str) -> Sequence[MarkupPart]:

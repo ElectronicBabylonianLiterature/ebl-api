@@ -1,5 +1,6 @@
 from itertools import dropwhile
-from typing import Sequence, Tuple, Type
+from typing import Sequence, Tuple, Type, Iterator
+import re
 
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
@@ -13,11 +14,10 @@ from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfo
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.greek_tokens import GreekWord
-from ebl.transliteration.domain.introduction_transformer import IntroductionLineTransformer
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.markup import MarkupPart
+from ebl.transliteration.domain.markup import MarkupPart, ParagraphSeparatorPart
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
 from ebl.transliteration.domain.parallel_line import ParallelLine
@@ -66,9 +66,6 @@ NOTE_LINE_PARSER = Lark.open(
 )
 MARKUP_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
-)
-INTRODUCTION_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="introduction"
 )
 PARALLEL_LINE_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
@@ -129,9 +126,20 @@ def parse_markup(atf: str) -> Sequence[MarkupPart]:
     tree = MARKUP_PARSER.parse(atf)
     return LineTransformer().transform(tree)
 
+
+def split_paragraphs(atf: str) -> Iterator[str]:
+    for paragraph in re.split(r"\n\n+", atf.strip()):
+        yield " ".join(paragraph.split())
+
+
 def parse_introduction(atf: str) -> Sequence[MarkupPart]:
-    tree = INTRODUCTION_PARSER.parse(atf)
-    return IntroductionLineTransformer().transform(tree)
+    parts = []
+
+    for paragraph in split_paragraphs(atf):
+        if parts:
+            parts.append(ParagraphSeparatorPart())
+        parts.extend(LineTransformer().transform(MARKUP_PARSER.parse(paragraph)))
+    return tuple(parts)
 
 
 def parse_parallel_line(atf: str) -> ParallelLine:

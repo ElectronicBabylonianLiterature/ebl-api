@@ -138,10 +138,10 @@ class BibliographyPart(MarkupPart):
 
 @attr.s(frozen=True, auto_attribs=True)
 class ParagraphSeparatorPart(MarkupPart):
-    
     @property
     def value(self) -> str:
         return "\n\n"
+
 
 def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
     return tuple(parts)
