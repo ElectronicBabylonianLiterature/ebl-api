@@ -20,12 +20,13 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
-from ebl.transliteration.domain.lark_parser import PARSE_ERRORS, parse_introduction_line
+from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
+from ebl.transliteration.domain.lark_parser import parse_introduction as _parse_introduction
 
 
 def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
     try:
-        return parse_introduction_line(introduction) if introduction else tuple()
+        return _parse_introduction(introduction) if introduction else tuple()
     except PARSE_ERRORS as error:
         raise ValidationError(
             f"Invalid introduction: {introduction}. {error}"
