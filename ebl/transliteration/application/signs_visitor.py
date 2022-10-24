@@ -9,10 +9,10 @@ from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
 from ebl.transliteration.domain.enclosure_tokens import Gloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.lark_parser import (
-    PARSE_ERRORS,
     parse_compound_grapheme,
     parse_reading,
 )
+from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,

@@ -1,62 +1,32 @@
 from itertools import dropwhile
-from typing import Sequence, Tuple, Type, Iterator
+from typing import Sequence, Iterator
 import re
 
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark
-from lark.visitors import v_args
 
 from ebl.errors import DataError
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.at_line_transformer import AtLineTransformer
-from ebl.transliteration.domain.dollar_line_transformer import DollarLineTransfomer
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.labels import DuplicateStatusError
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
+from ebl.transliteration.domain.line import EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart, ParagraphSeparatorPart
 from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.note_line_transformer import NoteLineTransformer
+
 from ebl.transliteration.domain.parallel_line import ParallelLine
-from ebl.transliteration.domain.parallel_line_transformer import ParallelLineTransformer
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.transliteration_error import TransliterationError
-from ebl.transliteration.domain.translation_line_transformer import (
-    TranslationLineTransformer,
-)
 from ebl.transliteration.domain.word_tokens import Word
-
-PARSE_ERRORS: Tuple[Type[Exception], ...] = (
-    UnexpectedInput,
-    ParseError,
-    VisitError,
-    EnclosureError,
-)
-
-
-class LineTransformer(
-    AtLineTransformer,
-    DollarLineTransfomer,
-    NoteLineTransformer,
-    TextLineTransformer,
-    ParallelLineTransformer,
-    TranslationLineTransformer,
-):
-    def empty_line(self, _):
-        return EmptyLine()
-
-    @v_args(inline=True)
-    def control_line(self, prefix, content):
-        return ControlLine(prefix, content)
-
+from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.line_transformer import LineTransformer
 
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
