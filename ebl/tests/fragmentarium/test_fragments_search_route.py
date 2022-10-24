@@ -58,7 +58,7 @@ def test_search_fragmentarium_number(get_number, client, fragmentarium):
         FragmentInfosPagination([FragmentInfo.of(fragment)], 1)
     )
 
-    assert "Cache-Control" not in result.headers
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_search_fragmentarium_number_not_found(client):
@@ -76,6 +76,7 @@ def test_search_fragmentarium_number_not_found(client):
     assert result.json == expected_fragment_infos_pagination_dto(
         FragmentInfosPagination([], 0)
     )
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_search_fragmentarium_references(client, fragmentarium, bibliography, user):
@@ -113,7 +114,7 @@ def test_search_fragmentarium_references(client, fragmentarium, bibliography, us
     assert result.json == expected_fragment_infos_pagination_dto(
         FragmentInfosPagination([FragmentInfo.of(fragment_expected)], 1)
     )
-    assert "Cache-Control" not in result.headers
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
@@ -134,6 +135,7 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
         },
     )
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "Cache-Control" not in result.headers
 
 
 def test_search_fragmentarium_transliteration(
@@ -180,7 +182,7 @@ def test_search_fragmentarium_transliteration(
         )
     )
 
-    assert "Cache-Control" not in result.headers
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_search_fragmentarium_combined_query(
@@ -231,7 +233,7 @@ def test_search_fragmentarium_combined_query(
             1,
         )
     )
-    assert "Cache-Control" not in result.headers
+    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):

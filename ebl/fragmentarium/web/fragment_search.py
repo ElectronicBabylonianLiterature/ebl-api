@@ -20,7 +20,17 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.users.web.require_scope import require_scope
 
-CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
+CACHED_COMMANDS = frozenset(
+    {
+        "latest",
+        "needsRevision",
+        "number",
+        "transliteration",
+        "bibliographyId",
+        "pages",
+        "paginationIndex",
+    }
+)
 
 
 class FragmentSearch:

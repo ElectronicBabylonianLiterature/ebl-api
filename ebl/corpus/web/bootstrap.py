@@ -13,7 +13,7 @@ from ebl.corpus.web.extant_lines import ExtantLinesResource
 from ebl.corpus.web.lemmatizations import LemmatizationResource
 from ebl.corpus.web.lines import LinesImportResource, LinesResource, LineResource
 from ebl.corpus.web.manuscripts import ManuscriptsResource
-from ebl.corpus.web.texts import TextResource, TextSearchResource, TextsResource
+from ebl.corpus.web.texts import TextResource, TextsResource, make_text_search_resource
 from ebl.corpus.web.unplaced_lines import UnplacedLinesResource
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
@@ -32,8 +32,8 @@ def create_corpus_routes(api: falcon.App, context: Context):
 
     texts = TextsResource(corpus)
     text = TextResource(corpus)
-    text_search = TextSearchResource(
-        corpus, TransliterationQueryFactory(context.sign_repository)
+    text_search = make_text_search_resource(
+        context.cache, corpus, TransliterationQueryFactory(context.sign_repository)
     )
     chapters = ChaptersResource(corpus)
     chapters_display = ChaptersDisplayResource(corpus)
