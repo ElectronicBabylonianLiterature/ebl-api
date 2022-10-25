@@ -137,7 +137,7 @@ class BibliographyPart(MarkupPart):
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class ParagraphSeparatorPart(MarkupPart):
+class ParagraphPart(MarkupPart):
     @property
     def value(self) -> str:
         return "\n\n"

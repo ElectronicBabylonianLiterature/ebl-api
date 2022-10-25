@@ -14,7 +14,7 @@ from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.markup import MarkupPart, ParagraphSeparatorPart
+from ebl.transliteration.domain.markup import MarkupPart, ParagraphPart
 from ebl.transliteration.domain.note_line import NoteLine
 
 from ebl.transliteration.domain.parallel_line import ParallelLine
@@ -107,7 +107,7 @@ def parse_introduction(atf: str) -> Sequence[MarkupPart]:
 
     for paragraph in split_paragraphs(atf):
         if parts:
-            parts.append(ParagraphSeparatorPart())
+            parts.append(ParagraphPart())
         parts.extend(LineTransformer().transform(MARKUP_PARSER.parse(paragraph)))
     return tuple(parts)
 
