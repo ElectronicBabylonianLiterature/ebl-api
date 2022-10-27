@@ -7,6 +7,7 @@ from ebl.transliteration.domain.labels import (
     ObjectLabel,
     SurfaceLabel,
     parse_labels,
+    SealLabel,
 )
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 
@@ -37,6 +38,14 @@ class ColumnLabelSchema(LabelSchema):
     @post_load
     def make_label(self, data, **kwargs) -> ColumnLabel:
         return ColumnLabel(data["status"], data["column"])
+
+
+class SealLabelSchema(LabelSchema):
+    seal = fields.Int(required=True)
+
+    @post_load
+    def make_seal(self, data, **kwargs) -> SealLabel:
+        return SealLabel(data["status"], data["seal"])
 
 
 class SurfaceLabelSchema(LabelSchema):

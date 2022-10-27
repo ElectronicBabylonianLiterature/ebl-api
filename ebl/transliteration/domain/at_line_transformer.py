@@ -18,6 +18,7 @@ from ebl.transliteration.domain.labels import (
     ObjectLabel,
     SurfaceLabel,
     LabelTransformer,
+    SealLabel,
 )
 
 
@@ -46,6 +47,10 @@ class AtLineTransformer(LabelTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__column(self, number, statuses):
         return ColumnAtLine(ColumnLabel.from_int(number, statuses))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__seal(self, number, statuses):
+        return SealAtLine(SealLabel.from_int(number, statuses))
 
     @v_args(inline=True)
     def ebl_atf_text_line__discourse(self, discourse):

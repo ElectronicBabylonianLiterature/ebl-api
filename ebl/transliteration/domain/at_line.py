@@ -5,7 +5,7 @@ import attr
 
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.atf import Atf, Composite, Discourse
-from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel
+from ebl.transliteration.domain.labels import SurfaceLabel, ColumnLabel, ObjectLabel, SealLabel
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.markup import convert_part_sequence, MarkupPart
 
@@ -55,6 +55,14 @@ class ColumnAtLine(AtLine):
     @property
     def display_value(self) -> str:
         return f"column {self.column_label.column}{self.column_label.status_string}"
+
+@attr.s(auto_attribs=True, frozen=True)
+class SealAtLine(AtLine):
+    seal_label: SealLabel
+
+    @property
+    def display_value(self) -> str:
+        return f"seal {self.seal_label.seal}{self.seal_label.status_string}"
 
 
 @attr.s(auto_attribs=True, frozen=True)

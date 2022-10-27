@@ -100,6 +100,17 @@ class ColumnLabel(Label):
     def accept(self, visitor: LabelVisitor) -> LabelVisitor:
         return visitor.visit_column_label(self)
 
+@attr.s(auto_attribs=True, frozen=True)
+class SealLabel(Label):
+    seal: int
+
+    @staticmethod
+    def from_int(seal: int, status: Sequence[Status] = tuple()) -> "SealLabel":
+        return SealLabel(status, seal)
+    
+    @property
+    def _atf(self) -> str:
+        return f"@seal {self.seal}"
 
 @attr.s(auto_attribs=True, frozen=True)
 class SurfaceLabel(Label):
