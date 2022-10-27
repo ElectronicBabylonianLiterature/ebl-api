@@ -6,10 +6,10 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 
 
 class QueryItemSchema(Schema):
-    _id = fields.String()
+    id_ = fields.String(data_key="_id")
+    matching_lines = fields.List(fields.Integer(), required=True, data_key="matchingLines")
     museum_number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
-    matching_lines = fields.List(fields.Integer, load_default=tuple(), data_key="matchingLines")
-    total = fields.Integer(load_default=0)
+    total = fields.Integer(required=True)
 
     @post_load
     def make_query_item(self, data, **kwargs) -> QueryItem:
@@ -18,8 +18,8 @@ class QueryItemSchema(Schema):
 
 
 class QueryResultSchema(Schema):
-    total_matching_lines = fields.Integer(data_key="totalMatchingLines")
-    items = fields.Nested(QueryItemSchema, many=True)
+    total_matching_lines = fields.Integer(data_key="totalMatchingLines", required=True)
+    items = fields.Nested(QueryItemSchema, many=True, required=True)
 
     @post_load
     def make_query_result(self, data, **kwargs) -> QueryResult:

@@ -1,16 +1,16 @@
-from typing import List
+from typing import Sequence
 import attr
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 @attr.s(auto_attribs=True, frozen=True)
 class QueryItem:
-    _id: str
-    museumNumber: MuseumNumber
-    matchingLines: List[int]
+    id_: str
+    museum_number: MuseumNumber
+    matching_lines: Sequence[int]
     total: int
 
 @attr.s(auto_attribs=True, frozen=True)
 class QueryResult:
-    items: List[QueryItem]
-    totalMatchingLines: int
+    items: Sequence[QueryItem]
+    total_matching_lines: int

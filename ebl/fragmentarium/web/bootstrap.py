@@ -95,4 +95,4 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     api.add_route("/statistics", statistics)
     api.add_route("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager)
     api.add_route("/folios/{name}/{number}", folios)
-    api.add_route("/query", fragment_query)
+    api.add_route("/fragments/query", fragment_query)

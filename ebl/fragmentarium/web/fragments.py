@@ -34,7 +34,7 @@ class FragmentsQueryResource:
         self._repository = repository
 
     def on_get(self, req: Request, resp: Response):
-        lemmas = req.params.get("lemmas", [])
+        lemmas = req.params["lemmas"].split("+")
         operator = req.params.get("operator", "or")
         resp.media = QueryResultSchema().dump(
             self._repository.query_lemmas(lemmas, operator=operator)

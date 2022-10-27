@@ -455,7 +455,13 @@ class MongoFragmentRepository(FragmentRepository):
                     }
                 },
                 {"$unwind": "$lemmas"},
-                {"$match": {"lemmas": {"$regex": "^u I$"}}},
+                {
+                    "$match": {
+                        f"${operator}": [
+                            {"lemmas": {"$regex": lemma}} for lemma in lemmas
+                        ]
+                    }
+                },
                 {
                     "$group": {
                         "_id": "$_id",
@@ -488,4 +494,4 @@ class MongoFragmentRepository(FragmentRepository):
                 {"$project": {"_id": False}},
             ]
         )
-        return QueryResultSchema().load(data)
+        return QueryResultSchema().load(next(data))
