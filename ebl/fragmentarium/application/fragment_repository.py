@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Sequence, Tuple
+from ebl.common.query.query_result import QueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -93,4 +94,8 @@ class FragmentRepository(ABC):
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
     ) -> Tuple[Sequence[Fragment], int]:
+        ...
+
+    @abstractmethod
+    def query_lemmas(self, lemmas: Sequence[str], **kwargs) -> QueryResult:
         ...

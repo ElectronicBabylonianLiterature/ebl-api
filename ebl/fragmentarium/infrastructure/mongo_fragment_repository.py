@@ -480,7 +480,7 @@ class MongoFragmentRepository(FragmentRepository):
                 {"$sort": {"total": -1}},
                 {
                     "$group": {
-                        "_id": null,
+                        "_id": None,
                         "totalMatchingLines": {"$sum": "$total"},
                         "items": {"$push": "$$ROOT"},
                     }

@@ -6,10 +6,11 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 @attr.s(auto_attribs=True, frozen=True)
 class QueryItem:
     _id: str
-    museumNumber: MuseumNumber()
+    museumNumber: MuseumNumber
     matchingLines: List[int]
     total: int
 
+@attr.s(auto_attribs=True, frozen=True)
 class QueryResult:
     items: List[QueryItem]
     totalMatchingLines: int

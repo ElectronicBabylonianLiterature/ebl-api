@@ -1,8 +1,10 @@
 import falcon
 from falcon import Request, Response
 from typing import Sequence
+from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
@@ -25,3 +27,15 @@ class FragmentsResource:
         if fragment.authorized_scopes:
             check_fragment_scope(req.context.user, fragment.authorized_scopes)
         resp.media = create_response_dto(fragment, user, has_photo)
+
+
+class FragmentsQueryResource:
+    def __init__(self, repository: FragmentRepository):
+        self._repository = repository
+
+    def on_get(self, req: Request, resp: Response):
+        lemmas = req.params.get("lemmas", [])
+        operator = req.params.get("operator", "or")
+        resp.media = QueryResultSchema().dump(
+            self._repository.query_lemmas(lemmas, operator=operator)
+        )
