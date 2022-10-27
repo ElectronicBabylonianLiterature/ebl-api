@@ -1,4 +1,5 @@
 import falcon
+from falcon_caching import Cache
 from marshmallow import Schema, fields
 
 from ebl.corpus.application.corpus import Corpus
@@ -16,8 +17,9 @@ class CorpusLemmatizationsSchema(Schema):
 
 
 class LemmatizationResource:
-    def __init__(self, corpus: Corpus) -> None:
+    def __init__(self, corpus: Corpus, cache: Cache) -> None:
         self._corpus = corpus
+        self._cache = cache
 
     @falcon.before(require_scope, "write:texts")
     @validate(CorpusLemmatizationsSchema())
@@ -32,6 +34,7 @@ class LemmatizationResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
+        self._cache.delete(str(chapter_id))
         updated_chapter = self._corpus.update_manuscript_lemmatization(
             chapter_id,
             CorpusLemmatizationsSchema().load(req.media)["lemmatization"],
