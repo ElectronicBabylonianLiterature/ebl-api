@@ -122,7 +122,7 @@ def test_labels(text_with_labels) -> None:
     ]
 
 
-def test_translation_berofe_text() -> None:
+def test_translation_before_text() -> None:
     with pytest.raises(ValueError):
         Text.of_iterable([TranslationLine(tuple()), *LINES])
 

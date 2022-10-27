@@ -300,7 +300,13 @@ class MongoFragmentRepository(FragmentRepository):
             fragment_is(fragment),
             {
                 "$set": FragmentSchema(
-                    only=("text", "notes", "signs", "record", "line_to_vec")
+                    only=(
+                        "text",
+                        "notes",
+                        "signs",
+                        "record",
+                        "line_to_vec",
+                    )
                 ).dump(fragment)
             },
         )
@@ -315,6 +321,12 @@ class MongoFragmentRepository(FragmentRepository):
         self._fragments.update_one(
             fragment_is(fragment),
             {"$set": FragmentSchema(only=("text",)).dump(fragment)},
+        )
+
+    def update_introduction(self, fragment):
+        self._fragments.update_one(
+            fragment_is(fragment),
+            {"$set": FragmentSchema(only=("introduction",)).dump(fragment)},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):

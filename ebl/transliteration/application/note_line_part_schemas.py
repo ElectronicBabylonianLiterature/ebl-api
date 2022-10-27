@@ -11,6 +11,7 @@ from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
     LanguagePart,
+    ParagraphPart,
     StringPart,
 )
 
@@ -48,6 +49,12 @@ class BibliographyPartSchema(Schema):
         return BibliographyPart(data["reference"])
 
 
+class ParagraphPartSchema(Schema):
+    @post_load
+    def make_part(self, data, **kwargs) -> ParagraphPart:
+        return ParagraphPart()
+
+
 class OneOfNoteLinePartSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[Schema]] = {
@@ -55,4 +62,5 @@ class OneOfNoteLinePartSchema(OneOfSchema):
         "EmphasisPart": EmphasisPartSchema,
         "LanguagePart": LanguagePartSchema,
         "BibliographyPart": BibliographyPartSchema,
+        "ParagraphPart": ParagraphPartSchema,
     }

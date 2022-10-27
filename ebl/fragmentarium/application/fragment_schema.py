@@ -7,6 +7,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
+    Introduction,
     Measure,
     UncuratedReference,
     Scope,
@@ -14,6 +15,9 @@ from ebl.fragmentarium.domain.fragment import (
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnum
+from ebl.transliteration.application.note_line_part_schemas import (
+    OneOfNoteLinePartSchema,
+)
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
@@ -77,6 +81,15 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
+class IntroductionSchema(Schema):
+    text = fields.String(required=True)
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
+
+    @post_load
+    def make_introduction(self, data, **kwargs):
+        return Introduction(data["text"], tuple(data["parts"]))
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
@@ -113,6 +126,7 @@ class FragmentSchema(Schema):
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
+    introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
 
     @post_load
     def make_fragment(self, data, **kwargs):
