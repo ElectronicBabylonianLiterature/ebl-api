@@ -6,6 +6,8 @@ from marshmallow import EXCLUDE
 from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.query.query_result import QueryResult
+from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -427,3 +429,63 @@ class MongoFragmentRepository(FragmentRepository):
 
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
+
+    def query_lemmas(self, lemmas: Sequence[str], **kwargs) -> QueryResult:
+        operator: str = kwargs.get("operator", "or")
+        data = self._fragments.aggregate(
+            [
+                {
+                    "$match": {
+                        f"${operator}": [
+                            {"text.lines.content.uniqueLemma": {"$regex": lemma}}
+                            for lemma in lemmas
+                        ]
+                    }
+                },
+                {"$project": {"museumNumber": True, "line": "$text.lines.content"}},
+                {"$unwind": {"path": "$line", "includeArrayIndex": "lineIndex"}},
+                {"$unwind": {"path": "$line", "includeArrayIndex": "tokenIndex"}},
+                {
+                    "$project": {
+                        "_id": True,
+                        "lemmas": "$line.uniqueLemma",
+                        "lineIndex": True,
+                        "tokenIndex": True,
+                        "museumNumber": True,
+                    }
+                },
+                {"$unwind": "$lemmas"},
+                {"$match": {"lemmas": {"$regex": "^u I$"}}},
+                {
+                    "$group": {
+                        "_id": "$_id",
+                        "matchingLines": {"$addToSet": "$lineIndex"},
+                        "museumNumber": {"$first": "$museumNumber"},
+                    }
+                },
+                {"$unwind": "$matchingLines"},
+                {"$sort": {"matchingLines": 1}},
+                {
+                    "$group": {
+                        "_id": "$_id",
+                        "museumNumber": {"$first": "$museumNumber"},
+                        "matchingLines": {"$push": "$matchingLines"},
+                    }
+                },
+                {
+                    "$addFields": {
+                        "total": {"$size": "$matchingLines"},
+                    }
+                },
+                {"$sort": {"total": -1}},
+                {
+                    "$group": {
+                        "_id": null,
+                        "totalMatchingLines": {"$sum": "$total"},
+                        "items": {"$push": "$$ROOT"},
+                    }
+                },
+                {"$project": {"_id": False}},
+            ]
+        )
+        return QueryResultSchema().load(data)
