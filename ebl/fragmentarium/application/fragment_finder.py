@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Optional, Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dictionary.application.dictionary import Dictionary
@@ -34,8 +34,10 @@ class FragmentFinder:
         self._folios = folios
         self._parallel_injector = parallel_injector
 
-    def find(self, number: MuseumNumber) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number)
+    def find(
+        self, number: MuseumNumber, only_lines: Optional[Sequence[int]] = None
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number, only_lines)
         return (
             fragment.set_text(
                 self._parallel_injector.inject_transliteration(fragment.text)

@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Tuple
+from typing import List, Sequence, Tuple, Optional
 from ebl.common.query.query_result import QueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -34,7 +34,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_museum_number(self, number: MuseumNumber) -> Fragment:
+    def query_by_museum_number(
+        self, number: MuseumNumber, only_lines: Optional[Sequence[int]]
+    ) -> Fragment:
         ...
 
     @abstractmethod

@@ -1,5 +1,5 @@
 import re
-from typing import List, Sequence
+from typing import List, Sequence, Optional
 
 from marshmallow import EXCLUDE
 from pymongo.database import Database
@@ -29,7 +29,9 @@ class MongoAnnotationsRepository(AnnotationsRepository):
             True,
         )
 
-    def query_by_museum_number(self, number: MuseumNumber) -> Annotations:
+    def query_by_museum_number(
+        self, number: MuseumNumber, only_lines: Optional[Sequence[int]]
+    ) -> Annotations:
         try:
             result = self._collection.find_one({"fragmentNumber": str(number)})
 
