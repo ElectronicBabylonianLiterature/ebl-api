@@ -226,3 +226,9 @@ class MongoSignRepository(SignRepository):
             ]
         )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+
+    def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
+        cursor = self._collection.find_many(
+            {"logograms": {"$elemMatch": {"wordId": word_id}}}
+        )
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)

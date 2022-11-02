@@ -29,6 +29,9 @@ class SignsSearch:
                 ): lambda params: signs.search_composite_signs(
                     params["value"], params["subIndex"]
                 ),
+                frozenset(["wordId"]): lambda params: signs.search_by_lemma(
+                    params["wordId"]
+                ),
             }
         )
 
