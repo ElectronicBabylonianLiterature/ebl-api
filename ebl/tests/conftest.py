@@ -541,17 +541,10 @@ def signs():
     return [
         Sign(
             name,
-            tuple(
-                SignListRecord(list_name, number)
-                for list_name, number in lists
-            ),
-            tuple(
-                Value(value_name, sub_index)
-                for value_name, sub_index in values
-            ),
+            tuple(SignListRecord(list_name, number) for list_name, number in lists),
+            tuple(Value(value_name, sub_index) for value_name, sub_index in values),
             logograms=tuple(
-                Logogram(name, name, tuple(word_ids), name)
-                for word_ids in logograms
+                Logogram(name, name, tuple(word_ids), name) for word_ids in logograms
             ),
         )
         for name, values, lists, logograms in [
