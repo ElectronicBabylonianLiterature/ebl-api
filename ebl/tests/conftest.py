@@ -62,7 +62,7 @@ from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, Obje
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.sign import Sign, SignListRecord, Value
+from ebl.transliteration.domain.sign import Sign, SignListRecord, Value, Logogram
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -543,36 +543,45 @@ def signs():
             name,
             tuple(SignListRecord(list_name, number) for list_name, number in lists),
             tuple(Value(value_name, sub_index) for value_name, sub_index in values),
+            logograms=tuple(
+                Logogram(name, name, tuple(word_id for word_id in word_ids), name)
+                for word_ids in logograms
+            ),
         )
-        for name, values, lists in [
-            ("P₂", [(":", 1)], [("ABZ", "377n1")]),
-            ("KU", [("ku", 1)], [("KWU", "869")]),
-            ("NU", [("nu", 1)], [("ABZ", "075")]),
-            ("IGI", [("ši", 1), ("igi", 1)], [("HZL", "288"), ("ABZ", "207a/207b X")]),
-            ("DIŠ", [("ana", 1), ("1", 1), ("diš", 1)], []),
-            ("UD", [("ud", 1), ("u", 4), ("tu", 2)], []),
-            ("MI", [("mi", 1), ("gi", 6)], []),
-            ("KI", [("ki", 1)], []),
-            ("DU", [("du", 1)], []),
-            ("U", [("u", 1), ("10", 1)], [("ABZ", "411")]),
-            ("|U.U|", [("20", 1)], [("ABZ", "471")]),
-            ("BA", [("ba", 1), ("ku", 1)], []),
-            ("MA", [("ma", 1)], []),
-            ("TI", [("ti", 1)], []),
-            ("MU", [("mu", 1)], []),
-            ("TA", [("ta", 1)], []),
-            ("ŠU", [("šu", 1)], []),
-            ("BU", [("bu", 1), ("gid", 2)], []),
-            ("|(4×ZA)×KUR|", [("geštae", 1)], [("ABZ", "531+588")]),
-            ("|(AŠ&AŠ@180)×U|", [], []),
-            ("|A.EDIN.LAL|", [("ummu", 3)], []),
-            ("|HU.HI|", [("mat", 3)], [("ABZ", "081")]),
-            ("AŠ", [("ana", 3)], [("ABZ", "001")]),
-            ("EDIN", [("bil", None), ("bir", 4)], [("ABZ", "168")]),
-            ("|ŠU₂.3×AN|", [("kunga", 1)], []),
-            ("BUR₂", [("bul", 1)], [("ABZ", "11")]),
-            ("HU", [("u", 18)], [("ABZ", "78")]),
-            ("|URU×URUDA| ", [("bansur", 1)], [("ABZ", "41")]),
+        for name, values, lists, logograms in [
+            ("P₂", [(":", 1)], [("ABZ", "377n1")], [["lemmatu I"]]),
+            ("KU", [("ku", 1)], [("KWU", "869")], []),
+            ("NU", [("nu", 1)], [("ABZ", "075")], []),
+            (
+                "IGI",
+                [("ši", 1), ("igi", 1)],
+                [("HZL", "288"), ("ABZ", "207a/207b X")],
+                [],
+            ),
+            ("DIŠ", [("ana", 1), ("1", 1), ("diš", 1)], [], []),
+            ("UD", [("ud", 1), ("u", 4), ("tu", 2)], [], []),
+            ("MI", [("mi", 1), ("gi", 6)], [], []),
+            ("KI", [("ki", 1)], [], []),
+            ("DU", [("du", 1)], [], []),
+            ("U", [("u", 1), ("10", 1)], [("ABZ", "411")], []),
+            ("|U.U|", [("20", 1)], [("ABZ", "471")], []),
+            ("BA", [("ba", 1), ("ku", 1)], [], []),
+            ("MA", [("ma", 1)], [], []),
+            ("TI", [("ti", 1)], [], []),
+            ("MU", [("mu", 1)], [], []),
+            ("TA", [("ta", 1)], [], []),
+            ("ŠU", [("šu", 1)], [], []),
+            ("BU", [("bu", 1), ("gid", 2)], [], []),
+            ("|(4×ZA)×KUR|", [("geštae", 1)], [("ABZ", "531+588")], []),
+            ("|(AŠ&AŠ@180)×U|", [], [], []),
+            ("|A.EDIN.LAL|", [("ummu", 3)], [], []),
+            ("|HU.HI|", [("mat", 3)], [("ABZ", "081")], []),
+            ("AŠ", [("ana", 3)], [("ABZ", "001")], []),
+            ("EDIN", [("bil", None), ("bir", 4)], [("ABZ", "168")], []),
+            ("|ŠU₂.3×AN|", [("kunga", 1)], [], []),
+            ("BUR₂", [("bul", 1)], [("ABZ", "11")], []),
+            ("HU", [("u", 18)], [("ABZ", "78")], []),
+            ("|URU×URUDA| ", [("bansur", 1)], [("ABZ", "41")], []),
         ]
     ]
 

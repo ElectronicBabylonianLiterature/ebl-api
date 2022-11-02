@@ -170,8 +170,8 @@ class MongoSignRepository(SignRepository):
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
                         "LaBaSi": {"$first": "$LaBaSi"},
-                        "Logograms": {"$push": "$Logograms"},
-                        "Fossey": {"$push": "$Fossey"},
+                        "logograms": {"$first": "$logograms"},
+                        "fossey": {"$first": "$fossey"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }

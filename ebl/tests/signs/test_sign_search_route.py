@@ -28,7 +28,14 @@ def test_signs_not_found(client):
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [],
+                    "logograms": [
+                        {
+                            "logogram": "P₂",
+                            "atf": "P₂",
+                            "wordId": ["lemmatu I"],
+                            "schrammLogogramme": "P₂",
+                        }
+                    ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
@@ -43,7 +50,14 @@ def test_signs_not_found(client):
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [],
+                    "logograms": [
+                        {
+                            "logogram": "P₂",
+                            "atf": "P₂",
+                            "wordId": ["lemmatu I"],
+                            "schrammLogogramme": "P₂",
+                        }
+                    ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
@@ -58,7 +72,14 @@ def test_signs_not_found(client):
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [],
+                    "logograms": [
+                        {
+                            "logogram": "P₂",
+                            "atf": "P₂",
+                            "wordId": ["lemmatu I"],
+                            "schrammLogogramme": "P₂",
+                        }
+                    ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
@@ -73,7 +94,14 @@ def test_signs_not_found(client):
             [
                 {
                     "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [],
+                    "logograms": [
+                        {
+                            "logogram": "P₂",
+                            "atf": "P₂",
+                            "wordId": ["lemmatu I"],
+                            "schrammLogogramme": "P₂",
+                        }
+                    ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
