@@ -143,6 +143,15 @@ class ParagraphPart(MarkupPart):
         return "\n\n"
 
 
+@attr.s(frozen=True, auto_attribs=True)
+class UrlPart(TextPart):
+    url: str
+
+    @property
+    def value(self) -> str:
+        return "".join((f"@url{{{self.url}}}", f"{{{self.text}}}" if self.text else ""))
+
+
 def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]:
     return tuple(parts)
 

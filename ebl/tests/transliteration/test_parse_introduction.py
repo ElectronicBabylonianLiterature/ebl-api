@@ -8,6 +8,7 @@ from ebl.transliteration.domain.markup import (
     EmphasisPart,
     StringPart,
     ParagraphPart,
+    UrlPart,
 )
 
 
@@ -36,6 +37,24 @@ from ebl.transliteration.domain.markup import (
                 ParagraphPart(),
                 StringPart("Last."),
             ),
+        ),
+        (
+            "A bare link: @url{http://www.example.com}",
+            (
+                StringPart("A bare link: "),
+                UrlPart("", "http://www.example.com"),
+            ),
+        ),
+        (
+            "A link with @url{www.example.com}{a display text}",
+            (
+                StringPart("A link with "),
+                UrlPart("a display text", "www.example.com"),
+            ),
+        ),
+        (
+            "@url{www.example.com/#špecial cḫars}",
+            (UrlPart("", "www.example.com/#špecial cḫars"),),
         ),
     ],
 )
