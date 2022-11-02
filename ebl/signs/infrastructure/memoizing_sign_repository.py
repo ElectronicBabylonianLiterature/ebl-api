@@ -30,7 +30,7 @@ class MemoizingSignRepository(SignRepository):
         return self._search_by_lists_name(name, number)
 
     def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
-        return self._search_by_lemma(name, word_id)
+        return self._search_by_lemma(word_id)
 
     def search_include_homophones(self, reading) -> Sequence[Sign]:
         return self._search_include_homophones(reading)
