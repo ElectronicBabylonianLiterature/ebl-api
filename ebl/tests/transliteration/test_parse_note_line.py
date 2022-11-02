@@ -43,6 +43,7 @@ def expected_language_part(language: Language, transliteration: str) -> Language
         ("@bib{RN1@1\\}2}", (BibliographyPart.of(BibliographyId("RN1"), "1}2"),)),
         ("@bib{RN12\\@3@3}", (BibliographyPart.of(BibliographyId("RN12@3"), "3"),)),
         ("@bib{RN@1\\}\\@2}", (BibliographyPart.of(BibliographyId("RN"), "1}@2"),)),
+        ("@bib{RN}", (BibliographyPart.of(BibliographyId("RN"), ""),)),
         (
             "this is a note @i{italic text}@akk{kur}@sux{kur}",
             (

@@ -24,6 +24,8 @@ from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
 
+Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
+
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class AnnotationsService:

@@ -1,5 +1,6 @@
 from itertools import dropwhile
-from typing import Sequence
+from typing import Sequence, Iterator
+import re
 
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
@@ -13,7 +14,7 @@ from ebl.transliteration.domain.greek_tokens import GreekWord
 from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.markup import MarkupPart
+from ebl.transliteration.domain.markup import MarkupPart, ParagraphPart
 from ebl.transliteration.domain.note_line import NoteLine
 
 from ebl.transliteration.domain.parallel_line import ParallelLine
@@ -94,6 +95,21 @@ def parse_note_line(atf: str) -> NoteLine:
 def parse_markup(atf: str) -> Sequence[MarkupPart]:
     tree = MARKUP_PARSER.parse(atf)
     return LineTransformer().transform(tree)
+
+
+def split_paragraphs(atf: str) -> Iterator[str]:
+    for paragraph in re.split(r"\n\n+", atf.strip()):
+        yield " ".join(paragraph.split())
+
+
+def parse_introduction(atf: str) -> Sequence[MarkupPart]:
+    parts = []
+
+    for paragraph in split_paragraphs(atf):
+        if parts:
+            parts.append(ParagraphPart())
+        parts.extend(LineTransformer().transform(MARKUP_PARSER.parse(paragraph)))
+    return tuple(parts)
 
 
 def parse_parallel_line(atf: str) -> ParallelLine:

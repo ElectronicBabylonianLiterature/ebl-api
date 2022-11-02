@@ -3,7 +3,8 @@ import pytest
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Genre, NotLowestJoinError
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, NotLowestJoinError
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -221,3 +222,23 @@ def test_update_references_invalid(
 
     with pytest.raises(DataError):
         fragment_updater.update_references(number, references, user)
+
+
+def test_update_introduction(
+    fragment_updater: FragmentUpdater, user, fragment_repository, changelog, when
+):
+    fragment: Fragment = FragmentFactory.build()
+    number = fragment.number
+    introduction = "Test introduction"
+    updated_fragment = fragment.set_introduction(introduction)
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_introduction(updated_fragment).thenReturn()
+
+    result = fragment_updater.update_introduction(number, introduction, user)
+    assert result == (updated_fragment, False)

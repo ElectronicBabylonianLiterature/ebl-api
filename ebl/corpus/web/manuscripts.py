@@ -1,4 +1,6 @@
 import falcon
+from falcon_caching import Cache
+
 from ebl.corpus.web.chapter_schemas import (
     ApiChapterSchema,
     ApiManuscriptSchema,
@@ -19,8 +21,9 @@ class ManuscriptDtoSchema(Schema):
 
 
 class ManuscriptsResource:
-    def __init__(self, corpus: Corpus):
+    def __init__(self, corpus: Corpus, cache: Cache):
         self._corpus = corpus
+        self._cache = cache
 
     @falcon.before(require_scope, "write:texts")
     def on_get(
@@ -50,6 +53,7 @@ class ManuscriptsResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
+        self._cache.delete(str(chapter_id))
         dto = ManuscriptDtoSchema().load(req.media)
         updated_chapter = self._corpus.update_manuscripts(
             chapter_id,

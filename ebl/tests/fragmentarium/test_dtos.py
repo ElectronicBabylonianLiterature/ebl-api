@@ -15,12 +15,16 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
 )
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.application.fragment_schema import JoinsSchema
+from ebl.fragmentarium.application.fragment_schema import (
+    JoinsSchema,
+    IntroductionSchema,
+)
 from ebl.fragmentarium.domain.joins import Joins
+from ebl.fragmentarium.domain.fragment import Fragment
 
 
 def test_create_response_dto(user):
-    lemmatized_fragment = LemmatizedFragmentFactory.build(
+    lemmatized_fragment: Fragment = LemmatizedFragmentFactory.build(
         joins=Joins(((JoinFactory.build(),),))
     )
     has_photo = True
@@ -88,6 +92,7 @@ def test_create_response_dto(user):
                 ]
                 for line_to_vec_encodings in lemmatized_fragment.line_to_vec
             ],
+            "introduction": IntroductionSchema().dump(lemmatized_fragment.introduction),
         },
         pydash.is_none,
     )
