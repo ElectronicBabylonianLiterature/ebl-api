@@ -3,7 +3,7 @@ from typing import Tuple, Sequence
 
 import attr
 from PIL import Image
-Image.MAX_IMAGE_PIXELS = None
+Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
 
 from ebl.changelog import Changelog
 from ebl.ebl_ai_client import EblAiClient
