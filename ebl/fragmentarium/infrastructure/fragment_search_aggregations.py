@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict, Sequence
+from typing import Tuple, List, Dict
 from enum import Enum
 
 VOCAB_PATH = "vocabulary"
@@ -11,27 +11,6 @@ class QueryType(Enum):
     LINE = "line"
     PHRASE = "phrase"
     LEMMA = "lemma"
-
-
-def create_phrase_matcher(phrase: Sequence[str]) -> bool:
-
-    phrase_len = len(phrase)
-
-    def phrase_matcher(sequence):
-        sequence_len = len(sequence)
-        if sequence_len < phrase_len:
-            return False
-
-        for i in range(sequence_len - phrase_len + 1):
-            if all(
-                lemma in lemmas
-                for lemma, lemmas in zip(phrase, sequence[i : i + phrase_len])
-            ):
-                return True
-
-        return False
-
-    return phrase_matcher
 
 
 def _flatten_vocabulary() -> List[dict]:
@@ -86,7 +65,11 @@ def _arrange_result(include_lemma_sequences=False) -> List[dict]:
         {
             "$group": {
                 "_id": None,
-                "totalMatchingLines": {"$sum": "$total"},
+                **(
+                    {}
+                    if include_lemma_sequences
+                    else {"totalMatchingLines": {"$sum": "$total"}}
+                ),
                 "items": {"$push": "$$ROOT"},
             }
         },

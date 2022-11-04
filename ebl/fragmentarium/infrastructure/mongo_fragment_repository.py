@@ -25,8 +25,8 @@ from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     QueryType,
     create_search_aggregation,
-    create_phrase_matcher,
 )
+from ebl.fragmentarium.infrastructure.phrase_matcher import PhraseMatcher
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -485,26 +485,35 @@ class MongoFragmentRepository(FragmentRepository):
         data = next(data, {})
 
         if query_operator == QueryType.PHRASE:
-            has_phrase = create_phrase_matcher(lemmas)
+            phrase_matcher = PhraseMatcher(phrase=lemmas)
+
             matching_items = list()
             total_matching_lines = 0
 
             for query_item in data["items"]:
-                lines, lemma_lines = query_item["matchingLines"], query_item["lemmaSequences"]
-                matching_lines = [i for i, lemmas in zip(lines, lemma_lines) if has_phrase(lemmas)]
-                
+                lines, lemma_sequences = (
+                    query_item["matchingLines"],
+                    query_item["lemmaSequences"],
+                )
+                total = 0
+                matching_lines = []
+
+                for i, sequence in zip(lines, lemma_sequences):
+                    if phrase_matcher.matches(sequence):
+                        matching_lines.append(i)
+                        total += 1
+
                 if not matching_lines:
                     continue
-                
+
                 query_item["matchingLines"] = matching_lines
-                total = len(matching_lines)
                 query_item["total"] = total
-                
+
                 del query_item["lemmaSequences"]
-                
+
                 total_matching_lines += total
                 matching_items.append(query_item)
-            
+
             data["items"] = matching_items
             data["totalMatchingLines"] = total_matching_lines
 
