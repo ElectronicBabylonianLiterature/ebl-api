@@ -11,6 +11,7 @@ from ebl.transliteration.domain.markup import (
     LanguagePart,
     MarkupPart,
     StringPart,
+    UrlPart,
 )
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.tokens import Token as EblToken
@@ -44,6 +45,13 @@ class MarkupTransformer(Transformer):
         )
 
     def ebl_atf_text_line__note_text(self, children) -> str:
+        return "".join(children)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__url_part(self, url: str, note_text="") -> UrlPart:
+        return UrlPart(note_text, url)
+
+    def ebl_atf_text_line__url(self, children) -> str:
         return "".join(children)
 
 

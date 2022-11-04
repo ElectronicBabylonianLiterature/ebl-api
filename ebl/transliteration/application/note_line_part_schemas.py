@@ -13,6 +13,7 @@ from ebl.transliteration.domain.markup import (
     LanguagePart,
     ParagraphPart,
     StringPart,
+    UrlPart,
 )
 
 
@@ -55,6 +56,15 @@ class ParagraphPartSchema(Schema):
         return ParagraphPart()
 
 
+class UrlPartSchema(Schema):
+    url = fields.Url(required=True)
+    text = fields.String(load_default="")
+
+    @post_load
+    def make_part(self, data, **kwargs) -> UrlPart:
+        return UrlPart(**data)
+
+
 class OneOfNoteLinePartSchema(OneOfSchema):
     type_field = "type"
     type_schemas: Mapping[str, Type[Schema]] = {
@@ -63,4 +73,5 @@ class OneOfNoteLinePartSchema(OneOfSchema):
         "LanguagePart": LanguagePartSchema,
         "BibliographyPart": BibliographyPartSchema,
         "ParagraphPart": ParagraphPartSchema,
+        "UrlPart": UrlPartSchema,
     }
