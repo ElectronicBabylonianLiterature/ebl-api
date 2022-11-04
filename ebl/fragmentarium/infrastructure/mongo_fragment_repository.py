@@ -22,6 +22,13 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
+    simple_search,
+    search_or,
+    search_lines,
+    search_and,
+    search_and_filter,
+)
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -466,68 +473,45 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query_lemmas(self, lemmas: Sequence[str], **kwargs) -> QueryResult:
-        operator: str = kwargs.get("operator", "or")
-        data = self._fragments.aggregate(
-            [
-                {
-                    "$match": {
-                        f"${operator}": [
-                            {"text.lines.content.uniqueLemma": {"$regex": lemma}}
-                            for lemma in lemmas
-                        ]
-                    }
-                },
-                {"$project": {"museumNumber": True, "line": "$text.lines.content"}},
-                {"$unwind": {"path": "$line", "includeArrayIndex": "lineIndex"}},
-                {"$unwind": {"path": "$line", "includeArrayIndex": "tokenIndex"}},
-                {
-                    "$project": {
-                        "_id": True,
-                        "lemmas": "$line.uniqueLemma",
-                        "lineIndex": True,
-                        "tokenIndex": True,
-                        "museumNumber": True,
-                    }
-                },
-                {"$unwind": "$lemmas"},
-                {
-                    "$match": {
-                        f"${operator}": [
-                            {"lemmas": {"$regex": lemma}} for lemma in lemmas
-                        ]
-                    }
-                },
-                {
-                    "$group": {
-                        "_id": "$_id",
-                        "matchingLines": {"$addToSet": "$lineIndex"},
-                        "museumNumber": {"$first": "$museumNumber"},
-                    }
-                },
-                {"$unwind": "$matchingLines"},
-                {"$sort": {"matchingLines": 1}},
-                {
-                    "$group": {
-                        "_id": "$_id",
-                        "museumNumber": {"$first": "$museumNumber"},
-                        "matchingLines": {"$push": "$matchingLines"},
-                    }
-                },
-                {
-                    "$addFields": {
-                        "total": {"$size": "$matchingLines"},
-                    }
-                },
-                {"$sort": {"total": -1}},
-                {
-                    "$group": {
-                        "_id": None,
-                        "totalMatchingLines": {"$sum": "$total"},
-                        "items": {"$push": "$$ROOT"},
-                    }
-                },
-                {"$project": {"_id": False}},
-            ]
-        )
-        return QueryResultSchema().load(next(data))
+    def query_lemmas(self, query: dict) -> QueryResult:
+        search_operator, lemmas = next(query.items())
+        lemmas = lemmas.split("+")
+
+        if search_operator == "lemma":
+            data = self._fragments.aggregate(
+                search_and_filter(
+                    line_match={"text.lines.content.uniqueLemma": lemmas[0]},
+                    vocabulary_match={"_vocabulary": lemmas[0]},
+                )
+            )
+        else:
+            if search_operator == "and":
+                data = self._fragments.aggregate(
+                    search_and_filter(
+                        {"text.lines.content.uniqueLemma": {"$all": lemmas}},
+                        {"$or": [{"_vocabulary": lemma} for lemma in lemmas]},
+                    )
+                )
+            elif search_operator == "or":
+                data = self._fragments.aggregate(
+                    search_and_filter(
+                        {
+                            "$or": [
+                                {"text.lines.content.uniqueLemma": lemma}
+                                for lemma in lemmas
+                            ]
+                        },
+                        {"$or": [{"_vocabulary": lemma} for lemma in lemmas]},
+                    )
+                )
+            elif search_operator in ["line", "phrase"]:
+                data = self._fragments.aggregate(search_lines(lemmas))
+
+                if search_operator == "phrase":
+                    data = (d for d in data)  # TODO: add filter logic
+            else:
+                raise TypeError(f"Unknown search operator: {search_operator}")
+
+        data = next(data, {})
+
+        return QueryResultSchema().load(data) if data else QueryResult([], 0)
