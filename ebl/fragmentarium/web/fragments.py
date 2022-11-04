@@ -1,6 +1,6 @@
 import falcon
 from falcon import Request, Response
-from typing import Sequence
+from typing import Sequence, Union
 from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -23,10 +23,10 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        lines = req.params.get("lines")
+        lines: Union[Sequence[str], None] = req.params.get("lines")
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
-            only_lines=[int(i) for i in lines] if lines else lines,
+            lines=[int(i) for i in lines] if lines is not None else lines,
         )
         if fragment.authorized_scopes:
             check_fragment_scope(req.context.user, fragment.authorized_scopes)
@@ -38,8 +38,4 @@ class FragmentsQueryResource:
         self._repository = repository
 
     def on_get(self, req: Request, resp: Response):
-        lemmas = req.params["lemmas"].split("+")
-        operator = req.params.get("operator", "or")
-        resp.media = QueryResultSchema().dump(
-            self._repository.query_lemmas(lemmas, operator=operator)
-        )
+        resp.media = QueryResultSchema().dump(self._repository.query_lemmas(req.params))

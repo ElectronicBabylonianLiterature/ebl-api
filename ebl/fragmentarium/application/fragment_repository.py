@@ -35,7 +35,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_by_museum_number(
-        self, number: MuseumNumber, only_lines: Optional[Sequence[int]]
+        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
     ) -> Fragment:
         ...
 
@@ -103,5 +103,5 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_lemmas(self, lemmas: Sequence[str], **kwargs) -> QueryResult:
+    def query_lemmas(self, query: dict) -> QueryResult:
         ...

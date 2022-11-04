@@ -1,21 +1,19 @@
-from typing import Tuple, List
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
-    MongoFragmentRepository,
-)
-from enum import Enum, auto
+from typing import Tuple, List, Dict
+from enum import Enum
+
+VOCAB_PATH = "vocabulary"
+LEMMA_PATH = "text.lines.content.uniqueLemma"
 
 
-class SearchOperator(Enum):
+class QueryType(Enum):
     AND = "and"
     OR = "or"
     LINE = "line"
     PHRASE = "phrase"
     LEMMA = "lemma"
 
-def get_matchers(_operator, lemmas) -> Tuple[dict, dict]:
-    pass
 
-def _flatten_vocabulary():
+def _flatten_vocabulary() -> List[dict]:
     return [
         {"$project": {"museumNumber": 1, "line": "$text.lines.content"}},
         {"$unwind": {"path": "$line", "includeArrayIndex": "lineIndex"}},
@@ -30,7 +28,7 @@ def _flatten_vocabulary():
         },
         {
             "$addFields": {
-                "_vocabulary": {
+                VOCAB_PATH: {
                     "$setIntersection": {
                         "$reduce": {
                             "input": "$lemmas",
@@ -44,7 +42,7 @@ def _flatten_vocabulary():
     ]
 
 
-def _create_query_result():
+def _arrange_result() -> List[dict]:
     return [
         {
             "$group": {
@@ -58,6 +56,7 @@ def _create_query_result():
                 "total": {"$size": "$matchingLines"},
             }
         },
+        {"$sort": {"total": -1}},
         {
             "$group": {
                 "_id": None,
@@ -69,50 +68,39 @@ def _create_query_result():
     ]
 
 
-def search_and_filter(line_match: dict, vocabulary_match: dict):
+def search_and_filter(line_matcher: dict, vocabulary_matcher: dict) -> List[dict]:
     return [
-        {"$match": line_match},
+        {"$match": line_matcher},
         *_flatten_vocabulary(),
-        {"$match": vocabulary_match},
-        *_create_query_result(),
+        {"$match": vocabulary_matcher},
+        *_arrange_result(),
     ]
 
 
-def simple_search(lemma: str) -> List[dict]:
-    return [
-        {"$match": {"text.lines.content.uniqueLemma": lemma}},
-        *_flatten_vocabulary(),
-        {"$match": {"_vocabulary": lemma}},
-        *_create_query_result(),
-    ]
+def create_search_aggregation(
+    search_operator: QueryType, lemmas: List[str]
+) -> List[dict]:
+    matchers: Dict[QueryType, Tuple[dict, dict]] = {
+        QueryType.LEMMA: (
+            {LEMMA_PATH: lemmas[0]},
+            {VOCAB_PATH: lemmas[0]},
+        ),
+        QueryType.AND: (
+            {LEMMA_PATH: {"$all": lemmas}},
+            {"$or": [{VOCAB_PATH: lemma} for lemma in lemmas]},
+        ),
+        QueryType.OR: (
+            {"$or": [{LEMMA_PATH: lemma} for lemma in lemmas]},
+            {"$or": [{VOCAB_PATH: lemma} for lemma in lemmas]},
+        ),
+        QueryType.LINE: (
+            {LEMMA_PATH: {"$all": lemmas}},
+            {VOCAB_PATH: {"$all": lemmas}},
+        ),
+        QueryType.PHRASE: (
+            {LEMMA_PATH: {"$all": lemmas}},
+            {VOCAB_PATH: {"$all": lemmas}},
+        ),
+    }
 
-
-def search_or(lemmas: List[str]) -> List[dict]:
-    return [
-        {
-            "$match": {
-                "$or": [{"text.lines.content.uniqueLemma": lemma} for lemma in lemmas]
-            }
-        },
-        *_flatten_vocabulary(),
-        {"$match": {"$or": [{"_vocabulary": lemma} for lemma in lemmas]}},
-        *_create_query_result(),
-    ]
-
-
-def search_and(lemmas: List[str]) -> List[dict]:
-    return [
-        {"$match": {"text.lines.content.uniqueLemma": {"$all": lemmas}}},
-        *_flatten_vocabulary(),
-        {"$match": {"$or": [{"_vocabulary": lemma} for lemma in lemmas]}},
-        *_create_query_result(),
-    ]
-
-
-def search_lines(lemmas: List[str]) -> List[dict]:
-    return [
-        {"$match": {"text.lines.content.uniqueLemma": {"$all": lemmas}}},
-        *_flatten_vocabulary(),
-        {"$match": {"_vocabulary": {"$all": lemmas}}},
-        *_create_query_result(),
-    ]
+    return search_and_filter(*matchers[search_operator])

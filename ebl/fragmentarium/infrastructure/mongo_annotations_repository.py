@@ -30,7 +30,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         )
 
     def query_by_museum_number(
-        self, number: MuseumNumber, only_lines: Optional[Sequence[int]]
+        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
     ) -> Annotations:
         try:
             result = self._collection.find_one({"fragmentNumber": str(number)})

@@ -1,5 +1,5 @@
 import operator
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, cast
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -23,12 +23,10 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    simple_search,
-    search_or,
-    search_lines,
-    search_and,
-    search_and_filter,
+    QueryType,
+    create_search_aggregation,
 )
+
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -210,13 +208,12 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_by_museum_number(
-        self, number: MuseumNumber, only_lines: Optional[Sequence[int]] = None
+        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
     ):
-        print("only:", only_lines)
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *filter_fragment_lines(only_lines),
+                *filter_fragment_lines(lines),
                 *join_reference_documents(),
                 *join_joins(),
             ]
@@ -473,44 +470,16 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query_lemmas(self, query: dict) -> QueryResult:
-        search_operator, lemmas = next(query.items())
-        lemmas = lemmas.split("+")
+    def query_lemmas(self, query: Dict[str, str]) -> QueryResult:
 
-        if search_operator == "lemma":
-            data = self._fragments.aggregate(
-                search_and_filter(
-                    line_match={"text.lines.content.uniqueLemma": lemmas[0]},
-                    vocabulary_match={"_vocabulary": lemmas[0]},
-                )
-            )
-        else:
-            if search_operator == "and":
-                data = self._fragments.aggregate(
-                    search_and_filter(
-                        {"text.lines.content.uniqueLemma": {"$all": lemmas}},
-                        {"$or": [{"_vocabulary": lemma} for lemma in lemmas]},
-                    )
-                )
-            elif search_operator == "or":
-                data = self._fragments.aggregate(
-                    search_and_filter(
-                        {
-                            "$or": [
-                                {"text.lines.content.uniqueLemma": lemma}
-                                for lemma in lemmas
-                            ]
-                        },
-                        {"$or": [{"_vocabulary": lemma} for lemma in lemmas]},
-                    )
-                )
-            elif search_operator in ["line", "phrase"]:
-                data = self._fragments.aggregate(search_lines(lemmas))
+        cmd, _lemmas = next(iter(query.items()))
 
-                if search_operator == "phrase":
-                    data = (d for d in data)  # TODO: add filter logic
-            else:
-                raise TypeError(f"Unknown search operator: {search_operator}")
+        search_operator: QueryType = QueryType[cmd.upper()]
+        lemmas: list = _lemmas.split("+")
+
+        data = self._fragments.aggregate(
+            create_search_aggregation(search_operator, lemmas)
+        )
 
         data = next(data, {})
 

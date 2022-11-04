@@ -1,4 +1,3 @@
-from typing import List
 from marshmallow import Schema, fields, post_load
 from ebl.common.query.query_result import QueryItem, QueryResult
 
@@ -7,8 +6,12 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 
 class QueryItemSchema(Schema):
     id_ = fields.String(data_key="_id")
-    matching_lines = fields.List(fields.Integer(), required=True, data_key="matchingLines")
-    museum_number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
+    matching_lines = fields.List(
+        fields.Integer(), required=True, data_key="matchingLines"
+    )
+    museum_number = fields.Nested(
+        MuseumNumberSchema, required=True, data_key="museumNumber"
+    )
     total = fields.Integer(required=True)
 
     @post_load
