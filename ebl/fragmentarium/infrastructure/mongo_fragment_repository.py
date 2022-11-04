@@ -487,7 +487,7 @@ class MongoFragmentRepository(FragmentRepository):
         if query_operator == QueryType.PHRASE:
             phrase_matcher = PhraseMatcher(phrase=lemmas)
 
-            matching_items = list()
+            matching_items = []
             total_matching_lines = 0
 
             for query_item in data["items"]:
