@@ -10,6 +10,7 @@ class QueryItem:
     museum_number: MuseumNumber
     matching_lines: Sequence[int]
     total: int
+    lemma_sequences: Sequence[Sequence[Sequence[str]]] = attr.ib(default=tuple())
 
 
 @attr.s(auto_attribs=True, frozen=True)

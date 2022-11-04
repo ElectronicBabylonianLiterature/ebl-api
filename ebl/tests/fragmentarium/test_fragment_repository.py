@@ -726,7 +726,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"and": "uk I+kur II+ap III"},
+            {"and": "kur II+uk I+ap III"},
             QueryResult(
                 [
                     QueryItem(
@@ -737,6 +737,27 @@ def test_update_update_references(fragment_repository):
                     )
                 ],
                 1,
+            ),
+        ),
+        (
+            {"phrase": "uk I+kur II"},
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[1],
+                        MUSEUM_NUMBERS[1],
+                        (0,),
+                        1,
+                    )
+                ],
+                1,
+            ),
+        ),
+        (
+            {"phrase": "uk I+ap III"},
+            QueryResult(
+                [],
+                0,
             ),
         ),
     ],

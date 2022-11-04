@@ -12,11 +12,17 @@ class QueryItemSchema(Schema):
     museum_number = fields.Nested(
         MuseumNumberSchema, required=True, data_key="museumNumber"
     )
+    lemma_sequences = fields.List(
+        fields.List(fields.List(fields.String())),
+        load_default=tuple(),
+        data_key="lemmaSequences",
+    )
     total = fields.Integer(required=True)
 
     @post_load
     def make_query_item(self, data, **kwargs) -> QueryItem:
         data["matching_lines"] = tuple(data["matching_lines"])
+        data["lemma_sequences"] = tuple(data["lemma_sequences"])
         return QueryItem(**data)
 
 
