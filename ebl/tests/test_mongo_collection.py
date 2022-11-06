@@ -58,14 +58,14 @@ def test_find_many(collection):
     collection.insert_one(document_match2)
     collection.insert_one(document_no_match)
 
-    assert [document for document in collection.find_many({"data": "payload"})] == [
+    assert list(collection.find_many({"data": "payload"})) == [
         document_match1,
         document_match2,
     ]
 
 
 def test_find_many_document_not_found(collection):
-    assert list(collection.find_many({})) == []
+    assert not list(collection.find_many({}))
 
 
 def test_aggregate(collection):
@@ -76,9 +76,10 @@ def test_aggregate(collection):
     collection.insert_one(document_match2)
     collection.insert_one(document_no_match)
 
-    assert [
-        document for document in collection.aggregate([{"$match": {"data": "payload"}}])
-    ] == [document_match1, document_match2]
+    assert list(collection.aggregate([{"$match": {"data": "payload"}}])) == [
+        document_match1,
+        document_match2,
+    ]
 
 
 def test_update(collection):
