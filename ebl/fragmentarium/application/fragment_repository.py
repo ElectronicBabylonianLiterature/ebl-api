@@ -97,6 +97,7 @@ class FragmentRepository(ABC):
     def update_introduction(self, fragment: Fragment) -> None:
         ...
 
+    @abstractmethod
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
     ) -> Tuple[Sequence[Fragment], int]:
