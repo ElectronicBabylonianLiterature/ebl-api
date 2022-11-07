@@ -57,7 +57,7 @@ class ParagraphPartSchema(Schema):
 
 
 class UrlPartSchema(Schema):
-    url = fields.Url(required=True)
+    url = fields.String(required=True)
     text = fields.String(load_default="")
 
     @post_load
