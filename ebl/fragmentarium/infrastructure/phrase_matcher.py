@@ -38,38 +38,41 @@ class PhraseMatcher:
         return False
 
 
+def get_matching_lines(
+    lines: Sequence[int],
+    lemma_sequences: Sequence[LemmaLine],
+    phrase_matcher: PhraseMatcher,
+) -> Tuple[Sequence[int], int]:
+    total = 0
+    matching_lines = []
+
+    for i, sequence in zip(lines, lemma_sequences):
+        if phrase_matcher.matches(sequence):
+            matching_lines.append(i)
+            total += 1
+
+    return matching_lines, total
+
+
 def filter_query_results(data: dict, phrase: Sequence[str]):
 
     phrase_matcher = PhraseMatcher(phrase)
     matching_items = []
     total_matching_lines = 0
 
-    def get_matching_lines(
-        lines: Sequence[int], lemma_sequences: Sequence[LemmaLine]
-    ) -> Tuple[Sequence[int], int]:
-        total = 0
-        matching_lines = []
-
-        for i, sequence in zip(lines, lemma_sequences):
-            if phrase_matcher.matches(sequence):
-                matching_lines.append(i)
-                total += 1
-
-        return matching_lines, total
-
     for query_item in data["items"]:
 
         matching_lines, total = get_matching_lines(
-            query_item["matchingLines"], query_item.pop("lemmaSequences")
+            query_item["matchingLines"],
+            query_item.pop("lemmaSequences"),
+            phrase_matcher,
         )
 
-        if total == 0:
-            continue
+        if total > 0:
+            matching_items.append(
+                {**query_item, "matchingLines": matching_lines, "total": total}
+            )
 
-        matching_items.append(
-            {**query_item, "matchingLines": matching_lines, "total": total}
-        )
-
-        total_matching_lines += total
+            total_matching_lines += total
 
     return {"items": matching_items, "totalMatchingLines": total_matching_lines}
