@@ -482,9 +482,7 @@ class MongoFragmentRepository(FragmentRepository):
             create_search_aggregation(query_operator, lemmas)
         )
 
-        data = next(data, {})
-
-        if data:
+        if data := next(data, {}):
             if query_operator == QueryType.PHRASE:
                 data = filter_query_results(data, lemmas)
 

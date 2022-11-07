@@ -19,11 +19,10 @@ class PhraseMatcher:
         self._phrase_len = len(phrase)
 
     def _is_match(self, line: LemmaLine) -> bool:
-        for combination in product(*(lemma or [""] for lemma in line)):
-            if self._phrase == combination:
-                return True
-
-        return False
+        return any(
+            self._phrase == combination
+            for combination in product(*(lemma or [""] for lemma in line))
+        )
 
     def matches(self, line: LemmaLine) -> bool:
         line = list(
