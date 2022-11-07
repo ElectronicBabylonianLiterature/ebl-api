@@ -1,4 +1,4 @@
-from typing import Sequence, Iterable
+from typing import Sequence, Iterable, Tuple
 from itertools import tee, dropwhile, product
 
 
@@ -44,9 +44,9 @@ def filter_query_results(data: dict, phrase: Sequence[str]):
     matching_items = []
     total_matching_lines = 0
 
-    for query_item in data["items"]:
-        lines = query_item["matchingLines"]
-        lemma_sequences: Sequence[LemmaLine] = query_item["lemmaSequences"]
+    def get_matching_lines(
+        lines: Sequence[int], lemma_sequences: Sequence[LemmaLine]
+    ) -> Tuple[Sequence[int], int]:
         total = 0
         matching_lines = []
 
@@ -55,18 +55,21 @@ def filter_query_results(data: dict, phrase: Sequence[str]):
                 matching_lines.append(i)
                 total += 1
 
-        if not matching_lines:
+        return matching_lines, total
+
+    for query_item in data["items"]:
+
+        matching_lines, total = get_matching_lines(
+            query_item["matchingLines"], query_item.pop("lemmaSequences")
+        )
+
+        if total == 0:
             continue
 
-        query_item["matchingLines"] = matching_lines
-        query_item["total"] = total
-
-        del query_item["lemmaSequences"]
+        matching_items.append(
+            {**query_item, "matchingLines": matching_lines, "total": total}
+        )
 
         total_matching_lines += total
-        matching_items.append(query_item)
 
-    data["items"] = matching_items
-    data["totalMatchingLines"] = total_matching_lines
-
-    return data
+    return {"items": matching_items, "totalMatchingLines": total_matching_lines}
