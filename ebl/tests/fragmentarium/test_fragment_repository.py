@@ -774,13 +774,12 @@ def test_query_lemmas(
         ),
     )
     fragment = LemmatizedFragmentFactory.build(number=MUSEUM_NUMBERS[0])
-    fragment2 = attr.evolve(
+    fragment_with_phrase = attr.evolve(
         fragment,
         number=MUSEUM_NUMBERS[1],
         text=attr.evolve(fragment.text, lines=[line_with_lemmas]),
     )
     fragment_repository.create(fragment)
-    fragment_repository.create(fragment2)
+    fragment_repository.create(fragment_with_phrase)
 
-    result = fragment_repository.query_lemmas(query)
-    assert result == expected
+    assert fragment_repository.query_lemmas(query) == expected

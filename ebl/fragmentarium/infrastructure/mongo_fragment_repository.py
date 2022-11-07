@@ -26,7 +26,7 @@ from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     QueryType,
     create_search_aggregation,
 )
-from ebl.fragmentarium.infrastructure.phrase_matcher import PhraseMatcher
+from ebl.fragmentarium.infrastructure.phrase_matcher import filter_query_results
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -484,37 +484,11 @@ class MongoFragmentRepository(FragmentRepository):
 
         data = next(data, {})
 
-        if query_operator == QueryType.PHRASE:
-            phrase_matcher = PhraseMatcher(phrase=lemmas)
+        if data:
+            if query_operator == QueryType.PHRASE:
+                data = filter_query_results(data, lemmas)
 
-            matching_items = []
-            total_matching_lines = 0
+            return QueryResultSchema().load(data)
 
-            for query_item in data["items"]:
-                lines, lemma_sequences = (
-                    query_item["matchingLines"],
-                    query_item["lemmaSequences"],
-                )
-                total = 0
-                matching_lines = []
-
-                for i, sequence in zip(lines, lemma_sequences):
-                    if phrase_matcher.matches(sequence):
-                        matching_lines.append(i)
-                        total += 1
-
-                if not matching_lines:
-                    continue
-
-                query_item["matchingLines"] = matching_lines
-                query_item["total"] = total
-
-                del query_item["lemmaSequences"]
-
-                total_matching_lines += total
-                matching_items.append(query_item)
-
-            data["items"] = matching_items
-            data["totalMatchingLines"] = total_matching_lines
-
-        return QueryResultSchema().load(data) if data else QueryResult([], 0)
+        else:
+            return QueryResult([], 0)
