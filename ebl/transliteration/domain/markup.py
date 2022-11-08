@@ -129,7 +129,8 @@ class BibliographyPart(MarkupPart):
     def value(self) -> str:
         id = escape(self.reference.id)
         pages = escape(self.reference.pages)
-        pages = '@'+pages if pages else pages
+        pages = "@" + pages if pages else pages
+
         return f"@bib{{{id}{pages}}}"
 
     @staticmethod
