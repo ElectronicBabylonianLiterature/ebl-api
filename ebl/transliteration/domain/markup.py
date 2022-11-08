@@ -128,9 +128,9 @@ class BibliographyPart(MarkupPart):
     @property
     def value(self) -> str:
         id = escape(self.reference.id)
-        pages = escape(self.reference.pages)
-        pages = '@'+pages if pages else pages
-        return f"@bib{{{id}{pages}}}"
+        pages = f"@{escape(self.reference.pages)}"
+
+        return f"@bib{{{id}{pages if pages != '@' else ''}}}"
 
     @staticmethod
     def of(id: BibliographyId, pages: str) -> "BibliographyPart":
