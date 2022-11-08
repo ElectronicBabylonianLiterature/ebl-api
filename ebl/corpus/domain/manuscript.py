@@ -98,6 +98,12 @@ class Period(SiglumEnumWithParent):
     PARTHIAN = ("Parthian", "Par", "Late Babylonian")
     UNCERTAIN = ("Uncertain", "Unc", None)
     NONE = ("None", "", None)
+    URUK_IV = ("Uruk IV", "Uruk4", None)
+    URUK_III_JEMDET_NASR = ("Uruk III/Jemdet Nasr", "JN", None)
+    ED_I_II = ("ED I/II", "ED1-2", None)
+    FARA = ("Fara", "Fara", None)
+    PRESARGONIC = ("Presargonic", "PSarg", None)
+    SARGONIC = ("Sargonic", "Sarg", None)
 
 
 @attr.s(auto_attribs=True, frozen=True)
