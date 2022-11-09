@@ -1,6 +1,6 @@
 import attr
 import pytest
-from ebl.common.period import Period
+from ebl.common.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import (
     Chapter,
@@ -14,7 +14,6 @@ from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
-    PeriodModifier,
     Provenance,
     Siglum,
 )
