@@ -179,8 +179,9 @@ parallel-text = genre, ' ', category, '.', index, ' ',
 genre = 'L' | 'D' | 'Lex' | 'Med'
 category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
            (* Must be a valid numeral. *)
-stage = 'Ur3' | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA'
-      | 'NB'  | 'LB'  | 'Per' | 'Hel' | 'Par' | 'Unc' | 'SB';
+stage = 'Ur3'  | 'OA'  | 'OB'  | 'MB'  | 'MA'  | 'Hit' | 'NA' | 'NB'  | 'LB' |
+        'Per'  | 'Hel' | 'Par' | 'Uruk4' | 'JN' | 'ED1-2' |
+        'Fara' | 'PSarg' | 'Sarg' | 'Unc' | 'SB';
 version  = '"', { any-character }-, '"';
 chapter =  '"', { any-character }-, '"';
 
