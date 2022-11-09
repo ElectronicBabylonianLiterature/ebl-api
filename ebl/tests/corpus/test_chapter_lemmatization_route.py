@@ -13,7 +13,7 @@ from ebl.tests.corpus.support import (
     create_chapter_dto,
     create_chapter_url,
 )
-from ebl.tests.factories.corpus import ChapterFactory, TextFactory
+from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text_line import TextLine
@@ -41,21 +41,13 @@ DTO = {
 }
 
 
-def test_updating_lemmatization_invalidates_chapter_display_cache(
-    cached_client, bibliography, sign_repository, signs, text_repository
+def test_updating_lemmatization(
+    client, bibliography, sign_repository, signs, text_repository
 ):
     allow_signs(signs, sign_repository)
     chapter: Chapter = ChapterFactory.build()
-    text = TextFactory.build(
-        genre=chapter.text_id.genre,
-        category=chapter.text_id.category,
-        index=chapter.text_id.index,
-    )
-    text_repository.create(text)
     allow_references(chapter, bibliography)
     text_repository.create_chapter(chapter)
-    first_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
-    assert first_result.status == falcon.HTTP_OK
     updated_chapter = attr.evolve(
         chapter,
         lines=(
@@ -125,21 +117,17 @@ def test_updating_lemmatization_invalidates_chapter_display_cache(
 
     expected = create_chapter_dto(updated_chapter)
 
-    post_result = cached_client.simulate_post(
+    post_result = client.simulate_post(
         create_chapter_url(chapter, "/lemmatization"), body=json.dumps(DTO)
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected
 
-    get_result = cached_client.simulate_get(create_chapter_url(chapter))
+    get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == expected
-
-    second_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
-    assert second_result.status == falcon.HTTP_OK
-    assert first_result.json != second_result.json
 
 
 def test_updating_invalid_stage(
