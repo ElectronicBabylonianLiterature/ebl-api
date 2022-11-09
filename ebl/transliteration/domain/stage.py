@@ -18,8 +18,8 @@ class Stage(Enum):
     PARTHIAN = "Parthian"
     UNCERTAIN = "Uncertain"
     URUK_IV = "Uruk IV"
-    URUK_III_JEMDET_NASR = "Uruk III/Jemdet Nasr"
-    ED_I_II = "ED I/II"
+    URUK_III_JEMDET_NASR = "Uruk III-Jemdet Nasr"
+    ED_I_II = "ED I-II"
     FARA = "Fara"
     PRESARGONIC = "Presargonic"
     SARGONIC = "Sargonic"
@@ -44,11 +44,11 @@ ABBREVIATIONS: Mapping[Stage, str] = {
     Stage.HELLENISTIC: "Hel",
     Stage.PARTHIAN: "Par",
     Stage.UNCERTAIN: "Unc",
-    Stage.STANDARD_BABYLONIAN: "SB",
     Stage.URUK_IV: "Uruk4",
     Stage.URUK_III_JEMDET_NASR: "JN",
     Stage.ED_I_II: "ED1-2",
     Stage.FARA: "Fara",
     Stage.PRESARGONIC: "PSarg",
     Stage.SARGONIC: "Sarg",
+    Stage.STANDARD_BABYLONIAN: "SB",
 }
