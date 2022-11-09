@@ -29,7 +29,8 @@ GENRE: "Lex" | "Med" | "L" | "D"
 CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
 chapter_name: STAGE " " [quoted_string " "] quoted_string 
 quoted_string: "\"" /./+ "\""
-STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" | "Hel" | "Par" | "Unc" | "SB"
+STAGE: "Ur3" | "OA" | "OB" | "MB" | "MA" | "Hit" | "NA" | "NB" | "LB" | "Per" 
+     | "Hel" | "Par" | "Unc" | "Uruk4" | "JN" | "ED1-2" | "Fara" | "PSarg" | "Sarg"|  "SB"
 parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
 CF: "cf. "
 PARALLEL_LINE_PREFIX: "// "
