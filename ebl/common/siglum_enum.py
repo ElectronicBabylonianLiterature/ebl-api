@@ -8,11 +8,11 @@ class SiglumEnum(Enum):
 
     @classmethod
     def from_abbreviation(cls, abbreviation):
-        return [enum for enum in cls if enum.abbreviation == abbreviation][0]
+        return next(enum for enum in cls if enum.abbreviation == abbreviation)
 
     @classmethod
     def from_name(cls, name):
-        return [enum for enum in cls if enum.long_name == name][0]
+        return next(enum for enum in cls if enum.long_name == name)
 
 
 class SiglumEnumWithParent(SiglumEnum):
