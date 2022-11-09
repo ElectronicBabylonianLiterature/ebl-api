@@ -5,9 +5,9 @@ import falcon
 import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.common.period import Period
 from ebl.corpus.domain.manuscript import (
     ManuscriptType,
-    Period,
     PeriodModifier,
     Provenance,
 )

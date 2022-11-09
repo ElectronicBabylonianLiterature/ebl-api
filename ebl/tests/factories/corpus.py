@@ -1,5 +1,6 @@
 import factory.fuzzy
 import pydash
+from ebl.common.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line
@@ -9,8 +10,6 @@ from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
     OldSiglum,
-    Period,
-    PeriodModifier,
     Provenance,
 )
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator

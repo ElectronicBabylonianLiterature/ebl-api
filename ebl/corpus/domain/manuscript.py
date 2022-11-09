@@ -1,33 +1,14 @@
-from enum import Enum
 from typing import Optional, Sequence
 
 import attr
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.common.period import Period, PeriodModifier
+from ebl.common.siglum_enum import SiglumEnum, SiglumEnumWithParent
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-
-
-class SiglumEnum(Enum):
-    def __init__(self, long_name, abbreviation):
-        self.long_name = long_name
-        self.abbreviation = abbreviation
-
-    @classmethod
-    def from_abbreviation(cls, abbreviation):
-        return [enum for enum in cls if enum.abbreviation == abbreviation][0]
-
-    @classmethod
-    def from_name(cls, name):
-        return [enum for enum in cls if enum.long_name == name][0]
-
-
-class SiglumEnumWithParent(SiglumEnum):
-    def __init__(self, long_name, abbreviation, parent):
-        super().__init__(long_name, abbreviation)
-        self.parent = parent
 
 
 class ManuscriptType(SiglumEnum):
@@ -75,35 +56,6 @@ class Provenance(SiglumEnumWithParent):
     SUSA = ("Susa", "Sus", "Periphery")
     UGARIT = ("Ugarit", "Uga", "Periphery")
     UNCERTAIN = ("Uncertain", "Unc", None)
-
-
-class PeriodModifier(Enum):
-    NONE = "None"
-    EARLY = "Early"
-    LATE = "Late"
-
-
-class Period(SiglumEnumWithParent):
-    UR_III = ("Ur III", "Ur3", None)
-    OLD_ASSYRIAN = ("Old Assyrian", "OA", None)
-    OLD_BABYLONIAN = ("Old Babylonian", "OB", None)
-    MIDDLE_BABYLONIAN = ("Middle Babylonian", "MB", None)
-    MIDDLE_ASSYRIAN = ("Middle Assyrian", "MA", None)
-    HITTITE = ("Hittite", "Hit", None)
-    NEO_ASSYRIAN = ("Neo-Assyrian", "NA", None)
-    NEO_BABYLONIAN = ("Neo-Babylonian", "NB", None)
-    LATE_BABYLONIAN = ("Late Babylonian", "LB", None)
-    PERSIAN = ("Persian", "Per", "Late Babylonian")
-    HELLENISTIC = ("Hellenistic", "Hel", "Late Babylonian")
-    PARTHIAN = ("Parthian", "Par", "Late Babylonian")
-    UNCERTAIN = ("Uncertain", "Unc", None)
-    NONE = ("None", "", None)
-    URUK_IV = ("Uruk IV", "Uruk4", None)
-    URUK_III_JEMDET_NASR = ("Uruk III/Jemdet Nasr", "JN", None)
-    ED_I_II = ("ED I/II", "ED1-2", None)
-    FARA = ("Fara", "Fara", None)
-    PRESARGONIC = ("Presargonic", "PSarg", None)
-    SARGONIC = ("Sargonic", "Sarg", None)
 
 
 @attr.s(auto_attribs=True, frozen=True)
