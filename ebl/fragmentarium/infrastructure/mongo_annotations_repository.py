@@ -11,7 +11,7 @@ from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.mongo_collection import MongoCollection
 
-COLLECTION = "annotations"
+COLLECTION = "annotations_copy_1"
 
 
 def has_none_values(dictionary: dict) -> bool:

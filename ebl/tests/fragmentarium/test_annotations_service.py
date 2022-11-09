@@ -1,9 +1,13 @@
+import json
+
 import attr
+from marshmallow import EXCLUDE
 
 from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.cropped_sign_image import Base64, CroppedSignImage
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import (
@@ -12,7 +16,8 @@ from ebl.tests.factories.annotation import (
     AnnotationDataFactory,
     CroppedSignFactory,
 )
-from ebl.tests.factories.fragment import TransliteratedFragmentFactory
+
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory, FragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 SCHEMA = AnnotationsSchema()
@@ -23,6 +28,17 @@ def test_label_by_line_number(text_with_labels, annotations_service):
         annotations_service._label_by_line_number(2, text_with_labels.labels)
         == "i Stone wig Stone wig 2"
     )
+
+
+def test_tasd1(annotations_service):
+    f = open('ex.json')
+    data = json.load(f)
+    fragment = FragmentSchema(unknown=EXCLUDE).load(data)
+    indexs = [18, 53, 72, 75, 78, 97]
+    labels = fragment.text.labels
+    asd = [annotations_service._label_by_line_number(x, labels) for x in indexs]
+    assert labels != []
+
 
 
 def test_cropped_images_from_sign(

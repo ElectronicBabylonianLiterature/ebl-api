@@ -19,7 +19,6 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User
@@ -48,17 +47,6 @@ class AnnotationsService:
     def find(self, number: MuseumNumber) -> Annotations:
         return self._annotations_repository.query_by_museum_number(number)
 
-    def _label_by_line_number(
-        self, line_number_to_match: int, labels: Sequence[LineLabel]
-    ) -> str:
-        matching_label = None
-        for label in labels:
-            label_line_number = label.line_number
-            if label_line_number and label_line_number.is_matching_number(
-                line_number_to_match
-            ):
-                matching_label = label
-        return matching_label.formatted_label if matching_label else ""
 
     def _cropped_image_from_annotations_helper(
         self,
@@ -71,11 +59,9 @@ class AnnotationsService:
         updated_cropped_annotations = []
 
         for annotation in annotations.annotations:
-            label = (
-                self._label_by_line_number(annotation.data.path[0], labels)
-                if annotation.data.type != AnnotationValueType.BLANK
-                else ""
-            )
+            annotation_path = annotation.data.path[0]
+            label = labels[annotation_path].formatted_label
+
             cropped_image = annotation.crop_image(image)
             cropped_sign_image = CroppedSignImage.create(cropped_image)
             cropped_sign_images.append(cropped_sign_image)
@@ -109,6 +95,19 @@ class AnnotationsService:
             annotations, image, fragment.script, fragment.text.labels
         )
 
+    def _label_by_line_number(
+        self, line_number_to_match: int, labels: Sequence[LineLabel]
+    ) -> str:
+        matching_label = None
+        for label in labels:
+            label_line_number = label.line_number
+            if label_line_number and label_line_number.is_matching_number(
+                line_number_to_match
+            ):
+                matching_label = label
+        return matching_label.formatted_label if matching_label else ""
+
+
     def update(self, annotations: Annotations, user: User) -> Annotations:
         old_annotations = self._annotations_repository.query_by_museum_number(
             annotations.fragment_number
@@ -129,4 +128,41 @@ class AnnotationsService:
             {"_id": _id, **schema.dump(old_annotations)},
             {"_id": _id, **schema.dump(annotations_with_image_ids)},
         )
+        return annotations_with_image_ids
+
+    def _cropped_image_from_annotations_1(
+        self, annotations: Annotations
+    ) -> Annotations:
+        fragment = self._fragments_repository.query_by_museum_number(
+            annotations.fragment_number
+        )
+        text = fragment.text
+        labels = text.labels
+        script = fragment.script
+        updated_cropped_annotations = []
+
+        for annotation in annotations.annotations:
+            annotation_path = annotation.data.path[0]
+            if annotation.cropped_sign and len(labels) - 1 >= annotation_path:
+                annotation_path = annotation.data.path[0]
+                label = labels[annotation_path].formatted_label
+                if annotation.cropped_sign.label != label:
+                    print(f"False: {fragment.number}")
+
+                updated_cropped_annotation = attr.evolve(
+                    annotation,
+                    cropped_sign=CroppedSign(
+                        annotation.cropped_sign.image_id,
+                        script,
+                        label,
+                    ),
+                )
+                updated_cropped_annotations.append(updated_cropped_annotation)
+            else:
+                updated_cropped_annotations.append(annotation)
+        return attr.evolve(annotations, annotations=updated_cropped_annotations)
+
+    def migrate(self, annotations: Annotations) -> Annotations:
+        annotations_with_image_ids = self._cropped_image_from_annotations_1(annotations)
+        self._annotations_repository.create_or_update(annotations_with_image_ids)
         return annotations_with_image_ids
