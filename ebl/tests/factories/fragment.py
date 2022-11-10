@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import factory
+from ebl.common.period import Period
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
@@ -11,6 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
     Genre,
     Introduction,
     Scope,
+    Script,
     UncuratedReference,
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
@@ -87,6 +89,14 @@ class JoinFactory(factory.Factory):
     legacy_data = factory.Faker("sentence")
 
 
+class ScriptFactory(factory.Factory):
+    class Meta:
+        model = Script
+
+    period = factory.fuzzy.FuzzyChoice(set(Period) - {Period.NONE})
+    uncertain = factory.Faker("boolean")
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
@@ -100,7 +110,8 @@ class FragmentFactory(factory.Factory):
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
     description = factory.Faker("text")
-    script = factory.Iterator(["NA", "NB"])
+    legacy_script = factory.Iterator(["NA", "NB"])
+    script = factory.SubFactory(ScriptFactory)
     folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
     genres = factory.Iterator(
         [
