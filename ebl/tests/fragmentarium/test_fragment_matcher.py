@@ -3,9 +3,12 @@ from ebl.fragmentarium.application.fragment_matcher import (
     LineToVecRanking,
 )
 from ebl.fragmentarium.application.line_to_vec import LineToVecScore, LineToVecEntry
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import FragmentFactory
+
+SCRIPT = Script()
 
 
 def test_find(fragment_repository, when, fragment_matcher):
@@ -18,15 +21,15 @@ def test_find(fragment_repository, when, fragment_matcher):
 
 def test_sort_scores_to_list():
     score = [
-        LineToVecScore(MuseumNumber.of("X.1"), "N/A", 4),
-        LineToVecScore(MuseumNumber.of("X.2"), "N/A", 12),
-        LineToVecScore(MuseumNumber.of("X.3"), "N/A", 2),
+        LineToVecScore(MuseumNumber.of("X.1"), SCRIPT, 4),
+        LineToVecScore(MuseumNumber.of("X.2"), SCRIPT, 12),
+        LineToVecScore(MuseumNumber.of("X.3"), SCRIPT, 2),
     ]
 
     assert sort_scores_to_list(score) == [
-        LineToVecScore(MuseumNumber.of("X.2"), "N/A", 12),
-        LineToVecScore(MuseumNumber.of("X.1"), "N/A", 4),
-        LineToVecScore(MuseumNumber.of("X.3"), "N/A", 2),
+        LineToVecScore(MuseumNumber.of("X.2"), SCRIPT, 12),
+        LineToVecScore(MuseumNumber.of("X.1"), SCRIPT, 4),
+        LineToVecScore(MuseumNumber.of("X.3"), SCRIPT, 2),
     ]
 
 
@@ -51,14 +54,14 @@ def test_line_to_vec(fragment_matcher, when):
         .query_transliterated_line_to_vec()
         .thenReturn(
             [
-                LineToVecEntry(fragment_1.number, "N/A", fragment_1_line_to_vec),
-                LineToVecEntry(fragment_2.number, "N/A", fragment_2_line_to_vec),
+                LineToVecEntry(fragment_1.number, SCRIPT, fragment_1_line_to_vec),
+                LineToVecEntry(fragment_2.number, SCRIPT, fragment_2_line_to_vec),
             ]
         )
     )
     assert fragment_matcher.rank_line_to_vec(parameters) == LineToVecRanking(
-        [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 3)],
-        [LineToVecScore(MuseumNumber.of("X.1"), "N/A", 5)],
+        [LineToVecScore(MuseumNumber.of("X.1"), SCRIPT, 3)],
+        [LineToVecScore(MuseumNumber.of("X.1"), SCRIPT, 5)],
     )
 
 
@@ -83,9 +86,9 @@ def test_empty_line_to_vec(fragment_matcher, when):
         .query_transliterated_line_to_vec()
         .thenReturn(
             [
-                LineToVecEntry(fragment_1.number, "N/A", tuple()),
-                LineToVecEntry(fragment_2.number, "N/A", fragment_2_line_to_vec),
-                LineToVecEntry(fragment_3.number, "N/A", fragment_2_line_to_vec),
+                LineToVecEntry(fragment_1.number, SCRIPT, tuple()),
+                LineToVecEntry(fragment_2.number, SCRIPT, fragment_2_line_to_vec),
+                LineToVecEntry(fragment_3.number, SCRIPT, fragment_2_line_to_vec),
             ]
         )
     )

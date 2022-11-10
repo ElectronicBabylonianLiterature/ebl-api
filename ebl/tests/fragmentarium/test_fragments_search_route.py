@@ -3,12 +3,13 @@ from typing import Dict
 import attr
 import falcon
 import pytest
+from ebl.common.period import Period
 
 from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,
     ApiFragmentInfosPaginationSchema,
 )
-from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
@@ -139,9 +140,11 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
 def test_search_fragmentarium_transliteration(
     client, fragmentarium, sign_repository, signs
 ):
-    transliterated_fragment_1 = TransliteratedFragmentFactory.build(script="A")
+    transliterated_fragment_1 = TransliteratedFragmentFactory.build(
+        script=Script(Period.LATE_BABYLONIAN)
+    )
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.123"), script="B"
+        number=MuseumNumber.of("X.123"), script=Script(Period.MIDDLE_ASSYRIAN)
     )
     for transliterated_fragment in [
         transliterated_fragment_1,

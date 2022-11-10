@@ -1,5 +1,6 @@
 import attr
 import pytest
+from ebl.common.period import Period
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -10,7 +11,7 @@ from ebl.fragmentarium.application.fragmentarium_search_query import (
 )
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction, Script
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
@@ -458,13 +459,13 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     for sign in signs:
         sign_repository.create(sign)
     transliterated_fragment_0 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.2"), script="A"
+        number=MuseumNumber.of("X.2"), script=Script(Period.ED_I_II)
     )
     transliterated_fragment_1 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.0"), script="B"
+        number=MuseumNumber.of("X.0"), script=Script(Period.PERSIAN)
     )
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.1"), script="B"
+        number=MuseumNumber.of("X.1"), script=Script(Period.PERSIAN)
     )
 
     fragment_repository.create_many(
