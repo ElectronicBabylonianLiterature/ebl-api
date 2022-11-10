@@ -2,6 +2,7 @@ import pydash
 from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.common.period import Period
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -9,6 +10,7 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Introduction,
     Measure,
+    Script,
     UncuratedReference,
     Scope,
 )
@@ -90,6 +92,19 @@ class IntroductionSchema(Schema):
         return Introduction(data["text"], tuple(data["parts"]))
 
 
+class ScriptSchema(Schema):
+    period = fields.Function(
+        lambda script: script.period.long_name,
+        lambda value: Period.from_name(value),
+        required=True,
+    )
+    uncertain = fields.Boolean(required=True)
+
+    @post_load
+    def make_script(self, data, **kwargs) -> Script:
+        return Script(**data)
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
@@ -101,7 +116,7 @@ class FragmentSchema(Schema):
     publication = fields.String(required=True)
     description = fields.String(required=True)
     collection = fields.String(required=True)
-    script = fields.String(required=True)
+    legacy_script = fields.String(load_default="", data_key="legacyScript")
     museum = fields.String(required=True)
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
@@ -127,6 +142,7 @@ class FragmentSchema(Schema):
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
+    script = fields.Nested(ScriptSchema, load_default=None)
 
     @post_load
     def make_fragment(self, data, **kwargs):

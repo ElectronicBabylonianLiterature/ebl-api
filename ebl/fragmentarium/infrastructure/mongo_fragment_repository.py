@@ -9,7 +9,7 @@ from ebl.bibliography.infrastructure.bibliography import join_reference_document
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
 from ebl.fragmentarium.application.fragmentarium_search_query import (
     FragmentariumSearchQuery,
 )
@@ -273,7 +273,7 @@ class MongoFragmentRepository(FragmentRepository):
         return [
             LineToVecEntry(
                 MuseumNumberSchema().load(fragment["museumNumber"]),
-                fragment["script"],
+                ScriptSchema().load(fragment["script"]),
                 tuple(
                     LineToVecEncoding.from_list(line_to_vec)
                     for line_to_vec in fragment["lineToVec"]

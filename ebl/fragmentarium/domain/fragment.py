@@ -6,6 +6,7 @@ import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.common.period import Period
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
@@ -54,7 +55,7 @@ class Measure:
 @attr.s(auto_attribs=True, frozen=True)
 class Genre:
     category: Sequence[str] = attr.ib()
-    uncertain: bool
+    uncertain: bool = False
 
     @category.validator
     def _check_is_genres_valid(self, _, category: Sequence[str]) -> None:
@@ -77,6 +78,15 @@ class Introduction:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class Script:
+    period: Period = attr.ib(default=Period.NONE)
+    uncertain: bool = False
+
+    def __str__(self) -> str:
+        return self.period.value
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
     accession: str = ""
@@ -86,7 +96,7 @@ class Fragment:
     publication: str = ""
     description: str = ""
     collection: str = ""
-    script: str = ""
+    legacy_script: str = ""
     museum: str = ""
     width: Measure = Measure()
     length: Measure = Measure()
@@ -103,6 +113,7 @@ class Fragment:
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
     authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction("", tuple())
+    script: Script = Script()
 
     @property
     def is_lowest_join(self) -> bool:

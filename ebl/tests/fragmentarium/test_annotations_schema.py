@@ -1,5 +1,6 @@
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Geometry,
@@ -7,6 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 HEIGHT = 34.5
@@ -20,7 +22,7 @@ TYPE = AnnotationValueType.HAS_SIGN
 ID = "abc123"
 SIGN_NAME = "KUR"
 IMAGE_ID = "image-id"
-SCRIPT = "script"
+SCRIPT = Script()
 LABEL = "label"
 ANNOTATION = Annotation(
     Geometry(X, Y, WIDTH, HEIGHT),
@@ -44,7 +46,11 @@ SERIALIZED = {
                 "signName": SIGN_NAME,
                 "path": PATH,
             },
-            "croppedSign": {"imageId": IMAGE_ID, "script": SCRIPT, "label": LABEL},
+            "croppedSign": {
+                "imageId": IMAGE_ID,
+                "script": ScriptSchema().dump(SCRIPT),
+                "label": LABEL,
+            },
         }
     ],
 }

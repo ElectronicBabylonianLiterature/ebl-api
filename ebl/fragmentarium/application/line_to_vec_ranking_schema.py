@@ -1,11 +1,12 @@
 from marshmallow import Schema, fields, pre_dump
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecScore
 
 
 class LineToVecScoreSchema(Schema):
     museum_number = fields.String(required=True, data_key="museumNumber")
-    script = fields.String(required=True)
+    script = fields.Nested(ScriptSchema, required=True)
     score = fields.Int(required=True)
 
     @pre_dump

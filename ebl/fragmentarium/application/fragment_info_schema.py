@@ -4,6 +4,7 @@ from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
     ApiReferenceSchema,
 )
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -13,7 +14,7 @@ from ebl.transliteration.application.text_schema import TextSchema
 class FragmentInfoSchema(Schema):
     number: fields.Field = fields.Nested(MuseumNumberSchema, required=True)
     accession = fields.String(required=True)
-    script = fields.String(required=True)
+    script = fields.Nested(ScriptSchema, required=True)
     description = fields.String(required=True)
     editor = fields.String(load_default="")
     edition_date = fields.String(data_key="editionDate", load_default="")

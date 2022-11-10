@@ -19,6 +19,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
+from ebl.fragmentarium.domain.fragment import Script
 
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -64,7 +65,7 @@ class AnnotationsService:
         self,
         annotations: Annotations,
         image: Image.Image,
-        script: str,
+        script: Script,
         labels: Sequence[LineLabel],
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
@@ -106,7 +107,10 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.script, fragment.text.labels
+            annotations,
+            image,
+            fragment.script,
+            fragment.text.labels,
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
