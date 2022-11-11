@@ -11,7 +11,7 @@ class CacheRepository(ABC):
         ...
 
     @abstractmethod
-    def set(self, key: str, item: any) -> None:
+    def set(self, key: str, item: dict) -> None:
         ...
 
     @abstractmethod

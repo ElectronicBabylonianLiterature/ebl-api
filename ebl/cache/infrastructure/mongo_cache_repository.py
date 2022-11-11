@@ -16,7 +16,7 @@ class MongoCacheRepository(CacheRepository):
     def get(self, key: str) -> dict:
         return self._collection.find_one({"key": key}, projection={"key": 0, "_id": 0})
 
-    def set(self, key: str, item: any) -> None:
+    def set(self, key: str, item: dict) -> None:
         self._collection.insert_one({"key": key, **item})
 
     def delete(self, key: str) -> None:

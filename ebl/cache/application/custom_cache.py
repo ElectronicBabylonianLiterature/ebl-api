@@ -13,7 +13,7 @@ class CustomCache:
     def get(self, key: str) -> dict:
         return self._mongo_cache_repository.get(key)
 
-    def set(self, key: str, item: any) -> None:
+    def set(self, key: str, item: dict) -> None:
         self._mongo_cache_repository.set(key, item)
 
     def delete(self, key: str) -> None:
