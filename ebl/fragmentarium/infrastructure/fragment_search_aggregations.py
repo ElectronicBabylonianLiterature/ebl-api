@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict
+from typing import Tuple, List, Dict, Sequence
 from enum import Enum
 
 VOCAB_PATH = "vocabulary"
@@ -89,7 +89,7 @@ def search_and_filter(
 
 
 def create_search_aggregation(
-    query_operator: QueryType, lemmas: List[str]
+    query_operator: QueryType, lemmas: Sequence[str]
 ) -> List[dict]:
     matchers: Dict[QueryType, Tuple[dict, dict]] = {
         QueryType.LEMMA: (

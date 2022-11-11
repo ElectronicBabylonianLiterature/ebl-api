@@ -9,6 +9,7 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.application.fragmentarium_search_query import (
     FragmentariumSearchQuery,
 )
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import QueryType
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -104,5 +105,5 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_lemmas(self, query: dict) -> QueryResult:
+    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
         ...

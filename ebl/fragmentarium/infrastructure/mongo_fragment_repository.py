@@ -1,5 +1,5 @@
 import operator
-from typing import Callable, Dict, List, Optional, Sequence, Tuple, cast
+from typing import Callable, List, Optional, Sequence, Tuple, cast
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -471,19 +471,12 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query_lemmas(self, query: Dict[str, str]) -> QueryResult:
+    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
 
-        cmd, _lemmas = next(iter(query.items()))
-
-        query_operator = QueryType[cmd.upper()]
-        lemmas = _lemmas.split("+")
-
-        data = self._fragments.aggregate(
-            create_search_aggregation(query_operator, lemmas)
-        )
+        data = self._fragments.aggregate(create_search_aggregation(query_type, lemmas))
 
         if data := next(data, {}):
-            if query_operator == QueryType.PHRASE:
+            if query_type == QueryType.PHRASE:
                 data = filter_query_results(data, lemmas)
 
             return QueryResultSchema().load(data)

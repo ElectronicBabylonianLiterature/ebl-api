@@ -1,3 +1,4 @@
+from typing import Tuple
 import attr
 import pytest
 from ebl.common.query.query_result import QueryItem, QueryResult
@@ -14,6 +15,7 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import QueryType
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -654,10 +656,11 @@ def test_update_update_references(fragment_repository):
 
 
 @pytest.mark.parametrize(
-    "query,expected",
+    "query_type,lemmas,expected",
     [
         (
-            {"lemma": "ana I"},
+            QueryType.LEMMA,
+            "ana I",
             QueryResult(
                 [
                     QueryItem(
@@ -671,7 +674,8 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"or": "ana I+kīdu I"},
+            QueryType.OR,
+            ("ana I", "kīdu I"),
             QueryResult(
                 [
                     QueryItem(
@@ -685,7 +689,8 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"or": "ana I+kur II+kīdu I"},
+            QueryType.OR,
+            ("ana I", "kur II", "kīdu I"),
             QueryResult(
                 [
                     QueryItem(
@@ -705,14 +710,16 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"line": "ana I+kīdu I"},
+            QueryType.LINE,
+            ("ana I", "kīdu I"),
             QueryResult(
                 [],
                 0,
             ),
         ),
         (
-            {"line": "kīdu I+u I+bamātu I"},
+            QueryType.LINE,
+            ("kīdu I", "u I", "bamātu I"),
             QueryResult(
                 [
                     QueryItem(
@@ -726,7 +733,8 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"and": "kur II+uk I+ap III"},
+            QueryType.AND,
+            ("kur II", "uk I", "ap III"),
             QueryResult(
                 [
                     QueryItem(
@@ -740,7 +748,8 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"phrase": "uk I+kur II"},
+            QueryType.PHRASE,
+            ("uk I", "kur II"),
             QueryResult(
                 [
                     QueryItem(
@@ -754,7 +763,8 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            {"phrase": "uk I+ap III"},
+            QueryType.PHRASE,
+            ("uk I", "ap III"),
             QueryResult(
                 [],
                 0,
@@ -763,7 +773,10 @@ def test_update_update_references(fragment_repository):
     ],
 )
 def test_query_lemmas(
-    fragment_repository: FragmentRepository, query: dict, expected: QueryResult
+    fragment_repository: FragmentRepository,
+    query_type: QueryType,
+    lemmas: Tuple[str],
+    expected: QueryResult,
 ):
     line_with_lemmas = TextLine.of_iterable(
         LineNumber(2, True),
@@ -782,4 +795,4 @@ def test_query_lemmas(
     fragment_repository.create(fragment)
     fragment_repository.create(fragment_with_phrase)
 
-    assert fragment_repository.query_lemmas(query) == expected
+    assert fragment_repository.query_lemmas(query_type, lemmas) == expected

@@ -31,10 +31,8 @@ class PhraseMatcher:
 
         for ngram in ngrams(line, self._phrase_len):
             if self._is_match(ngram):
-                print(">>> matches")
                 return True
 
-            print(">>> doesn't match")
         return False
 
 
