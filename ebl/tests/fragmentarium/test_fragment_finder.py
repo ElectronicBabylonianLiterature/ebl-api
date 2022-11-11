@@ -39,6 +39,24 @@ def test_find(
     assert fragment_finder.find(number) == (expected_fragment, has_photo)
 
 
+@pytest.mark.parametrize("lines", [None, [], [0, 2]])
+def test_find_with_lines(
+    lines,
+    fragment_finder,
+    fragment_repository,
+    when,
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number, lines)
+        .thenReturn(fragment)
+    )
+
+    assert fragment_finder.find(number, lines)[0] == fragment
+
+
 def test_find_not_found(fragment_finder, fragment_repository, when):
     number = MuseumNumber("unknown", "id")
     (
