@@ -1,6 +1,6 @@
 import falcon
 from falcon import Request, Response
-from typing import Sequence, Union
+from typing import Sequence
 from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -10,6 +10,7 @@ from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
 from ebl.fragmentarium.domain.fragment import Scope
+from ebl.errors import DataError
 
 
 def check_fragment_scope(user: User, scopes: Sequence[Scope]):
@@ -24,11 +25,17 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        lines: Union[Sequence[str], None] = req.params.get()
+        lines = req.params.get("lines")
+
+        if lines:
+            try:
+                lines = [int(i) for i in lines]
+            except ValueError as error:
+                raise DataError("Lines must be a list of integers") from error
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
-            lines=lines if lines is None else [int(i) for i in lines],
+            lines=lines,
         )
         if fragment.authorized_scopes:
             check_fragment_scope(req.context.user, fragment.authorized_scopes)
