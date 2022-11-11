@@ -24,10 +24,11 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        lines: Union[Sequence[str], None] = req.params.get("lines")
+        lines: Union[Sequence[str], None] = req.params.get()
+
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
-            lines=[int(i) for i in lines] if lines is not None else lines,
+            lines=lines if lines is None else [int(i) for i in lines],
         )
         if fragment.authorized_scopes:
             check_fragment_scope(req.context.user, fragment.authorized_scopes)

@@ -105,24 +105,18 @@ def _find_adjacent_museum_number_from_sequence(
     return current_prev, current_next
 
 
-def filter_fragment_lines(lines: Optional[Sequence[int]]) -> Sequence[dict]:
-    return (
-        [
-            {
-                "$addFields": {
-                    "text.lines": {
-                        "$map": {
-                            "input": lines,
-                            "as": "i",
-                            "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
-                        }
-                    }
+def filter_fragment_lines(lines: Sequence[int]) -> dict:
+    return {
+        "$addFields": {
+            "text.lines": {
+                "$map": {
+                    "input": lines,
+                    "as": "i",
+                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
                 }
             }
-        ]
-        if lines
-        else []
-    )
+        }
+    }
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -214,7 +208,7 @@ class MongoFragmentRepository(FragmentRepository):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *filter_fragment_lines(lines),
+                *([] if lines is None else [filter_fragment_lines(lines)]),
                 *join_reference_documents(),
                 *join_joins(),
             ]

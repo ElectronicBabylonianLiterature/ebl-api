@@ -2,7 +2,7 @@ from typing import Sequence, Iterable, Tuple
 from itertools import tee, dropwhile, product
 
 
-LemmaLine = Sequence[Sequence[str]]
+LemmaSequence = Sequence[Sequence[str]]
 
 
 def ngrams(sequence: Iterable, n: int):
@@ -18,13 +18,13 @@ class PhraseMatcher:
         self._phrase = tuple(phrase)
         self._phrase_len = len(phrase)
 
-    def _is_match(self, line: LemmaLine) -> bool:
+    def _is_match(self, line: LemmaSequence) -> bool:
         return any(
             self._phrase == combination
             for combination in product(*(lemma or [""] for lemma in line))
         )
 
-    def matches(self, line: LemmaLine) -> bool:
+    def matches(self, line: LemmaSequence) -> bool:
         line = list(
             dropwhile(lambda unique_lemmas: self._phrase[0] not in unique_lemmas, line)
         )
@@ -38,39 +38,43 @@ class PhraseMatcher:
 
 def get_matching_lines(
     lines: Sequence[int],
-    lemma_sequences: Sequence[LemmaLine],
+    lemma_sequences: Sequence[LemmaSequence],
     phrase_matcher: PhraseMatcher,
 ) -> Tuple[Sequence[int], int]:
-    total = 0
+    match_count = 0
     matching_lines = []
 
     for i, sequence in zip(lines, lemma_sequences):
         if phrase_matcher.matches(sequence):
             matching_lines.append(i)
-            total += 1
+            match_count += 1
 
-    return matching_lines, total
+    return matching_lines, match_count
 
 
 def filter_query_results(data: dict, phrase: Sequence[str]):
 
     phrase_matcher = PhraseMatcher(phrase)
     matching_items = []
-    total_matching_lines = 0
+    match_count_total = 0
 
     for query_item in data["items"]:
 
-        matching_lines, total = get_matching_lines(
+        matching_lines, match_count = get_matching_lines(
             query_item["matchingLines"],
             query_item.pop("lemmaSequences"),
             phrase_matcher,
         )
 
-        if total > 0:
+        if match_count > 0:
             matching_items.append(
-                {**query_item, "matchingLines": matching_lines, "total": total}
+                {
+                    **query_item,
+                    "matchingLines": matching_lines,
+                    "matchCount": match_count,
+                }
             )
 
-            total_matching_lines += total
+            match_count_total += match_count
 
-    return {"items": matching_items, "totalMatchingLines": total_matching_lines}
+    return {"items": matching_items, "matchCountTotal": match_count_total}

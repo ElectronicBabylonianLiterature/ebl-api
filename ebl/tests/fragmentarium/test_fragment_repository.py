@@ -795,4 +795,4 @@ def test_query_lemmas(
     fragment_repository.create(fragment)
     fragment_repository.create(fragment_with_phrase)
 
-    assert (lemmas, fragment_repository.query_lemmas(query_type, lemmas)) == (lemmas, expected)
+    assert fragment_repository.query_lemmas(query_type, lemmas) == expected

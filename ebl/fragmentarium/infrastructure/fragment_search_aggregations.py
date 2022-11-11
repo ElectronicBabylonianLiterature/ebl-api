@@ -58,17 +58,17 @@ def _arrange_result(include_lemma_sequences=False) -> List[dict]:
         },
         {
             "$addFields": {
-                "total": {"$size": "$matchingLines"},
+                "matchCount": {"$size": "$matchingLines"},
             }
         },
-        {"$sort": {"total": -1}},
+        {"$sort": {"matchCount": -1}},
         {
             "$group": {
                 "_id": None,
                 **(
                     {}
                     if include_lemma_sequences
-                    else {"totalMatchingLines": {"$sum": "$total"}}
+                    else {"matchCountTotal": {"$sum": "$matchCount"}}
                 ),
                 "items": {"$push": "$$ROOT"},
             }
