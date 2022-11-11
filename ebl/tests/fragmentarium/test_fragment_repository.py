@@ -660,7 +660,7 @@ def test_update_update_references(fragment_repository):
     [
         (
             QueryType.LEMMA,
-            "ana I",
+            ("ana I",),
             QueryResult(
                 [
                     QueryItem(
@@ -795,4 +795,4 @@ def test_query_lemmas(
     fragment_repository.create(fragment)
     fragment_repository.create(fragment_with_phrase)
 
-    assert fragment_repository.query_lemmas(query_type, lemmas) == expected
+    assert (lemmas, fragment_repository.query_lemmas(query_type, lemmas)) == (lemmas, expected)
