@@ -623,7 +623,7 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
     assert fragment_repository.query_transliterated_line_to_vec() == [
         LineToVecEntry(
             transliterated_fragment.number,
-            transliterated_fragment.script,
+            transliterated_fragment.script.abbreviation,
             transliterated_fragment.line_to_vec,
         )
     ]

@@ -1,6 +1,4 @@
 import falcon
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
-
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
@@ -18,14 +16,14 @@ def test_fragment_matcher_route(client, fragmentarium, user):
         "score": [
             {
                 "museumNumber": "X.326",
-                "script": ScriptSchema().dump(fragment_2.script),
+                "script": fragment_2.script.abbreviation,
                 "score": 3,
             }
         ],
         "scoreWeighted": [
             {
                 "museumNumber": "X.326",
-                "script": ScriptSchema().dump(fragment_2.script),
+                "script": fragment_2.script.abbreviation,
                 "score": 5,
             }
         ],

@@ -273,7 +273,7 @@ class MongoFragmentRepository(FragmentRepository):
         return [
             LineToVecEntry(
                 MuseumNumberSchema().load(fragment["museumNumber"]),
-                ScriptSchema().load(fragment["script"]),
+                ScriptSchema().load(fragment["script"]).abbreviation,
                 tuple(
                     LineToVecEncoding.from_list(line_to_vec)
                     for line_to_vec in fragment["lineToVec"]

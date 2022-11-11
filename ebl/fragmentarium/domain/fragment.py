@@ -83,7 +83,11 @@ class Script:
     uncertain: bool = False
 
     def __str__(self) -> str:
-        return self.period.value
+        return self.abbreviation
+
+    @property
+    def abbreviation(self) -> str:
+        return self.period.value[1]
 
 
 @attr.s(auto_attribs=True, frozen=True)
