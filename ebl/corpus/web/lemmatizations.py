@@ -1,7 +1,7 @@
 import falcon
-from falcon_caching import Cache
 from marshmallow import Schema, fields
 
+from ebl.cache.application.custom_cache import CustomCache
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.lemmatization_schema import LineVariantLemmatizationSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
@@ -17,7 +17,7 @@ class CorpusLemmatizationsSchema(Schema):
 
 
 class LemmatizationResource:
-    def __init__(self, corpus: Corpus, cache: Cache) -> None:
+    def __init__(self, corpus: Corpus, cache: CustomCache) -> None:
         self._corpus = corpus
         self._cache = cache
 

@@ -1,6 +1,6 @@
 import falcon
-from falcon_caching import Cache
 
+from ebl.cache.application.custom_cache import CustomCache
 from ebl.corpus.web.alignment_schema import AlignmentSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.web.text_utils import create_chapter_id
@@ -9,7 +9,7 @@ from ebl.users.web.require_scope import require_scope
 
 
 class AlignmentResource:
-    def __init__(self, corpus, cache: Cache):
+    def __init__(self, corpus, cache: CustomCache):
         self._corpus = corpus
         self._cache = cache
 

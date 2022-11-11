@@ -23,6 +23,8 @@ import ebl.context
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
+from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -111,6 +113,11 @@ def dictionary(word_repository, changelog):
 @pytest.fixture
 def cropped_sign_images_repository(database):
     return MongoCroppedSignImagesRepository(database)
+
+
+@pytest.fixture
+def mongo_cache_repository(database):
+    return MongoCacheRepository(database)
 
 
 @pytest.fixture
@@ -406,6 +413,7 @@ def context(
     lemma_repository,
     user,
     parallel_line_injector,
+    mongo_cache_repository,
 ):
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
@@ -423,6 +431,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
+        custom_cache=CustomCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
     )
 
@@ -457,7 +466,10 @@ def basic_fragmentarium_permissions_client(
 @pytest.fixture
 def cached_client(context):
     api = ebl.app.create_app(
-        attr.evolve(context, cache=Cache(config={"CACHE_TYPE": "simple"}))
+        attr.evolve(
+            context,
+            cache=Cache(config={"CACHE_TYPE": "simple"}),
+        )
     )
     return testing.TestClient(api)
 

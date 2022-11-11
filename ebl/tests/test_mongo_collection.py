@@ -45,6 +45,29 @@ def test_find(collection):
     assert collection.find_one({"data": "payload"}) == document
 
 
+def test_exists(collection):
+    document = {"data": "payload"}
+    collection.insert_one(document)
+
+    assert collection.exists({"data": "payload"}) is True
+
+
+def test_delete(collection):
+    document = {"data": "payload"}
+    collection.insert_one(document)
+
+    collection.delete_one({"data": "payload"})
+    assert collection.exists({"data": "payload"}) is False
+
+
+def test_delete_not_found(collection):
+    document = {"data": "payload"}
+    collection.insert_one(document)
+
+    with pytest.raises(NotFoundError):
+        collection.delete_one({"data": "payload1"})
+
+
 def test_find_document_not_found(collection):
     with pytest.raises(NotFoundError):
         collection.find_one({})
