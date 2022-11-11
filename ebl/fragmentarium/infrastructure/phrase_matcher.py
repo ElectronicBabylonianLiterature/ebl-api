@@ -29,11 +29,7 @@ class PhraseMatcher:
             dropwhile(lambda unique_lemmas: self._phrase[0] not in unique_lemmas, line)
         )
 
-        for ngram in ngrams(line, self._phrase_len):
-            if self._is_match(ngram):
-                return True
-
-        return False
+        return any(self._is_match(ngram) for ngram in ngrams(line, self._phrase_len))
 
 
 def get_matching_lines(
