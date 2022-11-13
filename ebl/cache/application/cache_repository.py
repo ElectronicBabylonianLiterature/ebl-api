@@ -3,17 +3,17 @@ from abc import ABC, abstractmethod
 
 class CacheRepository(ABC):
     @abstractmethod
-    def has(self, key: str) -> bool:
+    def has(self, cache_key: str) -> bool:
         ...
 
     @abstractmethod
-    def get(self, key: str) -> dict:
+    def get(self, cache_key: str) -> dict:
         ...
 
     @abstractmethod
-    def set(self, key: str, item: dict) -> None:
+    def set(self, cache_key: str, item: dict) -> None:
         ...
 
     @abstractmethod
-    def delete(self, key: str) -> None:
+    def delete(self, cache_key: str) -> None:
         ...
