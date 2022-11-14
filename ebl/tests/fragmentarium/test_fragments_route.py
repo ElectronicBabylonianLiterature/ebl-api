@@ -17,7 +17,7 @@ def test_get(client, fragmentarium, parallel_line_injector, user, lines, slice_)
     result = client.simulate_get(
         "/fragments/{}{}".format(
             transliterated_fragment.number,
-            "" if lines == False else f"?lines={json.dumps(lines)}",
+            "" if lines is False else f"?lines={json.dumps(lines)}",
         )
     )
 
