@@ -15,11 +15,9 @@ def test_get(client, fragmentarium, parallel_line_injector, user, lines, slice_)
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
     result = client.simulate_get(
-        "/fragments/{}{}".format(
-            transliterated_fragment.number,
-            "" if lines is False else f"?lines={json.dumps(lines)}",
-        )
+        f'/fragments/{transliterated_fragment.number}{"" if lines is False else f"?lines={json.dumps(lines)}"}'
     )
+
 
     expected_fragment = attr.evolve(
         transliterated_fragment,
