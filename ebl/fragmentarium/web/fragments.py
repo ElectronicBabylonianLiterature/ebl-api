@@ -25,13 +25,10 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        lines = req.params.get("lines")
+        lines = req.get_param_as_json("lines")
 
-        if lines:
-            try:
-                lines = [int(i) for i in lines]
-            except ValueError as error:
-                raise DataError("Lines must be a list of integers") from error
+        if not (lines is None or isinstance(lines, list)):
+            raise DataError("Lines must be a list of integers")
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
