@@ -29,7 +29,7 @@ GENRE: "Lex" | "Med" | "L" | "D"
 CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
 chapter_name: STAGE " " [quoted_string " "] quoted_string 
 quoted_string: "\"" /./+ "\""
-STAGE: "ED1-2"
+STAGE: "ED1_2"
      | "Fara"
      | "Hel"
      | "Hit"

@@ -19,7 +19,7 @@ class Period(SiglumEnumWithParent):
     NONE = ("None", "", None)
     URUK_IV = ("Uruk IV", "Uruk4", None)
     URUK_III_JEMDET_NASR = ("Uruk III-Jemdet Nasr", "JN", None)
-    ED_I_II = ("ED I-II", "ED1-2", None)
+    ED_I_II = ("ED I-II", "ED1_2", None)
     FARA = ("Fara", "Fara", None)
     PRESARGONIC = ("Presargonic", "PSarg", None)
     SARGONIC = ("Sargonic", "Sarg", None)

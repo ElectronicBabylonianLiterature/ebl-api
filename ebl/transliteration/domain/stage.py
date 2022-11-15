@@ -46,7 +46,7 @@ ABBREVIATIONS: Mapping[Stage, str] = {
     Stage.UNCERTAIN: "Unc",
     Stage.URUK_IV: "Uruk4",
     Stage.URUK_III_JEMDET_NASR: "JN",
-    Stage.ED_I_II: "ED1-2",
+    Stage.ED_I_II: "ED1_2",
     Stage.FARA: "Fara",
     Stage.PRESARGONIC: "PSarg",
     Stage.SARGONIC: "Sarg",
