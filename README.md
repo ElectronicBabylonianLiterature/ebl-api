@@ -209,6 +209,10 @@ PYMONGOIM__OPERATING_SYSTEM=ubuntu
 [Falcon-Caching](https://falcon-caching.readthedocs.io/) middleware can be used for caching.
 See the documentation for more information. Configuration is read from `CACHE_CONFIG` environment variable.
 
+
+Alternatively **CustomCache** is a custom Cache which works similar to Falcon-Caching `cache.set, cache.get, ...` methods.
+CustomCache will not expire but has to be invalidated manually.
+
 ```shell script
 CACHE_CONFIG='{"CACHE_TYPE": "simple"}' poetry run waitress-serve --port=8000 --call ebl.app:get_app
 ```

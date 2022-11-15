@@ -89,6 +89,7 @@ class LinesImportResource:
 class LineResource:
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
+
     @falcon.before(require_scope, "read:texts")
     def on_get(
         self,

@@ -56,6 +56,7 @@ def test_get(client, text_repository, parallel_line_injector, text, chapter, url
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == ChapterDisplaySchema().dump(injected_chapter_display)
 
+
 def test_get_cached(cached_client, text_repository, text, chapter, url):
     text_repository.create(text)
     text_repository.create_chapter(chapter)

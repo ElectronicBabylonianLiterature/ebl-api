@@ -24,25 +24,27 @@ EMPTY_EDIT_DTO = {"new": [], "deleted": [], "edited": []}
 
 CHAPTER = ChapterFactory.build()
 UPDATED_CHAPTER = attr.evolve(
-        CHAPTER,
-        lines=(
-            attr.evolve(
-                CHAPTER.lines[0],
-                number=LineNumber(1, True),
-            ).set_variant_alignment_flags(),
-        ),
-        parser_version=ATF_PARSER_VERSION,
-    )
+    CHAPTER,
+    lines=(
+        attr.evolve(
+            CHAPTER.lines[0],
+            number=LineNumber(1, True),
+        ).set_variant_alignment_flags(),
+    ),
+    parser_version=ATF_PARSER_VERSION,
+)
 
 EDITED = [
-            {"index": index, "line": line}
-            for index, line in enumerate(create_chapter_dto(UPDATED_CHAPTER)["lines"])
-        ]
+    {"index": index, "line": line}
+    for index, line in enumerate(create_chapter_dto(UPDATED_CHAPTER)["lines"])
+]
 BODY_UPDATING = {
-        "new": [],
-        "deleted": [],
-        "edited": EDITED,
-    }
+    "new": [],
+    "deleted": [],
+    "edited": EDITED,
+}
+
+
 def test_updating_cached(
     cached_client, bibliography, sign_repository, signs, text_repository
 ) -> None:
@@ -70,6 +72,7 @@ def test_updating_cached(
 
     assert second_result.status == falcon.HTTP_OK
     assert first_result.json != second_result.json
+
 
 def test_updating(
     client, bibliography, sign_repository, signs, text_repository
