@@ -14,7 +14,7 @@ if __name__ == "__main__":
         context.cropped_sign_images_repository,
     )
     print(f"Lenght {len(annotations)}")
-    for counter, annotation in enumerate(annotations):
+    for annotation in annotations:
         #print(counter)
         service.migrate(annotation)
 
