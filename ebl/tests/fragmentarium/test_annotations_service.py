@@ -22,24 +22,12 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 SCHEMA = AnnotationsSchema()
 
-
-def test_label_by_line_number(text_with_labels, annotations_service):
-    assert (
-        annotations_service._label_by_line_number(2, text_with_labels.labels)
-        == "i Stone wig Stone wig 2"
-    )
-
-
-def test_tasd1(annotations_service):
-    f = open('ex.json')
-    data = json.load(f)
-    fragment = FragmentSchema(unknown=EXCLUDE).load(data)
-    indexs = [18, 53, 72, 75, 78, 97]
-    labels = fragment.text.labels
-    asd = [annotations_service._label_by_line_number(x, labels) for x in indexs]
-    assert labels != []
-
-
+def test_labels(annotations_service):
+    fragment = TransliteratedFragmentFactory.build()
+    asd0 = fragment.text.lines
+    asd1 = annotations_service.labels(fragment.text.lines)
+    asd2 = fragment.text.labels
+    assert fragment.text.labels == annotations_service.labels(fragment.text.lines)
 
 def test_cropped_images_from_sign(
     annotations_repository,
@@ -50,7 +38,7 @@ def test_cropped_images_from_sign(
     annotations_service,
 ):
     single_annotation = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(path=[2, 0, 0])
+        data=AnnotationDataFactory.build(path=[1, 0, 0])
     )
     annotation = AnnotationsFactory.build(annotations=[single_annotation])
 
@@ -137,7 +125,7 @@ def test_update(
 
     old_annotations = AnnotationsFactory.build(fragment_number=fragment_number)
 
-    data = AnnotationDataFactory.build(path=[2, 0, 0])
+    data = AnnotationDataFactory.build(path=[1, 0, 0])
     annotation = AnnotationFactory.build(cropped_sign=None, data=data)
     annotations = AnnotationsFactory.build(
         fragment_number=fragment_number, annotations=[annotation]

@@ -123,8 +123,8 @@ class Text:
         for line in self.lines:
             if type(line) in handlers:
                 current, labels = handlers[type(line)](line)
-
         return labels
+
 
     @property
     def is_empty(self) -> bool:

@@ -1,10 +1,13 @@
+import functools
 from io import BytesIO
 from typing import Tuple, Sequence
 
 import attr
+import pydash
 from PIL import Image
 
 from ebl.changelog import Changelog
+from ebl.corpus.domain.line import Line
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
@@ -19,8 +22,12 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
+from ebl.transliteration.domain.at_line import ObjectAtLine, SurfaceAtLine, ColumnAtLine
 from ebl.transliteration.domain.line_label import LineLabel
+from ebl.transliteration.domain.line_number import LineNumber, AbstractLineNumber, \
+    LineNumberRange
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.users.domain.user import User
 
 Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
@@ -59,9 +66,7 @@ class AnnotationsService:
         updated_cropped_annotations = []
 
         for annotation in annotations.annotations:
-            annotation_path = annotation.data.path[0]
-            label = labels[annotation_path].formatted_label
-
+            label = labels[annotation.data.path[0]].formatted_label if annotation.data.type != AnnotationValueType.BLANK else ""
             cropped_image = annotation.crop_image(image)
             cropped_sign_image = CroppedSignImage.create(cropped_image)
             cropped_sign_images.append(cropped_sign_image)
@@ -95,18 +100,6 @@ class AnnotationsService:
             annotations, image, fragment.script, fragment.text.labels
         )
 
-    def _label_by_line_number(
-        self, line_number_to_match: int, labels: Sequence[LineLabel]
-    ) -> str:
-        matching_label = None
-        for label in labels:
-            label_line_number = label.line_number
-            if label_line_number and label_line_number.is_matching_number(
-                line_number_to_match
-            ):
-                matching_label = label
-        return matching_label.formatted_label if matching_label else ""
-
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
         old_annotations = self._annotations_repository.query_by_museum_number(
@@ -130,6 +123,44 @@ class AnnotationsService:
         )
         return annotations_with_image_ids
 
+    def labels(self, lines: Sequence[Line]):
+        def asd(currents, line):
+            current: LineLabel = currents[0]
+            lines = currents[1]
+            if isinstance(line, TextLine):
+                return [current, [*lines, [current.set_line_number(line.line_number)]]]
+            elif isinstance(line, ObjectAtLine):
+                return [current.set_object(line.label), lines]
+            elif isinstance(line, SurfaceAtLine):
+                return [current.set_surface(line.surface_label), lines]
+            elif isinstance(line, ColumnAtLine):
+                return [current.set_column(line.column_label), lines]
+            else:
+                return [current, lines]
+        _, labels = functools.reduce(asd, lines, [LineLabel(None, None, None, None), []])
+        labels = pydash.flatten(labels)
+        complete_labels = []
+        for i in range(len(lines)):
+            label = next(filter(lambda label: label.line_number.is_matching_number(i+1), labels), None)
+            complete_labels.append(label)
+        return complete_labels
+
+
+
+    def get_start_number(self, line_number: AbstractLineNumber):
+        if isinstance(line_number, LineNumberRange):
+            return line_number.start.number
+        else:
+            return line_number.number
+
+    def get_end_number(self, line_number: AbstractLineNumber):
+        if isinstance(line_number, LineNumberRange):
+            return line_number.end.number
+        else:
+            return line_number.number
+
+
+
     def _cropped_image_from_annotations_1(
         self, annotations: Annotations
     ) -> Annotations:
@@ -137,18 +168,31 @@ class AnnotationsService:
             annotations.fragment_number
         )
         text = fragment.text
-        labels = text.labels
+        labels = []
+        for i in range(len(text.lines) - 1):
+            if i + 1 < len(text.labels):
+                label_first, label_second = text.labels[i], text.labels[i+1]
+                if self.get_start_number(label_second.line_number) > self.get_end_number(label_first.line_number):
+                    line_number = self.get_start_number(label_second.line_number)
+                    if not label_first.line_number.is_matching_number(line_number - 1):
+                        labels.extend([label_first, None])
+                        break
+                labels.append(label_first)
+                break
+            labels.append(None)
+
+
         script = fragment.script
         updated_cropped_annotations = []
-
         for annotation in annotations.annotations:
+            if len(annotation.data.path) == 0:
+                break
             annotation_path = annotation.data.path[0]
             if annotation.cropped_sign and len(labels) - 1 >= annotation_path:
-                annotation_path = annotation.data.path[0]
-                label = labels[annotation_path].formatted_label
+                label_ = labels[annotation_path]
+                label = label_.formatted_label if label_ else ""
                 if annotation.cropped_sign.label != label:
-                    print(f"False: {fragment.number}")
-
+                    print(f"{fragment.number} -- {annotation.data.sign_name} --- {annotation.cropped_sign.label}-------{label}")
                 updated_cropped_annotation = attr.evolve(
                     annotation,
                     cropped_sign=CroppedSign(
