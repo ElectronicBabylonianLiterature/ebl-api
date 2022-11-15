@@ -13,7 +13,7 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.corpus import ChapterFactory, TextFactory
+from ebl.tests.factories.corpus import ChapterFactory
 from ebl.transliteration.domain.stage import Stage
 from ebl.tests.corpus.support import (
     allow_references,
@@ -34,24 +34,12 @@ def test_get(client, bibliography, text_repository):
     assert get_result.json == create_chapter_dto(chapter)["manuscripts"]
 
 
-def test_updating_invalidates_chapter_display_cache(
-    cached_client, bibliography, sign_repository, signs, text_repository
-):
+def test_updating(client, bibliography, sign_repository, signs, text_repository):
     uncertain_fragment = MuseumNumber.of("K.1")
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
-    text = TextFactory.build(
-        genre=chapter.text_id.genre,
-        category=chapter.text_id.category,
-        index=chapter.text_id.index,
-    )
-    text_repository.create(text)
     allow_references(chapter, bibliography)
     text_repository.create_chapter(chapter)
-
-    first_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
-    assert first_result.status == falcon.HTTP_OK
-
     updated_chapter = attr.evolve(
         chapter,
         manuscripts=(
@@ -62,7 +50,7 @@ def test_updating_invalidates_chapter_display_cache(
         uncertain_fragments=(uncertain_fragment,),
     )
 
-    post_result = cached_client.simulate_post(
+    post_result = client.simulate_post(
         create_chapter_url(chapter, "/manuscripts"),
         body=json.dumps(
             {
@@ -75,14 +63,10 @@ def test_updating_invalidates_chapter_display_cache(
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == create_chapter_dto(updated_chapter)
 
-    get_result = cached_client.simulate_get(create_chapter_url(chapter))
+    get_result = client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == create_chapter_dto(updated_chapter)
-
-    second_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
-    assert second_result.status == falcon.HTTP_OK
-    assert first_result.json != second_result.json
 
 
 def test_updating_text_not_found(client, bibliography):
