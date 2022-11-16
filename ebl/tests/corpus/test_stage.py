@@ -8,7 +8,7 @@ def test_abbreviation_completeness() -> None:
 
 
 @pytest.mark.parametrize("stage", Stage)
-def test_slug(stage) -> None:
+def test_slug(stage: Stage) -> None:
     allowed_slug_chars = re.compile(r"^[a-zA-Z0-9_\s-]+$")
     long_name = stage.value
     abbreviation = ABBREVIATIONS[stage]

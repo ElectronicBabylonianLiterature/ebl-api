@@ -23,6 +23,10 @@ class Period(SiglumEnumWithParent):
     FARA = ("Fara", "Fara", None)
     PRESARGONIC = ("Presargonic", "PSarg", None)
     SARGONIC = ("Sargonic", "Sarg", None)
+    PROTO_ELAMITE = ("Proto-Elamite", "PElam", None)
+    OLD_ELAMITE = ("Old Elamite", "OElam", None)
+    MIDDLE_ELAMITE = ("Middle Elamite", "MElam", None)
+    NEO_ELAMITE = ("Neo-Elamite", "NElam", None)
 
 
 class PeriodModifier(Enum):

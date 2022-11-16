@@ -23,6 +23,10 @@ class Stage(Enum):
     FARA = "Fara"
     PRESARGONIC = "Presargonic"
     SARGONIC = "Sargonic"
+    PROTO_ELAMITE = "Proto-Elamite"
+    OLD_ELAMITE = "Old Elamite"
+    MIDDLE_ELAMITE = "Middle Elamite"
+    NEO_ELAMITE = "Neo-Elamite"
     STANDARD_BABYLONIAN = "Standard Babylonian"
 
     @property
@@ -51,4 +55,8 @@ ABBREVIATIONS: Mapping[Stage, str] = {
     Stage.PRESARGONIC: "PSarg",
     Stage.SARGONIC: "Sarg",
     Stage.STANDARD_BABYLONIAN: "SB",
+    Stage.PROTO_ELAMITE: "PElam",
+    Stage.OLD_ELAMITE: "OElam",
+    Stage.MIDDLE_ELAMITE: "MElam",
+    Stage.NEO_ELAMITE: "NElam",
 }
