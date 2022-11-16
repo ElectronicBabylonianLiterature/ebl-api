@@ -115,9 +115,10 @@ def test_stages_periods_equality():
         )
     )
 
-    enum_periods = set(
+    enum_periods = {
         period.abbreviation for period in Period if period != Period.NONE
-    )
+    }
+
 
     enum_stages = set(STAGE_ABBREVIATIONS.values())
 
