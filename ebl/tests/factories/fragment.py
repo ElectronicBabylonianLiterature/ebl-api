@@ -1,7 +1,7 @@
 from typing import Sequence
 
 import factory
-from ebl.common.period import Period
+from ebl.common.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
@@ -94,6 +94,7 @@ class ScriptFactory(factory.Factory):
         model = Script
 
     period = factory.fuzzy.FuzzyChoice(set(Period) - {Period.NONE})
+    period_modifier = factory.fuzzy.FuzzyChoice(set(PeriodModifier))
     uncertain = factory.Faker("boolean")
 
 

@@ -6,7 +6,7 @@ import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.common.period import Period
+from ebl.common.period import Period, PeriodModifier
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
@@ -80,6 +80,7 @@ class Introduction:
 @attr.s(auto_attribs=True, frozen=True)
 class Script:
     period: Period = attr.ib(default=Period.NONE)
+    period_modifier: PeriodModifier = attr.ib(default=PeriodModifier.NONE)
     uncertain: bool = False
 
     def __str__(self) -> str:

@@ -1,14 +1,17 @@
 import pytest
 from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.domain.fragment import Script
-from ebl.common.period import Period
+from ebl.common.period import Period, PeriodModifier
 
 
 @pytest.mark.parametrize(
     "script,serialized",
     [
-        (Script(Period.FARA, True), {"period": "Fara", "uncertain": True}),
-        (Script(), {"period": "None", "uncertain": False}),
+        (
+            Script(Period.FARA, PeriodModifier.EARLY, True),
+            {"period": "Fara", "periodModifier": "Early", "uncertain": True},
+        ),
+        (Script(), {"period": "None", "periodModifier": "None", "uncertain": False}),
     ],
 )
 def test_schema(script, serialized):

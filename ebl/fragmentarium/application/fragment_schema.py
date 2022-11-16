@@ -2,7 +2,7 @@ import pydash
 from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.period import Period
+from ebl.common.period import Period, PeriodModifier
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -97,6 +97,9 @@ class ScriptSchema(Schema):
         lambda script: script.period.long_name,
         lambda value: Period.from_name(value),
         required=True,
+    )
+    period_modifier = ValueEnum(
+        PeriodModifier, required=True, data_key="periodModifier"
     )
     uncertain = fields.Boolean(required=True)
 

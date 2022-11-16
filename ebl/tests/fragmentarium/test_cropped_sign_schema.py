@@ -13,7 +13,11 @@ from ebl.fragmentarium.domain.fragment import Script
             CroppedSign("image id", Script(), "label"),
             {
                 "imageId": "image id",
-                "script": {"period": "None", "uncertain": False},
+                "script": {
+                    "period": "None",
+                    "periodModifier": "None",
+                    "uncertain": False,
+                },
                 "label": "label",
             },
         ),
