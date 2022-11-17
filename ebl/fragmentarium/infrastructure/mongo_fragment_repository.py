@@ -469,11 +469,11 @@ class MongoFragmentRepository(FragmentRepository):
 
         data = self._fragments.aggregate(create_search_aggregation(query_type, lemmas))
 
-        if data := next(data, {}):
+        if result := next(data, None):
             if query_type == QueryType.PHRASE:
-                data = filter_query_results(data, lemmas)
+                result = filter_query_results(result, lemmas)
 
-            return QueryResultSchema().load(data)
+            return QueryResultSchema().load(result)
 
         else:
             return QueryResult([], 0)
