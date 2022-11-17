@@ -467,13 +467,13 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
 
-        data = self._fragments.aggregate(create_search_aggregation(query_type, lemmas))
+        data = next(
+            self._fragments.aggregate(create_search_aggregation(query_type, lemmas)),
+            {"items": [], "matchCountTotal": 0},
+        )
 
-        if result := next(data, None):
-            if query_type == QueryType.PHRASE:
-                result = filter_query_results(result, lemmas)
-
-            return QueryResultSchema().load(result)
-
-        else:
-            return QueryResult([], 0)
+        return QueryResultSchema().load(
+            filter_query_results(data, lemmas)
+            if query_type == QueryType.PHRASE
+            else data
+        )
