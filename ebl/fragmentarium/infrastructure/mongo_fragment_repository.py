@@ -311,22 +311,29 @@ class MongoFragmentRepository(FragmentRepository):
             },
         )
 
-    def update_genres(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": FragmentSchema(only=("genres",)).dump(fragment)},
-        )
+    def update_field(self, field, fragment):
 
-    def update_lemmatization(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": FragmentSchema(only=("text",)).dump(fragment)},
-        )
+        fields_to_update = {
+            "introduction": ("introduction",),
+            "lemmatization": ("text",),
+            "genres": ("genres",),
+            "references": ("references",),
+            "transliteration": (
+                "text",
+                "notes",
+                "signs",
+                "record",
+                "line_to_vec",
+            ),
+        }
 
-    def update_introduction(self, fragment):
+        if field not in fields_to_update:
+            raise ValueError(
+                f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
+            )
         self._fragments.update_one(
             fragment_is(fragment),
-            {"$set": FragmentSchema(only=("introduction",)).dump(fragment)},
+            {"$set": FragmentSchema(only=fields_to_update[field]).dump(fragment)},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
@@ -430,12 +437,6 @@ class MongoFragmentRepository(FragmentRepository):
                 museum_number, all_museum_numbers, True
             )
         return FragmentPagerInfo(cast(MuseumNumber, prev), cast(MuseumNumber, next))
-
-    def update_references(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": FragmentSchema(only=("references",)).dump(fragment)},
-        )
 
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
