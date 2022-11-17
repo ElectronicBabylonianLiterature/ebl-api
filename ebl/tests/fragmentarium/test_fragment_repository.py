@@ -256,7 +256,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
         TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"), user
     )
 
-    fragment_repository.update_transliteration(updated_fragment)
+    fragment_repository.update_field("transliteration", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
@@ -265,7 +265,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
 def test_update_update_transliteration_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_transliteration(transliterated_fragment)
+        fragment_repository.update_field("transliteration", transliterated_fragment)
 
 
 def test_update_genres(fragment_repository):
@@ -274,7 +274,7 @@ def test_update_genres(fragment_repository):
     updated_fragment = fragment.set_genres(
         (Genre(["ARCHIVAL", "Administrative"], False),)
     )
-    fragment_repository.update_genres(updated_fragment)
+    fragment_repository.update_field("genres", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
@@ -288,7 +288,7 @@ def test_update_lemmatization(fragment_repository):
     lemmatization = Lemmatization(tokens)
     updated_fragment = transliterated_fragment.update_lemmatization(lemmatization)
 
-    fragment_repository.update_lemmatization(updated_fragment)
+    fragment_repository.update_field("lemmatization", updated_fragment)
     result = fragment_repository.query_by_museum_number(transliterated_fragment.number)
 
     assert result == updated_fragment
@@ -298,7 +298,7 @@ def test_update_introduction(fragment_repository: FragmentRepository):
     fragment: Fragment = FragmentFactory.build(introduction=Introduction("", tuple()))
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_introduction("Introduction")
-    fragment_repository.update_introduction(updated_fragment)
+    fragment_repository.update_field("introduction", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
@@ -307,7 +307,7 @@ def test_update_introduction(fragment_repository: FragmentRepository):
 def test_update_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_lemmatization(transliterated_fragment)
+        fragment_repository.update_field("lemmatization", transliterated_fragment)
 
 
 def test_statistics(database, fragment_repository):
@@ -635,7 +635,7 @@ def test_update_references(fragment_repository):
     references = (reference,)
     updated_fragment = fragment.set_references(references)
 
-    fragment_repository.update_references(updated_fragment)
+    fragment_repository.update_field("references", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
@@ -644,4 +644,4 @@ def test_update_references(fragment_repository):
 def test_update_update_references(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_references(transliterated_fragment)
+        fragment_repository.update_field("references", transliterated_fragment)

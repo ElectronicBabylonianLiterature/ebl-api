@@ -62,7 +62,7 @@ def test_update_transliteration(
     ).thenReturn()
     (
         when(fragment_repository)
-        .update_transliteration(transliterated_fragment)
+        .update_field("transliteration", transliterated_fragment)
         .thenReturn()
     )
 
@@ -128,7 +128,7 @@ def test_update_genres(
         {"_id": str(number), **SCHEMA.dump(fragment)},
         {"_id": str(number), **SCHEMA.dump(updated_fragment)},
     ).thenReturn()
-    when(fragment_repository).update_genres(updated_fragment).thenReturn()
+    when(fragment_repository).update_field("genres", updated_fragment).thenReturn()
 
     result = fragment_updater.update_genres(number, genres, user)
     assert result == (injected_fragment, False)
@@ -158,7 +158,9 @@ def test_update_lemmatization(
         {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
         {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
     ).thenReturn()
-    when(fragment_repository).update_lemmatization(lemmatized_fragment).thenReturn()
+    when(fragment_repository).update_field(
+        "lemmatization", lemmatized_fragment
+    ).thenReturn()
 
     result = fragment_updater.update_lemmatization(number, lemmatization, user)
     assert result == (injected_fragment, False)
@@ -198,7 +200,7 @@ def test_update_references(
     when(fragment_repository).query_by_museum_number(number).thenReturn(
         fragment
     ).thenReturn(updated_fragment)
-    when(fragment_repository).update_references(updated_fragment).thenReturn()
+    when(fragment_repository).update_field("references", updated_fragment).thenReturn()
     when(changelog).create(
         "fragments",
         user.profile,
@@ -238,7 +240,9 @@ def test_update_introduction(
         {"_id": str(number), **SCHEMA.dump(fragment)},
         {"_id": str(number), **SCHEMA.dump(updated_fragment)},
     ).thenReturn()
-    when(fragment_repository).update_introduction(updated_fragment).thenReturn()
+    when(fragment_repository).update_field(
+        "introduction", updated_fragment
+    ).thenReturn()
 
     result = fragment_updater.update_introduction(number, introduction, user)
     assert result == (updated_fragment, False)
