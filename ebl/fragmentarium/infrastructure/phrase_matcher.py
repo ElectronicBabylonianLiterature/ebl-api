@@ -73,4 +73,11 @@ def filter_query_results(data: dict, phrase: Sequence[str]):
 
             match_count_total += match_count
 
-    return {"items": matching_items, "matchCountTotal": match_count_total}
+    return {
+        "items": sorted(
+            matching_items,
+            key=lambda query_item: query_item["matchCount"],
+            reverse=True,
+        ),
+        "matchCountTotal": match_count_total,
+    }
