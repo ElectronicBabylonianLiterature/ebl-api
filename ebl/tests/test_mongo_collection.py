@@ -45,6 +45,29 @@ def test_find(collection):
     assert collection.find_one({"data": "payload"}) == document
 
 
+def test_exists(collection):
+    document = {"data": "payload"}
+    collection.insert_one(document)
+
+    assert collection.exists({"data": "payload"}) is True
+
+
+def test_delete(collection):
+    document = {"data": "payload"}
+    collection.insert_one(document)
+
+    collection.delete_one({"data": "payload"})
+    assert collection.exists({"data": "payload"}) is False
+
+
+def test_delete_not_found(collection):
+    document = {"data": "payload"}
+    collection.insert_one(document)
+
+    with pytest.raises(NotFoundError):
+        collection.delete_one({"data": "payload1"})
+
+
 def test_find_document_not_found(collection):
     with pytest.raises(NotFoundError):
         collection.find_one({})
@@ -58,14 +81,14 @@ def test_find_many(collection):
     collection.insert_one(document_match2)
     collection.insert_one(document_no_match)
 
-    assert [document for document in collection.find_many({"data": "payload"})] == [
+    assert list(collection.find_many({"data": "payload"})) == [
         document_match1,
         document_match2,
     ]
 
 
 def test_find_many_document_not_found(collection):
-    assert list(collection.find_many({})) == []
+    assert not list(collection.find_many({}))
 
 
 def test_aggregate(collection):
@@ -76,9 +99,10 @@ def test_aggregate(collection):
     collection.insert_one(document_match2)
     collection.insert_one(document_no_match)
 
-    assert [
-        document for document in collection.aggregate([{"$match": {"data": "payload"}}])
-    ] == [document_match1, document_match2]
+    assert list(collection.aggregate([{"$match": {"data": "payload"}}])) == [
+        document_match1,
+        document_match2,
+    ]
 
 
 def test_update(collection):

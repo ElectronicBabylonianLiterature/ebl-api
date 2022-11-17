@@ -22,6 +22,9 @@ class MongoCollection:
     def insert_many(self, documents: Sequence[dict]):
         return self.__get_collection().insert_many(documents).inserted_ids
 
+    def exists(self, query) -> bool:
+        return bool(self.__get_collection().find_one(query))
+
     def insert_one(self, document):
         try:
             return self.__get_collection().insert_one(document).inserted_id
@@ -55,6 +58,13 @@ class MongoCollection:
             raise self.__not_found_error(document["_id"])
         else:
             return result
+
+    def delete_one(self, query: dict) -> None:
+        if not bool(query):
+            raise ValueError("Empty Query for delete one not allowed")
+        result = self.__get_collection().delete_one(query)
+        if result.deleted_count == 0:
+            raise self.__not_found_error(query)
 
     def update_one(self, query, update):
         result = self.__get_collection().update_one(query, update)

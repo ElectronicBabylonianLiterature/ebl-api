@@ -4,7 +4,7 @@ import falcon
 from falcon_caching import Cache
 from falcon_caching.utils import register
 
-from ebl.cache import DEFAULT_TIMEOUT, cache_control
+from ebl.cache.application.cache import DEFAULT_TIMEOUT, cache_control
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 
 
