@@ -8,7 +8,7 @@
 
 note_line: "#note: " _markup
 markup: _markup
-_markup: (emphasis_part | language_part | bibliography_part | string_part)+
+_markup: (emphasis_part | language_part | bibliography_part | string_part | url_part)+
 language_part: "@" LANGUAGE "{" text "}"
 emphasis_part: "@i{" note_text "}"
 bibliography_part: "@bib{" escaped_text ("@" escaped_text)? "}"
@@ -16,7 +16,8 @@ escaped_text: (/[^@{}\\\n\r]/ | ("\\" /[@{}\\]/))+
 string_part: note_text
 note_text: /[^@{}\n\r]+/
 LANGUAGE: "akk" | "sux" | "es"
-
+url_part: "@url{" url "}" ("{" note_text "}")?
+url: /[^}]+/
 
 ?parallel_line: parallel_fragment | parallel_text | parallel_composition
 parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [object_label " "] [surface_label " "]  [column_label " "] line_number
@@ -206,7 +207,7 @@ sub_index: [SUB_INDEX]
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
 logogram_name: logogram_name_part (broken_away logogram_name_part)*
-!number_name_head:  "0".."9" "0".."9"* | "½"
+!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "⅔" | "⅚"
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+

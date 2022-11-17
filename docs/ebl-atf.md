@@ -56,6 +56,7 @@ akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
 sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
 emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)
 bibliography = '@bib{', escaped-text, ( '@', escaped-text,) '}';
+url = '@url{', url, '}', ('{', optional-display-text, '}');
 escaped-text = { ( markup-character - '\' ) | '\@' | '\{' | '\}' | '\\' };
 markup-text = { markup-character };
 markup-character = any-character - ( '@' | '{' | '}' );

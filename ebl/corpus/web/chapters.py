@@ -1,5 +1,4 @@
 import falcon
-from falcon_caching import Cache
 from pydash.arrays import flatten_deep
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
@@ -38,9 +37,8 @@ class ChaptersResource:
 
 
 class ChaptersDisplayResource:
-    def __init__(self, corpus: Corpus, cache: Cache):
+    def __init__(self, corpus: Corpus):
         self._corpus = corpus
-        self._cache = cache
 
     @falcon.before(require_scope, "read:texts")
     def on_get(
@@ -54,14 +52,8 @@ class ChaptersDisplayResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        chapter_id_str = str(chapter_id)
-        if self._cache.has(chapter_id_str):
-            resp.media = self._cache.get(chapter_id_str)
-        else:
-            chapter = self._corpus.find_chapter_for_display(chapter_id)
-            dump = ChapterDisplaySchema().dump(chapter)
-            self._cache.set(chapter_id_str, dump)
-            resp.media = ChapterDisplaySchema().dump(chapter)
+        chapter = self._corpus.find_chapter_for_display(chapter_id)
+        resp.media = ChapterDisplaySchema().dump(chapter)
 
 
 class ChaptersByManuscriptResource:

@@ -1,7 +1,6 @@
 from typing import Tuple
 
 import falcon
-from falcon_caching import Cache
 from marshmallow import Schema, fields, post_load
 
 from ebl.corpus.application.corpus import Corpus
@@ -39,9 +38,8 @@ class LinesImportSchema(Schema):
 
 
 class LinesResource:
-    def __init__(self, corpus: Corpus, cache: Cache):
+    def __init__(self, corpus: Corpus):
         self._corpus = corpus
-        self._cache = cache
 
     @falcon.before(require_scope, "write:texts")
     @validate(LinesUpdateSchema())
@@ -56,7 +54,6 @@ class LinesResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete(str(chapter_id))
         updated_chapter = self._corpus.update_lines(
             chapter_id, LinesUpdateSchema().load(req.media), req.context.user
         )
@@ -64,9 +61,8 @@ class LinesResource:
 
 
 class LinesImportResource:
-    def __init__(self, corpus: Corpus, cache: Cache):
+    def __init__(self, corpus: Corpus):
         self._corpus = corpus
-        self._cache = cache
 
     @falcon.before(require_scope, "write:texts")
     @validate(LinesImportSchema())
@@ -81,7 +77,6 @@ class LinesImportResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete(str(chapter_id))
         updated_chapter = self._corpus.import_lines(
             chapter_id, req.media["atf"], req.context.user
         )

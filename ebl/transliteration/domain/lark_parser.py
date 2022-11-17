@@ -138,9 +138,19 @@ def validate_line(line: Line) -> None:
     visitor.done()
 
 
+def clean_line(line: str):
+    replacements = {"\t+": " ", " ̶": "-"}
+
+    for old, new in replacements.items():
+        line = re.sub(old, new, line)
+
+    return line
+
+
 def parse_atf_lark(atf_):
     def parse_line_(line: str, line_number: int):
         try:
+            line = clean_line(line)
             parsed_line = parse_line(line) if line else EmptyLine()
             validate_line(parsed_line)
             return parsed_line, None

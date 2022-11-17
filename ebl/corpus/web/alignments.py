@@ -1,5 +1,4 @@
 import falcon
-from falcon_caching import Cache
 
 from ebl.corpus.web.alignment_schema import AlignmentSchema
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
@@ -9,9 +8,8 @@ from ebl.users.web.require_scope import require_scope
 
 
 class AlignmentResource:
-    def __init__(self, corpus, cache: Cache):
+    def __init__(self, corpus):
         self._corpus = corpus
-        self._cache = cache
 
     @falcon.before(require_scope, "write:texts")
     @validate(AlignmentSchema())
@@ -26,7 +24,6 @@ class AlignmentResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete(str(chapter_id))
         updated_chapter = self._corpus.update_alignment(
             chapter_id, AlignmentSchema().load(req.media), req.context.user
         )
