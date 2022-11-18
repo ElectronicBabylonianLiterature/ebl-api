@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Tuple
+from typing import List, Sequence, Tuple, Optional
+from ebl.common.query.query_result import QueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -8,6 +9,7 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.application.fragmentarium_search_query import (
     FragmentariumSearchQuery,
 )
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import QueryType
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -33,7 +35,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_museum_number(self, number: MuseumNumber) -> Fragment:
+    def query_by_museum_number(
+        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+    ) -> Fragment:
         ...
 
     @abstractmethod
@@ -75,26 +79,15 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def update_transliteration(self, fragment: Fragment) -> None:
+    def update_field(self, field: str, fragment: Fragment) -> None:
         ...
 
     @abstractmethod
-    def update_genres(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_lemmatization(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_references(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_introduction(self, fragment: Fragment) -> None:
-        ...
-
     def query_fragmentarium(
         self, query: FragmentariumSearchQuery
     ) -> Tuple[Sequence[Fragment], int]:
+        ...
+
+    @abstractmethod
+    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
         ...

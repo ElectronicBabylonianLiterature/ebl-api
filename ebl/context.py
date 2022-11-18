@@ -4,6 +4,7 @@ from falcon_caching import Cache
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.cache.application.custom_cache import CustomCache
 from ebl.changelog import Changelog
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
@@ -42,6 +43,7 @@ class Context:
     text_repository: MongoTextRepository
     annotations_repository: AnnotationsRepository
     lemma_repository: LemmaRepository
+    custom_cache: CustomCache
     cache: Cache
     parallel_line_injector: ParallelLineInjector
 

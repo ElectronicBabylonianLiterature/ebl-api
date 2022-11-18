@@ -6,6 +6,8 @@ from marshmallow import EXCLUDE
 from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.query.query_result import QueryResult
+from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -20,6 +22,12 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
+    QueryType,
+    create_search_aggregation,
+)
+from ebl.fragmentarium.infrastructure.phrase_matcher import filter_query_results
+
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -95,6 +103,20 @@ def _find_adjacent_museum_number_from_sequence(
         current_prev = current_prev or last
         current_next = current_next or first
     return current_prev, current_next
+
+
+def filter_fragment_lines(lines: Sequence[int]) -> dict:
+    return {
+        "$addFields": {
+            "text.lines": {
+                "$map": {
+                    "input": lines,
+                    "as": "i",
+                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
+                }
+            }
+        }
+    }
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -180,10 +202,13 @@ class MongoFragmentRepository(FragmentRepository):
             }
         )
 
-    def query_by_museum_number(self, number: MuseumNumber):
+    def query_by_museum_number(
+        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+    ):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
+                *([] if lines is None else [filter_fragment_lines(lines)]),
                 *join_reference_documents(),
                 *join_joins(),
             ]
@@ -295,38 +320,29 @@ class MongoFragmentRepository(FragmentRepository):
         )
         return FragmentInfoSchema(many=True).load(cursor)
 
-    def update_transliteration(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {
-                "$set": FragmentSchema(
-                    only=(
-                        "text",
-                        "notes",
-                        "signs",
-                        "record",
-                        "line_to_vec",
-                    )
-                ).dump(fragment)
-            },
-        )
+    def update_field(self, field, fragment):
 
-    def update_genres(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": FragmentSchema(only=("genres",)).dump(fragment)},
-        )
+        fields_to_update = {
+            "introduction": ("introduction",),
+            "lemmatization": ("text",),
+            "genres": ("genres",),
+            "references": ("references",),
+            "transliteration": (
+                "text",
+                "notes",
+                "signs",
+                "record",
+                "line_to_vec",
+            ),
+        }
 
-    def update_lemmatization(self, fragment):
+        if field not in fields_to_update:
+            raise ValueError(
+                f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
+            )
         self._fragments.update_one(
             fragment_is(fragment),
-            {"$set": FragmentSchema(only=("text",)).dump(fragment)},
-        )
-
-    def update_introduction(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": FragmentSchema(only=("introduction",)).dump(fragment)},
+            {"$set": FragmentSchema(only=fields_to_update[field]).dump(fragment)},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
@@ -431,11 +447,18 @@ class MongoFragmentRepository(FragmentRepository):
             )
         return FragmentPagerInfo(cast(MuseumNumber, prev), cast(MuseumNumber, next))
 
-    def update_references(self, fragment):
-        self._fragments.update_one(
-            fragment_is(fragment),
-            {"$set": FragmentSchema(only=("references",)).dump(fragment)},
-        )
-
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
+
+    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
+
+        data = next(
+            self._fragments.aggregate(create_search_aggregation(query_type, lemmas)),
+            {"items": [], "matchCountTotal": 0},
+        )
+
+        return QueryResultSchema().load(
+            filter_query_results(data, lemmas)
+            if query_type == QueryType.PHRASE
+            else data
+        )

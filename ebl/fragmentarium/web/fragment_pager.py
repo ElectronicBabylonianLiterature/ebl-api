@@ -2,7 +2,7 @@ import falcon
 from falcon_caching import Cache
 from falcon_caching.utils import register
 
-from ebl.cache import cache_control, DEFAULT_TIMEOUT
+from ebl.cache.application.cache import cache_control, DEFAULT_TIMEOUT
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_pager_info_schema import (
     FragmentPagerInfoSchema,

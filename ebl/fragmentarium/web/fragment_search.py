@@ -3,7 +3,7 @@ from typing import Tuple, Dict
 import falcon
 from falcon_caching import Cache
 
-from ebl.cache import DEFAULT_TIMEOUT, cache_control
+from ebl.cache.application.cache import DEFAULT_TIMEOUT, cache_control
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder

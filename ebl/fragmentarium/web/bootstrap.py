@@ -13,7 +13,7 @@ from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
 from ebl.fragmentarium.web.fragment_matcher import FragmentMatcherResource
 from ebl.fragmentarium.web.fragment_pager import make_fragment_pager_resource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
-from ebl.fragmentarium.web.fragments import FragmentsResource
+from ebl.fragmentarium.web.fragments import FragmentsQueryResource, FragmentsResource
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
@@ -67,6 +67,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.get_transliteration_query_factory(),
         context.cache,
     )
+    fragment_query = FragmentsQueryResource(context.fragment_repository)
     genres = GenresResource()
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
@@ -98,6 +99,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/statistics", statistics),
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
         ("/folios/{name}/{number}", folios),
+        ("/fragments/query", fragment_query),
     ]
 
     for uri, resource in routes:

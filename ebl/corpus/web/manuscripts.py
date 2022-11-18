@@ -1,16 +1,16 @@
 import falcon
-from falcon_caching import Cache
+from marshmallow import Schema, fields
 
+from ebl.cache.application.custom_cache import CustomCache
+from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.chapter_schemas import (
     ApiChapterSchema,
     ApiManuscriptSchema,
     MuseumNumberString,
 )
 from ebl.corpus.web.text_utils import create_chapter_id
-from ebl.corpus.application.corpus import Corpus
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
-from marshmallow import Schema, fields
 
 
 class ManuscriptDtoSchema(Schema):
@@ -21,7 +21,7 @@ class ManuscriptDtoSchema(Schema):
 
 
 class ManuscriptsResource:
-    def __init__(self, corpus: Corpus, cache: Cache):
+    def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
         self._cache = cache
 

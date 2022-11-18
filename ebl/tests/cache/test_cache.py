@@ -1,7 +1,7 @@
 import falcon
 from falcon import testing
 
-from ebl.cache import cache_control
+from ebl.cache.application.cache import cache_control
 
 
 DIRECTIVES = ["public", "max-age=600"]

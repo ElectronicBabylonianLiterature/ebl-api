@@ -26,7 +26,11 @@ def test_find(
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number, None)
+        .thenReturn(fragment)
+    )
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
     expected_fragment = fragment.set_text(
         parallel_line_injector.inject_transliteration(fragment.text)
@@ -35,9 +39,31 @@ def test_find(
     assert fragment_finder.find(number) == (expected_fragment, has_photo)
 
 
+@pytest.mark.parametrize("lines", [None, [], [0, 2]])
+def test_find_with_lines(
+    lines,
+    fragment_finder,
+    fragment_repository,
+    when,
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number, lines)
+        .thenReturn(fragment)
+    )
+
+    assert fragment_finder.find(number, lines)[0] == fragment
+
+
 def test_find_not_found(fragment_finder, fragment_repository, when):
     number = MuseumNumber("unknown", "id")
-    (when(fragment_repository).query_by_museum_number(number).thenRaise(NotFoundError))
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number, None)
+        .thenRaise(NotFoundError)
+    )
 
     with pytest.raises(NotFoundError):
         fragment_finder.find(number)

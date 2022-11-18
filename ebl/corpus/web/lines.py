@@ -1,9 +1,9 @@
 from typing import Tuple
 
 import falcon
-from falcon_caching import Cache
 from marshmallow import Schema, fields, post_load
 
+from ebl.cache.application.custom_cache import CustomCache
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
@@ -39,7 +39,7 @@ class LinesImportSchema(Schema):
 
 
 class LinesResource:
-    def __init__(self, corpus: Corpus, cache: Cache):
+    def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
         self._cache = cache
 
@@ -64,7 +64,7 @@ class LinesResource:
 
 
 class LinesImportResource:
-    def __init__(self, corpus: Corpus, cache: Cache):
+    def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
         self._cache = cache
 
