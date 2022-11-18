@@ -76,7 +76,7 @@ class SignsVisitor(TokenVisitor):
 
     @property
     def result(self) -> Sequence[Union[int, str]]:
-        return self.result_string if not self._to_unicode else self.result_unicode
+        return self.result_unicode if self._to_unicode else self.result_string
 
     @property
     def result_string(self) -> Sequence[str]:
