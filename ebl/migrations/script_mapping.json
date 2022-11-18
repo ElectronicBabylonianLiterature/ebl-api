@@ -1,0 +1,492 @@
+{
+    "NB": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "NA": {
+        "period": "Neo-Assyrian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "OB": {
+        "period": "Old Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "UrIII": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "MB": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Ur3": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "EOB": {
+        "period": "Old Babylonian",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "OAkk": {
+        "period": "Sargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "eOB": {
+        "period": "Old Babylonian",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "Late Babylonian": {
+        "period": "Late Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "LOB": {
+        "period": "Old Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Achaemenid": {
+        "period": "Persian",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "Old Assyrian": {
+        "period": "Old Assyrian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "ED3b": {
+        "period": "Presargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Hel": {
+        "period": "Hellenistic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Late Early Dynastic": {
+        "period": "Presargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Jemdat-Nasr": {
+        "period": "Uruk III-Jemdet Nasr",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Hittite": {
+        "period": "Hittite",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "ED1-2": {
+        "period": "ED I-II",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "MB?": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Early Dynastic III": {
+        "period": "Fara",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "MA": {
+        "period": "Middle Assyrian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "eNB": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Akkadian": {
+        "period": "Sargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Achaemenid": {
+        "period": "Persian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "OA": {
+        "period": "Old Assyrian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Post Sargonic": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Old Babylonian?": {
+        "period": "Old Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "ED3a": {
+        "period": "Fara",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Dynastic": {
+        "period": "ED I-II",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Late Achaemenid": {
+        "period": "Persian",
+        "period_modifier": "Late",
+        "uncertain": false
+    },
+    "Mitannian": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "OB?": {
+        "period": "Old Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Uruk IV": {
+        "period": "Uruk IV",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Ur3?": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "MElam": {
+        "period": "Middle Elamite",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Parthian": {
+        "period": "Parthian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early second millennium": {
+        "period": "Old Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Lag2": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Post-Akkadian": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Isin-Larsa": {
+        "period": "Old Babylonian",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "NB?": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Kassite": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Dynastic II": {
+        "period": "ED I-II",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Selucid": {
+        "period": "Hellenistic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early first millennium": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "OA?": {
+        "period": "Old Assyrian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Ur III?": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Ach": {
+        "period": "Persian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Neo-Babylonian?": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "NA?": {
+        "period": "Neo-Assyrian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Early Sargonic": {
+        "period": "Sargonic",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "Sargonic?": {
+        "period": "Sargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Post-Kassite": {
+        "period": "Middle Babylonian",
+        "period_modifier": "Late",
+        "uncertain": false
+    },
+    "Jemdat-Nasr?": {
+        "period": "Uruk III-Jemdet Nasr",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Uruk": {
+        "period": "Uruk IV",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Early first millennium?": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "Early",
+        "uncertain": true
+    },
+    "Middle Babylonian?": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "PElam": {
+        "period": "Proto-Elamite",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Parthian?": {
+        "period": "Parthian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "OAkk?": {
+        "period": "Sargonic",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Early Dynastic I-II": {
+        "period": "ED I-II",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Akkadian": {
+        "period": "Sargonic",
+        "period_modifier": "Early",
+        "uncertain": false
+    },
+    "Early Dynastic I": {
+        "period": "ED I-II",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Late Babylonian?": {
+        "period": "Late Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Early Old Babylonian?": {
+        "period": "Old Babylonian",
+        "period_modifier": "Early",
+        "uncertain": true
+    },
+    "Middle Elamite": {
+        "period": "Middle Elamite",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Urartian": {
+        "period": "Neo-Assyrian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Late Early Dynastic?": {
+        "period": "Presargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Dynastic?": {
+        "period": "ED I-II",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "eOB?": {
+        "period": "Old Babylonian",
+        "period_modifier": "Early",
+        "uncertain": true
+    },
+    "Mitannian?": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Neo-Babylonian?": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "Early",
+        "uncertain": true
+    },
+    "LagashII": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Post Sargonic?": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Hellenistic?": {
+        "period": "Hellenistic",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Neo-Elamite": {
+        "period": "Neo-Elamite",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Early Achaemenid?": {
+        "period": "Persian",
+        "period_modifier": "Early",
+        "uncertain": true
+    },
+    "Late Old Babylonian?": {
+        "period": "Old Babylonian",
+        "period_modifier": "Late",
+        "uncertain": true
+    },
+    "Early Sargonic?": {
+        "period": "Sargonic",
+        "period_modifier": "Early",
+        "uncertain": true
+    },
+    "Kassite?": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "EDIIIb": {
+        "period": "Presargonic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "nB": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "EDIIIa": {
+        "period": "Fara",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "MA?": {
+        "period": "Middle Assyrian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Selucid?": {
+        "period": "Hellenistic",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Persian?": {
+        "period": "Persian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Graeco-Roman": {
+        "period": "Hellenistic",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Persian": {
+        "period": "Persian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Ur III": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "UrIII?": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "MB(?)": {
+        "period": "Middle Babylonian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "ED3b?": {
+        "period": "Presargonic",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Lag2?": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "ED3b; OAkk": {
+        "period": "Presargonic",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Neo-Babylonian": {
+        "period": "Neo-Babylonian",
+        "period_modifier": "None",
+        "uncertain": false
+    },
+    "Urartian?": {
+        "period": "Neo-Assyrian",
+        "period_modifier": "None",
+        "uncertain": true
+    },
+    "Post-Akkadian?": {
+        "period": "Ur III",
+        "period_modifier": "None",
+        "uncertain": true
+    }
+}
