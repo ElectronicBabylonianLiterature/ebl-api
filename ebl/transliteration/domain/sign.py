@@ -26,6 +26,7 @@ class Logogram:
     atf: Atf = Atf("")
     word_id: Sequence[str] = tuple()
     schramm_logogramme: str = ""
+    unicode: str = ""
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -67,3 +68,6 @@ class Sign:
             ][0]
         except IndexError:
             return self.name
+
+    def set_logograms(self, logograms: Sequence[Logogram]) -> "Sign":
+        return attr.evolve(self, logograms=tuple(logograms))

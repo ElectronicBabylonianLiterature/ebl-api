@@ -34,13 +34,14 @@ def test_signs_not_found(client):
                             "atf": "P₂",
                             "wordId": ["lemmatu I"],
                             "schrammLogogramme": "P₂",
+                            "unicode": "",
                         }
                     ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
-                    "unicode": [],
+                    "unicode": [74865],
                     "values": [{"subIndex": 1, "value": ":"}],
                 }
             ],
@@ -56,13 +57,14 @@ def test_signs_not_found(client):
                             "atf": "P₂",
                             "wordId": ["lemmatu I"],
                             "schrammLogogramme": "P₂",
+                            "unicode": "",
                         }
                     ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
-                    "unicode": [],
+                    "unicode": [74865],
                     "values": [{"subIndex": 1, "value": ":"}],
                 }
             ],
@@ -78,13 +80,14 @@ def test_signs_not_found(client):
                             "atf": "P₂",
                             "wordId": ["lemmatu I"],
                             "schrammLogogramme": "P₂",
+                            "unicode": "",
                         }
                     ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
-                    "unicode": [],
+                    "unicode": [74865],
                     "values": [{"subIndex": 1, "value": ":"}],
                 }
             ],
@@ -100,13 +103,14 @@ def test_signs_not_found(client):
                             "atf": "P₂",
                             "wordId": ["lemmatu I"],
                             "schrammLogogramme": "P₂",
+                            "unicode": "",
                         }
                     ],
                     "fossey": [],
                     "mesZl": "",
                     "LaBaSi": "",
                     "name": "P₂",
-                    "unicode": [],
+                    "unicode": [74865],
                     "values": [{"subIndex": 1, "value": ":"}],
                 }
             ],

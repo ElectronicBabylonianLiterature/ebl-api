@@ -48,6 +48,7 @@ class LogogramSchema(Schema):
     atf = fields.String(required=True)
     word_id = fields.List(fields.String(), required=True, data_key="wordId")
     schramm_logogramme = fields.String(required=True, data_key="schrammLogogramme")
+    unicode = fields.String()
 
     @post_load
     def make_logogram(self, data, **kwargs) -> Logogram:
