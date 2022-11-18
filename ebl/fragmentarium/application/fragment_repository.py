@@ -79,23 +79,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def update_transliteration(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_genres(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_lemmatization(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_references(self, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def update_introduction(self, fragment: Fragment) -> None:
+    def update_field(self, field: str, fragment: Fragment) -> None:
         ...
 
     @abstractmethod

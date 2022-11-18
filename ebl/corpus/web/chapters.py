@@ -1,19 +1,21 @@
 import falcon
 from pydash.arrays import flatten_deep
+
+from ebl.cache.application.custom_cache import CustomCache
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
-from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
-from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
-from ebl.corpus.web.chapter_schemas import ApiChapterSchema
 from ebl.corpus.application.schemas import (
     ManuscriptAttestationSchema,
 )
+from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
+from ebl.corpus.web.chapter_schemas import ApiChapterSchema
+from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
-from ebl.transliteration.domain.genre import Genre
-from ebl.users.web.require_scope import require_scope
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.errors import DataError
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.transliteration.domain.genre import Genre
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.users.web.require_scope import require_scope
 
 
 class ChaptersResource:
@@ -37,8 +39,9 @@ class ChaptersResource:
 
 
 class ChaptersDisplayResource:
-    def __init__(self, corpus: Corpus):
+    def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
+        self._cache = cache
 
     @falcon.before(require_scope, "read:texts")
     def on_get(
@@ -52,8 +55,14 @@ class ChaptersDisplayResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        chapter = self._corpus.find_chapter_for_display(chapter_id)
-        resp.media = ChapterDisplaySchema().dump(chapter)
+        chapter_id_str = str(chapter_id)
+        if self._cache.has(chapter_id_str):
+            resp.media = self._cache.get(chapter_id_str)
+        else:
+            chapter = self._corpus.find_chapter_for_display(chapter_id)
+            dump = ChapterDisplaySchema().dump(chapter)
+            self._cache.set(chapter_id_str, dump)
+            resp.media = ChapterDisplaySchema().dump(chapter)
 
 
 class ChaptersByManuscriptResource:

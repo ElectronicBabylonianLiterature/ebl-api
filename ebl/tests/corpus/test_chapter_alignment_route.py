@@ -6,7 +6,7 @@ import falcon
 import pytest
 
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
-from ebl.tests.factories.corpus import ChapterFactory
+from ebl.tests.factories.corpus import ChapterFactory, TextFactory
 from ebl.transliteration.domain.enclosure_tokens import BrokenAway
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.sign_tokens import Logogram, Reading
@@ -38,11 +38,18 @@ DTO = {
 }
 
 
-def test_updating_alignment(
-    client, bibliography, sign_repository, signs, text_repository
+def test_updating_alignment_and_invalidate_chapter_display_cache(
+    cached_client, bibliography, sign_repository, signs, text_repository
 ):
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
+
+    text = TextFactory.build(
+        genre=chapter.text_id.genre,
+        category=chapter.text_id.category,
+        index=chapter.text_id.index,
+    )
+    text_repository.create(text)
     allow_references(chapter, bibliography)
     text_repository.create_chapter(chapter)
     alignment = 0
@@ -104,17 +111,24 @@ def test_updating_alignment(
 
     expected_chapter = ApiChapterSchema().dump(updated_chapter)
 
-    post_result = client.simulate_post(
+    first_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
+    assert first_result.status == falcon.HTTP_OK
+
+    post_result = cached_client.simulate_post(
         create_chapter_url(chapter, "/alignment"), body=json.dumps(DTO)
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected_chapter
 
-    get_result = client.simulate_get(create_chapter_url(chapter))
+    get_result = cached_client.simulate_get(create_chapter_url(chapter))
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == expected_chapter
+
+    second_result = cached_client.simulate_get(create_chapter_url(chapter, "/display"))
+    assert second_result.status == falcon.HTTP_OK
+    assert first_result.json != second_result.json
 
 
 def test_updating_invalid_stage(
