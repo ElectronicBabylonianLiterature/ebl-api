@@ -145,7 +145,7 @@ class FragmentSchema(Schema):
     )
     authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
-    script = fields.Nested(ScriptSchema, load_default=None)
+    script = fields.Nested(ScriptSchema, load_default=Script())
 
     @post_load
     def make_fragment(self, data, **kwargs):
