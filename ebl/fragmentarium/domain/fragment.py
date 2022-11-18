@@ -81,7 +81,7 @@ class Introduction:
 class Script:
     period: Period = attr.ib(default=Period.NONE)
     period_modifier: PeriodModifier = attr.ib(default=PeriodModifier.NONE)
-    uncertain: bool = False
+    uncertain: Optional[bool] = None
 
     def __str__(self) -> str:
         return self.abbreviation

@@ -101,7 +101,7 @@ class ScriptSchema(Schema):
     period_modifier = ValueEnum(
         PeriodModifier, required=True, data_key="periodModifier"
     )
-    uncertain = fields.Boolean(required=True)
+    uncertain = fields.Boolean(load_default=None)
 
     @post_load
     def make_script(self, data, **kwargs) -> Script:
