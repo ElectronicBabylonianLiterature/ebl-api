@@ -181,6 +181,9 @@ class SignsVisitor(TokenVisitor):
                 variant_visitor._standardizations.append(
                     Standardization.of_string(VARIANT_SEPARATOR)
                 )
+        self._visit_variant(variant_visitor)
+
+    def _visit_variant(self, variant_visitor: "SignsVisitor") -> None:
         if not self._to_unicode:
             self._standardizations.append(
                 Standardization.of_string(
