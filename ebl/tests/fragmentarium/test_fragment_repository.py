@@ -1,5 +1,7 @@
+from typing import Tuple
 import attr
 import pytest
+from ebl.common.query.query_result import QueryItem, QueryResult
 
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
@@ -13,6 +15,7 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import QueryType
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -37,6 +40,11 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
+FRAGMENT_IDS = ["X.1", "B.2"]
+MUSEUM_NUMBERS = [
+    MuseumNumber(prefix="X", number="1", suffix=""),
+    MuseumNumber(prefix="B", number="2", suffix=""),
+]
 
 
 ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
@@ -645,3 +653,146 @@ def test_update_update_references(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_field("references", transliterated_fragment)
+
+
+@pytest.mark.parametrize(
+    "query_type,lemmas,expected",
+    [
+        (
+            QueryType.LEMMA,
+            ("ana I",),
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[0],
+                        MUSEUM_NUMBERS[0],
+                        (1,),
+                        1,
+                    ),
+                ],
+                1,
+            ),
+        ),
+        (
+            QueryType.OR,
+            ("ana I", "kīdu I"),
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[0],
+                        MUSEUM_NUMBERS[0],
+                        (1, 2),
+                        2,
+                    )
+                ],
+                2,
+            ),
+        ),
+        (
+            QueryType.OR,
+            ("ana I", "kur II", "kīdu I"),
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[0],
+                        MUSEUM_NUMBERS[0],
+                        (1, 2),
+                        2,
+                    ),
+                    QueryItem(
+                        FRAGMENT_IDS[1],
+                        MUSEUM_NUMBERS[1],
+                        (0,),
+                        1,
+                    ),
+                ],
+                3,
+            ),
+        ),
+        (
+            QueryType.LINE,
+            ("ana I", "kīdu I"),
+            QueryResult(
+                [],
+                0,
+            ),
+        ),
+        (
+            QueryType.LINE,
+            ("kīdu I", "u I", "bamātu I"),
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[0],
+                        MUSEUM_NUMBERS[0],
+                        (2,),
+                        1,
+                    )
+                ],
+                1,
+            ),
+        ),
+        (
+            QueryType.AND,
+            ("kur II", "uk I", "ap III"),
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[1],
+                        MUSEUM_NUMBERS[1],
+                        (0,),
+                        1,
+                    )
+                ],
+                1,
+            ),
+        ),
+        (
+            QueryType.PHRASE,
+            ("uk I", "kur II"),
+            QueryResult(
+                [
+                    QueryItem(
+                        FRAGMENT_IDS[1],
+                        MUSEUM_NUMBERS[1],
+                        (0,),
+                        1,
+                    )
+                ],
+                1,
+            ),
+        ),
+        (
+            QueryType.PHRASE,
+            ("uk I", "ap III"),
+            QueryResult(
+                [],
+                0,
+            ),
+        ),
+    ],
+)
+def test_query_lemmas(
+    fragment_repository: FragmentRepository,
+    query_type: QueryType,
+    lemmas: Tuple[str],
+    expected: QueryResult,
+):
+    line_with_lemmas = TextLine.of_iterable(
+        LineNumber(2, True),
+        (
+            Word.of([Reading.of_name("uk")], unique_lemma=(WordId("uk I"),)),
+            Word.of([Reading.of_name("kur")], unique_lemma=(WordId("kur II"),)),
+            Word.of([Reading.of_name("ap")], unique_lemma=(WordId("ap III"),)),
+        ),
+    )
+    fragment = LemmatizedFragmentFactory.build(number=MUSEUM_NUMBERS[0])
+    fragment_with_phrase = attr.evolve(
+        fragment,
+        number=MUSEUM_NUMBERS[1],
+        text=attr.evolve(fragment.text, lines=[line_with_lemmas]),
+    )
+    fragment_repository.create(fragment)
+    fragment_repository.create(fragment_with_phrase)
+
+    assert fragment_repository.query_lemmas(query_type, lemmas) == expected
