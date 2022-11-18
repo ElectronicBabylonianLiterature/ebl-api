@@ -3,7 +3,6 @@ from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import os
 import sys
-from pprint import pprint
 import json
 
 
@@ -15,7 +14,8 @@ fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
 
 if __name__ == "__main__":
     print(
-        "\nMap the 'legacyScript' value in each fragment to its corresponding full Script entry\n"
+        "\nMap the 'legacyScript' value in each fragment "
+        "to its corresponding full Script entry\n"
     )
     print("This migration applies to the db", repr(DB))
 

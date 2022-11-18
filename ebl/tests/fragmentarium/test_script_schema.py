@@ -11,7 +11,7 @@ from ebl.common.period import Period, PeriodModifier
             Script(Period.FARA, PeriodModifier.EARLY, True),
             {"period": "Fara", "periodModifier": "Early", "uncertain": True},
         ),
-        (Script(), {"period": "None", "periodModifier": "None", "uncertain": False}),
+        (Script(), {"period": "None", "periodModifier": "None", "uncertain": None}),
     ],
 )
 def test_schema(script, serialized):
