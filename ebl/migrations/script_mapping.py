@@ -4,6 +4,7 @@ from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import os
 import sys
 import json
+from time import sleep
 
 
 client = MongoClient(os.environ["MONGODB_URI"])
@@ -29,24 +30,29 @@ if __name__ == "__main__":
 
     print("Applying the migration (this may take a while)...")
 
-    with open("ebl/migrations/script_mapping.json") as jf:
+    with open("ebl/migrations/mapping.json") as jf:
         mapping = json.load(jf)
 
-    for fragment in fragments.aggregate([{"$project": {"legacyScript": 1}}]):
+    for i, fragment in enumerate(
+        fragments.aggregate([{"$project": {"legacyScript": 1}}])
+    ):
         script = fragment["legacyScript"].replace("\x0b", "")
-        if script in mapping:
-            value = mapping[script]
-            fragments.update_one(
-                {"_id": fragment["_id"]},
-                {
-                    "$set": {
-                        "script": {
-                            "period": value["long_name"],
-                            "periodModifier": value["period_modifier"],
-                            "uncertain": value["uncertain"],
-                        }
-                    }
-                },
-            )
 
-    print("Process finished.")
+        fragments.update_one(
+            {"_id": fragment["_id"]},
+            {
+                "$set": {
+                    "script": {
+                        "period": mapping[script]["period"],
+                        "periodModifier": mapping[script]["period_modifier"],
+                        "uncertain": mapping[script]["uncertain"],
+                    }
+                    if script in mapping
+                    else None
+                }
+            },
+        )
+        print(f"{i} fragments processed\r", end="")
+        sleep(0.0001)
+
+    print("\nProcess finished.")
