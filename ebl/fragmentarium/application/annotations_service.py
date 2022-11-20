@@ -85,7 +85,7 @@ class AnnotationsService:
                 cropped_sign=CroppedSign(
                     cropped_sign_image.image_id,
                     script,
-                    label,
+                    label
                 ),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
