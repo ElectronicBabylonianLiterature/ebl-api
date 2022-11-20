@@ -4,8 +4,7 @@ from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import os
 import sys
 import json
-from time import sleep
-
+from pprint import pprint
 
 client = MongoClient(os.environ["MONGODB_URI"])
 DB = os.environ.get("MONGODB_DB")
@@ -33,26 +32,34 @@ if __name__ == "__main__":
     with open("ebl/migrations/mapping.json") as jf:
         mapping = json.load(jf)
 
-    for i, fragment in enumerate(
-        fragments.aggregate([{"$project": {"legacyScript": 1}}])
-    ):
-        script = fragment["legacyScript"].replace("\x0b", "")
-
-        fragments.update_one(
-            {"_id": fragment["_id"]},
+    result = fragments.update_many(
+        {},
+        [
             {
                 "$set": {
                     "script": {
-                        "period": mapping[script]["period"],
-                        "periodModifier": mapping[script]["period_modifier"],
-                        "uncertain": mapping[script]["uncertain"],
+                        "$switch": {
+                            "branches": [
+                                {
+                                    "case": {"$eq": ["$legacyScript", key]},
+                                    "then": {
+                                        "period": value["period"],
+                                        "periodModifier": value["period_modifier"],
+                                        "uncertain": value["uncertain"],
+                                    },
+                                }
+                                for key, value in mapping.items()
+                            ],
+                            "default": {
+                                "period": "None",
+                                "periodModifier": "None",
+                                "uncertain": False,
+                            },
+                        }
                     }
-                    if script in mapping
-                    else None
                 }
-            },
-        )
-        print(f"{i} fragments processed\r", end="")
-        sleep(0.0001)
+            }
+        ],
+    )
 
-    print("\nProcess finished.")
+    pprint(result.raw_result)
