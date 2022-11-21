@@ -52,6 +52,7 @@ def test_search_include_homophones(sign_repository, signs):
 
     first = memoizing_sign_repository.search_include_homophones(value)
     second = memoizing_sign_repository.search_include_homophones(value)
+
     assert [sign] == first
     assert first is second
 
@@ -93,5 +94,19 @@ def test_search_all(sign_repository, signs):
 
     first = memoizing_sign_repository.search_all(value, sub_index)
     second = memoizing_sign_repository.search_all(value, sub_index)
+    assert [sign] == first
+    assert first is second
+
+
+def test_search_by_lemma(sign_repository, signs):
+    sign = signs[0]
+    word_id = sign.logograms[0].word_id[0]
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+    memoizing_sign_repository.create(sign)
+
+    first = memoizing_sign_repository.search_by_lemma(word_id)
+    second = memoizing_sign_repository.search_by_lemma(word_id)
+
     assert [sign] == first
     assert first is second

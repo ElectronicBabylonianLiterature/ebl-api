@@ -18,6 +18,7 @@ class MemoizingSignRepository(SignRepository):
             delegate.search_include_homophones
         )
         self._search_by_lists_name = pydash.memoize(delegate.search_by_lists_name)
+        self._search_by_lemma = pydash.memoize(delegate.search_by_lemma)
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)
@@ -27,6 +28,9 @@ class MemoizingSignRepository(SignRepository):
 
     def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
         return self._search_by_lists_name(name, number)
+
+    def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
+        return self._search_by_lemma(word_id)
 
     def search_include_homophones(self, reading) -> Sequence[Sign]:
         return self._search_include_homophones(reading)

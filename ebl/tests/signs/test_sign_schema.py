@@ -23,6 +23,7 @@ def test_logogram_schema():
         "atf": "AŠ-IKU",
         "wordId": ["ikû I"],
         "schrammLogogramme": "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)",
+        "unicode": "",
     }
     logogram = Logogram(
         "AŠ-IKU", Atf("AŠ-IKU"), ("ikû I",), "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
