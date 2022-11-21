@@ -25,14 +25,6 @@ def inject_logograms_unicode(
         _signs.append(sign.set_logograms(logograms))
     return _signs
 
-
-def preprocess_logogram_atf(atf: str) -> Sequence[str]:
-    atf = re.sub("(.*?)", "", atf)
-    if "→" in atf:
-        atf = atf.split("→")[1]
-    return [atf_part.strip("+ ") for atf_part in atf.split(",")]
-
-
 def get_logogram_unicode(atf: str, sign_repository: SignRepository) -> str:
     unicode_list = []
     for atf_part in preprocess_logogram_atf(atf):
@@ -40,3 +32,9 @@ def get_logogram_unicode(atf: str, sign_repository: SignRepository) -> str:
         parse_text_line(f"1. {atf_part}").accept(signs_visitor)
         unicode_list.append("".join(chr(char) for char in signs_visitor.result_unicode))
     return ", ".join(unicode_list)
+
+def preprocess_logogram_atf(atf: str) -> Sequence[str]:
+    atf = re.sub(r"\(.*?\)", "", atf)
+    if "→" in atf:
+        atf = atf.split("→")[1]
+    return [atf_part.strip("+ ") for atf_part in atf.split(",")]

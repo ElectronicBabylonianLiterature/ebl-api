@@ -1,5 +1,6 @@
 import falcon
 import pytest
+import copy
 
 from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.transliteration.domain.sign import Sign, SignName
@@ -20,100 +21,51 @@ def test_signs_not_found(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
+sign_data = {
+    "lists": [{"name": "ABZ", "number": "377n1"}],
+    "logograms": [
+        {
+            "logogram": "P₂",
+            "atf": "P₂",
+            "wordId": ["lemmatu I"],
+            "schrammLogogramme": "P₂",
+            "unicode": "",
+        }
+    ],
+    "fossey": [],
+    "mesZl": "",
+    "LaBaSi": "",
+    "name": "P₂",
+    "unicode": [74865],
+    "values": [{"subIndex": 1, "value": ":"}],
+}
+
+sign_data2 = copy.deepcopy(sign_data)
+sign_data2["logograms"][0]["unicode"] = "?"
+
+
 @pytest.mark.parametrize(
     "params, expected",
     [
         (
             {"listsName": "ABZ", "listsNumber": "377n1"},
-            [
-                {
-                    "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [
-                        {
-                            "logogram": "P₂",
-                            "atf": "P₂",
-                            "wordId": ["lemmatu I"],
-                            "schrammLogogramme": "P₂",
-                            "unicode": "",
-                        }
-                    ],
-                    "fossey": [],
-                    "mesZl": "",
-                    "LaBaSi": "",
-                    "name": "P₂",
-                    "unicode": [74865],
-                    "values": [{"subIndex": 1, "value": ":"}],
-                }
-            ],
+            [sign_data],
         ),
         (
             {"value": ":", "subIndex": "1"},
-            [
-                {
-                    "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [
-                        {
-                            "logogram": "P₂",
-                            "atf": "P₂",
-                            "wordId": ["lemmatu I"],
-                            "schrammLogogramme": "P₂",
-                            "unicode": "",
-                        }
-                    ],
-                    "fossey": [],
-                    "mesZl": "",
-                    "LaBaSi": "",
-                    "name": "P₂",
-                    "unicode": [74865],
-                    "values": [{"subIndex": 1, "value": ":"}],
-                }
-            ],
+            [sign_data],
         ),
         (
             {"value": ":", "isIncludeHomophones": "true", "subIndex": "2"},
-            [
-                {
-                    "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [
-                        {
-                            "logogram": "P₂",
-                            "atf": "P₂",
-                            "wordId": ["lemmatu I"],
-                            "schrammLogogramme": "P₂",
-                            "unicode": "",
-                        }
-                    ],
-                    "fossey": [],
-                    "mesZl": "",
-                    "LaBaSi": "",
-                    "name": "P₂",
-                    "unicode": [74865],
-                    "values": [{"subIndex": 1, "value": ":"}],
-                }
-            ],
+            [sign_data],
         ),
         (
             {"value": "ku", "subIndex": "1", "isComposite": "true"},
-            [
-                {
-                    "lists": [{"name": "ABZ", "number": "377n1"}],
-                    "logograms": [
-                        {
-                            "logogram": "P₂",
-                            "atf": "P₂",
-                            "wordId": ["lemmatu I"],
-                            "schrammLogogramme": "P₂",
-                            "unicode": "",
-                        }
-                    ],
-                    "fossey": [],
-                    "mesZl": "",
-                    "LaBaSi": "",
-                    "name": "P₂",
-                    "unicode": [74865],
-                    "values": [{"subIndex": 1, "value": ":"}],
-                }
-            ],
+            [sign_data],
+        ),
+        (
+            {"wordId": "lemmatu I"},
+            [sign_data2],
         ),
     ],
 )
