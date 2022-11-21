@@ -82,11 +82,7 @@ class AnnotationsService:
 
             updated_cropped_annotation = attr.evolve(
                 annotation,
-                cropped_sign=CroppedSign(
-                    cropped_sign_image.image_id,
-                    script,
-                    label
-                ),
+                cropped_sign=CroppedSign(cropped_sign_image.image_id, script, label),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
         return (

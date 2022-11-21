@@ -21,10 +21,10 @@ from ebl.fragmentarium.domain.annotation import (
 
 MINIMUM_BOUNDING_BOX_SIZE = 0.3
 TO_FILTER = [
-        AnnotationValueType.RULING_DOLLAR_LINE,
-        AnnotationValueType.SURFACE_AT_LINE,
-        AnnotationValueType.STRUCT
-    ]
+    AnnotationValueType.RULING_DOLLAR_LINE,
+    AnnotationValueType.SURFACE_AT_LINE,
+    AnnotationValueType.STRUCT,
+]
 
 
 def filter_empty_annotation(annotation: Annotation) -> bool:

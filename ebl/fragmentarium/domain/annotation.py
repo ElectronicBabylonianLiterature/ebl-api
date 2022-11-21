@@ -58,7 +58,7 @@ class Annotation:
         )
         cropped_image = image.crop(area)
         MAX_SIZE = (800, 800)
-        if cropped_image.size[0] * cropped_image.size[1] >= MAX_SIZE[0]* MAX_SIZE[1]:
+        if cropped_image.size[0] * cropped_image.size[1] >= MAX_SIZE[0] * MAX_SIZE[1]:
             cropped_image.thumbnail(MAX_SIZE)
         buf = io.BytesIO()
         cropped_image.save(buf, format="PNG")
