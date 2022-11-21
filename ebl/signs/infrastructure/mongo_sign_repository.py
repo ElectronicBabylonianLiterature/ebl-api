@@ -111,6 +111,10 @@ class MongoSignRepository(SignRepository):
     def create(self, sign: Sign) -> str:
         return self._collection.insert_one(SignSchema().dump(sign))
 
+    def find_many(self, query, *args, **kwargs):
+        data = self._collection.find_many(query, *args, **kwargs)
+        return cast(Sign, SignSchema(unknown=EXCLUDE).load(data, many=True))
+
     def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))

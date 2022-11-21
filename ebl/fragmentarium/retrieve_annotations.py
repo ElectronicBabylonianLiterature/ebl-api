@@ -103,7 +103,6 @@ def create_annotations(
         bounding_boxes, signs = prepare_annotations(
             single_annotation, image.size[0], image.size[1]
         )
-
         write_annotations(
             join(output_folder_annotations, f"gt_{fragment_number}.txt"),
             bounding_boxes,
