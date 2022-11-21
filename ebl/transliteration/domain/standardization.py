@@ -19,9 +19,6 @@ class Standardization:
     def get_value(self, is_deep: bool):
         return self.deep if is_deep else self.shallow
 
-    def get_unicode_value(self):
-        return self.unicode
-
     @classmethod
     def of_sign(cls, sign: Sign) -> "Standardization":
         shallow = cls.escape_standardization(sign)

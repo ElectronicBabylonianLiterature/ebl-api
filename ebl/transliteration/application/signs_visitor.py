@@ -88,10 +88,7 @@ class SignsVisitor(TokenVisitor):
     @property
     def result_unicode(self) -> Sequence[int]:
         return flat_map_deep(
-            [
-                standardization.get_unicode_value()
-                for standardization in self._standardizations
-            ]
+            [standardization.unicode for standardization in self._standardizations]
         )
 
     @skip_erasures
@@ -175,9 +172,10 @@ class SignsVisitor(TokenVisitor):
     @skip_enclosures
     def visit_variant(self, variant: Variant) -> None:
         variant_visitor = SignsVisitor(self._sign_repository, False, self._to_unicode)
-        for i, token in enumerate(variant.tokens):
+        tokens_len = len(variant.tokens)
+        for index, token in enumerate(variant.tokens):
             token.accept(variant_visitor)
-            if i + 1 < len(variant.tokens) and self._to_unicode:
+            if index + 1 < tokens_len and self._to_unicode:
                 variant_visitor._standardizations.append(
                     Standardization.of_string(VARIANT_SEPARATOR)
                 )
