@@ -10,6 +10,7 @@ class MemoizingSignRepository(SignRepository):
     def __init__(self, delegate: SignRepository):
         self._create = delegate.create
         self._find = pydash.memoize(delegate.find)
+        self._find_many = delegate.find_many
         self._search = pydash.memoize(delegate.search)
         self._search_by_id = pydash.memoize(delegate.search_by_id)
         self._search_all = pydash.memoize(delegate.search_all)
@@ -24,6 +25,9 @@ class MemoizingSignRepository(SignRepository):
 
     def find(self, name: SignName) -> Sign:
         return self._find(name)
+
+    def find_many(self, query, *args, **kwargs) -> Sign:
+        return self._find_many(self, query, *args, **kwargs)
 
     def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
         return self._search_by_lists_name(name, number)

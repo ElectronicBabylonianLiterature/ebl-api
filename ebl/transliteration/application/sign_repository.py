@@ -14,7 +14,7 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
-    def find_many(self, query, *args, **kwargs ) -> Sign:
+    def find_many(self, query, *args, **kwargs) -> Sign:
         ...
 
     @abstractmethod
