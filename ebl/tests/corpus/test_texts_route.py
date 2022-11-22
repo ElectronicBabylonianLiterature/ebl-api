@@ -77,3 +77,4 @@ def test_searching_texts(client, bibliography, sign_repository, signs, text_repo
         ],
         "totalCount": 1,
     }
+    assert get_result.headers["Cache-Control"] == "private, max-age=600"
