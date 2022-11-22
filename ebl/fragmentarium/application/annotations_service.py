@@ -71,11 +71,10 @@ class AnnotationsService:
         updated_cropped_annotations = []
 
         for annotation in annotations.annotations:
-            label = (
-                self._label_by_line_number(annotation.data.path[0], labels)
-                if annotation.data.type != AnnotationValueType.BLANK
-                else ""
-            )
+            label = ""
+            if annotation.data.type not in [AnnotationValueType.BLANK, AnnotationValueType.STRUCT, AnnotationValueType.UnclearSign]:
+                label = self._label_by_line_number(annotation.data.path[0], labels)
+
             cropped_image = annotation.crop_image(image)
             cropped_sign_image = CroppedSignImage.create(cropped_image)
             cropped_sign_images.append(cropped_sign_image)
