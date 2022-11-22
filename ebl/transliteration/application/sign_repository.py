@@ -14,6 +14,10 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
+    def find_many(self, query, *args, **kwargs) -> Sign:
+        ...
+
+    @abstractmethod
     def search_by_id(self, query: str) -> Sequence[Sign]:
         ...
 

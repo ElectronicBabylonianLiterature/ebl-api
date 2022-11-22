@@ -20,6 +20,11 @@ from ebl.fragmentarium.domain.annotation import (
 )
 
 MINIMUM_BOUNDING_BOX_SIZE = 0.3
+TO_FILTER = [
+    AnnotationValueType.RULING_DOLLAR_LINE,
+    AnnotationValueType.SURFACE_AT_LINE,
+    AnnotationValueType.STRUCT,
+]
 
 
 def filter_empty_annotation(annotation: Annotation) -> bool:
@@ -35,10 +40,7 @@ def filter_empty_annotation(annotation: Annotation) -> bool:
 
 
 def filter_annotation_by_type(annotation: Annotation) -> bool:
-    return annotation.data.type not in [
-        AnnotationValueType.RULING_DOLLAR_LINE,
-        AnnotationValueType.SURFACE_AT_LINE,
-    ]
+    return annotation.data.type not in TO_FILTER
 
 
 def filter_annotation(annotation: Annotation) -> bool:
@@ -64,6 +66,7 @@ def handle_blank_annotation_type(annotation_data: AnnotationData) -> str:
 def prepare_annotations(
     annotation: Annotations, image_width: int, image_height: int
 ) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
+
     annotations_with_signs = list(filter(filter_annotation, annotation.annotations))
 
     bounding_boxes = BoundingBox.from_annotations(
@@ -100,7 +103,6 @@ def create_annotations(
         bounding_boxes, signs = prepare_annotations(
             single_annotation, image.size[0], image.size[1]
         )
-
         write_annotations(
             join(output_folder_annotations, f"gt_{fragment_number}.txt"),
             bounding_boxes,
@@ -167,6 +169,7 @@ if __name__ == "__main__":
         args.output_imgs = "./annotations/imgs"
 
     context = create_context()
+    print(f"Following Annotation Types are filtered: {TO_FILTER}")
     annotation_collection = context.annotations_repository.retrieve_all_non_empty()
     create_annotations(
         annotation_collection,
