@@ -10,7 +10,8 @@ from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
 from ebl.fragmentarium.domain.fragment import Scope
-from ebl.errors import DataError
+
+from marshmallow import ValidationError
 
 
 def check_fragment_scope(user: User, scopes: Sequence[Scope]):
@@ -25,10 +26,13 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        lines = req.get_param_as_json("lines")
+        lines = req.get_param_as_list("lines")
 
-        if not (lines is None or isinstance(lines, list)):
-            raise DataError("Lines must be a list of integers")
+        if lines is not None:
+            try:
+                lines = [int(line) for line in lines]
+            except ValueError as error:
+                raise ValidationError("Lines must be a list of integers") from error
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
