@@ -6,15 +6,17 @@ import json
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from urllib.parse import urlencode
 
 
-@pytest.mark.parametrize(
-    "lines,slice_", [(False, None), (None, None), ([], 0), ([0, 1], 2)]
-)
+@pytest.mark.parametrize("lines,slice_", [(False, None), (None, 0), ([0, 1], 2)])
 def test_get(client, fragmentarium, parallel_line_injector, user, lines, slice_):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
-    lines_parameter = "" if lines is False else f"?lines={json.dumps(lines)}"
+    lines_parameter = (
+        "" if lines is False else f"?{urlencode({'lines': lines}, doseq=True)}"
+    )
+
     result = client.simulate_get(
         f"/fragments/{transliterated_fragment.number}{lines_parameter}"
     )
