@@ -74,8 +74,7 @@ class MongoCollection:
             return result
 
     def update_many(self, query, update, **kwargs):
-        result = self.__get_collection().update_many(query, update, **kwargs)
-        return result
+        return self.__get_collection().update_many(query, update, **kwargs)
 
     def count_documents(self, query) -> int:
         return self.__get_collection().count_documents(query)
