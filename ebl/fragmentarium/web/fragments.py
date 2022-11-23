@@ -1,6 +1,6 @@
 import falcon
 from falcon import Request, Response
-from typing import Sequence, Union, List
+from typing import Sequence, Optional, List
 from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -12,15 +12,13 @@ from ebl.users.web.require_scope import require_scope
 from ebl.fragmentarium.domain.fragment import Scope
 from ebl.errors import DataError
 
-LineParameter = Union[List[str], None]
-
 
 def check_fragment_scope(user: User, scopes: Sequence[Scope]):
     if not user.can_read_fragment([scope_group.value for scope_group in scopes]):
         raise falcon.HTTPForbidden()
 
 
-def parse_lines(lines: LineParameter) -> LineParameter:
+def parse_lines(lines: Optional[List[str]]) -> Optional[List[int]]:
     if lines == ["None"]:
         return []
     elif lines is None:
