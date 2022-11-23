@@ -72,7 +72,11 @@ class AnnotationsService:
 
         for annotation in annotations.annotations:
             label = ""
-            if annotation.data.type not in [AnnotationValueType.BLANK, AnnotationValueType.STRUCT, AnnotationValueType.UnclearSign]:
+            if annotation.data.type not in [
+                AnnotationValueType.BLANK,
+                AnnotationValueType.STRUCT,
+                AnnotationValueType.UnclearSign,
+            ]:
                 label = self._label_by_line_number(annotation.data.path[0], labels)
 
             cropped_image = annotation.crop_image(image)
