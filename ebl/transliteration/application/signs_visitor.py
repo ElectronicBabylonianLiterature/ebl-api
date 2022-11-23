@@ -1,7 +1,9 @@
 import re
-from typing import Callable, MutableSequence, Optional, Sequence, TypeVar
+from typing import Callable, MutableSequence, Optional, Sequence, TypeVar, Union
 
 import attr
+
+from pydash import flat_map_deep
 
 from ebl.errors import NotFoundError
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -67,16 +69,27 @@ def skip_erasures(func: Callable[[S, T], None]) -> Callable[[S, T], None]:
 class SignsVisitor(TokenVisitor):
     _sign_repository: SignRepository
     _is_deep: bool = True
+    _to_unicode: bool = False
     _standardizations: MutableSequence[Standardization] = attr.ib(
         init=False, factory=list
     )
 
     @property
-    def result(self) -> Sequence[str]:
+    def result(self) -> Sequence[Union[int, str]]:
+        return self.result_unicode if self._to_unicode else self.result_string
+
+    @property
+    def result_string(self) -> Sequence[str]:
         return [
             standardization.get_value(self._is_deep)
             for standardization in self._standardizations
         ]
+
+    @property
+    def result_unicode(self) -> Sequence[int]:
+        return flat_map_deep(
+            [standardization.unicode for standardization in self._standardizations]
+        )
 
     @skip_erasures
     def visit_word(self, word: Word) -> None:
@@ -158,13 +171,25 @@ class SignsVisitor(TokenVisitor):
     @skip_erasures
     @skip_enclosures
     def visit_variant(self, variant: Variant) -> None:
-        variant_visitor = SignsVisitor(self._sign_repository, False)
-        for token in variant.tokens:
+        variant_visitor = SignsVisitor(self._sign_repository, False, self._to_unicode)
+        tokens_len = len(variant.tokens)
+        for index, token in enumerate(variant.tokens):
             token.accept(variant_visitor)
+            if index + 1 < tokens_len and self._to_unicode:
+                variant_visitor._standardizations.append(
+                    Standardization.of_string(VARIANT_SEPARATOR)
+                )
+        self._visit_variant(variant_visitor)
 
-        self._standardizations.append(
-            Standardization.of_string(VARIANT_SEPARATOR.join(variant_visitor.result))
-        )
+    def _visit_variant(self, variant_visitor: "SignsVisitor") -> None:
+        if not self._to_unicode:
+            self._standardizations.append(
+                Standardization.of_string(
+                    VARIANT_SEPARATOR.join(variant_visitor.result_string)
+                )
+            )
+        else:
+            self._standardizations += variant_visitor._standardizations
 
     def _visit_sign(self, sign: Sign) -> None:
         if self._is_deep and is_splittable(sign.name):
@@ -180,7 +205,9 @@ class SignsVisitor(TokenVisitor):
             return Standardization.of_string(name)
 
     def _visit_tokens(self, tokens: Sequence[Token]) -> None:
-        sub_visitor = SignsVisitor(self._sign_repository)
+        sub_visitor = SignsVisitor(
+            self._sign_repository, self._is_deep, self._to_unicode
+        )
         for token in tokens:
             token.accept(sub_visitor)
         self._standardizations.extend(sub_visitor._standardizations)

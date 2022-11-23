@@ -27,6 +27,8 @@ class AnnotationValueType(Enum):
     BLANK = "Blank"
     PREDICTED = "Predicted"
     PARTIALLY_BROKEN = "PartiallyBroken"
+    STRUCT = "Struct"
+    UnclearSign = "UnclearSign"
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
@@ -55,6 +57,9 @@ class Annotation:
             int(bounding_box.top_left_y + bounding_box.height),
         )
         cropped_image = image.crop(area)
+        MAX_SIZE = (800, 800)
+        if cropped_image.size[0] * cropped_image.size[1] >= MAX_SIZE[0] * MAX_SIZE[1]:
+            cropped_image.thumbnail(MAX_SIZE)
         buf = io.BytesIO()
         cropped_image.save(buf, format="PNG")
         return Base64(base64.b64encode(buf.getvalue()).decode("utf-8"))
@@ -96,17 +101,15 @@ class BoundingBox:
         image_width: int, image_height: int, annotations: Sequence[Annotation]
     ) -> Sequence["BoundingBox"]:
         return tuple(
-            [
-                BoundingBox.from_relative_coordinates(
-                    annotation.geometry.x,
-                    annotation.geometry.y,
-                    annotation.geometry.width,
-                    annotation.geometry.height,
-                    image_width,
-                    image_height,
-                )
-                for annotation in annotations
-            ]
+            BoundingBox.from_relative_coordinates(
+                annotation.geometry.x,
+                annotation.geometry.y,
+                annotation.geometry.width,
+                annotation.geometry.height,
+                image_width,
+                image_height,
+            )
+            for annotation in annotations
         )
 
 

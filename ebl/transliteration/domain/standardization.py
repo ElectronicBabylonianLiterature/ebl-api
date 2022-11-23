@@ -1,5 +1,7 @@
 import attr
 
+from typing import Sequence
+
 from ebl.transliteration.domain.atf import VARIANT_SEPARATOR
 from ebl.transliteration.domain.sign import Sign
 
@@ -8,6 +10,7 @@ from ebl.transliteration.domain.sign import Sign
 class Standardization:
     deep: str
     shallow: str
+    unicode: Sequence[int]
 
     @property
     def is_splittable(self) -> bool:
@@ -20,11 +23,11 @@ class Standardization:
     def of_sign(cls, sign: Sign) -> "Standardization":
         shallow = cls.escape_standardization(sign)
         deep = sign.name if is_splittable(sign.name) else shallow
-        return cls(deep, shallow)
+        return cls(deep, shallow, sign.unicode)
 
     @classmethod
     def of_string(cls, value: str) -> "Standardization":
-        return cls(value, value)
+        return cls(value, value, tuple(ord(char) for char in value))
 
     @staticmethod
     def escape_standardization(sign: Sign) -> str:

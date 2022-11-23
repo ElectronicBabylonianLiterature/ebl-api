@@ -14,6 +14,10 @@ class SignRepository(ABC):
         ...
 
     @abstractmethod
+    def find_many(self, query, *args, **kwargs) -> Sign:
+        ...
+
+    @abstractmethod
     def search_by_id(self, query: str) -> Sequence[Sign]:
         ...
 
@@ -35,4 +39,8 @@ class SignRepository(ABC):
 
     @abstractmethod
     def search(self, reading: str, sub_index: Optional[int]) -> Optional[Sign]:
+        ...
+
+    @abstractmethod
+    def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
         ...

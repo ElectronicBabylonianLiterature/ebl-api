@@ -48,6 +48,7 @@ class LogogramSchema(Schema):
     atf = fields.String(required=True)
     word_id = fields.List(fields.String(), required=True, data_key="wordId")
     schramm_logogramme = fields.String(required=True, data_key="schrammLogogramme")
+    unicode = fields.String()
 
     @post_load
     def make_logogram(self, data, **kwargs) -> Logogram:
@@ -111,6 +112,10 @@ class MongoSignRepository(SignRepository):
     def create(self, sign: Sign) -> str:
         return self._collection.insert_one(SignSchema().dump(sign))
 
+    def find_many(self, query, *args, **kwargs):
+        data = self._collection.find_many(query, *args, **kwargs)
+        return cast(Sign, SignSchema(unknown=EXCLUDE).load(data, many=True))
+
     def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
@@ -170,8 +175,8 @@ class MongoSignRepository(SignRepository):
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
                         "LaBaSi": {"$first": "$LaBaSi"},
-                        "Logograms": {"$push": "$Logograms"},
-                        "Fossey": {"$push": "$Fossey"},
+                        "logograms": {"$first": "$logograms"},
+                        "fossey": {"$first": "$fossey"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }
@@ -224,5 +229,11 @@ class MongoSignRepository(SignRepository):
                 {"$unwind": "$joined"},
                 {"$replaceRoot": {"newRoot": "$joined"}},
             ]
+        )
+        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+
+    def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
+        cursor = self._collection.find_many(
+            {"logograms": {"$elemMatch": {"wordId": word_id}}}
         )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
