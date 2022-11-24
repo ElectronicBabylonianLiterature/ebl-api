@@ -64,7 +64,7 @@ class AnnotationsService:
         self,
         annotations: Annotations,
         image: Image.Image,
-        script: str,
+        legacy_script: str,
         labels: Sequence[LineLabel],
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
@@ -85,7 +85,9 @@ class AnnotationsService:
 
             updated_cropped_annotation = attr.evolve(
                 annotation,
-                cropped_sign=CroppedSign(cropped_sign_image.image_id, script, label),
+                cropped_sign=CroppedSign(
+                    cropped_sign_image.image_id, legacy_script, label
+                ),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
         return (
@@ -105,7 +107,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.script, fragment.text.labels
+            annotations, image, fragment.legacy_script, fragment.text.labels
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:

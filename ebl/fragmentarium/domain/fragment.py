@@ -86,7 +86,7 @@ class Fragment:
     publication: str = ""
     description: str = ""
     collection: str = ""
-    script: str = ""
+    legacy_script: str = ""
     museum: str = ""
     width: Measure = Measure()
     length: Measure = Measure()

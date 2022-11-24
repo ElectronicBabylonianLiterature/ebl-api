@@ -35,18 +35,18 @@ class CroppedSignImageSchema(Schema):
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedSign:
     image_id: str
-    script: str
+    legacy_script: str
     label: str
 
 
 class CroppedSignSchema(Schema):
     image_id = fields.String(required=True, data_key="imageId")
-    script = fields.String(required=True)
+    legacy_script = fields.String(required=True, data_key="legacyScript")
     label = fields.String(required=True)
 
     @post_load
     def load(self, data, **kwargs):
-        return CroppedSign(data["imageId"], data["script"], data["label"])
+        return CroppedSign(data["imageId"], data["legacyScript"], data["label"])
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
@@ -60,7 +60,7 @@ class CroppedAnnotation(CroppedSign):
     ) -> "CroppedAnnotation":
         return cls(
             cropped_sign.image_id,
-            cropped_sign.script,
+            cropped_sign.legacy_script,
             cropped_sign.label,
             fragment_number,
             image,

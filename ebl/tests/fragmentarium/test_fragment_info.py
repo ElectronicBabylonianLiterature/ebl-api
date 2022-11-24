@@ -17,7 +17,7 @@ def test_of():
     assert FragmentInfo.of(FRAGMENT, MATCHING_LINES) == FragmentInfo(
         FRAGMENT.number,
         FRAGMENT.accession,
-        FRAGMENT.script,
+        FRAGMENT.legacy_script,
         FRAGMENT.description,
         MATCHING_LINES,
         "",
@@ -30,7 +30,7 @@ def test_of_with_references():
     assert FragmentInfo.of(FRAGMENT_WITH_REFERENCES, MATCHING_LINES) == FragmentInfo(
         FRAGMENT_WITH_REFERENCES.number,
         FRAGMENT_WITH_REFERENCES.accession,
-        FRAGMENT_WITH_REFERENCES.script,
+        FRAGMENT_WITH_REFERENCES.legacy_script,
         FRAGMENT_WITH_REFERENCES.description,
         MATCHING_LINES,
         "",
@@ -65,7 +65,7 @@ def test_of_with_record():
     assert FragmentInfo.of(fragment, MATCHING_LINES) == FragmentInfo(
         FRAGMENT.number,
         FRAGMENT.accession,
-        FRAGMENT.script,
+        FRAGMENT.legacy_script,
         FRAGMENT.description,
         MATCHING_LINES,
         "This User",

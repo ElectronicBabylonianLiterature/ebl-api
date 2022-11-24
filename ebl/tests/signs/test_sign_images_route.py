@@ -27,7 +27,7 @@ def test_signs_get(
     fragment_repository.create(fragment)
 
     annotation_data = AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0])
-    cropped_sign = CroppedSignFactory.build(script=fragment.script)
+    cropped_sign = CroppedSignFactory.build(legacy_script=fragment.legacy_script)
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
     )
@@ -49,7 +49,7 @@ def test_signs_get(
 
     assert result_json["fragmentNumber"] == str(fragment.number)
     assert result_json["image"] == "test-base64-string"
-    assert result_json["script"] == cropped_sign.script
+    assert result_json["legacyScript"] == cropped_sign.legacy_script
     assert result_json["label"] == cropped_sign.label
 
     assert result.status == falcon.HTTP_OK

@@ -13,7 +13,7 @@ from ebl.transliteration.domain.text import Text
 class FragmentInfo:
     number: MuseumNumber
     accession: str
-    script: str
+    legacy_script: str
     description: str
     matching_lines: Optional[Text]
     editor: str
@@ -46,7 +46,7 @@ class FragmentInfo:
         return FragmentInfo(
             fragment.number,
             fragment.accession,
-            fragment.script,
+            fragment.legacy_script,
             fragment.description,
             matching_lines,
             first_transliteration.user,

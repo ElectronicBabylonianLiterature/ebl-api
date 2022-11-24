@@ -76,8 +76,8 @@ def test_collection():
 
 
 def test_script():
-    fragment = FragmentFactory.build(script="NA")
-    assert fragment.script == "NA"
+    fragment = FragmentFactory.build(legacy_script="NA")
+    assert fragment.legacy_script == "NA"
 
 
 def test_museum():

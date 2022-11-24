@@ -466,13 +466,13 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     for sign in signs:
         sign_repository.create(sign)
     transliterated_fragment_0 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.2"), script="A"
+        number=MuseumNumber.of("X.2"), legacy_script="A"
     )
     transliterated_fragment_1 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.0"), script="B"
+        number=MuseumNumber.of("X.0"), legacy_script="B"
     )
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.1"), script="B"
+        number=MuseumNumber.of("X.1"), legacy_script="B"
     )
 
     fragment_repository.create_many(
@@ -630,7 +630,7 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
     assert fragment_repository.query_transliterated_line_to_vec() == [
         LineToVecEntry(
             transliterated_fragment.number,
-            transliterated_fragment.script,
+            transliterated_fragment.legacy_script,
             transliterated_fragment.line_to_vec,
         )
     ]
