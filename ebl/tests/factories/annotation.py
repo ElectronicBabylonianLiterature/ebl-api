@@ -43,7 +43,7 @@ class CroppedSignFactory(factory.Factory):
         model = CroppedSign
 
     image_id = factory.Faker("word")
-    legacy_script = factory.Faker("word")
+    script = factory.Faker("word")
     label = factory.Faker("word")
 
 

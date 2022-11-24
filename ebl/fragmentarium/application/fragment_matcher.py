@@ -81,12 +81,12 @@ class FragmentMatcher:
             ):
                 line_to_vec_score = LineToVecScore(
                     entry.museum_number,
-                    entry.legacy_script,
+                    entry.script,
                     score(candidate_line_to_vecs, entry.line_to_vec),
                 )
                 line_to_vec_weighted_score = LineToVecScore(
                     entry.museum_number,
-                    entry.legacy_script,
+                    entry.script,
                     score_weighted(candidate_line_to_vecs, entry.line_to_vec),
                 )
                 ranker.insert_score(line_to_vec_score, line_to_vec_weighted_score)

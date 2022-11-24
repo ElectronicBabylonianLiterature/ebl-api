@@ -19,11 +19,11 @@ def test_line_to_vec_ranking_schema():
     )
     assert LineToVecRankingSchema().dump(line_to_vec_ranking) == {
         "score": [
-            {"museumNumber": "X.0", "score": 10, "legacyScript": "N/A"},
-            {"museumNumber": "X.1", "score": 4, "legacyScript": "N/A"},
+            {"museumNumber": "X.0", "score": 10, "script": "N/A"},
+            {"museumNumber": "X.1", "score": 4, "script": "N/A"},
         ],
         "scoreWeighted": [
-            {"museumNumber": "X.0", "score": 15, "legacyScript": "N/A"},
-            {"museumNumber": "X.1", "score": 7, "legacyScript": "N/A"},
+            {"museumNumber": "X.0", "score": 15, "script": "N/A"},
+            {"museumNumber": "X.1", "score": 7, "script": "N/A"},
         ],
     }

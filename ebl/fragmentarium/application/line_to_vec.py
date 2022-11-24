@@ -9,12 +9,12 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecEntry:
     museum_number: MuseumNumber
-    legacy_script: str
+    script: str
     line_to_vec: Tuple[LineToVecEncodings, ...]
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineToVecScore:
     museum_number: MuseumNumber
-    legacy_script: str
+    script: str
     score: int

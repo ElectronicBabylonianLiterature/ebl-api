@@ -17,14 +17,14 @@ def test_fragment_matcher_route(client, fragmentarium, user):
         "score": [
             {
                 "museumNumber": "X.326",
-                "legacyScript": fragment_2.legacy_script,
+                "script": fragment_2.legacy_script,
                 "score": 3,
             }
         ],
         "scoreWeighted": [
             {
                 "museumNumber": "X.326",
-                "legacyScript": fragment_2.legacy_script,
+                "script": fragment_2.legacy_script,
                 "score": 5,
             }
         ],

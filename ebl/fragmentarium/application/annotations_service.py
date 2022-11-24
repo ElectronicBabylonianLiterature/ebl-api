@@ -64,7 +64,7 @@ class AnnotationsService:
         self,
         annotations: Annotations,
         image: Image.Image,
-        legacy_script: str,
+        script: str,
         labels: Sequence[LineLabel],
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
@@ -85,9 +85,7 @@ class AnnotationsService:
 
             updated_cropped_annotation = attr.evolve(
                 annotation,
-                cropped_sign=CroppedSign(
-                    cropped_sign_image.image_id, legacy_script, label
-                ),
+                cropped_sign=CroppedSign(cropped_sign_image.image_id, script, label),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
         return (

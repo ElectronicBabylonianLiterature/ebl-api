@@ -46,7 +46,7 @@ SERIALIZED = {
             },
             "croppedSign": {
                 "imageId": IMAGE_ID,
-                "legacyScript": SCRIPT,
+                "script": SCRIPT,
                 "label": LABEL,
             },
         }
