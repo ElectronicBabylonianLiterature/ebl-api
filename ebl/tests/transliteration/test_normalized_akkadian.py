@@ -107,7 +107,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
     assert_token_serialization(word, serialized)
 
 
-def test_akkadian_word_invalid_modifier() -> None:
+def test_akkadian_word_invalid_modifier():
     with pytest.raises(ValueError):
         AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
 

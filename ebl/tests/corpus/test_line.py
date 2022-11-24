@@ -7,7 +7,7 @@ from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 
-def test_invalid_extent() -> None:
+def test_invalid_extent():
     translation = TranslationLine(
         tuple(), extent=Extent(LineNumber(1), (SurfaceLabel(tuple(), Surface.OBVERSE),))
     )

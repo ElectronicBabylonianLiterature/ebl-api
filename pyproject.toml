@@ -32,9 +32,9 @@ althaia = "^3.14.1-alpha.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.0"
-pytest-cov = "*"
+pytest-cov = "^4.0.0"
 freezegun = "*"
-pytest-mockito = "*"
+pytest-mockito = "^0.0.4"
 factory-boy = "*"
 flake8 = "*"
 pyhamcrest = "*"
@@ -43,8 +43,13 @@ httpretty = "*"
 pyre-check = "0.9.10"
 black = "*"
 pymongo-inmemory = "*"
-pytest-xdist = "*"
+pytest-xdist = "^3.0.2"
 autopep8 = "^1.6.0"
+pytest-forked = "^1.4.0"
+mypy-extensions = "^0.4.3"
+typeguard = "^2.13.3"
+typing-extensions = "^4.4.0"
+typing-inspect = "^0.8.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

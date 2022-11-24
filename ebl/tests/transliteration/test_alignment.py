@@ -32,7 +32,7 @@ def test_apply() -> None:
         Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
     ],
 )
-def test_apply_invalid(word) -> None:
+def test_apply_invalid(word):
     alignment = AlignmentToken("bu", 0)
     with pytest.raises(AlignmentError):
         alignment.apply(word)

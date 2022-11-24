@@ -239,14 +239,14 @@ def test_update_lemmatization() -> None:
     assert line.update_lemmatization(lemmatization) == expected
 
 
-def test_update_lemmatization_incompatible() -> None:
+def test_update_lemmatization_incompatible():
     line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("mu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
     with pytest.raises(LemmatizationError):
         line.update_lemmatization(lemmatization)
 
 
-def test_update_lemmatization_wrong_lenght() -> None:
+def test_update_lemmatization_wrong_lenght():
     line = TextLine.of_iterable(
         LINE_NUMBER,
         [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")])],

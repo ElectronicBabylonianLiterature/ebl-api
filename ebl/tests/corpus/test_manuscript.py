@@ -29,7 +29,7 @@ def test_is_empty(line: Union[TextLine, EmptyLine], expected: bool) -> None:
         (Provenance.UNCERTAIN, Period.NONE, ManuscriptType.NONE),
     ],
 )
-def test_invalid_siglum(provenance, period, type_) -> None:
+def test_invalid_siglum(provenance, period, type_):
     with pytest.raises(ValueError):
         Manuscript(1, provenance=provenance, period=period, type=type_)
 

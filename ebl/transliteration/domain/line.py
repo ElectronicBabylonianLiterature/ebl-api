@@ -40,7 +40,7 @@ class Line(ABC):
         return self
 
     def accept(self, visitor: TokenVisitor) -> None:
-        pass
+        return None
 
 
 @attr.s(auto_attribs=True, frozen=True)

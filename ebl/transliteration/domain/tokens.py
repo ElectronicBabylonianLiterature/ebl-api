@@ -15,7 +15,7 @@ from ebl.transliteration.domain.language import Language
 
 class TokenVisitor(ABC):
     def visit(self, token: "Token") -> None:
-        pass
+        return None
 
     def visit_word(self, word) -> None:
         self.visit(word)

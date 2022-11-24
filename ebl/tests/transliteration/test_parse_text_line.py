@@ -1304,7 +1304,7 @@ def test_parse_normalized_akkadain_shift() -> None:
         ("a+1.a+2. šu", [1]),
     ],
 )
-def test_invalid_text_line(atf, line_numbers) -> None:
+def test_invalid_text_line(atf, line_numbers):
     with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
@@ -1314,7 +1314,7 @@ def test_invalid_text_line(atf, line_numbers) -> None:
 @pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2])]
 )
-def test_invalid_brackets(atf, line_numbers) -> None:
+def test_invalid_brackets(atf, line_numbers):
     with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 

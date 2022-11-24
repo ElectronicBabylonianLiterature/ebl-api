@@ -210,7 +210,7 @@ def test_set_unique_lemma_empty() -> None:
         Word.of([Reading.of_name("bu"), Joiner.hyphen()]),
     ],
 )
-def test_set_unique_lemma_invalid(word) -> None:
+def test_set_unique_lemma_invalid(word):
     lemma = LemmatizationToken("bu", (WordId("nu I"),))
     with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)

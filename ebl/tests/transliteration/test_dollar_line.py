@@ -118,7 +118,7 @@ def test_state_dollar_line_content() -> None:
     assert actual.is_end_of is False
 
 
-def test_state_dollar_line_non_empty_string_error() -> None:
+def test_state_dollar_line_non_empty_string_error():
     with pytest.raises(ValueError):
         StateDollarLine(
             None, None, ScopeContainer(atf.Surface.REVERSE, "test"), None, None

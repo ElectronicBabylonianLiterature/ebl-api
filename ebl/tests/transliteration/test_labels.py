@@ -82,7 +82,7 @@ def test_parse_labels_empty() -> None:
 
 
 @pytest.mark.parametrize("labels", ["o r", "i iii", "i o"])
-def test_parse_labels_invalud(labels) -> None:
+def test_parse_labels_invalud(labels):
     with pytest.raises(PARSE_ERRORS):
         parse_labels(labels)
 
@@ -102,7 +102,7 @@ def test_label_to_atf(_, status, atf, model) -> None:
     assert model.to_atf() == f"{atf}{status}"
 
 
-def test_duplicate_status_is_invalid() -> None:
+def test_duplicate_status_is_invalid():
     class TestLabel(Label):
         @property
         def _atf(self) -> str:

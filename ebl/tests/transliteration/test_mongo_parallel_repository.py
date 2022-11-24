@@ -63,7 +63,7 @@ def test_find_implicit_chapter(
 
 
 def test_find_implicit_chapter_not_found(
-    parallel_repository: MongoParallelRepository,
-) -> None:
+    parallel_repository,
+):
     with pytest.raises(NotFoundError):
         parallel_repository.find_implicit_chapter(TEXT_ID)

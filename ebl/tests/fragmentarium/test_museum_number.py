@@ -22,27 +22,27 @@ def test_str_no_suffix() -> None:
     assert str(MuseumNumber(PREFIX, NUMBER)) == f"{PREFIX}.{NUMBER}"
 
 
-def test_invalid_empty_prefix() -> None:
+def test_invalid_empty_prefix():
     with pytest.raises(ValueError):
         MuseumNumber("", NUMBER)
 
 
-def test_invalid_period_in_prefix_no_suffix() -> None:
+def test_invalid_period_in_prefix_no_suffix():
     with pytest.raises(ValueError):
         MuseumNumber("K.A", NUMBER)
 
 
-def test_invalid_empty_number() -> None:
+def test_invalid_empty_number():
     with pytest.raises(ValueError):
         MuseumNumber(PREFIX, "")
 
 
-def test_invalid_period_in_number() -> None:
+def test_invalid_period_in_number():
     with pytest.raises(ValueError):
         MuseumNumber(PREFIX, "1.1")
 
 
-def test_invalid_period_in_suffix() -> None:
+def test_invalid_period_in_suffix():
     with pytest.raises(ValueError):
         MuseumNumber(PREFIX, NUMBER, "a.1")
 
@@ -64,7 +64,7 @@ def test_of_long_prefix() -> None:
     )
 
 
-def test_of_invalid() -> None:
+def test_of_invalid():
     with pytest.raises(ValueError):
         MuseumNumber.of("K.")
 

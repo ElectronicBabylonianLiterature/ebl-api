@@ -841,7 +841,7 @@ def test_lone_determinative(atf, expected) -> None:
 
 
 @pytest.mark.parametrize("atf", ["{udu}?"])
-def test_invalid_lone_determinative(atf) -> None:
+def test_invalid_lone_determinative(atf):
     with pytest.raises(UnexpectedInput):
         parse_word(atf)
 
@@ -870,6 +870,6 @@ def test_invalid_lone_determinative(atf) -> None:
         "kur-[",
     ],
 )
-def test_invalid(invalid_atf) -> None:
+def test_invalid(invalid_atf):
     with pytest.raises((UnexpectedInput, ParseError)):
         parse_word(invalid_atf)

@@ -68,7 +68,7 @@ def test_at_line_surface_no_status() -> None:
     assert at_line.display_value == "surface Stone wig"
 
 
-def test_at_line_surface_instantiate_text_with_wrong_surface() -> None:
+def test_at_line_surface_instantiate_text_with_wrong_surface():
     with pytest.raises(ValueError):
         at_line = SurfaceAtLine(
             SurfaceLabel((atf.Status.CORRECTION,), atf.Surface.OBVERSE, "Stone wig")
@@ -129,6 +129,6 @@ def test_at_line_composite_milestone() -> None:
     assert at_line.display_value == "m=locator o 1"
 
 
-def test_at_line_composite_raise_error() -> None:
+def test_at_line_composite_raise_error():
     with pytest.raises(ValueError):
         CompositeAtLine(atf.Composite.END, "paragraph", 1)

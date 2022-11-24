@@ -56,7 +56,7 @@ def test_line_variant_constructor() -> None:
     assert LINE_VARIANT.manuscripts[0].omitted_words == OMITTED_WORDS
 
 
-def test_invalid_enclosures() -> None:
+def test_invalid_enclosures():
     with pytest.raises(ValueError):
         LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple())
 

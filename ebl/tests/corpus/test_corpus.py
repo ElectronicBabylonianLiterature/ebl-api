@@ -245,7 +245,7 @@ def test_find_manuscripts_with_joins(
 
 def test_find_chapter_raises_exception_if_references_not_found(
     corpus, text_repository, bibliography, when
-) -> None:
+):
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
@@ -525,9 +525,7 @@ def test_updating_manuscript_lemmatization(
         ),
     ],
 )
-def test_invalid_alignment(
-    alignment, corpus, text_repository, bibliography, when
-) -> None:
+def test_invalid_alignment(alignment, corpus, text_repository, bibliography, when):
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
@@ -594,9 +592,7 @@ def test_updating_manuscripts(
         ),
     ],
 )
-def test_invalid_manuscripts(
-    manuscripts, corpus, text_repository, bibliography, when
-) -> None:
+def test_invalid_manuscripts(manuscripts, corpus, text_repository, bibliography, when):
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS
     )
@@ -607,7 +603,7 @@ def test_invalid_manuscripts(
 
 def test_update_manuscripts_raises_exception_if_invalid_references(
     corpus, text_repository, bibliography, when
-) -> None:
+):
     manuscripts = CHAPTER.manuscripts
     expect_invalid_references(bibliography, when)
 
@@ -906,7 +902,7 @@ def test_merging_lines(
 
 def test_update_lines_raises_exception_if_invalid_signs(
     corpus, text_repository, bibliography, when
-) -> None:
+):
     lines = LinesUpdate([], set(), dict(enumerate(CHAPTER.lines)))
     when(text_repository).find_chapter(CHAPTER.id_).thenReturn(
         CHAPTER_WITHOUT_DOCUMENTS

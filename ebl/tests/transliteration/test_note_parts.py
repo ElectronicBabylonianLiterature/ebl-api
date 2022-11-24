@@ -33,6 +33,6 @@ def test_bibliography_part_escape() -> None:
         (ReferenceType.DISCUSSION, "1", "", ("1", "2")),
     ],
 )
-def test_invalid_reference(type, pages, note, lines) -> None:
+def test_invalid_reference(type, pages, note, lines):
     with (pytest.raises(ValueError)):
         BibliographyPart(Reference(BIBLIOGRAPHY_ID, type, pages, note, lines))

@@ -572,7 +572,7 @@ def test_reconstructed_line(text, expected) -> None:
         "...!",
     ],
 )
-def test_invalid_reconstructed_line(text) -> None:
+def test_invalid_reconstructed_line(text):
     with pytest.raises(
         ValueError, match=f"Invalid reconstructed line: %n {re.escape(text)}"
     ):
@@ -602,7 +602,7 @@ def test_invalid_reconstructed_line(text) -> None:
         "i[)]bnû",
     ],
 )
-def test_validate_invalid(text) -> None:
+def test_validate_invalid(text):
     line = parse_reconstructed_line(f"%n {text}")
     with pytest.raises(ValueError):
         validate(line)

@@ -112,7 +112,7 @@ def test_parse_manuscript(lines, expected) -> None:
     assert parse_manuscript(atf) == expected
 
 
-def test_parse_manuscript_invalid() -> None:
+def test_parse_manuscript_invalid():
     with pytest.raises(DataError):
         parse_manuscript(f"{UNKNOWN_MANUSCRIPT.siglum} o iii 1. kur")
 
@@ -294,7 +294,7 @@ def test_parse_chapter(lines, expected) -> None:
     assert parse_chapter(atf, MANUSCRIPTS) == expected
 
 
-def test_parse_chapter_empty() -> None:
+def test_parse_chapter_empty():
     with pytest.raises(DataError):
         f = parse_chapter("", MANUSCRIPTS)
         print(f)

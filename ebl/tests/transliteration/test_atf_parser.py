@@ -69,7 +69,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
         ("$ ", [1]),
     ],
 )
-def test_invalid_atf(atf, line_numbers) -> None:
+def test_invalid_atf(atf, line_numbers):
     with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
@@ -79,6 +79,6 @@ def test_invalid_atf(atf, line_numbers) -> None:
 @pytest.mark.parametrize(
     "atf,line_numbers", [("1. x\n1. x", [2]), ("1. x\n@obverse\n1. x\n1. x", [4])]
 )
-def test_duplicate_labels(atf, line_numbers) -> None:
+def test_duplicate_labels(atf, line_numbers):
     with pytest.raises(DataError, match="Duplicate labels."):
         parse_atf_lark(atf)

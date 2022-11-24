@@ -69,7 +69,8 @@ class State:
         self, error: TransliterationError, fragment: Fragment
     ) -> None:
         self.invalid_atf += 1
-        for index, error in enumerate(error.errors):
+        errors = error.errors
+        for index, error in enumerate(errors):
             atf = fragment.text.lines[error["lineNumber"] - 1].atf
             number = fragment.number if index == 0 else len(str(fragment.number)) * " "
             self.errors.append(f"{number}\t{atf}\t{error}")

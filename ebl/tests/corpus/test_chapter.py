@@ -346,7 +346,7 @@ def test_text_lines() -> None:
     ]
 
 
-def test_invalid_extent() -> None:
+def test_invalid_extent():
     with pytest.raises(ValueError):
         Chapter(
             TextId(GENRE, 0, 0),
@@ -363,7 +363,7 @@ def test_invalid_extent() -> None:
         )
 
 
-def test_extent_before_translation() -> None:
+def test_extent_before_translation():
     with pytest.raises(ValueError):
         Chapter(
             TextId(GENRE, 0, 0),
@@ -381,7 +381,7 @@ def test_extent_before_translation() -> None:
         )
 
 
-def test_overlapping() -> None:
+def test_overlapping():
     with pytest.raises(ValueError):
         Chapter(
             TextId(GENRE, 0, 0),
@@ -403,7 +403,7 @@ def test_overlapping() -> None:
         )
 
 
-def test_overlapping_languages() -> None:
+def test_overlapping_languages():
     Chapter(
         TextId(GENRE, 0, 0),
         manuscripts=(Manuscript(MANUSCRIPT_ID),),
@@ -422,7 +422,7 @@ def test_overlapping_languages() -> None:
     )
 
 
-def test_extant_lines() -> None:
+def test_extant_lines():
     manuscript = Manuscript(MANUSCRIPT_ID)
     manuscript_line = LINE_VARIANT_1.manuscripts[0]
     chapter = Chapter(

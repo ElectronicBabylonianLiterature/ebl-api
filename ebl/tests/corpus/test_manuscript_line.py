@@ -7,7 +7,7 @@ from ebl.corpus.domain.line import ManuscriptLine
 from ebl.tests.factories.corpus import ManuscriptLineFactory
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import DollarLine, StateDollarLine
-from ebl.transliteration.domain.labels import ColumnLabel, Label, SurfaceLabel
+from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.markup import StringPart
@@ -38,7 +38,7 @@ WORD3 = Word.of(
         (ColumnLabel.from_label("i"), SurfaceLabel.from_label(atf.Surface.REVERSE)),
     ],
 )
-def test_invalid_labels(labels: Sequence[Label]) -> None:
+def test_invalid_labels(labels):
     with pytest.raises(ValueError):
         ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine(LineNumber(1)))
 
