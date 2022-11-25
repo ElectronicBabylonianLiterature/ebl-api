@@ -181,6 +181,12 @@ class MongoSignRepository(SignRepository):
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }
                 },
+                {
+                    "$addFields": {
+                        "logograms": {"$ifNull": ["$logograms", []]},
+                        "fossey": {"$ifNull": ["$fossey", []]},
+                    }
+                },
                 {"$sort": {"subIndexCopy": 1}},
             ]
         )
