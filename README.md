@@ -17,7 +17,7 @@
 
 Requirements:
 
-* [PyPy3.8](https://www.pypy.org) & pip
+* [PyPy3.9](https://www.pypy.org) & pip
 * [Task](https://taskfile.dev/)
 
 ```shell script
