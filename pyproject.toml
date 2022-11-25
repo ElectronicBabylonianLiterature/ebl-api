@@ -23,7 +23,7 @@ inflect = "*"
 tqdm = "*"
 marshmallow-oneofschema = "*"
 pycryptodomex = "*"
-cryptography = "^36.0.1"
+cryptography = "^38.0.3"
 pillow = "*"
 alignment = {git = "https://github.com/ElectronicBabylonianLiterature/python-alignment.git"}
 falcon-caching = "^1.0.1"
