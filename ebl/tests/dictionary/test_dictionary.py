@@ -14,7 +14,7 @@ def test_create_and_find(database, dictionary, word):
 
 
 def test_create_and_find_many(database, dictionary, word):
-    word = dictionary.create(word)
+    dictionary.create(word)
     another_word = {**word, "_id": "part1 part2 II"}
     dictionary.create(another_word)
 
