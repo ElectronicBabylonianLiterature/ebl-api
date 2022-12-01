@@ -76,6 +76,7 @@ class AnnotationsService:
                 AnnotationValueType.BLANK,
                 AnnotationValueType.STRUCT,
                 AnnotationValueType.UnclearSign,
+                AnnotationValueType.ColumnAtLine,
             ]:
                 label = self._label_by_line_number(annotation.data.path[0], labels)
 

@@ -29,6 +29,7 @@ class AnnotationValueType(Enum):
     PARTIALLY_BROKEN = "PartiallyBroken"
     STRUCT = "Struct"
     UnclearSign = "UnclearSign"
+    ColumnAtLine = "ColumnAtLine"
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
