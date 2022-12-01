@@ -122,12 +122,11 @@ class MongoWordRepository(WordRepository):
     def query_by_id(self, id_: WordId):
         return self._collection.find_one_by_id(id_)
 
-    def query_by_ids(self, query: str) -> Sequence:
-        lemmas = query.split(",")
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence:
         cursor = self._collection.aggregate(
             [
                 {
-                    "$match": {"_id": {"$in": lemmas}},
+                    "$match": {"_id": {"$in": ids}},
                 }
             ]
         )
