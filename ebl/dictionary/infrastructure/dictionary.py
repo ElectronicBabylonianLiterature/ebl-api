@@ -95,7 +95,7 @@ class MongoDictionary:
             }
         )
 
-        return [word for word in cursor]
+        return list(cursor)
 
     def search_lemma(self, query):
         cursor = self._collection.aggregate(
@@ -103,7 +103,7 @@ class MongoDictionary:
             collation={"locale": "en", "strength": 1, "normalization": True},
         )
 
-        return [word for word in cursor]
+        return list(cursor)
 
     def update(self, word, user):
         old_word = self.find(word["_id"])
@@ -130,7 +130,7 @@ class MongoWordRepository(WordRepository):
                 }
             ]
         )
-        return [word for word in cursor]
+        return list(cursor)
 
     def query_by_lemma_form_or_meaning(self, query: str) -> Sequence:
         lemma = query.split(" ")
@@ -144,7 +144,7 @@ class MongoWordRepository(WordRepository):
             }
         )
 
-        return [word for word in cursor]
+        return list(cursor)
 
     def query_by_lemma_prefix(self, query: str) -> Sequence:
         cursor = self._collection.aggregate(
@@ -152,7 +152,7 @@ class MongoWordRepository(WordRepository):
             collation={"locale": "en", "strength": 1, "normalization": True},
         )
 
-        return [word for word in cursor]
+        return list(cursor)
 
     def update(self, word) -> None:
         self._collection.update_one({"_id": word["_id"]}, {"$set": word})
