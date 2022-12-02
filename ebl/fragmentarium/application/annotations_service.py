@@ -122,7 +122,9 @@ class AnnotationsService:
 
         self._annotations_repository.create_or_update(annotations_with_image_ids)
 
-        len(cropped_sign_images) and self._cropped_sign_images_repository.create_many(cropped_sign_images)
+        len(cropped_sign_images) and self._cropped_sign_images_repository.create_many(
+            cropped_sign_images
+        )
 
         self._changelog.create(
             "annotations",
