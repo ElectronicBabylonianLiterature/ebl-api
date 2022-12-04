@@ -251,7 +251,7 @@ class MongoFragmentRepository(FragmentRepository):
                 mongo_query,
                 projection={"joins": False},
             )
-            .sort([("script", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
+            .sort([("legacyScript", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
             .skip(LIMIT * query.paginationIndex)
             .limit(LIMIT)
             .collation(
@@ -298,7 +298,7 @@ class MongoFragmentRepository(FragmentRepository):
         return [
             LineToVecEntry(
                 MuseumNumberSchema().load(fragment["museumNumber"]),
-                fragment["script"],
+                fragment["legacyScript"],
                 tuple(
                     LineToVecEncoding.from_list(line_to_vec)
                     for line_to_vec in fragment["lineToVec"]

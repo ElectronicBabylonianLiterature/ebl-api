@@ -14,9 +14,19 @@ def test_fragment_matcher_route(client, fragmentarium, user):
         line_to_vec=(LineToVecEncoding.from_list([1, 1, 2]),),
     )
     expected_score = {
-        "score": [{"museumNumber": "X.326", "script": fragment_2.script, "score": 3}],
+        "score": [
+            {
+                "museumNumber": "X.326",
+                "script": fragment_2.legacy_script,
+                "score": 3,
+            }
+        ],
         "scoreWeighted": [
-            {"museumNumber": "X.326", "script": fragment_2.script, "score": 5}
+            {
+                "museumNumber": "X.326",
+                "script": fragment_2.legacy_script,
+                "score": 5,
+            }
         ],
     }
     fragmentarium.create(fragment_1)

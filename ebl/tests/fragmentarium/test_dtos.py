@@ -48,7 +48,7 @@ def test_create_response_dto(user):
                 lemmatized_fragment.thickness, filter=lambda _, value: value is not None
             ),
             "collection": lemmatized_fragment.collection,
-            "script": lemmatized_fragment.script,
+            "legacyScript": lemmatized_fragment.legacy_script,
             "notes": lemmatized_fragment.notes,
             "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,
@@ -107,7 +107,7 @@ def test_create_fragment_info_dto():
     assert ApiFragmentInfoSchema().dump(info) == {
         "number": str(info.number),
         "accession": info.accession,
-        "script": info.script,
+        "legacyScript": info.legacy_script,
         "description": info.description,
         "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",

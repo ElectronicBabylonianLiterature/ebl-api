@@ -100,7 +100,7 @@ class FragmentFactory(factory.Factory):
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
     description = factory.Faker("text")
-    script = factory.Iterator(["NA", "NB"])
+    legacy_script = factory.Iterator(["NA", "NB"])
     folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
     genres = factory.Iterator(
         [

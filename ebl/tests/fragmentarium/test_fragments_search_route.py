@@ -139,9 +139,9 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
 def test_search_fragmentarium_transliteration(
     client, fragmentarium, sign_repository, signs
 ):
-    transliterated_fragment_1 = TransliteratedFragmentFactory.build(script="A")
+    transliterated_fragment_1 = TransliteratedFragmentFactory.build(legacy_script="A")
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.123"), script="B"
+        number=MuseumNumber.of("X.123"), legacy_script="B"
     )
     for transliterated_fragment in [
         transliterated_fragment_1,
