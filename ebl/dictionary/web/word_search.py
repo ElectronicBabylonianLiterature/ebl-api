@@ -10,6 +10,9 @@ class WordSearch:
             {
                 frozenset(["query"]): lambda value: dictionary.search(**value),
                 frozenset(["lemma"]): lambda value: dictionary.search_lemma(**value),
+                frozenset(["lemmas"]): lambda value: dictionary.find_many(
+                    value["lemmas"].split(",")
+                ),
             }
         )
 

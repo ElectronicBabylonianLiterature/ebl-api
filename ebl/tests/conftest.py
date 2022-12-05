@@ -28,8 +28,8 @@ from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
-from ebl.dictionary.application.dictionary import Dictionary
-from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
+from ebl.dictionary.application.dictionary_service import Dictionary
+from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository

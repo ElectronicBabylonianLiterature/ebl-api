@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import Sequence
 
-from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.lemmatization.domain.lemmatization import Lemma
 
 

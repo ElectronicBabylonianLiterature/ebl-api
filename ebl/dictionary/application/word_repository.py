@@ -14,6 +14,10 @@ class WordRepository(ABC):
         ...
 
     @abstractmethod
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence:
+        ...
+
+    @abstractmethod
     def query_by_lemma_form_or_meaning(self, query: str) -> Sequence:
         ...
 

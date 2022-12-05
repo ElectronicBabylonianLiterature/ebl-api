@@ -18,6 +18,16 @@ def test_find(database, word_repository, word):
     assert word_repository.query_by_id(word["_id"]) == word
 
 
+def test_find_many(database, word_repository, word):
+    another_word = {**word, "_id": "part1 part2 II"}
+    database[COLLECTION].insert_many([word, another_word])
+
+    assert word_repository.query_by_ids([word["_id"], another_word["_id"]]) == [
+        word,
+        another_word,
+    ]
+
+
 def test_word_not_found(word_repository):
     with pytest.raises(NotFoundError):
         word_repository.query_by_id("not found")

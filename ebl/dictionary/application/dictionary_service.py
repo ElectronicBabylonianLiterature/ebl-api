@@ -19,6 +19,9 @@ class Dictionary:
     def find(self, id_):
         return self._repository.query_by_id(id_)
 
+    def find_many(self, lemmas: Sequence[str]) -> Sequence:
+        return self._repository.query_by_ids(lemmas)
+
     def search(self, query: str) -> Sequence:
         return self._repository.query_by_lemma_form_or_meaning(query)
 

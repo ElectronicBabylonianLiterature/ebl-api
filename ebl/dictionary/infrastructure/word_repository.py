@@ -72,45 +72,6 @@ def _create_lemma_search_pipeline(query):
     ]
 
 
-class MongoDictionary:
-    def __init__(self, database):
-        self._collection = MongoCollection(database, COLLECTION)
-        self._changelog = Changelog(database)
-
-    def create(self, document):
-        return self._collection.insert_one(document)
-
-    def find(self, id_):
-        return self._collection.find_one_by_id(id_)
-
-    def search(self, query):
-        lemma = query.split(" ")
-        cursor = self._collection.find_many(
-            {
-                "$or": [
-                    {"lemma": lemma},
-                    {"forms": {"$elemMatch": {"lemma": lemma}}},
-                    {"meaning": {"$regex": re.escape(query)}},
-                ]
-            }
-        )
-
-        return [word for word in cursor]
-
-    def search_lemma(self, query):
-        cursor = self._collection.aggregate(
-            _create_lemma_search_pipeline(query),
-            collation={"locale": "en", "strength": 1, "normalization": True},
-        )
-
-        return [word for word in cursor]
-
-    def update(self, word, user):
-        old_word = self.find(word["_id"])
-        self._changelog.create(COLLECTION, user.profile, old_word, word)
-        self._collection.update_one({"_id": word["_id"]}, {"$set": word})
-
-
 class MongoWordRepository(WordRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
@@ -121,6 +82,16 @@ class MongoWordRepository(WordRepository):
 
     def query_by_id(self, id_: WordId):
         return self._collection.find_one_by_id(id_)
+
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence:
+        cursor = self._collection.aggregate(
+            [
+                {
+                    "$match": {"_id": {"$in": ids}},
+                }
+            ]
+        )
+        return list(cursor)
 
     def query_by_lemma_form_or_meaning(self, query: str) -> Sequence:
         lemma = query.split(" ")
@@ -134,7 +105,7 @@ class MongoWordRepository(WordRepository):
             }
         )
 
-        return [word for word in cursor]
+        return list(cursor)
 
     def query_by_lemma_prefix(self, query: str) -> Sequence:
         cursor = self._collection.aggregate(
@@ -142,7 +113,7 @@ class MongoWordRepository(WordRepository):
             collation={"locale": "en", "strength": 1, "normalization": True},
         )
 
-        return [word for word in cursor]
+        return list(cursor)
 
     def update(self, word) -> None:
         self._collection.update_one({"_id": word["_id"]}, {"$set": word})

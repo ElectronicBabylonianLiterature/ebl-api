@@ -1,7 +1,7 @@
 from typing import List, Optional, Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
-from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.folios import Folio
