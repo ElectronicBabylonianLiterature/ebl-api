@@ -18,7 +18,7 @@ def test_create_and_find_many(database, dictionary, word):
     another_word = {**word, "_id": "part1 part2 II"}
     dictionary.create(another_word)
 
-    assert dictionary.find_many(",".join([word["_id"], another_word["_id"]])) == [
+    assert dictionary.find_many([word["_id"], another_word["_id"]]) == [
         word,
         another_word,
     ]
