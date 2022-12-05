@@ -30,6 +30,7 @@ class AnnotationValueType(Enum):
     STRUCT = "Struct"
     UnclearSign = "UnclearSign"
     ColumnAtLine = "ColumnAtLine"
+    CompoundGrapheme = "CompoundGrapheme"
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
