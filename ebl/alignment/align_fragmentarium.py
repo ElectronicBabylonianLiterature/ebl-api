@@ -132,7 +132,7 @@ def parse_arguments() -> argparse.Namespace:
         help="Filename for saving the results.",
     )
     parser.add_argument(
-        "-w", "--workers", type=int, default=4, help="Number of parallel workers."
+        "-w", "--workers", type=int, default=None, help="Number of parallel workers."
     )
     parser.add_argument(
         "-t",
