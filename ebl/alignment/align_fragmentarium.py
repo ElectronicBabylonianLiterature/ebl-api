@@ -1,6 +1,7 @@
 import argparse
 import csv
 from functools import partial
+from dotenv import load_dotenv
 import re
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import sys
@@ -145,6 +146,7 @@ def parse_arguments() -> argparse.Namespace:
 
 
 if __name__ == "__main__":
+    load_dotenv()
     args = parse_arguments()
     start = args.skip
     end = args.skip + args.limit
