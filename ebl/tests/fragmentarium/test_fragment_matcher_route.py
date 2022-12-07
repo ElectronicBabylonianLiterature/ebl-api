@@ -16,14 +16,14 @@ def test_fragment_matcher_route(client, fragmentarium, user):
         "score": [
             {
                 "museumNumber": "X.326",
-                "script": fragment_2.script.abbreviation,
+                "script": fragment_2.script.period.abbreviation,
                 "score": 3,
             }
         ],
         "scoreWeighted": [
             {
                 "museumNumber": "X.326",
-                "script": fragment_2.script.abbreviation,
+                "script": fragment_2.script.period.abbreviation,
                 "score": 5,
             }
         ],

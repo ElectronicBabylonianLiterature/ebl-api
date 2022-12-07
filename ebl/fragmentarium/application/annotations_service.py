@@ -107,7 +107,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.legacy_script, fragment.text.labels
+            annotations, image, fragment.script, fragment.text.labels
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:

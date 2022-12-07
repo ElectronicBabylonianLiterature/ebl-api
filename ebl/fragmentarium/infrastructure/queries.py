@@ -67,7 +67,7 @@ def aggregate_needs_revision() -> List[dict]:
                 "_id": "$museumNumber",
                 "accession": {"$first": "$accession"},
                 "description": {"$first": "$description"},
-                "legacyScript": {"$first": "$legacyScript"},
+                "script": {"$first": "$script"},
                 "record": {"$push": "$record"},
             }
         },
@@ -123,7 +123,7 @@ def aggregate_needs_revision() -> List[dict]:
                 "number": "$_id",
                 "accession": 1,
                 "description": 1,
-                "legacyScript": 1,
+                "script": 1,
                 "editionDate": {"$arrayElemAt": ["$transliterationDates", 0]},
                 "editor": {"$arrayElemAt": ["$transliterators", 0]},
             }
