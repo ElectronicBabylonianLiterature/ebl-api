@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.context import Context
-from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.lemmatization.application.suggestion_finder import SuggestionFinder
 from ebl.lemmatization.web.lemma_search import LemmaSearch
 

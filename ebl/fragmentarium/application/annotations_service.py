@@ -72,22 +72,22 @@ class AnnotationsService:
         updated_cropped_annotations = []
 
         for annotation in annotations.annotations:
-            label = (
-                self._label_by_line_number(annotation.data.path[0], labels)
-                if annotation.data.type != AnnotationValueType.BLANK
-                else ""
-            )
+            label = ""
+            if annotation.data.type not in [
+                AnnotationValueType.BLANK,
+                AnnotationValueType.STRUCT,
+                AnnotationValueType.UnclearSign,
+                AnnotationValueType.ColumnAtLine,
+            ]:
+                label = self._label_by_line_number(annotation.data.path[0], labels)
+
             cropped_image = annotation.crop_image(image)
             cropped_sign_image = CroppedSignImage.create(cropped_image)
             cropped_sign_images.append(cropped_sign_image)
 
             updated_cropped_annotation = attr.evolve(
                 annotation,
-                cropped_sign=CroppedSign(
-                    cropped_sign_image.image_id,
-                    script,
-                    label,
-                ),
+                cropped_sign=CroppedSign(cropped_sign_image.image_id, script, label),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
         return (
@@ -107,10 +107,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations,
-            image,
-            fragment.script,
-            fragment.text.labels,
+            annotations, image, fragment.legacy_script, fragment.text.labels
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
@@ -125,7 +122,10 @@ class AnnotationsService:
         ) = self._cropped_image_from_annotations(annotations)
 
         self._annotations_repository.create_or_update(annotations_with_image_ids)
-        self._cropped_sign_images_repository.create_many(cropped_sign_images)
+
+        len(cropped_sign_images) and self._cropped_sign_images_repository.create_many(
+            cropped_sign_images
+        )
 
         self._changelog.create(
             "annotations",

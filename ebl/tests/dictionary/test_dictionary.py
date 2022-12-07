@@ -13,6 +13,30 @@ def test_create_and_find(database, dictionary, word):
     assert dictionary.find(word_id) == word
 
 
+def test_create_and_find_many(database, dictionary, word, when):
+    another_word = {**word, "_id": "part1 part2 II"}
+    dictionary.create(word)
+    dictionary.create(another_word)
+
+    ids = [word["_id"], another_word["_id"]]
+
+    assert dictionary.find_many(ids) == [
+        word,
+        another_word,
+    ]
+
+    when(dictionary).find_many(ids).thenReturn(
+        [
+            word,
+            another_word,
+        ]
+    )
+    assert dictionary.find_many(ids) == [
+        word,
+        another_word,
+    ]
+
+
 def test_word_not_found(dictionary):
     with pytest.raises(NotFoundError):
         dictionary.find("not found")

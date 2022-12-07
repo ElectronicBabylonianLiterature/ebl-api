@@ -56,10 +56,55 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("|NOTREADING.NOTREADING|", ["NOTREADING", "NOTREADING"]),
     ],
 )
-def test_signs_visitor(text: str, expected: Sequence[str], sign_repository, signs):
+def test_signs_visitor_string(
+    text: str, expected: Sequence[str], sign_repository, signs
+):
     for sign in signs:
         sign_repository.create(sign)
 
     visitor = SignsVisitor(sign_repository)
+    parse_line(f"1. {text}").accept(visitor)
+    assert visitor.result == expected
+
+
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        ("ku gid₂ nu ši", [74154, 73805, 74337, 74054]),
+        (
+            "|(4×ZA)×KUR| |(AŠ&AŠ@180)×U| NU |GA₂#*+BAD!?| |GA₂#*.BAD!?|",
+            [
+                74591,
+                74499,
+                74337,
+                124,
+                71,
+                65,
+                8322,
+                43,
+                66,
+                65,
+                68,
+                124,
+                124,
+                71,
+                65,
+                8322,
+                46,
+                66,
+                65,
+                68,
+                124,
+            ],
+        ),
+    ],
+)
+def test_signs_visitor_unicode(
+    text: str, expected: Sequence[str], sign_repository, signs
+):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    visitor = SignsVisitor(sign_repository, False, True)
     parse_line(f"1. {text}").accept(visitor)
     assert visitor.result == expected

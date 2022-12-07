@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.context import Context
-from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.dictionary.web.word_search import WordSearch
 from ebl.dictionary.web.words import WordsResource
 

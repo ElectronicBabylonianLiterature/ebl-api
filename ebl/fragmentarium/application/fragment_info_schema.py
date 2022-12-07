@@ -14,7 +14,7 @@ from ebl.transliteration.application.text_schema import TextSchema
 class FragmentInfoSchema(Schema):
     number: fields.Field = fields.Nested(MuseumNumberSchema, required=True)
     accession = fields.String(required=True)
-    script = fields.Nested(ScriptSchema, required=True)
+    legacy_script = fields.String(required=True, data_key="legacyScript")
     description = fields.String(required=True)
     editor = fields.String(load_default="")
     edition_date = fields.String(data_key="editionDate", load_default="")

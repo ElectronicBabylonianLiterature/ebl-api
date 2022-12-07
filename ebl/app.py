@@ -20,7 +20,7 @@ from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.corpus.web.bootstrap import create_corpus_routes
-from ebl.dictionary.infrastructure.dictionary import MongoWordRepository
+from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
