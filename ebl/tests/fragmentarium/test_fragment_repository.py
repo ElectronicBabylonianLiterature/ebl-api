@@ -313,6 +313,16 @@ def test_update_introduction(fragment_repository: FragmentRepository):
     assert result == updated_fragment
 
 
+def test_update_script(fragment_repository: FragmentRepository):
+    fragment: Fragment = FragmentFactory.build(script=Script(Period.NONE))
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_script(Script(Period.MIDDLE_ELAMITE))
+    fragment_repository.update_field("script", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
 def test_update_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):

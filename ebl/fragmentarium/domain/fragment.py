@@ -140,6 +140,9 @@ class Fragment:
             ),
         )
 
+    def set_script(self, script: Script) -> "Fragment":
+        return attr.evolve(self, script=script)
+
     def update_lowest_join_transliteration(
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":

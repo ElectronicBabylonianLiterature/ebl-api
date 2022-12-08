@@ -327,6 +327,7 @@ class MongoFragmentRepository(FragmentRepository):
             "lemmatization": ("text",),
             "genres": ("genres",),
             "references": ("references",),
+            "script": ("script",),
             "transliteration": (
                 "text",
                 "notes",
