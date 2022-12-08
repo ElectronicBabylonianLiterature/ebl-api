@@ -179,7 +179,7 @@ parallel-text = genre, ' ', category, '.', index, ' ',
 genre = 'L' | 'D' | 'Lex' | 'Med'
 category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
            (* Must be a valid numeral. *)
-stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' | 
+stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' |
         'MElam'| 'MA'  | 'Hit' | 'NA' | 'NB' | 'NElam'  | 'LB' |
         'Per'  | 'Hel' | 'Par' | 'Uruk4' | 'JN' | 'ED1_2' |
         'Fara' | 'PSarg' | 'Sarg' | 'Unc' | 'SB';
