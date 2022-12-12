@@ -104,7 +104,8 @@ class MongoWordRepository(WordRepository):
                 ]
             }
         )
-
+        # ToDo: 
+        # Add: word (= lemma), meaning, root, vowel class
         return list(cursor)
 
     def query_by_lemma_prefix(self, query: str) -> Sequence:
