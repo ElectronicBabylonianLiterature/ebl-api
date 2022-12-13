@@ -2,6 +2,7 @@ import falcon
 from falcon import Response, Request
 
 from ebl.errors import DataError
+from marshmallow import ValidationError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.web.require_scope import require_scope
@@ -22,5 +23,5 @@ class FragmentScriptResource:
                 user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
-        except ValueError as error:
-            raise DataError(error)
+        except ValidationError as error:
+            raise DataError(f"Invalid script data: '{req.media['script']}'") from error
