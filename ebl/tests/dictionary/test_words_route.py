@@ -11,11 +11,26 @@ def saved_word(dictionary, word):
     return word
 
 
+@pytest.fixture
+def another_saved_word(dictionary, word):
+    word = {**word, "_id": "part1 part2 II"}
+    dictionary.create(word)
+    return word
+
+
 def test_get_word(client, saved_word):
     unique_lemma = saved_word["_id"]
     result = client.simulate_get(f"/words/{unique_lemma}")
 
     assert result.json == saved_word
+    assert result.status == falcon.HTTP_OK
+
+
+def test_get_words(client, saved_word, another_saved_word):
+    ids = ",".join([saved_word["_id"], another_saved_word["_id"]])
+    result = client.simulate_get("/words", params={"lemmas": ids})
+
+    assert result.json == [saved_word, another_saved_word]
     assert result.status == falcon.HTTP_OK
 
 

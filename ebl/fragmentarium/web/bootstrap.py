@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.context import Context
-from ebl.dictionary.application.dictionary import Dictionary
+from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher

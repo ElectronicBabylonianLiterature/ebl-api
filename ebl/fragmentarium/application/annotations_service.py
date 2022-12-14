@@ -76,6 +76,7 @@ class AnnotationsService:
                 AnnotationValueType.BLANK,
                 AnnotationValueType.STRUCT,
                 AnnotationValueType.UnclearSign,
+                AnnotationValueType.ColumnAtLine,
             ]:
                 label = self._label_by_line_number(annotation.data.path[0], labels)
 
@@ -105,7 +106,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.script, fragment.text.labels
+            annotations, image, fragment.legacy_script, fragment.text.labels
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
@@ -120,7 +121,10 @@ class AnnotationsService:
         ) = self._cropped_image_from_annotations(annotations)
 
         self._annotations_repository.create_or_update(annotations_with_image_ids)
-        self._cropped_sign_images_repository.create_many(cropped_sign_images)
+
+        len(cropped_sign_images) and self._cropped_sign_images_repository.create_many(
+            cropped_sign_images
+        )
 
         self._changelog.create(
             "annotations",

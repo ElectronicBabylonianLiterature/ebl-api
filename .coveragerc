@@ -1,3 +1,8 @@
 [run]
 omit = ebl/tests/*
 source = ebl
+
+[report]
+exclude_lines =
+    @abstractmethod
+    @abc.abstractmethod

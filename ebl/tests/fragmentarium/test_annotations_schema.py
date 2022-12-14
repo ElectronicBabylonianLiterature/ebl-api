@@ -44,7 +44,11 @@ SERIALIZED = {
                 "signName": SIGN_NAME,
                 "path": PATH,
             },
-            "croppedSign": {"imageId": IMAGE_ID, "script": SCRIPT, "label": LABEL},
+            "croppedSign": {
+                "imageId": IMAGE_ID,
+                "script": SCRIPT,
+                "label": LABEL,
+            },
         }
     ],
 }

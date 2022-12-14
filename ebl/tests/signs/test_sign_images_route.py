@@ -27,7 +27,7 @@ def test_signs_get(
     fragment_repository.create(fragment)
 
     annotation_data = AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0])
-    cropped_sign = CroppedSignFactory.build(script=fragment.script)
+    cropped_sign = CroppedSignFactory.build(script=fragment.legacy_script)
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
     )
