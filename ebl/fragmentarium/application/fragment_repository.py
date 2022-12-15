@@ -36,7 +36,7 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_by_museum_number(
-        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+        self, number: MuseumNumber, query_filter: Optional[dict] = None
     ) -> Fragment:
         ...
 

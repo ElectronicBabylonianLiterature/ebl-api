@@ -203,12 +203,17 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_by_museum_number(
-        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+        self, number: MuseumNumber, query_filter: Optional[dict] = None
     ):
+        query_filter = query_filter or {}
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *([] if lines is None else [filter_fragment_lines(lines)]),
+                *(
+                    [filter_fragment_lines(query_filter["lines"])]
+                    if query_filter.get("lines")
+                    else []
+                ),
                 *join_reference_documents(),
                 *join_joins(),
             ]

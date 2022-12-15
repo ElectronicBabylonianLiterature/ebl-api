@@ -1,7 +1,6 @@
 import pytest
 import attr
 import falcon
-import json
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -9,31 +8,46 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from urllib.parse import urlencode
 
 
-@pytest.mark.parametrize("lines,slice_", [(False, None), (None, 0), ([0, 1], 2)])
-def test_get(client, fragmentarium, parallel_line_injector, user, lines, slice_):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
-    lines_parameter = (
-        "" if lines is False else f"?{urlencode({'lines': lines}, doseq=True)}"
-    )
+FRAGMENT = TransliteratedFragmentFactory.build()
 
-    result = client.simulate_get(
-        f"/fragments/{transliterated_fragment.number}{lines_parameter}"
-    )
+
+@pytest.mark.parametrize(
+    "query_filter,changes",
+    [
+        ({}, {}),
+        ({"lines": []}, {}),
+        (
+            {"lines": ["0", "1"]},
+            {"lines": FRAGMENT.text.lines[:2]},
+        ),
+        (
+            {"lines": "1"},
+            {"lines": FRAGMENT.text.lines[1:2]},
+        ),
+    ],
+)
+def test_get(
+    client, fragmentarium, parallel_line_injector, user, query_filter, changes
+):
+    fragmentarium.create(FRAGMENT)
+    query_parameters = f"?{urlencode(query_filter, doseq=True)}"
+
+    result = client.simulate_get(f"/fragments/{FRAGMENT.number}{query_parameters}")
+
+    if "lines" in changes:
+        changes["lines"] = parallel_line_injector.inject(changes["lines"])
 
     expected_fragment = attr.evolve(
-        transliterated_fragment,
+        FRAGMENT,
         text=attr.evolve(
-            transliterated_fragment.text,
-            lines=parallel_line_injector.inject(
-                transliterated_fragment.text.lines[slice(slice_)]
-            ),
+            FRAGMENT.text,
+            **changes,
         ),
     )
     expected = create_response_dto(
         expected_fragment,
         user,
-        transliterated_fragment.number == MuseumNumber("K", "1"),
+        FRAGMENT.number == MuseumNumber("K", "1"),
     )
 
     assert result.json == expected
@@ -45,12 +59,12 @@ def test_get_invalid_lines(client, fragmentarium):
     fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get(
-        f"/fragments/{transliterated_fragment.number}?lines={json.dumps('invalid lines')}"
+        f"/fragments/{transliterated_fragment.number}?lines='invalid lines'"
     )
 
     expected_json = {
         "title": "422 Unprocessable Entity",
-        "description": "Lines must be a list of integers",
+        "description": "lines must be a list of integers, got 'invalid lines' instead",
     }
 
     assert result.json == expected_json

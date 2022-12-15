@@ -1,6 +1,6 @@
 import falcon
 from falcon import Request, Response
-from typing import Sequence, Optional, List
+from typing import Sequence
 from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -18,16 +18,18 @@ def check_fragment_scope(user: User, scopes: Sequence[Scope]):
         raise falcon.HTTPForbidden()
 
 
-def parse_lines(lines: Optional[List[str]]) -> Optional[List[int]]:
-    if lines == ["None"]:
-        return []
-    elif lines is None:
-        return None
+def parse_query_parameters(req: Request) -> dict:
+    parameters = req.params
 
-    try:
-        return [int(line) for line in lines]
-    except ValueError as error:
-        raise DataError("Lines must be a list of integers") from error
+    if "lines" in parameters:
+        try:
+            parameters["lines"] = [int(line) for line in req.get_param_as_list("lines")]
+        except ValueError as error:
+            raise DataError(
+                f"lines must be a list of integers, got {parameters['lines']} instead"
+            ) from error
+
+    return parameters
 
 
 class FragmentsResource:
@@ -37,11 +39,11 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        lines = parse_lines(req.get_param_as_list("lines"))
+        query_filter = parse_query_parameters(req)
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
-            lines=lines,
+            query_filter=query_filter,
         )
         if fragment.authorized_scopes:
             check_fragment_scope(req.context.user, fragment.authorized_scopes)
