@@ -46,7 +46,7 @@ class FragmentUpdater:
             if ignore_lowest_join
             else fragment.update_lowest_join_transliteration(transliteration, user)
         )
-        self._create_changlelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("transliteration", updated_fragment)
 
         return self._create_result(updated_fragment)
@@ -57,7 +57,7 @@ class FragmentUpdater:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_introduction(introduction)
 
-        self._create_changlelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("introduction", updated_fragment)
 
         return self._create_result(updated_fragment)
@@ -68,7 +68,7 @@ class FragmentUpdater:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_script(script)
 
-        self._create_changlelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("script", updated_fragment)
 
         return self._create_result(updated_fragment)
@@ -79,7 +79,7 @@ class FragmentUpdater:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_genres(genres)
 
-        self._create_changlelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("genres", updated_fragment)
 
         return self._create_result(updated_fragment)
@@ -90,7 +90,7 @@ class FragmentUpdater:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.update_lemmatization(lemmatization)
 
-        self._create_changlelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("lemmatization", updated_fragment)
 
         return self._create_result(updated_fragment)
@@ -103,7 +103,7 @@ class FragmentUpdater:
 
         updated_fragment = fragment.set_references(references)
 
-        self._create_changlelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("references", updated_fragment)
 
         return self._create_result(self._repository.query_by_museum_number(number))
@@ -116,7 +116,7 @@ class FragmentUpdater:
             self._photos.query_if_file_exists(f"{fragment.number}.jpg"),
         )
 
-    def _create_changlelog(
+    def _create_changelog(
         self, user: User, fragment: Fragment, updated_fragment: Fragment
     ) -> None:
         schema = FragmentSchema()
