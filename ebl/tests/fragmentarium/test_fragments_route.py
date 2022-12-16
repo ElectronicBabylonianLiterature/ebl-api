@@ -8,42 +8,48 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from urllib.parse import urlencode
 
 
-FRAGMENT = TransliteratedFragmentFactory.build()
-
-
 @pytest.mark.parametrize(
-    "lines_parameter,new_lines",
+    "lines_parameter,lines_slice",
     [
-        ([], []),
+        ([], (0, None)),
         (
             ["0", "1"],
-            FRAGMENT.text.lines[:2],
+            (0, 2),
         ),
         (
             "1",
-            FRAGMENT.text.lines[1:2],
+            (1, 2),
         ),
     ],
 )
 def test_get(
-    client, fragmentarium, parallel_line_injector, user, lines_parameter, new_lines
+    client, fragmentarium, parallel_line_injector, user, lines_parameter, lines_slice
 ):
-    fragmentarium.create(FRAGMENT)
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    fragmentarium.create(transliterated_fragment)
     query_parameters = f"?{urlencode({'lines': lines_parameter}, doseq=True)}"
 
-    result = client.simulate_get(f"/fragments/{FRAGMENT.number}{query_parameters}")
+    result = client.simulate_get(
+        f"/fragments/{transliterated_fragment.number}{query_parameters}"
+    )
+
+    start, end = lines_slice
+    text_lines = transliterated_fragment.text.lines
 
     expected_fragment = attr.evolve(
-        FRAGMENT,
+        transliterated_fragment,
         text=attr.evolve(
-            FRAGMENT.text,
-            lines=parallel_line_injector.inject(new_lines) or FRAGMENT.text.lines,
+            transliterated_fragment.text,
+            lines=parallel_line_injector.inject(
+                text_lines[start : end or len(text_lines)]
+            )
+            or text_lines,
         ),
     )
     expected = create_response_dto(
         expected_fragment,
         user,
-        FRAGMENT.number == MuseumNumber("K", "1"),
+        transliterated_fragment.number == MuseumNumber("K", "1"),
     )
 
     assert result.json == expected
