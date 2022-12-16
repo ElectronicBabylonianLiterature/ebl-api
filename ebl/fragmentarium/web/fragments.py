@@ -18,18 +18,13 @@ def check_fragment_scope(user: User, scopes: Sequence[Scope]):
         raise falcon.HTTPForbidden()
 
 
-def parse_query_parameters(req: Request) -> dict:
-    parameters = req.params
-
-    if "lines" in parameters:
-        try:
-            parameters["lines"] = [int(line) for line in req.get_param_as_list("lines")]
-        except ValueError as error:
-            raise DataError(
-                f"lines must be a list of integers, got {parameters['lines']} instead"
-            ) from error
-
-    return parameters
+def parse_lines(lines: Sequence[str]) -> Sequence[int]:
+    try:
+        return [int(line) for line in lines]
+    except ValueError as error:
+        raise DataError(
+            f"lines must be a list of integers, got {lines} instead"
+        ) from error
 
 
 class FragmentsResource:
@@ -39,11 +34,11 @@ class FragmentsResource:
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user
-        query_filter = parse_query_parameters(req)
+        lines = parse_lines(req.get_param_as_list("lines", default=[]))
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
-            query_filter=query_filter,
+            lines=lines,
         )
         if fragment.authorized_scopes:
             check_fragment_scope(req.context.user, fragment.authorized_scopes)

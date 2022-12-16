@@ -12,36 +12,32 @@ FRAGMENT = TransliteratedFragmentFactory.build()
 
 
 @pytest.mark.parametrize(
-    "query_filter,changes",
+    "lines_parameter,new_lines",
     [
-        ({}, {}),
-        ({"lines": []}, {}),
+        ([], []),
         (
-            {"lines": ["0", "1"]},
-            {"lines": FRAGMENT.text.lines[:2]},
+            ["0", "1"],
+            FRAGMENT.text.lines[:2],
         ),
         (
-            {"lines": "1"},
-            {"lines": FRAGMENT.text.lines[1:2]},
+            "1",
+            FRAGMENT.text.lines[1:2],
         ),
     ],
 )
 def test_get(
-    client, fragmentarium, parallel_line_injector, user, query_filter, changes
+    client, fragmentarium, parallel_line_injector, user, lines_parameter, new_lines
 ):
     fragmentarium.create(FRAGMENT)
-    query_parameters = f"?{urlencode(query_filter, doseq=True)}"
+    query_parameters = f"?{urlencode({'lines': lines_parameter}, doseq=True)}"
 
     result = client.simulate_get(f"/fragments/{FRAGMENT.number}{query_parameters}")
-
-    if "lines" in changes:
-        changes["lines"] = parallel_line_injector.inject(changes["lines"])
 
     expected_fragment = attr.evolve(
         FRAGMENT,
         text=attr.evolve(
             FRAGMENT.text,
-            **changes,
+            lines=parallel_line_injector.inject(new_lines) or FRAGMENT.text.lines,
         ),
     )
     expected = create_response_dto(
@@ -59,12 +55,12 @@ def test_get_invalid_lines(client, fragmentarium):
     fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get(
-        f"/fragments/{transliterated_fragment.number}?lines='invalid lines'"
+        f"/fragments/{transliterated_fragment.number}?lines=invalidtest"
     )
 
     expected_json = {
         "title": "422 Unprocessable Entity",
-        "description": "lines must be a list of integers, got 'invalid lines' instead",
+        "description": "lines must be a list of integers, got ['invalidtest'] instead",
     }
 
     assert result.json == expected_json
