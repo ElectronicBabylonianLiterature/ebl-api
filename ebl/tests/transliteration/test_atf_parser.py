@@ -20,6 +20,8 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
+PARSER_PATH = "../../transliteration/domain/ebl_atf.lark"
+LINE_PARSER_PATH = "../../transliteration/domain/ebl_atf_text_line.lark"
 
 
 @pytest.mark.parametrize(
@@ -88,14 +90,14 @@ def test_duplicate_labels(atf) -> None:
 
 def test_stages_periods_equality():
     atf_parser = Lark.open(
-        "../../transliteration/domain/ebl_atf.lark",
+        PARSER_PATH,
         rel_to=__file__,
         maybe_placeholders=True,
         start="siglum",
     )
 
     text_line_parser = Lark.open(
-        "../../transliteration/domain/ebl_atf_text_line.lark",
+        LINE_PARSER_PATH,
         rel_to=__file__,
         maybe_placeholders=True,
         start="chapter_name",
