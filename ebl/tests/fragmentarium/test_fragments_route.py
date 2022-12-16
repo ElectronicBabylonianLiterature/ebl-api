@@ -1,31 +1,49 @@
 import pytest
 import attr
 import falcon
-import json
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from urllib.parse import urlencode
 
 
 @pytest.mark.parametrize(
-    "lines,slice_", [(False, None), (None, None), ([], 0), ([0, 1], 2)]
+    "lines_parameter,lines_slice",
+    [
+        ([], (0, None)),
+        (
+            ["0", "1"],
+            (0, 2),
+        ),
+        (
+            "1",
+            (1, 2),
+        ),
+    ],
 )
-def test_get(client, fragmentarium, parallel_line_injector, user, lines, slice_):
+def test_get(
+    client, fragmentarium, parallel_line_injector, user, lines_parameter, lines_slice
+):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
-    lines_parameter = "" if lines is False else f"?lines={json.dumps(lines)}"
+    query_parameters = f"?{urlencode({'lines': lines_parameter}, doseq=True)}"
+
     result = client.simulate_get(
-        f"/fragments/{transliterated_fragment.number}{lines_parameter}"
+        f"/fragments/{transliterated_fragment.number}{query_parameters}"
     )
+
+    start, end = lines_slice
+    text_lines = transliterated_fragment.text.lines
 
     expected_fragment = attr.evolve(
         transliterated_fragment,
         text=attr.evolve(
             transliterated_fragment.text,
             lines=parallel_line_injector.inject(
-                transliterated_fragment.text.lines[slice(slice_)]
-            ),
+                text_lines[start : end or len(text_lines)]
+            )
+            or text_lines,
         ),
     )
     expected = create_response_dto(
@@ -43,12 +61,12 @@ def test_get_invalid_lines(client, fragmentarium):
     fragmentarium.create(transliterated_fragment)
 
     result = client.simulate_get(
-        f"/fragments/{transliterated_fragment.number}?lines={json.dumps('invalid lines')}"
+        f"/fragments/{transliterated_fragment.number}?lines=invalidtest"
     )
 
     expected_json = {
         "title": "422 Unprocessable Entity",
-        "description": "Lines must be a list of integers",
+        "description": "lines must be a list of integers, got ['invalidtest'] instead",
     }
 
     assert result.json == expected_json
