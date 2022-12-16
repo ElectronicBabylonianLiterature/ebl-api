@@ -208,7 +208,7 @@ class MongoFragmentRepository(FragmentRepository):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *([] if lines is None else [filter_fragment_lines(lines)]),
+                *([filter_fragment_lines(lines)] if lines else []),
                 *join_reference_documents(),
                 *join_joins(),
             ]
