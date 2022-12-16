@@ -16,7 +16,7 @@ from ebl.fragmentarium.domain.fragment import Script
                 "script": {
                     "period": "None",
                     "periodModifier": "None",
-                    "uncertain": None,
+                    "uncertain": False,
                 },
                 "label": "label",
             },
