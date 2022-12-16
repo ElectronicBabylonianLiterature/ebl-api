@@ -93,19 +93,42 @@ class MongoWordRepository(WordRepository):
         )
         return list(cursor)
 
-    def query_by_lemma_form_or_meaning(self, query: str) -> Sequence:
-        lemma = query.split(" ")
-        cursor = self._collection.find_many(
+    def query_by_lemma_meaning_root_vowels(
+        self, word: str = "", meaning: str = "", root: str = "", vowelClass: str = ""
+    ) -> Sequence:
+        print(word, meaning, root, vowelClass)
+        _lemma = ({"$or": [{"lemma": word}, {"forms.lemma": word}]}
+                  if word
+                  else {}
+                  )
+        _meaning = (
             {
                 "$or": [
-                    {"lemma": lemma},
-                    {"forms": {"$elemMatch": {"lemma": lemma}}},
-                    {"meaning": {"$regex": re.escape(query)}},
+                    {"meaning": {"$regex": re.escape(meaning[0])}},
+                    {
+                        "amplifiedMeanings.meaning": {
+                            "$regex": re.escape(meaning[0])
+                        }
+                    },
                 ]
             }
+            if meaning
+            else {}
         )
-        # ToDo: 
-        # Add: word (= lemma), meaning, root, vowel class
+        _roots = {"roots": root[0]} if root else {}
+        _vowels = (
+            {"amplifiedMeanings.vowels.value": vowelClass[0].split("/")}
+            if vowelClass
+            else {}
+        )
+
+        cursor = self._collection.aggregate(
+            [
+                {
+                    "$match": {"$and": [_lemma, _meaning, _roots, _vowels]},
+                }
+            ]
+        )
         return list(cursor)
 
     def query_by_lemma_prefix(self, query: str) -> Sequence:

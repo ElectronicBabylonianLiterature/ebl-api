@@ -25,8 +25,7 @@ class Dictionary:
         return self._repository.query_by_ids(lemmas)
 
     def search(self, query: str) -> Sequence:
-        print('!!!', parse_qs(query))
-        return self._repository.query_by_lemma_form_or_meaning(query)
+        return self._repository.query_by_lemma_meaning_root_vowels(**parse_qs(query))
 
     def search_lemma(self, lemma: str) -> Sequence:
         return self._repository.query_by_lemma_prefix(lemma)

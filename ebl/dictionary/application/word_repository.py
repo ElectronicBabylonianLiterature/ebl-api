@@ -18,7 +18,9 @@ class WordRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_lemma_form_or_meaning(self, query: str) -> Sequence:
+    def query_by_lemma_meaning_root_vowels(
+        self, word: str, meaning: str, root: str, vowelClass: str
+    ) -> Sequence:
         ...
 
     @abstractmethod
