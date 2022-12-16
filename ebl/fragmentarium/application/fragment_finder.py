@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Sequence
+from typing import List, Optional, Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.dictionary.application.dictionary_service import Dictionary
