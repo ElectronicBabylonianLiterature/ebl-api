@@ -1,7 +1,7 @@
 import attr
 
 from ebl.ebl_ai_client import EblAiClient
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.cropped_sign_image import Base64, CroppedSignImage
 from ebl.fragmentarium.domain.annotation import Annotations
@@ -15,7 +15,7 @@ from ebl.tests.factories.annotation import (
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-SCHEMA = AnnotationsSchema()
+SCHEMA = AnnotationsWithScriptSchema()
 
 
 def test_label_by_line_number(text_with_labels, annotations_service):
@@ -158,7 +158,7 @@ def test_update(
     when(cropped_sign_images_repository).create_many(
         [expected_cropped_sign_image]
     ).thenReturn()
-    schema = AnnotationsSchema()
+    schema = AnnotationsWithScriptSchema()
     when(changelog).create(
         "annotations",
         user.profile,

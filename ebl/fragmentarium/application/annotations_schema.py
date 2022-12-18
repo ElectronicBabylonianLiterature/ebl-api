@@ -53,10 +53,17 @@ class AnnotationSchema(Schema):
 
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
-    script = fields.String(required=True)
     annotations = fields.List(fields.Nested(AnnotationSchema(), required=True))
 
     @post_load
     def make_annotation(self, data, **kwargs):
         data["fragment_number"] = MuseumNumber.of(data["fragment_number"])
         return Annotations(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
+
+class AnnotationsWithScriptSchema(AnnotationsSchema):
+    script = fields.String(required=True)

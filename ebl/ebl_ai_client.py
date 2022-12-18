@@ -64,5 +64,5 @@ class EblAiClient:
             )
         )
         return Annotations.from_bounding_boxes_predictions(
-            number, bounding_boxes_predictions, height, width, ""
+            number, bounding_boxes_predictions, height, width
         )

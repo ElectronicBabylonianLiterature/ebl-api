@@ -123,8 +123,8 @@ class BoundingBoxPrediction(BoundingBox):
 @attr.attrs(auto_attribs=True, frozen=True)
 class Annotations:
     fragment_number: MuseumNumber
-    script: str
     annotations: Sequence[Annotation] = tuple()
+    script: Optional[str] = None
 
     @classmethod
     def from_bounding_boxes_predictions(
@@ -133,7 +133,6 @@ class Annotations:
         bboxes: Sequence[BoundingBoxPrediction],
         image_height: int,
         image_width: int,
-        script: str,
     ) -> "Annotations":
         annotations = []
         for bbox in bboxes:
@@ -144,4 +143,4 @@ class Annotations:
                 bbox.height / image_width * 100,
             )
             annotations.append(Annotation.from_prediction(geometry))
-        return cls(fragment_number, script, annotations)
+        return cls(fragment_number, annotations)

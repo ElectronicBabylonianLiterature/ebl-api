@@ -1,6 +1,9 @@
 import falcon
 
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import (
+    AnnotationsWithScriptSchema,
+    AnnotationsSchema,
+)
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.marshmallowschema import validate
@@ -12,7 +15,7 @@ class AnnotationResource:
         self._annotation_service = annotation_service
 
     @falcon.before(require_scope, "annotate:fragments")
-    @validate(AnnotationsSchema())
+    @validate(AnnotationsWithScriptSchema())
     def on_post(self, req: falcon.Request, resp: falcon.Response, number: str):
         if number == req.media.get("fragmentNumber"):
             annotations = self._annotation_service.update(
@@ -25,11 +28,11 @@ class AnnotationResource:
             )
 
     @falcon.before(require_scope, "read:fragments")
-    @validate(None, AnnotationsSchema())
+    @validate(None, AnnotationsWithScriptSchema())
     def on_get(self, req, resp: falcon.Response, number: str):
         museum_number = parse_museum_number(number)
         if req.params.get("generateAnnotations") == "true":
             annotations = self._annotation_service.generate_annotations(museum_number)
         else:
             annotations = self._annotation_service.find(museum_number)
-        resp.media = AnnotationsSchema().dump(annotations)
+        resp.media = AnnotationsWithScriptSchema().dump(annotations)

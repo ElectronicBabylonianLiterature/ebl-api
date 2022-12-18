@@ -6,7 +6,10 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import (
+    AnnotationsWithScriptSchema,
+    AnnotationsSchema,
+)
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.mongo_collection import MongoCollection
@@ -24,7 +27,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
     def create_or_update(self, annotations: Annotations) -> None:
         self._collection.replace_one(
-            AnnotationsSchema().dump(annotations),
+            AnnotationsWithScriptSchema().dump(annotations),
             {"fragmentNumber": str(annotations.fragment_number)},
             True,
         )
@@ -32,7 +35,6 @@ class MongoAnnotationsRepository(AnnotationsRepository):
     def query_by_museum_number(self, number: MuseumNumber) -> Annotations:
         try:
             result = self._collection.find_one({"fragmentNumber": str(number)})
-
             return AnnotationsSchema().load(result, unknown=EXCLUDE)
         except NotFoundError:
             return Annotations(number)
@@ -73,4 +75,4 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                 {"$project": {"fragment": 0}},
             ]
         )
-        return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)
+        return AnnotationsWithScriptSchema().load(result, many=True, unknown=EXCLUDE)

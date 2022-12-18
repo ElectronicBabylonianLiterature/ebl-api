@@ -1,4 +1,4 @@
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
@@ -55,8 +55,8 @@ SERIALIZED = {
 
 
 def test_load():
-    assert AnnotationsSchema().load(SERIALIZED) == ANNOTATIONS
+    assert AnnotationsWithScriptSchema().load(SERIALIZED) == ANNOTATIONS
 
 
 def test_dump():
-    assert AnnotationsSchema().dump(ANNOTATIONS) == SERIALIZED
+    assert AnnotationsWithScriptSchema().dump(ANNOTATIONS) == SERIALIZED

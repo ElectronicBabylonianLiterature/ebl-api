@@ -8,7 +8,7 @@ from ebl.changelog import Changelog
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImage,
@@ -64,7 +64,6 @@ class AnnotationsService:
         self,
         annotations: Annotations,
         image: Image.Image,
-        script: str,
         labels: Sequence[LineLabel],
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
@@ -81,7 +80,7 @@ class AnnotationsService:
 
             updated_cropped_annotation = attr.evolve(
                 annotation,
-                cropped_sign=CroppedSign(cropped_sign_image.image_id, script, label),
+                cropped_sign=CroppedSign(cropped_sign_image.image_id, label),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
         return (
@@ -101,7 +100,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.legacy_script, fragment.text.labels
+            annotations, image, fragment.text.labels
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
@@ -109,7 +108,7 @@ class AnnotationsService:
             annotations.fragment_number
         )
         _id = str(annotations.fragment_number)
-        schema = AnnotationsSchema()
+        schema = AnnotationsWithScriptSchema()
         (
             annotations_with_image_ids,
             cropped_sign_images,
