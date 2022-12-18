@@ -60,6 +60,17 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                         },
                     }
                 },
+                {
+                    "$lookup": {
+                        "from": "fragments",
+                        "localField": "fragmentNumber",
+                        "foreignField": "_id",
+                        "as": "fragment",
+                    }
+                },
+                {"$unwind": "$fragment"},
+                {"$addFields": {"script": "$fragment.legacyScript"}},
+                {"$project": {"fragment": 0}},
             ]
         )
         return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)

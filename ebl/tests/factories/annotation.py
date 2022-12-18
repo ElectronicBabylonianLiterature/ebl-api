@@ -43,7 +43,6 @@ class CroppedSignFactory(factory.Factory):
         model = CroppedSign
 
     image_id = factory.Faker("word")
-    script = factory.Faker("word")
     label = factory.Faker("word")
 
 
@@ -61,6 +60,7 @@ class AnnotationsFactory(factory.Factory):
         model = Annotations
 
     fragment_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
+    script = factory.Faker("word")
     annotations = factory.List(
         [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory)]
     )

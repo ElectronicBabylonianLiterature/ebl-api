@@ -53,6 +53,7 @@ class AnnotationSchema(Schema):
 
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
+    script = fields.String(required=True)
     annotations = fields.List(fields.Nested(AnnotationSchema(), required=True))
 
     @post_load

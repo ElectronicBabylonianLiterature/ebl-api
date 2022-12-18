@@ -4,7 +4,6 @@ from ebl.fragmentarium.application.cropped_annotations_service import (
 from ebl.fragmentarium.application.cropped_sign_image import (
     Base64,
     CroppedSignImage,
-    CroppedAnnotation,
 )
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
@@ -32,10 +31,18 @@ def test_find_annotations_by_sign(
         CroppedSignImage(image_id_2, Base64("test-base64-2"))
     )
     fragment_number = annotations.fragment_number
-    expected_1 = CroppedAnnotation.from_cropped_sign(
-        fragment_number, Base64("test-base64-1"), annotation[0].cropped_sign
-    )
-    expected_2 = CroppedAnnotation.from_cropped_sign(
-        fragment_number, Base64("test-base64-2"), annotation[1].cropped_sign
-    )
+
+    expected_1 = {
+        "fragmentNumber": fragment_number,
+        "image": Base64("test-base64-1"),
+        "script": annotations.script,
+        "label": annotation[0].cropped_sign.label,
+    }
+    expected_2 = {
+        "fragmentNumber": fragment_number,
+        "image": Base64("test-base64-2"),
+        "script": annotations.script,
+        "label": annotation[1].cropped_sign.label,
+    }
+
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]

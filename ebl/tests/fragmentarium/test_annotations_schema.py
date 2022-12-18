@@ -25,15 +25,16 @@ LABEL = "label"
 ANNOTATION = Annotation(
     Geometry(X, Y, WIDTH, HEIGHT),
     AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME),
-    CroppedSign(IMAGE_ID, SCRIPT, LABEL),
+    CroppedSign(IMAGE_ID, LABEL),
 )
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
-ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION])
+ANNOTATIONS = Annotations(MUSEUM_NUMBER, SCRIPT, [ANNOTATION])
 
 
 SERIALIZED = {
     "fragmentNumber": str(MUSEUM_NUMBER),
+    "script": SCRIPT,
     "annotations": [
         {
             "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
@@ -46,7 +47,6 @@ SERIALIZED = {
             },
             "croppedSign": {
                 "imageId": IMAGE_ID,
-                "script": SCRIPT,
                 "label": LABEL,
             },
         }

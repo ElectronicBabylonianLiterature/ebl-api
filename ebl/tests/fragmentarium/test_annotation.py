@@ -26,12 +26,12 @@ IMAGE_ID = "image-id"
 SCRIPT = "script"
 LABEL = "label"
 
-CROPPED_SIGN = CroppedSign(IMAGE_ID, SCRIPT, LABEL)
+CROPPED_SIGN = CroppedSign(IMAGE_ID, LABEL)
 
 ANNOTATION = Annotation(GEOMETRY, DATA, CROPPED_SIGN)
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
-ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION])
+ANNOTATIONS = Annotations(MUSEUM_NUMBER, SCRIPT, [ANNOTATION])
 
 
 def test_geometry():
@@ -62,7 +62,7 @@ def test_annotations_from_bounding_box_predictions():
     bbox_1 = BoundingBoxPrediction(0, 0, 10, 100, 0.99)
     bbox_2 = BoundingBoxPrediction(500, 500, 100, 10, 0.99)
     annotations = Annotations.from_bounding_boxes_predictions(
-        MUSEUM_NUMBER, [bbox_1, bbox_2], 1000, 1000
+        MUSEUM_NUMBER, [bbox_1, bbox_2], 1000, 1000, ""
     )
     assert annotations.annotations[0].geometry == Geometry(0.0, 0.0, 1.0, 10.0)
     assert annotations.annotations[1].geometry == Geometry(50.0, 50.0, 10.0, 1.0)
