@@ -1,13 +1,11 @@
-import attr
-
 from ebl.fragmentarium.application.annotations_schema import (
     AnnotationsWithScriptSchema,
     AnnotationsSchema,
 )
 from ebl.fragmentarium.domain.annotation import Annotations
+from ebl.tests.factories.annotation import AnnotationsFactory
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.tests.factories.annotation import AnnotationsFactory
 
 COLLECTION = "annotations"
 
