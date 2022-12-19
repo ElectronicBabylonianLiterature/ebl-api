@@ -41,12 +41,12 @@ class CroppedSign:
 
 class CroppedSignSchema(Schema):
     image_id = fields.String(required=True, data_key="imageId")
-    script = fields.String(required=True)
+    script = fields.String()
     label = fields.String(required=True)
 
     @post_load
     def load(self, data, **kwargs):
-        return CroppedSign(data["imageId"], data["script"], data["label"])
+        return CroppedSign(data["imageId"], data.get("script", ""), data["label"])
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
