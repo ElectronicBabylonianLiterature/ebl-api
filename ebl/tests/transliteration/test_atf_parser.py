@@ -70,7 +70,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
     ],
 )
 def test_invalid_atf(atf, line_numbers) -> None:
-    with pytest.raises(TransliterationError) as exc_info:
+    with pytest.raises(TransliterationError) as exc_info:  # pyre-ignore[16]
         parse_atf_lark(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
@@ -80,5 +80,5 @@ def test_invalid_atf(atf, line_numbers) -> None:
     "atf,line_numbers", [("1. x\n1. x", [2]), ("1. x\n@obverse\n1. x\n1. x", [4])]
 )
 def test_duplicate_labels(atf, line_numbers) -> None:
-    with pytest.raises(DataError, match="Duplicate labels."):
+    with pytest.raises(DataError, match="Duplicate labels."):  # pyre-ignore[16]
         parse_atf_lark(atf)

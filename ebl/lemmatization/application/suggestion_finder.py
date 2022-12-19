@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Sequence
 
 from ebl.dictionary.application.dictionary_service import Dictionary
@@ -6,6 +6,7 @@ from ebl.lemmatization.domain.lemmatization import Lemma
 
 
 class LemmaRepository(ABC):
+    @abstractmethod
     def query_lemmas(self, word: str, is_normalized: bool) -> Sequence[Lemma]:
         ...
 

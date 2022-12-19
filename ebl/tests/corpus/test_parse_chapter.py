@@ -113,7 +113,7 @@ def test_parse_manuscript(lines, expected) -> None:
 
 
 def test_parse_manuscript_invalid() -> None:
-    with pytest.raises(DataError):
+    with pytest.raises(DataError):  # pyre-ignore[16]
         parse_manuscript(f"{UNKNOWN_MANUSCRIPT.siglum} o iii 1. kur")
 
 
@@ -295,6 +295,6 @@ def test_parse_chapter(lines, expected) -> None:
 
 
 def test_parse_chapter_empty() -> None:
-    with pytest.raises(DataError):
+    with pytest.raises(DataError):  # pyre-ignore[16]
         f = parse_chapter("", MANUSCRIPTS)
         print(f)

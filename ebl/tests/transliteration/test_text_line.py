@@ -242,7 +242,7 @@ def test_update_lemmatization() -> None:
 def test_update_lemmatization_incompatible() -> None:
     line = TextLine.of_iterable(LINE_NUMBER, [Word.of([Reading.of_name("mu")])])
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
-    with pytest.raises(LemmatizationError):
+    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
         line.update_lemmatization(lemmatization)
 
 
@@ -252,5 +252,5 @@ def test_update_lemmatization_wrong_lenght() -> None:
         [Word.of([Reading.of_name("bu")]), Word.of([Reading.of_name("bu")])],
     )
     lemmatization = (LemmatizationToken("bu", (WordId("nu I"),)),)
-    with pytest.raises(LemmatizationError):
+    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
         line.update_lemmatization(lemmatization)

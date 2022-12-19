@@ -99,14 +99,14 @@ def test_update_lemmatization() -> None:
 
 def test_update_lemmatization_incompatible() -> None:
     lemmatization = Lemmatization(((LemmatizationToken("mu", tuple()),),))
-    with pytest.raises(LemmatizationError):
+    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
         TEXT.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lines() -> None:
     lemmatization = Lemmatization((*TEXT.lemmatization.tokens, tuple()))
 
-    with pytest.raises(LemmatizationError):
+    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
         TEXT.update_lemmatization(lemmatization)
 
 
@@ -123,12 +123,12 @@ def test_labels(text_with_labels) -> None:
 
 
 def test_translation_before_text() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Text.of_iterable([TranslationLine(tuple()), *LINES])
 
 
 def test_invalid_extent() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
@@ -139,7 +139,7 @@ def test_invalid_extent() -> None:
 
 
 def test_extent_before_translation() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
@@ -150,7 +150,7 @@ def test_extent_before_translation() -> None:
 
 
 def test_exent_overlapping() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),

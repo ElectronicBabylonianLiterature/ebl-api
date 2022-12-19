@@ -1,4 +1,4 @@
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 import attr
 from gridfs import GridFS, GridOut
@@ -21,7 +21,7 @@ class GridFsFile(File):
         return self._grid_out.length
 
     @property
-    def content_type(self) -> str:
+    def content_type(self) -> Optional[str]:
         return self._grid_out.content_type
 
     def read(self, size=-1) -> bytes:

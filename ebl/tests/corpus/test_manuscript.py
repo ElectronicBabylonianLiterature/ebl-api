@@ -30,7 +30,7 @@ def test_is_empty(line: Union[TextLine, EmptyLine], expected: bool) -> None:
     ],
 )
 def test_invalid_siglum(provenance, period, type_) -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Manuscript(1, provenance=provenance, period=period, type=type_)
 
 

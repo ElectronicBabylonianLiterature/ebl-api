@@ -34,5 +34,5 @@ def test_apply() -> None:
 )
 def test_apply_invalid(word) -> None:
     alignment = AlignmentToken("bu", 0)
-    with pytest.raises(AlignmentError):
+    with pytest.raises(AlignmentError):  # pyre-ignore[16]
         alignment.apply(word)
