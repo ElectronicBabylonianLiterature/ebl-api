@@ -60,7 +60,10 @@ class AnnotationsFactory(factory.Factory):
         model = Annotations
 
     fragment_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    script = factory.Faker("word")
     annotations = factory.List(
         [factory.SubFactory(AnnotationFactory), factory.SubFactory(AnnotationFactory)]
     )
+
+
+class AnnotationsWithScriptFactory(AnnotationsFactory):
+    script = factory.Faker("word")

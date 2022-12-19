@@ -55,7 +55,6 @@ def test_cropped_images_from_sign(
     )
     for annotation, cropped_image in zip(annotations.annotations, cropped_images):
         assert annotation.cropped_sign.image_id == cropped_image.image_id
-        assert annotation.cropped_sign.script == fragment.legacy_script
         assert annotation.cropped_sign.label == "i Stone wig Stone wig 2"
 
 
@@ -145,7 +144,6 @@ def test_update(
         annotation,
         cropped_sign=CroppedSignFactory.build(
             image_id="test-id",
-            script=fragment.legacy_script,
             label="i Stone wig Stone wig 2",
         ),
     )

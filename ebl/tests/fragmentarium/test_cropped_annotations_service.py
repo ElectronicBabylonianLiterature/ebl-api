@@ -8,6 +8,7 @@ from ebl.fragmentarium.application.cropped_sign_image import (
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
+    AnnotationsWithScriptFactory,
 )
 
 
@@ -18,7 +19,7 @@ def test_find_annotations_by_sign(
         annotations_repository, cropped_sign_images_repository
     )
     annotation = AnnotationFactory.build_batch(2)
-    annotations = AnnotationsFactory.build(annotations=annotation)
+    annotations = AnnotationsWithScriptFactory.build(annotations=annotation)
 
     image_id_1 = annotation[0].cropped_sign.image_id
     image_id_2 = annotation[1].cropped_sign.image_id
@@ -33,13 +34,13 @@ def test_find_annotations_by_sign(
     fragment_number = annotations.fragment_number
 
     expected_1 = {
-        "fragmentNumber": fragment_number,
+        "fragmentNumber": str(fragment_number),
         "image": Base64("test-base64-1"),
         "script": annotations.script,
         "label": annotation[0].cropped_sign.label,
     }
     expected_2 = {
-        "fragmentNumber": fragment_number,
+        "fragmentNumber": str(fragment_number),
         "image": Base64("test-base64-2"),
         "script": annotations.script,
         "label": annotation[1].cropped_sign.label,
