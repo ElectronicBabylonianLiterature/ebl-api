@@ -1,12 +1,8 @@
-import json
-
 import falcon
 
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
-
-
 from ebl.users.web.require_scope import require_scope
 
 
