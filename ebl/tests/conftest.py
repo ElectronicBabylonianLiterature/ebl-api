@@ -372,6 +372,7 @@ def user() -> User:
                 "read:fragments",
                 "read:CAIC-fragments",
                 "read:SIPPARLIBRARY-fragments",
+                "read:ITALIANNINEVEH-fragments",
                 "read:URUKLBU-fragments",
                 "read:WGL-folios",
                 "read:bibliography",
