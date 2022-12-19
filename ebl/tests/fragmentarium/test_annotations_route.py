@@ -3,7 +3,7 @@ import json
 import falcon
 import httpretty
 
-from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema, AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 
 from ebl.tests.conftest import create_test_photo
@@ -21,7 +21,7 @@ def test_find_annotations(client):
         params={"generateAnnotations": False},
     )
 
-    expected_json = AnnotationsWithScriptSchema().dump(annotations)
+    expected_json = AnnotationsSchema().dump(annotations)
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
 
