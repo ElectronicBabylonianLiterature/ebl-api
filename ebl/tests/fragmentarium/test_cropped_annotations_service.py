@@ -6,7 +6,6 @@ from ebl.fragmentarium.application.cropped_sign_image import (
     CroppedSignImage,
 )
 from ebl.tests.factories.annotation import (
-    AnnotationsFactory,
     AnnotationFactory,
     AnnotationsWithScriptFactory,
 )
