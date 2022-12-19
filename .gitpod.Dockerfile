@@ -9,7 +9,7 @@ RUN sudo apt-get update \
 
 RUN brew install go-task/tap/go-task
 
-ARG PYTHON_VERSION=pypy3.9-7.3.10
+ARG PYTHON_VERSION=pypy3.9-7.3.9
 RUN pyenv update
 RUN pyenv install $PYTHON_VERSION
 RUN pyenv global $PYTHON_VERSION
