@@ -47,7 +47,7 @@ def align_fragment_and_chapter(
 
 def to_dict(
     fragment: Fragment, text: Text, chapter: Chapter, result: AlignmentResult
-) -> dict:
+):
     common = {
         "fragment": result.a.name,
         "manuscript": result.b.name,
