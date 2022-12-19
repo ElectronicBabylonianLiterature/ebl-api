@@ -43,4 +43,3 @@ class CroppedSignSchema(Schema):
     @post_load
     def load(self, data, **kwargs):
         return CroppedSign(data["imageId"], data["label"])
-
