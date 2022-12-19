@@ -8,7 +8,7 @@ from ebl.changelog import Changelog
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImage,
@@ -108,7 +108,7 @@ class AnnotationsService:
             annotations.fragment_number
         )
         _id = str(annotations.fragment_number)
-        schema = AnnotationsWithScriptSchema()
+        schema = AnnotationsSchema()
         (
             annotations_with_image_ids,
             cropped_sign_images,

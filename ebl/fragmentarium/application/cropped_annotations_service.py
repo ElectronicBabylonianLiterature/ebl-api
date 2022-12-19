@@ -29,7 +29,7 @@ class CroppedAnnotationService:
                     )
                     cropped_image_annotations.append(
                         {
-                            "fragmentNumber": annotation.fragment_number,
+                            "fragmentNumber": str(annotation.fragment_number),
                             "image": cropped_sign_image.image,
                             "script": annotation.script,
                             "label": cropped_sign.label,

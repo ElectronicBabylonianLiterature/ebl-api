@@ -3,7 +3,7 @@ import json
 import falcon
 import httpretty
 
-from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema, AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 
 from ebl.tests.conftest import create_test_photo
@@ -79,11 +79,11 @@ def test_update(client, fragment_repository, photo_repository):
     fragment_repository.create(fragment)
     photo_repository._create(create_test_photo(number))
 
-    body = AnnotationsWithScriptSchema().dump(annotations)
+    body = AnnotationsSchema().dump(annotations)
     url = f"/fragments/{number}/annotations"
     post_result = client.simulate_post(url, body=json.dumps(body))
 
-    expected_json = AnnotationsWithScriptSchema().dump(annotations)
+    expected_json = AnnotationsSchema().dump(annotations)
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json["fragmentNumber"] == expected_json["fragmentNumber"]
@@ -103,7 +103,7 @@ def test_update(client, fragment_repository, photo_repository):
 
 def test_update_number_mismatch(client):
     annotations = AnnotationsFactory.build()
-    body = AnnotationsWithScriptSchema().dumps(annotations)
+    body = AnnotationsSchema().dumps(annotations)
     url = "/fragments/not.match/annotations"
     post_result = client.simulate_post(url, body=body)
 
@@ -112,7 +112,7 @@ def test_update_number_mismatch(client):
 
 def test_update_invalid_number(client):
     annotations = AnnotationsFactory.build()
-    body = AnnotationsWithScriptSchema().dumps(annotations)
+    body = AnnotationsSchema().dumps(annotations)
     url = "/fragments/invalid/annotations"
     post_result = client.simulate_post(url, body=body)
 
@@ -129,7 +129,7 @@ def test_update_invalid(client):
 
 def test_update_not_allowed(guest_client):
     annotations = AnnotationsFactory.build()
-    body = AnnotationsWithScriptSchema().dumps(annotations)
+    body = AnnotationsSchema().dumps(annotations)
     url = "/fragments/not match/annotations"
     result = guest_client.simulate_post(url, body=body)
 

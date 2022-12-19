@@ -44,7 +44,8 @@ class CroppedSignSchema(Schema):
     def load(self, data, **kwargs):
         return CroppedSign(data["imageId"], data["label"])
 
-
+"""
 class CroppedAnnotationSchema(CroppedSignSchema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
     image = fields.String(required=True)
+"""

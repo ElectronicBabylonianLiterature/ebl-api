@@ -27,7 +27,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
     def create_or_update(self, annotations: Annotations) -> None:
         self._collection.replace_one(
-            AnnotationsWithScriptSchema().dump(annotations),
+            AnnotationsSchema().dump(annotations),
             {"fragmentNumber": str(annotations.fragment_number)},
             True,
         )
@@ -35,6 +35,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
     def query_by_museum_number(self, number: MuseumNumber) -> Annotations:
         try:
             result = self._collection.find_one({"fragmentNumber": str(number)})
+
             return AnnotationsSchema().load(result, unknown=EXCLUDE)
         except NotFoundError:
             return Annotations(number)

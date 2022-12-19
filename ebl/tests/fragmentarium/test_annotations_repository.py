@@ -79,7 +79,7 @@ def test_query_by_museum_number(database, annotations_repository):
     annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number
 
-    database[COLLECTION].insert_one(AnnotationsWithScriptSchema().dump(annotations))
+    database[COLLECTION].insert_one(AnnotationsSchema().dump(annotations))
 
     assert annotations_repository.query_by_museum_number(fragment_number) == annotations
 
