@@ -111,7 +111,12 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
-    authorized_scopes = [Scope.CAIC, Scope.SIPPARLIBRARY, Scope.URUKLBU]
+    authorized_scopes = [
+        Scope.CAIC,
+        Scope.SIPPARLIBRARY,
+        Scope.URUKLBU,
+        Scope.ITALIANNINEVEH,
+    ]
     introduction = Introduction("text", (StringPart("text"),))
 
 

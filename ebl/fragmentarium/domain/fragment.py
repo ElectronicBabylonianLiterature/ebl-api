@@ -68,6 +68,7 @@ class Scope(Enum):
     CAIC = "CAIC"
     SIPPARLIBRARY = "SIPPARLIBRARY"
     URUKLBU = "URUKLBU"
+    ITALIANNINEVEH = "ITALIANNINEVEH"
 
 
 @attr.s(auto_attribs=True, frozen=True)
