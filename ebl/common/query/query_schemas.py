@@ -3,8 +3,6 @@ from ebl.common.query.query_result import QueryItem, QueryResult
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
-LemmaSequenceField = fields.List(fields.String())
-
 
 class QueryItemSchema(Schema):
     id_ = fields.String(data_key="_id")
@@ -14,17 +12,11 @@ class QueryItemSchema(Schema):
     museum_number = fields.Nested(
         MuseumNumberSchema, required=True, data_key="museumNumber"
     )
-    lemma_sequences = fields.List(
-        fields.List(LemmaSequenceField),
-        load_default=tuple(),
-        data_key="lemmaSequences",
-    )
     match_count = fields.Integer(required=True, data_key="matchCount")
 
     @post_load
     def make_query_item(self, data, **kwargs) -> QueryItem:
         data["matching_lines"] = tuple(data["matching_lines"])
-        data["lemma_sequences"] = tuple(data["lemma_sequences"])
         return QueryItem(**data)
 
 
