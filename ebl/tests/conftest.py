@@ -499,7 +499,7 @@ def word():
             {"lemma": ["form1"], "notes": [], "attested": True},
             {"lemma": ["form2", "part2"], "notes": ["a note"], "attested": False},
         ],
-        "meaning": "a meaning",
+        "meaning": "some semantics",
         "amplifiedMeanings": [
             {
                 "meaning": "(*i/i*) meaning",

@@ -94,30 +94,26 @@ class MongoWordRepository(WordRepository):
         return list(cursor)
 
     def query_by_lemma_meaning_root_vowels(
-        self, word: str = "", meaning: str = "", root: str = "", vowelClass: str = ""
+        self,
+        word: str = "",
+        meaning: str = "",
+        root: str = "",
+        vowelClass: str = "",
     ) -> Sequence:
-        print(word, meaning, root, vowelClass)
-        _lemma = ({"$or": [{"lemma": word}, {"forms.lemma": word}]}
-                  if word
-                  else {}
-                  )
+        _lemma = {"$or": [{"lemma": word}, {"forms.lemma": word}]} if word else {}
         _meaning = (
             {
                 "$or": [
-                    {"meaning": {"$regex": re.escape(meaning[0])}},
-                    {
-                        "amplifiedMeanings.meaning": {
-                            "$regex": re.escape(meaning[0])
-                        }
-                    },
+                    {"meaning": {"$regex": re.escape(meaning)}},
+                    {"amplifiedMeanings.meaning": {"$regex": re.escape(meaning)}},
                 ]
             }
             if meaning
             else {}
         )
-        _roots = {"roots": root[0]} if root else {}
+        _roots = {"roots": root} if root else {}
         _vowels = (
-            {"amplifiedMeanings.vowels.value": vowelClass[0].split("/")}
+            {"amplifiedMeanings.vowels.value": vowelClass.split("/")}
             if vowelClass
             else {}
         )

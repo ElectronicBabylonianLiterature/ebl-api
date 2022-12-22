@@ -1,5 +1,6 @@
 import pydash
 import pytest
+import copy
 
 from ebl.errors import NotFoundError
 
@@ -36,8 +37,9 @@ def test_word_not_found(word_repository):
 def test_search_finds_all_homonyms(database, word_repository, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     database[COLLECTION].insert_many([word, another_word])
+    query = {"word": word["lemma"][0]}
 
-    assert word_repository.query_by_lemma_form_or_meaning(" ".join(word["lemma"])) == [
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [
         word,
         another_word,
     ]
@@ -51,24 +53,69 @@ def test_search_finds_by_meaning(database, word_repository, word):
         "meaning": "not matching",
     }
     database[COLLECTION].insert_many([word, another_word])
+    query = {"meaning": word["meaning"]}
 
-    assert word_repository.query_by_lemma_form_or_meaning(word["meaning"][1:4]) == [
-        word
-    ]
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+
+
+def test_search_finds_by_root(database, word_repository, word):
+    another_word = copy.deepcopy(
+        {
+            **word,
+            "_id": "part1 part2 II",
+            "homonym": "II",
+        }
+    )
+    another_word["roots"][0] = "lmm"
+    database[COLLECTION].insert_many([word, another_word])
+    query = {"root": word["roots"][0]}
+
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+
+
+def test_search_finds_by_vowel_class(database, word_repository, word):
+    another_word = copy.deepcopy(
+        {
+            **word,
+            "_id": "part1 part2 II",
+            "homonym": "II",
+        }
+    )
+    another_word["amplifiedMeanings"][0]["vowels"][0]["value"] = ["e", "u"]
+    database[COLLECTION].insert_many([word, another_word])
+    query = {"vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])}
+
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+
+
+def test_search_finds_by_all_params(database, word_repository, word):
+    another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
+    another_word["roots"][0] = "lmm"
+    database[COLLECTION].insert_many([word, another_word])
+    query = {
+        "word": word["lemma"][0],
+        "meaning": word["meaning"],
+        "root": word["roots"][0],
+        "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
+    }
+
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
 
 
 def test_search_finds_duplicates(database, word_repository, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     database[COLLECTION].insert_many([word, another_word])
+    query = {"meaning": word["meaning"][1:4]}
 
-    assert word_repository.query_by_lemma_form_or_meaning(word["meaning"][1:4]) == [
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [
         word,
         another_word,
     ]
 
 
 def test_search_not_found(word_repository):
-    assert word_repository.query_by_lemma_form_or_meaning("lemma") == []
+    query = {"word": "lemma"}
+    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == []
 
 
 def test_update(word_repository, word):

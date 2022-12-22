@@ -1,5 +1,5 @@
 from typing import Sequence
-from urllib.parse import parse_qs
+from urllib.parse import parse_qsl
 
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
@@ -25,7 +25,9 @@ class Dictionary:
         return self._repository.query_by_ids(lemmas)
 
     def search(self, query: str) -> Sequence:
-        return self._repository.query_by_lemma_meaning_root_vowels(**parse_qs(query))
+        return self._repository.query_by_lemma_meaning_root_vowels(
+            **dict(parse_qsl(query))
+        )
 
     def search_lemma(self, lemma: str) -> Sequence:
         return self._repository.query_by_lemma_prefix(lemma)

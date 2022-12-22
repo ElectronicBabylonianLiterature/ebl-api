@@ -3,6 +3,8 @@ import pytest
 from freezegun import freeze_time
 
 from ebl.errors import NotFoundError
+from urllib.parse import urlencode
+import copy
 
 COLLECTION = "words"
 
@@ -46,8 +48,9 @@ def test_search_finds_all_homonyms(dictionary, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
+    query = urlencode({"word": word["lemma"][0]}, doseq=False)
 
-    assert dictionary.search(" ".join(word["lemma"])) == [word, another_word]
+    assert dictionary.search(query) == [word, another_word]
 
 
 def test_search_finds_by_meaning(dictionary, word):
@@ -59,20 +62,64 @@ def test_search_finds_by_meaning(dictionary, word):
     }
     dictionary.create(word)
     dictionary.create(another_word)
+    query = urlencode({"meaning": word["meaning"]}, doseq=False)
 
-    assert dictionary.search(word["meaning"][1:4]) == [word]
+    assert dictionary.search(query) == [word]
+
+
+def test_search_finds_by_root(dictionary, word):
+    another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
+    another_word["roots"][0] = "lmm"
+    dictionary.create(word)
+    dictionary.create(another_word)
+    query = urlencode({"root": word["roots"][0]}, doseq=False)
+
+    assert dictionary.search(query) == [word]
+
+
+def test_search_finds_by_vowel_class(dictionary, word):
+    another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
+    another_word["amplifiedMeanings"][0]["vowels"][0]["value"] = ["e", "u"]
+    dictionary.create(word)
+    dictionary.create(another_word)
+    query = urlencode(
+        {"vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])},
+        doseq=False,
+    )
+
+    assert dictionary.search(query) == [word]
+
+
+def test_search_finds_by_all_params(dictionary, word):
+    another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
+    another_word["roots"][0] = "lmm"
+    dictionary.create(word)
+    dictionary.create(another_word)
+    query = urlencode(
+        {
+            "word": word["lemma"][0],
+            "meaning": word["meaning"],
+            "root": word["roots"][0],
+            "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
+        },
+        doseq=False,
+    )
+
+    assert dictionary.search(query) == [word]
 
 
 def test_search_finds_duplicates(dictionary, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
+    query = urlencode({"meaning": word["meaning"][1:4]}, doseq=False)
 
-    assert dictionary.search(word["meaning"][1:4]) == [word, another_word]
+    assert dictionary.search(query) == [word, another_word]
 
 
 def test_search_not_found(dictionary):
-    assert dictionary.search("lemma") == []
+    query = urlencode({"word": "lemma"}, doseq=False)
+    assert dictionary.search(query) == []
 
 
 def test_update(dictionary, word, user):
