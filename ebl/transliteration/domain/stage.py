@@ -4,6 +4,13 @@ from typing import Mapping
 
 @unique
 class Stage(Enum):
+    UNCERTAIN = "Uncertain"
+    URUK_IV = "Uruk IV"
+    URUK_III_JEMDET_NASR = "Uruk III-Jemdet Nasr"
+    ED_I_II = "ED I-II"
+    FARA = "Fara"
+    PRESARGONIC = "Presargonic"
+    SARGONIC = "Sargonic"
     UR_III = "Ur III"
     OLD_ASSYRIAN = "Old Assyrian"
     OLD_BABYLONIAN = "Old Babylonian"
@@ -16,13 +23,6 @@ class Stage(Enum):
     PERSIAN = "Persian"
     HELLENISTIC = "Hellenistic"
     PARTHIAN = "Parthian"
-    UNCERTAIN = "Uncertain"
-    URUK_IV = "Uruk IV"
-    URUK_III_JEMDET_NASR = "Uruk III-Jemdet Nasr"
-    ED_I_II = "ED I-II"
-    FARA = "Fara"
-    PRESARGONIC = "Presargonic"
-    SARGONIC = "Sargonic"
     PROTO_ELAMITE = "Proto-Elamite"
     OLD_ELAMITE = "Old Elamite"
     MIDDLE_ELAMITE = "Middle Elamite"
