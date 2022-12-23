@@ -73,7 +73,7 @@ def _create_lemma_search_pipeline(query):
 
 
 def _create_query_by_lemma(word: str, collate: bool) -> dict:
-    regex_options = "mi" if collate else "m"
+    regex_options = "i" if collate else ""
     return {
         "$or": [
             {"lemma": {"$regex": rf"^{word}", "$options": regex_options}},
@@ -104,7 +104,7 @@ def _create_query_by_meaning(meaning: str, collate: bool) -> dict:
 
 
 def _create_query_by_root(root: str, collate: bool) -> dict:
-    regex_options = "mi" if collate else "m"
+    regex_options = "i" if collate else ""
     return {"roots": {"$regex": rf"^{root}$", "$options": regex_options}}
 
 
