@@ -58,15 +58,14 @@ class DictionaryFieldQuery:
         )
 
     def _is_regex(self, segment, type) -> bool:
-        if not re.match(expression["wildcard"], segment):
-            return False
-        return True if (
-            "collation" in type
-            and self.use_collations
-        ) or (
-            "collation" not in type
-            and self.use_wildcards
-        ) else False
+        return (
+            bool(
+                ("collation" in type and self.use_collations)
+                or ("collation" not in type and self.use_wildcards)
+            )
+            if re.match(expression["wildcard"], segment)
+            else False
+        )
 
     def _wildcards_to_regexp(self, segment: str) -> str:
         for type, expression in WILDCARD_MATCHERS.items():
