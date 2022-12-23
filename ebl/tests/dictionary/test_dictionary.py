@@ -44,16 +44,32 @@ def test_word_not_found(dictionary):
         dictionary.find("not found")
 
 
-def test_search_finds_all_homonyms(dictionary, word):
+@pytest.mark.parametrize(
+    "query",
+    [
+        "part1",
+        "pārT2",
+        "pa?t1",
+        "*rt*",
+    ],
+)
+def test_search_finds_all_homonyms(dictionary, word, query):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"word": word["lemma"][0]})
 
-    assert dictionary.search(query) == [word, another_word]
+    assert dictionary.search(urlencode({"word": query})) == [word, another_word]
 
 
-def test_search_finds_by_meaning(dictionary, word):
+@pytest.mark.parametrize(
+    "query",
+    [
+        "some semantics",
+        "me semant",
+        "sEmaNṭ",
+    ],
+)
+def test_search_finds_by_meaning(dictionary, word, query):
     another_word = {
         **word,
         "_id": "part1 part2 II",
@@ -62,19 +78,28 @@ def test_search_finds_by_meaning(dictionary, word):
     }
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"meaning": word["meaning"]})
 
-    assert dictionary.search(query) == [word]
+    assert dictionary.search(urlencode({"meaning": query})) == [word]
 
 
-def test_search_finds_by_root(dictionary, word):
+@pytest.mark.parametrize(
+    "query",
+    [
+        "wb'",
+        "w?'",
+        "w*",
+        "?b*",
+        "*b*",
+        '"*š"',
+    ],
+)
+def test_search_finds_by_root(dictionary, word, query):
     another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
-    another_word["roots"][0] = "lmm"
+    another_word["roots"] = ["lmm", "plt", "prs"]
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"root": word["roots"][0]})
 
-    assert dictionary.search(query) == [word]
+    assert dictionary.search(urlencode({"root": query})) == [word]
 
 
 def test_search_finds_by_vowel_class(dictionary, word):
@@ -84,7 +109,6 @@ def test_search_finds_by_vowel_class(dictionary, word):
     dictionary.create(another_word)
     query = urlencode(
         {"vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])},
-        doseq=False,
     )
 
     assert dictionary.search(query) == [word]
@@ -97,12 +121,11 @@ def test_search_finds_by_all_params(dictionary, word):
     dictionary.create(another_word)
     query = urlencode(
         {
-            "word": word["lemma"][0],
+            "word": '"Parṭ2"',
             "meaning": word["meaning"],
             "root": word["roots"][0],
             "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
         },
-        doseq=False,
     )
 
     assert dictionary.search(query) == [word]

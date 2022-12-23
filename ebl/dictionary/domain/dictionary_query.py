@@ -7,8 +7,8 @@ WILDCARD_FIELDS = ["word", "root"]
 COLLATED_FIELDS = ["word", "meaning", "root"]
 
 WILDCARD_MATCHERS: Dict[str, Dict[str, str]] = {
-    "any sign": {"wildcard": r"\?", "regex": r"([^\s])"},
-    "any sign+": {"wildcard": r"\*", "regex": r"([^\s])*"},
+    "any sign": {"wildcard": r"\?", "regex": r"[^\s]"},
+    "any sign+": {"wildcard": r"\*", "regex": r"[^\s]*"},
     "collation S": {"wildcard": r"[s|š|ṣ]", "regex": r"[s|š|ṣ]"},
     "collation T": {"wildcard": r"[t|ṭ]", "regex": r"[t|ṭ]"},
     "collation A": {"wildcard": r"[a|ā|â]", "regex": r"[a|ā|â]"},
@@ -77,6 +77,8 @@ class DictionaryFieldQuery:
 def make_query_params_from_string(query_string: str) -> Iterable[DictionaryFieldQuery]:
     parsed_query = parse_qsl(query_string)
     query_dict = dict(parsed_query) if parsed_query else {}
+    if "vowelClass" in query_dict:
+        query_dict["vowel_class"] = query_dict.pop("vowelClass")
     return (
         DictionaryFieldQuery(string, field, field in WILDCARD_FIELDS)
         for field, string in query_dict.items()

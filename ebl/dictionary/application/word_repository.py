@@ -24,7 +24,7 @@ class WordRepository(ABC):
         word: Optional[DictionaryFieldQuery],
         meaning: Optional[DictionaryFieldQuery],
         root: Optional[DictionaryFieldQuery],
-        vowelClass: Optional[DictionaryFieldQuery],
+        vowel_class: Optional[DictionaryFieldQuery],
     ) -> Sequence:
         ...
 

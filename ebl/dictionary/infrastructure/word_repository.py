@@ -143,7 +143,7 @@ class MongoWordRepository(WordRepository):
         word: Optional[DictionaryFieldQuery] = None,
         meaning: Optional[DictionaryFieldQuery] = None,
         root: Optional[DictionaryFieldQuery] = None,
-        vowelClass: Optional[DictionaryFieldQuery] = None,
+        vowel_class: Optional[DictionaryFieldQuery] = None,
     ) -> Sequence:
         cursor = self._collection.aggregate(
             [
@@ -161,8 +161,8 @@ class MongoWordRepository(WordRepository):
                             _create_query_by_root(root.value, root.use_collations)
                             if root
                             else {},
-                            _create_query_by_vowel_class(vowelClass.value)
-                            if vowelClass
+                            _create_query_by_vowel_class(vowel_class.value)
+                            if vowel_class
                             else {},
                         ]
                     },

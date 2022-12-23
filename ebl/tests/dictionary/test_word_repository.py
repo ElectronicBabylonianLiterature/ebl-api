@@ -46,20 +46,36 @@ def test_word_not_found(word_repository):
         word_repository.query_by_id("not found")
 
 
-def test_search_finds_all_homonyms(database, word_repository, word):
+@pytest.mark.parametrize(
+    "query",
+    [
+        "part1",
+        "pārT2",
+        "pa?t1",
+        "*rt*",
+    ],
+)
+def test_search_finds_all_homonyms(database, word, word_repository, query):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     database[COLLECTION].insert_many([word, another_word])
-    query = {"word": word["lemma"][0]}
 
     assert word_repository.query_by_lemma_meaning_root_vowels(
-        **_make_query_params(query)
+        **_make_query_params({"word": query})
     ) == [
         word,
         another_word,
     ]
 
 
-def test_search_finds_by_meaning(database, word_repository, word):
+@pytest.mark.parametrize(
+    "query",
+    [
+        "some semantics",
+        "me semant",
+        "sEmaNṭ",
+    ],
+)
+def test_search_finds_by_meaning(database, word_repository, word, query):
     another_word = {
         **word,
         "_id": "part1 part2 II",
@@ -67,14 +83,24 @@ def test_search_finds_by_meaning(database, word_repository, word):
         "meaning": "not matching",
     }
     database[COLLECTION].insert_many([word, another_word])
-    query = {"meaning": word["meaning"]}
 
     assert word_repository.query_by_lemma_meaning_root_vowels(
-        **_make_query_params(query)
+        **_make_query_params({"meaning": query})
     ) == [word]
 
 
-def test_search_finds_by_root(database, word_repository, word):
+@pytest.mark.parametrize(
+    "query",
+    [
+        "wb'",
+        "w?'",
+        "w*",
+        "?b*",
+        "*b*",
+        '"*š"',
+    ],
+)
+def test_search_finds_by_root(database, word_repository, word, query):
     another_word = copy.deepcopy(
         {
             **word,
@@ -82,12 +108,11 @@ def test_search_finds_by_root(database, word_repository, word):
             "homonym": "II",
         }
     )
-    another_word["roots"][0] = "lmm"
+    another_word["roots"] = ["lmm", "plt", "prs"]
     database[COLLECTION].insert_many([word, another_word])
-    query = {"root": word["roots"][0]}
 
     assert word_repository.query_by_lemma_meaning_root_vowels(
-        **_make_query_params(query)
+        **_make_query_params({"root": query})
     ) == [word]
 
 
@@ -113,12 +138,11 @@ def test_search_finds_by_all_params(database, word_repository, word):
     another_word["roots"][0] = "lmm"
     database[COLLECTION].insert_many([word, another_word])
     query = {
-        "word": word["lemma"][0],
+        "word": '"Parṭ2"',
         "meaning": word["meaning"],
         "root": word["roots"][0],
         "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
     }
-
     assert word_repository.query_by_lemma_meaning_root_vowels(
         **_make_query_params(query)
     ) == [word]

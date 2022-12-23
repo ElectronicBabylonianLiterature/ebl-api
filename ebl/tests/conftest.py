@@ -490,7 +490,7 @@ def text_with_labels():
 @pytest.fixture
 def word():
     return {
-        "lemma": ["part1", "part2"],
+        "lemma": ["part1", "Parṭ2"],
         "attested": True,
         "legacyLemma": "part1 part2",
         "homonym": "I",
@@ -512,7 +512,7 @@ def word():
         "derived": [[{"lemma": ["derived"], "homonym": "I", "notes": []}]],
         "derivedFrom": None,
         "source": "**part1 part2** source",
-        "roots": ["wb'", "'b'"],
+        "roots": ["wb'", "'b'", "plš"],
         "pos": ["V"],
         "guideWord": "meaning",
         "arabicGuideWord": "meaning",
