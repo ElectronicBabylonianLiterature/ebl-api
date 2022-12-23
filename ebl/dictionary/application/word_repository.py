@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Sequence
+from typing import Sequence, Optional
+from ebl.dictionary.domain.dictionary_query import DictionaryFieldQuery
 
 from ebl.dictionary.domain.word import WordId
 
@@ -20,11 +21,10 @@ class WordRepository(ABC):
     @abstractmethod
     def query_by_lemma_meaning_root_vowels(
         self,
-        word: str,
-        meaning: str,
-        root: str,
-        vowelClass: str,
-        non_collatable: Sequence,
+        word: Optional[DictionaryFieldQuery],
+        meaning: Optional[DictionaryFieldQuery],
+        root: Optional[DictionaryFieldQuery],
+        vowelClass: Optional[DictionaryFieldQuery],
     ) -> Sequence:
         ...
 

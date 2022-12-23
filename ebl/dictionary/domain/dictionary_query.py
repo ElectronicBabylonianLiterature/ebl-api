@@ -38,13 +38,7 @@ class DictionaryFieldQuery:
 
     @property
     def value(self) -> str:
-        return (
-            self.regexp
-            if self.regexp
-            else re.escape(self.string)
-            if self.use_wildcards or self.use_collations
-            else self.string
-        )
+        return self.regexp if self.regexp else re.escape(self.string)
 
     @property
     def all_wildcards(self) -> str:

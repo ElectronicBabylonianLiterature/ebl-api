@@ -24,13 +24,12 @@ class Dictionary:
         return self._repository.query_by_ids(lemmas)
 
     def search(self, query: str) -> Sequence:
-        query_params = list(make_query_params_from_string(query))
-
         return self._repository.query_by_lemma_meaning_root_vowels(
-            **{param.field: param.value for param in query_params if param.value},
-            non_collatable=[
-                param.field for param in query_params if not param.use_collations
-            ]
+            **{
+                param.field: param
+                for param in make_query_params_from_string(query)
+                if param.value
+            },
         )
 
     def search_lemma(self, lemma: str) -> Sequence:
