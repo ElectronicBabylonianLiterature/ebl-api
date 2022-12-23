@@ -29,16 +29,14 @@ class DictionaryFieldQuery:
     def __attrs_post_init__(self) -> None:
         self.string = self.string.strip(" ")
         self.use_collations = (
-            False
-            if re.match(r'^".+"$', self.string) or self.field not in COLLATED_FIELDS
-            else True
+            not re.match(r'^".+"$', self.string) and self.field in COLLATED_FIELDS
         )
         self.string = self.string.strip('"')
         self.regexp = self._make_regexp()
 
     @property
     def value(self) -> str:
-        return self.regexp if self.regexp else re.escape(self.string)
+        return self.regexp or re.escape(self.string)
 
     @property
     def all_wildcards(self) -> str:
