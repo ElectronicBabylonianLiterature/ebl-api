@@ -8,6 +8,7 @@ from marshmallow import (
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.common.period import Period, PeriodModifier
 from ebl.corpus.application.id_schemas import TextIdSchema, ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter import (
@@ -22,8 +23,6 @@ from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
     OldSiglum,
-    Period,
-    PeriodModifier,
     Provenance,
     is_invalid_non_standard_text,
     is_invalid_standard_text,

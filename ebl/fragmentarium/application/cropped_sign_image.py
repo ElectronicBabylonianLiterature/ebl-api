@@ -3,6 +3,8 @@ from typing import NewType
 
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.domain.fragment import Script
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -35,18 +37,18 @@ class CroppedSignImageSchema(Schema):
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedSign:
     image_id: str
-    script: str
+    script: Script
     label: str
 
 
 class CroppedSignSchema(Schema):
     image_id = fields.String(required=True, data_key="imageId")
-    script = fields.String()
+    script = fields.Nested(ScriptSchema, load_default=Script())
     label = fields.String(required=True)
 
     @post_load
-    def load(self, data, **kwargs):
-        return CroppedSign(data["imageId"], data.get("script", ""), data["label"])
+    def make_cropped_sign(self, data, **kwargs):
+        return CroppedSign(data["image_id"], data["script"], data["label"])
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

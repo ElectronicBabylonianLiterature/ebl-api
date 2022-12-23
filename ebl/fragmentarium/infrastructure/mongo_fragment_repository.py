@@ -11,7 +11,7 @@ from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
 from ebl.fragmentarium.application.fragmentarium_search_query import (
     FragmentariumSearchQuery,
 )
@@ -251,7 +251,7 @@ class MongoFragmentRepository(FragmentRepository):
                 mongo_query,
                 projection={"joins": False},
             )
-            .sort([("legacyScript", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
+            .sort([("script.period", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
             .skip(LIMIT * query.paginationIndex)
             .limit(LIMIT)
             .collation(
@@ -298,7 +298,7 @@ class MongoFragmentRepository(FragmentRepository):
         return [
             LineToVecEntry(
                 MuseumNumberSchema().load(fragment["museumNumber"]),
-                fragment["legacyScript"],
+                ScriptSchema().load(fragment["script"]),
                 tuple(
                     LineToVecEncoding.from_list(line_to_vec)
                     for line_to_vec in fragment["lineToVec"]
@@ -327,6 +327,7 @@ class MongoFragmentRepository(FragmentRepository):
             "lemmatization": ("text",),
             "genres": ("genres",),
             "references": ("references",),
+            "script": ("script",),
             "transliteration": (
                 "text",
                 "notes",

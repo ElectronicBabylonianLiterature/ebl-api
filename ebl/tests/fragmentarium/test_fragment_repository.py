@@ -1,6 +1,7 @@
 from typing import Tuple
 import attr
 import pytest
+from ebl.common.period import Period
 from ebl.common.query.query_result import QueryItem, QueryResult
 
 from ebl.dictionary.domain.word import WordId
@@ -12,7 +13,7 @@ from ebl.fragmentarium.application.fragmentarium_search_query import (
 )
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction, Script
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import QueryType
@@ -312,6 +313,16 @@ def test_update_introduction(fragment_repository: FragmentRepository):
     assert result == updated_fragment
 
 
+def test_update_script(fragment_repository: FragmentRepository):
+    fragment: Fragment = FragmentFactory.build(script=Script(Period.NONE))
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_script(Script(Period.MIDDLE_ELAMITE))
+    fragment_repository.update_field("script", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
 def test_update_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
@@ -466,13 +477,13 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     for sign in signs:
         sign_repository.create(sign)
     transliterated_fragment_0 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.2"), legacy_script="A"
+        number=MuseumNumber.of("X.2"), script=Script(Period.ED_I_II)
     )
     transliterated_fragment_1 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.0"), legacy_script="B"
+        number=MuseumNumber.of("X.0"), script=Script(Period.PERSIAN)
     )
     transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.1"), legacy_script="B"
+        number=MuseumNumber.of("X.1"), script=Script(Period.PERSIAN)
     )
 
     fragment_repository.create_many(
@@ -630,7 +641,7 @@ def test_find_transliterated_line_to_vec(database, fragment_repository):
     assert fragment_repository.query_transliterated_line_to_vec() == [
         LineToVecEntry(
             transliterated_fragment.number,
-            transliterated_fragment.legacy_script,
+            transliterated_fragment.script,
             transliterated_fragment.line_to_vec,
         )
     ]

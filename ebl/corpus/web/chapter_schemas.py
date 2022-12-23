@@ -173,7 +173,7 @@ def _split_reconstruction(
     return text, note, parallel_lines
 
 
-def _parse_recontsruction(
+def _parse_reconstruction(
     reconstruction: str,
 ) -> Tuple[Sequence[Token], Optional[NoteLine], Sequence[ParallelLine]]:
     try:
@@ -224,7 +224,7 @@ class ApiLineVariantSchema(LineVariantSchema):
 
     @post_load
     def make_line_variant(self, data: dict, **kwargs) -> LineVariant:
-        text, note, parallel_lines = _parse_recontsruction(data["reconstruction"])
+        text, note, parallel_lines = _parse_reconstruction(data["reconstruction"])
         return LineVariant(
             text, note, tuple(data["manuscripts"]), parallel_lines, data["intertext"]
         )

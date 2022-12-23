@@ -10,11 +10,13 @@ from ebl.fragmentarium.web.annotations import AnnotationResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
+from ebl.fragmentarium.web.fragment_script import FragmentScriptResource
 from ebl.fragmentarium.web.fragment_matcher import FragmentMatcherResource
 from ebl.fragmentarium.web.fragment_pager import make_fragment_pager_resource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import FragmentsQueryResource, FragmentsResource
 from ebl.fragmentarium.web.genres import GenresResource
+from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
@@ -57,6 +59,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
     fragment_genre = FragmentGenreResource(updater)
+    fragment_script = FragmentScriptResource(updater)
 
     fragment_matcher = FragmentMatcherResource(
         FragmentMatcher(context.fragment_repository)
@@ -69,6 +72,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     )
     fragment_query = FragmentsQueryResource(context.fragment_repository)
     genres = GenresResource()
+    periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
     transliteration = TransliterationResource(
@@ -86,6 +90,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments", fragment_search),
         ("/fragments/{number}/match", fragment_matcher),
         ("/fragments/{number}/genres", fragment_genre),
+        ("/fragments/{number}/script", fragment_script),
         ("/fragments/{number}", fragments),
         ("/fragments/{number}/pager", fragment_pager),
         ("/fragments/{number}/lemmatization", lemmatization),
@@ -96,6 +101,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
         ("/genres", genres),
+        ("/periods", periods),
         ("/statistics", statistics),
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
         ("/folios/{name}/{number}", folios),

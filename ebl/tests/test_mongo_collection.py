@@ -115,6 +115,20 @@ def test_update(collection):
     }
 
 
+def test_update_many(collection):
+    documents = [{"data": "payload"}, {"data": "payload2"}]
+    insert_ids = collection.insert_many(documents)
+    collection.update_many({}, {"$set": {"data": "updated payload"}})
+
+    assert [collection.find_one_by_id(_id) for _id in insert_ids] == [
+        {
+            "_id": _id,
+            "data": "updated payload",
+        }
+        for _id in insert_ids
+    ]
+
+
 def test_update_document_not_found(collection):
     with pytest.raises(NotFoundError):
         collection.update_one({}, {"$set": {"data": "not found"}})

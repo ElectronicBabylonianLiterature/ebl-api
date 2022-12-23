@@ -3,7 +3,7 @@ from typing import Sequence, Optional
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.domain.fragment import Fragment, Genre
+from ebl.fragmentarium.domain.fragment import Fragment, Genre, Script
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
@@ -13,7 +13,7 @@ from ebl.transliteration.domain.text import Text
 class FragmentInfo:
     number: MuseumNumber
     accession: str
-    legacy_script: str
+    script: Script
     description: str
     matching_lines: Optional[Text]
     editor: str
@@ -46,7 +46,7 @@ class FragmentInfo:
         return FragmentInfo(
             fragment.number,
             fragment.accession,
-            fragment.legacy_script,
+            fragment.script,
             fragment.description,
             matching_lines,
             first_transliteration.user,
