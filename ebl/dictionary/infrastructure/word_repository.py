@@ -140,10 +140,10 @@ class MongoWordRepository(WordRepository):
 
     def query_by_lemma_meaning_root_vowels(
         self,
-        word: Optional[DictionaryFieldQuery],
-        meaning: Optional[DictionaryFieldQuery],
-        root: Optional[DictionaryFieldQuery],
-        vowelClass: Optional[DictionaryFieldQuery],
+        word: Optional[DictionaryFieldQuery] = None,
+        meaning: Optional[DictionaryFieldQuery] = None,
+        root: Optional[DictionaryFieldQuery] = None,
+        vowelClass: Optional[DictionaryFieldQuery] = None,
     ) -> Sequence:
         cursor = self._collection.aggregate(
             [

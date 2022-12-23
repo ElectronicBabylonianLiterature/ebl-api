@@ -2,9 +2,21 @@ import pydash
 import pytest
 import copy
 
+from typing import Dict
+from urllib.parse import urlencode
+from ebl.dictionary.domain.dictionary_query import DictionaryFieldQuery
 from ebl.errors import NotFoundError
+from ebl.dictionary.domain.dictionary_query import make_query_params_from_string
 
 COLLECTION = "words"
+
+
+def _make_query_params(query: Dict) -> Dict[str, DictionaryFieldQuery]:
+    return {
+        param.field: param
+        for param in make_query_params_from_string(urlencode(query))
+        if param.value
+    }
 
 
 def test_create(database, word_repository, word):
@@ -39,7 +51,9 @@ def test_search_finds_all_homonyms(database, word_repository, word):
     database[COLLECTION].insert_many([word, another_word])
     query = {"word": word["lemma"][0]}
 
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **_make_query_params(query)
+    ) == [
         word,
         another_word,
     ]
@@ -55,7 +69,9 @@ def test_search_finds_by_meaning(database, word_repository, word):
     database[COLLECTION].insert_many([word, another_word])
     query = {"meaning": word["meaning"]}
 
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **_make_query_params(query)
+    ) == [word]
 
 
 def test_search_finds_by_root(database, word_repository, word):
@@ -70,7 +86,9 @@ def test_search_finds_by_root(database, word_repository, word):
     database[COLLECTION].insert_many([word, another_word])
     query = {"root": word["roots"][0]}
 
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **_make_query_params(query)
+    ) == [word]
 
 
 def test_search_finds_by_vowel_class(database, word_repository, word):
@@ -85,7 +103,9 @@ def test_search_finds_by_vowel_class(database, word_repository, word):
     database[COLLECTION].insert_many([word, another_word])
     query = {"vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])}
 
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **_make_query_params(query)
+    ) == [word]
 
 
 def test_search_finds_by_all_params(database, word_repository, word):
@@ -99,7 +119,9 @@ def test_search_finds_by_all_params(database, word_repository, word):
         "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
     }
 
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [word]
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **_make_query_params(query)
+    ) == [word]
 
 
 def test_search_finds_duplicates(database, word_repository, word):
@@ -107,7 +129,9 @@ def test_search_finds_duplicates(database, word_repository, word):
     database[COLLECTION].insert_many([word, another_word])
     query = {"meaning": word["meaning"][1:4]}
 
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == [
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **_make_query_params(query)
+    ) == [
         word,
         another_word,
     ]
@@ -115,7 +139,10 @@ def test_search_finds_duplicates(database, word_repository, word):
 
 def test_search_not_found(word_repository):
     query = {"word": "lemma"}
-    assert word_repository.query_by_lemma_meaning_root_vowels(**query) == []
+    assert (
+        word_repository.query_by_lemma_meaning_root_vowels(**_make_query_params(query))
+        == []
+    )
 
 
 def test_update(word_repository, word):

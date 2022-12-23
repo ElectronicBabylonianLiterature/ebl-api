@@ -48,7 +48,7 @@ def test_search_finds_all_homonyms(dictionary, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"word": word["lemma"][0]}, doseq=False)
+    query = urlencode({"word": word["lemma"][0]})
 
     assert dictionary.search(query) == [word, another_word]
 
@@ -62,7 +62,7 @@ def test_search_finds_by_meaning(dictionary, word):
     }
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"meaning": word["meaning"]}, doseq=False)
+    query = urlencode({"meaning": word["meaning"]})
 
     assert dictionary.search(query) == [word]
 
@@ -72,7 +72,7 @@ def test_search_finds_by_root(dictionary, word):
     another_word["roots"][0] = "lmm"
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"root": word["roots"][0]}, doseq=False)
+    query = urlencode({"root": word["roots"][0]})
 
     assert dictionary.search(query) == [word]
 
@@ -112,13 +112,13 @@ def test_search_finds_duplicates(dictionary, word):
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
-    query = urlencode({"meaning": word["meaning"][1:4]}, doseq=False)
+    query = urlencode({"meaning": word["meaning"][1:4]})
 
     assert dictionary.search(query) == [word, another_word]
 
 
 def test_search_not_found(dictionary):
-    query = urlencode({"word": "lemma"}, doseq=False)
+    query = urlencode({"word": "lemma"})
     assert dictionary.search(query) == []
 
 
