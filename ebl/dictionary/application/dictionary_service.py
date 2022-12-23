@@ -4,6 +4,7 @@ from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.users.domain.user import User
+from ebl.dictionary.domain.dictionary_query import make_query_params_from_string
 
 COLLECTION = "words"
 
@@ -23,7 +24,13 @@ class Dictionary:
         return self._repository.query_by_ids(lemmas)
 
     def search(self, query: str) -> Sequence:
-        return self._repository.query_by_lemma_form_or_meaning(query)
+        return self._repository.query_by_lemma_meaning_root_vowels(
+            **{
+                param.field: param
+                for param in make_query_params_from_string(query)
+                if param.value
+            },
+        )
 
     def search_lemma(self, lemma: str) -> Sequence:
         return self._repository.query_by_lemma_prefix(lemma)
