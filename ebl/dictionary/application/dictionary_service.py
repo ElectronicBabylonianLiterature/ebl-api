@@ -1,11 +1,10 @@
 from typing import Sequence
-from urllib.parse import parse_qsl
 
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.users.domain.user import User
-
+from ebl.dictionary.domain.dictionary_query import make_query_params_from_string
 
 COLLECTION = "words"
 
@@ -25,8 +24,13 @@ class Dictionary:
         return self._repository.query_by_ids(lemmas)
 
     def search(self, query: str) -> Sequence:
+        query_params = list(make_query_params_from_string(query))
+
         return self._repository.query_by_lemma_meaning_root_vowels(
-            **dict(parse_qsl(query))
+            **{param.field: param.value for param in query_params if param.value},
+            non_collatable=[
+                param.field for param in query_params if not param.use_collations
+            ]
         )
 
     def search_lemma(self, lemma: str) -> Sequence:
