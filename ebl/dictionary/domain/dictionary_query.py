@@ -57,7 +57,7 @@ class DictionaryFieldQuery:
             if segment
         )
 
-    def _is_regex(self, segment, type, expression) -> bool:
+    def _is_regex(self, segment: str, type: str, expression: Dict) -> bool:
         return (
             bool(
                 ("collation" in type and self.use_collations)
