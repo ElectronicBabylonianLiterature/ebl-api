@@ -1,6 +1,7 @@
 import attr
 from freezegun import freeze_time
 import pytest
+from ebl.common.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
@@ -8,6 +9,7 @@ from ebl.fragmentarium.domain.fragment import (
     Genre,
     Measure,
     NotLowestJoinError,
+    Script,
     UncuratedReference,
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
@@ -76,8 +78,9 @@ def test_collection():
 
 
 def test_script():
-    fragment = FragmentFactory.build(legacy_script="NA")
-    assert fragment.legacy_script == "NA"
+    script = Script(Period.PRESARGONIC)
+    fragment = FragmentFactory.build(script=script)
+    assert fragment.script == script
 
 
 def test_museum():

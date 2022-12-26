@@ -18,6 +18,7 @@ from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.fragment_schema import (
     JoinsSchema,
     IntroductionSchema,
+    ScriptSchema,
 )
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -49,6 +50,7 @@ def test_create_response_dto(user):
             ),
             "collection": lemmatized_fragment.collection,
             "legacyScript": lemmatized_fragment.legacy_script,
+            "script": ScriptSchema().dump(lemmatized_fragment.script),
             "notes": lemmatized_fragment.notes,
             "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,
@@ -107,7 +109,7 @@ def test_create_fragment_info_dto():
     assert ApiFragmentInfoSchema().dump(info) == {
         "number": str(info.number),
         "accession": info.accession,
-        "legacyScript": info.legacy_script,
+        "script": ScriptSchema().dump(info.script),
         "description": info.description,
         "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",

@@ -6,6 +6,7 @@ import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.common.period import Period, PeriodModifier
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
@@ -54,7 +55,7 @@ class Measure:
 @attr.s(auto_attribs=True, frozen=True)
 class Genre:
     category: Sequence[str] = attr.ib()
-    uncertain: bool
+    uncertain: bool = False
 
     @category.validator
     def _check_is_genres_valid(self, _, category: Sequence[str]) -> None:
@@ -68,12 +69,27 @@ class Scope(Enum):
     CAIC = "CAIC"
     SIPPARLIBRARY = "SIPPARLIBRARY"
     URUKLBU = "URUKLBU"
+    ITALIANNINEVEH = "ITALIANNINEVEH"
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Introduction:
     text: str
     parts: Tuple[MarkupPart]
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Script:
+    period: Period = attr.ib(default=Period.NONE)
+    period_modifier: PeriodModifier = attr.ib(default=PeriodModifier.NONE)
+    uncertain: bool = False
+
+    def __str__(self) -> str:
+        return self.abbreviation
+
+    @property
+    def abbreviation(self) -> str:
+        return self.period.value[1]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -103,6 +119,7 @@ class Fragment:
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
     authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction("", tuple())
+    script: Script = Script()
 
     @property
     def is_lowest_join(self) -> bool:
@@ -123,6 +140,9 @@ class Fragment:
                 parts=parse_introduction(introduction),
             ),
         )
+
+    def set_script(self, script: Script) -> "Fragment":
+        return attr.evolve(self, script=script)
 
     def update_lowest_join_transliteration(
         self, transliteration: TransliterationUpdate, user: User

@@ -1,10 +1,10 @@
-import re
-from typing import Sequence
+from typing import Sequence, Optional
 
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.mongo_collection import MongoCollection
+from ebl.dictionary.domain.dictionary_query import DictionaryFieldQuery
 
 COLLECTION = "words"
 LEMMA_SEARCH_LIMIT = 15
@@ -72,6 +72,51 @@ def _create_lemma_search_pipeline(query):
     ]
 
 
+def _create_query_by_lemma(word: str, collate: bool) -> dict:
+    regex_options = "i" if collate else ""
+    return {
+        "$or": [
+            {"lemma": {"$regex": rf"^{word}", "$options": regex_options}},
+            {"forms.lemma": {"$regex": rf"^{word}", "$options": regex_options}},
+        ]
+    }
+
+
+def _create_query_by_meaning(meaning: str, collate: bool) -> dict:
+    regex_options = "i" if collate else ""
+    return {
+        "$or": [
+            {"meaning": {"$regex": meaning, "$options": regex_options}},
+            {
+                "amplifiedMeanings.meaning": {
+                    "$regex": meaning,
+                    "$options": regex_options,
+                }
+            },
+            {
+                "amplifiedMeanings.entries.meaning": {
+                    "$regex": meaning,
+                    "$options": regex_options,
+                }
+            },
+        ]
+    }
+
+
+def _create_query_by_root(root: str, collate: bool) -> dict:
+    regex_options = "i" if collate else ""
+    return {"roots": {"$regex": rf"^{root}$", "$options": regex_options}}
+
+
+def _create_query_by_vowel_class(vowel_class: str) -> dict:
+    return {
+        "$or": [
+            {"amplifiedMeanings.vowels.value": vowel_class.split("/")},
+            {"amplifiedMeanings.entries.vowels.value": vowel_class.split("/")},
+        ]
+    }
+
+
 class MongoWordRepository(WordRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
@@ -93,18 +138,37 @@ class MongoWordRepository(WordRepository):
         )
         return list(cursor)
 
-    def query_by_lemma_form_or_meaning(self, query: str) -> Sequence:
-        lemma = query.split(" ")
-        cursor = self._collection.find_many(
-            {
-                "$or": [
-                    {"lemma": lemma},
-                    {"forms": {"$elemMatch": {"lemma": lemma}}},
-                    {"meaning": {"$regex": re.escape(query)}},
-                ]
-            }
+    def query_by_lemma_meaning_root_vowels(
+        self,
+        word: Optional[DictionaryFieldQuery] = None,
+        meaning: Optional[DictionaryFieldQuery] = None,
+        root: Optional[DictionaryFieldQuery] = None,
+        vowel_class: Optional[DictionaryFieldQuery] = None,
+    ) -> Sequence:
+        cursor = self._collection.aggregate(
+            [
+                {
+                    "$match": {
+                        "$and": [
+                            _create_query_by_lemma(word.value, word.use_collations)
+                            if word
+                            else {},
+                            _create_query_by_meaning(
+                                meaning.value, meaning.use_collations
+                            )
+                            if meaning
+                            else {},
+                            _create_query_by_root(root.value, root.use_collations)
+                            if root
+                            else {},
+                            _create_query_by_vowel_class(vowel_class.value)
+                            if vowel_class
+                            else {},
+                        ]
+                    },
+                }
+            ],
         )
-
         return list(cursor)
 
     def query_by_lemma_prefix(self, query: str) -> Sequence:

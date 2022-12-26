@@ -1,3 +1,4 @@
+from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -37,8 +38,8 @@ def test_retrieve_all_non_empty(database, annotations_repository):
     assert annotations_repository.retrieve_all_non_empty() == annotations
 
 
-def test_create(database, annotations_repository):
-    annotations = AnnotationsFactory.build()
+def test_create(database, annotations_repository: AnnotationsRepository):
+    annotations: Annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number
 
     annotations_repository.create_or_update(annotations)
@@ -61,7 +62,9 @@ def test_update(database, annotations_repository):
     ) == AnnotationsSchema().dump(updated)
 
 
-def test_query_by_museum_number(database, annotations_repository):
+def test_query_by_museum_number(
+    database, annotations_repository: AnnotationsRepository
+):
     annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number
 

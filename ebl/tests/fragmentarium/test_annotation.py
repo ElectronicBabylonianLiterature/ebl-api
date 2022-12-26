@@ -7,6 +7,7 @@ from ebl.fragmentarium.domain.annotation import (
     BoundingBoxPrediction,
     AnnotationValueType,
 )
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 HEIGHT = 3.5
@@ -23,7 +24,7 @@ SIGN_NAME = "KUR"
 DATA = AnnotationData(ID, VALUE, TYPE, PATH, SIGN_NAME)
 
 IMAGE_ID = "image-id"
-SCRIPT = "script"
+SCRIPT = Script()
 LABEL = "label"
 
 CROPPED_SIGN = CroppedSign(IMAGE_ID, SCRIPT, LABEL)
