@@ -84,7 +84,7 @@ def test_invalid_atf(atf, line_numbers) -> None:
 
 @pytest.mark.parametrize("atf", ["1. x\n1. x", "1. x\n@obverse\n1. x\n1. x"])
 def test_duplicate_labels(atf) -> None:
-    with pytest.raises(DataError, match="Duplicate labels."): # pyre-ignore[16]
+    with pytest.raises(DataError, match="Duplicate labels."):  # pyre-ignore[16]
         parse_atf_lark(atf)
 
 
