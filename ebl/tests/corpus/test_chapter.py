@@ -346,7 +346,7 @@ def test_text_lines() -> None:
 
 
 def test_invalid_extent() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Chapter(
             TextId(GENRE, 0, 0),
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
@@ -363,7 +363,7 @@ def test_invalid_extent() -> None:
 
 
 def test_extent_before_translation() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Chapter(
             TextId(GENRE, 0, 0),
             manuscripts=(Manuscript(MANUSCRIPT_ID),),
@@ -381,7 +381,7 @@ def test_extent_before_translation() -> None:
 
 
 def test_overlapping() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         Chapter(
             TextId(GENRE, 0, 0),
             manuscripts=(Manuscript(MANUSCRIPT_ID),),

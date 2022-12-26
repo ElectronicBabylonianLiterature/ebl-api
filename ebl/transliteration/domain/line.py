@@ -39,7 +39,7 @@ class Line(ABC):
     def update_alignments(self: L, alignment_map) -> L:
         return self
 
-    def accept(self, visitor: TokenVisitor) -> None:
+    def accept(self, visitor: TokenVisitor) -> None:  # noqa: B027
         pass
 
 

@@ -57,7 +57,7 @@ def test_line_variant_constructor() -> None:
 
 
 def test_invalid_enclosures() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError):  # pyre-ignore[16]
         LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple())
 
 

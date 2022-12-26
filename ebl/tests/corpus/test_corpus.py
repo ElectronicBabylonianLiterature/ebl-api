@@ -251,7 +251,7 @@ def test_find_chapter_raises_exception_if_references_not_found(
     )
     when(bibliography).find(...).thenRaise(NotFoundError())
 
-    with pytest.raises(Defect):
+    with pytest.raises(Defect):  # pyre-ignore[16]
         corpus.find_chapter(CHAPTER.id_)
 
 
@@ -532,7 +532,7 @@ def test_invalid_alignment(
         CHAPTER_WITHOUT_DOCUMENTS
     )
     expect_bibliography(bibliography, when)
-    with pytest.raises(AlignmentError):
+    with pytest.raises(AlignmentError):  # pyre-ignore[16]
         corpus.update_alignment(CHAPTER.id_, alignment, ANY_USER)
 
 
@@ -601,7 +601,7 @@ def test_invalid_manuscripts(
         CHAPTER_WITHOUT_DOCUMENTS
     )
     expect_bibliography(bibliography, when)
-    with pytest.raises(DataError):
+    with pytest.raises(DataError):  # pyre-ignore[16]
         corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
 
 
@@ -611,7 +611,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
     manuscripts = CHAPTER.manuscripts
     expect_invalid_references(bibliography, when)
 
-    with pytest.raises(DataError):
+    with pytest.raises(DataError):  # pyre-ignore[16]
         corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
 
 
@@ -913,5 +913,5 @@ def test_update_lines_raises_exception_if_invalid_signs(
     )
     expect_bibliography(bibliography, when)
 
-    with pytest.raises(DataError):
+    with pytest.raises(DataError):  # pyre-ignore[16]
         corpus.update_lines(CHAPTER.id_, lines, ANY_USER)
