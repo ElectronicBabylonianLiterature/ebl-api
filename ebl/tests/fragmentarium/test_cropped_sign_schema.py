@@ -1,9 +1,9 @@
 import pytest
+
 from ebl.fragmentarium.application.cropped_sign_image import (
     CroppedSign,
     CroppedSignSchema,
 )
-from ebl.fragmentarium.domain.fragment import Script
 
 
 @pytest.mark.parametrize(
