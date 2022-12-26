@@ -48,7 +48,7 @@ def test_signs_get(
 
     assert result_json["fragmentNumber"] == str(fragment.number)
     assert result_json["image"] == "test-base64-string"
-    assert result_json["script"] == fragment.legacy_script
+    assert result_json["script"] == str(fragment.script)
     assert result_json["label"] == cropped_sign.label
 
     assert result.status == falcon.HTTP_OK

@@ -1,4 +1,3 @@
-from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
@@ -20,7 +19,8 @@ TYPE = AnnotationValueType.HAS_SIGN
 ID = "abc123"
 SIGN_NAME = "KUR"
 IMAGE_ID = "image-id"
-SCRIPT = "script"
+SCRIPT = ScriptFactory.build()
+SCRIPT_DUMPED = ScriptSchema().dump(SCRIPT)
 LABEL = "label"
 ANNOTATION = Annotation(
     Geometry(X, Y, WIDTH, HEIGHT),
@@ -34,7 +34,7 @@ ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION], SCRIPT)
 
 SERIALIZED = {
     "fragmentNumber": str(MUSEUM_NUMBER),
-    "script": SCRIPT,
+    "script": SCRIPT_DUMPED,
     "annotations": [
         {
             "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
@@ -47,6 +47,7 @@ SERIALIZED = {
             },
             "croppedSign": {
                 "imageId": IMAGE_ID,
+                "script": SCRIPT_DUMPED,
                 "label": LABEL,
             },
         }

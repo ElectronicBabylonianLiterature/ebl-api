@@ -12,10 +12,10 @@ COLLECTION = "annotations"
 
 def test_find_by_sign(database, annotations_repository, fragment_repository):
     annotations = AnnotationsFactory.build_batch(3)
+    scripts = ScriptFactory.build_batch(3)
     for i, annotation in enumerate(annotations):
-        script = f"NB-{i}"
         fragment = FragmentFactory.build(
-            number=annotation.fragment_number, legacy_script=script
+            number=annotation.fragment_number, script=scripts[i]
         )
         fragment_repository.create(fragment)
 
@@ -30,7 +30,7 @@ def test_find_by_sign(database, annotations_repository, fragment_repository):
     for i, result in enumerate(results):
         for annotation in result.annotations:
             assert annotation.data.sign_name == sign_query
-        assert result.script == f"NB-{i}"
+        assert result.script == scripts[i]
 
 
 def test_retrieve_all(database, annotations_repository):

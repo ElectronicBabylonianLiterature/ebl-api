@@ -1,13 +1,13 @@
 from typing import Iterable
 
 from lark.visitors import v_args
+from ebl.common.period import Period
 
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
     Manuscript,
-    Period,
     Provenance,
     ManuscriptType,
     Siglum,

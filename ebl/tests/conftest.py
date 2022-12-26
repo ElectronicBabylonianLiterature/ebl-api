@@ -372,6 +372,7 @@ def user() -> User:
                 "read:fragments",
                 "read:CAIC-fragments",
                 "read:SIPPARLIBRARY-fragments",
+                "read:ITALIANNINEVEH-fragments",
                 "read:URUKLBU-fragments",
                 "read:WGL-folios",
                 "read:bibliography",
@@ -490,7 +491,7 @@ def text_with_labels():
 @pytest.fixture
 def word():
     return {
-        "lemma": ["part1", "part2"],
+        "lemma": ["part1", "Parṭ2"],
         "attested": True,
         "legacyLemma": "part1 part2",
         "homonym": "I",
@@ -499,7 +500,7 @@ def word():
             {"lemma": ["form1"], "notes": [], "attested": True},
             {"lemma": ["form2", "part2"], "notes": ["a note"], "attested": False},
         ],
-        "meaning": "a meaning",
+        "meaning": "some semantics",
         "amplifiedMeanings": [
             {
                 "meaning": "(*i/i*) meaning",
@@ -512,7 +513,7 @@ def word():
         "derived": [[{"lemma": ["derived"], "homonym": "I", "notes": []}]],
         "derivedFrom": None,
         "source": "**part1 part2** source",
-        "roots": ["wb'", "'b'"],
+        "roots": ["wb'", "'b'", "plš"],
         "pos": ["V"],
         "guideWord": "meaning",
         "arabicGuideWord": "meaning",
