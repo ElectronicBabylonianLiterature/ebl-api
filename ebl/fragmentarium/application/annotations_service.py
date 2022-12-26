@@ -19,7 +19,6 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-from ebl.fragmentarium.domain.fragment import Script
 
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -65,7 +64,6 @@ class AnnotationsService:
         self,
         annotations: Annotations,
         image: Image.Image,
-        script: Script,
         labels: Sequence[LineLabel],
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
@@ -73,12 +71,7 @@ class AnnotationsService:
 
         for annotation in annotations.annotations:
             label = ""
-            if annotation.data.type not in [
-                AnnotationValueType.BLANK,
-                AnnotationValueType.STRUCT,
-                AnnotationValueType.UnclearSign,
-                AnnotationValueType.ColumnAtLine,
-            ]:
+            if annotation.data.type == AnnotationValueType.HAS_SIGN:
                 label = self._label_by_line_number(annotation.data.path[0], labels)
 
             cropped_image = annotation.crop_image(image)
@@ -87,7 +80,7 @@ class AnnotationsService:
 
             updated_cropped_annotation = attr.evolve(
                 annotation,
-                cropped_sign=CroppedSign(cropped_sign_image.image_id, script, label),
+                cropped_sign=CroppedSign(cropped_sign_image.image_id, label),
             )
             updated_cropped_annotations.append(updated_cropped_annotation)
         return (
@@ -107,7 +100,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.script, fragment.text.labels
+            annotations, image, fragment.text.labels
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:

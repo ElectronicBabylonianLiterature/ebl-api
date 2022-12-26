@@ -27,12 +27,12 @@ IMAGE_ID = "image-id"
 SCRIPT = Script()
 LABEL = "label"
 
-CROPPED_SIGN = CroppedSign(IMAGE_ID, SCRIPT, LABEL)
+CROPPED_SIGN = CroppedSign(IMAGE_ID, LABEL)
 
 ANNOTATION = Annotation(GEOMETRY, DATA, CROPPED_SIGN)
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
-ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION])
+ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION], SCRIPT)
 
 
 def test_geometry():

@@ -1,23 +1,36 @@
-from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import (
+    AnnotationsWithScriptSchema,
+    AnnotationsSchema,
+)
 from ebl.fragmentarium.domain.annotation import Annotations
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.annotation import AnnotationsFactory
+from ebl.tests.factories.fragment import FragmentFactory, ScriptFactory
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 COLLECTION = "annotations"
 
 
-def test_find_by_sign(database, annotations_repository):
-    annotations = AnnotationsFactory.build_batch(5)
+def test_find_by_sign(database, annotations_repository, fragment_repository):
+    annotations = AnnotationsFactory.build_batch(3)
+    scripts = ScriptFactory.build_batch(3)
+    for i, annotation in enumerate(annotations):
+        fragment = FragmentFactory.build(
+            number=annotation.fragment_number, script=scripts[i]
+        )
+        fragment_repository.create(fragment)
+
     sign_query = annotations[0].annotations[0].data.sign_name
-    database[COLLECTION].insert_many(AnnotationsSchema(many=True).dump(annotations))
+    database[COLLECTION].insert_many(
+        AnnotationsWithScriptSchema(many=True).dump(annotations)
+    )
 
     results = annotations_repository.find_by_sign(sign_query)
 
     assert len(results) >= 1
-    for result in results:
+    for i, result in enumerate(results):
         for annotation in result.annotations:
             assert annotation.data.sign_name == sign_query
+        assert result.script == scripts[i]
 
 
 def test_retrieve_all(database, annotations_repository):
@@ -38,8 +51,8 @@ def test_retrieve_all_non_empty(database, annotations_repository):
     assert annotations_repository.retrieve_all_non_empty() == annotations
 
 
-def test_create(database, annotations_repository: AnnotationsRepository):
-    annotations: Annotations = AnnotationsFactory.build()
+def test_create(database, annotations_repository):
+    annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number
 
     annotations_repository.create_or_update(annotations)
@@ -62,9 +75,7 @@ def test_update(database, annotations_repository):
     ) == AnnotationsSchema().dump(updated)
 
 
-def test_query_by_museum_number(
-    database, annotations_repository: AnnotationsRepository
-):
+def test_query_by_museum_number(database, annotations_repository):
     annotations = AnnotationsFactory.build()
     fragment_number = annotations.fragment_number
 
