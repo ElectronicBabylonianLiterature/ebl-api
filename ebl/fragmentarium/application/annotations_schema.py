@@ -9,6 +9,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.schemas import ValueEnum
 
@@ -67,4 +68,4 @@ class AnnotationsSchema(Schema):
 
 
 class AnnotationsWithScriptSchema(AnnotationsSchema):
-    script = fields.Nested(ScriptSchema(), required=True)
+    script = fields.Nested(ScriptSchema(), load_default=Script())
