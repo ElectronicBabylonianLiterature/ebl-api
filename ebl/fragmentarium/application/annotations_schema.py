@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, post_load, post_dump
 import pydash
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,
@@ -66,4 +67,4 @@ class AnnotationsSchema(Schema):
 
 
 class AnnotationsWithScriptSchema(AnnotationsSchema):
-    script = fields.String(required=True)
+    script = fields.Nested(ScriptSchema(), required=True)

@@ -10,14 +10,9 @@ from ebl.fragmentarium.domain.fragment import Script
     "cropped_sign,serialized",
     [
         (
-            CroppedSign("image id", Script(), "label"),
+            CroppedSign("image id", "label"),
             {
                 "imageId": "image id",
-                "script": {
-                    "period": "None",
-                    "periodModifier": "None",
-                    "uncertain": False,
-                },
                 "label": "label",
             },
         ),

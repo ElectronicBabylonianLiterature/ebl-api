@@ -4,7 +4,7 @@ from ebl.fragmentarium.application.annotations_schema import (
 )
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.tests.factories.annotation import AnnotationsFactory
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import FragmentFactory, ScriptFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 COLLECTION = "annotations"

@@ -44,7 +44,6 @@ class CroppedSignFactory(factory.Factory):
         model = CroppedSign
 
     image_id = factory.Faker("word")
-    script = factory.SubFactory(ScriptFactory)
     label = factory.Faker("word")
 
 

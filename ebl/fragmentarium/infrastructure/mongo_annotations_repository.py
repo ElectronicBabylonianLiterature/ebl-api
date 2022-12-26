@@ -72,7 +72,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                     }
                 },
                 {"$unwind": "$fragment"},
-                {"$addFields": {"script": "$fragment.legacyScript"}},
+                {"$addFields": {"script": "$fragment.script"}},
                 {"$project": {"fragment": 0}},
             ]
         )

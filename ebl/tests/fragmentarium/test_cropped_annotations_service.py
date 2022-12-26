@@ -35,13 +35,13 @@ def test_find_annotations_by_sign(
     expected_1 = {
         "fragmentNumber": str(fragment_number),
         "image": Base64("test-base64-1"),
-        "script": annotations.script,
+        "script": str(annotations.script),
         "label": annotation[0].cropped_sign.label,
     }
     expected_2 = {
         "fragmentNumber": str(fragment_number),
         "image": Base64("test-base64-2"),
-        "script": annotations.script,
+        "script": str(annotations.script),
         "label": annotation[1].cropped_sign.label,
     }
 

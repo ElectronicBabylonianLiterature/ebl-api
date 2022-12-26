@@ -1,4 +1,6 @@
+from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Geometry,
@@ -6,6 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
+from ebl.tests.factories.fragment import ScriptFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 HEIGHT = 34.5
@@ -47,7 +50,6 @@ SERIALIZED = {
             },
             "croppedSign": {
                 "imageId": IMAGE_ID,
-                "script": SCRIPT_DUMPED,
                 "label": LABEL,
             },
         }
