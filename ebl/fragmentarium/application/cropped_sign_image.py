@@ -3,10 +3,6 @@ from typing import NewType
 
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
-from ebl.fragmentarium.domain.fragment import Script
-
-from ebl.transliteration.domain.museum_number import MuseumNumber
 
 Base64 = NewType("Base64", str)
 
@@ -37,38 +33,13 @@ class CroppedSignImageSchema(Schema):
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedSign:
     image_id: str
-    script: Script
     label: str
 
 
 class CroppedSignSchema(Schema):
     image_id = fields.String(required=True, data_key="imageId")
-    script = fields.Nested(ScriptSchema, load_default=Script())
     label = fields.String(required=True)
 
     @post_load
-    def make_cropped_sign(self, data, **kwargs):
-        return CroppedSign(data["image_id"], data["script"], data["label"])
-
-
-@attr.attrs(auto_attribs=True, frozen=True)
-class CroppedAnnotation(CroppedSign):
-    fragment_number: MuseumNumber
-    image: Base64
-
-    @classmethod
-    def from_cropped_sign(
-        cls, fragment_number: MuseumNumber, image: Base64, cropped_sign: CroppedSign
-    ) -> "CroppedAnnotation":
-        return cls(
-            cropped_sign.image_id,
-            cropped_sign.script,
-            cropped_sign.label,
-            fragment_number,
-            image,
-        )
-
-
-class CroppedAnnotationSchema(CroppedSignSchema):
-    fragment_number = fields.String(required=True, data_key="fragmentNumber")
-    image = fields.String(required=True)
+    def load(self, data, **kwargs):
+        return CroppedSign(data["imageId"], data["label"])

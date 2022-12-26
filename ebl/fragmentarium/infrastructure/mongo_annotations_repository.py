@@ -6,7 +6,10 @@ from pymongo.database import Database
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
-from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import (
+    AnnotationsWithScriptSchema,
+    AnnotationsSchema,
+)
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.mongo_collection import MongoCollection
@@ -60,6 +63,17 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                         },
                     }
                 },
+                {
+                    "$lookup": {
+                        "from": "fragments",
+                        "localField": "fragmentNumber",
+                        "foreignField": "_id",
+                        "as": "fragment",
+                    }
+                },
+                {"$unwind": "$fragment"},
+                {"$addFields": {"script": "$fragment.script"}},
+                {"$project": {"fragment": 0}},
             ]
         )
-        return AnnotationsSchema().load(result, many=True, unknown=EXCLUDE)
+        return AnnotationsWithScriptSchema().load(result, many=True, unknown=EXCLUDE)

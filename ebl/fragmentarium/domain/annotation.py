@@ -8,6 +8,7 @@ from uuid import uuid4
 import attr
 
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign, Base64
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -124,6 +125,7 @@ class BoundingBoxPrediction(BoundingBox):
 class Annotations:
     fragment_number: MuseumNumber
     annotations: Sequence[Annotation] = tuple()
+    script: Optional[Script] = None
 
     @classmethod
     def from_bounding_boxes_predictions(

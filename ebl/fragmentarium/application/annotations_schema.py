@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, post_load, post_dump
 import pydash
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
+from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,
@@ -59,3 +60,11 @@ class AnnotationsSchema(Schema):
     def make_annotation(self, data, **kwargs):
         data["fragment_number"] = MuseumNumber.of(data["fragment_number"])
         return Annotations(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
+
+class AnnotationsWithScriptSchema(AnnotationsSchema):
+    script = fields.Nested(ScriptSchema(), required=True)

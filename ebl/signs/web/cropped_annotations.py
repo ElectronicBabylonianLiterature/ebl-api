@@ -3,8 +3,6 @@ import falcon
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
-from ebl.fragmentarium.application.cropped_sign_image import CroppedAnnotationSchema
-
 from ebl.users.web.require_scope import require_scope
 
 
@@ -17,4 +15,4 @@ class CroppedAnnotationsResource:
         cropped_signs = self._cropped_annotations_service.find_annotations_by_sign(
             sign_name
         )
-        resp.media = CroppedAnnotationSchema().dump(cropped_signs, many=True)
+        resp.media = cropped_signs
