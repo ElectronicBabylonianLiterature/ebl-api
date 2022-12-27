@@ -1,9 +1,13 @@
+import json
+
 import attr
+from marshmallow import EXCLUDE
 
 from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.application.cropped_sign_image import Base64, CroppedSignImage
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.annotation import Annotations
 from ebl.tests.conftest import create_test_photo
 from ebl.tests.factories.annotation import (
@@ -14,15 +18,67 @@ from ebl.tests.factories.annotation import (
 )
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from functools import singledispatchmethod
+from itertools import combinations, groupby, zip_longest
+from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type
+
+import attr
+
+from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
+from ebl.merger import Merger
+from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
+from ebl.transliteration.domain.line import Line
+from ebl.transliteration.domain.line_label import LineLabel
+from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 SCHEMA = AnnotationsSchema()
 
 
-def test_label_by_line_number(text_with_labels, annotations_service):
-    assert (
-        annotations_service._label_by_line_number(2, text_with_labels.labels)
-        == "i Stone wig Stone wig 2"
-    )
+def labels1(lines) -> Sequence[LineLabel]:
+    current: LineLabel = LineLabel(None, None, None, None)
+    labels: List[LineLabel] = []
+
+    handlers: Mapping[
+        Type[Line], Callable[[Line], Tuple[LineLabel, List[LineLabel]]]
+    ] = {
+        TextLine: lambda line: (
+            current,
+            [*labels, [current.set_line_number(line.line_number), str(type(line))]],
+        ),
+        ColumnAtLine: lambda line: (current.set_column(line.column_label), [*labels, [current, str(type(line))]]),
+        SurfaceAtLine: lambda line: (
+            current.set_surface(line.surface_label),
+            [*labels, [current, str(type(line))]],
+        ),
+        ObjectAtLine: lambda line: (current.set_object(line.label), [*labels, [current, str(type(line))]]),
+    }
+
+    for line in lines:
+        if type(line) in handlers:
+            current, labels = handlers[type(line)](line)
+        elif type(line) != NoteLine:
+            current, labels = current, [*labels, [current, str(type(line))]]
+    return labels
+
+def test_123(fragment_repository):
+    raw = json.load(open("./ex.json"))
+    fragment = FragmentSchema(unknown=EXCLUDE).load(raw)
+    fragment_repository.create(fragment)
+    assert fragment == fragment_repository.query_by_museum_number(fragment.number)
+    labels = labels1(fragment.text.lines)
+    asd = [label[1] for label in labels]
+    print(asd)
+    assert False
+
+def test_1234(fragment_repository):
+    raw = json.load(open("./ex.json"))
+    fragment = FragmentSchema(unknown=EXCLUDE).load(raw)
+    fragment_repository.create(fragment)
+    exp_frag = fragment_repository.query_by_museum_number(fragment.number)
+    assert fragment == fragment_repository.query_by_museum_number(fragment.number)
 
 
 def test_cropped_images_from_sign(
