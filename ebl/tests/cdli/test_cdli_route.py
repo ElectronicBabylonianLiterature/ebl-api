@@ -14,7 +14,9 @@ def test_get(photo_status, line_art_status, detail_line_art_status, client):
     cdli_number = "P397611"
     photo_url = f"https://cdli.mpiwg-berlin.mpg.de/dl/photo/{cdli_number}.jpg"
     line_art_url = f"https://cdli.mpiwg-berlin.mpg.de/dl/lineart/{cdli_number}_l.jpg"
-    detail_line_art_url = f"https://cdli.mpiwg-berlin.mpg.de/dl/lineart/{cdli_number}_ld.jpg"
+    detail_line_art_url = (
+        f"https://cdli.mpiwg-berlin.mpg.de/dl/lineart/{cdli_number}_ld.jpg"
+    )
 
     httpretty.register_uri(httpretty.HEAD, photo_url, status=photo_status)
     httpretty.register_uri(httpretty.HEAD, line_art_url, status=line_art_status)

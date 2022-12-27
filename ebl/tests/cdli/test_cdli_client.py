@@ -5,8 +5,14 @@ import ebl.cdli.infrastructure.cdli_client as client
 
 CDLI_NUMBER = "P397611"
 METHODS = [
-    (client.get_photo_url, f"https://cdli.mpiwg-berlin.mpg.de/dl/photo/{CDLI_NUMBER}.jpg"),
-    (client.get_line_art_url, f"https://cdli.mpiwg-berlin.mpg.de/dl/lineart/{CDLI_NUMBER}_l.jpg"),
+    (
+        client.get_photo_url,
+        f"https://cdli.mpiwg-berlin.mpg.de/dl/photo/{CDLI_NUMBER}.jpg",
+    ),
+    (
+        client.get_line_art_url,
+        f"https://cdli.mpiwg-berlin.mpg.de/dl/lineart/{CDLI_NUMBER}_l.jpg",
+    ),
     (
         client.get_detail_line_art_url,
         f"https://cdli.mpiwg-berlin.mpg.de/dl/lineart/{CDLI_NUMBER}_ld.jpg",
