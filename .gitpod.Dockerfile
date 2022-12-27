@@ -1,10 +1,5 @@
 FROM gitpod/workspace-mongodb
 
-ARG PYTHON_VERSION=pypy3.9-7.3.9
-RUN pyenv install $PYTHON_VERSION
-RUN pyenv global $PYTHON_VERSION
-RUN pyenv update
-
 # Install custom tools, runtime, etc. using apt-get
 # More information: https://www.gitpod.io/docs/config-docker/
 RUN sudo apt-get update \
@@ -13,6 +8,11 @@ RUN sudo apt-get update \
     && sudo rm -rf /var/lib/apt/lists/*
 
 RUN brew install go-task/tap/go-task
+
+ARG PYTHON_VERSION=pypy3.9-7.3.10
+RUN cd /home/gitpod/.pyenv/plugins/python-build/../.. && git pull && cd -
+RUN pyenv install $PYTHON_VERSION
+RUN pyenv global $PYTHON_VERSION
 
 RUN python -m ensurepip
 RUN python -m pip install --upgrade pip poetry
