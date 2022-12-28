@@ -101,8 +101,7 @@ class ChaptersByLemmaResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         genre = req.params.get("genre")
         dictionary_lines = self._corpus.search_lemma(
-            req.params["lemma"],
-            None if not genre else Genre(genre),
+            req.params["lemma"], Genre(genre) if genre else None
         )
 
         resp.media = DictionaryLineDisplaySchema().dump(
