@@ -102,7 +102,7 @@ class ChaptersByLemmaResource:
         genre = req.params.get("genre")
         dictionary_lines = self._corpus.search_lemma(
             req.params["lemma"],
-            None if genre is None else Genre(genre),
+            None if not genre else Genre(genre),
         )
 
         resp.media = DictionaryLineDisplaySchema().dump(

@@ -278,7 +278,6 @@ class MongoTextRepository(TextRepository):
                 {"$match": lemma_query},
                 join_text_title(),
                 filter_manuscripts_by_lemma(lemma),
-                {"$limit": LIMIT},
                 {
                     "$project": {
                         "textId": True,
@@ -292,8 +291,19 @@ class MongoTextRepository(TextRepository):
             ]
         )
 
+        limited_lines = []
+        genre_counts = {genre.value: 0 for genre in Genre}
+
+        for line_dto in lemma_lines:
+            genre = line_dto["textId"]["genre"]
+            if genre_counts[genre] < LIMIT:
+                limited_lines.append(line_dto)
+                genre_counts[genre] += 1
+            if sum(genre_counts.values()) >= 40:
+                break
+
         return DictionaryLineSchema().load(
-            lemma_lines,
+            limited_lines,
             many=True,
         )
 
