@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Sequence
+from typing import List, Optional, Tuple, Sequence, Dict
 
 import pymongo
 from pymongo.database import Database
@@ -247,10 +247,24 @@ class MongoTextRepository(TextRepository):
             filter_query_by_transliteration(query, cursor), many=True
         ), self._chapters.count_documents(mongo_query)
 
+    def _limit_by_genre(self, cursor: Sequence[Dict]) -> List[Dict]:
+        LIMIT = 10
+        limited_lines = []
+        genre_counts = {genre.value: 0 for genre in Genre}
+
+        for line_dto in cursor:
+            genre = line_dto["textId"]["genre"]
+            if genre_counts[genre] < LIMIT:
+                limited_lines.append(line_dto)
+                genre_counts[genre] += 1
+            if sum(genre_counts.values()) >= 40:
+                break
+
+        return limited_lines
+
     def query_by_lemma(
         self, lemma: str, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
-        LIMIT = 10
         lemma_query = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
@@ -291,19 +305,8 @@ class MongoTextRepository(TextRepository):
             ]
         )
 
-        limited_lines = []
-        genre_counts = {genre.value: 0 for genre in Genre}
-
-        for line_dto in lemma_lines:
-            genre = line_dto["textId"]["genre"]
-            if genre_counts[genre] < LIMIT:
-                limited_lines.append(line_dto)
-                genre_counts[genre] += 1
-            if sum(genre_counts.values()) >= 40:
-                break
-
         return DictionaryLineSchema().load(
-            limited_lines,
+            self._limit_by_genre(lemma_lines),
             many=True,
         )
 
