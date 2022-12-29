@@ -227,7 +227,7 @@ def test_listing_texts(database, text_repository, bibliography_repository) -> No
         another_text.chapters[0],
         name="Another chapter",
     )
-    another_text = attr.evolve(another_text, chapters=tuple([another_chapter_listing]))
+    another_text = attr.evolve(another_text, chapters=(another_chapter_listing, ))
     when_text_in_collection(database)
     when_text_in_collection(database, another_text)
     when_chapter_in_collection(database)
