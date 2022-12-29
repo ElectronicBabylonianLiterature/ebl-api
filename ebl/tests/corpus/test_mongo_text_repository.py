@@ -216,14 +216,18 @@ def test_find_raises_exception_if_text_not_found(text_repository) -> None:
 
 
 def test_listing_texts(database, text_repository, bibliography_repository) -> None:
-    another_text = attr.evolve(TEXT, index=2)
+    another_text = attr.evolve(TEXT, index=999, name="Another text")
     another_chapter = attr.evolve(
         CHAPTER,
         text_id=another_text.id,
         stage=another_text.chapters[0].stage,
-        name=another_text.chapters[0].name,
+        name="Another chapter",
     )
-
+    another_chapter_listing = attr.evolve(
+        another_text.chapters[0],
+        name="Another chapter",
+    )
+    another_text = attr.evolve(another_text, chapters=tuple([another_chapter_listing]))
     when_text_in_collection(database)
     when_text_in_collection(database, another_text)
     when_chapter_in_collection(database)
