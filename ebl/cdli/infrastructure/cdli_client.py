@@ -3,7 +3,7 @@ import logging
 import requests
 from requests import Timeout
 
-BASE_URL = "https://cdli.ucla.edu/dl"
+BASE_URL = "https://cdli.mpiwg-berlin.mpg.de/dl"
 TIMEOUT_SECONDS = 5
 
 
