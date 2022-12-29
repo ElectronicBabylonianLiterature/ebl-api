@@ -176,7 +176,7 @@ def parallel_line_injector(
 
 
 @pytest.fixture
-def text_repository(database):
+def text_repository(database: Database):
     return MongoTextRepository(database)
 
 
