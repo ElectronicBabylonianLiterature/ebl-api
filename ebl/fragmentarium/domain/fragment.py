@@ -3,7 +3,6 @@ from typing import Optional, Sequence, Tuple
 from enum import Enum
 
 import attr
-import pydash
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.period import Period, PeriodModifier
@@ -179,8 +178,9 @@ class Fragment:
     def get_matching_lines(self, query: TransliterationQuery) -> Text:
         line_numbers = query.match(self.signs)
 
-        match = [
-            (self.text.text_lines[numbers[0] : numbers[1] + 1])
-            for numbers, _ in groupby(line_numbers)
-        ]
-        return Text(lines=tuple(pydash.flatten(match)))
+        lines = tuple(
+            line
+            for (start, end), _ in groupby(line_numbers)
+            for line in self.text.text_lines[start : end + 1]
+        )
+        return Text(lines=lines)

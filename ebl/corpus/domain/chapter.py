@@ -230,4 +230,4 @@ class Chapter:
     def _match(
         self, query: TransliterationQuery
     ) -> Sequence[Sequence[Tuple[int, int]]]:
-        return [query.match(signs) for signs in self.signs]
+        return [list(query.match(signs)) for signs in self.signs]

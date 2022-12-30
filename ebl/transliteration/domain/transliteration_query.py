@@ -1,8 +1,7 @@
 from __future__ import annotations
 import re
 import attr
-from itertools import chain
-from typing import cast, Sequence, Tuple, List
+from typing import cast, Sequence, Tuple, List, Iterator
 from enum import Enum
 from collections import OrderedDict
 from ebl.errors import DataError
@@ -105,25 +104,17 @@ class TransliterationQuery:
                 children.append(self.make_transliteration_query_text(segment))
         return children
 
-    def match(self, transliteration: str) -> Sequence[Tuple[int, int]]:
-        return [
-            (
+    def match(self, transliteration: str) -> Iterator[Tuple[int, int]]:
+        for match in re.finditer(
+            re.compile(self.regexp, re.MULTILINE), transliteration
+        ):
+            yield (
                 self.get_line_number(transliteration, match.start()),
                 self.get_line_number(transliteration, match.end()),
             )
-            for match in re.finditer(
-                re.compile(self.regexp, re.MULTILINE), transliteration
-            )
-        ]
 
     def get_line_number(self, transliteration: str, position: int) -> int:
-        return len(
-            [
-                char
-                for char in chain.from_iterable(transliteration[:position])
-                if char == "\n"
-            ]
-        )
+        return transliteration[:position].count("\n")
 
     def make_transliteration_query_line(self, string: str) -> TransliterationQueryLine:
         return TransliterationQueryLine(string=string, visitor=self.visitor)
