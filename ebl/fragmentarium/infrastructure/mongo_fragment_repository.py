@@ -247,17 +247,25 @@ class MongoFragmentRepository(FragmentRepository):
         LIMIT = 30
         mongo_query = self._query_fragmentarium_create_query(query)
         cursor = (
-            self._fragments.find_many(
-                mongo_query,
-                projection={"joins": False},
+            self._fragments.aggregate(
+                [
+                    {"$match": mongo_query},
+                    {"$project": {"joins": False}},
+                    {
+                        "$sort": {
+                            "script.period": pymongo.ASCENDING,
+                            "_id": pymongo.ASCENDING,
+                        }
+                    },
+                    {"$skip": LIMIT * query.paginationIndex},
+                    {"$limit": LIMIT},
+                ],
+                collation=Collation(
+                    locale="en", numericOrdering=True, alternate="shifted"
+                ),
+                allowDiskUse=True,
             )
-            .sort([("script.period", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
-            .skip(LIMIT * query.paginationIndex)
-            .limit(LIMIT)
-            .collation(
-                Collation(locale="en", numericOrdering=True, alternate="shifted")
-            )
-            .allow_disk_use(True)
+
         )
         return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
 
