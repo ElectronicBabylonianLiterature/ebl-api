@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Tuple, Sequence
+from typing import Sequence, Tuple, Union, Mapping, Type, Callable, List
 
 import attr
 from PIL import Image
@@ -19,9 +19,12 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-
+from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.users.domain.user import User
 
 Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
@@ -48,32 +51,22 @@ class AnnotationsService:
     def find(self, number: MuseumNumber) -> Annotations:
         return self._annotations_repository.query_by_museum_number(number)
 
-    def _label_by_line_number(
-        self, line_number_to_match: int, labels: Sequence[LineLabel]
-    ) -> str:
-        matching_label = None
-        for label in labels:
-            label_line_number = label.line_number
-            if label_line_number and label_line_number.is_matching_number(
-                line_number_to_match
-            ):
-                matching_label = label
-        return matching_label.formatted_label if matching_label else ""
-
     def _cropped_image_from_annotations_helper(
         self,
         annotations: Annotations,
         image: Image.Image,
-        labels: Sequence[LineLabel],
+        labels: Sequence[Tuple[LineLabel, Line]],
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
         updated_cropped_annotations = []
 
         for annotation in annotations.annotations:
-            label = ""
-            if annotation.data.type == AnnotationValueType.HAS_SIGN:
-                label = self._label_by_line_number(annotation.data.path[0], labels)
-
+            index = annotation.data.path[0]
+            label = (
+                labels[index][0].formatted_label
+                if annotation.data.type == AnnotationValueType.HAS_SIGN
+                else ""
+            )
             cropped_image = annotation.crop_image(image)
             cropped_sign_image = CroppedSignImage.create(cropped_image)
             cropped_sign_images.append(cropped_sign_image)
@@ -100,7 +93,7 @@ class AnnotationsService:
         image_bytes = fragment_image.read()
         image = Image.open(BytesIO(image_bytes), mode="r")
         return self._cropped_image_from_annotations_helper(
-            annotations, image, fragment.text.labels
+            annotations, image, self.get_labels(fragment.text.lines)
         )
 
     def update(self, annotations: Annotations, user: User) -> Annotations:
@@ -127,3 +120,37 @@ class AnnotationsService:
             {"_id": _id, **schema.dump(annotations_with_image_ids)},
         )
         return annotations_with_image_ids
+
+    def get_labels(self, lines) -> Sequence[Tuple[LineLabel, Line]]:
+        # Matches same structure in Frontend Count (
+        # Similar to fragment.text.labels but count EmptyLine and igore NoteLine)
+        # https://github.com/ElectronicBabylonianLiterature/ebl-frontend/blob/master/src/fragmentarium/ui/image-annotation/annotation-tool/mapTokensToAnnotationTokens.ts
+        current: LineLabel = LineLabel(None, None, None, None)
+        labels: Sequence[Tuple[LineLabel, Line]] = []
+
+        handlers = {
+            TextLine: lambda line: (
+                current,
+                [*labels, (current.set_line_number(line.line_number), line)],
+            ),
+            ColumnAtLine: lambda line: (
+                current.set_column(line.column_label),
+                [*labels, (current, line)],
+            ),
+            SurfaceAtLine: lambda line: (
+                current.set_surface(line.surface_label),
+                [*labels, (current, line)],
+            ),
+            ObjectAtLine: lambda line: (
+                current.set_object(line.label),
+                [*labels, (current, line)],
+            ),
+        }
+
+        for line in lines:
+            if not isinstance(line, NoteLine):
+                if type(line) in handlers:
+                    current, labels = handlers[type(line)](line)
+                else:
+                    current, labels = current, [*labels, (current, line)]
+        return labels

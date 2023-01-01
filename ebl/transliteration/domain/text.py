@@ -123,7 +123,6 @@ class Text:
         for line in self.lines:
             if type(line) in handlers:
                 current, labels = handlers[type(line)](line)
-
         return labels
 
     @property
