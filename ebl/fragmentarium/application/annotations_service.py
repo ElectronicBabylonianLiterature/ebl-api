@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Sequence, Tuple, Union, Mapping, Type, Callable, List
+from typing import Sequence, Tuple
 
 import attr
 from PIL import Image
