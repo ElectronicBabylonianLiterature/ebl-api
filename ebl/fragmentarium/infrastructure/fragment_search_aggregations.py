@@ -1,5 +1,7 @@
-from typing import Tuple, List, Dict, Sequence
+from typing import Tuple, List, Dict, Sequence, Optional
 from enum import Enum
+from ebl.fragmentarium.infrastructure.queries import number_is
+
 
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
@@ -54,11 +56,7 @@ def _arrange_result(include_lemma_sequences=False) -> List[dict]:
                     if include_lemma_sequences
                     else {}
                 ),
-            }
-        },
-        {
-            "$addFields": {
-                "matchCount": {"$size": "$matchingLines"},
+                "matchCount": {"$sum": 1},
             }
         },
         {"$sort": {"matchCount": -1}},
@@ -116,5 +114,137 @@ def create_search_aggregation(
 
     return search_and_filter(
         *matchers[query_operator],
-        include_lemma_sequences=query_operator == QueryType.PHRASE
+        include_lemma_sequences=query_operator == QueryType.PHRASE,
     )
+
+
+def _transliteration_line_match(line_patterns: List[str]) -> List[Dict]:
+    pattern_length = len(line_patterns)
+    return (
+        [
+            {
+                "$addFields": {
+                    "signChunks": {
+                        "$zip": {
+                            "inputs": [
+                                "$signLines",
+                                *(
+                                    {
+                                        "$slice": [
+                                            "$signLines",
+                                            i + 1,
+                                            {"$size": "$signLines"},
+                                        ]
+                                    }
+                                    for i in range(pattern_length - 1)
+                                ),
+                            ]
+                        }
+                    }
+                }
+            },
+            {"$unwind": {"path": "$signChunks", "includeArrayIndex": "chunkIndex"}},
+            {
+                "$match": {
+                    f"signChunks.{i}": {"$regex": line_pattern}
+                    for i, line_pattern in enumerate(line_patterns)
+                }
+            },
+        ]
+        if pattern_length > 1
+        else [
+            {"$unwind": {"path": "$signLines", "includeArrayIndex": "chunkIndex"}},
+            {
+                "$match": {
+                    "signLines": line_patterns[0],
+                }
+            },
+        ]
+    )
+
+
+def match_transliteration(transliteration: Optional[str]) -> List[Dict]:
+    if not transliteration:
+        return []
+
+    line_patterns = [line for line in transliteration.strip().split("\n") if line]
+    sign_patterns = [rf"\b{sign}\b" for sign in transliteration.split()]
+
+    return [
+        {
+            "$match": {
+                "$and": [
+                    {"signs": {"$regex": sign_pattern}}
+                    for sign_pattern in sign_patterns
+                ],
+            }
+        },
+        {
+            "$project": {
+                "museumNumber": True,
+                "lineTypes": "$text.lines.type",
+                "signs": True,
+            }
+        },
+        {"$unwind": {"path": "$lineTypes", "includeArrayIndex": "lineIndex"}},
+        {"$match": {"lineTypes": "TextLine"}},
+        {
+            "$group": {
+                "_id": "$_id",
+                "museumNumber": {"$first": "$museumNumber"},
+                "textLines": {"$push": "$lineIndex"},
+                "signLines": {"$first": {"$split": ["$signs", "\n"]}},
+            }
+        },
+        *_transliteration_line_match(line_patterns),
+        {
+            "$group": {
+                "_id": "$_id",
+                "museumNumber": {"$first": "$museumNumber"},
+                "matchingLines": {
+                    "$push": {"$arrayElemAt": ["$textLines", "$chunkIndex"]}
+                },
+                "matchCount": {"$sum": 1},
+            }
+        },
+    ]
+
+
+def transform_result() -> List[Dict]:
+    return [
+        {"$sort": {"matchCount": -1}},
+        {
+            "$group": {
+                "_id": None,
+                "items": {"$push": "$$ROOT"},
+                "matchCountTotal": {"$sum": "$matchCount"},
+            }
+        },
+        {"$project": {"_id": False}},
+    ]
+
+
+def prefilter_fragments(query: Dict) -> List[Dict]:
+    number_query = number_is(query["number"]) if "number" in query else {}
+    id_query = (
+        {"references": {"$elemMatch": {"id": query["bibliographyId"]}}}
+        if "bibliographyId" in query
+        else {}
+    )
+    if "pages" in query:
+        id_query["references"]["$elemMatch"]["pages"] = {
+            "$regex": rf".*?(^|[^\d]){query['pages']}([^\d]|$).*?"
+        }
+
+    # TODO: accession? CDLI? Script?
+    constraints = {**number_query, **id_query}
+    return [{"$match": constraints} if constraints else {}]
+
+
+def create_query_aggregation(query) -> List[Dict]:
+    return [
+        *prefilter_fragments(query),
+        *match_transliteration(query.get("transliteration")),
+        # TODO: match lemmas here
+        *transform_result(),
+    ]

@@ -50,7 +50,12 @@ class FragmentsQueryResource:
         self._repository = repository
 
     def on_get(self, req: Request, resp: Response):
-        cmd, lemmas = next(iter(req.params.items()))
-        resp.media = QueryResultSchema().dump(
-            self._repository.query_lemmas(QueryType[cmd.upper()], lemmas.split("+"))
-        )
+        parameters = {**req.params}
+
+        if "lemmas" in parameters:
+            parameters["lemmas"] = parameters["lemmas"].split("+")
+            parameters["lemma-operator"] = QueryType[
+                parameters.get("lemma-operator", "and").upper()
+            ]
+
+        resp.media = QueryResultSchema().dump(self._repository.query(parameters))

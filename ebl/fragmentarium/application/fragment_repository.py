@@ -91,3 +91,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
         ...
+
+    @abstractmethod
+    def query(self, query: dict) -> QueryResult:
+        ...

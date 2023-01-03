@@ -25,6 +25,7 @@ from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     QueryType,
     create_search_aggregation,
+    create_query_aggregation,
 )
 from ebl.fragmentarium.infrastructure.phrase_matcher import filter_query_results
 
@@ -463,3 +464,10 @@ class MongoFragmentRepository(FragmentRepository):
             if query_type == QueryType.PHRASE
             else data
         )
+
+    def query(self, query: dict):
+        data = next(
+            self._fragments.aggregate(create_query_aggregation(query)),
+            {"items": [], "matchCountTotal": 0},
+        )
+        return QueryResultSchema().load(data)
