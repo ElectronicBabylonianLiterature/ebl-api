@@ -11,6 +11,9 @@ from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
 from ebl.fragmentarium.domain.fragment import Scope
 from ebl.errors import DataError
+from ebl.transliteration.application.transliteration_query_factory import (
+    TransliterationQueryFactory,
+)
 
 
 def check_fragment_scope(user: User, scopes: Sequence[Scope]):
@@ -46,16 +49,27 @@ class FragmentsResource:
 
 
 class FragmentsQueryResource:
-    def __init__(self, repository: FragmentRepository):
+    def __init__(
+        self,
+        repository: FragmentRepository,
+        transliteration_query_factory: TransliterationQueryFactory,
+    ):
         self._repository = repository
+        self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
         parameters = {**req.params}
 
-        if "lemmas" in parameters:
+        if parameters.get("lemmas"):
             parameters["lemmas"] = parameters["lemmas"].split("+")
             parameters["lemma-operator"] = QueryType[
                 parameters.get("lemma-operator", "and").upper()
+            ]
+        if parameters.get("transliteration"):
+            parameters["transliteration"] = [
+                self._transliteration_query_factory.create(line).regexp
+                for line in parameters["transliteration"].strip().split("\n")
+                if line
             ]
 
         resp.media = QueryResultSchema().dump(self._repository.query(parameters))

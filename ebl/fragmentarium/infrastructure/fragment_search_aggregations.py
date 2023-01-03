@@ -156,29 +156,18 @@ def _transliteration_line_match(line_patterns: List[str]) -> List[Dict]:
             {"$unwind": {"path": "$signLines", "includeArrayIndex": "chunkIndex"}},
             {
                 "$match": {
-                    "signLines": line_patterns[0],
+                    "signLines": {"$regex": line_patterns[0]},
                 }
             },
         ]
     )
 
 
-def match_transliteration(transliteration: Optional[str]) -> List[Dict]:
+def match_transliteration(transliteration: Optional[List[str]]) -> List[Dict]:
     if not transliteration:
         return []
 
-    line_patterns = [line for line in transliteration.strip().split("\n") if line]
-    sign_patterns = [rf"\b{sign}\b" for sign in transliteration.split()]
-
     return [
-        {
-            "$match": {
-                "$and": [
-                    {"signs": {"$regex": sign_pattern}}
-                    for sign_pattern in sign_patterns
-                ],
-            }
-        },
         {
             "$project": {
                 "museumNumber": True,
@@ -196,7 +185,7 @@ def match_transliteration(transliteration: Optional[str]) -> List[Dict]:
                 "signLines": {"$first": {"$split": ["$signs", "\n"]}},
             }
         },
-        *_transliteration_line_match(line_patterns),
+        *_transliteration_line_match(transliteration),
         {
             "$group": {
                 "_id": "$_id",
@@ -238,7 +227,7 @@ def prefilter_fragments(query: Dict) -> List[Dict]:
 
     # TODO: accession? CDLI? Script?
     constraints = {**number_query, **id_query}
-    return [{"$match": constraints} if constraints else {}]
+    return [{"$match": constraints}] if constraints else []
 
 
 def create_query_aggregation(query) -> List[Dict]:
