@@ -1,4 +1,4 @@
-from typing import Tuple, List, Dict, Sequence, Optional
+from typing import List, Dict
 from enum import Enum
 from ebl.fragmentarium.infrastructure.queries import number_is
 
@@ -15,7 +15,7 @@ class QueryType(Enum):
     LEMMA = "lemma"
 
 
-class TransliterationMatcher:
+class SignMatcher:
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
         self._pattern_length = len(pattern)
@@ -52,7 +52,7 @@ class TransliterationMatcher:
             },
         ]
 
-    def build_pipeline(self) -> List[Dict]:
+    def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         return [
             {
                 "$project": {
@@ -95,7 +95,7 @@ class TransliterationMatcher:
                     "matchingLines": {
                         "$push": {"$arrayElemAt": ["$textLines", "$chunkIndex"]}
                     },
-                    "matchCount": {"$sum": 1},
+                    **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
         ]
@@ -110,13 +110,11 @@ class LemmaMatcher:
         self,
         pattern: List[str],
         query_type: QueryType,
-        count_matches_per_item=True,
     ):
         self.pattern = pattern
         self.query_type = query_type
-        self._count_matches = count_matches_per_item
 
-    def build_pipeline(self) -> List[Dict]:
+    def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipelines = {
             QueryType.LEMMA: self._lemma,
             QueryType.AND: self._and,
@@ -124,7 +122,7 @@ class LemmaMatcher:
             QueryType.LINE: self._line,
             QueryType.PHRASE: self._phrase,
         }
-        return pipelines[self.query_type]()
+        return pipelines[self.query_type](count_matches_per_item)
 
     def _flatten_lemmas(self) -> List[dict]:
         return [
@@ -159,55 +157,59 @@ class LemmaMatcher:
             },
         ]
 
-    def _rejoin_lines(self) -> List[Dict]:
+    def _rejoin_lines(self, count_matches_per_item=True) -> List[Dict]:
         return [
             {
                 "$group": {
                     "_id": "$_id",
                     "matchingLines": {"$push": "$lineIndex"},
                     "museumNumber": {"$first": "$museumNumber"},
-                    **({"matchCount": {"$sum": 1}} if self._count_matches else {}),
+                    **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
         ]
 
     def _create_match_pipeline(
-        self, fragment_query: Dict, line_query: Dict
+        self, fragment_query: Dict, line_query: Dict, count_matches_per_item=True
     ) -> List[Dict]:
         return [
             {"$match": fragment_query},
             *self._explode_lines(),
             *self._flatten_lemmas(),
             {"$match": line_query},
-            *self._rejoin_lines(),
+            *self._rejoin_lines(count_matches_per_item),
         ]
 
-    def _lemma(self) -> List[Dict]:
+    def _lemma(self, count_matches_per_item=True) -> List[Dict]:
         lemma = self.pattern[0]
         return self._create_match_pipeline(
             {self.unique_lemma_path: lemma},
             {self.vocabulary_path: lemma},
+            count_matches_per_item,
         )
 
-    def _and(self) -> List[Dict]:
+    def _and(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
             {self.unique_lemma_path: {"$all": self.pattern}},
             {"$or": [{self.vocabulary_path: lemma} for lemma in self.pattern]},
+            count_matches_per_item,
         )
 
-    def _or(self) -> List[Dict]:
+    def _or(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
             {self.unique_lemma_path: {"$in": self.pattern}},
             {self.vocabulary_path: {"$in": self.pattern}},
+            count_matches_per_item,
         )
 
-    def _line(self) -> List[Dict]:
+    def _line(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
             {self.unique_lemma_path: {"$all": self.pattern}},
             {self.vocabulary_path: {"$all": self.pattern}},
+            count_matches_per_item,
         )
 
-    def _phrase(self) -> List[Dict]:
+    def _phrase(self, count_matches_per_item=True) -> List[Dict]:
         return [
             {"$match": {self.unique_lemma_path: {"$all": self.pattern}}},
             *self._explode_lines(),
@@ -254,9 +256,21 @@ class LemmaMatcher:
 class PatternMatcher:
     def __init__(self, query: Dict):
         self._query = query
-        self._lemmas: List[str] = query.get("lemmas")
-        self._lemma_operator = query.get("lemma-operator")
-        self._transliteration: List[str] = query.get("transliteration")
+
+        self._lemma_matcher = (
+            LemmaMatcher(
+                query["lemmas"],
+                query.get("lemma-operator", QueryType.AND),
+            )
+            if "lemmas" in query
+            else None
+        )
+
+        self._sign_matcher = (
+            SignMatcher(query["transliteration"])
+            if "transliteration" in query
+            else None
+        )
 
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
@@ -272,27 +286,33 @@ class PatternMatcher:
         ]
 
     def _prefilter(self) -> List[Dict]:
-        number_query = number_is(self.query["number"]) if "number" in self.query else {}
+        number_query = (
+            number_is(self._query["number"]) if "number" in self._query else {}
+        )
         id_query = (
-            {"references": {"$elemMatch": {"id": self.query["bibliographyId"]}}}
-            if "bibliographyId" in self.query
+            {"references": {"$elemMatch": {"id": self._query["bibliographyId"]}}}
+            if "bibliographyId" in self._query
             else {}
         )
-        if "pages" in self.query:
+        if "pages" in self._query:
             id_query["references"]["$elemMatch"]["pages"] = {
-                "$regex": rf".*?(^|[^\d]){self.query['pages']}([^\d]|$).*?"
+                "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
             }
 
         constraints = {**number_query, **id_query}
 
         return [{"$match": constraints}] if constraints else []
 
-    def _match_merged(self) -> List[Dict]:
+    def _merge_pipelines(self) -> List[Dict]:
         return [
             {
                 "$facet": {
-                    "transliteration": self._match_transliteration(),
-                    "lemmas": self._match_lemmas(),
+                    "transliteration": self._sign_matcher.build_pipeline(
+                        count_matches_per_item=False
+                    ),
+                    "lemmas": self._lemma_matcher.build_pipeline(
+                        count_matches_per_item=False
+                    ),
                 }
             },
             {
@@ -325,305 +345,16 @@ class PatternMatcher:
             {"$addFields": {"matchCount": {"$size": "$matchingLines"}}},
         ]
 
-    def build(self) -> List[Dict]:
+    def build_pipeline(self) -> List[Dict]:
         pipeline = self._prefilter()
 
-        if self._lemmas and self._transliteration:
-            pipeline.extend(self._match_merged())
-        elif self._lemmas:
-            pipeline.extend(self._match_lemmas())
-        elif self._transliteration:
-            pipeline.extend(self._match_transliteration())
+        if self._lemma_matcher and self._sign_matcher:
+            pipeline.extend(self._merge_pipelines())
+        elif self._lemma_matcher:
+            pipeline.extend(self._lemma_matcher.build_pipeline())
+        elif self._sign_matcher:
+            pipeline.extend(self._sign_matcher.build_pipeline())
 
         pipeline.extend(self._wrap_query_items_with_total())
 
         return pipeline
-
-
-def _flatten_lemmas() -> List[dict]:
-    return [
-        {"$project": {"museumNumber": 1, "line": "$text.lines.content"}},
-        {"$unwind": {"path": "$line", "includeArrayIndex": "lineIndex"}},
-        {
-            "$project": {
-                "_id": 1,
-                "lemmas": "$line.uniqueLemma",
-                "lineIndex": 1,
-                "tokenIndex": 1,
-                "museumNumber": 1,
-            }
-        },
-        {
-            "$addFields": {
-                VOCAB_PATH: {
-                    "$setIntersection": {
-                        "$reduce": {
-                            "input": "$lemmas",
-                            "initialValue": [],
-                            "in": {"$concatArrays": ["$$value", "$$this"]},
-                        }
-                    }
-                },
-            }
-        },
-    ]
-
-
-def _wrap_query_items_with_total() -> List[Dict]:
-    return [
-        {"$sort": {"matchCount": -1}},
-        {
-            "$group": {
-                "_id": None,
-                "items": {"$push": "$$ROOT"},
-                "matchCountTotal": {"$sum": "$matchCount"},
-            }
-        },
-        {"$project": {"_id": False}},
-    ]
-
-
-def _arrange_result(include_lemma_sequences=False) -> List[dict]:
-    return [
-        {
-            "$group": {
-                "_id": "$_id",
-                "matchingLines": {"$push": "$lineIndex"},
-                "museumNumber": {"$first": "$museumNumber"},
-                **(
-                    {"lemmaSequences": {"$push": "$lemmas"}}
-                    if include_lemma_sequences
-                    else {}
-                ),
-                "matchCount": {"$sum": 1},
-            }
-        },
-        {"$sort": {"matchCount": -1}},
-        {
-            "$group": {
-                "_id": None,
-                **(
-                    {}
-                    if include_lemma_sequences
-                    else {"matchCountTotal": {"$sum": "$matchCount"}}
-                ),
-                "items": {"$push": "$$ROOT"},
-            }
-        },
-        {"$project": {"_id": 0}},
-    ]
-
-
-def _search_and_filter(
-    line_matcher: dict, vocabulary_matcher: dict, include_lemma_sequences=False
-) -> List[dict]:
-    return [
-        {"$match": line_matcher},
-        *_flatten_lemmas(),
-        {"$match": vocabulary_matcher},
-        *_arrange_result(include_lemma_sequences),
-    ]
-
-
-def create_search_aggregation(
-    query_operator: QueryType, lemmas: Sequence[str]
-) -> List[dict]:
-    matchers: Dict[QueryType, Tuple[dict, dict]] = {
-        QueryType.LEMMA: (
-            {LEMMA_PATH: lemmas[0]},
-            {VOCAB_PATH: lemmas[0]},
-        ),
-        QueryType.AND: (
-            {LEMMA_PATH: {"$all": lemmas}},
-            {"$or": [{VOCAB_PATH: lemma} for lemma in lemmas]},
-        ),
-        QueryType.OR: (
-            {"$or": [{LEMMA_PATH: lemma} for lemma in lemmas]},
-            {"$or": [{VOCAB_PATH: lemma} for lemma in lemmas]},
-        ),
-        QueryType.LINE: (
-            {LEMMA_PATH: {"$all": lemmas}},
-            {VOCAB_PATH: {"$all": lemmas}},
-        ),
-        QueryType.PHRASE: (
-            {LEMMA_PATH: {"$all": lemmas}},
-            {VOCAB_PATH: {"$all": lemmas}},
-        ),
-    }
-
-    return _search_and_filter(
-        *matchers[query_operator],
-        include_lemma_sequences=query_operator == QueryType.PHRASE,
-    )
-
-
-def lemma_pattern_match(pattern: List[str]) -> List[Dict]:
-
-    pattern_length = len(pattern)
-
-    return [
-        {
-            "$match": {
-                "$and": [{"text.lines.content.uniqueLemma": lemma} for lemma in pattern]
-            }
-        },
-        {
-            "$project": {
-                "lemmaSequence": "$text.lines.content.uniqueLemma",
-                "museumNumber": True,
-            }
-        },
-        {"$unwind": {"path": "$lemmaSequence", "includeArrayIndex": "lineIndex"}},
-        {"$match": {"lemmaSequence": {"$ne": [], "$exists": True}}},
-        {
-            "$project": {
-                "ngram": {
-                    "$zip": {
-                        "inputs": [
-                            "$lemmaSequence",
-                            *(
-                                {
-                                    "$slice": [
-                                        "$lemmaSequence",
-                                        i + 1,
-                                        {"$size": "$lemmaSequence"},
-                                    ]
-                                }
-                                for i in range(pattern_length - 1)
-                            ),
-                        ]
-                    }
-                },
-                "lineIndex": True,
-                "museumNumber": True,
-            }
-        },
-        {"$addFields": {"ngram": {"$setUnion": ["$ngram", []]}}},
-        {"$unwind": {"path": "$ngram", "includeArrayIndex": "ngramIndex"}},
-        {
-            "$match": {
-                "$expr": {
-                    "$and": [
-                        {"$in": [lemma, {"$arrayElemAt": ["$ngram", i]}]}
-                        for i, lemma in enumerate(pattern)
-                    ]
-                }
-            }
-        },
-        {
-            "$group": {
-                "_id": "$_id",
-                "lineIndex": {"$push": "$lineIndex"},
-                "matchCount": {"$sum": 1},
-                "museumNumber": {"$first": "$museumNumber"},
-            }
-        },
-        *_wrap_query_items_with_total(),
-    ]
-
-
-def _match_transliteration_lines(line_patterns: List[str]) -> List[Dict]:
-    pattern_length = len(line_patterns)
-    return (
-        [
-            {
-                "$addFields": {
-                    "signChunks": {
-                        "$zip": {
-                            "inputs": [
-                                "$signLines",
-                                *(
-                                    {
-                                        "$slice": [
-                                            "$signLines",
-                                            i + 1,
-                                            {"$size": "$signLines"},
-                                        ]
-                                    }
-                                    for i in range(pattern_length - 1)
-                                ),
-                            ]
-                        }
-                    }
-                }
-            },
-            {"$unwind": {"path": "$signChunks", "includeArrayIndex": "chunkIndex"}},
-            {
-                "$match": {
-                    f"signChunks.{i}": {"$regex": line_pattern}
-                    for i, line_pattern in enumerate(line_patterns)
-                }
-            },
-        ]
-        if pattern_length > 1
-        else [
-            {"$unwind": {"path": "$signLines", "includeArrayIndex": "chunkIndex"}},
-            {
-                "$match": {
-                    "signLines": {"$regex": line_patterns[0]},
-                }
-            },
-        ]
-    )
-
-
-def match_transliteration(transliteration: Optional[List[str]]) -> List[Dict]:
-    if not transliteration:
-        return []
-
-    return [
-        {
-            "$project": {
-                "museumNumber": True,
-                "lineTypes": "$text.lines.type",
-                "signs": True,
-            }
-        },
-        {"$unwind": {"path": "$lineTypes", "includeArrayIndex": "lineIndex"}},
-        {"$match": {"lineTypes": "TextLine"}},
-        {
-            "$group": {
-                "_id": "$_id",
-                "museumNumber": {"$first": "$museumNumber"},
-                "textLines": {"$push": "$lineIndex"},
-                "signLines": {"$first": {"$split": ["$signs", "\n"]}},
-            }
-        },
-        *_match_transliteration_lines(transliteration),
-        {
-            "$group": {
-                "_id": "$_id",
-                "museumNumber": {"$first": "$museumNumber"},
-                "matchingLines": {
-                    "$push": {"$arrayElemAt": ["$textLines", "$chunkIndex"]}
-                },
-                "matchCount": {"$sum": 1},
-            }
-        },
-    ]
-
-
-def prefilter_fragments(query: Dict) -> List[Dict]:
-    number_query = number_is(query["number"]) if "number" in query else {}
-    id_query = (
-        {"references": {"$elemMatch": {"id": query["bibliographyId"]}}}
-        if "bibliographyId" in query
-        else {}
-    )
-    if "pages" in query:
-        id_query["references"]["$elemMatch"]["pages"] = {
-            "$regex": rf".*?(^|[^\d]){query['pages']}([^\d]|$).*?"
-        }
-
-    # TODO: accession? CDLI? Script?
-    constraints = {**number_query, **id_query}
-    return [{"$match": constraints}] if constraints else []
-
-
-def create_query_aggregation(query) -> List[Dict]:
-    return [
-        *prefilter_fragments(query),
-        *match_transliteration(query.get("transliteration")),
-        # TODO: match lemmas here
-        *_wrap_query_items_with_total(),
-    ]

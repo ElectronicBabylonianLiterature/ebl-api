@@ -23,11 +23,8 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    QueryType,
-    create_search_aggregation,
-    create_query_aggregation,
+    PatternMatcher,
 )
-from ebl.fragmentarium.infrastructure.phrase_matcher import filter_query_results
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -452,22 +449,23 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
+    # def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
+    #     matcher = PatternMatcher(query)
+    #     data = next(
+    #         self._fragments.aggregate(create_search_aggregation(query_type, lemmas)),
+    #         {"items": [], "matchCountTotal": 0},
+    #     )
 
+    #     return QueryResultSchema().load(
+    #         filter_query_results(data, lemmas)
+    #         if query_type == QueryType.PHRASE
+    #         else data
+    #     )
+
+    def query(self, query: dict) -> QueryResult:
+        matcher = PatternMatcher(query)
         data = next(
-            self._fragments.aggregate(create_search_aggregation(query_type, lemmas)),
-            {"items": [], "matchCountTotal": 0},
-        )
-
-        return QueryResultSchema().load(
-            filter_query_results(data, lemmas)
-            if query_type == QueryType.PHRASE
-            else data
-        )
-
-    def query(self, query: dict):
-        data = next(
-            self._fragments.aggregate(create_query_aggregation(query)),
+            self._fragments.aggregate(matcher.build_pipeline()),
             {"items": [], "matchCountTotal": 0},
         )
         return QueryResultSchema().load(data)
