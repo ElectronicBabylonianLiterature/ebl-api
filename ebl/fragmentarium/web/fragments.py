@@ -62,8 +62,8 @@ class FragmentsQueryResource:
 
         if parameters.get("lemmas"):
             parameters["lemmas"] = parameters["lemmas"].split("+")
-            parameters["lemma-operator"] = QueryType[
-                parameters.get("lemma-operator", "and").upper()
+            parameters["lemmaOperator"] = QueryType[
+                parameters.get("lemmaOperator", "and").upper()
             ]
         if parameters.get("transliteration"):
             parameters["transliteration"] = [
@@ -71,5 +71,7 @@ class FragmentsQueryResource:
                 for line in parameters["transliteration"].strip().split("\n")
                 if line
             ]
+        if parameters.get("limit"):
+            parameters["limit"] = int(parameters["limit"])
 
         resp.media = QueryResultSchema().dump(self._repository.query(parameters))

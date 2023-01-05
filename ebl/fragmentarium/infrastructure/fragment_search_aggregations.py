@@ -260,7 +260,7 @@ class PatternMatcher:
         self._lemma_matcher = (
             LemmaMatcher(
                 query["lemmas"],
-                query.get("lemma-operator", QueryType.AND),
+                query.get("lemmaOperator", QueryType.AND),
             )
             if "lemmas" in query
             else None
@@ -272,9 +272,13 @@ class PatternMatcher:
             else None
         )
 
+    def _limit_result(self):
+        return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
+
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
             {"$sort": {"matchCount": -1}},
+            *self._limit_result(),
             {
                 "$group": {
                     "_id": None,
@@ -290,8 +294,8 @@ class PatternMatcher:
             number_is(self._query["number"]) if "number" in self._query else {}
         )
         id_query = (
-            {"references": {"$elemMatch": {"id": self._query["bibliographyId"]}}}
-            if "bibliographyId" in self._query
+            {"references": {"$elemMatch": {"id": self._query["bibId"]}}}
+            if "bibId" in self._query
             else {}
         )
         if "pages" in self._query:
@@ -354,6 +358,19 @@ class PatternMatcher:
             pipeline.extend(self._lemma_matcher.build_pipeline())
         elif self._sign_matcher:
             pipeline.extend(self._sign_matcher.build_pipeline())
+        else:
+            pipeline.extend(
+                [
+                    {
+                        "$project": {
+                            "_id": 1,
+                            "museumNumber": 1,
+                            "matchingLines": [],
+                        }
+                    },
+                    {"$addFields": {"matchCount": 0}},
+                ]
+            )
 
         pipeline.extend(self._wrap_query_items_with_total())
 

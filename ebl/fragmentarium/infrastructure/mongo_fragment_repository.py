@@ -449,19 +449,6 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    # def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
-    #     matcher = PatternMatcher(query)
-    #     data = next(
-    #         self._fragments.aggregate(create_search_aggregation(query_type, lemmas)),
-    #         {"items": [], "matchCountTotal": 0},
-    #     )
-
-    #     return QueryResultSchema().load(
-    #         filter_query_results(data, lemmas)
-    #         if query_type == QueryType.PHRASE
-    #         else data
-    #     )
-
     def query(self, query: dict) -> QueryResult:
         matcher = PatternMatcher(query)
         data = next(
