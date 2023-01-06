@@ -63,7 +63,9 @@ class FragmentsQueryResource:
         if parameters.get("lemmas"):
             parameters["lemmas"] = parameters["lemmas"].split("+")
             parameters["lemmaOperator"] = QueryType[
-                parameters.get("lemmaOperator", "and").upper()
+                "AND"
+                if len(parameters["lemmas"]) == 1
+                else parameters.get("lemmaOperator", "and").upper()
             ]
         if parameters.get("transliteration"):
             parameters["transliteration"] = [
