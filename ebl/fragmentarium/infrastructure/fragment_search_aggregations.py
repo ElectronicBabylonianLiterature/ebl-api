@@ -91,19 +91,22 @@ class PatternMatcher:
                 },
             },
             {
+                "$match": {
+                    "matchingLines": {"$size": 2},
+                }
+            },
+            {
                 "$addFields": {
                     "matchingLines": {
-                        "$setIntersection": {
-                            "$reduce": {
-                                "input": "$matchingLines",
-                                "initialValue": [],
-                                "in": {"$concatArrays": ["$$value", "$$this"]},
-                            }
-                        }
+                        "$setUnion": [
+                            {"$arrayElemAt": ["$matchingLines", 0]},
+                            {"$arrayElemAt": ["$matchingLines", 1]},
+                        ]
                     }
                 }
             },
             {"$addFields": {"matchCount": {"$size": "$matchingLines"}}},
+            {"$match": {"matchCount": {"$gt": 0}}},
         ]
 
     def build_pipeline(self) -> List[Dict]:

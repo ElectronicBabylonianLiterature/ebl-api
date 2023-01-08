@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Dict
+from typing import List, Dict, Union
 
 
 class QueryType(Enum):
@@ -8,6 +8,20 @@ class QueryType(Enum):
     LINE = "line"
     PHRASE = "phrase"
     LEMMA = "lemma"
+
+
+def flatten_field(input_: Union[str, Dict]) -> Dict:
+    return {
+        "$reduce": {
+            "input": input_,
+            "initialValue": [],
+            "in": {"$concatArrays": ["$$value", "$$this"]},
+        }
+    }
+
+
+def drop_duplicates(input_: Union[str, Dict]) -> Dict:
+    return {"$setUnion": [input_, []]}
 
 
 class LemmaMatcher:
@@ -37,15 +51,9 @@ class LemmaMatcher:
         return [
             {
                 "$addFields": {
-                    self.vocabulary_path: {
-                        "$setIntersection": {
-                            "$reduce": {
-                                "input": f"${self.flat_path}",
-                                "initialValue": [],
-                                "in": {"$concatArrays": ["$$value", "$$this"]},
-                            }
-                        }
-                    },
+                    self.vocabulary_path: drop_duplicates(
+                        flatten_field(f"${self.flat_path}")
+                    )
                 }
             }
         ]

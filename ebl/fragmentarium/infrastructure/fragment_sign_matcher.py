@@ -1,10 +1,15 @@
 from typing import List, Dict
+from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
+    drop_duplicates,
+    flatten_field,
+)
 
 
 class SignMatcher:
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
         self._pattern_length = len(pattern)
+        self._is_complex = self._pattern_length > 1
 
     def _match_transliteration_lines(self) -> List[Dict]:
         return [
@@ -38,6 +43,25 @@ class SignMatcher:
             },
         ]
 
+    def _expand_line_ranges(self) -> Dict:
+        return {
+            "$map": {
+                "input": {
+                    "$range": [
+                        "$chunkIndex",
+                        {
+                            "$add": [
+                                "$chunkIndex",
+                                self._pattern_length,
+                            ]
+                        },
+                    ]
+                },
+                "as": "index",
+                "in": {"$arrayElemAt": ["$textLines", "$$index"]},
+            }
+        }
+
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         return [
             {
@@ -58,7 +82,9 @@ class SignMatcher:
                 }
             },
             *(
-                [
+                self._match_transliteration_lines()
+                if self._is_complex
+                else [
                     {
                         "$unwind": {
                             "path": "$signLines",
@@ -71,17 +97,22 @@ class SignMatcher:
                         }
                     },
                 ]
-                if self._pattern_length == 1
-                else self._match_transliteration_lines()
             ),
             {
                 "$group": {
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "matchingLines": {
-                        "$push": {"$arrayElemAt": ["$textLines", "$chunkIndex"]}
+                        "$push": self._expand_line_ranges()
+                        if self._is_complex
+                        else {"$arrayElemAt": ["$textLines", "$chunkIndex"]}
                     },
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
+            *(
+                [{"$addFields": {"matchingLines": flatten_field("$matchingLines")}}]
+                if self._is_complex
+                else []
+            ),
         ]
