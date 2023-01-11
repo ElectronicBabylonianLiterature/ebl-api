@@ -450,9 +450,15 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
     def query(self, query: dict) -> QueryResult:
-        matcher = PatternMatcher(query)
-        data = next(
-            self._fragments.aggregate(matcher.build_pipeline()),
-            {"items": [], "matchCountTotal": 0},
-        )
+        empty_result = {"items": [], "matchCountTotal": 0}
+        
+        if set(query) - {"lemmaOperator"}:
+            matcher = PatternMatcher(query)
+            data = next(
+                self._fragments.aggregate(matcher.build_pipeline()),
+                empty_result,
+            )
+        else:
+            data = empty_result
+
         return QueryResultSchema().load(data)
