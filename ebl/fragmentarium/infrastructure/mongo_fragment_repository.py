@@ -451,7 +451,7 @@ class MongoFragmentRepository(FragmentRepository):
 
     def query(self, query: dict) -> QueryResult:
         empty_result = {"items": [], "matchCountTotal": 0}
-        
+
         if set(query) - {"lemmaOperator"}:
             matcher = PatternMatcher(query)
             data = next(

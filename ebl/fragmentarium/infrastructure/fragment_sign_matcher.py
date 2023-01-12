@@ -1,8 +1,5 @@
 from typing import List, Dict
-from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
-    drop_duplicates,
-    flatten_field,
-)
+from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import flatten_field
 
 
 class SignMatcher:
