@@ -1,4 +1,4 @@
-from typing import Tuple, Dict
+from typing import Tuple
 
 import falcon
 from falcon_caching import Cache
@@ -9,12 +9,8 @@ from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,
-    ApiFragmentInfosPaginationSchema,
 )
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
@@ -39,20 +35,10 @@ class FragmentSearch:
         def find_latest(_):
             return fragmentarium.find_latest()
 
-        self.api_fragment_infos_pagination_schema = ApiFragmentInfosPaginationSchema()
         self.api_fragment_info_schema = ApiFragmentInfoSchema(many=True)
         self._transliteration_query_factory = transliteration_query_factory
         self._dispatch = create_dispatcher(
             {
-                frozenset(
-                    [
-                        "number",
-                        "transliteration",
-                        "bibliographyId",
-                        "pages",
-                        "paginationIndex",
-                    ]
-                ): lambda value: self._search_fragmentarium(finder, value),
                 frozenset(["random"]): lambda _: self.api_fragment_info_schema.dump(
                     finder.find_random()
                 ),
@@ -68,37 +54,6 @@ class FragmentSearch:
                     ["needsRevision"]
                 ): lambda x: self.api_fragment_info_schema.dump(find_needs_revision(x)),
             }
-        )
-
-    def _search_fragmentarium(self, finder: FragmentFinder, query: Dict) -> Dict:
-        fragment_infos_pagination = finder.search_fragmentarium(
-            self._parse_fragmentarium_search(**query)
-        )
-        return self.api_fragment_infos_pagination_schema.dump(fragment_infos_pagination)
-
-    def _parse_fragmentarium_search(
-        self,
-        number: str,
-        transliteration: str,
-        bibliographyId: str,
-        pages: str,
-        paginationIndex: str,
-    ) -> FragmentariumSearchQuery:
-        parsed_transliteration = (
-            self._transliteration_query_factory.create(transliteration)
-            if transliteration
-            else self._transliteration_query_factory.create_empty()
-        )
-        validated_id, validated_pages = FragmentSearch._validate_pages(
-            bibliographyId, pages
-        )
-
-        return FragmentariumSearchQuery(
-            number,
-            parsed_transliteration,
-            validated_id,
-            validated_pages,
-            self._validate_pagination_index(paginationIndex),
         )
 
     @staticmethod

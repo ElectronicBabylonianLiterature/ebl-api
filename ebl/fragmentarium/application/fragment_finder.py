@@ -7,11 +7,7 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -44,37 +40,6 @@ class FragmentFinder:
             ),
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
-
-    def search(self, query: FragmentariumSearchQuery) -> FragmentInfosPagination:
-        query_results, total_count = self._repository.query_fragmentarium(query)
-        if query.transliteration.is_empty():
-            fragmentInfosResult = list(map(FragmentInfo.of, query_results))
-        else:
-            fragmentInfosResult = [
-                FragmentInfo.of(
-                    fragment, fragment.get_matching_lines(query.transliteration)
-                )
-                for fragment in query_results
-            ]
-        return FragmentInfosPagination(fragmentInfosResult, total_count)
-
-    def search_fragmentarium(
-        self, query: FragmentariumSearchQuery
-    ) -> FragmentInfosPagination:
-        fragment_infos_pagination = self.search(query)
-        fragment_infos = fragment_infos_pagination.fragment_infos
-        total_count = fragment_infos_pagination.total_count
-
-        fragment_infos_with_documents = []
-        for fragment_info in fragment_infos:
-            references_with_documents = [
-                reference.set_document(self._bibliography.find(reference.id))
-                for reference in fragment_info.references
-            ]
-            fragment_infos_with_documents.append(
-                fragment_info.set_references(references_with_documents)
-            )
-        return FragmentInfosPagination(fragment_infos_with_documents, total_count)
 
     def find_random(self) -> List[FragmentInfo]:
         return list(
