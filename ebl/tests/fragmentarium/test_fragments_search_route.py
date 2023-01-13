@@ -18,7 +18,6 @@ from ebl.tests.factories.fragment import (
     InterestingFragmentFactory,
     TransliteratedFragmentFactory,
 )
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
@@ -31,6 +30,17 @@ def expected_fragment_infos_pagination_dto(
     fragment_infos_pagination: FragmentInfosPagination,
 ) -> Dict:
     return ApiFragmentInfosPaginationSchema().dump(fragment_infos_pagination)
+
+
+def query_item_of(fragment: Fragment, matching_lines=None) -> Dict:
+    lines = [] if matching_lines is None else matching_lines
+
+    return {
+        "_id": str(fragment.number),
+        "museumNumber": MuseumNumberSchema().dump(fragment.number),
+        "matchingLines": lines,
+        "matchCount": len(lines),
+    }
 
 
 @pytest.mark.parametrize(
@@ -53,14 +63,7 @@ def test_query_fragmentarium_number(get_number, client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == {
-        "items": [
-            {
-                "_id": str(fragment.number),
-                "museumNumber": MuseumNumberSchema().dump(fragment.number),
-                "matchingLines": [],
-                "matchCount": 0,
-            }
-        ],
+        "items": [query_item_of(fragment)],
         "matchCountTotal": 0,
     }
 
@@ -97,14 +100,7 @@ def test_query_fragmentarium_references(client, fragmentarium, bibliography, use
 
     assert result.status == falcon.HTTP_OK
     assert result.json == {
-        "items": [
-            {
-                "_id": "X.3",
-                "matchCount": 0,
-                "matchingLines": [],
-                "museumNumber": MuseumNumberSchema().dump(fragment.number),
-            }
-        ],
+        "items": [query_item_of(fragment)],
         "matchCountTotal": 0,
     }
 
@@ -146,27 +142,33 @@ def test_query_fragmentarium_transliteration(
     assert result.status == falcon.HTTP_OK
     assert result.json == {
         "items": [
-            {
-                "_id": str(fragment.number),
-                "matchCount": 1,
-                "matchingLines": [3],
-                "museumNumber": MuseumNumberSchema().dump(fragment.number),
-            }
+            query_item_of(fragment, matching_lines=[3])
             for fragment in transliterated_fragments
         ],
         "matchCountTotal": 2,
     }
 
 
-def test_query_fragmentarium_lemmas(client, fragmentarium, sign_repository, signs):
+@pytest.mark.parametrize(
+    "lemma_operator,lemmas",
+    [
+        ("and", ""),
+        ("or", ""),
+        ("line", ""),
+        ("phrase", ""),
+        ("lemma", ""),
+    ],
+)
+def test_query_fragmentarium_lemmas(client, fragmentarium, lemma_operator, lemmas):
     # TODO
+    # check each matcher
+    # assert "and" is picked if len(lemmas) == 1 no matter the operator
     pass
 
 
 def test_query_fragmentarium_combined_query(
     client, fragmentarium, sign_repository, signs, bibliography, user
 ):
-    # TODO: adapt to new api
     bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
     bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
     bibliography.create(bib_entry_1, user)
@@ -184,34 +186,21 @@ def test_query_fragmentarium_combined_query(
         sign_repository.create(sign)
 
     result = client.simulate_get(
-        "/fragments",
+        "/fragments/query",
         params={
             "number": str(fragment.number),
             "transliteration": "ma-tu₂",
-            "bibliographyId": fragment.references[0].id,
+            "bibId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
-            "paginationIndex": 0,
         },
     )
 
     assert result.status == falcon.HTTP_OK
 
-    fragment_expected = fragment.set_references(
-        [
-            fragment.references[0].set_document(bib_entry_1),
-            fragment.references[1].set_document(bib_entry_2),
-        ]
-    )
-    assert result.json == expected_fragment_infos_pagination_dto(
-        FragmentInfosPagination(
-            [
-                FragmentInfo.of(
-                    fragment_expected, parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
-                )
-            ],
-            1,
-        )
-    )
+    assert result.json == {
+        "items": [query_item_of(fragment, matching_lines=[3])],
+        "matchCountTotal": 1,
+    }
 
 
 def test_query_signs_invalid(client, fragmentarium, sign_repository, signs):
