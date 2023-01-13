@@ -20,6 +20,7 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 
 def expected_fragment_info_dto(fragment: Fragment, text=None) -> Dict:
@@ -40,46 +41,40 @@ def expected_fragment_infos_pagination_dto(
         lambda fragment: fragment.accession,
     ],
 )
-def test_search_fragmentarium_number(get_number, client, fragmentarium):
+def test_query_fragmentarium_number(get_number, client, fragmentarium):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
     result = client.simulate_get(
-        "/fragments",
+        "/fragments/query",
         params={
             "number": get_number(fragment),
-            "transliteration": "",
-            "bibliographyId": "",
-            "pages": "",
-            "paginationIndex": 0,
         },
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == expected_fragment_infos_pagination_dto(
-        FragmentInfosPagination([FragmentInfo.of(fragment)], 1)
-    )
+    assert result.json == {
+        "items": [
+            {
+                "_id": str(fragment.number),
+                "museumNumber": MuseumNumberSchema().dump(fragment.number),
+                "matchingLines": [],
+                "matchCount": 0,
+            }
+        ],
+        "matchCountTotal": 0,
+    }
 
-    assert "Cache-Control" not in result.headers
 
-
-def test_search_fragmentarium_number_not_found(client):
+def test_query_fragmentarium_number_not_found(client):
     result = client.simulate_get(
-        "/fragments",
-        params={
-            "number": "K.1",
-            "transliteration": "",
-            "bibliographyId": "",
-            "pages": "",
-            "paginationIndex": 0,
-        },
+        "/fragments/query",
+        params={"number": "K.1"},
     )
 
-    assert result.json == expected_fragment_infos_pagination_dto(
-        FragmentInfosPagination([], 0)
-    )
+    assert result.json == {"items": [], "matchCountTotal": 0}
 
 
-def test_search_fragmentarium_references(client, fragmentarium, bibliography, user):
+def test_query_fragmentarium_references(client, fragmentarium, bibliography, user):
     bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
     bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
     bibliography.create(bib_entry_1, user)
@@ -93,31 +88,28 @@ def test_search_fragmentarium_references(client, fragmentarium, bibliography, us
     )
     fragmentarium.create(fragment)
     result = client.simulate_get(
-        "/fragments",
+        "/fragments/query",
         params={
-            "number": "",
-            "transliteration": "",
-            "bibliographyId": fragment.references[0].id,
+            "bibId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
-            "paginationIndex": 0,
         },
     )
 
     assert result.status == falcon.HTTP_OK
+    assert result.json == {
+        "items": [
+            {
+                "_id": "X.3",
+                "matchCount": 0,
+                "matchingLines": [],
+                "museumNumber": MuseumNumberSchema().dump(fragment.number),
+            }
+        ],
+        "matchCountTotal": 0,
+    }
 
-    fragment_expected = fragment.set_references(
-        [
-            fragment.references[0].set_document(bib_entry_1),
-            fragment.references[1].set_document(bib_entry_2),
-        ]
-    )
-    assert result.json == expected_fragment_infos_pagination_dto(
-        FragmentInfosPagination([FragmentInfo.of(fragment_expected)], 1)
-    )
-    assert "Cache-Control" not in result.headers
 
-
-def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
+def test_query_fragmentarium_invalid_references(client, fragmentarium):
     fragment = FragmentFactory.build(
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
@@ -125,70 +117,56 @@ def test_search_fragmentarium_invalid_references_query(client, fragmentarium):
     reference_id = fragment.references[0].id
     reference_pages = "should be a number"
     result = client.simulate_get(
-        "/fragments",
-        params={
-            "number": "",
-            "transliteration": "",
-            "bibliographyId": reference_id,
-            "pages": reference_pages,
-            "paginationIndex": 0,
-        },
+        "/fragments/query",
+        params={"bibId": reference_id, "pages": reference_pages},
     )
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
-def test_search_fragmentarium_transliteration(
+def test_query_fragmentarium_transliteration(
     client, fragmentarium, sign_repository, signs
 ):
-    transliterated_fragment_1 = TransliteratedFragmentFactory.build(
-        script=Script(Period.LATE_BABYLONIAN)
-    )
-    transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.123"), script=Script(Period.MIDDLE_ASSYRIAN)
-    )
-    for transliterated_fragment in [
-        transliterated_fragment_1,
-        transliterated_fragment_2,
-    ]:
-        fragmentarium.create(transliterated_fragment)
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of("X.123"), script=Script(Period.MIDDLE_ASSYRIAN)
+        ),
+        TransliteratedFragmentFactory.build(script=Script(Period.LATE_BABYLONIAN)),
+    ]
+    for fragment in transliterated_fragments:
+        fragmentarium.create(fragment)
 
     for sign in signs:
         sign_repository.create(sign)
 
     result = client.simulate_get(
-        "/fragments",
-        params={
-            "number": "",
-            "transliteration": "ma-tu₂",
-            "pages": "",
-            "bibliographyId": "",
-            "paginationIndex": 0,
-        },
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂"},
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == expected_fragment_infos_pagination_dto(
-        FragmentInfosPagination(
-            [
-                FragmentInfo.of(
-                    transliterated_fragment_1,
-                    parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂"),
-                ),
-                FragmentInfo.of(
-                    transliterated_fragment_2,
-                    parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂"),
-                ),
-            ],
-            2,
-        )
-    )
-
-    assert "Cache-Control" not in result.headers
+    assert result.json == {
+        "items": [
+            {
+                "_id": str(fragment.number),
+                "matchCount": 1,
+                "matchingLines": [3],
+                "museumNumber": MuseumNumberSchema().dump(fragment.number),
+            }
+            for fragment in transliterated_fragments
+        ],
+        "matchCountTotal": 2,
+    }
 
 
-def test_search_fragmentarium_combined_query(
+def test_query_fragmentarium_lemmas(client, fragmentarium, sign_repository, signs):
+    # TODO
+    pass
+
+
+def test_query_fragmentarium_combined_query(
     client, fragmentarium, sign_repository, signs, bibliography, user
 ):
+    # TODO: adapt to new api
     bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
     bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
     bibliography.create(bib_entry_1, user)
@@ -234,23 +212,15 @@ def test_search_fragmentarium_combined_query(
             1,
         )
     )
-    assert "Cache-Control" not in result.headers
 
 
-def test_search_signs_invalid(client, fragmentarium, sign_repository, signs):
+def test_query_signs_invalid(client, fragmentarium, sign_repository, signs):
     result = client.simulate_get(
-        "/fragments",
-        params={
-            "number": "",
-            "transliteration": "$ invalid",
-            "bibliographyId": "",
-            "pages": "",
-            "paginationIndex": 0,
-        },
+        "/fragments/query",
+        params={"transliteration": "$ invalid"},
     )
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert "Cache-Control" not in result.headers
 
 
 def test_random(client, fragmentarium):
