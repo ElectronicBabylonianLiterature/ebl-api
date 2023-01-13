@@ -136,10 +136,10 @@ class TransliterationQueryText(TransliterationQuery):
         signs_regexp = " ".join(
             self._create_sign_regexp(sign) for sign in self._create_signs(self.string)
         )
-        return rf"(?<=[|\s]){signs_regexp}"
+        return rf"(?<![^|\s]){signs_regexp}"
 
     def _create_sign_regexp(self, sign: str) -> str:
-        return rf"(\S+\/)*{re.escape(sign)}(?=[\s\/])"
+        return rf"(\S+\/)*{re.escape(sign)}(?![^\s\/])"
 
     def _create_signs(self, transliteration: str) -> Sequence[str]:
         if not transliteration:
@@ -188,7 +188,7 @@ class TransliterationQueryLine(TransliterationQuery):
 
     def _regexp(self) -> str:
         content = TransliterationQuery(string=self.string, visitor=self.visitor)
-        return rf"(?<=[|\s]){content.regexp}"
+        return rf"(?<![^|\s]){content.regexp}"
 
 
 @attr.s(auto_attribs=True, frozen=True)
