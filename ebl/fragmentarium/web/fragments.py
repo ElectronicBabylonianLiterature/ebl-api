@@ -60,20 +60,29 @@ class FragmentsQueryResource:
     def on_get(self, req: Request, resp: Response):
         parameters = {**req.params}
 
-        if parameters.get("lemmas"):
+        if "lemmas" in parameters:
             parameters["lemmas"] = parameters["lemmas"].split("+")
             parameters["lemmaOperator"] = QueryType[
                 "AND"
                 if len(parameters["lemmas"]) == 1
                 else parameters.get("lemmaOperator", "and").upper()
             ]
-        if parameters.get("transliteration"):
+        if "transliteration" in parameters:
             parameters["transliteration"] = [
                 self._transliteration_query_factory.create(line).regexp
                 for line in parameters["transliteration"].strip().split("\n")
                 if line
             ]
-        if parameters.get("limit"):
+        if "limit" in parameters:
             parameters["limit"] = int(parameters["limit"])
+
+        if "pages" in parameters:
+            pages = parameters["pages"]
+            if "bibId" not in parameters:
+                raise DataError("Name, Year or Title required")
+            try:
+                parameters["pages"] = int(pages)
+            except ValueError as error:
+                raise DataError(f'Pages "{pages}" not numeric.') from error
 
         resp.media = QueryResultSchema().dump(self._repository.query(parameters))
