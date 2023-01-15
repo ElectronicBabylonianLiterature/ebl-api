@@ -17,6 +17,7 @@ from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
     TransliteratedFragmentFactory,
+    LemmatizedFragmentFactory,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -150,20 +151,45 @@ def test_query_fragmentarium_transliteration(
 
 
 @pytest.mark.parametrize(
-    "lemma_operator,lemmas",
+    "lemma_operator,lemmas,expected_lines",
     [
-        ("and", ""),
-        ("or", ""),
-        ("line", ""),
-        ("phrase", ""),
-        ("lemma", ""),
+        ("and", "ana I+ginâ I", [1]),
+        ("or", "ginâ I+bamātu I+mu I", [1, 2, 3]),
+        ("line", "u I+kīdu I", [2]),
+        ("phrase", "mu I+tamalāku I", [3]),
     ],
 )
-def test_query_fragmentarium_lemmas(client, fragmentarium, lemma_operator, lemmas):
-    # TODO
-    # check each matcher
-    # assert "and" is picked if len(lemmas) == 1 no matter the operator
-    pass
+def test_query_fragmentarium_lemmas(
+    client, fragmentarium, lemma_operator, lemmas, expected_lines
+):
+    fragment = LemmatizedFragmentFactory.build()
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"lemmaOperator": lemma_operator, "lemmas": lemmas},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == {
+        "items": [query_item_of(fragment, matching_lines=expected_lines)],
+        "matchCountTotal": len(expected_lines),
+    }
+
+
+def test_query_fragmentarium_lemmas_not_found(client, fragmentarium):
+    fragment = LemmatizedFragmentFactory.build()
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"lemmaOperator": "phrase", "lemmas": "u I+u I+u I"},
+    )
+    assert result.status == falcon.HTTP_OK
+    assert result.json == {
+        "items": [],
+        "matchCountTotal": 0,
+    }
 
 
 def test_query_fragmentarium_combined_query(
@@ -174,7 +200,7 @@ def test_query_fragmentarium_combined_query(
     bibliography.create(bib_entry_1, user)
     bibliography.create(bib_entry_2, user)
 
-    fragment = TransliteratedFragmentFactory.build(
+    fragment = LemmatizedFragmentFactory.build(
         references=(
             ReferenceFactory.build(id="RN.0", pages="254"),
             ReferenceFactory.build(id="RN.1"),
@@ -192,14 +218,16 @@ def test_query_fragmentarium_combined_query(
             "transliteration": "ma-tu₂",
             "bibId": fragment.references[0].id,
             "pages": fragment.references[0].pages,
+            "lemmas": "ana I+mu I",
+            "lemmaOperator": "or",
         },
     )
 
     assert result.status == falcon.HTTP_OK
 
     assert result.json == {
-        "items": [query_item_of(fragment, matching_lines=[3])],
-        "matchCountTotal": 1,
+        "items": [query_item_of(fragment, matching_lines=[1, 3])],
+        "matchCountTotal": 2,
     }
 
 
