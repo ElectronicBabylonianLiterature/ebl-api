@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List, Optional
 
 import attr
 import falcon
@@ -33,14 +33,17 @@ def expected_fragment_infos_pagination_dto(
     return ApiFragmentInfosPaginationSchema().dump(fragment_infos_pagination)
 
 
-def query_item_of(fragment: Fragment, matching_lines=None) -> Dict:
+def query_item_of(
+    fragment: Fragment,
+    matching_lines: Optional[List[int]] = None,
+    match_count: Optional[int] = None,
+) -> Dict:
     lines = [] if matching_lines is None else matching_lines
 
     return {
-        "_id": str(fragment.number),
         "museumNumber": MuseumNumberSchema().dump(fragment.number),
         "matchingLines": lines,
-        "matchCount": len(lines),
+        "matchCount": match_count or len(lines),
     }
 
 
