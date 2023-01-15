@@ -36,6 +36,7 @@ class PatternMatcher:
         return [
             {"$sort": {"matchCount": -1, "_id": 1}},
             *self._limit_result(),
+            {"$project": {"_id": False}},
             {
                 "$group": {
                     "_id": None,
