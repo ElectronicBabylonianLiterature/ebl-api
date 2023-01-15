@@ -61,9 +61,8 @@ class AnnotationsService:
         updated_cropped_annotations = []
 
         for annotation in annotations.annotations:
-            index = annotation.data.path[0]
             label = (
-                labels[index][0].formatted_label
+                labels[annotation.data.path[0]][0].formatted_label
                 if annotation.data.type == AnnotationValueType.HAS_SIGN
                 else ""
             )
