@@ -675,7 +675,6 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        FRAGMENT_IDS[0],
                         MUSEUM_NUMBERS[0],
                         (1,),
                         1,
@@ -690,7 +689,6 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        FRAGMENT_IDS[0],
                         MUSEUM_NUMBERS[0],
                         (1, 2),
                         2,
@@ -705,13 +703,11 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        FRAGMENT_IDS[0],
                         MUSEUM_NUMBERS[0],
                         (1, 2),
                         2,
                     ),
                     QueryItem(
-                        FRAGMENT_IDS[1],
                         MUSEUM_NUMBERS[1],
                         (0,),
                         1,
@@ -734,7 +730,6 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        FRAGMENT_IDS[0],
                         MUSEUM_NUMBERS[0],
                         (2,),
                         1,
@@ -749,7 +744,6 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        FRAGMENT_IDS[1],
                         MUSEUM_NUMBERS[1],
                         (0,),
                         1,
@@ -764,7 +758,6 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        FRAGMENT_IDS[1],
                         MUSEUM_NUMBERS[1],
                         (0,),
                         1,

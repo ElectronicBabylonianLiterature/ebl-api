@@ -6,7 +6,6 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 @attr.s(auto_attribs=True, frozen=True)
 class QueryItem:
-    id_: str
     museum_number: MuseumNumber
     matching_lines: Sequence[int]
     match_count: int
@@ -16,3 +15,7 @@ class QueryItem:
 class QueryResult:
     items: Sequence[QueryItem]
     match_count_total: int
+
+    @staticmethod
+    def create_empty() -> "QueryResult":
+        return QueryResult([], 0)
