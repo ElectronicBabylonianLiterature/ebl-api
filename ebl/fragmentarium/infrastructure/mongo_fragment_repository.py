@@ -3,7 +3,6 @@ from typing import Callable, List, Optional, Sequence, Tuple, cast
 
 import pymongo
 from marshmallow import EXCLUDE
-from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.query.query_result import QueryResult
@@ -12,9 +11,6 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -34,7 +30,6 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_random,
     fragment_is,
     join_joins,
-    number_is,
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -216,48 +211,6 @@ class MongoFragmentRepository(FragmentRepository):
             return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
-
-    @staticmethod
-    def _query_fragmentarium_create_query(
-        query: FragmentariumSearchQuery,
-    ) -> dict:
-        number_query = number_is(query.number) if query.number else {}
-        signs_query = (
-            {}
-            if query.transliteration.is_empty()
-            else {"signs": {"$regex": query.transliteration.regexp}}
-        )
-
-        id_query = (
-            {"references": {"$elemMatch": {"id": query.bibliography_id}}}
-            if query.bibliography_id
-            else {}
-        )
-        if query.pages:
-            id_query["references"]["$elemMatch"]["pages"] = {
-                "$regex": rf".*?(^|[^\d]){query.pages}([^\d]|$).*?"
-            }
-        return {**number_query, **signs_query, **id_query}
-
-    def query_fragmentarium(
-        self, query: FragmentariumSearchQuery
-    ) -> Tuple[Sequence[Fragment], int]:
-        LIMIT = 30
-        mongo_query = self._query_fragmentarium_create_query(query)
-        cursor = (
-            self._fragments.find_many(
-                mongo_query,
-                projection={"joins": False},
-            )
-            .sort([("script.period", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
-            .skip(LIMIT * query.paginationIndex)
-            .limit(LIMIT)
-            .collation(
-                Collation(locale="en", numericOrdering=True, alternate="shifted")
-            )
-            .allow_disk_use(True)
-        )
-        return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
 
     def query_by_id_and_page_in_references(self, id_: str, pages: str):
         match: dict = {"references": {"$elemMatch": {"id": id_}}}
@@ -450,15 +403,14 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
     def query(self, query: dict) -> QueryResult:
-        empty_result = {"items": [], "matchCountTotal": 0}
 
         if set(query) - {"lemmaOperator"}:
             matcher = PatternMatcher(query)
             data = next(
                 self._fragments.aggregate(matcher.build_pipeline()),
-                empty_result,
+                None,
             )
         else:
-            data = empty_result
+            data = None
 
-        return QueryResultSchema().load(data)
+        return QueryResultSchema().load(data) if data else QueryResult.create_empty()

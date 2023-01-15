@@ -1,14 +1,11 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Tuple, Optional
+from typing import List, Sequence, Optional
 from ebl.common.query.query_result import QueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -79,12 +76,6 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def update_field(self, field: str, fragment: Fragment) -> None:
-        ...
-
-    @abstractmethod
-    def query_fragmentarium(
-        self, query: FragmentariumSearchQuery
-    ) -> Tuple[Sequence[Fragment], int]:
         ...
 
     @abstractmethod
