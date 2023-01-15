@@ -169,7 +169,7 @@ class TransliterationQueryWildCard(TransliterationQuery):
         if self.type == Type.ANY_SIGN:
             return any_sign_regex
 
-        return any_sign_regex + ".*" if self.type == Type.ANY_SIGN_PLUS else ""
+        return f"{any_sign_regex}.*" if self.type == Type.ANY_SIGN_PLUS else ""
 
     def _regexp_alternative(self) -> str:
         alternative_strings = self.string.strip("[]").split("|")
