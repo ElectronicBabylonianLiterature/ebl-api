@@ -130,7 +130,7 @@ class LemmaMatcher:
         return [
             {"$match": {self.unique_lemma_path: {"$all": self.pattern}}},
             *self._explode_lines(),
-            {"$match": {self.flat_path: {"$ne": [], "$exists": True}}},
+            {"$match": {self.flat_path: {"$not": {"$size": 0}, "$exists": True}}},
             {
                 "$project": {
                     "ngram": {
