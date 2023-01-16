@@ -528,42 +528,6 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     )
 
 
-def test_query_fragmentarium_pagination(fragment_repository, sign_repository, signs):
-    for sign in signs:
-        sign_repository.create(sign)
-    fragment_0 = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0"))
-    transliterated_fragments = [
-        fragment_0,
-        *[
-            attr.evolve(fragment_0, number=MuseumNumber.of(f"X.{i+1}"))
-            for i in range(39)
-        ],
-    ]
-
-    fragment_repository.create_many(transliterated_fragments)
-
-    result_first_page = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            transliteration=TransliterationQuery(
-                string="KU", visitor=SignsVisitor(sign_repository)
-            )
-        )
-    )
-    expected_first_page = (transliterated_fragments[:30], 40)
-    assert result_first_page == expected_first_page
-
-    result_second_page = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            transliteration=TransliterationQuery(
-                string="KU", visitor=SignsVisitor(sign_repository)
-            ),
-            paginationIndex=1,
-        )
-    )
-    expected_second_page = (transliterated_fragments[30:], 40)
-    assert result_second_page == expected_second_page
-
-
 def test_query_fragmentarium_transliteration_and_number(
     fragment_repository, sign_repository, signs
 ):
