@@ -98,20 +98,6 @@ def _find_adjacent_museum_number_from_sequence(
     return current_prev, current_next
 
 
-def filter_fragment_lines(lines: Sequence[int]) -> dict:
-    return {
-        "$addFields": {
-            "text.lines": {
-                "$map": {
-                    "input": lines,
-                    "as": "i",
-                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
-                }
-            }
-        }
-    }
-
-
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
@@ -195,13 +181,32 @@ class MongoFragmentRepository(FragmentRepository):
             }
         )
 
+    def _filter_fragment_lines(self, lines: Sequence[int]) -> dict:
+        return (
+            [
+                {
+                    "$addFields": {
+                        "text.lines": {
+                            "$map": {
+                                "input": lines,
+                                "as": "i",
+                                "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
+                            }
+                        }
+                    }
+                }
+            ]
+            if lines
+            else []
+        )
+
     def query_by_museum_number(
         self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
     ):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *([filter_fragment_lines(lines)] if lines else []),
+                *self._filter_fragment_lines(lines),
                 *join_reference_documents(),
                 *join_joins(),
             ]
@@ -211,15 +216,6 @@ class MongoFragmentRepository(FragmentRepository):
             return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
-
-    def query_by_id_and_page_in_references(self, id_: str, pages: str):
-        match: dict = {"references": {"$elemMatch": {"id": id_}}}
-        if pages:
-            match["references"]["$elemMatch"]["pages"] = {
-                "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
-            }
-        cursor = self._fragments.find_many(match, projection={"joins": False})
-        return self._map_fragments(cursor)
 
     def query_random_by_transliterated(self):
         cursor = self._fragments.aggregate(
