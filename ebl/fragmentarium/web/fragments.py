@@ -86,7 +86,7 @@ class FragmentsQueryResource:
 
     def on_get(self, req: Request, resp: Response):
         parameters = {**req.params}
-        parameters.update(self._process_lemmas(parameters))
+        parameters |= self._process_lemmas(parameters)
         parameters.update(self._process_pages(parameters))
 
         if "transliteration" in parameters:
