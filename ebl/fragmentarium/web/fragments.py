@@ -84,6 +84,7 @@ class FragmentsQueryResource:
         except ValueError as error:
             raise DataError(f'Pages "{pages}" not numeric.') from error
 
+    @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response):
         parameters = {**req.params}
         parameters |= self._process_lemmas(parameters)
