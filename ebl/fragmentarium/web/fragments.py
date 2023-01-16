@@ -1,6 +1,6 @@
 import falcon
 from falcon import Request, Response
-from typing import Sequence
+from typing import Sequence, Dict
 from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -57,16 +57,38 @@ class FragmentsQueryResource:
         self._repository = repository
         self._transliteration_query_factory = transliteration_query_factory
 
+    def _process_lemmas(self, parameters: Dict) -> Dict:
+        if "lemmas" not in parameters:
+            return {}
+
+        lemmas = parameters["lemmas"].split("+")
+        return {
+            "lemmas": lemmas,
+            "lemmaOperator": QueryType[
+                "AND"
+                if len(lemmas) == 1
+                else parameters.get("lemmaOperator", "and").upper()
+            ],
+        }
+
+    def _process_pages(self, parameters: Dict) -> Dict:
+        if "pages" not in parameters:
+            return {}
+
+        pages = parameters["pages"]
+
+        if "bibId" not in parameters:
+            raise DataError("Name, Year or Title required")
+        try:
+            return {"pages": int(pages)}
+        except ValueError as error:
+            raise DataError(f'Pages "{pages}" not numeric.') from error
+
     def on_get(self, req: Request, resp: Response):
         parameters = {**req.params}
+        parameters.update(self._process_lemmas(parameters))
+        parameters.update(self._process_pages(parameters))
 
-        if "lemmas" in parameters:
-            parameters["lemmas"] = parameters["lemmas"].split("+")
-            parameters["lemmaOperator"] = QueryType[
-                "AND"
-                if len(parameters["lemmas"]) == 1
-                else parameters.get("lemmaOperator", "and").upper()
-            ]
         if "transliteration" in parameters:
             parameters["transliteration"] = [
                 self._transliteration_query_factory.create(line).regexp
@@ -75,14 +97,5 @@ class FragmentsQueryResource:
             ]
         if "limit" in parameters:
             parameters["limit"] = int(parameters["limit"])
-
-        if "pages" in parameters:
-            pages = parameters["pages"]
-            if "bibId" not in parameters:
-                raise DataError("Name, Year or Title required")
-            try:
-                parameters["pages"] = int(pages)
-            except ValueError as error:
-                raise DataError(f'Pages "{pages}" not numeric.') from error
 
         resp.media = QueryResultSchema().dump(self._repository.query(parameters))
