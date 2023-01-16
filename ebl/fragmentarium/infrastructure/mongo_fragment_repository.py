@@ -3,6 +3,7 @@ from typing import Callable, List, Optional, Sequence, Tuple, cast
 
 import pymongo
 from marshmallow import EXCLUDE
+from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.query.query_result import QueryResult
@@ -403,7 +404,12 @@ class MongoFragmentRepository(FragmentRepository):
         if set(query) - {"lemmaOperator"}:
             matcher = PatternMatcher(query)
             data = next(
-                self._fragments.aggregate(matcher.build_pipeline()),
+                self._fragments.aggregate(
+                    matcher.build_pipeline(),
+                    collation=Collation(
+                        locale="en", numericOrdering=True, alternate="shifted"
+                    ),
+                ),
                 None,
             )
         else:
