@@ -181,7 +181,7 @@ class MongoFragmentRepository(FragmentRepository):
             }
         )
 
-    def _filter_fragment_lines(self, lines: Sequence[int]) -> dict:
+    def _filter_fragment_lines(self, lines: Optional[Sequence[int]]) -> List:
         return (
             [
                 {
