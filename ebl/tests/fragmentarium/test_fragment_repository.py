@@ -1,6 +1,7 @@
 from typing import Tuple
 import attr
 import pytest
+import random
 from ebl.common.period import Period
 from ebl.common.query.query_result import QueryItem, QueryResult
 
@@ -493,40 +494,38 @@ def test_query_fragmentarium_transliteration(
 def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
-    transliterated_fragment_0 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.2"), script=Script(Period.ED_I_II)
-    )
-    transliterated_fragment_1 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.0"), script=Script(Period.PERSIAN)
-    )
-    transliterated_fragment_2 = TransliteratedFragmentFactory.build(
-        number=MuseumNumber.of("X.1"), script=Script(Period.PERSIAN)
-    )
 
-    fragment_repository.create_many(
-        [
-            transliterated_fragment_0,
-            transliterated_fragment_1,
-            transliterated_fragment_2,
-        ]
-    )
+    fragments = [
+        attr.evolve(
+            TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.3")),
+            signs=("KU\nX\nDU\nKU\nMI"),
+        ),
+        TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0")),
+        TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.1")),
+        TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.2")),
+    ]
+    lines = [[0, 3], [0], [0], [0]]
 
-    result = fragment_repository.query_fragmentarium(
-        FragmentariumSearchQuery(
-            transliteration=TransliterationQuery(
-                string="KU", visitor=SignsVisitor(sign_repository)
-            )
-        )
+    fragment_repository.create_many(random.sample(fragments, len(fragments)))
+
+    result = fragment_repository.query(
+        {
+            "transliteration": [
+                TransliterationQuery(
+                    string="KU", visitor=SignsVisitor(sign_repository)
+                ).regexp
+            ]
+        }
     )
-    expected = (
-        [
-            transliterated_fragment_0,
-            transliterated_fragment_1,
-            transliterated_fragment_2,
-        ],
-        3,
+    assert result == QueryResultSchema().load(
+        {
+            "items": [
+                query_item_of(fragment, lines)
+                for fragment, lines in zip(fragments, lines)
+            ],
+            "matchCountTotal": 5,
+        }
     )
-    assert result == expected
 
 
 def test_query_fragmentarium_pagination(fragment_repository, sign_repository, signs):
