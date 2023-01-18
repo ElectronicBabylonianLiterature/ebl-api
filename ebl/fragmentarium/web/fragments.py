@@ -5,7 +5,7 @@ from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import QueryType
+from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaQueryType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
@@ -64,7 +64,7 @@ class FragmentsQueryResource:
         lemmas = parameters["lemmas"].split("+")
         return {
             "lemmas": lemmas,
-            "lemmaOperator": QueryType[
+            "lemmaOperator": LemmaQueryType[
                 "AND"
                 if len(lemmas) == 1
                 else parameters.get("lemmaOperator", "and").upper()

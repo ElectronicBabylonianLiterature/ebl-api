@@ -14,7 +14,7 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction, Script
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
-from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import QueryType
+from ebl.common.query.query_result import LemmaQueryType
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
@@ -672,7 +672,7 @@ def test_update_update_references(fragment_repository):
     "query_type,lemmas,expected",
     [
         (
-            QueryType.LEMMA,
+            LemmaQueryType.LEMMA,
             ("ana I",),
             QueryResult(
                 [
@@ -686,7 +686,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.OR,
+            LemmaQueryType.OR,
             ("ana I", "kīdu I"),
             QueryResult(
                 [
@@ -700,7 +700,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.OR,
+            LemmaQueryType.OR,
             ("ana I", "kur II", "kīdu I"),
             QueryResult(
                 [
@@ -719,7 +719,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.LINE,
+            LemmaQueryType.LINE,
             ("ana I", "kīdu I"),
             QueryResult(
                 [],
@@ -727,7 +727,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.LINE,
+            LemmaQueryType.LINE,
             ("kīdu I", "u I", "bamātu I"),
             QueryResult(
                 [
@@ -741,7 +741,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.AND,
+            LemmaQueryType.AND,
             ("kur II", "uk I", "ap III"),
             QueryResult(
                 [
@@ -755,7 +755,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.PHRASE,
+            LemmaQueryType.PHRASE,
             ("uk I", "kur II"),
             QueryResult(
                 [
@@ -769,7 +769,7 @@ def test_update_update_references(fragment_repository):
             ),
         ),
         (
-            QueryType.PHRASE,
+            LemmaQueryType.PHRASE,
             ("uk I", "ap III"),
             QueryResult(
                 [],
@@ -780,7 +780,7 @@ def test_update_update_references(fragment_repository):
 )
 def test_query_lemmas(
     fragment_repository: FragmentRepository,
-    query_type: QueryType,
+    query_type: LemmaQueryType,
     lemmas: Tuple[str],
     expected: QueryResult,
 ):

@@ -1,7 +1,16 @@
 from typing import Sequence
 import attr
+from enum import Enum
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
+
+
+class LemmaQueryType(Enum):
+    AND = "and"
+    OR = "or"
+    LINE = "line"
+    PHRASE = "phrase"
+    LEMMA = "lemma"
 
 
 @attr.s(auto_attribs=True, frozen=True)

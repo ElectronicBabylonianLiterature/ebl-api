@@ -1,9 +1,7 @@
 from typing import List, Dict
 from ebl.fragmentarium.infrastructure.queries import number_is
-from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
-    QueryType,
-    LemmaMatcher,
-)
+from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaMatcher
+from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
 
 VOCAB_PATH = "vocabulary"
@@ -17,7 +15,7 @@ class PatternMatcher:
         self._lemma_matcher = (
             LemmaMatcher(
                 query["lemmas"],
-                query.get("lemmaOperator", QueryType.AND),
+                query.get("lemmaOperator", LemmaQueryType.AND),
             )
             if "lemmas" in query
             else None

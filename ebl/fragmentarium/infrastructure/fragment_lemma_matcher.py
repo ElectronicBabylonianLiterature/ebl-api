@@ -1,27 +1,6 @@
-from enum import Enum
-from typing import List, Dict, Union
-
-
-class QueryType(Enum):
-    AND = "and"
-    OR = "or"
-    LINE = "line"
-    PHRASE = "phrase"
-    LEMMA = "lemma"
-
-
-def flatten_field(input_: Union[str, Dict]) -> Dict:
-    return {
-        "$reduce": {
-            "input": input_,
-            "initialValue": [],
-            "in": {"$concatArrays": ["$$value", "$$this"]},
-        }
-    }
-
-
-def drop_duplicates(input_: Union[str, Dict]) -> Dict:
-    return {"$setUnion": [input_, []]}
+from ebl.common.query.query_result import LemmaQueryType
+from ebl.common.query.util import flatten_field, drop_duplicates
+from typing import List, Dict
 
 
 class LemmaMatcher:
@@ -32,18 +11,18 @@ class LemmaMatcher:
     def __init__(
         self,
         pattern: List[str],
-        query_type: QueryType,
+        query_type: LemmaQueryType,
     ):
         self.pattern = pattern
         self.query_type = query_type
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipelines = {
-            QueryType.LEMMA: self._lemma,
-            QueryType.AND: self._and,
-            QueryType.OR: self._or,
-            QueryType.LINE: self._line,
-            QueryType.PHRASE: self._phrase,
+            LemmaQueryType.LEMMA: self._lemma,
+            LemmaQueryType.AND: self._and,
+            LemmaQueryType.OR: self._or,
+            LemmaQueryType.LINE: self._line,
+            LemmaQueryType.PHRASE: self._phrase,
         }
         return pipelines[self.query_type](count_matches_per_item)
 
