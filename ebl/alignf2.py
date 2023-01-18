@@ -1,6 +1,6 @@
 import time
 import re
-from typing import Counter
+from collections import Counter
 
 from alignment.vocabulary import Vocabulary
 
