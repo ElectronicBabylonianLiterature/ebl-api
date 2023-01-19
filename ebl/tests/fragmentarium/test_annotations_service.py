@@ -18,13 +18,6 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 SCHEMA = AnnotationsSchema()
 
 
-def test_label_by_line_number(text_with_labels, annotations_service):
-    assert (
-        annotations_service._label_by_line_number(2, text_with_labels.labels)
-        == "i Stone wig Stone wig 2"
-    )
-
-
 def test_cropped_images_from_sign(
     annotations_repository,
     fragment_repository,
@@ -34,7 +27,7 @@ def test_cropped_images_from_sign(
     annotations_service,
 ):
     single_annotation = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(path=[2, 0, 0])
+        data=AnnotationDataFactory.build(path=[3, 0, 0])
     )
     annotation = AnnotationsFactory.build(annotations=[single_annotation])
 
@@ -55,7 +48,7 @@ def test_cropped_images_from_sign(
     )
     for annotation, cropped_image in zip(annotations.annotations, cropped_images):
         assert annotation.cropped_sign.image_id == cropped_image.image_id
-        assert annotation.cropped_sign.label == "i Stone wig Stone wig 2"
+        assert annotation.cropped_sign.label == "i Stone wig"
 
 
 def test_generate_annotations(
@@ -144,7 +137,7 @@ def test_update(
         annotation,
         cropped_sign=CroppedSignFactory.build(
             image_id="test-id",
-            label="i Stone wig Stone wig 2",
+            label="i",
         ),
     )
     expected_annotations = attr.evolve(

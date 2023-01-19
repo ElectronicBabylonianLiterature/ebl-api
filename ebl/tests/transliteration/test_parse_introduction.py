@@ -29,6 +29,10 @@ from ebl.transliteration.domain.markup import (
             (BibliographyPart.of(BibliographyId("RN123"), "x 2-3a"),),
         ),
         (
+            "@bib{NO_PAGES}",
+            (BibliographyPart.of(BibliographyId("NO_PAGES"), ""),),
+        ),
+        (
             "First paragraph.\n\nSecond.\n\n\nLast.\n\n",
             (
                 StringPart("First paragraph."),
