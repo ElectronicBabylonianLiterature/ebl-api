@@ -128,9 +128,11 @@ def test_query_fragmentarium_transliteration(
 ):
     transliterated_fragments = [
         TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of("X.5"), script=Script(Period.LATE_BABYLONIAN)
+        ),
+        TransliteratedFragmentFactory.build(
             number=MuseumNumber.of("X.123"), script=Script(Period.MIDDLE_ASSYRIAN)
         ),
-        TransliteratedFragmentFactory.build(script=Script(Period.LATE_BABYLONIAN)),
     ]
     for fragment in transliterated_fragments:
         fragmentarium.create(fragment)

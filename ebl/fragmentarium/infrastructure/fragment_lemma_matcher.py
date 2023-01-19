@@ -1,5 +1,5 @@
 from ebl.common.query.query_result import LemmaQueryType
-from ebl.common.query.util import flatten_field, drop_duplicates
+from ebl.common.query.util import flatten_field, drop_duplicates, ngrams
 from typing import List, Dict
 
 
@@ -103,23 +103,7 @@ class LemmaMatcher:
             {"$match": {self.flat_path: {"$not": {"$size": 0}, "$exists": True}}},
             {
                 "$project": {
-                    "ngram": {
-                        "$zip": {
-                            "inputs": [
-                                f"${self.flat_path}",
-                                *(
-                                    {
-                                        "$slice": [
-                                            f"${self.flat_path}",
-                                            i + 1,
-                                            {"$size": f"${self.flat_path}"},
-                                        ]
-                                    }
-                                    for i in range(len(self.pattern) - 1)
-                                ),
-                            ]
-                        }
-                    },
+                    "ngram": ngrams(f"${self.flat_path}", n=len(self.pattern)),
                     "lineIndex": True,
                     "museumNumber": True,
                 }
