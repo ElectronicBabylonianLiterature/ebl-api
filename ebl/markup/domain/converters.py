@@ -1,16 +1,16 @@
 from typing import Sequence, Dict
 from ebl.transliteration.domain.markup import MarkupPart
-from ebl.transliteration.domain.lark_parser import parse_markup
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from marshmallow import ValidationError
+from ebl.transliteration.domain.lark_parser import parse_introduction
 
 
 def markup_from_string(string: str) -> Sequence[MarkupPart]:
     try:
-        return parse_markup(string) if string else tuple()
+        return parse_introduction(string) if string else tuple()
     except PARSE_ERRORS as error:
         raise ValidationError(f"Invalid markup: {string}. {error}") from error
 
