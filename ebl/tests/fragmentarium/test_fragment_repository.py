@@ -672,7 +672,7 @@ def test_update_update_references(fragment_repository):
     "query_type,lemmas,expected",
     [
         (
-            LemmaQueryType.LEMMA,
+            LemmaQueryType.AND,
             ("ana I",),
             QueryResult(
                 [

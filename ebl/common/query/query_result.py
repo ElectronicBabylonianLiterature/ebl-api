@@ -10,7 +10,6 @@ class LemmaQueryType(Enum):
     OR = "or"
     LINE = "line"
     PHRASE = "phrase"
-    LEMMA = "lemma"
 
 
 @attr.s(auto_attribs=True, frozen=True)

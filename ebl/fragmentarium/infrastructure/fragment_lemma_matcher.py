@@ -18,7 +18,6 @@ class LemmaMatcher:
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipelines = {
-            LemmaQueryType.LEMMA: self._lemma,
             LemmaQueryType.AND: self._and,
             LemmaQueryType.OR: self._or,
             LemmaQueryType.LINE: self._line,
@@ -75,14 +74,6 @@ class LemmaMatcher:
             {"$match": line_query},
             *self._rejoin_lines(count_matches_per_item),
         ]
-
-    def _lemma(self, count_matches_per_item=True) -> List[Dict]:
-        lemma = self.pattern[0]
-        return self._create_match_pipeline(
-            {self.unique_lemma_path: lemma},
-            {self.vocabulary_path: lemma},
-            count_matches_per_item,
-        )
 
     def _and(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
