@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Sequence, Tuple
 
 import attr
+from ebl.common.query.query_result import QueryResult
+from ebl.common.query.query_schemas import QueryResultSchema
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
@@ -24,6 +26,7 @@ from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
 from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.infrastructure.corpus_search_aggregations import CorpusPatternMatcher
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.genre import Genre
@@ -32,6 +35,9 @@ from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
+
+from pymongo.collation import Collation
+
 
 COLLECTION = "chapters"
 
@@ -181,6 +187,23 @@ class Corpus:
             )
             for line in self._repository.query_by_lemma(query, genre)
         )
+
+    def query(self, query: dict) -> QueryResult:
+        if set(query) - {"lemmaOperator"}:
+            matcher = CorpusPatternMatcher(query)
+            data = next(
+                self._fragments.aggregate(
+                    matcher.build_pipeline(),
+                    collation=Collation(
+                        locale="en", numericOrdering=True, alternate="shifted"
+                    ),
+                ),
+                None,
+            )
+        else:
+            data = None
+
+        return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
     def list(self) -> List[Text]:
         return self._repository.list()
