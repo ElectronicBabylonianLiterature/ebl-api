@@ -120,5 +120,5 @@ class LemmaMatcher:
                     }
                 }
             },
-            *self._rejoin_lines(),
+            *self._rejoin_lines(count_matches_per_item),
         ]
