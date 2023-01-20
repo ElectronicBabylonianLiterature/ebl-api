@@ -45,7 +45,11 @@ expected = [
     {"text": "². Following Borger’s request in ", "type": "StringPart"},
     {"text": "MesZL", "type": "EmphasisPart"},
     {
-        "text": '² p. viii, the very few deviations of <span style="color: #00610F;">different color</span>. These editions, such as the repeated paragraph in p. 418 (see ',
+        "text": (
+            "² p. viii, the very few deviations of "
+            '<span style="color: #00610F;">different color</span>. '
+            "These editions, such as the repeated paragraph in p. 418 (see "
+        ),
         "type": "StringPart",
     },
     {"url": "https://www.ebl.lmu.de/signs/DIŠ", "text": "here", "type": "UrlPart"},
