@@ -1,7 +1,10 @@
 import falcon
 from pydash.arrays import flatten_deep
+from pydash import flow
 
 from ebl.cache.application.custom_cache import CustomCache
+from ebl.common.query.parameter_parser import parse_lemmas
+from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
@@ -13,6 +16,9 @@ from ebl.corpus.web.display_schemas import DictionaryLineDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.transliteration.application.transliteration_query_factory import (
+    TransliterationQueryFactory,
+)
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.web.require_scope import require_scope
@@ -111,3 +117,21 @@ class ChaptersByLemmaResource:
             ],
             many=True,
         )
+
+
+class CorpusQueryResource:
+    def __init__(
+        self,
+        corpus: Corpus,
+        transliteration_query_factory: TransliterationQueryFactory,
+    ):
+        self._corpus = corpus
+        self._transliteration_query_factory = transliteration_query_factory
+
+    @falcon.before(require_scope, "read:texts")
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        parse = flow(
+            parse_lemmas,
+        )
+
+        resp.media = QueryResultSchema().dump(self._corpus.query(parse(req.params)))

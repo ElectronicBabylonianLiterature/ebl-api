@@ -7,6 +7,7 @@ from ebl.corpus.web.chapters import (
     ChaptersByLemmaResource,
     ChaptersDisplayResource,
     ChaptersResource,
+    CorpusQueryResource,
 )
 from ebl.corpus.web.colophons import ColophonsResource
 from ebl.corpus.web.extant_lines import ExtantLinesResource
@@ -47,6 +48,9 @@ def create_corpus_routes(api: falcon.App, context: Context):
     colophons = ColophonsResource(corpus)
     unplaced_lines = UnplacedLinesResource(corpus)
     extant_lines = ExtantLinesResource(corpus)
+    corpus_query = CorpusQueryResource(
+        corpus, context.get_transliteration_query_factory()
+    )
 
     text_url = "/texts/{genre}/{category}/{index}"
     chapter_url = text_url + "/chapters/{stage}/{name}"
@@ -67,3 +71,4 @@ def create_corpus_routes(api: falcon.App, context: Context):
     api.add_route(f"{chapter_url}/unplaced_lines", unplaced_lines)
     api.add_route(f"{chapter_url}/extant_lines", extant_lines)
     api.add_route("/lemmasearch", chapters_by_lemma)
+    api.add_route("/corpus/query", corpus_query)
