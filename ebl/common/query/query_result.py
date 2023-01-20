@@ -32,19 +32,12 @@ class QueryResult:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class CorpusLineMatch:
-    line: int
-    variant: int
-    reconstruction: bool
-    manuscripts: Sequence[int]
-
-
-@attr.s(auto_attribs=True, frozen=True)
 class CorpusQueryItem:
     text_id: TextId
     stage: Stage
     name: str
-    matching_lines: Sequence[CorpusLineMatch]
+    lines: Sequence[int]
+    variants: Sequence[int]
     match_count: int
 
 
