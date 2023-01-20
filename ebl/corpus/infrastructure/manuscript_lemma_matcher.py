@@ -37,10 +37,13 @@ class ManuscriptLemmaMatcher:
                     "name": 1,
                 }
             },
-            {"$unwind": {"path": "$manuscriptLine", "includeArrayIndex": "variantIndex"}},
             {
-                "$unwind": f"${self.manuscript_line_path}"
+                "$unwind": {
+                    "path": f"${self.manuscript_line_path}",
+                    "includeArrayIndex": "variantIndex",
+                }
             },
+            {"$unwind": f"${self.manuscript_line_path}"},
         ]
 
     def _rejoin_lines(self, count_matches_per_item=True) -> List[Dict]:
@@ -145,4 +148,3 @@ class ManuscriptLemmaMatcher:
             },
             *self._rejoin_lines(count_matches_per_item),
         ]
-
