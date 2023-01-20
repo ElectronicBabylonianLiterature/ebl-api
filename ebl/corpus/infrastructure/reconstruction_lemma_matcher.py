@@ -147,10 +147,3 @@ class ReconstructionLemmaMatcher:
             },
             *self._rejoin_lines(count_matches_per_item),
         ]
-
-
-if __name__ == "__main__":
-    matcher = ReconstructionLemmaMatcher(["zakāru I", "ana I"], LemmaQueryType.AND)
-    import json
-
-    print(json.dumps(matcher.build_pipeline(), indent=2))
