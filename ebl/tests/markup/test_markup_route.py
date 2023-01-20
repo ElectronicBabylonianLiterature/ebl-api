@@ -29,10 +29,7 @@ expected = [
         },
         "type": "BibliographyPart",
     },
-    {
-        "text": "website   the   third   chapter   of   R.   Borger’s ",
-        "type": "StringPart",
-    },
+    {"text": "website the third chapter of R. Borger’s ", "type": "StringPart"},
     {"text": "Mesopotamisches Zeichenlexikon", "type": "EmphasisPart"},
     {
         "text": " (Alter Orient und Altes Testament 305. Münster, ²2010). ",
@@ -40,7 +37,7 @@ expected = [
     },
     {
         "url": "https://www.hethport.uni-wuerzburg.de/cuneifont/",
-        "text": "Assurbanipal   font",
+        "text": "Assurbanipal font",
         "type": "UrlPart",
     },
     {"text": ". contain all glyphs from ", "type": "StringPart"},
@@ -48,20 +45,13 @@ expected = [
     {"text": "². Following Borger’s request in ", "type": "StringPart"},
     {"text": "MesZL", "type": "EmphasisPart"},
     {
-        "text": (
-            "² p. viii, the very few deviations of "
-            '<span   style="color:   #00610F;">different   color</span>.   '
-            "These editions,   such   as   the   repeated   paragraph   in   p.   418   (see "
-        ),
+        "text": '² p. viii, the very few deviations of <span style="color: #00610F;">different color</span>. These editions, such as the repeated paragraph in p. 418 (see ',
         "type": "StringPart",
     },
     {"url": "https://www.ebl.lmu.de/signs/DIŠ", "text": "here", "type": "UrlPart"},
-    {"text": "). the   digitization   of   his   ", "type": "StringPart"},
-    {"text": "magnum   opus", "type": "EmphasisPart"},
-    {
-        "text": "   would   have   made   the   project The entire ",
-        "type": "StringPart",
-    },
+    {"text": "). the digitization of his ", "type": "StringPart"},
+    {"text": "magnum opus", "type": "EmphasisPart"},
+    {"text": " would have made the project The entire ", "type": "StringPart"},
     {"text": "MesZL", "type": "EmphasisPart"},
     {"text": "², not only the third chapter reproduced on this ", "type": "StringPart"},
     {
@@ -79,6 +69,5 @@ def test_get_markup(client):
             "text": markup_string,
         },
     )
-    print(result.json)
     assert result.json == expected
     assert result.status == falcon.HTTP_OK
