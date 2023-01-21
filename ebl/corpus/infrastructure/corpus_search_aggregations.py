@@ -163,12 +163,14 @@ class CorpusPatternMatcher:
                 [
                     {
                         "$project": {
-                            "_id": 1,
-                            "museumNumber": 1,
-                            "matchingLines": [],
+                            "textId": True,
+                            "stage": True,
+                            "name": True,
+                            "lines": [],
+                            "variants": [],
+                            "matchCount": {"$literal": 0},
                         }
                     },
-                    {"$addFields": {"matchCount": 0}},
                 ]
             )
 
