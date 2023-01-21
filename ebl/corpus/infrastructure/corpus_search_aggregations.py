@@ -148,10 +148,12 @@ class CorpusPatternMatcher:
         pipeline = []
 
         if all(
-            self._reconstruction_lemma_matcher,
-            self._manuscript_lemma_matcher,
-            include_reconstruction,
-            include_manuscripts,
+            [
+                self._reconstruction_lemma_matcher,
+                self._manuscript_lemma_matcher,
+                include_reconstruction,
+                include_manuscripts,
+            ]
         ):
             pipeline.extend(self._merge_pipelines())
         elif self._reconstruction_lemma_matcher and include_reconstruction:
