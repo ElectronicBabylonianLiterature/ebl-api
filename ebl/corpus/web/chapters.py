@@ -4,7 +4,7 @@ from pydash import flow
 
 from ebl.cache.application.custom_cache import CustomCache
 from ebl.common.query.parameter_parser import parse_lemmas
-from ebl.common.query.query_schemas import QueryResultSchema
+from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
@@ -134,4 +134,6 @@ class CorpusQueryResource:
             parse_lemmas,
         )
 
-        resp.media = QueryResultSchema().dump(self._corpus.query(parse(req.params)))
+        resp.media = CorpusQueryResultSchema().dump(
+            self._corpus.query(parse(req.params))
+        )
