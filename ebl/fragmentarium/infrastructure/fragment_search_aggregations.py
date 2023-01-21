@@ -122,12 +122,12 @@ class PatternMatcher:
                 [
                     {
                         "$project": {
-                            "_id": 1,
-                            "museumNumber": 1,
+                            "_id": True,
+                            "museumNumber": True,
                             "matchingLines": [],
+                            "matchCount": {"$literal": 0},
                         }
                     },
-                    {"$addFields": {"matchCount": 0}},
                 ]
             )
 
