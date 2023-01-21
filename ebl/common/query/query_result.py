@@ -44,3 +44,7 @@ class CorpusQueryItem:
 @attr.s(auto_attribs=True, frozen=True)
 class CorpusQueryResult(QueryResult):
     items: Sequence[CorpusQueryItem]
+
+    @staticmethod
+    def create_empty() -> "CorpusQueryResult":
+        return CorpusQueryResult([], 0)
