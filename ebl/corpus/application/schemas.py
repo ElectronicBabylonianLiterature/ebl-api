@@ -4,7 +4,7 @@ from marshmallow import (
     fields,
     post_load,
     validate,
-    validates_schema,
+    validates_schema, EXCLUDE,
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
@@ -259,6 +259,19 @@ class DictionaryLinePaginationSchema(Schema):
     total_count = fields.Integer(required=True, data_key="totalCount")
 
 
+class ChapterAlignmentSchema(Schema):
+    text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
+    manuscripts = fields.Nested(ManuscriptSchema, many=True, required=True)
+    signs = fields.List(fields.String(), load_default=tuple())
+
+    @post_load
+    def make_chapter(self, data: dict, **kwargs) -> Chapter:
+        return Chapter(
+            text_id=data["text_id"],
+            manuscripts=tuple(data["manuscripts"]),
+            signs=tuple(data["signs"]),
+        )
+
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnum(Classification, required=True)
@@ -334,6 +347,42 @@ class ChapterListingSchema(Schema):
             data["name"],
             tuple(data["translation"]),
             tuple(data["uncertain_fragments"]),
+        )
+
+class ChapterListingAlignmentSchema(Schema):
+    stage = ValueEnum(Stage, required=True)
+    name = fields.String(required=True, validate=validate.Length(min=1))
+
+    @post_load
+    def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
+        return ChapterListing(
+            Stage(data["stage"]),
+            data["name"],
+            tuple(),
+            tuple(),
+        )
+
+
+class TextAlignmentSchema(Schema):
+    genre = ValueEnum(Genre, load_default=Genre.LITERATURE)
+    category = fields.Integer(required=True, validate=validate.Range(min=0))
+    index = fields.Integer(required=True, validate=validate.Range(min=0))
+    name = fields.String(required=True, validate=validate.Length(min=1))
+    chapters = fields.Nested(ChapterListingAlignmentSchema, unknown=EXCLUDE, many=True, required=True)
+
+    @post_load
+    def make_text(self, data: dict, **kwargs) -> Text:
+        return Text(
+            data["genre"],
+            data["category"],
+            data["index"],
+            data["name"],
+            has_doi=False,
+            number_of_verses=-1,
+            approximate_verses=False,
+            intro="",
+            chapters=tuple(data["chapters"]),
+            references=tuple(),
         )
 
 

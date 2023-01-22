@@ -1,9 +1,9 @@
 from alignment.vocabulary import Vocabulary
 from hamcrest import assert_that, has_properties, contains_exactly
 
-from ebl.alignment.application.align import align, align_pair
-from ebl.alignment.domain.sequence import NamedSequence
-from ebl.alignment.domain.scoring import match
+from ebl.aalignment.application.align import align, align_pair
+from ebl.aalignment.domain.sequence import NamedSequence
+from ebl.aalignment.domain.scoring import match
 
 
 def test_align_pair() -> None:

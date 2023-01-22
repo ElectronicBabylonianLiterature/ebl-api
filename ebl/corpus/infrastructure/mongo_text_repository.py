@@ -1,6 +1,7 @@
 from typing import List, Optional, Tuple, Sequence, Dict
 
 import pymongo
+from marshmallow import EXCLUDE
 from pymongo.database import Database
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
@@ -12,7 +13,7 @@ from ebl.corpus.application.schemas import (
     LineSchema,
     ManuscriptSchema,
     TextSchema,
-    ManuscriptAttestationSchema,
+    ManuscriptAttestationSchema, ChapterAlignmentSchema, TextAlignmentSchema,
 )
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
@@ -137,6 +138,15 @@ class MongoTextRepository(TextRepository):
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
+    def find_chapter_for_alignment(self, id_: ChapterId) -> Chapter:
+        try:
+            chapter = self._chapters.find_one(
+                chapter_id_query(id_), projection={"_id": False}
+            )
+            return ChapterAlignmentSchema(unknown=EXCLUDE).load(chapter)
+        except NotFoundError as error:
+            raise chapter_not_found(id_) from error
+
     def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         try:
             text = self.find(id_.text_id)
@@ -167,6 +177,23 @@ class MongoTextRepository(TextRepository):
             return LineSchema().load(next(chapters))
         except StopIteration as error:
             raise line_not_found(id_, number) from error
+
+    def list_alignment(self) -> List[Text]:
+        return TextAlignmentSchema(unknown=EXCLUDE).load(
+            self._texts.aggregate(
+                [
+                    *join_reference_documents(),
+                    *join_chapters(False),
+                    {
+                        "$sort": {
+                            "category": pymongo.ASCENDING,
+                            "index": pymongo.ASCENDING,
+                        }
+                    },
+                ]
+            ),
+            many=True,
+        )
 
     def list(self) -> List[Text]:
         return TextSchema().load(

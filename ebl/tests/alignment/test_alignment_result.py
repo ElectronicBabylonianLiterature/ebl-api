@@ -1,7 +1,7 @@
 from alignment.vocabulary import Vocabulary
 
-from ebl.alignment.domain.result import AlignmentResult
-from ebl.alignment.domain.sequence import NamedSequence
+from ebl.aalignment.domain.result import AlignmentResult
+from ebl.aalignment.domain.sequence import NamedSequence
 
 
 def test_alignment_result() -> None:

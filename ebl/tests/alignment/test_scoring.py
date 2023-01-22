@@ -1,7 +1,7 @@
 from alignment.vocabulary import Vocabulary
 import pytest
 
-from ebl.alignment.domain.scoring import EblScoring
+from ebl.aalignment.domain.scoring import EblScoring
 
 
 @pytest.mark.parametrize(

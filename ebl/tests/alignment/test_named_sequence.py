@@ -1,6 +1,6 @@
 from alignment.sequence import Sequence
 from alignment.vocabulary import Vocabulary
-from ebl.alignment.domain.sequence import NamedSequence
+from ebl.aalignment.domain.sequence import NamedSequence
 from ebl.tests.factories.fragment import FragmentFactory
 
 signs = "X X ABZ001\nABZ002\nX X X\n"
