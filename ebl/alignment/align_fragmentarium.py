@@ -108,7 +108,7 @@ def parse_arguments() -> argparse.Namespace:
         "-s", "--skip", type=int, default=0, help="Number of fragments to skip."
     )
     parser.add_argument(
-        "-l", "--limit", type=int, default=10, help="Number of fragments to align."
+        "-l", "--limit", type=int, default=25000, help="Number of fragments to align."
     )
     parser.add_argument(
         "--minScore",
@@ -121,7 +121,7 @@ def parse_arguments() -> argparse.Namespace:
         "--maxLines",
         dest="max_lines",
         type=int,
-        default=20,
+        default=10,
         help="Maximum size of fragment to align.",
     )
     parser.add_argument(
@@ -132,12 +132,13 @@ def parse_arguments() -> argparse.Namespace:
         help="Filename for saving the results.",
     )
     parser.add_argument(
-        "-w", "--workers", type=int, default=4, help="Number of parallel workers."
+        "-w", "--workers", default=None, help="Number of parallel workers."
     )
     parser.add_argument(
         "-t",
         "--threads",
         action="store_true",
+        default=True,
         help="Use threads instead of processes.",
     )
 
