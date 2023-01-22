@@ -41,5 +41,5 @@ class NamedSequence:
         return NamedSequence(name, seq)
 
     @staticmethod
-    def of_fragment(fragment: Fragment, vocabulary: Vocabulary) -> "NamedSequence":
-        return NamedSequence.of_signs(fragment.number, fragment.signs, vocabulary)
+    def of_fragment(fragment_number, fragment_signs, vocabulary: Vocabulary) -> "NamedSequence":
+        return NamedSequence.of_signs(fragment_number, fragment_signs, vocabulary)

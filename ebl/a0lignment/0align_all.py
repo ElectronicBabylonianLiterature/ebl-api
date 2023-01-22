@@ -35,10 +35,8 @@ def align_pairs(pairs):
     return sorted(alignments, key=lambda x: x.score, reverse=True)
 
 
-def _align_fragment(number, chapter):
-    context = create_context()
-    fragment = context.fragment_repository.query_by_museum_number(number)
-    fragment_sequence = NamedSequence.of_fragment(fragment, vocabulary)
+def _align_fragment(fragment, chapter):
+    fragment_sequence = NamedSequence.of_fragment(fragment["_id"], fragment["signs"], vocabulary)
 
     pairs = [
         (
@@ -53,28 +51,21 @@ def _align_fragment(number, chapter):
     return align_pairs(pairs)
 
 def to_dict(
-    fragment, text, chapter, result
+    result
 ) -> dict:
-    common = {
+    return {
         "fragment": result.a.name,
         "manuscript": result.b.name,
-        "text id": text.id,
-        "text name": text.name,
-        "chapter": f"{chapter.stage.abbreviation} {chapter.name}",
-        "notes": fragment.notes,
-    }
-    return {
-        **common,
-        "score": result.score,
+        "score": result.score
     }
 
 def align_fragment(number, chapters):
     context = create_context()
-    fragment = context.fragment_repository.query_by_museum_number(number)
+    fragment = context.fragment_repository.query_by_museum_number_alignment(number)
     results = []
     for text, chapter in chapters:
-        for result in _align_fragment(number, chapter):
-            results.append(to_dict(fragment, text, chapter, result))
+        for result in _align_fragment(fragment, chapter):
+            results.append(to_dict(result))
 
     return results
 
@@ -107,6 +98,8 @@ if __name__ == "__main__":
 
     #asd = align_fragment(fragment_numbers[0], chapters)
 
+
+
     Executor = ThreadPoolExecutor if threads else ProcessPoolExecutor
 
     with Executor(max_workers=workers) as executor, open(
@@ -125,12 +118,8 @@ if __name__ == "__main__":
 
         fieldnames = [
             "fragment",
-            "text id",
-            "text name",
-            "chapter",
             "manuscript",
             "score",
-            "notes"
         ]
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writeheader()
@@ -138,6 +127,7 @@ if __name__ == "__main__":
         for fragment_results in results:
             for result in fragment_results:
                 writer.writerow(result)
+
 
     t = time.time()
     print(f"\nTime: {round((t-t0)/60, 2)} min")

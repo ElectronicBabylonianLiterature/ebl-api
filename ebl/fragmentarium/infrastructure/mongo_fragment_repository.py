@@ -219,6 +219,22 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
+
+    def query_by_museum_number_alignment(
+        self, number: MuseumNumber
+    ):
+        data = self._fragments.aggregate(
+            [
+                {"$match": museum_number_is(number)},
+                {"$project": {"_id": 1, "signs": 1}},
+            ]
+        )
+        try:
+            return next(data)
+        except StopIteration as error:
+            raise NotFoundError(f"Fragment {number} not found.") from error
+
+
     @staticmethod
     def _query_fragmentarium_create_query(
         query: FragmentariumSearchQuery,
