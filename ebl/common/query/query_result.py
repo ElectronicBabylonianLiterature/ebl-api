@@ -42,8 +42,9 @@ class CorpusQueryItem:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class CorpusQueryResult(QueryResult):
+class CorpusQueryResult:
     items: Sequence[CorpusQueryItem]
+    match_count_total: int
 
     @staticmethod
     def create_empty() -> "CorpusQueryResult":

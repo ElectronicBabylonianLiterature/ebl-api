@@ -36,7 +36,7 @@ class CorpusQueryItemSchema(Schema):
     match_count = fields.Integer(required=True, data_key="matchCount")
 
     @post_load
-    def make_query_item(self, data, **kwargs) -> QueryItem:
+    def make_query_item(self, data, **kwargs) -> CorpusQueryItem:
         data["lines"] = tuple(data["lines"])
         data["variants"] = tuple(data["variants"])
         return CorpusQueryItem(**data)
@@ -55,5 +55,5 @@ class CorpusQueryResultSchema(QueryResultSchema):
     items = fields.Nested(CorpusQueryItemSchema, many=True, required=True)
 
     @post_load
-    def make_query_result(self, data, **kwargs) -> QueryResult:
+    def make_query_result(self, data, **kwargs) -> CorpusQueryResult:
         return CorpusQueryResult(**data)
