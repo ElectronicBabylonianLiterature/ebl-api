@@ -133,7 +133,7 @@ class ReconstructionLemmaMatcher:
                     "museumNumber": True,
                 }
             },
-            {"$addFields": {"ngram": {"$setUnion": ["$ngram", []]}}},
+            {"$addFields": {"ngram": drop_duplicates("$ngram")}},
             {"$unwind": "$ngram"},
             {
                 "$match": {
