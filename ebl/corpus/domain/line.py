@@ -1,4 +1,4 @@
-from typing import Optional, Sequence
+from typing import Sequence
 
 import attr
 import pydash
@@ -54,12 +54,12 @@ class Line:
         else:
             return manuscript_line
 
-    def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
+    def get_manuscript_text_lines(self, manuscript_id: int) -> Sequence[TextLine]:
         return (
             pydash.chain(self.variants)
-            .map_(lambda variant: variant.get_manuscript_text_line(manuscript_id))
+            .map_(lambda variant: variant.get_manuscript_text_lines(manuscript_id))
+            .flatten()
             .reject(pydash.is_none)
-            .head()
             .value()
         )
 

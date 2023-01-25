@@ -93,13 +93,12 @@ class LineVariant:
             .value()
         )
 
-    def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
+    def get_manuscript_text_lines(self, manuscript_id: int) -> Sequence[TextLine]:
         return (
             pydash.chain(self.manuscripts)
             .filter(lambda manuscript: manuscript.manuscript_id == manuscript_id)
             .map_(lambda manuscript: manuscript.line)
             .filter(lambda line: isinstance(line, TextLine))
-            .head()
             .value()
         )
 

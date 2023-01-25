@@ -207,7 +207,7 @@ class Chapter:
                 ExtantLine.of(line, manuscript_id)
                 for line in self.lines
                 if manuscript_id in line.manuscript_ids
-                and line.get_manuscript_text_line(manuscript_id) is not None
+                and line.get_manuscript_text_lines(manuscript_id)
             ),
             lambda extant_line: extant_line.label,
         )
@@ -215,13 +215,14 @@ class Chapter:
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript
     ) -> Sequence[TextLineEntry]:
-        def create_entry(line: Line, index: int) -> Optional[TextLineEntry]:
-            text_line = line.get_manuscript_text_line(manuscript.id)
-            return TextLineEntry(text_line, index) if text_line else None
+        def create_entries(line: Line, index: int) -> Sequence[TextLineEntry]:
+            text_lines = line.get_manuscript_text_lines(manuscript.id)
+            return [TextLineEntry(line, index) for line in text_lines]
 
         return (
             pydash.chain(self.lines)
-            .map_(create_entry)
+            .map_(create_entries)
+            .flatten()
             .reject(pydash.is_none)
             .concat([TextLineEntry(line, None) for line in manuscript.text_lines])
             .value()

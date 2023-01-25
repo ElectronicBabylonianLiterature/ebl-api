@@ -112,12 +112,18 @@ LINE_VARIANT_2 = LineVariant(
 LINE_2 = Line(LineNumber(2), (LINE_VARIANT_2,))
 
 MANUSCRIPT_TEXT_3 = attr.evolve(MANUSCRIPT_TEXT_1, line_number=LineNumber(3))
+MANUSCRIPT_TEXT_4 = attr.evolve(MANUSCRIPT_TEXT_1, line_number=LineNumber(4))
 LINE_VARIANT_3 = LineVariant(
     LINE_RECONSTRUCTION,
     None,
     (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_3),),
 )
-LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
+LINE_VARIANT_4 = LineVariant(
+    LINE_RECONSTRUCTION,
+    None,
+    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_4),),
+)
+LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3, LINE_VARIANT_4))
 
 RECORD = Record(
     (Author("Author", "Test", AuthorRole.EDITOR, ""),),
@@ -339,6 +345,7 @@ def test_text_lines() -> None:
         [
             TextLineEntry(MANUSCRIPT_TEXT_1, 0),
             TextLineEntry(MANUSCRIPT_TEXT_3, 2),
+            TextLineEntry(MANUSCRIPT_TEXT_4, 2),
             *[TextLineEntry(line, None) for line in COLOPHON.text_lines],
             *[TextLineEntry(line, None) for line in UNPLACED_LINES.text_lines],
         ]
