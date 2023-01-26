@@ -128,7 +128,9 @@ class Chapter:
         return [
             (self.manuscripts[index].siglum, text_lines[index][number])
             for index, signs in enumerate(self.signs)
-            for number, line in enumerate(signs.split("\n"))
+            for number, line in enumerate(
+                signs.rstrip("\n").split("\n") if "\n" in signs else []
+            )
             if "?" in line
         ]
 
@@ -223,7 +225,6 @@ class Chapter:
             pydash.chain(self.lines)
             .map_(create_entries)
             .flatten()
-            .reject(pydash.is_none)
             .concat([TextLineEntry(line, None) for line in manuscript.text_lines])
             .value()
         )

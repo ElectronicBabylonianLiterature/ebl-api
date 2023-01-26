@@ -563,7 +563,7 @@ def test_updating_manuscripts(
             ),
         ),
         uncertain_fragments=uncertain_fragments,
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\n",),
     )
     expect_find_and_update_chapter(
         bibliography,
@@ -668,7 +668,7 @@ def test_updating_lines_edit(
                 ),
             ).set_variant_alignment_flags(),
         ),
-        signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",),
+        signs=("ABZ075 KU ABZ207a\\u002F207b\\u0020X\nKU\nABZ075\n",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(
@@ -697,7 +697,7 @@ def test_updating_lines_delete(
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=CHAPTER.lines[1:],
-        signs=("KU\nABZ075",),
+        signs=("KU\nABZ075\n",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(
@@ -744,7 +744,7 @@ def test_updating_lines_add(
                 ),
             ).set_variant_alignment_flags(),
         ),
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nABZ075\nKU\nABZ075",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nABZ075\nKU\nABZ075\n",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(
@@ -779,7 +779,7 @@ def test_importing_lines(
             *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
             *parse_chapter(atf, CHAPTER.manuscripts),
         ),
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075\n",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(
@@ -857,7 +857,7 @@ def test_merging_lines(
     updated_chapter = attr.evolve(
         CHAPTER,
         lines=(new_line,),
-        signs=("KU BA\nKU\nABZ075",),
+        signs=("KU BA\nKU\nABZ075\n",),
         parser_version=ATF_PARSER_VERSION,
     )
     expect_find_and_update_chapter(

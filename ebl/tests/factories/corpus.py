@@ -269,7 +269,7 @@ class ChapterFactory(factory.Factory):
     lines = factory.List(
         [factory.SubFactory(LineFactory, manuscript_id=1)], TupleFactory
     )
-    signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075",)
+    signs = ("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nKU\nABZ075\n",)
     record = factory.SubFactory(RecordFactory)
     parser_version = ""
     is_filtered_query = False
