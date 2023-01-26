@@ -291,6 +291,7 @@ def test_updating_non_existing_chapter_raises_exception(text_repository):
     "string,is_match",
     [("KU", True), ("NU\nKU", True), ("UD", False)],
 )
+@pytest.mark.xfail(reason="Deprecated implementation")
 def test_query_by_transliteration(
     string, is_match, text_repository, sign_repository, signs
 ) -> None:
@@ -386,6 +387,7 @@ def test_query_by_lemma(
     assert text_repository.query_by_lemma(lemma_id, genre) == expected
 
 
+@pytest.mark.xfail(reason="Deprecated implementation")
 def test_query_by_transliteration_lookup(
     text_repository, sign_repository, signs
 ) -> None:

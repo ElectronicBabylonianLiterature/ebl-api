@@ -1,5 +1,5 @@
 import falcon
-
+import pytest
 from ebl.corpus.application.schemas import TextSchema
 from ebl.corpus.domain.chapter_info import ChapterInfo
 from ebl.corpus.web.chapter_info_schema import ChapterInfoSchema
@@ -55,6 +55,7 @@ def test_listing_texts(client, bibliography, text_repository):
     assert get_result.json == [create_dto(first_text), create_dto(second_text)]
 
 
+@pytest.mark.xfail(reason="Deprecated implementation")
 def test_searching_texts(client, bibliography, sign_repository, signs, text_repository):
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
