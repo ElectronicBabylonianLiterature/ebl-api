@@ -18,17 +18,13 @@ class SignsUpdater:
         return attr.evolve(chapter, signs=self._create_signs(chapter))
 
     def _create_signs(self, chapter: Chapter) -> Sequence[Optional[str]]:
-        signs_per_manuscript = []
-        for manuscript in chapter.text_lines:
-            manuscript_lines = [entry.line for entry in manuscript]
-            signs_per_manuscript.append(
-                self._map_lines(manuscript_lines) if manuscript_lines else ""
-            )
-
-        return tuple(signs_per_manuscript)
+        return tuple(
+            self._map_lines([entry.line for entry in manuscript])
+            for manuscript in chapter.text_lines
+        )
 
     def _map_lines(self, lines: Sequence[TextLine]) -> str:
-        return "\n".join(self._map_line(line) for line in lines) + "\n"
+        return "\n".join(self._map_line(line) for line in lines)
 
     def _map_line(self, line: TextLine) -> str:
         visitor = SignsVisitor(self._sign_repository)

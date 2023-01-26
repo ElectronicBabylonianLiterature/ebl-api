@@ -4,7 +4,11 @@ from ebl.bibliography.application.reference_schema import (
     ReferenceSchema,
 )
 from ebl.bibliography.domain.reference import Reference
-from ebl.corpus.application.schemas import ChapterSchema, OldSiglumSchema
+from ebl.corpus.application.schemas import (
+    ChapterSchema,
+    OldSiglumSchema,
+    serialize_signs,
+)
 from ebl.corpus.application.record_schemas import (
     AuthorSchema,
     RecordSchema,
@@ -110,7 +114,7 @@ def to_dict(chapter: Chapter, include_documents=False):
         "version": chapter.version,
         "name": chapter.name,
         "order": chapter.order,
-        "signs": list(chapter.signs),
+        "signs": serialize_signs(chapter.signs),
         "record": RecordSchema().dump(chapter.record),
         "parserVersion": chapter.parser_version,
         "manuscripts": [

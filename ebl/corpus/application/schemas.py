@@ -1,3 +1,4 @@
+from typing import Sequence
 from marshmallow import (
     Schema,
     ValidationError,
@@ -259,6 +260,10 @@ class DictionaryLinePaginationSchema(Schema):
     total_count = fields.Integer(required=True, data_key="totalCount")
 
 
+def serialize_signs(signs: Sequence[str]) -> Sequence[Sequence[str]]:
+    return [sign_line.split("\n") if sign_line else [] for sign_line in signs]
+
+
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnum(Classification, required=True)
@@ -275,7 +280,11 @@ class ChapterSchema(Schema):
         data_key="uncertainFragments",
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
-    signs = fields.List(fields.String(), load_default=tuple())
+    signs = fields.Function(
+        lambda chapter: serialize_signs(chapter.signs),
+        lambda sign_lines: ["\n".join(line) for line in sign_lines],
+        required=True,
+    )
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
     is_filtered_query = fields.Bool(load_default=False, data_key="isFilteredQuery")

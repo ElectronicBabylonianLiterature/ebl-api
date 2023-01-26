@@ -262,7 +262,7 @@ def test_importing_invalidates_chapter_display_cache(
             *(line.set_variant_alignment_flags() for line in chapter.lines),
             *parse_chapter(atf, chapter.manuscripts),
         ),
-        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU\nABZ075\n",),
+        signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )
 
