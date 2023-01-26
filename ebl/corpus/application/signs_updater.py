@@ -20,8 +20,7 @@ class SignsUpdater:
     def _create_signs(self, chapter: Chapter) -> Sequence[str]:
         signs_per_manuscript = []
         for manuscript in chapter.text_lines:
-            manuscript_lines = [entry.line for entry in manuscript]
-            if manuscript_lines:
+            if manuscript_lines := [entry.line for entry in manuscript]:
                 signs_per_manuscript.append(self._map_lines(manuscript_lines))
 
         return tuple(signs_per_manuscript)
