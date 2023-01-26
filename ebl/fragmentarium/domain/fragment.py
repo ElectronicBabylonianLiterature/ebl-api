@@ -22,14 +22,12 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
-from ebl.transliteration.domain.lark_parser import (
-    parse_introduction as _parse_introduction,
-)
+from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
 
 
 def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
     try:
-        return _parse_introduction(introduction) if introduction else tuple()
+        return parse_markup_paragraphs(introduction) if introduction else tuple()
     except PARSE_ERRORS as error:
         raise ValidationError(
             f"Invalid introduction: {introduction}. {error}"
