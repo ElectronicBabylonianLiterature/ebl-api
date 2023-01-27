@@ -28,7 +28,9 @@ class SignMatcher:
                             "as": "m",
                             "in": {
                                 "manuscriptId": {"$arrayElemAt": ["$$m", 0]},
-                                "signs": {"$arrayElemAt": ["$$m", 1]},
+                                "signs": {
+                                    "$split": [{"$arrayElemAt": ["$$m", 1]}, "\n"]
+                                },
                             },
                         }
                     },
@@ -45,28 +47,45 @@ class SignMatcher:
             {"$unwind": "$manuscriptWithSigns"},
             {
                 "$project": {
-                    "signs": {"$split": ["$manuscriptWithSigns.signs", "\n"]},
                     "manuscriptIdsToInclude": "$manuscriptWithSigns.manuscriptId",
                     "textId": True,
                     "stage": True,
                     "name": True,
                     "manuscriptLines": True,
-                }
-            },
-            {
-                "$unwind": {
-                    "path": "$signs",
-                    "includeArrayIndex": "manuscriptLinesToInclude",
+                    "ngram": {
+                        "$zip": {
+                            "inputs": [
+                                "$manuscriptWithSigns.signs",
+                                {
+                                    "$slice": [
+                                        "$manuscriptWithSigns.signs",
+                                        1,
+                                        {"$size": "$manuscriptWithSigns.signs"},
+                                    ]
+                                },
+                            ]
+                        }
+                    },
                 }
             },
         ]
 
     def _match(self) -> List[Dict]:
-        # TODO: Construct proper ngram matching
         return [
-            {"$match": {"signs": {"$regex": r"^X.*X$"}}},
             {
-                "$project": {"signs": 0},
+                "$unwind": {
+                    "path": "$ngram",
+                    "includeArrayIndex": "manuscriptLinesToInclude",
+                }
+            },
+            {
+                "$match": {
+                    f"ngram.{i}": {"$regex": line_pattern}
+                    for i, line_pattern in enumerate(self.pattern)
+                }
+            },
+            {
+                "$project": {"signs": 0, "ngram": 0},
             },
         ]
 
@@ -105,19 +124,6 @@ class SignMatcher:
         return [
             {"$unwind": {"path": "$manuscriptId", "includeArrayIndex": "lineIndex"}},
             {"$unwind": {"path": "$manuscriptId", "includeArrayIndex": "variantIndex"}},
-        ]
-
-    def _create_ngrams(self) -> List[Dict]:
-        return [
-            {"$unwind": "$manuscript"},
-            {
-                "$project": {
-                    "ngram": ngrams("$manuscript.signs", len(self.pattern)),
-                    "manuscriptId": "$manuscript.id",
-                    "lines": True,
-                }
-            },
-            {"$unwind": "$ngram"},
         ]
 
     def _filter_textlines(self) -> List[Dict]:
@@ -217,5 +223,7 @@ class SignMatcher:
             *self._flatten_variants(),
             *self._filter_textlines(),
             *self._get_matching_variants(),
+            *self._regroup_chapters(),
         ]
+
         return pipeline
