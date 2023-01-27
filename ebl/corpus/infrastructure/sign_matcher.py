@@ -2,7 +2,7 @@ from typing import List, Dict
 from ebl.common.query.util import ngrams
 
 
-class SignMatcher:
+class CorpusSignMatcher:
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
 
@@ -208,10 +208,13 @@ class SignMatcher:
                     "textId": {"$first": "$textId"},
                     "name": {"$first": "$name"},
                     "stage": {"$first": "$stage"},
-                    "lineIndex": {"$push": "$lineIndex"},
-                    "variantIndex": {"$push": "$variantIndex"},
+                    "lines": {"$push": "$lineIndex"},
+                    "variants": {"$push": "$variantIndex"},
+                    "matchCount": {"$sum": 1},
                 }
-            }
+            },
+            {"$sort": {"matchCount": -1, "_id": 1}},
+            {"$project": {"_id": False}},
         ]
 
     def build_pipeline(self) -> List[Dict]:

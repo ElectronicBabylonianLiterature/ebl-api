@@ -4,6 +4,7 @@ from ebl.corpus.infrastructure.manuscript_lemma_matcher import ManuscriptLemmaMa
 from ebl.corpus.infrastructure.reconstruction_lemma_matcher import (
     ReconstructionLemmaMatcher,
 )
+from ebl.corpus.infrastructure.sign_matcher import CorpusSignMatcher
 
 
 class CorpusPatternMatcher:
@@ -24,6 +25,11 @@ class CorpusPatternMatcher:
                 query.get("lemmaOperator", LemmaQueryType.AND),
             )
             if "lemmas" in query
+            else None
+        )
+        self._sign_matcher = (
+            CorpusSignMatcher(query["transliteration"])
+            if "transliteration" in query
             else None
         )
 
