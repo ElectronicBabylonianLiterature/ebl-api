@@ -200,7 +200,7 @@ class CorpusSignMatcher:
             },
         ]
 
-    def _regroup_chapters(self) -> List[Dict]:
+    def _regroup_chapters(self, count_matches_per_item: bool) -> List[Dict]:
         return [
             {
                 "$group": {
@@ -210,14 +210,12 @@ class CorpusSignMatcher:
                     "stage": {"$first": "$stage"},
                     "lines": {"$push": "$lineIndex"},
                     "variants": {"$push": "$variantIndex"},
-                    "matchCount": {"$sum": 1},
+                    **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
-            {"$sort": {"matchCount": -1, "_id": 1}},
-            {"$project": {"_id": False}},
         ]
 
-    def build_pipeline(self) -> List[Dict]:
+    def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipeline = [
             *self._merge_manuscripts_and_signs(),
             *self._restructure_signs(),
@@ -226,7 +224,7 @@ class CorpusSignMatcher:
             *self._flatten_variants(),
             *self._filter_textlines(),
             *self._get_matching_variants(),
-            *self._regroup_chapters(),
+            *self._regroup_chapters(count_matches_per_item),
         ]
 
         return pipeline
