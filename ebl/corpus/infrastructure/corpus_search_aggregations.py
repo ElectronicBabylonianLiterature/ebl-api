@@ -80,28 +80,15 @@ class CorpusPatternMatcher:
             },
         ]
 
-    def _merge_pipelines(self) -> List[Dict]:
+    def _merge_pipelines(self, facets: Dict) -> List[Dict]:
         return [
             {
                 "$facet": {
-                    "reconstruction_lemmas": self._reconstruction_lemma_matcher.build_pipeline(
-                        count_matches_per_item=False
-                    ),
-                    "manuscript_lemmas": self._manuscript_lemma_matcher.build_pipeline(
-                        count_matches_per_item=False
-                    ),
+                    k: v.build_pipeline(count_matches_per_item=False)
+                    for k, v in facets.items()
                 }
             },
-            {
-                "$project": {
-                    "combined": {
-                        "$concatArrays": [
-                            "$reconstruction_lemmas",
-                            "$manuscript_lemmas",
-                        ]
-                    }
-                }
-            },
+            {"$project": {"combined": {"$concatArrays": [f"${k}" for k in facets]}}},
             {"$unwind": "$combined"},
             {"$replaceRoot": {"newRoot": "$combined"}},
             {
@@ -148,24 +135,21 @@ class CorpusPatternMatcher:
             },
         ]
 
-    def build_pipeline(
-        self, include_reconstruction=True, include_manuscripts=True
-    ) -> List[Dict]:
+    def build_pipeline(self) -> List[Dict]:
         pipeline = []
+        facets = {
+            "reconstruction_lemmas": self._reconstruction_lemma_matcher,
+            "manuscript_lemmas": self._manuscript_lemma_matcher,
+            "signs": self._sign_matcher,
+        }
+        included_facets = {k: v for k, v in facets.items() if v}
+        number_of_facets = len(included_facets)
 
-        if all(
-            [
-                self._reconstruction_lemma_matcher,
-                self._manuscript_lemma_matcher,
-                include_reconstruction,
-                include_manuscripts,
-            ]
-        ):
-            pipeline.extend(self._merge_pipelines())
-        elif self._reconstruction_lemma_matcher and include_reconstruction:
-            pipeline.extend(self._reconstruction_lemma_matcher.build_pipeline())
-        elif self._manuscript_lemma_matcher and include_manuscripts:
-            pipeline.extend(self._manuscript_lemma_matcher.build_pipeline())
+        if number_of_facets >= 2:
+            pipeline.extend(self._merge_pipelines(included_facets))
+        elif number_of_facets == 1:
+            matcher = next(iter(included_facets))
+            pipeline.extend(matcher.build_pipeline())
         else:
             pipeline.extend(
                 [
