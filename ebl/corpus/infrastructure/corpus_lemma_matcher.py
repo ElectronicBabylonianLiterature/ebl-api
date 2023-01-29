@@ -217,14 +217,14 @@ class CorpusLemmaMatcher:
 
     def _or(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
-            {"$or": self._lemma_path_combinations()},
+            {"$or": [{"fullVocabulary": lemma} for lemma in self.pattern]},
             {"$or": self._lemma_path_combinations(flat=True)},
             count_matches_per_item,
         )
 
     def _line(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
-            {"$and": self._lemma_path_combinations()},
+            {"$or": [{path: {"$all": self.pattern}} for path in self._lemma_paths]},
             {
                 "$or": [
                     {"flatReconstruction": {"$all": self.pattern}},
@@ -235,7 +235,8 @@ class CorpusLemmaMatcher:
 
     def _phrase(self, count_matches_per_item=True) -> List[Dict]:
         return [
-            {"$match": {"$and": self._lemma_path_combinations()}},
+            *self._join_vocabulary(),
+            {"$match": {"fullVocabulary": {"$all": self.pattern}}},
             {
                 "$project": {
                     self.reconstruction_lemma_path: 1,
@@ -270,9 +271,17 @@ class CorpusLemmaMatcher:
                             ]
                         },
                     ),
-                    "manuscriptLineNgrams": drop_duplicates(
-                        ngrams("$manuscriptLine", n=len(self.pattern))
+                    "manuscriptLineNgrams": filter_array(
+                        drop_duplicates(ngrams("$manuscriptLine", n=len(self.pattern))),
+                        "ngram",
+                        {
+                            "$and": [
+                                {"$in": [lemma, {"$arrayElemAt": ["$$ngram", i]}]}
+                                for i, lemma in enumerate(self.pattern)
+                            ]
+                        },
                     ),
                 }
             },
+            *self._rejoin_lines(count_matches_per_item),
         ]
