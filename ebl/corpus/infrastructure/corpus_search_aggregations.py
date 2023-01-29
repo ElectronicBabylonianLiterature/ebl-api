@@ -1,31 +1,21 @@
 from typing import Dict, List
 from ebl.common.query.query_result import LemmaQueryType
-from ebl.corpus.infrastructure.manuscript_lemma_matcher import ManuscriptLemmaMatcher
-from ebl.corpus.infrastructure.reconstruction_lemma_matcher import (
-    ReconstructionLemmaMatcher,
-)
+from ebl.corpus.infrastructure.corpus_lemma_matcher import CorpusLemmaMatcher
 
 
 class CorpusPatternMatcher:
     def __init__(self, query: Dict):
         self._query = query
 
-        self._reconstruction_lemma_matcher = (
-            ReconstructionLemmaMatcher(
+        self._lemma_matcher = (
+            CorpusLemmaMatcher(
                 query["lemmas"],
                 query.get("lemmaOperator", LemmaQueryType.AND),
             )
             if "lemmas" in query
             else None
         )
-        self._manuscript_lemma_matcher = (
-            ManuscriptLemmaMatcher(
-                query["lemmas"],
-                query.get("lemmaOperator", LemmaQueryType.AND),
-            )
-            if "lemmas" in query
-            else None
-        )
+        self._sign_matcher = None
 
     def _limit_result(self):
         return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
@@ -142,24 +132,15 @@ class CorpusPatternMatcher:
             },
         ]
 
-    def build_pipeline(
-        self, include_reconstruction=True, include_manuscripts=True
-    ) -> List[Dict]:
+    def build_pipeline(self) -> List[Dict]:
         pipeline = []
 
-        if all(
-            [
-                self._reconstruction_lemma_matcher,
-                self._manuscript_lemma_matcher,
-                include_reconstruction,
-                include_manuscripts,
-            ]
-        ):
+        if self._lemma_matcher and self._sign_matcher:
             pipeline.extend(self._merge_pipelines())
-        elif self._reconstruction_lemma_matcher and include_reconstruction:
-            pipeline.extend(self._reconstruction_lemma_matcher.build_pipeline())
-        elif self._manuscript_lemma_matcher and include_manuscripts:
-            pipeline.extend(self._manuscript_lemma_matcher.build_pipeline())
+        elif self._lemma_matcher:
+            pipeline.extend(self._lemma_matcher.build_pipeline())
+        elif self._sign_matcher:
+            pipeline.extend(self._sign_matcher.build_pipeline())
         else:
             pipeline.extend(
                 [
