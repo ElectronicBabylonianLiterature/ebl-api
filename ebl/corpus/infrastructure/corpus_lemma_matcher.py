@@ -58,6 +58,22 @@ class CorpusLemmaMatcher:
                         "stage": "$stage",
                         "name": "$name",
                         "textId": "$textId",
+                        "lineIndex": "$lineIndex",
+                        "variantIndex": "$variantIndex",
+                    },
+                }
+            },
+            {
+                "$replaceRoot": {
+                    "newRoot": "$_id"
+                }
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "stage": "$stage",
+                        "name": "$name",
+                        "textId": "$textId",
                     },
                     "lines": {"$push": "$lineIndex"},
                     "variants": {"$push": "$variantIndex"},
