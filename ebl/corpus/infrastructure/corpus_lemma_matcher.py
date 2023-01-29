@@ -77,15 +77,38 @@ class CorpusLemmaMatcher:
             },
         ]
 
-    def _flatten_lemmas(self) -> List[dict]:
+    def _join_vocabulary(self) -> List[dict]:
         return [
             {
                 "$addFields": {
-                    self.vocabulary_path: drop_duplicates(
-                        flatten_field(f"${self.reconstruction_path}")
+                    "reconstructionVocabulary": flatten_field(
+                        flatten_field(
+                            flatten_field("$lines.variants.reconstruction.uniqueLemma")
+                        )
+                    ),
+                    "manuscriptLineVocabulary": flatten_field(
+                        flatten_field(
+                            flatten_field(
+                                flatten_field(
+                                    "$lines.variants.manuscripts.line.content.uniqueLemma"
+                                )
+                            )
+                        )
+                    ),
+                }
+            },
+            {
+                "$addFields": {
+                    "fullVocabulary": drop_duplicates(
+                        {
+                            "$concatArrays": [
+                                "$reconstructionVocabulary",
+                                "$manuscriptLineVocabulary",
+                            ]
+                        }
                     )
                 }
-            }
+            },
         ]
 
     def _unwind_lines(self) -> List[dict]:
@@ -127,6 +150,7 @@ class CorpusLemmaMatcher:
                 "$unwind": {
                     "path": "$manuscripts",
                     "includeArrayIndex": "manuscriptLineIndex",
+                    "preserveNullAndEmptyArrays": True,
                 }
             },
             {
@@ -151,6 +175,7 @@ class CorpusLemmaMatcher:
         self, chapter_query: Dict, line_query: Dict, count_matches_per_item=True
     ) -> List[Dict]:
         return [
+            *self._join_vocabulary(),
             {"$match": chapter_query},
             {
                 "$project": {
@@ -185,7 +210,7 @@ class CorpusLemmaMatcher:
 
     def _and(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
-            {"$or": [{path: {"$all": self.pattern}} for path in self._lemma_paths]},
+            {"fullVocabulary": {"$all": self.pattern}},
             {"$or": self._lemma_path_combinations(flat=True)},
             count_matches_per_item,
         )
@@ -251,10 +276,3 @@ class CorpusLemmaMatcher:
                 }
             },
         ]
-
-
-if __name__ == "__main__":
-    matcher = CorpusLemmaMatcher(["ša I", "pû I"], LemmaQueryType.PHRASE)
-    import json
-
-    print(json.dumps(matcher.build_pipeline(), indent=2))
