@@ -1,6 +1,7 @@
 from typing import Dict, List
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.corpus.infrastructure.corpus_lemma_matcher import CorpusLemmaMatcher
+from ebl.corpus.infrastructure.sign_matcher import CorpusSignMatcher
 
 
 class CorpusPatternMatcher:
@@ -15,7 +16,11 @@ class CorpusPatternMatcher:
             if "lemmas" in query
             else None
         )
-        self._sign_matcher = None
+        self._sign_matcher = (
+            CorpusSignMatcher(query["transliteration"])
+            if "transliteration" in query
+            else None
+        )
 
     def _limit_result(self):
         return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
@@ -64,28 +69,15 @@ class CorpusPatternMatcher:
             },
         ]
 
-    def _merge_pipelines(self) -> List[Dict]:
+    def _merge_pipelines(self, facets: Dict) -> List[Dict]:
         return [
             {
                 "$facet": {
-                    "reconstruction_lemmas": self._reconstruction_lemma_matcher.build_pipeline(
-                        count_matches_per_item=False
-                    ),
-                    "manuscript_lemmas": self._manuscript_lemma_matcher.build_pipeline(
-                        count_matches_per_item=False
-                    ),
+                    k: v.build_pipeline(count_matches_per_item=False)
+                    for k, v in facets.items()
                 }
             },
-            {
-                "$project": {
-                    "combined": {
-                        "$concatArrays": [
-                            "$reconstruction_lemmas",
-                            "$manuscript_lemmas",
-                        ]
-                    }
-                }
-            },
+            {"$project": {"combined": {"$concatArrays": [f"${k}" for k in facets]}}},
             {"$unwind": "$combined"},
             {"$replaceRoot": {"newRoot": "$combined"}},
             {

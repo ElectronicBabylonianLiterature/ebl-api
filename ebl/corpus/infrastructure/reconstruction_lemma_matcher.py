@@ -67,7 +67,7 @@ class ReconstructionLemmaMatcher:
                     "textId": "$_id.textId",
                     "lines": True,
                     "variants": True,
-                    "matchCount": True,
+                    "matchCount": count_matches_per_item,
                 }
             },
         ]
