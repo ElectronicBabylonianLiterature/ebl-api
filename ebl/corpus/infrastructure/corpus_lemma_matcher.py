@@ -95,18 +95,10 @@ class CorpusLemmaMatcher:
             {
                 "$addFields": {
                     "reconstructionVocabulary": flatten_field(
-                        flatten_field(
-                            flatten_field("$lines.variants.reconstruction.uniqueLemma")
-                        )
+                        "$lines.variants.reconstruction.uniqueLemma", depth=3
                     ),
                     "manuscriptLineVocabulary": flatten_field(
-                        flatten_field(
-                            flatten_field(
-                                flatten_field(
-                                    "$lines.variants.manuscripts.line.content.uniqueLemma"
-                                )
-                            )
-                        )
+                        "$lines.variants.manuscripts.line.content.uniqueLemma", depth=4
                     ),
                 }
             },
