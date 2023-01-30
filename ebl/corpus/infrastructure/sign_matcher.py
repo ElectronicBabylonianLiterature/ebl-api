@@ -5,6 +5,7 @@ from ebl.common.query.util import ngrams
 class CorpusSignMatcher:
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
+        self._is_multiline = len(self.pattern) > 1
 
     def _merge_manuscripts_and_signs(self) -> List[Dict]:
         return [
@@ -40,38 +41,42 @@ class CorpusSignMatcher:
                     "manuscriptLines": "$lines.variants.manuscripts",
                 }
             },
-        ]
-
-    def _restructure_signs(self) -> List[Dict]:
-        return [
             {"$unwind": "$manuscriptWithSigns"},
             {
                 "$project": {
                     "manuscriptIdsToInclude": "$manuscriptWithSigns.manuscriptId",
+                    "signs": "$manuscriptWithSigns.signs",
                     "textId": True,
                     "stage": True,
                     "name": True,
                     "manuscriptLines": True,
-                    "ngram": {
-                        "$zip": {
-                            "inputs": [
-                                "$manuscriptWithSigns.signs",
-                                {
-                                    "$slice": [
-                                        "$manuscriptWithSigns.signs",
-                                        1,
-                                        {"$size": "$manuscriptWithSigns.signs"},
-                                    ]
-                                },
-                            ]
-                        }
-                    },
                 }
             },
         ]
 
-    def _match(self) -> List[Dict]:
+    def _create_sign_line_ngrams(self) -> List[Dict]:
         return [
+            {
+                "$addFields": {
+                    "ngram": ngrams("$signs", len(self.pattern)),
+                }
+            },
+        ]
+
+    def _match_single_line(self) -> List[Dict]:
+        return [
+            {
+                "$unwind": {
+                    "path": "$signs",
+                    "includeArrayIndex": "manuscriptLinesToInclude",
+                }
+            },
+            {"$match": {"signs": {"$regex": self.pattern[0]}}},
+        ]
+
+    def _match_multiline(self) -> List[Dict]:
+        return [
+            *self._create_sign_line_ngrams(),
             {
                 "$unwind": {
                     "path": "$ngram",
@@ -84,13 +89,13 @@ class CorpusSignMatcher:
                     for i, line_pattern in enumerate(self.pattern)
                 }
             },
-            {
-                "$project": {"signs": 0, "ngram": 0},
-            },
         ]
 
     def _merge_manuscripts_to_include(self) -> List[Dict]:
         return [
+            {
+                "$project": {"signs": 0, "ngram": 0},
+            },
             {
                 "$group": {
                     "_id": "$_id",
@@ -213,11 +218,7 @@ class CorpusSignMatcher:
                     },
                 }
             },
-            {
-                "$replaceRoot": {
-                    "newRoot": "$_id"
-                }
-            },
+            {"$replaceRoot": {"newRoot": "$_id"}},
             {
                 "$group": {
                     "_id": {
@@ -246,8 +247,11 @@ class CorpusSignMatcher:
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipeline = [
             *self._merge_manuscripts_and_signs(),
-            *self._restructure_signs(),
-            *self._match(),
+            *(
+                self._match_multiline()
+                if self._is_multiline
+                else self._match_single_line()
+            ),
             *self._merge_manuscripts_to_include(),
             *self._flatten_variants(),
             *self._filter_textlines(),
