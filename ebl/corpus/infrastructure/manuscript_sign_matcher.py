@@ -88,7 +88,7 @@ class SignMatcher:
         ]
 
     def build_pipeline(self) -> List[Dict]:
-        pipeline = [
+        return [
             {
                 "$project": {
                     "manuscripts.id": True,
@@ -106,7 +106,6 @@ class SignMatcher:
             },
             *self._collect_indexes(),
         ]
-        return pipeline
 
 
 if __name__ == "__main__":
