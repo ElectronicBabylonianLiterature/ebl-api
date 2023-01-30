@@ -3,7 +3,7 @@ from pydash.arrays import flatten_deep
 from pydash import flow
 
 from ebl.cache.application.custom_cache import CustomCache
-from ebl.common.query.parameter_parser import parse_lemmas
+from ebl.common.query.parameter_parser import parse_lemmas, parse_transliteration
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
@@ -131,7 +131,7 @@ class CorpusQueryResource:
     @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         parse = flow(
-            parse_lemmas,
+            parse_lemmas, parse_transliteration(self._transliteration_query_factory)
         )
 
         resp.media = CorpusQueryResultSchema().dump(
