@@ -229,7 +229,7 @@ class CorpusLemmaMatcher:
 
     def _line(self, count_matches_per_item=True) -> List[Dict]:
         return self._create_match_pipeline(
-            {"$or": [{path: {"$all": self.pattern}} for path in self._lemma_paths]},
+            {"fullVocabulary": {"$all": self.pattern}},
             {
                 "$or": [
                     {"flatReconstruction": {"$all": self.pattern}},
