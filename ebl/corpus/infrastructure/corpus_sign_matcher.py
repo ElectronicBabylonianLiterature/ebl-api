@@ -219,6 +219,7 @@ class CorpusSignMatcher:
                 }
             },
             {"$replaceRoot": {"newRoot": "$_id"}},
+            {"$sort": {"lines": 1, "variants": 1}},
             {
                 "$group": {
                     "_id": {
