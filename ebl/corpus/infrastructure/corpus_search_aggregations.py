@@ -1,7 +1,8 @@
 from typing import Dict, List
 from ebl.common.query.query_result import LemmaQueryType
+from ebl.common.query.util import flatten_field
 from ebl.corpus.infrastructure.corpus_lemma_matcher import CorpusLemmaMatcher
-from ebl.corpus.infrastructure.sign_matcher import CorpusSignMatcher
+from ebl.corpus.infrastructure.corpus_sign_matcher import CorpusSignMatcher
 
 
 class CorpusPatternMatcher:
@@ -27,7 +28,7 @@ class CorpusPatternMatcher:
 
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
-            {"$sort": {"matchCount": -1, "_id": 1}},
+            {"$sort": {"matchCount": -1, "textId": 1}},
             *self._limit_result(),
             {"$project": {"_id": False}},
             {
@@ -40,44 +41,48 @@ class CorpusPatternMatcher:
             {"$project": {"_id": False}},
         ]
 
-    def _deduplicate_merged(self) -> List[Dict]:
+    def _drop_merged_duplicates(self) -> List[Dict]:
         return [
             {
-                "$addFields": {
-                    "zipped": {
-                        "$setUnion": [{"$zip": {"inputs": ["$lines", "$variants"]}}, []]
+                "$project": {
+                    "linesAndVariants": {"$zip": {"inputs": ["$lines", "$variants"]}}
+                }
+            },
+            {"$unwind": "$linesAndVariants"},
+            {
+                "$project": {
+                    "line": {"$first": "$linesAndVariants"},
+                    "variant": {"$last": "$linesAndVariants"},
+                }
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "stage": "$_id.stage",
+                        "name": "$_id.name",
+                        "textId": "$_id.textId",
+                        "line": "$line",
+                        "variant": "$variant",
                     }
                 }
             },
-            {
-                "$project": {
-                    "lines": {
-                        "$map": {
-                            "input": "$zipped",
-                            "as": "tuple",
-                            "in": {"$arrayElemAt": ["$$tuple", 0]},
-                        }
-                    },
-                    "variants": {
-                        "$map": {
-                            "input": "$zipped",
-                            "as": "tuple",
-                            "in": {"$arrayElemAt": ["$$tuple", 1]},
-                        }
-                    },
-                }
-            },
+            {"$replaceRoot": {"newRoot": "$_id"}},
+            {"$sort": {"line": 1, "variant": 1}},
         ]
 
-    def _merge_pipelines(self, facets: Dict) -> List[Dict]:
+    def _merge_pipelines(self) -> List[Dict]:
         return [
             {
                 "$facet": {
-                    k: v.build_pipeline(count_matches_per_item=False)
-                    for k, v in facets.items()
+                    "lemmas": self._lemma_matcher.build_pipeline(
+                        count_matches_per_item=False
+                    ),
+                    "signs": self._sign_matcher.build_pipeline(
+                        count_matches_per_item=False
+                    ),
                 }
             },
-            {"$project": {"combined": {"$concatArrays": [f"${k}" for k in facets]}}},
+            {"$project": {"combined": {"$concatArrays": ["$lemmas", "$signs"]}}},
             {"$unwind": "$combined"},
             {"$replaceRoot": {"newRoot": "$combined"}},
             {
@@ -85,32 +90,30 @@ class CorpusPatternMatcher:
                     "_id": {"stage": "$stage", "name": "$name", "textId": "$textId"},
                     "lines": {"$push": "$lines"},
                     "variants": {"$push": "$variants"},
-                },
-            },
-            {
-                "$match": {
-                    "lines": {"$size": 2},
                 }
             },
+            {"$match": {"lines": {"$size": 2}}},
             {
                 "$addFields": {
-                    "lines": {
-                        "$concatArrays": [
-                            {"$arrayElemAt": ["$lines", 0]},
-                            {"$arrayElemAt": ["$lines", 1]},
-                        ]
-                    },
-                    "variants": {
-                        "$concatArrays": [
-                            {"$arrayElemAt": ["$variants", 0]},
-                            {"$arrayElemAt": ["$variants", 1]},
-                        ]
-                    },
+                    "lines": flatten_field("$lines"),
+                    "variants": flatten_field("$variants"),
                 }
             },
-            *self._deduplicate_merged(),
+            *self._drop_merged_duplicates(),
+            {"$sort": {"line": 1}},
+            {
+                "$group": {
+                    "_id": {
+                        "stage": "$stage",
+                        "name": "$name",
+                        "textId": "$textId",
+                    },
+                    "lines": {"$push": "$line"},
+                    "variants": {"$push": "$variant"},
+                }
+            },
+            {"$match": {"lines": {"$exists": True, "$not": {"$size": 0}}}},
             {"$addFields": {"matchCount": {"$size": "$lines"}}},
-            {"$match": {"matchCount": {"$gt": 0}}},
             {
                 "$project": {
                     "_id": False,
