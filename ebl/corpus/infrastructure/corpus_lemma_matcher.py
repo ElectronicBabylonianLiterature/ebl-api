@@ -63,11 +63,7 @@ class CorpusLemmaMatcher:
                     },
                 }
             },
-            {
-                "$replaceRoot": {
-                    "newRoot": "$_id"
-                }
-            },
+            {"$replaceRoot": {"newRoot": "$_id"}},
             {
                 "$group": {
                     "_id": {
@@ -77,7 +73,6 @@ class CorpusLemmaMatcher:
                     },
                     "lines": {"$push": "$lineIndex"},
                     "variants": {"$push": "$variantIndex"},
-                    **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
             {
@@ -88,7 +83,7 @@ class CorpusLemmaMatcher:
                     "textId": "$_id.textId",
                     "lines": True,
                     "variants": True,
-                    "matchCount": count_matches_per_item,
+                    **({"matchCount": True} if count_matches_per_item else {}),
                 }
             },
         ]
