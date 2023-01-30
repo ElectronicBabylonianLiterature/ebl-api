@@ -246,7 +246,7 @@ class CorpusSignMatcher:
         ]
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
-        pipeline = [
+        return [
             *self._merge_manuscripts_and_signs(),
             *(
                 self._match_multiline()
@@ -259,5 +259,3 @@ class CorpusSignMatcher:
             *self._get_matching_variants(),
             *self._regroup_chapters(count_matches_per_item),
         ]
-
-        return pipeline
