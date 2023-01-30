@@ -68,7 +68,7 @@ LINE_3 = LineFactory.build(
         ),
     ),
 )
-CHAPTER_WITH_QUERY_LEMMA: Chapter = ChapterFactory.build(
+CHAPTER_WITH_LEMMA: Chapter = ChapterFactory.build(
     text_id=LITERATURE_TEXT.id,
     manuscripts=(LEMMA_MANUSCRIPT,),
     lines=(LINE_1, LINE_2, LINE_3),
@@ -102,7 +102,7 @@ def query_item_of(
 def test_query_chapter_lemmas(
     client, text_repository, lemma_operator, lemmas, expected_lines, expected_variants
 ):
-    text_repository.create_chapter(CHAPTER_WITH_QUERY_LEMMA)
+    text_repository.create_chapter(CHAPTER_WITH_LEMMA)
 
     result = client.simulate_get(
         "/corpus/query",
@@ -113,7 +113,7 @@ def test_query_chapter_lemmas(
     assert result.json == {
         "items": [
             query_item_of(
-                CHAPTER_WITH_QUERY_LEMMA,
+                CHAPTER_WITH_LEMMA,
                 lines=expected_lines,
                 variants=expected_variants,
             )
@@ -203,6 +203,61 @@ def test_query_chapter_signs(
         "items": [
             query_item_of(
                 CHAPTER_WITH_SIGNS, lines=expected_lines, variants=expected_variants
+            )
+        ],
+        "matchCountTotal": len(expected_lines),
+    }
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected
+
+
+CHAPTER_WITH_SIGNS_AND_LEMMAS = attr.evolve(
+    CHAPTER_WITH_SIGNS,
+    manuscripts=tuple([*CHAPTER_WITH_SIGNS.manuscripts, LEMMA_MANUSCRIPT]),
+    lines=tuple([*CHAPTER_WITH_SIGNS.lines, *CHAPTER_WITH_LEMMA.lines]),
+)
+
+
+@pytest.mark.parametrize(
+    "transliteration,lemmas,lemma_operator,expected_lines,expected_variants",
+    [
+        ("bul bansur", "ina I", "and", [0, 4], [0, 0]),
+        ("ma šu\nba", "bamātu I+qanû I", "phrase", [3, 5], [0, 0]),
+        ("ti", "u I+mu I", "line", [2, 6], [1, 0]),
+    ],
+)
+def test_query_chapter_lemmas_and_signs(
+    client,
+    text_repository,
+    sign_repository,
+    signs,
+    transliteration,
+    lemmas,
+    lemma_operator,
+    expected_lines,
+    expected_variants,
+):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    text_repository.create_chapter(CHAPTER_WITH_SIGNS_AND_LEMMAS)
+
+    result = client.simulate_get(
+        "/corpus/query",
+        params={
+            "transliteration": transliteration,
+            "lemmas": lemmas,
+            "lemmaOperator": lemma_operator,
+        },
+    )
+
+    expected = {
+        "items": [
+            query_item_of(
+                CHAPTER_WITH_SIGNS_AND_LEMMAS,
+                lines=expected_lines,
+                variants=expected_variants,
             )
         ],
         "matchCountTotal": len(expected_lines),
