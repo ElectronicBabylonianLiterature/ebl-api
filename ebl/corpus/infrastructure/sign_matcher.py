@@ -204,13 +204,41 @@ class CorpusSignMatcher:
         return [
             {
                 "$group": {
-                    "_id": "$_id",
-                    "textId": {"$first": "$textId"},
-                    "name": {"$first": "$name"},
-                    "stage": {"$first": "$stage"},
-                    "lines": {"$push": "$lineIndex"},
-                    "variants": {"$push": "$variantIndex"},
+                    "_id": {
+                        "textId": "$textId",
+                        "name": "$name",
+                        "stage": "$stage",
+                        "lines": "$lineIndex",
+                        "variants": "$variantIndex",
+                    },
+                }
+            },
+            {
+                "$replaceRoot": {
+                    "newRoot": "$_id"
+                }
+            },
+            {
+                "$group": {
+                    "_id": {
+                        "textId": "$textId",
+                        "name": "$name",
+                        "stage": "$stage",
+                    },
+                    "lines": {"$push": "$lines"},
+                    "variants": {"$push": "$variants"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
+                }
+            },
+            {
+                "$project": {
+                    "_id": False,
+                    "stage": "$_id.stage",
+                    "name": "$_id.name",
+                    "textId": "$_id.textId",
+                    "lines": True,
+                    "variants": True,
+                    **({"matchCount": True} if count_matches_per_item else {}),
                 }
             },
         ]
