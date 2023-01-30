@@ -13,7 +13,9 @@ from ebl.tests.factories.corpus import (
     ManuscriptFactory,
     ManuscriptLineFactory,
 )
+from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord
+from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.tokens import ValueToken
 
 
@@ -139,11 +141,14 @@ VARIANT_LINES = [
     ],
     [
         LineVariantFactory.build(
+            manuscripts=(),
+        ),
+        LineVariantFactory.build(
             manuscripts=tuple(
                 ManuscriptLineFactory.build(manuscript_id=manuscript.id)
                 for manuscript in MANUSCRIPTS[1:]
             ),
-        )
+        ),
     ],
     [
         LineVariantFactory.build(
@@ -162,6 +167,7 @@ CHAPTER_WITH_SIGNS: Chapter = ChapterFactory.build(
     manuscripts=tuple(MANUSCRIPTS),
     lines=tuple(LINES),
     signs=SIGNS,
+    text_id=TextId(Genre.LITERATURE, 42, 1),
 )
 
 
@@ -169,9 +175,9 @@ CHAPTER_WITH_SIGNS: Chapter = ChapterFactory.build(
     "transliteration,expected_lines,expected_variants",
     [
         ("bul bansur", [0], [0]),
-        ("ti", [2], [0]),
-        ("x", [0, 2, 3], [0, 0, 0]),
-        ("šu", [2, 3], [1, 0]),
+        ("ti", [2], [1]),
+        ("x", [0, 2, 3], [0, 1, 0]),
+        ("šu", [3], [0]),
         ("ma šu\nba", [3], [0]),
     ],
 )
