@@ -1,10 +1,6 @@
 from typing import List, Dict
 from ebl.common.query.query_result import LemmaQueryType
-from ebl.common.query.util import ngrams, drop_duplicates, flatten_field
-
-
-def filter_array(input_, as_, cond) -> Dict:
-    return {"$filter": {"input": input_, "as": as_, "cond": cond}}
+from ebl.common.query.util import filter_array, ngrams, drop_duplicates, flatten_field
 
 
 class CorpusLemmaMatcher:
@@ -29,26 +25,6 @@ class CorpusLemmaMatcher:
             LemmaQueryType.PHRASE: self._phrase,
         }
         return _dispatcher[self.query_type](count_matches_per_item)
-
-    def _explode_reconstruction(self) -> List[Dict]:
-        return [
-            {"$unwind": {"path": "$lines", "includeArrayIndex": "lineIndex"}},
-            {
-                "$project": {
-                    "lineIndex": 1,
-                    "variants": "$lines.variants",
-                    "textId": 1,
-                    "stage": 1,
-                    "name": 1,
-                }
-            },
-            {"$unwind": {"path": "$variants", "includeArrayIndex": "variantIndex"}},
-            {
-                "$addFields": {
-                    self.reconstruction_path: "$variants.reconstruction.uniqueLemma",
-                }
-            },
-        ]
 
     def _rejoin_lines(self, count_matches_per_item=True) -> List[Dict]:
         return [
@@ -177,7 +153,11 @@ class CorpusLemmaMatcher:
         ]
 
     def _create_match_pipeline(
-        self, chapter_query: Dict, line_query: Dict, count_matches_per_item=True
+        self,
+        chapter_query: Dict,
+        line_query: Dict,
+        count_matches_per_item=True,
+        pre_join_steps: List[Dict] = None,
     ) -> List[Dict]:
         return [
             *self._join_vocabulary(),
@@ -195,6 +175,7 @@ class CorpusLemmaMatcher:
             *self._unwind_variants(),
             *self._unwind_manuscripts(),
             {"$match": line_query},
+            *(pre_join_steps or []),
             *self._rejoin_lines(count_matches_per_item),
         ]
 
@@ -239,29 +220,7 @@ class CorpusLemmaMatcher:
         )
 
     def _phrase(self, count_matches_per_item=True) -> List[Dict]:
-        return [
-            *self._join_vocabulary(),
-            {"$match": {"fullVocabulary": {"$all": self.pattern}}},
-            {
-                "$project": {
-                    self.reconstruction_lemma_path: 1,
-                    self.manuscriptlines_lemma_path: 1,
-                    "textId": 1,
-                    "stage": 1,
-                    "name": 1,
-                }
-            },
-            *self._unwind_lines(),
-            *self._unwind_variants(),
-            *self._unwind_manuscripts(),
-            {
-                "$match": {
-                    "$or": [
-                        {"flatReconstruction": {"$all": self.pattern}},
-                        {"flatManuscriptLine": {"$all": self.pattern}},
-                    ]
-                }
-            },
+        aggregate_phrase = [
             {
                 "$addFields": {
                     "reconstructionNgrams": filter_array(
@@ -288,5 +247,16 @@ class CorpusLemmaMatcher:
                     ),
                 }
             },
-            *self._rejoin_lines(count_matches_per_item),
         ]
+
+        return self._create_match_pipeline(
+            {"fullVocabulary": {"$all": self.pattern}},
+            {
+                "$or": [
+                    {"flatReconstruction": {"$all": self.pattern}},
+                    {"flatManuscriptLine": {"$all": self.pattern}},
+                ]
+            },
+            count_matches_per_item,
+            pre_join_steps=aggregate_phrase,
+        )

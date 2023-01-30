@@ -35,3 +35,7 @@ def ngrams(input_: Union[str, Dict], n) -> Dict:
             ]
         }
     }
+
+
+def filter_array(input_, as_, cond) -> Dict:
+    return {"$filter": {"input": input_, "as": as_, "cond": cond}}
