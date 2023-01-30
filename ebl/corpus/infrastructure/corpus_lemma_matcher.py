@@ -64,6 +64,7 @@ class CorpusLemmaMatcher:
                 }
             },
             {"$replaceRoot": {"newRoot": "$_id"}},
+            {"$sort": {"lineIndex": 1, "variantIndex": 1}},
             {
                 "$group": {
                     "_id": {
@@ -73,6 +74,7 @@ class CorpusLemmaMatcher:
                     },
                     "lines": {"$push": "$lineIndex"},
                     "variants": {"$push": "$variantIndex"},
+                    **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
             {
