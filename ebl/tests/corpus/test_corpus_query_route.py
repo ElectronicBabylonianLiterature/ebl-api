@@ -118,3 +118,89 @@ def test_query_chapter_lemmas(
         ],
         "matchCountTotal": len(expected_lines),
     }
+
+
+SIGNS = [
+    "X ABZ411 ABZ11 ABZ41",
+    "X X X TI BA",
+    "MA ŠU X\nTI BA X",
+]
+MANUSCRIPTS = ManuscriptFactory.build_batch(3)
+VARIANT_LINES = [
+    [
+        LineVariantFactory.build(
+            manuscripts=(ManuscriptLineFactory.build(manuscript_id=MANUSCRIPTS[0].id),),
+        )
+    ],
+    [
+        LineVariantFactory.build(
+            manuscripts=(),
+        )
+    ],
+    [
+        LineVariantFactory.build(
+            manuscripts=tuple(
+                ManuscriptLineFactory.build(manuscript_id=manuscript.id)
+                for manuscript in MANUSCRIPTS[1:]
+            ),
+        )
+    ],
+    [
+        LineVariantFactory.build(
+            manuscripts=(ManuscriptLineFactory.build(manuscript_id=MANUSCRIPTS[2].id),),
+        )
+    ],
+]
+LINES = [
+    LineFactory.build(
+        variants=tuple(variants),
+    )
+    for variants in VARIANT_LINES
+]
+
+CHAPTER_WITH_SIGNS: Chapter = ChapterFactory.build(
+    manuscripts=tuple(MANUSCRIPTS),
+    lines=tuple(LINES),
+    signs=SIGNS,
+)
+
+
+@pytest.mark.parametrize(
+    "transliteration,expected_lines,expected_variants",
+    [
+        ("bul bansur", [0], [0]),
+        ("ti", [2], [0]),
+        ("x", [0, 2, 3], [0, 0, 0]),
+        ("šu", [2, 3], [1, 0]),
+        ("ma šu\nba", [3], [0]),
+    ],
+)
+def test_query_chapter_signs(
+    client,
+    text_repository,
+    sign_repository,
+    signs,
+    transliteration,
+    expected_lines,
+    expected_variants,
+):
+    for sign in signs:
+        sign_repository.create(sign)
+    text_repository.create_chapter(CHAPTER_WITH_SIGNS)
+
+    result = client.simulate_get(
+        "/corpus/query",
+        params={"transliteration": transliteration},
+    )
+
+    expected = {
+        "items": [
+            query_item_of(
+                CHAPTER_WITH_SIGNS, lines=expected_lines, variants=expected_variants
+            )
+        ],
+        "matchCountTotal": len(expected_lines),
+    }
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected
