@@ -173,38 +173,6 @@ def aggregate_chapter_display(
         *(_match_line_variants(lines, variants) if lines and variants else []),
         {"$project": {"_id": False}},
     ]
-    return [
-        {"$match": chapter_id_query(id_)},
-        {
-            "$addFields": {
-                "id": {"textId": "$textId", "stage": "$stage", "name": "$name"},
-                "lines": {
-                    "$map": {
-                        "input": "$lines",
-                        "as": "line",
-                        "in": {
-                            "number": "$$line.number",
-                            "oldLineNumbers": "$$line.oldLineNumbers",
-                            "isSecondLineOfParallelism": "$$line.isSecondLineOfParallelism",
-                            "isBeginningOfSection": "$$line.isBeginningOfSection",
-                            "translation": "$$line.translation",
-                            "variants": "$$line.variants",
-                        },
-                    }
-                },
-                "manuscripts": "$manuscripts",
-            }
-        },
-        {
-            "$project": {
-                "_id": False,
-                "id": True,
-                "lines": True,
-                "record": True,
-                "manuscripts": True,
-            }
-        },
-    ]
 
 
 def join_text() -> List[dict]:
