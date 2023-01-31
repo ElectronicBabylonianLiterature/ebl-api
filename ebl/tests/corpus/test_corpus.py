@@ -52,6 +52,7 @@ CHAPTER_WITHOUT_DOCUMENTS = attr.evolve(
         for manuscript in CHAPTER.manuscripts
     ),
 )
+CHAPTER_DISPLAY = ChapterDisplay.of_chapter(TEXT, CHAPTER)
 
 
 def expect_bibliography(bibliography, when) -> None:
@@ -149,30 +150,66 @@ def test_find_chapter(corpus, text_repository, bibliography, when) -> None:
 def test_find_chapter_for_display(
     corpus, text_repository, parallel_line_injector, when
 ) -> None:
-    chapter_display = ChapterDisplay.of_chapter(TEXT, CHAPTER)
+    lines = [
+        attr.evolve(
+            line,
+            variants=tuple(
+                attr.evolve(
+                    variant,
+                    parallel_lines=parallel_line_injector.inject(
+                        variant.parallel_lines
+                    ),
+                )
+                for variant in line.variants
+            ),
+        )
+        for line in CHAPTER_DISPLAY.lines
+    ]
     injected_chapter_display = attr.evolve(
-        chapter_display,
-        lines=tuple(
-            attr.evolve(
-                line,
-                variants=tuple(
-                    attr.evolve(
-                        variant,
-                        parallel_lines=parallel_line_injector.inject(
-                            variant.parallel_lines
-                        ),
-                    )
-                    for variant in line.variants
-                ),
-            )
-            for line in chapter_display.lines
-        ),
+        CHAPTER_DISPLAY,
+        lines=tuple(lines),
     )
-    when(text_repository).find_chapter_for_display(CHAPTER.id_).thenReturn(
-        chapter_display
+    when(text_repository).find_chapter_for_display(CHAPTER.id_, None, None).thenReturn(
+        CHAPTER_DISPLAY
     )
 
     assert corpus.find_chapter_for_display(CHAPTER.id_) == injected_chapter_display
+
+
+def test_find_chapter_for_display_filtered_lines(
+    corpus, text_repository, parallel_line_injector, when
+) -> None:
+    lines = [
+        attr.evolve(
+            line,
+            variants=tuple(
+                attr.evolve(
+                    variant,
+                    parallel_lines=parallel_line_injector.inject(
+                        variant.parallel_lines
+                    ),
+                )
+                for variant in line.variants
+            ),
+        )
+        for line in CHAPTER_DISPLAY.lines
+    ]
+    chapter_display_filtered_lines = attr.evolve(
+        CHAPTER_DISPLAY, lines=tuple(CHAPTER_DISPLAY.lines[:1])
+    )
+    injected_chapter_display_filtered_lines = attr.evolve(
+        CHAPTER_DISPLAY,
+        lines=tuple(lines[:1]),
+    )
+
+    when(text_repository).find_chapter_for_display(CHAPTER.id_, [0], [0]).thenReturn(
+        chapter_display_filtered_lines
+    )
+
+    assert (
+        corpus.find_chapter_for_display(CHAPTER.id_, [0], [0])
+        == injected_chapter_display_filtered_lines
+    )
 
 
 def test_search_lemma(corpus: Corpus, text_repository, when) -> None:
