@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Optional
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.common.query.util import filter_array, ngrams, drop_duplicates, flatten_field
 
@@ -157,7 +157,7 @@ class CorpusLemmaMatcher:
         chapter_query: Dict,
         line_query: Dict,
         count_matches_per_item=True,
-        pre_join_steps: List[Dict] = None,
+        pre_join_steps: Optional[List[Dict]] = None,
     ) -> List[Dict]:
         return [
             *self._join_vocabulary(),
