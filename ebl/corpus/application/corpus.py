@@ -56,12 +56,7 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def find_chapter_for_display(
-        self,
-        id_: ChapterId,
-        lines: Optional[Sequence[int]] = None,
-        variants: Optional[Sequence[int]] = None,
-    ) -> ChapterDisplay:
+    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
         ...
 
     @abstractmethod
@@ -131,15 +126,8 @@ class Corpus:
         chapter = self._repository.find_chapter(id_)
         return self._inject_references(chapter)
 
-    def find_chapter_for_display(
-        self,
-        id_: ChapterId,
-        lines: Optional[Sequence[int]] = None,
-        variants: Optional[Sequence[int]] = None,
-    ) -> ChapterDisplay:
-        return self._inject_parallels(
-            self._repository.find_chapter_for_display(id_, lines, variants)
-        )
+    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+        return self._inject_parallels(self._repository.find_chapter_for_display(id_))
 
     def find_line(
         self, id_: ChapterId, number: int

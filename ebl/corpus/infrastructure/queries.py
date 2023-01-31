@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence
+from typing import List
 
 from ebl.corpus.domain.chapter import ChapterId
 
@@ -110,72 +110,38 @@ def join_chapters(include_uncertain_fragmnets: bool) -> List[dict]:
     ]
 
 
-def _match_line_variants(
-    lines: Sequence[int],
-    variants: Sequence[int],
-) -> List[dict]:
-    line_variants = list(map(list, zip(lines, variants)))
-
-    return [
-        {"$unwind": {"path": "$lines", "includeArrayIndex": "lineIndex"}},
-        {"$match": {"lineIndex": {"$in": lines}}},
-        {"$unwind": {"path": "$lines.variants", "includeArrayIndex": "variantIndex"}},
-        {
-            "$match": {
-                "$expr": {"$in": [["$lineIndex", "$variantIndex"], line_variants]}
-            }
-        },
-        {
-            "$group": {
-                "_id": {"_id": "$_id", "lineIndex": "$lineIndex"},
-                "id": {"$first": "$id"},
-                "manuscripts": {"$first": "$manuscripts"},
-                "lines": {"$first": "$lines"},
-                "variants": {"$push": "$lines.variants"},
-                "record": {"$first": "$record"},
-            }
-        },
-        {
-            "$addFields": {
-                "lines": {"variants": "$variants"},
-            }
-        },
-        {
-            "$group": {
-                "_id": {
-                    "_id": "$_id._id",
-                },
-                "id": {"$first": "$id"},
-                "manuscripts": {"$first": "$manuscripts"},
-                "lines": {"$push": "$lines"},
-                "record": {"$first": "$record"},
-            }
-        },
-    ]
-
-
-def aggregate_chapter_display(
-    id_: ChapterId,
-    lines: Optional[Sequence[int]],
-    variants: Optional[Sequence[int]],
-) -> List[dict]:
+def aggregate_chapter_display(id_: ChapterId) -> List[dict]:
     return [
         {"$match": chapter_id_query(id_)},
         {
-            "$project": {
+            "$addFields": {
                 "id": {"textId": "$textId", "stage": "$stage", "name": "$name"},
-                "lines.number": True,
-                "lines.oldLineNumbers": True,
-                "lines.isSecondLineOfParallelism": True,
-                "lines.isBeginningOfSection": True,
-                "lines.translation": True,
-                "lines.variants": True,
-                "manuscripts": True,
-                "record": True,
+                "lines": {
+                    "$map": {
+                        "input": "$lines",
+                        "as": "line",
+                        "in": {
+                            "number": "$$line.number",
+                            "oldLineNumbers": "$$line.oldLineNumbers",
+                            "isSecondLineOfParallelism": "$$line.isSecondLineOfParallelism",
+                            "isBeginningOfSection": "$$line.isBeginningOfSection",
+                            "translation": "$$line.translation",
+                            "variants": "$$line.variants",
+                        },
+                    }
+                },
+                "manuscripts": "$manuscripts",
             }
         },
-        *(_match_line_variants(lines, variants) if lines and variants else []),
-        {"$project": {"_id": False}},
+        {
+            "$project": {
+                "_id": False,
+                "id": True,
+                "lines": True,
+                "record": True,
+                "manuscripts": True,
+            }
+        },
     ]
 
 
