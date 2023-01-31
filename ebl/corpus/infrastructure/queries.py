@@ -114,13 +114,17 @@ def _match_line_variants(
     lines: Sequence[int],
     variants: Sequence[int],
 ) -> List[dict]:
-    lineVariants = list(map(list, zip(lines, variants)))
+    line_variants = list(map(list, zip(lines, variants)))
 
     return [
         {"$unwind": {"path": "$lines", "includeArrayIndex": "lineIndex"}},
         {"$match": {"lineIndex": {"$in": lines}}},
         {"$unwind": {"path": "$lines.variants", "includeArrayIndex": "variantIndex"}},
-        {"$match": {"$expr": {"$in": [["$lineIndex", "$variantIndex"], lineVariants]}}},
+        {
+            "$match": {
+                "$expr": {"$in": [["$lineIndex", "$variantIndex"], line_variants]}
+            }
+        },
         {
             "$group": {
                 "_id": {"_id": "$_id", "lineIndex": "$lineIndex"},

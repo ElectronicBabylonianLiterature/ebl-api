@@ -1,3 +1,5 @@
+from collections import defaultdict
+from typing import Sequence
 import falcon
 from pydash.arrays import flatten_deep
 from pydash import flow
@@ -48,6 +50,26 @@ class ChaptersResource:
         resp.media = ApiChapterSchema().dump(chapter)
 
 
+def select_lines_and_variants(
+    chapter: dict, lines: Sequence[int], variants: Sequence[int]
+):
+    line_variants = defaultdict(set)
+
+    for line, variant in zip(lines, variants):
+        line_variants[line].add(variant)
+
+    chapter["lines"] = [
+        {
+            **line,
+            "variants": [line["variants"][i] for i in line_variants[line_index]],
+        }
+        for line_index, line in chapter["lines"]
+        if line_index in lines
+    ]
+
+    return chapter
+
+
 class ChaptersDisplayResource:
     def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
@@ -66,17 +88,26 @@ class ChaptersDisplayResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         chapter_id_str = str(chapter_id)
+        lines = parse_lines(req.get_param_as_list("lines", default=[]))
+        variants = parse_lines(req.get_param_as_list("variants", default=[]))
+
         if self._cache.has(chapter_id_str):
-            resp.media = self._cache.get(chapter_id_str)
-        else:
-            chapter = self._corpus.find_chapter_for_display(
-                chapter_id,
-                parse_lines(req.get_param_as_list("lines", default=[])),
-                parse_lines(req.get_param_as_list("variants", default=[])),
+            cached_chapter = self._cache.get(chapter_id_str)
+            resp.media = (
+                select_lines_and_variants(cached_chapter, lines, variants)
+                if lines and variants
+                else cached_chapter
             )
+        else:
+            chapter = self._corpus.find_chapter_for_display(chapter_id)
             dump = ChapterDisplaySchema().dump(chapter)
             self._cache.set(chapter_id_str, dump)
-            resp.media = ChapterDisplaySchema().dump(chapter)
+
+            resp.media = (
+                select_lines_and_variants(dump, lines, variants)
+                if lines and variants
+                else dump
+            )
 
 
 class ChaptersByManuscriptResource:
