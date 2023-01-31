@@ -63,7 +63,7 @@ def select_lines_and_variants(
             **line,
             "variants": [line["variants"][i] for i in line_variants[line_index]],
         }
-        for line_index, line in chapter["lines"]
+        for line_index, line in enumerate(chapter["lines"])
         if line_index in lines
     ]
 
