@@ -142,10 +142,17 @@ class MongoTextRepository(TextRepository):
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
-    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+    def find_chapter_for_display(
+        self,
+        id_: ChapterId,
+        lines: Optional[Sequence[int]] = None,
+        variants: Optional[Sequence[int]] = None,
+    ) -> ChapterDisplay:
         try:
             text = self.find(id_.text_id)
-            chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
+            chapters = self._chapters.aggregate(
+                aggregate_chapter_display(id_, lines, variants)
+            )
             return ChapterDisplaySchema().load(
                 {
                     **next(chapters),

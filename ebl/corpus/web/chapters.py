@@ -3,7 +3,11 @@ from pydash.arrays import flatten_deep
 from pydash import flow
 
 from ebl.cache.application.custom_cache import CustomCache
-from ebl.common.query.parameter_parser import parse_lemmas, parse_transliteration
+from ebl.common.query.parameter_parser import (
+    parse_lemmas,
+    parse_transliteration,
+    parse_lines,
+)
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
@@ -52,7 +56,7 @@ class ChaptersDisplayResource:
     @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
-        _,
+        req: falcon.Request,
         resp: falcon.Response,
         genre: str,
         category: str,
@@ -65,7 +69,11 @@ class ChaptersDisplayResource:
         if self._cache.has(chapter_id_str):
             resp.media = self._cache.get(chapter_id_str)
         else:
-            chapter = self._corpus.find_chapter_for_display(chapter_id)
+            chapter = self._corpus.find_chapter_for_display(
+                chapter_id,
+                parse_lines(req.get_param_as_list("lines", default=[])),
+                parse_lines(req.get_param_as_list("variants", default=[])),
+            )
             dump = ChapterDisplaySchema().dump(chapter)
             self._cache.set(chapter_id_str, dump)
             resp.media = ChapterDisplaySchema().dump(chapter)
