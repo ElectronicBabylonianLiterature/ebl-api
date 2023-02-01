@@ -324,6 +324,7 @@ class MongoTextRepository(TextRepository):
                     collation=Collation(
                         locale="en", numericOrdering=True, alternate="shifted"
                     ),
+                    allowDiskUse=True
                 ),
                 None,
             )
