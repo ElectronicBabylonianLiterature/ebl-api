@@ -14,11 +14,11 @@ class CorpusSignMatcher:
                     "manuscriptsWithSigns": {
                         "$zip": {"inputs": ["$manuscripts.id", "$signs"]}
                     },
-                    "textId": 1,
-                    "stage": 1,
-                    "name": 1,
-                    "lines.variants.manuscripts.manuscriptId": 1,
-                    "lines.variants.manuscripts.line.type": 1,
+                    "textId": True,
+                    "stage": True,
+                    "name": True,
+                    "lines.variants.manuscripts.manuscriptId": True,
+                    "lines.variants.manuscripts.line.type": True,
                 }
             },
             {
@@ -28,28 +28,30 @@ class CorpusSignMatcher:
                             "input": "$manuscriptsWithSigns",
                             "as": "m",
                             "in": {
-                                "manuscriptId": {"$arrayElemAt": ["$$m", 0]},
-                                "signs": {
-                                    "$split": [{"$arrayElemAt": ["$$m", 1]}, "\n"]
-                                },
+                                "manuscriptId": {"$first": "$$m"},
+                                "signs": {"$split": [{"$last": "$$m"}, "\n"]},
                             },
                         }
                     },
-                    "textId": 1,
-                    "stage": 1,
-                    "name": 1,
-                    "manuscriptLines": "$lines.variants.manuscripts",
-                }
-            },
-            {"$unwind": "$manuscriptWithSigns"},
-            {
-                "$project": {
-                    "manuscriptIdsToInclude": "$manuscriptWithSigns.manuscriptId",
-                    "signs": "$manuscriptWithSigns.signs",
                     "textId": True,
                     "stage": True,
                     "name": True,
-                    "manuscriptLines": True,
+                    "lines": "$lines.variants.manuscripts",
+                }
+            },
+            {
+                "$unwind": {
+                    "path": "$manuscriptWithSigns",
+                }
+            },
+            {
+                "$project": {
+                    "textId": True,
+                    "stage": True,
+                    "name": True,
+                    "manuscriptId": "$manuscriptWithSigns.manuscriptId",
+                    "signs": "$manuscriptWithSigns.signs",
+                    "lines": True,
                 }
             },
         ]
@@ -68,7 +70,7 @@ class CorpusSignMatcher:
             {
                 "$unwind": {
                     "path": "$signs",
-                    "includeArrayIndex": "manuscriptLinesToInclude",
+                    "includeArrayIndex": "signLineIndex",
                 }
             },
             {"$match": {"signs": {"$regex": self.pattern[0]}}},
@@ -80,7 +82,7 @@ class CorpusSignMatcher:
             {
                 "$unwind": {
                     "path": "$ngram",
-                    "includeArrayIndex": "manuscriptLinesToInclude",
+                    "includeArrayIndex": "signLineIndex",
                 }
             },
             {
@@ -94,128 +96,98 @@ class CorpusSignMatcher:
     def _merge_manuscripts_to_include(self) -> List[Dict]:
         return [
             {
-                "$project": {"signs": 0, "ngram": 0},
-            },
-            {
                 "$group": {
-                    "_id": "$_id",
-                    "stage": {"$first": "$stage"},
-                    "name": {"$first": "$name"},
-                    "textId": {"$first": "$textId"},
-                    "manuscriptIdsToInclude": {"$push": "$manuscriptIdsToInclude"},
-                    "manuscriptLinesToInclude": {"$push": "$manuscriptLinesToInclude"},
-                    "manuscriptId": {"$first": "$manuscriptLines"},
-                }
-            },
-            {
-                "$project": {
-                    "manuscriptsToInclude": {
-                        "$zip": {
-                            "inputs": [
-                                "$manuscriptIdsToInclude",
-                                "$manuscriptLinesToInclude",
-                            ]
-                        }
+                    "_id": {
+                        "textId": "$textId",
+                        "stage": "$stage",
+                        "name": "$name",
+                        "manuscriptId": "$manuscriptId",
                     },
-                    "stage": 1,
-                    "name": 1,
-                    "textId": 1,
-                    "manuscriptId": 1,
+                    "textLinesToInclude": {"$push": "$signLineIndex"},
+                    "lines": {"$first": "$lines"},
                 }
             },
         ]
 
     def _flatten_variants(self) -> List[Dict]:
         return [
-            {"$unwind": {"path": "$manuscriptId", "includeArrayIndex": "lineIndex"}},
-            {"$unwind": {"path": "$manuscriptId", "includeArrayIndex": "variantIndex"}},
+            {"$unwind": {"path": "$lines", "includeArrayIndex": "lineIndex"}},
+            {"$unwind": {"path": "$lines", "includeArrayIndex": "variantIndex"}},
         ]
 
     def _filter_textlines(self) -> List[Dict]:
         return [
             {
                 "$addFields": {
-                    "manuscriptId": {
+                    "lines": {
                         "$filter": {
-                            "input": "$manuscriptId",
-                            "as": "m",
-                            "cond": {"$eq": ["$$m.line.type", "TextLine"]},
-                        }
-                    }
-                }
-            },
-        ]
-
-    def _get_matching_variants(self) -> List[Dict]:
-        return [
-            {
-                "$unwind": {
-                    "path": "$manuscriptId",
-                    "includeArrayIndex": "manuscriptVariantLineIndex",
-                }
-            },
-            {
-                "$match": {
-                    "$expr": {
-                        "$in": [
-                            [
-                                "$manuscriptId.manuscriptId",
-                                "$manuscriptVariantLineIndex",
-                            ],
-                            "$manuscriptsToInclude",
-                        ]
-                    }
-                }
-            },
-        ]
-
-    def _collect_indexes(self) -> List[Dict]:
-        return [
-            {"$unwind": {"path": "$lines", "includeArrayIndex": "lineIndex"}},
-            {
-                "$unwind": {
-                    "path": "$lines.variants",
-                    "includeArrayIndex": "variantIndex",
-                }
-            },
-            {
-                "$project": {
-                    "manuscriptLineIds": {
-                        "$filter": {
-                            "input": "$lines.variants.manuscripts",
-                            "as": "manuscript",
+                            "input": "$lines",
+                            "as": "line",
                             "cond": {
-                                "$eq": ["$$manuscript.manuscriptId", "$manuscriptId"]
+                                "$and": [
+                                    {
+                                        "$eq": [
+                                            "$$line.manuscriptId",
+                                            "$_id.manuscriptId",
+                                        ]
+                                    },
+                                    {"$eq": ["$$line.line.type", "TextLine"]},
+                                ]
                             },
                         }
-                    },
-                    "lineIndex": True,
-                    "variantIndex": True,
-                    "manuscriptId": True,
+                    }
                 }
             },
-            {"$match": {"manuscriptLineIds": {"$exists": True, "$not": {"$size": 0}}}},
-            {
-                "$group": {
-                    "_id": "$_id",
-                    "manuscriptsToInclude": {"$addToSet": "$manuscriptId"},
-                    "lineIndex": {"$push": "$lineIndex"},
-                    "variantIndex": {"$push": "$variantIndex"},
-                }
-            },
+            {"$match": {"lines": {"$exists": True, "$not": {"$size": 0}}}},
         ]
 
     def _regroup_chapters(self, count_matches_per_item: bool) -> List[Dict]:
         return [
             {
                 "$group": {
+                    "_id": "$_id",
+                    "_maxLength": {"$sum": 1},
+                    "textLinesToInclude": {"$first": "$textLinesToInclude"},
+                    "lineIndex": {"$push": "$lineIndex"},
+                    "variantIndex": {"$push": "$variantIndex"},
+                }
+            },
+            {
+                "$project": {
+                    "include": {
+                        "$map": {
+                            "input": {
+                                "$filter": {
+                                    "input": "$textLinesToInclude",
+                                    "as": "i",
+                                    "cond": {"$lt": ["$$i", "$_maxLength"]},
+                                }
+                            },
+                            "as": "t",
+                            "in": [
+                                {"$arrayElemAt": ["$lineIndex", "$$t"]},
+                                {"$arrayElemAt": ["$variantIndex", "$$t"]},
+                            ],
+                        }
+                    }
+                }
+            },
+            {"$unwind": "$include"},
+            {
+                "$project": {
+                    "lines": {"$first": "$include"},
+                    "variants": {"$last": "$include"},
+                }
+            },
+            {
+                "$group": {
                     "_id": {
-                        "textId": "$textId",
-                        "name": "$name",
-                        "stage": "$stage",
-                        "lines": "$lineIndex",
-                        "variants": "$variantIndex",
-                    },
+                        "textId": "$_id.textId",
+                        "stage": "$_id.stage",
+                        "name": "$_id.name",
+                        "lines": "$lines",
+                        "variants": "$variants",
+                    }
                 }
             },
             {"$replaceRoot": {"newRoot": "$_id"}},
@@ -224,8 +196,8 @@ class CorpusSignMatcher:
                 "$group": {
                     "_id": {
                         "textId": "$textId",
-                        "name": "$name",
                         "stage": "$stage",
+                        "name": "$name",
                     },
                     "lines": {"$push": "$lines"},
                     "variants": {"$push": "$variants"},
@@ -256,6 +228,5 @@ class CorpusSignMatcher:
             *self._merge_manuscripts_to_include(),
             *self._flatten_variants(),
             *self._filter_textlines(),
-            *self._get_matching_variants(),
             *self._regroup_chapters(count_matches_per_item),
         ]
