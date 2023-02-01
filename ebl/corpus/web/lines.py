@@ -89,8 +89,9 @@ class LinesImportResource:
 
 
 class LineResource:
-    def __init__(self, corpus: Corpus):
+    def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
+        self._cache = cache
 
     @falcon.before(require_scope, "read:texts")
     def on_get(
@@ -105,12 +106,21 @@ class LineResource:
         number: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
+        cache_id = f"{str(chapter_id)} line-{number}"
+
+        if self._cache.has(cache_id):
+            resp.media = self._cache.get(cache_id)
+            return
 
         try:
             line, manuscripts = self._corpus.find_line_with_manuscript_joins(
                 chapter_id, int(number)
             )
-            line_details = LineDetailsDisplay.from_line_manuscripts(line, manuscripts)
-            resp.media = LineDetailsDisplaySchema().dump(line_details)
+            line_details = LineDetailsDisplay.from_line_manuscripts(
+                line, manuscripts
+            )
+            dump = LineDetailsDisplaySchema().dump(line_details)
+            self._cache.set(cache_id, dump)
+            resp.media = dump
         except (IndexError, ValueError) as error:
             raise NotFoundError(f"{chapter_id} line {number} not found.") from error

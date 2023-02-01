@@ -38,7 +38,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     )
     chapters = ChaptersResource(corpus)
     chapters_display = ChaptersDisplayResource(corpus, context.custom_cache)
-    chapters_line = LineResource(corpus)
+    chapters_line = LineResource(corpus, context.custom_cache)
     chapters_by_lemma = ChaptersByLemmaResource(corpus)
     alignment = AlignmentResource(corpus, context.custom_cache)
     manuscript_lemmatization = LemmatizationResource(corpus, context.custom_cache)
