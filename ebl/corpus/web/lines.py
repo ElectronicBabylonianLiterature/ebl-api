@@ -116,9 +116,7 @@ class LineResource:
             line, manuscripts = self._corpus.find_line_with_manuscript_joins(
                 chapter_id, int(number)
             )
-            line_details = LineDetailsDisplay.from_line_manuscripts(
-                line, manuscripts
-            )
+            line_details = LineDetailsDisplay.from_line_manuscripts(line, manuscripts)
             dump = LineDetailsDisplaySchema().dump(line_details)
             self._cache.set(cache_id, dump)
             resp.media = dump
