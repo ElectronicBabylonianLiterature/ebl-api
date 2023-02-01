@@ -90,14 +90,4 @@ def test_get_guest_scope(guest_client, fragmentarium):
     fragmentarium.create(fragment)
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
-def test_get_fragment_no_access(basic_fragmentarium_permissions_client, fragmentarium):
-    fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
-    result = basic_fragmentarium_permissions_client.simulate_get(
-        f"/fragments/{fragment.number}"
-    )
-
-    assert result.status == falcon.HTTP_FORBIDDEN
+    assert result.status == falcon.HTTP_OK

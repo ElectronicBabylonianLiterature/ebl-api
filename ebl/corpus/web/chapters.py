@@ -19,6 +19,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class ChaptersResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -39,6 +42,9 @@ class ChaptersResource:
 
 
 class ChaptersDisplayResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
         self._cache = cache

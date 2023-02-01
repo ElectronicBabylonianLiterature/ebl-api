@@ -24,6 +24,9 @@ class TextsResource:
 
 
 class TextResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -36,6 +39,9 @@ class TextResource:
 
 
 class TextSearchResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(
         self, corpus: Corpus, transliteration_query_factory: TransliterationQueryFactory
     ):

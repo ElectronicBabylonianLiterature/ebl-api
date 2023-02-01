@@ -89,6 +89,9 @@ class LinesImportResource:
 
 
 class LineResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 

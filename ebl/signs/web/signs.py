@@ -6,6 +6,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class SignsResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, signs: SignRepository):
         self._signs = signs
 

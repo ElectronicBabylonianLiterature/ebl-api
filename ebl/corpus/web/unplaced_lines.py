@@ -13,6 +13,9 @@ class UnplacedLinesSchema(Schema):
 
 
 class UnplacedLinesResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 

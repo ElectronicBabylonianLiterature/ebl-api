@@ -29,7 +29,7 @@ def test_create_response_dto(user):
         joins=Joins(((JoinFactory.build(),),))
     )
     has_photo = True
-    assert create_response_dto(lemmatized_fragment, user, has_photo) == pydash.omit_by(
+    expected_dto = pydash.omit_by(
         {
             "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": lemmatized_fragment.accession,
@@ -59,8 +59,7 @@ def test_create_response_dto(user):
                 for entry in lemmatized_fragment.record.entries
             ],
             "folios": [
-                attr.asdict(folio)
-                for folio in lemmatized_fragment.folios.filter(user).entries
+                attr.asdict(folio) for folio in lemmatized_fragment.folios.entries
             ],
             "text": TextSchema().dump(lemmatized_fragment.text),
             "references": [
@@ -98,6 +97,7 @@ def test_create_response_dto(user):
         },
         pydash.is_none,
     )
+    assert create_response_dto(lemmatized_fragment, user, has_photo) == expected_dto
 
 
 def test_create_fragment_info_dto():

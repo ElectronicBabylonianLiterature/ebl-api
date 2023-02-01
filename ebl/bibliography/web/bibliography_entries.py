@@ -7,6 +7,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class BibliographyResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
@@ -25,6 +28,9 @@ class BibliographyResource:
 
 
 class BibliographyEntriesResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, bibliography):
         self._bibliography = bibliography
 

@@ -1,5 +1,4 @@
-import attr
-from marshmallow import fields, pre_dump
+from marshmallow import fields
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.errors import DataError
@@ -18,10 +17,6 @@ class FragmentDtoSchema(FragmentSchema):
 
     class Meta:
         exclude = ("authorized_scopes",)
-
-    @pre_dump
-    def filter_folios(self, data, **kwargs):
-        return attr.evolve(data, folios=data.folios.filter(self.context["user"]))
 
 
 def create_response_dto(fragment: Fragment, user: User, has_photo: bool):

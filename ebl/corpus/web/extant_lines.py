@@ -26,6 +26,9 @@ class ExtantLinesSchema(Schema):
 
 
 class ExtantLinesResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 

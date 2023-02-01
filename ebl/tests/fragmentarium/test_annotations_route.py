@@ -12,6 +12,21 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
+def get_update_data():
+
+    number = MuseumNumber.of("K.123")
+    annotation_1 = AnnotationFactory(cropped_sign=None)
+    annotation_2 = AnnotationFactory(cropped_sign=None)
+    annotations = AnnotationsFactory.build(
+        fragment_number=number, annotations=[annotation_1, annotation_2]
+    )
+    fragment = TransliteratedFragmentFactory.build(number=number)
+    body = json.dumps(AnnotationsSchema().dump(annotations))
+    url = f"/fragments/{number}/annotations"
+
+    return [url, body, fragment, annotations, number]
+
+
 def test_find_annotations(client):
     fragment_number = MuseumNumber("X", "2")
     annotations = Annotations(fragment_number)
@@ -60,28 +75,13 @@ def test_generate_annotations(client, photo_repository):
     assert result.json["annotations"][0]["geometry"]["y"] == 0.0
 
 
-def test_find_not_allowed(guest_client):
-    result = guest_client.simulate_get(
-        "/fragments/X.1/annotations", params={"generateAnnotations": False}
-    )
-
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
 def test_update(client, fragment_repository, photo_repository):
-    number = MuseumNumber.of("K.123")
-    annotation_1 = AnnotationFactory(cropped_sign=None)
-    annotation_2 = AnnotationFactory(cropped_sign=None)
-    annotations = AnnotationsFactory.build(
-        fragment_number=number, annotations=[annotation_1, annotation_2]
-    )
-    fragment = TransliteratedFragmentFactory.build(number=number)
+
+    [url, body, fragment, annotations, number] = get_update_data()
     fragment_repository.create(fragment)
     photo_repository._create(create_test_photo(number))
 
-    body = AnnotationsSchema().dump(annotations)
-    url = f"/fragments/{number}/annotations"
-    post_result = client.simulate_post(url, body=json.dumps(body))
+    post_result = client.simulate_post(url, body=body)
 
     expected_json = AnnotationsSchema().dump(annotations)
 
@@ -127,10 +127,11 @@ def test_update_invalid(client):
     assert post_result.status == falcon.HTTP_BAD_REQUEST
 
 
-def test_update_not_allowed(guest_client):
-    annotations = AnnotationsFactory.build()
-    body = AnnotationsSchema().dumps(annotations)
-    url = "/fragments/not match/annotations"
+def test_update_not_allowed(guest_client, fragment_repository, photo_repository):
+
+    [url, body, fragment, annotations, number] = get_update_data()
+    fragment_repository.create(fragment)
+    photo_repository._create(create_test_photo(number))
     result = guest_client.simulate_post(url, body=body)
 
     assert result.status == falcon.HTTP_FORBIDDEN

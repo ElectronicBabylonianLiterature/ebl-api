@@ -53,11 +53,3 @@ def test_get_folio_pager_invalid_id(client):
     result = client.simulate_get("/fragments/invalid/pager/WGL/1")
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-
-def test_get_folio_pager_no_access_to_folio(client, fragmentarium):
-    fragment = FragmentFactory.build()
-    fragmentarium.create(fragment)
-    result = client.simulate_get(f"/fragments/{fragment.number}/pager/XXX/1")
-
-    assert result.status == falcon.HTTP_FORBIDDEN
