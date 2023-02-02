@@ -2,7 +2,6 @@ from typing import Tuple
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.corpus.application.record_schemas import RecordSchema
-from ebl.corpus.application.schemas import serialize_signs
 from ebl.corpus.web.chapter_schemas import (
     ApiChapterSchema,
     ApiManuscriptSchema,
@@ -67,7 +66,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
         "version": chapter.version,
         "name": chapter.name,
         "order": chapter.order,
-        "signs": serialize_signs(chapter.signs),
+        "signs": list(chapter.signs),
         "record": RecordSchema().dump(chapter.record),
         "parserVersion": chapter.parser_version,
         "manuscripts": ApiManuscriptSchema(
