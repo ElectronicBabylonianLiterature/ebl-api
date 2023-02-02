@@ -17,3 +17,7 @@ class CacheRepository(ABC):
     @abstractmethod
     def delete(self, cache_key: str) -> None:
         ...
+
+    @abstractmethod
+    def delete_all(self, pattern: str) -> None:
+        ...

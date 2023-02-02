@@ -2,8 +2,12 @@ from typing import List, Optional, Tuple, Sequence, Dict
 
 import pymongo
 from pymongo.database import Database
+from pymongo.collation import Collation
+
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.query.query_result import CorpusQueryResult
+from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.corpus import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
@@ -24,6 +28,7 @@ from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.chapter_query_filters import (
     filter_query_by_transliteration,
 )
+from ebl.corpus.infrastructure.corpus_search_aggregations import CorpusPatternMatcher
 from ebl.corpus.infrastructure.manuscript_lemma_filter import (
     filter_manuscripts_by_lemma,
 )
@@ -308,6 +313,28 @@ class MongoTextRepository(TextRepository):
         return DictionaryLineSchema().load(
             self._limit_by_genre(lemma_lines),
             many=True,
+        )
+
+    def query(self, query: dict) -> CorpusQueryResult:
+        if set(query) - {"lemmaOperator"}:
+            matcher = CorpusPatternMatcher(query)
+            data = next(
+                self._chapters.aggregate(
+                    matcher.build_pipeline(),
+                    collation=Collation(
+                        locale="en", numericOrdering=True, alternate="shifted"
+                    ),
+                    allowDiskUse=True,
+                ),
+                None,
+            )
+        else:
+            data = None
+
+        return (
+            CorpusQueryResultSchema().load(data)
+            if data
+            else CorpusQueryResult.create_empty()
         )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Sequence, Tuple
 
 import attr
+from ebl.common.query.query_result import CorpusQueryResult
 
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
@@ -32,6 +33,7 @@ from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
+
 
 COLLECTION = "chapters"
 
@@ -95,6 +97,10 @@ class TextRepository(ABC):
     def query_manuscripts_with_joins_by_chapter(
         self, id_: ChapterId
     ) -> Sequence[Manuscript]:
+        ...
+
+    @abstractmethod
+    def query(self, query: dict) -> CorpusQueryResult:
         ...
 
 
@@ -181,6 +187,9 @@ class Corpus:
             )
             for line in self._repository.query_by_lemma(query, genre)
         )
+
+    def query(self, query: dict) -> CorpusQueryResult:
+        return self._repository.query(query)
 
     def list(self) -> List[Text]:
         return self._repository.list()

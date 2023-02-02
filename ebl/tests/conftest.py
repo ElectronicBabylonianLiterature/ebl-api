@@ -23,7 +23,7 @@ import ebl.context
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
@@ -425,7 +425,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
-        custom_cache=CustomCache(mongo_cache_repository),
+        custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
     )
 
