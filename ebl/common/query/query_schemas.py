@@ -5,7 +5,6 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 
 
 class QueryItemSchema(Schema):
-    id_ = fields.String(data_key="_id")
     matching_lines = fields.List(
         fields.Integer(), required=True, data_key="matchingLines"
     )

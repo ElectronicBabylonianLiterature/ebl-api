@@ -316,7 +316,7 @@ GET_MATCHING_LINES_DATA = [
 def test_get_matching_lines(string, expected, sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
-    transliterated_fragment = FragmentFactory.build(
+    transliterated_fragment: Fragment = FragmentFactory.build(
         text=parse_atf_lark(
             Atf(
                 "1'. [...-ku]-nu-ši [...]\n"

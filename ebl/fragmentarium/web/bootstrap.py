@@ -70,7 +70,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.get_transliteration_query_factory(),
         context.cache,
     )
-    fragment_query = FragmentsQueryResource(context.fragment_repository)
+    fragment_query = FragmentsQueryResource(
+        context.fragment_repository, context.get_transliteration_query_factory()
+    )
     genres = GenresResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
