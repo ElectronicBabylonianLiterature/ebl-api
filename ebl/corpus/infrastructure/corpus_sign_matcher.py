@@ -29,7 +29,7 @@ class CorpusSignMatcher:
                             "as": "m",
                             "in": {
                                 "manuscriptId": {"$first": "$$m"},
-                                "signs": {"$split": [{"$last": "$$m"}, "\n"]},
+                                "signs": {"$last": "$$m"},
                             },
                         }
                     },
