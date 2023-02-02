@@ -122,11 +122,10 @@ def test_query_chapter_lemmas(
     }
 
 
-SIGNS: List[List[str]] = [
-    ["X ABZ411 ABZ11 ABZ41"],
-    ["X X X TI BA"],
-    ["MA ŠU X"],
-    ["TI BA X"],
+SIGNS = [
+    "X ABZ411 ABZ11 ABZ41",
+    "X X X TI BA",
+    "MA ŠU X\nTI BA X",
 ]
 MANUSCRIPTS = ManuscriptFactory.build_batch(3)
 VARIANT_LINES = [
