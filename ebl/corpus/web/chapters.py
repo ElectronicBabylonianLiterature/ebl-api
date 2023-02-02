@@ -72,6 +72,9 @@ class ChaptersDisplayResource:
 
 
 class ChaptersByManuscriptResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
         self._corpus = corpus
         self._fragment_finder = fragment_finder
