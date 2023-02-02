@@ -141,20 +141,11 @@ class CorpusSignMatcher:
             {"$match": {"lines": {"$exists": True, "$not": {"$size": 0}}}},
         ]
 
-    def _regroup_chapters(self, count_matches_per_item: bool) -> List[Dict]:
+    def _filter_line_variants_to_include(self) -> List[Dict]:
         return [
             {
-                "$group": {
-                    "_id": "$_id",
-                    "_maxLength": {"$sum": 1},
-                    "textLinesToInclude": {"$first": "$textLinesToInclude"},
-                    "lineIndex": {"$push": "$lineIndex"},
-                    "variantIndex": {"$push": "$variantIndex"},
-                }
-            },
-            {
                 "$project": {
-                    "include": {
+                    "lineVariantsToInclude": {
                         "$map": {
                             "input": {
                                 "$filter": {
@@ -172,13 +163,17 @@ class CorpusSignMatcher:
                     }
                 }
             },
-            {"$unwind": "$include"},
+            {"$unwind": "$lineVariantsToInclude"},
             {
                 "$project": {
-                    "lines": {"$first": "$include"},
-                    "variants": {"$last": "$include"},
+                    "lines": {"$first": "$lineVariantsToInclude"},
+                    "variants": {"$last": "$lineVariantsToInclude"},
                 }
             },
+        ]
+
+    def _deduplicate_matches(self) -> List[Dict]:
+        return [
             {
                 "$group": {
                     "_id": {
@@ -192,6 +187,21 @@ class CorpusSignMatcher:
             },
             {"$replaceRoot": {"newRoot": "$_id"}},
             {"$sort": {"lines": 1, "variants": 1}},
+        ]
+
+    def _regroup_chapters(self, count_matches_per_item: bool) -> List[Dict]:
+        return [
+            {
+                "$group": {
+                    "_id": "$_id",
+                    "_maxLength": {"$sum": 1},
+                    "textLinesToInclude": {"$first": "$textLinesToInclude"},
+                    "lineIndex": {"$push": "$lineIndex"},
+                    "variantIndex": {"$push": "$variantIndex"},
+                }
+            },
+            *self._filter_line_variants_to_include(),
+            *self._deduplicate_matches(),
             {
                 "$group": {
                     "_id": {
