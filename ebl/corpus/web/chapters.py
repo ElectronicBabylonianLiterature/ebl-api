@@ -4,7 +4,7 @@ import falcon
 from pydash.arrays import flatten_deep
 from pydash import flow
 
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_transliteration,
@@ -51,7 +51,7 @@ class ChaptersResource:
 
 
 class ChaptersDisplayResource:
-    def __init__(self, corpus: Corpus, cache: CustomCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
 

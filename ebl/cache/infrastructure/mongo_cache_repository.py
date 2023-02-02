@@ -3,6 +3,7 @@ from pymongo.database import Database
 from ebl.cache.application.cache_repository import CacheRepository
 from ebl.mongo_collection import MongoCollection
 
+
 COLLECTION = "cache"
 
 
