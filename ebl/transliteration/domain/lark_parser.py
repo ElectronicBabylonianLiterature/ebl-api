@@ -102,9 +102,8 @@ def split_paragraphs(atf: str) -> Iterator[str]:
         yield " ".join(paragraph.split())
 
 
-def parse_introduction(atf: str) -> Sequence[MarkupPart]:
+def parse_markup_paragraphs(atf: str) -> Sequence[MarkupPart]:
     parts = []
-
     for paragraph in split_paragraphs(atf):
         if parts:
             parts.append(ParagraphPart())
