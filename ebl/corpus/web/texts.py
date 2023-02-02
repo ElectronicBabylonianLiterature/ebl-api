@@ -14,6 +14,7 @@ from ebl.users.web.require_scope import require_scope
 
 
 class TextsResource:
+
     auth = {"exempt_methods": ["GET"]}
 
     def __init__(self, corpus: Corpus):

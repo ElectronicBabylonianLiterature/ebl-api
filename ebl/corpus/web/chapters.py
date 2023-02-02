@@ -155,6 +155,9 @@ class ChaptersByManuscriptResource:
 
 
 class ChaptersByLemmaResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -175,6 +178,9 @@ class ChaptersByLemmaResource:
 
 
 class CorpusQueryResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(
         self,
         corpus: Corpus,

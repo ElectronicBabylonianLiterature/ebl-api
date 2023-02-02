@@ -40,6 +40,9 @@ class FragmentsResource:
 
 
 class FragmentsQueryResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(
         self,
         repository: FragmentRepository,
