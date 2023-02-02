@@ -72,14 +72,15 @@ class ChaptersDisplayResource:
         variants: Optional[Sequence[int]],
     ):
         if lines and variants:
-            line_variants = self._create_line_variant_map(lines, variants)
+            line_variants_map = self._create_line_variant_map(lines, variants)
+
+            def get_matching_variants(variants: Sequence, line_index) -> Sequence:
+                return [variants[i] for i in line_variants_map[line_index]]
 
             chapter["lines"] = [
                 {
                     **line,
-                    "variants": [
-                        line["variants"][i] for i in line_variants[line_index]
-                    ],
+                    "variants": get_matching_variants(line["variants"], line_index),
                 }
                 for line_index, line in enumerate(chapter["lines"])
                 if line_index in lines
