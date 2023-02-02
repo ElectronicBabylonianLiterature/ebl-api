@@ -66,6 +66,13 @@ class MongoCollection:
         if result.deleted_count == 0:
             raise self.__not_found_error(query)
 
+    def delete_many(self, query: dict) -> None:
+        if not bool(query):
+            raise ValueError("Empty Query for delete many not allowed")
+        result = self.__get_collection().delete_many(query)
+        if result.deleted_count == 0:
+            raise self.__not_found_error(query)
+
     def update_one(self, query, update):
         result = self.__get_collection().update_one(query, update)
         if result.matched_count == 0:

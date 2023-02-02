@@ -27,3 +27,10 @@ def test_custom_cache_delete(mongo_cache_repository, when):
     when(mongo_cache_repository).delete("test-key").thenReturn(None)
     custom_cache.delete("test-key")
     verify(mongo_cache_repository, 1).delete("test-key")
+
+
+def test_custom_cache_delete_all(mongo_cache_repository, when):
+    custom_cache = CustomCache(mongo_cache_repository)
+    when(mongo_cache_repository).delete_all("^test-").thenReturn(None)
+    custom_cache.delete_all(pattern="^test-")
+    verify(mongo_cache_repository, 1).delete_all("^test-")

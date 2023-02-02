@@ -18,3 +18,6 @@ class CustomCache:
 
     def delete(self, key: str) -> None:
         self._mongo_cache_repository.delete(key)
+
+    def delete_all(self, pattern: str) -> None:
+        self._mongo_cache_repository.delete_all(pattern)
