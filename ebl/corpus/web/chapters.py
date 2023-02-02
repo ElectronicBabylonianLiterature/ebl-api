@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Sequence
+from typing import Sequence, Optional
 import falcon
 from pydash.arrays import flatten_deep
 from pydash import flow
@@ -51,8 +51,11 @@ class ChaptersResource:
 
 
 def select_lines_and_variants(
-    chapter: dict, lines: Sequence[int], variants: Sequence[int]
+    chapter: dict, lines: Optional[Sequence[int]], variants: Optional[Sequence[int]]
 ):
+    if not (lines and variants):
+        return chapter
+
     line_variants = defaultdict(set)
 
     for line, variant in zip(lines, variants):
@@ -93,21 +96,13 @@ class ChaptersDisplayResource:
 
         if self._cache.has(chapter_id_str):
             cached_chapter = self._cache.get(chapter_id_str)
-            resp.media = (
-                select_lines_and_variants(cached_chapter, lines, variants)
-                if lines and variants
-                else cached_chapter
-            )
+            resp.media = select_lines_and_variants(cached_chapter, lines, variants)
         else:
             chapter = self._corpus.find_chapter_for_display(chapter_id)
             dump = ChapterDisplaySchema().dump(chapter)
             self._cache.set(chapter_id_str, dump)
 
-            resp.media = (
-                select_lines_and_variants(dump, lines, variants)
-                if lines and variants
-                else dump
-            )
+            resp.media = select_lines_and_variants(dump, lines, variants)
 
 
 class ChaptersByManuscriptResource:
