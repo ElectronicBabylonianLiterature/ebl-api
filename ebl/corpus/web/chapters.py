@@ -50,33 +50,42 @@ class ChaptersResource:
         resp.media = ApiChapterSchema().dump(chapter)
 
 
-def select_lines_and_variants(
-    chapter: dict, lines: Optional[Sequence[int]], variants: Optional[Sequence[int]]
-):
-    if not (lines and variants):
-        return chapter
-
-    line_variants = defaultdict(set)
-
-    for line, variant in zip(lines, variants):
-        line_variants[line].add(variant)
-
-    chapter["lines"] = [
-        {
-            **line,
-            "variants": [line["variants"][i] for i in line_variants[line_index]],
-        }
-        for line_index, line in enumerate(chapter["lines"])
-        if line_index in lines
-    ]
-
-    return chapter
-
-
 class ChaptersDisplayResource:
     def __init__(self, corpus: Corpus, cache: CustomCache):
         self._corpus = corpus
         self._cache = cache
+
+    def _create_line_variant_map(
+        self, lines: Sequence[int], variants: Sequence[int]
+    ) -> dict:
+        line_variants = defaultdict(set)
+
+        for line, variant in zip(lines, variants):
+            line_variants[line].add(variant)
+
+        return line_variants
+
+    def _select_lines_and_variants(
+        self,
+        chapter: dict,
+        lines: Optional[Sequence[int]],
+        variants: Optional[Sequence[int]],
+    ):
+        if lines and variants:
+            line_variants = self._create_line_variant_map(lines, variants)
+
+            chapter["lines"] = [
+                {
+                    **line,
+                    "variants": [
+                        line["variants"][i] for i in line_variants[line_index]
+                    ],
+                }
+                for line_index, line in enumerate(chapter["lines"])
+                if line_index in lines
+            ]
+
+        return chapter
 
     @falcon.before(require_scope, "read:texts")
     def on_get(
@@ -96,13 +105,15 @@ class ChaptersDisplayResource:
 
         if self._cache.has(chapter_id_str):
             cached_chapter = self._cache.get(chapter_id_str)
-            resp.media = select_lines_and_variants(cached_chapter, lines, variants)
+            resp.media = self._select_lines_and_variants(
+                cached_chapter, lines, variants
+            )
         else:
             chapter = self._corpus.find_chapter_for_display(chapter_id)
             dump = ChapterDisplaySchema().dump(chapter)
             self._cache.set(chapter_id_str, dump)
 
-            resp.media = select_lines_and_variants(dump, lines, variants)
+            resp.media = self._select_lines_and_variants(dump, lines, variants)
 
 
 class ChaptersByManuscriptResource:
