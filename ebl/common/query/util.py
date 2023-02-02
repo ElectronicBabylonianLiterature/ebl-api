@@ -1,10 +1,10 @@
 from typing import Union, Dict
 
 
-def flatten_field(input_: Union[str, Dict]) -> Dict:
+def flatten_field(input_: Union[str, Dict], depth=1) -> Dict:
     return {
         "$reduce": {
-            "input": input_,
+            "input": flatten_field(input_, depth=depth - 1) if depth > 1 else input_,
             "initialValue": [],
             "in": {"$concatArrays": ["$$value", "$$this"]},
         }
@@ -35,3 +35,7 @@ def ngrams(input_: Union[str, Dict], n) -> Dict:
             ]
         }
     }
+
+
+def filter_array(input_, as_, cond) -> Dict:
+    return {"$filter": {"input": input_, "as": as_, "cond": cond}}

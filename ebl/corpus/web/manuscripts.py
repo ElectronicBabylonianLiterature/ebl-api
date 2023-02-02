@@ -1,7 +1,7 @@
 import falcon
 from marshmallow import Schema, fields
 
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.chapter_schemas import (
     ApiChapterSchema,
@@ -21,7 +21,7 @@ class ManuscriptDtoSchema(Schema):
 
 
 class ManuscriptsResource:
-    def __init__(self, corpus: Corpus, cache: CustomCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
 
@@ -53,7 +53,8 @@ class ManuscriptsResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete(str(chapter_id))
+        self._cache.delete_chapter(chapter_id)
+
         dto = ManuscriptDtoSchema().load(req.media)
         updated_chapter = self._corpus.update_manuscripts(
             chapter_id,

@@ -13,7 +13,7 @@ import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.cache.application.cache import create_cache
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
@@ -72,7 +72,7 @@ def create_context():
         set_sentry_user,
     )
     cache = create_cache()
-    custom_cache = CustomCache(MongoCacheRepository(database))
+    custom_cache = ChapterCache(MongoCacheRepository(database))
     return Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=auth_backend,
