@@ -3,7 +3,7 @@ import falcon
 
 def has_scope(req: falcon.Request, scope: str) -> bool:
     if not hasattr(req.context, "user") or not req.context.user:
-        return "read:" in scope or scope in {"access:beta"}
+        return True if "read:" in scope or scope in ["access:beta"] else False
     return req.context.user.has_scope(scope)
 
 
