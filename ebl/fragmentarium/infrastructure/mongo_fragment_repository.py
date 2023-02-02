@@ -12,9 +12,6 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -23,10 +20,8 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    QueryType,
-    create_search_aggregation,
+    PatternMatcher,
 )
-from ebl.fragmentarium.infrastructure.phrase_matcher import filter_query_results
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -36,7 +31,6 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_random,
     fragment_is,
     join_joins,
-    number_is,
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -103,20 +97,6 @@ def _find_adjacent_museum_number_from_sequence(
         current_prev = current_prev or last
         current_next = current_next or first
     return current_prev, current_next
-
-
-def filter_fragment_lines(lines: Sequence[int]) -> dict:
-    return {
-        "$addFields": {
-            "text.lines": {
-                "$map": {
-                    "input": lines,
-                    "as": "i",
-                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
-                }
-            }
-        }
-    }
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -202,13 +182,32 @@ class MongoFragmentRepository(FragmentRepository):
             }
         )
 
+    def _filter_fragment_lines(self, lines: Optional[Sequence[int]]) -> List:
+        return (
+            [
+                {
+                    "$addFields": {
+                        "text.lines": {
+                            "$map": {
+                                "input": lines,
+                                "as": "i",
+                                "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
+                            }
+                        }
+                    }
+                }
+            ]
+            if lines
+            else []
+        )
+
     def query_by_museum_number(
         self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
     ):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *([filter_fragment_lines(lines)] if lines else []),
+                *self._filter_fragment_lines(lines),
                 *join_reference_documents(),
                 *join_joins(),
             ]
@@ -218,57 +217,6 @@ class MongoFragmentRepository(FragmentRepository):
             return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
-
-    @staticmethod
-    def _query_fragmentarium_create_query(
-        query: FragmentariumSearchQuery,
-    ) -> dict:
-        number_query = number_is(query.number) if query.number else {}
-        signs_query = (
-            {}
-            if query.transliteration.is_empty()
-            else {"signs": {"$regex": query.transliteration.regexp}}
-        )
-
-        id_query = (
-            {"references": {"$elemMatch": {"id": query.bibliography_id}}}
-            if query.bibliography_id
-            else {}
-        )
-        if query.pages:
-            id_query["references"]["$elemMatch"]["pages"] = {
-                "$regex": rf".*?(^|[^\d]){query.pages}([^\d]|$).*?"
-            }
-        return {**number_query, **signs_query, **id_query}
-
-    def query_fragmentarium(
-        self, query: FragmentariumSearchQuery
-    ) -> Tuple[Sequence[Fragment], int]:
-        LIMIT = 30
-        mongo_query = self._query_fragmentarium_create_query(query)
-        cursor = (
-            self._fragments.find_many(
-                mongo_query,
-                projection={"joins": False},
-            )
-            .sort([("script.period", pymongo.ASCENDING), ("_id", pymongo.ASCENDING)])
-            .skip(LIMIT * query.paginationIndex)
-            .limit(LIMIT)
-            .collation(
-                Collation(locale="en", numericOrdering=True, alternate="shifted")
-            )
-            .allow_disk_use(True)
-        )
-        return self._map_fragments(cursor), self._fragments.count_documents(mongo_query)
-
-    def query_by_id_and_page_in_references(self, id_: str, pages: str):
-        match: dict = {"references": {"$elemMatch": {"id": id_}}}
-        if pages:
-            match["references"]["$elemMatch"]["pages"] = {
-                "$regex": rf".*?(^|[^\d]){pages}([^\d]|$).*?"
-            }
-        cursor = self._fragments.find_many(match, projection={"joins": False})
-        return self._map_fragments(cursor)
 
     def query_random_by_transliterated(self):
         cursor = self._fragments.aggregate(
@@ -451,15 +399,20 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
+    def query(self, query: dict) -> QueryResult:
 
-        data = next(
-            self._fragments.aggregate(create_search_aggregation(query_type, lemmas)),
-            {"items": [], "matchCountTotal": 0},
-        )
+        if set(query) - {"lemmaOperator"}:
+            matcher = PatternMatcher(query)
+            data = next(
+                self._fragments.aggregate(
+                    matcher.build_pipeline(),
+                    collation=Collation(
+                        locale="en", numericOrdering=True, alternate="shifted"
+                    ),
+                ),
+                None,
+            )
+        else:
+            data = None
 
-        return QueryResultSchema().load(
-            filter_query_results(data, lemmas)
-            if query_type == QueryType.PHRASE
-            else data
-        )
+        return QueryResultSchema().load(data) if data else QueryResult.create_empty()

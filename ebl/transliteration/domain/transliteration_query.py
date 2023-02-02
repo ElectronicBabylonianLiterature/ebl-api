@@ -1,7 +1,6 @@
 from __future__ import annotations
 import re
 import attr
-from itertools import chain
 from typing import cast, Sequence, Tuple, List
 from enum import Enum
 from collections import OrderedDict
@@ -69,10 +68,10 @@ class TransliterationQuery:
 
     def children_regexp(self, string: str = "") -> str:
         children = self.create_children(string)
-        if children == []:
+        if not children:
             return r""
         separator = r"( .*)?\n.*" if self.type == Type.LINES else r" "
-        return rf"{separator}".join(child.regexp for child in children)
+        return separator.join(child.regexp for child in children)
 
     def create_children(self, string: str = "") -> Sequence[TransliterationQuery]:
         return (
@@ -117,13 +116,7 @@ class TransliterationQuery:
         ]
 
     def get_line_number(self, transliteration: str, position: int) -> int:
-        return len(
-            [
-                char
-                for char in chain.from_iterable(transliteration[:position])
-                if char == "\n"
-            ]
-        )
+        return transliteration[:position].count("\n")
 
     def make_transliteration_query_line(self, string: str) -> TransliterationQueryLine:
         return TransliterationQueryLine(string=string, visitor=self.visitor)
@@ -146,7 +139,7 @@ class TransliterationQueryText(TransliterationQuery):
         return rf"(?<![^|\s]){signs_regexp}"
 
     def _create_sign_regexp(self, sign: str) -> str:
-        return rf"([^\s]+\/)*{re.escape(sign)}(?![^\s\/])"
+        return rf"(\S+\/)*{re.escape(sign)}(?![^\s\/])"
 
     def _create_signs(self, transliteration: str) -> Sequence[str]:
         if not transliteration:
@@ -170,11 +163,13 @@ class TransliterationQueryWildCard(TransliterationQuery):
     def _regexp(self) -> str:
         if self.type == Type.ALTERNATIVE:
             return self._regexp_alternative()
+
+        any_sign_regex = r"(\S+\/)*[^ ]+(\/\S+)*"
+
         if self.type == Type.ANY_SIGN:
-            return r"([^\s]+\/)*[^ ]+(\/[^\s]+)*"
-        return (
-            r"([^\s]+\/)*[^ ]+(\/[^\s]+)*.*" if self.type == Type.ANY_SIGN_PLUS else ""
-        )
+            return any_sign_regex
+
+        return f"{any_sign_regex}.*" if self.type == Type.ANY_SIGN_PLUS else ""
 
     def _regexp_alternative(self) -> str:
         alternative_strings = self.string.strip("[]").split("|")
