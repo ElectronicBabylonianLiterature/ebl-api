@@ -24,7 +24,7 @@ def get_update_data():
     body = json.dumps(AnnotationsSchema().dump(annotations))
     url = f"/fragments/{number}/annotations"
 
-    return [url, body, fragment, annotations, number]
+    return url, body, fragment, annotations, number
 
 
 def test_find_annotations(client):
@@ -77,7 +77,7 @@ def test_generate_annotations(client, photo_repository):
 
 def test_update(client, fragment_repository, photo_repository):
 
-    [url, body, fragment, annotations, number] = get_update_data()
+    url, body, fragment, annotations, number = get_update_data()
     fragment_repository.create(fragment)
     photo_repository._create(create_test_photo(number))
 
@@ -129,7 +129,7 @@ def test_update_invalid(client):
 
 def test_update_not_allowed(guest_client, fragment_repository, photo_repository):
 
-    [url, body, fragment, annotations, number] = get_update_data()
+    url, body, fragment, annotations, number = get_update_data()
     fragment_repository.create(fragment)
     photo_repository._create(create_test_photo(number))
     result = guest_client.simulate_post(url, body=body)
