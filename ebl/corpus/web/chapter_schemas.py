@@ -30,11 +30,10 @@ from ebl.transliteration.domain.lark_parser import (
     parse_parallel_line,
     parse_text_line,
     parse_translation_line,
-    parse_markup,
 )
+from ebl.markup.domain.converters import markup_from_string
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line import EmptyLine
-from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
@@ -189,13 +188,6 @@ def _parse_reconstruction(
         ) from error
 
 
-def _parse_intertext(intertext: str) -> Sequence[MarkupPart]:
-    try:
-        return parse_markup(intertext) if intertext else tuple()
-    except PARSE_ERRORS as error:
-        raise ValidationError(f"Invalid intertext: {intertext}. {error}") from error
-
-
 class ApiLineVariantSchema(LineVariantSchema):
     class Meta:
         exclude = ("note", "parallel_lines")
@@ -218,7 +210,7 @@ class ApiLineVariantSchema(LineVariantSchema):
     manuscripts = fields.Nested(ApiManuscriptLineSchema, many=True, required=True)
     intertext = fields.Function(
         lambda line: "".join(part.value for part in line.intertext),
-        _parse_intertext,
+        markup_from_string,
         load_default="",
     )
 
