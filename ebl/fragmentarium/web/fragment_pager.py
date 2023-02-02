@@ -12,7 +12,6 @@ from ebl.users.web.require_scope import require_scope
 
 
 def make_fragment_pager_resource(finder: FragmentFinder, cache: Cache):
-
     class FragmentPagerResource:
 
         auth = {"exempt_methods": ["GET"]}
