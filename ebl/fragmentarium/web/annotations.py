@@ -10,6 +10,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class AnnotationResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, annotation_service: AnnotationsService):
         self._annotation_service = annotation_service
 

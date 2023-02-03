@@ -74,6 +74,7 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
 )
 from ebl.users.domain.user import User
 from ebl.users.infrastructure.auth0 import Auth0User
+from ebl.fragmentarium.web.annotations import AnnotationResource
 
 
 @pytest.fixture(scope="session")
@@ -390,14 +391,6 @@ def user() -> User:
 
 
 @pytest.fixture
-def basic_fragmentarium_permissions_user(user) -> User:
-    user._access_token["scope"] = [
-        "read:fragments",
-    ]
-    return user
-
-
-@pytest.fixture
 def context(
     ebl_ai_client,
     cropped_sign_images_repository,
@@ -443,24 +436,17 @@ def client(context):
     return testing.TestClient(api)
 
 
+class EnsureAnnotationPost:
+    def on_post(self, req, resp):
+        return AnnotationResource(annotations_service).on_post(req, resp, "K.123")
+
+
 @pytest.fixture
 def guest_client(context):
     api = ebl.app.create_app(
         attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
     )
-    return testing.TestClient(api)
-
-
-@pytest.fixture
-def basic_fragmentarium_permissions_client(
-    context, basic_fragmentarium_permissions_user
-):
-    api = ebl.app.create_app(
-        attr.evolve(
-            context,
-            auth_backend=NoneAuthBackend(lambda: basic_fragmentarium_permissions_user),
-        )
-    )
+    api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
     return testing.TestClient(api)
 
 

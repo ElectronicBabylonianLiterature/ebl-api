@@ -11,6 +11,9 @@ from ebl.signs.web.logograms_injector import inject_logograms_unicode
 
 
 class SignsSearch:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, signs: SignRepository):
         self.sign_repository = signs
         self._dispatch = create_dispatcher(

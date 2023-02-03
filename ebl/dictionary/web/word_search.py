@@ -5,6 +5,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class WordSearch:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, dictionary):
         self._dispatch = create_dispatcher(
             {

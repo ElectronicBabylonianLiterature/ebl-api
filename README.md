@@ -46,24 +46,35 @@ has to be base64 encoded before being added to the environment variable.
 
 #### Scopes
 
-`write:bibliography`,
-`read:bibliography`,
-`access:beta`,
-`lemmatize:fragments`,
-`transliterate:fragments`,
-`read:fragments`,
-`write:words`,
-`read:words`,
-`read:texts`,
+Corpus:
 `write:texts`,
 `create:texts`,
+
+Fragmentarium:
+`lemmatize:fragments`,
+`transliterate:fragments`,
 `annotate:fragments`,
 
-Folio scopes need to have the following format:
+Bibliography:
+`write:bibliography`,
+
+Dictionary:
+`write:words`,
+
+
+##### Legacy (currently unused) scopes
+
+`access:beta`,
+`read:texts`,
+`read:fragments`,
+`read:bibliography`,
+`read:words`,
+
+Folio scopes have the following format:
 
 `read:<Folio name>-folios`
 
-Fragments can have additional scopes in the following format:
+Fragments have additional scopes in the following format:
 
 `read:<Fragment group>-fragments`
 

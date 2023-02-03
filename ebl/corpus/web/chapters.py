@@ -31,6 +31,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class ChaptersResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -51,6 +54,9 @@ class ChaptersResource:
 
 
 class ChaptersDisplayResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
@@ -118,6 +124,9 @@ class ChaptersDisplayResource:
 
 
 class ChaptersByManuscriptResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
         self._corpus = corpus
         self._fragment_finder = fragment_finder
@@ -146,6 +155,9 @@ class ChaptersByManuscriptResource:
 
 
 class ChaptersByLemmaResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -166,6 +178,9 @@ class ChaptersByLemmaResource:
 
 
 class CorpusQueryResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(
         self,
         corpus: Corpus,

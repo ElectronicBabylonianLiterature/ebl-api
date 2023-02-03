@@ -10,6 +10,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class CdliResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, cdli_number: str):
         resp.media = {

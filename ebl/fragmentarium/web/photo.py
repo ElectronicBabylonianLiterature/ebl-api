@@ -6,6 +6,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class PhotoResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 

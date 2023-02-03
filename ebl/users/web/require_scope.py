@@ -1,9 +1,12 @@
 import falcon
 
-from ebl.users.domain.user import User
+
+def has_scope(req: falcon.Request, scope: str) -> bool:
+    if not hasattr(req.context, "user") or not req.context.user:
+        return "read:" in scope or scope in {"access:beta"}
+    return req.context.user.has_scope(scope)
 
 
 def require_scope(req: falcon.Request, _resp, _resource, _params, scope: str):
-    user: User = req.context.user
-    if not user or not user.has_scope(scope):
+    if not has_scope(req, scope):
         raise falcon.HTTPForbidden()

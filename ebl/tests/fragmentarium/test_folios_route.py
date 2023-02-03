@@ -9,25 +9,13 @@ def test_get_folio(client, folio_with_allowed_scope):
     assert result.content == folio_with_allowed_scope.data
 
 
-def test_get_folio_no_access(client, folio_with_restricted_scope):
-    result = client.simulate_get("/folios/AKG/001")
-
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
 def test_get_folio_name_not_found(client):
     result = client.simulate_get("/folios/UNKWN/001")
 
-    assert result.status == falcon.HTTP_FORBIDDEN
+    assert result.status == falcon.HTTP_NOT_FOUND
 
 
 def test_get_folio_number_not_found(client):
     result = client.simulate_get("/folios/WGL/002")
 
     assert result.status == falcon.HTTP_NOT_FOUND
-
-
-def test_get_guest_scope(guest_client, folio_with_allowed_scope):
-    result = guest_client.simulate_get("/folios/WGL/001")
-
-    assert result.status == falcon.HTTP_FORBIDDEN

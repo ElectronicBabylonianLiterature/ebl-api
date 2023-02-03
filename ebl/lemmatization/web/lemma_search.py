@@ -25,6 +25,9 @@ def get_parameters(params: dict) -> Tuple[str, bool]:
 
 
 class LemmaSearch:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, finder: SuggestionFinder):
         self._finder = finder
 

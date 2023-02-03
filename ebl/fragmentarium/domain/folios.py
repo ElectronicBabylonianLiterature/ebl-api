@@ -19,6 +19,6 @@ class Folios:
 
     def filter(self, user) -> "Folios":
         folios = tuple(
-            folio for folio in self.entries if user.can_read_folio(folio.name)
+            folio for folio in self.entries if user and user.can_read_folio(folio.name)
         )
         return Folios(folios)

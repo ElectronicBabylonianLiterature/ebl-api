@@ -7,6 +7,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class CroppedAnnotationsResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, cropped_annotations_service: CroppedAnnotationService):
         self._cropped_annotations_service = cropped_annotations_service
 
