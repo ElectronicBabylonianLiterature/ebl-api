@@ -14,7 +14,6 @@ def check_folio_scope(user: User, name: str):
 
 
 class FoliosResource:
-
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 

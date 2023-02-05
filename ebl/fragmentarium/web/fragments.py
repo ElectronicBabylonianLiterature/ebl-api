@@ -1,5 +1,7 @@
 import falcon
 from falcon import Request, Response
+from pydash import flow
+from typing import Sequence
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
@@ -8,7 +10,6 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_pages,
 )
-
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -17,8 +18,11 @@ from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from pydash import flow
+from ebl.fragmentarium.domain.fragment import Scope
 
+def check_fragment_scope(user: User, scopes: Sequence[Scope]):
+    if not user.can_read_fragment([scope_group.value for scope_group in scopes]):
+        raise falcon.HTTPForbidden()
 
 class FragmentsResource:
 
@@ -36,6 +40,8 @@ class FragmentsResource:
             parse_museum_number(number),
             lines=lines,
         )
+        if fragment.authorized_scopes:
+            check_fragment_scope(req.context.user, fragment.authorized_scopes)
         resp.media = create_response_dto(fragment, user, has_photo)
 
 
