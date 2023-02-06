@@ -9,10 +9,13 @@ from ebl.users.web.require_scope import require_scope
 
 
 class FragmentMatcherResource:
+
+    auth = {"exempt_methods": ["GET"]}
+
     def __init__(self, fragment_matcher: FragmentMatcher):
         self.fragment_matcher = fragment_matcher
 
-    @before(require_scope, "transliterate:fragments")
+    @before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, number) -> None:
         try:
             resp.media = LineToVecRankingSchema().dump(
