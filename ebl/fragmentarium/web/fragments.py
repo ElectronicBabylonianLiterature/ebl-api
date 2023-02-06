@@ -20,9 +20,11 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.fragmentarium.domain.fragment import Scope
 
+
 def check_fragment_scope(user: User, scopes: Sequence[Scope]):
     if not user.can_read_fragment([scope_group.value for scope_group in scopes]):
         raise falcon.HTTPForbidden()
+
 
 class FragmentsResource:
 
