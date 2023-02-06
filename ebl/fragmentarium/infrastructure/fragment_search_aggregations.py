@@ -124,7 +124,7 @@ class PatternMatcher:
                         "$project": {
                             "_id": True,
                             "museumNumber": True,
-                            "matchingLines": [],
+                            "matchingLines": {"$range": [0, {"$size": "$text.lines"}]},
                             "matchCount": {"$literal": 0},
                         }
                     },
