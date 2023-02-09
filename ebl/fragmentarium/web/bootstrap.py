@@ -62,7 +62,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_script = FragmentScriptResource(updater)
 
     fragment_matcher = FragmentMatcherResource(
-        FragmentMatcher(context.fragment_repository)
+        FragmentMatcher(context.fragment_repository), finder
     )
     fragment_search = FragmentSearch(
         fragmentarium,
@@ -81,7 +81,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         updater, context.get_transliteration_update_factory()
     )
     introduction = IntroductionResource(updater)
-    annotations = AnnotationResource(annotations_service)
+    annotations = AnnotationResource(annotations_service, finder)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)

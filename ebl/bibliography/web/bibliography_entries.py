@@ -7,13 +7,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class BibliographyResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "read:bibliography")
     def on_get(self, req: Request, resp: Response) -> None:
         resp.media = self._bibliography.search(req.params["query"])
 
@@ -28,13 +24,9 @@ class BibliographyResource:
 
 
 class BibliographyEntriesResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "read:bibliography")
     def on_get(self, _req, resp: Response, id_: str) -> None:
         resp.media = self._bibliography.find(id_)
 

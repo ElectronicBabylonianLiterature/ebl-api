@@ -21,14 +21,10 @@ class ManuscriptDtoSchema(Schema):
 
 
 class ManuscriptsResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
         req: falcon.Request,

@@ -20,9 +20,6 @@ CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
 
 
 class FragmentSearch:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(
         self,
         fragmentarium: Fragmentarium,

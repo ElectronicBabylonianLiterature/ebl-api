@@ -12,7 +12,7 @@ def test_get_folio(client, folio_with_allowed_scope):
 def test_get_folio_name_not_found(client):
     result = client.simulate_get("/folios/UNKWN/001")
 
-    assert result.status == falcon.HTTP_NOT_FOUND
+    assert result.status == falcon.HTTP_FORBIDDEN
 
 
 def test_get_folio_number_not_found(client):

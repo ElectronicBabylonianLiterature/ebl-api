@@ -1,22 +1,15 @@
 import base64
-
-import falcon
 import attr
 from cairosvg import svg2png
 
 from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.users.web.require_scope import require_scope
 
 
 class SignsResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, signs: SignRepository):
         self._signs = signs
 
-    @falcon.before(require_scope, "read:words")
     def on_get(self, _req, resp, sign_name):
         sign = self._signs.find(sign_name)
         fosseysBase64 = []

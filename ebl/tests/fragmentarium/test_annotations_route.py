@@ -27,7 +27,7 @@ def get_update_data():
     return url, body, fragment, annotations, number
 
 
-def test_find_annotations(client):
+def test_find_annotations(client, fragment_repository):
     fragment_number = MuseumNumber("X", "2")
     annotations = Annotations(fragment_number)
 

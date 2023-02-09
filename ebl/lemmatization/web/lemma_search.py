@@ -3,7 +3,6 @@ from typing import Tuple
 import falcon
 
 from ebl.lemmatization.application.suggestion_finder import SuggestionFinder
-from ebl.users.web.require_scope import require_scope
 
 
 def get_parameters(params: dict) -> Tuple[str, bool]:
@@ -25,14 +24,9 @@ def get_parameters(params: dict) -> Tuple[str, bool]:
 
 
 class LemmaSearch:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, finder: SuggestionFinder):
         self._finder = finder
 
-    @falcon.before(require_scope, "read:fragments")
-    @falcon.before(require_scope, "read:words")
     def on_get(self, req, resp):
         allowed_params = {"word", "isNormalized"}
         if not set(req.params.keys()).issubset(allowed_params):

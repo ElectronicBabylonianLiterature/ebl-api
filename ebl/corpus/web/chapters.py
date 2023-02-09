@@ -27,17 +27,12 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.users.web.require_scope import require_scope
 
 
 class ChaptersResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
         _,
@@ -54,9 +49,6 @@ class ChaptersResource:
 
 
 class ChaptersDisplayResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
@@ -94,7 +86,6 @@ class ChaptersDisplayResource:
 
         return chapter
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
         req: falcon.Request,
@@ -124,14 +115,10 @@ class ChaptersDisplayResource:
 
 
 class ChaptersByManuscriptResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
         self._corpus = corpus
         self._fragment_finder = fragment_finder
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
         req: falcon.Request,
@@ -155,13 +142,9 @@ class ChaptersByManuscriptResource:
 
 
 class ChaptersByLemmaResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         genre = req.params.get("genre")
         dictionary_lines = self._corpus.search_lemma(
@@ -178,9 +161,6 @@ class ChaptersByLemmaResource:
 
 
 class CorpusQueryResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(
         self,
         corpus: Corpus,
@@ -189,7 +169,6 @@ class CorpusQueryResource:
         self._corpus = corpus
         self._transliteration_query_factory = transliteration_query_factory
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         parse = flow(
             parse_lemmas, parse_transliteration(self._transliteration_query_factory)

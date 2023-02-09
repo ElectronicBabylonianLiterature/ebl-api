@@ -391,6 +391,25 @@ def user() -> User:
 
 
 @pytest.fixture
+def uruklbu_user() -> User:
+    return Auth0User(
+        {
+            "scope": [
+                "read:words",
+                "read:fragments",
+                "read:URUKLBU-fragments",
+                "read:bibliography",
+                "read:texts",
+            ]
+        },
+        lambda: {
+            "name": "uruklbu.user@example.com",
+            "https://ebabylon.org/eblName": "User",
+        },
+    )
+
+
+@pytest.fixture
 def context(
     ebl_ai_client,
     cropped_sign_images_repository,
@@ -436,17 +455,30 @@ def client(context):
     return testing.TestClient(api)
 
 
+@pytest.fixture
+def limited_client(context, uruklbu_user):
+    api = ebl.app.create_app(
+        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: uruklbu_user))
+    )
+    return testing.TestClient(api)
+
+
 class EnsureAnnotationPost:
+    def __init__(self, fragment_finder: FragmentFinder) -> None:
+        self._finder = fragment_finder
+
     def on_post(self, req, resp):
-        return AnnotationResource(annotations_service).on_post(req, resp, "K.123")
+        return AnnotationResource(annotations_service, self._finder).on_post(
+            req, resp, "K.123"
+        )
 
 
 @pytest.fixture
-def guest_client(context):
+def guest_client(context, fragment_finder):
     api = ebl.app.create_app(
         attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
     )
-    api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
+    api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost(fragment_finder))
     return testing.TestClient(api)
 
 
