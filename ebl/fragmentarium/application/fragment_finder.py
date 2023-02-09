@@ -41,6 +41,9 @@ class FragmentFinder:
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
+    def fetch_scopes(self, number: MuseumNumber) -> List[str]:
+        return self._repository.fetch_scopes(number)
+
     def find_random(self) -> List[FragmentInfo]:
         return list(
             map(FragmentInfo.of, self._repository.query_random_by_transliterated())
