@@ -39,17 +39,16 @@ def require_folio_scope(req: falcon.Request, _resp, _resource, params):
         f"read:{params['name'] if 'name' in params else params['folio_name']}-folios"
     )
 
-    if scope not in OPEN_SCOPES:
-        if is_guest_session(req) or not has_scope(req, scope):
-            raise falcon.HTTPForbidden()
+    if scope not in OPEN_SCOPES and (
+        is_guest_session(req) or not has_scope(req, scope)
+    ):
+        raise falcon.HTTPForbidden()
 
 
 def require_fragment_scope(req: falcon.Request, _resp, resource, params):
-    fragment_scopes = resource._finder.fetch_scopes(
+    if fragment_scopes := resource._finder.fetch_scopes(
         parse_museum_number(params["number"])
-    )
-
-    if fragment_scopes:
+    ):
         if is_guest_session(req):
             raise falcon.HTTPForbidden()
         elif not all(
