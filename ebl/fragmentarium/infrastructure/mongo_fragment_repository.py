@@ -219,12 +219,12 @@ class MongoFragmentRepository(FragmentRepository):
             raise NotFoundError(f"Fragment {number} not found.") from error
 
     def fetch_scopes(self, number: MuseumNumber) -> List[str]:
-        try:
-            return self._fragments.find_one(
+        return next(
+            self._fragments.find_many(
                 museum_number_is(number), projection={"authorizedScopes": True}
-            )["authorizedScopes"]
-        except KeyError as error:
-            raise NotFoundError(f"Fragment {number} not found.") from error
+            ),
+            {},
+        ).get("authorizedScopes", [])
 
     def query_random_by_transliterated(self):
         cursor = self._fragments.aggregate(
