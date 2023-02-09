@@ -1,6 +1,7 @@
 import pytest
 import attr
 import falcon
+from ebl.fragmentarium.domain.fragment import Scope
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -85,9 +86,25 @@ def test_get_not_found(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_get_guest_scope(guest_client, fragmentarium):
+def test_get_no_access(limited_client, fragmentarium):
     fragment = FragmentFactory.build()
+    fragmentarium.create(fragment)
+    result = limited_client.simulate_get(f"/fragments/{fragment.number}")
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+@pytest.mark.parametrize(
+    "authorized_scopes,expected",
+    [
+        ([], falcon.HTTP_OK),
+        ([Scope.SIPPARLIBRARY], falcon.HTTP_FORBIDDEN),
+        ([Scope.CAIC, Scope.URUKLBU], falcon.HTTP_FORBIDDEN),
+    ],
+)
+def test_get_guest_scope(guest_client, fragmentarium, authorized_scopes, expected):
+    fragment = FragmentFactory.build(authorized_scopes=authorized_scopes)
     fragmentarium.create(fragment)
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
-    assert result.status == falcon.HTTP_OK
+    assert result.status == expected
