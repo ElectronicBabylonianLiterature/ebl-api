@@ -81,3 +81,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def query(self, query: dict) -> QueryResult:
         ...
+
+    @abstractmethod
+    def fetch_scopes(self, number: MuseumNumber) -> List[str]:
+        ...
