@@ -4,7 +4,7 @@ from base64 import b64decode
 import falcon
 import sentry_sdk
 from Cryptodome.PublicKey import RSA
-from falcon_auth import FalconAuthMiddleware
+from falcon_auth import FalconAuthMiddleware, MultiAuthBackend, NoneAuthBackend
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
@@ -46,6 +46,7 @@ from ebl.transliteration.application.parallel_line_injector import ParallelLineI
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
+from ebl.users.domain.user import Guest
 from ebl.users.infrastructure.auth0 import Auth0Backend
 
 althaia.patch()
@@ -71,11 +72,12 @@ def create_context():
         os.environ["AUTH0_ISSUER"],
         set_sentry_user,
     )
+    guest_backend = NoneAuthBackend(Guest)
     cache = create_cache()
     custom_cache = ChapterCache(MongoCacheRepository(database))
     return Context(
         ebl_ai_client=ebl_ai_client,
-        auth_backend=auth_backend,
+        auth_backend=MultiAuthBackend(auth_backend, guest_backend),
         cropped_sign_images_repository=MongoCroppedSignImagesRepository(database),
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
