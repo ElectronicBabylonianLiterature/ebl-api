@@ -14,15 +14,12 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from ebl.users.web.require_scope import require_scope
+from ebl.users.web.require_scope import require_fragment_scope
 
 CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
 
 
 class FragmentSearch:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(
         self,
         fragmentarium: Fragmentarium,
@@ -80,7 +77,7 @@ class FragmentSearch:
                 raise DataError(f'Pages "{pages}" not numeric.') from error
         return id, pages
 
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_fragment_scope)
     @cache_control(
         ["private", "max-age=600"],
         when=lambda req, _: req.params.keys() <= CACHED_COMMANDS,

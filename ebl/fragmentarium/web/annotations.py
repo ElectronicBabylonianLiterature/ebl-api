@@ -6,13 +6,10 @@ from ebl.fragmentarium.application.annotations_schema import (
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.marshmallowschema import validate
-from ebl.users.web.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope, require_fragment_scope
 
 
 class AnnotationResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, annotation_service: AnnotationsService):
         self._annotation_service = annotation_service
 
@@ -29,7 +26,7 @@ class AnnotationResource:
                 description="Fragment numbers do not match."
             )
 
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_fragment_scope)
     @validate(None, AnnotationsSchema())
     def on_get(self, req, resp: falcon.Response, number: str):
         museum_number = parse_museum_number(number)
