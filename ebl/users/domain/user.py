@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Sequence
+from typing import Sequence, List, Optional
 
 
 class User(ABC):
@@ -26,6 +26,11 @@ class User(ABC):
             if not self.has_scope(scope):
                 return False
         return True
+
+    def get_scopes(
+        self, prefix: Optional[str] = "", suffix: Optional[str] = ""
+    ) -> List[str]:
+        return []
 
 
 class Guest(User):

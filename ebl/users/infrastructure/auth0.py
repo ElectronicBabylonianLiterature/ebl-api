@@ -1,5 +1,5 @@
 import copy
-from typing import Any, Callable
+from typing import Any, Callable, List, Optional
 
 import pydash
 import requests
@@ -30,8 +30,17 @@ class Auth0User(User):
         profile = self.profile
         return profile.get("https://ebabylon.org/eblName", profile["name"])
 
+    def get_scopes(
+        self, prefix: Optional[str] = "", suffix: Optional[str] = ""
+    ) -> List[str]:
+        return [
+            scope
+            for scope in self._access_token["scope"].split()
+            if scope.startswith(prefix) and scope.endswith(suffix)
+        ]
+
     def has_scope(self, scope):
-        return scope in self._access_token["scope"]
+        return scope in self.get_scopes()
 
 
 class Auth0Backend(JWTAuthBackend):
