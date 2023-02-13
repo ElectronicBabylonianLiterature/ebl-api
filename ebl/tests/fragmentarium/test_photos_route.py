@@ -10,6 +10,6 @@ def test_get_photo(client, photo):
 
 
 def test_get_photo_not_found(client):
-    result = client.simulate_get("/fragments/unknown/photo")
+    result = client.simulate_get("/fragments/unknown.42/photo")
 
     assert result.status == falcon.HTTP_NOT_FOUND
