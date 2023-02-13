@@ -204,9 +204,11 @@ def test_fragment_not_found(fragment_repository):
 
 
 def test_find_random(fragment_repository):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+    transliterated_fragment = TransliteratedFragmentFactory.build(authorized_scopes=[])
 
-    fragment_repository.create_many([FragmentFactory.build(), transliterated_fragment])
+    fragment_repository.create_many(
+        [FragmentFactory.build(authorized_scopes=[]), transliterated_fragment]
+    )
 
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment

@@ -1,4 +1,5 @@
-from typing import List
+from typing import List, Optional
+import re
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.record import RecordType
@@ -30,14 +31,50 @@ def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def aggregate_random() -> List[dict]:
-    return [{"$match": HAS_TRANSLITERATION}, sample_size_one()]
+def empty_authorized_scopes() -> dict:
+    return {
+        "$or": [
+            {"authorizedScopes": {"$exists": False}},
+            {"authorizedScopes": {"$size": 0}},
+        ]
+    }
 
 
-def aggregate_latest() -> List[dict]:
+def match_user_scopes(user_scopes: Optional[List[str]] = None) -> dict:
+    def strip_affixes(scope: str) -> str:
+        match = re.match(r"^(?:read:)(.+)(?:-.+)$", scope)
+        if match:
+            return match.group(1)
+        else:
+            raise ValueError(
+                f"Unexpected scope format: {scope!r} does not start "
+                "with 'read:' and end with '-fragments'"
+            )
+
+    if user_scopes:
+        return {
+            "$or": [{"authorizedScopes": strip_affixes(scope)} for scope in user_scopes]
+        }
+    else:
+        return empty_authorized_scopes()
+
+
+def aggregate_random(user_scopes: Optional[List[str]] = None) -> List[dict]:
+    return [
+        {"$match": {**HAS_TRANSLITERATION, **match_user_scopes(user_scopes)}},
+        sample_size_one(),
+    ]
+
+
+def aggregate_latest(user_scopes: Optional[List[str]] = None) -> List[dict]:
     temp_field_name = "_temp"
     return [
-        {"$match": {"record.type": RecordType.TRANSLITERATION.value}},
+        {
+            "$match": {
+                "record.type": RecordType.TRANSLITERATION.value,
+                **match_user_scopes(user_scopes),
+            }
+        },
         {
             "$addFields": {
                 temp_field_name: {
@@ -57,9 +94,15 @@ def aggregate_latest() -> List[dict]:
     ]
 
 
-def aggregate_needs_revision() -> List[dict]:
+def aggregate_needs_revision(user_scopes: Optional[List[str]] = None) -> List[dict]:
     return [
-        {"$match": {"record.type": "Transliteration", **HAS_TRANSLITERATION}},
+        {
+            "$match": {
+                "record.type": "Transliteration",
+                **HAS_TRANSLITERATION,
+                **match_user_scopes(user_scopes),
+            }
+        },
         {"$unwind": "$record"},
         {"$sort": {"record.date": 1}},
         {
@@ -133,7 +176,9 @@ def aggregate_needs_revision() -> List[dict]:
     ]
 
 
-def aggregate_path_of_the_pioneers() -> List[dict]:
+def aggregate_path_of_the_pioneers(
+    user_scopes: Optional[List[str]] = None,
+) -> List[dict]:
     max_uncurated_reference = (
         f"uncuratedReferences.{PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES}"
     )
@@ -147,6 +192,7 @@ def aggregate_path_of_the_pioneers() -> List[dict]:
                     {"uncuratedReferences": {"$exists": True}},
                     {max_uncurated_reference: {"$exists": False}},
                     {"references.type": {"$ne": "EDITION"}},
+                    match_user_scopes(user_scopes),
                 ]
             }
         },

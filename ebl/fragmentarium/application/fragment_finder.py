@@ -44,14 +44,24 @@ class FragmentFinder:
     def fetch_scopes(self, number: MuseumNumber) -> List[str]:
         return self._repository.fetch_scopes(number)
 
-    def find_random(self) -> List[FragmentInfo]:
+    def find_random(
+        self, user_scopes: Optional[List[str]] = None
+    ) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, self._repository.query_random_by_transliterated())
+            map(
+                FragmentInfo.of,
+                self._repository.query_random_by_transliterated(user_scopes),
+            )
         )
 
-    def find_interesting(self) -> List[FragmentInfo]:
+    def find_interesting(
+        self, user_scopes: Optional[List[str]] = None
+    ) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, (self._repository.query_path_of_the_pioneers()))
+            map(
+                FragmentInfo.of,
+                (self._repository.query_path_of_the_pioneers(user_scopes)),
+            )
         )
 
     def folio_pager(
