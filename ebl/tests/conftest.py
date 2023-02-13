@@ -364,24 +364,25 @@ def annotations_service(
 def user() -> User:
     return Auth0User(
         {
-            "scope": [
-                "read:words",
-                "write:words",
-                "transliterate:fragments",
-                "lemmatize:fragments",
-                "annotate:fragments",
-                "read:fragments",
-                "read:CAIC-fragments",
-                "read:SIPPARLIBRARY-fragments",
-                "read:ITALIANNINEVEH-fragments",
-                "read:URUKLBU-fragments",
-                "read:WGL-folios",
-                "read:bibliography",
-                "write:bibliography",
-                "read:texts",
-                "write:texts",
-                "create:texts",
-            ]
+            "scope": " ".join(
+                [
+                    "read:words",
+                    "write:words",
+                    "transliterate:fragments",
+                    "lemmatize:fragments",
+                    "annotate:fragments",
+                    "read:CAIC-fragments",
+                    "read:SIPPARLIBRARY-fragments",
+                    "read:ITALIANNINEVEH-fragments",
+                    "read:URUKLBU-fragments",
+                    "read:WGL-folios",
+                    "read:bibliography",
+                    "write:bibliography",
+                    "read:texts",
+                    "write:texts",
+                    "create:texts",
+                ]
+            )
         },
         lambda: {
             "name": "test.user@example.com",

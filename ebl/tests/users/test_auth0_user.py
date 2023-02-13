@@ -75,21 +75,16 @@ def test_can_read_folio(scopes, folio_name, expected):
     "user_scope,scopes,expected",
     [
         (
-            [
-                "read:CAIC-fragments",
-                "read:SIPPARLIBRARY-fragments",
-                "read:URUKLBU-fragments",
-                "read:ITALIANNINEVEH-fragments",
-            ],
+            "read:CAIC-fragments read:SIPPARLIBRARY-fragments read:URUKLBU-fragments read:ITALIANNINEVEH-fragments",
             ["CAIC", "SIPPARLIBRARY", "URUKLBU", "ITALIANNINEVEH"],
             True,
         ),
         (
-            ["read:SIPPARLIBRARY-fragments", "read:URUKLBU-fragments"],
+            "read:SIPPARLIBRARY-fragments read:URUKLBU-fragments",
             ["CAIC", "SIPPARLIBRARY", "URUKLBU", "ITALIANNINEVEH"],
             False,
         ),
-        (["read:SIPPARLIBRARY-fragments"], ["CAIC"], False),
+        ("read:SIPPARLIBRARY-fragments", ["CAIC"], False),
         ([], [], True),
     ],
 )
