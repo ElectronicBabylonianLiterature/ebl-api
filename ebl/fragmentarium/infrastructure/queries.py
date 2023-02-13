@@ -44,7 +44,7 @@ def match_user_scopes(user_scopes: Optional[List[str]] = None) -> dict:
     def strip_affixes(scope: str) -> str:
         match = re.match(r"^(?:read:)(.+)(?:-.+)$", scope)
         if match:
-            return match.group(1)
+            return match[1]
         else:
             raise ValueError(
                 f"Unexpected scope format: {scope!r} does not start "
