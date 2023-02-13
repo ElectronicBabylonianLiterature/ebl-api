@@ -1,5 +1,4 @@
 import falcon
-
 from ebl.fragmentarium.web.dtos import parse_museum_number
 
 HIDDEN_SCOPES = [
@@ -17,9 +16,13 @@ HIDDEN_SCOPES = [
 
 
 def has_scope(req: falcon.Request, scope: str) -> bool:
-    if not hasattr(req.context, "user") or not req.context.user:
-        return "read:" in scope or scope in {"access:beta"}
-    return req.context.user.has_scope(scope)
+    user = getattr(req.context, "user", None)
+
+    return (
+        user.has_scope(scope)
+        if user
+        else scope.startswith("read:") and scope not in HIDDEN_SCOPES
+    )
 
 
 def require_scope(req: falcon.Request, _resp, _resource, _params, scope: str):
@@ -40,7 +43,7 @@ def require_fragment_scope(req: falcon.Request, _resp, resource, params):
     if fragment_scopes := resource._finder.fetch_scopes(
         parse_museum_number(params["number"])
     ):
-        if not all(
+        if not any(
             has_scope(req, f"read:{scope}-fragments") for scope in fragment_scopes
         ):
             raise falcon.HTTPForbidden()
