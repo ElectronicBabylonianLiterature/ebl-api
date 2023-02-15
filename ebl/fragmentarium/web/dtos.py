@@ -23,9 +23,7 @@ class FragmentDtoSchema(FragmentSchema):
         if "folios" in data:
             user = self.context.get("user", Guest())
             data["folios"] = [
-                folio
-                for folio in data["folios"]
-                if user.can_read_folio(f"read:{folio['name']}-folios")
+                folio for folio in data["folios"] if user.can_read_folio(folio["name"])
             ]
         return data
 

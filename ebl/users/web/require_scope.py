@@ -8,11 +8,9 @@ def require_scope(req: falcon.Request, _resp, _resource, _params, scope: str):
 
 
 def require_folio_scope(req: falcon.Request, _resp, _resource, params):
-    scope = (
-        f"read:{params['name'] if 'name' in params else params['folio_name']}-folios"
-    )
-
-    if not req.context.user.can_read_folio(scope):
+    if not req.context.user.can_read_folio(
+        params["name"] if "name" in params else params["folio_name"]
+    ):
         raise falcon.HTTPForbidden()
 
 
