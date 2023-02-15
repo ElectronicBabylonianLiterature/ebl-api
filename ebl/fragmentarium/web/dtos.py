@@ -25,7 +25,7 @@ class FragmentDtoSchema(FragmentSchema):
             data["folios"] = [
                 folio
                 for folio in data["folios"]
-                if user.has_scope(f"read:{folio['name']}-folios")
+                if user.can_read_folio(f"read:{folio['name']}-folios")
             ]
         return data
 

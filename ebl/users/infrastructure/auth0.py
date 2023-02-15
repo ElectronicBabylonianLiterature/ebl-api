@@ -40,7 +40,7 @@ class Auth0User(User):
         ]
 
     def has_scope(self, scope):
-        return self.is_open_scope(scope) or scope in self.get_scopes()
+        return scope in self.get_scopes()
 
 
 class Auth0Backend(JWTAuthBackend):

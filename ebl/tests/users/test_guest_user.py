@@ -16,7 +16,7 @@ def test_ebl_name():
 
 
 def test_can_read_folio():
-    assert USER.can_read_folio("write:WGL-folios") is False
+    assert USER.can_read_folio("WRM") is False
 
 
 def test_can_read_fragment():

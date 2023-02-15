@@ -61,8 +61,7 @@ def test_ebl_name(profile, expected):
     "scopes,folio_name,expected",
     [
         ("read:WGL-folios", "WGL", True),
-        ("write:WGL-folios", "WGL", False),
-        ("read:XXX-folios", "WGL", False),
+        ("read:XXX-folios", "ARG", False),
     ],
 )
 def test_can_read_folio(scopes, folio_name, expected):
@@ -86,7 +85,7 @@ def test_can_read_folio(scopes, folio_name, expected):
         ),
         (
             ["read:SIPPARLIBRARY-fragments", "read:URUKLBU-fragments"],
-            ["CAIC", "SIPPARLIBRARY", "URUKLBU", "ITALIANNINEVEH"],
+            ["CAIC", "ITALIANNINEVEH"],
             False,
         ),
         (["read:SIPPARLIBRARY-fragments"], ["CAIC"], False),

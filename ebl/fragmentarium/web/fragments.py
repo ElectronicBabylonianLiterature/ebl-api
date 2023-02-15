@@ -52,5 +52,8 @@ class FragmentsQueryResource:
         )
 
         resp.media = QueryResultSchema().dump(
-            self._repository.query(parse(req.params), req.context.user.get_scopes())
+            self._repository.query(
+                parse(req.params),
+                req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
+            )
         )
