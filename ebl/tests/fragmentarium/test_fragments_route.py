@@ -1,6 +1,7 @@
 import pytest
 import attr
 import falcon
+from ebl.fragmentarium.domain.fragment import Scope
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -91,3 +92,11 @@ def test_get_guest_scope(guest_client, fragmentarium):
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
     assert result.status == falcon.HTTP_OK
+
+
+def test_get_no_access(guest_client, fragmentarium):
+    fragment = FragmentFactory.build(authorized_scopes=[Scope.SIPPARLIBRARY])
+    fragmentarium.create(fragment)
+    result = guest_client.simulate_get(f"/fragments/{fragment.number}")
+
+    assert result.status == falcon.HTTP_FORBIDDEN
