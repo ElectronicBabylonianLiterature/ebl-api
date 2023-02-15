@@ -31,15 +31,6 @@ def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def empty_authorized_scopes() -> dict:
-    return {
-        "$or": [
-            {"authorizedScopes": {"$exists": False}},
-            {"authorizedScopes": {"$size": 0}},
-        ]
-    }
-
-
 def match_user_scopes(user_scopes: Optional[List[str]] = None) -> dict:
     def strip_affixes(scope: str) -> str:
         match = re.match(r"^(?:read:)(.+)(?:-.+)$", scope)
@@ -51,12 +42,17 @@ def match_user_scopes(user_scopes: Optional[List[str]] = None) -> dict:
                 "with 'read:' and end with '-fragments'"
             )
 
+    allowed_scopes: List[dict] = [
+        {"authorizedScopes": {"$exists": False}},
+        {"authorizedScopes": {"$size": 0}},
+    ]
+
     if user_scopes:
-        return {
-            "$or": [{"authorizedScopes": strip_affixes(scope)} for scope in user_scopes]
-        }
-    else:
-        return empty_authorized_scopes()
+        allowed_scopes.extend(
+            {"authorizedScopes": strip_affixes(scope)} for scope in user_scopes
+        )
+
+    return {"$or": allowed_scopes}
 
 
 def aggregate_random(user_scopes: Optional[List[str]] = None) -> List[dict]:
