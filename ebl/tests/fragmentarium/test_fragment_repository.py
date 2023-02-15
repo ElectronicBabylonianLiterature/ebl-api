@@ -11,7 +11,12 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction, Script
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    Genre,
+    Introduction,
+    Script,
+)
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.common.query.query_result import LemmaQueryType
@@ -204,11 +209,9 @@ def test_fragment_not_found(fragment_repository):
 
 
 def test_find_random(fragment_repository):
-    transliterated_fragment = TransliteratedFragmentFactory.build(authorized_scopes=[])
+    transliterated_fragment = TransliteratedFragmentFactory.build()
 
-    fragment_repository.create_many(
-        [FragmentFactory.build(authorized_scopes=[]), transliterated_fragment]
-    )
+    fragment_repository.create_many([FragmentFactory.build(), transliterated_fragment])
 
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
