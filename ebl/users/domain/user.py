@@ -3,6 +3,19 @@ from typing import Sequence, List, Optional
 
 
 class User(ABC):
+    hidden_scopes = [
+        "read:ILF-folios",
+        "read:SP-folios",
+        "read:USK-folios",
+        "read:ARG-folios",
+        "read:WRM-folios",
+        "read:MJG-folios",
+        "read:SP-folios",
+        "read:UG-folios",
+        "read:SJL-folios",
+        "read:EVW-folios",
+    ]
+
     @property
     @abstractmethod
     def profile(self) -> dict:
@@ -14,7 +27,10 @@ class User(ABC):
         ...
 
     def has_scope(self, scope: str) -> bool:
-        return False
+        return self.is_open_scope(scope)
+
+    def is_open_scope(self, scope: str) -> bool:
+        return scope.startswith("read:") and scope not in self.hidden_scopes
 
     def can_read_folio(self, name: str) -> bool:
         scope = f"read:{name}-folios"

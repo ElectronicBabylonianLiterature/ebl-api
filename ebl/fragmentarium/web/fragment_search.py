@@ -71,11 +71,8 @@ class FragmentSearch:
         when=lambda req, _: req.params.keys() <= CACHED_COMMANDS,
     )
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        user_scopes = (
-            req.context.user.get_scopes(prefix="read:", suffix="-fragments")
-            if getattr(req.context, "user", None)
-            else []
-        )
         resp.media = self.api_fragment_info_schema.dump(
-            self._dispatch(req.params)(user_scopes)
+            self._dispatch(req.params)(
+                req.context.user.get_scopes(prefix="read:", suffix="-fragments")
+            )
         )

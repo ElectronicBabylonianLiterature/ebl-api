@@ -12,14 +12,11 @@ from ebl.common.query.parameter_parser import (
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
-from ebl.users.domain.user import User, Guest
 from ebl.users.web.require_scope import require_fragment_scope
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from pydash import flow
-
-GUEST_USER = Guest()
 
 
 class FragmentsResource:
@@ -28,16 +25,13 @@ class FragmentsResource:
 
     @falcon.before(require_fragment_scope)
     def on_get(self, req: Request, resp: Response, number: str):
-        user: User = (
-            req.context.user if getattr(req.context, "user", None) else GUEST_USER
-        )
         lines = parse_lines(req.get_param_as_list("lines", default=[]))
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number),
             lines=lines,
         )
-        resp.media = create_response_dto(fragment, user, has_photo)
+        resp.media = create_response_dto(fragment, req.context.user, has_photo)
 
 
 class FragmentsQueryResource:
@@ -50,11 +44,6 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
-        user_scopes = (
-            req.context.user.get_scopes(prefix="read:", suffix="-fragments")
-            if getattr(req.context, "user", None)
-            else []
-        )
         parse = flow(
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
@@ -63,5 +52,5 @@ class FragmentsQueryResource:
         )
 
         resp.media = QueryResultSchema().dump(
-            self._repository.query(parse(req.params), user_scopes)
+            self._repository.query(parse(req.params), req.context.user.get_scopes())
         )

@@ -6,7 +6,6 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.users.domain.user import User, Guest
-from ebl.common.folios import HIDDEN_SCOPES
 
 
 class FragmentDtoSchema(FragmentSchema):
@@ -27,7 +26,6 @@ class FragmentDtoSchema(FragmentSchema):
                 folio
                 for folio in data["folios"]
                 if user.has_scope(f"read:{folio['name']}-folios")
-                or f"read:{folio['name']}-folios" not in HIDDEN_SCOPES
             ]
         return data
 
