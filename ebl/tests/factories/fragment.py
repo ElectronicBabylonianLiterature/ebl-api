@@ -11,7 +11,6 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Introduction,
-    Scope,
     Script,
     UncuratedReference,
 )
@@ -123,12 +122,7 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
-    authorized_scopes = [
-        Scope.CAIC,
-        Scope.SIPPARLIBRARY,
-        Scope.URUKLBU,
-        Scope.ITALIANNINEVEH,
-    ]
+    authorized_scopes = []
     introduction = Introduction("text", (StringPart("text"),))
 
 
