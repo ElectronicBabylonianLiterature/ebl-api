@@ -414,10 +414,12 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query(self, query: dict) -> QueryResult:
+    def query(
+        self, query: dict, user_scopes: Optional[List[str]] = None
+    ) -> QueryResult:
 
         if set(query) - {"lemmaOperator"}:
-            matcher = PatternMatcher(query)
+            matcher = PatternMatcher(query, user_scopes)
             data = next(
                 self._fragments.aggregate(
                     matcher.build_pipeline(),

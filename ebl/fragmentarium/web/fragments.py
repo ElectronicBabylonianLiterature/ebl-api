@@ -46,6 +46,11 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
+        user_scopes = (
+            req.context.user.get_scopes(prefix="read:", suffix="-fragments")
+            if getattr(req.context, "user", None)
+            else []
+        )
         parse = flow(
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
@@ -53,4 +58,6 @@ class FragmentsQueryResource:
             parse_integer_field("limit"),
         )
 
-        resp.media = QueryResultSchema().dump(self._repository.query(parse(req.params)))
+        resp.media = QueryResultSchema().dump(
+            self._repository.query(parse(req.params), user_scopes)
+        )

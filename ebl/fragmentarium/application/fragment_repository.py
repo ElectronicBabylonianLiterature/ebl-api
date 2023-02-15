@@ -87,7 +87,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query(self, query: dict) -> QueryResult:
+    def query(
+        self, query: dict, user_scopes: Optional[List[str]] = None
+    ) -> QueryResult:
         ...
 
     @abstractmethod
