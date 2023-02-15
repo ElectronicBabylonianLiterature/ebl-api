@@ -106,10 +106,3 @@ class SignMatcher:
             },
             *self._collect_indexes(),
         ]
-
-
-if __name__ == "__main__":
-    matcher = SignMatcher([r"^X X X [^X]+ X X [^X]+ X ", r"^."])
-    import json
-
-    print(json.dumps(matcher.build_pipeline(), indent=2))
