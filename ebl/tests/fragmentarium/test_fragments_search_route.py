@@ -21,6 +21,7 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.fragmentarium.domain.genres import genres
 
 
 def expected_fragment_info_dto(fragment: Fragment, text=None) -> Dict:
@@ -312,3 +313,20 @@ def test_search_fragment_no_query(client):
 def test_search_invalid_params(client, parameters):
     result = client.simulate_get("/fragments", params=parameters)
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize(
+    "endpoint,expected",
+    [
+        ("/genres", list(map(list, genres))),
+        (
+            "/periods",
+            [period.long_name for period in Period if period is not Period.NONE],
+        ),
+    ],
+)
+def test_get_options(client, endpoint, expected):
+    result = client.simulate_get(endpoint)
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected
