@@ -6,7 +6,7 @@ import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres

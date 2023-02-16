@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 import attr
 import falcon
 import pytest
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,

@@ -1,5 +1,5 @@
 from falcon import Response, Request
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 
 class PeriodsResource:

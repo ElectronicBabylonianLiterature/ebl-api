@@ -1,7 +1,7 @@
 from typing import Sequence
 
 import factory
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId

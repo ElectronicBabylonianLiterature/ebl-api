@@ -1,7 +1,7 @@
 import attr
 from freezegun import freeze_time
 import pytest
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (

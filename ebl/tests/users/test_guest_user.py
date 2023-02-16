@@ -17,11 +17,9 @@ def test_ebl_name():
 
 def test_can_read_folio():
     assert USER.can_read_folio("WRM") is False
+    assert USER.can_read_folio("NOT_HIDDEN") is True
 
 
 def test_can_read_fragment():
     assert USER.can_read_fragment([]) is True
-
-
-def test_can_read_fragment_restricted():
     assert USER.can_read_fragment(["CAIC"]) is False

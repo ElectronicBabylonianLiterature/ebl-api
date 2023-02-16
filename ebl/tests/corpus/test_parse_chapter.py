@@ -1,7 +1,7 @@
 from typing import Sequence
 
 import pytest
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine

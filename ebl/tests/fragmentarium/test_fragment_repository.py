@@ -2,7 +2,7 @@ from typing import Tuple, List
 import attr
 import pytest
 import random
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 from ebl.common.query.query_result import QueryItem, QueryResult
 
 from ebl.dictionary.domain.word import WordId

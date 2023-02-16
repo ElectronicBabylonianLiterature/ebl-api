@@ -8,7 +8,7 @@ from marshmallow import (
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 from ebl.corpus.application.id_schemas import TextIdSchema, ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter import (
