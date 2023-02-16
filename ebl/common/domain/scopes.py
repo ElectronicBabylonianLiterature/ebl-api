@@ -7,14 +7,14 @@ import attr
 @attr.s(auto_attribs=True, frozen=True)
 class ScopeItem(Enum):
     def __init__(self, scope_string: str):
-        parts = re.match("([^:]+):(.+)(:?-(.+))?")
+        match = re.match("([^:]+):(.+)(:?-(.+))?", scope_string)
 
-        if not parts:
+        if not match:
             raise ValueError(f"Unexepcted scope format: {scope_string!r}")
 
-        self.prefix = parts[0]
-        self.name = parts[1]
-        self.suffix = parts[2] if len(parts) > 2 else ""
+        self.prefix = match[1]
+        self.name = match[2]
+        self.suffix = match[3] if len(match.groups()) > 3 else ""
 
     def __str__(self):
         suffix = f"-{self.suffix}" if self.suffix else ""
