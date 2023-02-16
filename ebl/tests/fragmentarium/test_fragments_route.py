@@ -86,7 +86,7 @@ def test_get_not_found(client):
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
-def test_get_guest_scope(guest_client, fragmentarium):
+def test_get_fragment_as_guest(guest_client, fragmentarium):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
@@ -94,7 +94,7 @@ def test_get_guest_scope(guest_client, fragmentarium):
     assert result.status == falcon.HTTP_OK
 
 
-def test_get_no_access(guest_client, fragmentarium):
+def test_get_restricted_fragment_as_guest(guest_client, fragmentarium):
     fragment = FragmentFactory.build(authorized_scopes=[Scope.SIPPARLIBRARY])
     fragmentarium.create(fragment)
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
