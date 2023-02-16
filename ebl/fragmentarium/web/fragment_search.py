@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, List
+from typing import Tuple, Sequence
 
 import falcon
 from falcon_caching import Cache
@@ -27,11 +27,11 @@ class FragmentSearch:
         cache: Cache,
     ):
         @cache.memoize(DEFAULT_TIMEOUT)
-        def find_needs_revision(user_scopes: Optional[List[str]] = None):
+        def find_needs_revision(user_scopes: Sequence[str] = tuple()):
             return fragmentarium.find_needs_revision(user_scopes)
 
         @cache.memoize(DEFAULT_TIMEOUT)
-        def find_latest(user_scopes: Optional[List[str]] = None):
+        def find_latest(user_scopes: Sequence[str] = tuple()):
             return fragmentarium.find_latest(user_scopes)
 
         self.api_fragment_info_schema = ApiFragmentInfoSchema(many=True)

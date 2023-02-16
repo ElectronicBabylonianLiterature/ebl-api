@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Sequence
 import re
 
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -31,7 +31,7 @@ def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def match_user_scopes(user_scopes: Optional[List[str]] = None) -> dict:
+def match_user_scopes(user_scopes: Sequence[str] = tuple()) -> dict:
     def strip_affixes(scope: str) -> str:
         match = re.match(r"^(?:read:)(.+)(?:-.+)$", scope)
         if match:
@@ -55,14 +55,14 @@ def match_user_scopes(user_scopes: Optional[List[str]] = None) -> dict:
     return {"$or": allowed_scopes}
 
 
-def aggregate_random(user_scopes: Optional[List[str]] = None) -> List[dict]:
+def aggregate_random(user_scopes: Sequence[str] = tuple()) -> List[dict]:
     return [
         {"$match": {**HAS_TRANSLITERATION, **match_user_scopes(user_scopes)}},
         sample_size_one(),
     ]
 
 
-def aggregate_latest(user_scopes: Optional[List[str]] = None) -> List[dict]:
+def aggregate_latest(user_scopes: Sequence[str] = tuple()) -> List[dict]:
     temp_field_name = "_temp"
     return [
         {
@@ -90,7 +90,7 @@ def aggregate_latest(user_scopes: Optional[List[str]] = None) -> List[dict]:
     ]
 
 
-def aggregate_needs_revision(user_scopes: Optional[List[str]] = None) -> List[dict]:
+def aggregate_needs_revision(user_scopes: Sequence[str] = tuple()) -> List[dict]:
     return [
         {
             "$match": {
@@ -173,7 +173,7 @@ def aggregate_needs_revision(user_scopes: Optional[List[str]] = None) -> List[di
 
 
 def aggregate_path_of_the_pioneers(
-    user_scopes: Optional[List[str]] = None,
+    user_scopes: Sequence[str] = tuple(),
 ) -> List[dict]:
     max_uncurated_reference = (
         f"uncuratedReferences.{PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES}"

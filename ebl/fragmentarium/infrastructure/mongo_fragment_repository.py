@@ -226,14 +226,14 @@ class MongoFragmentRepository(FragmentRepository):
             {},
         ).get("authorizedScopes", [])
 
-    def query_random_by_transliterated(self, user_scopes: Optional[List[str]] = None):
+    def query_random_by_transliterated(self, user_scopes: Sequence[str] = tuple()):
         cursor = self._fragments.aggregate(
             [*aggregate_random(user_scopes), {"$project": {"joins": False}}]
         )
 
         return self._map_fragments(cursor)
 
-    def query_path_of_the_pioneers(self, user_scopes: Optional[List[str]] = None):
+    def query_path_of_the_pioneers(self, user_scopes: Sequence[str] = tuple()):
         cursor = self._fragments.aggregate(
             [
                 *aggregate_path_of_the_pioneers(user_scopes),
@@ -267,7 +267,7 @@ class MongoFragmentRepository(FragmentRepository):
         ]
 
     def query_by_transliterated_sorted_by_date(
-        self, user_scopes: Optional[List[str]] = None
+        self, user_scopes: Sequence[str] = tuple()
     ):
         cursor = self._fragments.aggregate(
             [*aggregate_latest(user_scopes), {"$project": {"joins": False}}]
@@ -275,7 +275,7 @@ class MongoFragmentRepository(FragmentRepository):
         return self._map_fragments(cursor)
 
     def query_by_transliterated_not_revised_by_other(
-        self, user_scopes: Optional[List[str]] = None
+        self, user_scopes: Sequence[str] = tuple()
     ):
         cursor = self._fragments.aggregate(
             [*aggregate_needs_revision(user_scopes), {"$project": {"joins": False}}],
@@ -414,9 +414,7 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query(
-        self, query: dict, user_scopes: Optional[List[str]] = None
-    ) -> QueryResult:
+    def query(self, query: dict, user_scopes: Sequence[str] = tuple()) -> QueryResult:
 
         if set(query) - {"lemmaOperator"}:
             matcher = PatternMatcher(query, user_scopes)

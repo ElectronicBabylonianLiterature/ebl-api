@@ -65,7 +65,7 @@ def test_find_random(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
     (
         when(fragment_repository)
-        .query_random_by_transliterated(None)
+        .query_random_by_transliterated(tuple())
         .thenReturn([fragment])
     )
     assert fragment_finder.find_random() == [FragmentInfo.of(fragment)]
@@ -73,7 +73,7 @@ def test_find_random(fragment_finder, fragment_repository, when):
 
 def test_find_interesting(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    (when(fragment_repository).query_path_of_the_pioneers(None).thenReturn([fragment]))
+    (when(fragment_repository).query_path_of_the_pioneers(tuple()).thenReturn([fragment]))
     assert fragment_finder.find_interesting() == [FragmentInfo.of(fragment)]
 
 

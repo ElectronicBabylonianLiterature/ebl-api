@@ -44,9 +44,7 @@ class FragmentFinder:
     def fetch_scopes(self, number: MuseumNumber) -> List[str]:
         return self._repository.fetch_scopes(number)
 
-    def find_random(
-        self, user_scopes: Optional[List[str]] = None
-    ) -> List[FragmentInfo]:
+    def find_random(self, user_scopes: Sequence[str] = tuple()) -> List[FragmentInfo]:
         return list(
             map(
                 FragmentInfo.of,
@@ -55,7 +53,7 @@ class FragmentFinder:
         )
 
     def find_interesting(
-        self, user_scopes: Optional[List[str]] = None
+        self, user_scopes: Sequence[str] = tuple()
     ) -> List[FragmentInfo]:
         return list(
             map(
