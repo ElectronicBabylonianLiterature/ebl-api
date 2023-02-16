@@ -20,7 +20,7 @@ def test_find(
     number = fragment.number
     (
         when(fragment_repository)
-        .query_by_museum_number(number, None)
+        .query_by_museum_number(number, None, True)
         .thenReturn(fragment)
     )
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
@@ -42,7 +42,7 @@ def test_find_with_lines(
     number = fragment.number
     (
         when(fragment_repository)
-        .query_by_museum_number(number, lines)
+        .query_by_museum_number(number, lines, True)
         .thenReturn(fragment)
     )
 
@@ -53,7 +53,7 @@ def test_find_not_found(fragment_finder, fragment_repository, when):
     number = MuseumNumber("unknown", "id")
     (
         when(fragment_repository)
-        .query_by_museum_number(number, None)
+        .query_by_museum_number(number, None, True)
         .thenRaise(NotFoundError)
     )
 

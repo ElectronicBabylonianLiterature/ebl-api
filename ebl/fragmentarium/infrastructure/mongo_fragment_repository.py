@@ -182,18 +182,23 @@ class MongoFragmentRepository(FragmentRepository):
             }
         )
 
+    def _omit_text_lines(self) -> List:
+        return [{"$addFields": {"text.lines": []}}]
+
     def _filter_fragment_lines(self, lines: Optional[Sequence[int]]) -> List:
         return (
             [
                 {
                     "$addFields": {
-                        "text.lines": {
-                            "$map": {
-                                "input": lines,
-                                "as": "i",
-                                "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
+                        "text.lines": (
+                            {
+                                "$map": {
+                                    "input": lines,
+                                    "as": "i",
+                                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
+                                }
                             }
-                        }
+                        )
                     }
                 }
             ]
@@ -202,12 +207,19 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def query_by_museum_number(
-        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+        self,
+        number: MuseumNumber,
+        lines: Optional[Sequence[int]] = None,
+        load_lines=True,
     ):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
-                *self._filter_fragment_lines(lines),
+                *(
+                    self._filter_fragment_lines(lines)
+                    if load_lines
+                    else self._omit_text_lines()
+                ),
                 *join_reference_documents(),
                 *join_joins(),
             ]

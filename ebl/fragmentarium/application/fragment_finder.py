@@ -31,9 +31,12 @@ class FragmentFinder:
         self._parallel_injector = parallel_injector
 
     def find(
-        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+        self,
+        number: MuseumNumber,
+        lines: Optional[Sequence[int]] = None,
+        load_lines=True,
     ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number, lines)
+        fragment = self._repository.query_by_museum_number(number, lines, load_lines)
         return (
             fragment.set_text(
                 self._parallel_injector.inject_transliteration(fragment.text)
