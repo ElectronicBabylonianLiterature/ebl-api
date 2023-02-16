@@ -15,6 +15,7 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Introduction,
+    Scope,
     Script,
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
@@ -820,3 +821,10 @@ def test_query_lemmas(
         fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
         == expected
     )
+
+
+def test_fetch_scopes(fragment_repository: FragmentRepository):
+    fragment = FragmentFactory.build(authorized_scopes=[Scope.URUKLBU, Scope.CAIC])
+    fragment_repository.create(fragment)
+
+    assert fragment_repository.fetch_scopes(fragment.number) == ["URUKLBU", "CAIC"]
