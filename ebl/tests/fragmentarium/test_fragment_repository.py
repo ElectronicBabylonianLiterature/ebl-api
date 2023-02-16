@@ -218,6 +218,16 @@ def test_find_random(fragment_repository):
     ]
 
 
+def test_find_random_skips_restricted_fragments(fragment_repository):
+    restricted_transliterated_fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.ITALIANNINEVEH]
+    )
+
+    fragment_repository.create_many([restricted_transliterated_fragment])
+
+    assert fragment_repository.query_random_by_transliterated() == []
+
+
 def test_folio_pager_exception(fragment_repository):
     with pytest.raises(NotFoundError):
         museum_number = MuseumNumber.of("1841-07-26.54")
