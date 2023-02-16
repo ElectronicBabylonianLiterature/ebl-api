@@ -15,7 +15,7 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Introduction,
-    Scope,
+    FragmentScope,
     Script,
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
@@ -221,7 +221,7 @@ def test_find_random(fragment_repository):
 
 def test_find_random_skips_restricted_fragments(fragment_repository):
     restricted_transliterated_fragment = TransliteratedFragmentFactory.build(
-        authorized_scopes=[Scope.ITALIANNINEVEH]
+        authorized_scopes=[FragmentScope.ITALIANNINEVEH]
     )
 
     fragment_repository.create_many([restricted_transliterated_fragment])
@@ -824,7 +824,9 @@ def test_query_lemmas(
 
 
 def test_fetch_scopes(fragment_repository: FragmentRepository):
-    fragment = FragmentFactory.build(authorized_scopes=[Scope.URUKLBU, Scope.CAIC])
+    fragment = FragmentFactory.build(
+        authorized_scopes=[FragmentScope.URUKLBU, FragmentScope.CAIC]
+    )
     fragment_repository.create(fragment)
 
     assert fragment_repository.fetch_scopes(fragment.number) == ["URUKLBU", "CAIC"]

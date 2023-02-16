@@ -63,7 +63,7 @@ class Genre:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Scope(Enum):
+class FragmentScope(Enum):
     CAIC = "CAIC"
     SIPPARLIBRARY = "SIPPARLIBRARY"
     URUKLBU = "URUKLBU"
@@ -115,7 +115,7 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
-    authorized_scopes: Optional[Sequence[Scope]] = list()
+    authorized_scopes: Optional[Sequence[FragmentScope]] = list()
     introduction: Introduction = Introduction("", tuple())
     script: Script = Script()
 

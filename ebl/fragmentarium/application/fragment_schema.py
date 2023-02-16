@@ -12,7 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
     Measure,
     Script,
     UncuratedReference,
-    Scope,
+    FragmentScope,
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
@@ -143,7 +143,9 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
-    authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
+    authorized_scopes = fields.List(
+        ValueEnum(FragmentScope), data_key="authorizedScopes"
+    )
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
     script = fields.Nested(ScriptSchema, load_default=Script())
 

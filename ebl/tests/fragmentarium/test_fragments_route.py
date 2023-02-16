@@ -2,7 +2,7 @@ import pytest
 import attr
 import falcon
 from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import Scope
+from ebl.fragmentarium.domain.fragment import FragmentScope
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
@@ -98,7 +98,7 @@ def test_get_fragment_as_guest(guest_client, fragmentarium):
 
 
 def test_get_restricted_fragment_as_guest(guest_client, fragmentarium):
-    fragment = FragmentFactory.build(authorized_scopes=[Scope.SIPPARLIBRARY])
+    fragment = FragmentFactory.build(authorized_scopes=[FragmentScope.SIPPARLIBRARY])
     fragmentarium.create(fragment)
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
