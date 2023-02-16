@@ -34,9 +34,9 @@ class FragmentFinder:
         self,
         number: MuseumNumber,
         lines: Optional[Sequence[int]] = None,
-        load_lines=True,
+        exclude_lines=False,
     ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number, lines, load_lines)
+        fragment = self._repository.query_by_museum_number(number, lines, exclude_lines)
         return (
             fragment.set_text(
                 self._parallel_injector.inject_transliteration(fragment.text)

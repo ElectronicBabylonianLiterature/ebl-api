@@ -35,7 +35,7 @@ class FragmentRepository(ABC):
         self,
         number: MuseumNumber,
         lines: Optional[Sequence[int]] = None,
-        load_lines: bool = True,
+        exclude_lines: bool = False,
     ) -> Fragment:
         ...
 

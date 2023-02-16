@@ -210,15 +210,15 @@ class MongoFragmentRepository(FragmentRepository):
         self,
         number: MuseumNumber,
         lines: Optional[Sequence[int]] = None,
-        load_lines=True,
+        exclude_lines=False,
     ):
         data = self._fragments.aggregate(
             [
                 {"$match": museum_number_is(number)},
                 *(
-                    self._filter_fragment_lines(lines)
-                    if load_lines
-                    else self._omit_text_lines()
+                    self._omit_text_lines()
+                    if exclude_lines
+                    else self._filter_fragment_lines(lines)
                 ),
                 *join_reference_documents(),
                 *join_joins(),
