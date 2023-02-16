@@ -1,11 +1,12 @@
-from marshmallow import fields, post_dump
+import attr
+from marshmallow import fields
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.users.domain.user import User, Guest
+from ebl.users.domain.user import User
 
 
 class FragmentDtoSchema(FragmentSchema):
@@ -18,17 +19,12 @@ class FragmentDtoSchema(FragmentSchema):
     class Meta:
         exclude = ("authorized_scopes",)
 
-    @post_dump
-    def exclude_hidden_folios(self, data, **kwargs):
-        if "folios" in data:
-            user = self.context.get("user", Guest())
-            data["folios"] = [
-                folio for folio in data["folios"] if user.can_read_folio(folio["name"])
-            ]
-        return data
 
-
-def create_response_dto(fragment: Fragment, user: User, has_photo: bool):
+def create_response_dto(
+    fragment: Fragment, user: User, has_photo: bool, filter_folios=False
+):
+    if filter_folios:
+        fragment = attr.evolve(fragment, folios=fragment.folios.filter(user))
     return FragmentDtoSchema(context={"user": user, "has_photo": has_photo}).dump(
         fragment
     )

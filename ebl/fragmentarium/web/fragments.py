@@ -31,7 +31,9 @@ class FragmentsResource:
             parse_museum_number(number),
             lines=lines,
         )
-        resp.media = create_response_dto(fragment, req.context.user, has_photo)
+        resp.media = create_response_dto(
+            fragment, req.context.user, has_photo, filter_folios=True
+        )
 
 
 class FragmentsQueryResource:
