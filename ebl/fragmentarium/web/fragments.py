@@ -31,7 +31,7 @@ class FragmentsResource:
     def on_get(self, req: Request, resp: Response, number: str):
         user: User = req.context.user if hasattr(req.context, "user") else None
         lines = parse_lines(req.get_param_as_list("lines", default=[]))
-        exclude_lines = req.get_param_as_bool("exclude_lines", default=False)
+        exclude_lines = req.get_param_as_bool("excludeLines", default=False)
 
         fragment, has_photo = self._finder.find(
             parse_museum_number(number), lines=lines, exclude_lines=exclude_lines
