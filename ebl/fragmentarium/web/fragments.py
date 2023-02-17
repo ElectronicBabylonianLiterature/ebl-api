@@ -26,10 +26,10 @@ class FragmentsResource:
     @falcon.before(require_fragment_read_scope)
     def on_get(self, req: Request, resp: Response, number: str):
         lines = parse_lines(req.get_param_as_list("lines", default=[]))
+        exclude_lines = req.get_param_as_bool("excludeLines", default=False)
 
         fragment, has_photo = self._finder.find(
-            parse_museum_number(number),
-            lines=lines,
+            parse_museum_number(number), lines=lines, exclude_lines=exclude_lines
         )
         resp.media = create_response_dto(fragment, req.context.user, has_photo)
 

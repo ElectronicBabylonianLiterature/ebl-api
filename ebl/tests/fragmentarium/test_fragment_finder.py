@@ -1,3 +1,4 @@
+import attr
 import pytest
 
 from ebl.errors import NotFoundError
@@ -20,7 +21,7 @@ def test_find(
     number = fragment.number
     (
         when(fragment_repository)
-        .query_by_museum_number(number, None)
+        .query_by_museum_number(number, None, False)
         .thenReturn(fragment)
     )
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
@@ -42,18 +43,38 @@ def test_find_with_lines(
     number = fragment.number
     (
         when(fragment_repository)
-        .query_by_museum_number(number, lines)
+        .query_by_museum_number(number, lines, False)
         .thenReturn(fragment)
     )
 
     assert fragment_finder.find(number, lines)[0] == fragment
 
 
+@pytest.mark.parametrize("lines", [None, [], [0, 2]])
+def test_find_without_lines(
+    lines,
+    fragment_finder,
+    fragment_repository,
+    when,
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number, lines, True)
+        .thenReturn(
+            attr.evolve(fragment, text=attr.evolve(fragment.text, lines=tuple()))
+        )
+    )
+
+    assert fragment_finder.find(number, lines, True)[0].text.lines == tuple()
+
+
 def test_find_not_found(fragment_finder, fragment_repository, when):
     number = MuseumNumber("unknown", "id")
     (
         when(fragment_repository)
-        .query_by_museum_number(number, None)
+        .query_by_museum_number(number, None, False)
         .thenRaise(NotFoundError)
     )
 
