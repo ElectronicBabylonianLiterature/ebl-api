@@ -1,15 +1,12 @@
 import pytest
 import attr
 import falcon
-from ebl.fragmentarium.domain.folios import Folio, Folios
-from ebl.fragmentarium.domain.fragment import FragmentScope
+from ebl.common.domain.scopes import Scope
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from urllib.parse import urlencode
-
-from ebl.users.domain.user import User
 
 
 @pytest.mark.parametrize(
@@ -98,20 +95,10 @@ def test_get_fragment_as_guest(guest_client, fragmentarium):
 
 
 def test_get_restricted_fragment_as_guest(guest_client, fragmentarium):
-    fragment = FragmentFactory.build(authorized_scopes=[FragmentScope.SIPPARLIBRARY])
-    fragmentarium.create(fragment)
-    result = guest_client.simulate_get(f"/fragments/{fragment.number}")
-
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
-def test_get_fragment_filters_folios(guest_client, fragmentarium):
-    restricted_folio = User.hidden_scopes[0][5:-7]
     fragment = FragmentFactory.build(
-        folios=Folios((Folio(restricted_folio, "1"), Folio("OPENFOLIO", "1")))
+        authorized_scopes=[Scope.READ_SIPPARLIBRARY_FRAGMENTS]
     )
     fragmentarium.create(fragment)
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
-    assert result.status == falcon.HTTP_OK
-    assert result.json["folios"] == [{"name": "OPENFOLIO", "number": "1"}]
+    assert result.status == falcon.HTTP_FORBIDDEN

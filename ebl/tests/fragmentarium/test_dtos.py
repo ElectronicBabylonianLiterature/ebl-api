@@ -59,9 +59,7 @@ def test_create_response_dto(user):
                 for entry in lemmatized_fragment.record.entries
             ],
             "folios": [
-                attr.asdict(folio)
-                for folio in lemmatized_fragment.folios.entries
-                if user.can_read_folio(folio.name)
+                attr.asdict(folio) for folio in lemmatized_fragment.folios.entries
             ],
             "text": TextSchema().dump(lemmatized_fragment.text),
             "references": [
