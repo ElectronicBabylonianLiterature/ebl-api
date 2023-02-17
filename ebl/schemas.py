@@ -58,8 +58,8 @@ class ScopeEnum(EnumField):
     def __init__(self, **kwargs):
         super().__init__(Scope, **kwargs)
 
-    def _serialize_enum(self, value: Enum) -> str:
-        return str(value)
+    def _serialize_enum(self, value: Scope) -> str:
+        return value.scope_name
 
     def _deserialize_enum(self, value: str) -> Enum:
-        return Scope.from_string(value)
+        return Scope.from_string(f"read:{value}-fragments")

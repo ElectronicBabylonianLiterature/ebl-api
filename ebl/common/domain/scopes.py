@@ -7,7 +7,7 @@ RESTRICTED = False
 
 class ScopeItem(Enum):
     def __init__(self, scope_string: str, is_open=True):
-        prefix, name, suffix = self.parse_scope_string(scope_string)
+        prefix, name, suffix = self._parse_scope_string(scope_string)
         self.prefix = prefix
         self.scope_name = name
         self.suffix = suffix
@@ -15,7 +15,7 @@ class ScopeItem(Enum):
 
     @classmethod
     def from_string(cls, scope_string: str):
-        prefix, name, suffix = cls.parse_scope_string(scope_string)
+        prefix, name, suffix = cls._parse_scope_string(scope_string)
         try:
             return next(
                 enum
@@ -27,18 +27,8 @@ class ScopeItem(Enum):
         except StopIteration:
             raise ValueError(f"Unknown scope: {scope_string}")
 
-    @classmethod
-    def from_parts(cls, prefix: str, scope_name: str, suffix: str = ""):
-        return next(
-            enum
-            for enum in cls
-            if cls.prefix == prefix
-            and cls.scope_name == scope_name
-            and suffix in [cls.suffix, ""]
-        )
-
     @staticmethod
-    def parse_scope_string(scope_string: str):
+    def _parse_scope_string(scope_string: str):
         match = re.match("([^:]+):([^-]+)(?:-(.+))?", scope_string)
 
         if not match:
