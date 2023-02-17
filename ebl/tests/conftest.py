@@ -72,7 +72,7 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
-from ebl.users.domain.user import User
+from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
 
@@ -304,7 +304,7 @@ def folio_with_allowed_scope():
 
 @pytest.fixture
 def folio_with_restricted_scope():
-    return FakeFile("AKG_001.jpg", b"klgsFPOutx", {"scope": "AKG-folios"})
+    return FakeFile("ILF_001.jpg", b"klgsFPOutx", {"scope": "ILF-folios"})
 
 
 @pytest.fixture
@@ -364,24 +364,25 @@ def annotations_service(
 def user() -> User:
     return Auth0User(
         {
-            "scope": [
-                "read:words",
-                "write:words",
-                "transliterate:fragments",
-                "lemmatize:fragments",
-                "annotate:fragments",
-                "read:fragments",
-                "read:CAIC-fragments",
-                "read:SIPPARLIBRARY-fragments",
-                "read:ITALIANNINEVEH-fragments",
-                "read:URUKLBU-fragments",
-                "read:WGL-folios",
-                "read:bibliography",
-                "write:bibliography",
-                "read:texts",
-                "write:texts",
-                "create:texts",
-            ]
+            "scope": " ".join(
+                [
+                    "read:words",
+                    "write:words",
+                    "transliterate:fragments",
+                    "lemmatize:fragments",
+                    "annotate:fragments",
+                    "read:CAIC-fragments",
+                    "read:SIPPARLIBRARY-fragments",
+                    "read:ITALIANNINEVEH-fragments",
+                    "read:URUKLBU-fragments",
+                    "read:WGL-folios",
+                    "read:bibliography",
+                    "write:bibliography",
+                    "read:texts",
+                    "write:texts",
+                    "create:texts",
+                ]
+            )
         },
         lambda: {
             "name": "test.user@example.com",
@@ -444,7 +445,7 @@ class EnsureAnnotationPost:
 @pytest.fixture
 def guest_client(context):
     api = ebl.app.create_app(
-        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
+        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: Guest()))
     )
     api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
     return testing.TestClient(api)

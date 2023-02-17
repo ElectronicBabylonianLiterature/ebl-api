@@ -1,4 +1,4 @@
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 from ebl.fragmentarium.application.fragment_matcher import (
     sort_scores_to_list,
     LineToVecRanking,

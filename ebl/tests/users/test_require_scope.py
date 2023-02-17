@@ -14,7 +14,7 @@ class TestResource:
         resp.status = falcon.HTTP_OK
 
 
-def do_get(scope):
+def do_get(scope: str):
     def user_loader():
         return Auth0User({"scope": scope}, lambda: {})
 
@@ -28,24 +28,12 @@ def do_get(scope):
 
 
 def test_require_scope_present():
-    result = do_get([SCOPE])
+    result = do_get(SCOPE)
 
     assert result.status == falcon.HTTP_OK
 
 
 def test_require_scope_not_present():
-    result = do_get([])
-
-    assert result.status == falcon.HTTP_FORBIDDEN
-
-
-def test_require_scope_no_user():
-    auth_backend = NoneAuthBackend(lambda: None)
-    auth_middleware = FalconAuthMiddleware(auth_backend)
-    api = falcon.App(middleware=[auth_middleware])
-    api.add_route("/test", TestResource())
-    client = testing.TestClient(api)
-
-    result = client.simulate_get("/test")
+    result = do_get("")
 
     assert result.status == falcon.HTTP_FORBIDDEN

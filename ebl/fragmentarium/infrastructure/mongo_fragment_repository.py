@@ -6,6 +6,7 @@ from marshmallow import EXCLUDE
 from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import NotFoundError
@@ -230,16 +231,31 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
-    def query_random_by_transliterated(self):
+    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
+        fragment = next(
+            self._fragments.find_many(
+                museum_number_is(number), projection={"authorizedScopes": True}
+            ),
+            {},
+        )
+        return [
+            Scope.from_string(f"read:{value}-fragments")
+            for value in fragment.get("authorizedScopes", [])
+        ]
+
+    def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = tuple()):
         cursor = self._fragments.aggregate(
-            [*aggregate_random(), {"$project": {"joins": False}}]
+            [*aggregate_random(user_scopes), {"$project": {"joins": False}}]
         )
 
         return self._map_fragments(cursor)
 
-    def query_path_of_the_pioneers(self):
+    def query_path_of_the_pioneers(self, user_scopes: Sequence[Scope] = tuple()):
         cursor = self._fragments.aggregate(
-            [*aggregate_path_of_the_pioneers(), {"$project": {"joins": False}}]
+            [
+                *aggregate_path_of_the_pioneers(user_scopes),
+                {"$project": {"joins": False}},
+            ]
         )
 
         return self._map_fragments(cursor)
@@ -267,15 +283,19 @@ class MongoFragmentRepository(FragmentRepository):
             for fragment in cursor
         ]
 
-    def query_by_transliterated_sorted_by_date(self):
+    def query_by_transliterated_sorted_by_date(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ):
         cursor = self._fragments.aggregate(
-            [*aggregate_latest(), {"$project": {"joins": False}}]
+            [*aggregate_latest(user_scopes), {"$project": {"joins": False}}]
         )
         return self._map_fragments(cursor)
 
-    def query_by_transliterated_not_revised_by_other(self):
+    def query_by_transliterated_not_revised_by_other(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ):
         cursor = self._fragments.aggregate(
-            [*aggregate_needs_revision(), {"$project": {"joins": False}}],
+            [*aggregate_needs_revision(user_scopes), {"$project": {"joins": False}}],
             allowDiskUse=True,
         )
         return FragmentInfoSchema(many=True).load(cursor)
@@ -411,10 +431,10 @@ class MongoFragmentRepository(FragmentRepository):
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
-    def query(self, query: dict) -> QueryResult:
+    def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
 
         if set(query) - {"lemmaOperator"}:
-            matcher = PatternMatcher(query)
+            matcher = PatternMatcher(query, user_scopes)
             data = next(
                 self._fragments.aggregate(
                     matcher.build_pipeline(),

@@ -2,7 +2,8 @@ from typing import Tuple, List
 import attr
 import pytest
 import random
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
+from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryItem, QueryResult
 
 from ebl.dictionary.domain.word import WordId
@@ -11,7 +12,12 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction, Script
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    Genre,
+    Introduction,
+    Script,
+)
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.common.query.query_result import LemmaQueryType
@@ -211,6 +217,16 @@ def test_find_random(fragment_repository):
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
     ]
+
+
+def test_find_random_skips_restricted_fragments(fragment_repository):
+    restricted_transliterated_fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.READ_ITALIANNINEVEH_FRAGMENTS]
+    )
+
+    fragment_repository.create_many([restricted_transliterated_fragment])
+
+    assert fragment_repository.query_random_by_transliterated() == []
 
 
 def test_folio_pager_exception(fragment_repository):
@@ -805,3 +821,15 @@ def test_query_lemmas(
         fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
         == expected
     )
+
+
+def test_fetch_scopes(fragment_repository: FragmentRepository):
+    fragment = FragmentFactory.build(
+        authorized_scopes=[Scope.READ_URUKLBU_FRAGMENTS, Scope.READ_CAIC_FRAGMENTS]
+    )
+    fragment_repository.create(fragment)
+
+    assert fragment_repository.fetch_scopes(fragment.number) == [
+        Scope.READ_URUKLBU_FRAGMENTS,
+        Scope.READ_CAIC_FRAGMENTS,
+    ]

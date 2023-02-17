@@ -2,7 +2,7 @@ import pydash
 from marshmallow import Schema, fields, post_dump, post_load
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -12,11 +12,10 @@ from ebl.fragmentarium.domain.fragment import (
     Measure,
     Script,
     UncuratedReference,
-    Scope,
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ValueEnum
+from ebl.schemas import ScopeEnum, ValueEnum
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
@@ -143,7 +142,10 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
-    authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
+    authorized_scopes = fields.List(
+        ScopeEnum(),
+        data_key="authorizedScopes",
+    )
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
     script = fields.Nested(ScriptSchema, load_default=Script())
 

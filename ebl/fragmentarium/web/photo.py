@@ -2,17 +2,14 @@ import falcon
 from falcon import Response
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
-from ebl.users.web.require_scope import require_scope
+from ebl.users.web.require_scope import require_fragment_read_scope
 
 
 class PhotoResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, finder: FragmentFinder):
         self._finder = finder
 
-    @falcon.before(require_scope, "read:fragments")
+    @falcon.before(require_fragment_read_scope)
     def on_get(self, _req, resp: Response, number: str):
         file = self._finder.find_photo(number)
 

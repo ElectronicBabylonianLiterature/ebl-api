@@ -1,9 +1,10 @@
 import copy
-from typing import Any, Callable
+from typing import Any, Callable, List, Optional
 
 import pydash
 import requests
 from falcon_auth import JWTAuthBackend
+from ebl.common.domain.scopes import Scope
 
 from ebl.users.domain.user import User
 
@@ -30,8 +31,17 @@ class Auth0User(User):
         profile = self.profile
         return profile.get("https://ebabylon.org/eblName", profile["name"])
 
-    def has_scope(self, scope):
-        return scope in self._access_token["scope"]
+    def get_scopes(
+        self, prefix: Optional[str] = "", suffix: Optional[str] = ""
+    ) -> List[Scope]:
+        return [
+            Scope.from_string(scope)
+            for scope in self._access_token["scope"].split()
+            if scope.startswith(prefix) and scope.endswith(suffix)
+        ]
+
+    def has_scope(self, scope: Scope):
+        return scope.is_open or scope in self.get_scopes()
 
 
 class Auth0Backend(JWTAuthBackend):

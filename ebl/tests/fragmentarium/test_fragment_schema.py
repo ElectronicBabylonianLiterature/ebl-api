@@ -1,13 +1,26 @@
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.tests.factories.fragment import LemmatizedFragmentFactory
+from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
+
+SCOPES = [
+    Scope.READ_ITALIANNINEVEH_FRAGMENTS,
+    Scope.READ_SIPPARLIBRARY_FRAGMENTS,
+]
+SERIALIZED_SCOPES = [
+    "ITALIANNINEVEH",
+    "SIPPARLIBRARY",
+]
 
 
 def test_serialization_and_deserialization():
     fragment = LemmatizedFragmentFactory.build(
-        joins=Joins(((Join(MuseumNumber("X", "1")),),))
+        joins=Joins(
+            ((Join(MuseumNumber("X", "1")),),),
+        ),
+        authorized_scopes=[Scope.READ_ITALIANNINEVEH_FRAGMENTS],
     )
     schema = FragmentSchema()
     data = schema.dump(fragment)
@@ -35,3 +48,16 @@ def test_number_deserialization():
         }
     )
     assert fragment.number == number
+
+
+def test_scope_serialization():
+    fragment = FragmentFactory.build(authorized_scopes=SCOPES)
+    assert FragmentSchema().dump(fragment)["authorizedScopes"] == SERIALIZED_SCOPES
+
+
+def test_scope_deserialization():
+    data = {
+        **FragmentSchema().dump(FragmentFactory.build()),
+        "authorizedScopes": SERIALIZED_SCOPES,
+    }
+    assert FragmentSchema().load(data).authorized_scopes == SCOPES

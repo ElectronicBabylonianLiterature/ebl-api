@@ -1,7 +1,7 @@
 import attr
 from freezegun import freeze_time
 import pytest
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
@@ -126,7 +126,7 @@ def test_record():
 
 def test_folios():
     fragment = FragmentFactory.build()
-    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("ARG", "1")))
 
 
 def test_text():

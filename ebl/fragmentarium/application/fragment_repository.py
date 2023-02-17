@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Sequence, Optional
+from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -40,19 +41,27 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_random_by_transliterated(self) -> List[Fragment]:
+    def query_random_by_transliterated(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_path_of_the_pioneers(self) -> List[Fragment]:
+    def query_path_of_the_pioneers(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_by_transliterated_sorted_by_date(self) -> List[Fragment]:
+    def query_by_transliterated_sorted_by_date(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_by_transliterated_not_revised_by_other(self) -> List[FragmentInfo]:
+    def query_by_transliterated_not_revised_by_other(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[FragmentInfo]:
         ...
 
     @abstractmethod
@@ -82,5 +91,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query(self, query: dict) -> QueryResult:
+    def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
+        ...
+
+    @abstractmethod
+    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         ...

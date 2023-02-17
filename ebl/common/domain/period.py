@@ -1,5 +1,5 @@
 from enum import Enum
-from ebl.common.siglum_enum import SiglumEnumWithParent
+from ebl.common.domain.siglum_enum import SiglumEnumWithParent
 
 
 class Period(SiglumEnumWithParent):

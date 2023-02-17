@@ -1,16 +1,19 @@
-from typing import List, Dict
-from ebl.fragmentarium.infrastructure.queries import number_is
+from typing import List, Dict, Sequence
+from ebl.common.domain.scopes import Scope
+from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaMatcher
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
+from pydash.arrays import compact
 
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
 
 
 class PatternMatcher:
-    def __init__(self, query: Dict):
+    def __init__(self, query: Dict, user_scopes: Sequence[Scope] = tuple()):
         self._query = query
+        self._scopes = user_scopes
 
         self._lemma_matcher = (
             LemmaMatcher(
@@ -58,8 +61,10 @@ class PatternMatcher:
             id_query["references"]["$elemMatch"]["pages"] = {
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
             }
-
-        constraints = {**number_query, **id_query}
+        constraints = {
+            "$and": compact([number_query, match_user_scopes(self._scopes)]),
+            **id_query,
+        }
 
         return [{"$match": constraints}] if constraints else []
 

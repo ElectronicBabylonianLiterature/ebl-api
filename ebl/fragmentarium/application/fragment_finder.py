@@ -1,6 +1,7 @@
 from typing import List, Optional, Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
+from ebl.common.domain.scopes import Scope
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -44,14 +45,25 @@ class FragmentFinder:
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
-    def find_random(self) -> List[FragmentInfo]:
+    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
+        return self._repository.fetch_scopes(number)
+
+    def find_random(self, user_scopes: Sequence[Scope] = tuple()) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, self._repository.query_random_by_transliterated())
+            map(
+                FragmentInfo.of,
+                self._repository.query_random_by_transliterated(user_scopes),
+            )
         )
 
-    def find_interesting(self) -> List[FragmentInfo]:
+    def find_interesting(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, (self._repository.query_path_of_the_pioneers()))
+            map(
+                FragmentInfo.of,
+                (self._repository.query_path_of_the_pioneers(user_scopes)),
+            )
         )
 
     def folio_pager(

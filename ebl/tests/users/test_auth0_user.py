@@ -1,4 +1,5 @@
 import pytest
+from ebl.common.domain.scopes import Scope
 
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -20,11 +21,12 @@ def create_default_profile():
 
 
 def test_has_scope():
-    scope = "scope"
-    user = Auth0User({"scope": scope}, create_default_profile)
+    scope = Scope.READ_TEXTS
+    other_scope = Scope.WRITE_TEXTS
+    user = Auth0User({"scope": str(scope)}, create_default_profile)
 
     assert user.has_scope(scope) is True
-    assert user.has_scope("other:scope") is False
+    assert user.has_scope(other_scope) is False
 
 
 def test_profile():
@@ -61,8 +63,7 @@ def test_ebl_name(profile, expected):
     "scopes,folio_name,expected",
     [
         ("read:WGL-folios", "WGL", True),
-        ("write:WGL-folios", "WGL", False),
-        ("read:XXX-folios", "WGL", False),
+        ("read:EVW-folios", "ARG", False),
     ],
 )
 def test_can_read_folio(scopes, folio_name, expected):
@@ -81,18 +82,26 @@ def test_can_read_folio(scopes, folio_name, expected):
                 "read:URUKLBU-fragments",
                 "read:ITALIANNINEVEH-fragments",
             ],
-            ["CAIC", "SIPPARLIBRARY", "URUKLBU", "ITALIANNINEVEH"],
+            [
+                "read:CAIC-fragments",
+                "read:SIPPARLIBRARY-fragments",
+                "read:URUKLBU-fragments",
+                "read:ITALIANNINEVEH-fragments",
+            ],
             True,
         ),
         (
             ["read:SIPPARLIBRARY-fragments", "read:URUKLBU-fragments"],
-            ["CAIC", "SIPPARLIBRARY", "URUKLBU", "ITALIANNINEVEH"],
+            ["read:CAIC-fragments", "read:ITALIANNINEVEH-fragments"],
             False,
         ),
-        (["read:SIPPARLIBRARY-fragments"], ["CAIC"], False),
+        (["read:SIPPARLIBRARY-fragments"], ["read:CAIC-fragments"], False),
         ([], [], True),
     ],
 )
 def test_can_read_fragment(user_scope, scopes, expected):
-    user = Auth0User({"scope": user_scope}, create_default_profile)
-    assert user.can_read_fragment(scopes) == expected
+    user = Auth0User({"scope": " ".join(user_scope)}, create_default_profile)
+    assert (
+        user.can_read_fragment([Scope.from_string(scope) for scope in scopes])
+        == expected
+    )

@@ -1,7 +1,7 @@
 from typing import Union
 
 import pytest
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.corpus.domain.manuscript import Manuscript, ManuscriptType, Provenance
 from ebl.tests.factories.corpus import ManuscriptLineFactory

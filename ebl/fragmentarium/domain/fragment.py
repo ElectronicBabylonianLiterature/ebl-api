@@ -1,12 +1,12 @@
 from itertools import groupby
 from typing import Optional, Sequence, Tuple
-from enum import Enum
 
 import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
@@ -60,14 +60,6 @@ class Genre:
         category = tuple(category)
         if category not in genres:
             raise ValueError(f"'{category}' is not a valid genre")
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Scope(Enum):
-    CAIC = "CAIC"
-    SIPPARLIBRARY = "SIPPARLIBRARY"
-    URUKLBU = "URUKLBU"
-    ITALIANNINEVEH = "ITALIANNINEVEH"
 
 
 @attr.s(auto_attribs=True, frozen=True)

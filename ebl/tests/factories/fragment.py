@@ -1,7 +1,7 @@
 from typing import Sequence
 
 import factory
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
@@ -11,7 +11,6 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Introduction,
-    Scope,
     Script,
     UncuratedReference,
 )
@@ -113,7 +112,7 @@ class FragmentFactory(factory.Factory):
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)
-    folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    folios = Folios((Folio("WGL", "1"), Folio("ARG", "1")))
     genres = factory.Iterator(
         [
             (
@@ -123,12 +122,7 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
-    authorized_scopes = [
-        Scope.CAIC,
-        Scope.SIPPARLIBRARY,
-        Scope.URUKLBU,
-        Scope.ITALIANNINEVEH,
-    ]
+    authorized_scopes = []
     introduction = Introduction("text", (StringPart("text"),))
 
 
@@ -348,7 +342,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         "X MU TA MA UD\n"
         "ŠU/|BI×IS|"
     )
-    folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
+    folios = Folios((Folio("WGL", "3"), Folio("ARG", "3")))
     record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
     line_to_vec = (
         (

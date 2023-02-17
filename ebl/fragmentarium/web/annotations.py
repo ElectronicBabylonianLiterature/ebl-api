@@ -10,9 +10,6 @@ from ebl.users.web.require_scope import require_scope
 
 
 class AnnotationResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, annotation_service: AnnotationsService):
         self._annotation_service = annotation_service
 
@@ -29,7 +26,6 @@ class AnnotationResource:
                 description="Fragment numbers do not match."
             )
 
-    @falcon.before(require_scope, "read:fragments")
     @validate(None, AnnotationsSchema())
     def on_get(self, req, resp: falcon.Response, number: str):
         museum_number = parse_museum_number(number)

@@ -1,6 +1,6 @@
 import factory.fuzzy
 import pydash
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line

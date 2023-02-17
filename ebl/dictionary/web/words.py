@@ -6,13 +6,9 @@ from ebl.users.web.require_scope import require_scope
 
 
 class WordsResource:
-
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, dictionary):
         self._dictionary = dictionary
 
-    @falcon.before(require_scope, "read:words")
     def on_get(self, _req, resp, object_id):
         resp.media = self._dictionary.find(object_id)
 
