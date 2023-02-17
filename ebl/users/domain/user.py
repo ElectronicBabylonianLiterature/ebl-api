@@ -25,8 +25,10 @@ class User(ABC):
         except ValueError:
             return True
 
-    def can_read_fragment(self, scopes: Sequence[Scope]) -> bool:
-        return (not scopes) or any(self.has_scope(scope) for scope in scopes)
+    def can_read_fragment(self, fragment_scopes: Sequence[Scope]) -> bool:
+        return (not fragment_scopes) or set(
+            self.get_scopes(prefix="read:", suffix="-fragments")
+        ).intersection(fragment_scopes)
 
     def get_scopes(
         self, prefix: Optional[str] = "", suffix: Optional[str] = ""

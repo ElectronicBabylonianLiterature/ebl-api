@@ -227,7 +227,8 @@ class MongoFragmentRepository(FragmentRepository):
             {},
         )
         return [
-            Scope.from_string(scope) for scope in fragment.get("authorizedScopes", [])
+            Scope.from_string(f"read:{value}-fragments")
+            for value in fragment.get("authorizedScopes", [])
         ]
 
     def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = tuple()):
