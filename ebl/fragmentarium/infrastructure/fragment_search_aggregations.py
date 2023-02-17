@@ -1,4 +1,5 @@
 from typing import List, Dict, Sequence
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaMatcher
 from ebl.common.query.query_result import LemmaQueryType
@@ -10,7 +11,7 @@ LEMMA_PATH = "text.lines.content.uniqueLemma"
 
 
 class PatternMatcher:
-    def __init__(self, query: Dict, user_scopes: Sequence[str] = tuple()):
+    def __init__(self, query: Dict, user_scopes: Sequence[Scope] = tuple()):
         self._query = query
         self._scopes = user_scopes
 

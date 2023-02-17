@@ -1,12 +1,12 @@
 from itertools import groupby
 from typing import Optional, Sequence, Tuple
-from enum import Enum
 
 import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
@@ -63,14 +63,6 @@ class Genre:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class FragmentScope(Enum):
-    CAIC = "CAIC"
-    SIPPARLIBRARY = "SIPPARLIBRARY"
-    URUKLBU = "URUKLBU"
-    ITALIANNINEVEH = "ITALIANNINEVEH"
-
-
-@attr.s(auto_attribs=True, frozen=True)
 class Introduction:
     text: str
     parts: Tuple[MarkupPart]
@@ -115,7 +107,7 @@ class Fragment:
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
-    authorized_scopes: Optional[Sequence[FragmentScope]] = list()
+    authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction("", tuple())
     script: Script = Script()
 

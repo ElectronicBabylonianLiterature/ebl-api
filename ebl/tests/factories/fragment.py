@@ -112,7 +112,7 @@ class FragmentFactory(factory.Factory):
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)
-    folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    folios = Folios((Folio("WGL", "1"), Folio("ARG", "1")))
     genres = factory.Iterator(
         [
             (
@@ -342,7 +342,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         "X MU TA MA UD\n"
         "ŠU/|BI×IS|"
     )
-    folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
+    folios = Folios((Folio("WGL", "3"), Folio("ARG", "3")))
     record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
     line_to_vec = (
         (

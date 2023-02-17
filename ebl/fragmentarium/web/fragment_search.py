@@ -4,6 +4,7 @@ import falcon
 from falcon_caching import Cache
 
 from ebl.cache.application.cache import DEFAULT_TIMEOUT, cache_control
+from ebl.common.domain.scopes import Scope
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -27,11 +28,11 @@ class FragmentSearch:
         cache: Cache,
     ):
         @cache.memoize(DEFAULT_TIMEOUT)
-        def find_needs_revision(user_scopes: Sequence[str] = tuple()):
+        def find_needs_revision(user_scopes: Sequence[Scope] = tuple()):
             return fragmentarium.find_needs_revision(user_scopes)
 
         @cache.memoize(DEFAULT_TIMEOUT)
-        def find_latest(user_scopes: Sequence[str] = tuple()):
+        def find_latest(user_scopes: Sequence[Scope] = tuple()):
             return fragmentarium.find_latest(user_scopes)
 
         self.api_fragment_info_schema = ApiFragmentInfoSchema(many=True)

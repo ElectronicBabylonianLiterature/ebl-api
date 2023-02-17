@@ -1,21 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Sequence, List, Optional
 
+from ebl.common.domain.scopes import Scope
+
 
 class User(ABC):
-    hidden_scopes = [
-        "read:ILF-folios",
-        "read:SP-folios",
-        "read:USK-folios",
-        "read:ARG-folios",
-        "read:WRM-folios",
-        "read:MJG-folios",
-        "read:SP-folios",
-        "read:UG-folios",
-        "read:SJL-folios",
-        "read:EVW-folios",
-    ]
-
     @property
     @abstractmethod
     def profile(self) -> dict:
@@ -26,24 +15,22 @@ class User(ABC):
     def ebl_name(self) -> str:
         ...
 
-    def has_scope(self, scope: str) -> bool:
-        return False
-
-    def is_hidden_folio_scope(self, scope: str) -> bool:
-        return scope in self.hidden_scopes
+    def has_scope(self, scope: Scope) -> bool:
+        return scope.is_open
 
     def can_read_folio(self, name: str) -> bool:
-        scope = f"read:{name}-folios"
-        return self.has_scope(scope) or not self.is_hidden_folio_scope(scope)
+        try:
+            scope = Scope.from_string(f"read:{name}-folios")
+            return self.has_scope(scope) or scope.is_open
+        except ValueError:
+            return True
 
-    def can_read_fragment(self, scopes: Sequence[str]) -> bool:
-        return (not scopes) or any(
-            self.has_scope(f"read:{scope}-fragments") for scope in scopes
-        )
+    def can_read_fragment(self, scopes: Sequence[Scope]) -> bool:
+        return (not scopes) or any(self.has_scope(scope) for scope in scopes)
 
     def get_scopes(
         self, prefix: Optional[str] = "", suffix: Optional[str] = ""
-    ) -> List[str]:
+    ) -> List[Scope]:
         return []
 
 

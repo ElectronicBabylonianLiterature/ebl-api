@@ -1,5 +1,5 @@
 from typing import List, Sequence
-import re
+from ebl.common.domain.scopes import Scope
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.record import RecordType
@@ -31,38 +31,26 @@ def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def match_user_scopes(user_scopes: Sequence[str] = tuple()) -> dict:
-    def strip_affixes(scope: str) -> str:
-        match = re.match(r"^(?:read:)(.+)(?:-.+)$", scope)
-        if match:
-            return match[1]
-        else:
-            raise ValueError(
-                f"Unexpected scope format: {scope!r} does not start "
-                "with 'read:' and end with '-fragments'"
-            )
-
+def match_user_scopes(user_scopes: Sequence[Scope] = tuple()) -> dict:
     allowed_scopes: List[dict] = [
         {"authorizedScopes": {"$exists": False}},
         {"authorizedScopes": {"$size": 0}},
     ]
 
     if user_scopes:
-        allowed_scopes.extend(
-            {"authorizedScopes": strip_affixes(scope)} for scope in user_scopes
-        )
+        allowed_scopes.extend({"authorizedScopes": str(scope)} for scope in user_scopes)
 
     return {"$or": allowed_scopes}
 
 
-def aggregate_random(user_scopes: Sequence[str] = tuple()) -> List[dict]:
+def aggregate_random(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
     return [
         {"$match": {**HAS_TRANSLITERATION, **match_user_scopes(user_scopes)}},
         sample_size_one(),
     ]
 
 
-def aggregate_latest(user_scopes: Sequence[str] = tuple()) -> List[dict]:
+def aggregate_latest(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
     temp_field_name = "_temp"
     return [
         {
@@ -90,7 +78,7 @@ def aggregate_latest(user_scopes: Sequence[str] = tuple()) -> List[dict]:
     ]
 
 
-def aggregate_needs_revision(user_scopes: Sequence[str] = tuple()) -> List[dict]:
+def aggregate_needs_revision(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
     return [
         {
             "$match": {
@@ -173,7 +161,7 @@ def aggregate_needs_revision(user_scopes: Sequence[str] = tuple()) -> List[dict]
 
 
 def aggregate_path_of_the_pioneers(
-    user_scopes: Sequence[str] = tuple(),
+    user_scopes: Sequence[Scope] = tuple(),
 ) -> List[dict]:
     max_uncurated_reference = (
         f"uncuratedReferences.{PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES}"

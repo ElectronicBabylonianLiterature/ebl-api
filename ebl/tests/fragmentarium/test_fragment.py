@@ -126,7 +126,7 @@ def test_record():
 
 def test_folios():
     fragment = FragmentFactory.build()
-    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("ARG", "1")))
 
 
 def test_text():
