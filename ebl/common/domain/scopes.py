@@ -29,12 +29,10 @@ class ScopeItem(Enum):
 
     @staticmethod
     def _parse_scope_string(scope_string: str):
-        match = re.match("([^:]+):([^-]+)(?:-(.+))?", scope_string)
-
-        if not match:
+        if match := re.match("([^:]+):([^-]+)(?:-(.+))?", scope_string):
+            return match[1], match[2], match[3] or ""
+        else:
             raise ValueError(f"Unexepcted scope format: {scope_string!r}")
-
-        return match[1], match[2], match[3] or ""
 
     @property
     def is_restricted(self) -> bool:
