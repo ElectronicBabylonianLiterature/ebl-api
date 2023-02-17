@@ -20,7 +20,7 @@ def require_folio_scope(req: falcon.Request, _resp, _resource, params):
         raise falcon.HTTPForbidden()
 
 
-def require_fragment_scope(req: falcon.Request, _resp, resource, params):
+def require_fragment_read_scope(req: falcon.Request, _resp, resource, params):
     user: User = req.context.user
 
     if fragment_scopes := resource._finder.fetch_scopes(

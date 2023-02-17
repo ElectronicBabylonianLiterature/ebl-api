@@ -8,7 +8,7 @@ from ebl.fragmentarium.application.fragment_pager_info_schema import (
     FragmentPagerInfoSchema,
 )
 from ebl.fragmentarium.web.dtos import parse_museum_number
-from ebl.users.web.require_scope import require_fragment_scope
+from ebl.users.web.require_scope import require_fragment_read_scope
 
 
 def make_fragment_pager_resource(finder: FragmentFinder, cache: Cache):
@@ -17,7 +17,7 @@ def make_fragment_pager_resource(finder: FragmentFinder, cache: Cache):
             self._finder = finder
 
         @register(
-            falcon.before(require_fragment_scope),
+            falcon.before(require_fragment_read_scope),
             cache_control(["private", f"max-age={DEFAULT_TIMEOUT}"]),
             cache.cached(timeout=DEFAULT_TIMEOUT),
         )
