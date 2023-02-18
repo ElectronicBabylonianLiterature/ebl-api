@@ -34,11 +34,16 @@ class Auth0User(User):
     def get_scopes(
         self, prefix: Optional[str] = "", suffix: Optional[str] = ""
     ) -> List[Scope]:
-        return [
-            Scope.from_string(scope)
-            for scope in self._access_token["scope"].split()
-            if scope.startswith(prefix) and scope.endswith(suffix)
-        ]
+        scopes = []
+
+        for scope in self._access_token["scope"].split():
+            if scope.startswith(prefix) and scope.endswith(suffix):
+                try:
+                    scopes.append(Scope.from_string(scope))
+                except ValueError:
+                    pass
+
+        return scopes
 
     def has_scope(self, scope: Scope):
         return scope.is_open or scope in self.get_scopes()
