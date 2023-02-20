@@ -1,11 +1,12 @@
 from typing import List, Dict
-from ebl.common.query.util import ngrams
+from ebl.common.query.util import ngrams, flatten_field
 
 
 class CorpusSignMatcher:
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
-        self._is_multiline = len(self.pattern) > 1
+        self._pattern_length = len(self.pattern)
+        self._is_multiline = self._pattern_length > 1
 
     def _merge_manuscripts_and_signs(self) -> List[Dict]:
         return [
@@ -60,7 +61,7 @@ class CorpusSignMatcher:
         return [
             {
                 "$addFields": {
-                    "ngram": ngrams("$signs", len(self.pattern)),
+                    "ngram": ngrams("$signs", self._pattern_length),
                 }
             },
         ]
@@ -93,6 +94,14 @@ class CorpusSignMatcher:
             },
         ]
 
+    def _expand_line_ranges(self) -> Dict:
+        return {
+            "$range": [
+                "$signLineIndex",
+                {"$add": ["$signLineIndex", self._pattern_length]},
+            ]
+        }
+
     def _merge_manuscripts_to_include(self) -> List[Dict]:
         return [
             {
@@ -103,7 +112,13 @@ class CorpusSignMatcher:
                         "name": "$name",
                         "manuscriptId": "$manuscriptId",
                     },
-                    "textLinesToInclude": {"$push": "$signLineIndex"},
+                    "textLinesToInclude": {
+                        "$push": (
+                            self._expand_line_ranges()
+                            if self._is_multiline
+                            else "$signLineIndex"
+                        )
+                    },
                     "lines": {"$first": "$lines"},
                 }
             },
@@ -236,6 +251,17 @@ class CorpusSignMatcher:
                 else self._match_single_line()
             ),
             *self._merge_manuscripts_to_include(),
+            *(
+                [
+                    {
+                        "$addFields": {
+                            "textLinesToInclude": flatten_field("$textLinesToInclude")
+                        }
+                    }
+                ]
+                if self._is_multiline
+                else []
+            ),
             *self._flatten_variants(),
             *self._filter_textlines(),
             *self._regroup_chapters(count_matches_per_item),
