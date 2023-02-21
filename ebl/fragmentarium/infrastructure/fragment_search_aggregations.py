@@ -35,7 +35,7 @@ class PatternMatcher:
 
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
-            {"$sort": {"matchCount": -1, "_id": 1}},
+            {"$sort": {"matchCount": -1, "script.sortKey": 1, "museumNumber": 1}},
             *self._limit_result(),
             {"$project": {"_id": False}},
             {
