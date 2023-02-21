@@ -61,7 +61,6 @@ Bibliography:
 Dictionary:
 `write:words`,
 
-
 ##### Legacy (currently unused) scopes
 
 `access:beta`,
@@ -253,18 +252,27 @@ def on_get(self, req, resp):
 [Auth0](https://auth0.com) and [falcon-auth](https://github.com/vertexcover-io/falcon-auth)
 are used for authentication and authorization.
 
-An endpoint can be protected using `require_scope`:
+An endpoint can be protected using the `@falcon.before` decorator three ways:
+
+* `@falcon.before(require_scope, "your scope name here")`: Simple check if the user is allowed to use the endpoint. Dynamic checks based on the fetched data is not possible.
+* `@falcon.before(require_folio_scope)`: Dynamically checks if the user can read folios based on the folio name from the url
+* `@falcon.before(require_fragment_read_scope)`: Dynamically checks if the user can read individual fragments by comparing the
+`authorized_scopes` from the fragment with the user scopes
+
+For example:
 
 ```python
 import falcon
-from ebl.users.web.require_scope import require_scope
+from ebl.users.web.require_scope import require_scope, require_fragment_read_scope
 
-@falcon.before(require_scope, "read:texts")
+@falcon.before(require_fragment_read_scope)
 def on_get(self, req, resp):
     ...
-```
 
-If more complex checks are required the user is available in `req.context.user`.
+@falcon.before(require_scope, "write:texts")
+def on_post(self, req, resp):
+    ...
+```
 
 ## Running the application
 

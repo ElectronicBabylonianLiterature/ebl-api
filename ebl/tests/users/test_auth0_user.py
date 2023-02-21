@@ -105,3 +105,11 @@ def test_can_read_fragment(user_scope, scopes, expected):
         user.can_read_fragment([Scope.from_string(scope) for scope in scopes])
         == expected
     )
+
+
+def test_get_scopes():
+    user = Auth0User(
+        {"scope": "read:bibliography write:texts unknown_scope_that_should_be_skipped"},
+        create_default_profile,
+    )
+    assert user.get_scopes() == [Scope.READ_BIBLIOGRAPHY, Scope.WRITE_TEXTS]

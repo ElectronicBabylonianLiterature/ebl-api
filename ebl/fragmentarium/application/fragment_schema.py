@@ -1,5 +1,5 @@
 import pydash
-from marshmallow import Schema, fields, post_dump, post_load
+from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.domain.period import Period, PeriodModifier
@@ -92,6 +92,9 @@ class IntroductionSchema(Schema):
 
 
 class ScriptSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     period = fields.Function(
         lambda script: script.period.long_name,
         lambda value: Period.from_name(value),
@@ -101,6 +104,9 @@ class ScriptSchema(Schema):
         PeriodModifier, required=True, data_key="periodModifier"
     )
     uncertain = fields.Boolean(load_default=None)
+    sort_key = fields.Function(
+        lambda script: script.period.sort_key, data_key="sortKey", dump_only=True
+    )
 
     @post_load
     def make_script(self, data, **kwargs) -> Script:

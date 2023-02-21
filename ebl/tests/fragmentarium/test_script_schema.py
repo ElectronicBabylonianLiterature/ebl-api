@@ -9,9 +9,22 @@ from ebl.common.domain.period import Period, PeriodModifier
     [
         (
             Script(Period.FARA, PeriodModifier.EARLY, True),
-            {"period": "Fara", "periodModifier": "Early", "uncertain": True},
+            {
+                "period": "Fara",
+                "periodModifier": "Early",
+                "uncertain": True,
+                "sortKey": Period.FARA.sort_key,
+            },
         ),
-        (Script(), {"period": "None", "periodModifier": "None", "uncertain": False}),
+        (
+            Script(),
+            {
+                "period": "None",
+                "periodModifier": "None",
+                "uncertain": False,
+                "sortKey": 0,
+            },
+        ),
     ],
 )
 def test_schema(script, serialized):

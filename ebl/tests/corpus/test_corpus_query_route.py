@@ -178,7 +178,7 @@ CHAPTER_WITH_SIGNS: Chapter = ChapterFactory.build(
         ("ti", [2, 3], [1, 0]),
         ("x", [0, 2, 3], [0, 1, 0]),
         ("šu", [2], [1]),
-        ("ma šu\nba", [2], [1]),
+        ("ma šu\nba", [2, 3], [1, 0]),
     ],
 )
 def test_query_chapter_signs(
@@ -223,7 +223,7 @@ CHAPTER_WITH_SIGNS_AND_LEMMAS = attr.evolve(
     "transliteration,lemmas,lemma_operator,expected_lines,expected_variants",
     [
         ("bul bansur", "ina I", "and", [0, 4], [0, 0]),
-        ("ma šu\nba", "bamātu I+qanû I", "phrase", [2, 5], [1, 0]),
+        ("ma šu\nba", "bamātu I+qanû I", "phrase", [2, 3, 5], [1, 0, 0]),
         ("ti", "u I+mu I", "line", [2, 3, 6], [1, 0, 0]),
     ],
 )
