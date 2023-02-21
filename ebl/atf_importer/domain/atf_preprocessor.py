@@ -37,6 +37,7 @@ class ATFPreprocessor:
             "oracc_atf_at_line__surface_with_status",
             "oracc_atf_at_line__discourse",
             "oracc_atf_at_line__column",
+            "oracc_atf_at_line__seal",
             "dollar_line",
             "note_line",
             "control_line",
