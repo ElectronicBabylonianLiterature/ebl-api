@@ -40,7 +40,7 @@ class AtLineTransformer(LabelTransformer):
         return str(letter)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__seal(self, number):
+    def ebl_atf_text_line__seal(self, number: int):
         return SealAtLine(number)
 
     @v_args(inline=True)
