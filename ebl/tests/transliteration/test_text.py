@@ -112,12 +112,13 @@ def test_update_lemmatization_wrong_lines() -> None:
 
 def test_labels(text_with_labels) -> None:
     assert text_with_labels.labels == [
-        LineLabel(None, None, None, LineNumber(1)),
+        LineLabel(None, None, None, LineNumber(1), None),
         LineLabel(
             ColumnLabel.from_int(1),
             SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
             ObjectLabel([], atf.Object.OBJECT, "Stone wig"),
             LineNumber(2),
+            None,
         ),
     ]
 

@@ -19,7 +19,12 @@ from ebl.fragmentarium.domain.annotation import (
     Annotations,
     AnnotationValueType,
 )
-from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.at_line import (
+    ColumnAtLine,
+    ObjectAtLine,
+    SurfaceAtLine,
+    SealAtLine,
+)
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -124,7 +129,7 @@ class AnnotationsService:
         # Matches same structure in Frontend Count (
         # Similar to fragment.text.labels but count EmptyLine and igore NoteLine)
         # https://github.com/ElectronicBabylonianLiterature/ebl-frontend/blob/master/src/fragmentarium/ui/image-annotation/annotation-tool/mapTokensToAnnotationTokens.ts
-        current: LineLabel = LineLabel(None, None, None, None)
+        current: LineLabel = LineLabel(None, None, None, None, None)
         labels: Sequence[Tuple[LineLabel, Line]] = []
 
         handlers = {
@@ -142,6 +147,10 @@ class AnnotationsService:
             ),
             ObjectAtLine: lambda line: (
                 current.set_object(line.label),
+                [*labels, (current, line)],
+            ),
+            SealAtLine: lambda line: (
+                current.set_seal(line.number),
                 [*labels, (current, line)],
             ),
         }

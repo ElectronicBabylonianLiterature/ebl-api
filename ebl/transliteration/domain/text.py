@@ -6,7 +6,12 @@ import attr
 
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.merger import Merger
-from ebl.transliteration.domain.at_line import ColumnAtLine, ObjectAtLine, SurfaceAtLine
+from ebl.transliteration.domain.at_line import (
+    ColumnAtLine,
+    ObjectAtLine,
+    SurfaceAtLine,
+    SealAtLine,
+)
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION, Atf
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
@@ -102,7 +107,7 @@ class Text:
 
     @property
     def labels(self) -> Sequence[LineLabel]:
-        current: LineLabel = LineLabel(None, None, None, None)
+        current: LineLabel = LineLabel(None, None, None, None, None)
         labels: List[LineLabel] = []
 
         handlers: Mapping[
@@ -118,6 +123,7 @@ class Text:
                 labels,
             ),
             ObjectAtLine: lambda line: (current.set_object(line.label), labels),
+            SealAtLine: lambda line: (current.set_seal(line.number), labels),
         }
 
         for line in self.lines:
