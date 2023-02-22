@@ -9,6 +9,7 @@ from ebl.transliteration.domain.at_line import (
     HeadingAtLine,
     ObjectAtLine,
     SurfaceAtLine,
+    SealAtLine,
 )
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
@@ -77,6 +78,7 @@ from ebl.transliteration.domain.markup import StringPart
             ],
         ),
         ("@date", [DiscourseAtLine(atf.Discourse.DATE)]),
+        ("@seal 1", [SealAtLine(1)]),
     ],
 )
 def test_parse_atf_at_line(line, expected_tokens):
