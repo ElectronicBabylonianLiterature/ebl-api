@@ -373,7 +373,9 @@ class ATFPreprocessor:
                 return self.line_not_converted(original_atf, atf)
 
     def write_unparsable_lines(self, filename):
-        with open(f"{self.logdir}unparseable_lines_{filename}.txt", "w", encoding="utf8") as outputfile:
+        with open(
+            f"{self.logdir}unparseable_lines_{filename}.txt", "w", encoding="utf8"
+        ) as outputfile:
             for key in self.unparseable_lines:
                 outputfile.write(key + "\n")
 
