@@ -36,11 +36,15 @@ class AtLineTransformer(LabelTransformer):
         return int(number)
 
     @v_args(inline=True)
+    def ebl_atf_text_line__ebl_atf_common__INT(self, number):
+        return int(number)
+
+    @v_args(inline=True)
     def ebl_atf_text_line__LCASE_LETTER(self, letter):
         return str(letter)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__seal(self, number):
+    def ebl_atf_text_line__seal(self, number: int):
         return SealAtLine(number)
 
     @v_args(inline=True)

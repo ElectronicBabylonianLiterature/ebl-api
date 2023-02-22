@@ -15,12 +15,17 @@ from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
                 SurfaceLabel([], atf.Surface.SURFACE, "Stone wig"),
                 ObjectLabel([], atf.Object.OBJECT, "Stone wig"),
                 LineNumber(2),
+                None,
             ),
             "i Stone wig Stone wig 2",
         ),
         (
             LineLabel(
-                None, None, None, LineNumberRange(LineNumber(1, True), LineNumber(3))
+                None,
+                None,
+                None,
+                LineNumberRange(LineNumber(1, True), LineNumber(3)),
+                None,
             ),
             "1'-3",
         ),

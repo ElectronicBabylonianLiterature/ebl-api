@@ -37,6 +37,7 @@ class ATFPreprocessor:
             "oracc_atf_at_line__surface_with_status",
             "oracc_atf_at_line__discourse",
             "oracc_atf_at_line__column",
+            "oracc_atf_at_line__seal",
             "dollar_line",
             "note_line",
             "control_line",
@@ -134,10 +135,10 @@ class ATFPreprocessor:
                     atf_part = part.replace("-", "#.")  # convert "-" to "."
                     atf_part = atf_part.replace("–", "#.")  # convert "-" to "."
                     atf_part = atf_part.replace(" ", "# ")  # convert " " to "#"
-                    if not (atf_part in opening or atf_part in closing):
+                    if atf_part not in opening and atf_part not in closing:
                         atf_part += "#"
                         new_atf += atf_part
-                elif not (part in opening or part in closing):
+                elif part not in opening and part not in closing:
                     new_atf += part
 
                 if part in opening:
@@ -195,10 +196,10 @@ class ATFPreprocessor:
                     atf_part = part.replace("-", "#.")  # convert "-" to "."
                     atf_part = atf_part.replace("–", "#.")  # convert "-" to "."
                     atf_part = atf_part.replace(" ", "# ")  # convert " " to "#"
-                    if not (atf_part in opening or atf_part in closing):
+                    if atf_part not in opening and atf_part not in closing:
                         atf_part += "#"
                         new_atf += atf_part
-                elif not (part in opening or part in closing):
+                elif part not in opening and part not in closing:
                     new_atf += part
 
                 if part in opening:
@@ -223,7 +224,7 @@ class ATFPreprocessor:
 
     def line_not_converted(self, original_atf, atf):
         error = "Could not convert line"
-        self.logger.error(error + ": " + atf)
+        self.logger.error(f"{error}: {atf}")
         self.logger.error(traceback.format_exc())
 
         if "translation" in atf:
@@ -249,7 +250,7 @@ class ATFPreprocessor:
         converted_line_array = words_serializer.result
 
         self.logger.info("Line successfully parsed, no conversion needed")
-        self.logger.debug("Parsed line as " + tree.data)
+        self.logger.debug(f"Parsed line as {tree.data}")
         self.logger.info(
             "----------------------------------------------------------------------"
         )
@@ -269,7 +270,7 @@ class ATFPreprocessor:
     def convert_line(self, original_atf, atf):
 
         tree = self.ORACC_PARSER.parse(atf)
-        self.logger.debug("Converting " + tree.data)
+        self.logger.debug(f"Converting {tree.data}")
 
         # self.logger.debug((tree.pretty()))
 
@@ -308,9 +309,7 @@ class ATFPreprocessor:
             self.EBL_PARSER.parse(conversion[0])
             self.logger.debug("Successfully parsed converted line")
             self.logger.debug(conversion[0])
-            self.logger.debug(
-                "Converted line as " + tree.data + " --> '" + conversion[0] + "'"
-            )
+            self.logger.debug(f"Converted line as {tree.data} --> '{conversion[0]}'")
             self.logger.debug(
                 "----------------------------------------------------------------------"
             )
@@ -348,7 +347,7 @@ class ATFPreprocessor:
         return atf, lemmas_and_guidewords_array, tree.data, []
 
     def process_line(self, atf):
-        self.logger.debug("Original line: '" + atf + "'")
+        self.logger.debug(f"Original line: '{atf}'")
         original_atf = atf
 
         try:
@@ -375,7 +374,7 @@ class ATFPreprocessor:
 
     def write_unparsable_lines(self, filename):
         with open(
-            self.logdir + "unparseable_lines_" + filename + ".txt", "w", encoding="utf8"
+            f"{self.logdir}unparseable_lines_{filename}.txt", "w", encoding="utf8"
         ) as outputfile:
             for key in self.unparseable_lines:
                 outputfile.write(key + "\n")
@@ -387,7 +386,7 @@ class ATFPreprocessor:
         return atf_.split("\n")
 
     def convert_lines(self, file, filename):
-        self.logger.info(Util.print_frame('Converting: "' + filename + '.atf"'))
+        self.logger.info(Util.print_frame(f'Converting: "{filename}.atf"'))
 
         lines = self.read_lines(file)
         processed_lines = []
