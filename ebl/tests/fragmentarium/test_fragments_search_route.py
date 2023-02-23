@@ -129,10 +129,13 @@ def test_query_fragmentarium_transliteration(
 ):
     transliterated_fragments = [
         TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of("X.123"), script=Script(Period.MIDDLE_ASSYRIAN)
+        ),
+        TransliteratedFragmentFactory.build(
             number=MuseumNumber.of("X.5"), script=Script(Period.LATE_BABYLONIAN)
         ),
         TransliteratedFragmentFactory.build(
-            number=MuseumNumber.of("X.123"), script=Script(Period.MIDDLE_ASSYRIAN)
+            number=MuseumNumber.of("X.42"), script=Script(Period.LATE_BABYLONIAN)
         ),
     ]
     for fragment in transliterated_fragments:
@@ -152,7 +155,7 @@ def test_query_fragmentarium_transliteration(
             query_item_of(fragment, matching_lines=[3])
             for fragment in transliterated_fragments
         ],
-        "matchCountTotal": 2,
+        "matchCountTotal": 3,
     }
 
 

@@ -516,15 +516,22 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
         sign_repository.create(sign)
 
     fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of("X.0"), script=Script(Period.FARA)
+        ),
         attr.evolve(
             TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.3")),
             signs=("KU\nX\nDU\nKU\nMI"),
+            script=Script(Period.OLD_ASSYRIAN),
         ),
-        TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.0")),
-        TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.1")),
-        TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.2")),
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of("X.1"), script=Script(Period.HELLENISTIC)
+        ),
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of("X.2"), script=Script(Period.PROTO_ELAMITE)
+        ),
     ]
-    lines = [[0, 3], [0], [0], [0]]
+    lines = [[0], [0, 3], [0], [0]]
 
     fragment_repository.create_many(random.sample(fragments, len(fragments)))
 
@@ -721,14 +728,14 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        MUSEUM_NUMBERS[0],
-                        (1, 2),
-                        2,
-                    ),
-                    QueryItem(
                         MUSEUM_NUMBERS[1],
                         (0,),
                         1,
+                    ),
+                    QueryItem(
+                        MUSEUM_NUMBERS[0],
+                        (1, 2),
+                        2,
                     ),
                 ],
                 3,
@@ -808,11 +815,15 @@ def test_query_lemmas(
             Word.of([Reading.of_name("ap")], unique_lemma=(WordId("ap III"),)),
         ),
     )
-    fragment = LemmatizedFragmentFactory.build(number=MUSEUM_NUMBERS[0])
+    fragment = LemmatizedFragmentFactory.build(
+        number=MUSEUM_NUMBERS[0],
+        script=Script(Period.NEO_ASSYRIAN),
+    )
     fragment_with_phrase = attr.evolve(
         fragment,
         number=MUSEUM_NUMBERS[1],
         text=attr.evolve(fragment.text, lines=[line_with_lemmas]),
+        script=Script(Period.NEO_ASSYRIAN),
     )
     fragment_repository.create(fragment)
     fragment_repository.create(fragment_with_phrase)
