@@ -1,13 +1,69 @@
-from typing import List, Dict, Sequence
+from typing import List, Dict, Sequence, Optional, Union
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaMatcher
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
+from ebl.transliteration.domain.museum_number import (
+    PREFIX_ORDER,
+    NUMBER_PREFIX_ORDER,
+    DEFAULT_PREFIX_ORDER,
+)
 from pydash.arrays import compact
 
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
+
+
+def convert_to_int(input_: Union[str, dict], default=0) -> dict:
+    return {"$convert": {"input": input_, "to": "int", "onError": default}}
+
+
+def sort_by_museum_number(
+    pre_sort_keys: Optional[dict] = None, post_sort_keys: Optional[dict] = None
+) -> List[Dict]:
+    sort_keys = [
+        {
+            "$cond": [
+                {
+                    "$regexMatch": {
+                        "input": "$museumNumber.prefix",
+                        "regex": r"^\d+$",
+                    }
+                },
+                NUMBER_PREFIX_ORDER,
+                {
+                    "$switch": {
+                        "branches": [
+                            {
+                                "case": {"$eq": ["$museumNumber.prefix", key]},
+                                "then": value,
+                            }
+                            for key, value in PREFIX_ORDER.items()
+                        ],
+                        "default": DEFAULT_PREFIX_ORDER,
+                    }
+                },
+            ]
+        },
+        convert_to_int("$museumNumber.prefix", 0),
+        "$museumNumber.prefix",
+        convert_to_int("$museumNumber.number", default=float("Inf")),
+        "$museumNumber.number",
+        convert_to_int("$museumNumber.suffix", default=float("Inf")),
+        "$museumNumber.suffix",
+    ]
+    return [
+        {"$addFields": {"tmpSortKeys": sort_keys}},
+        {
+            "$sort": {
+                **(pre_sort_keys or {}),
+                **{f"tmpSortKeys.{i}": 1 for i in range(len(sort_keys))},
+                **(post_sort_keys or {}),
+            }
+        },
+        {"$project": {"tmpSortKeys": False}},
+    ]
 
 
 class PatternMatcher:
@@ -35,9 +91,9 @@ class PatternMatcher:
 
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
-            {"$sort": {"matchCount": -1, "script.sortKey": 1, "museumNumber": 1}},
+            *sort_by_museum_number(pre_sort_keys={"script.sortKey": 1}),
             *self._limit_result(),
-            {"$project": {"_id": False}},
+            {"$project": {"_id": False, "script": False}},
             {
                 "$group": {
                     "_id": None,
@@ -131,6 +187,7 @@ class PatternMatcher:
                             "museumNumber": True,
                             "matchingLines": [],
                             "matchCount": {"$literal": 0},
+                            "script": True,
                         }
                     },
                 ]
