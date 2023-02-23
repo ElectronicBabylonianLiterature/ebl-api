@@ -42,6 +42,7 @@ class LemmaMatcher:
                 "$project": {
                     "museumNumber": 1,
                     self.flat_path: f"${self.unique_lemma_path}",
+                    "script": 1,
                 }
             },
             {
@@ -59,6 +60,7 @@ class LemmaMatcher:
                     "_id": "$_id",
                     "matchingLines": {"$push": "$lineIndex"},
                     "museumNumber": {"$first": "$museumNumber"},
+                    "script": {"$first": "$script"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
@@ -106,6 +108,7 @@ class LemmaMatcher:
                     "ngram": ngrams(f"${self.flat_path}", n=len(self.pattern)),
                     "lineIndex": True,
                     "museumNumber": True,
+                    "script": True,
                 }
             },
             {"$addFields": {"ngram": {"$setUnion": ["$ngram", []]}}},
