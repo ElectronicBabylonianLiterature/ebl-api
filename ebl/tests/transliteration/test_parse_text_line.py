@@ -53,6 +53,10 @@ from ebl.transliteration.domain.word_tokens import (
 DEFAULT_LANGUAGE = Language.AKKADIAN
 
 
+def create_number_part(number: str) -> Number:
+    return Number.of((ValueToken.of(number),))
+
+
 @pytest.mark.parametrize(
     "parser,version", [(parse_atf_lark, f"{atf.ATF_PARSER_VERSION}")]
 )
@@ -1195,6 +1199,25 @@ def test_parser_version(parser, version):
                         GreekWord.of([GreekLetter.of("α")]),
                         Column.of(),
                         GreekWord.of([GreekLetter.of("ε")]),
+                    ),
+                )
+            ],
+        ),
+        (
+            "42. 1;23.45",
+            [
+                TextLine.of_iterable(
+                    LineNumber(42),
+                    (
+                        Word.of(
+                            [
+                                create_number_part("1"),
+                                Joiner.of(atf.Joiner.SEMICOLON),
+                                create_number_part("23"),
+                                Joiner.of(atf.Joiner.DOT),
+                                create_number_part("45"),
+                            ]
+                        ),
                     ),
                 )
             ],
