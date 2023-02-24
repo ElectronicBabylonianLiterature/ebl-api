@@ -318,6 +318,10 @@ class Joiner(Token):
         return Joiner.of(atf.Joiner.COLON)
 
     @staticmethod
+    def semicolon():
+        return Joiner.of(atf.Joiner.SEMICOLON)
+
+    @staticmethod
     def plus():
         return Joiner.of(atf.Joiner.PLUS)
 

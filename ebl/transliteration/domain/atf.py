@@ -100,6 +100,7 @@ class Joiner(Enum):
     DOT = "."
     PLUS = "+"
     COLON = ":"
+    SEMICOLON = ";"
 
 
 @unique
