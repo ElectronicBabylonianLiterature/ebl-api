@@ -83,6 +83,14 @@ class Script:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class ExternalNumbers:
+    cdli_number: str = ""
+    bmid_number: str = ""
+    archibab_number: str = ""
+    bdtns_number: str = ""
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
     accession: str = ""
@@ -110,6 +118,7 @@ class Fragment:
     authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction("", tuple())
     script: Script = Script()
+    external_numbers: ExternalNumbers = ExternalNumbers()
 
     @property
     def is_lowest_join(self) -> bool:
