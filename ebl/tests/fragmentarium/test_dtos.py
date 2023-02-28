@@ -25,17 +25,22 @@ from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.fragment import Fragment
 
 
-def test_create_response_dto(user):
-    lemmatized_fragment: Fragment = LemmatizedFragmentFactory.build(
-        joins=Joins(((JoinFactory.build(),),))
-    )
-    has_photo = True
-    expected_dto = pydash.omit_by(
+@pytest.fixture
+def lemmatized_fragment() -> Fragment:
+    return LemmatizedFragmentFactory.build(joins=Joins(((JoinFactory.build(),),)))
+
+
+@pytest.fixture
+def has_photo():
+    return True
+
+
+@pytest.fixture
+def expected_dto(lemmatized_fragment, has_photo):
+    return pydash.omit_by(
         {
             "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": lemmatized_fragment.accession,
-            "cdliNumber": lemmatized_fragment.cdli_number,
-            "bmIdNumber": lemmatized_fragment.bm_id_number,
             "editedInOraccProject": lemmatized_fragment.edited_in_oracc_project,
             "publication": lemmatized_fragment.publication,
             "description": lemmatized_fragment.description,
@@ -101,6 +106,9 @@ def test_create_response_dto(user):
         },
         pydash.is_none,
     )
+
+
+def test_create_response_dto(user, lemmatized_fragment, expected_dto, has_photo):
     assert create_response_dto(lemmatized_fragment, user, has_photo) == expected_dto
 
 

@@ -85,7 +85,7 @@ class Script:
 @attr.s(auto_attribs=True, frozen=True)
 class ExternalNumbers:
     cdli_number: str = ""
-    bmid_number: str = ""
+    bm_id_number: str = ""
     archibab_number: str = ""
     bdtns_number: str = ""
 
@@ -94,8 +94,6 @@ class ExternalNumbers:
 class Fragment:
     number: MuseumNumber
     accession: str = ""
-    cdli_number: str = ""
-    bm_id_number: str = ""
     edited_in_oracc_project: str = ""
     publication: str = ""
     description: str = ""
@@ -183,3 +181,22 @@ class Fragment:
             for numbers, _ in groupby(line_numbers)
         ]
         return Text(lines=tuple(pydash.flatten(match)))
+
+    def _get_external_number(self, number_type: str) -> str:
+        return getattr(self.external_numbers, f"{number_type}_number")
+
+    @property
+    def cdli_number(self) -> str:
+        return self._get_external_number("cdli")
+
+    @property
+    def bm_id_number(self) -> str:
+        return self._get_external_number("bmid")
+
+    @property
+    def archibab_number(self) -> str:
+        return self._get_external_number("archibab")
+
+    @property
+    def bdtns_number(self) -> str:
+        return self._get_external_number("bdtns")

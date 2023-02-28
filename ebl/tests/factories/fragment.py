@@ -103,7 +103,7 @@ class ExternalNumbersFactory(factory.Factory):
         model = ExternalNumbers
 
     cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
-    bmid_number = factory.Sequence(lambda n: f"bmId-{n}")
+    bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
 
@@ -113,8 +113,6 @@ class FragmentFactory(factory.Factory):
         model = Fragment
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
-    bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     edited_in_oracc_project = factory.Sequence(lambda n: f"editedInOracc-{n}")
     accession = factory.Sequence(lambda n: f"accession-{n}")
     museum = factory.Faker("word")

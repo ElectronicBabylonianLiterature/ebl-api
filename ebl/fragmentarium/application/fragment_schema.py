@@ -116,7 +116,7 @@ class ScriptSchema(Schema):
 
 class ExternalNumbersSchema(Schema):
     cdli_number = fields.String(load_default="", data_key="cdliNumber")
-    bmid_number = fields.String(load_default="", data_key="bmIdNumber")
+    bm_id_number = fields.String(load_default="", data_key="bmIdNumber")
     archibab_number = fields.String(load_default="", data_key="archibabNumber")
     bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
 
@@ -128,8 +128,6 @@ class ExternalNumbersSchema(Schema):
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
-    cdli_number = fields.String(required=True, data_key="cdliNumber")
-    bm_id_number = fields.String(required=True, data_key="bmIdNumber")
     edited_in_oracc_project = fields.String(
         required=True, data_key="editedInOraccProject"
     )
