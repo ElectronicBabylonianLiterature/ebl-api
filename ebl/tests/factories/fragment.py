@@ -104,7 +104,9 @@ class ExternalNumbersFactory(factory.Factory):
         model = ExternalNumbers
 
     cdli_number = factory.Sequence(lambda n: f"P{n}")
-    bmid_number = factory.Faker("bothify", text="?_####-####-###", letters=ascii_uppercase)
+    bmid_number = factory.Faker(
+        "bothify", text="?_####-####-###", letters=ascii_uppercase
+    )
     archibab_number = factory.Sequence(lambda n: f"{n}")
     bdtns_number = factory.Sequence(lambda n: f"{n}")
 
