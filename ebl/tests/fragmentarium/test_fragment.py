@@ -200,7 +200,9 @@ def test_scopes():
 
 
 def test_external_numbers():
-    external_numbers = ExternalNumbers(cdli_number="A38", bm_id_number="W_1848-0720-117")
+    external_numbers = ExternalNumbers(
+        cdli_number="A38", bm_id_number="W_1848-0720-117"
+    )
     fragment = FragmentFactory.build(external_numbers=external_numbers)
     assert fragment.external_numbers == external_numbers
 

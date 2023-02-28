@@ -191,7 +191,7 @@ class Fragment:
 
     @property
     def bm_id_number(self) -> str:
-        return self._get_external_number("bmid")
+        return self._get_external_number("bm_id")
 
     @property
     def archibab_number(self) -> str:
