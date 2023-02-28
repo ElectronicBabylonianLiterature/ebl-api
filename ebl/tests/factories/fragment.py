@@ -1,5 +1,4 @@
 from typing import Sequence
-from string import ascii_uppercase
 
 import factory.fuzzy
 from ebl.common.domain.period import Period, PeriodModifier
@@ -103,12 +102,10 @@ class ExternalNumbersFactory(factory.Factory):
     class Meta:
         model = ExternalNumbers
 
-    cdli_number = factory.Sequence(lambda n: f"P{n}")
-    bmid_number = factory.Faker(
-        "bothify", text="?_####-####-###", letters=ascii_uppercase
-    )
-    archibab_number = factory.Sequence(lambda n: f"{n}")
-    bdtns_number = factory.Sequence(lambda n: f"{n}")
+    cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
+    bmid_number = factory.Sequence(lambda n: f"bmId-{n}")
+    archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
+    bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
 
 
 class FragmentFactory(factory.Factory):
