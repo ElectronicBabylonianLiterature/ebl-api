@@ -5,6 +5,7 @@ from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    ExternalNumbers,
     Fragment,
     Genre,
     Measure,
@@ -182,6 +183,12 @@ def test_scopes():
     scopes = ["CAIC"]
     fragment = FragmentFactory.build(authorized_scopes=scopes)
     assert fragment.authorized_scopes == scopes
+
+
+def test_external_numbers():
+    external_numbers = ExternalNumbers(cdli_number="A38", bmid_number="W_1848-0720-117")
+    fragment = FragmentFactory.build(external_numbers=external_numbers)
+    assert fragment.external_numbers == external_numbers
 
 
 @freeze_time("2018-09-07 15:41:24.032")
