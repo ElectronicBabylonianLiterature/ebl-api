@@ -95,7 +95,7 @@ def test_create_response_dto(user):
                 for line_to_vec_encodings in lemmatized_fragment.line_to_vec
             ],
             "introduction": IntroductionSchema().dump(lemmatized_fragment.introduction),
-            "external_numbers": ExternalNumbersSchema().dump(
+            "externalNumbers": ExternalNumbersSchema().dump(
                 lemmatized_fragment.external_numbers
             ),
         },
