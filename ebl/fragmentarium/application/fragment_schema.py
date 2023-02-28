@@ -167,7 +167,9 @@ class FragmentSchema(Schema):
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
     script = fields.Nested(ScriptSchema, load_default=Script())
     external_numbers = fields.Nested(
-        ExternalNumbersSchema, load_default=ExternalNumbers()
+        ExternalNumbersSchema,
+        load_default=ExternalNumbers(),
+        data_key="externalNumbers",
     )
 
     @post_load
