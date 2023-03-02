@@ -22,6 +22,7 @@ from ebl.tests.factories.fragment import (
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.genres import genres
+from ebl.common.domain.scopes import Scope
 
 
 def expected_fragment_info_dto(fragment: Fragment, text=None) -> Dict:
@@ -333,3 +334,29 @@ def test_get_options(client, endpoint, expected):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected
+
+
+def test_search_with_scopes(client, guest_client, fragmentarium):
+    fragment = FragmentFactory.build(
+        authorized_scopes=[Scope.READ_ITALIANNINEVEH_FRAGMENTS]
+    )
+    params = {
+        "number": str(fragment.number),
+    }
+
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get("/fragments/query", params=params)
+    guest_result = guest_client.simulate_get("/fragments/query", params=params)
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == {
+        "items": [query_item_of(fragment)],
+        "matchCountTotal": 0,
+    }
+
+    assert guest_result.status == falcon.HTTP_OK
+    assert guest_result.json == {
+        "items": [],
+        "matchCountTotal": 0,
+    }
