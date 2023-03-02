@@ -39,7 +39,7 @@ def align_fragment_and_chapter(
             ),
         )
         for index, signs in enumerate(chapter.signs)
-        if has_clear_signs(signs)
+        if signs is not None and has_clear_signs(signs)
     ]
 
     return align(pairs, vocabulary)

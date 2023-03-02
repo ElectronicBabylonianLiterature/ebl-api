@@ -102,7 +102,7 @@ class Chapter:
             validators.validate_manuscript_line_labels,
         ],
     )
-    signs: Sequence[str] = tuple()
+    signs: Sequence[Optional[str]] = tuple()
     record: Record = Record()
     parser_version: str = ""
     is_filtered_query: bool = False
@@ -128,7 +128,7 @@ class Chapter:
         return [
             (self.manuscripts[index].siglum, text_lines[index][number])
             for index, signs in enumerate(self.signs)
-            for number, line in enumerate(signs.split("\n"))
+            for number, line in enumerate([] if signs is None else signs.split("\n"))
             if "?" in line
         ]
 
@@ -230,4 +230,4 @@ class Chapter:
     def _match(
         self, query: TransliterationQuery
     ) -> Sequence[Sequence[Tuple[int, int]]]:
-        return [query.match(signs) for signs in self.signs]
+        return [query.match(signs) for signs in self.signs if signs is not None]

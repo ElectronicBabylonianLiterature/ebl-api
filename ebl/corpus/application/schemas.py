@@ -275,7 +275,7 @@ class ChapterSchema(Schema):
         data_key="uncertainFragments",
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
-    signs = fields.List(fields.String(), load_default=tuple())
+    signs = fields.List(fields.String(allow_none=True), load_default=tuple())
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
     is_filtered_query = fields.Bool(load_default=False, data_key="isFilteredQuery")

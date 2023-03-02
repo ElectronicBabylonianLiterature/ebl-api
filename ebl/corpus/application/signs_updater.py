@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Optional
 
 import attr
 
@@ -17,14 +17,14 @@ class SignsUpdater:
     def update(self, chapter: Chapter) -> Chapter:
         return attr.evolve(chapter, signs=self._create_signs(chapter))
 
-    def _create_signs(self, chapter: Chapter) -> Sequence[str]:
+    def _create_signs(self, chapter: Chapter) -> Sequence[Optional[str]]:
         return tuple(
             self._map_lines([entry.line for entry in manuscript])
             for manuscript in chapter.text_lines
         )
 
-    def _map_lines(self, lines: Sequence[TextLine]) -> str:
-        return "\n".join(self._map_line(line) for line in lines)
+    def _map_lines(self, lines: Sequence[TextLine]) -> Optional[str]:
+        return "\n".join(self._map_line(line) for line in lines) if lines else None
 
     def _map_line(self, line: TextLine) -> str:
         visitor = SignsVisitor(self._sign_repository)
