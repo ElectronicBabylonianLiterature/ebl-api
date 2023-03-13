@@ -179,7 +179,7 @@ class MongoWordRepository(WordRepository):
 
         return list(cursor)
 
-    def list_all_words(self) -> None:
+    def list_all_words(self) -> Sequence[str]:
         return list(id for id in self._collection.get_all_values("_id"))
 
     def update(self, word) -> None:

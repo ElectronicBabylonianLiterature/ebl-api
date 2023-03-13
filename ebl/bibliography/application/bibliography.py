@@ -56,6 +56,9 @@ class Bibliography:
             [*author_query_result, *container_query_result], lambda a, b: a == b
         )
 
+    def list_all_bibliography(self) -> Sequence[str]:
+        return self._repository.list_all_bibliography()
+
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
         parsed_query = dict.fromkeys(["author", "year", "title"])
