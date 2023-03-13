@@ -4,11 +4,11 @@ from falcon.media.validators.jsonschema import validate
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.users.web.require_scope import require_scope
-from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.bibliography import Bibliography
 
 
 class BibliographyResource:
-    def __init__(self, bibliography: BibliographyRepository):
+    def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
 
     def on_get(self, req: Request, resp: Response) -> None:
@@ -25,7 +25,7 @@ class BibliographyResource:
 
 
 class BibliographyEntriesResource:
-    def __init__(self, bibliography: BibliographyRepository):
+    def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
 
     def on_get(self, _req, resp: Response, id_: str) -> None:
@@ -38,8 +38,9 @@ class BibliographyEntriesResource:
         self._bibliography.update(entry, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT
 
+
 class BibliographyList:
-    def __init__(self, bibliography: BibliographyRepository):
+    def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
 
     def on_get(self, req: Request, resp: Response) -> None:

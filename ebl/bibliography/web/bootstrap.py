@@ -3,7 +3,7 @@ import falcon
 from ebl.bibliography.web.bibliography_entries import (
     BibliographyEntriesResource,
     BibliographyResource,
-    BibliographyList
+    BibliographyList,
 )
 from ebl.context import Context
 

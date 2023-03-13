@@ -53,6 +53,6 @@ class MemoizingSignRepository(SignRepository):
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         return self._search(reading, sub_index)
-    
+
     def list_all_signs(self) -> Sequence[str]:
         return self._list_all_signs()
