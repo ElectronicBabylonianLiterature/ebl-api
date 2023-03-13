@@ -94,3 +94,6 @@ class MongoCollection:
 
     def __get_collection(self) -> Collection:
         return self.__database[self.__collection]
+
+    def get_all_values(self, field: str) -> Sequence[str]:
+        return self.__get_collection().distinct(field)

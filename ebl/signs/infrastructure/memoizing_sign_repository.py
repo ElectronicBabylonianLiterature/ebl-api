@@ -20,6 +20,7 @@ class MemoizingSignRepository(SignRepository):
         )
         self._search_by_lists_name = pydash.memoize(delegate.search_by_lists_name)
         self._search_by_lemma = pydash.memoize(delegate.search_by_lemma)
+        self._list_all_signs = pydash.memoize(delegate.list_all_signs)
 
     def create(self, sign: Sign) -> str:
         return self._create(sign)
@@ -52,3 +53,6 @@ class MemoizingSignRepository(SignRepository):
 
     def search(self, reading, sub_index) -> Optional[Sign]:
         return self._search(reading, sub_index)
+    
+    def list_all_signs(self) -> Sequence[str]:
+        return self._list_all_signs()

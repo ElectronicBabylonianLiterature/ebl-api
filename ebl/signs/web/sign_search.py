@@ -30,6 +30,7 @@ class SignsSearch:
                 frozenset(["wordId"]): lambda params: signs.search_by_lemma(
                     params["wordId"]
                 ),
+                frozenset(["listAll"]): lambda params: signs.list_all_signs(),
             }
         )
 
@@ -47,8 +48,11 @@ class SignsSearch:
 
     def on_get(self, req, resp):
         signs = self._dispatch(self._parse_sub_index(req.params))
-        if "wordId" in req.params:
-            signs = inject_logograms_unicode(
-                signs, req.params["wordId"], self.sign_repository
-            )
-        resp.media = SignDtoSchema().dump(signs, many=True)
+        if "listAll" in req.params:
+            resp.media = signs
+        else:
+            if "wordId" in req.params:
+                signs = inject_logograms_unicode(
+                    signs, req.params["wordId"], self.sign_repository
+                )
+            resp.media = SignDtoSchema().dump(signs, many=True)
