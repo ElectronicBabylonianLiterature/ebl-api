@@ -179,5 +179,8 @@ class MongoWordRepository(WordRepository):
 
         return list(cursor)
 
+    def list_all_words(self) -> None:
+        return list(id for id in self._collection.get_all_values("_id"))
+
     def update(self, word) -> None:
         self._collection.update_one({"_id": word["_id"]}, {"$set": word})

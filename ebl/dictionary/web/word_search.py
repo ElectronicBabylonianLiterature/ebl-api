@@ -10,6 +10,7 @@ class WordSearch:
                 frozenset(["lemmas"]): lambda value: dictionary.find_many(
                     value["lemmas"].split(",")
                 ),
+                frozenset(["listAll"]): lambda value: dictionary.list_all_words(),
             }
         )
 
