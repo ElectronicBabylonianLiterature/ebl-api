@@ -145,4 +145,4 @@ class MongoBibliographyRepository(BibliographyRepository):
         ]
 
     def list_all_bibliography(self) -> Sequence[str]:
-        return list(id for id in self._collection.get_all_values("_id"))
+        return list(self._collection.get_all_values("_id"))
