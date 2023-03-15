@@ -1,5 +1,5 @@
 from functools import singledispatch
-from typing import Optional, Sequence, Set, Callable
+from typing import Iterator, Optional, Sequence, Set, Callable
 
 import attr
 import pydash
@@ -93,15 +93,15 @@ class LineVariant:
             .value()
         )
 
+    def get_manuscript_text_lines(self, manuscript_id: int) -> Iterator[TextLine]:
+        for manuscript in self.manuscripts:
+            if manuscript.manuscript_id == manuscript_id and isinstance(
+                manuscript.line, TextLine
+            ):
+                yield manuscript.line
+
     def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
-        return (
-            pydash.chain(self.manuscripts)
-            .filter(lambda manuscript: manuscript.manuscript_id == manuscript_id)
-            .map_(lambda manuscript: manuscript.line)
-            .filter(lambda line: isinstance(line, TextLine))
-            .head()
-            .value()
-        )
+        return next(self.get_manuscript_text_lines(manuscript_id), None)
 
     def merge(self, other: "LineVariant") -> "LineVariant":
         merged_reconstruction = merge_tokens(self.reconstruction, other.reconstruction)
