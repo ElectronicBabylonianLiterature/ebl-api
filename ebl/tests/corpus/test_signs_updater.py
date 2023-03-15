@@ -21,59 +21,135 @@ def words_from_string(readings: str) -> List[Word]:
     return [Word.of([Reading.of_name(name)]) for name in readings.split()]
 
 
+WORDS = ["ana ud", "ta ku mi", "šu ma"]
+
+
 @pytest.fixture
-def signs_updater(sign_repository):
+def signs_updater(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
     return SignsUpdater(sign_repository)
 
 
-EMPTY_TEXT = Text([])
-WORDS = ["ana ud", "ta ku mi", "šu ma"]
-TEXTLINES = [
-    TextLine.of_iterable(
-        LineNumber(1),
-        words_from_string("ši"),
-    ),
-]
-MANUSCRIPTS = ManuscriptFactory.build_batch(
-    3, colophon=EMPTY_TEXT, unplaced_lines=EMPTY_TEXT
-)
-VARIANT_WITH_EMPTY_MANUSCRIPT_TEXTLINE = LineVariantFactory.build(
-    manuscripts=(
-        ManuscriptLineFactory.build(
-            manuscript_id=MANUSCRIPTS[0].id,
-            line=TextLine.of_iterable(
-                LineNumber(1),
-                (Word.of([]),),
-            ),
-            labels=[],
-        ),
-    ),
-)
-VARIANTS = [
-    [VARIANT_WITH_EMPTY_MANUSCRIPT_TEXTLINE],
-    [
-        LineVariantFactory.build(
-            manuscripts=(
-                ManuscriptLineFactory.build(
-                    manuscript_id=MANUSCRIPTS[1].id,
-                    line=TextLine.of_iterable(
-                        LineNumber(i),
-                        words_from_string(words),
-                    ),
-                    labels=[],
+@pytest.fixture
+def empty_text():
+    return Text([])
+
+
+@pytest.fixture
+def manuscripts(empty_text):
+    return ManuscriptFactory.build_batch(
+        3, colophon=empty_text, unplaced_lines=empty_text
+    )
+
+
+@pytest.fixture
+def variant_with_empty_manuscript_textline(manuscripts):
+    return LineVariantFactory.build(
+        manuscripts=(
+            ManuscriptLineFactory.build(
+                manuscript_id=manuscripts[0].id,
+                line=TextLine.of_iterable(
+                    LineNumber(1),
+                    (Word.of([]),),
                 ),
+                labels=[],
             ),
-        )
-        for i, words in enumerate(WORDS, start=2)
-    ],
-    [],
-]
-LINE_WITH_EMPTY_MANUSCRIPT_TEXTLINE = LineFactory.build(
-    variants=[VARIANT_WITH_EMPTY_MANUSCRIPT_TEXTLINE]
-)
-LINE_WITHOUT_MANUSCRIPT_LINES = LineFactory.build(variants=[])
-LINE_WITH_MANY_VARIANTS = LineFactory.build(variants=[])
-LINES = [LineFactory.build(variants=variants) for variants in VARIANTS]
+        ),
+    )
+
+
+@pytest.fixture
+def variants(manuscripts, variant_with_empty_manuscript_textline):
+    return [
+        [variant_with_empty_manuscript_textline],
+        [
+            LineVariantFactory.build(
+                manuscripts=(
+                    ManuscriptLineFactory.build(
+                        manuscript_id=manuscripts[1].id,
+                        line=TextLine.of_iterable(
+                            LineNumber(i),
+                            words_from_string(words),
+                        ),
+                        labels=[],
+                    ),
+                ),
+            )
+            for i, words in enumerate(WORDS, start=2)
+        ],
+        [],
+    ]
+
+
+@pytest.fixture
+def chapter_with_empty_manuscript_textline(
+    manuscripts, variant_with_empty_manuscript_textline
+):
+    lines = [LineFactory.build(variants=[variant_with_empty_manuscript_textline])]
+    return ChapterFactory.build(manuscripts=manuscripts[:1], lines=lines)
+
+
+@pytest.fixture
+def chapter_with_line_without_manuscript_line(manuscripts):
+    return ChapterFactory.build(
+        manuscripts=manuscripts, lines=[LineFactory.build(variants=[])]
+    )
+
+
+@pytest.fixture
+def manuscript_with_colophon_lines(empty_text):
+    return ManuscriptFactory.build(
+        colophon=Text.of_iterable(
+            [TextLine.of_iterable(LineNumber(100), words_from_string("ana bu"))]
+        ),
+        unplaced_lines=empty_text,
+    )
+
+
+@pytest.fixture
+def manuscript_with_unplaced_lines(empty_text):
+    return ManuscriptFactory.build(
+        colophon=empty_text,
+        unplaced_lines=Text.of_iterable(
+            [TextLine.of_iterable(LineNumber(200), words_from_string("šu du"))]
+        ),
+    )
+
+
+@pytest.fixture
+def chapter_with_colophon_lines(manuscript_with_colophon_lines):
+
+    return ChapterFactory.build(
+        manuscripts=[manuscript_with_colophon_lines],
+        lines=[LineFactory.build(variants=[])],
+    )
+
+
+@pytest.fixture
+def chapter_with_unplaced_lines(manuscript_with_unplaced_lines):
+    return ChapterFactory.build(
+        manuscripts=[manuscript_with_unplaced_lines],
+        lines=[LineFactory.build(variants=[])],
+    )
+
+
+@pytest.fixture
+def complex_chapter(
+    manuscripts,
+    manuscript_with_colophon_lines,
+    manuscript_with_unplaced_lines,
+    variants,
+):
+    lines = [LineFactory.build(variants=subvariants) for subvariants in variants]
+    return ChapterFactory.build(
+        manuscripts=[
+            *manuscripts,
+            manuscript_with_colophon_lines,
+            manuscript_with_unplaced_lines,
+        ],
+        lines=lines,
+    )
 
 
 def update_and_serialize_signs(
@@ -83,32 +159,38 @@ def update_and_serialize_signs(
     return ChapterSchema().dump(updated_chapter)["signs"]
 
 
-def test_empty_manuscript(signs_updater):
-    chapter = ChapterFactory.build(
-        manuscripts=MANUSCRIPTS, lines=[LINE_WITHOUT_MANUSCRIPT_LINES]
+def test_empty_manuscript(
+    signs_updater, chapter_with_line_without_manuscript_line, manuscripts
+):
+
+    signs = update_and_serialize_signs(
+        signs_updater, chapter_with_line_without_manuscript_line
     )
-    signs = update_and_serialize_signs(signs_updater, chapter)
 
-    assert signs == [None for _ in MANUSCRIPTS]
+    assert signs == [None for _ in manuscripts]
 
 
-def test_empty_textline(signs_updater):
-    chapter = ChapterFactory.build(
-        manuscripts=MANUSCRIPTS[:1], lines=[LINE_WITH_EMPTY_MANUSCRIPT_TEXTLINE]
+def test_empty_textline(signs_updater, chapter_with_empty_manuscript_textline):
+    signs = update_and_serialize_signs(
+        signs_updater, chapter_with_empty_manuscript_textline
     )
-    signs = update_and_serialize_signs(signs_updater, chapter)
 
     assert signs == [""]
 
 
-def test_sign_updater_completeness(signs_updater, signs, sign_repository):
-    for sign in signs:
-        sign_repository.create(sign)
+def test_colophon_lines(signs_updater, chapter_with_colophon_lines):
+    signs = update_and_serialize_signs(signs_updater, chapter_with_colophon_lines)
 
-    chapter = ChapterFactory.build(
-        manuscripts=MANUSCRIPTS,
-        lines=LINES,
-    )
-    signs = update_and_serialize_signs(signs_updater, chapter)
+    assert signs == ["DIŠ BU"]
 
-    assert signs == ["", "DIŠ UD\nTA KU MI\nŠU MA", None]
+
+def test_unplaced_lines(signs_updater, chapter_with_unplaced_lines):
+    signs = update_and_serialize_signs(signs_updater, chapter_with_unplaced_lines)
+
+    assert signs == ["ŠU DU"]
+
+
+def test_signs_updater_completeness(signs_updater, complex_chapter):
+    signs = update_and_serialize_signs(signs_updater, complex_chapter)
+
+    assert signs == ["", "DIŠ UD\nTA KU MI\nŠU MA", None, "DIŠ BU", "ŠU DU"]
