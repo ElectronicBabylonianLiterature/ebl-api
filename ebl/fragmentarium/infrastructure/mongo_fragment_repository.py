@@ -38,6 +38,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
+from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -448,3 +449,6 @@ class MongoFragmentRepository(FragmentRepository):
             data = None
 
         return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+
+    def list_all_fragments(self, user_scopes: Sequence[Scope] = tuple()) -> Sequence[str]:
+        return list(self._fragments.get_all_values("_id", match_user_scopes(user_scopes)))
