@@ -48,11 +48,8 @@ class SignsSearch:
 
     def on_get(self, req, resp):
         signs = self._dispatch(self._parse_sub_index(req.params))
-        if "listAll" in req.params:
-            resp.media = signs
-        else:
-            if "wordId" in req.params:
-                signs = inject_logograms_unicode(
-                    signs, req.params["wordId"], self.sign_repository
-                )
-            resp.media = SignDtoSchema().dump(signs, many=True)
+        if "wordId" in req.params:
+            signs = inject_logograms_unicode(
+                signs, req.params["wordId"], self.sign_repository
+            )
+        resp.media = SignDtoSchema().dump(signs, many=True)

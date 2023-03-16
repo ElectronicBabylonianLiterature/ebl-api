@@ -62,11 +62,10 @@ class Bibliography:
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
         parsed_query = dict.fromkeys(["author", "year", "title"])
-        match = re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query)
-        if match:
-            parsed_query["author"] = match.group(1)
-            parsed_query["year"] = int(match.group(2)) if match.group(2) else None
-            parsed_query["title"] = match.group(3)
+        if match := re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query):
+            parsed_query["author"] = match[1]
+            parsed_query["year"] = int(match[2]) if match[2] else None
+            parsed_query["title"] = match[3]
         return parsed_query
 
     @staticmethod
