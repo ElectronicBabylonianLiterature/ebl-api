@@ -48,30 +48,6 @@ def test_accession():
     assert fragment.accession == "accession-3"
 
 
-def test_cdli_number():
-    external_numbers = ExternalNumbers(cdli_number="cdli-4")
-    fragment = FragmentFactory.build(external_numbers=external_numbers)
-    assert fragment.cdli_number == "cdli-4"
-
-
-def test_bm_id_number():
-    external_numbers = ExternalNumbers(bm_id_number="bmId-2")
-    fragment = FragmentFactory.build(external_numbers=external_numbers)
-    assert fragment.bm_id_number == "bmId-2"
-
-
-def test_archibab_number():
-    external_numbers = ExternalNumbers(archibab_number="archibab-007")
-    fragment = FragmentFactory.build(external_numbers=external_numbers)
-    assert fragment.archibab_number == "archibab-007"
-
-
-def test_bdtns_number():
-    external_numbers = ExternalNumbers(bdtns_number="bdtns-42")
-    fragment = FragmentFactory.build(external_numbers=external_numbers)
-    assert fragment.bdtns_number == "bdtns-42"
-
-
 def test_edited_in_oracc_project():
     fragment = FragmentFactory.build(edited_in_oracc_project="dcclt")
     assert fragment.edited_in_oracc_project == "dcclt"
@@ -197,6 +173,23 @@ def test_scopes():
     scopes = ["CAIC"]
     fragment = FragmentFactory.build(authorized_scopes=scopes)
     assert fragment.authorized_scopes == scopes
+
+
+@pytest.mark.parametrize(
+    "number",
+    [
+        "cdli_number",
+        "bm_id_number",
+        "archibab_number",
+        "bdtns_number",
+        "ur_online_number",
+    ],
+)
+def test_external_number(number):
+    external_numbers = ExternalNumbers(**{number: "test-42"})
+    fragment = FragmentFactory.build(external_numbers=external_numbers)
+
+    assert getattr(fragment, number) == "test-42"
 
 
 def test_external_numbers():
