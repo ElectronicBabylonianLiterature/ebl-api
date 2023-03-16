@@ -1,3 +1,4 @@
+from typing import Optional
 import os
 from base64 import b64decode
 
@@ -62,10 +63,10 @@ def set_sentry_user(id_: str) -> None:
         scope.user = {"id": id_}
 
 
-def create_context():
+def create_context(db_name: Optional[str] = None):
     ebl_ai_client = EblAiClient(os.environ["EBL_AI_API"])
     client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
+    database = client.get_database(db_name or os.environ.get("MONGODB_DB"))
     auth_backend = Auth0Backend(
         decode_certificate(os.environ["AUTH0_PEM"]),
         os.environ["AUTH0_AUDIENCE"],

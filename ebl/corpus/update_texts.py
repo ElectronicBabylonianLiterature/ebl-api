@@ -2,6 +2,7 @@ import argparse
 from functools import reduce
 from multiprocessing import Pool
 from typing import List
+import sys
 
 import attr
 from tqdm import tqdm
@@ -9,7 +10,7 @@ from tqdm import tqdm
 from ebl.app import create_context
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.corpus.domain.text import Text, TextId
+from ebl.corpus.domain.text import Text
 from ebl.users.domain.user import ApiUser
 from ebl.corpus.domain.lines_update import LinesUpdate
 
@@ -52,39 +53,6 @@ class State:
         )
 
 
-def update(number) -> State:
-    context = create_context()
-    corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
-    )
-    state = State()
-    text = corpus.find(number)
-
-    try:
-        update_text(corpus, text)
-        state.add_updated()
-    except Exception as error:
-        state.add_error(error, text)
-
-    return state
-
-
-def get_text_ids() -> List[TextId]:
-    context = create_context()
-    corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
-    )
-    return [text.id for text in corpus.list()]
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -94,9 +62,41 @@ if __name__ == "__main__":
         help="number of parallel workers to perform migration",
         default=4,
     )
+    parser.add_argument("--production", action="store_true")
     args = parser.parse_args()
 
-    numbers = get_text_ids()
+    if args.production:
+        prompt = input(
+            "Warning! You're about to migrate the chapter collection of the production database.\n"
+            "Make sure you created a backup duplicate. Press y to continue "
+        )
+
+        if prompt.lower() != "y":
+            print("Aborted.")
+            sys.exit()
+
+    context = create_context("ebl" if args.production else "ebldev")
+    corpus = Corpus(
+        context.text_repository,
+        context.get_bibliography(),
+        context.changelog,
+        context.sign_repository,
+        context.parallel_line_injector,
+    )
+
+    def update(number) -> State:
+        state = State()
+        text = corpus.find(number)
+
+        try:
+            update_text(corpus, text)
+            state.add_updated()
+        except Exception as error:
+            state.add_error(error, text)
+
+        return state
+
+    numbers = [text.id for text in corpus.list()]
 
     with Pool(processes=args.workers) as pool:
         states = tqdm(pool.imap_unordered(update, numbers), total=len(numbers))
