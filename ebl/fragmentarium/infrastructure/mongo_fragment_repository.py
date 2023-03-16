@@ -450,5 +450,9 @@ class MongoFragmentRepository(FragmentRepository):
 
         return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
-    def list_all_fragments(self, user_scopes: Sequence[Scope] = tuple()) -> Sequence[str]:
-        return list(self._fragments.get_all_values("_id", match_user_scopes(user_scopes)))
+    def list_all_fragments(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ) -> Sequence[str]:
+        return list(
+            self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
+        )

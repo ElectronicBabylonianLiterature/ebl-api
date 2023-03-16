@@ -68,6 +68,14 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
+    def list_all_texts(self) -> Sequence:
+        ...
+
+    @abstractmethod
+    def list_all_chapters(self) -> Sequence:
+        ...
+
+    @abstractmethod
     def update(self, id_: ChapterId, chapter: Chapter) -> None:
         ...
 
@@ -193,6 +201,12 @@ class Corpus:
 
     def list(self) -> List[Text]:
         return self._repository.list()
+
+    def list_all_texts(self) -> Sequence:
+        return self._repository.list_all_texts()
+
+    def list_all_chapters(self) -> Sequence:
+        return self._repository.list_all_chapters()
 
     def update_alignment(
         self, id_: ChapterId, alignment: Alignment, user: User

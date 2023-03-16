@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Sequence, Dict
+from typing import List, Optional, Tuple, Sequence, Dict, Union
 
 import pymongo
 from pymongo.database import Database
@@ -188,6 +188,44 @@ class MongoTextRepository(TextRepository):
                 ]
             ),
             many=True,
+        )
+
+    def list_all_texts(self) -> Sequence[Dict[str, Union[str, int]]]:
+        return list(
+            self._texts.aggregate(
+                [
+                    {
+                        "$group": {
+                            "_id": {
+                                "index": "$index",
+                                "category": "$category",
+                                "genre": "$genre",
+                            }
+                        }
+                    },
+                    {"$replaceRoot": {"newRoot": "$_id"}},
+                ]
+            )
+        )
+
+    def list_all_chapters(self) -> Sequence[Dict[str, Union[str, int]]]:
+        return list(
+            self._chapters.aggregate(
+                [
+                    {
+                        "$group": {
+                            "_id": {
+                                "chapter": "$name",
+                                "stage": "$stage",
+                                "index": "$textId.index",
+                                "category": "$textId.category",
+                                "genre": "$textId.genre",
+                            }
+                        }
+                    },
+                    {"$replaceRoot": {"newRoot": "$_id"}},
+                ]
+            )
         )
 
     def update(self, id_: ChapterId, chapter: Chapter) -> None:
