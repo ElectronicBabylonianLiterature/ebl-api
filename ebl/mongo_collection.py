@@ -90,7 +90,7 @@ class MongoCollection:
         return self.__get_collection().create_index(index, **kwargs)
 
     def get_all_values(self, field: str, query: Optional[dict] = None) -> Sequence[str]:
-        return self.__get_collection().distinct(field, query if query else {})
+        return self.__get_collection().distinct(field, query or {})
 
     def __not_found_error(self, query):
         return NotFoundError(f"{self.__resource_noun} {query} not found.")
