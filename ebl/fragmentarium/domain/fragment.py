@@ -88,6 +88,7 @@ class ExternalNumbers:
     bm_id_number: str = ""
     archibab_number: str = ""
     bdtns_number: str = ""
+    ur_online_number: str = ""
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -200,3 +201,7 @@ class Fragment:
     @property
     def bdtns_number(self) -> str:
         return self._get_external_number("bdtns")
+
+    @property
+    def ur_online_number(self) -> str:
+        return self._get_external_number("ur_online")

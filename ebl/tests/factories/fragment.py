@@ -106,6 +106,7 @@ class ExternalNumbersFactory(factory.Factory):
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
 
 
 class FragmentFactory(factory.Factory):
