@@ -67,8 +67,9 @@ if __name__ == "__main__":
 
     if args.production:
         prompt = input(
-            "Warning! You're about to migrate the chapter collection of the production database.\n"
-            "Make sure you created a backup duplicate. Press y to continue "
+            "Warning! You're about to migrate the chapter collection of the "
+            "production database.\nMake sure you created a backup duplicate.\n"
+            "Press y to continue "
         )
 
         if prompt.lower() != "y":
