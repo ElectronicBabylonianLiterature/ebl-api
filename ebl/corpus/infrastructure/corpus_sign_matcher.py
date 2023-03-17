@@ -154,6 +154,7 @@ class CorpusSignMatcher:
                 }
             },
             {"$match": {"lines": {"$exists": True, "$not": {"$size": 0}}}},
+            {"$unwind": "$lines"},
         ]
 
     def _filter_line_variants_to_include(self) -> List[Dict]:
