@@ -1,9 +1,7 @@
-from abc import ABC, abstractmethod
 from typing import List, Optional, Sequence, Tuple
-
 import attr
 from ebl.common.query.query_result import CorpusQueryResult
-
+from ebl.corpus.application.corpus_repository import CorpusRepository
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
     ManuscriptReferenceInjector,
@@ -38,90 +36,16 @@ from ebl.users.domain.user import User
 COLLECTION = "chapters"
 
 
-class TextRepository(ABC):
-    @abstractmethod
-    def create(self, text: Text) -> None:
-        ...
-
-    @abstractmethod
-    def create_chapter(self, chapter: Chapter) -> None:
-        ...
-
-    @abstractmethod
-    def find(self, id_: TextId) -> Text:
-        ...
-
-    @abstractmethod
-    def find_chapter(self, id_: ChapterId) -> Chapter:
-        ...
-
-    @abstractmethod
-    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
-        ...
-
-    @abstractmethod
-    def find_line(self, id_: ChapterId, number: int) -> Line:
-        ...
-
-    @abstractmethod
-    def list(self) -> List[Text]:
-        ...
-
-    @abstractmethod
-    def list_all_texts(self) -> Sequence:
-        ...
-
-    @abstractmethod
-    def list_all_chapters(self) -> Sequence:
-        ...
-
-    @abstractmethod
-    def update(self, id_: ChapterId, chapter: Chapter) -> None:
-        ...
-
-    @abstractmethod
-    def query_by_transliteration(
-        self, query: TransliterationQuery, pagination_index: int
-    ) -> Tuple[Sequence[Chapter], int]:
-        ...
-
-    @abstractmethod
-    def query_by_lemma(
-        self, lemma: str, genre: Optional[Genre] = None
-    ) -> Sequence[DictionaryLine]:
-        ...
-
-    @abstractmethod
-    def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]:
-        ...
-
-    @abstractmethod
-    def query_corpus_by_manuscript(
-        self, museum_numbers: List[MuseumNumber]
-    ) -> List[ManuscriptAttestation]:
-        ...
-
-    @abstractmethod
-    def query_manuscripts_with_joins_by_chapter(
-        self, id_: ChapterId
-    ) -> Sequence[Manuscript]:
-        ...
-
-    @abstractmethod
-    def query(self, query: dict) -> CorpusQueryResult:
-        ...
-
-
 class Corpus:
     def __init__(
         self,
-        repository: TextRepository,
+        repository: CorpusRepository,
         bibliography,
         changelog,
         sign_repository: SignRepository,
         parallel_injector: ParallelLineInjector,
     ):
-        self._repository: TextRepository = repository
+        self._repository: CorpusRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
         self._sign_repository = sign_repository

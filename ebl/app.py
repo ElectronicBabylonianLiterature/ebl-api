@@ -18,7 +18,7 @@ from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
-from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
+from ebl.corpus.infrastructure.mongo_text_repository import MongoCorpusRepository
 from ebl.corpus.web.bootstrap import create_corpus_routes
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
 from ebl.dictionary.web.bootstrap import create_dictionary_routes
@@ -87,7 +87,7 @@ def create_context():
         fragment_repository=MongoFragmentRepository(database),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),
-        text_repository=MongoTextRepository(database),
+        text_repository=MongoCorpusRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
         custom_cache=custom_cache,

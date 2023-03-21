@@ -8,7 +8,7 @@ from pymongo.collation import Collation
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
-from ebl.corpus.application.corpus import TextRepository
+from ebl.corpus.application.corpus_repository import CorpusRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
@@ -64,7 +64,7 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
     return NotFoundError(f"Chapter {id_} line {number} not found.")
 
 
-class MongoTextRepository(TextRepository):
+class MongoCorpusRepository(CorpusRepository):
     def __init__(self, database: Database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)

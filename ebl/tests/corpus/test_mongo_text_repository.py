@@ -2,7 +2,7 @@ from typing import Sequence
 import attr
 import pytest
 
-from ebl.corpus.application.corpus import TextRepository
+from ebl.corpus.application.corpus_repository import CorpusRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
@@ -373,7 +373,7 @@ def make_dictionary_line(text: Text, chapter: Chapter, lemma: str) -> Dictionary
     ],
 )
 def test_query_by_lemma(
-    text_repository: TextRepository,
+    text_repository: CorpusRepository,
     text: Text,
     chapter: Chapter,
     lemma_id: str,

@@ -27,7 +27,7 @@ from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
-from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
+from ebl.corpus.infrastructure.mongo_text_repository import MongoCorpusRepository
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
 from ebl.ebl_ai_client import EblAiClient
@@ -178,7 +178,7 @@ def parallel_line_injector(
 
 @pytest.fixture
 def text_repository(database: Database):
-    return MongoTextRepository(database)
+    return MongoCorpusRepository(database)
 
 
 @pytest.fixture
