@@ -254,16 +254,14 @@ def test_add_lowest_join_transliteration(user):
         fragment.update_lowest_join_transliteration(transliteration, user)
 
 
-def test_update_notes(user):
+def test_set_notes():
+    text = "Some @i{notes}"
     fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(fragment.text, "new notes")
-    updated_fragment = fragment.update_transliteration(transliteration, user)
+    updated_fragment = fragment.set_notes(text)
 
-    expected_fragment = attr.evolve(
-        fragment, notes=transliteration.notes, line_to_vec=()
+    assert updated_fragment.notes == Notes(
+        text, (StringPart("Some "), EmphasisPart("notes"))
     )
-
-    assert updated_fragment == expected_fragment
 
 
 def test_update_lemmatization():
