@@ -12,6 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
     NotLowestJoinError,
     Script,
     UncuratedReference,
+    Notes,
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
@@ -32,6 +33,7 @@ from ebl.tests.factories.fragment import (
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.markup import StringPart, EmphasisPart
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.application.signs_visitor import SignsVisitor
@@ -101,7 +103,7 @@ def test_joins():
 
 def test_notes():
     fragment = FragmentFactory.build()
-    assert fragment.notes == ""
+    assert fragment.notes == Notes("notes", (StringPart("notes"),))
 
 
 def test_signs():
