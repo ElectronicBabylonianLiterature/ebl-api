@@ -16,6 +16,7 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Introduction,
+    Notes,
     Script,
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
@@ -331,10 +332,20 @@ def test_update_lemmatization(fragment_repository):
 
 
 def test_update_introduction(fragment_repository: FragmentRepository):
-    fragment: Fragment = FragmentFactory.build(introduction=Introduction("", tuple()))
+    fragment: Fragment = FragmentFactory.build(introduction=Introduction())
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_introduction("Introduction")
     fragment_repository.update_field("introduction", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
+def test_update_notes(fragment_repository: FragmentRepository):
+    fragment: Fragment = FragmentFactory.build(notes=Notes())
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_notes("Notes")
+    fragment_repository.update_field("notes", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
