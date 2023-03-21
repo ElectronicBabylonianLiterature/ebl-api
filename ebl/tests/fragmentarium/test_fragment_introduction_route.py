@@ -10,40 +10,40 @@ from ebl.transliteration.domain.markup import StringPart
 
 
 @pytest.mark.parametrize(
-    "parameters",
+    "old_introduction,new_introduction",
     [
-        {
-            "old_introduction": Introduction("", tuple()),
-            "new_introduction": Introduction(
+        [
+            Introduction(),
+            Introduction(
                 "A new introduction",
                 (StringPart("A new introduction"),),
             ),
-        },
-        {
-            "old_introduction": Introduction(
+        ],
+        [
+            Introduction(
                 "An old introduction",
                 (StringPart("An old introduction"),),
             ),
-            "new_introduction": Introduction("", tuple()),
-        },
-        {
-            "old_introduction": Introduction("", tuple()),
-            "new_introduction": Introduction("", tuple()),
-        },
+            Introduction(),
+        ],
+        [
+            Introduction(),
+            Introduction(),
+        ],
     ],
 )
-def test_update_introduction(client, fragmentarium, user, database, parameters):
-    fragment: Fragment = FragmentFactory.build(
-        introduction=parameters["old_introduction"]
-    )
+def test_update_introduction(
+    client, fragmentarium, user, database, old_introduction, new_introduction
+):
+    fragment: Fragment = FragmentFactory.build(introduction=old_introduction)
     fragment_number = fragmentarium.create(fragment)
-    update = {"introduction": parameters["new_introduction"].text}
+    update = {"introduction": new_introduction.text}
     post_result = client.simulate_post(
         f"/fragments/{fragment_number}/introduction", body=json.dumps(update)
     )
     expected_json = {
         **create_response_dto(
-            fragment.set_introduction(parameters["new_introduction"].text),
+            fragment.set_introduction(new_introduction.text),
             user,
             fragment.number == "K.1",
         )
