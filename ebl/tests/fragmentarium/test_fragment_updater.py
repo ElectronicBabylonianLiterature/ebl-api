@@ -244,3 +244,23 @@ def test_update_introduction(
 
     result = fragment_updater.update_introduction(number, introduction, user)
     assert result == (updated_fragment, False)
+
+
+def test_update_notes(
+    fragment_updater: FragmentUpdater, user, fragment_repository, changelog, when
+):
+    fragment: Fragment = FragmentFactory.build()
+    number = fragment.number
+    notes = "Test notes"
+    updated_fragment = fragment.set_notes(notes)
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field("notes", updated_fragment).thenReturn()
+
+    result = fragment_updater.update_notes(number, notes, user)
+    assert result == (updated_fragment, False)
