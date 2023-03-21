@@ -128,7 +128,8 @@ class ATFImporter:
                     if oracc_lemma not in not_lemmatized:
                         not_lemmatized[oracc_lemma] = True
                     self.logger.warning(
-                        f"Incompatible lemmatization: No guideWord to oracc lemma '{oracc_lemma}' present"
+                        "Incompatible lemmatization: "
+                        f"No guideWord to oracc lemma '{oracc_lemma}' present"
                     )
 
                 # if "X" or "u" or "n" then add [] and return
@@ -218,7 +219,9 @@ class ATFImporter:
                             not_lemmatized[oracc_lemma] = True
 
                             self.logger.warning(
-                                f"Incompatible lemmatization: No citation form or guideword (by sense) found in the glossary for '{oracc_lemma}'"
+                                "Incompatible lemmatization: No citation "
+                                "form or guideword (by sense) found in the "
+                                f"glossary for '{oracc_lemma}'"
                             )
 
             # set as noun
@@ -235,7 +238,8 @@ class ATFImporter:
                 if oracc_lemma not in not_lemmatized:
                     not_lemmatized[oracc_lemma] = True
                 self.logger.warning(
-                    f"Incompatible lemmatization: No eBL word found to oracc lemma or guide word ({oracc_lemma} : {oracc_guideword})"
+                    "Incompatible lemmatization: No eBL word found to oracc lemma or "
+                    f"guide word ({oracc_lemma} : {oracc_guideword})"
                 )
 
             all_unique_lemmas.append(unique_lemmas)
@@ -386,7 +390,8 @@ class ATFImporter:
                     f"{filename}: transliteration {str(last_transliteration_line)}"
                 )
                 self.logger.debug(
-                    f"ebl transliteration{str(last_transliteration)} {len(last_transliteration)}"
+                    f"ebl transliteration{str(last_transliteration)} "
+                    f"{len(last_transliteration)}"
                 )
                 self.logger.debug(
                     f"all_unique_lemmata {str(all_unique_lemmas)} {len(all_unique_lemmas)}"
@@ -536,8 +541,7 @@ class ATFImporter:
             "--author",
             required=False,
             help="Name of the author of the imported fragements. \nIf not specified a "
-            "name needs to be entered manually for every "
-            "fragment.",
+            "name needs to be entered manually for every fragment.",
         )
 
         parser.add_argument(
@@ -572,9 +576,7 @@ class ATFImporter:
                 filename = filename.split(".")[0]
 
                 self.logger.info(
-                    Util.print_frame(
-                        f"Importing {filename}.atf as: {import_style}"
-                    )
+                    Util.print_frame(f"Importing {filename}.atf as: {import_style}")
                 )
                 if args.author is None:
                     self.username = input(
@@ -586,7 +588,9 @@ class ATFImporter:
                     filepath, filename
                 )
 
-                self.logger.info(Util.print_frame(f"Formatting to EBL-ATF of {filename}.atf"))
+                self.logger.info(
+                    Util.print_frame(f"Formatting to EBL-ATF of {filename}.atf")
+                )
                 ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)
                 # insert result into database
                 self.logger.info(
@@ -598,19 +602,27 @@ class ATFImporter:
 
             if args.logdir:
 
-                with open(f"{args.logdir}not_lemmatized.txt", "w", encoding="utf8") as outputfile:
+                with open(
+                    f"{args.logdir}not_lemmatized.txt", "w", encoding="utf8"
+                ) as outputfile:
                     for key in not_lemmatized:
                         outputfile.write(key + "\n")
 
-                with open(f"{args.logdir}error_lines.txt", "w", encoding="utf8") as outputfile:
+                with open(
+                    f"{args.logdir}error_lines.txt", "w", encoding="utf8"
+                ) as outputfile:
                     for key in error_lines:
                         outputfile.write(key + "\n")
 
-                with open(f"{args.logdir}not_imported.txt", "w", encoding="utf8") as outputfile:
+                with open(
+                    f"{args.logdir}not_imported.txt", "w", encoding="utf8"
+                ) as outputfile:
                     for entry in failed:
                         outputfile.write(entry + "\n")
 
-                with open(f"{args.logdir}imported.txt", "w", encoding="utf8") as outputfile:
+                with open(
+                    f"{args.logdir}imported.txt", "w", encoding="utf8"
+                ) as outputfile:
                     for entry in success:
                         outputfile.write(entry + "\n")
 
