@@ -17,7 +17,7 @@ from ebl.fragmentarium.domain.joins import Join
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
-    updates = {"transliteration": "$ (the transliteration)", "notes": "some notes"}
+    updates = {"transliteration": "$ (the transliteration)"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -25,9 +25,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
     expected_json = {
         **create_response_dto(
             fragment.update_transliteration(
-                TransliterationUpdate(
-                    parse_atf_lark(updates["transliteration"]), updates["notes"]
-                ),
+                TransliterationUpdate(parse_atf_lark(updates["transliteration"])),
                 user,
             ),
             user,
@@ -72,10 +70,8 @@ def test_update_transliteration_merge_lemmatization(
     fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
     lines[1] = new_transliteration
-    updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
-    updated_transliteration = transliteration_factory.create(
-        updates["transliteration"], updates["notes"]
-    )
+    updates = {"transliteration": "\n".join(lines)}
+    updated_transliteration = transliteration_factory.create(updates["transliteration"])
     updated_fragment = lemmatized_fragment.update_transliteration(
         updated_transliteration, user
     )
@@ -162,10 +158,12 @@ def test_update_transliteration_invalid(client):
     [
         "transliteration",
         '"transliteration"',
-        json.dumps({"transliteration": "$ (the transliteration)"}),
-        json.dumps({"notes": "some notes"}),
-        json.dumps({"transliteration": 1, "notes": "some notes"}),
-        json.dumps({"transliteration": "$ (the transliteration)", "notes": 1}),
+        json.dumps(
+            {
+                "transliteration": "$ (the transliteration)",
+                "notes": "deprecated notes field",
+            }
+        ),
     ],
 )
 def test_update_transliteration_invalid_entity(client, fragmentarium, body):

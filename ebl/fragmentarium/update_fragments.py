@@ -27,7 +27,7 @@ def update_fragment(
     updater: FragmentUpdater,
     fragment: Fragment,
 ) -> None:
-    transliteration = transliteration_factory.create(fragment.text.atf, fragment.notes)
+    transliteration = transliteration_factory.create(fragment.text.atf)
     user = ApiUser("update_fragments.py")
     updater.update_transliteration(fragment.number, transliteration, user, True)
 

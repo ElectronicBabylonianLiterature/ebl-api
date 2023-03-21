@@ -40,9 +40,7 @@ def test_update_transliteration(
     )
     number = transliterated_fragment.number
     atf = Atf("1. x x\n2. x")
-    transliteration = TransliterationUpdate(
-        parse_atf_lark(atf), "updated notes", "X X\nX"
-    )
+    transliteration = TransliterationUpdate(parse_atf_lark(atf), "X X\nX")
     transliterated_fragment = transliterated_fragment.update_transliteration(
         transliteration, user
     )
@@ -82,7 +80,7 @@ def test_update_update_transliteration_not_found(
     with pytest.raises(NotFoundError):
         fragment_updater.update_transliteration(
             number,
-            TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"),
+            TransliterationUpdate(parse_atf_lark("$ (the transliteration)")),
             user,
         )
 
@@ -105,7 +103,7 @@ def test_update_update_transliteration_not_lowest_join(
     with pytest.raises(NotLowestJoinError):
         fragment_updater.update_transliteration(
             number,
-            TransliterationUpdate(parse_atf_lark("1. x"), "updated notes", "X"),
+            TransliterationUpdate(parse_atf_lark("1. x"), "X"),
             user,
             False,
         )

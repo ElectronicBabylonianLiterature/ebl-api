@@ -310,9 +310,7 @@ class ATFImporter:
         museum_number,
     ) -> None:
         converted_transliteration = "\n".join(transliterations)
-        transliteration = transliteration_factory.create(
-            Atf(converted_transliteration), ""
-        )
+        transliteration = transliteration_factory.create(Atf(converted_transliteration))
         user = AtfImporterUser(self.username)
         updater.update_transliteration(
             parse_museum_number(museum_number), transliteration, user

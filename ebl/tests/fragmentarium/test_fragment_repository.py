@@ -289,7 +289,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
     fragment = FragmentFactory.build()
     fragment_repository.create(fragment)
     updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"), user
+        TransliterationUpdate(parse_atf_lark("$ (the transliteration)")), user
     )
 
     fragment_repository.update_field("transliteration", updated_fragment)

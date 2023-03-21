@@ -9,7 +9,6 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationUpdate:
     text: Text = Text()
-    notes: str = ""
     signs: str = attr.ib(default="")
 
     @signs.validator

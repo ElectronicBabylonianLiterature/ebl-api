@@ -308,9 +308,9 @@ class MongoFragmentRepository(FragmentRepository):
             "genres": ("genres",),
             "references": ("references",),
             "script": ("script",),
+            "notes": ("notes",),
             "transliteration": (
                 "text",
-                "notes",
                 "signs",
                 "record",
                 "line_to_vec",

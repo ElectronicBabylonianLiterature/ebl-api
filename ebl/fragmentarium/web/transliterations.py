@@ -12,8 +12,9 @@ from ebl.fragmentarium.domain.fragment import NotLowestJoinError
 
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
-    "properties": {"transliteration": {"type": "string"}, "notes": {"type": "string"}},
-    "required": ["transliteration", "notes"],
+    "properties": {"transliteration": {"type": "string"}},
+    "required": ["transliteration"],
+    "additionalProperties": False,
 }
 
 
@@ -45,8 +46,6 @@ class TransliterationResource:
 
     def _create_transliteration(self, media):
         try:
-            return self._transliteration_factory.create(
-                Atf(media["transliteration"]), media["notes"]
-            )
+            return self._transliteration_factory.create(Atf(media["transliteration"]))
         except ValueError as error:
             raise DataError(error) from error
