@@ -12,6 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
     Measure,
     Script,
     UncuratedReference,
+    ExternalNumbers,
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
@@ -113,11 +114,21 @@ class ScriptSchema(Schema):
         return Script(**data)
 
 
+class ExternalNumbersSchema(Schema):
+    cdli_number = fields.String(load_default="", data_key="cdliNumber")
+    bm_id_number = fields.String(load_default="", data_key="bmIdNumber")
+    archibab_number = fields.String(load_default="", data_key="archibabNumber")
+    bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
+    ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
+
+    @post_load
+    def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
+        return ExternalNumbers(**data)
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
-    cdli_number = fields.String(required=True, data_key="cdliNumber")
-    bm_id_number = fields.String(required=True, data_key="bmIdNumber")
     edited_in_oracc_project = fields.String(
         required=True, data_key="editedInOraccProject"
     )
@@ -154,6 +165,11 @@ class FragmentSchema(Schema):
     )
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
     script = fields.Nested(ScriptSchema, load_default=Script())
+    external_numbers = fields.Nested(
+        ExternalNumbersSchema,
+        load_default=ExternalNumbers(),
+        data_key="externalNumbers",
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):

@@ -83,11 +83,18 @@ class Script:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class ExternalNumbers:
+    cdli_number: str = ""
+    bm_id_number: str = ""
+    archibab_number: str = ""
+    bdtns_number: str = ""
+    ur_online_number: str = ""
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
     accession: str = ""
-    cdli_number: str = ""
-    bm_id_number: str = ""
     edited_in_oracc_project: str = ""
     publication: str = ""
     description: str = ""
@@ -110,6 +117,7 @@ class Fragment:
     authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction("", tuple())
     script: Script = Script()
+    external_numbers: ExternalNumbers = ExternalNumbers()
 
     @property
     def is_lowest_join(self) -> bool:
@@ -174,3 +182,26 @@ class Fragment:
             for numbers, _ in groupby(line_numbers)
         ]
         return Text(lines=tuple(pydash.flatten(match)))
+
+    def _get_external_number(self, number_type: str) -> str:
+        return getattr(self.external_numbers, f"{number_type}_number")
+
+    @property
+    def cdli_number(self) -> str:
+        return self._get_external_number("cdli")
+
+    @property
+    def bm_id_number(self) -> str:
+        return self._get_external_number("bm_id")
+
+    @property
+    def archibab_number(self) -> str:
+        return self._get_external_number("archibab")
+
+    @property
+    def bdtns_number(self) -> str:
+        return self._get_external_number("bdtns")
+
+    @property
+    def ur_online_number(self) -> str:
+        return self._get_external_number("ur_online")

@@ -1,6 +1,6 @@
 from typing import Sequence
 
-import factory
+import factory.fuzzy
 from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Stage
@@ -8,6 +8,7 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    ExternalNumbers,
     Fragment,
     Genre,
     Introduction,
@@ -97,13 +98,22 @@ class ScriptFactory(factory.Factory):
     uncertain = factory.Faker("boolean")
 
 
+class ExternalNumbersFactory(factory.Factory):
+    class Meta:
+        model = ExternalNumbers
+
+    cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
+    bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
+    archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
+    bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
-    bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     edited_in_oracc_project = factory.Sequence(lambda n: f"editedInOracc-{n}")
     accession = factory.Sequence(lambda n: f"accession-{n}")
     museum = factory.Faker("word")
@@ -124,6 +134,7 @@ class FragmentFactory(factory.Factory):
     )
     authorized_scopes = []
     introduction = Introduction("text", (StringPart("text"),))
+    external_numbers = factory.SubFactory(ExternalNumbersFactory)
 
 
 class InterestingFragmentFactory(FragmentFactory):

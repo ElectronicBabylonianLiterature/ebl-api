@@ -19,7 +19,7 @@ def fragment_is(fragment: Fragment) -> dict:
 
 
 def number_is(number: str) -> dict:
-    or_ = [{"cdliNumber": number}, {"accession": number}]
+    or_ = [{"externalNumbers.cdliNumber": number}, {"accession": number}]
     try:
         or_.append(museum_number_is(MuseumNumber.of(number)))
     except ValueError:
