@@ -108,11 +108,11 @@ class ATFImporter:
     def get_ebl_lemmata(self, orrac_lemma_tupel, all_unique_lemmas):
 
         try:
-            unique_lemmas = []
             oracc_lemma = None
             oracc_guideword = None
             oracc_pos_tag = None
 
+            unique_lemmas = []
             for ol_tuple in orrac_lemma_tupel:
                 oracc_lemma = ol_tuple[0]
                 oracc_guideword = ol_tuple[1]
@@ -128,17 +128,13 @@ class ATFImporter:
                     if oracc_lemma not in not_lemmatized:
                         not_lemmatized[oracc_lemma] = True
                     self.logger.warning(
-                        "Incompatible lemmatization: No guideWord to oracc lemma '"
-                        + oracc_lemma
-                        + "' present"
+                        f"Incompatible lemmatization: No guideWord to oracc lemma '{oracc_lemma}' present"
                     )
 
                 # if "X" or "u" or "n" then add [] and return
                 if oracc_lemma in ["X", "u", "n"]:
                     self.logger.warning(
-                        "Oracc lemma was '"
-                        + oracc_lemma
-                        + "' ->  here no lemmatization"
+                        f"Oracc lemma was '{oracc_lemma}' ->  here no lemmatization"
                     )
                     all_unique_lemmas.append(unique_lemmas)
                     return
@@ -189,15 +185,16 @@ class ATFImporter:
                             if "//" in guideword:
                                 guideword = guideword.split("//")[0]
 
-                            for entry in self.db.get_collection("words").find(
-                                {
-                                    "oraccWords.lemma": citation_form,
-                                    "oraccWords.guideWord": guideword,
-                                },
-                                {"_id"},
-                            ):
-                                unique_lemmas.append(entry["_id"])
-
+                            unique_lemmas.extend(
+                                entry["_id"]
+                                for entry in self.db.get_collection("words").find(
+                                    {
+                                        "oraccWords.lemma": citation_form,
+                                        "oraccWords.guideWord": guideword,
+                                    },
+                                    {"_id"},
+                                )
+                            )
                             if not unique_lemmas:
                                 for entry in self.db.get_collection("words").find(
                                     {
@@ -221,27 +218,24 @@ class ATFImporter:
                             not_lemmatized[oracc_lemma] = True
 
                             self.logger.warning(
-                                "Incompatible lemmatization: No citation form or "
-                                "guideword (by sense) found in the glossary for '"
-                                + oracc_lemma
-                                + "'"
+                                f"Incompatible lemmatization: No citation form or guideword (by sense) found in the glossary for '{oracc_lemma}'"
                             )
 
             # set as noun
             if not unique_lemmas and oracc_pos_tag in NOUN_POS_TAGS:
 
-                for entry in self.db.get_collection("words").find(
-                    {"oraccWords.lemma": oracc_lemma}, {"_id"}
-                ):
-                    unique_lemmas.append(entry["_id"])
-
+                unique_lemmas.extend(
+                    entry["_id"]
+                    for entry in self.db.get_collection("words").find(
+                        {"oraccWords.lemma": oracc_lemma}, {"_id"}
+                    )
+                )
             # all attempts to find a ebl lemma failed
             if not unique_lemmas:
                 if oracc_lemma not in not_lemmatized:
                     not_lemmatized[oracc_lemma] = True
                 self.logger.warning(
-                    "Incompatible lemmatization: No eBL word found to oracc lemma or "
-                    "guide word (" + oracc_lemma + " : " + oracc_guideword + ")"
+                    f"Incompatible lemmatization: No eBL word found to oracc lemma or guide word ({oracc_lemma} : {oracc_guideword})"
                 )
 
             all_unique_lemmas.append(unique_lemmas)
@@ -254,11 +248,10 @@ class ATFImporter:
 
         lemgwpos_cf = {}
         forms_senses = {}
-        lemposgw_cfgw = dict()
+        lemposgw_cfgw = {}
 
         with open(path, "r", encoding="utf8") as f:
-            for line in f.readlines():
-
+            for line in f:
                 if line.startswith("@entry"):
                     lemmas = []
                     split = line.split(" ", 2)
@@ -359,11 +352,11 @@ class ATFImporter:
     ):
         if test_lemmata is None:
             test_lemmata = []
-        result = {"transliteration": [], "lemmatization": [], "control_lines": []}
         last_transliteration_line = ""
         last_alter_lemline_at = []
         last_transliteration = []
 
+        result = {"transliteration": [], "lemmatization": [], "control_lines": []}
         for line in converted_lines:
 
             if line["c_type"] == "control_line":
@@ -382,7 +375,7 @@ class ATFImporter:
 
                 for alter_pos in last_alter_lemline_at:
                     self.logger.warning(
-                        "Adding placeholder to lemma line at position:" + str(alter_pos)
+                        f"Adding placeholder to lemma line at position:{str(alter_pos)}"
                     )
                     all_unique_lemmas.insert(alter_pos, [])
 
@@ -390,19 +383,13 @@ class ATFImporter:
                 last_alter_lemline_at = []
 
                 self.logger.debug(
-                    filename + ": transliteration " + str(last_transliteration_line)
+                    f"{filename}: transliteration {str(last_transliteration_line)}"
                 )
                 self.logger.debug(
-                    "ebl transliteration"
-                    + str(last_transliteration)
-                    + " "
-                    + str(len(last_transliteration))
+                    f"ebl transliteration{str(last_transliteration)} {len(last_transliteration)}"
                 )
                 self.logger.debug(
-                    "all_unique_lemmata "
-                    + str(all_unique_lemmas)
-                    + " "
-                    + str(len(all_unique_lemmas))
+                    f"all_unique_lemmata {str(all_unique_lemmas)} {len(all_unique_lemmas)}"
                 )
 
                 # join oracc_word with ebl unique lemmata
@@ -412,7 +399,7 @@ class ATFImporter:
                         "Transiteration and Lemmatization don't have equal length!!"
                     )
                     error_lines.append(
-                        filename + ": transliteration " + str(last_transliteration_line)
+                        f"{filename}: transliteration {str(last_transliteration_line)}"
                     )
 
                 result["last_transliteration"] = last_transliteration
@@ -474,9 +461,7 @@ class ATFImporter:
                 parse_museum_number(museum_number_split.strip())
                 museum_number = museum_number_split
             except Exception:
-                self.logger.error(
-                    "Could not find valid museum number in '" + filename + "'"
-                )
+                self.logger.error(f"Could not find valid museum number in '{filename}'")
 
         skip = False
         while museum_number is None:
@@ -489,16 +474,14 @@ class ATFImporter:
                     break
                 parse_museum_number(museum_number_input)
                 museum_number = museum_number_input
-                self.logger.info("Museum number '" + museum_number + "' is valid!")
+                self.logger.info(f"Museum number '{museum_number}' is valid!")
             except Exception:
                 pass
 
         if skip:
-            failed.append(filename + " could not be imported: Museum number not found")
+            failed.append(f"{filename} could not be imported: Museum number not found")
             self.logger.error("Museum number not found")
-            self.logger.info(
-                Util.print_frame('Conversion of "' + filename + '.atf" failed')
-            )
+            self.logger.info(Util.print_frame(f'Conversion of "{filename}.atf" failed'))
             return
 
         try:
@@ -514,7 +497,7 @@ class ATFImporter:
                 updater, ebl_lines["lemmatization"], museum_number
             )
 
-            success.append(filename + " successfully imported")
+            success.append(f"{filename} successfully imported")
             self.logger.info(
                 Util.print_frame(
                     'Conversion of "'
@@ -526,8 +509,8 @@ class ATFImporter:
             )
 
         except Exception as e:
-            self.logger.error(filename + " could not be imported: " + str(e))
-            failed.append(filename + " could not be imported: " + str(e))
+            self.logger.error(f"{filename} could not be imported: {str(e)}")
+            failed.append(f"{filename} could not be imported: {str(e)}")
 
     def start(self):
 
@@ -590,12 +573,12 @@ class ATFImporter:
 
                 self.logger.info(
                     Util.print_frame(
-                        "Importing " + filename + ".atf as: " + import_style
+                        f"Importing {filename}.atf as: {import_style}"
                     )
                 )
                 if args.author is None:
                     self.username = input(
-                        "Please enter the fragments author to import " + filename + ": "
+                        f"Please enter the fragments author to import {filename}: "
                     )
                 # convert all lines
                 self.atf_preprocessor = ATFPreprocessor(args.logdir, style)
@@ -603,41 +586,31 @@ class ATFImporter:
                     filepath, filename
                 )
 
-                self.logger.info(
-                    Util.print_frame("Formatting to EBL-ATF of " + filename + ".atf")
-                )
+                self.logger.info(Util.print_frame(f"Formatting to EBL-ATF of {filename}.atf"))
                 ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)
                 # insert result into database
                 self.logger.info(
                     Util.print_frame(
-                        "Inserting converted lines of " + filename + ".atf into db"
+                        f"Inserting converted lines of {filename}.atf into db"
                     )
                 )
                 self.insert_into_db(ebl_lines, filename)
 
             if args.logdir:
 
-                with open(
-                    args.logdir + "not_lemmatized.txt", "w", encoding="utf8"
-                ) as outputfile:
+                with open(f"{args.logdir}not_lemmatized.txt", "w", encoding="utf8") as outputfile:
                     for key in not_lemmatized:
                         outputfile.write(key + "\n")
 
-                with open(
-                    args.logdir + "error_lines.txt", "w", encoding="utf8"
-                ) as outputfile:
+                with open(f"{args.logdir}error_lines.txt", "w", encoding="utf8") as outputfile:
                     for key in error_lines:
                         outputfile.write(key + "\n")
 
-                with open(
-                    args.logdir + "not_imported.txt", "w", encoding="utf8"
-                ) as outputfile:
+                with open(f"{args.logdir}not_imported.txt", "w", encoding="utf8") as outputfile:
                     for entry in failed:
                         outputfile.write(entry + "\n")
 
-                with open(
-                    args.logdir + "imported.txt", "w", encoding="utf8"
-                ) as outputfile:
+                with open(f"{args.logdir}imported.txt", "w", encoding="utf8") as outputfile:
                     for entry in success:
                         outputfile.write(entry + "\n")
 
