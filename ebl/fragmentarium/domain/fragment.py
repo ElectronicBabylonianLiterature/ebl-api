@@ -63,9 +63,19 @@ class Genre:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Introduction:
+class MarkupText:
     text: str
     parts: Tuple[MarkupPart]
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Introduction(MarkupText):
+    pass
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Notes(MarkupText):
+    pass
 
 
 @attr.s(auto_attribs=True, frozen=True)

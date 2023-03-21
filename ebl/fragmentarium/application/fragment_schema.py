@@ -9,6 +9,7 @@ from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Introduction,
+    Notes,
     Measure,
     Script,
     UncuratedReference,
@@ -83,13 +84,21 @@ class UncuratedReferenceSchema(Schema):
         return UncuratedReference(**data)
 
 
-class IntroductionSchema(Schema):
+class MarkupTextSchema(Schema):
     text = fields.String(required=True)
     parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
 
+
+class IntroductionSchema(MarkupTextSchema):
     @post_load
     def make_introduction(self, data, **kwargs):
         return Introduction(data["text"], tuple(data["parts"]))
+
+
+class NotesSchema(MarkupTextSchema):
+    @post_load
+    def make_notes(self, data, **kwargs):
+        return Notes(data["text"], tuple(data["parts"]))
 
 
 class ScriptSchema(Schema):
@@ -145,7 +154,7 @@ class FragmentSchema(Schema):
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
     signs = fields.String(load_default="")
-    notes = fields.String(required=True)
+    notes = fields.Nested(NotesSchema, default=Notes("", tuple()))
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     uncurated_references = fields.Nested(
         UncuratedReferenceSchema,
