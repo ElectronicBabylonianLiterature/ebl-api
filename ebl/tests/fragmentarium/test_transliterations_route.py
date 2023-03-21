@@ -105,7 +105,7 @@ def test_update_transliteration_merge_lemmatization(
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
-    updates = {"transliteration": "1. kururu", "notes": ""}
+    updates = {"transliteration": "1. kururu"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -122,7 +122,7 @@ def test_update_transliteration_not_lowest_join(client, fragment_repository) -> 
     number = MuseumNumber("X", "2")
     fragment = FragmentFactory.build(number=number)
     fragment_repository.create_join([[Join(number)], [Join(MuseumNumber("X", "1"))]])
-    updates = {"transliteration": "1. kururu", "notes": ""}
+    updates = {"transliteration": "1. kururu"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -137,9 +137,7 @@ def test_update_transliteration_not_lowest_join(client, fragment_repository) -> 
 
 def test_update_transliteration_not_found(client):
     url = "/fragments/unknown.fragment/transliteration"
-    body = json.dumps(
-        {"transliteration": "$ (the transliteration)", "notes": "some notes"}
-    )
+    body = json.dumps({"transliteration": "$ (the transliteration)"})
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -147,7 +145,7 @@ def test_update_transliteration_not_found(client):
 
 def test_update_transliteration_invalid(client):
     url = "/fragments/invalud/transliteration"
-    body = json.dumps({"transliteration": "", "notes": ""})
+    body = json.dumps({"transliteration": ""})
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
