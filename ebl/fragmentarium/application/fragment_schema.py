@@ -91,13 +91,13 @@ class MarkupTextSchema(Schema):
 
 class IntroductionSchema(MarkupTextSchema):
     @post_load
-    def make_introduction(self, data, **kwargs):
+    def make_introduction(self, data, **kwargs) -> Introduction:
         return Introduction(data["text"], tuple(data["parts"]))
 
 
 class NotesSchema(MarkupTextSchema):
     @post_load
-    def make_notes(self, data, **kwargs):
+    def make_notes(self, data, **kwargs) -> Notes:
         return Notes(data["text"], tuple(data["parts"]))
 
 
@@ -154,7 +154,7 @@ class FragmentSchema(Schema):
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
     signs = fields.String(load_default="")
-    notes = fields.Nested(NotesSchema, default=Notes("", tuple()))
+    notes = fields.Nested(NotesSchema, default=Notes())
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     uncurated_references = fields.Nested(
         UncuratedReferenceSchema,
@@ -172,7 +172,7 @@ class FragmentSchema(Schema):
         ScopeEnum(),
         data_key="authorizedScopes",
     )
-    introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
+    introduction = fields.Nested(IntroductionSchema, default=Introduction())
     script = fields.Nested(ScriptSchema, load_default=Script())
     external_numbers = fields.Nested(
         ExternalNumbersSchema,
