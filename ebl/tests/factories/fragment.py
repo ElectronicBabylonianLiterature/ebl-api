@@ -12,6 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
     Fragment,
     Genre,
     Introduction,
+    Notes,
     Script,
     UncuratedReference,
 )
@@ -134,6 +135,7 @@ class FragmentFactory(factory.Factory):
     )
     authorized_scopes = []
     introduction = Introduction("text", (StringPart("text"),))
+    notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
 
 
@@ -142,13 +144,13 @@ class InterestingFragmentFactory(FragmentFactory):
     publication = ""  # pyre-ignore[15]
     joins: Sequence[str] = tuple()
     text = Text()
-    notes = ""
     uncurated_references = (
         UncuratedReference("7(0)"),
         UncuratedReference("CAD 51", (34, 56)),
         UncuratedReference("7(1)"),
     )
     references = tuple()
+    notes = Notes()
 
 
 class TransliteratedFragmentFactory(FragmentFactory):
