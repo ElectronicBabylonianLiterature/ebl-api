@@ -62,3 +62,14 @@ def test_update_introduction(client, fragmentarium, user, database, parameters):
             "user_profile.name": user.profile["name"],
         }
     )
+
+
+def test_update_invalid_introduction(client, fragmentarium, user, database):
+    fragment: Fragment = FragmentFactory.build()
+    fragment_number = fragmentarium.create(fragment)
+    update = {"introduction": "@i{syntax error"}
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/introduction", body=json.dumps(update)
+    )
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
