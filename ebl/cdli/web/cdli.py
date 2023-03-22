@@ -1,4 +1,3 @@
-import falcon
 from falcon import Request, Response
 
 from ebl.cdli.infrastructure.cdli_client import (
@@ -6,11 +5,9 @@ from ebl.cdli.infrastructure.cdli_client import (
     get_line_art_url,
     get_photo_url,
 )
-from ebl.users.web.require_scope import require_scope
 
 
 class CdliResource:
-    @falcon.before(require_scope, "read:fragments")
     def on_get(self, req: Request, resp: Response, cdli_number: str):
         resp.media = {
             "photoUrl": get_photo_url(cdli_number),

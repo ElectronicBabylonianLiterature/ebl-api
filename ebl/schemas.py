@@ -4,6 +4,8 @@ from typing import Type, Any
 
 from marshmallow import fields
 
+from ebl.common.domain.scopes import Scope
+
 
 class EnumField(fields.Field, ABC):
     default_error_messages = {
@@ -28,7 +30,7 @@ class EnumField(fields.Field, ABC):
             raise self.make_error("invalid_value") from error
 
     @abstractmethod
-    def _serialize_enum(self, value: Enum):
+    def _serialize_enum(self, value):
         ...
 
     @abstractmethod
@@ -50,3 +52,14 @@ class NameEnum(EnumField):
 
     def _deserialize_enum(self, value: str) -> Enum:
         return self._enum_class[value]
+
+
+class ScopeEnum(EnumField):
+    def __init__(self, **kwargs):
+        super().__init__(Scope, **kwargs)
+
+    def _serialize_enum(self, value: Scope) -> str:
+        return value.scope_name
+
+    def _deserialize_enum(self, value: str) -> Enum:
+        return Scope.from_string(f"read:{value}-fragments")

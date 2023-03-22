@@ -9,7 +9,6 @@ class WordsResource:
     def __init__(self, dictionary):
         self._dictionary = dictionary
 
-    @falcon.before(require_scope, "read:words")
     def on_get(self, _req, resp, object_id):
         resp.media = self._dictionary.find(object_id)
 

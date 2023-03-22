@@ -1,7 +1,4 @@
-import falcon
-
 from ebl.dispatcher import create_dispatcher
-from ebl.users.web.require_scope import require_scope
 
 
 class WordSearch:
@@ -16,6 +13,5 @@ class WordSearch:
             }
         )
 
-    @falcon.before(require_scope, "read:words")
     def on_get(self, req, resp):
         resp.media = self._dispatch(req.params)

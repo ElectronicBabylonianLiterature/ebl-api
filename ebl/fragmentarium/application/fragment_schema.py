@@ -1,8 +1,8 @@
 import pydash
-from marshmallow import Schema, fields, post_dump, post_load
+from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -12,11 +12,11 @@ from ebl.fragmentarium.domain.fragment import (
     Measure,
     Script,
     UncuratedReference,
-    Scope,
+    ExternalNumbers,
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ValueEnum
+from ebl.schemas import ScopeEnum, ValueEnum
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
@@ -93,6 +93,9 @@ class IntroductionSchema(Schema):
 
 
 class ScriptSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     period = fields.Function(
         lambda script: script.period.long_name,
         lambda value: Period.from_name(value),
@@ -102,17 +105,30 @@ class ScriptSchema(Schema):
         PeriodModifier, required=True, data_key="periodModifier"
     )
     uncertain = fields.Boolean(load_default=None)
+    sort_key = fields.Function(
+        lambda script: script.period.sort_key, data_key="sortKey", dump_only=True
+    )
 
     @post_load
     def make_script(self, data, **kwargs) -> Script:
         return Script(**data)
 
 
+class ExternalNumbersSchema(Schema):
+    cdli_number = fields.String(load_default="", data_key="cdliNumber")
+    bm_id_number = fields.String(load_default="", data_key="bmIdNumber")
+    archibab_number = fields.String(load_default="", data_key="archibabNumber")
+    bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
+    ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
+
+    @post_load
+    def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
+        return ExternalNumbers(**data)
+
+
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.String(required=True)
-    cdli_number = fields.String(required=True, data_key="cdliNumber")
-    bm_id_number = fields.String(required=True, data_key="bmIdNumber")
     edited_in_oracc_project = fields.String(
         required=True, data_key="editedInOraccProject"
     )
@@ -143,9 +159,17 @@ class FragmentSchema(Schema):
         load_default=tuple(),
         data_key="lineToVec",
     )
-    authorized_scopes = fields.List(ValueEnum(Scope), data_key="authorizedScopes")
+    authorized_scopes = fields.List(
+        ScopeEnum(),
+        data_key="authorizedScopes",
+    )
     introduction = fields.Nested(IntroductionSchema, default=Introduction("", tuple()))
     script = fields.Nested(ScriptSchema, load_default=Script())
+    external_numbers = fields.Nested(
+        ExternalNumbersSchema,
+        load_default=ExternalNumbers(),
+        data_key="externalNumbers",
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):

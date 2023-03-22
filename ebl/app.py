@@ -4,7 +4,7 @@ from base64 import b64decode
 import falcon
 import sentry_sdk
 from Cryptodome.PublicKey import RSA
-from falcon_auth import FalconAuthMiddleware
+from falcon_auth import FalconAuthMiddleware, MultiAuthBackend, NoneAuthBackend
 from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
@@ -13,7 +13,7 @@ import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.cache.application.cache import create_cache
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
@@ -25,6 +25,7 @@ from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
+from ebl.markup.web.bootstrap import create_markup_route
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
@@ -45,6 +46,7 @@ from ebl.transliteration.application.parallel_line_injector import ParallelLineI
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
+from ebl.users.domain.user import Guest
 from ebl.users.infrastructure.auth0 import Auth0Backend
 
 althaia.patch()
@@ -70,11 +72,12 @@ def create_context():
         os.environ["AUTH0_ISSUER"],
         set_sentry_user,
     )
+    guest_backend = NoneAuthBackend(Guest)
     cache = create_cache()
-    custom_cache = CustomCache(MongoCacheRepository(database))
+    custom_cache = ChapterCache(MongoCacheRepository(database))
     return Context(
         ebl_ai_client=ebl_ai_client,
-        auth_backend=auth_backend,
+        auth_backend=MultiAuthBackend(auth_backend, guest_backend),
         cropped_sign_images_repository=MongoCroppedSignImagesRepository(database),
         word_repository=MongoWordRepository(database),
         sign_repository=MongoSignRepository(database),
@@ -113,6 +116,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_files_route(api, context)
     create_fragmentarium_routes(api, context)
     create_lemmatization_routes(api, context)
+    create_markup_route(api, context)
 
     return api
 

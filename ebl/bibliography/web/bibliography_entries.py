@@ -10,7 +10,6 @@ class BibliographyResource:
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "read:bibliography")
     def on_get(self, req: Request, resp: Response) -> None:
         resp.media = self._bibliography.search(req.params["query"])
 
@@ -28,7 +27,6 @@ class BibliographyEntriesResource:
     def __init__(self, bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "read:bibliography")
     def on_get(self, _req, resp: Response, id_: str) -> None:
         resp.media = self._bibliography.find(id_)
 

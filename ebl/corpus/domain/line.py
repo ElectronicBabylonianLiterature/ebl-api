@@ -54,6 +54,13 @@ class Line:
         else:
             return manuscript_line
 
+    def get_manuscript_text_lines(self, manuscript_id: int) -> Sequence[TextLine]:
+        return [
+            line
+            for variant in self.variants
+            for line in variant.get_manuscript_text_lines(manuscript_id)
+        ]
+
     def get_manuscript_text_line(self, manuscript_id: int) -> Optional[TextLine]:
         return (
             pydash.chain(self.variants)

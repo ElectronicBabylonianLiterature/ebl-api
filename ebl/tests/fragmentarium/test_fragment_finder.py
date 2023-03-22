@@ -1,18 +1,11 @@
+import attr
 import pytest
 
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
-from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.transliteration_query import TransliterationQuery
-from ebl.transliteration.application.signs_visitor import SignsVisitor
 
 
 @pytest.mark.parametrize("has_photo", [True, False])
@@ -28,7 +21,7 @@ def test_find(
     number = fragment.number
     (
         when(fragment_repository)
-        .query_by_museum_number(number, None)
+        .query_by_museum_number(number, None, False)
         .thenReturn(fragment)
     )
     (when(photo_repository).query_if_file_exists(f"{number}.jpg").thenReturn(has_photo))
@@ -50,18 +43,38 @@ def test_find_with_lines(
     number = fragment.number
     (
         when(fragment_repository)
-        .query_by_museum_number(number, lines)
+        .query_by_museum_number(number, lines, False)
         .thenReturn(fragment)
     )
 
     assert fragment_finder.find(number, lines)[0] == fragment
 
 
+@pytest.mark.parametrize("lines", [None, [], [0, 2]])
+def test_find_without_lines(
+    lines,
+    fragment_finder,
+    fragment_repository,
+    when,
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number, lines, True)
+        .thenReturn(
+            attr.evolve(fragment, text=attr.evolve(fragment.text, lines=tuple()))
+        )
+    )
+
+    assert fragment_finder.find(number, lines, True)[0].text.lines == tuple()
+
+
 def test_find_not_found(fragment_finder, fragment_repository, when):
     number = MuseumNumber("unknown", "id")
     (
         when(fragment_repository)
-        .query_by_museum_number(number, None)
+        .query_by_museum_number(number, None, False)
         .thenRaise(NotFoundError)
     )
 
@@ -71,13 +84,21 @@ def test_find_not_found(fragment_finder, fragment_repository, when):
 
 def test_find_random(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    (when(fragment_repository).query_random_by_transliterated().thenReturn([fragment]))
+    (
+        when(fragment_repository)
+        .query_random_by_transliterated(tuple())
+        .thenReturn([fragment])
+    )
     assert fragment_finder.find_random() == [FragmentInfo.of(fragment)]
 
 
 def test_find_interesting(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    (when(fragment_repository).query_path_of_the_pioneers().thenReturn([fragment]))
+    (
+        when(fragment_repository)
+        .query_path_of_the_pioneers(tuple())
+        .thenReturn([fragment])
+    )
     assert fragment_finder.find_interesting() == [FragmentInfo.of(fragment)]
 
 
@@ -106,100 +127,6 @@ def test_fragment_finder(fragment_finder, fragment_repository, when):
         .thenReturn(expected)
     )
     assert fragment_finder.fragment_pager(fragment_number) == expected
-
-
-def test_search_fragmentarium_inject_document_in_fragment_infos(
-    fragment_finder, when, bibliography
-):
-    bibliography_entry = BibliographyEntryFactory.build()
-    fragment_1 = FragmentInfo.of(
-        FragmentFactory.build(
-            number="K.1", references=(ReferenceFactory.build(id="RN.0"),)
-        )
-    )
-    fragment_2 = FragmentInfo.of(
-        FragmentFactory.build(
-            number="K.2",
-            references=(
-                ReferenceFactory.build(id="RN.1"),
-                ReferenceFactory.build(id="RN.2"),
-            ),
-        )
-    )
-    fragment_expected_1 = fragment_1.set_references(
-        [fragment_1.references[0].set_document(bibliography_entry)]
-    )
-    fragment_expected_2 = fragment_2.set_references(
-        [
-            fragment_2.references[0].set_document(bibliography_entry),
-            fragment_2.references[1].set_document(bibliography_entry),
-        ]
-    )
-    (
-        when(fragment_finder)
-        .search(FragmentariumSearchQuery(bibliography_id="id", pages="pages"))
-        .thenReturn(FragmentInfosPagination([fragment_1, fragment_2], 2))
-    )
-    (when(bibliography).find("RN.0").thenReturn(bibliography_entry))
-    (when(bibliography).find("RN.1").thenReturn(bibliography_entry))
-    (when(bibliography).find("RN.2").thenReturn(bibliography_entry))
-
-    assert fragment_finder.search_fragmentarium(
-        FragmentariumSearchQuery(bibliography_id="id", pages="pages")
-    ) == FragmentInfosPagination(
-        [
-            fragment_expected_1,
-            fragment_expected_2,
-        ],
-        2,
-    )
-
-
-def test_search(fragment_finder, fragment_repository, when):
-    fragment = FragmentFactory.build()
-    number = fragment.number
-    (
-        when(fragment_repository)
-        .query_fragmentarium(FragmentariumSearchQuery(number=number))
-        .thenReturn(([fragment], 1))
-    )
-
-    assert fragment_finder.search(
-        FragmentariumSearchQuery(number=number)
-    ) == FragmentInfosPagination(
-        [FragmentInfo.of(fragment)],
-        1,
-    )
-
-
-def test_search_fragmentarium_transliteration(
-    fragment_finder, fragment_repository, sign_repository, signs, when
-):
-    for sign in signs:
-        sign_repository.create(sign)
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    string = "MA UD"
-
-    query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
-    matching_fragments = [transliterated_fragment]
-
-    (
-        when(fragment_repository)
-        .query_fragmentarium(FragmentariumSearchQuery(transliteration=query))
-        .thenReturn((matching_fragments, 1))
-    )
-
-    expected_lines = parse_atf_lark("6'. [...] x# mu ta-ma;-tu₂")
-    expected = FragmentInfosPagination(
-        [FragmentInfo.of(fragment, expected_lines) for fragment in matching_fragments],
-        1,
-    )
-    assert (
-        fragment_finder.search_fragmentarium(
-            FragmentariumSearchQuery(transliteration=query)
-        )
-        == expected
-    )
 
 
 def test_find_photo(fragment_finder, photo, photo_repository, when):

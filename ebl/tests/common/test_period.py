@@ -1,4 +1,4 @@
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 
 def test_mapping():

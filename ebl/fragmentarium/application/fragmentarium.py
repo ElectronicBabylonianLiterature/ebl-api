@@ -1,4 +1,5 @@
-from typing import Dict, List
+from typing import Dict, List, Sequence
+from ebl.common.domain.scopes import Scope
 
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -18,16 +19,20 @@ class Fragmentarium:
             "lines": self._repository.count_lines(),
         }
 
-    def find_latest(self) -> List[FragmentInfo]:
+    def find_latest(self, user_scopes: Sequence[Scope] = tuple()) -> List[FragmentInfo]:
         return list(
             map(
                 FragmentInfo.of,
-                self._repository.query_by_transliterated_sorted_by_date(),
+                self._repository.query_by_transliterated_sorted_by_date(user_scopes),
             )
         )
 
-    def find_needs_revision(self) -> List[FragmentInfo]:
-        return self._repository.query_by_transliterated_not_revised_by_other()
+    def find_needs_revision(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ) -> List[FragmentInfo]:
+        return self._repository.query_by_transliterated_not_revised_by_other(
+            user_scopes
+        )
 
     def create(self, fragment: Fragment) -> str:
         return self._repository.create(fragment)

@@ -1,5 +1,5 @@
 from enum import Enum, unique
-from typing import Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
+from typing import Iterator, Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
 
 import attr
 import pydash
@@ -102,7 +102,7 @@ class Chapter:
             validators.validate_manuscript_line_labels,
         ],
     )
-    signs: Sequence[str] = tuple()
+    signs: Sequence[Optional[str]] = tuple()
     record: Record = Record()
     parser_version: str = ""
     is_filtered_query: bool = False
@@ -128,7 +128,7 @@ class Chapter:
         return [
             (self.manuscripts[index].siglum, text_lines[index][number])
             for index, signs in enumerate(self.signs)
-            for number, line in enumerate(signs.split("\n"))
+            for number, line in enumerate([] if signs is None else signs.split("\n"))
             if "?" in line
         ]
 
@@ -215,19 +215,19 @@ class Chapter:
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript
     ) -> Sequence[TextLineEntry]:
-        def create_entry(line: Line, index: int) -> Optional[TextLineEntry]:
-            text_line = line.get_manuscript_text_line(manuscript.id)
-            return TextLineEntry(text_line, index) if text_line else None
+        def create_entries(index: int, line: Line) -> Iterator[TextLineEntry]:
+            for text_line in line.get_manuscript_text_lines(manuscript.id):
+                yield TextLineEntry(text_line, index)
 
-        return (
-            pydash.chain(self.lines)
-            .map_(create_entry)
-            .reject(pydash.is_none)
-            .concat([TextLineEntry(line, None) for line in manuscript.text_lines])
-            .value()
-        )
+        entries = [
+            entry
+            for index, line in enumerate(self.lines)
+            for entry in create_entries(index, line)
+        ]
+
+        return entries + [TextLineEntry(line, None) for line in manuscript.text_lines]
 
     def _match(
         self, query: TransliterationQuery
     ) -> Sequence[Sequence[Tuple[int, int]]]:
-        return [query.match(signs) for signs in self.signs]
+        return [query.match(signs) for signs in self.signs if signs is not None]

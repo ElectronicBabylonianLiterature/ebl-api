@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Sequence
+from typing import Sequence, List, Optional
+
+from ebl.common.domain.scopes import Scope
 
 
 class User(ABC):
@@ -13,19 +15,27 @@ class User(ABC):
     def ebl_name(self) -> str:
         ...
 
-    def has_scope(self, scope: str) -> bool:
-        return False
+    def has_scope(self, scope: Scope) -> bool:
+        return scope.is_open
 
     def can_read_folio(self, name: str) -> bool:
-        scope = f"read:{name}-folios"
-        return self.has_scope(scope)
+        try:
+            scope = Scope.from_string(f"read:{name}-folios")
+            return self.has_scope(scope) or scope.is_open
+        except ValueError:
+            return True
 
-    def can_read_fragment(self, scopes: Sequence[str]) -> bool:
-        for scope_group in scopes:
-            scope = f"read:{scope_group}-fragments"
-            if not self.has_scope(scope):
-                return False
-        return True
+    def can_read_fragment(self, fragment_scopes: Sequence[Scope]) -> bool:
+        return (not fragment_scopes) or bool(
+            set(self.get_scopes(prefix="read:", suffix="-fragments")).intersection(
+                fragment_scopes
+            )
+        )
+
+    def get_scopes(
+        self, prefix: Optional[str] = "", suffix: Optional[str] = ""
+    ) -> List[Scope]:
+        return []
 
 
 class Guest(User):

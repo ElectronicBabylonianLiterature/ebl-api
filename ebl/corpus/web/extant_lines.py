@@ -3,7 +3,6 @@ from marshmallow import fields, Schema
 
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.web.text_utils import create_chapter_id
-from ebl.users.web.require_scope import require_scope
 from ebl.transliteration.application.line_number_schemas import OneOfLineNumberSchema
 
 
@@ -29,7 +28,6 @@ class ExtantLinesResource:
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
         _,

@@ -1,17 +1,14 @@
 from typing import List, Optional, Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
+from ebl.common.domain.scopes import Scope
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -35,9 +32,12 @@ class FragmentFinder:
         self._parallel_injector = parallel_injector
 
     def find(
-        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+        self,
+        number: MuseumNumber,
+        lines: Optional[Sequence[int]] = None,
+        exclude_lines=False,
     ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number, lines)
+        fragment = self._repository.query_by_museum_number(number, lines, exclude_lines)
         return (
             fragment.set_text(
                 self._parallel_injector.inject_transliteration(fragment.text)
@@ -45,45 +45,25 @@ class FragmentFinder:
             self._photos.query_if_file_exists(f"{number}.jpg"),
         )
 
-    def search(self, query: FragmentariumSearchQuery) -> FragmentInfosPagination:
-        query_results, total_count = self._repository.query_fragmentarium(query)
-        if query.transliteration.is_empty():
-            fragmentInfosResult = list(map(FragmentInfo.of, query_results))
-        else:
-            fragmentInfosResult = [
-                FragmentInfo.of(
-                    fragment, fragment.get_matching_lines(query.transliteration)
-                )
-                for fragment in query_results
-            ]
-        return FragmentInfosPagination(fragmentInfosResult, total_count)
+    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
+        return self._repository.fetch_scopes(number)
 
-    def search_fragmentarium(
-        self, query: FragmentariumSearchQuery
-    ) -> FragmentInfosPagination:
-        fragment_infos_pagination = self.search(query)
-        fragment_infos = fragment_infos_pagination.fragment_infos
-        total_count = fragment_infos_pagination.total_count
-
-        fragment_infos_with_documents = []
-        for fragment_info in fragment_infos:
-            references_with_documents = [
-                reference.set_document(self._bibliography.find(reference.id))
-                for reference in fragment_info.references
-            ]
-            fragment_infos_with_documents.append(
-                fragment_info.set_references(references_with_documents)
-            )
-        return FragmentInfosPagination(fragment_infos_with_documents, total_count)
-
-    def find_random(self) -> List[FragmentInfo]:
+    def find_random(self, user_scopes: Sequence[Scope] = tuple()) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, self._repository.query_random_by_transliterated())
+            map(
+                FragmentInfo.of,
+                self._repository.query_random_by_transliterated(user_scopes),
+            )
         )
 
-    def find_interesting(self) -> List[FragmentInfo]:
+    def find_interesting(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ) -> List[FragmentInfo]:
         return list(
-            map(FragmentInfo.of, (self._repository.query_path_of_the_pioneers()))
+            map(
+                FragmentInfo.of,
+                (self._repository.query_path_of_the_pioneers(user_scopes)),
+            )
         )
 
     def folio_pager(

@@ -3,7 +3,7 @@ from typing import Tuple
 import falcon
 from marshmallow import Schema, fields, post_load
 
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
@@ -39,7 +39,7 @@ class LinesImportSchema(Schema):
 
 
 class LinesResource:
-    def __init__(self, corpus: Corpus, cache: CustomCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
 
@@ -56,7 +56,7 @@ class LinesResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete(str(chapter_id))
+        self._cache.delete_chapter(chapter_id)
         updated_chapter = self._corpus.update_lines(
             chapter_id, LinesUpdateSchema().load(req.media), req.context.user
         )
@@ -64,7 +64,7 @@ class LinesResource:
 
 
 class LinesImportResource:
-    def __init__(self, corpus: Corpus, cache: CustomCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
         self._cache = cache
 
@@ -81,7 +81,7 @@ class LinesImportResource:
         name: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
-        self._cache.delete(str(chapter_id))
+        self._cache.delete_chapter(chapter_id)
         updated_chapter = self._corpus.import_lines(
             chapter_id, req.media["atf"], req.context.user
         )
@@ -89,10 +89,10 @@ class LinesImportResource:
 
 
 class LineResource:
-    def __init__(self, corpus: Corpus):
+    def __init__(self, corpus: Corpus, cache: ChapterCache):
         self._corpus = corpus
+        self._cache = cache
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self,
         _,
@@ -105,12 +105,19 @@ class LineResource:
         number: str,
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
+        cache_id = f"{str(chapter_id)} line-{number}"
+
+        if self._cache.has(cache_id):
+            resp.media = self._cache.get(cache_id)
+            return
 
         try:
             line, manuscripts = self._corpus.find_line_with_manuscript_joins(
                 chapter_id, int(number)
             )
             line_details = LineDetailsDisplay.from_line_manuscripts(line, manuscripts)
-            resp.media = LineDetailsDisplaySchema().dump(line_details)
+            dump = LineDetailsDisplaySchema().dump(line_details)
+            self._cache.set(cache_id, dump)
+            resp.media = dump
         except (IndexError, ValueError) as error:
             raise NotFoundError(f"{chapter_id} line {number} not found.") from error

@@ -8,7 +8,7 @@ from marshmallow import (
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 from ebl.corpus.application.id_schemas import TextIdSchema, ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter import (
@@ -288,7 +288,7 @@ class ChapterSchema(Schema):
         data_key="uncertainFragments",
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
-    signs = fields.List(fields.String(), load_default=tuple())
+    signs = fields.List(fields.String(allow_none=True), load_default=tuple())
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
     is_filtered_query = fields.Bool(load_default=False, data_key="isFilteredQuery")

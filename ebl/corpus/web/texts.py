@@ -10,12 +10,9 @@ from ebl.errors import DataError
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from ebl.users.web.require_scope import require_scope
 
 
 class TextsResource:
-    auth = {"exempt_methods": ["GET"]}
-
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -27,7 +24,6 @@ class TextResource:
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(
         self, _, resp: falcon.Response, genre: str, category: str, index: str
     ) -> None:
@@ -42,7 +38,6 @@ class TextSearchResource:
         self._corpus = corpus
         self._transliteration_query_factory = transliteration_query_factory
 
-    @falcon.before(require_scope, "read:texts")
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         query = self._transliteration_query_factory.create(
             req.params["transliteration"]

@@ -3,8 +3,8 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.common.period import Period, PeriodModifier
-from ebl.common.siglum_enum import SiglumEnum, SiglumEnumWithParent
+from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.siglum_enum import SiglumEnum, SiglumEnumWithParent
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text

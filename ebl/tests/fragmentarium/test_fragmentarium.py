@@ -6,7 +6,7 @@ def test_find_latest(fragmentarium, fragment_repository, when):
     fragment = FragmentFactory.build()
     (
         when(fragment_repository)
-        .query_by_transliterated_sorted_by_date()
+        .query_by_transliterated_sorted_by_date(tuple())
         .thenReturn([fragment])
     )
     assert fragmentarium.find_latest() == [FragmentInfo.of(fragment)]
@@ -16,7 +16,7 @@ def test_needs_revision(fragmentarium, fragment_repository, when):
     fragment_info = FragmentInfo.of(TransliteratedFragmentFactory.build())
     (
         when(fragment_repository)
-        .query_by_transliterated_not_revised_by_other()
+        .query_by_transliterated_not_revised_by_other(tuple())
         .thenReturn([fragment_info])
     )
     assert fragmentarium.find_needs_revision() == [fragment_info]

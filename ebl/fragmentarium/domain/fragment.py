@@ -1,12 +1,12 @@
 from itertools import groupby
 from typing import Optional, Sequence, Tuple
-from enum import Enum
 
 import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
@@ -22,14 +22,12 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
-from ebl.transliteration.domain.lark_parser import (
-    parse_introduction as _parse_introduction,
-)
+from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
 
 
 def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
     try:
-        return _parse_introduction(introduction) if introduction else tuple()
+        return parse_markup_paragraphs(introduction) if introduction else tuple()
     except PARSE_ERRORS as error:
         raise ValidationError(
             f"Invalid introduction: {introduction}. {error}"
@@ -65,14 +63,6 @@ class Genre:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Scope(Enum):
-    CAIC = "CAIC"
-    SIPPARLIBRARY = "SIPPARLIBRARY"
-    URUKLBU = "URUKLBU"
-    ITALIANNINEVEH = "ITALIANNINEVEH"
-
-
-@attr.s(auto_attribs=True, frozen=True)
 class Introduction:
     text: str
     parts: Tuple[MarkupPart]
@@ -93,11 +83,18 @@ class Script:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class ExternalNumbers:
+    cdli_number: str = ""
+    bm_id_number: str = ""
+    archibab_number: str = ""
+    bdtns_number: str = ""
+    ur_online_number: str = ""
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
     accession: str = ""
-    cdli_number: str = ""
-    bm_id_number: str = ""
     edited_in_oracc_project: str = ""
     publication: str = ""
     description: str = ""
@@ -120,6 +117,7 @@ class Fragment:
     authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction("", tuple())
     script: Script = Script()
+    external_numbers: ExternalNumbers = ExternalNumbers()
 
     @property
     def is_lowest_join(self) -> bool:
@@ -184,3 +182,26 @@ class Fragment:
             for numbers, _ in groupby(line_numbers)
         ]
         return Text(lines=tuple(pydash.flatten(match)))
+
+    def _get_external_number(self, number_type: str) -> str:
+        return getattr(self.external_numbers, f"{number_type}_number")
+
+    @property
+    def cdli_number(self) -> str:
+        return self._get_external_number("cdli")
+
+    @property
+    def bm_id_number(self) -> str:
+        return self._get_external_number("bm_id")
+
+    @property
+    def archibab_number(self) -> str:
+        return self._get_external_number("archibab")
+
+    @property
+    def bdtns_number(self) -> str:
+        return self._get_external_number("bdtns")
+
+    @property
+    def ur_online_number(self) -> str:
+        return self._get_external_number("ur_online")

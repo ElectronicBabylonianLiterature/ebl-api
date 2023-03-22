@@ -1,12 +1,8 @@
 from typing import Dict
-
-import falcon
-
 from ebl.dispatcher import create_dispatcher
 from ebl.errors import DataError
 from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.users.web.require_scope import require_scope
 from ebl.signs.web.logograms_injector import inject_logograms_unicode
 
 
@@ -49,7 +45,6 @@ class SignsSearch:
                 )
         return params_copy
 
-    @falcon.before(require_scope, "read:words")
     def on_get(self, req, resp):
         signs = self._dispatch(self._parse_sub_index(req.params))
         if "wordId" in req.params:

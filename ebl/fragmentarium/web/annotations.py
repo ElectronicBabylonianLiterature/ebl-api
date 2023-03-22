@@ -26,7 +26,6 @@ class AnnotationResource:
                 description="Fragment numbers do not match."
             )
 
-    @falcon.before(require_scope, "read:fragments")
     @validate(None, AnnotationsSchema())
     def on_get(self, req, resp: falcon.Response, number: str):
         museum_number = parse_museum_number(number)

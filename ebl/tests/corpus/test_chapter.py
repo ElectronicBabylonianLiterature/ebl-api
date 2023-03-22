@@ -1,6 +1,6 @@
 import attr
 import pytest
-from ebl.common.period import Period, PeriodModifier
+from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import (
     Chapter,

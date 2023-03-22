@@ -1,10 +1,11 @@
 import attr
 from freezegun import freeze_time
 import pytest
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    ExternalNumbers,
     Fragment,
     Genre,
     Measure,
@@ -45,16 +46,6 @@ def test_number():
 def test_accession():
     fragment = FragmentFactory.build(accession="accession-3")
     assert fragment.accession == "accession-3"
-
-
-def test_cdli_number():
-    fragment = FragmentFactory.build(cdli_number="cdli-4")
-    assert fragment.cdli_number == "cdli-4"
-
-
-def test_bm_id_number():
-    fragment = FragmentFactory.build(bm_id_number="bmId-2")
-    assert fragment.bm_id_number == "bmId-2"
 
 
 def test_edited_in_oracc_project():
@@ -126,7 +117,7 @@ def test_record():
 
 def test_folios():
     fragment = FragmentFactory.build()
-    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    assert fragment.folios == Folios((Folio("WGL", "1"), Folio("ARG", "1")))
 
 
 def test_text():
@@ -182,6 +173,31 @@ def test_scopes():
     scopes = ["CAIC"]
     fragment = FragmentFactory.build(authorized_scopes=scopes)
     assert fragment.authorized_scopes == scopes
+
+
+@pytest.mark.parametrize(
+    "number",
+    [
+        "cdli_number",
+        "bm_id_number",
+        "archibab_number",
+        "bdtns_number",
+        "ur_online_number",
+    ],
+)
+def test_external_number(number):
+    external_numbers = ExternalNumbers(**{number: "test-42"})
+    fragment = FragmentFactory.build(external_numbers=external_numbers)
+
+    assert getattr(fragment, number) == "test-42"
+
+
+def test_external_numbers():
+    external_numbers = ExternalNumbers(
+        cdli_number="A38", bm_id_number="W_1848-0720-117"
+    )
+    fragment = FragmentFactory.build(external_numbers=external_numbers)
+    assert fragment.external_numbers == external_numbers
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -316,7 +332,7 @@ GET_MATCHING_LINES_DATA = [
 def test_get_matching_lines(string, expected, sign_repository, signs):
     for sign in signs:
         sign_repository.create(sign)
-    transliterated_fragment = FragmentFactory.build(
+    transliterated_fragment: Fragment = FragmentFactory.build(
         text=parse_atf_lark(
             Atf(
                 "1'. [...-ku]-nu-ši [...]\n"

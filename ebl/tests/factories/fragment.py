@@ -1,17 +1,17 @@
 from typing import Sequence
 
-import factory
-from ebl.common.period import Period, PeriodModifier
+import factory.fuzzy
+from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    ExternalNumbers,
     Fragment,
     Genre,
     Introduction,
-    Scope,
     Script,
     UncuratedReference,
 )
@@ -98,13 +98,22 @@ class ScriptFactory(factory.Factory):
     uncertain = factory.Faker("boolean")
 
 
+class ExternalNumbersFactory(factory.Factory):
+    class Meta:
+        model = ExternalNumbers
+
+    cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
+    bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
+    archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
+    bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    cdli_number = factory.Sequence(lambda n: f"cdli-{n}")
-    bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     edited_in_oracc_project = factory.Sequence(lambda n: f"editedInOracc-{n}")
     accession = factory.Sequence(lambda n: f"accession-{n}")
     museum = factory.Faker("word")
@@ -113,7 +122,7 @@ class FragmentFactory(factory.Factory):
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)
-    folios = Folios((Folio("WGL", "1"), Folio("XXX", "1")))
+    folios = Folios((Folio("WGL", "1"), Folio("ARG", "1")))
     genres = factory.Iterator(
         [
             (
@@ -123,13 +132,9 @@ class FragmentFactory(factory.Factory):
             (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
         ]
     )
-    authorized_scopes = [
-        Scope.CAIC,
-        Scope.SIPPARLIBRARY,
-        Scope.URUKLBU,
-        Scope.ITALIANNINEVEH,
-    ]
+    authorized_scopes = []
     introduction = Introduction("text", (StringPart("text"),))
+    external_numbers = factory.SubFactory(ExternalNumbersFactory)
 
 
 class InterestingFragmentFactory(FragmentFactory):
@@ -348,7 +353,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         "X MU TA MA UD\n"
         "ŠU/|BI×IS|"
     )
-    folios = Folios((Folio("WGL", "3"), Folio("XXX", "3")))
+    folios = Folios((Folio("WGL", "3"), Folio("ARG", "3")))
     record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
     line_to_vec = (
         (

@@ -4,7 +4,7 @@ import re
 
 import pytest
 from hamcrest.library import starts_with
-from ebl.common.period import Period
+from ebl.common.domain.period import Period
 
 from ebl.errors import DataError
 from ebl.tests.assertions import assert_exception_has_errors

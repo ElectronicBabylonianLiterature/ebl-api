@@ -23,7 +23,7 @@ import ebl.context
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
-from ebl.cache.application.custom_cache import CustomCache
+from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
@@ -72,8 +72,9 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
-from ebl.users.domain.user import User
+from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
+from ebl.fragmentarium.web.annotations import AnnotationResource
 
 
 @pytest.fixture(scope="session")
@@ -303,7 +304,7 @@ def folio_with_allowed_scope():
 
 @pytest.fixture
 def folio_with_restricted_scope():
-    return FakeFile("AKG_001.jpg", b"klgsFPOutx", {"scope": "AKG-folios"})
+    return FakeFile("ILF_001.jpg", b"klgsFPOutx", {"scope": "ILF-folios"})
 
 
 @pytest.fixture
@@ -363,38 +364,31 @@ def annotations_service(
 def user() -> User:
     return Auth0User(
         {
-            "scope": [
-                "read:words",
-                "write:words",
-                "transliterate:fragments",
-                "lemmatize:fragments",
-                "annotate:fragments",
-                "read:fragments",
-                "read:CAIC-fragments",
-                "read:SIPPARLIBRARY-fragments",
-                "read:ITALIANNINEVEH-fragments",
-                "read:URUKLBU-fragments",
-                "read:WGL-folios",
-                "read:bibliography",
-                "write:bibliography",
-                "read:texts",
-                "write:texts",
-                "create:texts",
-            ]
+            "scope": " ".join(
+                [
+                    "read:words",
+                    "write:words",
+                    "transliterate:fragments",
+                    "lemmatize:fragments",
+                    "annotate:fragments",
+                    "read:CAIC-fragments",
+                    "read:SIPPARLIBRARY-fragments",
+                    "read:ITALIANNINEVEH-fragments",
+                    "read:URUKLBU-fragments",
+                    "read:WGL-folios",
+                    "read:bibliography",
+                    "write:bibliography",
+                    "read:texts",
+                    "write:texts",
+                    "create:texts",
+                ]
+            )
         },
         lambda: {
             "name": "test.user@example.com",
             "https://ebabylon.org/eblName": "User",
         },
     )
-
-
-@pytest.fixture
-def basic_fragmentarium_permissions_user(user) -> User:
-    user._access_token["scope"] = [
-        "read:fragments",
-    ]
-    return user
 
 
 @pytest.fixture
@@ -432,7 +426,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
-        custom_cache=CustomCache(mongo_cache_repository),
+        custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
     )
 
@@ -443,24 +437,17 @@ def client(context):
     return testing.TestClient(api)
 
 
+class EnsureAnnotationPost:
+    def on_post(self, req, resp):
+        return AnnotationResource(annotations_service).on_post(req, resp, "K.123")
+
+
 @pytest.fixture
 def guest_client(context):
     api = ebl.app.create_app(
-        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: None))
+        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: Guest()))
     )
-    return testing.TestClient(api)
-
-
-@pytest.fixture
-def basic_fragmentarium_permissions_client(
-    context, basic_fragmentarium_permissions_user
-):
-    api = ebl.app.create_app(
-        attr.evolve(
-            context,
-            auth_backend=NoneAuthBackend(lambda: basic_fragmentarium_permissions_user),
-        )
-    )
+    api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
     return testing.TestClient(api)
 
 

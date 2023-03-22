@@ -1,15 +1,12 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Tuple, Optional
+from typing import List, Sequence, Optional
+from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.application.fragmentarium_search_query import (
-    FragmentariumSearchQuery,
-)
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import QueryType
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
@@ -36,24 +33,35 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query_by_museum_number(
-        self, number: MuseumNumber, lines: Optional[Sequence[int]] = None
+        self,
+        number: MuseumNumber,
+        lines: Optional[Sequence[int]] = None,
+        exclude_lines: bool = False,
     ) -> Fragment:
         ...
 
     @abstractmethod
-    def query_random_by_transliterated(self) -> List[Fragment]:
+    def query_random_by_transliterated(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_path_of_the_pioneers(self) -> List[Fragment]:
+    def query_path_of_the_pioneers(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_by_transliterated_sorted_by_date(self) -> List[Fragment]:
+    def query_by_transliterated_sorted_by_date(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[Fragment]:
         ...
 
     @abstractmethod
-    def query_by_transliterated_not_revised_by_other(self) -> List[FragmentInfo]:
+    def query_by_transliterated_not_revised_by_other(
+        self, user_scopes: Sequence[Scope]
+    ) -> List[FragmentInfo]:
         ...
 
     @abstractmethod
@@ -83,11 +91,9 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_fragmentarium(
-        self, query: FragmentariumSearchQuery
-    ) -> Tuple[Sequence[Fragment], int]:
+    def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
         ...
 
     @abstractmethod
-    def query_lemmas(self, query_type: QueryType, lemmas: Sequence[str]) -> QueryResult:
+    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         ...
