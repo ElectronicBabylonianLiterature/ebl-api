@@ -6,7 +6,7 @@ from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.changelog import Changelog
-from ebl.corpus.infrastructure.mongo_text_repository import MongoCorpusRepository
+from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import FileRepository
@@ -40,7 +40,7 @@ class Context:
     fragment_repository: FragmentRepository
     changelog: Changelog
     bibliography_repository: BibliographyRepository
-    text_repository: MongoCorpusRepository
+    text_repository: MongoTextRepository
     annotations_repository: AnnotationsRepository
     lemma_repository: LemmaRepository
     custom_cache: ChapterCache

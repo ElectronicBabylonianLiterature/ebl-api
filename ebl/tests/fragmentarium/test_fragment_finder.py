@@ -70,6 +70,12 @@ def test_find_without_lines(
     assert fragment_finder.find(number, lines, True)[0].text.lines == tuple()
 
 
+def test_list_all_fragments(fragment_repository) -> None:
+    fragment = FragmentFactory.build()
+    fragment_repository.create(fragment)
+    assert fragment_repository.list_all_fragments() == [str(fragment.number)]
+
+
 def test_find_not_found(fragment_finder, fragment_repository, when):
     number = MuseumNumber("unknown", "id")
     (

@@ -125,6 +125,26 @@ def expect_find_and_update_chapter(
     )
 
 
+def test_list_all_texts(text_repository) -> None:
+    text_repository.create(TEXT)
+    assert text_repository.list_all_texts() == [
+        {"index": TEXT.index, "category": TEXT.category, "genre": TEXT.genre.value}
+    ]
+
+
+def test_list_all_chapters(text_repository) -> None:
+    text_repository.create_chapter(CHAPTER)
+    assert text_repository.list_all_chapters() == [
+        {
+            "chapter": CHAPTER.name,
+            "stage": CHAPTER.stage.value,
+            "index": CHAPTER.text_id.index,
+            "category": CHAPTER.text_id.category,
+            "genre": CHAPTER.text_id.genre.value,
+        }
+    ]
+
+
 def test_find_text(corpus, text_repository, bibliography, when) -> None:
     when(text_repository).find(TEXT.id).thenReturn(TEXT)
 

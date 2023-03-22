@@ -1,7 +1,7 @@
 from typing import List, Optional, Sequence, Tuple
 import attr
 from ebl.common.query.query_result import CorpusQueryResult
-from ebl.corpus.application.corpus_repository import CorpusRepository
+from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
     ManuscriptReferenceInjector,
@@ -39,13 +39,13 @@ COLLECTION = "chapters"
 class Corpus:
     def __init__(
         self,
-        repository: CorpusRepository,
+        repository: TextRepository,
         bibliography,
         changelog,
         sign_repository: SignRepository,
         parallel_injector: ParallelLineInjector,
     ):
-        self._repository: CorpusRepository = repository
+        self._repository: TextRepository = repository
         self._bibliography = bibliography
         self._changelog = changelog
         self._sign_repository = sign_repository

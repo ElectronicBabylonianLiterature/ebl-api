@@ -13,7 +13,7 @@ from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.common.query.query_result import CorpusQueryResult
 
 
-class CorpusRepository(ABC):
+class TextRepository(ABC):
     @abstractmethod
     def create(self, text: Text) -> None:
         ...
