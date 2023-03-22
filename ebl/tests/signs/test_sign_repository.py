@@ -233,3 +233,9 @@ def test_search_by_lists_name(
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search("unknown", 1) is None
+
+
+def test_list_all_signs(sign_repository, signs) -> None:
+    for sign in signs:
+        sign_repository.create(sign)
+    assert sign_repository.list_all_signs() == sorted([sign.name for sign in signs])
