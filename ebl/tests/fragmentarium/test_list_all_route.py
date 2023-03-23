@@ -1,5 +1,4 @@
 import falcon
-import pytest
 from ebl.tests.factories.fragment import FragmentFactory
 
 
