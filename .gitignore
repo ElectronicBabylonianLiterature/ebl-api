@@ -119,6 +119,7 @@ run_backend.sh
 # Migration script output
 invalid_fragments.tsv
 invalid_texts.tsv
+failed_note_parses.csv
 
 # Line To Vec Scores
 line_to_vec_ranking_results
