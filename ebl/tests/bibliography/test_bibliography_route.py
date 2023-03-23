@@ -120,3 +120,10 @@ def test_search(client, saved_entry, params):
 
     assert result.json == [saved_entry]
     assert result.status == falcon.HTTP_OK
+
+
+def test_list_all_bibliography(client, saved_entry):
+    result = client.simulate_get("/bibliography/all")
+
+    assert result.json == [saved_entry["id"]]
+    assert result.status == falcon.HTTP_OK

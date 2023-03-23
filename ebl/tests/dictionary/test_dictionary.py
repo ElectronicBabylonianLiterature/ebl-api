@@ -5,15 +5,13 @@ from freezegun import freeze_time
 from ebl.errors import NotFoundError
 from urllib.parse import urlencode
 import copy
-from ebl.transliteration.domain.word_tokens import Word
-from ebl.dictionary.application.dictionary_service import Dictionary
 
 COLLECTION = "words"
 
 
-def test_list_all_words(database, dictionary: Dictionary, word: Word) -> None:
+def test_list_all_words(database, dictionary, word) -> None:
     dictionary.create(word)
-    assert dictionary.list_all_words() == ["part1 part2 I"]
+    assert dictionary.list_all_words() == [word["_id"]]
 
 
 def test_create_and_find(database, dictionary, word) -> None:
