@@ -1,0 +1,1712 @@
+_id,text,error
+"1880,0719.285","Alu, thorns (@akk{{u₂}AD₂/KIŠI₁₆})? [ER]","Invalid markup: Alu, thorns ({u₂}AD₂/KIŠI₁₆)? [ER]. No terminal defined for '{' at line 1 col 14
+
+Alu, thorns ({u₂}AD₂/KIŠI₁₆)? [ER]
+             ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+"1881,0727.69","cf. K.20101, maybe a join? [ZsF]
+-> unfortunately no (compare overlap in @akk{DUB} of @akk{{lu₂}GAL DUB.SAR-MEŠ}) but still same type of colophon [TM] 
+
+Is this BRONCHIA II? (compare K.2614) [TM]","Invalid markup: cf. K.20101, maybe a join? [ZsF]
+-> unfortunately no (compare overlap in DUB of {lu₂}GAL DUB.SAR-MEŠ) but still same type of colophon [TM] 
+
+Is this BRONCHIA II? (compare K.2614) [TM]. No terminal defined for '{' at line 1 col 81
+
+rtunately no (compare overlap in DUB of {lu₂}GAL DUB.SAR-MEŠ) but still same typ
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.121072,Eršema @sux{dilmun{ki} nigin-na} 1,"Invalid markup: Eršema dilmun{ki} nigin-na 1. No terminal defined for '{' at line 1 col 14
+
+Eršema dilmun{ki} nigin-na 1
+             ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.123407,"Lexical, @i{Harra} I 178-187; // Ni.1893, i 3'-10' [AH]","Invalid markup: Lexical, @{Harra} I 178-187; // Ni.1893, i 3'-10' [AH]. No terminal defined for '{' at line 1 col 11
+
+Lexical, @{Harra} I 178-187; // Ni.1893, i 3'-10' 
+          ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+BM.31475,"Obv // Uḫ XIII/XV 71–84a, Rev (a) bilingual (@sux{{d}lugal-amaš-pa-e₃-a} || bennu), (b) Bīt rimki III (// SpTU III 67 i 1-6) [EJ]","Invalid markup: Obv // Uḫ XIII/XV 71–84a, Rev (a) bilingual ({d}LUGAL.AMAŠ.PA.È.A || bennu), (b) Bīt rimki III (// SpTU III 67 i 1-6) [EJ]. No terminal defined for '{' at line 1 col 46
+
+/ Uḫ XIII/XV 71–84a, Rev (a) bilingual ({d}LUGAL.AMAŠ.PA.È.A || bennu), (b) Bīt 
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.32631,"Seed of Kingship? [EJ]
+rather @sux{u₃ ĝa₂-e {d}+en-lil₂-la₂}? [TM]","Invalid markup: Seed of Kingship? [EJ]
+rather u₃ ĝa₂-e {d}+en-lil₂-la₂? [TM]. No terminal defined for '{' at line 1 col 40
+
+Seed of Kingship? [EJ] rather u₃ ĝa₂-e {d}+en-lil₂-la₂? [TM]
+                                       ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.33868,"Same tablet as BM.33725 ? (no photo, only Strassmaier’s notes) [EJ]
+
+(""Rm-IV.430. Ein Stück einer großen Tafel, siehe [sketch, right edge], nur mit Schreibübung DIŠ ZU, LAM, LAM×KUR usw.; Rückseite @akk{{munus?#}-re-ʾ-in-du a-ha-[x (x)]} usw. ohne allen Wert, Rückseite Reste von 5 Zeilen, Vorderseite 25 Zeichen untereinander in drei Reihen. — Ohne allen Wert —"" [JNS])","Invalid markup: Same tablet as BM.33725 ? (no photo, only Strassmaier’s notes) [EJ]
+
+(""Rm-IV.430. Ein Stück einer großen Tafel, siehe [sketch, right edge], nur mit Schreibübung DIŠ ZU, LAM, LAM×KUR usw.; Rückseite {munus?#}-re-ʾ-in-du a-ha-[x (x)] usw. ohne allen Wert, Rückseite Reste von 5 Zeilen, Vorderseite 25 Zeichen untereinander in drei Reihen. — Ohne allen Wert —"" [JNS]). No terminal defined for '{' at line 1 col 130
+
+ng DIŠ ZU, LAM, LAM×KUR usw.; Rückseite {munus?#}-re-ʾ-in-du a-ha-[x (x)] usw. o
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.35273,compare SBH 14 (@akk{MU.164.KAM {m}a-lik-sa-an-dar LUGAL}),"Invalid markup: compare SBH 14 (MU.164.KAM {m}a-lik-sa-an-dar LUGAL). No terminal defined for '{' at line 1 col 28
+
+compare SBH 14 (MU.164.KAM {m}a-lik-sa-an-dar LUGAL)
+                           ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.35423,@akk{[...] {u₂}GAMUN{s[ar} ...]},"Invalid markup: [...] {u₂}GAMUN{s[ar} ...]. No terminal defined for '{' at line 1 col 7
+
+[...] {u₂}GAMUN{s[ar} ...]
+      ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.36148,"@sux{za-ha-da} = @i{magšaru} ?
+@sux{{urudu}šen-du-us₂-sa} = @i{kibirru}
+@sux{aga-silig-ga} = @i{agasalamakku}; @i{kalmakru}
+
+weapons of Ninurta mentioned [EJ]","Invalid markup: za-ha-da = magšaru ?
+{urudu}šen-du-us₂-sa = kibirru
+aga-silig-ga = agasalamakku; kalmakru
+
+weapons of Ninurta mentioned [EJ]. No terminal defined for '{' at line 1 col 22
+
+za-ha-da = magšaru ? {urudu}šen-du-us₂-sa = kibirru aga-silig
+                     ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.36413,"5'-6' compare end of An : Anum III, but ŠUL mul is hard to reconcile with catchline of An : Anum IV (@sux{{d}inana} : @akk{{d}iš-tar}, should be a separate, additional entry 
+8'-15' looks like An : Anum IV 266-273, may improve Litke's edition if it hasn't been improved already, which only cites main YBC source [JLP]","Invalid markup: 5'-6' compare end of An : Anum III, but ŠUL mul is hard to reconcile with catchline of An : Anum IV ({d}inana : {d}iš-tar, should be a separate, additional entry 
+8'-15' looks like An : Anum IV 266-273, may improve Litke's edition if it hasn't been improved already, which only cites main YBC source [JLP]. No terminal defined for '{' at line 1 col 102
+
+concile with catchline of An : Anum IV ({d}inana : {d}iš-tar, should be a separa
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.36445,"See BM.36066, BM.35697 & BM.35702 [AH]
+
+
+reference in AfO 44-45, 180b fn. 39 (11': ""@akk{MUL KASKAL {d}UTU} = @akk{MIN} (Mercury?) @akk{ina ŠA₃ {mul}zi-ba-ni-tum} ..."") should be to BM.36445, not BM.36455.","Invalid markup: See BM.36066, BM.35697 & BM.35702 [AH]
+
+
+reference in AfO 44-45, 180b fn. 39 (11': ""MUL KASKAL {d}UTU = MIN (Mercury?) ina ŠA₃ {mul}zi-ba-ni-tum ..."") should be to BM.36445, not BM.36455.. No terminal defined for '{' at line 1 col 55
+
+fO 44-45, 180b fn. 39 (11': ""MUL KASKAL {d}UTU = MIN (Mercury?) ina ŠA₃ {mul}zi-
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.36455,"reference in AfO 44-45, 180b fn. 39 (11': ""@akk{MUL KASKAL {d}UTU} = @akk{MIN} (Mercury?) @akk{ina ŠA₃ {mul}zi-ba-ni-tum} ..."") should be to BM.36445, not BM.36455.","Invalid markup: reference in AfO 44-45, 180b fn. 39 (11': ""MUL KASKAL {d}UTU = MIN (Mercury?) ina ŠA₃ {mul}zi-ba-ni-tum ..."") should be to BM.36445, not BM.36455.. No terminal defined for '{' at line 1 col 55
+
+fO 44-45, 180b fn. 39 (11': ""MUL KASKAL {d}UTU = MIN (Mercury?) ina ŠA₃ {mul}zi-
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.36623,"Ḫarra IV & V
+
+The student probably jumped from IV 145b to 208, as 145b has @sux{{giš}giri₃-gub zu₂ am-si si-si-ga} and 208 has @sux{{giš}ka-kara₂ zu am-si si-(si)-ga} [TM]","Invalid markup: Ḫarra IV & V
+
+The student probably jumped from IV 145b to 208, as 145b has {giš}giri₃-gub zu₂ am-si si-si-ga and 208 has {giš}ka-kara₂ zu am-si si-(si)-ga [TM]. No terminal defined for '{' at line 1 col 62
+
+jumped from IV 145b to 208, as 145b has {giš}giri₃-gub zu₂ am-si si-si-ga and 20
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.37001,"compare DT.157 rev, erroneous plene/pleonastic rendering of @akk{{d}TIR.AN.NA}","Invalid markup: compare DT.157 rev, erroneous plene/pleonastic rendering of {d}TIR.AN.NA. No terminal defined for '{' at line 1 col 61
+
+erroneous plene/pleonastic rendering of {d}TIR.AN.NA
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.37267,@akk{{zi₂}MAD.GA₂},"Invalid markup: {zi₂}MAD.GA₂. No terminal defined for '{' at line 1 col 1
+
+{zi₂}MAD.GA₂
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"
+BM.37322,"god list? circle of Enlil, possibly @sux{{d}+en-[lil₂]} as a qualifying column? [JLP]","Invalid markup: god list? circle of Enlil, possibly {d}+en-[lil₂] as a qualifying column? [JLP]. No terminal defined for '{' at line 1 col 37
+
+god list? circle of Enlil, possibly {d}+en-[lil₂] as a qualifying column? [J
+                                    ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.37545,o?2 @sux{eridu{ki}},"Invalid markup: o?2 eridu{ki}. No terminal defined for '{' at line 1 col 10
+
+o?2 eridu{ki}
+         ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.37856,§3: Ḫḫ XIV (@sux{šaḫ {giš}gi} ff.),"Invalid markup: §3: Ḫḫ XIV (šaḫ {giš}gi ff.). No terminal defined for '{' at line 1 col 17
+
+§3: Ḫḫ XIV (šaḫ {giš}gi ff.)
+                ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38095,"cf. BM.37724
+Lambert’s transliteration has e₂ throughout, despite noting it is a divine boat list. Should @sux{e₂} be emended to @sux{{giš}ma₂} ?","Invalid markup: cf. BM.37724
+Lambert’s transliteration has e₂ throughout, despite noting it is a divine boat list. Should e₂ be emended to {giš}ma₂ ?. No terminal defined for '{' at line 1 col 124
+
+vine boat list. Should e₂ be emended to {giš}ma₂ ?
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38337,"astronomical? @akk{{mul₄}SAG.UŠ}, @akk{{mul₄}GU₄.UD}","Invalid markup: astronomical? {mul₄}SAG.UŠ, {mul₄}GU₄.UD. No terminal defined for '{' at line 1 col 15
+
+astronomical? {mul₄}SAG.UŠ, {mul₄}GU₄.UD
+              ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38388,"obverse g/k-ṣ/z-ṣ/z Akkadian section, similar but not identical to Nabnitu C (K.4314) 256f. reverse @sux{{giš}mitum} section, should be missing section of Nabnitu [JLP]","Invalid markup: obverse g/k-ṣ/z-ṣ/z Akkadian section, similar but not identical to Nabnitu C (K.4314) 256f. reverse {giš}/mitum/ section, should be missing section of Nabnitu [JLP]. No terminal defined for '{' at line 1 col 101
+
+cal to Nabnitu C (K.4314) 256f. reverse {giš}/mitum/ section, should be missing 
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38481,"end of a balag and beginning of an eršema whose incipit starts with @sux{dilmun{ki} nigin-na}
++ Marduk balag (@sux{še-eb e₂-sag-il₂-la}) -> @i{umun šermala an kia} or @i{ušumgin ni sia}?
+
+(Collated from photos taken in the BM (11/2021) [TM])
+
+r 9'-17' // BM.36198 2'-10' [ZsF]","Invalid markup: end of a balag and beginning of an eršema whose incipit starts with dilmun{ki} nigin-na
++ Marduk balag (še-eb e₂-sag-il₂-la) -> umun šermala an kia or ušumgin ni sia?
+
+(Collated from photos taken in the BM (11/2021) [TM])
+
+r 9'-17' // BM.36198 2'-10' [ZsF]. No terminal defined for '{' at line 1 col 75
+
+ eršema whose incipit starts with dilmun{ki} nigin-na + Marduk balag (še-eb e₂-s
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38732,"CCP 3.1.20.D - Enūma Anu Enlil 20 and 21 D (or 17 and 18, 17 month of @sux{{iti}KIN}, compare K.3775?), @i{mašʾaltu}","Invalid markup: CCP 3.1.20.D - Enūma Anu Enlil 20 and 21 D (or 17 and 18, 17 month of {iti}KIN, compare K.3775?), mašʾaltu. No terminal defined for '{' at line 1 col 71
+
+ 20 and 21 D (or 17 and 18, 17 month of {iti}KIN, compare K.3775?), mašʾaltu
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38957,@akk{UKKIN TIN.TIR{ki}-MEŠ},"Invalid markup: UKKIN TIN.TIR{ki}-MEŠ. No terminal defined for '{' at line 1 col 14
+
+UKKIN TIN.TIR{ki}-MEŠ
+             ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38870,medical? (@akk{{u₂}TAR.MUŠ}),"Invalid markup: medical? ({u₂}tar-muš). No terminal defined for '{' at line 1 col 11
+
+medical? ({u₂}tar-muš)
+          ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.39060,Nabonid? (@akk{{d}AG-I}) ?,"Invalid markup: Nabonid? ({d}AG-I) ?. No terminal defined for '{' at line 1 col 11
+
+Nabonid? ({d}AG-I) ?
+          ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.39355,cp. @sux{mu-tin nu-nus dim₂-ma} a+14; @sux{e₂-tur₃-gin₇ nigin-na-am₃} 21; @sux{{d}utu-gin₇ e₃-ta} 145 [TM],"Invalid markup: cp. mu-tin nu-nus dim₂-ma a+14; e₂-tur₃-gin₇ nigin-na-am₃ 21; {d}utu-gin₇ e₃-ta 145 [TM]. No terminal defined for '{' at line 1 col 63
+
+-ma a+14; e₂-tur₃-gin₇ nigin-na-am₃ 21; {d}utu-gin₇ e₃-ta 145 [TM]
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.38937,@sux{uru₂-zu tin-tir{ki}} etc.,"Invalid markup: uru₂-zu tin-tir{ki} etc.. No terminal defined for '{' at line 1 col 16
+
+uru₂-zu tin-tir{ki} etc.
+               ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.39399,"Weidner god list, rev not entered, PNs @akk{{d}AG}-...? [JLP]","Invalid markup: Weidner god list, rev not entered, PNs {d}AK-...? [JLP]. No terminal defined for '{' at line 1 col 40
+
+Weidner god list, rev not entered, PNs {d}AK-...? [JLP]
+                                       ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.39413,medical? (@akk{{u₂}HAR.HAR}),"Invalid markup: medical? ({u₂}HAR.HAR). No terminal defined for '{' at line 1 col 11
+
+medical? ({u₂}HAR.HAR)
+          ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.39670,"cf. BM.83026 (Eršema @sux{dilmun{ki} nigin-na})
+see also @sux{abzu pe-el-la₂-am₃}","Invalid markup: cf. BM.83026 (Eršema dilmun{ki} nigin-na)
+see also abzu pellam. No terminal defined for '{' at line 1 col 28
+
+cf. BM.83026 (Eršema dilmun{ki} nigin-na) see also abzu pellam
+                           ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.39786,@sux{{d}lugal.er₉.ra},"Invalid markup: {d}lugal.er₉.ra. No terminal defined for '{' at line 1 col 1
+
+{d}lugal.er₉.ra
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"
+BM.39736,"@sux{{d}nin-urta-kam@v-ma?}
+
+bilingual?","Invalid markup: {d}nin-urta-kam@v-ma?
+
+bilingual?. No terminal defined for '{' at line 1 col 1
+
+{d}nin-urta-kam@v-ma?
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"
+BM.40253,"ura 9, @sux{{gi}ma-sa₂-ab} section, covers missing section 116-122 [JLP]","Invalid markup: ura 9, {gi}ma-sa₂-ab section, covers missing section 116-122 [JLP]. No terminal defined for '{' at line 1 col 8
+
+ura 9, {gi}ma-sa₂-ab section, covers missing se
+       ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.40758,ikribus concerning @i{sûrtu} and @i{lahanu} (obv 13 @akk{{d?#}UTU?# u# {d}IŠKUR}),"Invalid markup: ikribus concerning sûrtu and lahanu (obv 13 {d?#}UTU?# u# {d}IŠKUR). No terminal defined for '{' at line 1 col 45
+
+bus concerning sûrtu and lahanu (obv 13 {d?#}UTU?# u# {d}IŠKUR)
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.40943,compare also Robson OECT 16 List L (p. 206): 33;20 is the weight (@akk{KI.LA₂}) of @akk{{sig₄}AL.UR₃.RA} [(...)]; 18 is the @akk{KI.LA₂} of @akk{{sig₄}ŠANABI-ti} [(...)],"Invalid markup: compare also Robson OECT 16 List L (p. 206): 33;20 is the weight (KI.LA₂) of {sig₄}AL.UR₃.RA [(...)]; 18 is the KI.LA₂ of {sig₄}ŠANABI-ti [(...)]. No terminal defined for '{' at line 1 col 78
+
+. 206): 33;20 is the weight (KI.LA₂) of {sig₄}AL.UR₃.RA [(...)]; 18 is the KI.LA
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.41003,,"Invalid markup: 
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+BM.41328,,"Invalid markup: 
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+BM.41717,"chronicle? [ZsF] cf. Babylonian Chronicle
+
+rev? compare Grayson Chronicle I iv 33-36 (even though there, the gods go from Ashur (!) to Babylon - compare also Shibata, Orient 49 with a possible intentional distortion of @akk{BAL.TIL{ki}} as @akk{BAL{ki}} in the bilingual royal inscription of Šamaš-šum-ukīn RIMB 2, B.6.33.1) [TM]
+
+
+Esarhaddon in Chronicle I from iii 38 - iv 33","Invalid markup: chronicle? [ZsF] cf. Babylonian Chronicle
+
+rev? compare Grayson Chronicle I iv 33-36 (even though there, the gods go from Ashur (!) to Babylon - compare also Shibata, Orient 49 with a possible intentional distortion of BAL.TIL{ki} as BAL{ki} in the bilingual royal inscription of Šamaš-šum-ukīn RIMB 2, B.6.33.1) [TM]
+
+
+Esarhaddon in Chronicle I from iii 38 - iv 33. No terminal defined for '{' at line 1 col 184
+
+ssible intentional distortion of BAL.TIL{ki} as BAL{ki} in the bilingual royal i
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.41960,"stillbirth? (@akk{ŠU {d}ku₃-bu})
+non-physical join BM.41897+; most likely SA.GIG 30 [ES]","Invalid markup: stillbirth? (ŠU {d}ku₃-bu)
+non-physical join BM.41897+; most likely SA.GIG 30 [ES]. No terminal defined for '{' at line 1 col 17
+
+stillbirth? (ŠU {d}ku₃-bu) non-physical join BM.41897+; 
+                ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.42858,7': @akk{{m}ar-ša₂-ka-a LUG[AL ...]},"Invalid markup: 7': {m}ar-ša₂-ka-a LUG[AL. No terminal defined for '{' at line 1 col 5
+
+7': {m}ar-ša₂-ka-a LUG[AL
+    ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.42867,2': 30 @akk{ar₂ {mul₂}BABBAR 1 ½ KUŠ₃},"Invalid markup: 2': 30 ar₂ {mul₂}BABBAR 1 1/2 KUŠ₃. No terminal defined for '{' at line 1 col 12
+
+2': 30 ar₂ {mul₂}BABBAR 1 1/2 KUŠ₃
+           ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.45428,"from Leichty Folio; not collated
+o 11'-13' // // K.2208+ i 21-23, hence EAE 31? [ZsF]
+rev. seems // K.3922+ [ZsF]
+rev. // K.3609, @akk{{iti}ŠU} and @akk{{iti}NE} [JLP]","Invalid markup: from Leichty Folio; not collated
+o 11'-13' // // K.2208+ i 21-23, hence EAE 31? [ZsF]
+rev. seems // K.3922+ [ZsF]
+rev. // K.3609, {iti}ŠU and {iti}NE [JLP]. No terminal defined for '{' at line 1 col 131
+
+ seems // K.3922+ [ZsF] rev. // K.3609, {iti}ŠU and {iti}NE [JLP]
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.50705,6 very narrow columns; col.3 lists masc. PNs with @akk{{d}NA₃}; col.4 fem. PNs with Tuqnu,"Invalid markup: 6 very narrow columns; col.3 lists masc. PNs with {d}NA₃; col.4 fem. PNs with Tuqnu. No terminal defined for '{' at line 1 col 51
+
+row columns; col.3 lists masc. PNs with {d}NA₃; col.4 fem. PNs with Tuqnu
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.54316,"@sux{{d}innin ša₃ gur₄-ra}, MS not in Sjöberg 1975","Invalid markup: {d}innin ša₃ gur₄-ra, MS not in Sjöberg 1975. No terminal defined for '{' at line 1 col 1
+
+{d}innin ša₃ gur₄-ra, MS not in Sjöberg 
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"
+BM.60794,"// BM.76206
++ BM.66141 [TM], restored accordingly
+
+// or (+) F.138 ? [TM]
+
+-> @akk{{iti}BARA₂.SAG.SAG}","Invalid markup: // BM.76206
++ BM.66141 [TM], restored accordingly
+
+// or (+) F.138 ? [TM]
+
+-> {iti}BARA₂.SAG.SAG. No terminal defined for '{' at line 1 col 4
+
+-> {iti}BARA₂.SAG.SAG
+   ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.66635,@akk{[BALA]G ša₂ {d}en-lil₂ NU AL.TIL},"Invalid markup: [bala]g ša₂ {d}en-lil₂ nu al-til. No terminal defined for '{' at line 1 col 13
+
+[bala]g ša₂ {d}en-lil₂ nu al-til
+            ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.71950,"legal proceedings? [ZsF]
+@sux{{d}en da nu} also in BM.37466 [TM]
+could be a PN too [ZsF]","Invalid markup: legal proceedings? [ZsF]
+{d}en da nu also in BM.37466 [TM]
+could be a PN too [ZsF]. No terminal defined for '{' at line 1 col 26
+
+legal proceedings? [ZsF] {d}en da nu also in BM.37466 [TM] could 
+                         ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.72949,"cf. K.10378 and parallel sections Balag @sux{{d}utu-gin₇ e₃-ta} [TM]
+(not collated)","Invalid markup: cf. K.10378 and parallel sections Balag {d}utu-gin₇ e₃-ta [TM]
+(not collated). No terminal defined for '{' at line 1 col 41
+
+cf. K.10378 and parallel sections Balag {d}utu-gin₇ e₃-ta [TM] (not collated)
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.73556,"Some lines, including obv.ll.1'-3', are not same with Gesche AOAT 275, p.612
+
+@akk{{d#}}/@akk{[MU]L} (Lambert)","Invalid markup: Some lines, including obv.ll.1'-3', are not same with Gesche AOAT 275, p.612
+
+{d#}/[MU]L (Lambert). No terminal defined for '{' at line 1 col 1
+
+{d#}/[MU]L (Lambert)
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"
+BM.83026,"Eršema @sux{dilmun{ki} nigin-na}, etc. w/musical instructions, Gabbay Eršema Prayers of the First Millennium II, 276f., Gabbay/Mirelman ZA 101, 291","Invalid markup: Eršema dilmun{ki} nigin-na, etc. w/musical instructions, Gabbay Eršema Prayers of the First Millennium II, 276f., Gabbay/Mirelman ZA 101, 291. No terminal defined for '{' at line 1 col 14
+
+Eršema dilmun{ki} nigin-na, etc. w/musical instructio
+             ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.82863,compare BM.39892 (@sux{{d}en ...}; @sux{{d}še}),"Invalid markup: compare BM.39892 ({d}en...; {d}še). No terminal defined for '{' at line 1 col 19
+
+compare BM.39892 ({d}en...; {d}še)
+                  ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.98602,5' @akk{{na₄}ZU₂.LUM} ? [ZsF],"Invalid markup: 5' {na₄}ZU₂.LUM ? [ZsF]. No terminal defined for '{' at line 1 col 4
+
+5' {na₄}ZU₂.LUM ? [ZsF]
+   ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.98596,"@akk{DIŠ 30 ina {iti}BARA₂ TUR₃ NIGIN₂-ma}, // K.2134+ obv. 19f., 1882,0323.139 (+), K.10422, BM.38295, BM.98596 [JLP]
+reverse almost entirely illegible","Invalid markup: DIŠ 30 ina {iti}BARA₂ TUR₃ NIGIN₂-ma, // K.2134+ obv. 19f., 1882,0323.139 (+), K.10422, BM.38295, BM.98596 [JLP]
+reverse almost entirely illegible. No terminal defined for '{' at line 1 col 12
+
+DIŠ 30 ina {iti}BARA₂ TUR₃ NIGIN₂-ma, // K.2134+ ob
+           ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.98625,"RB: nach Zeile 4 weitere @akk{{d}IŠKUR}
+EAE 45, r. 3'-5' (see Gehlken 2012, 46-47; BM.98625 is mentioned as possibly containing some omens from EAE 45 in 47 fn. 4) [AH]","Invalid markup: RB: nach Zeile 4 weitere {d}IŠKUR
+EAE 45, r. 3'-5' (see Gehlken 2012, 46-47; BM.98625 is mentioned as possibly containing some omens from EAE 45 in 47 fn. 4) [AH]. No terminal defined for '{' at line 1 col 26
+
+RB: nach Zeile 4 weitere {d}IŠKUR EAE 45, r. 3'-5' (see Gehlken 2
+                         ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.98994,"Aufzählungen von Gefäßen, Tieren etc.:
+obv. 5' @akk{PAB an-ni-u₂ {udu}SISKUR-MEŠ}
+    11' @akk{[PA]B an-ni-u₂ ša GAL-ME[Š]}
+    13' end of obverse
+
+%(portrait)%","Invalid markup: Aufzählungen von Gefäßen, Tieren etc.:
+obv. 5' PAB an-ni-u₂ {udu}SISKUR-MEŠ
+    11' [PA]B an-ni-u₂ ša GAL-ME[Š]
+    13' end of obverse
+
+%(portrait)%. No terminal defined for '{' at line 1 col 61
+
+äßen, Tieren etc.: obv. 5' PAB an-ni-u₂ {udu}SISKUR-MEŠ 11' [PA]B an-ni-u₂ ša GA
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+BM.99268,"RB: @akk{{d}15} erkennbar, sonst unlesbar","Invalid markup: RB: {d}15 erkennbar, sonst unlesbar. No terminal defined for '{' at line 1 col 5
+
+RB: {d}15 erkennbar, sonst unlesbar
+    ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+CBS.16,"o 3-9 // BM.39429 // BM.76230. Further dupls.: BM.34895, BM.41288 [JLP]; BM 37675 + 37868 (+) BM 37859, BM.40205 [JLP]; BM.38380 (Fincke, NABU 2020/3, no. 97).
+Commentary texts that disambiguate the logograms: BM.35401+ (+?) BM.45733 [WGL]; compare KAR 307.
+o 2 Civil AfO 25 66-67
+
+also // BM.35593 [JLP]
+also // BM.55592 [TM]
+also // BM.36193 [EJ]
+also // BM.41631 [AH]
+
+Also Commentary Text: BM.40169 [TM]
+
+see also the commentary BM.34035 o 28ff. (@akk{SA.<A> NIG₂.GIG AN.ŠAR₂ aš₂-šu₂ {mul₂}GAG.BAN IGI {mul₂}HUN a-na {+ta}tal-lu i-še-eṭ} etc.)","Invalid markup: o 3-9 // BM.39429 // BM.76230. Further dupls.: BM.34895, BM.41288 [JLP]; BM 37675 + 37868 (+) BM 37859, BM.40205 [JLP]; BM.38380 (Fincke, NABU 2020/3, no. 97).
+Commentary texts that disambiguate the logograms: BM.35401+ (+?) BM.45733 [WGL]; compare KAR 307.
+o 2 Civil AfO 25 66-67
+
+also // BM.35593 [JLP]
+also // BM.55592 [TM]
+also // BM.36193 [EJ]
+also // BM.41631 [AH]
+
+Also Commentary Text: BM.40169 [TM]
+
+see also the commentary BM.34035 o 28ff. (@akk{SA.<A> NIG₂.GIG AN.ŠAR₂ aš₂-šu₂ {mul₂}GAG.BAN IGI {mul₂}HUN a-na {ta+}tal-lu i-še-eṭ} etc.). No terminal defined for '}' at line 1 col 117
+
+u₂ {mul₂}GAG.BAN IGI {mul₂}HUN a-na {ta+}tal-lu i-še-eṭ} etc.)
+                                        ^
+Expected one of: 
+	* X
+	* __ANON_33
+	* ebl_atf_text_line__UNKNOWN_NUMBER_OF_SIGNS
+	* _ebl_atf_text_line__FOOT_SEPARATOR
+	* __ANON_27
+	* __ANON_28
+	* __ANON_29
+	* __ANON_30
+	* __ANON_31
+	* __ANON_32
+	* ebl_atf_text_line__VALUE_CHARACTER
+	* ebl_atf_text_line__LOGOGRAM_CHARACTER
+	* LESSTHAN
+	* __ANON_20
+	* __ANON_22
+	* LSQB
+	* LPAR
+	* _ebl_atf_text_line__WORD_SEPARATOR
+"
+DT.120,"Bīt rimki, @sux{ki-{d}utu-kam} for the sixth (Nineveh text form) or second (CBS 338 text form) ""house"" of the baptismal ceremony; for the varying attribution see Schwemer, Der kontraintuitive König, 78. Edited as part of ms. N(ineveh) B (= K.4819 [4R 23 No. 3] (+) DT.120 (+) K.2368 (+) 11661 (+) 13305) by J. Cooper, ZA 62 (1972) 65-81. DT.120 represents lines 24-30 of the reconstructed text. [HS]","Invalid markup: Bīt rimki, ki-{d}utu-kam for the sixth (Nineveh text form) or second (CBS 338 text form) ""house"" of the baptismal ceremony; for the varying attribution see Schwemer, Der kontraintuitive König, 78. Edited as part of ms. N(ineveh) B (= K.4819 [4R 23 No. 3] (+) DT.120 (+) K.2368 (+) 11661 (+) 13305) by J. Cooper, ZA 62 (1972) 65-81. DT.120 represents lines 24-30 of the reconstructed text. [HS]. No terminal defined for '{' at line 1 col 15
+
+Bīt rimki, ki-{d}utu-kam for the sixth (Nineveh text f
+              ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.10378,"K.10378 + K.15253 + K.20848 [TM], all transliterated here
+
+Zibum zibum 14f., BL 44, CLAM 347
+Balag @sux{{d}utu-gin₇ e₃-ta}","Invalid markup: K.10378 + K.15253 + K.20848 [TM], all transliterated here
+
+Zibum zibum 14f., BL 44, CLAM 347
+Balag {d}utu-gin₇ e₃-ta. No terminal defined for '{' at line 1 col 41
+
+Zibum zibum 14f., BL 44, CLAM 347 Balag {d}utu-gin₇ e₃-ta
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.10900,"RB: ""schwer lesbar""
+considered part of Practical Vocabulary Assur by Landsberger/Gurney AfO 18, 341 but compare close correspondence with ura 11 102f. (no Nineveh exemplars), with column 3' as explanatory column, @akk{{kuš}E₂-{giš}ERIN₂-MEŠ} unique (not understood as part of a balance in this context?)? [JLP]","Invalid markup: RB: ""schwer lesbar""
+considered part of Practical Vocabulary Assur by Landsberger/Gurney AfO 18, 341 but compare close correspondence with ura 11 102f. (no Nineveh exemplars), with column 3' as explanatory column, {kuš}E₂-{giš}ERIN₂-MEŠ unique (not understood as part of a balance in this context?)? [JLP]. No terminal defined for '{' at line 1 col 214
+
+, with column 3' as explanatory column, {kuš}E₂-{giš}ERIN₂-MEŠ unique (not under
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.11134,"1'-2' // @i{Iqqur īpuš} § 80, 11-12
+3'-8' // @i{Iqqur īpuš} § 67, 1-5 [AH]","Invalid markup: 1'-2' // i@{Iqqur īpuš} § 80, 11-12
+3'-8' // i@{Iqqur īpuš} § 67, 1-5 [AH]. No terminal defined for '{' at line 1 col 12
+
+1'-2' // i@{Iqqur īpuš} § 80, 11-12 3'-8' // i@{Iqq
+           ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+K.11376,"4'-10' // @i{Iqqur īpuš} § 56, 1-7 (K.7094+); @akk{SA.GIG} 19, 88'-91' (K.2274+) [AH]","Invalid markup: 4'-10' // @{Iqqur īpuš} § 56, 1-7 (K.7094+); SA.GIG 19, 88'-91' (K.2274+) [AH]. No terminal defined for '{' at line 1 col 12
+
+4'-10' // @{Iqqur īpuš} § 56, 1-7 (K.7094+); SA.GIG
+           ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+K.11695,"dupl. K.19831 [HS]. it might belong to BAM 516, IGI 3, also l. 9' could be also read @akk{[... ta-bi-l]a₁₂?}, also l. 10'  @akk{[... GA]ZI{sar}} [Panayotov]","Invalid markup: dupl. K.19831 [HS]. it might belong to BAM 516, IGI 3, also l. 9' could be also read ... ta-bi-l]a₁₂?, also l. 10'  GA]ZI{sar} [Panayotov]. No terminal defined for '{' at line 1 col 121
+
+read ... ta-bi-l]a₁₂?, also l. 10' GA]ZI{sar} [Panayotov]
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.12003,"Needs revision. Follows de Zorzi, 2014, 689. obverse or reverse is not clear","Invalid markup: Needs revision. Follows de Zorzi, 2014, 689. @obverse or @reverse is not clear. No terminal defined for 'o' at line 1 col 47
+
+revision. Follows de Zorzi, 2014, 689. @obverse or @reverse is not clear
+                                        ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+K.12093,rev? 1-6 // K.2187+ rev 19'-22' EAE 33/35 @akk{{iti}AB} long version?,"Invalid markup: rev? 1-6 // K.2187+ rev 19'-22' EAE 33/35 {iti}AB long version?. No terminal defined for '{' at line 1 col 43
+
+v? 1-6 // K.2187+ rev 19'-22' EAE 33/35 {iti}AB long version?
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.12638,Ziqīqu II,"Invalid markup: {d}Ziqīqu II. No terminal defined for '{' at line 1 col 1
+
+{d}Ziqīqu II
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"
+K.14201,"cf. K.7966 &d ? (reverse), perhaps + K.7005? [TM]","Invalid markup: cf. K.7966 @d ? (reverse), perhaps + K.7005? [TM]. No terminal defined for 'd' at line 1 col 13
+
+cf. K.7966 @d ? (reverse), perhaps + K.7005? [TM]
+            ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+K.14112,#ERROR!,"Invalid markup: + K.2786+ [ACH] for transliteration see there @reverse 37'-40'. No terminal defined for 'r' at line 1 col 48
+
+6+ [ACH] for transliteration see there @reverse 37'-40'
+                                        ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+K.14848,#ERROR!,"Invalid markup: + K.8514 [TM], transliterated sub K.8514;
+section dilmun{ki} nigin₂-u₃/na of Balag mu-tin nu-nus dim₂-ma; cf. Gabbay HES 2 331 sqq. (Synopsis No. X). No terminal defined for '{' at line 1 col 57
+
+ransliterated sub K.8514; section dilmun{ki} nigin₂-u₃/na of Balag mu-tin nu-nus
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.15225,TE possibly meant as @akk{{mul₂}} [ZsF],"Invalid markup: TE possibly meant as {mul₂} [ZsF]. No terminal defined for '{' at line 1 col 22
+
+TE possibly meant as {mul₂} [ZsF]
+                     ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.15400,"RB: ""Ich kann nahezu nichts lesen""; ""@akk{[... š]a? {uru}NIN[A ...]} ist vorhanden""","Invalid markup: RB: ""Ich kann nahezu nichts lesen""; ""š]a? {uru}NIN[A ist vorhanden"". No terminal defined for '{' at line 1 col 43
+
+: ""Ich kann nahezu nichts lesen""; ""š]a? {uru}NIN[A ist vorhanden""
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.15611,3' @akk{{lu₂}SAGI}? [ZsF],"Invalid markup: 3' {lu₂}SAGI? [ZsF]. No terminal defined for '{' at line 1 col 4
+
+3' {lu₂}SAGI? [ZsF]
+   ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.16270,,"Invalid markup:  . Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+K.1676,"
+","Invalid markup: 
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+K.17981,section of @akk{DIŠ {mul}ŠU.PA}?,"Invalid markup: section of DIŠ {mul}ŠU.PA?. No terminal defined for '{' at line 1 col 16
+
+section of DIŠ {mul}ŠU.PA?
+               ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.18377,Eršaḫuga @sux{me-e {d}utu-ra a-ra-zu ga-an-na-ab-du₁₁-ga},"Invalid markup: Eršaḫuga me-e {d}utu-ra a-ra-zu ga-an-na-ab-du₁₁-ga. No terminal defined for '{' at line 1 col 15
+
+Eršaḫuga me-e {d}utu-ra a-ra-zu ga-an-na-ab-du₁₁-ga
+              ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.18793,i 5': cf. @sux{{d}AŠ-pa₄-huš} in AN = Anu ii 100; god list? [ZsF],"Invalid markup: i 5': cf. {d}AŠ-pa₄-huš in AN = Anu ii 100; god list? [ZsF]. No terminal defined for '{' at line 1 col 11
+
+i 5': cf. {d}AŠ-pa₄-huš in AN = Anu ii 100; god li
+          ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.19211,"same scholars as in BM.134575
+cf. also @akk{{m}MU-lib₂-ši} in Catalogue of texts and authors","Invalid markup: same scholars as in BM.134575
+cf. also {m}MU-lib₂-ši in Catalogue of texts and authors. No terminal defined for '{' at line 1 col 40
+
+same scholars as in BM.134575 cf. also {m}MU-lib₂-ši in Catalogue of texts and 
+                                       ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.19285,"Possibly restore the line @sux{[e-ne-eg₂-ga₂-ni {gi}kid]-MAH-am₃}
+@sux{ama dumu-bi šu-ba mi-ni-ib-gur-re} is recurrent in balags (see Civil Reiner FS, 51). @sux{ildu₂} either reflects Ninildu or @sux{ildu₂} clan, etc. [JLP]","Invalid markup: Possibly restore the line e-ne-eg₂-ga₂-ni {gi}kid]-MAH-am₃
+ama dumu-bi šu-ba mi-ni-ib-gur-re the is recurrent in balags (see Civil Reiner FS, 51). ildu₂ either reflects Ninildu or ildu₂ clan, etc. [JLP]. No terminal defined for '{' at line 1 col 43
+
+ssibly restore the line e-ne-eg₂-ga₂-ni {gi}kid]-MAH-am₃ ama dumu-bi šu-ba mi-ni
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.1933,"
+","Invalid markup: 
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+K.19780,"LB: @sux{{d}šar₂-ur-ra an-ta lugal-bi-ir ugu-bi šu ba-an}
+OB: @sux{šar₂-ur₃-e en-re šu gu₂-bi-še₃ ba-an-na-ni-ib-ri-ri}
+Lugal.e VI (vDijk e₂, pl LXXVII)","Invalid markup: LB: @sux{{d}šar₂-ur-ra an-ta lugal-bi-ir ugu-bi šu ba-an}
+OB: @sux{šar₂-ur₃-e en-re šu gu₂bi-še₃ ba-an-na-ni-ib-ri-ri}
+Lugal.e VI (vDijk e₂, pl LXXVII). No terminal defined for 'b' at line 1 col 91
+
+ ba-an} OB: @sux{šar₂-ur₃-e en-re šu gu₂bi-še₃ ba-an-na-ni-ib-ri-ri} Lugal.e VI 
+                                        ^
+Expected one of: 
+	* ebl_atf_text_line__MODIFIER
+	* ebl_atf_text_line__UNCERTAIN
+	* ebl_atf_text_line__CORRECTION
+	* ebl_atf_text_line__COLLATION
+	* ebl_atf_text_line__DAMAGE
+	* LPAR
+	* _ebl_atf_text_line__WORD_SEPARATOR
+	* RSQB
+	* RPAR
+	* MORETHAN
+	* __ANON_21
+	* __ANON_23
+	* ebl_atf_text_line__CLOSE_DOCUMENT_ORIENTED_GLOSS
+	* RBRACE
+	* __ANON_19
+	* ebl_atf_text_line__IN_WORD_NEWLINE
+	* MINUS
+	* PLUS
+	* DOT
+	* COLON
+	* LESSTHAN
+	* __ANON_20
+	* __ANON_22
+	* LSQB
+	* __ANON_24
+	* __ANON_26
+	* LBRACE
+	* _ebl_atf_text_line__VARIANT_SEPARATOR
+"
+K.20101,"cf. 1881,0727.69, maybe a join? [ZsF]
+-> unfortunately no (compare overlap in @akk{DUB} of @akk{{lu₂}GAL DUB.SAR-MEŠ}) but still same type of colophon [TM] 
+Cf. K.3054. Issar-šumu-ēreš [SC]
+UDUG-HUL 4 168'f. 
+most probably (+) K.22122 [TM]
+(+) K.9397? [SC]
+
+compare also K.4895 (only other ruled manuscript of UH IV)","Invalid markup: cf. 1881,0727.69, maybe a join? [ZsF]
+-> unfortunately no (compare overlap in DUB of {lu₂}GAL DUB.SAR-MEŠ) but still same type of colophon [TM] 
+Cf. K.3054. Issar-šumu-ēreš [SC]
+UDUG-HUL 4 168'f. 
+most probably (+) K.22122 [TM]
+(+) K.9397? [SC]
+
+compare also K.4895 (only other ruled manuscript of UH IV). No terminal defined for '{' at line 1 col 86
+
+rtunately no (compare overlap in DUB of {lu₂}GAL DUB.SAR-MEŠ) but still same typ
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.20367,"Fragment preserves phrases from the Eršema @sux{dilmun{ki} nigin-na} 1 (HES 2, no. 1), the Eršema @sux{dilmun{ki} nigin-na} 2 (HES 2, no. 70) the the Balag-section of this name (cf. HES 2, no. X), but it does not run parallel to any of these compositions.","Invalid markup: Fragment preserves phrases from the Eršema dilmun{ki} nigin-na 1 (HES 2, no. 1), the Eršema dilmun{ki} nigin-na 2 (HES 2, no. 70) the the Balag-section of this name (cf. HES 2, no. X), but it does not run parallel to any of these compositions.. No terminal defined for '{' at line 1 col 50
+
+preserves phrases from the Eršema dilmun{ki} nigin-na 1 (HES 2, no. 1), the Erše
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.20509,"sequence of temple names in litany, possibly of Balaĝ section @sux{dilmun{ki} nigin-na} (cf. 1879,0708.70), @sux{dam-gar₃-ra ba-da-kur₂}","Invalid markup: sequence of temple names in litany, possibly of Balaĝ section dilmun{ki} nigin-na (cf. 1879,0708.70), dam-gar₃-ra ba-da-kur₂. No terminal defined for '{' at line 1 col 69
+
+litany, possibly of Balaĝ section dilmun{ki} nigin-na (cf. 1879,0708.70), dam-ga
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.20820,"ES, Balag section / Eršema @sux{dilmun{ki} nigin-na}, not (+) Sm.47 (cf. line ruling in zimbir line) [TM]","Invalid markup: ES, Balag section / Eršema dilmun{ki} nigin-na, not (+) Sm.47 (cf. line ruling in zimbir line) [TM]. No terminal defined for '{' at line 1 col 34
+
+ES, Balag section / Eršema dilmun{ki} nigin-na, not (+) Sm.47 (cf. line r
+                                 ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.20779,"// @sux{{d}utu lugal-am₃} (CLAM 423ff.) b+21-b+24 (= 1881,0727.66) [TM]
+cf. also K.2365++ ","Invalid markup: // {d}utu lugal-am₃ (CLAM 423ff.) b+21-b+24 (= 1881,0727.66) [TM]
+cf. also K.2365++ . No terminal defined for '{' at line 1 col 4
+
+// {d}utu lugal-am₃ (CLAM 423ff.) b+21-b+24
+   ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.21225,6' prob. Eršema @sux{dilmun{ki} nigin-na} [UG],"Invalid markup: 6' prob. Eršema dilmun{ki} nigin-na [UG]. No terminal defined for '{' at line 1 col 23
+
+6' prob. Eršema dilmun{ki} nigin-na [UG]
+                      ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.2187,"EAE 33/35 short version, months 1-12
+photo of entire reconstruction is under K.11051
+K.2731 is misplaced in reconstruction (@akk{{iti}ŠU} section), K.11123 belongs there
+K.2191+ joins K.11845 [JLP]
+K.11303 looks like part of piece, no contiguous join [JLP]
+rev 19'-22' // K.12093
+%(bubbles)% %(portrait)%","Invalid markup: EAE 33/35 short version, months 1-12
+photo of entire reconstruction is under K.11051
+K.2731 is misplaced in reconstruction ({iti}ŠU section), K.11123 belongs there
+K.2191+ joins K.11845 [JLP]
+K.11303 looks like part of piece, no contiguous join [JLP]
+rev 19'-22' // K.12093
+%(bubbles)% %(portrait)%. No terminal defined for '{' at line 1 col 125
+
+ K.2731 is misplaced in reconstruction ({iti}ŠU section), K.11123 belongs there 
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.21972,l. 2 @akk{[... ṣi]-bit} @i{Kūbi}? cf. CAD Ṣ 164a [ZsF],"Invalid markup: l. 2 @akk{[... ṣi]-bit Kūbi}? cf. CAD Ṣ 164a [ZsF]. No terminal defined for 'ū' at line 1 col 25
+
+l. 2 @akk{[... ṣi]-bit Kūbi}? cf. CAD Ṣ 164a [ZsF]
+                        ^
+Expected one of: 
+	* ebl_atf_text_line__LOGOGRAM_CHARACTER
+	* ebl_atf_text_line__SUB_INDEX
+	* ebl_atf_text_line__MODIFIER
+	* ebl_atf_text_line__UNCERTAIN
+	* ebl_atf_text_line__CORRECTION
+	* ebl_atf_text_line__COLLATION
+	* ebl_atf_text_line__DAMAGE
+	* LPAR
+	* __ANON_20
+	* _ebl_atf_text_line__WORD_SEPARATOR
+	* RSQB
+	* RPAR
+	* MORETHAN
+	* __ANON_21
+	* __ANON_23
+	* ebl_atf_text_line__CLOSE_DOCUMENT_ORIENTED_GLOSS
+	* RBRACE
+	* __ANON_19
+	* ebl_atf_text_line__IN_WORD_NEWLINE
+	* MINUS
+	* PLUS
+	* DOT
+	* COLON
+	* LESSTHAN
+	* __ANON_22
+	* LSQB
+	* __ANON_24
+	* __ANON_26
+	* LBRACE
+	* _ebl_atf_text_line__VARIANT_SEPARATOR
+"
+K.2736,"// BM.38767 [ZsF]
+joins K.5933 and K.6234, may also join Sm.1012, bond is in way [JLP]
+compare sequence of VAT.10163 (@akk{{iti}GAN}) Labat pg. 228","Invalid markup: // BM.38767 [ZsF]
+joins K.5933 and K.6234, may also join Sm.1012, bond is in way [JLP]
+compare sequence of VAT.10163 ({iti}GAN) Labat pg. 228. No terminal defined for '{' at line 1 col 119
+
+ay [JLP] compare sequence of VAT.10163 ({iti}GAN) Labat pg. 228
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.2863,"Bīt rimki, @sux{ki-{d}utu-kam} for the sixth (Nineveh text form) or second (CBS 338 text form) ""house"" of the baptismal ceremony; for the varying attribution see Schwemer, Der kontraintuitive König, 78. Edited as part of ms. N(ineveh) B (= K.2863 [4R 23 No. 3] (+) DT.120 (+) K.2368 (+) 11661 (+) 13305) by J. Cooper, ZA 62 (1972) 65-81. K.2863 represents lines 24-30 of the reconstructed text. [HS]
+
+note to K.2368 ? [BS]","Invalid markup: Bīt rimki, ki-{d}utu-kam for the sixth (Nineveh text form) or second (CBS 338 text form) ""house"" of the baptismal ceremony; for the varying attribution see Schwemer, Der kontraintuitive König, 78. Edited as part of ms. N(ineveh) B (= K.2863 [4R 23 No. 3] (+) DT.120 (+) K.2368 (+) 11661 (+) 13305) by J. Cooper, ZA 62 (1972) 65-81. K.2863 represents lines 24-30 of the reconstructed text. [HS]
+
+note to K.2368 ? [BS]. No terminal defined for '{' at line 1 col 15
+
+Bīt rimki, ki-{d}utu-kam for the sixth (Nineveh text f
+              ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.3609,rev. @akk{{iti}NE} restored from BM.45428 rev.,"Invalid markup: rev. {iti}NE restored from BM.45428 rev.. No terminal defined for '{' at line 1 col 6
+
+rev. {iti}NE restored from BM.45428 rev.
+     ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.3723,#ERROR!,"Invalid markup: + BM.98846 [TM], also transliterated here
+
+cf. also Rm.112 [TM]
+
+could this be the Catalogue's [(x x) x x u]d/n]a ka₂-digir-ra[{ki} (x)] (l. 7) ? -> probably not, at least if the restoration of the author as Uaneduga in the catalogue is correct. [TM]. No terminal defined for '{' at line 1 col 63
+
+logue's [(x x) x x u]d/n]a ka₂-digir-ra[{ki} (x)] (l. 7) ? -> probably not, at l
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.4231,"
+","Invalid markup: 
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+K.4427,"Balag @sux{{d}utu [...] e₂-kur-ra};
+(+) K.9299
+1-9 compare UM.29-13-468+ iv [JLP]","Invalid markup: Balag {d}utu [...] e₂-kur-ra;
+(+) K.9299
+1-9 compare UM.29-13-468+ iv [JLP]. No terminal defined for '{' at line 1 col 7
+
+Balag {d}utu [...] e₂-kur-ra; (+) K.9299 1-9 c
+      ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.4613,Balag @sux{{d}utu-gin₇ e₃-ta},"Invalid markup: Balag {d}utu-gin₇ e₃-ta. No terminal defined for '{' at line 1 col 7
+
+Balag {d}utu-gin₇ e₃-ta
+      ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.4819,"Bīt rimki, @sux{ki-{d}utu-kam} for the sixth (Nineveh text form) or second (CBS 338 text form) ""house"" of the baptismal ceremony; for the varying attribution see Schwemer, Der kontraintuitive König, 78. Edited as part of ms. N(ineveh) B (= K.4819 [4R 23 No. 3] (+) DT.120 (+) K.2368 (+) 11661 (+) 13305) by J. Cooper, ZA 62 (1972) 65-81. K.4819 represents lines 3-12.16 of the reconstructed text. [HS]","Invalid markup: Bīt rimki, ki-{d}utu-kam for the sixth (Nineveh text form) or second (CBS 338 text form) ""house"" of the baptismal ceremony; for the varying attribution see Schwemer, Der kontraintuitive König, 78. Edited as part of ms. N(ineveh) B (= K.4819 [4R 23 No. 3] (+) DT.120 (+) K.2368 (+) 11661 (+) 13305) by J. Cooper, ZA 62 (1972) 65-81. K.4819 represents lines 3-12.16 of the reconstructed text. [HS]. No terminal defined for '{' at line 1 col 15
+
+Bīt rimki, ki-{d}utu-kam for the sixth (Nineveh text f
+              ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.5728,"// K.10709 (EAE 33) [AH] , @akk{{iti}NE}
+// K.2686+ rev 1'f, part of K.2234+? ","Invalid markup: // K.10709 (EAE 33) [AH] , {iti}NE
+// K.2686+ rev 1'f, part of K.2234+? . No terminal defined for '{' at line 1 col 28
+
+// K.10709 (EAE 33) [AH] , {iti}NE // K.2686+ rev 1'f, part of K.22
+                           ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.5933,"Cf. K.5881 [WGL]
+joins K.6234 and K.2736+ [JLP]
+compare sequence of VAT.10163 (@akk{{iti}GAN}) Labat pg. 228","Invalid markup: Cf. K.5881 [WGL]
+joins K.6234 and K.2736+ [JLP]
+compare sequence of VAT.10163 ({iti}GAN) Labat pg. 228. No terminal defined for '{' at line 1 col 80
+
+6+ [JLP] compare sequence of VAT.10163 ({iti}GAN) Labat pg. 228
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.6135,EAE 33/35 (@akk{{iti}SIG₄}),"Invalid markup: EAE 33/35 ({iti}SIG₄). No terminal defined for '{' at line 1 col 12
+
+EAE 33/35 ({iti}SIG₄)
+           ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.6670,"Lunar eclipse omens
++ K.8173 [TM] + K.11867 [SC], all transliterated here
+
+
+Structure per section:
+----------------------------
+@akk{DIŠ ina {iti}x U₄.14.KAM₂ AN.GI₆ EN.NUN} N @akk{30 GAR-un}
+...
+... @akk{ITI/MU/U₄-MEŠ AN.GI₆ 30 NU GAR-an ina {iti}x U₄.14.KAM₂ AN.GI₆ EN.NUN} N+1 @akk{30 GAR-an}
+----------------------------
+
+""If in month x on day 14, a lunar eclipse occurs during the n-th watch
+...
+For ... months/years/days there will be no lunar eclipse, but (afterwards) in month y on day 14, a lunar eclipse will occur during the n+1-th watch""","Invalid markup: Lunar eclipse omens
++ K.8173 [TM] + K.11867 [SC], all transliterated here
+
+
+Structure per section:
+----------------------------
+DIŠ ina {iti}x U₄.14.KAM₂ AN.GI₆ EN.NUN n 30 GAR-un
+...
+... ITI/MU/U₄-MEŠ AN.GI₆ 30 NU GAR-an ina {iti}y U₄.14.KAM₂ AN.GI₆ EN.NUN n+1 30 GAR-an
+----------------------------
+
+""If in month x on day 14, a lunar eclipse occurs during the n-th watch
+...
+For ... months/years/days there will be no lunar eclipse, but (afterwards) in month y on day 14, a lunar eclipse will occur during the n+1-th watch"". No terminal defined for '{' at line 1 col 61
+
+n: ---------------------------- DIŠ ina {iti}x U₄.14.KAM₂ AN.GI₆ EN.NUN n 30 GAR
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.7083,Balag @sux{{d}utu-gin₇ e₃-ta} kirugu @sux{dam-gar₃-ra ba-da-kur₂} 4-20,"Invalid markup: Balag {d}utu-gin₇ e₃-ta kirugu dam-gar₃-ra ba-da-kur₂ 4-20. No terminal defined for '{' at line 1 col 7
+
+Balag {d}utu-gin₇ e₃-ta kirugu dam-gar₃-ra ba-
+      ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.7554,o 2' @sux{{d}}DN-@sux{ZU-a-ni}?,"Invalid markup: o 2' {d}DN-ZU-a-ni?. No terminal defined for '{' at line 1 col 6
+
+o 2' {d}DN-ZU-a-ni?
+     ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.8213,"eršema ""Sammeltafel""?
+ll. 6'-14' // ritual eršema @sux{{d}utu-gin₇ e₃-ta} (HES 2, no. 64), ll. 1-9 [ACH]","Invalid markup: eršema ""Sammeltafel""?
+ll. 6'-14' // ritual eršema {d}utu-gin₇ e₃-ta (HES 2, no. 64), ll. 1-9 [ACH]. No terminal defined for '{' at line 1 col 51
+
+mmeltafel""? ll. 6'-14' // ritual eršema {d}utu-gin₇ e₃-ta (HES 2, no. 64), ll. 1
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.8471,"EAE VII, r. = @akk{{iti}KIN}?? [TM]
+obv 1'-2' // K.1348 30'-33' [JLP]","Invalid markup: EAE VII, r. = {iti}KIN?? [TM]
+obv 1'-2' // K.1348 30'-33' [JLP]. No terminal defined for '{' at line 1 col 15
+
+EAE VII, r. = {iti}KIN?? [TM] obv 1'-2' // K.1348 30'-
+              ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+K.9362,"""cf. K.9417"" (WG Folio A053)","Invalid markup: ""cf. K.9417"" [WG] @A053. No terminal defined for 'A' at line 1 col 20
+
+""cf. K.9417"" [WG] @A053
+                   ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+Rm-II.160,"Edition Mullo-Weir, JRAS 2 (1929), 281-284, cf. also discussion of incantation incipit @akk{EN₂ {na₄}KA.GI.NA} in Simkó, AoFo 41 (2014), 120.","Invalid markup: Edition Mullo-Weir, JRAS 2 (1929), 281-284, cf. also discussion of incantation incipit EN₂ {na₄}KA.GI.NA in Simkó, AoFo 41 (2014), 120.. No terminal defined for '{' at line 1 col 92
+
+o discussion of incantation incipit EN₂ {na₄}KA.GI.NA in Simkó, AoFo 41 (2014), 
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Rm.488,"excerpt Alu 68 or 69? ll. 1'-2' might partly parallel ND.5467 obv. 18'-23' (@akk{{d}NIN.NINNA{mušen}}) [ES]
+Project Ālu Geneva","Invalid markup: excerpt Alu 68 or 69? ll. 1'-2' might partly parallel ND.5467 obv. 18'-23' ({d}NIN.NINNA{mušen}) [ES]
+Project Ālu Geneva. No terminal defined for '{' at line 1 col 77
+
+t partly parallel ND.5467 obv. 18'-23' ({d}NIN.NINNA{mušen}) [ES] Project Ālu Ge
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Rm-II.285,"similar to Šumma ālu 95 (Moren)
+Alu 95; Project Ālu Geneva. Catchline unplaced (@akk{TUKUM.BI TUKUM.BI {iti}A[PIN?.DU₈ ...]})","Invalid markup: similar to Šumma ālu 95 (Moren)
+Alu 95; Project Ālu Geneva. Catchline unplaced (TUKUM.BI TUKUM.BI {iti}A[PIN?.DU₈ ...]. No terminal defined for '{' at line 1 col 99
+
+. Catchline unplaced (TUKUM.BI TUKUM.BI {iti}A[PIN?.DU₈ ...]
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Sm.145,EAE 33/35 col. i @akk{{iti}ŠU},"Invalid markup: EAE 33/35 col. i {iti}ŠU. No terminal defined for '{' at line 1 col 18
+
+EAE 33/35 col. i {iti}ŠU
+                 ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Sm.450,"The tablet is not correctly positioned in the cdli photo: should be turned 90 degrees anticlockwise (cf. Geers copy)
+
+// balaĝ section @sux{e-ne-eg₃-zu-še₃} as found in @sux{u₄-dam ki am-us₂} (CLAM 120ff.), ll. 79ff. [TM]
++ K.2881+, for transliteration see there obverse 1'–10'","Invalid markup: The tablet is not correctly positioned in the cdli photo: should be turned 90 degrees anticlockwise (cf. Geers copy)
+
+// balaĝ section e-ne-eg₃-zu-še₃ as found in u₄-dam ki am-us₂ (CLAM 120ff.), ll. 79ff. [TM]
++ K.2881+, for transliteration see there @obverse 1'–10'. No terminal defined for 'o' at line 1 col 135
+
+K.2881+, for transliteration see there @obverse 1'–10'
+                                        ^
+Expected one of: 
+	* ebl_atf_text_line__LANGUAGE
+"
+Sm.934,"obv?. @i{Šumma ālu} 26, // K.6294 [AH]
+Possibly part of the same tablet as Sm.936 [AH]","Invalid markup: obv?. @i{Šumma ālu} 26, // K.6294 [AH]
+Possibly part of the same tablet as Sm.936 [AH]. No terminal defined for 'u' at line 1 col 13
+
+obv?. @i{Šumma ālu} 26, // K.6294 [AH] Possibly pa
+            ^
+Expected one of: 
+	* ebl_atf_text_line__LOGOGRAM_CHARACTER
+	* ebl_atf_text_line__SUB_INDEX
+	* ebl_atf_text_line__MODIFIER
+	* ebl_atf_text_line__UNCERTAIN
+	* ebl_atf_text_line__CORRECTION
+	* ebl_atf_text_line__COLLATION
+	* ebl_atf_text_line__DAMAGE
+	* LPAR
+	* __ANON_20
+	* RBRACE
+	* _ebl_atf_text_line__WORD_SEPARATOR
+	* RSQB
+	* RPAR
+	* MORETHAN
+	* __ANON_21
+	* __ANON_23
+	* ebl_atf_text_line__CLOSE_DOCUMENT_ORIENTED_GLOSS
+	* __ANON_19
+	* ebl_atf_text_line__IN_WORD_NEWLINE
+	* MINUS
+	* PLUS
+	* DOT
+	* COLON
+	* LESSTHAN
+	* __ANON_22
+	* LSQB
+	* __ANON_24
+	* __ANON_26
+	* LBRACE
+	* _ebl_atf_text_line__VARIANT_SEPARATOR
+"
+Sm.319,"Cf. 
+K.3099 obverse
+24'. @akk{DIŠ# [ina {iti}BAR]A₂ {mul#}AŠ.GAN₂ u {mul#}[...]}
+25'. @akk{DIŠ ina {iti#}BARA₂ {mul}AŠ.GAN₂ u {mul}dili-bat x x x [...]}","Invalid markup: Cf. 
+K.3099 obverse
+24'. DIŠ# [ina {iti}BAR]A₂ {mul#}AŠ.GAN₂ u {mul#} [...]
+25'. DIŠ ina {iti#}BARA₂ {mul}AŠ.GAN₂ u {mul}dili-bat x x x [...]. No terminal defined for '{' at line 1 col 35
+
+Cf. K.3099 obverse 24'. DIŠ# [ina {iti}BAR]A₂ {mul#}AŠ.GAN₂ u {mul#} [...]
+                                  ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Sm.910,"Resembles Uh 10 21-24 and 40-45 (with 43 missing), with @akk{MIN MIN} apparently standing for @sux{ur-sag {d}asal-lu₂-hi} and @akk{qar-ra-du {d}AMAR.UTU} [ZsF]","Invalid markup: Resembles Uh 10 21-24 and 40-45 (with 43 missing), with MIN MIN apparently standing for ur-sag {d}asal-lu₂-hi and qar-ra-du {d}AMAR.UTU [ZsF]. No terminal defined for '{' at line 1 col 96
+
+ MIN MIN apparently standing for ur-sag {d}asal-lu₂-hi and qar-ra-du {d}AMAR.UTU
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Sm.474,"cf. BM.59189 [TM]
+
+""left half, lower portion [?] Vs. schlecht lesbar. Könnte wohl auch mehrkolumnig gewesen sein. xaescp. [? = PNA?] 3/I p.989f., ohne unseren Text [arrows from lines with @akk{{m}pa-a-ru}]. Schenkung?. (Assurb., Elam B IV 81. 97 [recte 91 !] BIWA 198 66-5-19,1^1 x Qurna [?]."" [RB]
+
+Occurences of the name @akk{{m}pa-ru-u₂} in Asb inscriptions:
+B IV 81 = C V 87
+B IV 91 = C V 97
+B VII 33 = C VIII 24 (here par-ru-u)
+B VIII 25 = C VIII 15
+1866,0519.1 12'","Invalid markup: cf. BM.59189 [TM]
+
+""left half, lower portion [?] Vs. schlecht lesbar. Könnte wohl auch mehrkolumnig gewesen sein. xaescp. [? = PNA?] 3/I p.989f., ohne unseren Text [arrows from lines with {m}pa-a-ru]. Schenkung?. (Assurb., Elam B IV 81. 97 [recte 91 !] BIWA 198 66-5-19,1^1 x Qurna [?]."" [RB]
+
+Occurences of the name {m}pa-ru-u₂ in Asb inscriptions:
+B IV 81 = C V 87
+B IV 91 = C V 97
+B VII 33 = C VIII 24 (here par-ru-u)
+B VIII 25 = C VIII 15
+1866,0519.1 12'. No terminal defined for '{' at line 1 col 170
+
+ne unseren Text [arrows from lines with {m}pa-a-ru]. Schenkung?. (Assurb., Elam 
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+IB.unn.1,"// CTMMA 2 Nr. 96 col. ii' 
+// BM.72030 &d -> @sux{u₃ ĝa₂-e {d}en-lil₂-la₂} [TM]","Invalid markup: // CTMMA 2 Nr. 96 col. ii' 
+// BM.72030 &d -> u₃ ĝa₂-e {d}en-lil₂-la₂ [TM]. No terminal defined for '{' at line 1 col 55
+
+ 96 col. ii' // BM.72030 &d -> u₃ ĝa₂-e {d}en-lil₂-la₂ [TM]
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+Tobias.Test.Fragment,,"Invalid markup:  . Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+ND.5442,"Cf. Šulgi prophecy (K.4445)? [EJ]
+
+BM.72030 mentioned by Lambert is @sux{u₃ ĝa₂-e {d}en-lil₂-la₂} and probably not the same as KAR 8. ND.5442 does not seem to be bilingual [TM]","Invalid markup: Cf. Šulgi prophecy (K.4445)? [EJ]
+
+BM.72030 mentioned by Lambert is u₃ ĝa₂-e {d}en-lil₂-la₂ and probably not the same as KAR 8. ND.5442 does not seem to be bilingual [TM]. No terminal defined for '{' at line 1 col 43
+
+.72030 mentioned by Lambert is u₃ ĝa₂-e {d}en-lil₂-la₂ and probably not the same
+                                        ^
+Expected one of: 
+	* __ANON_12
+	* __ANON_11
+	* __ANON_8
+	* AT
+	* __ANON_7
+"
+ND.5425,"
+
+","Invalid markup: 
+
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+IM.135212,"
+","Invalid markup: 
+. Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+IM.49346,,"Invalid markup:  . Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+IM.50435,Collated by K.Reiter (@bib{AOAT_249@78*}).,"Invalid markup: Collated by K.Reiter (@bib{AOAT_249@78*).. Unexpected end-of-input. Expected one of: 
+	* __ANON_10
+	* BACKSLASH
+	* RBRACE
+"
+IM.49285,Collated by K.Reiter (@bib{AOAT_249@78*}).,"Invalid markup: Collated by K.Reiter (@bib{AOAT_249@78*).. Unexpected end-of-input. Expected one of: 
+	* __ANON_10
+	* BACKSLASH
+	* RBRACE
+"
+IM.50463,Collated by K.Reiter (@bib{AOAT_249@78*}).,"Invalid markup: Collated by K.Reiter (@bib{AOAT_249@78*).. Unexpected end-of-input. Expected one of: 
+	* __ANON_10
+	* BACKSLASH
+	* RBRACE
+"
+IM.49249,Collated by K.Reiter (@bib{AOAT_249@78*}).,"Invalid markup: Collated by K.Reiter (@bib{AOAT_249@78*).. Unexpected end-of-input. Expected one of: 
+	* __ANON_10
+	* BACKSLASH
+	* RBRACE
+"
+IM.49327,Collated by K.Reiter (@bib{AOAT_249@78*}).,"Invalid markup: Collated by K.Reiter (@bib{AOAT_249@78*).. Unexpected end-of-input. Expected one of: 
+	* __ANON_10
+	* BACKSLASH
+	* RBRACE
+"
+U.3636,,"Invalid markup:  . Unexpected end-of-input. Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_8
+	* __ANON_12
+	* __ANON_12
+	* __ANON_11
+"
+NE-21-O.358,@akk{{m}{d}30-GIN-IGI}?# → Eponymn 615 BCE?,"Invalid markup: {m}{d}30-GIN-IGI?# → Eponymn 615 BCE?. No terminal defined for '{' at line 1 col 1
+
+{m}{d}30-GIN-IGI?# → Eponymn 615 BCE?
+^
+Expected one of: 
+	* __ANON_7
+	* AT
+	* __ANON_8
+	* __ANON_12
+	* __ANON_11
+"

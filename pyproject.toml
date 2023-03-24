@@ -47,6 +47,7 @@ black = "*"
 pymongo-inmemory = "*"
 pytest-xdist = "*"
 autopep8 = "^1.6.0"
+pandas = "*"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
