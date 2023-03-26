@@ -180,7 +180,7 @@ class MongoWordRepository(WordRepository):
         return list(cursor)
 
     def list_all_words(self) -> Sequence[str]:
-        return list(self._collection.get_all_values("_id"))
+        return self._collection.get_all_values("_id")
 
     def update(self, word) -> None:
         self._collection.update_one({"_id": word["_id"]}, {"$set": word})

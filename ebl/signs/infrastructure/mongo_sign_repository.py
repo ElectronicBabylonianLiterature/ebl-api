@@ -245,4 +245,4 @@ class MongoSignRepository(SignRepository):
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def list_all_signs(self) -> Sequence[str]:
-        return list(self._collection.get_all_values("_id"))
+        return self._collection.get_all_values("_id")

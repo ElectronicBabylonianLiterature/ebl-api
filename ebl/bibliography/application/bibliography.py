@@ -40,7 +40,7 @@ class Bibliography:
     def search(self, query: str) -> Sequence[dict]:
         author_query_result = []
         author_query = self._parse_author_year_and_title(query)
-        if any(value is not None for value in list(author_query.values())):
+        if any(value is not None for value in author_query.values()):
             author_query_result = self.search_author_year_and_title(
                 author_query["author"], author_query["year"], author_query["title"]
             )
