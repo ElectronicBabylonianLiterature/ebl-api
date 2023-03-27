@@ -127,3 +127,11 @@ def test_signs_search_route_error(client, sign_repository, signs):
         sign_repository.create(sign)
     get_result = client.simulate_get("/signs", params={"signs": "P₂"})
     assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_all_signs_route(client, sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+    get_result = client.simulate_get("/signs/all")
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.json == sorted([sign.name for sign in signs])

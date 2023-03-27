@@ -18,3 +18,11 @@ class WordsResource:
         word = {**req.media, "_id": object_id}
         self._dictionary.update(word, req.context.user)
         resp.status = falcon.HTTP_NO_CONTENT
+
+
+class WordsListResource:
+    def __init__(self, dictionary):
+        self._dictionary = dictionary
+
+    def on_get(self, req, resp):
+        resp.media = self._dictionary.list_all_words()

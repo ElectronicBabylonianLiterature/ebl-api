@@ -30,6 +30,7 @@ class SignsSearch:
                 frozenset(["wordId"]): lambda params: signs.search_by_lemma(
                     params["wordId"]
                 ),
+                frozenset(["listAll"]): lambda params: signs.list_all_signs(),
             }
         )
 

@@ -35,6 +35,9 @@ class Dictionary:
     def search_lemma(self, lemma: str) -> Sequence:
         return self._repository.query_by_lemma_prefix(lemma)
 
+    def list_all_words(self) -> Sequence[str]:
+        return self._repository.list_all_words()
+
     def update(self, word, user: User) -> None:
         old_word = self.find(word["_id"])
         self._changelog.create(COLLECTION, user.profile, old_word, word)

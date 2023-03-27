@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, Sequence
 
 
 class BibliographyRepository(ABC):
@@ -25,4 +25,8 @@ class BibliographyRepository(ABC):
     def query_by_container_title_and_collection_number(
         self, container_title_short: Optional[str], collection_number: Optional[str]
     ):
+        ...
+
+    @abstractmethod
+    def list_all_bibliography(self) -> Sequence:
         ...
