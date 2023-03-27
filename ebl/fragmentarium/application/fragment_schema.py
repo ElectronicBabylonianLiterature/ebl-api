@@ -154,7 +154,7 @@ class FragmentSchema(Schema):
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
     signs = fields.String(load_default="")
-    notes = fields.Nested(NotesSchema, default=Notes())
+    notes = fields.Nested(NotesSchema, default=Notes(), data_key="parsedNotes")
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     uncurated_references = fields.Nested(
         UncuratedReferenceSchema,
