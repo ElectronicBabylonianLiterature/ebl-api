@@ -40,9 +40,7 @@ def test_update_transliteration(
     )
     number = transliterated_fragment.number
     atf = Atf("1. x x\n2. x")
-    transliteration = TransliterationUpdate(
-        parse_atf_lark(atf), "updated notes", "X X\nX"
-    )
+    transliteration = TransliterationUpdate(parse_atf_lark(atf), "X X\nX")
     transliterated_fragment = transliterated_fragment.update_transliteration(
         transliteration, user
     )
@@ -82,7 +80,7 @@ def test_update_update_transliteration_not_found(
     with pytest.raises(NotFoundError):
         fragment_updater.update_transliteration(
             number,
-            TransliterationUpdate(parse_atf_lark("$ (the transliteration)"), "notes"),
+            TransliterationUpdate(parse_atf_lark("$ (the transliteration)")),
             user,
         )
 
@@ -105,7 +103,7 @@ def test_update_update_transliteration_not_lowest_join(
     with pytest.raises(NotLowestJoinError):
         fragment_updater.update_transliteration(
             number,
-            TransliterationUpdate(parse_atf_lark("1. x"), "updated notes", "X"),
+            TransliterationUpdate(parse_atf_lark("1. x"), "X"),
             user,
             False,
         )
@@ -187,7 +185,6 @@ def test_update_references(
     changelog,
     when,
 ):
-
     fragment = FragmentFactory.build()
     number = fragment.number
     reference = ReferenceFactory.build()
@@ -245,4 +242,24 @@ def test_update_introduction(
     ).thenReturn()
 
     result = fragment_updater.update_introduction(number, introduction, user)
+    assert result == (updated_fragment, False)
+
+
+def test_update_notes(
+    fragment_updater: FragmentUpdater, user, fragment_repository, changelog, when
+):
+    fragment: Fragment = FragmentFactory.build()
+    number = fragment.number
+    notes = "Test notes"
+    updated_fragment = fragment.set_notes(notes)
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field("notes", updated_fragment).thenReturn()
+
+    result = fragment_updater.update_notes(number, notes, user)
     assert result == (updated_fragment, False)

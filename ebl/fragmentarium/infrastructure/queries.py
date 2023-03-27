@@ -173,7 +173,7 @@ def aggregate_path_of_the_pioneers(
             "$match": {
                 "$and": [
                     {"text.lines": []},
-                    {"notes": ""},
+                    {"parsedNotes.text": ""},
                     {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
                     {"uncuratedReferences": {"$exists": True}},
                     {max_uncurated_reference: {"$exists": False}},

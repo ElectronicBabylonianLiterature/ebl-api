@@ -27,6 +27,7 @@ from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import make_statistics_resource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
 from ebl.fragmentarium.web.introductions import IntroductionResource
+from ebl.fragmentarium.web.notes import NotesResource
 from ebl.corpus.web.chapters import ChaptersByManuscriptResource
 from ebl.corpus.application.corpus import Corpus
 
@@ -85,6 +86,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         updater, context.get_transliteration_update_factory()
     )
     introduction = IntroductionResource(updater)
+    notes = NotesResource(updater)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
@@ -107,6 +109,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/references", references),
         ("/fragments/{number}/transliteration", transliteration),
         ("/fragments/{number}/introduction", introduction),
+        ("/fragments/{number}/notes", notes),
         ("/fragments/{number}/annotations", annotations),
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),

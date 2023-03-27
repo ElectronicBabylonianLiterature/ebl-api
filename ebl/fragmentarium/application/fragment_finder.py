@@ -23,7 +23,6 @@ class FragmentFinder:
         folios: FileRepository,
         parallel_injector: ParallelLineInjector,
     ):
-
         self._bibliography = bibliography
         self._repository = repository
         self._dictionary = dictionary

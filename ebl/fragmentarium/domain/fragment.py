@@ -25,13 +25,11 @@ from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
 from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
 
 
-def parse_introduction(introduction: str) -> Sequence[MarkupPart]:
+def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:
     try:
-        return parse_markup_paragraphs(introduction) if introduction else tuple()
+        return parse_markup_paragraphs(text) if text else tuple()
     except PARSE_ERRORS as error:
-        raise ValidationError(
-            f"Invalid introduction: {introduction}. {error}"
-        ) from error
+        raise ValidationError(f"Invalid markup: {text}. {error}") from error
 
 
 class NotLowestJoinError(ValueError):
@@ -63,9 +61,19 @@ class Genre:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Introduction:
-    text: str
-    parts: Tuple[MarkupPart]
+class MarkupText:
+    text: str = ""
+    parts: Tuple[MarkupPart] = tuple()
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Introduction(MarkupText):
+    pass
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Notes(MarkupText):
+    pass
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -109,13 +117,13 @@ class Fragment:
     folios: Folios = Folios()
     text: Text = Text()
     signs: str = ""
-    notes: str = ""
+    notes: Notes = Notes()
     references: Sequence[Reference] = tuple()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
     genres: Sequence[Genre] = tuple()
     line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
     authorized_scopes: Optional[Sequence[Scope]] = list()
-    introduction: Introduction = Introduction("", tuple())
+    introduction: Introduction = Introduction()
     script: Script = Script()
     external_numbers: ExternalNumbers = ExternalNumbers()
 
@@ -135,7 +143,17 @@ class Fragment:
             introduction=attr.evolve(
                 self.introduction,
                 text=introduction,
-                parts=parse_introduction(introduction),
+                parts=parse_markup_with_paragraphs(introduction),
+            ),
+        )
+
+    def set_notes(self, notes: str) -> "Fragment":
+        return attr.evolve(
+            self,
+            notes=attr.evolve(
+                self.notes,
+                text=notes,
+                parts=parse_markup_with_paragraphs(notes),
             ),
         )
 
@@ -161,7 +179,6 @@ class Fragment:
         return attr.evolve(
             self,
             text=text,
-            notes=transliteration.notes,
             signs=transliteration.signs,
             record=record,
             line_to_vec=create_line_to_vec(text.lines),

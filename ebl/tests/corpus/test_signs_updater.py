@@ -119,7 +119,6 @@ def manuscript_with_unplaced_lines(empty_text):
 
 @pytest.fixture
 def chapter_with_colophon_lines(manuscript_with_colophon_lines):
-
     return ChapterFactory.build(
         manuscripts=[manuscript_with_colophon_lines],
         lines=[LineFactory.build(variants=[])],
@@ -162,7 +161,6 @@ def update_and_serialize_signs(
 def test_empty_manuscript(
     signs_updater, chapter_with_line_without_manuscript_line, manuscripts
 ):
-
     signs = update_and_serialize_signs(
         signs_updater, chapter_with_line_without_manuscript_line
     )

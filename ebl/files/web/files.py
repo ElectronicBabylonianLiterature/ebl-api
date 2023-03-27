@@ -6,7 +6,6 @@ from ebl.users.domain.user import Guest
 
 
 class PublicFilesResource:
-
     auth = {"backend": NoneAuthBackend(Guest)}
 
     def __init__(self, files: FileRepository):

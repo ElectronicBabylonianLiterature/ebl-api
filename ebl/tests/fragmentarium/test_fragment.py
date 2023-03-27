@@ -12,6 +12,7 @@ from ebl.fragmentarium.domain.fragment import (
     NotLowestJoinError,
     Script,
     UncuratedReference,
+    Notes,
 )
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
@@ -32,6 +33,7 @@ from ebl.tests.factories.fragment import (
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.markup import StringPart, EmphasisPart
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.application.signs_visitor import SignsVisitor
@@ -101,7 +103,7 @@ def test_joins():
 
 def test_notes():
     fragment = FragmentFactory.build()
-    assert fragment.notes == ""
+    assert fragment.notes == Notes("notes", (StringPart("notes"),))
 
 
 def test_signs():
@@ -205,7 +207,7 @@ def test_add_transliteration(user):
     fragment = FragmentFactory.build()
     atf = Atf("1. x x")
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(text, fragment.notes)
+    transliteration = TransliterationUpdate(text)
     record = fragment.record.add_entry("", atf, user)
 
     updated_fragment = fragment.update_transliteration(transliteration, user)
@@ -226,13 +228,12 @@ def test_update_transliteration(user):
     lines[1] = "2'. [...] GI₆ mu u₄-š[u ...]"
     atf = Atf("\n".join(lines))
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(text, "updated notes", "X X\nX")
+    transliteration = TransliterationUpdate(text, "X X\nX")
     updated_fragment = lemmatized_fragment.update_transliteration(transliteration, user)
 
     expected_fragment = attr.evolve(
         lemmatized_fragment,
         text=lemmatized_fragment.text.merge(text),
-        notes=transliteration.notes,
         signs=transliteration.signs,
         record=lemmatized_fragment.record.add_entry(
             lemmatized_fragment.text.atf, transliteration.text.atf, user
@@ -249,22 +250,20 @@ def test_add_lowest_join_transliteration(user):
     )
     atf = Atf("1. x x")
     text = parse_atf_lark(atf)
-    transliteration = TransliterationUpdate(text, fragment.notes)
+    transliteration = TransliterationUpdate(text)
 
     with pytest.raises(NotLowestJoinError):
         fragment.update_lowest_join_transliteration(transliteration, user)
 
 
-def test_update_notes(user):
+def test_set_notes():
+    text = "Some @i{notes}"
     fragment = FragmentFactory.build()
-    transliteration = TransliterationUpdate(fragment.text, "new notes")
-    updated_fragment = fragment.update_transliteration(transliteration, user)
+    updated_fragment = fragment.set_notes(text)
 
-    expected_fragment = attr.evolve(
-        fragment, notes=transliteration.notes, line_to_vec=()
+    assert updated_fragment.notes == Notes(
+        text, (StringPart("Some "), EmphasisPart("notes"))
     )
-
-    assert updated_fragment == expected_fragment
 
 
 def test_update_lemmatization():

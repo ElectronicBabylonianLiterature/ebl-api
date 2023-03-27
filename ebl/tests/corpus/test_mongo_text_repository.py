@@ -389,7 +389,6 @@ def test_query_by_lemma(
 def test_query_by_transliteration_lookup(
     text_repository, sign_repository, signs
 ) -> None:
-
     for sign in signs:
         sign_repository.create(sign)
     chapter = attr.evolve(

@@ -19,7 +19,6 @@ class Convert_Line_Joiner(Visitor):
 
 
 class Convert_Legacy_Grammar_Signs(Visitor):
-
     replacement_chars = {
         "á": "a",
         "é": "e",
@@ -34,38 +33,34 @@ class Convert_Legacy_Grammar_Signs(Visitor):
     def oracc_atf_text_line__logogram_name_part(self, tree):
         assert tree.data == "oracc_atf_text_line__logogram_name_part"
         for cnt, child in enumerate(tree.children):
-
             pattern = re.compile("[ÁÉÍÙ]")
             matches = pattern.search(child)
 
             if matches is not None:
-
-                match = matches.group(0)
+                match = matches[0]
                 try:
                     next_char = tree.children[cnt + 1]
                     tree.children[cnt] = self.replacement_chars[match]
-                    tree.children[cnt + 1] = next_char + "₃"
+                    tree.children[cnt + 1] = f"{next_char}₃"
 
                 except Exception:
-                    tree.children[cnt] = self.replacement_chars[match] + "₂"
+                    tree.children[cnt] = f"{self.replacement_chars[match]}₂"
 
     def oracc_atf_text_line__value_name_part(self, tree):
         assert tree.data == "oracc_atf_text_line__value_name_part"
         for cnt, child in enumerate(tree.children):
-
             pattern = re.compile("[áíéú]")
             matches = pattern.search(child)
 
             if matches is not None:
-
-                match = matches.group(0)
+                match = matches[0]
                 try:
                     next_char = tree.children[cnt + 1]
                     tree.children[cnt] = self.replacement_chars[match]
-                    tree.children[cnt + 1] = next_char + "₃"
+                    tree.children[cnt + 1] = f"{next_char}₃"
 
                 except Exception:
-                    tree.children[cnt] = self.replacement_chars[match] + "₂"
+                    tree.children[cnt] = f"{self.replacement_chars[match]}₂"
 
 
 class Strip_Signs(Visitor):
@@ -77,7 +72,6 @@ class Strip_Signs(Visitor):
 
 class DFS(Visitor):
     def visit_topdown(self, tree, result):
-
         if not hasattr(tree, "data"):
             return result
 
@@ -94,19 +88,19 @@ class Line_Serializer(Visitor):
     def text_line(self, tree):
         assert tree.data == "text_line"
         result = DFS().visit_topdown(tree, "")
-        self.line += " " + result
+        self.line += f" {result}"
         return result
 
     def dollar_line(self, tree):
         assert tree.data == "dollar_line"
         result = DFS().visit_topdown(tree, "")
-        self.line += " " + result
+        self.line += f" {result}"
         return result
 
     def control_line(self, tree):
         assert tree.data == "control_line"
         result = DFS().visit_topdown(tree, "")
-        self.line += " " + result
+        self.line += f" {result}"
         return result
 
 
@@ -155,17 +149,14 @@ class Get_Lemma_Values_and_Guidewords(Visitor):
     oracc_pos_tags = ["oracc_atf_lem_line__e_pos_tag", "oracc_atf_lem_line__pos_tag"]
 
     def oracc_atf_lem_line__lemma(self, tree):
-
         assert tree.data == "oracc_atf_lem_line__lemma"
         guide_word = ""
         pos_tag = ""
         cl = len(tree.children)
         lemmata = []
         for i, child in enumerate(tree.children):
-
             # collect additional lemmata and guidwords
             if child.data == "oracc_atf_lem_line__additional_lemmata":
-
                 for a_child in child.children:
                     if (
                         hasattr(a_child, "data")

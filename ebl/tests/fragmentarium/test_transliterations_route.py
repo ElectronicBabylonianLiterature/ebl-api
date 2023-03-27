@@ -17,7 +17,7 @@ from ebl.fragmentarium.domain.joins import Join
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
-    updates = {"transliteration": "$ (the transliteration)", "notes": "some notes"}
+    updates = {"transliteration": "$ (the transliteration)"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -25,9 +25,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
     expected_json = {
         **create_response_dto(
             fragment.update_transliteration(
-                TransliterationUpdate(
-                    parse_atf_lark(updates["transliteration"]), updates["notes"]
-                ),
+                TransliterationUpdate(parse_atf_lark(updates["transliteration"])),
                 user,
             ),
             user,
@@ -65,17 +63,14 @@ def test_update_transliteration_merge_lemmatization(
     parallel_line_injector,
     user,
 ):
-
     for sign in signs:
         sign_repository.create(sign)
     lemmatized_fragment = LemmatizedFragmentFactory.build()
     fragmentarium.create(lemmatized_fragment)
     lines = lemmatized_fragment.text.atf.split("\n")
     lines[1] = new_transliteration
-    updates = {"transliteration": "\n".join(lines), "notes": lemmatized_fragment.notes}
-    updated_transliteration = transliteration_factory.create(
-        updates["transliteration"], updates["notes"]
-    )
+    updates = {"transliteration": "\n".join(lines)}
+    updated_transliteration = transliteration_factory.create(updates["transliteration"])
     updated_fragment = lemmatized_fragment.update_transliteration(
         updated_transliteration, user
     )
@@ -109,7 +104,7 @@ def test_update_transliteration_merge_lemmatization(
 def test_update_transliteration_invalid_atf(client, fragmentarium):
     fragment = FragmentFactory.build()
     fragmentarium.create(fragment)
-    updates = {"transliteration": "1. kururu", "notes": ""}
+    updates = {"transliteration": "1. kururu"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -126,7 +121,7 @@ def test_update_transliteration_not_lowest_join(client, fragment_repository) -> 
     number = MuseumNumber("X", "2")
     fragment = FragmentFactory.build(number=number)
     fragment_repository.create_join([[Join(number)], [Join(MuseumNumber("X", "1"))]])
-    updates = {"transliteration": "1. kururu", "notes": ""}
+    updates = {"transliteration": "1. kururu"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/transliteration"
     post_result = client.simulate_post(url, body=body)
@@ -141,9 +136,7 @@ def test_update_transliteration_not_lowest_join(client, fragment_repository) -> 
 
 def test_update_transliteration_not_found(client):
     url = "/fragments/unknown.fragment/transliteration"
-    body = json.dumps(
-        {"transliteration": "$ (the transliteration)", "notes": "some notes"}
-    )
+    body = json.dumps({"transliteration": "$ (the transliteration)"})
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_NOT_FOUND
@@ -151,7 +144,7 @@ def test_update_transliteration_not_found(client):
 
 def test_update_transliteration_invalid(client):
     url = "/fragments/invalud/transliteration"
-    body = json.dumps({"transliteration": "", "notes": ""})
+    body = json.dumps({"transliteration": ""})
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -162,10 +155,12 @@ def test_update_transliteration_invalid(client):
     [
         "transliteration",
         '"transliteration"',
-        json.dumps({"transliteration": "$ (the transliteration)"}),
-        json.dumps({"notes": "some notes"}),
-        json.dumps({"transliteration": 1, "notes": "some notes"}),
-        json.dumps({"transliteration": "$ (the transliteration)", "notes": 1}),
+        json.dumps(
+            {
+                "transliteration": "$ (the transliteration)",
+                "notes": "deprecated notes field",
+            }
+        ),
     ],
 )
 def test_update_transliteration_invalid_entity(client, fragmentarium, body):

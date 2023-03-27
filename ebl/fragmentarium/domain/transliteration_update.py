@@ -9,13 +9,11 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationUpdate:
     text: Text = Text()
-    notes: str = ""
     signs: str = attr.ib(default="")
 
     @signs.validator
     def _check_signs(self, _attribute, value) -> None:
-        questionable_lines = self._get_questionable_lines(value)
-        if questionable_lines:
+        if questionable_lines := self._get_questionable_lines(value):
             raise TransliterationError(
                 [
                     {"description": "Invalid value", "lineNumber": line_number}
