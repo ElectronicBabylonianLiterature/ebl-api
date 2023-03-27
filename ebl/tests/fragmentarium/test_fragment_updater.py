@@ -185,7 +185,6 @@ def test_update_references(
     changelog,
     when,
 ):
-
     fragment = FragmentFactory.build()
     number = fragment.number
     reference = ReferenceFactory.build()

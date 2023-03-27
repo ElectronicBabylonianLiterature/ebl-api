@@ -63,7 +63,6 @@ def test_update_transliteration_merge_lemmatization(
     parallel_line_injector,
     user,
 ):
-
     for sign in signs:
         sign_repository.create(sign)
     lemmatized_fragment = LemmatizedFragmentFactory.build()

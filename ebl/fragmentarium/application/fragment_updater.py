@@ -25,7 +25,6 @@ class FragmentUpdater:
         photos: FileRepository,
         parallel_injector: ParallelLineInjector,
     ):
-
         self._repository = repository
         self._changelog = changelog
         self._bibliography = bibliography

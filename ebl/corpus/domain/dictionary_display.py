@@ -20,7 +20,6 @@ class DictionaryLineDisplay:
     def from_dictionary_line(
         cls, dictionary_line: DictionaryLine
     ) -> "DictionaryLineDisplay":
-
         return cls(
             dictionary_line.text_id,
             dictionary_line.text_name,

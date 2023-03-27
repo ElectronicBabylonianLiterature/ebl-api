@@ -31,7 +31,6 @@ wildcard_matchers: OrderedDict[Type, str] = OrderedDict(
 
 @attr.s(auto_attribs=True)
 class TransliterationQuery:
-
     string: str
     visitor: TokenVisitor
     type: Type = attr.ib(init=False)
@@ -193,7 +192,6 @@ class TransliterationQueryLine(TransliterationQuery):
 
 @attr.s(auto_attribs=True, frozen=True)
 class TransliterationQueryEmpty(TransliterationQuery):
-
     string: str = ""
     visitor: TokenVisitor = TokenVisitor()
     type: Type = Type.UNDEFINED

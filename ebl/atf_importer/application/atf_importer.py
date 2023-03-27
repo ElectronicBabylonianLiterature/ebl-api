@@ -106,7 +106,6 @@ class ATFImporter:
         return parse_atf_lark(line)
 
     def get_ebl_lemmata(self, orrac_lemma_tupel, all_unique_lemmas):
-
         try:
             oracc_lemma = None
             oracc_guideword = None
@@ -226,7 +225,6 @@ class ATFImporter:
 
             # set as noun
             if not unique_lemmas and oracc_pos_tag in NOUN_POS_TAGS:
-
                 unique_lemmas.extend(
                     entry["_id"]
                     for entry in self.db.get_collection("words").find(
@@ -249,7 +247,6 @@ class ATFImporter:
 
     @staticmethod
     def parse_glossary(path):
-
         lemgwpos_cf = {}
         forms_senses = {}
         lemposgw_cfgw = {}
@@ -333,7 +330,6 @@ class ATFImporter:
 
     @staticmethod
     def get_cdli_number(control_lines):
-
         for line in control_lines:
             linesplit = line["c_line"].split("=")
             cdli_number = linesplit[0].strip()
@@ -362,12 +358,10 @@ class ATFImporter:
 
         result = {"transliteration": [], "lemmatization": [], "control_lines": []}
         for line in converted_lines:
-
             if line["c_type"] == "control_line":
                 result["control_lines"].append(line)
 
             elif line["c_type"] == "lem_line":
-
                 all_unique_lemmas = []
                 lemma_line = []
                 if not test:
@@ -433,7 +427,6 @@ class ATFImporter:
                 result["lemmatization"].append(tuple(lemma_line))
 
             elif line["c_type"] == "text_line":
-
                 # skip "DIŠ"
                 oracc_words = [entry for entry in line["c_array"] if entry != "DIŠ"]
                 last_transliteration_line = line["c_line"]
@@ -447,7 +440,6 @@ class ATFImporter:
         return result
 
     def insert_into_db(self, ebl_lines, filename):
-
         context = create_context()
         transliteration_factory = context.get_transliteration_update_factory()
         updater = context.get_fragment_updater()
@@ -518,7 +510,6 @@ class ATFImporter:
             failed.append(f"{filename} could not be imported: {str(e)}")
 
     def start(self):
-
         self.logger.info("Atf-Importer started...")
 
         # cli arguments
@@ -566,9 +557,7 @@ class ATFImporter:
 
         # read atf files from input folder
         for filepath in glob.glob(os.path.join(args.input, "*.atf")):
-
             with open(filepath, "r"):
-
                 filepath = filepath.replace("\\", "/")
 
                 split = filepath.split("/")
@@ -601,7 +590,6 @@ class ATFImporter:
                 self.insert_into_db(ebl_lines, filename)
 
             if args.logdir:
-
                 with open(
                     f"{args.logdir}not_lemmatized.txt", "w", encoding="utf8"
                 ) as outputfile:

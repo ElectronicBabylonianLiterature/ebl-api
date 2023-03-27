@@ -82,7 +82,6 @@ class Bibliography:
         year: Optional[int] = None,
         title: Optional[str] = None,
     ) -> Sequence[dict]:
-
         return self._repository.query_by_author_year_and_title(author, year, title)
 
     def search_container_title_and_collection_number(

@@ -302,7 +302,6 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentInfoSchema(many=True).load(cursor)
 
     def update_field(self, field, fragment):
-
         fields_to_update = {
             "introduction": ("introduction",),
             "lemmatization": ("text",),
@@ -407,7 +406,6 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-
         if museum_number.number.isnumeric():
             prev, next = self._query_next_and_previous_fragment(museum_number)
             if prev and next:
@@ -433,7 +431,6 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
     def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
-
         if set(query) - {"lemmaOperator"}:
             matcher = PatternMatcher(query, user_scopes)
             data = next(

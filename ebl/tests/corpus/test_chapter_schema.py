@@ -95,7 +95,6 @@ def get_museum_number(manuscript: Manuscript, include_documents: bool):
 
 
 def to_dict(chapter: Chapter, include_documents=False):
-
     OLD_SIGLUM_SCHEMA = ApiOldSiglumSchema if include_documents else OldSiglumSchema
     REFERENCE_SCHEMA = ApiReferenceSchema if include_documents else ReferenceSchema
 

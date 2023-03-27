@@ -108,9 +108,7 @@ class ATFPreprocessor:
         return string
 
     def do_cdli_replacements(self, atf):
-
         if atf[0].isdigit():
-
             atf = atf.replace("–", "-")
             atf = atf.replace("--", "-")  # new rule 22.02.2021
 
@@ -130,7 +128,6 @@ class ATFPreprocessor:
             open_found = False
             new_atf = ""
             for part in atfsplit:
-
                 if open_found:
                     atf_part = part.replace("-", "#.")  # convert "-" to "."
                     atf_part = atf_part.replace("–", "#.")  # convert "-" to "."
@@ -169,9 +166,7 @@ class ATFPreprocessor:
         return atf
 
     def do_c_atf_replacements(self, atf):
-
         if atf[0].isdigit():
-
             atf = atf.replace("–", "-")
             atf = atf.replace("--", "-")  # new rule 22.02.2021
 
@@ -191,7 +186,6 @@ class ATFPreprocessor:
             open_found = False
             new_atf = ""
             for part in atfsplit:
-
                 if open_found:
                     atf_part = part.replace("-", "#.")  # convert "-" to "."
                     atf_part = atf_part.replace("–", "#.")  # convert "-" to "."
@@ -268,7 +262,6 @@ class ATFPreprocessor:
         return (converted_line, None, tree.data, None)
 
     def convert_line(self, original_atf, atf):
-
         tree = self.ORACC_PARSER.parse(atf)
         self.logger.debug(f"Converting {tree.data}")
 
@@ -323,7 +316,6 @@ class ATFPreprocessor:
             return (None, None, None, None)
 
     def convert_lemline(self, atf, tree):
-
         if self.skip_next_lem_line:
             self.logger.warning("Skipping lem line")
             self.skip_next_lem_line = False
@@ -358,7 +350,6 @@ class ATFPreprocessor:
             return self.check_original_line(atf)
 
         except Exception:
-
             if self.style == 1:
                 atf = self.do_c_atf_replacements(atf)
             elif self.style == 2:
