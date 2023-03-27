@@ -6,6 +6,7 @@ from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
 from ebl.fragmentarium.domain.fragment import NotLowestJoinError
+from marshmallow import ValidationError
 
 
 class NotesResource:
@@ -23,5 +24,5 @@ class NotesResource:
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
 
-        except NotLowestJoinError as error:
+        except (NotLowestJoinError, ValidationError) as error:
             raise DataError(error) from error
