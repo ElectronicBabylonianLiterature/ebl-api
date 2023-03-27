@@ -37,14 +37,14 @@ class Convert_Legacy_Grammar_Signs(Visitor):
             matches = pattern.search(child)
 
             if matches is not None:
-                match = matches.group(0)
+                match = matches[0]
                 try:
                     next_char = tree.children[cnt + 1]
                     tree.children[cnt] = self.replacement_chars[match]
-                    tree.children[cnt + 1] = next_char + "₃"
+                    tree.children[cnt + 1] = f"{next_char}₃"
 
                 except Exception:
-                    tree.children[cnt] = self.replacement_chars[match] + "₂"
+                    tree.children[cnt] = f"{self.replacement_chars[match]}₂"
 
     def oracc_atf_text_line__value_name_part(self, tree):
         assert tree.data == "oracc_atf_text_line__value_name_part"
@@ -53,14 +53,14 @@ class Convert_Legacy_Grammar_Signs(Visitor):
             matches = pattern.search(child)
 
             if matches is not None:
-                match = matches.group(0)
+                match = matches[0]
                 try:
                     next_char = tree.children[cnt + 1]
                     tree.children[cnt] = self.replacement_chars[match]
-                    tree.children[cnt + 1] = next_char + "₃"
+                    tree.children[cnt + 1] = f"{next_char}₃"
 
                 except Exception:
-                    tree.children[cnt] = self.replacement_chars[match] + "₂"
+                    tree.children[cnt] = f"{self.replacement_chars[match]}₂"
 
 
 class Strip_Signs(Visitor):
@@ -88,19 +88,19 @@ class Line_Serializer(Visitor):
     def text_line(self, tree):
         assert tree.data == "text_line"
         result = DFS().visit_topdown(tree, "")
-        self.line += " " + result
+        self.line += f" {result}"
         return result
 
     def dollar_line(self, tree):
         assert tree.data == "dollar_line"
         result = DFS().visit_topdown(tree, "")
-        self.line += " " + result
+        self.line += f" {result}"
         return result
 
     def control_line(self, tree):
         assert tree.data == "control_line"
         result = DFS().visit_topdown(tree, "")
-        self.line += " " + result
+        self.line += f" {result}"
         return result
 
 
