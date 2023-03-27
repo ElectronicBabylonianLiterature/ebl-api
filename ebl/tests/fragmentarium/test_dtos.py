@@ -58,7 +58,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "collection": lemmatized_fragment.collection,
             "legacyScript": lemmatized_fragment.legacy_script,
             "script": ScriptSchema().dump(lemmatized_fragment.script),
-            "parsedNotes": NotesSchema().dump(lemmatized_fragment.notes),
+            "notes": NotesSchema().dump(lemmatized_fragment.notes),
             "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,
             "record": [
