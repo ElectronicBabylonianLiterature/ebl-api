@@ -243,3 +243,6 @@ class MongoSignRepository(SignRepository):
             {"logograms": {"$elemMatch": {"wordId": word_id}}}
         )
         return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+
+    def list_all_signs(self) -> Sequence[str]:
+        return self._collection.get_all_values("_id")

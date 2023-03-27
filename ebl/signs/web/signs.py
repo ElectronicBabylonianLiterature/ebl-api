@@ -27,3 +27,11 @@ class SignsResource:
                 fosseysBase64.append(fossey)
         attr.evolve(sign, fossey=fosseysBase64)
         resp.media = SignDtoSchema().dump(attr.evolve(sign, fossey=fosseysBase64))
+
+
+class SignsListResource:
+    def __init__(self, signs: SignRepository):
+        self.sign_repository = signs
+
+    def on_get(self, req, resp):
+        resp.media = self.sign_repository.list_all_signs()

@@ -33,5 +33,9 @@ class WordRepository(ABC):
         ...
 
     @abstractmethod
+    def list_all_words(self) -> Sequence:
+        ...
+
+    @abstractmethod
     def update(self, word) -> None:
         ...

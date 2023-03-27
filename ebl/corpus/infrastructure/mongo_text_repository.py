@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Sequence, Dict
+from typing import List, Optional, Tuple, Sequence, Dict, Union
 
 import pymongo
 from pymongo.database import Database
@@ -8,7 +8,7 @@ from pymongo.collation import Collation
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
-from ebl.corpus.application.corpus import TextRepository
+from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
     ChapterSchema,
@@ -188,6 +188,44 @@ class MongoTextRepository(TextRepository):
                 ]
             ),
             many=True,
+        )
+
+    def list_all_texts(self) -> Sequence[Dict[str, Union[str, int]]]:
+        return list(
+            self._texts.aggregate(
+                [
+                    {
+                        "$group": {
+                            "_id": {
+                                "index": "$index",
+                                "category": "$category",
+                                "genre": "$genre",
+                            }
+                        }
+                    },
+                    {"$replaceRoot": {"newRoot": "$_id"}},
+                ]
+            )
+        )
+
+    def list_all_chapters(self) -> Sequence[Dict[str, Union[str, int]]]:
+        return list(
+            self._chapters.aggregate(
+                [
+                    {
+                        "$group": {
+                            "_id": {
+                                "chapter": "$name",
+                                "stage": "$stage",
+                                "index": "$textId.index",
+                                "category": "$textId.category",
+                                "genre": "$textId.genre",
+                            }
+                        }
+                    },
+                    {"$replaceRoot": {"newRoot": "$_id"}},
+                ]
+            )
         )
 
     def update(self, id_: ChapterId, chapter: Chapter) -> None:

@@ -119,3 +119,11 @@ def test_update_word_invalid_entity(transform, client, saved_word):
     post_result = client.simulate_post(f"/words/{unique_lemma}", body=body)
 
     assert post_result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_list_all_words_route(client, dictionary, word) -> None:
+    dictionary.create(word)
+    result = client.simulate_get("/words/all")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [word["_id"]]

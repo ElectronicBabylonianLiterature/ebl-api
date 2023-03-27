@@ -44,3 +44,7 @@ class SignRepository(ABC):
     @abstractmethod
     def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
         ...
+
+    @abstractmethod
+    def list_all_signs(self) -> Sequence[str]:
+        ...

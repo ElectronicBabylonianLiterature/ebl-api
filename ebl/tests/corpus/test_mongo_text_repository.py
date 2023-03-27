@@ -2,7 +2,7 @@ from typing import Sequence
 import attr
 import pytest
 
-from ebl.corpus.application.corpus import TextRepository
+from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.corpus.domain.chapter_display import ChapterDisplay
