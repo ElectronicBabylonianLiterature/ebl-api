@@ -188,3 +188,9 @@ def test_validate_references_invalid(
         bibliography.validate_references(
             [first_invalid, valid_reference, second_invalid]
         )
+
+
+def test_list_all_signs(bibliography, bibliography_repository, user) -> None:
+    bibliography_entry = BibliographyEntryFactory.build()
+    bibliography.create(bibliography_entry, user)
+    assert bibliography.list_all_bibliography() == [bibliography_entry["id"]]

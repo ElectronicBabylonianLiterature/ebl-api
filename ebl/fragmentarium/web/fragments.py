@@ -57,3 +57,14 @@ class FragmentsQueryResource:
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
         )
+
+
+class FragmentsListResource:
+    def __init__(
+        self,
+        repository: FragmentRepository,
+    ):
+        self._repository = repository
+
+    def on_get(self, req: Request, resp: Response):
+        resp.media = self._repository.list_all_fragments()

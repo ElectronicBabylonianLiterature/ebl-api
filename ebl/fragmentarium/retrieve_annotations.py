@@ -66,7 +66,6 @@ def handle_blank_annotation_type(annotation_data: AnnotationData) -> str:
 def prepare_annotations(
     annotation: Annotations, image_width: int, image_height: int
 ) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
-
     annotations_with_signs = list(filter(filter_annotation, annotation.annotations))
 
     bounding_boxes = BoundingBox.from_annotations(

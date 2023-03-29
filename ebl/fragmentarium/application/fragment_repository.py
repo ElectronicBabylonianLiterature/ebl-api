@@ -97,3 +97,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         ...
+
+    @abstractmethod
+    def list_all_fragments(self) -> Sequence[str]:
+        ...

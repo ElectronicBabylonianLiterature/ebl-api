@@ -40,7 +40,7 @@ class Bibliography:
     def search(self, query: str) -> Sequence[dict]:
         author_query_result = []
         author_query = self._parse_author_year_and_title(query)
-        if not all(value is None for value in list(author_query.values())):
+        if any(value is not None for value in author_query.values()):
             author_query_result = self.search_author_year_and_title(
                 author_query["author"], author_query["year"], author_query["title"]
             )
@@ -56,23 +56,24 @@ class Bibliography:
             [*author_query_result, *container_query_result], lambda a, b: a == b
         )
 
+    def list_all_bibliography(self) -> Sequence[str]:
+        return self._repository.list_all_bibliography()
+
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
         parsed_query = dict.fromkeys(["author", "year", "title"])
-        match = re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query)
-        if match:
-            parsed_query["author"] = match.group(1)
-            parsed_query["year"] = int(match.group(2)) if match.group(2) else None
-            parsed_query["title"] = match.group(3)
+        if match := re.match(r"^([^\d]+)(?: (\d{1,4})(?: (.*))?)?$", query):
+            parsed_query["author"] = match[1]
+            parsed_query["year"] = int(match[2]) if match[2] else None
+            parsed_query["title"] = match[3]
         return parsed_query
 
     @staticmethod
     def _parse_container_title_short_and_collection_number(query: str) -> dict:
         parsed_query = dict.fromkeys(["container_title_short", "collection_number"])
-        match = re.match(r"^([^\s]+)(?: (\d*))?$", query)
-        if match:
-            parsed_query["container_title_short"] = match.group(1)
-            parsed_query["collection_number"] = match.group(2)
+        if match := re.match(r"^([^\s]+)(?: (\d*))?$", query):
+            parsed_query["container_title_short"] = match[1]
+            parsed_query["collection_number"] = match[2]
         return parsed_query
 
     def search_author_year_and_title(
@@ -81,7 +82,6 @@ class Bibliography:
         year: Optional[int] = None,
         title: Optional[str] = None,
     ) -> Sequence[dict]:
-
         return self._repository.query_by_author_year_and_title(author, year, title)
 
     def search_container_title_and_collection_number(

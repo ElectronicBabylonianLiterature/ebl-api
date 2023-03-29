@@ -38,6 +38,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
+from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -328,16 +329,15 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentInfoSchema(many=True).load(cursor)
 
     def update_field(self, field, fragment):
-
         fields_to_update = {
             "introduction": ("introduction",),
             "lemmatization": ("text",),
             "genres": ("genres",),
             "references": ("references",),
             "script": ("script",),
+            "notes": ("notes",),
             "transliteration": (
                 "text",
-                "notes",
                 "signs",
                 "record",
                 "line_to_vec",
@@ -433,7 +433,6 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-
         if museum_number.number.isnumeric():
             prev, next = self._query_next_and_previous_fragment(museum_number)
             if prev and next:
@@ -459,7 +458,6 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
     def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
-
         if set(query) - {"lemmaOperator"}:
             matcher = PatternMatcher(query, user_scopes)
             data = next(
@@ -475,3 +473,10 @@ class MongoFragmentRepository(FragmentRepository):
             data = None
 
         return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+
+    def list_all_fragments(
+        self, user_scopes: Sequence[Scope] = tuple()
+    ) -> Sequence[str]:
+        return list(
+            self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
+        )

@@ -143,3 +143,6 @@ class MongoBibliographyRepository(BibliographyRepository):
                 collation={"locale": "en", "strength": 1, "normalization": True},
             )
         ]
+
+    def list_all_bibliography(self) -> Sequence[str]:
+        return self._collection.get_all_values("_id")

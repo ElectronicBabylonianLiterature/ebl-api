@@ -8,7 +8,6 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 
 class Fragmentarium:
     def __init__(self, repository: FragmentRepository):
-
         self._repository = repository
 
     def statistics(self) -> Dict[str, int]:

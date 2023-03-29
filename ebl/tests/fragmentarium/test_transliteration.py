@@ -12,13 +12,6 @@ def test_text():
     assert transliteration.text == text
 
 
-def test_notes():
-    notes = "notes"
-    transliteration = TransliterationUpdate(notes=notes)
-
-    assert transliteration.notes == notes
-
-
 def test_signs():
     signs = "X"
     transliteration = TransliterationUpdate(signs=signs)

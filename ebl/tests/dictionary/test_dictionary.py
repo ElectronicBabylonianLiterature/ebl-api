@@ -9,13 +9,18 @@ import copy
 COLLECTION = "words"
 
 
-def test_create_and_find(database, dictionary, word):
+def test_list_all_words(database, dictionary, word) -> None:
+    dictionary.create(word)
+    assert dictionary.list_all_words() == [word["_id"]]
+
+
+def test_create_and_find(database, dictionary, word) -> None:
     word_id = dictionary.create(word)
 
     assert dictionary.find(word_id) == word
 
 
-def test_create_and_find_many(database, dictionary, word, when):
+def test_create_and_find_many(database, dictionary, word, when) -> None:
     another_word = {**word, "_id": "part1 part2 II"}
     dictionary.create(word)
     dictionary.create(another_word)
@@ -53,7 +58,7 @@ def test_word_not_found(dictionary):
         "*rt*",
     ],
 )
-def test_search_finds_all_homonyms(dictionary, word, query):
+def test_search_finds_all_homonyms(dictionary, word, query) -> None:
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
@@ -69,7 +74,7 @@ def test_search_finds_all_homonyms(dictionary, word, query):
         "sEmaNṭ",
     ],
 )
-def test_search_finds_by_meaning(dictionary, word, query):
+def test_search_finds_by_meaning(dictionary, word, query) -> None:
     another_word = {
         **word,
         "_id": "part1 part2 II",
@@ -93,7 +98,7 @@ def test_search_finds_by_meaning(dictionary, word, query):
         '"*š"',
     ],
 )
-def test_search_finds_by_root(dictionary, word, query):
+def test_search_finds_by_root(dictionary, word, query) -> None:
     another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
     another_word["roots"] = ["lmm", "plt", "prs"]
     dictionary.create(word)
@@ -114,7 +119,7 @@ def test_search_finds_by_vowel_class(dictionary, word):
     assert dictionary.search(query) == [word]
 
 
-def test_search_finds_by_all_params(dictionary, word):
+def test_search_finds_by_all_params(dictionary, word) -> None:
     another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
     another_word["roots"][0] = "lmm"
     dictionary.create(word)
@@ -131,7 +136,7 @@ def test_search_finds_by_all_params(dictionary, word):
     assert dictionary.search(query) == [word]
 
 
-def test_search_finds_duplicates(dictionary, word):
+def test_search_finds_duplicates(dictionary, word) -> None:
     another_word = {**word, "_id": "part1 part2 II", "homonym": "II"}
     dictionary.create(word)
     dictionary.create(another_word)
@@ -140,12 +145,12 @@ def test_search_finds_duplicates(dictionary, word):
     assert dictionary.search(query) == [word, another_word]
 
 
-def test_search_not_found(dictionary):
+def test_search_not_found(dictionary) -> None:
     query = urlencode({"word": "lemma"})
     assert dictionary.search(query) == []
 
 
-def test_update(dictionary, word, user):
+def test_update(dictionary, word, user) -> None:
     new_lemma = ["new"]
     word_id = dictionary.create(word)
     updated_word = pydash.defaults({"lemma": new_lemma}, word)

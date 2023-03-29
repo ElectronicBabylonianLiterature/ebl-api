@@ -68,7 +68,6 @@ class LineVariantDisplay:
 
     @classmethod
     def from_line_variant(cls, line_variant: LineVariant, manuscripts_by_id):
-
         manuscript_line_displays = [
             ManuscriptLineDisplay.from_manuscript_line(
                 manuscripts_by_id[manuscript_line.manuscript_id], manuscript_line

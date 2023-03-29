@@ -1,4 +1,4 @@
-from typing import Any, cast, Sequence
+from typing import Any, cast, Sequence, Optional
 
 import inflect
 from pymongo.collection import Collection
@@ -88,6 +88,9 @@ class MongoCollection:
 
     def create_index(self, index, **kwargs):
         return self.__get_collection().create_index(index, **kwargs)
+
+    def get_all_values(self, field: str, query: Optional[dict] = None) -> Sequence[str]:
+        return self.__get_collection().distinct(field, query or {})
 
     def __not_found_error(self, query):
         return NotFoundError(f"{self.__resource_noun} {query} not found.")
