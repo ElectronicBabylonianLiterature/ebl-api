@@ -10,6 +10,9 @@ def test_get_fragment_pager(client, fragmentarium):
     fragment_2 = FragmentFactory.build(number=MuseumNumber("X", "2"))
     for fragment in [fragment_0, fragment_1, fragment_2]:
         fragmentarium.create(fragment)
+
+    fragmentarium._repository._create_sort_index()
+
     result = client.simulate_get(f"/fragments/{fragment_1.number}/pager")
 
     assert result.json == {"next": "X.2", "previous": "X.0"}

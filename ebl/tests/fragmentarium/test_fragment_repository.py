@@ -276,6 +276,9 @@ def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
         fragment_repository.create(
             FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
+
+    fragment_repository._create_sort_index()
+
     for museum_number in museum_numbers:
         results = fragment_repository.query_next_and_previous_fragment(
             MuseumNumber.of(museum_number)
@@ -838,6 +841,7 @@ def test_query_lemmas(
     )
     fragment_repository.create(fragment)
     fragment_repository.create(fragment_with_phrase)
+    fragment_repository._create_sort_index()
 
     assert (
         fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
