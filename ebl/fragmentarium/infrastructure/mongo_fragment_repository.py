@@ -106,6 +106,27 @@ class MongoFragmentRepository(FragmentRepository):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
 
+    def _create_sort_index(self) -> None:
+        print("Creating sort index (only necessary once after new fragments are added)")
+
+        self._fragments.aggregate(
+            [
+                {"$project": {"museumNumber": True}},
+                *sort_by_museum_number(),
+                {
+                    "$group": {
+                        "_id": None,
+                        "sorted": {"$push": "$_id"},
+                    }
+                },
+                {"$unwind": {"path": "$sorted", "includeArrayIndex": "sortKey"}},
+                {"$project": {"_id": "$sorted", "_sortKey": "$sortKey"}},
+                {"$merge": "fragments"},
+            ],
+            allowDiskUse=True,
+        )
+        self._fragments.create_index([("_sortKey", pymongo.ASCENDING)], unique=True)
+
     def create_indexes(self) -> None:
         self._fragments.create_index(
             [
@@ -141,6 +162,11 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
 
+        if next(
+            self._fragments.aggregate([{"$match": {"_sortKey": {"$exists": False}}}]),
+            default=False,
+        ):
+            self._create_sort_index()
     def count_transliterated_fragments(self):
         return self._fragments.count_documents(HAS_TRANSLITERATION)
 
