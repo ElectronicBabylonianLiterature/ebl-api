@@ -408,26 +408,34 @@ class MongoFragmentRepository(FragmentRepository):
             projection={"museumNumber": True},
         )
 
-    def _query_next_and_previous_fragment(
-        self, museum_number
-    ) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
-        same_museum_numbers = self.query_museum_numbers(
-            museum_number.prefix, rf"{museum_number.number}[^\d]*"
-        )
-        preeceding_museum_numbers = self.query_museum_numbers(
-            museum_number.prefix, rf"{int(museum_number.number) - 1}[^\d]*"
-        )
-        following_museum_numbers = self.query_museum_numbers(
-            museum_number.prefix, rf"{int(museum_number.number) + 1}[^\d]*"
-        )
-        return _find_adjacent_museum_number_from_sequence(
-            museum_number,
-            [
-                *same_museum_numbers,
-                *preeceding_museum_numbers,
-                *following_museum_numbers,
-            ],
-        )
+    def find_by_sort_key(self, key: int) -> MuseumNumber:
+        def make_museum_number(data: dict) -> MuseumNumber:
+            return MuseumNumberSchema().load(data.get("museumNumber", data))
+
+        try:
+            return make_museum_number(
+                self._fragments.find_one(
+                    {"_sortKey": key}, projection={"museumNumber": True}
+                )
+            )
+        except NotFoundError as error:
+            arg_max = next(
+                self._fragments.find_many(
+                    {}, projection={"_sortKey": True, "museumNumber": True}
+                )
+                .sort("_sortKey", -1)
+                .limit(1)
+            )
+            if key < 0:
+                return make_museum_number(arg_max)
+            elif key > arg_max["_sortKey"]:
+                return make_museum_number(
+                    self._fragments.find_one(
+                        {"_sortKey": 0}, projection={"museumNumber": True}
+                    )
+                )
+            else:
+                raise NotFoundError(f"Unable to find _sortKey {key}") from error
 
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
