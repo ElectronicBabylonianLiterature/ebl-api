@@ -1,4 +1,3 @@
-import operator
 from typing import Callable, List, Optional, Sequence, Tuple, cast
 
 import pymongo
@@ -22,6 +21,7 @@ from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     PatternMatcher,
+    sort_by_museum_number,
 )
 
 from ebl.fragmentarium.infrastructure.queries import (
@@ -67,38 +67,6 @@ def _min_max_museum_numbers(
         cast(Sequence[MuseumNumber], filter(lambda x: x is not None, museum_numbers))
     )
     return min(filtered_museum_numbers), max(filtered_museum_numbers)
-
-
-def _find_adjacent_museum_number_from_sequence(
-    museum_number: MuseumNumber, cursor: Sequence[dict], is_endpoint=False
-) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
-    first = None
-    last = None
-    current_prev = None
-    current_next = None
-    for current_cursor in cursor:
-        museum_number_dict = current_cursor["museumNumber"]
-        # Not use MuseumNumber().load(current_current["museumNumber"]) because of
-        # performance reasons
-        current_museum_number = MuseumNumber(
-            prefix=museum_number_dict["prefix"],
-            number=museum_number_dict["number"],
-            suffix=museum_number_dict["suffix"],
-        )
-
-        current_prev = _select_museum_between_two_values(
-            museum_number, current_museum_number, current_prev, operator.lt
-        )
-        current_next = _select_museum_between_two_values(
-            museum_number, current_museum_number, current_next, operator.gt
-        )
-
-        if is_endpoint:
-            first, last = _min_max_museum_numbers([first, last, current_museum_number])
-    if is_endpoint:
-        current_prev = current_prev or last
-        current_next = current_next or first
-    return current_prev, current_next
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -167,6 +135,7 @@ class MongoFragmentRepository(FragmentRepository):
             default=False,
         ):
             self._create_sort_index()
+
     def count_transliterated_fragments(self):
         return self._fragments.count_documents(HAS_TRANSLITERATION)
 
@@ -440,26 +409,19 @@ class MongoFragmentRepository(FragmentRepository):
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-        if museum_number.number.isnumeric():
-            prev, next = self._query_next_and_previous_fragment(museum_number)
-            if prev and next:
-                return FragmentPagerInfo(prev, next)
+        current = self._fragments.find_one(
+            {
+                "museumNumber.prefix": museum_number.prefix,
+                "museumNumber.number": museum_number.number,
+                "museumNumber.suffix": museum_number.suffix,
+            },
+            projection={"_sortKey": True},
+        )["_sortKey"]
 
-        museum_numbers_by_prefix = self._fragments.find_many(
-            {"museumNumber.prefix": museum_number.prefix},
-            projection={"museumNumber": True},
-        )
-        prev, next = _find_adjacent_museum_number_from_sequence(
-            museum_number, museum_numbers_by_prefix
-        )
-        if not (prev and next):
-            all_museum_numbers = self._fragments.find_many(
-                {}, projection={"museumNumber": True}
-            )
-            prev, next = _find_adjacent_museum_number_from_sequence(
-                museum_number, all_museum_numbers, True
-            )
-        return FragmentPagerInfo(cast(MuseumNumber, prev), cast(MuseumNumber, next))
+        prev = self.find_by_sort_key(current - 1)
+        next_ = self.find_by_sort_key(current + 1)
+
+        return FragmentPagerInfo(prev, next_)
 
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
