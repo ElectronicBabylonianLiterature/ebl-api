@@ -105,7 +105,9 @@ class MongoFragmentRepository(FragmentRepository):
             unique=True,
         )
         self._fragments.create_index([("accession", pymongo.ASCENDING)])
-        self._fragments.create_index([("cdliNumber", pymongo.ASCENDING)])
+        self._fragments.create_index(
+            [("externalNumbers.cdliNumber", pymongo.ASCENDING)]
+        )
         self._fragments.create_index([("folios.name", pymongo.ASCENDING)])
         self._fragments.create_index(
             [
