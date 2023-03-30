@@ -132,7 +132,7 @@ class MongoFragmentRepository(FragmentRepository):
 
         if next(
             self._fragments.aggregate([{"$match": {"_sortKey": {"$exists": False}}}]),
-            default=False,
+            False,
         ):
             self._create_sort_index()
 
