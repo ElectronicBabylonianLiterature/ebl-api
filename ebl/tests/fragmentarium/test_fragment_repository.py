@@ -745,14 +745,14 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        MUSEUM_NUMBERS[1],
-                        (0,),
-                        1,
-                    ),
-                    QueryItem(
                         MUSEUM_NUMBERS[0],
                         (1, 2),
                         2,
+                    ),
+                    QueryItem(
+                        MUSEUM_NUMBERS[1],
+                        (0,),
+                        1,
                     ),
                 ],
                 3,
