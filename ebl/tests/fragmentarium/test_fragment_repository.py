@@ -53,10 +53,10 @@ from ebl.transliteration.application.sign_repository import SignRepository
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
-FRAGMENT_IDS = ["X.1", "B.2"]
+FRAGMENT_IDS = ["K.1", "Sm.2"]
 MUSEUM_NUMBERS = [
-    MuseumNumber(prefix="X", number="1", suffix=""),
-    MuseumNumber(prefix="B", number="2", suffix=""),
+    MuseumNumber(prefix="K", number="1", suffix=""),
+    MuseumNumber(prefix="Sm", number="2", suffix=""),
 ]
 
 
