@@ -341,7 +341,7 @@ class ATFImporter:
 
     def get_museum_number_by_cdli_number(self, cdli_number):
         for entry in self.db.get_collection("fragments").find(
-            {"cdliNumber": cdli_number}, {"museumNumber"}
+            {"externalNumbers.cdliNumber": cdli_number}, {"museumNumber"}
         ):
             return entry["_id"]
 
