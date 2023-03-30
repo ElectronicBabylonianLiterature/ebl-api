@@ -93,7 +93,7 @@ class PatternMatcher:
         return [
             {"$sort": {"script.sortKey": 1, "_sortKey": 1}},
             *self._limit_result(),
-            {"$project": {"_id": False, "script": False}},
+            {"$project": {"_id": False, "script": False, "_sortKey": False}},
             {
                 "$group": {
                     "_id": None,
@@ -148,6 +148,7 @@ class PatternMatcher:
                     "_id": "$_id",
                     "matchingLines": {"$push": "$matchingLines"},
                     "museumNumber": {"$first": "$museumNumber"},
+                    "_sortKey": {"$first": "$_sortKey"},
                 },
             },
             {
