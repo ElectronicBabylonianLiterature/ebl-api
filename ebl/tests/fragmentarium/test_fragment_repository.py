@@ -9,6 +9,9 @@ from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -816,7 +819,7 @@ def test_update_update_references(fragment_repository):
     ],
 )
 def test_query_lemmas(
-    fragment_repository: FragmentRepository,
+    fragment_repository: MongoFragmentRepository,
     query_type: LemmaQueryType,
     lemmas: Tuple[str],
     expected: QueryResult,
