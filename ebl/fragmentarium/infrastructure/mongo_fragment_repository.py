@@ -1,4 +1,4 @@
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import Callable, List, Optional, Sequence
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -58,15 +58,6 @@ def _select_museum_between_two_values(
         return current_museum_number
     else:
         return current_prev_or_next
-
-
-def _min_max_museum_numbers(
-    museum_numbers: Sequence[Optional[MuseumNumber]],
-) -> Tuple[MuseumNumber, MuseumNumber]:
-    filtered_museum_numbers = list(
-        cast(Sequence[MuseumNumber], filter(lambda x: x is not None, museum_numbers))
-    )
-    return min(filtered_museum_numbers), max(filtered_museum_numbers)
 
 
 def load_museum_number(data: dict) -> MuseumNumber:
