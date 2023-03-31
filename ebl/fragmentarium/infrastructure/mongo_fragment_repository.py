@@ -1,5 +1,4 @@
-import operator
-from typing import Callable, List, Optional, Sequence, Tuple, cast
+from typing import List, Optional, Sequence
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -22,6 +21,7 @@ from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     PatternMatcher,
+    sort_by_museum_number,
 )
 
 from ebl.fragmentarium.infrastructure.queries import (
@@ -45,66 +45,35 @@ def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
-def _select_museum_between_two_values(
-    museum_number: MuseumNumber,
-    current_museum_number: MuseumNumber,
-    current_prev_or_next: Optional[MuseumNumber],
-    comparator: Callable[[MuseumNumber, MuseumNumber], bool],
-) -> Optional[MuseumNumber]:
-    if comparator(current_museum_number, museum_number) and (
-        not current_prev_or_next
-        or comparator(current_prev_or_next, current_museum_number)
-    ):
-        return current_museum_number
-    else:
-        return current_prev_or_next
-
-
-def _min_max_museum_numbers(
-    museum_numbers: Sequence[Optional[MuseumNumber]],
-) -> Tuple[MuseumNumber, MuseumNumber]:
-    filtered_museum_numbers = list(
-        cast(Sequence[MuseumNumber], filter(lambda x: x is not None, museum_numbers))
-    )
-    return min(filtered_museum_numbers), max(filtered_museum_numbers)
-
-
-def _find_adjacent_museum_number_from_sequence(
-    museum_number: MuseumNumber, cursor: Sequence[dict], is_endpoint=False
-) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
-    first = None
-    last = None
-    current_prev = None
-    current_next = None
-    for current_cursor in cursor:
-        museum_number_dict = current_cursor["museumNumber"]
-        # Not use MuseumNumber().load(current_current["museumNumber"]) because of
-        # performance reasons
-        current_museum_number = MuseumNumber(
-            prefix=museum_number_dict["prefix"],
-            number=museum_number_dict["number"],
-            suffix=museum_number_dict["suffix"],
-        )
-
-        current_prev = _select_museum_between_two_values(
-            museum_number, current_museum_number, current_prev, operator.lt
-        )
-        current_next = _select_museum_between_two_values(
-            museum_number, current_museum_number, current_next, operator.gt
-        )
-
-        if is_endpoint:
-            first, last = _min_max_museum_numbers([first, last, current_museum_number])
-    if is_endpoint:
-        current_prev = current_prev or last
-        current_next = current_next or first
-    return current_prev, current_next
+def load_museum_number(data: dict) -> MuseumNumber:
+    return MuseumNumberSchema().load(data.get("museumNumber", data))
 
 
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
+
+    def _create_sort_index(self) -> None:
+        print("Creating sort index (only necessary once after new fragments are added)")
+
+        self._fragments.aggregate(
+            [
+                {"$project": {"museumNumber": True}},
+                *sort_by_museum_number(),
+                {
+                    "$group": {
+                        "_id": None,
+                        "sorted": {"$push": "$_id"},
+                    }
+                },
+                {"$unwind": {"path": "$sorted", "includeArrayIndex": "sortKey"}},
+                {"$project": {"_id": "$sorted", "_sortKey": "$sortKey"}},
+                {"$merge": "fragments"},
+            ],
+            allowDiskUse=True,
+        )
+        self._fragments.create_index([("_sortKey", pymongo.ASCENDING)], unique=True)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -142,6 +111,12 @@ class MongoFragmentRepository(FragmentRepository):
                 ("fragments.museumNumber.suffix", pymongo.ASCENDING),
             ]
         )
+
+        if next(
+            self._fragments.aggregate([{"$match": {"_sortKey": {"$exists": False}}}]),
+            False,
+        ):
+            self._create_sort_index()
 
     def count_transliterated_fragments(self):
         return self._fragments.count_documents(HAS_TRANSLITERATION)
@@ -384,50 +359,48 @@ class MongoFragmentRepository(FragmentRepository):
             projection={"museumNumber": True},
         )
 
-    def _query_next_and_previous_fragment(
-        self, museum_number
-    ) -> Tuple[Optional[MuseumNumber], Optional[MuseumNumber]]:
-        same_museum_numbers = self.query_museum_numbers(
-            museum_number.prefix, rf"{museum_number.number}[^\d]*"
-        )
-        preeceding_museum_numbers = self.query_museum_numbers(
-            museum_number.prefix, rf"{int(museum_number.number) - 1}[^\d]*"
-        )
-        following_museum_numbers = self.query_museum_numbers(
-            museum_number.prefix, rf"{int(museum_number.number) + 1}[^\d]*"
-        )
-        return _find_adjacent_museum_number_from_sequence(
-            museum_number,
-            [
-                *same_museum_numbers,
-                *preeceding_museum_numbers,
-                *following_museum_numbers,
-            ],
-        )
+    def query_by_sort_key(self, key: int) -> MuseumNumber:
+        if key < 0:
+            last_fragment = next(
+                self._fragments.find_many(
+                    {}, projection={"_sortKey": True, "museumNumber": True}
+                )
+                .sort("_sortKey", -1)
+                .limit(1)
+            )
+            return load_museum_number(last_fragment)
+
+        if match := next(
+            self._fragments.aggregate(
+                [
+                    {"$match": {"_sortKey": {"$in": [0, key]}}},
+                    {"$limit": 2},
+                    {"$sort": {"_sortKey": -1}},
+                    {"$project": {"museumNumber": True}},
+                ]
+            ),
+            None,
+        ):
+            return load_museum_number(match)
+        else:
+            raise NotFoundError(f"Unable to find fragment with _sortKey {key}")
 
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
     ) -> FragmentPagerInfo:
-        if museum_number.number.isnumeric():
-            prev, next = self._query_next_and_previous_fragment(museum_number)
-            if prev and next:
-                return FragmentPagerInfo(prev, next)
+        current = self._fragments.find_one(
+            {
+                "museumNumber.prefix": museum_number.prefix,
+                "museumNumber.number": museum_number.number,
+                "museumNumber.suffix": museum_number.suffix,
+            },
+            projection={"_sortKey": True},
+        )["_sortKey"]
 
-        museum_numbers_by_prefix = self._fragments.find_many(
-            {"museumNumber.prefix": museum_number.prefix},
-            projection={"museumNumber": True},
-        )
-        prev, next = _find_adjacent_museum_number_from_sequence(
-            museum_number, museum_numbers_by_prefix
-        )
-        if not (prev and next):
-            all_museum_numbers = self._fragments.find_many(
-                {}, projection={"museumNumber": True}
-            )
-            prev, next = _find_adjacent_museum_number_from_sequence(
-                museum_number, all_museum_numbers, True
-            )
-        return FragmentPagerInfo(cast(MuseumNumber, prev), cast(MuseumNumber, next))
+        prev = self.query_by_sort_key(current - 1)
+        next_ = self.query_by_sort_key(current + 1)
+
+        return FragmentPagerInfo(prev, next_)
 
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)

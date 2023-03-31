@@ -9,6 +9,9 @@ from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -50,10 +53,10 @@ from ebl.transliteration.application.sign_repository import SignRepository
 
 COLLECTION = "fragments"
 JOINS_COLLECTION = "joins"
-FRAGMENT_IDS = ["X.1", "B.2"]
+FRAGMENT_IDS = ["K.1", "Sm.2"]
 MUSEUM_NUMBERS = [
-    MuseumNumber(prefix="X", number="1", suffix=""),
-    MuseumNumber(prefix="B", number="2", suffix=""),
+    MuseumNumber(prefix="K", number="1", suffix=""),
+    MuseumNumber(prefix="Sm", number="2", suffix=""),
 ]
 
 
@@ -276,6 +279,9 @@ def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
         fragment_repository.create(
             FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
         )
+
+    fragment_repository._create_sort_index()
+
     for museum_number in museum_numbers:
         results = fragment_repository.query_next_and_previous_fragment(
             MuseumNumber.of(museum_number)
@@ -739,14 +745,14 @@ def test_update_update_references(fragment_repository):
             QueryResult(
                 [
                     QueryItem(
-                        MUSEUM_NUMBERS[1],
-                        (0,),
-                        1,
-                    ),
-                    QueryItem(
                         MUSEUM_NUMBERS[0],
                         (1, 2),
                         2,
+                    ),
+                    QueryItem(
+                        MUSEUM_NUMBERS[1],
+                        (0,),
+                        1,
                     ),
                 ],
                 3,
@@ -813,7 +819,7 @@ def test_update_update_references(fragment_repository):
     ],
 )
 def test_query_lemmas(
-    fragment_repository: FragmentRepository,
+    fragment_repository: MongoFragmentRepository,
     query_type: LemmaQueryType,
     lemmas: Tuple[str],
     expected: QueryResult,
@@ -838,6 +844,7 @@ def test_query_lemmas(
     )
     fragment_repository.create(fragment)
     fragment_repository.create(fragment_with_phrase)
+    fragment_repository._create_sort_index()
 
     assert (
         fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
@@ -855,3 +862,34 @@ def test_fetch_scopes(fragment_repository: FragmentRepository):
         Scope.READ_URUKLBU_FRAGMENTS,
         Scope.READ_CAIC_FRAGMENTS,
     ]
+
+
+@pytest.mark.parametrize(
+    "key,number",
+    [
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 0),
+        (-1, 4),
+    ],
+)
+def test_query_by_sort_key(
+    fragment_repository: MongoFragmentRepository, key: int, number: int
+):
+    museum_numbers = [MuseumNumber("B", str(i)) for i in range(5)]
+    fragments = [FragmentFactory.build(number=number) for number in museum_numbers]
+
+    fragment_repository.create_many(fragments)
+    fragment_repository._create_sort_index()
+
+    assert fragment_repository.query_by_sort_key(key) == museum_numbers[number]
+
+
+def test_query_by_sort_key_no_index(fragment_repository):
+    fragment_repository.create(FragmentFactory.build(number=MuseumNumber("B", "0")))
+
+    with pytest.raises(NotFoundError, match="Unable to find fragment with _sortKey 0"):
+        fragment_repository.query_by_sort_key(0)

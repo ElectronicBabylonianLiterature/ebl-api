@@ -91,9 +91,9 @@ class PatternMatcher:
 
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
-            *sort_by_museum_number(pre_sort_keys={"script.sortKey": 1}),
+            {"$sort": {"script.sortKey": 1, "_sortKey": 1}},
             *self._limit_result(),
-            {"$project": {"_id": False, "script": False}},
+            {"$project": {"_id": False, "script": False, "_sortKey": False}},
             {
                 "$group": {
                     "_id": None,
@@ -148,6 +148,7 @@ class PatternMatcher:
                     "_id": "$_id",
                     "matchingLines": {"$push": "$matchingLines"},
                     "museumNumber": {"$first": "$museumNumber"},
+                    "_sortKey": {"$first": "$_sortKey"},
                 },
             },
             {

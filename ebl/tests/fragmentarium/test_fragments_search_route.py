@@ -142,6 +142,8 @@ def test_query_fragmentarium_transliteration(
     for fragment in transliterated_fragments:
         fragmentarium.create(fragment)
 
+    fragmentarium._repository._create_sort_index()
+
     for sign in signs:
         sign_repository.create(sign)
 
