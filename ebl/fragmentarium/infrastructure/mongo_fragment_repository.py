@@ -359,7 +359,7 @@ class MongoFragmentRepository(FragmentRepository):
             projection={"museumNumber": True},
         )
 
-    def find_by_sort_key(self, key: int) -> MuseumNumber:
+    def query_by_sort_key(self, key: int) -> MuseumNumber:
         if key < 0:
             last_fragment = next(
                 self._fragments.find_many(
@@ -399,8 +399,8 @@ class MongoFragmentRepository(FragmentRepository):
             projection={"_sortKey": True},
         )["_sortKey"]
 
-        prev = self.find_by_sort_key(current - 1)
-        next_ = self.find_by_sort_key(current + 1)
+        prev = self.query_by_sort_key(current - 1)
+        next_ = self.query_by_sort_key(current + 1)
 
         return FragmentPagerInfo(prev, next_)
 
