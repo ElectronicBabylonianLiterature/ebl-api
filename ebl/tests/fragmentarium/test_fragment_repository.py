@@ -876,7 +876,9 @@ def test_fetch_scopes(fragment_repository: FragmentRepository):
         (-1, 4),
     ],
 )
-def test_query_by_sort_key(fragment_repository: MongoFragmentRepository, key: int, number: int):
+def test_query_by_sort_key(
+    fragment_repository: MongoFragmentRepository, key: int, number: int
+):
     museum_numbers = [MuseumNumber("B", str(i)) for i in range(5)]
     fragments = [FragmentFactory.build(number=number) for number in museum_numbers]
 
@@ -886,7 +888,7 @@ def test_query_by_sort_key(fragment_repository: MongoFragmentRepository, key: in
     assert fragment_repository.query_by_sort_key(key) == museum_numbers[number]
 
 
-def test_query_by_sort_key_no_index(fragment_repository: MongoFragmentRepository):
+def test_query_by_sort_key_no_index(fragment_repository):
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber("B", "0")))
 
     with pytest.raises(NotFoundError, match="Unable to find fragment with _sortKey 0"):
