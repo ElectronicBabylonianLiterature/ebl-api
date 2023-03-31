@@ -1,4 +1,4 @@
-from typing import Callable, List, Optional, Sequence
+from typing import List, Optional, Sequence
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -43,21 +43,6 @@ from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
-
-
-def _select_museum_between_two_values(
-    museum_number: MuseumNumber,
-    current_museum_number: MuseumNumber,
-    current_prev_or_next: Optional[MuseumNumber],
-    comparator: Callable[[MuseumNumber, MuseumNumber], bool],
-) -> Optional[MuseumNumber]:
-    if comparator(current_museum_number, museum_number) and (
-        not current_prev_or_next
-        or comparator(current_prev_or_next, current_museum_number)
-    ):
-        return current_museum_number
-    else:
-        return current_prev_or_next
 
 
 def load_museum_number(data: dict) -> MuseumNumber:
