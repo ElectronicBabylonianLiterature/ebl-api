@@ -370,7 +370,7 @@ class MongoFragmentRepository(FragmentRepository):
             )
             return load_museum_number(last_fragment)
 
-        match = next(
+        if match := next(
             self._fragments.aggregate(
                 [
                     {"$match": {"_sortKey": {"$in": [0, key]}}},
@@ -380,9 +380,7 @@ class MongoFragmentRepository(FragmentRepository):
                 ]
             ),
             None,
-        )
-
-        if match:
+        ):
             return load_museum_number(match)
         else:
             raise NotFoundError(f"Unable to find fragment with _sortKey {key}")
