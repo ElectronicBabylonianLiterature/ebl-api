@@ -862,3 +862,32 @@ def test_fetch_scopes(fragment_repository: FragmentRepository):
         Scope.READ_URUKLBU_FRAGMENTS,
         Scope.READ_CAIC_FRAGMENTS,
     ]
+
+
+@pytest.mark.parametrize(
+    "key,number",
+    [
+        (0, 0),
+        (1, 1),
+        (2, 2),
+        (3, 3),
+        (4, 4),
+        (5, 0),
+        (-1, 4),
+    ],
+)
+def test_query_by_sort_key(fragment_repository: MongoFragmentRepository, key: int, number: int):
+    museum_numbers = [MuseumNumber("B", str(i)) for i in range(5)]
+    fragments = [FragmentFactory.build(number=number) for number in museum_numbers]
+
+    fragment_repository.create_many(fragments)
+    fragment_repository._create_sort_index()
+
+    assert fragment_repository.query_by_sort_key(key) == museum_numbers[number]
+
+
+def test_query_by_sort_key_no_index(fragment_repository: MongoFragmentRepository):
+    fragment_repository.create(FragmentFactory.build(number=MuseumNumber("B", "0")))
+
+    with pytest.raises(NotFoundError, match="Unable to find fragment with _sortKey 0"):
+        fragment_repository.query_by_sort_key(0)
