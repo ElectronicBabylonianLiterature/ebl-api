@@ -69,6 +69,10 @@ def _min_max_museum_numbers(
     return min(filtered_museum_numbers), max(filtered_museum_numbers)
 
 
+def load_museum_number(data: dict) -> MuseumNumber:
+    return MuseumNumberSchema().load(data.get("museumNumber", data))
+
+
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
@@ -380,33 +384,31 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def find_by_sort_key(self, key: int) -> MuseumNumber:
-        def make_museum_number(data: dict) -> MuseumNumber:
-            return MuseumNumberSchema().load(data.get("museumNumber", data))
-
-        try:
-            return make_museum_number(
-                self._fragments.find_one(
-                    {"_sortKey": key}, projection={"museumNumber": True}
-                )
-            )
-        except NotFoundError as error:
-            arg_max = next(
+        if key < 0:
+            last_fragment = next(
                 self._fragments.find_many(
                     {}, projection={"_sortKey": True, "museumNumber": True}
                 )
                 .sort("_sortKey", -1)
                 .limit(1)
             )
-            if key < 0:
-                return make_museum_number(arg_max)
-            elif key > arg_max["_sortKey"]:
-                return make_museum_number(
-                    self._fragments.find_one(
-                        {"_sortKey": 0}, projection={"museumNumber": True}
-                    )
-                )
-            else:
-                raise NotFoundError(f"Unable to find _sortKey {key}") from error
+            return load_museum_number(last_fragment)
+
+        match = next(
+            self._fragments.aggregate(
+                [
+                    {"$match": {"_sortKey": {"$in": [0, key]}}},
+                    {"$limit": 1},
+                    {"$project": {"museumNumber": True}},
+                ]
+            ),
+            None,
+        )
+
+        if match:
+            return load_museum_number(match)
+        else:
+            raise NotFoundError(f"Unable to find fragment with _sortKey {key}")
 
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
