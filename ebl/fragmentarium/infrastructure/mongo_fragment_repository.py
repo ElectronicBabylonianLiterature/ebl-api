@@ -374,7 +374,8 @@ class MongoFragmentRepository(FragmentRepository):
             self._fragments.aggregate(
                 [
                     {"$match": {"_sortKey": {"$in": [0, key]}}},
-                    {"$limit": 1},
+                    {"$limit": 2},
+                    {"$sort": {"_sortKey": -1}},
                     {"$project": {"museumNumber": True}},
                 ]
             ),
