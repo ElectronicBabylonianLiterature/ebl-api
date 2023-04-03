@@ -132,3 +132,6 @@ Taskfile.yml
 
 # Core dumps
 core.*
+
+# Alignment data export
+ebl/alignment/output
