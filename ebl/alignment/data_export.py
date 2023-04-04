@@ -38,7 +38,7 @@ if __name__ == "__main__":
     print("Exporting fragments...")
 
     fragment_signs = fragments.find_many(
-        {"signs": {"$exists": True, "$ne": ""}}, projection={"signs": True}, limit=5
+        {"signs": {"$exists": True, "$ne": ""}}, projection={"signs": True}
     )
     df_fragments = pd.DataFrame.from_records(fragment_signs)
 
