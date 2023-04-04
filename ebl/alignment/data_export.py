@@ -54,9 +54,7 @@ if __name__ == "__main__":
     siglum_columns = ["provenance", "period", "type", "disambiguator"]
     siglum_enums = [Provenance, Period, ManuscriptType]
 
-    abbreviation_mappings = {
-        column_name: enum for column_name, enum in zip(siglum_columns, siglum_enums)
-    }
+    abbreviation_mappings = dict(zip(siglum_columns, siglum_enums))
 
     chapter_signs = chapters.aggregate(
         [
