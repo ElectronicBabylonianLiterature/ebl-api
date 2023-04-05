@@ -44,10 +44,26 @@ month_names = [
     "December",
 ]
 
+include_fields = [
+    "text",
+    "signs",
+    "lines",
+    "references",
+    "introduction",
+    "notes",
+    "script",
+    "uniqueLemma",
+]
+
 
 def aggregate_actions(names: Sequence[str], month: int, year: int):
     pipeline = [
-        {"$match": {"user_profile.nickname": {"$regex": "|".join(names)}}},
+        {
+            "$match": {
+                "resource_type": "fragments",
+                "user_profile.nickname": {"$regex": "|".join(names)},
+            }
+        },
         {"$addFields": {"date": {"$toDate": "$date"}}},
         {
             "$match": {
@@ -57,7 +73,6 @@ def aggregate_actions(names: Sequence[str], month: int, year: int):
                         {"$eq": [month, {"$month": "$date"}]},
                     ]
                 },
-                "resource_type": "fragments",
             }
         },
         {"$sort": {"date": -1}},
@@ -74,19 +89,7 @@ def aggregate_actions(names: Sequence[str], month: int, year: int):
             }
         },
         {"$unwind": "$field"},
-        {
-            "$match": {
-                "field": {
-                    "$in": [
-                        "lines",
-                        "references",
-                        "introduction",
-                        "notes",
-                        "script.period",
-                    ]
-                }
-            }
-        },
+        {"$match": {"field": {"$regex": "|".join(include_fields)}}},
         {
             "$group": {
                 "_id": {"resource_id": "$resource_id", "action": "$action"},
@@ -162,7 +165,11 @@ if __name__ == "__main__":
     print("Creating dataframe...")
     df = pd.DataFrame.from_records(data)
     df = df[df.resource_id != "Test.Fragment"]
-    df = df.explode("fields").sort_values(["resource_id", "fields"])
+    df = df.explode("fields")
+    df["fields"] = df["fields"].str.extract(
+        f"({'|'.join(include_fields)})", expand=False
+    )
+    df = df.drop_duplicates()
 
     df = (
         df.sort_values("action")
