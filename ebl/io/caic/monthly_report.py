@@ -28,8 +28,6 @@ parser.add_argument(
     default=str(datetime.today().month),
 )
 
-all_names = ["cohen", "kolba", "kraus", "mitto", "rauchhaus"]
-
 month_names = [
     "",
     "January",
@@ -145,7 +143,14 @@ if __name__ == "__main__":
     if month not in range(1, 13):
         raise ValueError("")
 
-    users = args.names or all_names
+    users = args.names or [
+        name for name in os.environ.get("CAIC_TEAM_MEMBERS", "").split() if name
+    ]
+
+    if not users:
+        raise ValueError(
+            "No users specified and no CAIC_TEAM_MEMBERS environment variable found"
+        )
 
     month_name = month_names[month]
 
