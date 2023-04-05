@@ -194,17 +194,17 @@ if __name__ == "__main__":
 
     for user, frame in frames:
         path = os.path.join(
-            output_path, f"{user}_{month_name}_{year}_report.csv".lower()
+            output_path, f"{user}_{month_name}_{year}_report.tsv".lower()
         )
-        frame = frame.rename_axis("monthly_index").reset_index()
-        frame.monthly_index += 1
         frame["museum_number"] = frame["resource_id"].map(MuseumNumber.of)
         frame = frame.sort_values("museum_number")
+        frame = frame.reset_index(drop=True).rename_axis("monthly_index").reset_index()
+        frame.monthly_index += 1
         frame = frame[
             ["date", "user", "monthly_index", "resource_id", "reference", "action"]
         ]
 
-        frame.to_csv(path, index=False)
+        frame.to_csv(path, index=False, header=None, sep="\t")
 
     if len(frames) != len(users):
         print(f"Warning: expected {len(users)} output files, got {len(frames)}")
