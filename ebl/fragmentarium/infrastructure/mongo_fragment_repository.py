@@ -100,18 +100,6 @@ def _find_adjacent_museum_number_from_sequence(
         current_next = current_next or first
     return current_prev, current_next
 
-    def filter_fragment_lines(lines: Sequence[int]) -> dict:
-    return {
-        "$addFields": {
-            "text.lines": {
-                "$map": {
-                    "input": lines,
-                    "as": "i",
-                    "in": {"$arrayElemAt": ["$text.lines", "$$i"]},
-                }
-            }
-        }
-    }
 
 class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):

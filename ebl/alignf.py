@@ -25,7 +25,7 @@ def align_chapter_manuscripts(chapter):
         print(f"{chapter.id_}   ".ljust(80, "≡"), end="\n\n", flush=True)
 
     fragments = []
-    for manuscript in chapter.manuscripts[:10]:
+    for manuscript in chapter.manuscripts:
         if manuscript.museum_number is not None:
             try:
                 fragment = context.fragment_repository.query_by_museum_number(
@@ -34,8 +34,9 @@ def align_chapter_manuscripts(chapter):
 
                 if not re.fullmatch(r"[X\\n\s]*", fragment.signs):
                     fragments.append((fragment.number, fragment.signs))
-            except Exception:
-                pass
+            except Exception as e:
+                print(e)
+                #raise e
 
     t0 = time.time()
     v = Vocabulary()
@@ -78,5 +79,5 @@ if all:
     print("\n\nSubstitutions", end="\n\n")
     print_counter(c)
 else:
-    chapter = repository.find_chapter(iii4)
+    chapter = repository.find_chapter(i2)
     align_chapter_manuscripts(chapter)

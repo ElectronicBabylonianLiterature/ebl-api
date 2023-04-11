@@ -169,7 +169,7 @@ def align(
 ) -> Counter:
     substitutions = []
     results: List[AlignmentResult] = []
-    for (a, b) in pairs[:10]:
+    for (a, b) in pairs[:10]: # cut of for debugging
         result = align_pair(a, b, v)
         results.append(result)
 

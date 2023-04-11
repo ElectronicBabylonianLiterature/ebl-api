@@ -158,6 +158,8 @@ if __name__ == "__main__":
     fragment_numbers = fragments.query_transliterated_numbers()[start:end]
     chapters = load_chapters(context)
 
+    align_fragment(fragment_numbers[0], chapters)
+
     Executor = ThreadPoolExecutor if args.threads else ProcessPoolExecutor
 
     with Executor(max_workers=args.workers) as executor, open(

@@ -18,6 +18,7 @@ vocabulary = Vocabulary()
 
 def has_clear_signs(signs: str) -> bool:
     return not re.fullmatch(r"[X\\n\s]*", signs)
+
 @attr.s(auto_attribs=True, frozen=True)
 class AlignmentResult:
     a: NamedSequence
