@@ -1,9 +1,9 @@
 from PIL import Image
 from mockito import mock, verify
 
-from ebl.fragmentarium import retrieve_annotations
+from ebl.fragmentarium.annotations_ import retrieve_annotations
 from ebl.fragmentarium.domain.annotation import AnnotationValueType
-from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
+from ebl.fragmentarium.annotations_.retrieve_annotations import create_annotations, BoundingBox
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     GeometryFactory,
@@ -17,13 +17,13 @@ def test_handle_blank_annotation_type():
     assert retrieve_annotations.handle_blank_annotation_type(annotation_data) == "BLANK"
     annotation_data = AnnotationDataFactory.build()
     assert (
-        retrieve_annotations.handle_blank_annotation_type(annotation_data)
-        == annotation_data.sign_name
+            retrieve_annotations.handle_blank_annotation_type(annotation_data)
+            == annotation_data.sign_name
     )
     annotation_data = AnnotationDataFactory.build(sign_name="")
     assert (
-        retrieve_annotations.handle_blank_annotation_type(annotation_data)
-        == annotation_data.value
+            retrieve_annotations.handle_blank_annotation_type(annotation_data)
+            == annotation_data.value
     )
 
 
