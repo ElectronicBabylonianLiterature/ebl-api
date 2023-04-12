@@ -893,3 +893,14 @@ def test_query_by_sort_key_no_index(fragment_repository):
 
     with pytest.raises(NotFoundError, match="Unable to find fragment with _sortKey 0"):
         fragment_repository.query_by_sort_key(0)
+
+
+def test_create_sort_index_with_new_fragment(fragment_repository):
+    fragment_repository._create_sort_index()
+
+    fragment = FragmentFactory.build()
+    data = FragmentSchema().dump(fragment)
+    fragment_repository._fragments.insert_one(data)
+    fragment_repository._create_sort_index()
+
+    assert fragment_repository.query_by_sort_key(0) == fragment.number
