@@ -3,6 +3,7 @@ from typing import List, Optional, Sequence
 import pymongo
 from marshmallow import EXCLUDE
 from pymongo.collation import Collation
+from pymongo.errors import OperationFailure
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
@@ -57,7 +58,11 @@ class MongoFragmentRepository(FragmentRepository):
     def _create_sort_index(self) -> None:
         sortkey_index = [("_sortKey", pymongo.ASCENDING)]
 
-        self._fragments.drop_index(sortkey_index)
+        try:
+            self._fragments.drop_index(sortkey_index)
+        except OperationFailure:
+            print("No index found, creating from scratch...")
+
         self._fragments.aggregate(
             [
                 {"$project": {"museumNumber": True}},
