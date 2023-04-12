@@ -89,6 +89,9 @@ class MongoCollection:
     def create_index(self, index, **kwargs):
         return self.__get_collection().create_index(index, **kwargs)
 
+    def drop_index(self, index, **kwargs):
+        return self.__get_collection().drop_index(index, **kwargs)
+
     def get_all_values(self, field: str, query: Optional[dict] = None) -> Sequence[str]:
         return self.__get_collection().distinct(field, query or {})
 
