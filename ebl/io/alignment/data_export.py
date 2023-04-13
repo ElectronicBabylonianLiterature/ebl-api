@@ -10,7 +10,7 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.common.domain.period import Period
 import os
-import shutil
+import tarfile
 import pandas as pd
 import numpy as np
 import datetime
@@ -117,15 +117,13 @@ if __name__ == "__main__":
     df = pd.DataFrame({"sign": all_signs, "code": codes})
     df.to_csv(os.path.join(tmp_path, "vocabulary.tsv"), index=False, sep="\t")
 
-    zip_path = os.path.join(
-        os.path.dirname(__file__), f"alignment_data_{datetime.date.today()}"
+    tar_path = os.path.join(
+        os.path.dirname(__file__), f"alignment_data_{datetime.date.today()}.tar.gz"
     )
 
-    print(f"Storing archive in '{zip_path}.zip'...")
-    shutil.make_archive(
-        zip_path,
-        "zip",
-        tmp_path,
-    )
+    print(f"Storing archive in '{tar_path}'...")
+
+    with tarfile.open(tar_path, "w:gz") as tar:
+        tar.add(tmp_path, arcname=os.path.basename(tmp_path))
 
     print("Done.")
