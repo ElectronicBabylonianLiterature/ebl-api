@@ -3,6 +3,7 @@ from typing import List, Optional, Sequence
 import pymongo
 from marshmallow import EXCLUDE
 from pymongo.collation import Collation
+from pymongo.errors import OperationFailure
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
@@ -55,7 +56,12 @@ class MongoFragmentRepository(FragmentRepository):
         self._joins = MongoCollection(database, JOINS_COLLECTION)
 
     def _create_sort_index(self) -> None:
-        print("Creating sort index (only necessary once after new fragments are added)")
+        sortkey_index = [("_sortKey", pymongo.ASCENDING)]
+
+        try:
+            self._fragments.drop_index(sortkey_index)
+        except OperationFailure:
+            print("No index found, creating from scratch...")
 
         self._fragments.aggregate(
             [
@@ -73,7 +79,7 @@ class MongoFragmentRepository(FragmentRepository):
             ],
             allowDiskUse=True,
         )
-        self._fragments.create_index([("_sortKey", pymongo.ASCENDING)], unique=True)
+        self._fragments.create_index(sortkey_index)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -112,10 +118,10 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
 
-        if next(
-            self._fragments.aggregate([{"$match": {"_sortKey": {"$exists": False}}}]),
-            False,
-        ):
+        if new_fragments := self._fragments.count_documents({"_sortKey": None}):
+            print(
+                f"Found {new_fragments} newly added fragment(s) - rebuilding sort index..."
+            )
             self._create_sort_index()
 
     def count_transliterated_fragments(self):
