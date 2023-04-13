@@ -126,12 +126,58 @@ def aggregate_references(museum_numbers: Sequence[str]):
                 "resource_id": {"$first": "$_id"},
                 "reference": {"$first": "$references.id"},
                 "pages": {"$first": "$references.pages"},
+                "refType": {"$first": "$references.type"},
             }
         },
-        {"$project": {"_id": 0}},
+        {
+            "$lookup": {
+                "from": "bibliography",
+                "localField": "reference",
+                "foreignField": "_id",
+                "as": "fullReference",
+            }
+        },
+        {"$addFields": {"fullReference": {"$first": "$fullReference"}}},
+        {
+            "$project": {
+                "_id": 0,
+                "resource_id": True,
+                "pages": True,
+                "reference": True,
+                "refType": True,
+                "containerTitleShort": "$fullReference.container-title-short",
+                "collectionNumber": "$fullReference.collection-number",
+                "authors": "$fullReference.author",
+                "year": "$fullReference.issued.date-parts",
+            }
+        },
     ]
 
     return fragments.aggregate(pipeline)
+
+
+def create_citation(row):
+    if row.containerTitleShort and row.refType in ["COPY", "EDITION"]:
+        parts = [
+            row.containerTitleShort,
+            row.collectionNumber + "," if row.collectionNumber else "",
+            row.pages,
+        ]
+        return " ".join(part for part in parts if part)
+    else:
+
+        def get_name(author):
+            parts = [author.get("non-dropping-particle", ""), author.get("family", "")]
+            return " ".join(part for part in parts if part)
+
+        authors = " & ".join(
+            [get_name(row.authors[0])]
+            if len(row.authors) >= 3
+            else [get_name(author) for author in row.authors]
+        )
+        year = "-".join(str(year[0]) for year in row.year)
+        pages = f": {row.pages}" if row.pages else ""
+        return f"{authors}, {year}{pages}"
 
 
 if __name__ == "__main__":
@@ -171,16 +217,23 @@ if __name__ == "__main__":
     )
     df = df.drop_duplicates()
 
+    df["task"] = ""
+    df.loc[df.fields.eq("lines"), "task"] = "CORRECTION"
+    df.loc[df.action.eq("add") & df.fields.eq("lines"), "task"] = "EDITION"
+
     df = (
         df.sort_values("action")
         .groupby(["user", "resource_id", "fields"])
-        .agg({"action": "/".join})
+        .agg({"action": "/".join, "task": "max"})
     )
     df = df.reset_index()
 
     df["action"] = df.action + " " + df.fields
-    df = df.drop("fields", axis=1)
-    df = df.groupby(["user", "resource_id"]).agg("; ".join).reset_index()
+    df = (
+        df.groupby(["user", "resource_id"])
+        .agg({"action": "; ".join, "task": "max"})
+        .reset_index()
+    )
 
     df["date"] = f"{year}.{month}"
 
@@ -191,7 +244,8 @@ if __name__ == "__main__":
     df_ref = pd.DataFrame.from_records(ref_data)
     df = df.merge(df_ref, on="resource_id").fillna("")
 
-    df["reference"] = df[["reference", "pages"]].agg(", ".join, axis=1)
+    # df["reference"] = df[["reference", "pages"]].agg(", ".join, axis=1)
+    df["reference"] = df.apply(create_citation, axis=1)
 
     output_path = os.path.join(os.path.dirname(__file__), "reports")
     os.makedirs(output_path, exist_ok=True)
@@ -208,7 +262,15 @@ if __name__ == "__main__":
         frame = frame.reset_index(drop=True).rename_axis("monthly_index").reset_index()
         frame.monthly_index += 1
         frame = frame[
-            ["date", "user", "monthly_index", "resource_id", "reference", "action"]
+            [
+                "date",
+                "user",
+                "monthly_index",
+                "resource_id",
+                "reference",
+                "task",
+                "action",
+            ]
         ]
 
         frame.to_csv(path, index=False, header=None, sep="\t")
@@ -217,3 +279,5 @@ if __name__ == "__main__":
         print(f"Warning: expected {len(users)} output files, got {len(frames)}")
         print("Input users were", users)
         print("output users were", [user for user, _ in frames])
+
+    print("Done.")
