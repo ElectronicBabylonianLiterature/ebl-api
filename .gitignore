@@ -133,5 +133,7 @@ Taskfile.yml
 # Core dumps
 core.*
 
-# Alignment data export
-ebl/alignment/output
+# IO outputs
+ebl/io/caic/reports
+ebl/io/alignment/*.zip
+ebl/io/alignment/*.tar*

@@ -12,8 +12,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
-
-COLLECTION = "fragments"
+from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 
 
 class FragmentUpdater:
@@ -132,7 +131,7 @@ class FragmentUpdater:
         schema = FragmentSchema()
         fragment_id = str(fragment.number)
         self._changelog.create(
-            COLLECTION,
+            FRAGMENTS_COLLECTION,
             user.profile,
             {"_id": fragment_id, **schema.dump(fragment)},
             {"_id": fragment_id, **schema.dump(updated_fragment)},
