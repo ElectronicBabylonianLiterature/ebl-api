@@ -134,6 +134,5 @@ Taskfile.yml
 core.*
 
 # IO outputs
-ebl/io/caic/reports
 ebl/io/alignment/*.zip
 ebl/io/alignment/*.tar*
