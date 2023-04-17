@@ -12,7 +12,6 @@ from ebl.common.domain.period import Period
 import os
 import tarfile
 import pandas as pd
-import numpy as np
 import datetime
 
 # disable false positive SettingsWithCopyWarning
@@ -107,15 +106,6 @@ if __name__ == "__main__":
     df_chapters.to_csv(
         os.path.join(tmp_path, "chapter_signs.tsv"), index=False, sep="\t"
     )
-
-    print("Exporting vocabulary...")
-    frames = [frame for frame in (df_fragments, df_chapters) if frame is not None]
-
-    all_signs = pd.concat(frames)["signs"].str.split().explode().unique()
-    _, codes = np.unique(all_signs, return_inverse=True)
-
-    df = pd.DataFrame({"sign": all_signs, "code": codes})
-    df.to_csv(os.path.join(tmp_path, "vocabulary.tsv"), index=False, sep="\t")
 
     tar_path = os.path.join(
         os.path.dirname(__file__), f"alignment_data_{datetime.date.today()}.tar.gz"
