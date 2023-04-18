@@ -81,7 +81,7 @@ class Scope(ScopeItem):
     WRITE_WORDS = ("write:words", RESTRICTED)
     READ_IRAQ_MUSEUM_FRAGMENTS = (
         "read:IRAQ_MUSEUM-fragments",
-        RESTRICTED,
+        OPEN,
     )
     TRANSLITERATE_IRAQMUSEUMBAGHDAD_FRAGMENTS = (
         "transliterate:IRAQ_MUSEUM-fragments",
