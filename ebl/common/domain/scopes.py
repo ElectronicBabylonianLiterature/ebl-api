@@ -32,7 +32,10 @@ class ScopeItem(Enum):
         if match := re.match("([^:]+):([^-]+)(?:-(.+))?", scope_string):
             return match[1], match[2], match[3] or ""
         else:
-            raise ValueError(f"Unexepcted scope format: {scope_string!r}")
+            raise ValueError(
+                "Invalid scope format: Expected 'action:name(-collection)', "
+                f"got {scope_string!r}"
+            )
 
     @property
     def is_restricted(self) -> bool:
@@ -76,3 +79,11 @@ class Scope(ScopeItem):
     READ_WORDS = ("read:words", OPEN)
     READ_TEXTS = ("read:texts", OPEN)
     WRITE_WORDS = ("write:words", RESTRICTED)
+    READ_IRAQ_MUSEUM_FRAGMENTS = (
+        "read:IRAQ_MUSEUM-fragments",
+        RESTRICTED,
+    )
+    TRANSLITERATE_IRAQMUSEUMBAGHDAD_FRAGMENTS = (
+        "transliterate:IRAQ_MUSEUM-fragments",
+        RESTRICTED,
+    )
