@@ -15,9 +15,6 @@ class FragmentDtoSchema(FragmentSchema):
     )
     references = fields.Nested(ApiReferenceSchema, many=True)
 
-    class Meta:
-        exclude = ("authorized_scopes",)
-
 
 def create_response_dto(fragment: Fragment, user: User, has_photo: bool):
     return FragmentDtoSchema(context={"user": user, "has_photo": has_photo}).dump(
