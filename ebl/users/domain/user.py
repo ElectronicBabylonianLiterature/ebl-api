@@ -26,11 +26,13 @@ class User(ABC):
             return True
 
     def can_read_fragment(self, fragment_scopes: Sequence[Scope]) -> bool:
-        return (not fragment_scopes) or bool(
+        is_open_fragment = not {scope for scope in fragment_scopes if scope.is_restricted}
+        user_has_scope = bool(
             set(self.get_scopes(prefix="read:", suffix="-fragments")).intersection(
                 fragment_scopes
             )
         )
+        return is_open_fragment or user_has_scope
 
     def get_scopes(
         self, prefix: Optional[str] = "", suffix: Optional[str] = ""
