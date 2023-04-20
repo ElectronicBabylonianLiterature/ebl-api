@@ -129,8 +129,12 @@ class ExternalNumbersSchema(Schema):
     archibab_number = fields.String(load_default="", data_key="archibabNumber")
     bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
     ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
-    hiprecht_jena_number = fields.String(load_default="", data_key="hilprechtJenaNumber")
-    hiprecht_heidelberg_number = fields.String(load_default="", data_key="hilprechtHeidelbergNumber")
+    hiprecht_jena_number = fields.String(
+        load_default="", data_key="hilprechtJenaNumber"
+    )
+    hiprecht_heidelberg_number = fields.String(
+        load_default="", data_key="hilprechtHeidelbergNumber"
+    )
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
