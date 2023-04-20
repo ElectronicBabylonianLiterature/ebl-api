@@ -108,6 +108,8 @@ class ExternalNumbersFactory(factory.Factory):
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
+    hiprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
+    hiprecht_heidelberg_number = factory.Sequence(lambda n: f"hiprecht-heidelberg-{n}")
 
 
 class FragmentFactory(factory.Factory):

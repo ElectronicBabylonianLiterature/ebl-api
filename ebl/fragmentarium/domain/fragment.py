@@ -97,6 +97,8 @@ class ExternalNumbers:
     archibab_number: str = ""
     bdtns_number: str = ""
     ur_online_number: str = ""
+    hiprecht_jena_number: str = ""
+    hiprecht_heidelberg_number: str = ""
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -222,3 +224,11 @@ class Fragment:
     @property
     def ur_online_number(self) -> str:
         return self._get_external_number("ur_online")
+
+    @property
+    def hiprecht_jena_number(self) -> str:
+        return self._get_external_number("hiprecht_jena")
+
+    @property
+    def hiprecht_heidelberg_number(self) -> str:
+        return self._get_external_number("hiprecht_heidelberg")
