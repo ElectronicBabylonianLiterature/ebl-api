@@ -61,12 +61,15 @@ if __name__ == "__main__":
         [
             {
                 "$project": {
-                    "manuscripts": {"$zip": {"inputs": ["$manuscripts", "$signs"]}}
+                    "manuscripts": {"$zip": {"inputs": ["$manuscripts", "$signs"]}},
+                    "textId": 1,
+                    "stage": 1,
+                    "name": 1,
                 }
             },
             {"$unwind": "$manuscripts"},
             {
-                "$project": {
+                "$addFields": {
                     "manuscript": {"$first": "$manuscripts"},
                     "signs": {"$last": "$manuscripts"},
                 }
@@ -75,6 +78,11 @@ if __name__ == "__main__":
                 "$project": {
                     "_id": 0,
                     "id": {"$toString": "$_id"},
+                    "category": "$textId.category",
+                    "index": "$textId.index",
+                    "genre": "$textId.genre",
+                    "stage": 1,
+                    "name": 1,
                     "provenance": "$manuscript.provenance",
                     "period": "$manuscript.period",
                     "type": "$manuscript.type",
