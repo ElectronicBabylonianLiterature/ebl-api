@@ -41,10 +41,7 @@ if __name__ == "__main__":
     fragment_signs = fragments.find_many(
         {"signs": {"$exists": True, "$ne": ""}}, projection={"signs": True}
     )
-    df_fragments = pd.DataFrame.from_records(fragment_signs)
-
-    # exclude signs without clear signs
-    df_fragments = df_fragments[~df_fragments.signs.str.fullmatch(r"[X\s]*")]
+    df_fragments = pd.DataFrame.from_records(fragment_signs).fillna("")
 
     df_fragments.to_csv(
         os.path.join(tmp_path, "fragment_signs.tsv"), index=False, sep="\t"
@@ -96,7 +93,6 @@ if __name__ == "__main__":
 
     # exclude signs without clear signs
     df_chapters["signs"] = df_chapters["signs"].fillna("")
-    df_chapters = df_chapters[~df_chapters.signs.str.fullmatch(r"[X\s]*")]
 
     # map long names to abbreviations
     for column, enum in abbreviation_mappings.items():
