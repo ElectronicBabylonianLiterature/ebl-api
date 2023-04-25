@@ -9,6 +9,7 @@ from ebl.corpus.domain.manuscript import (
     Provenance,
 )
 from ebl.common.domain.period import Period
+from ebl.transliteration.domain.stage import Stage, ABBREVIATIONS as STAGE_ABBREVIATIONS
 import os
 import tarfile
 import pandas as pd
@@ -23,7 +24,8 @@ database = client.get_database(DB)
 fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
 chapters = MongoCollection(database, CHAPTERS_COLLECTION)
 
-tmp_path = "/tmp/alignment_output"
+output_folder_name = f"alignment_export_{datetime.date.today()}"
+tmp_path = os.path.join("/tmp", output_folder_name)
 os.makedirs(tmp_path, exist_ok=True)
 
 
@@ -41,7 +43,7 @@ if __name__ == "__main__":
     fragment_signs = fragments.find_many(
         {"signs": {"$exists": True, "$ne": ""}}, projection={"signs": True}
     )
-    df_fragments = pd.DataFrame.from_records(fragment_signs).fillna("")
+    df_fragments = pd.DataFrame.from_records(fragment_signs)
 
     df_fragments.to_csv(
         os.path.join(tmp_path, "fragment_signs.tsv"), index=False, sep="\t"
@@ -91,17 +93,23 @@ if __name__ == "__main__":
     )
     df_chapters = pd.DataFrame.from_records(chapter_signs)
 
-    # exclude signs without clear signs
-    df_chapters["signs"] = df_chapters["signs"].fillna("")
-
     # map long names to abbreviations
     for column, enum in abbreviation_mappings.items():
         df_chapters[column] = df_chapters[column].map(enum_mapping(enum))
 
+    stages = {stage.value: STAGE_ABBREVIATIONS[stage] for stage in Stage}
+    df_chapters["stage"] = df_chapters["stage"].map(stages)
+
+    # create siglum
     df_chapters["siglum"] = df_chapters[siglum_columns].agg("".join, axis=1)
     df_chapters = df_chapters[
         [
             "id",
+            "genre",
+            "category",
+            "index",
+            "stage",
+            "name",
             "siglum",
             "signs",
         ]
@@ -111,9 +119,7 @@ if __name__ == "__main__":
         os.path.join(tmp_path, "chapter_signs.tsv"), index=False, sep="\t"
     )
 
-    tar_path = os.path.join(
-        os.path.dirname(__file__), f"alignment_data_{datetime.date.today()}.tar.gz"
-    )
+    tar_path = os.path.join(os.path.dirname(__file__), f"{output_folder_name}.tar.gz")
 
     print(f"Storing archive in '{tar_path}'...")
 
