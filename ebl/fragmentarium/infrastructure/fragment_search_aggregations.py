@@ -10,6 +10,7 @@ from ebl.transliteration.domain.museum_number import (
     DEFAULT_PREFIX_ORDER,
 )
 from pydash.arrays import compact
+import re
 
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
@@ -108,6 +109,13 @@ class PatternMatcher:
         number_query = (
             number_is(self._query["number"]) if "number" in self._query else {}
         )
+
+        script_query = {}
+
+        for key in ["scriptPeriod", "scriptPeriodModifier"]:
+            if value := self._query.get(key):
+                script_query[re.sub(r"^scriptP", "script:p", key)] = value
+
         id_query = (
             {"references": {"$elemMatch": {"id": self._query["bibId"]}}}
             if "bibId" in self._query
@@ -118,7 +126,9 @@ class PatternMatcher:
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
             }
         constraints = {
-            "$and": compact([number_query, match_user_scopes(self._scopes)]),
+            "$and": compact(
+                [number_query, script_query, match_user_scopes(self._scopes)]
+            ),
             **id_query,
         }
 
