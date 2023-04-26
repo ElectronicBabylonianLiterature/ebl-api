@@ -114,7 +114,7 @@ class PatternMatcher:
 
         for key in ["scriptPeriod", "scriptPeriodModifier"]:
             if value := self._query.get(key):
-                script_query[re.sub(r"^scriptP", "script:p", key)] = value
+                script_query[re.sub(r"^scriptPeriod", "script.period", key)] = value
 
         id_query = (
             {"references": {"$elemMatch": {"id": self._query["bibId"]}}}
