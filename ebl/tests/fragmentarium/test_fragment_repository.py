@@ -947,3 +947,48 @@ def test_query_script(fragment_repository, query, expected):
     )
 
     assert fragment_repository.query(query) == expected_result
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        (["MONUMENTAL"], [0]),
+        (["ARCHIVAL"], [2]),
+        (["CANONICAL"], [1, 2]),
+        (["CANONICAL", "Technical"], [1]),
+        (["CANONICAL", "Divination"], [2]),
+        (["CANONICAL", "Divination", "Celestial"], [2]),
+        (["MONUMENTAL", "Narrative"], []),
+    ],
+)
+def test_query_genres(fragment_repository, query, expected):
+    test_genres = [
+        (Genre(["MONUMENTAL"], False),),
+        (Genre(["CANONICAL", "Technical"], False),),
+        (
+            Genre(["CANONICAL", "Divination"], False),
+            Genre(["CANONICAL", "Divination", "Celestial"], False),
+            Genre(["ARCHIVAL", "Letter"], False),
+        ),
+    ]
+    fragments = [
+        FragmentFactory.build(genres=genres, number=MuseumNumber.of(f"X.{i}"))
+        for i, genres in enumerate(test_genres)
+    ]
+
+    fragment_repository.create_many(fragments)
+    fragment_repository._create_sort_index()
+
+    expected_result = QueryResult(
+        [
+            QueryItem(
+                fragments[i].number,
+                tuple(),
+                0,
+            )
+            for i in expected
+        ],
+        0,
+    )
+
+    assert fragment_repository.query({"genre": query}) == expected_result
