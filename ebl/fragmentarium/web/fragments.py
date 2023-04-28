@@ -51,6 +51,9 @@ class FragmentsQueryResource:
             parse_integer_field("limit"),
         )
 
+        if genre_as_list := req.get_param_as_list("genre"):
+            req.params["genre"] = genre_as_list
+
         resp.media = QueryResultSchema().dump(
             self._repository.query(
                 parse(req.params),
