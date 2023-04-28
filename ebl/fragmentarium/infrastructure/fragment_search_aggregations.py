@@ -116,6 +116,11 @@ class PatternMatcher:
             if value := self._query.get(key):
                 script_query[re.sub(r"^scriptPeriod", "script.period", key)] = value
 
+        genre_query = {}
+
+        if genre := self._query.get("genre"):
+            genre_query = {"genres.category": {"$all": genre}}
+
         id_query = (
             {"references": {"$elemMatch": {"id": self._query["bibId"]}}}
             if "bibId" in self._query
@@ -125,9 +130,15 @@ class PatternMatcher:
             id_query["references"]["$elemMatch"]["pages"] = {
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
             }
+
         constraints = {
             "$and": compact(
-                [number_query, script_query, match_user_scopes(self._scopes)]
+                [
+                    number_query,
+                    genre_query,
+                    script_query,
+                    match_user_scopes(self._scopes),
+                ]
             ),
             **id_query,
         }
