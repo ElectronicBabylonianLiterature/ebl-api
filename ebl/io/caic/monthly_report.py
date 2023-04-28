@@ -108,7 +108,7 @@ def aggregate_actions(names: Sequence[str], month: int, year: int):
         },
     ]
 
-    return changelog.aggregate(pipeline)
+    return changelog.aggregate(pipeline, allowDiskUse=True)
 
 
 def aggregate_references(museum_numbers: Sequence[str]):
