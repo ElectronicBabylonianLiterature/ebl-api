@@ -10,7 +10,6 @@ from ebl.transliteration.domain.museum_number import (
     DEFAULT_PREFIX_ORDER,
 )
 from pydash.arrays import compact
-import re
 
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
@@ -105,42 +104,45 @@ class PatternMatcher:
             {"$project": {"_id": False}},
         ]
 
-    def _prefilter(self) -> List[Dict]:
-        number_query = (
-            number_is(self._query["number"]) if "number" in self._query else {}
-        )
+    def _filter_by_script(self) -> Dict:
+        parameters = {
+            "scriptPeriod": "script.period",
+            "scriptPeriodModifier": "script.periodModifier",
+        }
 
-        script_query = {}
+        return {
+            path: self._query.get(parameter)
+            for parameter, path in parameters.items()
+            if self._query.get(parameter)
+        }
 
-        for key in ["scriptPeriod", "scriptPeriodModifier"]:
-            if value := self._query.get(key):
-                script_query[re.sub(r"^scriptPeriod", "script.period", key)] = value
-
-        genre_query = {}
-
+    def _filter_by_genre(self) -> Dict:
         if genre := self._query.get("genre"):
-            genre_query = {"genres.category": {"$all": genre}}
+            return {"genres.category": {"$all": genre}}
+        return {}
 
-        id_query = (
-            {"references": {"$elemMatch": {"id": self._query["bibId"]}}}
-            if "bibId" in self._query
-            else {}
-        )
+    def _filter_by_reference(self) -> Dict:
+        if "bibId" not in self._query:
+            return {}
+
+        parameters = {"id": self._query["bibId"]}
         if "pages" in self._query:
-            id_query["references"]["$elemMatch"]["pages"] = {
+            parameters["pages"] = {
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
             }
+        return {"references": {"$elemMatch": parameters}}
 
+    def _prefilter(self) -> List[Dict]:
         constraints = {
             "$and": compact(
                 [
-                    number_query,
-                    genre_query,
-                    script_query,
+                    number_is(self._query["number"]) if "number" in self._query else {},
+                    self._filter_by_genre(),
+                    self._filter_by_script(),
+                    self._filter_by_reference(),
                     match_user_scopes(self._scopes),
                 ]
             ),
-            **id_query,
         }
 
         return [{"$match": constraints}] if constraints else []
