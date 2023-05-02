@@ -972,7 +972,9 @@ def test_query_genres(fragment_repository, query, expected):
         ),
     ]
     fragments = [
-        FragmentFactory.build(genres=genres, number=MuseumNumber.of(f"X.{i}"))
+        FragmentFactory.build(
+            genres=genres, number=MuseumNumber.of(f"X.{i}"), script=Script()
+        )
         for i, genres in enumerate(test_genres)
     ]
 
