@@ -2,7 +2,7 @@ from typing import Tuple, List
 import attr
 import pytest
 import random
-from ebl.common.domain.period import Period
+from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryItem, QueryResult
 
@@ -904,3 +904,93 @@ def test_create_sort_index_with_new_fragment(fragment_repository):
     fragment_repository._create_sort_index()
 
     assert fragment_repository.query_by_sort_key(0) == fragment.number
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ({}, []),
+        ({"scriptPeriod": "Hittite"}, [1, 2]),
+        ({"scriptPeriod": "Hittite", "scriptPeriodModifier": "Early"}, [1]),
+        ({"scriptPeriod": "Neo-Assyrian"}, [3]),
+        ({"scriptPeriod": "None"}, [0]),
+        ({"scriptPeriod": ""}, [0, 1, 2, 3]),
+    ],
+)
+def test_query_script(fragment_repository, query, expected):
+    scripts = [
+        Script(),
+        Script(Period.HITTITE, PeriodModifier.EARLY),
+        Script(Period.HITTITE),
+        Script(Period.NEO_ASSYRIAN),
+    ]
+    fragments = [
+        FragmentFactory.build(script=script, number=MuseumNumber.of(f"X.{i}"))
+        for i, script in enumerate(scripts)
+    ]
+
+    for fragment in fragments:
+        fragment_repository.create(fragment)
+
+    fragment_repository._create_sort_index()
+
+    expected_result = QueryResult(
+        [
+            QueryItem(
+                fragments[i].number,
+                tuple(),
+                0,
+            )
+            for i in expected
+        ],
+        0,
+    )
+
+    assert fragment_repository.query(query) == expected_result
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        (["MONUMENTAL"], [0]),
+        (["ARCHIVAL"], [2]),
+        (["CANONICAL"], [1, 2]),
+        (["CANONICAL", "Technical"], [1]),
+        (["CANONICAL", "Divination"], [2]),
+        (["CANONICAL", "Divination", "Celestial"], [2]),
+        (["MONUMENTAL", "Narrative"], []),
+    ],
+)
+def test_query_genres(fragment_repository, query, expected):
+    test_genres = [
+        (Genre(["MONUMENTAL"], False),),
+        (Genre(["CANONICAL", "Technical"], False),),
+        (
+            Genre(["CANONICAL", "Divination"], False),
+            Genre(["CANONICAL", "Divination", "Celestial"], False),
+            Genre(["ARCHIVAL", "Letter"], False),
+        ),
+    ]
+    fragments = [
+        FragmentFactory.build(
+            genres=genres, number=MuseumNumber.of(f"X.{i}"), script=Script()
+        )
+        for i, genres in enumerate(test_genres)
+    ]
+
+    fragment_repository.create_many(fragments)
+    fragment_repository._create_sort_index()
+
+    expected_result = QueryResult(
+        [
+            QueryItem(
+                fragments[i].number,
+                tuple(),
+                0,
+            )
+            for i in expected
+        ],
+        0,
+    )
+
+    assert fragment_repository.query({"genre": query}) == expected_result
