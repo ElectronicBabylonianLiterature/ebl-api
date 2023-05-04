@@ -185,16 +185,21 @@ class FragmentSchema(Schema):
         load_default=ExternalNumbers(),
         data_key="externalNumbers",
     )
+    projects = fields.List(fields.String())
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
+        if "projects" in data:
+            data["projects"] = tuple(data["projects"])
+
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         if "authorized_scopes" in data:
             data["authorized_scopes"] = list(data["authorized_scopes"])
+
         return Fragment(**data)
 
     @post_dump
