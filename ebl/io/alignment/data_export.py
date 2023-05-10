@@ -14,6 +14,9 @@ import os
 import tarfile
 import pandas as pd
 import datetime
+from functools import reduce
+from urllib.parse import quote as encode_url
+
 
 # disable false positive SettingsWithCopyWarning
 pd.options.mode.chained_assignment = None
@@ -114,6 +117,23 @@ if __name__ == "__main__":
             "signs",
         ]
     ]
+
+    df_chapters["category"] = df_chapters["category"].astype(int)
+    df_chapters["index"] = df_chapters["index"].astype(int)
+
+    url_columns = ["genre", "category", "index", "stage", "name"]
+
+    df_chapters["url"] = reduce(
+        (lambda x, y: x + "/" + y),
+        ["https://www.ebl.lmu.de/corpus"]
+        + [
+            df_chapters[col].fillna("").astype(str).map(encode_url)
+            for col in url_columns
+        ],
+    )
+
+    # move signs to the right
+    df_chapters["signs"] = df_chapters.pop("signs")
 
     df_chapters.to_csv(
         os.path.join(tmp_path, "chapter_signs.tsv"), index=False, sep="\t"
