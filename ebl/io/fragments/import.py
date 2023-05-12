@@ -32,7 +32,13 @@ parser.add_argument(
     "--skip-existing",
     action="store_true",
     default=False,
-    help="Skip existing",
+    help="Skip existing documents",
+)
+parser.add_argument(
+    "--skip-invalid",
+    action="store_true",
+    default=False,
+    help="Skip invalid documents",
 )
 parser.add_argument(
     "-vv",
@@ -119,24 +125,36 @@ def validate(fragments: dict) -> None:
             )
 
     if fails:
-        fail_summary_file = os.path.join(
-            os.path.dirname(__file__), "invalid_fragments.tsv"
-        )
+        if args.skip_invalid:
+            print(CHECK, "Excluding invalid...", sep="\n", end=" ")
+            return {
+                filename: data
+                for filename, data in fragments.items()
+                if filename not in fails
+            }
 
-        columns = ["file", "error", "hints"]
-        df = pd.DataFrame([[k, *v] for k, v in fails.items()], columns=columns)
-        df.to_csv(
-            fail_summary_file,
-            sep="\t",
-            index=False,
-        )
+        else:
+            fail_summary_file = os.path.join(
+                os.path.dirname(__file__), "invalid_fragments.tsv"
+            )
 
-        output = as_error(
-            "Validation failed. "
-            f"See table below or {fail_summary_file} for details.\n\n"
-            f"{df.to_markdown(index=False)}\n\nAborting."
-        )
-        sys.exit(output)
+            columns = ["file", "error", "hints"]
+            df = pd.DataFrame([[k, *v] for k, v in fails.items()], columns=columns)
+            df.to_csv(
+                fail_summary_file,
+                sep="\t",
+                index=False,
+            )
+
+            sys.exit(
+                as_error(
+                    "Invalid data. "
+                    f"See table below or {fail_summary_file} for details.\n\n"
+                    f"{df.to_markdown(index=False)}\n\nAborting."
+                )
+            )
+    else:
+        return fragments
 
 
 @show_progress("Checking ids...")
@@ -184,9 +202,9 @@ def validate_ids(fragments: dict, skip_existing: bool) -> dict:
 
 
 def push_to_db(fragments: dict, target_db: str) -> List[str]:
-    color = green if target_db == DEV_DB else yellow
-
     is_production_db = target_db == PROD_DB
+    color = yellow if is_production_db else green
+
     if is_production_db:
         prompt = (
             "\n!!! WARNING: This will alter the PRODUCTION DB and can lead to data loss. !!!"
@@ -220,8 +238,6 @@ def push_to_db(fragments: dict, target_db: str) -> List[str]:
         else:
             sys.exit("\nAborting.")
 
-    print("\nSummary of added fragments:", *result, sep="\n")
-    print()
     return result
 
 
@@ -263,13 +279,24 @@ fragments_collection = MongoCollection(database, FRAGMENTS_COLLECTION)
 
 fragments = load_data(args.fragments)
 
-validate(fragments)
+fragments = validate(fragments)
 fragments = validate_ids(fragments, args.skip_existing)
 
+if not fragments:
+    sys.exit(as_error("No fragments to import."))
+
 if args.dry_run:
-    print(green("All good!\n"))
+    print(green("All good!"))
+    print(
+        "Run without --dry-run/--validate "
+        f"to import the following {len(fragments)} new fragment(s) "
+        f"into the {args.database} database:"
+    )
+    print(*fragments, sep="\n")
     sys.exit()
 
-push_to_db(fragments, args.database)
+result = push_to_db(fragments, args.database)
 
 create_sort_index(fragments_collection)
+
+print("\nSummary of added fragments:", *result, sep="\n")
