@@ -24,6 +24,7 @@ from ebl.transliteration.application.note_line_part_schemas import (
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
+from ebl.common.domain.project import ResearchProject
 
 
 class MeasureSchema(Schema):
@@ -185,7 +186,14 @@ class FragmentSchema(Schema):
         load_default=ExternalNumbers(),
         data_key="externalNumbers",
     )
-    projects = fields.List(fields.String())
+    projects = fields.Function(
+        lambda fragment: tuple(project.long_name for project in fragment.projects),
+        lambda fragment_dto: tuple(
+            ResearchProject.from_name(value)
+            for value in fragment_dto.get("projects", [])
+        ),
+        required=True,
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):
