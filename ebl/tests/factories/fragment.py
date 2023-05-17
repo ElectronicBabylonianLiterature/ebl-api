@@ -2,7 +2,6 @@ from typing import Sequence
 
 import factory.fuzzy
 from ebl.common.domain.period import Period, PeriodModifier
-from ebl.common.domain.project import ResearchProject
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
@@ -140,7 +139,6 @@ class FragmentFactory(factory.Factory):
     introduction = Introduction("text", (StringPart("text"),))
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
-    projects = (ResearchProject.CAIC,)
 
 
 class InterestingFragmentFactory(FragmentFactory):

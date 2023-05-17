@@ -24,7 +24,6 @@ from ebl.transliteration.application.note_line_part_schemas import (
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.common.domain.project import ResearchProject
 
 
 class MeasureSchema(Schema):
@@ -186,25 +185,16 @@ class FragmentSchema(Schema):
         load_default=ExternalNumbers(),
         data_key="externalNumbers",
     )
-    projects = fields.Function(
-        lambda fragment: [project.long_name for project in fragment.projects],
-        lambda projects: tuple(map(ResearchProject.from_name, projects)),
-        required=True,
-    )
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
-        if "projects" in data:
-            data["projects"] = tuple(data["projects"])
-
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         if "authorized_scopes" in data:
             data["authorized_scopes"] = list(data["authorized_scopes"])
-
         return Fragment(**data)
 
     @post_dump
