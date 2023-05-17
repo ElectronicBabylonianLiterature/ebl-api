@@ -105,7 +105,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "externalNumbers": ExternalNumbersSchema().dump(
                 lemmatized_fragment.external_numbers
             ),
-            "projects": (ResearchProject["CAIC"].long_name,),
+            "projects": [ResearchProject["CAIC"].long_name],
         },
         pydash.is_none,
     )

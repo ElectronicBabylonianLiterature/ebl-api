@@ -187,11 +187,8 @@ class FragmentSchema(Schema):
         data_key="externalNumbers",
     )
     projects = fields.Function(
-        lambda fragment: tuple(project.long_name for project in fragment.projects),
-        lambda fragment_dto: tuple(
-            ResearchProject.from_name(value)
-            for value in fragment_dto.get("projects", [])
-        ),
+        lambda fragment: [project.long_name for project in fragment.projects],
+        lambda projects: tuple(map(ResearchProject.from_name, projects)),
         required=True,
     )
 

@@ -140,7 +140,7 @@ class FragmentFactory(factory.Factory):
     introduction = Introduction("text", (StringPart("text"),))
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
-    projects = [ResearchProject.CAIC]
+    projects = (ResearchProject.CAIC,)
 
 
 class InterestingFragmentFactory(FragmentFactory):
