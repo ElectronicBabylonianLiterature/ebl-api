@@ -41,7 +41,6 @@ class Text:
     intro: str
     chapters: Sequence[ChapterListing] = tuple()
     references: Sequence[Reference] = tuple()
-    projects: Sequence[str] = tuple()
 
     @property
     def id(self) -> TextId:
