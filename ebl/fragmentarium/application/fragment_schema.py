@@ -189,7 +189,6 @@ class FragmentSchema(Schema):
     projects = fields.Function(
         lambda fragment: [project.long_name for project in fragment.projects],
         lambda projects: tuple(map(ResearchProject.from_name, projects)),
-        required=True,
     )
 
     @post_load
