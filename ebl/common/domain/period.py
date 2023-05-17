@@ -1,8 +1,8 @@
 from enum import Enum
-from ebl.common.domain.siglum_enum import SiglumEnumWithParent
+from ebl.common.domain.named_enum import NamedEnumWithParent
 
 
-class Period(SiglumEnumWithParent):
+class Period(NamedEnumWithParent):
     NONE = ("None", "", None, 0)
     UNCERTAIN = ("Uncertain", "Unc", None, 1)
     URUK_IV = ("Uruk IV", "Uruk4", None, 2)

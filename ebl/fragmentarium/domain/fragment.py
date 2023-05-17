@@ -128,6 +128,7 @@ class Fragment:
     introduction: Introduction = Introduction()
     script: Script = Script()
     external_numbers: ExternalNumbers = ExternalNumbers()
+    projects: Sequence[str] = tuple()
 
     @property
     def is_lowest_join(self) -> bool:
