@@ -70,8 +70,8 @@ class ResearchProjectField(EnumField):
     def __init__(self, **kwargs):
         super().__init__(ResearchProject, **kwargs)
 
-    def _serialize_enum(self, project: ResearchProject) -> str:
-        return project.abbreviation
+    def _serialize_enum(self, value: ResearchProject) -> str:
+        return value.abbreviation
 
-    def _deserialize_enum(self, abbreviation: str) -> Enum:
-        return ResearchProject.from_abbreviation(abbreviation)
+    def _deserialize_enum(self, value: str) -> Enum:
+        return ResearchProject.from_abbreviation(value)
