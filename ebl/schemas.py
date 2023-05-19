@@ -5,6 +5,7 @@ from typing import Type, Any
 from marshmallow import fields
 
 from ebl.common.domain.scopes import Scope
+from ebl.common.domain.project import ResearchProject
 
 
 class EnumField(fields.Field, ABC):
@@ -38,7 +39,7 @@ class EnumField(fields.Field, ABC):
         ...
 
 
-class ValueEnum(EnumField):
+class ValueEnumField(EnumField):
     def _serialize_enum(self, value: Enum) -> Any:
         return value.value
 
@@ -46,7 +47,7 @@ class ValueEnum(EnumField):
         return self._enum_class(value)
 
 
-class NameEnum(EnumField):
+class NameEnumField(EnumField):
     def _serialize_enum(self, value: Enum) -> str:
         return value.name
 
@@ -54,7 +55,7 @@ class NameEnum(EnumField):
         return self._enum_class[value]
 
 
-class ScopeEnum(EnumField):
+class ScopeField(EnumField):
     def __init__(self, **kwargs):
         super().__init__(Scope, **kwargs)
 
@@ -63,3 +64,14 @@ class ScopeEnum(EnumField):
 
     def _deserialize_enum(self, value: str) -> Enum:
         return Scope.from_string(f"read:{value}-fragments")
+
+
+class ResearchProjectField(EnumField):
+    def __init__(self, **kwargs):
+        super().__init__(ResearchProject, **kwargs)
+
+    def _serialize_enum(self, project: ResearchProject) -> str:
+        return project.abbreviation
+
+    def _deserialize_enum(self, abbreviation: str) -> Enum:
+        return ResearchProject.from_abbreviation(abbreviation)

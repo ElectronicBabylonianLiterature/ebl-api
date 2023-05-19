@@ -1,6 +1,6 @@
 from marshmallow import fields, post_load
 
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnumField
 from ebl.transliteration.application.label_schemas import (
     ColumnLabelSchema,
     ObjectLabelSchema,
@@ -62,7 +62,7 @@ class ColumnAtLineSchema(AtLineSchema):
 
 
 class DiscourseAtLineSchema(AtLineSchema):
-    discourse_label = NameEnum(atf.Discourse, required=True)
+    discourse_label = NameEnumField(atf.Discourse, required=True)
     display_value = fields.String(data_key="displayValue")
 
     @post_load
@@ -80,8 +80,8 @@ class SurfaceAtLineSchema(AtLineSchema):
 
 
 class ObjectAtLineSchema(AtLineSchema):
-    status = fields.List(NameEnum(atf.Status), load_only=True)
-    object_label = NameEnum(atf.Object, load_only=True)
+    status = fields.List(NameEnumField(atf.Status), load_only=True)
+    object_label = NameEnumField(atf.Object, load_only=True)
     text = fields.String(dump_default="", load_only=True)
     label = fields.Nested(ObjectLabelSchema)
     display_value = fields.String(data_key="displayValue")
@@ -102,7 +102,7 @@ class DivisionAtLineSchema(AtLineSchema):
 
 
 class CompositeAtLineSchema(AtLineSchema):
-    composite = NameEnum(atf.Composite, required=True)
+    composite = NameEnumField(atf.Composite, required=True)
     text = fields.String(required=True)
     number = fields.Int(required=False, allow_none=True, dump_default=None)
     display_value = fields.String(data_key="displayValue")
