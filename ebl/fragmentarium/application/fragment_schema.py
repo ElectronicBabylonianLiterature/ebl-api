@@ -17,14 +17,13 @@ from ebl.fragmentarium.domain.fragment import (
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ScopeEnum, ValueEnum
+from ebl.schemas import ResearchProjectField, ScopeField, ValueEnumField
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.common.domain.project import ResearchProject
 
 
 class MeasureSchema(Schema):
@@ -42,7 +41,7 @@ class MeasureSchema(Schema):
 
 class RecordEntrySchema(Schema):
     user = fields.String(required=True)
-    type = ValueEnum(RecordType, required=True)
+    type = ValueEnumField(RecordType, required=True)
     date = fields.String(required=True)
 
     @post_load
@@ -111,7 +110,7 @@ class ScriptSchema(Schema):
         lambda value: Period.from_name(value),
         required=True,
     )
-    period_modifier = ValueEnum(
+    period_modifier = ValueEnumField(
         PeriodModifier, required=True, data_key="periodModifier"
     )
     uncertain = fields.Boolean(load_default=None)
@@ -171,12 +170,12 @@ class FragmentSchema(Schema):
     )
     genres = fields.Nested(GenreSchema, many=True, load_default=tuple())
     line_to_vec = fields.List(
-        fields.List(ValueEnum(LineToVecEncoding)),
+        fields.List(ValueEnumField(LineToVecEncoding)),
         load_default=tuple(),
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(
-        ScopeEnum(),
+        ScopeField(),
         data_key="authorizedScopes",
     )
     introduction = fields.Nested(IntroductionSchema, default=Introduction())
@@ -186,10 +185,7 @@ class FragmentSchema(Schema):
         load_default=ExternalNumbers(),
         data_key="externalNumbers",
     )
-    projects = fields.Function(
-        lambda fragment: [project.long_name for project in fragment.projects],
-        lambda projects: tuple(map(ResearchProject.from_name, projects)),
-    )
+    projects = fields.List(ResearchProjectField())
 
     @post_load
     def make_fragment(self, data, **kwargs):

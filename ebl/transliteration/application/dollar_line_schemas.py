@@ -2,7 +2,7 @@ from typing import Mapping, Type, Union
 
 from marshmallow import Schema, fields, post_load
 
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnumField
 from ebl.transliteration.application.line_schemas import LineBaseSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain import atf
@@ -46,8 +46,8 @@ class ImageDollarLineSchema(DollarLineSchema):
 
 
 class RulingDollarLineSchema(DollarLineSchema):
-    number = NameEnum(atf.Ruling, required=True)
-    status = NameEnum(atf.DollarStatus, load_default=None)
+    number = NameEnumField(atf.Ruling, required=True)
+    status = NameEnumField(atf.DollarStatus, load_default=None)
     display_value = fields.String(data_key="displayValue")
 
     @post_load
@@ -97,7 +97,7 @@ class ScopeContainerSchema(Schema):
 
 
 class StateDollarLineSchema(DollarLineSchema):
-    qualification = NameEnum(atf.Qualification, required=True, allow_none=True)
+    qualification = NameEnumField(atf.Qualification, required=True, allow_none=True)
     extent = fields.Function(
         lambda strict: StateDollarLineSchema.dump_extent(strict.extent),
         lambda value: value,
@@ -105,8 +105,8 @@ class StateDollarLineSchema(DollarLineSchema):
         allow_none=True,
     )
     scope = fields.Nested(ScopeContainerSchema, required=True, allow_none=True)
-    state = NameEnum(atf.State, required=True, allow_none=True)
-    status = NameEnum(atf.DollarStatus, required=True, allow_none=True)
+    state = NameEnumField(atf.State, required=True, allow_none=True)
+    status = NameEnumField(atf.DollarStatus, required=True, allow_none=True)
     display_value = fields.String(data_key="displayValue")
 
     @post_load

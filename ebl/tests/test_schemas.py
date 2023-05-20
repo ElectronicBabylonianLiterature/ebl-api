@@ -3,7 +3,7 @@ from enum import Enum
 import pytest
 from marshmallow import Schema, ValidationError
 
-from ebl.schemas import ValueEnum, NameEnum
+from ebl.schemas import ValueEnumField, NameEnumField
 
 
 class _TestEnumStr(Enum):
@@ -17,13 +17,13 @@ class _TestEnumInt(Enum):
 
 
 class _TestSchemaStr(Schema):
-    value = ValueEnum(_TestEnumStr, required=True, allow_none=True)
-    name = NameEnum(_TestEnumStr, required=True, allow_none=True)
+    value = ValueEnumField(_TestEnumStr, required=True, allow_none=True)
+    name = NameEnumField(_TestEnumStr, required=True, allow_none=True)
 
 
 class _TestSchemaInt(Schema):
-    value = ValueEnum(_TestEnumInt, required=True, allow_none=True)
-    name = NameEnum(_TestEnumInt, required=True, allow_none=True)
+    value = ValueEnumField(_TestEnumInt, required=True, allow_none=True)
+    name = NameEnumField(_TestEnumInt, required=True, allow_none=True)
 
 
 def test_str_value_enum():

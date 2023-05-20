@@ -11,7 +11,7 @@ from ebl.fragmentarium.domain.annotation import (
 )
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.schemas import ValueEnum
+from ebl.schemas import ValueEnumField
 
 
 class GeometrySchema(Schema):
@@ -27,7 +27,9 @@ class GeometrySchema(Schema):
 
 class AnnotationDataSchema(Schema):
     id = fields.String(required=True)
-    type = ValueEnum(AnnotationValueType, load_default=AnnotationValueType.HAS_SIGN)
+    type = ValueEnumField(
+        AnnotationValueType, load_default=AnnotationValueType.HAS_SIGN
+    )
     sign_name = fields.String(load_default="", data_key="signName")
     value = fields.String(required=True)
     path = fields.List(fields.Int, required=True)
