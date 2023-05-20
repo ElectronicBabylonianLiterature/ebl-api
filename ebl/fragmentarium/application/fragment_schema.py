@@ -194,7 +194,6 @@ class FragmentSchema(Schema):
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
         if "projects" in data:
             data["projects"] = tuple(data["projects"])
-
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         if "authorized_scopes" in data:

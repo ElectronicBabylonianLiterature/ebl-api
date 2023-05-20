@@ -350,7 +350,7 @@ class TextSchema(Schema):
     intro = fields.String(load_default="")
     chapters = fields.Nested(ChapterListingSchema, many=True, required=True)
     references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
-    projects = fields.List(ResearchProjectField())
+    projects = fields.List(ResearchProjectField(), load_default=tuple())
 
     @post_load
     def make_text(self, data: dict, **kwargs) -> Text:
