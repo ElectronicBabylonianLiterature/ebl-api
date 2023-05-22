@@ -2,10 +2,11 @@ from enum import Enum
 
 
 def get_by_attribute_value(cls, attribute, value):
-    try:
-        return next(enum for enum in cls if getattr(enum, attribute) == value)
-    except StopIteration:
-        raise ValueError(f"Unknown enum {attribute}: {value}")
+    mapper = {getattr(enum, attribute): enum for enum in cls}
+    if value not in mapper:
+        raise ValueError(f"Could not find a {cls.__name__} with {attribute} = {value}")
+
+    return mapper[value]
 
 
 class NamedEnum(Enum):
