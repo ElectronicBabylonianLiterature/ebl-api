@@ -124,37 +124,36 @@ def validate(fragments: dict) -> None:
                 str(problems)[:50] + "[...]" if problems else problems,
             )
 
-    if fails:
-        if args.skip_invalid:
-            print(CHECK, "Excluding invalid...", sep="\n", end=" ")
-            return {
-                filename: data
-                for filename, data in fragments.items()
-                if filename not in fails
-            }
-
-        else:
-            fail_summary_file = os.path.join(
-                os.path.dirname(__file__), "invalid_fragments.tsv"
-            )
-
-            columns = ["file", "error", "hints"]
-            df = pd.DataFrame([[k, *v] for k, v in fails.items()], columns=columns)
-            df.to_csv(
-                fail_summary_file,
-                sep="\t",
-                index=False,
-            )
-
-            sys.exit(
-                as_error(
-                    "Invalid data. "
-                    f"See table below or {fail_summary_file} for details.\n\n"
-                    f"{df.to_markdown(index=False)}\n\nAborting."
-                )
-            )
-    else:
+    if not fails:
         return fragments
+    if args.skip_invalid:
+        print(CHECK, "Excluding invalid...", sep="\n", end=" ")
+        return {
+            filename: data
+            for filename, data in fragments.items()
+            if filename not in fails
+        }
+
+    else:
+        fail_summary_file = os.path.join(
+            os.path.dirname(__file__), "invalid_fragments.tsv"
+        )
+
+        columns = ["file", "error", "hints"]
+        df = pd.DataFrame([[k, *v] for k, v in fails.items()], columns=columns)
+        df.to_csv(
+            fail_summary_file,
+            sep="\t",
+            index=False,
+        )
+
+        sys.exit(
+            as_error(
+                "Invalid data. "
+                f"See table below or {fail_summary_file} for details.\n\n"
+                f"{df.to_markdown(index=False)}\n\nAborting."
+            )
+        )
 
 
 @show_progress("Checking ids...")
@@ -164,41 +163,40 @@ def validate_ids(fragments: dict, skip_existing: bool) -> dict:
     if not all(new_ids):
         output = [as_error("The following documents are missing an '_id' field:")]
 
-        for filename, data in fragments.items():
-            if "_id" not in data:
-                output.append(filename)
-
+        output.extend(
+            filename
+            for filename, data in fragments.items()
+            if "_id" not in data
+        )
         sys.exit("{}\n\n Aborting.".format("\n".join(output)))
 
-    if existing := [
-        data["_id"]
-        for data in fragments_collection.find_many(
-            {"_id": {"$in": new_ids}}, projection={"_id": True}
-        )
-    ]:
-
-        if args.skip_existing:
-            return {
-                filepath: data
-                for filepath, data in fragments.items()
-                if data["_id"] not in existing
-            }
-        else:
-            fragments_by_id = {
-                data["_id"]: filename for filename, data in fragments.items()
-            }
-            df = pd.DataFrame(
-                {"file": [fragments_by_id[_id] for _id in existing], "_id": existing}
+    if not (
+        existing := [
+            data["_id"]
+            for data in fragments_collection.find_many(
+                {"_id": {"$in": new_ids}}, projection={"_id": True}
             )
-            output = as_error(
-                f"The following {len(existing)} documents have ids "
-                "that already exist in the db:\n\n"
-                f"{df.to_markdown(index=False)}\n\n"
-            )
-            sys.exit(output)
-
-    else:
+        ]
+    ):
         return fragments
+    if args.skip_existing:
+        return {
+            filepath: data
+            for filepath, data in fragments.items()
+            if data["_id"] not in existing
+        }
+    fragments_by_id = {
+        data["_id"]: filename for filename, data in fragments.items()
+    }
+    df = pd.DataFrame(
+        {"file": [fragments_by_id[_id] for _id in existing], "_id": existing}
+    )
+    output = as_error(
+        f"The following {len(existing)} documents have ids "
+        "that already exist in the db:\n\n"
+        f"{df.to_markdown(index=False)}\n\n"
+    )
+    sys.exit(output)
 
 
 def push_to_db(fragments: dict, target_db: str) -> List[str]:
@@ -224,9 +222,7 @@ def push_to_db(fragments: dict, target_db: str) -> List[str]:
         print(red("✗"))
         print(
             as_error(
-                "Import failed due to the following errors{}:".format(
-                    "" if args.verbose else " (use -vv to see the full stack)"
-                )
+                f'Import failed due to the following errors{"" if args.verbose else " (use -vv to see the full stack)"}:'
             )
         )
 
