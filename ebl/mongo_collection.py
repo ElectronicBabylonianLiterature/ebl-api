@@ -19,8 +19,8 @@ class MongoCollection:
         self.__collection = collection
         self.__resource_noun = singlar(collection)
 
-    def insert_many(self, documents: Sequence[dict]):
-        return self.__get_collection().insert_many(documents).inserted_ids
+    def insert_many(self, documents: Sequence[dict], ordered=True):
+        return self.__get_collection().insert_many(documents, ordered=ordered).inserted_ids
 
     def exists(self, query) -> bool:
         return bool(self.__get_collection().find_one(query))
