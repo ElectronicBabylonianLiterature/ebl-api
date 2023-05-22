@@ -17,7 +17,7 @@ from ebl.fragmentarium.domain.fragment import (
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.schemas import ScopeEnum, ValueEnum
+from ebl.schemas import ResearchProjectField, ScopeField, ValueEnumField
 from ebl.transliteration.application.note_line_part_schemas import (
     OneOfNoteLinePartSchema,
 )
@@ -41,7 +41,7 @@ class MeasureSchema(Schema):
 
 class RecordEntrySchema(Schema):
     user = fields.String(required=True)
-    type = ValueEnum(RecordType, required=True)
+    type = ValueEnumField(RecordType, required=True)
     date = fields.String(required=True)
 
     @post_load
@@ -110,7 +110,7 @@ class ScriptSchema(Schema):
         lambda value: Period.from_name(value),
         required=True,
     )
-    period_modifier = ValueEnum(
+    period_modifier = ValueEnumField(
         PeriodModifier, required=True, data_key="periodModifier"
     )
     uncertain = fields.Boolean(load_default=None)
@@ -170,12 +170,12 @@ class FragmentSchema(Schema):
     )
     genres = fields.Nested(GenreSchema, many=True, load_default=tuple())
     line_to_vec = fields.List(
-        fields.List(ValueEnum(LineToVecEncoding)),
+        fields.List(ValueEnumField(LineToVecEncoding)),
         load_default=tuple(),
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(
-        ScopeEnum(),
+        ScopeField(),
         data_key="authorizedScopes",
     )
     introduction = fields.Nested(IntroductionSchema, default=Introduction())
@@ -185,16 +185,20 @@ class FragmentSchema(Schema):
         load_default=ExternalNumbers(),
         data_key="externalNumbers",
     )
+    projects = fields.List(ResearchProjectField())
 
     @post_load
     def make_fragment(self, data, **kwargs):
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
+        if "projects" in data:
+            data["projects"] = tuple(data["projects"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
         if "authorized_scopes" in data:
             data["authorized_scopes"] = list(data["authorized_scopes"])
+
         return Fragment(**data)
 
     @post_dump

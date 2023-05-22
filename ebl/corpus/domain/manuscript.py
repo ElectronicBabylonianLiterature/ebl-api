@@ -4,14 +4,14 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
-from ebl.common.domain.siglum_enum import SiglumEnum, SiglumEnumWithParent
+from ebl.common.domain.named_enum import NamedEnum, NamedEnumWithParent
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 
 
-class ManuscriptType(SiglumEnum):
+class ManuscriptType(NamedEnum):
     LIBRARY = ("Library", "")
     SCHOOL = ("School", "Sch")
     VARIA = ("Varia", "Var")
@@ -22,7 +22,7 @@ class ManuscriptType(SiglumEnum):
     NONE = ("None", "")
 
 
-class Provenance(SiglumEnumWithParent):
+class Provenance(NamedEnumWithParent):
     STANDARD_TEXT = ("Standard Text", "Std", None)
     ASSYRIA = ("Assyria", "Assa", None)
     ASSUR = ("Aššur", "Ašš", "Assyria")

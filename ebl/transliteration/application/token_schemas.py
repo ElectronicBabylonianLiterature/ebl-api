@@ -5,7 +5,7 @@ import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load, validate
 from marshmallow_oneofschema import OneOfSchema
 
-from ebl.schemas import NameEnum, ValueEnum
+from ebl.schemas import NameEnumField, ValueEnumField
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
@@ -70,9 +70,9 @@ class BaseTokenSchema(Schema):
     value = fields.String(required=True)
     clean_value = fields.String(data_key="cleanValue")
     enclosure_type = fields.List(
-        NameEnum(EnclosureType), load_default=list, data_key="enclosureType"
+        NameEnumField(EnclosureType), load_default=list, data_key="enclosureType"
     )
-    erasure = NameEnum(ErasureState, load_default=ErasureState.NONE)
+    erasure = NameEnumField(ErasureState, load_default=ErasureState.NONE)
 
 
 class ValueTokenSchema(BaseTokenSchema):
@@ -84,7 +84,7 @@ class ValueTokenSchema(BaseTokenSchema):
 
 
 class LanguageShiftSchema(BaseTokenSchema):
-    language = NameEnum(Language, required=True)
+    language = NameEnumField(Language, required=True)
     normalized = fields.Boolean(required=True)
 
     @post_load
@@ -95,7 +95,7 @@ class LanguageShiftSchema(BaseTokenSchema):
 
 
 class EnclosureSchema(BaseTokenSchema):
-    side = NameEnum(Side, required=True)
+    side = NameEnumField(Side, required=True)
 
     @abstractmethod
     @post_load
@@ -190,7 +190,7 @@ class UnknownNumberOfSignsSchema(BaseTokenSchema):
 
 
 class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -218,7 +218,7 @@ class CommentaryProtocolSchema(BaseTokenSchema):
 class DividerSchema(BaseTokenSchema):
     divider = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -242,7 +242,7 @@ class ColumnSchema(BaseTokenSchema):
 
 
 class UnidentifiedSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -254,7 +254,7 @@ class UnidentifiedSignSchema(BaseTokenSchema):
 
 
 class UnclearSignSchema(BaseTokenSchema):
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -266,7 +266,9 @@ class UnclearSignSchema(BaseTokenSchema):
 
 
 class JoinerSchema(BaseTokenSchema):
-    enum_value = ValueEnum(atf.Joiner, required=True, data_key="value", load_only=True)
+    enum_value = ValueEnumField(
+        atf.Joiner, required=True, data_key="value", load_only=True
+    )
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -288,7 +290,7 @@ class NamedSignSchema(BaseTokenSchema):
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
     sign = fields.Nested(lambda: OneOfTokenSchema(), allow_none=True)
 
 
@@ -347,7 +349,7 @@ class NumberSchema(NamedSignSchema):
 
 class BaseWordSchema(BaseTokenSchema):
     parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
-    language = NameEnum(Language, required=True)
+    language = NameEnumField(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
     alignable = fields.Boolean()
@@ -417,7 +419,7 @@ class VariantSchema(BaseTokenSchema):
 class GraphemeSchema(BaseTokenSchema):
     name = fields.String(required=True)
     modifiers = fields.List(fields.String(), required=True)
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -486,7 +488,7 @@ class LineBreakSchema(BaseTokenSchema):
 
 
 class AkkadianWordSchema(BaseWordSchema):
-    modifiers = fields.List(ValueEnum(Flag), required=True)
+    modifiers = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -523,7 +525,7 @@ class MetricalFootSeparatorSchema(BreakSchema):
 
 class GreekLetterSchema(BaseTokenSchema):
     letter = fields.String(required=True, validate=validate.Length(1, 1))
-    flags = fields.List(ValueEnum(Flag), required=True)
+    flags = fields.List(ValueEnumField(Flag), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):

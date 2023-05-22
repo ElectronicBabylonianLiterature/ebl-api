@@ -1,6 +1,7 @@
 import factory.fuzzy
 import pydash
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.project import ResearchProject
 
 from ebl.corpus.domain.chapter import Chapter, Classification
 from ebl.corpus.domain.line import Line
@@ -302,6 +303,7 @@ class TextFactory(factory.Factory):
     references = factory.List(
         [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
     )
+    projects = (ResearchProject.CAIC,)
 
 
 class ManuscriptAttestationFactory(factory.Factory):
