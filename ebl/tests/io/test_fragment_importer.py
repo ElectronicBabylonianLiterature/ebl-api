@@ -6,9 +6,6 @@ from marshmallow import ValidationError
 import pytest
 import os
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
-    MongoFragmentRepository,
-)
 from pymongo.errors import BulkWriteError
 from ebl.io.fragments.importer import (
     validate,
@@ -124,8 +121,8 @@ def test_invalid_id(valid_fragment_data):
 
 def test_ensure_unique(
     valid_fragment_data,
-    fragment_repository: MongoFragmentRepository,
-    fragments_collection: MongoCollection,
+    fragment_repository,
+    fragments_collection,
 ):
     valid_fragment_data["_id"] = "mock.number"
     fragment_repository.create(FRAGMENT)
@@ -134,8 +131,8 @@ def test_ensure_unique(
 
 def test_ensure_unique_duplicate(
     valid_fragment_data,
-    fragment_repository: MongoFragmentRepository,
-    fragments_collection: MongoCollection,
+    fragment_repository,
+    fragments_collection,
 ):
     museum_number = str(FRAGMENT.number)
     valid_fragment_data["_id"] = museum_number
@@ -148,8 +145,8 @@ def test_ensure_unique_duplicate(
 
 def test_write_to_db(
     valid_fragment_data,
-    fragment_repository: MongoFragmentRepository,
-    fragments_collection: MongoCollection,
+    fragment_repository,
+    fragments_collection,
 ):
     fragment_repository.create(FRAGMENT)
     valid_fragment_data["_id"] = "mock.number"
@@ -161,8 +158,8 @@ def test_write_to_db(
 
 def test_write_to_db_duplicate(
     valid_fragment_data,
-    fragment_repository: MongoFragmentRepository,
-    fragments_collection: MongoCollection,
+    fragment_repository,
+    fragments_collection,
 ):
     fragment_repository.create(FRAGMENT)
     valid_fragment_data["_id"] = str(FRAGMENT.number)
@@ -171,9 +168,7 @@ def test_write_to_db_duplicate(
         write_to_db([valid_fragment_data], fragments_collection)
 
 
-def test_create_sort_index(
-    fragment_repository: MongoFragmentRepository, fragments_collection: MongoCollection
-):
+def test_create_sort_index(fragment_repository, fragments_collection):
     for i in [3, 2, 1]:
         fragment_repository.create(
             attr.evolve(FRAGMENT, number=MuseumNumber.of(f"X.{i}"))

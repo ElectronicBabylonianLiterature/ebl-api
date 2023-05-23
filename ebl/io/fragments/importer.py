@@ -99,8 +99,8 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
 
 
 def write_to_db(
-    fragments: List[dict], fragments_collection: MongoCollection
-) -> List[str]:
+    fragments: Sequence[dict], fragments_collection: MongoCollection
+) -> List:
 
     return fragments_collection.insert_many(fragments, ordered=False)
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
         if input(prompt) != "YES":
             sys.exit("Aborting.")
 
-    result = write_to_db(fragments_to_import.values(), COLLECTION)
+    result = write_to_db(list(fragments_to_import.values()), COLLECTION)
 
     print("Result:")
     print(result)
