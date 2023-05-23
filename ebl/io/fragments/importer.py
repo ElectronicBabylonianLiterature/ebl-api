@@ -77,7 +77,7 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
     try:
         fragments_collection.drop_index(sortkey_index)
     except OperationFailure:
-        print("No index found, creating from scratch...")
+        pass
 
     fragments_collection.aggregate(
         [
