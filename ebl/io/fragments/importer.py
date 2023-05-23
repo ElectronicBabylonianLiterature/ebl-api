@@ -27,10 +27,6 @@ def load_data(paths: Sequence[str]) -> dict:
             except json.JSONDecodeError as error:
                 raise ValueError(f"Invalid JSON: {file}") from error
 
-    if not fragments:
-        print("No fragments found.")
-        sys.exit()
-
     return fragments
 
 
@@ -135,6 +131,10 @@ if __name__ == "__main__":
     COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
 
     fragments_to_import = load_data(args.fragments)
+
+    if not fragments_to_import:
+        print("No fragments found.")
+        sys.exit()
 
     print("Validating...")
 
