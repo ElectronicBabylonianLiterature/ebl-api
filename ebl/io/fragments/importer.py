@@ -99,18 +99,8 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
 
 
 def write_to_db(
-    fragments: List[dict], target_db: str, fragments_collection: MongoCollection
+    fragments: List[dict], fragments_collection: MongoCollection
 ) -> List[str]:
-    is_production_db = target_db == PROD_DB
-
-    if is_production_db:
-        prompt = (
-            "\n!!! WARNING: This will alter the PRODUCTION DB and can lead to data loss. !!!"
-            "\n\nOnly proceed if you created a backup of the fragments collection."
-            "\nType YES to continue: "
-        )
-        if input(prompt) != "YES":
-            sys.exit("Aborting.")
 
     return fragments_collection.insert_many(fragments, ordered=False)
 
@@ -160,7 +150,17 @@ if __name__ == "__main__":
         sys.exit()
 
     print("Writing to database...")
-    result = write_to_db(fragments_to_import.values(), TARGET_DB, COLLECTION)
+
+    if TARGET_DB == PROD_DB:
+        prompt = (
+            "\n!!! WARNING: This will alter the PRODUCTION DB and can lead to data loss. !!!"
+            "\n\nOnly proceed if you created a backup of the fragments collection."
+            "\nType YES to continue: "
+        )
+        if input(prompt) != "YES":
+            sys.exit("Aborting.")
+
+    result = write_to_db(fragments_to_import.values(), COLLECTION)
 
     print("Result:")
     print(result)
