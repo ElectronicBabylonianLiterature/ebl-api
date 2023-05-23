@@ -38,7 +38,7 @@ def validate(data: dict, filename="") -> None:
     try:
         validation_errors = FragmentSchema(unknown="exclude").validate(data)
     except Exception as error:
-        raise ValidationError(f"Invalid data in {filename}") from error
+        raise ValidationError(f"Invalid data in {filename}: {error}") from error
     if validation_errors:
         raise ValidationError(f"Invalid data in {filename}: {validation_errors}")
 
@@ -47,7 +47,12 @@ def validate_id(data: dict, filename="") -> None:
     if "_id" not in data:
         raise ValidationError(f"Missing _id in {filename}")
 
-    MuseumNumber.of(data["_id"])
+    try:
+        MuseumNumber.of(data["_id"])
+    except ValueError:
+        raise ValidationError(
+            f"id {data['_id']!r} of {filename} is not a valid museum number"
+        )
 
 
 def ensure_unique(
