@@ -113,7 +113,6 @@ if __name__ == "__main__":
         description="Import documents into the fragments collection."
     )
     parser.add_argument(
-        "--dry-run",
         "--validate",
         action="store_true",
         default=False,
@@ -146,7 +145,7 @@ if __name__ == "__main__":
 
     print("Validation successful.")
 
-    if args.dry_run:
+    if args.validate:
         sys.exit()
 
     print("Writing to database...")
