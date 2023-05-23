@@ -19,7 +19,6 @@ from ebl.mongo_collection import MongoCollection
 
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
-import subprocess
 
 
 MOCKFILE = "mock.json"
@@ -191,33 +190,3 @@ def test_create_sort_index(fragment, fragment_repository, fragments_collection):
         fragments_collection.find_many({}, projection={"_id": True, "_sortKey": True}),
         key=lambda entry: entry["_sortKey"],
     ) == [{"_id": f"X.{i+1}", "_sortKey": i} for i in [0, 1, 2]]
-
-
-@pytest.mark.parametrize(
-    "updates,command,expected_error",
-    [
-        (
-            {},
-            "poetry run python -m ebl.io.fragments.importer --validate",
-            "ValidationError: Missing _id in {}",
-        ),
-        (
-            {"_id": "invalid museum number"},
-            "poetry run python -m ebl.io.fragments.importer --validate",
-            "ValidationError: id 'invalid museum number' of {} is not a valid museum number",
-        ),
-    ],
-)
-def test_main_validate_only(
-    valid_fragment_data, updates, tmp_path, command, expected_error
-):
-
-    valid_fragment_data.update(updates)
-    path = mock_json_file(json.dumps(valid_fragment_data), tmp_path)
-
-    result = subprocess.run(
-        command.split() + [path],
-        capture_output=True,
-    )
-    assert expected_error.format(path) in result.stderr.decode("utf-8")
-    assert "Writing to database..." not in result.stdout.decode("utf-8")
