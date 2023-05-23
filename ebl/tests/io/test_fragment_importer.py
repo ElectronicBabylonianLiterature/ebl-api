@@ -140,6 +140,11 @@ def test_write_to_db(valid_fragment_data, fragment_repository: MongoFragmentRepo
     assert write_to_db([valid_fragment_data], fragment_repository._fragments) == [
         "mock.number"
     ]
+    assert fragment_repository._fragments.count_documents({}) == 2
+    assert (
+        fragment_repository._fragments.find_one_by_id("mock.number")
+        == valid_fragment_data
+    )
 
 
 def test_write_to_db_duplicate(
