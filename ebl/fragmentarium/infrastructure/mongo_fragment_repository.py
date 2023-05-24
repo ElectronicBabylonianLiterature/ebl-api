@@ -401,10 +401,13 @@ class MongoFragmentRepository(FragmentRepository):
                 "museumNumber.suffix": museum_number.suffix,
             },
             projection={"_sortKey": True},
-        )["_sortKey"]
+        ).get("_sortKey")
 
-        prev = self.query_by_sort_key(current - 1)
-        next_ = self.query_by_sort_key(current + 1)
+        if current is None:
+            prev = next_ = museum_number
+        else:
+            prev = self.query_by_sort_key(current - 1)
+            next_ = self.query_by_sort_key(current + 1)
 
         return FragmentPagerInfo(prev, next_)
 
