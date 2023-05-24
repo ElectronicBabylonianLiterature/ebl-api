@@ -106,7 +106,10 @@ if __name__ == "__main__":
     INDEX_CMD = "reindex"
 
     parser = argparse.ArgumentParser(
-        description="Import documents into the fragments collection. MONGODB_URI environment variable must be set."
+        description=(
+            "Import documents into the fragments collection. "
+            "MONGODB_URI environment variable must be set."
+        )
     )
     subparsers = parser.add_subparsers(dest="subcommand")
 
