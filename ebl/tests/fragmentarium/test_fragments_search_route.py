@@ -139,10 +139,8 @@ def test_query_fragmentarium_transliteration(
             number=MuseumNumber.of("X.42"), script=Script(Period.LATE_BABYLONIAN)
         ),
     ]
-    for fragment in transliterated_fragments:
-        fragmentarium.create(fragment)
-
-    fragmentarium._repository._create_sort_index()
+    for index, fragment in enumerate(transliterated_fragments):
+        fragmentarium.create(fragment, sort_key=index)
 
     for sign in signs:
         sign_repository.create(sign)

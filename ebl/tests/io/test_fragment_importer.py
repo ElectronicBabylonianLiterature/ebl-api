@@ -3,17 +3,19 @@ import json
 import re
 import attr
 from marshmallow import ValidationError
+import pymongo
 import pytest
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from pymongo.errors import BulkWriteError
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.io.fragments.importer import (
+    create_sort_index,
     validate,
     load_data,
     validate_id,
     ensure_unique,
     write_to_db,
-    create_sort_index,
+    update_sort_keys,
 )
 from ebl.mongo_collection import MongoCollection
 
@@ -87,7 +89,7 @@ def test_invalid_enum(valid_fragment_data):
 
     with pytest.raises(
         ValidationError,
-        match=f"Invalid data in {MOCKFILE}: Unknown enum long_name: {unknown_period}",
+        match=f"Invalid data in {MOCKFILE}: Unknown Period.long_name: {unknown_period}",
     ):
         validate(valid_fragment_data)
 
@@ -176,17 +178,24 @@ def test_write_to_db_duplicate(
         write_to_db([valid_fragment_data], fragments_collection)
 
 
-def test_create_sort_index(fragment, fragment_repository, fragments_collection):
-    for i in [3, 2, 1]:
+def test_update_sort_index(fragment, fragment_repository, fragments_collection):
+    numbers = [1, 2, 3]
+    for i in numbers:
         fragment_repository.create(
             attr.evolve(fragment, number=MuseumNumber.of(f"X.{i}"))
         )
 
     assert not fragments_collection.exists({"_sortKey": {"$exists": True}})
 
-    create_sort_index(fragments_collection)
+    update_sort_keys(fragments_collection)
 
     assert sorted(
         fragments_collection.find_many({}, projection={"_id": True, "_sortKey": True}),
         key=lambda entry: entry["_sortKey"],
-    ) == [{"_id": f"X.{i+1}", "_sortKey": i} for i in [0, 1, 2]]
+    ) == [{"_id": f"X.{i}", "_sortKey": i - 1} for i in numbers]
+
+    create_sort_index(fragments_collection)
+
+    assert [("_sortKey", pymongo.ASCENDING)] in [
+        index["key"] for index in fragments_collection.index_information().values()
+    ]
