@@ -17,6 +17,7 @@ tasks:
       - task: lint
       - task: type
       - task: test
+      - task: import
 
   test:
     cmds:
@@ -37,3 +38,7 @@ tasks:
   start:
     cmds:
       - poetry run waitress-serve --port=8000 --call ebl.app:get_app
+  
+  import:
+    cmds:
+      - poetry run python -m ebl.io.fragments.importer {{.CLI_ARGS}}
