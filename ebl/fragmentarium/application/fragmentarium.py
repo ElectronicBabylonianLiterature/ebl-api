@@ -33,5 +33,5 @@ class Fragmentarium:
             user_scopes
         )
 
-    def create(self, fragment: Fragment) -> str:
-        return self._repository.create(fragment)
+    def create(self, fragment: Fragment, sort_key=None) -> str:
+        return self._repository.create(fragment, sort_key=sort_key)
