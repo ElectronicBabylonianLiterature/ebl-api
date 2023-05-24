@@ -4,9 +4,8 @@ import os
 import sys
 import json
 from marshmallow import ValidationError
-import pymongo
 from pymongo import MongoClient
-from pymongo.errors import OperationFailure
+import pymongo
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     sort_by_museum_number,
@@ -17,10 +16,12 @@ from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 
 
 def load_data(paths: Sequence[str]) -> dict:
-    files = [path for path in paths if path.endswith(".json")]
     fragments = {}
 
-    for file in files:
+    for file in paths:
+        if not file.endswith(".json"):
+            continue
+
         with open(file) as jsonfile:
             try:
                 fragments[file] = json.load(jsonfile)
@@ -67,14 +68,7 @@ def ensure_unique(
         raise ValidationError(f"ID {existing} of file {filename} already exists")
 
 
-def create_sort_index(fragments_collection: MongoCollection) -> None:
-    sortkey_index = [("_sortKey", pymongo.ASCENDING)]
-
-    try:
-        fragments_collection.drop_index(sortkey_index)
-    except OperationFailure:
-        pass
-
+def update_sort_keys(fragments_collection: MongoCollection) -> None:
     fragments_collection.aggregate(
         [
             {"$project": {"museumNumber": True}},
@@ -91,7 +85,10 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
         ],
         allowDiskUse=True,
     )
-    fragments_collection.create_index(sortkey_index)
+
+
+def create_sort_index(fragments_collection: MongoCollection) -> None:
+    fragments_collection.create_index([("_sortKey", pymongo.ASCENDING)])
 
 
 def write_to_db(
@@ -104,17 +101,35 @@ def write_to_db(
 if __name__ == "__main__":
     DEV_DB = "ebldev"
     PROD_DB = "ebl"
+    IMPORT_CMD = "import"
+    VALIDATION_CMD = "validate"
+    INDEX_CMD = "reindex"
 
     parser = argparse.ArgumentParser(
-        description="Import documents into the fragments collection."
+        description="Import documents into the fragments collection. MONGODB_URI environment variable must be set."
     )
-    parser.add_argument(
-        "--validate",
-        action="store_true",
-        default=False,
-        help="Run validation and exit without updating the db",
+    subparsers = parser.add_subparsers(dest="subcommand")
+
+    import_info = "Validate input files, write to the database, and reindex"
+    import_parser = subparsers.add_parser(
+        IMPORT_CMD, help=import_info, description=import_info
     )
-    parser.add_argument("fragments", nargs="+")
+
+    validation_info = "Validate input files without writing to the database"
+    validation_parser = subparsers.add_parser(
+        VALIDATION_CMD, help=validation_info, description=validation_info
+    )
+
+    for parser_with_input in [import_parser, validation_parser]:
+        parser_with_input.add_argument(
+            "fragments", nargs="+", help="Paths to JSON input files"
+        )
+
+    index_info = "Rebuild the sort index"
+    index_parser = subparsers.add_parser(
+        INDEX_CMD, help=index_info, description=index_info
+    )
+
     parser.add_argument(
         "-db",
         "--database",
@@ -123,6 +138,15 @@ if __name__ == "__main__":
         help="Toggle between development (default) and production db",
     )
 
+    def reindex_database(collection):
+        print("Calculating _sortKeys (this may take a while)...")
+        update_sort_keys(collection)
+
+        print("Reindexing database...")
+        create_sort_index(collection)
+
+        print("Sort index built successfully.")
+
     args = parser.parse_args()
 
     CLIENT = MongoClient(os.environ["MONGODB_URI"])
@@ -130,44 +154,51 @@ if __name__ == "__main__":
 
     COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
 
-    fragments_to_import = load_data(args.fragments)
+    if args.subcommand == INDEX_CMD:
+        reindex_database(COLLECTION)
+        sys.exit()
 
-    if not fragments_to_import:
+    print("Loading data...")
+    fragments = load_data(args.fragments)
+
+    if fragments:
+        print(f"Found {len(fragments)} files.")
+    else:
         print("No fragments found.")
         sys.exit()
 
     print("Validating...")
 
-    for filename, data in fragments_to_import.items():
+    for filename, data in fragments.items():
         validate(data, filename)
         validate_id(data, filename)
         ensure_unique(data, COLLECTION, filename)
 
     print("Validation successful.")
 
-    if args.validate:
+    if args.subcommand == VALIDATION_CMD:
         sys.exit()
 
     print("Writing to database...")
 
-    if TARGET_DB == PROD_DB:
+    if args.database == PROD_DB:
+        passphrase = "HAMMURABI"
         prompt = (
-            "\n!!! WARNING: This will alter the PRODUCTION DB and can lead to data loss. !!!"
-            "\n\nOnly proceed if you created a backup of the fragments collection."
-            "\nType YES to continue: "
+            "\n\033[93m!!! WARNING: "
+            "This will alter the PRODUCTION DB and can lead to data loss. !!!"
+            "\n\nPROCEED ONLY after creating a DUPLICATE of the fragments collection!\033[0m"
+            f"\n\nType {passphrase} to continue: "
         )
-        if input(prompt) != "YES":
+        if input(prompt) != passphrase:
             sys.exit("Aborting.")
 
-    result = write_to_db(list(fragments_to_import.values()), COLLECTION)
+    result = write_to_db(list(fragments.values()), COLLECTION)
 
     print("Result:")
     print(result)
 
-    print("Updating sort index (this may take a while...)")
+    reindex_database(COLLECTION)
 
-    create_sort_index(COLLECTION)
-
-    print("Done! The following fragments were added:")
-    for filename, data in fragments_to_import.items():
+    print("Done! Summary of added fragments:")
+    for filename, data in fragments.items():
         print(data["_id"], filename, sep="\t")
