@@ -111,7 +111,7 @@ if __name__ == "__main__":
             "MONGODB_URI environment variable must be set."
         )
     )
-    subparsers = parser.add_subparsers(dest="subcommand")
+    subparsers = parser.add_subparsers(dest="subcommand", required=True)
 
     import_info = "Validate input files, write to the database, and reindex"
     import_parser = subparsers.add_parser(
