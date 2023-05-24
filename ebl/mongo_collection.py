@@ -1,4 +1,4 @@
-from typing import Any, cast, Sequence, Optional
+from typing import Any, Mapping, cast, Sequence, Optional
 
 import inflect
 from pymongo.collection import Collection
@@ -90,6 +90,9 @@ class MongoCollection:
 
     def create_index(self, index, **kwargs):
         return self.__get_collection().create_index(index, **kwargs)
+
+    def index_information(self) -> Mapping:
+        return self.__get_collection().index_information()
 
     def drop_index(self, index, **kwargs):
         return self.__get_collection().drop_index(index, **kwargs)
