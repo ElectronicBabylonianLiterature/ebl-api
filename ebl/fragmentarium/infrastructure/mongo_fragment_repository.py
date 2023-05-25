@@ -3,7 +3,6 @@ from typing import List, Optional, Sequence
 import pymongo
 from marshmallow import EXCLUDE
 from pymongo.collation import Collation
-from pymongo.errors import OperationFailure
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
@@ -20,10 +19,7 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    PatternMatcher,
-    sort_by_museum_number,
-)
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -55,32 +51,6 @@ class MongoFragmentRepository(FragmentRepository):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
 
-    def _create_sort_index(self) -> None:
-        sortkey_index = [("_sortKey", pymongo.ASCENDING)]
-
-        try:
-            self._fragments.drop_index(sortkey_index)
-        except OperationFailure:
-            print("No index found, creating from scratch...")
-
-        self._fragments.aggregate(
-            [
-                {"$project": {"museumNumber": True}},
-                *sort_by_museum_number(),
-                {
-                    "$group": {
-                        "_id": None,
-                        "sorted": {"$push": "$_id"},
-                    }
-                },
-                {"$unwind": {"path": "$sorted", "includeArrayIndex": "sortKey"}},
-                {"$project": {"_id": "$sorted", "_sortKey": "$sortKey"}},
-                {"$merge": "fragments"},
-            ],
-            allowDiskUse=True,
-        )
-        self._fragments.create_index(sortkey_index)
-
     def create_indexes(self) -> None:
         self._fragments.create_index(
             [
@@ -110,6 +80,7 @@ class MongoFragmentRepository(FragmentRepository):
                 ("collection", pymongo.ASCENDING),
             ]
         )
+        self._fragments.create_index([("_sortKey", pymongo.ASCENDING)])
         self._joins.create_index(
             [
                 ("fragments.museumNumber.prefix", pymongo.ASCENDING),
@@ -117,12 +88,6 @@ class MongoFragmentRepository(FragmentRepository):
                 ("fragments.museumNumber.suffix", pymongo.ASCENDING),
             ]
         )
-
-        if new_fragments := self._fragments.count_documents({"_sortKey": None}):
-            print(
-                f"Found {new_fragments} newly added fragment(s) - rebuilding sort index..."
-            )
-            self._create_sort_index()
 
     def count_transliterated_fragments(self):
         return self._fragments.count_documents(HAS_TRANSLITERATION)
@@ -136,11 +101,12 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration:
             return 0
 
-    def create(self, fragment):
+    def create(self, fragment, sort_key=None):
         return self._fragments.insert_one(
             {
                 "_id": str(fragment.number),
                 **FragmentSchema(exclude=["joins"]).dump(fragment),
+                **({} if sort_key is None else {"_sortKey": sort_key}),
             }
         )
 
@@ -401,10 +367,13 @@ class MongoFragmentRepository(FragmentRepository):
                 "museumNumber.suffix": museum_number.suffix,
             },
             projection={"_sortKey": True},
-        )["_sortKey"]
+        ).get("_sortKey")
 
-        prev = self.query_by_sort_key(current - 1)
-        next_ = self.query_by_sort_key(current + 1)
+        if current is None:
+            prev = next_ = museum_number
+        else:
+            prev = self.query_by_sort_key(current - 1)
+            next_ = self.query_by_sort_key(current + 1)
 
         return FragmentPagerInfo(prev, next_)
 

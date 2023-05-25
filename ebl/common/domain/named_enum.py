@@ -5,7 +5,7 @@ def get_by_attribute_value(cls, attribute, value):
     try:
         return next(enum for enum in cls if getattr(enum, attribute) == value)
     except StopIteration:
-        raise ValueError(f"Unknown enum {attribute}: {value}")
+        raise ValueError(f"Unknown {cls.__name__}.{attribute}: {value}")
 
 
 class NamedEnum(Enum):

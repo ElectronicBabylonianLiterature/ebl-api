@@ -9,10 +9,10 @@ def test_mapping():
 
 
 def test_invalid_name():
-    with pytest.raises(ValueError, match="Unknown enum long_name: foobar"):
+    with pytest.raises(ValueError, match="Unknown Period.long_name: foobar"):
         Period.from_name("foobar")
 
 
 def test_invalid_abbreviation():
-    with pytest.raises(ValueError, match="Unknown enum abbreviation: foo"):
+    with pytest.raises(ValueError, match="Unknown Period.abbreviation: foo"):
         Period.from_abbreviation("foo")

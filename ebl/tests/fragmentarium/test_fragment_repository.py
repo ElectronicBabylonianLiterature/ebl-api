@@ -275,12 +275,11 @@ def test_folio_pager_exception(fragment_repository):
     ],
 )
 def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
-    for fragmentNumber in museum_numbers:
+    for index, fragmentNumber in enumerate(museum_numbers):
         fragment_repository.create(
-            FragmentFactory.build(number=MuseumNumber.of(fragmentNumber))
+            FragmentFactory.build(number=MuseumNumber.of(fragmentNumber)),
+            sort_key=index,
         )
-
-    fragment_repository._create_sort_index()
 
     for museum_number in museum_numbers:
         results = fragment_repository.query_next_and_previous_fragment(
@@ -842,9 +841,8 @@ def test_query_lemmas(
         text=attr.evolve(fragment.text, lines=[line_with_lemmas]),
         script=Script(Period.NEO_ASSYRIAN),
     )
-    fragment_repository.create(fragment)
-    fragment_repository.create(fragment_with_phrase)
-    fragment_repository._create_sort_index()
+    fragment_repository.create(fragment, sort_key=0)
+    fragment_repository.create(fragment_with_phrase, sort_key=1)
 
     assert (
         fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
@@ -865,7 +863,7 @@ def test_fetch_scopes(fragment_repository: FragmentRepository):
 
 
 @pytest.mark.parametrize(
-    "key,number",
+    "sort_key,expected_number",
     [
         (0, 0),
         (1, 1),
@@ -877,15 +875,19 @@ def test_fetch_scopes(fragment_repository: FragmentRepository):
     ],
 )
 def test_query_by_sort_key(
-    fragment_repository: MongoFragmentRepository, key: int, number: int
+    fragment_repository: MongoFragmentRepository,
+    sort_key: int,
+    expected_number: int,
 ):
     museum_numbers = [MuseumNumber("B", str(i)) for i in range(5)]
-    fragments = [FragmentFactory.build(number=number) for number in museum_numbers]
 
-    fragment_repository.create_many(fragments)
-    fragment_repository._create_sort_index()
+    for index, number in enumerate(museum_numbers):
+        fragment_repository.create(FragmentFactory.build(number=number), sort_key=index)
 
-    assert fragment_repository.query_by_sort_key(key) == museum_numbers[number]
+    assert (
+        fragment_repository.query_by_sort_key(sort_key)
+        == museum_numbers[expected_number]
+    )
 
 
 def test_query_by_sort_key_no_index(fragment_repository):
@@ -893,17 +895,6 @@ def test_query_by_sort_key_no_index(fragment_repository):
 
     with pytest.raises(NotFoundError, match="Unable to find fragment with _sortKey 0"):
         fragment_repository.query_by_sort_key(0)
-
-
-def test_create_sort_index_with_new_fragment(fragment_repository):
-    fragment_repository._create_sort_index()
-
-    fragment = FragmentFactory.build()
-    data = FragmentSchema().dump(fragment)
-    fragment_repository._fragments.insert_one(data)
-    fragment_repository._create_sort_index()
-
-    assert fragment_repository.query_by_sort_key(0) == fragment.number
 
 
 @pytest.mark.parametrize(
@@ -931,8 +922,6 @@ def test_query_script(fragment_repository, query, expected):
 
     for fragment in fragments:
         fragment_repository.create(fragment)
-
-    fragment_repository._create_sort_index()
 
     expected_result = QueryResult(
         [
@@ -979,7 +968,6 @@ def test_query_genres(fragment_repository, query, expected):
     ]
 
     fragment_repository.create_many(fragments)
-    fragment_repository._create_sort_index()
 
     expected_result = QueryResult(
         [
