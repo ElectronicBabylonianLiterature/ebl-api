@@ -15,6 +15,22 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 
 
+def _load_json(path: str):
+    with open(path) as jsonfile:
+        try:
+            return json.load(jsonfile)
+        except json.JSONDecodeError as error:
+            raise ValueError(f"Invalid JSON: {path}") from error
+
+
+def assert_type(obj, expected_type_, prefix=""):
+    if not isinstance(obj, expected_type_):
+        prefix = prefix + " " if prefix else ""
+        raise ValueError(
+            f"{prefix}Expected {expected_type_} but got {type(obj)} instead"
+        )
+
+
 def load_data(paths: Sequence[str]) -> dict:
     fragments = {}
 
@@ -22,11 +38,23 @@ def load_data(paths: Sequence[str]) -> dict:
         if not file.endswith(".json"):
             continue
 
-        with open(file) as jsonfile:
-            try:
-                fragments[file] = json.load(jsonfile)
-            except json.JSONDecodeError as error:
-                raise ValueError(f"Invalid JSON: {file}") from error
+        fragments[file] = _load_json(file)
+
+    return fragments
+
+
+def load_collection(path: str) -> dict:
+    fragments = {}
+
+    if not path.endswith(".json"):
+        return fragments
+
+    collection = _load_json(path)
+
+    assert_type(collection, list)
+    for index, data in enumerate(collection):
+        assert_type(data, dict, prefix=f"Element {index} ({str(data)[:15]} [...]):")
+        fragments[f"{path}-{index}"] = data
 
     return fragments
 
@@ -94,7 +122,6 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
 def write_to_db(
     fragments: Sequence[dict], fragments_collection: MongoCollection
 ) -> List:
-
     return fragments_collection.insert_many(fragments, ordered=False)
 
 
@@ -125,7 +152,9 @@ if __name__ == "__main__":
 
     for parser_with_input in [import_parser, validation_parser]:
         parser_with_input.add_argument(
-            "fragments", nargs="+", help="Paths to JSON input files"
+            "fragments",
+            nargs="+",
+            help="Paths to JSON input files OR a single file with an array of fragments",
         )
 
     index_info = "Rebuild the sort index"
@@ -140,8 +169,18 @@ if __name__ == "__main__":
         default=DEV_DB,
         help="Toggle between development (default) and production db",
     )
+    parser.add_argument(
+        "--skip-duplicates",
+        action="store_true",
+        help="Skip documents with ids already in the db",
+    )
+    parser.add_argument(
+        "--skip-invalid",
+        action="store_true",
+        help="Skip documents with invalid data",
+    )
 
-    def reindex_database(collection):
+    def _reindex_database(collection):
         print("Calculating _sortKeys (this may take a while)...")
         update_sort_keys(collection)
 
@@ -154,18 +193,31 @@ if __name__ == "__main__":
 
     CLIENT = MongoClient(os.environ["MONGODB_URI"])
     TARGET_DB = CLIENT.get_database(args.database)
+    INVALID = set()
+    DUPLICATES = set()
 
     COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
 
     if args.subcommand == INDEX_CMD:
-        reindex_database(COLLECTION)
+        _reindex_database(COLLECTION)
         sys.exit()
 
     print("Loading data...")
-    fragments = load_data(args.fragments)
+
+    if len(args.fragments) == 1:
+        try:
+            fragments = load_collection(args.fragments[0])
+            print("Found collection!")
+        except Exception:
+            fragments = load_data(args.fragments)
+
+    else:
+        fragments = load_data(args.fragments)
+
+    fragment_count = len(fragments)
 
     if fragments:
-        print(f"Found {len(fragments)} files.")
+        print(f"Found {fragment_count} files.")
     else:
         print("No fragments found.")
         sys.exit()
@@ -173,11 +225,46 @@ if __name__ == "__main__":
     print("Validating...")
 
     for filename, data in fragments.items():
-        validate(data, filename)
-        validate_id(data, filename)
-        ensure_unique(data, COLLECTION, filename)
+        if args.skip_invalid:
+            try:
+                validate(data, filename)
+                validate_id(data, filename)
+            except Exception:
+                INVALID.add(filename)
+                continue
+        else:
+            validate(data, filename)
+            validate_id(data, filename)
 
-    print("Validation successful.")
+        if args.skip_duplicates:
+            try:
+                ensure_unique(data, COLLECTION, filename)
+            except Exception:
+                DUPLICATES.add(filename)
+
+        else:
+            ensure_unique(data, COLLECTION, filename)
+
+    FILES_TO_SKIP = INVALID | DUPLICATES
+
+    if FILES_TO_SKIP:
+        print()
+
+    if INVALID:
+        print(f"Skipping {len(INVALID)} invalid file(s):", *INVALID, sep="\n")
+        print()
+    if DUPLICATES:
+        print(
+            f"Skipping {len(DUPLICATES)} file(s) with IDs already in the db:",
+            *DUPLICATES,
+            sep="\n",
+        )
+        print()
+
+    print(
+        f"Validation of {fragment_count - len(FILES_TO_SKIP)} out of {fragment_count} "
+        "files successful."
+    )
 
     if args.subcommand == VALIDATION_CMD:
         sys.exit()
@@ -195,12 +282,15 @@ if __name__ == "__main__":
         if input(prompt) != passphrase:
             sys.exit("Aborting.")
 
-    result = write_to_db(list(fragments.values()), COLLECTION)
+    result = write_to_db(
+        [data for filename, data in fragments.items() if filename not in FILES_TO_SKIP],
+        COLLECTION,
+    )
 
     print("Result:")
     print(result)
 
-    reindex_database(COLLECTION)
+    _reindex_database(COLLECTION)
 
     print("Done! Summary of added fragments:")
     for filename, data in fragments.items():
