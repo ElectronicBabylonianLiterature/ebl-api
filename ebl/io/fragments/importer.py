@@ -140,44 +140,55 @@ if __name__ == "__main__":
     )
     subparsers = parser.add_subparsers(dest="subcommand", required=True)
 
-    import_info = "Validate input files, write to the database, and reindex"
-    import_parser = subparsers.add_parser(
-        IMPORT_CMD, help=import_info, description=import_info
+    _input_parser = argparse.ArgumentParser(
+        description="Parser with input", add_help=False
     )
-
-    validation_info = "Validate input files without writing to the database"
-    validation_parser = subparsers.add_parser(
-        VALIDATION_CMD, help=validation_info, description=validation_info
+    _input_parser.add_argument(
+        "fragments",
+        nargs="+",
+        help="Paths to JSON input files OR a single file with an array of fragments",
     )
-
-    for parser_with_input in [import_parser, validation_parser]:
-        parser_with_input.add_argument(
-            "fragments",
-            nargs="+",
-            help="Paths to JSON input files OR a single file with an array of fragments",
-        )
-
-    index_info = "Rebuild the sort index"
-    index_parser = subparsers.add_parser(
-        INDEX_CMD, help=index_info, description=index_info
+    _input_parser.add_argument(
+        "--strict",
+        action="store_true",
+        help=(
+            "Stop the import if invalid files or duplicate IDs are found "
+            "and print detailed error message"
+        ),
     )
-
-    parser.add_argument(
+    _output_parser = argparse.ArgumentParser(
+        description="Parser with output", add_help=False
+    )
+    _output_parser.add_argument(
         "-db",
         "--database",
         choices=[DEV_DB, PROD_DB],
         default=DEV_DB,
         help="Toggle between development (default) and production db",
     )
-    parser.add_argument(
-        "--skip-duplicates",
-        action="store_true",
-        help="Skip documents with ids already in the db",
+
+    import_info = "Validate input files, write to the database, and reindex"
+    import_parser = subparsers.add_parser(
+        IMPORT_CMD,
+        help=import_info,
+        description=import_info,
+        parents=[_input_parser, _output_parser],
     )
-    parser.add_argument(
-        "--skip-invalid",
-        action="store_true",
-        help="Skip documents with invalid data",
+
+    validation_info = "Validate input files without writing to the database"
+    validation_parser = subparsers.add_parser(
+        VALIDATION_CMD,
+        help=validation_info,
+        description=validation_info,
+        parents=[_input_parser, _output_parser],
+    )
+
+    index_info = "Rebuild the sort index"
+    index_parser = subparsers.add_parser(
+        INDEX_CMD,
+        help=index_info,
+        description=index_info,
+        parents=[_output_parser],
     )
 
     def _reindex_database(collection):
@@ -193,10 +204,9 @@ if __name__ == "__main__":
 
     CLIENT = MongoClient(os.environ["MONGODB_URI"])
     TARGET_DB = CLIENT.get_database(args.database)
+    COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
     INVALID = set()
     DUPLICATES = set()
-
-    COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
 
     if args.subcommand == INDEX_CMD:
         _reindex_database(COLLECTION)
@@ -225,25 +235,25 @@ if __name__ == "__main__":
     print("Validating...")
 
     for filename, data in fragments.items():
-        if args.skip_invalid:
+        if args.strict:
+            validate(data, filename)
+            validate_id(data, filename)
+            ensure_unique(data, COLLECTION, filename)
+        else:
             try:
                 validate(data, filename)
                 validate_id(data, filename)
-            except Exception:
+            except Exception as error:
                 INVALID.add(filename)
+                print(error)
+                print()
+                print(str(error))
                 continue
-        else:
-            validate(data, filename)
-            validate_id(data, filename)
-
-        if args.skip_duplicates:
             try:
                 ensure_unique(data, COLLECTION, filename)
-            except Exception:
+            except Exception as error:
+                print(error)
                 DUPLICATES.add(filename)
-
-        else:
-            ensure_unique(data, COLLECTION, filename)
 
     FILES_TO_SKIP = INVALID | DUPLICATES
 
