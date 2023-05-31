@@ -13,6 +13,7 @@ from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
+import pandas as pd
 
 
 def _load_json(path: str):
@@ -23,11 +24,11 @@ def _load_json(path: str):
             raise ValueError(f"Invalid JSON: {path}") from error
 
 
-def assert_type(obj, expected_type_, prefix=""):
-    if not isinstance(obj, expected_type_):
+def assert_type(obj, expected_type, prefix=""):
+    if not isinstance(obj, expected_type):
         prefix = prefix + " " if prefix else ""
         raise ValueError(
-            f"{prefix}Expected {expected_type_} but got {type(obj)} instead"
+            f"{prefix}Expected {expected_type} but got {type(obj)} instead"
         )
 
 
@@ -52,9 +53,10 @@ def load_collection(path: str) -> dict:
     collection = _load_json(path)
 
     assert_type(collection, list)
+
     for index, data in enumerate(collection):
-        assert_type(data, dict, prefix=f"Element {index} ({str(data)[:15]} [...]):")
-        fragments[f"{path}-{index}"] = data
+        assert_type(data, dict)
+        fragments[f"{path}[{index}]"] = data
 
     return fragments
 
@@ -146,15 +148,12 @@ if __name__ == "__main__":
     _input_parser.add_argument(
         "fragments",
         nargs="+",
-        help="Paths to JSON input files OR a single file with an array of fragments",
+        help="Paths to JSON input files OR a single file with an array of dictionaries",
     )
     _input_parser.add_argument(
         "--strict",
         action="store_true",
-        help=(
-            "Stop the import if invalid files or duplicate IDs are found "
-            "and print detailed error message"
-        ),
+        help="Stop the import if invalid documents or duplicate IDs are found",
     )
     _output_parser = argparse.ArgumentParser(
         description="Parser with output", add_help=False
@@ -207,6 +206,9 @@ if __name__ == "__main__":
     COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
     INVALID = set()
     DUPLICATES = set()
+    FAILS = []
+    IS_COLLECTION = False
+    error_file = "invalid_texts.tsv"
 
     if args.subcommand == INDEX_CMD:
         _reindex_database(COLLECTION)
@@ -217,7 +219,7 @@ if __name__ == "__main__":
     if len(args.fragments) == 1:
         try:
             fragments = load_collection(args.fragments[0])
-            print("Found collection!")
+            IS_COLLECTION = True
         except Exception:
             fragments = load_data(args.fragments)
 
@@ -227,7 +229,7 @@ if __name__ == "__main__":
     fragment_count = len(fragments)
 
     if fragments:
-        print(f"Found {fragment_count} files.")
+        print(f"Found {'collection of ' * IS_COLLECTION}{fragment_count} documents.")
     else:
         print("No fragments found.")
         sys.exit()
@@ -244,36 +246,25 @@ if __name__ == "__main__":
                 validate(data, filename)
                 validate_id(data, filename)
             except Exception as error:
-                INVALID.add(filename)
-                print(error)
-                print()
-                print(str(error))
+                FAILS.append([filename, str(error)])
                 continue
             try:
                 ensure_unique(data, COLLECTION, filename)
             except Exception as error:
-                print(error)
-                DUPLICATES.add(filename)
+                FAILS.append([filename, str(error)])
 
-    FILES_TO_SKIP = INVALID | DUPLICATES
+    fail_count = len(FAILS)
+    df = pd.DataFrame.from_records(FAILS, columns=["File", "Error"])
 
-    if FILES_TO_SKIP:
-        print()
-
-    if INVALID:
-        print(f"Skipping {len(INVALID)} invalid file(s):", *INVALID, sep="\n")
-        print()
-    if DUPLICATES:
+    if FAILS:
         print(
-            f"Skipping {len(DUPLICATES)} file(s) with IDs already in the db:",
-            *DUPLICATES,
-            sep="\n",
+            f"Skipping {fail_count} document(s), see {os.path.abspath(error_file)} for details"
         )
-        print()
+        df.to_csv(error_file, sep="\t")
 
     print(
-        f"Validation of {fragment_count - len(FILES_TO_SKIP)} out of {fragment_count} "
-        "files successful."
+        f"Validation of {fragment_count - fail_count} out of {fragment_count} "
+        "document(s) successful."
     )
 
     if args.subcommand == VALIDATION_CMD:
@@ -293,7 +284,7 @@ if __name__ == "__main__":
             sys.exit("Aborting.")
 
     result = write_to_db(
-        [data for filename, data in fragments.items() if filename not in FILES_TO_SKIP],
+        [data for filename, data in fragments.items() if filename not in df.File],
         COLLECTION,
     )
 
@@ -303,5 +294,6 @@ if __name__ == "__main__":
     _reindex_database(COLLECTION)
 
     print("Done! Summary of added fragments:")
+
     for filename, data in fragments.items():
         print(data["_id"], filename, sep="\t")
