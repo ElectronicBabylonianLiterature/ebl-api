@@ -33,15 +33,7 @@ def assert_type(obj, expected_type, prefix=""):
 
 
 def load_data(paths: Sequence[str]) -> dict:
-    fragments = {}
-
-    for file in paths:
-        if not file.endswith(".json"):
-            continue
-
-        fragments[file] = _load_json(file)
-
-    return fragments
+    return {file: _load_json(file) for file in paths if file.endswith(".json")}
 
 
 def load_collection(path: str) -> dict:
