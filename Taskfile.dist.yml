@@ -17,9 +17,6 @@ tasks:
       - task: lint
       - task: type
       - task: test
-      - task: validate
-      - task: reindex
-      - task: import
 
   test:
     cmds:
