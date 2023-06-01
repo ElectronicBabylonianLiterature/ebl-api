@@ -90,6 +90,8 @@ if __name__ == "__main__":
                     "type": "$manuscript.type",
                     "disambiguator": "$manuscript.siglumDisambiguator",
                     "signs": 1,
+                    "colophon_lines": "$manuscript.colophon.numberOfLines",
+                    "unplaced_lines": "$manuscript.unplacedLines.numberOfLines",
                 }
             },
         ]
@@ -115,6 +117,8 @@ if __name__ == "__main__":
             "name",
             "siglum",
             "signs",
+            "colophon_lines",
+            "unplaced_lines",
         ]
     ]
 
