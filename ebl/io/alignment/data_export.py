@@ -22,8 +22,7 @@ from urllib.parse import quote as encode_url
 pd.options.mode.chained_assignment = None
 
 client = MongoClient(os.environ["MONGODB_URI"])
-DB = os.environ.get("MONGODB_DB")
-database = client.get_database(DB)
+database = client.get_database("ebl")
 fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
 chapters = MongoCollection(database, CHAPTERS_COLLECTION)
 
