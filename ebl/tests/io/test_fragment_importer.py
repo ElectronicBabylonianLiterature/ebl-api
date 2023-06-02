@@ -10,6 +10,7 @@ from pymongo.errors import BulkWriteError
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.io.fragments.importer import (
     create_sort_index,
+    load_collection,
     validate,
     load_data,
     validate_id,
@@ -56,6 +57,14 @@ def test_load_json(tmp_path):
     contents = {"test": "data"}
     path = mock_json_file(json.dumps(contents), tmp_path)
     assert load_data([path]) == {path: contents}
+
+
+def test_load_collection(tmp_path):
+    contents = [{"test": "data"}, {"foo": "bar"}]
+    path = mock_json_file(json.dumps(contents), tmp_path)
+    assert load_collection(path) == {
+        f"{path}[{index}]": content for index, content in enumerate(contents)
+    }
 
 
 def test_load_invalid_json(tmp_path):
