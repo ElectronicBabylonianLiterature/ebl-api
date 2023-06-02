@@ -2,6 +2,7 @@ from typing import Sequence
 
 import factory.fuzzy
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.project import ResearchProject
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.domain.text_id import TextId
@@ -108,6 +109,8 @@ class ExternalNumbersFactory(factory.Factory):
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
+    hiprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
+    hiprecht_heidelberg_number = factory.Sequence(lambda n: f"hiprecht-heidelberg-{n}")
 
 
 class FragmentFactory(factory.Factory):
@@ -137,6 +140,7 @@ class FragmentFactory(factory.Factory):
     introduction = Introduction("text", (StringPart("text"),))
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
+    projects = (ResearchProject.CAIC,)
 
 
 class InterestingFragmentFactory(FragmentFactory):

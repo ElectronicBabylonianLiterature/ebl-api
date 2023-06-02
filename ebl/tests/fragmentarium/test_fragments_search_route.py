@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 import attr
 import falcon
 import pytest
-from ebl.common.domain.period import Period
+from ebl.common.domain.period import Period, PeriodModifier
 
 from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,
@@ -139,10 +139,8 @@ def test_query_fragmentarium_transliteration(
             number=MuseumNumber.of("X.42"), script=Script(Period.LATE_BABYLONIAN)
         ),
     ]
-    for fragment in transliterated_fragments:
-        fragmentarium.create(fragment)
-
-    fragmentarium._repository._create_sort_index()
+    for index, fragment in enumerate(transliterated_fragments):
+        fragmentarium.create(fragment, sort_key=index)
 
     for sign in signs:
         sign_repository.create(sign)
@@ -362,3 +360,40 @@ def test_search_with_scopes(client, guest_client, fragmentarium):
         "items": [],
         "matchCountTotal": 0,
     }
+
+
+@pytest.mark.parametrize(
+    "params,expected",
+    [
+        ({"scriptPeriod": Period.NEO_BABYLONIAN.long_name}, [0]),
+        ({"scriptPeriod": Period.OLD_ASSYRIAN.long_name}, [1, 2]),
+        (
+            {
+                "scriptPeriod": Period.OLD_ASSYRIAN.long_name,
+                "scriptPeriodModifier": PeriodModifier.LATE.value,
+            },
+            [2],
+        ),
+        ({"scriptPeriod": Period.NEO_BABYLONIAN.long_name}, [0]),
+    ],
+)
+def test_search_script_period(client, fragmentarium, params, expected):
+    scripts = [
+        Script(Period.NEO_BABYLONIAN),
+        Script(Period.OLD_ASSYRIAN, PeriodModifier.EARLY),
+        Script(Period.OLD_ASSYRIAN, PeriodModifier.LATE),
+    ]
+    fragments = [FragmentFactory.build(script=script) for script in scripts]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    expected_json = {
+        "items": [query_item_of(fragments[i]) for i in expected],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get("/fragments/query", params=params)
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json

@@ -2,12 +2,12 @@ from marshmallow import Schema, fields, post_load
 
 from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnumField
 
 
 class ReferenceSchema(Schema):
     id = fields.String(required=True)
-    type = NameEnum(ReferenceType, required=True)
+    type = NameEnumField(ReferenceType, required=True)
     pages = fields.String(required=True)
     notes = fields.String(required=True)
     lines_cited = fields.List(fields.String(), required=True, data_key="linesCited")

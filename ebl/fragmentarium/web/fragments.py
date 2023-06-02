@@ -7,6 +7,7 @@ from ebl.common.query.parameter_parser import (
     parse_transliteration,
     parse_lemmas,
     parse_pages,
+    parse_genre,
 )
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
@@ -48,6 +49,7 @@ class FragmentsQueryResource:
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
+            parse_genre,
             parse_integer_field("limit"),
         )
 

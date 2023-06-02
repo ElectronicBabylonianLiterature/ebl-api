@@ -4,7 +4,7 @@ from marshmallow import Schema, fields, post_load
 from marshmallow_oneofschema import OneOfSchema
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnumField
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.markup import (
@@ -34,7 +34,7 @@ class EmphasisPartSchema(Schema):
 
 
 class LanguagePartSchema(Schema):
-    language = NameEnum(Language, required=True)
+    language = NameEnumField(Language, required=True)
     tokens = fields.Nested(OneOfTokenSchema, many=True, load_default=None)
 
     @post_load
