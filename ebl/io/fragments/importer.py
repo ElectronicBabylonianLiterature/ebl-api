@@ -290,7 +290,7 @@ if __name__ == "__main__":
         if filename not in set(df.File.to_list())
     }
     result = write_to_db(
-        fragments.values(),
+        list(fragments.values()),
         COLLECTION,
     )
 
