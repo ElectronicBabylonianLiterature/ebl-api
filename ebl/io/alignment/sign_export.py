@@ -16,6 +16,7 @@ import pandas as pd
 import datetime
 from functools import reduce
 from urllib.parse import quote as encode_url
+import argparse
 
 
 # disable false positive SettingsWithCopyWarning
@@ -36,10 +37,16 @@ def enum_mapping(enum):
 
 
 if __name__ == "__main__":
-    df_fragments = None
-    df_chapters = None
+    parser = argparse.ArgumentParser(description="Export sign data as TSV files")
+    parser.add_argument(
+        "--include-colophons",
+        help="Include colophon and unplaces lines from manuscripts",
+        action="store_true",
+    )
 
-    print(f"Writing data to {tmp_path}...")
+    args = parser.parse_args()
+
+    print(f"Starting export (temporary directory {tmp_path}/ )...")
     print("Exporting fragments...")
 
     fragment_signs = fragments.find_many(
@@ -78,7 +85,6 @@ if __name__ == "__main__":
             {
                 "$project": {
                     "_id": 0,
-                    "id": {"$toString": "$_id"},
                     "category": "$textId.category",
                     "index": "$textId.index",
                     "genre": "$textId.genre",
@@ -96,6 +102,16 @@ if __name__ == "__main__":
         ]
     )
     df_chapters = pd.DataFrame.from_records(chapter_signs)
+    df_chapters["signs"] = df_chapters.signs.fillna("")
+
+    if not args.include_colophons:
+        print("Dropping colophon and unplaced lines...")
+        df_chapters["signs"] = df_chapters.signs.str.split("\n")
+        df_chapters["signs"] = df_chapters.apply(
+            lambda row: row.signs[: -(row.colophon_lines + row.unplaced_lines) or None],
+            axis=1,
+        )
+        df_chapters["signs"] = df_chapters.signs.str.join("\n")
 
     # map long names to abbreviations
     for column, enum in abbreviation_mappings.items():
@@ -106,20 +122,6 @@ if __name__ == "__main__":
 
     # create siglum
     df_chapters["siglum"] = df_chapters[siglum_columns].agg("".join, axis=1)
-    df_chapters = df_chapters[
-        [
-            "id",
-            "genre",
-            "category",
-            "index",
-            "stage",
-            "name",
-            "siglum",
-            "signs",
-            "colophon_lines",
-            "unplaced_lines",
-        ]
-    ]
 
     df_chapters["category"] = df_chapters["category"].astype(int)
     df_chapters["index"] = df_chapters["index"].astype(int)
@@ -128,21 +130,26 @@ if __name__ == "__main__":
 
     df_chapters["url"] = reduce(
         (lambda x, y: x + "/" + y),
-        ["https://www.ebl.lmu.de/corpus"]
-        + [
+        [
             df_chapters[col].fillna("").astype(str).map(encode_url)
             for col in url_columns
         ],
     )
 
-    # move signs to the right
-    df_chapters["signs"] = df_chapters.pop("signs")
+    df_chapters["id"] = "/" + df_chapters["url"] + "#" + df_chapters["siglum"]
+    df_chapters = df_chapters[["id", "signs"]]
+
+    # exclude test chapter
+    df_chapters = df_chapters[~df_chapters["id"].str.startswith("/L/99/99/")]
 
     df_chapters.to_csv(
         os.path.join(tmp_path, "chapter_signs.tsv"), index=False, sep="\t"
     )
 
-    tar_path = os.path.join(os.path.dirname(__file__), f"{output_folder_name}.tar.gz")
+    tar_path = os.path.join(
+        os.path.dirname(__file__),
+        f"{output_folder_name}{'' if args.include_colophons else '_no_colophons'}.tar.gz",
+    )
 
     print(f"Storing archive in '{tar_path}'...")
 
