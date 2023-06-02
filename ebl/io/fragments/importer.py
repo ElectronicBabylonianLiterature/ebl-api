@@ -94,7 +94,6 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
 def write_to_db(
     fragments: Sequence[dict], fragments_collection: MongoCollection
 ) -> List:
-
     return fragments_collection.insert_many(fragments, ordered=False)
 
 

@@ -7,7 +7,6 @@ from ebl.tests.factories.fragment import FragmentFactory
 
 @pytest.mark.parametrize("current", [0, 1, 2])
 def test_get_fragment_pager(client, fragmentarium, current):
-
     for index in range(3):
         fragmentarium.create(
             FragmentFactory.build(number=MuseumNumber("X", str(index))), sort_key=index

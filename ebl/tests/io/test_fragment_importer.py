@@ -101,7 +101,6 @@ def test_invalid_input_type(valid_fragment_data):
             f"Invalid data in {MOCKFILE}: {{'_schema': ['Invalid input type.']}}"
         ),
     ):
-
         validate("invalid input")
 
 
