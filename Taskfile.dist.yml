@@ -17,7 +17,6 @@ tasks:
       - task: lint
       - task: type
       - task: test
-      - task: import
 
   test:
     cmds:
