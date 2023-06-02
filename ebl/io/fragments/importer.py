@@ -14,6 +14,7 @@ from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import pandas as pd
+import datetime
 
 
 def _load_json(path: str):
@@ -145,7 +146,7 @@ if __name__ == "__main__":
     _input_parser.add_argument(
         "--strict",
         action="store_true",
-        help="Stop the import if invalid documents or duplicate IDs are found",
+        help="Abort the import if invalid documents or duplicate IDs are found",
     )
     _output_parser = argparse.ArgumentParser(
         description="Parser with output", add_help=False
@@ -182,11 +183,12 @@ if __name__ == "__main__":
         parents=[_output_parser],
     )
 
-    def _reindex_database(collection):
+    def _reindex_database(collection, db):
+        print(f"Reindexing 'fragments' collection in the {db!r} database...")
         print("Calculating _sortKeys (this may take a while)...")
         update_sort_keys(collection)
 
-        print("Reindexing database...")
+        print("Creating the sort index...")
         create_sort_index(collection)
 
         print("Sort index built successfully.")
@@ -200,10 +202,12 @@ if __name__ == "__main__":
     DUPLICATES = set()
     FAILS = []
     IS_COLLECTION = False
+
     error_file = "invalid_texts.tsv"
+    summary_file = f"fragment_import_summary_{datetime.date.today()}.tsv"
 
     if args.subcommand == INDEX_CMD:
-        _reindex_database(COLLECTION)
+        _reindex_database(COLLECTION, args.database)
         sys.exit()
 
     print("Loading data...")
@@ -252,12 +256,17 @@ if __name__ == "__main__":
         print(
             f"Skipping {fail_count} document(s), see {os.path.abspath(error_file)} for details"
         )
-        df.to_csv(error_file, sep="\t")
+        df.to_csv(error_file, sep="\t", index=False)
+
+    valid_count = fragment_count - fail_count
 
     print(
-        f"Validation of {fragment_count - fail_count} out of {fragment_count} "
+        f"Validation of {valid_count} out of {fragment_count} "
         "document(s) successful."
     )
+
+    if not valid_count:
+        sys.exit("No data to import.")
 
     if args.subcommand == VALIDATION_CMD:
         sys.exit()
@@ -275,17 +284,25 @@ if __name__ == "__main__":
         if input(prompt) != passphrase:
             sys.exit("Aborting.")
 
+    fragments = {
+        filename: data
+        for filename, data in fragments.items()
+        if filename not in set(df.File.to_list())
+    }
     result = write_to_db(
-        [data for filename, data in fragments.items() if filename not in df.File],
+        fragments.values(),
         COLLECTION,
     )
 
     print("Result:")
     print(result)
 
-    _reindex_database(COLLECTION)
+    _reindex_database(COLLECTION, args.database)
 
-    print("Done! Summary of added fragments:")
+    pd.DataFrame.from_records(
+        [{"id": data["_id"], "file": filename} for filename, data in fragments.items()]
+    ).to_csv(summary_file, sep="\t", index=False)
 
-    for filename, data in fragments.items():
-        print(data["_id"], filename, sep="\t")
+    print(
+        f"Done! See {os.path.abspath(summary_file)} for a summary of added documents",
+    )
