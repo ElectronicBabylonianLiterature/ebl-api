@@ -28,5 +28,11 @@ class BibliographyRepository(ABC):
         ...
 
     @abstractmethod
+    def query_by_title_short_and_volume(
+        self, title_short: Optional[str], volume: Optional[str]
+    ):
+        ...
+
+    @abstractmethod
     def list_all_bibliography(self) -> Sequence:
         ...

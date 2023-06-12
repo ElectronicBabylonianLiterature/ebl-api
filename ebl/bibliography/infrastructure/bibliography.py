@@ -116,6 +116,20 @@ class MongoBibliographyRepository(BibliographyRepository):
             match["container-title-short"] = container_title_short
         if collection_number:
             match["collection-number"] = collection_number
+        return self._query(match)
+        
+
+    def query_by_title_short_and_volume(
+        self, title_short: Optional[str], volume: Optional[str]
+    ) -> Sequence[dict]:
+        match: Dict[str, Any] = {}
+        if title_short:
+            match["title-short"] = title_short
+        if volume:
+            match["volume"] = volume
+        return self._query(match)
+
+    def _query(self, match: Dict[str, Any]) -> Sequence[dict]:
         return [
             create_object_entry(data)
             for data in self._collection.aggregate(
