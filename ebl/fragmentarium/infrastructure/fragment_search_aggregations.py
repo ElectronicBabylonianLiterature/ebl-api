@@ -91,9 +91,9 @@ class PatternMatcher:
 
     def _wrap_query_items_with_total(self) -> List[Dict]:
         return [
-            *sort_by_museum_number(pre_sort_keys={"script.sortKey": 1}),
+            {"$sort": {"script.sortKey": 1, "_sortKey": 1}},
             *self._limit_result(),
-            {"$project": {"_id": False, "script": False}},
+            {"$project": {"_id": False, "script": False, "_sortKey": False}},
             {
                 "$group": {
                     "_id": None,
@@ -104,22 +104,45 @@ class PatternMatcher:
             {"$project": {"_id": False}},
         ]
 
-    def _prefilter(self) -> List[Dict]:
-        number_query = (
-            number_is(self._query["number"]) if "number" in self._query else {}
-        )
-        id_query = (
-            {"references": {"$elemMatch": {"id": self._query["bibId"]}}}
-            if "bibId" in self._query
-            else {}
-        )
+    def _filter_by_script(self) -> Dict:
+        parameters = {
+            "scriptPeriod": "script.period",
+            "scriptPeriodModifier": "script.periodModifier",
+        }
+
+        return {
+            path: self._query.get(parameter)
+            for parameter, path in parameters.items()
+            if self._query.get(parameter)
+        }
+
+    def _filter_by_genre(self) -> Dict:
+        if genre := self._query.get("genre"):
+            return {"genres.category": {"$all": genre}}
+        return {}
+
+    def _filter_by_reference(self) -> Dict:
+        if "bibId" not in self._query:
+            return {}
+
+        parameters = {"id": self._query["bibId"]}
         if "pages" in self._query:
-            id_query["references"]["$elemMatch"]["pages"] = {
+            parameters["pages"] = {
                 "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
             }
+        return {"references": {"$elemMatch": parameters}}
+
+    def _prefilter(self) -> List[Dict]:
         constraints = {
-            "$and": compact([number_query, match_user_scopes(self._scopes)]),
-            **id_query,
+            "$and": compact(
+                [
+                    number_is(self._query["number"]) if "number" in self._query else {},
+                    self._filter_by_genre(),
+                    self._filter_by_script(),
+                    self._filter_by_reference(),
+                    match_user_scopes(self._scopes),
+                ]
+            ),
         }
 
         return [{"$match": constraints}] if constraints else []
@@ -148,6 +171,7 @@ class PatternMatcher:
                     "_id": "$_id",
                     "matchingLines": {"$push": "$matchingLines"},
                     "museumNumber": {"$first": "$museumNumber"},
+                    "_sortKey": {"$first": "$_sortKey"},
                 },
             },
             {

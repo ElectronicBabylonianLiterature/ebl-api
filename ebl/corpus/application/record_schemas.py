@@ -5,13 +5,13 @@ from marshmallow import (
 )
 
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnumField
 
 
 class AuthorSchema(Schema):
     name = fields.String(required=True)
     prefix = fields.String(required=True)
-    role = NameEnum(AuthorRole, required=True)
+    role = NameEnumField(AuthorRole, required=True)
     orcid_number = fields.String(required=True, data_key="orcidNumber")
 
     @post_load

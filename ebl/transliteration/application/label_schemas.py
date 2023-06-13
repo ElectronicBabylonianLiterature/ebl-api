@@ -1,6 +1,6 @@
 from marshmallow import Schema, ValidationError, fields, post_load
 
-from ebl.schemas import NameEnum
+from ebl.schemas import NameEnumField
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.labels import (
     ColumnLabel,
@@ -27,7 +27,7 @@ def labels():
 
 
 class LabelSchema(Schema):
-    status = fields.List(NameEnum(atf.Status), required=True)
+    status = fields.List(NameEnumField(atf.Status), required=True)
     abbreviation = fields.String()
 
 
@@ -40,7 +40,7 @@ class ColumnLabelSchema(LabelSchema):
 
 
 class SurfaceLabelSchema(LabelSchema):
-    surface = NameEnum(atf.Surface, required=True)
+    surface = NameEnumField(atf.Surface, required=True)
     text = fields.String(dump_default="")
 
     @post_load
@@ -49,7 +49,7 @@ class SurfaceLabelSchema(LabelSchema):
 
 
 class ObjectLabelSchema(LabelSchema):
-    object = NameEnum(atf.Object, required=True)
+    object = NameEnumField(atf.Object, required=True)
     text = fields.String(dump_default="")
 
     @post_load

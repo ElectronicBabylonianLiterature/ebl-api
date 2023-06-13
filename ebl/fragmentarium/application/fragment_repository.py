@@ -16,7 +16,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def create(self, fragment: Fragment) -> str:
+    def create(self, fragment: Fragment, sort_key: Optional[int] = None) -> str:
         ...
 
     @abstractmethod

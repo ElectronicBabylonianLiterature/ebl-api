@@ -1,4 +1,4 @@
-from typing import Any, cast, Sequence, Optional
+from typing import Any, Mapping, cast, Sequence, Optional
 
 import inflect
 from pymongo.collection import Collection
@@ -19,8 +19,10 @@ class MongoCollection:
         self.__collection = collection
         self.__resource_noun = singlar(collection)
 
-    def insert_many(self, documents: Sequence[dict]):
-        return self.__get_collection().insert_many(documents).inserted_ids
+    def insert_many(self, documents: Sequence[dict], ordered=True):
+        return (
+            self.__get_collection().insert_many(documents, ordered=ordered).inserted_ids
+        )
 
     def exists(self, query) -> bool:
         return bool(self.__get_collection().find_one(query))
@@ -88,6 +90,12 @@ class MongoCollection:
 
     def create_index(self, index, **kwargs):
         return self.__get_collection().create_index(index, **kwargs)
+
+    def index_information(self) -> Mapping:
+        return self.__get_collection().index_information()
+
+    def drop_index(self, index, **kwargs):
+        return self.__get_collection().drop_index(index, **kwargs)
 
     def get_all_values(self, field: str, query: Optional[dict] = None) -> Sequence[str]:
         return self.__get_collection().distinct(field, query or {})

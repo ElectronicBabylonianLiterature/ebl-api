@@ -87,3 +87,9 @@ def parse_pages(parameters: Dict) -> Dict:
         return {**parameters, "pages": int(pages)}
     except ValueError as error:
         raise DataError(f"Pages {pages!r} not numeric.") from error
+
+
+def parse_genre(parameters: Dict) -> Dict:
+    genre = parameters.get("genre", "").split(":")
+
+    return {**parameters, "genre": genre} if any(genre) else parameters

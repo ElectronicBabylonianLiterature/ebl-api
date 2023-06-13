@@ -12,6 +12,7 @@ class ReferenceType(Enum):
     COPY = auto()
     PHOTO = auto()
     TRANSLATION = auto()
+    ARCHAEOLOGY = auto()
 
 
 @attr.s(auto_attribs=True, frozen=True)

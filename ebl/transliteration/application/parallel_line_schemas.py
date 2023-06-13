@@ -3,7 +3,7 @@ from marshmallow import Schema, fields, post_load, validate
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Stage
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.schemas import NameEnum, ValueEnum
+from ebl.schemas import NameEnumField, ValueEnumField
 from ebl.transliteration.application.label_schemas import (
     ColumnLabelSchema,
     ObjectLabelSchema,
@@ -78,7 +78,7 @@ class ParallelFragmentSchema(ParallelLineSchema):
 
 
 class ChapterNameSchema(Schema):
-    stage = ValueEnum(Stage, required=True)
+    stage = ValueEnumField(Stage, required=True)
     version = fields.String(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
 
@@ -88,7 +88,7 @@ class ChapterNameSchema(Schema):
 
 
 class ParallelTextSchema(ParallelLineSchema):
-    genre = NameEnum(Genre, load_only=True)
+    genre = NameEnumField(Genre, load_only=True)
     text = fields.Nested(TextIdSchema, required=True)
     chapter = fields.Nested(ChapterNameSchema, required=True, allow_none=True)
     line_number = fields.Nested(

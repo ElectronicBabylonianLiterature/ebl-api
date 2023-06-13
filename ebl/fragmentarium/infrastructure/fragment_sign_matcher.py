@@ -59,6 +59,7 @@ class SignMatcher:
             {
                 "$project": {
                     "museumNumber": True,
+                    "_sortKey": True,
                     "script": True,
                     "lineTypes": "$text.lines.type",
                     "signs": True,
@@ -70,6 +71,7 @@ class SignMatcher:
                 "$group": {
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
+                    "_sortKey": {"$first": "$_sortKey"},
                     "script": {"$first": "$script"},
                     "textLines": {"$push": "$lineIndex"},
                     "signLines": {"$first": {"$split": ["$signs", "\n"]}},
@@ -89,6 +91,7 @@ class SignMatcher:
                 "$group": {
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
+                    "_sortKey": {"$first": "$_sortKey"},
                     "script": {"$first": "$script"},
                     "matchingLines": {
                         "$push": self._expand_line_ranges()

@@ -24,6 +24,7 @@ from ebl.fragmentarium.application.fragment_schema import (
 )
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.common.domain.project import ResearchProject
 
 
 @pytest.fixture
@@ -104,6 +105,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "externalNumbers": ExternalNumbersSchema().dump(
                 lemmatized_fragment.external_numbers
             ),
+            "projects": [ResearchProject["CAIC"].abbreviation],
         },
         pydash.is_none,
     )
