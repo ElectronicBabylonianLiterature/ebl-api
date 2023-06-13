@@ -1,3 +1,12 @@
+FROM continuumio/miniconda3
+
+RUN apt-get update \ 
+    && apt-get install -y gcc g++
+RUN git clone https://github.com/poke1024/pyalign \
+    && cd pyalign \
+    && conda env create -f environment.yml \
+    && conda run -n pyalign python setup.py install
+
 FROM gitpod/workspace-mongodb
 
 # Install custom tools, runtime, etc. using apt-get
