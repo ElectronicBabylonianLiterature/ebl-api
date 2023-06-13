@@ -52,6 +52,7 @@ class Bibliography:
                 container_query["container_title_short"],
                 container_query["collection_number"],
             )
+
         title_short_volume_result = []
         title_short_volume_query = self._parse_title_short_and_volume(query)
         if any(value is not None for value in list(title_short_volume_query.values())):
@@ -59,11 +60,9 @@ class Bibliography:
                 title_short_volume_query["title_short"],
                 title_short_volume_query["volume"],
             )
-            # ToDo:
-            # - Add tests!
         return uniq_with(
-            [*author_query_result, *container_query_result,
-                * title_short_volume_result], lambda a, b: a == b
+            [*author_query_result, *container_query_result, *title_short_volume_result],
+            lambda a, b: a == b,
         )
 
     def list_all_bibliography(self) -> Sequence[str]:
@@ -116,9 +115,7 @@ class Bibliography:
         title_short: Optional[str] = None,
         volume: Optional[str] = None,
     ) -> Sequence[dict]:
-        return self._repository.query_by_title_short_and_volume(
-            title_short, volume
-        )
+        return self._repository.query_by_title_short_and_volume(title_short, volume)
 
     def validate_references(self, references: Sequence[Reference]):
         def is_invalid(reference):

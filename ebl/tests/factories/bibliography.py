@@ -10,6 +10,7 @@ class BibliographyEntryFactory(factory.Factory):
         rename = {
             "container_title": "container-title",
             "container_title_short": "container-title-short",
+            "title_short": "title-short",
             "collection_number": "collection-number",
         }
 
@@ -24,7 +25,9 @@ class BibliographyEntryFactory(factory.Factory):
     issue = "4"
     container_title = "Molecular Endocrinology"
     container_title_short = "ME"
+    title_short = "MARV"
     collection_number = "1"
+    volume = "2"
     author = [
         {"given": "Stefania", "family": "Miccadei"},
         {"given": "Rossana", "family": "De Leo"},

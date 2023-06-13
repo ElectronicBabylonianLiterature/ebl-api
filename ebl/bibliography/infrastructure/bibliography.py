@@ -117,7 +117,6 @@ class MongoBibliographyRepository(BibliographyRepository):
         if collection_number:
             match["collection-number"] = collection_number
         return self._query(match)
-        
 
     def query_by_title_short_and_volume(
         self, title_short: Optional[str], volume: Optional[str]
