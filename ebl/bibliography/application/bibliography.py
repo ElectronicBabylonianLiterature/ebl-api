@@ -52,8 +52,17 @@ class Bibliography:
                 container_query["container_title_short"],
                 container_query["collection_number"],
             )
+
+        title_short_volume_result = []
+        title_short_volume_query = self._parse_title_short_and_volume(query)
+        if any(value is not None for value in list(title_short_volume_query.values())):
+            title_short_volume_result = self.search_title_short_and_volume(
+                title_short_volume_query["title_short"],
+                title_short_volume_query["volume"],
+            )
         return uniq_with(
-            [*author_query_result, *container_query_result], lambda a, b: a == b
+            [*author_query_result, *container_query_result, *title_short_volume_result],
+            lambda a, b: a == b,
         )
 
     def list_all_bibliography(self) -> Sequence[str]:
@@ -76,6 +85,14 @@ class Bibliography:
             parsed_query["collection_number"] = match[2]
         return parsed_query
 
+    @staticmethod
+    def _parse_title_short_and_volume(query: str) -> dict:
+        parsed_query = dict.fromkeys(["title_short", "volume"])
+        if match := re.match(r"^([^\s]+)(?: (\d*))?$", query):
+            parsed_query["title_short"] = match[1]
+            parsed_query["volume"] = match[2]
+        return parsed_query
+
     def search_author_year_and_title(
         self,
         author: Optional[str] = None,
@@ -92,6 +109,13 @@ class Bibliography:
         return self._repository.query_by_container_title_and_collection_number(
             container_title, collection_number
         )
+
+    def search_title_short_and_volume(
+        self,
+        title_short: Optional[str] = None,
+        volume: Optional[str] = None,
+    ) -> Sequence[dict]:
+        return self._repository.query_by_title_short_and_volume(title_short, volume)
 
     def validate_references(self, references: Sequence[Reference]):
         def is_invalid(reference):

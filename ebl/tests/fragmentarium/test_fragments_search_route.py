@@ -111,20 +111,6 @@ def test_query_fragmentarium_references(client, fragmentarium, bibliography, use
     }
 
 
-def test_query_fragmentarium_invalid_references(client, fragmentarium):
-    fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(), ReferenceFactory.build())
-    )
-    fragmentarium.create(fragment)
-    reference_id = fragment.references[0].id
-    reference_pages = "should be a number"
-    result = client.simulate_get(
-        "/fragments/query",
-        params={"bibId": reference_id, "pages": reference_pages},
-    )
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-
 def test_query_fragmentarium_transliteration(
     client, fragmentarium, sign_repository, signs
 ):

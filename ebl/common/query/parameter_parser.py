@@ -79,14 +79,11 @@ def parse_pages(parameters: Dict) -> Dict:
     if "pages" not in parameters:
         return parameters
 
-    pages = parameters["pages"]
-
     if "bibId" not in parameters:
         raise DataError("Name, Year or Title required")
-    try:
-        return {**parameters, "pages": int(pages)}
-    except ValueError as error:
-        raise DataError(f"Pages {pages!r} not numeric.") from error
+    pages = parameters["pages"]
+
+    return {**parameters, "pages": pages}
 
 
 def parse_genre(parameters: Dict) -> Dict:

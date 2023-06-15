@@ -29,6 +29,24 @@ def test_search_container_short_collection_number(
     assert [bibliography_entry] == bibliography.search(query)
 
 
+def test_search_title_short_volume(bibliography, bibliography_repository, when):
+    bibliography_entry = BibliographyEntryFactory.build()
+    title_short = bibliography_entry["title-short"]
+    volume = bibliography_entry["volume"]
+    query = f"{title_short} {volume}"
+    (
+        when(bibliography_repository)
+        .query_by_author_year_and_title(title_short, int(volume), None)
+        .thenReturn([])
+    )
+    (
+        when(bibliography_repository)
+        .query_by_title_short_and_volume(title_short, volume)
+        .thenReturn([bibliography_entry])
+    )
+    assert [bibliography_entry] == bibliography.search(query)
+
+
 def test_search_author_title_year(bibliography, bibliography_repository, when):
     bibliography_entry = BibliographyEntryFactory.build()
     author = bibliography_entry["author"][0]["family"]
