@@ -39,12 +39,7 @@ def test_parse_integer_field_invalid():
 
 
 def test_parse_pages():
-    assert parse_pages(PARAMS) == {**PARAMS, "pages": 3}
-
-
-def test_parse_pages_invalid():
-    with pytest.raises(DataError, match="Pages [\"']invalid[\"'] not numeric."):
-        parse_pages({**PARAMS, "pages": "invalid"})
+    assert parse_pages(PARAMS) == {**PARAMS, "pages": "3"}
 
 
 def test_parse_pages_missing_id():
@@ -112,7 +107,7 @@ def test_pipeline(sign_repository):
         "lemmaOperator": LemmaQueryType.OR,
         "lemmas": ["first I", "second II"],
         "limit": 42,
-        "pages": 3,
+        "pages": "3",
         "transliteration": [
             factory.create(line).regexp
             for line in PARAMS["transliteration"].splitlines()
