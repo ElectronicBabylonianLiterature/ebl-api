@@ -79,10 +79,10 @@ def parse_pages(parameters: Dict) -> Dict:
     if "pages" not in parameters:
         return parameters
 
-    pages = parameters["pages"]
-
     if "bibId" not in parameters:
         raise DataError("Name, Year or Title required")
+    pages = parameters["pages"]
+
     return {**parameters, "pages": pages}
 
 
