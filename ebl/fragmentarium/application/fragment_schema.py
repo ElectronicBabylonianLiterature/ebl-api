@@ -186,6 +186,7 @@ class FragmentSchema(Schema):
         data_key="externalNumbers",
     )
     projects = fields.List(ResearchProjectField())
+    traditional_reference = fields.List(fields.String())
 
     @post_load
     def make_fragment(self, data, **kwargs):
