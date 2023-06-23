@@ -106,7 +106,6 @@ def expected_dto(lemmatized_fragment, has_photo):
                 lemmatized_fragment.external_numbers
             ),
             "projects": [ResearchProject["CAIC"].abbreviation],
-            "traditional_reference": lemmatized_fragment.traditional_reference,
         },
         pydash.is_none,
     )
