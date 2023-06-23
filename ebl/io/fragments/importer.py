@@ -1,4 +1,4 @@
-from typing import Sequence, List
+from typing import Optional, Sequence, List
 import argparse
 import os
 import sys
@@ -13,7 +13,7 @@ from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
-import pandas as pd
+import csv
 import datetime
 
 
@@ -118,6 +118,18 @@ def write_to_db(
     fragments: Sequence[dict], fragments_collection: MongoCollection
 ) -> List:
     return fragments_collection.insert_many(fragments, ordered=False)
+
+
+def write_to_tsv(
+    filepath: str,
+    data: Sequence[Sequence[str]],
+    column_names: Optional[Sequence[str]] = None,
+) -> None:
+    with open(filepath, "w", newline="") as csvfile:
+        writer = csv.writer(csvfile, delimiter="\t")  # pyre-ignore[6]
+        if column_names:
+            writer.writerow(column_names)
+        writer.writerows(FAILS)
 
 
 if __name__ == "__main__":
@@ -250,13 +262,12 @@ if __name__ == "__main__":
                 FAILS.append([filename, str(error)])
 
     fail_count = len(FAILS)
-    df = pd.DataFrame.from_records(FAILS, columns=["File", "Error"])
 
     if FAILS:
         print(
             f"Skipping {fail_count} document(s), see {os.path.abspath(error_file)} for details"
         )
-        df.to_csv(error_file, sep="\t", index=False)
+        write_to_tsv(error_file, FAILS, ["file", "error"])
 
     valid_count = fragment_count - fail_count
 
@@ -266,7 +277,8 @@ if __name__ == "__main__":
     )
 
     if not valid_count:
-        sys.exit("No data to import.")
+        print("No data to import.")
+        sys.exit()
 
     if args.subcommand == VALIDATION_CMD:
         sys.exit()
@@ -287,7 +299,7 @@ if __name__ == "__main__":
     fragments = {
         filename: data
         for filename, data in fragments.items()
-        if filename not in set(df.File.to_list())
+        if filename not in set(file for file, _ in FAILS)
     }
     result = write_to_db(
         list(fragments.values()),
@@ -299,9 +311,11 @@ if __name__ == "__main__":
 
     _reindex_database(COLLECTION, args.database)
 
-    pd.DataFrame.from_records(
-        [{"id": data["_id"], "file": filename} for filename, data in fragments.items()]
-    ).to_csv(summary_file, sep="\t", index=False)
+    write_to_tsv(
+        summary_file,
+        [[data["_id"], filename] for filename, data in fragments.items()],
+        ["id", "file"],
+    )
 
     print(
         f"Done! See {os.path.abspath(summary_file)} for a summary of added documents",
