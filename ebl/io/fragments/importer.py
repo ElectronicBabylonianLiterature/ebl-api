@@ -27,7 +27,7 @@ def _load_json(path: str):
 
 def assert_type(obj, expected_type, prefix=""):
     if not isinstance(obj, expected_type):
-        prefix = prefix + " " if prefix else ""
+        prefix = f"{prefix} " if prefix else ""
         raise ValueError(
             f"{prefix}Expected {expected_type} but got {type(obj)} instead"
         )
