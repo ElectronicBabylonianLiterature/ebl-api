@@ -10,7 +10,6 @@ on:
 
 env:
   PIPENV_VENV_IN_PROJECT: 1
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   PYMONGOIM__MONGO_VERSION: 4.4
   PYMONGOIM__OPERATING_SYSTEM: ubuntu
 
@@ -63,20 +62,6 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
-
-      - uses: edge/simple-slack-notify@v1.1.1
-        if: failure()
-        with:
-          channel: '#continuous-integration'
-          status: ${{ job.status }}
-          success_text: 'eBL API  build #${env.GITHUB_RUN_NUMBER} build completed successfully.'
-          failure_text: 'eBL API  build #${env.GITHUB_RUN_NUMBER} failed.'
-          cancelled_text: 'eBL API  build #${env.GITHUB_RUN_NUMBER} build was cancelled.'
-          fields: |
-            [{"title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
-             {"title": "Ref", "value": "${env.GITHUB_REF}", "short": true },
-             {"title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]
-
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [test]
@@ -99,16 +84,3 @@ jobs:
           tags: |
             www.ebl.lmu.de/ebl-api:master
             ${{format('www.ebl.lmu.de/ebl-api:master.{0}', github.run_number)}}
-      
-      - uses: edge/simple-slack-notify@v1.1.1
-        if: always()
-        with:
-          channel: '#continuous-integration'
-          status: ${{ job.status }}
-          success_text: 'Building eBL API image #${env.GITHUB_RUN_NUMBER} completed successfully.'
-          failure_text: 'Building eBL API image #${env.GITHUB_RUN_NUMBER} failed.'
-          cancelled_text: 'Building eBL API image #${env.GITHUB_RUN_NUMBER} was cancelled.'
-          fields: |
-            [{"title": "Repository", "value": "${env.GITHUB_REPOSITORY}", "short": true },
-             {"title": "Ref", "value": "${env.GITHUB_REF}", "short": true },
-             {"title": "Action URL", "value": "${env.GITHUB_SERVER_URL}/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID}"}]
