@@ -133,3 +133,7 @@ Taskfile.yml
 
 # Core dumps
 core.*
+
+# IO outputs
+ebl/io/alignment/*.zip
+ebl/io/alignment/*.tar*

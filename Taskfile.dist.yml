@@ -50,3 +50,6 @@ tasks:
     cmds:
       - poetry run python -m ebl.io.fragments.importer import {{.CLI_ARGS}}
 
+  export-signs:
+    cmds:
+      - poetry run python -m ebl.io.alignment.sign_export {{.CLI_ARGS}}
