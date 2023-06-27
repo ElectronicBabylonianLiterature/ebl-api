@@ -1,4 +1,5 @@
 import argparse
+import json
 import os
 import shutil
 from datetime import date
@@ -20,11 +21,6 @@ from ebl.fragmentarium.domain.annotation import (
 )
 
 MINIMUM_BOUNDING_BOX_SIZE = 0.3
-TO_FILTER = [
-    AnnotationValueType.RULING_DOLLAR_LINE,
-    AnnotationValueType.SURFACE_AT_LINE,
-    AnnotationValueType.STRUCT,
-]
 
 
 def filter_empty_annotation(annotation: Annotation) -> bool:
@@ -39,40 +35,91 @@ def filter_empty_annotation(annotation: Annotation) -> bool:
         return True
 
 
-def filter_annotation_by_type(annotation: Annotation) -> bool:
-    return annotation.data.type not in TO_FILTER
+def filter_annotation(annotation: Annotation, to_filter) -> bool:
+    return annotation.data.type not in to_filter and filter_empty_annotation(annotation)
 
 
-def filter_annotation(annotation: Annotation) -> bool:
-    return filter_annotation_by_type(annotation) and filter_empty_annotation(annotation)
+def match(annotation_data: AnnotationData) -> str:
+    type = annotation_data.type
+    if type == AnnotationValueType.SURFACE_AT_LINE:
+        return AnnotationValueType.SURFACE_AT_LINE.name
+    if type == AnnotationValueType.BLANK:
+        return AnnotationValueType.BLANK.name
+    if type == AnnotationValueType.ColumnAtLine:
+        return AnnotationValueType.ColumnAtLine.name
+    if type == AnnotationValueType.STRUCT:
+        return AnnotationValueType.STRUCT.name
+    if type == AnnotationValueType.UnclearSign:
+        return AnnotationValueType.UnclearSign.name
+    if type == AnnotationValueType.PARTIALLY_BROKEN:
+        return f"{parse_annotations(annotation_data)}?"
+    return parse_annotations(annotation_data)
 
 
-def handle_blank_annotation_type(annotation_data: AnnotationData) -> str:
-    if annotation_data.type == AnnotationValueType.BLANK:
-        ground_truth = AnnotationValueType.BLANK.name
-    else:
-        ground_truth = annotation_data.sign_name or annotation_data.value
-    if not ground_truth:
+def parse_annotations(annotation_data: AnnotationData) -> str:
+    MANUEL_FIX = {
+        "ni": "NI",
+        "pa": "PA",
+        "šam": "U₂",
+        "ti": "TI",
+        "li": "LI",
+        "NUN": "NUN",
+        "ŠU": "ŠU",
+        "GUR": "GUR",
+        "engur": "LAGAB×HAL",
+        "BE": "BAD",
+        "NA": "NA",
+    }
+    try:
+        if annotation_data.sign_name != "":
+            if annotation_data.sign_name.islower():
+                return MANUEL_FIX[annotation_data.sign_name]
+            else:
+                return annotation_data.sign_name
+        else:
+            if annotation_data.value.isdigit():
+                return annotation_data.value
+            else:
+                return MANUEL_FIX[annotation_data.value]
+    except (KeyError, AttributeError) as e:
+        print(e)
+        print(annotation_data)
+        return AnnotationValueType.UnclearSign.name
+
+
+def sign_to_sign_ground_truth(annotation_data: AnnotationData) -> str:
+    sign_ground_truth = match(annotation_data)
+    if (
+        sign_ground_truth == ""
+        or sign_ground_truth == "?"
+        or sign_ground_truth.islower()
+    ):
         raise ValueError(
             f"AnnotationData with id: '{annotation_data.id}', "
-            f"value: '{annotation_data.value}' "
+            f"value: '{annotation_data.value}' ",
             f"sign: '{annotation_data.sign_name}' and "
             f"type: '{annotation_data.type.value}' "
-            f"results in empty ground truth label"
+            f"results in empty ground truth label",
         )
-    return ground_truth
+    return sign_ground_truth
 
 
 def prepare_annotations(
-    annotation: Annotations, image_width: int, image_height: int
+    annotation: Annotations,
+    image_width: int,
+    image_height: int,
+    to_filter: Sequence[AnnotationValueType] = (),
 ) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
-    annotations_with_signs = list(filter(filter_annotation, annotation.annotations))
+
+    annotations_with_signs = list(
+        filter(lambda x: filter_annotation(x, to_filter), annotation.annotations)
+    )
 
     bounding_boxes = BoundingBox.from_annotations(
         image_width, image_height, annotations_with_signs
     )
     signs = [
-        handle_blank_annotation_type(annotation.data)
+        sign_to_sign_ground_truth(annotation.data)
         for annotation in annotations_with_signs
     ]
 
@@ -89,6 +136,7 @@ def create_annotations(
     output_folder_annotations: str,
     output_folder_images: str,
     photo_repository: FileRepository,
+    to_filter: Sequence[AnnotationValueType] = (),
 ) -> None:
     for counter, single_annotation in enumerate(annotation_collection):
         fragment_number = single_annotation.fragment_number
@@ -100,7 +148,7 @@ def create_annotations(
         image.save(join(output_folder_images, image_filename))
 
         bounding_boxes, signs = prepare_annotations(
-            single_annotation, image.size[0], image.size[1]
+            single_annotation, image.size[0], image.size[1], to_filter
         )
         write_annotations(
             join(output_folder_annotations, f"gt_{fragment_number}.txt"),
@@ -153,6 +201,18 @@ if __name__ == "__main__":
     parser.add_argument(
         "-oi", "--output_imgs", type=str, default=None, help="Output Images Directory"
     )
+    parser.add_argument(
+        "-f",
+        "--filter",
+        action="store_true",
+        help="filter unfinished Fragments from ./annotations.json",
+    )
+    parser.add_argument(
+        "-c",
+        "--classification",
+        action="store_true",
+        help="Get Signs for detection or classification",
+    )
     args = parser.parse_args()
 
     if None not in (args.output_annotations, args.output_imgs):
@@ -161,20 +221,56 @@ if __name__ == "__main__":
         )
 
     if args.output_annotations is None and args.output_imgs is None:
-        create_directory("./annotations")
-        create_directory("./annotations/annotations")
-        create_directory("./annotations/imgs")
+        create_directory("annotations")
+        create_directory("annotations/annotations")
+        create_directory("annotations/imgs")
         args.output_annotations = "./annotations/annotations"
         args.output_imgs = "./annotations/imgs"
 
     context = create_context()
-    print(f"Following Annotation Types are filtered: {TO_FILTER}")
+
     annotation_collection = context.annotations_repository.retrieve_all_non_empty()
+
+    if args.filter:
+        print(
+            "Unfinished Fragments are filtered. Unfinished "
+            "fragments are defined in './annotations.json' file"
+        )
+        finished_fragments = json.load(open("annotations.json"))["finished"]
+        unfinished_but_usable = json.load(open("annotations.json"))[
+            "unfinishedButUsable"
+        ]
+
+        annotation_collection = list(
+            filter(
+                lambda elem: str(elem.fragment_number)
+                in [*finished_fragments, *unfinished_but_usable],
+                annotation_collection,
+            )
+        )
+    if args.classification:
+        # For Sign Classification (Bounding Boxes have to be cropped for Image Classification)
+        TO_FILTER = [
+            AnnotationValueType.RULING_DOLLAR_LINE,
+            AnnotationValueType.SURFACE_AT_LINE,
+            AnnotationValueType.BLANK,
+            AnnotationValueType.ColumnAtLine,
+            AnnotationValueType.STRUCT,
+        ]
+    else:
+        # For Sign Detection aka Localized Bounding Boxes
+        TO_FILTER = [
+            AnnotationValueType.RULING_DOLLAR_LINE,
+            AnnotationValueType.ColumnAtLine,
+        ]
+    print(f"Following Annotation Types are filtered: {TO_FILTER}")
+
     create_annotations(
         annotation_collection,
         args.output_annotations,
         args.output_imgs,
         context.photo_repository,
+        to_filter=TO_FILTER,
     )
     write_fragment_numbers(
         annotation_collection, f"./annotations/Annotations_{date.today()}.txt"
