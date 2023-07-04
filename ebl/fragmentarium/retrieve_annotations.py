@@ -72,15 +72,15 @@ def parse_annotations(annotation_data: AnnotationData) -> str:
     }
     try:
         if annotation_data.sign_name != "":
-            if annotation_data.sign_name.islower():
-                return MANUEL_FIX[annotation_data.sign_name]
-            else:
-                return annotation_data.sign_name
+            return (
+                MANUEL_FIX[annotation_data.sign_name]
+                if annotation_data.sign_name.islower()
+                else annotation_data.sign_name
+            )
+        if annotation_data.value.isdigit():
+            return annotation_data.value
         else:
-            if annotation_data.value.isdigit():
-                return annotation_data.value
-            else:
-                return MANUEL_FIX[annotation_data.value]
+            return MANUEL_FIX[annotation_data.value]
     except (KeyError, AttributeError) as e:
         print(e)
         print(annotation_data)
