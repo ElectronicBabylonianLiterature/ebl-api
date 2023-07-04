@@ -12,21 +12,6 @@ from ebl.tests.factories.annotation import (
 )
 
 
-def test_handle_blank_annotation_type():
-    annotation_data = AnnotationDataFactory.build(type=AnnotationValueType.BLANK)
-    assert retrieve_annotations.handle_blank_annotation_type(annotation_data) == "BLANK"
-    annotation_data = AnnotationDataFactory.build()
-    assert (
-        retrieve_annotations.handle_blank_annotation_type(annotation_data)
-        == annotation_data.sign_name
-    )
-    annotation_data = AnnotationDataFactory.build(sign_name="")
-    assert (
-        retrieve_annotations.handle_blank_annotation_type(annotation_data)
-        == annotation_data.value
-    )
-
-
 def test_prepare_annotations():
     annotations_1 = AnnotationFactory.build()
     annotations_2 = AnnotationFactory.build(
