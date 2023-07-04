@@ -258,8 +258,9 @@ if __name__ == "__main__":
             AnnotationValueType.STRUCT,
         ]
     else:
-        # For Sign Detection aka Localized Bounding Boxes (Only Images where bounding boxes are complete can be used
-        # in contrast to Classification Task where all existing Bounding Boxes can be used by cropping the Images)
+        # For Sign Detection aka Localized Bounding Boxes (Only Images where bounding boxes
+        # are complete can be used in contrast to Classification Task where all existing
+        # Bounding Boxes can be used by cropping the Images)
         TO_FILTER = [
             AnnotationValueType.RULING_DOLLAR_LINE,
             AnnotationValueType.ColumnAtLine,
