@@ -110,7 +110,6 @@ def prepare_annotations(
     image_height: int,
     to_filter: Sequence[AnnotationValueType] = (),
 ) -> Tuple[Sequence[BoundingBox], Sequence[str]]:
-
     annotations_with_signs = list(
         filter(lambda x: filter_annotation(x, to_filter), annotation.annotations)
     )
