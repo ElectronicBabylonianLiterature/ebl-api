@@ -175,12 +175,7 @@ def aggregate_path_of_the_pioneers(
                     {"text.lines": []},
                     {"notes.text": {"$in": ["", None]}},
                     {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
-                    {
-                        "$or": [
-                            {"uncuratedReferences": {"$exists": False}},
-                            {max_uncurated_reference: {"$exists": False}},
-                        ]
-                    },
+                    {max_uncurated_reference: {"$exists": False}},
                     {"references.type": {"$ne": "EDITION"}},
                     match_user_scopes(user_scopes),
                 ]
