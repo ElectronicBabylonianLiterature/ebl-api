@@ -177,11 +177,7 @@ def aggregate_path_of_the_pioneers(
                     {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
                     {
                         "$or": [
-                            {
-                                "uncuratedReferences": {
-                                    "$exists": False
-                                }
-                            },
+                            {"uncuratedReferences": {"$exists": False}},
                             {max_uncurated_reference: {"$exists": False}},
                         ]
                     },
