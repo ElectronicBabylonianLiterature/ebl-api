@@ -1,6 +1,6 @@
 FROM pypy:3.9-7.3.10
 
-RUN pip install poetry
+RUN pip install --upgrade pip poetry
 
 EXPOSE 8000
 
