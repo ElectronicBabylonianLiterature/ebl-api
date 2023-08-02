@@ -1,9 +1,12 @@
 from typing import Sequence
 
+import attr
+
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImagesRepository,
 )
+from ebl.fragmentarium.domain.annotation import AnnotationValueType
 
 
 class CroppedAnnotationService:
@@ -19,6 +22,7 @@ class CroppedAnnotationService:
         annotations = self._annotations_repository.find_by_sign(sign)
         cropped_image_annotations = []
         for annotation in annotations:
+            annotation = attr.evolve(annotation, annotations=[x for x in annotation.annotations if x.data.type == AnnotationValueType.HAS_SIGN])
             for annotation_elem in annotation.annotations:
                 if cropped_sign := annotation_elem.cropped_sign:
                     cropped_sign_image = (
