@@ -264,6 +264,7 @@ class MongoFragmentRepository(FragmentRepository):
                 "record",
                 "line_to_vec",
             ),
+            "date": ("date",),
         }
 
         if field not in fields_to_update:

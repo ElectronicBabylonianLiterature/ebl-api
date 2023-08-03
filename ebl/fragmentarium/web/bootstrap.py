@@ -11,6 +11,7 @@ from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
 from ebl.fragmentarium.web.fragment_script import FragmentScriptResource
+from ebl.fragmentarium.web.fragment_date import FragmentDateResource
 from ebl.fragmentarium.web.fragment_matcher import FragmentMatcherResource
 from ebl.fragmentarium.web.fragment_pager import make_fragment_pager_resource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
@@ -65,6 +66,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragments = FragmentsResource(finder)
     fragment_genre = FragmentGenreResource(updater)
     fragment_script = FragmentScriptResource(updater)
+    fragment_date = FragmentDateResource(updater)
 
     fragment_matcher = FragmentMatcherResource(
         FragmentMatcher(context.fragment_repository)
@@ -103,6 +105,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/match", fragment_matcher),
         ("/fragments/{number}/genres", fragment_genre),
         ("/fragments/{number}/script", fragment_script),
+        ("/fragments/{number}/date", fragment_date),
         ("/fragments/{number}", fragments),
         ("/fragments/{number}/pager", fragment_pager),
         ("/fragments/{number}/lemmatization", lemmatization),
