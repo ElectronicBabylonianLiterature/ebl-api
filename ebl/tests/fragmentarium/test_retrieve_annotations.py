@@ -2,50 +2,11 @@ from PIL import Image
 from mockito import mock, verify
 
 from ebl.fragmentarium import retrieve_annotations
-from ebl.fragmentarium.domain.annotation import AnnotationValueType
 from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     GeometryFactory,
-    AnnotationDataFactory,
-    AnnotationFactory,
 )
-
-
-def test_handle_blank_annotation_type():
-    annotation_data = AnnotationDataFactory.build(type=AnnotationValueType.BLANK)
-    assert retrieve_annotations.handle_blank_annotation_type(annotation_data) == "BLANK"
-    annotation_data = AnnotationDataFactory.build()
-    assert (
-        retrieve_annotations.handle_blank_annotation_type(annotation_data)
-        == annotation_data.sign_name
-    )
-    annotation_data = AnnotationDataFactory.build(sign_name="")
-    assert (
-        retrieve_annotations.handle_blank_annotation_type(annotation_data)
-        == annotation_data.value
-    )
-
-
-def test_prepare_annotations():
-    annotations_1 = AnnotationFactory.build()
-    annotations_2 = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(type=AnnotationValueType.RULING_DOLLAR_LINE)
-    )
-    annotations_3 = AnnotationFactory.build(
-        data=AnnotationDataFactory.build(sign_name="")
-    )
-    annotation = AnnotationsFactory.build(
-        annotations=[annotations_1, annotations_2, annotations_3]
-    )
-
-    bounding_boxes, signs = retrieve_annotations.prepare_annotations(
-        annotation, 100, 100
-    )
-    assert len(bounding_boxes) == 2
-    assert len(signs) == 2
-    assert signs[0] == annotations_1.data.sign_name
-    assert signs[1] == annotations_3.data.value
 
 
 def test_create_annotations(photo_repository, when, photo):

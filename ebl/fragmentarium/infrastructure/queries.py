@@ -9,7 +9,7 @@ from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
-NUMBER_OF_LATEST_TRANSLITERATIONS: int = 20
+NUMBER_OF_LATEST_TRANSLITERATIONS: int = 50
 NUMBER_OF_NEEDS_REVISION: int = 20
 PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 10
 
@@ -175,7 +175,6 @@ def aggregate_path_of_the_pioneers(
                     {"text.lines": []},
                     {"notes.text": {"$in": ["", None]}},
                     {"$or": [{"collection": "Kuyunjik"}, {"isInteresting": True}]},
-                    {"uncuratedReferences": {"$exists": True}},
                     {max_uncurated_reference: {"$exists": False}},
                     {"references.type": {"$ne": "EDITION"}},
                     match_user_scopes(user_scopes),
