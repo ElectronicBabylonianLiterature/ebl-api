@@ -45,7 +45,7 @@ class Date:
     year: Year
     month: Month
     day: Day
-    king: King
+    king: Optional[King] = attr.ib(default=None)
     is_seleucid_era: Optional[bool] = attr.ib(default=None)
     ur3_calendar: Ur3Calendar = attr.ib(default=Ur3Calendar.NONE)
 
