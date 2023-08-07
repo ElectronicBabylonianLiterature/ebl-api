@@ -184,15 +184,14 @@ class MongoFragmentRepository(FragmentRepository):
 
     def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
         try:
-            date = self._fragments.find_one(
+            if date := self._fragments.find_one(
                 {
                     "museumNumber.prefix": number.prefix,
                     "museumNumber.number": number.number,
                     "museumNumber.suffix": number.suffix,
                 },
                 projection={"date": True},
-            ).get("date")
-            if date:
+            ).get("date"):
                 return DateSchema(unknown=EXCLUDE).load(date)
             return None
         except StopIteration as error:
