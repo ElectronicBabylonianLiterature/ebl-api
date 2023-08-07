@@ -8,6 +8,7 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.date import Date
 
 
 class FragmentRepository(ABC):
@@ -96,6 +97,10 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
+        ...
+
+    @abstractmethod
+    def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
         ...
 
     @abstractmethod
