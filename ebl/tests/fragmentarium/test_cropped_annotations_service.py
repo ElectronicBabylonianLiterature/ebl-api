@@ -9,16 +9,27 @@ from ebl.tests.factories.annotation import (
     AnnotationFactory,
     AnnotationsWithScriptFactory,
 )
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    MongoFragmentRepository,
+)
+from ebl.tests.factories.fragment import FragmentFactory
+from ebl.fragmentarium.domain.date import DateSchema
 
 
 def test_find_annotations_by_sign(
-    annotations_repository, cropped_sign_images_repository, when
+    annotations_repository,
+    cropped_sign_images_repository,
+    fragment_repository: MongoFragmentRepository,
+    when,
 ):
     service = CroppedAnnotationService(
-        annotations_repository, cropped_sign_images_repository
+        annotations_repository, cropped_sign_images_repository, fragment_repository
     )
     annotation = AnnotationFactory.build_batch(2)
     annotations = AnnotationsWithScriptFactory.build(annotations=annotation)
+
+    fragment = FragmentFactory.build(number=annotations.fragment_number)
+    fragment_repository.create(fragment)
 
     image_id_1 = annotation[0].cropped_sign.image_id
     image_id_2 = annotation[1].cropped_sign.image_id
@@ -37,12 +48,14 @@ def test_find_annotations_by_sign(
         "image": Base64("test-base64-1"),
         "script": str(annotations.script),
         "label": annotation[0].cropped_sign.label,
+        "date": DateSchema().dump(fragment.date),
     }
     expected_2 = {
         "fragmentNumber": str(fragment_number),
         "image": Base64("test-base64-2"),
         "script": str(annotations.script),
         "label": annotation[1].cropped_sign.label,
+        "date": DateSchema().dump(fragment.date),
     }
 
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]
