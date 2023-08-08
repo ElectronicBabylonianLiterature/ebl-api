@@ -1,11 +1,14 @@
 from typing import Sequence
 
+import attr
+
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImagesRepository,
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.date import DateSchema
+from ebl.fragmentarium.domain.annotation import AnnotationValueType
 
 
 class CroppedAnnotationService:
@@ -25,6 +28,14 @@ class CroppedAnnotationService:
         for annotation in annotations:
             date = DateSchema().dump(
                 self._fragment_repository.fetch_date(annotation.fragment_number)
+            )
+            annotation = attr.evolve(
+                annotation,
+                annotations=[
+                    x
+                    for x in annotation.annotations
+                    if x.data.type == AnnotationValueType.HAS_SIGN
+                ],
             )
             for annotation_elem in annotation.annotations:
                 if cropped_sign := annotation_elem.cropped_sign:
