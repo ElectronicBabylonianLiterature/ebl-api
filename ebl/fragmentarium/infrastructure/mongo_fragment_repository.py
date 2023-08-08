@@ -20,6 +20,7 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
+from ebl.fragmentarium.domain.date import Date, DateSchema
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
@@ -181,6 +182,21 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
+    def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
+        try:
+            if date := self._fragments.find_one(
+                {
+                    "museumNumber.prefix": number.prefix,
+                    "museumNumber.number": number.number,
+                    "museumNumber.suffix": number.suffix,
+                },
+                projection={"date": True},
+            ).get("date"):
+                return DateSchema(unknown=EXCLUDE).load(date)
+            return None
+        except StopIteration as error:
+            raise NotFoundError(f"Fragment {number} not found.") from error
+
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         fragment = next(
             self._fragments.find_many(
@@ -264,6 +280,7 @@ class MongoFragmentRepository(FragmentRepository):
                 "record",
                 "line_to_vec",
             ),
+            "date": ("date",),
         }
 
         if field not in fields_to_update:

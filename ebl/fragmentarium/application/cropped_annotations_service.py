@@ -6,6 +6,8 @@ from ebl.fragmentarium.application.annotations_repository import AnnotationsRepo
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImagesRepository,
 )
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.annotation import AnnotationValueType
 
 
@@ -14,14 +16,19 @@ class CroppedAnnotationService:
         self,
         annotations_repository: AnnotationsRepository,
         cropped_sign_images_repository: CroppedSignImagesRepository,
+        fragment_repository: FragmentRepository,
     ):
         self._annotations_repository = annotations_repository
+        self._fragment_repository = fragment_repository
         self._cropped_sign_image_repository = cropped_sign_images_repository
 
     def find_annotations_by_sign(self, sign: str) -> Sequence[dict]:
         annotations = self._annotations_repository.find_by_sign(sign)
         cropped_image_annotations = []
         for annotation in annotations:
+            date = DateSchema().dump(
+                self._fragment_repository.fetch_date(annotation.fragment_number)
+            )
             annotation = attr.evolve(
                 annotation,
                 annotations=[
@@ -43,6 +50,7 @@ class CroppedAnnotationService:
                             "image": cropped_sign_image.image,
                             "script": str(annotation.script),
                             "label": cropped_sign.label,
+                            "date": date,
                         }
                     )
         return cropped_image_annotations

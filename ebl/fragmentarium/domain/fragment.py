@@ -23,6 +23,7 @@ from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
 from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
+from ebl.fragmentarium.domain.date import Date
 
 
 def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:
@@ -127,6 +128,8 @@ class Fragment:
     authorized_scopes: Optional[Sequence[Scope]] = list()
     introduction: Introduction = Introduction()
     script: Script = Script()
+    date: Optional[Date] = None
+    dates_in_text: Optional[Sequence[Date]] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
     projects: Sequence[str] = tuple()
     traditional_reference: Sequence[str] = list()
@@ -190,6 +193,9 @@ class Fragment:
 
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
         return attr.evolve(self, genres=tuple(genres_new))
+
+    def set_date(self, date_new: Date) -> "Fragment":
+        return attr.evolve(self, date=date_new)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)

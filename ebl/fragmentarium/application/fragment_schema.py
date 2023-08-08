@@ -24,6 +24,7 @@ from ebl.transliteration.application.note_line_part_schemas import (
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
+from ebl.fragmentarium.domain.date import DateSchema
 
 
 class MeasureSchema(Schema):
@@ -187,6 +188,10 @@ class FragmentSchema(Schema):
     )
     projects = fields.List(ResearchProjectField())
     traditional_reference = fields.List(fields.String())
+    date = fields.Nested(DateSchema, allow_none=True, default=None)
+    dates_in_text = fields.Nested(
+        DateSchema, data_key="datesInText", many=True, allow_none=True, default=None
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):

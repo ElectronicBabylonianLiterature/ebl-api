@@ -77,6 +77,14 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
+from ebl.fragmentarium.domain.date import (
+    Date,
+    Year,
+    Month,
+    Day,
+    Ur3Calendar,
+)
+from ebl.chronology.chronology import chronology
 
 
 class JoinFactory(factory.Factory):
@@ -98,6 +106,46 @@ class ScriptFactory(factory.Factory):
     period = factory.fuzzy.FuzzyChoice(set(Period) - {Period.NONE})
     period_modifier = factory.fuzzy.FuzzyChoice(set(PeriodModifier))
     uncertain = factory.Faker("boolean")
+
+
+class YearFactory(factory.Factory):
+    class Meta:
+        model = Year
+
+    value = factory.Faker("word")
+    is_broken = factory.Faker("boolean")
+    is_uncertain = factory.Faker("boolean")
+
+
+class MonthFactory(factory.Factory):
+    class Meta:
+        model = Month
+
+    value = factory.Faker("word")
+    is_broken = factory.Faker("boolean")
+    is_uncertain = factory.Faker("boolean")
+    is_intercalary = factory.Faker("boolean")
+
+
+class DayFactory(factory.Factory):
+    class Meta:
+        model = Day
+
+    value = factory.Faker("word")
+    is_broken = factory.Faker("boolean")
+    is_uncertain = factory.Faker("boolean")
+
+
+class DateFactory(factory.Factory):
+    class Meta:
+        model = Date
+
+    year = factory.SubFactory(YearFactory)
+    month = factory.SubFactory(MonthFactory)
+    day = factory.SubFactory(DayFactory)
+    king = factory.Iterator(chronology.kings)
+    is_seleucid_era = factory.Faker("boolean")
+    ur3_calendar = factory.Iterator(Ur3Calendar)
 
 
 class ExternalNumbersFactory(factory.Factory):
@@ -126,6 +174,7 @@ class FragmentFactory(factory.Factory):
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)
+    date = factory.SubFactory(DateFactory)
     folios = Folios((Folio("WGL", "1"), Folio("ARG", "1")))
     genres = factory.Iterator(
         [
