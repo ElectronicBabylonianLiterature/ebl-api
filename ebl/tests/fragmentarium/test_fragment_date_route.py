@@ -1,7 +1,7 @@
 import falcon
 import pytest
 import json
-from ebl.fragmentarium.domain.date import DateSchema
+from ebl.fragmentarium.domain.written_date import DateSchema
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import (

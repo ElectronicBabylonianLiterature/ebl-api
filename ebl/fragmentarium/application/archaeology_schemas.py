@@ -1,7 +1,9 @@
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.fragmentarium.application.date_range_schema import DateRangeSchema
+from ebl.fragmentarium.application.date_schemas import (
+    DateRangeSchema,
+    DateWithNotesSchema,
+)
 from ebl.fragmentarium.domain.archaeology import Archaeology
-from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.findspot import BuildingType, ExcavationPlan, Findspot
 from ebl.schemas import NameEnumField
 from marshmallow import Schema, fields, post_load, validate
@@ -27,7 +29,7 @@ class ExcavationPlanSchema(Schema):
 
     @post_load
     def create_excavation_plan(self, data, **kwargs) -> ExcavationPlan:
-        return Archaeology(**data)
+        return ExcavationPlan(**data)
 
 
 class FindspotSchema(Schema):
@@ -45,7 +47,7 @@ class FindspotSchema(Schema):
 
     @post_load
     def create_findspot(self, data, **kwargs) -> Findspot:
-        return Archaeology(**data)
+        return Findspot(**data)
 
 
 class ArchaeologySchema(Schema):
@@ -58,7 +60,11 @@ class ArchaeologySchema(Schema):
     )
     regular_excavation = fields.Boolean(load_default=True, data_key="regularExcavation")
     excavation_date = fields.Nested(
-        DateSchema, data_key="excavationDate", many=True, allow_none=True, default=None
+        DateWithNotesSchema,
+        data_key="excavationDate",
+        many=True,
+        allow_none=True,
+        default=None,
     )
     findspot = fields.Nested(FindspotSchema)
 

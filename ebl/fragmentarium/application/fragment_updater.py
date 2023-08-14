@@ -12,7 +12,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
-from ebl.fragmentarium.domain.date import Date
+from ebl.fragmentarium.domain.written_date import Date
 
 COLLECTION = "fragments"
 

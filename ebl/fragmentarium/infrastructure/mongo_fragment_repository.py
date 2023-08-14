@@ -20,7 +20,7 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
-from ebl.fragmentarium.domain.date import Date, DateSchema
+from ebl.fragmentarium.domain.written_date import Date, DateSchema
 
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,

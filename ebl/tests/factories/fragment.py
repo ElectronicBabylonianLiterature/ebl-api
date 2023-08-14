@@ -77,7 +77,7 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
-from ebl.fragmentarium.domain.date import (
+from ebl.fragmentarium.domain.written_date import (
     Date,
     Year,
     Month,

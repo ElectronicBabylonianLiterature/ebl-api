@@ -1,4 +1,4 @@
-from ebl.fragmentarium.domain.date import (
+from ebl.fragmentarium.domain.written_date import (
     DateSchema,
     YearSchema,
     MonthSchema,

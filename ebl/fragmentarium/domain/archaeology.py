@@ -1,6 +1,6 @@
-from typing import Optional
+from typing import Optional, Sequence
 import attr
-from ebl.fragmentarium.domain.date_range import DateRange
+from ebl.fragmentarium.domain.date import DateWithNotes
 from ebl.fragmentarium.domain.findspot import Findspot
 from ebl.transliteration.domain.museum_number import MuseumNumber as ExcavationNumber
 from ebl.corpus.domain.manuscript import Provenance as ExcavationSite
@@ -11,5 +11,5 @@ class Archaeology:
     excavation_number: ExcavationNumber
     site: ExcavationSite
     regular_excavation: bool = True
-    excavation_date: Optional[DateRange] = None
+    excavation_date: Optional[Sequence[DateWithNotes]] = None
     findspot: Optional[Findspot] = None

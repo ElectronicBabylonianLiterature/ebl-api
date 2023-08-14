@@ -2,7 +2,7 @@ import attr
 from typing import Optional, Sequence
 from enum import Enum, auto
 from ebl.bibliography.domain.reference import Reference
-from ebl.fragmentarium.domain.date_range import DateRange
+from ebl.fragmentarium.domain.date import DateRange
 
 
 class BuildingType(Enum):

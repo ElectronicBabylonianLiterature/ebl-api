@@ -22,7 +22,7 @@ from ebl.fragmentarium.application.fragment_schema import (
     NotesSchema,
     ScriptSchema,
 )
-from ebl.fragmentarium.domain.date import DateSchema
+from ebl.fragmentarium.domain.written_date import DateSchema
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.common.domain.project import ResearchProject

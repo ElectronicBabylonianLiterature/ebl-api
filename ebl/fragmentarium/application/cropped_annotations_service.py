@@ -7,7 +7,7 @@ from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImagesRepository,
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.domain.date import DateSchema
+from ebl.fragmentarium.domain.written_date import DateSchema
 from ebl.fragmentarium.domain.annotation import AnnotationValueType
 
 

@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.date import Date
+from ebl.fragmentarium.domain.written_date import Date
 
 
 class FragmentRepository(ABC):
