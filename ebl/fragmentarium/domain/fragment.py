@@ -194,7 +194,7 @@ class Fragment:
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
         return attr.evolve(self, genres=tuple(genres_new))
 
-    def set_date(self, date_new: Date) -> "Fragment":
+    def set_date(self, date_new: Optional[Date]) -> "Fragment":
         return attr.evolve(self, date=date_new)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
