@@ -43,7 +43,7 @@ def test_update_date(client, fragmentarium, user, currentDate, updatedDate):
     update = {"date": DateSchema().dump(updatedDate)}
     post_result = client.simulate_post(
         f"/fragments/{fragment_number}/date",
-        body=json.dumps(update) if updatedDate else '{}',
+        body=json.dumps(update) if updatedDate else "{}",
     )
     expected_json = create_response_dto(
         fragment.set_date(updatedDate), user, fragment.number == "K.1"
