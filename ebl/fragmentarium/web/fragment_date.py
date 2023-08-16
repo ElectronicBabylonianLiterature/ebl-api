@@ -19,7 +19,7 @@ class FragmentDateResource:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_date(
                 parse_museum_number(number),
-                DateSchema().load(req.media["date"]),
+                DateSchema().load(req.media["date"]) if "date" in req.media else None,
                 user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)

@@ -287,9 +287,10 @@ class MongoFragmentRepository(FragmentRepository):
             raise ValueError(
                 f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
             )
+        query = FragmentSchema(only=fields_to_update[field]).dump(fragment)
         self._fragments.update_one(
             fragment_is(fragment),
-            {"$set": FragmentSchema(only=fields_to_update[field]).dump(fragment)},
+            {"$set": query if query else {field: None}},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
