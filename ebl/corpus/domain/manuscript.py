@@ -4,7 +4,8 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
-from ebl.common.domain.named_enum import NamedEnum, NamedEnumWithParent
+from ebl.common.domain.named_enum import NamedEnum
+from ebl.corpus.domain.provenance import Provenance
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
@@ -20,42 +21,6 @@ class ManuscriptType(NamedEnum):
     EXCERPT = ("Excerpt", "Ex")
     PARALLEL = ("Parallel", "Par")
     NONE = ("None", "")
-
-
-class Provenance(NamedEnumWithParent):
-    STANDARD_TEXT = ("Standard Text", "Std", None)
-    ASSYRIA = ("Assyria", "Assa", None)
-    ASSUR = ("Aššur", "Ašš", "Assyria")
-    HUZIRINA = ("Ḫuzirina", "Huz", "Assyria")
-    KALHU = ("Kalḫu", "Kal", "Assyria")
-    KHORSABAD = ("Khorsabad", "Kho", "Assyria")
-    NINEVEH = ("Nineveh", "Nin", "Assyria")
-    TARBISU = ("Tarbiṣu", "Tar", "Assyria")
-    BABYLONIA = ("Babylonia", "Baba", None)
-    BABYLON = ("Babylon", "Bab", "Babylonia")
-    BORSIPPA = ("Borsippa", "Bor", "Babylonia")
-    CUTHA = ("Cutha", "Cut", "Babylonia")
-    DILBAT = ("Dilbat", "Dil", "Babylonia")
-    ISIN = ("Isin", "Isn", "Babylonia")
-    KIS = ("Kiš", "Kiš", "Babylonia")
-    LARSA = ("Larsa", "Lar", "Babylonia")
-    METURAN = ("Meturan", "Met", "Babylonia")
-    NEREBUN = ("Nērebtum", "Nēr", "Babylonia")
-    NIPPUR = ("Nippur", "Nip", "Babylonia")
-    SIPPAR = ("Sippar", "Sip", "Babylonia")
-    SADUPPUM = ("Šaduppûm", "Šad", "Babylonia")
-    UR = ("Ur", "Ur", "Babylonia")
-    URUK = ("Uruk", "Urk", "Babylonia")
-    PERIPHERY = ("Periphery", "", None)
-    ALALAKS = ("Alalakh", "Ala", "Periphery")
-    TELL_EL_AMARNA = ("Tell el-Amarna", "Ama", "Periphery")
-    EMAR = ("Emar", "Emr", "Periphery")
-    HATTUSA = ("Ḫattuša", "Hat", "Periphery")
-    MARI = ("Mari", "Mar", "Periphery")
-    MEGIDDO = ("Megiddo", "Meg", "Periphery")
-    SUSA = ("Susa", "Sus", "Periphery")
-    UGARIT = ("Ugarit", "Uga", "Periphery")
-    UNCERTAIN = ("Uncertain", "Unc", None)
 
 
 @attr.s(auto_attribs=True, frozen=True)

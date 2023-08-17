@@ -8,7 +8,7 @@ from ebl.fragmentarium.domain.findspot import BuildingType, ExcavationPlan, Find
 from ebl.schemas import NameEnumField
 from marshmallow import Schema, fields, post_load, validate
 from ebl.transliteration.domain.museum_number import MuseumNumber as ExcavationNumber
-from ebl.corpus.domain.manuscript import Provenance as ExcavationSite
+from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
 
 class ExcavationNumberSchema(Schema):
