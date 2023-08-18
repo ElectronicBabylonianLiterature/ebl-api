@@ -24,7 +24,7 @@ from ebl.transliteration.application.note_line_part_schemas import (
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.fragmentarium.domain.written_date import DateSchema
+from ebl.fragmentarium.domain.date import DateSchema
 
 
 class MeasureSchema(Schema):

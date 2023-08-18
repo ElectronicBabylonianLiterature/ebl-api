@@ -23,7 +23,7 @@ from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
 from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
-from ebl.fragmentarium.domain.written_date import Date
+from ebl.fragmentarium.domain.date import Date
 
 
 def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:

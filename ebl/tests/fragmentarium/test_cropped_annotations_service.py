@@ -13,7 +13,7 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
 )
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.fragmentarium.domain.written_date import DateSchema
+from ebl.fragmentarium.domain.date import DateSchema
 
 
 def test_find_annotations_by_sign(
