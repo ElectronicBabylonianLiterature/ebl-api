@@ -29,6 +29,7 @@ class ExcavationPlanSchema(Schema):
 
     @post_load
     def create_excavation_plan(self, data, **kwargs) -> ExcavationPlan:
+        data["references"] = tuple(data["references"])
         return ExcavationPlan(**data)
 
 
@@ -41,12 +42,14 @@ class FindspotSchema(Schema):
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=tuple())
     room = fields.String()
     context = fields.String()
-    primary_context = fields.String(data_key="primaryContext")
+    primary_context = fields.Boolean(data_key="primaryContext")
     notes = fields.String()
     references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
 
     @post_load
     def create_findspot(self, data, **kwargs) -> Findspot:
+        data["plans"] = tuple(data["plans"])
+        data["references"] = tuple(data["references"])
         return Findspot(**data)
 
 
@@ -60,14 +63,11 @@ class ArchaeologySchema(Schema):
     )
     regular_excavation = fields.Boolean(load_default=True, data_key="regularExcavation")
     excavation_date = fields.Nested(
-        DateWithNotesSchema,
-        data_key="excavationDate",
-        many=True,
-        allow_none=True,
-        default=None,
+        DateWithNotesSchema, data_key="excavationDate", many=True, load_default=tuple()
     )
     findspot = fields.Nested(FindspotSchema)
 
     @post_load
     def create_archaeology(self, data, **kwargs) -> Archaeology:
+        data["excavation_date"] = tuple(data["excavation_date"])
         return Archaeology(**data)
