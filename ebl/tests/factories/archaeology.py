@@ -12,8 +12,8 @@ class DateRangeFactory(factory.Factory):
     class Meta:
         model = DateRange
 
-    start = factory.Faker("date")
-    end = factory.Faker("date")
+    start = factory.Faker("date_object")
+    end = factory.Faker("date_object")
     notes = factory.Faker("sentence")
 
 
@@ -21,7 +21,7 @@ class DateWithNotesFactory(factory.Factory):
     class Meta:
         model = DateWithNotes
 
-    date = factory.Faker("date")
+    date = factory.Faker("date_object")
     notes = factory.Faker("sentence")
 
 
@@ -43,7 +43,7 @@ class FindspotFactory(factory.Factory):
     building = factory.Faker("word")
     building_type = factory.fuzzy.FuzzyChoice(set(BuildingType))
     lavel_layer_phase = factory.Faker("word")
-    date_range = factory.Subfactory(DateRangeFactory)
+    date_range = factory.SubFactory(DateRangeFactory)
     plans = factory.List([factory.SubFactory(ExcavationPlanFactory)], TupleFactory)
     room = factory.Faker("word")
     context = factory.Faker("word")
@@ -66,4 +66,4 @@ class ArchaeologyFactory(factory.Factory):
     excavation_date = factory.List(
         [factory.SubFactory(DateWithNotesFactory)], TupleFactory
     )
-    findspot = factory.SubFactory()
+    findspot = factory.SubFactory(FindspotFactory)
