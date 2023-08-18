@@ -1,10 +1,20 @@
+import datetime
 from ebl.fragmentarium.domain.date import DateRange, DateWithNotes
 from marshmallow import Schema, fields, post_load
+from dateutil.parser import isoparse
+
+
+class IsoDateField(fields.Field):
+    def _serialize(self, date: datetime.date, *args, **kwargs) -> str:
+        return str(date)
+
+    def _deserialize(self, date_string: str, *args, **kwargs) -> datetime.date:
+        return isoparse(date_string).date()
 
 
 class DateRangeSchema(Schema):
-    start = fields.Date()
-    end = fields.Date()
+    start = IsoDateField()
+    end = IsoDateField()
     notes = fields.String()
 
     @post_load
@@ -13,7 +23,7 @@ class DateRangeSchema(Schema):
 
 
 class DateWithNotesSchema(Schema):
-    date = fields.Date()
+    date = IsoDateField()
     notes = fields.String()
 
     @post_load
