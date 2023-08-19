@@ -65,7 +65,7 @@ class ArchaeologySchema(Schema):
     excavation_date = fields.Nested(
         DateWithNotesSchema, data_key="excavationDate", many=True, load_default=tuple()
     )
-    findspot = fields.Nested(FindspotSchema)
+    findspot = fields.Nested(FindspotSchema, allow_none=True, default=None)
 
     @post_load
     def create_archaeology(self, data, **kwargs) -> Archaeology:
