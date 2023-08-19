@@ -30,9 +30,7 @@ class ExcavationPlanFactory(factory.Factory):
         model = ExcavationPlan
 
     svg = "<svg></svg>"
-    references = factory.List(
-        [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
-    )
+    references = factory.List([factory.SubFactory(ReferenceFactory)], TupleFactory)
 
 
 class FindspotFactory(factory.Factory):
@@ -49,9 +47,7 @@ class FindspotFactory(factory.Factory):
     context = factory.Faker("word")
     primary_context = factory.Faker("boolean")
     notes = factory.Faker("sentence")
-    references = factory.List(
-        [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
-    )
+    references = factory.List([factory.SubFactory(ReferenceFactory)], TupleFactory)
 
 
 class ArchaeologyFactory(factory.Factory):

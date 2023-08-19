@@ -6,10 +6,7 @@ from ebl.fragmentarium.application.archaeology_schemas import (
 from ebl.fragmentarium.application.date_schemas import DateWithNotesSchema
 from ebl.tests.factories.archaeology import (
     ArchaeologyFactory,
-    ExcavationPlanFactory,
-    FindspotFactory,
 )
-from ebl.tests.factories.bibliography import ReferenceFactory
 
 
 def test_serialize_archaeology():
@@ -29,13 +26,7 @@ def test_serialize_archaeology():
 
 
 def test_deserialize_archaeology():
-    references = (ReferenceFactory.build(with_document=False),)
-    plan_references = (ReferenceFactory.build(with_document=False),)
-
-    plans = (ExcavationPlanFactory.build(references=plan_references),)
-    findspot = FindspotFactory.build(references=references, plans=plans)
-
-    archaeology = ArchaeologyFactory.build(findspot=findspot)
+    archaeology = ArchaeologyFactory.build()
 
     assert (
         ArchaeologySchema().load(
