@@ -8,6 +8,7 @@ from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
+from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
@@ -133,6 +134,7 @@ class Fragment:
     external_numbers: ExternalNumbers = ExternalNumbers()
     projects: Sequence[str] = tuple()
     traditional_reference: Sequence[str] = list()
+    archaeology: Optional[Archaeology] = None
 
     @property
     def is_lowest_join(self) -> bool:
@@ -196,6 +198,9 @@ class Fragment:
 
     def set_date(self, date_new: Date) -> "Fragment":
         return attr.evolve(self, date=date_new)
+
+    def set_archaeology(self, archaeology: Archaeology) -> "Fragment":
+        return attr.evolve(self, archaeology=archaeology)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
