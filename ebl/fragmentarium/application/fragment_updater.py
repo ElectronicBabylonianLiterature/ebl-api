@@ -1,4 +1,4 @@
-from typing import Sequence, Tuple
+from typing import Sequence, Tuple, Optional
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
@@ -86,11 +86,10 @@ class FragmentUpdater:
         return self._create_result(updated_fragment)
 
     def update_date(
-        self, number: MuseumNumber, date: Date, user: User
+        self, number: MuseumNumber, date: Optional[Date], user: User
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_date(date)
-
         self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("date", updated_fragment)
 
