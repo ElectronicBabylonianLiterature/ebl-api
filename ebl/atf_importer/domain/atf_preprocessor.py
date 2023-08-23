@@ -97,7 +97,7 @@ class ATFPreprocessor:
             "J": "G",
             "Ŋ": "G",
             "G̃": "G",
-            "'": 'ʾ'
+            "'": "ʾ",
         }
 
         for char in special_chars:
@@ -118,7 +118,6 @@ class ATFPreprocessor:
             )  # convert subscripts
             atf = re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
-            
             atf = re.sub(r"(\d)ʾ", r"\1′", atf)
             atfsplit = re.split(r"([⌈⸢])(.*)?([⌉⸣])", atf)
             opening = ["⌈", "⸢"]
