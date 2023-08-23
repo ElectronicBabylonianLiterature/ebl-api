@@ -1,0 +1,2453 @@
+[
+{
+    "_id" : "IM.49225",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512877",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "39–41 no. 1", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49225",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49221",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525122",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "42–44 no. 2", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49221",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49543",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525123",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "45–47 no. 3", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49543",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49238",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525123",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "45–47 no. 3", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49238",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49219",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512876",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "48–51 no. 4", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49219",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49240",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512864",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "52–55 no. 5", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49240",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49274",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512872",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "56–68 no. 6", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49274",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49222",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512862",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "59–61 no. 7", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49222",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.51028",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525124",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "62–63 no. 8", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51028",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49534",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525125",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "64–65 no. 9", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49534",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50425",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525126",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "66–68 no. 10", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50425",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49258",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525127",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "69–70 no. 11", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49258",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50847",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525128",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "71–72 no. 12", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50847",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50553",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525129",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "73 no. 13", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50553",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49341",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512866",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "74–76 no. 14", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49341",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50501",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512867",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "77–78 no. 15", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50501",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49234",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525130",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "79–80 no. 16", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49234",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49229",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525131",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "81–82 no. 17", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49229",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49537",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512874",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "83–84 no. 18", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49537",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50467.bis",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525132",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "85–86 no. 19", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50467",
+        "suffix" : "bis"
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50472",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525133",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "87–88 no. 20", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50472",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49224",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525134",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "89–91 no. 21", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49224",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52251",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512868",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "92 no. 22", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52251",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49233",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512863",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "93–94 no. 23", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49233",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49253",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512865",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "95–96 no. 24", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49253",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49542",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525135",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "97–98 no. 25", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49542",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50417",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525136",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "99 no. 26", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50417",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.51021",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525137",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "100 no. 27", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51021",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50526",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525138",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "101-102 no. 28", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50526",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49255",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525139",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "103-104 no. 29", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49255",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49235",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525140",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "105-107 no. 30", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49235",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50507",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525141",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "108-109 no. 31", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50507",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52259",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525142",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "110-111 no. 32", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52259",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49239.2",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525143",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "112-113 no. 33", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49239",
+        "suffix" : "2"
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49257",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525144",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "114-115 no. 34", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49257",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52242",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525145",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "116 no. 35", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52242",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49236",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525146",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "117-118 no. 36", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49236",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52834",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525147",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "119-121 no. 37", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52834",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49226",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512871",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "122-124 no. 38", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49226",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49307",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "Early", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P512873",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "125-127 no. 39", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49307",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49305",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525148",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "128-130 no. 40", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49305",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49228",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525149",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "131-132 no. 41", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49228",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49227",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525150",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "133-135 no. 42", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49227",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49272",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525151",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "136-138 no. 43", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49272",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50871",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525152",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "139-141 no. 44", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50871",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52840",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525153",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "142 no. 45", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52840",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50449",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525154",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "143-144 no. 46", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50449",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52241",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525155",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "145 no. 47", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52241",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52839",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525156",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "146-147 no. 48", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52839",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49547",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525157",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "148-149 no. 49", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49547",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49344",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525158",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "150-151 no. 50", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49344",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.51051",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525159",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "152-153 no. 51", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51051",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.52260",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525160",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "154-155 no. 52", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52260",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.51027",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525161",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "156 no. 53", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51027",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49540",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525162",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "157 no. 54", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49540",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.49541.bis",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525163",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "158 no. 55", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49541",
+        "suffix" : "bis"
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+},
+{
+    "_id" : "IM.50440",
+    "bmIdNumber" : "",
+    "accession" : "",
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length" : {    },
+    "width" : {    },
+    "thickness" : {    },
+    "collection" : "Sippar-Amnanum",
+    "script" :  { "period" : "Old Babylonian", "periodModifier" : "None", "uncertain" : false, "sortKey" : 10 },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "P525164",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "The Iraq Museum, Baghdad",
+    "references" : [ 
+        { "id" : "boer2021ikunpisa", "type" : "EDITION", "pages" : "159 no. 56", "notes" : "", "linesCited" : [] }
+    ],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "50440",
+        "suffix" : ""
+    },
+    "genres" : [ 
+{ "category" : [ "ARCHIVAL", "Letter" ], "uncertain" : false}    ],
+    "editedInOraccProject" : ""
+
+}
+]
