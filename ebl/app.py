@@ -66,12 +66,15 @@ def create_context():
     ebl_ai_client = EblAiClient(os.environ["EBL_AI_API"])
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    auth_backend = Auth0Backend(
-        decode_certificate(os.environ["AUTH0_PEM"]),
-        os.environ["AUTH0_AUDIENCE"],
-        os.environ["AUTH0_ISSUER"],
-        set_sentry_user,
-    )
+    try:
+        auth_backend = Auth0Backend(
+            decode_certificate(os.environ["AUTH0_PEM"]),
+            os.environ["AUTH0_AUDIENCE"],
+            os.environ["AUTH0_ISSUER"],
+            set_sentry_user,
+        )
+    except KeyError:
+        auth_backend= NoneAuthBackend(Guest)
     guest_backend = NoneAuthBackend(Guest)
     cache = create_cache()
     custom_cache = ChapterCache(MongoCacheRepository(database))
