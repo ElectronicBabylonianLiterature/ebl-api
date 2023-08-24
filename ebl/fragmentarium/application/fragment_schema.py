@@ -190,7 +190,7 @@ class FragmentSchema(Schema):
     traditional_reference = fields.List(fields.String())
     date = fields.Nested(DateSchema, allow_none=True, default=None)
     dates_in_text = fields.Nested(
-        DateSchema, data_key="datesInText", many=True, allow_none=True, default=None
+        DateSchema, data_key="datesInText", many=True, allow_none=True, default=list()
     )
 
     @post_load
@@ -204,6 +204,8 @@ class FragmentSchema(Schema):
             data["uncurated_references"] = tuple(data["uncurated_references"])
         if "authorized_scopes" in data:
             data["authorized_scopes"] = list(data["authorized_scopes"])
+        if "dates_in_text" in data:
+            data["dates_in_text"] = list(data["dates_in_text"])
 
         return Fragment(**data)
 
