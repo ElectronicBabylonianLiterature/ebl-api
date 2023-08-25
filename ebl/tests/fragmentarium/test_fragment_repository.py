@@ -32,6 +32,7 @@ from ebl.tests.factories.fragment import (
     JoinFactory,
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,
+    DateFactory,
 )
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
@@ -317,6 +318,26 @@ def test_update_genres(fragment_repository):
         (Genre(["ARCHIVAL", "Administrative"], False),)
     )
     fragment_repository.update_field("genres", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
+def test_update_date(fragment_repository):
+    fragment = FragmentFactory.build(date=None)
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_date(DateFactory.build())
+    fragment_repository.update_field("date", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+
+    assert result == updated_fragment
+
+
+def test_update_dates_in_text(fragment_repository):
+    fragment = FragmentFactory.build(date=None)
+    fragment_repository.create(fragment)
+    updated_fragment = fragment.set_dates_in_text([DateFactory.build()])
+    fragment_repository.update_field("dates_in_text", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
