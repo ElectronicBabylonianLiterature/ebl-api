@@ -10,7 +10,11 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.factories.fragment import (
+    FragmentFactory,
+    TransliteratedFragmentFactory,
+    DateFactory,
+)
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
@@ -129,6 +133,54 @@ def test_update_genres(
     when(fragment_repository).update_field("genres", updated_fragment).thenReturn()
 
     result = fragment_updater.update_genres(number, genres, user)
+    assert result == (injected_fragment, False)
+
+
+def test_update_date(
+    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    date = DateFactory.build()
+    updated_fragment = fragment.set_date(date)
+    injected_fragment = updated_fragment.set_text(
+        parallel_line_injector.inject_transliteration(updated_fragment.text)
+    )
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field("date", updated_fragment).thenReturn()
+
+    result = fragment_updater.update_date(number, date, user)
+    assert result == (injected_fragment, False)
+
+
+def test_update_dates_in_text(
+    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    dates_in_text = [DateFactory.build()]
+    updated_fragment = fragment.set_dates_in_text(dates_in_text)
+    injected_fragment = updated_fragment.set_text(
+        parallel_line_injector.inject_transliteration(updated_fragment.text)
+    )
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(fragment)},
+        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field(
+        "dates_in_text", updated_fragment
+    ).thenReturn()
+
+    result = fragment_updater.update_dates_in_text(number, dates_in_text, user)
     assert result == (injected_fragment, False)
 
 
