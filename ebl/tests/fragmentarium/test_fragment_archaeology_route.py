@@ -30,9 +30,14 @@ def test_update_archaeology(
 ):
     fragment: Fragment = FragmentFactory.build(archaeology=old_archaeology)
     fragment_number = fragmentarium.create(fragment)
-    update = {"archaeology": ArchaeologySchema().dump(new_archaeology)}
+    data = ArchaeologySchema().dump(new_archaeology)
+
+    if number := new_archaeology.excavation_number:
+        data["excavationNumber"] = str(number)
+
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/archaeology", body=json.dumps(update)
+        f"/fragments/{fragment_number}/archaeology",
+        body=json.dumps({"archaeology": data}),
     )
     expected_json = {
         **create_response_dto(
