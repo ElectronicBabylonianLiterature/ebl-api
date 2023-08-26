@@ -5,7 +5,6 @@ from ebl.fragmentarium.application.archaeology_schemas import (
 )
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 
-# from ebl.errors import DataError
 import falcon
 from falcon import Request, Response
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
