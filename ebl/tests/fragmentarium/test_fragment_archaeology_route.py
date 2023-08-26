@@ -55,3 +55,20 @@ def test_update_archaeology(
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
+
+
+def test_invalid_excavation_number_update(client, fragmentarium, user):
+    fragment: Fragment = FragmentFactory.build()
+    fragment_number = fragmentarium.create(fragment)
+    invalid_number = "colorless green ideas sleep furiously"
+    invalid_data = {"excavationNumber": invalid_number}
+
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/archaeology",
+        body=json.dumps({"archaeology": invalid_data}),
+    )
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert post_result.json == {
+        "description": f"{invalid_number!r} is not a valid museum number.",
+        "title": "422 Unprocessable Entity",
+    }
