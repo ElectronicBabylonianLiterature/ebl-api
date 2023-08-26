@@ -19,8 +19,11 @@ class ArchaeologyResource:
     def _parse_excavation_number(
         self, excavation_number: Union[str, None]
     ) -> Union[dict, None]:
-        number = parse_museum_number(excavation_number)
-        return None if not excavation_number else ExcavationNumberSchema().dump(number)
+        return (
+            None
+            if not excavation_number
+            else ExcavationNumberSchema().dump(parse_museum_number(excavation_number))
+        )
 
     @falcon.before(require_scope, "transliterate:fragments")
     def on_post(self, req: Request, resp: Response, number: str) -> None:
