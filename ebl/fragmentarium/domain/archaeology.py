@@ -8,8 +8,8 @@ from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
 @attr.s(auto_attribs=True, frozen=True)
 class Archaeology:
-    excavation_number: ExcavationNumber
-    site: ExcavationSite
+    excavation_number: Optional[ExcavationNumber] = None
+    site: Optional[ExcavationSite] = None
     regular_excavation: bool = True
     excavation_date: Sequence[DateWithNotes] = tuple()
     findspot: Optional[Findspot] = None
