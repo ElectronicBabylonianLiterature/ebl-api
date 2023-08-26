@@ -12,7 +12,9 @@ from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
 
 class ExcavationNumberSchema(Schema):
-    prefix = fields.String(required=True, validate=validate.Length(min=1))
+    prefix = fields.String(
+        required=True, validate=(validate.Length(min=1), validate.ContainsNoneOf("."))
+    )
     number = fields.String(
         required=True, validate=(validate.Length(min=1), validate.ContainsNoneOf("."))
     )
@@ -55,13 +57,16 @@ class FindspotSchema(Schema):
 
 class ArchaeologySchema(Schema):
     excavation_number = fields.Nested(
-        ExcavationNumberSchema, required=True, data_key="excavationNumber"
+        ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
     site = fields.Function(
-        lambda archaeology: archaeology.site.long_name,
+        lambda archaeology: getattr(archaeology.site, "long_name", None),
         lambda value: ExcavationSite.from_name(value),
+        allow_none=True,
     )
-    regular_excavation = fields.Boolean(load_default=True, data_key="regularExcavation")
+    regular_excavation = fields.Boolean(
+        load_default=True, data_key="isRegularExcavation"
+    )
     excavation_date = fields.Nested(
         DateWithNotesSchema, data_key="excavationDate", many=True, load_default=tuple()
     )

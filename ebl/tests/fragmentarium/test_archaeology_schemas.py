@@ -17,7 +17,7 @@ def test_serialize_archaeology():
             archaeology.excavation_number
         ),
         "site": archaeology.site.long_name,
-        "regularExcavation": archaeology.regular_excavation,
+        "isRegularExcavation": archaeology.regular_excavation,
         "excavationDate": DateWithNotesSchema().dump(
             archaeology.excavation_date, many=True
         ),
@@ -35,7 +35,7 @@ def test_deserialize_archaeology():
                     archaeology.excavation_number
                 ),
                 "site": archaeology.site.long_name,
-                "regularExcavation": archaeology.regular_excavation,
+                "isRegularExcavation": archaeology.regular_excavation,
                 "excavationDate": DateWithNotesSchema().dump(
                     archaeology.excavation_date, many=True
                 ),
