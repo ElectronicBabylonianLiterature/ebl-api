@@ -16,6 +16,9 @@ from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 ARCHAEOLOGY = Archaeology(MuseumNumber("F", "1"), ExcavationSite.KALHU)
 ARCHAEOLOGIES = [
     ARCHAEOLOGY,
+    attr.evolve(ARCHAEOLOGY, site=None),
+    attr.evolve(ARCHAEOLOGY, excavation_number=None),
+    attr.evolve(ARCHAEOLOGY, findspot=None),
     attr.evolve(ARCHAEOLOGY, site=ExcavationSite.NIPPUR),
     attr.evolve(ARCHAEOLOGY, regular_excavation=False),
     attr.evolve(ARCHAEOLOGY, excavation_date=(DateWithNotesFactory.build(),)),
