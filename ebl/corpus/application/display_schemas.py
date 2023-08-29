@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
@@ -43,6 +43,15 @@ class LineDisplaySchema(Schema):
             tuple(data["variants"]),
             tuple(data["translation"] or []),
         )
+
+    @post_dump
+    def add_variant_indexes(self, data: dict, **kwargs) -> dict:
+        data["variants"] = [
+            {**variant, "index": index}
+            for index, variant in enumerate(data["variants"])
+        ]
+
+        return data
 
 
 class ChapterDisplaySchema(Schema):
