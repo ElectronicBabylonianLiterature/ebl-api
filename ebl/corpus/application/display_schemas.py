@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, post_dump
+from marshmallow import Schema, fields, post_load, post_dump, EXCLUDE
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
@@ -18,6 +18,9 @@ from ebl.transliteration.application.note_line_part_schemas import (
 
 
 class LineDisplaySchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     number = fields.Nested(OneOfLineNumberSchema, required=True)
     old_line_numbers = fields.Nested(
         OldLineNumberSchema, many=True, data_key="oldLineNumbers", load_default=tuple()
@@ -55,6 +58,9 @@ class LineDisplaySchema(Schema):
 
 
 class ChapterDisplaySchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     id_ = fields.Nested(ChapterIdSchema, required=True, data_key="id")
     text_name = fields.String(required=True, data_key="textName")
     text_has_doi = fields.Boolean(data_key="textHasDoi", load_default=False)
@@ -76,3 +82,11 @@ class ChapterDisplaySchema(Schema):
             data["record"],
             tuple(data["manuscripts"]),
         )
+
+    @post_dump
+    def add_line_indexes(self, data: dict, **kwargs) -> dict:
+        data["lines"] = [
+            {**line, "index": index} for index, line in enumerate(data["lines"])
+        ]
+
+        return data

@@ -5,6 +5,7 @@ from marshmallow import (
     post_load,
     validate,
     validates_schema,
+    EXCLUDE,
 )
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
@@ -176,6 +177,9 @@ class ManuscriptLineSchema(Schema):
 
 
 class LineVariantSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     reconstruction: fields.Field = fields.Nested(
         OneOfTokenSchema, required=True, many=True
     )
