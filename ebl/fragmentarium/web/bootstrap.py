@@ -68,8 +68,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
+
     fragments_retrieve_all = FragmentsRetrieveAllResource(
-        context.fragment_repository, finder
+        context.fragment_repository, context.photo_repository
     )
     fragment_genre = FragmentGenreResource(updater)
     fragment_script = FragmentScriptResource(updater)

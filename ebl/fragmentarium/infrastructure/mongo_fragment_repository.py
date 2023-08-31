@@ -33,6 +33,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
@@ -431,7 +432,7 @@ class MongoFragmentRepository(FragmentRepository):
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
         )
 
-    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[Fragment]:
+    def retrieve_transliterated_fragments1(self, skip: int) -> Sequence[Fragment]:
         return self._map_fragments(
             self._fragments.find_many(
                 HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}
@@ -439,3 +440,29 @@ class MongoFragmentRepository(FragmentRepository):
             .limit(RETRIEVE_ALL_LIMIT)
             .skip(skip)
         )
+
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
+        fragments = self._fragments.aggregate(
+            [
+                {
+                    "$match": HAS_TRANSLITERATION
+                    | {"authorizedScopes": {"$exists": False}}
+                },
+                {
+                    "$project": {
+                        "folios": 0,
+                        "lineToVec": 0,
+                        "authorizedScops": 0,
+                        "references": 0,
+                        "uncuratedReferences": 0,
+                        "genreLegacy": 0,
+                        "legacyJoins": 0,
+                        "legacyScript": 0,
+                        "_sortKey": 0,
+                    }
+                },
+                {"$skip": skip},
+                {"$limit": RETRIEVE_ALL_LIMIT},
+            ]
+        )
+        return list(fragments)

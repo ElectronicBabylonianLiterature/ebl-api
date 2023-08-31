@@ -1,7 +1,11 @@
+import json
+from pathlib import Path
+
 import falcon
 from falcon import Request, Response
 from marshmallow import fields
 from pydash import flow
+from tqdm import tqdm
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
@@ -13,6 +17,7 @@ from ebl.common.query.parameter_parser import (
 )
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import DataError
+from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
@@ -20,6 +25,8 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     RETRIEVE_ALL_LIMIT,
 )
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
@@ -29,9 +36,11 @@ from ebl.users.web.require_scope import require_fragment_read_scope
 class FragmentRetrieveAllDtoSchema(FragmentSchema):
     _id = fields.Function(lambda fragment: str(fragment.number))
     atf = fields.Function(lambda fragment: fragment.text.atf)
+    """
     has_photo = fields.Function(
         lambda _, context: context["has_photo"], data_key="hasPhoto"
     )
+    """
 
     class Meta:
         exclude = (
@@ -47,44 +56,55 @@ class FragmentRetrieveAllDtoSchema(FragmentSchema):
 
 
 class FragmentsRetrieveAllResource:
-    def __init__(self, repository: FragmentRepository, finder: FragmentFinder):
+    def __init__(
+        self, repository: FragmentRepository, photos_repository: FileRepository
+    ):
         self._repo = repository
-        self.finder = finder
+        self._photos = photos_repository
 
-    def _parse_skip(self, skip: str, limit: int, total_count: int) -> int:
+    def _parse_skip(self, skip: str, total_count: int) -> int:
         try:
             skip_int = int(skip)
         except ValueError as error:
             raise DataError(f"Skip '{skip}' is not numeric.") from error
         if skip_int < 0:
             raise DataError(f"Skip '{skip}' is negative.")
-        if skip_int + limit > total_count:
+        if skip_int > total_count:
             raise DataError(
                 f"Skip '{skip}' is greater than total count '{total_count}'."
             )
         return skip_int
 
     def on_get(self, req: Request, resp: Response):
+        """
+        limit = 1000
+        total_count = self._repo.count_transliterated_fragments_with_authorization()
+        results = []
+        for skip in tqdm(range(limit + 1, total_count, limit)):
+            print(skip)
+            fragments = self._repo.retrieve_transliterated_fragments(skip)
+            fragments = FragmentRetrieveAllDtoSchema(many=True).dump(fragments)
+            results.extend(fragments)
+        with open(Path(__file__).parent / "fragments.json", "w") as f:
+            json.dump(results, f)
+        print("done")
+        return
+        """
+
         total_count = self._repo.count_transliterated_fragments_with_authorization()
         skip = self._parse_skip(
             req.params.get("skip", default=0),
-            RETRIEVE_ALL_LIMIT,
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
-        has_photos = []
+        fragments_ = []
         for fragment in fragments:
-            _, has_photo = self.finder.find(fragment.number)
-            has_photos.append(has_photo)
-        resp.media = {
-            "totalCount": total_count,
-            "fragments": [
-                FragmentRetrieveAllDtoSchema(context={"has_photo": has_photo}).dump(
-                    fragment
-                )
-                for has_photo, fragment in zip(has_photos, fragments)
-            ],
-        }
+            fragment["atf"] = TextSchema().load(fragment["text"]).atf
+            dict.pop(fragment, "text")
+            number = MuseumNumberSchema().load(fragment["museumNumber"])
+            fragment["hasPhoto"] = self._photos.query_if_file_exists(f"{number}.jpg")
+            fragments_.append(fragment)
+        resp.media = {"totalCount": total_count, "fragments": fragments_}
 
 
 class FragmentsResource:
