@@ -39,6 +39,8 @@ from ebl.transliteration.infrastructure.queries import museum_number_is
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 
 
+RETRIEVE_ALL_LIMIT = 1000
+
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
@@ -51,7 +53,6 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
-        self.RETRIEVE_ALL_LIMIT = 100
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -434,6 +435,6 @@ class MongoFragmentRepository(FragmentRepository):
             self._fragments.find_many(
                 HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}
             )
-            .limit(self.RETRIEVE_ALL_LIMIT)
+            .limit(RETRIEVE_ALL_LIMIT)
             .skip(skip)
         )
