@@ -12,7 +12,6 @@ from ebl.fragmentarium.domain.date import Date
 
 
 class FragmentRepository(ABC):
-
     @abstractmethod
     def create_indexes(self) -> None:
         ...

@@ -1,10 +1,8 @@
-from typing import cast
-
 import falcon
 from falcon import Request, Response
 from marshmallow import fields
+from pydash import flow
 
-from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
     parse_lines,
@@ -13,18 +11,19 @@ from ebl.common.query.parameter_parser import (
     parse_pages,
     parse_genre,
 )
+from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import DataError
-
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import RETRIEVE_ALL_LIMIT
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
+    RETRIEVE_ALL_LIMIT,
+)
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
-from ebl.users.web.require_scope import require_fragment_read_scope
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
-from pydash import flow
+from ebl.users.web.require_scope import require_fragment_read_scope
 
 
 class FragmentRetrieveAllDtoSchema(FragmentSchema):

@@ -41,6 +41,7 @@ from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 
 RETRIEVE_ALL_LIMIT = 1000
 
+
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
