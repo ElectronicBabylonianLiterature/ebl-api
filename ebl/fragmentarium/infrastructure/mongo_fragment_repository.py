@@ -95,8 +95,9 @@ class MongoFragmentRepository(FragmentRepository):
         return self._fragments.count_documents(HAS_TRANSLITERATION)
 
     def count_transliterated_fragments_with_authorization(self) -> int:
-        return self._fragments.count_documents(HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}})
-
+        return self._fragments.count_documents(
+            HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}
+        )
 
     def count_lines(self):
         result = self._fragments.aggregate(
@@ -429,5 +430,10 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def retrieve_transliterated_fragments(self, skip: int) -> Sequence[Fragment]:
-        return self._map_fragments(self._fragments.find_many(HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}).limit(self.RETRIEVE_ALL_LIMIT).skip(skip))
-
+        return self._map_fragments(
+            self._fragments.find_many(
+                HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}
+            )
+            .limit(self.RETRIEVE_ALL_LIMIT)
+            .skip(skip)
+        )

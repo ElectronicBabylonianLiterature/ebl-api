@@ -32,14 +32,24 @@ class FragmentRetrieveAllDtoSchema(FragmentSchema):
     )
 
     class Meta:
-        exclude = ("folios","legacy_script", "text","authorized_scopes","references", "uncurated_references", "folios", "line_to_vec")
+        exclude = (
+            "folios",
+            "legacy_script",
+            "text",
+            "authorized_scopes",
+            "references",
+            "uncurated_references",
+            "folios",
+            "line_to_vec",
+        )
+
+
 class FragmentsRetrieveAllResource:
     def __init__(self, repository: FragmentRepository, finder: FragmentFinder):
         self._repo = repository
         self.finder = finder
 
-
-    def _parse_skip(self, skip: str, limit:int, total_count: int) -> int:
+    def _parse_skip(self, skip: str, limit: int, total_count: int) -> int:
         try:
             skip = int(skip)
         except ValueError as error:
@@ -47,18 +57,33 @@ class FragmentsRetrieveAllResource:
         if skip < 0:
             raise DataError(f"Skip '{skip}' is negative.")
         if skip + limit > total_count:
-            raise DataError(f"Skip '{skip}' is greater than total count '{total_count}'.")
+            raise DataError(
+                f"Skip '{skip}' is greater than total count '{total_count}'."
+            )
         return skip
 
     def on_get(self, req: Request, resp: Response):
         total_count = self._repo.count_transliterated_fragments_with_authorization()
-        skip = self._parse_skip(req.params.get("skip", default=0), self._repo.RETRIEVE_ALL_LIMIT, total_count)
+        skip = self._parse_skip(
+            req.params.get("skip", default=0),
+            self._repo.RETRIEVE_ALL_LIMIT,
+            total_count,
+        )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
         has_photos = []
         for fragment in fragments:
             _, has_photo = self.finder.find(fragment.number)
             has_photos.append(has_photo)
-        resp.media = {"totalCount": total_count, "fragments": [FragmentRetrieveAllDtoSchema(context={"has_photo": has_photo}).dump(fragment) for has_photo, fragment in zip(has_photos, fragments)]}
+        resp.media = {
+            "totalCount": total_count,
+            "fragments": [
+                FragmentRetrieveAllDtoSchema(context={"has_photo": has_photo}).dump(
+                    fragment
+                )
+                for has_photo, fragment in zip(has_photos, fragments)
+            ],
+        }
+
 
 class FragmentsResource:
     def __init__(self, finder: FragmentFinder):
