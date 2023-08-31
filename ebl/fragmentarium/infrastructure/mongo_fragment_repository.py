@@ -51,6 +51,7 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self.RETRIEVE_ALL_LIMIT = 100
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -90,8 +91,12 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
 
-    def count_transliterated_fragments(self):
+    def count_transliterated_fragments(self) -> int:
         return self._fragments.count_documents(HAS_TRANSLITERATION)
+
+    def count_transliterated_fragments_with_authorization(self) -> int:
+        return self._fragments.count_documents(HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}})
+
 
     def count_lines(self):
         result = self._fragments.aggregate(
@@ -422,3 +427,7 @@ class MongoFragmentRepository(FragmentRepository):
         return list(
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
         )
+
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[Fragment]:
+        return self._map_fragments(self._fragments.find_many(HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}).limit(self.RETRIEVE_ALL_LIMIT).skip(skip))
+

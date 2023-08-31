@@ -1,5 +1,7 @@
 import falcon
 from falcon import Request, Response
+from marshmallow import fields
+
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
@@ -9,9 +11,11 @@ from ebl.common.query.parameter_parser import (
     parse_pages,
     parse_genre,
 )
+from ebl.errors import DataError
 
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.web.require_scope import require_fragment_read_scope
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -19,6 +23,42 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from pydash import flow
 
+
+class FragmentRetrieveAllDtoSchema(FragmentSchema):
+    _id = fields.Function(lambda fragment: str(fragment.number))
+    atf = fields.Function(lambda fragment: fragment.text.atf)
+    has_photo = fields.Function(
+        lambda _, context: context["has_photo"], data_key="hasPhoto"
+    )
+
+    class Meta:
+        exclude = ("folios","legacy_script", "text","authorized_scopes","references", "uncurated_references", "folios", "line_to_vec")
+class FragmentsRetrieveAllResource:
+    def __init__(self, repository: FragmentRepository, finder: FragmentFinder):
+        self._repo = repository
+        self.finder = finder
+
+
+    def _parse_skip(self, skip: str, limit:int, total_count: int) -> int:
+        try:
+            skip = int(skip)
+        except ValueError as error:
+            raise DataError(f"Skip '{skip}' is not numeric.") from error
+        if skip < 0:
+            raise DataError(f"Skip '{skip}' is negative.")
+        if skip + limit > total_count:
+            raise DataError(f"Skip '{skip}' is greater than total count '{total_count}'.")
+        return skip
+
+    def on_get(self, req: Request, resp: Response):
+        total_count = self._repo.count_transliterated_fragments_with_authorization()
+        skip = self._parse_skip(req.params.get("skip", default=0), self._repo.RETRIEVE_ALL_LIMIT, total_count)
+        fragments = self._repo.retrieve_transliterated_fragments(skip)
+        has_photos = []
+        for fragment in fragments:
+            _, has_photo = self.finder.find(fragment.number)
+            has_photos.append(has_photo)
+        resp.media = {"totalCount": total_count, "fragments": [FragmentRetrieveAllDtoSchema(context={"has_photo": has_photo}).dump(fragment) for has_photo, fragment in zip(has_photos, fragments)]}
 
 class FragmentsResource:
     def __init__(self, finder: FragmentFinder):

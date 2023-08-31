@@ -12,6 +12,7 @@ from ebl.fragmentarium.domain.date import Date
 
 
 class FragmentRepository(ABC):
+
     @abstractmethod
     def create_indexes(self) -> None:
         ...
@@ -105,4 +106,10 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def list_all_fragments(self) -> Sequence[str]:
+        ...
+
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[Fragment]:
+        ...
+
+    def count_transliterated_fragments_with_authorization(self) -> int:
         ...
