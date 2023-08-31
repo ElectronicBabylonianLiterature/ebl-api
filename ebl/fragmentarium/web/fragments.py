@@ -1,11 +1,7 @@
-import json
-from pathlib import Path
-
 import falcon
 from falcon import Request, Response
 from marshmallow import fields
 from pydash import flow
-from tqdm import tqdm
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
@@ -21,9 +17,6 @@ from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
-    RETRIEVE_ALL_LIMIT,
-)
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
@@ -76,21 +69,6 @@ class FragmentsRetrieveAllResource:
         return skip_int
 
     def on_get(self, req: Request, resp: Response):
-        """
-        limit = 1000
-        total_count = self._repo.count_transliterated_fragments_with_authorization()
-        results = []
-        for skip in tqdm(range(limit + 1, total_count, limit)):
-            print(skip)
-            fragments = self._repo.retrieve_transliterated_fragments(skip)
-            fragments = FragmentRetrieveAllDtoSchema(many=True).dump(fragments)
-            results.extend(fragments)
-        with open(Path(__file__).parent / "fragments.json", "w") as f:
-            json.dump(results, f)
-        print("done")
-        return
-        """
-
         total_count = self._repo.count_transliterated_fragments_with_authorization()
         skip = self._parse_skip(
             req.params.get("skip", default=0),

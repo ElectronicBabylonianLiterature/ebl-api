@@ -108,7 +108,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[Fragment]:
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
         ...
 
     @abstractmethod
