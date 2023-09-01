@@ -267,6 +267,7 @@ genres = (
     ("CANONICAL", "Literature", "Narrative", "The Poor Man of Nippur"),
     ("CANONICAL", "Literature", "Narrative", "Toil of Babylon"),
     ("CANONICAL", "Literature", "Sidu"),
+    ("CANONICAL", "Literature", "Taboo Text (CBS 16 and duplicates)"),
     ("CANONICAL", "Magic"),
     ("CANONICAL", "Magic", "Anti-witchcraft"),
     ("CANONICAL", "Magic", "Anti-witchcraft", "Maqlû"),
