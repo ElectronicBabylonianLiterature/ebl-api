@@ -79,15 +79,14 @@ class ATFPreprocessor:
 
     def replace_special_characters(self, string):
         special_chars = {
-            "c": "š",
             "sz": "š",
+            "c": "š",
             "s,": "ṣ",
             "ş": "ṣ",
             "t,": "ṭ",
             "ḫ": "h",
             "j": "g",
             "ŋ": "g",
-            "ĝ": "g",
             "g̃": "g",
             "C": "Š",
             "SZ": "Š",
@@ -98,8 +97,7 @@ class ATFPreprocessor:
             "J": "G",
             "Ŋ": "G",
             "G̃": "G",
-            "Ĝ": "G",
-            # "'": 'ʾ'
+            "'": "ʾ",
         }
 
         for char in special_chars:
@@ -111,16 +109,16 @@ class ATFPreprocessor:
         if atf[0].isdigit():
             atf = atf.replace("–", "-")
             atf = atf.replace("--", "-")  # new rule 22.02.2021
+            atf = self.replace_special_characters(atf)
 
             callback_normalize = (
                 lambda pat: pat.group(1)
                 + pat.group(2)
                 + self.normalize_numbers(pat.group(3))
             )  # convert subscripts
-            atf = re.sub(r"(.*?)([A-z])(\d+)", callback_normalize, atf)
+            atf = re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
-            atf = self.replace_special_characters(atf)
-
+            atf = re.sub(r"(\d)ʾ", r"\1′", atf)
             atfsplit = re.split(r"([⌈⸢])(.*)?([⌉⸣])", atf)
             opening = ["⌈", "⸢"]
             closing = ["⌉", "⸣"]
@@ -175,7 +173,7 @@ class ATFPreprocessor:
                 + pat.group(2)
                 + self.normalize_numbers(pat.group(3))
             )  # convert subscripts
-            atf = re.sub(r"(.*?)([A-z])(\d+)", callback_normalize, atf)
+            atf = re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
             atf = self.replace_special_characters(atf)
 
@@ -340,6 +338,8 @@ class ATFPreprocessor:
 
     def process_line(self, atf):
         self.logger.debug(f"Original line: '{atf}'")
+        atf = atf.replace("\r", "")
+        atf = atf.replace("sz", "š")
         original_atf = atf
 
         try:

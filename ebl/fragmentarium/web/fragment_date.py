@@ -25,3 +25,23 @@ class FragmentDateResource:
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except ValidationError as error:
             raise DataError(f"Invalid date data: '{req.media['date']}'") from error
+
+
+class FragmentDatesInTextResource:
+    def __init__(self, updater: FragmentUpdater):
+        self._updater = updater
+
+    @falcon.before(require_scope, "transliterate:fragments")
+    def on_post(self, req: Request, resp: Response, number: str) -> None:
+        try:
+            user = req.context.user
+            updated_fragment, has_photo = self._updater.update_dates_in_text(
+                parse_museum_number(number),
+                DateSchema().load(req.media["datesInText"], many=True),
+                user,
+            )
+            resp.media = create_response_dto(updated_fragment, user, has_photo)
+        except ValidationError as error:
+            raise DataError(
+                f"Invalid datesInText data: '{req.media['datesInText']}'"
+            ) from error

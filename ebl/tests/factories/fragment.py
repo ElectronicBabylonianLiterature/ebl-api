@@ -1,6 +1,7 @@
 from typing import Sequence
 
 import factory.fuzzy
+import random
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
 
@@ -176,6 +177,9 @@ class FragmentFactory(factory.Factory):
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)
     date = factory.SubFactory(DateFactory)
+    dates_in_text = factory.List(
+        [factory.SubFactory(DateFactory) for _ in range(random.randint(0, 4))]
+    )
     folios = Folios((Folio("WGL", "1"), Folio("ARG", "1")))
     genres = factory.Iterator(
         [

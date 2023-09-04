@@ -62,6 +62,9 @@ def expected_dto(lemmatized_fragment, has_photo):
             "legacyScript": lemmatized_fragment.legacy_script,
             "script": ScriptSchema().dump(lemmatized_fragment.script),
             "date": DateSchema().dump(lemmatized_fragment.date),
+            "datesInText": [
+                DateSchema().dump(date) for date in lemmatized_fragment.dates_in_text
+            ],
             "notes": NotesSchema().dump(lemmatized_fragment.notes),
             "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,

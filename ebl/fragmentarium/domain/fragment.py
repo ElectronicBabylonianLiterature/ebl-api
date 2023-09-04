@@ -130,7 +130,7 @@ class Fragment:
     introduction: Introduction = Introduction()
     script: Script = Script()
     date: Optional[Date] = None
-    dates_in_text: Optional[Sequence[Date]] = None
+    dates_in_text: Sequence[Date] = list()
     external_numbers: ExternalNumbers = ExternalNumbers()
     projects: Sequence[str] = tuple()
     traditional_reference: Sequence[str] = list()
@@ -198,6 +198,9 @@ class Fragment:
 
     def set_date(self, date_new: Optional[Date]) -> "Fragment":
         return attr.evolve(self, date=date_new)
+
+    def set_dates_in_text(self, dates_in_text_new: Sequence[Date]) -> "Fragment":
+        return attr.evolve(self, dates_in_text=dates_in_text_new)
 
     def set_archaeology(self, archaeology: Archaeology) -> "Fragment":
         return attr.evolve(self, archaeology=archaeology)

@@ -95,6 +95,16 @@ class FragmentUpdater:
 
         return self._create_result(updated_fragment)
 
+    def update_dates_in_text(
+        self, number: MuseumNumber, dates_in_text: Sequence[Date], user: User
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
+        updated_fragment = fragment.set_dates_in_text(dates_in_text)
+        self._create_changelog(user, fragment, updated_fragment)
+        self._repository.update_field("dates_in_text", updated_fragment)
+
+        return self._create_result(updated_fragment)
+
     def update_genres(
         self, number: MuseumNumber, genres: Sequence[Genre], user: User
     ) -> Tuple[Fragment, bool]:

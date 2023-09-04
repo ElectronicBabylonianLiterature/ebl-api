@@ -282,6 +282,7 @@ class MongoFragmentRepository(FragmentRepository):
                 "line_to_vec",
             ),
             "date": ("date",),
+            "dates_in_text": ("dates_in_text",),
         }
 
         if field not in fields_to_update:
