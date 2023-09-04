@@ -3,7 +3,8 @@ from typing import Union
 import pytest
 from ebl.common.domain.period import Period
 
-from ebl.corpus.domain.manuscript import Manuscript, ManuscriptType, Provenance
+from ebl.corpus.domain.manuscript import Manuscript, ManuscriptType
+from ebl.corpus.domain.provenance import Provenance
 from ebl.tests.factories.corpus import ManuscriptLineFactory
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber

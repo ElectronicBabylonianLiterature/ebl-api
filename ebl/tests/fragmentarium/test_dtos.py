@@ -3,6 +3,7 @@ import pydash
 import pytest
 
 from ebl.errors import DataError
+from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
@@ -112,6 +113,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             ),
             "projects": [ResearchProject["CAIC"].abbreviation],
             "traditional_reference": lemmatized_fragment.traditional_reference,
+            "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
         },
         pydash.is_none,
     )

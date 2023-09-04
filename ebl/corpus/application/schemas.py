@@ -1,3 +1,4 @@
+from ebl.corpus.domain.provenance import Provenance
 from marshmallow import (
     Schema,
     ValidationError,
@@ -23,7 +24,6 @@ from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
     OldSiglum,
-    Provenance,
     is_invalid_non_standard_text,
     is_invalid_standard_text,
 )
