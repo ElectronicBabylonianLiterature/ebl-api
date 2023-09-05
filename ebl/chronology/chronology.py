@@ -59,6 +59,9 @@ class Eponym:
     event: str
     phase: str
     notes: str
+    king: str
+    isKing: bool
+    rel: int
 
 
 class EponymSchema(Schema):
@@ -69,6 +72,9 @@ class EponymSchema(Schema):
     event = fields.String(allow_none=True, load_default=None)
     phase = fields.String()
     notes = fields.String(allow_none=True, load_default=None)
+    king = fields.String(allow_none=True, load_default=None)
+    isKing = fields.Boolean(allow_none=True, load_default=None)
+    rel = fields.Integer(allow_none=True, load_default=None)
 
     @post_load
     def make_eponym(self, data: dict, **kwargs) -> Eponym:
