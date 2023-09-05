@@ -47,6 +47,7 @@ def to_dict(
         "isSingleStage": chapter.is_single_stage,
         "lines": [
             {
+                "index": index,
                 "number": OneOfLineNumberSchema().dump(line.number),
                 "oldLineNumbers": OldLineNumberSchema().dump(
                     line.old_line_numbers, many=True
@@ -55,6 +56,7 @@ def to_dict(
                 "isBeginningOfSection": line.is_beginning_of_section,
                 "variants": [
                     {
+                        "index": index,
                         "intertext": OneOfNoteLinePartSchema().dump(
                             variant.intertext, many=True
                         ),
@@ -69,13 +71,13 @@ def to_dict(
                             variant.parallel_lines, many=True
                         ),
                     }
-                    for variant in line.variants
+                    for index, variant in enumerate(line.variants)
                 ],
                 "translation": []
                 if missing_translation
                 else TranslationLineSchema().dump(line.translation, many=True),
             }
-            for line in chapter.lines
+            for index, line in enumerate(chapter.lines)
         ],
         "record": RecordSchema().dump(chapter.record),
         "manuscripts": ManuscriptSchema().dump(chapter.manuscripts, many=True),

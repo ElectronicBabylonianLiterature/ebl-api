@@ -7,25 +7,25 @@ def test_set(database, mongo_cache_repository) -> None:
     mongo_cache_repository.set("test", {"data": "data"})
 
     inserted_text = database[CACHE_COLLECTION].find_one(
-        {"cache_key": "test"}, projection={"_id": False, "cache_key": False}
+        {"_id": "test"}, projection={"_id": False, "_id": False}
     )
     assert inserted_text == {"data": "data"}
 
 
 def test_has(database, mongo_cache_repository) -> None:
-    database[CACHE_COLLECTION].insert_one({"cache_key": "test", "data": "data"})
+    database[CACHE_COLLECTION].insert_one({"_id": "test", "data": "data"})
     assert mongo_cache_repository.has("test") is True
 
 
 def test_get(database, mongo_cache_repository) -> None:
-    database[CACHE_COLLECTION].insert_one({"cache_key": "test", "data": "data"})
+    database[CACHE_COLLECTION].insert_one({"_id": "test", "data": "data"})
     assert mongo_cache_repository.get("test") == {"data": "data"}
 
 
 def test_delete(database, mongo_cache_repository) -> None:
-    database[CACHE_COLLECTION].insert_one({"cache_key": "test", "data": "data"})
+    database[CACHE_COLLECTION].insert_one({"_id": "test", "data": "data"})
     mongo_cache_repository.delete("test")
-    assert database[CACHE_COLLECTION].find_one({"cache_key": "test"}) is None
+    assert database[CACHE_COLLECTION].find_one({"_id": "test"}) is None
 
 
 @pytest.mark.parametrize(
@@ -33,7 +33,7 @@ def test_delete(database, mongo_cache_repository) -> None:
 )
 def test_exists_with_regex(database, mongo_cache_repository, key, expected) -> None:
     database[CACHE_COLLECTION].insert_one(
-        {"cache_key": key, "data": "data"},
+        {"_id": key, "data": "data"},
     )
     assert mongo_cache_repository.has(r"^test(\sline-\d+)?$", regex=True) == expected
 
@@ -41,12 +41,12 @@ def test_exists_with_regex(database, mongo_cache_repository, key, expected) -> N
 def test_delete_all(database, mongo_cache_repository) -> None:
     database[CACHE_COLLECTION].insert_many(
         [
-            {"cache_key": "test", "data": "data"},
-            {"cache_key": "test line-42", "data": "data"},
-            {"cache_key": "foobar", "data": "data"},
+            {"_id": "test", "data": "data"},
+            {"_id": "test line-42", "data": "data"},
+            {"_id": "foobar", "data": "data"},
         ]
     )
     mongo_cache_repository.delete_all(pattern=r"^test(\sline-\d+)?$")
-    assert database[CACHE_COLLECTION].find_one({"cache_key": "test"}) is None
-    assert database[CACHE_COLLECTION].find_one({"cache_key": "test line-42"}) is None
-    assert database[CACHE_COLLECTION].find_one({"cache_key": "foobar"}) is not None
+    assert database[CACHE_COLLECTION].find_one({"_id": "test"}) is None
+    assert database[CACHE_COLLECTION].find_one({"_id": "test line-42"}) is None
+    assert database[CACHE_COLLECTION].find_one({"_id": "foobar"}) is not None
