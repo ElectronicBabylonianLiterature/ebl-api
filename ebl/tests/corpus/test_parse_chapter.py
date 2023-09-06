@@ -9,9 +9,9 @@ from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
-    Provenance,
     Siglum,
 )
+from ebl.corpus.domain.provenance import Provenance
 from ebl.corpus.domain.parser import parse_chapter, parse_paratext
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory

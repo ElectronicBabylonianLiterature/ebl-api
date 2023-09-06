@@ -11,8 +11,8 @@ from ebl.corpus.domain.manuscript import (
     Manuscript,
     ManuscriptType,
     OldSiglum,
-    Provenance,
 )
+from ebl.corpus.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.joins import Join, Joins

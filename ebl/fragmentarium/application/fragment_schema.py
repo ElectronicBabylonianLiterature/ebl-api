@@ -3,6 +3,7 @@ from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -192,6 +193,7 @@ class FragmentSchema(Schema):
     dates_in_text = fields.Nested(
         DateSchema, data_key="datesInText", many=True, allow_none=True, default=list()
     )
+    archaeology = fields.Nested(ArchaeologySchema, allow_none=True, default=None)
 
     @post_load
     def make_fragment(self, data, **kwargs):
