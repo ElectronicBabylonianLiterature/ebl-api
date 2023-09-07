@@ -78,8 +78,9 @@ def to_dict(
                 "translation": []
                 if missing_translation
                 else TranslationLineSchema().dump(line.translation, many=True),
+                **({} if for_loading else {"originalIndex": index}),
             }
-            for line in chapter.lines
+            for index, line in enumerate(chapter.lines)
         ],
         "record": RecordSchema().dump(chapter.record),
         "manuscripts": ManuscriptSchema().dump(chapter.manuscripts, many=True),

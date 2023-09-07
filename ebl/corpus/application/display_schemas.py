@@ -23,6 +23,7 @@ class LineVariantDisplaySchema(LineVariantSchema):
 
 class LineDisplaySchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
+    original_index = fields.Integer(data_key="originalIndex", dump_only=True)
     old_line_numbers = fields.Nested(
         OldLineNumberSchema, many=True, data_key="oldLineNumbers", load_default=tuple()
     )
@@ -80,3 +81,11 @@ class ChapterDisplaySchema(Schema):
             data["record"],
             tuple(data["manuscripts"]),
         )
+
+    @post_dump
+    def add_line_indexes(self, data: dict, **kwargs) -> dict:
+        data["lines"] = [
+            {**line, "originalIndex": index} for index, line in enumerate(data["lines"])
+        ]
+
+        return data
