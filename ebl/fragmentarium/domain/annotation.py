@@ -28,6 +28,7 @@ class AnnotationValueType(Enum):
     BLANK = "Blank"
     PREDICTED = "Predicted"
     PARTIALLY_BROKEN = "PartiallyBroken"
+    DAMAGED = "Damaged"
     STRUCT = "Struct"
     UnclearSign = "UnclearSign"
     ColumnAtLine = "ColumnAtLine"
