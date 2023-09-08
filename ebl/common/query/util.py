@@ -16,8 +16,8 @@ def drop_duplicates(input_: Union[str, Dict]) -> Dict:
 
 
 def ngrams(input_: Union[str, Dict], n) -> Dict:
-    if n <= 1:
-        raise ValueError("ngram size must be 2 or more")
+    if n <= 0:
+        raise ValueError("ngram size must be 1 or more")
     return {
         "$zip": {
             "inputs": [
