@@ -1,11 +1,13 @@
 from typing import Optional, Sequence, Union, Dict
 
 from ebl.common.query.util import drop_duplicates, filter_array, ngrams
+from ebl.corpus.domain.chapter import ChapterId
+from ebl.corpus.infrastructure.queries import chapter_id_query
 
 NGRAM_FIELD = "ngram"
 
 
-def create_all_ngrams(
+def aggregate_all_ngrams(
     input_: Union[str, Dict],
     N: Sequence[int],
     output_: str = "ngrams",
@@ -42,15 +44,46 @@ def create_all_ngrams(
     ]
 
 
-def create_fragment_ngrams(
+def aggregate_fragment_ngrams(
     number: str, N: Sequence[int], signs_to_exclude: Optional[Sequence[str]] = None
 ):
     return [
         {"$match": {"_id": number}},
         {"$project": {NGRAM_FIELD: {"$split": ["$signs", " "]}}},
-        *create_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD, signs_to_exclude),
+        *aggregate_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD, signs_to_exclude),
     ]
 
 
-def create_chapter_ngrams():
-    pass
+def aggregate_chapter_ngrams(
+    chapter_id: ChapterId,
+    N: Sequence[int],
+    linebreak_char="#",
+    signs_to_exclude: Optional[Sequence[str]] = None,
+):
+    replace_linebreaks = {
+        "$replaceAll": {
+            "input": "$signs",
+            "find": "\n",
+            "replacement": f" {linebreak_char} ",
+        }
+    }
+
+    return [
+        {"$match": chapter_id_query(chapter_id)},
+        {"$project": {"signs": 1}},
+        {"$unwind": "$signs"},
+        {
+            "$project": {
+                NGRAM_FIELD: {
+                    "$split": [
+                        replace_linebreaks,
+                        " ",
+                    ]
+                }
+            }
+        },
+        *aggregate_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD, signs_to_exclude),
+        {"$unwind": f"${NGRAM_FIELD}"},
+        {"$group": {"_id": None, NGRAM_FIELD: {"$addToSet": f"${NGRAM_FIELD}"}}},
+        {"$project": {"_id": False}},
+    ]
