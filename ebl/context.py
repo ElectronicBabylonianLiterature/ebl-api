@@ -19,6 +19,9 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
+from ebl.fragmentarium.infrastructure.fragment_ngram_repository import (
+    FragmentNGramRepository,
+)
 from ebl.lemmatization.application.suggestion_finder import LemmaRepository
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -38,6 +41,7 @@ class Context:
     photo_repository: FileRepository
     folio_repository: FileRepository
     fragment_repository: FragmentRepository
+    fragment_ngram_repository: FragmentNGramRepository
     changelog: Changelog
     bibliography_repository: BibliographyRepository
     text_repository: MongoTextRepository

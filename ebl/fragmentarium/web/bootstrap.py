@@ -93,7 +93,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
     transliteration = TransliterationResource(
-        updater, context.get_transliteration_update_factory()
+        updater,
+        context.get_transliteration_update_factory(),
+        context.fragment_ngram_repository,
     )
     introduction = IntroductionResource(updater)
     archaeology = ArchaeologyResource(updater)
