@@ -1,4 +1,4 @@
-from typing import Union, Dict
+from typing import Optional, Sequence, Union, Dict
 
 
 def flatten_field(input_: Union[str, Dict], depth=1) -> Dict:
@@ -39,3 +39,51 @@ def ngrams(input_: Union[str, Dict], n) -> Dict:
 
 def filter_array(input_, as_, cond) -> Dict:
     return {"$filter": {"input": input_, "as": as_, "cond": cond}}
+
+
+def aggregate_all_ngrams(
+    input_: Union[str, Dict],
+    N: Sequence[int],
+    output_: str = "ngrams",
+    signs_to_exclude: Optional[Sequence[str]] = None,
+    ngram_field="ngram",
+):
+    if signs_to_exclude is None:
+        signs_to_exclude = ["X", ""]
+
+    exclude_empty = {
+        "$eq": [
+            {
+                "$size": {
+                    "$setIntersection": [
+                        f"$${ngram_field}",
+                        signs_to_exclude,
+                    ]
+                }
+            },
+            0,
+        ]
+    }
+    return [
+        {
+            "$addFields": {
+                output_: drop_duplicates(
+                    filter_array(
+                        {"$concatArrays": [ngrams(input_, n) for n in N if n > 0]},
+                        ngram_field,
+                        exclude_empty,
+                    )
+                )
+            }
+        },
+    ]
+
+
+def replace_all(old: str, new: str):
+    return {
+        "$replaceAll": {
+            "input": "$signs",
+            "find": old,
+            "replacement": new,
+        }
+    }
