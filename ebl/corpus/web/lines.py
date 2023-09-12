@@ -73,9 +73,15 @@ class LinesResource:
 
 
 class LinesImportResource:
-    def __init__(self, corpus: Corpus, cache: ChapterCache):
+    def __init__(
+        self,
+        corpus: Corpus,
+        cache: ChapterCache,
+        ngram_repository: ChapterNGramRepository,
+    ):
         self._corpus = corpus
         self._cache = cache
+        self.ngram_repository = ngram_repository
 
     @falcon.before(require_scope, "write:texts")
     @validate(LinesImportSchema())

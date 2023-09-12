@@ -54,7 +54,9 @@ def create_corpus_routes(api: falcon.App, context: Context):
     lines = LinesResource(
         corpus, context.custom_cache, context.chapter_ngram_repository
     )
-    lines_import = LinesImportResource(corpus, context.custom_cache)
+    lines_import = LinesImportResource(
+        corpus, context.custom_cache, context.chapter_ngram_repository
+    )
     colophons = ColophonsResource(corpus)
     unplaced_lines = UnplacedLinesResource(corpus)
     extant_lines = ExtantLinesResource(corpus)
