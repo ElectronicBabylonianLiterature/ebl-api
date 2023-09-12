@@ -4,7 +4,7 @@ from ebl.transliteration.infrastructure.collections import (
     FRAGMENT_NGRAM_COLLECTION,
     FRAGMENTS_COLLECTION,
 )
-from typing import Optional, Sequence
+from typing import Sequence
 
 from ebl.common.query.util import aggregate_all_ngrams, replace_all
 
@@ -20,7 +20,6 @@ class FragmentNGramRepository:
         self,
         number: dict,
         N: Sequence[int],
-        signs_to_exclude: Optional[Sequence[str]] = None,
     ):
         return [
             {"$match": {f"museumNumber.{key}": value for key, value in number.items()}},
@@ -34,18 +33,15 @@ class FragmentNGramRepository:
                     }
                 }
             },
-            *aggregate_all_ngrams(
-                f"${NGRAM_FIELD}s", N, f"{NGRAM_FIELD}s", signs_to_exclude
-            ),
+            *aggregate_all_ngrams(f"${NGRAM_FIELD}s", N, f"{NGRAM_FIELD}s"),
         ]
 
     def update_ngrams(
         self,
         number: dict,
         N: Sequence[int],
-        signs_to_exclude: Optional[Sequence[str]] = None,
     ) -> None:
-        aggregation = self.aggregate_fragment_ngrams(number, N, signs_to_exclude)
+        aggregation = self.aggregate_fragment_ngrams(number, N)
         if data := next(
             self._fragments.aggregate(aggregation, allowDiskUse=True),
             None,

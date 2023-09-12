@@ -6,7 +6,7 @@ from ebl.transliteration.infrastructure.collections import (
     CHAPTER_NGRAM_COLLECTION,
     CHAPTERS_COLLECTION,
 )
-from typing import Optional, Sequence
+from typing import Sequence
 
 from ebl.common.query.util import aggregate_all_ngrams, replace_all
 
@@ -22,7 +22,6 @@ class ChapterNGramRepository:
         self,
         chapter_id: ChapterId,
         N: Sequence[int],
-        signs_to_exclude: Optional[Sequence[str]] = None,
     ):
         return [
             {"$match": chapter_id_query(chapter_id)},
@@ -38,7 +37,7 @@ class ChapterNGramRepository:
                     }
                 }
             },
-            *aggregate_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD, signs_to_exclude),
+            *aggregate_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD),
             {"$unwind": f"${NGRAM_FIELD}"},
             {
                 "$group": {
@@ -56,9 +55,8 @@ class ChapterNGramRepository:
         self,
         chapter_id: ChapterId,
         N: Sequence[int],
-        signs_to_exclude: Optional[Sequence[str]] = None,
     ) -> None:
-        aggregation = self.aggregate_chapter_ngrams(chapter_id, N, signs_to_exclude)
+        aggregation = self.aggregate_chapter_ngrams(chapter_id, N)
         if data := next(
             self._chapters.aggregate(aggregation, allowDiskUse=True),
             None,
