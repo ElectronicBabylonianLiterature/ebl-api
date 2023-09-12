@@ -26,13 +26,13 @@ class ChapterNGramRepository:
     ):
         return [
             {"$match": chapter_id_query(chapter_id)},
-            {"$project": {"signs": 1}},
+            {"$project": {"signs": 1, "textId": 1, "stage": 1, "name": 1}},
             {"$unwind": "$signs"},
             {
-                "$project": {
+                "$addFields": {
                     NGRAM_FIELD: {
                         "$split": [
-                            replace_all("#", " # "),
+                            replace_all("\n", " # "),
                             " ",
                         ]
                     }
@@ -43,7 +43,10 @@ class ChapterNGramRepository:
             {
                 "$group": {
                     "_id": None,
-                    f"{NGRAM_FIELD}s": {"$addToSet": f"${NGRAM_FIELD}"},
+                    NGRAM_FIELD: {"$addToSet": f"${NGRAM_FIELD}"},
+                    "textId": {"$first": "$textId"},
+                    "name": {"$first": "$name"},
+                    "stage": {"$first": "$stage"},
                 }
             },
             {"$project": {"_id": False}},
@@ -62,7 +65,8 @@ class ChapterNGramRepository:
         ):
             try:
                 self._ngrams.update_one(
-                    {"_id": data["_id"]}, {"$set": {"ngrams": data["ngrams"]}}
+                    chapter_id_query(chapter_id),
+                    {"$set": {NGRAM_FIELD: data[NGRAM_FIELD]}},
                 )
             except NotFoundError:
                 self._ngrams.insert_one(data)
