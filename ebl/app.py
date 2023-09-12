@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
 import althaia
+from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramRepository
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
@@ -89,6 +90,7 @@ def create_context():
         folio_repository=GridFsFileRepository(database, "folios"),
         fragment_repository=MongoFragmentRepository(database),
         fragment_ngram_repository=FragmentNGramRepository(database),
+        chapter_ngram_repository=ChapterNGramRepository(database),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database),

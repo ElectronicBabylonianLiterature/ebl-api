@@ -7,11 +7,13 @@ from ebl.cache.application.custom_cache import ChapterCache
 from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
+from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramRepository
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema, ApiLineSchema
 from ebl.corpus.web.display_schemas import LineDetailsDisplay, LineDetailsDisplaySchema
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.errors import NotFoundError
 from ebl.marshmallowschema import validate
+from ebl.users.web.update_cache import create_chapter_ngram_cache
 from ebl.users.web.require_scope import require_scope
 
 
@@ -39,12 +41,19 @@ class LinesImportSchema(Schema):
 
 
 class LinesResource:
-    def __init__(self, corpus: Corpus, cache: ChapterCache):
+    def __init__(
+        self,
+        corpus: Corpus,
+        cache: ChapterCache,
+        ngram_repository: ChapterNGramRepository,
+    ):
         self._corpus = corpus
         self._cache = cache
+        self.ngram_repository = ngram_repository
 
     @falcon.before(require_scope, "write:texts")
     @validate(LinesUpdateSchema())
+    @falcon.after(create_chapter_ngram_cache)
     def on_post(
         self,
         req: falcon.Request,
@@ -70,6 +79,7 @@ class LinesImportResource:
 
     @falcon.before(require_scope, "write:texts")
     @validate(LinesImportSchema())
+    @falcon.after(create_chapter_ngram_cache)
     def on_post(
         self,
         req: falcon.Request,

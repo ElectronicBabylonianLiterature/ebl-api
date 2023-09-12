@@ -48,8 +48,12 @@ def create_corpus_routes(api: falcon.App, context: Context):
     chapters_by_lemma = ChaptersByLemmaResource(corpus)
     alignment = AlignmentResource(corpus, context.custom_cache)
     manuscript_lemmatization = LemmatizationResource(corpus, context.custom_cache)
-    manuscript = ManuscriptsResource(corpus, context.custom_cache)
-    lines = LinesResource(corpus, context.custom_cache)
+    manuscript = ManuscriptsResource(
+        corpus, context.custom_cache, context.chapter_ngram_repository
+    )
+    lines = LinesResource(
+        corpus, context.custom_cache, context.chapter_ngram_repository
+    )
     lines_import = LinesImportResource(corpus, context.custom_cache)
     colophons = ColophonsResource(corpus)
     unplaced_lines = UnplacedLinesResource(corpus)

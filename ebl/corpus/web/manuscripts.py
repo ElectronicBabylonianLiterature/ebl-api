@@ -3,6 +3,7 @@ from marshmallow import Schema, fields
 
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramRepository
 from ebl.corpus.web.chapter_schemas import (
     ApiChapterSchema,
     ApiManuscriptSchema,
@@ -10,6 +11,7 @@ from ebl.corpus.web.chapter_schemas import (
 )
 from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.marshmallowschema import validate
+from ebl.users.web.update_cache import create_chapter_ngram_cache
 from ebl.users.web.require_scope import require_scope
 
 
@@ -21,9 +23,15 @@ class ManuscriptDtoSchema(Schema):
 
 
 class ManuscriptsResource:
-    def __init__(self, corpus: Corpus, cache: ChapterCache):
+    def __init__(
+        self,
+        corpus: Corpus,
+        cache: ChapterCache,
+        ngram_repository: ChapterNGramRepository,
+    ):
         self._corpus = corpus
         self._cache = cache
+        self.ngram_repository = ngram_repository
 
     def on_get(
         self,
@@ -41,6 +49,7 @@ class ManuscriptsResource:
 
     @falcon.before(require_scope, "write:texts")
     @validate(ManuscriptDtoSchema())
+    @falcon.after(create_chapter_ngram_cache)
     def on_post(
         self,
         req: falcon.Request,
