@@ -46,11 +46,10 @@ class FragmentNGramRepository:
         signs_to_exclude: Optional[Sequence[str]] = None,
     ) -> None:
         aggregation = self.aggregate_fragment_ngrams(number, N, signs_to_exclude)
-        data = next(
+        if data := next(
             self._fragments.aggregate(aggregation, allowDiskUse=True),
             None,
-        )
-        if data:
+        ):
             try:
                 self._ngrams.update_one(
                     {"_id": data["_id"]}, {"$set": {"ngrams": data["ngrams"]}}

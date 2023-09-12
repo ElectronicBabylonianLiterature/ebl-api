@@ -56,11 +56,10 @@ class ChapterNGramRepository:
         signs_to_exclude: Optional[Sequence[str]] = None,
     ) -> None:
         aggregation = self.aggregate_chapter_ngrams(chapter_id, N, signs_to_exclude)
-        data = next(
+        if data := next(
             self._chapters.aggregate(aggregation, allowDiskUse=True),
             None,
-        )
-        if data:
+        ):
             try:
                 self._ngrams.update_one(
                     {"_id": data["_id"]}, {"$set": {"ngrams": data["ngrams"]}}
