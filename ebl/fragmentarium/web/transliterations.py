@@ -9,7 +9,7 @@ from ebl.fragmentarium.infrastructure.fragment_ngram_repository import (
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import TransliterationError
-from ebl.users.web.create_ngram_cache import create_fragment_ngram_cache
+from ebl.users.web.update_cache import create_fragment_ngram_cache
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
 from ebl.fragmentarium.domain.fragment import NotLowestJoinError
