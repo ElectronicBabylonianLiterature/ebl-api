@@ -31,8 +31,6 @@ class TransliterationResource:
     ):
         self._updater = updater
         self._transliteration_factory = transliteration_factory
-
-        # Consumed by falcon.after
         self.ngram_repository = ngram_repository
 
     @falcon.before(require_scope, "transliterate:fragments")
