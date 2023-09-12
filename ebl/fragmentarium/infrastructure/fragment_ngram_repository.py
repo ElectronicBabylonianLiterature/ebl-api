@@ -28,7 +28,7 @@ class FragmentNGramRepository:
                 "$project": {
                     f"{NGRAM_FIELD}s": {
                         "$split": [
-                            replace_all("#", " # "),
+                            replace_all("\n", " # "),
                             " ",
                         ]
                     }
