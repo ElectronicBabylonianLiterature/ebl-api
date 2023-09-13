@@ -52,3 +52,8 @@ class FragmentNGramRepository:
                 )
             except NotFoundError:
                 self._ngrams.insert_one(data)
+
+    def get_ngrams(self, id_: str):
+        ngrams = self._ngrams.find_one_by_id(id_)[f"{NGRAM_FIELD}s"]
+
+        return set(map(tuple, ngrams))
