@@ -56,4 +56,4 @@ class FragmentNGramRepository:
     def get_ngrams(self, id_: str):
         ngrams = self._ngrams.find_one_by_id(id_)[f"{NGRAM_FIELD}s"]
 
-        return set(map(tuple, ngrams))
+        return {tuple(ngram) for ngram in ngrams}
