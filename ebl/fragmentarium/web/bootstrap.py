@@ -74,7 +74,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_date = FragmentDateResource(updater)
     fragment_dates_in_text = FragmentDatesInTextResource(updater)
 
-    ngram_aligner = NgramAlignResource(context.fragment_repository)
+    ngrams = NgramAlignResource(context.fragment_ngram_repository)
 
     fragment_matcher = FragmentMatcherResource(
         FragmentMatcher(context.fragment_repository)
@@ -113,7 +113,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     routes = [
         ("/fragments", fragment_search),
-        ("/fragments/{number}/align", ngram_aligner),
+        ("/fragments/{number}/ngrams", ngrams),
         ("/fragments/{number}/match", fragment_matcher),
         ("/fragments/{number}/genres", fragment_genre),
         ("/fragments/{number}/script", fragment_script),

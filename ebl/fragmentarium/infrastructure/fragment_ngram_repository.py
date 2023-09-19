@@ -1,5 +1,7 @@
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import (
     FRAGMENT_NGRAM_COLLECTION,
     FRAGMENTS_COLLECTION,
@@ -55,5 +57,14 @@ class FragmentNGramRepository:
 
     def get_ngrams(self, id_: str) -> Set[Tuple[str]]:
         ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
+
+        return {tuple(ngram) for ngram in ngrams}
+
+    def get_or_set_ngrams(self, id_: str, N: Sequence[int]) -> Set[Tuple[str]]:
+        try:
+            ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
+        except NotFoundError:
+            self.update_ngrams(MuseumNumberSchema().dump(MuseumNumber.of(id_)), N)
+            ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
 
         return {tuple(ngram) for ngram in ngrams}
