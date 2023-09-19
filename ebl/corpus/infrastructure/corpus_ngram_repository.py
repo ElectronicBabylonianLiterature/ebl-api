@@ -6,7 +6,7 @@ from ebl.transliteration.infrastructure.collections import (
     CHAPTER_NGRAM_COLLECTION,
     CHAPTERS_COLLECTION,
 )
-from typing import Sequence
+from typing import Sequence, Set, Tuple
 
 from ebl.common.query.util import aggregate_all_ngrams, replace_all
 
@@ -68,3 +68,8 @@ class ChapterNGramRepository:
                 )
             except NotFoundError:
                 self._ngrams.insert_one(data)
+
+    def get_ngrams(self, chapter_id: ChapterId) -> Set[Tuple[str]]:
+        ngrams = self._ngrams.find_one(chapter_id_query(chapter_id))[NGRAM_FIELD]
+
+        return {tuple(ngram) for ngram in ngrams}
