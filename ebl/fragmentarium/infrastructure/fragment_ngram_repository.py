@@ -4,7 +4,7 @@ from ebl.transliteration.infrastructure.collections import (
     FRAGMENT_NGRAM_COLLECTION,
     FRAGMENTS_COLLECTION,
 )
-from typing import Sequence
+from typing import Sequence, Set, Tuple
 
 from ebl.common.query.util import aggregate_all_ngrams, replace_all
 
@@ -25,7 +25,7 @@ class FragmentNGramRepository:
             {"$match": {f"museumNumber.{key}": value for key, value in number.items()}},
             {
                 "$project": {
-                    f"{NGRAM_FIELD}s": {
+                    NGRAM_FIELD: {
                         "$split": [
                             replace_all("\n", " # "),
                             " ",
@@ -33,7 +33,7 @@ class FragmentNGramRepository:
                     }
                 }
             },
-            *aggregate_all_ngrams(f"${NGRAM_FIELD}s", N, f"{NGRAM_FIELD}s"),
+            *aggregate_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD),
         ]
 
     def update_ngrams(
@@ -48,12 +48,12 @@ class FragmentNGramRepository:
         ):
             try:
                 self._ngrams.update_one(
-                    {"_id": data["_id"]}, {"$set": {"ngrams": data["ngrams"]}}
+                    {"_id": data["_id"]}, {"$set": {NGRAM_FIELD: data[NGRAM_FIELD]}}
                 )
             except NotFoundError:
                 self._ngrams.insert_one(data)
 
-    def get_ngrams(self, id_: str):
-        ngrams = self._ngrams.find_one_by_id(id_)[f"{NGRAM_FIELD}s"]
+    def get_ngrams(self, id_: str) -> Set[Tuple[str]]:
+        ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
 
         return {tuple(ngram) for ngram in ngrams}
