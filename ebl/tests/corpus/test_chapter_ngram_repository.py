@@ -14,6 +14,13 @@ def chapter_ngrams_from_signs(
     )
 
 
+def test_create_chapter_sets_ngrams(text_repository, chapter_ngram_repository):
+    chapter = ChapterFactory.build()
+    text_repository.create_chapter(chapter)
+
+    assert chapter_ngram_repository._ngrams.exists(chapter_id_query(chapter.id_))
+
+
 @pytest.mark.parametrize(
     "N",
     N_VALUES,
@@ -24,15 +31,12 @@ def chapter_ngrams_from_signs(
 )
 def test_update_chapter_ngrams(text_repository, chapter_ngram_repository, N, N_NEW):
     chapter = ChapterFactory.build()
-    text_repository.create_chapter(chapter)
+    text_repository.create_chapter(chapter, N)
 
-    assert not chapter_ngram_repository._ngrams.exists(chapter_id_query(chapter.id_))
-
-    chapter_ngram_repository.update_ngrams(chapter.id_, N)
     ngrams = chapter_ngrams_from_signs(chapter.signs, N)
 
     assert chapter_ngram_repository.get_ngrams(chapter.id_) == ngrams
 
-    chapter_ngram_repository.update_ngrams(chapter.id_, N_NEW)
+    chapter_ngram_repository.set_ngrams(chapter.id_, N_NEW)
     ngrams = chapter_ngrams_from_signs(chapter.signs, N_NEW)
     assert chapter_ngram_repository.get_ngrams(chapter.id_) == ngrams
