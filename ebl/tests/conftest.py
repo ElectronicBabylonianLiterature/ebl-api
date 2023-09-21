@@ -27,6 +27,7 @@ from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
 from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramRepository
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
@@ -43,6 +44,9 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
+)
+from ebl.fragmentarium.infrastructure.fragment_ngram_repository import (
+    FragmentNGramRepository,
 )
 from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
@@ -197,6 +201,16 @@ def corpus(
 @pytest.fixture
 def fragment_repository(database):
     return MongoFragmentRepository(database)
+
+
+@pytest.fixture
+def fragment_ngram_repository(database):
+    return FragmentNGramRepository(database)
+
+
+@pytest.fixture
+def chapter_ngram_repository(database):
+    return ChapterNGramRepository(database)
 
 
 @pytest.fixture
@@ -401,6 +415,8 @@ def context(
     photo_repository,
     folio_repository,
     fragment_repository,
+    fragment_ngram_repository,
+    chapter_ngram_repository,
     text_repository,
     changelog,
     bibliography_repository,
@@ -420,6 +436,8 @@ def context(
         photo_repository=photo_repository,
         folio_repository=folio_repository,
         fragment_repository=fragment_repository,
+        fragment_ngram_repository=fragment_ngram_repository,
+        chapter_ngram_repository=chapter_ngram_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,
         text_repository=text_repository,

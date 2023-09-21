@@ -19,7 +19,9 @@ class TextRepository(ABC):
         ...
 
     @abstractmethod
-    def create_chapter(self, chapter: Chapter) -> None:
+    def create_chapter(
+        self, chapter: Chapter, ngram_n: Optional[Sequence[int]] = None
+    ) -> None:
         ...
 
     @abstractmethod

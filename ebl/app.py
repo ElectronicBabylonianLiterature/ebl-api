@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations.falcon import FalconIntegration
 import althaia
+from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramRepository
 import ebl.error_handler
 from ebl.bibliography.infrastructure.bibliography import MongoBibliographyRepository
 from ebl.bibliography.web.bootstrap import create_bibliography_routes
@@ -25,6 +26,9 @@ from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
+from ebl.fragmentarium.infrastructure.fragment_ngram_repository import (
+    FragmentNGramRepository,
+)
 from ebl.markup.web.bootstrap import create_markup_route
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
@@ -85,6 +89,8 @@ def create_context():
         photo_repository=GridFsFileRepository(database, "photos"),
         folio_repository=GridFsFileRepository(database, "folios"),
         fragment_repository=MongoFragmentRepository(database),
+        fragment_ngram_repository=FragmentNGramRepository(database),
+        chapter_ngram_repository=ChapterNGramRepository(database),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),
         text_repository=MongoTextRepository(database),

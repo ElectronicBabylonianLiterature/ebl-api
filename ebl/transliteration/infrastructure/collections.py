@@ -1,3 +1,5 @@
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
 FRAGMENTS_COLLECTION = "fragments"
+FRAGMENT_NGRAM_COLLECTION = "fragment_ngrams"
+CHAPTER_NGRAM_COLLECTION = "chapter_ngrams"
