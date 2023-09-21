@@ -6,6 +6,7 @@ from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
+from ebl.common.infrastructure.ngrams import DEFAULT_N
 from ebl.common.query.query_result import QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import NotFoundError
@@ -19,6 +20,9 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
+from ebl.fragmentarium.infrastructure.fragment_ngram_repository import (
+    FragmentNGramRepository,
+)
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
 from ebl.fragmentarium.domain.date import Date, DateSchema
 
@@ -51,6 +55,7 @@ class MongoFragmentRepository(FragmentRepository):
     def __init__(self, database):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self._ngram_repository = FragmentNGramRepository(database)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -102,14 +107,16 @@ class MongoFragmentRepository(FragmentRepository):
         except StopIteration:
             return 0
 
-    def create(self, fragment, sort_key=None):
-        return self._fragments.insert_one(
+    def create(self, fragment, sort_key=None, ngram_n=None):
+        id_ = self._fragments.insert_one(
             {
                 "_id": str(fragment.number),
                 **FragmentSchema(exclude=["joins"]).dump(fragment),
                 **({} if sort_key is None else {"_sortKey": sort_key}),
             }
         )
+        self._ngram_repository.set_ngrams(MuseumNumber.of(id_), ngram_n or DEFAULT_N)
+        return id_
 
     def create_many(self, fragments: Sequence[Fragment]) -> Sequence[str]:
         schema = FragmentSchema(exclude=["joins"])
