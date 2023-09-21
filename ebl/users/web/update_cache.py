@@ -5,12 +5,15 @@ from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramReposi
 from ebl.fragmentarium.infrastructure.fragment_ngram_repository import (
     FragmentNGramRepository,
 )
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 
 
 def create_fragment_ngram_cache(_req, resp, resource):
     if museum_number_dto := resp.media.get("museumNumber"):
         ngram_repository: FragmentNGramRepository = resource.ngram_repository
-        ngram_repository.set_ngrams(museum_number_dto, DEFAULT_N)
+        ngram_repository.set_ngrams(
+            MuseumNumberSchema().load(museum_number_dto), DEFAULT_N
+        )
 
 
 def create_chapter_ngram_cache(_req, resp, resource):

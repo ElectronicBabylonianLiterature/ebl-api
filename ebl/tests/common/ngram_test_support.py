@@ -1,11 +1,13 @@
 from typing import Sequence, Set, Tuple, TypeVar
 
+from ebl.common.infrastructure.ngrams import DEFAULT_N
+
 T = TypeVar("T")
 
 N_VALUES = [
+    DEFAULT_N,
     [1],
     [1, 2],
-    [1, 2, 3],
     [5],
 ]
 

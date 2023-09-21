@@ -1,6 +1,5 @@
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
-from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import (
     FRAGMENT_NGRAM_COLLECTION,
@@ -9,6 +8,7 @@ from ebl.transliteration.infrastructure.collections import (
 from typing import Sequence, Set, Tuple
 
 from ebl.common.query.util import aggregate_all_ngrams, replace_all
+from ebl.transliteration.infrastructure.queries import museum_number_is
 
 NGRAM_FIELD = "ngram"
 
@@ -20,11 +20,11 @@ class FragmentNGramRepository:
 
     def aggregate_fragment_ngrams(
         self,
-        number: dict,
+        number: MuseumNumber,
         N: Sequence[int],
     ):
         return [
-            {"$match": {f"museumNumber.{key}": value for key, value in number.items()}},
+            {"$match": museum_number_is(number)},
             {
                 "$project": {
                     NGRAM_FIELD: {
@@ -38,11 +38,11 @@ class FragmentNGramRepository:
             *aggregate_all_ngrams(f"${NGRAM_FIELD}", N, NGRAM_FIELD),
         ]
 
-    def update_ngrams(
+    def set_ngrams(
         self,
-        number: dict,
+        number: MuseumNumber,
         N: Sequence[int],
-    ) -> None:
+    ) -> Set[Tuple[str]]:
         aggregation = self.aggregate_fragment_ngrams(number, N)
         if data := next(
             self._fragments.aggregate(aggregation, allowDiskUse=True),
@@ -55,16 +55,21 @@ class FragmentNGramRepository:
             except NotFoundError:
                 self._ngrams.insert_one(data)
 
-    def get_ngrams(self, id_: str) -> Set[Tuple[str]]:
-        ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
+            return {tuple(ngram) for ngram in data[NGRAM_FIELD]}
+
+        return set()
+
+    def get_ngrams(self, number: MuseumNumber) -> Set[Tuple[str]]:
+        ngrams = self._ngrams.find_one_by_id(str(number))[NGRAM_FIELD]
 
         return {tuple(ngram) for ngram in ngrams}
 
-    def get_or_set_ngrams(self, id_: str, N: Sequence[int]) -> Set[Tuple[str]]:
+    def get_or_set_ngrams(
+        self, number: MuseumNumber, N: Sequence[int]
+    ) -> Set[Tuple[str]]:
         try:
-            ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
+            return self.get_ngrams(number)
         except NotFoundError:
-            self.update_ngrams(MuseumNumberSchema().dump(MuseumNumber.of(id_)), N)
-            ngrams = self._ngrams.find_one_by_id(id_)[NGRAM_FIELD]
+            ngrams = self.set_ngrams(number, N)
 
-        return {tuple(ngram) for ngram in ngrams}
+        return ngrams
