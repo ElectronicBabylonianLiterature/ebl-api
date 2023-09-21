@@ -111,10 +111,10 @@ class MongoTextRepository(TextRepository):
         self._texts.insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
     def create_chapter(
-        self, chapter: Chapter, N: Optional[Sequence[int]] = None
+        self, chapter: Chapter, ngram_n: Optional[Sequence[int]] = None
     ) -> None:
         self._chapters.insert_one(ChapterSchema().dump(chapter))
-        self._ngram_repository.set_ngrams(chapter.id_, N or DEFAULT_N)
+        self._ngram_repository.set_ngrams(chapter.id_, ngram_n or DEFAULT_N)
 
     def find(self, id_: TextId) -> Text:
         try:
