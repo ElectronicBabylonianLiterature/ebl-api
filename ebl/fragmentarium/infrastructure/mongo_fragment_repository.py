@@ -6,8 +6,10 @@ from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
+from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
 from ebl.common.query.query_result import QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
+from ebl.common.query.util import add_ngram_field, replace_all
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -103,13 +105,16 @@ class MongoFragmentRepository(FragmentRepository):
             return 0
 
     def create(self, fragment, sort_key=None):
-        return self._fragments.insert_one(
+        id_ = self._fragments.insert_one(
             {
                 "_id": str(fragment.number),
                 **FragmentSchema(exclude=["joins"]).dump(fragment),
                 **({} if sort_key is None else {"_sortKey": sort_key}),
             }
         )
+        self.update_ngrams(fragment.number)
+
+        return id_
 
     def create_many(self, fragments: Sequence[Fragment]) -> Sequence[str]:
         schema = FragmentSchema(exclude=["joins"])
@@ -295,6 +300,9 @@ class MongoFragmentRepository(FragmentRepository):
             {"$set": query if query else {field: None}},
         )
 
+        if field == "transliteration":
+            self.update_ngrams(fragment.number)
+
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
         sort_ascending = {"$sort": {"key": 1}}
         sort_descending = {"$sort": {"key": -1}}
@@ -341,15 +349,6 @@ class MongoFragmentRepository(FragmentRepository):
             raise NotFoundError("Could not retrieve any fragments")
         else:
             return result
-
-    def query_museum_numbers(self, prefix: str, number_regex: str) -> Sequence[dict]:
-        return self._fragments.find_many(
-            {
-                "museumNumber.prefix": prefix,
-                "museumNumber.number": {"$regex": number_regex},
-            },
-            projection={"museumNumber": True},
-        )
 
     def query_by_sort_key(self, key: int) -> MuseumNumber:
         if key < 0:
@@ -422,4 +421,21 @@ class MongoFragmentRepository(FragmentRepository):
     ) -> Sequence[str]:
         return list(
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
+        )
+
+    def update_ngrams(self, number: MuseumNumber):
+        tmp_signs = "tmp_signs"
+        pipeline = [
+            {
+                "$addFields": {
+                    tmp_signs: {"$split": [replace_all("$signs", "\n", " # "), " "]}
+                }
+            },
+            add_ngram_field(f"${tmp_signs}", NGRAM_N_VALUES, "ngrams"),
+            {"$unset": tmp_signs},
+        ]
+
+        self._fragments.update_one(
+            museum_number_is(number),
+            pipeline,
         )
