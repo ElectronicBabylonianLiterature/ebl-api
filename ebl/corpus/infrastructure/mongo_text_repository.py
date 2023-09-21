@@ -6,6 +6,7 @@ from pymongo.collation import Collation
 
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.infrastructure.ngrams import DEFAULT_N
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.corpus.application.text_repository import TextRepository
@@ -28,6 +29,7 @@ from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.infrastructure.chapter_query_filters import (
     filter_query_by_transliteration,
 )
+from ebl.corpus.infrastructure.corpus_ngram_repository import ChapterNGramRepository
 from ebl.corpus.infrastructure.corpus_search_aggregations import CorpusPatternMatcher
 from ebl.corpus.infrastructure.manuscript_lemma_filter import (
     filter_manuscripts_by_lemma,
@@ -68,6 +70,7 @@ class MongoTextRepository(TextRepository):
     def __init__(self, database: Database):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
+        self._ngram_repository = ChapterNGramRepository(database)
 
     def create_indexes(self) -> None:
         self._texts.create_index(
@@ -107,8 +110,11 @@ class MongoTextRepository(TextRepository):
     def create(self, text: Text) -> None:
         self._texts.insert_one(TextSchema(exclude=["chapters"]).dump(text))
 
-    def create_chapter(self, chapter: Chapter) -> None:
+    def create_chapter(
+        self, chapter: Chapter, N: Optional[Sequence[int]] = None
+    ) -> None:
         self._chapters.insert_one(ChapterSchema().dump(chapter))
+        self._ngram_repository.set_ngrams(chapter.id_, N or DEFAULT_N)
 
     def find(self, id_: TextId) -> Text:
         try:
