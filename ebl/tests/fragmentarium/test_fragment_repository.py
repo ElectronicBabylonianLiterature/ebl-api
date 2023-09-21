@@ -4,6 +4,7 @@ import pytest
 import random
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.scopes import Scope
+from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
 from ebl.common.query.query_result import QueryItem, QueryResult
 
 from ebl.dictionary.domain.word import WordId
@@ -26,6 +27,7 @@ from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
+from ebl.tests.common.ngram_test_support import ngrams_from_signs
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
     FragmentFactory,
@@ -50,6 +52,7 @@ from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.tests.fragmentarium.test_fragments_search_route import query_item_of
 from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.infrastructure.queries import museum_number_is
 
 
 COLLECTION = "fragments"
@@ -110,7 +113,7 @@ def test_create(database, fragment_repository):
 
     assert fragment_id == str(fragment.number)
     assert database[COLLECTION].find_one(
-        {"_id": fragment_id}, projection={"_id": False}
+        {"_id": fragment_id}, projection={"_id": False, "ngrams": False}
     ) == FragmentSchema(exclude=["joins"]).dump(fragment)
 
 
@@ -1003,3 +1006,31 @@ def test_query_genres(fragment_repository, query, expected):
     )
 
     assert fragment_repository.query({"genre": query}) == expected_result
+
+
+def test_create_fragment_extracts_ngrams(fragment_repository):
+    fragment = TransliteratedFragmentFactory.build()
+
+    fragment_repository.create(fragment)
+    data = fragment_repository._fragments.find_one(museum_number_is(fragment.number))
+
+    assert set(map(tuple, data["ngrams"])) == ngrams_from_signs(
+        fragment.signs, NGRAM_N_VALUES
+    )
+
+
+def test_update_transliteration_updates_ngrams(fragment_repository, user):
+    fragment = TransliteratedFragmentFactory.build(signs="")
+    fragment_repository.create(fragment)
+
+    updated_fragment = fragment.update_transliteration(
+        TransliterationUpdate(parse_atf_lark("1. X MU TA MA UD MI KU")), user
+    )
+
+    fragment_repository.update_field("transliteration", updated_fragment)
+
+    data = fragment_repository._fragments.find_one(museum_number_is(fragment.number))
+
+    assert set(map(tuple, data["ngrams"])) == ngrams_from_signs(
+        updated_fragment.signs, NGRAM_N_VALUES
+    )
