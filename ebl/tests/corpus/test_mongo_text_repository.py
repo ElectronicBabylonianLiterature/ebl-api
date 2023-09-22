@@ -1,6 +1,7 @@
 from typing import Sequence
 import attr
 import pytest
+from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
 
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
@@ -13,6 +14,7 @@ from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.tests.common.ngram_test_support import chapter_ngrams_from_signs
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -167,7 +169,7 @@ def test_creating_chapter(database, text_repository) -> None:
             "stage": CHAPTER.stage.value,
             "name": CHAPTER.name,
         },
-        projection={"_id": False},
+        projection={"_id": False, "ngrams": False},
     )
     assert inserted_chapter == ChapterSchema().dump(CHAPTER)
 
@@ -466,3 +468,51 @@ def test_query_corpus_by_manuscript(database, text_repository) -> None:
     assert text_repository.query_corpus_by_manuscript(
         [CHAPTER.manuscripts[0].museum_number]
     ) == [expected_manuscript_attestation]
+
+
+def test_create_chapter_stores_ngrams(database, text_repository):
+    text_repository.create_chapter(CHAPTER)
+
+    data = database[CHAPTERS_COLLECTION].find_one(
+        {
+            "textId.category": CHAPTER.text_id.category,
+            "textId.index": CHAPTER.text_id.index,
+            "stage": CHAPTER.stage.value,
+            "name": CHAPTER.name,
+        },
+        projection={"_id": False, "ngrams": True},
+    )
+
+    assert set(map(tuple, data["ngrams"])) == chapter_ngrams_from_signs(
+        CHAPTER.signs, NGRAM_N_VALUES
+    )
+
+
+def test_update_chapter_stores_ngrams(database, text_repository):
+    text_repository.create_chapter(CHAPTER)
+
+    updated_chapter = attr.evolve(
+        CHAPTER,
+        signs=(
+            "X ABZ411 ABZ11 ABZ41",
+            "X X X TI BA",
+        ),
+    )
+
+    when_chapter_in_collection(database)
+
+    text_repository.update(CHAPTER.id_, updated_chapter)
+
+    data = database[CHAPTERS_COLLECTION].find_one(
+        {
+            "textId.category": CHAPTER.text_id.category,
+            "textId.index": CHAPTER.text_id.index,
+            "stage": CHAPTER.stage.value,
+            "name": CHAPTER.name,
+        },
+        projection={"_id": False, "ngrams": True},
+    )
+
+    assert set(map(tuple, data["ngrams"])) == chapter_ngrams_from_signs(
+        updated_chapter.signs, NGRAM_N_VALUES
+    )

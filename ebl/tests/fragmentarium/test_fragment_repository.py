@@ -1008,7 +1008,7 @@ def test_query_genres(fragment_repository, query, expected):
     assert fragment_repository.query({"genre": query}) == expected_result
 
 
-def test_create_fragment_extracts_ngrams(fragment_repository):
+def test_create_fragment_stores_ngrams(fragment_repository):
     fragment = TransliteratedFragmentFactory.build()
 
     fragment_repository.create(fragment)
