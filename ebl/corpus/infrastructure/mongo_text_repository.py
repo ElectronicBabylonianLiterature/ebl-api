@@ -6,8 +6,15 @@ from pymongo.collation import Collation
 
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
+from ebl.common.query.util import (
+    drop_duplicates,
+    extract_ngrams,
+    flatten_field,
+    replace_all,
+)
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
@@ -109,6 +116,7 @@ class MongoTextRepository(TextRepository):
 
     def create_chapter(self, chapter: Chapter) -> None:
         self._chapters.insert_one(ChapterSchema().dump(chapter))
+        self._update_ngrams(chapter.id_)
 
     def find(self, id_: TextId) -> Text:
         try:
@@ -243,6 +251,7 @@ class MongoTextRepository(TextRepository):
                 ).dump(chapter)
             },
         )
+        self._update_ngrams(id_)
 
     def query_by_transliteration(
         self, query: TransliterationQuery, pagination_index: int
@@ -449,3 +458,22 @@ class MongoTextRepository(TextRepository):
             ]
         )
         return ManuscriptAttestationSchema().load(cursor, many=True)
+
+    def _update_ngrams(self, id_: ChapterId) -> None:
+        map_extract_ngrams = {
+            "$map": {
+                "input": "$signs",
+                "in": extract_ngrams(
+                    {"$split": [replace_all("$$this", "\n", " # "), " "]},
+                    NGRAM_N_VALUES,
+                ),
+            }
+        }
+        pipeline = [
+            {"$set": {"ngrams": drop_duplicates(flatten_field(map_extract_ngrams))}},
+        ]
+
+        self._chapters.update_one(
+            chapter_id_query(id_),
+            pipeline,
+        )
