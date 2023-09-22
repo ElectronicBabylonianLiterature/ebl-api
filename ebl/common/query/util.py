@@ -41,10 +41,9 @@ def filter_array(input_, as_, cond) -> Dict:
     return {"$filter": {"input": input_, "as": as_, "cond": cond}}
 
 
-def add_ngram_field(
+def extract_ngrams(
     input_: Union[str, Dict],
     N: Sequence[int],
-    output_: str = "ngrams",
 ):
     signs_to_exclude = ["X", ""]
 
@@ -61,17 +60,13 @@ def add_ngram_field(
             0,
         ]
     }
-    return {
-        "$addFields": {
-            output_: drop_duplicates(
-                filter_array(
-                    {"$concatArrays": [ngrams(input_, n) for n in N if n > 0]},
-                    "this",
-                    exclude_empty,
-                )
-            )
-        }
-    }
+    return drop_duplicates(
+        filter_array(
+            {"$concatArrays": [ngrams(input_, n) for n in N if n > 0]},
+            "this",
+            exclude_empty,
+        )
+    )
 
 
 def replace_all(input_: Union[str, Dict], old: str, new: str):
