@@ -9,7 +9,7 @@ from ebl.common.domain.scopes import Scope
 from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
 from ebl.common.query.query_result import QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
-from ebl.common.query.util import add_ngram_field, replace_all
+from ebl.common.query.util import extract_ngrams, replace_all
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -424,15 +424,15 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def update_ngrams(self, number: MuseumNumber):
-        tmp_signs = "tmp_signs"
         pipeline = [
             {
-                "$addFields": {
-                    tmp_signs: {"$split": [replace_all("$signs", "\n", " # "), " "]}
+                "$set": {
+                    "ngrams": extract_ngrams(
+                        {"$split": [replace_all("$signs", "\n", " # "), " "]},
+                        NGRAM_N_VALUES,
+                    )
                 }
             },
-            add_ngram_field(f"${tmp_signs}", NGRAM_N_VALUES, "ngrams"),
-            {"$unset": tmp_signs},
         ]
 
         self._fragments.update_one(
