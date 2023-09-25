@@ -437,3 +437,8 @@ class MongoFragmentRepository(FragmentRepository):
                 },
             ],
         )
+
+    def get_ngrams(self, number: MuseumNumber) -> Sequence[Sequence[str]]:
+        return self._fragments.find_one(
+            museum_number_is(number), projection={"ngrams": True}
+        )["ngrams"]

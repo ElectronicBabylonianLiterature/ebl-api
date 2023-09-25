@@ -106,3 +106,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def list_all_fragments(self) -> Sequence[str]:
         ...
+
+    @abstractmethod
+    def get_ngrams(self, number: MuseumNumber) -> Sequence[Sequence[str]]:
+        ...
