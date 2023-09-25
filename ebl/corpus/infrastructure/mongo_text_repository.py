@@ -44,7 +44,7 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_chapters,
     join_text,
-    join_text_title,
+    join_text_names,
 )
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
@@ -261,35 +261,8 @@ class MongoTextRepository(TextRepository):
         cursor = self._chapters.aggregate(
             [
                 {"$match": mongo_query},
-                {
-                    "$lookup": {
-                        "from": "texts",
-                        "let": {
-                            "chapterGenre": "$textId.genre",
-                            "chapterCategory": "$textId.category",
-                            "chapterIndex": "$textId.index",
-                        },
-                        "pipeline": [
-                            {
-                                "$match": {
-                                    "$expr": {
-                                        "$and": [
-                                            {"$eq": ["$genre", "$$chapterGenre"]},
-                                            {"$eq": ["$category", "$$chapterCategory"]},
-                                            {"$eq": ["$index", "$$chapterIndex"]},
-                                        ]
-                                    }
-                                }
-                            },
-                            {"$project": {"name": 1, "_id": 0}},
-                        ],
-                        "as": "textNames",
-                    }
-                },
+                *join_text_names(),
                 {"$project": {"_id": False}},
-                {"$addFields": {"textName": {"$first": "$textNames"}}},
-                {"$addFields": {"textName": "$textName.name"}},
-                {"$project": {"textNames": False}},
                 {"$skip": LIMIT * pagination_index},
                 {"$limit": LIMIT},
             ],
@@ -342,12 +315,12 @@ class MongoTextRepository(TextRepository):
                 },
                 {"$unwind": "$lines"},
                 {"$match": lemma_query},
-                join_text_title(),
+                *join_text_names(),
                 filter_manuscripts_by_lemma(lemma),
                 {
                     "$project": {
                         "textId": True,
-                        "textName": {"$first": "$textName.name"},
+                        "textName": True,
                         "chapterName": "$name",
                         "stage": True,
                         "line": "$lines",
@@ -482,8 +455,14 @@ class MongoTextRepository(TextRepository):
         self, ngrams: Sequence[Sequence[str]], limit: Optional[int] = None
     ) -> Sequence[dict]:
         ngram_list = list(ngrams)
+        test_chapter_category = 99
         pipeline: List[dict] = [
-            {"$match": {"textId.category": {"$ne": 99}}},
+            {
+                "$match": {
+                    "textId.category": {"$ne": test_chapter_category},
+                    "ngrams": {"$exists": True, "$not": {"$size": 0}},
+                }
+            },
             {
                 "$project": {
                     "_id": 0,
@@ -516,6 +495,7 @@ class MongoTextRepository(TextRepository):
                     },
                 }
             },
+            *join_text_names(),
             {"$sort": {"overlap": -1}},
         ]
 
