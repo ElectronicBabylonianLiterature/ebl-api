@@ -10,6 +10,7 @@ from ebl.fragmentarium.web.annotations import AnnotationResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
+from ebl.fragmentarium.web.fragment_ngram_matcher import NgramMatchResource
 from ebl.fragmentarium.web.fragment_script import FragmentScriptResource
 from ebl.fragmentarium.web.fragment_date import (
     FragmentDateResource,
@@ -85,6 +86,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_query = FragmentsQueryResource(
         context.fragment_repository, context.get_transliteration_query_factory()
     )
+    ngram_matcher = NgramMatchResource(context.fragment_repository)
     genres = GenresResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
@@ -124,6 +126,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/annotations", annotations),
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
+        ("/fragments/{number}/ngrams", ngram_matcher),
         ("/genres", genres),
         ("/periods", periods),
         ("/statistics", statistics),
