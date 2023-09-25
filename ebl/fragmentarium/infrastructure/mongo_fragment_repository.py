@@ -424,18 +424,16 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def update_ngrams(self, number: MuseumNumber):
-        pipeline = [
-            {
-                "$set": {
-                    "ngrams": extract_ngrams(
-                        {"$split": [replace_all("$signs", "\n", " # "), " "]},
-                        NGRAM_N_VALUES,
-                    )
-                }
-            },
-        ]
-
         self._fragments.update_one(
             museum_number_is(number),
-            pipeline,
+            [
+                {
+                    "$set": {
+                        "ngrams": extract_ngrams(
+                            {"$split": [replace_all("$signs", "\n", " # "), " "]},
+                            NGRAM_N_VALUES,
+                        )
+                    }
+                },
+            ],
         )
