@@ -6,6 +6,8 @@ import json
 from marshmallow import ValidationError
 from pymongo import MongoClient
 import pymongo
+from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
+from ebl.common.query.util import extract_ngrams, replace_all
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
     sort_by_museum_number,
@@ -114,6 +116,24 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
     fragments_collection.create_index([("_sortKey", pymongo.ASCENDING)])
 
 
+def _create_ngrams(fragments_collection: MongoCollection, fragments: dict) -> None:
+    print(f"Extracting n-grams from {len(fragments)} fragment(s)...")
+    numbers = [fragment["_id"] for fragment in fragments.values()]
+    fragments_collection.update_many(
+        {"_id": {"$in": numbers}},
+        [
+            {
+                "$set": {
+                    "ngrams": extract_ngrams(
+                        {"$split": [replace_all("$signs", "\n", " # "), " "]},
+                        NGRAM_N_VALUES,
+                    )
+                }
+            }
+        ],
+    )
+
+
 def write_to_db(
     fragments: Sequence[dict], fragments_collection: MongoCollection
 ) -> List:
@@ -129,7 +149,7 @@ def write_to_tsv(
         writer = csv.writer(csvfile, delimiter="\t")  # pyre-ignore[6]
         if column_names:
             writer.writerow(column_names)
-        writer.writerows(FAILS)
+        writer.writerows(data)
 
 
 if __name__ == "__main__":
@@ -265,7 +285,7 @@ if __name__ == "__main__":
 
     if FAILS:
         print(
-            f"Skipping {fail_count} document(s), see {os.path.abspath(error_file)} for details"
+            f"Skipping {fail_count} document(s), see {os.path.abspath(error_file)} for details."
         )
         write_to_tsv(error_file, FAILS, ["file", "error"])
 
@@ -296,27 +316,28 @@ if __name__ == "__main__":
         if input(prompt) != passphrase:
             sys.exit("Aborting.")
 
-    fragments = {
+    valid_fragments = {
         filename: data
         for filename, data in fragments.items()
         if filename not in set(file for file, _ in FAILS)
     }
     result = write_to_db(
-        list(fragments.values()),
+        list(valid_fragments.values()),
         COLLECTION,
     )
 
     print("Result:")
     print(result)
 
+    _create_ngrams(COLLECTION, valid_fragments)
     _reindex_database(COLLECTION, args.database)
 
     write_to_tsv(
         summary_file,
-        [[data["_id"], filename] for filename, data in fragments.items()],
+        [[data["_id"], filename] for filename, data in valid_fragments.items()],
         ["id", "file"],
     )
 
     print(
-        f"Done! See {os.path.abspath(summary_file)} for a summary of added documents",
+        f"Done! See {os.path.abspath(summary_file)} for a summary of added documents.",
     )
