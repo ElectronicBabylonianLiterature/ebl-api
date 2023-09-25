@@ -112,7 +112,7 @@ class MongoFragmentRepository(FragmentRepository):
                 **({} if sort_key is None else {"_sortKey": sort_key}),
             }
         )
-        self.update_ngrams(fragment.number)
+        self._update_ngrams(fragment.number)
 
         return id_
 
@@ -301,7 +301,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
         if field == "transliteration":
-            self.update_ngrams(fragment.number)
+            self._update_ngrams(fragment.number)
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
         sort_ascending = {"$sort": {"key": 1}}
@@ -423,7 +423,7 @@ class MongoFragmentRepository(FragmentRepository):
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
         )
 
-    def update_ngrams(self, number: MuseumNumber):
+    def _update_ngrams(self, number: MuseumNumber):
         self._fragments.update_one(
             museum_number_is(number),
             [
