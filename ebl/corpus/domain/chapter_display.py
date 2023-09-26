@@ -139,3 +139,14 @@ class ChapterDisplay:
             chapter.record,
             chapter.manuscripts,
         )
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class ChapterNgramScore(ChapterId):
+    text_name: str
+    score: float
+
+    def of(chapter_id: ChapterId, text_name: str, score: float) -> "ChapterNgramScore":
+        return ChapterNgramScore(
+            chapter_id.text_id, chapter_id.stage, chapter_id.name, text_name, score
+        )

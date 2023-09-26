@@ -3,7 +3,11 @@ from marshmallow import Schema, fields, post_load, post_dump
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.application.schemas import LineVariantSchema, ManuscriptSchema
-from ebl.corpus.domain.chapter_display import ChapterDisplay, LineDisplay
+from ebl.corpus.domain.chapter_display import (
+    ChapterDisplay,
+    ChapterNgramScore,
+    LineDisplay,
+)
 from ebl.corpus.domain.record import Record
 from ebl.transliteration.application.line_number_schemas import (
     OneOfLineNumberSchema,
@@ -89,3 +93,12 @@ class ChapterDisplaySchema(Schema):
         ]
 
         return data
+
+
+class ChapterNgramScoreSchema(ChapterIdSchema):
+    text_name = fields.String(required=True, data_key="textName")
+    score = fields.Float(required=True)
+
+    @post_load
+    def make_result(self, data: dict, **kwargs) -> ChapterNgramScore:
+        return ChapterNgramScore(*+data)

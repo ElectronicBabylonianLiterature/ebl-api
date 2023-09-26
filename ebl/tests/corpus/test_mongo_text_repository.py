@@ -2,12 +2,12 @@ from typing import Sequence
 import attr
 import pytest
 from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
-from ebl.corpus.application.id_schemas import ChapterIdSchema
+from ebl.corpus.application.display_schemas import ChapterNgramScoreSchema
 
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
 from ebl.corpus.domain.chapter import Chapter
-from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.chapter_display import ChapterDisplay, ChapterNgramScore
 from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.text import Text, UncertainFragment
 from ebl.dictionary.domain.word import WordId
@@ -17,7 +17,7 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.tests.common.ngram_test_support import (
     chapter_ngrams_from_signs,
-    compute_overlap,
+    compute_ngram_score,
     ngrams_from_signs,
 )
 from ebl.tests.factories.corpus import (
@@ -528,23 +528,34 @@ def test_update_chapter_stores_ngrams(database, text_repository):
     )
 
 
-def test_aggregate_ngram_overlaps(text_repository, database):
-    chapters = [ChapterFactory.build(signs=(f"{signs} {signs}",)) for signs in SIGNS]
+def test_aggregate_ngram_overlaps(text_repository):
+    text_repository.create(TEXT)
+    chapters = [
+        ChapterFactory.build(
+            signs=(f"{signs} {signs}",),
+            text_id=TextId(TEXT.genre, TEXT.category, TEXT.index),
+        )
+        for signs in SIGNS
+    ]
 
     for chapter in chapters:
         text_repository.create_chapter(chapter)
 
     fragment = FragmentFactory.create(signs="TI BA ABZ11")
+
     assert text_repository.aggregate_ngram_overlaps(
         ngrams_from_signs(fragment.signs, NGRAM_N_VALUES)
     ) == sorted(
         (
-            {
-                **ChapterIdSchema().dump(chapter.id_),
-                "overlap": compute_overlap(fragment, chapter, NGRAM_N_VALUES),
-            }
+            ChapterNgramScoreSchema().dump(
+                ChapterNgramScore.of(
+                    chapter.id_,
+                    TEXT.name,
+                    compute_ngram_score(fragment, chapter, NGRAM_N_VALUES),
+                )
+            )
             for chapter in chapters
         ),
-        key=lambda item: item["overlap"],
+        key=lambda item: item["score"],
         reverse=True,
     )

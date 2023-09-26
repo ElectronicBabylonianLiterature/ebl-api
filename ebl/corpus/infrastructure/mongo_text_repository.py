@@ -469,7 +469,7 @@ class MongoTextRepository(TextRepository):
                     "textId": 1,
                     "name": 1,
                     "stage": 1,
-                    "overlap": {
+                    "score": {
                         "$let": {
                             "vars": {
                                 "intersection": {
@@ -496,7 +496,7 @@ class MongoTextRepository(TextRepository):
                 }
             },
             *join_text_names(),
-            {"$sort": {"overlap": -1}},
+            {"$sort": {"score": -1}},
         ]
 
         if limit:

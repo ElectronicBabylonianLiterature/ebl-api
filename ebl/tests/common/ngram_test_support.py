@@ -23,7 +23,9 @@ def chapter_ngrams_from_signs(
     )
 
 
-def compute_overlap(fragment: Fragment, chapter: Chapter, N: Sequence[int]) -> float:
+def compute_ngram_score(
+    fragment: Fragment, chapter: Chapter, N: Sequence[int]
+) -> float:
     F = ngrams_from_signs(fragment.signs, N)
     C = chapter_ngrams_from_signs(chapter.signs, N)
 
