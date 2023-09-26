@@ -146,7 +146,5 @@ class ChapterNgramScore(ChapterId):
     text_name: str
     score: float
 
-    def of(chapter_id: ChapterId, text_name: str, score: float) -> "ChapterNgramScore":
-        return ChapterNgramScore(
-            chapter_id.text_id, chapter_id.stage, chapter_id.name, text_name, score
-        )
+    def of(self, text_name: str, score: float) -> "ChapterNgramScore":
+        return ChapterNgramScore(self.text_id, self.stage, self.name, text_name, score)
