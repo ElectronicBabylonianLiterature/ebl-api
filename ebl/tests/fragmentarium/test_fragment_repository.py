@@ -1019,6 +1019,15 @@ def test_create_fragment_stores_ngrams(fragment_repository):
     )
 
 
+def test_get_ngrams(fragment_repository):
+    fragment = TransliteratedFragmentFactory.build()
+    fragment_repository.create(fragment)
+
+    assert set(
+        map(tuple, fragment_repository.get_ngrams(fragment.number))
+    ) == ngrams_from_signs(fragment.signs, NGRAM_N_VALUES)
+
+
 def test_update_transliteration_updates_ngrams(fragment_repository, user):
     fragment = TransliteratedFragmentFactory.build(signs="")
     fragment_repository.create(fragment)
