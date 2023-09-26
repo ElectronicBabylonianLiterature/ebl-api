@@ -145,7 +145,7 @@ class ChapterDisplay:
 class ChapterNgramScore(ChapterId):
     text_name: str
     score: float
-    
+
     @staticmethod
     def of(chapter_id: ChapterId, text_name: str, score: float) -> "ChapterNgramScore":
         return ChapterNgramScore(
