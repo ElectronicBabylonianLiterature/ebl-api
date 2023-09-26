@@ -1,4 +1,6 @@
 from typing import Sequence, Set, Tuple, TypeVar, Optional
+from ebl.corpus.domain.chapter import Chapter
+from ebl.fragmentarium.domain.fragment import Fragment
 
 T = TypeVar("T")
 
@@ -19,3 +21,10 @@ def chapter_ngrams_from_signs(
     return set.union(
         *(ngrams_from_signs(signs, N) for signs in chapter_signs if signs is not None)
     )
+
+
+def compute_overlap(fragment: Fragment, chapter: Chapter, N: Sequence[int]) -> float:
+    F = ngrams_from_signs(fragment.signs, N)
+    C = chapter_ngrams_from_signs(chapter.signs, N)
+
+    return (len(F & C) / min(len(F), len(C))) if F and C else 0.0

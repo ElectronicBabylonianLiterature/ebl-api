@@ -2,6 +2,7 @@ from typing import Sequence
 import attr
 import pytest
 from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
+from ebl.corpus.application.id_schemas import ChapterIdSchema
 
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.schemas import ChapterSchema, TextSchema
@@ -14,7 +15,11 @@ from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.tests.common.ngram_test_support import chapter_ngrams_from_signs
+from ebl.tests.common.ngram_test_support import (
+    chapter_ngrams_from_signs,
+    compute_overlap,
+    ngrams_from_signs,
+)
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -140,6 +145,11 @@ CHAPTER_WITH_MANUSCRIPT_LEMMA: Chapter = ChapterFactory.build(
         ),
     ),
 )
+SIGNS = [
+    "X ABZ411 ABZ11 ABZ41",
+    "X X X TI BA",
+    "MA ŠU X\nTI BA X",
+]
 
 
 def when_text_in_collection(database, text=TEXT) -> None:
@@ -515,4 +525,26 @@ def test_update_chapter_stores_ngrams(database, text_repository):
 
     assert set(map(tuple, data["ngrams"])) == chapter_ngrams_from_signs(
         updated_chapter.signs, NGRAM_N_VALUES
+    )
+
+
+def test_aggregate_ngram_overlaps(text_repository, database):
+    chapters = [ChapterFactory.build(signs=(f"{signs} {signs}",)) for signs in SIGNS]
+
+    for chapter in chapters:
+        text_repository.create_chapter(chapter)
+
+    fragment = FragmentFactory.create(signs="TI BA ABZ11")
+    assert text_repository.aggregate_ngram_overlaps(
+        ngrams_from_signs(fragment.signs, NGRAM_N_VALUES)
+    ) == sorted(
+        (
+            {
+                **ChapterIdSchema().dump(chapter.id_),
+                "overlap": compute_overlap(fragment, chapter, NGRAM_N_VALUES),
+            }
+            for chapter in chapters
+        ),
+        key=lambda item: item["overlap"],
+        reverse=True,
     )

@@ -5,7 +5,7 @@ import pytest
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.corpus.domain.chapter import Chapter
 from ebl.dictionary.domain.word import WordId
-from ebl.tests.corpus.test_mongo_text_repository import LITERATURE_TEXT
+from ebl.tests.corpus.test_mongo_text_repository import LITERATURE_TEXT, SIGNS
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     LineFactory,
@@ -122,11 +122,6 @@ def test_query_chapter_lemmas(
     }
 
 
-SIGNS = [
-    "X ABZ411 ABZ11 ABZ41",
-    "X X X TI BA",
-    "MA ŠU X\nTI BA X",
-]
 MANUSCRIPTS = ManuscriptFactory.build_batch(3)
 VARIANT_LINES = [
     [
