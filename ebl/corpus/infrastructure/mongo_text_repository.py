@@ -518,8 +518,4 @@ class MongoTextRepository(TextRepository):
         if limit:
             pipeline.append({"$limit": limit})
 
-        import json
-
-        print(json.dumps(pipeline, indent=2))
-
         return list(self._chapters.aggregate(pipeline))
