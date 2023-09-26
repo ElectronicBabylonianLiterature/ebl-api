@@ -101,4 +101,4 @@ class ChapterNgramScoreSchema(ChapterIdSchema):
 
     @post_load
     def make_result(self, data: dict, **kwargs) -> ChapterNgramScore:
-        return ChapterNgramScore(*+data)
+        return ChapterNgramScore(**data)
