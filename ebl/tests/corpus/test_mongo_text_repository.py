@@ -503,10 +503,7 @@ def test_update_chapter_stores_ngrams(database, text_repository):
 
     updated_chapter = attr.evolve(
         CHAPTER,
-        signs=(
-            "X ABZ411 ABZ11 ABZ41",
-            "X X X TI BA",
-        ),
+        signs=("X ABZ411 ABZ11 ABZ41", "X X X TI BA", None),
     )
 
     when_chapter_in_collection(database)

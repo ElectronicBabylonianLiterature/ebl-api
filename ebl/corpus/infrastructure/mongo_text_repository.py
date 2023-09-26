@@ -12,6 +12,7 @@ from ebl.common.query.query_schemas import CorpusQueryResultSchema
 from ebl.common.query.util import (
     drop_duplicates,
     extract_ngrams,
+    filter_array,
     flatten_field,
     replace_all,
 )
@@ -443,7 +444,19 @@ class MongoTextRepository(TextRepository):
             }
         }
         pipeline = [
-            {"$set": {"ngrams": drop_duplicates(flatten_field(map_extract_ngrams))}},
+            {
+                "$set": {
+                    "ngrams": drop_duplicates(
+                        flatten_field(
+                            filter_array(
+                                map_extract_ngrams,
+                                "manuscriptSigns",
+                                {"$ne": ["$$manuscriptSigns", None]},
+                            )
+                        )
+                    )
+                }
+            },
         ]
 
         self._chapters.update_one(
@@ -454,6 +467,9 @@ class MongoTextRepository(TextRepository):
     def aggregate_ngram_overlaps(
         self, ngrams: Sequence[Sequence[str]], limit: Optional[int] = None
     ) -> Sequence[dict]:
+        if not ngrams:
+            raise ValueError("ngrams must not be empty")
+
         ngram_list = list(ngrams)
         test_chapter_category = 99
         pipeline: List[dict] = [
@@ -480,7 +496,7 @@ class MongoTextRepository(TextRepository):
                                 "minLength": {
                                     "$min": [
                                         {"$size": "$ngrams"},
-                                        {"$size": [ngram_list]},
+                                        len(ngram_list),
                                     ]
                                 },
                             },
@@ -501,5 +517,9 @@ class MongoTextRepository(TextRepository):
 
         if limit:
             pipeline.append({"$limit": limit})
+
+        import json
+
+        print(json.dumps(pipeline, indent=2))
 
         return list(self._chapters.aggregate(pipeline))
