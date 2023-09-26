@@ -1,5 +1,6 @@
 from ebl.corpus.domain.provenance import Provenance
 from marshmallow import (
+    EXCLUDE,
     Schema,
     ValidationError,
     fields,
@@ -260,6 +261,9 @@ class DictionaryLinePaginationSchema(Schema):
 
 
 class ChapterSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnumField(Classification, required=True)
     stage = ValueEnumField(Stage, required=True)

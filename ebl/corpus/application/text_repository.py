@@ -85,3 +85,9 @@ class TextRepository(ABC):
     @abstractmethod
     def query(self, query: dict) -> CorpusQueryResult:
         ...
+
+    @abstractmethod
+    def aggregate_ngram_overlaps(
+        self, ngrams: Sequence[Sequence[str]], limit: Optional[int] = None
+    ) -> Sequence[dict]:
+        ...

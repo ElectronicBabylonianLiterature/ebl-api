@@ -6,8 +6,16 @@ from pymongo.collation import Collation
 
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
+from ebl.common.infrastructure.ngrams import NGRAM_N_VALUES
 from ebl.common.query.query_result import CorpusQueryResult
 from ebl.common.query.query_schemas import CorpusQueryResultSchema
+from ebl.common.query.util import (
+    drop_duplicates,
+    extract_ngrams,
+    filter_array,
+    flatten_field,
+    replace_all,
+)
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
@@ -37,7 +45,7 @@ from ebl.corpus.infrastructure.queries import (
     chapter_id_query,
     join_chapters,
     join_text,
-    join_text_title,
+    join_text_names,
 )
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.infrastructure.queries import is_in_fragmentarium, join_joins
@@ -109,6 +117,7 @@ class MongoTextRepository(TextRepository):
 
     def create_chapter(self, chapter: Chapter) -> None:
         self._chapters.insert_one(ChapterSchema().dump(chapter))
+        self._update_ngrams(chapter.id_)
 
     def find(self, id_: TextId) -> Text:
         try:
@@ -243,6 +252,7 @@ class MongoTextRepository(TextRepository):
                 ).dump(chapter)
             },
         )
+        self._update_ngrams(id_)
 
     def query_by_transliteration(
         self, query: TransliterationQuery, pagination_index: int
@@ -252,35 +262,8 @@ class MongoTextRepository(TextRepository):
         cursor = self._chapters.aggregate(
             [
                 {"$match": mongo_query},
-                {
-                    "$lookup": {
-                        "from": "texts",
-                        "let": {
-                            "chapterGenre": "$textId.genre",
-                            "chapterCategory": "$textId.category",
-                            "chapterIndex": "$textId.index",
-                        },
-                        "pipeline": [
-                            {
-                                "$match": {
-                                    "$expr": {
-                                        "$and": [
-                                            {"$eq": ["$genre", "$$chapterGenre"]},
-                                            {"$eq": ["$category", "$$chapterCategory"]},
-                                            {"$eq": ["$index", "$$chapterIndex"]},
-                                        ]
-                                    }
-                                }
-                            },
-                            {"$project": {"name": 1, "_id": 0}},
-                        ],
-                        "as": "textNames",
-                    }
-                },
+                *join_text_names(),
                 {"$project": {"_id": False}},
-                {"$addFields": {"textName": {"$first": "$textNames"}}},
-                {"$addFields": {"textName": "$textName.name"}},
-                {"$project": {"textNames": False}},
                 {"$skip": LIMIT * pagination_index},
                 {"$limit": LIMIT},
             ],
@@ -333,12 +316,12 @@ class MongoTextRepository(TextRepository):
                 },
                 {"$unwind": "$lines"},
                 {"$match": lemma_query},
-                join_text_title(),
+                *join_text_names(),
                 filter_manuscripts_by_lemma(lemma),
                 {
                     "$project": {
                         "textId": True,
-                        "textName": {"$first": "$textName.name"},
+                        "textName": True,
                         "chapterName": "$name",
                         "stage": True,
                         "line": "$lines",
@@ -449,3 +432,90 @@ class MongoTextRepository(TextRepository):
             ]
         )
         return ManuscriptAttestationSchema().load(cursor, many=True)
+
+    def _update_ngrams(self, id_: ChapterId) -> None:
+        map_extract_ngrams = {
+            "$map": {
+                "input": "$signs",
+                "in": extract_ngrams(
+                    {"$split": [replace_all("$$this", "\n", " # "), " "]},
+                    NGRAM_N_VALUES,
+                ),
+            }
+        }
+        pipeline = [
+            {
+                "$set": {
+                    "ngrams": drop_duplicates(
+                        flatten_field(
+                            filter_array(
+                                map_extract_ngrams,
+                                "manuscriptSigns",
+                                {"$ne": ["$$manuscriptSigns", None]},
+                            )
+                        )
+                    )
+                }
+            },
+        ]
+
+        self._chapters.update_one(
+            chapter_id_query(id_),
+            pipeline,
+        )
+
+    def aggregate_ngram_overlaps(
+        self, ngrams: Sequence[Sequence[str]], limit: Optional[int] = None
+    ) -> Sequence[dict]:
+        if not ngrams:
+            raise ValueError("ngrams must not be empty")
+
+        ngram_list = list(ngrams)
+        test_chapter_category = 99
+        pipeline: List[dict] = [
+            {
+                "$match": {
+                    "textId.category": {"$ne": test_chapter_category},
+                    "ngrams": {"$exists": True, "$not": {"$size": 0}},
+                }
+            },
+            {
+                "$project": {
+                    "_id": 0,
+                    "textId": 1,
+                    "name": 1,
+                    "stage": 1,
+                    "score": {
+                        "$let": {
+                            "vars": {
+                                "intersection": {
+                                    "$size": {
+                                        "$setIntersection": ["$ngrams", ngram_list]
+                                    }
+                                },
+                                "minLength": {
+                                    "$min": [
+                                        {"$size": "$ngrams"},
+                                        len(ngram_list),
+                                    ]
+                                },
+                            },
+                            "in": {
+                                "$cond": [
+                                    {"$eq": ["$$minLength", 0]},
+                                    0.0,
+                                    {"$divide": ["$$intersection", "$$minLength"]},
+                                ]
+                            },
+                        }
+                    },
+                }
+            },
+            *join_text_names(),
+            {"$sort": {"score": -1}},
+        ]
+
+        if limit:
+            pipeline.append({"$limit": limit})
+
+        return list(self._chapters.aggregate(pipeline))

@@ -1,0 +1,1 @@
+NGRAM_N_VALUES = [1, 2, 3]
