@@ -153,6 +153,7 @@ class FragmentSchema(Schema):
     description = fields.String(required=True)
     collection = fields.String(required=True)
     legacy_script = fields.String(data_key="legacyScript", load_default="")
+    traditional_references = fields.List(fields.String(), data_key="traditionalReferences")
     museum = fields.String(required=True)
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
@@ -188,7 +189,6 @@ class FragmentSchema(Schema):
         data_key="externalNumbers",
     )
     projects = fields.List(ResearchProjectField())
-    traditional_reference = fields.List(fields.String())
     date = fields.Nested(DateSchema, allow_none=True, default=None)
     dates_in_text = fields.Nested(
         DateSchema, data_key="datesInText", many=True, allow_none=True, default=list()
