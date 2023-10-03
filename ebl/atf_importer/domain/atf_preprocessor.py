@@ -170,7 +170,7 @@ class ATFPreprocessor:
 
         elif atf == "$ ruling":
             atf = "$ single ruling"
-            
+
         elif atf == "$ seal impression broken":
             atf = "$ (seal impression broken)"
 
@@ -183,7 +183,7 @@ class ATFPreprocessor:
         if atf[0].isdigit():
             atf = atf.replace("–", "-")
             atf = atf.replace("--", "-")  # new rule 22.02.2021
-            
+
             callback_normalize = (
                 lambda pat: pat.group(1)
                 + pat.group(2)
