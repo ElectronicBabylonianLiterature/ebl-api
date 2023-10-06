@@ -49,6 +49,10 @@ class ATFPreprocessor:
         self.style = style
 
     def do_oracc_replacements(self, atf):
+        atf = re.sub(
+            r"([\[<])([*:])(.*)", r"\1 \2\3", atf
+        )  # convert [* => [  <* => < *
+        atf = re.sub(r"(:)([]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
         atf = atf.replace("--", "-")  # new rule 22.02.2021
         atf = atf.replace("{f}", "{munus}")
         atf = atf.replace("1/2", "½")
