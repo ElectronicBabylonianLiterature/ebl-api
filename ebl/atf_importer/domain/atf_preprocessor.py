@@ -356,7 +356,6 @@ class ATFPreprocessor:
     def process_line(self, atf):
         self.logger.debug(f"Original line: '{atf}'")
         atf = atf.replace("\r", "")
-        atf = atf.replace("@sealings", "")
         atf = atf.replace("sz", "š")
         original_atf = atf
 
