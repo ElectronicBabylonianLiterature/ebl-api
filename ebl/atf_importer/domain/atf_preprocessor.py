@@ -68,9 +68,7 @@ class ATFPreprocessor:
         atf = atf.replace("$ rest broken", "$ rest of side broken")
         atf = atf.replace("$ ruling", "$ single ruling")
         atf = atf.replace("$ seal impression broken", "$ (seal impression broken)")
-        atf = atf.replace("$ seal impression", "$ (seal impression)")
-
-        return atf
+        return atf.replace("$ seal impression", "$ (seal impression)")
 
     def normalize_numbers(self, digits):
         numbers = {
