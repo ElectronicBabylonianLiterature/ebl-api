@@ -133,7 +133,7 @@ class Fragment:
     dates_in_text: Sequence[Date] = list()
     external_numbers: ExternalNumbers = ExternalNumbers()
     projects: Sequence[str] = tuple()
-    traditional_reference: Sequence[str] = list()
+    traditional_references: Sequence[str] = list()
     archaeology: Optional[Archaeology] = None
 
     @property

@@ -118,7 +118,7 @@ class ATFImporter:
                 oracc_pos_tag = ol_tuple[2]
 
                 oracc_lemma = oracc_lemma.strip()
-                oracc_guideword = oracc_guideword.strip()
+                oracc_guideword = oracc_guideword.strip().rstrip("]").lstrip("[")
 
                 if "//" in oracc_guideword:
                     oracc_guideword = oracc_guideword.split("//")[0]

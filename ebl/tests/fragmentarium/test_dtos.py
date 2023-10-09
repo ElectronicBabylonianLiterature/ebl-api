@@ -60,6 +60,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             ),
             "collection": lemmatized_fragment.collection,
             "legacyScript": lemmatized_fragment.legacy_script,
+            "traditionalReferences": lemmatized_fragment.traditional_references,
             "script": ScriptSchema().dump(lemmatized_fragment.script),
             "date": DateSchema().dump(lemmatized_fragment.date),
             "datesInText": [
@@ -112,7 +113,6 @@ def expected_dto(lemmatized_fragment, has_photo):
                 lemmatized_fragment.external_numbers
             ),
             "projects": [ResearchProject["CAIC"].abbreviation],
-            "traditional_reference": lemmatized_fragment.traditional_reference,
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
         },
         pydash.is_none,

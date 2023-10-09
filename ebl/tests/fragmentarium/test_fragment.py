@@ -55,11 +55,11 @@ def test_edited_in_oracc_project():
     assert fragment.edited_in_oracc_project == "dcclt"
 
 
-def traditional_reference():
+def traditional_references():
     fragment = FragmentFactory.build(
-        traditional_reference=["CT 1, 12", "CT I, 12", "CT I 12"]
+        traditional_references=["CT 1, 12", "CT I, 12", "CT I 12"]
     )
-    assert fragment.traditional_reference == ["CT 1, 12", "CT I, 12", "CT I 12"]
+    assert fragment.traditional_references == ["CT 1, 12", "CT I, 12", "CT I 12"]
 
 
 def test_publication():
