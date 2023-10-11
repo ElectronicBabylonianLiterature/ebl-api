@@ -505,11 +505,7 @@ class ATFImporter:
                         + '")'
                     )
                 )
-            except Exception as e:
-                self.logger.error(f"{filename} could not be imported: {str(e)}")
-                failed.append(f"{filename} could not be imported: {str(e)}")
-
-            except Exception as e:
+            except (Exception, Exception) as e:
                 self.logger.error(f"{filename} could not be imported: {str(e)}")
                 failed.append(f"{filename} could not be imported: {str(e)}")
 
