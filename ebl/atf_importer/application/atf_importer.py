@@ -483,15 +483,10 @@ class ATFImporter:
             self.logger.info(Util.print_frame(f'Conversion of "{filename}.atf" failed'))
             return
 
-        if (
-            len(
-                list(
-                    self.db.get_collection("fragments").find(
-                        {"museumNumber": museum_number}, {"text.lines.0"}
-                    )
-                )
+        if not list(
+            self.db.get_collection("fragments").find(
+                {"museumNumber": museum_number}, {"text.lines.0"}
             )
-            == 0
         ):
             try:
                 # Insert transliteration
