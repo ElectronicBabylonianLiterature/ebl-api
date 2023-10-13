@@ -458,7 +458,9 @@ class ATFImporter:
                 parse_museum_number(museum_number_split.strip())
                 museum_number = museum_number_split
             except Exception:
-                self.logger.error(f"Could not find a valid museum number in '{filename}'")
+                self.logger.error(
+                    f"Could not find a valid museum number in '{filename}'"
+                )
 
         skip = False
         while museum_number is None:
@@ -481,7 +483,14 @@ class ATFImporter:
             self.logger.info(Util.print_frame(f'Conversion of "{filename}.atf" failed'))
             return
 
-        if not document_has_property("fragments", "text.lines.0"):
+        if (
+            len(list(
+                self.db.get_collection("fragments").find(
+                    {"museumNumber": museum_number}, {"text.lines.0"}
+                )
+            ))
+            == 0
+        ):
             try:
                 # Insert transliteration
                 self.insert_translitertions(
@@ -505,15 +514,14 @@ class ATFImporter:
                         + '")'
                     )
                 )
-            except (Exception, Exception) as e:
-                self.logger.error(f"{filename} could not be imported: {str(e)}")
-                failed.append(f"{filename} could not be imported: {str(e)}")
+            except Exception:
+                self.logger.error(f"{filename} could not be imported: {str(Exception)}")
+                failed.append(f"{filename} could not be imported: {str(Exception)}")
 
     def start(self):
         self.logger.info("Atf-Importer started...")
 
         # cli arguments
-
         parser = argparse.ArgumentParser(
             description="Converts ATF-files to eBL-ATF standard."
         )
