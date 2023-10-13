@@ -484,11 +484,13 @@ class ATFImporter:
             return
 
         if (
-            len(list(
-                self.db.get_collection("fragments").find(
-                    {"museumNumber": museum_number}, {"text.lines.0"}
+            len(
+                list(
+                    self.db.get_collection("fragments").find(
+                        {"museumNumber": museum_number}, {"text.lines.0"}
+                    )
                 )
-            ))
+            )
             == 0
         ):
             try:
