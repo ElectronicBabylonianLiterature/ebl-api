@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 
 from ebl.corpus.application.id_schemas import ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
@@ -17,8 +17,13 @@ from ebl.transliteration.application.note_line_part_schemas import (
 )
 
 
+class LineVariantDisplaySchema(LineVariantSchema):
+    original_index = fields.Integer(data_key="originalIndex", dump_only=True)
+
+
 class LineDisplaySchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
+    original_index = fields.Integer(data_key="originalIndex", dump_only=True)
     old_line_numbers = fields.Nested(
         OldLineNumberSchema, many=True, data_key="oldLineNumbers", load_default=tuple()
     )
@@ -28,7 +33,7 @@ class LineDisplaySchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    variants = fields.Nested(LineVariantSchema, many=True, required=True)
+    variants = fields.Nested(LineVariantDisplaySchema, many=True, required=True)
     translation = fields.List(
         fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
     )
@@ -43,6 +48,15 @@ class LineDisplaySchema(Schema):
             tuple(data["variants"]),
             tuple(data["translation"] or []),
         )
+
+    @post_dump
+    def add_variant_indexes(self, data: dict, **kwargs) -> dict:
+        data["variants"] = [
+            {**variant, "originalIndex": index}
+            for index, variant in enumerate(data["variants"])
+        ]
+
+        return data
 
 
 class ChapterDisplaySchema(Schema):
@@ -67,3 +81,11 @@ class ChapterDisplaySchema(Schema):
             data["record"],
             tuple(data["manuscripts"]),
         )
+
+    @post_dump
+    def add_line_indexes(self, data: dict, **kwargs) -> dict:
+        data["lines"] = [
+            {**line, "originalIndex": index} for index, line in enumerate(data["lines"])
+        ]
+
+        return data

@@ -1,7 +1,8 @@
 import attr
-
+from typing import Sequence
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.domain.chapter_display import ChapterDisplay
+from ebl.corpus.domain.line_variant import LineVariant
 from ebl.tests.factories.corpus import (
     ChapterFactory,
     TextFactory,
@@ -29,6 +30,26 @@ from ebl.corpus.application.schemas import ManuscriptSchema, ManuscriptLineSchem
 CHAPTER_DISPLAY = ChapterDisplay.of_chapter(TextFactory.build(), ChapterFactory.build())
 
 
+def variants_to_dict(
+    variants: Sequence[LineVariant], for_loading: bool
+) -> Sequence[dict]:
+    return [
+        {
+            "intertext": OneOfNoteLinePartSchema().dump(variant.intertext, many=True),
+            "reconstruction": OneOfTokenSchema().dump(
+                variant.reconstruction, many=True
+            ),
+            "note": variant.note and NoteLineSchema().dump(variant.note),
+            "manuscripts": ManuscriptLineSchema().dump(variant.manuscripts, many=True),
+            "parallelLines": ParallelLineSchema().dump(
+                variant.parallel_lines, many=True
+            ),
+            **({} if for_loading else {"originalIndex": index}),
+        }
+        for index, variant in enumerate(variants)
+    ]
+
+
 def to_dict(
     chapter: ChapterDisplay, missing_translation: bool = False, for_loading=False
 ) -> dict:
@@ -53,29 +74,13 @@ def to_dict(
                 ),
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
-                "variants": [
-                    {
-                        "intertext": OneOfNoteLinePartSchema().dump(
-                            variant.intertext, many=True
-                        ),
-                        "reconstruction": OneOfTokenSchema().dump(
-                            variant.reconstruction, many=True
-                        ),
-                        "note": variant.note and NoteLineSchema().dump(variant.note),
-                        "manuscripts": ManuscriptLineSchema().dump(
-                            variant.manuscripts, many=True
-                        ),
-                        "parallelLines": ParallelLineSchema().dump(
-                            variant.parallel_lines, many=True
-                        ),
-                    }
-                    for variant in line.variants
-                ],
+                "variants": variants_to_dict(line.variants, for_loading),
                 "translation": []
                 if missing_translation
                 else TranslationLineSchema().dump(line.translation, many=True),
+                **({} if for_loading else {"originalIndex": index}),
             }
-            for line in chapter.lines
+            for index, line in enumerate(chapter.lines)
         ],
         "record": RecordSchema().dump(chapter.record),
         "manuscripts": ManuscriptSchema().dump(chapter.manuscripts, many=True),

@@ -189,6 +189,10 @@ def write_fragment_numbers(
 
 
 if __name__ == "__main__":
+    """
+    python3 ebl/fragmentarium/annotations/prepare_annotations.py -f  # for detection finished fragments are filtered
+    python3 ebl/fragmentarium/annotations/prepare_annotations.py -c  # for classification
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-oa",
@@ -204,7 +208,7 @@ if __name__ == "__main__":
         "-f",
         "--filter",
         action="store_true",
-        help="filter unfinished Fragments from ./annotations.json",
+        help="filter finished Fragments from ./annotations.json",
     )
     parser.add_argument(
         "-c",
@@ -232,18 +236,15 @@ if __name__ == "__main__":
 
     if args.filter:
         print(
-            "Unfinished Fragments are filtered. Unfinished "
+            "Already finished Fragments are filtered. Finished"
             "fragments are defined in './annotations.json' file"
         )
-        finished_fragments = json.load(open("annotations.json"))["finished"]
-        unfinished_but_usable = json.load(open("annotations.json"))[
-            "unfinishedButUsable"
-        ]
+        finished_fragments = json.load(open("ebl/fragmentarium/annotations.json"))["finished"]
 
         annotation_collection = list(
             filter(
                 lambda elem: str(elem.fragment_number)
-                in [*finished_fragments, *unfinished_but_usable],
+                in [*finished_fragments],
                 annotation_collection,
             )
         )

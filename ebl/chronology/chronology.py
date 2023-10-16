@@ -50,6 +50,41 @@ class KingSchema(Schema):
         return {key: value for key, value in data.items() if value is not None}
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class Eponym:
+    date: str
+    name: str
+    title: str
+    area: str
+    event: str
+    phase: str
+    notes: str
+    king: str
+    isKing: bool
+    rel: int
+
+
+class EponymSchema(Schema):
+    date = fields.String(allow_none=True, load_default=None)
+    name = fields.String(allow_none=True, load_default=None)
+    title = fields.String(allow_none=True, load_default=None)
+    area = fields.String(allow_none=True, load_default=None)
+    event = fields.String(allow_none=True, load_default=None)
+    phase = fields.String()
+    notes = fields.String(allow_none=True, load_default=None)
+    king = fields.String(allow_none=True, load_default=None)
+    isKing = fields.Boolean(allow_none=True, load_default=None)
+    rel = fields.Integer(allow_none=True, load_default=None)
+
+    @post_load
+    def make_eponym(self, data: dict, **kwargs) -> Eponym:
+        return Eponym(**data)
+
+    @post_dump
+    def remove_skip_values(self, data: dict, **kwargs):
+        return {key: value for key, value in data.items() if value is not None}
+
+
 class ChronologySchema(Schema):
     kings = fields.List(fields.Nested(KingSchema))
 

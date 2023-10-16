@@ -11,7 +11,7 @@ additional_lemma : value_part guide_word? pos_tag? e_pos_tag? norm0? unit?
 lemma :  value_part guide_word? pos_tag? e_pos_tag? norm0? unit? additional_lemmata*  
 
 value_part: PLUSSIGN? (VALUE_CHARACTER|LOGOGRAM_CHARACTER|/[\.A-Za-z\s\d\)\(\/\-]/)+
-guide_word: "["/[\.A-Za-z\s\d\)\(\/\-\?]/*"]"
+guide_word: /\[[^\]]*?\]/
 pos_tag: POS_TAG
 e_pos_tag: "'" POS_TAG
 norm0: NORM(VALUE_CHARACTER|LOGOGRAM_CHARACTER|/[\.A-Za-z\s\d\)\(\/\-]/)+ | NORM

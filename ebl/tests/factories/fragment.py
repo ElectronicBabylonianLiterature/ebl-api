@@ -6,6 +6,7 @@ from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
 
 from ebl.corpus.domain.chapter import Stage
+from ebl.tests.factories.archaeology import ArchaeologyFactory
 from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -194,6 +195,7 @@ class FragmentFactory(factory.Factory):
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
     projects = (ResearchProject.CAIC,)
+    archaeology = factory.SubFactory(ArchaeologyFactory)
 
 
 class InterestingFragmentFactory(FragmentFactory):

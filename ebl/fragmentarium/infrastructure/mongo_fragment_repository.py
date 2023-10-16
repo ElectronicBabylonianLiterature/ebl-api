@@ -280,6 +280,7 @@ class MongoFragmentRepository(FragmentRepository):
             "references": ("references",),
             "script": ("script",),
             "notes": ("notes",),
+            "archaeology": ("archaeology",),
             "transliteration": (
                 "text",
                 "signs",
