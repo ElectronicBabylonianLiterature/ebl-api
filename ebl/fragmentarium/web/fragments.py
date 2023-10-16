@@ -29,11 +29,6 @@ from ebl.users.web.require_scope import require_fragment_read_scope
 class FragmentRetrieveAllDtoSchema(FragmentSchema):
     _id = fields.Function(lambda fragment: str(fragment.number))
     atf = fields.Function(lambda fragment: fragment.text.atf)
-    """
-    has_photo = fields.Function(
-        lambda _, context: context["has_photo"], data_key="hasPhoto"
-    )
-    """
 
     class Meta:
         exclude = (
