@@ -190,8 +190,10 @@ def write_fragment_numbers(
 
 if __name__ == "__main__":
     """
-    python3 ebl/fragmentarium/annotations/prepare_annotations.py -f  # for detection finished fragments are filtered
-    python3 ebl/fragmentarium/annotations/prepare_annotations.py -c  # for classification
+    # for detection finished fragments are filtered
+    python3 ebl/fragmentarium/annotations/prepare_annotations.py -f
+     # for classification
+    python3 ebl/fragmentarium/annotations/prepare_annotations.py -c
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
