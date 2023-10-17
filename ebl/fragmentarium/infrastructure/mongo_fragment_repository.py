@@ -91,13 +91,11 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
 
-    def count_transliterated_fragments(self) -> int:
-        return self._fragments.count_documents(HAS_TRANSLITERATION)
-
-    def count_transliterated_fragments_with_authorization(self) -> int:
-        return self._fragments.count_documents(
-            HAS_TRANSLITERATION | {"authorizedScopes": {"$exists": False}}
-        )
+    def count_transliterated_fragments(self, only_authorized=False) -> int:
+        query = HAS_TRANSLITERATION
+        if only_authorized:
+            query = query | {"authorizedScopes": {"$exists": False}}
+        return self._fragments.count_documents(query)
 
     def count_lines(self):
         result = self._fragments.aggregate(

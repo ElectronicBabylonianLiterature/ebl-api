@@ -1,6 +1,5 @@
 import falcon
 from falcon import Request, Response
-from marshmallow import fields
 from pydash import flow
 
 from ebl.common.query.parameter_parser import (
@@ -16,7 +15,6 @@ from ebl.errors import DataError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
@@ -24,23 +22,6 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from ebl.users.web.require_scope import require_fragment_read_scope
-
-
-class FragmentRetrieveAllDtoSchema(FragmentSchema):
-    _id = fields.Function(lambda fragment: str(fragment.number))
-    atf = fields.Function(lambda fragment: fragment.text.atf)
-
-    class Meta:
-        exclude = (
-            "folios",
-            "legacy_script",
-            "text",
-            "authorized_scopes",
-            "references",
-            "uncurated_references",
-            "folios",
-            "line_to_vec",
-        )
 
 
 class FragmentsRetrieveAllResource:
@@ -64,13 +45,15 @@ class FragmentsRetrieveAllResource:
         return skip_int
 
     def on_get(self, req: Request, resp: Response):
-        total_count = self._repo.count_transliterated_fragments_with_authorization()
+        total_count = self._repo.count_transliterated_fragments(only_authorized=True)
         skip = self._parse_skip(
             req.params.get("skip", default=0),
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
         fragments_ = []
+        # to improve performance we don't serialize the complete Fragment in fragment_repository
+        # because we would have to deserialize it again here to return it to client
         for fragment in fragments:
             fragment["atf"] = TextSchema().load(fragment["text"]).atf
             dict.pop(fragment, "text")
