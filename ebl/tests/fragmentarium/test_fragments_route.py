@@ -109,6 +109,7 @@ def test_fragments_retrieve_all(guest_client, fragmentarium):
     fragment_with_scope = TransliteratedFragmentFactory.build(
         authorized_scopes=[Scope.READ_ITALIANNINEVEH_FRAGMENTS]
     )
+
     fragmentarium.create(fragment_with_scope)
     for fragment in fragments:
         fragmentarium.create(fragment)
