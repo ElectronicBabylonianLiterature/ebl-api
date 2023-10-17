@@ -47,7 +47,7 @@ class FragmentsRetrieveAllResource:
     def on_get(self, req: Request, resp: Response):
         total_count = self._repo.count_transliterated_fragments(only_authorized=True)
         skip = self._parse_skip(
-            req.params.get("skip", default=0),
+            req.params.get("skip", 0),
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
