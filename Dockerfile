@@ -1,4 +1,4 @@
-FROM pypy:3.9-7.3.10
+FROM pypy:3.12-7.3.12
 
 RUN pip install poetry
 

@@ -209,6 +209,8 @@ The test use [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory)
 Depending on your OS it might be necessary to configure it in order to get the correct version
 of MongoDB. E.g. for Ubuntu add the following environment variables:
 
+To fix error: `pymongo.errors.ServerSelectionTimeoutError: 127.0.0.1:27017: [Errno 111] Connection refused, ...` when
+running tests install mongodb locally. See https://github.com/kaizendorks/pymongo_inmemory/issues/63
 ```dotenv
 PYMONGOIM__MONGO_VERSION=4.4
 PYMONGOIM__OPERATING_SYSTEM=ubuntu
