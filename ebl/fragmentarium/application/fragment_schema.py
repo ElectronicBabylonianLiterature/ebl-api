@@ -215,6 +215,7 @@ class FragmentSchema(Schema):
 
     @post_dump
     def filter_none(self, data, **kwargs):
-        if len(data["authorizedScopes"]) == 0:
+        scope = data.get("authorized_scopes")
+        if scope is not None and len(scope) == 0:
             data.pop("authorizedScopes")
         return pydash.omit_by(data, pydash.is_none)
