@@ -247,8 +247,7 @@ if __name__ == "__main__":
 
         annotation_collection = list(
             filter(
-                lambda elem: str(elem.fragment_number)
-                in [*finished_fragments],
+                lambda elem: str(elem.fragment_number) in [*finished_fragments],
                 annotation_collection,
             )
         )
