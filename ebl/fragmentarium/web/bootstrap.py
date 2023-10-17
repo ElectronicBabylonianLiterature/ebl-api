@@ -22,6 +22,7 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsQueryResource,
     FragmentsResource,
     FragmentsListResource,
+    FragmentsRetrieveAllResource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.periods import PeriodsResource
@@ -68,6 +69,10 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
+
+    fragments_retrieve_all = FragmentsRetrieveAllResource(
+        context.fragment_repository, context.photo_repository
+    )
     fragment_genre = FragmentGenreResource(updater)
     fragment_script = FragmentScriptResource(updater)
     fragment_date = FragmentDateResource(updater)
@@ -108,6 +113,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     routes = [
         ("/fragments", fragment_search),
+        ("/fragments/retrieve-all", fragments_retrieve_all),
         ("/fragments/{number}/match", fragment_matcher),
         ("/fragments/{number}/genres", fragment_genre),
         ("/fragments/{number}/script", fragment_script),

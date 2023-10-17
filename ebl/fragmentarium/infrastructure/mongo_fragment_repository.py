@@ -14,14 +14,13 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
+from ebl.fragmentarium.domain.date import Date, DateSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
-from ebl.fragmentarium.domain.date import Date, DateSchema
-
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -31,12 +30,14 @@ from ebl.fragmentarium.infrastructure.queries import (
     fragment_is,
     join_joins,
 )
+from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
-from ebl.fragmentarium.infrastructure.queries import match_user_scopes
+
+RETRIEVE_ALL_LIMIT = 1000
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -90,8 +91,11 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
 
-    def count_transliterated_fragments(self):
-        return self._fragments.count_documents(HAS_TRANSLITERATION)
+    def count_transliterated_fragments(self, only_authorized=False) -> int:
+        query = HAS_TRANSLITERATION
+        if only_authorized:
+            query = query | {"authorizedScopes": {"$exists": False}}
+        return self._fragments.count_documents(query)
 
     def count_lines(self):
         result = self._fragments.aggregate(
@@ -423,3 +427,29 @@ class MongoFragmentRepository(FragmentRepository):
         return list(
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
         )
+
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
+        fragments = self._fragments.aggregate(
+            [
+                {
+                    "$match": HAS_TRANSLITERATION
+                    | {"authorizedScopes": {"$exists": False}}
+                },
+                {
+                    "$project": {
+                        "folios": 0,
+                        "lineToVec": 0,
+                        "authorizedScops": 0,
+                        "references": 0,
+                        "uncuratedReferences": 0,
+                        "genreLegacy": 0,
+                        "legacyJoins": 0,
+                        "legacyScript": 0,
+                        "_sortKey": 0,
+                    }
+                },
+                {"$skip": skip},
+                {"$limit": RETRIEVE_ALL_LIMIT},
+            ]
+        )
+        return list(fragments)

@@ -102,3 +102,17 @@ def test_get_restricted_fragment_as_guest(guest_client, fragmentarium):
     result = guest_client.simulate_get(f"/fragments/{fragment.number}")
 
     assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_fragments_retrieve_all(guest_client, fragmentarium):
+    fragments = TransliteratedFragmentFactory.build_batch(5)
+    fragment_with_scope = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.READ_ITALIANNINEVEH_FRAGMENTS]
+    )
+    fragmentarium.create(fragment_with_scope)
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+    result = guest_client.simulate_get("/fragments/retrieve-all?skip=0")
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json["fragments"]) == 5
+    assert result.json["totalCount"] == 5

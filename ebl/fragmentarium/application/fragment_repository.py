@@ -25,7 +25,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def count_transliterated_fragments(self) -> int:
+    def count_transliterated_fragments(self, only_authorized=True) -> int:
         ...
 
     @abstractmethod
@@ -105,4 +105,8 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def list_all_fragments(self) -> Sequence[str]:
+        ...
+
+    @abstractmethod
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
         ...

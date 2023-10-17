@@ -72,15 +72,15 @@ def parse_annotations(annotation_data: AnnotationData) -> str:
     }
     try:
         if annotation_data.sign_name != "":
-            if annotation_data.sign_name.islower():
-                return MANUEL_FIX[annotation_data.sign_name]
-            else:
-                return annotation_data.sign_name
+            return (
+                MANUEL_FIX[annotation_data.sign_name]
+                if annotation_data.sign_name.islower()
+                else annotation_data.sign_name
+            )
+        if annotation_data.value.isdigit():
+            return annotation_data.value
         else:
-            if annotation_data.value.isdigit():
-                return annotation_data.value
-            else:
-                return MANUEL_FIX[annotation_data.value]
+            return MANUEL_FIX[annotation_data.value]
     except (KeyError, AttributeError) as e:
         print(e)
         print(annotation_data)
@@ -192,7 +192,7 @@ if __name__ == "__main__":
     """
     # for detection finished fragments are filtered
     python3 ebl/fragmentarium/annotations/prepare_annotations.py -f
-     # for classification
+    # for classification
     python3 ebl/fragmentarium/annotations/prepare_annotations.py -c
     """
     parser = argparse.ArgumentParser()
@@ -247,7 +247,8 @@ if __name__ == "__main__":
 
         annotation_collection = list(
             filter(
-                lambda elem: str(elem.fragment_number) in [*finished_fragments],
+                lambda elem: str(elem.fragment_number)
+                in [*finished_fragments],
                 annotation_collection,
             )
         )
