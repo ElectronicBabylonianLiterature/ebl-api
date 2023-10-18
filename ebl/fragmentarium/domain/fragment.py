@@ -101,6 +101,7 @@ class ExternalNumbers:
     ur_online_number: str = ""
     hiprecht_jena_number: str = ""
     hiprecht_heidelberg_number: str = ""
+    metropolitan_number: str = ""
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -137,6 +137,7 @@ class ExternalNumbersSchema(Schema):
     hiprecht_heidelberg_number = fields.String(
         load_default="", data_key="hilprechtHeidelbergNumber"
     )
+    metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
