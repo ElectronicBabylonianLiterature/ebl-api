@@ -23,7 +23,7 @@ class AfoRegisterRecordSchema(Schema):
         return AfoRegisterRecord(**data)
 
 
-class MongoSignRepository(AfoRegisterRepository):
+class MongoAfoRegisterRepository(AfoRegisterRepository):
     def __init__(self, database: Database):
         self._collection = MongoCollection(database, COLLECTION)
 

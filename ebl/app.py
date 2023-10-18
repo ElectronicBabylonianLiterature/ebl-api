@@ -46,6 +46,9 @@ from ebl.transliteration.application.parallel_line_injector import ParallelLineI
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
+from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MongoAfoRegisterRepository,
+)
 from ebl.users.domain.user import Guest
 from ebl.users.infrastructure.auth0 import Auth0Backend
 
@@ -90,6 +93,7 @@ def create_context():
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
+        afo_register_repository=MongoAfoRegisterRepository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
@@ -124,5 +128,4 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
 def get_app():
     sentry_sdk.init(dsn=os.environ["SENTRY_DSN"], integrations=[FalconIntegration()])
     context = create_context()
-
     return create_app(context, os.environ["AUTH0_ISSUER"], os.environ["AUTH0_AUDIENCE"])
