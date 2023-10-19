@@ -451,14 +451,16 @@ class ATFImporter:
             self.logger.warning(
                 "No museum number to cdli number'"
                 + cdli_number
-                + "' found. Trying to parse from original file..."
+                + "' found. Trying to parse from the original file..."
             )
             try:
                 museum_number_split = self.get_museum_number(ebl_lines["control_lines"])
                 parse_museum_number(museum_number_split.strip())
                 museum_number = museum_number_split
             except Exception:
-                self.logger.error(f"Could not find valid museum number in '{filename}'")
+                self.logger.error(
+                    f"Could not find a valid museum number in '{filename}'"
+                )
 
         skip = False
         while museum_number is None:
@@ -481,39 +483,42 @@ class ATFImporter:
             self.logger.info(Util.print_frame(f'Conversion of "{filename}.atf" failed'))
             return
 
-        try:
-            # insert transliteration
-            self.insert_translitertions(
-                transliteration_factory,
-                updater,
-                ebl_lines["transliteration"],
-                museum_number,
+        if not list(
+            self.db.get_collection("fragments").find(
+                {"museumNumber": museum_number}, {"text.lines.0"}
             )
-            # insert lemmatization
-            self.insert_lemmatization(
-                updater, ebl_lines["lemmatization"], museum_number
-            )
-
-            success.append(f"{filename} successfully imported")
-            self.logger.info(
-                Util.print_frame(
-                    'Conversion of "'
-                    + filename
-                    + '.atf" finished (museum number "'
-                    + museum_number
-                    + '")'
+        ):
+            try:
+                # Insert transliteration
+                self.insert_translitertions(
+                    transliteration_factory,
+                    updater,
+                    ebl_lines["transliteration"],
+                    museum_number,
                 )
-            )
+                # Insert lemmatization
+                self.insert_lemmatization(
+                    updater, ebl_lines["lemmatization"], museum_number
+                )
 
-        except Exception as e:
-            self.logger.error(f"{filename} could not be imported: {str(e)}")
-            failed.append(f"{filename} could not be imported: {str(e)}")
+                success.append(f"{filename} successfully imported")
+                self.logger.info(
+                    Util.print_frame(
+                        'Conversion of "'
+                        + filename
+                        + '.atf" finished (museum number "'
+                        + museum_number
+                        + '")'
+                    )
+                )
+            except Exception:
+                self.logger.error(f"{filename} could not be imported: {str(Exception)}")
+                failed.append(f"{filename} could not be imported: {str(Exception)}")
 
     def start(self):
         self.logger.info("Atf-Importer started...")
 
         # cli arguments
-
         parser = argparse.ArgumentParser(
             description="Converts ATF-files to eBL-ATF standard."
         )
