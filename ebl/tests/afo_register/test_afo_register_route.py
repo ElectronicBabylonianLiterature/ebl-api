@@ -26,6 +26,7 @@ def test_find_afo_register_record_route(
         "discussedBy": afo_register_record.discussed_by,
         "discussedByNotes": afo_register_record.discussed_by_notes,
     }
+    afo_register_repository.create(afo_register_record)
     get_result = client.simulate_get("/afo-register", params=params)
 
     assert get_result.status == falcon.HTTP_OK
