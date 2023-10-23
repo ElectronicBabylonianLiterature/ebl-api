@@ -1,7 +1,7 @@
 import falcon
 from ebl.context import Context
 
-from ebl.afo_register.web.afo_register_entries import AfoRegisterResource
+from ebl.afo_register.web.afo_register_records import AfoRegisterResource
 
 
 def create_afo_register_routes(api: falcon.App, context: Context):

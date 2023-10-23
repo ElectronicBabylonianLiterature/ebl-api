@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, EXCLUDE
 from typing import cast
 from pymongo.database import Database
 from ebl.mongo_collection import MongoCollection
@@ -10,6 +10,9 @@ COLLECTION = "afo_register"
 
 
 class AfoRegisterRecordSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     afo_number = fields.String(required=True, data_key="afoNumber")
     page = fields.String(required=True)
     text = fields.String(required=True)
@@ -25,8 +28,13 @@ class AfoRegisterRecordSchema(Schema):
 
 class MongoAfoRegisterRepository(AfoRegisterRepository):
     def __init__(self, database: Database):
-        self._collection = MongoCollection(database, COLLECTION)
+        self._afo_register = MongoCollection(database, COLLECTION)
+
+    def create(self, afo_register_record: AfoRegisterRecord) -> str:
+        return self._afo_register.insert_one(
+            AfoRegisterRecordSchema().dump(afo_register_record)
+        )
 
     def find(self, query, *args, **kwargs) -> AfoRegisterRecord:
-        data = {}  # self._collection.find_one_by_id(name)
+        data = self._afo_register.find_one(query)
         return cast(AfoRegisterRecord, AfoRegisterRecordSchema().load(data))

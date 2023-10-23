@@ -7,3 +7,7 @@ class AfoRegisterRepository(ABC):
     @abstractmethod
     def find(self, query, *args, **kwargs) -> AfoRegisterRecord:
         ...
+
+    @abstractmethod
+    def create(self, afo_register_record: AfoRegisterRecord) -> str:
+        ...

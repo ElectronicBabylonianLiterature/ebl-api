@@ -72,6 +72,9 @@ from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
+from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MongoAfoRegisterRepository,
+)
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -245,6 +248,11 @@ def fragment_updater(
     )
 
 
+@pytest.fixture
+def afo_register_repository(database):
+    return MongoAfoRegisterRepository(database)
+
+
 class FakeFile(File):
     def __init__(self, filename: str, data: bytes, metadata: dict):
         self.filename = filename
@@ -406,6 +414,7 @@ def context(
     bibliography_repository,
     annotations_repository,
     lemma_repository,
+    afo_register_repository,
     user,
     parallel_line_injector,
     mongo_cache_repository,
@@ -425,6 +434,7 @@ def context(
         text_repository=text_repository,
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
+        afo_register_repository=afo_register_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
