@@ -250,3 +250,11 @@ class Fragment:
     @property
     def hiprecht_heidelberg_number(self) -> str:
         return self._get_external_number("hiprecht_heidelberg")
+
+    @property
+    def metropolitan_number(self) -> str:
+        return self._get_external_number("metropolitan_number")
+
+    @property
+    def louvre_number(self) -> str:
+        return self._get_external_number("louvre_number")
