@@ -99,8 +99,8 @@ class ExternalNumbers:
     archibab_number: str = ""
     bdtns_number: str = ""
     ur_online_number: str = ""
-    hiprecht_jena_number: str = ""
-    hiprecht_heidelberg_number: str = ""
+    hilprecht_jena_number: str = ""
+    hilprecht_heidelberg_number: str = ""
     metropolitan_number: str = ""
     louvre_number: str = ""
 
@@ -244,12 +244,12 @@ class Fragment:
         return self._get_external_number("ur_online")
 
     @property
-    def hiprecht_jena_number(self) -> str:
-        return self._get_external_number("hiprecht_jena")
+    def hilprecht_jena_number(self) -> str:
+        return self._get_external_number("hilprecht_jena")
 
     @property
-    def hiprecht_heidelberg_number(self) -> str:
-        return self._get_external_number("hiprecht_heidelberg")
+    def hilprecht_heidelberg_number(self) -> str:
+        return self._get_external_number("hilprecht_heidelberg")
 
     @property
     def metropolitan_number(self) -> str:
