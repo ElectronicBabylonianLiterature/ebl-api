@@ -102,6 +102,7 @@ class ExternalNumbers:
     hiprecht_jena_number: str = ""
     hiprecht_heidelberg_number: str = ""
     metropolitan_number: str = ""
+    louvre_number: str = ""
 
 
 @attr.s(auto_attribs=True, frozen=True)
