@@ -131,10 +131,10 @@ class ExternalNumbersSchema(Schema):
     archibab_number = fields.String(load_default="", data_key="archibabNumber")
     bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
     ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
-    hiprecht_jena_number = fields.String(
+    hilprecht_jena_number = fields.String(
         load_default="", data_key="hilprechtJenaNumber"
     )
-    hiprecht_heidelberg_number = fields.String(
+    hilprecht_heidelberg_number = fields.String(
         load_default="", data_key="hilprechtHeidelbergNumber"
     )
     metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")

@@ -192,8 +192,8 @@ def test_scopes():
         "archibab_number",
         "bdtns_number",
         "ur_online_number",
-        "hiprecht_jena_number",
-        "hiprecht_heidelberg_number",
+        "hilprecht_jena_number",
+        "hilprecht_heidelberg_number",
     ],
 )
 def test_external_number(number):
