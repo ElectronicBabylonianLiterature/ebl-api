@@ -160,7 +160,9 @@ class ExternalNumbersFactory(factory.Factory):
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
     hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
-    hilprecht_heidelberg_number = factory.Sequence(lambda n: f"hilprecht-heidelberg-{n}")
+    hilprecht_heidelberg_number = factory.Sequence(
+        lambda n: f"hilprecht-heidelberg-{n}"
+    )
 
 
 class FragmentFactory(factory.Factory):
