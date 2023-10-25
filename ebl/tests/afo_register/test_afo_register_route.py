@@ -14,7 +14,7 @@ def afo_register_record() -> AfoRegisterRecord:
     return AfoRegisterRecordFactory.build()
 
 
-def test_find_afo_register_record_route(
+def test_search_afo_register_record_route(
     afo_register_record, afo_register_repository: AfoRegisterRepository, client
 ) -> None:
     params = {
@@ -30,4 +30,4 @@ def test_find_afo_register_record_route(
     get_result = client.simulate_get("/afo-register", params=params)
 
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == AfoRegisterRecordSchema().dump(afo_register_record)
+    assert get_result.json == [AfoRegisterRecordSchema().dump(afo_register_record)]

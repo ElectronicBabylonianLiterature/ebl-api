@@ -13,9 +13,9 @@ class AfoRegisterResource:
 
     def on_get(self, req: Request, resp: Response) -> None:
         try:
-            response = self._afoRegisterRepository.find(req.params)
+            response = self._afoRegisterRepository.search(req.params)
         except ValueError as error:
             raise NotFoundError(
                 f"No AfO registry entries matching {str(req.params)} found."
             ) from error
-        resp.media = AfoRegisterRecordSchema().dump(response)
+        resp.media = AfoRegisterRecordSchema().dump(response, many=True)

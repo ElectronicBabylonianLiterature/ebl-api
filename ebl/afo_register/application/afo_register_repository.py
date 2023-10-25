@@ -1,3 +1,4 @@
+from typing import Sequence
 from abc import ABC, abstractmethod
 
 from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
@@ -5,7 +6,7 @@ from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
 
 class AfoRegisterRepository(ABC):
     @abstractmethod
-    def find(self, query, *args, **kwargs) -> AfoRegisterRecord:
+    def search(self, query, *args, **kwargs) -> Sequence[AfoRegisterRecord]:
         ...
 
     @abstractmethod

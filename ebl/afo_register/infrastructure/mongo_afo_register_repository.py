@@ -35,6 +35,6 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
             AfoRegisterRecordSchema().dump(afo_register_record)
         )
 
-    def find(self, query, *args, **kwargs) -> AfoRegisterRecord:
-        data = self._afo_register.find_one(query)
-        return cast(AfoRegisterRecord, AfoRegisterRecordSchema().load(data))
+    def search(self, query, *args, **kwargs):
+        data = self._afo_register.find_many(query)
+        return cast(AfoRegisterRecord, AfoRegisterRecordSchema().load(data, many=True))
