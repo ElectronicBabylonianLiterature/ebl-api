@@ -103,6 +103,7 @@ class ExternalNumbers:
     hilprecht_heidelberg_number: str = ""
     metropolitan_number: str = ""
     louvre_number: str = ""
+    yale_peabody_number: str = ""
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -250,6 +251,10 @@ class Fragment:
     @property
     def hilprecht_heidelberg_number(self) -> str:
         return self._get_external_number("hilprecht_heidelberg")
+
+    @property
+    def yale_peabody_number(self) -> str:
+        return self._get_external_number("yale_peabody")
 
     @property
     def metropolitan_number(self) -> str:
