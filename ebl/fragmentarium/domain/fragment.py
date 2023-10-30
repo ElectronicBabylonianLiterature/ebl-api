@@ -104,6 +104,7 @@ class ExternalNumbers:
     metropolitan_number: str = ""
     louvre_number: str = ""
     yale_peabody_number: str = ""
+    oracc_numbers: Sequence[str] = list()
 
 
 @attr.s(auto_attribs=True, frozen=True)

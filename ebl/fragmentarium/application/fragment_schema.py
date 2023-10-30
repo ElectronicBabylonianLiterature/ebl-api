@@ -140,10 +140,13 @@ class ExternalNumbersSchema(Schema):
     metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
     yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
+    oracc_numbers = fields.List(
+        fields.String(), load_default=tuple(), data_key="oraccNumbers"
+    )
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
-        return ExternalNumbers(**data)
+        return ExternalNumbers({**data, "oracc_numbers": tuple(data["oracc_numbers"])})
 
     @post_dump
     def omit_empty_numbers(self, data, **kwargs):
