@@ -146,7 +146,8 @@ class ExternalNumbersSchema(Schema):
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
-        return ExternalNumbers({**data, "oracc_numbers": tuple(data["oracc_numbers"])})
+        data["oracc_numbers"] = tuple(data["oracc_numbers"])
+        return ExternalNumbers(**data)
 
     @post_dump
     def omit_empty_numbers(self, data, **kwargs):
