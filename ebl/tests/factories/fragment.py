@@ -7,6 +7,7 @@ from ebl.common.domain.project import ResearchProject
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.tests.factories.archaeology import ArchaeologyFactory
+from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -162,6 +163,12 @@ class ExternalNumbersFactory(factory.Factory):
     hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
     hilprecht_heidelberg_number = factory.Sequence(
         lambda n: f"hilprecht-heidelberg-{n}"
+    )
+    metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
+    louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
+    yale_peabody_number = factory.Sequence(lambda n: f"yale-peabody-number-{n}")
+    oracc_numbers = factory.List(
+        [factory.Sequence(lambda n: f"oracc-number-{n}")], TupleFactory
     )
 
 
