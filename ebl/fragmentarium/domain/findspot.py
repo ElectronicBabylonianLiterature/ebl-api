@@ -23,6 +23,7 @@ class ExcavationPlan:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Findspot:
+    id_: int
     site: Optional[ExcavationSite] = None
     area: str = ""
     building: str = ""

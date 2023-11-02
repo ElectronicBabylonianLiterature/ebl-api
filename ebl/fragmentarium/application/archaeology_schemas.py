@@ -36,6 +36,7 @@ class ExcavationPlanSchema(Schema):
 
 
 class FindspotSchema(Schema):
+    id_ = fields.Integer(required=True, data_key="_id")
     site = fields.Function(
         lambda findspot: getattr(findspot.site, "long_name", None),
         lambda value: ExcavationSite.from_name(value),
