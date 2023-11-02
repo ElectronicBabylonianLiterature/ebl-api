@@ -7,6 +7,8 @@ from ebl.transliteration.domain.museum_number import MuseumNumber as ExcavationN
 from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 import factory.fuzzy
 
+FINDSPOT_COUNT = 3
+
 
 class DateRangeFactory(factory.Factory):
     class Meta:
@@ -37,7 +39,7 @@ class FindspotFactory(factory.Factory):
     class Meta:
         model = Findspot
 
-    id_ = factory.Sequence(lambda n: n)
+    id_ = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
     site = factory.fuzzy.FuzzyChoice(
         set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
     )
