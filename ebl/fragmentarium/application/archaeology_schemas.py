@@ -36,6 +36,11 @@ class ExcavationPlanSchema(Schema):
 
 
 class FindspotSchema(Schema):
+    site = fields.Function(
+        lambda findspot: getattr(findspot.site, "long_name", None),
+        lambda value: ExcavationSite.from_name(value),
+        allow_none=True,
+    )
     area = fields.String()
     building = fields.String()
     building_type = NameEnumField(BuildingType, data_key="buildingType")
@@ -44,14 +49,15 @@ class FindspotSchema(Schema):
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=tuple())
     room = fields.String()
     context = fields.String()
-    primary_context = fields.Boolean(data_key="primaryContext")
+    primary_context = fields.Boolean(
+        data_key="primaryContext",
+        allow_none=True,
+    )
     notes = fields.String()
-    references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
 
     @post_load
     def create_findspot(self, data, **kwargs) -> Findspot:
         data["plans"] = tuple(data["plans"])
-        data["references"] = tuple(data["references"])
         return Findspot(**data)
 
 
