@@ -21,7 +21,7 @@ def test_serialize_archaeology():
         "excavationDate": DateWithNotesSchema().dump(
             archaeology.excavation_date, many=True
         ),
-        "findspot": FindspotSchema().dump(archaeology.findspot),
+        "findspotId": archaeology.findspot_id,
     }
 
 
@@ -39,7 +39,7 @@ def test_deserialize_archaeology():
                 "excavationDate": DateWithNotesSchema().dump(
                     archaeology.excavation_date, many=True
                 ),
-                "findspot": FindspotSchema().dump(archaeology.findspot),
+                "findspotId": archaeology.findspot_id,
             }
         )
         == archaeology

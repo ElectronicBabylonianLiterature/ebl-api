@@ -1,7 +1,6 @@
 from typing import Optional, Sequence
 import attr
 from ebl.fragmentarium.domain.iso_date import DateWithNotes
-from ebl.fragmentarium.domain.findspot import Findspot
 from ebl.transliteration.domain.museum_number import MuseumNumber as ExcavationNumber
 from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
