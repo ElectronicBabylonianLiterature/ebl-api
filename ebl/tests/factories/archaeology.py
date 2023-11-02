@@ -37,6 +37,9 @@ class FindspotFactory(factory.Factory):
     class Meta:
         model = Findspot
 
+    site = factory.fuzzy.FuzzyChoice(
+        set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
+    )
     area = factory.Faker("word")
     building = factory.Faker("word")
     building_type = factory.fuzzy.FuzzyChoice(set(BuildingType))
@@ -47,7 +50,6 @@ class FindspotFactory(factory.Factory):
     context = factory.Faker("word")
     primary_context = factory.Faker("boolean")
     notes = factory.Faker("sentence")
-    references = factory.List([factory.SubFactory(ReferenceFactory)], TupleFactory)
 
 
 class ArchaeologyFactory(factory.Factory):
