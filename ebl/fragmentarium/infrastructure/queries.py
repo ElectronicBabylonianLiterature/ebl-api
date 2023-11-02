@@ -329,7 +329,7 @@ def join_findspots() -> List[dict]:
         {
             "$lookup": {
                 "from": FINDSPOTS_COLLECTION,
-                "localField": "archaeology.findspot",
+                "localField": "archaeology.findspotId",
                 "foreignField": "_id",
                 "as": "findspots",
             }

@@ -78,6 +78,9 @@ class ArchaeologySchema(Schema):
         DateWithNotesSchema, data_key="excavationDate", many=True, load_default=tuple()
     )
     findspot_id = fields.Integer(allow_none=True, default=None, data_key="findspotId")
+    findspot = fields.Nested(
+        FindspotSchema, allow_none=True, default=None, data_key="findspot"
+    )
 
     @post_load
     def create_archaeology(self, data, **kwargs) -> Archaeology:
