@@ -104,6 +104,7 @@ class ExternalNumbers:
     metropolitan_number: str = ""
     louvre_number: str = ""
     philadelphia_number: str = ""
+    achemenet_number: str = ""
     yale_peabody_number: str = ""
     oracc_numbers: Sequence[str] = tuple()
 
@@ -265,6 +266,10 @@ class Fragment:
     @property
     def louvre_number(self) -> str:
         return self._get_external_number("louvre_number")
+
+    @property
+    def achemenet_number(self) -> str:
+        return self._get_external_number("achemenet")
 
     @property
     def philadelphia_number(self) -> str:
