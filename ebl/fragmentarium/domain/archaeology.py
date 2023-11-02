@@ -12,4 +12,4 @@ class Archaeology:
     site: Optional[ExcavationSite] = None
     regular_excavation: bool = True
     excavation_date: Sequence[DateWithNotes] = tuple()
-    findspot: Optional[Findspot] = None
+    findspot_id: Optional[int] = None
