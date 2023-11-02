@@ -37,6 +37,7 @@ class FindspotFactory(factory.Factory):
     class Meta:
         model = Findspot
 
+    id_ = factory.Sequence(lambda n: n)
     site = factory.fuzzy.FuzzyChoice(
         set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
     )
