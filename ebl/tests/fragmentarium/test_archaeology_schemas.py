@@ -1,7 +1,6 @@
 from ebl.fragmentarium.application.archaeology_schemas import (
     ArchaeologySchema,
     ExcavationNumberSchema,
-    FindspotSchema,
 )
 from ebl.fragmentarium.application.date_schemas import DateWithNotesSchema
 from ebl.tests.factories.archaeology import (
