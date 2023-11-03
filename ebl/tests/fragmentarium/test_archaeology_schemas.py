@@ -21,6 +21,7 @@ def test_serialize_archaeology():
             archaeology.excavation_date, many=True
         ),
         "findspotId": archaeology.findspot_id,
+        "findspot": archaeology.findspot,
     }
 
 
@@ -39,6 +40,7 @@ def test_deserialize_archaeology():
                     archaeology.excavation_date, many=True
                 ),
                 "findspotId": archaeology.findspot_id,
+                "findspot": archaeology.findspot,
             }
         )
         == archaeology
