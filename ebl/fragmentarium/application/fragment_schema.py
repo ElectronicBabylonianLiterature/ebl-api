@@ -140,6 +140,8 @@ class ExternalNumbersSchema(Schema):
     metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
     yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
+    philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
+    achemenet_number = fields.String(load_default="", data_key="achemenetNumber")
     oracc_numbers = fields.List(
         fields.String(), load_default=tuple(), data_key="oraccNumbers"
     )

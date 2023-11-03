@@ -166,7 +166,9 @@ class ExternalNumbersFactory(factory.Factory):
     )
     metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
+    philadelphia_number = factory.Sequence(lambda n: f"philadelphia-number-{n}")
     yale_peabody_number = factory.Sequence(lambda n: f"yale-peabody-number-{n}")
+    achemenet_number = factory.Sequence(lambda n: f"achemenet-number-{n}")
     oracc_numbers = factory.List(
         [factory.Sequence(lambda n: f"oracc-number-{n}")], TupleFactory
     )
