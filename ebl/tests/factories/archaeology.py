@@ -14,8 +14,8 @@ class DateRangeFactory(factory.Factory):
     class Meta:
         model = DateRange
 
-    start = factory.Faker("date_object")
-    end = factory.Faker("date_object")
+    start = factory.fuzzy.FuzzyInteger(-800, -750)
+    end = factory.fuzzy.FuzzyInteger(-745, -650)
     notes = factory.Faker("sentence")
 
 
