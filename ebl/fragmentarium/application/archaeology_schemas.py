@@ -35,13 +35,16 @@ class ExcavationPlanSchema(Schema):
         return ExcavationPlan(**data)
 
 
+site_field = fields.Function(
+    lambda object_: getattr(object_.site, "long_name", None),
+    lambda value: ExcavationSite.from_name(value) if value else None,
+    allow_none=True,
+)
+
+
 class FindspotSchema(Schema):
     id_ = fields.Integer(required=True, data_key="_id")
-    site = fields.Function(
-        lambda findspot: getattr(findspot.site, "long_name", None),
-        lambda value: ExcavationSite.from_name(value),
-        allow_none=True,
-    )
+    site = site_field
     area = fields.String()
     building = fields.String()
     building_type = NameEnumField(BuildingType, data_key="buildingType")
@@ -66,11 +69,7 @@ class ArchaeologySchema(Schema):
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
-    site = fields.Function(
-        lambda archaeology: getattr(archaeology.site, "long_name", None),
-        lambda value: ExcavationSite.from_name(value),
-        allow_none=True,
-    )
+    site = site_field
     regular_excavation = fields.Boolean(
         load_default=True, data_key="isRegularExcavation"
     )
