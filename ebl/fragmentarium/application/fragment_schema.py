@@ -142,6 +142,7 @@ class ExternalNumbersSchema(Schema):
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
     philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
     achemenet_number = fields.String(load_default="", data_key="achemenetNumber")
+    nabucco_number = fields.String(load_default="", data_key="nabuccoNumber")
     oracc_numbers = fields.List(
         fields.String(), load_default=tuple(), data_key="oraccNumbers"
     )
