@@ -3,6 +3,7 @@ from typing import Optional, Sequence
 from enum import Enum, auto
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.iso_date import DateRange
+from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
 
 class BuildingType(Enum):
@@ -22,6 +23,8 @@ class ExcavationPlan:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Findspot:
+    id_: int
+    site: Optional[ExcavationSite] = None
     area: str = ""
     building: str = ""
     building_type: Optional[BuildingType] = None
@@ -32,4 +35,3 @@ class Findspot:
     context: str = ""
     primary_context: Optional[bool] = None
     notes: str = ""
-    references: Sequence[Reference] = tuple()
