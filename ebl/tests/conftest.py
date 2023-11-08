@@ -50,6 +50,9 @@ from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
 )
+from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
+    MongoFindspotRepository,
+)
 from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
     MongoLemmaRepository,
 )
@@ -75,6 +78,7 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
+from ebl.tests.factories.archaeology import FindspotFactory, FINDSPOT_COUNT
 
 
 @pytest.fixture(scope="session")
@@ -197,6 +201,16 @@ def corpus(
 @pytest.fixture
 def fragment_repository(database):
     return MongoFragmentRepository(database)
+
+
+@pytest.fixture
+def findspot_repository(database):
+    return MongoFindspotRepository(database)
+
+
+@pytest.fixture
+def findspots():
+    return FindspotFactory.build_batch(FINDSPOT_COUNT)
 
 
 @pytest.fixture
@@ -406,6 +420,7 @@ def context(
     bibliography_repository,
     annotations_repository,
     lemma_repository,
+    findspot_repository,
     user,
     parallel_line_injector,
     mongo_cache_repository,
@@ -425,6 +440,7 @@ def context(
         text_repository=text_repository,
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
+        findspot_repository=findspot_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,

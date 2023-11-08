@@ -13,8 +13,8 @@ class IsoDateField(fields.Field):
 
 
 class DateRangeSchema(Schema):
-    start = IsoDateField()
-    end = IsoDateField()
+    start = fields.Integer()
+    end = fields.Integer()
     notes = fields.String()
 
     @post_load
