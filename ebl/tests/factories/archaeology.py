@@ -7,15 +7,13 @@ from ebl.transliteration.domain.museum_number import MuseumNumber as ExcavationN
 from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 import factory.fuzzy
 
-FINDSPOT_COUNT = 3
-
 
 class DateRangeFactory(factory.Factory):
     class Meta:
         model = DateRange
 
-    start = factory.fuzzy.FuzzyInteger(-800, -750)
-    end = factory.fuzzy.FuzzyInteger(-745, -650)
+    start = factory.Faker("date_object")
+    end = factory.Faker("date_object")
     notes = factory.Faker("sentence")
 
 
@@ -39,10 +37,6 @@ class FindspotFactory(factory.Factory):
     class Meta:
         model = Findspot
 
-    id_ = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
-    site = factory.fuzzy.FuzzyChoice(
-        set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
-    )
     area = factory.Faker("word")
     building = factory.Faker("word")
     building_type = factory.fuzzy.FuzzyChoice(set(BuildingType))
@@ -53,6 +47,7 @@ class FindspotFactory(factory.Factory):
     context = factory.Faker("word")
     primary_context = factory.Faker("boolean")
     notes = factory.Faker("sentence")
+    references = factory.List([factory.SubFactory(ReferenceFactory)], TupleFactory)
 
 
 class ArchaeologyFactory(factory.Factory):
@@ -67,4 +62,4 @@ class ArchaeologyFactory(factory.Factory):
     excavation_date = factory.List(
         [factory.SubFactory(DateWithNotesFactory)], TupleFactory
     )
-    findspot_id = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
+    findspot = factory.SubFactory(FindspotFactory)
