@@ -7,7 +7,6 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
-from ebl.fragmentarium.web.findspots import FindspotResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
@@ -67,6 +66,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.sign_repository,
         context.parallel_line_injector,
     )
+
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
 
@@ -106,7 +106,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
     chapters = ChaptersByManuscriptResource(corpus, finder)
-    findspots = FindspotResource(context.findspot_repository)
 
     all_fragments = FragmentsListResource(
         context.fragment_repository,
@@ -138,7 +137,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/folios/{name}/{number}", folios),
         ("/fragments/query", fragment_query),
         ("/fragments/all", all_fragments),
-        ("/findspots", findspots),
     ]
 
     for uri, resource in routes:

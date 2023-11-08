@@ -1,4 +1,3 @@
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
 FRAGMENTS_COLLECTION = "fragments"
-FINDSPOTS_COLLECTION = "findspots"
