@@ -29,7 +29,6 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_random,
     fragment_is,
     join_joins,
-    join_findspots,
 )
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.mongo_collection import MongoCollection
@@ -177,7 +176,6 @@ class MongoFragmentRepository(FragmentRepository):
                     if exclude_lines
                     else self._filter_fragment_lines(lines)
                 ),
-                *join_findspots(),
                 *join_reference_documents(),
                 *join_joins(),
             ]

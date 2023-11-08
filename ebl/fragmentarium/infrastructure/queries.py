@@ -5,10 +5,7 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.infrastructure.collections import (
-    FRAGMENTS_COLLECTION,
-    FINDSPOTS_COLLECTION,
-)
+from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import museum_number_is
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
@@ -321,19 +318,4 @@ def join_joins() -> List[dict]:
         },
         {"$set": {"joins": {"$first": "$joins"}}},
         {"$set": {"joins": "$joins.fragments"}},
-    ]
-
-
-def join_findspots() -> List[dict]:
-    return [
-        {
-            "$lookup": {
-                "from": FINDSPOTS_COLLECTION,
-                "localField": "archaeology.findspotId",
-                "foreignField": "_id",
-                "as": "findspots",
-            }
-        },
-        {"$addFields": {"archaeology.findspot": {"$first": "$findspots"}}},
-        {"$project": {"findspots": False}},
     ]
