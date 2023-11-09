@@ -1,4 +1,5 @@
 import attr
+from typing import Sequence
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -10,3 +11,9 @@ class AfoRegisterRecord:
     lines_discussed: str = ""
     discussed_by: str = ""
     discussed_by_notes: str = ""
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class AfoRegisterRecordSuggestion:
+    text: str = ""
+    text_numbers: Sequence[str] = tuple()

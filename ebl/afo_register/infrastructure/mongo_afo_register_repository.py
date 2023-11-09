@@ -1,8 +1,11 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
-from typing import cast
+from typing import cast, Sequence
 from pymongo.database import Database
 from ebl.mongo_collection import MongoCollection
-from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
+from ebl.afo_register.domain.afo_register_record import (
+    AfoRegisterRecord,
+    AfoRegisterRecordSuggestion,
+)
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
 
 
@@ -26,6 +29,15 @@ class AfoRegisterRecordSchema(Schema):
         return AfoRegisterRecord(**data)
 
 
+class AfoRegisterRecordSuggestionSchema(Schema):
+    text = fields.String(required=True)
+    text_numbers = fields.List(fields.String(), required=True, data_key="textNumbers")
+
+    @post_load
+    def make_suggestion(self, data, **kwargs):
+        return AfoRegisterRecordSuggestion(**data)
+
+
 class MongoAfoRegisterRepository(AfoRegisterRepository):
     def __init__(self, database: Database):
         self._afo_register = MongoCollection(database, COLLECTION)
@@ -35,6 +47,21 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
             AfoRegisterRecordSchema().dump(afo_register_record)
         )
 
-    def search(self, query, *args, **kwargs):
-        data = self._afo_register.find_many(query)
-        return cast(AfoRegisterRecord, AfoRegisterRecordSchema().load(data, many=True))
+    def search(self, query, *args, **kwargs) -> Sequence[AfoRegisterRecord]:
+        records = AfoRegisterRecordSchema().load(
+            self._afo_register.find_many(query), many=True
+        )
+        return cast(Sequence[AfoRegisterRecord], records)
+
+    def search_suggestions(
+        self, text_query: str, *args, **kwargs
+    ) -> Sequence[AfoRegisterRecordSuggestion]:
+        pipeline = [
+            {"$match": {"text": {"$regex": text_query, "$options": "i"}}},
+            {"$group": {"_id": "$text", "textNumbers": {"$push": "$textNumber"}}},
+            {"$project": {"text": "$_id", "textNumbers": "$textNumbers", "_id": 0}},
+        ]
+        suggestions = AfoRegisterRecordSuggestionSchema().load(
+            self._afo_register.aggregate(pipeline), many=True
+        )
+        return cast(Sequence[AfoRegisterRecordSuggestion], suggestions)

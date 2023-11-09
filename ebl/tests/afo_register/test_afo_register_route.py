@@ -2,10 +2,16 @@ import falcon
 import pytest
 
 from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
-from ebl.tests.factories.afo_register import AfoRegisterRecordFactory
-from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
+from ebl.tests.factories.afo_register import (
+    AfoRegisterRecordFactory,
+    AfoRegisterRecordSuggestionFactory,
+)
+from ebl.afo_register.application.afo_register_repository import (
+    AfoRegisterRepository,
+)
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     AfoRegisterRecordSchema,
+    AfoRegisterRecordSuggestionSchema,
 )
 
 
@@ -31,3 +37,21 @@ def test_search_afo_register_record_route(
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == [AfoRegisterRecordSchema().dump(afo_register_record)]
+
+
+def test_search_afo_register_suggestions_route(
+    afo_register_record, afo_register_repository: AfoRegisterRepository, client
+) -> None:
+    afo_register_repository.create(afo_register_record)
+    get_result = client.simulate_get(
+        "/afo-register/suggestions",
+        params={"text_query": afo_register_record.text[:-2]},
+    )
+    afo_register_record_suggestion = AfoRegisterRecordSuggestionFactory.build(
+        text=afo_register_record.text, text_numbers=[afo_register_record.text_number]
+    )
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.json == [
+        AfoRegisterRecordSuggestionSchema().dump(afo_register_record_suggestion)
+    ]

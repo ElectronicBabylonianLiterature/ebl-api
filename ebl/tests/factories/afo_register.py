@@ -1,6 +1,10 @@
 import factory
-from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
+from ebl.afo_register.domain.afo_register_record import (
+    AfoRegisterRecord,
+    AfoRegisterRecordSuggestion,
+)
 from faker import Faker
+from typing import Sequence
 
 PUBLICATIONS = ["StOr", "Al.T.", "OECT", "VS", "STT", "CCT", "CM", "CST", "SAAB"]
 
@@ -21,6 +25,10 @@ def get_text() -> str:
 
 def get_text_number() -> str:
     return f"Nr. {fake.random_int(min=1, max=300)}"
+
+
+def get_text_numbers() -> Sequence[str]:
+    return [get_text_number() for i in range(0, fake.random_int(min=1, max=15))]
 
 
 def get_lines_discussed() -> str:
@@ -47,3 +55,11 @@ class AfoRegisterRecordFactory(factory.Factory):
     lines_discussed = factory.LazyAttribute(lambda obj: get_lines_discussed())
     discussed_by = factory.LazyAttribute(lambda obj: get_discussed_by())
     discussed_by_notes = factory.Faker("sentence")
+
+
+class AfoRegisterRecordSuggestionFactory(factory.Factory):
+    class Meta:
+        model = AfoRegisterRecordSuggestion
+
+    text = factory.LazyAttribute(lambda obj: get_text())
+    text_numbers = factory.LazyAttribute(lambda obj: get_text_numbers())
