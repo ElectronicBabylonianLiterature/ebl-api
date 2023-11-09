@@ -15,7 +15,6 @@ from ebl.transliteration.domain.line import EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart, ParagraphPart
 from ebl.transliteration.domain.note_line import NoteLine
-from ebl.transliteration.domain.line_label import LineLabel
 
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Reading
@@ -174,7 +173,7 @@ def parse_atf_lark(atf_):
         raise TransliterationError(
             [
                 {
-                    "description": f"Duplicate label",
+                    "description": "Duplicate label",
                     "lineNumber": label.line_index + 1,
                 }
                 for label in text.labels
