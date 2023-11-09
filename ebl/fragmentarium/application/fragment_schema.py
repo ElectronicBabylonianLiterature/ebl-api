@@ -131,16 +131,30 @@ class ExternalNumbersSchema(Schema):
     archibab_number = fields.String(load_default="", data_key="archibabNumber")
     bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
     ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
-    hiprecht_jena_number = fields.String(
+    hilprecht_jena_number = fields.String(
         load_default="", data_key="hilprechtJenaNumber"
     )
-    hiprecht_heidelberg_number = fields.String(
+    hilprecht_heidelberg_number = fields.String(
         load_default="", data_key="hilprechtHeidelbergNumber"
+    )
+    metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
+    yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
+    louvre_number = fields.String(load_default="", data_key="louvreNumber")
+    philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
+    achemenet_number = fields.String(load_default="", data_key="achemenetNumber")
+    nabucco_number = fields.String(load_default="", data_key="nabuccoNumber")
+    oracc_numbers = fields.List(
+        fields.String(), load_default=tuple(), data_key="oraccNumbers"
     )
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
+        data["oracc_numbers"] = tuple(data["oracc_numbers"])
         return ExternalNumbers(**data)
+
+    @post_dump
+    def omit_empty_numbers(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_empty)
 
 
 class FragmentSchema(Schema):

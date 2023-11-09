@@ -99,8 +99,15 @@ class ExternalNumbers:
     archibab_number: str = ""
     bdtns_number: str = ""
     ur_online_number: str = ""
-    hiprecht_jena_number: str = ""
-    hiprecht_heidelberg_number: str = ""
+    hilprecht_jena_number: str = ""
+    hilprecht_heidelberg_number: str = ""
+    metropolitan_number: str = ""
+    louvre_number: str = ""
+    philadelphia_number: str = ""
+    achemenet_number: str = ""
+    nabucco_number: str = ""
+    yale_peabody_number: str = ""
+    oracc_numbers: Sequence[str] = tuple()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -242,9 +249,33 @@ class Fragment:
         return self._get_external_number("ur_online")
 
     @property
-    def hiprecht_jena_number(self) -> str:
-        return self._get_external_number("hiprecht_jena")
+    def hilprecht_jena_number(self) -> str:
+        return self._get_external_number("hilprecht_jena")
 
     @property
-    def hiprecht_heidelberg_number(self) -> str:
-        return self._get_external_number("hiprecht_heidelberg")
+    def hilprecht_heidelberg_number(self) -> str:
+        return self._get_external_number("hilprecht_heidelberg")
+
+    @property
+    def yale_peabody_number(self) -> str:
+        return self._get_external_number("yale_peabody")
+
+    @property
+    def metropolitan_number(self) -> str:
+        return self._get_external_number("metropolitan_number")
+
+    @property
+    def louvre_number(self) -> str:
+        return self._get_external_number("louvre_number")
+
+    @property
+    def achemenet_number(self) -> str:
+        return self._get_external_number("achemenet")
+
+    @property
+    def nabucco_number(self) -> str:
+        return self._get_external_number("nabucco")
+
+    @property
+    def philadelphia_number(self) -> str:
+        return self._get_external_number("philadelphia_number")

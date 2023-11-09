@@ -26,6 +26,9 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
+from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
+    MongoFindspotRepository,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -44,6 +47,7 @@ class Context:
     text_repository: MongoTextRepository
     annotations_repository: AnnotationsRepository
     lemma_repository: LemmaRepository
+    findspot_repository: MongoFindspotRepository
     custom_cache: ChapterCache
     cache: Cache
     parallel_line_injector: ParallelLineInjector

@@ -52,6 +52,9 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 )
 from ebl.users.domain.user import Guest
 from ebl.users.infrastructure.auth0 import Auth0Backend
+from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
+    MongoFindspotRepository,
+)
 
 althaia.patch()
 
@@ -95,6 +98,7 @@ def create_context():
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
         afo_register_repository=MongoAfoRegisterRepository(database),
+        findspot_repository=MongoFindspotRepository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
