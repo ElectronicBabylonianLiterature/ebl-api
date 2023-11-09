@@ -5,7 +5,10 @@ from falcon.media.validators.jsonschema import validate
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.transliteration_error import (
+    TransliterationError,
+    DuplicateLabelError,
+)
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
 from ebl.fragmentarium.domain.fragment import NotLowestJoinError
@@ -34,7 +37,7 @@ class TransliterationResource:
                 user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
-        except TransliterationError as error:
+        except (TransliterationError, DuplicateLabelError) as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {
                 "title": resp.status,

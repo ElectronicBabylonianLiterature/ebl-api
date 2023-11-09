@@ -22,7 +22,10 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.translation_line import TranslationLine
-from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.transliteration_error import (
+    TransliterationError,
+    DuplicateLabelError,
+)
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line_transformer import LineTransformer
@@ -170,7 +173,7 @@ def parse_atf_lark(atf_):
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 
     if duplicates := pydash.duplicates(text.labels):
-        raise TransliterationError(
+        raise DuplicateLabelError(
             [
                 {
                     "description": "Duplicate label",
