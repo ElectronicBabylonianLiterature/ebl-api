@@ -6,7 +6,6 @@ import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
 from lark.lark import Lark
 
-from ebl.errors import DataError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
@@ -16,6 +15,7 @@ from ebl.transliteration.domain.line import EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart, ParagraphPart
 from ebl.transliteration.domain.note_line import NoteLine
+from ebl.transliteration.domain.line_label import LineLabel
 
 from ebl.transliteration.domain.parallel_line import ParallelLine
 from ebl.transliteration.domain.sign_tokens import CompoundGrapheme, Reading
@@ -170,8 +170,17 @@ def parse_atf_lark(atf_):
 
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 
-    if pydash.duplicates(text.labels):
-        raise DataError("Duplicate labels.")
+    if duplicates := pydash.duplicates(text.labels):
+        raise TransliterationError(
+            [
+                {
+                    "description": f"Duplicate label",
+                    "lineNumber": label.line_index + 1,
+                }
+                for label in text.labels
+                if label in duplicates
+            ]
+        )
     else:
         return text
 
