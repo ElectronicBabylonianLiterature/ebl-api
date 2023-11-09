@@ -28,7 +28,7 @@ def get_text_number() -> str:
 
 
 def get_text_numbers() -> Sequence[str]:
-    return [get_text_number() for i in range(0, fake.random_int(min=1, max=15))]
+    return [get_text_number() for _ in range(0, fake.random_int(min=1, max=15))]
 
 
 def get_lines_discussed() -> str:
