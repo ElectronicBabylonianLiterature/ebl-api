@@ -115,7 +115,10 @@ class Text:
         ] = {
             TextLine: lambda line: (
                 current,
-                [*labels, current.set_line_number(line.line_number)],
+                [
+                    *labels,
+                    current.set_line_number(line.line_number),
+                ],
             ),
             ColumnAtLine: lambda line: (current.set_column(line.column_label), labels),
             SurfaceAtLine: lambda line: (
@@ -126,8 +129,9 @@ class Text:
             SealAtLine: lambda line: (current.set_seal(line.number), labels),
         }
 
-        for line in self.lines:
+        for index, line in enumerate(self.lines):
             if type(line) in handlers:
+                current = current.set_line_index(index)
                 current, labels = handlers[type(line)](line)
         return labels
 
