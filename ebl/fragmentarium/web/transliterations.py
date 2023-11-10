@@ -8,6 +8,7 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import (
     TransliterationError,
     DuplicateLabelError,
+    ExtentLabelError,
 )
 from ebl.users.web.require_scope import require_scope
 from ebl.errors import DataError
@@ -37,7 +38,11 @@ class TransliterationResource:
                 user,
             )
             resp.media = create_response_dto(updated_fragment, user, has_photo)
-        except (TransliterationError, DuplicateLabelError) as error:
+        except (
+            DuplicateLabelError,
+            ExtentLabelError,
+            TransliterationError,
+        ) as error:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             resp.media = {
                 "title": resp.status,
