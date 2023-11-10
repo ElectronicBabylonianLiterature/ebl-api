@@ -30,6 +30,7 @@ from ebl.transliteration.domain.transliteration_error import (
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line_transformer import LineTransformer
+from functools import singledispatch
 
 WORD_PARSER = Lark.open(
     "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
@@ -185,21 +186,15 @@ def parse_atf_lark(atf_):
         return text
 
 
-def create_transliteration_error_data(error: Exception, line: str, line_number: int):
-    handlers = {
-        UnexpectedInput: unexpected_input_error,
-        ParseError: parse_error,
-        EnclosureError: enclosure_error,
-        VisitError: visit_error,
-    }
-    for type_, handler in handlers.items():
-        if isinstance(error, type_):
-            return handler(error, line, line_number)  # pyre-ignore[6]
-
+@singledispatch
+def create_transliteration_error_data(
+    error: Exception, line: str, line_number: int
+) -> ErrorAnnotation:
     raise error
 
 
-def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
+@create_transliteration_error_data.register
+def _(error: UnexpectedInput, line: str, line_number: int) -> ErrorAnnotation:
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
     return ErrorAnnotation(
@@ -208,15 +203,18 @@ def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     )
 
 
-def parse_error(error: ParseError, line: str, line_number: int):
+@create_transliteration_error_data.register
+def _(error: ParseError, line: str, line_number: int) -> ErrorAnnotation:
     return ErrorAnnotation(f"Invalid line: {error}", line_number + 1)
 
 
-def enclosure_error(error: EnclosureError, line: str, line_number: int):
+@create_transliteration_error_data.register
+def _(error: EnclosureError, line: str, line_number: int) -> ErrorAnnotation:
     return ErrorAnnotation("Invalid brackets.", line_number + 1)
 
 
-def visit_error(error: VisitError, line: str, line_number: int):
+@create_transliteration_error_data.register
+def _(error: VisitError, line: str, line_number: int) -> ErrorAnnotation:
     if isinstance(error.orig_exc, DuplicateStatusError):
         return ErrorAnnotation("Duplicate Status", line_number + 1)
     else:
