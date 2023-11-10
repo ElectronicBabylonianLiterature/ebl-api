@@ -29,12 +29,12 @@ class LabelsValidator:
     def __init__(self, text: "Text") -> None:
         self._index = -1
         self._ranges = defaultdict(list)
-        self._errors = []
+        self._errors: List[ErrorAnnotation] = []
         self._labels = [
             (label.column, label.surface, label.line_number) for label in text.labels
         ]
 
-    def get_errors(self, lines: Sequence[Line]) -> List[dict]:
+    def get_errors(self, lines: Sequence[Line]) -> List[ErrorAnnotation]:
         self._index = -1
         self._ranges = defaultdict(list)
         self._errors = []
@@ -44,10 +44,7 @@ class LabelsValidator:
 
         return [*self._errors, *self._get_overlaps()]
 
-    def add_error(self, error: ErrorAnnotation) -> None:
-        self._errors.append(error.to_dict())
-
-    def _get_overlaps(self) -> Iterator[dict]:
+    def _get_overlaps(self) -> Iterator[ErrorAnnotation]:
         for language, ranges in self._ranges.items():
             overlap = pydash.duplicates([index for index, _ in ranges])
 
@@ -55,7 +52,7 @@ class LabelsValidator:
                 ErrorAnnotation(
                     f"Overlapping extents for language {language}.",
                     annotation_index + 1,
-                ).to_dict()
+                )
                 for index, annotation_index in ranges
                 if index in overlap
             )
@@ -74,7 +71,7 @@ class LabelsValidator:
     @_validate_line.register(TranslationLine)
     def _(self, line: TranslationLine, annotation_index: int) -> None:
         if self._index < 0:
-            self.add_error(
+            self._errors.append(
                 ErrorAnnotation(
                     "Translation before any text line.",
                     annotation_index + 1,
@@ -92,7 +89,7 @@ class LabelsValidator:
         try:
             end = self._get_index(extent)
             if end <= self._index:
-                self.add_error(
+                self._errors.append(
                     ErrorAnnotation(
                         f"Extent {extent} before translation.",
                         annotation_index + 1,
@@ -102,7 +99,7 @@ class LabelsValidator:
                 (index, annotation_index) for index in range(self._index, end + 1)
             )
         except ValueError:
-            self.add_error(
+            self._errors.append(
                 ErrorAnnotation(
                     f"Extent {extent} does not exist.",
                     annotation_index + 1,

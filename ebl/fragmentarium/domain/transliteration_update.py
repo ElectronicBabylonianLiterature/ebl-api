@@ -19,7 +19,7 @@ class TransliterationUpdate:
         if questionable_lines := self._get_questionable_lines(value):
             raise TransliterationError(
                 [
-                    ErrorAnnotation("Invalid value", line_number).to_dict()
+                    ErrorAnnotation("Invalid value", line_number)
                     for line_number in questionable_lines
                 ]
             )

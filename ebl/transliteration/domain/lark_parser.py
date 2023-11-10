@@ -25,6 +25,7 @@ from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.transliteration_error import (
     TransliterationError,
     DuplicateLabelError,
+    ErrorAnnotation,
 )
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
@@ -175,10 +176,7 @@ def parse_atf_lark(atf_):
     if duplicates := pydash.duplicates(text.labels):
         raise DuplicateLabelError(
             [
-                {
-                    "description": "Duplicate label",
-                    "lineNumber": label.line_index + 1,
-                }
+                ErrorAnnotation("Duplicate label", label.line_index + 1)
                 for label in text.labels
                 if label in duplicates
             ]
@@ -204,24 +202,22 @@ def create_transliteration_error_data(error: Exception, line: str, line_number: 
 def unexpected_input_error(error: UnexpectedInput, line: str, line_number: int):
     description = "Invalid line: "
     context = error.get_context(line, 6).split("\n", 1)
-    return {
-        "description": (
-            description + context[0] + "\n" + len(description) * " " + context[1]
-        ),
-        "lineNumber": line_number + 1,
-    }
+    return ErrorAnnotation(
+        description + context[0] + "\n" + len(description) * " " + context[1],
+        line_number + 1,
+    )
 
 
 def parse_error(error: ParseError, line: str, line_number: int):
-    return {"description": f"Invalid line: {error}", "lineNumber": line_number + 1}
+    return ErrorAnnotation(f"Invalid line: {error}", line_number + 1)
 
 
 def enclosure_error(error: EnclosureError, line: str, line_number: int):
-    return {"description": "Invalid brackets.", "lineNumber": line_number + 1}
+    return ErrorAnnotation("Invalid brackets.", line_number + 1)
 
 
 def visit_error(error: VisitError, line: str, line_number: int):
     if isinstance(error.orig_exc, DuplicateStatusError):
-        return {"description": "Duplicate Status", "lineNumber": line_number + 1}
+        return ErrorAnnotation("Duplicate Status", line_number + 1)
     else:
         raise error
