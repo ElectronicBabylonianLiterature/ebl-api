@@ -49,13 +49,16 @@ class LabelsValidator:
 
     def _get_overlaps(self) -> Iterator[dict]:
         for language, ranges in self._ranges.items():
-            if overlap := pydash.duplicates([index for index, _ in ranges]):
-                for index, annotation_index in ranges:
-                    if index in overlap:
-                        yield ErrorAnnotation(
-                            f"Overlapping extents for language {language}.",
-                            annotation_index + 1,
-                        ).to_dict()
+            overlap = pydash.duplicates([index for index, _ in ranges])
+
+            yield from (
+                ErrorAnnotation(
+                    f"Overlapping extents for language {language}.",
+                    annotation_index + 1,
+                ).to_dict()
+                for index, annotation_index in ranges
+                if index in overlap
+            )
 
     def _get_index(self, extent: Extent) -> int:
         return self._labels.index((extent.column, extent.surface, extent.number))
