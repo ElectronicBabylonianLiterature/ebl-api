@@ -3,7 +3,10 @@ from typing import List
 import attr
 
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.transliteration_error import (
+    TransliterationError,
+    ErrorAnnotation,
+)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -16,7 +19,7 @@ class TransliterationUpdate:
         if questionable_lines := self._get_questionable_lines(value):
             raise TransliterationError(
                 [
-                    {"description": "Invalid value", "lineNumber": line_number}
+                    ErrorAnnotation("Invalid value", line_number).to_dict()
                     for line_number in questionable_lines
                 ]
             )
