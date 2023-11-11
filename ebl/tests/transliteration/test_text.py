@@ -8,6 +8,7 @@ from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
 )
+from ebl.transliteration.domain.transliteration_error import ExtentLabelError
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
@@ -124,12 +125,12 @@ def test_labels(text_with_labels) -> None:
 
 
 def test_translation_before_text() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
         Text.of_iterable([TranslationLine(tuple()), *LINES])
 
 
 def test_invalid_extent() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
@@ -140,7 +141,7 @@ def test_invalid_extent() -> None:
 
 
 def test_extent_before_translation() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
@@ -151,7 +152,7 @@ def test_extent_before_translation() -> None:
 
 
 def test_exent_overlapping() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
