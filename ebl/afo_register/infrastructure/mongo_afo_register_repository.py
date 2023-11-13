@@ -1,6 +1,8 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from typing import cast, Sequence
 from pymongo.database import Database
+import re
+from natsort import natsorted
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecord,
@@ -10,6 +12,16 @@ from ebl.afo_register.application.afo_register_repository import AfoRegisterRepo
 
 
 COLLECTION = "afo_register"
+
+
+def create_markdown_aware_regex(query):
+    markdown_escape = r"(\*|\^)*"
+    return r"\s*".join(
+        [
+            markdown_escape + re.escape(char) + markdown_escape
+            for char in query
+        ]
+    )
 
 
 class AfoRegisterRecordSchema(Schema):
@@ -35,6 +47,7 @@ class AfoRegisterRecordSuggestionSchema(Schema):
 
     @post_load
     def make_suggestion(self, data, **kwargs):
+        data["text_numbers"] = natsorted(data["text_numbers"])
         return AfoRegisterRecordSuggestion(**data)
 
 
@@ -56,9 +69,20 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def search_suggestions(
         self, text_query: str, *args, **kwargs
     ) -> Sequence[AfoRegisterRecordSuggestion]:
+        markdown_aware_query = create_markdown_aware_regex(text_query)
         pipeline = [
-            {"$match": {"text": {"$regex": text_query, "$options": "i"}}},
-            {"$group": {"_id": "$text", "textNumbers": {"$push": "$textNumber"}}},
+            {"$match": {"text": {"$regex": markdown_aware_query, "$options": "i"}}},
+            {"$group": {"_id": "$text", "textNumbers": {"$addToSet": "$textNumber"}}},
+            {
+                "$project": {
+                    "text": "$_id",
+                    "_id": 0,
+                    "textNumbers": {"$setUnion": ["$textNumbers", []]},
+                }
+            },
+            {"$unwind": "$textNumbers"},
+            {"$sort": {"textNumbers": 1}},
+            {"$group": {"_id": "$text", "textNumbers": {"$push": "$textNumbers"}}},
             {"$project": {"text": "$_id", "textNumbers": "$textNumbers", "_id": 0}},
         ]
         suggestions = AfoRegisterRecordSuggestionSchema().load(
