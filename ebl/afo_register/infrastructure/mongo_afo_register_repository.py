@@ -17,10 +17,7 @@ COLLECTION = "afo_register"
 def create_markdown_aware_regex(query):
     markdown_escape = r"(\*|\^)*"
     return r"\s*".join(
-        [
-            markdown_escape + re.escape(char) + markdown_escape
-            for char in query
-        ]
+        [markdown_escape + re.escape(char) + markdown_escape for char in query]
     )
 
 

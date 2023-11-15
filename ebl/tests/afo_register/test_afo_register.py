@@ -23,6 +23,9 @@ def afo_register_record_suggestion():
     return AfoRegisterRecordSuggestionFactory.build()
 
 
+# ToDo: Fix test
+
+
 def test_afo_register_record_creation(afo_register_record: AfoRegisterRecord) -> None:
     assert afo_register_record.afo_number is not None
     assert afo_register_record.page is not None

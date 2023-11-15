@@ -3,6 +3,7 @@ from ebl.tests.factories.afo_register import (
     AfoRegisterRecordSuggestionFactory,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
+from natsort import natsorted
 
 
 def test_find_by_id(afo_register_repository: AfoRegisterRepository):
@@ -51,10 +52,12 @@ def test_find_record_suggestions(afo_register_repository: AfoRegisterRepository)
     )
     afo_register_repository.create(afo_register_record)
     afo_register_repository.create(another_afo_register_record)
-    text_numbers = [
-        afo_register_record.text_number,
-        another_afo_register_record.text_number,
-    ]
+    text_numbers = natsorted(
+        [
+            afo_register_record.text_number,
+            another_afo_register_record.text_number,
+        ]
+    )
     afo_register_record_suggestion = AfoRegisterRecordSuggestionFactory.build(
         text=afo_register_record.text, text_numbers=text_numbers
     )

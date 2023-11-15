@@ -5,6 +5,7 @@ from ebl.afo_register.domain.afo_register_record import (
 )
 from faker import Faker
 from typing import Sequence
+from natsort import natsorted
 
 PUBLICATIONS = ["StOr", "Al.T.", "OECT", "VS", "STT", "CCT", "CM", "CST", "SAAB"]
 
@@ -62,4 +63,4 @@ class AfoRegisterRecordSuggestionFactory(factory.Factory):
         model = AfoRegisterRecordSuggestion
 
     text = factory.LazyAttribute(lambda obj: get_text())
-    text_numbers = factory.LazyAttribute(lambda obj: get_text_numbers())
+    text_numbers = factory.LazyAttribute(lambda obj: natsorted(get_text_numbers()))
