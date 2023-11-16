@@ -14,11 +14,24 @@ from ebl.afo_register.application.afo_register_repository import AfoRegisterRepo
 COLLECTION = "afo_register"
 
 
-def create_markdown_aware_regex(query):
+def create_markdown_aware_regex(query: str) -> str:
     markdown_escape = r"(\*|\^)*"
-    return r"\s*".join(
+    query = query.replace(r" +", " ")
+    return r"".join(
         [markdown_escape + re.escape(char) + markdown_escape for char in query]
     )
+
+
+def create_search_query(query):
+    if "textNumber" not in query:
+        return query
+    text_number = query["textNumber"]
+    text_number_stripped = text_number.strip('"')
+    if text_number != text_number_stripped:
+        query["textNumber"] = text_number_stripped
+    else:
+        query["textNumber"] = {"$regex": f"^{text_number}.*", "$options": "i"}
+    return query
 
 
 class AfoRegisterRecordSchema(Schema):
@@ -58,10 +71,14 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
         )
 
     def search(self, query, *args, **kwargs) -> Sequence[AfoRegisterRecord]:
-        records = AfoRegisterRecordSchema().load(
-            self._afo_register.find_many(query), many=True
+        data = self._afo_register.find_many(create_search_query(query))
+        records = AfoRegisterRecordSchema().load(data, many=True)
+        return cast(
+            Sequence[AfoRegisterRecord],
+            natsorted(
+                records, key=lambda record: f"${record.text} ${record.text_number}"
+            ),
         )
-        return cast(Sequence[AfoRegisterRecord], records)
 
     def search_suggestions(
         self, text_query: str, *args, **kwargs
