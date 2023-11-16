@@ -6,7 +6,7 @@ import pytest
 from hamcrest.library import starts_with
 from ebl.common.domain.period import Period
 
-from ebl.errors import DataError
+from ebl.transliteration.domain.transliteration_error import DuplicateLabelError
 from ebl.tests.assertions import assert_exception_has_errors
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import SurfaceAtLine
@@ -83,8 +83,8 @@ def test_invalid_atf(atf, line_numbers) -> None:
 
 
 @pytest.mark.parametrize("atf", ["1. x\n1. x", "1. x\n@obverse\n1. x\n1. x"])
-def test_duplicate_labels(atf) -> None:
-    with pytest.raises(DataError, match="Duplicate labels."):  # pyre-ignore[16]
+def test_duplicate_labels(atf):
+    with pytest.raises(DuplicateLabelError, match="Duplicate labels"):
         parse_atf_lark(atf)
 
 

@@ -15,6 +15,7 @@ class LineLabel:
     object: Optional[ObjectLabel]
     line_number: Optional[AbstractLineNumber]
     seal_number: Optional[int]
+    line_index: Optional[int] = attr.ib(default=None, eq=False)
 
     def set_column(self, column: Optional[ColumnLabel]) -> "LineLabel":
         return attr.evolve(self, column=column)
@@ -27,6 +28,9 @@ class LineLabel:
 
     def set_line_number(self, line_number: Optional[AbstractLineNumber]) -> "LineLabel":
         return attr.evolve(self, line_number=line_number)
+
+    def set_line_index(self, index: Optional[int]) -> "LineLabel":
+        return attr.evolve(self, line_index=index)
 
     def set_seal(self, seal_number: Optional[int]) -> "LineLabel":
         return attr.evolve(self, seal_number=seal_number)
