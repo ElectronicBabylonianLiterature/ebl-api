@@ -2,6 +2,7 @@ from typing import Sequence
 
 import factory.fuzzy
 import random
+from ebl.common.domain.accession import Accession
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
 
@@ -181,7 +182,7 @@ class FragmentFactory(factory.Factory):
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     edited_in_oracc_project = factory.Sequence(lambda n: f"editedInOracc-{n}")
-    accession = factory.Sequence(lambda n: f"accession-{n}")
+    accession = factory.Sequence(lambda n: Accession("A", str(n)))
     museum = factory.Faker("word")
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")

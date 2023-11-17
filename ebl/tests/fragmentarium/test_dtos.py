@@ -1,6 +1,7 @@
 import attr
 import pydash
 import pytest
+from ebl.common.application.schemas import AccessionSchema
 
 from ebl.errors import DataError
 from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
@@ -44,7 +45,7 @@ def expected_dto(lemmatized_fragment, has_photo):
     return pydash.omit_by(
         {
             "museumNumber": attr.asdict(lemmatized_fragment.number),
-            "accession": lemmatized_fragment.accession,
+            "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "editedInOraccProject": lemmatized_fragment.edited_in_oracc_project,
             "publication": lemmatized_fragment.publication,
             "description": lemmatized_fragment.description,
@@ -131,7 +132,7 @@ def test_create_fragment_info_dto():
     is_transliteration = record_entry.type == RecordType.TRANSLITERATION
     assert ApiFragmentInfoSchema().dump(info) == {
         "number": str(info.number),
-        "accession": info.accession,
+        "accession": AccessionSchema().dump(info.accession),
         "script": ScriptSchema().dump(info.script),
         "description": info.description,
         "matchingLines": TextSchema().dump(text),

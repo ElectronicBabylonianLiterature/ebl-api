@@ -1,4 +1,5 @@
 from typing import List, Sequence
+from ebl.common.domain.accession import Accession
 from ebl.common.domain.scopes import Scope
 
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -9,7 +10,7 @@ from ebl.transliteration.infrastructure.collections import (
     FRAGMENTS_COLLECTION,
     FINDSPOTS_COLLECTION,
 )
-from ebl.transliteration.infrastructure.queries import museum_number_is
+from ebl.transliteration.infrastructure.queries import museum_number_is, accession_is
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 50
@@ -22,9 +23,13 @@ def fragment_is(fragment: Fragment) -> dict:
 
 
 def number_is(number: str) -> dict:
-    or_ = [{"externalNumbers.cdliNumber": number}, {"accession": number}]
+    or_ = [{"externalNumbers.cdliNumber": number}]
     try:
         or_.append(museum_number_is(MuseumNumber.of(number)))
+    except ValueError:
+        pass
+    try:
+        or_.append(accession_is(Accession.of(number)))
     except ValueError:
         pass
     return {"$or": or_}
