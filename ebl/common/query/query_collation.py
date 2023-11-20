@@ -139,17 +139,25 @@ class CollatedFieldQuery:
 
     def _wildcards_to_regexp(self, segment: str) -> str:
         for type, expression in WILDCARD_AND_COLLATION_MATCHERS.items():
-            if self._is_regex(segment, type, expression):
-                return (
-                    self._markdown_aware_regex(expression["regex"], False)
-                    if self.use_markdown_escape
-                    else expression["regex"]
-                )
+            if not self._is_regex(segment, type, expression):
+                continue
+            return self._process_expression(segment, expression)
+
+        return self._escape_segment(segment)
+
+    def _process_expression(self, segment: str, expression: Dict) -> str:
+        regex = expression["regex"]
         return (
-            r"".join([self._markdown_aware_regex(char) for char in segment])
+            self._markdown_aware_regex(regex, False)
             if self.use_markdown_escape
-            else re.escape(segment)
+            else regex
         )
+
+    def _escape_segment(self, segment: str) -> str:
+        if self.use_markdown_escape:
+            return r"".join([self._markdown_aware_regex(char) for char in segment])
+        else:
+            return re.escape(segment)
 
     def _markdown_aware_regex(self, segment: str, escape=True) -> str:
         return r"".join(
