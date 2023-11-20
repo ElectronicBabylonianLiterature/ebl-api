@@ -1,7 +1,6 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from typing import cast, Sequence
 from pymongo.database import Database
-import re
 from natsort import natsorted
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
@@ -9,17 +8,12 @@ from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecordSuggestion,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
+from ebl.common.query.query_collation import (
+    make_query_params,
+)
 
 
 COLLECTION = "afo_register"
-
-
-def create_markdown_aware_regex(query: str) -> str:
-    markdown_escape = r"(\*|\^)*"
-    query = query.replace(r" +", " ")
-    return r"".join(
-        [markdown_escape + re.escape(char) + markdown_escape for char in query]
-    )
 
 
 def create_search_query(query):
@@ -83,9 +77,11 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def search_suggestions(
         self, text_query: str, *args, **kwargs
     ) -> Sequence[AfoRegisterRecordSuggestion]:
-        markdown_aware_query = create_markdown_aware_regex(text_query)
+        collated_query = list(make_query_params({"text": text_query}, "afo-register"))[
+            0
+        ]
         pipeline = [
-            {"$match": {"text": {"$regex": markdown_aware_query, "$options": "i"}}},
+            {"$match": {"text": {"$regex": collated_query.value, "$options": "i"}}},
             {"$group": {"_id": "$text", "textNumbers": {"$addToSet": "$textNumber"}}},
             {
                 "$project": {

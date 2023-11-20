@@ -4,7 +4,7 @@ from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.mongo_collection import MongoCollection
-from ebl.dictionary.domain.dictionary_query import DictionaryFieldQuery
+from ebl.common.query.query_collation import CollatedFieldQuery
 
 COLLECTION = "words"
 LEMMA_SEARCH_LIMIT = 15
@@ -140,10 +140,10 @@ class MongoWordRepository(WordRepository):
 
     def query_by_lemma_meaning_root_vowels(
         self,
-        word: Optional[DictionaryFieldQuery] = None,
-        meaning: Optional[DictionaryFieldQuery] = None,
-        root: Optional[DictionaryFieldQuery] = None,
-        vowel_class: Optional[DictionaryFieldQuery] = None,
+        word: Optional[CollatedFieldQuery] = None,
+        meaning: Optional[CollatedFieldQuery] = None,
+        root: Optional[CollatedFieldQuery] = None,
+        vowel_class: Optional[CollatedFieldQuery] = None,
     ) -> Sequence:
         cursor = self._collection.aggregate(
             [

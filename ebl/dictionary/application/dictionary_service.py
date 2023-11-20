@@ -4,7 +4,7 @@ from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
 from ebl.users.domain.user import User
-from ebl.dictionary.domain.dictionary_query import make_query_params_from_string
+from ebl.common.query.query_collation import make_query_params_from_string
 
 COLLECTION = "words"
 
