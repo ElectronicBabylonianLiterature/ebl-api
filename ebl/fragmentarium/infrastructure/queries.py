@@ -10,7 +10,7 @@ from ebl.transliteration.infrastructure.collections import (
     FRAGMENTS_COLLECTION,
     FINDSPOTS_COLLECTION,
 )
-from ebl.transliteration.infrastructure.queries import museum_number_is, accession_is
+from ebl.transliteration.infrastructure.queries import query_number_is
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
 NUMBER_OF_LATEST_TRANSLITERATIONS: int = 50
@@ -19,19 +19,17 @@ PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 10
 
 
 def fragment_is(fragment: Fragment) -> dict:
-    return museum_number_is(fragment.number)
+    return query_number_is(fragment.number)
 
 
 def number_is(number: str) -> dict:
     or_ = [{"externalNumbers.cdliNumber": number}]
-    try:
-        or_.append(museum_number_is(MuseumNumber.of(number)))
-    except ValueError:
-        pass
-    try:
-        or_.append(accession_is(Accession.of(number)))
-    except ValueError:
-        pass
+
+    for number_class in [MuseumNumber, Accession]:
+        try:
+            or_.append(query_number_is(number_class.of(number)))
+        except ValueError:
+            pass
     return {"$or": or_}
 
 

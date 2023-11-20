@@ -55,6 +55,7 @@ def query_item_of(
         lambda fragment: str(fragment.number),
         lambda fragment: fragment.cdli_number,
         lambda fragment: str(fragment.accession),
+        lambda fragment: str(fragment.archaeology.excavation_number),
     ],
 )
 def test_query_fragmentarium_number(get_number, client, fragmentarium):
