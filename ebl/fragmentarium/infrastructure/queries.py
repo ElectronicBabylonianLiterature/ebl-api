@@ -1,6 +1,7 @@
 from typing import List, Sequence
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.scopes import Scope
+from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.record import RecordType
@@ -25,7 +26,7 @@ def fragment_is(fragment: Fragment) -> dict:
 def number_is(number: str) -> dict:
     or_ = [{"externalNumbers.cdliNumber": number}]
 
-    for number_class in [MuseumNumber, Accession]:
+    for number_class in [MuseumNumber, Accession, ExcavationNumber]:
         try:
             or_.append(query_number_is(number_class.of(number)))
         except ValueError:
