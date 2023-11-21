@@ -3,6 +3,7 @@ from typing import Sequence, Optional
 import attr
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.common.domain.accession import Accession
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, Script
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -12,7 +13,7 @@ from ebl.transliteration.domain.text import Text
 @attr.s(frozen=True, auto_attribs=True)
 class FragmentInfo:
     number: MuseumNumber
-    accession: str
+    accession: Optional[Accession]
     script: Script
     description: str
     matching_lines: Optional[Text]
