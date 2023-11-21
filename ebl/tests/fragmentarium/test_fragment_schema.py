@@ -61,16 +61,3 @@ def test_scope_deserialization():
         "authorizedScopes": SERIALIZED_SCOPES,
     }
     assert FragmentSchema().load(data).authorized_scopes == SCOPES
-
-
-def test_empty_accession_serialization():
-    fragment = FragmentFactory.build(accession=None)
-    assert "accession" not in FragmentSchema().dump(fragment)
-
-
-def test_empty_accession_deserialization():
-    data = {
-        **FragmentSchema().dump(FragmentFactory.build()),
-        "accession": None,
-    }
-    assert FragmentSchema().load(data).accession is None

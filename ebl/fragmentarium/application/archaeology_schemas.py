@@ -1,24 +1,25 @@
-from ebl.common.application.schemas import AbstractMuseumNumberSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.date_schemas import (
     DateRangeSchema,
     DateWithNotesSchema,
 )
-from ebl.fragmentarium.domain.archaeology import (
-    Archaeology,
-    ExcavationNumber,
-)
-from ebl.fragmentarium.domain.findspot import (
-    BuildingType,
-    ExcavationPlan,
-    Findspot,
-    ExcavationSite,
-)
+from ebl.fragmentarium.domain.archaeology import Archaeology
+from ebl.fragmentarium.domain.findspot import BuildingType, ExcavationPlan, Findspot
 from ebl.schemas import NameEnumField
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, validate
+from ebl.transliteration.domain.museum_number import MuseumNumber as ExcavationNumber
+from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
 
-class ExcavationNumberSchema(AbstractMuseumNumberSchema):
+class ExcavationNumberSchema(Schema):
+    prefix = fields.String(
+        required=True, validate=(validate.Length(min=1), validate.ContainsNoneOf("."))
+    )
+    number = fields.String(
+        required=True, validate=(validate.Length(min=1), validate.ContainsNoneOf("."))
+    )
+    suffix = fields.String(required=True, validate=validate.ContainsNoneOf("."))
+
     @post_load
     def create_excavation_number(self, data, **kwargs) -> ExcavationNumber:
         return ExcavationNumber(**data)
