@@ -3,10 +3,7 @@ from typing import Optional, Sequence
 from enum import Enum, auto
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.iso_date import DateRange
-from ebl.corpus.domain.provenance import Provenance
-
-
-ExcavationSite = Provenance
+from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
 
 class BuildingType(Enum):

@@ -2,7 +2,6 @@ import pydash
 from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
-from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -160,7 +159,7 @@ class ExternalNumbersSchema(Schema):
 
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
-    accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
+    accession = fields.String(required=True)
     edited_in_oracc_project = fields.String(
         required=True, data_key="editedInOraccProject"
     )
