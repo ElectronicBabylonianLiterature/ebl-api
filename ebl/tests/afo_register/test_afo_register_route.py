@@ -1,5 +1,6 @@
 import falcon
 import pytest
+import json
 
 from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
 from ebl.tests.factories.afo_register import (
@@ -48,9 +49,8 @@ def test_search_by_texts_and_numbers_route(
     afo_register_repository.create(record1)
     afo_register_repository.create(record2)
     afo_register_repository.create(record3)
-    query = ["Text1 1", "Text3 3"]
-    get_result = client.simulate_get(
-        "/afo-register/texts-numbers", params={"list": query}
+    get_result = client.simulate_post(
+        "/afo-register/texts-numbers", body=json.dumps(["Text1 1", "Text3 3"])
     )
     expected_results = [
         AfoRegisterRecordSchema().dump(record) for record in [record1, record3]
