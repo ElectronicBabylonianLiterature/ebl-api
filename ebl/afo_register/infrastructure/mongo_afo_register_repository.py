@@ -28,6 +28,15 @@ def create_search_query(query):
     return query
 
 
+def cast_with_sorting(
+    records: Sequence[AfoRegisterRecord],
+) -> Sequence[AfoRegisterRecord]:
+    return cast(
+        Sequence[AfoRegisterRecord],
+        natsorted(records, key=lambda record: f"${record.text} ${record.text_number}"),
+    )
+
+
 class AfoRegisterRecordSchema(Schema):
     class Meta:
         unknown = EXCLUDE
@@ -67,12 +76,25 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def search(self, query, *args, **kwargs) -> Sequence[AfoRegisterRecord]:
         data = self._afo_register.find_many(create_search_query(query))
         records = AfoRegisterRecordSchema().load(data, many=True)
-        return cast(
-            Sequence[AfoRegisterRecord],
-            natsorted(
-                records, key=lambda record: f"${record.text} ${record.text_number}"
-            ),
-        )
+        return cast_with_sorting(records)
+
+    def search_by_texts_and_numbers(
+        self, query_list: Sequence[str], *args, **kwargs
+    ) -> Sequence[AfoRegisterRecord]:
+        pipeline = [
+            {
+                "$addFields": {
+                    "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
+                }
+            },
+            {"$match": {"combined_field": {"$in": query_list}}},
+            {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
+            {"$replaceRoot": {"newRoot": "$document"}},
+            {"$project": {"combined_field": 0}},
+        ]
+        data = self._afo_register.aggregate(pipeline)
+        records = AfoRegisterRecordSchema().load(data, many=True)
+        return cast_with_sorting(records)
 
     def search_suggestions(
         self, text_query: str, *args, **kwargs

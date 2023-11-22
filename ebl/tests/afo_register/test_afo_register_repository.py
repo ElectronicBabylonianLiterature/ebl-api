@@ -45,6 +45,21 @@ def test_find_by_all_record_parameters(afo_register_repository: AfoRegisterRepos
     ) == [afo_register_record]
 
 
+def test_search_by_texts_and_numbers(afo_register_repository: AfoRegisterRepository):
+    record1 = AfoRegisterRecordFactory.build(text="Text1", text_number="1")
+    record2 = AfoRegisterRecordFactory.build(text="Text2", text_number="2")
+    record3 = AfoRegisterRecordFactory.build(text="Text3", text_number="3")
+    afo_register_repository.create(record1)
+    afo_register_repository.create(record2)
+    afo_register_repository.create(record3)
+    query = ["Text1 1", "Text3 3"]
+    results = afo_register_repository.search_by_texts_and_numbers(query)
+
+    assert len(results) == 2
+    assert record1 in results
+    assert record3 in results
+
+
 def test_find_record_suggestions(afo_register_repository: AfoRegisterRepository):
     afo_register_record = AfoRegisterRecordFactory.build()
     another_afo_register_record = AfoRegisterRecordFactory.build(
