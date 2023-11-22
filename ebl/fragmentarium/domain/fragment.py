@@ -5,6 +5,7 @@ import attr
 import pydash
 
 from ebl.bibliography.domain.reference import Reference
+from ebl.common.domain.accession import Accession
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
@@ -113,7 +114,7 @@ class ExternalNumbers:
 @attr.s(auto_attribs=True, frozen=True)
 class Fragment:
     number: MuseumNumber
-    accession: str = ""
+    accession: Optional[Accession] = None
     edited_in_oracc_project: str = ""
     publication: str = ""
     description: str = ""

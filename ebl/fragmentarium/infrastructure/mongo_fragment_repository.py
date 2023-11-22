@@ -36,7 +36,7 @@ from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
-from ebl.transliteration.infrastructure.queries import museum_number_is
+from ebl.transliteration.infrastructure.queries import query_number_is
 
 RETRIEVE_ALL_LIMIT = 1000
 
@@ -171,7 +171,7 @@ class MongoFragmentRepository(FragmentRepository):
     ):
         data = self._fragments.aggregate(
             [
-                {"$match": museum_number_is(number)},
+                {"$match": query_number_is(number)},
                 *(
                     self._omit_text_lines()
                     if exclude_lines
@@ -206,7 +206,7 @@ class MongoFragmentRepository(FragmentRepository):
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         fragment = next(
             self._fragments.find_many(
-                museum_number_is(number), projection={"authorizedScopes": True}
+                query_number_is(number), projection={"authorizedScopes": True}
             ),
             {},
         )
