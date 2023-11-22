@@ -4,16 +4,19 @@ import attr
 import falcon
 import pytest
 from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
-from ebl.fragmentarium.domain.archaeology import Archaeology
+from ebl.fragmentarium.domain.archaeology import (
+    Archaeology,
+    ExcavationNumber,
+)
+from ebl.fragmentarium.domain.findspot import ExcavationSite
 from ebl.fragmentarium.domain.fragment import Fragment
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.archaeology import DateWithNotesFactory
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.corpus.domain.provenance import Provenance as ExcavationSite
 
-ARCHAEOLOGY = Archaeology(MuseumNumber("F", "1"), ExcavationSite.KALHU)
+
+ARCHAEOLOGY = Archaeology(ExcavationNumber("F", "1"), ExcavationSite.KALHU)
 ARCHAEOLOGIES = [
     ARCHAEOLOGY,
     attr.evolve(ARCHAEOLOGY, site=None),

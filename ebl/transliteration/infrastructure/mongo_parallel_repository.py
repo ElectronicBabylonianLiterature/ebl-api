@@ -15,7 +15,7 @@ from ebl.transliteration.infrastructure.collections import (
     CHAPTERS_COLLECTION,
     FRAGMENTS_COLLECTION,
 )
-from ebl.transliteration.infrastructure.queries import museum_number_is
+from ebl.transliteration.infrastructure.queries import query_number_is
 
 
 class MongoParallelRepository(ParallelRepository):
@@ -27,7 +27,7 @@ class MongoParallelRepository(ParallelRepository):
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
 
     def fragment_exists(self, museum_number: MuseumNumber) -> bool:
-        return self._fragments.count_documents(museum_number_is(museum_number)) > 0
+        return self._fragments.count_documents(query_number_is(museum_number)) > 0
 
     def find_implicit_chapter(self, text_id: TextId) -> ChapterName:
         try:
