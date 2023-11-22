@@ -22,6 +22,22 @@ class AfoRegisterResource:
         resp.media = AfoRegisterRecordSchema().dump(response, many=True)
 
 
+class AfoRegisterTextsAndNumbersResource:
+    def __init__(self, afoRegisterRepository: AfoRegisterRepository):
+        self._afoRegisterRepository = afoRegisterRepository
+
+    def on_get(self, req: Request, resp: Response) -> None:
+        try:
+            response = self._afoRegisterRepository.search_by_texts_and_numbers(
+                req.params["list"]
+            )
+        except ValueError as error:
+            raise NotFoundError(
+                f"No AfO registry entries matching {str(req.params)} found."
+            ) from error
+        resp.media = AfoRegisterRecordSchema().dump(response, many=True)
+
+
 class AfoRegisterSuggestionsResource:
     def __init__(self, afoRegisterRepository: AfoRegisterRepository):
         self._afoRegisterRepository = afoRegisterRepository

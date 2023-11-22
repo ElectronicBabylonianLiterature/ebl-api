@@ -17,6 +17,12 @@ class AfoRegisterRepository(ABC):
         ...
 
     @abstractmethod
+    def search_by_texts_and_numbers(
+        self, query_list: Sequence[str], *args, **kwargs
+    ) -> Sequence[AfoRegisterRecord]:
+        ...
+
+    @abstractmethod
     def search_suggestions(
         self, text_query: str, *args, **kwargs
     ) -> Sequence[AfoRegisterRecordSuggestion]:
