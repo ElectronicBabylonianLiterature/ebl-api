@@ -122,9 +122,7 @@ class PatternMatcher:
         return {}
 
     def _filter_by_project(self) -> Dict:
-        if project := self._query.get("project"):
-            return {"projects": project}
-        return {}
+        return {"projects": project} if (project := self._query.get("project")) else {}
 
     def _filter_by_reference(self) -> Dict:
         if "bibId" not in self._query:
