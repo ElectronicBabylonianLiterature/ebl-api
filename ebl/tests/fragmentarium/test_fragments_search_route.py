@@ -4,6 +4,7 @@ import attr
 import falcon
 import pytest
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.project import ResearchProject
 
 from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,
@@ -371,6 +372,31 @@ def test_search_script_period(client, fragmentarium, params, expected):
         Script(Period.OLD_ASSYRIAN, PeriodModifier.LATE),
     ]
     fragments = [FragmentFactory.build(script=script) for script in scripts]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    expected_json = {
+        "items": [query_item_of(fragments[i]) for i in expected],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get("/fragments/query", params=params)
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json
+
+
+@pytest.mark.parametrize(
+    "params,expected",
+    [
+        ({"project": ResearchProject.CAIC.abbreviation}, [0]),
+        ({"project": ResearchProject.ALU_GENEVA.abbreviation}, [1]),
+    ],
+)
+def test_search_project(client, fragmentarium, params, expected):
+    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
+    fragments = [FragmentFactory.build(projects=(project,)) for project in projects]
 
     for fragment in fragments:
         fragmentarium.create(fragment)
