@@ -13,12 +13,16 @@ def query_number_is(number) -> dict:
 
 
 def build_query(path_prefix: str, serialized: dict, allow_wildcard: bool) -> dict:
-    if allow_wildcard:
-        if serialized["number"] == "*" and not serialized["suffix"]:
-            serialized.pop("suffix")
-        serialized = {key: value for key, value in serialized.items() if value != "*"}
+    suffix = serialized["suffix"]
+    serialized["suffix"] = (
+        "*" if allow_wildcard and serialized["number"] == "*" and not suffix else suffix
+    )
 
-    return {f"{path_prefix}.{key}": value for key, value in serialized.items()}
+    return {
+        f"{path_prefix}.{key}": value
+        for key, value in serialized.items()
+        if not (allow_wildcard and value == "*")
+    }
 
 
 @query_number_is.register
