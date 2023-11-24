@@ -3,6 +3,7 @@ import attr
 import pytest
 import random
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.project import ResearchProject
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryItem, QueryResult
 
@@ -145,11 +146,64 @@ def test_create_join(database, fragment_repository):
     }
 
 
-def test_query_by_museum_number(database, fragment_repository):
-    fragment = LemmatizedFragmentFactory.build()
-    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+@pytest.mark.parametrize("number", ["IM.123", "IM.*"])
+def test_query_by_museum_number(database, fragment_repository, number):
+    fragments = {
+        number: LemmatizedFragmentFactory.build(number=MuseumNumber.of(number))
+        for number in ["IM.123", "IM.*"]
+    }
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+    database[COLLECTION].insert_many(
+        [
+            FragmentSchema(exclude=["joins"]).dump(fragment)
+            for fragment in fragments.values()
+        ]
+    )
+
+    assert (
+        fragment_repository.query_by_museum_number(MuseumNumber.of(number))
+        == fragments[number]
+    )
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ("IM.*", ["IM.1"]),
+        ("BM.*", ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a"]),
+        ("BM.*.*", ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a"]),
+        ("BM.*.a", ["BM.2.a", "BM.3.a"]),
+        ("*.1", ["BM.1", "IM.1"]),
+        ("*.3.*", ["BM.3.a"]),
+        ("*.*.b", ["BM.2.b"]),
+        ("*.*.*", ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a", "IM.1"]),
+        ("*.*", ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a", "IM.1"]),
+    ],
+)
+def test_museum_number_wildcard(fragment_repository, query, expected):
+    all_numbers = ["BM.1", "BM.2", "BM.2.a", "BM.2.b", "BM.3.a", "IM.1"]
+
+    fragments = [
+        FragmentFactory.build(number=MuseumNumber.of(number), script=Script())
+        for number in all_numbers
+    ]
+
+    fragment_repository.create_many(fragments)
+
+    expected_result = QueryResult(
+        [
+            QueryItem(
+                fragment.number,
+                tuple(),
+                0,
+            )
+            for fragment in fragments
+            if str(fragment.number) in expected
+        ],
+        0,
+    )
+
+    assert fragment_repository.query({"number": query}) == expected_result
 
 
 def test_query_by_museum_number_joins(database, fragment_repository):
@@ -1003,3 +1057,38 @@ def test_query_genres(fragment_repository, query, expected):
     )
 
     assert fragment_repository.query({"genre": query}) == expected_result
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ("CAIC", [0]),
+        ("aluGeneva", [1]),
+        (None, [0, 1]),
+    ],
+)
+def test_query_project(fragment_repository, query, expected):
+    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
+
+    fragments = [
+        FragmentFactory.build(
+            number=MuseumNumber.of(f"X.{i}"), projects=[project], script=Script()
+        )
+        for i, project in enumerate(projects)
+    ]
+
+    fragment_repository.create_many(fragments)
+
+    expected_result = QueryResult(
+        [
+            QueryItem(
+                fragments[i].number,
+                tuple(),
+                0,
+            )
+            for i in expected
+        ],
+        0,
+    )
+
+    assert fragment_repository.query({"project": query}) == expected_result
