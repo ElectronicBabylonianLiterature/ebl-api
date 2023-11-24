@@ -28,7 +28,7 @@ def number_is(number: str) -> dict:
 
     for number_class in [MuseumNumber, Accession, ExcavationNumber]:
         try:
-            or_.append(query_number_is(number_class.of(number)))
+            or_.append(query_number_is(number_class.of(number), allow_wildcard=True))
         except ValueError:
             pass
     return {"$or": or_}
