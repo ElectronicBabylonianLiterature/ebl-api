@@ -12,11 +12,16 @@ def query_number_is(number) -> dict:
     raise ValueError(f"Unknown number type: {type(number)}")
 
 
-def build_query(path_prefix: str, serialized: dict, allow_wildcard: bool) -> dict:
+def replace_suffix(serialized: dict) -> dict:
     suffix = serialized["suffix"]
-    serialized["suffix"] = (
-        "*" if allow_wildcard and serialized["number"] == "*" and not suffix else suffix
-    )
+    return {
+        **serialized,
+        "suffix": "*" if serialized["number"] == "*" and not suffix else suffix,
+    }
+
+
+def build_query(path_prefix: str, serialized: dict, allow_wildcard: bool) -> dict:
+    serialized = replace_suffix(serialized) if allow_wildcard else serialized
 
     return {
         f"{path_prefix}.{key}": value
