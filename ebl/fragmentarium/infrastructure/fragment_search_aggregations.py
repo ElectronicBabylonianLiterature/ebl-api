@@ -121,6 +121,9 @@ class PatternMatcher:
             return {"genres.category": {"$all": genre}}
         return {}
 
+    def _filter_by_project(self) -> Dict:
+        return {"projects": project} if (project := self._query.get("project")) else {}
+
     def _filter_by_reference(self) -> Dict:
         if "bibId" not in self._query:
             return {}
@@ -145,6 +148,7 @@ class PatternMatcher:
                 [
                     number_is(self._query["number"]) if "number" in self._query else {},
                     self._filter_by_genre(),
+                    self._filter_by_project(),
                     self._filter_by_script(),
                     self._filter_by_reference(),
                     self._filter_by_traditional_references(),

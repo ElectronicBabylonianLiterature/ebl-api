@@ -61,6 +61,7 @@ class ATFPreprocessor:
         atf = atf.replace("1/5", "⅕")
         atf = atf.replace("1/6", "⅙")
         atf = atf.replace("2/3", "⅔")
+        atf = atf.replace("5/6", "⅚")
 
         atf = atf.replace("\t", " ")  # convert tabs to spaces
         atf = " ".join(atf.split())  # remove multiple spaces

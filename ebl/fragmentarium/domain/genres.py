@@ -17,6 +17,7 @@ genres = (
     ("ARCHIVAL", "Legal", "Decree"),
     ("ARCHIVAL", "Legal", "Judicial"),
     ("ARCHIVAL", "Legal", "Judicial", "Court Case"),
+    ("ARCHIVAL", "Legal", "Lease"),
     ("ARCHIVAL", "Legal", "Sale"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other", "Adoption"),

@@ -12,22 +12,37 @@ def query_number_is(number) -> dict:
     raise ValueError(f"Unknown number type: {type(number)}")
 
 
-@query_number_is.register
-def _(number: MuseumNumber) -> dict:
-    serialized = MuseumNumberSchema().dump(number)
-    return {f"museumNumber.{key}": value for key, value in serialized.items()}
-
-
-@query_number_is.register
-def _(accession: Accession) -> dict:
-    serialized = AccessionSchema().dump(accession)
-    return {f"accession.{key}": value for key, value in serialized.items()}
-
-
-@query_number_is.register
-def _(number: ExcavationNumber) -> dict:
-    serialized = ExcavationNumberSchema().dump(number)
+def replace_suffix(serialized: dict) -> dict:
+    suffix = serialized["suffix"]
     return {
-        f"archaeology.excavationNumber.{key}": value
-        for key, value in serialized.items()
+        **serialized,
+        "suffix": "*" if serialized["number"] == "*" and not suffix else suffix,
     }
+
+
+def build_query(path_prefix: str, serialized: dict, allow_wildcard: bool) -> dict:
+    serialized = replace_suffix(serialized) if allow_wildcard else serialized
+
+    return {
+        f"{path_prefix}.{key}": value
+        for key, value in serialized.items()
+        if not (allow_wildcard and value == "*")
+    }
+
+
+@query_number_is.register
+def _(number: MuseumNumber, allow_wildcard=False) -> dict:
+    serialized = MuseumNumberSchema().dump(number)
+    return build_query("museumNumber", serialized, allow_wildcard)
+
+
+@query_number_is.register
+def _(accession: Accession, allow_wildcard=False) -> dict:
+    serialized = AccessionSchema().dump(accession)
+    return build_query("accession", serialized, allow_wildcard)
+
+
+@query_number_is.register
+def _(number: ExcavationNumber, allow_wildcard=False) -> dict:
+    serialized = ExcavationNumberSchema().dump(number)
+    return build_query("archaeology.excavationNumber", serialized, allow_wildcard)
