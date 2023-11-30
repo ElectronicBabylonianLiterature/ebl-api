@@ -18,15 +18,20 @@ if __name__ == "__main__":
     if os.path.exists(output_folder_images):
         shutil.rmtree(output_folder_images)
     os.makedirs(output_folder_images)
+    fragments_with_images = []
+
     for fragment in tqdm(fragments):
         try:
             image = photo_repository.query_by_file_name(f"{fragment}.jpg")
-            image_bytes = image.read()
-            image = Image.open(BytesIO(image_bytes), mode="r")
-            image.save(f"{output_folder_images}/{fragment}.jpg")
+            fragments_with_images.append(fragment)
+            #image_bytes = image.read()
+            #image = Image.open(BytesIO(image_bytes), mode="r")
+            #image.save(f"{output_folder_images}/{fragment}.jpg")
         except NotFoundError as e:
             # print(e)
             no_images += 1
             continue
+    with open("fragments.txt", "w+") as file:
+        file.write(str(fragments_with_images))
     print(f"Number of fragments without images: {no_images}")
     print("Finished")
