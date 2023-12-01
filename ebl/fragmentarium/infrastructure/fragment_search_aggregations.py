@@ -1,5 +1,6 @@
 from typing import List, Dict, Sequence, Optional, Union
 from ebl.common.domain.scopes import Scope
+from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaMatcher
 from ebl.common.query.query_result import LemmaQueryType
@@ -13,6 +14,7 @@ from pydash.arrays import compact
 
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
+LATEST_TRANSLITERATION_LIMIT: int = 50
 
 
 def convert_to_int(input_: Union[str, dict], default=0) -> dict:
@@ -89,9 +91,14 @@ class PatternMatcher:
     def _limit_result(self):
         return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
 
-    def _wrap_query_items_with_total(self) -> List[Dict]:
+    def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
+        return [{"$sort": sort_fields}] if sort_fields else []
+
+    def _wrap_query_items_with_total(
+        self, sort_fields: Optional[Dict] = None
+    ) -> List[Dict]:
         return [
-            {"$sort": {"script.sortKey": 1, "_sortKey": 1}},
+            *self._sort_by(sort_fields),
             *self._limit_result(),
             {"$project": {"_id": False, "script": False, "_sortKey": False}},
             {
@@ -205,7 +212,49 @@ class PatternMatcher:
             {"$match": {"matchCount": {"$gt": 0}}},
         ]
 
+    def _latest(
+        self,
+    ) -> List[Dict]:
+        tmp_record = "tmpRecord"
+        return [
+            {
+                "$match": {
+                    "record.type": RecordType.TRANSLITERATION.value,
+                    **match_user_scopes(self._scopes),
+                }
+            },
+            {
+                "$addFields": {
+                    tmp_record: {
+                        "$filter": {
+                            "input": "$record",
+                            "as": "entry",
+                            "cond": {
+                                "$eq": [
+                                    "$$entry.type",
+                                    RecordType.TRANSLITERATION.value,
+                                ]
+                            },
+                        }
+                    }
+                }
+            },
+            {"$sort": {f"{tmp_record}.date": -1}},
+            {"$limit": LATEST_TRANSLITERATION_LIMIT},
+            {
+                "$project": {
+                    "museumNumber": 1,
+                    "matchingLines": [0, 1, 2],
+                    "matchCount": {"$literal": 0},
+                }
+            },
+            *self._wrap_query_items_with_total(),
+        ]
+
     def build_pipeline(self) -> List[Dict]:
+        if self._query.get("latest"):
+            return self._latest()
+
         pipeline = self._prefilter()
 
         if self._lemma_matcher and self._sign_matcher:
@@ -229,6 +278,10 @@ class PatternMatcher:
                 ]
             )
 
-        pipeline.extend(self._wrap_query_items_with_total())
+        pipeline.extend(
+            self._wrap_query_items_with_total(
+                sort_fields={"script.sortKey": 1, "_sortKey": 1}
+            )
+        )
 
         return pipeline
