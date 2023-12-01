@@ -15,6 +15,7 @@ from pydash.arrays import compact
 VOCAB_PATH = "vocabulary"
 LEMMA_PATH = "text.lines.content.uniqueLemma"
 LATEST_TRANSLITERATION_LIMIT: int = 50
+LATEST_TRANSLITERATION_LINE_LIMIT: int = 3
 
 
 def convert_to_int(input_: Union[str, dict], default=0) -> dict:
@@ -224,7 +225,7 @@ class PatternMatcher:
                 }
             },
             {
-                "$addFields": {
+                "$project": {
                     tmp_record: {
                         "$filter": {
                             "input": "$record",
@@ -236,16 +237,41 @@ class PatternMatcher:
                                 ]
                             },
                         }
-                    }
+                    },
+                    "lineType": "$text.lines.type",
+                    "museumNumber": 1,
                 }
             },
             {"$sort": {f"{tmp_record}.date": -1}},
             {"$limit": LATEST_TRANSLITERATION_LIMIT},
             {
+                "$unwind": {
+                    "path": "$lineType",
+                    "includeArrayIndex": "lineIndex",
+                }
+            },
+            {"$match": {"lineType": "TextLine"}},
+            {
+                "$group": {
+                    "_id": "$_id",
+                    "museumNumber": {"$first": "$museumNumber"},
+                    "matchingLines": {"$push": "$lineIndex"},
+                    tmp_record: {"$first": f"${tmp_record}"},
+                }
+            },
+            {"$sort": {f"{tmp_record}.date": -1}},
+            {
                 "$project": {
-                    "museumNumber": 1,
-                    "matchingLines": [0, 1, 2],
+                    "_id": False,
+                    "museumNumber": True,
                     "matchCount": {"$literal": 0},
+                    "matchingLines": {
+                        "$slice": [
+                            "$matchingLines",
+                            0,
+                            LATEST_TRANSLITERATION_LINE_LIMIT,
+                        ]
+                    },
                 }
             },
             *self._wrap_query_items_with_total(),
