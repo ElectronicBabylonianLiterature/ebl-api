@@ -1,72 +1,18 @@
-from typing import List, Dict, Sequence, Optional, Union
+from typing import List, Dict, Sequence, Optional
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
-from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import LemmaMatcher
+from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
+    LemmaMatcher,
+    EmptyMatcher,
+)
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
-from ebl.transliteration.domain.museum_number import (
-    PREFIX_ORDER,
-    NUMBER_PREFIX_ORDER,
-    DEFAULT_PREFIX_ORDER,
-)
+
 from pydash.arrays import compact
 
-VOCAB_PATH = "vocabulary"
-LEMMA_PATH = "text.lines.content.uniqueLemma"
 LATEST_TRANSLITERATION_LIMIT: int = 50
 LATEST_TRANSLITERATION_LINE_LIMIT: int = 3
-
-
-def convert_to_int(input_: Union[str, dict], default=0) -> dict:
-    return {"$convert": {"input": input_, "to": "int", "onError": default}}
-
-
-def sort_by_museum_number(
-    pre_sort_keys: Optional[dict] = None, post_sort_keys: Optional[dict] = None
-) -> List[Dict]:
-    sort_keys = [
-        {
-            "$cond": [
-                {
-                    "$regexMatch": {
-                        "input": "$museumNumber.prefix",
-                        "regex": r"^\d+$",
-                    }
-                },
-                NUMBER_PREFIX_ORDER,
-                {
-                    "$switch": {
-                        "branches": [
-                            {
-                                "case": {"$eq": ["$museumNumber.prefix", key]},
-                                "then": value,
-                            }
-                            for key, value in PREFIX_ORDER.items()
-                        ],
-                        "default": DEFAULT_PREFIX_ORDER,
-                    }
-                },
-            ]
-        },
-        convert_to_int("$museumNumber.prefix", 0),
-        "$museumNumber.prefix",
-        convert_to_int("$museumNumber.number", default=float("Inf")),
-        "$museumNumber.number",
-        convert_to_int("$museumNumber.suffix", default=float("Inf")),
-        "$museumNumber.suffix",
-    ]
-    return [
-        {"$addFields": {"tmpSortKeys": sort_keys}},
-        {
-            "$sort": {
-                **(pre_sort_keys or {}),
-                **{f"tmpSortKeys.{i}": 1 for i in range(len(sort_keys))},
-                **(post_sort_keys or {}),
-            }
-        },
-        {"$project": {"tmpSortKeys": False}},
-    ]
 
 
 class PatternMatcher:
@@ -80,13 +26,13 @@ class PatternMatcher:
                 query.get("lemmaOperator", LemmaQueryType.AND),
             )
             if "lemmas" in query
-            else None
+            else EmptyMatcher()
         )
 
         self._sign_matcher = (
             SignMatcher(query["transliteration"])
             if "transliteration" in query
-            else None
+            else EmptyMatcher()
         )
 
     def _limit_result(self):
@@ -166,6 +112,19 @@ class PatternMatcher:
         }
 
         return [{"$match": constraints}] if constraints else []
+
+    def _default_pipeline(self) -> List[Dict]:
+        return [
+            {
+                "$project": {
+                    "_id": True,
+                    "museumNumber": True,
+                    "matchingLines": [],
+                    "matchCount": {"$literal": 0},
+                    "script": True,
+                }
+            },
+        ]
 
     def _merge_pipelines(self) -> List[Dict]:
         return [
@@ -277,37 +236,27 @@ class PatternMatcher:
             *self._wrap_query_items_with_total(),
         ]
 
+    def _get_pipeline_components(self) -> List[Dict]:
+        dispatcher = {
+            (True, True): self._merge_pipelines(),
+            (True, False): self._lemma_matcher.build_pipeline(),
+            (False, True): self._sign_matcher.build_pipeline(),
+            (False, False): self._default_pipeline(),
+        }
+        key = (
+            isinstance(self._lemma_matcher, LemmaMatcher),
+            isinstance(self._sign_matcher, SignMatcher),
+        )
+
+        return [
+            *self._prefilter(),
+            *dispatcher[key],
+            *self._wrap_query_items_with_total(
+                sort_fields={"script.sortKey": 1, "_sortKey": 1}
+            ),
+        ]
+
     def build_pipeline(self) -> List[Dict]:
         if self._query.get("latest"):
             return self._latest()
-
-        pipeline = self._prefilter()
-
-        if self._lemma_matcher and self._sign_matcher:
-            pipeline.extend(self._merge_pipelines())
-        elif self._lemma_matcher:
-            pipeline.extend(self._lemma_matcher.build_pipeline())
-        elif self._sign_matcher:
-            pipeline.extend(self._sign_matcher.build_pipeline())
-        else:
-            pipeline.extend(
-                [
-                    {
-                        "$project": {
-                            "_id": True,
-                            "museumNumber": True,
-                            "matchingLines": [],
-                            "matchCount": {"$literal": 0},
-                            "script": True,
-                        }
-                    },
-                ]
-            )
-
-        pipeline.extend(
-            self._wrap_query_items_with_total(
-                sort_fields={"script.sortKey": 1, "_sortKey": 1}
-            )
-        )
-
-        return pipeline
+        return self._get_pipeline_components()
