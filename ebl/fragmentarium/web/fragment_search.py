@@ -16,7 +16,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 
-CACHED_COMMANDS = frozenset({"latest", "needsRevision"})
+CACHED_COMMANDS = frozenset({"needsRevision"})
 
 
 class FragmentSearch:
@@ -31,17 +31,12 @@ class FragmentSearch:
         def find_needs_revision(user_scopes: Sequence[Scope] = tuple()):
             return fragmentarium.find_needs_revision(user_scopes)
 
-        @cache.memoize(DEFAULT_TIMEOUT)
-        def find_latest(user_scopes: Sequence[Scope] = tuple()):
-            return fragmentarium.find_latest(user_scopes)
-
         self.api_fragment_info_schema = ApiFragmentInfoSchema(many=True)
         self._transliteration_query_factory = transliteration_query_factory
         self._dispatch = create_dispatcher(
             {
                 frozenset(["random"]): lambda _: finder.find_random,
                 frozenset(["interesting"]): lambda _: finder.find_interesting,
-                frozenset(["latest"]): lambda _: find_latest,
                 frozenset(["needsRevision"]): lambda _: find_needs_revision,
             }
         )
