@@ -2,16 +2,6 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 
 
-def test_find_latest(fragmentarium, fragment_repository, when):
-    fragment = FragmentFactory.build()
-    (
-        when(fragment_repository)
-        .query_by_transliterated_sorted_by_date(tuple())
-        .thenReturn([fragment])
-    )
-    assert fragmentarium.find_latest() == [FragmentInfo.of(fragment)]
-
-
 def test_needs_revision(fragmentarium, fragment_repository, when):
     fragment_info = FragmentInfo.of(TransliteratedFragmentFactory.build())
     (
