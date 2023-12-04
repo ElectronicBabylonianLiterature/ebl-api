@@ -1,5 +1,5 @@
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 
 def test_needs_revision(fragmentarium, fragment_repository, when):
