@@ -181,7 +181,6 @@ class FragmentFactory(factory.Factory):
         model = Fragment
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    edited_in_oracc_project = factory.Sequence(lambda n: f"editedInOracc-{n}")
     accession = factory.Sequence(lambda n: Accession("A", str(n)))
     museum = factory.Faker("word")
     collection = factory.Faker("word")
