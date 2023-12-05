@@ -238,10 +238,10 @@ class PatternMatcher:
 
     def _get_pipeline_components(self) -> List[Dict]:
         dispatcher = {
-            (True, True): self._merge_pipelines(),
-            (True, False): self._lemma_matcher.build_pipeline(),
-            (False, True): self._sign_matcher.build_pipeline(),
-            (False, False): self._default_pipeline(),
+            (True, True): self._merge_pipelines,
+            (True, False): self._lemma_matcher.build_pipeline,
+            (False, True): self._sign_matcher.build_pipeline,
+            (False, False): self._default_pipeline,
         }
         key = (
             isinstance(self._lemma_matcher, LemmaMatcher),
@@ -250,7 +250,7 @@ class PatternMatcher:
 
         return [
             *self._prefilter(),
-            *dispatcher[key],
+            *dispatcher[key](),
             *self._wrap_query_items_with_total(
                 sort_fields={"script.sortKey": 1, "_sortKey": 1}
             ),
