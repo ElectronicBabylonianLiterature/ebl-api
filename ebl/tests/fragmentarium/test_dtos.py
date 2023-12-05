@@ -46,7 +46,6 @@ def expected_dto(lemmatized_fragment, has_photo):
         {
             "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
-            "editedInOraccProject": lemmatized_fragment.edited_in_oracc_project,
             "publication": lemmatized_fragment.publication,
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
