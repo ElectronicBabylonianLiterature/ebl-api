@@ -1,6 +1,9 @@
+import json
 import falcon
 from falcon import Request, Response
+from falcon_caching import Cache
 from pydash import flow
+from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
@@ -113,3 +116,27 @@ class FragmentsListResource:
 
     def on_get(self, req: Request, resp: Response):
         resp.media = self._repository.list_all_fragments()
+
+
+def make_latest_additions_resource(repository: FragmentRepository, cache: Cache):
+    class LatestAdditionsResource:
+        def __init__(
+            self,
+            repository: FragmentRepository,
+        ):
+            self._repository = repository
+
+        @cache.cached(timeout=DEFAULT_TIMEOUT)
+        def on_get(self, req: Request, resp: Response):
+            resp.text = json.dumps(
+                QueryResultSchema().dump(
+                    self._repository.query(
+                        {"latest": True},
+                        req.context.user.get_scopes(
+                            prefix="read:", suffix="-fragments"
+                        ),
+                    )
+                )
+            )
+
+    return LatestAdditionsResource(repository)

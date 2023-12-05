@@ -24,6 +24,7 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsResource,
     FragmentsListResource,
     FragmentsRetrieveAllResource,
+    make_latest_additions_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.periods import PeriodsResource
@@ -90,6 +91,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_query = FragmentsQueryResource(
         context.fragment_repository, context.get_transliteration_query_factory()
     )
+    latest_additions_query = make_latest_additions_resource(
+        context.fragment_repository, context.cache
+    )
     genres = GenresResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
@@ -137,6 +141,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
         ("/folios/{name}/{number}", folios),
         ("/fragments/query", fragment_query),
+        ("/fragments/latest", latest_additions_query),
         ("/fragments/all", all_fragments),
         ("/findspots", findspots),
     ]
