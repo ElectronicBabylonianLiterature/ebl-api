@@ -24,7 +24,7 @@ def create_search_query(query):
     if text_number != text_number_stripped:
         query["textNumber"] = text_number_stripped
     else:
-        query["textNumber"] = {"$regex": f"^{text_number}.*", "$options": "i"}
+        query["textNumber"] = {"$regex": f"^{text_number}", "$options": "i"}
     return query
 
 
@@ -99,9 +99,7 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def search_suggestions(
         self, text_query: str, *args, **kwargs
     ) -> Sequence[AfoRegisterRecordSuggestion]:
-        collated_query = list(make_query_params({"text": text_query}, "afo-register"))[
-            0
-        ]
+        collated_query = next(make_query_params({"text": text_query}, "afo-register"))
         pipeline = [
             {"$match": {"text": {"$regex": collated_query.value, "$options": "i"}}},
             {"$group": {"_id": "$text", "textNumbers": {"$addToSet": "$textNumber"}}},
