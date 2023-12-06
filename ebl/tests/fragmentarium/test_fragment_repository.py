@@ -11,11 +11,9 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.record import RecordType
+from ebl.fragmentarium.infrastructure.queries import LATEST_TRANSLITERATION_LINE_LIMIT
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
-)
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    LATEST_TRANSLITERATION_LINE_LIMIT,
 )
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
@@ -1130,4 +1128,4 @@ def test_query_latest(fragment_repository):
         }
     )
 
-    assert fragment_repository.query({"latest": True}) == expected_result
+    assert fragment_repository.query_latest() == expected_result

@@ -54,12 +54,6 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def query_by_transliterated_sorted_by_date(
-        self, user_scopes: Sequence[Scope]
-    ) -> List[Fragment]:
-        ...
-
-    @abstractmethod
     def query_by_transliterated_not_revised_by_other(
         self, user_scopes: Sequence[Scope]
     ) -> List[FragmentInfo]:
@@ -93,6 +87,10 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
+        ...
+
+    @abstractmethod
+    def query_latest(self, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
         ...
 
     @abstractmethod
