@@ -18,6 +18,10 @@ tasks:
       - task: type
       - task: test
 
+  python3:
+    cmds:
+      - poetry run python3 {{.CLI_ARGS}}
+
   test:
     cmds:
       - poetry run pytest {{.CLI_ARGS}}

@@ -3,6 +3,14 @@ from ebl.common.query.util import flatten_field, drop_duplicates, ngrams
 from typing import List, Dict
 
 
+class EmptyMatcher:
+    def build_pipeline(self, *args, **kwargs) -> List[Dict]:
+        return []
+
+    def __bool__(self):
+        return False
+
+
 class LemmaMatcher:
     unique_lemma_path = "text.lines.content.uniqueLemma"
     vocabulary_path = "vocabulary"

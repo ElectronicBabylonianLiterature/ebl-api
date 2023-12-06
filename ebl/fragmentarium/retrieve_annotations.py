@@ -206,11 +206,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-oi", "--output_imgs", type=str, default=None, help="Output Images Directory"
     )
+    # add argument string
+
     parser.add_argument(
         "-f",
         "--filter",
-        action="store_true",
-        help="filter finished Fragments from ./annotations.json",
+        type=str,
+        help="filter from ./annotations.json has to 'finished', 'unfinished' or 'selected'",
     )
     parser.add_argument(
         "-c",
@@ -237,20 +239,33 @@ if __name__ == "__main__":
     annotation_collection = context.annotations_repository.retrieve_all_non_empty()
 
     if args.filter:
-        print(
-            "Already finished Fragments are filtered. Finished"
-            "fragments are defined in './annotations.json' file"
-        )
-        finished_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
-            "finished"
-        ]
-
-        annotation_collection = list(
-            filter(
-                lambda elem: str(elem.fragment_number) in [*finished_fragments],
-                annotation_collection,
+        if args.filter not in ["finished", "unfinished", "selected"]:
+            raise argparse.ArgumentError(
+                None,
+                message="Filter has to be either 'finished', 'unfinished' or 'selected'",
             )
-        )
+        print(f"'{args.filter}' Fragments are filtered.")
+        if args.filter == "selected" or args.filter == "finished":
+            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
+                args.filter
+            ]
+            annotation_collection = list(
+                filter(
+                    lambda elem: str(elem.fragment_number) in filter_fragments,
+                    annotation_collection,
+                )
+            )
+        else:
+            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
+                "finished"
+            ]
+            annotation_collection = list(
+                filter(
+                    lambda elem: str(elem.fragment_number) not in filter_fragments,
+                    annotation_collection,
+                )
+            )
+
     if args.classification:
         # For Sign Classification (Bounding Boxes have to be cropped for Image Classification)
         TO_FILTER = [

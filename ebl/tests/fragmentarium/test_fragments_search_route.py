@@ -46,7 +46,7 @@ def query_item_of(
     return {
         "museumNumber": MuseumNumberSchema().dump(fragment.number),
         "matchingLines": lines,
-        "matchCount": match_count or len(lines),
+        "matchCount": len(lines) if match_count is None else match_count,
     }
 
 
@@ -260,17 +260,6 @@ def test_interesting(client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert result.json == [expected_fragment_info_dto(interesting_fragment)]
     assert "Cache-Control" not in result.headers
-
-
-def test_latest(client, fragmentarium):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
-
-    result = client.simulate_get("/fragments", params={"latest": True})
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
-    assert result.headers["Cache-Control"] == "private, max-age=600"
 
 
 def test_needs_revision(client, fragmentarium):

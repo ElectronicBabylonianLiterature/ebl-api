@@ -18,14 +18,6 @@ class Fragmentarium:
             "lines": self._repository.count_lines(),
         }
 
-    def find_latest(self, user_scopes: Sequence[Scope] = tuple()) -> List[FragmentInfo]:
-        return list(
-            map(
-                FragmentInfo.of,
-                self._repository.query_by_transliterated_sorted_by_date(user_scopes),
-            )
-        )
-
     def find_needs_revision(
         self, user_scopes: Sequence[Scope] = tuple()
     ) -> List[FragmentInfo]:

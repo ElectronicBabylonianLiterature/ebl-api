@@ -10,8 +10,12 @@ from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
+)
+from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
+    LATEST_TRANSLITERATION_LINE_LIMIT,
 )
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
@@ -28,6 +32,8 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.tests.factories.bibliography import ReferenceFactory
+from ebl.tests.factories.record import RecordEntryFactory, RecordFactory
+
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     JoinFactory,
@@ -1092,3 +1098,36 @@ def test_query_project(fragment_repository, query, expected):
     )
 
     assert fragment_repository.query({"project": query}) == expected_result
+
+
+def test_query_latest(fragment_repository):
+    fragments = [
+        TransliteratedFragmentFactory.build(
+            record=RecordFactory.build(
+                entries=(
+                    RecordEntryFactory.build(
+                        date=f"2023-05-0{i+1}", type=RecordType.TRANSLITERATION
+                    ),
+                )
+            ),
+        )
+        for i in range(5, 0, -1)
+    ]
+
+    fragment_repository.create_many(fragments)
+
+    expected_result = QueryResultSchema().load(
+        {
+            "items": [
+                query_item_of(
+                    fragment,
+                    tuple(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
+                    0,
+                )
+                for fragment in fragments
+            ],
+            "matchCountTotal": 0,
+        }
+    )
+
+    assert fragment_repository.query({"latest": True}) == expected_result

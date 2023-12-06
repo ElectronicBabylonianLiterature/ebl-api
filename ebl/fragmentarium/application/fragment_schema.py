@@ -161,9 +161,6 @@ class ExternalNumbersSchema(Schema):
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
-    edited_in_oracc_project = fields.String(
-        required=True, data_key="editedInOraccProject"
-    )
     publication = fields.String(required=True)
     description = fields.String(required=True)
     collection = fields.String(required=True)

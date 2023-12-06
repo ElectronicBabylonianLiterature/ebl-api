@@ -115,7 +115,6 @@ class ExternalNumbers:
 class Fragment:
     number: MuseumNumber
     accession: Optional[Accession] = None
-    edited_in_oracc_project: str = ""
     publication: str = ""
     description: str = ""
     collection: str = ""

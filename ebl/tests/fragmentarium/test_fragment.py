@@ -50,11 +50,6 @@ def test_accession():
     assert fragment.accession == "accession-3"
 
 
-def test_edited_in_oracc_project():
-    fragment = FragmentFactory.build(edited_in_oracc_project="dcclt")
-    assert fragment.edited_in_oracc_project == "dcclt"
-
-
 def traditional_references():
     fragment = FragmentFactory.build(
         traditional_references=["CT 1, 12", "CT I, 12", "CT I 12"]
