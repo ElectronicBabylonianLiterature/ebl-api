@@ -1,7 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import List, Sequence, Optional
 from ebl.common.domain.scopes import Scope
-from ebl.common.query.query_result import QueryResult
+from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
+from ebl.common.query.query_schemas import (
+    AfORegisterToFragmentQueryResultSchema,
+)
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -39,6 +42,14 @@ class FragmentRepository(ABC):
         lines: Optional[Sequence[int]] = None,
         exclude_lines: bool = False,
     ) -> Fragment:
+        ...
+
+    @abstractmethod
+    def query_by_traditional_references(
+        self,
+        traditional_references: Sequence[str],
+        user_scopes: Sequence[Scope],
+    ) -> AfORegisterToFragmentQueryResult:
         ...
 
     @abstractmethod

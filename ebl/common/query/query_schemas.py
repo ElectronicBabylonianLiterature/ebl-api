@@ -4,6 +4,8 @@ from ebl.common.query.query_result import (
     CorpusQueryResult,
     QueryItem,
     QueryResult,
+    AfORegisterToFragmentQueryResult,
+    AfORegisterToFragmentQueryItem,
 )
 from ebl.corpus.application.id_schemas import TextIdSchema
 from ebl.schemas import ValueEnumField
@@ -42,6 +44,18 @@ class CorpusQueryItemSchema(Schema):
         return CorpusQueryItem(**data)
 
 
+class AfORegisterToFragmentQueryItemSchema(Schema):
+    traditional_reference = fields.String(required=True, data_key="traditionalReference")
+    fragment_numbers = fields.List(
+        fields.String(), required=True, data_key="fragmentNumbers"
+    )
+
+    @post_load
+    def make_query_item(self, data, **kwargs) -> AfORegisterToFragmentQueryItem:
+        data["fragment_numbers"] = tuple(data["fragment_numbers"])
+        return AfORegisterToFragmentQueryItem(**data)
+
+
 class QueryResultSchema(Schema):
     match_count_total = fields.Integer(data_key="matchCountTotal", required=True)
     items = fields.Nested(QueryItemSchema, many=True, required=True)
@@ -57,3 +71,13 @@ class CorpusQueryResultSchema(QueryResultSchema):
     @post_load
     def make_query_result(self, data, **kwargs) -> CorpusQueryResult:
         return CorpusQueryResult(**data)
+
+
+class AfORegisterToFragmentQueryResultSchema(Schema):
+    items = fields.Nested(
+        AfORegisterToFragmentQueryItemSchema, many=True, required=True
+    )
+
+    @post_load
+    def make_query_result(self, data, **kwargs) -> AfORegisterToFragmentQueryResult:
+        return AfORegisterToFragmentQueryResult(**data)
