@@ -462,7 +462,13 @@ class MongoFragmentRepository(FragmentRepository):
                     "fragmentNumbers": {"$addToSet": "$_id"},
                 }
             },
-            {"$project": {"traditionalReference": "$_id", "fragmentNumbers": 1, "_id": 0}},
+            {
+                "$project": {
+                    "traditionalReference": "$_id",
+                    "fragmentNumbers": 1,
+                    "_id": 0,
+                }
+            },
         ]
         data = self._fragments.aggregate(pipeline)
         return (

@@ -4,16 +4,10 @@ from ebl.common.query.query_schemas import (
 from ebl.tests.factories.fragment import (
     FragmentFactory,
 )
-from ebl.common.query.query_schemas import (
-    AfORegisterToFragmentQueryResultSchema,
-)
 
-def test_query_fragmentarium_afo_register(
-    fragment_repository
-):
-    fragment = FragmentFactory.build(
-        traditional_references = []
-    )
+
+def test_query_fragmentarium_afo_register(fragment_repository):
+    fragment = FragmentFactory.build(traditional_references=[])
 
     # ToDo: Add data to test
 

@@ -2,9 +2,6 @@ from abc import ABC, abstractmethod
 from typing import List, Sequence, Optional
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
-from ebl.common.query.query_schemas import (
-    AfORegisterToFragmentQueryResultSchema,
-)
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment

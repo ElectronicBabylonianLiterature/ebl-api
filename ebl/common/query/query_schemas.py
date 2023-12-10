@@ -45,7 +45,9 @@ class CorpusQueryItemSchema(Schema):
 
 
 class AfORegisterToFragmentQueryItemSchema(Schema):
-    traditional_reference = fields.String(required=True, data_key="traditionalReference")
+    traditional_reference = fields.String(
+        required=True, data_key="traditionalReference"
+    )
     fragment_numbers = fields.List(
         fields.String(), required=True, data_key="fragmentNumbers"
     )

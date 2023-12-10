@@ -1,4 +1,3 @@
-import falcon
 from falcon import Request, Response
 
 from ebl.errors import DataError

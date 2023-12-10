@@ -99,7 +99,9 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def search_suggestions(
         self, text_query: str, *args, **kwargs
     ) -> Sequence[AfoRegisterRecordSuggestion]:
-        collated_query_iter = iter(make_query_params({"text": text_query}, "afo-register"))
+        collated_query_iter = iter(
+            make_query_params({"text": text_query}, "afo-register")
+        )
         collated_query = next(collated_query_iter)
         pipeline = [
             {"$match": {"text": {"$regex": collated_query.value, "$options": "i"}}},
