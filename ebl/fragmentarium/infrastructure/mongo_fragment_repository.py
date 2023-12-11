@@ -6,8 +6,11 @@ from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
-from ebl.common.query.query_result import QueryResult
-from ebl.common.query.query_schemas import QueryResultSchema
+from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
+from ebl.common.query.query_schemas import (
+    QueryResultSchema,
+    AfORegisterToFragmentQueryResultSchema,
+)
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
@@ -30,6 +33,7 @@ from ebl.fragmentarium.infrastructure.queries import (
     fragment_is,
     join_joins,
     join_findspots,
+    aggregate_by_traditional_references,
 )
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.mongo_collection import MongoCollection
@@ -37,6 +41,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 from ebl.transliteration.infrastructure.queries import query_number_is
+
 
 RETRIEVE_ALL_LIMIT = 1000
 
@@ -422,6 +427,21 @@ class MongoFragmentRepository(FragmentRepository):
             data = None
 
         return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+
+    def query_by_traditional_references(
+        self,
+        traditional_references: Sequence[str],
+        user_scopes: Sequence[Scope] = tuple(),
+    ) -> AfORegisterToFragmentQueryResult:
+        pipeline = aggregate_by_traditional_references(
+            traditional_references, user_scopes
+        )
+        data = self._fragments.aggregate(pipeline)
+        return (
+            AfORegisterToFragmentQueryResultSchema().load({"items": data})
+            if data
+            else AfORegisterToFragmentQueryResult.create_empty()
+        )
 
     def list_all_fragments(
         self, user_scopes: Sequence[Scope] = tuple()

@@ -41,6 +41,12 @@ class CorpusQueryItem:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class AfORegisterToFragmentQueryItem:
+    traditional_reference: str
+    fragment_numbers: Sequence[str]
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class CorpusQueryResult:
     items: Sequence[CorpusQueryItem]
     match_count_total: int
@@ -48,3 +54,12 @@ class CorpusQueryResult:
     @staticmethod
     def create_empty() -> "CorpusQueryResult":
         return CorpusQueryResult([], 0)
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class AfORegisterToFragmentQueryResult:
+    items: Sequence[AfORegisterToFragmentQueryItem]
+
+    @staticmethod
+    def create_empty() -> "AfORegisterToFragmentQueryResult":
+        return AfORegisterToFragmentQueryResult([])
