@@ -33,6 +33,7 @@ from ebl.fragmentarium.infrastructure.queries import (
     fragment_is,
     join_joins,
     join_findspots,
+    aggregate_by_traditional_references,
 )
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.mongo_collection import MongoCollection
@@ -432,44 +433,9 @@ class MongoFragmentRepository(FragmentRepository):
         traditional_references: Sequence[str],
         user_scopes: Sequence[Scope] = tuple(),
     ) -> AfORegisterToFragmentQueryResult:
-        pipeline = [
-            {
-                "$match": {
-                    "traditionalReferences": {"$in": traditional_references},
-                    **match_user_scopes(user_scopes),
-                }
-            },
-            {
-                "$project": {
-                    "_id": 1,
-                    "traditionalReference": {
-                        "$arrayElemAt": [
-                            {
-                                "$filter": {
-                                    "input": "$traditionalReferences",
-                                    "as": "ref",
-                                    "cond": {"$in": ["$$ref", traditional_references]},
-                                }
-                            },
-                            0,
-                        ]
-                    },
-                }
-            },
-            {
-                "$group": {
-                    "_id": "$traditionalReference",
-                    "fragmentNumbers": {"$addToSet": "$_id"},
-                }
-            },
-            {
-                "$project": {
-                    "traditionalReference": "$_id",
-                    "fragmentNumbers": 1,
-                    "_id": 0,
-                }
-            },
-        ]
+        pipeline = aggregate_by_traditional_references(
+            traditional_references, user_scopes
+        )
         data = self._fragments.aggregate(pipeline)
         return (
             AfORegisterToFragmentQueryResultSchema().load({"items": data})
