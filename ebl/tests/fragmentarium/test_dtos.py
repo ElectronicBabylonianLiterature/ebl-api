@@ -43,7 +43,7 @@ def has_photo():
 @pytest.fixture
 def expected_dto(lemmatized_fragment, has_photo):
     return pydash.omit_by(
-        {   
+        {
             "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
@@ -65,7 +65,7 @@ def expected_dto(lemmatized_fragment, has_photo):
                 "museumName": lemmatized_fragment.museum.museumName,
                 "city": lemmatized_fragment.museum.city,
                 "country": lemmatized_fragment.museum.country,
-                "url": lemmatized_fragment.museum.url
+                "url": lemmatized_fragment.museum.url,
             },
             "script": ScriptSchema().dump(lemmatized_fragment.script),
             "date": DateSchema().dump(lemmatized_fragment.date),
