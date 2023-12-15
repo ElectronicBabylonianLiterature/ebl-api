@@ -61,18 +61,13 @@ def expected_dto(lemmatized_fragment, has_photo):
             "collection": lemmatized_fragment.collection,
             "legacyScript": lemmatized_fragment.legacy_script,
             "traditionalReferences": lemmatized_fragment.traditional_references,
-            "museum": {
-                "museumName": lemmatized_fragment.museum.museumName,
-                "city": lemmatized_fragment.museum.city,
-                "country": lemmatized_fragment.museum.country,
-                "url": lemmatized_fragment.museum.url,
-            },
             "script": ScriptSchema().dump(lemmatized_fragment.script),
             "date": DateSchema().dump(lemmatized_fragment.date),
             "datesInText": [
                 DateSchema().dump(date) for date in lemmatized_fragment.dates_in_text
             ],
             "notes": NotesSchema().dump(lemmatized_fragment.notes),
+            "museum": lemmatized_fragment.museum,
             "signs": lemmatized_fragment.signs,
             "record": [
                 {"user": entry.user, "type": entry.type.value, "date": entry.date}
