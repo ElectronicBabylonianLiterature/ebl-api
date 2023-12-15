@@ -12,6 +12,7 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.tests.factories.corpus import (
     ChapterFactory,
@@ -35,6 +36,13 @@ from ebl.transliteration.domain.tokens import ValueToken
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.application.signs_visitor import SignsVisitor
+
+dummy_museum = Museum(
+    museumName="Dummy Museum",
+    city="Dummy City",
+    country="Dummy Country",
+    url="https://dummy-museum.org/",
+)
 
 TEXTS_COLLECTION = "texts"
 CHAPTERS_COLLECTION = "chapters"
@@ -203,7 +211,14 @@ def test_finding_text(
     chapter = attr.evolve(CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMENT,))
     when_text_in_collection(database, text)
     when_chapter_in_collection(database, chapter)
-    fragment_repository.create(Fragment(UNCERTAIN_FRAGMENT))
+    dummy_museum = Museum(
+        museumName="Dummy Museum",
+        city="Dummy City",
+        country="Dummy Country",
+        url="https://dummy-museum.org/",
+    )
+    fragment_repository.create(Fragment(UNCERTAIN_FRAGMENT, museum=dummy_museum))
+
     for reference in text.references:
         bibliography_repository.create(reference.document)
 

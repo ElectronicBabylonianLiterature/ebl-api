@@ -1,5 +1,5 @@
 from typing import Sequence
-
+from ebl.fragmentarium.domain.museum import Museum
 import factory.fuzzy
 import random
 from ebl.common.domain.accession import Accession
@@ -176,13 +176,23 @@ class ExternalNumbersFactory(factory.Factory):
     )
 
 
+class MuseumFactory(factory.Factory):
+    class Meta:
+        model = Museum
+
+    museumName = "The British Museum"
+    city = "London"
+    country = "GBR"
+    url = "https://www.britishmuseum.org/"
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     accession = factory.Sequence(lambda n: Accession("A", str(n)))
-    museum = factory.Faker("word")
+    museum = factory.SubFactory(MuseumFactory)
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
     description = factory.Faker("text")
