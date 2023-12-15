@@ -3,6 +3,7 @@ from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.application.schemas import AccessionSchema
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -40,6 +41,17 @@ class MeasureSchema(Schema):
     @post_dump
     def filter_none(self, data, **kwargs):
         return pydash.omit_by(data, pydash.is_none)
+
+
+class MuseumSchema(Schema):
+    museumName = fields.String(required=True)
+    city = fields.String(required=True)
+    country = fields.String(required=True)
+    url = fields.Url(required=True)
+
+    @post_load
+    def make_museum(self, data, **kwargs) -> Museum:
+        return Museum(**data)
 
 
 class RecordEntrySchema(Schema):
@@ -168,7 +180,7 @@ class FragmentSchema(Schema):
     traditional_references = fields.List(
         fields.String(), data_key="traditionalReferences"
     )
-    museum = fields.String(required=True)
+    museum = fields.Nested(MuseumSchema, required=True)
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
     thickness = fields.Nested(MeasureSchema, required=True)
@@ -211,6 +223,17 @@ class FragmentSchema(Schema):
 
     @post_load
     def make_fragment(self, data, **kwargs):
+        self._convert_lists_to_tuples(data)
+        self._ensure_museum_object(data)
+
+        if "authorized_scopes" in data:
+            data["authorized_scopes"] = list(data["authorized_scopes"])
+        if "dates_in_text" in data:
+            data["dates_in_text"] = list(data["dates_in_text"])
+
+        return Fragment(**data)
+
+    def _convert_lists_to_tuples(self, data):
         data["references"] = tuple(data["references"])
         data["genres"] = tuple(data["genres"])
         data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
@@ -218,12 +241,10 @@ class FragmentSchema(Schema):
             data["projects"] = tuple(data["projects"])
         if data["uncurated_references"] is not None:
             data["uncurated_references"] = tuple(data["uncurated_references"])
-        if "authorized_scopes" in data:
-            data["authorized_scopes"] = list(data["authorized_scopes"])
-        if "dates_in_text" in data:
-            data["dates_in_text"] = list(data["dates_in_text"])
 
-        return Fragment(**data)
+    def _ensure_museum_object(self, data):
+        if "museum" in data and not isinstance(data["museum"], Museum):
+            data["museum"] = Museum(**data["museum"])
 
     @post_dump
     def filter_none(self, data, **kwargs):

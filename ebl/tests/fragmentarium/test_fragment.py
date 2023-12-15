@@ -2,7 +2,7 @@ import attr
 from freezegun import freeze_time
 import pytest
 from ebl.common.domain.period import Period
-
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
     ExternalNumbers,
@@ -79,8 +79,14 @@ def test_script():
 
 
 def test_museum():
-    fragment = FragmentFactory.build(museum="Museum")
-    assert fragment.museum == "Museum"
+    fragment = FragmentFactory.build()
+    expected_museum = Museum(
+        museumName="The British Museum",
+        city="London",
+        country="GBR",
+        url="https://www.britishmuseum.org/",
+    )
+    assert fragment.museum == expected_museum
 
 
 def test_length():
@@ -115,7 +121,13 @@ def test_signs():
 
 def test_record():
     record = RecordFactory.build()
-    fragment = Fragment(MuseumNumber.of("X.1"), record=record)
+    museum = Museum(
+        museumName="Some Museum",
+        city="Some City",
+        country="Some Country",
+        url="https://some-museum.org/",
+    )
+    fragment = Fragment(MuseumNumber.of("X.1"), museum, record=record)
     assert fragment.record == record
 
 
