@@ -26,7 +26,6 @@ from ebl.lemmatization.domain.lemmatization import (
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import (
-    MuseumFactory,
     FragmentFactory,
     LemmatizedFragmentFactory,
     TransliteratedFragmentFactory,

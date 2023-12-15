@@ -223,21 +223,28 @@ class FragmentSchema(Schema):
 
     @post_load
     def make_fragment(self, data, **kwargs):
-        data["references"] = tuple(data["references"])
-        data["genres"] = tuple(data["genres"])
-        data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
-        if "museum" in data and not isinstance(data["museum"], Museum):
-            data["museum"] = Museum(**data["museum"])
-        if "projects" in data:
-            data["projects"] = tuple(data["projects"])
-        if data["uncurated_references"] is not None:
-            data["uncurated_references"] = tuple(data["uncurated_references"])
+        self._convert_lists_to_tuples(data)
+        self._ensure_museum_object(data)
+
         if "authorized_scopes" in data:
             data["authorized_scopes"] = list(data["authorized_scopes"])
         if "dates_in_text" in data:
             data["dates_in_text"] = list(data["dates_in_text"])
 
         return Fragment(**data)
+
+    def _convert_lists_to_tuples(self, data):
+        data["references"] = tuple(data["references"])
+        data["genres"] = tuple(data["genres"])
+        data["line_to_vec"] = tuple(map(tuple, data["line_to_vec"]))
+        if "projects" in data:
+            data["projects"] = tuple(data["projects"])
+        if data["uncurated_references"] is not None:
+            data["uncurated_references"] = tuple(data["uncurated_references"])
+
+    def _ensure_museum_object(self, data):
+        if "museum" in data and not isinstance(data["museum"], Museum):
+            data["museum"] = Museum(**data["museum"])
 
     @post_dump
     def filter_none(self, data, **kwargs):
