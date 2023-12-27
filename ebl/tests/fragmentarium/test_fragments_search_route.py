@@ -1,4 +1,5 @@
 from typing import Dict, List, Optional
+from datetime import date, timedelta
 
 import attr
 import falcon
@@ -13,13 +14,20 @@ from ebl.fragmentarium.application.fragment_info_schema import (
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
+from ebl.fragmentarium.domain.record import RecordType
+from ebl.fragmentarium.infrastructure.queries import (
+    LATEST_TRANSLITERATION_LIMIT,
+    LATEST_TRANSLITERATION_LINE_LIMIT,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
+
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
     TransliteratedFragmentFactory,
     LemmatizedFragmentFactory,
 )
+from ebl.tests.factories.record import RecordEntryFactory, RecordFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.genres import genres
@@ -399,3 +407,42 @@ def test_search_project(client, fragmentarium, params, expected):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
+
+
+def test_query_latest(client, fragmentarium):
+    number_of_fragments = LATEST_TRANSLITERATION_LIMIT + 10
+    start_date = date(2023, 5, 1)
+    fragments = [
+        TransliteratedFragmentFactory.build(
+            record=RecordFactory.build(
+                entries=(
+                    RecordEntryFactory.build(
+                        date=str(start_date + timedelta(i)),
+                        type=RecordType.TRANSLITERATION,
+                    ),
+                )
+            ),
+        )
+        for i in range(number_of_fragments)
+    ]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    query_items_by_date = [
+        query_item_of(
+            fragment,
+            list(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
+            0,
+        )
+        for fragment in reversed(fragments)
+    ]
+    expected = {
+        "items": query_items_by_date[:LATEST_TRANSLITERATION_LIMIT],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get("/fragments/latest")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected
