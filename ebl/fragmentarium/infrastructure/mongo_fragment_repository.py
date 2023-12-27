@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence
+from typing import List, Optional, Sequence, Iterator
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -23,7 +23,7 @@ from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
+from ebl.fragmentarium.infrastructure.fragment_pattern_matcher import PatternMatcher
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -52,6 +52,11 @@ def has_none_values(dictionary: dict) -> bool:
 
 def load_museum_number(data: dict) -> MuseumNumber:
     return MuseumNumberSchema().load(data.get("museumNumber", data))
+
+
+def load_query_result(cursor: Iterator) -> QueryResult:
+    data = next(cursor, None)
+    return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -260,14 +265,6 @@ class MongoFragmentRepository(FragmentRepository):
             for fragment in cursor
         ]
 
-    def query_by_transliterated_sorted_by_date(
-        self, user_scopes: Sequence[Scope] = tuple()
-    ):
-        cursor = self._fragments.aggregate(
-            [*aggregate_latest(user_scopes), {"$project": {"joins": False}}]
-        )
-        return self._map_fragments(cursor)
-
     def query_by_transliterated_not_revised_by_other(
         self, user_scopes: Sequence[Scope] = tuple()
     ):
@@ -412,21 +409,27 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
     def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
-        if set(query) - {"lemmaOperator"}:
-            matcher = PatternMatcher(query, user_scopes)
-            data = next(
-                self._fragments.aggregate(
-                    matcher.build_pipeline(),
-                    collation=Collation(
-                        locale="en", numericOrdering=True, alternate="shifted"
-                    ),
+        cursor = (
+            self._fragments.aggregate(
+                PatternMatcher(query, user_scopes).build_pipeline(),
+                collation=Collation(
+                    locale="en", numericOrdering=True, alternate="shifted"
                 ),
-                None,
             )
-        else:
-            data = None
+            if set(query) - {"lemmaOperator"}
+            else iter([])
+        )
+        return load_query_result(cursor)
 
-        return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+    def query_latest(self, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
+        return load_query_result(
+            self._fragments.aggregate(
+                aggregate_latest(user_scopes),
+                collation=Collation(
+                    locale="en", numericOrdering=True, alternate="shifted"
+                ),
+            )
+        )
 
     def query_by_traditional_references(
         self,

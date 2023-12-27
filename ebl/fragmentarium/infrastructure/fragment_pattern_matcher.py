@@ -1,6 +1,5 @@
 from typing import List, Dict, Sequence, Optional
 from ebl.common.domain.scopes import Scope
-from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
     LemmaMatcher,
@@ -10,9 +9,6 @@ from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
 
 from pydash.arrays import compact
-
-LATEST_TRANSLITERATION_LIMIT: int = 50
-LATEST_TRANSLITERATION_LINE_LIMIT: int = 3
 
 
 class PatternMatcher:
@@ -164,76 +160,12 @@ class PatternMatcher:
             {"$match": {"matchCount": {"$gt": 0}}},
         ]
 
-    def _latest(
-        self,
-    ) -> List[Dict]:
-        tmp_record = "tmpRecord"
-        return [
-            {
-                "$match": {
-                    "record.type": RecordType.TRANSLITERATION.value,
-                    **match_user_scopes(self._scopes),
-                }
-            },
-            {
-                "$project": {
-                    tmp_record: {
-                        "$filter": {
-                            "input": "$record",
-                            "as": "entry",
-                            "cond": {
-                                "$eq": [
-                                    "$$entry.type",
-                                    RecordType.TRANSLITERATION.value,
-                                ]
-                            },
-                        }
-                    },
-                    "lineType": "$text.lines.type",
-                    "museumNumber": 1,
-                }
-            },
-            {"$sort": {f"{tmp_record}.date": -1}},
-            {"$limit": LATEST_TRANSLITERATION_LIMIT},
-            {
-                "$unwind": {
-                    "path": "$lineType",
-                    "includeArrayIndex": "lineIndex",
-                }
-            },
-            {"$match": {"lineType": "TextLine"}},
-            {
-                "$group": {
-                    "_id": "$_id",
-                    "museumNumber": {"$first": "$museumNumber"},
-                    "matchingLines": {"$push": "$lineIndex"},
-                    tmp_record: {"$first": f"${tmp_record}"},
-                }
-            },
-            {"$sort": {f"{tmp_record}.date": -1}},
-            {
-                "$project": {
-                    "_id": False,
-                    "museumNumber": True,
-                    "matchCount": {"$literal": 0},
-                    "matchingLines": {
-                        "$slice": [
-                            "$matchingLines",
-                            0,
-                            LATEST_TRANSLITERATION_LINE_LIMIT,
-                        ]
-                    },
-                }
-            },
-            *self._wrap_query_items_with_total(),
-        ]
-
     def _get_pipeline_components(self) -> List[Dict]:
         dispatcher = {
-            (True, True): self._merge_pipelines(),
-            (True, False): self._lemma_matcher.build_pipeline(),
-            (False, True): self._sign_matcher.build_pipeline(),
-            (False, False): self._default_pipeline(),
+            (True, True): self._merge_pipelines,
+            (True, False): self._lemma_matcher.build_pipeline,
+            (False, True): self._sign_matcher.build_pipeline,
+            (False, False): self._default_pipeline,
         }
         key = (
             isinstance(self._lemma_matcher, LemmaMatcher),
@@ -242,13 +174,11 @@ class PatternMatcher:
 
         return [
             *self._prefilter(),
-            *dispatcher[key],
+            *dispatcher[key](),
             *self._wrap_query_items_with_total(
                 sort_fields={"script.sortKey": 1, "_sortKey": 1}
             ),
         ]
 
     def build_pipeline(self) -> List[Dict]:
-        if self._query.get("latest"):
-            return self._latest()
         return self._get_pipeline_components()

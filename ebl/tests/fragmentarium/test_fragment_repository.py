@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from typing import Tuple, List
 import attr
 import pytest
@@ -11,11 +12,9 @@ from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.record import RecordType
+from ebl.fragmentarium.infrastructure.queries import LATEST_TRANSLITERATION_LINE_LIMIT
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
     MongoFragmentRepository,
-)
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    LATEST_TRANSLITERATION_LINE_LIMIT,
 )
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
@@ -1101,17 +1100,19 @@ def test_query_project(fragment_repository, query, expected):
 
 
 def test_query_latest(fragment_repository):
+    start_date = date(2023, 5, 1)
     fragments = [
         TransliteratedFragmentFactory.build(
             record=RecordFactory.build(
                 entries=(
                     RecordEntryFactory.build(
-                        date=f"2023-05-0{i+1}", type=RecordType.TRANSLITERATION
+                        date=str(start_date + timedelta(i)),
+                        type=RecordType.TRANSLITERATION,
                     ),
                 )
             ),
         )
-        for i in range(5, 0, -1)
+        for i in range(5)
     ]
 
     fragment_repository.create_many(fragments)
@@ -1124,10 +1125,10 @@ def test_query_latest(fragment_repository):
                     tuple(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
                     0,
                 )
-                for fragment in fragments
+                for fragment in reversed(fragments)
             ],
             "matchCountTotal": 0,
         }
     )
 
-    assert fragment_repository.query({"latest": True}) == expected_result
+    assert fragment_repository.query_latest() == expected_result

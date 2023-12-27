@@ -1,4 +1,4 @@
-from typing import List, Sequence
+from typing import List, Sequence, Dict
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.domain.archaeology import ExcavationNumber
@@ -14,9 +14,10 @@ from ebl.transliteration.infrastructure.collections import (
 from ebl.transliteration.infrastructure.queries import query_number_is
 
 HAS_TRANSLITERATION: dict = {"text.lines.type": {"$exists": True}}
-NUMBER_OF_LATEST_TRANSLITERATIONS: int = 50
 NUMBER_OF_NEEDS_REVISION: int = 20
 PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES: int = 10
+LATEST_TRANSLITERATION_LIMIT: int = 50
+LATEST_TRANSLITERATION_LINE_LIMIT: int = 3
 
 
 def fragment_is(fragment: Fragment) -> dict:
@@ -59,8 +60,10 @@ def aggregate_random(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
     ]
 
 
-def aggregate_latest(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
-    temp_field_name = "_temp"
+def aggregate_latest(
+    user_scopes: Sequence[Scope] = tuple(),
+) -> List[Dict]:
+    tmp_record = "_tmpRecord"
     return [
         {
             "$match": {
@@ -69,21 +72,62 @@ def aggregate_latest(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
             }
         },
         {
-            "$addFields": {
-                temp_field_name: {
+            "$project": {
+                tmp_record: {
                     "$filter": {
                         "input": "$record",
                         "as": "entry",
                         "cond": {
-                            "$eq": ["$$entry.type", RecordType.TRANSLITERATION.value]
+                            "$eq": [
+                                "$$entry.type",
+                                RecordType.TRANSLITERATION.value,
+                            ]
                         },
                     }
-                }
+                },
+                "lineType": "$text.lines.type",
+                "museumNumber": 1,
             }
         },
-        {"$sort": {f"{temp_field_name}.date": -1}},
-        {"$limit": NUMBER_OF_LATEST_TRANSLITERATIONS},
-        {"$project": {temp_field_name: 0}},
+        {"$sort": {f"{tmp_record}.date": -1}},
+        {"$limit": LATEST_TRANSLITERATION_LIMIT},
+        {
+            "$unwind": {
+                "path": "$lineType",
+                "includeArrayIndex": "lineIndex",
+            }
+        },
+        {"$match": {"lineType": "TextLine"}},
+        {
+            "$group": {
+                "_id": "$_id",
+                "museumNumber": {"$first": "$museumNumber"},
+                "matchingLines": {"$push": "$lineIndex"},
+                tmp_record: {"$first": f"${tmp_record}"},
+            }
+        },
+        {"$sort": {f"{tmp_record}.date": -1}},
+        {
+            "$project": {
+                "_id": False,
+                "museumNumber": True,
+                "matchCount": {"$literal": 0},
+                "matchingLines": {
+                    "$slice": [
+                        "$matchingLines",
+                        0,
+                        LATEST_TRANSLITERATION_LINE_LIMIT,
+                    ]
+                },
+            }
+        },
+        {
+            "$group": {
+                "_id": None,
+                "items": {"$push": "$$ROOT"},
+            }
+        },
+        {"$project": {"_id": False, "items": 1, "matchCountTotal": {"$literal": 0}}},
     ]
 
 
