@@ -85,13 +85,6 @@ class PatternMatcher:
             }
         return {"references": {"$elemMatch": parameters}}
 
-    def _filter_by_traditional_references(self) -> Dict:
-        if traditional_references := self._query.get("traditionalReferences"):
-            return {
-                "traditionalReferences": {"$elemMatch": {"$eq": traditional_references}}
-            }
-        return {}
-
     def _prefilter(self) -> List[Dict]:
         constraints = {
             "$and": compact(
@@ -101,7 +94,6 @@ class PatternMatcher:
                     self._filter_by_project(),
                     self._filter_by_script(),
                     self._filter_by_reference(),
-                    self._filter_by_traditional_references(),
                     match_user_scopes(self._scopes),
                 ]
             ),

@@ -36,6 +36,9 @@ from ebl.fragmentarium.web.transliterations import TransliterationResource
 from ebl.fragmentarium.web.introductions import IntroductionResource
 from ebl.fragmentarium.web.archaeology import ArchaeologyResource
 from ebl.fragmentarium.web.notes import NotesResource
+from ebl.fragmentarium.web.fragments_afo_register import (
+    AfoRegisterFragmentsQueryResource,
+)
 from ebl.corpus.web.chapters import ChaptersByManuscriptResource
 from ebl.corpus.application.corpus import Corpus
 
@@ -91,6 +94,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_query = FragmentsQueryResource(
         context.fragment_repository, context.get_transliteration_query_factory()
     )
+    afo_register_fragments_query = AfoRegisterFragmentsQueryResource(
+        context.fragment_repository, finder
+    )
     latest_additions_query = make_latest_additions_resource(
         context.fragment_repository, context.cache
     )
@@ -141,6 +147,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
         ("/folios/{name}/{number}", folios),
         ("/fragments/query", fragment_query),
+        ("/fragments/query-by-traditional-references", afo_register_fragments_query),
         ("/fragments/latest", latest_additions_query),
         ("/fragments/all", all_fragments),
         ("/findspots", findspots),
