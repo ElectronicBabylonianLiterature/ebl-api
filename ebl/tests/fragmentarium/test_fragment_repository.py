@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 from typing import Tuple, List
 import attr
 import pytest
@@ -1099,17 +1100,19 @@ def test_query_project(fragment_repository, query, expected):
 
 
 def test_query_latest(fragment_repository):
+    start_date = date(2023, 5, 1)
     fragments = [
         TransliteratedFragmentFactory.build(
             record=RecordFactory.build(
                 entries=(
                     RecordEntryFactory.build(
-                        date=f"2023-05-0{i+1}", type=RecordType.TRANSLITERATION
+                        date=str(start_date + timedelta(i)),
+                        type=RecordType.TRANSLITERATION,
                     ),
                 )
             ),
         )
-        for i in range(5, 0, -1)
+        for i in range(5)
     ]
 
     fragment_repository.create_many(fragments)
@@ -1122,7 +1125,7 @@ def test_query_latest(fragment_repository):
                     tuple(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
                     0,
                 )
-                for fragment in fragments
+                for fragment in reversed(fragments)
             ],
             "matchCountTotal": 0,
         }
