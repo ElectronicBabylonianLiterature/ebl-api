@@ -156,6 +156,7 @@ CSL_JSON_SCHEMA = {
         "version": {"type": "string"},
         "volume": {"type": ["string", "number"]},
         "year-suffix": {"type": "string"},
+        "is-indexed": {"type": "boolean"},
     },
     "required": ["type", "id"],
     "additionalProperties": False,
