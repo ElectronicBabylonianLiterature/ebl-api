@@ -19,6 +19,16 @@ def saved_entry(bibliography, user):
     return bibliography_entry
 
 
+@pytest.fixture
+def saved_indexed_entry(bibliography, user):
+    bibliography_entry = {
+        **BibliographyEntryFactory.build(id="Q30000001"),
+        "is-indexed": True,
+    }
+    bibliography.create(bibliography_entry, user)
+    return bibliography_entry
+
+
 def test_get_entry(client, saved_entry):
     id_ = saved_entry["id"]
     result = client.simulate_get(f"/bibliography/{id_}")
@@ -122,8 +132,15 @@ def test_search(client, saved_entry, params):
     assert result.status == falcon.HTTP_OK
 
 
-def test_list_all_bibliography(client, saved_entry):
+def test_list_all_bibliography(client, saved_entry, saved_indexed_entry):
     result = client.simulate_get("/bibliography/all")
 
-    assert result.json == [saved_entry["id"]]
+    assert result.json == [saved_entry["id"], saved_indexed_entry["id"]]
+    assert result.status == falcon.HTTP_OK
+
+
+def test_list_all_indexed_bibliography(client, saved_entry, saved_indexed_entry):
+    result = client.simulate_get("/bibliography/indexed")
+
+    assert result.json == [saved_indexed_entry["id"]]
     assert result.status == falcon.HTTP_OK
