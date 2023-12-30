@@ -4,6 +4,7 @@ from ebl.bibliography.web.bibliography_entries import (
     BibliographyEntriesResource,
     BibliographyResource,
     BibliographyList,
+    IndexedBibliographyList,
 )
 from ebl.context import Context
 
@@ -13,6 +14,9 @@ def create_bibliography_routes(api: falcon.App, context: Context):
     bibliography_resource = BibliographyResource(bibliography)
     bibliography_entries = BibliographyEntriesResource(bibliography)
     bibliography_all = BibliographyList(bibliography)
+    indexed_bibliography_all = IndexedBibliographyList(bibliography)
+
     api.add_route("/bibliography", bibliography_resource)
     api.add_route("/bibliography/all", bibliography_all)
+    api.add_route("/bibliography/indexed", indexed_bibliography_all)
     api.add_route("/bibliography/{id_}", bibliography_entries)
