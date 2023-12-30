@@ -68,6 +68,9 @@ class Bibliography:
     def list_all_bibliography(self) -> Sequence[str]:
         return self._repository.list_all_bibliography()
 
+    def list_all_indexed_bibliography(self) -> Sequence[str]:
+        return self._repository.list_all_indexed_bibliography()
+
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
         parsed_query = dict.fromkeys(["author", "year", "title"])

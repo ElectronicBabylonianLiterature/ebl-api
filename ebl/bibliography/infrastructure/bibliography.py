@@ -157,5 +157,13 @@ class MongoBibliographyRepository(BibliographyRepository):
             )
         ]
 
-    def list_all_bibliography(self) -> Sequence[str]:
-        return self._collection.get_all_values("_id")
+    def list_all_bibliography(self, query: Optional[dict] = None) -> Sequence[str]:
+        return self._collection.get_all_values("_id", query)
+
+    def list_all_indexed_bibliography(self) -> Sequence[str]:
+        return [
+            reference["_id"]
+            for reference in self._collection.aggregate(
+                [{"$match": {"is-indexed": True}}, {"$project": {"_id": True}}]
+            )
+        ]

@@ -36,3 +36,7 @@ class BibliographyRepository(ABC):
     @abstractmethod
     def list_all_bibliography(self) -> Sequence:
         ...
+
+    @abstractmethod
+    def list_all_indexed_bibliography(self) -> Sequence:
+        ...
