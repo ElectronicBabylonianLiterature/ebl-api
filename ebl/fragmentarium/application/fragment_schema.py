@@ -1,6 +1,7 @@
 import pydash
+from ebl.schemas import NameEnumField
 from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
-
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.period import Period, PeriodModifier
@@ -168,7 +169,7 @@ class FragmentSchema(Schema):
     traditional_references = fields.List(
         fields.String(), data_key="traditionalReferences"
     )
-    museum = fields.String(required=True)
+    museum = NameEnumField(Museum, required=True)
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
     thickness = fields.Nested(MeasureSchema, required=True)
