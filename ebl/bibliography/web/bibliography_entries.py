@@ -44,4 +44,14 @@ class BibliographyList:
         self._bibliography = bibliography
 
     def on_get(self, req: Request, resp: Response) -> None:
+        resp.media = self._bibliography.find_many(
+            req.get_param("ids", required=True).split(",")
+        )
+
+
+class BibliographyAll:
+    def __init__(self, bibliography: Bibliography):
+        self._bibliography = bibliography
+
+    def on_get(self, req: Request, resp: Response) -> None:
         resp.media = self._bibliography.list_all_bibliography()
