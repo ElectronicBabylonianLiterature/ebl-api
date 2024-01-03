@@ -161,4 +161,4 @@ class Museum(Enum):
         "FRA",
         "https://www.ephe.psl.eu/",
     )
-    UNKNOWN = ("Unknown", "Unknown", "Unknown", "Unknown")
+    UNKNOWN = ("", "", "", "")
