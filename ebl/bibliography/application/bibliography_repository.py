@@ -12,6 +12,10 @@ class BibliographyRepository(ABC):
         ...
 
     @abstractmethod
+    def query_by_ids(self, ids: Sequence[str]):
+        ...
+
+    @abstractmethod
     def update(self, entry) -> None:
         ...
 

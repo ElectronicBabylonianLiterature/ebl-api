@@ -27,6 +27,9 @@ class Bibliography:
     def find(self, id_: str):
         return self._repository.query_by_id(id_)
 
+    def find_many(self, ids: Sequence[str]):
+        return self._repository.query_by_ids(ids)
+
     def update(self, entry, user: User):
         old_entry = self._repository.query_by_id(entry["id"])
         self._changelog.create(
