@@ -20,7 +20,7 @@ class CachedMarkup(Markup):
         self._cache = cache
 
     def on_get(self, req: Request, resp: Response) -> None:
-        cache_key = hash(req.params["text"])
+        cache_key = req.params["text"]
 
         if cached := self._cache.get(cache_key):
             resp.text = cached
