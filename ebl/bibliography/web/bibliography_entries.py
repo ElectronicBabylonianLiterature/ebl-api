@@ -1,6 +1,9 @@
 import falcon
+from falcon_caching import Cache
 from falcon import Request, Response
 from falcon.media.validators.jsonschema import validate
+import json
+from ebl.cache.application.cache import DAILY_TIMEOUT
 
 from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
 from ebl.users.web.require_scope import require_scope
@@ -40,13 +43,20 @@ class BibliographyEntriesResource:
 
 
 class BibliographyList:
-    def __init__(self, bibliography: Bibliography):
+    def __init__(self, bibliography: Bibliography, cache: Cache):
         self._bibliography = bibliography
+        self._cache = cache
 
     def on_get(self, req: Request, resp: Response) -> None:
-        resp.media = self._bibliography.find_many(
-            req.get_param("ids", required=True).split(",")
-        )
+        ids = req.params["ids"].split(",")
+        cache_key = hash(tuple(sorted(set(ids))))
+
+        if cached := self._cache.get(cache_key):
+            resp.text = cached
+        else:
+            data = json.dumps(self._bibliography.find_many(ids))
+            self._cache.set(cache_key, data, timeout=DAILY_TIMEOUT)
+            resp.text = data
 
 
 class BibliographyAll:
