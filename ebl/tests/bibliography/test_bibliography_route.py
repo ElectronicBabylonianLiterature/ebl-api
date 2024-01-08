@@ -19,6 +19,20 @@ def saved_entry(bibliography, user):
     return bibliography_entry
 
 
+@pytest.fixture
+def saved_entries(bibliography, user):
+    number_of_entries = 5
+    entries = [
+        BibliographyEntryFactory.build(id=f"XY{i+1:05}")
+        for i in range(number_of_entries)
+    ]
+
+    for entry in entries:
+        bibliography.create(entry, user)
+
+    return entries
+
+
 def test_get_entry(client, saved_entry):
     id_ = saved_entry["id"]
     result = client.simulate_get(f"/bibliography/{id_}")
@@ -126,4 +140,12 @@ def test_list_all_bibliography(client, saved_entry):
     result = client.simulate_get("/bibliography/all")
 
     assert result.json == [saved_entry["id"]]
+    assert result.status == falcon.HTTP_OK
+
+
+def test_list_bibliography(client, saved_entries):
+    ids = [entry["id"] for entry in saved_entries]
+    result = client.simulate_get(f"/bibliography/list?ids={','.join(ids)}")
+
+    assert result.json == saved_entries
     assert result.status == falcon.HTTP_OK

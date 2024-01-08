@@ -64,6 +64,10 @@ class MongoBibliographyRepository(BibliographyRepository):
         data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
 
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
+        data = self._collection.find_many({"_id": {"$in": ids}})
+        return [create_object_entry(item) for item in data]
+
     def update(self, entry) -> None:
         mongo_entry = create_mongo_entry(entry)
         self._collection.replace_one(mongo_entry)

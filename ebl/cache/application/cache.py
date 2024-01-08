@@ -7,6 +7,7 @@ from falcon_caching import Cache
 
 
 DEFAULT_TIMEOUT: int = 600
+DAILY_TIMEOUT: int = 86400
 CONFIG_ENVIRONMENT_VARIABLE: str = "CACHE_CONFIG"
 DEFAULT_CONFIG: str = '{"CACHE_TYPE": "null"}'
 
