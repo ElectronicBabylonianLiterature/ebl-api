@@ -49,7 +49,7 @@ class BibliographyList:
 
     def on_get(self, req: Request, resp: Response) -> None:
         ids = req.params["ids"].split(",")
-        cache_key = tuple(sorted(set(ids)))
+        cache_key = ",".join(sorted(set(ids)))
 
         if cached := self._cache.get(cache_key):
             resp.text = cached
