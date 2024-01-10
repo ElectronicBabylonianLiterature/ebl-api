@@ -20,14 +20,14 @@ class Museum(Enum):
         "IRQ",
         "https://theiraqmuseum.com/",
     )
-    UNIVERSITY_OF_PENNSYLVANIA_MUSEUM_OF_ARCHAEOLOGY_AND_ANTHROPOLOGY = (
+    PENN_MUSEUM = (
         "University of Pennsylvania Museum of Archaeology and Anthropology",
         "Philadelphia",
         "USA",
         "https://www.penn.museum/",
     )
     ASHMOLEAN_MUSEUM = ("Ashmolean Museum", "Oxford", "GBR", "https://ashmolean.org/")
-    COLLEGE_OF_PHYSICIANS_OF_PHILADELPHIA = (
+    PHYSICIANS_COLLEGE_PHILADELPHIA = (
         "College of Physicians of Philadelphia",
         "Philadelphia",
         "USA",
@@ -39,31 +39,31 @@ class Museum(Enum):
         "ISR",
         "https://www.ebaf.edu/couvent/",
     )
-    REDPATH_MUSEUM_ENTNOLOGICAL_COLLECTIONS = (
+    REDPATH_MUSEUM = (
         "Redpath Museum Ethnological Collections",
         "Montreal",
         "CAN",
         "https://www.mcgill.ca/redpath/collections/ethnology",
     )
-    FRAU_PROFESSOR_HILPRECHT_COLLECTION_OF_BABYLONIAN_ANTIQUITIES = (
+    HILPRECHT_COLLECTION = (
         "Frau Professor Hilprecht Collection of Babylonian Antiquities",
         "Jena",
         "DEU",
         "https://www.gw.uni-jena.de/fakultaet/institut-fuer-orientalistik-indogermanistik-ur-und-fruehgeschichtliche-archaeologie/altorientalistik/hilprecht-sammlung",
     )
-    PHOEBE_A_HEARST_MUSEUM_OF_ANTHROPOLOGY = (
+    HEARST_MUSEUM = (
         "Phoebe A. Hearst Museum of Anthropology",
         "Berkeley",
         "USA",
         "https://hearstmuseum.berkeley.edu/",
     )
-    JOHN_RYLANDS_RESEARCH_INSTITUTE_AND_LIBRARY = (
+    RYLANDS_INSTITUTE = (
         "John Rylands Research Institute and Library",
         "Manchester",
         "GRB",
         "https://www.library.manchester.ac.uk/rylands/",
     )
-    KELSEY_MUSEUM_OF_ARCHAEOLOGY = (
+    KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
         "Ann Arbor",
         "USA",
@@ -76,32 +76,32 @@ class Museum(Enum):
         "https://www.khm.at/",
     )
     LOUVRE = ("Louvre", "Paris", "FRA", "https://www.louvre.fr/")
-    MUSEE_D_ART_ET_D_HISTOIRE = (
+    MUSEE_D_ART = (
         "Musée d’Art et d’Histoire",
         "Geneva",
         "CHE",
         "https://www.mahmah.ch/",
     )
-    MUSEES_ROYAUX_D_ART_ET_D_HISTOIRE = (
+    MUSEES_ROYAUX = (
         "Musées royaux d’Art et d’Histoire",
         "Brussels",
         "BEL",
         "https://www.kmkg-mrah.be/",
     )
     NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DNK", "https://en.natmus.dk/")
-    OAKLAND_MUSEUM_OF_CALIFORNIA = (
+    OAKLAND_MUSEUM = (
         "Oakland Museum of California",
         "Oakland",
         "USA",
         "https://museumca.org/",
     )
-    INSTITUTE_FOR_THE_STUDY_OF_ANCIENT_CULTURES_WEST_ASIA_AND_NORTH_AFRICA = (
+    ANCIENT_CULTURES_CHICAGO = (
         "Institute for the Study of Ancient Cultures, West Asia & North Africa",
         "Chicago",
         "USA",
         "https://isac.uchicago.edu/",
     )
-    PIERPONT_MORGAN_LIBRARY_AND_MUSEUM = (
+    PIERPONT_MORGAN = (
         "Pierpont Morgan Library & Museum",
         "New York",
         "USA",
@@ -149,7 +149,7 @@ class Museum(Enum):
         "USA",
         "https://thewalters.org/",
     )
-    YALE_PEABODY_MUSEUM_YALE_BABYLONIAN_COLLECTION = (
+    YALE_PEABODY_COLLECTION = (
         "Yale Peabody Museum, Yale Babylonian Collection",
         "New Haven",
         "USA",
