@@ -1268,6 +1268,7 @@ def test_parse_dividers() -> None:
         ("%ob", Language.AKKADIAN),
         ("%sux", Language.SUMERIAN),
         ("%es", Language.EMESAL),
+        ("%hit", Language.HITTITE),
         ("%foo", DEFAULT_LANGUAGE),
     ],
 )

@@ -261,6 +261,7 @@ code. If no shifts are present *Akkadian* is used as the default language.
 | `%grc` | Greek | | No | No |
 | `%akkgrc` | Akkadian | In Greek characters | No | No |
 | `%suxgrc` | Sumerian | In Greek characters | No | No |
+| `%hit` | Hittite | | No | Yes |
 
 Any other shifts are considered valid and have language *Unknown*. *Akkadian*
 and *Unknown* are lemmatizable.
