@@ -176,7 +176,7 @@ parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
 
 parallel-text = genre, ' ', category, '.', index, ' ',
                 [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
-genre = 'L' | 'D' | 'Lex' | 'Med'
+genre = 'L' | 'D' | 'Lex' | 'Med' | 'Mag'
 category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
            (* Must be a valid numeral. *)
 stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' |
