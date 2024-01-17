@@ -4,6 +4,7 @@ from enum import Enum, auto
 class Language(Enum):
     UNKNOWN = 0
     AKKADIAN = auto()
+    HITTITE = auto()
     SUMERIAN = auto()
     EMESAL = auto()
     GREEK = auto()
@@ -35,6 +36,7 @@ class Language(Enum):
             "%akkgrc": Language.AKKADIAN,
             "%suxgrc": Language.SUMERIAN,
             "%grc": Language.GREEK,
+            "%hit": Language.HITTITE,
         }
         return codes.get(code, cls.UNKNOWN)
 
