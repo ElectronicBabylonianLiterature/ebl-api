@@ -268,7 +268,7 @@ class Fragment:
     @property
     def louvre_number(self) -> str:
         return self._get_external_number("louvre_number")
-        
+
     @property
     def australianinstituteofarchaeology_number(self) -> str:
         return self._get_external_number("australianinstituteofarchaeology_number")
