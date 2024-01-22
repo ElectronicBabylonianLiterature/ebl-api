@@ -1,5 +1,5 @@
 import datetime
-from ebl.fragmentarium.domain.iso_date import DateRange, DateWithNotes
+from ebl.fragmentarium.domain.date_range import DateRange, DateWithNotes
 from marshmallow import Schema, fields, post_load
 from dateutil.parser import isoparse
 
