@@ -79,4 +79,9 @@ class ArchaeologyFactory(factory.Factory):
     excavation_date = factory.List(
         [factory.SubFactory(DateWithNotesFactory)], TupleFactory
     )
-    findspot_id = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
+
+    class Params:
+        with_findspot = factory.Trait(
+            findspot=factory.SubFactory(FindspotFactory),
+            findspot_id=factory.SelfAttribute("findspot.id_"),
+        )
