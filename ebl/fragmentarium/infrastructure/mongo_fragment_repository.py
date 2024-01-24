@@ -293,24 +293,11 @@ class MongoFragmentRepository(FragmentRepository):
         )
 
     def update_field(self, field: UpdatableField, fragment: Fragment):
-        fields_to_update = {
-            "introduction": ("introduction",),
-            "text": ("text",),
-            "genres": ("genres",),
-            "references": ("references",),
-            "script": ("script",),
-            "notes": ("notes",),
-            "archaeology": ("archaeology",),
-            "date": ("date",),
-            "dates_in_text": ("dates_in_text",),
-        }
-
-        if field not in fields_to_update:
-            valid_fields = ",".join(get_args(UpdatableField))
+        if field not in (valid_fields := get_args(UpdatableField)):
             raise ValueError(
                 f"Unexpected update field {field}, must be one of {valid_fields}"
             )
-        query = FragmentSchema(only=fields_to_update[field]).dump(fragment)
+        query = FragmentSchema(only=(field,)).dump(fragment)
         self._fragments.update_one(
             fragment_is(fragment),
             {"$set": query or {field: None}},
