@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, Iterator
+from typing import List, Optional, Sequence, Iterator, get_args
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -13,7 +13,10 @@ from ebl.common.query.query_schemas import (
 )
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_repository import (
+    FragmentRepository,
+    UpdatableField,
+)
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -274,7 +277,7 @@ class MongoFragmentRepository(FragmentRepository):
         )
         return FragmentInfoSchema(many=True).load(cursor)
 
-    def update_field(self, field, fragment):
+    def update_field(self, field: UpdatableField, fragment: Fragment):
         fields_to_update = {
             "introduction": ("introduction",),
             "lemmatization": ("text",),
@@ -294,8 +297,9 @@ class MongoFragmentRepository(FragmentRepository):
         }
 
         if field not in fields_to_update:
+            valid_fields = ",".join(get_args(UpdatableField))
             raise ValueError(
-                f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
+                f"Unexpected update field {field}, must be one of {valid_fields}"
             )
         query = FragmentSchema(only=fields_to_update[field]).dump(fragment)
         self._fragments.update_one(

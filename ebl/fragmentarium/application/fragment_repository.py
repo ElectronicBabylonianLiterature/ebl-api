@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Optional
+from typing import List, Sequence, Optional, Literal
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
 
@@ -9,6 +9,18 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.date import Date
+
+UpdatableField = Literal[
+    "introduction",
+    "text",
+    "genres",
+    "references",
+    "script",
+    "notes",
+    "archaeology",
+    "date",
+    "dates_in_text",
+]
 
 
 class FragmentRepository(ABC):
@@ -90,7 +102,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def update_field(self, field: str, fragment: Fragment) -> None:
+    def update_field(self, field: UpdatableField, fragment: Fragment) -> None:
         ...
 
     @abstractmethod
