@@ -358,7 +358,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
         TransliterationUpdate(parse_atf_lark("$ (the transliteration)")), user
     )
 
-    fragment_repository.update_field("transliteration", updated_fragment)
+    fragment_repository.update_transliteration(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
@@ -367,7 +367,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
 def test_update_update_transliteration_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_field("transliteration", transliterated_fragment)
+        fragment_repository.update_transliteration(transliterated_fragment)
 
 
 def test_update_genres(fragment_repository):

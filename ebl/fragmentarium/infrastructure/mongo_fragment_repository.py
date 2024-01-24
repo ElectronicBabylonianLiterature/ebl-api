@@ -277,6 +277,21 @@ class MongoFragmentRepository(FragmentRepository):
         )
         return FragmentInfoSchema(many=True).load(cursor)
 
+    def update_transliteration(self, fragment: Fragment):
+        self._fragments.update_one(
+            fragment_is(fragment),
+            {
+                "$set": FragmentSchema(
+                    only=(
+                        "text",
+                        "signs",
+                        "record",
+                        "line_to_vec",
+                    )
+                ).dump(fragment)
+            },
+        )
+
     def update_field(self, field: UpdatableField, fragment: Fragment):
         fields_to_update = {
             "introduction": ("introduction",),
@@ -286,12 +301,6 @@ class MongoFragmentRepository(FragmentRepository):
             "script": ("script",),
             "notes": ("notes",),
             "archaeology": ("archaeology",),
-            "transliteration": (
-                "text",
-                "signs",
-                "record",
-                "line_to_vec",
-            ),
             "date": ("date",),
             "dates_in_text": ("dates_in_text",),
         }
@@ -304,7 +313,7 @@ class MongoFragmentRepository(FragmentRepository):
         query = FragmentSchema(only=fields_to_update[field]).dump(fragment)
         self._fragments.update_one(
             fragment_is(fragment),
-            {"$set": query if query else {field: None}},
+            {"$set": query or {field: None}},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):

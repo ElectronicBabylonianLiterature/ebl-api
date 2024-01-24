@@ -102,6 +102,10 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def update_transliteration(self, fragment: Fragment) -> None:
+        ...
+
+    @abstractmethod
     def update_field(self, field: UpdatableField, fragment: Fragment) -> None:
         ...
 

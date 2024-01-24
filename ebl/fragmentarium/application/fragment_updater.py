@@ -48,7 +48,7 @@ class FragmentUpdater:
             else fragment.update_lowest_join_transliteration(transliteration, user)
         )
         self._create_changelog(user, fragment, updated_fragment)
-        self._repository.update_field("transliteration", updated_fragment)
+        self._repository.update_transliteration(updated_fragment)
 
         return self._create_result(updated_fragment)
 

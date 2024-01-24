@@ -64,7 +64,7 @@ def test_update_transliteration(
     ).thenReturn()
     (
         when(fragment_repository)
-        .update_field("transliteration", transliterated_fragment)
+        .update_transliteration(transliterated_fragment)
         .thenReturn()
     )
 
