@@ -446,10 +446,17 @@ def test_update_script(fragment_repository: FragmentRepository):
     assert result == updated_fragment
 
 
-def test_update_update_lemmatization_not_found(fragment_repository):
+def test_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
         fragment_repository.update_field("lemmatization", transliterated_fragment)
+
+
+def test_update_invalid_field_fails(fragment_repository):
+    with pytest.raises(ValueError, match="Unexpected update field"):
+        fragment_repository.update_field(
+            "some invalid field name", FragmentFactory.build()
+        )
 
 
 def test_statistics(database, fragment_repository):
