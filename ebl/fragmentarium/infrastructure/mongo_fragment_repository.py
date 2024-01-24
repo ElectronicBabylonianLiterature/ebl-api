@@ -280,7 +280,7 @@ class MongoFragmentRepository(FragmentRepository):
     def update_field(self, field: UpdatableField, fragment: Fragment):
         fields_to_update = {
             "introduction": ("introduction",),
-            "lemmatization": ("text",),
+            "text": ("text",),
             "genres": ("genres",),
             "references": ("references",),
             "script": ("script",),

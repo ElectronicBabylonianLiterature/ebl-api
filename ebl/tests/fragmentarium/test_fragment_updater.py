@@ -208,9 +208,7 @@ def test_update_lemmatization(
         {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
         {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
     ).thenReturn()
-    when(fragment_repository).update_field(
-        "lemmatization", lemmatized_fragment
-    ).thenReturn()
+    when(fragment_repository).update_field("text", lemmatized_fragment).thenReturn()
 
     result = fragment_updater.update_lemmatization(number, lemmatization, user)
     assert result == (injected_fragment, False)
