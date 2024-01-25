@@ -416,9 +416,13 @@ def test_search_project(client, fragmentarium, project):
 
 @pytest.mark.parametrize(
     "site",
-    [ExcavationSite.UR, ExcavationSite.TELL_EL_AMARNA],
+    [ExcavationSite.UR, ExcavationSite.TELL_EL_AMARNA, ExcavationSite.KIS],
 )
-def test_search_site(client, fragmentarium, site):
+@pytest.mark.parametrize(
+    "attribute",
+    ["long_name", "name"],
+)
+def test_search_site(client, fragmentarium, site, attribute):
     fragments = [
         FragmentFactory.build(archaeology__site=site)
         for site in [site, ExcavationSite.ASSUR]
@@ -436,7 +440,9 @@ def test_search_site(client, fragmentarium, site):
         "matchCountTotal": 0,
     }
 
-    result = client.simulate_get("/fragments/query", params={"site": site.name})
+    result = client.simulate_get(
+        "/fragments/query", params={"site": getattr(site, attribute)}
+    )
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
