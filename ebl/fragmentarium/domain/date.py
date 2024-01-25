@@ -41,11 +41,17 @@ class Day:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class DateKing(King):
+    is_broken: Optional[bool] = attr.ib(default=None)
+    is_uncertain: Optional[bool] = attr.ib(default=None)
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Date:
     year: Year
     month: Month
     day: Day
-    king: Optional[King] = attr.ib(default=None)
+    king: Optional[DateKing] = attr.ib(default=None)
     eponym: Optional[Eponym] = attr.ib(default=None)
     is_seleucid_era: Optional[bool] = attr.ib(default=None)
     is_assyrian_date: Optional[bool] = attr.ib(default=None)
@@ -85,6 +91,19 @@ class DaySchema(LabeledSchema):
         return Day(**data)
 
 
+class DateKingSchema(KingSchema):
+    is_broken = fields.Boolean(data_key="isBroken", allow_none=True)
+    is_uncertain = fields.Boolean(data_key="isUncertain", allow_none=True)
+
+    @post_load
+    def make_king(self, data: dict, **kwargs) -> DateKing:
+        return DateKing(**data)
+
+    @post_dump
+    def remove_skip_values(self, data: dict, **kwargs):
+        return {key: value for key, value in data.items() if value is not None}
+
+
 class DateSchema(Schema):
     class Meta:
         unknown = EXCLUDE
@@ -92,7 +111,7 @@ class DateSchema(Schema):
     year = fields.Nested(YearSchema())
     month = fields.Nested(MonthSchema())
     day = fields.Nested(DaySchema())
-    king = fields.Nested(KingSchema(), allow_none=True)
+    king = fields.Nested(DateKingSchema(), allow_none=True)
     eponym = fields.Nested(EponymSchema(), allow_none=True)
     is_assyrian_date = fields.Boolean(data_key="isAssyrianDate", allow_none=True)
     is_seleucid_era = fields.Boolean(data_key="isSeleucidEra", allow_none=True)
