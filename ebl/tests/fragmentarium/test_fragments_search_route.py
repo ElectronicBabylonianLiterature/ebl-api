@@ -385,25 +385,29 @@ def test_search_script_period(client, fragmentarium, params, expected):
 
 
 @pytest.mark.parametrize(
-    "params,expected",
-    [
-        ({"project": ResearchProject.CAIC.abbreviation}, [0]),
-        ({"project": ResearchProject.ALU_GENEVA.abbreviation}, [1]),
-    ],
+    "project",
+    [ResearchProject.CAIC, ResearchProject.ALU_GENEVA],
 )
-def test_search_project(client, fragmentarium, params, expected):
-    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
-    fragments = [FragmentFactory.build(projects=(project,)) for project in projects]
+def test_search_project(client, fragmentarium, project):
+    fragments = [
+        FragmentFactory.build(projects=(project,)) for project in ResearchProject
+    ]
 
     for fragment in fragments:
         fragmentarium.create(fragment)
 
     expected_json = {
-        "items": [query_item_of(fragments[i]) for i in expected],
+        "items": [
+            query_item_of(fragment)
+            for fragment in fragments
+            if project in fragment.projects
+        ],
         "matchCountTotal": 0,
     }
 
-    result = client.simulate_get("/fragments/query", params=params)
+    result = client.simulate_get(
+        "/fragments/query", params={"project": project.abbreviation}
+    )
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
