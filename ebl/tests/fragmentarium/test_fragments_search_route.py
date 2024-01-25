@@ -32,6 +32,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.genres import genres
 from ebl.common.domain.scopes import Scope
+from ebl.fragmentarium.domain.findspot import ExcavationSite
 
 
 def expected_fragment_info_dto(fragment: Fragment, text=None) -> Dict:
@@ -385,25 +386,63 @@ def test_search_script_period(client, fragmentarium, params, expected):
 
 
 @pytest.mark.parametrize(
-    "params,expected",
-    [
-        ({"project": ResearchProject.CAIC.abbreviation}, [0]),
-        ({"project": ResearchProject.ALU_GENEVA.abbreviation}, [1]),
-    ],
+    "project",
+    [ResearchProject.CAIC, ResearchProject.ALU_GENEVA],
 )
-def test_search_project(client, fragmentarium, params, expected):
-    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
-    fragments = [FragmentFactory.build(projects=(project,)) for project in projects]
+def test_search_project(client, fragmentarium, project):
+    fragments = [
+        FragmentFactory.build(projects=(project,)) for project in ResearchProject
+    ]
 
     for fragment in fragments:
         fragmentarium.create(fragment)
 
     expected_json = {
-        "items": [query_item_of(fragments[i]) for i in expected],
+        "items": [
+            query_item_of(fragment)
+            for fragment in fragments
+            if project in fragment.projects
+        ],
         "matchCountTotal": 0,
     }
 
-    result = client.simulate_get("/fragments/query", params=params)
+    result = client.simulate_get(
+        "/fragments/query", params={"project": project.abbreviation}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json
+
+
+@pytest.mark.parametrize(
+    "site",
+    [ExcavationSite.UR, ExcavationSite.TELL_EL_AMARNA, ExcavationSite.KIS],
+)
+@pytest.mark.parametrize(
+    "attribute",
+    ["long_name", "name"],
+)
+def test_search_site(client, fragmentarium, site, attribute):
+    fragments = [
+        FragmentFactory.build(archaeology__site=site)
+        for site in [site, ExcavationSite.ASSUR]
+    ]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    expected_json = {
+        "items": [
+            query_item_of(fragment)
+            for fragment in fragments
+            if fragment.archaeology.site == site
+        ],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get(
+        "/fragments/query", params={"site": getattr(site, attribute)}
+    )
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
