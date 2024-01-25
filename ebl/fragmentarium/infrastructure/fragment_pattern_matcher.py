@@ -7,6 +7,7 @@ from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
+from ebl.corpus.domain.provenance import Provenance
 
 from pydash.arrays import compact
 
@@ -74,12 +75,19 @@ class PatternMatcher:
     def _filter_by_project(self) -> Dict:
         return {"projects": project} if (project := self._query.get("project")) else {}
 
-    def _filter_by_provenance(self) -> Dict:
-        return (
-            {"archaeology.site": {"$regex": f"^{provenance}$", "$options": "i"}}
-            if (provenance := self._query.get("provenance"))
-            else {}
-        )
+    def _filter_by_site(self) -> Dict:
+        if provenance := self._query.get("site"):
+            search_value = next(
+                (p.long_name for p in Provenance if p.name == provenance.upper()),
+                provenance,
+            )
+            return {
+                "archaeology.site": {
+                    "$regex": f"^{search_value}$",
+                    "$options": "i",
+                }
+            }
+        return {}
 
     def _filter_by_reference(self) -> Dict:
         if "bibId" not in self._query:
@@ -99,7 +107,7 @@ class PatternMatcher:
                     number_is(self._query["number"]) if "number" in self._query else {},
                     self._filter_by_genre(),
                     self._filter_by_project(),
-                    self._filter_by_provenance(),
+                    self._filter_by_site(),
                     self._filter_by_script(),
                     self._filter_by_reference(),
                     match_user_scopes(self._scopes),
