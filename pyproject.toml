@@ -5,7 +5,7 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = "3.9.*"
+python = "^3.9.0"
 falcon = "^3.0.1"
 falcon-auth = "*"
 pymongo = "*"
@@ -32,6 +32,7 @@ althaia = "^3.14.1-alpha.2"
 cairosvg = "^2.7.0"
 pyyaml = "6.0.1"
 python-dateutil = "^2.8.2"
+natsort = "^8.4.0"
 
 
 [tool.poetry.dev-dependencies]

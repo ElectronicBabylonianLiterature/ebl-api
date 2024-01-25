@@ -50,16 +50,11 @@ def test_accession():
     assert fragment.accession == "accession-3"
 
 
-def test_edited_in_oracc_project():
-    fragment = FragmentFactory.build(edited_in_oracc_project="dcclt")
-    assert fragment.edited_in_oracc_project == "dcclt"
-
-
-def traditional_reference():
+def traditional_references():
     fragment = FragmentFactory.build(
-        traditional_reference=["CT 1, 12", "CT I, 12", "CT I 12"]
+        traditional_references=["CT 1, 12", "CT I, 12", "CT I 12"]
     )
-    assert fragment.traditional_reference == ["CT 1, 12", "CT I, 12", "CT I 12"]
+    assert fragment.traditional_references == ["CT 1, 12", "CT I, 12", "CT I 12"]
 
 
 def test_publication():
@@ -192,8 +187,8 @@ def test_scopes():
         "archibab_number",
         "bdtns_number",
         "ur_online_number",
-        "hiprecht_jena_number",
-        "hiprecht_heidelberg_number",
+        "hilprecht_jena_number",
+        "hilprecht_heidelberg_number",
     ],
 )
 def test_external_number(number):

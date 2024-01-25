@@ -72,15 +72,15 @@ def parse_annotations(annotation_data: AnnotationData) -> str:
     }
     try:
         if annotation_data.sign_name != "":
-            if annotation_data.sign_name.islower():
-                return MANUEL_FIX[annotation_data.sign_name]
-            else:
-                return annotation_data.sign_name
+            return (
+                MANUEL_FIX[annotation_data.sign_name]
+                if annotation_data.sign_name.islower()
+                else annotation_data.sign_name
+            )
+        if annotation_data.value.isdigit():
+            return annotation_data.value
         else:
-            if annotation_data.value.isdigit():
-                return annotation_data.value
-            else:
-                return MANUEL_FIX[annotation_data.value]
+            return MANUEL_FIX[annotation_data.value]
     except (KeyError, AttributeError) as e:
         print(e)
         print(annotation_data)
@@ -189,6 +189,12 @@ def write_fragment_numbers(
 
 
 if __name__ == "__main__":
+    """
+    # for detection finished fragments are filtered
+    python3 ebl/fragmentarium/annotations/prepare_annotations.py -f
+    # for classification
+    python3 ebl/fragmentarium/annotations/prepare_annotations.py -c
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-oa",
@@ -200,11 +206,13 @@ if __name__ == "__main__":
     parser.add_argument(
         "-oi", "--output_imgs", type=str, default=None, help="Output Images Directory"
     )
+    # add argument string
+
     parser.add_argument(
         "-f",
         "--filter",
-        action="store_true",
-        help="filter unfinished Fragments from ./annotations.json",
+        type=str,
+        help="filter from ./annotations.json has to 'finished', 'unfinished' or 'selected'",
     )
     parser.add_argument(
         "-c",
@@ -231,22 +239,33 @@ if __name__ == "__main__":
     annotation_collection = context.annotations_repository.retrieve_all_non_empty()
 
     if args.filter:
-        print(
-            "Unfinished Fragments are filtered. Unfinished "
-            "fragments are defined in './annotations.json' file"
-        )
-        finished_fragments = json.load(open("annotations.json"))["finished"]
-        unfinished_but_usable = json.load(open("annotations.json"))[
-            "unfinishedButUsable"
-        ]
-
-        annotation_collection = list(
-            filter(
-                lambda elem: str(elem.fragment_number)
-                in [*finished_fragments, *unfinished_but_usable],
-                annotation_collection,
+        if args.filter not in ["finished", "unfinished", "selected"]:
+            raise argparse.ArgumentError(
+                None,
+                message="Filter has to be either 'finished', 'unfinished' or 'selected'",
             )
-        )
+        print(f"'{args.filter}' Fragments are filtered.")
+        if args.filter == "selected" or args.filter == "finished":
+            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
+                args.filter
+            ]
+            annotation_collection = list(
+                filter(
+                    lambda elem: str(elem.fragment_number) in filter_fragments,
+                    annotation_collection,
+                )
+            )
+        else:
+            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
+                "finished"
+            ]
+            annotation_collection = list(
+                filter(
+                    lambda elem: str(elem.fragment_number) not in filter_fragments,
+                    annotation_collection,
+                )
+            )
+
     if args.classification:
         # For Sign Classification (Bounding Boxes have to be cropped for Image Classification)
         TO_FILTER = [

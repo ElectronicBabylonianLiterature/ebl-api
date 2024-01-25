@@ -2,11 +2,13 @@ from typing import Sequence
 
 import factory.fuzzy
 import random
+from ebl.common.domain.accession import Accession
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
 
 from ebl.corpus.domain.chapter import Stage
 from ebl.tests.factories.archaeology import ArchaeologyFactory
+from ebl.tests.factories.collections import TupleFactory
 from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
@@ -159,8 +161,22 @@ class ExternalNumbersFactory(factory.Factory):
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
-    hiprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
-    hiprecht_heidelberg_number = factory.Sequence(lambda n: f"hiprecht-heidelberg-{n}")
+    hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
+    hilprecht_heidelberg_number = factory.Sequence(
+        lambda n: f"hilprecht-heidelberg-{n}"
+    )
+    metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
+    louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
+    australianinstituteofarchaeology_number = factory.Sequence(
+        lambda n: f"australianinstituteofarchaeology-number-{n}"
+    )
+    philadelphia_number = factory.Sequence(lambda n: f"philadelphia-number-{n}")
+    yale_peabody_number = factory.Sequence(lambda n: f"yale-peabody-number-{n}")
+    achemenet_number = factory.Sequence(lambda n: f"achemenet-number-{n}")
+    nabucco_number = factory.Sequence(lambda n: f"nabucco-number-{n}")
+    oracc_numbers = factory.List(
+        [factory.Sequence(lambda n: f"oracc-number-{n}")], TupleFactory
+    )
 
 
 class FragmentFactory(factory.Factory):
@@ -168,8 +184,7 @@ class FragmentFactory(factory.Factory):
         model = Fragment
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    edited_in_oracc_project = factory.Sequence(lambda n: f"editedInOracc-{n}")
-    accession = factory.Sequence(lambda n: f"accession-{n}")
+    accession = factory.Sequence(lambda n: Accession("A", str(n)))
     museum = factory.Faker("word")
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")

@@ -25,7 +25,7 @@ from ebl.dictionary.web.bootstrap import create_dictionary_routes
 from ebl.ebl_ai_client import EblAiClient
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.files.web.bootstrap import create_files_route
-from ebl.markup.web.bootstrap import create_markup_route
+from ebl.markup.web.bootstrap import create_markup_routes
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
@@ -42,12 +42,19 @@ from ebl.lemmatization.infrastrcuture.mongo_suggestions_finder import (
 from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
+from ebl.afo_register.web.bootstrap import create_afo_register_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
+from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MongoAfoRegisterRepository,
+)
 from ebl.users.domain.user import Guest
 from ebl.users.infrastructure.auth0 import Auth0Backend
+from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
+    MongoFindspotRepository,
+)
 
 althaia.patch()
 
@@ -90,6 +97,8 @@ def create_context():
         text_repository=MongoTextRepository(database),
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
+        afo_register_repository=MongoAfoRegisterRepository(database),
+        findspot_repository=MongoFindspotRepository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
@@ -116,7 +125,8 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_files_route(api, context)
     create_fragmentarium_routes(api, context)
     create_lemmatization_routes(api, context)
-    create_markup_route(api, context)
+    create_markup_routes(api, context)
+    create_afo_register_routes(api, context)
 
     return api
 
@@ -124,5 +134,4 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
 def get_app():
     sentry_sdk.init(dsn=os.environ["SENTRY_DSN"], integrations=[FalconIntegration()])
     context = create_context()
-
     return create_app(context, os.environ["AUTH0_ISSUER"], os.environ["AUTH0_AUDIENCE"])

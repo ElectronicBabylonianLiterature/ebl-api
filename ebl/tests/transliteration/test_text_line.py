@@ -48,6 +48,7 @@ LINE_NUMBER = LineNumber(1)
         ("%ob", Language.AKKADIAN),
         ("%sux", Language.SUMERIAN),
         ("%es", Language.EMESAL),
+        ("%hit", Language.HITTITE),
         ("%foo", DEFAULT_LANGUAGE),
     ],
 )

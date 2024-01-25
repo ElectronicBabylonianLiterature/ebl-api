@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
+from ebl.fragmentarium.web.findspots import FindspotResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
 from ebl.fragmentarium.web.fragment_genre import FragmentGenreResource
@@ -22,6 +23,8 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsQueryResource,
     FragmentsResource,
     FragmentsListResource,
+    FragmentsRetrieveAllResource,
+    make_latest_additions_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.periods import PeriodsResource
@@ -33,6 +36,9 @@ from ebl.fragmentarium.web.transliterations import TransliterationResource
 from ebl.fragmentarium.web.introductions import IntroductionResource
 from ebl.fragmentarium.web.archaeology import ArchaeologyResource
 from ebl.fragmentarium.web.notes import NotesResource
+from ebl.fragmentarium.web.fragments_afo_register import (
+    AfoRegisterFragmentsQueryResource,
+)
 from ebl.corpus.web.chapters import ChaptersByManuscriptResource
 from ebl.corpus.application.corpus import Corpus
 
@@ -65,9 +71,12 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.sign_repository,
         context.parallel_line_injector,
     )
-
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
+
+    fragments_retrieve_all = FragmentsRetrieveAllResource(
+        context.fragment_repository, context.photo_repository
+    )
     fragment_genre = FragmentGenreResource(updater)
     fragment_script = FragmentScriptResource(updater)
     fragment_date = FragmentDateResource(updater)
@@ -85,6 +94,12 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_query = FragmentsQueryResource(
         context.fragment_repository, context.get_transliteration_query_factory()
     )
+    afo_register_fragments_query = AfoRegisterFragmentsQueryResource(
+        context.fragment_repository, finder
+    )
+    latest_additions_query = make_latest_additions_resource(
+        context.fragment_repository, context.cache
+    )
     genres = GenresResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
@@ -101,6 +116,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
     chapters = ChaptersByManuscriptResource(corpus, finder)
+    findspots = FindspotResource(context.findspot_repository)
 
     all_fragments = FragmentsListResource(
         context.fragment_repository,
@@ -108,6 +124,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     routes = [
         ("/fragments", fragment_search),
+        ("/fragments/retrieve-all", fragments_retrieve_all),
         ("/fragments/{number}/match", fragment_matcher),
         ("/fragments/{number}/genres", fragment_genre),
         ("/fragments/{number}/script", fragment_script),
@@ -130,7 +147,10 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
         ("/folios/{name}/{number}", folios),
         ("/fragments/query", fragment_query),
+        ("/fragments/query-by-traditional-references", afo_register_fragments_query),
+        ("/fragments/latest", latest_additions_query),
         ("/fragments/all", all_fragments),
+        ("/findspots", findspots),
     ]
 
     for uri, resource in routes:

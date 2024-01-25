@@ -4,14 +4,14 @@ import copy
 
 from typing import Dict
 from urllib.parse import urlencode
-from ebl.dictionary.domain.dictionary_query import DictionaryFieldQuery
+from ebl.common.query.query_collation import CollatedFieldQuery
 from ebl.errors import NotFoundError
-from ebl.dictionary.domain.dictionary_query import make_query_params_from_string
+from ebl.common.query.query_collation import make_query_params_from_string
 
 COLLECTION = "words"
 
 
-def _make_query_params(query: Dict) -> Dict[str, DictionaryFieldQuery]:
+def _make_query_params(query: Dict) -> Dict[str, CollatedFieldQuery]:
     return {
         param.field: param
         for param in make_query_params_from_string(urlencode(query))

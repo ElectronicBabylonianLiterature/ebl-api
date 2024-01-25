@@ -2,6 +2,7 @@ import pydash
 from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
@@ -131,28 +132,45 @@ class ExternalNumbersSchema(Schema):
     archibab_number = fields.String(load_default="", data_key="archibabNumber")
     bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
     ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
-    hiprecht_jena_number = fields.String(
+    hilprecht_jena_number = fields.String(
         load_default="", data_key="hilprechtJenaNumber"
     )
-    hiprecht_heidelberg_number = fields.String(
+    hilprecht_heidelberg_number = fields.String(
         load_default="", data_key="hilprechtHeidelbergNumber"
+    )
+    metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
+    yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
+    louvre_number = fields.String(load_default="", data_key="louvreNumber")
+    philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
+    australianinstituteofarchaeology_number = fields.String(
+        load_default="", data_key="australianinstituteofarchaeologyNumber"
+    )
+    achemenet_number = fields.String(load_default="", data_key="achemenetNumber")
+    nabucco_number = fields.String(load_default="", data_key="nabuccoNumber")
+    oracc_numbers = fields.List(
+        fields.String(), load_default=tuple(), data_key="oraccNumbers"
     )
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
+        data["oracc_numbers"] = tuple(data["oracc_numbers"])
         return ExternalNumbers(**data)
+
+    @post_dump
+    def omit_empty_numbers(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_empty)
 
 
 class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
-    accession = fields.String(required=True)
-    edited_in_oracc_project = fields.String(
-        required=True, data_key="editedInOraccProject"
-    )
+    accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
     publication = fields.String(required=True)
     description = fields.String(required=True)
     collection = fields.String(required=True)
     legacy_script = fields.String(data_key="legacyScript", load_default="")
+    traditional_references = fields.List(
+        fields.String(), data_key="traditionalReferences"
+    )
     museum = fields.String(required=True)
     width = fields.Nested(MeasureSchema, required=True)
     length = fields.Nested(MeasureSchema, required=True)
@@ -188,7 +206,6 @@ class FragmentSchema(Schema):
         data_key="externalNumbers",
     )
     projects = fields.List(ResearchProjectField())
-    traditional_reference = fields.List(fields.String())
     date = fields.Nested(DateSchema, allow_none=True, default=None)
     dates_in_text = fields.Nested(
         DateSchema, data_key="datesInText", many=True, allow_none=True, default=list()
@@ -213,4 +230,7 @@ class FragmentSchema(Schema):
 
     @post_dump
     def filter_none(self, data, **kwargs):
+        scope = data.get("authorizedScopes")
+        if scope is not None and len(scope) == 0:
+            data.pop("authorizedScopes")
         return pydash.omit_by(data, pydash.is_none)

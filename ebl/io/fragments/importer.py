@@ -6,10 +6,8 @@ import json
 from marshmallow import ValidationError
 from pymongo import MongoClient
 import pymongo
+from ebl.common.query.util import sort_by_museum_number
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import (
-    sort_by_museum_number,
-)
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION

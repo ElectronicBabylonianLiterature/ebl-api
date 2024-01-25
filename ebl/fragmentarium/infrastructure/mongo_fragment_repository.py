@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence
+from typing import List, Optional, Sequence, Iterator
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -6,22 +6,24 @@ from pymongo.collation import Collation
 
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.common.domain.scopes import Scope
-from ebl.common.query.query_result import QueryResult
-from ebl.common.query.query_schemas import QueryResultSchema
+from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
+from ebl.common.query.query_schemas import (
+    QueryResultSchema,
+    AfORegisterToFragmentQueryResultSchema,
+)
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
+from ebl.fragmentarium.domain.date import Date, DateSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.domain.joins import Join
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
-from ebl.fragmentarium.infrastructure.fragment_search_aggregations import PatternMatcher
-from ebl.fragmentarium.domain.date import Date, DateSchema
-
+from ebl.fragmentarium.infrastructure.fragment_pattern_matcher import PatternMatcher
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     aggregate_latest,
@@ -30,13 +32,18 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_random,
     fragment_is,
     join_joins,
+    join_findspots,
+    aggregate_by_traditional_references,
 )
+from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
-from ebl.transliteration.infrastructure.queries import museum_number_is
-from ebl.fragmentarium.infrastructure.queries import match_user_scopes
+from ebl.transliteration.infrastructure.queries import query_number_is
+
+
+RETRIEVE_ALL_LIMIT = 1000
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -45,6 +52,11 @@ def has_none_values(dictionary: dict) -> bool:
 
 def load_museum_number(data: dict) -> MuseumNumber:
     return MuseumNumberSchema().load(data.get("museumNumber", data))
+
+
+def load_query_result(cursor: Iterator) -> QueryResult:
+    data = next(cursor, None)
+    return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
 
 class MongoFragmentRepository(FragmentRepository):
@@ -90,8 +102,11 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
 
-    def count_transliterated_fragments(self):
-        return self._fragments.count_documents(HAS_TRANSLITERATION)
+    def count_transliterated_fragments(self, only_authorized=False) -> int:
+        query = HAS_TRANSLITERATION
+        if only_authorized:
+            query = query | {"authorizedScopes": {"$exists": False}}
+        return self._fragments.count_documents(query)
 
     def count_lines(self):
         result = self._fragments.aggregate(
@@ -166,12 +181,13 @@ class MongoFragmentRepository(FragmentRepository):
     ):
         data = self._fragments.aggregate(
             [
-                {"$match": museum_number_is(number)},
+                {"$match": query_number_is(number)},
                 *(
                     self._omit_text_lines()
                     if exclude_lines
                     else self._filter_fragment_lines(lines)
                 ),
+                *join_findspots(),
                 *join_reference_documents(),
                 *join_joins(),
             ]
@@ -200,7 +216,7 @@ class MongoFragmentRepository(FragmentRepository):
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
         fragment = next(
             self._fragments.find_many(
-                museum_number_is(number), projection={"authorizedScopes": True}
+                query_number_is(number), projection={"authorizedScopes": True}
             ),
             {},
         )
@@ -248,14 +264,6 @@ class MongoFragmentRepository(FragmentRepository):
             )
             for fragment in cursor
         ]
-
-    def query_by_transliterated_sorted_by_date(
-        self, user_scopes: Sequence[Scope] = tuple()
-    ):
-        cursor = self._fragments.aggregate(
-            [*aggregate_latest(user_scopes), {"$project": {"joins": False}}]
-        )
-        return self._map_fragments(cursor)
 
     def query_by_transliterated_not_revised_by_other(
         self, user_scopes: Sequence[Scope] = tuple()
@@ -401,21 +409,42 @@ class MongoFragmentRepository(FragmentRepository):
         return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
 
     def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
-        if set(query) - {"lemmaOperator"}:
-            matcher = PatternMatcher(query, user_scopes)
-            data = next(
-                self._fragments.aggregate(
-                    matcher.build_pipeline(),
-                    collation=Collation(
-                        locale="en", numericOrdering=True, alternate="shifted"
-                    ),
+        cursor = (
+            self._fragments.aggregate(
+                PatternMatcher(query, user_scopes).build_pipeline(),
+                collation=Collation(
+                    locale="en", numericOrdering=True, alternate="shifted"
                 ),
-                None,
             )
-        else:
-            data = None
+            if set(query) - {"lemmaOperator"}
+            else iter([])
+        )
+        return load_query_result(cursor)
 
-        return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+    def query_latest(self, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
+        return load_query_result(
+            self._fragments.aggregate(
+                aggregate_latest(user_scopes),
+                collation=Collation(
+                    locale="en", numericOrdering=True, alternate="shifted"
+                ),
+            )
+        )
+
+    def query_by_traditional_references(
+        self,
+        traditional_references: Sequence[str],
+        user_scopes: Sequence[Scope] = tuple(),
+    ) -> AfORegisterToFragmentQueryResult:
+        pipeline = aggregate_by_traditional_references(
+            traditional_references, user_scopes
+        )
+        data = self._fragments.aggregate(pipeline)
+        return (
+            AfORegisterToFragmentQueryResultSchema().load({"items": data})
+            if data
+            else AfORegisterToFragmentQueryResult.create_empty()
+        )
 
     def list_all_fragments(
         self, user_scopes: Sequence[Scope] = tuple()
@@ -423,3 +452,29 @@ class MongoFragmentRepository(FragmentRepository):
         return list(
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
         )
+
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
+        fragments = self._fragments.aggregate(
+            [
+                {
+                    "$match": HAS_TRANSLITERATION
+                    | {"authorizedScopes": {"$exists": False}}
+                },
+                {
+                    "$project": {
+                        "folios": 0,
+                        "lineToVec": 0,
+                        "authorizedScops": 0,
+                        "references": 0,
+                        "uncuratedReferences": 0,
+                        "genreLegacy": 0,
+                        "legacyJoins": 0,
+                        "legacyScript": 0,
+                        "_sortKey": 0,
+                    }
+                },
+                {"$skip": skip},
+                {"$limit": RETRIEVE_ALL_LIMIT},
+            ]
+        )
+        return list(fragments)

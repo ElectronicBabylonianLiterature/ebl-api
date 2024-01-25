@@ -1,11 +1,11 @@
 ?start: line
 
 ?line: empty_line
+     | lem_line
      | note_line
      | translation_line
      | text_line
      | dollar_line
-     | lem_line
      | at_line
      | control_line
 

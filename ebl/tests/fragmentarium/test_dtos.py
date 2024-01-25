@@ -1,6 +1,7 @@
 import attr
 import pydash
 import pytest
+from ebl.common.application.schemas import AccessionSchema
 
 from ebl.errors import DataError
 from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
@@ -44,8 +45,7 @@ def expected_dto(lemmatized_fragment, has_photo):
     return pydash.omit_by(
         {
             "museumNumber": attr.asdict(lemmatized_fragment.number),
-            "accession": lemmatized_fragment.accession,
-            "editedInOraccProject": lemmatized_fragment.edited_in_oracc_project,
+            "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
@@ -60,6 +60,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             ),
             "collection": lemmatized_fragment.collection,
             "legacyScript": lemmatized_fragment.legacy_script,
+            "traditionalReferences": lemmatized_fragment.traditional_references,
             "script": ScriptSchema().dump(lemmatized_fragment.script),
             "date": DateSchema().dump(lemmatized_fragment.date),
             "datesInText": [
@@ -112,7 +113,6 @@ def expected_dto(lemmatized_fragment, has_photo):
                 lemmatized_fragment.external_numbers
             ),
             "projects": [ResearchProject["CAIC"].abbreviation],
-            "traditional_reference": lemmatized_fragment.traditional_reference,
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
         },
         pydash.is_none,
@@ -131,7 +131,7 @@ def test_create_fragment_info_dto():
     is_transliteration = record_entry.type == RecordType.TRANSLITERATION
     assert ApiFragmentInfoSchema().dump(info) == {
         "number": str(info.number),
-        "accession": info.accession,
+        "accession": AccessionSchema().dump(info.accession),
         "script": ScriptSchema().dump(info.script),
         "description": info.description,
         "matchingLines": TextSchema().dump(text),

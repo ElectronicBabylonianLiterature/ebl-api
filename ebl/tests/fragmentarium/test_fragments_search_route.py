@@ -1,9 +1,11 @@
 from typing import Dict, List, Optional
+from datetime import date, timedelta
 
 import attr
 import falcon
 import pytest
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.project import ResearchProject
 
 from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,
@@ -12,13 +14,20 @@ from ebl.fragmentarium.application.fragment_info_schema import (
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
+from ebl.fragmentarium.domain.record import RecordType
+from ebl.fragmentarium.infrastructure.queries import (
+    LATEST_TRANSLITERATION_LIMIT,
+    LATEST_TRANSLITERATION_LINE_LIMIT,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
+
 from ebl.tests.factories.fragment import (
     FragmentFactory,
     InterestingFragmentFactory,
     TransliteratedFragmentFactory,
     LemmatizedFragmentFactory,
 )
+from ebl.tests.factories.record import RecordEntryFactory, RecordFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.genres import genres
@@ -45,7 +54,7 @@ def query_item_of(
     return {
         "museumNumber": MuseumNumberSchema().dump(fragment.number),
         "matchingLines": lines,
-        "matchCount": match_count or len(lines),
+        "matchCount": len(lines) if match_count is None else match_count,
     }
 
 
@@ -54,7 +63,8 @@ def query_item_of(
     [
         lambda fragment: str(fragment.number),
         lambda fragment: fragment.cdli_number,
-        lambda fragment: fragment.accession,
+        lambda fragment: str(fragment.accession),
+        lambda fragment: str(fragment.archaeology.excavation_number),
     ],
 )
 def test_query_fragmentarium_number(get_number, client, fragmentarium):
@@ -260,17 +270,6 @@ def test_interesting(client, fragmentarium):
     assert "Cache-Control" not in result.headers
 
 
-def test_latest(client, fragmentarium):
-    transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragmentarium.create(transliterated_fragment)
-
-    result = client.simulate_get("/fragments", params={"latest": True})
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json == [expected_fragment_info_dto(transliterated_fragment)]
-    assert result.headers["Cache-Control"] == "private, max-age=600"
-
-
 def test_needs_revision(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
@@ -383,3 +382,67 @@ def test_search_script_period(client, fragmentarium, params, expected):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
+
+
+@pytest.mark.parametrize(
+    "params,expected",
+    [
+        ({"project": ResearchProject.CAIC.abbreviation}, [0]),
+        ({"project": ResearchProject.ALU_GENEVA.abbreviation}, [1]),
+    ],
+)
+def test_search_project(client, fragmentarium, params, expected):
+    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
+    fragments = [FragmentFactory.build(projects=(project,)) for project in projects]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    expected_json = {
+        "items": [query_item_of(fragments[i]) for i in expected],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get("/fragments/query", params=params)
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json
+
+
+def test_query_latest(client, fragmentarium):
+    number_of_fragments = LATEST_TRANSLITERATION_LIMIT + 10
+    start_date = date(2023, 5, 1)
+    fragments = [
+        TransliteratedFragmentFactory.build(
+            record=RecordFactory.build(
+                entries=(
+                    RecordEntryFactory.build(
+                        date=str(start_date + timedelta(i)),
+                        type=RecordType.TRANSLITERATION,
+                    ),
+                )
+            ),
+        )
+        for i in range(number_of_fragments)
+    ]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    query_items_by_date = [
+        query_item_of(
+            fragment,
+            list(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
+            0,
+        )
+        for fragment in reversed(fragments)
+    ]
+    expected = {
+        "items": query_items_by_date[:LATEST_TRANSLITERATION_LIMIT],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get("/fragments/latest")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected

@@ -176,7 +176,7 @@ parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
 
 parallel-text = genre, ' ', category, '.', index, ' ',
                 [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
-genre = 'L' | 'D' | 'Lex' | 'Med'
+genre = 'L' | 'D' | 'Lex' | 'Med' | 'Mag'
 category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
            (* Must be a valid numeral. *)
 stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' |
@@ -261,6 +261,7 @@ code. If no shifts are present *Akkadian* is used as the default language.
 | `%grc` | Greek | | No | No |
 | `%akkgrc` | Akkadian | In Greek characters | No | No |
 | `%suxgrc` | Sumerian | In Greek characters | No | No |
+| `%hit` | Hittite | | No | Yes |
 
 Any other shifts are considered valid and have language *Unknown*. *Akkadian*
 and *Unknown* are lemmatizable.

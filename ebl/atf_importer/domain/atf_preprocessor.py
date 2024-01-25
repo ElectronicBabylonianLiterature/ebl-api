@@ -52,14 +52,24 @@ class ATFPreprocessor:
         atf = re.sub(
             r"([\[<])([*:])(.*)", r"\1 \2\3", atf
         )  # convert [* => [  <* => < *
-        atf = re.sub(r"(\*)([]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
-
+        atf = re.sub(r"(:)([]>])(.*)", r"\1 \2\3", atf)  # convert *] => * ]  ?
         atf = atf.replace("--", "-")  # new rule 22.02.2021
+        atf = atf.replace("{f}", "{munus}")
+        atf = atf.replace("1/2", "½")
+        atf = atf.replace("1/3", "⅓")
+        atf = atf.replace("1/4", "¼")
+        atf = atf.replace("1/5", "⅕")
+        atf = atf.replace("1/6", "⅙")
+        atf = atf.replace("2/3", "⅔")
+        atf = atf.replace("5/6", "⅚")
 
         atf = atf.replace("\t", " ")  # convert tabs to spaces
         atf = " ".join(atf.split())  # remove multiple spaces
 
-        return atf
+        atf = atf.replace("$ rest broken", "$ rest of side broken")
+        atf = atf.replace("$ ruling", "$ single ruling")
+        atf = atf.replace("$ seal impression broken", "$ (seal impression broken)")
+        return atf.replace("$ seal impression", "$ (seal impression)")
 
     def normalize_numbers(self, digits):
         numbers = {
@@ -161,6 +171,15 @@ class ATFPreprocessor:
         elif atf == "$ rest broken":
             atf = "$ rest of side broken"
 
+        elif atf == "$ ruling":
+            atf = "$ single ruling"
+
+        elif atf == "$ seal impression broken":
+            atf = "$ (seal impression broken)"
+
+        elif atf == "$ seal impression":
+            atf = "$ (seal impression)"
+
         return atf
 
     def do_c_atf_replacements(self, atf):
@@ -231,6 +250,7 @@ class ATFPreprocessor:
         # special case convert note lines in cdli atf
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
+            atf = atf.replace("# note:", "#note:")
 
         # words serializer oracc parser
         tree = self.ORACC_PARSER.parse(atf)
