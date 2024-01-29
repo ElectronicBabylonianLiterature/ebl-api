@@ -17,14 +17,15 @@ from ebl.corpus.web.lines import LinesImportResource, LinesResource, LineResourc
 from ebl.corpus.web.manuscripts import ManuscriptsResource
 from ebl.corpus.web.texts import (
     TextResource,
-    TextSearchResource,
+    # TextSearchResource,
     TextsResource,
     TextsAllResource,
 )
 from ebl.corpus.web.unplaced_lines import UnplacedLinesResource
-from ebl.transliteration.application.transliteration_query_factory import (
-    TransliterationQueryFactory,
-)
+
+# from ebl.transliteration.application.transliteration_query_factory import (
+#     TransliterationQueryFactory,
+# )
 
 
 def create_corpus_routes(api: falcon.App, context: Context):
@@ -39,9 +40,9 @@ def create_corpus_routes(api: falcon.App, context: Context):
 
     texts = TextsResource(corpus)
     text = TextResource(corpus)
-    text_search = TextSearchResource(
-        corpus, TransliterationQueryFactory(context.sign_repository)
-    )
+    # text_search = TextSearchResource(
+    #     corpus, TransliterationQueryFactory(context.sign_repository)
+    # )
     chapters = ChaptersResource(corpus)
     chapters_display = ChaptersDisplayResource(corpus, context.custom_cache)
     chapters_line = LineResource(corpus, context.custom_cache)
@@ -64,7 +65,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     chapter_url = text_url + "/chapters/{stage}/{name}"
 
     api.add_route("/texts", texts)
-    api.add_route("/textsearch", text_search)
+    # api.add_route("/textsearch", text_search)
     api.add_route(text_url, text)
 
     api.add_route(chapter_url, chapters)
