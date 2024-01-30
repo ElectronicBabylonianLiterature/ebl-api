@@ -16,8 +16,7 @@ class JoinSchema(Schema):
     is_in_fragmentarium = fields.Boolean(
         load_default=False, data_key="isInFragmentarium")
     is_envelope = fields.Boolean(
-        load_default=False, data_key="isEnvelope" )
-
+        load_default=False, data_key="isEnvelope")
 
     @post_load
     def make_join(self, data, **kwargs):
