@@ -13,6 +13,7 @@ class Join:
     note: str = ""
     legacy_data: str = ""
     is_in_fragmentarium: bool = False
+    is_envelope: bool = False
 
 
 @attr.s(auto_attribs=True, frozen=True)

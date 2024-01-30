@@ -14,8 +14,10 @@ class JoinSchema(Schema):
     note = fields.String(required=True)
     legacy_data = fields.String(required=True, data_key="legacyData")
     is_in_fragmentarium = fields.Boolean(
-        load_default=False, data_key="isInFragmentarium"
-    )
+        load_default=False, data_key="isInFragmentarium")
+    is_envelope = fields.Boolean(
+        load_default=False, data_key="isEnvelope" )
+
 
     @post_load
     def make_join(self, data, **kwargs):
