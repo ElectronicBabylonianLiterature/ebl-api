@@ -86,9 +86,11 @@ from ebl.fragmentarium.domain.date import (
     Year,
     Month,
     Day,
+    DateKing,
+    DateKingSchema,
     Ur3Calendar,
 )
-from ebl.chronology.chronology import chronology
+from ebl.chronology.chronology import chronology, King, KingSchema
 
 
 class JoinFactory(factory.Factory):
@@ -140,6 +142,16 @@ class DayFactory(factory.Factory):
     is_uncertain = factory.Faker("boolean")
 
 
+def create_date_king(king: King) -> DateKing:
+    return DateKingSchema().load(
+        {
+            **KingSchema().dump(king),
+            "isBroken": random.choice([True, False]),
+            "isUncertain": random.choice([True, False]),
+        }
+    )
+
+
 class DateFactory(factory.Factory):
     class Meta:
         model = Date
@@ -147,7 +159,9 @@ class DateFactory(factory.Factory):
     year = factory.SubFactory(YearFactory)
     month = factory.SubFactory(MonthFactory)
     day = factory.SubFactory(DayFactory)
-    king = factory.Iterator(chronology.kings)
+    king = factory.Iterator(
+        chronology.kings, getter=lambda king: create_date_king(king)
+    )
     is_seleucid_era = factory.Faker("boolean")
     ur3_calendar = factory.Iterator(Ur3Calendar)
 
