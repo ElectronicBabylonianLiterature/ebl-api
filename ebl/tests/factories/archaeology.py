@@ -1,5 +1,5 @@
 from ebl.fragmentarium.domain.archaeology import Archaeology, ExcavationNumber
-from ebl.fragmentarium.domain.date_range import DateRange, CommentedDate, PartialDate
+from ebl.fragmentarium.domain.date_range import DateRange, PartialDate
 from ebl.fragmentarium.domain.findspot import BuildingType, ExcavationPlan, Findspot
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
@@ -20,6 +20,7 @@ class PartialDateFactory(factory.Factory):
         yes_declaration=factory.fuzzy.FuzzyChoice([*range(1, 29), None]),
         no_declaration=None,
     )
+    notes = factory.Faker("sentence")
 
 
 class DateRangeFactory(factory.Factory):
@@ -28,14 +29,6 @@ class DateRangeFactory(factory.Factory):
 
     start = factory.SubFactory(PartialDateFactory)
     end = factory.SubFactory(PartialDateFactory)
-    notes = factory.Faker("sentence")
-
-
-class CommentedDateFactory(factory.Factory):
-    class Meta:
-        model = CommentedDate
-
-    date = factory.SubFactory(PartialDateFactory)
     notes = factory.Faker("sentence")
 
 
@@ -77,7 +70,7 @@ class ArchaeologyFactory(factory.Factory):
     )
     regular_excavation = factory.Faker("boolean")
     excavation_date = factory.List(
-        [factory.SubFactory(CommentedDateFactory)], TupleFactory
+        [factory.SubFactory(PartialDateFactory)], TupleFactory
     )
 
     class Params:
