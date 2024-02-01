@@ -2,7 +2,7 @@ from ebl.common.application.schemas import AbstractMuseumNumberSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.date_schemas import (
     DateRangeSchema,
-    DateWithNotesSchema,
+    CommentedDateSchema,
 )
 from ebl.fragmentarium.domain.archaeology import (
     Archaeology,
@@ -73,7 +73,10 @@ class ArchaeologySchema(Schema):
         load_default=True, data_key="isRegularExcavation"
     )
     excavation_date = fields.Nested(
-        DateWithNotesSchema, data_key="excavationDate", many=True, load_default=tuple()
+        CommentedDateSchema,
+        data_key="excavationDate",
+        many=True,
+        load_default=tuple(),
     )
     findspot_id = fields.Integer(allow_none=True, default=None, data_key="findspotId")
     findspot = fields.Nested(

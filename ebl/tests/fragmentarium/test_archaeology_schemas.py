@@ -4,7 +4,7 @@ from ebl.fragmentarium.application.archaeology_schemas import (
     ExcavationNumberSchema,
     FindspotSchema,
 )
-from ebl.fragmentarium.application.date_schemas import DateWithNotesSchema
+from ebl.fragmentarium.application.date_schemas import CommentedDateSchema
 from ebl.tests.factories.archaeology import (
     ArchaeologyFactory,
 )
@@ -20,7 +20,7 @@ def test_serialize_archaeology(with_findspot):
         ),
         "site": archaeology.site.long_name,
         "isRegularExcavation": archaeology.regular_excavation,
-        "excavationDate": DateWithNotesSchema().dump(
+        "excavationDate": CommentedDateSchema().dump(
             archaeology.excavation_date, many=True
         ),
         "findspotId": archaeology.findspot_id,
@@ -41,7 +41,7 @@ def test_deserialize_archaeology(with_findspot):
                 ),
                 "site": archaeology.site.long_name,
                 "isRegularExcavation": archaeology.regular_excavation,
-                "excavationDate": DateWithNotesSchema().dump(
+                "excavationDate": CommentedDateSchema().dump(
                     archaeology.excavation_date, many=True
                 ),
                 "findspotId": archaeology.findspot_id,

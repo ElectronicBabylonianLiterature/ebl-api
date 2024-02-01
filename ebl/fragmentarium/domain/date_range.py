@@ -17,6 +17,6 @@ class DateRange:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class DateWithNotes:
+class CommentedDate:
     date: PartialDate
     notes: str = ""

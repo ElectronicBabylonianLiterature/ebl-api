@@ -1,5 +1,5 @@
 import datetime
-from ebl.fragmentarium.domain.date_range import DateRange, DateWithNotes, PartialDate
+from ebl.fragmentarium.domain.date_range import DateRange, CommentedDate, PartialDate
 from marshmallow import Schema, fields, post_load
 from dateutil.parser import isoparse
 
@@ -32,10 +32,10 @@ class DateRangeSchema(Schema):
         return DateRange(**data)
 
 
-class DateWithNotesSchema(Schema):
+class CommentedDateSchema(Schema):
     date = fields.Nested(PartialDateSchema, required=True)
     notes = fields.String()
 
     @post_load
-    def create_date(self, data, **kwargs) -> DateWithNotes:
-        return DateWithNotes(**data)
+    def create_date(self, data, **kwargs) -> CommentedDate:
+        return CommentedDate(**data)
