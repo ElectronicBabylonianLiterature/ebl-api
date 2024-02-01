@@ -69,9 +69,7 @@ class ArchaeologyFactory(factory.Factory):
         set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
     )
     regular_excavation = factory.Faker("boolean")
-    excavation_date = factory.List(
-        [factory.SubFactory(PartialDateFactory)], TupleFactory
-    )
+    excavation_date = factory.SubFactory(DateRangeFactory)
 
     class Params:
         with_findspot = factory.Trait(

@@ -2,7 +2,6 @@ from ebl.common.application.schemas import AbstractMuseumNumberSchema
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.fragmentarium.application.date_schemas import (
     DateRangeSchema,
-    PartialDateSchema,
 )
 from ebl.fragmentarium.domain.archaeology import (
     Archaeology,
@@ -73,17 +72,11 @@ class ArchaeologySchema(Schema):
         load_default=True, data_key="isRegularExcavation"
     )
     excavation_date = fields.Nested(
-        PartialDateSchema,
-        data_key="excavationDate",
-        many=True,
-        load_default=tuple(),
+        DateRangeSchema, allow_none=True, data_key="excavationDate", load_default=None
     )
     findspot_id = fields.Integer(allow_none=True, default=None, data_key="findspotId")
-    findspot = fields.Nested(
-        FindspotSchema, allow_none=True, default=None, data_key="findspot"
-    )
+    findspot = fields.Nested(FindspotSchema, allow_none=True, load_default=None)
 
     @post_load
     def create_archaeology(self, data, **kwargs) -> Archaeology:
-        data["excavation_date"] = tuple(data["excavation_date"])
         return Archaeology(**data)

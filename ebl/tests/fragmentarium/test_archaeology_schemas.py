@@ -4,7 +4,8 @@ from ebl.fragmentarium.application.archaeology_schemas import (
     ExcavationNumberSchema,
     FindspotSchema,
 )
-from ebl.fragmentarium.application.date_schemas import PartialDateSchema
+from ebl.fragmentarium.application.date_schemas import DateRangeSchema
+from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.tests.factories.archaeology import (
     ArchaeologyFactory,
 )
@@ -12,7 +13,7 @@ from ebl.tests.factories.archaeology import (
 
 @pytest.mark.parametrize("with_findspot", [True, False])
 def test_serialize_archaeology(with_findspot):
-    archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
+    archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
 
     assert ArchaeologySchema().dump(archaeology) == {
         "excavationNumber": ExcavationNumberSchema().dump(
@@ -20,9 +21,7 @@ def test_serialize_archaeology(with_findspot):
         ),
         "site": archaeology.site.long_name,
         "isRegularExcavation": archaeology.regular_excavation,
-        "excavationDate": PartialDateSchema().dump(
-            archaeology.excavation_date, many=True
-        ),
+        "excavationDate": DateRangeSchema().dump(archaeology.excavation_date),
         "findspotId": archaeology.findspot_id,
         "findspot": archaeology.findspot
         and FindspotSchema().dump(archaeology.findspot),
@@ -31,7 +30,7 @@ def test_serialize_archaeology(with_findspot):
 
 @pytest.mark.parametrize("with_findspot", [True, False])
 def test_deserialize_archaeology(with_findspot):
-    archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
+    archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
 
     assert (
         ArchaeologySchema().load(
@@ -41,9 +40,7 @@ def test_deserialize_archaeology(with_findspot):
                 ),
                 "site": archaeology.site.long_name,
                 "isRegularExcavation": archaeology.regular_excavation,
-                "excavationDate": PartialDateSchema().dump(
-                    archaeology.excavation_date, many=True
-                ),
+                "excavationDate": DateRangeSchema().dump(archaeology.excavation_date),
                 "findspotId": archaeology.findspot_id,
                 "findspot": archaeology.findspot
                 and FindspotSchema().dump(archaeology.findspot),
