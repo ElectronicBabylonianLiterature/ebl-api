@@ -12,7 +12,7 @@ from ebl.fragmentarium.domain.findspot import ExcavationSite
 from ebl.fragmentarium.domain.fragment import Fragment
 
 from ebl.fragmentarium.web.dtos import create_response_dto
-from ebl.tests.factories.archaeology import DateWithNotesFactory
+from ebl.tests.factories.archaeology import DateRangeFactory
 from ebl.tests.factories.fragment import FragmentFactory
 
 
@@ -24,7 +24,7 @@ ARCHAEOLOGIES = [
     attr.evolve(ARCHAEOLOGY, findspot_id=None),
     attr.evolve(ARCHAEOLOGY, site=ExcavationSite.NIPPUR),
     attr.evolve(ARCHAEOLOGY, regular_excavation=False),
-    attr.evolve(ARCHAEOLOGY, excavation_date=(DateWithNotesFactory.build(),)),
+    attr.evolve(ARCHAEOLOGY, excavation_date=DateRangeFactory.build()),
     attr.evolve(ARCHAEOLOGY, findspot_id=1),
 ]
 
