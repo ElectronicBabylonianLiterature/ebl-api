@@ -8,12 +8,15 @@ from hamcrest.core.core.isequal import equal_to
 def test_join() -> None:
     museum_number = MuseumNumber("X", "1")
     is_checked = True
+    is_envelope = True
     joined_by = "Test User"
     date = "today"
     note = "test join"
     legacy_data = "old stuff"
 
-    join = Join(museum_number, is_checked, joined_by, date, note, legacy_data)
+    join = Join(
+        museum_number, is_checked, is_envelope, joined_by, date, note, legacy_data
+    )
 
     assert_that(
         join,
@@ -21,6 +24,7 @@ def test_join() -> None:
             {
                 "museum_number": museum_number,
                 "is_checked": is_checked,
+                "is_envelope": is_envelope,
                 "joined_by": joined_by,
                 "date": date,
                 "note": note,
@@ -33,6 +37,7 @@ def test_join() -> None:
 def test_join_default() -> None:
     defaults = {
         "is_checked": False,
+        "is_envelope": False,
         "joined_by": "",
         "date": "",
         "note": "",
