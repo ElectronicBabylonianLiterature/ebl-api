@@ -21,7 +21,7 @@ def test_serialize_archaeology(with_findspot):
         ),
         "site": archaeology.site.long_name,
         "isRegularExcavation": archaeology.regular_excavation,
-        "excavationDate": DateRangeSchema().dump(archaeology.excavation_date),
+        "date": DateRangeSchema().dump(archaeology.excavation_date),
         "findspotId": archaeology.findspot_id,
         "findspot": archaeology.findspot
         and FindspotSchema().dump(archaeology.findspot),
@@ -40,7 +40,7 @@ def test_deserialize_archaeology(with_findspot):
                 ),
                 "site": archaeology.site.long_name,
                 "isRegularExcavation": archaeology.regular_excavation,
-                "excavationDate": DateRangeSchema().dump(archaeology.excavation_date),
+                "date": DateRangeSchema().dump(archaeology.excavation_date),
                 "findspotId": archaeology.findspot_id,
                 "findspot": archaeology.findspot
                 and FindspotSchema().dump(archaeology.findspot),

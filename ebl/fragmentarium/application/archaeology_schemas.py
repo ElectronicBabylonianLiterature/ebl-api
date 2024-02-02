@@ -75,7 +75,7 @@ class ArchaeologySchema(Schema):
         load_default=True, data_key="isRegularExcavation"
     )
     excavation_date = fields.Nested(
-        DateRangeSchema, allow_none=True, data_key="excavationDate", load_default=None
+        DateRangeSchema, allow_none=True, data_key="date", load_default=None
     )
     findspot_id = fields.Integer(allow_none=True, default=None, data_key="findspotId")
     findspot = fields.Nested(FindspotSchema, allow_none=True, load_default=None)
