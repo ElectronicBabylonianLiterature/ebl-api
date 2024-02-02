@@ -47,7 +47,7 @@ class FindspotSchema(Schema):
     building = fields.String()
     building_type = NameEnumField(BuildingType, data_key="buildingType")
     lavel_layer_phase = fields.String(data_key="levelLayerPhase")
-    date_range = fields.Nested(DateRangeSchema, data_key="dateRange", allow_none=True)
+    date_range = fields.Nested(DateRangeSchema, data_key="date", allow_none=True)
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=tuple())
     room = fields.String()
     context = fields.String()
