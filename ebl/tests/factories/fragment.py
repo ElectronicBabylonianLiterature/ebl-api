@@ -1,5 +1,5 @@
 from typing import Sequence
-
+import pydash
 import factory.fuzzy
 import random
 from ebl.common.domain.accession import Accession
@@ -95,12 +95,16 @@ class JoinFactory(factory.Factory):
     class Meta:
         model = Join
 
-    museum_number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
+    museum_number = factory.Sequence(
+        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
+    )
     is_checked = factory.Faker("boolean")
-    joined_by = factory.Faker("last_name")
-    date = factory.Faker("sentence")
+    is_envelope = factory.Faker("boolean")
+    joined_by = factory.Faker("word")
+    date = factory.Faker("date")
     note = factory.Faker("sentence")
     legacy_data = factory.Faker("sentence")
+    is_in_fragmentarium = factory.Faker("boolean")
 
 
 class ScriptFactory(factory.Factory):
