@@ -69,7 +69,7 @@ class ArchaeologySchema(Schema):
     )
     site = site_field
     regular_excavation = fields.Boolean(
-        load_default=True, data_key="isRegularExcavation"
+        load_default=False, data_key="isRegularExcavation"
     )
     excavation_date = fields.Nested(
         DateRangeSchema, allow_none=True, data_key="date", load_default=None
