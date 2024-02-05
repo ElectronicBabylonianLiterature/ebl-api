@@ -25,6 +25,10 @@ class PartialDateSchema(Schema):
     def create_partial_date(self, data, **kwargs) -> PartialDate:
         return PartialDate(**data)
 
+    @post_dump
+    def remove_empty_fields(self, data: dict, **kwargs):
+        return {key: value for key, value in data.items() if value or value == 0}
+
 
 class DateRangeSchema(Schema):
     start = fields.Nested(PartialDateSchema, required=True)
@@ -34,7 +38,3 @@ class DateRangeSchema(Schema):
     @post_load
     def create_date_range(self, data, **kwargs) -> DateRange:
         return DateRange(**data)
-
-    @post_dump
-    def remove_empty_fields(self, data: dict, **kwargs):
-        return {key: value for key, value in data.items() if value or value == 0}
