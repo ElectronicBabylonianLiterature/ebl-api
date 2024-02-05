@@ -72,6 +72,7 @@ class Provenance(ProvenanceEnum):
     EBLA = ("Ebla", "Ebl", "Periphery", "EBA")
     ELAM = ("Elam", "Elam", "Periphery", None)
     EMAR = ("Emar", "Emr", "Periphery", "EMR")
+    HAMATH = ("Hamath", "Ham", "Periphery", "HAM")
     HATTUSA = ("Ḫattuša", "Hat", "Periphery", "HAT")
     KANES = ("Kaneš", "Kan", "Periphery", "KNS")
     KARKEMIS = ("Karkemiš", "Kar", "Periphery", "KRK")
