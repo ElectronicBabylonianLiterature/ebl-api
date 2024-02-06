@@ -17,9 +17,6 @@ class PartialDateSchema(Schema):
     month = fields.Integer(allow_none=True)
     day = fields.Integer(allow_none=True)
     notes = fields.String(allow_none=True, load_default="")
-    is_post_canonical = fields.Boolean(
-        allow_none=True, load_default=False, data_key="isPostCanonical"
-    )
 
     @post_load
     def create_partial_date(self, data, **kwargs) -> PartialDate:
