@@ -78,6 +78,7 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MongoAfoRegisterRepository,
 )
+from ebl.chronology.infrastructure.mongo_kings_repository import MongoKingsRepository
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -267,6 +268,11 @@ def afo_register_repository(database):
     return MongoAfoRegisterRepository(database)
 
 
+@pytest.fixture
+def kings_repository(database):
+    return MongoKingsRepository(database)
+
+
 class FakeFile(File):
     def __init__(self, filename: str, data: bytes, metadata: dict):
         self.filename = filename
@@ -433,6 +439,7 @@ def context(
     user,
     parallel_line_injector,
     mongo_cache_repository,
+    kings_repository,
 ):
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
@@ -454,6 +461,7 @@ def context(
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
+        kings_repository=kings_repository,
     )
 
 

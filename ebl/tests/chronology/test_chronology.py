@@ -4,7 +4,7 @@ from ebl.chronology.chronology import KingSchema, ChronologySchema, Chronology, 
 
 def test_king_creation():
     king = King(
-        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes"
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", True
     )
 
     assert king.order_global == 1
@@ -16,14 +16,24 @@ def test_king_creation():
     assert king.date == "1999"
     assert king.total_of_years == "10 years"
     assert king.notes == "Some notes"
+    assert king.is_not_in_brinkman is True
 
 
 def test_chronology_creation():
     king_a = King(
-        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes"
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", True
     )
     king_b = King(
-        2, 2, "dyn2", "Dynasty 2", "2", "King B", "2000", "5 years", "Other notes"
+        2,
+        2,
+        "dyn2",
+        "Dynasty 2",
+        "2",
+        "King B",
+        "2000",
+        "5 years",
+        "Other notes",
+        False,
     )
     chronology = Chronology([king_a, king_b])
 
@@ -32,10 +42,19 @@ def test_chronology_creation():
 
 def test_find_king_by_name():
     king_a = King(
-        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes"
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", True
     )
     king_b = King(
-        2, 2, "dyn2", "Dynasty 2", "2", "King B", "2000", "5 years", "Other notes"
+        2,
+        2,
+        "dyn2",
+        "Dynasty 2",
+        "2",
+        "King B",
+        "2000",
+        "5 years",
+        "Other notes",
+        False,
     )
     chronology = Chronology([king_a, king_b])
 
@@ -55,6 +74,7 @@ def test_king_schema_deserialization():
         "date": "1999",
         "totalOfYears": "10 years",
         "notes": "Some notes",
+        "isNotInBrinkman": True,
     }
     king = KingSchema().load(king_data)
 
@@ -67,6 +87,7 @@ def test_king_schema_deserialization():
     assert king.date == "1999"
     assert king.total_of_years == "10 years"
     assert king.notes == "Some notes"
+    assert king.is_not_in_brinkman is True
 
 
 def test_chronology_schema_deserialization():

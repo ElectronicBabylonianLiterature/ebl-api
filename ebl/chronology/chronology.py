@@ -15,6 +15,7 @@ class King:
     date: str
     total_of_years: str
     notes: str
+    is_not_in_brinkman: bool
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -40,6 +41,9 @@ class KingSchema(Schema):
     date = fields.String()
     total_of_years = fields.String(data_key="totalOfYears")
     notes = fields.String(allow_none=True, load_default=None)
+    is_not_in_brinkman = fields.Boolean(
+        allow_none=True, load_default=None, data_key="isNotInBrinkman"
+    )
 
     @post_load
     def make_king(self, data: dict, **kwargs) -> King:
