@@ -89,7 +89,6 @@ from ebl.fragmentarium.domain.date import (
     DateKing,
     DateKingSchema,
     Ur3Calendar,
-    DateKingSchema,
 )
 from ebl.chronology.chronology import chronology, King, KingSchema
 

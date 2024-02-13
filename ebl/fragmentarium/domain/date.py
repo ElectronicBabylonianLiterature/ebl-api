@@ -53,12 +53,6 @@ class DateEponym(Eponym):
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class DateKing(King):
-    is_broken: Optional[bool] = attr.ib(default=None)
-    is_uncertain: Optional[bool] = attr.ib(default=None)
-
-
-@attr.s(auto_attribs=True, frozen=True)
 class Date:
     year: Year
     month: Month
