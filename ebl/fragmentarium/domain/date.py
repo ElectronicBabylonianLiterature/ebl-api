@@ -105,6 +105,10 @@ class DateKingSchema(KingSchema):
     def make_king(self, data: dict, **kwargs) -> DateKing:
         return DateKing(**data)
 
+    @post_dump
+    def remove_skip_values(self, data: dict, **kwargs):
+        return {key: value for key, value in data.items() if value is not None}
+
 
 class DateEponymSchema(EponymSchema):
     is_broken = fields.Boolean(data_key="isBroken", allow_none=True)
