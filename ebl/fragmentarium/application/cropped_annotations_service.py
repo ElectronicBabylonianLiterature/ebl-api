@@ -51,6 +51,7 @@ class CroppedAnnotationService:
                             "script": str(annotation.script),
                             "label": cropped_sign.label,
                             "date": date,
+                            "provenance": annotation.provenance,
                         }
                     )
         return cropped_image_annotations
