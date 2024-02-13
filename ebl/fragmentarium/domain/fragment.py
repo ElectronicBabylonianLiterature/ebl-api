@@ -104,6 +104,7 @@ class ExternalNumbers:
     hilprecht_heidelberg_number: str = ""
     metropolitan_number: str = ""
     louvre_number: str = ""
+    australianinstituteofarchaeology_number: str = ""
     philadelphia_number: str = ""
     achemenet_number: str = ""
     nabucco_number: str = ""
@@ -267,6 +268,10 @@ class Fragment:
     @property
     def louvre_number(self) -> str:
         return self._get_external_number("louvre_number")
+
+    @property
+    def australianinstituteofarchaeology_number(self) -> str:
+        return self._get_external_number("australianinstituteofarchaeology_number")
 
     @property
     def achemenet_number(self) -> str:
