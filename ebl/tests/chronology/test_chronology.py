@@ -4,7 +4,7 @@ from ebl.chronology.chronology import KingSchema, ChronologySchema, Chronology, 
 
 def test_king_creation():
     king = King(
-        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes"
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", None
     )
 
     assert king.order_global == 1
@@ -20,10 +20,10 @@ def test_king_creation():
 
 def test_chronology_creation():
     king_a = King(
-        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes"
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", None
     )
     king_b = King(
-        2, 2, "dyn2", "Dynasty 2", "2", "King B", "2000", "5 years", "Other notes"
+        2, 2, "dyn2", "Dynasty 2", "2", "King B", "2000", "5 years", "Other notes", True
     )
     chronology = Chronology([king_a, king_b])
 
@@ -32,10 +32,10 @@ def test_chronology_creation():
 
 def test_find_king_by_name():
     king_a = King(
-        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes"
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", None
     )
     king_b = King(
-        2, 2, "dyn2", "Dynasty 2", "2", "King B", "2000", "5 years", "Other notes"
+        2, 2, "dyn2", "Dynasty 2", "2", "King B", "2000", "5 years", "Other notes", True
     )
     chronology = Chronology([king_a, king_b])
 
@@ -73,8 +73,8 @@ def test_chronology_schema_deserialization():
     with open("ebl/chronology/brinkmanKings.json", "r", encoding="utf-8") as file:
         data = json.load(file)
         chronology = ChronologySchema().load({"kings": data})
-    assert len(chronology.kings) == 364
+    assert len(chronology.kings) == 365
     assert chronology.kings[0].name == "Sargon"
-    assert chronology.kings[363].name == "Aššur-uballiṭ II"
-    assert chronology.kings[50].order_global == 51
-    assert chronology.kings[363].order_global == 364
+    assert chronology.kings[363].name == "Sin-šar-iškun"
+    assert chronology.kings[50].order_global == 50
+    assert chronology.kings[363].order_global == 363
