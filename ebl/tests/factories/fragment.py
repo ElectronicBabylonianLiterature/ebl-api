@@ -171,6 +171,7 @@ class ExternalNumbersFactory(factory.Factory):
     )
     metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
+    alalah_hpm_number = factory.Sequence(lambda n: f"alalah_hpm_number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"
     )
