@@ -22,6 +22,7 @@ TYPE = AnnotationValueType.HAS_SIGN
 ID = "abc123"
 SIGN_NAME = "KUR"
 IMAGE_ID = "image-id"
+PROVENANCE = "ASSUR"
 SCRIPT = ScriptFactory.build()
 SCRIPT_DUMPED = ScriptSchema().dump(SCRIPT)
 LABEL = "label"
@@ -32,12 +33,13 @@ ANNOTATION = Annotation(
 )
 
 MUSEUM_NUMBER = MuseumNumber("K", "1")
-ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION], SCRIPT)
+ANNOTATIONS = Annotations(MUSEUM_NUMBER, [ANNOTATION], SCRIPT, PROVENANCE)
 
 
 SERIALIZED = {
     "fragmentNumber": str(MUSEUM_NUMBER),
     "script": SCRIPT_DUMPED,
+    "provenance": PROVENANCE,
     "annotations": [
         {
             "geometry": {"x": X, "y": Y, "width": WIDTH, "height": HEIGHT},
