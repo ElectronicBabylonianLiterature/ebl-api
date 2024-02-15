@@ -131,7 +131,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/genres", fragment_genre),
         ("/fragments/{number}/script", fragment_script),
         ("/fragments/{number}/date", fragment_date),
-        ("/fragments/{number}/dates_in_text", fragment_dates_in_text),
+        ("/fragments/{number}/dates-in-text", fragment_dates_in_text),
         ("/fragments/{number}", fragments),
         ("/fragments/{number}/pager", fragment_pager),
         ("/fragments/{number}/lemmatization", lemmatization),
