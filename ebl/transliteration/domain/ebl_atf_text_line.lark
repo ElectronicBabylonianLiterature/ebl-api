@@ -194,7 +194,7 @@ _loose_joiner: _strict_joiner
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
 _any_close: (close_broken_away | close_perhaps_broken_away | close_accidental_omission | close_intentional_omission | close_removal)+
 _any_open: (open_accidental_omission | open_intentional_omission | open_removal | open_broken_away | open_perhaps_broken_away)+
-!joiner: _WORD_SEPARATOR* ("-" | "+" | "." | ":" | ";") _WORD_SEPARATOR*
+!joiner: _WORD_SEPARATOR* ("-" | "+" | "." | ":" | ";" | ",") _WORD_SEPARATOR*
 
 ?value: unidentified_sign
       | unclear_sign
