@@ -326,6 +326,10 @@ class Joiner(Token):
         return Joiner.of(atf.Joiner.PLUS)
 
     @staticmethod
+    def comma():
+        return Joiner.of(atf.Joiner.PLUS)
+
+    @staticmethod
     def of(joiner: atf.Joiner):
         return Joiner(frozenset(), ErasureState.NONE, joiner)
 
