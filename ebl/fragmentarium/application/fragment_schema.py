@@ -142,7 +142,11 @@ class ExternalNumbersSchema(Schema):
     metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
     yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
+    alalah_hpm_number = fields.String(load_default="", data_key="alalahHpmNumber")
     philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
+    australianinstituteofarchaeology_number = fields.String(
+        load_default="", data_key="australianinstituteofarchaeologyNumber"
+    )
     achemenet_number = fields.String(load_default="", data_key="achemenetNumber")
     nabucco_number = fields.String(load_default="", data_key="nabuccoNumber")
     oracc_numbers = fields.List(

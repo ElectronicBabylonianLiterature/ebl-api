@@ -10,6 +10,7 @@ from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
         (Language.AKKADIAN, True),
         (Language.EMESAL, False),
         (Language.SUMERIAN, False),
+        (Language.HITTITE, False),
     ],
 )
 def test_lemmatizable(language, expected):
@@ -39,6 +40,7 @@ def test_lemmatizable(language, expected):
         ("%akkgrc", Language.AKKADIAN),
         ("%suxgrc", Language.SUMERIAN),
         ("%grc", Language.GREEK),
+        ("%hit", Language.HITTITE),
     ],
 )
 def test_of_atf(atf, expected):

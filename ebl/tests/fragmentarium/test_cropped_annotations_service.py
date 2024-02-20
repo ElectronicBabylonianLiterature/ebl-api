@@ -42,6 +42,7 @@ def test_find_annotations_by_sign(
         CroppedSignImage(image_id_2, Base64("test-base64-2"))
     )
     fragment_number = annotations.fragment_number
+    provenance = annotations.provenance
 
     expected_1 = {
         "fragmentNumber": str(fragment_number),
@@ -49,6 +50,7 @@ def test_find_annotations_by_sign(
         "script": str(annotations.script),
         "label": annotation[0].cropped_sign.label,
         "date": DateSchema().dump(fragment.date),
+        "provenance": provenance,
     }
     expected_2 = {
         "fragmentNumber": str(fragment_number),
@@ -56,6 +58,7 @@ def test_find_annotations_by_sign(
         "script": str(annotations.script),
         "label": annotation[1].cropped_sign.label,
         "date": DateSchema().dump(fragment.date),
+        "provenance": provenance,
     }
 
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]

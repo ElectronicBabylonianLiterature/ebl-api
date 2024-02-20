@@ -1,5 +1,5 @@
 from ebl.fragmentarium.domain.archaeology import Archaeology, ExcavationNumber
-from ebl.fragmentarium.domain.iso_date import DateRange, DateWithNotes
+from ebl.fragmentarium.domain.date_range import DateRange, PartialDate
 from ebl.fragmentarium.domain.findspot import BuildingType, ExcavationPlan, Findspot
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
@@ -9,20 +9,26 @@ import factory.fuzzy
 FINDSPOT_COUNT = 3
 
 
+class PartialDateFactory(factory.Factory):
+    class Meta:
+        model = PartialDate
+
+    year = factory.fuzzy.FuzzyInteger(1900, 2020)
+    month = factory.fuzzy.FuzzyChoice([*range(1, 13), None])
+    day = factory.Maybe(
+        "month",
+        yes_declaration=factory.fuzzy.FuzzyChoice([*range(1, 29), None]),
+        no_declaration=None,
+    )
+    notes = factory.Faker("sentence")
+
+
 class DateRangeFactory(factory.Factory):
     class Meta:
         model = DateRange
 
-    start = factory.fuzzy.FuzzyInteger(-800, -750)
-    end = factory.fuzzy.FuzzyInteger(-745, -650)
-    notes = factory.Faker("sentence")
-
-
-class DateWithNotesFactory(factory.Factory):
-    class Meta:
-        model = DateWithNotes
-
-    date = factory.Faker("date_object")
+    start = factory.SubFactory(PartialDateFactory)
+    end = factory.SubFactory(PartialDateFactory)
     notes = factory.Faker("sentence")
 
 
@@ -63,7 +69,10 @@ class ArchaeologyFactory(factory.Factory):
         set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
     )
     regular_excavation = factory.Faker("boolean")
-    excavation_date = factory.List(
-        [factory.SubFactory(DateWithNotesFactory)], TupleFactory
-    )
-    findspot_id = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
+    excavation_date = factory.SubFactory(DateRangeFactory)
+
+    class Params:
+        with_findspot = factory.Trait(
+            findspot=factory.SubFactory(FindspotFactory),
+            findspot_id=factory.SelfAttribute("findspot.id_"),
+        )

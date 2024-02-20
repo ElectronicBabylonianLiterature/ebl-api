@@ -15,9 +15,10 @@ from ebl.corpus.domain.manuscript import (
 from ebl.corpus.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.text import ChapterListing, Text
-from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.domain.joins import Joins
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
+from ebl.tests.factories.fragment import JoinFactory
 from ebl.tests.factories.ids import TextIdFactory
 from ebl.tests.factories.parallel_line import (
     ParallelCompositionFactory,
@@ -60,21 +61,6 @@ class OldSiglumFactory(factory.Factory):
 
     siglum = factory.Faker("word")
     reference = factory.SubFactory(ReferenceFactory, with_document=True)
-
-
-class JoinFactory(factory.Factory):
-    class Meta:
-        model = Join
-
-    museum_number = factory.Sequence(
-        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
-    )
-    is_checked = factory.Faker("boolean")
-    joined_by = factory.Faker("word")
-    date = factory.Faker("date")
-    note = factory.Faker("sentence")
-    legacy_data = factory.Faker("sentence")
-    is_in_fragmentarium = factory.Faker("boolean")
 
 
 class JoinsFactory(factory.Factory):

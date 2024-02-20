@@ -81,6 +81,10 @@ from ebl.transliteration.domain.parallel_line import (
             ParallelText(False, TextId(Genre.LEXICOGRAPHY, 1, 1), None, LineNumber(1)),
         ),
         (
+            "// Mag III.1 2",
+            ParallelText(False, TextId(Genre.MAGIC, 3, 1), None, LineNumber(2)),
+        ),
+        (
             "// Med I.1 1",
             ParallelText(False, TextId(Genre.MEDICINE, 1, 1), None, LineNumber(1)),
         ),

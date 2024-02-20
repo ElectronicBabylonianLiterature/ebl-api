@@ -8,6 +8,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 class Join:
     museum_number: MuseumNumber
     is_checked: bool = False
+    is_envelope: bool = False
     joined_by: str = ""
     date: str = ""
     note: str = ""

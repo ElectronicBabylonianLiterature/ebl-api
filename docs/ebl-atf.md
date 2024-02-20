@@ -8,7 +8,7 @@ encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki
 The EBNF grammar below is an idealized representation of the eBL-ATF as it does
 not deal with ambiguities and implementation details necessary to create the
 domain model in practice. A fully functional grammar is defined in
-[ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/text/ebl-atf.lark).
+[ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/transliteration/domain/ebl_atf.lark).
 The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark).
 See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/)
 and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
@@ -176,7 +176,7 @@ parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
 
 parallel-text = genre, ' ', category, '.', index, ' ',
                 [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
-genre = 'L' | 'D' | 'Lex' | 'Med'
+genre = 'L' | 'D' | 'Lex' | 'Med' | 'Mag'
 category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
            (* Must be a valid numeral. *)
 stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' |
@@ -261,6 +261,7 @@ code. If no shifts are present *Akkadian* is used as the default language.
 | `%grc` | Greek | | No | No |
 | `%akkgrc` | Akkadian | In Greek characters | No | No |
 | `%suxgrc` | Sumerian | In Greek characters | No | No |
+| `%hit` | Hittite | | No | Yes |
 
 Any other shifts are considered valid and have language *Unknown*. *Akkadian*
 and *Unknown* are lemmatizable.
@@ -469,7 +470,7 @@ part-joiner = [ inword-newline ], [ close_presence ], [ joiner ],
               (* The joiner can be omitted next to determinative,
                  phonetic-gloss, or linguistic gloss. *)
 
-joiner = { word-separator } ( '-' | '+' | '.' | ':' ) { word-separator };
+joiner = { word-separator } ( '-' | '+' | '.' | ':' | ',' ) { word-separator };
 inword-newline = ';';
 
 value = unknown
@@ -662,6 +663,7 @@ provenance = 'Assa'
            | 'Ama'
            | 'Emr'
            | 'Hat'
+           | 'Ham'
            | 'Mar'
            | 'Meg'
            | 'Sus'

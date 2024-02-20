@@ -127,6 +127,7 @@ class Annotations:
     fragment_number: MuseumNumber
     annotations: Sequence[Annotation] = tuple()
     script: Optional[Script] = None
+    provenance: Optional[str] = None
 
     @classmethod
     def from_bounding_boxes_predictions(
