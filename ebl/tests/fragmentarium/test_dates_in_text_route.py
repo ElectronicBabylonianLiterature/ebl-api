@@ -42,7 +42,7 @@ def test_update_date(client, fragmentarium, user, currentDate, updatedDate):
     fragment_number = fragmentarium.create(fragment)
     update = {"datesInText": [DateSchema().dump(updatedDate)]}
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/dates_in_text",
+        f"/fragments/{fragment_number}/dates-in-text",
         body=json.dumps(update) if updatedDate else '{"datesInText": []}',
     )
     expected_json = create_response_dto(
@@ -64,7 +64,7 @@ def test_update_invalid_dates_in_text(client, fragmentarium, user, database):
     updates = {"datesInText": ["nonsense date"]}
 
     post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/dates_in_text", body=json.dumps(updates)
+        f"/fragments/{fragment_number}/dates-in-text", body=json.dumps(updates)
     )
 
     expected_json = {

@@ -470,7 +470,7 @@ part-joiner = [ inword-newline ], [ close_presence ], [ joiner ],
               (* The joiner can be omitted next to determinative,
                  phonetic-gloss, or linguistic gloss. *)
 
-joiner = { word-separator } ( '-' | '+' | '.' | ':' ) { word-separator };
+joiner = { word-separator } ( '-' | '+' | '.' | ':' | ',' ) { word-separator };
 inword-newline = ';';
 
 value = unknown
@@ -663,6 +663,7 @@ provenance = 'Assa'
            | 'Ama'
            | 'Emr'
            | 'Hat'
+           | 'Ham'
            | 'Mar'
            | 'Meg'
            | 'Sus'

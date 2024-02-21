@@ -14,7 +14,7 @@ from ebl.fragmentarium.domain.findspot import (
     ExcavationSite,
 )
 from ebl.schemas import NameEnumField
-from marshmallow import Schema, fields, post_load, EXCLUDE
+from marshmallow import Schema, fields, post_load
 
 
 class ExcavationNumberSchema(AbstractMuseumNumberSchema):
@@ -64,15 +64,12 @@ class FindspotSchema(Schema):
 
 
 class ArchaeologySchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
     site = site_field
     regular_excavation = fields.Boolean(
-        load_default=True, data_key="isRegularExcavation"
+        load_default=False, data_key="isRegularExcavation"
     )
     excavation_date = fields.Nested(
         DateRangeSchema, allow_none=True, data_key="date", load_default=None
