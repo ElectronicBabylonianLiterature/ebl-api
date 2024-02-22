@@ -67,7 +67,7 @@ def expected_dto(lemmatized_fragment, has_photo):
                 DateSchema().dump(date) for date in lemmatized_fragment.dates_in_text
             ],
             "notes": NotesSchema().dump(lemmatized_fragment.notes),
-            "museum": lemmatized_fragment.museum,
+            "museum": lemmatized_fragment.museum.name,
             "signs": lemmatized_fragment.signs,
             "record": [
                 {"user": entry.user, "type": entry.type.value, "date": entry.date}

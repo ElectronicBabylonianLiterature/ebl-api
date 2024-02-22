@@ -3,7 +3,7 @@ from typing import Optional, Sequence, Tuple
 
 import attr
 import pydash
-
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.period import Period, PeriodModifier
@@ -121,7 +121,7 @@ class Fragment:
     description: str = ""
     collection: str = ""
     legacy_script: str = ""
-    museum: str = ""
+    museum: Museum = Museum.UNKNOWN
     width: Measure = Measure()
     length: Measure = Measure()
     thickness: Measure = Measure()
