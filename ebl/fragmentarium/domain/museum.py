@@ -233,4 +233,5 @@ class Museum(Enum):
         "USA",
         "https://peabody.yale.edu/explore/collections/yale-babylonian-collection",
     )
+    HYPERURANION = ("", "", "", "")
     UNKNOWN = ("", "", "", "")
