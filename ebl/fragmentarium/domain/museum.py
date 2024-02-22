@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Museum(Enum):
-    def __init__(self, museum_name, city, country, url):
+    def __init__(self, museum_name, city="", country="", url=""):
         self.museum_name = museum_name
         self.city = city
         self.country = country
@@ -129,25 +129,21 @@ class Museum(Enum):
         "Private collection in Chicago",
         "Chicago",
         "USA",
-        "",
     )
     PRIVATE_COLLECTION_OF_J_CARRE = (
         "Private collection of J. Carré",
         "Brussels",
         "BEL",
-        "",
     )
     PRIVATE_COLLECTION_OF_M_FOEKEN = (
         "Private collection of M. Foeken",
         "Leiden",
         "NLD",
-        "",
     )
     PRIVATE_COLLECTION_OF_W_LAMPLOUGH = (
         "Private collection of W. Lamplough",
         "",
         "GBR",
-        "",
     )
     REDPATH_MUSEUM = (
         "Redpath Museum Ethnological Collections",
@@ -233,5 +229,5 @@ class Museum(Enum):
         "USA",
         "https://peabody.yale.edu/explore/collections/yale-babylonian-collection",
     )
-    HYPERURANION = ("", "", "", "")
-    UNKNOWN = ("", "", "", "")
+    UNKNOWN = ("UNKNOWN",)
+    HYPERURANION = ("HYPERURANION",)
