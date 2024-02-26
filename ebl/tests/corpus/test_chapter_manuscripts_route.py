@@ -6,7 +6,7 @@ import pytest
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.domain.period import Period, PeriodModifier
-from ebl.corpus.domain.manuscript import ManuscriptType
+from ebl.corpus.domain.manuscript_type import ManuscriptType
 from ebl.corpus.domain.provenance import Provenance
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory

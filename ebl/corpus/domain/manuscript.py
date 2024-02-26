@@ -4,23 +4,12 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
-from ebl.common.domain.named_enum import NamedEnum
+from ebl.corpus.domain.manuscript_type import ManuscriptType
 from ebl.corpus.domain.provenance import Provenance
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
-
-
-class ManuscriptType(NamedEnum):
-    LIBRARY = ("Library", "")
-    SCHOOL = ("School", "Sch")
-    VARIA = ("Varia", "Var")
-    COMMENTARY = ("Commentary", "Com")
-    QUOTATION = ("Quotation", "Quo")
-    EXCERPT = ("Excerpt", "Ex")
-    PARALLEL = ("Parallel", "Par")
-    NONE = ("None", "")
 
 
 @attr.s(auto_attribs=True, frozen=True)
