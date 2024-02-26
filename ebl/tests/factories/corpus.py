@@ -12,7 +12,7 @@ from ebl.corpus.domain.manuscript import (
     OldSiglum,
 )
 from ebl.corpus.domain.manuscript_type import ManuscriptType
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.joins import Joins

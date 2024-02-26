@@ -11,7 +11,7 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.corpus.domain.manuscript_type import ManuscriptType
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.provenance import Provenance
 from ebl.transliteration.domain.line_transformer import LineTransformer
 
 

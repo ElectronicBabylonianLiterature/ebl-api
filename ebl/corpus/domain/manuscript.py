@@ -5,7 +5,7 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.corpus.domain.manuscript_type import ManuscriptType
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text

@@ -1,9 +1,14 @@
 from ebl.fragmentarium.domain.archaeology import Archaeology, ExcavationNumber
 from ebl.fragmentarium.domain.date_range import DateRange, PartialDate
-from ebl.fragmentarium.domain.findspot import BuildingType, ExcavationPlan, Findspot
+from ebl.fragmentarium.domain.findspot import (
+    BuildingType,
+    ExcavationPlan,
+    ExcavationSite,
+    Findspot,
+)
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
-from ebl.corpus.domain.provenance import Provenance as ExcavationSite
+
 import factory.fuzzy
 
 FINDSPOT_COUNT = 3

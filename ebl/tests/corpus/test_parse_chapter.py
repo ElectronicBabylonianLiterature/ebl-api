@@ -11,7 +11,7 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.corpus.domain.manuscript_type import ManuscriptType
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.parser import parse_chapter, parse_paratext
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
