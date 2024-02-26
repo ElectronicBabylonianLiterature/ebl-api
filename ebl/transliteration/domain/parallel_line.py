@@ -14,7 +14,7 @@ from ebl.transliteration.domain.labels import (
 )
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 
 

@@ -2,7 +2,7 @@ import attr
 from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.line import Line
 from ebl.corpus.web.display_schemas import LineDetailsDisplay
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 
 from ebl.transliteration.domain.text_id import TextId
 

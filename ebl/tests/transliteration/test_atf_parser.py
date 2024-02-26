@@ -15,7 +15,7 @@ from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 

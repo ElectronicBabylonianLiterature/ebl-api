@@ -3,7 +3,7 @@ from typing import Sequence
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.text_id import TextId
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 import ebl.corpus.domain.chapter_validators as validators
 
 

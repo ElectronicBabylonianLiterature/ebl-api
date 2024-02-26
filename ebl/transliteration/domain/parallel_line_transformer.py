@@ -1,7 +1,7 @@
 from lark.visitors import v_args
 import roman
 
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.genre import Genre

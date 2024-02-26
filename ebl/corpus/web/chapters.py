@@ -27,7 +27,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 
 
 class ChaptersResource:

@@ -6,7 +6,7 @@ from marshmallow import fields
 
 from ebl.common.domain.scopes import Scope
 from ebl.common.domain.project import ResearchProject
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 
 
 class EnumField(fields.Field, ABC):

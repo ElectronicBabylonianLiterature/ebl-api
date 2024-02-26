@@ -1,7 +1,7 @@
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.text import TextId
 from ebl.errors import NotFoundError
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.genre import Genre
 
 

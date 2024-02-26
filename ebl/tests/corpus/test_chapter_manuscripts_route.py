@@ -11,7 +11,7 @@ from ebl.common.domain.provenance import Provenance
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.tests.corpus.support import (
     allow_references,
     allow_signs,

@@ -1,6 +1,6 @@
 import pytest
 import re
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 
 
 @pytest.mark.parametrize("stage", Stage)

@@ -18,7 +18,7 @@ from ebl.corpus.domain.manuscript import (
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
