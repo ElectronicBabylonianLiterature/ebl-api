@@ -1,4 +1,4 @@
-from ebl.corpus.domain.manuscript_type import ManuscriptType
+from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
 from marshmallow import (
     Schema,

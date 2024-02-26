@@ -4,7 +4,7 @@ import pytest
 from ebl.common.domain.period import Period
 
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.corpus.domain.manuscript_type import ManuscriptType
+from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
 from ebl.tests.factories.corpus import ManuscriptLineFactory
 from ebl.transliteration.domain.line import EmptyLine

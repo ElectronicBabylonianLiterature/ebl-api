@@ -15,7 +15,7 @@ from ebl.corpus.domain.manuscript import (
     Manuscript,
     Siglum,
 )
-from ebl.corpus.domain.manuscript_type import ManuscriptType
+from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.transliteration.domain.stage import Stage

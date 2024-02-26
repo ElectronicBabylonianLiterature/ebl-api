@@ -10,7 +10,7 @@ from ebl.corpus.domain.manuscript import (
     Manuscript,
     Siglum,
 )
-from ebl.corpus.domain.manuscript_type import ManuscriptType
+from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.parser import parse_chapter, parse_paratext
 from ebl.errors import DataError
