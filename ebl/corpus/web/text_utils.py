@@ -16,7 +16,9 @@ def create_chapter_id(
     genre: str, category: str, index: str, stage: str, name: str
 ) -> ChapterId:
     try:
-        return ChapterId(create_text_id(genre, category, index), Stage(stage), name)
+        return ChapterId(
+            create_text_id(genre, category, index), Stage.from_name(stage), name
+        )
     except (ValueError, NotFoundError) as error:
         raise NotFoundError(
             f"Chapter {genre} {category}.{index} {stage} {name} not found."

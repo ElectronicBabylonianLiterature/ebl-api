@@ -330,7 +330,7 @@ def test_duplicate_line_numbers_invalid():
 
 def test_stage():
     periods = [period.long_name for period in Period if period is not Period.NONE]
-    stages = [stage.value for stage in Stage]
+    stages = [stage.long_name for stage in Stage]
     assert stages == [*periods, "Standard Babylonian"]
 
 

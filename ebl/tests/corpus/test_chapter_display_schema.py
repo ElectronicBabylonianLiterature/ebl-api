@@ -55,7 +55,7 @@ def to_dict(
 ) -> dict:
     chapter_display = {
         "id": {
-            "stage": chapter.id_.stage.value,
+            "stage": chapter.id_.stage.long_name,
             "name": chapter.id_.name,
             "textId": {
                 "genre": chapter.id_.text_id.genre.value,

@@ -58,7 +58,7 @@ class MongoParallelRepository(ParallelRepository):
                     "textId.genre": text_id.genre.value,
                     "textId.category": text_id.category,
                     "textId.index": text_id.index,
-                    "stage": chapter_name.stage.value,
+                    "stage": chapter_name.stage.long_name,
                     "name": chapter_name.name,
                 }
             )

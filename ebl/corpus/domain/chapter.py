@@ -58,7 +58,7 @@ class ChapterId:
             self.text_id.genre.value,
             self.text_id.category,
             self.text_id.index,
-            self.stage.value,
+            self.stage.long_name,
             self.name,
         )
 

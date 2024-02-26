@@ -164,7 +164,7 @@ def test_creating_chapter(database, text_repository) -> None:
         {
             "textId.category": CHAPTER.text_id.category,
             "textId.index": CHAPTER.text_id.index,
-            "stage": CHAPTER.stage.value,
+            "stage": CHAPTER.stage.long_name,
             "name": CHAPTER.name,
         },
         projection={"_id": False},

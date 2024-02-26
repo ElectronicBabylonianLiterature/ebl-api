@@ -190,6 +190,6 @@ class ChaptersAllResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         result = self._corpus.list_all_chapters()
         resp.media = [
-            {**chapter, **{"stage": Stage(chapter["stage"]).abbreviation}}
+            {**chapter, **{"stage": Stage.from_name(chapter["stage"]).abbreviation}}
             for chapter in result
         ]
