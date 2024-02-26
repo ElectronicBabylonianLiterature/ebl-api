@@ -29,12 +29,11 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.corpus.domain.record import Record
-from ebl.transliteration.domain.stage import Stage
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.joins import Joins
-from ebl.schemas import ResearchProjectField, ValueEnumField
+from ebl.schemas import ResearchProjectField, StageField, ValueEnumField
 from ebl.transliteration.application.label_schemas import labels
 from ebl.transliteration.application.line_number_schemas import (
     OneOfLineNumberSchema,
@@ -233,7 +232,7 @@ class DictionaryLineSchema(Schema):
     chapter_name = fields.String(
         required=True, validate=validate.Length(min=1), data_key="chapterName"
     )
-    stage = ValueEnumField(Stage, required=True)
+    stage = StageField(required=True)
     line = fields.Nested(LineSchema, required=True)
     manuscripts = fields.Nested(ManuscriptSchema, required=True, many=True)
 
@@ -262,7 +261,7 @@ class DictionaryLinePaginationSchema(Schema):
 class ChapterSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
     classification = ValueEnumField(Classification, required=True)
-    stage = ValueEnumField(Stage, required=True)
+    stage = StageField(required=True)
     version = fields.String(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
     text_name = fields.String(data_key="textName", load_only=True, load_default="")
@@ -290,7 +289,7 @@ class ChapterSchema(Schema):
         return Chapter(
             data["text_id"],
             Classification(data["classification"]),
-            Stage(data["stage"]),
+            data["stage"],
             data["version"],
             data["name"],
             data["order"],
@@ -317,7 +316,7 @@ class UncertainFragmentSchema(Schema):
 
 
 class ChapterListingSchema(Schema):
-    stage = ValueEnumField(Stage, required=True)
+    stage = StageField(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
     translation = fields.Nested(TranslationLineSchema, many=True, load_default=tuple())
     uncertain_fragments = fields.Nested(
@@ -330,7 +329,7 @@ class ChapterListingSchema(Schema):
     @post_load
     def make_chapter_listing(self, data: dict, **kwargs) -> ChapterListing:
         return ChapterListing(
-            Stage(data["stage"]),
+            data["stage"],
             data["name"],
             tuple(data["translation"]),
             tuple(data["uncertain_fragments"]),

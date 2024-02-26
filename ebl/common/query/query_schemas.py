@@ -8,10 +8,9 @@ from ebl.common.query.query_result import (
     AfORegisterToFragmentQueryItem,
 )
 from ebl.corpus.application.id_schemas import TextIdSchema
-from ebl.schemas import ValueEnumField
+from ebl.schemas import StageField
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.domain.stage import Stage
 
 
 class QueryItemSchema(Schema):
@@ -31,7 +30,7 @@ class QueryItemSchema(Schema):
 
 class CorpusQueryItemSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
-    stage = ValueEnumField(Stage, required=True)
+    stage = StageField(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
     lines = fields.List(fields.Integer(), required=True)
     variants = fields.List(fields.Integer(), required=True)
