@@ -6,6 +6,7 @@ from marshmallow import fields
 
 from ebl.common.domain.scopes import Scope
 from ebl.common.domain.project import ResearchProject
+from ebl.transliteration.domain.stage import Stage
 
 
 class EnumField(fields.Field, ABC):
@@ -53,6 +54,17 @@ class NameEnumField(EnumField):
 
     def _deserialize_enum(self, value: str) -> Enum:
         return self._enum_class[value]
+
+
+class StageField(EnumField):
+    def __init__(self, **kwargs):
+        super().__init__(Stage, **kwargs)
+
+    def _serialize_enum(self, value: Stage) -> str:
+        return value.long_name
+
+    def _deserialize_enum(self, value: str) -> Enum:
+        return Stage.from_name(value)
 
 
 class ScopeField(EnumField):
