@@ -94,6 +94,12 @@ class Museum(Enum):
         "ESP",
         "https://www.museudemontserrat.com/en/index.html",
     )
+    MUSEUM_OF_ANATOLIAN_CIVILIZATIONS = (
+        "Anadolu Medeniyetleri Müzesi",
+        "Ankara",
+        "TUR",
+        "https://muze.gov.tr/muze-detay?SectionId=AMM01&DistId=AMM",
+    )
     NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DNK", "https://en.natmus.dk/")
     OAKLAND_MUSEUM = (
         "Oakland Museum of California",
@@ -162,6 +168,12 @@ class Museum(Enum):
         "Manchester",
         "GRB",
         "https://www.library.manchester.ac.uk/rylands/",
+    )
+    SANLIURFA_MUSEUM = (
+        "Şanlıurfa Arkeoloji Müzesi",
+        "Şanlıurfa",
+        "TUR",
+        "https://muze.gov.tr/muze-detay?SectionId=SUM02&DistId=SUM",
     )
     THE_BRITISH_MUSEUM = (
         "The British Museum",
