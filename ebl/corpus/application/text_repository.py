@@ -89,3 +89,7 @@ class TextRepository(ABC):
     @abstractmethod
     def get_sign_data(self, id_: ChapterId) -> dict:
         ...
+
+    @abstractmethod
+    def get_all_sign_data(self) -> Sequence[dict]:
+        ...
