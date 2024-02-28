@@ -214,3 +214,14 @@ class ChapterSignsResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         resp.media = self._corpus.get_sign_data(chapter_id)
+
+
+class AllChapterSignsResource:
+    def __init__(
+        self,
+        corpus: Corpus,
+    ):
+        self._corpus = corpus
+
+    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        resp.media = self._corpus.get_all_sign_data()
