@@ -83,7 +83,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     api.add_route(f"{chapter_url}/unplaced_lines", unplaced_lines)
     api.add_route(f"{chapter_url}/extant_lines", extant_lines)
     api.add_route(f"{chapter_url}/signs", signs)
-    api.add_route(f"/all-signs", all_signs)
+    api.add_route("/all-signs", all_signs)
     api.add_route("/lemmasearch", chapters_by_lemma)
     api.add_route("/corpus/query", corpus_query)
     api.add_route("/corpus/texts/all", all_texts)
