@@ -139,3 +139,14 @@ def make_latest_additions_resource(repository: FragmentRepository, cache: Cache)
             )
 
     return LatestAdditionsResource(repository)
+
+
+class AllFragmentSignsResource:
+    def __init__(
+        self,
+        repository: FragmentRepository,
+    ):
+        self._repository = repository
+
+    def on_get(self, req: Request, resp: Response):
+        resp.media = self._repository.fetch_fragment_signs()
