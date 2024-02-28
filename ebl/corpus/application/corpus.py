@@ -137,6 +137,9 @@ class Corpus:
     ) -> Chapter:
         return self._update_chapter(id_, AlignmentUpdater(alignment), user)
 
+    def get_sign_data(self, id_: ChapterId) -> dict:
+        return self._repository.get_sign_data(id_)
+
     def update_manuscript_lemmatization(
         self, id_: ChapterId, lemmatization: ChapterLemmatization, user: User
     ) -> Chapter:

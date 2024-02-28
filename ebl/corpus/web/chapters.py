@@ -193,3 +193,24 @@ class ChaptersAllResource:
             {**chapter, **{"stage": Stage.from_name(chapter["stage"]).abbreviation}}
             for chapter in result
         ]
+
+
+class ChapterSignsResource:
+    def __init__(
+        self,
+        corpus: Corpus,
+    ):
+        self._corpus = corpus
+
+    def on_get(
+        self,
+        req: falcon.Request,
+        resp: falcon.Response,
+        genre: str,
+        category: str,
+        index: str,
+        stage: str,
+        name: str,
+    ) -> None:
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        resp.media = self._corpus.get_sign_data(chapter_id)
