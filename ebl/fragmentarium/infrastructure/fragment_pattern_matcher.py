@@ -7,7 +7,7 @@ from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.provenance import Provenance
 
 from pydash.arrays import compact
 

@@ -1,14 +1,16 @@
 import falcon
 
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.provenance import Provenance
 
 
 def test_get_genre(client):
     get_result = client.simulate_get("/provenances")
     provenances_data = tuple(
-        (prov.long_name, prov.parent)
-        if prov.parent is None
-        else (prov.long_name, f"({prov.parent})")
+        (
+            (prov.long_name, prov.parent)
+            if prov.parent is None
+            else (prov.long_name, f"({prov.parent})")
+        )
         for prov in Provenance
         if prov.long_name != "Standard Text"
     )

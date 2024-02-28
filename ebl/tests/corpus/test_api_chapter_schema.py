@@ -62,7 +62,7 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
             "index": chapter.text_id.index,
         },
         "classification": chapter.classification.value,
-        "stage": chapter.stage.value,
+        "stage": chapter.stage.long_name,
         "version": chapter.version,
         "name": chapter.name,
         "order": chapter.order,
@@ -101,17 +101,23 @@ def create(include_documents: bool) -> Tuple[Chapter, dict]:
                                 "labels": [
                                     label.to_value() for label in manuscript_line.labels
                                 ],
-                                "number": ""
-                                if manuscript_line.is_empty
-                                else manuscript_line.line.line_number.atf[:-1],
+                                "number": (
+                                    ""
+                                    if manuscript_line.is_empty
+                                    else manuscript_line.line.line_number.atf[:-1]
+                                ),
                                 "atf": "\n".join(
                                     [
-                                        ""
-                                        if manuscript_line.is_empty
-                                        else manuscript_line.line.atf[
-                                            len(manuscript_line.line.line_number.atf)
-                                            + 1 :
-                                        ],
+                                        (
+                                            ""
+                                            if manuscript_line.is_empty
+                                            else manuscript_line.line.atf[
+                                                len(
+                                                    manuscript_line.line.line_number.atf
+                                                )
+                                                + 1 :
+                                            ]
+                                        ),
                                         *[
                                             line.atf
                                             for line in manuscript_line.paratext
@@ -150,9 +156,9 @@ def test_serialize_manuscript() -> None:
         "id": manuscript.id,
         "siglumDisambiguator": manuscript.siglum_disambiguator,
         "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
-        "museumNumber": str(manuscript.museum_number)
-        if manuscript.museum_number
-        else "",
+        "museumNumber": (
+            str(manuscript.museum_number) if manuscript.museum_number else ""
+        ),
         "accession": manuscript.accession,
         "periodModifier": manuscript.period_modifier.value,
         "period": manuscript.period.long_name,
@@ -176,9 +182,9 @@ def test_deserialize_manuscript() -> None:
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
                 "oldSigla": ApiOldSiglumSchema().dump(manuscript.old_sigla, many=True),
-                "museumNumber": str(manuscript.museum_number)
-                if manuscript.museum_number
-                else "",
+                "museumNumber": (
+                    str(manuscript.museum_number) if manuscript.museum_number else ""
+                ),
                 "accession": manuscript.accession,
                 "periodModifier": manuscript.period_modifier.value,
                 "period": manuscript.period.long_name,

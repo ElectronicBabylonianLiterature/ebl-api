@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.tests.factories.corpus import ChapterListingFactory, TextFactory
 
 

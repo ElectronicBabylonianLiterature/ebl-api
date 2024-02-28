@@ -8,7 +8,7 @@ from ebl.tests.factories.corpus import ChapterFactory, TextIdFactory
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.parallel_line import ChapterName
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,

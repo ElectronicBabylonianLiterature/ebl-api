@@ -13,12 +13,12 @@ from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
     Manuscript,
-    ManuscriptType,
     Siglum,
 )
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.manuscript_type import ManuscriptType
+from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -330,7 +330,7 @@ def test_duplicate_line_numbers_invalid():
 
 def test_stage():
     periods = [period.long_name for period in Period if period is not Period.NONE]
-    stages = [stage.value for stage in Stage]
+    stages = [stage.long_name for stage in Stage]
     assert stages == [*periods, "Standard Babylonian"]
 
 

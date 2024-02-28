@@ -6,7 +6,7 @@ import falcon
 import pytest
 
 from ebl.corpus.domain.parser import parse_chapter
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.corpus.web.chapter_schemas import ApiLineSchema
 from ebl.tests.corpus.support import (
     allow_references,

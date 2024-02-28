@@ -27,5 +27,5 @@ def create_chapter_url(chapter: Chapter, suffix: str = "") -> str:
     return (
         f"/texts/{chapter.text_id.genre.value}"
         f"/{chapter.text_id.category}/{chapter.text_id.index}"
-        f"/chapters/{chapter.stage.value}/{chapter.name}{suffix}"
+        f"/chapters/{chapter.stage.long_name}/{chapter.name}{suffix}"
     )

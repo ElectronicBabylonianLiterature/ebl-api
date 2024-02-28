@@ -137,7 +137,7 @@ def test_list_all_chapters(text_repository) -> None:
     assert text_repository.list_all_chapters() == [
         {
             "chapter": CHAPTER.name,
-            "stage": CHAPTER.stage.value,
+            "stage": CHAPTER.stage.long_name,
             "index": CHAPTER.text_id.index,
             "category": CHAPTER.text_id.category,
             "genre": CHAPTER.text_id.genre.value,

@@ -27,7 +27,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 
 
 class ChaptersResource:
@@ -190,6 +190,6 @@ class ChaptersAllResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         result = self._corpus.list_all_chapters()
         resp.media = [
-            {**chapter, **{"stage": Stage(chapter["stage"]).abbreviation}}
+            {**chapter, **{"stage": Stage.from_name(chapter["stage"]).abbreviation}}
             for chapter in result
         ]

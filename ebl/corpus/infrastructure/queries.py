@@ -13,7 +13,7 @@ def chapter_id_query(id_: ChapterId) -> dict:
         "textId.genre": id_.text_id.genre.value,
         "textId.category": id_.text_id.category,
         "textId.index": id_.text_id.index,
-        "stage": id_.stage.value,
+        "stage": id_.stage.long_name,
         "name": id_.name,
     }
 
