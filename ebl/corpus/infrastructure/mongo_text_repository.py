@@ -449,3 +449,16 @@ class MongoTextRepository(TextRepository):
             ]
         )
         return ManuscriptAttestationSchema().load(cursor, many=True)
+
+    def get_sign_data(self, id_: ChapterId) -> dict:
+        return self._chapters.find_one(
+            chapter_id_query(id_),
+            projection={
+                "_id": False,
+                "signs": True,
+                "manuscripts": True,
+                "textId": True,
+                "stage": True,
+                "name": True,
+            },
+        )
