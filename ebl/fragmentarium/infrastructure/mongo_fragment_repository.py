@@ -478,3 +478,10 @@ class MongoFragmentRepository(FragmentRepository):
             ]
         )
         return list(fragments)
+
+    def fetch_fragment_signs(self) -> Sequence[dict]:
+        return list(
+            self._fragments.find_many(
+                {"signs": {"$regex": "."}}, projection={"signs": True}
+            )
+        )
