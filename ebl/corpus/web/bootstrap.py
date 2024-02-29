@@ -10,7 +10,7 @@ from ebl.corpus.web.chapters import (
     CorpusQueryResource,
     ChaptersAllResource,
     ChapterSignsResource,
-    AllChapterSignsResource,
+    make_all_chapter_signs_resource,
 )
 from ebl.corpus.web.colophons import ColophonsResource
 from ebl.corpus.web.extant_lines import ExtantLinesResource
@@ -62,7 +62,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     all_texts = TextsAllResource(corpus)
     all_chapters = ChaptersAllResource(corpus)
     signs = ChapterSignsResource(corpus)
-    all_signs = AllChapterSignsResource(corpus)
+    all_signs = make_all_chapter_signs_resource(corpus, context.cache)
 
     text_url = "/texts/{genre}/{category}/{index}"
     chapter_url = text_url + "/chapters/{stage}/{name}"

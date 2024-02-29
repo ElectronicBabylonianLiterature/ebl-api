@@ -1,8 +1,10 @@
 from collections import defaultdict
 from typing import Sequence, Optional
 import falcon
+from falcon_caching import Cache
 from pydash.arrays import flatten_deep
 from pydash import flow
+from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.common.query.parameter_parser import (
@@ -216,12 +218,16 @@ class ChapterSignsResource:
         resp.media = self._corpus.get_sign_data(chapter_id)
 
 
-class AllChapterSignsResource:
-    def __init__(
-        self,
-        corpus: Corpus,
-    ):
-        self._corpus = corpus
+def make_all_chapter_signs_resource(corpus: Corpus, cache: Cache):
+    class AllChapterSignsResource:
+        def __init__(
+            self,
+            corpus: Corpus,
+        ):
+            self._corpus = corpus
 
-    def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-        resp.media = self._corpus.get_all_sign_data()
+        @cache.cached(timeout=DEFAULT_TIMEOUT)
+        def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+            resp.media = self._corpus.get_all_sign_data()
+
+    return AllChapterSignsResource(corpus)
