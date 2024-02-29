@@ -25,7 +25,7 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsListResource,
     FragmentsRetrieveAllResource,
     make_latest_additions_resource,
-    AllFragmentSignsResource,
+    make_all_fragment_signs_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.provenances import ProvenancesResource
@@ -122,7 +122,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     findspots = FindspotResource(context.findspot_repository)
 
     all_fragments = FragmentsListResource(context.fragment_repository)
-    all_signs = AllFragmentSignsResource(context.fragment_repository)
+    all_signs = make_all_fragment_signs_resource(
+        context.fragment_repository, context.cache
+    )
 
     routes = [
         ("/fragments", fragment_search),
