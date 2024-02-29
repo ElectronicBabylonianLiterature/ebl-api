@@ -1,3 +1,4 @@
+import json
 from collections import defaultdict
 from typing import Sequence, Optional
 import falcon
@@ -228,6 +229,6 @@ def make_all_chapter_signs_resource(corpus: Corpus, cache: Cache):
 
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
-            resp.media = self._corpus.get_all_sign_data()
+            resp.text = json.dumps(self._corpus.get_all_sign_data())
 
     return AllChapterSignsResource(corpus)

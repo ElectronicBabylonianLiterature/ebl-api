@@ -151,6 +151,6 @@ def make_all_fragment_signs_resource(repository: FragmentRepository, cache: Cach
 
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: Request, resp: Response):
-            resp.media = self._repository.fetch_fragment_signs()
+            resp.text = json.dumps(self._repository.fetch_fragment_signs())
 
     return AllFragmentSignsResource(repository)
