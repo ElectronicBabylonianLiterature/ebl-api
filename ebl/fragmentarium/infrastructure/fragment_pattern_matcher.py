@@ -77,16 +77,15 @@ class PatternMatcher:
 
     def _filter_by_site(self) -> Dict:
         if provenance := self._query.get("site"):
-            search_value = next(
-                (p.long_name for p in Provenance if p.name == provenance.upper()),
-                provenance,
-            )
-            return {
-                "archaeology.site": {
-                    "$regex": f"^{search_value}$",
-                    "$options": "i",
-                }
-            }
+            children = [p.long_name for p in Provenance if p.parent == provenance]
+            if children:
+                return {"archaeology.site": {"$in": [provenance] + children}}
+            else:
+                search_value = next(
+                    (p.long_name for p in Provenance if p.name == provenance.upper()),
+                    provenance,
+                )
+            return {"archaeology.site": search_value}
         return {}
 
     def _filter_by_reference(self) -> Dict:
