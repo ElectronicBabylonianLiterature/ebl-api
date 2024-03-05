@@ -101,6 +101,7 @@ class Joiner(Enum):
     PLUS = "+"
     COLON = ":"
     SEMICOLON = ";"
+    COMMA = ","
 
 
 @unique

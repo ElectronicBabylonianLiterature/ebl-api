@@ -139,6 +139,10 @@ CHAPTER_WITH_MANUSCRIPT_LEMMA: Chapter = ChapterFactory.build(
     ),
 )
 
+CHAPTER_SIGN_SCHEMA = ChapterSchema(
+    only=["text_id", "stage", "name", "manuscripts", "signs"]
+)
+
 
 def when_text_in_collection(database, text=TEXT) -> None:
     database[TEXTS_COLLECTION].insert_one(TextSchema(exclude=["chapters"]).dump(text))
@@ -164,7 +168,7 @@ def test_creating_chapter(database, text_repository) -> None:
         {
             "textId.category": CHAPTER.text_id.category,
             "textId.index": CHAPTER.text_id.index,
-            "stage": CHAPTER.stage.value,
+            "stage": CHAPTER.stage.long_name,
             "name": CHAPTER.name,
         },
         projection={"_id": False},
@@ -466,3 +470,32 @@ def test_query_corpus_by_manuscript(database, text_repository) -> None:
     assert text_repository.query_corpus_by_manuscript(
         [CHAPTER.manuscripts[0].museum_number]
     ) == [expected_manuscript_attestation]
+
+
+def test_get_sign_data(database, text_repository):
+    when_chapter_in_collection(database)
+    assert text_repository.get_sign_data(CHAPTER.id_) == CHAPTER_SIGN_SCHEMA.dump(
+        CHAPTER
+    )
+
+
+def test_get_all_sign_data(text_repository):
+    signs = [
+        ["", None],
+        ["KU", "TA"],
+        ["MI", "NA"],
+    ]
+
+    def sort_by_signs(chapters):
+        return sorted(chapters, key=lambda chapter: chapter["signs"])
+
+    chapters = [attr.evolve(CHAPTER, signs=signs_) for signs_ in signs]
+
+    for chapter in chapters:
+        text_repository.create_chapter(chapter)
+
+    assert sort_by_signs(text_repository.get_all_sign_data()) == sort_by_signs(
+        CHAPTER_SIGN_SCHEMA.dump(
+            [chapter for chapter in chapters if any(chapter.signs)], many=True
+        )
+    )

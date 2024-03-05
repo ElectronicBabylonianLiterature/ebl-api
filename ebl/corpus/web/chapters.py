@@ -1,8 +1,11 @@
+import json
 from collections import defaultdict
 from typing import Sequence, Optional
 import falcon
+from falcon_caching import Cache
 from pydash.arrays import flatten_deep
 from pydash import flow
+from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.common.query.parameter_parser import (
@@ -27,7 +30,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 
 
 class ChaptersResource:
@@ -190,6 +193,42 @@ class ChaptersAllResource:
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         result = self._corpus.list_all_chapters()
         resp.media = [
-            {**chapter, **{"stage": Stage(chapter["stage"]).abbreviation}}
+            {**chapter, **{"stage": Stage.from_name(chapter["stage"]).abbreviation}}
             for chapter in result
         ]
+
+
+class ChapterSignsResource:
+    def __init__(
+        self,
+        corpus: Corpus,
+    ):
+        self._corpus = corpus
+
+    def on_get(
+        self,
+        req: falcon.Request,
+        resp: falcon.Response,
+        genre: str,
+        category: str,
+        index: str,
+        stage: str,
+        name: str,
+    ) -> None:
+        chapter_id = create_chapter_id(genre, category, index, stage, name)
+        resp.media = self._corpus.get_sign_data(chapter_id)
+
+
+def make_all_chapter_signs_resource(corpus: Corpus, cache: Cache):
+    class AllChapterSignsResource:
+        def __init__(
+            self,
+            corpus: Corpus,
+        ):
+            self._corpus = corpus
+
+        @cache.cached(timeout=DEFAULT_TIMEOUT)
+        def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+            resp.text = json.dumps(self._corpus.get_all_sign_data())
+
+    return AllChapterSignsResource(corpus)

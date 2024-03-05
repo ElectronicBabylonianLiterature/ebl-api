@@ -1,9 +1,8 @@
 from marshmallow import Schema, fields, post_load, validate
 
 from ebl.corpus.domain.chapter import ChapterId
-from ebl.transliteration.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
-from ebl.schemas import ValueEnumField
+from ebl.schemas import StageField, ValueEnumField
 from ebl.transliteration.domain.genre import Genre
 
 
@@ -19,7 +18,7 @@ class TextIdSchema(Schema):
 
 class ChapterIdSchema(Schema):
     text_id = fields.Nested(TextIdSchema, required=True, data_key="textId")
-    stage = ValueEnumField(Stage, required=True)
+    stage = StageField(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
 
     @post_load

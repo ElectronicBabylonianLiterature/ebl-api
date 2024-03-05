@@ -58,6 +58,7 @@ class Provenance(ProvenanceEnum):
     SADUPPUM = ("Šaduppûm", "Šad", "Babylonia", "SDP")
     SAHRINU = ("Šaḫrīnu", "Šah", "Babylonia", None)
     SURUPPAK = ("Šuruppak", "Šur", "Babylonia", "SUR")
+    TELL_AL_SIB = ("Meturan (Tell al-Sib)", "MetS", "Babylonia", "LSB")
     TUTUB = ("Tutub", "Ttb", "Babylonia", "TTB")
     UMMA = ("Umma", "Umm", "Babylonia", "JOK")
     UR = ("Ur", "Ur", "Babylonia", "URI")

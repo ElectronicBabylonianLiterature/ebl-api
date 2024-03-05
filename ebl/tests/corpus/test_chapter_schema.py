@@ -105,7 +105,7 @@ def to_dict(chapter: Chapter, include_documents=False):
             "index": chapter.text_id.index,
         },
         "classification": chapter.classification.value,
-        "stage": chapter.stage.value,
+        "stage": chapter.stage.long_name,
         "version": chapter.version,
         "name": chapter.name,
         "order": chapter.order,

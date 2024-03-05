@@ -116,3 +116,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
         ...
+
+    @abstractmethod
+    def fetch_fragment_signs(self) -> Sequence[dict]:
+        ...

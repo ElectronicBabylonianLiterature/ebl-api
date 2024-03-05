@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from functools import partial
 from typing import Tuple, List
 import attr
 import pytest
@@ -1132,3 +1133,20 @@ def test_query_latest(fragment_repository):
     )
 
     assert fragment_repository.query_latest() == expected_result
+
+
+def test_fetch_fragment_signs(fragment_repository):
+    signs = ["foo", "bar", "", "\n\n"]
+    fragments = [attr.evolve(FragmentFactory.build(), signs=signs_) for signs_ in signs]
+    fragment_repository.create_many(fragments)
+    expected = [
+        {"_id": str(fragment.number), "signs": fragment.signs}
+        for fragment in fragments
+        if fragment.signs.strip()
+    ]
+
+    sort_by_id = partial(sorted, key=lambda f: f["_id"])
+
+    assert sort_by_id(fragment_repository.fetch_fragment_signs()) == sort_by_id(
+        expected
+    )

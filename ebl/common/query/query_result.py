@@ -2,7 +2,7 @@ from typing import Sequence
 import attr
 from enum import Enum
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 
 

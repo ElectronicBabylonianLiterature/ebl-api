@@ -1,10 +1,11 @@
 from typing import List
-from lark import Lark
+from lark import Lark, UnexpectedCharacters
 import re
 
 import pytest
 from hamcrest.library import starts_with
 from ebl.common.domain.period import Period
+from ebl.common.domain.provenance import Provenance
 
 from ebl.transliteration.domain.transliteration_error import DuplicateLabelError
 from ebl.tests.assertions import assert_exception_has_errors
@@ -15,7 +16,7 @@ from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
-from ebl.transliteration.domain.stage import ABBREVIATIONS as STAGE_ABBREVIATIONS
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
@@ -88,14 +89,17 @@ def test_duplicate_labels(atf):
         parse_atf_lark(atf)
 
 
-def test_stages_periods_equality():
-    atf_parser = Lark.open(
+@pytest.fixture
+def siglum_parser():
+    return Lark.open(
         PARSER_PATH,
         rel_to=__file__,
         maybe_placeholders=True,
         start="siglum",
     )
 
+
+def test_stages_periods_equality(siglum_parser):
     text_line_parser = Lark.open(
         LINE_PARSER_PATH,
         rel_to=__file__,
@@ -106,7 +110,7 @@ def test_stages_periods_equality():
     atf_parser_periods = set(
         re.findall(
             r"[A-Za-z0-9_]+",
-            atf_parser.get_terminal("PERIOD").pattern.value,
+            siglum_parser.get_terminal("PERIOD").pattern.value,
         )
     )
 
@@ -119,8 +123,21 @@ def test_stages_periods_equality():
 
     enum_periods = {period.abbreviation for period in Period if period != Period.NONE}
 
-    enum_stages = set(STAGE_ABBREVIATIONS.values())
+    enum_stages = {stage.abbreviation for stage in Stage}
 
     assert atf_parser_periods == enum_periods
     assert line_parser_stages - {"SB"} == enum_periods
     assert line_parser_stages == enum_stages
+
+
+@pytest.mark.parametrize("provenance", Provenance)
+def test_provenances_coverage(siglum_parser, provenance):
+    abbreviation = provenance.abbreviation
+    mock_siglum = f"{abbreviation}NA"
+    try:
+        siglum_parser.parse(mock_siglum)
+    except UnexpectedCharacters as e:
+        raise ValueError(
+            f"Cannot parse {provenance.long_name!r}: "
+            f"Is {abbreviation!r} in PROVENANCES in ebl_atf.lark?"
+        ) from e

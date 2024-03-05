@@ -25,8 +25,10 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsListResource,
     FragmentsRetrieveAllResource,
     make_latest_additions_resource,
+    make_all_fragment_signs_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
+from ebl.fragmentarium.web.provenances import ProvenancesResource
 from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
@@ -101,6 +103,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     genres = GenresResource()
+    provenances = ProvenancesResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
@@ -118,8 +121,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     chapters = ChaptersByManuscriptResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)
 
-    all_fragments = FragmentsListResource(
-        context.fragment_repository,
+    all_fragments = FragmentsListResource(context.fragment_repository)
+    all_signs = make_all_fragment_signs_resource(
+        context.fragment_repository, context.cache
     )
 
     routes = [
@@ -142,6 +146,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
         ("/genres", genres),
+        ("/provenances", provenances),
         ("/periods", periods),
         ("/statistics", statistics),
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),
@@ -150,6 +155,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/query-by-traditional-references", afo_register_fragments_query),
         ("/fragments/latest", latest_additions_query),
         ("/fragments/all", all_fragments),
+        ("/fragments/all-signs", all_signs),
         ("/findspots", findspots),
     ]
 

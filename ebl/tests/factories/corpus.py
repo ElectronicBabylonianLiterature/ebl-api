@@ -9,10 +9,10 @@ from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
     Manuscript,
-    ManuscriptType,
     OldSiglum,
 )
-from ebl.corpus.domain.provenance import Provenance
+from ebl.common.domain.manuscript_type import ManuscriptType
+from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.joins import Joins
@@ -40,7 +40,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 )
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.sign_tokens import Reading
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text import Text as Transliteration
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (

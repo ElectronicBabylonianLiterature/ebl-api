@@ -5,7 +5,7 @@ import random
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
-
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.corpus.domain.chapter import Stage
 from ebl.tests.factories.archaeology import ArchaeologyFactory
 from ebl.tests.factories.collections import TupleFactory
@@ -185,6 +185,7 @@ class ExternalNumbersFactory(factory.Factory):
     )
     metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
+    alalah_hpm_number = factory.Sequence(lambda n: f"alalah_hpm_number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"
     )
@@ -203,7 +204,7 @@ class FragmentFactory(factory.Factory):
 
     number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
     accession = factory.Sequence(lambda n: Accession("A", str(n)))
-    museum = factory.Faker("word")
+    museum = factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN])
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
     description = factory.Faker("text")

@@ -85,7 +85,7 @@ def query_item_of(
         "variants": variants or [],
         "matchCount": len(lines or []),
         "name": chapter.name,
-        "stage": chapter.stage.value,
+        "stage": chapter.stage.long_name,
         "textId": TextIdSchema().dump(chapter.text_id),
     }
 

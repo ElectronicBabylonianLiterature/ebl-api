@@ -7,7 +7,7 @@ from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import Manuscript
-from ebl.transliteration.domain.stage import Stage
+from ebl.common.domain.stage import Stage
 from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.atf import Surface

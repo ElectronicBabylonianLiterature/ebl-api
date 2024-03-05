@@ -72,7 +72,12 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                     }
                 },
                 {"$unwind": "$fragment"},
-                {"$addFields": {"script": "$fragment.script"}},
+                {
+                    "$addFields": {
+                        "script": "$fragment.script",
+                        "provenance": "$fragment.archaeology.site",
+                    }
+                },
                 {"$project": {"fragment": 0}},
             ]
         )

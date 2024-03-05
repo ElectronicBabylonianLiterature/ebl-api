@@ -1,0 +1,28 @@
+from ebl.common.domain.named_enum import NamedEnum
+
+
+class Stage(NamedEnum):
+    UNCERTAIN = ("Uncertain", "Unc")
+    URUK_IV = ("Uruk IV", "Uruk4")
+    URUK_III_JEMDET_NASR = ("Uruk III-Jemdet Nasr", "JN")
+    ED_I_II = ("ED I-II", "ED1_2")
+    FARA = ("Fara", "Fara")
+    PRESARGONIC = ("Presargonic", "PSarg")
+    SARGONIC = ("Sargonic", "Sarg")
+    UR_III = ("Ur III", "Ur3")
+    OLD_ASSYRIAN = ("Old Assyrian", "OA")
+    OLD_BABYLONIAN = ("Old Babylonian", "OB")
+    MIDDLE_BABYLONIAN = ("Middle Babylonian", "MB")
+    MIDDLE_ASSYRIAN = ("Middle Assyrian", "MA")
+    HITTITE = ("Hittite", "Hit")
+    NEO_ASSYRIAN = ("Neo-Assyrian", "NA")
+    NEO_BABYLONIAN = ("Neo-Babylonian", "NB")
+    LATE_BABYLONIAN = ("Late Babylonian", "LB")
+    PERSIAN = ("Persian", "Per")
+    HELLENISTIC = ("Hellenistic", "Hel")
+    PARTHIAN = ("Parthian", "Par")
+    PROTO_ELAMITE = ("Proto-Elamite", "PElam")
+    OLD_ELAMITE = ("Old Elamite", "OElam")
+    MIDDLE_ELAMITE = ("Middle Elamite", "MElam")
+    NEO_ELAMITE = ("Neo-Elamite", "NElam")
+    STANDARD_BABYLONIAN = ("Standard Babylonian", "SB")
