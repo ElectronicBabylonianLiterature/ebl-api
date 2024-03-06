@@ -86,6 +86,9 @@ class SignSchema(Schema):
     fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
+    reverse_order = fields.String(
+        data_key="reverseOrder", load_default="", allow_none=True
+    )
     unicode = fields.List(fields.Int(), load_default=tuple())
 
     @post_load
@@ -175,6 +178,7 @@ class MongoSignRepository(SignRepository):
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
                         "LaBaSi": {"$first": "$LaBaSi"},
+                        "reverseOrder": {"$first": "$reverseOrder"},
                         "logograms": {"$first": "$logograms"},
                         "fossey": {"$first": "$fossey"},
                         "values": {"$push": "$values"},

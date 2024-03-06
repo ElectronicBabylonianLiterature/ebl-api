@@ -80,6 +80,7 @@ sign_data = {
     "fossey": [],
     "mesZl": "",
     "LaBaSi": "",
+    "reverseOrder": "",
     "name": "P₂",
     "unicode": [74865],
     "values": [{"subIndex": 1, "value": ":"}],

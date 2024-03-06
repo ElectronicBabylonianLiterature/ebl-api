@@ -77,6 +77,7 @@ def test_sign_schema():
         "unicode": [],
         "mesZl": "",
         "LaBaSi": "",
+        "reverseOrder": "",
         "logograms": [],
         "fossey": [],
     }
@@ -101,6 +102,7 @@ def test_sign_dto_schema():
         "values": [{"value": "kur", "subIndex": 3}, {"value": "ruk"}],
         "mesZl": "",
         "LaBaSi": "",
+        "reverseOrder": "",
         "unicode": [],
         "logograms": [],
         "fossey": [],
