@@ -83,6 +83,7 @@ def test_sign():
         fossey=fossey,
         mes_zl="test_mesZl",
         labasi="test_LaBaSi",
+        reverse_order="test_reverseOrder",
     )
 
     assert sign.name == name
@@ -92,6 +93,7 @@ def test_sign():
     assert sign.fossey == fossey
     assert sign.mes_zl == "test_mesZl"
     assert sign.labasi == "test_LaBaSi"
+    assert sign.reverse_order == "test_reverseOrder"
 
 
 def test_standardization_abz():

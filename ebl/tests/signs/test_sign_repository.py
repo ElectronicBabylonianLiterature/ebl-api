@@ -111,6 +111,7 @@ def mongo_sign_si_2():
         "forms": [],
         "mesZl": """<div align="center">1	**AŠ**	𒀸</div>""",
         "LaBaSi": "12",
+        "reverseOrder": "10",
         "logograms": [
             {
                 "logogram": "AŠ-IKU",
