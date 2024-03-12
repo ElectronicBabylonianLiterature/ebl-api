@@ -14,6 +14,7 @@ from ebl.transliteration.domain.sign import (
     Value,
     Logogram,
     Fossey,
+    SignOrder,
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -78,6 +79,25 @@ class FosseySchema(Schema):
         return Fossey(**data)
 
 
+class SignOrderSchema(Schema):
+    direct_neo_assyrian = fields.List(
+        fields.Integer(), required=True, data_key="directNeoAssyrian"
+    )
+    direct_neo_babylonian = fields.List(
+        fields.Integer(), required=True, data_key="directNeoBabylonian"
+    )
+    reverse_neo_assyrian = fields.List(
+        fields.Integer(), required=True, data_key="reverseNeoAssyrian"
+    )
+    reverse_neo_babylonian = fields.List(
+        fields.Integer(), required=True, data_key="reverseNeoBabylonian"
+    )
+
+    @post_load
+    def make_sign_order(self, data, **kwargs):
+        return SignOrder(**data)
+
+
 class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
@@ -85,10 +105,8 @@ class SignSchema(Schema):
     logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
     fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
+    sign_order = fields.Nested(SignOrderSchema, allow_none=True, load_default=None)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
-    reverse_order = fields.String(
-        data_key="reverseOrder", load_default="", allow_none=True
-    )
     unicode = fields.List(fields.Int(), load_default=tuple())
 
     @post_load
@@ -178,9 +196,9 @@ class MongoSignRepository(SignRepository):
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
                         "LaBaSi": {"$first": "$LaBaSi"},
-                        "reverseOrder": {"$first": "$reverseOrder"},
                         "logograms": {"$first": "$logograms"},
                         "fossey": {"$first": "$fossey"},
+                        "signOrder": {"$first": "$signOrder"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }

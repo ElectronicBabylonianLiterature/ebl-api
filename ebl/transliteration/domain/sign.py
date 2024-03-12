@@ -47,13 +47,20 @@ class Fossey:
 
 
 @attr.s(frozen=True, auto_attribs=True)
+class SignOrder:
+    direct_neo_assyrian: Sequence[int] = tuple()
+    direct_neo_babylonian: Sequence[int] = tuple()
+    reverse_neo_assyrian: Sequence[int] = tuple()
+    reverse_neo_babylonian: Sequence[int] = tuple()
+
+@attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
+    sign_order: Optional[SignOrder] = None
     lists: Sequence[SignListRecord] = tuple()
     values: Sequence[Value] = tuple()
     mes_zl: str = ""
     labasi: str = ""
-    reverse_order: str = ""
     logograms: Sequence[Logogram] = tuple()
     fossey: Sequence[Fossey] = tuple()
     unicode: Sequence[int] = tuple()

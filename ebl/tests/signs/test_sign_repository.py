@@ -111,7 +111,6 @@ def mongo_sign_si_2():
         "forms": [],
         "mesZl": """<div align="center">1	**AŠ**	𒀸</div>""",
         "LaBaSi": "12",
-        "reverseOrder": "",
         "logograms": [
             {
                 "logogram": "AŠ-IKU",
@@ -128,6 +127,12 @@ def mongo_sign_si_2():
                 "ME 43 CD 126b ZL 290",
             },
         ],
+        "signOrder": {
+            "directNeoAssyrian": [1, 3],
+            "directNeoBabylonian": [1, 3],
+            "reverseNeoAssyrian": [1, 3],
+            "reverseNeoBabylonian": [1, 3],
+        },
         "fossey": [
             {
                 "page": 405,

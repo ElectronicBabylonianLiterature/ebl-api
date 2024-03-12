@@ -67,7 +67,13 @@ from ebl.transliteration.domain.at_line import ColumnAtLine, SurfaceAtLine, Obje
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel, ObjectLabel
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.sign import Sign, SignListRecord, Value, Logogram
+from ebl.transliteration.domain.sign import (
+    Sign,
+    SignListRecord,
+    SignOrder,
+    Value,
+    Logogram,
+)
 from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
@@ -567,48 +573,57 @@ def signs():
     return [
         Sign(
             name,
-            tuple(SignListRecord(list_name, number) for list_name, number in lists),
             tuple(Value(value_name, sub_index) for value_name, sub_index in values),
+            tuple(SignListRecord(list_name, number) for list_name, number in lists),
+            SignOrder(sign_order),
             logograms=tuple(
                 Logogram(name, name, tuple(word_ids), name) for word_ids in logograms
             ),
             unicode=tuple(unicode),
         )
-        for name, values, lists, logograms, unicode in [
-            ("P₂", [(":", 1)], [("ABZ", "377n1")], [["lemmatu I"]], [74865]),
-            ("KU", [("ku", 1)], [("KWU", "869")], [], [74154]),
-            ("NU", [("nu", 1)], [("ABZ", "075")], [], [74337]),
+        for name, values, sign_order, lists, logograms, unicode in [
+            (
+                "P₂",
+                [(":", 1)],
+                ([1, 2], [1, 2], [1, 2], [1, 2]),
+                [("ABZ", "377n1")],
+                [["lemmatu I"]],
+                [74865],
+            ),
+            ("KU", [("ku", 1)], (), [("KWU", "869")], [], [74154]),
+            ("NU", [("nu", 1)], (), [("ABZ", "075")], [], [74337]),
             (
                 "IGI",
                 [("ši", 1), ("igi", 1)],
+                (),
                 [("HZL", "288"), ("ABZ", "207a/207b X")],
                 [],
                 [74054],
             ),
-            ("DIŠ", [("ana", 1), ("1", 1), ("diš", 1)], [], [], [73849]),
-            ("UD", [("ud", 1), ("u", 4), ("tu", 2)], [], [], [74515]),
-            ("MI", [("mi", 1), ("gi", 6)], [], [], [74282]),
-            ("KI", [("ki", 1)], [], [], [74144]),
-            ("DU", [("du", 1)], [], [], [73850]),
-            ("U", [("u", 1), ("10", 1)], [("ABZ", "411")], [], [74507]),
-            ("|U.U|", [("20", 1)], [("ABZ", "471")], [], [74649]),
-            ("BA", [("ba", 1), ("ku", 1)], [], [], [73792]),
-            ("MA", [("ma", 1)], [], [], [74272]),
-            ("TI", [("ti", 1)], [], [], [74494]),
-            ("MU", [("mu", 1)], [], [], [74284]),
-            ("TA", [("ta", 1)], [], [], [74475]),
-            ("ŠU", [("šu", 1)], [], [], [74455]),
-            ("BU", [("bu", 1), ("gid", 2)], [], [], [73805]),
-            ("|(4×ZA)×KUR|", [("geštae", 1)], [("ABZ", "531+588")], [], [74591]),
-            ("|(AŠ&AŠ@180)×U|", [], [], [], [74499]),
-            ("|A.EDIN.LAL|", [("ummu", 3)], [], [], [73728, 73876, 74226]),
-            ("|HU.HI|", [("mat", 3)], [("ABZ", "081")], [], [74039, 74029]),
-            ("AŠ", [("ana", 3)], [("ABZ", "001")], [], [73784]),
-            ("EDIN", [("bil", None), ("bir", 4)], [("ABZ", "168")], [], [73876]),
-            ("|ŠU₂.3×AN|", [("kunga", 1)], [], [], [74457]),
-            ("BUR₂", [("bul", 1)], [("ABZ", "11")], [], [74215]),
-            ("HU", [("u", 18)], [("ABZ", "78")], [], [74039]),
-            ("|URU×URUDA| ", [("bansur", 1)], [("ABZ", "41")], [], [74574]),
+            ("DIŠ", [("ana", 1), ("1", 1), ("diš", 1)], (), [], [], [73849]),
+            ("UD", [("ud", 1), ("u", 4), ("tu", 2)], (), [], [], [74515]),
+            ("MI", [("mi", 1), ("gi", 6)], (), [], [], [74282]),
+            ("KI", [("ki", 1)], (), [], [], [74144]),
+            ("DU", [("du", 1)], (), [], [], [73850]),
+            ("U", [("u", 1), ("10", 1)], (), [("ABZ", "411")], [], [74507]),
+            ("|U.U|", [("20", 1)], (), [("ABZ", "471")], [], [74649]),
+            ("BA", [("ba", 1), ("ku", 1)], (), [], [], [73792]),
+            ("MA", [("ma", 1)], (), [], [], [74272]),
+            ("TI", [("ti", 1)], (), [], [], [74494]),
+            ("MU", [("mu", 1)], (), [], [], [74284]),
+            ("TA", [("ta", 1)], (), [], [], [74475]),
+            ("ŠU", [("šu", 1)], (), [], [], [74455]),
+            ("BU", [("bu", 1), ("gid", 2)], (), [], [], [73805]),
+            ("|(4×ZA)×KUR|", [("geštae", 1)], (), [("ABZ", "531+588")], [], [74591]),
+            ("|(AŠ&AŠ@180)×U|", [], (), [], [], [74499]),
+            ("|A.EDIN.LAL|", [("ummu", 3)], (), [], [], [73728, 73876, 74226]),
+            ("|HU.HI|", [("mat", 3)], (), [("ABZ", "081")], [], [74039, 74029]),
+            ("AŠ", [("ana", 3)], (), [("ABZ", "001")], [], [73784]),
+            ("EDIN", [("bil", None), ("bir", 4)], (), [("ABZ", "168")], [], [73876]),
+            ("|ŠU₂.3×AN|", [("kunga", 1)], (), [], [], [74457]),
+            ("BUR₂", [("bul", 1)], (), [("ABZ", "11")], [], [74215]),
+            ("HU", [("u", 18)], (), [("ABZ", "78")], [], [74039]),
+            ("|URU×URUDA| ", [("bansur", 1)], (), [("ABZ", "41")], [], [74574]),
         ]
     ]
 
