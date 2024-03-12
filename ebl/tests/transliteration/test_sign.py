@@ -98,7 +98,7 @@ def test_sign():
         fossey=fossey,
         mes_zl="test_mesZl",
         labasi="test_LaBaSi",
-        sign_order,
+        sign_order=None,
     )
 
     assert sign.name == name

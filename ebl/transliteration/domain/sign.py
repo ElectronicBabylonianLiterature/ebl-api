@@ -53,6 +53,7 @@ class SignOrder:
     reverse_neo_assyrian: Sequence[int] = tuple()
     reverse_neo_babylonian: Sequence[int] = tuple()
 
+
 @attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
