@@ -94,7 +94,7 @@ class SignOrderSchema(Schema):
     )
 
     @post_load
-    def make_sign_order(self, data, **kwargs):
+    def make_sign_order(self, data, **kwargs) -> SignOrder:
         return SignOrder(**data)
 
 
@@ -105,9 +105,14 @@ class SignSchema(Schema):
     logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
     fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
-    sign_order = fields.Nested(SignOrderSchema, allow_none=True, load_default=None)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
     unicode = fields.List(fields.Int(), load_default=tuple())
+    sign_order = fields.Nested(
+        SignOrderSchema,
+        data_key="signOrder",
+        allow_none=True,
+        load_default=None,
+    )
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
@@ -118,12 +123,16 @@ class SignSchema(Schema):
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
 
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return {key: value for key, value in data.items() if value is not None}
+
 
 class SignDtoSchema(SignSchema):
     @post_dump
     def make_sign_dto(self, data, **kwargs) -> Dict:
         data["name"] = data.pop("_id")
-        return data
+        return {key: value for key, value in data.items() if value is not None}
 
 
 class MongoSignRepository(SignRepository):

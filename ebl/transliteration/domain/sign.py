@@ -57,7 +57,6 @@ class SignOrder:
 @attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
-    sign_order: Optional[SignOrder] = None
     lists: Sequence[SignListRecord] = tuple()
     values: Sequence[Value] = tuple()
     mes_zl: str = ""
@@ -65,6 +64,7 @@ class Sign:
     logograms: Sequence[Logogram] = tuple()
     fossey: Sequence[Fossey] = tuple()
     unicode: Sequence[int] = tuple()
+    sign_order: Optional[SignOrder] = None
 
     @property
     def standardization(self):
