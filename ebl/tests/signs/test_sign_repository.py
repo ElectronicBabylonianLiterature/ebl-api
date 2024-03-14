@@ -128,6 +128,12 @@ def mongo_sign_si_2():
                 "ME 43 CD 126b ZL 290",
             },
         ],
+        "signOrder": {
+            "directNeoAssyrian": [1, 3],
+            "directNeoBabylonian": [1, 3],
+            "reverseNeoAssyrian": [1, 3],
+            "reverseNeoBabylonian": [1, 3],
+        },
         "fossey": [
             {
                 "page": 405,

@@ -10,7 +10,7 @@ from ebl.transliteration.domain.sign import Sign, SignName, Fossey
 
 def test_signs_get(client, sign_repository):
     sign = Sign(
-        SignName("test"),
+        name=SignName("test"),
         fossey=[
             Fossey(
                 sign="""<svg height="10" width="10">
@@ -84,10 +84,24 @@ sign_data = {
     "name": "P₂",
     "unicode": [74865],
     "values": [{"subIndex": 1, "value": ":"}],
+    "signOrder": {
+        "directNeoAssyrian": [1, 2],
+        "directNeoBabylonian": [1, 2],
+        "reverseNeoAssyrian": [1, 2],
+        "reverseNeoBabylonian": [1, 2],
+    },
 }
 
 sign_data2 = copy.deepcopy(sign_data)
-sign_data2["logograms"][0]["unicode"] = "?"
+sign_data2["logograms"] = [
+    {
+        "logogram": "P₂",
+        "atf": "P₂",
+        "wordId": ["lemmatu I"],
+        "schrammLogogramme": "P₂",
+        "unicode": "?",
+    }
+]
 
 
 @pytest.mark.parametrize(

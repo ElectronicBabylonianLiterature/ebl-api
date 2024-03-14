@@ -47,6 +47,14 @@ class Fossey:
 
 
 @attr.s(frozen=True, auto_attribs=True)
+class SignOrder:
+    direct_neo_assyrian: Sequence[int] = ()
+    direct_neo_babylonian: Sequence[int] = ()
+    reverse_neo_assyrian: Sequence[int] = ()
+    reverse_neo_babylonian: Sequence[int] = ()
+
+
+@attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
     lists: Sequence[SignListRecord] = tuple()
@@ -57,6 +65,7 @@ class Sign:
     logograms: Sequence[Logogram] = tuple()
     fossey: Sequence[Fossey] = tuple()
     unicode: Sequence[int] = tuple()
+    sign_order: Optional[SignOrder] = None
 
     @property
     def standardization(self):

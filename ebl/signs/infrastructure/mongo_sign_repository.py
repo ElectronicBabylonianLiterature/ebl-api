@@ -14,6 +14,7 @@ from ebl.transliteration.domain.sign import (
     Value,
     Logogram,
     Fossey,
+    SignOrder,
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -78,6 +79,25 @@ class FosseySchema(Schema):
         return Fossey(**data)
 
 
+class SignOrderSchema(Schema):
+    direct_neo_assyrian = fields.List(
+        fields.Integer(), required=True, data_key="directNeoAssyrian"
+    )
+    direct_neo_babylonian = fields.List(
+        fields.Integer(), required=True, data_key="directNeoBabylonian"
+    )
+    reverse_neo_assyrian = fields.List(
+        fields.Integer(), required=True, data_key="reverseNeoAssyrian"
+    )
+    reverse_neo_babylonian = fields.List(
+        fields.Integer(), required=True, data_key="reverseNeoBabylonian"
+    )
+
+    @post_load
+    def make_sign_order(self, data, **kwargs) -> SignOrder:
+        return SignOrder(**data)
+
+
 class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
@@ -90,6 +110,12 @@ class SignSchema(Schema):
         data_key="reverseOrder", load_default="", allow_none=True
     )
     unicode = fields.List(fields.Int(), load_default=tuple())
+    sign_order = fields.Nested(
+        SignOrderSchema,
+        data_key="signOrder",
+        allow_none=True,
+        load_default=None,
+    )
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
@@ -100,12 +126,16 @@ class SignSchema(Schema):
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
 
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return {key: value for key, value in data.items() if value is not None}
+
 
 class SignDtoSchema(SignSchema):
     @post_dump
     def make_sign_dto(self, data, **kwargs) -> Dict:
         data["name"] = data.pop("_id")
-        return data
+        return {key: value for key, value in data.items() if value is not None}
 
 
 class MongoSignRepository(SignRepository):
@@ -181,6 +211,7 @@ class MongoSignRepository(SignRepository):
                         "reverseOrder": {"$first": "$reverseOrder"},
                         "logograms": {"$first": "$logograms"},
                         "fossey": {"$first": "$fossey"},
+                        "signOrder": {"$first": "$signOrder"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }

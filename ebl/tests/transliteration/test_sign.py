@@ -4,6 +4,7 @@ from ebl.transliteration.domain.sign import (
     Sign,
     SignListRecord,
     SignName,
+    SignOrder,
     Value,
     Logogram,
     Fossey,
@@ -18,6 +19,19 @@ def test_logogram():
     assert logogram.atf == Atf("AŠ-IKU")
     assert logogram.word_id == ["ikû I"]
     assert logogram.schramm_logogramme == "AŠ-IKU; *iku* (Deich); ZL 290 (Lit.)"
+
+
+def test_sign_order():
+    sign_order = SignOrder(
+        [1, 2],
+        [1, 2],
+        [1, 2],
+        [1, 2],
+    )
+    assert sign_order.direct_neo_assyrian == [1, 2]
+    assert sign_order.direct_neo_babylonian == [1, 2]
+    assert sign_order.reverse_neo_assyrian == [1, 2]
+    assert sign_order.reverse_neo_babylonian == [1, 2]
 
 
 def test_fossey():
@@ -75,6 +89,7 @@ def test_sign():
         "me-luḫ-ḫa",
         "M15,21.7c-0.1-0.1-0.2-0.4-0.2-0.8c-0.1-1-0.1-1.2-0.5-1.3c-0.2",
     )
+    sign_order = SignOrder([1, 2], [1, 2], [1, 2], [1, 2])
     sign = Sign(
         name,
         lists=lists,
@@ -83,7 +98,7 @@ def test_sign():
         fossey=fossey,
         mes_zl="test_mesZl",
         labasi="test_LaBaSi",
-        reverse_order="test_reverseOrder",
+        sign_order=sign_order,
     )
 
     assert sign.name == name
@@ -93,7 +108,7 @@ def test_sign():
     assert sign.fossey == fossey
     assert sign.mes_zl == "test_mesZl"
     assert sign.labasi == "test_LaBaSi"
-    assert sign.reverse_order == "test_reverseOrder"
+    assert sign.sign_order == sign_order
 
 
 def test_standardization_abz():
