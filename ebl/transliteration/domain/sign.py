@@ -61,6 +61,7 @@ class Sign:
     values: Sequence[Value] = tuple()
     mes_zl: str = ""
     labasi: str = ""
+    reverse_order: str = ""
     logograms: Sequence[Logogram] = tuple()
     fossey: Sequence[Fossey] = tuple()
     unicode: Sequence[int] = tuple()
