@@ -50,7 +50,7 @@ class Fossey:
 class SignOrder:
     direct_neo_assyrian: Sequence[int] = ()
     direct_neo_babylonian: Sequence[int] = ()
-    reverse_neo_assyrian: Sequence[int] = tuple()
+    reverse_neo_assyrian: Sequence[int] = ()
     reverse_neo_babylonian: Sequence[int] = ()
 
 
