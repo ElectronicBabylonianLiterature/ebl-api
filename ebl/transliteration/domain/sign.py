@@ -48,7 +48,7 @@ class Fossey:
 
 @attr.s(frozen=True, auto_attribs=True)
 class SignOrder:
-    direct_neo_assyrian: Sequence[int] = tuple()
+    direct_neo_assyrian: Sequence[int] = ()
     direct_neo_babylonian: Sequence[int] = tuple()
     reverse_neo_assyrian: Sequence[int] = tuple()
     reverse_neo_babylonian: Sequence[int] = ()
