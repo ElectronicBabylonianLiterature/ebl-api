@@ -140,4 +140,6 @@ def test_provenances_coverage(siglum_parser, provenance):
         raise ValueError(
             f"Cannot parse {provenance.long_name!r}: "
             f"Is {abbreviation!r} in PROVENANCES in ebl_atf.lark?"
+            "If yes, make sure it occurs *above* any entries with the same prefix,"
+            f"e.g., {abbreviation[:-1]!r}"
         ) from e
