@@ -31,7 +31,7 @@ from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.provenances import ProvenancesResource
 from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
-from ebl.fragmentarium.web.photo import PhotoResource
+from ebl.fragmentarium.web.photo import PhotoResource, ThumbnailResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import make_statistics_resource
 from ebl.fragmentarium.web.transliterations import TransliterationResource
@@ -54,6 +54,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         Dictionary(context.word_repository, context.changelog),
         context.photo_repository,
         context.folio_repository,
+        context.thumbnail_repository,
         context.parallel_line_injector,
     )
     updater = context.get_fragment_updater()
@@ -117,6 +118,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
+    thumbnails = ThumbnailResource(finder)
     folios = FoliosResource(finder)
     chapters = ChaptersByManuscriptResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)
@@ -143,6 +145,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/archaeology", archaeology),
         ("/fragments/{number}/notes", notes),
         ("/fragments/{number}/annotations", annotations),
+        ("/fragments/{number}/thumbnail/{resolution}", thumbnails),
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
         ("/genres", genres),
