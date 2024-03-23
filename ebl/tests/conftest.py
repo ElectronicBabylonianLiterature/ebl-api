@@ -34,7 +34,7 @@ from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
-from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder, ThumbnailSize
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
@@ -363,7 +363,15 @@ def photo_repository(database, photo):
 
 @pytest.fixture
 def thumbnail_repository(database, photo):
-    return TestFilesRepository(database, "thumbnails", photo, create_test_photo("K.2"))
+    thumbnails = [
+        FakeFile(
+            photo.filename.replace(".jpg", f"_{resolution.value}.jpg"),
+            b"yVGSDbnTth",
+            {},
+        )
+        for resolution in ThumbnailSize
+    ]
+    return TestFilesRepository(database, "thumbnails", photo, *thumbnails)
 
 
 @pytest.fixture
