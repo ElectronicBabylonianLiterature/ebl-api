@@ -1,4 +1,5 @@
 import argparse
+from typing import cast, Iterable
 from pymongo import MongoClient
 from gridfs import GridFS
 import os
@@ -10,7 +11,7 @@ from tqdm import tqdm
 from ebl.fragmentarium.application.fragment_finder import ThumbnailSize
 
 
-def resize(original: Image, size: ThumbnailSize):
+def resize(original: Image.Image, size: ThumbnailSize):
     width = size.value
     resolution = (width, original.size[1])
     resized = original.copy()
@@ -19,7 +20,7 @@ def resize(original: Image, size: ThumbnailSize):
     return resized
 
 
-def clear_thumbnails(collection: GridFS) -> None:
+def clear_thumbnails(collection) -> None:
     all_thumbnails = list(collection.find())
     for old_thumbnail in tqdm(
         all_thumbnails, desc="Clearing thumbnails", total=len(all_thumbnails)
@@ -60,7 +61,7 @@ if __name__ == "__main__":
     database = client.get_database(os.environ["MONGODB_DB"])
 
     original_photos_collection = GridFS(database, "photos")
-    original_photos = list(original_photos_collection.find())
+    original_photos = list(cast(Iterable, original_photos_collection.find()))
     total = len(original_photos)
 
     thumbnail_collection = GridFS(database, "thumbnails")
