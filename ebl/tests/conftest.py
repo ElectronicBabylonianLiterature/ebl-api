@@ -34,7 +34,7 @@ from ebl.ebl_ai_client import EblAiClient
 from ebl.files.application.file_repository import File
 from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
-from ebl.fragmentarium.application.fragment_finder import FragmentFinder
+from ebl.fragmentarium.application.fragment_finder import FragmentFinder, ThumbnailSize
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
@@ -233,6 +233,7 @@ def fragment_finder(
     dictionary,
     photo_repository,
     file_repository,
+    thumbnail_repository,
     bibliography,
     parallel_line_injector,
 ):
@@ -242,6 +243,7 @@ def fragment_finder(
         dictionary,
         photo_repository,
         file_repository,
+        thumbnail_repository,
         parallel_line_injector,
     )
 
@@ -360,6 +362,19 @@ def photo_repository(database, photo):
 
 
 @pytest.fixture
+def thumbnail_repository(database, photo):
+    thumbnails = [
+        FakeFile(
+            photo.filename.replace(".jpg", f"_{resolution.value}.jpg"),
+            b"yVGSDbnTth",
+            {},
+        )
+        for resolution in ThumbnailSize
+    ]
+    return TestFilesRepository(database, "thumbnails", photo, *thumbnails)
+
+
+@pytest.fixture
 def annotations_repository(database):
     return MongoAnnotationsRepository(database)
 
@@ -428,6 +443,7 @@ def context(
     file_repository,
     photo_repository,
     folio_repository,
+    thumbnail_repository,
     fragment_repository,
     text_repository,
     changelog,
@@ -449,6 +465,7 @@ def context(
         public_file_repository=file_repository,
         photo_repository=photo_repository,
         folio_repository=folio_repository,
+        thumbnail_repository=thumbnail_repository,
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,

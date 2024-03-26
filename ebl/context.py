@@ -41,6 +41,7 @@ class Context:
     public_file_repository: FileRepository
     photo_repository: FileRepository
     folio_repository: FileRepository
+    thumbnail_repository: FileRepository
     fragment_repository: FragmentRepository
     changelog: Changelog
     bibliography_repository: BibliographyRepository
