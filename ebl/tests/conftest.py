@@ -70,7 +70,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.sign import (
     Sign,
     SignListRecord,
-    SignOrder,
+    SortKeys,
     Value,
     Logogram,
 )
@@ -583,9 +583,9 @@ def signs():
                 Logogram(name, name, tuple(word_ids), name) for word_ids in logograms
             ),
             unicode=tuple(unicode),
-            sign_order=SignOrder(*sign_order) if sign_order else None,
+            sort_keys=SortKeys(*sort_keys) if sort_keys else None,
         )
-        for name, values, lists, logograms, unicode, sign_order in [
+        for name, values, lists, logograms, unicode, sort_keys in [
             (
                 "P₂",
                 [(":", 1)],
