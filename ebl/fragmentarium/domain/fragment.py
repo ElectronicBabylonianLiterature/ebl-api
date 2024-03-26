@@ -111,6 +111,7 @@ class ExternalNumbers:
     nabucco_number: str = ""
     yale_peabody_number: str = ""
     oracc_numbers: Sequence[str] = tuple()
+    seal_number: str = ""
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -289,3 +290,7 @@ class Fragment:
     @property
     def philadelphia_number(self) -> str:
         return self._get_external_number("philadelphia_number")
+
+    @property
+    def seal_number(self) -> str:
+        return self._get_external_number("seal_number")
