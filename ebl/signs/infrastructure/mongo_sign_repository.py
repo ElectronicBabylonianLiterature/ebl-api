@@ -81,16 +81,28 @@ class FosseySchema(Schema):
 
 class SortKeysSchema(Schema):
     neo_assyrian_onset = fields.List(
-        fields.Integer(), required=True, data_key="neoAssyrianOnset"
+        fields.Integer(),
+        data_key="neoAssyrianOnset",
+        allow_none=True,
+        load_default=None,
     )
     neo_babylonian_onset = fields.List(
-        fields.Integer(), required=True, data_key="neoBabylonianOnset"
+        fields.Integer(),
+        data_key="neoBabylonianOnset",
+        allow_none=True,
+        load_default=None,
     )
     neo_assyrian_offset = fields.List(
-        fields.Integer(), required=True, data_key="neoAssyrianOffset"
+        fields.Integer(),
+        data_key="neoAssyrianOffset",
+        allow_none=True,
+        load_default=None,
     )
     neo_babylonian_offset = fields.List(
-        fields.Integer(), required=True, data_key="neoBabylonianOffset"
+        fields.Integer(),
+        data_key="neoBabylonianOffset",
+        allow_none=True,
+        load_default=None,
     )
 
     @post_load
