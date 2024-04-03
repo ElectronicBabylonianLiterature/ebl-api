@@ -1,30 +1,22 @@
-from typing import Sequence
-
 import pymongo
-from marshmallow import EXCLUDE
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_create import (
     MongoFragmentRepositoryCreate,
 )
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get import (
     MongoFragmentRepositoryGet,
 )
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     fragment_is,
 )
-from ebl.mongo_collection import MongoCollection
-from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 
 
 class MongoFragmentRepository(
     MongoFragmentRepositoryCreate, MongoFragmentRepositoryGet
 ):
     def __init__(self, database):
-        self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
-        self._joins = MongoCollection(database, JOINS_COLLECTION)
+        super().__init__(database)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -107,6 +99,3 @@ class MongoFragmentRepository(
             fragment_is(fragment),
             {"$set": query if query else {field: None}},
         )
-
-    def _map_fragments(self, cursor) -> Sequence[Fragment]:
-        return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)

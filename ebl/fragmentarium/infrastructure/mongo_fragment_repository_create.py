@@ -2,12 +2,17 @@ from typing import Sequence
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.joins import Join
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
+    MongoFragmentRepositoryBase,
+)
 
 
-class MongoFragmentRepositoryCreate(FragmentRepository):
+class MongoFragmentRepositoryCreate(MongoFragmentRepositoryBase):
+    def __init__(self, database):
+        super().__init__(database)
+
     def create(self, fragment, sort_key=None):
         return self._fragments.insert_one(
             {

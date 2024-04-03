@@ -10,7 +10,9 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
+    MongoFragmentRepositoryBase,
+)
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
@@ -43,7 +45,10 @@ def load_query_result(cursor: Iterator) -> QueryResult:
     return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
 
-class MongoFragmentRepositoryGetBase(FragmentRepository):
+class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
+    def __init__(self, database):
+        super().__init__(database)
+
     def _omit_text_lines(self) -> List:
         return [{"$addFields": {"text.lines": []}}]
 
@@ -223,4 +228,5 @@ class MongoFragmentRepositoryGetBase(FragmentRepository):
 class MongoFragmentRepositoryGet(
     MongoFragmentRepositoryGetBase, MongoFragmentRepositoryGetExtended
 ):
-    pass
+    def __init__(self, database):
+        super().__init__(database)

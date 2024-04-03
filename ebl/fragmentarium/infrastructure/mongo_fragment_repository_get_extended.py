@@ -6,7 +6,9 @@ from marshmallow import EXCLUDE
 from ebl.common.domain.scopes import Scope
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
+    MongoFragmentRepositoryBase,
+)
 from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -26,7 +28,10 @@ def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
 
 
-class MongoFragmentRepositoryGetExtended(FragmentRepository):
+class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
+    def __init__(self, database):
+        super().__init__(database)
+
     def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = tuple()):
         cursor = self._fragments.aggregate(
             [*aggregate_random(user_scopes), {"$project": {"joins": False}}]
