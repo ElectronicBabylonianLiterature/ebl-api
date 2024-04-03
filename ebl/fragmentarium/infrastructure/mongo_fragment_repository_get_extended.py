@@ -1,13 +1,9 @@
-from typing import List, Optional, Sequence, Iterator
+from typing import List, Optional, Sequence
 
 import pymongo
 from marshmallow import EXCLUDE
 
 from ebl.common.domain.scopes import Scope
-from ebl.common.query.query_result import QueryResult
-from ebl.common.query.query_schemas import (
-    QueryResultSchema,
-)
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository

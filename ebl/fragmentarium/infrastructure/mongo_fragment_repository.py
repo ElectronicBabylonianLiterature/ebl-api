@@ -2,7 +2,6 @@ from typing import Sequence
 
 import pymongo
 from marshmallow import EXCLUDE
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_create import (
     MongoFragmentRepositoryCreate,
 )

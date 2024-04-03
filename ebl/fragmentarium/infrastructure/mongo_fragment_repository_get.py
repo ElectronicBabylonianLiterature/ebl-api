@@ -42,6 +42,7 @@ def load_query_result(cursor: Iterator) -> QueryResult:
     data = next(cursor, None)
     return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
+
 class MongoFragmentRepositoryGetBase(FragmentRepository):
     def _omit_text_lines(self) -> List:
         return [{"$addFields": {"text.lines": []}}]
@@ -217,7 +218,6 @@ class MongoFragmentRepositoryGetBase(FragmentRepository):
             ]
         )
         return list(fragments)
-
 
 
 class MongoFragmentRepositoryGet(
