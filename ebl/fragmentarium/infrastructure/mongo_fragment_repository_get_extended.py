@@ -12,6 +12,7 @@ from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.date import Date, DateSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -22,24 +23,11 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_path_of_the_pioneers,
     aggregate_random,
 )
-from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.queries import query_number_is
-
-
-RETRIEVE_ALL_LIMIT = 1000
 
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
-
-
-def load_museum_number(data: dict) -> MuseumNumber:
-    return MuseumNumberSchema().load(data.get("museumNumber", data))
-
-
-def load_query_result(cursor: Iterator) -> QueryResult:
-    data = next(cursor, None)
-    return QueryResultSchema().load(data) if data else QueryResult.create_empty()
 
 
 class MongoFragmentRepositoryGetExtended(FragmentRepository):

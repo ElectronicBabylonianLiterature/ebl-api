@@ -34,10 +34,6 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended imp
 RETRIEVE_ALL_LIMIT = 1000
 
 
-def has_none_values(dictionary: dict) -> bool:
-    return not all(dictionary.values())
-
-
 def load_museum_number(data: dict) -> MuseumNumber:
     return MuseumNumberSchema().load(data.get("museumNumber", data))
 
