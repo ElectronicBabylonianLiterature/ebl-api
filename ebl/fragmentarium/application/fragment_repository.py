@@ -106,6 +106,10 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
+    def fetch_names(self, partial_name: str) -> List[str]:
+        ...
+
+    @abstractmethod
     def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
         ...
 

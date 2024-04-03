@@ -161,3 +161,26 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             Scope.from_string(f"read:{value}-fragments")
             for value in fragment.get("authorizedScopes", [])
         ]
+
+    def fetch_names(self, partial_name: str) -> List[str]:
+        pipeline = [
+            {"$unwind": "$colophon.individuals"},
+            {
+                "$project": {
+                    "names": [
+                        "$colophon.individuals.name.value",
+                        "$colophon.individuals.son_of.value",
+                        "$colophon.individuals.grandson_of.value",
+                        "$colophon.individuals.family.value",
+                    ]
+                }
+            },
+            {"$unwind": "$names"},
+            {"$match": {"names": {"$regex": partial_name, "$options": "i"}}},
+            {"$group": {"_id": None, "unique_names": {"$addToSet": "$names"}}},
+            {"$unwind": "$unique_names"},
+            {"$sort": {"unique_names": 1}},
+            {"$project": {"_id": 0, "name": "$unique_names"}},
+        ]
+        cursor = self._fragments.aggregate(pipeline)
+        return [data["name"] for data in cursor if data["name"]]
