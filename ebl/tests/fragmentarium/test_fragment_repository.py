@@ -359,7 +359,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
         TransliterationUpdate(parse_atf_lark("$ (the transliteration)")), user
     )
 
-    fragment_repository.update_field("transliteration", updated_fragment)
+    fragment_repository.update_transliteration(updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
     assert result == updated_fragment
@@ -368,7 +368,7 @@ def test_update_transliteration_with_record(fragment_repository, user):
 def test_update_update_transliteration_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_field("transliteration", transliterated_fragment)
+        fragment_repository.update_transliteration(transliterated_fragment)
 
 
 def test_update_genres(fragment_repository):
@@ -411,7 +411,7 @@ def test_update_lemmatization(fragment_repository):
     lemmatization = Lemmatization(tokens)
     updated_fragment = transliterated_fragment.update_lemmatization(lemmatization)
 
-    fragment_repository.update_field("lemmatization", updated_fragment)
+    fragment_repository.update_field("text", updated_fragment)
     result = fragment_repository.query_by_museum_number(transliterated_fragment.number)
 
     assert result == updated_fragment
@@ -447,10 +447,17 @@ def test_update_script(fragment_repository: FragmentRepository):
     assert result == updated_fragment
 
 
-def test_update_update_lemmatization_not_found(fragment_repository):
+def test_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_field("lemmatization", transliterated_fragment)
+        fragment_repository.update_field("text", transliterated_fragment)
+
+
+def test_update_invalid_field_fails(fragment_repository):
+    with pytest.raises(ValueError, match="Unexpected update field"):
+        fragment_repository.update_field(
+            "some invalid field name", FragmentFactory.build()
+        )
 
 
 def test_statistics(database, fragment_repository):

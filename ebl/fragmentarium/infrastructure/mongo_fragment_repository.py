@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, Iterator
+from typing import List, Optional, Sequence, Iterator, get_args
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -13,7 +13,10 @@ from ebl.common.query.query_schemas import (
 )
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_repository import (
+    FragmentRepository,
+    UpdatableField,
+)
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema, ScriptSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
@@ -274,33 +277,30 @@ class MongoFragmentRepository(FragmentRepository):
         )
         return FragmentInfoSchema(many=True).load(cursor)
 
-    def update_field(self, field, fragment):
-        fields_to_update = {
-            "introduction": ("introduction",),
-            "lemmatization": ("text",),
-            "genres": ("genres",),
-            "references": ("references",),
-            "script": ("script",),
-            "notes": ("notes",),
-            "archaeology": ("archaeology",),
-            "transliteration": (
-                "text",
-                "signs",
-                "record",
-                "line_to_vec",
-            ),
-            "date": ("date",),
-            "dates_in_text": ("dates_in_text",),
-        }
-
-        if field not in fields_to_update:
-            raise ValueError(
-                f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
-            )
-        query = FragmentSchema(only=fields_to_update[field]).dump(fragment)
+    def update_transliteration(self, fragment: Fragment):
         self._fragments.update_one(
             fragment_is(fragment),
-            {"$set": query if query else {field: None}},
+            {
+                "$set": FragmentSchema(
+                    only=(
+                        "text",
+                        "signs",
+                        "record",
+                        "line_to_vec",
+                    )
+                ).dump(fragment)
+            },
+        )
+
+    def update_field(self, field: UpdatableField, fragment: Fragment):
+        if field not in (valid_fields := get_args(UpdatableField)):
+            raise ValueError(
+                f"Unexpected update field {field}, must be one of {valid_fields}"
+            )
+        query = FragmentSchema(only=(field,)).dump(fragment)
+        self._fragments.update_one(
+            fragment_is(fragment),
+            {"$set": query or {field: None}},
         )
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
