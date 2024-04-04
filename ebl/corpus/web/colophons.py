@@ -6,12 +6,12 @@ from ebl.corpus.web.text_utils import create_chapter_id
 from ebl.transliteration.application.text_schema import TextSchema
 
 
-class ColophonSchema(Schema):
+class CorpusColophonSchema(Schema):
     siglum = fields.String()
     colophon = fields.Nested(TextSchema, data_key="text")
 
 
-class ColophonsResource:
+class CorpusColophonsResource:
     def __init__(self, corpus: Corpus):
         self._corpus = corpus
 
@@ -31,4 +31,4 @@ class ColophonsResource:
             for manuscript in self._corpus.find_manuscripts(chapter_id)
             if not manuscript.colophon.is_empty
         ]
-        resp.media = ColophonSchema().dump(manuscripts, many=True)
+        resp.media = CorpusColophonSchema().dump(manuscripts, many=True)

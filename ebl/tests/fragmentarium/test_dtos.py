@@ -24,6 +24,7 @@ from ebl.fragmentarium.application.fragment_schema import (
     NotesSchema,
     ScriptSchema,
 )
+from ebl.fragmentarium.application.colophon_schema import ColophonSchema
 from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.fragment import Fragment
@@ -114,6 +115,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             ),
             "projects": [ResearchProject["CAIC"].abbreviation],
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
+            "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),
         },
         pydash.is_none,
     )

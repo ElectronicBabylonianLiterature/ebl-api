@@ -166,10 +166,18 @@ def test_query_by_museum_number(database, fragment_repository, number):
         ]
     )
 
-    assert (
-        fragment_repository.query_by_museum_number(MuseumNumber.of(number))
-        == fragments[number]
+    fragment = fragments[number]
+    queried_fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(number)
     )
+
+    print(
+        "!",
+        fragment.colophon,
+        FragmentSchema(exclude=["joins"]).dump(fragment)["colophon"],
+    )
+
+    assert queried_fragment == fragment
 
 
 @pytest.mark.parametrize(
