@@ -106,7 +106,7 @@ class FragmentRepository(ABC):
         ...
 
     @abstractmethod
-    def fetch_names(self, partial_name: str) -> List[str]:
+    def fetch_names(self, name_query: str) -> List[str]:
         ...
 
     @abstractmethod

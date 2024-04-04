@@ -162,7 +162,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             for value in fragment.get("authorizedScopes", [])
         ]
 
-    def fetch_names(self, partial_name: str) -> List[str]:
+    def fetch_names(self, name_query: str) -> List[str]:
         pipeline = [
             {"$unwind": "$colophon.individuals"},
             {
@@ -176,7 +176,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
                 }
             },
             {"$unwind": "$names"},
-            {"$match": {"names": {"$regex": partial_name, "$options": "i"}}},
+            {"$match": {"names": {"$regex": name_query, "$options": "i"}}},
             {"$group": {"_id": None, "unique_names": {"$addToSet": "$names"}}},
             {"$unwind": "$unique_names"},
             {"$sort": {"unique_names": 1}},
