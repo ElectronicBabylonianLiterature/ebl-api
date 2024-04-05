@@ -32,14 +32,14 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
     def __init__(self, database):
         super().__init__(database)
 
-    def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = tuple()):
+    def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = ()):
         cursor = self._fragments.aggregate(
             [*aggregate_random(user_scopes), {"$project": {"joins": False}}]
         )
 
         return self._map_fragments(cursor)
 
-    def query_path_of_the_pioneers(self, user_scopes: Sequence[Scope] = tuple()):
+    def query_path_of_the_pioneers(self, user_scopes: Sequence[Scope] = ()):
         cursor = self._fragments.aggregate(
             [
                 *aggregate_path_of_the_pioneers(user_scopes),
@@ -73,7 +73,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         ]
 
     def query_by_transliterated_not_revised_by_other(
-        self, user_scopes: Sequence[Scope] = tuple()
+        self, user_scopes: Sequence[Scope] = ()
     ):
         cursor = self._fragments.aggregate(
             [*aggregate_needs_revision(user_scopes), {"$project": {"joins": False}}],
@@ -169,8 +169,8 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
                 "$project": {
                     "names": [
                         "$colophon.individuals.name.value",
-                        "$colophon.individuals.son_of.value",
-                        "$colophon.individuals.grandson_of.value",
+                        "$colophon.individuals.sonOf.value",
+                        "$colophon.individuals.grandsonOf.value",
                         "$colophon.individuals.family.value",
                     ]
                 }
