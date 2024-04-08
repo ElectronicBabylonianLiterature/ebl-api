@@ -39,19 +39,22 @@ class CroppedAnnotationService:
             )
             for annotation_elem in annotation.annotations:
                 if cropped_sign := annotation_elem.cropped_sign:
-                    cropped_sign_image = (
-                        self._cropped_sign_image_repository.query_by_id(
-                            cropped_sign.image_id
+                    try:
+                        cropped_sign_image = (
+                            self._cropped_sign_image_repository.query_by_id(
+                                cropped_sign.image_id
+                            )
                         )
-                    )
-                    cropped_image_annotations.append(
-                        {
-                            "fragmentNumber": str(annotation.fragment_number),
-                            "image": cropped_sign_image.image,
-                            "script": str(annotation.script),
-                            "label": cropped_sign.label,
-                            "date": date,
-                            "provenance": annotation.provenance,
-                        }
-                    )
+                        cropped_image_annotations.append(
+                            {
+                                "fragmentNumber": str(annotation.fragment_number),
+                                "image": cropped_sign_image.image,
+                                "script": str(annotation.script),
+                                "label": cropped_sign.label,
+                                "date": date,
+                                "provenance": annotation.provenance,
+                            }
+                        )
+                    except Exception:
+                        pass
         return cropped_image_annotations
