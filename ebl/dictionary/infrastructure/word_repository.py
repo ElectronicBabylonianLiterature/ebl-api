@@ -150,20 +150,28 @@ class MongoWordRepository(WordRepository):
                 {
                     "$match": {
                         "$and": [
-                            _create_query_by_lemma(word.value, word.use_collations)
-                            if word
-                            else {},
-                            _create_query_by_meaning(
-                                meaning.value, meaning.use_collations
-                            )
-                            if meaning
-                            else {},
-                            _create_query_by_root(root.value, root.use_collations)
-                            if root
-                            else {},
-                            _create_query_by_vowel_class(vowel_class.value)
-                            if vowel_class
-                            else {},
+                            (
+                                _create_query_by_lemma(word.value, word.use_collations)
+                                if word
+                                else {}
+                            ),
+                            (
+                                _create_query_by_meaning(
+                                    meaning.value, meaning.use_collations
+                                )
+                                if meaning
+                                else {}
+                            ),
+                            (
+                                _create_query_by_root(root.value, root.use_collations)
+                                if root
+                                else {}
+                            ),
+                            (
+                                _create_query_by_vowel_class(vowel_class.value)
+                                if vowel_class
+                                else {}
+                            ),
                         ]
                     },
                 }

@@ -75,9 +75,11 @@ def to_dict(
                 "isSecondLineOfParallelism": line.is_second_line_of_parallelism,
                 "isBeginningOfSection": line.is_beginning_of_section,
                 "variants": variants_to_dict(line.variants, for_loading),
-                "translation": []
-                if missing_translation
-                else TranslationLineSchema().dump(line.translation, many=True),
+                "translation": (
+                    []
+                    if missing_translation
+                    else TranslationLineSchema().dump(line.translation, many=True)
+                ),
                 **({} if for_loading else {"originalIndex": index}),
             }
             for index, line in enumerate(chapter.lines)
