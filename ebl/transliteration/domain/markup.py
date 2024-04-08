@@ -36,8 +36,7 @@ TP = TypeVar("TP", bound="TextPart")
 class MarkupPart(ABC):
     @property
     @abstractmethod
-    def value(self) -> str:
-        ...
+    def value(self) -> str: ...
 
     @property
     def key(self) -> str:

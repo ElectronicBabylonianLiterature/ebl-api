@@ -93,12 +93,14 @@ def test_updating_alignment_and_invalidate_chapter_display_cache(
                             ),
                         ),
                         reconstruction=tuple(
-                            cast(
-                                AbstractWord,
-                                token,
-                            ).set_has_omitted_alignment(True)
-                            if index in omitted_words
-                            else token
+                            (
+                                cast(
+                                    AbstractWord,
+                                    token,
+                                ).set_has_omitted_alignment(True)
+                                if index in omitted_words
+                                else token
+                            )
                             for index, token in enumerate(
                                 chapter.lines[0].variants[0].reconstruction
                             )

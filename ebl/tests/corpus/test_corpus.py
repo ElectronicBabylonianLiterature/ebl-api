@@ -322,14 +322,16 @@ def test_updating_alignment(
     omitted_words = (6,)
     has_variant_alignment = variant is not None
     updated_reconstruction = tuple(
-        cast(
-            AbstractWord,
-            token,
+        (
+            cast(
+                AbstractWord,
+                token,
+            )
+            .set_has_variant_alignment(has_variant_alignment and index == alignment)
+            .set_has_omitted_alignment(index in omitted_words)
+            if index in (*omitted_words, alignment)
+            else token
         )
-        .set_has_variant_alignment(has_variant_alignment and index == alignment)
-        .set_has_omitted_alignment(index in omitted_words)
-        if index in (*omitted_words, alignment)
-        else token
         for index, token in enumerate(CHAPTER.lines[0].variants[0].reconstruction)
     )
     updated_chapter = attr.evolve(
@@ -674,12 +676,14 @@ def test_updating_lines_edit(
                             ),
                         ),
                         reconstruction=tuple(
-                            cast(
-                                AbstractWord,
-                                token,
-                            ).set_has_omitted_alignment(True)
-                            if index in omitted_words
-                            else token
+                            (
+                                cast(
+                                    AbstractWord,
+                                    token,
+                                ).set_has_omitted_alignment(True)
+                                if index in omitted_words
+                                else token
+                            )
                             for index, token in enumerate(
                                 CHAPTER.lines[0].variants[0].reconstruction
                             )

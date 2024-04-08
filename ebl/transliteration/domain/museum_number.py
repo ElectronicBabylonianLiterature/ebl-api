@@ -73,9 +73,11 @@ class MuseumNumber:
     @property
     def _prefix_order(self) -> Tuple[int, int, str]:
         return (
-            NUMBER_PREFIX_ORDER
-            if self.prefix.isnumeric()
-            else PREFIX_ORDER.get(self.prefix, DEFAULT_PREFIX_ORDER),
+            (
+                NUMBER_PREFIX_ORDER
+                if self.prefix.isnumeric()
+                else PREFIX_ORDER.get(self.prefix, DEFAULT_PREFIX_ORDER)
+            ),
             int(self.prefix) if self.prefix.isnumeric() else 0,
             self.prefix,
         )

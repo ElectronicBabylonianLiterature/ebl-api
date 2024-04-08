@@ -94,9 +94,11 @@ class SignMatcher:
                     "_sortKey": {"$first": "$_sortKey"},
                     "script": {"$first": "$script"},
                     "matchingLines": {
-                        "$push": self._expand_line_ranges()
-                        if self._is_multiline
-                        else {"$arrayElemAt": ["$textLines", "$signLineIndex"]}
+                        "$push": (
+                            self._expand_line_ranges()
+                            if self._is_multiline
+                            else {"$arrayElemAt": ["$textLines", "$signLineIndex"]}
+                        )
                     },
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }

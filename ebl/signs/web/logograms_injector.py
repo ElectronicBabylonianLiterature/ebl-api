@@ -15,11 +15,14 @@ def inject_logograms_unicode(
     _signs = []
     for sign in signs:
         logograms = tuple(
-            attr.evolve(
-                logogram, unicode=get_logogram_unicode(logogram.atf, sign_repository)
+            (
+                attr.evolve(
+                    logogram,
+                    unicode=get_logogram_unicode(logogram.atf, sign_repository),
+                )
+                if word_id in logogram.word_id
+                else logogram
             )
-            if word_id in logogram.word_id
-            else logogram
             for logogram in sign.logograms
         )
         _signs.append(sign.set_logograms(logograms))
