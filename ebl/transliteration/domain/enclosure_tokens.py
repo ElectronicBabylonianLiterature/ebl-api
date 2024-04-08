@@ -17,7 +17,8 @@ class Enclosure(Token):
 
     @staticmethod
     @abstractmethod
-    def get_sides() -> Mapping[Side, str]: ...
+    def get_sides() -> Mapping[Side, str]:
+        ...
 
     @property
     def value(self) -> str:
@@ -155,11 +156,13 @@ class Gloss(Token):
 
     @property
     @abstractmethod
-    def open(self) -> str: ...
+    def open(self) -> str:
+        ...
 
     @property
     @abstractmethod
-    def close(self) -> str: ...
+    def close(self) -> str:
+        ...
 
     @property
     def parts(self) -> Sequence[Token]:

@@ -117,11 +117,13 @@ class Token(ABC):
 
     @property
     @abstractmethod
-    def value(self) -> str: ...
+    def value(self) -> str:
+        ...
 
     @property
     @abstractmethod
-    def parts(self) -> Sequence["Token"]: ...
+    def parts(self) -> Sequence["Token"]:
+        ...
 
     @property
     def clean_value(self) -> str:

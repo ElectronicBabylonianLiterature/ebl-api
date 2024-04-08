@@ -77,7 +77,8 @@ class Break(Token):
 
     @property
     @abstractmethod
-    def _symbol(self) -> str: ...
+    def _symbol(self) -> str:
+        ...
 
     @property
     def parts(self) -> Sequence["Token"]:

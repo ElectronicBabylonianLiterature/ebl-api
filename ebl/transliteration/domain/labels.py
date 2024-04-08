@@ -17,13 +17,16 @@ class DuplicateStatusError(ValueError):
 
 class LabelVisitor(ABC):
     @abstractmethod
-    def visit_surface_label(self, label: "SurfaceLabel") -> "LabelVisitor": ...
+    def visit_surface_label(self, label: "SurfaceLabel") -> "LabelVisitor":
+        ...
 
     @abstractmethod
-    def visit_column_label(self, label: "ColumnLabel") -> "LabelVisitor": ...
+    def visit_column_label(self, label: "ColumnLabel") -> "LabelVisitor":
+        ...
 
     @abstractmethod
-    def visit_object_label(self, label: "ObjectLabel") -> "LabelVisitor": ...
+    def visit_object_label(self, label: "ObjectLabel") -> "LabelVisitor":
+        ...
 
 
 def no_duplicate_status(_instance, _attribute, value) -> None:
@@ -51,18 +54,21 @@ class Label(ABC):
 
     @property
     @abstractmethod
-    def abbreviation(self) -> str: ...
+    def abbreviation(self) -> str:
+        ...
 
     @property
     @abstractmethod
-    def _atf(self) -> str: ...
+    def _atf(self) -> str:
+        ...
 
     @property
     def status_string(self) -> str:
         return "".join(status.value for status in self.status)
 
     @abstractmethod
-    def accept(self, visitor: LabelVisitor) -> LabelVisitor: ...
+    def accept(self, visitor: LabelVisitor) -> LabelVisitor:
+        ...
 
     def to_value(self) -> str:
         return f"{self.abbreviation}{self.status_string}"
