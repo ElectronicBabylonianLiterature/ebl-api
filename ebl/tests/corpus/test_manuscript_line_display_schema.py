@@ -95,9 +95,9 @@ def test_serialize() -> None:
         "line": OneOfLineSchema().dump(manuscript_line.line),
         "paratext": OneOfLineSchema().dump(manuscript_line.paratext, many=True),
         "references": ApiReferenceSchema().dump(manuscript.references, many=True),
-        "museumNumber": str(manuscript.museum_number)
-        if manuscript.museum_number
-        else "",
+        "museumNumber": (
+            str(manuscript.museum_number) if manuscript.museum_number else ""
+        ),
         "isInFragmentarium": manuscript.is_in_fragmentarium,
         "accession": manuscript.accession,
         "joins": [

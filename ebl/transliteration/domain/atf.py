@@ -236,9 +236,7 @@ def to_sub_index(number: Optional[int]) -> str:
     return (
         "ₓ"
         if number is None
-        else ""
-        if number == 1
-        else "".join(_SUB_SCRIPT[digit] for digit in str(number))
+        else "" if number == 1 else "".join(_SUB_SCRIPT[digit] for digit in str(number))
     )
 
 

@@ -1,7 +1,7 @@
 from ebl.signs.infrastructure.mongo_sign_repository import (
     SignSchema,
     LogogramSchema,
-    SignOrderSchema,
+    SortKeysSchema,
     FosseySchema,
     SignDtoSchema,
 )
@@ -12,7 +12,7 @@ from ebl.transliteration.domain.sign import (
     Fossey,
     Value,
     SignName,
-    SignOrder,
+    SortKeys,
     SignListRecord,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -71,22 +71,22 @@ def test_fossey_schema():
     assert FosseySchema().dump(fossey) == data
 
 
-def test_sign_order_schema():
+def test_sort_keys_schema():
     data = {
-        "directNeoAssyrian": [1, 2],
-        "directNeoBabylonian": [1, 2],
-        "reverseNeoAssyrian": [1, 2],
-        "reverseNeoBabylonian": [1, 2],
+        "neoAssyrianOnset": [1, 2],
+        "neoBabylonianOnset": [1, 2],
+        "neoAssyrianOffset": [1, 2],
+        "neoBabylonianOffset": [1, 2],
     }
-    signOrder = SignOrder(
+    sortKeys = SortKeys(
         [1, 2],
         [1, 2],
         [1, 2],
         [1, 2],
     )
 
-    assert SignOrderSchema().load(data) == signOrder
-    assert SignOrderSchema().dump(signOrder) == data
+    assert SortKeysSchema().load(data) == sortKeys
+    assert SortKeysSchema().dump(sortKeys) == data
 
 
 def test_sign_schema():

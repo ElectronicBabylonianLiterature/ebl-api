@@ -14,7 +14,7 @@ from ebl.transliteration.domain.sign import (
     Value,
     Logogram,
     Fossey,
-    SignOrder,
+    SortKeys,
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -79,23 +79,35 @@ class FosseySchema(Schema):
         return Fossey(**data)
 
 
-class SignOrderSchema(Schema):
-    direct_neo_assyrian = fields.List(
-        fields.Integer(), required=True, data_key="directNeoAssyrian"
+class SortKeysSchema(Schema):
+    neo_assyrian_onset = fields.List(
+        fields.Integer(),
+        data_key="neoAssyrianOnset",
+        allow_none=True,
+        load_default=None,
     )
-    direct_neo_babylonian = fields.List(
-        fields.Integer(), required=True, data_key="directNeoBabylonian"
+    neo_babylonian_onset = fields.List(
+        fields.Integer(),
+        data_key="neoBabylonianOnset",
+        allow_none=True,
+        load_default=None,
     )
-    reverse_neo_assyrian = fields.List(
-        fields.Integer(), required=True, data_key="reverseNeoAssyrian"
+    neo_assyrian_offset = fields.List(
+        fields.Integer(),
+        data_key="neoAssyrianOffset",
+        allow_none=True,
+        load_default=None,
     )
-    reverse_neo_babylonian = fields.List(
-        fields.Integer(), required=True, data_key="reverseNeoBabylonian"
+    neo_babylonian_offset = fields.List(
+        fields.Integer(),
+        data_key="neoBabylonianOffset",
+        allow_none=True,
+        load_default=None,
     )
 
     @post_load
-    def make_sign_order(self, data, **kwargs) -> SignOrder:
-        return SignOrder(**data)
+    def make_sort_keys(self, data, **kwargs) -> SortKeys:
+        return SortKeys(**data)
 
 
 class SignSchema(Schema):
@@ -110,9 +122,9 @@ class SignSchema(Schema):
         data_key="reverseOrder", load_default="", allow_none=True
     )
     unicode = fields.List(fields.Int(), load_default=tuple())
-    sign_order = fields.Nested(
-        SignOrderSchema,
-        data_key="signOrder",
+    sort_keys = fields.Nested(
+        SortKeysSchema,
+        data_key="sortKeys",
         allow_none=True,
         load_default=None,
     )
@@ -211,7 +223,7 @@ class MongoSignRepository(SignRepository):
                         "reverseOrder": {"$first": "$reverseOrder"},
                         "logograms": {"$first": "$logograms"},
                         "fossey": {"$first": "$fossey"},
-                        "signOrder": {"$first": "$signOrder"},
+                        "sortKeys": {"$first": "$sortKeys"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }

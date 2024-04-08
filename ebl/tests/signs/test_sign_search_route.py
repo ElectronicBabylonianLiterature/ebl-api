@@ -84,11 +84,11 @@ sign_data = {
     "name": "P₂",
     "unicode": [74865],
     "values": [{"subIndex": 1, "value": ":"}],
-    "signOrder": {
-        "directNeoAssyrian": [1, 2],
-        "directNeoBabylonian": [1, 2],
-        "reverseNeoAssyrian": [1, 2],
-        "reverseNeoBabylonian": [1, 2],
+    "sortKeys": {
+        "neoAssyrianOnset": [1, 2],
+        "neoBabylonianOnset": [1, 2],
+        "neoAssyrianOffset": [1, 2],
+        "neoBabylonianOffset": [1, 2],
     },
 }
 

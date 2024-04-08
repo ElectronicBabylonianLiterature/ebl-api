@@ -28,13 +28,11 @@ class AbstractWord(Token):
 
     @property
     @abstractmethod
-    def language(self) -> Language:
-        ...
+    def language(self) -> Language: ...
 
     @property
     @abstractmethod
-    def normalized(self) -> bool:
-        ...
+    def normalized(self) -> bool: ...
 
     @property
     def parts(self) -> Sequence[Token]:
@@ -119,7 +117,7 @@ class AbstractWord(Token):
 
     def _is_compatible(self, token: Token) -> bool:
         same_value = self.clean_value == token.clean_value
-        same_type = type(token) == type(self)
+        same_type = isinstance(token, AbstractWord)
         return same_type and same_value
 
 
