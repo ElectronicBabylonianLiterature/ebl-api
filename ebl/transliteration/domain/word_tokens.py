@@ -28,13 +28,11 @@ class AbstractWord(Token):
 
     @property
     @abstractmethod
-    def language(self) -> Language:
-        ...
+    def language(self) -> Language: ...
 
     @property
     @abstractmethod
-    def normalized(self) -> bool:
-        ...
+    def normalized(self) -> bool: ...
 
     @property
     def parts(self) -> Sequence[Token]:
