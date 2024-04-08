@@ -14,6 +14,7 @@ from ebl.transliteration.domain.sign import (
     Value,
     Logogram,
     Fossey,
+    SortKeys,
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -78,6 +79,37 @@ class FosseySchema(Schema):
         return Fossey(**data)
 
 
+class SortKeysSchema(Schema):
+    neo_assyrian_onset = fields.List(
+        fields.Integer(),
+        data_key="neoAssyrianOnset",
+        allow_none=True,
+        load_default=None,
+    )
+    neo_babylonian_onset = fields.List(
+        fields.Integer(),
+        data_key="neoBabylonianOnset",
+        allow_none=True,
+        load_default=None,
+    )
+    neo_assyrian_offset = fields.List(
+        fields.Integer(),
+        data_key="neoAssyrianOffset",
+        allow_none=True,
+        load_default=None,
+    )
+    neo_babylonian_offset = fields.List(
+        fields.Integer(),
+        data_key="neoBabylonianOffset",
+        allow_none=True,
+        load_default=None,
+    )
+
+    @post_load
+    def make_sort_keys(self, data, **kwargs) -> SortKeys:
+        return SortKeys(**data)
+
+
 class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
@@ -86,7 +118,16 @@ class SignSchema(Schema):
     fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
+    reverse_order = fields.String(
+        data_key="reverseOrder", load_default="", allow_none=True
+    )
     unicode = fields.List(fields.Int(), load_default=tuple())
+    sort_keys = fields.Nested(
+        SortKeysSchema,
+        data_key="sortKeys",
+        allow_none=True,
+        load_default=None,
+    )
 
     @post_load
     def make_sign(self, data, **kwargs) -> Sign:
@@ -97,12 +138,16 @@ class SignSchema(Schema):
         data["unicode"] = tuple(data["unicode"])
         return Sign(**data)
 
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return {key: value for key, value in data.items() if value is not None}
+
 
 class SignDtoSchema(SignSchema):
     @post_dump
     def make_sign_dto(self, data, **kwargs) -> Dict:
         data["name"] = data.pop("_id")
-        return data
+        return {key: value for key, value in data.items() if value is not None}
 
 
 class MongoSignRepository(SignRepository):
@@ -175,8 +220,10 @@ class MongoSignRepository(SignRepository):
                         "unicode": {"$first": "$unicode"},
                         "mesZl": {"$first": "$mesZl"},
                         "LaBaSi": {"$first": "$LaBaSi"},
+                        "reverseOrder": {"$first": "$reverseOrder"},
                         "logograms": {"$first": "$logograms"},
                         "fossey": {"$first": "$fossey"},
+                        "sortKeys": {"$first": "$sortKeys"},
                         "values": {"$push": "$values"},
                         "subIndexCopy": {"$min": "$subIndexCopy"},
                     }

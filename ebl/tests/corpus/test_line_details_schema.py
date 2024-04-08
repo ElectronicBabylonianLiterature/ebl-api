@@ -52,9 +52,11 @@ SERIALIZED_LINE_DETAILS: dict = {
                     "paratext": OneOfLineSchema().dump(
                         MANUSCRIPT_LINE.paratext, many=True
                     ),
-                    "museumNumber": str(MANUSCRIPT.museum_number)
-                    if MANUSCRIPT.museum_number
-                    else "",
+                    "museumNumber": (
+                        str(MANUSCRIPT.museum_number)
+                        if MANUSCRIPT.museum_number
+                        else ""
+                    ),
                     "isInFragmentarium": MANUSCRIPT.is_in_fragmentarium,
                     "accession": MANUSCRIPT.accession,
                     "joins": [

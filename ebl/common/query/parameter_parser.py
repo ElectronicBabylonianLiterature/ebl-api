@@ -59,9 +59,11 @@ def parse_lemmas(parameters: Dict) -> Dict:
 
     try:
         lemma_operator = LemmaQueryType[
-            "AND"
-            if len(lemmas) == 1
-            else parameters.get("lemmaOperator", "and").upper()
+            (
+                "AND"
+                if len(lemmas) == 1
+                else parameters.get("lemmaOperator", "and").upper()
+            )
         ]
     except KeyError as error:
         raise DataError(

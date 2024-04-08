@@ -106,9 +106,13 @@ def _serialize_number(manuscript_line: ManuscriptLine) -> str:
 def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
     return "\n".join(
         [
-            manuscript_line.line.atf[len(manuscript_line.line.line_number.atf) + 1 :]
-            if isinstance(manuscript_line.line, TextLine)
-            else "",
+            (
+                manuscript_line.line.atf[
+                    len(manuscript_line.line.line_number.atf) + 1 :
+                ]
+                if isinstance(manuscript_line.line, TextLine)
+                else ""
+            ),
             *[line.atf for line in manuscript_line.paratext],
         ]
     ).strip()

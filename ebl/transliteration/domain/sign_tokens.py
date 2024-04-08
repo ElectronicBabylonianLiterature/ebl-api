@@ -81,7 +81,7 @@ class NamedSign(AbstractSign):
     @property
     def name(self) -> str:
         return "".join(
-            token.value for token in self.name_parts if type(token) == ValueToken
+            token.value for token in self.name_parts if isinstance(token, ValueToken)
         )
 
     @property

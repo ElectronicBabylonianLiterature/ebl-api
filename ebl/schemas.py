@@ -32,12 +32,10 @@ class EnumField(fields.Field, ABC):
             raise self.make_error("invalid_value") from error
 
     @abstractmethod
-    def _serialize_enum(self, value):
-        ...
+    def _serialize_enum(self, value): ...
 
     @abstractmethod
-    def _deserialize_enum(self, value) -> Enum:
-        ...
+    def _deserialize_enum(self, value) -> Enum: ...
 
 
 class ValueEnumField(EnumField):
