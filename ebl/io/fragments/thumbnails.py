@@ -55,6 +55,9 @@ if __name__ == "__main__":
             "MONGODB_URI environment variable must be set."
         )
     )
+    parser.add_argument(
+        "command", default="update", nargs="?", choices=["update", "clear"]
+    )
     args = parser.parse_args()
 
     client = MongoClient(os.environ["MONGODB_URI"])
@@ -65,7 +68,14 @@ if __name__ == "__main__":
 
     thumbnail_collection = GridFS(database, "thumbnails")
 
-    clear_thumbnails(thumbnail_collection)
+    if args.command == "update":
+        clear_thumbnails(thumbnail_collection)
 
-    for size in ThumbnailSize:
-        create_thumbnails(thumbnail_collection, originals, size)
+        print("Generating thumbnails...")
+        for size in ThumbnailSize:
+            create_thumbnails(thumbnail_collection, originals, size)
+        print("Done.")
+
+    elif args.command == "clear":
+        clear_thumbnails(thumbnail_collection)
+        print("Done.")
