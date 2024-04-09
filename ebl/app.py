@@ -91,6 +91,7 @@ def create_context():
         public_file_repository=GridFsFileRepository(database, "fs"),
         photo_repository=GridFsFileRepository(database, "photos"),
         folio_repository=GridFsFileRepository(database, "folios"),
+        thumbnail_repository=GridFsFileRepository(database, "thumbnails"),
         fragment_repository=MongoFragmentRepository(database),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),

@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, Optional, Sequence, Tuple
 
 from ebl.bibliography.application.bibliography import Bibliography
@@ -13,6 +14,19 @@ from ebl.transliteration.application.parallel_line_injector import ParallelLineI
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
+class ThumbnailSize(Enum):
+    SMALL = 240
+    MEDIUM = 480
+    LARGE = 720
+
+    @classmethod
+    def from_string(cls, value: str):
+        try:
+            return cls[value.upper()]
+        except KeyError as e:
+            raise ValueError(f"Unknown thumbnail size: {value}") from e
+
+
 class FragmentFinder:
     def __init__(
         self,
@@ -21,6 +35,7 @@ class FragmentFinder:
         dictionary: Dictionary,
         photos: FileRepository,
         folios: FileRepository,
+        thumbnails: FileRepository,
         parallel_injector: ParallelLineInjector,
     ):
         self._bibliography = bibliography
@@ -28,6 +43,7 @@ class FragmentFinder:
         self._dictionary = dictionary
         self._photos = photos
         self._folios = folios
+        self._thumbnails = thumbnails
         self._parallel_injector = parallel_injector
 
     def find(
@@ -82,3 +98,7 @@ class FragmentFinder:
     def find_photo(self, number: str) -> File:
         file_name = f"{number}.jpg"
         return self._photos.query_by_file_name(file_name)
+
+    def find_thumbnail(self, number: str, width: ThumbnailSize) -> File:
+        file_name = f"{number}_{width.value}.jpg"
+        return self._thumbnails.query_by_file_name(file_name)
