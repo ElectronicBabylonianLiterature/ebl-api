@@ -28,11 +28,11 @@ def clear_thumbnails(collection) -> None:
         collection.delete(old_thumbnail._id)
 
 
-def create_thumbnails(originals: list, total: int, size: ThumbnailSize):
+def create_thumbnails(collection, originals: list, size: ThumbnailSize):
     for item in tqdm(
         originals,
         desc=f"Creating {size.name.lower()} thumbnails",
-        total=total,
+        total=len(originals),
     ):
         filename, extension = os.path.splitext(item.filename)
         original = Image.open(item)
@@ -41,7 +41,7 @@ def create_thumbnails(originals: list, total: int, size: ThumbnailSize):
         with io.BytesIO() as stream:
             thumbnail.save(stream, format="jpeg")
             stream.seek(0)
-            thumbnail_collection.put(
+            collection.put(
                 stream,
                 content_type="image/jpeg",
                 filename=f"{filename}_{size.value}{extension}",
@@ -61,12 +61,11 @@ if __name__ == "__main__":
     database = client.get_database(os.environ["MONGODB_DB"])
 
     original_photos_collection = GridFS(database, "photos")
-    original_photos = list(cast(Iterable, original_photos_collection.find()))
-    total = len(original_photos)
+    originals = list(cast(Iterable, original_photos_collection.find()))
 
     thumbnail_collection = GridFS(database, "thumbnails")
 
     clear_thumbnails(thumbnail_collection)
 
     for size in ThumbnailSize:
-        create_thumbnails(original_photos, total, size)
+        create_thumbnails(thumbnail_collection, originals, size)
