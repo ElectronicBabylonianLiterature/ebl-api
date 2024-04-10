@@ -3,7 +3,7 @@ from typing import cast, Iterable
 from pymongo import MongoClient
 from gridfs import GridFS
 import os
-from PIL import Image
+from PIL import Image, ImageFile
 import io
 from tqdm import tqdm
 from ebl.fragmentarium.application.fragment_finder import ThumbnailSize
@@ -12,6 +12,7 @@ from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 
 Image.MAX_IMAGE_PIXELS = None
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def resize(original: Image.Image, size: ThumbnailSize):
@@ -31,34 +32,9 @@ def clear_thumbnails(collection) -> None:
         collection.delete(old_thumbnail._id)
 
 
-def remove_infix(filename, width):
-    name, extension = os.path.splitext(filename)
-    return name.removesuffix(f"_{width}") + extension
-
-
 def add_infix(filename, size: ThumbnailSize):
     name, extension = os.path.splitext(filename)
     return f"{name}_{size.value}{extension}"
-
-
-def create_thumbnails(collection, originals: Iterable, size: ThumbnailSize, total: int):
-    for item in tqdm(
-        originals,
-        desc=f"Creating {size.name.lower()} thumbnails",
-        total=total,
-    ):
-        filename, extension = os.path.splitext(item.filename)
-        original = Image.open(item)
-        thumbnail = resize(original, size)
-
-        with io.BytesIO() as stream:
-            thumbnail.save(stream, format="jpeg")
-            stream.seek(0)
-            collection.put(
-                stream,
-                content_type="image/jpeg",
-                filename=f"{filename}_{size.value}{extension}",
-            )
 
 
 def load_batch(collection, batch):
@@ -139,7 +115,7 @@ if __name__ == "__main__":
             needs_thumbnail = [
                 file
                 for file in all_photos
-                if not add_infix(file, thumbnail_size) in all_thumbnails
+                if add_infix(file, thumbnail_size) not in all_thumbnails
             ]
             total = len(needs_thumbnail)
 
@@ -166,7 +142,7 @@ if __name__ == "__main__":
                     else:
                         thumbnails = [
                             create_thumbnail(item, thumbnail_size)
-                            for item in tqdm(batch, total=len(needs_thumbnail))
+                            for item in tqdm(originals, total=len(needs_thumbnail))
                         ]
                     print("Saving thumbnails...")
                     save_thumbnails(thumbnail_collection, thumbnails)
