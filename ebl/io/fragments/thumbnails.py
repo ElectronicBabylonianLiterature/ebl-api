@@ -1,5 +1,4 @@
 import argparse
-from typing import cast, Iterable
 from pymongo import MongoClient
 from gridfs import GridFS
 import os
@@ -11,7 +10,7 @@ from itertools import islice
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 
-Image.MAX_IMAGE_PIXELS = None
+Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
