@@ -136,37 +136,54 @@ class MongoSignRepository(SignRepository):
     def find_signs_by_order(self, name: SignName, order: str, sort_era: str) -> Sign:
         key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
         if order == "preceding":
-            cursor = self._collection.aggregate(
-                [
-                    {
-                        "$match": {
-                            f"sortKeys.{sort_era}": {
-                                "$elemMatch": {"$lt": key, "$gte": key - 5}
+            range_start = "$lt"
+            range_end = "$gte"
+            end_key = key - 5
+        elif order == "following":
+            range_start = "$gt"
+            range_end = "$lte"
+            end_key = key + 5
+        cursor = self._collection.aggregate(
+            [
+                {
+                    "$match": {
+                        f"sortKeys.{sort_era}": {
+                            "$elemMatch": {
+                                f"{range_start}": key,
+                                f"{range_end}": end_key,
                             }
                         }
-                    },
-                    {"$unwind": f"$sortKeys.{sort_era}"},
-                    {"$match": {f"sortKeys.{sort_era}": {"$lt": key, "$gt": key - 5}}},
-                    {
-                        "$project": {
-                            "sign": 1,
-                            "unicode": 1,
-                            "name": "$_id",
-                            "sort_key": f"$sortKeys.{sort_era}",
+                    }
+                },
+                {"$unwind": f"$sortKeys.{sort_era}"},
+                {
+                    "$match": {
+                        f"sortKeys.{sort_era}": {
+                            f"{range_start}": key,
+                            f"{range_end}": end_key,
                         }
-                    },
-                    {"$sort": {"sort_key": 1}},
-                    {"$group": {"_id": "1", "signs": {"$push": "$$ROOT"}}},
-                    {
-                        "$project": {
-                            "signs.name": 1,
-                            "signs.unicode": 1,
-                            "signs.sort_key": 1,
-                        }
-                    },
-                ]
-            )
-            return OrderedSignsSchema().load(cursor, unknown=EXCLUDE, many=True)
+                    }
+                },
+                {
+                    "$project": {
+                        "sign": 1,
+                        "unicode": 1,
+                        "name": "$_id",
+                        "sort_key": f"$sortKeys.{sort_era}",
+                    }
+                },
+                {"$sort": {"sort_key": 1}},
+                {"$group": {"_id": "1", "signs": {"$push": "$$ROOT"}}},
+                {
+                    "$project": {
+                        "signs.name": 1,
+                        "signs.unicode": 1,
+                        "signs.sort_key": 1,
+                    }
+                },
+            ]
+        )
+        return OrderedSignsSchema().load(cursor, unknown=EXCLUDE, many=True)
 
     def search(self, reading: str, sub_index: Optional[int] = None) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
