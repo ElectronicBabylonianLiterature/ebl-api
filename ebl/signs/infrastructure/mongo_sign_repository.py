@@ -135,11 +135,10 @@ class MongoSignRepository(SignRepository):
 
     def find_signs_by_order(self, name: SignName, order: str, sort_era: str) -> Sign:
         key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
-        if order == "preceding":
-            range_start = "$lt"
-            range_end = "$gte"
-            end_key = key - 5
-        elif order == "following":
+        range_start = "$lt"
+        range_end = "$gte"
+        end_key = key - 5
+        if order == "following":
             range_start = "$gt"
             range_end = "$lte"
             end_key = key + 5
