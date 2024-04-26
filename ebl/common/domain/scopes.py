@@ -52,6 +52,7 @@ class Scope(ScopeItem):
     READ_ARG_FOLIOS = ("read:ARG-folios", RESTRICTED)
     READ_EVW_FOLIOS = ("read:EVW-folios", RESTRICTED)
     READ_ILF_FOLIOS = ("read:ILF-folios", RESTRICTED)
+    READ_HHF_FOLIOS = ("read:HHF-folios", OPEN)
     READ_MJG_FOLIOS = ("read:MJG-folios", RESTRICTED)
     READ_SJL_FOLIOS = ("read:SJL-folios", RESTRICTED)
     READ_SP_FOLIOS = ("read:SP-folios", RESTRICTED)
