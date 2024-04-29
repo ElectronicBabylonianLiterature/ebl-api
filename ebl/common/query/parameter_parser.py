@@ -39,6 +39,8 @@ def parse_transliteration(
         if "transliteration" not in parameters:
             return parameters
 
+        for line in parameters["transliteration"].strip().split("\n"):
+            print(transliteration_query_factory.create(line).regexp)
         return {
             **parameters,
             "transliteration": [
