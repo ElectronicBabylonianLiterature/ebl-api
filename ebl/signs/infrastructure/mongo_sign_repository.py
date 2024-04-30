@@ -46,7 +46,6 @@ class ValueSchema(Schema):
 class OrderedSignSchema(Schema):
     name = fields.String(required=True)
     unicode = fields.List(fields.Int(), required=True)
-    sort_key = fields.Int(required=True)
 
 
 class LogogramSchema(Schema):
@@ -133,7 +132,7 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
-    def find_signs_by_order(self, name: SignName, order: str, sort_era: str) -> Sign:
+    def find_signs_by_order(self, name: SignName, order: str, sort_era: str) -> list[Sign]:
         key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
         range_start = "$lt"
         range_end = "$gte"
@@ -177,12 +176,16 @@ class MongoSignRepository(SignRepository):
                     "$project": {
                         "signs.name": 1,
                         "signs.unicode": 1,
-                        "signs.sort_key": 1,
                     }
                 },
             ]
         )
-        return OrderedSignsSchema().load(cursor, unknown=EXCLUDE, many=True)
+        loaded_signs = []
+        for item in cursor:
+            for sign in item['signs']:
+                loaded_sign = OrderedSignSchema().load(sign, unknown=EXCLUDE)
+                loaded_signs.append(loaded_sign)
+        return loaded_signs
 
     def search(self, reading: str, sub_index: Optional[int] = None) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
