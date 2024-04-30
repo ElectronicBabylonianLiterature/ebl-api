@@ -196,7 +196,9 @@ class ExternalNumbersFactory(factory.Factory):
     oracc_numbers = factory.List(
         [factory.Sequence(lambda n: f"oracc-number-{n}")], TupleFactory
     )
-    seal_number = factory.Sequence(lambda n: f"seal_number-{n}")
+    seal_numbers = factory.List(
+        [factory.Sequence(lambda n: f"seal_number-{n}")], TupleFactory
+    )
 
 
 class FragmentFactory(factory.Factory):

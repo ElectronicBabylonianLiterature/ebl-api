@@ -152,11 +152,14 @@ class ExternalNumbersSchema(Schema):
     oracc_numbers = fields.List(
         fields.String(), load_default=tuple(), data_key="oraccNumbers"
     )
-    seal_number = fields.String(load_default="", data_key="sealNumber")
+    seal_numbers = fields.List(
+        fields.String(), load_default=tuple(), data_key="sealNumbers"
+    )
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
         data["oracc_numbers"] = tuple(data["oracc_numbers"])
+        data["seal_numbers"] = tuple(data["seal_numbers"])
         return ExternalNumbers(**data)
 
     @post_dump

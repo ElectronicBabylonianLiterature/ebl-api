@@ -111,7 +111,7 @@ class ExternalNumbers:
     nabucco_number: str = ""
     yale_peabody_number: str = ""
     oracc_numbers: Sequence[str] = tuple()
-    seal_number: str = ""
+    seal_numbers: Sequence[str] = tuple()
 
 
 @attr.s(auto_attribs=True, frozen=True)
