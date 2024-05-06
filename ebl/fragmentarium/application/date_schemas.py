@@ -1,6 +1,6 @@
 import datetime
 from ebl.fragmentarium.domain.date_range import DateRange, PartialDate
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, post_dump
 from dateutil.parser import isoparse
 
 
@@ -21,6 +21,10 @@ class PartialDateSchema(Schema):
     @post_load
     def create_partial_date(self, data, **kwargs) -> PartialDate:
         return PartialDate(**data)
+
+    @post_dump
+    def remove_empty_fields(self, data: dict, **kwargs):
+        return {key: value for key, value in data.items() if value or value == 0}
 
 
 class DateRangeSchema(Schema):
