@@ -14,6 +14,7 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.users.domain.user import User
 from ebl.fragmentarium.domain.date import Date
+from ebl.fragmentarium.domain.colophon import Colophon
 
 COLLECTION = "fragments"
 
@@ -147,6 +148,16 @@ class FragmentUpdater:
         updated_fragment = fragment.set_archaeology(archaeology)
 
         self._repository.update_field("archaeology", updated_fragment)
+
+        return self._create_result(updated_fragment)
+
+    def update_colophon(
+        self, number: MuseumNumber, colophon: Colophon, user: User
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
+        updated_fragment = fragment.set_colophon(colophon)
+
+        self._repository.update_field("colophon", updated_fragment)
 
         return self._create_result(updated_fragment)
 

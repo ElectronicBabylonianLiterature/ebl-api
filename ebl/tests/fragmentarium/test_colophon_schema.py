@@ -6,14 +6,16 @@ from ebl.fragmentarium.application.colophon_schema import (
     ColophonType,
     ColophonOwnership,
     IndividualType,
-    Provenance,
+    IndividualTypeAttestationSchema
 )
 from ebl.fragmentarium.domain.colophon import (
     NameAttestation,
     ProvenanceAttestation,
 )
+from ebl.common.domain.provenance import Provenance
 
 name_attestation = {"value": "John Doe"}
+type_attestation = {"value": IndividualType.Scribe}
 provenance_attestation = {"value": "Provenance.BABYLON"}
 colophon_data = {
     "colophon_status": ColophonStatus.OnlyColophon,
@@ -26,7 +28,7 @@ colophon_data = {
         {
             "name": name_attestation,
             "son_of": name_attestation,
-            "type": IndividualType.Scribe,
+            "type": type_attestation,
         }
     ],
 }
@@ -56,6 +58,7 @@ def test_colophon_schema_integration():
     deserialized = schema.load(serialized)
     provenance_deserialized = ProvenanceAttestationSchema().load(provenance_attestation)
     name_deserialized = NameAttestationSchema().load(name_attestation)
+    type_deserialized = IndividualTypeAttestationSchema().load(type_attestation)
     assert deserialized.colophon_status == ColophonStatus.OnlyColophon
     assert deserialized.colophon_ownership == ColophonOwnership.Individual
     assert deserialized.colophon_types == [ColophonType.AsbD]
@@ -65,5 +68,5 @@ def test_colophon_schema_integration():
     assert deserialized.individuals[0].name == name_deserialized
     assert deserialized.individuals[0].son_of == name_deserialized
     assert deserialized.individuals[0].grandson_of is None
-    assert deserialized.individuals[0].type == IndividualType.Scribe
+    assert deserialized.individuals[0].type == type_deserialized
     assert isinstance(deserialized.original_from, ProvenanceAttestation)

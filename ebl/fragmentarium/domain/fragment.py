@@ -216,6 +216,9 @@ class Fragment:
     def set_archaeology(self, archaeology: Archaeology) -> "Fragment":
         return attr.evolve(self, archaeology=archaeology)
 
+    def set_colophon(self, colophon: Colophon) -> "Fragment":
+        return attr.evolve(self, colophon=colophon)
+
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)

@@ -68,13 +68,20 @@ class ProvenanceAttestation:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class IndividualTypeAttestation:
+    value: Optional[IndividualType] = None
+    is_broken: Optional[bool] = None
+    is_uncertain: Optional[bool] = None
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class IndividualAttestation:
     name: Optional[NameAttestation] = None
     son_of: Optional[NameAttestation] = None
     grandson_of: Optional[NameAttestation] = None
     family: Optional[NameAttestation] = None
     native_of: Optional[ProvenanceAttestation] = None
-    type: Optional[IndividualType] = None
+    type: Optional[IndividualTypeAttestation] = None
 
 
 @attr.s(auto_attribs=True, frozen=True)

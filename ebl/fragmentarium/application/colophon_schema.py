@@ -9,9 +9,9 @@ from ebl.fragmentarium.domain.colophon import (
     ProvenanceAttestation,
     IndividualAttestation,
     IndividualType,
+    IndividualTypeAttestation,
     Colophon,
 )
-from ebl.common.domain.provenance import Provenance
 
 
 class NameAttestationSchema(Schema):
@@ -35,8 +35,21 @@ class ProvenanceAttestationSchema(Schema):
 
     @post_load
     def make_provenance_attestation(self, data, **kwargs) -> ProvenanceAttestation:
-        data["value"] = Provenance[data["value"].split(".")[1]]
         return ProvenanceAttestation(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs) -> dict:
+        return pydash.omit_by(data, pydash.is_none)
+
+
+class IndividualTypeAttestationSchema(Schema):
+    value = ValueEnumField(IndividualType, allow_none=True)
+    is_broken = fields.Boolean(data_key="isBroken", allow_none=True)
+    is_uncertain = fields.Boolean(data_key="isUncertain", allow_none=True)
+
+    @post_load
+    def make_type_attestation(self, data, **kwargs) -> IndividualTypeAttestation:
+        return IndividualTypeAttestation(**data)
 
     @post_dump
     def filter_none(self, data, **kwargs) -> dict:
@@ -67,7 +80,7 @@ class IndividualAttestationSchema(Schema):
     native_of = fields.Nested(
         ProvenanceAttestationSchema, allow_none=True, data_key="nativeOf"
     )
-    type = ValueEnumField(IndividualType, allow_none=True)
+    type = fields.Nested(IndividualTypeAttestationSchema, allow_none=True)
 
     @post_load
     def make_individual_attestation(self, data, **kwargs) -> IndividualAttestation:

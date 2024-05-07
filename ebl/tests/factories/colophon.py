@@ -9,6 +9,7 @@ from ebl.fragmentarium.domain.colophon import (
     Colophon,
     IndividualType,
     ColophonOwnership,
+    IndividualTypeAttestation
 )
 from ebl.common.domain.provenance import Provenance
 
@@ -30,6 +31,14 @@ class ProvenanceAttestationFactory(factory.Factory):
     is_broken = factory.Faker("boolean")
     is_uncertain = factory.Faker("boolean")
 
+class IndividualTypeFactory(factory.Factory):
+    class Meta:
+        model = IndividualTypeAttestation
+
+    value = factory.fuzzy.FuzzyChoice([t for t in IndividualType])
+    is_broken = factory.Faker("boolean")
+    is_uncertain = factory.Faker("boolean")
+
 
 class IndividualAttestationFactory(factory.Factory):
     class Meta:
@@ -40,7 +49,7 @@ class IndividualAttestationFactory(factory.Factory):
     grandson_of = factory.SubFactory(NameAttestationFactory)
     family = factory.SubFactory(NameAttestationFactory)
     native_of = factory.SubFactory(ProvenanceAttestationFactory)
-    type = factory.fuzzy.FuzzyChoice([t for t in IndividualType])
+    type = factory.SubFactory(IndividualTypeFactory)
 
 
 class ColophonFactory(factory.Factory):

@@ -171,12 +171,6 @@ def test_query_by_museum_number(database, fragment_repository, number):
         MuseumNumber.of(number)
     )
 
-    print(
-        "!",
-        fragment.colophon,
-        FragmentSchema(exclude=["joins"]).dump(fragment)["colophon"],
-    )
-
     assert queried_fragment == fragment
 
 

@@ -88,6 +88,7 @@ class MongoFragmentRepository(
             ),
             "date": ("date",),
             "dates_in_text": ("dates_in_text",),
+            "colophon": ("colophon",),
         }
 
         if field not in fields_to_update:
