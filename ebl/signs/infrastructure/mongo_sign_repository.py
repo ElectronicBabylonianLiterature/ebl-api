@@ -132,7 +132,7 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
-    def find_signs_by_order(self, name: SignName, sort_era: str) -> list[Sign]:
+    def find_signs_by_order(self, name: SignName, sort_era: str) -> Optional[Sign]:
         try:
             key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
         except KeyError:
