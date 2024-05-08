@@ -136,7 +136,7 @@ class MongoSignRepository(SignRepository):
         try:
             key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
         except KeyError as e:
-            raise  e
+            raise e
         range_start = key - 5
         range_end = key + 5
         cursor = self._collection.aggregate(
