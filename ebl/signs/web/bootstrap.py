@@ -25,4 +25,4 @@ def create_signs_routes(api: falcon.App, context: Context):
     api.add_route("/signs/{sign_name}", signs)
     api.add_route("/signs/{sign_name}/images", signs_images)
     api.add_route("/signs/all", signs_all)
-    api.add_route("/signs/{sign_name}/{order}/{sort_era}", ordered_signs)
+    api.add_route("/signs/{sign_name}/{sort_era}", ordered_signs)

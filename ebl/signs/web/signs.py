@@ -41,7 +41,5 @@ class SignsOrderResource:
     def __init__(self, signs: SignRepository):
         self.sign_repository = signs
 
-    def on_get(self, req, resp, sign_name, order, sort_era):
-        resp.media = self.sign_repository.find_signs_by_order(
-            sign_name, order, sort_era
-        )
+    def on_get(self, req, resp, sign_name, sort_era):
+        resp.media = self.sign_repository.find_signs_by_order(sign_name, sort_era)

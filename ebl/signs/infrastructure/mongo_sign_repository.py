@@ -132,23 +132,21 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
-    def find_signs_by_order(self, name: SignName, order: str, sort_era: str) -> list[Sign]:
-        key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
-        range_start = "$lt"
-        range_end = "$gte"
-        end_key = key - 5
-        if order == "following":
-            range_start = "$gt"
-            range_end = "$lte"
-            end_key = key + 5
+    def find_signs_by_order(self, name: SignName, sort_era: str) -> list[Sign]:
+        try:
+            key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
+        except KeyError:
+            return None
+        range_start = key - 5
+        range_end = key + 5
         cursor = self._collection.aggregate(
             [
                 {
                     "$match": {
                         f"sortKeys.{sort_era}": {
                             "$elemMatch": {
-                                f"{range_start}": key,
-                                f"{range_end}": end_key,
+                                "$gte": range_start,
+                                "$lte": range_end,
                             }
                         }
                     }
@@ -157,8 +155,8 @@ class MongoSignRepository(SignRepository):
                 {
                     "$match": {
                         f"sortKeys.{sort_era}": {
-                            f"{range_start}": key,
-                            f"{range_end}": end_key,
+                            "$gte": range_start,
+                            "$lte": range_end,
                         }
                     }
                 },
@@ -182,7 +180,7 @@ class MongoSignRepository(SignRepository):
         )
         loaded_signs = []
         for item in cursor:
-            for sign in item['signs']:
+            for sign in item["signs"]:
                 loaded_sign = OrderedSignSchema().load(sign, unknown=EXCLUDE)
                 loaded_signs.append(loaded_sign)
         return loaded_signs
