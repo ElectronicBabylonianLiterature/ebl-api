@@ -45,7 +45,9 @@ class FindspotSchema(Schema):
     site = site_field
     area = fields.String()
     building = fields.String()
-    building_type = NameEnumField(BuildingType, data_key="buildingType")
+    building_type = NameEnumField(
+        BuildingType, data_key="buildingType", allow_none=True
+    )
     lavel_layer_phase = fields.String(data_key="levelLayerPhase")
     date_range = fields.Nested(DateRangeSchema, data_key="date", allow_none=True)
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=tuple())

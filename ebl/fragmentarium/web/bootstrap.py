@@ -55,6 +55,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         Dictionary(context.word_repository, context.changelog),
         context.photo_repository,
         context.folio_repository,
+        context.thumbnail_repository,
         context.parallel_line_injector,
     )
     updater = context.get_fragment_updater()
@@ -147,6 +148,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/colophon", colophon),
         ("/fragments/{number}/notes", notes),
         ("/fragments/{number}/annotations", annotations),
+        ("/fragments/{number}/thumbnail/{resolution}", photo),
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
         ("/genres", genres),

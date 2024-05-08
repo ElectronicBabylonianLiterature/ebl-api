@@ -2,6 +2,7 @@ import attr
 import pytest
 
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_finder import ThumbnailSize
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.tests.factories.fragment import FragmentFactory
@@ -141,6 +142,17 @@ def test_find_photo(fragment_finder, photo, photo_repository, when):
     when(photo_repository).query_by_file_name(file_name).thenReturn(photo)
 
     assert fragment_finder.find_photo(number) == photo
+
+
+@pytest.mark.parametrize("thumbnail_size", ThumbnailSize)
+def test_find_thumbnail(
+    fragment_finder, photo, thumbnail_repository, when, thumbnail_size
+):
+    number = photo.filename.removesuffix(".jpg")
+    file_name = f"{number}_{thumbnail_size.value}.jpg"
+    when(thumbnail_repository).query_by_file_name(file_name).thenReturn(photo)
+
+    assert fragment_finder.find_thumbnail(number, thumbnail_size) == photo
 
 
 def test_find_folio(fragment_finder, folio_with_allowed_scope, file_repository, when):
