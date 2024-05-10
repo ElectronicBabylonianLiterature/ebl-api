@@ -1,7 +1,6 @@
 import attr
 from typing import Optional, List
 from enum import Enum
-from ebl.common.domain.provenance import Provenance
 
 
 class ColophonStatus(Enum):
@@ -62,7 +61,7 @@ class NameAttestation:
 
 @attr.s(auto_attribs=True, frozen=True)
 class ProvenanceAttestation:
-    value: Optional[Provenance] = None
+    value: Optional[str] = None
     is_broken: Optional[bool] = None
     is_uncertain: Optional[bool] = None
 

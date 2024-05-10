@@ -29,7 +29,7 @@ class NameAttestationSchema(Schema):
 
 
 class ProvenanceAttestationSchema(Schema):
-    value = fields.String(required=False, load_default=None)
+    value = fields.String(allow_none=True)
     is_broken = fields.Boolean(data_key="isBroken", allow_none=True)
     is_uncertain = fields.Boolean(data_key="isUncertain", allow_none=True)
 

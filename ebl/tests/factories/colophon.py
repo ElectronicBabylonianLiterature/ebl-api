@@ -9,7 +9,7 @@ from ebl.fragmentarium.domain.colophon import (
     Colophon,
     IndividualType,
     ColophonOwnership,
-    IndividualTypeAttestation
+    IndividualTypeAttestation,
 )
 from ebl.common.domain.provenance import Provenance
 
@@ -27,9 +27,12 @@ class ProvenanceAttestationFactory(factory.Factory):
     class Meta:
         model = ProvenanceAttestation
 
-    value = factory.fuzzy.FuzzyChoice([p for p in Provenance])
+    value = factory.fuzzy.FuzzyChoice(
+        [f"{p.long_name} ({p.parent})" if p.parent else p.long_name for p in Provenance]
+    )
     is_broken = factory.Faker("boolean")
     is_uncertain = factory.Faker("boolean")
+
 
 class IndividualTypeFactory(factory.Factory):
     class Meta:
