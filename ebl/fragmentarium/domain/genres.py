@@ -284,6 +284,7 @@ genres = (
     ("CANONICAL", "Lexicography", "Vocabularies", "Nabnītu"),
     ("CANONICAL", "Lexicography", "Vocabularies", "Šarru"),
     ("CANONICAL", "Literature"),
+    ("CANONICAL", "Literature", "Göttertypentext"),
     ("CANONICAL", "Literature", "Hymns"),
     ("CANONICAL", "Literature", "Hymns", "Divine"),
     ("CANONICAL", "Literature", "Hymns", "Divine", "Bulluṭsa-rabi’s Hymn to Gula"),
