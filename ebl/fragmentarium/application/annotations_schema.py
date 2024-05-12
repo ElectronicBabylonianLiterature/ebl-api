@@ -57,7 +57,7 @@ class AnnotationSchema(Schema):
 
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
-    provenance = fields.String(required=False, data_key="provenance", load_default=None)
+    provenance = fields.String(required=False, load_default=None)
     annotations = fields.List(fields.Nested(AnnotationSchema(), required=True))
 
     @post_load

@@ -43,6 +43,7 @@ from ebl.fragmentarium.web.fragments_afo_register import (
 )
 from ebl.corpus.web.chapters import ChaptersByManuscriptResource
 from ebl.corpus.application.corpus import Corpus
+from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
 
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
@@ -113,6 +114,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     )
     introduction = IntroductionResource(updater)
     archaeology = ArchaeologyResource(updater)
+    colophon = ColophonResource(updater)
     notes = NotesResource(updater)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
@@ -126,6 +128,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     all_signs = make_all_fragment_signs_resource(
         context.fragment_repository, context.cache
     )
+    colophon_names = ColophonNamesResource(context.fragment_repository)
 
     routes = [
         ("/fragments", fragment_search),
@@ -142,6 +145,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/transliteration", transliteration),
         ("/fragments/{number}/introduction", introduction),
         ("/fragments/{number}/archaeology", archaeology),
+        ("/fragments/{number}/colophon", colophon),
         ("/fragments/{number}/notes", notes),
         ("/fragments/{number}/annotations", annotations),
         ("/fragments/{number}/thumbnail/{resolution}", photo),
@@ -158,6 +162,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/latest", latest_additions_query),
         ("/fragments/all", all_fragments),
         ("/fragments/all-signs", all_signs),
+        ("/fragments/colophon-names", colophon_names),
         ("/findspots", findspots),
     ]
 

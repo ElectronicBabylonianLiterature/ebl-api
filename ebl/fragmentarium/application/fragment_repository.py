@@ -90,6 +90,9 @@ class FragmentRepository(ABC):
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]: ...
 
     @abstractmethod
+    def fetch_names(self, name_query: str) -> List[str]: ...
+
+    @abstractmethod
     def fetch_date(self, number: MuseumNumber) -> Optional[Date]: ...
 
     @abstractmethod

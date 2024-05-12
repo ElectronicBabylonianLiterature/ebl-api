@@ -26,6 +26,7 @@ from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
 from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
 from ebl.fragmentarium.domain.date import Date
+from ebl.fragmentarium.domain.colophon import Colophon
 
 
 def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:
@@ -145,6 +146,7 @@ class Fragment:
     projects: Sequence[str] = tuple()
     traditional_references: Sequence[str] = list()
     archaeology: Optional[Archaeology] = None
+    colophon: Optional[Colophon] = None
 
     @property
     def is_lowest_join(self) -> bool:
@@ -214,6 +216,9 @@ class Fragment:
 
     def set_archaeology(self, archaeology: Archaeology) -> "Fragment":
         return attr.evolve(self, archaeology=archaeology)
+
+    def set_colophon(self, colophon: Colophon) -> "Fragment":
+        return attr.evolve(self, colophon=colophon)
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)

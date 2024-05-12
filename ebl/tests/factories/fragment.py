@@ -91,6 +91,7 @@ from ebl.fragmentarium.domain.date import (
     Ur3Calendar,
 )
 from ebl.chronology.chronology import chronology, King, KingSchema
+from ebl.tests.factories.colophon import ColophonFactory
 
 
 class JoinFactory(factory.Factory):
@@ -233,6 +234,7 @@ class FragmentFactory(factory.Factory):
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
     projects = (ResearchProject.CAIC,)
     archaeology = factory.SubFactory(ArchaeologyFactory)
+    colophon = factory.SubFactory(ColophonFactory)
 
 
 class InterestingFragmentFactory(FragmentFactory):

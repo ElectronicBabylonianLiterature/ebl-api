@@ -17,10 +17,6 @@ from ebl.mongo_collection import MongoCollection
 COLLECTION = "annotations"
 
 
-def has_none_values(dictionary: dict) -> bool:
-    return not all(dictionary.values())
-
-
 class MongoAnnotationsRepository(AnnotationsRepository):
     def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)

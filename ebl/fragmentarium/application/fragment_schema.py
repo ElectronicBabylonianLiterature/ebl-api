@@ -28,6 +28,7 @@ from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.date import DateSchema
+from ebl.fragmentarium.application.colophon_schema import ColophonSchema
 
 
 class MeasureSchema(Schema):
@@ -217,6 +218,7 @@ class FragmentSchema(Schema):
         DateSchema, data_key="datesInText", many=True, allow_none=True, default=list()
     )
     archaeology = fields.Nested(ArchaeologySchema, allow_none=True, default=None)
+    colophon = fields.Nested(ColophonSchema, allow_none=True, default=None)
 
     @post_load
     def make_fragment(self, data, **kwargs):
@@ -235,7 +237,7 @@ class FragmentSchema(Schema):
         return Fragment(**data)
 
     @post_dump
-    def filter_none(self, data, **kwargs):
+    def filter_none(self, data, **kwargs) -> dict:
         scope = data.get("authorizedScopes")
         if scope is not None and len(scope) == 0:
             data.pop("authorizedScopes")

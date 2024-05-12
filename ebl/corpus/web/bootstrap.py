@@ -12,7 +12,7 @@ from ebl.corpus.web.chapters import (
     ChapterSignsResource,
     make_all_chapter_signs_resource,
 )
-from ebl.corpus.web.colophons import ColophonsResource
+from ebl.corpus.web.colophons import CorpusColophonsResource
 from ebl.corpus.web.extant_lines import ExtantLinesResource
 from ebl.corpus.web.lemmatizations import LemmatizationResource
 from ebl.corpus.web.lines import LinesImportResource, LinesResource, LineResource
@@ -53,7 +53,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
     manuscript = ManuscriptsResource(corpus, context.custom_cache)
     lines = LinesResource(corpus, context.custom_cache)
     lines_import = LinesImportResource(corpus, context.custom_cache)
-    colophons = ColophonsResource(corpus)
+    colophons = CorpusColophonsResource(corpus)
     unplaced_lines = UnplacedLinesResource(corpus)
     extant_lines = ExtantLinesResource(corpus)
     corpus_query = CorpusQueryResource(
