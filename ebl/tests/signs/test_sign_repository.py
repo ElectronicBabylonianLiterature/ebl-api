@@ -39,6 +39,11 @@ def mongo_sign_igi():
             },
         ],
         "forms": [],
+        "sortKeys": {
+            "neoAssyrianOnset": [126],
+            "neoBabylonianOnset": [39],
+            "neoAssyrianOffset": [25],
+        },
     }
 
 
@@ -74,6 +79,11 @@ def mongo_sign_si():
             },
         ],
         "forms": [],
+        "sortKeys": {
+            "neoAssyrianOnset": [125],
+            "neoBabylonianOnset": [38],
+            "neoAssyrianOffset": [24],
+        },
     }
 
 
@@ -153,7 +163,7 @@ def sign_si_2(mongo_sign_si_2):
     return SignSchema(unknown=EXCLUDE).load(mongo_sign_si_2)
 
 
-def teste(database, sign_repository, sign_igi):
+def test_create(database, sign_repository, sign_igi):
     sign_name = sign_repository.create(sign_igi)
 
     assert database[COLLECTION].find_one({"_id": sign_name}) == SignSchema().dump(
@@ -234,6 +244,14 @@ def test_search_by_lists_name(
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search("unknown", 1) is None
+
+
+def test_find_signs_by_order(database, sign_repository, mongo_sign_igi, mongo_sign_si):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
+    assert sign_repository.find_signs_by_order("IGI", "neoBabylonianOnset") == [
+        {"name": "SI", "unicode": []},
+        {"name": "IGI", "unicode": [74054]},
+    ]
 
 
 def test_find_signs_by_order_not_found(sign_repository):

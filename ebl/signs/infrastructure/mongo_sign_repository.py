@@ -107,10 +107,6 @@ class SignSchema(Schema):
         return Sign(**data)
 
 
-class OrderedSignsSchema(Schema):
-    ordered_signs = fields.Nested(OrderedSignSchema, many=True, data_key="signs")
-
-
 class SignDtoSchema(SignSchema):
     @post_dump
     def make_sign_dto(self, data, **kwargs) -> Dict:
@@ -163,36 +159,30 @@ class MongoSignRepository(SignRepository):
                 },
                 {
                     "$project": {
-                        "sign": 1,
                         "unicode": 1,
-                        "lists": 1,
                         "name": "$_id",
                         "sort_key": f"$sortKeys.{sort_era}",
                         "mzlNumber": {
-                            "$let": {
-                                "vars": {
-                                    "filteredResult": {
-                                        "$filter": {
-                                            "input": "$lists",
-                                            "as": "item",
-                                            "cond": {"$eq": ["$$item.name", "MZL"]},
-                                        }
-                                    }
-                                },
-                                "in": {"$arrayElemAt": ["$$filteredResult.number", 0]},
+                            "$first": {
+                                "$filter": {
+                                    "input": "$lists",
+                                    "as": "item",
+                                    "cond": {"$eq": ["$$item.name", "MZL"]},
+                                }
                             }
                         },
                     }
                 },
                 {"$sort": {"sort_key": 1}},
-                {"$group": {"_id": "1", "signs": {"$push": "$$ROOT"}}},
                 {
                     "$project": {
-                        "signs.name": 1,
-                        "signs.unicode": 1,
-                        "signs.mzlNumber": 1,
+                        "_id": 0,
+                        "name": 1,
+                        "unicode": 1,
+                        "mzlNumber": "$mzlNumber.number",
                     }
                 },
+                {"$group": {"_id": None, "signs": {"$push": "$$ROOT"}}},
             ]
         )
         return [
