@@ -2,7 +2,7 @@ import pytest
 from marshmallow import EXCLUDE
 
 from ebl.errors import NotFoundError
-from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
+from ebl.signs.infrastructure.mongo_sign_repository import OrderedSignSchema, SignSchema
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -153,7 +153,7 @@ def sign_si_2(mongo_sign_si_2):
     return SignSchema(unknown=EXCLUDE).load(mongo_sign_si_2)
 
 
-def test_create(database, sign_repository, sign_igi):
+def teste(database, sign_repository, sign_igi):
     sign_name = sign_repository.create(sign_igi)
 
     assert database[COLLECTION].find_one({"_id": sign_name}) == SignSchema().dump(
@@ -234,6 +234,10 @@ def test_search_by_lists_name(
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search("unknown", 1) is None
+
+
+def test_find_signs_by_order_not_found(sign_repository):
+    assert sign_repository.find_signs_by_order("SI", "not_existing_era") == []
 
 
 def test_list_all_signs(sign_repository, signs) -> None:

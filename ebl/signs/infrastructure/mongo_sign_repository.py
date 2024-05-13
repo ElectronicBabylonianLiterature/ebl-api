@@ -136,7 +136,7 @@ class MongoSignRepository(SignRepository):
     def find_signs_by_order(self, name: SignName, sort_era: str) -> list[Sign]:
         try:
             key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
-        except KeyError:
+        except (KeyError, NotFoundError):
             return []
         range_start = key - 5
         range_end = key + 5
