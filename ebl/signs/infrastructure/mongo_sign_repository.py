@@ -46,6 +46,7 @@ class ValueSchema(Schema):
 class OrderedSignSchema(Schema):
     name = fields.String(required=True)
     unicode = fields.List(fields.Int(), required=True)
+    mzl = fields.String(required=False, data_key="mzlNumber")
 
 
 class LogogramSchema(Schema):
@@ -135,8 +136,8 @@ class MongoSignRepository(SignRepository):
     def find_signs_by_order(self, name: SignName, sort_era: str) -> list[Sign]:
         try:
             key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
-        except KeyError as e:
-            raise e
+        except KeyError:
+            return []
         range_start = key - 5
         range_end = key + 5
         cursor = self._collection.aggregate(
@@ -164,8 +165,23 @@ class MongoSignRepository(SignRepository):
                     "$project": {
                         "sign": 1,
                         "unicode": 1,
+                        "lists": 1,
                         "name": "$_id",
                         "sort_key": f"$sortKeys.{sort_era}",
+                        "mzlNumber": {
+                            "$let": {
+                                "vars": {
+                                    "filteredResult": {
+                                        "$filter": {
+                                            "input": "$lists",
+                                            "as": "item",
+                                            "cond": {"$eq": ["$$item.name", "MZL"]},
+                                        }
+                                    }
+                                },
+                                "in": {"$arrayElemAt": ["$$filteredResult.number", 0]},
+                            }
+                        },
                     }
                 },
                 {"$sort": {"sort_key": 1}},
@@ -174,16 +190,16 @@ class MongoSignRepository(SignRepository):
                     "$project": {
                         "signs.name": 1,
                         "signs.unicode": 1,
+                        "signs.mzlNumber": 1,
                     }
                 },
             ]
         )
-        loaded_signs = []
-        for item in cursor:
-            for sign in item["signs"]:
-                loaded_sign = OrderedSignSchema().load(sign, unknown=EXCLUDE)
-                loaded_signs.append(loaded_sign)
-        return loaded_signs
+        return [
+            OrderedSignSchema().load(sign, unknown=EXCLUDE)
+            for item in cursor
+            for sign in item["signs"]
+        ]
 
     def search(self, reading: str, sub_index: Optional[int] = None) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
