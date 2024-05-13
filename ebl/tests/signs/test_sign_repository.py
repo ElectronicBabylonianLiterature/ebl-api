@@ -2,7 +2,7 @@ import pytest
 from marshmallow import EXCLUDE
 
 from ebl.errors import NotFoundError
-from ebl.signs.infrastructure.mongo_sign_repository import OrderedSignSchema, SignSchema
+from ebl.signs.infrastructure.mongo_sign_repository import SignSchema
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
