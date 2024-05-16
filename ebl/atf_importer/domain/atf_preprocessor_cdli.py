@@ -4,11 +4,11 @@ from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 
 class CdliReplacements(AtfPreprocessorBase):
     def do_cdli_replacements(self, atf: str) -> str:
-        if atf[0].isdigit():
-            atf = self._handle_numeric_atf(atf)
-        else:
-            atf = self._handle_special_cases(atf)
-        return atf
+        return (
+            self._handle_numeric_atf(atf)
+            if atf[0].isdigit()
+            else self._handle_special_cases(atf)
+        )
 
     def _handle_numeric_atf(self, atf: str) -> str:
         numeric_atf_methods = [
