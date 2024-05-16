@@ -82,8 +82,6 @@ class EblLinesGetter:
             last_transliteration = self._handle_text_line(line, result)
         elif c_type == "lem_line":
             self._handle_lem_line(line, result, filename, last_transliteration)
-        elif c_type == "empty_line":
-            pass
 
     def _handle_control_line(self, line: Dict[str, Any], result: defaultdict):
         result["control_lines"].append(line)
