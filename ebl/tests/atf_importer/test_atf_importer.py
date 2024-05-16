@@ -1,10 +1,10 @@
-from ebl.atf_importer.application.atf_importer import ATFImporter
-from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
+from ebl.atf_importer.application.atf_importer import AtfImporter
+from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
 
 # Test case for insertion of placeholder if "<<"
 def test_placeholder_insert(database):
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
+    atf_preprocessor = AtfPreprocessor("../logs", 0)
     converted_lines = []
     c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ "
@@ -33,7 +33,7 @@ def test_placeholder_insert(database):
     )
 
     # reformat test lines
-    a = ATFImporter(database)
+    a = AtfImporter(database)
 
     ebl_lines = a.convert_to_ebl_lines(
         converted_lines,

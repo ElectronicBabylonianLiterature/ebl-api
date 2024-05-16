@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.atf_importer.domain.atf_preprocessor import ATFPreprocessor
+from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
 
 PROBLEMATIC_TEXT_LINES = [
@@ -52,7 +52,7 @@ LEGACY_GRAMMAR_SIGNS = [
     [*PROBLEMATIC_TEXT_LINES, FOLLOWING_SIGN_IS_NOT_A_LOGOGRAM, *LEGACY_GRAMMAR_SIGNS],
 )
 def test_text_lines(line, expected):
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
+    atf_preprocessor = AtfPreprocessor("../logs", 0)
 
     (
         converted_line,
@@ -585,7 +585,7 @@ def test_text_lines(line, expected):
     ],
 )
 def test_lemma_line_c_type_is_lem_line(line):
-    atf_preprocessor = ATFPreprocessor("../logs", 0)
+    atf_preprocessor = AtfPreprocessor("../logs", 0)
 
     (
         converted_line,
