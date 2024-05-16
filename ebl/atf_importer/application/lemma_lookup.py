@@ -37,11 +37,9 @@ class LemmaLookup:
     def _lookup_prefixed_lemma(self, lemma: str, guideword: str) -> List[str]:
         lemma = lemma.replace("ʾ", "'")
         unique_lemmas = self._query_database(
-            "oraccWords.lemma", lemma, "oraccWords.guideWord", guideword
-        )
+                    "oraccWords.lemma", lemma, "oraccWords.guideWord", guideword
+                ) or self._query_multiple_sources(lemma, guideword)
 
-        if not unique_lemmas:
-            unique_lemmas = self._query_multiple_sources(lemma, guideword)
 
         return unique_lemmas
 
