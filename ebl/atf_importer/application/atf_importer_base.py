@@ -111,8 +111,7 @@ class EblLinesGetter:
     ) -> List[Dict]:
         unique_lemmas = []
         for lemma, guideword, pos_tag in lemma_tuples:
-            db_entries = self._lookup_lemma(lemma, guideword, pos_tag)
-            if db_entries:
+            if db_entries := self._lookup_lemma(lemma, guideword, pos_tag):
                 unique_lemmas.extend(db_entries)
             else:
                 self.logger.warning(f"Lemma not found: {lemma} in {filename}")
