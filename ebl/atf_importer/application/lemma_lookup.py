@@ -53,11 +53,9 @@ class LemmaLookup:
             guideword = guideword.split("//")[0] if "//" in guideword else guideword
 
             unique_lemmas = self._query_database(
-                "oraccWords.lemma", citation_form, "oraccWords.guideWord", guideword
-            )
+                            "oraccWords.lemma", citation_form, "oraccWords.guideWord", guideword
+                        ) or self._query_multiple_sources(citation_form, guideword)
 
-            if not unique_lemmas:
-                unique_lemmas = self._query_multiple_sources(citation_form, guideword)
 
         except KeyError:
             self.logger.warning(
