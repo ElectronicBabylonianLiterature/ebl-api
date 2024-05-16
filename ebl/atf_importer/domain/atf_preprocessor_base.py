@@ -89,12 +89,12 @@ oracc_replacements = {
 class AtfPreprocessorBase:
     def __init__(self, logdir: str, style: int) -> None:
         self.ebl_parser = Lark.open(
-            "ebl/transliteration/domain/ebl_atf.lark",
+            "../../transliteration/domain/ebl_atf.lark",
             maybe_placeholders=True,
             rel_to=__file__,
         )
         self.oracc_parser = Lark.open(
-            "ebl/atf_importer/domain/lark-oracc/oracc_atf.lark",
+            "lark-oracc/oracc_atf.lark",
             maybe_placeholders=True,
             rel_to=__file__,
         )
