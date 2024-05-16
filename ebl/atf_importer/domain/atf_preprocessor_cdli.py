@@ -28,8 +28,7 @@ class CdliReplacements(AtfPreprocessorBase):
         return atf
 
     def _replace_dashes(self, atf: str) -> str:
-        atf = atf.replace("–", "-").replace("--", "-")
-        return atf
+        return atf.replace("–", "-").replace("--", "-")
 
     def _normalize_patterns(self, atf: str) -> str:
         callback_normalize = (
