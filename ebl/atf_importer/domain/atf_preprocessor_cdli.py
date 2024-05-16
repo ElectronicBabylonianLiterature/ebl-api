@@ -36,8 +36,7 @@ class CdliReplacements(AtfPreprocessorBase):
             + pat.group(2)
             + self._normalize_numbers(pat.group(3))
         )
-        atf = re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
-        return atf
+        return re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
     def _replace_primed_digits(self, atf: str) -> str:
         return re.sub(r"(\d)ʾ", r"\1′", atf)
