@@ -32,11 +32,11 @@ class AtfImporterConfig:
 
 class AtfImporterBase:
     def __init__(self, database):
-        self.logger = self.setup_logger()
         self.database = database
         self.username: str = ""
+        self.logger = self.setup_logger()
         self.config = AtfImporterConfig("ebl/atf_importer/domain/atf_data.json")
-        self._ebl_lines_getter = EblLinesGetter(self.logger)
+        self._ebl_lines_getter = EblLinesGetter(self.database, self.config, self.logger)
         self._database_importer = DatabaseImporter(database, self.logger, self.username)
 
     def convert_to_ebl_lines(

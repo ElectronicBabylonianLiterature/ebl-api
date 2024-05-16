@@ -38,7 +38,9 @@ def test_placeholder_insert(database):
     ebl_lines = a.convert_to_ebl_lines(
         converted_lines,
         "cpp_3_1_16",
-        True,
-        [[], ["Šabaṭu I"], [], [], [], ["Sin I"], [], [], [], [], []],
+        # ToDo: Check if the implementation is proper
+        #
+        #True,
+        #[[], ["Šabaṭu I"], [], [], [], ["Sin I"], [], [], [], [], []],
     )
     assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])
