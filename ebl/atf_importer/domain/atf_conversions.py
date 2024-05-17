@@ -35,16 +35,18 @@ class ConvertLegacyGrammarSigns(Visitor):
         pattern = re.compile("[áéíú]")
         self.replace_characters(tree, pattern, "₃")
 
-def replace_characters(self, tree: Tree, pattern: re.Pattern, default_suffix: str) -> None:
-    for cnt, child in enumerate(tree.children):
-        match = pattern.search(child)
-        if match:
-            new_char = self.replacement_chars[match[0]]
-            try:
-                tree.children[cnt] = new_char
-                tree.children[cnt + 1] += default_suffix
-            except IndexError:
-                tree.children[cnt] = f"{new_char}₂"
+    def replace_characters(
+        self, tree: Tree, pattern: re.Pattern, default_suffix: str
+    ) -> None:
+        for cnt, child in enumerate(tree.children):
+            match = pattern.search(child)
+            if match:
+                new_char = self.replacement_chars[match[0]]
+                try:
+                    tree.children[cnt] = new_char
+                    tree.children[cnt + 1] += default_suffix
+                except IndexError:
+                    tree.children[cnt] = f"{new_char}₂"
 
 
 class StripSigns(Visitor):
@@ -126,15 +128,19 @@ class GetLemmaValuesAndGuidewords(Visitor):
     def atf_oracc_lem_line__lemma(self, tree: Tree) -> None:
         lemmata: List[Tuple[str, str, str]] = []
 
-    for child in tree.children:
-        if child.data == "atf_oracc_lem_line__value_part":
-            lemma_value = DepthFirstSearch().visit_topdown(child, "")
-            guide_word = _get_child_data(1) if len(tree.children) > 1 else ""
-            pos_tag = _get_child_data(2) if len(tree.children) > 2 else ""
-            lemmata.append((lemma_value, guide_word, pos_tag))
-            
-    self.result.append(lemmata)
+        for child in tree.children:
+            if child.data == "atf_oracc_lem_line__value_part":
+                lemma_value = DepthFirstSearch().visit_topdown(child, "")
+                guide_word = (
+                    self._get_child_data(1, tree) if len(tree.children) > 1 else ""
+                )
+                pos_tag = (
+                    self._get_child_data(2, tree) if len(tree.children) > 2 else ""
+                )
+                lemmata.append((lemma_value, guide_word, pos_tag))
+
+        self.result.append(lemmata)
 
     @staticmethod
-    def _get_child_data(index: int) -> str:
+    def _get_child_data(index: int, tree: Tree) -> str:
         return DepthFirstSearch().visit_topdown(tree.children[index], "")

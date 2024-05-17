@@ -216,25 +216,24 @@ class AtfPreprocessorBase:
         words_serializer.visit_topdown(tree)
         return (converted_line, words_serializer.result, tree.data, [])
 
-
-def parse_and_convert_line(
-    self, atf: str
-) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
-    result = None
-    try:
-        tree = self.oracc_parser.parse(atf)
-        if tree.data in self.unused_lines:
-            result = self.get_empty_conversion(tree)
-        elif tree.data == "lem_line":
-            result = self.convert_lemline(atf, tree)
-        elif tree.data == "text_line":
-            result = self.handle_text_line(tree)
-        else:
-            result = self.unused_line(tree)
-    except Exception:
-        self.logger.error(traceback.format_exc())
-        result = self.log_unparseable_line(atf)
-    return result
+    def parse_and_convert_line(
+        self, atf: str
+    ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
+        result = None
+        try:
+            tree = self.oracc_parser.parse(atf)
+            if tree.data in self.unused_lines:
+                result = self.get_empty_conversion(tree)
+            elif tree.data == "lem_line":
+                result = self.convert_lemline(atf, tree)
+            elif tree.data == "text_line":
+                result = self.handle_text_line(tree)
+            else:
+                result = self.unused_line(tree)
+        except Exception:
+            self.logger.error(traceback.format_exc())
+            result = self.log_unparseable_line(atf)
+        return result
 
     def write_unparsable_lines(self, filename: str) -> None:
         with open(

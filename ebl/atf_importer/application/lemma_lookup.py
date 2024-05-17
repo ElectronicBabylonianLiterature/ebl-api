@@ -25,7 +25,9 @@ class LemmaLookup:
                 return self._query_database("oraccWords.lemma", lemma)
             return unique_lemmas
 
-    def _log_warning_if_no_lemmas(self, unique_lemmas: List[str], lemma: str, guideword: str) -> None:
+    def _log_warning_if_no_lemmas(
+        self, unique_lemmas: List[str], lemma: str, guideword: str
+    ) -> None:
         if not unique_lemmas:
             self.logger.warning(
                 "Incompatible lemmatization: No eBL word found for lemma"

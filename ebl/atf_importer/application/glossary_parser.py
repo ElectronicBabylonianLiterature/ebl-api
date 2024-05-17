@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Sequence, Tuple, Optional, Iterator, TypedDict
+from typing import Dict, List, Tuple, Optional, Iterator, TypedDict
 
 
 class GlossaryParserData(TypedDict):
@@ -37,13 +37,13 @@ class GlossaryParser:
 
     def _handle_entry(
         self, line: str, lemmas: List[str]
-    ) -> List[List[str], Dict[str, str]]:
+    ) -> Tuple[List[str], Dict[str, str]]:
         lemmas.clear()
         return lemmas, self._parse_entry(line)
 
     def _handle_form(
         self, line: str, current_entry: Dict[str, str], lemmas: List[str]
-    ) -> Sequence[str]:
+    ) -> List[str]:
         lemma = self._parse_form(line, current_entry)
         if lemma:
             lemmas.append(lemma)
