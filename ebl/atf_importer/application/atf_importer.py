@@ -2,10 +2,13 @@ import argparse
 import glob
 import os
 from pymongo import MongoClient
-from typing import List, Dict, Tuple
+from typing import List
 
 from ebl.atf_importer.application.atf_importer_base import AtfImporterBase
-from ebl.atf_importer.application.glossary_parser import GlossaryParser, GlossaryParserData
+from ebl.atf_importer.application.glossary_parser import (
+    GlossaryParser,
+    GlossaryParserData,
+)
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
 
