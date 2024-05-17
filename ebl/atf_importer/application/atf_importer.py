@@ -35,7 +35,6 @@ class AtfImporter(AtfImporterBase):
 
     def process_files(self, file_paths: List[str], glossary_path: str) -> None:
         glossary_data = self.parse_glossary(glossary_path)
-        lemgwpos_cf, forms_senses, lemposgw_cfgw = self.parse_glossary(glossary_path)
         for filepath in file_paths:
             self.process_file(filepath, glossary_data)
 
