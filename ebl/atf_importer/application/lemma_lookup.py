@@ -24,8 +24,8 @@ class LemmaLookup:
 
         if not unique_lemmas:
             self.logger.warning(
-                f"""Incompatible lemmatization: No eBL word found for lemma
-                 '{lemma}' and guide word '{guideword}'"""
+                "Incompatible lemmatization: No eBL word found for lemma"
+                f" {lemma}' and guide word '{guideword}'"
             )
 
         return [{"_id": lemma_id} for lemma_id in unique_lemmas]
@@ -37,9 +37,8 @@ class LemmaLookup:
     def _lookup_prefixed_lemma(self, lemma: str, guideword: str) -> List[str]:
         lemma = lemma.replace("ʾ", "'")
         unique_lemmas = self._query_database(
-                    "oraccWords.lemma", lemma, "oraccWords.guideWord", guideword
-                ) or self._query_multiple_sources(lemma, guideword)
-
+            "oraccWords.lemma", lemma, "oraccWords.guideWord", guideword
+        ) or self._query_multiple_sources(lemma, guideword)
 
         return unique_lemmas
 
@@ -53,14 +52,12 @@ class LemmaLookup:
             guideword = guideword.split("//")[0] if "//" in guideword else guideword
 
             unique_lemmas = self._query_database(
-                            "oraccWords.lemma", citation_form, "oraccWords.guideWord", guideword
-                        ) or self._query_multiple_sources(citation_form, guideword)
-
-
+                "oraccWords.lemma", citation_form, "oraccWords.guideWord", guideword
+            ) or self._query_multiple_sources(citation_form, guideword)
         except KeyError:
             self.logger.warning(
-                f"""Incompatible lemmatization: No citation form
-                 or guideword found in the glossary for '{lemma}'"""
+                "Incompatible lemmatization: No citation form"
+                f" or guideword found in the glossary for '{lemma}'"
             )
             return []
 

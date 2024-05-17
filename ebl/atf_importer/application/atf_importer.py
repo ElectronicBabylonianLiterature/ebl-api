@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from typing import List, Dict, Tuple
 
 from ebl.atf_importer.application.atf_importer_base import AtfImporterBase
-from ebl.atf_importer.application.glossary_parser import GlossaryParser
+from ebl.atf_importer.application.glossary_parser import GlossaryParser, GlossaryParserData
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
 
@@ -13,13 +13,14 @@ class AtfImporter(AtfImporterBase):
     def __init__(self, database):
         super().__init__(database)
         self.atf_preprocessor = None
+        self.glossary_parser = GlossaryParser()
 
-    @staticmethod
     def parse_glossary(
+        self,
         path: str,
-    ) -> Tuple[Dict[str, str], Dict[str, List[str]], Dict[str, Tuple[str, str]]]:
+    ) -> GlossaryParserData:
         with open(path, "r", encoding="utf8") as file:
-            return GlossaryParser.parse(file)
+            return self.glossary_parser.parse(file)
 
     def run_importer(
         self, input_dir: str, logdir: str, glossary_path: str, author: str, style: int
@@ -31,18 +32,17 @@ class AtfImporter(AtfImporterBase):
 
     def process_files(self, file_paths: List[str], glossary_path: str) -> None:
         glossary_data = self.parse_glossary(glossary_path)
+        lemgwpos_cf, forms_senses, lemposgw_cfgw = self.parse_glossary(glossary_path)
         for filepath in file_paths:
             self.process_file(filepath, glossary_data)
 
     def process_file(
         self,
         filepath: str,
-        glossary_data: Tuple[
-            Dict[str, str], Dict[str, List[str]], Dict[str, Tuple[str, str]]
-        ],
+        glossary_data: GlossaryParserData,
     ) -> None:
-        # ToDo:
-        # glossary_data ??
+        # ToDo: Fix
+        # `GlossaryParserData` goes nowhere. Should probably go to `lemma_lookup`
         filename = os.path.basename(filepath).split(".")[0]
         converted_lines = self.atf_preprocessor.convert_lines(filepath, filename)
         ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)

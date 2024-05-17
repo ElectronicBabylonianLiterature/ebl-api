@@ -74,10 +74,9 @@ class CdliReplacements(AtfPreprocessorBase):
         opening = {"⌈", "⸢"}
         closing = {"⌉", "⸣"}
 
-        new_atf = "".join(
+        return "".join(
             self._process_bracketed_part(part, opening, closing) for part in atfsplit
         )
-        return new_atf
 
     def _process_bracketed_part(self, part: str, opening: set, closing: set) -> str:
         if getattr(self, "open_found", False):

@@ -1,9 +1,7 @@
 import json
 import logging
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Optional
-
-
+from typing import Any, Dict, List, Tuple, Optional, Literal, TypedDict
 from ebl.app import create_context
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
@@ -21,13 +19,24 @@ class LemmatizationError(Exception):
     pass
 
 
-class AtfImporterConfig:
-    def __init__(self, config_path: str):
-        with open(config_path, "r") as file:
-            self.config_data = json.load(file)
+class AtfImporterConfigData(TypedDict):
+    STYLES: Dict[str, int]
+    POS_TAGS: List[str]
+    NOUN_POS_TAGS: List[str]
 
-    def __getitem__(self, item: str) -> Any:
-        return self.config_data.get(item)
+
+class AtfImporterConfig:
+    config_data: AtfImporterConfigData
+    config_path = "ebl/atf_importer/domain/atf_data.json"
+
+    def __init__(self):
+        with open(self.config_path, "r") as file:
+            self.config_data: AtfImporterConfigData = json.load(file)
+
+    def __getitem__(
+        self, item: Literal["STYLES", "POS_TAGS", "NOUN_POS_TAGS"]
+    ) -> Dict[str, int] | List[str]:
+        return getattr(self.config_data, item)
 
 
 class AtfImporterBase:
@@ -35,7 +44,7 @@ class AtfImporterBase:
         self.database = database
         self.username: str = ""
         self.logger = self.setup_logger()
-        self.config = AtfImporterConfig("ebl/atf_importer/domain/atf_data.json")
+        self.config = AtfImporterConfig()
         self._ebl_lines_getter = EblLinesGetter(self.database, self.config, self.logger)
         self._database_importer = DatabaseImporter(database, self.logger, self.username)
 
@@ -55,17 +64,15 @@ class AtfImporterBase:
 class EblLinesGetter:
     def __init__(self, database, config, logger):
         self.logger = logger
-        self._lemmalookup = LemmaLookup(database, config, logger)
+        self.lemmalookup = LemmaLookup(database, config, logger)
 
     def convert_to_ebl_lines(
         self, converted_lines: List[Dict[str, Any]], filename: str
     ) -> Dict[str, List]:
         result = defaultdict(list)
         last_transliteration: Optional[str] = None
-
         for line in converted_lines:
             self._handle_line_type(line, result, filename, last_transliteration)
-
         return dict(result)
 
     def _handle_line_type(
@@ -118,7 +125,7 @@ class EblLinesGetter:
         return unique_lemmas
 
     def _lookup_lemma(self, lemma: str, guideword: str, pos_tag: str):
-        return self._lemmalookup.lookup_lemma(lemma, guideword, pos_tag)
+        return self.lemmalookup.lookup_lemma(lemma, guideword, pos_tag)
 
 
 class DatabaseImporter:
