@@ -2,7 +2,7 @@ import argparse
 import glob
 import os
 from pymongo import MongoClient
-from typing import List
+from typing import List, TypedDict
 
 from ebl.atf_importer.application.atf_importer_base import AtfImporterBase
 from ebl.atf_importer.application.glossary_parser import (
@@ -10,6 +10,14 @@ from ebl.atf_importer.application.glossary_parser import (
     GlossaryParserData,
 )
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+
+
+class AtfImporterConfig(TypedDict):
+    input_dir: str
+    log_dir: str
+    glossary_path: str
+    author: str
+    style: int
 
 
 class AtfImporter(AtfImporterBase):
@@ -25,13 +33,11 @@ class AtfImporter(AtfImporterBase):
         with open(path, "r", encoding="utf8") as file:
             return self.glossary_parser.parse(file)
 
-    def run_importer(
-        self, input_dir: str, logdir: str, glossary_path: str, author: str, style: int
-    ) -> None:
-        self.username = author
-        self.atf_preprocessor = AtfPreprocessor(logdir, style)
-        file_paths = glob.glob(os.path.join(input_dir, "*.atf"))
-        self.process_files(file_paths, glossary_path)
+    def run_importer(self, config: AtfImporterConfig) -> None:
+        self.username = config["author"]
+        self.atf_preprocessor = AtfPreprocessor(config["log_dir"], config["style"])
+        file_paths = glob.glob(os.path.join(config["input_dir"], "*.atf"))
+        self.process_files(file_paths, config["glossary_path"])
 
     def process_files(self, file_paths: List[str], glossary_path: str) -> None:
         glossary_data = self.parse_glossary(glossary_path)
@@ -80,7 +86,13 @@ class AtfImporter(AtfImporterBase):
 
         args = parser.parse_args()
         self.run_importer(
-            args.input, args.logdir, args.glossary, args.author, args.style
+            {
+                "input_dir": args.input,
+                "log_dir": args.logdir,
+                "glossary_path": args.glossary,
+                "author": args.author,
+                "style": args.style,
+            }
         )
 
     @staticmethod

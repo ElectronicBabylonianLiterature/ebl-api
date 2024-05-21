@@ -1,7 +1,7 @@
 import json
 import logging
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Optional, Literal, TypedDict, Union
+from typing import Any, Dict, List, Tuple, Optional, Literal, TypedDict, Union, Sequence
 from ebl.app import create_context
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
@@ -192,6 +192,15 @@ class DatabaseImporter:
         lemmatizations: List[Tuple[str, List[Dict]]],
         museum_number: str,
     ):
+        lemmatization_tokens = self._get_lemmatization_tokens(lemmatizations)
+        lemmatization = Lemmatization([lemmatization_tokens])
+        self.updater.update_lemmatization(
+            parse_museum_number(museum_number), lemmatization, self.user
+        )
+
+    def _get_lemmatization_tokens(
+        self, lemmatizations: List[Tuple[str, List[Dict]]]
+    ) -> Sequence[LemmatizationToken]:
         lemmatization_tokens = []
         for text_line, lemmas in lemmatizations:
             ebl_lines = parse_atf_lark(text_line).lines[0].content
@@ -204,8 +213,4 @@ class DatabaseImporter:
                         token.value, tuple(lemma_ids) if lemma_ids else None
                     )
                 )
-
-        lemmatization = Lemmatization(tuple(lemmatization_tokens))
-        self.updater.update_lemmatization(
-            parse_museum_number(museum_number), lemmatization, self.user
-        )
+        return lemmatization_tokens

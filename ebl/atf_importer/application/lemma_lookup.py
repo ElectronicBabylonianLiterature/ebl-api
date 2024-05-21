@@ -1,4 +1,11 @@
-from typing import List, Dict
+from typing import List, Dict, TypedDict, Union
+
+
+class QueryConfig(TypedDict, total=False):
+    lemma_field: str
+    lemma_value: Union[str, List[str]]
+    guideword_field: str = ""
+    guideword_value: str = ""
 
 
 class LemmaLookup:
@@ -22,7 +29,9 @@ class LemmaLookup:
         else:
             unique_lemmas = self._lookup_standard_lemma(lemma, guideword, pos_tag)
             if not unique_lemmas and pos_tag in self.config.get("noun_pos_tags", []):
-                return self._query_database("oraccWords.lemma", lemma)
+                return self._query_database(
+                    {"lemma_field": "oraccWords.lemma", "lemma_value": lemma}
+                )
             return unique_lemmas
 
     def _log_warning_if_no_lemmas(
@@ -41,7 +50,12 @@ class LemmaLookup:
     def _lookup_prefixed_lemma(self, lemma: str, guideword: str) -> List[str]:
         lemma = lemma.replace("ʾ", "'")
         unique_lemmas = self._query_database(
-            "oraccWords.lemma", lemma, "oraccWords.guideWord", guideword
+            {
+                "lemma_field": "oraccWords.lemma",
+                "lemma_value": lemma,
+                "guideword_field": "oraccWords.guideWord",
+                "guideword_value": guideword,
+            }
         ) or self._query_multiple_sources(lemma, guideword)
 
         return unique_lemmas
@@ -56,7 +70,12 @@ class LemmaLookup:
             guideword = guideword.split("//")[0] if "//" in guideword else guideword
 
             unique_lemmas = self._query_database(
-                "oraccWords.lemma", citation_form, "oraccWords.guideWord", guideword
+                {
+                    "lemma_field": "oraccWords.lemma",
+                    "lemma_value": citation_form,
+                    "guideword_field": "oraccWords.guideWord",
+                    "guideword_value": guideword,
+                }
             ) or self._query_multiple_sources(citation_form, guideword)
         except KeyError:
             self.logger.warning(
@@ -72,20 +91,19 @@ class LemmaLookup:
         unique_lemmas = []
         for source in sources:
             unique_lemmas += self._query_database(
-                source, [lemma], "guideWord", guideword
+                {
+                    "lemma_field": source,
+                    "lemma_value": [lemma],
+                    "guideword_field": "guideWord",
+                    "guideword_value": guideword,
+                }
             )
         return unique_lemmas
 
-    def _query_database(
-        self,
-        lemma_field: str,
-        lemma_value,
-        guideword_field: str = "",
-        guideword_value: str = "",
-    ) -> List[str]:
-        query = {lemma_field: lemma_value}
-        if guideword_field != "" and guideword_value != "":
-            query[guideword_field] = guideword_value
+    def _query_database(self, config: QueryConfig) -> List[str]:
+        query = {config["lemma_field"]: config["lemma_value"]}
+        if config["guideword_field"] != "" and config["guideword_value"] != "":
+            query[config["guideword_field"]] = config["guideword_value"]
 
         return [
             entry["_id"]
