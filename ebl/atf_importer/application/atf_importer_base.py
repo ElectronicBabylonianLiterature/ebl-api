@@ -201,16 +201,25 @@ class DatabaseImporter:
     def _get_lemmatization_tokens(
         self, lemmatizations: List[Tuple[str, List[Dict]]]
     ) -> Sequence[LemmatizationToken]:
-        lemmatization_tokens = []
+        lemmatization_tokens: List[LemmatizationToken] = []
         for text_line, lemmas in lemmatizations:
             ebl_lines = parse_atf_lark(text_line).lines[0].content
-            for token in ebl_lines:
-                lemma_ids = [
-                    lemma["_id"] for lemma in lemmas if lemma["lemma"] == token.value
-                ]
-                lemmatization_tokens.append(
-                    LemmatizationToken(
-                        token.value, tuple(lemma_ids) if lemma_ids else None
-                    )
-                )
+            lemmatization_tokens = self._get_lemmatization_tokens_in_lines(
+                ebl_lines, lemmas, lemmatization_tokens
+            )
+        return lemmatization_tokens
+
+    def _get_lemmatization_tokens_in_lines(
+        self,
+        ebl_lines,
+        lemmas,
+        lemmatization_tokens: List[LemmatizationToken],
+    ) -> List[LemmatizationToken]:
+        for token in ebl_lines:
+            lemma_ids = [
+                lemma["_id"] for lemma in lemmas if lemma["lemma"] == token.value
+            ]
+            lemmatization_tokens.append(
+                LemmatizationToken(token.value, tuple(lemma_ids) if lemma_ids else None)
+            )
         return lemmatization_tokens
