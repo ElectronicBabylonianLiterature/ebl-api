@@ -1,7 +1,7 @@
 import json
 import logging
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Optional, Literal, TypedDict
+from typing import Any, Dict, List, Tuple, Optional, Literal, TypedDict, Union
 from ebl.app import create_context
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
@@ -35,7 +35,7 @@ class AtfImporterConfig:
 
     def __getitem__(
         self, item: Literal["STYLES", "POS_TAGS", "NOUN_POS_TAGS"]
-    ) -> Dict[str, int] | List[str]:
+    ) -> Union[Dict[str, int], List[str]]:
         return getattr(self.config_data, item)
 
 
