@@ -20,13 +20,16 @@ T = TypeVar("T", bound=Line)
 
 class ParallelRepository(ABC):
     @abstractmethod
-    def fragment_exists(self, museum_number: MuseumNumber) -> bool: ...
+    def fragment_exists(self, museum_number: MuseumNumber) -> bool:
+        ...
 
     @abstractmethod
-    def find_implicit_chapter(self, text_id: TextId) -> ChapterName: ...
+    def find_implicit_chapter(self, text_id: TextId) -> ChapterName:
+        ...
 
     @abstractmethod
-    def chapter_exists(self, text_id: TextId, chapter_name: ChapterName) -> bool: ...
+    def chapter_exists(self, text_id: TextId, chapter_name: ChapterName) -> bool:
+        ...
 
 
 class ParallelLineInjector:

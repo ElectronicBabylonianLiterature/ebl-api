@@ -15,7 +15,8 @@ Atf = atf.Atf
 class DollarLine(Line):
     @property
     @abstractmethod
-    def display_value(self) -> str: ...
+    def display_value(self) -> str:
+        ...
 
     @property
     def atf(self) -> Atf:

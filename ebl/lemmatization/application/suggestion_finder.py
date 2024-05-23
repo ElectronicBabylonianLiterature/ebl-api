@@ -7,7 +7,8 @@ from ebl.lemmatization.domain.lemmatization import Lemma
 
 class LemmaRepository(ABC):
     @abstractmethod
-    def query_lemmas(self, word: str, is_normalized: bool) -> Sequence[Lemma]: ...
+    def query_lemmas(self, word: str, is_normalized: bool) -> Sequence[Lemma]:
+        ...
 
 
 class SuggestionFinder:

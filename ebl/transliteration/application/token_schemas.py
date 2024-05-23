@@ -99,7 +99,8 @@ class EnclosureSchema(BaseTokenSchema):
 
     @abstractmethod
     @post_load
-    def make_token(self, data, **kwargs) -> Token: ...
+    def make_token(self, data, **kwargs) -> Token:
+        ...
 
 
 class DocumentOrientedGlossSchema(EnclosureSchema):
@@ -446,7 +447,8 @@ class GlossSchema(BaseTokenSchema):
 
     @abstractmethod
     @post_load
-    def make_token(self, data, **kwargs) -> Gloss: ...
+    def make_token(self, data, **kwargs) -> Gloss:
+        ...
 
 
 class DeterminativeSchema(GlossSchema):

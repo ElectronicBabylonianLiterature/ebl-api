@@ -19,7 +19,7 @@ class Surface(Enum):
     http://oracc.org/doc/help/editinginatf/labels/index.html#d2e21408
     and "Surfaces" in
     http://oracc.org/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
-    """
+    """ 
 
     OBVERSE = ("obverse", "o")
     REVERSE = ("reverse", "r")
@@ -236,7 +236,9 @@ def to_sub_index(number: Optional[int]) -> str:
     return (
         "ₓ"
         if number is None
-        else "" if number == 1 else "".join(_SUB_SCRIPT[digit] for digit in str(number))
+        else ""
+        if number == 1
+        else "".join(_SUB_SCRIPT[digit] for digit in str(number))
     )
 
 
