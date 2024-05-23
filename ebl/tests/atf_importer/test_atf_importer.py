@@ -33,14 +33,14 @@ def test_placeholder_insert(database):
     )
 
     # reformat test lines
-    a = AtfImporter(database)
+    atf_importer = AtfImporter(database)
 
-    ebl_lines = a.convert_to_ebl_lines(
+    ebl_lines = atf_importer.convert_to_ebl_lines(
         converted_lines,
         "cpp_3_1_16",
         # ToDo: Check if the implementation is proper
         #
         # True,
-        # [[], ["Šabaṭu I"], [], [], [], ["Sin I"], [], [], [], [], []],
+        # [[], ["Šabaṭu I"], [], [], [], ["Sin I"], [], [], [], [], []]
     )
     assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])

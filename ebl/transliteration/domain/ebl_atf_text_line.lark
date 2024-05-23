@@ -255,11 +255,7 @@ COMPOUND_OPERATOR: "×" | "%" | "&" | "+"
 grapheme: GRAPHEME_NAME modifiers flags
 GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
 GRAPHEME_NAME: GRAPHEME_CHARACTER (GRAPHEME_CHARACTER)* SUB_INDEX?
-GRAPHEME_CHARACTER: "a".."z"
-                  | "A".."Z"
-                  | "Ṣ" | "Š" | "Ṭ"
-                  | "ṣ" | "š" | "ṭ"
-                  | "0".."9"
+GRAPHEME_CHARACTER: VALUE_CHARACTER | LOGOGRAM_CHARACTER | "0".."9"
 
 SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
 NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")*

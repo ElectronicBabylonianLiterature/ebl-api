@@ -34,11 +34,11 @@ preprocess_text_replacements = {
 }
 
 unused_lines = {
-    "atf_oracc_at_line__object_with_status",
-    "atf_oracc_at_line__surface_with_status",
-    "atf_oracc_at_line__discourse",
-    "atf_oracc_at_line__column",
-    "atf_oracc_at_line__seal",
+    "oracc_atf_at_line__object_with_status",
+    "oracc_atf_at_line__surface_with_status",
+    "oracc_atf_at_line__discourse",
+    "oracc_atf_at_line__column",
+    "oracc_atf_at_line__seal",
     "dollar_line",
     "note_line",
     "control_line",
@@ -168,11 +168,10 @@ class AtfPreprocessorBase:
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
         if tree.data in self.unused_lines:
             return self.get_empty_conversion(tree)
-        else:
-            self.logger.warning(
-                f"Attempting to process a line not marked as unused: {tree.data}"
-            )
-            return (None, None, tree.data, None)
+        self.logger.warning(
+            f"Attempting to process a line not marked as unused: {tree.data}"
+        )
+        return (None, None, tree.data, None)
 
     def get_empty_conversion(self, tree) -> Tuple[str, None, str, None]:
         line_serializer = LineSerializer()

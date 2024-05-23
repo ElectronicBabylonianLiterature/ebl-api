@@ -27,7 +27,7 @@ class AtfImporterConfigData(TypedDict):
 
 class AtfImporterConfig:
     config_data: AtfImporterConfigData
-    config_path = "ebl/atf_importer/domain/atf_data.json"
+    config_path = "ebl/atf_importer/domain/atf_importer_config.json"
 
     def __init__(self):
         with open(self.config_path, "r") as file:

@@ -14,13 +14,13 @@ class AtfCReplacements(AtfPreprocessorBase):
         return atf
 
     def _replace_hyphens(self, atf: str) -> str:
-        atf = atf.replace("–", "-").replace("--", "-")
-        return atf
+        return atf.replace("–", "-").replace("--", "-")
 
     def _apply_normalization(self, atf: str) -> str:
         def callback_normalize(pat):
             return pat.group(1) + pat.group(2) + self._normalize_numbers(pat.group(3))
 
+        # ToDo: Check this. Does `callback_normalize` work?
         return re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
     def _process_split_replacements(self, atf: str) -> str:
@@ -36,7 +36,7 @@ class AtfCReplacements(AtfPreprocessorBase):
 
     def _replace_with_special_rules(self, part: str) -> str:
         part = part.replace("-", "#.").replace("–", "#.").replace(" ", "# ")
-        return part + "#" if part not in ["⌈", "⸢", "⌉", "⸣"] else part
+        return f"{part}#" if part not in ["⌈", "⸢", "⌉", "⸣"] else part  
 
     def _build_new_atf(
         self, atfsplit: list, opening: list, closing: list, replace_parts_func

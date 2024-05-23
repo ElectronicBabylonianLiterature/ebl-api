@@ -30,18 +30,11 @@ FOLLOWING_SIGN_IS_NOT_A_LOGOGRAM = (
     "5'. [...] x [...] x-šu₂? : kal : nap-ha-ri : WA-wa-ru : ia-ar₂-ru",
 )
 
-
 LEGACY_GRAMMAR_SIGNS = [
     (
-        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* É.GAL : "
+        "57. {mulₓ(ÁB)}GU.LA KI* ŠÈG KI*# {kur}NIM.MA{ki} iš-kar* ÀM.GAL É.GAL : "
         "ANŠE.KUR.RA-MEŠ",
-        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* E₂.GAL : "
-        "ANŠE.KUR.RA-MEŠ",
-    ),
-    (
-        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* ÁM.GAL : "
-        "ANŠE.KUR.RA-MEŠ",
-        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL : "
+        "57. {mulₓ(AB₂)}GU.LA KI* ŠEG₃ KI*# {kur}NIM.MA{ki} iš-kar* AM₃.GAL E₂.GAL : "
         "ANŠE.KUR.RA-MEŠ",
     ),
 ]
