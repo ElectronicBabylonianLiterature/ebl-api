@@ -171,67 +171,73 @@ class MongoSignRepository(SignRepository):
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
 
-    def find_signs_by_order(self, name: SignName, sort_era: str) -> list[Sign]:
+    def find_signs_by_order(self, name: SignName, sort_era: str) -> list[list[Sign]]:
         try:
-            key = self._collection.find_one_by_id(name)["sortKeys"][sort_era][0]
+            keys = self._collection.find_one_by_id(name)["sortKeys"][sort_era]
         except (KeyError, NotFoundError):
             return []
-        range_start = key - 5
-        range_end = key + 5
-        cursor = self._collection.aggregate(
-            [
-                {
-                    "$match": {
-                        f"sortKeys.{sort_era}": {
-                            "$elemMatch": {
+
+        all_results = []
+        for key in keys:
+            range_start = key - 5
+            range_end = key + 5
+            cursor = self._collection.aggregate(
+                [
+                    {
+                        "$match": {
+                            f"sortKeys.{sort_era}": {
+                                "$elemMatch": {
+                                    "$gte": range_start,
+                                    "$lte": range_end,
+                                }
+                            }
+                        }
+                    },
+                    {"$unwind": f"$sortKeys.{sort_era}"},
+                    {
+                        "$match": {
+                            f"sortKeys.{sort_era}": {
                                 "$gte": range_start,
                                 "$lte": range_end,
                             }
                         }
-                    }
-                },
-                {"$unwind": f"$sortKeys.{sort_era}"},
-                {
-                    "$match": {
-                        f"sortKeys.{sort_era}": {
-                            "$gte": range_start,
-                            "$lte": range_end,
-                        }
-                    }
-                },
-                {
-                    "$project": {
-                        "unicode": 1,
-                        "name": "$_id",
-                        "sort_key": f"$sortKeys.{sort_era}",
-                        "mzlNumber": {
-                            "$first": {
-                                "$filter": {
-                                    "input": "$lists",
-                                    "as": "item",
-                                    "cond": {"$eq": ["$$item.name", "MZL"]},
+                    },
+                    {
+                        "$project": {
+                            "unicode": 1,
+                            "name": "$_id",
+                            "sort_key": f"$sortKeys.{sort_era}",
+                            "mzlNumber": {
+                                "$first": {
+                                    "$filter": {
+                                        "input": "$lists",
+                                        "as": "item",
+                                        "cond": {"$eq": ["$$item.name", "MZL"]},
+                                    }
                                 }
-                            }
-                        },
-                    }
-                },
-                {"$sort": {"sort_key": 1}},
-                {
-                    "$project": {
-                        "_id": 0,
-                        "name": 1,
-                        "unicode": 1,
-                        "mzlNumber": "$mzlNumber.number",
-                    }
-                },
-                {"$group": {"_id": None, "signs": {"$push": "$$ROOT"}}},
-            ]
-        )
-        return [
+                            },
+                        }
+                    },
+                    {"$sort": {"sort_key": 1}},
+                    {
+                        "$project": {
+                            "_id": 0,
+                            "name": 1,
+                            "unicode": 1,
+                            "mzlNumber": "$mzlNumber.number",
+                        }
+                    },
+                    {"$group": {"_id": None, "signs": {"$push": "$$ROOT"}}},
+                ]
+            )
+
+            results = [
             OrderedSignSchema().load(sign, unknown=EXCLUDE)
             for item in cursor
-            for sign in item["signs"]
-        ]
+                for sign in item["signs"]
+            ]
+            all_results.extend([results])
+        return all_results
 
     def search(self, reading: str, sub_index: Optional[int] = None) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
