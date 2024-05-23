@@ -232,8 +232,8 @@ class MongoSignRepository(SignRepository):
             )
 
             results = [
-            OrderedSignSchema().load(sign, unknown=EXCLUDE)
-            for item in cursor
+                OrderedSignSchema().load(sign, unknown=EXCLUDE)
+                for item in cursor
                 for sign in item["signs"]
             ]
             all_results.extend([results])

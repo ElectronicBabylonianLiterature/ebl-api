@@ -19,7 +19,7 @@ class Surface(Enum):
     http://oracc.org/doc/help/editinginatf/labels/index.html#d2e21408
     and "Surfaces" in
     http://oracc.org/doc/help/editinginatf/primer/structuretutorial/index.html#d2e17947
-    """ 
+    """
 
     OBVERSE = ("obverse", "o")
     REVERSE = ("reverse", "r")
