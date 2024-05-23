@@ -15,7 +15,7 @@ class LemmaLookup:
         self.logger = logger
 
     def lookup_lemma(self, lemma: str, guideword: str, pos_tag: str) -> List[Dict]:
-        if lemma in ["X", "u", "n"]:
+        if lemma in {"X", "u", "n"}:
             return []
         lemma = lemma.strip()
         guideword = self._clean_guideword(guideword)

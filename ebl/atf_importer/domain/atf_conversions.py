@@ -49,9 +49,9 @@ class ConvertLegacyGrammarSigns(Visitor):
     ) -> None:
         patterns = (re.compile("[áéíúÁÉÍÚ]"), re.compile("[àèìùÀÈÌÙ]"))
         for index, child in enumerate(tree.children):
-            for pattern_index, pattern in enumerate(patterns):
-                if isinstance(child, Token):
-                    match = pattern.search(child)
+            if isinstance(child, Token):
+                for pattern_index, pattern in enumerate(patterns):
+                    match = pattern.search(str(child))
                     if match:
                         suffix = "₂" if pattern_index == 0 else "₃"
                         self.replace_character_in_child(tree, index, match, suffix)

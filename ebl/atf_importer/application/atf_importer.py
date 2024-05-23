@@ -1,18 +1,41 @@
 import argparse
 import glob
 import os
+import json
+import logging
 from pymongo import MongoClient
-from typing import List, TypedDict
-
-from ebl.atf_importer.application.atf_importer_base import AtfImporterBase
+from typing import Any, Dict, List, TypedDict, Union, TypedDict, Literal
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
     GlossaryParserData,
 )
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+from ebl.fragmentarium.web.dtos import parse_museum_number
+from ebl.atf_importer.application.lines_getter import EblLinesGetter
+from ebl.atf_importer.application.database_importer import DatabaseImporter
 
 
-class AtfImporterConfig(TypedDict):
+class AtfImporterConfigData(TypedDict):
+    STYLES: Dict[str, int]
+    POS_TAGS: List[str]
+    NOUN_POS_TAGS: List[str]
+
+
+class AtfImporterConfig:
+    config_data: AtfImporterConfigData
+    config_path = "ebl/atf_importer/domain/atf_importer_config.json"
+
+    def __init__(self):
+        with open(self.config_path, "r") as file:
+            self.config_data: AtfImporterConfigData = json.load(file)
+
+    def __getitem__(
+        self, item: Literal["STYLES", "POS_TAGS", "NOUN_POS_TAGS"]
+    ) -> Union[Dict[str, int], List[str]]:
+        return getattr(self.config_data, item)
+
+
+class AtfImporterArgs(TypedDict):
     input_dir: str
     log_dir: str
     glossary_path: str
@@ -20,11 +43,28 @@ class AtfImporterConfig(TypedDict):
     style: int
 
 
-class AtfImporter(AtfImporterBase):
+class AtfImporter:
     def __init__(self, database):
-        super().__init__(database)
+        self.database = database
+        self.username: str = ""
+        self.logger = self.setup_logger()
+        self.config = AtfImporterConfig()
+        self._ebl_lines_getter = EblLinesGetter(self.database, self.config, self.logger)
+        self._database_importer = DatabaseImporter(database, self.logger, self.username)
         self.atf_preprocessor = None
         self.glossary_parser = GlossaryParser()
+
+    def convert_to_ebl_lines(
+        self, converted_lines: List[Dict[str, Any]], filename: str
+    ) -> Dict[str, List]:
+        return self._ebl_lines_getter.convert_to_ebl_lines(converted_lines, filename)
+
+    def setup_logger(self) -> logging.Logger:
+        logging.basicConfig(level=logging.DEBUG)
+        return logging.getLogger("Atf-Importer")
+
+    def import_into_database(self, ebl_lines: Dict[str, List], filename: str):
+        self._database_importer.import_into_database(ebl_lines, filename)
 
     def parse_glossary(
         self,
@@ -33,18 +73,18 @@ class AtfImporter(AtfImporterBase):
         with open(path, "r", encoding="utf8") as file:
             return self.glossary_parser.parse(file)
 
-    def run_importer(self, config: AtfImporterConfig) -> None:
-        self.username = config["author"]
-        self.atf_preprocessor = AtfPreprocessor(config["log_dir"], config["style"])
-        file_paths = glob.glob(os.path.join(config["input_dir"], "*.atf"))
-        self.process_files(file_paths, config["glossary_path"])
+    def run_importer(self, args: AtfImporterArgs) -> None:
+        self.username = args["author"]
+        self.atf_preprocessor = AtfPreprocessor(args["log_dir"], args["style"])
+        file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
+        self.process_files(file_paths, args["glossary_path"])
 
     def process_files(self, file_paths: List[str], glossary_path: str) -> None:
         glossary_data = self.parse_glossary(glossary_path)
         for filepath in file_paths:
-            self.process_file(filepath, glossary_data)
+            self._process_file(filepath, glossary_data)
 
-    def process_file(
+    def _process_file(
         self,
         filepath: str,
         glossary_data: GlossaryParserData,
