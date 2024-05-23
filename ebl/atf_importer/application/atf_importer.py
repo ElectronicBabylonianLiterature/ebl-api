@@ -4,13 +4,12 @@ import os
 import json
 import logging
 from pymongo import MongoClient
-from typing import Any, Dict, List, TypedDict, Union, TypedDict, Literal
+from typing import Any, Dict, List, TypedDict, Union, Literal
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
     GlossaryParserData,
 )
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
-from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.atf_importer.application.database_importer import DatabaseImporter
 

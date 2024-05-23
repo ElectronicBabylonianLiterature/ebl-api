@@ -2,6 +2,7 @@ from collections import defaultdict
 from typing import Any, Dict, List, Tuple, Optional
 from ebl.atf_importer.application.lemma_lookup import LemmaLookup
 
+
 class EblLinesGetter:
     def __init__(self, database, config, logger):
         self.logger = logger

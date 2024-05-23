@@ -43,8 +43,10 @@ def test_placeholder_insert(database):
         # [[], ["Šabaṭu I"], [], [], [], ["Sin I"], [], [], [], [], []]
     )
     # print(ebl_lines)
-    # {'transliteration': ['64. DIŠ ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇']}
+    # {'transliteration': ['64. DIŠ ina {iti}ZIZ₂ U₄ 14.KAM
+    #   AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇']}
 
     # ToDo: Fix error:
-    # FAILED ebl/tests/atf_importer/test_atf_importer.py::test_placeholder_insert - KeyError: 'last_transliteration'
+    # FAILED ebl/tests/atf_importer/test_atf_importer.py:
+    #   :test_placeholder_insert - KeyError: 'last_transliteration'
     assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])

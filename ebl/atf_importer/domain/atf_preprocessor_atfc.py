@@ -36,7 +36,7 @@ class AtfCReplacements(AtfPreprocessorBase):
 
     def _replace_with_special_rules(self, part: str) -> str:
         part = part.replace("-", "#.").replace("–", "#.").replace(" ", "# ")
-        return f"{part}#" if part not in ["⌈", "⸢", "⌉", "⸣"] else part  
+        return f"{part}#" if part not in ["⌈", "⸢", "⌉", "⸣"] else part
 
     def _build_new_atf(
         self, atfsplit: list, opening: list, closing: list, replace_parts_func
