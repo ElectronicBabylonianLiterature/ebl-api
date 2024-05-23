@@ -53,7 +53,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("%akkgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("%suxgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("|BUL.U₁₈|", ["ABZ11", "ABZ78"]),
-        ("|NOTREADING.NOTREADING|", ["NOTREADING", "NOTREADING"]),
+        ("|AMAR₂.AMAR₂|", ["AMAR₂", "AMAR₂"]),
     ],
 )
 def test_signs_visitor_string(
