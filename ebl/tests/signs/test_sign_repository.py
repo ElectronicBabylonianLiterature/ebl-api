@@ -254,10 +254,12 @@ def test_search_not_found(sign_repository):
 
 def test_find_signs_by_order(database, sign_repository, mongo_sign_igi, mongo_sign_si):
     database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
-    assert sign_repository.find_signs_by_order("IGI", "neoBabylonianOnset") == [[
-        {"name": "SI", "unicode": []},
-        {"name": "IGI", "unicode": [74054]},
-    ]]
+    assert sign_repository.find_signs_by_order("IGI", "neoBabylonianOnset") == [
+        [
+            {"name": "SI", "unicode": []},
+            {"name": "IGI", "unicode": [74054]},
+        ]
+    ]
 
 
 def test_find_signs_by_order_not_found(sign_repository):
