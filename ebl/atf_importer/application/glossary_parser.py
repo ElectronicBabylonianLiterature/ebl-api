@@ -60,8 +60,7 @@ class GlossaryParser:
         if len(parts) > 1:
             entry["cf"] = parts[1].replace("ʾ", "'").strip()
             description = parts[2] if len(parts) > 2 else ""
-            match = re.search(r"\[(.*?)\] (.*)", description)
-            if match:
+            if match := re.search(r"\[(.*?)\] (.*)", description):
                 entry["gw"], entry["pos"] = match.groups()
                 entry["gw"] = entry["gw"].strip()
                 entry["pos"] = entry["pos"].strip()

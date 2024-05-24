@@ -16,7 +16,6 @@ class AtfPreprocessor(AtfCReplacements, CdliReplacements):
             result = self.process_line(line)
             if self.stop_preprocessing:
                 break
-
             processed_lines.append(
                 {
                     "c_line": result[0],
@@ -49,5 +48,7 @@ class AtfPreprocessor(AtfCReplacements, CdliReplacements):
                 atf = self.do_atf_c_replacements(atf)
             else:
                 atf = self.do_oracc_replacements(atf)
-
+            # ToDo:
+            # unused local variable
+            # `atf` is not used
             return self.parse_and_convert_line(original_atf)

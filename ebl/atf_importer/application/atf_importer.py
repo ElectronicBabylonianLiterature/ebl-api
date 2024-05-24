@@ -48,10 +48,16 @@ class AtfImporter:
         self.username: str = ""
         self.logger = self.setup_logger()
         self.config = AtfImporterConfig()
-        self._ebl_lines_getter = EblLinesGetter(self.database, self.config, self.logger)
         self._database_importer = DatabaseImporter(database, self.logger, self.username)
         self.atf_preprocessor = None
         self.glossary_parser = GlossaryParser()
+        # ToDo:
+        # Continue from here
+        # undefined name 'glossary_path'
+        glossary_path = ""  # REPLACE
+        self._ebl_lines_getter = EblLinesGetter(
+            self.database, self.config, self.logger, self.parse_glossary(glossary_path)
+        )
 
     def convert_to_ebl_lines(
         self, converted_lines: List[Dict[str, Any]], filename: str
@@ -79,17 +85,10 @@ class AtfImporter:
         self.process_files(file_paths, args["glossary_path"])
 
     def process_files(self, file_paths: List[str], glossary_path: str) -> None:
-        glossary_data = self.parse_glossary(glossary_path)
         for filepath in file_paths:
-            self._process_file(filepath, glossary_data)
+            self._process_file(filepath)
 
-    def _process_file(
-        self,
-        filepath: str,
-        glossary_data: GlossaryParserData,
-    ) -> None:
-        # ToDo: Fix
-        # `GlossaryParserData` goes nowhere. Should probably go to `lemma_lookup`
+    def _process_file(self, filepath: str) -> None:
         filename = os.path.basename(filepath).split(".")[0]
         converted_lines = self.atf_preprocessor.convert_lines(filepath, filename)
         ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)

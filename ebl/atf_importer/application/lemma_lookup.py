@@ -9,10 +9,11 @@ class QueryConfig(TypedDict, total=False):
 
 
 class LemmaLookup:
-    def __init__(self, database, config, logger):
+    def __init__(self, database, config, logger, glossary_data):
         self.database = database
         self.config = config
         self.logger = logger
+        self.glossary_data = glossary_data
 
     def lookup_lemma(self, lemma: str, guideword: str, pos_tag: str) -> List[Dict]:
         if lemma in {"X", "u", "n"}:
@@ -64,11 +65,10 @@ class LemmaLookup:
         self, lemma: str, guideword: str, pos_tag: str
     ) -> List[str]:
         try:
-            citation_form, guideword = self.config["lemposgw_cfgw"][
+            citation_form, guideword = self.glossary_data["lemposgw_cfgw"][
                 lemma + pos_tag + guideword
             ]
             guideword = guideword.split("//")[0] if "//" in guideword else guideword
-
             unique_lemmas = self._query_database(
                 {
                     "lemma_field": "oraccWords.lemma",
