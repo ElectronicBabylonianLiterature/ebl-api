@@ -1,7 +1,8 @@
 from typing import List, Dict, TypedDict, Union
+from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 
 
-class QueryConfig(TypedDict, total=False):
+class QueryArgs(TypedDict, total=False):
     lemma_field: str
     lemma_value: Union[str, List[str]]
     guideword_field: str = ""
@@ -9,7 +10,7 @@ class QueryConfig(TypedDict, total=False):
 
 
 class LemmaLookup:
-    def __init__(self, database, config, logger, glossary_data):
+    def __init__(self, database, config: AtfImporterConfigData, logger, glossary_data):
         self.database = database
         self.config = config
         self.logger = logger
@@ -29,7 +30,7 @@ class LemmaLookup:
             return self._lookup_prefixed_lemma(lemma[1:], guideword)
         else:
             unique_lemmas = self._lookup_standard_lemma(lemma, guideword, pos_tag)
-            if not unique_lemmas and pos_tag in self.config.get("noun_pos_tags", []):
+            if not unique_lemmas and pos_tag in self.config["NOUN_POS_TAGS"]:
                 return self._query_database(
                     {"lemma_field": "oraccWords.lemma", "lemma_value": lemma}
                 )
@@ -100,10 +101,17 @@ class LemmaLookup:
             )
         return unique_lemmas
 
-    def _query_database(self, config: QueryConfig) -> List[str]:
-        query = {config["lemma_field"]: config["lemma_value"]}
-        if config["guideword_field"] != "" and config["guideword_value"] != "":
-            query[config["guideword_field"]] = config["guideword_value"]
+    def _query_database(self, args: QueryArgs) -> List[str]:
+        # ToDo:
+        # Optionally, agreggate db queries
+        query = {args["lemma_field"]: args["lemma_value"]}
+        if (
+            hasattr(args, "guideword_field")
+            and hasattr(args, "guideword_value")
+            and args["guideword_field"] != ""
+            and args["guideword_value"] != ""
+        ):
+            query[args["guideword_field"]] = args["guideword_value"]
 
         return [
             entry["_id"]

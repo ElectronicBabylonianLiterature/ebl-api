@@ -57,5 +57,62 @@
     "TN",
     "WN",
     "YN"
+  ],
+  "CLI_ARGS": [
+    {
+      "flags": [
+        "-i",
+        "--input"
+      ],
+      "kwargs": {
+        "required": true,
+        "help": "Path of the input directory."
+      }
+    },
+    {
+      "flags": [
+        "-l",
+        "--logdir"
+      ],
+      "kwargs": {
+        "required": true,
+        "help": "Path of the log files directory."
+      }
+    },
+    {
+      "flags": [
+        "-g",
+        "--glossary"
+      ],
+      "kwargs": {
+        "required": true,
+        "help": "Path to the glossary file."
+      }
+    },
+    {
+      "flags": [
+        "-a",
+        "--author"
+      ],
+      "kwargs": {
+        "required": false,
+        "help": "Name of the author of the imported fragments."
+      }
+    },
+    {
+      "flags": [
+        "-s",
+        "--style"
+      ],
+      "kwargs": {
+        "required": false,
+        "default": "Oracc",
+        "choices": [
+          "Oracc",
+          "Other"
+        ],
+        "help": "Specify import style."
+      }
+    }
   ]
 }

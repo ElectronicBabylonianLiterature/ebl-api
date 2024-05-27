@@ -4,10 +4,17 @@ from ebl.atf_importer.application.lemma_lookup import LemmaLookup
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParserData,
 )
+from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 
 
 class EblLinesGetter:
-    def __init__(self, database, config, logger, glossary_data: GlossaryParserData):
+    def __init__(
+        self,
+        database,
+        config: AtfImporterConfigData,
+        logger,
+        glossary_data: GlossaryParserData,
+    ):
         self.logger = logger
         self.lemmalookup = LemmaLookup(database, config, logger, glossary_data)
 

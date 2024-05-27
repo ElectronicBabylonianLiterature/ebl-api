@@ -1,5 +1,6 @@
 from ebl.atf_importer.application.atf_importer import AtfImporter
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+from ebl.atf_importer.application.lines_getter import EblLinesGetter
 
 
 def test_placeholder_insert(database):
@@ -34,6 +35,12 @@ def test_placeholder_insert(database):
         }
     )
     atf_importer = AtfImporter(database)
+    atf_importer._ebl_lines_getter = EblLinesGetter(
+        atf_importer.database,
+        atf_importer.config,
+        atf_importer.logger,
+        {},  # ToDo: Add glossaryData
+    )
     ebl_lines = atf_importer.convert_to_ebl_lines(
         converted_lines,
         "cpp_3_1_16",

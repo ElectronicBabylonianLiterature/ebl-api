@@ -1,5 +1,6 @@
 import re
 from typing import Dict, List, Tuple, Optional, Iterator, TypedDict
+from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 
 
 class GlossaryParserData(TypedDict):
@@ -9,7 +10,8 @@ class GlossaryParserData(TypedDict):
 
 
 class GlossaryParser:
-    def __init__(self):
+    def __init__(self, config: AtfImporterConfigData):
+        self.config = config
         self.lemgwpos_cf: Dict[str, str] = {}
         self.forms_senses: Dict[str, List[str]] = {}
         self.lemposgw_cfgw: Dict[str, Tuple[str, str]] = {}
@@ -91,9 +93,9 @@ class GlossaryParser:
     def _extract_pos_tag_and_sense(
         self, line: str
     ) -> Tuple[Optional[str], Optional[str]]:
-        parts = line.split(" ", 2)
-        pos_tag = parts[1] if len(parts) > 1 else None
-        sense = parts[2].strip() if len(parts) > 2 else None
+        pos_tags = list(set(line.split(" ", 2)).intersection(self.config["POS_TAGS"]))
+        pos_tag = pos_tags[0] if pos_tags[0] else ""
+        sense = line.split(pos_tag)[1].rstrip("\n")
         return pos_tag, sense
 
     def _update_forms_senses(self, lemma: str, sense: Optional[str]) -> None:
