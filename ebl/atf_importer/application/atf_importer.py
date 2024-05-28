@@ -3,7 +3,7 @@ import glob
 import os
 import logging
 from pymongo import MongoClient
-from typing import Any, Dict, List, TypedDict
+from typing import Any, Dict, List, TypedDict, Optional
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
     GlossaryParserData,
@@ -16,10 +16,37 @@ from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
 
 class AtfImporterArgs(TypedDict):
     input_dir: str
-    log_dir: str
+    logdir: str
     glossary_path: str
     author: str
     style: int
+
+
+class Logger:
+    def __init__(self, logdir: Optional[str] = "atf_importer_logs/"):
+        logging.basicConfig(level=logging.DEBUG)
+        self.logger = logging.getLogger("Atf-Importer")
+        self.logdir = logdir
+        self.imported: List[str] = []
+        self.not_imported: List[str] = []
+        self.failed: List[str] = []
+        self.error_lines: List[str] = []
+        self.success: List[str] = []
+
+    def write_logs(self):
+        log_sets = [
+            {"filename": "not_lemmatized", "data": self.not_lemmatized},
+            {"filename": "error_lines", "data": self.error_lines},
+            {"filename": "not_imported", "data": self.failed},
+            {"filename": "imported", "data": self.success},
+        ]
+        for log_data in log_sets:
+            self._write_log(log_data["filename"], log_data["data"])
+
+    def _write_log(self, filename: str, data: List[str]) -> None:
+        with open(f"{self.logdir}{filename}.txt", "w", encoding="utf8") as outputfile:
+            for line in data:
+                outputfile.write(line + "\n")
 
 
 class AtfImporter:
@@ -43,8 +70,7 @@ class AtfImporter:
             return {}
 
     def setup_logger(self) -> None:
-        logging.basicConfig(level=logging.DEBUG)
-        self.logger = logging.getLogger("Atf-Importer")
+        self.logger = Logger()
 
     def setup_lines_getter(self, glossary_path: str) -> None:
         self._ebl_lines_getter = EblLinesGetter(
@@ -64,9 +90,12 @@ class AtfImporter:
     def run_importer(self, args: AtfImporterArgs) -> None:
         self.setup_lines_getter(args["glossary_path"])
         self.username = args["author"]
-        self.atf_preprocessor = AtfPreprocessor(args["log_dir"], args["style"])
+        self.atf_preprocessor = AtfPreprocessor(args["logdir"], args["style"])
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
         self._process_files(file_paths)
+        if args["logdir"]:
+            self.logger.logdir = args["logdir"]
+            self.logger.write_logs()
 
     def _process_files(self, file_paths: List[str]) -> None:
         for filepath in file_paths:
@@ -90,7 +119,7 @@ class AtfImporter:
         self.run_importer(
             {
                 "input_dir": args.input,
-                "log_dir": args.logdir,
+                "logdir": args.logdir,
                 "glossary_path": args.glossary,
                 "author": args.author,
                 "style": args.style,
