@@ -42,6 +42,7 @@ class EblLinesGetter:
         result["all_unique_lemmas"] = []
         for line in converted_lines:
             result, context = self._handle_line_type(line, result, filename, context)
+        self._log_result(result, context)
         return dict(result)
 
     def _handle_line_type(
@@ -93,10 +94,7 @@ class EblLinesGetter:
             )
             return result
 
-        all_unique_lemmas = self._get_all_unique_lemmas(line, filename)
-        self._add_placeholders_to_lemmas(
-            all_unique_lemmas, context.last_alter_lemline_at
-        )
+        all_unique_lemmas = self._get_all_unique_lemmas(line, filename, context)
         result["all_unique_lemmas"] += all_unique_lemmas
         result["last_transliteration"] = context.last_transliteration
         lemma_line = self._create_lemma_line(
@@ -105,12 +103,14 @@ class EblLinesGetter:
             context.last_transliteration_line,
         )
         result["lemmatization"].append(tuple(lemma_line))
+        self._log_line(filename, context)
         return result
 
     def _get_all_unique_lemmas(
         self,
         line: Dict[str, Any],
         filename: str,
+        context: LineContext,
     ) -> List:
         if self.test_lemmas:
             return self.test_lemmas
@@ -119,7 +119,9 @@ class EblLinesGetter:
             all_unique_lemmas = self._get_ebl_lemmata(
                 oracc_lemma_tupel, all_unique_lemmas, filename
             )
-        return all_unique_lemmas
+        return self._add_placeholders_to_lemmas(
+            all_unique_lemmas, context.last_alter_lemline_at
+        )
 
     def _add_placeholders_to_lemmas(
         self, all_unique_lemmas: List, last_alter_lemline_at: List[int]
@@ -129,6 +131,7 @@ class EblLinesGetter:
                 f"Adding placeholder to lemma line at position:{str(alter_pos)}"
             )
             all_unique_lemmas.insert(alter_pos, [])
+        return all_unique_lemmas
 
     def _get_ebl_lemmata(
         self,
@@ -162,7 +165,7 @@ class EblLinesGetter:
                 f"Transliteration {str(last_transliteration_line)}"
             )
 
-        for index, oracc_word in enumerate(last_transliteration):
+        for index, _oracc_word in enumerate(last_transliteration):
             # ToDo: Check if `oracc_word` should go somewhere.
             #
             # ebl/atf_importer/application/lines_getter.py:165:18:
@@ -181,3 +184,18 @@ class EblLinesGetter:
             else:
                 lemma_line.append(LemmatizationToken(token.value, None))
         return lemma_line
+
+    def _log_line(self, filename: str, context: LineContext) -> None:
+        self.logger.debug(
+            f"{filename}: transliteration {str(context.last_transliteration_line)}"
+        )
+        self.logger.debug(
+            f"eBL transliteration{str(context.last_transliteration)} "
+            f"{len(context.last_transliteration)}"
+        )
+
+    def _log_result(self, result: defaultdict, context: LineContext) -> None:
+        all_unique_lemmas = result["all_unique_lemmas"]
+        self.logger.debug(
+            f"All unique lemmata. Total: {len(all_unique_lemmas)}.\n{str(all_unique_lemmas)}"
+        )

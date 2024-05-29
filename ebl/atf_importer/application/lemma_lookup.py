@@ -18,6 +18,7 @@ class LemmaLookup:
 
     def lookup_lemma(self, lemma: str, guideword: str, pos_tag: str) -> List[Dict]:
         if lemma in {"X", "u", "n"}:
+            self.logger.warning(f"No lemmatization: Blank Oracc lemma '{lemma}'")
             return []
         lemma = lemma.strip()
         guideword = self._clean_guideword(guideword)
@@ -81,7 +82,7 @@ class LemmaLookup:
         except KeyError:
             self.logger.warning(
                 "Incompatible lemmatization: No citation form"
-                f" or guideword found in the glossary for '{lemma}'"
+                f" or guideword (by sense) found in the glossary for '{lemma}'"
             )
             return []
 

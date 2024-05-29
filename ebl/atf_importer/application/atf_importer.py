@@ -1,7 +1,6 @@
 import argparse
 import glob
 import os
-import logging
 from pymongo import MongoClient
 from typing import Any, Dict, List, TypedDict, Optional
 from ebl.atf_importer.application.glossary_parser import (
@@ -12,6 +11,8 @@ from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.atf_importer.application.database_importer import DatabaseImporter
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
+from ebl.atf_importer.application.logger import Logger
+from ebl.atf_importer.domain.atf_preprocessor_util import Util
 
 
 class AtfImporterArgs(TypedDict):
@@ -19,34 +20,7 @@ class AtfImporterArgs(TypedDict):
     logdir: str
     glossary_path: str
     author: str
-    style: int
-
-
-class Logger:
-    def __init__(self, logdir: Optional[str] = "atf_importer_logs/"):
-        logging.basicConfig(level=logging.DEBUG)
-        self.logger = logging.getLogger("Atf-Importer")
-        self.logdir = logdir
-        self.imported: List[str] = []
-        self.not_imported: List[str] = []
-        self.failed: List[str] = []
-        self.error_lines: List[str] = []
-        self.success: List[str] = []
-
-    def write_logs(self):
-        log_sets = [
-            {"filename": "not_lemmatized", "data": self.not_lemmatized},
-            {"filename": "error_lines", "data": self.error_lines},
-            {"filename": "not_imported", "data": self.failed},
-            {"filename": "imported", "data": self.success},
-        ]
-        for log_data in log_sets:
-            self._write_log(log_data["filename"], log_data["data"])
-
-    def _write_log(self, filename: str, data: List[str]) -> None:
-        with open(f"{self.logdir}{filename}.txt", "w", encoding="utf8") as outputfile:
-            for line in data:
-                outputfile.write(line + "\n")
+    style: int = 0
 
 
 class AtfImporter:
@@ -69,8 +43,8 @@ class AtfImporter:
         else:
             return {}
 
-    def setup_logger(self) -> None:
-        self.logger = Logger()
+    def setup_logger(self, logdir: Optional[str] = None) -> None:
+        self.logger = Logger(logdir)
 
     def setup_lines_getter(self, glossary_path: str) -> None:
         self._ebl_lines_getter = EblLinesGetter(
@@ -78,7 +52,10 @@ class AtfImporter:
         )
 
     def import_into_database(self, ebl_lines: Dict[str, List], filename: str) -> None:
-        self._database_importer.import_into_database(ebl_lines, filename)
+        try:
+            self._database_importer.import_into_database(ebl_lines, filename)
+        except Exception as e:
+            self.logger.exception(e)
 
     def parse_glossary(
         self,
@@ -88,23 +65,29 @@ class AtfImporter:
             return self.glossary_parser.parse(file)
 
     def run_importer(self, args: AtfImporterArgs) -> None:
+        if args["logdir"]:
+            self.setup_logger(args["logdir"])
         self.setup_lines_getter(args["glossary_path"])
         self.username = args["author"]
         self.atf_preprocessor = AtfPreprocessor(args["logdir"], args["style"])
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
-        self._process_files(file_paths)
-        if args["logdir"]:
-            self.logger.logdir = args["logdir"]
-            self.logger.write_logs()
+        self._process_files(file_paths, args)
+        self.logger.write_logs()
 
-    def _process_files(self, file_paths: List[str]) -> None:
+    def _process_files(self, file_paths: List[str], args: AtfImporterArgs) -> None:
         for filepath in file_paths:
-            self._process_file(filepath)
+            self._process_file(filepath, args)
 
-    def _process_file(self, filepath: str) -> None:
+    def _process_file(self, filepath: str, args: AtfImporterArgs) -> None:
         filename = os.path.basename(filepath).split(".")[0]
+        style = self.config["STYLES"][args["style"]]
+        self.logger.info(Util.print_frame(f"Importing {filename}.atf as: {style}"))
         converted_lines = self.atf_preprocessor.convert_lines(filepath, filename)
+        self.logger.info(Util.print_frame(f"Formatting to eBL-ATF of {filename}.atf"))
         ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)
+        self.logger.info(
+            Util.print_frame(f"Importing converted lines of {filename}.atf into db")
+        )
         self.import_into_database(ebl_lines, filename)
 
     def cli(self) -> None:
@@ -131,6 +114,7 @@ class AtfImporter:
         client = MongoClient(os.getenv("MONGODB_URI"))
         database = client.get_database(os.getenv("MONGODB_DB"))
         importer = AtfImporter(database)
+        importer.logger.info("Atf-Importer")
         importer.cli()
 
 

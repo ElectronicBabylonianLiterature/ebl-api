@@ -15,7 +15,7 @@ class CliArgument(TypedDict):
 
 
 class AtfImporterConfigData(TypedDict):
-    STYLES: Dict[str, int]
+    STYLES: Dict[int, str]
     POS_TAGS: List[str]
     NOUN_POS_TAGS: List[str]
     CLI_ARGS: List[CliArgument]

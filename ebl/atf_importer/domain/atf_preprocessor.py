@@ -26,7 +26,7 @@ class AtfPreprocessor(AtfCReplacements, CdliReplacements):
             )
 
         self.logger.info(Util.print_frame("Preprocessing finished"))
-        self.write_unparsable_lines(filename)
+        self.write_unparsable_lines(filename)  # ToDo: replace with normal logging
         return processed_lines
 
     def process_line(

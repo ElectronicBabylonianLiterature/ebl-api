@@ -9,6 +9,7 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationT
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
 from ebl.users.domain.user import AtfImporterUser
+from ebl.atf_importer.domain.atf_preprocessor_util import Util
 
 
 class DatabaseImporter:
@@ -25,6 +26,11 @@ class DatabaseImporter:
     def import_into_database(self, ebl_lines: Dict[str, List], filename: str):
         museum_number: Optional[str] = self._retrieve_museum_number(ebl_lines, filename)
         if not museum_number:
+            self.logger.error(
+                f"{filename} could not be imported: Museum number not found",
+                "not_imported_files",
+            )
+            self.logger.info(Util.print_frame(f'Conversion of "{filename}.atf" failed'))
             return
         if self._check_fragment_exists(museum_number):
             self._import(ebl_lines, museum_number, filename)
@@ -36,17 +42,70 @@ class DatabaseImporter:
                 museum_number,
             )
             self._insert_lemmatization(ebl_lines["lemmatization"], museum_number)
-            self.logger.info(f"{filename} successfully imported")
+            self.logger(f"{filename} successfully imported", "imported_files")
         except Exception as e:
-            self.logger.error(f"Error importing {filename}: {str(e)}")
+            self.logger.error(
+                f"Error importing {filename}: {str(e)}", "not_imported_files"
+            )
+
+    def _get_valid_museum_number_or_none(
+        self, museum_number_string: str
+    ) -> Optional[str]:
+        try:
+            parse_museum_number(museum_number_string)
+            self.logger.info(f"Museum number '{museum_number_string}' is valid")
+            return museum_number_string
+        except ValueError:
+            return
 
     def _retrieve_museum_number(
         self, ebl_lines: Dict[str, List], filename: str
     ) -> Optional[str]:
+        if museum_number := self._get_museum_number_by_cdli_number(
+            ebl_lines["control_lines"]
+        ):
+            return museum_number
         for line in ebl_lines["control_lines"]:
             linesplit = line["c_line"].split("=")
-            if len(linesplit) > 1:
-                return linesplit[-1].strip()
+            if len(linesplit) > 1 and (
+                museum_number := self._get_valid_museum_number_or_none(
+                    linesplit[-1].strip()
+                )
+            ):
+                return museum_number
+        self.logger.error(f"Could not find a valid museum number in '{filename}'")
+        return self._input_museum_number(filename)
+
+    def _input_museum_number(
+        self, filename: str, museum_number: Optional[str] = None
+    ) -> Optional[str]:
+        while museum_number is None:
+            museum_number_input = input(
+                "Please enter a valid museum number (enter 'skip' to skip this file): "
+            )
+            if museum_number_input.lower() == "skip":
+                return None
+            museum_number = self._get_valid_museum_number_or_none(museum_number_input)
+        return museum_number
+
+    def _get_museum_number_by_cdli_number(self, control_lines) -> Optional[str]:
+        if cdli_number := self._get_cdli_number(control_lines):
+            for entry in self.database.get_collection("fragments").find(
+                {"externalNumbers.cdliNumber": cdli_number}, {"museumNumber"}
+            ):
+                if "_id" in entry.keys():
+                    return entry["_id"]
+        self.logger.warning(
+            f"No museum number to CDLI number '{cdli_number}' found."
+            " Trying to parse from the original file..."
+        )
+        return None
+
+    @staticmethod
+    def _get_cdli_number(control_lines) -> Optional[str]:
+        for line in control_lines:
+            cdli_number = line["c_line"].split("=")[0].strip().replace("&", "")
+            return cdli_number
         return None
 
     def _check_fragment_exists(self, museum_number: str) -> bool:
