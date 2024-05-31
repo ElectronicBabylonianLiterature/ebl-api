@@ -43,7 +43,8 @@ class LemmaLookup:
         if not unique_lemmas:
             self.logger.warning(
                 "Incompatible lemmatization: No eBL word found for lemma"
-                f" '{lemma}' and guide word '{guideword}'"
+                f" '{lemma}' and guide word '{guideword}'",
+                "not_lemmatized_tokens",
             )
 
     def _clean_guideword(self, guideword: str) -> str:
@@ -70,7 +71,7 @@ class LemmaLookup:
             citation_form, guideword = self.glossary_data["lemposgw_cfgw"][
                 lemma + pos_tag + guideword
             ]
-            guideword = guideword.split("//")[0] if "//" in guideword else guideword
+            guideword = self._clean_guideword(guideword)
             unique_lemmas = self._query_database(
                 {
                     "lemma_field": "oraccWords.lemma",
@@ -82,7 +83,8 @@ class LemmaLookup:
         except KeyError:
             self.logger.warning(
                 "Incompatible lemmatization: No citation form"
-                f" or guideword (by sense) found in the glossary for '{lemma}'"
+                f" or guideword (by sense) found in the glossary for '{lemma}'",
+                "not_lemmatized_tokens",
             )
             return []
 

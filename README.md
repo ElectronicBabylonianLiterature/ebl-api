@@ -494,8 +494,8 @@ poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_impor
 
 #### Troubleshooting
 
-If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparseable_lines_[fragment_file].txt`, `not_imported.txt`) and see which lines could not be parsed.
-If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `not_lemmatized.txt`.
+If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparsable_lines_[fragment_file].txt`, `not_imported_files.txt`) and see which lines could not be parsed.
+If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `not_lemmatized_tokens.txt`.
 
 ## Acknowledgements
 

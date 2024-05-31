@@ -122,7 +122,7 @@ class EblLinesGetter:
     ) -> List:
         all_unique_lemmas = []
         for oracc_lemma_tupel in line["c_array"]:
-            all_unique_lemmas = self._get_ebl_lemmata(
+            all_unique_lemmas = self._get_ebl_lemmas(
                 oracc_lemma_tupel, all_unique_lemmas, filename
             )
         return self._add_placeholders_to_lemmas(
@@ -139,7 +139,7 @@ class EblLinesGetter:
             all_unique_lemmas.insert(alter_pos, [])
         return all_unique_lemmas
 
-    def _get_ebl_lemmata(
+    def _get_ebl_lemmas(
         self,
         oracc_lemma_tupel: Tuple[str, str, str],
         all_unique_lemmas: List,
@@ -174,9 +174,10 @@ class EblLinesGetter:
         )
 
     def _log_transliteration_error(self, last_transliteration_line: str) -> None:
-        self.logger.error("Transliteration and Lemmatization don't have equal length!!")
-        self.logger.error_lines.append(
-            f"Transliteration {str(last_transliteration_line)}"
+        self.logger.error(
+            "Transliteration and Lemmatization don't have equal length:"
+            f"\n{str(last_transliteration_line)}",
+            "error_lines",
         )
 
     def _map_lemmas_to_indices(
@@ -184,11 +185,6 @@ class EblLinesGetter:
     ) -> dict:
         oracc_word_ebl_lemmas = {}
         for index in range(len(last_transliteration)):
-            # ToDo: Check if `oracc_word` should go somewhere.
-            #
-            # ebl/atf_importer/application/lines_getter.py:165:18:
-            # B007 Loop control variable 'oracc_word' not used within the loop body.
-            # If this is intended, start the name with an underscore.
             oracc_word_ebl_lemmas[index] = all_unique_lemmas[index]
         return oracc_word_ebl_lemmas
 

@@ -102,7 +102,6 @@ class AtfPreprocessorBase:
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
         self.skip_next_lem_line = False
-        self.unparseable_lines = []
         self.unused_lines = unused_lines
         self.stop_preprocessing = False
         self.logdir = logdir
@@ -136,11 +135,6 @@ class AtfPreprocessorBase:
         atf = " ".join(atf.split())
 
         return atf
-
-    def log_unparseable_line(self, atf: str) -> Tuple[None, None, None, None]:
-        self.logger.error(f"Could not convert line: {atf}")
-        self.unparseable_lines.append(atf)
-        return (None, None, None, None)
 
     def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
         self.ebl_parser.parse(atf)
@@ -218,7 +212,7 @@ class AtfPreprocessorBase:
     def parse_and_convert_line(
         self, atf: str
     ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
-        result = None
+        result = (None, None, None, None)
         try:
             tree = self.oracc_parser.parse(atf)
             if tree.data in self.unused_lines:
@@ -231,15 +225,8 @@ class AtfPreprocessorBase:
                 result = self.unused_line(tree)
         except Exception:
             self.logger.error(traceback.format_exc())
-            result = self.log_unparseable_line(atf)
+            self.logger.error(f"Could not convert line: {atf}", "unparsable_lines")
         return result
-
-    def write_unparsable_lines(self, filename: str) -> None:
-        with open(
-            f"{self.logdir}unparseable_lines_{filename}.txt", "w", encoding="utf8"
-        ) as outputfile:
-            for line in self.unparseable_lines:
-                outputfile.write(line + "\n")
 
     def read_lines(self, file: str) -> List[str]:
         with codecs.open(file, "r", encoding="utf8") as f:

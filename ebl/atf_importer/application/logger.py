@@ -2,18 +2,12 @@ import logging
 from typing import Dict, List, Optional, Literal, get_args
 
 LogKey = Literal[
-    "not_lemmatized_lines",
+    "unparsable_lines",
+    "not_lemmatized_tokens",
     "error_lines",
-    "not_imported_files",  # failed
-    "imported_files",  # success
+    "not_imported_files",
+    "imported_files",
 ]
-
-# ToDo: Continue from here. Check if all the logging the original
-# code was preserved. Original variables:
-# not_lemmatized = {}
-# error_lines = []
-# success = []
-# failed = []
 
 
 class Logger:
