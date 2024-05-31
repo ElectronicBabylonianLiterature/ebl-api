@@ -4,9 +4,16 @@ from typing import Dict, List, Optional, Literal, get_args
 LogKey = Literal[
     "not_lemmatized_lines",
     "error_lines",
-    "not_imported_files",
-    "imported_files",
+    "not_imported_files",  # failed
+    "imported_files",  # success
 ]
+
+# ToDo: Continue from here. Check if all the logging the original
+# code was preserved. Original variables:
+# not_lemmatized = {}
+# error_lines = []
+# success = []
+# failed = []
 
 
 class Logger:
@@ -23,15 +30,15 @@ class Logger:
     def debug(self, text: str) -> None:
         self.logger.debug(text)
 
-    def success(self, text: str, key: Optional[LogKey]) -> None:
+    def success(self, text: str, key: Optional[LogKey] = None) -> None:
         self.logger.success(text)
         self._append_to_data(text, key)
 
-    def info(self, text: str, key: Optional[LogKey]) -> None:
+    def info(self, text: str, key: Optional[LogKey] = None) -> None:
         self.logger.info(text)
         self._append_to_data(text, key)
 
-    def warning(self, text: str, key: Optional[LogKey]) -> None:
+    def warning(self, text: str, key: Optional[LogKey] = None) -> None:
         self.logger.warning(text)
         self._append_to_data(text, key)
 

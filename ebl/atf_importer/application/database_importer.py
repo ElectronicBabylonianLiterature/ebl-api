@@ -89,17 +89,27 @@ class DatabaseImporter:
         return museum_number
 
     def _get_museum_number_by_cdli_number(self, control_lines) -> Optional[str]:
-        if cdli_number := self._get_cdli_number(control_lines):
-            for entry in self.database.get_collection("fragments").find(
-                {"externalNumbers.cdliNumber": cdli_number}, {"museumNumber"}
-            ):
-                if "_id" in entry.keys():
-                    return entry["_id"]
+        cdli_number = self._get_cdli_number(control_lines)
+        if cdli_number:
+            museum_number = self._find_museum_number_by_cdli(cdli_number)
+            if museum_number:
+                return museum_number
+        self._log_no_museum_number_found(cdli_number)
+        return None
+
+    def _find_museum_number_by_cdli(self, cdli_number: str) -> Optional[str]:
+        for entry in self.database.get_collection("fragments").find(
+            {"externalNumbers.cdliNumber": cdli_number}, {"museumNumber"}
+        ):
+            if "_id" in entry:
+                return entry["_id"]
+        return None
+
+    def _log_no_museum_number_found(self, cdli_number: Optional[str]) -> None:
         self.logger.warning(
             f"No museum number to CDLI number '{cdli_number}' found."
             " Trying to parse from the original file..."
         )
-        return None
 
     @staticmethod
     def _get_cdli_number(control_lines) -> Optional[str]:

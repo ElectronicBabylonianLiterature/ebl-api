@@ -22,10 +22,12 @@ class EblLinesGetter:
         config: AtfImporterConfigData,
         logger,
         glossary_data: GlossaryParserData,
+        # ToDo: Remove `self.test_lemmas`.
         test_lemmas: Optional[List] = None,
     ):
         self.logger = logger
         self.lemmalookup = LemmaLookup(database, config, logger, glossary_data)
+        # ToDo: Remove `self.test_lemmas`.
         self.test_lemmas = test_lemmas
 
     def convert_to_ebl_lines(
@@ -94,7 +96,13 @@ class EblLinesGetter:
             )
             return result
 
-        all_unique_lemmas = self._get_all_unique_lemmas(line, filename, context)
+        # ToDo: Remove `self.test_lemmas`.
+        # Change test logic to actual db query or mocking
+        all_unique_lemmas = (
+            self.test_lemmas
+            if self.test_lemmas
+            else self._get_all_unique_lemmas(line, filename, context)
+        )
         result["all_unique_lemmas"] += all_unique_lemmas
         result["last_transliteration"] = context.last_transliteration
         lemma_line = self._create_lemma_line(
@@ -112,8 +120,6 @@ class EblLinesGetter:
         filename: str,
         context: LineContext,
     ) -> List:
-        if self.test_lemmas:
-            return self.test_lemmas
         all_unique_lemmas = []
         for oracc_lemma_tupel in line["c_array"]:
             all_unique_lemmas = self._get_ebl_lemmata(
@@ -156,23 +162,39 @@ class EblLinesGetter:
         all_unique_lemmas: List,
         last_transliteration_line: str,
     ) -> List:
-        oracc_word_ebl_lemmas = {}
         if len(last_transliteration) != len(all_unique_lemmas):
-            self.logger.error(
-                "Transliteration and Lemmatization don't have equal length!!"
-            )
-            self.logger.error_lines.append(
-                f"Transliteration {str(last_transliteration_line)}"
-            )
+            self._log_transliteration_error(last_transliteration_line)
+            return []
 
-        for index, _oracc_word in enumerate(last_transliteration):
+        oracc_word_ebl_lemmas = self._map_lemmas_to_indices(
+            last_transliteration, all_unique_lemmas
+        )
+        return self._generate_lemma_line(
+            last_transliteration_line, oracc_word_ebl_lemmas
+        )
+
+    def _log_transliteration_error(self, last_transliteration_line: str) -> None:
+        self.logger.error("Transliteration and Lemmatization don't have equal length!!")
+        self.logger.error_lines.append(
+            f"Transliteration {str(last_transliteration_line)}"
+        )
+
+    def _map_lemmas_to_indices(
+        self, last_transliteration: List[str], all_unique_lemmas: List
+    ) -> dict:
+        oracc_word_ebl_lemmas = {}
+        for index in range(len(last_transliteration)):
             # ToDo: Check if `oracc_word` should go somewhere.
             #
             # ebl/atf_importer/application/lines_getter.py:165:18:
             # B007 Loop control variable 'oracc_word' not used within the loop body.
-            # If this is intended, start the name with an underscore..
+            # If this is intended, start the name with an underscore.
             oracc_word_ebl_lemmas[index] = all_unique_lemmas[index]
+        return oracc_word_ebl_lemmas
 
+    def _generate_lemma_line(
+        self, last_transliteration_line: str, oracc_word_ebl_lemmas: dict
+    ) -> List:
         ebl_lines = parse_atf_lark(last_transliteration_line)
         lemma_line = []
         word_cnt = 0

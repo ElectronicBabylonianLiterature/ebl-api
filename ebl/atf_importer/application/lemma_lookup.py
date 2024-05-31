@@ -1,4 +1,4 @@
-from typing import List, Dict, TypedDict, Union
+from typing import List, Dict, TypedDict, Union, Any
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 
 
@@ -102,19 +102,29 @@ class LemmaLookup:
             )
         return unique_lemmas
 
-    def _query_database(self, args: QueryArgs) -> List[str]:
-        # ToDo:
-        # Optionally, agreggate db queries
-        query = {args["lemma_field"]: args["lemma_value"]}
-        if (
-            hasattr(args, "guideword_field")
-            and hasattr(args, "guideword_value")
-            and args["guideword_field"] != ""
-            and args["guideword_value"] != ""
-        ):
-            query[args["guideword_field"]] = args["guideword_value"]
+    def _query_database(self, args: Dict[str, Any]) -> List[str]:
+        query = self._build_query(args)
+        return self._execute_query(query)
 
+    def _build_query(self, args: Dict[str, Any]) -> Dict[str, Any]:
+        query = {args["lemma_field"]: args["lemma_value"]}
+        if self._has_guideword(args):
+            query[args["guideword_field"]] = args["guideword_value"]
+        return query
+
+    def _has_guideword(self, args: Dict[str, Any]) -> bool:
+        return (
+            "guideword_field" in args
+            and "guideword_value" in args
+            and args["guideword_field"]
+            and args["guideword_value"]
+        )
+
+    def _execute_query(self, query: Dict[str, Any]) -> List[str]:
+        aggregation_pipeline = [{"$match": query}, {"$project": {"_id": 1}}]
         return [
             entry["_id"]
-            for entry in self.database.get_collection("words").find(query, {"_id"})
+            for entry in self.database.get_collection("words").aggregate(
+                aggregation_pipeline
+            )
         ]
