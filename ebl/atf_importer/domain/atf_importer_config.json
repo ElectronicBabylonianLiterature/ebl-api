@@ -1,8 +1,7 @@
 {
   "STYLES": {
-    "0": "Oracc ATF",
-    "1": "Oracc C-ATF",
-    "2": "CDLI"
+    "1": "Oracc ATF",
+    "2": "CDLI ATF"
   },
   "POS_TAGS": [
     "REL",
@@ -106,12 +105,12 @@
       ],
       "kwargs": {
         "required": false,
-        "default": "Oracc",
+        "default": 0,
         "choices": [
-          "Oracc",
-          "Other"
+          "1 = Oracc ATF (O-ATF)",
+          "2 = CDLI ATF (C-ATF)"
         ],
-        "help": "Specify import style."
+        "help": "Specify import style (default: 1 = Oracc ATF)."
       }
     }
   ]

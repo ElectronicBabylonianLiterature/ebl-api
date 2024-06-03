@@ -80,8 +80,8 @@ class AtfImporter:
 
     def _process_file(self, filepath: str, args: AtfImporterArgs) -> None:
         filename = os.path.basename(filepath).split(".")[0]
-        style = self.config["STYLES"][args["style"]]
-        self.logger.info(Util.print_frame(f"Importing {filename}.atf as: {style}"))
+        style_name = self.config["STYLES"][str(args["style"])]
+        self.logger.info(Util.print_frame(f"Importing {filename}.atf as: {style_name}"))
         converted_lines = self.atf_preprocessor.convert_lines(filepath, filename)
         self.logger.info(Util.print_frame(f"Formatting to eBL-ATF of {filename}.atf"))
         ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)

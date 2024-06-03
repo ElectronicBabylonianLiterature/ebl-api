@@ -2,16 +2,20 @@ import re
 from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 
 
+opening_half_bracket = {"⌈", "⸢"}
+closing_half_bracket = {"⌉", "⸣"}
+
+
 class CdliReplacements(AtfPreprocessorBase):
     def do_cdli_replacements(self, atf: str) -> str:
         return (
-            self._handle_numeric_atf(atf)
+            self._handle_text_line(atf)
             if atf[0].isdigit()
-            else self._handle_special_cases(atf)
-        )
+            else self._handle_dollar_line(atf)
+        ).strip(" ")
 
-    def _handle_numeric_atf(self, atf: str) -> str:
-        numeric_atf_methods = [
+    def _handle_text_line(self, atf: str) -> str:
+        atf_text_line_methods = [
             "_replace_dashes",
             "replace_special_characters",
             "_normalize_patterns",
@@ -20,15 +24,16 @@ class CdliReplacements(AtfPreprocessorBase):
             "_uppercase_underscore",
             "_lowercase_braces",
             "_replace_dollar_signs",
-            "_replace_tabs",
+            "_replace_tabs_and_excessive_whitespaces",
+            "reorder_bracket_punctuation",
         ]
-        for method_name in numeric_atf_methods:
+        for method_name in atf_text_line_methods:
             method = getattr(self, method_name)
             atf = method(atf)
         return atf
 
     def _replace_dashes(self, atf: str) -> str:
-        return atf.replace("–", "-").replace("--", "-")
+        return re.sub(r"–|--", "-", atf)
 
     def _normalize_patterns(self, atf: str) -> str:
         callback_normalize = (
@@ -56,38 +61,39 @@ class CdliReplacements(AtfPreprocessorBase):
     def _replace_dollar_signs(self, atf: str) -> str:
         return re.sub(r"\(\$.*\$\)", r"($___$)", atf)
 
-    def _replace_tabs(self, atf: str) -> str:
-        atf = atf.replace("\t", " ")
-        return " ".join(atf.split())
+    def _replace_tabs_and_excessive_whitespaces(self, atf: str) -> str:
+        return atf.replace("[\t\s]*", " ")
 
-    def _handle_special_cases(self, atf: str) -> str:
-        special_cases = {
+    def _handle_dollar_line(self, atf: str) -> str:
+        special_marks = {
             "$ rest broken": "$ rest of side broken",
             "$ ruling": "$ single ruling",
-            "$ seal impression broken": "$ (seal impression broken)",
-            "$ seal impression": "$ (seal impression)",
         }
-        return special_cases.get(atf, atf)
+        if atf in special_marks.keys():
+            return special_marks[atf]
+        if atf.startswith("$ "):
+            dollar_comment = atf.split("$ ")[1]
+            return f"$ ({dollar_comment})"
+        return atf
 
     def _process_bracketed_parts(self, atf: str) -> str:
-        atfsplit = re.split(r"([⌈⸢])(.*)?([⌉⸣])", atf)
-        opening = {"⌈", "⸢"}
-        closing = {"⌉", "⸣"}
-
-        return "".join(
-            self._process_bracketed_part(part, opening, closing) for part in atfsplit
+        self.open_found = False
+        split = re.split(r"([⌈⌉⸢⸣])", atf)
+        if len(split) > 1 and atf.startswith('10. ['):
+            # ToDo: Continue from here.
+            print("! split", split)
+            print("! norm", "".join(self._process_bracketed_part(part) for part in split))
+            input("press enter")
+        return (
+            "".join(self._process_bracketed_part(part) for part in split)
+            if len(split) > 1
+            else atf
         )
 
-    def _process_bracketed_part(self, part: str, opening: set, closing: set) -> str:
-        if getattr(self, "open_found", False):
-            self.open_found = False if part in closing else self.open_found
-            return self._transform_bracketed_part(part, opening, closing)
-        if part in opening:
-            self.open_found = True
-        return part if part not in closing else ""
-
-    def _transform_bracketed_part(self, part: str, opening: set, closing: set) -> str:
-        part = part.replace("-", "#.").replace("–", "#.").replace(" ", "# ")
-        if part not in opening and part not in closing:
-            part += "#"
-        return part
+    def _process_bracketed_part(self, part: str) -> str:
+        if part in opening_half_bracket.union(closing_half_bracket):
+            self.open_found = part in opening_half_bracket
+            return ""
+        if self.open_found == False:
+            return part
+        return re.sub(r"([-.\s])", r"#\1", part) + "#"

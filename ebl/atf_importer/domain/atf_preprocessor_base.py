@@ -129,22 +129,23 @@ class AtfPreprocessorBase:
     def do_oracc_replacements(self, atf: str) -> str:
         for old, new in oracc_replacements.items():
             atf = atf.replace(old, new)
-
         atf = re.sub(r"([\[<])([*:])(.*)", r"\1 \2\3", atf)
         atf = re.sub(r"(:)([]>])(.*)", r"\1 \2\3", atf)
         atf = " ".join(atf.split())
-
+        atr = self.reorder_bracket_punctuation(atf)
         return atf
+
+    def reorder_bracket_punctuation(self, atf: str) -> str:
+        return re.sub(r'\]([\?!]+)', lambda match: match.group(1) + ']', atf)
 
     def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
         self.ebl_parser.parse(atf)
 
+        # ToDo: Move condition to CDLI transformations?
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
-
         tree = self.oracc_parser.parse(atf)
-
         words_serializer = GetWords()
         words_serializer.result = []
         words_serializer.visit_topdown(tree)
