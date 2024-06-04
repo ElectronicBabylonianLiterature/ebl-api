@@ -1,9 +1,7 @@
 import codecs
 import logging
 import re
-import traceback
 from typing import Tuple, Optional, List, Any
-
 from lark import Lark
 
 from ebl.atf_importer.domain.atf_conversions import (
@@ -16,22 +14,10 @@ from ebl.atf_importer.domain.atf_conversions import (
     LineSerializer,
 )
 
-preprocess_text_replacements = {
-    "--": "-",
-    "{f}": "{munus}",
-    "1/2": "½",
-    "1/3": "⅓",
-    "1/4": "¼",
-    "1/5": "⅕",
-    "1/6": "⅙",
-    "2/3": "⅔",
-    "5/6": "⅚",
-    "\t": " ",
-    "$ rest broken": "$ rest of side broken",
-    "$ ruling": "$ single ruling",
-    "$ seal impression broken": "$ (seal impression broken)",
-    "$ seal impression": "$ (seal impression)",
-}
+
+opening_half_bracket = {"⌈", "⸢"}
+closing_half_bracket = {"⌉", "⸣"}
+
 
 unused_lines = {
     "oracc_atf_at_line__object_with_status",
@@ -69,7 +55,6 @@ special_chars = {
 }
 
 oracc_replacements = {
-    "--": "-",
     "{f}": "{munus}",
     "1/2": "½",
     "1/3": "⅓",
@@ -83,6 +68,29 @@ oracc_replacements = {
     "$ ruling": "$ single ruling",
     "$ seal impression broken": "$ (seal impression broken)",
     "$ seal impression": "$ (seal impression)",
+}
+
+
+preprocess_text_replacements = {
+    "\r": "",
+    "--": "-",
+    "{f}": "{munus}",
+    "1/2": "½",
+    "1/3": "⅓",
+    "1/4": "¼",
+    "1/5": "⅕",
+    "1/6": "⅙",
+    "2/3": "⅔",
+    "5/6": "⅚",
+    "\t": " ",
+    "$ rest broken": "$ rest of side broken",
+    "$ ruling": "$ single ruling",
+    "]x": "] x",
+    "x[": "x [",
+    "]⸢x": "] ⸢x",
+    "]⌈x": "] ⌈x",
+    "x⸣[": "x⸣ [",
+    "x⌉[": "x⌉ [",
 }
 
 
@@ -111,10 +119,9 @@ class AtfPreprocessorBase:
     def preprocess_text(self, atf: str) -> str:
         for old, new in preprocess_text_replacements.items():
             atf = atf.replace(old, new)
-
         atf = re.sub(r"([\[<])([*:])(.*)", r"\1 \2\3", atf)
         atf = re.sub(r"(:)([]>])(.*)", r"\1 \2\3", atf)
-        atf = " ".join(atf.split())
+        atf = " ".join(atf.split()).strip(" ")
         return atf
 
     def _normalize_numbers(self, digits: str) -> str:
@@ -129,34 +136,18 @@ class AtfPreprocessorBase:
     def do_oracc_replacements(self, atf: str) -> str:
         for old, new in oracc_replacements.items():
             atf = atf.replace(old, new)
-        atf = re.sub(r"([\[<])([*:])(.*)", r"\1 \2\3", atf)
-        atf = re.sub(r"(:)([]>])(.*)", r"\1 \2\3", atf)
-        atf = " ".join(atf.split())
-        atr = self.reorder_bracket_punctuation(atf)
-        return atf
+        atf = self.reorder_bracket_punctuation(atf)
+        return self.do_cdli_replacements(atf)
+
+    def do_cdli_replacements(self, atf: str) -> str:
+        return (
+            self._handle_text_line(atf)
+            if atf[0].isdigit()
+            else self._handle_dollar_line(atf)
+        )
 
     def reorder_bracket_punctuation(self, atf: str) -> str:
-        return re.sub(r'\]([\?!]+)', lambda match: match.group(1) + ']', atf)
-
-    def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
-        self.ebl_parser.parse(atf)
-
-        # ToDo: Move condition to CDLI transformations?
-        if self.style == 2 and atf[0] == "#" and atf[1] == " ":
-            atf = atf.replace("#", "#note:")
-            atf = atf.replace("# note:", "#note:")
-        tree = self.oracc_parser.parse(atf)
-        words_serializer = GetWords()
-        words_serializer.result = []
-        words_serializer.visit_topdown(tree)
-        converted_line_array = words_serializer.result
-
-        self.logger.info("Line successfully parsed, no conversion needed")
-        self.logger.debug(f"Parsed line as {tree.data}")
-        self.logger.info(
-            "----------------------------------------------------------------------"
-        )
-        return (atf, converted_line_array, tree.data, [])
+        return re.sub(r"\]([\?!]+)", lambda match: match.group(1) + "]", atf)
 
     def unused_line(
         self, tree
@@ -210,25 +201,97 @@ class AtfPreprocessorBase:
         words_serializer.visit_topdown(tree)
         return (converted_line, words_serializer.result, tree.data, [])
 
-    def parse_and_convert_line(
-        self, atf: str
-    ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
-        result = (None, None, None, None)
-        try:
-            tree = self.oracc_parser.parse(atf)
-            if tree.data in self.unused_lines:
-                result = self.get_empty_conversion(tree)
-            elif tree.data == "lem_line":
-                result = self.convert_lemline(atf, tree)
-            elif tree.data == "text_line":
-                result = self.handle_text_line(tree)
-            else:
-                result = self.unused_line(tree)
-        except Exception:
-            self.logger.error(traceback.format_exc())
-            self.logger.error(f"Could not convert line: {atf}", "unparsable_lines")
-        return result
-
     def read_lines(self, file: str) -> List[str]:
         with codecs.open(file, "r", encoding="utf8") as f:
             return f.read().split("\n")
+
+    def _handle_text_line(self, atf: str) -> str:
+        atf_text_line_methods = [
+            "_replace_dashes",
+            "replace_special_characters",
+            "_normalize_patterns",
+            "_replace_primed_digits",
+            "_process_bracketed_parts",
+            "_uppercase_underscore",
+            "_lowercase_braces",
+            "_replace_dollar_signs",
+            "_replace_tabs_and_excessive_whitespaces",
+            "reorder_bracket_punctuation",
+        ]
+        for method_name in atf_text_line_methods:
+            atf = getattr(self, method_name)(atf)
+            if atf.startswith("9. ⸢4(BÁN)?⸣"):
+                print("atf after method " + method_name)
+                print(atf)
+                input("press enter")
+        return atf
+
+    def _replace_dashes(self, atf: str) -> str:
+        return re.sub(r"–|--", "-", atf)
+
+    def _normalize_patterns(self, atf: str) -> str:
+        callback_normalize = (
+            lambda pat: pat.group(1)
+            + pat.group(2)
+            + self._normalize_numbers(pat.group(3))
+        )
+        return re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
+
+    def _replace_primed_digits(self, atf: str) -> str:
+        return re.sub(r"(\d)ʾ", r"\1′", atf)
+
+    def _uppercase_underscore(self, atf: str) -> str:
+        def callback_upper(pat):
+            return pat.group(1).upper().replace("-", ".")
+
+        return re.sub(r"_(.*?)_", callback_upper, atf)
+
+    def _lowercase_braces(self, atf: str) -> str:
+        def callback_lower(pat):
+            return pat.group(1).lower()
+
+        return re.sub(r"({.*?})", callback_lower, atf)
+
+    def _replace_dollar_signs(self, atf: str) -> str:
+        return re.sub(r"\(\$.*\$\)", r"($___$)", atf)
+
+    def _replace_tabs_and_excessive_whitespaces(self, atf: str) -> str:
+        return atf.replace("[\t ]*", " ")
+
+    def _handle_dollar_line(self, atf: str) -> str:
+        special_marks = {
+            "$ rest broken": "$ rest of side broken",
+            "$ ruling": "$ single ruling",
+        }
+        if atf in special_marks.keys():
+            return special_marks[atf]
+        if atf.startswith("$ "):
+            dollar_comment = atf.split("$ ")[1]
+            return f"$ ({dollar_comment})"
+        return atf
+
+    def _process_bracketed_parts(self, atf: str) -> str:
+        self.open_found = False
+        split = re.split(r"([⌈⌉⸢⸣])", atf)
+        if len(split) > 1 and atf.startswith("9. ⸢4(BÁN)?⸣"):
+            # ToDo: Continue from here.
+            # Problem with `4(BÁN)#?`, which is not in lark grammer
+            # The issue is probably with SIGN - ? - #
+            print("! split", split)
+            print(
+                "! norm", "".join(self._process_bracketed_part(part) for part in split)
+            )
+            input("press enter")
+        return (
+            "".join(self._process_bracketed_part(part) for part in split)
+            if len(split) > 1
+            else atf
+        )
+
+    def _process_bracketed_part(self, part: str) -> str:
+        if part in opening_half_bracket.union(closing_half_bracket):
+            self.open_found = part in opening_half_bracket
+            return ""
+        if not self.open_found:
+            return part
+        return re.sub(r"([-.\s])", r"#\1", part) + "#" + marks

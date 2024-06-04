@@ -1,7 +1,6 @@
 import os
 import zipfile
 import tempfile
-import subprocess
 from ebl.atf_importer.application.atf_importer import AtfImporter
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
@@ -11,7 +10,7 @@ def test_atf_importer(database):
     """
     Test bulk import.
     """
-    #importer_path = "ebl/atf_importer/application/atf_importer.py"
+    # importer_path = "ebl/atf_importer/application/atf_importer.py"
     atf_importer = AtfImporter(database)
     archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
     with tempfile.TemporaryDirectory() as tempdir:
@@ -19,7 +18,7 @@ def test_atf_importer(database):
         archive.extractall(data_path)
         for dir in os.listdir(data_path):
             glossary_akk_path = f"{data_path}/{dir}/akk.glo"
-            glossary_qpn_path = f"{data_path}/{dir}/qpn.glo"
+            # glossary_qpn_path = f"{data_path}/{dir}/qpn.glo"
             atf_dir_path = f"{data_path}/{dir}/00atf"
             logdir_path = f"{data_path}/logs/{dir}"
             """
@@ -38,14 +37,14 @@ def test_atf_importer(database):
             ]
             """
             print(f"Testing import of atf data in {atf_dir_path}")
-            #print("Running", " ".join(command))
+            # print("Running", " ".join(command))
             atf_importer.run_importer(
                 {
                     "input_dir": atf_dir_path,
                     "logdir": logdir_path,
                     "glossary_path": glossary_akk_path,
                     "author": "Test author",
-                    "style": 0,
+                    "style": 1,
                 }
             )
             # result = subprocess.run(

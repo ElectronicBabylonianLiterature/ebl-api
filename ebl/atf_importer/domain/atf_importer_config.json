@@ -1,7 +1,7 @@
 {
   "STYLES": {
-    "1": "Oracc ATF",
-    "2": "CDLI ATF"
+    "0": "Oracc ATF",
+    "1": "CDLI ATF"
   },
   "POS_TAGS": [
     "REL",
