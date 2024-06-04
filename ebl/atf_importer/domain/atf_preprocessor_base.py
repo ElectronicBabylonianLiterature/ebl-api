@@ -294,4 +294,4 @@ class AtfPreprocessorBase:
             return ""
         if not self.open_found:
             return part
-        return re.sub(r"([-.\s])", r"#\1", part) + "#" + marks
+        return re.sub(r"([-.\s])", r"#\1", part) + "#"
