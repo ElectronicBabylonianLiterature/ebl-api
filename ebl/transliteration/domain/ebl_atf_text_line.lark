@@ -236,12 +236,12 @@ value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "f" | "g"
                | "ĝ" | "h" | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n"
-               | "p" | "q" | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū"
-               | "û" | "w" | "z" | "ḫ" | "ʾ"
+               | "p" | "q" | "r" | "s" | "ṣ" | "š" | "ś" | "t" | "ṭ" | "u"
+               | "ū" | "û" | "w" | "z" | "ḫ" | "ʾ"
 LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "Ĝ" | "H"
                    | "I" | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R"
-                   | "S" | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ"
-                   | "ʾ"
+                   | "S" | "Ṣ" | "Š" | "Ś" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z"
+                   | "Ḫ" | "ʾ"
 
 ?any_grapheme: compound_grapheme | grapheme
 compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
@@ -257,8 +257,8 @@ GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
 GRAPHEME_NAME: GRAPHEME_CHARACTER (GRAPHEME_CHARACTER)* SUB_INDEX?
 GRAPHEME_CHARACTER: "a".."z"
                   | "A".."Z"
-                  | "Ṣ" | "Š" | "Ṭ"
-                  | "ṣ" | "š" | "ṭ"
+                  | "Ṣ" | "Š" | "Ś" | "Ṭ"
+                  | "ṣ" | "š" | "ś" | "ṭ"
                   | "0".."9"
 
 SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
@@ -331,7 +331,7 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
                  | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
                  | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
-                 | "š" | "ū" | "ṣ" | "ṭ" | "₄"
+                 | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
 
 _greek: greek_token (_WORD_SEPARATOR greek_token)*
 ?greek_token: greek_word
