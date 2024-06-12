@@ -5,12 +5,12 @@ from marshmallow import Schema, fields, post_load, ValidationError
 from ebl.corpus.domain.alignment import Alignment, ManuscriptLineAlignment
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import (
+from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_greek_word,
     parse_normalized_akkadian_word,
     parse_word,
 )
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 

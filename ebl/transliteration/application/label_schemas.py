@@ -8,7 +8,7 @@ from ebl.transliteration.domain.labels import (
     SurfaceLabel,
     parse_labels,
 )
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 
 
 def try_parse_labels(value):

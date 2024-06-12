@@ -8,7 +8,7 @@ from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number

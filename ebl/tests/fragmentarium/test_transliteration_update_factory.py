@@ -5,7 +5,7 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 

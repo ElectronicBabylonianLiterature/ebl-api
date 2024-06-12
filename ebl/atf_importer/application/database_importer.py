@@ -7,7 +7,7 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 from ebl.fragmentarium.web.dtos import parse_museum_number
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.users.domain.user import AtfImporterUser
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 

@@ -5,8 +5,8 @@ from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.errors import DataError
 from ebl.transliteration.domain.dollar_line import DollarLine
-from ebl.transliteration.domain.lark_parser import CHAPTER_PARSER
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser import CHAPTER_PARSER
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.note_line import NoteLine
 
 

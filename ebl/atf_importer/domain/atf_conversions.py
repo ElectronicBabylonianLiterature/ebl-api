@@ -15,65 +15,6 @@ class ConvertLineJoiner(Visitor):
             tree.children[0] = "-"
 
 
-class ConvertLegacyGrammarSigns(Visitor):
-    replacement_chars = {
-        "á": "a",
-        "é": "e",
-        "í": "i",
-        "ú": "u",
-        "à": "a",
-        "è": "e",
-        "ì": "i",
-        "ù": "u",
-        "Á": "A",
-        "É": "E",
-        "Í": "I",
-        "Ú": "U",
-        "À": "A",
-        "È": "E",
-        "Ì": "I",
-        "Ù": "U",
-    }
-
-    patterns = ((re.compile("[áéíúÁÉÍÚ]"), "₂"), (re.compile("[àèìùÀÈÌÙ]"), "₃"))
-
-    def oracc_atf_text_line__value_name_part(self, tree: Tree) -> None:
-        self._replace_characters(tree)
-
-    def oracc_atf_text_line__logogram_name_part(self, tree: Tree) -> None:
-        self._replace_characters(tree)
-
-    def oracc_atf_text_line__grapheme(self, tree: Tree) -> None:
-        self._replace_characters(tree)
-
-    def _replace_characters(self, tree: Tree) -> None:
-        for index, child in enumerate(tree.children):
-            if isinstance(child, Token):
-                self._process_token(tree, index, child)
-
-    def _process_token(self, tree: Tree, index: int, child: Token) -> None:
-        for pattern, suffix in self.patterns:
-            match = pattern.search(str(child))
-            if match:
-                self._replace_character_in_child(tree, index, match, suffix)
-
-    def _replace_character_in_child(
-        self, tree: Tree, index: int, match: re.Match, suffix: str
-    ) -> None:
-        char = match[0]
-        new_char = self.replacement_chars[char]
-        tree.children[index] = tree.children[index].replace(char, new_char)
-        self._append_suffix(tree, index, suffix)
-
-    def _append_suffix(self, tree: Tree, index: int, suffix: str) -> None:
-        if index + 1 < len(tree.children) and isinstance(
-            tree.children[index + 1], Token
-        ):
-            tree.children[index + 1] += suffix
-        else:
-            tree.children[index] += suffix
-
-
 class StripSigns(Visitor):
     def oracc_atf_text_line__uncertain_sign(self, tree: Tree) -> None:
         if (
@@ -151,6 +92,9 @@ class GetLemmaValuesAndGuidewords(Visitor):
     result: List[List[Tuple[str, str, str]]] = []
 
     def oracc_atf_lem_line__lemma(self, tree: Tree) -> None:
+        # ToDo:
+        # Extract oracc_atf_lem_line parser,
+        # use within ebl_atf parser or separately.
         lemmata: List[Tuple[str, str, str]] = []
         for child in tree.children:
             if child.data == "oracc_atf_lem_line__value_part":

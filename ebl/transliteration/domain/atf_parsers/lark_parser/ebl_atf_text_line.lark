@@ -5,6 +5,9 @@
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
 %import .ebl_atf_common (seal)
+%import .ebl_atf_abbreviations (STAGE)
+%import .legacy_atf (LEGACY_VALUE_CHARACTER_ACCENTED, LEGACY_LOGOGRAM_CHARACTER_ACCENTED)
+%import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
 
 note_line: "#note: " _markup
 markup: _markup
@@ -29,30 +32,6 @@ GENRE: "Lex" | "Med" | "L" | "D" | "Mag"
 CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
 chapter_name: STAGE " " [quoted_string " "] quoted_string 
 quoted_string: "\"" /./+ "\""
-STAGE: "ED1_2"
-     | "Fara"
-     | "Hel"
-     | "Hit"
-     | "JN"
-     | "LB"
-     | "MA"
-     | "MB"
-     | "MElam"
-     | "NA"
-     | "NB"
-     | "NElam"
-     | "OA"
-     | "OB"
-     | "OElam"
-     | "PElam"
-     | "PSarg"
-     | "Par"
-     | "Per"
-     | "SB"
-     | "Sarg"
-     | "Unc"
-     | "Ur3"
-     | "Uruk4"
 parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
 CF: "cf. "
 PARALLEL_LINE_PREFIX: "// "
@@ -164,6 +143,8 @@ open_intentional_omission: "<("
 close_intentional_omission: ")>"
 open_removal: "<<"
 close_removal: ">>"
+open_legacy_damage: LEGACY_OPEN_HALF_BRACKET
+close_legacy_damage: LEGACY_CLOSE_HALF_BRACKET
 
 lone_determinative.4: _any_open? (phonetic_gloss | determinative) _any_close?
 
@@ -173,6 +154,7 @@ _word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasu
 inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"
 inline_erasure_part: _parts?
 
+?legacy_damage: _parts
 _parts: value _parts_tail*
       | gloss (_loose_joiner? value)? _parts_tail*
 _parts_tail: _strict_joiner value
@@ -192,9 +174,22 @@ _loose_joiner: _strict_joiner
              | in_word_newline? _any_close joiner? _any_open?
              | in_word_newline? joiner? _any_open
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
-_any_close: (close_broken_away | close_perhaps_broken_away | close_accidental_omission | close_intentional_omission | close_removal)+
-_any_open: (open_accidental_omission | open_intentional_omission | open_removal | open_broken_away | open_perhaps_broken_away)+
-!joiner: _WORD_SEPARATOR* ("-" | "+" | "." | ":" | ";" | ",") _WORD_SEPARATOR*
+_any_close: (_any_close_element)+
+_any_close_element: close_broken_away 
+      | close_perhaps_broken_away 
+      | close_accidental_omission 
+      | close_intentional_omission 
+      | close_removal
+      | close_legacy_damage
+_any_open: (_any_open_element)+
+_any_open_element: open_accidental_omission 
+      | open_intentional_omission 
+      | open_removal 
+      | open_broken_away 
+      | open_perhaps_broken_away
+      | open_legacy_damage
+!joiner: _WORD_SEPARATOR* (_any_joiner) _WORD_SEPARATOR*
+_any_joiner: "-" | "+" | "." | ":" | ";" | ","  | LEGACY_ORACC_JOINER
 
 ?value: unidentified_sign
       | unclear_sign
@@ -220,10 +215,10 @@ variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 
 egyptian_metrical_feet_separator: "•" flags
 
-number: number_name modifiers flags ["(" any_grapheme ")"]
-reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]
-logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"]
-surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>"
+number: number_name modifiers flags ["(" any_grapheme ")"] -> legacy_accented_sign
+reading: value_name sub_index modifiers flags ["(" any_grapheme ")"] -> legacy_accented_sign
+logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"] -> legacy_accented_sign
+surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>" -> legacy_accented_sign
 surrogate_text: reading (joiner reading)*
 sub_index: [SUB_INDEX]
 
@@ -232,8 +227,9 @@ value_name: value_name_part (broken_away value_name_part)*
 logogram_name: logogram_name_part (broken_away logogram_name_part)*
 !number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚" | "ø"
 !number_name_part:  "0".."9"+
-value_name_part: VALUE_CHARACTER+
-logogram_name_part: LOGOGRAM_CHARACTER+
+value_name_part: value_character+
+logogram_name_part: logogram_character+
+
 VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "f" | "g"
                | "ĝ" | "h" | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n"
                | "p" | "q" | "r" | "s" | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū"
@@ -243,19 +239,22 @@ LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "
                    | "S" | "Ṣ" | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z" | "Ḫ"
                    | "ʾ"
 
+value_character: VALUE_CHARACTER | LEGACY_VALUE_CHARACTER_ACCENTED
+logogram_character: LOGOGRAM_CHARACTER | LEGACY_LOGOGRAM_CHARACTER_ACCENTED
+
 ?any_grapheme: compound_grapheme | grapheme
-compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
-COMPOUND_FRAGMENT: SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)*
-SUB_COMPOUND: "(" COMPOUND_PART ((COMPOUND_OPERATOR | COMPOUND_OPERATOR_DOT) COMPOUND_PART)* ")"
-            | COMPOUND_PART
-COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
+compound_grapheme: "|" compound_fragment ("." compound_fragment)* "|"
+compound_fragment: sub_compound (COMPOUND_OPERATOR sub_compound)*
+sub_compound: "(" compound_part ((COMPOUND_OPERATOR | COMPOUND_OPERATOR_DOT) compound_part)* ")"
+            | compound_part
+compound_part: _grapheme (VARIANT_SEPARATOR _grapheme)*
 COMPOUND_OPERATOR_DOT: "." 
 COMPOUND_OPERATOR: "×" | "%" | "&" | "+"
 
-grapheme: GRAPHEME_NAME modifiers flags
-GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
-GRAPHEME_NAME: GRAPHEME_CHARACTER (GRAPHEME_CHARACTER)* SUB_INDEX?
-GRAPHEME_CHARACTER: VALUE_CHARACTER | LOGOGRAM_CHARACTER | "0".."9"
+grapheme: grapheme_name modifiers flags
+_grapheme: grapheme_name MODIFIER* flags
+grapheme_name: grapheme_character (grapheme_character)* sub_index -> legacy_accented_sign
+grapheme_character: value_character | logogram_character | "0".."9"
 
 SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
 NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")*
@@ -267,7 +266,6 @@ _VARIANT_SEPARATOR: VARIANT_SEPARATOR
 VARIANT_SEPARATOR: "/"
 
 flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
-FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
 DAMAGE: "#"
 
 modifiers: MODIFIER*
@@ -372,7 +370,8 @@ TOP: "t.e."
 
 ?at_line: "@" at_line_value
 
-?at_line_value:  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
+?at_line_value: seal | column | heading | discourse | object_with_status 
+               | surface_with_status | divisions | composite
 
 surface_with_status: surface " "? status
 
@@ -382,7 +381,7 @@ column: "column " INT " "? status
 
 heading: "h" INT [ " " _markup ]
 
-!discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
+!discourse: "catchline" | "colophon" | "date" +| "signature" | "signatures" | "summary" | "witnesses"
 
 divisions: "m=division " free_text [" " INT]
 

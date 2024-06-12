@@ -1,7 +1,7 @@
 import pytest
 
 from ebl.transliteration.domain.enclosure_tokens import Erasure
-from ebl.transliteration.domain.lark_parser import parse_erasure
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_erasure
 from ebl.transliteration.domain.sign_tokens import Divider, Reading
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 from ebl.transliteration.domain.word_tokens import ErasureState, Word

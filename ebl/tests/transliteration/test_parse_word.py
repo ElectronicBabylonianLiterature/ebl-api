@@ -14,7 +14,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     PhoneticGloss,
     Removal,
 )
-from ebl.transliteration.domain.lark_parser import parse_word
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_word
 from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,

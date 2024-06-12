@@ -13,7 +13,7 @@ from ebl.transliteration.domain.enclosure_transformer import (
     GlossTransformer,
 )
 from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
-from ebl.transliteration.domain.lark import tokens_to_value_tokens
+from ebl.transliteration.domain.atf_parsers.lark import tokens_to_value_tokens
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,

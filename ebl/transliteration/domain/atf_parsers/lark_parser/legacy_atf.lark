@@ -1,0 +1,13 @@
+LEGACY_ORACC_DIVIDER: "*"
+LEGACY_ORACC_JOINER: "--"
+LEGACY_VALUE_CHARACTER_ACCENTED: "á" | "à" | "é" | "è" | "í" | "ì" | "ú" | "ù"
+LEGACY_LOGOGRAM_CHARACTER_ACCENTED: "Á" | "À" | "É" | "È" | "Í" | "Ì" | "Ú" | "Ù"
+LEGACY_OPEN_HALF_BRACKET: "⌈" | "⸢" 
+LEGACY_CLOSE_HALF_BRACKET: "⌉" | "⸣"
+
+//# TODO:
+//# Implement here the following:
+//# oracc_atf_text_line__divider
+//# oracc_atf_text_line__joiner
+//# oracc_atf_text_line__uncertain_sign
+//# etc. (check `atf_conversions.py`).

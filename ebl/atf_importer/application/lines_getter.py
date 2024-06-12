@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from ebl.atf_importer.application.lemma_lookup import LemmaLookup
 from ebl.atf_importer.application.glossary_parser import GlossaryParserData
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 
 
