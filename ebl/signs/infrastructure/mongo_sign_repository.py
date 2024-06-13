@@ -18,6 +18,7 @@ from ebl.transliteration.domain.sign import (
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 COLLECTION = "signs"
 
@@ -367,3 +368,29 @@ class MongoSignRepository(SignRepository):
 
     def list_all_signs(self) -> Sequence[str]:
         return self._collection.get_all_values("_id")
+
+    def get_unicode_from_atf(self, line: str) -> Sequence[str]:
+        modified_line = "1. " + line
+        result = parse_atf_lark(modified_line)
+        values_indexes = []
+        for idx, line in enumerate(result.lines):
+            for word in line._content:
+                for part in word._parts:
+                    if hasattr(part, "name_parts"):
+                        values_indexes.append(
+                            (part.name_parts[0]._value, part.sub_index)
+                        )
+                values_indexes.append(("whitespace", 1))
+        line_query_result = []
+        for value, subIndex in values_indexes:
+            if value == "whitespace":
+                line_query_result.append({"unicode": [9999]})
+            else:
+                query = {
+                    "values": {"$elemMatch": {"value": value, "subIndex": subIndex}}
+                }
+                projection = {"_id": 0, "unicode": 1}
+                result = self._collection.find_many(query, projection)
+                for res in result:
+                    line_query_result.append(res)
+        return line_query_result[:-1]

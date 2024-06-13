@@ -5,7 +5,12 @@ from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
 from ebl.signs.web.sign_search import SignsSearch
-from ebl.signs.web.signs import SignsResource, SignsListResource, SignsOrderResource
+from ebl.signs.web.signs import (
+    SignsResource,
+    SignsListResource,
+    SignsOrderResource,
+    TransliterationResource,
+)
 from ebl.signs.web.cropped_annotations import CroppedAnnotationsResource
 
 
@@ -20,9 +25,11 @@ def create_signs_routes(api: falcon.App, context: Context):
             context.fragment_repository,
         )
     )
+    atf_parser = TransliterationResource(context.sign_repository)
     signs_all = SignsListResource(context.sign_repository)
     api.add_route("/signs", signs_search)
     api.add_route("/signs/{sign_name}", signs)
     api.add_route("/signs/{sign_name}/images", signs_images)
     api.add_route("/signs/all", signs_all)
     api.add_route("/signs/{sign_name}/{sort_era}", ordered_signs)
+    api.add_route("/signs/transliteration/{line}", atf_parser)
