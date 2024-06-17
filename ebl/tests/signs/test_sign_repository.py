@@ -264,11 +264,11 @@ def test_find_signs_by_order(database, sign_repository, mongo_sign_igi, mongo_si
 
 def test_get_unicode_from_atf(database, sign_repository, mongo_sign_igi, mongo_sign_si):
     database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
-    transliteration_line = "igi si"
+    transliteration_line = "ši ši"
     assert sign_repository.get_unicode_from_atf(transliteration_line) == [
         {"unicode": [74054]},
         {"unicode": [9999]},
-        {"unicode": []},
+        {"unicode": [74054]},
     ]
 
 
