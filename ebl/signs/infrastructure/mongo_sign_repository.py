@@ -375,7 +375,7 @@ class MongoSignRepository(SignRepository):
                 yield (part.name_parts[0]._value, part.sub_index)
         yield ("whitespace", 1)
 
-    def _extract_values_indexes(self, result) -> List[Tuple[str, int]]:
+    def _extract_values_indexes(self, result) -> Iterable[Tuple[str, int]]:
         return (
             value_index
             for line in result.lines
@@ -384,7 +384,7 @@ class MongoSignRepository(SignRepository):
         )
 
     def _query_database(
-        self, values_indexes: List[Tuple[str, int]]
+        self, values_indexes: Iterable[Tuple[str, int]]
     ) -> Iterable[Dict[str, List[int]]]:
         for value, sub_index in values_indexes:
             if value == "whitespace":
