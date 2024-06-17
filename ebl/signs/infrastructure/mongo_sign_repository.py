@@ -373,7 +373,7 @@ class MongoSignRepository(SignRepository):
         modified_line = "1. " + line
         result = parse_atf_lark(modified_line)
         values_indexes = []
-        for idx, line in enumerate(result.lines):
+        for line in result.lines:
             for word in line._content:
                 for part in word._parts:
                     if hasattr(part, "name_parts"):
