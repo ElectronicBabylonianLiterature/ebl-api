@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Tuple, cast, Sequence, Dict
+from typing import List, Optional, Tuple, cast, Sequence, Dict, Iterable
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
@@ -369,44 +369,34 @@ class MongoSignRepository(SignRepository):
     def list_all_signs(self) -> Sequence[str]:
         return self._collection.get_all_values("_id")
 
-    def _modify_line(self, line: str) -> str:
-        return "1. " + line
-
-    def _parse_line(self, modified_line: str):
-        return parse_atf_lark(modified_line)
+    def _extract_word_values_indexes(self, word):
+        for part in word._parts:
+            if part.name_parts:
+                yield (part.name_parts[0]._value, part.sub_index)
+        yield ("whitespace", 1)
 
     def _extract_values_indexes(self, result) -> List[Tuple[str, int]]:
-        values_indexes = []
-        for line in result.lines:
-            for word in line._content:
-                for part in word._parts:
-                    if hasattr(part, "name_parts"):
-                        values_indexes.append(
-                            (part.name_parts[0]._value, part.sub_index)
-                        )
-                values_indexes.append(("whitespace", 1))
-        return values_indexes
+        return (
+            value_index
+            for line in result.lines
+            for word in line._content
+            for value_index in self._extract_word_values_indexes(word)
+        )
 
     def _query_database(
         self, values_indexes: List[Tuple[str, int]]
-    ) -> List[Dict[str, List[int]]]:
-        line_query_result = []
-        for value, subIndex in values_indexes:
+    ) -> Iterable[Dict[str, List[int]]]:
+        for value, sub_index in values_indexes:
             if value == "whitespace":
-                line_query_result.append({"unicode": [9999]})
+                yield {"unicode": [9999]}
             else:
                 query = {
-                    "values": {"$elemMatch": {"value": value, "subIndex": subIndex}}
+                    "values": {"$elemMatch": {"value": value, "subIndex": sub_index}}
                 }
-                projection = {"_id": 0, "unicode": 1}
-                result = self._collection.find_many(query, projection)
-                for res in result:
-                    line_query_result.append(res)
-        return line_query_result
+                yield from self._collection.find_many(query, {"_id": 0, "unicode": 1})
 
     def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
-        modified_line = self._modify_line(line)
-        result = self._parse_line(modified_line)
-        values_indexes = self._extract_values_indexes(result)
-        line_query_result = self._query_database(values_indexes)
+        text = parse_atf_lark(f"1. {line}")
+        values_indexes = self._extract_values_indexes(text)
+        line_query_result = list(self._query_database(values_indexes))
         return line_query_result[:-1]
