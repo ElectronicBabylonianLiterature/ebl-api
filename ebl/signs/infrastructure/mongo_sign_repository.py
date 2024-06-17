@@ -404,7 +404,7 @@ class MongoSignRepository(SignRepository):
                     line_query_result.append(res)
         return line_query_result
 
-    def get_unicode_from_atf(self, line: str) -> Sequence[str]:
+    def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
         modified_line = self._modify_line(line)
         result = self._parse_line(modified_line)
         values_indexes = self._extract_values_indexes(result)
