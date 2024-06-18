@@ -1,5 +1,5 @@
 import re
-from typing import Optional, cast, Sequence, Dict
+from typing import List, Optional, Tuple, cast, Sequence, Dict, Iterable
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
@@ -18,6 +18,7 @@ from ebl.transliteration.domain.sign import (
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 COLLECTION = "signs"
 
@@ -367,3 +368,35 @@ class MongoSignRepository(SignRepository):
 
     def list_all_signs(self) -> Sequence[str]:
         return self._collection.get_all_values("_id")
+
+    def _extract_word_subIndex(self, word):
+        for part in word._parts:
+            if getattr(part, "name_parts", []):
+                yield (part.name_parts[0]._value, part.sub_index)
+        yield ("whitespace", 1)
+
+    def _extract_words_subIndexes(self, result) -> Iterable[Tuple[str, int]]:
+        return (
+            value_index
+            for line in result.lines
+            for word in line._content
+            for value_index in self._extract_word_subIndex(word)
+        )
+
+    def _find_unicode(
+        self, values_indexes: Iterable[Tuple[str, int]]
+    ) -> Iterable[Dict[str, List[int]]]:
+        for value, sub_index in values_indexes:
+            if value == "whitespace":
+                yield {"unicode": [9999]}
+            else:
+                query = {
+                    "values": {"$elemMatch": {"value": value, "subIndex": sub_index}}
+                }
+                yield from self._collection.find_many(query, {"_id": 0, "unicode": 1})
+
+    def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
+        text = parse_atf_lark(f"1. {line}")
+        values_indexes = self._extract_words_subIndexes(text)
+        line_query_result = list(self._find_unicode(values_indexes))
+        return line_query_result[:-1]

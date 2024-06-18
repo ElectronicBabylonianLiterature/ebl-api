@@ -262,6 +262,16 @@ def test_find_signs_by_order(database, sign_repository, mongo_sign_igi, mongo_si
     ]
 
 
+def test_get_unicode_from_atf(database, sign_repository, mongo_sign_igi, mongo_sign_si):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
+    transliteration_line = "ši ši"
+    assert sign_repository.get_unicode_from_atf(transliteration_line) == [
+        {"unicode": [74054]},
+        {"unicode": [9999]},
+        {"unicode": [74054]},
+    ]
+
+
 def test_find_signs_by_order_not_found(sign_repository):
     assert sign_repository.find_signs_by_order("SI", "not_existing_era") == []
 
