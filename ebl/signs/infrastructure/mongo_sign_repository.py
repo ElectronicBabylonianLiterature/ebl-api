@@ -369,21 +369,21 @@ class MongoSignRepository(SignRepository):
     def list_all_signs(self) -> Sequence[str]:
         return self._collection.get_all_values("_id")
 
-    def _extract_word_values_indexes(self, word):
+    def _extract_word_subIndex(self, word):
         for part in word._parts:
-            if part.name_parts:
+            if getattr(part, "name_parts", []):
                 yield (part.name_parts[0]._value, part.sub_index)
         yield ("whitespace", 1)
 
-    def _extract_values_indexes(self, result) -> Iterable[Tuple[str, int]]:
+    def _extract_words_subIndexes(self, result) -> Iterable[Tuple[str, int]]:
         return (
             value_index
             for line in result.lines
             for word in line._content
-            for value_index in self._extract_word_values_indexes(word)
+            for value_index in self._extract_word_subIndex(word)
         )
 
-    def _query_database(
+    def _find_unicode(
         self, values_indexes: Iterable[Tuple[str, int]]
     ) -> Iterable[Dict[str, List[int]]]:
         for value, sub_index in values_indexes:
@@ -397,6 +397,6 @@ class MongoSignRepository(SignRepository):
 
     def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
         text = parse_atf_lark(f"1. {line}")
-        values_indexes = self._extract_values_indexes(text)
-        line_query_result = list(self._query_database(values_indexes))
+        values_indexes = self._extract_words_subIndexes(text)
+        line_query_result = list(self._find_unicode(values_indexes))
         return line_query_result[:-1]
