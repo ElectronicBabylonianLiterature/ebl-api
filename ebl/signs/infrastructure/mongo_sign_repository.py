@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple, cast, Sequence, Dict, Iterable
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
-
+from ebl.transliteration.domain.enclosure_tokens import Determinative
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -371,6 +371,8 @@ class MongoSignRepository(SignRepository):
 
     def _extract_word_subIndex(self, word):
         for part in word._parts:
+            if isinstance(part, Determinative):
+                part = part._parts[0]
             if getattr(part, "name_parts", []):
                 yield (part.name_parts[0]._value, part.sub_index)
         yield ("whitespace", 1)
