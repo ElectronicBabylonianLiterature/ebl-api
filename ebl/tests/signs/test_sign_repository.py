@@ -304,7 +304,7 @@ def test_get_unicode_from_atf(
         {"unicode": [9999]},
         {"unicode": [74054]},
     ]
-    transliteration_line_with_det = "d ši"
+    transliteration_line_with_det = "{d} ši"
     assert sign_repository.get_unicode_from_atf(transliteration_line_with_det) == [
         {"unicode": [1311]},
         {"unicode": [9999]},
