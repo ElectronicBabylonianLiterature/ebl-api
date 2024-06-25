@@ -48,6 +48,38 @@ def mongo_sign_igi():
 
 
 @pytest.fixture
+def mongo_sign_d():
+    return {
+        "_id": "d",
+        "lists": [{"name": "HZL", "number": "288"}],
+        "unicode": [1311],
+        "notes": [],
+        "internalNotes": [],
+        "literature": [],
+        "values": [
+            {
+                "value": "d",
+                "subIndex": 1,
+                "questionable": False,
+                "deprecated": False,
+                "notes": [],
+                "internalNotes": [],
+            },
+            {
+                "value": "panu",
+                "subIndex": 1,
+                "questionable": False,
+                "deprecated": False,
+                "languageRestriction": "akk",
+                "notes": [],
+                "internalNotes": [],
+            },
+        ],
+        "forms": [],
+    }
+
+
+@pytest.fixture
 def sign_igi(mongo_sign_igi):
     return SignSchema(unknown=EXCLUDE).load(mongo_sign_igi)
 
@@ -262,11 +294,19 @@ def test_find_signs_by_order(database, sign_repository, mongo_sign_igi, mongo_si
     ]
 
 
-def test_get_unicode_from_atf(database, sign_repository, mongo_sign_igi, mongo_sign_si):
-    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
+def test_get_unicode_from_atf(
+    database, sign_repository, mongo_sign_igi, mongo_sign_si, mongo_sign_d
+):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si, mongo_sign_d])
     transliteration_line = "ši ši"
     assert sign_repository.get_unicode_from_atf(transliteration_line) == [
         {"unicode": [74054]},
+        {"unicode": [9999]},
+        {"unicode": [74054]},
+    ]
+    transliteration_line_with_det = "{d} ši"
+    assert sign_repository.get_unicode_from_atf(transliteration_line_with_det) == [
+        {"unicode": [1311]},
         {"unicode": [9999]},
         {"unicode": [74054]},
     ]
