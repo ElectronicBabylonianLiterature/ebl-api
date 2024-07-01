@@ -3,7 +3,7 @@ name: CI
 on:
   push:
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.9', 'pypy-3.9']
+        python-version: ["3.9", "pypy-3.9"]
     name: Test Python ${{ matrix.python-version }}
 
     steps:
@@ -38,7 +38,7 @@ jobs:
       - name: Lint
         if: success() || steps.install.outcome == 'success'
         run: poetry run flake8 ebl
-      
+
       - name: Code Style
         if: success() || steps.install.outcome == 'success'
         run: poetry run black ebl --check
@@ -56,7 +56,7 @@ jobs:
           CI: true
         run: poetry run pytest
 
-      - name: Unit Tests with Coverage  
+      - name: Unit Tests with Coverage
         uses: paambaati/codeclimate-action@v3.0.0
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
@@ -72,8 +72,8 @@ jobs:
       - uses: actions/checkout@v3
 
       - uses: docker/setup-buildx-action@v1
-        
-      - uses: docker/login-action@v1 
+
+      - uses: docker/login-action@v1
         with:
           registry: www.ebl.lmu.de
           username: ${{ secrets.EBL_REGISTRY_USERNAME }}
@@ -86,3 +86,26 @@ jobs:
           tags: |
             www.ebl.lmu.de/ebl-api:master
             ${{format('www.ebl.lmu.de/ebl-api:master.{0}', github.run_number)}}
+
+  docker2:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: docker/setup-buildx-action@v1
+
+      - uses: docker/login-action@v1
+        with:
+          registry: ebl.badw.de
+          username: ${{ secrets.EBL_REGISTRY_USERNAME }}
+          password: ${{ secrets.EBL_REGISTRY_PASSWORD }}
+
+      - id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: |
+            ebl.badw.de/ebl-api:master
+            ${{format('ebl.badw.de/ebl-api:master.{0}', github.run_number)}}
