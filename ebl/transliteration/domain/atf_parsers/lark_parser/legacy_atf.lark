@@ -5,7 +5,9 @@ LEGACY_LOGOGRAM_CHARACTER_ACCENTED: "Á" | "À" | "É" | "È" | "Í" | "Ì" | "�
 LEGACY_OPEN_HALF_BRACKET: "⌈" | "⸢" 
 LEGACY_CLOSE_HALF_BRACKET: "⌉" | "⸣"
 
-//# TODO:
+legacy_single_ruling: " "* "ruling" [" "? ("!?" | "*" | "?" | "!")]
+
+//# ToDo:
 //# Implement here the following:
 //# oracc_atf_text_line__divider
 //# oracc_atf_text_line__joiner

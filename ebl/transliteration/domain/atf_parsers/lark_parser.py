@@ -39,7 +39,9 @@ WORD_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="any_word")
 NOTE_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="note_line")
 MARKUP_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="markup")
 PARALLEL_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="parallel_line")
-TRANSLATION_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="translation_line")
+TRANSLATION_LINE_PARSER = Lark.open(
+    ATF_GRAMMAR_PATH, **kwargs_lark, start="translation_line"
+)
 PARATEXT_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="paratext")
 CHAPTER_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="chapter")
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)

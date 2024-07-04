@@ -1,7 +1,7 @@
 %import common.CR
 %import common.LF
 %import common.WS_INLINE
-%import .ebl_atf_abbreviations (PROVENANCE, STAGE, TYPE)
+%import .ebl_atf_abbreviations (PROVENANCE, PERIOD, TYPE)
 %import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup)
 %import .ebl_atf_dollar_line (dollar_line)
 %import .ebl_atf_text_line (at_line)
@@ -37,6 +37,6 @@ manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_lin
 _WHITE_SPACE: WS_INLINE
 _NEWLINE: (CR? LF) 
 
-siglum: [PROVENANCE] STAGE [TYPE] [DISAMBIQUATOR]
+siglum: [PROVENANCE] PERIOD [TYPE] [DISAMBIQUATOR]
       | "Std" [DISAMBIQUATOR] -> standard_text_siglum
 DISAMBIQUATOR: /[\S]+/

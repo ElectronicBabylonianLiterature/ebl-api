@@ -1,6 +1,5 @@
-import re
 from typing import List, Tuple
-from lark import Visitor, Tree, lexer, Token
+from lark import Visitor, Tree, lexer
 
 
 class ConvertLineDividers(Visitor):

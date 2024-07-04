@@ -17,6 +17,8 @@ closing_half_bracket = {"⌉", "⸣"}
 
 
 # ToDo:
+# Functionality should be mainly transferred
+# to `transformers`.
 # Extract oracc_atf_lem_line parser,
 # use within ebl_atf parser or separately.
 
