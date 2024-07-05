@@ -1,3 +1,4 @@
+from ebl.common.domain.scopes import Scope
 from freezegun import freeze_time
 import pytest
 
@@ -133,6 +134,25 @@ def test_update_genres(
     when(fragment_repository).update_field("genres", updated_fragment).thenReturn()
 
     result = fragment_updater.update_genres(number, genres, user)
+    assert result == (injected_fragment, False)
+
+
+def test_update_scopes(
+    fragment_updater, fragment_repository, user, parallel_line_injector, when
+):
+    fragment = FragmentFactory.build()
+    number = fragment.number
+    scopes = [Scope.READ_CAIC_FRAGMENTS]
+    updated_fragment = fragment.set_scopes(scopes)
+    injected_fragment = updated_fragment.set_text(
+        parallel_line_injector.inject_transliteration(updated_fragment.text)
+    )
+    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
+    when(fragment_repository).update_field(
+        "authorized_scopes", updated_fragment
+    ).thenReturn()
+    result = fragment_updater.update_scopes(number, scopes)
+
     assert result == (injected_fragment, False)
 
 

@@ -20,6 +20,7 @@ from ebl.fragmentarium.web.fragment_matcher import FragmentMatcherResource
 from ebl.fragmentarium.web.fragment_pager import make_fragment_pager_resource
 from ebl.fragmentarium.web.fragment_search import FragmentSearch
 from ebl.fragmentarium.web.fragments import (
+    FragmentAuthorizedScopesResource,
     FragmentsQueryResource,
     FragmentsResource,
     FragmentsListResource,
@@ -112,6 +113,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     transliteration = TransliterationResource(
         updater, context.get_transliteration_update_factory()
     )
+    scopes = FragmentAuthorizedScopesResource(
+        context.fragment_repository, finder, updater
+    )
     introduction = IntroductionResource(updater)
     archaeology = ArchaeologyResource(updater)
     colophon = ColophonResource(updater)
@@ -164,6 +168,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/all-signs", all_signs),
         ("/fragments/colophon-names", colophon_names),
         ("/findspots", findspots),
+        ("/fragments/{number}/scopes", scopes),
     ]
 
     for uri, resource in routes:

@@ -3,6 +3,7 @@ from typing import Sequence, Tuple, Optional
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
+from ebl.common.domain.scopes import Scope
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
@@ -114,6 +115,15 @@ class FragmentUpdater:
 
         self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("genres", updated_fragment)
+
+        return self._create_result(updated_fragment)
+
+    def update_scopes(
+        self, number: MuseumNumber, scopes: Sequence[Scope]
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
+        updated_fragment = fragment.set_scopes(scopes)
+        self._repository.update_field("authorized_scopes", updated_fragment)
 
         return self._create_result(updated_fragment)
 

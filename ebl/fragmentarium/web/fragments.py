@@ -18,6 +18,7 @@ from ebl.errors import DataError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
@@ -105,6 +106,34 @@ class FragmentsQueryResource:
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
         )
+
+
+class FragmentAuthorizedScopesResource:
+    def __init__(
+        self,
+        repository: FragmentRepository,
+        finder: FragmentFinder,
+        updater: FragmentUpdater,
+    ):
+        self._repository = repository
+        self._finder = finder
+        self._updater = updater
+
+    @falcon.before(require_fragment_read_scope)
+    def on_post(self, req: Request, resp: Response, number: str) -> None:
+        try:
+            user = req.context.user
+            fragment, has_photo = self._finder.find(parse_museum_number(number))
+            if not fragment:
+                raise falcon.HTTPNotFound()
+
+            updated_fragment, has_photo = self._updater.update_scopes(
+                    fragment, req.media["authorized_scopes"]
+                )
+            resp.status = falcon.HTTP_200
+            resp.media = create_response_dto(updated_fragment, user, has_photo)
+        except ValueError as error:
+            raise DataError(error)
 
 
 class FragmentsListResource:
