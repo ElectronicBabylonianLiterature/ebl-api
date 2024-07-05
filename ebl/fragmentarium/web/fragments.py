@@ -123,13 +123,9 @@ class FragmentAuthorizedScopesResource:
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:
             user = req.context.user
-            fragment, has_photo = self._finder.find(parse_museum_number(number))
-            if not fragment:
-                raise falcon.HTTPNotFound()
-
             updated_fragment, has_photo = self._updater.update_scopes(
-                    fragment, req.media["authorized_scopes"]
-                )
+                number, req.media["authorized_scopes"]
+            )
             resp.status = falcon.HTTP_200
             resp.media = create_response_dto(updated_fragment, user, has_photo)
         except ValueError as error:
