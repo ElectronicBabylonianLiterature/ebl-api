@@ -124,7 +124,7 @@ class FragmentAuthorizedScopesResource:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_scopes(
-                number, req.media["authorized_scopes"]
+                parse_museum_number(number), req.media["authorized_scopes"]
             )
             resp.status = falcon.HTTP_200
             resp.media = create_response_dto(updated_fragment, user, has_photo)
