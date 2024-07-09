@@ -129,13 +129,7 @@ def make_latest_additions_resource(repository: FragmentRepository, cache: Cache)
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: Request, resp: Response):
             resp.text = json.dumps(
-                QueryResultSchema().dump(
-                    self._repository.query_latest(
-                        req.context.user.get_scopes(
-                            prefix="read:", suffix="-fragments"
-                        ),
-                    )
-                )
+                QueryResultSchema().dump(self._repository.query_latest())
             )
 
     return LatestAdditionsResource(repository)
