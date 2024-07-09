@@ -399,14 +399,8 @@ def aggregate_by_traditional_references(
                 **match_user_scopes(user_scopes),
             }
         },
-        {
-            "$unwind": "$traditionalReferences"
-        },
-        {
-            "$match": {
-                "traditionalReferences": {"$in": traditional_references}
-            }
-        },
+        {"$unwind": "$traditionalReferences"},
+        {"$match": {"traditionalReferences": {"$in": traditional_references}}},
         {
             "$group": {
                 "_id": "$traditionalReferences",
