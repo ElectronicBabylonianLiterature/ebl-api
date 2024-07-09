@@ -1149,6 +1149,30 @@ def test_query_latest(fragment_repository):
     assert fragment_repository.query_latest() == expected_result
 
 
+def test_query_latest_skips_restricted_fragments(fragment_repository):
+    open_fragment = TransliteratedFragmentFactory.build()
+    restricted_fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.READ_CAIC_FRAGMENTS]
+    )
+
+    fragment_repository.create_many([open_fragment, restricted_fragment])
+
+    expected_result = QueryResultSchema().load(
+        {
+            "items": [
+                query_item_of(
+                    open_fragment,
+                    tuple(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
+                    0,
+                )
+            ],
+            "matchCountTotal": 0,
+        }
+    )
+
+    assert fragment_repository.query_latest() == expected_result
+
+
 def test_fetch_fragment_signs(fragment_repository):
     signs = ["foo", "bar", "", "\n\n"]
     fragments = [attr.evolve(FragmentFactory.build(), signs=signs_) for signs_ in signs]
