@@ -400,25 +400,16 @@ def aggregate_by_traditional_references(
             }
         },
         {
-            "$project": {
-                "_id": 1,
-                "traditionalReference": {
-                    "$arrayElemAt": [
-                        {
-                            "$filter": {
-                                "input": "$traditionalReferences",
-                                "as": "ref",
-                                "cond": {"$in": ["$$ref", traditional_references]},
-                            }
-                        },
-                        0,
-                    ]
-                },
+            "$unwind": "$traditionalReferences"
+        },
+        {
+            "$match": {
+                "traditionalReferences": {"$in": traditional_references}
             }
         },
         {
             "$group": {
-                "_id": "$traditionalReference",
+                "_id": "$traditionalReferences",
                 "fragmentNumbers": {"$addToSet": "$_id"},
             }
         },
