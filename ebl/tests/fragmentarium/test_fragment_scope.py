@@ -18,7 +18,10 @@ from ebl.tests.factories.fragment import FragmentFactory
         },
         {
             "currentScopes": [Scope.READ_CAIC_FRAGMENTS],
-            "newScopes": [Scope.READ_ITALIANNINEVEH_FRAGMENTS, Scope.READ_CAIC_FRAGMENTS],
+            "newScopes": [
+                Scope.READ_ITALIANNINEVEH_FRAGMENTS,
+                Scope.READ_CAIC_FRAGMENTS,
+            ],
         },
         {
             "currentScopes": [Scope.READ_CAIC_FRAGMENTS],
@@ -30,13 +33,19 @@ def test_update_scopes(client, fragmentarium, user, parameters):
     fragment = FragmentFactory.build(authorized_scopes=parameters["currentScopes"])
     fragment_number = fragmentarium.create(fragment)
     updates = {"authorized_scopes": parameters["newScopes"]}
-    json_updates = {"authorized_scopes": [ScopeField()._serialize_enum(scope) for scope in parameters["newScopes"]]}
+    json_updates = {
+        "authorized_scopes": [
+            ScopeField()._serialize_enum(scope) for scope in parameters["newScopes"]
+        ]
+    }
     post_result = client.simulate_post(
         f"/fragments/{fragment_number}/scopes", body=json.dumps(json_updates)
     )
     expected_json = {
         **create_response_dto(
-            fragment.set_scopes(updates["authorized_scopes"]), user, fragment.number == "K.1"
+            fragment.set_scopes(updates["authorized_scopes"]),
+            user,
+            fragment.number == "K.1",
         )
     }
     assert post_result.status == falcon.HTTP_OK
@@ -44,22 +53,3 @@ def test_update_scopes(client, fragmentarium, user, parameters):
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
-
-
-
-def test_update_invalid_genres(client, fragmentarium, user, database):
-    fragment = FragmentFactory.build(genres=tuple())
-    fragment_number = fragmentarium.create(fragment)
-    updates = {"genres": [{"category": ["asd", "wtz"], "uncertain": False}]}
-
-    post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/genres", body=json.dumps(updates)
-    )
-
-    expected_json = {
-        "title": "422 Unprocessable Entity",
-        "description": "'('asd', 'wtz')' is not a valid genre",
-    }
-
-    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-    assert post_result.json == expected_json
