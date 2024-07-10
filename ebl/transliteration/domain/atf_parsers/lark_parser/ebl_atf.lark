@@ -5,6 +5,7 @@
 %import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup)
 %import .ebl_atf_dollar_line (dollar_line)
 %import .ebl_atf_text_line (at_line)
+%import .oracc_atf_lem_line (lem_line)
 
 ?start: line
 
@@ -16,6 +17,7 @@
      | parallel_line
      | translation_line
      | control_line
+     | lem_line
 
 empty_line: /\s+/?
 !control_line.-2: ("=:" | "&" | "#") /.+/?

@@ -5,10 +5,11 @@
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
 %import .ebl_atf_common (seal)
+%import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 %import .ebl_atf_abbreviations (PERIOD)
-%import .legacy_atf (LEGACY_VALUE_CHARACTER_ACCENTED, LEGACY_LOGOGRAM_CHARACTER_ACCENTED)
 %import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
 %import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DIVIDER)
+%import .legacy_atf (legacy_uncertain_sign_prefix)
 
 note_line: "#note: " _markup
 markup: _markup
@@ -47,8 +48,7 @@ translation_extent: [labels " "] line_number
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 ?line_number: line_number_range | single_line_number
 line_number_range: single_line_number "-" single_line_number
-single_line_number: [LETTER "+"] INT [ANY_PRIME] [LETTER]
-ANY_PRIME: PRIME | "′" | "’" 
+single_line_number: [LETTER "+"] INT [PRIME] [LETTER]
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
@@ -174,7 +174,7 @@ gloss_body: open_omission_or_removal* value (_strict_joiner value)* close_omissi
 
 _loose_joiner: _strict_joiner
              | in_word_newline? _any_close joiner? _any_open?
-             | in_word_newline? joiner? _any_open
+             | in_word_newline? _any_close? joiner? _any_open
 _strict_joiner: in_word_newline? _any_close? joiner _any_open?
 _any_open: (open_intentional_omission
       | open_accidental_omission
@@ -193,6 +193,7 @@ _any_close: (close_intentional_omission
 ?value: unidentified_sign
       | unclear_sign
       | unknown_number_of_signs
+      | legacy_uncertain_sign
       | reading
       | number
       | logogram
@@ -204,6 +205,7 @@ _any_close: (close_intentional_omission
 variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
+             | legacy_uncertain_sign
              | reading
              | logogram
              | surrogate
@@ -213,6 +215,7 @@ variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 
 
 egyptian_metrical_feet_separator: "•" flags
+?legacy_uncertain_sign: legacy_uncertain_sign_prefix logogram
 
 number: number_name modifiers flags ["(" any_grapheme ")"]
 reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]
@@ -229,30 +232,13 @@ logogram_name: logogram_name_part (broken_away logogram_name_part)*
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
 
-VALUE_CHARACTER_MAIN: "a" | "ā" | "â" | "b" | "d" | "e" 
-      | "ē" | "ê" | "f" | "g" | "ĝ" | "h" 
-      | "i" | "ī" | "î" | "y" | "k" | "l" 
-      | "m" | "n" | "p" | "q" | "r" | "s" 
-      | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū"
-      | "û" | "w" | "z" | "ḫ" | "ʾ"
-LOGOGRAM_CHARACTER_MAIN: "A" | "Ā" | "Â" | "B" | "D" | "E" 
-      | "Ē" | "Ê" | "G" | "Ĝ" | "H" | "I" 
-      | "Ī" | "Î" | "Y" | "K" | "L" | "M" 
-      | "N" | "P" | "Q" | "R" | "S" | "Ṣ" 
-      | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" 
-      | "W" | "Z" | "Ḫ" | "ʾ"
-
-VALUE_CHARACTER: VALUE_CHARACTER_MAIN | LEGACY_VALUE_CHARACTER_ACCENTED
-LOGOGRAM_CHARACTER: LOGOGRAM_CHARACTER_MAIN | LEGACY_LOGOGRAM_CHARACTER_ACCENTED
-
 ?any_grapheme: compound_grapheme | grapheme
 compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
 COMPOUND_FRAGMENT: SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)*
-SUB_COMPOUND: "(" COMPOUND_PART ((COMPOUND_OPERATOR | COMPOUND_OPERATOR_DOT) COMPOUND_PART)* ")"
+SUB_COMPOUND: "(" COMPOUND_PART ((COMPOUND_OPERATOR) COMPOUND_PART)* ")"
             | COMPOUND_PART
 COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
-COMPOUND_OPERATOR_DOT: "." 
-COMPOUND_OPERATOR: "×" | "%" | "&" | "+"
+COMPOUND_OPERATOR: "×" | "%" | "&" | "+" | "."
 
 grapheme: GRAPHEME_NAME modifiers flags
 GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
@@ -397,7 +383,7 @@ composite_milestone: "m=locator " free_text [" " INT]
 
 
 status: (PRIME | UNCERTAIN | CORRECTION | COLLATION)*
-PRIME: "'"
+PRIME: "'" | "′" | "’" 
 UNCERTAIN: "?"
 CORRECTION: "!"
 COLLATION: "*"

@@ -1,23 +1,32 @@
 from typing import List, Tuple
 from lark import Visitor, Tree, lexer
 
+# ToDo:
+# Remove. Use `legacy_atf_visitor` instead
 
+# Duplicate:
+"""
 class ConvertLineDividers(Visitor):
-    def oracc_atf_text_line__divider(self, tree: Tree) -> None:
-        if tree.data == "oracc_atf_text_line__divider" and tree.children[0] == "*":
+    def ebl_atf_text_line__divider(self, tree: Tree) -> None:
+        if tree.data == "ebl_atf_text_line__divider" and tree.children[0] == "*":
+            # ToDo:
+            # Replace with actual logogram object?
             tree.children[0] = "DIŠ"
+"""
 
-
+# Duplicate:
+"""
 class ConvertLineJoiner(Visitor):
-    def oracc_atf_text_line__joiner(self, tree: Tree) -> None:
-        if tree.data == "oracc_atf_text_line__joiner" and tree.children[0] == "--":
+    def ebl_atf_text_line__joiner(self, tree: Tree) -> None:
+        if tree.data == "ebl_atf_text_line__joiner" and tree.children[0] == "--":
             tree.children[0] = "-"
+"""
 
 
 class StripSigns(Visitor):
-    def oracc_atf_text_line__uncertain_sign(self, tree: Tree) -> None:
+    def ebl_atf_text_line__legacy_uncertain_sign_prefix(self, tree: Tree) -> None:
         if (
-            tree.data == "oracc_atf_text_line__uncertain_sign"
+            tree.data == "ebl_atf_text_line__legacy_uncertain_sign_prefix"
             and tree.children[0] == "$"
         ):
             tree.children[0] = ""
@@ -57,7 +66,7 @@ class LineSerializer(Visitor):
 class GetLineNumber(Visitor):
     number: str = ""
 
-    def oracc_atf_text_line__single_line_number(self, tree: Tree) -> str:
+    def ebl_atf_text_line__single_line_number(self, tree: Tree) -> str:
         result = DepthFirstSearch().visit_topdown(tree, "")
         self.number += result
         return result
@@ -69,10 +78,9 @@ class GetWords(Visitor):
         self.result = []
         self.alter_lemline_at = []
         self.removal_open = False
-        self.prefix = "oracc"
 
-    def oracc_atf_text_line__word(self, tree):
-        assert tree.data == "oracc_atf_text_line__word"
+    def ebl_atf_text_line__word(self, tree):
+        assert tree.data == "ebl_atf_text_line__word"
         word = ""
 
         for child in tree.children:
@@ -92,7 +100,7 @@ class GetLemmaValuesAndGuidewords(Visitor):
 
     def oracc_atf_lem_line__lemma(self, tree: Tree) -> None:
         # ToDo:
-        # Extract oracc_atf_lem_line parser,
+        # Continue from here. Extract oracc_atf_lem_line parser,
         # use within ebl_atf parser or separately.
         lemmata: List[Tuple[str, str, str]] = []
         for child in tree.children:

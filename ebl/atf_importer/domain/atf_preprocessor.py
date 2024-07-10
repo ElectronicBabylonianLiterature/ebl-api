@@ -56,7 +56,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
-        tree = self.oracc_parser.parse(atf)  # ToDo: Remove `oracc_parser`
+        tree = self.ebl_parser.parse(atf)
         tree = self.transform_legacy_atf(tree)
         words_serializer = GetWords()
         words_serializer.result = []
@@ -82,7 +82,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
     ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
         result = (None, None, None, None)
         try:
-            tree = self.oracc_parser.parse(atf)
+            tree = self.ebl_parser.parse(atf)
             if tree.data in self.unused_lines:
                 result = self.get_empty_conversion(tree)
             elif tree.data == "lem_line":

@@ -4,8 +4,8 @@ import re
 from typing import Tuple, Optional, List, Any
 from lark import Lark
 from ebl.atf_importer.domain.atf_conversions import (
-    ConvertLineDividers,
-    ConvertLineJoiner,
+    #ConvertLineDividers,
+    #ConvertLineJoiner,
     StripSigns,
     GetLemmaValuesAndGuidewords,
     GetWords,
@@ -104,15 +104,17 @@ class AtfPreprocessorBase:
             maybe_placeholders=True,
             rel_to=__file__,
         )
-        self.oracc_parser = Lark.open(
-            "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark",
-            # ToDo: Continue from here. Build the parser so it
-            # handles ATF with legacy (CDLI & Oracc) syntax.
-            # Previously: "lark-oracc/oracc_atf.lark",
-            # This should be eventually removed completely.
-            maybe_placeholders=True,
-            rel_to=__file__,
-        )
+
+        # ToDo: Continue from here. Build the parser so it
+        # handles ATF with legacy (CDLI & Oracc) syntax.
+        # Previously: "lark-oracc/oracc_atf.lark",
+        # This should be eventually removed completely.
+        
+        #self.oracc_parser = Lark.open(
+        #    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark",
+            #maybe_placeholders=True,
+            #rel_to=__file__,
+        #)
 
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
@@ -194,8 +196,8 @@ class AtfPreprocessorBase:
         return atf, lemmas_and_guidewords_array, tree.data, []
 
     def handle_text_line(self, tree) -> Tuple[str, List[Any], str, List[Any]]:
-        ConvertLineDividers().visit(tree)
-        ConvertLineJoiner().visit(tree)
+        #ConvertLineDividers().visit(tree)
+        #ConvertLineJoiner().visit(tree)
         StripSigns().visit(tree)
 
         line_serializer = LineSerializer()

@@ -46,7 +46,6 @@ LEGACY_GRAMMAR_SIGNS = [
 )
 def test_text_lines(line, expected):
     atf_preprocessor = AtfPreprocessor("../logs", 0)
-
     (
         converted_line,
         c_array,

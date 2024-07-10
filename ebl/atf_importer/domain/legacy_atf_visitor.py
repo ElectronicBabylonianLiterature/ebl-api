@@ -42,7 +42,6 @@ class HalfBracketsTransformer(Transformer):
 
 
 class OraccJoinerTransformer(Transformer):
-    # ToDo: Implement in grammar
     def __init__(self):
         super().__init__()
         self.legacy_found = False
@@ -54,7 +53,6 @@ class OraccJoinerTransformer(Transformer):
 
 
 class OraccDividerTransformer(Transformer):
-    # ToDo: Implement in grammar
     def __init__(self):
         super().__init__()
         self.legacy_found = False
@@ -122,38 +120,55 @@ class LegacyAtfVisitor(Visitor):
     text_line_prefix = "ebl_atf_text_line"
     sign_rules = ["number", "reading", "logogram", "surrogate", "GRAPHEME_NAME"]
     legacy_damage_rules = ["_parts_pattern", "_parts_pattern_gloss"]
+    legacy_joiner_rulers = ["LEGACY_ORACC_JOINER"]
+    legacy_divider_rulers = ["LEGACY_ORACC_DIVIDER"]
 
     def __init__(self):
         super().__init__()
         self.legacy_found = False
+        self._set_rules(self.sign_rules, self.transform_legacy_sign)
         self._set_rules(
-            self.text_line_prefix, self.sign_rules, self.transform_legacy_sign
-        )
-        self._set_rules(
-            self.text_line_prefix,
             self.legacy_damage_rules,
             self.transform_legacy_damage,
         )
+        self._set_rules(
+            self.legacy_joiner_rulers,
+            self.transform_legacy_joiner,
+        )
+        self._set_rules(
+            self.legacy_divider_rulers,
+            self.transform_legacy_divider,
+        )
 
     def _set_rules(
-        self, prefix: str, rules: Sequence[str], method: Callable[[Tree], None]
+        self,
+        rules: Sequence[str],
+        method: Callable[[Tree], Transformer],
+        prefix: Optional[str],
     ) -> None:
+        prefix = prefix if prefix else self.prefix
         for rule in rules:
             setattr(
                 self,
                 f"{prefix}__{rule}",
-                method,
+                self._wrap_legacy_found(method),
             )
 
+    def _wrap_legacy_found(self, method: Callable[[Tree], Transformer]) -> Callable[[Tree], None]:
+        def _method(tree: Tree) -> None:
+            transformer = method(tree)
+            if transformer.legacy_found:
+                self.legacy_found = True
+        return _method
+
     def transform_legacy_sign(self, tree: Tree) -> None:
-        transformer = AccentedIndexTransformer(visit_tokens=True).transform(tree)
-        if transformer.legacy_found:
-            self.legacy_found = True
+        return AccentedIndexTransformer(visit_tokens=True).transform(tree)
 
     def transform_legacy_damage(self, tree: Tree) -> None:
-        transformer = HalfBracketsTransformer().transform(tree)
-        if transformer.legacy_found:
-            self.legacy_found = True
+        return HalfBracketsTransformer().transform(tree)
 
-    # ToDo: Add
-    # `OraccJoinerTransformer`
+    def transform_legacy_joiner(self, tree: Tree) -> None:
+        return OraccJoinerTransformer().transform(tree)
+
+    def transform_legacy_divider(self, tree: Tree) -> None:
+        return OraccDividerTransformer().transform(tree)
