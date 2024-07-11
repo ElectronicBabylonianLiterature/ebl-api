@@ -20,6 +20,7 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.schemas import ScopeField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -124,7 +125,11 @@ class FragmentAuthorizedScopesResource:
         try:
             user = req.context.user
             updated_fragment, has_photo = self._updater.update_scopes(
-                parse_museum_number(number), req.media["authorized_scopes"]
+                parse_museum_number(number),
+                [
+                    ScopeField()._deserialize_enum(scope)
+                    for scope in req.media["authorized_scopes"]
+                ],
             )
             resp.status = falcon.HTTP_200
             resp.media = create_response_dto(updated_fragment, user, has_photo)

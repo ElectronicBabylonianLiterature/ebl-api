@@ -35,7 +35,9 @@ def test_update_scopes(client, fragmentarium, user, parameters):
     updates = {"authorized_scopes": parameters["newScopes"]}
     json_updates = {
         "authorized_scopes": [
-            ScopeField()._serialize_enum(scope) for scope in parameters["newScopes"]
+            ScopeField()._serialize_enum(scope)
+            for scope in parameters["newScopes"]
+            if scope
         ]
     }
     post_result = client.simulate_post(
