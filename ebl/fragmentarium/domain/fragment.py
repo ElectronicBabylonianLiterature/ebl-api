@@ -1,3 +1,4 @@
+from enum import Enum
 from itertools import groupby
 from typing import Optional, Sequence, Tuple
 
@@ -208,7 +209,7 @@ class Fragment:
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
         return attr.evolve(self, genres=tuple(genres_new))
 
-    def set_scopes(self, scopes_new: Sequence[Scope]) -> "Fragment":
+    def set_scopes(self, scopes_new: Sequence[Enum]) -> "Fragment":
         return attr.evolve(self, authorized_scopes=list(scopes_new))
 
     def set_date(self, date_new: Optional[Date]) -> "Fragment":

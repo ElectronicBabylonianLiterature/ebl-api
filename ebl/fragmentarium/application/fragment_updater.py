@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Sequence, Tuple, Optional
 
 from ebl.bibliography.application.bibliography import Bibliography
@@ -119,7 +120,7 @@ class FragmentUpdater:
         return self._create_result(updated_fragment)
 
     def update_scopes(
-        self, number: MuseumNumber, scopes: Sequence[Scope]
+        self, number: MuseumNumber, scopes: Sequence[Enum]
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.set_scopes(scopes)
