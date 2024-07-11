@@ -4,7 +4,6 @@ from typing import Sequence, Tuple, Optional
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
-from ebl.common.domain.scopes import Scope
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
