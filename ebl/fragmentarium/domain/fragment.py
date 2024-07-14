@@ -100,6 +100,7 @@ class ExternalNumbers:
     bm_id_number: str = ""
     archibab_number: str = ""
     bdtns_number: str = ""
+    chicago_isac_number: str = ""
     ur_online_number: str = ""
     hilprecht_jena_number: str = ""
     hilprecht_heidelberg_number: str = ""
@@ -251,6 +252,10 @@ class Fragment:
     @property
     def bdtns_number(self) -> str:
         return self._get_external_number("bdtns")
+
+    @property
+    def chicago_isac_number(self) -> str:
+        return self._get_external_number("chicago_isac")
 
     @property
     def ur_online_number(self) -> str:

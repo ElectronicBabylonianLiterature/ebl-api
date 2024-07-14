@@ -133,6 +133,7 @@ class ExternalNumbersSchema(Schema):
     bm_id_number = fields.String(load_default="", data_key="bmIdNumber")
     archibab_number = fields.String(load_default="", data_key="archibabNumber")
     bdtns_number = fields.String(load_default="", data_key="bdtnsNumber")
+    chicago_isac_number = fields.String(load_default="", data_key="chicagoIsacNumber")
     ur_online_number = fields.String(load_default="", data_key="urOnlineNumber")
     hilprecht_jena_number = fields.String(
         load_default="", data_key="hilprechtJenaNumber"
