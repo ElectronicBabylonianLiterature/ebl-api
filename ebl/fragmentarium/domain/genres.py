@@ -388,6 +388,7 @@ genres = (
     ("CANONICAL", "Magic", "Exorcistic", "Lamaštu"),
     ("CANONICAL", "Magic", "Exorcistic", "Marduk’s Address to the Demons (Udugḫul 11)"),
     ("CANONICAL", "Magic", "Exorcistic", "Muššuʾu"),
+    ("CANONICAL", "Magic", "Exorcistic", "Qutāru"),
     ("CANONICAL", "Magic", "Exorcistic", "Saĝba"),
     ("CANONICAL", "Magic", "Exorcistic", "Saggigameš"),
     ("CANONICAL", "Magic", "Exorcistic", "Šēp lemutti"),
