@@ -46,9 +46,7 @@ def match_user_scopes(user_scopes: Sequence[Scope] = tuple()) -> dict:
     ]
 
     if user_scopes:
-        allowed_scopes.extend(
-            {"authorizedScopes": scope.scope_name} for scope in user_scopes
-        )
+        allowed_scopes.extend({"authorizedScopes": str(scope)} for scope in user_scopes)
 
     return {"$or": allowed_scopes}
 

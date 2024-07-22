@@ -70,10 +70,10 @@ class ScopeField(EnumField):
         super().__init__(Scope, **kwargs)
 
     def _serialize_enum(self, value: Scope) -> str:
-        return value.scope_name
+        return str(value)
 
     def _deserialize_enum(self, value: str) -> Enum:
-        return Scope.from_string(f"read:{value}-fragments")
+        return Scope.from_string(value)
 
 
 class ResearchProjectField(EnumField):
