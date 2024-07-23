@@ -46,9 +46,7 @@ def match_user_scopes(user_scopes: Sequence[Scope] = tuple()) -> dict:
     ]
 
     if user_scopes:
-        allowed_scopes.extend(
-            {"authorizedScopes": scope.scope_name} for scope in user_scopes
-        )
+        allowed_scopes.extend({"authorizedScopes": str(scope)} for scope in user_scopes)
 
     return {"$or": allowed_scopes}
 
@@ -60,15 +58,17 @@ def aggregate_random(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
     ]
 
 
-def aggregate_latest(
-    user_scopes: Sequence[Scope] = tuple(),
-) -> List[Dict]:
+def exclude_restricted_fragments():
+    return match_user_scopes([])
+
+
+def aggregate_latest() -> List[Dict]:
     tmp_record = "_tmpRecord"
     return [
         {
             "$match": {
                 "record.type": RecordType.TRANSLITERATION.value,
-                **match_user_scopes(user_scopes),
+                **exclude_restricted_fragments(),
             }
         },
         {
@@ -397,26 +397,11 @@ def aggregate_by_traditional_references(
                 **match_user_scopes(user_scopes),
             }
         },
-        {
-            "$project": {
-                "_id": 1,
-                "traditionalReference": {
-                    "$arrayElemAt": [
-                        {
-                            "$filter": {
-                                "input": "$traditionalReferences",
-                                "as": "ref",
-                                "cond": {"$in": ["$$ref", traditional_references]},
-                            }
-                        },
-                        0,
-                    ]
-                },
-            }
-        },
+        {"$unwind": "$traditionalReferences"},
+        {"$match": {"traditionalReferences": {"$in": traditional_references}}},
         {
             "$group": {
-                "_id": "$traditionalReference",
+                "_id": "$traditionalReferences",
                 "fragmentNumbers": {"$addToSet": "$_id"},
             }
         },

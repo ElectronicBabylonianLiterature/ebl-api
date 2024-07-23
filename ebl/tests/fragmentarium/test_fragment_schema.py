@@ -10,8 +10,8 @@ SCOPES = [
     Scope.READ_SIPPARLIBRARY_FRAGMENTS,
 ]
 SERIALIZED_SCOPES = [
-    "ITALIANNINEVEH",
-    "SIPPARLIBRARY",
+    "read:ITALIANNINEVEH-fragments",
+    "read:SIPPARLIBRARY-fragments",
 ]
 
 

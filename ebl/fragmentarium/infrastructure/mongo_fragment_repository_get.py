@@ -166,10 +166,10 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         )
         return load_query_result(cursor)
 
-    def query_latest(self, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
+    def query_latest(self) -> QueryResult:
         return load_query_result(
             self._fragments.aggregate(
-                aggregate_latest(user_scopes),
+                aggregate_latest(),
                 collation=Collation(
                     locale="en", numericOrdering=True, alternate="shifted"
                 ),
