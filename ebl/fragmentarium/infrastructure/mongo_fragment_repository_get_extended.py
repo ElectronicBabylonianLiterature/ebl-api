@@ -158,8 +158,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             {},
         )
         return [
-            Scope.from_string(f"read:{value}-fragments")
-            for value in fragment.get("authorizedScopes", [])
+            Scope.from_string(value) for value in fragment.get("authorizedScopes", [])
         ]
 
     def fetch_names(self, name_query: str) -> List[str]:
