@@ -28,7 +28,7 @@ class FragmentSearch:
         cache: Cache,
     ):
         @cache.memoize(DEFAULT_TIMEOUT)
-        def find_needs_revision(user_scopes: Sequence[Scope] = tuple()):
+        def find_needs_revision(user_scopes: Sequence[Scope] = ()):
             return fragmentarium.find_needs_revision(user_scopes)
 
         self.api_fragment_info_schema = ApiFragmentInfoSchema(many=True)

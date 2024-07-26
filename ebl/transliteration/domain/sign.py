@@ -24,7 +24,7 @@ class Value:
 class Logogram:
     logogram: str = ""
     atf: Atf = Atf("")
-    word_id: Sequence[str] = tuple()
+    word_id: Sequence[str] = ()
     schramm_logogramme: str = ""
     unicode: str = ""
 
@@ -57,14 +57,14 @@ class SortKeys:
 @attr.s(frozen=True, auto_attribs=True)
 class Sign:
     name: SignName
-    lists: Sequence[SignListRecord] = tuple()
-    values: Sequence[Value] = tuple()
+    lists: Sequence[SignListRecord] = ()
+    values: Sequence[Value] = ()
     mes_zl: str = ""
     labasi: str = ""
     reverse_order: str = ""
-    logograms: Sequence[Logogram] = tuple()
-    fossey: Sequence[Fossey] = tuple()
-    unicode: Sequence[int] = tuple()
+    logograms: Sequence[Logogram] = ()
+    fossey: Sequence[Fossey] = ()
+    unicode: Sequence[int] = ()
     sort_keys: Optional[SortKeys] = None
 
     @property

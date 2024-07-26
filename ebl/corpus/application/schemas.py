@@ -76,7 +76,7 @@ class ManuscriptSchema(Schema):
         required=False,
         data_key="oldSigla",
         many=True,
-        load_default=tuple(),
+        load_default=(),
     )
     museum_number: fields.Field = fields.Nested(
         MuseumNumberSchema, required=True, allow_none=True, data_key="museumNumber"
@@ -181,10 +181,10 @@ class LineVariantSchema(Schema):
     note = fields.Nested(NoteLineSchema, required=True, allow_none=True)
     manuscripts = fields.Nested(ManuscriptLineSchema, many=True, required=True)
     parallel_lines = fields.Nested(
-        ParallelLineSchema, many=True, load_default=tuple(), data_key="parallelLines"
+        ParallelLineSchema, many=True, load_default=(), data_key="parallelLines"
     )
     intertext: fields.Field = fields.Nested(
-        OneOfNoteLinePartSchema, many=True, load_default=tuple()
+        OneOfNoteLinePartSchema, many=True, load_default=()
     )
 
     @post_load
@@ -201,7 +201,7 @@ class LineVariantSchema(Schema):
 class LineSchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
     old_line_numbers = fields.Nested(
-        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=tuple()
+        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=()
     )
     variants = fields.Nested(
         LineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
@@ -212,7 +212,7 @@ class LineSchema(Schema):
     is_beginning_of_section = fields.Boolean(
         required=True, data_key="isBeginningOfSection"
     )
-    translation = fields.Nested(TranslationLineSchema, many=True, load_default=tuple())
+    translation = fields.Nested(TranslationLineSchema, many=True, load_default=())
 
     @post_load
     def make_line(self, data: dict, **kwargs) -> Line:
@@ -270,17 +270,17 @@ class ChapterSchema(Schema):
     uncertain_fragments: fields.Field = fields.Nested(
         MuseumNumberSchema,
         many=True,
-        load_default=tuple(),
+        load_default=(),
         data_key="uncertainFragments",
     )
     lines = fields.Nested(LineSchema, many=True, required=True)
-    signs = fields.List(fields.String(allow_none=True), load_default=tuple())
+    signs = fields.List(fields.String(allow_none=True), load_default=())
     record = fields.Nested(RecordSchema, load_default=Record())
     parser_version = fields.String(load_default="", data_key="parserVersion")
     is_filtered_query = fields.Bool(load_default=False, data_key="isFilteredQuery")
     colophon_lines_in_query = fields.Nested(
         ChapterQueryColophonLinesSchema,
-        load_default={"colophonLinesInQuery": dict()},
+        load_default={"colophonLinesInQuery": {}},
         data_key="colophonLinesInQuery",
     )
 
@@ -318,11 +318,11 @@ class UncertainFragmentSchema(Schema):
 class ChapterListingSchema(Schema):
     stage = StageField(required=True)
     name = fields.String(required=True, validate=validate.Length(min=1))
-    translation = fields.Nested(TranslationLineSchema, many=True, load_default=tuple())
+    translation = fields.Nested(TranslationLineSchema, many=True, load_default=())
     uncertain_fragments = fields.Nested(
         UncertainFragmentSchema,
         many=True,
-        load_default=tuple(),
+        load_default=(),
         data_key="uncertainFragments",
     )
 
@@ -348,8 +348,8 @@ class TextSchema(Schema):
     approximate_verses = fields.Boolean(required=True, data_key="approximateVerses")
     intro = fields.String(load_default="")
     chapters = fields.Nested(ChapterListingSchema, many=True, required=True)
-    references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
-    projects = fields.List(ResearchProjectField(), load_default=tuple())
+    references = fields.Nested(ReferenceSchema, many=True, load_default=())
+    projects = fields.List(ResearchProjectField(), load_default=())
 
     @post_load
     def make_text(self, data: dict, **kwargs) -> Text:

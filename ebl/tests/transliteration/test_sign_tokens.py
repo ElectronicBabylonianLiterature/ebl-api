@@ -45,7 +45,7 @@ def test_unidentified_sign() -> None:
     assert sign.value == expected_value
     assert sign.clean_value == expected_value
     assert sign.get_key() == f"UnidentifiedSign⁝{expected_value}"
-    assert sign.flags == tuple()
+    assert sign.flags == ()
     assert sign.lemmatizable is False
 
     serialized = {"type": "UnidentifiedSign", "flags": []}
@@ -74,7 +74,7 @@ def test_unclear_sign() -> None:
     assert sign.value == expected_value
     assert sign.clean_value == expected_value
     assert sign.get_key() == f"UnclearSign⁝{expected_value}"
-    assert sign.flags == tuple()
+    assert sign.flags == ()
     assert sign.lemmatizable is False
 
     serialized = {"type": "UnclearSign", "flags": []}

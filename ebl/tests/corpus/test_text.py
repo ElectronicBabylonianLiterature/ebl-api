@@ -7,7 +7,7 @@ from ebl.tests.factories.corpus import ChapterListingFactory, TextFactory
 @pytest.mark.parametrize(
     "chapters,expected",
     [
-        (tuple(), False),
+        ((), False),
         (ChapterListingFactory.build_batch(2, stage=Stage.NEO_ASSYRIAN), False),
         (
             [

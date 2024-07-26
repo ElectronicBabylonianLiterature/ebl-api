@@ -15,7 +15,7 @@ class DictionaryLine:
     stage: Stage
     line: Line
     manuscripts: Sequence[Manuscript] = attr.ib(
-        default=tuple(),
+        default=(),
         validator=[
             validators.validate_manuscript_ids,
             validators.validate_manuscript_sigla,

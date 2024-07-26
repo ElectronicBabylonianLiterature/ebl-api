@@ -21,7 +21,7 @@ class Reference:
     type: ReferenceType
     pages: str = ""
     notes: str = ""
-    lines_cited: Sequence[str] = tuple()
+    lines_cited: Sequence[str] = ()
     document: Optional[dict] = None
 
     def set_document(self, new_document: dict) -> "Reference":

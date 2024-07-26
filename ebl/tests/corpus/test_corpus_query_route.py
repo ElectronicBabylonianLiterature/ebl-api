@@ -214,8 +214,8 @@ def test_query_chapter_signs(
 
 CHAPTER_WITH_SIGNS_AND_LEMMAS = attr.evolve(
     CHAPTER_WITH_SIGNS,
-    manuscripts=tuple([*CHAPTER_WITH_SIGNS.manuscripts, LEMMA_MANUSCRIPT]),
-    lines=tuple([*CHAPTER_WITH_SIGNS.lines, *CHAPTER_WITH_LEMMA.lines]),
+    manuscripts=(*CHAPTER_WITH_SIGNS.manuscripts, LEMMA_MANUSCRIPT),
+    lines=(*CHAPTER_WITH_SIGNS.lines, *CHAPTER_WITH_LEMMA.lines),  # pyre-ignore[60]
 )
 
 

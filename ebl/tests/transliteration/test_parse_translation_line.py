@@ -19,13 +19,13 @@ from ebl.transliteration.domain.atf import Surface
         (
             "#tr.ar.(2): translation",
             TranslationLine(
-                (StringPart("translation"),), "ar", Extent(LineNumber(2), tuple())
+                (StringPart("translation"),), "ar", Extent(LineNumber(2), ())
             ),
         ),
         (
             "#tr.(2): translation",
             TranslationLine(
-                (StringPart("translation"),), "en", Extent(LineNumber(2), tuple())
+                (StringPart("translation"),), "en", Extent(LineNumber(2), ())
             ),
         ),
         (
@@ -35,7 +35,7 @@ from ebl.transliteration.domain.atf import Surface
                 "de",
                 Extent(
                     LineNumber(1),
-                    (SurfaceLabel(tuple(), Surface.OBVERSE), ColumnLabel(tuple(), 3)),
+                    (SurfaceLabel((), Surface.OBVERSE), ColumnLabel((), 3)),
                 ),
             ),
         ),

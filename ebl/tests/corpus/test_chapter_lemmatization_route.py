@@ -88,7 +88,7 @@ def test_updating_lemmatization_invalidates_chapter_display_cache(
                                     .variants[0]
                                     .reconstruction[6]
                                     .value,
-                                    tuple(),
+                                    (),
                                 )
                             ),
                         ),

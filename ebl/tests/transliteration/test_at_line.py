@@ -16,7 +16,7 @@ from ebl.transliteration.domain.atf import Atf
 
 
 @pytest.mark.parametrize(
-    "parts,parts_text", [(tuple(), ""), ((StringPart("a"), StringPart("b c")), " ab c")]
+    "parts,parts_text", [((), ""), ((StringPart("a"), StringPart("b c")), " ab c")]
 )
 def test_at_line_heading(parts, parts_text) -> None:
     at_line = HeadingAtLine(1, parts)
