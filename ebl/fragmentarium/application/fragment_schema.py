@@ -152,11 +152,9 @@ class ExternalNumbersSchema(Schema):
     achemenet_number = fields.String(load_default="", data_key="achemenetNumber")
     nabucco_number = fields.String(load_default="", data_key="nabuccoNumber")
     oracc_numbers = fields.List(
-        fields.String(), load_default=tuple(), data_key="oraccNumbers"
+        fields.String(), load_default=(), data_key="oraccNumbers"
     )
-    seal_numbers = fields.List(
-        fields.String(), load_default=tuple(), data_key="sealNumbers"
-    )
+    seal_numbers = fields.List(fields.String(), load_default=(), data_key="sealNumbers")
 
     @post_load
     def make_external_numbers(self, data, **kwargs) -> ExternalNumbers:
@@ -196,10 +194,10 @@ class FragmentSchema(Schema):
         data_key="uncuratedReferences",
         load_default=None,
     )
-    genres = fields.Nested(GenreSchema, many=True, load_default=tuple())
+    genres = fields.Nested(GenreSchema, many=True, load_default=())
     line_to_vec = fields.List(
         fields.List(ValueEnumField(LineToVecEncoding)),
-        load_default=tuple(),
+        load_default=(),
         data_key="lineToVec",
     )
     authorized_scopes = fields.List(
@@ -216,7 +214,7 @@ class FragmentSchema(Schema):
     projects = fields.List(ResearchProjectField())
     date = fields.Nested(DateSchema, allow_none=True, default=None)
     dates_in_text = fields.Nested(
-        DateSchema, data_key="datesInText", many=True, allow_none=True, default=list()
+        DateSchema, data_key="datesInText", many=True, allow_none=True, default=[]
     )
     archaeology = fields.Nested(ArchaeologySchema, allow_none=True, default=None)
     colophon = fields.Nested(ColophonSchema, allow_none=True, default=None)

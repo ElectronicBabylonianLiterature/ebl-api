@@ -10,7 +10,7 @@ from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
 
 def markup_from_string(string: str) -> Sequence[MarkupPart]:
     try:
-        return parse_markup_paragraphs(string) if string else tuple()
+        return parse_markup_paragraphs(string) if string else ()
     except PARSE_ERRORS as error:
         raise ValidationError(f"Invalid markup: {string}. {error}") from error
 

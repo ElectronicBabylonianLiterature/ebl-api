@@ -87,7 +87,7 @@ def test_empty_line_to_vec(fragment_matcher, when):
         .query_transliterated_line_to_vec()
         .thenReturn(
             [
-                LineToVecEntry(fragment_1.number, SCRIPT, tuple()),
+                LineToVecEntry(fragment_1.number, SCRIPT, ()),
                 LineToVecEntry(fragment_2.number, SCRIPT, fragment_2_line_to_vec),
                 LineToVecEntry(fragment_3.number, SCRIPT, fragment_2_line_to_vec),
             ]

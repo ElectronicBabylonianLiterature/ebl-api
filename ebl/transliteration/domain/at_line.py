@@ -37,9 +37,7 @@ class SealAtLine(AtLine):
 @attr.s(auto_attribs=True, frozen=True)
 class HeadingAtLine(AtLine):
     number: int
-    parts: Sequence[MarkupPart] = attr.ib(
-        converter=convert_part_sequence, default=tuple()
-    )
+    parts: Sequence[MarkupPart] = attr.ib(converter=convert_part_sequence, default=())
 
     @property
     def display_value(self) -> str:

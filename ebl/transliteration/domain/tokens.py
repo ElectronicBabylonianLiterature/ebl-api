@@ -178,7 +178,7 @@ class ValueToken(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @classmethod
     def of(cls: Type[VT], value: str) -> VT:
@@ -213,7 +213,7 @@ class UnknownNumberOfSigns(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @staticmethod
     def of() -> "UnknownNumberOfSigns":
@@ -228,7 +228,7 @@ class Tabulation(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @staticmethod
     def of() -> "Tabulation":
@@ -264,7 +264,7 @@ class Column(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -301,7 +301,7 @@ class Joiner(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @staticmethod
     def dot():
@@ -340,7 +340,7 @@ class LineBreak(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     def accept(self, visitor: "TokenVisitor") -> None:
         visitor.visit_line_break(self)

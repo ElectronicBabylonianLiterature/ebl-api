@@ -52,7 +52,7 @@ AlignmentMap = Sequence[Optional[int]]
 @attr.s(auto_attribs=True, frozen=True)
 class TextLine(Line):
     line_number: AbstractLineNumber
-    _content: Sequence[Token] = tuple()
+    _content: Sequence[Token] = ()
 
     @property
     def key(self) -> str:

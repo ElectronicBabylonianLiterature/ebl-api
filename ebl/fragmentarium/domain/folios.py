@@ -15,7 +15,7 @@ class Folio:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Folios:
-    entries: Sequence[Folio] = tuple()
+    entries: Sequence[Folio] = ()
 
     def filter(self, user) -> "Folios":
         folios = tuple(

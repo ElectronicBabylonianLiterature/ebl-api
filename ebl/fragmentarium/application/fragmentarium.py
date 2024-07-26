@@ -19,7 +19,7 @@ class Fragmentarium:
         }
 
     def find_needs_revision(
-        self, user_scopes: Sequence[Scope] = tuple()
+        self, user_scopes: Sequence[Scope] = ()
     ) -> List[FragmentInfo]:
         return self._repository.query_by_transliterated_not_revised_by_other(
             user_scopes

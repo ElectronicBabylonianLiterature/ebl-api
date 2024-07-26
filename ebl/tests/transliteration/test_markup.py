@@ -82,7 +82,7 @@ def test_part_title_case(part: MarkupPart, expected: MarkupPart) -> None:
 @pytest.mark.parametrize(
     "parts,expected",
     [
-        (tuple(), tuple()),
+        ((), ()),
         ([StringPart("foo--")], (StringPart("foo"),)),
         (
             [StringPart("foo--"), StringPart("foo--")],
@@ -96,7 +96,7 @@ def test_rstrip(parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]) -> 
 
 @pytest.mark.parametrize(
     "parts,expected",
-    [(tuple(), tuple()), ([StringPart("foo bar")], (StringPart("Foo Bar"),))],
+    [((), ()), ([StringPart("foo bar")], (StringPart("Foo Bar"),))],
 )
 def test_title_case(
     parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]
@@ -122,6 +122,6 @@ def test_context_aware_title_case(
     assert title_case(parts) == expected
 
 
-@pytest.mark.parametrize("parts", [tuple(), [StringPart("foo-- bar--")]])
+@pytest.mark.parametrize("parts", [(), [StringPart("foo-- bar--")]])
 def test_to_title(parts: Sequence[MarkupPart]) -> None:
     assert to_title(parts) == title_case(rstrip(parts))

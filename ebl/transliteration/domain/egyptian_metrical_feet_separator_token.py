@@ -9,21 +9,19 @@ from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 
 @attr.s(frozen=True, auto_attribs=True)
 class EgyptianMetricalFeetSeparator(Token):
-    flags: Sequence[atf.Flag] = attr.ib(
-        default=tuple(), converter=convert_flag_sequence
-    )
+    flags: Sequence[atf.Flag] = attr.ib(default=(), converter=convert_flag_sequence)
 
     @property
     def clean_value(self) -> str:
         return self._sign
 
     @staticmethod
-    def of(flags: Sequence[atf.Flag] = tuple()) -> "EgyptianMetricalFeetSeparator":
+    def of(flags: Sequence[atf.Flag] = ()) -> "EgyptianMetricalFeetSeparator":
         return EgyptianMetricalFeetSeparator(frozenset(), ErasureState.NONE, flags)
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @property
     def _sign(self) -> str:

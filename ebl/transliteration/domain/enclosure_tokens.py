@@ -29,7 +29,7 @@ class Enclosure(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @property
     def is_open(self) -> bool:
@@ -150,7 +150,7 @@ class Gloss(Token):
     _parts: Sequence[Token] = attr.ib(converter=convert_token_sequence)
 
     @classmethod
-    def of(cls: Type[G], parts: Sequence[Token] = tuple()) -> G:
+    def of(cls: Type[G], parts: Sequence[Token] = ()) -> G:
         return cls(frozenset(), ErasureState.NONE, parts)
 
     @property

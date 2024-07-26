@@ -76,11 +76,11 @@ class ColumnLabel(Label):
     column: int
 
     @staticmethod
-    def from_label(column: str, status: Iterable[Status] = tuple()) -> "ColumnLabel":
+    def from_label(column: str, status: Iterable[Status] = ()) -> "ColumnLabel":
         return ColumnLabel(status, roman.fromRoman(column.upper()))  # pyre-fixme[6]
 
     @staticmethod
-    def from_int(column: int, status: Sequence[Status] = tuple()) -> "ColumnLabel":
+    def from_int(column: int, status: Sequence[Status] = ()) -> "ColumnLabel":
         return ColumnLabel(status, column)
 
     @property
@@ -109,7 +109,7 @@ class SurfaceLabel(Label):
 
     @staticmethod
     def from_label(
-        surface: Surface, status: Sequence[Status] = tuple(), text: str = ""
+        surface: Surface, status: Sequence[Status] = (), text: str = ""
     ) -> "SurfaceLabel":
         return SurfaceLabel(status, surface, text)
 
@@ -145,7 +145,7 @@ class ObjectLabel(Label):
 
     @staticmethod
     def from_object(
-        object: Object, status: Sequence[Status] = tuple(), text: str = ""
+        object: Object, status: Sequence[Status] = (), text: str = ""
     ) -> "ObjectLabel":
         return ObjectLabel(status, object, text)
 
@@ -207,4 +207,4 @@ def parse_labels(label: str) -> Sequence[Label]:
         tree = LABEL_PARSER.parse(label)
         return LabelTransformer().transform(tree)
     else:
-        return tuple()
+        return ()

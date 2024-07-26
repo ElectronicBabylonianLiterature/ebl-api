@@ -19,8 +19,8 @@ class FragmentInfo:
     matching_lines: Optional[Text]
     editor: str
     edition_date: str
-    references: Sequence[Reference] = tuple()
-    genres: Sequence[Genre] = tuple()
+    references: Sequence[Reference] = ()
+    genres: Sequence[Genre] = ()
 
     def set_references(self, references: Sequence[Reference]) -> "FragmentInfo":
         return attr.evolve(self, references=tuple(references))

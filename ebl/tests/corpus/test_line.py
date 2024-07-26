@@ -9,7 +9,7 @@ from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 def test_invalid_extent() -> None:
     translation = TranslationLine(
-        tuple(), extent=Extent(LineNumber(1), (SurfaceLabel(tuple(), Surface.OBVERSE),))
+        (), extent=Extent(LineNumber(1), (SurfaceLabel((), Surface.OBVERSE),))
     )
 
     with pytest.raises(  # pyre-ignore[16]

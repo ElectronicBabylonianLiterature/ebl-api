@@ -22,4 +22,4 @@ def parse_chapter(
 
 def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
     tree = CHAPTER_PARSER.parse(atf, start="paratext")
-    return ChapterTransformer(tuple()).transform(tree)
+    return ChapterTransformer(()).transform(tree)

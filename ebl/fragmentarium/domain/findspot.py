@@ -21,7 +21,7 @@ class BuildingType(Enum):
 @attr.s(auto_attribs=True, frozen=True)
 class ExcavationPlan:
     svg: str
-    references: Sequence[Reference] = tuple()
+    references: Sequence[Reference] = ()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -33,7 +33,7 @@ class Findspot:
     building_type: Optional[BuildingType] = None
     lavel_layer_phase: str = ""
     date_range: Optional[DateRange] = None
-    plans: Sequence[ExcavationPlan] = tuple()
+    plans: Sequence[ExcavationPlan] = ()
     room: str = ""
     context: str = ""
     primary_context: Optional[bool] = None

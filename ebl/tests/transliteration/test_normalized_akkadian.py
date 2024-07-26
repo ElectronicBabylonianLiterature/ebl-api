@@ -122,7 +122,7 @@ def test_set_unique_lemma() -> None:
 
 def test_set_unique_lemma_empty() -> None:
     word = AkkadianWord.of((ValueToken.of("bu"),), unique_lemma=(WordId("nu I"),))
-    lemma = LemmatizationToken("bu", tuple())
+    lemma = LemmatizationToken("bu", ())
     expected = AkkadianWord.of((ValueToken.of("bu"),))
 
     assert word.set_unique_lemma(lemma) == expected

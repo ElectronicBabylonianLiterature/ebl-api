@@ -25,7 +25,7 @@ class ExcavationNumberSchema(AbstractMuseumNumberSchema):
 
 class ExcavationPlanSchema(Schema):
     svg = fields.String()
-    references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
+    references = fields.Nested(ReferenceSchema, many=True, load_default=())
 
     @post_load
     def create_excavation_plan(self, data, **kwargs) -> ExcavationPlan:
@@ -50,7 +50,7 @@ class FindspotSchema(Schema):
     )
     lavel_layer_phase = fields.String(data_key="levelLayerPhase")
     date_range = fields.Nested(DateRangeSchema, data_key="date", allow_none=True)
-    plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=tuple())
+    plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=())
     room = fields.String()
     context = fields.String()
     primary_context = fields.Boolean(

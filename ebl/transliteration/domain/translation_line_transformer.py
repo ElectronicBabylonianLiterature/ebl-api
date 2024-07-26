@@ -17,4 +17,4 @@ class TranslationLineTransformer(LabelTransformer, MarkupTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__translation_extent(self, labels, line_number) -> Extent:
-        return Extent(line_number, labels or tuple())
+        return Extent(line_number, labels or ())

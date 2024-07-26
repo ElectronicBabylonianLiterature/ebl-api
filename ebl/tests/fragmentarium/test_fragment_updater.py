@@ -224,7 +224,7 @@ def test_update_update_lemmatization_not_found(
 
     with pytest.raises(NotFoundError):
         fragment_updater.update_lemmatization(
-            number, Lemmatization(((LemmatizationToken("1.", tuple()),),)), user
+            number, Lemmatization(((LemmatizationToken("1.", ()),),)), user
         )
 
 

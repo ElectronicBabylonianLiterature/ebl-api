@@ -45,7 +45,7 @@ def test_defaults() -> None:
 
     assert reference.pages == ""
     assert reference.notes == ""
-    assert reference.lines_cited == tuple()
+    assert reference.lines_cited == ()
     assert reference.document is None
 
 
