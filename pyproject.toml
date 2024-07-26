@@ -33,6 +33,7 @@ cairosvg = "^2.7.0"
 pyyaml = "6.0.1"
 python-dateutil = "^2.8.2"
 natsort = "^8.4.0"
+ruff = "^0.5.5"
 
 
 [tool.poetry.dev-dependencies]
@@ -54,3 +55,7 @@ autopep8 = "^1.6.0"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff.lint]
+select = ["C", "E", "F", "W", "B"]
+ignore = ["E203", "E501", "E231", "B028", "C408", "B904", "C901"]
