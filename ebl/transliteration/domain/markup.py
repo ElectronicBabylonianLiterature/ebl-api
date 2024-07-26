@@ -159,7 +159,7 @@ def rstrip(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
     if parts:
         *head, last = parts
         return (*head, last.rstrip())
-    return []
+    return ()
 
 
 def title_case(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
