@@ -183,8 +183,8 @@ class LabelTransformer(Transformer):
         self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
         return SurfaceLabel.from_label(
-            Surface.from_label(surface),
-            status,  # pyre-ignore[6]
+            Surface.from_label(surface),  # pyre-ignore[6]
+            status,
         )
 
     @v_args(inline=True)
