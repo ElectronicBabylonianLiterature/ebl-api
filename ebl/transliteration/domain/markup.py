@@ -156,7 +156,10 @@ def convert_part_sequence(parts: Iterable[MarkupPart]) -> Tuple[MarkupPart, ...]
 
 
 def rstrip(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
-    return (*parts[:-1], parts[-1].rstrip()) if parts else parts  # sourcery skip
+    if parts:
+        *head, last = parts
+        return (*head, last.rstrip())
+    return []
 
 
 def title_case(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
