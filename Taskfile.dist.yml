@@ -1,6 +1,6 @@
-version: '3'
+version: "3"
 
-dotenv: ['.env']
+dotenv: [".env"]
 
 tasks:
   cp:
@@ -13,7 +13,6 @@ tasks:
   test-all:
     cmds:
       - task: format
-        vars: {CLI_ARGS: "--check"}
       - task: lint
       - task: type
       - task: test
@@ -28,20 +27,20 @@ tasks:
 
   lint:
     cmds:
-      - poetry run flake8 ebl
-  
+      - poetry run ruff check ebl {{.CLI_ARGS}}
+
   type:
     cmds:
       - poetry run pyre check
-  
+
   format:
     cmds:
-      - poetry run black ebl {{.CLI_ARGS}}
+      - poetry run ruff format --check ebl
 
   start:
     cmds:
       - poetry run waitress-serve --port=8000 --call ebl.app:get_app
-  
+
   validate-fragments:
     cmds:
       - poetry run python -m ebl.io.fragments.importer validate {{.CLI_ARGS}}
@@ -53,4 +52,3 @@ tasks:
   import-fragments:
     cmds:
       - poetry run python -m ebl.io.fragments.importer import {{.CLI_ARGS}}
-
