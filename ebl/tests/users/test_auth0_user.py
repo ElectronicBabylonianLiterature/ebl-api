@@ -35,9 +35,17 @@ def test_profile():
     assert user.profile == PROFILE
 
 
+def mock_fetch_user_info(user):
+    _ = user.profile
+    _ = user.profile
+    _ = user.ebl_name
+
+
 def test_memoize_profile():
     profile_factory = ProfileFactory(PROFILE)
-    Auth0User({}, profile_factory.create)
+    user = Auth0User({}, profile_factory.create)
+
+    mock_fetch_user_info(user)
 
     assert profile_factory.count == 1
 
