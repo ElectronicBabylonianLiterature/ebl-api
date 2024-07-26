@@ -109,7 +109,7 @@ class LabelsValidator:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Text:
-    lines: Sequence[Line] = attr.ib(default=tuple())
+    lines: Sequence[Line] = attr.ib(default=())
     parser_version: str = ATF_PARSER_VERSION
 
     @lines.validator

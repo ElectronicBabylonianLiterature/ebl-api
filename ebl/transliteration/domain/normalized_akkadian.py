@@ -14,7 +14,7 @@ from ebl.transliteration.domain.word_tokens import AbstractWord
 
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class AkkadianWord(AbstractWord):
-    modifiers: Sequence[Flag] = attr.ib(default=tuple())
+    modifiers: Sequence[Flag] = attr.ib(default=())
 
     @modifiers.validator
     def _validate_modifiers(self, _, value):
@@ -48,8 +48,8 @@ class AkkadianWord(AbstractWord):
     @staticmethod
     def of(
         parts: Sequence[Token],
-        modifier: Sequence[Flag] = tuple(),
-        unique_lemma: Lemma = tuple(),
+        modifier: Sequence[Flag] = (),
+        unique_lemma: Lemma = (),
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
         has_variant_alignment: bool = False,
@@ -81,7 +81,7 @@ class Break(Token):
 
     @property
     def parts(self) -> Sequence["Token"]:
-        return tuple()
+        return ()
 
     @property
     def value(self) -> str:

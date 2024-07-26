@@ -63,12 +63,10 @@ def test_find_without_lines(
     (
         when(fragment_repository)
         .query_by_museum_number(number, lines, True)
-        .thenReturn(
-            attr.evolve(fragment, text=attr.evolve(fragment.text, lines=tuple()))
-        )
+        .thenReturn(attr.evolve(fragment, text=attr.evolve(fragment.text, lines=())))
     )
 
-    assert fragment_finder.find(number, lines, True)[0].text.lines == tuple()
+    assert fragment_finder.find(number, lines, True)[0].text.lines == ()
 
 
 def test_list_all_fragments(fragment_repository) -> None:
@@ -93,7 +91,7 @@ def test_find_random(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
     (
         when(fragment_repository)
-        .query_random_by_transliterated(tuple())
+        .query_random_by_transliterated(())
         .thenReturn([fragment])
     )
     assert fragment_finder.find_random() == [FragmentInfo.of(fragment)]
@@ -101,11 +99,7 @@ def test_find_random(fragment_finder, fragment_repository, when):
 
 def test_find_interesting(fragment_finder, fragment_repository, when):
     fragment = FragmentFactory.build()
-    (
-        when(fragment_repository)
-        .query_path_of_the_pioneers(tuple())
-        .thenReturn([fragment])
-    )
+    (when(fragment_repository).query_path_of_the_pioneers(()).thenReturn([fragment]))
     assert fragment_finder.find_interesting() == [FragmentInfo.of(fragment)]
 
 

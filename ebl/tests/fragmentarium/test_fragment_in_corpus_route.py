@@ -22,7 +22,7 @@ CHAPTER = ChapterFactory.build(
             id=1,
             museum_number=MUSEUM_NUMBER,
             accession="",
-            references=tuple(),
+            references=(),
         ),
     ),
 )

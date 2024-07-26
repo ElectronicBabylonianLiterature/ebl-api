@@ -36,7 +36,7 @@ class ManuscriptLineDisplay:
     accession: str
     is_in_fragmentarium: bool
     joins: Sequence[Sequence[Join]]
-    omitted_words: Sequence[int] = tuple()
+    omitted_words: Sequence[int] = ()
 
     @classmethod
     def from_manuscript_line(

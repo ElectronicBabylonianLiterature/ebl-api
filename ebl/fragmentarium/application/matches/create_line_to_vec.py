@@ -71,7 +71,7 @@ def _parse_text_line_line_number_range(
 
 @singledispatch
 def line_to_vec(line: Line, _: bool) -> LineToVecEncodings:
-    return tuple()
+    return ()
 
 
 @line_to_vec.register(TextLine)
@@ -92,12 +92,12 @@ def _line_to_vec_ruling(line: RulingDollarLine, _: bool) -> LineToVecEncodings:
         atf.Ruling.SINGLE: (LineToVecEncoding.SINGLE_RULING,),
         atf.Ruling.DOUBLE: (LineToVecEncoding.DOUBLE_RULING,),
         atf.Ruling.TRIPLE: (LineToVecEncoding.TRIPLE_RULING,),
-    }.get(line.number, tuple())
+    }.get(line.number, ())
 
 
 @line_to_vec.register(StateDollarLine)
 def _line_to_vec_state(line: StateDollarLine, _: bool) -> LineToVecEncodings:
-    return (LineToVecEncoding.END,) if line.is_end_of else tuple()
+    return (LineToVecEncoding.END,) if line.is_end_of else ()
 
 
 @singledispatch
@@ -117,7 +117,7 @@ def _get_line_number_range(line_number: LineNumberRange) -> int:
 
 @attr.s(auto_attribs=True, frozen=True)
 class LineSplits:
-    splits: Tuple[Tuple[Line, ...], ...] = (tuple(),)
+    splits: Tuple[Tuple[Line, ...], ...] = ((),)
     _last_line_number: int = -1
 
     @singledispatchmethod
@@ -161,4 +161,4 @@ def create_line_to_vec(lines: Sequence[Line]) -> Tuple[LineToVecEncodings, ...]:
         line_to_vec_result.append(tuple(line_to_vec_intermediate_result))
         line_to_vec_intermediate_result = []
 
-    return tuple(line_to_vec_result) if len(line_to_vec_result[0]) else tuple()
+    return tuple(line_to_vec_result) if len(line_to_vec_result[0]) else ()

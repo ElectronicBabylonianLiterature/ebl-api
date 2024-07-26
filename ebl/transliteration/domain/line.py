@@ -63,4 +63,4 @@ class EmptyLine(Line):
 
     @property
     def lemmatization(self) -> Tuple:
-        return tuple()
+        return ()

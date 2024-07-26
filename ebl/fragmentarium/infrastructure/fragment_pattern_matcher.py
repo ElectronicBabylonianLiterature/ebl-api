@@ -13,7 +13,7 @@ from pydash.arrays import compact
 
 
 class PatternMatcher:
-    def __init__(self, query: Dict, user_scopes: Sequence[Scope] = tuple()):
+    def __init__(self, query: Dict, user_scopes: Sequence[Scope] = ()):
         self._query = query
         self._scopes = user_scopes
 

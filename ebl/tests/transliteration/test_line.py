@@ -7,7 +7,7 @@ from ebl.transliteration.domain.line import ControlLine, EmptyLine
 def test_empty_line() -> None:
     line = EmptyLine()
 
-    assert line.lemmatization == tuple()
+    assert line.lemmatization == ()
     assert line.key == f"EmptyLine⁞⁞{hash(line)}"
     assert line.atf == ""
 
@@ -27,7 +27,7 @@ def test_control_line() -> None:
     "line,lemmatization",
     [
         (ControlLine("#", " a comment"), (LemmatizationToken(" a comment"),)),
-        (EmptyLine(), tuple()),
+        (EmptyLine(), ()),
     ],
 )
 def test_update_lemmatization(line, lemmatization) -> None:
