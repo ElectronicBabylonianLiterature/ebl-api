@@ -168,7 +168,7 @@ class EnclosureUpdater(TokenVisitor):
         new_token = self._set_enclosure_type(variant)
         visitors = list(map(sub_visit, variant.tokens))
 
-        enclosures = set(visitor._enclosures for visitor in visitors)
+        enclosures = {visitor._enclosures for visitor in visitors}
         self._enclosures = sorted(enclosures, key=len, reverse=True)[0]
 
         tokens = tuple(token for visitor in visitors for token in visitor.tokens)
@@ -257,7 +257,7 @@ class EnclosureUpdater(TokenVisitor):
 
 
 def set_enclosure_type(
-    tokens: Union[Sequence[Token], Iterable[Token]]
+    tokens: Union[Sequence[Token], Iterable[Token]],
 ) -> Sequence[Token]:
     enclosure_visitor = EnclosureUpdater()
     for token in tokens:

@@ -297,7 +297,7 @@ if __name__ == "__main__":
     fragments = {
         filename: data
         for filename, data in fragments.items()
-        if filename not in set(file for file, _ in FAILS)
+        if filename not in {file for file, _ in FAILS}
     }
     result = write_to_db(
         list(fragments.values()),

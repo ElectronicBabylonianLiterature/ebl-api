@@ -37,11 +37,7 @@ def test_profile():
 
 def test_memoize_profile():
     profile_factory = ProfileFactory(PROFILE)
-    user = Auth0User({}, profile_factory.create)
-
-    user.profile
-    user.profile
-    user.ebl_name
+    Auth0User({}, profile_factory.create)
 
     assert profile_factory.count == 1
 

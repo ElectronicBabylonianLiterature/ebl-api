@@ -13,7 +13,7 @@ from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.language import Language
 
 
-class TokenVisitor(ABC):
+class TokenVisitor(ABC):  # noqa: B024
     def visit(self, token: "Token") -> None:  # noqa: B027
         pass
 

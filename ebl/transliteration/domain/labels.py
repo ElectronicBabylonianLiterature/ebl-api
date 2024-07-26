@@ -32,7 +32,7 @@ def no_duplicate_status(_instance, _attribute, value) -> None:
 
 
 def convert_status_sequence(
-    status: Union[Iterable[Status], Sequence[Status]]
+    status: Union[Iterable[Status], Sequence[Status]],
 ) -> Tuple[Status, ...]:
     return tuple(status)
 
@@ -183,7 +183,8 @@ class LabelTransformer(Transformer):
         self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
         return SurfaceLabel.from_label(
-            Surface.from_label(surface), status  # pyre-ignore[6]
+            Surface.from_label(surface),
+            status,  # pyre-ignore[6]
         )
 
     @v_args(inline=True)

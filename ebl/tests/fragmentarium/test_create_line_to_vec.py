@@ -87,7 +87,7 @@ def test_split_multiple_lines():
     lines = parse_atf_lark(
         "@obverse\n1'. x [...]\n@reverse\n1'. x [...]\n2'. x [...]\n@edge\n1'. x [...]"
     ).lines
-    splitted_lines = tuple([lines[:3], lines[3:6], lines[6:]])
+    splitted_lines = (lines[:3], lines[3:6], lines[6:])
     assert split_lines(lines) == splitted_lines
 
 
