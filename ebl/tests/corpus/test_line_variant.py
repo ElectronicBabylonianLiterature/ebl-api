@@ -58,7 +58,7 @@ def test_line_variant_constructor() -> None:
 
 def test_invalid_enclosures() -> None:
     with pytest.raises(ValueError):  # pyre-ignore[16]
-        LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, tuple())
+        LineVariant((AkkadianWord.of((BrokenAway.open(),)),), NOTE, ())
 
 
 @pytest.mark.parametrize(
@@ -109,7 +109,7 @@ def test_set_has_variant_alignment(word: AbstractWord, expected: bool) -> None:
 @pytest.mark.parametrize(
     "omitted_words,expected",
     [
-        (tuple(), (False, False, False)),
+        ((), (False, False, False)),
         ((1, 2), (False, True, True)),
     ],
 )

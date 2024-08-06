@@ -22,8 +22,8 @@ class FragmentInfoSchema(Schema):
     matching_lines = fields.Nested(
         TextSchema, load_default=None, data_key="matchingLines"
     )
-    references = fields.Nested(ReferenceSchema, many=True, load_default=tuple())
-    genres = fields.Nested(GenreSchema, many=True, load_default=tuple())
+    references = fields.Nested(ReferenceSchema, many=True, load_default=())
+    genres = fields.Nested(GenreSchema, many=True, load_default=())
 
 
 class ApiFragmentInfoSchema(FragmentInfoSchema):

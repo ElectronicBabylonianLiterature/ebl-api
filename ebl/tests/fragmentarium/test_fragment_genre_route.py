@@ -13,7 +13,7 @@ from ebl.tests.factories.fragment import FragmentFactory
     "parameters",
     [
         {
-            "currentGenres": tuple(),
+            "currentGenres": (),
             "newGenres": [Genre(["ARCHIVAL", "Administrative", "Lists"], False)],
         },
         {
@@ -58,7 +58,7 @@ def test_update_genres(client, fragmentarium, user, database, parameters):
 
 
 def test_update_invalid_genres(client, fragmentarium, user, database):
-    fragment = FragmentFactory.build(genres=tuple())
+    fragment = FragmentFactory.build(genres=())
     fragment_number = fragmentarium.create(fragment)
     updates = {"genres": [{"category": ["asd", "wtz"], "uncertain": False}]}
 

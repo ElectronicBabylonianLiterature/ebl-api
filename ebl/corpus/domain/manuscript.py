@@ -52,7 +52,7 @@ def is_invalid_non_standard_text(provenance, period, type_) -> bool:
 class Manuscript:
     id: int
     siglum_disambiguator: str = ""
-    old_sigla: Sequence[OldSiglum] = tuple()
+    old_sigla: Sequence[OldSiglum] = ()
     museum_number: Optional[MuseumNumber] = None
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
@@ -62,7 +62,7 @@ class Manuscript:
     notes: str = ""
     colophon: Text = Text()
     unplaced_lines: Text = Text()
-    references: Sequence[Reference] = tuple()
+    references: Sequence[Reference] = ()
     joins: Joins = Joins()
     is_in_fragmentarium: bool = False
 

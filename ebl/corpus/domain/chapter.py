@@ -73,7 +73,7 @@ def make_title(translation: Sequence[TranslationLine]) -> Sequence[MarkupPart]:
             for line in translation
             if line.language == DEFAULT_LANGUAGE
         ),
-        tuple(),
+        (),
     )
 
 
@@ -86,15 +86,15 @@ class Chapter:
     name: str = ""
     order: int = 0
     manuscripts: Sequence[Manuscript] = attr.ib(
-        default=tuple(),
+        default=(),
         validator=[
             validators.validate_manuscript_ids,
             validators.validate_manuscript_sigla,
         ],
     )
-    uncertain_fragments: Sequence[MuseumNumber] = tuple()
+    uncertain_fragments: Sequence[MuseumNumber] = ()
     lines: Sequence[Line] = attr.ib(
-        default=tuple(),
+        default=(),
         validator=[
             validators.validate_line_numbers,
             validators.validate_translations,
@@ -102,7 +102,7 @@ class Chapter:
             validators.validate_manuscript_line_labels,
         ],
     )
-    signs: Sequence[Optional[str]] = tuple()
+    signs: Sequence[Optional[str]] = ()
     record: Record = Record()
     parser_version: str = ""
     is_filtered_query: bool = False

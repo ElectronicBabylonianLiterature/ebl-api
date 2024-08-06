@@ -152,7 +152,7 @@ def test_references():
 
 def test_references_default():
     fragment = FragmentFactory.build()
-    assert fragment.references == tuple()
+    assert fragment.references == ()
 
 
 def test_genre():
@@ -163,7 +163,7 @@ def test_genre():
 
 def test_set_genre():
     updated_genres = (Genre(["ARCHIVAL", "Administrative", "Lists"], True),)
-    fragment = FragmentFactory.build(genres=tuple())
+    fragment = FragmentFactory.build(genres=())
     updated_fragment = fragment.set_genres(updated_genres)
     assert updated_fragment.genres == updated_genres
 
@@ -285,7 +285,7 @@ def test_update_lemmatization():
 
 def test_update_lemmatization_incompatible():
     fragment = FragmentFactory.build()
-    lemmatization = Lemmatization(((LemmatizationToken("mu", tuple()),),))
+    lemmatization = Lemmatization(((LemmatizationToken("mu", ()),),))
     with pytest.raises(LemmatizationError):
         fragment.update_lemmatization(lemmatization)
 

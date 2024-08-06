@@ -45,7 +45,7 @@ class ChapterTransformer(LineTransformer):
     @v_args(inline=True)
     def manuscript_line(self, siglum, labels, line, *paratext):
         return ManuscriptLine(
-            self._manuscripts[siglum], labels or tuple(), line, tuple(paratext)
+            self._manuscripts[siglum], labels or (), line, tuple(paratext)
         )
 
     @v_args(inline=True)
@@ -69,7 +69,7 @@ class ChapterTransformer(LineTransformer):
         return Line(
             line_number,
             (main_variant, *[variant for _, variant in tail]),
-            translation=translation or tuple(),
+            translation=translation or (),
         )
 
     def chapter(self, lines):

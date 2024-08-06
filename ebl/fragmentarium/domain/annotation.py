@@ -125,7 +125,7 @@ class BoundingBoxPrediction(BoundingBox):
 @attr.attrs(auto_attribs=True, frozen=True)
 class Annotations:
     fragment_number: MuseumNumber
-    annotations: Sequence[Annotation] = tuple()
+    annotations: Sequence[Annotation] = ()
     script: Optional[Script] = None
     provenance: Optional[str] = None
 

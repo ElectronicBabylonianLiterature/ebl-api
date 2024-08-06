@@ -70,7 +70,7 @@ UNPLACED_LINES = Transliteration.of_iterable(
 )
 REFERENCES = (ReferenceFactory.build(),)
 LINE_NUMBER = LineNumber(1)
-OLD_LINE_NUMBERS = tuple()
+OLD_LINE_NUMBERS = ()
 LINE_RECONSTRUCTION = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
@@ -107,7 +107,7 @@ LINE_1 = Line(
 )
 
 LINE_VARIANT_2 = LineVariant(
-    LINE_RECONSTRUCTION, None, (ManuscriptLine(MANUSCRIPT_ID, tuple(), EmptyLine()),)
+    LINE_RECONSTRUCTION, None, (ManuscriptLine(MANUSCRIPT_ID, (), EmptyLine()),)
 )
 LINE_2 = Line(LineNumber(2), (LINE_VARIANT_2,))
 
@@ -115,7 +115,7 @@ MANUSCRIPT_TEXT_3 = attr.evolve(MANUSCRIPT_TEXT_1, line_number=LineNumber(3))
 LINE_VARIANT_3 = LineVariant(
     LINE_RECONSTRUCTION,
     None,
-    (ManuscriptLine(MANUSCRIPT_ID, tuple(), MANUSCRIPT_TEXT_3),),
+    (ManuscriptLine(MANUSCRIPT_ID, (), MANUSCRIPT_TEXT_3),),
 )
 LINE_3 = Line(LineNumber(3), (LINE_VARIANT_3,))
 
@@ -354,9 +354,7 @@ def test_invalid_extent() -> None:
                 Line(
                     LineNumber(1),
                     (LINE_VARIANT_1,),
-                    translation=(
-                        TranslationLine(tuple(), extent=Extent(LineNumber(2))),
-                    ),
+                    translation=(TranslationLine((), extent=Extent(LineNumber(2))),),
                 ),
             ),
         )
@@ -372,9 +370,7 @@ def test_extent_before_translation() -> None:
                 Line(
                     LineNumber(2),
                     (LINE_VARIANT_2,),
-                    translation=(
-                        TranslationLine(tuple(), extent=Extent(LineNumber(1))),
-                    ),
+                    translation=(TranslationLine((), extent=Extent(LineNumber(1))),),
                 ),
             ),
         )
@@ -389,14 +385,12 @@ def test_overlapping() -> None:
                 Line(
                     LineNumber(1),
                     (LINE_VARIANT_1,),
-                    translation=(
-                        TranslationLine(tuple(), extent=Extent(LineNumber(2))),
-                    ),
+                    translation=(TranslationLine((), extent=Extent(LineNumber(2))),),
                 ),
                 Line(
                     LineNumber(2),
                     (LINE_VARIANT_2,),
-                    translation=(TranslationLine(tuple()),),
+                    translation=(TranslationLine(()),),
                 ),
             ),
         )
@@ -410,12 +404,12 @@ def test_overlapping_languages() -> None:
             Line(
                 LineNumber(1),
                 (LINE_VARIANT_1,),
-                translation=(TranslationLine(tuple(), "en", Extent(LineNumber(2))),),
+                translation=(TranslationLine((), "en", Extent(LineNumber(2))),),
             ),
             Line(
                 LineNumber(2),
                 (LINE_VARIANT_2,),
-                translation=(TranslationLine(tuple(), "de"),),
+                translation=(TranslationLine((), "de"),),
             ),
         ),
     )
@@ -445,7 +439,7 @@ def test_extant_lines_mixed_sides() -> None:
     manuscript = Manuscript(
         MANUSCRIPT_ID,
         siglum_disambiguator="1",
-        old_sigla=tuple(),
+        old_sigla=(),
         period_modifier=PeriodModifier.NONE,
         period=Period.LATE_BABYLONIAN,
         provenance=Provenance.BABYLON,
@@ -463,7 +457,7 @@ def test_extant_lines_mixed_sides() -> None:
     )
     manuscript_line2 = ManuscriptLine(
         MANUSCRIPT_ID,
-        tuple(),
+        (),
         TextLine(LineNumber(2), (UnknownNumberOfSigns.of(),)),
         PARATEXT,
         OMITTED_WORDS,

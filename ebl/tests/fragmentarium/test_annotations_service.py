@@ -76,7 +76,7 @@ def test_generate_annotations(
         photo_repository,
         cropped_sign_images_repository,
     )
-    expected = Annotations(fragment_number, tuple())
+    expected = Annotations(fragment_number, ())
     when(ebl_ai_client).generate_annotations(fragment_number, image_file, 0).thenReturn(
         expected
     )

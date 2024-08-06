@@ -202,7 +202,7 @@ def test_museum_number_wildcard(fragment_repository, query, expected):
         [
             QueryItem(
                 fragment.number,
-                tuple(),
+                (),
                 0,
             )
             for fragment in fragments
@@ -374,7 +374,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
 
 
 def test_update_genres(fragment_repository):
-    fragment = FragmentFactory.build(genres=tuple())
+    fragment = FragmentFactory.build(genres=())
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_genres(
         (Genre(["ARCHIVAL", "Administrative"], False),)
@@ -1022,7 +1022,7 @@ def test_query_script(fragment_repository, query, expected):
         [
             QueryItem(
                 fragments[i].number,
-                tuple(),
+                (),
                 0,
             )
             for i in expected
@@ -1068,7 +1068,7 @@ def test_query_genres(fragment_repository, query, expected):
         [
             QueryItem(
                 fragments[i].number,
-                tuple(),
+                (),
                 0,
             )
             for i in expected
@@ -1103,7 +1103,7 @@ def test_query_project(fragment_repository, query, expected):
         [
             QueryItem(
                 fragments[i].number,
-                tuple(),
+                (),
                 0,
             )
             for i in expected

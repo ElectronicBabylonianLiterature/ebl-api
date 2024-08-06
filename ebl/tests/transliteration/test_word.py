@@ -68,7 +68,7 @@ def test_defaults() -> None:
     assert word.lemmatizable is True
     assert word.language == DEFAULT_LANGUAGE
     assert word.normalized is False
-    assert word.unique_lemma == tuple()
+    assert word.unique_lemma == ()
     assert word.erasure == ErasureState.NONE
     assert word.alignment is None
     assert word.variant is None
@@ -80,7 +80,7 @@ def test_defaults() -> None:
     "language,unique_lemma",
     [
         (Language.SUMERIAN, (WordId("ku II"), WordId("aklu I"))),
-        (Language.EMESAL, tuple()),
+        (Language.EMESAL, ()),
         (Language.AKKADIAN, (WordId("aklu I"),)),
     ],
 )
@@ -192,7 +192,7 @@ def test_set_unique_lemma() -> None:
 
 def test_set_unique_lemma_empty() -> None:
     word = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
-    lemma = LemmatizationToken("bu", tuple())
+    lemma = LemmatizationToken("bu", ())
     expected = Word.of([Reading.of_name("bu")], Language.SUMERIAN)
 
     assert word.set_unique_lemma(lemma) == expected

@@ -39,9 +39,9 @@ class Text:
     number_of_verses: int
     approximate_verses: bool
     intro: str
-    chapters: Sequence[ChapterListing] = tuple()
-    references: Sequence[Reference] = tuple()
-    projects: Sequence[str] = tuple()
+    chapters: Sequence[ChapterListing] = ()
+    references: Sequence[Reference] = ()
+    projects: Sequence[str] = ()
 
     @property
     def id(self) -> TextId:

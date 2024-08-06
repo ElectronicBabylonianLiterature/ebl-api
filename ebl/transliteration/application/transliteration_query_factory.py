@@ -16,5 +16,4 @@ class TransliterationQueryFactory:
 
     def create(self, string: str) -> TransliterationQuery:
         query = TransliterationQuery(string=string, visitor=self.visitor)
-        query.regexp
         return query

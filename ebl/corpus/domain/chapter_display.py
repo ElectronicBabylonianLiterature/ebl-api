@@ -28,7 +28,7 @@ def get_default_translation(
             for translation_line in translations
             if translation_line.language == DEFAULT_LANGUAGE
         ),
-        tuple(),
+        (),
     )
 
 
@@ -84,7 +84,7 @@ class ChapterDisplay:
     lines: Sequence[LineDisplay]
     record: Record
     manuscripts: Sequence[Manuscript] = attr.ib(
-        default=tuple(),
+        default=(),
         validator=[
             validators.validate_manuscript_ids,
             validators.validate_manuscript_sigla,
@@ -93,7 +93,7 @@ class ChapterDisplay:
 
     @property
     def title(self) -> Sequence[MarkupPart]:
-        return self.lines[0].title if self.lines else tuple()
+        return self.lines[0].title if self.lines else ()
 
     @property
     def atf(self) -> Atf:

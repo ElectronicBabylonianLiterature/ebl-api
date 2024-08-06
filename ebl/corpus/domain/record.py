@@ -27,6 +27,6 @@ class Translator:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Record:
-    authors: Sequence[Author] = tuple()
-    translators: Sequence[Translator] = tuple()
+    authors: Sequence[Author] = ()
+    translators: Sequence[Translator] = ()
     publication_date: str = ""

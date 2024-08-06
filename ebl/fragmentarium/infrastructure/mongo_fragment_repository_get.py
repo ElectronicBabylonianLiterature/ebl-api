@@ -153,7 +153,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
 
         return FragmentPagerInfo(prev, next_)
 
-    def query(self, query: dict, user_scopes: Sequence[Scope] = tuple()) -> QueryResult:
+    def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult:
         cursor = (
             self._fragments.aggregate(
                 PatternMatcher(query, user_scopes).build_pipeline(),
@@ -179,7 +179,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
     def query_by_traditional_references(
         self,
         traditional_references: Sequence[str],
-        user_scopes: Sequence[Scope] = tuple(),
+        user_scopes: Sequence[Scope] = (),
     ) -> AfORegisterToFragmentQueryResult:
         pipeline = aggregate_by_traditional_references(
             traditional_references, user_scopes
@@ -191,9 +191,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             else AfORegisterToFragmentQueryResult.create_empty()
         )
 
-    def list_all_fragments(
-        self, user_scopes: Sequence[Scope] = tuple()
-    ) -> Sequence[str]:
+    def list_all_fragments(self, user_scopes: Sequence[Scope] = ()) -> Sequence[str]:
         return list(
             self._fragments.get_all_values("_id", match_user_scopes(user_scopes))
         )

@@ -9,10 +9,10 @@ from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 
 def test_invalid_extent() -> None:
     translation = TranslationLine(
-        tuple(), extent=Extent(LineNumber(1), (SurfaceLabel(tuple(), Surface.OBVERSE),))
+        (), extent=Extent(LineNumber(1), (SurfaceLabel((), Surface.OBVERSE),))
     )
 
     with pytest.raises(  # pyre-ignore[16]
         ValueError, match="Labels are not allowed in line translations."
     ):
-        Line(LineNumber(1), tuple(), translation=(translation,)),
+        (Line(LineNumber(1), (), translation=(translation,)),)

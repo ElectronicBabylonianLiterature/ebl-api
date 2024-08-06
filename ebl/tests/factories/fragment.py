@@ -241,14 +241,14 @@ class FragmentFactory(factory.Factory):
 class InterestingFragmentFactory(FragmentFactory):
     collection = "Kuyunjik"  # pyre-ignore[15]
     publication = ""  # pyre-ignore[15]
-    joins: Sequence[str] = tuple()
+    joins: Sequence[str] = ()
     text = Text()
     uncurated_references = (
         UncuratedReference("7(0)"),
         UncuratedReference("CAD 51", (34, 56)),
         UncuratedReference("7(1)"),
     )
-    references = tuple()
+    references = ()
     notes = Notes()
 
 

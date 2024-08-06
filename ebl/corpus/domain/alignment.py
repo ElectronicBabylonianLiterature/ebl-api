@@ -8,7 +8,7 @@ from ebl.transliteration.domain.alignment import AlignmentToken
 @attr.s(auto_attribs=True, frozen=True)
 class ManuscriptLineAlignment:
     alignment: Sequence[AlignmentToken]
-    omitted_words: Sequence[int] = tuple()
+    omitted_words: Sequence[int] = ()
 
 
 @attr.s(auto_attribs=True, frozen=True)

@@ -12,21 +12,19 @@ T = TypeVar("T", bound="UnknownSign")
 
 @attr.s(auto_attribs=True, frozen=True)
 class UnknownSign(Token):
-    flags: Sequence[atf.Flag] = attr.ib(
-        default=tuple(), converter=convert_flag_sequence
-    )
+    flags: Sequence[atf.Flag] = attr.ib(default=(), converter=convert_flag_sequence)
 
     @property
     def clean_value(self) -> str:
         return self._sign
 
     @classmethod
-    def of(cls: Type[T], flags: Sequence[atf.Flag] = tuple()) -> T:
+    def of(cls: Type[T], flags: Sequence[atf.Flag] = ()) -> T:
         return cls(frozenset(), ErasureState.NONE, flags)
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @property
     @abstractmethod

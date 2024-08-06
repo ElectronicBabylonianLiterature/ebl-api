@@ -39,7 +39,7 @@ def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
 
 
-def match_user_scopes(user_scopes: Sequence[Scope] = tuple()) -> dict:
+def match_user_scopes(user_scopes: Sequence[Scope] = ()) -> dict:
     allowed_scopes: List[dict] = [
         {"authorizedScopes": {"$exists": False}},
         {"authorizedScopes": {"$size": 0}},
@@ -51,7 +51,7 @@ def match_user_scopes(user_scopes: Sequence[Scope] = tuple()) -> dict:
     return {"$or": allowed_scopes}
 
 
-def aggregate_random(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
+def aggregate_random(user_scopes: Sequence[Scope] = ()) -> List[dict]:
     return [
         {"$match": {**HAS_TRANSLITERATION, **match_user_scopes(user_scopes)}},
         sample_size_one(),
@@ -131,7 +131,7 @@ def aggregate_latest() -> List[Dict]:
     ]
 
 
-def aggregate_needs_revision(user_scopes: Sequence[Scope] = tuple()) -> List[dict]:
+def aggregate_needs_revision(user_scopes: Sequence[Scope] = ()) -> List[dict]:
     return [
         {
             "$match": {
@@ -214,7 +214,7 @@ def aggregate_needs_revision(user_scopes: Sequence[Scope] = tuple()) -> List[dic
 
 
 def aggregate_path_of_the_pioneers(
-    user_scopes: Sequence[Scope] = tuple(),
+    user_scopes: Sequence[Scope] = (),
 ) -> List[dict]:
     max_uncurated_reference = (
         f"uncuratedReferences.{PATH_OF_THE_PIONEERS_MAX_UNCURATED_REFERENCES}"
@@ -388,7 +388,7 @@ def join_findspots() -> List[dict]:
 
 
 def aggregate_by_traditional_references(
-    traditional_references: Sequence[str], user_scopes: Sequence[Scope] = tuple()
+    traditional_references: Sequence[str], user_scopes: Sequence[Scope] = ()
 ) -> List[dict]:
     return [
         {

@@ -16,7 +16,7 @@ from ebl.users.web.require_scope import require_scope
 class ManuscriptDtoSchema(Schema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
     uncertain_fragments = fields.List(
-        MuseumNumberString(), load_default=tuple(), data_key="uncertainFragments"
+        MuseumNumberString(), load_default=(), data_key="uncertainFragments"
     )
 
 
