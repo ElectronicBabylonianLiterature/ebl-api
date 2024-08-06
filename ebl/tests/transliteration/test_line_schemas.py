@@ -641,7 +641,7 @@ LINES = [
             "ar",
             Extent(
                 LineNumber(1),
-                (SurfaceLabel(tuple(), Surface.OBVERSE), ColumnLabel(tuple(), 2)),
+                (SurfaceLabel((), Surface.OBVERSE), ColumnLabel((), 2)),
             ),
         ),
         {

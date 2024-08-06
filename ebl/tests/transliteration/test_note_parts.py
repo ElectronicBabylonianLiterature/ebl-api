@@ -11,7 +11,7 @@ def test_bibliography_part() -> None:
     part = BibliographyPart.of(BIBLIOGRAPHY_ID, pages)
 
     assert part.reference == Reference(
-        BIBLIOGRAPHY_ID, ReferenceType.DISCUSSION, pages, "", tuple()
+        BIBLIOGRAPHY_ID, ReferenceType.DISCUSSION, pages, "", ()
     )
 
 
@@ -26,10 +26,10 @@ def test_bibliography_part_escape() -> None:
 @pytest.mark.parametrize(
     "type,pages,note,lines",
     [
-        (ReferenceType.EDITION, "1", "", tuple()),
-        (ReferenceType.COPY, "1", "", tuple()),
-        (ReferenceType.PHOTO, "1", "", tuple()),
-        (ReferenceType.DISCUSSION, "1", "notes not allowed", tuple()),
+        (ReferenceType.EDITION, "1", "", ()),
+        (ReferenceType.COPY, "1", "", ()),
+        (ReferenceType.PHOTO, "1", "", ()),
+        (ReferenceType.DISCUSSION, "1", "notes not allowed", ()),
         (ReferenceType.DISCUSSION, "1", "", ("1", "2")),
     ],
 )

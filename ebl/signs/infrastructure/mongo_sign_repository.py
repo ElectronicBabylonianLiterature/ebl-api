@@ -121,14 +121,14 @@ class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
-    logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
-    fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
+    logograms = fields.Nested(LogogramSchema, many=True, load_default=())
+    fossey = fields.Nested(FosseySchema, many=True, load_default=())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
     reverse_order = fields.String(
         data_key="reverseOrder", load_default="", allow_none=True
     )
-    unicode = fields.List(fields.Int(), load_default=tuple())
+    unicode = fields.List(fields.Int(), load_default=())
     sort_keys = fields.Nested(
         SortKeysSchema,
         data_key="sortKeys",

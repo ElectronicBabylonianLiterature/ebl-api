@@ -226,7 +226,7 @@ def test_lemmatization() -> None:
     assert line.lemmatization == (
         LemmatizationToken("bu", (WordId("nu I"),)),
         LemmatizationToken("..."),
-        LemmatizationToken("nu", tuple()),
+        LemmatizationToken("nu", ()),
     )
 
 

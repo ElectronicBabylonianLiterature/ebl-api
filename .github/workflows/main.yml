@@ -37,11 +37,11 @@ jobs:
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
-        run: poetry run flake8 ebl
+        run: poetry run ruff check ebl
 
       - name: Code Style
         if: success() || steps.install.outcome == 'success'
-        run: poetry run black ebl --check
+        run: poetry run ruff format --check ebl
 
       - name: Type Check
         if: success() || steps.install.outcome == 'success'

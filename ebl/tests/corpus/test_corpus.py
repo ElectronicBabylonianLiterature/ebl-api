@@ -437,7 +437,7 @@ def test_updating_manuscript_lemmatization(
                                     .variants[0]
                                     .reconstruction[6]
                                     .value,
-                                    tuple(),
+                                    (),
                                 )
                             ),
                         ),
@@ -493,7 +493,7 @@ def test_updating_manuscript_lemmatization(
                     LemmatizationToken("["),
                     LemmatizationToken("..."),
                     LemmatizationToken("||"),
-                    LemmatizationToken("...]-buāru#", tuple()),
+                    LemmatizationToken("...]-buāru#", ()),
                 ),
                 ((LemmatizationToken("ku-[nu-ši]", (WordId("aklu I"),)),),),
             ),
@@ -538,10 +538,10 @@ def test_updating_manuscript_lemmatization(
                 ((ManuscriptLineAlignment((AlignmentToken("ku-[nu-ši]", 0),)),),),
             )
         ),
-        Alignment((((ManuscriptLineAlignment(tuple()),),),)),
-        Alignment(((tuple(),),)),
-        Alignment((tuple(),)),
-        Alignment(tuple()),
+        Alignment((((ManuscriptLineAlignment(()),),),)),
+        Alignment((((),),)),
+        Alignment(((),)),
+        Alignment(()),
         Alignment(
             (((ManuscriptLineAlignment((AlignmentToken("invalid value", 0),)),),),)
         ),
@@ -609,7 +609,7 @@ def test_updating_manuscripts(
 @pytest.mark.parametrize(
     "manuscripts",
     [
-        tuple(),
+        (),
         (
             CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
             CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0],
@@ -624,7 +624,7 @@ def test_invalid_manuscripts(
     )
     expect_bibliography(bibliography, when)
     with pytest.raises(DataError):  # pyre-ignore[16]
-        corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
+        corpus.update_manuscripts(CHAPTER.id_, manuscripts, (), ANY_USER)
 
 
 def test_update_manuscripts_raises_exception_if_invalid_references(
@@ -634,7 +634,7 @@ def test_update_manuscripts_raises_exception_if_invalid_references(
     expect_invalid_references(bibliography, when)
 
     with pytest.raises(DataError):  # pyre-ignore[16]
-        corpus.update_manuscripts(CHAPTER.id_, manuscripts, tuple(), ANY_USER)
+        corpus.update_manuscripts(CHAPTER.id_, manuscripts, (), ANY_USER)
 
 
 def test_updating_lines_edit(
@@ -830,7 +830,7 @@ def test_merging_lines(
     )
     is_second_line_of_parallelism = False
     is_beginning_of_section = False
-    old_line_numbers = tuple()
+    old_line_numbers = ()
     text_line = TextLine.of_iterable(
         LineNumber(1),
         (
@@ -849,7 +849,7 @@ def test_merging_lines(
             LineVariant(
                 reconstruction,
                 None,
-                (ManuscriptLine(manuscript_id, tuple(), text_line),),
+                (ManuscriptLine(manuscript_id, (), text_line),),
             ),
         ),
         old_line_numbers,
@@ -866,11 +866,7 @@ def test_merging_lines(
             LineVariant(
                 reconstruction,
                 None,
-                (
-                    ManuscriptLine(
-                        manuscript_id, tuple(), text_line.merge(new_text_line)
-                    ),
-                ),
+                (ManuscriptLine(manuscript_id, (), text_line.merge(new_text_line)),),
             ),
         ),
         old_line_numbers,
@@ -909,11 +905,7 @@ def test_merging_lines(
                             LineVariant(
                                 reconstruction,
                                 None,
-                                (
-                                    ManuscriptLine(
-                                        manuscript_id, tuple(), new_text_line
-                                    ),
-                                ),
+                                (ManuscriptLine(manuscript_id, (), new_text_line),),
                             ),
                         ),
                         old_line_numbers,

@@ -59,7 +59,7 @@ def test_is_beginning_of_side(line, is_beginning) -> None:
 @pytest.mark.parametrize(
     "paratext,is_end",
     [
-        (tuple(), False),
+        ((), False),
         ((NoteLine((StringPart("note"),)),), False),
         ((StateDollarLine(None, atf.Extent.SEVERAL, None, None, None),), False),
         ((StateDollarLine(None, atf.Extent.END_OF, None, None, None),), True),
@@ -82,9 +82,9 @@ def test_is_end_of_side(
 def test_update_manuscript_alignment():
     manuscript = ManuscriptLine(
         9001,
-        tuple(),
+        (),
         TextLine(LineNumber(1), (WORD1, WORD2, WORD3)),
-        tuple(),
+        (),
         (1, 3),
     )
     expected = attr.evolve(
@@ -113,4 +113,4 @@ def test_get_textline_content():
 def test_get_emptyline_content():
     manuscript = ManuscriptLineFactory.build(line=EmptyLine())
 
-    assert manuscript.get_line_content() == tuple()
+    assert manuscript.get_line_content() == ()

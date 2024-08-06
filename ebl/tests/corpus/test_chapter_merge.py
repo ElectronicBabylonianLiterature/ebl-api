@@ -68,7 +68,7 @@ RECONSTRUCTION_WITHOUT_LEMMA = (AkkadianWord.of((ValueToken.of("buāru"),)),)
 IS_SECOND_LINE_OF_PARALLELISM = True
 IS_BEGINNING_OF_SECTION = True
 NOTE = None
-OLD_LINE_NUMBERS = tuple()
+OLD_LINE_NUMBERS = ()
 LINE = Line(
     LineNumber(1),
     (LineVariant(RECONSTRUCTION, NOTE, (MANUSCRIPT_LINE,)),),
@@ -403,21 +403,21 @@ def test_merge_line_variant(old, new, expected):
         (
             Line(
                 LineNumber(1),
-                (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
+                (LineVariant(RECONSTRUCTION, NOTE, ()),),
                 OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
             Line(
                 LineNumber(1),
-                (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
+                (LineVariant(RECONSTRUCTION, NOTE, ()),),
                 OLD_LINE_NUMBERS,
                 True,
                 True,
             ),
             Line(
                 LineNumber(1),
-                (LineVariant(RECONSTRUCTION, NOTE, tuple()),),
+                (LineVariant(RECONSTRUCTION, NOTE, ()),),
                 OLD_LINE_NUMBERS,
                 True,
                 True,
@@ -426,33 +426,21 @@ def test_merge_line_variant(old, new, expected):
         (
             Line(
                 LineNumber(1),
-                (
-                    LineVariant(
-                        RECONSTRUCTION, NoteLine((StringPart("a note"),)), tuple()
-                    ),
-                ),
+                (LineVariant(RECONSTRUCTION, NoteLine((StringPart("a note"),)), ()),),
                 OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
             Line(
                 LineNumber(1),
-                (
-                    LineVariant(
-                        RECONSTRUCTION, NoteLine((StringPart("new note"),)), tuple()
-                    ),
-                ),
+                (LineVariant(RECONSTRUCTION, NoteLine((StringPart("new note"),)), ()),),
                 OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
             ),
             Line(
                 LineNumber(1),
-                (
-                    LineVariant(
-                        RECONSTRUCTION, NoteLine((StringPart("new note"),)), tuple()
-                    ),
-                ),
+                (LineVariant(RECONSTRUCTION, NoteLine((StringPart("new note"),)), ()),),
                 OLD_LINE_NUMBERS,
                 IS_SECOND_LINE_OF_PARALLELISM,
                 IS_BEGINNING_OF_SECTION,
@@ -595,7 +583,7 @@ OLD_LINE = Line(
     LineNumber(2),
     (
         LineVariant(
-            tuple(),
+            (),
             None,
             (
                 ManuscriptLine(
@@ -671,7 +659,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
-                tuple(),
+                (),
                 (NEW_LINE, ANOTHER_NEW_LINE),
             ),
             Chapter(
@@ -682,7 +670,7 @@ OLD_LINE = Line(
                 CHAPTER_NAME,
                 ORDER,
                 (MANUSCRIPT,),
-                tuple(),
+                (),
                 (OLD_LINE.merge(NEW_LINE), LINE.merge(ANOTHER_NEW_LINE)),
             ),
         ),

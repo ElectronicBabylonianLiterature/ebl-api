@@ -163,7 +163,7 @@ class LineVariantFactory(factory.Factory):
     )
     note = factory.fuzzy.FuzzyChoice([None, NoteLine((StringPart("a note"),))])
     manuscripts = factory.List([factory.SelfAttribute("..manuscript")], TupleFactory)
-    intertext = factory.fuzzy.FuzzyChoice([tuple(), (StringPart("bar"),)])
+    intertext = factory.fuzzy.FuzzyChoice([(), (StringPart("bar"),)])
     parallel_lines = factory.List(
         [
             factory.SubFactory(ParallelCompositionFactory),
@@ -270,7 +270,7 @@ class ChapterListingFactory(factory.Factory):
     stage = factory.fuzzy.FuzzyChoice(Stage)
     name = factory.Faker("sentence")
     translation = (TranslationLine((StringPart("foo"),), "en", None),)
-    uncertain_fragments = tuple()
+    uncertain_fragments = ()
 
 
 class TextFactory(factory.Factory):

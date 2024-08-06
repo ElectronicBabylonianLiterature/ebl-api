@@ -121,11 +121,11 @@ class ATFPreprocessor:
             atf = atf.replace("--", "-")  # new rule 22.02.2021
             atf = self.replace_special_characters(atf)
 
-            callback_normalize = (
-                lambda pat: pat.group(1)
-                + pat.group(2)
-                + self.normalize_numbers(pat.group(3))
-            )  # convert subscripts
+            def callback_normalize(pat):
+                return (
+                    pat.group(1) + pat.group(2) + self.normalize_numbers(pat.group(3))
+                )
+
             atf = re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
             atf = re.sub(r"(\d)ʾ", r"\1′", atf)
@@ -187,11 +187,11 @@ class ATFPreprocessor:
             atf = atf.replace("–", "-")
             atf = atf.replace("--", "-")  # new rule 22.02.2021
 
-            callback_normalize = (
-                lambda pat: pat.group(1)
-                + pat.group(2)
-                + self.normalize_numbers(pat.group(3))
-            )  # convert subscripts
+            def callback_normalize(pat):
+                return (
+                    pat.group(1) + pat.group(2) + self.normalize_numbers(pat.group(3))
+                )
+
             atf = re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
             atf = self.replace_special_characters(atf)

@@ -45,7 +45,7 @@ class SealAtLineSchema(AtLineSchema):
 class HeadingAtLineSchema(AtLineSchema):
     number = fields.Int(required=True)
     display_value = fields.String(data_key="displayValue")
-    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), load_default=tuple())
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), load_default=())
 
     @post_load
     def make_line(self, data, **kwargs) -> HeadingAtLine:

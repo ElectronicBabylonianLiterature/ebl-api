@@ -18,7 +18,7 @@ class Join:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Joins:
-    _fragments: Sequence[Sequence[Join]] = tuple()
+    _fragments: Sequence[Sequence[Join]] = ()
 
     @property
     def fragments(self) -> Sequence[Sequence[Join]]:

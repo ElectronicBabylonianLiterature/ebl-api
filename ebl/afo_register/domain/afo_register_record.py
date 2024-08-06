@@ -16,4 +16,4 @@ class AfoRegisterRecord:
 @attr.s(frozen=True, auto_attribs=True)
 class AfoRegisterRecordSuggestion:
     text: str = ""
-    text_numbers: Sequence[str] = tuple()
+    text_numbers: Sequence[str] = ()

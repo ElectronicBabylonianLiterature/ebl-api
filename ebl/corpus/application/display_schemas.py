@@ -25,7 +25,7 @@ class LineDisplaySchema(Schema):
     number = fields.Nested(OneOfLineNumberSchema, required=True)
     original_index = fields.Integer(data_key="originalIndex", dump_only=True)
     old_line_numbers = fields.Nested(
-        OldLineNumberSchema, many=True, data_key="oldLineNumbers", load_default=tuple()
+        OldLineNumberSchema, many=True, data_key="oldLineNumbers", load_default=()
     )
     is_second_line_of_parallelism = fields.Boolean(
         required=True, data_key="isSecondLineOfParallelism"
@@ -35,7 +35,7 @@ class LineDisplaySchema(Schema):
     )
     variants = fields.Nested(LineVariantDisplaySchema, many=True, required=True)
     translation = fields.List(
-        fields.Nested(TranslationLineSchema), load_default=tuple(), allow_none=True
+        fields.Nested(TranslationLineSchema), load_default=(), allow_none=True
     )
 
     @post_load
