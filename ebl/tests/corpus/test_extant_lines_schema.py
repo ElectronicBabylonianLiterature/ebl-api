@@ -25,7 +25,7 @@ MANUSCRIPT_TEXT_1 = TextLine(
 def test_extant_lines_schema() -> None:
     manuscript = Manuscript(1)
     manuscript_line = ManuscriptLine(1, LABELS, MANUSCRIPT_TEXT_1)
-    variant = LineVariant(tuple(), manuscripts=(manuscript_line,))
+    variant = LineVariant((), manuscripts=(manuscript_line,))
     text_line = Line(LineNumber(1), (variant,))
     chapter = Chapter(
         TextId(Genre.LITERATURE, 0, 0), manuscripts=(manuscript,), lines=(text_line,)

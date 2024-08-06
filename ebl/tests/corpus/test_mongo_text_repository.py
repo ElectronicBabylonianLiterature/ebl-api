@@ -53,13 +53,13 @@ CHAPTER = ChapterFactory.build(
             id=1,
             museum_number=MUSEUM_NUMBER,
             accession="",
-            references=tuple(),
+            references=(),
         ),
     ),
     lines=(
         LineFactory.build(manuscript_id=1, translation=TEXT.chapters[0].translation),
     ),
-    uncertain_fragments=tuple(),
+    uncertain_fragments=(),
     is_filtered_query=False,
     colophon_lines_in_query=ChapterQueryColophonLinesFactory.build(),
 )
@@ -72,13 +72,13 @@ CHAPTER_FILTERED_QUERY = ChapterFactory.build(
             id=1,
             museum_number=MUSEUM_NUMBER,
             accession="",
-            references=tuple(),
+            references=(),
         ),
     ),
     lines=(
         LineFactory.build(manuscript_id=1, translation=TEXT.chapters[0].translation),
     ),
-    uncertain_fragments=tuple(),
+    uncertain_fragments=(),
     is_filtered_query=True,
     colophon_lines_in_query=ChapterQueryColophonLinesFactory.build(
         colophon_lines_in_query={"1": [0]}
@@ -129,9 +129,7 @@ CHAPTER_WITH_MANUSCRIPT_LEMMA: Chapter = ChapterFactory.build(
                         ),
                     ),
                     reconstruction=(
-                        AkkadianWord.of(
-                            (ValueToken.of("buāru"),), unique_lemma=tuple()
-                        ),
+                        AkkadianWord.of((ValueToken.of("buāru"),), unique_lemma=()),
                     ),
                 ),
             )
@@ -276,9 +274,7 @@ def test_finding_line_chapter_not_found(database, text_repository) -> None:
 
 
 def test_updating_chapter(database, text_repository) -> None:
-    updated_chapter = attr.evolve(
-        CHAPTER, lines=tuple(), manuscripts=tuple(), signs=tuple()
-    )
+    updated_chapter = attr.evolve(CHAPTER, lines=(), manuscripts=(), signs=())
     when_chapter_in_collection(database)
 
     text_repository.update(CHAPTER.id_, updated_chapter)

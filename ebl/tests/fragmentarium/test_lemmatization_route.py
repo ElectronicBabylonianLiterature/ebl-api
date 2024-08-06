@@ -12,7 +12,7 @@ from ebl.transliteration.application.lemmatization_schema import (
     LemmatizationTokenSchema,
 )
 
-TOKEN = LemmatizationToken("kur", tuple())
+TOKEN = LemmatizationToken("kur", ())
 LEMMATIZATION = Lemmatization(((TOKEN,),))
 
 SERIALIZED = {"lemmatization": [[LemmatizationTokenSchema().dump(TOKEN)]]}

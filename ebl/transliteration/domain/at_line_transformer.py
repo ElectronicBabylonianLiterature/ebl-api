@@ -57,7 +57,7 @@ class AtLineTransformer(LabelTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__heading(self, number, *markup):
-        return HeadingAtLine(number, markup or tuple())
+        return HeadingAtLine(number, markup or ())
 
     @v_args(inline=True)
     def ebl_atf_text_line__OBJECT(self, object_: Token):

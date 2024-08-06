@@ -19,7 +19,7 @@ def test_line_display_of_line() -> None:
 
     assert line_display == LineDisplay(
         line.number,
-        tuple(),
+        (),
         line.is_second_line_of_parallelism,
         line.is_beginning_of_section,
         line.variants,

@@ -35,7 +35,7 @@ class RecordEntry:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Record:
-    entries: Sequence[RecordEntry] = tuple()
+    entries: Sequence[RecordEntry] = ()
 
     def add_entry(
         self, old_transliteration: str, new_transliteration: str, user: User

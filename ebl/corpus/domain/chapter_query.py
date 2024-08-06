@@ -7,7 +7,7 @@ from ebl.corpus.domain.manuscript import Manuscript
 
 @attr.s(auto_attribs=True, frozen=True)
 class ChapterQueryColophonLines:
-    colophon_lines_in_query: Mapping[str, Sequence[int]] = dict()
+    colophon_lines_in_query: Mapping[str, Sequence[int]] = {}
 
     def get_matching_lines(
         self, manuscripts: Sequence[Manuscript]
@@ -49,7 +49,7 @@ class ChapterQueryColophonLinesSchema(Schema):
     colophon_lines_in_query = fields.Mapping(
         keys=fields.Str(),
         values=fields.List(fields.Int()),
-        load_default=dict(),
+        load_default={},
         data_key="colophonLinesInQuery",
     )
 

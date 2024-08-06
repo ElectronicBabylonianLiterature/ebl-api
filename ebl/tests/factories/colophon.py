@@ -38,7 +38,7 @@ class IndividualTypeFactory(factory.Factory):
     class Meta:
         model = IndividualTypeAttestation
 
-    value = factory.fuzzy.FuzzyChoice([t for t in IndividualType])
+    value = factory.fuzzy.FuzzyChoice(list(IndividualType))
     is_broken = factory.Faker("boolean")
     is_uncertain = factory.Faker("boolean")
 
@@ -59,11 +59,11 @@ class ColophonFactory(factory.Factory):
     class Meta:
         model = Colophon
 
-    colophon_status = factory.fuzzy.FuzzyChoice([cs for cs in ColophonStatus])
-    colophon_ownership = factory.fuzzy.FuzzyChoice([co for co in ColophonOwnership])
+    colophon_status = factory.fuzzy.FuzzyChoice(list(ColophonStatus))
+    colophon_ownership = factory.fuzzy.FuzzyChoice(list(ColophonOwnership))
     colophon_types = factory.List(
         [
-            factory.fuzzy.FuzzyChoice([ct for ct in ColophonType])
+            factory.fuzzy.FuzzyChoice(list(ColophonType))
             for _ in range(random.randint(1, 3))
         ]
     )

@@ -17,7 +17,7 @@ def test_of_value():
     assert lone_determinative.lemmatizable is False
     assert lone_determinative.language == DEFAULT_LANGUAGE
     assert lone_determinative.normalized is False
-    assert lone_determinative.unique_lemma == tuple()
+    assert lone_determinative.unique_lemma == ()
     assert lone_determinative.erasure == ErasureState.NONE
     assert lone_determinative.alignment is None
 
@@ -38,7 +38,7 @@ def test_lone_determinative(language):
     assert lone_determinative.lemmatizable is False
     assert lone_determinative.language == language
     assert lone_determinative.normalized is False
-    assert lone_determinative.unique_lemma == tuple()
+    assert lone_determinative.unique_lemma == ()
 
     serialized = {
         "type": "LoneDeterminative",
