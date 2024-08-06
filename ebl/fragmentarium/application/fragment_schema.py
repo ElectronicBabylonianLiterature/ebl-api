@@ -236,4 +236,3 @@ class FragmentSchema(Schema):
             data["dates_in_text"] = list(data["dates_in_text"])
 
         return Fragment(**data)
-
