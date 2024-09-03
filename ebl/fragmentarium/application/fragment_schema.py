@@ -204,6 +204,7 @@ class FragmentSchema(Schema):
         ScopeField(),
         data_key="authorizedScopes",
     )
+    ocr_signs = fields.String(load_default="", data_key="ocredSigns")
     introduction = fields.Nested(IntroductionSchema, default=Introduction())
     script = fields.Nested(ScriptSchema, load_default=Script())
     external_numbers = fields.Nested(

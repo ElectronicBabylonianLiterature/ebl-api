@@ -92,6 +92,7 @@ class MongoFragmentRepository(
             "authorized_scopes": [
                 "authorized_scopes",
             ],
+            "ocredSigns": ("ocredSigns"),
         }
 
         if field not in fields_to_update:

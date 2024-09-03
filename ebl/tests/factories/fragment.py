@@ -236,6 +236,7 @@ class FragmentFactory(factory.Factory):
     projects = (ResearchProject.CAIC,)
     archaeology = factory.SubFactory(ArchaeologyFactory)
     colophon = factory.SubFactory(ColophonFactory)
+    ocr_signs = "ABZ10 X"
 
 
 class InterestingFragmentFactory(FragmentFactory):
@@ -454,6 +455,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         "X MU TA MA UD\n"
         "ŠU/|BI×IS|"
     )
+    ocr_signs = "ABZ10 X"
     folios = Folios((Folio("WGL", "3"), Folio("ARG", "3")))
     record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
     line_to_vec = (
