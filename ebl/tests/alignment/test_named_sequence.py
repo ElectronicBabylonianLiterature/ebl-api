@@ -4,6 +4,7 @@ from ebl.alignment.domain.sequence import NamedSequence
 from ebl.tests.factories.fragment import FragmentFactory
 
 signs = "X X ABZ001\nABZ002\nX X X\n"
+ocr_signs = ""
 sequence = Sequence(["ABZ001", "#", "ABZ002", "#", "#"])
 
 
@@ -18,7 +19,7 @@ def test_of_signs() -> None:
 
 def test_of_fragment() -> None:
     vocabulary = Vocabulary()
-    fragment = FragmentFactory.build(signs=signs)
+    fragment = FragmentFactory.build(signs=signs, ocr_signs=ocr_signs)
     named = NamedSequence.of_fragment(fragment, vocabulary)
 
     assert named.name == str(fragment.number)

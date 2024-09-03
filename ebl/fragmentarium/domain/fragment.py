@@ -134,6 +134,7 @@ class Fragment:
     folios: Folios = Folios()
     text: Text = Text()
     signs: str = ""
+    ocr_signs: str = ""
     notes: Notes = Notes()
     references: Sequence[Reference] = ()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
