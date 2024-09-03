@@ -116,6 +116,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "projects": [ResearchProject["CAIC"].abbreviation],
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
             "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),
+            "authorizedScopes": [],
         },
         pydash.is_none,
     )

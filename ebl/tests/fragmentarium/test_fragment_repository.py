@@ -385,6 +385,18 @@ def test_update_genres(fragment_repository):
     assert result == updated_fragment
 
 
+def test_update_scopes(
+    fragment_repository,
+):
+    fragment = FragmentFactory.build(authorized_scopes=[])
+    fragment_repository.create(fragment)
+    scopes = [Scope.READ_CAIC_FRAGMENTS]
+    updated_fragment = fragment.set_scopes(scopes)
+    fragment_repository.update_field("authorized_scopes", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
+    assert result == updated_fragment
+
+
 def test_update_date(fragment_repository):
     fragment = FragmentFactory.build(date=None)
     fragment_repository.create(fragment)

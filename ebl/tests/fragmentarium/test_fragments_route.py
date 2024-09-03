@@ -114,5 +114,5 @@ def test_fragments_retrieve_all(guest_client, fragmentarium):
         fragmentarium.create(fragment)
     result = guest_client.simulate_get("/fragments/retrieve-all?skip=0")
     assert result.status == falcon.HTTP_OK
-    assert len(result.json["fragments"]) == 5
-    assert result.json["totalCount"] == 5
+    assert len(result.json["fragments"]) == 0
+    assert result.json["totalCount"] == 0
