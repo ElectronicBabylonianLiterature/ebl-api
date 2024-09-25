@@ -93,6 +93,7 @@ class Flag(Enum):
     UNCERTAIN = "?"
     CORRECTION = "!"
     COLLATION = "*"
+    NO_LONGER_VISIBLE = "°"
 
 
 @unique
@@ -215,6 +216,7 @@ FLAGS: Mapping[str, str] = {
     "uncertainty": re.escape(Flag.UNCERTAIN.value),
     "collation": re.escape(Flag.COLLATION.value),
     "damage": re.escape(Flag.DAMAGE.value),
+    "no longer visible": re.escape(Flag.NO_LONGER_VISIBLE.value),
     "correction": re.escape(Flag.CORRECTION.value),
 }
 
