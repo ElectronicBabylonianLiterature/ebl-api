@@ -65,6 +65,7 @@ class DollarStatus(Enum):
     UNCERTAIN = "?"
     EMENDED_NOT_COLLATED = "!"
     NEEDS_COLLATION = "!?"
+    NO_LONGER_VISIBLE = "°"
 
     CORRECTION = "!"
     COLLATION = "*"
