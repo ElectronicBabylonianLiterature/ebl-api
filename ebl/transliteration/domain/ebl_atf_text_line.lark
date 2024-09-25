@@ -397,8 +397,9 @@ composite_composite: "composite"
 composite_milestone: "m=locator " free_text [" " INT]
 
 
-status: (PRIME | UNCERTAIN | CORRECTION | COLLATION)*
+status: (PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
 PRIME: "'"
 UNCERTAIN: "?"
 CORRECTION: "!"
 COLLATION: "*"
+NO_LONGER_VISIBLE: "°"
