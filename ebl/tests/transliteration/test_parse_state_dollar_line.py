@@ -129,6 +129,16 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
             ),
         ),
         (
+            "several tablet blank °",
+            StateDollarLine(
+                None,
+                atf.Extent.SEVERAL,
+                ScopeContainer(atf.Object.TABLET),
+                atf.State.BLANK,
+                atf.DollarStatus.NO_LONGER_VISIBLE,
+            ),
+        ),
+        (
             "several tablet blank !?",
             StateDollarLine(
                 None,
