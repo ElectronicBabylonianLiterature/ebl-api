@@ -30,7 +30,7 @@ SCOPE: "columns" | "column" | "lines" | "line" | "cases" | "case" | "surface" | 
 STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
      | "omitted" | "continues"
 
-DOLLAR_STATUS: "!?" | "*" | "?" | "!"
+DOLLAR_STATUS: "!?" | "*" | "?" | "!" | "°"
 
 ruling : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
 RULING_NUMBER : "single" | "double" | "triple"
