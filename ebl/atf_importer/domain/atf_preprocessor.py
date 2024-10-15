@@ -22,7 +22,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
                     "c_line": result[0],
                     "c_array": result[1],
                     "c_type": result[2],
-                    "c_alter_lemline_at": result[3],
+                    "c_alter_lem_line_at": result[3],
                 }
             )
         self.logger.info(Util.print_frame("Preprocessing finished"))
@@ -31,6 +31,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
     def process_line(
         self, original_atf_line: str
     ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
+        # ToDo: Restructure. This should be made more straightforward, lines shouldn't be parsed twice.
         self.logger.debug(f"Original line: '{original_atf_line}'")
         atf_line = self.preprocess_text(original_atf_line)
         try:
@@ -51,24 +52,20 @@ class AtfPreprocessor(AtfPreprocessorBase):
             return self.parse_and_convert_line(atf_line)
 
     def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
-        self.ebl_parser.parse(atf)
-
+        input(f'! check_original_line. [{atf}]')
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
+        input('! before parse')
         tree = self.ebl_parser.parse(atf)
+        input('! before transform')
         tree = self.transform_legacy_atf(tree)
-        words_serializer = GetWords()
-        words_serializer.result = []
-        words_serializer.visit_topdown(tree)
-        converted_line_array = words_serializer.result
-
         self.logger.info("Line successfully parsed")
         self.logger.debug(f"Parsed line as {tree.data}")
         self.logger.info(
             "----------------------------------------------------------------------"
         )
-        return (atf, converted_line_array, tree.data, [])
+        return self.get_line_tree_data(tree)
 
     def transform_legacy_atf(self, tree: Tree) -> Tree:
         visitor = LegacyAtfVisitor()
@@ -86,9 +83,9 @@ class AtfPreprocessor(AtfPreprocessorBase):
             if tree.data in self.unused_lines:
                 result = self.get_empty_conversion(tree)
             elif tree.data == "lem_line":
-                result = self.convert_lemline(atf, tree)
+                result = self.convert_lem_line(atf, tree)
             elif tree.data == "text_line":
-                result = self.handle_text_line(tree)
+                result = self.get_line_tree_data(tree)
             else:
                 result = self.unused_line(tree)
         except Exception:

@@ -50,7 +50,7 @@ def test_text_lines(line, expected):
         converted_line,
         c_array,
         c_type,
-        c_alter_lemline_at,
+        c_alter_lem_line_at,
     ) = atf_preprocessor.process_line(line)
     assert converted_line == expected
 
@@ -68,7 +68,7 @@ def test_lemma_line_c_type_is_lem_line(line):
         converted_line,
         c_array,
         c_type,
-        c_alter_lemline_at,
+        c_alter_lem_line_at,
     ) = atf_preprocessor.process_line(line)
 
     assert c_type == "lem_line"

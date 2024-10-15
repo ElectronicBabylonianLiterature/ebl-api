@@ -1,9 +1,9 @@
-LEGACY_ORACC_DIVIDER: "*"
 LEGACY_ORACC_JOINER: "--"
 LEGACY_VALUE_CHARACTER_ACCENTED: "á" | "à" | "é" | "è" | "í" | "ì" | "ú" | "ù"
 LEGACY_LOGOGRAM_CHARACTER_ACCENTED: "Á" | "À" | "É" | "È" | "Í" | "Ì" | "Ú" | "Ù"
 LEGACY_OPEN_HALF_BRACKET: "⌈" | "⸢" 
 LEGACY_CLOSE_HALF_BRACKET: "⌉" | "⸣"
+LEGACY_ORACC_DISH_DIVIDER: "*"
 legacy_uncertain_sign_prefix: "$"
 
 legacy_single_ruling: " "* "ruling" [" "? ("!?" | "*" | "?" | "!")]

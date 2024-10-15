@@ -67,7 +67,7 @@ def test_placeholder_insert(database):
     """
     atf_preprocessor = AtfPreprocessor("../logs", 0)
     converted_lines = []
-    c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+    c_line, c_array, c_type, c_alter_lem_line_at = atf_preprocessor.process_line(
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ "
         "DINGIR GU₇"
     )
@@ -76,10 +76,10 @@ def test_placeholder_insert(database):
             "c_line": c_line,
             "c_array": c_array,
             "c_type": c_type,
-            "c_alter_lemline_at": c_alter_lemline_at,
+            "c_alter_lem_line_at": c_alter_lem_line_at,
         }
     )
-    c_line, c_array, c_type, c_alter_lemline_at = atf_preprocessor.process_line(
+    c_line, c_array, c_type, c_alter_lem_line_at = atf_preprocessor.process_line(
         "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["
         "1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
         "god]N; ikkal[eat]V"
@@ -89,7 +89,7 @@ def test_placeholder_insert(database):
             "c_line": c_line,
             "c_array": c_array,
             "c_type": c_type,
-            "c_alter_lemline_at": c_alter_lemline_at,
+            "c_alter_lem_line_at": c_alter_lem_line_at,
         }
     )
     test_lemmas = [

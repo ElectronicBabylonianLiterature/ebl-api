@@ -12,7 +12,7 @@ from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 class LineContext:
     last_transliteration: List[str]
     last_transliteration_line: str
-    last_alter_lemline_at: List[int]
+    last_alter_lem_line_at: List[int]
 
 
 class EblLinesGetter:
@@ -38,7 +38,7 @@ class EblLinesGetter:
         context = LineContext(
             last_transliteration=[],
             last_transliteration_line="",
-            last_alter_lemline_at=[],
+            last_alter_lem_line_at=[],
         )
         result = defaultdict(list)
         result["all_unique_lemmas"] = []
@@ -79,7 +79,7 @@ class EblLinesGetter:
             entry for entry in line["c_array"] if entry != "DIŠ"
         ]
         context.last_transliteration_line = line["c_line"]
-        context.last_alter_lemline_at = line["c_alter_lemline_at"]
+        context.last_alter_lem_line_at = line["c_alter_lem_line_at"]
         result["transliteration"].append(context.last_transliteration_line)
         return context
 
@@ -126,13 +126,13 @@ class EblLinesGetter:
                 oracc_lemma_tupel, all_unique_lemmas, filename
             )
         return self._add_placeholders_to_lemmas(
-            all_unique_lemmas, context.last_alter_lemline_at
+            all_unique_lemmas, context.last_alter_lem_line_at
         )
 
     def _add_placeholders_to_lemmas(
-        self, all_unique_lemmas: List, last_alter_lemline_at: List[int]
+        self, all_unique_lemmas: List, last_alter_lem_line_at: List[int]
     ):
-        for alter_pos in last_alter_lemline_at:
+        for alter_pos in last_alter_lem_line_at:
             self.logger.warning(
                 f"Adding placeholder to lemma line at position:{str(alter_pos)}"
             )

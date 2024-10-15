@@ -48,6 +48,7 @@ class LineSerializer(Visitor):
     line: str = ""
 
     def process_line(self, tree: Tree, line_type: str) -> str:
+        input(f'line type data: {tree.data}, line type variable: {line_type}')
         assert tree.data == line_type
         result = DepthFirstSearch().visit_topdown(tree, "")
         self.line += f" {result}"
@@ -76,7 +77,7 @@ class GetWords(Visitor):
     def __init__(self):
         self.wordcounter = 0
         self.result = []
-        self.alter_lemline_at = []
+        self.alter_lem_line_at = []
         self.removal_open = False
 
     def ebl_atf_text_line__word(self, tree):
@@ -88,7 +89,7 @@ class GetWords(Visitor):
                 self.removal_open = True
             elif child == ">>" and self.removal_open:
                 self.removal_open = False
-                self.alter_lemline_at.append(self.wordcounter)
+                self.alter_lem_line_at.append(self.wordcounter)
             elif isinstance(child, lexer.Token):
                 word += child
             else:

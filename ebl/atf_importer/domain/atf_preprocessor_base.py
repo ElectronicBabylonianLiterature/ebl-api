@@ -2,10 +2,10 @@ import codecs
 import logging
 import re
 from typing import Tuple, Optional, List, Any
-from lark import Lark
+from lark import Lark, Tree
 from ebl.atf_importer.domain.atf_conversions import (
-    #ConvertLineDividers,
-    #ConvertLineJoiner,
+    # ConvertLineDividers,
+    # ConvertLineJoiner,
     StripSigns,
     GetLemmaValuesAndGuidewords,
     GetWords,
@@ -109,12 +109,12 @@ class AtfPreprocessorBase:
         # handles ATF with legacy (CDLI & Oracc) syntax.
         # Previously: "lark-oracc/oracc_atf.lark",
         # This should be eventually removed completely.
-        
-        #self.oracc_parser = Lark.open(
+
+        # self.oracc_parser = Lark.open(
         #    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark",
-            #maybe_placeholders=True,
-            #rel_to=__file__,
-        #)
+        # maybe_placeholders=True,
+        # rel_to=__file__,
+        # )
 
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
@@ -162,30 +162,20 @@ class AtfPreprocessorBase:
         self, tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
         if tree.data in self.unused_lines:
-            return self.get_empty_conversion(tree)
+            return (self.line_tree_to_string(tree), None, tree.data, None)
         self.logger.warning(
             f"Attempting to process a line not marked as unused: {tree.data}"
         )
         return (None, None, tree.data, None)
 
-    def get_empty_conversion(self, tree) -> Tuple[str, None, str, None]:
-        line_serializer = LineSerializer()
-        line_serializer.visit_topdown(tree)
-        converted_line = line_serializer.line.strip(" ")
-        return (converted_line, None, tree.data, None)
-
-    def convert_lemline(
+    def convert_lem_line(
         self, atf: str, tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
         if self.skip_next_lem_line:
             self.logger.warning("Skipping lem line due to previous flag.")
             self.skip_next_lem_line = False
             return (None, None, "lem_line", None)
-
-        lemmas_and_guidewords_serializer = GetLemmaValuesAndGuidewords()
-        lemmas_and_guidewords_serializer.visit(tree)
-        lemmas_and_guidewords_array = lemmas_and_guidewords_serializer.result
-
+        lemmas_and_guidewords_array = self.serizalize_lemmas_and_guidewords()
         self.logger.debug(
             "Converted line as "
             + tree.data
@@ -195,19 +185,30 @@ class AtfPreprocessorBase:
         )
         return atf, lemmas_and_guidewords_array, tree.data, []
 
-    def handle_text_line(self, tree) -> Tuple[str, List[Any], str, List[Any]]:
-        #ConvertLineDividers().visit(tree)
-        #ConvertLineJoiner().visit(tree)
-        StripSigns().visit(tree)
-
+    def line_tree_to_string(self, tree: Tree) -> str:
         line_serializer = LineSerializer()
         line_serializer.visit_topdown(tree)
-        converted_line = line_serializer.line.strip(" ")
+        return line_serializer.line.strip(" ")
 
+    def serialize_words(self, tree: Tree) -> List[Any]:
         words_serializer = GetWords()
         words_serializer.result = []
         words_serializer.visit_topdown(tree)
-        return (converted_line, words_serializer.result, tree.data, [])
+        return words_serializer.result
+
+    def serizalize_lemmas_and_guidewords(self, tree: Tree) -> List[Any]:
+        lemmas_and_guidewords_serializer = GetLemmaValuesAndGuidewords()
+        lemmas_and_guidewords_serializer.visit(tree)
+        return lemmas_and_guidewords_serializer.result
+
+    def get_line_tree_data(self, tree: Tree) -> Tuple[str, List[Any], str, List[Any]]:
+        # ConvertLineDividers().visit(tree)
+        # ConvertLineJoiner().visit(tree)
+        StripSigns().visit(tree)  # ToDo: Move
+        converted_line = self.line_tree_to_string(tree)
+        input(f"converted line: {converted_line}")
+        words = self.serialize_words(tree)
+        return (converted_line, words, tree.data, [])
 
     def read_lines(self, file: str) -> List[str]:
         with codecs.open(file, "r", encoding="utf8") as f:

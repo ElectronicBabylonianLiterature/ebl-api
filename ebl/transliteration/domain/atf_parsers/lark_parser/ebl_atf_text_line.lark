@@ -8,7 +8,7 @@
 %import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 %import .ebl_atf_abbreviations (PERIOD)
 %import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
-%import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DIVIDER)
+%import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
 %import .legacy_atf (legacy_uncertain_sign_prefix)
 
 note_line: "#note: " _markup
@@ -226,7 +226,7 @@ sub_index: [SUB_INDEX]
 
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
-logogram_name: logogram_name_part (broken_away logogram_name_part)*
+logogram_name: logogram_name_part (broken_away logogram_name_part)* | LEGACY_ORACC_DISH_DIVIDER
 !number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚" | "ø"
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
