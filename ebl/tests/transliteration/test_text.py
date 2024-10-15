@@ -60,7 +60,7 @@ def test_set_version() -> None:
 def test_lemmatization() -> None:
     assert TEXT.lemmatization == Lemmatization(
         (
-            (LemmatizationToken("ha-am", tuple()),),
+            (LemmatizationToken("ha-am", ()),),
             (LemmatizationToken(" single ruling"),),
         )
     )
@@ -99,13 +99,13 @@ def test_update_lemmatization() -> None:
 
 
 def test_update_lemmatization_incompatible() -> None:
-    lemmatization = Lemmatization(((LemmatizationToken("mu", tuple()),),))
+    lemmatization = Lemmatization(((LemmatizationToken("mu", ()),),))
     with pytest.raises(LemmatizationError):  # pyre-ignore[16]
         TEXT.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lines() -> None:
-    lemmatization = Lemmatization((*TEXT.lemmatization.tokens, tuple()))
+    lemmatization = Lemmatization((*TEXT.lemmatization.tokens, ()))
 
     with pytest.raises(LemmatizationError):  # pyre-ignore[16]
         TEXT.update_lemmatization(lemmatization)
@@ -126,7 +126,7 @@ def test_labels(text_with_labels) -> None:
 
 def test_translation_before_text() -> None:
     with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
-        Text.of_iterable([TranslationLine(tuple()), *LINES])
+        Text.of_iterable([TranslationLine(()), *LINES])
 
 
 def test_invalid_extent() -> None:
@@ -134,7 +134,7 @@ def test_invalid_extent() -> None:
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
-                TranslationLine(tuple(), "en", Extent(LineNumber(3))),
+                TranslationLine((), "en", Extent(LineNumber(3))),
                 TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
             ]
         )
@@ -146,7 +146,7 @@ def test_extent_before_translation() -> None:
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
                 TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
-                TranslationLine(tuple(), "en", Extent(LineNumber(1))),
+                TranslationLine((), "en", Extent(LineNumber(1))),
             ]
         )
 
@@ -156,9 +156,9 @@ def test_exent_overlapping() -> None:
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
-                TranslationLine(tuple(), extent=Extent(LineNumber(2))),
+                TranslationLine((), extent=Extent(LineNumber(2))),
                 TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
-                TranslationLine(tuple()),
+                TranslationLine(()),
             ]
         )
 
@@ -167,8 +167,8 @@ def test_extent_overlapping_languages() -> None:
     Text.of_iterable(
         [
             TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
-            TranslationLine(tuple(), "en", Extent(LineNumber(2))),
+            TranslationLine((), "en", Extent(LineNumber(2))),
             TextLine.of_iterable(LineNumber(2), [Word.of([Reading.of_name("bu")])]),
-            TranslationLine(tuple(), "de"),
+            TranslationLine((), "de"),
         ]
     )

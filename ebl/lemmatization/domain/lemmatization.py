@@ -20,4 +20,4 @@ class LemmatizationToken:
 
 @attr.s(auto_attribs=True, frozen=True)
 class Lemmatization:
-    tokens: Sequence[Sequence[LemmatizationToken]] = tuple()
+    tokens: Sequence[Sequence[LemmatizationToken]] = ()

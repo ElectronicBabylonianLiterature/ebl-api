@@ -28,10 +28,10 @@ class GreekLetter(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @staticmethod
-    def of(letter: str, flags: Sequence[atf.Flag] = tuple()):
+    def of(letter: str, flags: Sequence[atf.Flag] = ()):
         return GreekLetter(frozenset(), ErasureState.NONE, letter, flags)
 
 
@@ -65,7 +65,7 @@ class GreekWord(AbstractWord):
     def of(
         parts: Sequence[Token],
         language: Language = Language.GREEK,
-        unique_lemma: Lemma = tuple(),
+        unique_lemma: Lemma = (),
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
         erasure: ErasureState = ErasureState.NONE,

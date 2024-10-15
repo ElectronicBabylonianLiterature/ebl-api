@@ -179,6 +179,7 @@ class ExternalNumbersFactory(factory.Factory):
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    chicago_isac_number = factory.Sequence(lambda n: f"chicago-isac-number-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
     hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
     hilprecht_heidelberg_number = factory.Sequence(
@@ -240,14 +241,14 @@ class FragmentFactory(factory.Factory):
 class InterestingFragmentFactory(FragmentFactory):
     collection = "Kuyunjik"  # pyre-ignore[15]
     publication = ""  # pyre-ignore[15]
-    joins: Sequence[str] = tuple()
+    joins: Sequence[str] = ()
     text = Text()
     uncurated_references = (
         UncuratedReference("7(0)"),
         UncuratedReference("CAD 51", (34, 56)),
         UncuratedReference("7(1)"),
     )
-    references = tuple()
+    references = ()
     notes = Notes()
 
 

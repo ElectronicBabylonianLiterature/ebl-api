@@ -17,7 +17,7 @@ DEFAULT_LANGUAGE = "en"
 @attr.s(frozen=True, auto_attribs=True)
 class Extent:
     number: AbstractLineNumber
-    labels: Sequence[Label] = attr.ib(default=tuple(), validator=validate_labels)
+    labels: Sequence[Label] = attr.ib(default=(), validator=validate_labels)
 
     @property
     def column(self) -> Optional[ColumnLabel]:

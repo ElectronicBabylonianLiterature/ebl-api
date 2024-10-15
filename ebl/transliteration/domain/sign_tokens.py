@@ -41,7 +41,7 @@ class Divider(AbstractSign):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @property
     def clean_value(self) -> str:
@@ -58,8 +58,8 @@ class Divider(AbstractSign):
     @staticmethod
     def of(
         divider: str,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
     ):
         return Divider(frozenset(), ErasureState.NONE, modifiers, flags, divider)
 
@@ -117,8 +117,8 @@ class Reading(NamedSign):
     def of(
         name: NameParts,
         sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Reading":
         return Reading(
@@ -129,8 +129,8 @@ class Reading(NamedSign):
     def of_name(
         name: str,
         sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Reading":
         return Reading.of((ValueToken.of(name),), sub_index, modifiers, flags, sign)
@@ -138,9 +138,7 @@ class Reading(NamedSign):
 
 @attr.s(auto_attribs=True, frozen=True)
 class Logogram(NamedSign):
-    surrogate: Sequence[Token] = attr.ib(
-        default=tuple(), converter=convert_token_sequence
-    )
+    surrogate: Sequence[Token] = attr.ib(default=(), converter=convert_token_sequence)
 
     @property
     def value(self) -> str:
@@ -162,10 +160,10 @@ class Logogram(NamedSign):
     def of(
         name: NameParts,
         sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
-        surrogate: Sequence[Token] = tuple(),
+        surrogate: Sequence[Token] = (),
     ) -> "Logogram":
         return Logogram(
             frozenset(),
@@ -182,10 +180,10 @@ class Logogram(NamedSign):
     def of_name(
         name: str,
         sub_index: Optional[int] = 1,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
-        surrogate: Sequence[Token] = tuple(),
+        surrogate: Sequence[Token] = (),
     ) -> "Logogram":
         return Logogram.of(
             (ValueToken.of(name),), sub_index, modifiers, flags, sign, surrogate
@@ -200,8 +198,8 @@ class Number(NamedSign):
     @staticmethod
     def of(
         name: NameParts,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
@@ -212,8 +210,8 @@ class Number(NamedSign):
     @staticmethod
     def of_name(
         name: str,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
@@ -237,7 +235,7 @@ class Grapheme(AbstractSign):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_grapheme(self)
@@ -245,8 +243,8 @@ class Grapheme(AbstractSign):
     @staticmethod
     def of(
         name: SignName,
-        modifiers: Sequence[str] = tuple(),
-        flags: Sequence[atf.Flag] = tuple(),
+        modifiers: Sequence[str] = (),
+        flags: Sequence[atf.Flag] = (),
     ) -> "Grapheme":
         return Grapheme(frozenset(), ErasureState.NONE, modifiers, flags, name)
 

@@ -27,15 +27,15 @@ ERASURE_RIGHT = Erasure.close()
         ),
         (
             "°\\ku°",
-            tuple(),
+            (),
             (Word.of(erasure=ErasureState.OVER_ERASED, parts=[Reading.of_name("ku")]),),
         ),
         (
             "°ku\\°",
             (Word.of(erasure=ErasureState.ERASED, parts=[Reading.of_name("ku")]),),
-            tuple(),
+            (),
         ),
-        ("°\\°", tuple(), tuple()),
+        ("°\\°", (), ()),
         (
             "°x X\\X x°",
             (

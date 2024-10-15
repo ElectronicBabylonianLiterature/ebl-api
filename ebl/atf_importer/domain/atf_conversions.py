@@ -48,7 +48,7 @@ class LineSerializer(Visitor):
     line: str = ""
 
     def process_line(self, tree: Tree, line_type: str) -> str:
-        input(f'line type data: {tree.data}, line type variable: {line_type}')
+        input(f"line type data: {tree.data}, line type variable: {line_type}")
         assert tree.data == line_type
         result = DepthFirstSearch().visit_topdown(tree, "")
         self.line += f" {result}"

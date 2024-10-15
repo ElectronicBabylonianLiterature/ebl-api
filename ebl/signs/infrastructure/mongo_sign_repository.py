@@ -1,9 +1,9 @@
 import re
-from typing import Optional, cast, Sequence, Dict
+from typing import List, Optional, Tuple, cast, Sequence, Dict, Iterable
 
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 from pymongo.database import Database
-
+from ebl.transliteration.domain.enclosure_tokens import Determinative
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.sign_repository import SignRepository
@@ -18,6 +18,7 @@ from ebl.transliteration.domain.sign import (
 )
 
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 COLLECTION = "signs"
 
@@ -42,6 +43,12 @@ class ValueSchema(Schema):
     @post_dump
     def filter_none(self, data, **kwargs):
         return {key: value for key, value in data.items() if value is not None}
+
+
+class OrderedSignSchema(Schema):
+    name = fields.String(required=True)
+    unicode = fields.List(fields.Int(), required=True)
+    mzl = fields.String(required=False, data_key="mzlNumber")
 
 
 class LogogramSchema(Schema):
@@ -114,14 +121,14 @@ class SignSchema(Schema):
     name = fields.String(required=True, data_key="_id")
     lists = fields.Nested(SignListRecordSchema, many=True, required=True)
     values = fields.Nested(ValueSchema, many=True, required=True, unknown=EXCLUDE)
-    logograms = fields.Nested(LogogramSchema, many=True, load_default=tuple())
-    fossey = fields.Nested(FosseySchema, many=True, load_default=tuple())
+    logograms = fields.Nested(LogogramSchema, many=True, load_default=())
+    fossey = fields.Nested(FosseySchema, many=True, load_default=())
     mes_zl = fields.String(data_key="mesZl", load_default="", allow_none=True)
     labasi = fields.String(data_key="LaBaSi", load_default="", allow_none=True)
     reverse_order = fields.String(
         data_key="reverseOrder", load_default="", allow_none=True
     )
-    unicode = fields.List(fields.Int(), load_default=tuple())
+    unicode = fields.List(fields.Int(), load_default=())
     sort_keys = fields.Nested(
         SortKeysSchema,
         data_key="sortKeys",
@@ -164,6 +171,74 @@ class MongoSignRepository(SignRepository):
     def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
         return cast(Sign, SignSchema(unknown=EXCLUDE).load(data))
+
+    def find_signs_by_order(self, name: SignName, sort_era: str) -> list[list[Sign]]:
+        try:
+            keys = self._collection.find_one_by_id(name)["sortKeys"][sort_era]
+        except (KeyError, NotFoundError):
+            return []
+
+        all_results = []
+        for key in keys:
+            range_start = key - 5
+            range_end = key + 5
+            cursor = self._collection.aggregate(
+                [
+                    {
+                        "$match": {
+                            f"sortKeys.{sort_era}": {
+                                "$elemMatch": {
+                                    "$gte": range_start,
+                                    "$lte": range_end,
+                                }
+                            }
+                        }
+                    },
+                    {"$unwind": f"$sortKeys.{sort_era}"},
+                    {
+                        "$match": {
+                            f"sortKeys.{sort_era}": {
+                                "$gte": range_start,
+                                "$lte": range_end,
+                            }
+                        }
+                    },
+                    {
+                        "$project": {
+                            "unicode": 1,
+                            "name": "$_id",
+                            "sort_key": f"$sortKeys.{sort_era}",
+                            "mzlNumber": {
+                                "$first": {
+                                    "$filter": {
+                                        "input": "$lists",
+                                        "as": "item",
+                                        "cond": {"$eq": ["$$item.name", "MZL"]},
+                                    }
+                                }
+                            },
+                        }
+                    },
+                    {"$sort": {"sort_key": 1}},
+                    {
+                        "$project": {
+                            "_id": 0,
+                            "name": 1,
+                            "unicode": 1,
+                            "mzlNumber": "$mzlNumber.number",
+                        }
+                    },
+                    {"$group": {"_id": None, "signs": {"$push": "$$ROOT"}}},
+                ]
+            )
+
+            results = [
+                OrderedSignSchema().load(sign, unknown=EXCLUDE)
+                for item in cursor
+                for sign in item["signs"]
+            ]
+            all_results.extend([results])
+        return all_results
 
     def search(self, reading: str, sub_index: Optional[int] = None) -> Optional[Sign]:
         sub_index_query = {"$exists": False} if sub_index is None else sub_index
@@ -293,3 +368,37 @@ class MongoSignRepository(SignRepository):
 
     def list_all_signs(self) -> Sequence[str]:
         return self._collection.get_all_values("_id")
+
+    def _extract_word_subIndex(self, word):
+        for part in word._parts:
+            if isinstance(part, Determinative):
+                part = part._parts[0]
+            if getattr(part, "name_parts", []):
+                yield (part.name_parts[0]._value, part.sub_index)
+        yield ("whitespace", 1)
+
+    def _extract_words_subIndexes(self, result) -> Iterable[Tuple[str, int]]:
+        return (
+            value_index
+            for line in result.lines
+            for word in line._content
+            for value_index in self._extract_word_subIndex(word)
+        )
+
+    def _find_unicode(
+        self, values_indexes: Iterable[Tuple[str, int]]
+    ) -> Iterable[Dict[str, List[int]]]:
+        for value, sub_index in values_indexes:
+            if value == "whitespace":
+                yield {"unicode": [9999]}
+            else:
+                query = {
+                    "values": {"$elemMatch": {"value": value, "subIndex": sub_index}}
+                }
+                yield from self._collection.find_many(query, {"_id": 0, "unicode": 1})
+
+    def get_unicode_from_atf(self, line: str) -> List[Dict[str, List[int]]]:
+        text = parse_atf_lark(f"1. {line}")
+        values_indexes = self._extract_words_subIndexes(text)
+        line_query_result = list(self._find_unicode(values_indexes))
+        return line_query_result[:-1]

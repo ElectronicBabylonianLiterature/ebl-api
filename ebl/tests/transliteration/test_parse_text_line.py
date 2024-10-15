@@ -1235,13 +1235,13 @@ def test_parse_dividers() -> None:
             TextLine.of_iterable(
                 LineNumber(1),
                 (
-                    Divider.of(":", tuple(), (atf.Flag.UNCERTAIN,)),
-                    Divider.of(":", tuple(), (atf.Flag.DAMAGE, atf.Flag.CORRECTION)),
-                    Divider.of(":", tuple(), (atf.Flag.DAMAGE,)),
-                    Divider.of("::", tuple(), (atf.Flag.UNCERTAIN,)),
-                    Divider.of(":.", ("@v",), tuple()),
+                    Divider.of(":", (), (atf.Flag.UNCERTAIN,)),
+                    Divider.of(":", (), (atf.Flag.DAMAGE, atf.Flag.CORRECTION)),
+                    Divider.of(":", (), (atf.Flag.DAMAGE,)),
+                    Divider.of("::", (), (atf.Flag.UNCERTAIN,)),
+                    Divider.of(":.", ("@v",), ()),
                     Divider.of("/", ("@19",), (atf.Flag.COLLATION,)),
-                    Divider.of(':"', ("@20", "@c"), tuple()),
+                    Divider.of(':"', ("@20", "@c"), ()),
                     Divider.of(";", ("@v", "@19"), (atf.Flag.CORRECTION,)),
                 ),
             )

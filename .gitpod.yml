@@ -19,3 +19,4 @@ vscode:
     - mongodb.mongodb-vscode
     - davidanson.vscode-markdownlint
     - ms-azuretools.vscode-docker
+    - charliermarsh.ruff

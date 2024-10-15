@@ -103,7 +103,7 @@ def test_set_unique_lemma_incompatible(token):
 
 @pytest.mark.parametrize("token", TOKENS)
 def test_set_unique_lemma_with_lemma(token):
-    lemma = LemmatizationToken(token.value, tuple())
+    lemma = LemmatizationToken(token.value, ())
     with pytest.raises(LemmatizationError):
         token.set_unique_lemma(lemma)
 

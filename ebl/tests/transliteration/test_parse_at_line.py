@@ -60,7 +60,7 @@ from ebl.transliteration.domain.markup import StringPart
         ("@fragment 1", [ObjectAtLine(ObjectLabel([], atf.Object.FRAGMENT, "1"))]),
         ("@edge a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.EDGE, "a"))]),
         ("@face a", [SurfaceAtLine(SurfaceLabel([], atf.Surface.FACE, "a"))]),
-        ("@h1", [HeadingAtLine(1, tuple())]),
+        ("@h1", [HeadingAtLine(1, ())]),
         ("@h1 foo", [HeadingAtLine(1, (StringPart("foo"),))]),
         ("@column 1", [ColumnAtLine(ColumnLabel.from_int(1))]),
         (

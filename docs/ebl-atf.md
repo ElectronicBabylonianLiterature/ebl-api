@@ -155,7 +155,7 @@ ruling = ('single' | 'double' | 'triple'), ' ', 'ruling',
 
 image = '(image ' number, [ lower-case-letter ], ' = ', free-text, ')';
 
-dollar-status = '*' | '?' | '!' | '!?';
+dollar-status = '*' | '?' | '!' | '!?' | '°';
 ```
 
 See: [ATF Structure Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/structuretutorial/index.html)
@@ -537,11 +537,12 @@ invalue-broken-away: open-broken-away | close-broken-away;
 
 variant-separator = '/';
 
-flag = { damage | uncertain | correction | collation };
+flag = { damage | uncertain | correction | collation | no-longer-visible };
 damage = '#';
 uncertain = '?';
 correction = '!';
 collation = '*';
+no-longer-visible = '°';
 
 modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n'
                   | 'z' | 'k' | 'r' | 'h' | 'v' | { decimal-digit }- ) };

@@ -279,7 +279,7 @@ def test_needs_revision(client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == [
-        expected_fragment_info_dto(attr.evolve(transliterated_fragment, genres=tuple()))
+        expected_fragment_info_dto(attr.evolve(transliterated_fragment, genres=()))
     ]
     assert result.headers["Cache-Control"] == "private, max-age=600"
 

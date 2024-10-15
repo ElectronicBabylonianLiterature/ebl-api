@@ -52,13 +52,13 @@ class AtfPreprocessor(AtfPreprocessorBase):
             return self.parse_and_convert_line(atf_line)
 
     def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
-        input(f'! check_original_line. [{atf}]')
+        input(f"! check_original_line. [{atf}]")
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
-        input('! before parse')
+        input("! before parse")
         tree = self.ebl_parser.parse(atf)
-        input('! before transform')
+        input("! before transform")
         tree = self.transform_legacy_atf(tree)
         self.logger.info("Line successfully parsed")
         self.logger.debug(f"Parsed line as {tree.data}")

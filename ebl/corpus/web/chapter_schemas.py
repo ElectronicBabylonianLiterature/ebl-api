@@ -73,7 +73,7 @@ class ApiManuscriptSchema(ManuscriptSchema):
         ApiOldSiglumSchema,
         many=True,
         required=False,
-        load_default=tuple(),
+        load_default=(),
         data_key="oldSigla",
     )
     museum_number = MuseumNumberString(required=True, data_key="museumNumber")
@@ -231,7 +231,7 @@ def deserialize_translation(atf: str) -> Sequence[TranslationLine]:
         return (
             tuple(parse_translation_line(line) for line in atf.split("\n"))
             if atf
-            else tuple()
+            else ()
         )
     except PARSE_ERRORS as error:
         raise ValidationError(f"Invalid translation: {atf}.", "translation") from error
@@ -240,7 +240,7 @@ def deserialize_translation(atf: str) -> Sequence[TranslationLine]:
 class ApiLineSchema(Schema):
     number = LineNumberString(required=True)
     old_line_numbers = fields.Nested(
-        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=tuple()
+        OldLineNumberSchema, data_key="oldLineNumbers", many=True, load_default=()
     )
     variants = fields.Nested(
         ApiLineVariantSchema, many=True, required=True, validate=validate.Length(min=1)
@@ -272,6 +272,6 @@ class ApiLineSchema(Schema):
 class ApiChapterSchema(ChapterSchema):
     manuscripts = fields.Nested(ApiManuscriptSchema, many=True, required=True)
     uncertain_fragments = fields.List(
-        MuseumNumberString(), load_default=tuple(), data_key="uncertainFragments"
+        MuseumNumberString(), load_default=(), data_key="uncertainFragments"
     )
     lines = fields.Nested(ApiLineSchema, many=True, required=True)

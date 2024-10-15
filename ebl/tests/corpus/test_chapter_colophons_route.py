@@ -8,11 +8,11 @@ from ebl.transliteration.domain.text import Text
 
 def test_get(client, text_repository):
     chapter = ChapterFactory.build(
-        lines=tuple(),
+        lines=(),
         manuscripts=(
-            ManuscriptFactory.build(references=tuple()),
-            ManuscriptFactory.build(colophon=Text(), references=tuple()),
-            ManuscriptFactory.build(references=tuple()),
+            ManuscriptFactory.build(references=()),
+            ManuscriptFactory.build(colophon=Text(), references=()),
+            ManuscriptFactory.build(references=()),
         ),
     )
     text_repository.create_chapter(chapter)

@@ -19,9 +19,9 @@ T = TypeVar("T", bound=Token)
 
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractWord(Token):
-    unique_lemma: Lemma = tuple()
+    unique_lemma: Lemma = ()
     alignment: Optional[int] = None
-    _parts: Sequence[Token] = attr.ib(default=tuple(), converter=convert_token_sequence)
+    _parts: Sequence[Token] = attr.ib(default=(), converter=convert_token_sequence)
     variant: Optional["AbstractWord"] = None
     has_variant_alignment: bool = False
     has_omitted_alignment: bool = False
@@ -68,7 +68,7 @@ class AbstractWord(Token):
         value_is_compatible = self.value == lemma.value
         lemma_is_compatible = self.lemmatizable or not lemma.unique_lemma
         if value_is_compatible and lemma_is_compatible:
-            return attr.evolve(self, unique_lemma=lemma.unique_lemma or tuple())
+            return attr.evolve(self, unique_lemma=lemma.unique_lemma or ())
         else:
             raise LemmatizationError(f"Cannot apply {lemma} to {self}.")
 
@@ -134,7 +134,7 @@ class Word(AbstractWord):
         cls: Type[W],
         parts: Sequence[Token],
         language: Language = DEFAULT_LANGUAGE,
-        unique_lemma: Lemma = tuple(),
+        unique_lemma: Lemma = (),
         erasure: ErasureState = ErasureState.NONE,
         alignment: Optional[int] = None,
         variant: Optional[AbstractWord] = None,
@@ -193,7 +193,7 @@ class InWordNewline(Token):
 
     @property
     def parts(self):
-        return tuple()
+        return ()
 
     @staticmethod
     def of() -> "InWordNewline":

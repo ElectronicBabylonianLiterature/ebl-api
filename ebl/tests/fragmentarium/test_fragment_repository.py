@@ -202,7 +202,7 @@ def test_museum_number_wildcard(fragment_repository, query, expected):
         [
             QueryItem(
                 fragment.number,
-                tuple(),
+                (),
                 0,
             )
             for fragment in fragments
@@ -374,7 +374,7 @@ def test_update_update_transliteration_not_found(fragment_repository):
 
 
 def test_update_genres(fragment_repository):
-    fragment = FragmentFactory.build(genres=tuple())
+    fragment = FragmentFactory.build(genres=())
     fragment_repository.create(fragment)
     updated_fragment = fragment.set_genres(
         (Genre(["ARCHIVAL", "Administrative"], False),)
@@ -382,6 +382,18 @@ def test_update_genres(fragment_repository):
     fragment_repository.update_field("genres", updated_fragment)
     result = fragment_repository.query_by_museum_number(fragment.number)
 
+    assert result == updated_fragment
+
+
+def test_update_scopes(
+    fragment_repository,
+):
+    fragment = FragmentFactory.build(authorized_scopes=[])
+    fragment_repository.create(fragment)
+    scopes = [Scope.READ_CAIC_FRAGMENTS]
+    updated_fragment = fragment.set_scopes(scopes)
+    fragment_repository.update_field("authorized_scopes", updated_fragment)
+    result = fragment_repository.query_by_museum_number(fragment.number)
     assert result == updated_fragment
 
 
@@ -1010,7 +1022,7 @@ def test_query_script(fragment_repository, query, expected):
         [
             QueryItem(
                 fragments[i].number,
-                tuple(),
+                (),
                 0,
             )
             for i in expected
@@ -1056,7 +1068,7 @@ def test_query_genres(fragment_repository, query, expected):
         [
             QueryItem(
                 fragments[i].number,
-                tuple(),
+                (),
                 0,
             )
             for i in expected
@@ -1091,7 +1103,7 @@ def test_query_project(fragment_repository, query, expected):
         [
             QueryItem(
                 fragments[i].number,
-                tuple(),
+                (),
                 0,
             )
             for i in expected
@@ -1129,6 +1141,30 @@ def test_query_latest(fragment_repository):
                     0,
                 )
                 for fragment in reversed(fragments)
+            ],
+            "matchCountTotal": 0,
+        }
+    )
+
+    assert fragment_repository.query_latest() == expected_result
+
+
+def test_query_latest_skips_restricted_fragments(fragment_repository):
+    open_fragment = TransliteratedFragmentFactory.build()
+    restricted_fragment = TransliteratedFragmentFactory.build(
+        authorized_scopes=[Scope.READ_CAIC_FRAGMENTS]
+    )
+
+    fragment_repository.create_many([open_fragment, restricted_fragment])
+
+    expected_result = QueryResultSchema().load(
+        {
+            "items": [
+                query_item_of(
+                    open_fragment,
+                    tuple(range(LATEST_TRANSLITERATION_LINE_LIMIT)),
+                    0,
+                )
             ],
             "matchCountTotal": 0,
         }

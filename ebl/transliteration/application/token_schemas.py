@@ -310,9 +310,7 @@ class ReadingSchema(NamedSignSchema):
 
 
 class LogogramSchema(NamedSignSchema):
-    surrogate = fields.List(
-        fields.Nested(lambda: OneOfTokenSchema()), load_default=tuple()
-    )
+    surrogate = fields.List(fields.Nested(lambda: OneOfTokenSchema()), load_default=())
 
     @post_load
     def make_token(self, data, **kwargs):

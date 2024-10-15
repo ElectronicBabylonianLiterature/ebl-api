@@ -22,8 +22,8 @@ class ManuscriptLine:
     manuscript_id: int
     labels: Sequence[Label] = attr.ib(validator=validate_labels)
     line: Union[TextLine, EmptyLine]
-    paratext: Sequence[Union[DollarLine, NoteLine]] = tuple()
-    omitted_words: Sequence[int] = tuple()
+    paratext: Sequence[Union[DollarLine, NoteLine]] = ()
+    omitted_words: Sequence[int] = ()
 
     @property
     def label(self) -> Optional[ManuscriptLineLabel]:
@@ -90,7 +90,7 @@ class ManuscriptLine:
         )
 
     def get_line_content(self) -> Sequence[Token]:
-        return tuple() if self.is_empty else cast(TextLine, self.line).content
+        return () if self.is_empty else cast(TextLine, self.line).content
 
     def has_lemma(self, lemma: str) -> bool:
         return any(

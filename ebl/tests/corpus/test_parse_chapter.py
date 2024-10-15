@@ -82,15 +82,15 @@ def parse_manuscript(atf):
         ),
         (
             [f"{MANUSCRIPTS[0].siglum} 1. kur"],
-            ManuscriptLine(MANUSCRIPTS[0].id, tuple(), parse_text_line("1. kur")),
+            ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f"    {MANUSCRIPTS[0].siglum} 1. kur"],
-            ManuscriptLine(MANUSCRIPTS[0].id, tuple(), parse_text_line("1. kur")),
+            ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f" {MANUSCRIPTS[0].siglum} 1. kur"],
-            ManuscriptLine(MANUSCRIPTS[0].id, tuple(), parse_text_line("1. kur")),
+            ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f"{MANUSCRIPTS[0].siglum} o iii", "#note: a note", "$ single ruling"],
@@ -103,7 +103,7 @@ def parse_manuscript(atf):
         ),
         (
             [f"{MANUSCRIPTS[0].siglum}"],
-            ManuscriptLine(MANUSCRIPTS[0].id, tuple(), EmptyLine()),
+            ManuscriptLine(MANUSCRIPTS[0].id, (), EmptyLine()),
         ),
     ],
 )
@@ -124,10 +124,10 @@ def parse_reconstruction(atf):
 @pytest.mark.parametrize(
     "lines,expected",
     [
-        (["1. kur"], (parse_text_line("1. kur"), None, tuple())),
+        (["1. kur"], (parse_text_line("1. kur"), None, ())),
         (
             ["1. kur", "#note: a note"],
-            (parse_text_line("1. kur"), parse_note_line("#note: a note"), tuple()),
+            (parse_text_line("1. kur"), parse_note_line("#note: a note"), ()),
         ),
         (
             ["1. kur", "// (parallel line 1)"],
@@ -168,7 +168,7 @@ def parse_line_variant(atf):
                 parse_text_line("1. kur").content,
                 None,
                 (parse_manuscript(f"{MANUSCRIPTS[0].siglum} o iii 1. kur"),),
-                tuple(),
+                (),
             ),
         ),
         (
@@ -184,7 +184,7 @@ def parse_line_variant(atf):
                     parse_manuscript(f"{MANUSCRIPTS[0].siglum} o iii 1. kur"),
                     parse_manuscript(f"{MANUSCRIPTS[1].siglum} o iii 2. kur"),
                 ),
-                tuple(),
+                (),
             ),
         ),
         (

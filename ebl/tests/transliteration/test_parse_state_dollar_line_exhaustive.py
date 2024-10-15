@@ -76,6 +76,7 @@ STATUSES = [
     ("!", atf.DollarStatus.EMENDED_NOT_COLLATED),
     ("?", atf.DollarStatus.UNCERTAIN),
     ("!?", atf.DollarStatus.NEEDS_COLLATION),
+    ("°", atf.DollarStatus.NO_LONGER_VISIBLE),
 ]
 
 

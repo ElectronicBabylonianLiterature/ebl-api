@@ -15,10 +15,10 @@ from ebl.transliteration.domain.translation_line import TranslationLine
 class Line:
     number: AbstractLineNumber
     variants: Sequence[LineVariant]
-    old_line_numbers: Sequence[OldLineNumber] = attr.ib(default=tuple())
+    old_line_numbers: Sequence[OldLineNumber] = attr.ib(default=())
     is_second_line_of_parallelism: bool = False
     is_beginning_of_section: bool = False
-    translation: Sequence[TranslationLine] = attr.ib(default=tuple())
+    translation: Sequence[TranslationLine] = attr.ib(default=())
 
     @translation.validator
     def _validate_translations(self, _, value: Sequence[TranslationLine]) -> None:

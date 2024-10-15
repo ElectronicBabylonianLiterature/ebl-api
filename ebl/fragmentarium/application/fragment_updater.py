@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Sequence, Tuple, Optional
 
 from ebl.bibliography.application.bibliography import Bibliography
@@ -115,6 +116,14 @@ class FragmentUpdater:
         self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("genres", updated_fragment)
 
+        return self._create_result(updated_fragment)
+
+    def update_scopes(
+        self, number: MuseumNumber, scopes: Sequence[Enum]
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
+        updated_fragment = fragment.set_scopes(scopes)
+        self._repository.update_field("authorized_scopes", updated_fragment)
         return self._create_result(updated_fragment)
 
     def update_lemmatization(

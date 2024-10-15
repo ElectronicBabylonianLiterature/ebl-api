@@ -1,3 +1,4 @@
+from enum import Enum
 from itertools import groupby
 from typing import Optional, Sequence, Tuple
 
@@ -31,7 +32,7 @@ from ebl.fragmentarium.domain.colophon import Colophon
 
 def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:
     try:
-        return parse_markup_paragraphs(text) if text else tuple()
+        return parse_markup_paragraphs(text) if text else ()
     except PARSE_ERRORS as error:
         raise ValidationError(f"Invalid markup: {text}. {error}") from error
 
@@ -43,7 +44,7 @@ class NotLowestJoinError(ValueError):
 @attr.s(auto_attribs=True, frozen=True)
 class UncuratedReference:
     document: str
-    pages: Sequence[int] = tuple()
+    pages: Sequence[int] = ()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -67,7 +68,7 @@ class Genre:
 @attr.s(auto_attribs=True, frozen=True)
 class MarkupText:
     text: str = ""
-    parts: Tuple[MarkupPart] = tuple()
+    parts: Sequence[MarkupPart] = ()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -100,6 +101,7 @@ class ExternalNumbers:
     bm_id_number: str = ""
     archibab_number: str = ""
     bdtns_number: str = ""
+    chicago_isac_number: str = ""
     ur_online_number: str = ""
     hilprecht_jena_number: str = ""
     hilprecht_heidelberg_number: str = ""
@@ -111,8 +113,8 @@ class ExternalNumbers:
     achemenet_number: str = ""
     nabucco_number: str = ""
     yale_peabody_number: str = ""
-    oracc_numbers: Sequence[str] = tuple()
-    seal_numbers: Sequence[str] = tuple()
+    oracc_numbers: Sequence[str] = ()
+    seal_numbers: Sequence[str] = ()
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -133,18 +135,18 @@ class Fragment:
     text: Text = Text()
     signs: str = ""
     notes: Notes = Notes()
-    references: Sequence[Reference] = tuple()
+    references: Sequence[Reference] = ()
     uncurated_references: Optional[Sequence[UncuratedReference]] = None
-    genres: Sequence[Genre] = tuple()
-    line_to_vec: Tuple[LineToVecEncodings, ...] = tuple()
-    authorized_scopes: Optional[Sequence[Scope]] = list()
+    genres: Sequence[Genre] = ()
+    line_to_vec: Tuple[LineToVecEncodings, ...] = ()
+    authorized_scopes: Optional[Sequence[Scope]] = []
     introduction: Introduction = Introduction()
     script: Script = Script()
     date: Optional[Date] = None
-    dates_in_text: Sequence[Date] = list()
+    dates_in_text: Sequence[Date] = []
     external_numbers: ExternalNumbers = ExternalNumbers()
-    projects: Sequence[str] = tuple()
-    traditional_references: Sequence[str] = list()
+    projects: Sequence[str] = ()
+    traditional_references: Sequence[str] = []
     archaeology: Optional[Archaeology] = None
     colophon: Optional[Colophon] = None
 
@@ -208,6 +210,9 @@ class Fragment:
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
         return attr.evolve(self, genres=tuple(genres_new))
 
+    def set_scopes(self, scopes_new: Sequence[Enum]) -> "Fragment":
+        return attr.evolve(self, authorized_scopes=list(scopes_new))
+
     def set_date(self, date_new: Optional[Date]) -> "Fragment":
         return attr.evolve(self, date=date_new)
 
@@ -251,6 +256,10 @@ class Fragment:
     @property
     def bdtns_number(self) -> str:
         return self._get_external_number("bdtns")
+
+    @property
+    def chicago_isac_number(self) -> str:
+        return self._get_external_number("chicago_isac")
 
     @property
     def ur_online_number(self) -> str:

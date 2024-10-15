@@ -254,8 +254,8 @@ unclear_sign: "x" flags
 _VARIANT_SEPARATOR: VARIANT_SEPARATOR
 VARIANT_SEPARATOR: "/"
 
-flags: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
-FLAG: (UNCERTAIN | CORRECTION | COLLATION| DAMAGE)*
+flags: (UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE | DAMAGE)*
+FLAG: (UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE | DAMAGE)*
 DAMAGE: "#"
 
 modifiers: MODIFIER*
@@ -315,7 +315,7 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
                  | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
                  | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
-                 | "š" | "ū" | "ṣ" | "ṭ" | "₄"
+                 | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
 
 _greek: greek_token (_WORD_SEPARATOR greek_token)*
 ?greek_token: greek_word
@@ -381,9 +381,9 @@ composite_end: "end " free_text
 composite_composite: "composite"
 composite_milestone: "m=locator " free_text [" " INT]
 
-
-status: (PRIME | UNCERTAIN | CORRECTION | COLLATION)*
+status: (PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
 PRIME: "'" | "′" | "’" 
 UNCERTAIN: "?"
 CORRECTION: "!"
 COLLATION: "*"
+NO_LONGER_VISIBLE: "°"

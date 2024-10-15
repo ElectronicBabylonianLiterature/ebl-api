@@ -39,6 +39,43 @@ def mongo_sign_igi():
             },
         ],
         "forms": [],
+        "sortKeys": {
+            "neoAssyrianOnset": [126],
+            "neoBabylonianOnset": [39],
+            "neoAssyrianOffset": [25],
+        },
+    }
+
+
+@pytest.fixture
+def mongo_sign_d():
+    return {
+        "_id": "d",
+        "lists": [{"name": "HZL", "number": "288"}],
+        "unicode": [1311],
+        "notes": [],
+        "internalNotes": [],
+        "literature": [],
+        "values": [
+            {
+                "value": "d",
+                "subIndex": 1,
+                "questionable": False,
+                "deprecated": False,
+                "notes": [],
+                "internalNotes": [],
+            },
+            {
+                "value": "panu",
+                "subIndex": 1,
+                "questionable": False,
+                "deprecated": False,
+                "languageRestriction": "akk",
+                "notes": [],
+                "internalNotes": [],
+            },
+        ],
+        "forms": [],
     }
 
 
@@ -74,6 +111,11 @@ def mongo_sign_si():
             },
         ],
         "forms": [],
+        "sortKeys": {
+            "neoAssyrianOnset": [125],
+            "neoBabylonianOnset": [38],
+            "neoAssyrianOffset": [24],
+        },
     }
 
 
@@ -240,6 +282,38 @@ def test_search_by_lists_name(
 
 def test_search_not_found(sign_repository):
     assert sign_repository.search("unknown", 1) is None
+
+
+def test_find_signs_by_order(database, sign_repository, mongo_sign_igi, mongo_sign_si):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si])
+    assert sign_repository.find_signs_by_order("IGI", "neoBabylonianOnset") == [
+        [
+            {"name": "SI", "unicode": []},
+            {"name": "IGI", "unicode": [74054]},
+        ]
+    ]
+
+
+def test_get_unicode_from_atf(
+    database, sign_repository, mongo_sign_igi, mongo_sign_si, mongo_sign_d
+):
+    database[COLLECTION].insert_many([mongo_sign_igi, mongo_sign_si, mongo_sign_d])
+    transliteration_line = "ši ši"
+    assert sign_repository.get_unicode_from_atf(transliteration_line) == [
+        {"unicode": [74054]},
+        {"unicode": [9999]},
+        {"unicode": [74054]},
+    ]
+    transliteration_line_with_det = "{d} ši"
+    assert sign_repository.get_unicode_from_atf(transliteration_line_with_det) == [
+        {"unicode": [1311]},
+        {"unicode": [9999]},
+        {"unicode": [74054]},
+    ]
+
+
+def test_find_signs_by_order_not_found(sign_repository):
+    assert sign_repository.find_signs_by_order("SI", "not_existing_era") == []
 
 
 def test_list_all_signs(sign_repository, signs) -> None:

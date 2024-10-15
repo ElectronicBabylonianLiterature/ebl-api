@@ -65,6 +65,7 @@ class DollarStatus(Enum):
     UNCERTAIN = "?"
     EMENDED_NOT_COLLATED = "!"
     NEEDS_COLLATION = "!?"
+    NO_LONGER_VISIBLE = "°"
 
     CORRECTION = "!"
     COLLATION = "*"
@@ -92,6 +93,7 @@ class Flag(Enum):
     UNCERTAIN = "?"
     CORRECTION = "!"
     COLLATION = "*"
+    NO_LONGER_VISIBLE = "°"
 
 
 @unique
@@ -214,6 +216,7 @@ FLAGS: Mapping[str, str] = {
     "uncertainty": re.escape(Flag.UNCERTAIN.value),
     "collation": re.escape(Flag.COLLATION.value),
     "damage": re.escape(Flag.DAMAGE.value),
+    "no longer visible": re.escape(Flag.NO_LONGER_VISIBLE.value),
     "correction": re.escape(Flag.CORRECTION.value),
 }
 
@@ -236,7 +239,9 @@ def to_sub_index(number: Optional[int]) -> str:
     return (
         "ₓ"
         if number is None
-        else "" if number == 1 else "".join(_SUB_SCRIPT[digit] for digit in str(number))
+        else ""
+        if number == 1
+        else "".join(_SUB_SCRIPT[digit] for digit in str(number))
     )
 
 

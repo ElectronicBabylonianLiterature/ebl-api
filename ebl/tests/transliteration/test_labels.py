@@ -14,13 +14,13 @@ from ebl.transliteration.domain.labels import (
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 
 LABELS: List[Tuple[str, str, str, Label]] = [
-    ("o", "", "@obverse", SurfaceLabel(tuple(), Surface.OBVERSE)),
-    ("r", "", "@reverse", SurfaceLabel(tuple(), Surface.REVERSE)),
-    ("b.e.", "", "@bottom", SurfaceLabel(tuple(), Surface.BOTTOM)),
-    ("e.", "", "@edge", SurfaceLabel(tuple(), Surface.EDGE)),
-    ("l.e.", "", "@left", SurfaceLabel(tuple(), Surface.LEFT)),
-    ("r.e.", "", "@right", SurfaceLabel(tuple(), Surface.RIGHT)),
-    ("t.e.", "", "@top", SurfaceLabel(tuple(), Surface.TOP)),
+    ("o", "", "@obverse", SurfaceLabel((), Surface.OBVERSE)),
+    ("r", "", "@reverse", SurfaceLabel((), Surface.REVERSE)),
+    ("b.e.", "", "@bottom", SurfaceLabel((), Surface.BOTTOM)),
+    ("e.", "", "@edge", SurfaceLabel((), Surface.EDGE)),
+    ("l.e.", "", "@left", SurfaceLabel((), Surface.LEFT)),
+    ("r.e.", "", "@right", SurfaceLabel((), Surface.RIGHT)),
+    ("t.e.", "", "@top", SurfaceLabel((), Surface.TOP)),
     ("o", "'", "@obverse", SurfaceLabel((Status.PRIME,), Surface.OBVERSE)),
     ("r", "?", "@reverse", SurfaceLabel((Status.UNCERTAIN,), Surface.REVERSE)),
     ("b.e.", "!", "@bottom", SurfaceLabel((Status.CORRECTION,), Surface.BOTTOM)),
@@ -31,16 +31,16 @@ LABELS: List[Tuple[str, str, str, Label]] = [
         "@left",
         SurfaceLabel((Status.COLLATION, Status.CORRECTION), Surface.LEFT),
     ),
-    ("i", "", "@column 1", ColumnLabel(tuple(), 1)),
-    ("ii", "", "@column 2", ColumnLabel(tuple(), 2)),
-    ("iii", "", "@column 3", ColumnLabel(tuple(), 3)),
-    ("iv", "", "@column 4", ColumnLabel(tuple(), 4)),
-    ("v", "", "@column 5", ColumnLabel(tuple(), 5)),
-    ("vi", "", "@column 6", ColumnLabel(tuple(), 6)),
-    ("vii", "", "@column 7", ColumnLabel(tuple(), 7)),
-    ("viii", "", "@column 8", ColumnLabel(tuple(), 8)),
-    ("ix", "", "@column 9", ColumnLabel(tuple(), 9)),
-    ("x", "", "@column 10", ColumnLabel(tuple(), 10)),
+    ("i", "", "@column 1", ColumnLabel((), 1)),
+    ("ii", "", "@column 2", ColumnLabel((), 2)),
+    ("iii", "", "@column 3", ColumnLabel((), 3)),
+    ("iv", "", "@column 4", ColumnLabel((), 4)),
+    ("v", "", "@column 5", ColumnLabel((), 5)),
+    ("vi", "", "@column 6", ColumnLabel((), 6)),
+    ("vii", "", "@column 7", ColumnLabel((), 7)),
+    ("viii", "", "@column 8", ColumnLabel((), 8)),
+    ("ix", "", "@column 9", ColumnLabel((), 9)),
+    ("x", "", "@column 10", ColumnLabel((), 10)),
     ("i", "'", "@column 1", ColumnLabel((Status.PRIME,), 1)),
     ("ii", "?", "@column 2", ColumnLabel((Status.UNCERTAIN,), 2)),
     ("iii", "!", "@column 3", ColumnLabel((Status.CORRECTION,), 3)),
@@ -50,20 +50,20 @@ LABELS: List[Tuple[str, str, str, Label]] = [
 
 
 UNPARSABLE_LABELS: List[Tuple[str, str, str, Label]] = [
-    ("a", "", "@edge a", SurfaceLabel(tuple(), Surface.EDGE, "a")),
-    ("side a", "", "@surface side a", SurfaceLabel(tuple(), Surface.SURFACE, "side a")),
-    ("a", "", "@face a", SurfaceLabel(tuple(), Surface.FACE, "a")),
-    ("bulla", "", "@bulla", ObjectLabel(tuple(), Object.BULLA, "")),
-    ("envelope", "", "@envelope", ObjectLabel(tuple(), Object.ENVELOPE, "")),
-    ("a", "", "@fragment a", ObjectLabel(tuple(), Object.FRAGMENT, "a")),
+    ("a", "", "@edge a", SurfaceLabel((), Surface.EDGE, "a")),
+    ("side a", "", "@surface side a", SurfaceLabel((), Surface.SURFACE, "side a")),
+    ("a", "", "@face a", SurfaceLabel((), Surface.FACE, "a")),
+    ("bulla", "", "@bulla", ObjectLabel((), Object.BULLA, "")),
+    ("envelope", "", "@envelope", ObjectLabel((), Object.ENVELOPE, "")),
+    ("a", "", "@fragment a", ObjectLabel((), Object.FRAGMENT, "a")),
     (
         "Stone wig",
         "",
         "@object Stone wig",
-        ObjectLabel(tuple(), Object.OBJECT, "Stone wig"),
+        ObjectLabel((), Object.OBJECT, "Stone wig"),
     ),
-    ("prism", "", "@prism", ObjectLabel(tuple(), Object.PRISM, "")),
-    ("tablet", "", "@tablet", ObjectLabel(tuple(), Object.TABLET, "")),
+    ("prism", "", "@prism", ObjectLabel((), Object.PRISM, "")),
+    ("tablet", "", "@tablet", ObjectLabel((), Object.TABLET, "")),
 ]
 
 
@@ -78,7 +78,7 @@ def test_parse_labels_multiple() -> None:
 
 
 def test_parse_labels_empty() -> None:
-    assert parse_labels("") == tuple()
+    assert parse_labels("") == ()
 
 
 @pytest.mark.parametrize("labels", ["o r", "i iii", "i o"])

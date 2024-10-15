@@ -18,7 +18,9 @@ from ebl.errors import DataError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.schemas import ScopeField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -107,6 +109,34 @@ class FragmentsQueryResource:
         )
 
 
+class FragmentAuthorizedScopesResource:
+    def __init__(
+        self,
+        repository: FragmentRepository,
+        finder: FragmentFinder,
+        updater: FragmentUpdater,
+    ):
+        self._repository = repository
+        self._finder = finder
+        self._updater = updater
+
+    @falcon.before(require_fragment_read_scope)
+    def on_post(self, req: Request, resp: Response, number: str) -> None:
+        try:
+            user = req.context.user
+            updated_fragment, has_photo = self._updater.update_scopes(
+                parse_museum_number(number),
+                [
+                    ScopeField()._deserialize_enum(scope)
+                    for scope in req.media["authorized_scopes"]
+                ],
+            )
+            resp.status = falcon.HTTP_200
+            resp.media = create_response_dto(updated_fragment, user, has_photo)
+        except ValueError as error:
+            raise DataError(error)
+
+
 class FragmentsListResource:
     def __init__(
         self,
@@ -129,13 +159,7 @@ def make_latest_additions_resource(repository: FragmentRepository, cache: Cache)
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: Request, resp: Response):
             resp.text = json.dumps(
-                QueryResultSchema().dump(
-                    self._repository.query_latest(
-                        req.context.user.get_scopes(
-                            prefix="read:", suffix="-fragments"
-                        ),
-                    )
-                )
+                QueryResultSchema().dump(self._repository.query_latest())
             )
 
     return LatestAdditionsResource(repository)
