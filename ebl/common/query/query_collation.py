@@ -4,7 +4,7 @@ from enum import Enum
 from typing import Dict, Iterable, Literal, Sequence
 from urllib.parse import parse_qsl
 
-DataType = Literal["dictionary", "afo-register"]
+DataType = Literal["dictionary", "afo-register", "colophons"]
 
 
 class Fields(Enum):
@@ -18,6 +18,11 @@ class Fields(Enum):
         "WILDCARD_FIELDS": [],
         "MARKDOWN_FIELDS": ["text"],
     }
+    COLOPHONS = {
+        "COLLATED_FIELDS": ["names"],
+        "WILDCARD_FIELDS": [],
+        "MARKDOWN_FIELDS": [],
+    }
 
     @staticmethod
     def findByDataType(data_type: DataType) -> Dict[str, Sequence[str]]:
@@ -25,6 +30,8 @@ class Fields(Enum):
             return Fields.DICTIONARY.value
         elif data_type == "afo-register":
             return Fields.AFO_REGISTER.value
+        elif data_type == "colophons":
+            return Fields.COLOPHONS.value
         else:
             raise ValueError("Invalid data type")
 
