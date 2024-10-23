@@ -2,12 +2,11 @@ import pytest
 import json
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
-
 PROBLEMATIC_TEXT_LINES = [
     (
-        "1. [*] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ ŠUB{"
+        "1. [*] AN#.GE₆ GAR-ma U₄ ŠÚ{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šú ŠUB{"
         "+di} * AN.GE₆",
-        "1. [ DIŠ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ "
+        "1. [DIŠ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ "
         "ŠUB{+di} DIŠ AN.GE₆",
     ),
     (
@@ -17,8 +16,8 @@ PROBLEMATIC_TEXT_LINES = [
         "ud-da-a-ta",
     ),
     (
-        "14. [...] x (x) še-e-hu $BAD $E₂ $ME : ina GAŠAN-ia₅ {d}SUEN {"
-        "d}INANA--<E₂>.AN.NA",
+        "14. [...] x (x) še-e-hu $BAD $É $ME : ina GAŠAN-ia₅ {d}SUEN {"
+        "d}INANA--<É>.AN.NA",
         "14. [...] x (x) še-e-hu BAD E₂ ME : ina GAŠAN-ia₅ {d}SUEN {"
         "d}INANA-<E₂>.AN.NA",
     ),
@@ -41,18 +40,23 @@ LEGACY_GRAMMAR_SIGNS = [
 
 
 @pytest.mark.parametrize(
-    "line,expected",
+    "legacy_line,ebl_line",
     [*PROBLEMATIC_TEXT_LINES, FOLLOWING_SIGN_IS_NOT_A_LOGOGRAM, *LEGACY_GRAMMAR_SIGNS],
 )
-def test_text_lines(line, expected):
+def test_text_lines(legacy_line, ebl_line):
+    # ToDo: fix
     atf_preprocessor = AtfPreprocessor("../logs", 0)
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lem_line_at,
-    ) = atf_preprocessor.process_line(line)
-    assert converted_line == expected
+    legacy_tree = atf_preprocessor.ebl_parser.parse(legacy_line)
+    legacy_tree = atf_preprocessor.transform_legacy_atf(legacy_tree)
+
+    expected_tree = atf_preprocessor.ebl_parser.parse(ebl_line)
+    expected_tree = atf_preprocessor.transform_legacy_atf(expected_tree)
+
+    # (converted_line,) = atf_preprocessor.process_line(legacy_line)
+    print(legacy_tree)
+    print(expected_tree)
+
+    assert legacy_tree == expected_tree
 
 
 lemma_lines = []

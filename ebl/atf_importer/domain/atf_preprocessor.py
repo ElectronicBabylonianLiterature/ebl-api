@@ -5,6 +5,7 @@ from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.atf_importer.domain.atf_conversions import GetWords
 from ebl.atf_importer.domain.legacy_atf_visitor import LegacyAtfVisitor
+# from ebl.transliteration.domain.line_transformer import LineTransformer
 
 
 class AtfPreprocessor(AtfPreprocessorBase):
@@ -52,13 +53,16 @@ class AtfPreprocessor(AtfPreprocessorBase):
             return self.parse_and_convert_line(atf_line)
 
     def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
-        input(f"! check_original_line. [{atf}]")
+        print("! check_original_line.")
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
-        input("! before parse")
+        # input(f"! before parse:\n{atf}")
         tree = self.ebl_parser.parse(atf)
-        input("! before transform")
+        # print(tree.pretty())
+        # input(f"! after parse:\n{self.line_tree_to_string(tree)}")
+        # input("! before transform")
+        # input("! after transform")
         tree = self.transform_legacy_atf(tree)
         self.logger.info("Line successfully parsed")
         self.logger.debug(f"Parsed line as {tree.data}")
@@ -81,7 +85,9 @@ class AtfPreprocessor(AtfPreprocessorBase):
         try:
             tree = self.ebl_parser.parse(atf)
             if tree.data in self.unused_lines:
-                result = self.get_empty_conversion(tree)
+                # result = self.get_empty_conversion(tree)
+                # ToDo: Check original
+                return tree
             elif tree.data == "lem_line":
                 result = self.convert_lem_line(atf, tree)
             elif tree.data == "text_line":

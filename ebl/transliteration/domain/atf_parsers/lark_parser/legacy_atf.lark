@@ -5,8 +5,8 @@ LEGACY_OPEN_HALF_BRACKET: "⌈" | "⸢"
 LEGACY_CLOSE_HALF_BRACKET: "⌉" | "⸣"
 LEGACY_ORACC_DISH_DIVIDER: "*"
 legacy_uncertain_sign_prefix: "$"
-
 legacy_single_ruling: " "* "ruling" [" "? ("!?" | "*" | "?" | "!")]
+
 
 //# ToDo:
 //# Implement here the following:

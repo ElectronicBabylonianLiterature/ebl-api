@@ -80,7 +80,7 @@ class GetWords(Visitor):
         self.alter_lem_line_at = []
         self.removal_open = False
 
-    def ebl_atf_text_line__word(self, tree):
+    def ebl_atf_text_line__word(self, tree: Tree) -> None:
         assert tree.data == "ebl_atf_text_line__word"
         word = ""
 
@@ -91,7 +91,7 @@ class GetWords(Visitor):
                 self.removal_open = False
                 self.alter_lem_line_at.append(self.wordcounter)
             elif isinstance(child, lexer.Token):
-                word += child
+                word += child # ToDo: Check, fix type error
             else:
                 word += DepthFirstSearch().visit_topdown(child, "")
 

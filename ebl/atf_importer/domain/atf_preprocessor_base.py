@@ -110,12 +110,6 @@ class AtfPreprocessorBase:
         # Previously: "lark-oracc/oracc_atf.lark",
         # This should be eventually removed completely.
 
-        # self.oracc_parser = Lark.open(
-        #    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark",
-        # maybe_placeholders=True,
-        # rel_to=__file__,
-        # )
-
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
         self.skip_next_lem_line = False
@@ -169,13 +163,13 @@ class AtfPreprocessorBase:
         return (None, None, tree.data, None)
 
     def convert_lem_line(
-        self, atf: str, tree
+        self, atf: str, tree: Tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
         if self.skip_next_lem_line:
             self.logger.warning("Skipping lem line due to previous flag.")
             self.skip_next_lem_line = False
             return (None, None, "lem_line", None)
-        lemmas_and_guidewords_array = self.serizalize_lemmas_and_guidewords()
+        lemmas_and_guidewords_array = self.serizalize_lemmas_and_guidewords(tree)
         self.logger.debug(
             "Converted line as "
             + tree.data
@@ -186,6 +180,7 @@ class AtfPreprocessorBase:
         return atf, lemmas_and_guidewords_array, tree.data, []
 
     def line_tree_to_string(self, tree: Tree) -> str:
+        # ToDo: Remove
         line_serializer = LineSerializer()
         line_serializer.visit_topdown(tree)
         return line_serializer.line.strip(" ")
@@ -240,11 +235,9 @@ class AtfPreprocessorBase:
         return re.sub(r"–|--", "-", atf)
 
     def _normalize_patterns(self, atf: str) -> str:
-        callback_normalize = (
-            lambda pat: pat.group(1)
-            + pat.group(2)
-            + self._normalize_numbers(pat.group(3))
-        )
+        def callback_normalize(pat):
+            return pat.group(1) + pat.group(2) + self._normalize_numbers(pat.group(3))
+
         return re.sub(r"(.*?)([a-zA-Z])(\d+)", callback_normalize, atf)
 
     def _replace_primed_digits(self, atf: str) -> str:
@@ -283,6 +276,7 @@ class AtfPreprocessorBase:
     def _process_bracketed_parts(self, atf: str) -> str:
         self.open_found = False
         split = re.split(r"([⌈⌉⸢⸣])", atf)
+        # ToDo: Remove:
         if len(split) > 1 and atf.startswith("9. ⸢4(BÁN)?⸣"):
             # ToDo: Continue from here.
             # Problem with `4(BÁN)#?`, which is not in lark grammer

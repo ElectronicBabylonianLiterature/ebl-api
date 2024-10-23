@@ -1,6 +1,6 @@
 import re
 from typing import Optional, Sequence, Callable
-from lark.visitors import Visitor, Transformer, Tree, v_args
+from lark.visitors import Visitor, Transformer, Tree, Token, v_args
 
 # ToDo: Continue from here
 # Make sure every transformer is implemented and works properly.
@@ -25,33 +25,33 @@ class LegacyAtfVisitor(Visitor):
     sign_rules = ["number", "reading", "logogram", "surrogate", "GRAPHEME_NAME"]
     legacy_damage_rules = ["_parts_pattern", "_parts_pattern_gloss"]
     legacy_joiner_rulers = ["LEGACY_ORACC_JOINER"]
-    legacy_special_rulers = ["LEGACY_ORACC_DISH_SIGN"]
+    legacy_special_rulers = ["logogram"]
 
     def __init__(self):
         super().__init__()
         self.legacy_found = False
-        self._set_rules(self.sign_rules, self.transform_legacy_sign)
+        self._set_rules(self.sign_rules, self.get_legacy_sign_transformer)
         self._set_rules(
             self.legacy_damage_rules,
-            self.transform_legacy_damage,
+            self.get_legacy_damage_transformer,
         )
         self._set_rules(
             self.legacy_joiner_rulers,
-            self.transform_legacy_joiner,
+            self.get_legacy_joiner_transformer,
         )
         self._set_rules(
-            self.legacy_divider_rulers,
-            self.transform_legacy_special,
+            self.legacy_special_rulers,
+            self.get_legacy_special_transformer,
         )
         input("legacy visitor initiated")
 
     def _set_rules(
         self,
         rules: Sequence[str],
-        method: Callable[[Tree], Transformer],
-        prefix: Optional[str],
+        method: Callable[[Tree], LegacyTransformer],
+        prefix: Optional[str] = None,
     ) -> None:
-        prefix = perfix if prefix else self.text_line_prefix
+        prefix = prefix if prefix else self.text_line_prefix
         for rule in rules:
             setattr(
                 self,
@@ -60,30 +60,39 @@ class LegacyAtfVisitor(Visitor):
             )
 
     def _wrap_legacy_found(
-        self, method: Callable[[Tree], Transformer]
-    ) -> Callable[[Tree], None]:
-        def _method(tree: Tree) -> None:
+        self, method: Callable[[Tree], LegacyTransformer]
+    ) -> Callable[[Tree], Tree]:
+        def _method(tree: Tree) -> Tree:
+            # ToDo: Continue from here. Highest priority.
+            # Transformations happen, but the original tree won't change.
             transformer = method(tree)
+            tree = transformer.transform(tree)
             if transformer.legacy_found:
                 self.legacy_found = True
+            print("\n!!!! tree", tree)
+            return tree
 
         return _method
 
-    def transform_legacy_sign(self, tree: Tree) -> None:
-        return AccentedIndexTransformer(visit_tokens=True).transform(tree)
+    def get_legacy_sign_transformer(self, tree: Tree) -> LegacyTransformer:
+        return AccentedIndexTransformer()
 
-    def transform_legacy_damage(self, tree: Tree) -> None:
-        return HalfBracketsTransformer().transform(tree)
+    def get_legacy_damage_transformer(self, tree: Tree) -> LegacyTransformer:
+        return HalfBracketsTransformer()
 
-    def transform_legacy_joiner(self, tree: Tree) -> None:
-        return OraccJoinerTransformer().transform(tree)
+    def get_legacy_joiner_transformer(self, tree: Tree) -> LegacyTransformer:
+        return OraccJoinerTransformer()
 
-    def transform_legacy_special(self, tree: Tree) -> None:
-        return OraccSpecialTransformer().transform(tree)
+    def get_legacy_special_transformer(self, tree: Tree) -> LegacyTransformer:
+        return OraccSpecialTransformer()
 
 
 class HalfBracketsTransformer(LegacyTransformer):
     # ToDo: Check if works
+
+    def __init__(self):
+        self.open = False
+
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_OPEN_HALF_BRACKET(self, bracket: str) -> str:
         print("! bbbbbb", bracket)
@@ -110,15 +119,20 @@ class HalfBracketsTransformer(LegacyTransformer):
 class OraccJoinerTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_ORACC_JOINER(self, bracket: str) -> str:
+        print("!!!!!!!!!!!!!!!!!!!! LEGACY_ORACC_JOINER")
         self.legacy_found = True
         return "-"
 
 
 class OraccSpecialTransformer(LegacyTransformer):
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_ORACC_DISH_DIVIDER(self, bracket: str) -> str:
+    def ebl_atf_text_line__LEGACY_ORACC_DISH_DIVIDER(self, child: str) -> Tree:
+        print("!!!!!!!!!!!!!!!!!!!! LEGACY_ORACC_DISH_DIVIDER")
         self.legacy_found = True
-        return "DIŠ"
+        return Tree(
+            "ebl_atf_text_line__logogram_name_part",
+            [Token("ebl_atf_text_line__LOGOGRAM_CHARACTER", char) for char in "DIŠ"],
+        )
 
 
 class AccentedIndexTransformer(LegacyTransformer):
@@ -148,14 +162,17 @@ class AccentedIndexTransformer(LegacyTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_VALUE_CHARACTER_ACCENTED(self, char: str) -> str:
+        print("!!!!!!!!!!!!!!!!!!!! LEGACY_VALUE_CHARACTER_ACCENTED")
         return self._transform_accented_vowel(char)
 
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_LOGOGRAM_CHARACTER_ACCENTED(self, char: str) -> str:
+        print("!!!!!!!!!!!!!!!!!!!! LEGACY_LOGOGRAM_CHARACTER_ACCENTED")
         return self._transform_accented_vowel(char)
 
     @v_args(inline=True)
     def ebl_atf_text_line__sub_index(self, char: Optional[str]) -> Optional[str]:
+        print("!!!!!!!!!!!!!!!!!!!! ebl_atf_text_line__sub_index")
         return self.sub_index if self.sub_index and not char else char
 
     def _transform_accented_vowel(self, char: str) -> str:
