@@ -4,6 +4,14 @@ from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
 PROBLEMATIC_TEXT_LINES = [
     (
+        "1. ŠÚ",
+        "1. ŠU₂",
+    ),
+    (
+        "1. [*]",
+        "1. [DIŠ]",
+    ),
+    (
         "1. [*] AN#.GE₆ GAR-ma U₄ ŠÚ{+up} * AN.GE₆ GAR-ma {d}IŠKUR KA-šú ŠUB{"
         "+di} * AN.GE₆",
         "1. [DIŠ] AN#.GE₆ GAR-ma U₄ ŠU₂{+up} DIŠ AN.GE₆ GAR-ma {d}IŠKUR KA-šu₂ "
@@ -53,8 +61,8 @@ def test_text_lines(legacy_line, ebl_line):
     expected_tree = atf_preprocessor.transform_legacy_atf(expected_tree)
 
     # (converted_line,) = atf_preprocessor.process_line(legacy_line)
-    print(legacy_tree)
-    print(expected_tree)
+    # print(legacy_tree)
+    # print(expected_tree)
 
     assert legacy_tree == expected_tree
 

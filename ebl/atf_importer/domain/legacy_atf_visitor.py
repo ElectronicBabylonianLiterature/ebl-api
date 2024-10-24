@@ -17,76 +17,6 @@ class LegacyTransformer(Transformer):
         self.legacy_found = False
 
 
-class LegacyAtfVisitor(Visitor):
-    # ToDo: Continue from here.
-    # Move all atf preprocessing here
-    # ?Try to convert to string and then parse?
-    text_line_prefix = "ebl_atf_text_line"
-    sign_rules = ["number", "reading", "logogram", "surrogate", "GRAPHEME_NAME"]
-    legacy_damage_rules = ["_parts_pattern", "_parts_pattern_gloss"]
-    legacy_joiner_rulers = ["LEGACY_ORACC_JOINER"]
-    legacy_special_rulers = ["logogram"]
-
-    def __init__(self):
-        super().__init__()
-        self.legacy_found = False
-        self._set_rules(self.sign_rules, self.get_legacy_sign_transformer)
-        self._set_rules(
-            self.legacy_damage_rules,
-            self.get_legacy_damage_transformer,
-        )
-        self._set_rules(
-            self.legacy_joiner_rulers,
-            self.get_legacy_joiner_transformer,
-        )
-        self._set_rules(
-            self.legacy_special_rulers,
-            self.get_legacy_special_transformer,
-        )
-        input("legacy visitor initiated")
-
-    def _set_rules(
-        self,
-        rules: Sequence[str],
-        method: Callable[[Tree], LegacyTransformer],
-        prefix: Optional[str] = None,
-    ) -> None:
-        prefix = prefix if prefix else self.text_line_prefix
-        for rule in rules:
-            setattr(
-                self,
-                f"{prefix}__{rule}",
-                self._wrap_legacy_found(method),
-            )
-
-    def _wrap_legacy_found(
-        self, method: Callable[[Tree], LegacyTransformer]
-    ) -> Callable[[Tree], Tree]:
-        def _method(tree: Tree) -> Tree:
-            # ToDo: Continue from here. Highest priority.
-            # Transformations happen, but the original tree won't change.
-            transformer = method(tree)
-            tree = transformer.transform(tree)
-            if transformer.legacy_found:
-                self.legacy_found = True
-            print("\n!!!! tree", tree)
-            return tree
-
-        return _method
-
-    def get_legacy_sign_transformer(self, tree: Tree) -> LegacyTransformer:
-        return AccentedIndexTransformer()
-
-    def get_legacy_damage_transformer(self, tree: Tree) -> LegacyTransformer:
-        return HalfBracketsTransformer()
-
-    def get_legacy_joiner_transformer(self, tree: Tree) -> LegacyTransformer:
-        return OraccJoinerTransformer()
-
-    def get_legacy_special_transformer(self, tree: Tree) -> LegacyTransformer:
-        return OraccSpecialTransformer()
-
-
 class HalfBracketsTransformer(LegacyTransformer):
     # ToDo: Check if works
 
@@ -161,14 +91,18 @@ class AccentedIndexTransformer(LegacyTransformer):
         self.sub_index = None
 
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_VALUE_CHARACTER_ACCENTED(self, char: str) -> str:
-        print("!!!!!!!!!!!!!!!!!!!! LEGACY_VALUE_CHARACTER_ACCENTED")
-        return self._transform_accented_vowel(char)
+    def ebl_atf_text_line__VALUE_CHARACTER(self, char: str) -> str:
+        if char in self.replacement_chars.keys():
+            print("!!!!!!!!!!!!!!!!!!!! LEGACY_VALUE_CHARACTER", char)
+            return self._transform_accented_vowel(char)
+        return char
 
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_LOGOGRAM_CHARACTER_ACCENTED(self, char: str) -> str:
-        print("!!!!!!!!!!!!!!!!!!!! LEGACY_LOGOGRAM_CHARACTER_ACCENTED")
-        return self._transform_accented_vowel(char)
+    def ebl_atf_text_line__LOGOGRAM_CHARACTER(self, char: str) -> str:
+        if char in self.replacement_chars.keys():
+            print("!!!!!!!!!!!!!!!!!!!! LEGACY_LOGOGRAM_CHARACTER", char)
+            return self._transform_accented_vowel(char)
+        return char
 
     @v_args(inline=True)
     def ebl_atf_text_line__sub_index(self, char: Optional[str]) -> Optional[str]:
@@ -185,3 +119,70 @@ class AccentedIndexTransformer(LegacyTransformer):
             if pattern.search(char):
                 self.sub_index = suffix
                 break
+
+
+accented_index_transformer = AccentedIndexTransformer()
+half_brackets_transformer = HalfBracketsTransformer()
+oracc_joiner_transformer = OraccJoinerTransformer()
+oracc_special_transformer = OraccSpecialTransformer()
+
+
+class LegacyAtfVisitor(Visitor):
+    # ToDo: Continue from here.
+    # Move all atf preprocessing here
+    # ?Try to convert to string and then parse?
+    text_line_prefix = "ebl_atf_text_line"
+    tokens_to_visit = {
+        "number": [accented_index_transformer],
+        "reading": [accented_index_transformer],
+        "logogram": [accented_index_transformer, oracc_special_transformer],
+        "surrogate": [accented_index_transformer],
+        "GRAPHEME_NAME": [accented_index_transformer],
+        "_parts_pattern": [half_brackets_transformer],
+        "_parts_pattern_gloss": [half_brackets_transformer],
+        "LEGACY_ORACC_JOINER": [oracc_joiner_transformer],
+    }
+
+    def __init__(self):
+        super().__init__()
+        self.legacy_found = False
+        for suffix, transformers in self.tokens_to_visit.items():
+            self._set_rules(suffix, transformers)
+
+        input("legacy visitor initiated")
+
+    def _set_rules(
+        self,
+        suffix: str,
+        transformers: Sequence[LegacyTransformer],
+        prefix: Optional[str] = None,
+    ) -> None:
+        prefix = prefix if prefix else self.text_line_prefix
+        setattr(
+            self,
+            f"{prefix}__{suffix}",
+            self._wrap_legacy_found(transformers),
+        )
+
+    def _wrap_legacy_found(
+        self, transformers: Sequence[LegacyTransformer]
+    ) -> Callable[[Tree], None]:
+        def _method(tree: Tree) -> Tree:
+            for transformer in transformers:
+                # ToDo: Continue from here. Top Priority.
+                # There is an error that likely has to do with
+                # the token (`tree`) element being added children
+                # disregarding the internal structure.
+                # A possible approach for complex transformers (such as `AccentedIndexTransformer`)
+                # might be saving the element as an attibute
+                # of the `LegacyTransformer` class, then extracting it, e.g.:
+                # transformer.transform(tree)
+                # tree.children[0] = transformer.result
+                # Make sure, however, that old results are not memorized:
+                # Either initiate new instances or (better?) renew them on each run.
+                tree.children[0] = transformer.transform(tree)
+                if transformer.legacy_found:
+                    self.legacy_found = True
+            print("\nTransformed Tree:", tree.pretty())
+
+        return _method
