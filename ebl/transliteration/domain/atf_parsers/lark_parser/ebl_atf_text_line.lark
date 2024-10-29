@@ -6,6 +6,7 @@
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
 %import .ebl_atf_common (seal)
 %import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
+%import .ebl_atf_common (AKKADIAN_ALPHABET, GREEK_ALPHABET)
 %import .ebl_atf_abbreviations (PERIOD)
 %import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
 %import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
@@ -222,7 +223,6 @@ reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]
 logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"]
 surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>"
 surrogate_text: reading (joiner reading)*
-sub_index: [SUB_INDEX]
 
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
@@ -233,20 +233,20 @@ value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
 
 ?any_grapheme: compound_grapheme | grapheme
-compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
-COMPOUND_FRAGMENT: SUB_COMPOUND (COMPOUND_OPERATOR SUB_COMPOUND)*
-SUB_COMPOUND: "(" COMPOUND_PART ((COMPOUND_OPERATOR) COMPOUND_PART)* ")"
-            | COMPOUND_PART
-COMPOUND_PART: GRAPHEME (VARIANT_SEPARATOR GRAPHEME)*
+compound_grapheme: "|" compound_fragment ("." compound_fragment)* "|"
+?compound_fragment: sub_compound (COMPOUND_OPERATOR sub_compound)*
+?sub_compound: "(" compound_part ((COMPOUND_OPERATOR) compound_part)* ")"
+            | compound_part
+?compound_part: grapheme (VARIANT_SEPARATOR grapheme)*
 COMPOUND_OPERATOR: "×" | "%" | "&" | "+" | "."
 
-grapheme: GRAPHEME_NAME modifiers flags
-GRAPHEME: GRAPHEME_NAME MODIFIER* FLAG
-GRAPHEME_NAME: GRAPHEME_CHARACTER (GRAPHEME_CHARACTER)* SUB_INDEX?
-GRAPHEME_CHARACTER: VALUE_CHARACTER | LOGOGRAM_CHARACTER | "0".."9"
+grapheme: grapheme_name sub_index modifiers flags
+grapheme_name: grapheme_name_part
+grapheme_name_part: VALUE_CHARACTER+ | LOGOGRAM_CHARACTER+
 
+sub_index: [SUB_INDEX]
 SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
-NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")*
+NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")* | "1".."9" ("0".."9")*
 
 unidentified_sign: "X" flags
 unclear_sign: "x" flags
@@ -310,12 +310,6 @@ open_emendation: "<"
 close_emendation: ">"
 
 akkadian_string: AKKADIAN_ALPHABET+
-AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
-                 | "M" | "N" | "P" | "S" | "T" | "U" | "Y" | "Z" | "a" | "b"
-                 | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
-                 | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
-                 | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
-                 | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
 
 _greek: greek_token (_WORD_SEPARATOR greek_token)*
 ?greek_token: greek_word
@@ -327,12 +321,6 @@ greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosur
                 | unknown_number_of_signs
 ?greek_enclosure: _any_open | _any_close
 greek_letter: GREEK_ALPHABET flags
-GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"
-              | "Ζ" | "ζ" | "Η" | "η" | "Θ" | "θ" | "Ι" | "ι" | "Κ" | "κ"
-              | "Λ" | "λ" | "Μ" | "μ" | "Ν" | "ν" | "Ξ" | "ξ" | "Ο" | "ο"
-              | "Π" | "π" | "Ρ" | "ρ" | "Σ" | "σ" | "ς" | "Τ" | "τ" | "Υ"
-              | "υ" | "Φ" | "φ" | "Χ" | "χ" | "Ψ" | "ψ" | "Ω" | "ω"
-
 
 labels: surface_label " " column_label
       | surface_label

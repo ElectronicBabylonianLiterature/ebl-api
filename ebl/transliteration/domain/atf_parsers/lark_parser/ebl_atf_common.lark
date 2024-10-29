@@ -33,3 +33,16 @@ LOGOGRAM_CHARACTER_MAIN: "A" | "Ā" | "Â" | "B" | "D" | "E"
 
 VALUE_CHARACTER: VALUE_CHARACTER_MAIN | LEGACY_VALUE_CHARACTER_ACCENTED
 LOGOGRAM_CHARACTER: LOGOGRAM_CHARACTER_MAIN | LEGACY_LOGOGRAM_CHARACTER_ACCENTED
+
+GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"
+              | "Ζ" | "ζ" | "Η" | "η" | "Θ" | "θ" | "Ι" | "ι" | "Κ" | "κ"
+              | "Λ" | "λ" | "Μ" | "μ" | "Ν" | "ν" | "Ξ" | "ξ" | "Ο" | "ο"
+              | "Π" | "π" | "Ρ" | "ρ" | "Σ" | "σ" | "ς" | "Τ" | "τ" | "Υ"
+              | "υ" | "Φ" | "φ" | "Χ" | "χ" | "Ψ" | "ψ" | "Ω" | "ω"
+
+AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
+                 | "M" | "N" | "P" | "S" | "T" | "U" | "Y" | "Z" | "a" | "b"
+                 | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
+                 | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
+                 | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
+                 | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
