@@ -45,6 +45,7 @@ class Provenance(ProvenanceEnum):
     KISURRA = ("Kisurra", "Ksr", "Babylonia", "KSR")
     KIS = ("Kiš", "Kiš", "Babylonia", "KSH")
     KUTALLA = ("Kutalla", "Kut", "Babylonia", "SFR")
+    LAGABA = ("Lagaba", "Lag", "Babylonia", "LGBunk")
     LAGAS = ("Lagaš", "Lag", "Babylonia", "LAG")
     LARAK = ("Larak", "Lrk", "Babylonia", "LRK")
     LARSA = ("Larsa", "Lar", "Babylonia", "LAR")
