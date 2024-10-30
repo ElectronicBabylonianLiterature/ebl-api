@@ -29,6 +29,7 @@ class Provenance(ProvenanceEnum):
     BAD_TIBIRA = ("Bad-Tibira", "Btb", "Babylonia", "BTB")
     BORSIPPA = ("Borsippa", "Bor", "Babylonia", "BOR")
     CUTHA = ("Cutha", "Cut", "Babylonia", "GUD")
+    DAMRUM = ("Damrum", "Dam", "Babylonia", "DMRunk")
     DILBAT = ("Dilbat", "Dil", "Babylonia", "DLB")
     DIQDIQQAH = ("Diqdiqqah", "Diqd", "Babylonia", "DQD")
     DUR_KURIGALZU = ("Dūr-Kurigalzu", "Dku", "Babylonia", "AQA")
