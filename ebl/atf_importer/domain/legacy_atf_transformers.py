@@ -29,23 +29,24 @@ class LegacyTransformer(Transformer):
         result = super().transform(tree)
         return result if result else tree
 
-    def _transform_children(self, children):
+    def _transform_children(self, children: Sequence[Tree]):
+        index_correction = 0
         for index, child in enumerate(children):
-            self._enter_node(index)
-            if self.is_classes_break_at(self.get_ancestors()):
-                result = child
-            elif isinstance(child, Tree):
-                result = self._transform_tree(child)
-            elif self.__visit_tokens__ and isinstance(child, Token):
-                result = self._call_userfunc_token(child)
-            else:
-                result = child
-
+            self._enter_node(index - index_correction)
+            result = self._get_child_result(child)
+            self._exit_node()
             if result is not Discard:
-                self._exit_node()
                 yield result
-            else:
-                self._exit_node()
+
+    def _get_child_result(self, child: Tree) -> Tree:
+        if self.is_classes_break_at(self.get_ancestors()):
+            return child
+        elif isinstance(child, Tree):
+            return self._transform_tree(child)
+        elif self.__visit_tokens__ and isinstance(child, Token):
+            return self._call_userfunc_token(child)
+        else:
+            return child
 
     def _enter_node(self, index: int = 0) -> None:
         self.current_path.append(index)
@@ -60,7 +61,8 @@ class LegacyTransformer(Transformer):
         tree = self.current_tree
         ancestors = [tree.data]
         for parent_index in self.current_path[:-1]:
-            ancestors.append(tree.children[parent_index].data)
+            ancestor = tree.children[parent_index]
+            ancestors.append(ancestor.data)
             tree = tree.children[parent_index]
         return ancestors
 
@@ -69,8 +71,6 @@ class LegacyTransformer(Transformer):
 
 
 class HalfBracketsTransformer(LegacyTransformer):
-    # ToDo: Check if works
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.open = False
@@ -80,40 +80,36 @@ class HalfBracketsTransformer(LegacyTransformer):
         self.open = False
 
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_OPEN_HALF_BRACKET(self, bracket: str) -> str:
-        print("! bbbbbb", bracket)
-        input()
+    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Discard:
         self.legacy_found = True
         self.open = True
-        return ""
+        return Discard
 
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_CLOSE_HALF_BRACKET(self, bracket: str) -> str:
-        print("! bbbbbb", bracket)
-        input()
+    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Discard:
         self.legacy_found = True
         self.open = False
-        return ""
+        return Discard
 
     @v_args(inline=True)
-    def ebl_atf_text_line__flags(self, flags: str):
-        print("! bbbbbb", flags)
-        input()
-        return flags + "#" if self.open else flags
+    def ebl_atf_text_line__flags(self, *flags) -> Tree:
+        damage_flag = Token("ebl_atf_text_line__DAMAGE", "#") if self.open else None
+        _flags = [flag for flag in [*flags, damage_flag] if flag]
+        return Tree("ebl_atf_text_line__flags", _flags if _flags else [])
 
 
 class OraccJoinerTransformer(LegacyTransformer):
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_ORACC_JOINER(self, bracket: str) -> str:
-        print("!!!!!!!!!!!!!!!!!!!! LEGACY_ORACC_JOINER")
-        self.legacy_found = True
-        return "-"
+    def ebl_atf_text_line__joiner(self, joiner: Token) -> Tree:
+        if joiner.type == "ebl_atf_text_line__LEGACY_ORACC_JOINER":
+            self.legacy_found = True
+            return Tree("ebl_atf_text_line__joiner", [Token("MINUS", "-")])
+        return Tree("ebl_atf_text_line__joiner", [joiner])
 
 
 class OraccSpecialTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_ORACC_DISH_DIVIDER(self, child: str) -> Tree:
-        print("!!!!!!!!!!!!!!!!!!!! LEGACY_ORACC_DISH_DIVIDER")
         self.legacy_found = True
         return Tree(
             "ebl_atf_text_line__logogram_name_part",
@@ -194,3 +190,12 @@ class AccentedIndexTransformer(LegacyTransformer):
             "ebl_atf_text_line__sub_index",
             [sub_index_value],
         )
+
+
+class UncertainSignTransformer(LegacyTransformer):
+    @v_args(inline=True)
+    def ebl_atf_text_line__legacy_uncertain_sign(
+        self, prefix: Tree, sign: Tree
+    ) -> Tree:
+        self.legacy_found = True
+        return sign

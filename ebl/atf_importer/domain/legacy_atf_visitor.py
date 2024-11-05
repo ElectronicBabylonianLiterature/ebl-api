@@ -5,6 +5,7 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
     HalfBracketsTransformer,
     OraccJoinerTransformer,
     OraccSpecialTransformer,
+    UncertainSignTransformer,
 )
 from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
@@ -18,8 +19,9 @@ from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
 
 index_and_accented_transformer = (AccentedIndexTransformer(), "all_children")
-half_brackets_transformer = (HalfBracketsTransformer(), "first_child")
-oracc_joiner_transformer = (OraccJoinerTransformer(), "first_child")
+uncertain_sign_transformer = (UncertainSignTransformer(), "all_children")
+half_brackets_transformer = (HalfBracketsTransformer(), "all_children")
+oracc_joiner_transformer = (OraccJoinerTransformer(), "all_children")
 oracc_special_transformer = (OraccSpecialTransformer(), "first_child")
 
 
@@ -34,9 +36,11 @@ class LegacyAtfVisitor(Visitor):
         ],
         "surrogate": [index_and_accented_transformer],
         "grapheme": [index_and_accented_transformer],
-        "_parts_pattern": [half_brackets_transformer],
-        "_parts_pattern_gloss": [half_brackets_transformer],
-        "LEGACY_ORACC_JOINER": [oracc_joiner_transformer],
+        "word": [
+            uncertain_sign_transformer,
+            oracc_joiner_transformer,
+        ],
+        "text": [half_brackets_transformer],
     }
 
     def __init__(self):

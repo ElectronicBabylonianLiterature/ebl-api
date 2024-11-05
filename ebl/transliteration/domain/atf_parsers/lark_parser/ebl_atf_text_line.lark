@@ -64,11 +64,14 @@ _head: _have_both
 _tail: _WORD_SEPARATOR _omit_right* _have_both?
      | _WORD_SEPARATOR? _omit_left+
      | _WORD_SEPARATOR _require_both
+     | _WORD_SEPARATOR? _require_both_optional_ws
 
 _require_both: commentary_protocol
-             | divider_variant
-             | divider
-             | line_break
+            | line_break
+
+_require_both_optional_ws:  divider_variant
+            | divider
+
 _have_both: tabulation
          | column_token
          | erasure
