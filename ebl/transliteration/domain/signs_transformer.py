@@ -1,7 +1,8 @@
+from lark import Token, Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.atf import sub_index_to_int
+from ebl.transliteration.domain.atf import sub_index_to_int, to_sub_index
 from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
     EgyptianMetricalFeetSeparator,
 )
@@ -15,6 +16,18 @@ from ebl.transliteration.domain.sign_tokens import (
 from ebl.transliteration.domain.tokens import Joiner
 from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
+
+
+def tree_to_string(tree: Tree) -> str:
+    _children = []
+    for part in tree.scan_values(lambda x: x):
+        if hasattr(part, "value") :
+            _children.append(part.value)
+        elif isinstance(part, Tree):
+            _children.append(tree_to_string(part))
+        else:
+            _children.append(str(part))
+    return "".join(_children)
 
 
 class SignTransformer(Transformer):
@@ -85,8 +98,21 @@ class SignTransformer(Transformer):
         return tuple(map(atf.Flag, tokens))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__grapheme(self, name, modifiers, flags):
-        return Grapheme.of(name.value, modifiers, flags)
+    def ebl_atf_text_line__grapheme(self, name, sub_index, modifiers, flags):
+        _name = tree_to_string(name)
+        _sub_index = to_sub_index(sub_index) if sub_index and sub_index != 1 else ""
+        return Grapheme.of(_name + _sub_index, modifiers, flags)
+
+    def ebl_atf_text_line__sub_compound(self, children):
+        return Tree("ebl_atf_text_line__sub_compound", ["(", *children, ")"])
 
     def ebl_atf_text_line__compound_grapheme(self, children):
-        return CompoundGrapheme.of([part.value for part in children])
+        _children = []
+        for part in children:
+            if isinstance(part, Token):
+                _children.append(part.value)
+            elif isinstance(part, Tree):
+                _children.append(tree_to_string(part))
+            else:
+                _children.append(str(part))
+        return CompoundGrapheme.of(_children)

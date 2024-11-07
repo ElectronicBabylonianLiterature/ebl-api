@@ -245,7 +245,9 @@ COMPOUND_OPERATOR: "×" | "%" | "&" | "+" | "."
 
 grapheme: grapheme_name sub_index modifiers flags
 grapheme_name: grapheme_name_part
-grapheme_name_part: VALUE_CHARACTER+ | LOGOGRAM_CHARACTER+
+grapheme_name_part: VALUE_CHARACTER+ 
+      | LOGOGRAM_CHARACTER+ 
+      | number_name_head number_name_part*
 
 sub_index: [SUB_INDEX]
 SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
