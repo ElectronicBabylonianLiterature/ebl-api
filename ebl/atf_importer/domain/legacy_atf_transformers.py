@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Sequence
+from typing import Optional, List, Sequence, Union, Type
 from lark.visitors import Transformer, Tree, Token, v_args, Discard
 from ebl.transliteration.domain.atf import _SUB_SCRIPT
 
@@ -13,10 +13,12 @@ from ebl.transliteration.domain.atf import _SUB_SCRIPT
 
 
 class LegacyTransformer(Transformer):
+    text_line_prefix = "ebl_atf_text_line"
+
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.legacy_found = False
-        self.current_path: Sequence[int] = []
+        self.current_path: List[int] = []
         self.current_tree: Optional[Tree] = None
         self.break_at: Sequence[str] = []
 
@@ -69,6 +71,14 @@ class LegacyTransformer(Transformer):
     def is_classes_break_at(self, node_classes: Sequence[str]) -> bool:
         return not set(node_classes).isdisjoint(self.break_at)
 
+    def to_token(self, name: str, string: Optional[str]) -> Token:
+        return Token(f"{self.text_line_prefix}__{name}", string)
+
+    def to_tree(
+        self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
+    ) -> Tree:
+        return Tree(f"{self.text_line_prefix}__{name}", children)
+
 
 class HalfBracketsTransformer(LegacyTransformer):
     def __init__(self, **kwargs):
@@ -80,39 +90,39 @@ class HalfBracketsTransformer(LegacyTransformer):
         self.open = False
 
     @v_args(inline=True)
-    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Discard:
+    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Type[Discard]:
         self.legacy_found = True
         self.open = True
         return Discard
 
     @v_args(inline=True)
-    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Discard:
+    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Type[Discard]:
         self.legacy_found = True
         self.open = False
         return Discard
 
     @v_args(inline=True)
     def ebl_atf_text_line__flags(self, *flags) -> Tree:
-        damage_flag = Token("ebl_atf_text_line__DAMAGE", "#") if self.open else None
+        damage_flag = self.to_token("DAMAGE", "#") if self.open else None
         _flags = [flag for flag in [*flags, damage_flag] if flag]
-        return Tree("ebl_atf_text_line__flags", _flags if _flags else [])
+        return self.to_tree("flags", _flags if _flags else [])
 
 
 class OraccJoinerTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__joiner(self, joiner: Token) -> Tree:
-        if joiner.type == "ebl_atf_text_line__LEGACY_ORACC_JOINER":
+        if joiner.type == "ebl_atf_text_line__LEGACY_ORACC_JOINER":  # type: ignore
             self.legacy_found = True
-            return Tree("ebl_atf_text_line__joiner", [Token("MINUS", "-")])
-        return Tree("ebl_atf_text_line__joiner", [joiner])
+            return self.to_tree("joiner", [Token("MINUS", "-")])
+        return self.to_tree("joiner", [joiner])
 
 
 class OraccSpecialTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_ORACC_DISH_DIVIDER(self, child: str) -> Tree:
         self.legacy_found = True
-        return Tree(
-            "ebl_atf_text_line__logogram_name_part",
+        return self.to_tree(
+            "logogram_name_part",
             [Token("ebl_atf_text_line__LOGOGRAM_CHARACTER", char) for char in "DIŠ"],
         )
 
@@ -176,18 +186,16 @@ class AccentedIndexTransformer(LegacyTransformer):
         self.legacy_found = True
         return self.replacement_chars[char]
 
-    def _set_sub_index_from_accented(self, char: str) -> None:
+    def _set_sub_index_from_accented(self, char: Optional[str]) -> None:
         for pattern, sub_index in self.accented_index_patterns:
             if pattern.search(char):
                 self._set_sub_index(sub_index)
                 break
 
-    def _set_sub_index(self, sub_index: str) -> None:
-        sub_index_value = (
-            Token("ebl_atf_text_line__SUB_INDEX", sub_index) if sub_index else None
-        )
-        self.sub_index = Tree(
-            "ebl_atf_text_line__sub_index",
+    def _set_sub_index(self, sub_index: Optional[str]) -> None:
+        sub_index_value = self.to_token("SUB_INDEX", sub_index) if sub_index else None
+        self.sub_index = self.to_tree(
+            "sub_index",
             [sub_index_value],
         )
 
@@ -199,3 +207,32 @@ class UncertainSignTransformer(LegacyTransformer):
     ) -> Tree:
         self.legacy_found = True
         return sign
+
+
+class LegacyModifierPrefixTransformer(LegacyTransformer):
+    @v_args(inline=True)
+    def ebl_atf_text_line__LEGACY_MODIFIER_PREFIX(self, prefix: Token) -> Token:
+        self.legacy_found = True
+        return self.to_token("MODIFIER_PREFIX", "@")
+
+
+# ToDo: Empty lines should be ignored
+"""
+class EmptyLineTransformer(LegacyTransformer):
+"""
+
+
+class LegacyPrimeTransformer(LegacyTransformer):
+    @v_args(inline=True)
+    def ebl_atf_text_line__LEGACY_PRIME(self, prime: Token) -> Token:
+        self.legacy_found = True
+        return self.to_token("PRIME", "'")
+
+
+class LegacyAlephTransformer(LegacyTransformer):
+    @v_args(inline=True)
+    def ebl_atf_text_line__VALUE_CHARACTER(self, token: Token) -> Token:
+        if str(token) == "'":
+            self.legacy_found = True
+            token = self.to_token("VALUE_CHARACTER", "ʾ")
+        return token

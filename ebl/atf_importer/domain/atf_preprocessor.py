@@ -74,7 +74,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
     def transform_legacy_atf(self, tree: Tree) -> Tree:
         visitor = LegacyAtfVisitor()
         visitor.visit(tree)
-        print('!!!! visitor.legacy_found', visitor.legacy_found)
+        # print('!!!! visitor.legacy_found', visitor.legacy_found)
         if visitor.legacy_found:
             self.logger.info("Legacy line successfully parsed")
         return tree

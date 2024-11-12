@@ -5,6 +5,13 @@ from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 # ToDo: All transformers should be tested
 
 PARSE_AND_TRANSFORM_LEGACY = [
+    ("1. a'", "1. aʾ"),
+    ("1′. A", "1'. A"),
+    ("1’. A", "1'. A"),
+    ("1. LU2~v", "1. LU₂@v"),
+    ("1. u2~v", "1. u₂@v"),
+    ("1. 2~v", "1. 2@v"),
+    ("1. $BAD.$É $ME", "1. BAD.E₂ ME"),
     ("1. ⸢16?! 15! 12⸣ 17", "1. 16?!# 15!# 12# 17"),
     ("1. $BAD.$É $ME", "1. BAD.E₂ ME"),
     (

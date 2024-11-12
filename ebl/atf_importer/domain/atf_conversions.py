@@ -4,24 +4,6 @@ from lark import Visitor, Tree, lexer
 # ToDo:
 # Remove. Use `legacy_atf_visitor` instead
 
-# Duplicate:
-"""
-class ConvertLineDividers(Visitor):
-    def ebl_atf_text_line__divider(self, tree: Tree) -> None:
-        if tree.data == "ebl_atf_text_line__divider" and tree.children[0] == "*":
-            # ToDo:
-            # Replace with actual logogram object?
-            tree.children[0] = "DIŠ"
-"""
-
-# Duplicate:
-"""
-class ConvertLineJoiner(Visitor):
-    def ebl_atf_text_line__joiner(self, tree: Tree) -> None:
-        if tree.data == "ebl_atf_text_line__joiner" and tree.children[0] == "--":
-            tree.children[0] = "-"
-"""
-
 
 class StripSigns(Visitor):
     def ebl_atf_text_line__legacy_uncertain_sign_prefix(self, tree: Tree) -> None:
@@ -91,7 +73,7 @@ class GetWords(Visitor):
                 self.removal_open = False
                 self.alter_lem_line_at.append(self.wordcounter)
             elif isinstance(child, lexer.Token):
-                word += child # ToDo: Check, fix type error
+                word += str(child)
             else:
                 word += DepthFirstSearch().visit_topdown(child, "")
 

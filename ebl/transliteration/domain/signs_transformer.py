@@ -21,7 +21,7 @@ from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, Unidenti
 def tree_to_string(tree: Tree) -> str:
     _children = []
     for part in tree.scan_values(lambda x: x):
-        if hasattr(part, "value") :
+        if hasattr(part, "value"):
             _children.append(part.value)
         elif isinstance(part, Tree):
             _children.append(tree_to_string(part))

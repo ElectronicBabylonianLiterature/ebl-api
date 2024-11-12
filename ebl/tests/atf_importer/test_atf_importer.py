@@ -121,5 +121,5 @@ def test_placeholder_insert(database):
     # ToDo: Fix error:
     # FAILED ebl/tests/atf_importer/test_atf_importer.py:
     #   :test_placeholder_insert - KeyError: 'last_transliteration'
-    print("!!!!", ebl_lines)
+    print("!!!! ebl_lines", ebl_lines)
     assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])

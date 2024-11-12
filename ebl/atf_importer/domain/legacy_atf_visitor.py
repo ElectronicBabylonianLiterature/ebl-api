@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Callable
+from typing import Optional, Sequence, Tuple, Callable
 from lark.visitors import Visitor, Tree
 from ebl.atf_importer.domain.legacy_atf_transformers import (
     AccentedIndexTransformer,
@@ -6,6 +6,9 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
     OraccJoinerTransformer,
     OraccSpecialTransformer,
     UncertainSignTransformer,
+    LegacyModifierPrefixTransformer,
+    LegacyPrimeTransformer,
+    LegacyAlephTransformer,
 )
 from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
@@ -23,24 +26,34 @@ uncertain_sign_transformer = (UncertainSignTransformer(), "all_children")
 half_brackets_transformer = (HalfBracketsTransformer(), "all_children")
 oracc_joiner_transformer = (OraccJoinerTransformer(), "all_children")
 oracc_special_transformer = (OraccSpecialTransformer(), "first_child")
+oracc_modifier_prefix_transformer = (LegacyModifierPrefixTransformer(), "all_children")
+prime_transformer = (LegacyPrimeTransformer(), "all_children")
+legacy_aleph_transformer = (LegacyAlephTransformer(), "all_children")
 
 
 class LegacyAtfVisitor(Visitor):
     text_line_prefix = "ebl_atf_text_line"
     nodes_to_visit = {
-        # "number": [index_and_accented_transformer],
-        "reading": [index_and_accented_transformer],
+        "number": [oracc_modifier_prefix_transformer],
+        "reading": [index_and_accented_transformer, oracc_modifier_prefix_transformer],
         "logogram": [
             index_and_accented_transformer,
+            oracc_modifier_prefix_transformer,
             oracc_special_transformer,
         ],
-        "surrogate": [index_and_accented_transformer],
-        "grapheme": [index_and_accented_transformer],
+        "surrogate": [
+            index_and_accented_transformer,
+            oracc_modifier_prefix_transformer,
+        ],
+        "grapheme": [index_and_accented_transformer, oracc_modifier_prefix_transformer],
         "word": [
             uncertain_sign_transformer,
             oracc_joiner_transformer,
         ],
         "text": [half_brackets_transformer],
+        "status": [prime_transformer],
+        "single_line_number": [prime_transformer],
+        "value_name_part": [legacy_aleph_transformer],
     }
 
     def __init__(self):
@@ -53,7 +66,7 @@ class LegacyAtfVisitor(Visitor):
     def _set_rules(
         self,
         suffix: str,
-        transformers: Sequence[LegacyTransformer],
+        transformers: Sequence[Tuple[LegacyTransformer, str]],
         prefix: Optional[str] = None,
     ) -> None:
         prefix = prefix if prefix else self.text_line_prefix
@@ -64,8 +77,8 @@ class LegacyAtfVisitor(Visitor):
         )
 
     def _wrap_transformers(
-        self, transformers: Sequence[LegacyTransformer]
-    ) -> Callable[[Tree], None]:
+        self, transformers: Sequence[Tuple[LegacyTransformer, str]]
+    ) -> Callable:
         def _method(tree: Tree) -> Tree:
             for transformer_data in transformers:
                 self._transform(tree, *transformer_data)

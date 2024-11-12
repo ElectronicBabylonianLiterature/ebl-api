@@ -49,7 +49,7 @@ translation_extent: [labels " "] line_number
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 ?line_number: line_number_range | single_line_number
 line_number_range: single_line_number "-" single_line_number
-single_line_number: [LETTER "+"] INT [PRIME] [LETTER]
+single_line_number: [LETTER "+"] INT [PRIME | LEGACY_PRIME] [LETTER]
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
@@ -64,13 +64,14 @@ _head: _have_both
 _tail: _WORD_SEPARATOR _omit_right* _have_both?
      | _WORD_SEPARATOR? _omit_left+
      | _WORD_SEPARATOR _require_both
-     | _WORD_SEPARATOR? _require_both_optional_ws
+     | _require_both_optional_ws
 
 _require_both: commentary_protocol
+            | divider_variant
+            | divider
             | line_break
 
-_require_both_optional_ws:  divider_variant
-            | divider
+_require_both_optional_ws: _WORD_SEPARATOR? (divider_variant | divider)
 
 _have_both: tabulation
          | column_token
@@ -206,7 +207,7 @@ _any_close: (close_intentional_omission
       | variant
       | egyptian_metrical_feet_separator
 
-variant: variant_part (_VARIANT_SEPARATOR variant_part)+
+variant.1: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
              | legacy_uncertain_sign
@@ -263,8 +264,10 @@ flags: (UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE | DAMAGE)*
 FLAG: (UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE | DAMAGE)*
 DAMAGE: "#"
 
-modifiers: MODIFIER*
-MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
+modifiers: modifier*
+modifier: ((MODIFIER_PREFIX | LEGACY_MODIFIER_PREFIX) (MODIFIER_CHARACTER | ("0".."9")+))
+MODIFIER_PREFIX: "@"
+LEGACY_MODIFIER_PREFIX: "~"
 MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
 
 in_word_newline: IN_WORD_NEWLINE
@@ -374,8 +377,9 @@ composite_end: "end " free_text
 composite_composite: "composite"
 composite_milestone: "m=locator " free_text [" " INT]
 
-status: (PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
-PRIME: "'" | "′" | "’" 
+status: (PRIME | LEGACY_PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
+PRIME: "'"
+LEGACY_PRIME: "′" | "’" 
 UNCERTAIN: "?"
 CORRECTION: "!"
 COLLATION: "*"
