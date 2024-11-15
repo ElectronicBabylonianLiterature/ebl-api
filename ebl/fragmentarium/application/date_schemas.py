@@ -28,7 +28,7 @@ class PartialDateSchema(Schema):
 
 
 class DateRangeSchema(Schema):
-    start = fields.Nested(PartialDateSchema, required=True)
+    start = fields.Nested(PartialDateSchema, allow_none=True)
     end = fields.Nested(PartialDateSchema, allow_none=True)
     notes = fields.String(allow_none=True)
 
