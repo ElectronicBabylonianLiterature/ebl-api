@@ -91,6 +91,9 @@ class SignTransformer(Transformer):
     def ebl_atf_text_line__sub_index(self, sub_index=""):
         return sub_index_to_int(sub_index)
 
+    def ebl_atf_text_line__modifier(self, tokens):
+        return "".join(map(str, tokens))
+
     def ebl_atf_text_line__modifiers(self, tokens):
         return tuple(map(str, tokens))
 

@@ -1,24 +1,24 @@
 %import .ebl_atf_common (INT, LCASE_LETTER)
-%import .ebl_atf_common (free_text)
+%import .ebl_atf_common (status)
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
-%import .ebl_atf_common (seal, OBJECT, SURFACE, free_text, _markup)
+%import .ebl_atf_common (seal, free_text)
+%import .ebl_atf_text_line(_markup)
 
-?at_line: "@" value
+?at_line: "@" at_line_value
 
-?value:  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
+?at_line_value: seal | column | legacy_column | heading | discourse | object_with_status 
+               | surface_with_status | divisions | composite
 
-STATUS:  "'" | "?" | "!" | "*"
+surface_with_status: surface " "? status
 
-statuses: STATUS*
+object_with_status: object " "? status
 
-surface_with_status : surface " "? statuses
+column: "column " INT " "? status
 
-object_with_status : object " "? statuses
+legacy_column : "column"
 
-column : "column " INT " "? statuses
-
-heading: "h" INT [ _markup ]
+heading: "h" INT [ " " _markup ]
 
 !discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
 
@@ -29,4 +29,3 @@ composite_start: "div " free_text [" " INT]
 composite_end: "end " free_text
 composite_composite: "composite"
 composite_milestone: "m=locator " free_text [" " INT]
-

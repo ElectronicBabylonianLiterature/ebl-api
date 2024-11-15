@@ -5,6 +5,13 @@ from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 # ToDo: All transformers should be tested
 
 PARSE_AND_TRANSFORM_LEGACY = [
+    ("", ""),
+    ("@column", "@column 1"),
+    ("@column", "@column 2"),
+    ("@face a", "@face a"),
+    ("@obverse", "@obverse"),
+    ("@reverse", "@reverse"),
+    ("$ single ruling", "$ single ruling"),
     ("1. a'", "1. aʾ"),
     ("1′. A", "1'. A"),
     ("1’. A", "1'. A"),
@@ -89,9 +96,9 @@ def test_text_lines(legacy_line, ebl_line):
     legacy_tree = atf_preprocessor.ebl_parser.parse(legacy_line)
     legacy_tree = atf_preprocessor.transform_legacy_atf(legacy_tree)
     expected_tree = atf_preprocessor.ebl_parser.parse(ebl_line)
-    # print("RESULT:\n", legacy_tree)  # .pretty())
-    # print("EXPECTED:\n", expected_tree)  # .pretty())
-    # input() <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    print("RESULT:\n", legacy_tree)  # .pretty())
+    print("EXPECTED:\n", expected_tree)  # .pretty())
+    input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
     assert legacy_tree == expected_tree
 
