@@ -48,7 +48,6 @@ class MarkupTransformer(Transformer):
             "".join(pages.children) if pages else "",
         )
 
-
     def ebl_atf_text_line__note_text(self, children) -> str:
         return "".join(children)
 

@@ -3,7 +3,6 @@ from lark.visitors import Tree
 from typing import Tuple, Optional, List, Dict, Any
 from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
-from ebl.atf_importer.domain.atf_conversions import GetWords
 from ebl.atf_importer.domain.legacy_atf_visitor import LegacyAtfVisitor
 # from ebl.transliteration.domain.line_transformer import LineTransformer
 

@@ -188,12 +188,20 @@ class LabelTransformer(Transformer):
         )
 
     @v_args(inline=True)
+    def ebl_atf_text_line__object_label(
+        self, object_: Token, status: Sequence[Status]
+    ) -> ObjectLabel:
+        return ObjectLabel.from_object(Object(object_), status)
+
+    @v_args(inline=True)
     def ebl_atf_text_line__ebl_atf_common__object_label(
         self, object_: Token, status: Sequence[Status]
     ) -> ObjectLabel:
         return ObjectLabel.from_object(Object(object_), status)
 
-    def ebl_atf_text_line__ebl_atf_common__status(self, children: Iterable[Token]) -> Sequence[Status]:
+    def ebl_atf_text_line__ebl_atf_common__status(
+        self, children: Iterable[Token]
+    ) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
 
     def ebl_atf_at_line__status(self, children: Iterable[Token]) -> Sequence[Status]:

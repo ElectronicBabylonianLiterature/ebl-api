@@ -98,7 +98,7 @@ def test_text_lines(legacy_line, ebl_line):
     expected_tree = atf_preprocessor.ebl_parser.parse(ebl_line)
     print("RESULT:\n", legacy_tree)  # .pretty())
     print("EXPECTED:\n", expected_tree)  # .pretty())
-    #input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
     assert legacy_tree == expected_tree
 
