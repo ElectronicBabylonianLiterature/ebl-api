@@ -13,7 +13,7 @@ from ebl.transliteration.domain.atf import _SUB_SCRIPT
 
 
 class LegacyTransformer(Transformer):
-    text_line_prefix = "ebl_atf_text_line"
+    prefix = "ebl_atf_text_line"
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -72,12 +72,12 @@ class LegacyTransformer(Transformer):
         return not set(node_classes).isdisjoint(self.break_at)
 
     def to_token(self, name: str, string: Optional[str]) -> Token:
-        return Token(f"{self.text_line_prefix}__{name}", string)
+        return Token(f"{self.prefix}__{name}", string)
 
     def to_tree(
         self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
     ) -> Tree:
-        return Tree(f"{self.text_line_prefix}__{name}", children)
+        return Tree(f"{self.prefix}__{name}", children)
 
 
 class HalfBracketsTransformer(LegacyTransformer):
@@ -216,12 +216,6 @@ class LegacyModifierPrefixTransformer(LegacyTransformer):
         return self.to_token("MODIFIER_PREFIX", "@")
 
 
-# ToDo: Empty lines should be ignored
-"""
-class EmptyLineTransformer(LegacyTransformer):
-"""
-
-
 class LegacyPrimeTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_text_line__LEGACY_PRIME(self, prime: Token) -> Token:
@@ -236,3 +230,26 @@ class LegacyAlephTransformer(LegacyTransformer):
             self.legacy_found = True
             token = self.to_token("VALUE_CHARACTER", "ʾ")
         return token
+
+
+class LegacyColumnTransformer(LegacyTransformer):
+    column_number = 1
+
+    def __init__(self, **kwargs) -> None:
+        prefix = "ebl_atf_at_line"  # noqa: F841
+        super().__init__(**kwargs)
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__legacy_column(self, column: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", column, self.column_number)
+        input()
+        self.column_number += 1
+        return column  # self.to_tree("bla_bla", [])
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__at_line_value(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test, self.column_number)
+        input()
+        return test

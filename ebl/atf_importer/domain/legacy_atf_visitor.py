@@ -1,4 +1,4 @@
-from typing import Optional, Sequence, Tuple, Callable
+from typing import Sequence, Tuple, Callable
 from lark.visitors import Visitor, Tree
 from ebl.atf_importer.domain.legacy_atf_transformers import (
     AccentedIndexTransformer,
@@ -9,6 +9,7 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
     LegacyModifierPrefixTransformer,
     LegacyPrimeTransformer,
     LegacyAlephTransformer,
+    LegacyColumnTransformer,
 )
 from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
@@ -29,10 +30,13 @@ oracc_special_transformer = (OraccSpecialTransformer(), "first_child")
 oracc_modifier_prefix_transformer = (LegacyModifierPrefixTransformer(), "all_children")
 prime_transformer = (LegacyPrimeTransformer(), "all_children")
 legacy_aleph_transformer = (LegacyAlephTransformer(), "all_children")
+legacy_column_transformer = (LegacyColumnTransformer(), "all_children")
 
 
 class LegacyAtfVisitor(Visitor):
     text_line_prefix = "ebl_atf_text_line"
+    at_line_prefix = "ebl_atf_at_line"
+
     nodes_to_visit = {
         "number": [oracc_modifier_prefix_transformer],
         "reading": [index_and_accented_transformer, oracc_modifier_prefix_transformer],
@@ -54,22 +58,24 @@ class LegacyAtfVisitor(Visitor):
         "status": [prime_transformer],
         "single_line_number": [prime_transformer],
         "value_name_part": [legacy_aleph_transformer],
+        "at_line_value": [legacy_column_transformer],
     }
 
     def __init__(self):
         super().__init__()
         self.legacy_found = False
         for suffix, transformers in self.nodes_to_visit.items():
-            self._set_rules(suffix, transformers)
-        print("LegacyAtfVisitor initialized")
+            prefix = self.text_line_prefix
+            if "at_line" in suffix:
+                prefix = self.at_line_prefix
+            self._set_rules(suffix, transformers, prefix)
 
     def _set_rules(
         self,
         suffix: str,
         transformers: Sequence[Tuple[LegacyTransformer, str]],
-        prefix: Optional[str] = None,
+        prefix: str,
     ) -> None:
-        prefix = prefix if prefix else self.text_line_prefix
         setattr(
             self,
             f"{prefix}__{suffix}",
