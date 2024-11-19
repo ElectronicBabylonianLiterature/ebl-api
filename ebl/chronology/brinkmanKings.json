@@ -117,8 +117,19 @@
       "dynastyNumber": "2a",
       "dynastyName": "Second Dynasty of Lagash",
       "orderInDynasty": "1",
+      "name": "Ur-Bau",
+      "date": "",
+      "totalOfYears": "",
+      "notes": "",
+      "isNotInBrinkman": true
+    },
+    {
+      "orderGlobal": 11.2,
+      "dynastyNumber": "2b",
+      "dynastyName": "Second Dynasty of Lagash",
+      "orderInDynasty": "1",
       "name": "Gudea",
-      "date": "2144–2124",
+      "date": "2130–2110",
       "totalOfYears": "20",
       "notes": "",
       "isNotInBrinkman": true
@@ -462,6 +473,17 @@
       "date": "1822–1763",
       "totalOfYears": "60",
       "notes": ""
+    },
+    {
+      "orderGlobal": 45.1,
+      "dynastyNumber": "4",
+      "dynastyName": "Larsa Dynasty",
+      "orderInDynasty": "15",
+      "name": "Rim-Sin II",
+      "date": "1740–1736",
+      "totalOfYears": "4",
+      "notes": "",
+      "isNotInBrinkman": true
     },
     {
       "orderGlobal": 46,
