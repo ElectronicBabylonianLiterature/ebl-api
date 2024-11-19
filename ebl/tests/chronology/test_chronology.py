@@ -73,8 +73,8 @@ def test_chronology_schema_deserialization():
     with open("ebl/chronology/brinkmanKings.json", "r", encoding="utf-8") as file:
         data = json.load(file)
         chronology = ChronologySchema().load({"kings": data})
-    assert len(chronology.kings) == 365
+    assert len(chronology.kings) == 400
     assert chronology.kings[0].name == "Sargon"
-    assert chronology.kings[363].name == "Sin-šar-iškun"
+    assert chronology.kings[-2].name == "Sin-šar-iškun"
     assert chronology.kings[50].order_global == 50
     assert chronology.kings[363].order_global == 363
