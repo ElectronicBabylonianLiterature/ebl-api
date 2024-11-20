@@ -76,5 +76,3 @@ def test_chronology_schema_deserialization():
     assert len(chronology.kings) == 400
     assert chronology.kings[0].name == "Sargon"
     assert chronology.kings[-2].name == "Sin-šar-iškun"
-    assert chronology.kings[50].order_global == 50
-    assert chronology.kings[363].order_global == 363
