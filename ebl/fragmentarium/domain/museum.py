@@ -21,6 +21,12 @@ class Museum(Enum):
         "AUS",
         "https://www.aiarch.org.au/",
     )
+    CHESTER_BEATTY_LIBRARY = (
+        "Chester Beatty Library",
+        "Dublin",
+        "IRL",
+        "https://chesterbeatty.ie/",
+    )
     COUVENT_SAINT_ETIENNE = (
         "Couvent Saint-Étienne",
         "Jerusalem",
