@@ -13,7 +13,6 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    ExternalNumbers,
     Fragment,
     Genre,
     Introduction,
@@ -21,6 +20,7 @@ from ebl.fragmentarium.domain.fragment import (
     Script,
     UncuratedReference,
 )
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
