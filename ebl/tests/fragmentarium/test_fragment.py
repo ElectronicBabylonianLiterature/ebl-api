@@ -5,7 +5,6 @@ from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    ExternalNumbers,
     Fragment,
     Genre,
     Measure,
@@ -14,6 +13,7 @@ from ebl.fragmentarium.domain.fragment import (
     UncuratedReference,
     Notes,
 )
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.tests.factories.parallel_line import ParallelCompositionFactory

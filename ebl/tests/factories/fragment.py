@@ -13,7 +13,6 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    ExternalNumbers,
     Fragment,
     Genre,
     Introduction,
@@ -21,6 +20,7 @@ from ebl.fragmentarium.domain.fragment import (
     Script,
     UncuratedReference,
 )
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
@@ -187,6 +187,7 @@ class ExternalNumbersFactory(factory.Factory):
     )
     metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
+    dublin_tcd_number = factory.Sequence(lambda n: f"dublin_tcd_number-{n}")
     alalah_hpm_number = factory.Sequence(lambda n: f"alalah_hpm_number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"

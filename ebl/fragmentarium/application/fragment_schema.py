@@ -16,8 +16,8 @@ from ebl.fragmentarium.domain.fragment import (
     Measure,
     Script,
     UncuratedReference,
-    ExternalNumbers,
 )
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ResearchProjectField, ScopeField, ValueEnumField
@@ -144,6 +144,7 @@ class ExternalNumbersSchema(Schema):
     metropolitan_number = fields.String(load_default="", data_key="metropolitanNumber")
     yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
+    dublin_tcd_number = fields.String(load_default="", data_key="dublinTcdNumber")
     alalah_hpm_number = fields.String(load_default="", data_key="alalahHpmNumber")
     philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
     australianinstituteofarchaeology_number = fields.String(
