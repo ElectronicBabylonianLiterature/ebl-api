@@ -8,15 +8,20 @@ from ebl.atf_importer.domain.legacy_atf_visitor import LegacyAtfVisitor
 
 
 class AtfPreprocessor(AtfPreprocessorBase):
-    def convert_lines(self, file: str, filename: str) -> List[Dict[str, Any]]:
-        self.logger.info(Util.print_frame(f'Converting: "{filename}.atf"'))
+    legacy_visitor = LegacyAtfVisitor()
 
-        lines = self.read_lines(file)
+    def convert_lines_from_string(self, text: str) -> List[Dict[str, Any]]:
+        return self._convert_lines(text.split("\n"))
+
+    def convert_lines_from_path(self, path: str, filename: str) -> List[Dict[str, Any]]:
+        self.logger.info(Util.print_frame(f'Converting: "{filename}.atf"'))
+        lines = self.read_lines_from_path(path)
+        return self._convert_lines(lines)
+
+    def _convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         processed_lines = []
         for line in lines:
             result = self.process_line(line)
-            if self.stop_preprocessing:
-                break
             processed_lines.append(
                 {
                     "c_line": result[0],
@@ -28,6 +33,10 @@ class AtfPreprocessor(AtfPreprocessorBase):
         self.logger.info(Util.print_frame("Preprocessing finished"))
         return processed_lines
 
+    def get_line_tree_data(self, tree: Tree) -> Tuple[Tree, List[Any], str, List[Any]]:
+        words = self.serialize_words(tree)
+        return (tree, words, tree.data, [])
+
     def process_line(
         self, original_atf_line: str
     ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
@@ -37,11 +46,6 @@ class AtfPreprocessor(AtfPreprocessorBase):
         try:
             if atf_line.startswith("#lem"):
                 raise Exception("Special handling for #lem lines.")
-            if atf_line.startswith("@translation") or atf_line.startswith("@("):
-                # ToDo: Handle translations
-                # @translation labeled en project
-                # @(t.e. 1)
-                return self.parse_and_convert_line("")
             return self.check_original_line(original_atf_line)
         except Exception:
             atf_line = (
@@ -51,17 +55,13 @@ class AtfPreprocessor(AtfPreprocessorBase):
             )
             return self.parse_and_convert_line(atf_line)
 
-    def check_original_line(self, atf: str) -> Tuple[str, List[Any], str, List[Any]]:
-        print("! check_original_line.")
+    def check_original_line(
+        self, atf: str
+    ) -> Tuple[Optional[Tree], List[Any], str, List[Any]]:
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
-        # input(f"! before parse:\n{atf}")
         tree = self.ebl_parser.parse(atf)
-        # print(tree.pretty())
-        # input(f"! after parse:\n{self.line_tree_to_string(tree)}")
-        # input("! before transform")
-        # input("! after transform")
         tree = self.transform_legacy_atf(tree)
         self.logger.info("Line successfully parsed")
         self.logger.debug(f"Parsed line as {tree.data}")
@@ -71,10 +71,9 @@ class AtfPreprocessor(AtfPreprocessorBase):
         return self.get_line_tree_data(tree)
 
     def transform_legacy_atf(self, tree: Tree) -> Tree:
-        visitor = LegacyAtfVisitor()
-        visitor.visit(tree)
+        self.legacy_visitor.visit(tree)
         # print('!!!! visitor.legacy_found', visitor.legacy_found)
-        if visitor.legacy_found:
+        if self.legacy_visitor.legacy_found:
             self.logger.info("Legacy line successfully parsed")
         return tree
 
@@ -90,10 +89,8 @@ class AtfPreprocessor(AtfPreprocessorBase):
                 return tree
             elif tree.data == "lem_line":
                 result = self.convert_lem_line(atf, tree)
-            elif tree.data == "text_line":
-                result = self.get_line_tree_data(tree)
             else:
-                result = self.unused_line(tree)
+                result = self.get_line_tree_data(tree)
         except Exception:
             self.logger.error(traceback.format_exc())
             self.logger.error(f"Could not convert line: {atf}", "unparsable_lines")

@@ -233,23 +233,74 @@ class LegacyAlephTransformer(LegacyTransformer):
 
 
 class LegacyColumnTransformer(LegacyTransformer):
-    column_number = 1
+    prefix = "ebl_atf_at_line"
+
+    # ToDo: Fix this. It seems like this transformer is not being called
+    # for some unclear reason. The error is probably not here, but in the
+    # visitor or elsewhere.
+    # All methods with `test` are just for testing.
 
     def __init__(self, **kwargs) -> None:
-        prefix = "ebl_atf_at_line"  # noqa: F841
         super().__init__(**kwargs)
+        self.column_number = 1
 
     @v_args(inline=True)
     def ebl_atf_at_line__legacy_column(self, column: Tree) -> Tree:
         self.legacy_found = True
-        print("!!!!", column, self.column_number)
+        print("!!!!", column)
         input()
         self.column_number += 1
-        return column  # self.to_tree("bla_bla", [])
+        return self.to_tree(
+            "legacy_column",
+            # [self.to_token("INT", str(self.column_number)), self.to_tree("status", [])],
+            [self.to_token("INT", "1"), self.to_tree("status", [])],
+        )
 
     @v_args(inline=True)
-    def ebl_atf_at_line__at_line_value(self, test: Tree) -> Tree:
+    def ebl_atf_at_line__INT(self, test: Tree) -> Tree:
         self.legacy_found = True
-        print("!!!!", test, self.column_number)
+        print("!!!!", test)
+        input()
+        return test
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__ebl_atf_common__INT(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test)
+        input()
+        return test
+
+    @v_args(inline=True)
+    def ebl_atf_common__INT(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test)
+        input()
+        return test
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__face(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test)
+        input()
+        return test
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__LCASE_LETTER(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test)
+        input()
+        return test
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__status(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test)
+        input()
+        return test
+
+    @v_args(inline=True)
+    def ebl_atf_at_line__SURFACE(self, test: Tree) -> Tree:
+        self.legacy_found = True
+        print("!!!!", test)
         input()
         return test

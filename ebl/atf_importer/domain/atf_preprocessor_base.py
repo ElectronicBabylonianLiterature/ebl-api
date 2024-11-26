@@ -4,12 +4,8 @@ import re
 from typing import Tuple, Optional, List, Any
 from lark import Lark, Tree
 from ebl.atf_importer.domain.atf_conversions import (
-    # ConvertLineDividers,
-    # ConvertLineJoiner,
-    StripSigns,
     GetLemmaValuesAndGuidewords,
     GetWords,
-    LineSerializer,
 )
 
 opening_half_bracket = {"⌈", "⸢"}
@@ -114,7 +110,6 @@ class AtfPreprocessorBase:
         self.logger.setLevel(logging.DEBUG)
         self.skip_next_lem_line = False
         self.unused_lines = unused_lines
-        self.stop_preprocessing = False
         self.logdir = logdir
         self.style = style
         self.open_found = False
@@ -152,16 +147,6 @@ class AtfPreprocessorBase:
     def reorder_bracket_punctuation(self, atf: str) -> str:
         return re.sub(r"\]([\?!]+)", lambda match: match.group(1) + "]", atf)
 
-    def unused_line(
-        self, tree
-    ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
-        if tree.data in self.unused_lines:
-            return (self.line_tree_to_string(tree), None, tree.data, None)
-        self.logger.warning(
-            f"Attempting to process a line not marked as unused: {tree.data}"
-        )
-        return (None, None, tree.data, None)
-
     def convert_lem_line(
         self, atf: str, tree: Tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
@@ -179,12 +164,6 @@ class AtfPreprocessorBase:
         )
         return atf, lemmas_and_guidewords_array, tree.data, []
 
-    def line_tree_to_string(self, tree: Tree) -> str:
-        # ToDo: Remove
-        line_serializer = LineSerializer()
-        line_serializer.visit_topdown(tree)
-        return line_serializer.line.strip(" ")
-
     def serialize_words(self, tree: Tree) -> List[Any]:
         words_serializer = GetWords()
         words_serializer.result = []
@@ -196,16 +175,7 @@ class AtfPreprocessorBase:
         lemmas_and_guidewords_serializer.visit(tree)
         return lemmas_and_guidewords_serializer.result
 
-    def get_line_tree_data(self, tree: Tree) -> Tuple[str, List[Any], str, List[Any]]:
-        # ConvertLineDividers().visit(tree)
-        # ConvertLineJoiner().visit(tree)
-        StripSigns().visit(tree)  # ToDo: Move
-        converted_line = self.line_tree_to_string(tree)
-        input(f"converted line: {converted_line}")
-        words = self.serialize_words(tree)
-        return (converted_line, words, tree.data, [])
-
-    def read_lines(self, file: str) -> List[str]:
+    def read_lines_from_path(self, file: str) -> List[str]:
         with codecs.open(file, "r", encoding="utf8") as f:
             return f.read().split("\n")
 

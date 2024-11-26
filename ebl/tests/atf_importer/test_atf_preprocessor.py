@@ -4,6 +4,22 @@ from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
 # ToDo: All transformers should be tested
 
+TRANSLATION_LEGACY = """
+@obverse
+1. a-na
+2. a-bi-ya
+@translation en labelled
+@label(o 1-o 2)
+To my father
+"""
+
+TRANSLATION_EXPECTED = """
+@obverse
+1. a-na
+# tr.en.(o 2): To my father
+2. a-bi-ya
+"""
+
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
     ("@column", "@column 1"),
@@ -11,6 +27,7 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("@face a", "@face a"),
     ("@obverse", "@obverse"),
     ("@reverse", "@reverse"),
+    ("$ obverse broken", "$ obverse broken"),
     ("$ single ruling", "$ single ruling"),
     ("1. a'", "1. aʾ"),
     ("1′. A", "1'. A"),
@@ -80,6 +97,17 @@ LEGACY_GRAMMAR_SIGNS = [
         "ANŠE.KUR.RA-MEŠ",
     ),
 ]
+
+
+def test_legacy_translation():
+    atf_preprocessor = AtfPreprocessor("../logs", 0)
+    legacy_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_LEGACY)
+    expected_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_EXPECTED)
+    print("RESULT:\n", legacy_tree)  # .pretty())
+    print("EXPECTED:\n", expected_tree)  # .pretty())
+    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+
+    assert legacy_tree == expected_tree
 
 
 @pytest.mark.parametrize(

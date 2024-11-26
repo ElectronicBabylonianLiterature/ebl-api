@@ -43,7 +43,9 @@ TRANSLATION_LINE_PARSER = Lark.open(
     ATF_GRAMMAR_PATH, **kwargs_lark, start="translation_line"
 )
 PARATEXT_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="paratext")
-CHAPTER_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="chapter")
+CHAPTER_PARSER = Lark.open(
+    ATF_GRAMMAR_PATH, **kwargs_lark, start="chapter", debug=True
+)  # ToDo: Remove debug
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
 
 

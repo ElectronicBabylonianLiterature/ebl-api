@@ -1,0 +1,19 @@
+%import common.CR
+%import common.LF
+
+%import .ebl_atf_manuscript_line (manuscript_line)
+%import .ebl_atf_text_line (text_line)
+%import .ebl_atf_note_line (note_line)
+%import .ebl_atf_parallel_line (parallel_line)
+%import .ebl_atf_translation_line (translation_line)
+
+chapter: chapter_line (_NEWLINE _NEWLINE+ chapter_line)*
+
+chapter_line: [chapter_translation] line_variant (_NEWLINE line_variant)*
+chapter_translation: (translation_line _NEWLINE)+
+
+line_variant: reconstruction (_NEWLINE manuscript_line)*
+
+reconstruction: text_line [_NEWLINE note_line] (_NEWLINE parallel_line)*
+
+_NEWLINE: (CR? LF)

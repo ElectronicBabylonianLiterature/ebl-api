@@ -5,15 +5,6 @@ from lark import Visitor, Tree, lexer
 # Remove. Use `legacy_atf_visitor` instead
 
 
-class StripSigns(Visitor):
-    def ebl_atf_text_line__legacy_uncertain_sign_prefix(self, tree: Tree) -> None:
-        if (
-            tree.data == "ebl_atf_text_line__legacy_uncertain_sign_prefix"
-            and tree.children[0] == "$"
-        ):
-            tree.children[0] = ""
-
-
 class DepthFirstSearch(Visitor):
     def visit_topdown(self, tree: Tree, result: str) -> str:
         if not hasattr(tree, "data"):

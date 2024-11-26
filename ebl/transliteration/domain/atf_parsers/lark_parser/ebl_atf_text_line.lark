@@ -1,58 +1,12 @@
-%import common.INT
-%import common.LETTER
-%import common.LCASE_LETTER
-%import .ebl_atf_common (free_text)
-%import .ebl_atf_common (seal)
 %import .ebl_atf_common (AKKADIAN_ALPHABET, GREEK_ALPHABET)
 %import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
-%import .ebl_atf_common (labels)
-%import .ebl_atf_common (CAPITAL_ROMAN_NUMERAL)
-%import .ebl_atf_common (PRIME, LEGACY_PRIME, UNCERTAIN, CORRECTION, COLLATION, NO_LONGER_VISIBLE)
-%import .ebl_atf_common (object_label, surface_label, column_label)
-%import .ebl_atf_abbreviations (PERIOD)
+%import .ebl_atf_common (UNCERTAIN, CORRECTION, COLLATION, NO_LONGER_VISIBLE)
+%import .ebl_atf_common (line_number)
 %import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
 %import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
 %import .legacy_atf (legacy_uncertain_sign_prefix)
 
-note_line: "#note: " _markup
-markup: _markup
-
-_markup: (emphasis_part | language_part | bibliography_part | string_part | url_part)+
-language_part: "@" LANGUAGE "{" text "}"
-emphasis_part: "@i{" note_text "}"
-bibliography_part: "@bib{" escaped_text ("@" escaped_text)? "}"
-escaped_text: (/[^@{}\\\n\r]/ | ("\\" /[@{}\\]/))+
-string_part: note_text
-note_text: /[^@{}\n\r]+/
-LANGUAGE: "akk" | "sux" | "es"
-url_part: "@url{" url "}" ("{" note_text "}")?
-url: /[^}]+/
-
-?parallel_line: parallel_fragment | parallel_text | parallel_composition
-parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [object_label " "] [surface_label " "]  [column_label " "] line_number
-!museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
-DUPLICATES: "&d"
-parallel_text: PARALLEL_LINE_PREFIX [CF] text_id " "  [chapter_name " "] line_number
-text_id: GENRE " " CATEGORY "." INT
-GENRE: "Lex" | "Med" | "L" | "D" | "Mag"
-CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
-chapter_name: STAGE " " [quoted_string " "] quoted_string 
-quoted_string: "\"" /./+ "\""
-STAGE: PERIOD | "SB"
-parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
-CF: "cf. "
-PARALLEL_LINE_PREFIX: "// "
-
-
-translation_line: "#tr" [ "." TRANSLATION_LANGUAGE ] [".(" translation_extent ")"] ": " _markup
-TRANSLATION_LANGUAGE: LCASE_LETTER~2
-translation_extent: [labels " "] line_number
-
-
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
-?line_number: line_number_range | single_line_number
-line_number_range: single_line_number "-" single_line_number
-single_line_number: [LETTER "+"] INT [PRIME | LEGACY_PRIME] [LETTER]
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian

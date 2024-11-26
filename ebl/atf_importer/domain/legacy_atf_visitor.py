@@ -66,7 +66,7 @@ class LegacyAtfVisitor(Visitor):
         self.legacy_found = False
         for suffix, transformers in self.nodes_to_visit.items():
             prefix = self.text_line_prefix
-            if "at_line" in suffix:
+            if suffix in ["at_line"]:
                 prefix = self.at_line_prefix
             self._set_rules(suffix, transformers, prefix)
 
@@ -76,6 +76,7 @@ class LegacyAtfVisitor(Visitor):
         transformers: Sequence[Tuple[LegacyTransformer, str]],
         prefix: str,
     ) -> None:
+        print(f"{prefix}__{suffix}")
         setattr(
             self,
             f"{prefix}__{suffix}",
@@ -92,7 +93,9 @@ class LegacyAtfVisitor(Visitor):
 
         return _method
 
-    def _transform(self, tree: Tree, transformer: LegacyTransformer, replace: str):
+    def _transform(
+        self, tree: Tree, transformer: LegacyTransformer, replace: str
+    ) -> None:
         transformer.clear()
         transformer.current_tree = tree
         transformed_tree = transformer.transform(tree)

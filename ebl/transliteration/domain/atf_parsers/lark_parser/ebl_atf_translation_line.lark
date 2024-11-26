@@ -1,0 +1,8 @@
+%import common.LCASE_LETTER
+
+%import .ebl_atf_common (line_number, labels)
+%import .ebl_atf_note_line (_markup)
+
+translation_line: "#tr" [ "." TRANSLATION_LANGUAGE ] [".(" translation_extent ")"] ": " _markup
+TRANSLATION_LANGUAGE: LCASE_LETTER~2
+translation_extent: [labels " "] line_number
