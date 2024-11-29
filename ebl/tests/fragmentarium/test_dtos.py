@@ -113,7 +113,11 @@ def expected_dto(lemmatized_fragment, has_photo):
             "externalNumbers": ExternalNumbersSchema().dump(
                 lemmatized_fragment.external_numbers
             ),
-            "projects": [ResearchProject["CAIC"].abbreviation],
+            "projects": [
+                ResearchProject["CAIC"].abbreviation,
+                ResearchProject["ALU_GENEVA"].abbreviation,
+                ResearchProject["AMPS"].abbreviation,
+            ],
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
             "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),
             "authorizedScopes": [],
