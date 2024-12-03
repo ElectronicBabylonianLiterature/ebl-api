@@ -1,5 +1,3 @@
-from typing import Iterable
-
 from lark.visitors import v_args
 from ebl.common.domain.period import Period
 
@@ -7,7 +5,6 @@ from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript_line import ManuscriptLine
 from ebl.corpus.domain.line_variant import LineVariant
 from ebl.corpus.domain.manuscript import (
-    Manuscript,
     Siglum,
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
@@ -16,22 +13,27 @@ from ebl.transliteration.domain.line_transformer import LineTransformer
 
 
 class ChapterTransformer(LineTransformer):
-    def __init__(self, manuscripts: Iterable[Manuscript]):
-        self._manuscripts = {
-            manuscript.siglum: manuscript.id for manuscript in manuscripts
-        }
-
     def manuscript_label(self, children):
         return children
 
-    @v_args(inline=True)
-    def siglum(self, provenance, period, type_, disambiquator):
+    def get_siglum(self, provenance, period, type_, disambiquator):
         return Siglum(
             Provenance.from_abbreviation(provenance or ""),
             Period.from_abbreviation(period),
             ManuscriptType.from_abbreviation(type_ or ""),
             disambiquator or "",
         )
+
+    @v_args(inline=True)
+    def siglum(self, provenance=None, period=None, type_=None, disambiquator=None):
+        if period:
+            return self.get_siglum(provenance, period, type_, disambiquator)
+        else:
+            return self.standard_text_siglum(disambiquator)
+
+    @v_args(inline=True)
+    def ebl_atf_manuscript_line__siglum(self, provenance, period, type_, disambiquator):
+        return self.get_siglum(provenance, period, type_, disambiquator)
 
     @v_args(inline=True)
     def standard_text_siglum(self, disambiquator):
@@ -44,9 +46,7 @@ class ChapterTransformer(LineTransformer):
 
     @v_args(inline=True)
     def manuscript_line(self, siglum, labels, line, *paratext):
-        return ManuscriptLine(
-            self._manuscripts[siglum], labels or (), line, tuple(paratext)
-        )
+        return ManuscriptLine(siglum, labels or (), line, tuple(paratext))
 
     @v_args(inline=True)
     def reconstruction(self, line, note, *parallels):

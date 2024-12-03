@@ -13,7 +13,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.erasure_visitor import set_erasure_state
-from ebl.transliteration.domain.lark import tokens_to_value_tokens
+from ebl.transliteration.domain.atf_parsers.lark import tokens_to_value_tokens
 from ebl.transliteration.domain.tokens import ErasureState
 
 

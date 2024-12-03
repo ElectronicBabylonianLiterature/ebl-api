@@ -13,7 +13,7 @@ from ebl.transliteration.domain.enclosure_transformer import (
     GlossTransformer,
 )
 from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
-from ebl.transliteration.domain.lark import tokens_to_value_tokens
+from ebl.transliteration.domain.atf_parsers.lark import tokens_to_value_tokens
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
@@ -131,16 +131,29 @@ class GreekTransformer(EnclosureTransformer, SignTransformer):
 class TextLineTransformer(
     WordTransformer, NormalizedAkkadianTransformer, GreekTransformer
 ):
+    def __init__(self):
+        for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
+            _method = method.replace("ebl_atf_text_line", "")
+            setattr(
+                self,
+                f"ebl_atf_parallel_line{_method}",
+                getattr(self, method),
+            )
+
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__line_number_range(self, start, end):
+    def ebl_atf_common__line_number_range(self, start, end):
         return LineNumberRange(start, end)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__single_line_number(
+    def ebl_atf_text_line__ebl_atf_common__line_number_range(self, start, end):
+        return LineNumberRange(start, end)
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__ebl_atf_common__single_line_number(
         self, prefix_modifier, number, prime, suffix_modifier
     ):
         return LineNumber(

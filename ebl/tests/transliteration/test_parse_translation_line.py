@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.transliteration.domain.lark_parser import parse_translation_line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_translation_line
 from ebl.transliteration.domain.markup import StringPart
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.labels import ColumnLabel, SurfaceLabel

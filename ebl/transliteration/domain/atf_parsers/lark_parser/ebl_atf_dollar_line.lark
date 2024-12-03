@@ -1,8 +1,11 @@
-%import .ebl_atf_common (DIGIT, INT, LCASE_LETTER)
+%import common.DIGIT -> DIGIT
+%import common.INT -> INT
+%import common.LCASE_LETTER -> LCASE_LETTER
 %import .ebl_atf_common (free_text)
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
 %import .ebl_atf_common (seal)
+%import .legacy_atf (legacy_single_ruling)
 
 ?dollar_line: "$" " "* value
 ?value: strict
@@ -32,7 +35,8 @@ STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 
 DOLLAR_STATUS: "!?" | "*" | "?" | "!" | "°"
 
-ruling : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
+ruling: RULING_NUMBER " ruling" [" "? (DOLLAR_STATUS)] | legacy_single_ruling
+
 RULING_NUMBER : "single" | "double" | "triple"
 
 

@@ -28,32 +28,28 @@ from ebl.transliteration.domain.transliteration_error import (
     ErrorAnnotation,
 )
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line_transformer import LineTransformer
 from functools import singledispatch
 
-WORD_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
-)
-NOTE_LINE_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
-)
-MARKUP_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
-)
-PARALLEL_LINE_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
-)
+ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
+kwargs_lark = {"maybe_placeholders": True, "rel_to": __file__}
+
+WORD_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="any_word")
+NOTE_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="note_line")
+MARKUP_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="markup")
+PARALLEL_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="parallel_line")
 TRANSLATION_LINE_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="translation_line"
+    ATF_GRAMMAR_PATH, **kwargs_lark, start="translation_line"
 )
-PARATEXT_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
-)
+PARATEXT_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="paratext")
 CHAPTER_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="chapter"
+    "lark_parser/ebl_atf_chapter.lark", **kwargs_lark, start="chapter"
 )
-LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
+MANUSCRIPT_PARSER = Lark.open(
+    "lark_parser/ebl_atf_manuscript_line.lark", **kwargs_lark, start="manuscript_line"
+)
+LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
 
 
 def parse_word(atf: str) -> Word:
@@ -131,7 +127,7 @@ def parse_text_line(atf: str) -> TextLine:
 
 
 def parse_line_number(atf: str) -> AbstractLineNumber:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__line_number")
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_common__line_number")
     return LineTransformer().transform(tree)
 
 
