@@ -131,9 +131,22 @@ class GreekTransformer(EnclosureTransformer, SignTransformer):
 class TextLineTransformer(
     WordTransformer, NormalizedAkkadianTransformer, GreekTransformer
 ):
+    def __init__(self):
+        for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
+            _method = method.replace("ebl_atf_text_line", "")
+            setattr(
+                self,
+                f"ebl_atf_parallel_line{_method}",
+                getattr(self, method),
+            )
+
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
+
+    @v_args(inline=True)
+    def ebl_atf_common__line_number_range(self, start, end):
+        return LineNumberRange(start, end)
 
     @v_args(inline=True)
     def ebl_atf_text_line__ebl_atf_common__line_number_range(self, start, end):

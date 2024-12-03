@@ -37,15 +37,6 @@ class LineSerializer(Visitor):
         return self.process_line(tree, "control_line")
 
 
-class GetLineNumber(Visitor):
-    number: str = ""
-
-    def ebl_atf_text_line__ebl_atf_common__single_line_number(self, tree: Tree) -> str:
-        result = DepthFirstSearch().visit_topdown(tree, "")
-        self.number += result
-        return result
-
-
 class GetWords(Visitor):
     def __init__(self):
         self.wordcounter = 0

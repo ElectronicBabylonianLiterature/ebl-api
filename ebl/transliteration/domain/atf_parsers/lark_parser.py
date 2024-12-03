@@ -127,7 +127,7 @@ def parse_text_line(atf: str) -> TextLine:
 
 
 def parse_line_number(atf: str) -> AbstractLineNumber:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__line_number")
+    tree = LINE_PARSER.parse(atf, start="ebl_atf_common__line_number")
     return LineTransformer().transform(tree)
 
 

@@ -169,19 +169,42 @@ LINE_NUMBER_EXPRESSION = r"[^\s]+"
 
 
 class LabelTransformer(Transformer):
-    def labels(self, children) -> Sequence[Label]:
+    def __init__(self):
+        # ToDo: Fix. This method appereatly is not being called
+        input("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        for method in [method for method in dir(self) if "ebl_atf_common" in method]:
+            self.set_methods(method.replace("ebl_atf_common__", ""))
+
+    def set_methods(self, method: str) -> None:
+        for prefix in [
+            "ebl_atf_parallel_line",
+            "ebl_atf_at_line",
+            "ebl_atf_translation_line",
+        ]:
+            print(f"{prefix}__{method}")
+            input()
+            setattr(
+                self,
+                f"{prefix}__{method}",
+                getattr(self, method),
+            )
+
+    def ebl_atf_common__labels(self, children) -> Sequence[Label]:
         return tuple(children)
 
     @v_args(inline=True)
     def ebl_atf_common__column_label(
         self, numeral: Token, status: Sequence[Status]
     ) -> ColumnLabel:
+        print(numeral, status)
+        input()
         return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
 
     @v_args(inline=True)
     def ebl_atf_common__surface_label(
         self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
+        input("SURFACE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return SurfaceLabel.from_label(
             Surface.from_label(surface),  # pyre-ignore[6]
             status,
@@ -193,12 +216,7 @@ class LabelTransformer(Transformer):
     ) -> ObjectLabel:
         return ObjectLabel.from_object(Object(object_), status)
 
-    def ebl_atf_common__status(
-        self, children: Iterable[Token]
-    ) -> Sequence[Status]:
-        return tuple(Status(token) for token in children)
-
-    def ebl_atf_at_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
+    def ebl_atf_common__status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
 
 
