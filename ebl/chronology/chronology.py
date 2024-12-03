@@ -28,7 +28,7 @@ class Chronology:
         except IndexError:
             return None
 
- 
+
 class KingSchema(Schema):
     order_global = fields.Float(data_key="orderGlobal")
     group_with = fields.Integer(
