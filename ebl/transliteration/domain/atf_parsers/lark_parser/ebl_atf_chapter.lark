@@ -1,8 +1,8 @@
 %import common.CR
 %import common.LF
 
-%import .ebl_atf_manuscript_line (manuscript_line)
-%import .ebl_atf_text_line (text_line)
+%import .ebl_atf_manuscript_line.manuscript_line -> manuscript_line
+%import .ebl_atf_text_line.text_line -> text_line
 %import .ebl_atf_note_line (note_line)
 %import .ebl_atf_parallel_line (parallel_line)
 %import .ebl_atf_translation_line (translation_line)

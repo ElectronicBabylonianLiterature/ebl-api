@@ -10,6 +10,4 @@ legacy_single_ruling: " "* "ruling" [" "? ("!?" | "*" | "?" | "!")]
 
 
 //# ToDo:
-//# Implement here the following:
-//# oracc_atf_text_line__uncertain_sign
-//# etc. (check `atf_conversions.py`).
+//# check `atf_conversions.py` and implement all missing features.

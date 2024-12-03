@@ -12,7 +12,11 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
-from ebl.corpus.domain.parser import parse_chapter, parse_paratext
+from ebl.corpus.domain.parser import (
+    parse_chapter,
+    parse_paratext,
+    parse_manuscript as _parse_manuscript,
+)
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
 from ebl.transliteration.domain.labels import parse_labels
@@ -34,7 +38,7 @@ MANUSCRIPTS: Sequence[Manuscript] = (
 
 
 def parse_siglum(siglum):
-    return parse_chapter(siglum, MANUSCRIPTS, "siglum")
+    return _parse_manuscript(siglum, MANUSCRIPTS, "siglum")
 
 
 @pytest.mark.parametrize("period", [Period.NEO_ASSYRIAN])
@@ -61,7 +65,7 @@ def test_parse_siglum_standard_text(disambiquator: str) -> None:
 
 
 def parse_manuscript(atf):
-    return parse_chapter(atf, MANUSCRIPTS, "manuscript_line")
+    return _parse_manuscript(atf, MANUSCRIPTS, "manuscript_line")
 
 
 @pytest.mark.parametrize(
@@ -224,12 +228,12 @@ def parse_chapter_line(atf):
 @pytest.mark.parametrize(
     "lines,expected",
     [
-        (["1. kur"], Line(LineNumber(1), (parse_line_variant("1. kur")[1],))),
+        (["1. kur"], Line(LineNumber(1), (parse_line_variant("1. kur")[0],))),
         (
             ["1. kur", "1. ra"],
             Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[1], parse_line_variant("1. ra")[1]),
+                (parse_line_variant("1. kur")[0], parse_line_variant("1. ra")[0]),
             ),
         ),
         (
@@ -237,8 +241,8 @@ def parse_chapter_line(atf):
             Line(
                 LineNumber(1),
                 (
-                    parse_line_variant(f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur")[1],
-                    parse_line_variant("1. ra")[1],
+                    parse_line_variant(f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur")[0],
+                    parse_line_variant("1. ra")[0],
                 ),
             ),
         ),
@@ -256,7 +260,7 @@ def test_parse_chapter_line(lines, expected) -> None:
             ["#tr.en: translation", "1. kur"],
             Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[1],),
+                (parse_line_variant("1. kur")[0],),
                 translation=(parse_translation_line("#tr.en: translation"),),
             ),
         ),
@@ -264,7 +268,7 @@ def test_parse_chapter_line(lines, expected) -> None:
             ["#tr.en: translation", "#tr.de: translation", "1. kur"],
             Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[1],),
+                (parse_line_variant("1. kur")[0],),
                 translation=(
                     parse_translation_line("#tr.en: translation"),
                     parse_translation_line("#tr.de: translation"),

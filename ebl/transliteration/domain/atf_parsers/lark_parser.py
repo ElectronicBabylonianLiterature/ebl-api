@@ -44,8 +44,11 @@ TRANSLATION_LINE_PARSER = Lark.open(
 )
 PARATEXT_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="paratext")
 CHAPTER_PARSER = Lark.open(
-    ATF_GRAMMAR_PATH, **kwargs_lark, start="chapter", debug=True
-)  # ToDo: Remove debug
+    "lark_parser/ebl_atf_chapter.lark", **kwargs_lark, start="chapter"
+)
+MANUSCRIPT_PARSER = Lark.open(
+    "lark_parser/ebl_atf_manuscript_line.lark", **kwargs_lark, start="manuscript_line"
+)
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
 
 

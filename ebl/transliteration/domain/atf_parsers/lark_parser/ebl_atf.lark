@@ -1,6 +1,6 @@
 %import .ebl_atf_text_line (text_line, any_word)
 %import .ebl_atf_parallel_line (parallel_line)
-%import .ebl_atf_manuscript_line (manuscript_line, paratext)
+%import .ebl_atf_manuscript_line (manuscript_line, paratext, siglum)
 %import .ebl_atf_translation_line (translation_line)
 %import .ebl_atf_note_line (note_line, markup)
 %import .ebl_atf_dollar_line (dollar_line)
@@ -8,6 +8,7 @@
 %import .ebl_atf_chapter (chapter)
 %import .ebl_atf_empty_line (empty_line)
 %import .ebl_atf_common (labels)
+%import .ebl_atf_control_line (control_line)
 %import .oracc_atf_lem_line (lem_line)
 
 ?start: line
@@ -21,5 +22,3 @@
      | translation_line
      | control_line
      | lem_line
-
-!control_line.-2: ("=:" | "&" | "#") /.+/?

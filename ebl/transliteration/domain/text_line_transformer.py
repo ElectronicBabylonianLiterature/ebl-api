@@ -136,11 +136,11 @@ class TextLineTransformer(
         return TextLine.of_iterable(line_number, content)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__line_number_range(self, start, end):
+    def ebl_atf_text_line__ebl_atf_common__line_number_range(self, start, end):
         return LineNumberRange(start, end)
 
     @v_args(inline=True)
-    def ebl_atf_text_line__single_line_number(
+    def ebl_atf_text_line__ebl_atf_common__single_line_number(
         self, prefix_modifier, number, prime, suffix_modifier
     ):
         return LineNumber(

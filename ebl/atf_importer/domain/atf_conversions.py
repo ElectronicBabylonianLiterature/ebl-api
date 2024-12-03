@@ -40,7 +40,7 @@ class LineSerializer(Visitor):
 class GetLineNumber(Visitor):
     number: str = ""
 
-    def ebl_atf_text_line__single_line_number(self, tree: Tree) -> str:
+    def ebl_atf_text_line__ebl_atf_common__single_line_number(self, tree: Tree) -> str:
         result = DepthFirstSearch().visit_topdown(tree, "")
         self.number += result
         return result

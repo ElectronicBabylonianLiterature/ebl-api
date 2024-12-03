@@ -1,7 +1,7 @@
 %import .ebl_atf_common (AKKADIAN_ALPHABET, GREEK_ALPHABET)
 %import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 %import .ebl_atf_common (UNCERTAIN, CORRECTION, COLLATION, NO_LONGER_VISIBLE)
-%import .ebl_atf_common (line_number)
+%import .ebl_atf_common.line_number -> line_number
 %import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
 %import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
 %import .legacy_atf (legacy_uncertain_sign_prefix)
