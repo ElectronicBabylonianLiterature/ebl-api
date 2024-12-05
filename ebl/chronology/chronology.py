@@ -6,7 +6,7 @@ from marshmallow import Schema, fields, post_load, post_dump
 
 @attr.s(auto_attribs=True, frozen=True)
 class King:
-    order_global: int
+    order_global: float
     group_with: int
     dynasty_number: str
     dynasty_name: str
@@ -30,7 +30,7 @@ class Chronology:
 
 
 class KingSchema(Schema):
-    order_global = fields.Integer(data_key="orderGlobal")
+    order_global = fields.Float(data_key="orderGlobal")
     group_with = fields.Integer(
         data_key="groupWith", allow_none=True, load_default=None
     )

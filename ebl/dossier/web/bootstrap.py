@@ -1,7 +1,7 @@
 import falcon
 from ebl.context import Context
 
-from ebl.afo_register.web.dossier_records import (
+from ebl.dossier.web.dossier_records import (
     DossierResource,
 )
 

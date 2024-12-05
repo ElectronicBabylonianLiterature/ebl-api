@@ -84,6 +84,9 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MongoAfoRegisterRepository,
 )
+from ebl.dossier.infrastructure.mongo_dossier_repository import (
+    MongoDossierRepository,
+)
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -435,6 +438,11 @@ def user() -> User:
 
 
 @pytest.fixture
+def dossier_repository(database):
+    return MongoDossierRepository(database)
+
+
+@pytest.fixture
 def context(
     ebl_ai_client,
     cropped_sign_images_repository,
@@ -451,6 +459,7 @@ def context(
     annotations_repository,
     lemma_repository,
     afo_register_repository,
+    dossier_repository,
     findspot_repository,
     user,
     parallel_line_injector,
@@ -473,6 +482,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         afo_register_repository=afo_register_repository,
+        dossier_repository=dossier_repository,
         findspot_repository=findspot_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),

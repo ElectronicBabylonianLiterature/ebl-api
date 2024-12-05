@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
 
-from ebl.afo_register.domain.afo_register_record import (
+from ebl.dossier.domain.dossier_record import (
     DossierRecord,
 )
 
-class AfoRegisterRepository(ABC):
+
+class DossierRepository(ABC):
+    @abstractmethod
+    def fetch(self, name: str) -> DossierRecord: ...
 
     @abstractmethod
-    def fetch(self, query, *args, **kwargs) -> DossierRecord: ...
+    def create(self, dossier_record: DossierRecord) -> str: ...

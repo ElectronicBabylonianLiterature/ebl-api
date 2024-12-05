@@ -1,7 +1,7 @@
 from falcon import Request, Response
 from ebl.errors import NotFoundError
 
-from ebl.dossier.domain.dossier_repository import DossierRepository
+from ebl.dossier.application.dossier_repository import DossierRepository
 from ebl.dossier.infrastructure.mongo_dossier_repository import (
     DossierRecordSchema,
 )
