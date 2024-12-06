@@ -28,6 +28,7 @@ class ExcavationPlan:
 class Findspot:
     id_: int
     site: Optional[ExcavationSite] = None
+    sector: str = ""
     area: str = ""
     building: str = ""
     building_type: Optional[BuildingType] = None
