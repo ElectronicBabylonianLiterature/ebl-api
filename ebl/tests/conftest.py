@@ -84,7 +84,7 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MongoAfoRegisterRepository,
 )
-from ebl.dossier.infrastructure.mongo_dossier_repository import (
+from ebl.dossiers.infrastructure.mongo_dossier_repository import (
     MongoDossierRepository,
 )
 from ebl.users.domain.user import Guest, User

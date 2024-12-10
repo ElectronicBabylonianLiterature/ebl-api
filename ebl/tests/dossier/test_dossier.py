@@ -8,11 +8,6 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     AfoRegisterRecordSchema,
     AfoRegisterRecordSuggestionSchema,
 )
-from ebl.tests.factories.afo_register import (
-    AfoRegisterRecordFactory,
-    AfoRegisterRecordSuggestionFactory,
-)
-
 
 @pytest.fixture
 def afo_register_record():
@@ -57,15 +52,6 @@ def test_afo_register_record_to_dict(afo_register_record: AfoRegisterRecord) -> 
     }
 
 
-def test_afo_register_record_suggestion_to_dict(
-    afo_register_record_suggestion: AfoRegisterRecordSuggestion,
-) -> None:
-    assert AfoRegisterRecordSuggestionSchema().dump(afo_register_record_suggestion) == {
-        "text": afo_register_record_suggestion.text,
-        "textNumbers": afo_register_record_suggestion.text_numbers,
-    }
-
-
 def test_afo_register_record_from_dict(afo_register_record: AfoRegisterRecord) -> None:
     serialized_data = AfoRegisterRecordSchema().dump(afo_register_record)
     deserialized_object = AfoRegisterRecordSchema().load(serialized_data)
@@ -80,17 +66,4 @@ def test_afo_register_record_from_dict(afo_register_record: AfoRegisterRecord) -
         deserialized_object.discussed_by_notes == afo_register_record.discussed_by_notes
     )
 
-
-def test_afo_register_record_suggestion_from_dict(
-    afo_register_record_suggestion: AfoRegisterRecordSuggestion,
-) -> None:
-    serialized_data = AfoRegisterRecordSuggestionSchema().dump(
-        afo_register_record_suggestion
-    )
-    deserialized_object = AfoRegisterRecordSuggestionSchema().load(serialized_data)
-
-    assert deserialized_object.text == afo_register_record_suggestion.text
-    assert (
-        deserialized_object.text_numbers == afo_register_record_suggestion.text_numbers
-    )
 """

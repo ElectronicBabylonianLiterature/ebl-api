@@ -29,7 +29,7 @@ from ebl.afo_register.application.afo_register_repository import AfoRegisterRepo
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
-from ebl.dossier.application.dossier_repository import DossierRepository
+from ebl.dossiers.application.dossier_repository import DossierRepository
 
 
 @attr.s(auto_attribs=True, frozen=True)

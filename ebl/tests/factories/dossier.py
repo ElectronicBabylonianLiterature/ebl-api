@@ -1,13 +1,12 @@
 import factory
 from random import randint
-from ebl.dossier.domain.dossier_record import (
+from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
 )
-from ebl.tests.factories.bibliography import ReferenceFactory
-from ebl.tests.factories.collections import TupleFactory
 from ebl.common.domain.provenance import Provenance
 from ebl.tests.factories.fragment import ScriptFactory
 from ebl.chronology.chronology import chronology
+from ebl.bibliography.domain.reference import ReferenceType
 
 
 class DossierRecordFactory(factory.Factory):
@@ -28,6 +27,6 @@ class DossierRecordFactory(factory.Factory):
     )
     provenance = factory.fuzzy.FuzzyChoice(set(Provenance) - {Provenance.STANDARD_TEXT})
     script = factory.SubFactory(ScriptFactory)
-    references = factory.List(
-        [factory.SubFactory(ReferenceFactory, with_document=True)], TupleFactory
+    references = factory.LazyAttribute(
+        lambda _: list({list(ReferenceType)[i] for i in range(randint(1, 6))})
     )

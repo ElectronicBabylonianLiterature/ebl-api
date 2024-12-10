@@ -1,5 +1,5 @@
 from ebl.tests.factories.dossier import DossierRecordFactory
-from ebl.dossier.application.dossier_repository import DossierRepository
+from ebl.dossiers.application.dossier_repository import DossierRepository
 
 
 def test_fetch(dossier_repository: DossierRepository):

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from ebl.dossier.domain.dossier_record import (
+from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
 )
 
