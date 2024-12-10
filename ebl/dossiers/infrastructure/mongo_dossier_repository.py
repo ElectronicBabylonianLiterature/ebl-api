@@ -23,7 +23,7 @@ class DossierRecordSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    _id = fields.String(required=True, unique=True)
+    id = fields.String(required=True, unique=True, data_key="_id")
     description = fields.String(load_default=None)
     is_approximate_date = fields.Boolean(
         data_key="isApproximateDate", load_default=False
@@ -50,11 +50,11 @@ class MongoDossierRepository(DossierRepository):
     def __init__(self, database: Database):
         self._dossier = MongoCollection(database, COLLECTION)
 
-    def fetch(self, name: str) -> DossierRecord:
-        query = {"name": name}
+    def fetch(self, id: str) -> DossierRecord:
+        query = {"_id": id}
         record_data = self._dossier.find_one(query)
         if not record_data:
-            raise ValueError(f"No dossier record found for the name: {name}")
+            raise ValueError(f"No dossier record found for the id: {id}")
         return DossierRecordSchema().load(record_data)
 
     def create(self, dossier_record: DossierRecord) -> str:

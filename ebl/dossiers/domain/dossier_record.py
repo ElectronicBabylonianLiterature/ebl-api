@@ -8,7 +8,7 @@ from ebl.bibliography.domain.reference import ReferenceType
 
 @attr.s(frozen=True, auto_attribs=True)
 class DossierRecord:
-    _id: str
+    id: str
     description: Optional[str] = None
     is_approximate_date: bool = False
     year_range_from: Optional[int] = None

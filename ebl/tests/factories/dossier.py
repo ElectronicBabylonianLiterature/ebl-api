@@ -13,7 +13,7 @@ class DossierRecordFactory(factory.Factory):
     class Meta:
         model = DossierRecord
 
-    name = factory.Faker("word")
+    id = factory.Faker("word")
     description = factory.Faker("sentence")
     is_approximate_date = factory.Faker("boolean")
     year_range_from = factory.Maybe("is_approximate_date", randint(-2500, -400), None)
@@ -23,7 +23,7 @@ class DossierRecordFactory(factory.Factory):
         None,
     )
     related_kings = factory.LazyAttribute(
-        lambda _: [chronology.kings[i].order_global for i in range(randint(0, 100))]
+        lambda _: [chronology.kings[i].order_global for i in range(randint(0, 10))]
     )
     provenance = factory.fuzzy.FuzzyChoice(set(Provenance) - {Provenance.STANDARD_TEXT})
     script = factory.SubFactory(ScriptFactory)

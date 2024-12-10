@@ -7,4 +7,4 @@ def test_fetch(dossier_repository: DossierRepository):
     dossier_repository.create(dossier_record)
     dossier_repository.create(DossierRecordFactory.build())
 
-    assert dossier_repository.fetch(dossier_record.name) == dossier_record
+    assert dossier_repository.fetch(dossier_record.id) == dossier_record
