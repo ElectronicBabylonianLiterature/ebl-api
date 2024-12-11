@@ -7,7 +7,7 @@ from ebl.dossiers.domain.dossier_record import (
 )
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.common.domain.provenance import Provenance
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.schemas import NameEnumField
 from ebl.bibliography.domain.reference import ReferenceType
 

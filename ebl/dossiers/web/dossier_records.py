@@ -14,7 +14,9 @@ class DossiersResource:
 
     def on_get(self, req: Request, resp: Response) -> None:
         try:
-            dossiers = self._dossiersRepository.query_by_ids(req.params["ids"].split(","))
+            dossiers = self._dossiersRepository.query_by_ids(
+                req.params["ids"].split(",")
+            )
         except ValueError as error:
             raise NotFoundError(
                 f"No dossier records matching {str(req.params)} found."

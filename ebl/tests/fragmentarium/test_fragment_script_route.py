@@ -2,7 +2,7 @@ import falcon
 import pytest
 import json
 from ebl.common.domain.period import Period, PeriodModifier
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, ScriptFactory
