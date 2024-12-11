@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, pre_dump
 from ebl.fragmentarium.application.line_to_vec import LineToVecScore
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.fragmentarium.domain.fragment import Script
 
 

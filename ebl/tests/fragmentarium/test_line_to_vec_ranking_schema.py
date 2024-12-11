@@ -5,7 +5,7 @@ from ebl.fragmentarium.application.line_to_vec_ranking_schema import (
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import ScriptFactory
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 
 
 SCRIPT = ScriptFactory.build()

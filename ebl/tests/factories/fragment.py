@@ -19,7 +19,9 @@ from ebl.fragmentarium.domain.fragment import (
     Notes,
     Script,
     UncuratedReference,
+    DossierReference,
 )
+
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -204,6 +206,14 @@ class ExternalNumbersFactory(factory.Factory):
     )
 
 
+class FragmentDossierReferenceFactory(factory.Factory):
+    class Meta:
+        model = DossierReference
+
+    dossierId = factory.Faker("word")
+    isUncertain = factory.Faker("boolean")
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
@@ -237,6 +247,12 @@ class FragmentFactory(factory.Factory):
     projects = (ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS)
     archaeology = factory.SubFactory(ArchaeologyFactory)
     colophon = factory.SubFactory(ColophonFactory)
+    dossiers = factory.List(
+        [
+            factory.SubFactory(FragmentDossierReferenceFactory)
+            for _ in range(random.randint(0, 4))
+        ]
+    )
 
 
 class InterestingFragmentFactory(FragmentFactory):

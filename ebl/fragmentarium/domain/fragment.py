@@ -100,6 +100,12 @@ class Script:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class DossierReference:
+    dossierId: str
+    isUncertain: bool = False
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Fragment(FragmentExternalNumbers):
     number: MuseumNumber
     accession: Optional[Accession] = None
@@ -131,6 +137,7 @@ class Fragment(FragmentExternalNumbers):
     archaeology: Optional[Archaeology] = None
     colophon: Optional[Colophon] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
+    dossiers: Sequence[str] = []
 
     @property
     def is_lowest_join(self) -> bool:

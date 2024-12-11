@@ -17,13 +17,14 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
 )
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.application.fragment_schema import (
+from ebl.fragmentarium.application.fragment_fields_schemas import (
     ExternalNumbersSchema,
-    JoinsSchema,
     IntroductionSchema,
     NotesSchema,
     ScriptSchema,
+    DossierReferenceSchema,
 )
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.colophon_schema import ColophonSchema
 from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.joins import Joins
@@ -121,6 +122,10 @@ def expected_dto(lemmatized_fragment, has_photo):
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
             "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),
             "authorizedScopes": [],
+            "dossiers": [
+                DossierReferenceSchema().dump(dossier)
+                for dossier in lemmatized_fragment.dossiers
+            ],
         },
         pydash.is_none,
     )

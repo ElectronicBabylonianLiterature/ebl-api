@@ -6,7 +6,7 @@ from marshmallow import Schema, fields, post_load, post_dump
 
 @attr.s(auto_attribs=True, frozen=True)
 class King:
-    order_global: int
+    order_global: float
     group_with: int
     dynasty_number: str
     dynasty_name: str
