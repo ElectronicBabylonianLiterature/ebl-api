@@ -29,7 +29,7 @@ from ebl.afo_register.application.afo_register_repository import AfoRegisterRepo
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
-from ebl.dossiers.application.dossier_repository import DossierRepository
+from ebl.dossiers.application.dossiers_repository import DossiersRepository
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -54,7 +54,7 @@ class Context:
     cache: Cache
     parallel_line_injector: ParallelLineInjector
     afo_register_repository: AfoRegisterRepository
-    dossier_repository: DossierRepository
+    dossiers_repository: DossiersRepository
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

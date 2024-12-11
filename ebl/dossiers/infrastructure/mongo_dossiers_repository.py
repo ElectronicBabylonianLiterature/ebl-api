@@ -4,7 +4,7 @@ from ebl.mongo_collection import MongoCollection
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
 )
-from ebl.dossiers.application.dossier_repository import DossierRepository
+from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.schemas import NameEnumField
@@ -46,7 +46,7 @@ class DossierRecordSchema(Schema):
         return DossierRecord(**data)
 
 
-class MongoDossierRepository(DossierRepository):
+class MongoDossiersRepository(DossiersRepository):
     def __init__(self, database: Database):
         self._dossier = MongoCollection(database, COLLECTION)
 

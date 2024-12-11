@@ -2,7 +2,7 @@ import pytest
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
 )
-from ebl.dossiers.infrastructure.mongo_dossier_repository import (
+from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     DossierRecordSchema,
 )
 from ebl.tests.factories.dossier import DossierRecordFactory
@@ -54,7 +54,9 @@ def test_dossier_record_to_dict(
         "yearRangeFrom": dossier_record.year_range_from,
         "yearRangeTo": dossier_record.year_range_to,
         "relatedKings": dossier_record.related_kings,
-        "provenance": dossier_record.provenance.long_name,
+        "provenance": dossier_record.provenance.long_name
+        if dossier_record.provenance
+        else None,
         "script": ScriptSchema().dump(dossier_record.script),
         "references": [
             str(reference).replace("ReferenceType.", "")

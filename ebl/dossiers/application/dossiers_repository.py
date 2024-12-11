@@ -5,9 +5,9 @@ from ebl.dossiers.domain.dossier_record import (
 )
 
 
-class DossierRepository(ABC):
+class DossiersRepository(ABC):
     @abstractmethod
-    def fetch(self, name: str) -> DossierRecord: ...
+    def fetch(self, id: str) -> DossierRecord: ...
 
     @abstractmethod
     def create(self, dossier_record: DossierRecord) -> str: ...
