@@ -1,3 +1,4 @@
+from typing import Sequence
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
 from ebl.mongo_collection import MongoCollection
@@ -48,14 +49,11 @@ class DossierRecordSchema(Schema):
 
 class MongoDossiersRepository(DossiersRepository):
     def __init__(self, database: Database):
-        self._dossier = MongoCollection(database, COLLECTION)
+        self._collection = MongoCollection(database, COLLECTION)
 
-    def fetch(self, id: str) -> DossierRecord:
-        query = {"_id": id}
-        record_data = self._dossier.find_one(query)
-        if not record_data:
-            raise ValueError(f"No dossier record found for the id: {id}")
-        return DossierRecordSchema().load(record_data)
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]:
+        cursor = self._collection.find_many({"_id": {"$in": ids}})
+        return DossierRecordSchema(many=True).load(cursor)
 
     def create(self, dossier_record: DossierRecord) -> str:
-        return self._dossier.insert_one(DossierRecordSchema().dump(dossier_record))
+        return self._collection.insert_one(DossierRecordSchema().dump(dossier_record))
