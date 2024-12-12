@@ -65,5 +65,9 @@ class MarkupTransformer(Transformer):
 
 
 class NoteLineTransformer(MarkupTransformer):
+
+    def __init__(self):
+        super(MarkupTransformer, self).__init__()
+
     def note_line(self, children: Sequence[MarkupPart]) -> NoteLine:
         return NoteLine(children)

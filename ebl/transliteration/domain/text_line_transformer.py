@@ -134,11 +134,12 @@ class TextLineTransformer(
     def __init__(self):
         for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
             _method = method.replace("ebl_atf_text_line", "")
-            setattr(
-                self,
-                f"ebl_atf_parallel_line{_method}",
-                getattr(self, method),
-            )
+            for prefix in ["ebl_atf_parallel_line", "ebl_atf_translation_line"]:
+                setattr(
+                    self,
+                    f"{prefix}{_method}",
+                    getattr(self, method),
+                )
 
     @v_args(inline=True)
     def text_line(self, line_number, content):

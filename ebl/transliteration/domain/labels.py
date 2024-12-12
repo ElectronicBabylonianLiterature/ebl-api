@@ -170,10 +170,9 @@ LINE_NUMBER_EXPRESSION = r"[^\s]+"
 
 class LabelTransformer(Transformer):
     def __init__(self):
-        # ToDo: Fix. This method appereatly is not being called
-        input("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        for method in [method for method in dir(self) if "ebl_atf_common" in method]:
-            self.set_methods(method.replace("ebl_atf_common__", ""))
+        methods = [method for method in dir(self) if "ebl_atf_common" in method]
+        for method in methods:
+            self.set_methods(method)
 
     def set_methods(self, method: str) -> None:
         for prefix in [
@@ -181,8 +180,12 @@ class LabelTransformer(Transformer):
             "ebl_atf_at_line",
             "ebl_atf_translation_line",
         ]:
-            print(f"{prefix}__{method}")
-            input()
+            _method = method.replace("ebl_atf_common__", "")
+            setattr(
+                self,
+                f"{prefix}__{_method}",
+                getattr(self, method),
+            )
             setattr(
                 self,
                 f"{prefix}__{method}",
@@ -196,15 +199,12 @@ class LabelTransformer(Transformer):
     def ebl_atf_common__column_label(
         self, numeral: Token, status: Sequence[Status]
     ) -> ColumnLabel:
-        print(numeral, status)
-        input()
         return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
 
     @v_args(inline=True)
     def ebl_atf_common__surface_label(
         self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
-        input("SURFACE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return SurfaceLabel.from_label(
             Surface.from_label(surface),  # pyre-ignore[6]
             status,

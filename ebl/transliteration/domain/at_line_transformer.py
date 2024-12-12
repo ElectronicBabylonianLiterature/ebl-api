@@ -28,6 +28,9 @@ class ObjectData:
 
 
 class AtLineTransformer(LabelTransformer):
+    def __init__(self):
+        super().__init__()
+
     def ebl_atf_at_line__free_text(self, content):
         return "".join(content)
 
