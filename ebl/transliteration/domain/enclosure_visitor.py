@@ -241,7 +241,7 @@ class EnclosureUpdater(TokenVisitor):
 
     def _visit_parts(self, tokens: Sequence[Token]) -> Sequence[Token]:
         part_visitor = EnclosureUpdater(self._enclosures)
-        for token in tokens:
+        for token in (token for token in tokens if hasattr(token, "accept")):
             token.accept(part_visitor)
 
         self._enclosures = part_visitor._enclosures

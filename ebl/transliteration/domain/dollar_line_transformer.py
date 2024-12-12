@@ -20,7 +20,7 @@ class DollarLineTransformer(Transformer):
         return LooseDollarLine(str(content))
 
     @v_args(inline=True)
-    def ebl_atf_dollar_line__ruling(self, number, status=None):
+    def ebl_atf_dollar_line__ruling(self, number=1, status=None):
         return RulingDollarLine(atf.Ruling(str(number)), status)
 
     @v_args(inline=True)

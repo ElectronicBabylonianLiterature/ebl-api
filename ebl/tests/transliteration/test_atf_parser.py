@@ -14,15 +14,17 @@ from ebl.transliteration.domain.at_line import SurfaceAtLine
 from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
-PARSER_PATH = "../../transliteration/domain/ebl_atf.lark"
-LINE_PARSER_PATH = "../../transliteration/domain/ebl_atf_text_line.lark"
+PARSER_PATH = "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark"
+LINE_PARSER_PATH = (
+    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf_text_line.lark"
+)
 
 
 @pytest.mark.parametrize(
