@@ -425,8 +425,7 @@ def test_search_project(client, fragmentarium, project):
 )
 def test_search_site(client, fragmentarium, site, attribute):
     fragments = [
-        FragmentFactory.build(museum=museum)
-        for museum in [museum, Museum.PENN_MUSEUM]
+        FragmentFactory.build(museum=museum) for museum in [museum, Museum.PENN_MUSEUM]
     ]
 
     for fragment in fragments:
@@ -447,6 +446,7 @@ def test_search_site(client, fragmentarium, site, attribute):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
+
 
 @pytest.mark.parametrize(
     "site",
