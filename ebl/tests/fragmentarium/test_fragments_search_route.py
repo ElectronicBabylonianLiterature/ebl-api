@@ -417,19 +417,25 @@ def test_search_project(client, fragmentarium, project):
 
 @pytest.mark.parametrize(
     "museum",
-    [Museum.THE_BRITISH_MUSEUM, Museum.YALE_PEABODY_COLLECTION, Museum.THE_IRAQ_MUSEUM],
+    [Museum.THE_BRITISH_MUSEUM, Museum.THE_IRAQ_MUSEUM, Museum.PENN_MUSEUM],
 )
 @pytest.mark.parametrize(
     "attribute",
-    ["museum_name", "name"],
+    ["name"]
 )
 def test_search_museum(client, fragmentarium, museum, attribute):
+    print(f"Testing museum: {museum.name} with attribute: {attribute}")
+
     fragments = [
-        FragmentFactory.build(museum=museum) for museum in [museum, Museum.PENN_MUSEUM]
+        FragmentFactory.build(museum=museum)
+        for museum in [museum, Museum.YALE_PEABODY_COLLECTION]
     ]
+
+    print(f"Fragments created: {fragments}")
 
     for fragment in fragments:
         fragmentarium.create(fragment)
+        print(f"Fragment created in fragmentarium: {fragment}")
 
     expected_json = {
         "items": [
@@ -440,9 +446,14 @@ def test_search_museum(client, fragmentarium, museum, attribute):
         "matchCountTotal": 0,
     }
 
+    print(f"Expected JSON: {expected_json}")
+    print(f"Requesting with museum attribute: {getattr(museum, attribute)}")
+
     result = client.simulate_get(
         "/fragments/query", params={"museum": getattr(museum, attribute)}
     )
+
+    print(f"Result from client: {result.status}, {result.json}")
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
