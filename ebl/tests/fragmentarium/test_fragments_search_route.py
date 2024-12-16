@@ -4,7 +4,6 @@ from datetime import date, timedelta
 import attr
 import falcon
 import pytest
-from ebl.fragmentarium.domain.museum import Museum
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
 
@@ -15,6 +14,7 @@ from ebl.fragmentarium.application.fragment_info_schema import (
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import (
     LATEST_TRANSLITERATION_LIMIT,
@@ -423,7 +423,7 @@ def test_search_project(client, fragmentarium, project):
     "attribute",
     ["museum_name", "name"],
 )
-def test_search_site(client, fragmentarium, site, attribute):
+def test_search_museum(client, fragmentarium, museum, attribute):
     fragments = [
         FragmentFactory.build(museum=museum) for museum in [museum, Museum.PENN_MUSEUM]
     ]
