@@ -4,6 +4,7 @@ from datetime import date, timedelta
 import attr
 import falcon
 import pytest
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.project import ResearchProject
 
@@ -413,6 +414,39 @@ def test_search_project(client, fragmentarium, project):
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json
 
+
+@pytest.mark.parametrize(
+    "museum",
+    [Museum.THE_BRITISH_MUSEUM, Museum.YALE_PEABODY_COLLECTION, Museum.THE_IRAQ_MUSEUM],
+)
+@pytest.mark.parametrize(
+    "attribute",
+    ["museum_name", "name"],
+)
+def test_search_site(client, fragmentarium, site, attribute):
+    fragments = [
+        FragmentFactory.build(museum=museum)
+        for museum in [museum, Museum.PENN_MUSEUM]
+    ]
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    expected_json = {
+        "items": [
+            query_item_of(fragment)
+            for fragment in fragments
+            if fragment.museum == museum
+        ],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get(
+        "/fragments/query", params={"museum": getattr(museum, attribute)}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json
 
 @pytest.mark.parametrize(
     "site",
