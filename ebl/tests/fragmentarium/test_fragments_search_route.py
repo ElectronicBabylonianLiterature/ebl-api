@@ -419,10 +419,7 @@ def test_search_project(client, fragmentarium, project):
     "museum",
     [Museum.THE_BRITISH_MUSEUM, Museum.THE_IRAQ_MUSEUM, Museum.PENN_MUSEUM],
 )
-@pytest.mark.parametrize(
-    "attribute",
-    ["name"]
-)
+@pytest.mark.parametrize("attribute", ["name"])
 def test_search_museum(client, fragmentarium, museum, attribute):
     print(f"Testing museum: {museum.name} with attribute: {attribute}")
 
