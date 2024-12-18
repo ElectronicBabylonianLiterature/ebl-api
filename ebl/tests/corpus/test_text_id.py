@@ -11,6 +11,7 @@ from ebl.transliteration.domain.genre import Genre
         (TextId(Genre.LEXICOGRAPHY, 5, 8), "Lex V.8"),
         (TextId(Genre.MAGIC, 1, 2), "Mag I.2"),
         (TextId(Genre.MEDICINE, 1, 3), "Med I.3"),
+        (TextId(Genre.SHUILA, 1, 8), "Šui I.8"),
     ],
 )
 def test_str(text_id, expected) -> None:
