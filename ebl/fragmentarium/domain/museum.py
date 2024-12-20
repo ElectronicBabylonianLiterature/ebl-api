@@ -223,6 +223,12 @@ class Museum(Enum):
         "IRL",
         "https://www.tcd.ie/",
     )
+    TURIN_DEPARTMENT_ARCHAEOLOGY = (
+        "Sezione di Archeologia del Dipartimento di Studi Storici, Università di Torino",
+        "Turin",
+        "ITA",
+        "https://www.dipstudistorici.unito.it/",
+    )
     URUK_WARKA_SAMMLUNG = (
         "Uruk-Warka-Sammlung",
         "Heidelberg",

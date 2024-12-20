@@ -59,6 +59,7 @@ class Provenance(ProvenanceEnum):
     NIPPUR = ("Nippur", "Nip", "Babylonia", "NIP")
     PI_KASI = ("Pī-Kasî", "Pik", "Babylonia", "ANT")
     PUZRIS_DAGAN = ("Puzriš-Dagān", "Puz", "Babylonia", "DRE")
+    SELEUCIA = ("Silūqīah", "Sel", "Babylonia", "SEL")
     SIPPAR = ("Sippar", "Sip", "Babylonia", "SAP")
     SIPPAR_AMNANUM = ("Sippar-Amnānum", "Sipam", "Babylonia", "SIP")
     SULAIYMAH = ("Sulaiymah", "Sul", "Babylonia", "HMR")
