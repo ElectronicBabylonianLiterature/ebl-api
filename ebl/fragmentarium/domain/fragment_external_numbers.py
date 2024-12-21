@@ -13,6 +13,7 @@ class ExternalNumbers:
     hilprecht_jena_number: str = ""
     hilprecht_heidelberg_number: str = ""
     metropolitan_number: str = ""
+    pierpont_morgan_number: str = ""
     louvre_number: str = ""
     dublin_tcd_number: str = ""
     alalah_hpm_number: str = ""
@@ -70,6 +71,10 @@ class FragmentExternalNumbers:
     @property
     def metropolitan_number(self) -> str:
         return self._get_external_number("metropolitan_number")
+
+    @property
+    def pierpont_morgan_number(self) -> str:
+        return self._get_external_number("pierpont_morgan_number")
 
     @property
     def louvre_number(self) -> str:
