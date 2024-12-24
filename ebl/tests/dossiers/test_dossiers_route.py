@@ -39,7 +39,7 @@ def test_fetch_dossier_record_route(
     dossiers_repository.create(unrelated_dossier_record)
     get_result = client.simulate_get(
         "/dossiers",
-        params={"ids": ",".join([dossier_record.id, another_dossier_record.id])},
+        params={"ids[]": [dossier_record.id, another_dossier_record.id]},
     )
 
     assert get_result.status == falcon.HTTP_OK

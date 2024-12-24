@@ -3,7 +3,7 @@ from typing import Sequence, Optional
 
 from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.domain.fragment import Script
-from ebl.bibliography.domain.reference import ReferenceType
+from ebl.bibliography.domain.reference import Reference
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -16,4 +16,4 @@ class DossierRecord:
     related_kings: Sequence[float] = []
     provenance: Optional[Provenance] = None
     script: Optional[Script] = None
-    references: Sequence[ReferenceType] = []
+    references: Sequence[Reference] = ()

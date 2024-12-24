@@ -8,10 +8,9 @@ from ebl.dossiers.domain.dossier_record import (
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
-from ebl.schemas import NameEnumField
-from ebl.bibliography.domain.reference import ReferenceType
+from ebl.bibliography.application.reference_schema import ReferenceSchema
 
-COLLECTION = "dossier"
+COLLECTION = "dossiers"
 
 provenance_field = fields.Function(
     lambda object_: getattr(object_.provenance, "long_name", None),
@@ -40,10 +39,13 @@ class DossierRecordSchema(Schema):
     )
     provenance = provenance_field
     script = fields.Nested(ScriptSchema, allow_none=True, load_default=None)
-    references = fields.List(NameEnumField(ReferenceType), load_default=list)
+    references = fields.Nested(
+        ReferenceSchema, allow_none=True, many=True, load_default=()
+    )
 
     @post_load
     def make_record(self, data, **kwargs):
+        data["references"] = tuple(data["references"])
         return DossierRecord(**data)
 
 
@@ -53,7 +55,8 @@ class MongoDossiersRepository(DossiersRepository):
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]:
         cursor = self._collection.find_many({"_id": {"$in": ids}})
-        return DossierRecordSchema(many=True).load(cursor)
+        records = DossierRecordSchema(many=True).load(cursor)
+        return records
 
     def create(self, dossier_record: DossierRecord) -> str:
         return self._collection.insert_one(DossierRecordSchema().dump(dossier_record))
