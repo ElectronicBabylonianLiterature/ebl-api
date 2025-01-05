@@ -21,6 +21,7 @@ class ExternalNumbers:
     philadelphia_number: str = ""
     achemenet_number: str = ""
     nabucco_number: str = ""
+    digitale_keilschrift_bibliothek: str = ""
     yale_peabody_number: str = ""
     oracc_numbers: Sequence[str] = ()
     seal_numbers: Sequence[str] = ()
@@ -99,6 +100,10 @@ class FragmentExternalNumbers:
     @property
     def nabucco_number(self) -> str:
         return self._get_external_number("nabucco")
+
+    @property
+    def digitale_keilschrift_bibliothek(self) -> str:
+        return self._get_external_number("digitale_keilschrift_bibliothek")
 
     @property
     def philadelphia_number(self) -> str:
