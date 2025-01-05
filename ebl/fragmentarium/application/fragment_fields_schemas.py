@@ -145,7 +145,9 @@ class ExternalNumbersSchema(Schema):
     oracc_numbers = fields.List(
         fields.String(), load_default=(), data_key="oraccNumbers"
     )
-    digitale_keilschrift_bibliothek = fields.String(load_default="", data_key="digitaleKeilschriftBibliothek")
+    digitale_keilschrift_bibliothek = fields.String(
+        load_default="", data_key="digitaleKeilschriftBibliothek"
+    )
     seal_numbers = fields.List(fields.String(), load_default=(), data_key="sealNumbers")
 
     @post_load
