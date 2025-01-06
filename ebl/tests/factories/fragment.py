@@ -199,7 +199,7 @@ class ExternalNumbersFactory(factory.Factory):
     yale_peabody_number = factory.Sequence(lambda n: f"yale-peabody-number-{n}")
     achemenet_number = factory.Sequence(lambda n: f"achemenet-number-{n}")
     nabucco_number = factory.Sequence(lambda n: f"nabucco-number-{n}")
-    digitale_keilschrift_bibliothek = factory.Sequence(
+    digitale_keilschrift_bibliothek_number = factory.Sequence(
         lambda n: f"digitale-keilschrift-bibliothek-{n}"
     )
     oracc_numbers = factory.List(
