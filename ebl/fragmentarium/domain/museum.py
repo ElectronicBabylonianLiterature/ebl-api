@@ -69,6 +69,12 @@ class Museum(Enum):
         "TUR",
         "https://muze.gov.tr/muze-detay?SectionId=IAR01&DistId=IAR",
     )
+    IZIKO_MUSEUMS_OF_SOUTH_AFRICA = (
+        "Iziko Museums of South Africa",
+        "Cape Town",
+        "ZA",
+        "https://www.iziko.org.za/",
+    )
     KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
         "Ann Arbor",
