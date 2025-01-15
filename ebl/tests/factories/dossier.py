@@ -28,5 +28,7 @@ class DossierRecordFactory(factory.Factory):
     provenance = factory.fuzzy.FuzzyChoice(set(Provenance) - {Provenance.STANDARD_TEXT})
     script = factory.SubFactory(ScriptFactory)
     references = factory.LazyAttribute(
-        lambda _: tuple(ReferenceFactory() for _ in range(randint(1, 5)))
+        lambda _: tuple(
+            ReferenceFactory(with_document=True) for _ in range(randint(1, 5))
+        )
     )

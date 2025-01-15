@@ -9,7 +9,7 @@ from ebl.tests.factories.dossier import DossierRecordFactory
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
-from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 
 
 @pytest.fixture
@@ -59,7 +59,7 @@ def test_dossier_record_to_dict(
         if dossier_record.provenance
         else None,
         "script": ScriptSchema().dump(dossier_record.script),
-        "references": ReferenceSchema().dump(dossier_record.references, many=True),
+        "references": ApiReferenceSchema().dump(dossier_record.references, many=True),
     }
 
 

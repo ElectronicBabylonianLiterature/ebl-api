@@ -9,7 +9,7 @@ from ebl.dossiers.domain.dossier_record import (
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
-from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId
 
 DOSSIERS_COLLECTION = "dossiers"
@@ -41,7 +41,7 @@ class DossierRecordSchema(Schema):
     )
     script = fields.Nested(ScriptSchema, allow_none=True, load_default=None)
     references = fields.Nested(
-        ReferenceSchema, allow_none=True, many=True, load_default=()
+        ApiReferenceSchema, allow_none=True, many=True, load_default=()
     )
 
     @post_load
@@ -94,14 +94,16 @@ class MongoDossiersRepository(DossiersRepository):
         for index, dossier in enumerate(dossiers):
             injected_references = [
                 {
-                    **ReferenceSchema().dump(reference),
+                    **ApiReferenceSchema().dump(reference),
                     "document": bibliography_entries.get(reference.id, {}),
                 }
                 for reference in dossier.references
             ]
             dossiers[index] = attr.evolve(
                 dossier,
-                references=ReferenceSchema(unknown=EXCLUDE, many=True).load(
-                    injected_references
+                references=tuple(
+                    ApiReferenceSchema(unknown=EXCLUDE, many=True).load(
+                        injected_references
+                    )
                 ),
             )
