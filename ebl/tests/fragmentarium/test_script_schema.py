@@ -1,5 +1,5 @@
 import pytest
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.common.domain.period import Period, PeriodModifier
 

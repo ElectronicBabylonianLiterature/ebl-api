@@ -6,7 +6,7 @@ from marshmallow import ValidationError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.web.require_scope import require_scope
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 
 
 class FragmentScriptResource:

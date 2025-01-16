@@ -9,7 +9,7 @@ from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchem
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.date import Date, DateSchema
