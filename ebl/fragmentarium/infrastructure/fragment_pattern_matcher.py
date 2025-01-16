@@ -72,6 +72,9 @@ class PatternMatcher:
             return {"genres.category": {"$all": genre}}
         return {}
 
+    def _filter_by_museum(self) -> Dict:
+        return {"museum": museum} if (museum := self._query.get("museum")) else {}
+
     def _filter_by_project(self) -> Dict:
         return {"projects": project} if (project := self._query.get("project")) else {}
 
@@ -105,6 +108,7 @@ class PatternMatcher:
                 [
                     number_is(self._query["number"]) if "number" in self._query else {},
                     self._filter_by_genre(),
+                    self._filter_by_museum(),
                     self._filter_by_project(),
                     self._filter_by_site(),
                     self._filter_by_script(),

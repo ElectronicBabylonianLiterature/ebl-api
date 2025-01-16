@@ -69,6 +69,12 @@ class Museum(Enum):
         "TUR",
         "https://muze.gov.tr/muze-detay?SectionId=IAR01&DistId=IAR",
     )
+    IZIKO_MUSEUMS_OF_SOUTH_AFRICA = (
+        "Iziko Museums of South Africa",
+        "Cape Town",
+        "ZA",
+        "https://www.iziko.org.za/",
+    )
     KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
         "Ann Arbor",
@@ -222,6 +228,12 @@ class Museum(Enum):
         "Dublin",
         "IRL",
         "https://www.tcd.ie/",
+    )
+    TURIN_DEPARTMENT_ARCHAEOLOGY = (
+        "Sezione di Archeologia del Dipartimento di Studi Storici, Università di Torino",
+        "Turin",
+        "ITA",
+        "https://www.dipstudistorici.unito.it/",
     )
     URUK_WARKA_SAMMLUNG = (
         "Uruk-Warka-Sammlung",

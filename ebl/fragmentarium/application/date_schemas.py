@@ -13,7 +13,7 @@ class IsoDateField(fields.Field):
 
 
 class PartialDateSchema(Schema):
-    year = fields.Integer(required=True)
+    year = fields.Integer(allow_none=True)
     month = fields.Integer(allow_none=True)
     day = fields.Integer(allow_none=True)
     notes = fields.String(allow_none=True, load_default="")
@@ -29,7 +29,7 @@ class PartialDateSchema(Schema):
 
 class DateRangeSchema(Schema):
     start = fields.Nested(PartialDateSchema, allow_none=True)
-    end = fields.Nested(PartialDateSchema, allow_none=True)
+    end = fields.Nested(PartialDateSchema, allow_none=True, required=False)
     notes = fields.String(allow_none=True)
 
     @post_load

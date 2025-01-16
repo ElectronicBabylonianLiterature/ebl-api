@@ -13,6 +13,7 @@ class ExternalNumbers:
     hilprecht_jena_number: str = ""
     hilprecht_heidelberg_number: str = ""
     metropolitan_number: str = ""
+    pierpont_morgan_number: str = ""
     louvre_number: str = ""
     dublin_tcd_number: str = ""
     alalah_hpm_number: str = ""
@@ -20,6 +21,7 @@ class ExternalNumbers:
     philadelphia_number: str = ""
     achemenet_number: str = ""
     nabucco_number: str = ""
+    digitale_keilschrift_bibliothek_number: str = ""
     yale_peabody_number: str = ""
     oracc_numbers: Sequence[str] = ()
     seal_numbers: Sequence[str] = ()
@@ -72,6 +74,10 @@ class FragmentExternalNumbers:
         return self._get_external_number("metropolitan_number")
 
     @property
+    def pierpont_morgan_number(self) -> str:
+        return self._get_external_number("pierpont_morgan_number")
+
+    @property
     def louvre_number(self) -> str:
         return self._get_external_number("louvre_number")
 
@@ -94,6 +100,10 @@ class FragmentExternalNumbers:
     @property
     def nabucco_number(self) -> str:
         return self._get_external_number("nabucco")
+
+    @property
+    def digitale_keilschrift_bibliothek_number(self) -> str:
+        return self._get_external_number("digitale_keilschrift_bibliothek_number")
 
     @property
     def philadelphia_number(self) -> str:

@@ -11,7 +11,7 @@ WORKDIR /usr/src/ebl
 
 COPY pyproject.toml ./
 COPY poetry.* ./
-RUN poetry install --no-root --no-dev
+RUN poetry install --no-root --only main
 
 COPY ./ebl ./ebl
 
