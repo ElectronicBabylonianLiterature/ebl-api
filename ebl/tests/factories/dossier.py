@@ -6,7 +6,7 @@ from ebl.dossiers.domain.dossier_record import (
 from ebl.common.domain.provenance import Provenance
 from ebl.tests.factories.fragment import ScriptFactory
 from ebl.chronology.chronology import chronology
-from ebl.bibliography.domain.reference import ReferenceType
+from ebl.tests.factories.bibliography import ReferenceFactory
 
 
 class DossierRecordFactory(factory.Factory):
@@ -28,5 +28,7 @@ class DossierRecordFactory(factory.Factory):
     provenance = factory.fuzzy.FuzzyChoice(set(Provenance) - {Provenance.STANDARD_TEXT})
     script = factory.SubFactory(ScriptFactory)
     references = factory.LazyAttribute(
-        lambda _: list({list(ReferenceType)[i] for i in range(randint(1, 6))})
+        lambda _: tuple(
+            ReferenceFactory(with_document=True) for _ in range(randint(1, 5))
+        )
     )

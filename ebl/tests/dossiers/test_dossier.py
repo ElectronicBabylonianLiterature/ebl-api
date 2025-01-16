@@ -7,8 +7,9 @@ from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
 )
 from ebl.tests.factories.dossier import DossierRecordFactory
 from ebl.fragmentarium.domain.fragment import Script
-from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.common.domain.provenance import Provenance
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 
 
 @pytest.fixture
@@ -27,7 +28,7 @@ def test_dossier_record_creation(
     assert isinstance(dossier_record.related_kings, (list, type(None)))
     assert isinstance(dossier_record.provenance, (Provenance, type(None)))
     assert isinstance(dossier_record.script, (Script, type(None)))
-    assert isinstance(dossier_record.references, (list, type(None)))
+    assert isinstance(dossier_record.references, (tuple, type(None)))
 
 
 def test_dossier_record_defaults() -> None:
@@ -41,7 +42,7 @@ def test_dossier_record_defaults() -> None:
     assert blank_dossier_record.related_kings == []
     assert blank_dossier_record.provenance is None
     assert blank_dossier_record.script is None
-    assert blank_dossier_record.references == []
+    assert blank_dossier_record.references == ()
 
 
 def test_dossier_record_to_dict(
@@ -58,10 +59,7 @@ def test_dossier_record_to_dict(
         if dossier_record.provenance
         else None,
         "script": ScriptSchema().dump(dossier_record.script),
-        "references": [
-            str(reference).replace("ReferenceType.", "")
-            for reference in dossier_record.references
-        ],
+        "references": ApiReferenceSchema().dump(dossier_record.references, many=True),
     }
 
 
