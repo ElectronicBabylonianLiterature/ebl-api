@@ -135,6 +135,7 @@ class ExternalNumbersSchema(Schema):
     yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
     dublin_tcd_number = fields.String(load_default="", data_key="dublinTcdNumber")
+    cambridge_maa_number = fields.String(load_default="", data_key="cambridgeMaaNumber")
     alalah_hpm_number = fields.String(load_default="", data_key="alalahHpmNumber")
     philadelphia_number = fields.String(load_default="", data_key="philadelphiaNumber")
     australianinstituteofarchaeology_number = fields.String(

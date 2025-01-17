@@ -100,6 +100,12 @@ class Museum(Enum):
         "BEL",
         "https://www.kmkg-mrah.be/",
     )
+    MUSEUM_OF_ARCHAEOLOGY_AND_ANTHROPOLOGY_CAMBRIDGE = (
+        "Museum of Archaeology and Anthropology",
+        "Cambridge",
+        "GBR",
+        "https://collections.maa.cam.ac.uk",
+    )
     MUSEUM_OF_MONTSERRAT = (
         "Museum of Montserrat",
         "Montserrat",
