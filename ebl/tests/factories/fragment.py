@@ -191,6 +191,7 @@ class ExternalNumbersFactory(factory.Factory):
     pierpont_morgan_number = factory.Sequence(lambda n: f"pierpont-morgan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
     dublin_tcd_number = factory.Sequence(lambda n: f"dublin-tcd-number-{n}")
+    cambridge_maa_number = factory.Sequence(lambda n: f"cambridge-maa-number-{n}")
     alalah_hpm_number = factory.Sequence(lambda n: f"alalah-hpm-number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"

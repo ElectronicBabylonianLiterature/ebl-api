@@ -16,6 +16,7 @@ class ExternalNumbers:
     pierpont_morgan_number: str = ""
     louvre_number: str = ""
     dublin_tcd_number: str = ""
+    cambridge_maa_number: str = ""
     alalah_hpm_number: str = ""
     australianinstituteofarchaeology_number: str = ""
     philadelphia_number: str = ""
@@ -84,6 +85,10 @@ class FragmentExternalNumbers:
     @property
     def dublin_tcd_number(self) -> str:
         return self._get_external_number("dublin_tcd_number")
+
+    @property
+    def cambridge_maa_number(self) -> str:
+        return self._get_external_number("cambridge_maa_number")
 
     @property
     def alalah_hpm_number(self) -> str:
