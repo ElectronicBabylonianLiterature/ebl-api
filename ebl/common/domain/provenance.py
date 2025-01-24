@@ -21,6 +21,7 @@ class Provenance(ProvenanceEnum):
     KAR_TUKULTI_NINURTA = ("Kār-Tukulti-Ninurta", "Ktn", "Assyria", "KTN")
     KHORSABAD = ("Khorsabad", "Kho", "Assyria", "SAR")
     NINEVEH = ("Nineveh", "Nin", "Assyria", "NNV")
+    SIBANIBA = ("Šibaniba", "Shi", "Assyria", "SHI" )
     SUBAT_ENLIL = ("Šubat-Enlil", "Šub", "Assyria", "SZE")
     TARBISU = ("Tarbiṣu", "Tar", "Assyria", "SKH")
     BABYLONIA = ("Babylonia", "Baba", None, None)
