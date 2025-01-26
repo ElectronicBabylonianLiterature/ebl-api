@@ -22,8 +22,10 @@ Requirements:
 
 ```shell script
 pip install poetry
-poetry install
+poetry install --no-root
 ```
+
+For development, use `poetry install --no-root --with dev`.
 
 If `libcst` installation fails (because a binary wheel is not available for Linux/Windows + Pypy) you may need to install
 the [rust compiler](https://www.rust-lang.org/tools/install) to solve it.
