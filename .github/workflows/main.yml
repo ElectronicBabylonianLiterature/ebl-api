@@ -22,6 +22,14 @@ jobs:
         python-version: ["3.9", "pypy-3.9"]
     name: Test Python ${{ matrix.python-version }}
 
+    services:
+      mongo:
+        image: mongo:${{ env.PYMONGOIM__MONGO_VERSION }}
+        ports:
+          - 27017:27017
+        options: > 
+          --bind_ip 127.0.0.1 # Ensures MongoDB listens only on localhost
+
     steps:
       - uses: actions/checkout@v3
 
@@ -34,7 +42,7 @@ jobs:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
 
-      - name: Install
+      - name: Install Dependencies
         id: install
         run: |
           pip install --upgrade pip
@@ -53,7 +61,7 @@ jobs:
         if: success() || steps.install.outcome == 'success'
         run: poetry run pyre check
 
-      - name: Download
+      - name: Download Test Data
         run: poetry run python -m ebl.tests.downloader
 
       - name: Unit Tests
