@@ -33,11 +33,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl
-          # Download and install libssl1.1 manually
           curl -O http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
           sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb || true
-          sudo apt-get -f install -y  # Resolve any dependency issues
-          sudo ldconfig  # Reload dynamic linker cache
+          sudo apt-get -f install -y
+          sudo ldconfig
 
       - name: Install MongoDB
         run: |
