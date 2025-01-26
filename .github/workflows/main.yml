@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
     branches: [master]
-
+  
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -16,7 +16,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         python-version: ["3.9", "pypy-3.9"]
@@ -28,18 +28,43 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -O http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
+          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb || true
+          sudo apt-get -f install -y
+          sudo ldconfig
+
+      - name: Install MongoDB
+        run: |
+          curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-org
+          sudo ldconfig
+
+      - name: Set MongoDB Binary
+        run: echo "export MONGOD_EXECUTABLE=$(which mongod)" >> $GITHUB_ENV
+
+      - name: Debug MongoDB Binary
+        run: |
+          ls -l /usr/bin/mongod
+          ldd /usr/bin/mongod
+
       - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
 
-      - name: Install
+      - name: Install Python Dependencies
         id: install
         run: |
           pip install --upgrade pip
           pip install poetry
-          poetry install --no-root
+          poetry install --no-root --with dev
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
@@ -53,7 +78,7 @@ jobs:
         if: success() || steps.install.outcome == 'success'
         run: poetry run pyre check
 
-      - name: Download
+      - name: Download Test Resources
         run: poetry run python -m ebl.tests.downloader
 
       - name: Unit Tests
@@ -73,7 +98,7 @@ jobs:
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [test]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
 
