@@ -28,7 +28,7 @@ jobs:
         ports:
           - 27017:27017
         options: > 
-          --bind_ip 127.0.0.1 # Ensures MongoDB listens only on localhost
+          --bind_ip_all
 
     steps:
       - uses: actions/checkout@v3
