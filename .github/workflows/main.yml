@@ -27,8 +27,8 @@ jobs:
         image: mongo:4.4
         ports:
           - 27017:27017
-        options: > 
-          --bind_ip_all
+        env:
+          MONGO_INITDB_BIND_IP: "0.0.0.0"
 
     steps:
       - uses: actions/checkout@v3
