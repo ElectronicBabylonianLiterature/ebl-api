@@ -5,7 +5,6 @@ on:
   pull_request:
     branches: [master]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
@@ -22,14 +21,6 @@ jobs:
         python-version: ["3.9", "pypy-3.9"]
     name: Test Python ${{ matrix.python-version }}
 
-    services:
-      mongo:
-        image: mongo:4.4
-        ports:
-          - 27017:27017
-        env:
-          MONGO_INITDB_BIND_IP: "0.0.0.0"
-
     steps:
       - uses: actions/checkout@v3
 
@@ -37,12 +28,18 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libssl1.1  # Install OpenSSL 1.1
+          sudo apt-get install -y curl
+
       - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           source $HOME/.cargo/env
 
-      - name: Install Dependencies
+      - name: Install Python Dependencies
         id: install
         run: |
           pip install --upgrade pip
@@ -61,7 +58,7 @@ jobs:
         if: success() || steps.install.outcome == 'success'
         run: poetry run pyre check
 
-      - name: Download Test Data
+      - name: Download Test Resources
         run: poetry run python -m ebl.tests.downloader
 
       - name: Unit Tests
@@ -77,26 +74,3 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
-
-  docker:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - uses: docker/setup-buildx-action@v1
-
-      - uses: docker/login-action@v1
-        with:
-          registry: ebl.badw.de
-          username: ${{ secrets.EBL_REGISTRY_USERNAME }}
-          password: ${{ secrets.EBL_REGISTRY_PASSWORD }}
-
-      - id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          push: true
-          tags: |
-            ebl.badw.de/ebl-api:master
-            ${{format('ebl.badw.de/ebl-api:master.{0}', github.run_number)}}
