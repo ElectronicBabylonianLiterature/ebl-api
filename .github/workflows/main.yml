@@ -27,12 +27,15 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      
+
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libssl1.1  # Install OpenSSL 1.1
           sudo apt-get install -y curl
+          # Download and install libssl1.1 manually
+          curl -O http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
+          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb || true
+          sudo apt-get -f install -y  # Resolve any dependency issues
 
       - name: Install Rust
         run: |
