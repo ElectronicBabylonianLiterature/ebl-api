@@ -169,8 +169,8 @@ class Museum(Enum):
         "",
         "GBR",
     )
-    REDPATH_MUSEUM = (
-        "Redpath Museum Ethnological Collections",
+    MCGILL_UNIVERSITY = (
+        "McGill University Ethnological Collections",
         "Montreal",
         "CAN",
         "https://www.mcgill.ca/redpath/collections/ethnology",
