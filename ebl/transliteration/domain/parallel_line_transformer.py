@@ -5,7 +5,6 @@ from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.genre import Genre
-from ebl.transliteration.domain.labels import LabelTransformer
 from ebl.transliteration.domain.parallel_line import (
     ChapterName,
     Labels,
@@ -13,9 +12,13 @@ from ebl.transliteration.domain.parallel_line import (
     ParallelFragment,
     ParallelText,
 )
+from ebl.transliteration.domain.common_transformer import CommonTransformer
 
 
-class ParallelLineTransformer(LabelTransformer):
+class ParallelLineTransformer(CommonTransformer):
+    def __init__(self):
+        super().__init__()
+
     @v_args(inline=True)
     def ebl_atf_parallel_line__parallel_fragment(
         self,
@@ -63,7 +66,9 @@ class ParallelLineTransformer(LabelTransformer):
             "".join(name.children),
         )
 
-    def ebl_atf_parallel_line__parallel_composition(self, children) -> ParallelComposition:
+    def ebl_atf_parallel_line__parallel_composition(
+        self, children
+    ) -> ParallelComposition:
         return ParallelComposition(
             children[1] is not None, "".join(children[2:-1]), children[-1]
         )

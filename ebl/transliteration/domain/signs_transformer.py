@@ -32,6 +32,7 @@ def tree_to_string(tree: Tree) -> str:
 
 class SignTransformer(Transformer):
     def __init__(self):
+        super().__init__()
         for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
             setattr(self, f"ebl_atf_note_line__{method}", getattr(self, method))
 

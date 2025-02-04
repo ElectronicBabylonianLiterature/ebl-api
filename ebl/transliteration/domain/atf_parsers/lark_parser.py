@@ -30,6 +30,8 @@ from ebl.transliteration.domain.transliteration_error import (
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line_transformer import LineTransformer
+from ebl.transliteration.domain.label_transformer import LabelTransformer
+from ebl.transliteration.domain.labels import Label
 from functools import singledispatch
 
 ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
@@ -50,6 +52,13 @@ MANUSCRIPT_PARSER = Lark.open(
     "lark_parser/ebl_atf_manuscript_line.lark", **kwargs_lark, start="manuscript_line"
 )
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
+
+LABEL_PARSER = Lark.open(
+    "lark_parser/ebl_atf.lark",
+    maybe_placeholders=True,
+    rel_to=__file__,
+    start="labels",
+)
 
 
 def parse_word(atf: str) -> Word:
@@ -119,6 +128,14 @@ def parse_parallel_line(atf: str) -> ParallelLine:
 def parse_translation_line(atf: str) -> TranslationLine:
     tree = TRANSLATION_LINE_PARSER.parse(atf)
     return LineTransformer().transform(tree)
+
+
+def parse_labels(label: str) -> Sequence[Label]:
+    if label:
+        tree = LABEL_PARSER.parse(label)
+        return LabelTransformer().transform(tree)
+    else:
+        return ()
 
 
 def parse_text_line(atf: str) -> TextLine:

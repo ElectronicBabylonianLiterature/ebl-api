@@ -19,12 +19,12 @@ from ebl.corpus.domain.parser import (
 )
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
-from ebl.transliteration.domain.labels import parse_labels
 from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_note_line,
     parse_parallel_line,
     parse_text_line,
     parse_translation_line,
+    parse_labels,
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
@@ -228,12 +228,12 @@ def parse_chapter_line(atf):
 @pytest.mark.parametrize(
     "lines,expected",
     [
-        (["1. kur"], Line(LineNumber(1), (parse_line_variant("1. kur")[0],))),
+        (["1. kur"], Line(LineNumber(1), (parse_line_variant("1. kur")[1],))),
         (
             ["1. kur", "1. ra"],
             Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[0], parse_line_variant("1. ra")[0]),
+                (parse_line_variant("1. kur")[1], parse_line_variant("1. ra")[1]),
             ),
         ),
         (
@@ -241,8 +241,8 @@ def parse_chapter_line(atf):
             Line(
                 LineNumber(1),
                 (
-                    parse_line_variant(f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur")[0],
-                    parse_line_variant("1. ra")[0],
+                    parse_line_variant(f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur")[1],
+                    parse_line_variant("1. ra")[1],
                 ),
             ),
         ),
@@ -260,7 +260,7 @@ def test_parse_chapter_line(lines, expected) -> None:
             ["#tr.en: translation", "1. kur"],
             Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[0],),
+                (parse_line_variant("1. kur")[1],),
                 translation=(parse_translation_line("#tr.en: translation"),),
             ),
         ),
@@ -268,7 +268,7 @@ def test_parse_chapter_line(lines, expected) -> None:
             ["#tr.en: translation", "#tr.de: translation", "1. kur"],
             Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[0],),
+                (parse_line_variant("1. kur")[1],),
                 translation=(
                     parse_translation_line("#tr.en: translation"),
                     parse_translation_line("#tr.de: translation"),

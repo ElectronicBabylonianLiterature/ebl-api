@@ -12,6 +12,17 @@ from ebl.transliteration.domain.dollar_line import (
 
 
 class DollarLineTransformer(Transformer):
+    def __init__(self):
+        super().__init__()
+        for method in [
+            method for method in dir(self) if "ebl_atf_dollar_line" in method
+        ]:
+            setattr(
+                self,
+                f"ebl_atf_manuscript_line__{method}",
+                getattr(self, method),
+            )
+
     def ebl_atf_dollar_line__free_text(self, content):
         return "".join(content)
 

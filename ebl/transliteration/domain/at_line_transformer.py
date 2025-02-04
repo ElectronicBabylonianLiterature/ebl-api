@@ -1,6 +1,7 @@
 import attr
 from lark import Token
 from lark.visitors import v_args
+from ebl.transliteration.domain.common_transformer import CommonTransformer
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.at_line import (
@@ -17,7 +18,6 @@ from ebl.transliteration.domain.labels import (
     ColumnLabel,
     ObjectLabel,
     SurfaceLabel,
-    LabelTransformer,
 )
 
 
@@ -27,20 +27,12 @@ class ObjectData:
     text: str = ""
 
 
-class AtLineTransformer(LabelTransformer):
+class AtLineTransformer(CommonTransformer):
     def __init__(self):
         super().__init__()
 
     def ebl_atf_at_line__free_text(self, content):
         return "".join(content)
-
-    @v_args(inline=True)
-    def ebl_atf_at_line__INT(self, number):
-        return int(number)
-
-    @v_args(inline=True)
-    def ebl_atf_at_line__ebl_atf_common__INT(self, number):
-        return int(number)
 
     @v_args(inline=True)
     def ebl_atf_at_line__LCASE_LETTER(self, letter):

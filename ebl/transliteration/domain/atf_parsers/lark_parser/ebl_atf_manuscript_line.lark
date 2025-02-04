@@ -14,8 +14,9 @@
 manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
 ?manuscript_text: " " text_line | empty_line
 ?paratext_line: _NEWLINE _WHITE_SPACE? paratext
-siglum: [PROVENANCE] PERIOD [TYPE] [DISAMBIQUATOR]
-      | "Std" [DISAMBIQUATOR]
+siglum: detailed_siglum | standard_text_siglum
+detailed_siglum: [PROVENANCE] PERIOD [TYPE] [DISAMBIQUATOR]
+standard_text_siglum: "Std" [DISAMBIQUATOR]
 DISAMBIQUATOR: /[\S]+/
 
 _WHITE_SPACE: WS_INLINE

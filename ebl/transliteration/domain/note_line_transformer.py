@@ -16,13 +16,19 @@ from ebl.transliteration.domain.markup import (
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.tokens import Token as EblToken
 
+MARKUP_PREFIXES = [
+    "ebl_atf_at_line",
+    "ebl_atf_manuscript_line",
+    "ebl_atf_translation_line",
+]
+
 
 class MarkupTransformer(Transformer):
-
     def __init__(self):
+        super().__init__()
         for method in [method for method in dir(self) if "ebl_atf_note_line" in method]:
-            setattr(self, f"ebl_atf_at_line__{method}", getattr(self, method))
-            setattr(self, f"ebl_atf_translation_line__{method}", getattr(self, method))
+            for prefix in MARKUP_PREFIXES:
+                setattr(self, f"{prefix}__{method}", getattr(self, method))
 
     def markup(self, children) -> Sequence[MarkupPart]:
         return tuple(children)
@@ -64,10 +70,19 @@ class MarkupTransformer(Transformer):
         return "".join(children)
 
 
-class NoteLineTransformer(MarkupTransformer):
+NOTE_LINE_PREFIXES = [
+    "ebl_atf_at_line",
+    "ebl_atf_manuscript_line",
+    "ebl_atf_translation_line",
+]
 
+
+class NoteLineTransformer(MarkupTransformer):
     def __init__(self):
-        super(MarkupTransformer, self).__init__()
+        super().__init__()
+        for method in [method for method in dir(self) if "note_line" in method]:
+            for prefix in NOTE_LINE_PREFIXES:
+                setattr(self, f"{prefix}__{method}", getattr(self, method))
 
     def note_line(self, children: Sequence[MarkupPart]) -> NoteLine:
         return NoteLine(children)

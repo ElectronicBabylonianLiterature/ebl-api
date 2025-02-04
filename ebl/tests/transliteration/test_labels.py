@@ -4,13 +4,13 @@ import pytest
 
 from ebl.transliteration.domain.atf import Status, Surface, Object
 from ebl.transliteration.domain.labels import (
-    parse_labels,
     ColumnLabel,
     Label,
     LabelVisitor,
     SurfaceLabel,
     ObjectLabel,
 )
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_labels
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 
 LABELS: List[Tuple[str, str, str, Label]] = [

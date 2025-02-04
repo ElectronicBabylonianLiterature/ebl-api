@@ -6,8 +6,8 @@ from ebl.transliteration.domain.labels import (
     ColumnLabel,
     ObjectLabel,
     SurfaceLabel,
-    parse_labels,
 )
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_labels
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 
 

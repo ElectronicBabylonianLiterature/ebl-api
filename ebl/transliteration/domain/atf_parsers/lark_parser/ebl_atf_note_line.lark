@@ -11,4 +11,4 @@ string_part: note_text
 LANGUAGE: "akk" | "sux" | "es"
 url_part: "@url{" url "}" ("{" note_text "}")?
 url: /[^}]+/
-?note_text: /[^@{}\n\r]+/
+note_text: /[^@{}\n\r]+/
