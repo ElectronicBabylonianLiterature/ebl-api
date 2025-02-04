@@ -1084,11 +1084,12 @@ def test_query_genres(fragment_repository, query, expected):
     [
         ("CAIC", [0]),
         ("aluGeneva", [1]),
-        (None, [0, 1]),
+        ("AMPS", [2]),
+        (None, [0, 1, 2]),
     ],
 )
 def test_query_project(fragment_repository, query, expected):
-    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
+    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS]
 
     fragments = [
         FragmentFactory.build(

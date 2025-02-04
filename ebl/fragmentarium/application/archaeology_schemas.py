@@ -43,6 +43,7 @@ site_field = fields.Function(
 class FindspotSchema(Schema):
     id_ = fields.Integer(required=True, data_key="_id")
     site = site_field
+    sector = fields.String()
     area = fields.String()
     building = fields.String()
     building_type = NameEnumField(

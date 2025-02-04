@@ -21,6 +21,12 @@ class Museum(Enum):
         "AUS",
         "https://www.aiarch.org.au/",
     )
+    CHESTER_BEATTY_LIBRARY = (
+        "Chester Beatty Library",
+        "Dublin",
+        "IRL",
+        "https://chesterbeatty.ie/",
+    )
     COUVENT_SAINT_ETIENNE = (
         "Couvent Saint-Étienne",
         "Jerusalem",
@@ -63,6 +69,12 @@ class Museum(Enum):
         "TUR",
         "https://muze.gov.tr/muze-detay?SectionId=IAR01&DistId=IAR",
     )
+    IZIKO_MUSEUMS_OF_SOUTH_AFRICA = (
+        "Iziko Museums of South Africa",
+        "Cape Town",
+        "ZA",
+        "https://www.iziko.org.za/",
+    )
     KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
         "Ann Arbor",
@@ -87,6 +99,12 @@ class Museum(Enum):
         "Brussels",
         "BEL",
         "https://www.kmkg-mrah.be/",
+    )
+    MUSEUM_OF_ARCHAEOLOGY_AND_ANTHROPOLOGY_CAMBRIDGE = (
+        "Museum of Archaeology and Anthropology",
+        "Cambridge",
+        "GBR",
+        "https://collections.maa.cam.ac.uk",
     )
     MUSEUM_OF_MONTSERRAT = (
         "Museum of Montserrat",
@@ -151,8 +169,8 @@ class Museum(Enum):
         "",
         "GBR",
     )
-    REDPATH_MUSEUM = (
-        "Redpath Museum Ethnological Collections",
+    MCGILL_UNIVERSITY = (
+        "McGill University Ethnological Collections",
         "Montreal",
         "CAN",
         "https://www.mcgill.ca/redpath/collections/ethnology",
@@ -216,6 +234,12 @@ class Museum(Enum):
         "Dublin",
         "IRL",
         "https://www.tcd.ie/",
+    )
+    TURIN_DEPARTMENT_ARCHAEOLOGY = (
+        "Sezione di Archeologia del Dipartimento di Studi Storici, Università di Torino",
+        "Turin",
+        "ITA",
+        "https://www.dipstudistorici.unito.it/",
     )
     URUK_WARKA_SAMMLUNG = (
         "Uruk-Warka-Sammlung",

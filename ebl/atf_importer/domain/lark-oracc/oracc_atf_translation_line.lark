@@ -1,5 +1,10 @@
 
-translation_line: "#tr.en: " (emphasis_part | language_part | string_part)+
+translation_line: "#tr" ["." language_code] ["." translation_extent] ": " markup+
+language_code: /[a-z]{2}/
+translation_extent: "(" [label " "] line_number ")"
+label: /[a-z0-9\.]+/
+line_number: /[0-9]+/
+markup: emphasis_part | language_part | string_part
 language_part: "@" LANGUAGE "{" translation_text "}"
 emphasis_part: "@i{" translation_text "}"
 string_part: translation_text

@@ -6,6 +6,7 @@
 %import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
 %import .legacy_atf (legacy_uncertain_sign_prefix)
 
+
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
@@ -164,7 +165,7 @@ _any_close: (close_intentional_omission
       | variant
       | egyptian_metrical_feet_separator
 
-variant.1: variant_part (_VARIANT_SEPARATOR variant_part)+
+variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
              | unclear_sign
              | legacy_uncertain_sign

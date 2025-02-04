@@ -13,14 +13,16 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    ExternalNumbers,
     Fragment,
     Genre,
     Introduction,
     Notes,
     Script,
     UncuratedReference,
+    DossierReference,
 )
+
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
@@ -186,8 +188,11 @@ class ExternalNumbersFactory(factory.Factory):
         lambda n: f"hilprecht-heidelberg-{n}"
     )
     metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
+    pierpont_morgan_number = factory.Sequence(lambda n: f"pierpont-morgan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
-    alalah_hpm_number = factory.Sequence(lambda n: f"alalah_hpm_number-{n}")
+    dublin_tcd_number = factory.Sequence(lambda n: f"dublin-tcd-number-{n}")
+    cambridge_maa_number = factory.Sequence(lambda n: f"cambridge-maa-number-{n}")
+    alalah_hpm_number = factory.Sequence(lambda n: f"alalah-hpm-number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"
     )
@@ -195,12 +200,23 @@ class ExternalNumbersFactory(factory.Factory):
     yale_peabody_number = factory.Sequence(lambda n: f"yale-peabody-number-{n}")
     achemenet_number = factory.Sequence(lambda n: f"achemenet-number-{n}")
     nabucco_number = factory.Sequence(lambda n: f"nabucco-number-{n}")
+    digitale_keilschrift_bibliothek_number = factory.Sequence(
+        lambda n: f"digitale-keilschrift-bibliothek-{n}"
+    )
     oracc_numbers = factory.List(
         [factory.Sequence(lambda n: f"oracc-number-{n}")], TupleFactory
     )
     seal_numbers = factory.List(
         [factory.Sequence(lambda n: f"seal_number-{n}")], TupleFactory
     )
+
+
+class FragmentDossierReferenceFactory(factory.Factory):
+    class Meta:
+        model = DossierReference
+
+    dossierId = factory.Faker("word")
+    isUncertain = factory.Faker("boolean")
 
 
 class FragmentFactory(factory.Factory):
@@ -233,9 +249,15 @@ class FragmentFactory(factory.Factory):
     introduction = Introduction("text", (StringPart("text"),))
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
-    projects = (ResearchProject.CAIC,)
+    projects = (ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS)
     archaeology = factory.SubFactory(ArchaeologyFactory)
     colophon = factory.SubFactory(ColophonFactory)
+    dossiers = factory.List(
+        [
+            factory.SubFactory(FragmentDossierReferenceFactory)
+            for _ in range(random.randint(0, 4))
+        ]
+    )
 
 
 class InterestingFragmentFactory(FragmentFactory):

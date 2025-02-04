@@ -53,6 +53,7 @@ class FindspotFactory(factory.Factory):
     site = factory.fuzzy.FuzzyChoice(
         set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
     )
+    sector = factory.Faker("word")
     area = factory.Faker("word")
     building = factory.Faker("word")
     building_type = factory.fuzzy.FuzzyChoice(set(BuildingType))

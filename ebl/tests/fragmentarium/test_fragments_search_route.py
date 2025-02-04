@@ -14,6 +14,7 @@ from ebl.fragmentarium.application.fragment_info_schema import (
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
+from ebl.fragmentarium.domain.museum import Museum
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import (
     LATEST_TRANSLITERATION_LIMIT,
@@ -387,7 +388,7 @@ def test_search_script_period(client, fragmentarium, params, expected):
 
 @pytest.mark.parametrize(
     "project",
-    [ResearchProject.CAIC, ResearchProject.ALU_GENEVA],
+    [ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS],
 )
 def test_search_project(client, fragmentarium, project):
     fragments = [
@@ -409,6 +410,47 @@ def test_search_project(client, fragmentarium, project):
     result = client.simulate_get(
         "/fragments/query", params={"project": project.abbreviation}
     )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json
+
+
+@pytest.mark.parametrize(
+    "museum",
+    [Museum.THE_BRITISH_MUSEUM, Museum.THE_IRAQ_MUSEUM, Museum.PENN_MUSEUM],
+)
+@pytest.mark.parametrize("attribute", ["name"])
+def test_search_museum(client, fragmentarium, museum, attribute):
+    print(f"Testing museum: {museum.name} with attribute: {attribute}")
+
+    fragments = [
+        FragmentFactory.build(museum=museum)
+        for museum in [museum, Museum.YALE_PEABODY_COLLECTION]
+    ]
+
+    print(f"Fragments created: {fragments}")
+
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+        print(f"Fragment created in fragmentarium: {fragment}")
+
+    expected_json = {
+        "items": [
+            query_item_of(fragment)
+            for fragment in fragments
+            if fragment.museum == museum
+        ],
+        "matchCountTotal": 0,
+    }
+
+    print(f"Expected JSON: {expected_json}")
+    print(f"Requesting with museum attribute: {getattr(museum, attribute)}")
+
+    result = client.simulate_get(
+        "/fragments/query", params={"museum": getattr(museum, attribute)}
+    )
+
+    print(f"Result from client: {result.status}, {result.json}")
 
     assert result.status == falcon.HTTP_OK
     assert result.json == expected_json

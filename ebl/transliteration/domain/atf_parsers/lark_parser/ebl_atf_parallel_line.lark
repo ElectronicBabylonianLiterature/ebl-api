@@ -11,7 +11,7 @@ parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES 
 DUPLICATES: "&d"
 parallel_text: PARALLEL_LINE_PREFIX [CF] text_id " "  [chapter_name " "] line_number
 text_id: GENRE " " CATEGORY "." INT
-GENRE: "Lex" | "Med" | "L" | "D" | "Mag"
+GENRE: "Lex" | "Med" | "L" | "D" | "Mag" | "Šui"
 CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
 chapter_name: STAGE " " [quoted_string " "] quoted_string 
 quoted_string: "\"" /./+ "\""

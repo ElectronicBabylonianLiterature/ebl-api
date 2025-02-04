@@ -5,7 +5,7 @@ from ebl.bibliography.application.reference_schema import (
     ApiReferenceSchema,
 )
 from ebl.common.application.schemas import AccessionSchema
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema

@@ -8,3 +8,4 @@ class Genre(Enum):
     LEXICOGRAPHY = "Lex"
     MAGIC = "Mag"
     MEDICINE = "Med"
+    SHUILA = "Šui"
