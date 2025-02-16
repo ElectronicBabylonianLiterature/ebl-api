@@ -10,6 +10,7 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
     LegacyPrimeTransformer,
     LegacyAlephTransformer,
     LegacyColumnTransformer,
+    LegacyTranslationBlockTransformer,
 )
 from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
@@ -22,15 +23,16 @@ from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 # extept for `# note:` perhaps, if really needed.
 
 
-index_and_accented_transformer = (AccentedIndexTransformer(), "all_children")
-uncertain_sign_transformer = (UncertainSignTransformer(), "all_children")
-half_brackets_transformer = (HalfBracketsTransformer(), "all_children")
-oracc_joiner_transformer = (OraccJoinerTransformer(), "all_children")
-oracc_special_transformer = (OraccSpecialTransformer(), "first_child")
-oracc_modifier_prefix_transformer = (LegacyModifierPrefixTransformer(), "all_children")
-prime_transformer = (LegacyPrimeTransformer(), "all_children")
-legacy_aleph_transformer = (LegacyAlephTransformer(), "all_children")
-legacy_column_transformer = (LegacyColumnTransformer(), "all_children")
+index_and_accented_transformer = (AccentedIndexTransformer(), "children")
+uncertain_sign_transformer = (UncertainSignTransformer(), "children")
+half_brackets_transformer = (HalfBracketsTransformer(), "children")
+oracc_joiner_transformer = (OraccJoinerTransformer(), "children")
+oracc_special_transformer = (OraccSpecialTransformer(), "children")
+oracc_modifier_prefix_transformer = (LegacyModifierPrefixTransformer(), "children")
+prime_transformer = (LegacyPrimeTransformer(), "children")
+aleph_transformer = (LegacyAlephTransformer(), "children")
+column_transformer = (LegacyColumnTransformer(), "tree")
+translation_block_transformer = (LegacyTranslationBlockTransformer(), "tree")
 
 
 class LegacyAtfVisitor(Visitor):
@@ -55,10 +57,12 @@ class LegacyAtfVisitor(Visitor):
             oracc_joiner_transformer,
         ],
         "text": [half_brackets_transformer],
-        "status": [prime_transformer],
-        "single_line_number": [prime_transformer],
-        "value_name_part": [legacy_aleph_transformer],
-        "at_line_value": [legacy_column_transformer],
+        "status": [column_transformer],
+        "ebl_atf_common__single_line_number": [prime_transformer],
+        "value_name_part": [aleph_transformer],
+        "at_line_value": [column_transformer],
+        "legacy_column": [column_transformer],
+        "legacy_translation_line": [translation_block_transformer],
     }
 
     def __init__(self):
@@ -66,8 +70,10 @@ class LegacyAtfVisitor(Visitor):
         self.legacy_found = False
         for suffix, transformers in self.nodes_to_visit.items():
             prefix = self.text_line_prefix
-            if suffix in ["at_line"]:
+            if suffix in ["legacy_column"]:
                 prefix = self.at_line_prefix
+            elif "legacy_translation" in suffix:
+                prefix = "" #self.translation_line_prefix
             self._set_rules(suffix, transformers, prefix)
 
     def _set_rules(
@@ -76,10 +82,11 @@ class LegacyAtfVisitor(Visitor):
         transformers: Sequence[Tuple[LegacyTransformer, str]],
         prefix: str,
     ) -> None:
-        print(f"{prefix}__{suffix}")
+        method = f"{prefix}__{suffix}" if prefix else suffix
+        print(method)
         setattr(
             self,
-            f"{prefix}__{suffix}",
+            method,
             self._wrap_transformers(transformers),
         )
 
@@ -101,7 +108,8 @@ class LegacyAtfVisitor(Visitor):
         transformed_tree = transformer.transform(tree)
         if transformer.legacy_found:
             self.legacy_found = True
-            if replace == "first_child":
-                tree.children[0] = transformed_tree.children[0]
-            elif replace == "all_children":
+            if replace == "tree":
+                tree.data = transformed_tree.data
+                tree.children = transformed_tree.children
+            elif replace == "children":
                 tree.children = transformed_tree.children

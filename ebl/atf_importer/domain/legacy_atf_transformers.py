@@ -72,12 +72,20 @@ class LegacyTransformer(Transformer):
         return not set(node_classes).isdisjoint(self.break_at)
 
     def to_token(self, name: str, string: Optional[str]) -> Token:
-        return Token(f"{self.prefix}__{name}", string)
+        return (
+            Token(f"{self.prefix}__{name}", string)
+            if self.prefix
+            else Token(name, string)
+        )
 
     def to_tree(
         self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
     ) -> Tree:
-        return Tree(f"{self.prefix}__{name}", children)
+        return (
+            Tree(f"{self.prefix}__{name}", children)
+            if self.prefix
+            else Tree(name, children)
+        )
 
 
 class HalfBracketsTransformer(LegacyTransformer):
@@ -217,8 +225,10 @@ class LegacyModifierPrefixTransformer(LegacyTransformer):
 
 
 class LegacyPrimeTransformer(LegacyTransformer):
+    prefix = "ebl_atf_text_line__ebl_atf_common"
+
     @v_args(inline=True)
-    def ebl_atf_text_line__LEGACY_PRIME(self, prime: Token) -> Token:
+    def ebl_atf_text_line__ebl_atf_common__LEGACY_PRIME(self, prime: Token) -> Token:
         self.legacy_found = True
         return self.to_token("PRIME", "'")
 
@@ -233,74 +243,104 @@ class LegacyAlephTransformer(LegacyTransformer):
 
 
 class LegacyColumnTransformer(LegacyTransformer):
-    prefix = "ebl_atf_at_line"
-
-    # ToDo: Fix this. It seems like this transformer is not being called
-    # for some unclear reason. The error is probably not here, but in the
-    # visitor or elsewhere.
-    # All methods with `test` are just for testing.
+    prefix = ""
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.column_number = 1
 
     @v_args(inline=True)
-    def ebl_atf_at_line__legacy_column(self, column: Tree) -> Tree:
+    def ebl_atf_at_line__legacy_column(self) -> Tree:
         self.legacy_found = True
-        print("!!!!", column)
-        input()
+        column_number = self.column_number
         self.column_number += 1
         return self.to_tree(
-            "legacy_column",
-            # [self.to_token("INT", str(self.column_number)), self.to_tree("status", [])],
-            [self.to_token("INT", "1"), self.to_tree("status", [])],
+            "ebl_atf_at_line__column",
+            [
+                self.to_token("ebl_atf_at_line__INT", str(column_number)),
+                self.to_tree("ebl_atf_at_line__status", []),
+            ],
+        )
+
+
+class LegacyTranslationBlockTransformer(LegacyTransformer):
+    #
+    # ToDo: Continue from here.
+    # Write an injector that detects the correct line.
+    # This can be implemented using the lables & line number in `self.start`.
+    # It would make sense to trace labels & line numbers within the `LegacyTransformer` or the visitor:
+    # Write methods for `...__labels` and `...__ebl_atf_common__single_line_number` to capture the data and save it within the class.
+    # Then, text lines can be indexed accordingly.
+    # The main issue to consider is detecting the end of the translation block to inject the translation line at this point.
+    # The most obvious option would be detecting the beginning of each block and then the the beginning of a new text
+    # or end of all texts.
+    #
+    # Ensure that this works, then clean up.
+
+    prefix = ""
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self._reset()
+
+    def _reset(self) -> None:
+        self.language: Optional[Token] = None
+        self.start: Optional[Sequence[Tree]] = None
+        self.extent: Optional[Sequence[Tree]] = None
+        self.translation: Sequence[str] = []
+
+    @property
+    def translation_c_line(self) -> Sequence[Union[Tree, Token]]:
+        return [
+            self.language,
+            self._translation_extent,
+            self._translation_string_part,
+        ]
+
+    @property
+    def _translation_extent(self) -> Tree:
+        return self.to_tree("ebl_atf_translation_line__translation_extent", self.extent)
+
+    @property
+    def _translation_string_part(self) -> Tree:
+        line_token = self.to_token(
+            "__ANON_26", " ".join(self.translation).replace(r"/[\s]+/", " ")
+        )
+        note_text = self.to_tree(
+            "ebl_atf_translation_line__ebl_atf_note_line__note_text", [line_token]
+        )
+        return self.to_tree(
+            "ebl_atf_translation_line__ebl_atf_note_line__string_part", [note_text]
         )
 
     @v_args(inline=True)
-    def ebl_atf_at_line__INT(self, test: Tree) -> Tree:
+    def ebl_atf_translation_line__legacy_translation_block_at_line(
+        self, language: str
+    ) -> None:
+        self._reset()
         self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
+        self.language = language
+        return
 
     @v_args(inline=True)
-    def ebl_atf_at_line__ebl_atf_common__INT(self, test: Tree) -> Tree:
+    def ebl_atf_translation_line__labels_start(self, labels: Tree) -> None:
         self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
+        self.start = labels.children
+        return
 
     @v_args(inline=True)
-    def ebl_atf_common__INT(self, test: Tree) -> Tree:
+    def ebl_atf_translation_line__labels_extent(self, labels: Tree) -> None:
         self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
+        self.extent = labels.children
+        return
+
+    # def _extract_labels(self, labels: Tree) -> Sequence[Tree]:
+    #    return labels.children[0].children + [labels.children[1]]
 
     @v_args(inline=True)
-    def ebl_atf_at_line__face(self, test: Tree) -> Tree:
+    def ebl_atf_translation_line__legacy_translation_block_line(
+        self, text: Tree
+    ) -> None:
         self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
-
-    @v_args(inline=True)
-    def ebl_atf_at_line__LCASE_LETTER(self, test: Tree) -> Tree:
-        self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
-
-    @v_args(inline=True)
-    def ebl_atf_at_line__status(self, test: Tree) -> Tree:
-        self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
-
-    @v_args(inline=True)
-    def ebl_atf_at_line__SURFACE(self, test: Tree) -> Tree:
-        self.legacy_found = True
-        print("!!!!", test)
-        input()
-        return test
+        self.translation.append(str(text.children[0]))
+        return

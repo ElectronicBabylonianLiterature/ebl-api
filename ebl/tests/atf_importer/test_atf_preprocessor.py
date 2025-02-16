@@ -16,7 +16,7 @@ To my father
 TRANSLATION_EXPECTED = """
 @obverse
 1. a-na
-# tr.en.(o 2): To my father
+#tr.en.(o 2): To my father
 2. a-bi-ya
 """
 
@@ -103,9 +103,10 @@ def test_legacy_translation():
     atf_preprocessor = AtfPreprocessor("../logs", 0)
     legacy_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_LEGACY)
     expected_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_EXPECTED)
-    print("RESULT:\n", legacy_tree)  # .pretty())
-    print("EXPECTED:\n", expected_tree)  # .pretty())
-    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    # ToDo: Clean up
+    #print("RESULT:\n", legacy_tree)  # .pretty())
+    #print("EXPECTED:\n", expected_tree)  # .pretty())
+    #input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
     assert legacy_tree == expected_tree
 
@@ -124,9 +125,10 @@ def test_text_lines(legacy_line, ebl_line):
     legacy_tree = atf_preprocessor.ebl_parser.parse(legacy_line)
     legacy_tree = atf_preprocessor.transform_legacy_atf(legacy_tree)
     expected_tree = atf_preprocessor.ebl_parser.parse(ebl_line)
-    print("RESULT:\n", legacy_tree)  # .pretty())
-    print("EXPECTED:\n", expected_tree)  # .pretty())
-    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    # ToDo: Clean up
+    #print("RESULT:\n", legacy_tree)  # .pretty())
+    #print("EXPECTED:\n", expected_tree)  # .pretty())
+    #input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
     assert legacy_tree == expected_tree
 

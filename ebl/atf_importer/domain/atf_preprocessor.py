@@ -4,11 +4,12 @@ from typing import Tuple, Optional, List, Dict, Any
 from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.atf_importer.domain.legacy_atf_visitor import LegacyAtfVisitor
-# from ebl.transliteration.domain.line_transformer import LineTransformer
+#from ebl.transliteration.domain.line_transformer import LineTransformer
 
 
 class AtfPreprocessor(AtfPreprocessorBase):
     legacy_visitor = LegacyAtfVisitor()
+    #line_transformer = LineTransformer()
 
     def convert_lines_from_string(self, text: str) -> List[Dict[str, Any]]:
         return self._convert_lines(text.split("\n"))
@@ -22,6 +23,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
         processed_lines = []
         for line in lines:
             result = self.process_line(line)
+            #c_line = self.line_transformer.transform(result[0])
             processed_lines.append(
                 {
                     "c_line": result[0],
