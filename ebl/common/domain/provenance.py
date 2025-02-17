@@ -94,6 +94,7 @@ class Provenance(ProvenanceEnum):
     TELL_EL_AMARNA = ("Tell el-Amarna", "Ama", "Periphery", "AKH")
     ANAH = ("‘Anah", "Anh", "Periphery", "TNA")
     ANSAN = ("Anšan", "Anš", "Periphery", "ANS")
+    ASNAKKUM = ("Ašnakkum", "Ašn", "Periphery", "ASZ")
     BAKR_AWA = ("Bakr Āwā", "Bakr", "Periphery", "BAW")
     BARAH = ("Bārah", "Bar", "Periphery", "PRA")
     BITWATA = ("Bitwātā", "Bitw", "Periphery", "SNJ")
