@@ -16,7 +16,11 @@ from ebl.fragmentarium.domain.fragment import NotLowestJoinError
 
 TRANSLITERATION_DTO_SCHEMA = {
     "type": "object",
-    "properties": {"transliteration": {"type": "string"}},
+    "properties": {
+        "transliteration": {"type": "string"},
+        "notes": {"type": "string"},
+        "introduction": {"type": "string"},
+    },
     "required": ["transliteration"],
     "additionalProperties": False,
 }
