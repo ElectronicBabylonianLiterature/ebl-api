@@ -18,6 +18,9 @@ class LineTransformer(
     ParallelLineTransformer,
     TranslationLineTransformer,
 ):
+    def __init__(self):
+        super().__init__()
+
     def empty_line(self, _):
         return EmptyLine()
 

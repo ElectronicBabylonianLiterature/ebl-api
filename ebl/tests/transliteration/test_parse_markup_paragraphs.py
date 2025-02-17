@@ -2,7 +2,7 @@ import pytest
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.tests.transliteration.test_parse_note_line import expected_language_part
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
 from ebl.transliteration.domain.markup import (
     BibliographyPart,
     EmphasisPart,
