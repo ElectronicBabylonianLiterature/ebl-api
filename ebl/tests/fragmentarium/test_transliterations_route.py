@@ -158,7 +158,7 @@ def test_update_transliteration_invalid(client):
         json.dumps(
             {
                 "transliteration": "$ (the transliteration)",
-                "notes": "deprecated notes field",
+                "foobar": "unexpected field",
             }
         ),
     ],
