@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
+from ebl.fragmentarium.web.edition import EditionResource
 from ebl.fragmentarium.web.findspots import FindspotResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
@@ -120,6 +121,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     archaeology = ArchaeologyResource(updater)
     colophon = ColophonResource(updater)
     notes = NotesResource(updater)
+    edition = EditionResource(transliteration, notes, introduction)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
@@ -148,6 +150,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/references", references),
         ("/fragments/{number}/transliteration", transliteration),
         ("/fragments/{number}/introduction", introduction),
+        ("/fragments/{number}/edition", edition),
         ("/fragments/{number}/archaeology", archaeology),
         ("/fragments/{number}/colophon", colophon),
         ("/fragments/{number}/notes", notes),
