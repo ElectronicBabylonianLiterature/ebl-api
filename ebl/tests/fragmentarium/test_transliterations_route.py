@@ -309,7 +309,6 @@ def test_update_multiple_fields(
     new_notes,
     new_transliteration,
 ):
-
     fragment: Fragment = FragmentFactory.build(
         introduction=old_introduction, notes=old_notes
     )
