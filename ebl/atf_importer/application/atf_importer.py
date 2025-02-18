@@ -306,8 +306,8 @@ class ATFImporter:
         converted_transliteration = "\n".join(transliterations)
         transliteration = transliteration_factory.create(Atf(converted_transliteration))
         user = AtfImporterUser(self.username)
-        updater.update_transliteration(
-            parse_museum_number(museum_number), transliteration, user
+        updater.update_edition(
+            parse_museum_number(museum_number), user, transliteration=transliteration
         )
 
     def insert_lemmatization(
