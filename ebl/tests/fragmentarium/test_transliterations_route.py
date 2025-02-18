@@ -15,6 +15,41 @@ from ebl.fragmentarium.domain.joins import Join
 from ebl.transliteration.domain.markup import StringPart, EmphasisPart
 
 
+NOTES_FIXTURE = [
+    [Notes(), Notes("Some notes", (StringPart("Some notes"),))],
+    [Notes(), Notes()],
+    [Notes("Different notes"), Notes()],
+    [
+        Notes("Different notes"),
+        Notes(
+            "Different notes @i{with emphasis}",
+            (StringPart("Different notes "), EmphasisPart("with emphasis")),
+        ),
+    ],
+]
+
+INTRO_FIXTURE = [
+    [
+        Introduction(),
+        Introduction(
+            "A new introduction",
+            (StringPart("A new introduction"),),
+        ),
+    ],
+    [
+        Introduction(
+            "An old introduction",
+            (StringPart("An old introduction"),),
+        ),
+        Introduction(),
+    ],
+    [
+        Introduction(),
+        Introduction(),
+    ],
+]
+
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
@@ -175,21 +210,7 @@ def test_update_transliteration_invalid_entity(client, fragmentarium, body):
     assert post_result.status == falcon.HTTP_BAD_REQUEST
 
 
-@pytest.mark.parametrize(
-    "old_notes,new_notes",
-    [
-        [Notes(), Notes("Some notes", (StringPart("Some notes"),))],
-        [Notes(), Notes()],
-        [Notes("Different notes"), Notes()],
-        [
-            Notes("Different notes"),
-            Notes(
-                "Different notes @i{with emphasis}",
-                (StringPart("Different notes "), EmphasisPart("with emphasis")),
-            ),
-        ],
-    ],
-)
+@pytest.mark.parametrize("old_notes,new_notes", NOTES_FIXTURE)
 def test_update_notes(client, fragmentarium, user, database, old_notes, new_notes):
     fragment: Fragment = FragmentFactory.build(notes=old_notes)
     fragment_number = fragmentarium.create(fragment)
@@ -220,29 +241,18 @@ def test_update_notes(client, fragmentarium, user, database, old_notes, new_note
     )
 
 
-@pytest.mark.parametrize(
-    "old_introduction,new_introduction",
-    [
-        [
-            Introduction(),
-            Introduction(
-                "A new introduction",
-                (StringPart("A new introduction"),),
-            ),
-        ],
-        [
-            Introduction(
-                "An old introduction",
-                (StringPart("An old introduction"),),
-            ),
-            Introduction(),
-        ],
-        [
-            Introduction(),
-            Introduction(),
-        ],
-    ],
-)
+def test_update_invalid_notes(client, fragmentarium, user, database):
+    fragment: Fragment = FragmentFactory.build()
+    fragment_number = fragmentarium.create(fragment)
+    update = {"notes": "@i{syntax error"}
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/edition", body=json.dumps(update)
+    )
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize("old_introduction,new_introduction", INTRO_FIXTURE)
 def test_update_introduction(
     client, fragmentarium, user, database, old_introduction, new_introduction
 ):
@@ -252,13 +262,11 @@ def test_update_introduction(
     post_result = client.simulate_post(
         f"/fragments/{fragment_number}/edition", body=json.dumps(update)
     )
-    expected_json = {
-        **create_response_dto(
-            fragment.set_introduction(new_introduction.text),
-            user,
-            fragment.number == "K.1",
-        )
-    }
+    expected_json = create_response_dto(
+        fragment.set_introduction(new_introduction.text),
+        user,
+        fragment.number == "K.1",
+    )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected_json
@@ -284,3 +292,57 @@ def test_update_invalid_introduction(client, fragmentarium, user, database):
     )
 
     assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize("old_introduction,new_introduction", INTRO_FIXTURE)
+@pytest.mark.parametrize("old_notes,new_notes", NOTES_FIXTURE)
+@pytest.mark.parametrize("new_transliteration", ["", "$ (the transliteration)"])
+@freeze_time("2018-09-07 15:41:24.032")
+def test_update_multiple_fields(
+    client,
+    fragmentarium,
+    user,
+    database,
+    old_introduction,
+    new_introduction,
+    old_notes,
+    new_notes,
+    new_transliteration,
+):
+
+    fragment: Fragment = FragmentFactory.build(
+        introduction=old_introduction, notes=old_notes
+    )
+    fragment_number = fragmentarium.create(fragment)
+    updates = {
+        "introduction": new_introduction.text,
+        "notes": new_notes.text,
+        "transliteration": new_transliteration,
+    }
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/edition", body=json.dumps(updates)
+    )
+    expected_json = create_response_dto(
+        fragment.set_introduction(new_introduction.text)
+        .set_notes(new_notes.text)
+        .update_transliteration(
+            TransliterationUpdate(parse_atf_lark(updates["transliteration"])),
+            user,
+        ),
+        user,
+        fragment.number == "K.1",
+    )
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.json == expected_json
+
+    get_result = client.simulate_get(f"/fragments/{fragment_number}")
+    assert get_result.json == expected_json
+
+    assert database["changelog"].find_one(
+        {
+            "resource_id": fragment_number,
+            "resource_type": "fragments",
+            "user_profile.name": user.profile["name"],
+        }
+    )
