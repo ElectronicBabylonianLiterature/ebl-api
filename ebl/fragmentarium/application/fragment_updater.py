@@ -35,46 +35,36 @@ class FragmentUpdater:
         self._photos = photos
         self._parallel_injector = parallel_injector
 
-    def update_transliteration(
+    def update_edition(
         self,
         number: MuseumNumber,
-        transliteration: TransliterationUpdate,
         user: User,
+        introduction: Optional[str] = None,
+        notes: Optional[str] = None,
+        transliteration: Optional[TransliterationUpdate] = None,
         ignore_lowest_join: bool = False,
     ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number)
+        original_fragment = fragment = self._repository.query_by_museum_number(number)
 
-        updated_fragment = (
-            fragment.update_transliteration(transliteration, user)
-            if ignore_lowest_join
-            else fragment.update_lowest_join_transliteration(transliteration, user)
-        )
-        self._create_changelog(user, fragment, updated_fragment)
-        self._repository.update_field("transliteration", updated_fragment)
+        if introduction is not None:
+            fragment = fragment.set_introduction(introduction)
+            self._repository.update_field("introduction", fragment)
 
-        return self._create_result(updated_fragment)
+        if notes is not None:
+            fragment = fragment.set_notes(notes)
+            self._repository.update_field("notes", fragment)
 
-    def update_introduction(
-        self, number: MuseumNumber, introduction: str, user: User
-    ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number)
-        updated_fragment = fragment.set_introduction(introduction)
+        if transliteration is not None:
+            fragment = (
+                fragment.update_transliteration(transliteration, user)
+                if ignore_lowest_join
+                else fragment.update_lowest_join_transliteration(transliteration, user)
+            )
+            self._repository.update_field("transliteration", fragment)
 
-        self._create_changelog(user, fragment, updated_fragment)
-        self._repository.update_field("introduction", updated_fragment)
+        self._create_changelog(user, original_fragment, fragment)
 
-        return self._create_result(updated_fragment)
-
-    def update_notes(
-        self, number: MuseumNumber, notes: str, user: User
-    ) -> Tuple[Fragment, bool]:
-        fragment = self._repository.query_by_museum_number(number)
-        updated_fragment = fragment.set_notes(notes)
-
-        self._create_changelog(user, fragment, updated_fragment)
-        self._repository.update_field("notes", updated_fragment)
-
-        return self._create_result(updated_fragment)
+        return self._create_result(fragment)
 
     def update_script(
         self, number: MuseumNumber, script: Script, user: User

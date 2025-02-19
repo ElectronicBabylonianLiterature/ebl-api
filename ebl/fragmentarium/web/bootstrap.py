@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
+from ebl.fragmentarium.web.edition import EditionResource
 from ebl.fragmentarium.web.findspots import FindspotResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
@@ -35,10 +36,7 @@ from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import make_statistics_resource
-from ebl.fragmentarium.web.transliterations import TransliterationResource
-from ebl.fragmentarium.web.introductions import IntroductionResource
 from ebl.fragmentarium.web.archaeology import ArchaeologyResource
-from ebl.fragmentarium.web.notes import NotesResource
 from ebl.fragmentarium.web.fragments_afo_register import (
     AfoRegisterFragmentsQueryResource,
 )
@@ -110,16 +108,12 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
     references = ReferencesResource(updater)
-    transliteration = TransliterationResource(
-        updater, context.get_transliteration_update_factory()
-    )
+    edition = EditionResource(updater, context.get_transliteration_update_factory())
     scopes = FragmentAuthorizedScopesResource(
         context.fragment_repository, finder, updater
     )
-    introduction = IntroductionResource(updater)
     archaeology = ArchaeologyResource(updater)
     colophon = ColophonResource(updater)
-    notes = NotesResource(updater)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
@@ -146,11 +140,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/pager", fragment_pager),
         ("/fragments/{number}/lemmatization", lemmatization),
         ("/fragments/{number}/references", references),
-        ("/fragments/{number}/transliteration", transliteration),
-        ("/fragments/{number}/introduction", introduction),
+        ("/fragments/{number}/edition", edition),
         ("/fragments/{number}/archaeology", archaeology),
         ("/fragments/{number}/colophon", colophon),
-        ("/fragments/{number}/notes", notes),
         ("/fragments/{number}/annotations", annotations),
         ("/fragments/{number}/thumbnail/{resolution}", photo),
         ("/fragments/{number}/photo", photo),
