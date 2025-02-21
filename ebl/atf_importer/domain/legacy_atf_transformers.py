@@ -2,6 +2,7 @@ import re
 from typing import Optional, List, Sequence, Union, Type
 from lark.visitors import Transformer, Tree, Token, v_args, Discard
 from ebl.transliteration.domain.atf import _SUB_SCRIPT
+from ebl.transliteration.domain.common_transformer import CommonTransformer
 
 # ToDo: Continue from here
 # Make sure every transformer is implemented and works properly.
@@ -30,46 +31,6 @@ class LegacyTransformer(Transformer):
     def transform(self, tree: Tree) -> Tree:
         result = super().transform(tree)
         return result if result else tree
-
-    def _transform_children(self, children: Sequence[Tree]):
-        index_correction = 0
-        for index, child in enumerate(children):
-            self._enter_node(index - index_correction)
-            result = self._get_child_result(child)
-            self._exit_node()
-            if result is not Discard:
-                yield result
-
-    def _get_child_result(self, child: Tree) -> Tree:
-        if self.is_classes_break_at(self.get_ancestors()):
-            return child
-        elif isinstance(child, Tree):
-            return self._transform_tree(child)
-        elif self.__visit_tokens__ and isinstance(child, Token):
-            return self._call_userfunc_token(child)
-        else:
-            return child
-
-    def _enter_node(self, index: int = 0) -> None:
-        self.current_path.append(index)
-
-    def _exit_node(self) -> None:
-        if self.current_path:
-            self.current_path.pop()
-
-    def get_ancestors(self) -> Sequence:
-        if not self.current_tree:
-            return []
-        tree = self.current_tree
-        ancestors = [tree.data]
-        for parent_index in self.current_path[:-1]:
-            ancestor = tree.children[parent_index]
-            ancestors.append(ancestor.data)
-            tree = tree.children[parent_index]
-        return ancestors
-
-    def is_classes_break_at(self, node_classes: Sequence[str]) -> bool:
-        return not set(node_classes).isdisjoint(self.break_at)
 
     def to_token(self, name: str, string: Optional[str]) -> Token:
         return (
@@ -245,6 +206,10 @@ class LegacyAlephTransformer(LegacyTransformer):
 class LegacyColumnTransformer(LegacyTransformer):
     prefix = ""
 
+    # ToDo:
+    # Add indexing to detect the beginnging of the text.
+    # Then reset the column number when a new text begins.
+
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.column_number = 1
@@ -285,17 +250,20 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
 
     def _reset(self) -> None:
         self.language: Optional[Token] = None
-        self.start: Optional[Sequence[Tree]] = None
+        self.start: Optional[str] = None
         self.extent: Optional[Sequence[Tree]] = None
         self.translation: Sequence[str] = []
 
     @property
     def translation_c_line(self) -> Sequence[Union[Tree, Token]]:
-        return [
-            self.language,
-            self._translation_extent,
-            self._translation_string_part,
-        ]
+        return self.to_tree(
+            "translation_line",
+            [
+                self.language,
+                self._translation_extent,
+                self._translation_string_part,
+            ],
+        )
 
     @property
     def _translation_extent(self) -> Tree:
@@ -325,7 +293,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_translation_line__labels_start(self, labels: Tree) -> None:
         self.legacy_found = True
-        self.start = labels.children
+        self.start = self._labels_to_string(labels)
         return
 
     @v_args(inline=True)
@@ -334,8 +302,13 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         self.extent = labels.children
         return
 
-    # def _extract_labels(self, labels: Tree) -> Sequence[Tree]:
-    #    return labels.children[0].children + [labels.children[1]]
+    def _labels_to_string(self, labels: Tree) -> str:
+        labels, line_number = CommonTransformer().transform(labels).children
+        return (
+            " ".join(label.to_value() for label in labels)
+            + " "
+            + str(line_number.number)
+        )
 
     @v_args(inline=True)
     def ebl_atf_translation_line__legacy_translation_block_line(
@@ -343,4 +316,4 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     ) -> None:
         self.legacy_found = True
         self.translation.append(str(text.children[0]))
-        return
+        return self.translation_c_line

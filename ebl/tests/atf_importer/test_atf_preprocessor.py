@@ -5,19 +5,22 @@ from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 # ToDo: All transformers should be tested
 
 TRANSLATION_LEGACY = """
-@obverse
+@right?
+@column
 1. a-na
-2. a-bi-ya
+2. a-bí-ya
 @translation en labelled
-@label(o 1-o 2)
-To my father
+@label(r.e.? i 1-r.e.? i 2)
+To my
+father
 """
 
 TRANSLATION_EXPECTED = """
-@obverse
+@right?
+@column 1
 1. a-na
-#tr.en.(o 2): To my father
-2. a-bi-ya
+#tr.en.(r.e.? i 2): To my father
+2. a-bi2-ya
 """
 
 PARSE_AND_TRANSFORM_LEGACY = [
@@ -76,8 +79,7 @@ PROBLEMATIC_TEXT_LINES = [
     (
         "14. [...] x (x) še-e-hu $BAD $É $ME : ina GAŠAN-ia₅ {d}SUEN {"
         "d}INANA--<É>.AN.NA",
-        "14. [...] x (x) še-e-hu BAD E₂ ME : ina GAŠAN-ia₅ {d}SUEN {"
-        "d}INANA-<E₂>.AN.NA",
+        "14. [...] x (x) še-e-hu BAD E₂ ME : ina GAŠAN-ia₅ {d}SUEN {d}INANA-<E₂>.AN.NA",
     ),
 ]
 
@@ -104,9 +106,9 @@ def test_legacy_translation():
     legacy_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_LEGACY)
     expected_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_EXPECTED)
     # ToDo: Clean up
-    #print("RESULT:\n", legacy_tree)  # .pretty())
-    #print("EXPECTED:\n", expected_tree)  # .pretty())
-    #input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    # print("RESULT:\n", legacy_tree)  # .pretty())
+    # print("EXPECTED:\n", expected_tree)  # .pretty())
+    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
     assert legacy_tree == expected_tree
 
@@ -126,9 +128,9 @@ def test_text_lines(legacy_line, ebl_line):
     legacy_tree = atf_preprocessor.transform_legacy_atf(legacy_tree)
     expected_tree = atf_preprocessor.ebl_parser.parse(ebl_line)
     # ToDo: Clean up
-    #print("RESULT:\n", legacy_tree)  # .pretty())
-    #print("EXPECTED:\n", expected_tree)  # .pretty())
-    #input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    # print("RESULT:\n", legacy_tree)  # .pretty())
+    # print("EXPECTED:\n", expected_tree)  # .pretty())
+    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
     assert legacy_tree == expected_tree
 

@@ -32,7 +32,7 @@ oracc_modifier_prefix_transformer = (LegacyModifierPrefixTransformer(), "childre
 prime_transformer = (LegacyPrimeTransformer(), "children")
 aleph_transformer = (LegacyAlephTransformer(), "children")
 column_transformer = (LegacyColumnTransformer(), "tree")
-translation_block_transformer = (LegacyTranslationBlockTransformer(), "tree")
+translation_block_transformer = (LegacyTranslationBlockTransformer(), "first_child")
 
 
 class LegacyAtfVisitor(Visitor):
@@ -62,6 +62,7 @@ class LegacyAtfVisitor(Visitor):
         "value_name_part": [aleph_transformer],
         "at_line_value": [column_transformer],
         "legacy_column": [column_transformer],
+        "text_line": [translation_block_transformer],
         "legacy_translation_line": [translation_block_transformer],
     }
 
@@ -72,8 +73,8 @@ class LegacyAtfVisitor(Visitor):
             prefix = self.text_line_prefix
             if suffix in ["legacy_column"]:
                 prefix = self.at_line_prefix
-            elif "legacy_translation" in suffix:
-                prefix = "" #self.translation_line_prefix
+            elif suffix in ["legacy_translation_line", "text_line"]:
+                prefix = ""
             self._set_rules(suffix, transformers, prefix)
 
     def _set_rules(
@@ -108,7 +109,10 @@ class LegacyAtfVisitor(Visitor):
         transformed_tree = transformer.transform(tree)
         if transformer.legacy_found:
             self.legacy_found = True
-            if replace == "tree":
+            if replace == "first_child" and transformed_tree.children[0]:
+                tree.data = transformed_tree.children[0].data
+                tree.children = transformed_tree.children[0].children
+            elif replace == "tree":
                 tree.data = transformed_tree.data
                 tree.children = transformed_tree.children
             elif replace == "children":

@@ -3,13 +3,20 @@ from lark.visitors import Tree
 from typing import Tuple, Optional, List, Dict, Any
 from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
-from ebl.atf_importer.domain.legacy_atf_visitor import LegacyAtfVisitor
-#from ebl.transliteration.domain.line_transformer import LineTransformer
+from ebl.atf_importer.domain.legacy_atf_visitor import (
+    LegacyAtfVisitor,
+    translation_block_transformer,
+)
+
+# from ebl.transliteration.domain.line_transformer import LineTransformer
+from ebl.atf_importer.domain.atf_indexing_visitor import IndexingVisitor
 
 
 class AtfPreprocessor(AtfPreprocessorBase):
+    indexing_visitor = IndexingVisitor()
     legacy_visitor = LegacyAtfVisitor()
-    #line_transformer = LineTransformer()
+    translation_block_transformer = translation_block_transformer[0]
+    # line_transformer = LineTransformer()
 
     def convert_lines_from_string(self, text: str) -> List[Dict[str, Any]]:
         return self._convert_lines(text.split("\n"))
@@ -19,11 +26,64 @@ class AtfPreprocessor(AtfPreprocessorBase):
         lines = self.read_lines_from_path(path)
         return self._convert_lines(lines)
 
+    def _parse_and_index_lines(self, lines: List[str]) -> None:
+        line_trees = []
+        for line in lines:
+            # ToDo: Parsing should happen here and ONLY here
+            # Continue from here. Translation injection seems to work.
+            # Now it should be properly tested.
+            # For that, modify the logic and output a proper result.
+            # Also, add column logic to detect the end of the text
+            # and reset the legacy column transformer.
+            line_tree = self.ebl_parser.parse(line)
+            self.indexing_visitor.visit(line_tree)
+            self.legacy_visitor.visit(line_tree)
+            cursor = (
+                self.indexing_visitor.cursor_index
+                if line_tree.data == "text_line"
+                else None
+            )
+            if "translation_line" in line_tree.data:
+                line_trees = self._handle_legacy_translation(line_tree, line_trees)
+            else:
+                line_trees.append({"line": line_tree, "cursor": cursor})
+
+    def _handle_legacy_translation(
+        self, translation_line: Tree, line_trees: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        if translation_line.data == "translation_line":
+            insert_at = self.translation_block_transformer.start
+            line_trees = self._insert_translation_line(
+                translation_line, insert_at, line_trees
+            )
+        return line_trees
+
+    def _insert_translation_line(
+        self, translation_line: Tree, insert_at: str, line_trees: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        for index, tree_line in enumerate(line_trees):
+            if insert_at == tree_line["cursor"]:
+                if (
+                    index + 1 <= len(line_trees)
+                    and line_trees[index + 1]["line"].data == "translation_line"
+                ):
+                    line_trees[index + 1] = {
+                        "cursor": None,
+                        "line": translation_line,
+                    }
+                else:
+                    line_trees.insert(
+                        index + 1, {"cursor": None, "line": translation_line}
+                    )
+                break
+        return line_trees
+
     def _convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
+        self._parse_and_index_lines(lines)  # ToDo: Implement further logic
         processed_lines = []
         for line in lines:
             result = self.process_line(line)
-            #c_line = self.line_transformer.transform(result[0])
+            # c_line = self.line_transformer.transform(result[0])
             processed_lines.append(
                 {
                     "c_line": result[0],
@@ -74,7 +134,6 @@ class AtfPreprocessor(AtfPreprocessorBase):
 
     def transform_legacy_atf(self, tree: Tree) -> Tree:
         self.legacy_visitor.visit(tree)
-        # print('!!!! visitor.legacy_found', visitor.legacy_found)
         if self.legacy_visitor.legacy_found:
             self.logger.info("Legacy line successfully parsed")
         return tree

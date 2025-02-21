@@ -1,8 +1,5 @@
 %import common.INT
-%import .ebl_atf_common (status)
-%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
-%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
-%import .ebl_atf_common (seal, free_text)
+%import .ebl_atf_common (status, object, surface, seal, free_text)
 %import .ebl_atf_note_line(_markup)
 
 ?at_line: "@" at_line_value

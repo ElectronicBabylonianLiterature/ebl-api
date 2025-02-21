@@ -2,8 +2,8 @@
 %import common.INT -> INT
 %import common.LCASE_LETTER -> LCASE_LETTER
 %import .ebl_atf_common (free_text)
-%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
-%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (object, fragment)
+%import .ebl_atf_common (surface, edge)
 %import .ebl_atf_common (seal)
 %import .legacy_atf (legacy_single_ruling)
 
