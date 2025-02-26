@@ -5,7 +5,7 @@
 %import .ebl_atf_common (object, fragment)
 %import .ebl_atf_common (surface, edge)
 %import .ebl_atf_common (seal)
-%import .legacy_atf (legacy_single_ruling)
+%import .legacy_atf (legacy_single_ruling, legacy_broken_state)
 
 ?dollar_line: "$" " "* value
 ?value: strict
@@ -19,6 +19,7 @@ state: QUALIFICATION [" " extent] [" " scope] [" " STATE] [" " DOLLAR_STATUS]
      | scope [" " STATE] [" " DOLLAR_STATUS] -> state_scope
      | STATE [" " DOLLAR_STATUS] -> state_state
      | DOLLAR_STATUS -> state_status
+     | legacy_broken_state
 
 QUALIFICATION : "at least" | "at most" | "about"
 

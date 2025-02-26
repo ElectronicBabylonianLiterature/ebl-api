@@ -1,4 +1,5 @@
 import traceback
+import codecs
 from lark.visitors import Tree
 from typing import Tuple, Optional, List, Dict, Any
 from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
@@ -8,8 +9,7 @@ from ebl.atf_importer.domain.legacy_atf_visitor import (
     translation_block_transformer,
     column_transformer,
 )
-
-# from ebl.transliteration.domain.line_transformer import LineTransformer
+from ebl.transliteration.domain.line_transformer import LineTransformer
 from ebl.atf_importer.domain.atf_indexing_visitor import IndexingVisitor
 
 
@@ -18,14 +18,15 @@ class AtfPreprocessor(AtfPreprocessorBase):
     legacy_visitor = LegacyAtfVisitor()
     translation_block_transformer = translation_block_transformer[0]
     column_transformer = column_transformer[0]
-    # line_transformer = LineTransformer()
+    line_transformer = LineTransformer()
 
     def convert_lines_from_string(self, text: str) -> List[Dict[str, Any]]:
         return self._convert_lines(text.split("\n"))
 
     def convert_lines_from_path(self, path: str, filename: str) -> List[Dict[str, Any]]:
         self.logger.info(Util.print_frame(f'Converting: "{filename}.atf"'))
-        lines = self.read_lines_from_path(path)
+        with codecs.open(path, "r", encoding="utf8") as f:
+            lines = f.read().split("\n")
         return self._convert_lines(lines)
 
     def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
@@ -87,10 +88,12 @@ class AtfPreprocessor(AtfPreprocessorBase):
         return line_trees
 
     def _convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
+        self.translation_block_transformer.reset()
         self.column_transformer.reset()
         line_trees = self._parse_lines(lines)  # ToDo: Implement further logic
-        processed_lines = [line["line"] for line in line_trees]
-        # processed_lines = []
+        processed_lines = [
+            self.line_transformer.transform(line["line"]) for line in line_trees
+        ]
         """
         for line in lines:
             result = self.process_line(line)
@@ -136,7 +139,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
         tree = self.ebl_parser.parse(atf)
-        tree = self.transform_legacy_atf(tree)
+        # tree = self.transform_legacy_atf(tree)
         self.logger.info("Line successfully parsed")
         self.logger.debug(f"Parsed line as {tree.data}")
         self.logger.info(
@@ -144,11 +147,13 @@ class AtfPreprocessor(AtfPreprocessorBase):
         )
         return self.get_line_tree_data(tree)
 
+    """
     def transform_legacy_atf(self, tree: Tree) -> Tree:
         self.legacy_visitor.visit(tree)
         if self.legacy_visitor.legacy_found:
             self.logger.info("Legacy line successfully parsed")
         return tree
+    """
 
     def parse_and_convert_line(
         self, atf: str
@@ -156,11 +161,11 @@ class AtfPreprocessor(AtfPreprocessorBase):
         result = (None, None, None, None)
         try:
             tree = self.ebl_parser.parse(atf)
-            #if tree.data in self.unused_lines:
+            # if tree.data in self.unused_lines:
             # result = self.get_empty_conversion(tree)
             # ToDo: Check original
             # return tree
-            if tree.data == "lem_line": # elif ...
+            if tree.data == "lem_line":  # elif ...
                 result = self.convert_lem_line(atf, tree)
             else:
                 result = self.get_line_tree_data(tree)

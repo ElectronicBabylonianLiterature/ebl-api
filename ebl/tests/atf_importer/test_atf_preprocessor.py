@@ -20,18 +20,21 @@ TRANSLATION_EXPECTED = """
 @column 1
 1. a-na
 #tr.en.(r.e.? i 2): To my father
-2. a-bi2-ya
+2. a-bi₂-ya
 """
 
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
+    ("1. ⸢4(BÁN)?⸣", "1. 4(BAN₂)?#"), # ToDo: Continue from here. Fix the issue, then clean preprocessor base.
     ("@column", "@column 1"),
-    ("@column", "@column 2"),
-    ("@face a", "@face a"),
+    ("@column\n@column", "@column 1\n@column 2"),
+    ("@face a", "@face a"), # ToDo: Continue from here. New issue, debug & fix!
     ("@obverse", "@obverse"),
     ("@reverse", "@reverse"),
     ("$ obverse broken", "$ obverse broken"),
-    ("$ single ruling", "$ single ruling"),
+    ("$ rest broken", "$ rest of side broken"),
+    ("$ ruling", "$ single ruling"),
+    ("$ ruling?", "$ single ruling?"),
     ("1. a'", "1. aʾ"),
     ("1′. A", "1'. A"),
     ("1’. A", "1'. A"),
@@ -103,18 +106,23 @@ LEGACY_GRAMMAR_SIGNS = [
 
 def test_legacy_translation():
     atf_preprocessor = AtfPreprocessor("../logs", 0)
-    legacy_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_LEGACY)
-    expected_tree = atf_preprocessor.convert_lines_from_string(TRANSLATION_EXPECTED)
+    legacy_lines = atf_preprocessor.convert_lines_from_string(TRANSLATION_LEGACY)
+    expected_lines = [
+        atf_preprocessor.line_transformer.transform(
+            atf_preprocessor.ebl_parser.parse(line)
+        )
+        for line in TRANSLATION_EXPECTED.split("\n")
+    ]
     # ToDo: Clean up
-    # print("RESULT:\n", legacy_tree)  # .pretty())
-    # print("EXPECTED:\n", expected_tree)  # .pretty())
+    # print("\nRESULT:\n", legacy_lines)  # .pretty())
+    # print("EXPECTED:\n", expected_lines)  # .pretty())
     # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
-    assert legacy_tree == expected_tree
+    assert legacy_lines == expected_lines
 
 
 @pytest.mark.parametrize(
-    "legacy_line,ebl_line",
+    "legacy_lines,ebl_lines",
     [
         *PARSE_AND_TRANSFORM_LEGACY,
         *PROBLEMATIC_TEXT_LINES,
@@ -122,17 +130,22 @@ def test_legacy_translation():
         *LEGACY_GRAMMAR_SIGNS,
     ],
 )
-def test_text_lines(legacy_line, ebl_line):
+def test_text_lines(legacy_lines, ebl_lines):
     atf_preprocessor = AtfPreprocessor("../logs", 0)
-    legacy_tree = atf_preprocessor.ebl_parser.parse(legacy_line)
-    legacy_tree = atf_preprocessor.transform_legacy_atf(legacy_tree)
-    expected_tree = atf_preprocessor.ebl_parser.parse(ebl_line)
+    legacy_lines = atf_preprocessor.convert_lines_from_string(legacy_lines)
+    expected_lines = [
+        atf_preprocessor.line_transformer.transform(
+            atf_preprocessor.ebl_parser.parse(line)
+        )
+        for line in ebl_lines.split("\n")
+    ]
+
     # ToDo: Clean up
-    # print("RESULT:\n", legacy_tree)  # .pretty())
-    # print("EXPECTED:\n", expected_tree)  # .pretty())
+    # print("\nRESULT:\n", legacy_lines)  # .pretty())
+    # print("EXPECTED:\n", expected_lines)  # .pretty())
     # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
 
-    assert legacy_tree == expected_tree
+    assert legacy_lines == expected_lines
 
 
 lemma_lines = []

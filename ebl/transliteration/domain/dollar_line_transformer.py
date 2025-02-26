@@ -67,6 +67,10 @@ class DollarLineTransformer(Transformer):
         return ScopeContainer(atf.Surface.from_atf(str(surface)))
 
     @v_args(inline=True)
+    def ebl_atf_dollar_line__ebl_atf_common__SURFACE(self, surface):
+        return ScopeContainer(atf.Surface.from_atf(str(surface)))
+
+    @v_args(inline=True)
     def ebl_atf_dollar_line__generic_surface(self, text):
         return ScopeContainer(atf.Surface.SURFACE, str(text))
 

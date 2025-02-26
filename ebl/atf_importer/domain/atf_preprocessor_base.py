@@ -1,4 +1,3 @@
-import codecs
 import logging
 import re
 from typing import Tuple, Optional, List, Any
@@ -8,30 +7,11 @@ from ebl.atf_importer.domain.atf_conversions import (
     GetWords,
 )
 
-opening_half_bracket = {"⌈", "⸢"}
-closing_half_bracket = {"⌉", "⸣"}
-
-
 # ToDo:
 # Functionality should be mainly transferred
 # to `transformers`.
 # Extract oracc_atf_lem_line parser,
 # use within ebl_atf parser or separately.
-
-"""
-unused_lines = {
-    "oracc_atf_at_line__object_with_status",
-    "oracc_atf_at_line__surface_with_status",
-    "oracc_atf_at_line__discourse",
-    "oracc_atf_at_line__column",
-    "oracc_atf_at_line__seal",
-    "dollar_line",
-    "note_line",
-    "control_line",
-    "empty_line",
-    "translation_line",
-}
-"""
 
 special_chars = {
     "sz": "š",
@@ -85,7 +65,7 @@ preprocess_text_replacements = {
     "5/6": "⅚",
     "\t": " ",
     "$ rest broken": "$ rest of side broken",
-    "$ ruling": "$ single ruling",
+    #"$ ruling": "$ single ruling",
     "]x": "] x",
     "x[": "x [",
     "]⸢x": "] ⸢x",
@@ -111,7 +91,6 @@ class AtfPreprocessorBase:
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
         self.skip_next_lem_line = False
-        #self.unused_lines = unused_lines
         self.logdir = logdir
         self.style = style
         self.open_found = False
@@ -177,17 +156,12 @@ class AtfPreprocessorBase:
         lemmas_and_guidewords_serializer.visit(tree)
         return lemmas_and_guidewords_serializer.result
 
-    def read_lines_from_path(self, file: str) -> List[str]:
-        with codecs.open(file, "r", encoding="utf8") as f:
-            return f.read().split("\n")
-
     def _handle_text_line(self, atf: str) -> str:
         atf_text_line_methods = [
             "_replace_dashes",
             "replace_special_characters",
             "_normalize_patterns",
             "_replace_primed_digits",
-            "_process_bracketed_parts",
             "_uppercase_underscore",
             "_lowercase_braces",
             "_replace_dollar_signs",
@@ -234,40 +208,7 @@ class AtfPreprocessorBase:
         return atf.replace("[\t ]*", " ")
 
     def _handle_dollar_line(self, atf: str) -> str:
-        special_marks = {
-            "$ rest broken": "$ rest of side broken",
-            "$ ruling": "$ single ruling",
-        }
-        if atf in special_marks.keys():
-            return special_marks[atf]
         if atf.startswith("$ "):
             dollar_comment = atf.split("$ ")[1]
             return f"$ ({dollar_comment})"
         return atf
-
-    def _process_bracketed_parts(self, atf: str) -> str:
-        self.open_found = False
-        split = re.split(r"([⌈⌉⸢⸣])", atf)
-        # ToDo: Remove:
-        if len(split) > 1 and atf.startswith("9. ⸢4(BÁN)?⸣"):
-            # ToDo: Continue from here.
-            # Problem with `4(BÁN)#?`, which is not in lark grammer
-            # The issue is probably with SIGN - ? - #
-            print("! split", split)
-            print(
-                "! norm", "".join(self._process_bracketed_part(part) for part in split)
-            )
-            input("press enter")
-        return (
-            "".join(self._process_bracketed_part(part) for part in split)
-            if len(split) > 1
-            else atf
-        )
-
-    def _process_bracketed_part(self, part: str) -> str:
-        if part in opening_half_bracket.union(closing_half_bracket):
-            self.open_found = part in opening_half_bracket
-            return ""
-        if not self.open_found:
-            return part
-        return re.sub(r"([-.\s])", r"#\1", part) + "#"

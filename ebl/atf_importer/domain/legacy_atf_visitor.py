@@ -1,6 +1,7 @@
 from typing import Sequence, Tuple, Callable
 from lark.visitors import Visitor, Tree
 from ebl.atf_importer.domain.legacy_atf_transformers import (
+    LegacyTransformer,
     AccentedIndexTransformer,
     HalfBracketsTransformer,
     OraccJoinerTransformer,
@@ -11,8 +12,9 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
     LegacyAlephTransformer,
     LegacyColumnTransformer,
     LegacyTranslationBlockTransformer,
+    LegacyRulingTransformer,
+    LegacyStateTransformer,
 )
-from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
 # ToDo: Continue from here
 # Make sure every transformer is implemented and works properly.
@@ -33,11 +35,14 @@ prime_transformer = (LegacyPrimeTransformer(), "children")
 aleph_transformer = (LegacyAlephTransformer(), "children")
 column_transformer = (LegacyColumnTransformer(), "tree")
 translation_block_transformer = (LegacyTranslationBlockTransformer(), "first_child")
+ruling_transformer = (LegacyRulingTransformer(), "first_child")
+state_transformer = (LegacyStateTransformer(), "first_child")
 
 
 class LegacyAtfVisitor(Visitor):
     text_line_prefix = "ebl_atf_text_line"
     at_line_prefix = "ebl_atf_at_line"
+    dollar_line_prefix = "ebl_atf_dollar_line"
 
     nodes_to_visit = {
         "number": [oracc_modifier_prefix_transformer],
@@ -58,6 +63,8 @@ class LegacyAtfVisitor(Visitor):
         ],
         "text": [half_brackets_transformer],
         "status": [column_transformer],
+        "ruling": [ruling_transformer],
+        "state": [state_transformer],
         "ebl_atf_common__single_line_number": [prime_transformer],
         "value_name_part": [aleph_transformer],
         "at_line_value": [column_transformer],
@@ -73,6 +80,8 @@ class LegacyAtfVisitor(Visitor):
             prefix = self.text_line_prefix
             if suffix in ["legacy_column"]:
                 prefix = self.at_line_prefix
+            elif suffix in ["ruling", "state"]:
+                prefix = self.dollar_line_prefix
             elif suffix in ["legacy_translation_line", "text_line"]:
                 prefix = ""
             self._set_rules(suffix, transformers, prefix)

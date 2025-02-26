@@ -98,6 +98,38 @@ class LegacyTransformer(Transformer):
         )
 
 
+class LegacyStateTransformer(LegacyTransformer):
+    prefix = "ebl_atf_dollar_line"
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__legacy_broken_state(self) -> Tree:
+        self.legacy_found = True
+        return self.to_tree(
+            "state_extent",
+            [
+                self.to_token("EXTENT", "rest of"),
+                self.to_token("SCOPE", "side"),
+                self.to_token("STATE", "broken"),
+                None,
+            ],
+        )
+
+
+class LegacyRulingTransformer(LegacyTransformer):
+    prefix = "ebl_atf_dollar_line"
+
+    @v_args(inline=True)
+    def ebl_atf_dollar_line__legacy_single_ruling(
+        self, status: Optional[Token] = None
+    ) -> Tree:
+        self.legacy_found = True
+        if status:
+            status = self.to_token("DOLLAR_STATUS", str(status))
+        return self.to_tree(
+            "ruling", [self.to_token("RULING_NUMBER", "single"), status]
+        )
+
+
 class HalfBracketsTransformer(LegacyTransformer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -173,9 +205,6 @@ class AccentedIndexTransformer(LegacyTransformer):
         super().__init__(**kwargs)
         self.sub_index = None
         self.break_at = ["ebl_atf_text_line__surrogate_text"]
-        # ToDo: Continue from here.
-        # `break_at` does not work.
-        # Check the older, remove code (and implement it again?)
 
     def clear(self):
         super().clear()
@@ -258,10 +287,6 @@ class LegacyAlephTransformer(LegacyTransformer):
 class LegacyColumnTransformer(LegacyTransformer):
     prefix = ""
 
-    # ToDo:
-    # Add indexing to detect the beginnging of the text.
-    # Then reset the column number when a new text begins.
-
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.reset()
@@ -288,9 +313,9 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self._reset()
+        self.reset()
 
-    def _reset(self) -> None:
+    def reset(self) -> None:
         self.language: Optional[Token] = None
         self.start: Optional[str] = None
         self.extent: Optional[Sequence[Tree]] = None
@@ -327,7 +352,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     def ebl_atf_translation_line__legacy_translation_block_at_line(
         self, language: str
     ) -> None:
-        self._reset()
+        self.reset()
         self.legacy_found = True
         self.language = language
         return

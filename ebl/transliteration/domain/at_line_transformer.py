@@ -67,6 +67,10 @@ class AtLineTransformer(CommonTransformer):
         return ObjectData(atf.Object.FRAGMENT, text)
 
     @v_args(inline=True)
+    def ebl_atf_at_line__ebl_atf_common__SURFACE(self, surface: Token):
+        return SurfaceLabel.from_label(atf.Surface.from_atf(surface))  # pyre-ignore[6]
+
+    @v_args(inline=True)
     def ebl_atf_at_line__SURFACE(self, surface: Token):
         return SurfaceLabel.from_label(atf.Surface.from_atf(surface))  # pyre-ignore[6]
 

@@ -6,7 +6,9 @@ LEGACY_OPEN_HALF_BRACKET: "⌈" | "⸢"
 LEGACY_CLOSE_HALF_BRACKET: "⌉" | "⸣"
 LEGACY_ORACC_DISH_DIVIDER: "*"
 legacy_uncertain_sign_prefix: "$"
-legacy_single_ruling: " "* "ruling" [" "? ("!?" | "*" | "?" | "!")]
+legacy_single_ruling: " "* "ruling" " "* LEGACY_DOLLAR_STATUS?
+LEGACY_DOLLAR_STATUS: "!?" | "*" | "?" | "!"
+legacy_broken_state: "rest broken"
 
 //# ToDo:
 //# check `atf_conversions.py` and implement all missing features.
