@@ -18,6 +18,7 @@ closing_half_bracket = {"⌉", "⸣"}
 # Extract oracc_atf_lem_line parser,
 # use within ebl_atf parser or separately.
 
+"""
 unused_lines = {
     "oracc_atf_at_line__object_with_status",
     "oracc_atf_at_line__surface_with_status",
@@ -30,6 +31,7 @@ unused_lines = {
     "empty_line",
     "translation_line",
 }
+"""
 
 special_chars = {
     "sz": "š",
@@ -109,7 +111,7 @@ class AtfPreprocessorBase:
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
         self.skip_next_lem_line = False
-        self.unused_lines = unused_lines
+        #self.unused_lines = unused_lines
         self.logdir = logdir
         self.style = style
         self.open_found = False

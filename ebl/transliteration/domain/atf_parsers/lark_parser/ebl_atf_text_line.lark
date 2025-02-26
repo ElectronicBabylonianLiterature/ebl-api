@@ -181,7 +181,7 @@ egyptian_metrical_feet_separator: "•" flags
 ?legacy_uncertain_sign: legacy_uncertain_sign_prefix logogram
 
 number: number_name modifiers flags ["(" any_grapheme ")"]
-reading: value_name sub_index modifiers flags ["(" any_grapheme ")"]
+reading: value_name sub_index? modifiers? flags? ["(" any_grapheme ")"]
 logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"]
 surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>"
 surrogate_text: reading (joiner reading)*

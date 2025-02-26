@@ -34,7 +34,7 @@ class IndexingVisitor(Visitor):
         return tree
 
     def ebl_atf_at_line__column(self, tree: Tree) -> Tree:
-        self.cursor["column"] = roman.toRoman(str(tree.children[0])).lower() + "".join(
+        self.cursor["column"] = roman.toRoman(int(tree.children[0])).lower() + "".join(
             str(child) for child in tree.children[1].children
         )
         return tree

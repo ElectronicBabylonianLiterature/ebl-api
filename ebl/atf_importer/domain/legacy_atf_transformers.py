@@ -29,8 +29,57 @@ class LegacyTransformer(Transformer):
         self.current_tree = None
 
     def transform(self, tree: Tree) -> Tree:
-        result = super().transform(tree)
+        result = self._remove_discard_nodes(super().transform(tree))
         return result if result else tree
+
+    def _transform_children(self, children: Sequence[Tree]):
+        index_correction = 0
+        for index, child in enumerate(children):
+            self._enter_node(index - index_correction)
+            result = self._get_child_result(child)
+            self._exit_node()
+            if result is not Discard:
+                yield result
+
+    def _get_child_result(self, child: Tree) -> Tree:
+        if self.is_classes_break_at(self.get_ancestors()):
+            return child
+        elif isinstance(child, Tree):
+            return self._transform_tree(child)
+        elif self.__visit_tokens__ and isinstance(child, Token):
+            return self._call_userfunc_token(child)
+        else:
+            return child
+
+    def _enter_node(self, index: int = 0) -> None:
+        self.current_path.append(index)
+
+    def _exit_node(self) -> None:
+        if self.current_path:
+            self.current_path.pop()
+
+    def get_ancestors(self) -> Sequence:
+        if not self.current_tree:
+            return []
+        tree = self.current_tree
+        ancestors = [tree.data]
+        for parent_index in self.current_path[:-1]:
+            ancestor = tree.children[parent_index]
+            ancestors.append(ancestor.data)
+            tree = tree.children[parent_index]
+        return ancestors
+
+    def is_classes_break_at(self, node_classes: Sequence[str]) -> bool:
+        return not set(node_classes).isdisjoint(self.break_at)
+
+    def _remove_discard_nodes(self, tree: Tree) -> Tree:
+        if isinstance(tree, Tree):
+            tree.children = [
+                self._remove_discard_nodes(child)
+                for child in tree.children
+                if child is not Discard
+            ]
+        return tree
 
     def to_token(self, name: str, string: Optional[str]) -> Token:
         return (
@@ -124,6 +173,9 @@ class AccentedIndexTransformer(LegacyTransformer):
         super().__init__(**kwargs)
         self.sub_index = None
         self.break_at = ["ebl_atf_text_line__surrogate_text"]
+        # ToDo: Continue from here.
+        # `break_at` does not work.
+        # Check the older, remove code (and implement it again?)
 
     def clear(self):
         super().clear()
@@ -212,6 +264,9 @@ class LegacyColumnTransformer(LegacyTransformer):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
+        self.reset()
+
+    def reset(self):
         self.column_number = 1
 
     @v_args(inline=True)
@@ -229,19 +284,6 @@ class LegacyColumnTransformer(LegacyTransformer):
 
 
 class LegacyTranslationBlockTransformer(LegacyTransformer):
-    #
-    # ToDo: Continue from here.
-    # Write an injector that detects the correct line.
-    # This can be implemented using the lables & line number in `self.start`.
-    # It would make sense to trace labels & line numbers within the `LegacyTransformer` or the visitor:
-    # Write methods for `...__labels` and `...__ebl_atf_common__single_line_number` to capture the data and save it within the class.
-    # Then, text lines can be indexed accordingly.
-    # The main issue to consider is detecting the end of the translation block to inject the translation line at this point.
-    # The most obvious option would be detecting the beginning of each block and then the the beginning of a new text
-    # or end of all texts.
-    #
-    # Ensure that this works, then clean up.
-
     prefix = ""
 
     def __init__(self, **kwargs) -> None:
@@ -257,7 +299,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     @property
     def translation_c_line(self) -> Sequence[Union[Tree, Token]]:
         return self.to_tree(
-            "translation_line",
+            "!translation_line",
             [
                 self.language,
                 self._translation_extent,

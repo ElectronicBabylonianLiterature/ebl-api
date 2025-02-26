@@ -6,6 +6,7 @@ from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.atf_importer.domain.legacy_atf_visitor import (
     LegacyAtfVisitor,
     translation_block_transformer,
+    column_transformer,
 )
 
 # from ebl.transliteration.domain.line_transformer import LineTransformer
@@ -16,6 +17,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
     indexing_visitor = IndexingVisitor()
     legacy_visitor = LegacyAtfVisitor()
     translation_block_transformer = translation_block_transformer[0]
+    column_transformer = column_transformer[0]
     # line_transformer = LineTransformer()
 
     def convert_lines_from_string(self, text: str) -> List[Dict[str, Any]]:
@@ -26,7 +28,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
         lines = self.read_lines_from_path(path)
         return self._convert_lines(lines)
 
-    def _parse_and_index_lines(self, lines: List[str]) -> None:
+    def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         line_trees = []
         for line in lines:
             # ToDo: Parsing should happen here and ONLY here
@@ -35,6 +37,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
             # For that, modify the logic and output a proper result.
             # Also, add column logic to detect the end of the text
             # and reset the legacy column transformer.
+
             line_tree = self.ebl_parser.parse(line)
             self.indexing_visitor.visit(line_tree)
             self.legacy_visitor.visit(line_tree)
@@ -43,15 +46,20 @@ class AtfPreprocessor(AtfPreprocessorBase):
                 if line_tree.data == "text_line"
                 else None
             )
-            if "translation_line" in line_tree.data:
+            if (
+                "translation_line" in line_tree.data
+                and line_tree.data != "translation_line"
+            ):
                 line_trees = self._handle_legacy_translation(line_tree, line_trees)
             else:
                 line_trees.append({"line": line_tree, "cursor": cursor})
+        return line_trees
 
     def _handle_legacy_translation(
         self, translation_line: Tree, line_trees: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
-        if translation_line.data == "translation_line":
+        if translation_line.data == "!translation_line":
+            translation_line.data = "translation_line"
             insert_at = self.translation_block_transformer.start
             line_trees = self._insert_translation_line(
                 translation_line, insert_at, line_trees
@@ -64,7 +72,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
         for index, tree_line in enumerate(line_trees):
             if insert_at == tree_line["cursor"]:
                 if (
-                    index + 1 <= len(line_trees)
+                    index + 1 < len(line_trees)
                     and line_trees[index + 1]["line"].data == "translation_line"
                 ):
                     line_trees[index + 1] = {
@@ -79,8 +87,11 @@ class AtfPreprocessor(AtfPreprocessorBase):
         return line_trees
 
     def _convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
-        self._parse_and_index_lines(lines)  # ToDo: Implement further logic
-        processed_lines = []
+        self.column_transformer.reset()
+        line_trees = self._parse_lines(lines)  # ToDo: Implement further logic
+        processed_lines = [line["line"] for line in line_trees]
+        # processed_lines = []
+        """
         for line in lines:
             result = self.process_line(line)
             # c_line = self.line_transformer.transform(result[0])
@@ -92,6 +103,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
                     "c_alter_lem_line_at": result[3],
                 }
             )
+        """
         self.logger.info(Util.print_frame("Preprocessing finished"))
         return processed_lines
 
@@ -144,11 +156,11 @@ class AtfPreprocessor(AtfPreprocessorBase):
         result = (None, None, None, None)
         try:
             tree = self.ebl_parser.parse(atf)
-            if tree.data in self.unused_lines:
-                # result = self.get_empty_conversion(tree)
-                # ToDo: Check original
-                return tree
-            elif tree.data == "lem_line":
+            #if tree.data in self.unused_lines:
+            # result = self.get_empty_conversion(tree)
+            # ToDo: Check original
+            # return tree
+            if tree.data == "lem_line": # elif ...
                 result = self.convert_lem_line(atf, tree)
             else:
                 result = self.get_line_tree_data(tree)
