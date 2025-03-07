@@ -229,6 +229,12 @@ class Museum(Enum):
         "USA",
         "https://thewalters.org/",
     )
+    TOPKAPI_SARAYI = (
+        "Topkapı Sarayı Müzesi",
+        "Istanbul",
+        "TUR",
+        "https://muze.gen.tr/muze-detay/topkapi"
+    )
     TRINITY_COLLEGE_DUBLIN = (
         "Trinity College Dublin",
         "Dublin",
