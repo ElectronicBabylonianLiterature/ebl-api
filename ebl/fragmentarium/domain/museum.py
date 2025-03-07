@@ -233,7 +233,7 @@ class Museum(Enum):
         "Topkapı Sarayı Müzesi",
         "Istanbul",
         "TUR",
-        "https://muze.gen.tr/muze-detay/topkapi"
+        "https://muze.gen.tr/muze-detay/topkapi",
     )
     TRINITY_COLLEGE_DUBLIN = (
         "Trinity College Dublin",
