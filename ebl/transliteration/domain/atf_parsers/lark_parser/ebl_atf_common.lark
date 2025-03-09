@@ -8,7 +8,7 @@
 
 seal : "seal "  INT
 
-free_text.-2 : /[^\n@]+/
+free_text.-2 : /./+ " "*
 
 ?object: OBJECT | generic_object | fragment
 OBJECT: "tablet" | "envelope" | "prism" | "bulla"

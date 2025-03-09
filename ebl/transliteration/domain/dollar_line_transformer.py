@@ -17,9 +17,15 @@ class DollarLineTransformer(Transformer):
         for method in [
             method for method in dir(self) if "ebl_atf_dollar_line" in method
         ]:
+            _method = method.split("__")[1]
             setattr(
                 self,
                 f"ebl_atf_manuscript_line__{method}",
+                getattr(self, method),
+            )
+            setattr(
+                self,
+                f"ebl_atf_dollar_line__ebl_atf_common__{_method}",
                 getattr(self, method),
             )
 

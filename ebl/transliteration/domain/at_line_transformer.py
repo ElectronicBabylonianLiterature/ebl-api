@@ -30,6 +30,13 @@ class ObjectData:
 class AtLineTransformer(CommonTransformer):
     def __init__(self):
         super().__init__()
+        for method in [method for method in dir(self) if "ebl_atf_at_line" in method]:
+            _method = method.split("__")[1]
+            setattr(
+                self,
+                f"ebl_atf_at_line__ebl_atf_common__{_method}",
+                getattr(self, method),
+            )
 
     def ebl_atf_at_line__free_text(self, content):
         return "".join(content)
