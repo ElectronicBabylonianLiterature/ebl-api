@@ -4,7 +4,7 @@ import re
 
 import pydash
 from lark.exceptions import ParseError, UnexpectedInput, VisitError
-from lark.lark import Lark
+from lark.lark import Lark, Tree
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_error import EnclosureError
@@ -149,6 +149,8 @@ def parse_line_number(atf: str) -> AbstractLineNumber:
 
 
 def validate_line(line: Line) -> None:
+    if isinstance(line, Tree):
+        raise ParseError
     visitor = EnclosureValidator()
     line.accept(visitor)
     visitor.done()
