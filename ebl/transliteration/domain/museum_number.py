@@ -36,7 +36,7 @@ PREFIX_ORDER: Mapping[str, int] = {
     "UM": 11,
     "N": 12,
 }
-NUMBER_PREFIX_ORDER: int = 8
+NUMBER_PREFIX_ORDER: int = 6
 DEFAULT_PREFIX_ORDER: int = 13
 
 
