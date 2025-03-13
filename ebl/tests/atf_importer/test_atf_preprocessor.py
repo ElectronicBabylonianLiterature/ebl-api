@@ -2,8 +2,6 @@ import pytest
 import json
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 
-# ToDo: All transformers should be tested
-
 TRANSLATION_LEGACY = """
 @right?
 @column
@@ -25,10 +23,9 @@ TRANSLATION_EXPECTED = """
 
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
-    ("1. ⸢4(BÁN)?⸣", "1. 4(BAN₂)?#"), # ToDo: Continue from here. Fix the issue, then clean preprocessor base.
     ("@column", "@column 1"),
     ("@column\n@column", "@column 1\n@column 2"),
-    ("@face a", "@face a"), # ToDo: Continue from here. New issue, debug & fix!
+    ("@face a", "@face a"),
     ("@obverse", "@obverse"),
     ("@reverse", "@reverse"),
     ("$ obverse broken", "$ obverse broken"),
@@ -38,6 +35,10 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("1. a'", "1. aʾ"),
     ("1′. A", "1'. A"),
     ("1’. A", "1'. A"),
+    (
+        "1. ⸢4?(BÁN)⸣",
+        "1. 4?#(BAN₂#)",
+    ),
     ("1. LU2~v", "1. LU₂@v"),
     ("1. u2~v", "1. u₂@v"),
     ("1. 2~v", "1. 2@v"),
@@ -104,23 +105,6 @@ LEGACY_GRAMMAR_SIGNS = [
 ]
 
 
-def test_legacy_translation():
-    atf_preprocessor = AtfPreprocessor("../logs", 0)
-    legacy_lines = atf_preprocessor.convert_lines_from_string(TRANSLATION_LEGACY)
-    expected_lines = [
-        atf_preprocessor.line_transformer.transform(
-            atf_preprocessor.ebl_parser.parse(line)
-        )
-        for line in TRANSLATION_EXPECTED.split("\n")
-    ]
-    # ToDo: Clean up
-    # print("\nRESULT:\n", legacy_lines)  # .pretty())
-    # print("EXPECTED:\n", expected_lines)  # .pretty())
-    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
-
-    assert legacy_lines == expected_lines
-
-
 @pytest.mark.parametrize(
     "legacy_lines,ebl_lines",
     [
@@ -140,11 +124,20 @@ def test_text_lines(legacy_lines, ebl_lines):
         for line in ebl_lines.split("\n")
     ]
 
-    # ToDo: Clean up
-    # print("\nRESULT:\n", legacy_lines)  # .pretty())
-    # print("EXPECTED:\n", expected_lines)  # .pretty())
-    # input()  # <- With `task test`: "OSError: pytest: reading from stdin while output is captured!"
+    assert legacy_lines == expected_lines
 
+
+def test_legacy_translation():
+    atf_preprocessor = AtfPreprocessor("../logs", 0)
+    legacy_lines = atf_preprocessor.convert_lines_from_string(
+        TRANSLATION_LEGACY.strip("\n")
+    )
+    expected_lines = [
+        atf_preprocessor.line_transformer.transform(
+            atf_preprocessor.ebl_parser.parse(line)
+        )
+        for line in TRANSLATION_EXPECTED.strip("\n").split("\n")
+    ]
     assert legacy_lines == expected_lines
 
 
@@ -156,7 +149,6 @@ with open("ebl/tests/atf_importer/test_lemma_lines.json", "r") as file:
 @pytest.mark.parametrize("line", lemma_lines)
 def test_lemma_line_c_type_is_lem_line(line):
     atf_preprocessor = AtfPreprocessor("../logs", 0)
-
     (
         converted_line,
         c_array,

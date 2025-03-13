@@ -318,11 +318,11 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     def reset(self) -> None:
         self.language: Optional[Token] = None
         self.start: Optional[str] = None
-        self.extent: Optional[Sequence[Tree]] = None
-        self.translation: Sequence[str] = []
+        self.extent: Sequence[Tree] = []
+        self.translation: List[str] = []
 
     @property
-    def translation_c_line(self) -> Sequence[Union[Tree, Token]]:
+    def translation_c_line(self) -> Tree:
         return self.to_tree(
             "!translation_line",
             [
@@ -350,7 +350,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
 
     @v_args(inline=True)
     def ebl_atf_translation_line__legacy_translation_block_at_line(
-        self, language: str
+        self, language: Optional[Token]
     ) -> None:
         self.reset()
         self.legacy_found = True
@@ -380,7 +380,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     @v_args(inline=True)
     def ebl_atf_translation_line__legacy_translation_block_line(
         self, text: Tree
-    ) -> None:
+    ) -> Tree:
         self.legacy_found = True
-        self.translation.append(str(text.children[0]))
+        self.translation.append("".join([str(child) for child in text.children]))
         return self.translation_c_line

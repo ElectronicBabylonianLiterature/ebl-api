@@ -65,7 +65,7 @@ preprocess_text_replacements = {
     "5/6": "⅚",
     "\t": " ",
     "$ rest broken": "$ rest of side broken",
-    #"$ ruling": "$ single ruling",
+    # "$ ruling": "$ single ruling",
     "]x": "] x",
     "x[": "x [",
     "]⸢x": "] ⸢x",

@@ -1,7 +1,7 @@
 import traceback
 import codecs
 from lark.visitors import Tree
-from typing import Tuple, Optional, List, Dict, Any
+from typing import Tuple, Optional, List, Dict, Any, Union
 from ebl.atf_importer.domain.atf_preprocessor_base import AtfPreprocessorBase
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
 from ebl.atf_importer.domain.legacy_atf_visitor import (
@@ -30,6 +30,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
         return self._convert_lines(lines)
 
     def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
+        self.indexing_visitor.reset()
         line_trees = []
         for line in lines:
             # ToDo: Parsing should happen here and ONLY here
@@ -116,7 +117,9 @@ class AtfPreprocessor(AtfPreprocessorBase):
 
     def process_line(
         self, original_atf_line: str
-    ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
+    ) -> Tuple[
+        Union[None, Tree, str], Optional[List[Any]], Optional[str], Optional[List[Any]]
+    ]:
         # ToDo: Restructure. This should be made more straightforward, lines shouldn't be parsed twice.
         self.logger.debug(f"Original line: '{original_atf_line}'")
         atf_line = self.preprocess_text(original_atf_line)
@@ -132,9 +135,7 @@ class AtfPreprocessor(AtfPreprocessorBase):
             )
             return self.parse_and_convert_line(atf_line)
 
-    def check_original_line(
-        self, atf: str
-    ) -> Tuple[Optional[Tree], List[Any], str, List[Any]]:
+    def check_original_line(self, atf: str) -> Tuple[Tree, List[Any], str, List[Any]]:
         if self.style == 2 and atf[0] == "#" and atf[1] == " ":
             atf = atf.replace("#", "#note:")
             atf = atf.replace("# note:", "#note:")
@@ -157,7 +158,9 @@ class AtfPreprocessor(AtfPreprocessorBase):
 
     def parse_and_convert_line(
         self, atf: str
-    ) -> Tuple[Optional[str], Optional[List[Any]], Optional[str], Optional[List[Any]]]:
+    ) -> Tuple[
+        Union[None, Tree, str], Optional[List[Any]], Optional[str], Optional[List[Any]]
+    ]:
         result = (None, None, None, None)
         try:
             tree = self.ebl_parser.parse(atf)

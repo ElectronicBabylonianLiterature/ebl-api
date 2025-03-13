@@ -36,7 +36,11 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
         ("| :", ["ABZ377n1"]),
         (
             ":/ku šu/|BI×IS|-ummu₃/|IGI.KU|/mat₃",
-            ["ABZ377n1/KU", "ŠU/|BI×IS|", "|A.EDIN.LAL|/|IGI.KU|/ABZ081"], # ToDo: Fix and remove comment
+            [
+                "ABZ377n1/KU",
+                "ŠU/|BI×IS|",
+                "|A.EDIN.LAL|/|IGI.KU|/ABZ081",
+            ],  # ToDo: Fix and remove comment
         ),
         ("ku-[nu ši]", ["KU", "ABZ075", "ABZ207a\\u002F207b\\u0020X"]),
         ("< : ši>-ku", ["KU"]),

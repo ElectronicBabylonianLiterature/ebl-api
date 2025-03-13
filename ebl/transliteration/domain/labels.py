@@ -1,13 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Iterable, Sequence, Tuple, Union
-
 import attr
 import pydash
 import roman
-from lark.lark import Lark
-from lark.lexer import Token
-from lark.visitors import Transformer, v_args
-
 from ebl.transliteration.domain.atf import Object, Status, Surface
 
 

@@ -1,5 +1,5 @@
 import roman
-from lark.visitors import Visitor, Tree
+from lark.visitors import Visitor, Tree, Token
 
 surface_mapping = {
     "obverse": "o",
@@ -15,18 +15,30 @@ surface_mapping = {
 class IndexingVisitor(Visitor):
     def __init__(self):
         super().__init__()
-        self._reset()
+        self.reset()
 
-    def _reset(self) -> None:
+    def reset(self) -> None:
         self.column_counter = 1
         self.cursor = {"surface": None, "column": None, "line": None}
 
     def ebl_atf_at_line__surface_with_status(self, tree: Tree) -> Tree:
-        surface = surface_mapping[str(tree.children[0])] + "".join(
-            str(child) for child in tree.children[1].children
-        )
+        if (
+            isinstance(tree.children[0], Token)
+            and tree.children[0].type == "ebl_atf_at_line__ebl_atf_common__SURFACE"
+        ):
+            surface = surface_mapping[str(tree.children[0])] + "".join(
+                str(child) for child in tree.children[1].children
+            )
+        else:
+            surface = self._tree_to_string(tree)
         self.cursor["surface"] = surface
         return tree
+
+    def _tree_to_string(self, tree: Tree) -> str:
+        return " ".join(
+            str(child) if isinstance(child, Token) else self._tree_to_string(child)
+            for child in tree.children
+        ).strip()
 
     def ebl_atf_at_line__legacy_column(self, tree: Tree) -> Tree:
         self.cursor["column"] = roman.toRoman(self.column_counter).lower()

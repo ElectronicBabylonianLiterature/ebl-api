@@ -82,7 +82,9 @@ class AtfImporter:
         filename = os.path.basename(filepath).split(".")[0]
         style_name = self.config["STYLES"][str(int(args["style"]) - 1)]
         self.logger.info(Util.print_frame(f"Importing {filename}.atf as: {style_name}"))
-        converted_lines = self.atf_preprocessor.convert_lines_from_path(filepath, filename)
+        converted_lines = self.atf_preprocessor.convert_lines_from_path(
+            filepath, filename
+        )
         self.logger.info(Util.print_frame(f"Formatting to eBL-ATF of {filename}.atf"))
         ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)
         self.logger.info(
