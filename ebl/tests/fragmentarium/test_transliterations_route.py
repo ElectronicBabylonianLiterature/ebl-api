@@ -10,7 +10,7 @@ from ebl.fragmentarium.domain.fragment import Notes, Introduction, Fragment
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.joins import Join
 from ebl.transliteration.domain.markup import StringPart, EmphasisPart
 

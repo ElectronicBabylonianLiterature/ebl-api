@@ -3,7 +3,7 @@ from typing import Sequence
 import pytest
 
 from ebl.transliteration.application.signs_visitor import SignsVisitor
-from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 
 
 @pytest.mark.parametrize(
@@ -36,7 +36,11 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("| :", ["ABZ377n1"]),
         (
             ":/ku šu/|BI×IS|-ummu₃/|IGI.KU|/mat₃",
-            ["ABZ377n1/KU", "ŠU/|BI×IS|", "|A.EDIN.LAL|/|IGI.KU|/ABZ081"],
+            [
+                "ABZ377n1/KU",
+                "ŠU/|BI×IS|",
+                "|A.EDIN.LAL|/|IGI.KU|/ABZ081",
+            ],  # ToDo: Fix and remove comment
         ),
         ("ku-[nu ši]", ["KU", "ABZ075", "ABZ207a\\u002F207b\\u0020X"]),
         ("< : ši>-ku", ["KU"]),
@@ -53,7 +57,7 @@ from ebl.transliteration.domain.lark_parser import parse_line
         ("%akkgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("%suxgrc xX...ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω", []),
         ("|BUL.U₁₈|", ["ABZ11", "ABZ78"]),
-        ("|NOTREADING.NOTREADING|", ["NOTREADING", "NOTREADING"]),
+        ("|AMAR₂.AMAR₂|", ["AMAR₂", "AMAR₂"]),
     ],
 )
 def test_signs_visitor_string(
