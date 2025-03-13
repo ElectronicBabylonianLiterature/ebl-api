@@ -131,11 +131,11 @@ class Museum(Enum):
         "USA",
         "https://www.penn.museum/",
     )
-    PHYSICIANS_COLLEGE_PHILADELPHIA = (
-        "College of Physicians of Philadelphia",
+    MUETTER_MUSEUM = (
+        "The Mütter Museum at The College of Physicians of Philadelphia",
         "Philadelphia",
         "USA",
-        "https://www.collegeofphysicians.org/",
+        "https://muttermuseum.org/",
     )
     PIERPONT_MORGAN = (
         "Pierpont Morgan Library & Museum",
@@ -228,6 +228,12 @@ class Museum(Enum):
         "Baltimore",
         "USA",
         "https://thewalters.org/",
+    )
+    TOPKAPI_SARAYI = (
+        "Topkapı Sarayı Müzesi",
+        "Istanbul",
+        "TUR",
+        "https://muze.gen.tr/muze-detay/topkapi",
     )
     TRINITY_COLLEGE_DUBLIN = (
         "Trinity College Dublin",

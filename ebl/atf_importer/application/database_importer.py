@@ -135,8 +135,10 @@ class DatabaseImporter:
         transliteration = self.transliteration_factory.create(
             Atf(converted_transliteration)
         )
-        self.updater.update_transliteration(
-            parse_museum_number(museum_number), transliteration, self.user
+        self.updater.update_edition(
+            parse_museum_number(museum_number),
+            self.user,
+            transliteration=transliteration,
         )
 
     def _insert_lemmatization(

@@ -28,7 +28,7 @@ SCHEMA = FragmentSchema()
     "number,ignore_lowest_join",
     [(MuseumNumber.of("X.1"), False), (MuseumNumber.of("X.3"), True)],
 )
-def test_update_transliteration(
+def test_update_edition(
     number,
     ignore_lowest_join,
     fragment_updater,
@@ -69,8 +69,11 @@ def test_update_transliteration(
         .thenReturn()
     )
 
-    result = fragment_updater.update_transliteration(
-        number, transliteration, user, ignore_lowest_join
+    result = fragment_updater.update_edition(
+        number,
+        user,
+        transliteration=transliteration,
+        ignore_lowest_join=ignore_lowest_join,
     )
 
     assert result == (injected_fragment, False)
@@ -83,10 +86,12 @@ def test_update_update_transliteration_not_found(
     (when(fragment_repository).query_by_museum_number(number).thenRaise(NotFoundError))
 
     with pytest.raises(NotFoundError):
-        fragment_updater.update_transliteration(
+        fragment_updater.update_edition(
             number,
-            TransliterationUpdate(parse_atf_lark("$ (the transliteration)")),
             user,
+            transliteration=TransliterationUpdate(
+                parse_atf_lark("$ (the transliteration)")
+            ),
         )
 
 
@@ -106,11 +111,11 @@ def test_update_update_transliteration_not_lowest_join(
     )
 
     with pytest.raises(NotLowestJoinError):
-        fragment_updater.update_transliteration(
+        fragment_updater.update_edition(
             number,
-            TransliterationUpdate(parse_atf_lark("1. x"), "X"),
             user,
-            False,
+            transliteration=TransliterationUpdate(parse_atf_lark("1. x"), "X"),
+            ignore_lowest_join=False,
         )
 
 
@@ -313,7 +318,7 @@ def test_update_introduction(
         "introduction", updated_fragment
     ).thenReturn()
 
-    result = fragment_updater.update_introduction(number, introduction, user)
+    result = fragment_updater.update_edition(number, user, introduction=introduction)
     assert result == (updated_fragment, False)
 
 
@@ -333,5 +338,5 @@ def test_update_notes(
     ).thenReturn()
     when(fragment_repository).update_field("notes", updated_fragment).thenReturn()
 
-    result = fragment_updater.update_notes(number, notes, user)
+    result = fragment_updater.update_edition(number, user, notes=notes)
     assert result == (updated_fragment, False)
