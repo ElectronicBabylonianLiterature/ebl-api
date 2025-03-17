@@ -23,6 +23,7 @@ class CommonTransformer(Transformer):
         super().__init__()
         for method in [method for method in dir(self) if "ebl_atf_common" in method]:
             _method = method.replace("ebl_atf_common", "")
+            setattr(self, method.replace("ebl_atf_common__", ""), getattr(self, method))
             for prefix in PREFIXES:
                 setattr(self, f"{prefix}__{method}", getattr(self, method))
                 setattr(self, f"{prefix}{_method}", getattr(self, method))

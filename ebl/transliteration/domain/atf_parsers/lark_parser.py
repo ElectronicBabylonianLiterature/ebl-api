@@ -35,6 +35,7 @@ from ebl.transliteration.domain.labels import Label
 from functools import singledispatch
 
 ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
+ATF_COMMON_PATH = "lark_parser/ebl_atf_common.lark"
 kwargs_lark = {"maybe_placeholders": True, "rel_to": __file__}
 
 WORD_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="any_word")
@@ -52,6 +53,7 @@ MANUSCRIPT_PARSER = Lark.open(
     "lark_parser/ebl_atf_manuscript_line.lark", **kwargs_lark, start="manuscript_line"
 )
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
+LINE_NUMBER_PARSER = Lark.open(ATF_COMMON_PATH, **kwargs_lark, start="line_number")
 
 LABEL_PARSER = Lark.open(
     "lark_parser/ebl_atf.lark",
@@ -144,7 +146,7 @@ def parse_text_line(atf: str) -> TextLine:
 
 
 def parse_line_number(atf: str) -> AbstractLineNumber:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_common__line_number")
+    tree = LINE_NUMBER_PARSER.parse(atf)
     return LineTransformer().transform(tree)
 
 
