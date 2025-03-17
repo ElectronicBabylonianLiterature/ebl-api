@@ -28,5 +28,5 @@ def test_statistics(fragmentarium, fragment_repository, when):
     assert fragmentarium.statistics() == {
         "transliteratedFragments": transliterated_fragments,
         "lines": lines,
-        "totalFragments": total_fragments
+        "totalFragments": total_fragments,
     }
