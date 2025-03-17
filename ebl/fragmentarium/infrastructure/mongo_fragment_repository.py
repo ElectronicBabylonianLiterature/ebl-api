@@ -56,6 +56,9 @@ class MongoFragmentRepository(
             ]
         )
 
+    def count_total_fragments(self) -> int:
+        return self._fragments.count_documents({})
+
     def count_transliterated_fragments(self, only_authorized=False) -> int:
         query = HAS_TRANSLITERATION
         if only_authorized:
