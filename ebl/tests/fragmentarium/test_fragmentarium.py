@@ -15,6 +15,7 @@ def test_needs_revision(fragmentarium, fragment_repository, when):
 def test_statistics(fragmentarium, fragment_repository, when):
     transliterated_fragments = 2
     lines = 4
+    total_fragments = 0
 
     (
         when(fragment_repository)
@@ -26,4 +27,5 @@ def test_statistics(fragmentarium, fragment_repository, when):
     assert fragmentarium.statistics() == {
         "transliteratedFragments": transliterated_fragments,
         "lines": lines,
+        "totalFragments": total_fragments
     }
