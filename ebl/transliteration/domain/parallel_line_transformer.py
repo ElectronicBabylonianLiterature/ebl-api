@@ -60,6 +60,13 @@ class ParallelLineTransformer(CommonTransformer):
     def ebl_atf_parallel_line__chapter_name(
         self, stage_abbreviation, version, name
     ) -> ChapterName:
+        return self._transform_chapter_name(stage_abbreviation, version, name)
+
+    @v_args(inline=True)
+    def chapter_name(self, stage_abbreviation, version, name) -> ChapterName:
+        return self._transform_chapter_name(stage_abbreviation, version, name)
+
+    def _transform_chapter_name(self, stage_abbreviation, version, name) -> ChapterName:
         return ChapterName(
             [stage for stage in Stage if stage.abbreviation == stage_abbreviation][0],
             "".join(version.children) if version else "",
