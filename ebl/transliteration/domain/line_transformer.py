@@ -39,5 +39,6 @@ class LineTransformer(
         return ControlLine(prefix, content)
 
     @v_args(inline=True)
-    def ebl_atf_translation_line__legacy_translation_block_line(self, *args) -> None:
-        raise ParseError
+    def ebl_atf_translation_line__legacy_translation_block_line(self, tree) -> None:
+        line = "".join([str(child) for child in tree.children])
+        raise ParseError(line)

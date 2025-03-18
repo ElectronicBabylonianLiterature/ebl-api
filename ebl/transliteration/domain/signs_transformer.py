@@ -1,4 +1,5 @@
-from lark import Token, Tree
+from typing import Sequence
+from lark import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
@@ -115,12 +116,26 @@ class SignTransformer(Transformer):
         return Tree("ebl_atf_text_line__sub_compound", ["(", *children, ")"])
 
     def ebl_atf_text_line__compound_grapheme(self, children):
+        return CompoundGrapheme.of(self._parsed_graphemes_to_strings(children))
+
+    def _parsed_graphemes_to_strings(self, children: Sequence) -> Sequence[str]:
+        children = self._flatten_grapheme_elements(children)
+        _children = []
+        for index, part in enumerate(children):
+            _children.append(str(part))
+            if (
+                index + 1 < len(children)
+                and isinstance(part, Grapheme)
+                and isinstance(children[index + 1], Grapheme)
+            ):
+                _children.append(".")
+        return "".join(_children).split(".")
+
+    def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
         _children = []
         for part in children:
-            if isinstance(part, Token):
-                _children.append(part.value)
-            elif isinstance(part, Tree):
-                _children.append(tree_to_string(part))
+            if isinstance(part, Tree):
+                _children += self._flatten_grapheme_elements(part.children)
             else:
-                _children.append(str(part))
-        return CompoundGrapheme.of(_children)
+                _children.append(part)
+        return _children

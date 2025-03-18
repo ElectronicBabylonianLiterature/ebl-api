@@ -36,8 +36,5 @@ def test_create_invalid_atf(sign_repository):
         factory.create(atf)
 
     assert excinfo.value.errors == [
-        {
-            "description": ("Invalid line:  {kur}?\n" "                    ^\n"),
-            "lineNumber": 1,
-        }
+        {"description": "Invalid line: 1. {kur}?", "lineNumber": 1}
     ]
