@@ -111,7 +111,7 @@ class Fragment(FragmentExternalNumbers):
     accession: Optional[Accession] = None
     publication: str = ""
     description: str = ""
-    cdli_image: Sequence[str] = []
+    cdli_images: Sequence[str] = []
     collection: str = ""
     legacy_script: str = ""
     museum: Museum = Museum.UNKNOWN
