@@ -39,6 +39,9 @@ class FragmentSchema(Schema):
     accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
     publication = fields.String(required=True)
     description = fields.String(required=True)
+    cdli_images = fields.List(
+        fields.String(), data_key="cdliImages"
+    )
     collection = fields.String(required=True)
     legacy_script = fields.String(data_key="legacyScript", load_default="")
     traditional_references = fields.List(

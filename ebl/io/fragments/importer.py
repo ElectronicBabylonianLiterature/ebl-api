@@ -13,6 +13,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
 import datetime
+from .sitemap_updater import update_sitemap_in_frontend
 
 
 def _load_json(path: str):
@@ -136,6 +137,7 @@ if __name__ == "__main__":
     IMPORT_CMD = "import"
     VALIDATION_CMD = "validate"
     INDEX_CMD = "reindex"
+    UPDATE_SITEMAP_CMD = "update-sitemap"
 
     parser = argparse.ArgumentParser(
         description=(
@@ -193,6 +195,14 @@ if __name__ == "__main__":
         parents=[_output_parser],
     )
 
+    update_sitemap_info = "Update sitemap in ebl-frontend"
+    update_sitemap_parser = subparsers.add_parser(
+        UPDATE_SITEMAP_CMD,
+        help=update_sitemap_info,
+        description=update_sitemap_info,
+        parents=[_output_parser],
+    )
+
     def _reindex_database(collection, db):
         print(f"Reindexing 'fragments' collection in the {db!r} database...")
         print("Calculating _sortKeys (this may take a while)...")
@@ -218,6 +228,10 @@ if __name__ == "__main__":
 
     if args.subcommand == INDEX_CMD:
         _reindex_database(COLLECTION, args.database)
+        sys.exit()
+
+    if args.subcommand == UPDATE_SITEMAP_CMD:
+        update_sitemap_in_frontend()
         sys.exit()
 
     print("Loading data...")
@@ -270,8 +284,7 @@ if __name__ == "__main__":
     valid_count = fragment_count - fail_count
 
     print(
-        f"Validation of {valid_count} out of {fragment_count} "
-        "document(s) successful."
+        f"Validation of {valid_count} out of {fragment_count} document(s) successful."
     )
 
     if not valid_count:

@@ -15,7 +15,6 @@ from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.cache.application.cache import create_cache
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
-from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -125,7 +124,6 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
 
     create_signs_routes(api, context)
     create_bibliography_routes(api, context)
-    create_cdli_routes(api)
     create_corpus_routes(api, context)
     create_dictionary_routes(api, context)
     create_files_route(api, context)
