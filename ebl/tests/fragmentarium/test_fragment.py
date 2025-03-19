@@ -50,12 +50,14 @@ def test_accession():
     assert fragment.accession == "accession-3"
 
 
-
 def cdli_images():
     fragment = FragmentFactory.build(
         cdli_images=["dl/photo/P550449.jpg", "dl/lineart/P550449_l.jpg"]
     )
-    assert fragment.traditional_references == ["dl/photo/P550449.jpg", "dl/lineart/P550449_l.jpg"]
+    assert fragment.cdli_images == [
+        "dl/photo/P550449.jpg",
+        "dl/lineart/P550449_l.jpg",
+    ]
 
 
 def traditional_references():
