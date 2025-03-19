@@ -140,13 +140,13 @@ class SignsVisitor(TokenVisitor):
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if self._is_deep and is_splittable(grapheme.name):
             for part in grapheme.compound_parts:
-                self._visit_compount_grapheme_part(strip_flags(part))
+                self._visit_compound_grapheme_part(strip_flags(part))
         else:
             self._standardizations.append(
                 self._find(SignName(strip_flags(grapheme.name)))
             )
 
-    def _visit_compount_grapheme_part(self, stripped_part: str) -> None:
+    def _visit_compound_grapheme_part(self, stripped_part: str) -> None:
         try:
             reading = parse_reading(stripped_part.lower())
             self.visit_named_sign(reading)
