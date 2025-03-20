@@ -29,7 +29,7 @@ _require_both: commentary_protocol
             | divider
             | line_break
 
-_require_both_optional_ws: _WORD_SEPARATOR? (divider_variant | divider)
+_require_both_optional_ws.-5: _WORD_SEPARATOR? (divider_variant | divider)
 
 _have_both: tabulation
          | column_token
@@ -167,15 +167,13 @@ _any_close: (close_intentional_omission
 
 variant: variant_part (_VARIANT_SEPARATOR variant_part)+
 ?variant_part: unidentified_sign
-             | unclear_sign
-             | legacy_uncertain_sign
-             | reading
-             | logogram
-             | surrogate
-             | number
-             | compound_grapheme
-
-
+            | unclear_sign
+            | legacy_uncertain_sign
+            | reading
+            | logogram
+            | surrogate
+            | number
+            | compound_grapheme
 
 egyptian_metrical_feet_separator: "•" flags
 ?legacy_uncertain_sign: legacy_uncertain_sign_prefix logogram
