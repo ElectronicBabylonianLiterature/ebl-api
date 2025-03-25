@@ -544,7 +544,7 @@ correction = '!';
 collation = '*';
 no-longer-visible = '°';
 
-modifier = { '@', ( 'c' | 'f' | 'g' | 's' | 't' | 'n'
+modifier = { '@', ( 'aš' | 'c' | 'f' | 'g' | 's' | 't' | 'n'
                   | 'z' | 'k' | 'r' | 'h' | 'v' | { decimal-digit }- ) };
 
 sub-index-character = '₀' | '₁' | '₂' | '₃' | '₄' | '₅'
