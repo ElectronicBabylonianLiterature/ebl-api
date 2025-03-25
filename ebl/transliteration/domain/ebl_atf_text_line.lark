@@ -276,7 +276,7 @@ DAMAGE: "#"
 
 modifiers: MODIFIER*
 MODIFIER: ("@" (MODIFIER_CHARACTER | ("0".."9")+))
-MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
+MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v" | "aš"
 
 in_word_newline: IN_WORD_NEWLINE
 IN_WORD_NEWLINE: ";"
