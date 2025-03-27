@@ -16,6 +16,7 @@ from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.record import Record
+from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.markup import MarkupPart
@@ -217,6 +218,10 @@ class Fragment(FragmentExternalNumbers):
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
+        return attr.evolve(self, text=text)
+
+    def update_lemma_annotation(self, annotation: TextLemmaAnnotation) -> "Fragment":
+        text = self.text.update_lemma_annotation(annotation)
         return attr.evolve(self, text=text)
 
     def get_matching_lines(self, query: TransliterationQuery) -> Text:

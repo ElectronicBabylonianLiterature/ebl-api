@@ -9,6 +9,7 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, Script
+from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -123,6 +124,17 @@ class FragmentUpdater:
         updated_fragment = fragment.update_lemmatization(lemmatization)
 
         self._create_changelog(user, fragment, updated_fragment)
+        self._repository.update_field("lemmatization", updated_fragment)
+
+        return self._create_result(updated_fragment)
+
+    def update_lemma_annotation(
+        self, number: MuseumNumber, annotation: TextLemmaAnnotation, user: User
+    ) -> Tuple[Fragment, bool]:
+        fragment = self._repository.query_by_museum_number(number)
+        updated_fragment = fragment.update_lemma_annotation(annotation)
+
+        # self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("lemmatization", updated_fragment)
 
         return self._create_result(updated_fragment)
