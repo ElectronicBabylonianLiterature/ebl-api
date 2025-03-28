@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List, Optional, Sequence, Iterator
 
 from marshmallow import EXCLUDE
@@ -10,6 +11,7 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
@@ -26,6 +28,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended import (
@@ -43,6 +46,133 @@ def load_museum_number(data: dict) -> MuseumNumber:
 def load_query_result(cursor: Iterator) -> QueryResult:
     data = next(cursor, None)
     return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+
+
+def chapter_lemma_pipeline(clean_values: List[str]) -> List[dict]:
+    return [
+        {
+            "$project": {
+                "_id": 1,
+                "lines.variants.reconstruction": {
+                    "cleanValue": 1,
+                    "uniqueLemma": 1,
+                },
+                "lines.variants.manuscripts.line.content": {
+                    "cleanValue": 1,
+                    "uniqueLemma": 1,
+                },
+            }
+        },
+        {"$unwind": "$lines"},
+        {"$unwind": "$lines.variants"},
+        {
+            "$project": {
+                "reconstruction": "$lines.variants.reconstruction",
+                "manuscripts": "$lines.variants.manuscripts",
+            }
+        },
+        {
+            "$facet": {
+                "reconstructionLemmas": [
+                    {"$project": {"_id": False, "reconstruction": True}},
+                    {"$unwind": "$reconstruction"},
+                    {"$replaceRoot": {"newRoot": "$reconstruction"}},
+                    {
+                        "$match": {
+                            "uniqueLemma.0": {"$exists": True},
+                            "cleanValue": {"$in": clean_values},
+                        }
+                    },
+                ],
+                "manuscriptLemmas": [
+                    {"$project": {"_id": False, "manuscripts": True}},
+                    {"$unwind": "$manuscripts"},
+                    {"$unwind": "$manuscripts.line.content"},
+                    {"$replaceRoot": {"newRoot": "$manuscripts.line.content"}},
+                    {
+                        "$match": {
+                            "uniqueLemma.0": {"$exists": True},
+                            "cleanValue": {"$in": clean_values},
+                        }
+                    },
+                ],
+            }
+        },
+        {
+            "$project": {
+                "combinedLemmas": {
+                    "$concatArrays": ["$reconstructionLemmas", "$manuscriptLemmas"]
+                }
+            }
+        },
+        {"$unwind": "$combinedLemmas"},
+        {"$replaceRoot": {"newRoot": "$combinedLemmas"}},
+    ]
+
+
+def fragment_lemma_pipeline(clean_values: List[str]) -> List[dict]:
+    return [
+        {
+            "$match": {
+                "text.lines.content": {
+                    "$elemMatch": {
+                        "cleanValue": {"$in": clean_values},
+                        "uniqueLemma.0": {"$exists": True},
+                    }
+                }
+            }
+        },
+        {"$project": {"_id": False, "text.lines": True}},
+        {"$unwind": "$text.lines"},
+        {"$project": {"tokens": "$text.lines.content"}},
+        {"$unwind": "$tokens"},
+        {
+            "$project": {
+                "cleanValue": "$tokens.cleanValue",
+                "uniqueLemma": "$tokens.uniqueLemma",
+            }
+        },
+        {
+            "$match": {
+                "uniqueLemma.0": {"$exists": True},
+                "cleanValue": {"$in": clean_values},
+            }
+        },
+        {
+            "$unionWith": {
+                "coll": "chapters",
+                "pipeline": chapter_lemma_pipeline(clean_values),
+            }
+        },
+    ]
+
+
+def aggregate_counts() -> List[dict]:
+    return [
+        {
+            "$group": {
+                "_id": {"cleanValue": "$cleanValue", "uniqueLemma": "$uniqueLemma"},
+                "count": {"$sum": 1},
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "cleanValue": "$_id.cleanValue",
+                "uniqueLemma": "$_id.uniqueLemma",
+                "count": True,
+            }
+        },
+        {"$sort": {"count": -1}},
+        {
+            "$group": {
+                "_id": "$cleanValue",
+                "lemmatizations": {
+                    "$addToSet": {"uniqueLemma": "$uniqueLemma", "count": "$count"}
+                },
+            }
+        },
+    ]
 
 
 class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
@@ -221,6 +351,26 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             ]
         )
         return list(fragments)
+
+    def prefill_lemmas(self, number: MuseumNumber) -> TextLemmaAnnotation:
+        fragment = self.query_by_museum_number(number)
+        clean_values = defaultdict(list)
+
+        for line_index, line in enumerate(fragment.text.lines):
+            if not isinstance(line, TextLine):
+                continue
+            for token_index, token in enumerate(line.content):
+                if token.lemmatizable:
+                    clean_values[token.clean_value].append((line_index, token_index))
+
+        print("starting aggregation")
+        result = self._fragments.aggregate(
+            [*fragment_lemma_pipeline(list(clean_values)), *aggregate_counts()]
+        )
+        print("got result")
+        print(next(result))
+
+        return {}
 
 
 class MongoFragmentRepositoryGet(

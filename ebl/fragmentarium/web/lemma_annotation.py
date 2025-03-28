@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.users.web.require_scope import require_scope
@@ -44,3 +45,13 @@ class LemmaAnnotationResource:
             user,
         )
         resp.media = create_response_dto(updated_fragment, user, has_photo)
+
+
+class AutofillLemmasResource:
+    def __init__(self, repository: FragmentRepository):
+        self._repository = repository
+
+    @falcon.before(require_scope, "lemmatize:fragments")
+    def on_get(self, req, resp, number: str):
+        museum_number = parse_museum_number(number)
+        self._repository.prefill_lemmas(museum_number)
