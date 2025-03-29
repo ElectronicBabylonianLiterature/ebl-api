@@ -9,3 +9,4 @@ LineLemmaAnnotation = NewType("LineLemmaAnnotation", Dict[TokenIndex, Lemma])
 TextLemmaAnnotation = NewType(
     "TextLemmaAnnotation", Dict[LineIndex, LineLemmaAnnotation]
 )
+LemmaSuggestions = NewType("LemmaSuggestions", Dict[str, Lemma])

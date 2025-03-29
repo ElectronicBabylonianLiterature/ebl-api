@@ -54,4 +54,4 @@ class AutofillLemmasResource:
     @falcon.before(require_scope, "lemmatize:fragments")
     def on_get(self, req, resp, number: str):
         museum_number = parse_museum_number(number)
-        self._repository.prefill_lemmas(museum_number)
+        resp.media = self._repository.prefill_lemmas(museum_number)
