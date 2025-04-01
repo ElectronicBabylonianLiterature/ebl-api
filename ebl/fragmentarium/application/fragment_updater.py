@@ -134,7 +134,7 @@ class FragmentUpdater:
         fragment = self._repository.query_by_museum_number(number)
         updated_fragment = fragment.update_lemma_annotation(annotation)
 
-        # self._create_changelog(user, fragment, updated_fragment)
+        self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("lemmatization", updated_fragment)
 
         return self._create_result(updated_fragment)
