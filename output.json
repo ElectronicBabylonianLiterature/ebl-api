@@ -1,0 +1,5353 @@
+[{
+    "_id" : "IM.10597",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "89. Pl. LXXI: IM 10597; lexical (*nabnītu*).",
+        "parts" : [
+            {
+                "text" : "89. Pl. LXXI: IM 10597; lexical (*nabnītu*).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 89 pl. LXXI", "notes" : "89. Pl. LXXI: IM 10597; lexical (*nabnītu*).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "10597",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.10863",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "53. Pl. XLI: IM 10863; riddles? Cf. 1 ff.; ᵈza-qàr *a-li-a-at* / *a-li-a-at ù* giz-zuₓ *ú-ul i-šu* / *ša-ru-ur* ᵈ*šamaš*. Very careless writing. School exercise.",
+        "parts" : [
+            {
+                "text" : "53. Pl. XLI: IM 10863; riddles? Cf. 1 ff.; ᵈza-qàr *a-li-a-at* / *a-li-a-at ù* giz-zuₓ *ú-ul i-šu* / *ša-ru-ur* ᵈ*šamaš*. Very careless writing. School exercise.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 53 pl. XLI", "notes" : "53. Pl. XLI: IM 10863; riddles? Cf. 1 ff.; ᵈza-qàr *a-li-a-at* / *a-li-a-at ù* giz-zuₓ *ú-ul i-šu* / *ša-ru-ur* ᵈ*šamaš*. Very careless writing. School exercise.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "10863",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.10",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "8. Pl. VIII: IM 11053, 10; duplicate to SRT 9, 1–21 School exercise. hymn to Inanna. Cf. SGL 2, 123.",
+        "parts" : [
+            {
+                "text" : "8. Pl. VIII: IM 11053, 10; duplicate to SRT 9, 1–21 School exercise. hymn to Inanna. Cf. SGL 2, 123.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 8 pl. VIII", "notes" : "8. Pl. VIII: IM 11053, 10; duplicate to SRT 9, 1–21 School exercise. hymn to Inanna. Cf. SGL 2, 123.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "10"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.120",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "81. Pl. LXV: IM 11053, 120; liver omina; *ṣiptu*. Surface nearly completely worn off, but one may read somewhat more with the help of duplicates.",
+        "parts" : [
+            {
+                "text" : "81. Pl. LXV: IM 11053, 120; liver omina; *ṣiptu*. Surface nearly completely worn off, but one may read somewhat more with the help of duplicates.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 81 pl. LXV", "notes" : "81. Pl. LXV: IM 11053, 120; liver omina; *ṣiptu*. Surface nearly completely worn off, but one may read somewhat more with the help of duplicates.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "120"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.136",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "82. Pl. LXVI: IM 11053, 136; report on extispicy; cf. A. Goetze, JCS 11 (1957) 89 ff.; fragment.",
+        "parts" : [
+            {
+                "text" : "82. Pl. LXVI: IM 11053, 136; report on extispicy; cf. A. Goetze, JCS 11 (1957) 89 ff.; fragment.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 82 pl. LXVI", "notes" : "82. Pl. LXVI: IM 11053, 136; report on extispicy; cf. A. Goetze, JCS 11 (1957) 89 ff.; fragment.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "136"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.163",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "16. Pl. X: IM 11053, 163; letter to Nintinugga; cf. now Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1967) 137 ff.",
+        "parts" : [
+            {
+                "text" : "16. Pl. X: IM 11053, 163; letter to Nintinugga; cf. now Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1967) 137 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 16 pl. X", "notes" : "16. Pl. X: IM 11053, 163; letter to Nintinugga; cf. now Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1967) 137 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "163"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.329",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "2. Pl. III: IM 11053, 329 + IM 11053, 54b; the latter being joined by a dealer to IM 11053, 54a in order to make a complete tablet out of two different pieces. Wherever in this catalogue numbers are followed by: a, b, c etc., the pieces were wrongly put together by a dealer for the same purpose. IM 11053, 54b was published by me in Sumer 15 (1959) Pl. 15. After finding the other part I recopied the two pieces. Dumuzi’s Death. Cf. B. Alster, Dumuzi’s Dream (Copenhagen 1972).",
+        "parts" : [
+            {
+                "text" : "2. Pl. III: IM 11053, 329 + IM 11053, 54b; the latter being joined by a dealer to IM 11053, 54a in order to make a complete tablet out of two different pieces. Wherever in this catalogue numbers are followed by: a, b, c etc., the pieces were wrongly put together by a dealer for the same purpose. IM 11053, 54b was published by me in Sumer 15 (1959) Pl. 15. After finding the other part I recopied the two pieces. Dumuzi’s Death. Cf. B. Alster, Dumuzi’s Dream (Copenhagen 1972).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 2 pl. III", "notes" : "2. Pl. III: IM 11053, 329 + IM 11053, 54b; the latter being joined by a dealer to IM 11053, 54a in order to make a complete tablet out of two different pieces. Wherever in this catalogue numbers are followed by: a, b, c etc., the pieces were wrongly put together by a dealer for the same purpose. IM 11053, 54b was published by me in Sumer 15 (1959) Pl. 15. After finding the other part I recopied the two pieces. Dumuzi’s Death. Cf. B. Alster, Dumuzi’s Dream (Copenhagen 1972).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "329"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.40",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "17. Pl. XI: IM 11053, 40; fragment; left corner of a tablet. Probably beginning of a hymn to Šulgi.",
+        "parts" : [
+            {
+                "text" : "17. Pl. XI: IM 11053, 40; fragment; left corner of a tablet. Probably beginning of a hymn to Šulgi.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 17 pl. XI", "notes" : "17. Pl. XI: IM 11053, 40; fragment; left corner of a tablet. Probably beginning of a hymn to Šulgi.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "40"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.45",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "86. Pl. LXIX: IM 11053, 45; godlist. Probably four column-text. Note col. 2, 12: ᵈhendur-sagₓ(ŠED).",
+        "parts" : [
+            {
+                "text" : "86. Pl. LXIX: IM 11053, 45; godlist. Probably four column-text. Note col. 2, 12: ᵈhendur-sagₓ(ŠED).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 86 pl. LXIX", "notes" : "86. Pl. LXIX: IM 11053, 45; godlist. Probably four column-text. Note col. 2, 12: ᵈhendur-sagₓ(ŠED).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "45"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.54A",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "47. Pl. XXXV: IM 11053, 54a; cf. Sumer 15 (1959) pl. 2. It is the difficult passage where Gilgameš tricked Huwawa which begins with the proverb, JCS 1 (1947) 18, 117; ní ì-gál … // umunₓ ì-gál …: “awe defeats with awe, shrewdness with shrewdness”.",
+        "parts" : [
+            {
+                "text" : "47. Pl. XXXV: IM 11053, 54a; cf. Sumer 15 (1959) pl. 2. It is the difficult passage where Gilgameš tricked Huwawa which begins with the proverb, JCS 1 (1947) 18, 117; ní ì-gál … // umunₓ ì-gál …: “awe defeats with awe, shrewdness with shrewdness”.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 47 pl. XXXV", "notes" : "47. Pl. XXXV: IM 11053, 54a; cf. Sumer 15 (1959) pl. 2. It is the difficult passage where Gilgameš tricked Huwawa which begins with the proverb, JCS 1 (1947) 18, 117; ní ì-gál … // umunₓ ì-gál …: “awe defeats with awe, shrewdness with shrewdness”.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "54A"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.54B",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "2. Pl. III: IM 11053, 329 + IM 11053, 54b; the latter being joined by a dealer to IM 11053, 54a in order to make a complete tablet out of two different pieces. Wherever in this catalogue numbers are followed by: a, b, c etc., the pieces were wrongly put together by a dealer for the same purpose. IM 11053, 54b was published by me in Sumer 15 (1959) Pl. 15. After finding the other part I recopied the two pieces. Dumuzi’s Death. Cf. B. Alster, Dumuzi’s Dream (Copenhagen 1972).",
+        "parts" : [
+            {
+                "text" : "2. Pl. III: IM 11053, 329 + IM 11053, 54b; the latter being joined by a dealer to IM 11053, 54a in order to make a complete tablet out of two different pieces. Wherever in this catalogue numbers are followed by: a, b, c etc., the pieces were wrongly put together by a dealer for the same purpose. IM 11053, 54b was published by me in Sumer 15 (1959) Pl. 15. After finding the other part I recopied the two pieces. Dumuzi’s Death. Cf. B. Alster, Dumuzi’s Dream (Copenhagen 1972).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 2 pl. III", "notes" : "2. Pl. III: IM 11053, 329 + IM 11053, 54b; the latter being joined by a dealer to IM 11053, 54a in order to make a complete tablet out of two different pieces. Wherever in this catalogue numbers are followed by: a, b, c etc., the pieces were wrongly put together by a dealer for the same purpose. IM 11053, 54b was published by me in Sumer 15 (1959) Pl. 15. After finding the other part I recopied the two pieces. Dumuzi’s Death. Cf. B. Alster, Dumuzi’s Dream (Copenhagen 1972).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "54B"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.56",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "9. Pl. VIII: IM 11053, 56; fragment of a hymn to Inanna (or: Ninisina? cf. 5’: -n]a-me-en nu-nuz-zi nin-eš-bar-ra-me-en). School exercise.",
+        "parts" : [
+            {
+                "text" : "9. Pl. VIII: IM 11053, 56; fragment of a hymn to Inanna (or: Ninisina? cf. 5’: -n]a-me-en nu-nuz-zi nin-eš-bar-ra-me-en). School exercise.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 9 pl. VIII", "notes" : "9. Pl. VIII: IM 11053, 56; fragment of a hymn to Inanna (or: Ninisina? cf. 5’: -n]a-me-en nu-nuz-zi nin-eš-bar-ra-me-en). School exercise.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "56"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11053.99",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "36. Pl. XXV: IM 11053, 99. Fragment of king-list; cf. H. J. Nissen, ZA 57 (1965) 1 ff. School exercise.",
+        "parts" : [
+            {
+                "text" : "36. Pl. XXV: IM 11053, 99. Fragment of king-list; cf. H. J. Nissen, ZA 57 (1965) 1 ff. School exercise.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 36 pl. XXV", "notes" : "36. Pl. XXV: IM 11053, 99. Fragment of king-list; cf. H. J. Nissen, ZA 57 (1965) 1 ff. School exercise.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11053",
+        "suffix" : "99"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.100",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "44. Pl. XXXI: IM 11087, 100; school exercise; literary fragment (wisdom?). Neo-Babylonian script.",
+        "parts" : [
+            {
+                "text" : "44. Pl. XXXI: IM 11087, 100; school exercise; literary fragment (wisdom?). Neo-Babylonian script.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 44 pl. XXXI", "notes" : "44. Pl. XXXI: IM 11087, 100; school exercise; literary fragment (wisdom?). Neo-Babylonian script.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "100"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.31",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "71. Pl. LVIII: IM 11087, 31; incantation, Neo-Babylonian script.",
+        "parts" : [
+            {
+                "text" : "71. Pl. LVIII: IM 11087, 31; incantation, Neo-Babylonian script.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 71 pl. LVIII", "notes" : "71. Pl. LVIII: IM 11087, 31; incantation, Neo-Babylonian script.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "31"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.59",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "77. Pl. LXI: IM 11087, 59; this is the missing fragment joining IM 11087, 11 +11053, 20 +11053, 325, cf. Sumer 11/2 (1955) pl. 12. Obv. 1 = l. 24; the Rev. was left unpublished by Weissbach and is better conserved than the rest of the Rev.",
+        "parts" : [
+            {
+                "text" : "77. Pl. LXI: IM 11087, 59; this is the missing fragment joining IM 11087, 11 +11053, 20 +11053, 325, cf. Sumer 11/2 (1955) pl. 12. Obv. 1 = l. 24; the Rev. was left unpublished by Weissbach and is better conserved than the rest of the Rev.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 77 pl. LXI", "notes" : "77. Pl. LXI: IM 11087, 59; this is the missing fragment joining IM 11087, 11 +11053, 20 +11053, 325, cf. Sumer 11/2 (1955) pl. 12. Obv. 1 = l. 24; the Rev. was left unpublished by Weissbach and is better conserved than the rest of the Rev.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "59"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.61",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "92. Pl. LXXII: IM 11087, 61; small school exercise.",
+        "parts" : [
+            {
+                "text" : "92. Pl. LXXII: IM 11087, 61; small school exercise.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 92 pl. LXXII", "notes" : "92. Pl. LXXII: IM 11087, 61; small school exercise.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "61"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.85",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "14. Pl. IX: IM 11087, 85; fragment. Duplicate of TCL 15, 21, 66 ff. (+ other dupl.); cf. S. N. Kramer, PAPS 107 (1963) 508.",
+        "parts" : [
+            {
+                "text" : "14. Pl. IX: IM 11087, 85; fragment. Duplicate of TCL 15, 21, 66 ff. (+ other dupl.); cf. S. N. Kramer, PAPS 107 (1963) 508.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 14 pl. IX", "notes" : "14. Pl. IX: IM 11087, 85; fragment. Duplicate of TCL 15, 21, 66 ff. (+ other dupl.); cf. S. N. Kramer, PAPS 107 (1963) 508.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "85"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.9",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "37. Pl. XXV: IM 11087, 9; copy of inscription of Enlilbani on a clay tablet Y. Kärki, Die sumerischen Königsinschriften (Helsinki 1968) 18, Enlilbani 2.",
+        "parts" : [
+            {
+                "text" : "37. Pl. XXV: IM 11087, 9; copy of inscription of Enlilbani on a clay tablet Y. Kärki, Die sumerischen Königsinschriften (Helsinki 1968) 18, Enlilbani 2.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 37 pl. XXV", "notes" : "37. Pl. XXV: IM 11087, 9; copy of inscription of Enlilbani on a clay tablet Y. Kärki, Die sumerischen Königsinschriften (Helsinki 1968) 18, Enlilbani 2.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "9"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.93",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "27. Pl. XVII: IM 11087,93, school exercise; literary fragment; bilingual.",
+        "parts" : [
+            {
+                "text" : "27. Pl. XVII: IM 11087,93, school exercise; literary fragment; bilingual.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 27 pl. XVII", "notes" : "27. Pl. XVII: IM 11087,93, school exercise; literary fragment; bilingual.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "93"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087.Y",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "75. Pl. LX: IM 11087y; fragment of an incantation; Neo-Babylonian script.",
+        "parts" : [
+            {
+                "text" : "75. Pl. LX: IM 11087y; fragment of an incantation; Neo-Babylonian script.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 75 pl. LX", "notes" : "75. Pl. LX: IM 11087y; fragment of an incantation; Neo-Babylonian script.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : "Y"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.11087",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "68. Pl. LVII: IM 11087; incantation, legitimation-type (udug-hul). Remark the writing of the sign KA and cf. HSAO 233 for tablets with the same ductus.",
+        "parts" : [
+            {
+                "text" : "68. Pl. LVII: IM 11087; incantation, legitimation-type (udug-hul). Remark the writing of the sign KA and cf. HSAO 233 for tablets with the same ductus.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 68 pl. LVII", "notes" : "68. Pl. LVII: IM 11087; incantation, legitimation-type (udug-hul). Remark the writing of the sign KA and cf. HSAO 233 for tablets with the same ductus.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "11087",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.12183.A",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "4. Pl. IV: IM 12183a; the curse of Accad, cf. A. Falkenstein, ZA 57 (1965) 58, 154 ff. I read the first line: [ku]r-gi/gú-bi-na-šè (=gú-bi-in) and accordingly in the other texts: gủ-bí-na.",
+        "parts" : [
+            {
+                "text" : "4. Pl. IV: IM 12183a; the curse of Accad, cf. A. Falkenstein, ZA 57 (1965) 58, 154 ff. I read the first line: [ku]r-gi/gú-bi-na-šè (=gú-bi-in) and accordingly in the other texts: gủ-bí-na.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 4 pl. IV", "notes" : "4. Pl. IV: IM 12183a; the curse of Accad, cf. A. Falkenstein, ZA 57 (1965) 58, 154 ff. I read the first line: [ku]r-gi/gú-bi-na-šè (=gú-bi-in) and accordingly in the other texts: gủ-bí-na.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "12183",
+        "suffix" : "A"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13347",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "38. Pl. XXVI-XXVII: IM 13347; Sumer 11/2 (1955) pl. 1. Cf. Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1964) 42 ff. and Sumer 26 (1970) 160 ff.; add: MDP 27, 81, 212. Royal correspondance.",
+        "parts" : [
+            {
+                "text" : "38. Pl. XXVI-XXVII: IM 13347; Sumer 11/2 (1955) pl. 1. Cf. Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1964) 42 ff. and Sumer 26 (1970) 160 ff.; add: MDP 27, 81, 212. Royal correspondance.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 38 pl. XXVI-XXVII", "notes" : "38. Pl. XXVI-XXVII: IM 13347; Sumer 11/2 (1955) pl. 1. Cf. Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1964) 42 ff. and Sumer 26 (1970) 160 ff.; add: MDP 27, 81, 212. Royal correspondance.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13347",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13348",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "6. Pl. VI: IM 13348; cf. E. Gordon, BiOr 17 (1960) 141 and ib. 151 f. Essay collection three, four, and five. S. N. Kramer, UET 6, p. 3 ad 157–158. Dispute between two women. Bilingual.",
+        "parts" : [
+            {
+                "text" : "6. Pl. VI: IM 13348; cf. E. Gordon, BiOr 17 (1960) 141 and ib. 151 f. Essay collection three, four, and five. S. N. Kramer, UET 6, p. 3 ad 157–158. Dispute between two women. Bilingual.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 6 pl. VI", "notes" : "6. Pl. VI: IM 13348; cf. E. Gordon, BiOr 17 (1960) 141 and ib. 151 f. Essay collection three, four, and five. S. N. Kramer, UET 6, p. 3 ad 157–158. Dispute between two women. Bilingual.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13348",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13350",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "88. Pl. LXX: IM 13350; bilingual; lexical, cf. MSL 11, 73.",
+        "parts" : [
+            {
+                "text" : "88. Pl. LXX: IM 13350; bilingual; lexical, cf. MSL 11, 73.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 88 pl. LXX", "notes" : "88. Pl. LXX: IM 13350; bilingual; lexical, cf. MSL 11, 73.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13350",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13353",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "79. Pl. LXII: IM 13353; various historical liver omina. Is the strange looking sign in l. 5, 8 and 14 (like a cursive BUR) UD-*gunû*? *qerbu*?",
+        "parts" : [
+            {
+                "text" : "79. Pl. LXII: IM 13353; various historical liver omina. Is the strange looking sign in l. 5, 8 and 14 (like a cursive BUR) UD-*gunû*? *qerbu*?",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 79 pl. LXII", "notes" : "79. Pl. LXII: IM 13353; various historical liver omina. Is the strange looking sign in l. 5, 8 and 14 (like a cursive BUR) UD-*gunû*? *qerbu*?", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13353",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13365",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "29. Pl. XVIII: IM 13365; bilingual fragment; upper corner of a one column tablet. Writing Neo-Babylonian or perhaps Cassite. Commentary?",
+        "parts" : [
+            {
+                "text" : "29. Pl. XVIII: IM 13365; bilingual fragment; upper corner of a one column tablet. Writing Neo-Babylonian or perhaps Cassite. Commentary?",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 29 pl. XVIII", "notes" : "29. Pl. XVIII: IM 13365; bilingual fragment; upper corner of a one column tablet. Writing Neo-Babylonian or perhaps Cassite. Commentary?", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13365",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13385",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "7. Pl. VII: IM 13385. Hymn to Nisaba with prayer for Išbi’erra: bur-šu-ma-gal, cf. now: D. Reisman, Two Neo-Sumerian Hymns (Ann Arbor Microfilms) 103 ff. Top of Rev. Rev. 1. L. 1 = 70. Only the Rev. is copied here. I publish a photography of the Obv. taken before the tablet was fired in the kiln; by doing so, the surface deteriorated. Obv. 33–65.",
+        "parts" : [
+            {
+                "text" : "7. Pl. VII: IM 13385. Hymn to Nisaba with prayer for Išbi’erra: bur-šu-ma-gal, cf. now: D. Reisman, Two Neo-Sumerian Hymns (Ann Arbor Microfilms) 103 ff. Top of Rev. Rev. 1. L. 1 = 70. Only the Rev. is copied here. I publish a photography of the Obv. taken before the tablet was fired in the kiln; by doing so, the surface deteriorated. Obv. 33–65.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 7 pl. VII", "notes" : "7. Pl. VII: IM 13385. Hymn to Nisaba with prayer for Išbi’erra: bur-šu-ma-gal, cf. now: D. Reisman, Two Neo-Sumerian Hymns (Ann Arbor Microfilms) 103 ff. Top of Rev. Rev. 1. L. 1 = 70. Only the Rev. is copied here. I publish a photography of the Obv. taken before the tablet was fired in the kiln; by doing so, the surface deteriorated. Obv. 33–65.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13385",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13391",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "90. Pl. LXXI: IM 13391; lexical; school exercise.",
+        "parts" : [
+            {
+                "text" : "90. Pl. LXXI: IM 13391; lexical; school exercise.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 90 pl. LXXI", "notes" : "90. Pl. LXXI: IM 13391; lexical; school exercise.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13391",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13398",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "87. Pl. LXX: IM 13398; bilingual explanatory text; l. 13 gives the meaning of kab-du₁₁-ga *litiktu*/*latāku*, cf. CT 51, 59, 3, 9 and 60, 3, 45.",
+        "parts" : [
+            {
+                "text" : "87. Pl. LXX: IM 13398; bilingual explanatory text; l. 13 gives the meaning of kab-du₁₁-ga *litiktu*/*latāku*, cf. CT 51, 59, 3, 9 and 60, 3, 45.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 87 pl. LXX", "notes" : "87. Pl. LXX: IM 13398; bilingual explanatory text; l. 13 gives the meaning of kab-du₁₁-ga *litiktu*/*latāku*, cf. CT 51, 59, 3, 9 and 60, 3, 45.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13398",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13402",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "80. Pl. LXIII–LXIV: IM 13402; liver omina; very cursive writing. *erištu*; *kakku*; *bāb ekallim*.",
+        "parts" : [
+            {
+                "text" : "80. Pl. LXIII–LXIV: IM 13402; liver omina; very cursive writing. *erištu*; *kakku*; *bāb ekallim*.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 80 pl. LXIII–LXIV", "notes" : "80. Pl. LXIII–LXIV: IM 13402; liver omina; very cursive writing. *erištu*; *kakku*; *bāb ekallim*.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13402",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13404",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "34. Pl. XXIII: IM 13404; ér-šem₄-ma-ᵈ[nanna?], cf. VS 11, 113 and CT 42, 9, 3, 30 ff. The space of the 10 broken lines has been shortened in the copy. Incipit probably: [ab-šà-ga na]-mu-un-u, etc.",
+        "parts" : [
+            {
+                "text" : "34. Pl. XXIII: IM 13404; ér-šem₄-ma-ᵈ[nanna?], cf. VS 11, 113 and CT 42, 9, 3, 30 ff. The space of the 10 broken lines has been shortened in the copy. Incipit probably: [ab-šà-ga na]-mu-un-u, etc.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 34 pl. XXIII", "notes" : "34. Pl. XXIII: IM 13404; ér-šem₄-ma-ᵈ[nanna?], cf. VS 11, 113 and CT 42, 9, 3, 30 ff. The space of the 10 broken lines has been shortened in the copy. Incipit probably: [ab-šà-ga na]-mu-un-u, etc.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13404",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13706",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "78. Pl. LXII: IM 13706; liver omina: *naplastu*.",
+        "parts" : [
+            {
+                "text" : "78. Pl. LXII: IM 13706; liver omina: *naplastu*.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 78 pl. LXII", "notes" : "78. Pl. LXII: IM 13706; liver omina: *naplastu*.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13706",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.13712",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "39. Pl. XXVII: IM 13712; cf. Sumer 15 (1959) pl. 6. Letter of [ìr]-mu to Šulgi.",
+        "parts" : [
+            {
+                "text" : "39. Pl. XXVII: IM 13712; cf. Sumer 15 (1959) pl. 6. Letter of [ìr]-mu to Šulgi.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 39 pl. XXVII", "notes" : "39. Pl. XXVII: IM 13712; cf. Sumer 15 (1959) pl. 6. Letter of [ìr]-mu to Šulgi.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "13712",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.14044",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "70. Pl. LVIII: IM 14044; incantations, consecration-type. L. 12: ᵈkù-sù šá[ng]a-mah; for the sign šánga, Old-Babylonian, cf. UET 6, 101, 19; UMBS 1/1, 11, 4, 96 (E. Reiner).",
+        "parts" : [
+            {
+                "text" : "70. Pl. LVIII: IM 14044; incantations, consecration-type. L. 12: ᵈkù-sù šá[ng]a-mah; for the sign šánga, Old-Babylonian, cf. UET 6, 101, 19; UMBS 1/1, 11, 4, 96 (E. Reiner).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 70 pl. LVIII", "notes" : "70. Pl. LVIII: IM 14044; incantations, consecration-type. L. 12: ᵈkù-sù šá[ng]a-mah; for the sign šánga, Old-Babylonian, cf. UET 6, 101, 19; UMBS 1/1, 11, 4, 96 (E. Reiner).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "14044",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.14046",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "76. Pl. LXI: IM 14046; incantation: ka-lú-ùlu; cf. C. Wilcke, AfO 24 (1973) 15 and 18.",
+        "parts" : [
+            {
+                "text" : "76. Pl. LXI: IM 14046; incantation: ka-lú-ùlu; cf. C. Wilcke, AfO 24 (1973) 15 and 18.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 76 pl. LXI", "notes" : "76. Pl. LXI: IM 14046; incantation: ka-lú-ùlu; cf. C. Wilcke, AfO 24 (1973) 15 and 18.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "14046",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.14073.A",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "94. Pl. LXXIII: IM 14073 A+B; cf. E. Sollberger, ZA 53 (1959) 6 ff.",
+        "parts" : [
+            {
+                "text" : "94. Pl. LXXIII: IM 14073 A+B; cf. E. Sollberger, ZA 53 (1959) 6 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 94 pl. LXXIII", "notes" : "94. Pl. LXXIII: IM 14073 A+B; cf. E. Sollberger, ZA 53 (1959) 6 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "14073",
+        "suffix" : "A"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.14073.B",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "94. Pl. LXXIII: IM 14073 A+B; cf. E. Sollberger, ZA 53 (1959) 6 ff.",
+        "parts" : [
+            {
+                "text" : "94. Pl. LXXIII: IM 14073 A+B; cf. E. Sollberger, ZA 53 (1959) 6 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 94 pl. LXXIII", "notes" : "94. Pl. LXXIII: IM 14073 A+B; cf. E. Sollberger, ZA 53 (1959) 6 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "14073",
+        "suffix" : "B"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.18237",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "64. Pl. LIII: IM 18237; incantation (én-ùru) duplicate of YBC 18237 to be published in YOS XI. Both texts are badly written and YBC is partly syllabic: l. 5, -sig is there sig₆; l. 7: sig₄-šegbar (r.: ú.sig₄-sinigₓ?) is there: [še]g₉-sinig.",
+        "parts" : [
+            {
+                "text" : "64. Pl. LIII: IM 18237; incantation (én-ùru) duplicate of YBC 18237 to be published in YOS XI. Both texts are badly written and YBC is partly syllabic: l. 5, -sig is there sig₆; l. 7: sig₄-šegbar (r.: ú.sig₄-sinigₓ?) is there: [še]g₉-sinig.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 64 pl. LIII", "notes" : "64. Pl. LIII: IM 18237; incantation (én-ùru) duplicate of YBC 18237 to be published in YOS XI. Both texts are badly written and YBC is partly syllabic: l. 5, -sig is there sig₆; l. 7: sig₄-šegbar (r.: ú.sig₄-sinigₓ?) is there: [še]g₉-sinig.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "18237",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.18267",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "93. Pl. LXXII: IM 18267; id.",
+        "parts" : [
+            {
+                "text" : "93. Pl. LXXII: IM 18267; id.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 93 pl. LXXII", "notes" : "93. Pl. LXXII: IM 18267; id.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "18267",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.21180.1",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "62. Pl. LII: IM 21180, 1; incantations; Obv. = CT 16, 12; Rev. seems to be: inim-inim-ma-mu[š-a-kam]. ",
+        "parts" : [
+            {
+                "text" : "62. Pl. LII: IM 21180, 1; incantations; Obv. = CT 16, 12; Rev. seems to be: inim-inim-ma-mu[š-a-kam]. ",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 62 pl. LII", "notes" : "62. Pl. LII: IM 21180, 1; incantations; Obv. = CT 16, 12; Rev. seems to be: inim-inim-ma-mu[š-a-kam]. ", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "21180",
+        "suffix" : "1"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.21180.21",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "67. Pl. LVI: IM 21180, 21; incantation in Accadian language; surface worn off and difficult to read. = [muš/gír-tab d]ab₅-bé-da? (l. 19)?",
+        "parts" : [
+            {
+                "text" : "67. Pl. LVI: IM 21180, 21; incantation in Accadian language; surface worn off and difficult to read. = [muš/gír-tab d]ab₅-bé-da? (l. 19)?",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 67 pl. LVI", "notes" : "67. Pl. LVI: IM 21180, 21; incantation in Accadian language; surface worn off and difficult to read. = [muš/gír-tab d]ab₅-bé-da? (l. 19)?", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "21180",
+        "suffix" : "21"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.21180.X",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "46. Pl. XXXIV–XXXV: IM 21180x; epic of Gilgameš. It is the passage of the cutting of the ceder in order to float it to Nippur and to make a door out of it for the temple of Enlil, cf. l. 22: *lu-pu-uš* ᵍig *ša ga*?-*na ru-pu-ús-sa* [; 26: *a-na bi-ti* ᵈ*en-líl li-be-el pu-ra-tum* [; the piece deals with the same passage as Th. Bauer, JNES 16 (1957) 254 ff., but our text seems to have a fuller version. After l. 16 (= Bauer, l. 20): *mu-ša-bi i-li e-nu-na-ki pu*-x-*um-mi ip-te* it inserts a speech of Gilgameš? about the door. Remark on the Rev.? 34: *i-di-el a-bu-ul* [*qištim* ?]; cf. B. Landsberger, RA 62 (1968) 102 and note that ᵍig-kur-ra is common in Sumerian literature: ᵍig-kur-ra becomes: ᵍig-é-kur-ra! I did not finish my copy and with help of duplicates one can perhaps read more on the Rev. of which I do not possess a photograph. I publish it here as a help to read the photograph which I publish along with it.",
+        "parts" : [
+            {
+                "text" : "46. Pl. XXXIV–XXXV: IM 21180x; epic of Gilgameš. It is the passage of the cutting of the ceder in order to float it to Nippur and to make a door out of it for the temple of Enlil, cf. l. 22: *lu-pu-uš* ᵍig *ša ga*?-*na ru-pu-ús-sa* [; 26: *a-na bi-ti* ᵈ*en-líl li-be-el pu-ra-tum* [; the piece deals with the same passage as Th. Bauer, JNES 16 (1957) 254 ff., but our text seems to have a fuller version. After l. 16 (= Bauer, l. 20): *mu-ša-bi i-li e-nu-na-ki pu*-x-*um-mi ip-te* it inserts a speech of Gilgameš? about the door. Remark on the Rev.? 34: *i-di-el a-bu-ul* [*qištim* ?]; cf. B. Landsberger, RA 62 (1968) 102 and note that ᵍig-kur-ra is common in Sumerian literature: ᵍig-kur-ra becomes: ᵍig-é-kur-ra! I did not finish my copy and with help of duplicates one can perhaps read more on the Rev. of which I do not possess a photograph. I publish it here as a help to read the photograph which I publish along with it.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 46 pl. XXXIV–XXXV", "notes" : "46. Pl. XXXIV–XXXV: IM 21180x; epic of Gilgameš. It is the passage of the cutting of the ceder in order to float it to Nippur and to make a door out of it for the temple of Enlil, cf. l. 22: *lu-pu-uš* ᵍig *ša ga*?-*na ru-pu-ús-sa* [; 26: *a-na bi-ti* ᵈ*en-líl li-be-el pu-ra-tum* [; the piece deals with the same passage as Th. Bauer, JNES 16 (1957) 254 ff., but our text seems to have a fuller version. After l. 16 (= Bauer, l. 20): *mu-ša-bi i-li e-nu-na-ki pu*-x-*um-mi ip-te* it inserts a speech of Gilgameš? about the door. Remark on the Rev.? 34: *i-di-el a-bu-ul* [*qištim* ?]; cf. B. Landsberger, RA 62 (1968) 102 and note that ᵍig-kur-ra is common in Sumerian literature: ᵍig-kur-ra becomes: ᵍig-é-kur-ra! I did not finish my copy and with help of duplicates one can perhaps read more on the Rev. of which I do not possess a photograph. I publish it here as a help to read the photograph which I publish along with it.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "21180",
+        "suffix" : "X"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.21180.Y",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "63. Pl. LIII–LIV: IM 21180x [sic!]; *lamaštu*. Prof. F. Köcher prepares the edition of the series. Old-Babylonian. More such texts were copied by me in the Yale Bab. Collection and will appear in YOS XI.",
+        "parts" : [
+            {
+                "text" : "63. Pl. LIII–LIV: IM 21180x [sic!]; *lamaštu*. Prof. F. Köcher prepares the edition of the series. Old-Babylonian. More such texts were copied by me in the Yale Bab. Collection and will appear in YOS XI.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 63 pl. LIII–LIV", "notes" : "63. Pl. LIII–LIV: IM 21180x [sic!]; *lamaštu*. Prof. F. Köcher prepares the edition of the series. Old-Babylonian. More such texts were copied by me in the Yale Bab. Collection and will appear in YOS XI.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "21180",
+        "suffix" : "Y"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.21180.Z",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "74. Pl. LX: IM 21180z; incantations: ni sila du-du.",
+        "parts" : [
+            {
+                "text" : "74. Pl. LX: IM 21180z; incantations: ni sila du-du.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 74 pl. LX", "notes" : "74. Pl. LX: IM 21180z; incantations: ni sila du-du.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "21180",
+        "suffix" : "Z"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.24684",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "97. Pl. LXXIV: IM 24684; fragment of a stone vessel (“*kudurru*”).",
+        "parts" : [
+            {
+                "text" : "97. Pl. LXXIV: IM 24684; fragment of a stone vessel (“*kudurru*”).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 97 pl. LXXIV", "notes" : "97. Pl. LXXIV: IM 24684; fragment of a stone vessel (“*kudurru*”).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "24684",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.28938",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "61. Pl. LI: IM 28938; list of statives in the plur. fem.; the beginning and the end let us suspect some literary genre.",
+        "parts" : [
+            {
+                "text" : "61. Pl. LI: IM 28938; list of statives in the plur. fem.; the beginning and the end let us suspect some literary genre.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 61 pl. LI", "notes" : "61. Pl. LI: IM 28938; list of statives in the plur. fem.; the beginning and the end let us suspect some literary genre.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "28938",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.2900",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "41. Pl. XXIX-XXX: IM 2900. Hymn to Gungunum in Accadian. This may be the oldest royal hymn in this language.",
+        "parts" : [
+            {
+                "text" : "41. Pl. XXIX-XXX: IM 2900. Hymn to Gungunum in Accadian. This may be the oldest royal hymn in this language.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 41 pl. XXIX-XXX", "notes" : "41. Pl. XXIX-XXX: IM 2900. Hymn to Gungunum in Accadian. This may be the oldest royal hymn in this language.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "2900",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.2902",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "91. Pl. LXXII: IM 2902; fragment of a very big tablet. List of names beginning with: lú and lugal. Cf. E. Chiera, UMBS 11/2. O. R. Gurney, UET 7, 77.",
+        "parts" : [
+            {
+                "text" : "91. Pl. LXXII: IM 2902; fragment of a very big tablet. List of names beginning with: lú and lugal. Cf. E. Chiera, UMBS 11/2. O. R. Gurney, UET 7, 77.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 91 pl. LXXII", "notes" : "91. Pl. LXXII: IM 2902; fragment of a very big tablet. List of names beginning with: lú and lugal. Cf. E. Chiera, UMBS 11/2. O. R. Gurney, UET 7, 77.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "2902",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.3225",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "56. Pl. XLV: IM 3225; fragment of bilingual text. The colophon is important for the family of the scribe Dadījû; incantation; CT 4, + dupl.",
+        "parts" : [
+            {
+                "text" : "56. Pl. XLV: IM 3225; fragment of bilingual text. The colophon is important for the family of the scribe Dadījû; incantation; CT 4, + dupl.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 56 pl. XLV", "notes" : "56. Pl. XLV: IM 3225; fragment of bilingual text. The colophon is important for the family of the scribe Dadījû; incantation; CT 4, + dupl.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "3225",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.3233",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "54. Pl. XLII–XLIII: IM 3233. Accadian bal-bal-e between Nabû and his spouse Tašmētu. Cf. Sumer 13 (1957) p. 67; pl. 26–27. I read the scratches of the colophon: ]x+12 IM ᴵ*arik-din*-[*i*]-*lu* LÚ.A.BA *bīt* […] for the cultic setting of this important bal-bal-e, cf. O. R. Gurney, Tammuz reconsidered, JSS 17 (1962) 156, quoting: Harper, Letters 66 and 366.",
+        "parts" : [
+            {
+                "text" : "54. Pl. XLII–XLIII: IM 3233. Accadian bal-bal-e between Nabû and his spouse Tašmētu. Cf. Sumer 13 (1957) p. 67; pl. 26–27. I read the scratches of the colophon: ]x+12 IM ᴵ*arik-din*-[*i*]-*lu* LÚ.A.BA *bīt* […] for the cultic setting of this important bal-bal-e, cf. O. R. Gurney, Tammuz reconsidered, JSS 17 (1962) 156, quoting: Harper, Letters 66 and 366.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 54 pl. XLII–XLIII", "notes" : "54. Pl. XLII–XLIII: IM 3233. Accadian bal-bal-e between Nabû and his spouse Tašmētu. Cf. Sumer 13 (1957) p. 67; pl. 26–27. I read the scratches of the colophon: ]x+12 IM ᴵ*arik-din*-[*i*]-*lu* LÚ.A.BA *bīt* […] for the cultic setting of this important bal-bal-e, cf. O. R. Gurney, Tammuz reconsidered, JSS 17 (1962) 156, quoting: Harper, Letters 66 and 366.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "3233",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.3245",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "58. Pl. XLVI: IM 3245; seems to be a fragment of a ritual. Cf. 1 f.: gurun *ba-na-a ana* ᵍbanšur-*šú* gurun [… / … *lu al-si*] lú-gú-en-na *iq-bu-niš-šum* […]",
+        "parts" : [
+            {
+                "text" : "58. Pl. XLVI: IM 3245; seems to be a fragment of a ritual. Cf. 1 f.: gurun *ba-na-a ana* ᵍbanšur-*šú* gurun [… / … *lu al-si*] lú-gú-en-na *iq-bu-niš-šum* […]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 58 pl. XLVI", "notes" : "58. Pl. XLVI: IM 3245; seems to be a fragment of a ritual. Cf. 1 f.: gurun *ba-na-a ana* ᵍbanšur-*šú* gurun [… / … *lu al-si*] lú-gú-en-na *iq-bu-niš-šum* […]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "3245",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.3246",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "55. Pl. XLIV: IM 3246; cf. JRAS 1920, 568 (CAD s. *aštapiru*, etc. [but read in 19: *la-as-mu*]).",
+        "parts" : [
+            {
+                "text" : "55. Pl. XLIV: IM 3246; cf. JRAS 1920, 568 (CAD s. *aštapiru*, etc. [but read in 19: *la-as-mu*]).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 55 pl. XLIV", "notes" : "55. Pl. XLIV: IM 3246; cf. JRAS 1920, 568 (CAD s. *aštapiru*, etc. [but read in 19: *la-as-mu*]).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "3246",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.3252",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "59. Pl. XLVII: IM 3252; cf. Sumer 13 (1957) p. 67 and pl. 25. Cultic commentary; dupl. LKA 71 and cf. also K 3476, CT 15, 44–43. Rev. worn off but some more traces may be recognized.",
+        "parts" : [
+            {
+                "text" : "59. Pl. XLVII: IM 3252; cf. Sumer 13 (1957) p. 67 and pl. 25. Cultic commentary; dupl. LKA 71 and cf. also K 3476, CT 15, 44–43. Rev. worn off but some more traces may be recognized.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 59 pl. XLVII", "notes" : "59. Pl. XLVII: IM 3252; cf. Sumer 13 (1957) p. 67 and pl. 25. Cultic commentary; dupl. LKA 71 and cf. also K 3476, CT 15, 44–43. Rev. worn off but some more traces may be recognized.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "3252",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.3263",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "57. Pl. XLV: IM 3263; flake, surface only; ZA 64 (1975) 146, 47 ff.",
+        "parts" : [
+            {
+                "text" : "57. Pl. XLV: IM 3263; flake, surface only; ZA 64 (1975) 146, 47 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 57 pl. XLV", "notes" : "57. Pl. XLV: IM 3263; flake, surface only; ZA 64 (1975) 146, 47 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "3263",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43413",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "5. Pl. V: IM 43413; cf. now JNES 33 (1974) 291 ff.",
+        "parts" : [
+            {
+                "text" : "5. Pl. V: IM 43413; cf. now JNES 33 (1974) 291 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 5 pl. V", "notes" : "5. Pl. V: IM 43413; cf. now JNES 33 (1974) 291 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43413",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43429",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "103. Pl. LXXVII: IM 43429; sale of a slave; cf. Sumer 15 (1959) pl. 12.",
+        "parts" : [
+            {
+                "text" : "103. Pl. LXXVII: IM 43429; sale of a slave; cf. Sumer 15 (1959) pl. 12.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 103 pl. LXXVII", "notes" : "103. Pl. LXXVII: IM 43429; sale of a slave; cf. Sumer 15 (1959) pl. 12.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43429",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43438",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "19. Pl. XII: IM 43438; school exercise; proverbs: obv. 1, cf. UMBS 1/2, 117 Obv. 1; Rev. 12, UET 6, 367, 1 f.; 1 ff.: nir-gál; 10 ff.: nin (=nin₉). Very bad writing.",
+        "parts" : [
+            {
+                "text" : "19. Pl. XII: IM 43438; school exercise; proverbs: obv. 1, cf. UMBS 1/2, 117 Obv. 1; Rev. 12, UET 6, 367, 1 f.; 1 ff.: nir-gál; 10 ff.: nin (=nin₉). Very bad writing.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 19 pl. XII", "notes" : "19. Pl. XII: IM 43438; school exercise; proverbs: obv. 1, cf. UMBS 1/2, 117 Obv. 1; Rev. 12, UET 6, 367, 1 f.; 1 ff.: nir-gál; 10 ff.: nin (=nin₉). Very bad writing.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43438",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43453",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "99. Pl. LXXV: IM 43453; sale of a slave. Cf. Sumer 13 (1957) 133, pl. 33.",
+        "parts" : [
+            {
+                "text" : "99. Pl. LXXV: IM 43453; sale of a slave. Cf. Sumer 13 (1957) 133, pl. 33.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 99 pl. LXXV", "notes" : "99. Pl. LXXV: IM 43453; sale of a slave. Cf. Sumer 13 (1957) 133, pl. 33.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43453",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43483",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "95. Pl. LXXIII: IM 43483; letter notice from the Sargonic period. The text is complete.",
+        "parts" : [
+            {
+                "text" : "95. Pl. LXXIII: IM 43483; letter notice from the Sargonic period. The text is complete.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 95 pl. LXXIII", "notes" : "95. Pl. LXXIII: IM 43483; letter notice from the Sargonic period. The text is complete.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43483",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43693",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "98. Pl. LXXV: IM 43693. Deed about: mí-ús-sa… aka.",
+        "parts" : [
+            {
+                "text" : "98. Pl. LXXV: IM 43693. Deed about: mí-ús-sa… aka.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 98 pl. LXXV", "notes" : "98. Pl. LXXV: IM 43693. Deed about: mí-ús-sa… aka.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43693",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.43997",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "101. Pl. LXXVI: IM 43997; administrative text; the year date of Iddindagān has been quoted in ZA 58 (1967) 138, n. 199.",
+        "parts" : [
+            {
+                "text" : "101. Pl. LXXVI: IM 43997; administrative text; the year date of Iddindagān has been quoted in ZA 58 (1967) 138, n. 199.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 101 pl. LXXVI", "notes" : "101. Pl. LXXVI: IM 43997; administrative text; the year date of Iddindagān has been quoted in ZA 58 (1967) 138, n. 199.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "43997",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44036.1",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "104. Pl. LXXVII: IM 44036, 1; drawing of a ground-plan; the writing is very careless.",
+        "parts" : [
+            {
+                "text" : "104. Pl. LXXVII: IM 44036, 1; drawing of a ground-plan; the writing is very careless.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 104 pl. LXXVII", "notes" : "104. Pl. LXXVII: IM 44036, 1; drawing of a ground-plan; the writing is very careless.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44036",
+        "suffix" : "1"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44093",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "83. Pl. LXVI: IM 44093; liver omina, ki-gub. Cf. J. Nougayrol, RA 66 (1972) 95 and Sumer 13 (1957) p. 67 and pl. 33. Form, clay and script (cf. RU, l. 9; 10; DUMU, Rev. 3) ressembling Seleucian tablets, I assigned the text to that periode; but J. Nougayrol may be wright on account of the colophon.",
+        "parts" : [
+            {
+                "text" : "83. Pl. LXVI: IM 44093; liver omina, ki-gub. Cf. J. Nougayrol, RA 66 (1972) 95 and Sumer 13 (1957) p. 67 and pl. 33. Form, clay and script (cf. RU, l. 9; 10; DUMU, Rev. 3) ressembling Seleucian tablets, I assigned the text to that periode; but J. Nougayrol may be wright on account of the colophon.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 83 pl. LXVI", "notes" : "83. Pl. LXVI: IM 44093; liver omina, ki-gub. Cf. J. Nougayrol, RA 66 (1972) 95 and Sumer 13 (1957) p. 67 and pl. 33. Form, clay and script (cf. RU, l. 9; 10; DUMU, Rev. 3) ressembling Seleucian tablets, I assigned the text to that periode; but J. Nougayrol may be wright on account of the colophon.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44093",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44131",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "33. Pl. XXI: IM 44131; small fragment of a multicolumn tablet. Extremely small writing: 11 lines on 2.6 cm. The latest date may be nevertheless Cassite (cf. the sign KA). Lamentation to the Mothergoddess: cf. Rev.? 2, 9’: é-gal-keši.ki.",
+        "parts" : [
+            {
+                "text" : "33. Pl. XXI: IM 44131; small fragment of a multicolumn tablet. Extremely small writing: 11 lines on 2.6 cm. The latest date may be nevertheless Cassite (cf. the sign KA). Lamentation to the Mothergoddess: cf. Rev.? 2, 9’: é-gal-keši.ki.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 33 pl. XXI", "notes" : "33. Pl. XXI: IM 44131; small fragment of a multicolumn tablet. Extremely small writing: 11 lines on 2.6 cm. The latest date may be nevertheless Cassite (cf. the sign KA). Lamentation to the Mothergoddess: cf. Rev.? 2, 9’: é-gal-keši.ki.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44131",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44134",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "40. Pl. XXVIII: IM 44134; cf.  Sumer 15 (1959) pl. 7. Royal correspondance. Cf. Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1964) 139.",
+        "parts" : [
+            {
+                "text" : "40. Pl. XXVIII: IM 44134; cf.  Sumer 15 (1959) pl. 7. Royal correspondance. Cf. Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1964) 139.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 40 pl. XXVIII", "notes" : "40. Pl. XXVIII: IM 44134; cf.  Sumer 15 (1959) pl. 7. Royal correspondance. Cf. Fadhil A. Ali, Sumerian Letters (Ann Arbor Microfilms 1964) 139.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44134",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44150",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "60. Pl. XLVIII–L: IM 44150; lower half of the Obv. (2/5). Rev. completely broken away; surface worn off; small script (Seleucian). Cultic commentary (explanatory text). Col. 3 contains a very important section about the Akitu. I read the very fine script, 13 ff.: iti-bára-zà-gar-ra-ta ezen-nam?-guruš?-ta / *ina* iti-bára-zà-gar *i-sin-na*-[*ti* … // *á-ki-it šá* ᵈ*marduk* / *ana* ᵈ*en-líl ú-ziz*?-[…] // *á-ki-it šá* ᵈ*nin-urta* / *ana* ᵈ*en-lil a*-[…] // *á-ki-it* ᵈ*iš-tar šar-rat* nibru.ki : *šá* ᵈ*nin*-[…] // *á-ki-it šá* ᵈ*suʾen-na* ana* ᵈ*nin-urta sa*-[…] // *á-ki-it šá* ᵈx-*šá-a* (or: e₄-ru₄-a?) / *ana* ᵈ*nin-urta sa*-[…] // *tu-šá-ru* u₄-15-kam *qa*[*b*-…] // *ú-su-ka-tum te*-HER-*tum* nibru[…] // a-tu₅? *ram-kum mul-lil* […] // *mid-du u* ᵍhaš-x ᵍtukul *la ma-gi-*[*ri* …] // *ni-iq me-e a-rat qab*-[*ri* …] // *ki-mu-ut* sipa / *pi-te-e qab-r*[*i* …] // [x x x] *mit-hur-ti ú-ma-ši a-ba-ri* // *si-pit-tum* ᵈ*gu-la šu-ṣu* ᵈí[d …] // ᵈi₇-lú-ru-gú gíd-da / *i-si-in-nu* ᵈ*iš*[*taran*] // *ú-lu-lu* / *šá* ᵈk[a …] // *ti-i-ru* / *šá* ᵈ*é-a* : ᵈ[…] *tu-šá-ru*, supra, explains: *a-a-ru* = *tu-šá-ru*, quoted in CAD s. *ajaru* E. Several sections of this text have duplicates, both published and unpublished (oral communication of W.G. Lambert).",
+        "parts" : [
+            {
+                "text" : "60. Pl. XLVIII–L: IM 44150; lower half of the Obv. (2/5). Rev. completely broken away; surface worn off; small script (Seleucian). Cultic commentary (explanatory text). Col. 3 contains a very important section about the Akitu. I read the very fine script, 13 ff.: iti-bára-zà-gar-ra-ta ezen-nam?-guruš?-ta / *ina* iti-bára-zà-gar *i-sin-na*-[*ti* … // *á-ki-it šá* ᵈ*marduk* / *ana* ᵈ*en-líl ú-ziz*?-[…] // *á-ki-it šá* ᵈ*nin-urta* / *ana* ᵈ*en-lil a*-[…] // *á-ki-it* ᵈ*iš-tar šar-rat* nibru.ki : *šá* ᵈ*nin*-[…] // *á-ki-it šá* ᵈ*suʾen-na* ana* ᵈ*nin-urta sa*-[…] // *á-ki-it šá* ᵈx-*šá-a* (or: e₄-ru₄-a?) / *ana* ᵈ*nin-urta sa*-[…] // *tu-šá-ru* u₄-15-kam *qa*[*b*-…] // *ú-su-ka-tum te*-HER-*tum* nibru[…] // a-tu₅? *ram-kum mul-lil* […] // *mid-du u* ᵍhaš-x ᵍtukul *la ma-gi-*[*ri* …] // *ni-iq me-e a-rat qab*-[*ri* …] // *ki-mu-ut* sipa / *pi-te-e qab-r*[*i* …] // [x x x] *mit-hur-ti ú-ma-ši a-ba-ri* // *si-pit-tum* ᵈ*gu-la šu-ṣu* ᵈí[d …] // ᵈi₇-lú-ru-gú gíd-da / *i-si-in-nu* ᵈ*iš*[*taran*] // *ú-lu-lu* / *šá* ᵈk[a …] // *ti-i-ru* / *šá* ᵈ*é-a* : ᵈ[…] *tu-šá-ru*, supra, explains: *a-a-ru* = *tu-šá-ru*, quoted in CAD s. *ajaru* E. Several sections of this text have duplicates, both published and unpublished (oral communication of W.G. Lambert).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 60 pl. XLVIII–L", "notes" : "60. Pl. XLVIII–L: IM 44150; lower half of the Obv. (2/5). Rev. completely broken away; surface worn off; small script (Seleucian). Cultic commentary (explanatory text). Col. 3 contains a very important section about the Akitu. I read the very fine script, 13 ff.: iti-bára-zà-gar-ra-ta ezen-nam?-guruš?-ta / *ina* iti-bára-zà-gar *i-sin-na*-[*ti* … // *á-ki-it šá* ᵈ*marduk* / *ana* ᵈ*en-líl ú-ziz*?-[…] // *á-ki-it šá* ᵈ*nin-urta* / *ana* ᵈ*en-lil a*-[…] // *á-ki-it* ᵈ*iš-tar šar-rat* nibru.ki : *šá* ᵈ*nin*-[…] // *á-ki-it šá* ᵈ*suʾen-na* ana* ᵈ*nin-urta sa*-[…] // *á-ki-it šá* ᵈx-*šá-a* (or: e₄-ru₄-a?) / *ana* ᵈ*nin-urta sa*-[…] // *tu-šá-ru* u₄-15-kam *qa*[*b*-…] // *ú-su-ka-tum te*-HER-*tum* nibru[…] // a-tu₅? *ram-kum mul-lil* […] // *mid-du u* ᵍhaš-x ᵍtukul *la ma-gi-*[*ri* …] // *ni-iq me-e a-rat qab*-[*ri* …] // *ki-mu-ut* sipa / *pi-te-e qab-r*[*i* …] // [x x x] *mit-hur-ti ú-ma-ši a-ba-ri* // *si-pit-tum* ᵈ*gu-la šu-ṣu* ᵈí[d …] // ᵈi₇-lú-ru-gú gíd-da / *i-si-in-nu* ᵈ*iš*[*taran*] // *ú-lu-lu* / *šá* ᵈk[a …] // *ti-i-ru* / *šá* ᵈ*é-a* : ᵈ[…] *tu-šá-ru*, supra, explains: *a-a-ru* = *tu-šá-ru*, quoted in CAD s. *ajaru* E. Several sections of this text have duplicates, both published and unpublished (oral communication of W.G. Lambert).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44150",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44351.A",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "13. Pl. IX: IM 44351a; literary fragment; ᵈen-líl sù-rá-šè, 145 ff.",
+        "parts" : [
+            {
+                "text" : "13. Pl. IX: IM 44351a; literary fragment; ᵈen-líl sù-rá-šè, 145 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 13 pl. IX", "notes" : "13. Pl. IX: IM 44351a; literary fragment; ᵈen-líl sù-rá-šè, 145 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44351",
+        "suffix" : "A"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44351.B",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "3. Pl. III: IM 44351b; the beginning of the same composition.",
+        "parts" : [
+            {
+                "text" : "3. Pl. III: IM 44351b; the beginning of the same composition.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 3 pl. III", "notes" : "3. Pl. III: IM 44351b; the beginning of the same composition.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44351",
+        "suffix" : "B"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44425",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "42. Pl. XXX: IM 44425; fragment of a royal hymn. Probably Šulgi.",
+        "parts" : [
+            {
+                "text" : "42. Pl. XXX: IM 44425; fragment of a royal hymn. Probably Šulgi.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 42 pl. XXX", "notes" : "42. Pl. XXX: IM 44425; fragment of a royal hymn. Probably Šulgi.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44425",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44539.A",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "10. Pl. IX: IM 44539a = PAPS 107 (1963) 505, 2, 29 ff. IM 14539 was made out of three different pieces. Remark that a and b seem to be both the lower edge of a tablet.",
+        "parts" : [
+            {
+                "text" : "10. Pl. IX: IM 44539a = PAPS 107 (1963) 505, 2, 29 ff. IM 14539 was made out of three different pieces. Remark that a and b seem to be both the lower edge of a tablet.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 10 pl. IX", "notes" : "10. Pl. IX: IM 44539a = PAPS 107 (1963) 505, 2, 29 ff. IM 14539 was made out of three different pieces. Remark that a and b seem to be both the lower edge of a tablet.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44539",
+        "suffix" : "A"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44539.B",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "11. Pl. IX: IM 44539b: fragment; bur-šu-ma-gal, 29 ff.",
+        "parts" : [
+            {
+                "text" : "11. Pl. IX: IM 44539b: fragment; bur-šu-ma-gal, 29 ff.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 11 pl. IX", "notes" : "11. Pl. IX: IM 44539b: fragment; bur-šu-ma-gal, 29 ff.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44539",
+        "suffix" : "B"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.44539.C",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "12. Pl. IX: IM 44539c; literary fragment.",
+        "parts" : [
+            {
+                "text" : "12. Pl. IX: IM 44539c; literary fragment.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 12 pl. IX", "notes" : "12. Pl. IX: IM 44539c; literary fragment.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "44539",
+        "suffix" : "C"
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.49175",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "102. Pl. LXXVI: IM 49175; days of the bakery-prebend; 31. year of Darius.",
+        "parts" : [
+            {
+                "text" : "102. Pl. LXXVI: IM 49175; days of the bakery-prebend; 31. year of Darius.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 102 pl. LXXVI", "notes" : "102. Pl. LXXVI: IM 49175; days of the bakery-prebend; 31. year of Darius.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "49175",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51147",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "85. Pl. LXVIII–LXIX: IM 51147; “Silbenalphabet”, cf. lit. in AS 16 (1965) 21–56 (E. Sollberger; J. Nougayrol; Muazzez Çiğ and Hatice Kizilyay).",
+        "parts" : [
+            {
+                "text" : "85. Pl. LXVIII–LXIX: IM 51147; “Silbenalphabet”, cf. lit. in AS 16 (1965) 21–56 (E. Sollberger; J. Nougayrol; Muazzez Çiğ and Hatice Kizilyay).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 85 pl. LXVIII–LXIX", "notes" : "85. Pl. LXVIII–LXIX: IM 51147; “Silbenalphabet”, cf. lit. in AS 16 (1965) 21–56 (E. Sollberger; J. Nougayrol; Muazzez Çiğ and Hatice Kizilyay).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51147",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51176",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "24. Pl. XVI: IM 51176; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+        "parts" : [
+            {
+                "text" : "24. Pl. XVI: IM 51176; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 24 pl. XVI", "notes" : "24. Pl. XVI: IM 51176; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51176",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51207",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "72. Pl. LIX: IM 51207; from T. Harmal, cf. Sumer 13 (1957) 97, pl. 15. Incantation; cf. J. Nougayrol, RA 63 (1969) 95; R. Biggs, JNES 29 (1970) 59; the correction in CAD K 338a in l. 15 is against the original.",
+        "parts" : [
+            {
+                "text" : "72. Pl. LIX: IM 51207; from T. Harmal, cf. Sumer 13 (1957) 97, pl. 15. Incantation; cf. J. Nougayrol, RA 63 (1969) 95; R. Biggs, JNES 29 (1970) 59; the correction in CAD K 338a in l. 15 is against the original.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 72 pl. LIX", "notes" : "72. Pl. LIX: IM 51207; from T. Harmal, cf. Sumer 13 (1957) 97, pl. 15. Incantation; cf. J. Nougayrol, RA 63 (1969) 95; R. Biggs, JNES 29 (1970) 59; the correction in CAD K 338a in l. 15 is against the original.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51207",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51250",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "69. Pl. LVII: IM 51250; from T. Harmal, cf. Sumer 11/2 (1955) pl. 5. Incantations *ša ṣer-r*[*i-im*] and *ša zu-qí-qí-pí-im*. The language is neither Sumerian nor Accadian.",
+        "parts" : [
+            {
+                "text" : "69. Pl. LVII: IM 51250; from T. Harmal, cf. Sumer 11/2 (1955) pl. 5. Incantations *ša ṣer-r*[*i-im*] and *ša zu-qí-qí-pí-im*. The language is neither Sumerian nor Accadian.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 69 pl. LVII", "notes" : "69. Pl. LVII: IM 51250; from T. Harmal, cf. Sumer 11/2 (1955) pl. 5. Incantations *ša ṣer-r*[*i-im*] and *ša zu-qí-qí-pí-im*. The language is neither Sumerian nor Accadian.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51250",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51253",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "31. Pl. XX: IM 51253; from T. Harmal, cf. Sumer 13 (1957) p. 81. The text contains three sections of a lamentation to Inanna for which cf. CT 36, 35 ff. and ib. 43 ff. Syllabic Sumerian. The text begins: e-gi-pa-re = é gi-parₓ-e; read in l. 8: ú-ru-re, not: ur?-ru-re.",
+        "parts" : [
+            {
+                "text" : "31. Pl. XX: IM 51253; from T. Harmal, cf. Sumer 13 (1957) p. 81. The text contains three sections of a lamentation to Inanna for which cf. CT 36, 35 ff. and ib. 43 ff. Syllabic Sumerian. The text begins: e-gi-pa-re = é gi-parₓ-e; read in l. 8: ú-ru-re, not: ur?-ru-re.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 31 pl. XX", "notes" : "31. Pl. XX: IM 51253; from T. Harmal, cf. Sumer 13 (1957) p. 81. The text contains three sections of a lamentation to Inanna for which cf. CT 36, 35 ff. and ib. 43 ff. Syllabic Sumerian. The text begins: e-gi-pa-re = é gi-parₓ-e; read in l. 8: ú-ru-re, not: ur?-ru-re.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51253",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51292 ",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "65. Pl. LIV: IM 51292 = IM 51328 (next plate); cf. Sumer 13 (1957) 95A, pl. 15. Incantation concerning serpents.",
+        "parts" : [
+            {
+                "text" : "65. Pl. LIV: IM 51292 = IM 51328 (next plate); cf. Sumer 13 (1957) 95A, pl. 15. Incantation concerning serpents.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 65 pl. LIV", "notes" : "65. Pl. LIV: IM 51292 = IM 51328 (next plate); cf. Sumer 13 (1957) 95A, pl. 15. Incantation concerning serpents.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51292 ",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51328 ",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "66. Pl. LV: IM 51328 = IM 51292; cf. Sumer 13 (1957) 93, pl. 13.",
+        "parts" : [
+            {
+                "text" : "66. Pl. LV: IM 51328 = IM 51292; cf. Sumer 13 (1957) 93, pl. 13.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 66 pl. LV", "notes" : "66. Pl. LV: IM 51328 = IM 51292; cf. Sumer 13 (1957) 93, pl. 13.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51328 ",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51345",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "49. Pl. XXXVIII: IM 51345; literary text. School exercise, cf. Sumer 13 (1957) p. 66; id. [i.e. “From T. Harmal.”]",
+        "parts" : [
+            {
+                "text" : "49. Pl. XXXVIII: IM 51345; literary text. School exercise, cf. Sumer 13 (1957) p. 66; id. [i.e. “From T. Harmal.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 49 pl. XXXVIII", "notes" : "49. Pl. XXXVIII: IM 51345; literary text. School exercise, cf. Sumer 13 (1957) p. 66; id. [i.e. “From T. Harmal.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51345",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51529 ",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "23. Pl. XV: IM 51529 (not: 51829), id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+        "parts" : [
+            {
+                "text" : "23. Pl. XV: IM 51529 (not: 51829), id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 23 pl. XV", "notes" : "23. Pl. XV: IM 51529 (not: 51829), id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51529 ",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51530",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "26. Pl. XVII: IM 51530; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+        "parts" : [
+            {
+                "text" : "26. Pl. XVII: IM 51530; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 26 pl. XVII", "notes" : "26. Pl. XVII: IM 51530; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51530",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51543",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "21. Pl. XIV: IM 51543; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+        "parts" : [
+            {
+                "text" : "21. Pl. XIV: IM 51543; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 21 pl. XIV", "notes" : "21. Pl. XIV: IM 51543; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51543",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51544",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "22. Pl. XV: IM 51544; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+        "parts" : [
+            {
+                "text" : "22. Pl. XV: IM 51544; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 22 pl. XV", "notes" : "22. Pl. XV: IM 51544; id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51544",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51545.X",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "25. Pl. XVI: IM 51545x. I read the number 51650, but the photography bears the number 51545, but cf. supra, Nr 20, id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+        "parts" : [
+            {
+                "text" : "25. Pl. XVI: IM 51545x. I read the number 51650, but the photography bears the number 51545, but cf. supra, Nr 20, id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 25 pl. XVI", "notes" : "25. Pl. XVI: IM 51545x. I read the number 51650, but the photography bears the number 51545, but cf. supra, Nr 20, id. [i.e., “from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51545",
+        "suffix" : "X"
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51545",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "20. Pl. XIV: IM 51545; from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.",
+        "parts" : [
+            {
+                "text" : "20. Pl. XIV: IM 51545; from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 20 pl. XIV", "notes" : "20. Pl. XIV: IM 51545; from T. Harmal; cf. Sumer 11/2 (1955) 110 and ib. 13 (1957) 65. Bilingual passages from Enhedu’anna B, in-nin šà-gur₄-ra. Cf. also IŠET I 8 (66) Ni 9801; 11 (69) Ni 4295; 87 (145) Ni 4349. A parallel text in Accadian language of the za-a-kam section exists in the Geneva Museum Collection and will be published by Prof. G. Dossin. To avoid misinterpretations the reader should be aware that these difficult texts are written in the ‘Diālah-ductus’. The not unexercised scribe had a trembling hand and because of secondary wedges it is at times difficult to distinguish signs like: KI and DI, etc.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51545",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.51650",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "52. Pl. XLI: IM 51650; cf. Sumer 13 (1957) p. 66; pl. 23; id. [i.e. “From T. Harmal.”]",
+        "parts" : [
+            {
+                "text" : "52. Pl. XLI: IM 51650; cf. Sumer 13 (1957) p. 66; pl. 23; id. [i.e. “From T. Harmal.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 52 pl. XLI", "notes" : "52. Pl. XLI: IM 51650; cf. Sumer 13 (1957) p. 66; pl. 23; id. [i.e. “From T. Harmal.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "51650",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52196",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "51. Pl. XL: IM 52196; cf. Sumer 13 (1957) p. 67; id. [i.e. “From T. Harmal.”]",
+        "parts" : [
+            {
+                "text" : "51. Pl. XL: IM 52196; cf. Sumer 13 (1957) p. 67; id. [i.e. “From T. Harmal.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 51 pl. XL", "notes" : "51. Pl. XL: IM 52196; cf. Sumer 13 (1957) p. 67; id. [i.e. “From T. Harmal.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52196",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52546",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "73. Pl. LIX: IM 52546; from T. Harmal, cf. Sumer 13 (1957) 107B, pl. 20. Incantations.",
+        "parts" : [
+            {
+                "text" : "73. Pl. LIX: IM 52546; from T. Harmal, cf. Sumer 13 (1957) 107B, pl. 20. Incantations.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 73 pl. LIX", "notes" : "73. Pl. LIX: IM 52546; from T. Harmal, cf. Sumer 13 (1957) 107B, pl. 20. Incantations.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52546",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52578.C",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "50. Pl. XXXIX: IM 52578C; literary text; part of a very big tablet, cf. Sumer 13 (1957) p. 66; pl. 23; id. [i.e. “From T. Harmal.”]",
+        "parts" : [
+            {
+                "text" : "50. Pl. XXXIX: IM 52578C; literary text; part of a very big tablet, cf. Sumer 13 (1957) p. 66; pl. 23; id. [i.e. “From T. Harmal.”]",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 50 pl. XXXIX", "notes" : "50. Pl. XXXIX: IM 52578C; literary text; part of a very big tablet, cf. Sumer 13 (1957) p. 66; pl. 23; id. [i.e. “From T. Harmal.”]", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52578",
+        "suffix" : "C"
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52615",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "43. Pl. XXXI: IM 52615 (not: 52265); cf. Sumer 13 (1957) pl. 12. Gilgameš. From T. Harmal. Cf. B. Landsberger. RA(1968) 115 f., but remark: l. 1: at the end certainly 6–7 signs; last sign: AB or at the upmost: DU; l. 6, after *ša-me-e*: certainly not IM, probably two short signs; l. 9: the sign after *i-na* is by itself: URU; but possibly a sign written over erasure?; l. 8: *la-wi-um*, certain, not: -*at*; l. 10: traces point to: *ú-sú-ki il-pu-t*[*a*-(?); l. 13: certainly not: *mi-im-m*[*u-š*]*u*, r.: -*m*[*a*]; l. 14: first sign: [*a*]*m*- possible; l. 19: after *i-ba-aš-šu i*-: MA or MU impossible, hardly: NA, most likely: BE or NU, but NA is not excluded.",
+        "parts" : [
+            {
+                "text" : "43. Pl. XXXI: IM 52615 (not: 52265); cf. Sumer 13 (1957) pl. 12. Gilgameš. From T. Harmal. Cf. B. Landsberger. RA(1968) 115 f., but remark: l. 1: at the end certainly 6–7 signs; last sign: AB or at the upmost: DU; l. 6, after *ša-me-e*: certainly not IM, probably two short signs; l. 9: the sign after *i-na* is by itself: URU; but possibly a sign written over erasure?; l. 8: *la-wi-um*, certain, not: -*at*; l. 10: traces point to: *ú-sú-ki il-pu-t*[*a*-(?); l. 13: certainly not: *mi-im-m*[*u-š*]*u*, r.: -*m*[*a*]; l. 14: first sign: [*a*]*m*- possible; l. 19: after *i-ba-aš-šu i*-: MA or MU impossible, hardly: NA, most likely: BE or NU, but NA is not excluded.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 43 pl. XXXI", "notes" : "43. Pl. XXXI: IM 52615 (not: 52265); cf. Sumer 13 (1957) pl. 12. Gilgameš. From T. Harmal. Cf. B. Landsberger. RA(1968) 115 f., but remark: l. 1: at the end certainly 6–7 signs; last sign: AB or at the upmost: DU; l. 6, after *ša-me-e*: certainly not IM, probably two short signs; l. 9: the sign after *i-na* is by itself: URU; but possibly a sign written over erasure?; l. 8: *la-wi-um*, certain, not: -*at*; l. 10: traces point to: *ú-sú-ki il-pu-t*[*a*-(?); l. 13: certainly not: *mi-im-m*[*u-š*]*u*, r.: -*m*[*a*]; l. 14: first sign: [*a*]*m*- possible; l. 19: after *i-ba-aš-šu i*-: MA or MU impossible, hardly: NA, most likely: BE or NU, but NA is not excluded.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52615",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52684.A",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.",
+        "parts" : [
+            {
+                "text" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 48 pl. XXXVI–XXXIX", "notes" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52684",
+        "suffix" : "A"
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52684.B",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.",
+        "parts" : [
+            {
+                "text" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 48 pl. XXXVI–XXXIX", "notes" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52684",
+        "suffix" : "B"
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52305",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.",
+        "parts" : [
+            {
+                "text" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 48 pl. XXXVI–XXXIX", "notes" : "48. Pl. XXXVI–XXXIX: IM 52684A +52684B + 52305; epic of Sargon, cf. Sumer 13 (1957) p. 66 and pl. 16–19. From T. Harmal.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52305",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.52750",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "45. Pl. XXXII–XXXIII: IM 52750; epic of Gilgameš. Cf. Sumer 15 (1959) p. 9 f. and pl. 3-4; 13–15.",
+        "parts" : [
+            {
+                "text" : "45. Pl. XXXII–XXXIII: IM 52750; epic of Gilgameš. Cf. Sumer 15 (1959) p. 9 f. and pl. 3-4; 13–15.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 45 pl. XXXII–XXXIII", "notes" : "45. Pl. XXXII–XXXIII: IM 52750; epic of Gilgameš. Cf. Sumer 15 (1959) p. 9 f. and pl. 3-4; 13–15.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "52750",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.53977",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "35. Pl. XXIV: IM 53977; from T. Harmal, cf. Sumer 11/2 (1955) pl. 16. The beginning of l. 12 had been erased erroneously on my copy in Sumer. Read perhaps in l. 2: *ṣ*[*a-l*]*am* ᵈ[I]M *be-li na-ri-im*; in any case not: ᵈšul-gi. Cf. UET 6, 192.",
+        "parts" : [
+            {
+                "text" : "35. Pl. XXIV: IM 53977; from T. Harmal, cf. Sumer 11/2 (1955) pl. 16. The beginning of l. 12 had been erased erroneously on my copy in Sumer. Read perhaps in l. 2: *ṣ*[*a-l*]*am* ᵈ[I]M *be-li na-ri-im*; in any case not: ᵈšul-gi. Cf. UET 6, 192.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 35 pl. XXIV", "notes" : "35. Pl. XXIV: IM 53977; from T. Harmal, cf. Sumer 11/2 (1955) pl. 16. The beginning of l. 12 had been erased erroneously on my copy in Sumer. Read perhaps in l. 2: *ṣ*[*a-l*]*am* ᵈ[I]M *be-li na-ri-im*; in any case not: ᵈšul-gi. Cf. UET 6, 192.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "53977",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.54345",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "30. Pl. XIX: IM 54345; from T. Harmal, cf. Sumer 13 (1957) 83. Hymn to Utu. Cf. VS 2, 73 and duplicates (J. Krecher).",
+        "parts" : [
+            {
+                "text" : "30. Pl. XIX: IM 54345; from T. Harmal, cf. Sumer 13 (1957) 83. Hymn to Utu. Cf. VS 2, 73 and duplicates (J. Krecher).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 30 pl. XIX", "notes" : "30. Pl. XIX: IM 54345; from T. Harmal, cf. Sumer 13 (1957) 83. Hymn to Utu. Cf. VS 2, 73 and duplicates (J. Krecher).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "54345",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.54616",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "28. Pl. XVIII: IM 54616; from T. Harmal, cf. Sumer 13 (1957) 95, pl. 14; hymn to Utu.",
+        "parts" : [
+            {
+                "text" : "28. Pl. XVIII: IM 54616; from T. Harmal, cf. Sumer 13 (1957) 95, pl. 14; hymn to Utu.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 28 pl. XVIII", "notes" : "28. Pl. XVIII: IM 54616; from T. Harmal, cf. Sumer 13 (1957) 95, pl. 14; hymn to Utu.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "54616",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.55403",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "1. Pl. I–II: IM 55403. From Tell Harmal, cf. Sumer 11/2 (1955) p. 110 and Pl. 13-15; M. Civil, Or 41 (1972) 88 f. The text has been recopied. Between l. 37 and l. 38 there are traces of a number: 3[7] mu-[bi].",
+        "parts" : [
+            {
+                "text" : "1. Pl. I–II: IM 55403. From Tell Harmal, cf. Sumer 11/2 (1955) p. 110 and Pl. 13-15; M. Civil, Or 41 (1972) 88 f. The text has been recopied. Between l. 37 and l. 38 there are traces of a number: 3[7] mu-[bi].",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 1 pl. I–II", "notes" : "1. Pl. I–II: IM 55403. From Tell Harmal, cf. Sumer 11/2 (1955) p. 110 and Pl. 13-15; M. Civil, Or 41 (1972) 88 f. The text has been recopied. Between l. 37 and l. 38 there are traces of a number: 3[7] mu-[bi].", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "55403",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Šaduppûm",
+        "isRegularExcavation" : true,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.58080",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "32. Pl. XXI-XXII: IM 58080; ér-šà-hun-gá(-)an-na-kam: before an-na nothing seems missing. Colophon: dub *šá ištu muḫḫi-ḫi* giš-da gaba-ri ká-dingir-ra.ki x ᴵ*ileʾʾi-bulluṭ*-ᵈ*anum* lú.*kalû* AN *an*[-*tum*]. May be Seleucian from Uruk. For restitution of the contents, cf. p.e.: KAR 161 (S. Langdon, OECT 6, 4 ff.).",
+        "parts" : [
+            {
+                "text" : "32. Pl. XXI-XXII: IM 58080; ér-šà-hun-gá(-)an-na-kam: before an-na nothing seems missing. Colophon: dub *šá ištu muḫḫi-ḫi* giš-da gaba-ri ká-dingir-ra.ki x ᴵ*ileʾʾi-bulluṭ*-ᵈ*anum* lú.*kalû* AN *an*[-*tum*]. May be Seleucian from Uruk. For restitution of the contents, cf. p.e.: KAR 161 (S. Langdon, OECT 6, 4 ff.).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 32 pl. XXI-XXII", "notes" : "32. Pl. XXI-XXII: IM 58080; ér-šà-hun-gá(-)an-na-kam: before an-na nothing seems missing. Colophon: dub *šá ištu muḫḫi-ḫi* giš-da gaba-ri ká-dingir-ra.ki x ᴵ*ileʾʾi-bulluṭ*-ᵈ*anum* lú.*kalû* AN *an*[-*tum*]. May be Seleucian from Uruk. For restitution of the contents, cf. p.e.: KAR 161 (S. Langdon, OECT 6, 4 ff.).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "58080",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "archaeology" : {
+        "excavationNumber" : null,
+        "site" : "Uruk",
+        "isRegularExcavation" : false,
+        "date" : null
+    },
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.62257",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "84. Pl. LXVII: IM 62257; *enūma anu* ᵈ*enlil*, cf. CAD s. *akukūtu* and *ṣallumû*.",
+        "parts" : [
+            {
+                "text" : "84. Pl. LXVII: IM 62257; *enūma anu* ᵈ*enlil*, cf. CAD s. *akukūtu* and *ṣallumû*.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 84 pl. LXVII", "notes" : "84. Pl. LXVII: IM 62257; *enūma anu* ᵈ*enlil*, cf. CAD s. *akukūtu* and *ṣallumû*.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "62257",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.62813",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "100. Pl. LXXVI: IM 62813; process.",
+        "parts" : [
+            {
+                "text" : "100. Pl. LXXVI: IM 62813; process.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 100 pl. LXXVI", "notes" : "100. Pl. LXXVI: IM 62813; process.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "62813",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.62820",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "96. Pl. LXXIV: IM 62820; action at law, apparently finishing with a water-ordeal (Rev. 3, 1’) in the temple of Enki which is surprising since the ordeal should take place in at least a chapel of a vegetation-goddess. This text, and No 100 are belonging to a group of texts coming from in.ki, cf. M. Lambert, AOr 35 (1967) 521; D. O. Edzard, Sumerische Rechtsurkunden (München 1968) 50. The texts were bought from the family Samhery.",
+        "parts" : [
+            {
+                "text" : "96. Pl. LXXIV: IM 62820; action at law, apparently finishing with a water-ordeal (Rev. 3, 1’) in the temple of Enki which is surprising since the ordeal should take place in at least a chapel of a vegetation-goddess. This text, and No 100 are belonging to a group of texts coming from in.ki, cf. M. Lambert, AOr 35 (1967) 521; D. O. Edzard, Sumerische Rechtsurkunden (München 1968) 50. The texts were bought from the family Samhery.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 96 pl. LXXIV", "notes" : "96. Pl. LXXIV: IM 62820; action at law, apparently finishing with a water-ordeal (Rev. 3, 1’) in the temple of Enki which is surprising since the ordeal should take place in at least a chapel of a vegetation-goddess. This text, and No 100 are belonging to a group of texts coming from in.ki, cf. M. Lambert, AOr 35 (1967) 521; D. O. Edzard, Sumerische Rechtsurkunden (München 1968) 50. The texts were bought from the family Samhery.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "62820",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.62823",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "18. Pl. XII-XIII: IM 62823; selected proverbs. Skilfully written.",
+        "parts" : [
+            {
+                "text" : "18. Pl. XII-XIII: IM 62823; selected proverbs. Skilfully written.",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 18 pl. XII-XIII", "notes" : "18. Pl. XII-XIII: IM 62823; selected proverbs. Skilfully written.", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "62823",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+},
+{
+    "_id" : "IM.62827",
+    "accession" : null,
+    "fincke" : "",
+    "publication" : "",
+    "subcollection" : "",
+    "description" : "",
+    "length": {},
+    "width": {},
+    "thickness": {},
+    "collection" : "",
+    "script" : { "period" : "None", "periodModifier" : "None", "uncertain" : false, "sortKey" : null },
+    "dateLegacy" : "",
+    "folios" : [],
+    "record" : [],
+    "notes" : {
+        "text" : "15. Pl. XXI: IM 62827; Rev. // VS 2, 26 Obv. 1 (+ duplic.).",
+        "parts" : [
+            {
+                "text" : "15. Pl. XXI: IM 62827; Rev. // VS 2, 26 Obv. 1 (+ duplic.).",
+                "type" : "StringPart"
+            }
+        ]
+    },
+    "text" : {
+        "lines" : [],
+        "numberOfLines" : 0
+    },
+    "genreLegacy" : "",
+    "legacyJoins" : [],
+    "externalNumbers" : {
+        "cdliNumber" : "",
+        "bmIdNumber" : "",
+        "archibabNumber" : "",
+        "bdtnsNumber" : "",
+        "urOnlineNumber" : ""
+    },
+    "museum" : "THE_IRAQ_MUSEUM",
+"references" : [         { "id" : "LS297", "type" : "COPY", "pages" : "no. 15 pl. XXI", "notes" : "15. Pl. XXI: IM 62827; Rev. // VS 2, 26 Obv. 1 (+ duplic.).", "linesCited" : [] } 
+],
+    "museumNumber" : {
+        "prefix" : "IM",
+        "number" : "62827",
+        "suffix" : ""
+    },
+    "genres" : [],
+    "projects" : [ "CAIC" ]
+}
+]
