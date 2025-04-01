@@ -49,6 +49,7 @@ class NotLowestJoinError(ValueError):
 class UncuratedReference:
     document: str
     pages: Sequence[int] = ()
+    search_term: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, frozen=True)

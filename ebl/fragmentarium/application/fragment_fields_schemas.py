@@ -69,6 +69,7 @@ class FoliosSchema(Schema):
 class UncuratedReferenceSchema(Schema):
     document = fields.String(required=True)
     pages = fields.List(fields.Integer(), required=True)
+    search_term = fields.String(data_key="searchTerm", allow_none=True)
 
     @post_load
     def make_uncurated_reference(self, data, **kwargs):
