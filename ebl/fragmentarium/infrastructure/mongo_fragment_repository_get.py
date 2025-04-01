@@ -11,7 +11,6 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.domain.token_annotation import LemmaSuggestions
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
@@ -352,7 +351,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         )
         return list(fragments)
 
-    def prefill_lemmas(self, number: MuseumNumber) -> LemmaSuggestions:
+    def prefill_lemmas(self, number: MuseumNumber):
         fragment = self.query_by_museum_number(number)
         clean_values = defaultdict(list)
 
@@ -363,15 +362,13 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
                 if token.lemmatizable:
                     clean_values[token.clean_value].append((line_index, token_index))
 
-        result = self._fragments.aggregate(
-            [*fragment_lemma_pipeline(list(clean_values)), *aggregate_counts()]
-        )
-
         return {
             element["_id"]: max(
                 element["lemmatizations"], key=lambda entry: entry["count"]
             )["uniqueLemma"]
-            for element in result
+            for element in self._fragments.aggregate(
+                [*fragment_lemma_pipeline(list(clean_values)), *aggregate_counts()]
+            )
         }
 
 

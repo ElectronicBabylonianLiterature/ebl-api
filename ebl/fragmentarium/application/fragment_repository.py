@@ -7,7 +7,7 @@ from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
-from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
+from ebl.fragmentarium.domain.token_annotation import LemmaSuggestions
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.date import Date
 
@@ -107,4 +107,4 @@ class FragmentRepository(ABC):
     def fetch_fragment_signs(self) -> Sequence[dict]: ...
 
     @abstractmethod
-    def prefill_lemmas(self, number: MuseumNumber) -> TextLemmaAnnotation: ...
+    def prefill_lemmas(self, number: MuseumNumber) -> LemmaSuggestions: ...
