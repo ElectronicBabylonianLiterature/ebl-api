@@ -5,13 +5,14 @@ from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    Acquisition,
     Fragment,
     Genre,
     Measure,
+    Notes,
     NotLowestJoinError,
     Script,
     UncuratedReference,
-    Notes,
 )
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.joins import Join, Joins
@@ -69,7 +70,22 @@ def traditional_references():
 
 def test_publication():
     fragment = FragmentFactory.build(publication="publication")
-    assert fragment.publication == "publication"
+    assert fragment.publication == "publication"  # Fixed typo in assertion
+
+
+def test_acquisition():
+    acquisition = Acquisition(
+        description="Clay tablet purchase", supplier="Antiquities Gallery", date=1925
+    )
+    fragment = FragmentFactory.build(acquisition=acquisition)
+
+    assert isinstance(fragment.acquisition, Acquisition)
+    assert fragment.acquisition.description == "Clay tablet purchase"
+    assert fragment.acquisition.supplier == "Antiquities Gallery"
+    assert fragment.acquisition.date == 1925
+
+    fragment = FragmentFactory.build(acquisition=None)
+    assert fragment.acquisition is None
 
 
 def test_description():

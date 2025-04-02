@@ -1,7 +1,6 @@
 from enum import Enum
 from itertools import groupby
-from typing import Optional, Sequence, Tuple
-
+from typing import Dict, Any, Optional, Sequence, Tuple
 import attr
 import pydash
 from ebl.fragmentarium.domain.museum import Museum
@@ -59,6 +58,21 @@ class Measure:
 
 
 @attr.s(auto_attribs=True, frozen=True)
+class Acquisition:
+    description: str = ""
+    supplier: str = ""
+    date: int = 0
+
+    @staticmethod
+    def of(source: Dict[str, Any]) -> "Acquisition":
+        return Acquisition(
+            description=source.get("description", ""),
+            supplier=source.get("supplier", ""),
+            date=source.get("date", 0),
+        )
+
+
+@attr.s(auto_attribs=True, frozen=True)
 class Genre:
     category: Sequence[str] = attr.ib()
     uncertain: bool = False
@@ -111,6 +125,7 @@ class Fragment(FragmentExternalNumbers):
     number: MuseumNumber
     accession: Optional[Accession] = None
     publication: str = ""
+    acquisition: Optional[Acquisition] = None
     description: str = ""
     cdli_images: Sequence[str] = []
     collection: str = ""
