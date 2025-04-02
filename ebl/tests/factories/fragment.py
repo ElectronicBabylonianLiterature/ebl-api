@@ -219,6 +219,15 @@ class FragmentDossierReferenceFactory(factory.Factory):
     isUncertain = factory.Faker("boolean")
 
 
+class AcquisitionFactory(factory.Factory):
+    class Meta:
+        model = Acquisition
+
+    description = factory.Faker("sentence")
+    supplier = factory.Faker("company")
+    date = factory.Faker("random_int", min=1800, max=2023)
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
@@ -228,6 +237,7 @@ class FragmentFactory(factory.Factory):
     museum = factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN])
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
+    acquisition = factory.SubFactory(AcquisitionFactory)
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)

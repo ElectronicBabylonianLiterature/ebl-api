@@ -18,11 +18,12 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.fragment_fields_schemas import (
+    AcquisitionSchema,
+    DossierReferenceSchema,
     ExternalNumbersSchema,
     IntroductionSchema,
     NotesSchema,
     ScriptSchema,
-    DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.colophon_schema import ColophonSchema
@@ -50,6 +51,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
             "cdliImages": lemmatized_fragment.cdli_images,
+            "acquisition": AcquisitionSchema().dumpt(lemmatized_fragment.acquisition),
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
             "length": attr.asdict(

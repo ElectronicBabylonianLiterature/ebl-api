@@ -1,9 +1,10 @@
 from enum import Enum
 from itertools import groupby
-from typing import Optional, Sequence, Tuple
-
+from typing import Dict, Any, Optional, Sequence, Tuple
+import functools
 import attr
 import pydash
+import re
 from ebl.fragmentarium.domain.museum import Museum
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.accession import Accession
@@ -55,6 +56,41 @@ class UncuratedReference:
 class Measure:
     value: Optional[float] = None
     note: Optional[str] = None
+
+
+@functools.total_ordering
+@attr.s(auto_attribs=True, frozen=True, order=False)
+class Acquisition:
+    description: str
+    supplier: str
+    date: int
+
+    @staticmethod
+    def of(source: Dict[str, Any]) -> "Acquisition":
+        try:
+            return Acquisition(
+                description=source["description"],
+                supplier=source["supplier"],
+                date=source["date"],
+            )
+        except KeyError as e:
+            raise ValueError(f"Missing required field in acquisition data: {e}")
+        except TypeError:
+            raise ValueError("Acquisition data must be a dictionary")
+
+    def __lt__(self, other):
+        if not isinstance(other, Acquisition):
+            return NotImplemented
+        return self.date < other.date
+
+    def __eq__(self, other):
+        if not isinstance(other, Acquisition):
+            return NotImplemented
+        return (
+            self.description == other.description
+            and self.supplier == other.supplier
+            and self.date == other.date
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -110,6 +146,7 @@ class Fragment(FragmentExternalNumbers):
     number: MuseumNumber
     accession: Optional[Accession] = None
     publication: str = ""
+    acquisition: Optional[Acquisition] = None
     description: str = ""
     cdli_images: Sequence[str] = []
     collection: str = ""

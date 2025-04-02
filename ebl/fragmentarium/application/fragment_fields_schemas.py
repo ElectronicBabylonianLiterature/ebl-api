@@ -18,101 +18,27 @@ from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 
 
-class MeasureSchema(Schema):
-    value = fields.Float(load_default=None)
-    note = fields.String(load_default=None)
+class AcquisitionSchema(Schema):
+    description = fields.String(required=True)
+    dealer = fields.String(required=True)
+    date = fields.Integer(required=True)
 
     @post_load
-    def make_measure(self, data, **kwargs):
-        return Measure(**data)
+    def make_acquisition(self, data, **kwargs):
+        return Acquisition(**data)
 
     @post_dump
-    def filter_none(self, data, **kwargs):
-        return pydash.omit_by(data, pydash.is_none)
+    def filter_empty(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_empty)
 
 
-class RecordEntrySchema(Schema):
-    user = fields.String(required=True)
-    type = ValueEnumField(RecordType, required=True)
-    date = fields.String(required=True)
-
-    @post_load
-    def make_record_entry(self, data, **kwargs):
-        return RecordEntry(**data)
-
-
-class RecordSchema(Schema):
-    entries = fields.Nested(RecordEntrySchema, many=True, required=True)
+class DossierReferenceSchema(Schema):
+    dossierId = fields.String(required=True)
+    isUncertain = fields.Boolean(load_default=False)
 
     @post_load
-    def make_record(self, data, **kwargs):
-        return Record(tuple(data["entries"]))
-
-
-class FolioSchema(Schema):
-    name = fields.String(required=True)
-    number = fields.String(required=True)
-
-    @post_load
-    def make_record_entry(self, data, **kwargs):
-        return Folio(**data)
-
-
-class FoliosSchema(Schema):
-    entries = fields.Nested(FolioSchema, many=True, required=True)
-
-    @post_load
-    def make_folio(self, data, **kwargs):
-        return Folios(tuple(data["entries"]))
-
-
-class UncuratedReferenceSchema(Schema):
-    document = fields.String(required=True)
-    pages = fields.List(fields.Integer(), required=True)
-
-    @post_load
-    def make_uncurated_reference(self, data, **kwargs):
-        data["pages"] = tuple(data["pages"])
-        return UncuratedReference(**data)
-
-
-class MarkupTextSchema(Schema):
-    text = fields.String(required=True)
-    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
-
-
-class IntroductionSchema(MarkupTextSchema):
-    @post_load
-    def make_introduction(self, data, **kwargs) -> Introduction:
-        return Introduction(data["text"], tuple(data["parts"]))
-
-
-class NotesSchema(MarkupTextSchema):
-    @post_load
-    def make_notes(self, data, **kwargs) -> Notes:
-        return Notes(data["text"], tuple(data["parts"]))
-
-
-class ScriptSchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    period = fields.Function(
-        lambda script: script.period.long_name,
-        lambda value: Period.from_name(value),
-        required=True,
-    )
-    period_modifier = ValueEnumField(
-        PeriodModifier, required=True, data_key="periodModifier"
-    )
-    uncertain = fields.Boolean(load_default=None)
-    sort_key = fields.Function(
-        lambda script: script.period.sort_key, data_key="sortKey", dump_only=True
-    )
-
-    @post_load
-    def make_script(self, data, **kwargs) -> Script:
-        return Script(**data)
+    def make_dossier_reference(self, data, **kwargs) -> DossierReference:
+        return DossierReference(**data)
 
 
 class ExternalNumbersSchema(Schema):
@@ -162,10 +88,99 @@ class ExternalNumbersSchema(Schema):
         return pydash.omit_by(data, pydash.is_empty)
 
 
-class DossierReferenceSchema(Schema):
-    dossierId = fields.String(required=True)
-    isUncertain = fields.Boolean(load_default=False)
+class FolioSchema(Schema):
+    name = fields.String(required=True)
+    number = fields.String(required=True)
 
     @post_load
-    def make_dossier_reference(self, data, **kwargs) -> DossierReference:
-        return DossierReference(**data)
+    def make_record_entry(self, data, **kwargs):
+        return Folio(**data)
+
+
+class FoliosSchema(Schema):
+    entries = fields.Nested(FolioSchema, many=True, required=True)
+
+    @post_load
+    def make_folio(self, data, **kwargs):
+        return Folios(tuple(data["entries"]))
+
+
+class IntroductionSchema(MarkupTextSchema):
+    @post_load
+    def make_introduction(self, data, **kwargs) -> Introduction:
+        return Introduction(data["text"], tuple(data["parts"]))
+
+
+class MarkupTextSchema(Schema):
+    text = fields.String(required=True)
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
+
+
+class MeasureSchema(Schema):
+    value = fields.Float(load_default=None)
+    note = fields.String(load_default=None)
+
+    @post_load
+    def make_measure(self, data, **kwargs):
+        return Measure(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
+
+class NotesSchema(MarkupTextSchema):
+    @post_load
+    def make_notes(self, data, **kwargs) -> Notes:
+        return Notes(data["text"], tuple(data["parts"]))
+
+
+class RecordEntrySchema(Schema):
+    user = fields.String(required=True)
+    type = ValueEnumField(RecordType, required=True)
+    date = fields.String(required=True)
+
+    @post_load
+    def make_record_entry(self, data, **kwargs):
+        return RecordEntry(**data)
+
+
+class RecordSchema(Schema):
+    entries = fields.Nested(RecordEntrySchema, many=True, required=True)
+
+    @post_load
+    def make_record(self, data, **kwargs):
+        return Record(tuple(data["entries"]))
+
+
+class ScriptSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    period = fields.Function(
+        lambda script: script.period.long_name,
+        lambda value: Period.from_name(value),
+        required=True,
+    )
+    period_modifier = ValueEnumField(
+        PeriodModifier, required=True, data_key="periodModifier"
+    )
+    uncertain = fields.Boolean(load_default=None)
+    sort_key = fields.Function(
+        lambda script: script.period.sort_key, data_key="sortKey", dump_only=True
+    )
+
+    @post_load
+    def make_script(self, data, **kwargs) -> Script:
+        return Script(**data)
+
+
+class UncuratedReferenceSchema(Schema):
+    document = fields.String(required=True)
+    pages = fields.List(fields.Integer(), required=True)
+    search_term = fields.String(data_key="searchTerm", allow_none=True)
+
+    @post_load
+    def make_uncurated_reference(self, data, **kwargs):
+        data["pages"] = tuple(data["pages"])
+        return UncuratedReference(**data)
