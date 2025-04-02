@@ -1,10 +1,8 @@
 from enum import Enum
 from itertools import groupby
 from typing import Dict, Any, Optional, Sequence, Tuple
-import functools
 import attr
 import pydash
-import re
 from ebl.fragmentarium.domain.museum import Museum
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.accession import Accession
@@ -58,38 +56,18 @@ class Measure:
     note: Optional[str] = None
 
 
-@functools.total_ordering
-@attr.s(auto_attribs=True, frozen=True, order=False)
+@attr.s(auto_attribs=True, frozen=True)
 class Acquisition:
-    description: str
-    supplier: str
-    date: int
+    description: str = ""
+    supplier: str = ""
+    date: int = 0
 
     @staticmethod
     def of(source: Dict[str, Any]) -> "Acquisition":
-        try:
-            return Acquisition(
-                description=source["description"],
-                supplier=source["supplier"],
-                date=source["date"],
-            )
-        except KeyError as e:
-            raise ValueError(f"Missing required field in acquisition data: {e}")
-        except TypeError:
-            raise ValueError("Acquisition data must be a dictionary")
-
-    def __lt__(self, other):
-        if not isinstance(other, Acquisition):
-            return NotImplemented
-        return self.date < other.date
-
-    def __eq__(self, other):
-        if not isinstance(other, Acquisition):
-            return NotImplemented
-        return (
-            self.description == other.description
-            and self.supplier == other.supplier
-            and self.date == other.date
+        return Acquisition(
+            description=source.get("description", ""),
+            supplier=source.get("supplier", ""),
+            date=source.get("date", 0),
         )
 
 

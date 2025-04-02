@@ -13,13 +13,14 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    Acquisition,
+    DossierReference,
     Fragment,
     Genre,
     Introduction,
     Notes,
     Script,
     UncuratedReference,
-    DossierReference,
 )
 
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers

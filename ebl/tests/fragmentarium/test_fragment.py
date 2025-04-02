@@ -5,13 +5,14 @@ from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    Acquisition,
     Fragment,
     Genre,
     Measure,
+    Notes,
     NotLowestJoinError,
     Script,
     UncuratedReference,
-    Notes,
 )
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.joins import Join, Joins

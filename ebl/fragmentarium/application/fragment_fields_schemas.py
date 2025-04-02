@@ -2,12 +2,13 @@ import pydash
 from marshmallow import Schema, fields, post_dump, post_load, EXCLUDE
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    Introduction,
-    Notes,
-    Measure,
-    UncuratedReference,
-    Script,
+    Acquisition,
     DossierReference,
+    Introduction,
+    Measure,
+    Notes,
+    Script,
+    UncuratedReference,
 )
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.schemas import ValueEnumField
@@ -105,15 +106,15 @@ class FoliosSchema(Schema):
         return Folios(tuple(data["entries"]))
 
 
+class MarkupTextSchema(Schema):
+    text = fields.String(required=True)
+    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
+
+
 class IntroductionSchema(MarkupTextSchema):
     @post_load
     def make_introduction(self, data, **kwargs) -> Introduction:
         return Introduction(data["text"], tuple(data["parts"]))
-
-
-class MarkupTextSchema(Schema):
-    text = fields.String(required=True)
-    parts = fields.List(fields.Nested(OneOfNoteLinePartSchema), required=True)
 
 
 class MeasureSchema(Schema):
