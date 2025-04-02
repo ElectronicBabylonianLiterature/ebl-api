@@ -51,7 +51,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
             "cdliImages": lemmatized_fragment.cdli_images,
-            "acquisition": AcquisitionSchema().dumpt(lemmatized_fragment.acquisition),
+            "acquisition": AcquisitionSchema().dump(lemmatized_fragment.acquisition),
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
             "length": attr.asdict(

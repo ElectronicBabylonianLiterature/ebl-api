@@ -19,9 +19,9 @@ from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 
 
 class AcquisitionSchema(Schema):
-    description = fields.String(required=True)
-    dealer = fields.String(required=True)
-    date = fields.Integer(required=True)
+    description = fields.String(allow_none=True)
+    supplier = fields.String(required=True)
+    date = fields.Integer(allow_none=True)
 
     @post_load
     def make_acquisition(self, data, **kwargs):
