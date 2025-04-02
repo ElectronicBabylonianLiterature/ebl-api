@@ -225,8 +225,8 @@ class AcquisitionFactory(factory.Factory):
         model = Acquisition
 
     description = factory.Faker("sentence")
-    supplier = factory.Faker("company")
-    date = factory.Faker("random_int", min=1800, max=2023)
+    supplier = factory.Faker("word")
+    date = 0
 
 
 class FragmentFactory(factory.Factory):
