@@ -21,6 +21,7 @@ from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.fragment import (
+    Acquisition,
     Fragment,
     Genre,
     Introduction,

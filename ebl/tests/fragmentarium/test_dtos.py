@@ -149,6 +149,7 @@ def test_create_fragment_info_dto():
         "accession": AccessionSchema().dump(info.accession),
         "script": ScriptSchema().dump(info.script),
         "description": info.description,
+        "acquisition": AcquisitionSchema().dump(info.acquisition),
         "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",
