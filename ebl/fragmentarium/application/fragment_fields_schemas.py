@@ -20,8 +20,8 @@ from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 
 
 class AcquisitionSchema(Schema):
-    description = fields.String(required=True)
-    date = fields.Integer(required=True)
+    description = fields.String()
+    date = fields.Integer()
     supplier = fields.String(required=True)
 
     @post_load
