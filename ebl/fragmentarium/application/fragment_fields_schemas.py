@@ -20,17 +20,13 @@ from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 
 
 class AcquisitionSchema(Schema):
-    description = fields.String(allow_none=True)
+    description = fields.String(required=True)
+    date = fields.Integer(required=True)
     supplier = fields.String(required=True)
-    date = fields.Integer(allow_none=True)
 
     @post_load
     def make_acquisition(self, data, **kwargs):
         return Acquisition(**data)
-
-    @post_dump
-    def filter_empty(self, data, **kwargs):
-        return pydash.omit_by(data, pydash.is_empty)
 
 
 class DossierReferenceSchema(Schema):
