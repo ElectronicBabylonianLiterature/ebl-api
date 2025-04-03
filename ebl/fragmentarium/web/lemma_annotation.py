@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.dictionary.application.word_repository import WordRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -48,10 +49,33 @@ class LemmaAnnotationResource:
 
 
 class AutofillLemmasResource:
-    def __init__(self, repository: FragmentRepository):
-        self._repository = repository
+    def __init__(
+        self,
+        fragment_repository: FragmentRepository,
+        word_repository: WordRepository,
+    ):
+        self._fragment_repository = fragment_repository
+        self._word_repository = word_repository
+
+    def _collect_words(self, suggestions: dict) -> dict:
+        words = self._word_repository.query_by_ids(
+            list(
+                {
+                    lemma_id
+                    for unique_lemma in suggestions.values()
+                    for lemma_id in unique_lemma
+                }
+            )
+        )
+        return {word["_id"]: word for word in words}
 
     @falcon.before(require_scope, "lemmatize:fragments")
     def on_get(self, req, resp, number: str):
         museum_number = parse_museum_number(number)
-        resp.media = self._repository.prefill_lemmas(museum_number)
+        suggestions = self._fragment_repository.collect_lemmas(museum_number)
+        words = self._collect_words(suggestions)
+
+        resp.media = {
+            key: [words[lemma] for lemma in unique_lemma]
+            for key, unique_lemma in suggestions.items()
+        }

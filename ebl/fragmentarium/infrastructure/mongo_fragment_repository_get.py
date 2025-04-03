@@ -1,4 +1,3 @@
-from collections import defaultdict
 from typing import List, Optional, Sequence, Iterator
 
 from marshmallow import EXCLUDE
@@ -135,12 +134,6 @@ def fragment_lemma_pipeline(clean_values: List[str]) -> List[dict]:
             "$match": {
                 "uniqueLemma.0": {"$exists": True},
                 "cleanValue": {"$in": clean_values},
-            }
-        },
-        {
-            "$unionWith": {
-                "coll": "chapters",
-                "pipeline": chapter_lemma_pipeline(clean_values),
             }
         },
     ]
@@ -351,23 +344,33 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         )
         return list(fragments)
 
-    def prefill_lemmas(self, number: MuseumNumber):
+    def collect_lemmas(self, number: MuseumNumber):
         fragment = self.query_by_museum_number(number)
-        clean_values = defaultdict(list)
-
-        for line_index, line in enumerate(fragment.text.lines):
-            if not isinstance(line, TextLine):
-                continue
-            for token_index, token in enumerate(line.content):
-                if token.lemmatizable:
-                    clean_values[token.clean_value].append((line_index, token_index))
+        clean_values = list(
+            {
+                token.clean_value
+                for line in fragment.text.lines
+                if isinstance(line, TextLine)
+                for token in line.content
+                if token.lemmatizable
+            }
+        )
 
         return {
             element["_id"]: max(
                 element["lemmatizations"], key=lambda entry: entry["count"]
             )["uniqueLemma"]
             for element in self._fragments.aggregate(
-                [*fragment_lemma_pipeline(list(clean_values)), *aggregate_counts()]
+                [
+                    *fragment_lemma_pipeline(clean_values),
+                    {
+                        "$unionWith": {
+                            "coll": "chapters",
+                            "pipeline": chapter_lemma_pipeline(clean_values),
+                        }
+                    },
+                    *aggregate_counts(),
+                ]
             )
         }
 
