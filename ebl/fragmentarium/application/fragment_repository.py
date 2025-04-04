@@ -104,3 +104,6 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def fetch_fragment_signs(self) -> Sequence[dict]: ...
+
+    @abstractmethod
+    def collect_lemmas(self, number: MuseumNumber) -> dict: ...

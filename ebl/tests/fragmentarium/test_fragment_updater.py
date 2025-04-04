@@ -340,3 +340,35 @@ def test_update_notes(
 
     result = fragment_updater.update_edition(number, user, notes=notes)
     assert result == (updated_fragment, False)
+
+
+@freeze_time("2018-09-07 15:41:24.032")
+def test_update_lemma_annotation(
+    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    number = transliterated_fragment.number
+
+    annotation = {1: {3: ["aklu I"]}}
+    lemmatized_fragment = transliterated_fragment.update_lemma_annotation(annotation)
+
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(transliterated_fragment)
+    )
+    injected_fragment = lemmatized_fragment.set_text(
+        parallel_line_injector.inject_transliteration(lemmatized_fragment.text)
+    )
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field(
+        "lemmatization", lemmatized_fragment
+    ).thenReturn()
+
+    result = fragment_updater.update_lemma_annotation(number, annotation, user)
+    assert result == (injected_fragment, False)

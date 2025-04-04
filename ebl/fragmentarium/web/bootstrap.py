@@ -30,6 +30,10 @@ from ebl.fragmentarium.web.fragments import (
     make_all_fragment_signs_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
+from ebl.fragmentarium.web.lemma_annotation import (
+    LemmaAnnotationResource,
+    AutofillLemmasResource,
+)
 from ebl.fragmentarium.web.provenances import ProvenancesResource
 from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
@@ -107,6 +111,10 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     provenances = ProvenancesResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
+    lemma_annotation = LemmaAnnotationResource(updater)
+    lemma_autofill = AutofillLemmasResource(
+        context.fragment_repository, context.word_repository
+    )
     references = ReferencesResource(updater)
     edition = EditionResource(updater, context.get_transliteration_update_factory())
     scopes = FragmentAuthorizedScopesResource(
@@ -139,6 +147,8 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}", fragments),
         ("/fragments/{number}/pager", fragment_pager),
         ("/fragments/{number}/lemmatization", lemmatization),
+        ("/fragments/{number}/lemma-annotation", lemma_annotation),
+        ("/fragments/{number}/collect-lemmas", lemma_autofill),
         ("/fragments/{number}/references", references),
         ("/fragments/{number}/edition", edition),
         ("/fragments/{number}/archaeology", archaeology),
