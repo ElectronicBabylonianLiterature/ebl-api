@@ -275,13 +275,13 @@ def test_interesting(client, fragmentarium):
 def test_needs_revision(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
-
+    expected_fragment = attr.evolve(transliterated_fragment, genres=())
     result = client.simulate_get("/fragments", params={"needsRevision": True})
-
+    expected_dto = [expected_fragment_info_dto(expected_fragment)]
+    if "acquisition" in expected_dto[0]:
+        del expected_dto[0]["acquisition"]
     assert result.status == falcon.HTTP_OK
-    assert result.json == [
-        expected_fragment_info_dto(attr.evolve(transliterated_fragment, genres=()))
-    ]
+    assert result.json == expected_dto
     assert result.headers["Cache-Control"] == "private, max-age=600"
 
 

@@ -18,11 +18,12 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.fragmentarium.application.fragment_fields_schemas import (
+    AcquisitionSchema,
+    DossierReferenceSchema,
     ExternalNumbersSchema,
     IntroductionSchema,
     NotesSchema,
     ScriptSchema,
-    DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.colophon_schema import ColophonSchema
@@ -49,6 +50,8 @@ def expected_dto(lemmatized_fragment, has_photo):
             "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
+            "cdliImages": lemmatized_fragment.cdli_images,
+            "acquisition": AcquisitionSchema().dump(lemmatized_fragment.acquisition),
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
             "length": attr.asdict(
@@ -146,6 +149,7 @@ def test_create_fragment_info_dto():
         "accession": AccessionSchema().dump(info.accession),
         "script": ScriptSchema().dump(info.script),
         "description": info.description,
+        "acquisition": AcquisitionSchema().dump(info.acquisition),
         "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",

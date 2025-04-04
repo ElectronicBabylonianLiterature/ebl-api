@@ -13,13 +13,14 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
+    Acquisition,
+    DossierReference,
     Fragment,
     Genre,
     Introduction,
     Notes,
     Script,
     UncuratedReference,
-    DossierReference,
 )
 
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
@@ -192,6 +193,7 @@ class ExternalNumbersFactory(factory.Factory):
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
     dublin_tcd_number = factory.Sequence(lambda n: f"dublin-tcd-number-{n}")
     cambridge_maa_number = factory.Sequence(lambda n: f"cambridge-maa-number-{n}")
+    ashmolean_number = factory.Sequence(lambda n: f"ashmolean-number-{n}")
     alalah_hpm_number = factory.Sequence(lambda n: f"alalah-hpm-number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"
@@ -219,6 +221,15 @@ class FragmentDossierReferenceFactory(factory.Factory):
     isUncertain = factory.Faker("boolean")
 
 
+class AcquisitionFactory(factory.Factory):
+    class Meta:
+        model = Acquisition
+
+    description = factory.Faker("sentence")
+    supplier = factory.Faker("word")
+    date = 0
+
+
 class FragmentFactory(factory.Factory):
     class Meta:
         model = Fragment
@@ -228,6 +239,7 @@ class FragmentFactory(factory.Factory):
     museum = factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN])
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
+    acquisition = factory.SubFactory(AcquisitionFactory)
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)

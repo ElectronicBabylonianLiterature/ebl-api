@@ -270,8 +270,7 @@ if __name__ == "__main__":
     valid_count = fragment_count - fail_count
 
     print(
-        f"Validation of {valid_count} out of {fragment_count} "
-        "document(s) successful."
+        f"Validation of {valid_count} out of {fragment_count} document(s) successful."
     )
 
     if not valid_count:

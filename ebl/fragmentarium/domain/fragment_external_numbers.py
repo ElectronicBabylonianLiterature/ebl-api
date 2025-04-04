@@ -17,6 +17,7 @@ class ExternalNumbers:
     louvre_number: str = ""
     dublin_tcd_number: str = ""
     cambridge_maa_number: str = ""
+    ashmolean_number: str = ""
     alalah_hpm_number: str = ""
     australianinstituteofarchaeology_number: str = ""
     philadelphia_number: str = ""
@@ -89,6 +90,10 @@ class FragmentExternalNumbers:
     @property
     def cambridge_maa_number(self) -> str:
         return self._get_external_number("cambridge_maa_number")
+
+    @property
+    def ashmolean_number(self) -> str:
+        return self._get_external_number("ashmolean_number")
 
     @property
     def alalah_hpm_number(self) -> str:
