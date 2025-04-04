@@ -112,7 +112,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
     lemma_annotation = LemmaAnnotationResource(updater)
-    lemma_autofill = AutofillLemmasResource(context.fragment_repository, context.word_repository)
+    lemma_autofill = AutofillLemmasResource(
+        context.fragment_repository, context.word_repository
+    )
     references = ReferencesResource(updater)
     edition = EditionResource(updater, context.get_transliteration_update_factory())
     scopes = FragmentAuthorizedScopesResource(
