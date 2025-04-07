@@ -26,7 +26,6 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.bibliography.infrastructure.bibliography import join_reference_documents
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended import (
@@ -349,13 +348,11 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         clean_values = list(
             {
                 token.clean_value
-                for line in fragment.text.lines
-                if isinstance(line, TextLine)
+                for line in fragment.text.text_lines
                 for token in line.content
                 if token.lemmatizable
             }
         )
-
         return {
             element["_id"]: max(
                 element["lemmatizations"], key=lambda entry: entry["count"]
