@@ -76,6 +76,6 @@ class AutofillLemmasResource:
         words = self._collect_words(suggestions)
 
         resp.media = {
-            key: [words[lemma] for lemma in unique_lemma]
+            key: [words[lemma] for lemma in unique_lemma if lemma in words]
             for key, unique_lemma in suggestions.items()
         }
