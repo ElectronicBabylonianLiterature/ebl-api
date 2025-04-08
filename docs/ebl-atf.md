@@ -81,7 +81,7 @@ line = empty-line
 
 empty-line = '';
 
-control-line = '=:' | '&' | '#', { any-character };
+control-line = '=:' | '&', { any-character };
 ```
 
 ## @-lines

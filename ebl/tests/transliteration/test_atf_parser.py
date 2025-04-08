@@ -37,14 +37,6 @@ def test_parser_version(parser, version):
     [
         ("", []),
         ("\n", []),
-        (
-            "#first\n\n#second",
-            [ControlLine("#", "first"), EmptyLine(), ControlLine("#", "second")],
-        ),
-        (
-            "#first\n \n#second",
-            [ControlLine("#", "first"), EmptyLine(), ControlLine("#", "second")],
-        ),
         ("&K11111", [ControlLine("&", "K11111")]),
         ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
         (
@@ -59,7 +51,6 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
-        ("#some notes", [ControlLine("#", "some notes")]),
         ("=: continuation", [ControlLine("=:", " continuation")]),
     ],
 )
