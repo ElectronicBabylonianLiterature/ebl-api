@@ -121,6 +121,9 @@ divider_variant: divider _VARIANT_SEPARATOR divider
 tabulation: TABULATION
 TABULATION: "($___$)"
 
+word_ommited: WORD_OMMITED
+WORD_OMMITED: "ø"
+
 column_token: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
 

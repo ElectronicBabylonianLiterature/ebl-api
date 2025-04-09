@@ -336,6 +336,7 @@ the separator is ignored (see Word below) or can be omitted.
 
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
 |--------------|------------|--------------|-----------|-------|
+| WordOmmitted | `ø` | No | No | |
 | Tabulation   | `($___$)` | No | No | |
 | Divider      | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Egyptian Metrical Feet Separator | `•` | No | No | Can be within a word or standing alone between words. Can be followed by flags and surrounded with broken away and presence indicators . |
@@ -376,6 +377,7 @@ token = commentary-protocol
       | open-removal
       | open-document-oriented-gloss;
 
+word-ommited = 'ø';
 tabulation = '($___$)';
 
 divider-variant = ( variant-part | divider ), variant-separator,
