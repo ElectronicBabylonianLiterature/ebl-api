@@ -695,7 +695,7 @@ type = 'Sch'
 ## Validation
 
 The ATF should be parseable using the specification above. In addition,
-all readings and signs must be correct according to our sign list. Sometimes
+all readings and signs must be correct according to the eBL sign list. Sometimes
 when the validation or parsing logic is updated existing transliterations can
 become invalid. It should still be possible to load these transliterations, but
 saving them results in an error until the syntax is corrected.
