@@ -65,6 +65,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
         ("1. x\nthis is not valid", [2]),
         ("this is not valid\nthis is not valid", [1, 2]),
         ("$ ", [1]),
+        ("#first\n\n#second", [1, 3]),
     ],
 )
 def test_invalid_atf(atf, line_numbers) -> None:
