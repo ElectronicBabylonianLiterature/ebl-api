@@ -112,7 +112,7 @@ composite = composite_composite | composite_start | composite_end | composite_mi
 composite_start = 'div ', free-text, [ ' ', number ];
 composite_end = 'end ', free-text;
 composite_composite: 'composite';
-composite_milestone: 'm=locator ', free_text, [ ' ', number ];
+composite_milestone: 'm=locator ', free-text, [ ' ', number ];
 ```
 
 ## $-lines
@@ -176,7 +176,7 @@ parallel-composition = '(',  { any-character }-, ' ', line-number,  ')';
 
 parallel-text = genre, ' ', category, '.', index, ' ',
                 [ stage, ' ',  [ version, ' ' ], chapter , ' ' ], line-number;
-genre = 'L' | 'D' | 'Lex' | 'Med' | 'Mag' | 'Šui'
+genre = 'L' | 'D' | 'Lex' | 'Med' | 'Mag'
 category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
            (* Must be a valid numeral. *)
 stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' |
@@ -199,7 +199,7 @@ museum-number = ? .+?\.[^.]+(\.[^.]+)? ?;
 ```ebnf
 translation-line = '#tr', [ '.', language-code ],
                    [ '.', translation-extent ], ': ', markup;
-                   (* If omitted the language-code is en. *)
+                   (* If omitted the language-code is 'en'. *)
 language-code = ? ISO 639-1 language code ?;
 translation-extent = '(', [ label, ' ' ] , line-number, ')';
 ```
