@@ -1,7 +1,10 @@
+import re
+from typing import Sequence
+from lark import Tree
 from lark.visitors import Transformer, v_args
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.atf import sub_index_to_int
+from ebl.transliteration.domain.atf import sub_index_to_int, to_sub_index
 from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
     EgyptianMetricalFeetSeparator,
 )
@@ -17,7 +20,24 @@ from ebl.transliteration.domain.tokens import UnknownNumberOfSigns, ValueToken
 from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
 
 
+def tree_to_string(tree: Tree) -> str:
+    _children = []
+    for part in tree.scan_values(lambda x: x):
+        if hasattr(part, "value"):
+            _children.append(part.value)
+        elif isinstance(part, Tree):
+            _children.append(tree_to_string(part))
+        else:
+            _children.append(str(part))
+    return "".join(_children)
+
+
 class SignTransformer(Transformer):
+    def __init__(self):
+        super().__init__()
+        for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
+            setattr(self, f"ebl_atf_note_line__{method}", getattr(self, method))
+
     @v_args(inline=True)
     def ebl_atf_text_line__unidentified_sign(self, flags):
         return UnidentifiedSign.of(flags)
@@ -78,6 +98,9 @@ class SignTransformer(Transformer):
     def ebl_atf_text_line__sub_index(self, sub_index=""):
         return sub_index_to_int(sub_index)
 
+    def ebl_atf_text_line__modifier(self, tokens):
+        return "".join(map(str, tokens))
+
     def ebl_atf_text_line__modifiers(self, tokens):
         return tuple(map(str, tokens))
 
@@ -85,8 +108,35 @@ class SignTransformer(Transformer):
         return tuple(map(atf.Flag, tokens))
 
     @v_args(inline=True)
-    def ebl_atf_text_line__grapheme(self, name, modifiers, flags):
-        return Grapheme.of(name.value, modifiers, flags)
+    def ebl_atf_text_line__grapheme(self, name, sub_index, modifiers, flags):
+        _name = tree_to_string(name)
+        _sub_index = to_sub_index(sub_index) if sub_index and sub_index != 1 else ""
+        return Grapheme.of(_name + _sub_index, modifiers, flags)
+
+    def ebl_atf_text_line__sub_compound(self, children):
+        return Tree("ebl_atf_text_line__sub_compound", ["(", *children, ")"])
 
     def ebl_atf_text_line__compound_grapheme(self, children):
-        return CompoundGrapheme.of([part.value for part in children])
+        return CompoundGrapheme.of(self._parsed_graphemes_to_parts(children))
+
+    def _parsed_graphemes_to_parts(self, children: Sequence) -> Sequence[str]:
+        children = self._flatten_grapheme_elements(children)
+        _children = []
+        for index, part in enumerate(children):
+            _children.append(str(part))
+            if (
+                index + 1 < len(children)
+                and isinstance(part, Grapheme)
+                and isinstance(children[index + 1], Grapheme)
+            ):
+                _children.append(".")
+        return re.split(r"\.(?!(?:[^\(\)]*\)))", "".join(_children))
+
+    def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
+        _children = []
+        for part in children:
+            if isinstance(part, Tree):
+                _children += self._flatten_grapheme_elements(part.children)
+            else:
+                _children.append(part)
+        return _children
