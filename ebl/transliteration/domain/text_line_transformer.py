@@ -30,7 +30,7 @@ from ebl.transliteration.domain.tokens import (
     LanguageShift,
     LineBreak,
     Tabulation,
-    WordOmitted
+    WordOmitted,
 )
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.tokens import ValueToken, Variant
