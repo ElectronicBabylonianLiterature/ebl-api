@@ -29,6 +29,7 @@ from ebl.transliteration.domain.tokens import (
     LanguageShift,
     LineBreak,
     Tabulation,
+    WordOmitted,
 )
 from ebl.transliteration.domain.tokens import Token as EblToken
 from ebl.transliteration.domain.tokens import ValueToken, Variant
@@ -198,6 +199,10 @@ class TextLineTransformer(
     @v_args(inline=True)
     def ebl_atf_text_line__greek_shift(self, value):
         return LanguageShift.of(str(value))
+
+    @v_args(inline=True)
+    def ebl_atf_text_line__word_omitted(self, value):
+        return WordOmitted.of()
 
     @v_args(inline=True)
     def ebl_atf_text_line__tabulation(self, value):

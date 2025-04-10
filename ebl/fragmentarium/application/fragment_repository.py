@@ -28,6 +28,9 @@ class FragmentRepository(ABC):
     def count_lines(self) -> int: ...
 
     @abstractmethod
+    def count_total_fragments(self) -> int: ...
+
+    @abstractmethod
     def query_by_museum_number(
         self,
         number: MuseumNumber,
@@ -101,3 +104,6 @@ class FragmentRepository(ABC):
 
     @abstractmethod
     def fetch_fragment_signs(self) -> Sequence[dict]: ...
+
+    @abstractmethod
+    def collect_lemmas(self, number: MuseumNumber) -> dict: ...

@@ -4,7 +4,7 @@ import attr
 
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.accession import Accession
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, Script
+from ebl.fragmentarium.domain.fragment import Acquisition, Fragment, Genre, Script
 from ebl.fragmentarium.domain.record import RecordEntry, RecordType
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
@@ -15,6 +15,7 @@ class FragmentInfo:
     number: MuseumNumber
     accession: Optional[Accession]
     script: Script
+    acquisition: Optional[Acquisition]
     description: str
     matching_lines: Optional[Text]
     editor: str
@@ -48,6 +49,7 @@ class FragmentInfo:
             fragment.number,
             fragment.accession,
             fragment.script,
+            fragment.acquisition,
             fragment.description,
             matching_lines,
             first_transliteration.user,

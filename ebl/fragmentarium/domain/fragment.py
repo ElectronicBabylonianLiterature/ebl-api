@@ -1,7 +1,6 @@
 from enum import Enum
 from itertools import groupby
-from typing import Optional, Sequence, Tuple
-
+from typing import Dict, Any, Optional, Sequence, Tuple
 import attr
 import pydash
 from ebl.fragmentarium.domain.museum import Museum
@@ -16,6 +15,7 @@ from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.record import Record
+from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.markup import MarkupPart
@@ -49,12 +49,28 @@ class NotLowestJoinError(ValueError):
 class UncuratedReference:
     document: str
     pages: Sequence[int] = ()
+    search_term: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Measure:
     value: Optional[float] = None
     note: Optional[str] = None
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Acquisition:
+    description: str = ""
+    supplier: str = ""
+    date: int = 0
+
+    @staticmethod
+    def of(source: Dict[str, Any]) -> "Acquisition":
+        return Acquisition(
+            description=source.get("description", ""),
+            supplier=source.get("supplier", ""),
+            date=source.get("date", 0),
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -110,7 +126,9 @@ class Fragment(FragmentExternalNumbers):
     number: MuseumNumber
     accession: Optional[Accession] = None
     publication: str = ""
+    acquisition: Optional[Acquisition] = None
     description: str = ""
+    cdli_images: Sequence[str] = []
     collection: str = ""
     legacy_script: str = ""
     museum: Museum = Museum.UNKNOWN
@@ -216,6 +234,10 @@ class Fragment(FragmentExternalNumbers):
 
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
+        return attr.evolve(self, text=text)
+
+    def update_lemma_annotation(self, annotation: TextLemmaAnnotation) -> "Fragment":
+        text = self.text.update_lemma_annotation(annotation)
         return attr.evolve(self, text=text)
 
     def get_matching_lines(self, query: TransliterationQuery) -> Text:

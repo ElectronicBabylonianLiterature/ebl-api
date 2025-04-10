@@ -22,15 +22,16 @@ from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.application.colophon_schema import ColophonSchema
 from ebl.fragmentarium.application.fragment_fields_schemas import (
-    MeasureSchema,
-    RecordSchema,
-    FoliosSchema,
-    UncuratedReferenceSchema,
-    IntroductionSchema,
-    NotesSchema,
-    ScriptSchema,
-    ExternalNumbersSchema,
+    AcquisitionSchema,
     DossierReferenceSchema,
+    ExternalNumbersSchema,
+    FoliosSchema,
+    IntroductionSchema,
+    MeasureSchema,
+    NotesSchema,
+    RecordSchema,
+    ScriptSchema,
+    UncuratedReferenceSchema,
 )
 
 
@@ -38,7 +39,9 @@ class FragmentSchema(Schema):
     number = fields.Nested(MuseumNumberSchema, required=True, data_key="museumNumber")
     accession = fields.Nested(AccessionSchema, allow_none=True, load_default=None)
     publication = fields.String(required=True)
+    acquisition = fields.Nested(AcquisitionSchema, allow_none=True, load_default=None)
     description = fields.String(required=True)
+    cdli_images = fields.List(fields.String(), data_key="cdliImages")
     collection = fields.String(required=True)
     legacy_script = fields.String(data_key="legacyScript", load_default="")
     traditional_references = fields.List(

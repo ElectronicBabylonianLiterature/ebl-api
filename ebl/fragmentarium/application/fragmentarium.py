@@ -16,6 +16,7 @@ class Fragmentarium:
                 self._repository.count_transliterated_fragments()
             ),
             "lines": self._repository.count_lines(),
+            "totalFragments": self._repository.count_total_fragments(),
         }
 
     def find_needs_revision(

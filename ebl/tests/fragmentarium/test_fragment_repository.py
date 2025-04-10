@@ -511,11 +511,13 @@ def test_statistics(database, fragment_repository):
     )
     assert fragment_repository.count_transliterated_fragments() == 2
     assert fragment_repository.count_lines() == 4
+    assert fragment_repository.count_total_fragments() == 3
 
 
 def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_transliterated_fragments() == 0
     assert fragment_repository.count_lines() == 0
+    assert fragment_repository.count_total_fragments() == 0
 
 
 def test_query_fragmentarium_number(database, fragment_repository):

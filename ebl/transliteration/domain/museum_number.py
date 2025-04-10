@@ -35,9 +35,11 @@ PREFIX_ORDER: Mapping[str, int] = {
     "CBS": 10,
     "UM": 11,
     "N": 12,
+    "NBC": 13,
+    "YBC": 14,
 }
 NUMBER_PREFIX_ORDER: int = 6
-DEFAULT_PREFIX_ORDER: int = 13
+DEFAULT_PREFIX_ORDER: int = 15
 
 
 @functools.total_ordering
