@@ -75,6 +75,7 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
+    WordOmitted,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -306,6 +307,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                         ]
                     ),
                     Column.of(),
+                    WordOmitted.of(),
                     Tabulation.of(),
                     Word.of(
                         [
@@ -522,6 +524,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                         ]
                     ),
                     Column.of(),
+                    WordOmitted.of(),
                     Tabulation.of(),
                     Word.of(
                         [

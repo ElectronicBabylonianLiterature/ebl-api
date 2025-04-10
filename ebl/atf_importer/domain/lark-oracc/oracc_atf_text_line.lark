@@ -57,8 +57,8 @@ divider_variant: divider VARIANT_SEPARATOR2 divider
 tabulation: TABULATION
 TABULATION: "($___$)"
 
-word_ommited: WORD_OMMITED
-WORD_OMMITED: "ø"
+word_omitted: WORD_OMITTED
+WORD_OMITTED: "ø"
 
 column: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
