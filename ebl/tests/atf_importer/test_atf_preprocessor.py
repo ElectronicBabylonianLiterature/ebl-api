@@ -1,25 +1,37 @@
 import pytest
 import json
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_translation_line
 
-TRANSLATION_LEGACY = """
-@right?
+TRANSLATION_LEGACY_A = """@right?
 @column
 1. a-na
 2. a-bí-ya
 @translation en labelled
 @label(r.e.? i 1-r.e.? i 2)
 To my
-father
-"""
+father"""
 
-TRANSLATION_EXPECTED = """
-@right?
+TRANSLATION_EXPECTED_A = """@right?
 @column 1
 1. a-na
 #tr.en.(r.e.? i 2): To my father
+2. a-bi₂-ya"""
+
+TRANSLATION_LEGACY_B = """@right?
+@column
+1. a-na
+2. a-bí-ya
+@translation labeled en project
+@(r.e.? i 1) To my
+@(r.e.? i 2) father"""
+
+TRANSLATION_EXPECTED_B = """@right?
+@column 1
+1. a-na
+#tr.en: To my
 2. a-bi₂-ya
-"""
+#tr.en: father"""
 
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
@@ -129,16 +141,27 @@ def test_text_lines(legacy_lines, ebl_lines):
 
 def test_legacy_translation():
     atf_preprocessor = AtfPreprocessor("../logs", 0)
-    legacy_lines = atf_preprocessor.convert_lines_from_string(
-        TRANSLATION_LEGACY.strip("\n")
-    )
-    expected_lines = [
-        atf_preprocessor.line_transformer.transform(
-            atf_preprocessor.ebl_parser.parse(line)
-        )
-        for line in TRANSLATION_EXPECTED.strip("\n").split("\n")
+    translations = [
+        TRANSLATION_LEGACY_A,
+        TRANSLATION_LEGACY_B,
     ]
-    assert legacy_lines == expected_lines
+    expected = [
+        TRANSLATION_EXPECTED_A,
+        TRANSLATION_EXPECTED_B,
+    ]
+    for index, TRANSLATION_LEGACY in enumerate(translations):
+        expected_lines = [
+            parse_translation_line(line)
+            if "#tr" in line
+            else atf_preprocessor.line_transformer.transform(
+                atf_preprocessor.ebl_parser.parse(line)
+            )
+            for line in expected[index].split("\n")
+        ]
+        legacy_lines = atf_preprocessor.convert_lines_from_string(
+            TRANSLATION_LEGACY.strip("\n")
+        )
+        assert legacy_lines == expected_lines
 
 
 lemma_lines = []

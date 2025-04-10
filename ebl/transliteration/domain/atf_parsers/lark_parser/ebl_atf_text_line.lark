@@ -31,7 +31,8 @@ _require_both: commentary_protocol
 
 _require_both_optional_ws.-5: _WORD_SEPARATOR? (divider_variant | divider)
 
-_have_both: tabulation
+_have_both: word_omitted 
+         | tabulation
          | column_token
          | erasure
          | word
@@ -64,6 +65,9 @@ divider_variant: divider _VARIANT_SEPARATOR divider
 
 tabulation: TABULATION
 TABULATION: "($___$)"
+
+word_omitted: WORD_OMITTED
+WORD_OMITTED: "ø"
 
 column_token: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
@@ -187,7 +191,7 @@ surrogate_text: reading (joiner reading)*
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
 logogram_name: logogram_name_part (broken_away logogram_name_part)* | LEGACY_ORACC_DISH_DIVIDER
-!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚" | "ø"
+!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚"
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
@@ -224,7 +228,7 @@ modifiers: modifier*
 modifier: ((MODIFIER_PREFIX | LEGACY_MODIFIER_PREFIX) (MODIFIER_CHARACTER | ("0".."9")+))
 MODIFIER_PREFIX: "@"
 LEGACY_MODIFIER_PREFIX: "~"
-MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v"
+MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v" | "aš"
 
 in_word_newline: IN_WORD_NEWLINE
 IN_WORD_NEWLINE: ";"

@@ -7,12 +7,6 @@ from ebl.atf_importer.domain.atf_conversions import (
     GetWords,
 )
 
-# ToDo:
-# Functionality should be mainly transferred
-# to `transformers`.
-# Extract oracc_atf_lem_line parser,
-# use within ebl_atf parser or separately.
-
 special_chars = {
     "sz": "š",
     "c": "š",
@@ -44,7 +38,6 @@ oracc_replacements = {
     "1/6": "⅙",
     "2/3": "⅔",
     "5/6": "⅚",
-    "\t": " ",
     "$ rest broken": "$ rest of side broken",
     "$ ruling": "$ single ruling",
     "$ seal impression broken": "$ (seal impression broken)",
@@ -54,6 +47,7 @@ oracc_replacements = {
 
 preprocess_text_replacements = {
     "\r": "",
+    "\t": " ",
     "--": "-",
     "{f}": "{munus}",
     "1/2": "½",
@@ -63,9 +57,6 @@ preprocess_text_replacements = {
     "1/6": "⅙",
     "2/3": "⅔",
     "5/6": "⅚",
-    "\t": " ",
-    "$ rest broken": "$ rest of side broken",
-    # "$ ruling": "$ single ruling",
     "]x": "] x",
     "x[": "x [",
     "]⸢x": "] ⸢x",
@@ -82,11 +73,6 @@ class AtfPreprocessorBase:
             maybe_placeholders=True,
             rel_to=__file__,
         )
-
-        # ToDo: Continue from here. Build the parser so it
-        # handles ATF with legacy (CDLI & Oracc) syntax.
-        # Previously: "lark-oracc/oracc_atf.lark",
-        # This should be eventually removed completely.
 
         self.logger = logging.getLogger("Atf-Preprocessor")
         self.logger.setLevel(logging.DEBUG)
@@ -170,11 +156,6 @@ class AtfPreprocessorBase:
         ]
         for method_name in atf_text_line_methods:
             atf = getattr(self, method_name)(atf)
-            # ToDo: Remove
-            if atf.startswith("9. ⸢4(BÁN)?⸣"):
-                print("atf after method " + method_name)
-                print(atf)
-                input("press enter")
         return atf
 
     def _replace_dashes(self, atf: str) -> str:

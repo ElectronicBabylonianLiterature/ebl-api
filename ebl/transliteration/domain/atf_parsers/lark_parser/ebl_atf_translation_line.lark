@@ -11,10 +11,13 @@ translation_extent: [labels " "] line_number
 legacy_translation_line: legacy_translation_block_at_line 
     | legacy_translation_block_label_line 
     | legacy_translation_block_line
+    | legacy_translation_block_label_text_line
 
-legacy_translation_block_at_line.1: "@translation " TRANSLATION_LANGUAGE " labelled"
-legacy_translation_block_label_line.1: "@label(" labels_start "-" labels_extent ")"
-legacy_translation_block_line.-1: free_text
+legacy_translation_block_at_line.1: "@translation " TRANSLATION_LANGUAGE " labelled" 
+    | "@translation labeled " TRANSLATION_LANGUAGE " project"
+legacy_translation_block_label_text_line.1: legacy_translation_block_label_line " " legacy_translation_block_line
+legacy_translation_block_label_line.1: "@" ["label"] ["("] labels_start ["-" labels_extent] [")"]
+legacy_translation_block_line.-5: free_text
 
 labels_start: labels_and_line_number
 labels_extent: labels_and_line_number

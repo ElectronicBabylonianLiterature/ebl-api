@@ -130,7 +130,7 @@ class SignTransformer(Transformer):
                 and isinstance(children[index + 1], Grapheme)
             ):
                 _children.append(".")
-        return re.split(r'\.(?!(?:[^\(\)]*\)))', "".join(_children))
+        return re.split(r"\.(?!(?:[^\(\)]*\)))", "".join(_children))
 
     def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
         _children = []

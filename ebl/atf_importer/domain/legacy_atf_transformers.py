@@ -333,8 +333,12 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         )
 
     @property
-    def _translation_extent(self) -> Tree:
-        return self.to_tree("ebl_atf_translation_line__translation_extent", self.extent)
+    def _translation_extent(self) -> Optional[Tree]:
+        return (
+            self.to_tree("ebl_atf_translation_line__translation_extent", self.extent)
+            if self.extent
+            else None
+        )
 
     @property
     def _translation_string_part(self) -> Tree:
@@ -359,6 +363,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
 
     @v_args(inline=True)
     def ebl_atf_translation_line__labels_start(self, labels: Tree) -> None:
+        self.reset()
         self.legacy_found = True
         self.start = self._labels_to_string(labels)
         return
@@ -384,3 +389,8 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         self.legacy_found = True
         self.translation.append("".join([str(child) for child in text.children]))
         return self.translation_c_line
+
+    def ebl_atf_translation_line__legacy_translation_block_label_text_line(
+        self, line: Sequence[Tree]
+    ) -> Tree:
+        return line[1]
