@@ -336,7 +336,7 @@ the separator is ignored (see Word below) or can be omitted.
 
 | Token Type   | Definition | Lemmatizable | Alignable | Notes |
 |--------------|------------|--------------|-----------|-------|
-| WordOmmitted | `ø` | No | No | |
+| WordOmitted | `ø` | No | No | |
 | Tabulation   | `($___$)` | No | No | |
 | Divider      | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
 | Egyptian Metrical Feet Separator | `•` | No | No | Can be within a word or standing alone between words. Can be followed by flags and surrounded with broken away and presence indicators . |
@@ -350,7 +350,7 @@ the separator is ignored (see Word below) or can be omitted.
 
 ```ebnf
 non-normalized-text = token, { [ word-separator ], token };
-       (* Word separator can be ommitted after an opening bracket or before
+       (* Word separator can be omitted after an opening bracket or before
           a closing bracket. Commentary protocols and dividers must be
           surrounded by word separators. *)
 
