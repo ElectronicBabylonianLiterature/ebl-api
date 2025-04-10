@@ -48,6 +48,7 @@ from ebl.transliteration.domain.tokens import (
     Joiner,
     LanguageShift,
     LineBreak,
+    WordOmitted,
     Tabulation,
     Token,
     UnknownNumberOfSigns,
@@ -199,12 +200,15 @@ class EgyptianMetricalFeetSeparatorSchema(BaseTokenSchema):
             .set_erasure(data["erasure"])
         )
 
+class WordOmittedSchema(BaseTokenSchema):
+    @post_load
+    def make_token(self, data, **kwargs):
+        return WordOmitted(frozenset(data["enclosure_type"]), data["erasure"])
 
 class TabulationSchema(BaseTokenSchema):
     @post_load
     def make_token(self, data, **kwargs):
         return Tabulation(frozenset(data["enclosure_type"]), data["erasure"])
-
 
 class CommentaryProtocolSchema(BaseTokenSchema):
     @post_load
@@ -577,6 +581,7 @@ class OneOfTokenSchema(OneOfSchema):
         "Emendation": EmendationSchema,
         "Erasure": ErasureSchema,
         "UnknownNumberOfSigns": UnknownNumberOfSignsSchema,
+        "WordOmitted": WordOmittedSchema,
         "Tabulation": TabulationSchema,
         "CommentaryProtocol": CommentaryProtocolSchema,
         "Divider": DividerSchema,

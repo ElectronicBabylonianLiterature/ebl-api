@@ -88,6 +88,7 @@ _require_both: commentary_protocol
              | divider
              | line_break
 _have_both: tabulation
+         | word_omitted
          | column_token
          | erasure
          | word
@@ -118,11 +119,11 @@ divider_variant: divider _VARIANT_SEPARATOR divider
                | divider _VARIANT_SEPARATOR variant_part
                | variant_part _VARIANT_SEPARATOR divider
 
-tabulation: TABULATION
-TABULATION: "($___$)"
-
 word_omitted: WORD_OMITTED
 WORD_OMITTED: "ø"
+
+tabulation: TABULATION
+TABULATION: "($___$)"
 
 column_token: "&" [COLUMN_NUMBER]
 COLUMN_NUMBER: "1".."9" ("0".."9")*
