@@ -6,7 +6,7 @@ from ebl.atf_importer.application.glossary_parser import GlossaryParserData
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
-
+from ebl.atf_importer.application.logger import Logger
 
 @dataclass
 class LineContext:
@@ -20,7 +20,7 @@ class EblLinesGetter:
         self,
         database,
         config: AtfImporterConfigData,
-        logger,
+        logger: Logger,
         glossary_data: GlossaryParserData,
         # ToDo: Remove `self.test_lemmas`.
         test_lemmas: Optional[List] = None,
@@ -45,7 +45,11 @@ class EblLinesGetter:
         for line in converted_lines:
             result, context = self._handle_line_type(line, result, filename, context)
         self._log_result(result, context)
-        return dict(result)
+        # ToDo: Fix & clean up
+        try:
+            return dict(result)
+        except TypeError:
+            return result
 
     def _handle_line_type(
         self,

@@ -1,5 +1,6 @@
 from typing import List, Dict, TypedDict, Union, Any
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
+from ebl.atf_importer.application.logger import Logger
 
 
 class QueryArgs(TypedDict, total=False):
@@ -10,7 +11,9 @@ class QueryArgs(TypedDict, total=False):
 
 
 class LemmaLookup:
-    def __init__(self, database, config: AtfImporterConfigData, logger, glossary_data):
+    def __init__(
+        self, database, config: AtfImporterConfigData, logger: Logger, glossary_data
+    ):
         self.database = database
         self.config = config
         self.logger = logger

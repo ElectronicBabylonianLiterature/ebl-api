@@ -22,7 +22,7 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
 # happens in the main (ebl) atf grammar.
 # Write tests for all transformations!
 # After this is done, clean up and get rid of preprocessing
-# extept for `# note:` perhaps, if really needed.
+# except for `# note:` perhaps, if really needed.
 
 
 index_and_accented_transformer = (AccentedIndexTransformer(), "children")
@@ -93,7 +93,6 @@ class LegacyAtfVisitor(Visitor):
         prefix: str,
     ) -> None:
         method = f"{prefix}__{suffix}" if prefix else suffix
-        print(method)
         setattr(
             self,
             method,

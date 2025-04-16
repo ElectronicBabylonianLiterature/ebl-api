@@ -1,11 +1,11 @@
-import logging
 import re
-from typing import Tuple, Optional, List, Any
+from typing import List, Any
 from lark import Lark, Tree
 from ebl.atf_importer.domain.atf_conversions import (
     GetLemmaValuesAndGuidewords,
     GetWords,
 )
+from ebl.atf_importer.application.logger import Logger
 
 special_chars = {
     "sz": "š",
@@ -67,17 +67,18 @@ preprocess_text_replacements = {
 
 
 class AtfPreprocessorBase:
-    def __init__(self, logdir: str, style: int) -> None:
+    def __init__(self, logger: Logger, style: int) -> None:
         self.ebl_parser = Lark.open(
             "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark",
             maybe_placeholders=True,
             rel_to=__file__,
         )
 
-        self.logger = logging.getLogger("Atf-Preprocessor")
-        self.logger.setLevel(logging.DEBUG)
+        self.logger = logger
         self.skip_next_lem_line = False
-        self.logdir = logdir
+        # ToDo: Implement
+        # elif c_type is None:
+        # self.skip_next_lem_line = True
         self.style = style
         self.open_found = False
 
@@ -114,23 +115,6 @@ class AtfPreprocessorBase:
     def reorder_bracket_punctuation(self, atf: str) -> str:
         return re.sub(r"\]([\?!]+)", lambda match: match.group(1) + "]", atf)
 
-    def convert_lem_line(
-        self, atf: str, tree: Tree
-    ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
-        if self.skip_next_lem_line:
-            self.logger.warning("Skipping lem line due to previous flag.")
-            self.skip_next_lem_line = False
-            return (None, None, "lem_line", None)
-        lemmas_and_guidewords_array = self.serizalize_lemmas_and_guidewords(tree)
-        self.logger.debug(
-            "Converted line as "
-            + tree.data
-            + " --> '"
-            + str(lemmas_and_guidewords_array)
-            + "'"
-        )
-        return atf, lemmas_and_guidewords_array, tree.data, []
-
     def serialize_words(self, tree: Tree) -> List[Any]:
         words_serializer = GetWords()
         words_serializer.result = []
@@ -144,6 +128,8 @@ class AtfPreprocessorBase:
 
     def _handle_text_line(self, atf: str) -> str:
         atf_text_line_methods = [
+            "preprocess_text",
+            "_format_note_line",
             "_replace_dashes",
             "replace_special_characters",
             "_normalize_patterns",
@@ -192,4 +178,10 @@ class AtfPreprocessorBase:
         if atf.startswith("$ "):
             dollar_comment = atf.split("$ ")[1]
             return f"$ ({dollar_comment})"
+        return atf
+
+    def _format_note_line(self, atf: str) -> str:
+        if self.style == 2 and atf[0] == "#" and atf[1] == " ":
+            atf = atf.replace("#", "#note:")
+            atf = atf.replace("# note:", "#note:")
         return atf

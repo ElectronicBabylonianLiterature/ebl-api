@@ -24,7 +24,7 @@ class AtfImporterArgs(TypedDict):
 
 
 class AtfImporter:
-    def __init__(self, database) -> None:
+    def __init__(self, database, logdir: Optional[str] = None) -> None:
         self.database = database
         self.username: str = ""
         self.setup_logger()
@@ -69,7 +69,7 @@ class AtfImporter:
             self.setup_logger(args["logdir"])
         self.setup_lines_getter(args["glossary_path"])
         self.username = args["author"]
-        self.atf_preprocessor = AtfPreprocessor(args["logdir"], args["style"])
+        self.atf_preprocessor = AtfPreprocessor(self.logger, args["style"])
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
         self._process_files(file_paths, args)
         self.logger.write_logs()

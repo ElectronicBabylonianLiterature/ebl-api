@@ -1,5 +1,7 @@
 import logging
-from typing import Dict, List, Optional, Literal, get_args
+from os import PathLike
+from typing import Dict, List, Optional, Literal, Union, get_args
+from pathlib import Path
 
 LogKey = Literal[
     "unparsable_lines",
@@ -11,7 +13,7 @@ LogKey = Literal[
 
 
 class Logger:
-    def __init__(self, logdir: Optional[str] = None):
+    def __init__(self, logdir: Union[PathLike[str], str, None] = None):
         logging.basicConfig(level=logging.DEBUG)
         self.logger = logging.getLogger("Atf-Importer")
         self.logdir = logdir
@@ -50,7 +52,8 @@ class Logger:
                 self._write_log(f"{key}.txt", self.data[key])
 
     def _write_log(self, filename: str, data: List[str]) -> None:
-        with open(f"{self.logdir}{filename}", "w", encoding="utf8") as outputfile:
+        Path(self.logdir).mkdir(parents=True, exist_ok=True)  # pyre-ignore[6]
+        with open(f"{self.logdir}/{filename}", "w", encoding="utf8") as outputfile:
             for line in data:
                 outputfile.write(line + "\n")
 

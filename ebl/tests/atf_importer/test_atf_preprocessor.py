@@ -2,6 +2,9 @@ import pytest
 import json
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_translation_line
+from ebl.atf_importer.application.logger import Logger
+
+logger = Logger("../logs")
 
 TRANSLATION_LEGACY_A = """@right?
 @column
@@ -34,6 +37,10 @@ TRANSLATION_EXPECTED_B = """@right?
 #tr.en: father"""
 
 PARSE_AND_TRANSFORM_LEGACY = [
+    (
+        "1. [*] * *-*",
+        "1. [DIŠ] DIŠ DIŠ-DIŠ",
+    ),
     ("", ""),
     ("@column", "@column 1"),
     ("@column\n@column", "@column 1\n@column 2"),
@@ -68,10 +75,6 @@ PARSE_AND_TRANSFORM_LEGACY = [
     (
         "1. ŠU2 u3 ŠU2<(šumma)> |ŠU2+ŠU2|",
         "1. ŠU₂ u₃ ŠU₂<(šumma)> |ŠU₂+ŠU₂|",
-    ),
-    (
-        "1. [*] * *-*",
-        "1. [DIŠ] DIŠ DIŠ-DIŠ",
     ),
     (
         "1. <:>",
@@ -127,7 +130,7 @@ LEGACY_GRAMMAR_SIGNS = [
     ],
 )
 def test_text_lines(legacy_lines, ebl_lines):
-    atf_preprocessor = AtfPreprocessor("../logs", 0)
+    atf_preprocessor = AtfPreprocessor(logger, 0)
     legacy_lines = atf_preprocessor.convert_lines_from_string(legacy_lines)
     expected_lines = [
         atf_preprocessor.line_transformer.transform(
@@ -136,11 +139,17 @@ def test_text_lines(legacy_lines, ebl_lines):
         for line in ebl_lines.split("\n")
     ]
 
-    assert legacy_lines == expected_lines
+    print("result:")
+    print([line["serialized"] for line in legacy_lines])
+    print("expected:")
+    print(expected_lines)
+    input()
+
+    assert [line["serialized"] for line in legacy_lines] == expected_lines
 
 
 def test_legacy_translation():
-    atf_preprocessor = AtfPreprocessor("../logs", 0)
+    atf_preprocessor = AtfPreprocessor(logger, 0)
     translations = [
         TRANSLATION_LEGACY_A,
         TRANSLATION_LEGACY_B,
@@ -161,7 +170,7 @@ def test_legacy_translation():
         legacy_lines = atf_preprocessor.convert_lines_from_string(
             TRANSLATION_LEGACY.strip("\n")
         )
-        assert legacy_lines == expected_lines
+        assert [line["serialized"] for line in legacy_lines] == expected_lines
 
 
 lemma_lines = []
@@ -171,12 +180,7 @@ with open("ebl/tests/atf_importer/test_lemma_lines.json", "r") as file:
 
 @pytest.mark.parametrize("line", lemma_lines)
 def test_lemma_line_c_type_is_lem_line(line):
-    atf_preprocessor = AtfPreprocessor("../logs", 0)
-    (
-        converted_line,
-        c_array,
-        c_type,
-        c_alter_lem_line_at,
-    ) = atf_preprocessor.process_line(line)
+    atf_preprocessor = AtfPreprocessor(logger, 0)
+    result = atf_preprocessor.convert_lines_from_string(line)[0]
 
-    assert c_type == "lem_line"
+    assert result["c_type"] == "lem_line"

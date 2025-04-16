@@ -10,7 +10,7 @@ from ebl.transliteration.domain.common_transformer import CommonTransformer
 # happens in the main (ebl) atf grammar.
 # Write tests for all transformations!
 # After this is done, clean up and get rid of preprocessing
-# extept for `# note:` perhaps, if really needed.
+# except for `# note:` perhaps, if really needed.
 
 
 class LegacyTransformer(Transformer):

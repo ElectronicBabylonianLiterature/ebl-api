@@ -10,10 +10,11 @@ from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.users.domain.user import AtfImporterUser
 from ebl.atf_importer.domain.atf_preprocessor_util import Util
+from ebl.atf_importer.application.logger import Logger
 
 
 class DatabaseImporter:
-    def __init__(self, database, logger, username: str):
+    def __init__(self, database, logger: Logger, username: str):
         self.database = database
         self.logger = logger
         self.user = AtfImporterUser(username)
