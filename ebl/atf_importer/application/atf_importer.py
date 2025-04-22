@@ -7,12 +7,11 @@ from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
     GlossaryParserData,
 )
-from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.atf_importer.application.database_importer import DatabaseImporter
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
-from ebl.atf_importer.application.logger import Logger
-from ebl.atf_importer.domain.atf_preprocessor_util import Util
+from ebl.atf_importer.application.logger import Logger, LoggerUtil
 
 
 class AtfImporterArgs(TypedDict):
@@ -20,7 +19,6 @@ class AtfImporterArgs(TypedDict):
     logdir: str
     glossary_path: str
     author: str
-    style: int = 0
 
 
 class AtfImporter:
@@ -30,7 +28,7 @@ class AtfImporter:
         self.setup_logger()
         self.config = AtfImporterConfig().config_data
         self._database_importer = DatabaseImporter(database, self.logger, self.username)
-        self.atf_preprocessor = None
+        self.atf_parser = None
         self.glossary_parser = GlossaryParser(self.config)
         self._ebl_lines_getter = None
 
@@ -69,7 +67,7 @@ class AtfImporter:
             self.setup_logger(args["logdir"])
         self.setup_lines_getter(args["glossary_path"])
         self.username = args["author"]
-        self.atf_preprocessor = AtfPreprocessor(self.logger, args["style"])
+        self.atf_parser = LegacyAtfConverter(self.logger)
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
         self._process_files(file_paths, args)
         self.logger.write_logs()
@@ -80,15 +78,16 @@ class AtfImporter:
 
     def _process_file(self, filepath: str, args: AtfImporterArgs) -> None:
         filename = os.path.basename(filepath).split(".")[0]
-        style_name = self.config["STYLES"][str(int(args["style"]) - 1)]
-        self.logger.info(Util.print_frame(f"Importing {filename}.atf as: {style_name}"))
-        converted_lines = self.atf_preprocessor.convert_lines_from_path(
-            filepath, filename
+        self.logger.info(LoggerUtil.print_frame(f"Importing {filename}.atf"))
+        converted_lines = self.atf_parser.convert_lines_from_path(filepath, filename)
+        self.logger.info(
+            LoggerUtil.print_frame(f"Formatting to eBL-ATF of {filename}.atf")
         )
-        self.logger.info(Util.print_frame(f"Formatting to eBL-ATF of {filename}.atf"))
         ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)
         self.logger.info(
-            Util.print_frame(f"Importing converted lines of {filename}.atf into db")
+            LoggerUtil.print_frame(
+                f"Importing converted lines of {filename}.atf into db"
+            )
         )
         self.import_into_database(ebl_lines, filename)
 
@@ -107,7 +106,6 @@ class AtfImporter:
                 "logdir": args.logdir,
                 "glossary_path": args.glossary,
                 "author": args.author,
-                "style": args.style,
             }
         )
 

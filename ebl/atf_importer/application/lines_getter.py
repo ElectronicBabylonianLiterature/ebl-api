@@ -8,6 +8,7 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.atf_importer.application.logger import Logger
 
+
 @dataclass
 class LineContext:
     last_transliteration: List[str]

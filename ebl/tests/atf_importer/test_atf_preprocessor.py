@@ -1,6 +1,6 @@
 import pytest
 import json
-from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_translation_line
 from ebl.atf_importer.application.logger import Logger
 
@@ -23,24 +23,25 @@ TRANSLATION_EXPECTED_A = """@right?
 
 TRANSLATION_LEGACY_B = """@right?
 @column
-1. a-na
+1. a-na?
 2. a-bí-ya
+3. {m}EN-šu-nu
 @translation labeled en project
-@(r.e.? i 1) To my
-@(r.e.? i 2) father"""
+@(r.e.? i 1) @?To?@
+@(r.e.? i 2) my @"father"@
+@(r.e.? i 3) @Bēlšunu"""
 
 TRANSLATION_EXPECTED_B = """@right?
 @column 1
-1. a-na
-#tr.en: To my
+1. a-na?
+#tr.en: @i{To}
 2. a-bi₂-ya
-#tr.en: father"""
+#tr.en: my “father”
+3. {m}EN-šu-nu
+#tr.en: @i{Bēlšunu}"""
+
 
 PARSE_AND_TRANSFORM_LEGACY = [
-    (
-        "1. [*] * *-*",
-        "1. [DIŠ] DIŠ DIŠ-DIŠ",
-    ),
     ("", ""),
     ("@column", "@column 1"),
     ("@column\n@column", "@column 1\n@column 2"),
@@ -51,9 +52,25 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("$ rest broken", "$ rest of side broken"),
     ("$ ruling", "$ single ruling"),
     ("$ ruling?", "$ single ruling?"),
-    ("1. a'", "1. aʾ"),
+    ("$ seal impression", "$ (seal impression)"),
+    ("$ seal impression broken", "$ (seal impression broken)"),
+    ("# note: some note", "#note: some note"),
+    ("# some note", "#note: some note"),
+    ("1. kur    \t  \t kur", "1. kur kur"),
+    ("1. kur\tkur\r", "1. kur kur"),
+    ("1. x[x]x ⸢x⸣[x]⸢x⸣ ⌈x⌉[x]⌈x⌉", "1. x [x] x x# [x] x# x# [x] x#"),
+    ("1. [kur]? [kur]! [kur]?! [kur]!?", "1. [kur?] [kur!] [kur?!] [kur!?]"),
+    ("1. ($$) kur ($anything12 345!@$)", "1. ($___$) kur ($___$)"),
+    ("1. a–a a--a", "1. a-a a-a"),
+    ("1. sza ca s,a t,a ḫa ja ŋa g̃a 'a", "1. ša ša ṣa ṭa ha ga ga ga ʾa"),
+    ("1. SZA CA S,A T,A ḪA JA ŊA G̃A", "1. ŠA ŠA ṢA ṬA HA GA GA GA"),
+    ("1. {f}DUB.SAR", "1. {munus}DUB.SAR"),
+    ("1. 1/2 1/3 1/4 1/5 1/6 2/3 5/6", "1. ½ ⅓ ¼ ⅕ ⅙ ⅔ ⅚"),
+    ("1. _a-a_", "1. A.A"),
+    ("1. {GISZ}GIGIR", "1. {giš}GIGIR"),
     ("1′. A", "1'. A"),
     ("1’. A", "1'. A"),
+    ("1ʾ. A", "1'. A"),
     (
         "1. ⸢4?(BÁN)⸣",
         "1. 4?#(BAN₂#)",
@@ -75,6 +92,10 @@ PARSE_AND_TRANSFORM_LEGACY = [
     (
         "1. ŠU2 u3 ŠU2<(šumma)> |ŠU2+ŠU2|",
         "1. ŠU₂ u₃ ŠU₂<(šumma)> |ŠU₂+ŠU₂|",
+    ),
+    (
+        "1. [*] * *-*",
+        "1. [DIŠ] DIŠ DIŠ-DIŠ",
     ),
     (
         "1. <:>",
@@ -123,33 +144,26 @@ LEGACY_GRAMMAR_SIGNS = [
 @pytest.mark.parametrize(
     "legacy_lines,ebl_lines",
     [
+        *LEGACY_GRAMMAR_SIGNS,
         *PARSE_AND_TRANSFORM_LEGACY,
         *PROBLEMATIC_TEXT_LINES,
         *FOLLOWING_SIGN_IS_NOT_A_LOGOGRAM,
-        *LEGACY_GRAMMAR_SIGNS,
     ],
 )
 def test_text_lines(legacy_lines, ebl_lines):
-    atf_preprocessor = AtfPreprocessor(logger, 0)
-    legacy_lines = atf_preprocessor.convert_lines_from_string(legacy_lines)
+    legacy_atf_converter = LegacyAtfConverter(logger)
+    legacy_lines = legacy_atf_converter.convert_lines_from_string(legacy_lines)
     expected_lines = [
-        atf_preprocessor.line_transformer.transform(
-            atf_preprocessor.ebl_parser.parse(line)
+        legacy_atf_converter.line_transformer.transform(
+            legacy_atf_converter.ebl_parser.parse(line)
         )
         for line in ebl_lines.split("\n")
     ]
-
-    print("result:")
-    print([line["serialized"] for line in legacy_lines])
-    print("expected:")
-    print(expected_lines)
-    input()
-
     assert [line["serialized"] for line in legacy_lines] == expected_lines
 
 
 def test_legacy_translation():
-    atf_preprocessor = AtfPreprocessor(logger, 0)
+    legacy_atf_converter = LegacyAtfConverter(logger)
     translations = [
         TRANSLATION_LEGACY_A,
         TRANSLATION_LEGACY_B,
@@ -162,12 +176,12 @@ def test_legacy_translation():
         expected_lines = [
             parse_translation_line(line)
             if "#tr" in line
-            else atf_preprocessor.line_transformer.transform(
-                atf_preprocessor.ebl_parser.parse(line)
+            else legacy_atf_converter.line_transformer.transform(
+                legacy_atf_converter.ebl_parser.parse(line)
             )
             for line in expected[index].split("\n")
         ]
-        legacy_lines = atf_preprocessor.convert_lines_from_string(
+        legacy_lines = legacy_atf_converter.convert_lines_from_string(
             TRANSLATION_LEGACY.strip("\n")
         )
         assert [line["serialized"] for line in legacy_lines] == expected_lines
@@ -180,7 +194,7 @@ with open("ebl/tests/atf_importer/test_lemma_lines.json", "r") as file:
 
 @pytest.mark.parametrize("line", lemma_lines)
 def test_lemma_line_c_type_is_lem_line(line):
-    atf_preprocessor = AtfPreprocessor(logger, 0)
-    result = atf_preprocessor.convert_lines_from_string(line)[0]
+    legacy_atf_converter = LegacyAtfConverter(logger)
+    result = legacy_atf_converter.convert_lines_from_string(line)[0]
 
     assert result["c_type"] == "lem_line"

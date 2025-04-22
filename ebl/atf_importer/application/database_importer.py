@@ -9,8 +9,7 @@ from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationT
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.users.domain.user import AtfImporterUser
-from ebl.atf_importer.domain.atf_preprocessor_util import Util
-from ebl.atf_importer.application.logger import Logger
+from ebl.atf_importer.application.logger import Logger, LoggerUtil
 
 
 class DatabaseImporter:
@@ -31,7 +30,9 @@ class DatabaseImporter:
                 f"{filename} could not be imported: Museum number not found",
                 "not_imported_files",
             )
-            self.logger.info(Util.print_frame(f'Conversion of "{filename}.atf" failed'))
+            self.logger.info(
+                LoggerUtil.print_frame(f'Conversion of "{filename}.atf" failed')
+            )
             return
         if self._check_fragment_exists(museum_number):
             self._import(ebl_lines, museum_number, filename)
@@ -43,7 +44,7 @@ class DatabaseImporter:
                 museum_number,
             )
             self._insert_lemmatization(ebl_lines["lemmatization"], museum_number)
-            self.logger(f"{filename} successfully imported", "imported_files")
+            self.logger.success(f"{filename} successfully imported", "imported_files")
         except Exception as e:
             self.logger.error(
                 f"Error importing {filename}: {str(e)}", "not_imported_files"

@@ -191,7 +191,7 @@ surrogate_text: reading (joiner reading)*
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
 logogram_name: logogram_name_part (broken_away logogram_name_part)* | LEGACY_ORACC_DISH_DIVIDER
-!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚"
+!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅕" | "⅙" | "⅔" | "⅚"
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+

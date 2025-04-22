@@ -11,9 +11,11 @@ from ebl.atf_importer.domain.legacy_atf_transformers import (
     LegacyPrimeTransformer,
     LegacyAlephTransformer,
     LegacyColumnTransformer,
-    LegacyTranslationBlockTransformer,
     LegacyRulingTransformer,
     LegacyStateTransformer,
+)
+from ebl.atf_importer.domain.legacy_translation_transformer import (
+    LegacyTranslationBlockTransformer,
 )
 
 # ToDo: Continue from here

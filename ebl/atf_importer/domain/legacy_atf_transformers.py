@@ -2,15 +2,6 @@ import re
 from typing import Optional, List, Sequence, Union, Type
 from lark.visitors import Transformer, Tree, Token, v_args, Discard
 from ebl.transliteration.domain.atf import _SUB_SCRIPT
-from ebl.transliteration.domain.common_transformer import CommonTransformer
-
-# ToDo: Continue from here
-# Make sure every transformer is implemented and works properly.
-# Implement the rest, so the maximal possible number of transformations
-# happens in the main (ebl) atf grammar.
-# Write tests for all transformations!
-# After this is done, clean up and get rid of preprocessing
-# except for `# note:` perhaps, if really needed.
 
 
 class LegacyTransformer(Transformer):
@@ -88,9 +79,7 @@ class LegacyTransformer(Transformer):
             else Token(name, string)
         )
 
-    def to_tree(
-        self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
-    ) -> Tree:
+    def to_tree(self, name: str, children: List[Optional[Union[Tree, Token]]]) -> Tree:
         return (
             Tree(f"{self.prefix}__{name}", children)
             if self.prefix
@@ -306,91 +295,3 @@ class LegacyColumnTransformer(LegacyTransformer):
                 self.to_tree("ebl_atf_at_line__status", []),
             ],
         )
-
-
-class LegacyTranslationBlockTransformer(LegacyTransformer):
-    prefix = ""
-
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.reset()
-
-    def reset(self) -> None:
-        self.language: Optional[Token] = None
-        self.start: Optional[str] = None
-        self.extent: Sequence[Tree] = []
-        self.translation: List[str] = []
-
-    @property
-    def translation_c_line(self) -> Tree:
-        return self.to_tree(
-            "!translation_line",
-            [
-                self.language,
-                self._translation_extent,
-                self._translation_string_part,
-            ],
-        )
-
-    @property
-    def _translation_extent(self) -> Optional[Tree]:
-        return (
-            self.to_tree("ebl_atf_translation_line__translation_extent", self.extent)
-            if self.extent
-            else None
-        )
-
-    @property
-    def _translation_string_part(self) -> Tree:
-        line_token = self.to_token(
-            "__ANON_26", " ".join(self.translation).replace(r"/[\s]+/", " ")
-        )
-        note_text = self.to_tree(
-            "ebl_atf_translation_line__ebl_atf_note_line__note_text", [line_token]
-        )
-        return self.to_tree(
-            "ebl_atf_translation_line__ebl_atf_note_line__string_part", [note_text]
-        )
-
-    @v_args(inline=True)
-    def ebl_atf_translation_line__legacy_translation_block_at_line(
-        self, language: Optional[Token]
-    ) -> None:
-        self.reset()
-        self.legacy_found = True
-        self.language = language
-        return
-
-    @v_args(inline=True)
-    def ebl_atf_translation_line__labels_start(self, labels: Tree) -> None:
-        self.reset()
-        self.legacy_found = True
-        self.start = self._labels_to_string(labels)
-        return
-
-    @v_args(inline=True)
-    def ebl_atf_translation_line__labels_extent(self, labels: Tree) -> None:
-        self.legacy_found = True
-        self.extent = labels.children
-        return
-
-    def _labels_to_string(self, labels: Tree) -> str:
-        labels, line_number = CommonTransformer().transform(labels).children
-        return (
-            " ".join(label.to_value() for label in labels)
-            + " "
-            + str(line_number.number)
-        )
-
-    @v_args(inline=True)
-    def ebl_atf_translation_line__legacy_translation_block_line(
-        self, text: Tree
-    ) -> Tree:
-        self.legacy_found = True
-        self.translation.append("".join([str(child) for child in text.children]))
-        return self.translation_c_line
-
-    def ebl_atf_translation_line__legacy_translation_block_label_text_line(
-        self, line: Sequence[Tree]
-    ) -> Tree:
-        return line[1]

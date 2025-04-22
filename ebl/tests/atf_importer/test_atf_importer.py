@@ -2,7 +2,7 @@ import os
 import zipfile
 import tempfile
 from ebl.atf_importer.application.atf_importer import AtfImporter
-from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
+from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.atf_importer.application.logger import Logger
 
@@ -13,8 +13,8 @@ def test_placeholder_insert(database):
     """
     Test case for insertion of placeholder if '<<'.
     """
-    atf_preprocessor = AtfPreprocessor(logger, 0)
-    converted_lines = atf_preprocessor.convert_lines_from_string(
+    legacy_atf_converter = LegacyAtfConverter(logger)
+    converted_lines = legacy_atf_converter.convert_lines_from_string(
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
         "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["
         "1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
@@ -75,7 +75,6 @@ def test_atf_importer(database):
                     "logdir": logdir_path,
                     "glossary_path": glossary_akk_path,
                     "author": "Test author",
-                    "style": 1,
                 }
             )
 

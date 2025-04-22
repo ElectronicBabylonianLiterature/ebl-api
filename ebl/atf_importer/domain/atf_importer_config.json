@@ -97,21 +97,6 @@
         "required": false,
         "help": "Name of the author of the imported fragments."
       }
-    },
-    {
-      "flags": [
-        "-s",
-        "--style"
-      ],
-      "kwargs": {
-        "required": false,
-        "default": 0,
-        "choices": [
-          "1 = Oracc ATF (O-ATF)",
-          "2 = CDLI ATF (C-ATF)"
-        ],
-        "help": "Specify import style (default: 1 = Oracc ATF)."
-      }
     }
   ]
 }

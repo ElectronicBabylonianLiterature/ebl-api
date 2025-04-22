@@ -60,3 +60,23 @@ class Logger:
     def _append_to_data(self, text: str, key: Optional[LogKey] = None) -> None:
         if self.logdir and key:
             self.data[key].append(text)
+
+
+class LoggerUtil:
+    @staticmethod
+    def print_frame(s):
+        r = "\n"
+        r += " +-"
+
+        for _i in range(len(s)):
+            r += "-"
+        r += "-+\n"
+        r += " | " + s + " |\n"
+        r += " +-"
+
+        for _ in range(len(s)):
+            r += "-"
+
+        r += "-+\n"
+        r += "\n"
+        return r
