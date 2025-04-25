@@ -94,16 +94,15 @@ jobs:
         env:
           CI: true
           MONGODB_URI: mongodb://localhost:27017
-          MONGODB_CI_URI: ${{ env.MONGODB_URI }}
         run: poetry run pytest
 
       - name: Unit Tests with Coverage
         uses: paambaati/codeclimate-action@v5.0.0
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
+          CI: true
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           MONGODB_URI: mongodb://localhost:27017
-          MONGODB_CI_URI: ${{ env.MONGODB_URI }}
         with:
           coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
 
