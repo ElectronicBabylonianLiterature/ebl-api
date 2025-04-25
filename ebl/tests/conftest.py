@@ -1,6 +1,7 @@
 import datetime
 import io
 import json
+import os
 import uuid
 from pathlib import Path
 from typing import Any, Mapping, Sequence, Union
@@ -95,7 +96,7 @@ from ebl.tests.factories.archaeology import FindspotFactory, FINDSPOT_COUNT
 
 @pytest.fixture(scope="session")
 def mongo_client() -> MongoClient:
-    return MongoClient()
+    return MongoClient(os.environ.get("MONGODB_CI_URI"))
 
 
 @pytest.fixture

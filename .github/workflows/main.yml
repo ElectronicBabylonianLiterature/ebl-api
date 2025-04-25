@@ -26,7 +26,7 @@ jobs:
       mongodb:
         image: mongo:7.0
         ports:
-          - 27017:27017
+          - 27018:27017
 
     steps:
       - uses: actions/checkout@v4
@@ -94,6 +94,7 @@ jobs:
         env:
           CI: true
           MONGODB_URI: mongodb://localhost:27017
+          MONGODB_CI_URI: ${{ env.MONGODB_URI }}
         run: poetry run pytest
 
       - name: Unit Tests with Coverage
@@ -102,6 +103,7 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           MONGODB_URI: mongodb://localhost:27017
+          MONGODB_CI_URI: ${{ env.MONGODB_URI }}
         with:
           coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
 
