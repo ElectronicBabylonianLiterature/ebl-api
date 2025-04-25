@@ -104,7 +104,7 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           MONGODB_URI: mongodb://localhost:27017
         with:
-          coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
+          coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x
 
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
