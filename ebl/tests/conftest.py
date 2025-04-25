@@ -100,6 +100,7 @@ def mongo_client() -> MongoClient:
         return MongoClient(os.environ["MONGODB_URI"])
     else:
         from pymongo_inmemory import MongoClient as InMemoryMongoClient
+
         return InMemoryMongoClient()
 
 
