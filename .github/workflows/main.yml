@@ -23,31 +23,28 @@ jobs:
     name: Test Python ${{ matrix.python-version }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl
-          curl -O http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
-          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb || true
-          sudo apt-get -f install -y
-          sudo ldconfig
+          sudo apt-get install -y curl libssl-dev
 
       - name: Install MongoDB
         run: |
-          curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+          sudo apt-get install gnupg
+          curl -fsSL https://pgp.mongodb.com/server-4.4.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-4.4.gpg --dearmor
+          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-4.4.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
           sudo apt-get update
           sudo apt-get install -y mongodb-org
           sudo ldconfig
 
       - name: Set MongoDB Binary
-        run: echo "export MONGOD_EXECUTABLE=$(which mongod)" >> $GITHUB_ENV
+        run: echo "MONGOD_EXECUTABLE=$(which mongod)" >> $GITHUB_ENV
 
       - name: Debug MongoDB Binary
         run: |
@@ -88,7 +85,7 @@ jobs:
         run: poetry run pytest
 
       - name: Unit Tests with Coverage
-        uses: paambaati/codeclimate-action@v3.0.0
+        uses: paambaati/codeclimate-action@v5.0.0
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
@@ -100,18 +97,18 @@ jobs:
     needs: [test]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v3
 
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v3
         with:
           registry: ebl.badw.de
           username: ${{ secrets.EBL_REGISTRY_USERNAME }}
           password: ${{ secrets.EBL_REGISTRY_PASSWORD }}
 
       - id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           push: true
           tags: |
