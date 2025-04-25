@@ -96,6 +96,7 @@ from ebl.tests.factories.archaeology import FindspotFactory, FINDSPOT_COUNT
 
 @pytest.fixture(scope="session")
 def mongo_client() -> MongoClient:
+    print(os.environ["MONGODB_URI"])
     return MongoClient(os.environ["MONGODB_URI"])
 
 
