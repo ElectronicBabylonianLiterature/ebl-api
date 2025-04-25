@@ -16,7 +16,7 @@ env:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.9", "pypy-3.9"]
@@ -98,7 +98,7 @@ jobs:
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [test]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
