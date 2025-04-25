@@ -22,6 +22,12 @@ jobs:
         python-version: ["3.9", "pypy-3.9"]
     name: Test Python ${{ matrix.python-version }}
 
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
+
     steps:
       - uses: actions/checkout@v4
 
@@ -33,23 +39,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl libssl-dev
-
-      - name: Install MongoDB
-        run: |
-          sudo apt-get install gnupg
-          curl -fsSL https://pgp.mongodb.com/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
-          echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-          sudo apt-get update
-          sudo apt-get install -y mongodb-org
-          sudo ldconfig
-
-      - name: Set MongoDB Binary
-        run: echo "MONGOD_EXECUTABLE=$(which mongod)" >> $GITHUB_ENV
-
-      - name: Debug MongoDB Binary
-        run: |
-          ls -l /usr/bin/mongod
-          ldd /usr/bin/mongod
 
       - name: Install Rust
         run: |
@@ -82,6 +71,7 @@ jobs:
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           CI: true
+          MONGODB_URI: mongodb://localhost:27017
         run: poetry run pytest
 
       - name: Unit Tests with Coverage
@@ -89,6 +79,7 @@ jobs:
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          MONGODB_URI: mongodb://localhost:27017
         with:
           coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
 
