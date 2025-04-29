@@ -16,6 +16,10 @@ class LineContext:
     last_alter_lem_line_at: List[int]
 
 
+# ToDo: Continue from here.
+# The logic should be reconsidered and functionality transformed to `legacy_atf_converter`
+
+
 class EblLinesGetter:
     def __init__(
         self,
@@ -67,7 +71,7 @@ class EblLinesGetter:
         elif c_type == "lem_line":
             result = self._handle_lem_line(line, result, filename, context)
         else:
-            result["transliteration"].append(line["c_line"])
+            result["transliteration"].append(line["serialized"])
             result["lemmatization"].append(line["c_line"])
         return result, context
 
@@ -83,7 +87,7 @@ class EblLinesGetter:
         context.last_transliteration = [
             entry for entry in line["c_array"] if entry != "DIŠ"
         ]
-        context.last_transliteration_line = line["c_line"]
+        context.last_transliteration_line = line["serialized"]
         context.last_alter_lem_line_at = line["c_alter_lem_line_at"]
         result["transliteration"].append(context.last_transliteration_line)
         return context
@@ -196,7 +200,9 @@ class EblLinesGetter:
     def _generate_lemma_line(
         self, last_transliteration_line: str, oracc_word_ebl_lemmas: dict
     ) -> List:
-        ebl_lines = parse_atf_lark(last_transliteration_line)
+        ebl_lines = parse_atf_lark(
+            last_transliteration_line
+        )  # ToDo: check! this might be an issue
         lemma_line = []
         word_cnt = 0
         for token in ebl_lines.lines[0].content:

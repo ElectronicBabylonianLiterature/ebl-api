@@ -2,7 +2,7 @@ import argparse
 import glob
 import os
 from pymongo import MongoClient
-from typing import Any, Dict, List, TypedDict, Optional
+from typing import Any, Dict, List, TypedDict
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
     GlossaryParserData,
@@ -22,64 +22,57 @@ class AtfImporterArgs(TypedDict):
 
 
 class AtfImporter:
-    def __init__(self, database, logdir: Optional[str] = None) -> None:
+    logger: Any = None
+    database_importer: Any = None
+
+    def __init__(self, database) -> None:
         self.database = database
         self.username: str = ""
-        self.setup_logger()
         self.config = AtfImporterConfig().config_data
-        self._database_importer = DatabaseImporter(database, self.logger, self.username)
-        self.atf_parser = None
+        self.atf_converter = None
         self.glossary_parser = GlossaryParser(self.config)
-        self._ebl_lines_getter = None
+        self.ebl_lines_getter = None
 
     def convert_to_ebl_lines(
-        self, converted_lines: List[Dict[str, Any]], filename: str
+        # ToDo: Continue from here.
+        # This should be discarded. Functionality should be moved to `atf_converter.convert_lines()`
+        self,
+        converted_lines: List[Dict[str, Any]],
+        filename: str,
     ) -> Dict[str, List]:
-        ebl_lines_getter = getattr(self, "_ebl_lines_getter", None)
+        ebl_lines_getter = getattr(self, "ebl_lines_getter", None)
         if ebl_lines_getter:
             return ebl_lines_getter.convert_to_ebl_lines(converted_lines, filename)
         else:
             return {}
 
-    def setup_logger(self, logdir: Optional[str] = None) -> None:
-        self.logger = Logger(logdir)
-
-    def setup_lines_getter(self, glossary_path: str) -> None:
-        self._ebl_lines_getter = EblLinesGetter(
-            self.database, self.config, self.logger, self.parse_glossary(glossary_path)
+    def setup_importer(self, args: AtfImporterArgs) -> None:
+        self.username = args["author"]
+        self.logger = Logger(args["logdir"])
+        self.database_importer = DatabaseImporter(
+            self.database, self.logger, self.username
         )
-
-    def import_into_database(self, ebl_lines: Dict[str, List], filename: str) -> None:
-        try:
-            self._database_importer.import_into_database(ebl_lines, filename)
-        except Exception as e:
-            self.logger.exception(e)
-
-    def parse_glossary(
-        self,
-        path: str,
-    ) -> GlossaryParserData:
-        with open(path, "r", encoding="utf8") as file:
-            return self.glossary_parser.parse(file)
+        self.ebl_lines_getter = EblLinesGetter(
+            self.database,
+            self.config,
+            self.logger,
+            self.parse_glossary(args["glossary_path"]),  # ToDo: Allow multiple paths
+        )
+        self.atf_converter = LegacyAtfConverter(self.logger)
 
     def run_importer(self, args: AtfImporterArgs) -> None:
-        if args["logdir"]:
-            self.setup_logger(args["logdir"])
-        self.setup_lines_getter(args["glossary_path"])
-        self.username = args["author"]
-        self.atf_parser = LegacyAtfConverter(self.logger)
+        self.setup_importer(args)
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
-        self._process_files(file_paths, args)
+        for filepath in file_paths[:3]:  # ToDo: Remove restriction
+            self.logger.filepath = filepath
+            self.process_file(filepath, args)
+        self.logger.filepath = None
         self.logger.write_logs()
 
-    def _process_files(self, file_paths: List[str], args: AtfImporterArgs) -> None:
-        for filepath in file_paths:
-            self._process_file(filepath, args)
-
-    def _process_file(self, filepath: str, args: AtfImporterArgs) -> None:
+    def process_file(self, filepath: str, args: AtfImporterArgs) -> None:
         filename = os.path.basename(filepath).split(".")[0]
         self.logger.info(LoggerUtil.print_frame(f"Importing {filename}.atf"))
-        converted_lines = self.atf_parser.convert_lines_from_path(filepath, filename)
+        converted_lines = self.atf_converter.convert_lines_from_path(filepath, filename)
         self.logger.info(
             LoggerUtil.print_frame(f"Formatting to eBL-ATF of {filename}.atf")
         )
@@ -90,6 +83,19 @@ class AtfImporter:
             )
         )
         self.import_into_database(ebl_lines, filename)
+
+    def import_into_database(self, ebl_lines: Dict[str, List], filename: str) -> None:
+        try:
+            self.database_importer.import_into_database(ebl_lines, filename)
+        except Exception as e:
+            self.logger.exception(f"Error while importing into database: {e}")
+
+    def parse_glossary(
+        self,
+        path: str,
+    ) -> GlossaryParserData:
+        with open(path, "r", encoding="utf8") as file:
+            return self.glossary_parser.parse(file)
 
     def cli(self) -> None:
         parser = argparse.ArgumentParser(

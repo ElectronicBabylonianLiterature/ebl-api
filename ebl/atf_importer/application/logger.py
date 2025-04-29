@@ -17,32 +17,43 @@ class Logger:
         logging.basicConfig(level=logging.DEBUG)
         self.logger = logging.getLogger("Atf-Importer")
         self.logdir = logdir
+        self.filepath: Optional[str] = None
         self.log_keys = get_args(LogKey)
         self.data: Dict[str, List[str]] = {key: [] for key in self.log_keys}
 
     def setLevel(self, level) -> None:
         self.logger.setLevel(level)
 
+    def format_text(self, text: str) -> str:
+        if self.filepath:
+            return f"{self.filepath}: {text}"
+        return text
+
     def debug(self, text: str) -> None:
-        self.logger.debug(text)
+        self.logger.debug(self.format_text(text))
 
     def success(self, text: str, key: Optional[LogKey] = None) -> None:
+        text = self.format_text(text)
         self.logger.success(text)
-        self._append_to_data(text, key)
+        self._append_to_data(self.format_text(text), key)
 
     def info(self, text: str, key: Optional[LogKey] = None) -> None:
+        text = self.format_text(text)
         self.logger.info(text)
         self._append_to_data(text, key)
 
     def warning(self, text: str, key: Optional[LogKey] = None) -> None:
+        text = self.format_text(text)
         self.logger.warning(text)
         self._append_to_data(text, key)
 
     def error(self, text: str, key: Optional[LogKey] = None) -> None:
+        text = self.format_text(text)
         self.logger.error(text)
         self._append_to_data(text, key)
 
     def exception(self, text: str, key: Optional[LogKey] = None) -> None:
+        text = self.format_text(text)
         self.logger.exception(text)
         self._append_to_data(text, key)
 
@@ -54,8 +65,7 @@ class Logger:
     def _write_log(self, filename: str, data: List[str]) -> None:
         Path(self.logdir).mkdir(parents=True, exist_ok=True)  # pyre-ignore[6]
         with open(f"{self.logdir}/{filename}", "w", encoding="utf8") as outputfile:
-            for line in data:
-                outputfile.write(line + "\n")
+            outputfile.write("\n".join(data))
 
     def _append_to_data(self, text: str, key: Optional[LogKey] = None) -> None:
         if self.logdir and key:

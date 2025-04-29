@@ -167,7 +167,7 @@ def clean_line(line: str):
     return line
 
 
-def parse_atf_lark(atf_):
+def parse_atf_lark(atf_: str) -> Text:
     def parse_line_(line: str, line_number: int):
         try:
             line = clean_line(line)

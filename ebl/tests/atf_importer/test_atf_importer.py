@@ -1,19 +1,126 @@
 import os
 import zipfile
 import tempfile
+import builtins
+import pytest
 from ebl.atf_importer.application.atf_importer import AtfImporter
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
-from ebl.atf_importer.application.logger import Logger
+from ebl.tests.factories.fragment import FragmentFactory
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 
-logger = Logger("../logs")
+
+def create_file(path, content):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.touch()
+    path.write_text(content)
+
+
+def setup_and_run(atf_content, tmp_path, database):
+    atf_importer = AtfImporter(database)
+    create_file(tmp_path / "import/test.atf", atf_content)
+    create_file(tmp_path / "import/akkadian.glo", "")
+    atf_importer.run_importer(
+        {
+            "input_dir": tmp_path / "import",
+            "logdir": tmp_path / "logs",
+            "glossary_path": tmp_path / "import/akkadian.glo",
+            "author": "Test author",
+        }
+    )
+
+
+@pytest.fixture
+def mock_input(monkeypatch):
+    def _set_input_responses(responses):
+        responses_iter = iter(responses)
+        monkeypatch.setattr(builtins, "input", lambda *args: next(responses_iter))
+        return responses_iter
+
+    return _set_input_responses
+
+
+def test_logger_writes_files(database, fragment_repository, tmp_path):
+    setup_and_run("&P000001 = BM.1\n1'. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    assert os.listdir(tmp_path / "logs") == [
+        "imported_files.txt",
+        "not_imported_files.txt",
+        "error_lines.txt",
+        "not_lemmatized_tokens.txt",
+        "unparsable_lines.txt",
+    ]
+    for log_file in os.listdir(tmp_path / "logs"):
+        with open(tmp_path / f"logs/{log_file}") as logfile:
+            if log_file == "not_imported_files.txt":
+                # ToDo: Update assertion. The file should be listed in imported_files.txt
+                assert logfile.read() == ""
+
+
+def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_path):
+    fragment_repository.create(
+        FragmentFactory.build(
+            number="BM.111", external_numbers=ExternalNumbers(cdli_number="P111111")
+        )
+    )
+    setup_and_run("&P111111 = BM.111\n1'. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    # ToDo: Add assertion to check that the data was imported
+
+
+def test_find_museum_number_by_traditional_reference(
+    database, fragment_repository, tmp_path
+):
+    fragment_repository.create(
+        FragmentFactory.build(
+            number="BM.111", traditional_references=["test reference"]
+        )
+    )
+    setup_and_run("&P000001 = test reference\n. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    # ToDo: Add assertion to check that the data was imported
+
+
+def test_no_museum_number_in_database_input(
+    database, fragment_repository, tmp_path, mock_input
+):
+    responses = mock_input(["BM.2", "end"])
+    setup_and_run("&P000001 = test reference\n. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    assert next(responses) == "end"
+    # ToDo: Add assertion to check that the data was imported
+
+
+def test_no_museum_number_in_database_skip(
+    database, fragment_repository, tmp_path, mock_input
+):
+    responses = mock_input(["skip", "end"])
+    setup_and_run("&P000001 = test reference\n. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    assert next(responses) == "end"
+    # ToDo: Add assertion to check that the data was not imported
+
+
+def test_import_existing_fragment():
+    pass
+    # ToDo: Implement
+
+
+def test_import_existing_fragment_reject():
+    pass
+    # ToDo: Implement
+
+
+def test_import_fragment_parsing_errors():
+    pass
+    # ToDo: Implement
+
+
+def test_import_fragment_correct_parsing_errors():
+    pass
+    # ToDo: Implement
 
 
 def test_placeholder_insert(database):
     """
     Test case for insertion of placeholder if '<<'.
     """
-    legacy_atf_converter = LegacyAtfConverter(logger)
+    legacy_atf_converter = LegacyAtfConverter()
     converted_lines = legacy_atf_converter.convert_lines_from_string(
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
         "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["

@@ -118,10 +118,20 @@ class AtfPreprocessor:
         return re.sub(r"_(.*?)_", callback_upper, atf)
 
     def _lowercase_braces(self, atf: str) -> str:
-        def callback_lower(pat):
-            return pat.group(1).lower()
+        def callback_lower(m):
+            content = m.group(1)
 
-        return re.sub(r"({.*?})", callback_lower, atf)
+            def repl(part):
+                if part.startswith("(") and part.endswith(")"):
+                    return part
+                else:
+                    return part.lower()
+
+            parts = re.split(r"(\(.*?\))", content)
+            lowered = "".join((repl(part) for part in parts))
+            return lowered
+
+        return re.sub(r"{(.*?)}", lambda m: "{" + callback_lower(m) + "}", atf)
 
     def _replace_tabulation(self, atf: str) -> str:
         return re.sub(r"\(\$[^)]*\)", r"($___$)", atf)

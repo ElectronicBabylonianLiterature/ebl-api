@@ -15,6 +15,9 @@ from ebl.atf_importer.domain.atf_conversions import (
     GetWords,
 )
 from ebl.atf_importer.application.logger import Logger, LoggerUtil
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 
 
 class LegacyAtfConverter:
@@ -34,16 +37,32 @@ class LegacyAtfConverter:
         self.logger = logger
         self.preprocessor = AtfPreprocessor(self.logger)
 
-    def convert_lines_from_string(self, text: str) -> List[Dict[str, Any]]:
-        return self._convert_lines(text.split("\n"))
+    def convert_lines_from_string(self, text: str) -> Text:
+        return self.atf_to_text(text.split("\n"))
 
-    def convert_lines_from_path(self, path: str, filename: str) -> List[Dict[str, Any]]:
+    def convert_lines_from_path(self, path: str, filename: str) -> Text:
         self.logger.info(LoggerUtil.print_frame(f'Converting: "{filename}.atf"'))
         with codecs.open(path, "r", encoding="utf8") as f:
             lines = f.read().split("\n")
-        return self._convert_lines(lines)
+        return self.atf_to_text(lines)
 
-    def _convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
+    def atf_to_text(self, lines: List[str]) -> Text:
+        processed_lines = self.convert_lines(lines)
+        # ToDo: Continue from here.
+        # Importing legacy atf should include validation.
+        # lines = [(line["serialized"], None) for line in line]
+        # check_errors(lines)
+        text = Text(
+            tuple(
+                line["serialized"]
+                for line in processed_lines
+                if not isinstance(line["serialized"], EmptyLine)
+            ),
+            ATF_PARSER_VERSION,
+        )
+        return text
+
+    def convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         self.translation_block_transformer.reset()
         self.column_transformer.reset()
         processed_lines = []
@@ -57,7 +76,7 @@ class LegacyAtfConverter:
                 "c_array": c_array,
                 "c_type": c_type,
                 "c_alter_lem_line_at": c_alter_lem_line_at,
-                "serialized": None
+                "serialized": None  # ToDo: implement handling here?
                 if line_data["tree"].data == "lem_line"
                 else self.line_transformer.transform(line_data["tree"]),
             }
@@ -92,57 +111,61 @@ class LegacyAtfConverter:
 
     def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         self.indexing_visitor.reset()
-        line_trees = []
+        lines_data = []
         for line in lines:
-            line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
-            self.indexing_visitor.visit(line_tree)
-            self.legacy_visitor.visit(line_tree)
-            cursor = (
-                self.indexing_visitor.cursor_index
-                if line_tree.data == "text_line"
-                else None
-            )
-            if (
-                "translation_line" in line_tree.data
-                and line_tree.data != "translation_line"
-            ):
-                line_trees = self._handle_legacy_translation(line_tree, line_trees)
-            else:
-                line_trees.append({"string": line, "tree": line_tree, "cursor": cursor})
-        return line_trees
+            lines_data = self._parse_line(line, lines_data)
+        return lines_data
+
+    def _parse_line(self, line: str, lines_data: List[Dict[str, Any]]) -> dict:
+        line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
+        self.indexing_visitor.visit(line_tree)
+        self.legacy_visitor.visit(line_tree)
+        cursor = (
+            self.indexing_visitor.cursor_index
+            if line_tree.data == "text_line"
+            else None
+        )
+        if (
+            "translation_line" in line_tree.data
+            and line_tree.data != "translation_line"
+        ):
+            return self._handle_legacy_translation(line_tree, lines_data)
+        else:
+            lines_data.append({"string": line, "tree": line_tree, "cursor": cursor})
+            return lines_data
 
     def _handle_legacy_translation(
-        self, translation_line: Tree, line_trees: List[Dict[str, Any]]
+        self, translation_line: Tree, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         if translation_line.data == "!translation_line":
             translation_line.data = "translation_line"
             insert_at = self.translation_block_transformer.start
-            line_trees = self._insert_translation_line(
-                translation_line, insert_at, line_trees
+            lines_data = self._insert_translation_line(
+                translation_line, insert_at, lines_data
             )
-        return line_trees
+        return lines_data
 
     def _insert_translation_line(
-        self, translation_line: Tree, insert_at: str, line_trees: List[Dict[str, Any]]
+        self, translation_line: Tree, insert_at: str, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
-        for index, tree_line in enumerate(line_trees):
+        for index, tree_line in enumerate(lines_data):
             if insert_at == tree_line["cursor"]:
                 if (
-                    index + 1 < len(line_trees)
-                    and line_trees[index + 1]["tree"].data == "translation_line"
+                    index + 1 < len(lines_data)
+                    and lines_data[index + 1]["tree"].data == "translation_line"
                 ):
-                    line_trees[index + 1] = {
+                    lines_data[index + 1] = {
                         "string": "",
                         "tree": translation_line,
                         "cursor": None,
                     }
                 else:
-                    line_trees.insert(
+                    lines_data.insert(
                         index + 1,
                         {"string": "", "tree": translation_line, "cursor": None},
                     )
                 break
-        return line_trees
+        return lines_data
 
     def serialize_words(self, tree: Tree) -> List[Any]:
         words_serializer = GetWords()
