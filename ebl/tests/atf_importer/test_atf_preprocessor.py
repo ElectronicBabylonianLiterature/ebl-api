@@ -152,7 +152,7 @@ LEGACY_GRAMMAR_SIGNS = [
 )
 def test_text_lines(legacy_lines, ebl_lines):
     legacy_atf_converter = LegacyAtfConverter(logger)
-    legacy_lines = legacy_atf_converter.convert_lines_from_string(legacy_lines)
+    legacy_lines = legacy_atf_converter.convert_lines_from_string(legacy_lines)[1]
     expected_lines = parse_atf_lark(ebl_lines)
     assert legacy_lines == expected_lines
 
@@ -171,7 +171,7 @@ def test_legacy_translation():
         expected_lines = parse_atf_lark(expected[index])
         legacy_lines = legacy_atf_converter.convert_lines_from_string(
             TRANSLATION_LEGACY.strip("\n")
-        )
+        )[1]
         assert legacy_lines == expected_lines
 
 

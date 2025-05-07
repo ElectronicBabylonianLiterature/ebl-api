@@ -194,7 +194,9 @@ def parse_atf_lark(atf_: str) -> Text:
     if duplicates := pydash.duplicates(text.labels):
         raise DuplicateLabelError(
             [
-                ErrorAnnotation("Duplicate label", label.line_index + 1)
+                ErrorAnnotation(
+                    "Duplicate label", label.line_index + 1 if label.line_index else 1
+                )
                 for label in text.labels
                 if label in duplicates
             ]

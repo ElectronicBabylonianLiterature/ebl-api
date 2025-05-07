@@ -32,11 +32,6 @@ class Logger:
     def debug(self, text: str) -> None:
         self.logger.debug(self.format_text(text))
 
-    def success(self, text: str, key: Optional[LogKey] = None) -> None:
-        text = self.format_text(text)
-        self.logger.success(text)
-        self._append_to_data(self.format_text(text), key)
-
     def info(self, text: str, key: Optional[LogKey] = None) -> None:
         text = self.format_text(text)
         self.logger.info(text)

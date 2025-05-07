@@ -12,6 +12,7 @@ from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.atf_importer.application.database_importer import DatabaseImporter
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
 from ebl.atf_importer.application.logger import Logger, LoggerUtil
+from ebl.transliteration.domain.text import Text
 
 
 class AtfImporterArgs(TypedDict):
@@ -25,13 +26,14 @@ class AtfImporter:
     logger: Any = None
     database_importer: Any = None
 
-    def __init__(self, database) -> None:
+    def __init__(self, database, fragment_repository) -> None:
         self.database = database
         self.username: str = ""
         self.config = AtfImporterConfig().config_data
         self.atf_converter = None
         self.glossary_parser = GlossaryParser(self.config)
         self.ebl_lines_getter = None
+        self.fragment_repository = fragment_repository
 
     def convert_to_ebl_lines(
         # ToDo: Continue from here.
@@ -50,7 +52,7 @@ class AtfImporter:
         self.username = args["author"]
         self.logger = Logger(args["logdir"])
         self.database_importer = DatabaseImporter(
-            self.database, self.logger, self.username
+            self.database, self.fragment_repository, self.logger, self.username
         )
         self.ebl_lines_getter = EblLinesGetter(
             self.database,
@@ -72,7 +74,9 @@ class AtfImporter:
     def process_file(self, filepath: str, args: AtfImporterArgs) -> None:
         filename = os.path.basename(filepath).split(".")[0]
         self.logger.info(LoggerUtil.print_frame(f"Importing {filename}.atf"))
-        converted_lines = self.atf_converter.convert_lines_from_path(filepath, filename)
+        converted_lines, text = self.atf_converter.convert_lines_from_path(
+            filepath, filename
+        )
         self.logger.info(
             LoggerUtil.print_frame(f"Formatting to eBL-ATF of {filename}.atf")
         )
@@ -82,13 +86,15 @@ class AtfImporter:
                 f"Importing converted lines of {filename}.atf into db"
             )
         )
-        self.import_into_database(ebl_lines, filename)
+        self.import_into_database(ebl_lines, text, filename)
 
-    def import_into_database(self, ebl_lines: Dict[str, List], filename: str) -> None:
-        try:
-            self.database_importer.import_into_database(ebl_lines, filename)
-        except Exception as e:
-            self.logger.exception(f"Error while importing into database: {e}")
+    def import_into_database(
+        self, ebl_lines: Dict[str, List], text: Text, filename: str
+    ) -> None:
+        # try:
+        self.database_importer.import_into_database(ebl_lines, text, filename)
+        # except Exception as e:
+        #    self.logger.exception(f"Error while importing into database: {e}")
 
     def parse_glossary(
         self,

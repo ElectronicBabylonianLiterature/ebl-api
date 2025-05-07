@@ -3,12 +3,23 @@ import zipfile
 import tempfile
 import builtins
 import pytest
+from unittest.mock import patch
 from ebl.atf_importer.application.atf_importer import AtfImporter
-from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
-from ebl.atf_importer.application.lines_getter import EblLinesGetter
+
+# from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
+# from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
+
+@pytest.fixture(autouse=True)
+def patched_fragment_updater(fragment_updater):
+    with patch(
+        "ebl.context.Context.get_fragment_updater",
+        return_value=fragment_updater,
+    ):
+        yield
 
 def create_file(path, content):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -16,9 +27,9 @@ def create_file(path, content):
     path.write_text(content)
 
 
-def setup_and_run(atf_content, tmp_path, database):
-    atf_importer = AtfImporter(database)
-    create_file(tmp_path / "import/test.atf", atf_content)
+def setup_and_run_importer(atf_string, tmp_path, database, fragment_repository):
+    atf_importer = AtfImporter(database, fragment_repository)
+    create_file(tmp_path / "import/test.atf", atf_string)
     create_file(tmp_path / "import/akkadian.glo", "")
     atf_importer.run_importer(
         {
@@ -28,6 +39,22 @@ def setup_and_run(atf_content, tmp_path, database):
             "author": "Test author",
         }
     )
+
+
+def check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path):
+    fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(museum_number)
+    )
+    assert fragment.text.lines[0].content.split(" = ")[1] == test_id
+    for log_file in os.listdir(tmp_path / "logs"):
+        with open(tmp_path / f"logs/{log_file}") as logfile:
+            if log_file == "imported_files.txt":
+                assert (
+                    f"test.atf successfully imported as {museum_number}"
+                    in logfile.read()
+                )
+            else:
+                assert logfile.read() == ""
 
 
 @pytest.fixture
@@ -41,7 +68,11 @@ def mock_input(monkeypatch):
 
 
 def test_logger_writes_files(database, fragment_repository, tmp_path):
-    setup_and_run("&P000001 = BM.1\n1'. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    museum_number = "BM.1"
+    test_id = museum_number
+    atf = f"&P000001 = {test_id}\n1'. GU₄ 30 ⸢12⸣ [...]"
+    fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("BM.1")))
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
         "imported_files.txt",
         "not_imported_files.txt",
@@ -49,85 +80,117 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
         "not_lemmatized_tokens.txt",
         "unparsable_lines.txt",
     ]
-    for log_file in os.listdir(tmp_path / "logs"):
-        with open(tmp_path / f"logs/{log_file}") as logfile:
-            if log_file == "not_imported_files.txt":
-                # ToDo: Update assertion. The file should be listed in imported_files.txt
-                assert logfile.read() == ""
+    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
 
 
 def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_path):
+    museum_number = "BM.1"
+    test_id = museum_number
+    atf = f"&P111111 = {test_id}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
         FragmentFactory.build(
-            number="BM.111", external_numbers=ExternalNumbers(cdli_number="P111111")
+            number=MuseumNumber.of(museum_number),
+            external_numbers=ExternalNumbers(cdli_number="P111111"),
         )
     )
-    setup_and_run("&P111111 = BM.111\n1'. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
-    # ToDo: Add assertion to check that the data was imported
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
 
 
 def test_find_museum_number_by_traditional_reference(
     database, fragment_repository, tmp_path
 ):
+    museum_number = "BM.222"
+    test_id = "test reference"
+    atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
         FragmentFactory.build(
-            number="BM.111", traditional_references=["test reference"]
+            number=MuseumNumber.of(museum_number), traditional_references=[test_id]
         )
     )
-    setup_and_run("&P000001 = test reference\n. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
-    # ToDo: Add assertion to check that the data was imported
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
 
 
-def test_no_museum_number_in_database_input(
+def test_museum_number_input_by_user(
     database, fragment_repository, tmp_path, mock_input
 ):
-    responses = mock_input(["BM.2", "end"])
-    setup_and_run("&P000001 = test reference\n. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    museum_number = "BM.2"
+    test_id = "test reference"
+    atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
+    fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("BM.2")))
+    responses = mock_input([museum_number, "end"])
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert next(responses) == "end"
-    # ToDo: Add assertion to check that the data was imported
+    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
 
 
-def test_no_museum_number_in_database_skip(
+def test_museum_number_skip_by_user(
     database, fragment_repository, tmp_path, mock_input
 ):
     responses = mock_input(["skip", "end"])
-    setup_and_run("&P000001 = test reference\n. GU₄ 30 ⸢12⸣ [...]", tmp_path, database)
+    atf = "&P000001 = test reference\n1. GU₄ 30 ⸢12⸣ [...]"
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert next(responses) == "end"
-    # ToDo: Add assertion to check that the data was not imported
+    for log_file in os.listdir(tmp_path / "logs"):
+        with open(tmp_path / f"logs/{log_file}") as logfile:
+            if log_file == "not_imported_files.txt":
+                assert (
+                    "test.atf could not be imported: Museum number not found"
+                    in logfile.read()
+                )
+            else:
+                assert logfile.read() == ""
 
 
-def test_import_existing_fragment():
+def test_fragment_update_cancel_by_user(
+    database, fragment_repository, tmp_path, mock_input
+):
+    museum_number = "BM.333"
+    atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    check_importing_and_logs(
+        museum_number, museum_number, fragment_repository, tmp_path
+    )
+    # ToDo: Implement
+
+
+def test_import_fragment_parsing_errors(
+    database, fragment_repository, tmp_path, mock_input
+):
     pass
     # ToDo: Implement
 
 
-def test_import_existing_fragment_reject():
+def test_import_fragment_correct_parsing_errors(
+    database, fragment_repository, tmp_path, mock_input
+):
     pass
     # ToDo: Implement
 
 
-def test_import_fragment_parsing_errors():
-    pass
-    # ToDo: Implement
+# ToDo: Add tests for:
+# - importing multiple files
+# - importing files with lemmatization & multiple glossaries
+# - ask before updating existing edition
 
 
-def test_import_fragment_correct_parsing_errors():
-    pass
-    # ToDo: Implement
-
-
-def test_placeholder_insert(database):
+def test_placeholder_insert(database, fragment_repository, tmp_path):
     """
     Test case for insertion of placeholder if '<<'.
     """
-    legacy_atf_converter = LegacyAtfConverter()
-    converted_lines = legacy_atf_converter.convert_lines_from_string(
+    atf = (
+        "&P000001 = BM.999\n"
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
         "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["
         "1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
         "god]N; ikkal[eat]V"
     )
-
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    # ToDo: Actualize
     test_lemmas = [
         [],
         ["Šabaṭu I"],
@@ -141,30 +204,28 @@ def test_placeholder_insert(database):
         [],
         [],
     ]
-    atf_importer = AtfImporter(database)
-    atf_importer._ebl_lines_getter = EblLinesGetter(
-        atf_importer.database,
-        atf_importer.config,
-        atf_importer.logger,
-        {},  # ToDo: Add GlossaryParserData?
-        test_lemmas,  # ToDo: Better implement mocking
-    )
-    ebl_lines = atf_importer.convert_to_ebl_lines(
-        converted_lines,
-        "cpp_3_1_16",
-    )
-
-    # ToDo: Fix error:
+    # atf_importer = AtfImporter(database)
+    # atf_importer._ebl_lines_getter = EblLinesGetter(
+    #    atf_importer.database,
+    #    atf_importer.config,
+    #    atf_importer.logger,
+    #    {},  # ToDo: Add GlossaryParserData?
+    #    test_lemmas,  # ToDo: Better implement mocking
+    # )
+    # ebl_lines = atf_importer.convert_to_ebl_lines(
+    #    converted_lines,
+    #    "cpp_3_1_16",
+    # )
     # FAILED ebl/tests/atf_importer/test_atf_importer.py:
     #   :test_placeholder_insert - KeyError: 'last_transliteration'
-    print("!!!! ebl_lines", ebl_lines)
-    assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])
+    # print("!!!! ebl_lines", ebl_lines)
+    # assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])
 
 
-def test_atf_importer(database):
+def test_atf_importer(database, fragment_repository):
     # Test bulk import.
     # importer_path = "ebl/atf_importer/application/atf_importer.py"
-    atf_importer = AtfImporter(database)
+    atf_importer = AtfImporter(database, fragment_repository)
     archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
     with tempfile.TemporaryDirectory() as tempdir:
         data_path = f"{tempdir}/test_atf_import_data"

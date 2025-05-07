@@ -37,10 +37,14 @@ class LegacyAtfConverter:
         self.logger = logger
         self.preprocessor = AtfPreprocessor(self.logger)
 
-    def convert_lines_from_string(self, text: str) -> Text:
+    def convert_lines_from_string(
+        self, text: str
+    ) -> Tuple[List[Dict[str, Any]], Text]:
         return self.atf_to_text(text.split("\n"))
 
-    def convert_lines_from_path(self, path: str, filename: str) -> Text:
+    def convert_lines_from_path(
+        self, path: str, filename: str
+    ) -> Tuple[List[Dict[str, Any]], Text]:
         self.logger.info(LoggerUtil.print_frame(f'Converting: "{filename}.atf"'))
         with codecs.open(path, "r", encoding="utf8") as f:
             lines = f.read().split("\n")
@@ -60,7 +64,7 @@ class LegacyAtfConverter:
             ),
             ATF_PARSER_VERSION,
         )
-        return text
+        return processed_lines, text
 
     def convert_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         self.translation_block_transformer.reset()
@@ -116,7 +120,9 @@ class LegacyAtfConverter:
             lines_data = self._parse_line(line, lines_data)
         return lines_data
 
-    def _parse_line(self, line: str, lines_data: List[Dict[str, Any]]) -> dict:
+    def _parse_line(
+        self, line: str, lines_data: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
         line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
         self.indexing_visitor.visit(line_tree)
         self.legacy_visitor.visit(line_tree)
