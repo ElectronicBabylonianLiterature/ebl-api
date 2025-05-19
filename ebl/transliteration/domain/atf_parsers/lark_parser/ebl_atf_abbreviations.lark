@@ -1,43 +1,3 @@
-%import common.CR
-%import common.LF
-%import common.WS_INLINE
-%import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup)
-%import .ebl_atf_dollar_line (dollar_line)
-%import .ebl_atf_text_line (at_line)
-
-?start: line
-
-?line: empty_line
-     | note_line
-     | text_line
-     | dollar_line
-     | at_line
-     | parallel_line
-     | translation_line
-     | control_line
-
-empty_line: /\s+/?
-!control_line.-2: ("=:" | "&" ) /.+/?
-
-?paratext: note_line | dollar_line
-
-chapter: chapter_line (_NEWLINE _NEWLINE+ chapter_line)*
-
-chapter_line: [chapter_translation] line_variant (_NEWLINE line_variant)*
-chapter_translation: (translation_line _NEWLINE)+
-
-line_variant: reconstruction (_NEWLINE manuscript_line)*
-
-reconstruction: text_line [_NEWLINE note_line] (_NEWLINE parallel_line)*
-
-manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
-?manuscript_text: " " text_line | empty_line
-?paratext_line: _NEWLINE _WHITE_SPACE? paratext
-_WHITE_SPACE: WS_INLINE
-_NEWLINE: (CR? LF) 
-
-siglum: [PROVENANCE] PERIOD [TYPE] [DISAMBIQUATOR]
-      | "Std" [DISAMBIQUATOR] -> standard_text_siglum
 PROVENANCE: "Assa"
          | "Abs"
          | "Adb"
@@ -203,4 +163,3 @@ TYPE: "Sch"
     | "Var"
     | "Par"
     | "Ex"
-DISAMBIQUATOR: /[\S]+/

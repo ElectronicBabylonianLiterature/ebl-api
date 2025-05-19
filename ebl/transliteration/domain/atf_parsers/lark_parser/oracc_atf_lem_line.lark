@@ -1,5 +1,4 @@
-%import .oracc_atf_common (VALUE_CHARACTER)
-%import .oracc_atf_common (LOGOGRAM_CHARACTER)
+%import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 
 lem_line: "#lem: " lemma (LEM_SEPARATOR lemma)*
 LEM_SEPARATOR : "; "
