@@ -30,7 +30,7 @@ from ebl.transliteration.domain.transliteration_error import (
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line_transformer import LineTransformer
-from ebl.transliteration.domain.label_transformer import LabelTransformer
+from ebl.transliteration.domain.labels import LabelTransformer
 from ebl.transliteration.domain.labels import Label
 from functools import singledispatch
 
