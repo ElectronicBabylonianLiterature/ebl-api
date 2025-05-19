@@ -37,7 +37,7 @@ from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
-from ebl.transliteration.domain.reconstructed_text_parser import (
+from ebl.transliteration.domain.atf_parsers.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.domain.text_line import TextLine

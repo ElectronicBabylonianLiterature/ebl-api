@@ -15,7 +15,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
     Caesura,
     MetricalFootSeparator,
 )
-from ebl.transliteration.domain.reconstructed_text_parser import (
+from ebl.transliteration.domain.atf_parsers.reconstructed_text_parser import (
     parse_break,
     parse_reconstructed_line,
     parse_reconstructed_word,
