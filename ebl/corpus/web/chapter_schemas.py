@@ -32,7 +32,7 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_translation_line,
 )
 from ebl.markup.domain.converters import markup_from_string
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.note_line import NoteLine

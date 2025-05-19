@@ -148,7 +148,9 @@ class TransliterationQueryText(TransliterationQuery):
         return self.visitor.result
 
     def _parse(self, transliteration: str) -> TextLine:
-        from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+        from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
+            PARSE_ERRORS,
+        )
 
         transliteration = transliteration.strip(" -.")
         try:

@@ -11,7 +11,7 @@ from ebl.transliteration.domain.labels import (
     SurfaceLabel,
     ObjectLabel,
 )
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 
 LABELS: List[Tuple[str, str, str, Label]] = [
     ("o", "", "@obverse", SurfaceLabel((), Surface.OBVERSE)),

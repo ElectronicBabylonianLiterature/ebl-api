@@ -14,7 +14,7 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_compound_grapheme,
     parse_reading,
 )
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,

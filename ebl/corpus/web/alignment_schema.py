@@ -10,7 +10,7 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_normalized_akkadian_word,
     parse_word,
 )
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
