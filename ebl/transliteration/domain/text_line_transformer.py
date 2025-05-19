@@ -14,7 +14,6 @@ from ebl.transliteration.domain.enclosure_transformer import (
 )
 from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.atf_parsers.lark import tokens_to_value_tokens
-from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
@@ -39,9 +38,13 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.common_transformer import CommonTransformer
 
 
 class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
+    def __init__(self):
+        super().__init__()
+
     def ebl_atf_text_line__lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
 
@@ -70,7 +73,20 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
         return self._transform_erasure(erased, over_erased)
 
 
+NOTE_LINE_PREFIXES = [
+    "ebl_atf_at_line",
+    "ebl_atf_manuscript_line",
+    "ebl_atf_translation_line",
+]
+
+
 class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
+    def __init__(self):
+        super().__init__()
+        for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
+            for prefix in NOTE_LINE_PREFIXES:
+                setattr(self, f"{prefix}__{method}", getattr(self, method))
+
     def ebl_atf_text_line__text(self, children) -> Sequence[EblToken]:
         return tuple(children)
 
@@ -119,6 +135,9 @@ class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
 
 
 class GreekTransformer(EnclosureTransformer, SignTransformer):
+    def __init__(self):
+        super().__init__()
+
     def ebl_atf_text_line__greek_word(self, children) -> GreekWord:
         return GreekWord.of(
             children.children if isinstance(children, Tree) else children
@@ -129,24 +148,42 @@ class GreekTransformer(EnclosureTransformer, SignTransformer):
         return GreekLetter.of(alphabet.value, flags)
 
 
+TEXT_LINE_PREFIXES = [
+    "ebl_atf_parallel_line",
+    "ebl_atf_translation_line",
+    "ebl_atf_note_line__ebl_atf_text_line",
+    "ebl_atf_manuscript_line",
+]
+
+
 class TextLineTransformer(
-    WordTransformer, NormalizedAkkadianTransformer, GreekTransformer
+    WordTransformer, NormalizedAkkadianTransformer, GreekTransformer, CommonTransformer
 ):
+    def __init__(self):
+        super().__init__()
+        for method in [method for method in dir(self) if "ebl_atf_text_line"]:
+            _method = method.replace("ebl_atf_text_line", "")
+            for prefix in TEXT_LINE_PREFIXES:
+                setattr(
+                    self,
+                    f"{prefix}__{method}",
+                    getattr(self, method),
+                )
+                setattr(
+                    self,
+                    f"{prefix}{_method}",
+                    getattr(self, method),
+                )
+        for prefix in TEXT_LINE_PREFIXES:
+            setattr(
+                self,
+                f"{prefix}__text_line",
+                self.text_line,
+            )
+
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__line_number_range(self, start, end):
-        return LineNumberRange(start, end)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__single_line_number(
-        self, prefix_modifier, number, prime, suffix_modifier
-    ):
-        return LineNumber(
-            int(number), prime is not None, prefix_modifier, suffix_modifier
-        )
 
     def ebl_atf_text_line__text(self, children):
         return tokens_to_value_tokens(children)

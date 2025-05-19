@@ -1,5 +1,4 @@
 from typing import Iterable
-
 from lark.visitors import v_args
 from ebl.common.domain.period import Period
 
@@ -13,10 +12,12 @@ from ebl.corpus.domain.manuscript import (
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
 from ebl.transliteration.domain.line_transformer import LineTransformer
+from ebl.transliteration.domain.label_transformer import LabelTransformer
 
 
-class ChapterTransformer(LineTransformer):
+class ChapterTransformer(LineTransformer, LabelTransformer):
     def __init__(self, manuscripts: Iterable[Manuscript]):
+        super().__init__()
         self._manuscripts = {
             manuscript.siglum: manuscript.id for manuscript in manuscripts
         }
@@ -25,22 +26,51 @@ class ChapterTransformer(LineTransformer):
         return children
 
     @v_args(inline=True)
-    def siglum(self, provenance, period, type_, disambiquator):
-        return Siglum(
-            Provenance.from_abbreviation(provenance or ""),
-            Period.from_abbreviation(period),
-            ManuscriptType.from_abbreviation(type_ or ""),
-            disambiquator or "",
+    def get_siglum(self, provenance=None, period=None, type_=None, disambiquator=None):
+        _disambiquator = str(disambiquator) if disambiquator else ""
+        return (
+            Siglum(
+                Provenance.from_abbreviation(provenance or ""),
+                Period.from_abbreviation(period),
+                ManuscriptType.from_abbreviation(type_ or ""),
+                _disambiquator,
+            )
+            if period
+            else Siglum(
+                Provenance.STANDARD_TEXT,
+                Period.NONE,
+                ManuscriptType.NONE,
+                _disambiquator,
+            )
         )
 
     @v_args(inline=True)
+    def detailed_siglum(
+        self, provenance=None, period=None, type_=None, disambiquator=None
+    ):
+        return self.get_siglum(provenance, period, type_, disambiquator)
+
+    @v_args(inline=True)
+    def ebl_atf_manuscript_line__detailed_siglum(
+        self, provenance=None, period=None, type_=None, disambiquator=None
+    ):
+        return self.get_siglum(provenance, period, type_, disambiquator)
+
+    @v_args(inline=True)
     def standard_text_siglum(self, disambiquator):
-        return Siglum(
-            Provenance.STANDARD_TEXT,
-            Period.NONE,
-            ManuscriptType.NONE,
-            disambiquator or "",
-        )
+        return self.get_siglum(None, None, None, disambiquator)
+
+    @v_args(inline=True)
+    def ebl_atf_manuscript_line__standard_text_siglum(self, disambiquator):
+        return self.get_siglum(None, None, None, disambiquator)
+
+    @v_args(inline=True)
+    def siglum(self, siglum: Siglum) -> Siglum:
+        return siglum
+
+    @v_args(inline=True)
+    def ebl_atf_manuscript_line__siglum(self, siglum: Siglum) -> Siglum:
+        return siglum
 
     @v_args(inline=True)
     def manuscript_line(self, siglum, labels, line, *paratext):
