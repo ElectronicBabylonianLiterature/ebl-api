@@ -16,7 +16,7 @@ from ebl.corpus.domain.parser import parse_chapter, parse_paratext
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
 from ebl.transliteration.domain.labels import parse_labels
-from ebl.transliteration.domain.lark_parser import (
+from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_note_line,
     parse_parallel_line,
     parse_text_line,

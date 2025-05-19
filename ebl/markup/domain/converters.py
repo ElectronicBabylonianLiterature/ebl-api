@@ -5,7 +5,7 @@ from ebl.transliteration.application.note_line_part_schemas import (
 )
 from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
 from marshmallow import ValidationError
-from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
 
 
 def markup_from_string(string: str) -> Sequence[MarkupPart]:

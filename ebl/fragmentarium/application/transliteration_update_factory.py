@@ -2,7 +2,7 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import TextLine
 
 

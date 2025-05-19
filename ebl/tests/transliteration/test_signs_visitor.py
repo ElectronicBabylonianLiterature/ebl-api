@@ -3,7 +3,7 @@ from typing import Sequence
 import pytest
 
 from ebl.transliteration.application.signs_visitor import SignsVisitor
-from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 
 
 @pytest.mark.parametrize(

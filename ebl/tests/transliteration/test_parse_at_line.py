@@ -12,7 +12,7 @@ from ebl.transliteration.domain.at_line import (
     SealAtLine,
 )
 from ebl.transliteration.domain.labels import ColumnLabel, ObjectLabel, SurfaceLabel
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.markup import StringPart
