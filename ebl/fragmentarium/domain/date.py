@@ -4,7 +4,7 @@ from typing import Optional
 from marshmallow import Schema, fields, post_load, post_dump, EXCLUDE
 from enum import Enum
 from ebl.schemas import ValueEnumField
-from ebl.chronology.chronology import King, KingSchema, Eponym, EponymSchema
+from ebl.chronology.chronology import chronology, King, Eponym, EponymSchema
 
 
 class Ur3Calendar(Enum):
@@ -41,9 +41,14 @@ class Day:
 
 
 @attr.s(auto_attribs=True)
-class DateKing(King):
+class DateKing:
+    order_global: float
     is_broken: Optional[bool] = attr.ib(default=None)
     is_uncertain: Optional[bool] = attr.ib(default=None)
+
+    @staticmethod
+    def king(self) -> Optional[King]:
+        return chronology.find_king_by_order_global(self.order_global)
 
 
 @attr.s(auto_attribs=True)
@@ -97,12 +102,13 @@ class DaySchema(LabeledSchema):
         return Day(**data)
 
 
-class DateKingSchema(KingSchema):
+class DateKingSchema(Schema):
+    order_global = fields.Float(data_key="orderGlobal")
     is_broken = fields.Boolean(data_key="isBroken", allow_none=True)
     is_uncertain = fields.Boolean(data_key="isUncertain", allow_none=True)
 
     @post_load
-    def make_king(self, data: dict, **kwargs) -> DateKing:
+    def make_date_king(self, data: dict, **kwargs) -> DateKing:
         return DateKing(**data)
 
     @post_dump

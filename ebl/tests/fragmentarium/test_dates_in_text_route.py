@@ -13,7 +13,7 @@ from ebl.tests.factories.fragment import (
 
 
 @pytest.mark.parametrize(
-    "currentDate, updatedDate",
+    "current_date, updated_date",
     [
         (
             DateFactory.build(month=MonthFactory.build(value="10")),
@@ -37,16 +37,16 @@ from ebl.tests.factories.fragment import (
         ),
     ],
 )
-def test_update_date(client, fragmentarium, user, currentDate, updatedDate):
-    fragment = FragmentFactory.build(dates_in_text=[currentDate] if currentDate else [])
+def test_update_date(client, fragmentarium, user, current_date, updated_date):
+    fragment = FragmentFactory.build(dates_in_text=[current_date] if current_date else [])
     fragment_number = fragmentarium.create(fragment)
-    update = {"datesInText": [DateSchema().dump(updatedDate)]}
+    update = {"datesInText": [DateSchema().dump(updated_date)]}
     post_result = client.simulate_post(
         f"/fragments/{fragment_number}/dates-in-text",
-        body=json.dumps(update) if updatedDate else '{"datesInText": []}',
+        body=json.dumps(update) if updated_date else '{"datesInText": []}',
     )
     expected_json = create_response_dto(
-        fragment.set_dates_in_text([updatedDate] if updatedDate else []),
+        fragment.set_dates_in_text([updated_date] if updated_date else []),
         user,
         fragment.number == "K.1",
     )

@@ -32,15 +32,9 @@ def test_date_schema():
         "day": {"value": "1"},
         "king": {
             "orderGlobal": 1,
-            "dynastyNumber": "1",
-            "dynastyName": "Dynasty of Akkad",
-            "orderInDynasty": "1",
-            "name": "Sargon",
-            "date": "2334–2279",
-            "totalOfYears": "56?",
-            "notes": "",
         },
         "ur3Calendar": "Nippur",
     }
+    DateSchema().load(date_input)
     serialized_date = DateSchema().dump(DateSchema().load(date_input))
     assert date_input == serialized_date
