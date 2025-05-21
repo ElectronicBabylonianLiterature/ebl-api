@@ -5,6 +5,7 @@
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
 %import .ebl_atf_common (seal)
+%import .ebl_atf_abbreviations (PERIOD)
 
 note_line: "#note: " _markup
 markup: _markup
@@ -29,30 +30,7 @@ GENRE: "Lex" | "Med" | "L" | "D" | "Mag" | "Šui"
 CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
 chapter_name: STAGE " " [quoted_string " "] quoted_string 
 quoted_string: "\"" /./+ "\""
-STAGE: "ED1_2"
-     | "Fara"
-     | "Hel"
-     | "Hit"
-     | "JN"
-     | "LB"
-     | "MA"
-     | "MB"
-     | "MElam"
-     | "NA"
-     | "NB"
-     | "NElam"
-     | "OA"
-     | "OB"
-     | "OElam"
-     | "PElam"
-     | "PSarg"
-     | "Par"
-     | "Per"
-     | "SB"
-     | "Sarg"
-     | "Unc"
-     | "Ur3"
-     | "Uruk4"
+STAGE: PERIOD | "SB"
 parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
 CF: "cf. "
 PARALLEL_LINE_PREFIX: "// "
