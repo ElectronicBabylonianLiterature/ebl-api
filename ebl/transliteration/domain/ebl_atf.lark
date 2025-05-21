@@ -4,6 +4,7 @@
 %import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup)
 %import .ebl_atf_dollar_line (dollar_line)
 %import .ebl_atf_text_line (at_line)
+%import .ebl_atf_empty_line (empty_line)
 %import .ebl_atf_abbreviations (PROVENANCE, PERIOD, TYPE)
 
 ?start: line
@@ -17,7 +18,6 @@
      | translation_line
      | control_line
 
-empty_line: /\s+/?
 !control_line.-2: ("=:" | "&" ) /.+/?
 
 ?paratext: note_line | dollar_line
