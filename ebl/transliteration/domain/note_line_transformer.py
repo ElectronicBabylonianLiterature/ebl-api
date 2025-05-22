@@ -38,7 +38,9 @@ class MarkupTransformer(Transformer):
         return StringPart(text)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__bibliography_part(self, id_, pages=None) -> BibliographyPart:
+    def ebl_atf__text_line__bibliography_part(
+        self, id_, pages=None
+    ) -> BibliographyPart:
         return BibliographyPart.of(
             BibliographyId("".join(id_.children)),
             "".join(pages.children) if pages else "",

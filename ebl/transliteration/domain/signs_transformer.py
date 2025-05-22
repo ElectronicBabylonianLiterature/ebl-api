@@ -47,7 +47,9 @@ class SignTransformer(Transformer):
         return ValueToken.of("".join(children))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__logogram(self, name, sub_index, modifiers, flags, sign=None):
+    def ebl_atf__text_line__logogram(
+        self, name, sub_index, modifiers, flags, sign=None
+    ):
         return Logogram.of(tuple(name.children), sub_index, modifiers, flags, sign)
 
     @v_args(inline=True)
