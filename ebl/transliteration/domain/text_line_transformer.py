@@ -42,10 +42,10 @@ from ebl.transliteration.domain.word_tokens import (
 
 
 class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
-    def ebl_atf__text_line__lone_determinative(self, children):
+    def text_line__lone_determinative(self, children):
         return self._create_word(LoneDeterminative, children)
 
-    def ebl_atf__text_line__word(self, children):
+    def text_line__word(self, children):
         return self._create_word(Word, children)
 
     @staticmethod
@@ -54,78 +54,76 @@ class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
         return word_class.of(tokens)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__joiner(self, symbol):
+    def text_line__joiner(self, symbol):
         return Joiner.of(atf.Joiner(str(symbol)))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__in_word_newline(self, _):
+    def text_line__in_word_newline(self, _):
         return InWordNewline.of()
 
-    def ebl_atf__text_line__variant(self, children):
+    def text_line__variant(self, children):
         tokens = tokens_to_value_tokens(children)
         return Variant.of(*tokens)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__inline_erasure(self, erased, over_erased):
+    def text_line__inline_erasure(self, erased, over_erased):
         return self._transform_erasure(erased, over_erased)
 
 
 class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
-    def ebl_atf__text_line__text(self, children) -> Sequence[EblToken]:
+    def text_line__text(self, children) -> Sequence[EblToken]:
         return tuple(children)
 
-    def ebl_atf__text_line__certain_caesura(self, _) -> Caesura:
+    def text_line__certain_caesura(self, _) -> Caesura:
         return Caesura.certain()
 
-    def ebl_atf__text_line__uncertain_caesura(self, _) -> Caesura:
+    def text_line__uncertain_caesura(self, _) -> Caesura:
         return Caesura.uncertain()
 
-    def ebl_atf__text_line__certain_foot_separator(self, _) -> MetricalFootSeparator:
+    def text_line__certain_foot_separator(self, _) -> MetricalFootSeparator:
         return MetricalFootSeparator.certain()
 
-    def ebl_atf__text_line__uncertain_foot_separator(self, _) -> MetricalFootSeparator:
+    def text_line__uncertain_foot_separator(self, _) -> MetricalFootSeparator:
         return MetricalFootSeparator.uncertain()
 
     @v_args(inline=True)
-    def ebl_atf__text_line__akkadian_word(
+    def text_line__akkadian_word(
         self, parts: Tree, modifiers: Sequence[Flag], closing_enclosures: Tree
     ) -> AkkadianWord:
         return AkkadianWord.of(
             tuple(parts.children + closing_enclosures.children), modifiers
         )
 
-    def ebl_atf__text_line__normalized_modifiers(
+    def text_line__normalized_modifiers(
         self, modifiers: Iterable[Flag]
     ) -> Sequence[Flag]:
         return tuple(pydash.uniq(modifiers))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__normalized_modifier(self, modifier: Token) -> Flag:
+    def text_line__normalized_modifier(self, modifier: Token) -> Flag:
         return Flag(modifier)
 
-    def ebl_atf__text_line__akkadian_string(
-        self, children: Iterable[Token]
-    ) -> ValueToken:
+    def text_line__akkadian_string(self, children: Iterable[Token]) -> ValueToken:
         return ValueToken.of("".join(children))  # pyre-ignore[6]
 
-    def ebl_atf__text_line__separator(self, _) -> Joiner:
+    def text_line__separator(self, _) -> Joiner:
         return Joiner.hyphen()
 
-    def ebl_atf__text_line__open_emendation(self, _) -> Emendation:
+    def text_line__open_emendation(self, _) -> Emendation:
         return Emendation.open()
 
-    def ebl_atf__text_line__close_emendation(self, _) -> Emendation:
+    def text_line__close_emendation(self, _) -> Emendation:
         return Emendation.close()
 
 
 class GreekTransformer(EnclosureTransformer, SignTransformer):
-    def ebl_atf__text_line__greek_word(self, children) -> GreekWord:
+    def text_line__greek_word(self, children) -> GreekWord:
         return GreekWord.of(
             children.children if isinstance(children, Tree) else children
         )
 
     @v_args(inline=True)
-    def ebl_atf__text_line__greek_letter(self, alphabet, flags) -> GreekLetter:
+    def text_line__greek_letter(self, alphabet, flags) -> GreekLetter:
         return GreekLetter.of(alphabet.value, flags)
 
 
@@ -137,55 +135,55 @@ class TextLineTransformer(
         return TextLine.of_iterable(line_number, content)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__line_number_range(self, start, end):
+    def text_line__line_number_range(self, start, end):
         return LineNumberRange(start, end)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__single_line_number(
+    def text_line__single_line_number(
         self, prefix_modifier, number, prime, suffix_modifier
     ):
         return LineNumber(
             int(number), prime is not None, prefix_modifier, suffix_modifier
         )
 
-    def ebl_atf__text_line__text(self, children):
+    def text_line__text(self, children):
         return tokens_to_value_tokens(children)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__language_shift(self, value):
+    def text_line__language_shift(self, value):
         return LanguageShift.of(str(value))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__normalized_akkadian_shift(self, value):
+    def text_line__normalized_akkadian_shift(self, value):
         return LanguageShift.of(str(value))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__greek_shift(self, value):
+    def text_line__greek_shift(self, value):
         return LanguageShift.of(str(value))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__word_omitted(self, value):
+    def text_line__word_omitted(self, value):
         return WordOmitted.of()
 
     @v_args(inline=True)
-    def ebl_atf__text_line__tabulation(self, value):
+    def text_line__tabulation(self, value):
         return Tabulation.of()
 
     @v_args(inline=True)
-    def ebl_atf__text_line__commentary_protocol(self, value):
+    def text_line__commentary_protocol(self, value):
         return CommentaryProtocol.of(str(value))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__divider(self, value, modifiers, flags):
+    def text_line__divider(self, value, modifiers, flags):
         return Divider.of(str(value), modifiers, flags)
 
-    def ebl_atf__text_line__line_break(self, _):
+    def text_line__line_break(self, _):
         return LineBreak.of()
 
     @v_args(inline=True)
-    def ebl_atf__text_line__column_token(self, number):
+    def text_line__column_token(self, number):
         return Column.of(number and int(number))
 
     @v_args(inline=True)
-    def ebl_atf__text_line__divider_variant(self, first, second):
+    def text_line__divider_variant(self, first, second):
         return Variant.of(first, second)

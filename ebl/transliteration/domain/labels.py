@@ -173,13 +173,13 @@ class LabelTransformer(Transformer):
         return tuple(children)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__column_label(
+    def text_line__column_label(
         self, numeral: Token, status: Sequence[Status]
     ) -> ColumnLabel:
         return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
 
     @v_args(inline=True)
-    def ebl_atf__text_line__surface_label(
+    def text_line__surface_label(
         self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
         return SurfaceLabel.from_label(
@@ -188,12 +188,12 @@ class LabelTransformer(Transformer):
         )
 
     @v_args(inline=True)
-    def ebl_atf__text_line__object_label(
+    def text_line__object_label(
         self, object_: Token, status: Sequence[Status]
     ) -> ObjectLabel:
         return ObjectLabel.from_object(Object(object_), status)
 
-    def ebl_atf__text_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
+    def text_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
         return tuple(Status(token) for token in children)
 
 

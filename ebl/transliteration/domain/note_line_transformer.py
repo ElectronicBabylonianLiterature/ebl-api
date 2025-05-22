@@ -22,7 +22,7 @@ class MarkupTransformer(Transformer):
         return tuple(children)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__language_part(
+    def text_line__language_part(
         self, language: Token, transliteration: Sequence[EblToken]
     ) -> LanguagePart:
         return LanguagePart.of_transliteration(
@@ -30,30 +30,28 @@ class MarkupTransformer(Transformer):
         )
 
     @v_args(inline=True)
-    def ebl_atf__text_line__emphasis_part(self, text: str) -> EmphasisPart:
+    def text_line__emphasis_part(self, text: str) -> EmphasisPart:
         return EmphasisPart(text)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__string_part(self, text: str) -> StringPart:
+    def text_line__string_part(self, text: str) -> StringPart:
         return StringPart(text)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__bibliography_part(
-        self, id_, pages=None
-    ) -> BibliographyPart:
+    def text_line__bibliography_part(self, id_, pages=None) -> BibliographyPart:
         return BibliographyPart.of(
             BibliographyId("".join(id_.children)),
             "".join(pages.children) if pages else "",
         )
 
-    def ebl_atf__text_line__note_text(self, children) -> str:
+    def text_line__note_text(self, children) -> str:
         return "".join(children)
 
     @v_args(inline=True)
-    def ebl_atf__text_line__url_part(self, url: str, note_text="") -> UrlPart:
+    def text_line__url_part(self, url: str, note_text="") -> UrlPart:
         return UrlPart(note_text, url)
 
-    def ebl_atf__text_line__url(self, children) -> str:
+    def text_line__url(self, children) -> str:
         return "".join(children)
 
 

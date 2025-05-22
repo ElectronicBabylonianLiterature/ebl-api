@@ -19,7 +19,7 @@ from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 
 
 def parse_text(atf: str):
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__text")
+    tree = LINE_PARSER.parse(atf, start="text_line__text")
     return TextLineTransformer().transform(tree)
 
 

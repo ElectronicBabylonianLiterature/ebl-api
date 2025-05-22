@@ -70,27 +70,27 @@ def parse_word(atf: str) -> Word:
 
 
 def parse_normalized_akkadian_word(atf: str) -> Word:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__akkadian_word")
+    tree = LINE_PARSER.parse(atf, start="text_line__akkadian_word")
     return LineTransformer().transform(tree)
 
 
 def parse_greek_word(atf: str) -> GreekWord:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__greek_word")
+    tree = LINE_PARSER.parse(atf, start="text_line__greek_word")
     return LineTransformer().transform(tree)
 
 
 def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__compound_grapheme")
+    tree = LINE_PARSER.parse(atf, start="text_line__compound_grapheme")
     return LineTransformer().transform(tree)
 
 
 def parse_reading(atf: str) -> Reading:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__reading")
+    tree = LINE_PARSER.parse(atf, start="text_line__reading")
     return LineTransformer().transform(tree)
 
 
 def parse_erasure(atf: str) -> Sequence[EblToken]:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__erasure")
+    tree = LINE_PARSER.parse(atf, start="text_line__erasure")
     return LineTransformer().transform(tree)
 
 
@@ -139,7 +139,7 @@ def parse_text_line(atf: str) -> TextLine:
 
 
 def parse_line_number(atf: str) -> AbstractLineNumber:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf__text_line__line_number")
+    tree = LINE_PARSER.parse(atf, start="text_line__line_number")
     return LineTransformer().transform(tree)
 
 
