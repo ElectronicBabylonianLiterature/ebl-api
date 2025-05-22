@@ -5,7 +5,7 @@
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
 %import .ebl_atf_common (seal)
-%import .ebl_atf_abbreviations (PERIOD)
+%import .ebl_atf.ebl_atf_abbreviations (PERIOD)
 
 note_line: "#note: " _markup
 markup: _markup
