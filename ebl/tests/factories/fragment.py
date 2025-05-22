@@ -183,6 +183,7 @@ class ExternalNumbersFactory(factory.Factory):
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    rsti_number = factory.Sequence(lambda n: f"rsti-{n}")
     chicago_isac_number = factory.Sequence(lambda n: f"chicago-isac-number-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
     hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
