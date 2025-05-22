@@ -5,7 +5,7 @@
 %import .ebl_atf_dollar_line (dollar_line)
 %import .ebl_atf_text_line (at_line)
 %import .ebl_atf_empty_line (empty_line)
-%import .ebl_atf.ebl_atf_abbreviations (PROVENANCE, PERIOD, TYPE)
+%import .ebl_atf.abbreviations (PROVENANCE, PERIOD, TYPE)
 
 ?start: line
 
