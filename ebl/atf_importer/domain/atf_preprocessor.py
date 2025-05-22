@@ -20,7 +20,7 @@ from ebl.atf_importer.domain.atf_preprocessor_util import Util
 class ATFPreprocessor:
     def __init__(self, logdir, style):
         self.EBL_PARSER = Lark.open(
-            "../../transliteration/domain/ebl_atf.lark",
+            "../../transliteration/domain/ebl_atf/ebl_atf.lark",
             maybe_placeholders=True,
             rel_to=__file__,
         )

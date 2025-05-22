@@ -21,7 +21,7 @@ from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
-PARSER_PATH = "../../transliteration/domain/ebl_atf.lark"
+PARSER_PATH = "../../transliteration/domain/ebl_atf/ebl_atf.lark"
 LINE_PARSER_PATH = "../../transliteration/domain/ebl_atf/text_line.lark"
 
 

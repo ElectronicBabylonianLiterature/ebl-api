@@ -198,7 +198,7 @@ class LabelTransformer(Transformer):
 
 
 LABEL_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="labels"
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="labels"
 )
 
 
