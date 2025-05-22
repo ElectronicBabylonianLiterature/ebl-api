@@ -1,0 +1,25 @@
+%import common.CR
+%import common.LF
+%import common.WS_INLINE
+
+%import .ebl_atf_common.labels -> labels
+%import .ebl_atf_text_line.text_line -> text_line
+%import .ebl_atf_note_line.note_line -> note_line
+%import .ebl_atf_empty_line.empty_line -> empty_line
+%import .ebl_atf_dollar_line.dollar_line -> dollar_line
+
+%import .ebl_atf_abbreviations (PROVENANCE, PERIOD, TYPE)
+
+
+manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
+?manuscript_text: " " text_line | empty_line
+?paratext_line: _NEWLINE _WHITE_SPACE? paratext
+siglum: detailed_siglum | standard_text_siglum
+detailed_siglum: [PROVENANCE] PERIOD [TYPE] [DISAMBIQUATOR]
+standard_text_siglum: "Std" [DISAMBIQUATOR]
+DISAMBIQUATOR: /[\S]+/
+
+_WHITE_SPACE: WS_INLINE
+_NEWLINE: (CR? LF)
+
+?paratext: note_line | dollar_line
