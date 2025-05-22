@@ -11,19 +11,19 @@ RECONSTRUCTED_LINE_PARSER = Lark.open(
     "ebl_atf.lark",
     maybe_placeholders=True,
     rel_to=__file__,
-    start="ebl_atf_text_line__text",
+    start="ebl_atf__text_line__text",
 )
 
 
 def parse_reconstructed_word(word: str) -> AkkadianWord:
     tree = RECONSTRUCTED_LINE_PARSER.parse(
-        word, start="ebl_atf_text_line__akkadian_word"
+        word, start="ebl_atf__text_line__akkadian_word"
     )
     return TextLineTransformer().transform(tree)
 
 
 def parse_break(break_: str) -> Break:
-    tree = RECONSTRUCTED_LINE_PARSER.parse(break_, start="ebl_atf_text_line__break")
+    tree = RECONSTRUCTED_LINE_PARSER.parse(break_, start="ebl_atf__text_line__break")
     return TextLineTransformer().transform(tree)
 
 

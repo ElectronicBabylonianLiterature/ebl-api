@@ -1,7 +1,7 @@
 %import common.CR
 %import common.LF
 %import common.WS_INLINE
-%import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup, at_line)
+%import .ebl_atf.text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup, at_line)
 %import .ebl_atf.dollar_line (dollar_line)
 %import .ebl_atf.empty_line (empty_line)
 %import .ebl_atf.abbreviations (PROVENANCE, PERIOD, TYPE)
