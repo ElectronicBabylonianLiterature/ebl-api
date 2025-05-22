@@ -38,7 +38,9 @@ from ebl.tests.factories.fragment import (
     ],
 )
 def test_update_date(client, fragmentarium, user, current_date, updated_date):
-    fragment = FragmentFactory.build(dates_in_text=[current_date] if current_date else [])
+    fragment = FragmentFactory.build(
+        dates_in_text=[current_date] if current_date else []
+    )
     fragment_number = fragmentarium.create(fragment)
     update = {"datesInText": [DateSchema().dump(updated_date)]}
     post_result = client.simulate_post(

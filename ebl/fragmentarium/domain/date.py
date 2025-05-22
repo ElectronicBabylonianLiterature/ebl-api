@@ -46,7 +46,7 @@ class DateKing:
     is_broken: Optional[bool] = attr.ib(default=None)
     is_uncertain: Optional[bool] = attr.ib(default=None)
 
-    @staticmethod
+    @property
     def king(self) -> Optional[King]:
         return chronology.find_king_by_order_global(self.order_global)
 
