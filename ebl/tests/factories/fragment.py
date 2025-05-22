@@ -94,7 +94,7 @@ from ebl.fragmentarium.domain.date import (
     DateKingSchema,
     Ur3Calendar,
 )
-from ebl.chronology.chronology import chronology, King, KingSchema
+from ebl.chronology.chronology import chronology, King
 from ebl.tests.factories.colophon import ColophonFactory
 
 
@@ -154,7 +154,7 @@ class DayFactory(factory.Factory):
 def create_date_king(king: King) -> DateKing:
     return DateKingSchema().load(
         {
-            **KingSchema().dump(king),
+            "orderGlobal": king.order_global,
             "isBroken": random.choice([True, False]),
             "isUncertain": random.choice([True, False]),
         }

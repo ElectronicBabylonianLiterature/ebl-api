@@ -44,6 +44,29 @@ def test_find_king_by_name():
     assert chronology.find_king_by_name("King C") is None
 
 
+def test_find_king_by_order_global():
+    king_a = King(
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", None
+    )
+    king_b = King(
+        2.1,
+        2,
+        "dyn2",
+        "Dynasty 2",
+        "2",
+        "King B",
+        "2000",
+        "5 years",
+        "Other notes",
+        True,
+    )
+    chronology = Chronology([king_a, king_b])
+
+    assert chronology.find_king_by_order_global(1) == king_a
+    assert chronology.find_king_by_order_global(2.1) == king_b
+    assert chronology.find_king_by_order_global(3) is None
+
+
 def test_king_schema_deserialization():
     king_data = {
         "orderGlobal": 1,
