@@ -1,6 +1,10 @@
 %import common.DIGIT
 %import common.INT
 %import common.LCASE_LETTER
+%import common.LETTER
+
+%import .legacy_atf (LEGACY_VALUE_CHARACTER_ACCENTED, LEGACY_VALUE_CHARACTER)
+%import .legacy_atf (LEGACY_LOGOGRAM_CHARACTER_ACCENTED)
 
 seal : "seal "  INT
 
@@ -16,6 +20,22 @@ SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
 face: "face " LCASE_LETTER
 edge: "edge" (" " LCASE_LETTER)?
 generic_surface : "surface " free_text
+
+VALUE_CHARACTER_MAIN: "a" | "ā" | "â" | "b" | "d" | "e" 
+      | "ē" | "ê" | "f" | "g" | "ĝ" | "h" 
+      | "i" | "ī" | "î" | "y" | "k" | "l" 
+      | "m" | "n" | "p" | "q" | "r" | "s" 
+      | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū"
+      | "û" | "w" | "z" | "ḫ" | "ʾ"
+LOGOGRAM_CHARACTER_MAIN: "A" | "Ā" | "Â" | "B" | "D" | "E" 
+      | "Ē" | "Ê" | "G" | "Ĝ" | "H" | "I" 
+      | "Ī" | "Î" | "Y" | "K" | "L" | "M" 
+      | "N" | "P" | "Q" | "R" | "S" | "Ṣ" 
+      | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" 
+      | "W" | "Z" | "Ḫ" | "ʾ"
+
+VALUE_CHARACTER: VALUE_CHARACTER_MAIN | LEGACY_VALUE_CHARACTER_ACCENTED | LEGACY_VALUE_CHARACTER
+LOGOGRAM_CHARACTER: LOGOGRAM_CHARACTER_MAIN | LEGACY_LOGOGRAM_CHARACTER_ACCENTED
 
 GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"
               | "Ζ" | "ζ" | "Η" | "η" | "Θ" | "θ" | "Ι" | "ι" | "Κ" | "κ"
