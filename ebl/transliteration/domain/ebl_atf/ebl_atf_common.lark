@@ -1,10 +1,6 @@
 %import common.DIGIT
 %import common.INT
 %import common.LCASE_LETTER
-%import common.LETTER
-
-%import .legacy_atf (LEGACY_VALUE_CHARACTER_ACCENTED, LEGACY_VALUE_CHARACTER)
-%import .legacy_atf (LEGACY_LOGOGRAM_CHARACTER_ACCENTED)
 
 seal : "seal "  INT
 
@@ -34,8 +30,8 @@ LOGOGRAM_CHARACTER_MAIN: "A" | "Ā" | "Â" | "B" | "D" | "E"
       | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" 
       | "W" | "Z" | "Ḫ" | "ʾ"
 
-VALUE_CHARACTER: VALUE_CHARACTER_MAIN | LEGACY_VALUE_CHARACTER_ACCENTED | LEGACY_VALUE_CHARACTER
-LOGOGRAM_CHARACTER: LOGOGRAM_CHARACTER_MAIN | LEGACY_LOGOGRAM_CHARACTER_ACCENTED
+VALUE_CHARACTER: VALUE_CHARACTER_MAIN
+LOGOGRAM_CHARACTER: LOGOGRAM_CHARACTER_MAIN
 
 GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"
               | "Ζ" | "ζ" | "Η" | "η" | "Θ" | "θ" | "Ι" | "ι" | "Κ" | "κ"

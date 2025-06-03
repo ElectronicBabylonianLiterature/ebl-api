@@ -2,6 +2,7 @@
 %import common.LETTER
 %import common.LCASE_LETTER
 %import .ebl_atf_common (AKKADIAN_ALPHABET, GREEK_ALPHABET)
+%import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 %import .ebl_atf_common (free_text)
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
@@ -217,14 +218,6 @@ logogram_name: logogram_name_part (broken_away logogram_name_part)*
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+
-VALUE_CHARACTER: "a" | "ā" | "â" | "b" | "d" | "e" | "ē" | "ê" | "f" | "g"
-               | "ĝ" | "h" | "i" | "ī" | "î" | "y" | "k" | "l" | "m" | "n"
-               | "p" | "q" | "r" | "s" | "ṣ" | "š" | "ś" | "t" | "ṭ" | "u"
-               | "ū" | "û" | "w" | "z" | "ḫ" | "ʾ"
-LOGOGRAM_CHARACTER : "A" | "Ā" | "Â" | "B" | "D" | "E" | "Ē" | "Ê" | "G" | "Ĝ" | "H"
-                   | "I" | "Ī" | "Î" | "Y" | "K" | "L" | "M" | "N" | "P" | "Q" | "R"
-                   | "S" | "Ṣ" | "Š" | "Ś" | "T" | "Ṭ" | "U" | "Ū" | "Û" | "W" | "Z"
-                   | "Ḫ" | "ʾ"
 
 ?any_grapheme: compound_grapheme | grapheme
 compound_grapheme: "|" COMPOUND_FRAGMENT ("." COMPOUND_FRAGMENT)* "|"
