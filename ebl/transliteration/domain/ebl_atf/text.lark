@@ -1,9 +1,0 @@
-%import .ebl_atf_common (_WORD_SEPARATOR)
-
-?break: certain_caesura | uncertain_caesura | certain_foot_separator | uncertain_foot_separator
-certain_caesura: _CAESURA
-uncertain_caesura: "(" _CAESURA ")"
-_CAESURA: "||"
-certain_foot_separator: _FOOT_SEPARATOR
-uncertain_foot_separator: "(" _FOOT_SEPARATOR ")"
-_FOOT_SEPARATOR: "|"
