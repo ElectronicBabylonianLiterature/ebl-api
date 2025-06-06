@@ -12,6 +12,7 @@
 %import .ebl_atf_common (seal)
 %import .abbreviations (PERIOD)
 %import .text (_FOOT_SEPARATOR, break, certain_caesura, uncertain_caesura, certain_foot_separator, uncertain_foot_separator)
+%import .line_number (line_number, single_line_number, line_number_range)
 
 note_line: "#note: " _markup
 markup: _markup
@@ -48,10 +49,6 @@ translation_extent: [labels " "] line_number
 
 
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
-?line_number: line_number_range | single_line_number
-line_number_range: single_line_number "-" single_line_number
-single_line_number: [LETTER "+"] INT [ANY_PRIME] [LETTER]
-ANY_PRIME: PRIME | "′" | "’" 
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian

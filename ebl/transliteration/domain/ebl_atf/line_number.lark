@@ -1,0 +1,8 @@
+%import common.INT
+%import common.LETTER
+%import .ebl_atf_common (PRIME)
+
+?line_number: line_number_range | single_line_number
+line_number_range: single_line_number "-" single_line_number
+single_line_number: [LETTER "+"] INT [ANY_PRIME] [LETTER]
+ANY_PRIME: PRIME | "′" | "’" 
