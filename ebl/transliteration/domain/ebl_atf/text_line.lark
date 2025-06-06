@@ -11,6 +11,7 @@
 %import .ebl_atf_common (surface_label)
 %import .ebl_atf_common (seal)
 %import .abbreviations (PERIOD)
+%import .text (_FOOT_SEPARATOR, break, certain_caesura, uncertain_caesura, certain_foot_separator, uncertain_foot_separator)
 
 note_line: "#note: " _markup
 markup: _markup
@@ -265,14 +266,6 @@ UNKNOWN_NUMBER_OF_SIGNS: "..."
 _normalized_akkadian: _normalized_text (_WORD_SEPARATOR break _WORD_SEPARATOR _normalized_text)*
 
 _normalized_text: (akkadian_word | _lacuna) (_WORD_SEPARATOR (akkadian_word | _lacuna))*
-
-?break: certain_caesura | uncertain_caesura | certain_foot_separator | uncertain_foot_separator
-certain_caesura: _CAESURA
-uncertain_caesura: "(" _CAESURA ")"
-_CAESURA: "||"
-certain_foot_separator: _FOOT_SEPARATOR
-uncertain_foot_separator: "(" _FOOT_SEPARATOR ")"
-_FOOT_SEPARATOR: "|"
 
 _lacuna: enclosure_open* unknown_number_of_signs enclosure_close*
 
