@@ -1,6 +1,6 @@
 %import common.INT
 %import common.LETTER
-%import .ebl_atf_common (PRIME)
+%import .labels (PRIME)
 
 ?line_number: line_number_range | single_line_number
 line_number_range: single_line_number "-" single_line_number

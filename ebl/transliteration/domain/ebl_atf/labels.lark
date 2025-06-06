@@ -1,0 +1,27 @@
+status: (PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
+
+PRIME: "'"
+UNCERTAIN: "?"
+CORRECTION: "!"
+COLLATION: "*"
+NO_LONGER_VISIBLE: "°"
+
+surface_label: (OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP) status
+
+OBVERSE: "o"
+REVERSE:"r"
+BOTTOM: "b.e."
+EDGE: "e."
+LEFT: "l.e."
+RIGHT: "r.e."
+TOP: "t.e."
+
+object_label: (TABLET | ENVELOPE | PRIMS | BULLA) status
+
+TABLET: "tablet"
+ENVELOPE: "envelope"
+PRIMS: "prism"
+BULLA: "bulla"
+
+column_label: ROMAN_NUMERAL status
+ROMAN_NUMERAL: /[ivxlcdm]+/

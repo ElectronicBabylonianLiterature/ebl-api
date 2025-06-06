@@ -46,20 +46,4 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
                  | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
 
-surface_label: (OBVERSE | REVERSE | BOTTOM | EDGE | LEFT | RIGHT | TOP) status
-OBVERSE: "o"
-REVERSE:"r"
-BOTTOM: "b.e."
-EDGE: "e."
-LEFT: "l.e."
-RIGHT: "r.e."
-TOP: "t.e."
-
-status: (PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
-PRIME: "'"
-UNCERTAIN: "?"
-CORRECTION: "!"
-COLLATION: "*"
-NO_LONGER_VISIBLE: "°"
-
 _WORD_SEPARATOR: " "
