@@ -1,6 +1,7 @@
 %import common.INT
 %import common.LETTER
 %import common.LCASE_LETTER
+%import .ebl_atf_common (_WORD_SEPARATOR)
 %import .ebl_atf_common (AKKADIAN_ALPHABET, GREEK_ALPHABET)
 %import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 %import .ebl_atf_common (free_text)
@@ -131,8 +132,6 @@ SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9") ("a".."z" | "A".."Z" | "0".."9")+
 
 erasure.-1: "°" erasure_part "\\" erasure_part "°"
 erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
-
-_WORD_SEPARATOR: " "
 
 ?any_word: lone_determinative
          | word
