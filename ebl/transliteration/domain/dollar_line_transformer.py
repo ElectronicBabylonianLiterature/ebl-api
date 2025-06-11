@@ -94,15 +94,11 @@ class DollarLineTransformer(Transformer):
         return StateDollarLine(qualification, extent, scope_container, state, status)
 
     @v_args(inline=True)
-    def state_extent(
-        self, extent, scope_container=None, state=None, status=None
-    ):
+    def state_extent(self, extent, scope_container=None, state=None, status=None):
         return StateDollarLine(None, extent, scope_container, state, status)
 
     @v_args(inline=True)
-    def state_scope(
-        self, scope_container, state=None, status=None
-    ):
+    def state_scope(self, scope_container, state=None, status=None):
         return StateDollarLine(None, None, scope_container, state, status)
 
     @v_args(inline=True)
