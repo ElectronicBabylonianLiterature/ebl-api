@@ -1,0 +1,49 @@
+%import common.DIGIT
+%import common.INT
+%import common.LCASE_LETTER
+
+seal : "seal "  INT
+
+free_text.-2 : /./+ " "*
+
+?object: OBJECT | generic_object | fragment
+OBJECT: "tablet" | "envelope" | "prism" | "bulla"
+fragment: "fragment " free_text
+generic_object : "object " free_text
+
+?surface: SURFACE | generic_surface | face | edge
+SURFACE: "obverse" | "reverse" | "left" | "right" | "top" | "bottom"
+face: "face " LCASE_LETTER
+edge: "edge" (" " LCASE_LETTER)?
+generic_surface : "surface " free_text
+
+VALUE_CHARACTER_MAIN: "a" | "ā" | "â" | "b" | "d" | "e" 
+      | "ē" | "ê" | "f" | "g" | "ĝ" | "h" 
+      | "i" | "ī" | "î" | "y" | "k" | "l" 
+      | "m" | "n" | "p" | "q" | "r" | "s" 
+      | "ṣ" | "š" | "t" | "ṭ" | "u" | "ū"
+      | "û" | "w" | "z" | "ḫ" | "ʾ"
+LOGOGRAM_CHARACTER_MAIN: "A" | "Ā" | "Â" | "B" | "D" | "E" 
+      | "Ē" | "Ê" | "G" | "Ĝ" | "H" | "I" 
+      | "Ī" | "Î" | "Y" | "K" | "L" | "M" 
+      | "N" | "P" | "Q" | "R" | "S" | "Ṣ" 
+      | "Š" | "T" | "Ṭ" | "U" | "Ū" | "Û" 
+      | "W" | "Z" | "Ḫ" | "ʾ"
+
+VALUE_CHARACTER: VALUE_CHARACTER_MAIN
+LOGOGRAM_CHARACTER: LOGOGRAM_CHARACTER_MAIN
+
+GREEK_ALPHABET: "Α" | "α" | "Β" | "β" | "Γ" | "γ" | "Δ" | "δ" | "Ε" | "ε"
+              | "Ζ" | "ζ" | "Η" | "η" | "Θ" | "θ" | "Ι" | "ι" | "Κ" | "κ"
+              | "Λ" | "λ" | "Μ" | "μ" | "Ν" | "ν" | "Ξ" | "ξ" | "Ο" | "ο"
+              | "Π" | "π" | "Ρ" | "ρ" | "Σ" | "σ" | "ς" | "Τ" | "τ" | "Υ"
+              | "υ" | "Φ" | "φ" | "Χ" | "χ" | "Ψ" | "ψ" | "Ω" | "ω"
+
+AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
+                 | "M" | "N" | "P" | "S" | "T" | "U" | "Y" | "Z" | "a" | "b"
+                 | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "k" | "l" | "m"
+                 | "n" | "p" | "q" | "r" | "s" | "t" | "u" | "w" | "y" | "z"
+                 | "É" | "â" | "ê" | "î" | "û" | "ā" | "Ē" | "ē" | "ī" | "Š"
+                 | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
+
+_WORD_SEPARATOR: " "

@@ -33,27 +33,35 @@ from ebl.transliteration.domain.line_transformer import LineTransformer
 from functools import singledispatch
 
 WORD_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
 NOTE_LINE_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
 )
 MARKUP_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
 )
 PARALLEL_LINE_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="parallel_line"
+    "ebl_atf/ebl_atf.lark",
+    maybe_placeholders=True,
+    rel_to=__file__,
+    start="parallel_line",
 )
 TRANSLATION_LINE_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="translation_line"
+    "ebl_atf/ebl_atf.lark",
+    maybe_placeholders=True,
+    rel_to=__file__,
+    start="translation_line",
 )
 PARATEXT_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
 )
 CHAPTER_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="chapter"
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="chapter"
 )
-LINE_PARSER = Lark.open("ebl_atf.lark", maybe_placeholders=True, rel_to=__file__)
+LINE_PARSER = Lark.open(
+    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__
+)
 
 
 def parse_word(atf: str) -> Word:
@@ -62,27 +70,27 @@ def parse_word(atf: str) -> Word:
 
 
 def parse_normalized_akkadian_word(atf: str) -> Word:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__akkadian_word")
+    tree = LINE_PARSER.parse(atf, start="text_line__akkadian_word")
     return LineTransformer().transform(tree)
 
 
 def parse_greek_word(atf: str) -> GreekWord:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__greek_word")
+    tree = LINE_PARSER.parse(atf, start="text_line__greek_word")
     return LineTransformer().transform(tree)
 
 
 def parse_compound_grapheme(atf: str) -> CompoundGrapheme:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__compound_grapheme")
+    tree = LINE_PARSER.parse(atf, start="text_line__compound_grapheme")
     return LineTransformer().transform(tree)
 
 
 def parse_reading(atf: str) -> Reading:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__reading")
+    tree = LINE_PARSER.parse(atf, start="text_line__reading")
     return LineTransformer().transform(tree)
 
 
 def parse_erasure(atf: str) -> Sequence[EblToken]:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__erasure")
+    tree = LINE_PARSER.parse(atf, start="text_line__erasure")
     return LineTransformer().transform(tree)
 
 
@@ -131,7 +139,7 @@ def parse_text_line(atf: str) -> TextLine:
 
 
 def parse_line_number(atf: str) -> AbstractLineNumber:
-    tree = LINE_PARSER.parse(atf, start="ebl_atf_text_line__line_number")
+    tree = LINE_PARSER.parse(atf, start="text_line__line_number")
     return LineTransformer().transform(tree)
 
 
