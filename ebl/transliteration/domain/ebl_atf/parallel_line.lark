@@ -1,0 +1,20 @@
+%import common.INT
+%import .abbreviations (PERIOD)
+%import .line_number (line_number, single_line_number, line_number_range)
+%import .labels (status, surface_label, object_label, column_label, CAPITAL_ROMAN_NUMERAL)
+%import .ebl_atf_common (CF)
+
+?parallel_line: parallel_fragment | parallel_text | parallel_composition
+
+parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [object_label " "] [surface_label " "]  [column_label " "] line_number
+!museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
+DUPLICATES: "&d"
+parallel_text: PARALLEL_LINE_PREFIX [CF] text_id " "  [chapter_name " "] line_number
+text_id: GENRE " " CATEGORY "." INT
+GENRE: "Lex" | "Med" | "L" | "D" | "Mag" | "Šui"
+CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
+chapter_name: STAGE " " [quoted_string " "] quoted_string 
+quoted_string: "\"" /./+ "\""
+STAGE: PERIOD | "SB"
+parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
+PARALLEL_LINE_PREFIX: "// "
