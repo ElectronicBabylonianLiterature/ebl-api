@@ -35,10 +35,16 @@ MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.build(
 
 
 def test_search_fragment_attestations_in_corpus(client, fragmentarium, text_repository):
+    # ToDo: Update to contain uncertain fragments
     fragmentarium.create(FRAGMENT)
     text_repository.create(TEXT)
     text_repository.create_chapter(CHAPTER)
     result = client.simulate_get("/fragments/X.1/corpus")
     assert result.status == falcon.HTTP_OK
     assert result.headers["Content-Type"] == "application/json"
-    assert result.json == [ManuscriptAttestationSchema().dump(MANUSCRIPT_ATTESTATION)]
+    assert result.json == {
+        "manuscriptAttestations": [
+            ManuscriptAttestationSchema().dump(MANUSCRIPT_ATTESTATION)
+        ],
+        "uncertainFragmentAttestations": [],
+    }

@@ -19,8 +19,9 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import (
     MongoTextRepositoryBase,
     text_not_found,
     chapter_not_found,
-    line_not_found
+    line_not_found,
 )
+
 
 class MongoTextRepositoryFind(MongoTextRepositoryBase):
     def find(self, id_: TextId) -> Text:

@@ -302,3 +302,17 @@ class ManuscriptAttestationFactory(factory.Factory):
     text = factory.SubFactory(TextFactory)
     chapter_id = factory.SelfAttribute("chapter.id_")
     manuscript = factory.SubFactory(ManuscriptFactory)
+
+
+class UncertainFragmentAttestationFactory(factory.Factory):
+    class Meta:
+        model = ManuscriptAttestation
+
+    class Params:
+        chapter = factory.SubFactory(ChapterFactory)
+
+    museum_number = factory.Sequence(
+        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
+    )
+    text = factory.SubFactory(TextFactory)
+    chapter_id = factory.SelfAttribute("chapter.id_")
