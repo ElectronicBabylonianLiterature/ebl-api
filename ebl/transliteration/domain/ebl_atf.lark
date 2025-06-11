@@ -2,8 +2,12 @@
 %import common.LF
 %import common.WS_INLINE
 %import .ebl_atf_text_line (text_line, any_word, note_line, parallel_line, translation_line, labels, manuscript_line, markup)
-%import .ebl_atf_dollar_line (dollar_line)
 %import .ebl_atf_text_line (at_line)
+%import .ebl_atf_common (DIGIT, INT, LCASE_LETTER)
+%import .ebl_atf_common (free_text)
+%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
+%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (seal)
 
 ?start: line
 
@@ -204,3 +208,37 @@ TYPE: "Sch"
     | "Par"
     | "Ex"
 DISAMBIQUATOR: /[\S]+/
+
+?dollar_line: "$" " "* value
+?value: strict
+      | "(" " "* strict " "* ")"
+      | loose
+?strict: state | ruling | image | seal
+loose: "(" free_text ")"
+
+state: QUALIFICATION [" " extent] [" " scope] [" " STATE] [" " DOLLAR_STATUS]
+     | extent [" " scope] [" " STATE] [" " DOLLAR_STATUS] -> state_extent
+     | scope [" " STATE] [" " DOLLAR_STATUS] -> state_scope
+     | STATE [" " DOLLAR_STATUS] -> state_state
+     | DOLLAR_STATUS -> state_status
+
+QUALIFICATION : "at least" | "at most" | "about"
+
+?extent: INT | range | EXTENT
+EXTENT: "several" | "some" |  "rest of" | "start of" | "beginning of" | "middle of" | "end of"
+range.2: INT " "? "-" " "? INT
+
+?scope: SCOPE | object | surface
+SCOPE: "columns" | "column" | "lines" | "line" | "cases" | "case" | "surface" | "side" | "excerpt"
+
+
+STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
+     | "omitted" | "continues"
+
+DOLLAR_STATUS: "!?" | "*" | "?" | "!" | "°"
+
+ruling : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
+RULING_NUMBER : "single" | "double" | "triple"
+
+
+image.1 : "(" " "? "image " INT [LCASE_LETTER] " = " free_text ")"
