@@ -1,6 +1,5 @@
 import falcon
 
-from ebl.corpus.application.schemas import ManuscriptAttestationSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.tests.factories.corpus import (
@@ -8,6 +7,11 @@ from ebl.tests.factories.corpus import (
     ChapterFactory,
     ManuscriptFactory,
     ManuscriptAttestationFactory,
+    UncertainFragmentAttestationFactory,
+)
+from ebl.corpus.application.schemas import (
+    ManuscriptAttestationSchema,
+    UncertainFragmentAttestationSchema,
 )
 
 MUSEUM_NUMBER = MuseumNumber("X", "1")
@@ -25,12 +29,19 @@ CHAPTER = ChapterFactory.build(
             references=(),
         ),
     ),
+    uncertain_fragments=[MuseumNumber.of("X.500")],
 )
 
 MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.build(
     text=TEXT,
     chapter_id=CHAPTER.id_,
     manuscript=CHAPTER.manuscripts[0],
+)
+
+UNCERTAIN_FRAGMENT_ATTESTATION = UncertainFragmentAttestationFactory.build(
+    text=TEXT,
+    chapter_id=CHAPTER.id_,
+    museum_number=MuseumNumber.of("X.500"),
 )
 
 
@@ -41,4 +52,11 @@ def test_search_fragment_attestations_in_corpus(client, fragmentarium, text_repo
     result = client.simulate_get("/fragments/X.1/corpus")
     assert result.status == falcon.HTTP_OK
     assert result.headers["Content-Type"] == "application/json"
-    assert result.json == [ManuscriptAttestationSchema().dump(MANUSCRIPT_ATTESTATION)]
+    assert result.json == {
+        "manuscriptAttestations": [
+            ManuscriptAttestationSchema().dump(MANUSCRIPT_ATTESTATION)
+        ],
+        "uncertainFragmentAttestations": [
+            UncertainFragmentAttestationSchema().dump(UNCERTAIN_FRAGMENT_ATTESTATION)
+        ],
+    }
