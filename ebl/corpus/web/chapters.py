@@ -120,9 +120,6 @@ class ChaptersDisplayResource:
 
 
 class ChaptersByFragmentResource:
-    # ToDo: Fetch here uncertain fragments as well
-    # They are, however, NOT manuscripts,
-    # so the schema and logic should be adjusted.
     def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
         self._corpus = corpus
         self._fragment_finder = fragment_finder

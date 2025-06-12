@@ -8,7 +8,7 @@ from ebl.corpus.application.schemas import (
     DictionaryLineSchema,
     ManuscriptSchema,
     ManuscriptAttestationSchema,
-    UncertainFragmentSchema,
+    UncertainFragmentAttestationSchema,
 )
 from ebl.corpus.domain.chapter import Chapter, ChapterId
 from ebl.corpus.domain.dictionary_line import DictionaryLine
@@ -40,7 +40,6 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import (
     chapter_not_found,
 )
 from ebl.corpus.application.text_repository import CorpusFragmentsMapping
-
 
 class MuseumNumberMapping(TypedDict):
     prefix: str
@@ -230,14 +229,6 @@ class MongoTextRepositoryQuery(MongoTextRepositoryBase):
     def query_corpus_by_manuscripts(
         self, museum_numbers: List[MuseumNumber]
     ) -> List[ManuscriptAttestation]:
-        _museum_numbers = [
-            {
-                "prefix": museum_number["prefix"],
-                "number": museum_number["number"],
-                "suffix": museum_number["suffix"],
-            }
-            for museum_number in MuseumNumberSchema().dump(museum_numbers, many=True)
-        ]
         cursor = self._chapters.aggregate(
             [
                 {"$unwind": "$manuscripts"},
@@ -251,7 +242,11 @@ class MongoTextRepositoryQuery(MongoTextRepositoryBase):
                     }
                 },
                 {
-                    "$match": {"museumNumbers": {"$in": _museum_numbers}},
+                    "$match": {
+                        "museumNumbers": {
+                            "$in": get_museum_number_mappings(museum_numbers)
+                        }
+                    },
                 },
                 {
                     "$replaceRoot": {
@@ -274,28 +269,46 @@ class MongoTextRepositoryQuery(MongoTextRepositoryBase):
     def query_corpus_by_uncertain_fragments(
         self, museum_numbers: List[MuseumNumber]
     ) -> List[UncertainFragmentAttestation]:
-        uncertain_cursor = self._chapters.aggregate(
+        cursor = self._chapters.aggregate(
             [
                 {"$unwind": "$uncertainFragments"},
                 {
-                    "$match": {
-                        "uncertainFragments": {
-                            "$in": get_museum_number_mappings(museum_numbers)
+                    "$set": {
+                        "museumNumbers": {
+                            "prefix": "$uncertainFragments.prefix",
+                            "number": "$uncertainFragments.number",
+                            "suffix": "$uncertainFragments.suffix",
                         }
                     }
                 },
                 {
-                    "$project": {
-                        "textId": 1,
-                        "stage": 1,
-                        "name": 1,
-                        "museumNumber": "$uncertainFragments",
+                    "$match": {
+                        "museumNumbers": {
+                            "$in": get_museum_number_mappings(museum_numbers)
+                        }
+                    },
+                },
+                {
+                    "$replaceRoot": {
+                        "newRoot": {
+                            "chapterId": {
+                                "textId": "$textId",
+                                "stage": "$stage",
+                                "name": "$name",
+                            },
+                            "museumNumber": "$uncertainFragments",
+                        }
                     }
                 },
+                *join_text(),
+                {"$unwind": "$text"},
             ]
         )
-
-        return UncertainFragmentSchema().load(uncertain_cursor, many=True)
+        cursor = list(cursor)
+        # ToDo: Fix issue here and clean up
+        print(cursor)
+        input()
+        return UncertainFragmentAttestationSchema().load(cursor, many=True)
 
     def query_corpus_by_related_fragments(
         self, museum_numbers: List[MuseumNumber]
