@@ -41,6 +41,7 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import (
 )
 from ebl.corpus.application.text_repository import CorpusFragmentsMapping
 
+
 class MuseumNumberMapping(TypedDict):
     prefix: str
     number: str
@@ -304,10 +305,6 @@ class MongoTextRepositoryQuery(MongoTextRepositoryBase):
                 {"$unwind": "$text"},
             ]
         )
-        cursor = list(cursor)
-        # ToDo: Fix issue here and clean up
-        print(cursor)
-        input()
         return UncertainFragmentAttestationSchema().load(cursor, many=True)
 
     def query_corpus_by_related_fragments(
