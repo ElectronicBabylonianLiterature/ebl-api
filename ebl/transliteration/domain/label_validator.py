@@ -34,6 +34,7 @@ class LabelValidator(LabelVisitor):
 
 def validate_labels(_instance, _attribute, value: Sequence[Label]) -> None:
     validator = LabelValidator()
+    print(value)
     for label in value:
         label.accept(validator)
 

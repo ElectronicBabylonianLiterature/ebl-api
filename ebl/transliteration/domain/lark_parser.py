@@ -99,6 +99,9 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 def parse_line(atf: str) -> Line:
     tree = LINE_PARSER.parse(atf)
+    print(atf)
+    print(tree)
+    print(tree.pretty())
     return LineTransformer().transform(tree)
 
 
@@ -138,6 +141,8 @@ def parse_translation_line(atf: str) -> TranslationLine:
 
 def parse_text_line(atf: str) -> TextLine:
     tree = LINE_PARSER.parse(atf, start="text_line")
+    print(tree)
+    print(tree.pretty())
     return LineTransformer().transform(tree)
 
 

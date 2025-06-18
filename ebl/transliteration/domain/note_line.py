@@ -19,6 +19,7 @@ class NoteLine(Line):
 
     @property
     def atf(self) -> Atf:
+        print(self.parts)
         note = "".join(part.value for part in self.parts)
         return Atf(f"#note: {note}")
 

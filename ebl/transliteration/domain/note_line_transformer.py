@@ -22,7 +22,7 @@ class MarkupTransformer(Transformer):
         return tuple(children)
 
     @v_args(inline=True)
-    def text_line__language_part(
+    def text_line__markup__language_part(
         self, language: Token, transliteration: Sequence[EblToken]
     ) -> LanguagePart:
         return LanguagePart.of_transliteration(
@@ -30,11 +30,42 @@ class MarkupTransformer(Transformer):
         )
 
     @v_args(inline=True)
-    def text_line__emphasis_part(self, text: str) -> EmphasisPart:
+    def text_line__markup__emphasis_part(self, text: str) -> EmphasisPart:
         return EmphasisPart(text)
 
     @v_args(inline=True)
-    def text_line__string_part(self, text: str) -> StringPart:
+    def text_line__markup__string_part(self, text: str) -> StringPart:
+        return StringPart(text)
+
+    def note_line__markup__language_part(
+        self, language: Token, transliteration: Sequence[EblToken]
+    ) -> LanguagePart:
+        return LanguagePart.of_transliteration(
+            Language.of_atf(f"%{language}"), transliteration
+        )
+
+    @v_args(inline=True)
+    def note_line__markup__emphasis_part(self, text: str) -> EmphasisPart:
+        return EmphasisPart(text)
+
+    @v_args(inline=True)
+    def note_line__markup__string_part(self, text: str) -> StringPart:
+        return StringPart(text)
+
+    @v_args(inline=True)
+    def translation_line__markup__string_part(self, text: str) -> StringPart:
+        return StringPart(text)
+
+    @v_args(inline=True)
+    def at_line__markup__string_part(self, text: str) -> StringPart:
+        return StringPart(text)
+
+    @v_args(inline=True)
+    def markup__string_part(self, text: str) -> StringPart:
+        return StringPart(text)
+
+    @v_args(inline=True)
+    def string_part(self, text: str) -> StringPart:
         return StringPart(text)
 
     @v_args(inline=True)
@@ -45,6 +76,21 @@ class MarkupTransformer(Transformer):
         )
 
     def text_line__note_text(self, children) -> str:
+        return "".join(children)
+
+    def note_line__markup__note_text(self, children) -> str:
+        return "".join(children)
+
+    def translation_line__markup__note_text(self, children) -> str:
+        return "".join(children)
+
+    def at_line__markup__note_text(self, children) -> str:
+        return "".join(children)
+
+    def markup__note_text(self, children) -> str:
+        return "".join(children)
+
+    def note_text(self, children) -> str:
         return "".join(children)
 
     @v_args(inline=True)

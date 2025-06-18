@@ -12,10 +12,11 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
+from ebl.transliteration.domain.add_namespace import add_namespace
 from ebl.transliteration.domain.line_transformer import LineTransformer
 
 
-class ChapterTransformer(LineTransformer):
+class ChapterTransformer(add_namespace(LineTransformer, "manuscript_line")):
     def __init__(self, manuscripts: Iterable[Manuscript]):
         self._manuscripts = {
             manuscript.siglum: manuscript.id for manuscript in manuscripts
@@ -25,7 +26,7 @@ class ChapterTransformer(LineTransformer):
         return children
 
     @v_args(inline=True)
-    def siglum(self, provenance, period, type_, disambiquator):
+    def manuscript_line__siglum(self, provenance, period, type_, disambiquator):
         return Siglum(
             Provenance.from_abbreviation(provenance or ""),
             Period.from_abbreviation(period),

@@ -6,6 +6,7 @@ from lark.visitors import v_args
 import pydash
 
 from ebl.transliteration.domain import atf
+from ebl.transliteration.domain.add_namespace import add_namespace
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.enclosure_tokens import Emendation
 from ebl.transliteration.domain.enclosure_transformer import (
@@ -15,6 +16,7 @@ from ebl.transliteration.domain.enclosure_transformer import (
 from ebl.transliteration.domain.greek_tokens import GreekLetter, GreekWord
 from ebl.transliteration.domain.lark import tokens_to_value_tokens
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
+from ebl.transliteration.domain.line_number_transformer import LineNumberTransformer
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
@@ -23,6 +25,7 @@ from ebl.transliteration.domain.normalized_akkadian import (
 from ebl.transliteration.domain.sign_tokens import Divider
 from ebl.transliteration.domain.signs_transformer import SignTransformer
 from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.text_transformer import TextTransformer
 from ebl.transliteration.domain.tokens import (
     Column,
     CommentaryProtocol,
@@ -39,35 +42,36 @@ from ebl.transliteration.domain.word_tokens import (
     LoneDeterminative,
     Word,
 )
+from ebl.transliteration.domain.word_transformer import WordTransformer
 
 
-class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
-    def text_line__lone_determinative(self, children):
-        return self._create_word(LoneDeterminative, children)
+# class WordTransformer(EnclosureTransformer, GlossTransformer, SignTransformer):
+#     def text_line__lone_determinative(self, children):
+#         return self._create_word(LoneDeterminative, children)
 
-    def text_line__word(self, children):
-        return self._create_word(Word, children)
+#     def text_line__word(self, children):
+#         return self._create_word(Word, children)
 
-    @staticmethod
-    def _create_word(word_class: Type[Word], children: Sequence):
-        tokens = tokens_to_value_tokens(children)
-        return word_class.of(tokens)
+#     @staticmethod
+#     def _create_word(word_class: Type[Word], children: Sequence):
+#         tokens = tokens_to_value_tokens(children)
+#         return word_class.of(tokens)
 
-    @v_args(inline=True)
-    def text_line__joiner(self, symbol):
-        return Joiner.of(atf.Joiner(str(symbol)))
+#     @v_args(inline=True)
+#     def text_line__joiner(self, symbol):
+#         return Joiner.of(atf.Joiner(str(symbol)))
 
-    @v_args(inline=True)
-    def text_line__in_word_newline(self, _):
-        return InWordNewline.of()
+#     @v_args(inline=True)
+#     def text_line__in_word_newline(self, _):
+#         return InWordNewline.of()
 
-    def text_line__variant(self, children):
-        tokens = tokens_to_value_tokens(children)
-        return Variant.of(*tokens)
+#     def text_line__variant(self, children):
+#         tokens = tokens_to_value_tokens(children)
+#         return Variant.of(*tokens)
 
-    @v_args(inline=True)
-    def text_line__inline_erasure(self, erased, over_erased):
-        return self._transform_erasure(erased, over_erased)
+#     @v_args(inline=True)
+#     def text_line__inline_erasure(self, erased, over_erased):
+#         return self._transform_erasure(erased, over_erased)
 
 
 class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
@@ -128,26 +132,30 @@ class GreekTransformer(EnclosureTransformer, SignTransformer):
 
 
 class TextLineTransformer(
-    WordTransformer, NormalizedAkkadianTransformer, GreekTransformer
+    add_namespace(WordTransformer, "text_line__text"),
+    add_namespace(TextTransformer, "text_line"),
+    NormalizedAkkadianTransformer,
+    GreekTransformer,
+    add_namespace(LineNumberTransformer, "text_line__line_number"),
 ):
     @v_args(inline=True)
     def text_line(self, line_number, content):
         return TextLine.of_iterable(line_number, content)
 
-    @v_args(inline=True)
-    def text_line__line_number_range(self, start, end):
-        return LineNumberRange(start, end)
+    # @v_args(inline=True)
+    # def text_line__line_number_range(self, start, end):
+    #     return LineNumberRange(start, end)
 
-    @v_args(inline=True)
-    def text_line__single_line_number(
-        self, prefix_modifier, number, prime, suffix_modifier
-    ):
-        return LineNumber(
-            int(number), prime is not None, prefix_modifier, suffix_modifier
-        )
+    # @v_args(inline=True)
+    # def text_line__line_number__single_line_number(
+    #     self, prefix_modifier, number, prime, suffix_modifier
+    # ):
+    #     return LineNumber(
+    #         int(number), prime is not None, prefix_modifier, suffix_modifier
+    #     )
 
-    def text_line__text(self, children):
-        return tokens_to_value_tokens(children)
+    # def text_line__text(self, children):
+    #     return tokens_to_value_tokens(children)
 
     @v_args(inline=True)
     def text_line__language_shift(self, value):
