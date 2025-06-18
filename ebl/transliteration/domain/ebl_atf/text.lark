@@ -12,19 +12,6 @@
 %import .abbreviations (PERIOD)
 %import .line_number (line_number, single_line_number, line_number_range)
 
-note_line: "#note: " _markup
-markup: _markup
-_markup: (emphasis_part | language_part | bibliography_part | string_part | url_part)+
-language_part: "@" LANGUAGE "{" text "}"
-emphasis_part: "@i{" note_text "}"
-bibliography_part: "@bib{" escaped_text ("@" escaped_text)? "}"
-escaped_text: (/[^@{}\\\n\r]/ | ("\\" /[@{}\\]/))+
-string_part: note_text
-note_text: /[^@{}\n\r]+/
-LANGUAGE: "akk" | "sux" | "es"
-url_part: "@url{" url "}" ("{" note_text "}")?
-url: /[^}]+/
-
 ?parallel_line: parallel_fragment | parallel_text | parallel_composition
 parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [object_label " "] [surface_label " "]  [column_label " "] line_number
 !museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
@@ -39,12 +26,6 @@ STAGE: PERIOD | "SB"
 parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
 CF: "cf. "
 PARALLEL_LINE_PREFIX: "// "
-
-
-translation_line: "#tr" [ "." TRANSLATION_LANGUAGE ] [".(" translation_extent ")"] ": " _markup
-TRANSLATION_LANGUAGE: LCASE_LETTER~2
-translation_extent: [labels " "] line_number
-
 
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 
@@ -322,25 +303,3 @@ BULLA: "bulla"
 column_label: ROMAN_NUMERAL status
 ROMAN_NUMERAL: /[ivxlcdm]+/
 CAPITAL_ROMAN_NUMERAL: /[IVXLCDM]+/
-
-?at_line: "@" at_line_value
-
-?at_line_value:  seal | column | heading | discourse | object_with_status | surface_with_status | divisions | composite
-
-surface_with_status: surface " "? status
-
-object_with_status: object " "? status
-
-column: "column " INT " "? status
-
-heading: "h" INT [ " " _markup ]
-
-!discourse: "catchline" | "colophon" | "date" | "signature" | "signatures" | "summary" | "witnesses"
-
-divisions: "m=division " free_text [" " INT]
-
-?composite: composite_composite | composite_start | composite_end | composite_milestone
-composite_start: "div " free_text [" " INT]
-composite_end: "end " free_text
-composite_composite: "composite"
-composite_milestone: "m=locator " free_text [" " INT]
