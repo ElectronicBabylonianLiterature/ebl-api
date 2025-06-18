@@ -392,9 +392,6 @@ class ManuscriptAttestationSchema(Schema):
 
 
 class UncertainFragmentAttestationSchema(Schema):
-    museum_number = fields.Nested(
-        MuseumNumberSchema, data_key="museumNumber", required=True
-    )
     text = fields.Nested(TextSchema, required=True)
     chapter_id = fields.Nested(ChapterIdSchema, data_key="chapterId", required=True)
 
@@ -402,6 +399,4 @@ class UncertainFragmentAttestationSchema(Schema):
     def make_uncertain_fragment_attestation(
         self, data: dict, **kwargs
     ) -> UncertainFragmentAttestation:
-        return UncertainFragmentAttestation(
-            data["museum_number"], data["text"], data["chapter_id"]
-        )
+        return UncertainFragmentAttestation(data["text"], data["chapter_id"])

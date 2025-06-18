@@ -111,7 +111,6 @@ class MongoTextRepositoryQueryFragment(MongoTextRepositoryBase):
                                 "stage": "$stage",
                                 "name": "$name",
                             },
-                            "museumNumber": "$uncertainFragments",
                         }
                     }
                 },

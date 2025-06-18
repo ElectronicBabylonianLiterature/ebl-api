@@ -21,13 +21,11 @@ def test_manuscript_attestation() -> None:
     UNCERTAIN_FRAGMENT_ATTESTATION = UncertainFragmentAttestationFactory.build(
         text=attr.evolve(TEXT, references=()),
         chapter_id=CHAPTER.id_,
-        museum_number=MuseumNumber.of("X.500"),
     )
     assert (
         UncertainFragmentAttestation(
             text=attr.evolve(TEXT, references=()),
             chapter_id=CHAPTER.id_,
-            museum_number=MuseumNumber.of("X.500"),
         )
         == UNCERTAIN_FRAGMENT_ATTESTATION
     )

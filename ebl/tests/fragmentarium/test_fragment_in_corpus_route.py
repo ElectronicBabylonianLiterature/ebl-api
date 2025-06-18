@@ -44,7 +44,6 @@ MANUSCRIPT_ATTESTATION = ManuscriptAttestationFactory.build(
 UNCERTAIN_FRAGMENT_ATTESTATION = UncertainFragmentAttestationFactory.build(
     text=TEXT,
     chapter_id=CHAPTER.id_,
-    museum_number=MUSEUM_NUMBER_UNCERTAIN,
 )
 
 

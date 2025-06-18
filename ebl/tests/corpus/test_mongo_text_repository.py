@@ -499,7 +499,6 @@ def test_query_corpus_by_uncertain_fragments(
     expected_uncertain_fragment_attestation = UncertainFragmentAttestationFactory.build(
         text=cleaned_text,
         chapter_id=chapter_with_uncertain_fragment.id_,
-        museum_number=chapter_with_uncertain_fragment.uncertain_fragments[0],
     )
     result = text_repository.query_corpus_by_uncertain_fragments(
         [chapter_with_uncertain_fragment.uncertain_fragments[0]]
