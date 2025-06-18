@@ -1,7 +1,7 @@
 %import .markup._markup
 %import common.LCASE_LETTER
 %import .line_number (line_number, single_line_number, line_number_range)
-%import .text_line (labels)
+%import .labels.labels
 
 translation_line: "#tr" [ "." TRANSLATION_LANGUAGE ] [".(" translation_extent ")"] ": " _markup
 TRANSLATION_LANGUAGE: LCASE_LETTER~2

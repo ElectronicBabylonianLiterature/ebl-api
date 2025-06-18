@@ -25,3 +25,8 @@ BULLA: "bulla"
 
 column_label: ROMAN_NUMERAL status
 ROMAN_NUMERAL: /[ivxlcdm]+/
+CAPITAL_ROMAN_NUMERAL: /[IVXLCDM]+/
+
+labels: surface_label " " column_label
+      | surface_label
+      | column_label

@@ -1,4 +1,4 @@
-%import .text_line.text
+%import .text.text
 
 markup: _markup
 _markup: (emphasis_part | language_part | bibliography_part | string_part | url_part)+

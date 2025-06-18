@@ -7,27 +7,10 @@
 %import .ebl_atf_common (free_text)
 %import .ebl_atf_common (object, OBJECT, generic_object, fragment)
 %import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
-%import .labels (status, surface_label, PRIME, UNCERTAIN, CORRECTION, COLLATION, NO_LONGER_VISIBLE)
+%import .labels (status, labels, PRIME, UNCERTAIN, CORRECTION, COLLATION, NO_LONGER_VISIBLE)
 %import .ebl_atf_common (seal)
 %import .abbreviations (PERIOD)
 %import .line_number (line_number, single_line_number, line_number_range)
-
-?parallel_line: parallel_fragment | parallel_text | parallel_composition
-parallel_fragment: PARALLEL_LINE_PREFIX [CF] "F " museum_number " " [DUPLICATES " "] [object_label " "] [surface_label " "]  [column_label " "] line_number
-!museum_number: /./+ "." /[^.]/+ ("." /[^.]/+)?
-DUPLICATES: "&d"
-parallel_text: PARALLEL_LINE_PREFIX [CF] text_id " "  [chapter_name " "] line_number
-text_id: GENRE " " CATEGORY "." INT
-GENRE: "Lex" | "Med" | "L" | "D" | "Mag" | "Šui"
-CATEGORY: "0" | CAPITAL_ROMAN_NUMERAL
-chapter_name: STAGE " " [quoted_string " "] quoted_string 
-quoted_string: "\"" /./+ "\""
-STAGE: PERIOD | "SB"
-parallel_composition: PARALLEL_LINE_PREFIX [CF] "(" /./+ " " line_number ")"
-CF: "cf. "
-PARALLEL_LINE_PREFIX: "// "
-
-text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
 _shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
@@ -290,16 +273,4 @@ greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosur
                 | unknown_number_of_signs
 ?greek_enclosure: _any_open | _any_close
 greek_letter: GREEK_ALPHABET flags
-labels: surface_label " " column_label
-      | surface_label
-      | column_label
 
-object_label: (TABLET | ENVELOPE | PRIMS | BULLA) status
-TABLET: "tablet"
-ENVELOPE: "envelope"
-PRIMS: "prism"
-BULLA: "bulla"
-
-column_label: ROMAN_NUMERAL status
-ROMAN_NUMERAL: /[ivxlcdm]+/
-CAPITAL_ROMAN_NUMERAL: /[IVXLCDM]+/

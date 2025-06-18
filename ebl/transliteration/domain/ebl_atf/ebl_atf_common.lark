@@ -47,3 +47,4 @@ AKKADIAN_ALPHABET: "ʾ" | "A" | "B" | "D" | "E" | "G" | "H" | "I" | "K" | "L"
                  | "š" | "Ś" | "ś" | "ū" | "ṣ" | "ṭ" | "₄"
 
 _WORD_SEPARATOR: " "
+CF: "cf. "

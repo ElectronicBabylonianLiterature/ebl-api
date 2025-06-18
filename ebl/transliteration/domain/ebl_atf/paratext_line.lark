@@ -1,0 +1,13 @@
+%import common.CR
+%import common.LF
+%import common.WS_INLINE
+%import .note_line.note_line
+%import .dollar_line.dollar_line
+
+?paratext_line: _NEWLINE _WHITE_SPACE? paratext
+_NEWLINE: (CR? LF) 
+_WHITE_SPACE: WS_INLINE
+
+?paratext: note_line | dollar_line
+
+

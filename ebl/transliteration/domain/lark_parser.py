@@ -33,31 +33,34 @@ from ebl.transliteration.domain.line_transformer import LineTransformer
 from functools import singledispatch
 
 WORD_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
+    "ebl_atf/text.lark", maybe_placeholders=True, rel_to=__file__, start="any_word"
 )
 NOTE_LINE_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="note_line"
+    "ebl_atf/note_line.lark",
+    maybe_placeholders=True,
+    rel_to=__file__,
+    start="note_line",
 )
 MARKUP_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
+    "ebl_atf/markup.lark", maybe_placeholders=True, rel_to=__file__, start="markup"
 )
 PARALLEL_LINE_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark",
+    "ebl_atf/parallel_line.lark",
     maybe_placeholders=True,
     rel_to=__file__,
     start="parallel_line",
 )
 TRANSLATION_LINE_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark",
+    "ebl_atf/translation_line.lark",
     maybe_placeholders=True,
     rel_to=__file__,
     start="translation_line",
 )
 PARATEXT_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
+    "ebl_atf/paratext_line.lark", maybe_placeholders=True, rel_to=__file__, start="paratext"
 )
 CHAPTER_PARSER = Lark.open(
-    "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="chapter"
+    "ebl_atf/chapter.lark", maybe_placeholders=True, rel_to=__file__, start="chapter"
 )
 LINE_PARSER = Lark.open(
     "ebl_atf/ebl_atf.lark", maybe_placeholders=True, rel_to=__file__

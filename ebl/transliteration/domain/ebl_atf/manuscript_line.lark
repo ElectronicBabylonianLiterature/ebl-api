@@ -1,0 +1,16 @@
+%import common.WS_INLINE
+%import .labels.labels
+%import .abbreviations (PROVENANCE, PERIOD, TYPE)
+%import .paratext_line.paratext_line
+%import .text_line.text_line
+%import .empty_line.empty_line
+
+manuscript_line: _WHITE_SPACE? siglum  [" " labels] manuscript_text paratext_line*
+?manuscript_text: " " text_line | empty_line
+
+siglum: [PROVENANCE] PERIOD [TYPE] [DISAMBIQUATOR]
+      | "Std" [DISAMBIQUATOR] -> standard_text_siglum
+
+DISAMBIQUATOR: /[\S]+/
+
+_WHITE_SPACE: WS_INLINE
