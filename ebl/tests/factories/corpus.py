@@ -314,8 +314,5 @@ class UncertainFragmentAttestationFactory(factory.Factory):
     class Params:
         chapter = factory.SubFactory(ChapterFactory)
 
-    museum_number = factory.Sequence(
-        lambda n: MuseumNumber("M", str(n)) if pydash.is_odd(n) else None
-    )
     text = factory.SubFactory(TextFactory)
     chapter_id = factory.SelfAttribute("chapter.id_")
