@@ -18,6 +18,7 @@ from ebl.corpus.application.corpus import Corpus
 from ebl.corpus.application.display_schemas import ChapterDisplaySchema
 from ebl.corpus.application.schemas import (
     ManuscriptAttestationSchema,
+    UncertainFragmentAttestationSchema,
 )
 from ebl.corpus.domain.dictionary_display import DictionaryLineDisplay
 from ebl.corpus.web.chapter_schemas import ApiChapterSchema
@@ -118,7 +119,7 @@ class ChaptersDisplayResource:
             resp.media = self._select_lines_and_variants(dump, lines, variants)
 
 
-class ChaptersByManuscriptResource:
+class ChaptersByFragmentResource:
     def __init__(self, corpus: Corpus, fragment_finder: FragmentFinder):
         self._corpus = corpus
         self._fragment_finder = fragment_finder
@@ -137,12 +138,15 @@ class ChaptersByManuscriptResource:
         museum_numbers = [
             join.museum_number for join in flatten_deep(fragment.joins.fragments)
         ] or [museum_number]
-        manuscript_attestations = self._corpus.search_corpus_by_manuscript(
-            museum_numbers
-        )
-        resp.media = ManuscriptAttestationSchema().dump(
-            manuscript_attestations, many=True
-        )
+        fragment_attestations = self._corpus.search_corpus_by_fragment(museum_numbers)
+        resp.media = {
+            "manuscriptAttestations": ManuscriptAttestationSchema().dump(
+                fragment_attestations["manuscripts"], many=True
+            ),
+            "uncertainFragmentAttestations": UncertainFragmentAttestationSchema().dump(
+                fragment_attestations["uncertain_fragments"], many=True
+            ),
+        }
 
 
 class ChaptersByLemmaResource:
