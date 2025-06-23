@@ -313,5 +313,6 @@ class UncertainFragmentAttestationFactory(factory.Factory):
 
     class Params:
         chapter = factory.SubFactory(ChapterFactory)
+
     text = factory.SubFactory(TextFactory)
     chapter_id = factory.SelfAttribute("chapter.id_")
