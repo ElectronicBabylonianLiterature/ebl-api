@@ -2,7 +2,7 @@ import pytest
 
 from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import (
+from ebl.transliteration.domain.atf_parsers.lark_parser import (
     LINE_PARSER,
     parse_atf_lark,
     parse_markup,

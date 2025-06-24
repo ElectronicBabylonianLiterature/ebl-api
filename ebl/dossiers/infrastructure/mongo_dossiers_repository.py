@@ -20,7 +20,7 @@ class DossierRecordSchema(Schema):
     class Meta:
         unknown = EXCLUDE
 
-    id = fields.String(required=True, unique=True, data_key="_id")
+    id = fields.String(required=True, data_key="_id", metadata={"unique": True})
     description = fields.String(load_default=None)
     is_approximate_date = fields.Boolean(
         data_key="isApproximateDate", load_default=False
