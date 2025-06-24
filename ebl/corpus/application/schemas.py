@@ -28,6 +28,9 @@ from ebl.corpus.domain.manuscript import (
     is_invalid_standard_text,
 )
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
+from ebl.corpus.domain.uncertain_fragment_attestation import (
+    UncertainFragmentAttestation,
+)
 from ebl.corpus.domain.record import Record
 from ebl.corpus.domain.text import ChapterListing, Text, UncertainFragment
 from ebl.fragmentarium.application.joins_schema import JoinsSchema
@@ -386,3 +389,14 @@ class ManuscriptAttestationSchema(Schema):
             data["chapter_id"],
             data["manuscript"],
         )
+
+
+class UncertainFragmentAttestationSchema(Schema):
+    text = fields.Nested(TextSchema, required=True)
+    chapter_id = fields.Nested(ChapterIdSchema, data_key="chapterId", required=True)
+
+    @post_load
+    def make_uncertain_fragment_attestation(
+        self, data: dict, **kwargs
+    ) -> UncertainFragmentAttestation:
+        return UncertainFragmentAttestation(data["text"], data["chapter_id"])

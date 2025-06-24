@@ -44,7 +44,7 @@ from ebl.fragmentarium.web.archaeology import ArchaeologyResource
 from ebl.fragmentarium.web.fragments_afo_register import (
     AfoRegisterFragmentsQueryResource,
 )
-from ebl.corpus.web.chapters import ChaptersByManuscriptResource
+from ebl.corpus.web.chapters import ChaptersByFragmentResource
 from ebl.corpus.application.corpus import Corpus
 from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
 
@@ -127,7 +127,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
-    chapters = ChaptersByManuscriptResource(corpus, finder)
+    chapters = ChaptersByFragmentResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)
 
     all_fragments = FragmentsListResource(context.fragment_repository)
