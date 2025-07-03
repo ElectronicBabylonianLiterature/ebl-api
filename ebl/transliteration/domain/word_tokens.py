@@ -128,6 +128,7 @@ W = TypeVar("W", bound="Word")
 @attr.s(auto_attribs=True, frozen=True)
 class Word(AbstractWord):
     _language: Language = DEFAULT_LANGUAGE
+    id_: Optional[str] = None
 
     @classmethod
     def of(
@@ -140,6 +141,7 @@ class Word(AbstractWord):
         variant: Optional[AbstractWord] = None,
         has_variant_alignment: bool = False,
         has_omitted_alignment: bool = False,
+        id_: Optional[str] = None,
     ) -> W:
         return cls(
             frozenset(),
@@ -151,6 +153,7 @@ class Word(AbstractWord):
             has_variant_alignment,
             has_omitted_alignment,
             language,
+            id_,
         )
 
     @property
