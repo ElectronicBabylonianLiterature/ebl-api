@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from itertools import zip_longest
+from itertools import count, zip_longest
 from collections import defaultdict
 from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, Iterator
 
@@ -24,6 +24,7 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.word_tokens import Word
 
 
 class LabelsValidator:
@@ -203,6 +204,39 @@ class Text:
 
     def set_parser_version(self, parser_version: str) -> "Text":
         return attr.evolve(self, parser_version=parser_version)
+
+    def set_token_ids(self) -> "Text":
+        start_id = (
+            max(
+                (
+                    int(token.id_.split("-")[1]) if token.id_ else 0
+                    for line in self.lines
+                    if isinstance(line, TextLine)
+                    for token in line.content
+                    if isinstance(token, Word)
+                ),
+                default=0,
+            )
+            + 1
+        )
+        word_id = count(start_id)
+
+        def set_word_ids(line: Line) -> Line:
+            if isinstance(line, TextLine):
+                tokens = tuple(
+                    (
+                        attr.evolve(token, id_=f"Word-{next(word_id)}")
+                        if isinstance(token, Word) and token.id_ is None
+                        else token
+                    )
+                    for token in line.content
+                )
+                return attr.evolve(line, content=tokens)
+            return line
+
+        lines = tuple(set_word_ids(line) for line in self.lines)
+
+        return attr.evolve(self, lines=lines)
 
     @staticmethod
     def of_iterable(
