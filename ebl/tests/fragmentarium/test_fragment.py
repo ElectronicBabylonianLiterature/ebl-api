@@ -243,7 +243,7 @@ def test_add_transliteration(user):
     updated_fragment = fragment.update_transliteration(transliteration, user)
     expected_fragment = attr.evolve(
         fragment,
-        text=text,
+        text=text.set_token_ids(),
         record=record,
         line_to_vec=((LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE),),
     )
@@ -263,7 +263,7 @@ def test_update_transliteration(user):
 
     expected_fragment = attr.evolve(
         lemmatized_fragment,
-        text=lemmatized_fragment.text.merge(text),
+        text=lemmatized_fragment.text.merge(text).set_token_ids(),
         signs=transliteration.signs,
         record=lemmatized_fragment.record.add_entry(
             lemmatized_fragment.text.atf, transliteration.text.atf, user
