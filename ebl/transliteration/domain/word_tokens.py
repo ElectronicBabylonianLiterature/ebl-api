@@ -121,6 +121,9 @@ class AbstractWord(Token):
         same_type = isinstance(token, AbstractWord)
         return same_type and same_value
 
+    def set_id(self: A, id_: str) -> A:
+        return attr.evolve(self, id_=id_) if self.id_ is None else self
+
 
 DEFAULT_LANGUAGE: Language = Language.AKKADIAN
 W = TypeVar("W", bound="Word")
