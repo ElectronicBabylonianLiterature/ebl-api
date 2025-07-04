@@ -19,6 +19,7 @@ T = TypeVar("T", bound=Token)
 
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractWord(Token):
+    id_: Optional[str] = None
     unique_lemma: Lemma = ()
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=(), converter=convert_token_sequence)
@@ -128,7 +129,6 @@ W = TypeVar("W", bound="Word")
 @attr.s(auto_attribs=True, frozen=True)
 class Word(AbstractWord):
     _language: Language = DEFAULT_LANGUAGE
-    id_: Optional[str] = None
 
     @classmethod
     def of(
@@ -146,6 +146,7 @@ class Word(AbstractWord):
         return cls(
             frozenset(),
             erasure,
+            id_,
             unique_lemma,
             alignment,
             parts,
@@ -153,7 +154,6 @@ class Word(AbstractWord):
             has_variant_alignment,
             has_omitted_alignment,
             language,
-            id_,
         )
 
     @property

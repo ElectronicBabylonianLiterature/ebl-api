@@ -24,7 +24,7 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
-from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
 class LabelsValidator:
@@ -213,7 +213,7 @@ class Text:
                     for line in self.lines
                     if isinstance(line, TextLine)
                     for token in line.content
-                    if isinstance(token, Word)
+                    if isinstance(token, AbstractWord)
                 ),
                 default=0,
             )
@@ -226,7 +226,7 @@ class Text:
                 tokens = tuple(
                     (
                         attr.evolve(token, id_=f"Word-{next(word_id)}")
-                        if isinstance(token, Word) and token.id_ is None
+                        if isinstance(token, AbstractWord) and token.id_ is None
                         else token
                     )
                     for token in line.content

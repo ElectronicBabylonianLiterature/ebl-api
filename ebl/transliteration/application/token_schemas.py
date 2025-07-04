@@ -505,6 +505,7 @@ class AkkadianWordSchema(BaseWordSchema):
             data["variant"],
             data["has_variant_alignment"],
             data["has_omitted_alignment"],
+            data.get("id_"),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
@@ -554,6 +555,7 @@ class GreekWordSchema(BaseWordSchema):
             data["erasure"],
             data["has_variant_alignment"],
             data["has_omitted_alignment"],
+            data.get("id_"),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
