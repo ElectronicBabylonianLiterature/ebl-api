@@ -368,6 +368,7 @@ class BaseWordSchema(BaseTokenSchema):
     has_omitted_alignment = fields.Boolean(
         load_default=False, data_key="hasOmittedAlignment"
     )
+    id_ = fields.String(data_key="id", allow_none=True)
 
 
 class WordSchema(BaseWordSchema):
@@ -382,6 +383,7 @@ class WordSchema(BaseWordSchema):
             data["variant"],
             data["has_variant_alignment"],
             data["has_omitted_alignment"],
+            data.get("id_"),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -503,6 +505,7 @@ class AkkadianWordSchema(BaseWordSchema):
             data["variant"],
             data["has_variant_alignment"],
             data["has_omitted_alignment"],
+            data.get("id_"),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
@@ -552,6 +555,7 @@ class GreekWordSchema(BaseWordSchema):
             data["erasure"],
             data["has_variant_alignment"],
             data["has_omitted_alignment"],
+            data.get("id_"),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 

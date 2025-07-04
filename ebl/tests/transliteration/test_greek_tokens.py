@@ -77,5 +77,6 @@ def test_greek_word(
         "language": language.name,
         "hasVariantAlignment": word.has_variant_alignment,
         "hasOmittedAlignment": word.has_omitted_alignment,
+        "id": word.id_,
     }
     assert_token_serialization(word, serialized)
