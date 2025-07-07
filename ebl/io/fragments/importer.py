@@ -1,3 +1,4 @@
+from itertools import count
 from typing import Optional, Sequence, List
 import argparse
 import os
@@ -13,6 +14,8 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
 import datetime
+
+WORD_TYPES = {"Word", "AkkadianWord", "GreekWord"}
 
 
 def _load_json(path: str):
@@ -110,6 +113,33 @@ def update_sort_keys(fragments_collection: MongoCollection) -> None:
 
 def create_sort_index(fragments_collection: MongoCollection) -> None:
     fragments_collection.create_index([("_sortKey", pymongo.ASCENDING)])
+
+
+def set_word_ids(fragment: dict) -> dict:
+    lines = fragment.get("text", {}).get("lines", [])
+
+    if not lines:
+        return fragment
+
+    word_id = count(1)
+
+    def set_ids(line: dict) -> dict:
+        if line["type"] != "TextLine":
+            return line
+
+        content = []
+
+        for word in line["content"]:
+            if word.get("type") in WORD_TYPES:
+                word["id"] = f"Word-{next(word_id)}"
+                content.append(word)
+
+        return {**line, "content": content}
+
+    return {
+        **fragment,
+        "text": {**fragment["text"], "lines": [set_ids(line) for line in lines]},
+    }
 
 
 def write_to_db(
@@ -299,7 +329,7 @@ if __name__ == "__main__":
         if filename not in {file for file, _ in FAILS}
     }
     result = write_to_db(
-        list(fragments.values()),
+        [set_word_ids(fragment) for fragment in fragments.values()],
         COLLECTION,
     )
 
