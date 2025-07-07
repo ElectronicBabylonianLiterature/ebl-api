@@ -28,12 +28,6 @@ class Chronology:
         except IndexError:
             return None
 
-    def find_king_by_order_global(self, order_global: float) -> Optional[King]:
-        try:
-            return [king for king in self.kings if king.order_global == order_global][0]
-        except IndexError:
-            return None
-
 
 class KingSchema(Schema):
     order_global = fields.Float(data_key="orderGlobal")

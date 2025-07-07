@@ -15,7 +15,7 @@ from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLi
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.line import ControlLine, Line
+from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
 from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -37,6 +37,14 @@ def test_parser_version(parser, version):
     [
         ("", []),
         ("\n", []),
+        (
+            "#first\n\n#second",
+            [ControlLine("#", "first"), EmptyLine(), ControlLine("#", "second")],
+        ),
+        (
+            "#first\n \n#second",
+            [ControlLine("#", "first"), EmptyLine(), ControlLine("#", "second")],
+        ),
         ("&K11111", [ControlLine("&", "K11111")]),
         ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
         (
@@ -51,6 +59,7 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
+        ("#some notes", [ControlLine("#", "some notes")]),
         ("=: continuation", [ControlLine("=:", " continuation")]),
     ],
 )
@@ -65,7 +74,6 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
         ("1. x\nthis is not valid", [2]),
         ("this is not valid\nthis is not valid", [1, 2]),
         ("$ ", [1]),
-        ("#first\n\n#second", [1, 3]),
     ],
 )
 def test_invalid_atf(atf, line_numbers) -> None:

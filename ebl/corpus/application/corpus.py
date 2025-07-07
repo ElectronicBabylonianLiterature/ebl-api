@@ -27,7 +27,7 @@ from ebl.errors import DataError, Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.genre import Genre
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.corpus.application.text_repository import CorpusFragmentsMapping
+from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.users.domain.user import User
@@ -83,10 +83,10 @@ class Corpus:
             self._repository.query_manuscripts_with_joins_by_chapter(id_)
         )
 
-    def search_corpus_by_fragment(
+    def search_corpus_by_manuscript(
         self, museum_numbers: List[MuseumNumber]
-    ) -> CorpusFragmentsMapping:
-        return self._repository.query_corpus_by_related_fragments(museum_numbers)
+    ) -> List[ManuscriptAttestation]:
+        return self._repository.query_corpus_by_manuscript(museum_numbers)
 
     def _inject_references_to_manuscripts(
         self, manuscripts: Sequence[Manuscript]

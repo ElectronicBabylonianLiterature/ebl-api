@@ -585,7 +585,7 @@
     "isNotInBrinkman": true
   },
   {
-    "orderGlobal": 45.3,
+    "orderGlobal": 45.30,
     "dynastyNumber": "4.1",
     "dynastyName": "Uruk Dynasty",
     "orderInDynasty": "10",
@@ -695,7 +695,7 @@
     "isNotInBrinkman": true
   },
   {
-    "orderGlobal": 45.5,
+    "orderGlobal": 45.50,
     "dynastyNumber": "4.2",
     "dynastyName": "Ešnunna Dynasty",
     "orderInDynasty": "10",
@@ -805,7 +805,7 @@
     "isNotInBrinkman": true
   },
   {
-    "orderGlobal": 45.6,
+    "orderGlobal": 45.60,
     "dynastyNumber": "4.2",
     "dynastyName": "Ešnunna Dynasty",
     "orderInDynasty": "20",
@@ -1556,7 +1556,7 @@
     "name": "Marduk-zer-x",
     "date": "1045–1034",
     "totalOfYears": "12",
-    "notes": "It has been proposed on the basis of a damaged royal name in a kudurru (AOAT 51 pp.610-611) that the name of the tenth king be restored as Marduk-zēra-i[b-ni].  But a reading IB for the last partially preserved sign in the name is ruled out by the slant and positioning of the two surviving wedgeheads, especially at the upper left, as can be seen in both the photo and copy of the text (ibid., pl. 54)."
+    "notes": ""
   },
   {
     "orderGlobal": 117,
@@ -2215,7 +2215,7 @@
     "orderInDynasty": "1",
     "name": "Alexander (III)",
     "date": "330–323",
-    "totalOfYears": "8",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2225,7 +2225,7 @@
     "orderInDynasty": "2",
     "name": "Philip Arrhidaeus",
     "date": "323–316",
-    "totalOfYears": "7",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2245,7 +2245,7 @@
     "orderInDynasty": "4",
     "name": "Alexander (IV)",
     "date": "311–306",
-    "totalOfYears": "4",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2255,7 +2255,7 @@
     "orderInDynasty": "1",
     "name": "Seleucus I Nicator",
     "date": "305–281",
-    "totalOfYears": "30",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2265,7 +2265,7 @@
     "orderInDynasty": "2",
     "name": "Antiochus I Soter",
     "date": "281–261",
-    "totalOfYears": "20",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2275,7 +2275,7 @@
     "orderInDynasty": "3",
     "name": "Antiochus II Theos",
     "date": "261–246",
-    "totalOfYears": "15",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2285,7 +2285,7 @@
     "orderInDynasty": "4",
     "name": "Seleucus II Callinicus",
     "date": "246–225",
-    "totalOfYears": "21",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2295,7 +2295,7 @@
     "orderInDynasty": "5",
     "name": "Seleucus III Soter",
     "date": "225–223",
-    "totalOfYears": "3",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2305,7 +2305,7 @@
     "orderInDynasty": "6",
     "name": "Antiochus III (the Great)",
     "date": "222–187",
-    "totalOfYears": "35",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2315,7 +2315,7 @@
     "orderInDynasty": "7",
     "name": "Seleucus IV Philopator",
     "date": "187–175",
-    "totalOfYears": "12",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2325,7 +2325,7 @@
     "orderInDynasty": "8",
     "name": "Antiochus IV Epiphanes",
     "date": "175–164",
-    "totalOfYears": "11",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2335,7 +2335,7 @@
     "orderInDynasty": "9",
     "name": "Antiochus V Eupator",
     "date": "164–162",
-    "totalOfYears": "2",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2345,7 +2345,7 @@
     "orderInDynasty": "10",
     "name": "Demetrius I Soter",
     "date": "162–150",
-    "totalOfYears": "12",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2355,7 +2355,7 @@
     "orderInDynasty": "11",
     "name": "Alexander I Balas",
     "date": "150–145",
-    "totalOfYears": "6",
+    "totalOfYears": "",
     "notes": ""
   },
   {
@@ -2493,7 +2493,7 @@
     "dynastyNumber": "16",
     "dynastyName": "Seleucid Rulers",
     "orderInDynasty": "25",
-    "name": "Antiochus XII Dionysus",
+    "name": "AntiochusXII Dionysus",
     "date": "87–83",
     "totalOfYears": "",
     "notes": ""

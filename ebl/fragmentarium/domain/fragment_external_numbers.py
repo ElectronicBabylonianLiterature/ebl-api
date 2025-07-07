@@ -8,7 +8,6 @@ class ExternalNumbers:
     bm_id_number: str = ""
     archibab_number: str = ""
     bdtns_number: str = ""
-    rsti_number: str = ""
     chicago_isac_number: str = ""
     ur_online_number: str = ""
     hilprecht_jena_number: str = ""
@@ -51,10 +50,6 @@ class FragmentExternalNumbers:
     @property
     def bdtns_number(self) -> str:
         return self._get_external_number("bdtns")
-
-    @property
-    def rsti_number(self) -> str:
-        return self._get_external_number("rsti")
 
     @property
     def chicago_isac_number(self) -> str:

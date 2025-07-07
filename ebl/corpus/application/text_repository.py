@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional, Sequence, Tuple, TypedDict
+from typing import List, Optional, Sequence, Tuple
 from ebl.corpus.domain.text import Text, TextId
 from ebl.corpus.domain.chapter_display import ChapterDisplay
 from ebl.corpus.domain.chapter import Chapter, ChapterId
@@ -10,15 +10,7 @@ from ebl.corpus.domain.dictionary_line import DictionaryLine
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
-from ebl.corpus.domain.uncertain_fragment_attestation import (
-    UncertainFragmentAttestation,
-)
 from ebl.common.query.query_result import CorpusQueryResult
-
-
-class CorpusFragmentsMapping(TypedDict):
-    manuscripts: List[ManuscriptAttestation]
-    uncertain_fragments: List[UncertainFragmentAttestation]
 
 
 class TextRepository(ABC):
@@ -66,19 +58,9 @@ class TextRepository(ABC):
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]: ...
 
     @abstractmethod
-    def query_corpus_by_manuscripts(
+    def query_corpus_by_manuscript(
         self, museum_numbers: List[MuseumNumber]
     ) -> List[ManuscriptAttestation]: ...
-
-    @abstractmethod
-    def query_corpus_by_uncertain_fragments(
-        self, museum_numbers: List[MuseumNumber]
-    ) -> List[UncertainFragmentAttestation]: ...
-
-    @abstractmethod
-    def query_corpus_by_related_fragments(
-        self, museum_numbers: List[MuseumNumber]
-    ) -> CorpusFragmentsMapping: ...
 
     @abstractmethod
     def query_manuscripts_with_joins_by_chapter(
