@@ -4,7 +4,6 @@ from typing import Callable, Iterable, Optional, Sequence, Type, TypeVar, Union,
 import attr
 import pydash
 
-from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -94,19 +93,6 @@ class TextLine(Line):
             return token.set_unique_lemma(lemmatization_token)
 
         return self._update_tokens(lemmatization, updater, LemmatizationError)
-
-    def update_lemma_annotation(
-        self, line_annotation: LineLemmaAnnotation
-    ) -> "TextLine":
-        content = tuple(
-            (
-                attr.evolve(token, unique_lemma=line_annotation[index])
-                if index in line_annotation
-                else token
-            )
-            for index, token in enumerate(self.content)
-        )
-        return attr.evolve(self, content=content)
 
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "TextLine":
         def updater(token, alignment_token):

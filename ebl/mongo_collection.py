@@ -1,9 +1,10 @@
 from typing import Any, Mapping, cast, Sequence, Optional
+
 import inflect
-from bson import ObjectId
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import DuplicateKeyError
+
 from ebl.errors import DuplicateError, NotFoundError
 
 
@@ -31,7 +32,7 @@ class MongoCollection:
             return self.__get_collection().insert_one(document).inserted_id
         except DuplicateKeyError:
             raise DuplicateError(
-                f"{self.__resource_noun} {document['_id']} already exists."
+                f'{self.__resource_noun} {document["_id"]} already exists.'
             )
 
     def find_one_by_id(self, id_):
@@ -97,8 +98,7 @@ class MongoCollection:
         return self.__get_collection().drop_index(index, **kwargs)
 
     def get_all_values(self, field: str, query: Optional[dict] = None) -> Sequence[str]:
-        values = self.__get_collection().distinct(field, query or {})
-        return [value for value in values if not isinstance(value, ObjectId)]
+        return self.__get_collection().distinct(field, query or {})
 
     def __not_found_error(self, query):
         return NotFoundError(f"{self.__resource_noun} {query} not found.")

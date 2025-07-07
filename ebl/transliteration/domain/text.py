@@ -6,7 +6,6 @@ from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, Ite
 import pydash
 import attr
 
-from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.merger import Merger
 from ebl.transliteration.domain.at_line import (
@@ -177,17 +176,6 @@ class Text:
             return attr.evolve(self, lines=lines)
         else:
             raise LemmatizationError()
-
-    def update_lemma_annotation(self, annotation: TextLemmaAnnotation) -> "Text":
-        lines = tuple(
-            (
-                line.update_lemma_annotation(annotation[line_index])
-                if line_index in annotation
-                else line
-            )
-            for line_index, line in enumerate(self.lines)
-        )
-        return attr.evolve(self, lines=lines)
 
     def merge(self, other: "Text") -> "Text":
         def map_(line: Line) -> str:

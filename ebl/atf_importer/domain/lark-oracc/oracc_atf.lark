@@ -11,7 +11,7 @@
 
 empty_line: /\s+/?
 
-!control_line.-2: ("=:" | "&") /.+/?
+!control_line.-2: ("=:" | "&" | "#") /.+/?
 
 %import .oracc_atf_text_line (text_line, any_word)
 %import .oracc_atf_dollar_line (dollar_line)
