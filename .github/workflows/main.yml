@@ -11,48 +11,34 @@ on:
 env:
   PIPENV_VENV_IN_PROJECT: 1
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  PYMONGOIM__MONGO_VERSION: 4.4
+  PYMONGOIM__MONGO_VERSION: 7.0
   PYMONGOIM__OPERATING_SYSTEM: ubuntu
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ["3.9", "pypy-3.9"]
     name: Test Python ${{ matrix.python-version }}
 
-    steps:
-      - uses: actions/checkout@v3
+    services:
+      mongodb:
+        image: mongo:7.0
+        ports:
+          - 27017:27017
 
-      - uses: actions/setup-python@v2
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl
-          curl -O http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
-          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb || true
-          sudo apt-get -f install -y
-          sudo ldconfig
-
-      - name: Install MongoDB
-        run: |
-          curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
-          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-          sudo apt-get update
-          sudo apt-get install -y mongodb-org
-          sudo ldconfig
-
-      - name: Set MongoDB Binary
-        run: echo "export MONGOD_EXECUTABLE=$(which mongod)" >> $GITHUB_ENV
-
-      - name: Debug MongoDB Binary
-        run: |
-          ls -l /usr/bin/mongod
-          ldd /usr/bin/mongod
+          sudo apt-get install -y curl libssl-dev
 
       - name: Install Rust
         run: |
@@ -84,34 +70,35 @@ jobs:
       - name: Unit Tests
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
-          CI: true
+          MONGODB_URI: mongodb://localhost:27017
         run: poetry run pytest
 
       - name: Unit Tests with Coverage
-        uses: paambaati/codeclimate-action@v3.0.0
+        uses: paambaati/codeclimate-action@v5.0.0
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          MONGODB_URI: mongodb://localhost:27017
         with:
-          coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml
+          coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x
 
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     needs: [test]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: docker/setup-buildx-action@v1
+      - uses: docker/setup-buildx-action@v3
 
-      - uses: docker/login-action@v1
+      - uses: docker/login-action@v3
         with:
           registry: ebl.badw.de
           username: ${{ secrets.EBL_REGISTRY_USERNAME }}
           password: ${{ secrets.EBL_REGISTRY_PASSWORD }}
 
       - id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           push: true
           tags: |

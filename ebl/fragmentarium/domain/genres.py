@@ -30,6 +30,7 @@ genres = (
     ("ARCHIVAL", "Legal", "Suretyship"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other", "Adoption"),
+    ("ARCHIVAL", "Legal", "Transfer of Properties, Other", "Donation"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other", "Dowry"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other", "Exchange"),
     ("ARCHIVAL", "Legal", "Transfer of Properties, Other", "Inheritance"),

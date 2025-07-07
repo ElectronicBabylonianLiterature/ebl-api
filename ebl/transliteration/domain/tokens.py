@@ -221,6 +221,21 @@ class UnknownNumberOfSigns(Token):
 
 
 @attr.s(frozen=True)
+class WordOmitted(Token):
+    @property
+    def value(self) -> str:
+        return atf.WORD_OMITTED
+
+    @property
+    def parts(self):
+        return ()
+
+    @staticmethod
+    def of() -> "WordOmitted":
+        return WordOmitted(frozenset(), ErasureState.NONE)
+
+
+@attr.s(frozen=True)
 class Tabulation(Token):
     @property
     def value(self) -> str:

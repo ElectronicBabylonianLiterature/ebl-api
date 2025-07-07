@@ -88,6 +88,7 @@ _require_both: commentary_protocol
              | divider
              | line_break
 _have_both: tabulation
+         | word_omitted
          | column_token
          | erasure
          | word
@@ -117,6 +118,9 @@ greek_shift: GREEK_SHIFT
 divider_variant: divider _VARIANT_SEPARATOR divider
                | divider _VARIANT_SEPARATOR variant_part
                | variant_part _VARIANT_SEPARATOR divider
+
+word_omitted: WORD_OMITTED
+WORD_OMITTED: "ø"
 
 tabulation: TABULATION
 TABULATION: "($___$)"
@@ -230,7 +234,7 @@ sub_index: [SUB_INDEX]
 number_name: number_name_head (broken_away number_name_part)*
 value_name: value_name_part (broken_away value_name_part)*
 logogram_name: logogram_name_part (broken_away logogram_name_part)*
-!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚" | "ø"
+!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅙" | "⅔" | "⅚"
 !number_name_part:  "0".."9"+
 value_name_part: VALUE_CHARACTER+
 logogram_name_part: LOGOGRAM_CHARACTER+

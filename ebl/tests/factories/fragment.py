@@ -75,6 +75,7 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
+    WordOmitted,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -93,7 +94,7 @@ from ebl.fragmentarium.domain.date import (
     DateKingSchema,
     Ur3Calendar,
 )
-from ebl.chronology.chronology import chronology, King, KingSchema
+from ebl.chronology.chronology import chronology, King
 from ebl.tests.factories.colophon import ColophonFactory
 
 
@@ -153,7 +154,7 @@ class DayFactory(factory.Factory):
 def create_date_king(king: King) -> DateKing:
     return DateKingSchema().load(
         {
-            **KingSchema().dump(king),
+            "orderGlobal": king.order_global,
             "isBroken": random.choice([True, False]),
             "isUncertain": random.choice([True, False]),
         }
@@ -182,6 +183,7 @@ class ExternalNumbersFactory(factory.Factory):
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    rsti_number = factory.Sequence(lambda n: f"rsti-{n}")
     chicago_isac_number = factory.Sequence(lambda n: f"chicago-isac-number-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
     hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
@@ -306,6 +308,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                         ]
                     ),
                     Column.of(),
+                    WordOmitted.of(),
                     Tabulation.of(),
                     Word.of(
                         [
@@ -522,6 +525,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                         ]
                     ),
                     Column.of(),
+                    WordOmitted.of(),
                     Tabulation.of(),
                     Word.of(
                         [
