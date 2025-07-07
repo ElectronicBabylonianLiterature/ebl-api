@@ -53,6 +53,9 @@ from ebl.transliteration.domain.translation_line import TranslationLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.corpus.domain.chapter_query import ChapterQueryColophonLines
 from ebl.corpus.domain.manuscript_attestation import ManuscriptAttestation
+from ebl.corpus.domain.uncertain_fragment_attestation import (
+    UncertainFragmentAttestation,
+)
 
 
 class OldSiglumFactory(factory.Factory):
@@ -302,3 +305,14 @@ class ManuscriptAttestationFactory(factory.Factory):
     text = factory.SubFactory(TextFactory)
     chapter_id = factory.SelfAttribute("chapter.id_")
     manuscript = factory.SubFactory(ManuscriptFactory)
+
+
+class UncertainFragmentAttestationFactory(factory.Factory):
+    class Meta:
+        model = UncertainFragmentAttestation
+
+    class Params:
+        chapter = factory.SubFactory(ChapterFactory)
+
+    text = factory.SubFactory(TextFactory)
+    chapter_id = factory.SelfAttribute("chapter.id_")
