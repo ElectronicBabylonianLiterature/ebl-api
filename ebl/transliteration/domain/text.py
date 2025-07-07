@@ -15,6 +15,7 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     SealAtLine,
 )
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.transliteration_error import (
     ErrorAnnotation,
     ExtentLabelError,
@@ -25,6 +26,14 @@ from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
 from ebl.transliteration.domain.word_tokens import AbstractWord
+
+
+def set_id(token: Token, count: Iterator[int]) -> Token:
+    return (
+        token.set_id(f"Word-{next(count)}")
+        if (isinstance(token, AbstractWord) and token.id_ is None)
+        else token
+    )
 
 
 class LabelsValidator:
@@ -223,14 +232,7 @@ class Text:
             return (
                 attr.evolve(
                     line,
-                    content=tuple(
-                        (
-                            token.set_id(f"Word-{next(word_id)}")
-                            if isinstance(token, AbstractWord) and token.id_ is None
-                            else token
-                        )
-                        for token in line.content
-                    ),
+                    content=tuple(set_id(token, word_id) for token in line.content),
                 )
                 if isinstance(line, TextLine)
                 else line
