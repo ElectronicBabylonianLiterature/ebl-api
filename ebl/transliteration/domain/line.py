@@ -3,6 +3,7 @@ from typing import Sequence, Tuple, TypeVar
 
 import attr
 
+from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.transliteration.domain.alignment import AlignmentToken
 from ebl.transliteration.domain.atf import Atf
@@ -26,6 +27,9 @@ class Line(ABC):
         return f"{type(self).__name__}⁞{self.atf}⁞{hash(self)}"
 
     def update_lemmatization(self: L, lemmatization: Sequence[LemmatizationToken]) -> L:
+        return self
+
+    def update_lemma_annotation(self: L, line_annotation: LineLemmaAnnotation) -> L:
         return self
 
     def update_alignment(self: L, alignment: Sequence[AlignmentToken]) -> L:

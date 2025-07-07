@@ -22,6 +22,7 @@ from ebl.tests.factories.corpus import (
     TextFactory,
     ChapterQueryColophonLinesFactory,
     ManuscriptAttestationFactory,
+    UncertainFragmentAttestationFactory,
 )
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.genre import Genre
@@ -453,7 +454,7 @@ def test_query_manuscripts_with_joins_by_chapter(database, text_repository) -> N
     ]
 
 
-def test_query_corpus_by_manuscript(database, text_repository) -> None:
+def test_query_corpus_by_manuscripts(database, text_repository) -> None:
     when_text_in_collection(database, text=attr.evolve(TEXT, references=()))
     when_chapter_in_collection(database)
 
@@ -463,9 +464,46 @@ def test_query_corpus_by_manuscript(database, text_repository) -> None:
         manuscript=CHAPTER.manuscripts[0],
     )
 
-    assert text_repository.query_corpus_by_manuscript(
+    assert text_repository.query_corpus_by_manuscripts(
         [CHAPTER.manuscripts[0].museum_number]
     ) == [expected_manuscript_attestation]
+
+
+def test_query_corpus_by_uncertain_fragments(
+    database, text_repository, fragment_repository
+) -> None:
+    text_with_uncertain_fragment = attr.evolve(
+        TEXT,
+        chapters=(
+            attr.evolve(
+                TEXT.chapters[0],
+                uncertain_fragments=(UncertainFragment(UNCERTAIN_FRAGMENT),),
+            ),
+        ),
+        references=(),
+    )
+    chapter_with_uncertain_fragment = attr.evolve(
+        CHAPTER, uncertain_fragments=(UNCERTAIN_FRAGMENT,)
+    )
+    when_text_in_collection(database, text_with_uncertain_fragment)
+    when_chapter_in_collection(database, chapter_with_uncertain_fragment)
+    cleaned_text = attr.evolve(
+        text_with_uncertain_fragment,
+        chapters=(
+            attr.evolve(
+                text_with_uncertain_fragment.chapters[0],
+                uncertain_fragments=(),
+            ),
+        ),
+    )
+    expected_uncertain_fragment_attestation = UncertainFragmentAttestationFactory.build(
+        text=cleaned_text,
+        chapter_id=chapter_with_uncertain_fragment.id_,
+    )
+    result = text_repository.query_corpus_by_uncertain_fragments(
+        [chapter_with_uncertain_fragment.uncertain_fragments[0]]
+    )
+    assert result == [expected_uncertain_fragment_attestation]
 
 
 def test_get_sign_data(database, text_repository):

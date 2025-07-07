@@ -1,6 +1,7 @@
 import datetime
 import io
 import json
+import os
 import uuid
 from pathlib import Path
 from typing import Any, Mapping, Sequence, Union
@@ -16,7 +17,7 @@ from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
 from marshmallow import EXCLUDE
 from pymongo.database import Database
-from pymongo_inmemory import MongoClient
+from pymongo import MongoClient
 
 import ebl.app
 import ebl.context
@@ -95,7 +96,12 @@ from ebl.tests.factories.archaeology import FindspotFactory, FINDSPOT_COUNT
 
 @pytest.fixture(scope="session")
 def mongo_client() -> MongoClient:
-    return MongoClient()
+    if os.getenv("CI") == "true":
+        return MongoClient(os.environ["MONGODB_URI"])
+    else:
+        from pymongo_inmemory import MongoClient as InMemoryMongoClient
+
+        return InMemoryMongoClient()
 
 
 @pytest.fixture
