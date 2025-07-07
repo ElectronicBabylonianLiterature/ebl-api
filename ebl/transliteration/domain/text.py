@@ -226,7 +226,7 @@ class Text:
                     content=tuple(
                         (
                             token.set_id(f"Word-{next(word_id)}")
-                            if isinstance(token, AbstractWord)
+                            if isinstance(token, AbstractWord) and token.id_ is None
                             else token
                         )
                         for token in line.content

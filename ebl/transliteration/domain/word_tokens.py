@@ -122,7 +122,7 @@ class AbstractWord(Token):
         return same_type and same_value
 
     def set_id(self: A, id_: str) -> A:
-        return attr.evolve(self, id_=id_) if self.id_ is None else self
+        return attr.evolve(self, id_=id_)
 
 
 DEFAULT_LANGUAGE: Language = Language.AKKADIAN
