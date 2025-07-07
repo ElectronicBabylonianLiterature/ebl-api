@@ -11,6 +11,7 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.io.fragments.importer import (
     create_sort_index,
     load_collection,
+    set_word_ids,
     validate,
     load_data,
     validate_id,
@@ -22,6 +23,7 @@ from ebl.mongo_collection import MongoCollection
 
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
 MOCKFILE = "mock.json"
@@ -207,3 +209,18 @@ def test_update_sort_index(fragment, fragment_repository, fragments_collection):
     assert [("_sortKey", pymongo.ASCENDING)] in [
         index["key"] for index in fragments_collection.index_information().values()
     ]
+
+
+def test_set_word_ids(valid_fragment_data):
+    data_with_ids = set_word_ids(valid_fragment_data)
+    fragment = FragmentSchema().load(data_with_ids)
+
+    count = 1
+
+    for line in fragment.text.text_lines:
+        for word in line.content:
+            if isinstance(word, AbstractWord):
+                assert word.id_ == f"Word-{count}"
+                count += 1
+            else:
+                assert not hasattr(word, "id_")
