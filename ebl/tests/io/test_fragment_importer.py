@@ -214,13 +214,12 @@ def test_update_sort_index(fragment, fragment_repository, fragments_collection):
 def test_set_word_ids(valid_fragment_data):
     data_with_ids = set_word_ids(valid_fragment_data)
     fragment = FragmentSchema().load(data_with_ids)
+    ids = [
+        word.id_
+        for line in fragment.text.text_lines
+        for word in line.content
+        if hasattr(word, "id_")
+    ]
+    expected_ids = [f"Word-{index+1}" for index in range(len(ids))]
 
-    count = 1
-
-    for line in fragment.text.text_lines:
-        for word in line.content:
-            if isinstance(word, AbstractWord):
-                assert word.id_ == f"Word-{count}"
-                count += 1
-            else:
-                assert not hasattr(word, "id_")
+    assert ids == expected_ids
