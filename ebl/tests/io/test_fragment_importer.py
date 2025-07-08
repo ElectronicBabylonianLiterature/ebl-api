@@ -23,7 +23,6 @@ from ebl.mongo_collection import MongoCollection
 
 from ebl.tests.factories.fragment import LemmatizedFragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
 MOCKFILE = "mock.json"
