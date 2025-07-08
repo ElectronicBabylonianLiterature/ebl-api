@@ -1,19 +1,10 @@
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Optional
-from dataclasses import dataclass
-from ebl.atf_importer.application.lemma_lookup import LemmaLookup
+from typing import Any, Dict, List, Tuple
+from ebl.atf_importer.application.lemma_lookup import LemmaLineHandler
 from ebl.atf_importer.application.glossary_parser import GlossaryParserData
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
-from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
-from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.atf_importer.application.logger import Logger
-
-
-@dataclass
-class LineContext:
-    last_transliteration: List[str]
-    last_transliteration_line: str
-    last_alter_lem_line_at: List[int]
+from ebl.atf_importer.domain.line_context import LineContext
 
 
 # ToDo: Continue from here.
@@ -27,13 +18,11 @@ class EblLinesGetter:
         config: AtfImporterConfigData,
         logger: Logger,
         glossary_data: GlossaryParserData,
-        # ToDo: Remove `self.test_lemmas`.
-        test_lemmas: Optional[List] = None,
     ):
         self.logger = logger
-        self.lemmalookup = LemmaLookup(database, config, logger, glossary_data)
-        # ToDo: Remove `self.test_lemmas`.
-        self.test_lemmas = test_lemmas
+        self.lemma_line_handler = LemmaLineHandler(
+            database, config, logger, glossary_data
+        )
 
     def convert_to_ebl_lines(
         self,
@@ -69,7 +58,9 @@ class EblLinesGetter:
         elif c_type == "text_line":
             context = self._handle_text_line(line, result, context)
         elif c_type == "lem_line":
-            result = self._handle_lem_line(line, result, filename, context)
+            result = self.lemma_line_handler.handle_lem_line(
+                line, result, filename, context
+            )
         else:
             result["transliteration"].append(line["serialized"])
             result["lemmatization"].append(line["c_line"])
@@ -91,128 +82,6 @@ class EblLinesGetter:
         context.last_alter_lem_line_at = line["c_alter_lem_line_at"]
         result["transliteration"].append(context.last_transliteration_line)
         return context
-
-    def _handle_lem_line(
-        self,
-        line: Dict[str, Any],
-        result: defaultdict,
-        filename: str,
-        context: LineContext,
-    ) -> defaultdict:
-        if not context.last_transliteration:
-            self.logger.warning(
-                f"Lemmatization line without preceding text line in {filename}"
-            )
-            return result
-
-        # ToDo: Remove `self.test_lemmas`.
-        # Change test logic to actual db query or mocking
-        all_unique_lemmas = (
-            self.test_lemmas
-            if self.test_lemmas
-            else self._get_all_unique_lemmas(line, filename, context)
-        )
-        result["all_unique_lemmas"] += all_unique_lemmas
-        result["last_transliteration"] = context.last_transliteration
-        lemma_line = self._create_lemma_line(
-            context.last_transliteration,
-            all_unique_lemmas,
-            context.last_transliteration_line,
-        )
-        result["lemmatization"].append(tuple(lemma_line))
-        self._log_line(filename, context)
-        return result
-
-    def _get_all_unique_lemmas(
-        self,
-        line: Dict[str, Any],
-        filename: str,
-        context: LineContext,
-    ) -> List:
-        all_unique_lemmas = []
-        for oracc_lemma_tupel in line["c_array"]:
-            all_unique_lemmas = self._get_ebl_lemmas(
-                oracc_lemma_tupel, all_unique_lemmas, filename
-            )
-        return self._add_placeholders_to_lemmas(
-            all_unique_lemmas, context.last_alter_lem_line_at
-        )
-
-    def _add_placeholders_to_lemmas(
-        self, all_unique_lemmas: List, last_alter_lem_line_at: List[int]
-    ):
-        for alter_pos in last_alter_lem_line_at:
-            self.logger.warning(
-                f"Adding placeholder to lemma line at position:{str(alter_pos)}"
-            )
-            all_unique_lemmas.insert(alter_pos, [])
-        return all_unique_lemmas
-
-    def _get_ebl_lemmas(
-        self,
-        oracc_lemma_tupel: Tuple[str, str, str],
-        all_unique_lemmas: List,
-        filename: str,
-    ) -> List:
-        lemma, guideword, pos_tag = oracc_lemma_tupel
-        db_entries = self._lookup_lemma(lemma, guideword, pos_tag)
-        if db_entries:
-            all_unique_lemmas.extend(db_entries)
-        else:
-            self.logger.warning(f"Lemma not found: {lemma} in {filename}")
-        return all_unique_lemmas
-
-    def _lookup_lemma(self, lemma: str, guideword: str, pos_tag: str):
-        return self.lemmalookup.lookup_lemma(lemma, guideword, pos_tag)
-
-    def _create_lemma_line(
-        self,
-        last_transliteration: List[str],
-        all_unique_lemmas: List,
-        last_transliteration_line: str,
-    ) -> List:
-        if len(last_transliteration) != len(all_unique_lemmas):
-            self._log_transliteration_error(last_transliteration_line)
-            return []
-
-        oracc_word_ebl_lemmas = self._map_lemmas_to_indices(
-            last_transliteration, all_unique_lemmas
-        )
-        return self._generate_lemma_line(
-            last_transliteration_line, oracc_word_ebl_lemmas
-        )
-
-    def _log_transliteration_error(self, last_transliteration_line: str) -> None:
-        self.logger.error(
-            "Transliteration and Lemmatization don't have equal length:"
-            f"\n{str(last_transliteration_line)}",
-            "error_lines",
-        )
-
-    def _map_lemmas_to_indices(
-        self, last_transliteration: List[str], all_unique_lemmas: List
-    ) -> dict:
-        oracc_word_ebl_lemmas = {}
-        for index in range(len(last_transliteration)):
-            oracc_word_ebl_lemmas[index] = all_unique_lemmas[index]
-        return oracc_word_ebl_lemmas
-
-    def _generate_lemma_line(
-        self, last_transliteration_line: str, oracc_word_ebl_lemmas: dict
-    ) -> List:
-        ebl_lines = parse_atf_lark(
-            last_transliteration_line
-        )  # ToDo: check! this might be an issue
-        lemma_line = []
-        word_cnt = 0
-        for token in ebl_lines.lines[0].content:
-            unique_lemma = oracc_word_ebl_lemmas.get(word_cnt, [])
-            if unique_lemma:
-                lemma_line.append(LemmatizationToken(token.value, tuple(unique_lemma)))
-                word_cnt += 1
-            else:
-                lemma_line.append(LemmatizationToken(token.value, None))
-        return lemma_line
 
     def _log_line(self, filename: str, context: LineContext) -> None:
         self.logger.debug(

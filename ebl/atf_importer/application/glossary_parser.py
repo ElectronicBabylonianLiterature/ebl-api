@@ -1,3 +1,4 @@
+import os
 import re
 from typing import Dict, List, Tuple, Optional, Iterator, TypedDict
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
@@ -24,7 +25,18 @@ class GlossaryParser:
             "lemposgw_cfgw": self.lemposgw_cfgw,
         }
 
-    def parse(self, file: Iterator[str]) -> GlossaryParserData:
+    def parse_glossaries(
+        self,
+        directory_path: str,
+    ) -> GlossaryParserData:
+        for filename in os.listdir(directory_path):
+            if filename.endswith(".glo"):
+                file_path = os.path.join(directory_path, filename)
+                with open(file_path, "r", encoding="utf8") as file:
+                    self.parse(file)
+        return self.data
+
+    def parse(self, file: Iterator[str]) -> None:
         current_entry: Dict[str, str] = {}
         lemmas: List[str] = []
         for line in file:
@@ -35,7 +47,6 @@ class GlossaryParser:
                 lemmas = self._handle_form(line, current_entry, lemmas)
             elif line.startswith("@sense"):
                 self._handle_sense(line, lemmas, current_entry)
-        return self.data
 
     def _handle_entry(
         self, line: str, lemmas: List[str]

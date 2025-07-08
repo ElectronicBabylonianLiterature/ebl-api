@@ -81,11 +81,11 @@
     {
       "flags": [
         "-g",
-        "--glossary"
+        "--glodir"
       ],
       "kwargs": {
         "required": true,
-        "help": "Path to the glossary file."
+        "help": "Path to the glossaries' (.glo) directory."
       }
     },
     {

@@ -18,6 +18,8 @@ from ebl.atf_importer.application.logger import Logger, LoggerUtil
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
+from ebl.atf_importer.application.lemma_lookup import LemmaLookup
+from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 
 
 class LegacyAtfConverter:
@@ -33,13 +35,12 @@ class LegacyAtfConverter:
     line_transformer = LineTransformer()
     skip_next_lem_line = False  # ToDo: Check & implement, if needed
 
-    def __init__(self, logger: Logger):
+    def __init__(self, database, config: AtfImporterConfigData, logger: Logger, glossary):
         self.logger = logger
         self.preprocessor = AtfPreprocessor(self.logger)
+        self.lemma_lookup = LemmaLookup(database, config, logger, glossary)
 
-    def convert_lines_from_string(
-        self, text: str
-    ) -> Tuple[List[Dict[str, Any]], Text]:
+    def convert_lines_from_string(self, text: str) -> Tuple[List[Dict[str, Any]], Text]:
         return self.atf_to_text(text.split("\n"))
 
     def convert_lines_from_path(
@@ -92,6 +93,12 @@ class LegacyAtfConverter:
         self, atf: str, tree: Tree
     ) -> Tuple[Any, Optional[List[Any]], Optional[str], Optional[List[Any]]]:
         if tree.data == "lem_line":
+            # ToDo: Continue from here. Correctly handle lemmatization
+            print("!!!!", self._convert_lem_line(atf, tree))
+            for lemma, guideword, pos_tag in self._convert_lem_line(atf, tree)[1][0]:
+                print(lemma, guideword, pos_tag)
+                print(self.lemma_lookup.lookup_lemma(lemma, guideword[0], pos_tag))
+            input()
             return self._convert_lem_line(atf, tree)
         else:
             self._log_line(atf, tree)
@@ -104,8 +111,9 @@ class LegacyAtfConverter:
     def _convert_lem_line(
         self, atf: str, tree: Tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
+        # ToDo: Continue from here. Correctly handle lemmatization
         if self.skip_next_lem_line:
-            # ToDo: restore logic (flag if previous is None)
+            # ToDo: Perhaps restore logic (flag if previous is None)
             self.logger.warning("Skipping lem line due to previous flag.")
             self.skip_next_lem_line = False
             return (None, None, "lem_line", [])

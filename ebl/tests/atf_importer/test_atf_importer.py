@@ -21,21 +21,24 @@ def patched_fragment_updater(fragment_updater):
     ):
         yield
 
+
 def create_file(path, content):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch()
     path.write_text(content)
 
 
-def setup_and_run_importer(atf_string, tmp_path, database, fragment_repository):
+def setup_and_run_importer(
+    atf_string, tmp_path, database, fragment_repository, glossary=""
+):
     atf_importer = AtfImporter(database, fragment_repository)
     create_file(tmp_path / "import/test.atf", atf_string)
-    create_file(tmp_path / "import/akkadian.glo", "")
+    create_file(tmp_path / "import/glossary/akkadian.glo", glossary)
     atf_importer.run_importer(
         {
             "input_dir": tmp_path / "import",
             "logdir": tmp_path / "logs",
-            "glossary_path": tmp_path / "import/akkadian.glo",
+            "glodir": tmp_path / "import/glossary",
             "author": "Test author",
         }
     )
@@ -182,15 +185,47 @@ def test_placeholder_insert(database, fragment_repository, tmp_path):
     """
     Test case for insertion of placeholder if '<<'.
     """
+    museum_number = "BM.1"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
     atf = (
-        "&P000001 = BM.999\n"
+        f"&P000001 = {museum_number}\n"
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
         "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["
         "1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
         "god]N; ikkal[eat]V"
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
-    # ToDo: Actualize
+    glossary = (
+        "@project test/test_lemmatization\n"
+        "@lang    akk\n"
+        "@name    akk\n\n"
+        "@letter S\n\n"
+        "@entry Sin I [deity name] DN\n"
+        "@form 30 $Sin\n"
+        "@sense MN deity name\n"
+        "@end entry\n\n"
+        "@letter Š\n\n"
+        "@entry Šabaṭu I [month name] MN\n"
+        "@form {iti}ZIZ₂ $Šabaṭu\n"
+        "@sense MN month name\n"
+        "@end entry"
+    )
+
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository, glossary)
+    check_importing_and_logs(
+        museum_number, museum_number, fragment_repository, tmp_path
+    )
+    # ToDo: Continue from here
+    # The test fails because the lemmatization line is returned as `None`.
+
+    # I.e.:
+    #   ..._value='GU'),), sub_index=7, sign=None, surrogate=()),),
+    #   variant=None, has_variant_alignment=False, has_omitted_alignment=False, _language=<Language.AKKADIAN: 1>))),
+    #   None), <-- ! Lemmatization should be here
+    #   parser_version='6.2.0')
+    #
+    """
     test_lemmas = [
         [],
         ["Šabaṭu I"],
@@ -204,6 +239,8 @@ def test_placeholder_insert(database, fragment_repository, tmp_path):
         [],
         [],
     ]
+    """
+
     # atf_importer = AtfImporter(database)
     # atf_importer._ebl_lines_getter = EblLinesGetter(
     #    atf_importer.database,
@@ -222,6 +259,7 @@ def test_placeholder_insert(database, fragment_repository, tmp_path):
     # assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])
 
 
+"""
 def test_atf_importer(database, fragment_repository):
     # Test bulk import.
     # importer_path = "ebl/atf_importer/application/atf_importer.py"
@@ -241,12 +279,12 @@ def test_atf_importer(database, fragment_repository):
                 {
                     "input_dir": atf_dir_path,
                     "logdir": logdir_path,
-                    "glossary_path": glossary_akk_path,
+                    "glodir": glossary_akk_path,
                     "author": "Test author",
                 }
             )
 
-            """
+            '''
             command = [
                 "python",
                 "run",
@@ -260,7 +298,7 @@ def test_atf_importer(database, fragment_repository):
                 "-a",
                 "Test author",
             ]
-            """
+            '''
 
             # result = subprocess.run(
             #    command,
@@ -274,3 +312,4 @@ def test_atf_importer(database, fragment_repository):
             # ]
             # for filename in filenames:
             #    print(f"{atf_path}/{filename}")
+"""

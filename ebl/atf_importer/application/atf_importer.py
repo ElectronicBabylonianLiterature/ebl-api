@@ -5,7 +5,6 @@ from pymongo import MongoClient
 from typing import Any, Dict, List, TypedDict
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
-    GlossaryParserData,
 )
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
@@ -18,7 +17,7 @@ from ebl.transliteration.domain.text import Text
 class AtfImporterArgs(TypedDict):
     input_dir: str
     logdir: str
-    glossary_path: str
+    glodir: str
     author: str
 
 
@@ -54,13 +53,14 @@ class AtfImporter:
         self.database_importer = DatabaseImporter(
             self.database, self.fragment_repository, self.logger, self.username
         )
+        self.glossary = self.glossary_parser.parse_glossaries(args["glodir"])
         self.ebl_lines_getter = EblLinesGetter(
             self.database,
             self.config,
             self.logger,
-            self.parse_glossary(args["glossary_path"]),  # ToDo: Allow multiple paths
+            self.glossary,
         )
-        self.atf_converter = LegacyAtfConverter(self.logger)
+        self.atf_converter = LegacyAtfConverter(self.database, self.config, self.logger, self.glossary)
 
     def run_importer(self, args: AtfImporterArgs) -> None:
         self.setup_importer(args)
@@ -96,13 +96,6 @@ class AtfImporter:
         # except Exception as e:
         #    self.logger.exception(f"Error while importing into database: {e}")
 
-    def parse_glossary(
-        self,
-        path: str,
-    ) -> GlossaryParserData:
-        with open(path, "r", encoding="utf8") as file:
-            return self.glossary_parser.parse(file)
-
     def cli(self) -> None:
         parser = argparse.ArgumentParser(
             description="Converts ATF files to eBL-ATF standard."
@@ -116,7 +109,7 @@ class AtfImporter:
             {
                 "input_dir": args.input,
                 "logdir": args.logdir,
-                "glossary_path": args.glossary,
+                "glodir": args.glodir,
                 "author": args.author,
             }
         )
