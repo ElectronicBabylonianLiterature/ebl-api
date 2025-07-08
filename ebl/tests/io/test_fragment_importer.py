@@ -211,9 +211,10 @@ def test_update_sort_index(fragment, fragment_repository, fragments_collection):
     ]
 
 
-def test_set_word_ids(valid_fragment_data):
+def test_set_word_ids(fragment, valid_fragment_data):
     data_with_ids = set_word_ids(valid_fragment_data)
     fragment = FragmentSchema().load(data_with_ids)
+    fragment_with_ids = fragment.set_text(fragment.text.set_token_ids())
     ids = [
         word.id_
         for line in fragment.text.text_lines
@@ -223,3 +224,5 @@ def test_set_word_ids(valid_fragment_data):
     expected_ids = [f"Word-{index+1}" for index in range(len(ids))]
 
     assert ids == expected_ids
+    assert FragmentSchema().load(data_with_ids) == fragment_with_ids
+    assert FragmentSchema().dump(fragment_with_ids) == data_with_ids
