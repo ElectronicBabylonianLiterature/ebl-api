@@ -132,7 +132,7 @@ def set_word_ids(fragment: dict) -> dict:
         for word in line["content"]:
             if word.get("type") in WORD_TYPES:
                 word["id"] = f"Word-{next(word_id)}"
-                content.append(word)
+            content.append(word)
 
         return {**line, "content": content}
 
