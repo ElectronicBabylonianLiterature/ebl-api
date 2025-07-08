@@ -1,0 +1,102 @@
+{
+  "STYLES": {
+    "0": "Oracc ATF",
+    "1": "CDLI ATF"
+  },
+  "POS_TAGS": [
+    "REL",
+    "DET",
+    "CNJ",
+    "MOD",
+    "PRP",
+    "SBJ",
+    "AJ",
+    "AV",
+    "NU",
+    "DP",
+    "IP",
+    "PP",
+    "RP",
+    "XP",
+    "QP",
+    "DN",
+    "AN",
+    "CN",
+    "EN",
+    "FN",
+    "GN",
+    "LN",
+    "MN",
+    "ON",
+    "PN",
+    "QN",
+    "RN",
+    "SN",
+    "TN",
+    "WN",
+    "YN",
+    "N",
+    "V",
+    "J"
+  ],
+  "NOUN_POS_TAGS": [
+    "AN",
+    "CN",
+    "DN",
+    "EN",
+    "FN",
+    "GN",
+    "LN",
+    "MN",
+    "ON",
+    "PN",
+    "QN",
+    "RN",
+    "SN",
+    "TN",
+    "WN",
+    "YN"
+  ],
+  "CLI_ARGS": [
+    {
+      "flags": [
+        "-i",
+        "--input"
+      ],
+      "kwargs": {
+        "required": true,
+        "help": "Path of the input directory."
+      }
+    },
+    {
+      "flags": [
+        "-l",
+        "--logdir"
+      ],
+      "kwargs": {
+        "required": true,
+        "help": "Path of the log files directory."
+      }
+    },
+    {
+      "flags": [
+        "-g",
+        "--glodir"
+      ],
+      "kwargs": {
+        "required": true,
+        "help": "Path to the glossaries' (.glo) directory."
+      }
+    },
+    {
+      "flags": [
+        "-a",
+        "--author"
+      ],
+      "kwargs": {
+        "required": false,
+        "help": "Name of the author of the imported fragments."
+      }
+    }
+  ]
+}

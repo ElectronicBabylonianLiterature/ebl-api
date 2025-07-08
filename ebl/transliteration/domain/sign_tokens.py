@@ -222,6 +222,9 @@ class Number(NamedSign):
 class Grapheme(AbstractSign):
     name: SignName
 
+    def __str__(self) -> str:
+        return self.value
+
     @property
     def value(self) -> str:
         modifiers = "".join(self.modifiers)

@@ -5,7 +5,7 @@ from typing import cast, Sequence, Tuple, List
 from enum import Enum
 from collections import OrderedDict
 from ebl.errors import DataError
-from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import TokenVisitor
 
@@ -148,7 +148,9 @@ class TransliterationQueryText(TransliterationQuery):
         return self.visitor.result
 
     def _parse(self, transliteration: str) -> TextLine:
-        from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+        from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
+            PARSE_ERRORS,
+        )
 
         transliteration = transliteration.strip(" -.")
         try:
