@@ -223,6 +223,6 @@ def test_set_word_ids(fragment, valid_fragment_data):
     ]
     expected_ids = [f"Word-{index+1}" for index in range(len(ids))]
 
-    assert ids == expected_ids
+    assert ids and ids == expected_ids
     assert FragmentSchema().load(data_with_ids) == fragment_with_ids
     assert FragmentSchema().dump(fragment_with_ids) == data_with_ids
