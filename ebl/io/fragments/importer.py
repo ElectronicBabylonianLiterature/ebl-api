@@ -15,7 +15,7 @@ from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
 import datetime
 
-WORD_TYPES = {"Word", "AkkadianWord", "GreekWord"}
+WORD_TYPES = {"Word", "AkkadianWord", "GreekWord", "LoneDeterminative"}
 
 
 def _load_json(path: str):

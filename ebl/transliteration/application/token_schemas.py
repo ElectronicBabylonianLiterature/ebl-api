@@ -403,6 +403,7 @@ class LoneDeterminativeSchema(BaseWordSchema):
             data["variant"],
             data["has_variant_alignment"],
             data["has_omitted_alignment"],
+            data.get("id_"),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
