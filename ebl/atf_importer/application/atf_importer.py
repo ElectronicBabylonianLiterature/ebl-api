@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from typing import Any, Dict, List, TypedDict
 from ebl.atf_importer.application.glossary_parser import (
     GlossaryParser,
+    GlossaryParserData,
 )
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
@@ -24,15 +25,19 @@ class AtfImporterArgs(TypedDict):
 class AtfImporter:
     logger: Any = None
     database_importer: Any = None
+    glossary: GlossaryParserData = {
+        "lemma_guideword_pos__citationform": {},
+        "forms_senses": {},
+        "lemma_pos_guideword__citationform_guideword": {},
+    }
 
-    def __init__(self, database, fragment_repository) -> None:
+    def __init__(self, database) -> None:
         self.database = database
         self.username: str = ""
         self.config = AtfImporterConfig().config_data
         self.atf_converter = None
         self.glossary_parser = GlossaryParser(self.config)
         self.ebl_lines_getter = None
-        self.fragment_repository = fragment_repository
 
     def convert_to_ebl_lines(
         # ToDo: Continue from here.
@@ -51,7 +56,7 @@ class AtfImporter:
         self.username = args["author"]
         self.logger = Logger(args["logdir"])
         self.database_importer = DatabaseImporter(
-            self.database, self.fragment_repository, self.logger, self.username
+            self.database, self.logger, self.username
         )
         self.glossary = self.glossary_parser.parse_glossaries(args["glodir"])
         self.ebl_lines_getter = EblLinesGetter(
@@ -60,7 +65,9 @@ class AtfImporter:
             self.logger,
             self.glossary,
         )
-        self.atf_converter = LegacyAtfConverter(self.database, self.config, self.logger, self.glossary)
+        self.atf_converter = LegacyAtfConverter(
+            self.database, self.config, self.logger, self.glossary
+        )
 
     def run_importer(self, args: AtfImporterArgs) -> None:
         self.setup_importer(args)

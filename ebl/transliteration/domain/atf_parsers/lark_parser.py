@@ -181,6 +181,7 @@ def parse_atf_lark(atf_: str) -> Text:
         errors = [error for line, error in pairs if error is not None]
         if any(errors):
             raise TransliterationError(errors)
+
     lines = atf_.split("\n")
     lines = list(dropwhile(lambda line: line == "", reversed(lines)))
     lines.reverse()

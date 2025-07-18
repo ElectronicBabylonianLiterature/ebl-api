@@ -12,7 +12,6 @@ from ebl.users.domain.user import AtfImporterUser
 from ebl.atf_importer.application.logger import Logger
 from ebl.errors import DataError
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.errors import NotFoundError
 
 
@@ -20,7 +19,6 @@ class DatabaseImporter:
     def __init__(
         self,
         database,
-        fragment_repository: FragmentRepository,
         logger: Logger,
         username: str,
     ):
@@ -28,7 +26,7 @@ class DatabaseImporter:
         self.logger = logger
         self.user = AtfImporterUser(username)
         context = create_context()
-        self.fragment_repository = fragment_repository
+        self.fragment_repository = context.fragment_repository
         self.transliteration_factory: TransliterationUpdateFactory = (
             context.get_transliteration_update_factory()
         )
@@ -84,7 +82,7 @@ class DatabaseImporter:
             return answers_dict[answer]
         else:
             print(f"'{answer}' is an invalid answer. Please choose 'Y' or 'N'")
-            return self._overwrite_edition(museum_number)
+            return self._edition_overwrite_consent(museum_number)
 
     def _import(
         self, ebl_lines: Dict[str, List], text: Text, museum_number: str, filename: str
@@ -117,9 +115,7 @@ class DatabaseImporter:
             # , {"_id": 0, "text.lines.0": 1}
         except NotFoundError:
             return False, False
-        has_edition = bool(
-            result.text.lines
-        )
+        has_edition = bool(result.text.lines)
         return True, has_edition
 
     def _insert_transliterations(
@@ -222,7 +218,7 @@ class MuseumNumberGetter:
 class LemmatizationGetter:
     # ToDo: Move to legacy lemmatization, if possible
     def __init__(self, updater: FragmentUpdater, user: AtfImporterUser) -> None:
-        self.updater: updater
+        self.updater = updater
         self.user = user
 
     def insert_lemmatization(

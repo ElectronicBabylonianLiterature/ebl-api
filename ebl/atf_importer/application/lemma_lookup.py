@@ -32,15 +32,13 @@ class LemmaLookup:
         return [{"_id": lemma_id} for lemma_id in unique_lemmas]
 
     def _get_unique_lemmas(self, lemma: str, guideword: str, pos_tag: str) -> List[str]:
-        if lemma.startswith("+"):
-            return self._lookup_prefixed_lemma(lemma[1:], guideword)
-        else:
-            unique_lemmas = self._lookup_standard_lemma(lemma, guideword, pos_tag)
-            if not unique_lemmas and pos_tag in self.config["NOUN_POS_TAGS"]:
-                return self._query_database(
-                    {"lemma_field": "oraccWords.lemma", "lemma_value": lemma}
-                )
-            return unique_lemmas
+        lemma = lemma.replace("ʾ", "'").strip("+")
+        unique_lemmas = self._lookup_standard_lemma(lemma, guideword, pos_tag)
+        if not unique_lemmas and pos_tag in self.config["NOUN_POS_TAGS"]:
+            return self._query_database(
+                {"lemma_field": "oraccWords.lemma", "lemma_value": lemma}
+            )
+        return unique_lemmas
 
     def _log_warning_if_no_lemmas(
         self, unique_lemmas: List[str], lemma: str, guideword: str
@@ -56,28 +54,17 @@ class LemmaLookup:
         guideword = guideword.strip().strip("[]")
         return guideword.split("//")[0] if "//" in guideword else guideword
 
-    def _lookup_prefixed_lemma(self, lemma: str, guideword: str) -> List[str]:
-        lemma = lemma.replace("ʾ", "'")
-        unique_lemmas = self._query_database(
-            {
-                "lemma_field": "oraccWords.lemma",
-                "lemma_value": lemma,
-                "guideword_field": "oraccWords.guideWord",
-                "guideword_value": guideword,
-            }
-        ) or self._query_multiple_sources(lemma, guideword)
-
-        return unique_lemmas
-
     def _lookup_standard_lemma(
         self, lemma: str, guideword: str, pos_tag: str
     ) -> List[str]:
         try:
-            citation_form, guideword = self.glossary_data["lemposgw_cfgw"][
-                lemma + pos_tag + guideword
-            ]
+            sense = self.glossary_data["forms_senses"][lemma]
+            key = f"{lemma}{pos_tag}{sense[0]}"
+            citation_form, guideword = self.glossary_data[
+                "lemma_pos_guideword__citationform_guideword"
+            ][key]
             guideword = self._clean_guideword(guideword)
-            unique_lemmas = self._query_sources(citation_form, guideword)
+            unique_lemmas = self._query_sources(lemma, guideword, citation_form)
             return unique_lemmas
         except KeyError:
             self.logger.warning(
@@ -93,8 +80,8 @@ class LemmaLookup:
         self, lemma: str, guideword: str, citation_form: str
     ) -> List[str]:
         lemma_guideword_pairs = [
-            ("forms.lemma", "guideWord", [lemma]),
-            ("lemma", "guideWord", [lemma]),
+            ("forms.lemma", "guideWord", lemma),
+            ("lemma", "guideWord", lemma),
             ("oraccWords.lemma", "oraccWords.guideWord", citation_form),
         ]
         unique_lemmas = []
@@ -107,19 +94,38 @@ class LemmaLookup:
                     "guideword_value": guideword,
                 }
             )
-        print("query_multiple_sources", unique_lemmas)
-        return unique_lemmas
+        if unique_lemmas == []:
+            for lemma_field, guideword_field, lemma_value in lemma_guideword_pairs:  # noqa: B007
+                unique_lemmas += self._query_database(
+                    {
+                        "lemma_field": lemma_field,
+                        "lemma_value": lemma_value,
+                    }
+                )
+        return list(set(unique_lemmas))
 
     def _query_database(self, args: Dict[str, Any]) -> List[str]:
-        query = self._build_query(args)
-        print("query_database", self._execute_query(query))
-        return self._execute_query(query)
-
-    def _build_query(self, args: Dict[str, Any]) -> Dict[str, Any]:
         query = {args["lemma_field"]: args["lemma_value"]}
         if self._has_guideword(args):
             query[args["guideword_field"]] = args["guideword_value"]
-        return query
+        # ToDo: Clean up
+        print(
+            "query_database",
+            query,
+            [
+                entry["_id"]
+                for entry in self.database.get_collection("words").aggregate(
+                    [{"$match": query}, {"$project": {"_id": 1}}]
+                )
+            ],
+        )
+        input()
+        return [
+            entry["_id"]
+            for entry in self.database.get_collection("words").aggregate(
+                [{"$match": query}, {"$project": {"_id": 1}}]
+            )
+        ]
 
     def _has_guideword(self, args: Dict[str, Any]) -> bool:
         return (
@@ -128,15 +134,6 @@ class LemmaLookup:
             and args["guideword_field"]
             and args["guideword_value"]
         )
-
-    def _execute_query(self, query: Dict[str, Any]) -> List[str]:
-        aggregation_pipeline = [{"$match": query}, {"$project": {"_id": 1}}]
-        return [
-            entry["_id"]
-            for entry in self.database.get_collection("words").aggregate(
-                aggregation_pipeline
-            )
-        ]
 
 
 class LemmaLineHandler:
@@ -170,7 +167,7 @@ class LemmaLineHandler:
             context.last_transliteration_line,
         )
         result["lemmatization"].append(tuple(lemma_line))
-        self._log_line(filename, context)
+        # self._log_line(filename, context)
         return result
 
     def _get_all_unique_lemmas(
@@ -204,9 +201,6 @@ class LemmaLineHandler:
         all_unique_lemmas: List,
         filename: str,
     ) -> List:
-        # ToDo: Clean up
-        print("oracc_lemma_tupel:", oracc_lemma_tupel)
-        input()
         lemma, guideword, pos_tag = oracc_lemma_tupel
         db_entries = self._lookup_lemma(lemma, guideword, pos_tag)
         if db_entries:
@@ -237,15 +231,10 @@ class LemmaLineHandler:
             "\noracc_word_ebl_lemmas:",
             all_unique_lemmas,
         )
-        # ToDo:
-        # Use this:
-        # last_transliteration.update_lemmatization(oracc_word_ebl_lemmas)
-        return last_transliteration
-
-        # ToDo: Remove:
-        # return self._generate_lemma_line(
-        #    last_transliteration_line, oracc_word_ebl_lemmas
-        # )
+        # ToDo: Check if this works
+        # Should use the deserialized `Line` object:
+        # Undefined attribute [16]: `List` has no attribute `update_lemmatization`.
+        return last_transliteration.update_lemmatization(oracc_word_ebl_lemmas)
 
     def _log_transliteration_error(self, last_transliteration_line: str) -> None:
         self.logger.error(

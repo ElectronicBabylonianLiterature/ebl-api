@@ -3,8 +3,22 @@ import json
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.logger import Logger
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
+from ebl.atf_importer.application.atf_importer_config import (
+    AtfImporterConfig,
+)
+from ebl.atf_importer.application.glossary_parser import (
+    GlossaryParserData,
+)
+
 
 logger = Logger("../logs")
+config = AtfImporterConfig().config_data
+glossary: GlossaryParserData = {
+    "lemma_guideword_pos__citationform": {},
+    "forms_senses": {},
+    "lemma_pos_guideword__citationform_guideword": {},
+}
+
 
 TRANSLATION_LEGACY_A = """@right?
 @column
@@ -150,15 +164,15 @@ LEGACY_GRAMMAR_SIGNS = [
         *LEGACY_GRAMMAR_SIGNS,
     ],
 )
-def test_text_lines(legacy_lines, ebl_lines):
-    legacy_atf_converter = LegacyAtfConverter(logger)
+def test_text_lines(database, legacy_lines, ebl_lines):
+    legacy_atf_converter = LegacyAtfConverter(database, config, logger, glossary)
     legacy_lines = legacy_atf_converter.convert_lines_from_string(legacy_lines)[1]
     expected_lines = parse_atf_lark(ebl_lines)
     assert legacy_lines == expected_lines
 
 
-def test_legacy_translation():
-    legacy_atf_converter = LegacyAtfConverter(logger)
+def test_legacy_translation(database):
+    legacy_atf_converter = LegacyAtfConverter(database, config, logger, glossary)
     translations = [
         TRANSLATION_LEGACY_A,
         TRANSLATION_LEGACY_B,
@@ -181,8 +195,8 @@ with open("ebl/tests/atf_importer/test_lemma_lines.json", "r") as file:
 
 
 @pytest.mark.parametrize("line", lemma_lines)
-def test_lemma_line_c_type_is_lem_line(line):
-    legacy_atf_converter = LegacyAtfConverter(logger)
+def test_lemma_line_c_type_is_lem_line(database, line):
+    legacy_atf_converter = LegacyAtfConverter(database, config, logger, glossary)
     result = legacy_atf_converter.convert_lines([line])[0]
 
     assert result["c_type"] == "lem_line"

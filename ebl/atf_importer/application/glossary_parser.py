@@ -5,24 +5,36 @@ from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigDa
 
 
 class GlossaryParserData(TypedDict):
-    lemgwpos_cf: Dict[str, str]
+    lemma_guideword_pos__citationform: Dict[str, str]
     forms_senses: Dict[str, List[str]]
-    lemposgw_cfgw: Dict[str, Tuple[str, str]]
+    lemma_pos_guideword__citationform_guideword: Dict[str, Tuple[str, str]]
 
 
 class GlossaryParser:
     def __init__(self, config: AtfImporterConfigData):
         self.config = config
-        self.lemgwpos_cf: Dict[str, str] = {}
+        self.lemma_guideword_pos__citationform: Dict[str, str] = {}
         self.forms_senses: Dict[str, List[str]] = {}
-        self.lemposgw_cfgw: Dict[str, Tuple[str, str]] = {}
+        self.lemma_pos_guideword__citationform_guideword: Dict[
+            str, Tuple[str, str]
+        ] = {}
 
     @property
     def data(self) -> GlossaryParserData:
+        print(
+            {
+                "lemma_guideword_pos__citationform": self.lemma_guideword_pos__citationform,
+                "forms_senses": self.forms_senses,
+                "lemma_pos_guideword__citationform_guideword": self.lemma_pos_guideword__citationform_guideword,
+            }
+        )
+        # ToDo: Clean up
+        # print('glossary')
+        # input()
         return {
-            "lemgwpos_cf": self.lemgwpos_cf,
+            "lemma_guideword_pos__citationform": self.lemma_guideword_pos__citationform,
             "forms_senses": self.forms_senses,
-            "lemposgw_cfgw": self.lemposgw_cfgw,
+            "lemma_pos_guideword__citationform_guideword": self.lemma_pos_guideword__citationform_guideword,
         }
 
     def parse_glossaries(
@@ -71,11 +83,11 @@ class GlossaryParser:
         entry = {}
         parts = line.split(" ", 2)
         if len(parts) > 1:
-            entry["cf"] = parts[1].replace("ʾ", "'").strip()
+            entry["citationform"] = parts[1].replace("ʾ", "'").strip()
             description = parts[2] if len(parts) > 2 else ""
             if match := re.search(r"\[(.*?)\] (.*)", description):
-                entry["gw"], entry["pos"] = match.groups()
-                entry["gw"] = entry["gw"].strip()
+                entry["guideword"], entry["pos"] = match.groups()
+                entry["guideword"] = entry["guideword"].strip()
                 entry["pos"] = entry["pos"].strip()
         return entry
 
@@ -84,12 +96,14 @@ class GlossaryParser:
         if len(parts) > 2:
             lemma = parts[2].lstrip("$").rstrip("\n")
             if (
-                "cf" in current_entry
-                and "gw" in current_entry
+                "citationform" in current_entry
+                and "guideword" in current_entry
                 and "pos" in current_entry
             ):
-                key = f"{lemma}{current_entry['pos']}{current_entry['gw']}"
-                self.lemgwpos_cf[key] = current_entry["cf"]
+                key = f"{lemma}{current_entry['pos']}{current_entry['guideword']}"
+                self.lemma_guideword_pos__citationform[key] = current_entry[
+                    "citationform"
+                ]
             return lemma
         return None
 
@@ -99,14 +113,16 @@ class GlossaryParser:
         pos_tag, sense = self._extract_pos_tag_and_sense(line)
         for lemma in lemmas:
             self._update_forms_senses(lemma, sense)
-            self._update_lemposgw_cfgw(lemma, pos_tag, sense, current_entry)
+            self._update_lemma_pos_guideword__citationform_guideword(
+                lemma, pos_tag, sense, current_entry
+            )
 
     def _extract_pos_tag_and_sense(
         self, line: str
     ) -> Tuple[Optional[str], Optional[str]]:
         pos_tags = list(set(line.split(" ", 2)).intersection(self.config["POS_TAGS"]))
         pos_tag = pos_tags[0] if pos_tags[0] else ""
-        sense = line.split(pos_tag)[1].rstrip("\n")
+        sense = line.split(pos_tag)[1].strip(" \n")
         return pos_tag, sense
 
     def _update_forms_senses(self, lemma: str, sense: Optional[str]) -> None:
@@ -116,13 +132,16 @@ class GlossaryParser:
             else:
                 self.forms_senses[lemma].append(sense)
 
-    def _update_lemposgw_cfgw(
+    def _update_lemma_pos_guideword__citationform_guideword(
         self,
         lemma: str,
         pos_tag: Optional[str],
         sense: Optional[str],
         current_entry: Dict[str, str],
     ) -> None:
-        if sense and "gw" in current_entry:
+        if sense and "guideword" in current_entry:
             sense_key = f"{lemma}{pos_tag}{sense}"
-            self.lemposgw_cfgw[sense_key] = (current_entry["cf"], current_entry["gw"])
+            self.lemma_pos_guideword__citationform_guideword[sense_key] = (
+                current_entry["citationform"],
+                current_entry["guideword"],
+            )

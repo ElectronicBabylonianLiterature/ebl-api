@@ -3,6 +3,7 @@ import zipfile
 import tempfile
 import builtins
 import pytest
+from pymongo import MongoClient
 from unittest.mock import patch
 from ebl.atf_importer.application.atf_importer import AtfImporter
 
@@ -31,7 +32,7 @@ def create_file(path, content):
 def setup_and_run_importer(
     atf_string, tmp_path, database, fragment_repository, glossary=""
 ):
-    atf_importer = AtfImporter(database, fragment_repository)
+    atf_importer = AtfImporter(database)
     create_file(tmp_path / "import/test.atf", atf_string)
     create_file(tmp_path / "import/glossary/akkadian.glo", glossary)
     atf_importer.run_importer(
@@ -75,7 +76,7 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
     test_id = museum_number
     atf = f"&P000001 = {test_id}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("BM.1")))
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, database)
     assert os.listdir(tmp_path / "logs") == [
         "imported_files.txt",
         "not_imported_files.txt",
@@ -181,34 +182,88 @@ def test_import_fragment_correct_parsing_errors(
 # - ask before updating existing edition
 
 
-def test_placeholder_insert(database, fragment_repository, tmp_path):
+def test_placeholder_insert(fragment_repository, tmp_path):
+    # ToDo: Rename test. Ensure that placeholders work correctly
     """
     Test case for insertion of placeholder if '<<'.
     """
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "BM.1"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
     atf = (
         f"&P000001 = {museum_number}\n"
-        "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.GE₆ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
-        "#lem: ina[in]PRP; Šabaṭu[1]MN; ūmu[day]N; n; attalli[eclipse]N; Sin["
-        "1]DN; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
+        "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.KU₁₀ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
+        "#lem: ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n; attalli[eclipse]N; Sîn["
+        "moon]N; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
         "god]N; ikkal[eat]V"
     )
     glossary = (
         "@project test/test_lemmatization\n"
         "@lang    akk\n"
         "@name    akk\n\n"
+        "@letter A\n\n"
+        "@entry adrūssu [darkly] AV\n"
+        "@form KAN₅-su $adrūssu\n"
+        "@sense AV darkly\n"
+        "@end entry\n\n"
+        "@entry akālu [eat] V\n"
+        "@form KU₂ $akālu\n"
+        "@sense V eat\n"
+        "@end entry\n\n"
+        "@entry antallû [eclipse] N\n"
+        "@form AN.KU₁₀ $antallû\n"
+        "@sense N eclipse\n"
+        "@end entry\n\n"
+        "@letter E\n\n"
+        "@entry erēbu [enter] V\n"
+        "@form KU₄ $erēbu\n"
+        "@sense V enter\n"
+        "@sense V fall\n"
+        "@end entry\n\n"
+        "@letter I\n\n"
+        "@entry ilu [god] N\n"
+        "@form DINGIR $ilu\n"
+        "@form DINGIR{MEŠ} $ilu\n"
+        "@sense N god\n"
+        "@end entry\n\n"
+        "@entry ina [in] PRP\n"
+        "@form ina $ina\n"
+        "@form in $ina\n"
+        "@sense PRP in\n"
+        "@sense PRP during\n"
+        "@sense PRP at (plus numeral)\n"
+        "@end entry\n\n"
         "@letter S\n\n"
-        "@entry Sin I [deity name] DN\n"
-        "@form 30 $Sin\n"
-        "@sense MN deity name\n"
+        "@entry Sîn [moon(-god)] N\n"
+        "@form sin $Sîn\n"
+        "@sense N moon\n"
         "@end entry\n\n"
         "@letter Š\n\n"
-        "@entry Šabaṭu I [month name] MN\n"
-        "@form {iti}ZIZ₂ $Šabaṭu\n"
-        "@sense MN month name\n"
+        "@entry Šabāṭu [Month XI] MN\n"
+        "@form ZIZ₂ %akk $Šabāṭu\n"
+        "@form {ITU}ZIZ₂ %akk $Šabāṭu\n"
+        "@sense MN Month XI\n"
+        "@end entry\n\n"
+        "@entry šakānu [put] V\n"
+        "@form GAR $šakānu\n"
+        "@form GAR-ma $šakānu\n"
+        "@sense V set\n"
+        "@sense V occur\n"
+        "@sense V put\n"
+        "@sense V place\n"
+        "@end entry\n\n"
+        "@letter U\n\n"
+        "@entry ūmu [day] N\n"
+        "@form U₄{ME} $ūmu\n"
+        "@form UD $ūmu\n"
+        "@form ME $ūmu\n"
+        "@form U₄ $ūmu\n"
+        "@sense N day\n"
+        "@sense N first appearance\n"
+        "@sense N daytime\n"
         "@end entry"
     )
 
@@ -259,11 +314,36 @@ def test_placeholder_insert(database, fragment_repository, tmp_path):
     # assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])
 
 
+@pytest.mark.skip(reason="heavy test")
+def test_atf_importer(fragment_repository):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    atf_importer = AtfImporter(database)
+    archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
+    with tempfile.TemporaryDirectory() as tempdir:
+        data_path = f"{tempdir}/test_atf_import_data"
+        archive.extractall(data_path)
+        for dir in os.listdir(data_path):
+            glossary_path = f"{data_path}/{dir}"
+            atf_dir_path = f"{data_path}/{dir}/00atf"
+            logdir_path = f"{data_path}/logs/{dir}"
+            print(f"Testing import of atf data in {atf_dir_path}")
+            # print("Running", " ".join(command))
+            atf_importer.run_importer(
+                {
+                    "input_dir": atf_dir_path,
+                    "logdir": logdir_path,
+                    "glodir": glossary_path,
+                    "author": "Test author",
+                }
+            )
+
+
 """
 def test_atf_importer(database, fragment_repository):
     # Test bulk import.
     # importer_path = "ebl/atf_importer/application/atf_importer.py"
-    atf_importer = AtfImporter(database, fragment_repository)
+    atf_importer = AtfImporter(database)
     archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
     with tempfile.TemporaryDirectory() as tempdir:
         data_path = f"{tempdir}/test_atf_import_data"
