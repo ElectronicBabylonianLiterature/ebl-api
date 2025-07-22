@@ -1,11 +1,12 @@
 from enum import Enum
-from typing import List, Optional, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple, Union
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.common.domain.scopes import Scope
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.files.application.file_repository import File, FileRepository
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 from ebl.fragmentarium.domain.folios import Folio
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
@@ -48,7 +49,7 @@ class FragmentFinder:
 
     def find(
         self,
-        number: MuseumNumber,
+        number: Union[MuseumNumber, ExcavationNumber],
         lines: Optional[Sequence[int]] = None,
         exclude_lines=False,
     ) -> Tuple[Fragment, bool]:

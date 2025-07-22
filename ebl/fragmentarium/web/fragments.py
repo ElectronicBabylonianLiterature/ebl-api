@@ -14,12 +14,16 @@ from ebl.common.query.parameter_parser import (
     parse_genre,
 )
 from ebl.common.query.query_schemas import QueryResultSchema
-from ebl.errors import DataError
+from ebl.errors import DataError, NotFoundError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.fragmentarium.web.dtos import (
+    create_response_dto,
+    parse_excavation_number,
+    parse_museum_number,
+)
 from ebl.schemas import ScopeField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
@@ -76,10 +80,16 @@ class FragmentsResource:
     def on_get(self, req: Request, resp: Response, number: str):
         lines = parse_lines(req.get_param_as_list("lines", default=[]))
         exclude_lines = req.get_param_as_bool("excludeLines", default=False)
-
-        fragment, has_photo = self._finder.find(
-            parse_museum_number(number), lines=lines, exclude_lines=exclude_lines
-        )
+        try:
+            fragment, has_photo = self._finder.find(
+                parse_museum_number(number), lines=lines, exclude_lines=exclude_lines
+            )
+        except NotFoundError:
+            fragment, has_photo = self._finder.find(
+                parse_excavation_number(number),
+                lines=lines,
+                exclude_lines=exclude_lines,
+            )
         resp.media = create_response_dto(fragment, req.context.user, has_photo)
 
 
