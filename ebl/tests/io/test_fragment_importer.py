@@ -210,7 +210,7 @@ def test_update_sort_index(fragment, fragment_repository, fragments_collection):
     ]
 
 
-def test_set_word_ids(fragment, valid_fragment_data):
+def test_set_word_ids(valid_fragment_data):
     data_with_ids = set_word_ids(valid_fragment_data)
     fragment = FragmentSchema().load(data_with_ids)
     fragment_with_ids = fragment.set_text(fragment.text.set_token_ids())
