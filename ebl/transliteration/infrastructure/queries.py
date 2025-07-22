@@ -8,7 +8,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @singledispatch
-def query_number_is(number) -> dict:
+def query_number_is(number, allow_wildcard=False) -> dict:
     raise ValueError(f"Unknown number type: {type(number)}")
 
 
