@@ -420,8 +420,8 @@ def test_deleting_words_keeps_remaining_ids(user):
     transliteration = TransliterationUpdate(truncated_text)
 
     truncated_fragment = fragment.update_transliteration(transliteration, user)
-
-    assert None not in [word.id_ for word in get_words(truncated_fragment)]
+    expected_ids = [f"Word-{i}" for i in range(11, 22)]
+    assert [word.id_ for word in get_words(truncated_fragment)] == expected_ids
 
 
 def test_adding_words_sets_ids(user):
