@@ -82,7 +82,7 @@ jobs:
       - uses: qltysh/qlty-action/coverage@v1
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
-          files: coverage/lcov.info
+          files: coverage.xml
 
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
