@@ -25,4 +25,6 @@ class Stage(NamedEnum):
     OLD_ELAMITE = ("Old Elamite", "OElam")
     MIDDLE_ELAMITE = ("Middle Elamite", "MElam")
     NEO_ELAMITE = ("Neo-Elamite", "NElam")
+    LUWIAN = ("Luwian", "Luw")
+    ARAMAIC = ("Aramaic", "Aram")
     STANDARD_BABYLONIAN = ("Standard Babylonian", "SB")
