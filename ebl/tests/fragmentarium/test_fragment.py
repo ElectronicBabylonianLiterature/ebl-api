@@ -399,7 +399,7 @@ def get_words(fragment: Fragment) -> List[AbstractWord]:
 def test_updating_fragment_sets_token_ids(user):
     fragment = TransliteratedFragmentFactory.build()
 
-    assert all(word.id_ is None for word in get_words(fragment))
+    assert {word.id_ for word in get_words(fragment)} == {None}
 
     updated_fragment = fragment.update_transliteration(
         TransliterationUpdate(fragment.text), user
@@ -421,7 +421,7 @@ def test_deleting_words_keeps_remaining_ids(user):
 
     truncated_fragment = fragment.update_transliteration(transliteration, user)
 
-    assert all(word.id_ for word in get_words(truncated_fragment))
+    assert None not in [word.id_ for word in get_words(truncated_fragment)]
 
 
 def test_adding_words_sets_ids(user):
