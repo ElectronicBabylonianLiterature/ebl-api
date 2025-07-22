@@ -10,12 +10,13 @@ import pymongo
 from ebl.common.query.util import sort_by_museum_number
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.application.token_schemas import WORD_SCHEMAS
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
 import datetime
 
-WORD_TYPES = {"Word", "AkkadianWord", "GreekWord", "LoneDeterminative"}
+WORD_TYPES = set(WORD_SCHEMAS)
 
 
 def _load_json(path: str):
