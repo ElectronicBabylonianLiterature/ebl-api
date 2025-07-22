@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, Iterator
+from typing import List, Optional, Sequence, Iterator, Union
 
 from marshmallow import EXCLUDE
 from pymongo.collation import Collation
@@ -10,6 +10,7 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
@@ -196,7 +197,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
 
     def query_by_museum_number(
         self,
-        number: MuseumNumber,
+        number: Union[MuseumNumber, ExcavationNumber],
         lines: Optional[Sequence[int]] = None,
         exclude_lines=False,
     ):
