@@ -74,13 +74,15 @@ jobs:
         run: poetry run pytest
 
       - name: Unit Tests with Coverage
-        uses: paambaati/codeclimate-action@v5.0.0
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
           MONGODB_URI: mongodb://localhost:27017
+        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x
+      
+      - uses: qltysh/qlty-action/coverage@v1
         with:
-          coverageCommand: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x
+          token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
+          files: coverage/lcov.info
 
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
