@@ -71,13 +71,13 @@ jobs:
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest
+        run: poetry run pytest -n auto
 
       - name: Unit Tests with Coverage
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x
+        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x -n auto
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
