@@ -71,18 +71,19 @@ jobs:
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest
+        run: poetry run pytest -n auto
 
       - name: Unit Tests with Coverage
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
           MONGODB_URI: mongodb://localhost:27017
-        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x
+        run: poetry run pytest --cov=ebl --cov-report term --cov-report xml -x -n auto
 
       - uses: qltysh/qlty-action/coverage@v1
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: coverage.xml
+          add-prefix: ebl/
 
   docker:
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
