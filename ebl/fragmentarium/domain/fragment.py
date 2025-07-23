@@ -206,6 +206,8 @@ class Fragment(FragmentExternalNumbers):
         record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
         text = self.text.merge(transliteration.text)
 
+        text = text.set_token_ids()
+
         return attr.evolve(
             self,
             text=text,

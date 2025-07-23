@@ -1,5 +1,5 @@
 from functools import singledispatchmethod
-from itertools import zip_longest
+from itertools import count, zip_longest
 from collections import defaultdict
 from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, Iterator
 
@@ -15,6 +15,7 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
     SealAtLine,
 )
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.transliteration_error import (
     ErrorAnnotation,
     ExtentLabelError,
@@ -24,6 +25,15 @@ from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_label import LineLabel
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.translation_line import Extent, TranslationLine
+from ebl.transliteration.domain.word_tokens import AbstractWord
+
+
+def set_id(token: Token, count: Iterator[int]) -> Token:
+    return (
+        token.set_id(f"Word-{next(count)}")
+        if (isinstance(token, AbstractWord) and token.id_ is None)
+        else token
+    )
 
 
 class LabelsValidator:
@@ -203,6 +213,32 @@ class Text:
 
     def set_parser_version(self, parser_version: str) -> "Text":
         return attr.evolve(self, parser_version=parser_version)
+
+    def _get_max_token_id(self) -> int:
+        return max(
+            (
+                int(token.id_.split("-")[1]) if token.id_ else 0
+                for line in self.text_lines
+                for token in line.content
+                if isinstance(token, AbstractWord)
+            ),
+            default=0,
+        )
+
+    def set_token_ids(self) -> "Text":
+        word_id = count(self._get_max_token_id() + 1)
+
+        def set_word_ids(line: Line) -> Line:
+            return (
+                attr.evolve(
+                    line,
+                    content=tuple(set_id(token, word_id) for token in line.content),
+                )
+                if isinstance(line, TextLine)
+                else line
+            )
+
+        return attr.evolve(self, lines=tuple(set_word_ids(line) for line in self.lines))
 
     @staticmethod
     def of_iterable(

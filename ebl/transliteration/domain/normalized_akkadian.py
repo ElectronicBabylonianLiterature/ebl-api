@@ -54,10 +54,12 @@ class AkkadianWord(AbstractWord):
         variant: Optional[AbstractWord] = None,
         has_variant_alignment: bool = False,
         has_omitted_alignment: bool = False,
+        id_: Optional[str] = None,
     ) -> "AkkadianWord":
         return AkkadianWord(
             frozenset(),
             ErasureState.NONE,
+            id_,
             unique_lemma,
             alignment,
             parts,

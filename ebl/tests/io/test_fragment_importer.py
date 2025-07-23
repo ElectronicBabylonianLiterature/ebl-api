@@ -11,6 +11,7 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.io.fragments.importer import (
     create_sort_index,
     load_collection,
+    set_word_ids,
     validate,
     load_data,
     validate_id,
@@ -207,3 +208,20 @@ def test_update_sort_index(fragment, fragment_repository, fragments_collection):
     assert [("_sortKey", pymongo.ASCENDING)] in [
         index["key"] for index in fragments_collection.index_information().values()
     ]
+
+
+def test_set_word_ids(valid_fragment_data):
+    data_with_ids = set_word_ids(valid_fragment_data)
+    fragment = FragmentSchema().load(data_with_ids)
+    fragment_with_ids = fragment.set_text(fragment.text.set_token_ids())
+    ids = [
+        word.id_
+        for line in fragment.text.text_lines
+        for word in line.content
+        if hasattr(word, "id_")
+    ]
+    expected_ids = [f"Word-{index+1}" for index in range(len(ids))]
+
+    assert ids and ids == expected_ids
+    assert FragmentSchema().load(data_with_ids) == fragment_with_ids
+    assert FragmentSchema().dump(fragment_with_ids) == data_with_ids

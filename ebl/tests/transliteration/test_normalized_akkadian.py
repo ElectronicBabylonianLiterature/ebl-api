@@ -103,6 +103,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
         "language": "AKKADIAN",
         "hasVariantAlignment": word.has_variant_alignment,
         "hasOmittedAlignment": word.has_omitted_alignment,
+        "id": word.id_,
     }
     assert_token_serialization(word, serialized)
 
