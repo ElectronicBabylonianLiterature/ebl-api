@@ -14,6 +14,7 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
+from ebl.fragmentarium.domain.named_entity import NamedEntity
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -156,6 +157,7 @@ class Fragment(FragmentExternalNumbers):
     colophon: Optional[Colophon] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
     dossiers: Sequence[str] = []
+    named_entities: Optional[Sequence[NamedEntity]] = None
 
     @property
     def is_lowest_join(self) -> bool:
