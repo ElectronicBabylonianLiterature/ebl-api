@@ -1,6 +1,6 @@
 from enum import Enum
 from itertools import groupby
-from typing import Dict, Any, Optional, Sequence, Tuple
+from typing import Dict, Any, List, Optional, Sequence, Tuple
 import attr
 import pydash
 from ebl.fragmentarium.domain.museum import Museum
@@ -14,7 +14,7 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.fragmentarium.domain.named_entity import NamedEntity
+from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntity
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -252,3 +252,10 @@ class Fragment(FragmentExternalNumbers):
             for numbers, _ in groupby(line_numbers)
         ]
         return Text(lines=tuple(pydash.flatten(match)))
+
+    def set_named_entities(self, annotations: List[EntityAnnotationSpan]) -> "Fragment":
+        return attr.evolve(
+            self,
+            named_entities=tuple(entity.to_named_entity() for entity in annotations),
+            text=self.text.set_named_entities(annotations),
+        )

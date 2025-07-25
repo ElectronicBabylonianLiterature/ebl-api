@@ -6,6 +6,7 @@ from typing import Callable, Iterable, List, Mapping, Sequence, Tuple, Type, Ite
 import pydash
 import attr
 
+from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.merger import Merger
@@ -245,3 +246,21 @@ class Text:
         lines: Iterable[Line], parser_version: str = ATF_PARSER_VERSION
     ) -> "Text":
         return Text(tuple(lines), parser_version)
+
+    def set_named_entities(self, annotations: List[EntityAnnotationSpan]) -> "Text":
+        token_entity_map = defaultdict(list)
+        for annotation in annotations:
+            for token_id in annotation.span:
+                token_entity_map[token_id].append(annotation.id)
+
+        return attr.evolve(
+            self,
+            lines=tuple(
+                (
+                    line.set_named_entities(token_entity_map)
+                    if isinstance(line, TextLine)
+                    else line
+                )
+                for line in self.lines
+            ),
+        )
