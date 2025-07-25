@@ -1,4 +1,3 @@
-import attr
 import pytest
 
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
@@ -6,8 +5,7 @@ from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 
 @pytest.fixture
 def entity_annotated_fragment(named_entity_spans):
-    fragment = TransliteratedFragmentFactory.build()
-    fragment = attr.evolve(fragment, text=fragment.text.set_token_ids())
+    fragment = TransliteratedFragmentFactory.build().set_token_ids()
 
     return fragment.set_named_entities(named_entity_spans)
 
