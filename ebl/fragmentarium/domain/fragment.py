@@ -157,7 +157,7 @@ class Fragment(FragmentExternalNumbers):
     colophon: Optional[Colophon] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
     dossiers: Sequence[str] = []
-    named_entities: Sequence[NamedEntity] = ()
+    named_entities: Sequence[NamedEntity] = attr.ib(default=(), converter=tuple)
 
     @property
     def is_lowest_join(self) -> bool:
