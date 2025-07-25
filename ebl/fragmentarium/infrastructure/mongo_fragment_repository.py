@@ -95,6 +95,7 @@ class MongoFragmentRepository(
             "authorized_scopes": [
                 "authorized_scopes",
             ],
+            "named_entities": ("text", "named_entities"),
         }
 
         if field not in fields_to_update:

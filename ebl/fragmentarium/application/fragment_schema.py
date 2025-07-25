@@ -1,4 +1,5 @@
 import pydash
+from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
 from ebl.schemas import NameEnumField
 from marshmallow import Schema, fields, post_dump, post_load
 from ebl.fragmentarium.domain.museum import Museum
@@ -89,6 +90,12 @@ class FragmentSchema(Schema):
     archaeology = fields.Nested(ArchaeologySchema, allow_none=True, default=None)
     colophon = fields.Nested(ColophonSchema, allow_none=True, default=None)
     dossiers = fields.Nested(DossierReferenceSchema, many=True, default=[])
+    named_entities = fields.Nested(
+        NamedEntitySchema,
+        many=True,
+        default=(),
+        data_key="namedEntities",
+    )
 
     @post_load
     def make_fragment(self, data, **kwargs):

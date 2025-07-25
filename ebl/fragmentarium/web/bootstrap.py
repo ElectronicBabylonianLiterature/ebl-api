@@ -34,6 +34,7 @@ from ebl.fragmentarium.web.lemma_annotation import (
     LemmaAnnotationResource,
     AutofillLemmasResource,
 )
+from ebl.fragmentarium.web.named_entities import NamedEntityResource
 from ebl.fragmentarium.web.provenances import ProvenancesResource
 from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
@@ -135,6 +136,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     colophon_names = ColophonNamesResource(context.fragment_repository)
+    named_entities = NamedEntityResource(finder, updater)
 
     routes = [
         ("/fragments", fragment_search),
@@ -171,6 +173,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/colophon-names", colophon_names),
         ("/findspots", findspots),
         ("/fragments/{number}/scopes", scopes),
+        ("/fragments/{number}/named-entities", named_entities),
     ]
 
     for uri, resource in routes:

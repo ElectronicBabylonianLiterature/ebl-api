@@ -21,9 +21,10 @@ from ebl.transliteration.domain.lark_parser import parse_atf_lark
 
 
 SCHEMA = FragmentSchema()
+FROZEN_TIME = "2018-09-07 15:41:24.032"
 
 
-@freeze_time("2018-09-07 15:41:24.032")
+@freeze_time(FROZEN_TIME)
 @pytest.mark.parametrize(
     "number,ignore_lowest_join",
     [(MuseumNumber.of("X.1"), False), (MuseumNumber.of("X.3"), True)],
@@ -209,7 +210,7 @@ def test_update_dates_in_text(
     assert result == (injected_fragment, False)
 
 
-@freeze_time("2018-09-07 15:41:24.032")
+@freeze_time(FROZEN_TIME)
 def test_update_lemmatization(
     fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
 ):
@@ -342,7 +343,7 @@ def test_update_notes(
     assert result == (updated_fragment, False)
 
 
-@freeze_time("2018-09-07 15:41:24.032")
+@freeze_time(FROZEN_TIME)
 def test_update_lemma_annotation(
     fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
 ):
@@ -371,4 +372,41 @@ def test_update_lemma_annotation(
     ).thenReturn()
 
     result = fragment_updater.update_lemma_annotation(number, annotation, user)
+    assert result == (injected_fragment, False)
+
+
+@freeze_time(FROZEN_TIME)
+def test_update_named_entities(
+    fragment_updater,
+    named_entity_spans,
+    user,
+    fragment_repository,
+    parallel_line_injector,
+    changelog,
+    when,
+):
+    transliterated_fragment: Fragment = TransliteratedFragmentFactory.build()
+    number = transliterated_fragment.number
+
+    annotated_fragment = transliterated_fragment.set_named_entities(named_entity_spans)
+
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(transliterated_fragment)
+    )
+    injected_fragment = annotated_fragment.set_text(
+        parallel_line_injector.inject_transliteration(annotated_fragment.text)
+    )
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **SCHEMA.dump(annotated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field(
+        "named_entities", annotated_fragment
+    ).thenReturn()
+
+    result = fragment_updater.update_named_entities(number, named_entity_spans, user)
     assert result == (injected_fragment, False)

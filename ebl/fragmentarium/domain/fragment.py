@@ -1,6 +1,6 @@
 from enum import Enum
 from itertools import groupby
-from typing import Dict, Any, Optional, Sequence, Tuple
+from typing import Dict, Any, List, Optional, Sequence, Tuple
 import attr
 import pydash
 from ebl.fragmentarium.domain.museum import Museum
@@ -14,6 +14,7 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
+from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntity
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -22,6 +23,7 @@ from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.word_tokens import AbstractWord
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
@@ -156,6 +158,7 @@ class Fragment(FragmentExternalNumbers):
     colophon: Optional[Colophon] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
     dossiers: Sequence[str] = []
+    named_entities: Sequence[NamedEntity] = attr.ib(default=(), converter=tuple)
 
     @property
     def is_lowest_join(self) -> bool:
@@ -250,3 +253,31 @@ class Fragment(FragmentExternalNumbers):
             for numbers, _ in groupby(line_numbers)
         ]
         return Text(lines=tuple(pydash.flatten(match)))
+
+    def set_named_entities(self, annotations: List[EntityAnnotationSpan]) -> "Fragment":
+        return attr.evolve(
+            self,
+            named_entities=tuple(entity.to_named_entity() for entity in annotations),
+            text=self.text.set_named_entities(annotations),
+        )
+
+    @property
+    def words(self) -> List[AbstractWord]:
+        return [
+            token
+            for line in self.text.text_lines
+            for token in line.content
+            if isinstance(token, AbstractWord)
+        ]
+
+    def get_word_by_id(self, word_id: str) -> AbstractWord:
+        for word in self.words:
+            if word.id_ == word_id:
+                return word
+        raise ValueError(f"Word with id {word_id} not found in fragment.")
+
+    def set_token_ids(self) -> "Fragment":
+        return attr.evolve(
+            self,
+            text=self.text.set_token_ids(),
+        )
