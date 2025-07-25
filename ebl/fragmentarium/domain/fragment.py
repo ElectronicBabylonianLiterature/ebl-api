@@ -23,6 +23,7 @@ from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.word_tokens import AbstractWord
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
 from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
@@ -259,3 +260,18 @@ class Fragment(FragmentExternalNumbers):
             named_entities=tuple(entity.to_named_entity() for entity in annotations),
             text=self.text.set_named_entities(annotations),
         )
+
+    @property
+    def words(self) -> List[AbstractWord]:
+        return [
+            token
+            for line in self.text.text_lines
+            for token in line.content
+            if isinstance(token, AbstractWord)
+        ]
+
+    def get_word_by_id(self, word_id: str) -> AbstractWord:
+        for word in self.words:
+            if word.id_ == word_id:
+                return word
+        raise ValueError(f"Word with id {word_id} not found in fragment.")
