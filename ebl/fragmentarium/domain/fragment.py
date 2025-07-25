@@ -275,3 +275,9 @@ class Fragment(FragmentExternalNumbers):
             if word.id_ == word_id:
                 return word
         raise ValueError(f"Word with id {word_id} not found in fragment.")
+
+    def set_token_ids(self) -> "Fragment":
+        return attr.evolve(
+            self,
+            text=self.text.set_token_ids(),
+        )
