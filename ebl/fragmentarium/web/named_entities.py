@@ -11,7 +11,6 @@ from ebl.fragmentarium.application.named_entity_schema import (
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.marshmallowschema import validate
-from ebl.transliteration.domain.word_tokens import AbstractWord
 from ebl.users.web.require_scope import require_scope
 
 
@@ -25,11 +24,9 @@ class NamedEntityResource:
             entity.id: {**NamedEntitySchema().dump(entity), "span": []}
             for entity in fragment.named_entities
         }
-        for line in fragment.text.text_lines:
-            for token in line.content:
-                if isinstance(token, AbstractWord) and token.id_:
-                    for entity_id in token.named_entities:
-                        annotation_spans[entity_id]["span"].append(token.id_)
+        for word in fragment.words:
+            for entity_id in word.named_entities:
+                annotation_spans[entity_id]["span"].append(word.id_)
 
         return list(annotation_spans.values())
 
