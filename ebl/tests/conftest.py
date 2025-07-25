@@ -4,7 +4,7 @@ import json
 import os
 import uuid
 from pathlib import Path
-from typing import Any, Mapping, Sequence, Union
+from typing import Any, List, Mapping, Sequence, Union
 
 import attr
 import pydash
@@ -42,6 +42,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntityType
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
@@ -675,3 +676,14 @@ def create_mongo_bibliography_entry():
         )
 
     return _from_bibliography_entry
+
+
+@pytest.fixture
+def named_entity_spans() -> List[EntityAnnotationSpan]:
+    return [
+        EntityAnnotationSpan("Entity-1", NamedEntityType.PERSON, ["Word-2"]),
+        EntityAnnotationSpan(
+            "Entity-2", NamedEntityType.LOCATION, ["Word-2", "Word-3"]
+        ),
+        EntityAnnotationSpan("Entity-3", NamedEntityType.YEAR, ["Word-7", "Word-14"]),
+    ]

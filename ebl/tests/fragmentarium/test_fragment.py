@@ -1,4 +1,3 @@
-from typing import List
 import attr
 from freezegun import freeze_time
 import pytest
@@ -18,7 +17,6 @@ from ebl.fragmentarium.domain.fragment import (
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
-from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntityType
 from ebl.tests.factories.parallel_line import ParallelCompositionFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -429,41 +427,3 @@ def test_adding_words_sets_ids(user):
     expected_ids = [f"Word-{i}" for i in [1, 2, 6, 3, 4, 5]]
 
     assert [word.id_ for word in words] == expected_ids
-
-
-E1_PERSON = EntityAnnotationSpan("Entity-1", NamedEntityType.PERSON, ["Word-2"])
-E2_LOCATION = EntityAnnotationSpan(
-    "Entity-2", NamedEntityType.LOCATION, ["Word-2", "Word-3"]
-)
-E3_YEAR = EntityAnnotationSpan("Entity-3", NamedEntityType.YEAR, ["Word-7", "Word-14"])
-
-
-@pytest.fixture
-def named_entity_spans() -> List[EntityAnnotationSpan]:
-    return [E1_PERSON, E2_LOCATION, E3_YEAR]
-
-
-@pytest.fixture
-def entity_annotated_fragment(named_entity_spans):
-    fragment = TransliteratedFragmentFactory.build()
-    fragment: Fragment = attr.evolve(fragment, text=fragment.text.set_token_ids())
-
-    return fragment.set_named_entities(named_entity_spans)
-
-
-def test_named_entities(entity_annotated_fragment, named_entity_spans):
-    expected = tuple(span.to_named_entity() for span in named_entity_spans)
-    assert entity_annotated_fragment.named_entities == expected
-
-
-@pytest.mark.parametrize(
-    "word_id,expected",
-    [
-        ("Word-2", ["Entity-1", "Entity-2"]),
-        ("Word-3", ["Entity-2"]),
-        ("Word-7", ["Entity-3"]),
-        ("Word-14", ["Entity-3"]),
-    ],
-)
-def test_word_entities(entity_annotated_fragment, word_id, expected):
-    assert entity_annotated_fragment.get_word_by_id(word_id).named_entities == expected
