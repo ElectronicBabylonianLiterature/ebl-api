@@ -117,7 +117,7 @@ def test_word(language, unique_lemma) -> None:
         "variant": OneOfWordSchema().dump(variant),
         "hasVariantAlignment": word.has_variant_alignment,
         "hasOmittedAlignment": word.has_omitted_alignment,
-        "namedEntities": NamedEntitySchema().dump(word.named_entities, many=True)
+        "namedEntities": NamedEntitySchema().dump(word.named_entities, many=True),
     }
 
     assert_token_serialization(word, serialized)

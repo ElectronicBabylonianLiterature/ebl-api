@@ -130,7 +130,9 @@ def expected_dto(lemmatized_fragment, has_photo):
                 DossierReferenceSchema().dump(dossier)
                 for dossier in lemmatized_fragment.dossiers
             ],
-            "namedEntities": NamedEntitySchema().dump(lemmatized_fragment.named_entities, many=True)
+            "namedEntities": NamedEntitySchema().dump(
+                lemmatized_fragment.named_entities, many=True
+            ),
         },
         pydash.is_none,
     )

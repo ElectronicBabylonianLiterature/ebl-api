@@ -52,8 +52,9 @@ def test_lone_determinative(language):
         "parts": OneOfTokenSchema().dump(parts, many=True),
         "hasVariantAlignment": lone_determinative.has_variant_alignment,
         "hasOmittedAlignment": lone_determinative.has_omitted_alignment,
-        "namedEntities": NamedEntitySchema().dump(lone_determinative.named_entities, many=True)
-
+        "namedEntities": NamedEntitySchema().dump(
+            lone_determinative.named_entities, many=True
+        ),
     }
     assert_token_serialization(lone_determinative, serialized)
 
