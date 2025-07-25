@@ -2,7 +2,6 @@ from itertools import zip_longest
 from typing import (
     Callable,
     Iterable,
-    List,
     Optional,
     Sequence,
     Type,
@@ -14,9 +13,7 @@ from typing import (
 import attr
 import pydash
 
-from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan
 from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation
-from ebl.fragmentarium.web import named_entities
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
