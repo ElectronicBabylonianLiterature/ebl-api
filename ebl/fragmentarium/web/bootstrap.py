@@ -136,7 +136,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     colophon_names = ColophonNamesResource(context.fragment_repository)
-    named_entities = NamedEntityResource(finder)
+    named_entities = NamedEntityResource(finder, updater)
 
     routes = [
         ("/fragments", fragment_search),
