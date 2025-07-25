@@ -32,8 +32,24 @@ def test_named_entity_schema(entity, serialized):
 @pytest.mark.parametrize(
     "span,serialized",
     [
-        (EntityAnnotationSpan("Test-1", NamedEntityType.YEAR, ["Word-1", "Word-2"])),
-        (EntityAnnotationSpan("Test-2", NamedEntityType.PERSON, ["Word-3", "Word-4"])),
+        (
+            EntityAnnotationSpan("Test-1", NamedEntityType.YEAR, ["Word-1", "Word-2"]),
+            {
+                "id": "Test-1",
+                "type": NamedEntityType.YEAR.long_name,
+                "span": ["Word-1", "Word-2"],
+            },
+        ),
+        (
+            EntityAnnotationSpan(
+                "Test-2", NamedEntityType.PERSON, ["Word-3", "Word-4"]
+            ),
+            {
+                "id": "Test-2",
+                "type": NamedEntityType.PERSON.long_name,
+                "span": ["Word-3", "Word-4"],
+            },
+        ),
     ],
 )
 def test_entity_annotation_span_schema(span, serialized):
