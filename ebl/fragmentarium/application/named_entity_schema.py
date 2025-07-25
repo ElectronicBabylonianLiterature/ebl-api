@@ -1,10 +1,13 @@
-from typing import TypedDict
 from marshmallow import Schema, fields, post_load
 
-from ebl.fragmentarium.domain.named_entity import NamedEntity, NamedEntityType
+from ebl.fragmentarium.domain.named_entity import (
+    EntityAnnotationSpan,
+    NamedEntity,
+    NamedEntityType,
+)
 
 
-class NamedEntitySchema(Schema):
+class AbstractNamedEntitySchema(Schema):
     id = fields.String(required=True)
     type = fields.Function(
         lambda entity: entity.type.long_name,
@@ -12,16 +15,16 @@ class NamedEntitySchema(Schema):
         required=True,
     )
 
+
+class NamedEntitySchema(AbstractNamedEntitySchema):
     @post_load
     def make_entity(self, data, **kwargs) -> NamedEntity:
         return NamedEntity(**data)
 
 
-class EntityAnnotationSpanSchema(NamedEntitySchema):
+class EntityAnnotationSpanSchema(AbstractNamedEntitySchema):
     span = fields.List(fields.String(), required=True)
 
-
-class EntityAnnotationSpan(TypedDict):
-    id: str
-    type: str
-    span: list[str]
+    @post_load
+    def make_entity_span(self, data, **kwargs) -> EntityAnnotationSpan:
+        return EntityAnnotationSpan(**data)
