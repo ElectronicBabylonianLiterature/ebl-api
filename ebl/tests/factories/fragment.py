@@ -272,6 +272,7 @@ class FragmentFactory(factory.Factory):
             for _ in range(random.randint(0, 4))
         ]
     )
+    named_entities = ()
 
 
 class InterestingFragmentFactory(FragmentFactory):
