@@ -159,7 +159,7 @@ class TextLine(Line):
     def set_named_entities(self, token_entity_map: dict) -> "TextLine":
         updated_content = tuple(
             (
-                attr.evolve(token, named_entities=token_entity_map.get(token.id, []))
+                attr.evolve(token, named_entities=token_entity_map.get(token.id_, []))
                 if isinstance(token, AbstractWord)
                 else token
             )
