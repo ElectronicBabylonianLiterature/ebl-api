@@ -1,3 +1,4 @@
+from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
 import pytest
 
 import ebl.transliteration.domain.atf as atf
@@ -78,5 +79,6 @@ def test_greek_word(
         "hasVariantAlignment": word.has_variant_alignment,
         "hasOmittedAlignment": word.has_omitted_alignment,
         "id": word.id_,
+        "namedEntities": NamedEntitySchema().dump(word.named_entities, many=True)
     }
     assert_token_serialization(word, serialized)

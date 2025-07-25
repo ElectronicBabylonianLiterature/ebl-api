@@ -1,5 +1,6 @@
 from typing import List, Optional, Tuple
 
+from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
 import pytest
 
 from ebl.dictionary.domain.word import WordId
@@ -116,6 +117,7 @@ def test_word(language, unique_lemma) -> None:
         "variant": OneOfWordSchema().dump(variant),
         "hasVariantAlignment": word.has_variant_alignment,
         "hasOmittedAlignment": word.has_omitted_alignment,
+        "namedEntities": NamedEntitySchema().dump(word.named_entities, many=True)
     }
 
     assert_token_serialization(word, serialized)
