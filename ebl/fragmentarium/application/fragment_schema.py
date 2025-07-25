@@ -93,7 +93,7 @@ class FragmentSchema(Schema):
     named_entities = fields.Nested(
         NamedEntitySchema,
         many=True,
-        default=[],
+        default=(),
         data_key="namedEntities",
     )
 

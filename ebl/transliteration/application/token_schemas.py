@@ -372,7 +372,7 @@ class BaseWordSchema(BaseTokenSchema):
     named_entities = fields.List(
         fields.String(),
         data_key="namedEntities",
-        default=[],
+        default=(),
     )
 
 

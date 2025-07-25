@@ -72,7 +72,7 @@ class GreekWord(AbstractWord):
         has_variant_alignment: bool = False,
         has_omitted_alignment: bool = False,
         id_: Optional[str] = None,
-        named_entities: Sequence[str] = [],
+        named_entities: Sequence[str] = (),
     ) -> "GreekWord":
         return GreekWord(
             frozenset(),
