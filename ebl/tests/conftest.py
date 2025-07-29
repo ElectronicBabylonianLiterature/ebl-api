@@ -681,9 +681,11 @@ def create_mongo_bibliography_entry():
 @pytest.fixture
 def named_entity_spans() -> List[EntityAnnotationSpan]:
     return [
-        EntityAnnotationSpan("Entity-1", NamedEntityType.PERSON, ["Word-2"]),
+        EntityAnnotationSpan("Entity-1", NamedEntityType.PERSONAL_NAME, ["Word-2"]),
         EntityAnnotationSpan(
-            "Entity-2", NamedEntityType.LOCATION, ["Word-2", "Word-3"]
+            "Entity-2", NamedEntityType.BUILDING_NAME, ["Word-2", "Word-3"]
         ),
-        EntityAnnotationSpan("Entity-3", NamedEntityType.YEAR, ["Word-7", "Word-14"]),
+        EntityAnnotationSpan(
+            "Entity-3", NamedEntityType.YEAR_NAME, ["Word-7", "Word-14"]
+        ),
     ]
