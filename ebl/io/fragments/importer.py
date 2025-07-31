@@ -15,6 +15,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
 import datetime
+from copy import deepcopy
 
 WORD_TYPES = set(WORD_SCHEMAS)
 
@@ -117,7 +118,7 @@ def create_sort_index(fragments_collection: MongoCollection) -> None:
 
 
 def set_word_ids(fragment: dict) -> dict:
-    lines = fragment.get("text", {}).get("lines", [])
+    lines = deepcopy(fragment).get("text", {}).get("lines", [])
 
     if not lines:
         return fragment

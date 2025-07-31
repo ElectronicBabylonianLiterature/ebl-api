@@ -1,4 +1,5 @@
 import attr
+from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
 import pydash
 import pytest
 from ebl.common.application.schemas import AccessionSchema
@@ -129,6 +130,9 @@ def expected_dto(lemmatized_fragment, has_photo):
                 DossierReferenceSchema().dump(dossier)
                 for dossier in lemmatized_fragment.dossiers
             ],
+            "namedEntities": NamedEntitySchema().dump(
+                lemmatized_fragment.named_entities, many=True
+            ),
         },
         pydash.is_none,
     )

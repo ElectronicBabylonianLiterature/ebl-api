@@ -1,4 +1,3 @@
-from typing import List
 import attr
 from freezegun import freeze_time
 import pytest
@@ -39,7 +38,16 @@ from ebl.transliteration.domain.markup import StringPart, EmphasisPart
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.application.signs_visitor import SignsVisitor
-from ebl.transliteration.domain.word_tokens import AbstractWord
+
+
+@pytest.fixture
+def transliterated_fragment() -> Fragment:
+    return TransliteratedFragmentFactory.build()
+
+
+@pytest.fixture
+def fragment_with_token_ids(transliterated_fragment):
+    return transliterated_fragment.set_token_ids()
 
 
 def test_number():
@@ -136,8 +144,7 @@ def test_notes():
     assert fragment.notes == Notes("notes", (StringPart("notes"),))
 
 
-def test_signs():
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+def test_signs(transliterated_fragment):
     assert transliterated_fragment.signs == TransliteratedFragmentFactory.signs
 
 
@@ -298,8 +305,7 @@ def test_set_notes():
     )
 
 
-def test_update_lemmatization():
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+def test_update_lemmatization(transliterated_fragment):
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("nu I",))
     lemmatization = Lemmatization(tokens)
@@ -387,54 +393,67 @@ def test_get_matching_lines(string, expected, sign_repository, signs):
     assert matching_text == parse_atf_lark(expected)
 
 
-def get_words(fragment: Fragment) -> List[AbstractWord]:
-    return [
-        token
-        for line in fragment.text.text_lines
-        for token in line.content
-        if isinstance(token, AbstractWord)
-    ]
+def test_updating_fragment_sets_token_ids(transliterated_fragment, user):
+    assert {word.id_ for word in transliterated_fragment.words} == {None}
 
-
-def test_updating_fragment_sets_token_ids(user):
-    fragment = TransliteratedFragmentFactory.build()
-
-    assert {word.id_ for word in get_words(fragment)} == {None}
-
-    updated_fragment = fragment.update_transliteration(
-        TransliterationUpdate(fragment.text), user
+    updated_fragment = transliterated_fragment.update_transliteration(
+        TransliterationUpdate(transliterated_fragment.text), user
     )
-    words = get_words(updated_fragment)
+    words = updated_fragment.words
 
     assert [word.id_ for word in words] == [f"Word-{i+1}" for i in range(len(words))]
 
 
-def test_deleting_words_keeps_remaining_ids(user):
-    fragment = TransliteratedFragmentFactory.build()
-    fragment = fragment.update_transliteration(
-        TransliterationUpdate(fragment.text), user
+def test_deleting_words_keeps_remaining_ids(transliterated_fragment, user):
+    transliterated_fragment = transliterated_fragment.update_transliteration(
+        TransliterationUpdate(transliterated_fragment.text), user
     )
 
-    lines = fragment.text.atf.split("\n")
+    lines = transliterated_fragment.text.atf.split("\n")
     truncated_text = parse_atf_lark(Atf("\n".join(lines[2:])))
     transliteration = TransliterationUpdate(truncated_text)
 
-    truncated_fragment = fragment.update_transliteration(transliteration, user)
+    truncated_fragment = transliterated_fragment.update_transliteration(
+        transliteration, user
+    )
     expected_ids = [f"Word-{i}" for i in range(11, 22)]
-    assert [word.id_ for word in get_words(truncated_fragment)] == expected_ids
+    assert [word.id_ for word in truncated_fragment.words] == expected_ids
 
 
-def test_adding_words_sets_ids(user):
+def test_get_word_by_id(fragment_with_token_ids):
+    assert (
+        fragment_with_token_ids.get_word_by_id("Word-1")
+        == fragment_with_token_ids.words[0]
+    )
+
+
+def test_get_non_existent_word_by_id(fragment_with_token_ids):
+    invalid_id = "foobar"
+    with pytest.raises(
+        ValueError, match=f"Word with id {invalid_id} not found in fragment."
+    ):
+        fragment_with_token_ids.get_word_by_id(invalid_id)
+
+
+@pytest.fixture
+def short_fragment(transliterated_fragment, user) -> Fragment:
     atf = "1'. [...-ku]-nu-ši [...]\n3'. [...] GI₆ ana"
-    fragment = TransliteratedFragmentFactory.build()
-    fragment = fragment.update_transliteration(
+    return transliterated_fragment.update_transliteration(
         TransliterationUpdate(parse_atf_lark(Atf(atf))), user
     )
 
-    lines = atf.split("\n")
+
+def test_set_token_ids(transliterated_fragment):
+    word_ids = [word.id_ for word in transliterated_fragment.set_token_ids().words]
+    expected = [f"Word-{i + 1}" for i in range(len(word_ids))]
+    assert word_ids == expected
+
+
+def test_adding_words_sets_ids(short_fragment, user):
+    lines = short_fragment.text.atf.split("\n")
     lines.insert(1, "2'. kur")
     transliteration = TransliterationUpdate(parse_atf_lark(Atf("\n".join(lines))))
-    words = get_words(fragment.update_transliteration(transliteration, user))
+    words = short_fragment.update_transliteration(transliteration, user).words
     expected_ids = [f"Word-{i}" for i in [1, 2, 6, 3, 4, 5]]
 
     assert [word.id_ for word in words] == expected_ids
