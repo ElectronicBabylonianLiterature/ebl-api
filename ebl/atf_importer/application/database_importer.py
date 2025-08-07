@@ -1,17 +1,16 @@
-from typing import Dict, List, Tuple, Optional, Sequence
+from typing import List, Optional, Sequence
 from ebl.app import create_context
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
 from ebl.fragmentarium.web.dtos import parse_museum_number
-from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.users.domain.user import AtfImporterUser
 from ebl.atf_importer.application.logger import Logger
 from ebl.errors import DataError
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.errors import NotFoundError
 
 
@@ -19,6 +18,7 @@ class DatabaseImporter:
     def __init__(
         self,
         database,
+        fragment_repository: FragmentRepository,
         logger: Logger,
         username: str,
     ):
@@ -26,19 +26,18 @@ class DatabaseImporter:
         self.logger = logger
         self.user = AtfImporterUser(username)
         context = create_context()
-        self.fragment_repository = context.fragment_repository
+        self.fragment_repository = fragment_repository
         self.transliteration_factory: TransliterationUpdateFactory = (
             context.get_transliteration_update_factory()
         )
         self.updater: FragmentUpdater = context.get_fragment_updater()
         self.museum_number_getter = MuseumNumberGetter(database, logger)
-        self.lemmatization_getter = LemmatizationGetter(self.updater, self.user)
+        # ToDo: Clean up:
+        # self.lemmatization_getter = LemmatizationGetter(self.updater, self.user)
 
-    def import_into_database(
-        self, ebl_lines: Dict[str, List], text: Text, filename: str
-    ):
+    def import_into_database(self, text: Text, control_lines: List, filename: str):
         museum_number: Optional[str] = self.museum_number_getter.get_museum_number(
-            ebl_lines, filename
+            control_lines, filename
         )
         if not museum_number:
             self.logger.error(
@@ -46,11 +45,9 @@ class DatabaseImporter:
                 "not_imported_files",
             )
             return
-        return self.check_and_import(ebl_lines, text, museum_number, filename)
+        return self.check_and_import(text, museum_number, filename)
 
-    def check_and_import(
-        self, ebl_lines: Dict[str, List], text: Text, museum_number: str, filename: str
-    ) -> None:
+    def check_and_import(self, text: Text, museum_number: str, filename: str) -> None:
         self.logger.info(f"Museum number found: {museum_number}")
         fragment_exists, edition_exists = self._check_fragment_and_edition_exist(
             museum_number
@@ -70,7 +67,7 @@ class DatabaseImporter:
                 )
                 return
             self.logger.info(f"Overwriting edition for {museum_number}")
-        self._import(ebl_lines, text, museum_number, filename)
+        self._import(text, museum_number, filename)
 
     def _edition_overwrite_consent(self, museum_number: str) -> bool:
         answers_dict = {"Y": True, "N": False}
@@ -84,9 +81,7 @@ class DatabaseImporter:
             print(f"'{answer}' is an invalid answer. Please choose 'Y' or 'N'")
             return self._edition_overwrite_consent(museum_number)
 
-    def _import(
-        self, ebl_lines: Dict[str, List], text: Text, museum_number: str, filename: str
-    ):
+    def _import(self, text: Text, museum_number: str, filename: str):
         # try:
         self._insert_transliterations(
             text,
@@ -94,6 +89,7 @@ class DatabaseImporter:
         )
         # ToDo: IMPORTANT! Fix lemmatization!
         # self.lemmatization_getter.insert_lemmatization(ebl_lines["lemmatization"], museum_number)
+
         self.logger.info(
             f"{filename}.atf successfully imported as {museum_number}", "imported_files"
         )
@@ -136,12 +132,8 @@ class MuseumNumberGetter:
         self.logger = logger
         self.database = database
 
-    def get_museum_number(
-        self, ebl_lines: Dict[str, List], filename: str
-    ) -> Optional[str]:
-        cdli_number, reference = self._get_cdli_number_and_reference(
-            ebl_lines["control_lines"]
-        )
+    def get_museum_number(self, control_lines: List, filename: str) -> Optional[str]:
+        cdli_number, reference = self._get_cdli_number_and_reference(control_lines)
         if reference is not None:
             if museum_number := self._get_valid_museum_number_or_none(reference):
                 return museum_number
@@ -213,47 +205,3 @@ class MuseumNumberGetter:
                 return None
             museum_number = self._get_valid_museum_number_or_none(museum_number_input)
         return museum_number
-
-
-class LemmatizationGetter:
-    # ToDo: Move to legacy lemmatization, if possible
-    def __init__(self, updater: FragmentUpdater, user: AtfImporterUser) -> None:
-        self.updater = updater
-        self.user = user
-
-    def insert_lemmatization(
-        self,
-        lemmatizations: List[Tuple[str, List[Dict]]],
-        museum_number: str,
-    ):
-        lemmatization_tokens = self._get_lemmatization_tokens(lemmatizations)
-        lemmatization = Lemmatization([lemmatization_tokens])
-        self.updater.update_lemmatization(
-            parse_museum_number(museum_number), lemmatization, self.user
-        )
-
-    def _get_lemmatization_tokens(
-        self, lemmatizations: List[Tuple[str, List[Dict]]]
-    ) -> Sequence[LemmatizationToken]:
-        lemmatization_tokens: List[LemmatizationToken] = []
-        for text_line, lemmas in lemmatizations:
-            ebl_lines = parse_atf_lark(text_line).lines[0].content
-            lemmatization_tokens = self._get_lemmatization_tokens_in_lines(
-                ebl_lines, lemmas, lemmatization_tokens
-            )
-        return lemmatization_tokens
-
-    def _get_lemmatization_tokens_in_lines(
-        self,
-        ebl_lines,
-        lemmas,
-        lemmatization_tokens: List[LemmatizationToken],
-    ) -> List[LemmatizationToken]:
-        for token in ebl_lines:
-            lemma_ids = [
-                lemma["_id"] for lemma in lemmas if lemma["lemma"] == token.value
-            ]
-            lemmatization_tokens.append(
-                LemmatizationToken(token.value, tuple(lemma_ids) if lemma_ids else None)
-            )
-        return lemmatization_tokens

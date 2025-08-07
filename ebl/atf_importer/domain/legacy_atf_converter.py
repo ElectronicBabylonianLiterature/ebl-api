@@ -53,7 +53,7 @@ class LegacyAtfConverter:
             lines = f.read().split("\n")
         return self.atf_to_text(lines)
 
-    def atf_to_text(self, lines: List[str]) -> Text:
+    def atf_to_text(self, lines: List[str]) -> Tuple[List[Dict[str, Any]], Text]:
         processed_lines = self.convert_lines(lines)
         # ToDo: Continue from here.
         # Importing legacy atf should include validation.
@@ -95,12 +95,6 @@ class LegacyAtfConverter:
         self, atf: str, tree: Tree
     ) -> Tuple[Any, Optional[List[Any]], Optional[str], Optional[List[Any]]]:
         if tree.data == "lem_line":
-            # ToDo: Continue from here. Correctly handle lemmatization
-            # print("!!!!", self._convert_lem_line(atf, tree))
-            for lemma, guideword, pos_tag in self._convert_lem_line(atf, tree)[1][0]:
-                print(lemma, guideword, pos_tag)
-                print(self.lemma_lookup.lookup_lemma(lemma, guideword[0], pos_tag))
-            # input()
             return self._convert_lem_line(atf, tree)
         else:
             self._log_line(atf, tree)

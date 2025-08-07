@@ -1,11 +1,11 @@
 import argparse
 import glob
 import os
+import attr
 from pymongo import MongoClient
 from typing import Any, Dict, List, TypedDict
-from ebl.atf_importer.application.glossary_parser import (
-    GlossaryParser,
-    GlossaryParserData,
+from ebl.atf_importer.application.glossary import (
+    GlossaryParser, Glossary
 )
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
@@ -13,6 +13,7 @@ from ebl.atf_importer.application.database_importer import DatabaseImporter
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
 from ebl.atf_importer.application.logger import Logger, LoggerUtil
 from ebl.transliteration.domain.text import Text
+from ebl.context import Context
 
 
 class AtfImporterArgs(TypedDict):
@@ -25,19 +26,16 @@ class AtfImporterArgs(TypedDict):
 class AtfImporter:
     logger: Any = None
     database_importer: Any = None
-    glossary: GlossaryParserData = {
-        "lemma_guideword_pos__citationform": {},
-        "forms_senses": {},
-        "lemma_pos_guideword__citationform_guideword": {},
-    }
 
-    def __init__(self, database) -> None:
+    def __init__(self, database, fragment_repository) -> None:
         self.database = database
         self.username: str = ""
         self.config = AtfImporterConfig().config_data
         self.atf_converter = None
-        self.glossary_parser = GlossaryParser(self.config)
+        self.glossary_parser = GlossaryParser()
+        self.glossary = Glossary(entries=[])
         self.ebl_lines_getter = None
+        self.fragment_repository = fragment_repository
 
     def convert_to_ebl_lines(
         # ToDo: Continue from here.
@@ -56,9 +54,9 @@ class AtfImporter:
         self.username = args["author"]
         self.logger = Logger(args["logdir"])
         self.database_importer = DatabaseImporter(
-            self.database, self.logger, self.username
+            self.database, self.fragment_repository, self.logger, self.username
         )
-        self.glossary = self.glossary_parser.parse_glossaries(args["glodir"])
+        self.glossary = self.glossary_parser.load_glossaries(args["glodir"])
         self.ebl_lines_getter = EblLinesGetter(
             self.database,
             self.config,
@@ -87,19 +85,19 @@ class AtfImporter:
         self.logger.info(
             LoggerUtil.print_frame(f"Formatting to eBL-ATF of {filename}.atf")
         )
-        ebl_lines = self.convert_to_ebl_lines(converted_lines, filename)
+        data = self.convert_to_ebl_lines(converted_lines, filename)
+        control_lines = data["control_lines"]
+        text = attr.evolve(text, lines=data["transliteration"])
         self.logger.info(
             LoggerUtil.print_frame(
                 f"Importing converted lines of {filename}.atf into db"
             )
         )
-        self.import_into_database(ebl_lines, text, filename)
+        self.import_into_database(text, control_lines, filename)
 
-    def import_into_database(
-        self, ebl_lines: Dict[str, List], text: Text, filename: str
-    ) -> None:
+    def import_into_database(self, text: Text, control_lines: List, filename: str) -> None:
         # try:
-        self.database_importer.import_into_database(ebl_lines, text, filename)
+        self.database_importer.import_into_database(text, control_lines, filename)
         # except Exception as e:
         #    self.logger.exception(f"Error while importing into database: {e}")
 
@@ -125,7 +123,7 @@ class AtfImporter:
     def main() -> None:
         client = MongoClient(os.getenv("MONGODB_URI"))
         database = client.get_database(os.getenv("MONGODB_DB"))
-        importer = AtfImporter(database)
+        importer = AtfImporter(database, Context.fragment_repository)
         importer.logger.info("Atf-Importer")
         importer.cli()
 

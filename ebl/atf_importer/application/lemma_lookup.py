@@ -1,8 +1,15 @@
-from typing import List, Dict, Tuple, TypedDict, Union, Any
+import attr
+from typing import List, Dict, TypedDict, Union, Any, Optional, Callable
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.atf_importer.application.logger import Logger
 from collections import defaultdict
-from ebl.atf_importer.domain.line_context import LineContext
+from ebl.transliteration.domain.text import TextLine
+from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.enclosure_tokens import Removal
+from ebl.lemmatization.domain.lemmatization import LemmatizationToken
+from ebl.dictionary.domain.word import WordId
+from ebl.atf_importer.application.glossary import Glossary
 
 
 class QueryArgs(TypedDict, total=False):
@@ -12,68 +19,83 @@ class QueryArgs(TypedDict, total=False):
     guideword_value: str = ""
 
 
+@attr.s(frozen=True, auto_attribs=True)
+class OraccLemmatizationToken:
+    lemma: str
+    guideword: str
+    pos: str
+    transliteration: str
+    skip: bool
+    get_word_id: Callable[["OraccLemmatizationToken"], Optional[str]]
+
+    @property
+    def lemmatizable(self) -> bool:
+        if self.lemma in ["X", "u", "n"] or self.skip:
+            return False
+        return True
+
+    @property
+    def lemmatization_token(self) -> LemmatizationToken:
+        if self.lemmatizable:
+            word_id = self.get_word_id(self)
+            if word_id is not None:
+                return LemmatizationToken(self.transliteration, (WordId(word_id),))
+        return LemmatizationToken(self.transliteration)
+
+
 class LemmaLookup:
     def __init__(
-        self, database, config: AtfImporterConfigData, logger: Logger, glossary_data
+        self,
+        database,
+        config: AtfImporterConfigData,
+        logger: Logger,
+        glossary: Glossary,
     ):
         self.database = database
         self.config = config
         self.logger = logger
-        self.glossary_data = glossary_data
+        self.glossary = glossary
 
-    def lookup_lemma(self, lemma: str, guideword: str, pos_tag: str) -> List[Dict]:
-        if lemma in {"X", "u", "n"}:
-            self.logger.warning(f"No lemmatization: Blank Oracc lemma '{lemma}'")
-            return []
-        lemma = lemma.strip()
-        guideword = self._clean_guideword(guideword)
-        unique_lemmas = self._get_unique_lemmas(lemma, guideword, pos_tag)
-        self._log_warning_if_no_lemmas(unique_lemmas, lemma, guideword)
-        return [{"_id": lemma_id} for lemma_id in unique_lemmas]
+    def lookup_lemma(
+        self, lemmatization_token: OraccLemmatizationToken
+    ) -> Optional[str]:
+        unique_lemmas = self._get_unique_lemmas(lemmatization_token)
+        self._log_warning_if_no_lemmas(unique_lemmas, lemmatization_token)
+        # ToDo: Implement selection of options if more then 1
+        return unique_lemmas[0] if len(unique_lemmas) > 0 else None  # <- HERE
 
-    def _get_unique_lemmas(self, lemma: str, guideword: str, pos_tag: str) -> List[str]:
-        lemma = lemma.replace("ʾ", "'").strip("+")
-        unique_lemmas = self._lookup_standard_lemma(lemma, guideword, pos_tag)
-        if not unique_lemmas and pos_tag in self.config["NOUN_POS_TAGS"]:
+    def _get_unique_lemmas(
+        self, lemmatization_token: OraccLemmatizationToken
+    ) -> List[str]:
+        unique_lemmas = self._lookup_standard_lemma(lemmatization_token)
+        if (
+            not unique_lemmas
+            and lemmatization_token.pos in self.config["NOUN_POS_TAGS"]
+        ):
             return self._query_database(
-                {"lemma_field": "oraccWords.lemma", "lemma_value": lemma}
+                {
+                    "lemma_field": "oraccWords.lemma",
+                    "lemma_value": lemmatization_token.lemma,
+                }
             )
         return unique_lemmas
 
-    def _log_warning_if_no_lemmas(
-        self, unique_lemmas: List[str], lemma: str, guideword: str
-    ) -> None:
-        if not unique_lemmas:
-            self.logger.warning(
-                "Incompatible lemmatization: No eBL word found for lemma"
-                f" '{lemma}' and guide word '{guideword}'",
-                "not_lemmatized_tokens",
-            )
-
-    def _clean_guideword(self, guideword: str) -> str:
-        guideword = guideword.strip().strip("[]")
-        return guideword.split("//")[0] if "//" in guideword else guideword
-
     def _lookup_standard_lemma(
-        self, lemma: str, guideword: str, pos_tag: str
+        self, lemmatization_token: OraccLemmatizationToken
     ) -> List[str]:
-        try:
-            sense = self.glossary_data["forms_senses"][lemma]
-            key = f"{lemma}{pos_tag}{sense[0]}"
-            citation_form, guideword = self.glossary_data[
-                "lemma_pos_guideword__citationform_guideword"
-            ][key]
-            guideword = self._clean_guideword(guideword)
-            unique_lemmas = self._query_sources(lemma, guideword, citation_form)
-            return unique_lemmas
-        except KeyError:
+        unique_lemmas = []
+        glossary_lexemes = self.glossary.find({"lemma": lemmatization_token.lemma})
+        if glossary_lexemes == []:
             self.logger.warning(
                 "Incompatible lemmatization: No citation form"
-                f" or guideword (by sense) found in the glossary for '{lemma}'",
+                f" or guideword (by sense) found in the glossary for '{lemmatization_token.lemma}'",
                 "not_lemmatized_tokens",
             )
             return []
-
+        for lexeme in glossary_lexemes:
+            unique_lemmas += self._query_sources(
+                lemmatization_token.lemma, lexeme.guideword, lexeme.lemma
+            )
         return unique_lemmas
 
     def _query_sources(
@@ -108,18 +130,6 @@ class LemmaLookup:
         query = {args["lemma_field"]: args["lemma_value"]}
         if self._has_guideword(args):
             query[args["guideword_field"]] = args["guideword_value"]
-        # ToDo: Clean up
-        print(
-            "query_database",
-            query,
-            [
-                entry["_id"]
-                for entry in self.database.get_collection("words").aggregate(
-                    [{"$match": query}, {"$project": {"_id": 1}}]
-                )
-            ],
-        )
-        input()
         return [
             entry["_id"]
             for entry in self.database.get_collection("words").aggregate(
@@ -135,143 +145,135 @@ class LemmaLookup:
             and args["guideword_value"]
         )
 
+    def _log_warning_if_no_lemmas(
+        self, unique_lemmas: List[str], lemmatization_token: OraccLemmatizationToken
+    ) -> None:
+        # ToDo: Implement manual select of lemma by user
+        if not unique_lemmas:
+            self.logger.warning(
+                "Incompatible lemmatization: No eBL word found for lemma"
+                f" '{lemmatization_token.lemma}' and guideword '{lemmatization_token.guideword}'",
+                "not_lemmatized_tokens",
+            )
+
 
 class LemmaLineHandler:
     def __init__(
-        self, database, config: AtfImporterConfigData, logger: Logger, glossary_data
+        self, database, config: AtfImporterConfigData, logger: Logger, glossary
     ):
-        self.lemma_lookup = LemmaLookup(database, config, logger, glossary_data)
+        self.lemma_lookup = LemmaLookup(database, config, logger, glossary)
         self.logger = logger
 
-    def handle_lem_line(
+    def apply_lemmatization(
         self,
-        line: Dict[str, Any],
+        lemmatization_line: Dict[str, Any],
         result: defaultdict,
         filename: str,
-        context: LineContext,
-    ) -> defaultdict:
-        # ToDo: Check this out
-        """
-        if not context.last_transliteration:
-            self.logger.warning(
-                f"Lemmatization line without preceding text line in {filename}"
-            )
-            return result
-        """
-        all_unique_lemmas = self._get_all_unique_lemmas(line, filename, context)
-        result["all_unique_lemmas"] += all_unique_lemmas
-        result["last_transliteration"] = context.last_transliteration
-        lemma_line = self._create_lemma_line(
-            context.last_transliteration,
-            all_unique_lemmas,
-            context.last_transliteration_line,
+        transliteration_line: TextLine,
+    ) -> TextLine:
+        oracc_lemmatization = self.parse_lemmatization_line(
+            lemmatization_line, transliteration_line
         )
-        result["lemmatization"].append(tuple(lemma_line))
-        # self._log_line(filename, context)
-        return result
+        ebl_lemmatization = tuple(
+            token.lemmatization_token for token in oracc_lemmatization
+        )
+        # ToDo: Clean up
+        print(ebl_lemmatization)
+        input()
+        return transliteration_line.update_lemmatization(ebl_lemmatization)
 
-    def _get_all_unique_lemmas(
+    def parse_lemmatization_line(
+        self, lemmatization_line, transliteration_line: TextLine
+    ) -> Dict[str, str]:
+        oracc_lemmatization = []
+        transliteration_tokens = self.get_transliteration_tokens(transliteration_line)
+        # ToDo: Add length check here.
+        # If length doesn't match, consider manual lemmatization? (new card)
+        # CONTINUE FROM HERE. THE LOGIC SHOULD BE DIFFERENT. CYCLE through `transliteration_tokens`.
+        # Find corresponding indicies of `lemmatization_line["c_array"]`. Apply correction if `skip`.
+        # Refactor // make vars empty when skip.
+        index_correction = 0
+        for _index, oracc_lemma_entry in enumerate(lemmatization_line["c_array"]):
+            index = _index - index_correction
+            oracc_lemma_tuple = oracc_lemma_entry[0]
+            guideword = oracc_lemma_tuple[1].strip().strip("[]")
+            guideword = guideword.split("//")[0] if "//" in guideword else guideword
+            if transliteration_tokens[index]["skip"]:
+                index_correction += 1
+                OraccLemmatizationToken(
+                    lemma="",
+                    guideword="",
+                    pos="",
+                    transliteration=transliteration_tokens[index]["value"],
+                    skip=True,
+                    get_word_id=self.lemma_lookup.lookup_lemma,
+                )
+            else:
+                oracc_lemmatization.append(
+                    OraccLemmatizationToken(
+                        lemma=oracc_lemma_tuple[0].strip("+"),
+                        guideword=guideword,
+                        pos=oracc_lemma_tuple[2],
+                        transliteration=transliteration_tokens[index]["value"],
+                        skip=False,
+                        get_word_id=self.lemma_lookup.lookup_lemma,
+                    )
+                )
+        print(oracc_lemmatization)
+        input()
+        return oracc_lemmatization
+
+    def get_transliteration_tokens(self, transliteration_line: TextLine) -> List[Dict]:
+        transliteration_tokens = []
+        for token in transliteration_line._content:
+            if self.is_token_lemmatizable(token):
+                transliteration_tokens.append({"value": token.value, "skip": False})
+            else:
+                transliteration_tokens.append({"value": token.value, "skip": True})
+        return transliteration_tokens
+
+    """
+    def _lemmatize_line(
         self,
-        line: Dict[str, Any],
-        filename: str,
-        context: LineContext,
-    ) -> List:
-        all_unique_lemmas = []
-        for oracc_lemma_tupel in line["c_array"]:
-            all_unique_lemmas = self._get_ebl_lemmas(
-                oracc_lemma_tupel[0], all_unique_lemmas, filename
-            )
-        return self._add_placeholders_to_lemmas(
-            all_unique_lemmas, context.last_alter_lem_line_at
+        transliteration_line: TextLine,
+        oracc_lemmatization: List[OraccLemmatizationToken],
+    ) -> TextLine:
+        _lemmatization = (
+            LemmatizationToken("DIŠ", (WordId("šumma I"),)),
+            LemmatizationToken("ina", (WordId("ina I"),)),
+            LemmatizationToken("{iti}ZIZ₂", (WordId("Šabāṭu I"),)),
+            LemmatizationToken("U₄", (WordId("ūmu I"),)),
+            LemmatizationToken("14.KAM"),
+            LemmatizationToken("AN.KU₁₀", (WordId("antallû I"),)),
+            LemmatizationToken("30", (WordId("Sîn I"),)),
+            LemmatizationToken("GAR-ma", (WordId("šakānu I"),)),
+            LemmatizationToken("<<ina>>"),
+            LemmatizationToken("KAN₅-su", (WordId("adru I"),)),
+            LemmatizationToken("KU₄", (WordId("erēbu I"),)),
+            LemmatizationToken("DINGIR", (WordId("ilu I"),)),
+            LemmatizationToken("GU₇", (WordId("akālu I"),)),
         )
+        print("\ncorrect lemmatization:", _lemmatization == tuple(lemmatization))
+        input()
+        return transliteration_line.update_lemmatization(tuple(lemmatization))
+    """
 
-    def _add_placeholders_to_lemmas(
-        self, all_unique_lemmas: List, last_alter_lem_line_at: List[int]
-    ):
-        for alter_pos in last_alter_lem_line_at:
-            self.logger.warning(
-                f"Adding placeholder to lemma line at position:{str(alter_pos)}"
-            )
-            all_unique_lemmas.insert(alter_pos, [])
-        return all_unique_lemmas
+    def is_token_lemmatizable(self, token: Token) -> bool:
+        if not isinstance(token, Word) or not token.lemmatizable:
+            return False
+        parts = token._parts
+        if len(parts) >= 2 and (
+            isinstance(parts[0], Removal) or isinstance(parts[-1], Removal)
+        ):
+            return False
+        return True
 
-    def _get_ebl_lemmas(
-        self,
-        oracc_lemma_tupel: Tuple[str, str, str],
-        all_unique_lemmas: List,
-        filename: str,
-    ) -> List:
-        lemma, guideword, pos_tag = oracc_lemma_tupel
-        db_entries = self._lookup_lemma(lemma, guideword, pos_tag)
-        if db_entries:
-            all_unique_lemmas.extend(db_entries)
-        else:
-            self.logger.warning(f"Lemma not found: {lemma} in {filename}")
-        return all_unique_lemmas
+        # ToDo: Adjust for cases when removal consists of more than 2 words.
+        # <<a-a ba-ba>>
 
-    def _lookup_lemma(self, lemma: str, guideword: str, pos_tag: str):
-        return self.lemma_lookup.lookup_lemma(lemma, guideword, pos_tag)
-
-    def _create_lemma_line(
-        self,
-        last_transliteration: List[str],
-        all_unique_lemmas: List,
-        last_transliteration_line: str,
-    ) -> List:
-        if len(last_transliteration) != len(all_unique_lemmas):
-            self._log_transliteration_error(last_transliteration_line)
-            return []
-
-        oracc_word_ebl_lemmas = self._map_lemmas_to_indices(
-            last_transliteration, all_unique_lemmas
-        )
-        print(
-            "\noracc_word_ebl_lemmas:",
-            oracc_word_ebl_lemmas,
-            "\noracc_word_ebl_lemmas:",
-            all_unique_lemmas,
-        )
-        # ToDo: Check if this works
-        # Should use the deserialized `Line` object:
-        # Undefined attribute [16]: `List` has no attribute `update_lemmatization`.
-        return last_transliteration.update_lemmatization(oracc_word_ebl_lemmas)
-
-    def _log_transliteration_error(self, last_transliteration_line: str) -> None:
+    def _log_transliteration_error(self, transliteration_line: str) -> None:
         self.logger.error(
             "Transliteration and Lemmatization don't have equal length:"
-            f"\n{str(last_transliteration_line)}",
+            f"\n{str(transliteration_line)}",
             "error_lines",
         )
-
-    def _map_lemmas_to_indices(
-        self, last_transliteration: List[str], all_unique_lemmas: List
-    ) -> dict:
-        oracc_word_ebl_lemmas = {}
-        for index in range(len(last_transliteration)):
-            oracc_word_ebl_lemmas[index] = all_unique_lemmas[index]
-        return oracc_word_ebl_lemmas
-
-    # ToDo: Clean up
-    """
-    def _generate_lemma_line(
-        self, last_transliteration_line: str, oracc_word_ebl_lemmas: dict
-    ) -> List:
-        return []
-        # ToDo: Continue from here (latest!!!!): check! this might be an issue
-        # ToDo: Ideally, remove this method
-        # Implement a check for lemmatization lines
-        #
-        # ebl_lines = parse_atf_lark(
-        #    last_transliteration_line
-        # )
-        # lemma_line = []
-        # word_count = 0
-        # for token in last_transliteration_line:  # ebl_lines.lines[0].content:
-        #    unique_lemma = oracc_word_ebl_lemmas.get(word_count, [])
-        #    if unique_lemma:
-        #        lemma_line.append(LemmatizationToken(token.value, tuple(unique_lemma)))
-        #        word_count += 1
-        #    else:
-        #        lemma_line.append(LemmatizationToken(token.value, None))
-        # return lemma_line
-    """

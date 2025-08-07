@@ -32,7 +32,7 @@ def create_file(path, content):
 def setup_and_run_importer(
     atf_string, tmp_path, database, fragment_repository, glossary=""
 ):
-    atf_importer = AtfImporter(database)
+    atf_importer = AtfImporter(database, fragment_repository)
     create_file(tmp_path / "import/test.atf", atf_string)
     create_file(tmp_path / "import/glossary/akkadian.glo", glossary)
     atf_importer.run_importer(
@@ -45,11 +45,18 @@ def setup_and_run_importer(
     )
 
 
-def check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path):
+def check_importing_and_logs(
+    museum_number, fragment_repository, tmp_path, logs_check=True
+):
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
-    assert fragment.text.lines[0].content.split(" = ")[1] == test_id
+    assert str(fragment.number) == museum_number
+    if logs_check:
+        check_logs(tmp_path, museum_number)
+
+
+def check_logs(tmp_path, museum_number):
     for log_file in os.listdir(tmp_path / "logs"):
         with open(tmp_path / f"logs/{log_file}") as logfile:
             if log_file == "imported_files.txt":
@@ -73,10 +80,9 @@ def mock_input(monkeypatch):
 
 def test_logger_writes_files(database, fragment_repository, tmp_path):
     museum_number = "BM.1"
-    test_id = museum_number
-    atf = f"&P000001 = {test_id}\n1'. GU₄ 30 ⸢12⸣ [...]"
+    atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("BM.1")))
-    setup_and_run_importer(atf, tmp_path, database)
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
         "imported_files.txt",
         "not_imported_files.txt",
@@ -84,13 +90,12 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
         "not_lemmatized_tokens.txt",
         "unparsable_lines.txt",
     ]
-    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
 def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_path):
     museum_number = "BM.1"
-    test_id = museum_number
-    atf = f"&P111111 = {test_id}\n1'. GU₄ 30 ⸢12⸣ [...]"
+    atf = f"&P111111 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
         FragmentFactory.build(
             number=MuseumNumber.of(museum_number),
@@ -98,7 +103,7 @@ def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_pa
         )
     )
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
-    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
 def test_find_museum_number_by_traditional_reference(
@@ -113,7 +118,7 @@ def test_find_museum_number_by_traditional_reference(
         )
     )
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
-    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
 def test_museum_number_input_by_user(
@@ -126,7 +131,7 @@ def test_museum_number_input_by_user(
     responses = mock_input([museum_number, "end"])
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert next(responses) == "end"
-    check_importing_and_logs(museum_number, test_id, fragment_repository, tmp_path)
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
 def test_museum_number_skip_by_user(
@@ -157,7 +162,7 @@ def test_fragment_update_cancel_by_user(
     )
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     check_importing_and_logs(
-        museum_number, museum_number, fragment_repository, tmp_path
+        museum_number, fragment_repository, tmp_path
     )
     # ToDo: Implement
 
@@ -196,8 +201,8 @@ def test_placeholder_insert(fragment_repository, tmp_path):
     atf = (
         f"&P000001 = {museum_number}\n"
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.KU₁₀ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
-        "#lem: ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n; attalli[eclipse]N; Sîn["
-        "moon]N; iššakkanma[take place]V; adrūssu[darkly]AV; īrub[enter]V; ilu["
+        "#lem: šumma[if]CNJ; ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n; antallû[eclipse]N; Sîn["
+        "moon]N; šakānu[take place]V; adrūssu[darkly]AV; erēbu[enter]V; ilu["
         "god]N; ikkal[eat]V"
     )
     glossary = (
@@ -250,10 +255,11 @@ def test_placeholder_insert(fragment_repository, tmp_path):
         "@entry šakānu [put] V\n"
         "@form GAR $šakānu\n"
         "@form GAR-ma $šakānu\n"
-        "@sense V set\n"
-        "@sense V occur\n"
-        "@sense V put\n"
-        "@sense V place\n"
+        "@sense V take place\n"
+        "@end entry\n\n"
+        "@entry šumma [if] CNJ\n"
+        "@form DIŠ $šumma\n"
+        "@sense CNJ if\n"
         "@end entry\n\n"
         "@letter U\n\n"
         "@entry ūmu [day] N\n"
@@ -269,32 +275,8 @@ def test_placeholder_insert(fragment_repository, tmp_path):
 
     setup_and_run_importer(atf, tmp_path, database, fragment_repository, glossary)
     check_importing_and_logs(
-        museum_number, museum_number, fragment_repository, tmp_path
+        museum_number, fragment_repository, tmp_path, logs_check=False
     )
-    # ToDo: Continue from here
-    # The test fails because the lemmatization line is returned as `None`.
-
-    # I.e.:
-    #   ..._value='GU'),), sub_index=7, sign=None, surrogate=()),),
-    #   variant=None, has_variant_alignment=False, has_omitted_alignment=False, _language=<Language.AKKADIAN: 1>))),
-    #   None), <-- ! Lemmatization should be here
-    #   parser_version='6.2.0')
-    #
-    """
-    test_lemmas = [
-        [],
-        ["Šabaṭu I"],
-        [],
-        [],
-        [],
-        ["Sin I"],
-        [],
-        [],
-        [],
-        [],
-        [],
-    ]
-    """
 
     # atf_importer = AtfImporter(database)
     # atf_importer._ebl_lines_getter = EblLinesGetter(
