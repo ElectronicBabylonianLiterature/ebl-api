@@ -161,9 +161,7 @@ def test_fragment_update_cancel_by_user(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
-    check_importing_and_logs(
-        museum_number, fragment_repository, tmp_path
-    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
     # ToDo: Implement
 
 
@@ -187,11 +185,7 @@ def test_import_fragment_correct_parsing_errors(
 # - ask before updating existing edition
 
 
-def test_placeholder_insert(fragment_repository, tmp_path):
-    # ToDo: Rename test. Ensure that placeholders work correctly
-    """
-    Test case for insertion of placeholder if '<<'.
-    """
+def test_lemmatization(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "BM.1"
@@ -277,30 +271,32 @@ def test_placeholder_insert(fragment_repository, tmp_path):
     check_importing_and_logs(
         museum_number, fragment_repository, tmp_path, logs_check=False
     )
+    fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(museum_number)
+    )
+    print([(word.value, word.unique_lemma) for word in fragment.text.lines[0]._content])
+    assert [word.unique_lemma for word in fragment.text.lines[0]._content] == [
+        ("DIŠ", ("šumma I",)),
+        ("ina", ("ina I",)),
+        ("{iti}ZIZ₂", ("Šabāṭu I",)),
+        ("U₄", ("ūmu I",)),
+        ("14.KAM", ()),
+        ("AN.KU₁₀", ("antalû I",)),
+        ("30", ("Sîn I",)),
+        ("GAR-ma", ("šakānu I",)),
+        ("<<ina>>", ()),
+        ("KAN₅-su", ("adru I")), # Fix
+        ("KU₄", ("erēbu I",)),
+        ("DINGIR", ("ilu I",)),
+        ("GU₇", ("akālu I")), # Fix
+    ]
 
-    # atf_importer = AtfImporter(database)
-    # atf_importer._ebl_lines_getter = EblLinesGetter(
-    #    atf_importer.database,
-    #    atf_importer.config,
-    #    atf_importer.logger,
-    #    {},  # ToDo: Add GlossaryParserData?
-    #    test_lemmas,  # ToDo: Better implement mocking
-    # )
-    # ebl_lines = atf_importer.convert_to_ebl_lines(
-    #    converted_lines,
-    #    "cpp_3_1_16",
-    # )
-    # FAILED ebl/tests/atf_importer/test_atf_importer.py:
-    #   :test_placeholder_insert - KeyError: 'last_transliteration'
-    # print("!!!! ebl_lines", ebl_lines)
-    # assert len(ebl_lines["last_transliteration"]) == len(ebl_lines["all_unique_lemmas"])
 
-
-@pytest.mark.skip(reason="heavy test")
+# @pytest.mark.skip(reason="heavy test")
 def test_atf_importer(fragment_repository):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    atf_importer = AtfImporter(database)
+    atf_importer = AtfImporter(database, fragment_repository)
     archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
     with tempfile.TemporaryDirectory() as tempdir:
         data_path = f"{tempdir}/test_atf_import_data"

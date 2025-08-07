@@ -21,22 +21,21 @@ class QueryArgs(TypedDict, total=False):
 
 @attr.s(frozen=True, auto_attribs=True)
 class OraccLemmatizationToken:
-    lemma: str
-    guideword: str
-    pos: str
     transliteration: str
-    skip: bool
-    get_word_id: Callable[["OraccLemmatizationToken"], Optional[str]]
+    get_word_id: Optional[Callable[["OraccLemmatizationToken"], Optional[str]]]
+    lemma: str = ""
+    guideword: str = ""
+    pos: str = ""
 
     @property
     def lemmatizable(self) -> bool:
-        if self.lemma in ["X", "u", "n"] or self.skip:
+        if self.lemma in ["X", "u", "n", ""]:
             return False
         return True
 
     @property
     def lemmatization_token(self) -> LemmatizationToken:
-        if self.lemmatizable:
+        if self.lemmatizable and hasattr(self, "get_word_id"):
             word_id = self.get_word_id(self)
             if word_id is not None:
                 return LemmatizationToken(self.transliteration, (WordId(word_id),))
@@ -61,7 +60,7 @@ class LemmaLookup:
     ) -> Optional[str]:
         unique_lemmas = self._get_unique_lemmas(lemmatization_token)
         self._log_warning_if_no_lemmas(unique_lemmas, lemmatization_token)
-        # ToDo: Implement selection of options if more then 1
+        # ToDo: Implement selection of options if more then 1, if found
         return unique_lemmas[0] if len(unique_lemmas) > 0 else None  # <- HERE
 
     def _get_unique_lemmas(
@@ -177,9 +176,6 @@ class LemmaLineHandler:
         ebl_lemmatization = tuple(
             token.lemmatization_token for token in oracc_lemmatization
         )
-        # ToDo: Clean up
-        print(ebl_lemmatization)
-        input()
         return transliteration_line.update_lemmatization(ebl_lemmatization)
 
     def parse_lemmatization_line(
@@ -189,39 +185,41 @@ class LemmaLineHandler:
         transliteration_tokens = self.get_transliteration_tokens(transliteration_line)
         # ToDo: Add length check here.
         # If length doesn't match, consider manual lemmatization? (new card)
-        # CONTINUE FROM HERE. THE LOGIC SHOULD BE DIFFERENT. CYCLE through `transliteration_tokens`.
-        # Find corresponding indicies of `lemmatization_line["c_array"]`. Apply correction if `skip`.
-        # Refactor // make vars empty when skip.
         index_correction = 0
-        for _index, oracc_lemma_entry in enumerate(lemmatization_line["c_array"]):
-            index = _index - index_correction
-            oracc_lemma_tuple = oracc_lemma_entry[0]
+        for index, transliteration_token in enumerate(transliteration_tokens):
+            token, index_correction = self.get_oracc_lemmatization_token(
+                transliteration_token, lemmatization_line, index, index_correction
+            )
+            oracc_lemmatization.append(token)
+        return oracc_lemmatization
+
+    def get_oracc_lemmatization_token(
+        self,
+        transliteration_token,
+        lemmatization_line,
+        index,
+        index_correction,
+    ):
+        transliteration = transliteration_token["value"]
+        skip = True if transliteration_token["skip"] else False
+        if skip:
+            index_correction += 1
+            return OraccLemmatizationToken(
+                transliteration=transliteration, get_word_id=None
+            ), index_correction
+        else:
+            oracc_lemma_tuple = lemmatization_line["c_array"][index - index_correction][
+                0
+            ]
             guideword = oracc_lemma_tuple[1].strip().strip("[]")
             guideword = guideword.split("//")[0] if "//" in guideword else guideword
-            if transliteration_tokens[index]["skip"]:
-                index_correction += 1
-                OraccLemmatizationToken(
-                    lemma="",
-                    guideword="",
-                    pos="",
-                    transliteration=transliteration_tokens[index]["value"],
-                    skip=True,
-                    get_word_id=self.lemma_lookup.lookup_lemma,
-                )
-            else:
-                oracc_lemmatization.append(
-                    OraccLemmatizationToken(
-                        lemma=oracc_lemma_tuple[0].strip("+"),
-                        guideword=guideword,
-                        pos=oracc_lemma_tuple[2],
-                        transliteration=transliteration_tokens[index]["value"],
-                        skip=False,
-                        get_word_id=self.lemma_lookup.lookup_lemma,
-                    )
-                )
-        print(oracc_lemmatization)
-        input()
-        return oracc_lemmatization
+            return OraccLemmatizationToken(
+                lemma=oracc_lemma_tuple[0].strip("+"),
+                guideword=guideword,
+                pos=oracc_lemma_tuple[2],
+                transliteration=transliteration,
+                get_word_id=self.lemma_lookup.lookup_lemma,
+            ), index_correction
 
     def get_transliteration_tokens(self, transliteration_line: TextLine) -> List[Dict]:
         transliteration_tokens = []
@@ -231,32 +229,6 @@ class LemmaLineHandler:
             else:
                 transliteration_tokens.append({"value": token.value, "skip": True})
         return transliteration_tokens
-
-    """
-    def _lemmatize_line(
-        self,
-        transliteration_line: TextLine,
-        oracc_lemmatization: List[OraccLemmatizationToken],
-    ) -> TextLine:
-        _lemmatization = (
-            LemmatizationToken("DIŠ", (WordId("šumma I"),)),
-            LemmatizationToken("ina", (WordId("ina I"),)),
-            LemmatizationToken("{iti}ZIZ₂", (WordId("Šabāṭu I"),)),
-            LemmatizationToken("U₄", (WordId("ūmu I"),)),
-            LemmatizationToken("14.KAM"),
-            LemmatizationToken("AN.KU₁₀", (WordId("antallû I"),)),
-            LemmatizationToken("30", (WordId("Sîn I"),)),
-            LemmatizationToken("GAR-ma", (WordId("šakānu I"),)),
-            LemmatizationToken("<<ina>>"),
-            LemmatizationToken("KAN₅-su", (WordId("adru I"),)),
-            LemmatizationToken("KU₄", (WordId("erēbu I"),)),
-            LemmatizationToken("DINGIR", (WordId("ilu I"),)),
-            LemmatizationToken("GU₇", (WordId("akālu I"),)),
-        )
-        print("\ncorrect lemmatization:", _lemmatization == tuple(lemmatization))
-        input()
-        return transliteration_line.update_lemmatization(tuple(lemmatization))
-    """
 
     def is_token_lemmatizable(self, token: Token) -> bool:
         if not isinstance(token, Word) or not token.lemmatizable:
@@ -272,6 +244,7 @@ class LemmaLineHandler:
         # <<a-a ba-ba>>
 
     def _log_transliteration_error(self, transliteration_line: str) -> None:
+        # ToDo: Implement
         self.logger.error(
             "Transliteration and Lemmatization don't have equal length:"
             f"\n{str(transliteration_line)}",
