@@ -60,7 +60,7 @@ class LemmaLookup:
     ) -> Optional[str]:
         unique_lemmas = self._get_unique_lemmas(lemmatization_token)
         self._log_warning_if_no_lemmas(unique_lemmas, lemmatization_token)
-        # ToDo: Implement selection of options if more then 1, if found
+        # ToDo: Possibly implement selection of options if more then 1, if found
         return unique_lemmas[0] if len(unique_lemmas) > 0 else None  # <- HERE
 
     def _get_unique_lemmas(

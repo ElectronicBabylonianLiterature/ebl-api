@@ -23,6 +23,7 @@ class TranslationLineTransformer(CommonTransformer, MarkupTransformer):
     ) -> Extent:
         # ToDo: Fix the following issue in
         # `ebl/tests/atf_importer/test_atf_importer.py::test_atf_importer`
+        #
         """
         Converting: "AD-651.atf"
         E               lark.exceptions.VisitError: Error trying to process rule "ebl_atf_translation_line__translation_extent":

@@ -56,9 +56,10 @@ class LegacyAtfConverter:
     def atf_to_text(self, lines: List[str]) -> Tuple[List[Dict[str, Any]], Text]:
         processed_lines = self.convert_lines(lines)
         # ToDo: Continue from here.
-        # Importing legacy atf should include validation.
-        # lines = [(line["serialized"], None) for line in line]
         # check_errors(lines)
+        # for line in processed_lines:
+        # print("\n", line["serialized"], "\n")
+        # input()
         text = Text(
             tuple(
                 line["serialized"]
@@ -120,8 +121,17 @@ class LegacyAtfConverter:
     def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         self.indexing_visitor.reset()
         lines_data = []
+        # ToDo: Continue from here. Solve the issue with line parsing and order
+        # &X106510 = AD -651
         for line in lines:
+            # print(line)
             lines_data = self._parse_line(line, lines_data)
+            # print(
+            #    [lines_data[-1]["tree"].children[0]]
+            #    if len(lines_data[-1]["tree"].children) > 0
+            #    else lines_data[-1]["tree"]
+            # )
+            # input()
         return lines_data
 
     def _parse_line(

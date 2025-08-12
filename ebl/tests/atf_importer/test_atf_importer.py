@@ -183,6 +183,7 @@ def test_import_fragment_correct_parsing_errors(
 # - importing multiple files
 # - importing files with lemmatization & multiple glossaries
 # - ask before updating existing edition
+# - lemmatization: missing words, multiple options, 
 
 
 def test_lemmatization(fragment_repository, tmp_path):
@@ -274,7 +275,6 @@ def test_lemmatization(fragment_repository, tmp_path):
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
-    print([(word.value, word.unique_lemma) for word in fragment.text.lines[0]._content])
     assert [word.unique_lemma for word in fragment.text.lines[0]._content] == [
         ("DIŠ", ("šumma I",)),
         ("ina", ("ina I",)),
@@ -285,10 +285,10 @@ def test_lemmatization(fragment_repository, tmp_path):
         ("30", ("Sîn I",)),
         ("GAR-ma", ("šakānu I",)),
         ("<<ina>>", ()),
-        ("KAN₅-su", ("adru I")), # Fix
+        ("KAN₅-su", ("adru I")), # Fix!
         ("KU₄", ("erēbu I",)),
         ("DINGIR", ("ilu I",)),
-        ("GU₇", ("akālu I")), # Fix
+        ("GU₇", ("akālu I")), # Fix!
     ]
 
 

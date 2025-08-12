@@ -9,6 +9,7 @@
 %import .ebl_atf_empty_line (empty_line)
 %import .ebl_atf_common (labels)
 %import .ebl_atf_control_line (control_line)
+%import .ebl_atf_legacy_control_line (legacy_control_line)
 %import .oracc_atf_lem_line (lem_line)
 
 ?start: line
@@ -22,4 +23,5 @@
      | translation_line
      | control_line
      | lem_line
+     | legacy_control_line
      | legacy_translation_line
