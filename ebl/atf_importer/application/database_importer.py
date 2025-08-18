@@ -31,7 +31,9 @@ class DatabaseImporter:
             context.get_transliteration_update_factory()
         )
         self.updater: FragmentUpdater = context.get_fragment_updater()
-        self.museum_number_getter = MuseumNumberGetter(database, logger)
+        self.museum_number_getter = MuseumNumberGetter(
+            database, fragment_repository, logger
+        )
         # ToDo: Clean up:
         # self.lemmatization_getter = LemmatizationGetter(self.updater, self.user)
 
@@ -82,13 +84,12 @@ class DatabaseImporter:
             return self._edition_overwrite_consent(museum_number)
 
     def _import(self, text: Text, museum_number: str, filename: str):
+        # ToDo: Restore `try` after debugging
         # try:
         self._insert_transliterations(
             text,
             museum_number,
         )
-        # ToDo: IMPORTANT! Fix lemmatization!
-        # self.lemmatization_getter.insert_lemmatization(ebl_lines["lemmatization"], museum_number)
 
         self.logger.info(
             f"{filename}.atf successfully imported as {museum_number}", "imported_files"
@@ -105,10 +106,6 @@ class DatabaseImporter:
             result = self.fragment_repository.query_by_museum_number(
                 MuseumNumber.of(museum_number)
             )
-            # result = self.database.get_collection("fragments").find_one(
-            #    {"museumNumber": museum_number}
-            # )
-            # , {"_id": 0, "text.lines.0": 1}
         except NotFoundError:
             return False, False
         has_edition = bool(result.text.lines)
@@ -128,19 +125,22 @@ class DatabaseImporter:
 
 
 class MuseumNumberGetter:
-    def __init__(self, database, logger: Logger):
+    def __init__(
+        self, database, fragment_repository: FragmentRepository, logger: Logger
+    ):
         self.logger = logger
         self.database = database
+        self.fragment_repository = fragment_repository
 
     def get_museum_number(self, control_lines: List, filename: str) -> Optional[str]:
         cdli_number, reference = self._get_cdli_number_and_reference(control_lines)
         if reference is not None:
             if museum_number := self._get_valid_museum_number_or_none(reference):
-                return museum_number
+                return self._get_lowest_join_number(museum_number)
             if museum_number := self._get_museum_number_by_data(cdli_number, reference):
-                return museum_number
+                return self._get_lowest_join_number(museum_number)
         self.logger.error(f"Could not find a valid museum number for '{filename}'")
-        return self._input_museum_number()
+        return self._get_lowest_join_number(self._input_museum_number())
 
     def _get_valid_museum_number_or_none(
         self, museum_number_string: str
@@ -204,4 +204,13 @@ class MuseumNumberGetter:
             if museum_number_input.lower() == "skip":
                 return None
             museum_number = self._get_valid_museum_number_or_none(museum_number_input)
+        return museum_number
+
+    def _get_lowest_join_number(self, museum_number: Optional[str]) -> Optional[str]:
+        if museum_number:
+            fragment = self.fragment_repository.query_by_museum_number(
+                MuseumNumber.of(museum_number)
+            )
+            if fragment.joins.lowest and museum_number != str(fragment.joins.lowest):
+                return str(fragment.joins.lowest)
         return museum_number

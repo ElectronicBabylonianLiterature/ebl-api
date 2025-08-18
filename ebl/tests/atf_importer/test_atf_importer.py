@@ -9,9 +9,12 @@ from ebl.atf_importer.application.atf_importer import AtfImporter
 
 # from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 # from ebl.atf_importer.application.lines_getter import EblLinesGetter
-from ebl.tests.factories.fragment import FragmentFactory
+from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.fragmentarium.domain.joins import Join, Joins
+from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.fragmentarium.application.joins_schema import JoinSchema
 
 
 @pytest.fixture(autouse=True)
@@ -45,15 +48,12 @@ def setup_and_run_importer(
     )
 
 
-def check_importing_and_logs(
-    museum_number, fragment_repository, tmp_path, logs_check=True
-):
+def check_importing_and_logs(museum_number, fragment_repository, tmp_path):
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
     assert str(fragment.number) == museum_number
-    if logs_check:
-        check_logs(tmp_path, museum_number)
+    check_logs(tmp_path, museum_number)
 
 
 def check_logs(tmp_path, museum_number):
@@ -179,11 +179,48 @@ def test_import_fragment_correct_parsing_errors(
     # ToDo: Implement
 
 
+def test_import_fragment_with_joins(
+    database, fragment_repository, tmp_path, mock_input
+):
+    museum_number_join_low = "X.1"
+    museum_number_join_high = "X.2"
+    atf = f"&P000001 = {museum_number_join_high}\n1. LUGAL [x]"
+    for number_1, number_2 in [
+        (museum_number_join_low, museum_number_join_high),
+        (museum_number_join_high, museum_number_join_low),
+    ]:
+        fragment = FragmentFactory.build(
+            number=MuseumNumber.of(number_1),
+            joins=Joins(
+                ((Join(MuseumNumber.of(number_2), is_in_fragmentarium=True),),),
+            ),
+        )
+        fragment_repository.create(fragment)
+
+    database["joins"].insert_one(
+        {
+            "fragments": [
+                {
+                    **JoinSchema(exclude=["is_in_fragmentarium"]).dump(
+                        Join(MuseumNumber.of(museum_number))
+                    ),
+                    "group": index,
+                }
+                for index, museum_number in enumerate(
+                    [museum_number_join_low, museum_number_join_high]
+                )
+            ]
+        }
+    )
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    check_importing_and_logs(museum_number_join_low, fragment_repository, tmp_path)
+
+
 # ToDo: Add tests for:
 # - importing multiple files
 # - importing files with lemmatization & multiple glossaries
-# - ask before updating existing edition
-# - lemmatization: missing words, multiple options, 
+# - ask before updating existing edition (use `LemmatizedFragmentFactory`)
+# - lemmatization: missing words, multiple options,
 
 
 def test_lemmatization(fragment_repository, tmp_path):
@@ -197,15 +234,15 @@ def test_lemmatization(fragment_repository, tmp_path):
         f"&P000001 = {museum_number}\n"
         "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.KU₁₀ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
         "#lem: šumma[if]CNJ; ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n; antallû[eclipse]N; Sîn["
-        "moon]N; šakānu[take place]V; adrūssu[darkly]AV; erēbu[enter]V; ilu["
-        "god]N; ikkal[eat]V"
+        "moon]N; šakānu[take place]V; adru[dark]AV; erēbu[enter]V; ilu["
+        "god]N; akālu[eat]V"
     )
     glossary = (
         "@project test/test_lemmatization\n"
         "@lang    akk\n"
         "@name    akk\n\n"
         "@letter A\n\n"
-        "@entry adrūssu [darkly] AV\n"
+        "@entry adru [dark] AV\n"
         "@form KAN₅-su $adrūssu\n"
         "@sense AV darkly\n"
         "@end entry\n\n"
@@ -269,26 +306,24 @@ def test_lemmatization(fragment_repository, tmp_path):
     )
 
     setup_and_run_importer(atf, tmp_path, database, fragment_repository, glossary)
-    check_importing_and_logs(
-        museum_number, fragment_repository, tmp_path, logs_check=False
-    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
     assert [word.unique_lemma for word in fragment.text.lines[0]._content] == [
-        ("DIŠ", ("šumma I",)),
-        ("ina", ("ina I",)),
-        ("{iti}ZIZ₂", ("Šabāṭu I",)),
-        ("U₄", ("ūmu I",)),
-        ("14.KAM", ()),
-        ("AN.KU₁₀", ("antalû I",)),
-        ("30", ("Sîn I",)),
-        ("GAR-ma", ("šakānu I",)),
-        ("<<ina>>", ()),
-        ("KAN₅-su", ("adru I")), # Fix!
-        ("KU₄", ("erēbu I",)),
-        ("DINGIR", ("ilu I",)),
-        ("GU₇", ("akālu I")), # Fix!
+        ("šumma I",),
+        ("ina I",),
+        ("Šabāṭu I",),
+        ("ūmu I",),
+        (),
+        ("antalû I",),
+        ("Sîn I",),
+        ("šakānu I",),
+        (),
+        ("adru I",),
+        ("erēbu I",),
+        ("ilu I",),
+        ("akālu I",),
     ]
 
 
@@ -297,13 +332,15 @@ def test_atf_importer(fragment_repository):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     atf_importer = AtfImporter(database, fragment_repository)
-    archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
+    archive = zipfile.ZipFile(
+        "ebl/tests/atf_importer/test_data.zip"
+    )  # ToDo: Check `test_data2`
     with tempfile.TemporaryDirectory() as tempdir:
         data_path = f"{tempdir}/test_atf_import_data"
         archive.extractall(data_path)
         for dir in os.listdir(data_path):
-            glossary_path = f"{data_path}/{dir}"
-            atf_dir_path = f"{data_path}/{dir}/00atf"
+            glossary_path = f"{data_path}/{dir}"  # f"{data_path}"
+            atf_dir_path = f"{data_path}/{dir}/00atf"  # f"{data_path}"
             logdir_path = f"{data_path}/logs/{dir}"
             print(f"Testing import of atf data in {atf_dir_path}")
             # print("Running", " ".join(command))
