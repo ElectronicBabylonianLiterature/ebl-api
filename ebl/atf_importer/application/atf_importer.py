@@ -4,9 +4,7 @@ import os
 import attr
 from pymongo import MongoClient
 from typing import Any, Dict, List, TypedDict
-from ebl.atf_importer.application.glossary import (
-    GlossaryParser, Glossary
-)
+from ebl.atf_importer.application.glossary import GlossaryParser, Glossary
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.atf_importer.application.database_importer import DatabaseImporter
@@ -95,7 +93,9 @@ class AtfImporter:
         )
         self.import_into_database(text, control_lines, filename)
 
-    def import_into_database(self, text: Text, control_lines: List, filename: str) -> None:
+    def import_into_database(
+        self, text: Text, control_lines: List, filename: str
+    ) -> None:
         # try:
         self.database_importer.import_into_database(text, control_lines, filename)
         # except Exception as e:

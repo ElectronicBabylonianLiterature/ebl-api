@@ -6,14 +6,10 @@ import pytest
 from pymongo import MongoClient
 from unittest.mock import patch
 from ebl.atf_importer.application.atf_importer import AtfImporter
-
-# from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
-# from ebl.atf_importer.application.lines_getter import EblLinesGetter
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.joins import Join, Joins
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 
 
@@ -33,11 +29,12 @@ def create_file(path, content):
 
 
 def setup_and_run_importer(
-    atf_string, tmp_path, database, fragment_repository, glossary=""
+    atf_string, tmp_path, database, fragment_repository, glossary="", qpn_glossary=""
 ):
     atf_importer = AtfImporter(database, fragment_repository)
     create_file(tmp_path / "import/test.atf", atf_string)
-    create_file(tmp_path / "import/glossary/akkadian.glo", glossary)
+    create_file(tmp_path / "import/glossary/akk.glo", glossary)
+    create_file(tmp_path / "import/glossary/qpn.glo", qpn_glossary)
     atf_importer.run_importer(
         {
             "input_dir": tmp_path / "import",
@@ -94,8 +91,8 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
 
 
 def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_path):
-    museum_number = "BM.1"
-    atf = f"&P111111 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
+    museum_number = "BM.123"
+    atf = "&P111111 = XXX\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
         FragmentFactory.build(
             number=MuseumNumber.of(museum_number),
@@ -152,34 +149,39 @@ def test_museum_number_skip_by_user(
                 assert logfile.read() == ""
 
 
-def test_fragment_update_cancel_by_user(
+def test_ask_overwrite_existing_edition(
     database, fragment_repository, tmp_path, mock_input
 ):
-    museum_number = "BM.333"
+    museum_number = "N.1"
     atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
+    responses = mock_input(["Y", "end"])
     fragment_repository.create(
-        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+        LemmatizedFragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    assert next(responses) == "end"
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
-    # ToDo: Implement
 
 
-def test_import_fragment_parsing_errors(
+def test_ask_overwrite_existing_edition_cancel(
     database, fragment_repository, tmp_path, mock_input
 ):
-    pass
-    # ToDo: Implement
+    museum_number = "N.1"
+    atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
+    responses = mock_input(["N", "end"])
+    fragment_repository.create(
+        LemmatizedFragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    assert next(responses) == "end"
+    with open(tmp_path / "logs/not_imported_files.txt") as logfile:
+        assert (
+            "test.atf could not be imported: Edition found, importing cancelled by user"
+            in logfile.read()
+        )
 
 
-def test_import_fragment_correct_parsing_errors(
-    database, fragment_repository, tmp_path, mock_input
-):
-    pass
-    # ToDo: Implement
-
-
-def test_import_fragment_with_joins(
+def test_import_fragment_to_lowest_join(
     database, fragment_repository, tmp_path, mock_input
 ):
     museum_number_join_low = "X.1"
@@ -216,10 +218,25 @@ def test_import_fragment_with_joins(
     check_importing_and_logs(museum_number_join_low, fragment_repository, tmp_path)
 
 
+def test_import_fragment_correct_parsing_errors(
+    database, fragment_repository, tmp_path, mock_input, capsys
+):
+    museum_number = "H.2"
+    atf = f"&P000001 = {museum_number}\n1. GGG"
+    responses = mock_input(["1. GA", "end"])
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    captured = capsys.readouterr()
+    expected = "Error: Invalid transliteration \nThe following text line cannot be parsed:\n1. GGG\nPlease input the corrected line, then press enter:\n"
+    assert captured.out == expected
+    assert next(responses) == "end"
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+
+
 # ToDo: Add tests for:
 # - importing multiple files
-# - importing files with lemmatization & multiple glossaries
-# - ask before updating existing edition (use `LemmatizedFragmentFactory`)
 # - lemmatization: missing words, multiple options,
 
 
@@ -279,11 +296,6 @@ def test_lemmatization(fragment_repository, tmp_path):
         "@sense N moon\n"
         "@end entry\n\n"
         "@letter Š\n\n"
-        "@entry Šabāṭu [Month XI] MN\n"
-        "@form ZIZ₂ %akk $Šabāṭu\n"
-        "@form {ITU}ZIZ₂ %akk $Šabāṭu\n"
-        "@sense MN Month XI\n"
-        "@end entry\n\n"
         "@entry šakānu [put] V\n"
         "@form GAR $šakānu\n"
         "@form GAR-ma $šakānu\n"
@@ -305,7 +317,17 @@ def test_lemmatization(fragment_repository, tmp_path):
         "@end entry"
     )
 
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository, glossary)
+    qpn_glossary = (
+        "@entry Šabāṭu [Month XI] MN\n"
+        "@form ZIZ₂ %akk $Šabāṭu\n"
+        "@form {ITU}ZIZ₂ %akk $Šabāṭu\n"
+        "@sense MN Month XI\n"
+        "@end entry\n\n"
+    )
+
+    setup_and_run_importer(
+        atf, tmp_path, database, fragment_repository, glossary, qpn_glossary
+    )
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)

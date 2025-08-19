@@ -80,7 +80,7 @@ class DatabaseImporter:
         if answer in answers_dict.keys():
             return answers_dict[answer]
         else:
-            print(f"'{answer}' is an invalid answer. Please choose 'Y' or 'N'")
+            print(f"'{answer}' is an invalid answer. Please choose 'Y'(es) or 'N'(o)")
             return self._edition_overwrite_consent(museum_number)
 
     def _import(self, text: Text, museum_number: str, filename: str):

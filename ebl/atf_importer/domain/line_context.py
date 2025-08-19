@@ -2,6 +2,7 @@ from typing import List, Optional
 from dataclasses import dataclass
 from ebl.transliteration.domain.text import TextLine
 
+
 @dataclass
 class LineContext:
     last_transliteration: List[str]

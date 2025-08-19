@@ -148,6 +148,8 @@ class GlossaryParser:
     def _parse_senses(self, block):
         senses = []
         for match in re.finditer(r"@sense\s+(\w+)\s+(.+)", block):
-            sense = SenseEntry(pos=match.group(1).strip(), guideword=match.group(2).strip())
+            sense = SenseEntry(
+                pos=match.group(1).strip(), guideword=match.group(2).strip()
+            )
             senses.append(sense)
         return senses

@@ -1,7 +1,7 @@
 import codecs
 from lark import Lark
 from lark.visitors import Tree
-from typing import Tuple, Optional, List, Dict, Any
+from typing import Tuple, Optional, List, Dict, Type, Any
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
 from ebl.atf_importer.domain.legacy_atf_visitor import (
     LegacyAtfVisitor,
@@ -20,6 +20,9 @@ from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.atf_importer.application.lemma_lookup import LemmaLookup
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.atf_importer.domain.legacy_atf_line_validator import LegacyAtfLineValidator
 
 
 class LegacyAtfConverter:
@@ -41,6 +44,7 @@ class LegacyAtfConverter:
         self.logger = logger
         self.preprocessor = AtfPreprocessor(self.logger)
         self.lemma_lookup = LemmaLookup(database, config, logger, glossary)
+        self.validate_text_line = LegacyAtfLineValidator().validate_text_line
 
     def convert_lines_from_string(self, text: str) -> Tuple[List[Dict[str, Any]], Text]:
         return self.atf_to_text(text.split("\n"))
@@ -108,9 +112,7 @@ class LegacyAtfConverter:
     def _convert_lem_line(
         self, atf: str, tree: Tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
-        # ToDo: Continue from here. Correctly handle lemmatization
         if self.skip_next_lem_line:
-            # ToDo: Perhaps restore logic (flag if previous is None)
             self.logger.warning("Skipping lem line due to previous flag.")
             self.skip_next_lem_line = False
             return (None, None, "lem_line", [])
@@ -137,7 +139,7 @@ class LegacyAtfConverter:
     def _parse_line(
         self, line: str, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
-        line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
+        line_tree = self._parse_and_validate_line(line)
         self.indexing_visitor.visit(line_tree)
         self.legacy_visitor.visit(line_tree)
         cursor = (
@@ -153,6 +155,26 @@ class LegacyAtfConverter:
         else:
             lines_data.append({"string": line, "tree": line_tree, "cursor": cursor})
             return lines_data
+
+    def _parse_and_validate_line(self, line: str) -> Tree:
+        try:
+            line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
+            if line_tree.data == "text_line":
+                error = self.validate_text_line(line_tree)
+                if error:
+                    return self._report_and_correct_errors(line, error)
+            return line_tree
+        except (*PARSE_ERRORS, TransliterationError) as error:
+            return self._report_and_correct_errors(line, error)
+
+    def _report_and_correct_errors(self, line: str, error: Type[Exception]) -> Tree:
+        print(
+            "Error:",
+            str(error),
+            f"\nThe following text line cannot be parsed:\n{line}\nPlease input the corrected line, then press enter:",
+        )
+        corrected_line = input()
+        return self._parse_and_validate_line(corrected_line)
 
     def _handle_legacy_translation(
         self, translation_line: Tree, lines_data: List[Dict[str, Any]]

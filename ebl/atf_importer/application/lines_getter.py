@@ -20,9 +20,7 @@ class EblLinesGetter:
         glossary: Glossary,
     ):
         self.logger = logger
-        self.lemma_line_handler = LemmaLineHandler(
-            database, config, logger, glossary
-        )
+        self.lemma_line_handler = LemmaLineHandler(database, config, logger, glossary)
 
     def convert_to_ebl_lines(
         self,
@@ -35,12 +33,10 @@ class EblLinesGetter:
             last_alter_lem_line_at=[],
         )
         result = defaultdict(list)
-        result["all_unique_lemmas"] = []
         for line in converted_lines:
             result, line_context = self._handle_line_type(
                 line, result, filename, line_context
             )
-        self._log_result(result)
         # ToDo: Fix & clean up
         return dict(result)
 
@@ -89,10 +85,4 @@ class EblLinesGetter:
         self.logger.debug(
             f"eBL transliteration{str(line_context.last_transliteration)} "
             f"{len(line_context.last_transliteration)}"
-        )
-
-    def _log_result(self, result: defaultdict) -> None:
-        all_unique_lemmas = result["all_unique_lemmas"]
-        self.logger.debug(
-            f"All unique lemmata. Total: {len(all_unique_lemmas)}.\n{str(all_unique_lemmas)}"
         )
