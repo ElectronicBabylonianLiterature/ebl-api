@@ -53,9 +53,11 @@ class EblLinesGetter:
         elif c_type == "text_line":
             line_context = self._handle_text_line(line, result, line_context)
         elif c_type == "lem_line" and line_context.last_transliteration_line:
-            result["transliteration"][-1] = self.lemma_line_handler.apply_lemmatization(
+            lemmatized_line = self.lemma_line_handler.apply_lemmatization(
                 line, result, filename, line_context.last_transliteration_line
             )
+            if lemmatized_line:
+                result["transliteration"][-1] = lemmatized_line
         else:
             result["transliteration"].append(line["serialized"])
             result["lemmatization"].append(line["c_line"])

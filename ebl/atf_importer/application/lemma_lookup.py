@@ -36,7 +36,12 @@ class OraccLemmatizationToken:
     @property
     def lemmatization_token(self) -> LemmatizationToken:
         if self.lemmatizable and hasattr(self, "get_word_id"):
-            word_id = self.get_word_id(self)
+            oracc_lemmatization_token = self
+            word_id = (
+                self.get_word_id(oracc_lemmatization_token)
+                if self.get_word_id
+                else None
+            )
             if word_id is not None:
                 return LemmatizationToken(self.transliteration, (WordId(word_id),))
         return LemmatizationToken(self.transliteration)
@@ -180,7 +185,7 @@ class LemmaLineHandler:
 
     def parse_lemmatization_line(
         self, lemmatization_line, transliteration_line: TextLine
-    ) -> Dict[str, str]:
+    ) -> List[OraccLemmatizationToken]:
         oracc_lemmatization = []
         transliteration_tokens = self.get_transliteration_tokens(transliteration_line)
         # ToDo: Add length check here.

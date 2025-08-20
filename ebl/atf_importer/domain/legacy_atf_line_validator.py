@@ -1,5 +1,5 @@
 from typing import Optional, Type
-from lark import Token, Tree
+from lark import Tree
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.transliteration.domain.atf_parsers.lark_parser import validate_line
@@ -28,8 +28,8 @@ class LegacyAtfLineValidator:
             line_tree = LineTransformer().transform(line_tree)
             validate_line(line_tree)
             control_line = ControlLine(
-                prefix=Token("oracc_atf_lem_line__LEM_CONNECTOR", "&"),
-                content=Token("ebl_atf_legacy_control_line__TEXT", "P000001 = BM.1"),
+                prefix="&",
+                content="P000001 = BM.1",
             )
             self.transliteration_factory.create_from_text(
                 Text((control_line, line_tree), ATF_PARSER_VERSION)

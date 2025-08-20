@@ -23,6 +23,9 @@ from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigDa
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 from ebl.atf_importer.domain.legacy_atf_line_validator import LegacyAtfLineValidator
+from ebl.atf_importer.application.glossary import Glossary
+
+glossary = Glossary(entries=[])
 
 
 class LegacyAtfConverter:
@@ -39,7 +42,11 @@ class LegacyAtfConverter:
     skip_next_lem_line = False  # ToDo: Check & implement, if needed
 
     def __init__(
-        self, database, config: AtfImporterConfigData, logger: Logger, glossary
+        self,
+        database,
+        config: AtfImporterConfigData,
+        logger: Logger,
+        glossary: Glossary = glossary,
     ):
         self.logger = logger
         self.preprocessor = AtfPreprocessor(self.logger)
