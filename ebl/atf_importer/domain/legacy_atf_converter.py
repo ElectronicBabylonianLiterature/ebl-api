@@ -18,7 +18,7 @@ from ebl.atf_importer.application.logger import Logger, LoggerUtil
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
-from ebl.atf_importer.application.lemma_lookup import LemmaLookup
+from ebl.atf_importer.application.lemmatization import LemmaLookup
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.transliteration_error import TransliterationError
@@ -50,7 +50,7 @@ class LegacyAtfConverter:
     ):
         self.logger = logger
         self.preprocessor = AtfPreprocessor(self.logger)
-        self.lemma_lookup = LemmaLookup(database, config, logger, glossary)
+        self.lemmatization = LemmaLookup(database, config, logger, glossary)
         self.validate_text_line = LegacyAtfLineValidator().validate_text_line
 
     def convert_lines_from_string(self, text: str) -> Tuple[List[Dict[str, Any]], Text]:

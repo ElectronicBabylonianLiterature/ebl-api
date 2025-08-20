@@ -1,6 +1,6 @@
 from collections import defaultdict
 from typing import Any, Dict, List, Tuple
-from ebl.atf_importer.application.lemma_lookup import LemmaLineHandler
+from ebl.atf_importer.application.lemmatization import LemmaLineHandler
 from ebl.atf_importer.application.glossary import Glossary
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.atf_importer.application.logger import Logger

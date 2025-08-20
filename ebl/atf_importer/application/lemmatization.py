@@ -7,6 +7,7 @@ from ebl.transliteration.domain.text import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.enclosure_tokens import Removal
+from ebl.transliteration.domain.sign_tokens import Reading
 from ebl.lemmatization.domain.lemmatization import LemmatizationToken
 from ebl.dictionary.domain.word import WordId
 from ebl.atf_importer.application.glossary import Glossary
@@ -165,7 +166,7 @@ class LemmaLineHandler:
     def __init__(
         self, database, config: AtfImporterConfigData, logger: Logger, glossary
     ):
-        self.lemma_lookup = LemmaLookup(database, config, logger, glossary)
+        self.lemmatization = LemmaLookup(database, config, logger, glossary)
         self.logger = logger
 
     def apply_lemmatization(
@@ -206,8 +207,7 @@ class LemmaLineHandler:
         index_correction,
     ):
         transliteration = transliteration_token["value"]
-        skip = True if transliteration_token["skip"] else False
-        if skip:
+        if transliteration_token["skip"]:
             index_correction += 1
             return OraccLemmatizationToken(
                 transliteration=transliteration, get_word_id=None
@@ -223,30 +223,48 @@ class LemmaLineHandler:
                 guideword=guideword,
                 pos=oracc_lemma_tuple[2],
                 transliteration=transliteration,
-                get_word_id=self.lemma_lookup.lookup_lemma,
+                get_word_id=self.lemmatization.lookup_lemma,
             ), index_correction
 
     def get_transliteration_tokens(self, transliteration_line: TextLine) -> List[Dict]:
         transliteration_tokens = []
-        for token in transliteration_line._content:
-            if self.is_token_lemmatizable(token):
-                transliteration_tokens.append({"value": token.value, "skip": False})
-            else:
-                transliteration_tokens.append({"value": token.value, "skip": True})
+        removals_map = self._map_removals(transliteration_line)
+        for index, token in enumerate(transliteration_line._content):
+            transliteration_tokens.append(
+                {
+                    "value": token.value,
+                    "skip": not self.is_token_lemmatizable(token, index, removals_map),
+                }
+            )
         return transliteration_tokens
 
-    def is_token_lemmatizable(self, token: Token) -> bool:
-        if not isinstance(token, Word) or not token.lemmatizable:
-            return False
-        parts = token._parts
-        if len(parts) >= 2 and (
-            isinstance(parts[0], Removal) or isinstance(parts[-1], Removal)
-        ):
+    def is_token_lemmatizable(
+        self, token: Token, index: int, removals_map: dict[int, bool]
+    ) -> bool:
+        if not isinstance(token, Word) or not token.lemmatizable or removals_map[index]:
             return False
         return True
 
-        # ToDo: Adjust for cases when removal consists of more than 2 words.
-        # <<a-a ba-ba>>
+    def _map_removals(self, transliteration_line: TextLine) -> dict[int, bool]:
+        removal_status = remove_token = False
+        removals_map = {}
+        for token_index, token in enumerate(transliteration_line._content):
+            for part_index, part in enumerate(
+                [
+                    part
+                    for part in token._parts
+                    if isinstance(part, Removal) or isinstance(part, Reading)
+                ]
+            ):
+                remove_token = removal_status
+                change_within_token = False
+                if isinstance(part, Removal):
+                    removal_status = True if str(part.side) == "Side.LEFT" else False
+                    if part_index > 0 and part_index + 1 < len(token._parts):
+                        change_within_token = True
+                    remove_token = False if change_within_token else True
+            removals_map[token_index] = remove_token
+        return removals_map
 
     def _log_transliteration_error(self, transliteration_line: str) -> None:
         # ToDo: Implement

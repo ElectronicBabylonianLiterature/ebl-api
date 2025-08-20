@@ -11,6 +11,7 @@ from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.application.joins_schema import JoinSchema
+from ebl.tests.atf_importer.test_glossaries_data import GLOSSARY, QPN_GLOSSARY
 
 
 @pytest.fixture(autouse=True)
@@ -249,90 +250,21 @@ def test_lemmatization(fragment_repository, tmp_path):
     )
     atf = (
         f"&P000001 = {museum_number}\n"
-        "64. * ina {iti}ZIZ₂ U₄ 14.KAM AN.KU₁₀ 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
+        "64. * ina {iti}ZIZ₂ U₄ 14.KAM [AN.KU₁₀] 30 GAR-ma <<ina>> KAN₅-su KU₄ DINGIR GU₇\n"
         "#lem: šumma[if]CNJ; ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n; antallû[eclipse]N; Sîn["
         "moon]N; šakānu[take place]V; adru[dark]AV; erēbu[enter]V; ilu["
         "god]N; akālu[eat]V"
     )
-    glossary = (
-        "@project test/test_lemmatization\n"
-        "@lang    akk\n"
-        "@name    akk\n\n"
-        "@letter A\n\n"
-        "@entry adru [dark] AV\n"
-        "@form KAN₅-su $adrūssu\n"
-        "@sense AV darkly\n"
-        "@end entry\n\n"
-        "@entry akālu [eat] V\n"
-        "@form KU₂ $akālu\n"
-        "@sense V eat\n"
-        "@end entry\n\n"
-        "@entry antallû [eclipse] N\n"
-        "@form AN.KU₁₀ $antallû\n"
-        "@sense N eclipse\n"
-        "@end entry\n\n"
-        "@letter E\n\n"
-        "@entry erēbu [enter] V\n"
-        "@form KU₄ $erēbu\n"
-        "@sense V enter\n"
-        "@sense V fall\n"
-        "@end entry\n\n"
-        "@letter I\n\n"
-        "@entry ilu [god] N\n"
-        "@form DINGIR $ilu\n"
-        "@form DINGIR{MEŠ} $ilu\n"
-        "@sense N god\n"
-        "@end entry\n\n"
-        "@entry ina [in] PRP\n"
-        "@form ina $ina\n"
-        "@form in $ina\n"
-        "@sense PRP in\n"
-        "@sense PRP during\n"
-        "@sense PRP at (plus numeral)\n"
-        "@end entry\n\n"
-        "@letter S\n\n"
-        "@entry Sîn [moon(-god)] N\n"
-        "@form sin $Sîn\n"
-        "@sense N moon\n"
-        "@end entry\n\n"
-        "@letter Š\n\n"
-        "@entry šakānu [put] V\n"
-        "@form GAR $šakānu\n"
-        "@form GAR-ma $šakānu\n"
-        "@sense V take place\n"
-        "@end entry\n\n"
-        "@entry šumma [if] CNJ\n"
-        "@form DIŠ $šumma\n"
-        "@sense CNJ if\n"
-        "@end entry\n\n"
-        "@letter U\n\n"
-        "@entry ūmu [day] N\n"
-        "@form U₄{ME} $ūmu\n"
-        "@form UD $ūmu\n"
-        "@form ME $ūmu\n"
-        "@form U₄ $ūmu\n"
-        "@sense N day\n"
-        "@sense N first appearance\n"
-        "@sense N daytime\n"
-        "@end entry"
-    )
-
-    qpn_glossary = (
-        "@entry Šabāṭu [Month XI] MN\n"
-        "@form ZIZ₂ %akk $Šabāṭu\n"
-        "@form {ITU}ZIZ₂ %akk $Šabāṭu\n"
-        "@sense MN Month XI\n"
-        "@end entry\n\n"
-    )
 
     setup_and_run_importer(
-        atf, tmp_path, database, fragment_repository, glossary, qpn_glossary
+        atf, tmp_path, database, fragment_repository, GLOSSARY, QPN_GLOSSARY
     )
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
-    assert [word.unique_lemma for word in fragment.text.lines[0]._content] == [
+    lemmatization = [word.unique_lemma for word in fragment.text.lines[0]._content]
+    assert lemmatization == [
         ("šumma I",),
         ("ina I",),
         ("Šabāṭu I",),
@@ -346,6 +278,39 @@ def test_lemmatization(fragment_repository, tmp_path):
         ("erēbu I",),
         ("ilu I",),
         ("akālu I",),
+    ]
+
+
+def test_lemmatization_with_omission(fragment_repository, tmp_path):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    museum_number = "BM.1"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = (
+        f"&P000001 = {museum_number}\n"
+        "64. * <<ina>> ina <<{iti}ZIZ₂ A U₄>> {<<iti>>.iti}<<A>>.ZIZ₂.<<A>> U₄ 14.KAM\n"
+        "#lem: šumma[if]CNJ; ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n"
+    )
+    setup_and_run_importer(
+        atf, tmp_path, database, fragment_repository, GLOSSARY, QPN_GLOSSARY
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(museum_number)
+    )
+    lemmatization = [word.unique_lemma for word in fragment.text.lines[0]._content]
+    assert lemmatization == [
+        ("šumma I",),
+        (),
+        ("ina I",),
+        (),
+        (),
+        (),
+        ("Šabāṭu I",),
+        ("ūmu I",),
+        (),
     ]
 
 
