@@ -1,6 +1,6 @@
 from collections import defaultdict
 from typing import Any, Dict, List, Tuple
-from ebl.atf_importer.application.lemmatization import LemmaLineHandler
+from ebl.atf_importer.application.lemma_line_handler import LemmaLineHandler
 from ebl.atf_importer.application.glossary import Glossary
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.atf_importer.application.logger import Logger
@@ -53,6 +53,9 @@ class EblLinesGetter:
         elif c_type == "text_line":
             line_context = self._handle_text_line(line, result, line_context)
         elif c_type == "lem_line" and line_context.last_transliteration_line:
+            # ToDo: Continue from here. Debug saved lemma line issue.
+            # This probably has to do with previous lines not being removed!
+            # Check what happens on the upper level, esp. to `converted_lines`.
             lemmatized_line = self.lemma_line_handler.apply_lemmatization(
                 line, result, filename, line_context.last_transliteration_line
             )

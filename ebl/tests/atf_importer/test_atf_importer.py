@@ -30,12 +30,18 @@ def create_file(path, content):
 
 
 def setup_and_run_importer(
-    atf_string, tmp_path, database, fragment_repository, glossary="", qpn_glossary=""
+    atf_string,
+    tmp_path,
+    database,
+    fragment_repository,
+    glossaries=None,
 ):
+    if not glossaries:
+        glossaries = {"akk": "", "qpn": ""}
     atf_importer = AtfImporter(database, fragment_repository)
     create_file(tmp_path / "import/test.atf", atf_string)
-    create_file(tmp_path / "import/glossary/akk.glo", glossary)
-    create_file(tmp_path / "import/glossary/qpn.glo", qpn_glossary)
+    for key in glossaries.keys():
+        create_file(tmp_path / f"import/glossary/{key}.glo", glossaries[key])
     atf_importer.run_importer(
         {
             "input_dir": tmp_path / "import",
@@ -46,24 +52,42 @@ def setup_and_run_importer(
     )
 
 
-def check_importing_and_logs(museum_number, fragment_repository, tmp_path):
+def check_importing_and_logs(museum_number, fragment_repository, tmp_path, logs=None):
+    if logs is None:
+        logs = {}
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
     assert str(fragment.number) == museum_number
-    check_logs(tmp_path, museum_number)
+    check_logs(tmp_path, museum_number, logs)
 
 
-def check_logs(tmp_path, museum_number):
-    for log_file in os.listdir(tmp_path / "logs"):
-        with open(tmp_path / f"logs/{log_file}") as logfile:
-            if log_file == "imported_files.txt":
+def check_logs(tmp_path, museum_number, logs):
+    for log_filename in os.listdir(tmp_path / "logs"):
+        with open(tmp_path / f"logs/{log_filename}") as logfile:
+            logfile_content = logfile.read()
+            if log_filename in logs.keys():
+                for log_segment in logs[log_filename]:
+                    if len(log_segment) > 0:
+                        assert log_segment in logfile_content
+                    else:
+                        assert log_segment == logfile_content
+
+            elif log_filename == "imported_files.txt":
                 assert (
                     f"test.atf successfully imported as {museum_number}"
-                    in logfile.read()
+                    in logfile_content
                 )
             else:
-                assert logfile.read() == ""
+                assert logfile_content == ""
+
+
+def check_lemmatization(fragment_repository, museum_number, expected_lemmatization):
+    fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(museum_number)
+    )
+    lemmatization = [word.unique_lemma for word in fragment.text.lines[0]._content]
+    assert lemmatization == expected_lemmatization
 
 
 @pytest.fixture
@@ -85,7 +109,7 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
         "imported_files.txt",
         "not_imported_files.txt",
         "error_lines.txt",
-        "not_lemmatized_tokens.txt",
+        "lemmatization_log.txt",
         "unparsable_lines.txt",
     ]
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
@@ -139,15 +163,13 @@ def test_museum_number_skip_by_user(
     atf = "&P000001 = test reference\n1. GU₄ 30 ⸢12⸣ [...]"
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert next(responses) == "end"
-    for log_file in os.listdir(tmp_path / "logs"):
-        with open(tmp_path / f"logs/{log_file}") as logfile:
-            if log_file == "not_imported_files.txt":
-                assert (
-                    "test.atf could not be imported: Museum number not found"
-                    in logfile.read()
-                )
-            else:
-                assert logfile.read() == ""
+    logs = {
+        "imported_files.txt": [""],
+        "not_imported_files.txt": [
+            "test.atf could not be imported: Museum number not found"
+        ],
+    }
+    check_logs(tmp_path, "", logs)
 
 
 def test_ask_overwrite_existing_edition(
@@ -229,22 +251,21 @@ def test_import_fragment_correct_parsing_errors(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
-    captured = capsys.readouterr()
-    expected = "Error: Invalid transliteration \nThe following text line cannot be parsed:\n1. GGG\nPlease input the corrected line, then press enter:\n"
-    assert captured.out == expected
+    expected_captured = (
+        "Error: Invalid transliteration \n"
+        "The following text line cannot be parsed:\n"
+        "1. GGG\n"
+        "Please input the corrected line, then press enter:\n"
+    )
     assert next(responses) == "end"
+    assert capsys.readouterr().out == expected_captured
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
-
-
-# ToDo: Add tests for:
-# - importing multiple files
-# - lemmatization: missing words, multiple options,
 
 
 def test_lemmatization(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.1"
+    museum_number = "BM.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -257,14 +278,14 @@ def test_lemmatization(fragment_repository, tmp_path):
     )
 
     setup_and_run_importer(
-        atf, tmp_path, database, fragment_repository, GLOSSARY, QPN_GLOSSARY
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
-    fragment = fragment_repository.query_by_museum_number(
-        MuseumNumber.of(museum_number)
-    )
-    lemmatization = [word.unique_lemma for word in fragment.text.lines[0]._content]
-    assert lemmatization == [
+    expected_lemmatization = [
         ("šumma I",),
         ("ina I",),
         ("Šabāṭu I",),
@@ -279,12 +300,13 @@ def test_lemmatization(fragment_repository, tmp_path):
         ("ilu I",),
         ("akālu I",),
     ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
-def test_lemmatization_with_omission(fragment_repository, tmp_path):
+def test_lemmatization_with_removal(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.1"
+    museum_number = "BM.89"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -294,14 +316,14 @@ def test_lemmatization_with_omission(fragment_repository, tmp_path):
         "#lem: šumma[if]CNJ; ina[in]PRP; Šabāṭu[Month XI]MN; ūmu[day]N; n"
     )
     setup_and_run_importer(
-        atf, tmp_path, database, fragment_repository, GLOSSARY, QPN_GLOSSARY
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
-    fragment = fragment_repository.query_by_museum_number(
-        MuseumNumber.of(museum_number)
-    )
-    lemmatization = [word.unique_lemma for word in fragment.text.lines[0]._content]
-    assert lemmatization == [
+    expected_lemmatization = [
         ("šumma I",),
         (),
         ("ina I",),
@@ -312,6 +334,41 @@ def test_lemmatization_with_omission(fragment_repository, tmp_path):
         ("ūmu I",),
         (),
     ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
+def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    museum_number = "BM.5"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = f"&P000003 = {museum_number}\n64. * LU2 LUGAL\n#lem: šumma[if]CNJ; awīlu[man]N; šarru[king]N"
+    responses = mock_input(["amēlu I", "awīlu I", "", "end"])
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    logs = {
+        "lemmatization_log.txt": [
+            "Incompatible lemmatization: No eBL word found for lemma 'awīlu' and guideword 'man'",
+            "Manual lemmatization: eBL lemma 'awīlu I' entered by user",
+            "Incompatible lemmatization: No citation form or guideword (by sense) found in the glossary for 'šarru'",
+            "Incompatible lemmatization: No eBL word found for lemma 'šarru' and guideword 'king'",
+        ]
+    }
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path, logs)
+    assert next(responses) == "end"
+    expected_lemmatization = [
+        ("šumma I",),
+        ("awīlu I",),
+        (),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
 # @pytest.mark.skip(reason="heavy test")

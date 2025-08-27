@@ -5,7 +5,7 @@ from pathlib import Path
 
 LogKey = Literal[
     "unparsable_lines",
-    "not_lemmatized_tokens",
+    "lemmatization_log",
     "error_lines",
     "not_imported_files",
     "imported_files",

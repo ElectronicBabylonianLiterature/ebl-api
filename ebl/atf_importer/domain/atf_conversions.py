@@ -43,6 +43,9 @@ class GetWords(Visitor):
 class GetLemmaValuesAndGuidewords(Visitor):
     result: List[List[Tuple[str, str, str]]] = []
 
+    def __init__(self):
+        self.result = []
+
     def oracc_atf_lem_line__lemma(self, tree: Tree) -> None:
         # ToDo:
         # Continue from here. Correctly handle lemmatization.
@@ -65,23 +68,3 @@ class GetLemmaValuesAndGuidewords(Visitor):
     @staticmethod
     def _get_child_data(index: int, tree: Tree) -> str:
         return DepthFirstSearch().visit_topdown(tree.children[index], "")
-
-
-class LineSerializer(Visitor):
-    # ToDo: Not used. Check and remove.
-    line: str = ""
-
-    def process_line(self, tree: Tree, line_type: str) -> str:
-        assert tree.data == line_type
-        result = DepthFirstSearch().visit_topdown(tree, "")
-        self.line += f" {result}"
-        return result
-
-    def text_line(self, tree: Tree) -> str:
-        return self.process_line(tree, "text_line")
-
-    def dollar_line(self, tree: Tree) -> str:
-        return self.process_line(tree, "dollar_line")
-
-    def control_line(self, tree: Tree) -> str:
-        return self.process_line(tree, "control_line")
