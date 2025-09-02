@@ -34,8 +34,6 @@ class DatabaseImporter:
         self.museum_number_getter = MuseumNumberGetter(
             database, fragment_repository, logger
         )
-        # ToDo: Clean up:
-        # self.lemmatization_getter = LemmatizationGetter(self.updater, self.user)
 
     def import_into_database(self, text: Text, control_lines: List, filename: str):
         museum_number: Optional[str] = self.museum_number_getter.get_museum_number(
@@ -207,6 +205,8 @@ class MuseumNumberGetter:
         return museum_number
 
     def _get_lowest_join_number(self, museum_number: Optional[str]) -> Optional[str]:
+        # ToDo: Except errors.
+        # E.g. ebl.errors.NotFoundError: Fragment W.20030.142 not found.
         if museum_number:
             fragment = self.fragment_repository.query_by_museum_number(
                 MuseumNumber.of(museum_number)

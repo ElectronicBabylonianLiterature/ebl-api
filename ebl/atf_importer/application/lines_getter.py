@@ -9,8 +9,6 @@ from ebl.atf_importer.domain.line_context import LineContext
 
 # ToDo: Continue from here.
 # The logic should be reconsidered and functionality transformed to `legacy_atf_converter`
-
-
 class EblLinesGetter:
     def __init__(
         self,
@@ -53,17 +51,14 @@ class EblLinesGetter:
         elif c_type == "text_line":
             line_context = self._handle_text_line(line, result, line_context)
         elif c_type == "lem_line" and line_context.last_transliteration_line:
-            # ToDo: Continue from here. Debug saved lemma line issue.
-            # This probably has to do with previous lines not being removed!
-            # Check what happens on the upper level, esp. to `converted_lines`.
             lemmatized_line = self.lemma_line_handler.apply_lemmatization(
                 line, result, filename, line_context.last_transliteration_line
             )
             if lemmatized_line:
                 result["transliteration"][-1] = lemmatized_line
-        else:
-            result["transliteration"].append(line["serialized"])
-            result["lemmatization"].append(line["c_line"])
+        # else:
+        #    result["transliteration"].append(line["serialized"])
+        #    result["lemmatization"].append(line["c_line"])
         return result, line_context
 
     def _handle_control_line(

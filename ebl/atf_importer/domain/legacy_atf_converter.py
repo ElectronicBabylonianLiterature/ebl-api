@@ -16,7 +16,7 @@ from ebl.atf_importer.domain.atf_conversions import (
 )
 from ebl.atf_importer.application.logger import Logger, LoggerUtil
 from ebl.transliteration.domain.text import Text
-from ebl.transliteration.domain.line import EmptyLine
+from ebl.transliteration.domain.line import EmptyLine, ControlLine
 from ebl.transliteration.domain.atf import ATF_PARSER_VERSION
 from ebl.atf_importer.application.lemmatization import LemmaLookup
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
@@ -26,6 +26,17 @@ from ebl.atf_importer.domain.legacy_atf_line_validator import LegacyAtfLineValid
 from ebl.atf_importer.application.glossary import Glossary
 
 glossary = Glossary(entries=[])
+
+
+def include_line(line_instance) -> bool:
+    # ToDo: The latter condition is for testing the label extents issue. Might not be needed.
+    if (
+        isinstance(line_instance, EmptyLine)
+        or isinstance(line_instance, ControlLine)
+        or not hasattr(line_instance, "atf")
+    ):
+        return False
+    return True
 
 
 class LegacyAtfConverter:
@@ -66,16 +77,11 @@ class LegacyAtfConverter:
 
     def atf_to_text(self, lines: List[str]) -> Tuple[List[Dict[str, Any]], Text]:
         processed_lines = self.convert_lines(lines)
-        # ToDo: Continue from here.
-        # check_errors(lines)
-        # for line in processed_lines:
-        # print("\n", line["serialized"], "\n")
-        # input()
         text = Text(
             tuple(
                 line["serialized"]
                 for line in processed_lines
-                if not isinstance(line["serialized"], EmptyLine)
+                if include_line(line["serialized"])
             ),
             ATF_PARSER_VERSION,
         )
@@ -130,17 +136,8 @@ class LegacyAtfConverter:
     def _parse_lines(self, lines: List[str]) -> List[Dict[str, Any]]:
         self.indexing_visitor.reset()
         lines_data = []
-        # ToDo: Continue from here. Solve the issue with line parsing and order
-        # &X106510 = AD -651
         for line in lines:
-            # print(line)
             lines_data = self._parse_line(line, lines_data)
-            # print(
-            #    [lines_data[-1]["tree"].children[0]]
-            #    if len(lines_data[-1]["tree"].children) > 0
-            #    else lines_data[-1]["tree"]
-            # )
-            # input()
         return lines_data
 
     def _parse_line(
@@ -167,8 +164,7 @@ class LegacyAtfConverter:
         try:
             line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
             if line_tree.data == "text_line":
-                error = self.validate_text_line(line_tree)
-                if error:
+                if error := self.validate_text_line(line_tree):
                     return self._report_and_correct_errors(line, error)
             return line_tree
         except (*PARSE_ERRORS, TransliterationError) as error:
@@ -178,7 +174,8 @@ class LegacyAtfConverter:
         print(
             "Error:",
             str(error),
-            f"\nThe following text line cannot be parsed:\n{line}\nPlease input the corrected line, then press enter:",
+            f"\nThe following text line cannot be parsed:\n{line}\n"
+            "Please input the corrected line, then press enter:",
         )
         corrected_line = input()
         return self._parse_and_validate_line(corrected_line)

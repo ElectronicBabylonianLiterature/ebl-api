@@ -12,6 +12,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.application.joins_schema import JoinSchema
 from ebl.tests.atf_importer.test_glossaries_data import GLOSSARY, QPN_GLOSSARY
+from itertools import repeat
 
 
 @pytest.fixture(autouse=True)
@@ -67,12 +68,7 @@ def check_logs(tmp_path, museum_number, logs):
         with open(tmp_path / f"logs/{log_filename}") as logfile:
             logfile_content = logfile.read()
             if log_filename in logs.keys():
-                for log_segment in logs[log_filename]:
-                    if len(log_segment) > 0:
-                        assert log_segment in logfile_content
-                    else:
-                        assert log_segment == logfile_content
-
+                check_custom_logs_content(logs, log_filename, logfile_content)
             elif log_filename == "imported_files.txt":
                 assert (
                     f"test.atf successfully imported as {museum_number}"
@@ -80,6 +76,15 @@ def check_logs(tmp_path, museum_number, logs):
                 )
             else:
                 assert logfile_content == ""
+
+
+def check_custom_logs_content(logs, log_filename, logfile_content):
+    if logs[log_filename]:
+        for log_segment in logs[log_filename]:
+            if len(log_segment) > 0:
+                assert log_segment in logfile_content
+            else:
+                assert log_segment == logfile_content
 
 
 def check_lemmatization(fragment_repository, museum_number, expected_lemmatization):
@@ -371,17 +376,96 @@ def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input)
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    museum_number = "BM.17"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = (
+        f"&P000001 = {museum_number}\n"
+        "10. AN KI NUNDUN GÍR.TAB UŠ-id ana MÚL SA₄\n"
+        "#lem: Ṣalbaṭānu[Mars]CN; erṣētu[area]N'; šaptu[lip]N$; Zuqiqīpu[Scorpio]CN; "
+        "emēdu[lean on//be at a stationary point]V'V$nenmudu; "
+        "ana[to]PRP; kakkabu[star]N$; nebû[shining//bright]AJ'AJ$"
+    )
+    responses = mock_input(
+        [
+            "ṣalbatānu I",
+            "erṣetu I",
+            "šaptu I",
+            "zuqiqīpu I",
+            "emēdu I",
+            "ana I",
+            "kakkabu I",
+            "nebû I",
+            "end",
+        ]
+    )
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(
+        museum_number,
+        fragment_repository,
+        tmp_path,
+        logs={"lemmatization_log.txt": None},
+    )
+    assert next(responses) == "end"
+    expected_lemmatization = [
+        ("ṣalbatānu I",),
+        ("erṣetu I",),
+        ("šaptu I",),
+        ("zuqiqīpu I",),
+        ("emēdu I",),
+        ("ana I",),
+        ("kakkabu I",),
+        ("nebû I",),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
+def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_input):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    museum_number = "BM.17"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = (
+        f"&P000001 = {museum_number}\n5'. KIN 1 18 na 1 2 3 4 šamáš ina ⸢a?⸣-[kam? ...]"
+    )
+    mock_input(repeat(""))
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+
+
 # @pytest.mark.skip(reason="heavy test")
-def test_atf_importer(fragment_repository):
+def test_atf_importer(fragment_repository, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     atf_importer = AtfImporter(database, fragment_repository)
     archive = zipfile.ZipFile(
         "ebl/tests/atf_importer/test_data.zip"
     )  # ToDo: Check `test_data2`
+    mock_input(repeat(""))
     with tempfile.TemporaryDirectory() as tempdir:
         data_path = f"{tempdir}/test_atf_import_data"
         archive.extractall(data_path)
+        for museum_number in ["BM.32312", "VAT.4956", "W.20030.142"]:
+            fragment_repository.create(
+                FragmentFactory.build(number=MuseumNumber.of(museum_number))
+            )
         for dir in os.listdir(data_path):
             glossary_path = f"{data_path}/{dir}"  # f"{data_path}"
             atf_dir_path = f"{data_path}/{dir}/00atf"  # f"{data_path}"

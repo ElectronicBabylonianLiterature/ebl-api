@@ -66,6 +66,7 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("1. kur\tkur\r", "1. kur kur"),
     ("1. x[x]x ⸢x⸣[x]⸢x⸣ ⌈x⌉[x]⌈x⌉", "1. x [x] x x# [x] x# x# [x] x#"),
     ("1. [kur]? [kur]! [kur]?! [kur]!?", "1. [kur?] [kur!] [kur?!] [kur!?]"),
+    ("1. ⸢kur⸣? ⌈kur⌉! ⸢kur⸣?! ⌈kur⌉!?", "1. kur?# kur!# kur?!# kur!?#"),
     ("1. ($$) kur ($anything12 345!@$)", "1. ($___$) kur ($___$)"),
     ("1. a–a a--a", "1. a-a a-a"),
     ("1. sza ca s,a t,a ḫa ja ŋa g̃a 'a", "1. ša ša ṣa ṭa ha ga ga ga ʾa"),

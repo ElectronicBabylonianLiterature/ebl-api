@@ -61,11 +61,16 @@ class LemmaLookup:
         unique_lemmas = self._get_unique_lemmas(lemmatization_token)
         self._log_warning_if_no_lemmas(unique_lemmas, lemmatization_token)
         if not unique_lemmas:
-            return self._enter_lemma_id_or_skip()
+            return self._enter_lemma_id_or_skip(lemmatization_token)
         return unique_lemmas[0] if len(unique_lemmas) > 0 else None  # <- HERE
 
-    def _enter_lemma_id_or_skip(self) -> Optional[str]:
+    def _enter_lemma_id_or_skip(
+        self, lemmatization_token: OraccLemmatizationToken
+    ) -> Optional[str]:
         print(
+            "Annotate the following token:\n"
+            f"Transliteration: '{lemmatization_token.transliteration}' lemma: '{lemmatization_token.lemma}'; "
+            f"guide word: '{lemmatization_token.guideword}'; POS: '{lemmatization_token.pos}'\n"
             "Manually enter the eBL lemma id (e.g. 'bītu I') and press enter. To skip lemmatization, leave the field blank."
         )
         lemma_id = input().strip(" ")
@@ -81,7 +86,7 @@ class LemmaLookup:
             print(
                 f"Lemma id '{lemma_id}' is not found in the eBL database. Please try again."
             )
-            return self._enter_lemma_id_or_skip()
+            return self._enter_lemma_id_or_skip(lemmatization_token)
 
     def _get_unique_lemmas(
         self, lemmatization_token: OraccLemmatizationToken

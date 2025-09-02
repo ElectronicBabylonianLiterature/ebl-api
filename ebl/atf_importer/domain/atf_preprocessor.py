@@ -109,7 +109,11 @@ class AtfPreprocessor:
         return string
 
     def _reorder_bracket_punctuation(self, atf: str) -> str:
-        return re.sub(r"\]([\?!]+)", lambda match: match.group(1) + "]", atf)
+        return re.sub(
+            r"([\]\u2e23\u2309])([?!]+)",
+            lambda match: match.group(2) + match.group(1),
+            atf,
+        )
 
     def _uppercase_underscore(self, atf: str) -> str:
         def callback_upper(pat):
