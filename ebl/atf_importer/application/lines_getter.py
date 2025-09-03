@@ -7,8 +7,6 @@ from ebl.atf_importer.application.logger import Logger
 from ebl.atf_importer.domain.line_context import LineContext
 
 
-# ToDo: Continue from here.
-# The logic should be reconsidered and functionality transformed to `legacy_atf_converter`
 class EblLinesGetter:
     def __init__(
         self,
@@ -35,7 +33,6 @@ class EblLinesGetter:
             result, line_context = self._handle_line_type(
                 line, result, filename, line_context
             )
-        # ToDo: Fix & clean up
         return dict(result)
 
     def _handle_line_type(
@@ -46,7 +43,7 @@ class EblLinesGetter:
         line_context: LineContext,
     ) -> Tuple[defaultdict, LineContext]:
         c_type = line["c_type"]
-        if c_type == "control_line":
+        if "control_line" in c_type:
             result = self._handle_control_line(line, result)
         elif c_type == "text_line":
             line_context = self._handle_text_line(line, result, line_context)
@@ -56,9 +53,19 @@ class EblLinesGetter:
             )
             if lemmatized_line:
                 result["transliteration"][-1] = lemmatized_line
-        # else:
-        #    result["transliteration"].append(line["serialized"])
-        #    result["lemmatization"].append(line["c_line"])
+        elif "ebl_atf_at_line" in c_type or "ebl_atf_dollar_line" in c_type:
+            result["transliteration"].append(line["serialized"])
+        else:
+            # ToDo:
+            # Continue from here.
+            # Handle `translation_line` correctly.
+            # There should be a destingtion between proper translation lines
+            # and those incorrectly parsed as translation line.
+            # Check for other line types, then clean up
+            if c_type not in ["empty_line"]:
+                print(c_type)
+                print(line["serialized"])
+                input()
         return result, line_context
 
     def _handle_control_line(

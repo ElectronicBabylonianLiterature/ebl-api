@@ -13,6 +13,8 @@ from ebl.atf_importer.application.logger import Logger, LoggerUtil
 from ebl.transliteration.domain.text import Text
 from ebl.context import Context
 
+os.environ["EBL_AI_API"] = ""
+
 
 class AtfImporterArgs(TypedDict):
     input_dir: str
@@ -36,8 +38,6 @@ class AtfImporter:
         self.fragment_repository = fragment_repository
 
     def convert_to_ebl_lines(
-        # ToDo: Continue from here.
-        # This should be discarded. Functionality should be moved to `atf_converter.convert_lines()`
         self,
         converted_lines: List[Dict[str, Any]],
         filename: str,
@@ -68,7 +68,7 @@ class AtfImporter:
     def run_importer(self, args: AtfImporterArgs) -> None:
         self.setup_importer(args)
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
-        for filepath in file_paths[:3]:  # ToDo: Remove restriction
+        for filepath in file_paths:
             self.logger.filepath = filepath
             self.process_file(filepath, args)
         self.logger.filepath = None

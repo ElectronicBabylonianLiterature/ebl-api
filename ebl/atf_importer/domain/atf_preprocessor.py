@@ -85,6 +85,7 @@ class AtfPreprocessor:
             "_replace_tabulation",
             "_replace_tabs_and_excessive_whitespaces",
             "_reorder_bracket_punctuation",
+            "_reorder_round_bracket_punctuation",
         ]
         for method_name in atf_text_line_methods:
             atf = getattr(self, method_name)(atf)
@@ -112,6 +113,13 @@ class AtfPreprocessor:
         return re.sub(
             r"([\]\u2e23\u2309])([?!]+)",
             lambda match: match.group(2) + match.group(1),
+            atf,
+        )
+
+    def _reorder_round_bracket_punctuation(self, atf: str) -> str:
+        return re.sub(
+            r"\(([^)]*?)\)([?!]+)",
+            lambda m: m.group(2) + "(" + m.group(1) + ")",
             atf,
         )
 

@@ -10,7 +10,7 @@ from ebl.transliteration.domain.text import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.enclosure_tokens import Removal
-from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.sign_tokens import Reading, Logogram
 
 
 class LemmaLineHandler:
@@ -99,11 +99,13 @@ class LemmaLineHandler:
     def _map_removals(self, transliteration_line: TextLine) -> dict[int, bool]:
         removal_status = remove_token = False
         removals_map = {}
-        for token_index, token in enumerate(transliteration_line._content):
+        for token_index, token in enumerate(transliteration_line.content):
             parts = [
                 part
                 for part in token.parts
-                if isinstance(part, Removal) or isinstance(part, Reading)
+                if isinstance(part, Removal)
+                or isinstance(part, Reading)
+                or isinstance(part, Logogram)
             ]
             for part_index, part in enumerate(parts):
                 remove_token = removal_status
