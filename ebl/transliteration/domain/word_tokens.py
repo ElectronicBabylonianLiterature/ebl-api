@@ -19,12 +19,14 @@ T = TypeVar("T", bound=Token)
 
 @attr.s(auto_attribs=True, frozen=True)
 class AbstractWord(Token):
+    id_: Optional[str] = None
     unique_lemma: Lemma = ()
     alignment: Optional[int] = None
     _parts: Sequence[Token] = attr.ib(default=(), converter=convert_token_sequence)
     variant: Optional["AbstractWord"] = None
     has_variant_alignment: bool = False
     has_omitted_alignment: bool = False
+    named_entities: Sequence[str] = ()
 
     @property
     @abstractmethod
@@ -120,6 +122,9 @@ class AbstractWord(Token):
         same_type = isinstance(token, AbstractWord)
         return same_type and same_value
 
+    def set_id(self: A, id_: str) -> A:
+        return attr.evolve(self, id_=id_)
+
 
 DEFAULT_LANGUAGE: Language = Language.AKKADIAN
 W = TypeVar("W", bound="Word")
@@ -140,16 +145,20 @@ class Word(AbstractWord):
         variant: Optional[AbstractWord] = None,
         has_variant_alignment: bool = False,
         has_omitted_alignment: bool = False,
+        id_: Optional[str] = None,
+        named_entities: Sequence[str] = (),
     ) -> W:
         return cls(
             frozenset(),
             erasure,
+            id_,
             unique_lemma,
             alignment,
             parts,
             variant,
             has_variant_alignment,
             has_omitted_alignment,
+            named_entities,
             language,
         )
 

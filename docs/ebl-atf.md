@@ -182,7 +182,7 @@ category = { 'I' | 'V' | 'X' | 'L' | 'C' | 'D' | 'M' }-;
 stage = 'Ur3'  | 'OA'  | 'OB' | 'OElam' | 'PElam'  | 'MB' |
         'MElam'| 'MA'  | 'Hit' | 'NA' | 'NB' | 'NElam'  | 'LB' |
         'Per'  | 'Hel' | 'Par' | 'Uruk4' | 'JN' | 'ED1_2' |
-        'Fara' | 'PSarg' | 'Sarg' | 'Unc' | 'SB';
+        'Fara' | 'PSarg' | 'Sarg' | 'Aram' | 'Luw' | 'Unc' | 'SB';
 version  = '"', { any-character }-, '"';
 chapter =  '"', { any-character }-, '"';
 

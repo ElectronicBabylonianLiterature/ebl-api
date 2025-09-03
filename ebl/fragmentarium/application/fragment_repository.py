@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import List, Sequence, Optional
+from typing import List, Sequence, Optional, Union
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQueryResult
 
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
+from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
@@ -33,7 +34,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def query_by_museum_number(
         self,
-        number: MuseumNumber,
+        number: Union[MuseumNumber, ExcavationNumber],
         lines: Optional[Sequence[int]] = None,
         exclude_lines: bool = False,
     ) -> Fragment: ...

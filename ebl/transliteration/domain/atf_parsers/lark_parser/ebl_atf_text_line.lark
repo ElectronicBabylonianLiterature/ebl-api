@@ -6,7 +6,6 @@
 %import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
 %import .legacy_atf (legacy_uncertain_sign_prefix)
 
-
 text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
 
 text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
