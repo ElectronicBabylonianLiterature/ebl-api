@@ -2,13 +2,14 @@
 
 note_line: "#note: " _markup
 markup: _markup
-_markup: (emphasis_part | language_part | bibliography_part | string_part | url_part)+
+_markup: (markup_token_part | language_part | bibliography_part | string_part | url_part)+
 language_part: "@" LANGUAGE "{" text "}"
-emphasis_part: "@i{" note_text "}"
+markup_token_part: "@" MARKUP_TOKEN "{" note_text "}"
 bibliography_part: "@bib{" escaped_text ("@" escaped_text)? "}"
 escaped_text: (/[^@{}\\\n\r]/ | ("\\" /[@{}\\]/))+
 string_part: note_text
 LANGUAGE: "akk" | "sux" | "es"
+MARKUP_TOKEN: "i" | "sup" | "sub" | "b"
 url_part: "@url{" url "}" ("{" note_text "}")?
 url: /[^}]+/
 note_text: /[^@{}\n\r]+/

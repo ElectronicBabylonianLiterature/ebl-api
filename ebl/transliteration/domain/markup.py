@@ -68,10 +68,32 @@ class StringPart(TextPart):
 
 
 @attr.s(frozen=True, auto_attribs=True)
-class EmphasisPart(TextPart):
+class MarkupTokenPart(TextPart):
+    token: str
+
     @property
     def value(self) -> str:
-        return f"@i{{{self.text}}}"
+        return f"@{self.token}{{{self.text}}}"
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class EmphasisPart(MarkupTokenPart):
+    token: str = attr.ib(default="i", init=False)
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class SuperscriptPart(MarkupTokenPart):
+    token: str = attr.ib(default="sup", init=False)
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class SubscriptPart(MarkupTokenPart):
+    token: str = attr.ib(default="sub", init=False)
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class BoldPart(MarkupTokenPart):
+    token: str = attr.ib(default="b", init=False)
 
 
 @attr.s(frozen=True, auto_attribs=True)

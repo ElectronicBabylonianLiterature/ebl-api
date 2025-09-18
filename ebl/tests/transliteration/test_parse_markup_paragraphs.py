@@ -5,9 +5,12 @@ from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
 from ebl.transliteration.domain.markup import (
     BibliographyPart,
+    BoldPart,
     EmphasisPart,
-    StringPart,
     ParagraphPart,
+    StringPart,
+    SubscriptPart,
+    SuperscriptPart,
     UrlPart,
 )
 
@@ -21,6 +24,9 @@ from ebl.transliteration.domain.markup import (
         ),
         ("\tExtra\n whitespace  ", (StringPart("Extra whitespace"),)),
         ("Very @i{important}", (StringPart("Very "), EmphasisPart("important"))),
+        ("Very @b{important}", (StringPart("Very "), BoldPart("important"))),
+        ("H@sup{2}O", (StringPart("H"), SuperscriptPart("2"), StringPart("O"))),
+        ("CO@sub{2}", (StringPart("CO"), SubscriptPart("2"))),
         ("@akk{{d}kur}", (expected_language_part(Language.AKKADIAN, "{d}kur"),)),
         ("@sux{kur}", (expected_language_part(Language.SUMERIAN, "kur"),)),
         ("@es{kur}", (expected_language_part(Language.EMESAL, "kur"),)),

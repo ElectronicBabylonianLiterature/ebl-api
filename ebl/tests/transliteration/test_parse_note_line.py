@@ -9,9 +9,12 @@ from ebl.transliteration.domain.atf_parsers.lark_parser import (
 )
 from ebl.transliteration.domain.markup import (
     BibliographyPart,
+    BoldPart,
     EmphasisPart,
     LanguagePart,
     StringPart,
+    SubscriptPart,
+    SuperscriptPart,
 )
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.text import Text
@@ -32,6 +35,9 @@ def expected_language_part(language: Language, transliteration: str) -> Language
     [
         ("this is a note ", (StringPart("this is a note "),)),
         ("@i{italic text}", (EmphasisPart("italic text"),)),
+        ("@sup{superscript text}", (SuperscriptPart("superscript text"),)),
+        ("@sub{subscript text}", (SubscriptPart("subscript text"),)),
+        ("@b{bold text}", (BoldPart("bold text"),)),
         ("@akk{{d}kur}", (expected_language_part(Language.AKKADIAN, "{d}kur"),)),
         ("@sux{kur}", (expected_language_part(Language.SUMERIAN, "kur"),)),
         ("@es{kur}", (expected_language_part(Language.EMESAL, "kur"),)),
@@ -51,6 +57,17 @@ def expected_language_part(language: Language, transliteration: str) -> Language
                 EmphasisPart("italic text"),
                 expected_language_part(Language.AKKADIAN, "kur"),
                 expected_language_part(Language.SUMERIAN, "kur"),
+            ),
+        ),
+        (
+            "text @sup{super} @sub{sub} @b{bold}",
+            (
+                StringPart("text "),
+                SuperscriptPart("super"),
+                StringPart(" "),
+                SubscriptPart("sub"),
+                StringPart(" "),
+                BoldPart("bold"),
             ),
         ),
     ],
