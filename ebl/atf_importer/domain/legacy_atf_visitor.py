@@ -18,15 +18,6 @@ from ebl.atf_importer.domain.legacy_translation_transformer import (
     LegacyTranslationBlockTransformer,
 )
 
-# ToDo: Continue from here
-# Make sure every transformer is implemented and works properly.
-# Implement the rest, so the maximal possible number of transformations
-# happens in the main (ebl) atf grammar.
-# Write tests for all transformations!
-# After this is done, clean up and get rid of preprocessing
-# except for `# note:` perhaps, if really needed.
-
-
 index_and_accented_transformer = (AccentedIndexTransformer(), "children")
 uncertain_sign_transformer = (UncertainSignTransformer(), "children")
 half_brackets_transformer = (HalfBracketsTransformer(), "children")

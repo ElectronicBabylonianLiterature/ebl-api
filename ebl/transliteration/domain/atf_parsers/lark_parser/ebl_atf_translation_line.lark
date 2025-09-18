@@ -22,4 +22,4 @@ legacy_translation_block_line.-5: free_text
 labels_start: labels_and_line_number
 labels_extent: labels_and_line_number
 
-labels_and_line_number: labels " " line_number
+labels_and_line_number: (labels " ")? line_number

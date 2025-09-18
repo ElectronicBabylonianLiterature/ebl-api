@@ -47,6 +47,22 @@ TRANSLATION_EXPECTED_B = """@right?
 #tr.en: @i{Bēlšunu}"""
 
 
+# ToDo: Solve issue. This works fine without the prime in lines.
+TRANSLATION_LEGACY_C = """1'. a-na?
+2'. a-bí-ya
+3'. {m}EN-šu-nu
+@translation labeled en project
+@(1') @?To000?@
+@(2') my @"father"@
+@(3') @Bēlšunu"""
+
+TRANSLATION_EXPECTED_C = """1'. a-na?
+#tr.en: @i{To}
+2'. a-bi₂-ya
+#tr.en: my “father”
+3'. {m}EN-šu-nu
+#tr.en: @i{Bēlšunu}"""
+
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
     ("@column", "@column 1"),
@@ -170,10 +186,12 @@ def test_legacy_translation(database):
     translations = [
         TRANSLATION_LEGACY_A,
         TRANSLATION_LEGACY_B,
+        TRANSLATION_LEGACY_C,
     ]
     expected = [
         TRANSLATION_EXPECTED_A,
         TRANSLATION_EXPECTED_B,
+        TRANSLATION_EXPECTED_C,
     ]
     for index, TRANSLATION_LEGACY in enumerate(translations):
         expected_lines = parse_atf_lark(expected[index])

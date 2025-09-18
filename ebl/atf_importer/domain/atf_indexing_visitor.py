@@ -11,6 +11,8 @@ surface_mapping = {
     "top": "t.e.",
 }
 
+# ToDo: Continue from here. Implement primes?
+
 
 class IndexingVisitor(Visitor):
     def __init__(self):

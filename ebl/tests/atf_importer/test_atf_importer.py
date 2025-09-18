@@ -516,6 +516,16 @@ ATF = """&X103813 = AD381C
 
 @(t.e. 2) Diary from month VII to the end of month XII2 [...]"""
 
+# ToDo:
+# Continue from here
+# Tasks:
+# 1. Fix primed lines in translation (s. test_atf_preprocessor, translation C & atf_indexing_visitor)
+# 2. Test & merge the markup additions branch
+# 3. Consider a solution for cases like
+# "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
+# S. the test below. The issue is with `GE[₆ `.
+# The line is parsed as `translation_line`, but should be a parsing error for manual fix.
+# This should be tested as well.
 
 def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
@@ -524,14 +534,12 @@ def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_inpu
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
-    """
     atf = (
         f"&P000001 = {museum_number}\n"
-        "1. [...] DIR.ŠE MU 13\n"
-        "#lem: u; Addāru_Šanû[(Intercalary) Month XII₂]MN; šattu[year]N; n,"
+        "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
+        "#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; u"
     )
-    """
-    atf = ATF
+    # atf = ATF
     mock_input(repeat(""))
     setup_and_run_importer(
         atf,
@@ -567,6 +575,17 @@ def test_atf_importer(fragment_repository, mock_input):
             "BM.47725",
             "BM.34987",
             "BM.45816",
+            "BM.46009",
+            "BM.35377",
+            "BM.35195",
+            "BM.32333",
+            "BM.34642",
+            "BM.45673",
+            "BM.34792",
+            "BM.36622",
+            "BM.35212",
+            "BM.33759",
+            "BM.36036",
         ]:
             fragment_repository.create(
                 FragmentFactory.build(number=MuseumNumber.of(museum_number))
