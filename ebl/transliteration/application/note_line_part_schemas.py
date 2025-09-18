@@ -9,10 +9,13 @@ from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.markup import (
     BibliographyPart,
+    BoldPart,
     EmphasisPart,
     LanguagePart,
     ParagraphPart,
     StringPart,
+    SubscriptPart,
+    SuperscriptPart,
     UrlPart,
 )
 
@@ -31,6 +34,30 @@ class EmphasisPartSchema(Schema):
     @post_load
     def make_part(self, data, **kwargs) -> EmphasisPart:
         return EmphasisPart(data["text"])
+
+
+class SuperscriptPartSchema(Schema):
+    text = fields.String(required=True)
+
+    @post_load
+    def make_part(self, data, **kwargs) -> SuperscriptPart:
+        return SuperscriptPart(data["text"])
+
+
+class SubscriptPartSchema(Schema):
+    text = fields.String(required=True)
+
+    @post_load
+    def make_part(self, data, **kwargs) -> SubscriptPart:
+        return SubscriptPart(data["text"])
+
+
+class BoldPartSchema(Schema):
+    text = fields.String(required=True)
+
+    @post_load
+    def make_part(self, data, **kwargs) -> BoldPart:
+        return BoldPart(data["text"])
 
 
 class LanguagePartSchema(Schema):
@@ -70,6 +97,9 @@ class OneOfNoteLinePartSchema(OneOfSchema):
     type_schemas: Mapping[str, Type[Schema]] = {
         "StringPart": StringPartSchema,
         "EmphasisPart": EmphasisPartSchema,
+        "SuperscriptPart": SuperscriptPartSchema,
+        "SubscriptPart": SubscriptPartSchema,
+        "BoldPart": BoldPartSchema,
         "LanguagePart": LanguagePartSchema,
         "BibliographyPart": BibliographyPartSchema,
         "ParagraphPart": ParagraphPartSchema,

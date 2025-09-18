@@ -51,7 +51,8 @@ markup-part = emphasis
             | emesal
             | markup-text
             | bibliography;
-emphasis = '@i{', markup-text, '}';
+markup_token_part: "@" MARKUP_TOKEN "{" note_text "}"
+MARKUP_TOKEN: "i" | "sup" | "sub" | "b"
 akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
 sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
 emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)

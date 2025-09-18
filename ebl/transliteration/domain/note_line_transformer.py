@@ -7,10 +7,13 @@ from ebl.bibliography.domain.reference import BibliographyId
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.markup import (
     BibliographyPart,
+    BoldPart,
     EmphasisPart,
     LanguagePart,
     MarkupPart,
     StringPart,
+    SubscriptPart,
+    SuperscriptPart,
     UrlPart,
 )
 from ebl.transliteration.domain.note_line import NoteLine
@@ -44,8 +47,14 @@ class MarkupTransformer(Transformer):
         )
 
     @v_args(inline=True)
-    def ebl_atf_note_line__emphasis_part(self, text: str) -> EmphasisPart:
-        return EmphasisPart(text)
+    def ebl_atf_note_line__markup_token_part(self, token: Token, text: str) -> MarkupPart:
+        token_map = {
+            "i": EmphasisPart,
+            "sup": SuperscriptPart,
+            "sub": SubscriptPart,
+            "b": BoldPart,
+        }
+        return token_map[str(token)](text)
 
     @v_args(inline=True)
     def ebl_atf_note_line__string_part(self, text: str) -> StringPart:
