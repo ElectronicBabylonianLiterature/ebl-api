@@ -473,7 +473,7 @@ ATF = """&X103813 = AD381C
 4'. [...] KUR sa-mi-né-e URU SIG-ú šá KUR ku-up-ru šá ana DÙ [...]
 #lem: u; mātu[land]N; Saminê[Saminê]SN$; ālu[city]N; wēdû[famous]AJ; ša[of]DET; mātu[land]N; Kupru[Kupru]GN$; ša[which]REL; ana[for]PRP; epēšu[do//make]V'V$; u
 
-5'. [...] ⸢x⸣ su-un-du KUR ia-a-mu-un-ia-am-mu šá LUGAL ⸢DÙ⸣-u[š ...]  
+5'. [...] ⸢x⸣ su-un-du KUR ia-a-mu-un-ia-am-mu šá LUGAL ⸢DÙ⸣-u[š ...]
 #lem: u; u; X; mātu[land]N; Iamun-Yammu[Ionian Sea (?)]WN$; ša[which]REL; šarru[king]N; epēšu[do]V; u
 
 @top
@@ -548,7 +548,7 @@ def test_atf_importer(fragment_repository, mock_input):
     database = client.get_database(os.environ.get("MONGODB_DB"))
     atf_importer = AtfImporter(database, fragment_repository)
     archive = zipfile.ZipFile(
-        "ebl/tests/atf_importer/test_data3.zip" # ToDo: Change to "ebl/tests/atf_importer/test_data3.zip"
+        "ebl/tests/atf_importer/test_data3.zip"  # ToDo: Change to "ebl/tests/atf_importer/test_data3.zip"
     )  # ToDo: Check `test_data2`
     mock_input(repeat(""))
     with tempfile.TemporaryDirectory() as tempdir:

@@ -66,7 +66,7 @@ class EblLinesGetter:
             # and those incorrectly parsed as translation line.
             # Check for other line types, then clean up
             if c_type not in ["empty_line"]:
-                #input()
+                # input()
                 result["transliteration"].append(line["serialized"])
                 # result["lemmatization"].append(line["c_line"])
         return result, line_context
