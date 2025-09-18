@@ -132,13 +132,15 @@ class MuseumNumberGetter:
 
     def get_museum_number(self, control_lines: List, filename: str) -> Optional[str]:
         cdli_number, reference = self._get_cdli_number_and_reference(control_lines)
+        # ToDo: Clean up
+        print("cdli_number, reference:", cdli_number, reference)
         if reference is not None:
             if museum_number := self._get_valid_museum_number_or_none(reference):
                 return self._get_lowest_join_number(museum_number)
             if museum_number := self._get_museum_number_by_data(cdli_number, reference):
                 return self._get_lowest_join_number(museum_number)
         self.logger.error(f"Could not find a valid museum number for '{filename}'")
-        return self._get_lowest_join_number(self._input_museum_number())
+        return self._input_museum_number()
 
     def _get_valid_museum_number_or_none(
         self, museum_number_string: str
@@ -197,20 +199,29 @@ class MuseumNumberGetter:
         museum_number = None
         while museum_number is None:
             museum_number_input = input(
-                "Please enter a valid museum number (enter 'skip' to skip this file): "
+                "Please enter a valid museum number or leave blank to skip this file: "
             )
-            if museum_number_input.lower() == "skip":
+            if museum_number_input == "":
                 return None
             museum_number = self._get_valid_museum_number_or_none(museum_number_input)
-        return museum_number
+        return self._get_lowest_join_number(museum_number)
 
     def _get_lowest_join_number(self, museum_number: Optional[str]) -> Optional[str]:
-        # ToDo: Except errors.
-        # E.g. ebl.errors.NotFoundError: Fragment W.20030.142 not found.
         if museum_number:
-            fragment = self.fragment_repository.query_by_museum_number(
-                MuseumNumber.of(museum_number)
-            )
-            if fragment.joins.lowest and museum_number != str(fragment.joins.lowest):
-                return str(fragment.joins.lowest)
+            # ToDo: Clean up
+            print("museum number:", museum_number)
+            try:
+                fragment = self.fragment_repository.query_by_museum_number(
+                    MuseumNumber.of(museum_number)
+                )
+                if fragment.joins.lowest and museum_number != str(
+                    fragment.joins.lowest
+                ):
+                    return str(fragment.joins.lowest)
+            except NotFoundError:
+                print(
+                    f"Museum number {museum_number} does not exist in the fragmentarium."
+                )
+                return self._input_museum_number()
+            # return museum_number
         return museum_number

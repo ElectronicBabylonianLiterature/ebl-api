@@ -431,7 +431,92 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
-"""
+# ToDo: Debug
+# Works when:
+# &X103813 = BM.17
+#
+# Does not work when:
+# &X103813 = AD -381C
+
+ATF = """&X103813 = AD381C
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 23.KÁM {m}...]-šú šá {m}ar-tak-šat-su LUGAL MU-šú SA₄-ú DU₆ 1 [...]
+#lem: šattu[year]N; n; u; ša[who]REL; Artaxerxes[Artaxerxes]RN; šarru[king]N; šumšu[name]N; nabû[named]AJ; Tašrītu[Month VII]MN; n; u
+
+2. [...] ana ULÙ u MAR ŠUR UD.DA-su ina KI IGI GE₆ 6 ina ZALÁG dele-bat e S[A₄-šá-ABSIN ...]
+#lem: u; ana[to]PRP; šūtu[south]N; u[and]CNJ; amurru[west]N; zanānu[flash]V; ṣētu[bright light]N; ina[on]PRP; erṣētu[ground]N; amāru[see]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+3. [... GE₆ 9 ... sin] ár MÚL-ár-šá-SUHUR-MÁŠ 2/3 KÙŠ ana SI-šú šá SI GIN [...]
+#lem: u; mūšu[night]N; n; u; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; ana[to]PRP; qarnu[horn]N$qarnišu; ša[which]REL; ištānu[northern]AJ; alāku[go]V; u
+
+4. [...] ⸢GE₆⸣ 17 ina ZALÁG sin ina IGI ŠUR-GIGIR-šá-SI 1 ⸢2/3⸣ [KÙŠ ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN$; n; n; ammatu[unit]N; u
+
+5. [...] ⸢x x x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u; u
+
+@reverse
+1'. [... sin T]ÙR NIGÍN AN ⸢UTAH⸣ ⸢x šamáš? TÙR NIGÍN⸣ ma-diš iq-⸢tur₇⸣ [...]
+#lem: u; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; šamû[rain]N; natāku[drip]V; u; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mādiš[very]AV; qatāru[billow]V; u
+
+2'. [... GENNA ... MÚ]L-ár-šá-ALLA-šá-ULÙ 6 SI LÁL ITU BI KI.LAM še-i[m ...]
+#lem: u; Kayyamānu[Saturn]CN; u; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; alālu[balance]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; u
+
+3'. [...] ⸢x⸣ i-nu-šú MÚL.BABBAR ina UR.A dele-bat u GU₄.UD ina GU₄.AN GENNA ina ALLA A[N ...]
+#lem: u; u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in//in]PRP'PRP; Nēšu[Leo]CN; Dilbat[Venus]CN; u[and]CNJ; Šihṭu[Mercury]CN; ina[in]PRP; Zappu[Taurus]CN; Kayyamānu[Saturn]CN; ina[in]PRP; Alluttu[Cancer]CN; Ṣalbaṭānu[Mars]CN; u
+
+4'. [...] KUR sa-mi-né-e URU SIG-ú šá KUR ku-up-ru šá ana DÙ [...]
+#lem: u; mātu[land]N; Saminê[Saminê]SN$; ālu[city]N; wēdû[famous]AJ; ša[of]DET; mātu[land]N; Kupru[Kupru]GN$; ša[which]REL; ana[for]PRP; epēšu[do//make]V'V$; u
+
+5'. [...] ⸢x⸣ su-un-du KUR ia-a-mu-un-ia-am-mu šá LUGAL ⸢DÙ⸣-u[š ...]  
+#lem: u; u; X; mātu[land]N; Iamun-Yammu[Ionian Sea (?)]WN$; ša[which]REL; šarru[king]N; epēšu[do]V; u
+
+@top
+1. [BAR] 1 24.30 na DIR KALAG-ma sin NU IGI
+#lem: Nisannu[Month I]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; dannu[dense]AJ; Sîn[moon]N; ul[not]MOD; amāru[see]V
+
+2. EN.NUN šá gi-né-e šá TA DU₆ EN TIL DIR.ŠE [...]
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[regularity]N; ša[which]REL; ištu[from]PRP; Tašrītu[Month VII]MN; adi[until]PRP; qītu[end]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 24@sup{?} of ...x]šu who is called king Artaxerxes. Month VII, the 1st (of which followed the 30th of the prededing month); ... [...]
+
+@(o 2) [... a shooting star@sup{?}] flashed to the south-west; ist light was seen on the ground. Night of the 6th, last part of the night, Venus was above α Vir[ginis ...]
+
+@(o 3) [... the moon was] 2/3 cubit behind δ Capricorni, it was set to its northern horn [...]
+
+@(o 4) [...] Night of the 17th, last part of the night, the moon was 1 + x cubits in front of ζ Tauri [...]
+
+@(o 5) [...] ... Night@sup{?} of the 19th@sup{?}, last part of the night, the moon was in front@sup{?} of ... [...]
+
+@reverse
+
+@(r 1') [...] was surrounded by a halo; rain shower. The xth, the sun was surrounded by a halo, it billowed very much. [...]
+
+@(r 2') [...] was balanced 6 fingers [above/below] δ Cancri. That month, the quivalent (of 1 shekel of silver) was: barley, [...]
+
+@(r 3') [... mi]nas. At that time, Jupiter was in Leo; Venus and Mercury were in Taurus;
+
+@(r 4') [...] the land Saminê, a famous city of the land Kupru, which for making [...]
+
+@(r 5') [...]sundu of the land Iamuniammu which the king made [...]
+
+@top
+
+@(t.e. 1) [Month I], the 1st (of which followed the 30th of the preceding month); sunset to moonset: 24° 30'; dense clouds so that I did not see the moon.
+
+@(t.e. 2) Diary from month VII to the end of month XII2 [...]"""
+
+
 def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
@@ -439,14 +524,14 @@ def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_inpu
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
+    """
     atf = (
         f"&P000001 = {museum_number}\n"
-        "9. ⸢4(BÁN)?⸣ 1 GÍN bit-⸢qa⸣ ZÚ.LUM 3(BÁN)? 1 qa LAL ka-si 3(BARIG) 2(BÁN) ZÀ 2(BÁN) 1 qa ŠE.GIŠ ⸢5⸣? [...]\n"
-        "#lem: n; n; šiqlu[shekel]N; bitqu[break(age)]N; suluppu[date]N; n; n; qû[(one) litre]N; nahāsu[recede]V; kasû[mustard]N$; n; n; sahlu[cress]N; n; n; qû[(one) litre]N; šamaššammū[sesame]N; n; u"
+        "1. [...] DIR.ŠE MU 13\n"
+        "#lem: u; Addāru_Šanû[(Intercalary) Month XII₂]MN; šattu[year]N; n,"
     )
-    # ToDo: Solve issue with "4(BÁN)?". Convert to "4?(BÁN)" in preprocessor
-    # "9. ⸢4(BÁN)?⸣ 1 GÍN bit-⸢qa⸣ ZÚ.LUM 3(BÁN)? 1 qa LAL ka-si 3(BARIG) 2(BÁN) ZÀ 2(BÁN) 1 qa ŠE.GIŠ ⸢5⸣? [...]\n"
-    # "#lem: n; n; šiqlu[shekel]N; bitqu[break(age)]N; suluppu[date]N; n; n; qû[(one) litre]N; nahāsu[recede]V; kasû[mustard]N$; n; n; sahlu[cress]N; n; n; qû[(one) litre]N; šamaššammū[sesame]N; n; u"
+    """
+    atf = ATF
     mock_input(repeat(""))
     setup_and_run_importer(
         atf,
@@ -455,7 +540,6 @@ def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_inpu
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
-"""
 
 
 # @pytest.mark.skip(reason="heavy test")
@@ -464,7 +548,7 @@ def test_atf_importer(fragment_repository, mock_input):
     database = client.get_database(os.environ.get("MONGODB_DB"))
     atf_importer = AtfImporter(database, fragment_repository)
     archive = zipfile.ZipFile(
-        "ebl/tests/atf_importer/test_data.zip"
+        "ebl/tests/atf_importer/test_data3.zip" # ToDo: Change to "ebl/tests/atf_importer/test_data3.zip"
     )  # ToDo: Check `test_data2`
     mock_input(repeat(""))
     with tempfile.TemporaryDirectory() as tempdir:
@@ -476,7 +560,13 @@ def test_atf_importer(fragment_repository, mock_input):
             "W.20030.142",
             "VAT.5047",
             "VAT.4936",
-            "VAT.4924"
+            "VAT.4924",
+            "BM.47735",
+            "BM.34634",
+            "BM.34638",
+            "BM.47725",
+            "BM.34987",
+            "BM.45816",
         ]:
             fragment_repository.create(
                 FragmentFactory.build(number=MuseumNumber.of(museum_number))

@@ -1,6 +1,6 @@
 %import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
 
-lem_line: "#lem: " lemma (LEM_SEPARATOR lemma)*
+lem_line: "#lem: " lemma (LEM_SEPARATOR lemma)* ","?
 LEM_SEPARATOR : "; "
 LEM_CONNECTOR : "&"
 additional_lemmata: (LEM_CONNECTOR additional_lemma)

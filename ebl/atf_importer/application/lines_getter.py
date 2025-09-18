@@ -43,6 +43,9 @@ class EblLinesGetter:
         line_context: LineContext,
     ) -> Tuple[defaultdict, LineContext]:
         c_type = line["c_type"]
+        # ToDo: Clean up
+        # print("!!!", c_type)
+        # print(line["serialized"])
         if "control_line" in c_type:
             result = self._handle_control_line(line, result)
         elif c_type == "text_line":
@@ -63,9 +66,9 @@ class EblLinesGetter:
             # and those incorrectly parsed as translation line.
             # Check for other line types, then clean up
             if c_type not in ["empty_line"]:
-                print(c_type)
-                print(line["serialized"])
-                input()
+                #input()
+                result["transliteration"].append(line["serialized"])
+                # result["lemmatization"].append(line["c_line"])
         return result, line_context
 
     def _handle_control_line(

@@ -96,6 +96,9 @@ class LegacyAtfConverter:
             c_line, c_array, c_type, c_alter_lem_line_at = self._convert_line(
                 line_data["string"], line_data["tree"]
             )
+            # ToDo: Continue from here. Debug, clean up.
+            # For an unclear reason, `translation_line`s are being ignored.
+            # print("DDD", line_data)
             result = {
                 "c_line": c_line,
                 "c_array": c_array,
