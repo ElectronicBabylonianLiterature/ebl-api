@@ -222,7 +222,7 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    if None not in (args.output_annotations, args.output_imgs):
+    if bool(args.output_annotations) ^ bool(args.output_imgs):
         raise argparse.ArgumentError(
             None, message="Either specify both argument options or none at all"
         )
