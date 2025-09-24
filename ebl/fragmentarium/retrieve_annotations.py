@@ -335,6 +335,6 @@ except Exception as e:
         to_filter=TO_FILTER,
     )
     write_fragment_numbers(
-        annotation_collection, f"./annotations/Annotations_{date.today()}.txt"
+        annotation_collection, f"{args.output_annotations}/../Annotations_{date.today()}.txt"
     )
     print("Done")
