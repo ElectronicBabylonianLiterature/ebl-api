@@ -240,45 +240,17 @@ try:
     annotation_collection = context.annotations_repository.retrieve_all_non_empty()
     photo_repository = context.photo_repository
 except Exception as e:
-    print(f"Failed to create full context: {e}. Using partial context instead.")
+    print(f"Failed to create full context: {e}. Using Mongo environment only.")
     from pymongo import MongoClient
-    from ebl.context import Context
     from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
     MongoAnnotationsRepository,
-    
 )
     from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
-    
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     annotations_repository=MongoAnnotationsRepository(database)
     photo_repository=GridFsFileRepository(database, "photos")
-    # print(photo_repository)
-    partial_context = Context(
-        ebl_ai_client=None,
-        auth_backend=None,
-        cropped_sign_images_repository=None,
-        word_repository=None,
-        sign_repository=None,
-        public_file_repository=None,
-        folio_repository=None,
-        thumbnail_repository=None,
-        fragment_repository=None,
-        changelog=None,
-        bibliography_repository=None,
-        text_repository=None,
-        lemma_repository=None,
-        findspot_repository=None,
-        custom_cache=None,
-        cache=None,
-        parallel_line_injector=None,
-        afo_register_repository=None,
-        dossiers_repository=None,
-        photo_repository=photo_repository,
-        annotations_repository=annotations_repository,
-    )
-
-    annotation_collection = partial_context.annotations_repository.retrieve_all_non_empty()
+    annotation_collection = annotations_repository.retrieve_all_non_empty()
 
     if args.filter:
         if args.filter not in ["finished", "unfinished", "selected"]:
