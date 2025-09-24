@@ -141,6 +141,9 @@ class LegacyAtfConverter:
         lines_data = []
         for line in lines:
             lines_data = self._parse_line(line, lines_data)
+        # ToDo: Continue from here. Debug & clean up
+        # print(lines_data)
+        # input()
         return lines_data
 
     def _parse_line(
@@ -149,6 +152,8 @@ class LegacyAtfConverter:
         line_tree = self._parse_and_validate_line(line)
         self.indexing_visitor.visit(line_tree)
         self.legacy_visitor.visit(line_tree)
+        # ToDo: Continue from here. Debug & clean up
+        # print("!!!", self.indexing_visitor.cursor_index)
         cursor = (
             self.indexing_visitor.cursor_index
             if line_tree.data == "text_line"
@@ -158,6 +163,12 @@ class LegacyAtfConverter:
             "translation_line" in line_tree.data
             and line_tree.data != "translation_line"
         ):
+            # print("translation line tree data:", line_tree.data)
+            # print("translation line tree:", line_tree)
+            # print("\n\n")
+            # print(
+            #    "TRANSLATION:", self._handle_legacy_translation(line_tree, lines_data)
+            # )
             return self._handle_legacy_translation(line_tree, lines_data)
         else:
             lines_data.append({"string": line, "tree": line_tree, "cursor": cursor})

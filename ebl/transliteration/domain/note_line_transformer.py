@@ -47,7 +47,9 @@ class MarkupTransformer(Transformer):
         )
 
     @v_args(inline=True)
-    def ebl_atf_note_line__markup_token_part(self, token: Token, text: str) -> MarkupPart:
+    def ebl_atf_note_line__markup_token_part(
+        self, token: Token, text: str
+    ) -> MarkupPart:
         token_map = {
             "i": EmphasisPart,
             "sup": SuperscriptPart,

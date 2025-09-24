@@ -12,6 +12,7 @@ from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
 from ebl.atf_importer.application.logger import Logger, LoggerUtil
 from ebl.transliteration.domain.text import Text
 from ebl.context import Context
+from ebl.app import create_context
 
 os.environ["EBL_AI_API"] = ""
 
@@ -49,8 +50,10 @@ class AtfImporter:
             return {}
 
     def setup_importer(self, args: AtfImporterArgs) -> None:
+
         self.username = args["author"]
         self.logger = Logger(args["logdir"])
+        self.logger.info("Atf-Importer")
         self.database_importer = DatabaseImporter(
             self.database, self.fragment_repository, self.logger, self.username
         )
@@ -107,7 +110,7 @@ class AtfImporter:
         )
 
         for arg in self.config["CLI_ARGS"]:
-            parser.add_argument(*arg["flags"], *arg["kwargs"])
+            parser.add_argument(*arg["flags"], **arg["kwargs"])
 
         args = parser.parse_args()
         self.run_importer(
@@ -124,9 +127,9 @@ class AtfImporter:
         client = MongoClient(os.getenv("MONGODB_URI"))
         database = client.get_database(os.getenv("MONGODB_DB"))
         importer = AtfImporter(database, Context.fragment_repository)
-        importer.logger.info("Atf-Importer")
         importer.cli()
 
 
 if __name__ == "__main__":
+    Context = create_context()
     AtfImporter.main()

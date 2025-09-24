@@ -7,7 +7,7 @@ from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
 class LegacyTranslationBlockTransformer(LegacyTransformer):
     prefix = ""
-    _markup_pattern = re.compile(r"@\?(.*?)\?@|@([^\s@][^\s]*)")
+    _markup_pattern = re.compile(r"@\?(.*?)\?@|@(sub|sup)\{(.*?)\}|@([^\s@][^\s]*)")
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -58,9 +58,9 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     ) -> Tree:
         self.legacy_found = True
         self.translation.append("".join([str(child) for child in text.children]))
-        # ToDo: Clean up
-        print(self.translation_c_line)
-        input()
+        # ToDo: Continue from here. Debug & clean up
+        # print(self.translation_c_line)
+        # input()
         return self.translation_c_line
 
     def ebl_atf_translation_line__legacy_translation_block_label_text_line(
@@ -106,11 +106,24 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
             "ebl_atf_translation_line__ebl_atf_note_line__note_text", [token]
         )
         rule = (
-            "ebl_atf_translation_line__ebl_atf_note_line__emphasis_part"
-            if type == "emphasis"
+            "ebl_atf_translation_line__ebl_atf_note_line__markup_token_part"
+            if type != "string"
             else "ebl_atf_translation_line__ebl_atf_note_line__string_part"
         )
-        return self.to_tree(rule, [note_text])
+        children = ([self._get_markup_token(type)] if type != "string" else []) + [
+            note_text
+        ]
+        return self.to_tree(
+            rule,
+            children,
+        )
+
+    def _get_markup_token(self, type: str) -> Optional[Token]:
+        if type == "string":
+            return None
+        return self.to_token(
+            "ebl_atf_translation_line__ebl_atf_note_line__MARKUP_TOKEN", type
+        )
 
     def _split_markup_segments(self, text: str) -> List[tuple[str, str]]:
         segments = []
@@ -119,8 +132,10 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
             start, end = match.span()
             if start > last_index:
                 segments.append((text[last_index:start], "string"))
-            matched_text = match.group(1) or match.group(2)
-            segments.append((matched_text, "emphasis"))
+            if match.group(1) or match.group(4):
+                segments.append((match.group(1) or match.group(4), "i"))
+            elif match.group(2) and match.group(3):
+                segments.append((match.group(3), match.group(2)))
             last_index = end
         if last_index < len(text):
             segments.append((text[last_index:], "string"))

@@ -527,6 +527,7 @@ ATF = """&X103813 = AD381C
 # The line is parsed as `translation_line`, but should be a parsing error for manual fix.
 # This should be tested as well.
 
+
 def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
