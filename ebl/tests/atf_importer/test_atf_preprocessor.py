@@ -91,6 +91,8 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("@reverse", "@reverse"),
     ("$ obverse broken", "$ obverse broken"),
     ("$ rest broken", "$ rest of side broken"),
+    ("$ ((rest of column broken))", "$ rest of column broken"),
+    ("$ (((rest of column broken)))", "$ rest of column broken"),
     ("$ ruling", "$ single ruling"),
     ("$ ruling?", "$ single ruling?"),
     ("$ seal impression", "$ (seal impression)"),

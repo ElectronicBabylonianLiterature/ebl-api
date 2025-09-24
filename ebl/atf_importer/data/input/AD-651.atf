@@ -1,0 +1,16 @@
+&X106510 = AD -651
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+
+# note: This is not the edition of this text. The content is for testing purposes only.
+
+$ ((rest of column broken))
+
+@obverse
+1. [x x x] EN? liš-lim
+
+@translation labeled en project
+@(o 1) [At the command of ...] Bēl may it be well.

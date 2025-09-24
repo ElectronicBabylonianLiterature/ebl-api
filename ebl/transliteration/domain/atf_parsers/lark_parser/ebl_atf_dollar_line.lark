@@ -9,7 +9,7 @@
 
 ?dollar_line: "$" " "* value
 ?value: strict
-      | "(" " "* strict " "* ")"
+      | "("+ " "* strict " "* ")"+
       | loose
 ?strict: state | ruling | image | seal
 loose: "(" free_text ")"
