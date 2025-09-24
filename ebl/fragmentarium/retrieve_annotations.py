@@ -234,24 +234,25 @@ if __name__ == "__main__":
         args.output_annotations = "./annotations/annotations"
         args.output_imgs = "./annotations/imgs"
 
+    try:
+        context = create_context()
+        annotation_collection = context.annotations_repository.retrieve_all_non_empty()
+        photo_repository = context.photo_repository
+    except Exception as e:
+        print(f"Failed to create full context: {e}. Using Mongo environment only.")
+        from pymongo import MongoClient
+        from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
+            MongoAnnotationsRepository,
+        )
+        from ebl.files.infrastructure.grid_fs_file_repository import (
+            GridFsFileRepository,
+        )
 
-try:
-    context = create_context()
-    annotation_collection = context.annotations_repository.retrieve_all_non_empty()
-    photo_repository = context.photo_repository
-except Exception as e:
-    print(f"Failed to create full context: {e}. Using Mongo environment only.")
-    from pymongo import MongoClient
-    from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
-        MongoAnnotationsRepository,
-    )
-    from ebl.files.infrastructure.grid_fs_file_repository import GridFsFileRepository
-
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
-    annotations_repository = MongoAnnotationsRepository(database)
-    photo_repository = GridFsFileRepository(database, "photos")
-    annotation_collection = annotations_repository.retrieve_all_non_empty()
+        client = MongoClient(os.environ["MONGODB_URI"])
+        database = client.get_database(os.environ.get("MONGODB_DB"))
+        annotations_repository = MongoAnnotationsRepository(database)
+        photo_repository = GridFsFileRepository(database, "photos")
+        annotation_collection = annotations_repository.retrieve_all_non_empty()
 
     if args.filter:
         if args.filter not in ["finished", "unfinished", "selected"]:
