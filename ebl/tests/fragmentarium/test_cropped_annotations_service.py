@@ -34,15 +34,16 @@ def test_find_annotations_by_sign(
     image_id_1 = annotation[0].cropped_sign.image_id
     image_id_2 = annotation[1].cropped_sign.image_id
 
-    when(annotations_repository).find_by_sign(
-        "test-sign").thenReturn([annotations])
+    when(annotations_repository).find_by_sign("test-sign").thenReturn([annotations])
     when(cropped_sign_images_repository).query_by_id(image_id_1).thenReturn(
-        CroppedSignImage(image_id_1, Base64("test-base64-1"),
-                         annotations.fragment_number)
+        CroppedSignImage(
+            image_id_1, Base64("test-base64-1"), annotations.fragment_number
+        )
     )
     when(cropped_sign_images_repository).query_by_id(image_id_2).thenReturn(
-        CroppedSignImage(image_id_2, Base64("test-base64-2"),
-                         annotations.fragment_number)
+        CroppedSignImage(
+            image_id_2, Base64("test-base64-2"), annotations.fragment_number
+        )
     )
     fragment_number = annotations.fragment_number
     provenance = annotations.provenance
@@ -64,5 +65,4 @@ def test_find_annotations_by_sign(
         "provenance": provenance,
     }
 
-    assert service.find_annotations_by_sign(
-        "test-sign") == [expected_1, expected_2]
+    assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]

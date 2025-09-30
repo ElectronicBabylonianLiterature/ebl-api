@@ -133,7 +133,8 @@ def test_update(
     )
 
     expected_cropped_sign_image = CroppedSignImage(
-        "test-id", Base64("test-image"), fragment_number)
+        "test-id", Base64("test-image"), fragment_number
+    )
     annotation_cropped_sign = attr.evolve(
         annotation,
         cropped_sign=CroppedSignFactory.build(
@@ -147,9 +148,9 @@ def test_update(
     when(CroppedSignImage).create(...).thenReturn(expected_cropped_sign_image)
 
     when(cropped_sign_images_repository).delete_by_fragment_number(
-        fragment_number).thenReturn()
-    when(annotations_repository).create_or_update(
-        expected_annotations).thenReturn()
+        fragment_number
+    ).thenReturn()
+    when(annotations_repository).create_or_update(expected_annotations).thenReturn()
     when(cropped_sign_images_repository).create_many(
         [expected_cropped_sign_image]
     ).thenReturn()

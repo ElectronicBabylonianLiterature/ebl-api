@@ -48,8 +48,7 @@ class AnnotationsService:
     def generate_annotations(
         self, number: MuseumNumber, threshold: float = 0.3
     ) -> Annotations:
-        fragment_image = self._photo_repository.query_by_file_name(
-            f"{number}.jpg")
+        fragment_image = self._photo_repository.query_by_file_name(f"{number}.jpg")
         return self._ebl_ai_client.generate_annotations(
             number, fragment_image, threshold
         )
@@ -119,8 +118,7 @@ class AnnotationsService:
             cropped_sign_images,
         ) = self._cropped_image_from_annotations(annotations)
 
-        self._annotations_repository.create_or_update(
-            annotations_with_image_ids)
+        self._annotations_repository.create_or_update(annotations_with_image_ids)
 
         len(cropped_sign_images) and self._cropped_sign_images_repository.create_many(
             cropped_sign_images

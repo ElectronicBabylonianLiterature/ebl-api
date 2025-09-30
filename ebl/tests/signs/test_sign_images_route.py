@@ -25,8 +25,7 @@ def test_signs_get(
     )
     fragment_repository.create(fragment)
 
-    annotation_data = AnnotationDataFactory.build(
-        sign_name="signName", path=[2, 0, 0])
+    annotation_data = AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0])
     cropped_sign = CroppedSignFactory.build()
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
@@ -35,14 +34,16 @@ def test_signs_get(
     cropped_sign_images_repository.create_many(
         [
             CroppedSignImage(
-                annotation.cropped_sign.image_id, Base64(
-                    "test-base64-string"), fragment_number
+                annotation.cropped_sign.image_id,
+                Base64("test-base64-string"),
+                fragment_number,
             )
         ]
     )
     annotations_repository.create_or_update(
         AnnotationsFactory.build(
-            fragment_number=fragment_number, annotations=[annotation])
+            fragment_number=fragment_number, annotations=[annotation]
+        )
     )
 
     result = client.simulate_get("/signs/signName/images")

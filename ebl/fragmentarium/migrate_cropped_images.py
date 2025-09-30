@@ -37,7 +37,7 @@ def show_statistics(context: Context) -> tuple:
 
     pipeline = [
         {"$project": {"annotation_count": {"$size": "$annotations"}}},
-        {"$group": {"_id": None, "total_annotations": {"$sum": "$annotation_count"}}}
+        {"$group": {"_id": None, "total_annotations": {"$sum": "$annotation_count"}}},
     ]
     result = list(annotations_collection.aggregate(pipeline))
     individual_annotations_count = result[0]["total_annotations"] if result else 0
@@ -47,8 +47,11 @@ def show_statistics(context: Context) -> tuple:
     except Exception:
         cropped_images_count = cropped_images_collection.count_documents({})
 
-    ratio = cropped_images_count / \
-        individual_annotations_count if individual_annotations_count > 0 else 0
+    ratio = (
+        cropped_images_count / individual_annotations_count
+        if individual_annotations_count > 0
+        else 0
+    )
 
     logger.info(f"Individual annotations: {individual_annotations_count:,}")
     logger.info(f"Cropped images: {cropped_images_count:,}")
@@ -80,12 +83,12 @@ def regenerate_images(context: Context):
     for annotation_doc in annotations_cursor:
         try:
             fragment_number = MuseumNumber.of(annotation_doc["fragmentNumber"])
-            annotations = annotations_repository.query_by_museum_number(
-                fragment_number)
+            annotations = annotations_repository.query_by_museum_number(fragment_number)
 
             if annotations.annotations:
                 logger.info(
-                    f"Processing fragment {fragment_number} with {len(annotations.annotations)} annotations")
+                    f"Processing fragment {fragment_number} with {len(annotations.annotations)} annotations"
+                )
 
                 (
                     annotations_with_image_ids,
@@ -93,27 +96,27 @@ def regenerate_images(context: Context):
                 ) = annotations_service._cropped_image_from_annotations(annotations)
 
                 if cropped_sign_images:
-                    cropped_sign_images_repository.create_many(
-                        cropped_sign_images)
+                    cropped_sign_images_repository.create_many(cropped_sign_images)
                     logger.info(
-                        f"Created {len(cropped_sign_images)} cropped images for fragment {fragment_number}")
+                        f"Created {len(cropped_sign_images)} cropped images for fragment {fragment_number}"
+                    )
 
-                annotations_repository.create_or_update(
-                    annotations_with_image_ids)
+                annotations_repository.create_or_update(annotations_with_image_ids)
                 processed_count += 1
 
                 if processed_count % 100 == 0:
-                    logger.info(
-                        f"Processed {processed_count} fragments so far...")
+                    logger.info(f"Processed {processed_count} fragments so far...")
 
         except Exception as e:
             error_count += 1
             logger.error(
-                f"Error processing fragment {annotation_doc.get('fragmentNumber', 'unknown')}: {str(e)}")
+                f"Error processing fragment {annotation_doc.get('fragmentNumber', 'unknown')}: {str(e)}"
+            )
             continue
 
     logger.info(
-        f"Regeneration completed. Processed {processed_count} fragments, {error_count} errors.")
+        f"Regeneration completed. Processed {processed_count} fragments, {error_count} errors."
+    )
 
 
 def migrate_cropped_images():
@@ -123,8 +126,7 @@ def migrate_cropped_images():
     logger.info("=" * 40)
 
     logger.info("BEFORE migration:")
-    individual_annotations_count, cropped_images_count = show_statistics(
-        context)
+    individual_annotations_count, cropped_images_count = show_statistics(context)
 
     if cropped_images_count == 0:
         logger.info("No cropped images found. Nothing to clean up.")
