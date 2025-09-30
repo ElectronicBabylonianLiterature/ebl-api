@@ -4,6 +4,8 @@ from typing import NewType
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
 
+from ebl.transliteration.domain.museum_number import MuseumNumber
+
 Base64 = NewType("Base64", str)
 
 
@@ -11,23 +13,33 @@ Base64 = NewType("Base64", str)
 class CroppedSignImage:
     image_id: str
     image: Base64
+    fragment_number: MuseumNumber
 
     @classmethod
-    def create(cls, image: Base64) -> "CroppedSignImage":
-        return cls(str(uuid.uuid4()), image)
+    def create(cls, image: Base64, fragment_number: MuseumNumber) -> "CroppedSignImage":
+        return cls(str(uuid.uuid4()), image, fragment_number)
 
 
 class CroppedSignImageSchema(Schema):
     image_id = fields.Str(required=True)
     image = fields.Str(required=True)
+    fragment_number = fields.Str(required=True)
 
     @post_load
     def load(self, data, **kwargs):
-        return CroppedSignImage(data["_id"], data["image"])
+        return CroppedSignImage(
+            data["_id"],
+            data["image"],
+            MuseumNumber.of(data["fragment_number"])
+        )
 
     @post_dump
     def cropped_sign_image_dump(self, data, **kwargs):
-        return {"_id": data["image_id"], "image": data["image"]}
+        return {
+            "_id": data["image_id"],
+            "image": data["image"],
+            "fragment_number": str(data["fragment_number"])
+        }
 
 
 @attr.attrs(auto_attribs=True, frozen=True)

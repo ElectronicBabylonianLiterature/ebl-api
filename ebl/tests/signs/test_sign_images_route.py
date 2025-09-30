@@ -30,15 +30,16 @@ def test_signs_get(
     annotation = AnnotationFactory.build(
         data=annotation_data, cropped_sign=cropped_sign
     )
+    fragment_number = MuseumNumber("K", "2")
     cropped_sign_images_repository.create_many(
         [
             CroppedSignImage(
-                annotation.cropped_sign.image_id, Base64("test-base64-string")
+                annotation.cropped_sign.image_id, Base64("test-base64-string"), fragment_number
             )
         ]
     )
     annotations_repository.create_or_update(
-        AnnotationsFactory.build(fragment_number="K.2", annotations=[annotation])
+        AnnotationsFactory.build(fragment_number=fragment_number, annotations=[annotation])
     )
 
     result = client.simulate_get("/signs/signName/images")
