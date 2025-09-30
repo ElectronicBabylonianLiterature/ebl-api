@@ -133,7 +133,7 @@ class MuseumNumberGetter:
     def get_museum_number(self, control_lines: List, filename: str) -> Optional[str]:
         cdli_number, reference = self._get_cdli_number_and_reference(control_lines)
         # ToDo: Clean up
-        print("cdli_number, reference:", cdli_number, reference)
+        # print("cdli_number, reference:", cdli_number, reference)
         if reference is not None:
             if museum_number := self._get_valid_museum_number_or_none(reference):
                 return self._get_lowest_join_number(museum_number)
@@ -223,5 +223,4 @@ class MuseumNumberGetter:
                     f"Museum number {museum_number} does not exist in the fragmentarium."
                 )
                 return self._input_museum_number()
-            # return museum_number
         return museum_number

@@ -79,7 +79,9 @@ class LegacyTransformer(Transformer):
             else Token(name, string)
         )
 
-    def to_tree(self, name: str, children: List[Optional[Union[Tree, Token]]]) -> Tree:
+    def to_tree(
+        self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
+    ) -> Tree:
         return (
             Tree(f"{self.prefix}__{name}", children)
             if self.prefix

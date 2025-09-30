@@ -50,7 +50,6 @@ class LegacyAtfConverter:
     translation_block_transformer = translation_block_transformer[0]
     column_transformer = column_transformer[0]
     line_transformer = LineTransformer()
-    skip_next_lem_line = False  # ToDo: Check & implement, if needed
 
     def __init__(
         self,
@@ -128,10 +127,6 @@ class LegacyAtfConverter:
     def _convert_lem_line(
         self, atf: str, tree: Tree
     ) -> Tuple[Optional[str], Optional[List[Any]], str, Optional[List[Any]]]:
-        if self.skip_next_lem_line:
-            self.logger.warning("Skipping lem line due to previous flag.")
-            self.skip_next_lem_line = False
-            return (None, None, "lem_line", [])
         lemmas_and_guidewords_array = self.serizalize_lemmas_and_guidewords(tree)
         self._log_lem_line(tree, lemmas_and_guidewords_array)
         return atf, lemmas_and_guidewords_array, tree.data, []
@@ -197,6 +192,14 @@ class LegacyAtfConverter:
     def _handle_legacy_translation(
         self, translation_line: Tree, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
+        # ToDo:
+        # Continue from here. Debug, fix & add tests.
+        # 1. Translations are being incorrectly handled
+        # When there are lemmatization lines in the text.
+        #
+        # 2. Translation blocks sometimes contain labels
+        # and dollar lines that should be omitted.
+        #
         if translation_line.data == "!translation_line":
             translation_line.data = "translation_line"
             insert_at = self.translation_block_transformer.start

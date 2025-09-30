@@ -50,7 +50,6 @@ class AtfImporter:
             return {}
 
     def setup_importer(self, args: AtfImporterArgs) -> None:
-
         self.username = args["author"]
         self.logger = Logger(args["logdir"])
         self.logger.info("Atf-Importer")
@@ -58,14 +57,11 @@ class AtfImporter:
             self.database, self.fragment_repository, self.logger, self.username
         )
         self.glossary = self.glossary_parser.load_glossaries(args["glodir"])
-        self.ebl_lines_getter = EblLinesGetter(
-            self.database,
-            self.config,
-            self.logger,
-            self.glossary,
-        )
         self.atf_converter = LegacyAtfConverter(
             self.database, self.config, self.logger, self.glossary
+        )
+        self.ebl_lines_getter = EblLinesGetter(
+            self.database, self.config, self.logger, self.glossary, self.atf_converter
         )
 
     def run_importer(self, args: AtfImporterArgs) -> None:

@@ -5,6 +5,7 @@ from ebl.atf_importer.application.glossary import Glossary
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.atf_importer.application.logger import Logger
 from ebl.atf_importer.domain.line_context import LineContext
+from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 
 
 class EblLinesGetter:
@@ -14,9 +15,12 @@ class EblLinesGetter:
         config: AtfImporterConfigData,
         logger: Logger,
         glossary: Glossary,
+        atf_converter: LegacyAtfConverter,
     ):
         self.logger = logger
-        self.lemma_line_handler = LemmaLineHandler(database, config, logger, glossary)
+        self.lemma_line_handler = LemmaLineHandler(
+            database, config, logger, glossary, atf_converter
+        )
 
     def convert_to_ebl_lines(
         self,
@@ -52,7 +56,7 @@ class EblLinesGetter:
             line_context = self._handle_text_line(line, result, line_context)
         elif c_type == "lem_line" and line_context.last_transliteration_line:
             lemmatized_line = self.lemma_line_handler.apply_lemmatization(
-                line, result, filename, line_context.last_transliteration_line
+                line, line_context.last_transliteration_line, filename
             )
             if lemmatized_line:
                 result["transliteration"][-1] = lemmatized_line

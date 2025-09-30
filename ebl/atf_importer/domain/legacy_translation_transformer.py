@@ -110,9 +110,11 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
             if type != "string"
             else "ebl_atf_translation_line__ebl_atf_note_line__string_part"
         )
-        children = ([self._get_markup_token(type)] if type != "string" else []) + [
-            note_text
-        ]
+        markup_token = self._get_markup_token(type)
+        children: list[Optional[Union[Tree, Token]]] = []
+        if markup_token:
+            children.append(markup_token)
+        children.append(note_text)
         return self.to_tree(
             rule,
             children,

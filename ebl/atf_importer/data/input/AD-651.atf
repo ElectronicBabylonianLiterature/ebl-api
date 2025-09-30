@@ -7,10 +7,13 @@
 
 # note: This is not the edition of this text. The content is for testing purposes only.
 
-$ ((rest of column broken))
-
 @obverse
-1. [x x x] EN? liš-lim
+@column 1
+1. [x x x] sin ina! DIR IGI-mar GUR? NIM-a
+#lem: u; u; u; Sîn[moon]N; ina[in]PRP; erpetu[cloud]N; amāru[be(come) visible]V'V$ittanmar; baʾil[bright]AJ; šaqâ[high]AJ
+
 
 @translation labeled en project
-@(o 1) [At the command of ...] Bēl may it be well.
+
+@(o i 1) [Month I, ...,] the moon became visible in a cloud; it was bright and high.
+
