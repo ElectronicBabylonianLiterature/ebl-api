@@ -24,16 +24,21 @@ def test_delete_by_fragment_number(database):
 
     collection = database["cropped_sign_images"]
     assert collection.count_documents({}) == 3
-    assert collection.count_documents({"fragment_number": str(fragment_number_1)}) == 2
-    assert collection.count_documents({"fragment_number": str(fragment_number_2)}) == 1
+    assert collection.count_documents(
+        {"fragment_number": str(fragment_number_1)}) == 2
+    assert collection.count_documents(
+        {"fragment_number": str(fragment_number_2)}) == 1
 
     repository.delete_by_fragment_number(fragment_number_1)
 
     assert collection.count_documents({}) == 1
-    assert collection.count_documents({"fragment_number": str(fragment_number_1)}) == 0
-    assert collection.count_documents({"fragment_number": str(fragment_number_2)}) == 1
+    assert collection.count_documents(
+        {"fragment_number": str(fragment_number_1)}) == 0
+    assert collection.count_documents(
+        {"fragment_number": str(fragment_number_2)}) == 1
 
-    remaining_doc = collection.find_one({"fragment_number": str(fragment_number_2)})
+    remaining_doc = collection.find_one(
+        {"fragment_number": str(fragment_number_2)})
     assert remaining_doc["_id"] == "image3"
 
 
