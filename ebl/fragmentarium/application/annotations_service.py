@@ -72,7 +72,9 @@ class AnnotationsService:
                 else ""
             )
             cropped_image = annotation.crop_image(image)
-            cropped_sign_image = CroppedSignImage.create(cropped_image)
+            cropped_sign_image = CroppedSignImage.create(
+                cropped_image, annotations.fragment_number
+            )
             cropped_sign_images.append(cropped_sign_image)
 
             updated_cropped_annotation = attr.evolve(
@@ -106,6 +108,11 @@ class AnnotationsService:
         )
         _id = str(annotations.fragment_number)
         schema = AnnotationsSchema()
+
+        self._cropped_sign_images_repository.delete_by_fragment_number(
+            annotations.fragment_number
+        )
+
         (
             annotations_with_image_ids,
             cropped_sign_images,

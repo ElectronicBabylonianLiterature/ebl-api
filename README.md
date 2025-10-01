@@ -450,6 +450,25 @@ docker build -t ebl/api .
 docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api poetry run python -m ebl.alignment.align_fragmentarium
 ```
 
+### Cropped Sign Images Migration
+
+When annotation updates accumulate orphaned cropped sign images, the `ebl.fragmentarium.migrate_cropped_images` module
+can be used to clean up and regenerate all cropped images from annotations. This resolves synchronization
+issues where multiple images exist per annotation.
+
+The script can be run locally:
+
+```shell script
+poetry run python -m ebl.fragmentarium.migrate_cropped_images
+```
+
+, as stand alone container:
+
+```shell script
+docker build -t ebl/api .
+docker run --rm -it --env-file=.env --name ebl-migration ebl/api poetry run python -m ebl.fragmentarium.migrate_cropped_images
+```
+
 ### Steps to update the production database
 
 1) Implement the new functionality.
