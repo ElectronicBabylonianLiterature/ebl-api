@@ -1,6 +1,6 @@
 from mockito import mock, when
-import ebl.fragmentarium.migrate_cropped_images as module
 
+import ebl.fragmentarium.migrate_cropped_images as module
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
 from ebl.fragmentarium.migrate_cropped_images import (
     create_annotations_service,
@@ -18,16 +18,6 @@ def test_create_annotations_service():
     result = create_annotations_service(context)
 
     assert result.__class__.__name__ == "AnnotationsService"
-
-
-def test_cleanup_existing_images(database):
-    from ebl.fragmentarium.migrate_cropped_images import cleanup_existing_images
-
-    context = mock()
-
-    when(module).get_database().thenReturn(database)
-
-    cleanup_existing_images(context)
 
 
 def test_show_statistics():
@@ -79,7 +69,6 @@ def test_migrate_cropped_images():
     when(module).create_context().thenReturn(context)
     when(module).show_statistics(context).thenReturn((0, 0))
     when(module).regenerate_images(context).thenReturn(None)
-    when(module).cleanup_existing_images(context).thenReturn(None)
 
     migrate_cropped_images()
 
