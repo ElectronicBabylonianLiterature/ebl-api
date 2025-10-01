@@ -97,5 +97,5 @@ def test_chronology_schema_deserialization():
         data = json.load(file)
         chronology = ChronologySchema().load({"kings": data})
     assert len(chronology.kings) == 496
-    assert chronology.kings[0].name == "Sargon"
+    assert chronology.kings[0].name == "Ur-Nanše"
     assert chronology.kings[-2].name == "Sin-šar-iškun"
