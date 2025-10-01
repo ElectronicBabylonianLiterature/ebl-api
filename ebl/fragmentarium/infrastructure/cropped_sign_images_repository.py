@@ -28,4 +28,6 @@ class MongoCroppedSignImagesRepository(CroppedSignImagesRepository):
         )
 
     def delete_by_fragment_number(self, fragment_number: MuseumNumber) -> None:
-        self._database[COLLECTION].delete_many({"fragment_number": str(fragment_number)})
+        self._database[COLLECTION].delete_many(
+            {"fragment_number": str(fragment_number)}
+        )
