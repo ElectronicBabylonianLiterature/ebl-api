@@ -15,10 +15,14 @@ def test_create_annotations_service():
 
 def test_cleanup_existing_images(database):
     from ebl.fragmentarium.migrate_cropped_images import cleanup_existing_images
+    from unittest.mock import patch
 
     context = mock()
 
-    cleanup_existing_images(context)
+    with patch(
+        "ebl.fragmentarium.migrate_cropped_images.get_database", return_value=database
+    ):
+        cleanup_existing_images(context)
 
 
 def test_cropped_sign_image_creation():
