@@ -2,20 +2,13 @@ from mockito import mock, when
 
 import ebl.fragmentarium.migrate_cropped_images as module
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
-from ebl.fragmentarium.migrate_cropped_images import (
-    create_annotations_service,
-    show_statistics,
-    regenerate_images,
-    migrate_cropped_images,
-    main,
-)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_create_annotations_service():
     context = mock()
 
-    result = create_annotations_service(context)
+    result = module.create_annotations_service(context)
 
     assert result.__class__.__name__ == "AnnotationsService"
 
@@ -34,7 +27,7 @@ def test_show_statistics():
     when(cropped_images_collection).estimated_document_count().thenReturn(50)
     when(module).get_database().thenReturn(database)
 
-    individual_count, cropped_count = show_statistics(context)
+    individual_count, cropped_count = module.show_statistics(context)
 
     assert individual_count == 100
     assert cropped_count == 50
@@ -60,7 +53,7 @@ def test_regenerate_images():
     when(module).get_database().thenReturn(database)
     when(module).create_annotations_service(context).thenReturn(annotations_service)
 
-    regenerate_images(context)
+    module.regenerate_images(context)
 
 
 def test_migrate_cropped_images():
@@ -70,25 +63,25 @@ def test_migrate_cropped_images():
     when(module).show_statistics(context).thenReturn((0, 0))
     when(module).regenerate_images(context).thenReturn(None)
 
-    migrate_cropped_images()
+    module.migrate_cropped_images()
 
 
 def test_main():
     when(module).migrate_cropped_images().thenReturn(None)
 
-    main()
+    module.main()
 
 
 def test_main_keyboard_interrupt():
     when(module).migrate_cropped_images().thenRaise(KeyboardInterrupt)
 
-    main()
+    module.main()
 
 
 def test_main_exception():
     when(module).migrate_cropped_images().thenRaise(Exception("test error"))
 
-    main()
+    module.main()
 
 
 def test_cropped_sign_image_creation():
