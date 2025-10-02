@@ -10,11 +10,11 @@ from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.domain.atf import Flag, VARIANT_SEPARATOR
 from ebl.transliteration.domain.enclosure_tokens import Gloss
 from ebl.transliteration.domain.enclosure_type import EnclosureType
-from ebl.transliteration.domain.lark_parser import (
+from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_compound_grapheme,
     parse_reading,
 )
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.sign import Sign, SignName
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
@@ -140,13 +140,13 @@ class SignsVisitor(TokenVisitor):
     def visit_compound_grapheme(self, grapheme: CompoundGrapheme) -> None:
         if self._is_deep and is_splittable(grapheme.name):
             for part in grapheme.compound_parts:
-                self._visit_compount_grapheme_part(strip_flags(part))
+                self._visit_compound_grapheme_part(strip_flags(part))
         else:
             self._standardizations.append(
                 self._find(SignName(strip_flags(grapheme.name)))
             )
 
-    def _visit_compount_grapheme_part(self, stripped_part: str) -> None:
+    def _visit_compound_grapheme_part(self, stripped_part: str) -> None:
         try:
             reading = parse_reading(stripped_part.lower())
             self.visit_named_sign(reading)

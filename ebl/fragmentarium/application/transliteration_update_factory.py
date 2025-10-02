@@ -2,8 +2,8 @@ from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdat
 from ebl.transliteration.application.sign_repository import SignRepository
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.atf import Atf, WORD_SEPARATOR
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.text import TextLine
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.text import Text, TextLine
 
 
 class TransliterationUpdateFactory:
@@ -12,6 +12,10 @@ class TransliterationUpdateFactory:
 
     def create(self, atf: Atf) -> TransliterationUpdate:
         text = parse_atf_lark(atf)
+        signs = "\n".join(self._map_line(line) for line in text.text_lines)
+        return TransliterationUpdate(text, signs)
+
+    def create_from_text(self, text: Text) -> TransliterationUpdate:
         signs = "\n".join(self._map_line(line) for line in text.text_lines)
         return TransliterationUpdate(text, signs)
 
