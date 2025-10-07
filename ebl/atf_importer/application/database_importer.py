@@ -35,7 +35,9 @@ class DatabaseImporter:
             database, fragment_repository, logger
         )
 
-    def import_into_database(self, text: Text, control_lines: List, filename: str):
+    def import_into_database(
+        self, text: Text, control_lines: List, filename: str
+    ) -> None:
         museum_number: Optional[str] = self.museum_number_getter.get_museum_number(
             control_lines, filename
         )

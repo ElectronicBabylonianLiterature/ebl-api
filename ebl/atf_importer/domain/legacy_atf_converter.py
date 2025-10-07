@@ -95,9 +95,6 @@ class LegacyAtfConverter:
             c_line, c_array, c_type, c_alter_lem_line_at = self._convert_line(
                 line_data["string"], line_data["tree"]
             )
-            # ToDo: Continue from here. Debug, clean up.
-            # For an unclear reason, `translation_line`s are being ignored.
-            # print("DDD", line_data)
             result = {
                 "c_line": c_line,
                 "c_array": c_array,
@@ -136,9 +133,6 @@ class LegacyAtfConverter:
         lines_data = []
         for line in lines:
             lines_data = self._parse_line(line, lines_data)
-        # ToDo: Continue from here. Debug & clean up
-        # print(lines_data)
-        # input()
         return lines_data
 
     def _parse_line(
@@ -147,8 +141,6 @@ class LegacyAtfConverter:
         line_tree = self._parse_and_validate_line(line)
         self.indexing_visitor.visit(line_tree)
         self.legacy_visitor.visit(line_tree)
-        # ToDo: Continue from here. Debug & clean up
-        # print("!!!", self.indexing_visitor.cursor_index)
         cursor = (
             self.indexing_visitor.cursor_index
             if line_tree.data == "text_line"
@@ -158,12 +150,6 @@ class LegacyAtfConverter:
             "translation_line" in line_tree.data
             and line_tree.data != "translation_line"
         ):
-            # print("translation line tree data:", line_tree.data)
-            # print("translation line tree:", line_tree)
-            # print("\n\n")
-            # print(
-            #    "TRANSLATION:", self._handle_legacy_translation(line_tree, lines_data)
-            # )
             return self._handle_legacy_translation(line_tree, lines_data)
         else:
             lines_data.append({"string": line, "tree": line_tree, "cursor": cursor})
@@ -180,6 +166,7 @@ class LegacyAtfConverter:
             return self._report_and_correct_errors(line, error)
 
     def _report_and_correct_errors(self, line: str, error: Type[Exception]) -> Tree:
+        # ToDo: Log error
         print(
             "Error:",
             str(error),
@@ -193,11 +180,7 @@ class LegacyAtfConverter:
         self, translation_line: Tree, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         # ToDo:
-        # Continue from here. Debug, fix & add tests.
-        # 1. Translations are being incorrectly handled
-        # When there are lemmatization lines in the text.
-        #
-        # 2. Translation blocks sometimes contain labels
+        # Translation blocks sometimes contain labels
         # and dollar lines that should be omitted.
         #
         if translation_line.data == "!translation_line":
@@ -213,18 +196,24 @@ class LegacyAtfConverter:
     ) -> List[Dict[str, Any]]:
         for index, tree_line in enumerate(lines_data):
             if insert_at == tree_line["cursor"]:
+                _insert_at = (
+                    index + 2
+                    if index + 2 < len(lines_data)
+                    and lines_data[index + 1]["tree"].data == "lem_line"
+                    else index + 1
+                )
                 if (
-                    index + 1 < len(lines_data)
-                    and lines_data[index + 1]["tree"].data == "translation_line"
+                    _insert_at < len(lines_data)
+                    and lines_data[_insert_at]["tree"].data == "translation_line"
                 ):
-                    lines_data[index + 1] = {
+                    lines_data[_insert_at] = {
                         "string": "",
                         "tree": translation_line,
                         "cursor": None,
                     }
                 else:
                     lines_data.insert(
-                        index + 1,
+                        _insert_at,
                         {"string": "", "tree": translation_line, "cursor": None},
                     )
                 break

@@ -34,8 +34,6 @@ class LegacyAtfLineValidator:
             self.transliteration_factory.create_from_text(
                 Text((control_line, line_tree), ATF_PARSER_VERSION)
             )
-            # ToDo: Debug and clean up:
-            # print(" ".join([token.value for token in line_tree.content]))
             return None
         except (*PARSE_ERRORS, TransliterationError) as error:
             return error

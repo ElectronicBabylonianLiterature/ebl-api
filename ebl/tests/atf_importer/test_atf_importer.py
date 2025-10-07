@@ -485,6 +485,8 @@ def test_lemmatization_tokens_length_mismatch(
 
 
 def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
+    # ToDo: Continue from here.
+    # Labels in translation (commented out below) should be omitted.
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "BM.17"
@@ -498,11 +500,11 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
         "1. [...] sin\n"
         "#lem: u; Sîn[moon]N\n\n"
         "@translation labeled en project\n\n"
-        "@obverse\n"
-        "@column\n"
+        # "@obverse\n"
+        # "@column\n"
         "@(o i 1) [Month I, ...,] the moon."
     )
-    mock_input(repeat(""))
+    # mock_input(repeat(""))
     setup_and_run_importer(
         atf,
         tmp_path,
@@ -511,7 +513,7 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
-    check_lemmatization(fragment_repository, museum_number, [(), ()])
+    check_lemmatization(fragment_repository, museum_number, [(), ("Sîn I",)])
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
@@ -536,18 +538,18 @@ ATF = """&X104182 = AD -418B
 #atf: use math
 #atf: use legacy
 @obverse
-10. [...]⸢x x⸣ ina še-rì
-#lem: u; u; ina[in]PRP; šēri[morning]N
+1. [MU 5.KÁ]M {m}ú-ma-kuš šá {m}da-a-ri-muš MU-šú SA₄
+#lem: šattu[year]N; n; Umakuš[Umakuš]RN$; ša[which]REL; Dariamuš[Darius]RN; šumu[name]N$šumšu; nabû[named]AJ
 
-@reverse
-1'. [...]⸢x ABSIN x x x⸣ [...]
-#lem: u; Šerʾu[Virgo]CN; u; u; u; u"""
+@translation labeled en project
+@(o 1) [Year 5 of] Umakuš who is called Darius."""
 
 # ToDo:
 # Continue from here
 # Tasks:
 # 1. Fix primed lines in translation (s. test_atf_preprocessor, translation C & atf_indexing_visitor)
-# 3. Consider a solution for cases like
+
+# 2. Consider a solution for cases like
 # "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
 # S. the test below. The issue is with `GE[₆ `.
 # The line is parsed as `translation_line`, but should be a parsing error for manual fix.
@@ -561,12 +563,14 @@ def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_inpu
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
+    """
     atf = (
         f"&P000001 = {museum_number}\n"
         "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
         "#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; u"
     )
-    # atf = ATF
+    """
+    atf = ATF
     mock_input(repeat(""))
     setup_and_run_importer(
         atf,
@@ -602,8 +606,8 @@ def test_atf_importer(fragment_repository, mock_input):
             "BM.47725",
             "BM.34987",
             "BM.45816",
-            "BM.46009",
             "BM.35377",
+            "BM.46009",
             "BM.35195",
             "BM.32333",
             "BM.34642",
