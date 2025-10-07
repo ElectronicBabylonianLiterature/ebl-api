@@ -1,0 +1,4 @@
+legacy_control_line.-3: "#" PREFIX ": " TEXT
+
+PREFIX: "project" | "atf"
+TEXT: /.+/

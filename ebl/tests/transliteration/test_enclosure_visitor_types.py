@@ -14,7 +14,7 @@ from ebl.transliteration.domain.enclosure_tokens import (
 )
 from ebl.transliteration.domain.enclosure_type import EnclosureType
 from ebl.transliteration.domain.enclosure_visitor import EnclosureUpdater
-from ebl.transliteration.domain.lark_parser import parse_line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_line
 from ebl.transliteration.domain.normalized_akkadian import (
     AkkadianWord,
     Caesura,
