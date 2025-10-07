@@ -43,7 +43,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     def ebl_atf_translation_line__labels_start(self, labels: Tree) -> None:
         self.reset()
         self.legacy_found = True
-        self.start = self._extents_to_string(labels)
+        self.start = self._labels_to_string(labels)
         return
 
     @v_args(inline=True)
@@ -68,15 +68,13 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
     ) -> Tree:
         return line[1]
 
-    def _extents_to_string(self, labels: Tree) -> str:
-        extents = CommonTransformer().transform(labels).children
-        if len(extents) == 1:
-            return str(extents[0].number)
-        labels, line_number = extents
-        return (
-            " ".join(label.to_value() for label in labels)
-            + " "
-            + str(line_number.number)
+    def _labels_to_string(self, labels: Tree) -> str:
+        label_tokens = CommonTransformer().transform(labels).children
+        line_number_label = label_tokens[-1].label
+        if len(label_tokens) == 1:
+            return line_number_label
+        return " ".join(
+            [label.to_value() for label in label_tokens[0]] + [line_number_label]
         )
 
     @property
