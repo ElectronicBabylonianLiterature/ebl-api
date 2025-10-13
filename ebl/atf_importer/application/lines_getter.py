@@ -37,7 +37,6 @@ class EblLinesGetter:
             result, line_context = self._handle_line_type(
                 line, result, filename, line_context
             )
-        print("!! lemmatized line in result::end", result["transliteration"][-2])
         return dict(result)
 
     def _handle_line_type(

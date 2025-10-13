@@ -1,7 +1,8 @@
+from typing import List
 from lark.visitors import Transformer, v_args
-
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import (
+    DollarLine,
     LooseDollarLine,
     ImageDollarLine,
     RulingDollarLine,
@@ -28,6 +29,9 @@ class DollarLineTransformer(Transformer):
                 f"ebl_atf_dollar_line__ebl_atf_common__{_method}",
                 getattr(self, method),
             )
+
+    def dollar_line(self, line: List) -> DollarLine:
+        return line[0]
 
     def ebl_atf_dollar_line__free_text(self, content):
         return "".join(content)

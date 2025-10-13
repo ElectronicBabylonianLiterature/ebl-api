@@ -485,8 +485,6 @@ def test_lemmatization_tokens_length_mismatch(
 
 
 def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
-    # ToDo: Continue from here.
-    # Labels in translation (commented out below) should be omitted.
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "BM.17"
@@ -500,11 +498,11 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
         "1. [...] sin\n"
         "#lem: u; Sîn[moon]N\n\n"
         "@translation labeled en project\n\n"
-        # "@obverse\n"
-        # "@column\n"
+        "@obverse\n"
+        "@column\n"
         "@(o i 1) [Month I, ...,] the moon."
     )
-    # mock_input(repeat(""))
+    mock_input(repeat(""))
     setup_and_run_importer(
         atf,
         tmp_path,
@@ -519,7 +517,9 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
     )
     assert len(fragment.text.lines) == 4
     for line, expected_instance in zip(
-        fragment.text.lines, [SurfaceAtLine, ColumnAtLine, TextLine, TranslationLine]
+        fragment.text.lines,
+        [SurfaceAtLine, ColumnAtLine, TextLine, TranslationLine],
+        strict=True,
     ):
         assert isinstance(line, expected_instance) is True
 
@@ -581,7 +581,7 @@ def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_inpu
     )
 
 
-# @pytest.mark.skip(reason="heavy test")
+@pytest.mark.skip(reason="heavy test")
 def test_atf_importer(fragment_repository, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))

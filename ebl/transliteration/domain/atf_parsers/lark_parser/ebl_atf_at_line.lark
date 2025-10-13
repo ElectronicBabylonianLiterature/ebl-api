@@ -2,7 +2,7 @@
 %import .ebl_atf_common (status, object, surface, seal, free_text)
 %import .ebl_atf_note_line(_markup)
 
-?at_line: "@" at_line_value
+at_line: "@" at_line_value
 
 ?at_line_value: seal | column | legacy_column | heading | discourse | object_with_status 
                | surface_with_status | divisions | composite

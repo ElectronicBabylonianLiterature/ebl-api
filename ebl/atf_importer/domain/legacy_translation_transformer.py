@@ -18,6 +18,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         self.start: Optional[str] = None
         self.extent: List[Tree] = []
         self.translation: List[str] = []
+        self.active = False
 
     @property
     def translation_c_line(self) -> Tree:
@@ -35,6 +36,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         self, language: Optional[Token]
     ) -> None:
         self.reset()
+        self.active = True
         self.legacy_found = True
         self.language = language
         return
@@ -44,12 +46,14 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         self.reset()
         self.legacy_found = True
         self.start = self._labels_to_string(labels)
+        self.active = True
         return
 
     @v_args(inline=True)
     def ebl_atf_translation_line__labels_extent(self, labels: Tree) -> None:
         self.legacy_found = True
         self.extent = labels.children
+        self.active = True
         return
 
     @v_args(inline=True)
@@ -57,10 +61,8 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         self, text: Tree
     ) -> Tree:
         self.legacy_found = True
+        self.active = True
         self.translation.append("".join([str(child) for child in text.children]))
-        # ToDo: Continue from here. Debug & clean up
-        # print(self.translation_c_line)
-        # input()
         return self.translation_c_line
 
     def ebl_atf_translation_line__legacy_translation_block_label_text_line(

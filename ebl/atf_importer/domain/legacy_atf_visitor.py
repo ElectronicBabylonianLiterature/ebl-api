@@ -62,7 +62,6 @@ class LegacyAtfVisitor(Visitor):
         "value_name_part": [aleph_transformer],
         "at_line_value": [column_transformer],
         "legacy_column": [column_transformer],
-        "text_line": [translation_block_transformer],
         "legacy_translation_line": [translation_block_transformer],
     }
 
@@ -75,7 +74,9 @@ class LegacyAtfVisitor(Visitor):
                 prefix = self.at_line_prefix
             elif suffix in ["ruling", "state"]:
                 prefix = self.dollar_line_prefix
-            elif suffix in ["legacy_translation_line", "text_line"]:
+            elif suffix in [
+                "legacy_translation_line",
+            ]:
                 prefix = ""
             self._set_rules(suffix, transformers, prefix)
 
@@ -118,3 +119,13 @@ class LegacyAtfVisitor(Visitor):
                 tree.children = transformed_tree.children
             elif replace == "children":
                 tree.children = transformed_tree.children
+
+    def line(self, line: Tree) -> Tree:
+        line.data = line.children[0].data
+        line.children = (
+            line.children[0].children if hasattr(line.children[0], "children") else []
+        )
+        if translation_block_transformer[0].active and "translation" not in line.data:
+            line.data = "empty_line"
+            line.children = []
+        return line

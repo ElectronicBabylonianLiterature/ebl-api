@@ -94,7 +94,7 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 
 def parse_line(atf: str) -> Line:
-    tree = LINE_PARSER.parse(atf)
+    tree = LINE_PARSER.parse(atf).children[0]
     return LineTransformer().transform(tree)
 
 

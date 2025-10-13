@@ -139,8 +139,10 @@ class LegacyAtfConverter:
         self, line: str, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         line_tree = self._parse_and_validate_line(line)
-        self.indexing_visitor.visit(line_tree)
         self.legacy_visitor.visit(line_tree)
+        if line_tree.data == "empty_line":
+            return lines_data
+        self.indexing_visitor.visit(line_tree)
         cursor = (
             self.indexing_visitor.cursor_index
             if line_tree.data == "text_line"
@@ -158,8 +160,8 @@ class LegacyAtfConverter:
     def _parse_and_validate_line(self, line: str) -> Tree:
         try:
             line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
-            if line_tree.data == "text_line":
-                if error := self.validate_text_line(line_tree):
+            if line_tree.children[0].data == "text_line":
+                if error := self.validate_text_line(line_tree.children[0]):
                     return self._report_and_correct_errors(line, error)
             return line_tree
         except (*PARSE_ERRORS, TransliterationError) as error:
@@ -179,10 +181,6 @@ class LegacyAtfConverter:
     def _handle_legacy_translation(
         self, translation_line: Tree, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
-        # ToDo:
-        # Translation blocks sometimes contain labels
-        # and dollar lines that should be omitted.
-        #
         if translation_line.data == "!translation_line":
             translation_line.data = "translation_line"
             insert_at = self.translation_block_transformer.start
@@ -196,24 +194,24 @@ class LegacyAtfConverter:
     ) -> List[Dict[str, Any]]:
         for index, tree_line in enumerate(lines_data):
             if insert_at == tree_line["cursor"]:
-                _insert_at = (
+                insert_at_index = (
                     index + 2
-                    if index + 2 < len(lines_data)
+                    if index + 2 <= len(lines_data)
                     and lines_data[index + 1]["tree"].data == "lem_line"
                     else index + 1
                 )
                 if (
-                    _insert_at < len(lines_data)
-                    and lines_data[_insert_at]["tree"].data == "translation_line"
+                    insert_at_index < len(lines_data)
+                    and lines_data[insert_at_index]["tree"].data == "translation_line"
                 ):
-                    lines_data[_insert_at] = {
+                    lines_data[insert_at_index] = {
                         "string": "",
                         "tree": translation_line,
                         "cursor": None,
                     }
                 else:
                     lines_data.insert(
-                        _insert_at,
+                        insert_at_index,
                         {"string": "", "tree": translation_line, "cursor": None},
                     )
                 break
@@ -234,20 +232,12 @@ class LegacyAtfConverter:
         self.logger.debug(f"Original line: '{atf}'")
         self.logger.info("Line successfully parsed")
         self.logger.debug(f"Parsed line as {tree.data}")
-        self.logger.info(
-            "----------------------------------------------------------------------"
-        )
+        self.logger.info("".join("-" for _ in range(0, 70)))
 
     def _log_lem_line(
         self, tree: Tree, lemmas_and_guidewords_array: Optional[List[Any]]
     ) -> None:
         self.logger.debug(
-            "Converted line as "
-            + tree.data
-            + " --> '"
-            + str(lemmas_and_guidewords_array)
-            + "'"
+            f"Converted line as {tree.data} --> '{str(lemmas_and_guidewords_array)}'"
         )
-        self.logger.info(
-            "----------------------------------------------------------------------"
-        )
+        self.logger.info("".join("-" for _ in range(0, 70)))

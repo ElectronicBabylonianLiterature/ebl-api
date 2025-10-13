@@ -211,7 +211,7 @@ class MuseumNumberGetter:
     def _get_lowest_join_number(self, museum_number: Optional[str]) -> Optional[str]:
         if museum_number:
             # ToDo: Clean up
-            print("museum number:", museum_number)
+            # print("museum number:", museum_number)
             try:
                 fragment = self.fragment_repository.query_by_museum_number(
                     MuseumNumber.of(museum_number)

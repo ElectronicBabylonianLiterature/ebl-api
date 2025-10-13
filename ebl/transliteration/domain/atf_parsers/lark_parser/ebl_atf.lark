@@ -14,7 +14,7 @@
 
 ?start: line
 
-?line: empty_line
+line: empty_line
      | note_line
      | text_line
      | dollar_line

@@ -1,4 +1,5 @@
 import attr
+from typing import List
 from lark import Token
 from lark.visitors import v_args
 from ebl.transliteration.domain.common_transformer import CommonTransformer
@@ -15,6 +16,7 @@ from ebl.transliteration.domain.at_line import (
     SurfaceAtLine,
 )
 from ebl.transliteration.domain.labels import (
+    Label,
     ColumnLabel,
     ObjectLabel,
     SurfaceLabel,
@@ -37,6 +39,9 @@ class AtLineTransformer(CommonTransformer):
                 f"ebl_atf_at_line__ebl_atf_common__{_method}",
                 getattr(self, method),
             )
+
+    def at_line(self, line: List) -> Label:
+        return line[0]
 
     def ebl_atf_at_line__free_text(self, content):
         return "".join(content)

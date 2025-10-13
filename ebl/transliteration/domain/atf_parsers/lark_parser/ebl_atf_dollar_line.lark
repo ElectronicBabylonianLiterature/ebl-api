@@ -7,7 +7,7 @@
 %import .ebl_atf_common (seal)
 %import .legacy_atf (legacy_single_ruling, legacy_broken_state)
 
-?dollar_line: "$" " "* value
+dollar_line: "$" " "* value
 ?value: strict
       | "("+ " "* strict " "* ")"+
       | loose
