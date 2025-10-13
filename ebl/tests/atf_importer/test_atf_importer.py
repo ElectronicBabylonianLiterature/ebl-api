@@ -568,8 +568,6 @@ ATF = """&X104182 = AD -418B
 
 # ToDo:
 # Continue from here
-# Tasks:
-# 1. Fix primed lines in translation (s. test_atf_preprocessor, translation C & atf_indexing_visitor)
 
 # 2. Consider a solution for cases like
 # "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
@@ -609,7 +607,7 @@ def test_atf_importer(fragment_repository, mock_input):
     database = client.get_database(os.environ.get("MONGODB_DB"))
     atf_importer = AtfImporter(database, fragment_repository)
     archive = zipfile.ZipFile(
-        "ebl/tests/atf_importer/test_data.zip"  # ToDo: Change to "ebl/tests/atf_importer/test_data3.zip"
+        "ebl/tests/atf_importer/test_data3.zip"  # ToDo: Change to "ebl/tests/atf_importer/test_data3.zip"
     )  # ToDo: Check `test_data2`
     mock_input(repeat(""))
     with tempfile.TemporaryDirectory() as tempdir:

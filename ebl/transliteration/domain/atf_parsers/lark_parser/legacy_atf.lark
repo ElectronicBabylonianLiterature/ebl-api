@@ -9,6 +9,3 @@ legacy_uncertain_sign_prefix: "$"
 legacy_single_ruling: " "* "ruling" " "* LEGACY_DOLLAR_STATUS?
 LEGACY_DOLLAR_STATUS: "!?" | "*" | "?" | "!"
 legacy_broken_state: "rest broken"
-
-//# ToDo:
-//# check `atf_conversions.py` and implement all missing features.

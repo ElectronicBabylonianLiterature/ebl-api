@@ -84,6 +84,7 @@ class AtfPreprocessor:
             "_lowercase_braces",
             "_replace_tabulation",
             "_replace_tabs_and_excessive_whitespaces",
+            "_move_brackets_before_subscripts",
             "_reorder_bracket_punctuation",
             "_reorder_round_bracket_punctuation",
         ]
@@ -150,3 +151,55 @@ class AtfPreprocessor:
 
     def _replace_tabs_and_excessive_whitespaces(self, atf: str) -> str:
         return re.sub(r"[\t ]+", " ", atf)
+
+    def _move_brackets_before_subscripts(self, atf: str) -> str:
+        sub_chars = "₀₁₂₃₄₅₆₇₈₉"
+
+        def handle_closing_bracket(match):
+            content = match.group(1)
+            sub = match.group(2)
+            if not content:
+                return match.group(0)
+            inner_raw = content[:-1]
+            last = content[-1]
+            sep = " " if inner_raw and inner_raw[-1].isspace() else ""
+            inner_clean = inner_raw.rstrip()
+            if inner_clean == "":
+                return f"{last}{sub}# []"
+            if re.match(r"^[A-Za-z]{2,3}$", content.strip()):
+                return f"[{inner_clean}]{sep}{last}{sub}"
+            return f"[{inner_clean}]{sep}{last}{sub}#"
+
+        def handle_opening_bracket_preceding(match):
+            prefix = match.group(1)
+            sub = match.group(2)
+            rest = match.group(3) or ""
+            if not prefix:
+                return match.group(0)
+            before = prefix[:-1]
+            last = prefix[-1]
+            if not re.match(r"[A-Za-z]$", last):
+                return match.group(0)
+            hash_mark = "#" if len(prefix) == 1 else ""
+            rest_clean = rest.rstrip()
+            if before:
+                return f"{before}[{last}{sub}{hash_mark} {rest_clean}]"
+            else:
+                return f"{last}{sub}{hash_mark} [{rest_clean}]"
+
+        prev = None
+        current = atf
+        while prev != current:
+            prev = current
+            current = re.sub(
+                r"\[([^\]]+)\]([" + re.escape(sub_chars) + r"])",
+                handle_closing_bracket,
+                current,
+            )
+            current = re.sub(
+                r"([A-Za-z]+)\[\s*([" + re.escape(sub_chars) + r"])\s*([^\]]*)\]",
+                handle_opening_bracket_preceding,
+                current,
+            )
+
+        return current

@@ -1,9 +1,6 @@
 from typing import List, Tuple
 from lark import Visitor, Tree, lexer
 
-# ToDo:
-# Remove. Use `legacy_atf_visitor` instead
-
 
 class DepthFirstSearch(Visitor):
     def visit_topdown(self, tree: Tree, result: str) -> str:
