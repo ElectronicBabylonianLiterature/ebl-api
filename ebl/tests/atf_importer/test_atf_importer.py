@@ -352,6 +352,28 @@ def test_lemmatization_with_removal(fragment_repository, tmp_path):
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_lemmatization_ambiguity(fragment_repository, tmp_path):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    museum_number = "BM.899"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = f"&P000001 = {museum_number}\n8. ŠÚ\n#lem: rabû[set]V$"
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    expected_lemmatization = [
+        ("rabû III",),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
 def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
