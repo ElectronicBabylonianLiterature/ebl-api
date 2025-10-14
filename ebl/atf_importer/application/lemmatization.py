@@ -62,7 +62,7 @@ class LemmaLookup:
         self._log_warning_if_no_lemmas(unique_lemmas, lemmatization_token)
         if not unique_lemmas:
             return self._enter_lemma_id_or_skip(lemmatization_token)
-        return unique_lemmas[0] if len(unique_lemmas) > 0 else None  # <- HERE
+        return unique_lemmas[0] if len(unique_lemmas) > 0 else None
 
     def _enter_lemma_id_or_skip(
         self, lemmatization_token: OraccLemmatizationToken
@@ -108,11 +108,16 @@ class LemmaLookup:
         self, lemmatization_token: OraccLemmatizationToken
     ) -> List[str]:
         unique_lemmas = []
-        glossary_lexemes = self.glossary.find({"lemma": lemmatization_token.lemma})
+        glossary_lexemes = self.glossary.find(
+            {
+                "lemma": lemmatization_token.lemma,
+                "guideword": lemmatization_token.guideword,
+            }
+        )
         if glossary_lexemes == []:
             self.logger.warning(
                 "Incompatible lemmatization: No citation form"
-                f" or guideword (by sense) found in the glossary for '{lemmatization_token.lemma}'",
+                f" and guideword (by sense) found in the glossary for '{lemmatization_token.lemma}'",
                 "lemmatization_log",
             )
             return []
@@ -132,14 +137,13 @@ class LemmaLookup:
         ]
         unique_lemmas = []
         for lemma_field, guideword_field, lemma_value in lemma_guideword_pairs:
-            unique_lemmas += self._query_database(
-                {
-                    "lemma_field": lemma_field,
-                    "lemma_value": lemma_value,
-                    "guideword_field": guideword_field,
-                    "guideword_value": guideword,
-                }
-            )
+            args = {
+                "lemma_field": lemma_field,
+                "lemma_value": lemma_value,
+                "guideword_field": guideword_field,
+                "guideword_value": guideword,
+            }
+            unique_lemmas += self._query_database(args)
         if unique_lemmas == []:
             for lemma_field, guideword_field, lemma_value in lemma_guideword_pairs:  # noqa: B007
                 unique_lemmas += self._query_database(
@@ -154,12 +158,10 @@ class LemmaLookup:
         query = {args["lemma_field"]: args["lemma_value"]}
         if self._has_guideword(args):
             query[args["guideword_field"]] = args["guideword_value"]
-        return [
-            entry["_id"]
-            for entry in self.database.get_collection("words").aggregate(
-                [{"$match": query}, {"$project": {"_id": 1}}]
-            )
-        ]
+        cursor = self.database.get_collection("words").aggregate(
+            [{"$match": query}, {"$project": {"_id": 1}}]
+        )
+        return [entry["_id"] for entry in cursor]
 
     def _has_guideword(self, args: Dict[str, Any]) -> bool:
         return (

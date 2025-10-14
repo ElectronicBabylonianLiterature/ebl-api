@@ -352,6 +352,31 @@ def test_lemmatization_with_removal(fragment_repository, tmp_path):
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_problematic_lemmatization(fragment_repository, tmp_path):
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database(os.environ.get("MONGODB_DB"))
+    museum_number = "X.111"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = f"&P000001 = {museum_number}\n5. [...] ⸢x⸣ TÙR NIGÍN\n#lem: u; u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ"
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        database,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    expected_lemmatization = [
+        (),
+        (),
+        ("tarbaṣu I",),
+        ("lawû I",),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
 def test_lemmatization_ambiguity(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
@@ -394,7 +419,7 @@ def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input)
         "lemmatization_log.txt": [
             "Incompatible lemmatization: No eBL word found for lemma 'awīlu' and guideword 'man'",
             "Manual lemmatization: eBL lemma 'awīlu I' entered by user",
-            "Incompatible lemmatization: No citation form or guideword (by sense) found in the glossary for 'šarru'",
+            "Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'šarru'",
             "Incompatible lemmatization: No eBL word found for lemma 'šarru' and guideword 'king'",
         ]
     }
@@ -637,6 +662,10 @@ def test_atf_importer(fragment_repository, mock_input):
             "BM.35212",
             "BM.33759",
             "BM.36036",
+            "BM.32511",
+            "BM.35333",
+            "BM.37097",
+            "BM.36832",
         ]:
             fragment_repository.create(
                 FragmentFactory.build(number=MuseumNumber.of(museum_number))

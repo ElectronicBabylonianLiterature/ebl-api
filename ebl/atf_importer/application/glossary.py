@@ -46,19 +46,21 @@ class Glossary:
                 self._match_lemma(entry, query),
                 self._match_guideword(entry, query),
                 self._match_pos(entry, query),
-                self._match_transliteration(entry, query),
-                self._match_transcription(entry, query),
             ]
         )
 
     def _match_lemma(self, entry: LexicalEntry, query: GlossaryQuery) -> bool:
-        return "lemma" not in query or query["lemma"] == entry.lemma
+        return "lemma" in query and (
+            query["lemma"] == entry.lemma
+            or any(query["lemma"] == form.transcription for form in entry.forms)
+        )
 
     def _match_guideword(self, entry: LexicalEntry, query: GlossaryQuery) -> bool:
         if "guideword" not in query:
             return True
-        return query["guideword"] == entry.guideword or any(
-            sense.guideword == query["guideword"] for sense in entry.senses
+        guideword = re.sub(r"[()]", "", query["guideword"])
+        return guideword == entry.guideword or any(
+            sense.guideword == guideword for sense in entry.senses
         )
 
     def _match_pos(self, entry: LexicalEntry, query: GlossaryQuery) -> bool:
@@ -67,18 +69,6 @@ class Glossary:
         return query["pos"] == entry.pos or any(
             sense.pos == query["pos"] for sense in entry.senses
         )
-
-    def _match_transliteration(self, entry: LexicalEntry, query: GlossaryQuery) -> bool:
-        if "transliteration" not in query:
-            return True
-        return any(
-            form.transliteration == query["transliteration"] for form in entry.forms
-        )
-
-    def _match_transcription(self, entry: LexicalEntry, query: GlossaryQuery) -> bool:
-        if "transcription" not in query:
-            return True
-        return any(form.transcription == query["transcription"] for form in entry.forms)
 
 
 class GlossaryParser:
