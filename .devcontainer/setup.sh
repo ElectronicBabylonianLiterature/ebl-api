@@ -31,9 +31,13 @@ else
     echo "Rust already installed, skipping..."
 fi
 
-echo "Installing poetry..."
-# Install poetry
-pip install --user --upgrade pip poetry
+echo "Verifying poetry installation..."
+# Poetry is installed via devcontainer feature
+if ! command -v poetry &> /dev/null; then
+    echo "❌ Poetry not found! This should be installed via devcontainer feature."
+    exit 1
+fi
+poetry --version
 
 # Create MongoDB data directory
 mkdir -p /workspaces/data

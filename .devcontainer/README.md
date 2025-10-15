@@ -35,13 +35,14 @@ The project requires environment variables to be configured in a `.env` file at 
 
 ## What Gets Installed
 
-The `setup.sh` script installs:
+### Via Dev Container Features
+1. **Poetry** - Python dependency management (installed via `ghcr.io/devcontainers-contrib/features/poetry:2`)
 
+### Via setup.sh Script
 1. **MongoDB 4.4** - Database server
 2. **go-task** - Task runner
 3. **Rust** - Required for building libcst (pyre-check dependency)
-4. **Poetry** - Python dependency management
-5. **Python dependencies** - All project dependencies via `poetry install --no-root --with dev`
+4. **Python dependencies** - All project dependencies via `poetry install --no-root --with dev`
 
 ## MongoDB
 
