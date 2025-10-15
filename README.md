@@ -126,12 +126,23 @@ An organization and project need to be setup in Sentry. *DSN* under *Client Keys
 
 ## Development
 
-The project comes with a [Gitpod](https://www.gitpod.io) configuration including
-select extensions and a local MongoDB. Click the button below, configure the
-[environment variables](https://www.gitpod.io/docs/environment-variables/)
-(, import the data if you wish to use the local DB) and you are good to go.
+The project uses [Dev Containers](https://containers.dev/) for a consistent development environment. The configuration includes:
+- Python 3.12 with Poetry for dependency management
+- MongoDB 4.4 for local database
+- VS Code extensions for Python, MongoDB, Docker, and more
+- All required development tools (go-task, Rust compiler)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ElectronicBabylonianLiterature/ebl-api)
+### Setup
+
+1. **Environment Variables**: Copy `.env.example` to `.env` and configure your credentials:
+   ```bash
+   cp .env.example .env
+   ```
+   See `.devcontainer/README.md` for details on required environment variables.
+
+2. **Start Development Environment**: Open the project in a Dev Container-compatible environment (VS Code, GitHub Codespaces, or Gitpod Flex).
+
+3. **Import Data** (optional): If you wish to use a local database, import your data after the container is running.
 
 ### Running the tests
 
