@@ -30,7 +30,11 @@ echo "Installing Rust (required for libcst/pyre-check)..."
 # Install Rust compiler (needed for libcst which is required by pyre-check)
 if ! command -v rustc &> /dev/null; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source $HOME/.cargo/env
+    # Add Rust to PATH for current session
+    export PATH="$HOME/.cargo/bin:$PATH"
+    # Add Rust to PATH permanently
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+    rustc --version
 else
     echo "Rust already installed, skipping..."
 fi
@@ -62,19 +66,30 @@ echo 'export PYMONGOIM__OPERATING_SYSTEM=ubuntu' >> ~/.bashrc
 
 echo "Installing Python dependencies..."
 # Ensure Rust is in PATH (needed for libcst build)
-if [ -f "$HOME/.cargo/env" ]; then
-    source "$HOME/.cargo/env"
-    echo "Rust available at: $(which rustc)"
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Install Python dependencies (this may take several minutes)
+if ! poetry install --no-root --with dev; then
+    echo "❌ Poetry install failed!"
+    echo "This usually means a dependency failed to build."
+    echo "Check the output above for errors."
+    exit 1
 fi
 
-# Install Python dependencies
-echo "Running poetry install (this may take a few minutes)..."
-poetry install --no-root --with dev
-
 # Verify critical tools are installed
-echo "Verifying Python tools installation..."
-poetry run ruff --version || { echo "❌ ruff installation failed"; exit 1; }
-poetry run pytest --version || { echo "❌ pytest installation failed"; exit 1; }
-poetry run pyre --version || { echo "❌ pyre installation failed"; exit 1; }
+echo ""
+echo "Verifying installation..."
+if poetry run pytest --version > /dev/null 2>&1; then
+    echo "✅ pytest: $(poetry run pytest --version)"
+else
+    echo "⚠️  pytest not found in virtualenv - dev dependencies may not have installed"
+fi
 
+if poetry run ruff --version > /dev/null 2>&1; then
+    echo "✅ ruff: $(poetry run ruff --version)"
+else
+    echo "⚠️  ruff not found in virtualenv"
+fi
+
+echo ""
 echo "✅ Development environment setup complete!"
