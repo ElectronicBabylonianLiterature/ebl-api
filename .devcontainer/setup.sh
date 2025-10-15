@@ -18,9 +18,13 @@ else
     echo "MongoDB already installed, skipping..."
 fi
 
-echo "Installing go-task..."
-# Install go-task
-sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+echo "Verifying go-task installation..."
+# go-task is installed via devcontainer feature
+if ! command -v task &> /dev/null; then
+    echo "❌ go-task not found! This should be installed via devcontainer feature."
+    exit 1
+fi
+task --version
 
 echo "Installing Rust (required for libcst/pyre-check)..."
 # Install Rust compiler (needed for libcst which is required by pyre-check)
@@ -57,9 +61,20 @@ echo 'export PYMONGOIM__MONGO_VERSION=4.4' >> ~/.bashrc
 echo 'export PYMONGOIM__OPERATING_SYSTEM=ubuntu' >> ~/.bashrc
 
 echo "Installing Python dependencies..."
-# Source cargo env for Rust (needed for libcst build)
-[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
+# Ensure Rust is in PATH (needed for libcst build)
+if [ -f "$HOME/.cargo/env" ]; then
+    source "$HOME/.cargo/env"
+    echo "Rust available at: $(which rustc)"
+fi
+
 # Install Python dependencies
+echo "Running poetry install (this may take a few minutes)..."
 poetry install --no-root --with dev
+
+# Verify critical tools are installed
+echo "Verifying Python tools installation..."
+poetry run ruff --version || { echo "❌ ruff installation failed"; exit 1; }
+poetry run pytest --version || { echo "❌ pytest installation failed"; exit 1; }
+poetry run pyre --version || { echo "❌ pyre installation failed"; exit 1; }
 
 echo "✅ Development environment setup complete!"
