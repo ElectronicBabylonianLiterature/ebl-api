@@ -59,20 +59,6 @@ else
     echo ".env file already exists"
 fi
 
-# Set environment variables
-echo 'export NODE_OPTIONS=--experimental-worker' >> ~/.bashrc
-echo 'export PYMONGOIM__MONGO_VERSION=4.4' >> ~/.bashrc
-echo 'export PYMONGOIM__OPERATING_SYSTEM=ubuntu' >> ~/.bashrc
-
-# Load .env file automatically in shell sessions
-echo '' >> ~/.bashrc
-echo '# Load .env file if it exists' >> ~/.bashrc
-echo 'if [ -f /workspaces/ebl-api/.env ]; then' >> ~/.bashrc
-echo '    set -a' >> ~/.bashrc
-echo '    source /workspaces/ebl-api/.env' >> ~/.bashrc
-echo '    set +a' >> ~/.bashrc
-echo 'fi' >> ~/.bashrc
-
 echo "Installing Python dependencies..."
 # Ensure Rust is in PATH (needed for libcst build)
 export PATH="$HOME/.cargo/bin:$PATH"

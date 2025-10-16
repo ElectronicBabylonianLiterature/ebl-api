@@ -9,6 +9,7 @@
 			"version": "latest"
 		}
 	},
+	"runArgs": ["--env-file", ".env"],
 	"customizations": {
 		"vscode": {
 			"extensions": [

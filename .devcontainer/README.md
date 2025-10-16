@@ -29,12 +29,13 @@ The project requires environment variables to be configured in a `.env` file at 
 
 ### How Environment Variables are Loaded
 
-- **Shell sessions**: The `.env` file is automatically loaded in new shell sessions via `~/.bashrc`
-- **Task commands**: The `.env` file is loaded via the `dotenv: [".env"]` directive in `Taskfile.dist.yml`
-- **Current session**: If you need to load `.env` in your current shell, run:
-  ```bash
-  set -a && source .env && set +a
-  ```
+Environment variables from `.env` are automatically loaded into the container via the `runArgs: ["--env-file", ".env"]` configuration in `devcontainer.json`. This makes them available to all processes, including:
+- Shell sessions
+- `poetry run` commands
+- `task` commands
+- Any other processes running in the container
+
+No manual steps are required - everything works automatically after container rebuild.
 
 ### Security
 
