@@ -442,13 +442,15 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
     )
     atf = (
         f"&P000001 = {museum_number}\n"
-        "10. AN KI NUNDUN GÍR.TAB UŠ-id ana MÚL SA₄\n"
-        "#lem: Ṣalbaṭānu[Mars]CN; erṣētu[area]N'; šaptu[lip]N$; Zuqiqīpu[Scorpio]CN; "
+        "10. EN AN KI NUNDUN GÍR.TAB UŠ-id ana MÚL SA₄ GUR? NIM-a\n"
+        "#lem: Bēl[Bēl]DN$; Ṣalbaṭānu[Mars]CN; erṣētu[area]N'; šaptu[lip]N$; Zuqiqīpu[Scorpio]CN; "
         "emēdu[lean on//be at a stationary point]V'V$nenmudu; "
-        "ana[to]PRP; kakkabu[star]N$; nebû[shining//bright]AJ'AJ$"
+        "ana[to]PRP; kakkabu[star]N$; nebû[shining//bright]AJ'AJ$; "
+        "baʾil[bright]AJ; šaqâ[high]AJ"
     )
     responses = mock_input(
         [
+            "Bel I",
             "ṣalbatānu I",
             "erṣetu I",
             "šaptu I",
@@ -457,6 +459,8 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
             "ana I",
             "kakkabu I",
             "nebû I",
+            "ba'ālu I",
+            "šaqû II",
             "end",
         ]
     )
@@ -475,6 +479,7 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
     )
     assert next(responses) == "end"
     expected_lemmatization = [
+        ("Bel I",),
         ("ṣalbatānu I",),
         ("erṣetu I",),
         ("šaptu I",),
@@ -483,6 +488,8 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
         ("ana I",),
         ("kakkabu I",),
         ("nebû I",),
+        ("ba'ālu I",),
+        ("šaqû II",),
     ]
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
