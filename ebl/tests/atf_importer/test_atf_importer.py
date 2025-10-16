@@ -113,9 +113,9 @@ def mock_input(monkeypatch):
 
 
 def test_logger_writes_files(database, fragment_repository, tmp_path):
-    museum_number = "BM.1"
+    museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
-    fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("BM.1")))
+    fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.1")))
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
         "imported_files.txt",
@@ -128,7 +128,7 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
 
 
 def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_path):
-    museum_number = "BM.123"
+    museum_number = "X.123"
     atf = "&P111111 = XXX\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
         FragmentFactory.build(
@@ -143,7 +143,7 @@ def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_pa
 def test_find_museum_number_by_traditional_reference(
     database, fragment_repository, tmp_path
 ):
-    museum_number = "BM.222"
+    museum_number = "X.222"
     test_id = "test reference"
     atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
@@ -158,10 +158,10 @@ def test_find_museum_number_by_traditional_reference(
 def test_museum_number_input_by_user(
     database, fragment_repository, tmp_path, mock_input
 ):
-    museum_number = "BM.2"
+    museum_number = "X.2"
     test_id = "test reference"
     atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
-    fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("BM.2")))
+    fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.2")))
     responses = mock_input([museum_number, "end"])
     setup_and_run_importer(atf, tmp_path, database, fragment_repository)
     assert next(responses) == "end"
@@ -187,7 +187,7 @@ def test_museum_number_skip_by_user(
 def test_ask_overwrite_existing_edition(
     database, fragment_repository, tmp_path, mock_input
 ):
-    museum_number = "N.1"
+    museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
     responses = mock_input(["Y", "end"])
     fragment_repository.create(
@@ -201,7 +201,7 @@ def test_ask_overwrite_existing_edition(
 def test_ask_overwrite_existing_edition_cancel(
     database, fragment_repository, tmp_path, mock_input
 ):
-    museum_number = "N.1"
+    museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
     responses = mock_input(["N", "end"])
     fragment_repository.create(
@@ -256,7 +256,7 @@ def test_import_fragment_to_lowest_join(
 def test_import_fragment_correct_parsing_errors(
     database, fragment_repository, tmp_path, mock_input, capsys
 ):
-    museum_number = "H.2"
+    museum_number = "X.2"
     atf = f"&P000001 = {museum_number}\n1. GGG"
     responses = mock_input(["1. GA", "end"])
     fragment_repository.create(
@@ -277,7 +277,7 @@ def test_import_fragment_correct_parsing_errors(
 def test_lemmatization(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.17"
+    museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -320,7 +320,7 @@ def test_lemmatization(fragment_repository, tmp_path):
 def test_lemmatization_with_removal(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.89"
+    museum_number = "X.89"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -380,7 +380,7 @@ def test_problematic_lemmatization(fragment_repository, tmp_path):
 def test_lemmatization_ambiguity(fragment_repository, tmp_path):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.899"
+    museum_number = "X.899"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -402,7 +402,7 @@ def test_lemmatization_ambiguity(fragment_repository, tmp_path):
 def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.5"
+    museum_number = "X.5"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -436,7 +436,7 @@ def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input)
 def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.17"
+    museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -499,7 +499,7 @@ def test_lemmatization_tokens_length_mismatch(
 ):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.99"
+    museum_number = "X.99"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -541,7 +541,7 @@ def test_lemmatization_tokens_length_mismatch(
 def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.17"
+    museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
@@ -611,7 +611,7 @@ ATF = """&X104182 = AD -418B
 def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
     database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "BM.17"
+    museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
