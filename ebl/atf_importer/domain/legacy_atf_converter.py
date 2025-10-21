@@ -167,11 +167,14 @@ class LegacyAtfConverter:
             f"Error: {str(error)}\nThe following text line cannot be parsed:\n{line}"
         )
         self.logger.warning(warning)
-        print(
-            f"{warning}\nPlease input the corrected line, then press enter:",
-        )
-        corrected_line = input()
-        return self._parse_and_validate_line(corrected_line)
+        try:
+            print(
+                f"{warning}\nPlease input the corrected line, then press enter:",
+            )
+            corrected_line = input()
+            return self._parse_and_validate_line(corrected_line)
+        except (OSError, EOFError):
+            return self.ebl_parser.parse("")
 
     def _handle_legacy_translation(
         self, translation_line: Tree, lines_data: List[Dict[str, Any]]
