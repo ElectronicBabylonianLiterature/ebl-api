@@ -5,6 +5,7 @@ import builtins
 import pytest
 from pymongo import MongoClient
 from unittest.mock import patch
+from ebl.app import create_context
 from ebl.atf_importer.application.atf_importer import AtfImporter
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
@@ -39,16 +40,17 @@ def create_file(path, content):
 def setup_and_run_importer(
     atf_string,
     tmp_path,
-    database,
     fragment_repository,
     glossaries=None,
 ):
     if not glossaries:
         glossaries = {"akk": "", "qpn": ""}
-    atf_importer = AtfImporter(database, fragment_repository)
     create_file(tmp_path / "import/test.atf", atf_string)
     for key in glossaries.keys():
         create_file(tmp_path / f"import/glossary/{key}.glo", glossaries[key])
+    client = MongoClient(os.environ["MONGODB_URI"])
+    database = client.get_database("ebldev")
+    atf_importer = AtfImporter(database, fragment_repository)
     atf_importer.run_importer(
         {
             "input_dir": tmp_path / "import",
@@ -112,11 +114,11 @@ def mock_input(monkeypatch):
     return _set_input_responses
 
 
-def test_logger_writes_files(database, fragment_repository, tmp_path):
+def test_logger_writes_files(fragment_repository, tmp_path):
     museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.1")))
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
         "imported_files.txt",
         "not_imported_files.txt",
@@ -127,7 +129,7 @@ def test_logger_writes_files(database, fragment_repository, tmp_path):
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
-def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_path):
+def test_find_museum_number_by_cdli_number(fragment_repository, tmp_path, mock_input):
     museum_number = "X.123"
     atf = "&P111111 = XXX\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(
@@ -136,13 +138,12 @@ def test_find_museum_number_by_cdli_number(database, fragment_repository, tmp_pa
             external_numbers=ExternalNumbers(cdli_number="P111111"),
         )
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    responses = mock_input([museum_number, "end"])
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
-def test_find_museum_number_by_traditional_reference(
-    database, fragment_repository, tmp_path
-):
+def test_find_museum_number_by_traditional_reference(fragment_repository, tmp_path, mock_input):
     museum_number = "X.222"
     test_id = "test reference"
     atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
@@ -151,29 +152,26 @@ def test_find_museum_number_by_traditional_reference(
             number=MuseumNumber.of(museum_number), traditional_references=[test_id]
         )
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    responses = mock_input([museum_number, "end"])
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
-def test_museum_number_input_by_user(
-    database, fragment_repository, tmp_path, mock_input
-):
+def test_museum_number_input_by_user(fragment_repository, tmp_path, mock_input):
     museum_number = "X.2"
     test_id = "test reference"
     atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.2")))
     responses = mock_input([museum_number, "end"])
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert next(responses) == "end"
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
-def test_museum_number_skip_by_user(
-    database, fragment_repository, tmp_path, mock_input
-):
+def test_museum_number_skip_by_user(fragment_repository, tmp_path, mock_input):
     responses = mock_input(["", "end"])
     atf = "&P000001 = test reference\n1. GU₄ 30 ⸢12⸣ [...]"
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert next(responses) == "end"
     logs = {
         "imported_files.txt": [""],
@@ -184,22 +182,20 @@ def test_museum_number_skip_by_user(
     check_logs(tmp_path, "", logs)
 
 
-def test_ask_overwrite_existing_edition(
-    database, fragment_repository, tmp_path, mock_input
-):
+def test_ask_overwrite_existing_edition(fragment_repository, tmp_path, mock_input):
     museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
     responses = mock_input(["Y", "end"])
     fragment_repository.create(
         LemmatizedFragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert next(responses) == "end"
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
 def test_ask_overwrite_existing_edition_cancel(
-    database, fragment_repository, tmp_path, mock_input
+    fragment_repository, tmp_path, mock_input
 ):
     museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1. GU₄ 30 ⸢12⸣ [...]"
@@ -207,7 +203,7 @@ def test_ask_overwrite_existing_edition_cancel(
     fragment_repository.create(
         LemmatizedFragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert next(responses) == "end"
     with open(tmp_path / "logs/not_imported_files.txt") as logfile:
         assert (
@@ -216,9 +212,7 @@ def test_ask_overwrite_existing_edition_cancel(
         )
 
 
-def test_import_fragment_to_lowest_join(
-    database, fragment_repository, tmp_path, mock_input
-):
+def test_import_fragment_to_lowest_join(database, fragment_repository, tmp_path):
     museum_number_join_low = "X.1"
     museum_number_join_high = "X.2"
     atf = f"&P000001 = {museum_number_join_high}\n1. LUGAL [x]"
@@ -249,12 +243,12 @@ def test_import_fragment_to_lowest_join(
             ]
         }
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     check_importing_and_logs(museum_number_join_low, fragment_repository, tmp_path)
 
 
 def test_import_fragment_correct_parsing_errors(
-    database, fragment_repository, tmp_path, mock_input, capsys
+    fragment_repository, tmp_path, mock_input, capsys
 ):
     museum_number = "X.2"
     atf = f"&P000001 = {museum_number}\n1. GGG"
@@ -262,9 +256,9 @@ def test_import_fragment_correct_parsing_errors(
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
-    setup_and_run_importer(atf, tmp_path, database, fragment_repository)
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
     expected_captured = (
-        "Error: Invalid transliteration \n"
+        "Error: Invalid transliteration\n"
         "The following text line cannot be parsed:\n"
         "1. GGG\n"
         "Please input the corrected line, then press enter:\n"
@@ -275,8 +269,6 @@ def test_import_fragment_correct_parsing_errors(
 
 
 def test_lemmatization(fragment_repository, tmp_path):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -292,7 +284,6 @@ def test_lemmatization(fragment_repository, tmp_path):
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -318,8 +309,6 @@ def test_lemmatization(fragment_repository, tmp_path):
 
 
 def test_lemmatization_with_removal(fragment_repository, tmp_path):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.89"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -332,7 +321,6 @@ def test_lemmatization_with_removal(fragment_repository, tmp_path):
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -353,8 +341,6 @@ def test_lemmatization_with_removal(fragment_repository, tmp_path):
 
 
 def test_problematic_lemmatization(fragment_repository, tmp_path):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.111"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -363,7 +349,6 @@ def test_problematic_lemmatization(fragment_repository, tmp_path):
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -378,8 +363,6 @@ def test_problematic_lemmatization(fragment_repository, tmp_path):
 
 
 def test_lemmatization_ambiguity(fragment_repository, tmp_path):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.899"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -388,7 +371,6 @@ def test_lemmatization_ambiguity(fragment_repository, tmp_path):
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -400,8 +382,6 @@ def test_lemmatization_ambiguity(fragment_repository, tmp_path):
 
 
 def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.5"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -411,7 +391,6 @@ def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input)
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -434,8 +413,6 @@ def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input)
 
 
 def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -467,7 +444,6 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -497,8 +473,6 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
 def test_lemmatization_tokens_length_mismatch(
     fragment_repository, tmp_path, mock_input
 ):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.99"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -514,7 +488,6 @@ def test_lemmatization_tokens_length_mismatch(
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -539,8 +512,6 @@ def test_lemmatization_tokens_length_mismatch(
 
 
 def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
     museum_number = "X.17"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
@@ -560,7 +531,6 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
     setup_and_run_importer(
         atf,
         tmp_path,
-        database,
         fragment_repository,
         {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
     )
@@ -578,69 +548,12 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
         assert isinstance(line, expected_instance) is True
 
 
-# ToDo: Debug
-# Works when:
-# &X103813 = BM.17
-#
-# Does not work when:
-# &X103813 = AD -381C
-
-ATF = """&X104182 = AD -418B
-#project: adsd/adart1
-#atf: use unicode
-#atf: lang akk
-#atf: use math
-#atf: use legacy
-@obverse
-1. [MU 5.KÁ]M {m}ú-ma-kuš šá {m}da-a-ri-muš MU-šú SA₄
-#lem: šattu[year]N; n; Umakuš[Umakuš]RN$; ša[which]REL; Dariamuš[Darius]RN; šumu[name]N$šumšu; nabû[named]AJ
-
-@translation labeled en project
-@(o 1) [Year 5 of] Umakuš who is called Darius."""
-
-# ToDo:
-# Continue from here
-
-# 2. Consider a solution for cases like
-# "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
-# S. the test below. The issue is with `GE[₆ `.
-# The line is parsed as `translation_line`, but should be a parsing error for manual fix.
-# This should be tested as well.
-
-
-def test_manual_lemmatization_extended2(fragment_repository, tmp_path, mock_input):
-    client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
-    museum_number = "X.17"
-    fragment_repository.create(
-        FragmentFactory.build(number=MuseumNumber.of(museum_number))
-    )
-    """
-    atf = (
-        f"&P000001 = {museum_number}\n"
-        "7'. 12 DIR AN ZA GE₆ 13 13 DIR AN ZA GE[₆ ...]\n"
-        "#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; u"
-    )
-    """
-    atf = ATF
-    mock_input(repeat(""))
-    setup_and_run_importer(
-        atf,
-        tmp_path,
-        database,
-        fragment_repository,
-        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
-    )
-
-
 @pytest.mark.skip(reason="heavy test")
 def test_atf_importer(fragment_repository, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database(os.environ.get("MONGODB_DB"))
+    database = client.get_database("ebldev")
     atf_importer = AtfImporter(database, fragment_repository)
-    archive = zipfile.ZipFile(
-        "ebl/tests/atf_importer/test_data3.zip"  # ToDo: Change to "ebl/tests/atf_importer/test_data3.zip"
-    )  # ToDo: Check `test_data2`
+    archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
     mock_input(repeat(""))
     with tempfile.TemporaryDirectory() as tempdir:
         data_path = f"{tempdir}/test_atf_import_data"
@@ -678,11 +591,9 @@ def test_atf_importer(fragment_repository, mock_input):
                 FragmentFactory.build(number=MuseumNumber.of(museum_number))
             )
         for dir in os.listdir(data_path):
-            glossary_path = f"{data_path}/{dir}"  # f"{data_path}"
-            atf_dir_path = f"{data_path}/{dir}/00atf"  # f"{data_path}"
+            glossary_path = f"{data_path}/{dir}"
+            atf_dir_path = f"{data_path}/{dir}/00atf"
             logdir_path = f"{data_path}/logs/{dir}"
-            print(f"Testing import of atf data in {atf_dir_path}")
-            # print("Running", " ".join(command))
             atf_importer.run_importer(
                 {
                     "input_dir": atf_dir_path,
@@ -691,59 +602,3 @@ def test_atf_importer(fragment_repository, mock_input):
                     "author": "Test author",
                 }
             )
-
-
-"""
-def test_atf_importer(database, fragment_repository):
-    # Test bulk import.
-    # importer_path = "ebl/atf_importer/application/atf_importer.py"
-    atf_importer = AtfImporter(database)
-    archive = zipfile.ZipFile("ebl/tests/atf_importer/test_data.zip")
-    with tempfile.TemporaryDirectory() as tempdir:
-        data_path = f"{tempdir}/test_atf_import_data"
-        archive.extractall(data_path)
-        for dir in os.listdir(data_path):
-            glossary_akk_path = f"{data_path}/{dir}/akk.glo"
-            # glossary_qpn_path = f"{data_path}/{dir}/qpn.glo"
-            atf_dir_path = f"{data_path}/{dir}/00atf"
-            logdir_path = f"{data_path}/logs/{dir}"
-            print(f"Testing import of atf data in {atf_dir_path}")
-            # print("Running", " ".join(command))
-            atf_importer.run_importer(
-                {
-                    "input_dir": atf_dir_path,
-                    "logdir": logdir_path,
-                    "glodir": glossary_akk_path,
-                    "author": "Test author",
-                }
-            )
-
-            '''
-            command = [
-                "python",
-                "run",
-                importer_path,
-                "-i",
-                atf_dir_path,
-                "-l",
-                logdir_path,
-                "-g",
-                glossary_akk_path,
-                "-a",
-                "Test author",
-            ]
-            '''
-
-            # result = subprocess.run(
-            #    command,
-            #    shell=True,
-            #    capture_output=True,
-            # )
-            # print(result.stdout)
-            # self.assertIn("expected out", result.stdout)
-            # filenames = [
-            #    filename for filename in os.listdir(atf_path) if ".atf" in filename
-            # ]
-            # for filename in filenames:
-            #    print(f"{atf_path}/{filename}")
-"""

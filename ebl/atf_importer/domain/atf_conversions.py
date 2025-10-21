@@ -44,10 +44,6 @@ class GetLemmaValuesAndGuidewords(Visitor):
         self.result = []
 
     def oracc_atf_lem_line__lemma(self, tree: Tree) -> None:
-        # ToDo:
-        # Continue from here. Correctly handle lemmatization.
-        # Extract oracc_atf_lem_line parser,
-        # use within ebl_atf parser or separately.
         lemmata: List[Tuple[str, str, str]] = []
         for child in tree.children:
             if child.data == "oracc_atf_lem_line__value_part":

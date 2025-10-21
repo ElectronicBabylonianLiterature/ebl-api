@@ -58,7 +58,10 @@ class Glossary:
     def _match_guideword(self, entry: LexicalEntry, query: GlossaryQuery) -> bool:
         if "guideword" not in query:
             return True
-        guideword = re.sub(r"[()]", "", query["guideword"])
+        query_guideword = query["guideword"]
+        if query_guideword is None:
+            return True
+        guideword = re.sub(r"[()]", "", query_guideword)
         return guideword == entry.guideword or any(
             sense.guideword == guideword for sense in entry.senses
         )

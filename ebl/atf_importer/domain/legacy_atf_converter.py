@@ -29,12 +29,7 @@ glossary = Glossary(entries=[])
 
 
 def include_line(line_instance) -> bool:
-    # ToDo: The latter condition is for testing the label extents issue. Might not be needed.
-    if (
-        isinstance(line_instance, EmptyLine)
-        or isinstance(line_instance, ControlLine)
-        or not hasattr(line_instance, "atf")
-    ):
+    if isinstance(line_instance, EmptyLine) or isinstance(line_instance, ControlLine):
         return False
     return True
 
@@ -100,7 +95,7 @@ class LegacyAtfConverter:
                 "c_array": c_array,
                 "c_type": c_type,
                 "c_alter_lem_line_at": c_alter_lem_line_at,
-                "serialized": None  # ToDo: implement handling here?
+                "serialized": None
                 if line_data["tree"].data == "lem_line"
                 else self.line_transformer.transform(line_data["tree"]),
             }
@@ -168,12 +163,12 @@ class LegacyAtfConverter:
             return self._report_and_correct_errors(line, error)
 
     def _report_and_correct_errors(self, line: str, error: Type[Exception]) -> Tree:
-        # ToDo: Log error
+        warning = (
+            f"Error: {str(error)}\nThe following text line cannot be parsed:\n{line}"
+        )
+        self.logger.warning(warning)
         print(
-            "Error:",
-            str(error),
-            f"\nThe following text line cannot be parsed:\n{line}\n"
-            "Please input the corrected line, then press enter:",
+            f"{warning}\nPlease input the corrected line, then press enter:",
         )
         corrected_line = input()
         return self._parse_and_validate_line(corrected_line)

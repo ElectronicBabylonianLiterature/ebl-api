@@ -84,20 +84,19 @@ class DatabaseImporter:
             return self._edition_overwrite_consent(museum_number)
 
     def _import(self, text: Text, museum_number: str, filename: str):
-        # ToDo: Restore `try` after debugging
-        # try:
-        self._insert_transliterations(
-            text,
-            museum_number,
-        )
-
-        self.logger.info(
-            f"{filename}.atf successfully imported as {museum_number}", "imported_files"
-        )
-        # except Exception as e:
-        #    self.logger.error(
-        #        f"Error importing {filename}.atf: {str(e)}", "not_imported_files"
-        #    )
+        try:
+            self._insert_transliterations(
+                text,
+                museum_number,
+            )
+            self.logger.info(
+                f"{filename}.atf successfully imported as {museum_number}",
+                "imported_files",
+            )
+        except Exception as e:
+            self.logger.error(
+                f"Error importing {filename}.atf: {str(e)}", "not_imported_files"
+            )
 
     def _check_fragment_and_edition_exist(
         self, museum_number: str
@@ -134,8 +133,6 @@ class MuseumNumberGetter:
 
     def get_museum_number(self, control_lines: List, filename: str) -> Optional[str]:
         cdli_number, reference = self._get_cdli_number_and_reference(control_lines)
-        # ToDo: Clean up
-        # print("cdli_number, reference:", cdli_number, reference)
         if reference is not None:
             if museum_number := self._get_valid_museum_number_or_none(reference):
                 return self._get_lowest_join_number(museum_number)
@@ -210,8 +207,6 @@ class MuseumNumberGetter:
 
     def _get_lowest_join_number(self, museum_number: Optional[str]) -> Optional[str]:
         if museum_number:
-            # ToDo: Clean up
-            # print("museum number:", museum_number)
             try:
                 fragment = self.fragment_repository.query_by_museum_number(
                     MuseumNumber.of(museum_number)

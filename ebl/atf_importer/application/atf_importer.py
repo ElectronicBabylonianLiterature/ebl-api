@@ -95,11 +95,10 @@ class AtfImporter:
     def import_into_database(
         self, text: Text, control_lines: List, filename: str
     ) -> None:
-        # ToDo: Restore exception
-        # try:
-        self.database_importer.import_into_database(text, control_lines, filename)
-        # except Exception as e:
-        #    self.logger.exception(f"Error while importing into database: {e}")
+        try:
+            self.database_importer.import_into_database(text, control_lines, filename)
+        except Exception as e:
+            self.logger.exception(f"Error while importing into database: {e}")
 
     def cli(self) -> None:
         parser = argparse.ArgumentParser(
