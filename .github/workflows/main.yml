@@ -13,6 +13,13 @@ env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   PYMONGOIM__MONGO_VERSION: 7.0
   PYMONGOIM__OPERATING_SYSTEM: ubuntu
+  EBL_AI_API: http://localhost:8001
+  MONGODB_DB: ebltest
+  AUTH0_AUDIENCE: test-audience
+  AUTH0_ISSUER: https://test.auth0.com/
+  AUTH0_PEM: test-pem-certificate
+  SENTRY_DSN: https://test@sentry.io/test
+  SENTRY_ENVIRONMENT: test
 
 jobs:
   test:
