@@ -1,19 +1,29 @@
-from ebl.app import create_context
-from ebl.context import Context
-from ebl.transliteration.domain.text import Text
-from ebl.atf_importer.application.logger import Logger, LoggerUtil
-from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
-from ebl.atf_importer.application.database_importer import DatabaseImporter
-from ebl.atf_importer.application.lines_getter import EblLinesGetter
-from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
-from ebl.atf_importer.application.glossary import GlossaryParser, Glossary
-from typing import Any, Dict, List, TypedDict
-from pymongo import MongoClient
-import attr
 import argparse
 import glob
 import os
+
 os.environ["EBL_AI_API"] = ""
+
+import attr  # noqa: E402
+from typing import Any, Dict, List, TypedDict  # noqa: E402
+
+from pymongo import MongoClient  # noqa: E402
+
+from ebl.app import create_context  # noqa: E402
+from ebl.atf_importer.application.atf_importer_config import (  # noqa: E402
+    AtfImporterConfig,
+)
+from ebl.atf_importer.application.database_importer import (  # noqa: E402
+    DatabaseImporter,
+)
+from ebl.atf_importer.application.glossary import Glossary, GlossaryParser  # noqa: E402
+from ebl.atf_importer.application.lines_getter import EblLinesGetter  # noqa: E402
+from ebl.atf_importer.application.logger import Logger, LoggerUtil  # noqa: E402
+from ebl.atf_importer.domain.legacy_atf_converter import (  # noqa: E402
+    LegacyAtfConverter,
+)
+from ebl.context import Context  # noqa: E402
+from ebl.transliteration.domain.text import Text  # noqa: E402
 
 
 class AtfImporterArgs(TypedDict):
@@ -95,8 +105,7 @@ class AtfImporter:
         self, text: Text, control_lines: List, filename: str
     ) -> None:
         try:
-            self.database_importer.import_into_database(
-                text, control_lines, filename)
+            self.database_importer.import_into_database(text, control_lines, filename)
         except Exception as e:
             self.logger.exception(f"Error while importing into database: {e}")
 
