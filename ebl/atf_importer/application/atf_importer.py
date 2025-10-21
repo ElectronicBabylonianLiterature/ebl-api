@@ -1,19 +1,18 @@
+from ebl.app import create_context
+from ebl.context import Context
+from ebl.transliteration.domain.text import Text
+from ebl.atf_importer.application.logger import Logger, LoggerUtil
+from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
+from ebl.atf_importer.application.database_importer import DatabaseImporter
+from ebl.atf_importer.application.lines_getter import EblLinesGetter
+from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
+from ebl.atf_importer.application.glossary import GlossaryParser, Glossary
+from typing import Any, Dict, List, TypedDict
+from pymongo import MongoClient
+import attr
 import argparse
 import glob
 import os
-import attr
-from pymongo import MongoClient
-from typing import Any, Dict, List, TypedDict
-from ebl.atf_importer.application.glossary import GlossaryParser, Glossary
-from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
-from ebl.atf_importer.application.lines_getter import EblLinesGetter
-from ebl.atf_importer.application.database_importer import DatabaseImporter
-from ebl.atf_importer.application.atf_importer_config import AtfImporterConfig
-from ebl.atf_importer.application.logger import Logger, LoggerUtil
-from ebl.transliteration.domain.text import Text
-from ebl.context import Context
-from ebl.app import create_context
-
 os.environ["EBL_AI_API"] = ""
 
 
@@ -96,7 +95,8 @@ class AtfImporter:
         self, text: Text, control_lines: List, filename: str
     ) -> None:
         try:
-            self.database_importer.import_into_database(text, control_lines, filename)
+            self.database_importer.import_into_database(
+                text, control_lines, filename)
         except Exception as e:
             self.logger.exception(f"Error while importing into database: {e}")
 
