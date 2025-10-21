@@ -113,10 +113,11 @@ def mock_input(monkeypatch):
     return _set_input_responses
 
 
-def test_logger_writes_files(fragment_repository, tmp_path):
+def test_logger_writes_files(fragment_repository, tmp_path, mock_input):
     museum_number = "X.1"
     atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.1")))
+    mock_input(["1'. GU₄ 30 ⸢12⸣ [...]", "end"])
     setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
         "imported_files.txt",
