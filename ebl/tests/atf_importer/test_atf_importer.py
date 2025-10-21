@@ -115,7 +115,7 @@ def mock_input(monkeypatch):
 
 def test_logger_writes_files(fragment_repository, tmp_path):
     museum_number = "X.1"
-    atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
+    atf = f"&P000001 = {museum_number}\n1. GU₄"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.1")))
     setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
@@ -540,11 +540,11 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
     fragment = fragment_repository.query_by_museum_number(
         MuseumNumber.of(museum_number)
     )
-    assert len(fragment.text.lines) == 4
+    expected_types = [SurfaceAtLine, ColumnAtLine, TextLine, TranslationLine]
+    assert len(fragment.text.lines) == len(expected_types)
     for line, expected_instance in zip(
         fragment.text.lines,
-        [SurfaceAtLine, ColumnAtLine, TextLine, TranslationLine],
-        strict=True,
+        expected_types,
     ):
         assert isinstance(line, expected_instance) is True
 
