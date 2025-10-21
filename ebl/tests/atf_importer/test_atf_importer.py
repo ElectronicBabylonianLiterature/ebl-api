@@ -5,7 +5,6 @@ import builtins
 import pytest
 from pymongo import MongoClient
 from unittest.mock import patch
-from ebl.app import create_context
 from ebl.atf_importer.application.atf_importer import AtfImporter
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
@@ -138,7 +137,7 @@ def test_find_museum_number_by_cdli_number(fragment_repository, tmp_path, mock_i
             external_numbers=ExternalNumbers(cdli_number="P111111"),
         )
     )
-    responses = mock_input([museum_number, "end"])
+    mock_input([museum_number, "end"])
     setup_and_run_importer(atf, tmp_path, fragment_repository)
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
@@ -154,7 +153,7 @@ def test_find_museum_number_by_traditional_reference(
             number=MuseumNumber.of(museum_number), traditional_references=[test_id]
         )
     )
-    responses = mock_input([museum_number, "end"])
+    mock_input([museum_number, "end"])
     setup_and_run_importer(atf, tmp_path, fragment_repository)
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
