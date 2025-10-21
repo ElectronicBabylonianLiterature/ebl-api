@@ -143,7 +143,9 @@ def test_find_museum_number_by_cdli_number(fragment_repository, tmp_path, mock_i
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
-def test_find_museum_number_by_traditional_reference(fragment_repository, tmp_path, mock_input):
+def test_find_museum_number_by_traditional_reference(
+    fragment_repository, tmp_path, mock_input
+):
     museum_number = "X.222"
     test_id = "test reference"
     atf = f"&P000001 = {test_id}\n1. GU₄ 30 ⸢12⸣ [...]"
