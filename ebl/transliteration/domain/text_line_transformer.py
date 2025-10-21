@@ -161,7 +161,7 @@ class TextLineTransformer(
 ):
     def __init__(self):
         super().__init__()
-        for method in [method for method in dir(self) if "ebl_atf_text_line"]:
+        for method in [method for method in dir(self) if "ebl_atf_text_line" in method]:
             _method = method.replace("ebl_atf_text_line", "")
             for prefix in TEXT_LINE_PREFIXES:
                 setattr(
