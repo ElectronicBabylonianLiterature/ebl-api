@@ -119,13 +119,13 @@ def test_logger_writes_files(fragment_repository, tmp_path):
     atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.1")))
     setup_and_run_importer(atf, tmp_path, fragment_repository)
-    assert os.listdir(tmp_path / "logs") == [
+    assert set(os.listdir(tmp_path / "logs")) == {
         "imported_files.txt",
         "not_imported_files.txt",
         "error_lines.txt",
         "lemmatization_log.txt",
         "unparsable_lines.txt",
-    ]
+    }
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
 
 
