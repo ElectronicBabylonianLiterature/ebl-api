@@ -120,7 +120,7 @@ def test_import_into_database_exception_handling(fragment_repository, tmp_path):
     assert "Error while importing into database" in str(mock_logger.exception.call_args)
 
 
-def test_cli_method(fragment_repository, tmp_path):
+def test_cli_method(database, fragment_repository, tmp_path):
     museum_number = "X.100"
     atf = f"&P000100 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
 
@@ -132,9 +132,6 @@ def test_cli_method(fragment_repository, tmp_path):
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
 
-    client = MongoClient(os.environ["MONGODB_URI"])
-    db_name = os.environ.get("MONGODB_DB")
-    database = client.get_database(db_name) if db_name else client.get_database()
     atf_importer = AtfImporter(database, fragment_repository)
 
     with patch(
@@ -159,7 +156,7 @@ def test_cli_method(fragment_repository, tmp_path):
     assert str(fragment.number) == museum_number
 
 
-def test_main_method(fragment_repository, tmp_path):
+def test_main_method(database, fragment_repository, tmp_path):
     museum_number = "X.101"
     atf = f"&P000101 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
 
