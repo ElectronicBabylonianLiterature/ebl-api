@@ -48,7 +48,8 @@ def setup_and_run_importer(
     for key in glossaries.keys():
         create_file(tmp_path / f"import/glossary/{key}.glo", glossaries[key])
     client = MongoClient(os.environ["MONGODB_URI"])
-    database = client.get_database("ebldev")
+    db_name = os.environ.get("MONGODB_DB")
+    database = client.get_database(db_name) if db_name else client.get_database()
     atf_importer = AtfImporter(database, fragment_repository)
     atf_importer.run_importer(
         {
@@ -115,7 +116,7 @@ def mock_input(monkeypatch):
 
 def test_logger_writes_files(fragment_repository, tmp_path):
     museum_number = "X.1"
-    atf = f"&P000001 = {museum_number}\n1. GU₄"
+    atf = f"&P000001 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
     fragment_repository.create(FragmentFactory.build(number=MuseumNumber.of("X.1")))
     setup_and_run_importer(atf, tmp_path, fragment_repository)
     assert os.listdir(tmp_path / "logs") == [
@@ -428,11 +429,9 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
     )
     responses = mock_input(
         [
-            "Bel I",
             "ṣalbatānu I",
             "erṣetu I",
             "šaptu I",
-            "zuqiqīpu I",
             "emēdu I",
             "ana I",
             "kakkabu I",
