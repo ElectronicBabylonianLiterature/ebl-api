@@ -1,8 +1,13 @@
 import os
 import uuid
+import builtins
 
 import pytest
 from pymongo import MongoClient
+from unittest.mock import patch
+from ebl.atf_importer.application.atf_importer import AtfImporter
+from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.transliteration.domain.text import TextLine
 
 
 def pytest_configure(config):
@@ -60,3 +65,96 @@ def pytest_unconfigure(config):
             os.environ["MONGODB_URI"] = config._original_mongodb_uri
         elif "MONGODB_URI" in os.environ:
             del os.environ["MONGODB_URI"]
+
+
+@pytest.fixture(autouse=True)
+def patched_fragment_updater(fragment_updater):
+    with patch(
+        "ebl.context.Context.get_fragment_updater",
+        return_value=fragment_updater,
+    ):
+        yield
+
+
+@pytest.fixture
+def mock_input(monkeypatch):
+    def _set_input_responses(responses):
+        responses_iter = iter(responses)
+        monkeypatch.setattr(builtins, "input", lambda *args: next(responses_iter))
+        return responses_iter
+
+    return _set_input_responses
+
+
+def create_file(path, content):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.touch()
+    path.write_text(content)
+
+
+def setup_and_run_importer(
+    atf_string,
+    tmp_path,
+    fragment_repository,
+    glossaries=None,
+):
+    if not glossaries:
+        glossaries = {"akk": "", "qpn": ""}
+    create_file(tmp_path / "import/test.atf", atf_string)
+    for key in glossaries.keys():
+        create_file(tmp_path / f"import/glossary/{key}.glo", glossaries[key])
+    client = MongoClient(os.environ["MONGODB_URI"])
+    db_name = os.environ.get("MONGODB_DB")
+    database = client.get_database(db_name) if db_name else client.get_database()
+    atf_importer = AtfImporter(database, fragment_repository)
+    atf_importer.run_importer(
+        {
+            "input_dir": tmp_path / "import",
+            "logdir": tmp_path / "logs",
+            "glodir": tmp_path / "import/glossary",
+            "author": "Test author",
+        }
+    )
+
+
+def check_importing_and_logs(museum_number, fragment_repository, tmp_path, logs=None):
+    if logs is None:
+        logs = {}
+    fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(museum_number)
+    )
+    assert str(fragment.number) == museum_number
+    check_logs(tmp_path, museum_number, logs)
+
+
+def check_logs(tmp_path, museum_number, logs):
+    for log_filename in os.listdir(tmp_path / "logs"):
+        with open(tmp_path / f"logs/{log_filename}") as logfile:
+            logfile_content = logfile.read()
+            if log_filename in logs.keys():
+                check_custom_logs_content(logs, log_filename, logfile_content)
+            elif log_filename == "imported_files.txt":
+                assert (
+                    f"test.atf successfully imported as {museum_number}"
+                    in logfile_content
+                )
+            else:
+                assert logfile_content == ""
+
+
+def check_custom_logs_content(logs, log_filename, logfile_content):
+    if logs[log_filename]:
+        for log_segment in logs[log_filename]:
+            if len(log_segment) > 0:
+                assert log_segment in logfile_content
+            else:
+                assert log_segment == logfile_content
+
+
+def check_lemmatization(fragment_repository, museum_number, expected_lemmatization):
+    fragment = fragment_repository.query_by_museum_number(
+        MuseumNumber.of(museum_number)
+    )
+    text_lines = [line for line in fragment.text.lines if isinstance(line, TextLine)]
+    lemmatization = [word.unique_lemma for word in text_lines[0]._content]
+    assert lemmatization == expected_lemmatization
