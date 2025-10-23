@@ -14,6 +14,7 @@ from ebl.tests.atf_importer.test_data.database_setup import populate_database_fo
 def pytest_configure(config):
     temp_db_name = f"ebltest_{uuid.uuid4().hex[:8]}"
     production_dbs = ["ebl", "ebldev"]
+
     current_db = os.environ.get("MONGODB_DB")
     if current_db in production_dbs:
         raise RuntimeError(
@@ -21,20 +22,65 @@ def pytest_configure(config):
             f"Production databases {production_dbs} must NEVER be used in tests. "
             "Unset MONGODB_DB and MONGODB_URI before running tests."
         )
+
+    current_uri = os.environ.get("MONGODB_URI", "")
+    production_hosts = ["badwcai-ebl", "srv.mwn.de", "ebl.badw.de"]
+    for prod_host in production_hosts:
+        if prod_host in current_uri and os.getenv("CI") != "true":
+            raise RuntimeError(
+                f"CRITICAL SAFETY ERROR: MONGODB_URI contains production hostname '{prod_host}'. "
+                f"Production databases must NEVER be used in tests. "
+                f"Current URI: {current_uri[:50]}..."
+            )
+
     config._original_mongodb_db = os.environ.get("MONGODB_DB")
     config._original_mongodb_uri = os.environ.get("MONGODB_URI")
     config._temp_db_name = temp_db_name
-    from pymongo_inmemory import MongoClient as InMemoryMongoClient
 
-    client = InMemoryMongoClient()
-    os.environ["MONGODB_URI"] = f"mongodb://{client.HOST}:{client.PORT}"
-    os.environ["MONGODB_DB"] = temp_db_name
-    config._inmemory_client = client
-    if os.environ["MONGODB_DB"] in production_dbs:
+    if os.getenv("CI") == "true":
+        print(f"\n{'='*80}")
+        print("CI ENVIRONMENT DETECTED")
+        print(f"{'='*80}")
+        print(f"Using MongoDB service at: {os.environ.get('MONGODB_URI')}")
+        print(f"Test database: {temp_db_name}")
+        print(f"{'='*80}\n")
+
+        ci_uri = os.environ.get("MONGODB_URI", "")
+        if "localhost" not in ci_uri and "127.0.0.1" not in ci_uri:
+            raise RuntimeError(
+                f"CRITICAL SAFETY ERROR: In CI, MONGODB_URI must use localhost. "
+                f"Got: {ci_uri}"
+            )
+
+        os.environ["MONGODB_DB"] = temp_db_name
+    else:
+        print(f"\n{'='*80}")
+        print("LOCAL DEVELOPMENT ENVIRONMENT")
+        print(f"{'='*80}")
+        print("Starting in-memory MongoDB for isolated testing...")
+        print(f"Test database: {temp_db_name}")
+        print(f"{'='*80}\n")
+
+        from pymongo_inmemory import MongoClient as InMemoryMongoClient
+
+        client = InMemoryMongoClient()
+        os.environ["MONGODB_URI"] = f"mongodb://{client.HOST}:{client.PORT}"
+        os.environ["MONGODB_DB"] = temp_db_name
+        config._inmemory_client = client
+
+    final_db = os.environ.get("MONGODB_DB")
+    if final_db in production_dbs:
         raise RuntimeError(
-            "CRITICAL SAFETY ERROR: MONGODB_DB is set to production database. "
+            f"CRITICAL SAFETY ERROR: After configuration, MONGODB_DB is '{final_db}'. "
             "This should never happen. Tests aborted."
         )
+
+    if not final_db.startswith("ebltest_"):
+        raise RuntimeError(
+            f"CRITICAL SAFETY ERROR: Test database name '{final_db}' does not start with 'ebltest_'. "
+            "All test databases must follow the naming convention 'ebltest_*'."
+        )
+
     populate_database_for_tests(temp_db_name)
 
 
@@ -42,16 +88,36 @@ def pytest_configure(config):
 def database():
     db_name = os.environ.get("MONGODB_DB")
     production_dbs = ["ebl", "ebldev"]
+
     if db_name in production_dbs:
         raise RuntimeError(
             f"CRITICAL SAFETY ERROR: Cannot use production database '{db_name}' in tests. "
             "Tests must use isolated test databases only."
         )
+
+    if not db_name or not db_name.startswith("ebltest_"):
+        raise RuntimeError(
+            f"CRITICAL SAFETY ERROR: Test database name '{db_name}' does not start with 'ebltest_'. "
+            "All test databases must follow the naming convention 'ebltest_*'."
+        )
+
+    current_uri = os.environ.get("MONGODB_URI", "")
+    production_hosts = ["badwcai-ebl", "srv.mwn.de", "ebl.badw.de"]
+    if os.getenv("CI") != "true":
+        for prod_host in production_hosts:
+            if prod_host in current_uri:
+                raise RuntimeError(
+                    f"CRITICAL SAFETY ERROR: MONGODB_URI contains production hostname '{prod_host}'. "
+                    f"Production databases must NEVER be used in tests."
+                )
+
     client = MongoClient(os.environ["MONGODB_URI"])
     db = client.get_database(db_name) if db_name else client.get_database()
+
     for collection_name in db.list_collection_names():
         if collection_name not in ["signs", "words"]:
             db[collection_name].delete_many({})
+
     return db
 
 
