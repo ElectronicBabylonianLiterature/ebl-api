@@ -45,6 +45,12 @@ class Museum(Enum):
         "FR",
         "https://www.ephe.psl.eu/",
     )
+    HARVARD_MUSEUM = (
+        "Harvard Museum of the Ancient Near East",
+        "Cambridge",
+        "US",
+        "https://hmane.harvard.edu/",
+    )
     HATAY_ARCHAEOLOGY_MUSEUM = (
         "Hatay Archaeology Museum",
         "Antakya",
