@@ -12,6 +12,20 @@ from ebl.transliteration.domain.text import Text
 from ebl.tests.atf_importer.conftest import create_file
 
 
+def create_cli_argv(tmp_path, author):
+    return [
+        "atf_importer.py",
+        "--input",
+        str(tmp_path / "import"),
+        "--logdir",
+        str(tmp_path / "logs"),
+        "--glodir",
+        str(tmp_path / "import/glossary"),
+        "--author",
+        author,
+    ]
+
+
 @pytest.mark.skip(reason="Integration test - skipped by default")
 def test_atf_importer(fragment_repository, mock_input):
     client = MongoClient(os.environ["MONGODB_URI"])
@@ -134,20 +148,7 @@ def test_cli_method(database, fragment_repository, tmp_path):
 
     atf_importer = AtfImporter(database, fragment_repository)
 
-    with patch(
-        "sys.argv",
-        [
-            "atf_importer.py",
-            "--input",
-            str(tmp_path / "import"),
-            "--logdir",
-            str(tmp_path / "logs"),
-            "--glodir",
-            str(tmp_path / "import/glossary"),
-            "--author",
-            "Test CLI Author",
-        ],
-    ):
+    with patch("sys.argv", create_cli_argv(tmp_path, "Test CLI Author")):
         atf_importer.cli()
 
     fragment = fragment_repository.query_by_museum_number(
@@ -171,20 +172,7 @@ def test_main_method(database, fragment_repository, tmp_path):
     with patch("ebl.atf_importer.application.atf_importer.Context") as mock_context:
         mock_context.fragment_repository = fragment_repository
 
-        with patch(
-            "sys.argv",
-            [
-                "atf_importer.py",
-                "--input",
-                str(tmp_path / "import"),
-                "--logdir",
-                str(tmp_path / "logs"),
-                "--glodir",
-                str(tmp_path / "import/glossary"),
-                "--author",
-                "Test Main Author",
-            ],
-        ):
+        with patch("sys.argv", create_cli_argv(tmp_path, "Test Main Author")):
             AtfImporter.main()
 
     fragment = fragment_repository.query_by_museum_number(
