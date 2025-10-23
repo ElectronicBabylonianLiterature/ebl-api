@@ -8,47 +8,55 @@ from unittest.mock import patch
 from ebl.atf_importer.application.atf_importer import AtfImporter
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import TextLine
+from ebl.tests.atf_importer.test_data.database_setup import populate_database_for_tests
 
 
 def pytest_configure(config):
     temp_db_name = f"ebltest_{uuid.uuid4().hex[:8]}"
-
+    production_dbs = ["ebl", "ebldev"]
+    current_db = os.environ.get("MONGODB_DB")
+    if current_db in production_dbs:
+        raise RuntimeError(
+            f"CRITICAL SAFETY ERROR: Cannot run tests with MONGODB_DB='{current_db}'. "
+            f"Production databases {production_dbs} must NEVER be used in tests. "
+            "Unset MONGODB_DB and MONGODB_URI before running tests."
+        )
     config._original_mongodb_db = os.environ.get("MONGODB_DB")
+    config._original_mongodb_uri = os.environ.get("MONGODB_URI")
     config._temp_db_name = temp_db_name
+    from pymongo_inmemory import MongoClient as InMemoryMongoClient
 
-    if os.getenv("CI") == "true":
-        os.environ["MONGODB_DB"] = temp_db_name
-    else:
-        from pymongo_inmemory import MongoClient as InMemoryMongoClient
-
-        client = InMemoryMongoClient()
-        config._original_mongodb_uri = os.environ.get("MONGODB_URI")
-        os.environ["MONGODB_URI"] = f"mongodb://{client.HOST}:{client.PORT}"
-        os.environ["MONGODB_DB"] = temp_db_name
-        config._inmemory_client = client
-
-    from ebl.tests.atf_importer.test_data.database_setup import populate_signs_for_tests
-
-    populate_signs_for_tests()
+    client = InMemoryMongoClient()
+    os.environ["MONGODB_URI"] = f"mongodb://{client.HOST}:{client.PORT}"
+    os.environ["MONGODB_DB"] = temp_db_name
+    config._inmemory_client = client
+    if os.environ["MONGODB_DB"] in production_dbs:
+        raise RuntimeError(
+            "CRITICAL SAFETY ERROR: MONGODB_DB is set to production database. "
+            "This should never happen. Tests aborted."
+        )
+    populate_database_for_tests(temp_db_name)
 
 
 @pytest.fixture(scope="function")
 def database():
-    client = MongoClient(os.environ["MONGODB_URI"])
     db_name = os.environ.get("MONGODB_DB")
+    production_dbs = ["ebl", "ebldev"]
+    if db_name in production_dbs:
+        raise RuntimeError(
+            f"CRITICAL SAFETY ERROR: Cannot use production database '{db_name}' in tests. "
+            "Tests must use isolated test databases only."
+        )
+    client = MongoClient(os.environ["MONGODB_URI"])
     db = client.get_database(db_name) if db_name else client.get_database()
-
     for collection_name in db.list_collection_names():
         if collection_name not in ["signs", "words"]:
             db[collection_name].delete_many({})
-
     return db
 
 
 def pytest_unconfigure(config):
     if hasattr(config, "_temp_db_name"):
-        from pymongo import MongoClient
-
         mongodb_uri = os.environ.get("MONGODB_URI", "mongodb://localhost:27017")
         client = MongoClient(mongodb_uri)
         client.drop_database(config._temp_db_name)
@@ -106,6 +114,7 @@ def setup_and_run_importer(
     client = MongoClient(os.environ["MONGODB_URI"])
     db_name = os.environ.get("MONGODB_DB")
     database = client.get_database(db_name) if db_name else client.get_database()
+
     atf_importer = AtfImporter(database, fragment_repository)
     atf_importer.run_importer(
         {

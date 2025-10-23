@@ -27,10 +27,19 @@ def _populate_collection(database, collection_name, data):
             )
 
 
-def populate_signs_for_tests():
+def populate_database_for_tests(temp_db_name):
+    if temp_db_name in ["ebl", "ebldev"]:
+        raise RuntimeError(
+            f"CRITICAL SAFETY ERROR: Attempted to populate production database '{temp_db_name}'. "
+            "Tests must only use isolated test databases."
+        )
+    if not temp_db_name.startswith("ebltest_"):
+        raise RuntimeError(
+            f"CRITICAL SAFETY ERROR: Test database name '{temp_db_name}' does not start with 'ebltest_'. "
+            "All test databases must follow the naming convention 'ebltest_*'."
+        )
     client = MongoClient(os.environ["MONGODB_URI"])
-    db_name = os.environ.get("MONGODB_DB")
-    database = client.get_database(db_name) if db_name else client.get_database()
+    database = client.get_database(temp_db_name)
 
     _populate_collection(database, "signs", load_test_signs())
     _populate_collection(database, "words", load_test_words())
