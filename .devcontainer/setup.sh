@@ -18,22 +18,34 @@ else
     echo "MongoDB already installed, skipping..."
 fi
 
-echo "Installing go-task..."
-# Install go-task
-sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+echo "Verifying go-task installation..."
+# go-task is installed via devcontainer feature
+if ! command -v task &> /dev/null; then
+    echo "❌ go-task not found! This should be installed via devcontainer feature."
+    exit 1
+fi
+task --version
 
 echo "Installing Rust (required for libcst/pyre-check)..."
 # Install Rust compiler (needed for libcst which is required by pyre-check)
 if ! command -v rustc &> /dev/null; then
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source $HOME/.cargo/env
+    # Add Rust to PATH for current session
+    export PATH="$HOME/.cargo/bin:$PATH"
+    # Add Rust to PATH permanently
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
+    rustc --version
 else
     echo "Rust already installed, skipping..."
 fi
 
-echo "Installing poetry..."
-# Install poetry
-pip install --user --upgrade pip poetry
+echo "Verifying poetry installation..."
+# Poetry is installed via devcontainer feature
+if ! command -v poetry &> /dev/null; then
+    echo "❌ Poetry not found! This should be installed via devcontainer feature."
+    exit 1
+fi
+poetry --version
 
 # Create MongoDB data directory
 mkdir -p /workspaces/data
@@ -47,15 +59,32 @@ else
     echo ".env file already exists"
 fi
 
-# Set environment variables
-echo 'export NODE_OPTIONS=--experimental-worker' >> ~/.bashrc
-echo 'export PYMONGOIM__MONGO_VERSION=4.4' >> ~/.bashrc
-echo 'export PYMONGOIM__OPERATING_SYSTEM=ubuntu' >> ~/.bashrc
-
 echo "Installing Python dependencies..."
-# Source cargo env for Rust (needed for libcst build)
-[ -f "$HOME/.cargo/env" ] && source "$HOME/.cargo/env"
-# Install Python dependencies
-poetry install --no-root --with dev
+# Ensure Rust is in PATH (needed for libcst build)
+export PATH="$HOME/.cargo/bin:$PATH"
 
+# Install Python dependencies (this may take several minutes)
+if ! poetry install --no-root --with dev; then
+    echo "❌ Poetry install failed!"
+    echo "This usually means a dependency failed to build."
+    echo "Check the output above for errors."
+    exit 1
+fi
+
+# Verify critical tools are installed
+echo ""
+echo "Verifying installation..."
+if poetry run pytest --version > /dev/null 2>&1; then
+    echo "✅ pytest: $(poetry run pytest --version)"
+else
+    echo "⚠️  pytest not found in virtualenv - dev dependencies may not have installed"
+fi
+
+if poetry run ruff --version > /dev/null 2>&1; then
+    echo "✅ ruff: $(poetry run ruff --version)"
+else
+    echo "⚠️  ruff not found in virtualenv"
+fi
+
+echo ""
 echo "✅ Development environment setup complete!"
