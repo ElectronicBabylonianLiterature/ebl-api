@@ -8,7 +8,7 @@ encoding. The grammar definitions below use [EBNF](https://en.wikipedia.org/wiki
 The EBNF grammar below is an idealized representation of the eBL-ATF as it does
 not deal with ambiguities and implementation details necessary to create the
 domain model in practice. A fully functional grammar is defined in
-[ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/transliteration/domain/ebl_atf.lark).
+[ebl-atf.lark](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/ebl/transliteration/domain/atf_parsers/lark_parser/ebl_atf.lark).
 The file uses the EBNF variant of the [Lark parsing library](https://github.com/lark-parser/lark).
 See [Grammar Reference](https://lark-parser.readthedocs.io/en/latest/grammar/)
 and [Lark Cheat Sheet](https://lark-parser.readthedocs.io/en/latest/lark_cheatsheet.pdf).
@@ -51,7 +51,8 @@ markup-part = emphasis
             | emesal
             | markup-text
             | bibliography;
-emphasis = '@i{', markup-text, '}';
+markup_token_part: "@" MARKUP_TOKEN "{" note_text "}"
+MARKUP_TOKEN: "i" | "sup" | "sub" | "b"
 akkadian = '@akk{', non-normalized-text, '}'; (* Default language is %akk *)
 sumerian = '@sux{', non-normalized-text, '}'; (* Default language is %sux *)
 emesal = '@es{', non-normalized-text, '}'; (* Default language is %es *)

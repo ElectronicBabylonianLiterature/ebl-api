@@ -501,7 +501,7 @@ Importing and conversion of external .atf files which are encoded according to t
 To run use:
 <!-- usage -->
 ```sh-session
-poetry run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARY -l LOGDIR [-a] [-s]
+poetry run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARIES_DIRECTORY -l LOGDIR [-a] [-s]
 
 ```
 <!-- usagestop -->
@@ -510,24 +510,23 @@ poetry run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g 
 * `-h` shows help message and exits the script.
 * `-i` INPUT, `--input` INPUT : Path of the input directory (`required`).
 * `-l` LOGDIR, `--logdir` LOGDIR : Path of the log files directory (`required`).
-* `-g` GLOSSARY, `--glossary` GLOSSARY : Path to the glossary file (`required`).
+* `-g` GLODIR, `--glodir` GLODIR : Path to the glossaries (`.glo` files) directory (`required`).
 * `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported fragements. If not specified a name needs to be entered manually for every fragment (`optional`).
-* `-s` STYLE, `--style` STYLE : Specify import style by entering one of the following: (`Oracc ATF`|`Oracc C-ATF`|`CDLI`). If omitted defaulting to Oracc ATF (`optional`).
 
-* The importer always tries to import all .atf files from one given input `-i` folder. To every imported folder a glossary file must be specified via `-g`. The import style can be set via the `-s` option, which is not mandatory. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment.
+* The importer always tries to import all `.atf` files from one given input `-i` folder. To every imported folder a path to a folder with glossary file(s) (`.glo`) must be specified via `-g`. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment.
 
 Example calls:
 
 ```sh-session
-poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "atf_importer"
-poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_cdli_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "CDLI"
-poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/input_c_atf/" -l "ebl/atf_importer/logs/" -g  "ebl/atf_importer/glossary/akk-x-stdbab.glo" -a "test" -s "Oracc C-ATF"
+poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/data/input/" -l "ebl/atf_importer/data/logs/" -g  "ebl/atf_importer/data/glossary" -a "atf_importer"
+poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/data/input_cdli_atf/" -l "ebl/atf_importer/data/logs/" -g  "ebl/atf_importer/data/glossary" -a "test"
+poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/data/input_c_atf/" -l "ebl/atf_importer/data/logs/" -g  "ebl/atf_importer/data/glossary" -a "test"
 ```
 
 #### Troubleshooting
 
-If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparseable_lines_[fragment_file].txt`, `not_imported.txt`) and see which lines could not be parsed.
-If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `not_lemmatized.txt`.
+If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparsable_lines_[fragment_file].txt`, `not_imported_files.txt`) and see which lines could not be parsed.
+If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `lemmatization_log.txt`.
 
 ## Acknowledgements
 

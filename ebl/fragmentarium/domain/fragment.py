@@ -26,8 +26,8 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 from ebl.transliteration.domain.word_tokens import AbstractWord
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
-from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
-from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
+from ebl.transliteration.domain.atf_parsers.lark_parser import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
 from ebl.fragmentarium.domain.date import Date
 from ebl.fragmentarium.domain.colophon import Colophon
 from ebl.fragmentarium.domain.fragment_external_numbers import (

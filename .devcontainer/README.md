@@ -27,6 +27,16 @@ The project requires environment variables to be configured in a `.env` file at 
    - Sentry DSN
    - AI API endpoint
 
+### How Environment Variables are Loaded
+
+Environment variables from `.env` are automatically loaded into the container via the `runArgs: ["--env-file", ".env"]` configuration in `devcontainer.json`. This makes them available to all processes, including:
+- Shell sessions
+- `poetry run` commands
+- `task` commands
+- Any other processes running in the container
+
+No manual steps are required - everything works automatically after container rebuild.
+
 ### Security
 
 - ✅ `.env` is in `.gitignore` and will never be committed
@@ -35,13 +45,14 @@ The project requires environment variables to be configured in a `.env` file at 
 
 ## What Gets Installed
 
-The `setup.sh` script installs:
+### Via Dev Container Features
+1. **Poetry** - Python dependency management (installed via `ghcr.io/devcontainers-contrib/features/poetry:2`)
+2. **go-task** - Task runner (installed via `ghcr.io/devcontainers-contrib/features/go-task:1`)
 
+### Via setup.sh Script
 1. **MongoDB 4.4** - Database server
-2. **go-task** - Task runner
-3. **Rust** - Required for building libcst (pyre-check dependency)
-4. **Poetry** - Python dependency management
-5. **Python dependencies** - All project dependencies via `poetry install --no-root --with dev`
+2. **Rust** - Required for building libcst (pyre-check dependency)
+3. **Python dependencies** - All project dependencies via `poetry install --no-root --with dev`
 
 ## MongoDB
 

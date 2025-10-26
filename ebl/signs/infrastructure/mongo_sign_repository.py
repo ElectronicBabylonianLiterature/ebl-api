@@ -16,9 +16,8 @@ from ebl.transliteration.domain.sign import (
     Fossey,
     SortKeys,
 )
-
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 COLLECTION = "signs"
 

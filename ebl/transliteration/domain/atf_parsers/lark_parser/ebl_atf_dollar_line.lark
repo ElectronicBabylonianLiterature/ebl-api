@@ -1,12 +1,15 @@
-%import .ebl_atf_common (DIGIT, INT, LCASE_LETTER)
+%import common.DIGIT -> DIGIT
+%import common.INT -> INT
+%import common.LCASE_LETTER -> LCASE_LETTER
 %import .ebl_atf_common (free_text)
-%import .ebl_atf_common (object, OBJECT, generic_object, fragment)
-%import .ebl_atf_common (surface, SURFACE, generic_surface, face, edge)
+%import .ebl_atf_common (object, fragment)
+%import .ebl_atf_common (surface, edge)
 %import .ebl_atf_common (seal)
+%import .legacy_atf (legacy_single_ruling, legacy_broken_state)
 
-?dollar_line: "$" " "* value
+dollar_line: "$" " "* value
 ?value: strict
-      | "(" " "* strict " "* ")"
+      | "("+ " "* strict " "* ")"+
       | loose
 ?strict: state | ruling | image | seal
 loose: "(" free_text ")"
@@ -16,6 +19,7 @@ state: QUALIFICATION [" " extent] [" " scope] [" " STATE] [" " DOLLAR_STATUS]
      | scope [" " STATE] [" " DOLLAR_STATUS] -> state_scope
      | STATE [" " DOLLAR_STATUS] -> state_state
      | DOLLAR_STATUS -> state_status
+     | legacy_broken_state
 
 QUALIFICATION : "at least" | "at most" | "about"
 
@@ -32,7 +36,8 @@ STATE: "blank" | "broken" | "effaced" | "illegible" | "missing" | "traces"
 
 DOLLAR_STATUS: "!?" | "*" | "?" | "!" | "°"
 
-ruling : RULING_NUMBER " ruling" [" "? DOLLAR_STATUS]
+ruling: RULING_NUMBER " ruling" [" "? (DOLLAR_STATUS)] | legacy_single_ruling
+
 RULING_NUMBER : "single" | "double" | "triple"
 
 

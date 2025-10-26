@@ -22,7 +22,7 @@ from ebl.transliteration.application.line_number_schemas import OldLineNumberSch
 from ebl.transliteration.application.one_of_line_schema import OneOfLineSchema
 from ebl.transliteration.application.token_schemas import OneOfTokenSchema
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
-from ebl.transliteration.domain.lark_parser import (
+from ebl.transliteration.domain.atf_parsers.lark_parser import (
     TransliterationError,
     parse_atf_lark,
     parse_line_number,
@@ -32,12 +32,12 @@ from ebl.transliteration.domain.lark_parser import (
     parse_translation_line,
 )
 from ebl.markup.domain.converters import markup_from_string
-from ebl.transliteration.domain.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.note_line import NoteLine
 from ebl.transliteration.domain.parallel_line import ParallelLine
-from ebl.transliteration.domain.reconstructed_text_parser import (
+from ebl.transliteration.domain.atf_parsers.reconstructed_text_parser import (
     parse_reconstructed_line,
 )
 from ebl.transliteration.domain.text_line import TextLine

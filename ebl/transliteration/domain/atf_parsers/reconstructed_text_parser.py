@@ -8,7 +8,7 @@ from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token
 
 RECONSTRUCTED_LINE_PARSER = Lark.open(
-    "ebl_atf.lark",
+    "lark_parser/ebl_atf.lark",
     maybe_placeholders=True,
     rel_to=__file__,
     start="ebl_atf_text_line__text",
