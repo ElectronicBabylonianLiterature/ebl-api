@@ -114,6 +114,8 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("$ rest broken", "$ rest of side broken"),
     ("$ ((rest of column broken))", "$ rest of column broken"),
     ("$ (((rest of column broken)))", "$ rest of column broken"),
+    ("$ (ca. 4 lines blank)", "$ (ca. 4 lines blank)"),
+    ("$ (((ca. 4 lines blank)))", "$ (ca. 4 lines blank)"),
     ("$ ruling", "$ single ruling"),
     ("$ ruling?", "$ single ruling?"),
     ("$ seal impression", "$ (seal impression)"),

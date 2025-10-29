@@ -839,6 +839,40 @@
     "arabicGuideWord": "إلى"
   },
   {
+    "_id": "ammatu I",
+    "lemma": [
+      "ammatu"
+    ],
+    "attested": true,
+    "legacyLemma": "ammatu(m)",
+    "homonym": "I",
+    "forms": [],
+    "meaning": "\"cubit\" (a unit of length)",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "KUŠ₃"
+        ],
+        "atf": "KUŠ₃"
+      }
+    ],
+    "derived": [],
+    "derivedFrom": null,
+    "pos": [
+      "N"
+    ],
+    "oraccWords": [
+      {
+        "lemma": "ammatu",
+        "guideWord": "unit"
+      }
+    ],
+    "guideWord": "unit",
+    "origin": "test",
+    "arabicGuideWord": ""
+  },
+  {
     "_id": "antalû I",
     "lemma": [
       "antalû"

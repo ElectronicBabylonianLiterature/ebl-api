@@ -7,7 +7,7 @@ from ebl.atf_importer.application.lemmatization import (
 from ebl.atf_importer.application.logger import Logger
 from ebl.transliteration.domain.text import TextLine
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.tokens import Token
+from ebl.transliteration.domain.tokens import Token, Tabulation
 from ebl.transliteration.domain.enclosure_tokens import Removal
 from ebl.transliteration.domain.sign_tokens import Reading, Logogram
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
@@ -40,9 +40,7 @@ class LemmaLineHandler:
             self._log_lemmatization_length_error(
                 transliteration_line, lemmatization_line, filename
             )
-            return self.input_lemmatization_line(
-                lemmatization_line, transliteration_line, filename
-            )
+            return self.input_lemmatization_line(transliteration_line, filename)
         ebl_lemmatization = tuple(
             [token.lemmatization_token for token in oracc_lemmatization]
         )
@@ -50,7 +48,6 @@ class LemmaLineHandler:
 
     def input_lemmatization_line(
         self,
-        lemmatization_line: Dict[str, Any],
         transliteration_line: TextLine,
         filename: str,
     ) -> TextLine:
@@ -118,7 +115,7 @@ class LemmaLineHandler:
                 {
                     "value": token.value,
                     "skip": not self.is_token_lemmatizable(token, index, removals_map),
-                    "adjust_index": self.is_adjust_index(token, index, removals_map),
+                    "adjust_index": self.is_adjust_index(index, removals_map),
                 }
             )
         return transliteration_tokens
@@ -130,9 +127,7 @@ class LemmaLineHandler:
             return False
         return True
 
-    def is_adjust_index(
-        self, token: Token, index: int, removals_map: dict[int, bool]
-    ) -> bool:
+    def is_adjust_index(self, index: int, removals_map: dict[int, bool]) -> bool:
         if removals_map[index]:
             return True
         return False
@@ -141,17 +136,18 @@ class LemmaLineHandler:
         removal_status = remove_token = False
         removals_map = {}
         for token_index, token in enumerate(transliteration_line.content):
-            parts = [
-                part
-                for part in token.parts
-                if isinstance(part, Removal)
-                or isinstance(part, Reading)
-                or isinstance(part, Logogram)
-            ]
-            remove_token, removal_status = self._is_remove_token(
-                token, parts, remove_token, removal_status
-            )
-            removals_map[token_index] = remove_token
+            if isinstance(token, Tabulation):
+                removals_map[token_index] = True
+            else:
+                parts = [
+                    part
+                    for part in token.parts
+                    if isinstance(part, (Removal, Reading, Logogram))
+                ]
+                remove_token, removal_status = self._is_remove_token(
+                    token, parts, remove_token, removal_status
+                )
+                removals_map[token_index] = remove_token
         return removals_map
 
     def _is_remove_token(
@@ -163,12 +159,17 @@ class LemmaLineHandler:
     ) -> Tuple[bool, bool]:
         for part_index, part in enumerate(parts):
             remove_token = removal_status
-            change_within_token = False
             if isinstance(part, Removal):
                 removal_status = True if str(part.side) == "Side.LEFT" else False
-                if part_index > 0 and part_index + 1 < len(token.parts):
-                    change_within_token = True
-                remove_token = False if change_within_token else True
+                has_lemmatizable_content = any(
+                    isinstance(p, (Reading, Logogram)) for p in parts
+                )
+                if not has_lemmatizable_content:
+                    remove_token = True
+                elif part_index > 0 and part_index + 1 < len(token.parts):
+                    remove_token = False
+                else:
+                    remove_token = True
         return remove_token, removal_status
 
     def _is_lemmatizaton_length_match(
