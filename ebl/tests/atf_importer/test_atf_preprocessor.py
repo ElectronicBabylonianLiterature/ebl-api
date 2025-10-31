@@ -66,13 +66,13 @@ TRANSLATION_LEGACY_D = """1. a-na
 3. {m}EN-šu-nu
 @translation labeled en project
 @(1) @sub{To}
-@(2) my @sup{father}
+@(2) @i{my}@sup{?} @sup{father}
 @(3) @Bēlšunu"""
 
 TRANSLATION_EXPECTED_D = """1. a-na
 #tr.en: @sub{To}
 2. a-bi₂-ya
-#tr.en: my @sup{father}
+#tr.en: @i{my}@sup{?} @sup{father}
 3. {m}EN-šu-nu
 #tr.en: @i{Bēlšunu}"""
 

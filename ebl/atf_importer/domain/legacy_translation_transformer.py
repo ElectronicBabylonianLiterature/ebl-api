@@ -1,5 +1,5 @@
 import re
-from typing import Optional, List, Sequence, Union, cast
+from typing import Optional, List, Sequence, Union, cast, Match
 from lark.visitors import Tree, Token, v_args
 from ebl.transliteration.domain.common_transformer import CommonTransformer
 from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
@@ -7,7 +7,11 @@ from ebl.atf_importer.domain.legacy_atf_transformers import LegacyTransformer
 
 class LegacyTranslationBlockTransformer(LegacyTransformer):
     prefix = ""
-    _markup_pattern = re.compile(r"@\?(.*?)\?@|@(sub|sup)\{(.*?)\}|@([^\s@][^\s]*)")
+    _type_pattern = re.compile(r"@(?P<type>i|sup|sub|b)\{(?P<content>[^}]*?)\}")
+    _italics_pattern = re.compile(r"@\?(?P<italics>.*?)\?@")
+    _italics_prefixed_pattern = re.compile(
+        r"@(?![?{]|i\{|b\{|sub\{|sup\{)(?P<italics>[^\s@][^\s]*)"
+    )
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -128,17 +132,30 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
         )
 
     def _split_markup_segments(self, text: str) -> List[tuple[str, str]]:
-        segments = []
+        segments: List[tuple[str, str]] = []
         last_index = 0
-        for match in self._markup_pattern.finditer(text):
-            start, end = match.span()
+        matches = self._get_matches(text)
+        if not matches:
+            return [(text, "string")]
+        for start, end, match in matches:
             if start > last_index:
                 segments.append((text[last_index:start], "string"))
-            if match.group(1) or match.group(4):
-                segments.append((match.group(1) or match.group(4), "i"))
-            elif match.group(2) and match.group(3):
-                segments.append((match.group(3), match.group(2)))
+            if match.lastgroup == "italics":
+                segments.append((match.group("italics"), "i"))
+            elif match.lastgroup in ("type", "content"):
+                segments.append((match.group("content"), match.group("type")))
             last_index = end
         if last_index < len(text):
             segments.append((text[last_index:], "string"))
         return segments
+
+    def _get_matches(self, text: str) -> Sequence[tuple[int, int, Match]]:
+        matches: List[tuple[int, int, Match]] = []
+        for pattern in (
+            self._italics_pattern,
+            self._type_pattern,
+            self._italics_prefixed_pattern,
+        ):
+            for match in pattern.finditer(text):
+                matches.append((match.start(), match.end(), match))
+        return sorted(matches, key=lambda x: x[0])
