@@ -124,7 +124,6 @@ TRANSLATION_EXPECTED_F = """@obverse
 #tr.en: Bēlšunu"""
 
 
-
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
     ("@column", "@column 1"),
