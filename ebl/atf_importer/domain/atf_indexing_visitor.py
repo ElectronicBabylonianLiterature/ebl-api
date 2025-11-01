@@ -32,6 +32,7 @@ class IndexingVisitor(Visitor):
         else:
             surface = self._tree_to_string(tree)
         self.cursor["surface"] = surface
+        self.cursor["column"] = None
         return tree
 
     def _tree_to_string(self, tree: Tree) -> str:

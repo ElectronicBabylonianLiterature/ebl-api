@@ -102,6 +102,28 @@ $ single ruling
 #tr.en: Bēlšunu
 $ rest of side broken"""
 
+TRANSLATION_LEGACY_F = """@obverse
+@column
+1. a-na
+2. a-bí-ya
+@reverse
+1. {m}EN-šu-nu
+@translation labeled en project
+@(o i 1) To
+@(o i 2) my father
+@(r 1) Bēlšunu"""
+
+TRANSLATION_EXPECTED_F = """@obverse
+@column 1
+1. a-na
+#tr.en: To
+2. a-bi₂-ya
+#tr.en: my father
+@reverse
+1. {m}EN-šu-nu
+#tr.en: Bēlšunu"""
+
+
 
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
@@ -234,6 +256,7 @@ def test_legacy_translation(database):
         TRANSLATION_LEGACY_C,
         TRANSLATION_LEGACY_D,
         TRANSLATION_LEGACY_E,
+        TRANSLATION_LEGACY_F,
     ]
     expected = [
         TRANSLATION_EXPECTED_A,
@@ -241,6 +264,7 @@ def test_legacy_translation(database):
         TRANSLATION_EXPECTED_C,
         TRANSLATION_EXPECTED_D,
         TRANSLATION_EXPECTED_E,
+        TRANSLATION_EXPECTED_F,
     ]
     for index, TRANSLATION_LEGACY in enumerate(translations):
         expected_lines = parse_atf_lark(expected[index])
