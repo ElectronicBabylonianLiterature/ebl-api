@@ -266,6 +266,7 @@ class FragmentFactory(factory.Factory):
     projects = (ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS)
     archaeology = factory.SubFactory(ArchaeologyFactory)
     colophon = factory.SubFactory(ColophonFactory)
+    ocred_signs = "ABZ10 X"
     dossiers = factory.List(
         [
             factory.SubFactory(FragmentDossierReferenceFactory)
@@ -492,6 +493,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
         "X MU TA MA UD\n"
         "ŠU/|BI×IS|"
     )
+    ocred_signs = "ABZ10 X"
     folios = Folios((Folio("WGL", "3"), Folio("ARG", "3")))
     record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
     line_to_vec = (
