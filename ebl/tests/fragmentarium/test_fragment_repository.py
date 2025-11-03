@@ -96,7 +96,7 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
         )
     ),
     signs="MI DIŠ DIŠ UD ŠU",
-    ocr_signs="",
+    ocred_signs="",
 )
 
 
