@@ -13,6 +13,7 @@ class ReferenceType(Enum):
     PHOTO = auto()
     TRANSLATION = auto()
     ARCHAEOLOGY = auto()
+    ACQUISITION = auto()
 
 
 @attr.s(auto_attribs=True, frozen=True)

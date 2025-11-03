@@ -4,7 +4,7 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 FRAGMENT = FragmentFactory.build()
 FRAGMENT_WITH_REFERENCES = FragmentFactory.build(
@@ -18,6 +18,7 @@ def test_of():
         FRAGMENT.number,
         FRAGMENT.accession,
         FRAGMENT.script,
+        FRAGMENT.acquisition,
         FRAGMENT.description,
         MATCHING_LINES,
         "",
@@ -31,6 +32,7 @@ def test_of_with_references():
         FRAGMENT_WITH_REFERENCES.number,
         FRAGMENT_WITH_REFERENCES.accession,
         FRAGMENT_WITH_REFERENCES.script,
+        FRAGMENT_WITH_REFERENCES.acquisition,
         FRAGMENT_WITH_REFERENCES.description,
         MATCHING_LINES,
         "",
@@ -66,6 +68,7 @@ def test_of_with_record():
         FRAGMENT.number,
         FRAGMENT.accession,
         FRAGMENT.script,
+        FRAGMENT.acquisition,
         FRAGMENT.description,
         MATCHING_LINES,
         "This User",

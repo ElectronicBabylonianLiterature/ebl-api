@@ -12,15 +12,19 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.common.domain.provenance import Provenance
-from ebl.corpus.domain.parser import parse_chapter, parse_paratext
+from ebl.corpus.domain.parser import (
+    parse_chapter,
+    parse_paratext,
+    parse_manuscript as _parse_manuscript,
+)
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
-from ebl.transliteration.domain.labels import parse_labels
-from ebl.transliteration.domain.lark_parser import (
+from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_note_line,
     parse_parallel_line,
     parse_text_line,
     parse_translation_line,
+    parse_labels,
 )
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
@@ -34,7 +38,7 @@ MANUSCRIPTS: Sequence[Manuscript] = (
 
 
 def parse_siglum(siglum):
-    return parse_chapter(siglum, MANUSCRIPTS, "siglum")
+    return _parse_manuscript(siglum, MANUSCRIPTS, "siglum")
 
 
 @pytest.mark.parametrize("period", [Period.NEO_ASSYRIAN])
@@ -61,7 +65,7 @@ def test_parse_siglum_standard_text(disambiquator: str) -> None:
 
 
 def parse_manuscript(atf):
-    return parse_chapter(atf, MANUSCRIPTS, "manuscript_line")
+    return _parse_manuscript(atf, MANUSCRIPTS, "manuscript_line")
 
 
 @pytest.mark.parametrize(

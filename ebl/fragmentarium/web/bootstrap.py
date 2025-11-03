@@ -7,6 +7,7 @@ from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_matcher import FragmentMatcher
 from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.web.annotations import AnnotationResource
+from ebl.fragmentarium.web.edition import EditionResource
 from ebl.fragmentarium.web.findspots import FindspotResource
 from ebl.fragmentarium.web.folio_pager import FolioPagerResource
 from ebl.fragmentarium.web.folios import FoliosResource
@@ -29,20 +30,22 @@ from ebl.fragmentarium.web.fragments import (
     make_all_fragment_signs_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
+from ebl.fragmentarium.web.lemma_annotation import (
+    LemmaAnnotationResource,
+    AutofillLemmasResource,
+)
+from ebl.fragmentarium.web.named_entities import NamedEntityResource
 from ebl.fragmentarium.web.provenances import ProvenancesResource
 from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
 from ebl.fragmentarium.web.references import ReferencesResource
 from ebl.fragmentarium.web.statistics import make_statistics_resource
-from ebl.fragmentarium.web.transliterations import TransliterationResource
-from ebl.fragmentarium.web.introductions import IntroductionResource
 from ebl.fragmentarium.web.archaeology import ArchaeologyResource
-from ebl.fragmentarium.web.notes import NotesResource
 from ebl.fragmentarium.web.fragments_afo_register import (
     AfoRegisterFragmentsQueryResource,
 )
-from ebl.corpus.web.chapters import ChaptersByManuscriptResource
+from ebl.corpus.web.chapters import ChaptersByFragmentResource
 from ebl.corpus.application.corpus import Corpus
 from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
 
@@ -109,23 +112,23 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     provenances = ProvenancesResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
-    references = ReferencesResource(updater)
-    transliteration = TransliterationResource(
-        updater, context.get_transliteration_update_factory()
+    lemma_annotation = LemmaAnnotationResource(updater)
+    lemma_autofill = AutofillLemmasResource(
+        context.fragment_repository, context.word_repository
     )
+    references = ReferencesResource(updater)
+    edition = EditionResource(updater, context.get_transliteration_update_factory())
     scopes = FragmentAuthorizedScopesResource(
         context.fragment_repository, finder, updater
     )
-    introduction = IntroductionResource(updater)
     archaeology = ArchaeologyResource(updater)
     colophon = ColophonResource(updater)
-    notes = NotesResource(updater)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
     photo = PhotoResource(finder)
     folios = FoliosResource(finder)
-    chapters = ChaptersByManuscriptResource(corpus, finder)
+    chapters = ChaptersByFragmentResource(corpus, finder)
     findspots = FindspotResource(context.findspot_repository)
 
     all_fragments = FragmentsListResource(context.fragment_repository)
@@ -133,6 +136,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     colophon_names = ColophonNamesResource(context.fragment_repository)
+    named_entities = NamedEntityResource(finder, updater)
 
     routes = [
         ("/fragments", fragment_search),
@@ -145,12 +149,12 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}", fragments),
         ("/fragments/{number}/pager", fragment_pager),
         ("/fragments/{number}/lemmatization", lemmatization),
+        ("/fragments/{number}/lemma-annotation", lemma_annotation),
+        ("/fragments/{number}/collect-lemmas", lemma_autofill),
         ("/fragments/{number}/references", references),
-        ("/fragments/{number}/transliteration", transliteration),
-        ("/fragments/{number}/introduction", introduction),
+        ("/fragments/{number}/edition", edition),
         ("/fragments/{number}/archaeology", archaeology),
         ("/fragments/{number}/colophon", colophon),
-        ("/fragments/{number}/notes", notes),
         ("/fragments/{number}/annotations", annotations),
         ("/fragments/{number}/thumbnail/{resolution}", photo),
         ("/fragments/{number}/photo", photo),
@@ -169,6 +173,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/colophon-names", colophon_names),
         ("/findspots", findspots),
         ("/fragments/{number}/scopes", scopes),
+        ("/fragments/{number}/named-entities", named_entities),
     ]
 
     for uri, resource in routes:

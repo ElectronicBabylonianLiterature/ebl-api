@@ -8,7 +8,7 @@ from ebl.transliteration.domain.side import Side
 Atf = NewType("Atf", str)
 
 
-ATF_PARSER_VERSION = "6.1.0"
+ATF_PARSER_VERSION = "6.2.0"
 DEFAULT_ATF_PARSER_VERSION = "0.1.0"
 
 
@@ -65,6 +65,7 @@ class DollarStatus(Enum):
     UNCERTAIN = "?"
     EMENDED_NOT_COLLATED = "!"
     NEEDS_COLLATION = "!?"
+    NO_LONGER_VISIBLE = "°"
 
     CORRECTION = "!"
     COLLATION = "*"
@@ -92,6 +93,7 @@ class Flag(Enum):
     UNCERTAIN = "?"
     CORRECTION = "!"
     COLLATION = "*"
+    NO_LONGER_VISIBLE = "°"
 
 
 @unique
@@ -190,6 +192,7 @@ UNCLEAR_SIGN = "x"
 UNIDENTIFIED_SIGN = "X"
 IN_WORD_NEWLINE = ";"
 TABULATION = "($___$)"
+WORD_OMITTED = "ø"
 LINE_BREAK = "|"
 EGYPTIAN_METRICAL_FEET_SEPARATOR = "•"
 
@@ -214,6 +217,7 @@ FLAGS: Mapping[str, str] = {
     "uncertainty": re.escape(Flag.UNCERTAIN.value),
     "collation": re.escape(Flag.COLLATION.value),
     "damage": re.escape(Flag.DAMAGE.value),
+    "no longer visible": re.escape(Flag.NO_LONGER_VISIBLE.value),
     "correction": re.escape(Flag.CORRECTION.value),
 }
 

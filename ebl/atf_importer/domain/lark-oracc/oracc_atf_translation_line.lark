@@ -1,7 +1,0 @@
-
-translation_line: "#tr.en: " (emphasis_part | language_part | string_part)+
-language_part: "@" LANGUAGE "{" translation_text "}"
-emphasis_part: "@i{" translation_text "}"
-string_part: translation_text
-translation_text: /[^@{}]+/
-LANGUAGE: "akk" | "sux"

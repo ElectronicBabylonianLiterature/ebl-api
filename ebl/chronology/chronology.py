@@ -6,7 +6,7 @@ from marshmallow import Schema, fields, post_load, post_dump
 
 @attr.s(auto_attribs=True, frozen=True)
 class King:
-    order_global: int
+    order_global: float
     group_with: int
     dynasty_number: str
     dynasty_name: str
@@ -28,9 +28,15 @@ class Chronology:
         except IndexError:
             return None
 
+    def find_king_by_order_global(self, order_global: float) -> Optional[King]:
+        try:
+            return [king for king in self.kings if king.order_global == order_global][0]
+        except IndexError:
+            return None
+
 
 class KingSchema(Schema):
-    order_global = fields.Integer(data_key="orderGlobal")
+    order_global = fields.Float(data_key="orderGlobal")
     group_with = fields.Integer(
         data_key="groupWith", allow_none=True, load_default=None
     )

@@ -27,6 +27,8 @@ class Period(NamedEnumWithParent):
     OLD_ELAMITE = ("Old Elamite", "OElam", None, 21)
     MIDDLE_ELAMITE = ("Middle Elamite", "MElam", None, 22)
     NEO_ELAMITE = ("Neo-Elamite", "NElam", None, 23)
+    LUWIAN = ("Luwian", "Luw", None, 24)
+    ARAMAIC = ("Aramaic", "Aram", None, 25)
 
 
 class PeriodModifier(Enum):

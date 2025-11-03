@@ -5,15 +5,16 @@ from ebl.common.domain.period import Period
 
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    ExternalNumbers,
+    Acquisition,
     Fragment,
     Genre,
     Measure,
+    Notes,
     NotLowestJoinError,
     Script,
     UncuratedReference,
-    Notes,
 )
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.tests.factories.parallel_line import ParallelCompositionFactory
@@ -32,11 +33,21 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.tests.factories.record import RecordFactory
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.markup import StringPart, EmphasisPart
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.application.signs_visitor import SignsVisitor
+
+
+@pytest.fixture
+def transliterated_fragment() -> Fragment:
+    return TransliteratedFragmentFactory.build()
+
+
+@pytest.fixture
+def fragment_with_token_ids(transliterated_fragment):
+    return transliterated_fragment.set_token_ids()
 
 
 def test_number():
@@ -50,6 +61,16 @@ def test_accession():
     assert fragment.accession == "accession-3"
 
 
+def cdli_images():
+    fragment = FragmentFactory.build(
+        cdli_images=["dl/photo/P550449.jpg", "dl/lineart/P550449_l.jpg"]
+    )
+    assert fragment.cdli_images == [
+        "dl/photo/P550449.jpg",
+        "dl/lineart/P550449_l.jpg",
+    ]
+
+
 def traditional_references():
     fragment = FragmentFactory.build(
         traditional_references=["CT 1, 12", "CT I, 12", "CT I 12"]
@@ -59,7 +80,22 @@ def traditional_references():
 
 def test_publication():
     fragment = FragmentFactory.build(publication="publication")
-    assert fragment.publication == "publication"
+    assert fragment.publication == "publication"  # Fixed typo in assertion
+
+
+def test_acquisition():
+    acquisition = Acquisition(
+        description="Clay tablet purchase", supplier="Antiquities Gallery", date=1925
+    )
+    fragment = FragmentFactory.build(acquisition=acquisition)
+
+    assert isinstance(fragment.acquisition, Acquisition)
+    assert fragment.acquisition.description == "Clay tablet purchase"
+    assert fragment.acquisition.supplier == "Antiquities Gallery"
+    assert fragment.acquisition.date == 1925
+
+    fragment = FragmentFactory.build(acquisition=None)
+    assert fragment.acquisition is None
 
 
 def test_description():
@@ -108,8 +144,7 @@ def test_notes():
     assert fragment.notes == Notes("notes", (StringPart("notes"),))
 
 
-def test_signs():
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+def test_signs(transliterated_fragment):
     assert transliterated_fragment.signs == TransliteratedFragmentFactory.signs
 
 
@@ -217,7 +252,7 @@ def test_add_transliteration(user):
     updated_fragment = fragment.update_transliteration(transliteration, user)
     expected_fragment = attr.evolve(
         fragment,
-        text=text,
+        text=text.set_token_ids(),
         record=record,
         line_to_vec=((LineToVecEncoding.START, LineToVecEncoding.TEXT_LINE),),
     )
@@ -237,7 +272,7 @@ def test_update_transliteration(user):
 
     expected_fragment = attr.evolve(
         lemmatized_fragment,
-        text=lemmatized_fragment.text.merge(text),
+        text=lemmatized_fragment.text.merge(text).set_token_ids(),
         signs=transliteration.signs,
         record=lemmatized_fragment.record.add_entry(
             lemmatized_fragment.text.atf, transliteration.text.atf, user
@@ -270,8 +305,7 @@ def test_set_notes():
     )
 
 
-def test_update_lemmatization():
-    transliterated_fragment = TransliteratedFragmentFactory.build()
+def test_update_lemmatization(transliterated_fragment):
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("nu I",))
     lemmatization = Lemmatization(tokens)
@@ -357,3 +391,69 @@ def test_get_matching_lines(string, expected, sign_repository, signs):
     query = TransliterationQuery(string=string, visitor=SignsVisitor(sign_repository))
     matching_text = transliterated_fragment.get_matching_lines(query)
     assert matching_text == parse_atf_lark(expected)
+
+
+def test_updating_fragment_sets_token_ids(transliterated_fragment, user):
+    assert {word.id_ for word in transliterated_fragment.words} == {None}
+
+    updated_fragment = transliterated_fragment.update_transliteration(
+        TransliterationUpdate(transliterated_fragment.text), user
+    )
+    words = updated_fragment.words
+
+    assert [word.id_ for word in words] == [f"Word-{i+1}" for i in range(len(words))]
+
+
+def test_deleting_words_keeps_remaining_ids(transliterated_fragment, user):
+    transliterated_fragment = transliterated_fragment.update_transliteration(
+        TransliterationUpdate(transliterated_fragment.text), user
+    )
+
+    lines = transliterated_fragment.text.atf.split("\n")
+    truncated_text = parse_atf_lark(Atf("\n".join(lines[2:])))
+    transliteration = TransliterationUpdate(truncated_text)
+
+    truncated_fragment = transliterated_fragment.update_transliteration(
+        transliteration, user
+    )
+    expected_ids = [f"Word-{i}" for i in range(11, 22)]
+    assert [word.id_ for word in truncated_fragment.words] == expected_ids
+
+
+def test_get_word_by_id(fragment_with_token_ids):
+    assert (
+        fragment_with_token_ids.get_word_by_id("Word-1")
+        == fragment_with_token_ids.words[0]
+    )
+
+
+def test_get_non_existent_word_by_id(fragment_with_token_ids):
+    invalid_id = "foobar"
+    with pytest.raises(
+        ValueError, match=f"Word with id {invalid_id} not found in fragment."
+    ):
+        fragment_with_token_ids.get_word_by_id(invalid_id)
+
+
+@pytest.fixture
+def short_fragment(transliterated_fragment, user) -> Fragment:
+    atf = "1'. [...-ku]-nu-ši [...]\n3'. [...] GI₆ ana"
+    return transliterated_fragment.update_transliteration(
+        TransliterationUpdate(parse_atf_lark(Atf(atf))), user
+    )
+
+
+def test_set_token_ids(transliterated_fragment):
+    word_ids = [word.id_ for word in transliterated_fragment.set_token_ids().words]
+    expected = [f"Word-{i + 1}" for i in range(len(word_ids))]
+    assert word_ids == expected
+
+
+def test_adding_words_sets_ids(short_fragment, user):
+    lines = short_fragment.text.atf.split("\n")
+    lines.insert(1, "2'. kur")
+    transliteration = TransliterationUpdate(parse_atf_lark(Atf("\n".join(lines))))
+    words = short_fragment.update_transliteration(transliteration, user).words
+    expected_ids = [f"Word-{i}" for i in [1, 2, 6, 3, 4, 5]]
+
+    assert [word.id_ for word in words] == expected_ids

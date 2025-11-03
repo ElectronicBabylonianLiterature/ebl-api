@@ -1,0 +1,25 @@
+%import common.LCASE_LETTER
+%import .ebl_atf_common.line_number -> line_number
+%import .ebl_atf_common.labels -> labels
+%import .ebl_atf_common.free_text -> free_text
+%import .ebl_atf_note_line (_markup)
+
+translation_line: "#tr" [ "." TRANSLATION_LANGUAGE ] [".(" translation_extent ")"] ": " _markup
+TRANSLATION_LANGUAGE: LCASE_LETTER~2
+translation_extent: [labels " "] line_number
+
+legacy_translation_line: legacy_translation_block_at_line 
+    | legacy_translation_block_label_line 
+    | legacy_translation_block_line
+    | legacy_translation_block_label_text_line
+
+legacy_translation_block_at_line.1: "@translation " TRANSLATION_LANGUAGE " labelled" 
+    | "@translation labeled " TRANSLATION_LANGUAGE " project"
+legacy_translation_block_label_text_line.1: legacy_translation_block_label_line " " legacy_translation_block_line
+legacy_translation_block_label_line.1: "@" ["label"] ["("] labels_start ["-" labels_extent] [")"]
+legacy_translation_block_line.-5: free_text
+
+labels_start: labels_and_line_number
+labels_extent: labels_and_line_number
+
+labels_and_line_number: (labels " ")? line_number

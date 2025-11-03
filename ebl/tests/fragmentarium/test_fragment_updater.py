@@ -17,18 +17,19 @@ from ebl.tests.factories.fragment import (
     DateFactory,
 )
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 
 SCHEMA = FragmentSchema()
+FROZEN_TIME = "2018-09-07 15:41:24.032"
 
 
-@freeze_time("2018-09-07 15:41:24.032")
+@freeze_time(FROZEN_TIME)
 @pytest.mark.parametrize(
     "number,ignore_lowest_join",
     [(MuseumNumber.of("X.1"), False), (MuseumNumber.of("X.3"), True)],
 )
-def test_update_transliteration(
+def test_update_edition(
     number,
     ignore_lowest_join,
     fragment_updater,
@@ -69,8 +70,11 @@ def test_update_transliteration(
         .thenReturn()
     )
 
-    result = fragment_updater.update_transliteration(
-        number, transliteration, user, ignore_lowest_join
+    result = fragment_updater.update_edition(
+        number,
+        user,
+        transliteration=transliteration,
+        ignore_lowest_join=ignore_lowest_join,
     )
 
     assert result == (injected_fragment, False)
@@ -83,10 +87,12 @@ def test_update_update_transliteration_not_found(
     (when(fragment_repository).query_by_museum_number(number).thenRaise(NotFoundError))
 
     with pytest.raises(NotFoundError):
-        fragment_updater.update_transliteration(
+        fragment_updater.update_edition(
             number,
-            TransliterationUpdate(parse_atf_lark("$ (the transliteration)")),
             user,
+            transliteration=TransliterationUpdate(
+                parse_atf_lark("$ (the transliteration)")
+            ),
         )
 
 
@@ -106,11 +112,11 @@ def test_update_update_transliteration_not_lowest_join(
     )
 
     with pytest.raises(NotLowestJoinError):
-        fragment_updater.update_transliteration(
+        fragment_updater.update_edition(
             number,
-            TransliterationUpdate(parse_atf_lark("1. x"), "X"),
             user,
-            False,
+            transliteration=TransliterationUpdate(parse_atf_lark("1. x"), "X"),
+            ignore_lowest_join=False,
         )
 
 
@@ -204,7 +210,7 @@ def test_update_dates_in_text(
     assert result == (injected_fragment, False)
 
 
-@freeze_time("2018-09-07 15:41:24.032")
+@freeze_time(FROZEN_TIME)
 def test_update_lemmatization(
     fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
 ):
@@ -313,7 +319,7 @@ def test_update_introduction(
         "introduction", updated_fragment
     ).thenReturn()
 
-    result = fragment_updater.update_introduction(number, introduction, user)
+    result = fragment_updater.update_edition(number, user, introduction=introduction)
     assert result == (updated_fragment, False)
 
 
@@ -333,5 +339,74 @@ def test_update_notes(
     ).thenReturn()
     when(fragment_repository).update_field("notes", updated_fragment).thenReturn()
 
-    result = fragment_updater.update_notes(number, notes, user)
+    result = fragment_updater.update_edition(number, user, notes=notes)
     assert result == (updated_fragment, False)
+
+
+@freeze_time(FROZEN_TIME)
+def test_update_lemma_annotation(
+    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+):
+    transliterated_fragment = TransliteratedFragmentFactory.build()
+    number = transliterated_fragment.number
+
+    annotation = {1: {3: ["aklu I"]}}
+    lemmatized_fragment = transliterated_fragment.update_lemma_annotation(annotation)
+
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(transliterated_fragment)
+    )
+    injected_fragment = lemmatized_fragment.set_text(
+        parallel_line_injector.inject_transliteration(lemmatized_fragment.text)
+    )
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field(
+        "lemmatization", lemmatized_fragment
+    ).thenReturn()
+
+    result = fragment_updater.update_lemma_annotation(number, annotation, user)
+    assert result == (injected_fragment, False)
+
+
+@freeze_time(FROZEN_TIME)
+def test_update_named_entities(
+    fragment_updater,
+    named_entity_spans,
+    user,
+    fragment_repository,
+    parallel_line_injector,
+    changelog,
+    when,
+):
+    transliterated_fragment: Fragment = TransliteratedFragmentFactory.build()
+    number = transliterated_fragment.number
+
+    annotated_fragment = transliterated_fragment.set_named_entities(named_entity_spans)
+
+    (
+        when(fragment_repository)
+        .query_by_museum_number(number)
+        .thenReturn(transliterated_fragment)
+    )
+    injected_fragment = annotated_fragment.set_text(
+        parallel_line_injector.inject_transliteration(annotated_fragment.text)
+    )
+    when(changelog).create(
+        "fragments",
+        user.profile,
+        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **SCHEMA.dump(annotated_fragment)},
+    ).thenReturn()
+    when(fragment_repository).update_field(
+        "named_entities", annotated_fragment
+    ).thenReturn()
+
+    result = fragment_updater.update_named_entities(number, named_entity_spans, user)
+    assert result == (injected_fragment, False)

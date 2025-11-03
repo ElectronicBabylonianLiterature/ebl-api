@@ -1,7 +1,6 @@
 from enum import Enum
 from itertools import groupby
-from typing import Optional, Sequence, Tuple
-
+from typing import Dict, Any, List, Optional, Sequence, Tuple
 import attr
 import pydash
 from ebl.fragmentarium.domain.museum import Museum
@@ -15,19 +14,26 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
+from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntity
 from ebl.fragmentarium.domain.record import Record
+from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
 from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
+from ebl.transliteration.domain.word_tokens import AbstractWord
 from ebl.users.domain.user import User
 from marshmallow import ValidationError
-from ebl.transliteration.domain.lark_parser import PARSE_ERRORS
-from ebl.transliteration.domain.lark_parser import parse_markup_paragraphs
+from ebl.transliteration.domain.atf_parsers.lark_parser import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
 from ebl.fragmentarium.domain.date import Date
 from ebl.fragmentarium.domain.colophon import Colophon
+from ebl.fragmentarium.domain.fragment_external_numbers import (
+    FragmentExternalNumbers,
+    ExternalNumbers,
+)
 
 
 def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:
@@ -45,12 +51,28 @@ class NotLowestJoinError(ValueError):
 class UncuratedReference:
     document: str
     pages: Sequence[int] = ()
+    search_term: Optional[str] = None
 
 
 @attr.s(auto_attribs=True, frozen=True)
 class Measure:
     value: Optional[float] = None
     note: Optional[str] = None
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class Acquisition:
+    description: str = ""
+    supplier: str = ""
+    date: int = 0
+
+    @staticmethod
+    def of(source: Dict[str, Any]) -> "Acquisition":
+        return Acquisition(
+            description=source.get("description", ""),
+            supplier=source.get("supplier", ""),
+            date=source.get("date", 0),
+        )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -96,33 +118,19 @@ class Script:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class ExternalNumbers:
-    cdli_number: str = ""
-    bm_id_number: str = ""
-    archibab_number: str = ""
-    bdtns_number: str = ""
-    chicago_isac_number: str = ""
-    ur_online_number: str = ""
-    hilprecht_jena_number: str = ""
-    hilprecht_heidelberg_number: str = ""
-    metropolitan_number: str = ""
-    louvre_number: str = ""
-    alalah_hpm_number: str = ""
-    australianinstituteofarchaeology_number: str = ""
-    philadelphia_number: str = ""
-    achemenet_number: str = ""
-    nabucco_number: str = ""
-    yale_peabody_number: str = ""
-    oracc_numbers: Sequence[str] = ()
-    seal_numbers: Sequence[str] = ()
+class DossierReference:
+    dossierId: str
+    isUncertain: bool = False
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class Fragment:
+class Fragment(FragmentExternalNumbers):
     number: MuseumNumber
     accession: Optional[Accession] = None
     publication: str = ""
+    acquisition: Optional[Acquisition] = None
     description: str = ""
+    cdli_images: Sequence[str] = []
     collection: str = ""
     legacy_script: str = ""
     museum: Museum = Museum.UNKNOWN
@@ -145,11 +153,13 @@ class Fragment:
     script: Script = Script()
     date: Optional[Date] = None
     dates_in_text: Sequence[Date] = []
-    external_numbers: ExternalNumbers = ExternalNumbers()
     projects: Sequence[str] = ()
     traditional_references: Sequence[str] = []
     archaeology: Optional[Archaeology] = None
     colophon: Optional[Colophon] = None
+    external_numbers: ExternalNumbers = ExternalNumbers()
+    dossiers: Sequence[str] = []
+    named_entities: Sequence[NamedEntity] = attr.ib(default=(), converter=tuple)
 
     @property
     def is_lowest_join(self) -> bool:
@@ -200,6 +210,8 @@ class Fragment:
         record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
         text = self.text.merge(transliteration.text)
 
+        text = text.set_token_ids()
+
         return attr.evolve(
             self,
             text=text,
@@ -230,6 +242,10 @@ class Fragment:
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)
 
+    def update_lemma_annotation(self, annotation: TextLemmaAnnotation) -> "Fragment":
+        text = self.text.update_lemma_annotation(annotation)
+        return attr.evolve(self, text=text)
+
     def get_matching_lines(self, query: TransliterationQuery) -> Text:
         line_numbers = query.match(self.signs)
 
@@ -239,73 +255,30 @@ class Fragment:
         ]
         return Text(lines=tuple(pydash.flatten(match)))
 
-    def _get_external_number(self, number_type: str) -> str:
-        return getattr(self.external_numbers, f"{number_type}_number")
+    def set_named_entities(self, annotations: List[EntityAnnotationSpan]) -> "Fragment":
+        return attr.evolve(
+            self,
+            named_entities=tuple(entity.to_named_entity() for entity in annotations),
+            text=self.text.set_named_entities(annotations),
+        )
 
     @property
-    def cdli_number(self) -> str:
-        return self._get_external_number("cdli")
+    def words(self) -> List[AbstractWord]:
+        return [
+            token
+            for line in self.text.text_lines
+            for token in line.content
+            if isinstance(token, AbstractWord)
+        ]
 
-    @property
-    def bm_id_number(self) -> str:
-        return self._get_external_number("bm_id")
+    def get_word_by_id(self, word_id: str) -> AbstractWord:
+        for word in self.words:
+            if word.id_ == word_id:
+                return word
+        raise ValueError(f"Word with id {word_id} not found in fragment.")
 
-    @property
-    def archibab_number(self) -> str:
-        return self._get_external_number("archibab")
-
-    @property
-    def bdtns_number(self) -> str:
-        return self._get_external_number("bdtns")
-
-    @property
-    def chicago_isac_number(self) -> str:
-        return self._get_external_number("chicago_isac")
-
-    @property
-    def ur_online_number(self) -> str:
-        return self._get_external_number("ur_online")
-
-    @property
-    def hilprecht_jena_number(self) -> str:
-        return self._get_external_number("hilprecht_jena")
-
-    @property
-    def hilprecht_heidelberg_number(self) -> str:
-        return self._get_external_number("hilprecht_heidelberg")
-
-    @property
-    def yale_peabody_number(self) -> str:
-        return self._get_external_number("yale_peabody")
-
-    @property
-    def metropolitan_number(self) -> str:
-        return self._get_external_number("metropolitan_number")
-
-    @property
-    def louvre_number(self) -> str:
-        return self._get_external_number("louvre_number")
-
-    @property
-    def alalah_hpm_number(self) -> str:
-        return self._get_external_number("alalah_hpm_number")
-
-    @property
-    def australianinstituteofarchaeology_number(self) -> str:
-        return self._get_external_number("australianinstituteofarchaeology_number")
-
-    @property
-    def achemenet_number(self) -> str:
-        return self._get_external_number("achemenet")
-
-    @property
-    def nabucco_number(self) -> str:
-        return self._get_external_number("nabucco")
-
-    @property
-    def philadelphia_number(self) -> str:
-        return self._get_external_number("philadelphia_number")
-
-    @property
-    def seal_number(self) -> str:
-        return self._get_external_number("seal_number")
+    def set_token_ids(self) -> "Fragment":
+        return attr.evolve(
+            self,
+            text=self.text.set_token_ids(),
+        )

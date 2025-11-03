@@ -9,7 +9,7 @@ from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchem
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.date import Date, DateSchema
@@ -22,10 +22,40 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_random,
 )
 from ebl.transliteration.infrastructure.queries import query_number_is
+from ebl.common.query.query_collation import CollatedFieldQuery
 
 
 def has_none_values(dictionary: dict) -> bool:
     return not all(dictionary.values())
+
+
+def _get_colophon_names_query(name_regex: str) -> Sequence[dict]:
+    return [
+        {"$unwind": "$colophon.individuals"},
+        {
+            "$project": {
+                "names": [
+                    "$colophon.individuals.name.value",
+                    "$colophon.individuals.sonOf.value",
+                    "$colophon.individuals.grandsonOf.value",
+                    "$colophon.individuals.family.value",
+                ]
+            }
+        },
+        {"$unwind": "$names"},
+        {
+            "$match": {
+                "names": {
+                    "$regex": rf"{name_regex}",
+                    "$options": "i",
+                }
+            }
+        },
+        {"$group": {"_id": None, "unique_names": {"$addToSet": "$names"}}},
+        {"$unwind": "$unique_names"},
+        {"$sort": {"unique_names": 1}},
+        {"$project": {"_id": 0, "name": "$unique_names"}},
+    ]
 
 
 class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
@@ -162,24 +192,9 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         ]
 
     def fetch_names(self, name_query: str) -> List[str]:
-        pipeline = [
-            {"$unwind": "$colophon.individuals"},
-            {
-                "$project": {
-                    "names": [
-                        "$colophon.individuals.name.value",
-                        "$colophon.individuals.sonOf.value",
-                        "$colophon.individuals.grandsonOf.value",
-                        "$colophon.individuals.family.value",
-                    ]
-                }
-            },
-            {"$unwind": "$names"},
-            {"$match": {"names": {"$regex": name_query, "$options": "i"}}},
-            {"$group": {"_id": None, "unique_names": {"$addToSet": "$names"}}},
-            {"$unwind": "$unique_names"},
-            {"$sort": {"unique_names": 1}},
-            {"$project": {"_id": 0, "name": "$unique_names"}},
-        ]
+        if len(name_query) < 3:
+            return []
+        name_regex = CollatedFieldQuery(name_query, "names", "colophons").value
+        pipeline = _get_colophon_names_query(name_regex)
         cursor = self._fragments.aggregate(pipeline)
         return [data["name"] for data in cursor if data["name"]]

@@ -14,15 +14,19 @@ from ebl.transliteration.domain.at_line import SurfaceAtLine
 from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
 from ebl.transliteration.domain.labels import SurfaceLabel
 from ebl.transliteration.domain.language import Language
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
-from ebl.transliteration.domain.line import ControlLine, EmptyLine, Line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.line import ControlLine, Line
 from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 DEFAULT_LANGUAGE = Language.AKKADIAN
-PARSER_PATH = "../../transliteration/domain/ebl_atf.lark"
-LINE_PARSER_PATH = "../../transliteration/domain/ebl_atf_text_line.lark"
+MANUSCRIPT_LINE_PARSER_PATH = (
+    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf_manuscript_line.lark"
+)
+PARALLEL_LINE_PARSER_PATH = (
+    "../../transliteration/domain/atf_parsers/lark_parser/ebl_atf_parallel_line.lark"
+)
 
 
 @pytest.mark.parametrize(
@@ -37,14 +41,6 @@ def test_parser_version(parser, version):
     [
         ("", []),
         ("\n", []),
-        (
-            "#first\n\n#second",
-            [ControlLine("#", "first"), EmptyLine(), ControlLine("#", "second")],
-        ),
-        (
-            "#first\n \n#second",
-            [ControlLine("#", "first"), EmptyLine(), ControlLine("#", "second")],
-        ),
         ("&K11111", [ControlLine("&", "K11111")]),
         ("@reverse", [SurfaceAtLine(SurfaceLabel([], atf.Surface.REVERSE))]),
         (
@@ -59,7 +55,6 @@ def test_parser_version(parser, version):
                 )
             ],
         ),
-        ("#some notes", [ControlLine("#", "some notes")]),
         ("=: continuation", [ControlLine("=:", " continuation")]),
     ],
 )
@@ -74,6 +69,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
         ("1. x\nthis is not valid", [2]),
         ("this is not valid\nthis is not valid", [1, 2]),
         ("$ ", [1]),
+        ("#first\n\n#second", [1, 3]),
     ],
 )
 def test_invalid_atf(atf, line_numbers) -> None:
@@ -92,7 +88,7 @@ def test_duplicate_labels(atf):
 @pytest.fixture
 def siglum_parser():
     return Lark.open(
-        PARSER_PATH,
+        MANUSCRIPT_LINE_PARSER_PATH,
         rel_to=__file__,
         maybe_placeholders=True,
         start="siglum",
@@ -101,7 +97,7 @@ def siglum_parser():
 
 def test_stages_periods_equality(siglum_parser):
     text_line_parser = Lark.open(
-        LINE_PARSER_PATH,
+        PARALLEL_LINE_PARSER_PATH,
         rel_to=__file__,
         maybe_placeholders=True,
         start="chapter_name",

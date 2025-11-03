@@ -1,13 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Iterable, Sequence, Tuple, Union
-
 import attr
 import pydash
 import roman
-from lark.lark import Lark
-from lark.lexer import Token
-from lark.visitors import Transformer, v_args
-
 from ebl.transliteration.domain.atf import Object, Status, Surface
 
 
@@ -163,48 +158,3 @@ class ObjectLabel(Label):
     def to_atf(self) -> str:
         text = f" {self.text}" if self.text else ""
         return f"{self._atf}{self.status_string}{text}"
-
-
-LINE_NUMBER_EXPRESSION = r"[^\s]+"
-
-
-class LabelTransformer(Transformer):
-    def labels(self, children) -> Sequence[Label]:
-        return tuple(children)
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__column_label(
-        self, numeral: Token, status: Sequence[Status]
-    ) -> ColumnLabel:
-        return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__surface_label(
-        self, surface: Token, status: Sequence[Status]
-    ) -> SurfaceLabel:
-        return SurfaceLabel.from_label(
-            Surface.from_label(surface),  # pyre-ignore[6]
-            status,
-        )
-
-    @v_args(inline=True)
-    def ebl_atf_text_line__object_label(
-        self, object_: Token, status: Sequence[Status]
-    ) -> ObjectLabel:
-        return ObjectLabel.from_object(Object(object_), status)
-
-    def ebl_atf_text_line__status(self, children: Iterable[Token]) -> Sequence[Status]:
-        return tuple(Status(token) for token in children)
-
-
-LABEL_PARSER = Lark.open(
-    "ebl_atf.lark", maybe_placeholders=True, rel_to=__file__, start="labels"
-)
-
-
-def parse_labels(label: str) -> Sequence[Label]:
-    if label:
-        tree = LABEL_PARSER.parse(label)
-        return LabelTransformer().transform(tree)
-    else:
-        return ()

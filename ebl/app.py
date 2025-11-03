@@ -15,7 +15,6 @@ from ebl.bibliography.web.bootstrap import create_bibliography_routes
 from ebl.cache.application.cache import create_cache
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
-from ebl.cdli.web.bootstrap import create_cdli_routes
 from ebl.changelog import Changelog
 from ebl.context import Context
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
@@ -43,12 +42,16 @@ from ebl.lemmatization.web.bootstrap import create_lemmatization_routes
 from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.afo_register.web.bootstrap import create_afo_register_routes
+from ebl.dossiers.web.bootstrap import create_dossiers_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
 )
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MongoAfoRegisterRepository,
+)
+from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
+    MongoDossiersRepository,
 )
 from ebl.users.domain.user import Guest
 from ebl.users.infrastructure.auth0 import Auth0Backend
@@ -99,6 +102,7 @@ def create_context():
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
         afo_register_repository=MongoAfoRegisterRepository(database),
+        dossiers_repository=MongoDossiersRepository(database),
         findspot_repository=MongoFindspotRepository(database),
         custom_cache=custom_cache,
         cache=cache,
@@ -120,7 +124,6 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
 
     create_signs_routes(api, context)
     create_bibliography_routes(api, context)
-    create_cdli_routes(api)
     create_corpus_routes(api, context)
     create_dictionary_routes(api, context)
     create_files_route(api, context)
@@ -128,6 +131,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_lemmatization_routes(api, context)
     create_markup_routes(api, context)
     create_afo_register_routes(api, context)
+    create_dossiers_routes(api, context)
 
     return api
 

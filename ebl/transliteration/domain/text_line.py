@@ -1,9 +1,19 @@
 from itertools import zip_longest
-from typing import Callable, Iterable, Optional, Sequence, Type, TypeVar, Union, cast
+from typing import (
+    Callable,
+    Iterable,
+    Optional,
+    Sequence,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+)
 
 import attr
 import pydash
 
+from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -17,7 +27,7 @@ from ebl.transliteration.domain.language_visitor import set_language
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
-from ebl.transliteration.domain.word_tokens import Word
+from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 
 L = TypeVar("L", "TextLine", "Line")
 T = TypeVar("T")
@@ -94,6 +104,19 @@ class TextLine(Line):
 
         return self._update_tokens(lemmatization, updater, LemmatizationError)
 
+    def update_lemma_annotation(
+        self, line_annotation: LineLemmaAnnotation
+    ) -> "TextLine":
+        content = tuple(
+            (
+                attr.evolve(token, unique_lemma=line_annotation[index])
+                if index in line_annotation
+                else token
+            )
+            for index, token in enumerate(self.content)
+        )
+        return attr.evolve(self, content=content)
+
     def update_alignment(self, alignment: Sequence[AlignmentToken]) -> "TextLine":
         def updater(token, alignment_token):
             return alignment_token.apply(token)
@@ -129,3 +152,14 @@ class TextLine(Line):
     def accept(self, visitor: TokenVisitor) -> None:
         for token in self.content:
             token.accept(visitor)
+
+    def set_named_entities(self, token_entity_map: dict) -> "TextLine":
+        updated_content = tuple(
+            (
+                attr.evolve(token, named_entities=token_entity_map.get(token.id_, []))
+                if isinstance(token, AbstractWord)
+                else token
+            )
+            for token in self.content
+        )
+        return attr.evolve(self, content=updated_content)

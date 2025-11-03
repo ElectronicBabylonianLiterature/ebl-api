@@ -1,9 +1,10 @@
 import datetime
 import io
 import json
+import os
 import uuid
 from pathlib import Path
-from typing import Any, Mapping, Sequence, Union
+from typing import Any, List, Mapping, Sequence, Union
 
 import attr
 import pydash
@@ -16,7 +17,7 @@ from falcon_auth import NoneAuthBackend
 from falcon_caching import Cache
 from marshmallow import EXCLUDE
 from pymongo.database import Database
-from pymongo_inmemory import MongoClient
+from pymongo import MongoClient
 
 import ebl.app
 import ebl.context
@@ -41,6 +42,7 @@ from ebl.fragmentarium.application.fragmentarium import Fragmentarium
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
 )
+from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntityType
 from ebl.fragmentarium.infrastructure.cropped_sign_images_repository import (
     MongoCroppedSignImagesRepository,
 )
@@ -84,6 +86,9 @@ from ebl.transliteration.infrastructure.mongo_parallel_repository import (
 from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     MongoAfoRegisterRepository,
 )
+from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
+    MongoDossiersRepository,
+)
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -92,7 +97,12 @@ from ebl.tests.factories.archaeology import FindspotFactory, FINDSPOT_COUNT
 
 @pytest.fixture(scope="session")
 def mongo_client() -> MongoClient:
-    return MongoClient()
+    if os.getenv("CI") == "true":
+        return MongoClient(os.environ["MONGODB_URI"])
+    else:
+        from pymongo_inmemory import MongoClient as InMemoryMongoClient
+
+        return InMemoryMongoClient()
 
 
 @pytest.fixture
@@ -435,6 +445,11 @@ def user() -> User:
 
 
 @pytest.fixture
+def dossiers_repository(database):
+    return MongoDossiersRepository(database)
+
+
+@pytest.fixture
 def context(
     ebl_ai_client,
     cropped_sign_images_repository,
@@ -451,6 +466,7 @@ def context(
     annotations_repository,
     lemma_repository,
     afo_register_repository,
+    dossiers_repository,
     findspot_repository,
     user,
     parallel_line_injector,
@@ -473,6 +489,7 @@ def context(
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
         afo_register_repository=afo_register_repository,
+        dossiers_repository=dossiers_repository,
         findspot_repository=findspot_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),
@@ -659,3 +676,16 @@ def create_mongo_bibliography_entry():
         )
 
     return _from_bibliography_entry
+
+
+@pytest.fixture
+def named_entity_spans() -> List[EntityAnnotationSpan]:
+    return [
+        EntityAnnotationSpan("Entity-1", NamedEntityType.PERSONAL_NAME, ["Word-2"]),
+        EntityAnnotationSpan(
+            "Entity-2", NamedEntityType.BUILDING_NAME, ["Word-2", "Word-3"]
+        ),
+        EntityAnnotationSpan(
+            "Entity-3", NamedEntityType.YEAR_NAME, ["Word-7", "Word-14"]
+        ),
+    ]

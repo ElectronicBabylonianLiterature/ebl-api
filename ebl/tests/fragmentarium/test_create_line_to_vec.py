@@ -6,7 +6,7 @@ from ebl.fragmentarium.application.matches.create_line_to_vec import (
 )
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 
 @pytest.mark.parametrize(

@@ -2,7 +2,7 @@ import pytest
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import ScopeContainer, StateDollarLine
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
@@ -126,6 +126,16 @@ from ebl.transliteration.domain.transliteration_error import TransliterationErro
                 ScopeContainer(atf.Object.TABLET),
                 atf.State.BLANK,
                 atf.DollarStatus.EMENDED_NOT_COLLATED,
+            ),
+        ),
+        (
+            "several tablet blank °",
+            StateDollarLine(
+                None,
+                atf.Extent.SEVERAL,
+                ScopeContainer(atf.Object.TABLET),
+                atf.State.BLANK,
+                atf.DollarStatus.NO_LONGER_VISIBLE,
             ),
         ),
         (

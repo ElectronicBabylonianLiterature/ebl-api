@@ -2,7 +2,7 @@ import pytest
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.text import Text
 
 
@@ -23,6 +23,7 @@ from ebl.transliteration.domain.text import Text
         ("?", atf.DollarStatus.UNCERTAIN),
         ("!", atf.DollarStatus.EMENDED_NOT_COLLATED),
         ("!?", atf.DollarStatus.NEEDS_COLLATION),
+        ("°", atf.DollarStatus.NO_LONGER_VISIBLE),
     ],
 )
 @pytest.mark.parametrize("status_space", [True, False])

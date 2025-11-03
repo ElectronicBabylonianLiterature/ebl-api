@@ -8,6 +8,7 @@ from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImage,
 )
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 COLLECTION = "cropped_sign_images"
 
@@ -15,6 +16,7 @@ COLLECTION = "cropped_sign_images"
 class MongoCroppedSignImagesRepository(CroppedSignImagesRepository):
     def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
+        self._database = database
 
     def create_many(self, cropped_sign_images: Sequence[CroppedSignImage]) -> None:
         schema = CroppedSignImageSchema(many=True)
@@ -23,4 +25,9 @@ class MongoCroppedSignImagesRepository(CroppedSignImagesRepository):
     def query_by_id(self, image_id: str) -> CroppedSignImage:
         return CroppedSignImageSchema().load(
             self._collection.find_one({"_id": image_id})
+        )
+
+    def delete_by_fragment_number(self, fragment_number: MuseumNumber) -> None:
+        self._database[COLLECTION].delete_many(
+            {"fragment_number": str(fragment_number)}
         )

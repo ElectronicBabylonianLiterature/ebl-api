@@ -29,9 +29,15 @@ def update_fragment(
 ) -> None:
     transliteration = transliteration_factory.create(fragment.text.atf)
     user = ApiUser("update_fragments.py")
-    updater.update_transliteration(fragment.number, transliteration, user, True)
-    updater.update_introduction(fragment.number, fragment.introduction.text, user)
-    updater.update_notes(fragment.number, fragment.notes.text, user)
+
+    updater.update_edition(
+        fragment.number,
+        user,
+        fragment.introduction.text,
+        fragment.notes.text,
+        transliteration,
+        True,
+    )
 
 
 def find_transliterated(fragment_repository: FragmentRepository) -> List[MuseumNumber]:

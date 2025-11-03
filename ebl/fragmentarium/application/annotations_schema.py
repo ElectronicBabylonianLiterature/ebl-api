@@ -1,7 +1,7 @@
 from marshmallow import Schema, fields, post_load, post_dump
 import pydash
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
-from ebl.fragmentarium.application.fragment_schema import ScriptSchema
+from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.fragmentarium.domain.annotation import (
     Geometry,
     AnnotationData,

@@ -44,6 +44,29 @@ def test_find_king_by_name():
     assert chronology.find_king_by_name("King C") is None
 
 
+def test_find_king_by_order_global():
+    king_a = King(
+        1, 2, "dyn1", "Dynasty 1", "1", "King A", "1999", "10 years", "Some notes", None
+    )
+    king_b = King(
+        2.1,
+        2,
+        "dyn2",
+        "Dynasty 2",
+        "2",
+        "King B",
+        "2000",
+        "5 years",
+        "Other notes",
+        True,
+    )
+    chronology = Chronology([king_a, king_b])
+
+    assert chronology.find_king_by_order_global(1) == king_a
+    assert chronology.find_king_by_order_global(2.1) == king_b
+    assert chronology.find_king_by_order_global(3) is None
+
+
 def test_king_schema_deserialization():
     king_data = {
         "orderGlobal": 1,
@@ -73,8 +96,6 @@ def test_chronology_schema_deserialization():
     with open("ebl/chronology/brinkmanKings.json", "r", encoding="utf-8") as file:
         data = json.load(file)
         chronology = ChronologySchema().load({"kings": data})
-    assert len(chronology.kings) == 365
-    assert chronology.kings[0].name == "Sargon"
-    assert chronology.kings[363].name == "Sin-šar-iškun"
-    assert chronology.kings[50].order_global == 50
-    assert chronology.kings[363].order_global == 363
+    assert len(chronology.kings) == 496
+    assert chronology.kings[0].name == "Ur-Nanše"
+    assert chronology.kings[-2].name == "Sin-šar-iškun"

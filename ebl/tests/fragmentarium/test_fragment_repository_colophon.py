@@ -8,7 +8,7 @@ from ebl.tests.factories.colophon import (
 
 
 def test_fetch_names(fragment_repository):
-    names = ["barmarum", "garmarum", "harmarum", "zarmarum"]
+    names = ["barmarum", "garmarum", "harmarum", "zarmārum"]
     [name, second_name, third_name, fourth_name] = [
         NameAttestationFactory.build(value=name) for name in names
     ]
@@ -32,3 +32,4 @@ def test_fetch_names(fragment_repository):
     fragment_repository.create(fragment)
     assert names == fragment_repository.fetch_names("mar")
     assert ["pallaqum"] == fragment_repository.fetch_names("pal")
+    assert [] == fragment_repository.fetch_names("ma")

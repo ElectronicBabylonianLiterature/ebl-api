@@ -1,4 +1,5 @@
 import attr
+from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
 import pydash
 import pytest
 from ebl.common.application.schemas import AccessionSchema
@@ -8,7 +9,7 @@ from ebl.fragmentarium.application.archaeology_schemas import ArchaeologySchema
 from ebl.fragmentarium.application.fragment_info_schema import ApiFragmentInfoSchema
 from ebl.fragmentarium.application.genre_schema import GenreSchema
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
@@ -17,13 +18,15 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
 )
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.fragmentarium.application.fragment_schema import (
+from ebl.fragmentarium.application.fragment_fields_schemas import (
+    AcquisitionSchema,
+    DossierReferenceSchema,
     ExternalNumbersSchema,
-    JoinsSchema,
     IntroductionSchema,
     NotesSchema,
     ScriptSchema,
 )
+from ebl.fragmentarium.application.joins_schema import JoinsSchema
 from ebl.fragmentarium.application.colophon_schema import ColophonSchema
 from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.joins import Joins
@@ -48,6 +51,8 @@ def expected_dto(lemmatized_fragment, has_photo):
             "museumNumber": attr.asdict(lemmatized_fragment.number),
             "accession": AccessionSchema().dump(lemmatized_fragment.accession),
             "publication": lemmatized_fragment.publication,
+            "cdliImages": lemmatized_fragment.cdli_images,
+            "acquisition": AcquisitionSchema().dump(lemmatized_fragment.acquisition),
             "description": lemmatized_fragment.description,
             "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
             "length": attr.asdict(
@@ -113,11 +118,22 @@ def expected_dto(lemmatized_fragment, has_photo):
             "externalNumbers": ExternalNumbersSchema().dump(
                 lemmatized_fragment.external_numbers
             ),
-            "projects": [ResearchProject["CAIC"].abbreviation],
+            "projects": [
+                ResearchProject["CAIC"].abbreviation,
+                ResearchProject["ALU_GENEVA"].abbreviation,
+                ResearchProject["AMPS"].abbreviation,
+            ],
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
             "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),
             "authorizedScopes": [],
             "ocredSigns": "ABZ10 X",
+            "dossiers": [
+                DossierReferenceSchema().dump(dossier)
+                for dossier in lemmatized_fragment.dossiers
+            ],
+            "namedEntities": NamedEntitySchema().dump(
+                lemmatized_fragment.named_entities, many=True
+            ),
         },
         pydash.is_none,
     )
@@ -138,6 +154,7 @@ def test_create_fragment_info_dto():
         "accession": AccessionSchema().dump(info.accession),
         "script": ScriptSchema().dump(info.script),
         "description": info.description,
+        "acquisition": AcquisitionSchema().dump(info.acquisition),
         "matchingLines": TextSchema().dump(text),
         "editor": record_entry.user if is_transliteration else "",
         "editionDate": record_entry.date if is_transliteration else "",

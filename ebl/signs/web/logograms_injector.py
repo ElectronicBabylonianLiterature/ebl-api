@@ -4,7 +4,7 @@ import re
 import attr
 
 from ebl.transliteration.application.sign_repository import SignRepository
-from ebl.transliteration.domain.lark_parser import parse_text_line
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_text_line
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.transliteration.domain.sign import Sign
 

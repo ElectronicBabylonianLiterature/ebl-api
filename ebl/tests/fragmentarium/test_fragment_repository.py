@@ -41,7 +41,7 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
     DateFactory,
 )
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -512,11 +512,13 @@ def test_statistics(database, fragment_repository):
     )
     assert fragment_repository.count_transliterated_fragments() == 2
     assert fragment_repository.count_lines() == 4
+    assert fragment_repository.count_total_fragments() == 3
 
 
 def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_transliterated_fragments() == 0
     assert fragment_repository.count_lines() == 0
+    assert fragment_repository.count_total_fragments() == 0
 
 
 def test_query_fragmentarium_number(database, fragment_repository):
@@ -1085,11 +1087,12 @@ def test_query_genres(fragment_repository, query, expected):
     [
         ("CAIC", [0]),
         ("aluGeneva", [1]),
-        (None, [0, 1]),
+        ("AMPS", [2]),
+        (None, [0, 1, 2]),
     ],
 )
 def test_query_project(fragment_repository, query, expected):
-    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA]
+    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS]
 
     fragments = [
         FragmentFactory.build(

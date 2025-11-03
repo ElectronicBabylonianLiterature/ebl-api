@@ -13,7 +13,8 @@ from ebl.transliteration.domain.text_id import TextId
 from ebl.dictionary.domain.word import WordId
 from ebl.fragmentarium.domain.folios import Folio, Folios
 from ebl.fragmentarium.domain.fragment import (
-    ExternalNumbers,
+    Acquisition,
+    DossierReference,
     Fragment,
     Genre,
     Introduction,
@@ -21,6 +22,8 @@ from ebl.fragmentarium.domain.fragment import (
     Script,
     UncuratedReference,
 )
+
+from ebl.fragmentarium.domain.fragment_external_numbers import ExternalNumbers
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncoding
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain import atf
@@ -72,6 +75,7 @@ from ebl.transliteration.domain.tokens import (
     CommentaryProtocol,
     Joiner,
     LanguageShift,
+    WordOmitted,
     Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
@@ -90,7 +94,7 @@ from ebl.fragmentarium.domain.date import (
     DateKingSchema,
     Ur3Calendar,
 )
-from ebl.chronology.chronology import chronology, King, KingSchema
+from ebl.chronology.chronology import chronology, King
 from ebl.tests.factories.colophon import ColophonFactory
 
 
@@ -150,7 +154,7 @@ class DayFactory(factory.Factory):
 def create_date_king(king: King) -> DateKing:
     return DateKingSchema().load(
         {
-            **KingSchema().dump(king),
+            "orderGlobal": king.order_global,
             "isBroken": random.choice([True, False]),
             "isUncertain": random.choice([True, False]),
         }
@@ -179,6 +183,7 @@ class ExternalNumbersFactory(factory.Factory):
     bm_id_number = factory.Sequence(lambda n: f"bmId-{n}")
     archibab_number = factory.Sequence(lambda n: f"archibab-{n}")
     bdtns_number = factory.Sequence(lambda n: f"bdtns-{n}")
+    rsti_number = factory.Sequence(lambda n: f"rsti-{n}")
     chicago_isac_number = factory.Sequence(lambda n: f"chicago-isac-number-{n}")
     ur_online_number = factory.Sequence(lambda n: f"ur-online-{n}")
     hilprecht_jena_number = factory.Sequence(lambda n: f"hilprecht-jena-{n}")
@@ -186,8 +191,12 @@ class ExternalNumbersFactory(factory.Factory):
         lambda n: f"hilprecht-heidelberg-{n}"
     )
     metropolitan_number = factory.Sequence(lambda n: f"metropolitan-number-{n}")
+    pierpont_morgan_number = factory.Sequence(lambda n: f"pierpont-morgan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
-    alalah_hpm_number = factory.Sequence(lambda n: f"alalah_hpm_number-{n}")
+    dublin_tcd_number = factory.Sequence(lambda n: f"dublin-tcd-number-{n}")
+    cambridge_maa_number = factory.Sequence(lambda n: f"cambridge-maa-number-{n}")
+    ashmolean_number = factory.Sequence(lambda n: f"ashmolean-number-{n}")
+    alalah_hpm_number = factory.Sequence(lambda n: f"alalah-hpm-number-{n}")
     australianinstituteofarchaeology_number = factory.Sequence(
         lambda n: f"australianinstituteofarchaeology-number-{n}"
     )
@@ -195,12 +204,32 @@ class ExternalNumbersFactory(factory.Factory):
     yale_peabody_number = factory.Sequence(lambda n: f"yale-peabody-number-{n}")
     achemenet_number = factory.Sequence(lambda n: f"achemenet-number-{n}")
     nabucco_number = factory.Sequence(lambda n: f"nabucco-number-{n}")
+    digitale_keilschrift_bibliothek_number = factory.Sequence(
+        lambda n: f"digitale-keilschrift-bibliothek-{n}"
+    )
     oracc_numbers = factory.List(
         [factory.Sequence(lambda n: f"oracc-number-{n}")], TupleFactory
     )
     seal_numbers = factory.List(
         [factory.Sequence(lambda n: f"seal_number-{n}")], TupleFactory
     )
+
+
+class FragmentDossierReferenceFactory(factory.Factory):
+    class Meta:
+        model = DossierReference
+
+    dossierId = factory.Faker("word")
+    isUncertain = factory.Faker("boolean")
+
+
+class AcquisitionFactory(factory.Factory):
+    class Meta:
+        model = Acquisition
+
+    description = factory.Faker("sentence")
+    supplier = factory.Faker("word")
+    date = 0
 
 
 class FragmentFactory(factory.Factory):
@@ -212,6 +241,7 @@ class FragmentFactory(factory.Factory):
     museum = factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN])
     collection = factory.Faker("word")
     publication = factory.Faker("sentence")
+    acquisition = factory.SubFactory(AcquisitionFactory)
     description = factory.Faker("text")
     legacy_script = factory.Iterator(["NA", "NB"])
     script = factory.SubFactory(ScriptFactory)
@@ -233,10 +263,17 @@ class FragmentFactory(factory.Factory):
     introduction = Introduction("text", (StringPart("text"),))
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
-    projects = (ResearchProject.CAIC,)
+    projects = (ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS)
     archaeology = factory.SubFactory(ArchaeologyFactory)
     colophon = factory.SubFactory(ColophonFactory)
     ocr_signs = "ABZ10 X"
+    dossiers = factory.List(
+        [
+            factory.SubFactory(FragmentDossierReferenceFactory)
+            for _ in range(random.randint(0, 4))
+        ]
+    )
+    named_entities = ()
 
 
 class InterestingFragmentFactory(FragmentFactory):
@@ -273,6 +310,7 @@ class TransliteratedFragmentFactory(FragmentFactory):
                         ]
                     ),
                     Column.of(),
+                    WordOmitted.of(),
                     Tabulation.of(),
                     Word.of(
                         [
@@ -490,6 +528,7 @@ class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
                         ]
                     ),
                     Column.of(),
+                    WordOmitted.of(),
                     Tabulation.of(),
                     Word.of(
                         [

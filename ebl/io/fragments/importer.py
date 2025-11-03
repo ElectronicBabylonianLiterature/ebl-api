@@ -1,3 +1,4 @@
+from itertools import count
 from typing import Optional, Sequence, List
 import argparse
 import os
@@ -9,10 +10,14 @@ import pymongo
 from ebl.common.query.util import sort_by_museum_number
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.mongo_collection import MongoCollection
+from ebl.transliteration.application.token_schemas import WORD_SCHEMAS
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.infrastructure.collections import FRAGMENTS_COLLECTION
 import csv
 import datetime
+from copy import deepcopy
+
+WORD_TYPES = set(WORD_SCHEMAS)
 
 
 def _load_json(path: str):
@@ -110,6 +115,33 @@ def update_sort_keys(fragments_collection: MongoCollection) -> None:
 
 def create_sort_index(fragments_collection: MongoCollection) -> None:
     fragments_collection.create_index([("_sortKey", pymongo.ASCENDING)])
+
+
+def set_word_ids(fragment: dict) -> dict:
+    lines = deepcopy(fragment).get("text", {}).get("lines", [])
+
+    if not lines:
+        return fragment
+
+    word_id = count(1)
+
+    def set_ids(line: dict) -> dict:
+        if line["type"] != "TextLine":
+            return line
+
+        content = []
+
+        for word in line["content"]:
+            if word.get("type") in WORD_TYPES:
+                word["id"] = f"Word-{next(word_id)}"
+            content.append(word)
+
+        return {**line, "content": content}
+
+    return {
+        **fragment,
+        "text": {**fragment["text"], "lines": [set_ids(line) for line in lines]},
+    }
 
 
 def write_to_db(
@@ -270,8 +302,7 @@ if __name__ == "__main__":
     valid_count = fragment_count - fail_count
 
     print(
-        f"Validation of {valid_count} out of {fragment_count} "
-        "document(s) successful."
+        f"Validation of {valid_count} out of {fragment_count} document(s) successful."
     )
 
     if not valid_count:
@@ -300,7 +331,7 @@ if __name__ == "__main__":
         if filename not in {file for file, _ in FAILS}
     }
     result = write_to_db(
-        list(fragments.values()),
+        [set_word_ids(fragment) for fragment in fragments.values()],
         COLLECTION,
     )
 
