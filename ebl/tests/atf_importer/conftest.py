@@ -231,5 +231,9 @@ def check_lemmatization(fragment_repository, museum_number, expected_lemmatizati
         MuseumNumber.of(museum_number)
     )
     text_lines = [line for line in fragment.text.lines if isinstance(line, TextLine)]
-    lemmatization = [word.unique_lemma for word in text_lines[0]._content]
+    lemmatization = [
+        word.unique_lemma
+        for word in text_lines[0]._content
+        if hasattr(word, "unique_lemma")
+    ]
     assert lemmatization == expected_lemmatization

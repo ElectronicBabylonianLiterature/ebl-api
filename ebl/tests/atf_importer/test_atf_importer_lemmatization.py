@@ -87,6 +87,60 @@ def test_lemmatization_with_removal(fragment_repository, tmp_path):
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_lemmatization_with_removal2(fragment_repository, tmp_path, mock_input):
+    museum_number = "X.819"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = f"&P000001 = {museum_number}\n14. 1 KUŠ₃ <<x>> MULₓ(AB₂)\n#lem: n; ammatu[unit]N; kakkabu[star]N"
+    responses = mock_input(["ammatu I", "kakkabu I", "end"])
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    logs = {
+        "lemmatization_log.txt": [
+            "Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ammatu'",
+            "Incompatible lemmatization: No eBL word found for lemma 'ammatu' and guideword 'unit'",
+            "Manual lemmatization: eBL lemma 'ammatu I' entered by user",
+            "Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kakkabu'",
+            "Incompatible lemmatization: No eBL word found for lemma 'kakkabu' and guideword 'star'",
+            "Manual lemmatization: eBL lemma 'kakkabu I' entered by user",
+        ]
+    }
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path, logs)
+    assert next(responses) == "end"
+    expected_lemmatization = [
+        (),
+        ("ammatu I",),
+        (),
+        ("kakkabu I",),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
+def test_lemmatization_with_tabulation(fragment_repository, tmp_path):
+    museum_number = "X.11"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = f"&P000001 = {museum_number}\n2. ($indented$) ina [...]\n#lem: ina[in]PRP; u"
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    expected_lemmatization = [
+        ("ina I",),
+        (),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
 def test_problematic_lemmatization(fragment_repository, tmp_path):
     museum_number = "X.111"
     fragment_repository.create(

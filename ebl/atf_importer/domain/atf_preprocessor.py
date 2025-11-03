@@ -93,10 +93,7 @@ class AtfPreprocessor:
         return atf
 
     def _handle_dollar_line(self, atf: str) -> str:
-        if atf.startswith("$ "):
-            dollar_comment = atf.split("$ ")[1]
-            return f"$ ({dollar_comment})"
-        return atf
+        return self._strip_dollar_line_excessive_parantheses(atf)
 
     def _handle_note_line(self, atf: str) -> str:
         if atf[0] == "#" and atf[1] == " " and "# note:" not in atf:
@@ -203,3 +200,15 @@ class AtfPreprocessor:
             if before
             else f"{last}{sub}{hash_mark} [{rest_clean}]"
         )
+
+    def _strip_dollar_line_excessive_parantheses(self, line: str) -> str:
+        _line = self._strip_matching_parentheses(line[1:].strip())
+        return f"$ ({_line})"
+
+    def _strip_matching_parentheses(self, string: str) -> str:
+        while True:
+            new_string = re.sub(r"^\((.*)\)$", r"\1", string)
+            if new_string == string:
+                break
+            string = new_string
+        return string
