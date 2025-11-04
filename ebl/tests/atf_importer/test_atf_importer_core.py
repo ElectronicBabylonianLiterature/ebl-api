@@ -157,7 +157,7 @@ def test_cli_method(database, fragment_repository, tmp_path):
     assert str(fragment.number) == museum_number
 
 
-def test_main_method(database, fragment_repository, tmp_path):
+def test_main_method(fragment_repository, tmp_path):
     museum_number = "X.101"
     atf = f"&P000101 = {museum_number}\n1'. GU₄ 30 ⸢12⸣ [...]"
 
