@@ -165,6 +165,10 @@ PARSE_AND_TRANSFORM_LEGACY = [
         "1. ⸢4?(BÁN)⸣",
         "1. 4?#(BAN₂#)",
     ),
+    (
+        "1. [KÁ]⸢.SIKIL.⸣LA ⸢KÁ⸣[.SIKIL.]LA",
+        "1. [KA₂].SIKIL#.LA KA₂#.[SIKIL].LA",
+    ),
     ("1. LU2~v", "1. LU₂@v"),
     ("1. u2~v", "1. u₂@v"),
     ("1. 2~v", "1. 2@v"),

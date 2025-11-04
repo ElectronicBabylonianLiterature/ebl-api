@@ -87,6 +87,7 @@ class AtfPreprocessor:
             "_move_brackets_before_subscripts",
             "_reorder_bracket_punctuation",
             "_reorder_round_bracket_punctuation",
+            "_reorder_bracket_and_joiner",
         ]
         for method_name in atf_text_line_methods:
             atf = getattr(self, method_name)(atf)
@@ -212,3 +213,19 @@ class AtfPreprocessor:
                 break
             string = new_string
         return string
+
+    def _reorder_bracket_and_joiner(self, atf_string: str) -> str:
+        atf_string = re.sub(r"(?<![.\-])\s?([.\-])\]", r"]\1", atf_string)
+        atf_string = re.sub(
+            r"(?<![.\-])\s?([.\-])(\u2e23)",
+            lambda match: match.group(2) + match.group(1),
+            atf_string,
+        )
+        atf_string = re.sub(r"\[ ?([.])(?![.\-])", r"\1[", atf_string)
+        atf_string = re.sub(
+            r"(\u2e22) ?([.])(?![.\-])",
+            lambda match: match.group(2) + match.group(1),
+            atf_string,
+        )
+        atf_string = re.sub(r"(?<!-)-\]", r"]-", atf_string)
+        return atf_string
