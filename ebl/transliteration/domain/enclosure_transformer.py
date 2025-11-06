@@ -13,11 +13,14 @@ from ebl.transliteration.domain.enclosure_tokens import (
     Removal,
 )
 from ebl.transliteration.domain.erasure_visitor import set_erasure_state
-from ebl.transliteration.domain.lark import tokens_to_value_tokens
+from ebl.transliteration.domain.atf_parsers.lark import tokens_to_value_tokens
 from ebl.transliteration.domain.tokens import ErasureState
 
 
 class EnclosureTransformer(Transformer):
+    def __init__(self):
+        super().__init__()
+
     def ebl_atf_text_line__open_accidental_omission(self, _):
         return AccidentalOmission.open()
 
@@ -71,6 +74,9 @@ class EnclosureTransformer(Transformer):
 
 
 class GlossTransformer(Transformer):
+    def __init__(self):
+        super().__init__()
+
     @v_args(inline=True)
     def ebl_atf_text_line__determinative(self, tree):
         tokens = tokens_to_value_tokens(tree.children)

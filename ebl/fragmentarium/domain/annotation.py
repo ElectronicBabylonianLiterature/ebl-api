@@ -26,6 +26,7 @@ class AnnotationValueType(Enum):
     SURFACE_AT_LINE = "SurfaceAtLine"
     RULING_DOLLAR_LINE = "RulingDollarLine"
     BLANK = "Blank"
+    OCR = "OCR"
     PREDICTED = "Predicted"
     PARTIALLY_BROKEN = "PartiallyBroken"
     DAMAGED = "Damaged"

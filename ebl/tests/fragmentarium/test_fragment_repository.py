@@ -41,7 +41,7 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
     DateFactory,
 )
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import ControlLine, EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -96,6 +96,7 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
         )
     ),
     signs="MI DIŠ DIŠ UD ŠU",
+    ocred_signs="",
 )
 
 

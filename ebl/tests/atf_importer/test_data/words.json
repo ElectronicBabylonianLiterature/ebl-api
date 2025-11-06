@@ -1,0 +1,5667 @@
+[
+  {
+    "_id": "Bel I",
+    "attested": true,
+    "forms": [],
+    "meaning": "",
+    "logograms": [],
+    "derived": [],
+    "derivedFrom": null,
+    "amplifiedMeanings": [],
+    "pos": [
+      "DN"
+    ],
+    "oraccWords": [
+      {
+        "lemma": "Bel",
+        "guideWord": "Bel"
+      },
+      {
+        "lemma": "Bēl",
+        "guideWord": "Bēl"
+      }
+    ],
+    "lemma": [
+      "Bel"
+    ],
+    "homonym": "I",
+    "legacyLemma": "Bel",
+    "guideWord": "Bel",
+    "origin": "oracc/saao",
+    "arabicGuideWord": ""
+  },
+  {
+    "_id": "Sîn I",
+    "lemma": [
+      "Sîn"
+    ],
+    "attested": true,
+    "legacyLemma": "Sîn",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "Sê'"
+        ],
+        "attested": true,
+        "notes": [
+          "NA also"
+        ]
+      },
+      {
+        "lemma": [
+          "Sî'"
+        ],
+        "attested": true,
+        "notes": [
+          "NA also"
+        ]
+      }
+    ],
+    "meaning": "\"the moon(-god)\" Bab., M/NA \\[^d^EN.ZU; (d)30\\]; \"moon\", esp. jB astr.;",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [],
+        "notes": [
+          "^d^EN.ZU"
+        ]
+      },
+      {
+        "logogram": [
+          "30",
+          "d30"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "sînu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "Su'ēn"
+          ],
+          "homonym": "I",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**Sîn**, NA also *Sê/î'* \"the moon(-god)\" Bab., M/NA \\[^d^EN.ZU; (d)30\\]; \"moon\", esp. jB astr.; \\> *sînu*; *cf.* *Su'ēn*",
+    "pos": [],
+    "guideWord": "the moon(-god)",
+    "oraccWords": [],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<sup style=\"font-style: normal;\">d</sup><i>Šiena</i>",
+        "note": "= Sin",
+        "reference": "Fales, OrAn 12, 135",
+        "AfO": "AfO 25 (1974/1977) 471",
+        "agiID": "03254"
+      },
+      {
+        "mainWord": "<sup style=\"font-style: normal;\">d</sup><i>Sîn</i>",
+        "note": "= ug. <i>jr</i>[<i>ḫ</i>]",
+        "reference": "Herdner, Ugaritica VII 2: 13",
+        "AfO": "AfO 27 (1980) 430",
+        "agiID": "04647"
+      },
+      {
+        "mainWord": "<sup style=\"font-style: normal;\">d</sup>30",
+        "note": "Schreibung mit 4 Winkelhaken, Emar",
+        "reference": "Y. Cohen, HSSt. 59, 184",
+        "AfO": "AfO 53 (2018) 753",
+        "agiID": "22729"
+      }
+    ],
+    "arabicGuideWord": "الإله سين ، (إله-) القمر"
+  },
+  {
+    "_id": "adru I",
+    "lemma": [
+      "adru"
+    ],
+    "attested": true,
+    "legacyLemma": "adru",
+    "homonym": "I",
+    "forms": [],
+    "meaning": "\"dark, gloomy\" jB of mood; NA of textile;",
+    "amplifiedMeanings": [],
+    "logograms": [],
+    "derived": [],
+    "derivedFrom": {
+      "lemma": [
+        "adāru"
+      ],
+      "homonym": "I",
+      "notes": []
+    },
+    "source": "**adru** I \"dark, gloomy\" jB of mood; NA of textile; \\< *adāru* I",
+    "pos": [],
+    "guideWord": "dark",
+    "oraccWords": [
+      {
+        "lemma": "adru",
+        "guideWord": "dark"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>adrūtu</i>",
+        "note": "in <i>adrūtu aṣû</i>, “come out obscured”",
+        "reference": "Lambert, Oracles, 96",
+        "AfO": "AfO 46/47 (1999/2000) 566",
+        "agiID": "15997"
+      }
+    ],
+    "arabicGuideWord": "ظَلام"
+  },
+  {
+    "_id": "akālu I",
+    "lemma": [
+      "akālu"
+    ],
+    "attested": true,
+    "legacyLemma": "akālu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "akālum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"to eat\"",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(*a/u*) \\[GU7\\]",
+        "vowels": [
+          {
+            "value": [
+              "a",
+              "u"
+            ],
+            "notes": []
+          }
+        ],
+        "key": "G",
+        "entries": [
+          {
+            "meaning": "of men, animals \"eat, feed (on)\"; of baby *tulâša a.* \"feed (from) her breast\"; \"bite\" o.'s lips",
+            "vowels": []
+          },
+          {
+            "meaning": "transf. of fire, god causing disease, pest, enemy \"consume, devastate\"; of pain, grief \"consume; irritate, hurt\" part of body",
+            "vowels": []
+          },
+          {
+            "meaning": "\"soak up\" liquid, \"absorb\" fat",
+            "vowels": []
+          },
+          {
+            "meaning": "\"use up, spend\" money",
+            "vowels": []
+          },
+          {
+            "meaning": "\"have usufruct of, enjoy\" field, agricultural product, share, booty",
+            "vowels": []
+          },
+          {
+            "meaning": "in idioms *cf.* *asakku* II, *ikkibu*, *karṣu*; OB math. of wall etc. \"decrease in width\"",
+            "vowels": []
+          }
+        ]
+      },
+      {
+        "meaning": "iter. of G \\[GU7.GU7\\]",
+        "vowels": [],
+        "key": "Gtn",
+        "entries": []
+      },
+      {
+        "meaning": "of lands \"ravage each other\"; of stars \"cover, absorb each other\"",
+        "vowels": [],
+        "key": "Gt",
+        "entries": []
+      },
+      {
+        "meaning": "caus. of G \\[GU7\\] \"make\" men, animals, fire \"eat, feed on, consume\" food, medication, goods, booty, lands; \"steep\" an object in liquid; OA \"satisfy\" a claimant; jB stat. \"is infected\" with a disease",
+        "vowels": [],
+        "key": "Š",
+        "entries": []
+      },
+      {
+        "meaning": "\\[GU7\\] OB math. \"multiply together\", freq. \"square\" measured lengths N pass. of G \\[GU7\\]",
+        "vowels": [],
+        "key": "Št",
+        "entries": []
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "GU7"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "GU7.GU7"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "akalu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "aklu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ākilu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ākiltu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "akkilu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "akiltu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "iklu"
+          ],
+          "homonym": "II",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ikiltu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "akussu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ukultu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "uklu"
+          ],
+          "homonym": "II",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ukullû"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "mākalu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "mākaltu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "mākālu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "tākaltu"
+          ],
+          "homonym": "I",
+          "notes": [
+            "",
+            "?"
+          ]
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "tākultu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šūkulu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šūkultu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "mušākilu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "mušākilūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "musakkiltu"
+          ],
+          "homonym": "I",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**akālu(m)** \"to eat\" **G** (*a/u*) \\[GU7\\] **1.** of men, animals \"eat, feed (on)\"; of baby *tulâša a.* \"feed (from) her breast\"; \"bite\" o.'s lips **2.** transf. of fire, god causing disease, pest, enemy \"consume, devastate\"; of pain, grief \"consume; irritate, hurt\" part of body **3.** \"soak up\" liquid, \"absorb\" fat **4.** \"use up, spend\" money **5.** \"have usufruct of, enjoy\" field, agricultural product, share, booty **6.** in idioms *cf.* *asakku* II, *ikkibu*, *karṣu*; OB math. of wall etc. \"decrease in width\" **Gtn** iter. of G \\[GU7.GU7\\] **Gt** of lands \"ravage each other\"; of stars \"cover, absorb each other\" **Š** caus. of G \\[GU7\\] \"make\" men, animals, fire \"eat, feed on, consume\" food, medication, goods, booty, lands; \"steep\" an object in liquid; OA \"satisfy\" a claimant; jB stat. \"is infected\" with a disease **Št** \\[GU7\\] OB math. \"multiply together\", freq. \"square\" measured lengths N pass. of G \\[GU7\\]; \\> *akalu*; *aklu*; *ākilu*, *ākiltum*, *akkilu*; *akiltu*; *iklu* II, *ikiltu*; *akussu*, *ukultu*, *uklu* II; *ukullû* I; *mākalum*, *mākaltu*, *mākālu*; *tākaltu*?; *tākultu*; *šūkulu*, *šūkultu*; *mušākilu*, *mušākilūtum*; *cf.* *musakkiltu*",
+    "roots": [
+      "'kl"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "eat",
+    "oraccWords": [
+      {
+        "lemma": "akālu",
+        "guideWord": "eat"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "<i>asakkam</i> <i>a.</i>, aB, Mari; vgl. he. <i>maʿal</i>",
+        "reference": "Milgrom, JAOS 96, 241f.",
+        "AfO": "AfO 25 (1974/1977) 420",
+        "agiID": "01757"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "<i>nīšam</i> <i>a.</i>, aB",
+        "reference": "deJ. Ellis, JCS 25, 147",
+        "AfO": "AfO 25 (1974/1977) 420",
+        "agiID": "01758"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "∼ “ausnützen” o. ä.",
+        "reference": "Heimpel, Or. 69, 98",
+        "AfO": "AfO 48/49 (2001/2002) 419",
+        "agiID": "17310"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "aB; “to eat (away)”, said of a river when it crumbles its bank away …, Belege",
+        "reference": "Veenhof, Festschrift Böhl 369f.",
+        "AfO": "AfO 25 (1974/1977) 420",
+        "agiID": "01756"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "Gt-Stamm",
+        "reference": "Streck, AOAT 303, 26 (26). 38 (66)",
+        "AfO": "AfO 52 (2011) 682",
+        "agiID": "19748"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "in <i>nīšam</i> <i>a.</i> u. ä.",
+        "reference": "Charpin, MARI 8, 345",
+        "AfO": "AfO 46/47 (1999/2000) 566",
+        "agiID": "16001"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "in figurativer Verwendung in altassyr. Briefen, mit Silber, Profiten und Schulden",
+        "reference": "Michel, CRAI 53/1/1, 367f.",
+        "AfO": "AfO 53 (2018) 754",
+        "agiID": "22760"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "s. a. <i>mû</i> ",
+        "reference": "",
+        "AfO": "AfO 48/49 (2001/2002) 419",
+        "agiID": "17311"
+      },
+      {
+        "mainWord": "<i>akālu</i>",
+        "note": "zu <i>šurqam a.</i>, AbB 10, 192: 23.26",
+        "reference": "Moran, JAOS 107, 134",
+        "AfO": "AfO 35 (1988) 334",
+        "agiID": "07701"
+      },
+      {
+        "mainWord": "<i>akālum</i>",
+        "note": "mit 2 Akkusativobjekten, <i>šurqam līkulanni</i>",
+        "reference": "Kraus, AbB 10, 192i) p. 175",
+        "AfO": "AfO 34 (1987) 300",
+        "agiID": "07081"
+      },
+      {
+        "mainWord": "<i>akālum</i>",
+        "note": "",
+        "reference": "Durand, ARM 26/1, 475<sup style=\"font-style: normal;\">g</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 346",
+        "agiID": "08894"
+      },
+      {
+        "mainWord": "<i>šutākulu</i>",
+        "note": "",
+        "reference": "Høyrup, Lengths …, 23f.",
+        "AfO": "AfO 52 (2011) 726",
+        "agiID": "22353"
+      },
+      {
+        "mainWord": "<i>akālum</i>",
+        "note": "in <i>asakkam akālum</i>, Redewendung in Mari nach dem Vorbild von Ešnunna",
+        "reference": "Charpin, Festschrift Attinger, 129f.",
+        "AfO": "AfO 54 (2021) 721",
+        "agiID": "24907"
+      }
+    ],
+    "arabicGuideWord": "يأكل"
+  },
+  {
+    "_id": "ana I",
+    "lemma": [
+      "ana"
+    ],
+    "attested": true,
+    "legacyLemma": "ana",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "an"
+        ],
+        "attested": true,
+        "notes": []
+      }
+    ],
+    "meaning": "(*aš-š...* etc.) \"to, for\" (freq. abbr. *an*, with assimilation of *n* to following consonant (OA often wr. *a*)) (prep., governs subst. in gen., pers. pron. in dat.) \\[from MB onwards DIŠ; O/MB occas. NAM; M/jB ŠÈ\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "",
+        "entries": [
+          {
+            "meaning": "of space etc.: move, go, come \"to, towards\", bring, send, give, speak, write \"to\", also *ana ṣēr(i)*, *ana muhhi*; sit down \"near, beside\"; lay, put, throw down \"onto\"; substitute, compensate \"for\"; weigh \"for\"; sacrifice \"to\"; wait \"for\"; look \"at\"; submit \"to\"; set \"against\"; grow angry \"at\"",
+            "vowels": []
+          },
+          {
+            "meaning": "of time: \"for\", *ad-dār* \"forever\"; \"within\"",
+            "vowels": []
+          },
+          {
+            "meaning": "of purpose, intention: \"for\" marriage, work, journey; give \"for\" o.'s life; before infin. \"(in order) to\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"for, in favour of\" s.o.",
+            "vowels": []
+          },
+          {
+            "meaning": "\"towards, against\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"in view of, in the light of\" s.th., *ana šuāti* \"thereupon\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"by order of, on behalf of\"",
+            "vowels": []
+          },
+          {
+            "meaning": "buy, sell, exchange s.th. \"(in return) for\"",
+            "vowels": []
+          },
+          {
+            "meaning": "distrib.: \"by\", *šatta ana šatti* \"year by year\", *idi ana idi* \"on all sides\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"per, for each\" NA, NB *ana ūmu* \"per diem\"",
+            "vowels": []
+          },
+          {
+            "meaning": "causal and sim.: \"about, concerning\" house, field; weep, rejoice \"over\" s.th.",
+            "vowels": []
+          },
+          {
+            "meaning": "NB comm., of noun \"(derived) from, belonging to\" vb.",
+            "vowels": []
+          },
+          {
+            "meaning": "NB *ana lā cf.* *alla*, NB *analānuššu* \"without him\"",
+            "vowels": []
+          },
+          {
+            "meaning": "NA, NB as nota accusativi (*cf.* GAG §114e)",
+            "vowels": []
+          },
+          {
+            "meaning": "modal: *ana pī* \"according to\"; OA, OB *ana gamrim*, jB, NA *ana gimirtīšu* \"completely\"; cf. *sihirtu* 3, *qātu* 11, *zīmu*; OA *ana šalšīšu* \"three times\" (Bab. *cf.* *adi* 1); NA *ana ešrāte* \"ten times\", \"by\" one-third, a quarter etc.",
+            "vowels": []
+          },
+          {
+            "meaning": "pleonastic before term.-adv.: e.g. *ana ma'diš* \"to a great degree\"",
+            "vowels": []
+          },
+          {
+            "meaning": "before prep., adv. cf. *mahru* II, *pānu* I 8 etc.",
+            "vowels": []
+          },
+          {
+            "meaning": "\"as for, with respect to\", OA, OB *ana ša* \"with respect to the fact that, with respect to that which\"; NB *cf.* *ašša*",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "DIŠ"
+        ],
+        "notes": [
+          "from MB onwards"
+        ]
+      },
+      {
+        "logogram": [
+          "NAM"
+        ],
+        "notes": [
+          "O/MB occas."
+        ]
+      },
+      {
+        "logogram": [
+          "ŠÈ"
+        ],
+        "notes": [
+          "M/jB"
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "ašša"
+          ],
+          "homonym": "I",
+          "notes": [
+            "NB"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**ana** I, *an* (*aš-š...* etc.) \"to, for\" (freq. abbr. *an*, with assimilation of *n* to following consonant (OA often wr. *a*)) (prep., governs subst. in gen., pers. pron. in dat.) \\[from MB onwards DIŠ; O/MB occas. NAM; M/jB ŠÈ\\] **1.** of space etc.: move, go, come \"to, towards\", bring, send, give, speak, write \"to\", also *ana ṣēr(i)*, *ana muhhi*; sit down \"near, beside\"; lay, put, throw down \"onto\"; substitute, compensate \"for\"; weigh \"for\"; sacrifice \"to\"; wait \"for\"; look \"at\"; submit \"to\"; set \"against\"; grow angry \"at\" **2.** of timē \"for\", *ad-dār* \"forever\"; \"within\" **3.** of purpose, intention: \"for\" marriage, work, journey; give \"for\" o.'s life; before infin. \"(in order) to\" **4.** \"for, in favour of\" s.o. **5.** \"towards, against\" **6.** \"in view of, in the light of\" s.th., *ana šuāti* \"thereupon\" **7.** \"by order of, on behalf of\" **8.** buy, sell, exchange s.th. \"(in return) for\" **9.** distrib.: \"by\", *šatta ana šatti* \"year by year\", *idi ana idi* \"on all sides\" **10.** \"per, for each\" NA, NB *ana ūmu* \"per diem\" **11.** causal and sim.: \"about, concerning\" house, field; weep, rejoice \"over\" s.th. **12.** NB comm., of noun \"(derived) from, belonging to\" vb. **13.** NB *ana lā cf.* *alla*, NB *analānuššu* \"without him\" **14.** NA, NB as nota accusativi (*cf.* GAG §114e) **15.** modal: *ana pī* \"according to\"; OA, OB *ana gamrim*, jB, NA *ana gimirtīšu* \"completely\"; *cf.* *sihirtu* 3, *qātu* 11, *zīmu*; OA *ana šalšīšu* \"three times\" (Bab. *cf.* *adi* 1); NA *ana ešrāte* \"ten times\", \"by\" one-third, a quarter etc. **16.** pleonastic before term.-adv.: e.g. *ana ma'diš* \"to a great degree\" **17.** before prep., adv. cf. *mahru* II, *pānu* I 8 etc. 18. \"as for, with respect to\", OA, OB *ana ša* \"with respect to the fact that, with respect to that which\"; NB cf. *ašša*",
+    "pos": [
+      "PRP"
+    ],
+    "guideWord": "to",
+    "oraccWords": [
+      {
+        "lemma": "ana",
+        "guideWord": "to"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "“für, zugunsten von”, aB",
+        "reference": "Kraus, RA 68, 113",
+        "AfO": "AfO 25 (1974/1977) 421",
+        "agiID": "01780"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "<i>ana-ma</i>,<i> ana ša</i>, s. Grammatik, akkadisch <i>-ma</i>",
+        "reference": "E. Cohen, ZA 90, 212",
+        "AfO": "AfO 50 (2003/2004) 608",
+        "agiID": "18501"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "aA; zu <i>a</i> auch vor vokalischem Anlaut verkürzt",
+        "reference": "Bilgiç und Günbattı, FAOS Beih. 3, 51",
+        "AfO": "AfO 44/45 (1997/1998) 678",
+        "agiID": "14250"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "als <i>nota accusativi</i>, nB",
+        "reference": "Baker, AfO Beih. 30, 91",
+        "AfO": "AfO 52 (2011) 683",
+        "agiID": "19807"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "als Akkadogramm in Verwaltungstexten aus Ugarit",
+        "reference": "Roche, Society and Administration in Ancient Ugarit, 112",
+        "AfO": "AfO 53 (2018) 754",
+        "agiID": "22799"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "als nota accusativi",
+        "reference": "W.R.Mayer, Or 78, 427",
+        "AfO": "AfO 53 (2018) 754",
+        "agiID": "22798"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "Ausfallen von <i>n</i> und <i>m</i> am Wortbeginn; Assimilation von <i>ina/ana</i> damit zu verbinden?",
+        "reference": "Kwasman, Mesopotamia 21, 211f.",
+        "AfO": "AfO 35 (1988) 335",
+        "agiID": "07715"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "Ebla",
+        "reference": "Tonietti, QS 25, 325",
+        "AfO": "AfO 52 (2011) 683",
+        "agiID": "19808"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "nota accusativi, nA",
+        "reference": "Postgate, Legal Documents 188",
+        "AfO": "AfO 25 (1974/1977) 421",
+        "agiID": "01781"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "s. <i>ina</i> ",
+        "reference": "",
+        "AfO": "AfO 38/39 (1991/1992) 347",
+        "agiID": "08919"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "s. a. <i>išû</i> ",
+        "reference": "",
+        "AfO": "AfO 50 (2003/2004) 608",
+        "agiID": "18502"
+      },
+      {
+        "mainWord": "<i>ana kūm ša</i>",
+        "note": "",
+        "reference": "Hackl, AOAT 341, 20",
+        "AfO": "AfO 53 (2018) 754",
+        "agiID": "22800"
+      },
+      {
+        "mainWord": "<i>ana lēt</i>",
+        "note": "“zu (jmd. hin)”; schon aB",
+        "reference": "Kraus, AbB 7, p. 19 ad 21, Anm. c",
+        "AfO": "AfO 26 (1978/1979) 299",
+        "agiID": "03625"
+      },
+      {
+        "mainWord": "<i>ana piqat</i>",
+        "note": "Potentialis",
+        "reference": "Ziegler, Amurru 3, 98 zu 16",
+        "AfO": "AfO 52 (2011) 683",
+        "agiID": "19815"
+      },
+      {
+        "mainWord": "<i>anaṣirma</i>",
+        "note": "zu <i>ana ṣīrumma/ana ṣīr</i>",
+        "reference": "Frankena, SLB 4, 113",
+        "AfO": "AfO 27 (1980) 409",
+        "agiID": "04012"
+      },
+      {
+        "mainWord": "<i>zâzum itti/ana</i>",
+        "note": "Konstruktion wie <i>ḫabātum itti/ana</i>",
+        "reference": "Kraus, RA 69, 38",
+        "AfO": "AfO 25 (1974/1977) 482",
+        "agiID": "03574"
+      },
+      {
+        "mainWord": "<i>ana</i>",
+        "note": "<i>ʾa₅<span style = \"font-variant: all-small-caps; font-style: normal\"></i>(<i>ni</i>)<i></span>-na</i>; Schreibung in Ebla",
+        "reference": "Tonietti, Sistema preposizionale, 51.111",
+        "AfO": "AfO 54 (2021) 721",
+        "agiID": "24921"
+      }
+    ],
+    "arabicGuideWord": "إلى"
+  },
+  {
+    "_id": "ammatu I",
+    "lemma": [
+      "ammatu"
+    ],
+    "attested": true,
+    "legacyLemma": "ammatu(m)",
+    "homonym": "I",
+    "forms": [],
+    "meaning": "\"cubit\" (a unit of length)",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "KUŠ₃"
+        ],
+        "atf": "KUŠ₃"
+      }
+    ],
+    "derived": [],
+    "derivedFrom": null,
+    "pos": [
+      "N"
+    ],
+    "oraccWords": [
+      {
+        "lemma": "ammatu",
+        "guideWord": "unit"
+      }
+    ],
+    "guideWord": "unit",
+    "origin": "test",
+    "arabicGuideWord": ""
+  },
+  {
+    "_id": "antalû I",
+    "lemma": [
+      "antalû"
+    ],
+    "attested": true,
+    "legacyLemma": "anta(l)lû(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "attalû"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "antallû"
+        ],
+        "notes": [],
+        "attested": true
+      },
+      {
+        "lemma": [
+          "antalûm"
+        ],
+        "notes": [],
+        "attested": true
+      },
+      {
+        "lemma": [
+          "antallûm"
+        ],
+        "notes": [],
+        "attested": true
+      },
+      {
+        "lemma": [
+          "attallû"
+        ],
+        "attested": true,
+        "notes": []
+      }
+    ],
+    "meaning": "\"eclipse\" Bab., NA \\[AN.GE6; AN.TA.LÙ\\] of sun, moon, planet, star; Bogh. transf. of king, jB of lands;",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "AN.GE6"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "AN.TA.LÙ"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "namtallû"
+          ],
+          "homonym": "I",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**anta(l)lû(m)**, *attalû* \"eclipse\" Bab., NA \\[AN.GE6; AN.TA.LÙ\\] of sun, moon, planet, star; Bogh. transf. of king, jB of lands; \\< Sum.; *cf.* *namtallûm*",
+    "pos": [],
+    "guideWord": "eclipse",
+    "oraccWords": [
+      {
+        "lemma": "antalû",
+        "guideWord": "eclipse"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>attalû</i>",
+        "note": "s. a. <span style = \"font-variant: all-small-caps; font-style: normal\">an.ta.lù</span> ",
+        "reference": "",
+        "AfO": "AfO 52 (2011) 685",
+        "agiID": "19937"
+      },
+      {
+        "mainWord": "<i>attalû</i>",
+        "note": "Schreibungen; mB",
+        "reference": "Rutz, JCS 58, 84f.",
+        "AfO": "AfO 52 (2011) 685",
+        "agiID": "19936"
+      }
+    ],
+    "arabicGuideWord": "كسوف"
+  },
+  {
+    "_id": "awīlu I",
+    "lemma": [
+      "awīlu"
+    ],
+    "attested": true,
+    "legacyLemma": "awīlu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "amīlu"
+        ],
+        "attested": true,
+        "notes": [
+          "later"
+        ]
+      },
+      {
+        "lemma": [
+          "amēlu"
+        ],
+        "attested": true,
+        "notes": [
+          "later"
+        ]
+      },
+      {
+        "lemma": [
+          "abīlu"
+        ],
+        "attested": true,
+        "notes": [
+          "OAkk"
+        ]
+      },
+      {
+        "lemma": [
+          "abīlum"
+        ],
+        "attested": true,
+        "notes": [
+          "OAkk"
+        ]
+      },
+      {
+        "lemma": [
+          "a'īlu"
+        ],
+        "attested": true,
+        "notes": [
+          "MA"
+        ]
+      },
+      {
+        "lemma": [
+          "awīlum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"man\" \\[LÚ; jB om., med. also NA; Bogh. om. ZA\\] \"human being\" (also coll.); MA \"husband\"; \"person, one\"; jB, Nuzi *a. ana a.* \"one another\"; O/jB *a. ... a.* \"one ... the other\"; OA, OB \"free citizen\", also *mār/mārū a.*; \"citizen\" of PlN; as term of respect, OA, NA *lā a.* \"no gentleman\"; OB *a. Ešnunna* \"man (i.e. ruler) of Ešnunna\"; Nuzi, NB also \"slave\"; *a. nāri* (an aquatic animal) jB \\[LÚ.ÍD\\];",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "LÚ"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "jB om., med. also NA"
+        ]
+      },
+      {
+        "logogram": [
+          "ZA"
+        ],
+        "notes": [
+          "Bogh. om."
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "awīliš"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "awīlūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "awīltu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "amīlānu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "Awīlatu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šaha[mēlu?]"
+          ],
+          "homonym": "I",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**awīlu(m)**, later *amī/ēlu*, OAkk *abīlum*, MA *a'īlu* \"man\" \\[LÚ; jB om., med. also NA; Bogh. om. ZA\\] \"human being\" (also coll.); MA \"husband\"; \"person, one\"; jB, Nuzi *a. ana a.* \"one another\"; O/jB *a. ... a.* \"one ... the other\"; OA, OB \"free citizen\", also *mār/mārū a.*; \"citizen\" of PlN; as term of respect, OA, NA *lā a.* \"no gentleman\"; OB *a. Ešnunna* \"man (i.e. ruler) of Ešnunna\"; Nuzi, NB also \"slave\"; *a. nāri* (an aquatic animal) jB \\[LÚ.ÍD\\]; \\> *awīliš*, *awīlūtum*, *awīltum*; *amīlānu*, *Awīlatum*; *cf.* *šahamēlu*",
+    "pos": [],
+    "guideWord": "man",
+    "oraccWords": [
+      {
+        "lemma": "awīl narkabti",
+        "guideWord": "charioteer"
+      },
+      {
+        "lemma": "awīlu",
+        "guideWord": "man"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>aʾīlu</i>",
+        "note": "mA, in den Gesetzen; freier Bürger mit allen Rechten",
+        "reference": "Saporetti, DSC 2, 10f.",
+        "AfO": "AfO 29/30 (1983/1984) 404",
+        "agiID": "05287"
+      },
+      {
+        "mainWord": "<i>amēlu</i>",
+        "note": "<i>amēl nāri</i>",
+        "reference": "Saggs, JSS 18, 272f.",
+        "AfO": "AfO Beiheft 21 (1986) 29",
+        "agiID": "00059"
+      },
+      {
+        "mainWord": "<i>amēlu</i>",
+        "note": "s. <i>ḫābilu-amēlu</i> ",
+        "reference": "",
+        "AfO": "AfO 34 (1987) 300",
+        "agiID": "07089"
+      },
+      {
+        "mainWord": "<i>amēlu</i>",
+        "note": "s. a. <i>awīlu</i> ",
+        "reference": "",
+        "AfO": "AfO Beiheft 21 (1986) 29",
+        "agiID": "00060"
+      },
+      {
+        "mainWord": "<i>amīlu</i>",
+        "note": "Bedeutung in den Amarna-Texten",
+        "reference": "Muntingh, BMECCJ 4, 175ff.",
+        "AfO": "AfO 42/43 (1995/1996) 436",
+        "agiID": "12862"
+      },
+      {
+        "mainWord": "<i>amīlu</i>",
+        "note": "in <i>a.</i> <i>ṣibūti</i> “zinspflichtig”?",
+        "reference": "Wa. Mayer, WVDOG 102, 105",
+        "AfO": "AfO 50 (2003/2004) 609",
+        "agiID": "18559"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "“Angehöriger e. Elite” (aB)",
+        "reference": "Kraus, Mensch 117ff.",
+        "AfO": "AfO 25 (1974/1977) 423",
+        "agiID": "01852"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "“respectable member of the community”; Zusammenhang mit <i>ikribū</i>, s. d.",
+        "reference": "Dercksen, Festschrift Bilgiç, 95",
+        "AfO": "AfO 48/49 (2001/2002) 420",
+        "agiID": "17379"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "<i>/muškēnu</i>",
+        "reference": "Frankena, Festschrift Böhl 156ff.",
+        "AfO": "AfO 25 (1974/1977) 423",
+        "agiID": "01853"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "<i>/muškēnu</i>",
+        "reference": "Klíma, BiOr 32, 69<sup style=\"font-style: normal;\">+32f.</sup>",
+        "AfO": "AfO 25 (1974/1977) 423",
+        "agiID": "01854"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "<i>bīt</i> <i>a.</i> s. <i>ṭupšarrūtu</i> ",
+        "reference": "",
+        "AfO": "AfO 25 (1974/1977) 423",
+        "agiID": "01855"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "<i>mār</i> <i>a.</i>; vergl. <i>māru awīlī damqūtim</i>, Mari",
+        "reference": "Rowton, Or 42, 255",
+        "AfO": "AfO 25 (1974/1977) 423",
+        "agiID": "01856"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">dumu.meš</span> <i>a.</i> “Leute von Stande”, ohne erklärenden Kontext unklar",
+        "reference": "Kraus, AbB 7, p. 153 ad 179, Anm. a",
+        "AfO": "AfO 26 (1978/1979) 299",
+        "agiID": "03643"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "Anrede im Brief",
+        "reference": "Sallaberger, CM 16, 64ff.",
+        "AfO": "AfO 48/49 (2001/2002) 420",
+        "agiID": "17380"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "in <i>lū awīlat</i>",
+        "reference": "Hoffner, Letters from the Hittite Kingdom, 79f.",
+        "AfO": "AfO 53 (2018) 755",
+        "agiID": "22877"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "in Atraḫasīs",
+        "reference": "Cazelles, RA 64, 176",
+        "AfO": "AfO Beiheft 21 (1986) 34",
+        "agiID": "00188"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "in Chagar Bazar, Bedeutung “Herrscher”",
+        "reference": "Heimpel, ZA 61, 315",
+        "AfO": "AfO Beiheft 21 (1986) 34",
+        "agiID": "00189"
+      },
+      {
+        "mainWord": "<i>awīlu</i>",
+        "note": "und <i>awīlūtum</i> in Atraḫasīs austauschbar; Bedeutung “mankind”",
+        "reference": "W. G. Lambert, Or 38, 535",
+        "AfO": "AfO Beiheft 21 (1986) 34",
+        "agiID": "00190"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "“Mann (Bürger)”: Bürger im Sinne von “freier, voll rechts(handlungs)fähiger Einwohner des (gesamten) Landes”",
+        "reference": "Petschow, ZA 76, 24<sup style=\"font-style: normal;\">+13</sup>",
+        "AfO": "AfO 35 (1988) 336",
+        "agiID": "07753"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "<i>a.</i> vs. <i>muškēnum</i>; allg.",
+        "reference": "Chavalas, Life and Culture, 162ff.",
+        "AfO": "AfO 52 (2011) 685",
+        "agiID": "19940"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "<i>awīlum emūšu</i> “sein Herr Schwiegervater”, cf. <i>maḫar awīlim</i> PN <i>a-b</i>[<i>i</i> é]ren “beim ehrenwerten `Leutevater'” 98: 7f. u. ä.",
+        "reference": "Cagni, AbB 8, 102: 13",
+        "AfO": "AfO 28 (1981/1982) 335",
+        "agiID": "04925"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "<i>lu a-wi-lá-tí</i> “sei ein freundlicher Mann”",
+        "reference": "Donbaz, KTS 2, 39: 32",
+        "AfO": "AfO 40/41 (1993/1994) 452",
+        "agiID": "10939"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "aA; auch einfach “Mann”",
+        "reference": "Ulshöfer, FAOS Beih. 4, 255",
+        "AfO": "AfO 44/45 (1997/1998) 679",
+        "agiID": "14317"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "aA; in Briefen, “(gentle)man”",
+        "reference": "Larsen, Festschrift Veenhof, 280",
+        "AfO": "AfO 50 (2003/2004) 609",
+        "agiID": "18556"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "aB; vs. <i>muškēnum</i> (“homesteader”) hinsichtlich der Art des Grundbesitzes",
+        "reference": "Buccellati, Maarav 7, 91ff.",
+        "AfO": "AfO 44/45 (1997/1998) 679",
+        "agiID": "14316"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "Abhängigkeit im Keilschriftrecht; allgemeine Klassifikation angewandt auf <i>awīlu</i>,<i> muškēnu</i> und <i>wardu</i>",
+        "reference": "Kestemont, OLA 13, 107ff.",
+        "AfO": "AfO 29/30 (1983/1984) 405",
+        "agiID": "05320"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "als Synonym von <i>šarrum</i>; s. auch Dalley, OBTR p. 33<sup style=\"font-style: normal;\">+20</sup> [cf. KH Rs. 25: 75 H.]",
+        "reference": "ARM(T) 10, p. 265 zu 73: 14; s. 98: 12",
+        "AfO": "AfO 27 (1980) 411",
+        "agiID": "04064"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "Bedeutungen",
+        "reference": "Jacobsen, Finkelstein-Gedenkschrift, 115<sup style=\"font-style: normal;\">16</sup>",
+        "AfO": "AfO 27 (1980) 411",
+        "agiID": "04065"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "beste Übersetzung “Bürger”",
+        "reference": "von Soden, BiOr 35, 207",
+        "AfO": "AfO 27 (1980) 411",
+        "agiID": "04066"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "Briefe <i>ana awīlim</i>, spätaltbabyl.; einige wohl an Utul-Ištar",
+        "reference": "Richardson, Collapse I, 161ff.",
+        "AfO": "AfO 52 (2011) 685",
+        "agiID": "19941"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "Etymologisierung",
+        "reference": "Glassner, in Benoit u. a., Histoire de fractions, 119",
+        "AfO": "AfO 50 (2003/2004) 609",
+        "agiID": "18555"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "in Grabinschriften",
+        "reference": "Lundström, WZKM 91, 249",
+        "AfO": "AfO 50 (2003/2004) 609",
+        "agiID": "18557"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "in Rechtsurkunde, aB, Susa; ermordet",
+        "reference": "De Meyer, Festschrift Veenhof, 33 zu 4",
+        "AfO": "AfO 50 (2003/2004) 609",
+        "agiID": "18558"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "s. ḪammuraBi",
+        "reference": "Yaron, Tijdschrift voor Rechtsgeschiedenis 59, 223ff.",
+        "AfO": "AfO 40/41 (1993/1994) 452",
+        "agiID": "10940"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "s. a. <i>māru</i>, in <i>māri awīlim</i> ",
+        "reference": "",
+        "AfO": "AfO 44/45 (1997/1998) 679",
+        "agiID": "14318"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "s. a. <i>muškēnum</i> ",
+        "reference": "",
+        "AfO": "AfO 35 (1988) 336",
+        "agiID": "07754"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "s. a. <i>muškēnum</i> ",
+        "reference": "",
+        "AfO": "AfO 40/41 (1993/1994) 452",
+        "agiID": "10941"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "s. a. <i>rabû</i>, in <i>rabi awīlē</i> ",
+        "reference": "",
+        "AfO": "AfO 44/45 (1997/1998) 679",
+        "agiID": "14319"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "und <i>muškēnum</i>",
+        "reference": "Adams, Festschrift Diakonoff 12f.",
+        "AfO": "AfO 29/30 (1983/1984) 405",
+        "agiID": "05318"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "",
+        "reference": "Diakonoff, Oikumene 3, 97<sup style=\"font-style: normal;\">313</sup> u. ö.",
+        "AfO": "AfO 29/30 (1983/1984) 405",
+        "agiID": "05319"
+      },
+      {
+        "mainWord": "<i>amīl nāri</i>",
+        "note": "auf einem Obeliskenfragment aus Assur",
+        "reference": "Frahm, in: Orlamünde, WVDOG 135, 61",
+        "AfO": "AfO 53 (2018) 754",
+        "agiID": "22788"
+      },
+      {
+        "mainWord": "<i>ṣibūtu</i>",
+        "note": "s. <i>awīlum</i>, in <i>amīl ṣibūti</i> ",
+        "reference": "",
+        "AfO": "AfO 50 (2003/2004) 623",
+        "agiID": "19397"
+      },
+      {
+        "mainWord": "<i>lullû-amēlu</i>",
+        "note": "s. <i>māliku-amēlu</i> ",
+        "reference": "",
+        "AfO": "AfO 35 (1988) 346",
+        "agiID": "08075"
+      },
+      {
+        "mainWord": "<i>māliku amēlu</i>",
+        "note": "",
+        "reference": "Ataç, The Mythology of Kingship, 168",
+        "AfO": "AfO 53 (2018) 770",
+        "agiID": "23626"
+      },
+      {
+        "mainWord": "<i>māliku-amēlu</i>",
+        "note": "",
+        "reference": "W.R. Mayer, Or 56, 64f.",
+        "AfO": "AfO 35 (1988) 347",
+        "agiID": "08099"
+      },
+      {
+        "mainWord": "<i>mār/mārat awīlim</i>",
+        "note": "",
+        "reference": "Yaron, LE<sup style=\"font-style: normal;\">2</sup>, 164ff.",
+        "AfO": "AfO 40/41 (1993/1994) 469",
+        "agiID": "11598"
+      },
+      {
+        "mainWord": "<i>mārat aʾīle</i>",
+        "note": "s. <i>aʾīlu</i> ",
+        "reference": "",
+        "AfO": "AfO 29/30 (1983/1984) 412",
+        "agiID": "05526"
+      },
+      {
+        "mainWord": "<i>ḫābilu-amēlu</i>",
+        "note": "und andere Zusammensetzungen mit <i>amēlu</i>",
+        "reference": "Edzard, Or 54, 49",
+        "AfO": "AfO 34 (1987) 303",
+        "agiID": "07198"
+      },
+      {
+        "mainWord": "<i>māru</i>",
+        "note": "in <i>mari awīlim</i>",
+        "reference": "Hirsch, AfO 42/43, 128f.",
+        "AfO": "AfO 44/45 (1997/1998) 689",
+        "agiID": "14944"
+      },
+      {
+        "mainWord": "<i>rabû</i>",
+        "note": "in <i>rabi awīlē</i>, aA",
+        "reference": "Donbaz, Festschrift N. Özgüç, 147",
+        "AfO": "AfO 44/45 (1997/1998) 694",
+        "agiID": "15272"
+      },
+      {
+        "mainWord": "<i>awīlum</i>",
+        "note": "Syntax in altbabyl. Briefen",
+        "reference": "Arkhipov und Loesov, RA 109, 31ff.",
+        "AfO": "AfO 54 (2021) 722",
+        "agiID": "24949"
+      }
+    ],
+    "arabicGuideWord": "رجل"
+  },
+  {
+    "_id": "ba'ālu I",
+    "lemma": [
+      "ba'ālu"
+    ],
+    "attested": true,
+    "legacyLemma": "ba'ālu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "bâlu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "ba'ālum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"to be dominant, exceptionally big, bright\" Bab., NA",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(*i/i*) \\[GUR4\\] of decree \"be valid, in force\"; of part of body \"be exceptionally big\"; of stars \"be abnormally bright\"",
+        "vowels": [
+          {
+            "value": [
+              "i",
+              "i"
+            ],
+            "notes": []
+          }
+        ],
+        "key": "G",
+        "entries": []
+      },
+      {
+        "meaning": "O/jB \"make important, exaggerate\"",
+        "vowels": [],
+        "key": "D",
+        "entries": []
+      },
+      {
+        "meaning": "OB iter. of D",
+        "vowels": [],
+        "key": "Dtn",
+        "entries": []
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "GUR4"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "ba'lu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ba'ūlu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**ba'ālu(m)**, *bâlu* \"to be dominant, exceptionally big, bright\" Bab., NA **G** (*i/i*) \\[GUR4\\] of decree \"be valid, in force\"; of part of body \"be exceptionally big\"; of stars \"be abnormally bright\" **D** O/jB \"make important, exaggerate\" **Dtn** OB iter. of D; \\> *ba'lu*, *ba'ūlu*",
+    "roots": [
+      "b'l"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "be dominant",
+    "oraccWords": [
+      {
+        "lemma": "ba'ālu",
+        "guideWord": "be(come) dominant"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>baʾālum</i>",
+        "note": "D-Stamm “abnormal groß machen”",
+        "reference": "Frankena, SLB 4, 54",
+        "AfO": "AfO 27 (1980) 411",
+        "agiID": "04068"
+      },
+      {
+        "mainWord": "<i>baʾiltu</i>",
+        "note": "< <i>baʾālu</i> “to be abnormally large”",
+        "reference": "Moren und Foster, Gedenkschrift Sachs, 281 zu I 8",
+        "AfO": "AfO 38/39 (1991/1992) 348",
+        "agiID": "08984"
+      },
+      {
+        "mainWord": "<i>baʾālu</i>",
+        "note": "astronomische Metaphorik, zu <i>bibbu</i>,<i> manzāzu</i>,<i> šarūrū maqātu</i>,<i> šarūrī našû</i>,<i> baʾālu</i>,<i> ummulu</i>,<i> adanna etēqu</i>",
+        "reference": "Cooley, Iraq 70, 179ff.",
+        "AfO": "AfO 53 (2018) 756",
+        "agiID": "22887"
+      },
+      {
+        "mainWord": "<i>baʾālu</i>",
+        "note": "Beleg, Lit.; G und D, Objekt <i>apītum</i>",
+        "reference": "van Soldt, AbB 13, p. 77, 85a)",
+        "AfO": "AfO 42/43 (1995/1996) 437",
+        "agiID": "12920"
+      },
+      {
+        "mainWord": "<i>bâlu</i>",
+        "note": "s. <i>bêlu</i> (Van der Spek) ",
+        "reference": "",
+        "AfO": "AfO 52 (2011) 686",
+        "agiID": "19964"
+      }
+    ],
+    "arabicGuideWord": "مهيمن، مميّز، كبير",
+    "supplementsAkkadianDictionaries": "**baʾālu** “to be exceptionally big, bright; to be in force, forceful”  \n**G 1.** OB *mādiš ib-il* AbB 13, 15: 11 “he was very forceful(?)”. *ibissû* … *mādiš ib-ta-il* AbB 10, 32: 36 “the loss has become very great”.  \n**2.** OB lit. *sunqum ḫušaḫḫu nebrītum u miṭītum ba-li-il*(*-ma*) *ittī nišī labiriš bašī* ZA 110, 40f. i 49 and dupl. “famine, starvation, hunger and want are mixed up with (the fate of the) people and exist for a long time”.  \n**D** **1.** OB lit. PN *ina eper* KUR *bu-lu-ul* ZA 110, 48 iii 37 “PN is mixed with the dust of the netherworld”.  \n**2.** OB “to make important, exaggerate, enlarge” (s. AHw 1546 for other D- and Dtn-stem forms): *apītam ub-ta-aḫ-i-il* AbB 13, 85: 18 “I have enlarged the fallow land”."
+  },
+  {
+    "_id": "emēdu I",
+    "lemma": [
+      "emēdu"
+    ],
+    "attested": true,
+    "legacyLemma": "emēdu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "emēdum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"to lean on; impose\"",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(OA, early OB *a/u*, later *i/i*) \\[UŠ\\]",
+        "vowels": [
+          {
+            "value": [
+              "a",
+              "u"
+            ],
+            "notes": [
+              "OA, early OB"
+            ]
+          },
+          {
+            "value": [
+              "i",
+              "i"
+            ],
+            "notes": [
+              "later"
+            ]
+          }
+        ],
+        "key": "G",
+        "entries": [
+          {
+            "meaning": "\"lean on\" (= acc.) person, thing; ext., math., stat. \"is in contact with, touches, reaches to\"; of boat \"land\", of stars \"come into contact with\"; \"rely on, take refuge with\" deity, \"in\" corner, hiding place; *šadâ(šu) e.* \"resort to mountain\" (= disappear)",
+            "vowels": []
+          },
+          {
+            "meaning": "\"impose, put s.th. on (= acc.) s.o./s.th.\"; \"install\" door, beam; \"load\" captives on boat; \"put\" yoke, load \"on\" donkey, neck; \"impose\" corvée, tribute, tax etc.; penalty, judgement, oath(- taking); illness, woe; O/MB *pūt- e.* \"give guarantee\"",
+            "vowels": []
+          }
+        ]
+      },
+      {
+        "meaning": "iter. MB \"push ever further\" into woods",
+        "vowels": [],
+        "key": "Gtn",
+        "entries": []
+      },
+      {
+        "meaning": "OAkk \"lie on each other\"",
+        "vowels": [],
+        "key": "Gt",
+        "entries": []
+      },
+      {
+        "meaning": "\"install\" beams etc.; med. \"apply\" dressing; *qāta(m) u.* \"lay hands on\", liter. and transf. of legal act; \"dock\" a ship; \"build\" quay \"onto\" bank; \"set\" fire to s.th.; \"hide (intrans.) in\" corners; stat. \"is in contact with\"; OA \"assemble, load\" goods etc.",
+        "vowels": [],
+        "key": "D",
+        "entries": []
+      },
+      {
+        "meaning": "pass. of D with *qātu*",
+        "vowels": [],
+        "key": "Dt",
+        "entries": []
+      },
+      {
+        "meaning": "caus. of G OAkk \"cause to take refuge\"; NB \"cause to impose\" tax",
+        "vowels": [],
+        "key": "Š",
+        "entries": []
+      },
+      {
+        "meaning": "\"bring\" troops etc. \"together\", \"put\" (o.'s heads) \"together\"; \"add up\" amounts; \"knit\" o.'s eyebrows; of parts of body, of liver; med. \"mix\", \"add\" ingredients \"to one another\"",
+        "vowels": [],
+        "key": "Št",
+        "entries": []
+      },
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "N",
+        "entries": [
+          {
+            "meaning": "recipr. of persons \"get together\" with (= *itti*), \"confer\"; of troops \"combine, join up\"; \"meet\" in battle; of parts of liver, stars \"converge, meet up\"; Nuzi stat. \"adjoins\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"betake o.s. to\", \"seek refuge in\"",
+            "vowels": []
+          },
+          {
+            "meaning": "pass. of G \"be propped up\"; \"be imposed\"; \"be placed next to\"",
+            "vowels": []
+          }
+        ]
+      },
+      {
+        "meaning": "?) \"continually join together\", astr. \"continually conjoin\"",
+        "vowels": [],
+        "key": "Ntn",
+        "entries": []
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "UŠ"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "emdu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ēmidu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "emmēdu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "imdu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "imittu"
+          ],
+          "homonym": "II",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "nēmedu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "nēmettu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "etmudu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "etamdu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "mummidu"
+          ],
+          "homonym": "I",
+          "notes": [
+            "",
+            "?"
+          ]
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šutēmudu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "muttetendu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "umdu"
+          ],
+          "homonym": "I",
+          "notes": [
+            "",
+            "?"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**emēdu(m)** \"to lean on; impose\" **G** (OA, early OB *a/u*, later *i/i*) \\[UŠ\\] **1.** \"lean on\" (= acc.) person, thing; ext., math., stat. \"is in contact with, touches, reaches to\"; of boat \"land\", of stars \"come into contact with\"; \"rely on, take refuge with\" deity, \"in\" corner, hiding place; *šadâ(šu) e.* \"resort to mountain\" (= disappear) **2.** \"impose, put s.th. on (= acc.) s.o./s.th.\"; \"install\" door, beam; \"load\" captives on boat; \"put\" yoke, load \"on\" donkey, neck; \"impose\" corvée, tribute, tax etc.; penalty, judgement, oath(- taking); illness, woe; O/MB *pūt- e.* \"give guarantee\" **Gtn** iter. MB \"push ever further\" into woods **Gt** OAkk \"lie on each other\" **D** \"install\" beams etc.; med. \"apply\" dressing; *qāta(m) u.* \"lay hands on\", liter. and transf. of legal act; \"dock\" a ship; \"build\" quay \"onto\" bank; \"set\" fire to s.th.; \"hide (intrans.) in\" corners; stat. \"is in contact with\"; OA \"assemble, load\" goods etc. **Dt** pass. of D with *qātu* **Š** caus. of G OAkk \"cause to take refuge\"; NB \"cause to impose\" tax **Št** \"bring\" troops etc. \"together\", \"put\" (o.'s heads) \"together\"; \"add up\" amounts; \"knit\" o.'s eyebrows; of parts of body, of liver; med. \"mix\", \"add\" ingredients \"to one another\" **N** **1.** recipr. of persons \"get together\" with (= *itti*), \"confer\"; of troops \"combine, join up\"; \"meet\" in battle; of parts of liver, stars \"converge, meet up\"; Nuzi stat. \"adjoins\" **2.** \"betake o.s. to\", \"seek refuge in\" **3.** pass. of G \"be propped up\"; \"be imposed\"; \"be placed next to\" **Ntn** (or **Nt** ?) \"continually join together\", astr. \"continually conjoin\"; \\> *emdu* I; *ēmidu*, *emmēdu*; *imdu*, *imittu* II; *nēmedu*, *nēmettu*; *etmudu*, *etamdu*; *mummidu*?; *šutēmudu*; *muttetendu*; *umdu*?",
+    "roots": [
+      "'md"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "lean on",
+    "oraccWords": [
+      {
+        "lemma": "emēdu",
+        "guideWord": "lean on"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>emēdu</i>",
+        "note": "Dt, Opferfleisch wird “vorgelegt”",
+        "reference": "Birot, Death in Mesopotamia, 142 I 12f.15",
+        "AfO": "AfO 28 (1981/1982) 337",
+        "agiID": "04953"
+      },
+      {
+        "mainWord": "<i>emēdu</i>",
+        "note": "in: <i>šadāšu e.</i>",
+        "reference": "Edzard, WeOr 11, 156<sup style=\"font-style: normal;\">4</sup>",
+        "AfO": "AfO 28 (1981/1982) 337",
+        "agiID": "04954"
+      },
+      {
+        "mainWord": "<i>emēdu</i>",
+        "note": "s. <i>igāru</i> ",
+        "reference": "",
+        "AfO": "AfO 44/45 (1997/1998) 681",
+        "agiID": "14475"
+      },
+      {
+        "mainWord": "<i>emēdu</i>(<i>m</i>)",
+        "note": "“fliehen”, auch aB?",
+        "reference": "van Soldt, AbB 12, p. 85, 112a)",
+        "AfO": "AfO 38/39 (1991/1992) 351",
+        "agiID": "09108"
+      },
+      {
+        "mainWord": "<i>emēdu</i>(<i>m</i>)",
+        "note": "D ohne direktes Objekt",
+        "reference": "Groneberg, FAOS 14/1, 48<sup style=\"font-style: normal;\">45</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 351",
+        "agiID": "09107"
+      },
+      {
+        "mainWord": "<i>emēdu</i>(<i>m</i>)",
+        "note": "s. a. <i>pūtu</i> ",
+        "reference": "",
+        "AfO": "AfO 38/39 (1991/1992) 351",
+        "agiID": "09109"
+      },
+      {
+        "mainWord": "<i>emēdu</i>(<i>m</i>)",
+        "note": "s. a. <i>qātu</i> ",
+        "reference": "",
+        "AfO": "AfO 38/39 (1991/1992) 351",
+        "agiID": "09110"
+      }
+    ],
+    "arabicGuideWord": "يعتمد، يرتكز، يستند"
+  },
+  {
+    "_id": "erēbu I",
+    "lemma": [
+      "erēbu"
+    ],
+    "attested": true,
+    "legacyLemma": "erēbu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "erēbum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"to enter\"",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(Bab. *u/u*, Ass. *a/u*; OB perf. occas. *īterib*) \\[KU4(.RA)\\]",
+        "vowels": [
+          {
+            "value": [
+              "u",
+              "u"
+            ],
+            "notes": [
+              "Bab."
+            ]
+          },
+          {
+            "value": [
+              "a",
+              "u"
+            ],
+            "notes": [
+              "Ass."
+            ]
+          },
+          {
+            "value": [],
+            "notes": [
+              "OB perf. occas. *īterib*"
+            ]
+          }
+        ],
+        "key": "G",
+        "entries": [
+          {
+            "meaning": "\"come in\" (vent.), \"go in\" to (= *ana*) house, to (meet) s.o.; \"enter\" house (to take up residence; in marriage, adoption, servitude); land, city, heaven, underworld; *e. u (w)aṣû(m)* \"go/come in and out\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"enter\" new condition, e.g. *ana wardūtim/qāt PN/ilkim/adê e.* \"go into slavery/possession of PN/state service/sworn contract\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"report for duty, present o.s.\" to, before deity, king, lawcourt",
+            "vowels": []
+          },
+          {
+            "meaning": "of food, drink, incense \"enter\" the body; of work, lament *ana libbi-/ina karši- e.*, i.e. be painful; of building, feature on liver \"encroach, overlap\"",
+            "vowels": []
+          },
+          {
+            "meaning": "of goods, money etc. \"come in, arrive\"; of water, caravan, month, season; of sun \"set\"",
+            "vowels": []
+          }
+        ]
+      },
+      {
+        "meaning": "iter. \\[KU4.KU4(.MEŠ)\\], e.g. Lamaštu *mūterribtum ša bītāti* \"who continually enters houses\"; of caravans \"arrive at different times, successively\"; \"get into\" garment \"repeatedly\"; gramm. \"occur\"",
+        "vowels": [],
+        "key": "Gtn",
+        "entries": []
+      },
+      {
+        "meaning": "O/jB \"enter permanently\"?",
+        "vowels": [],
+        "key": "Gt",
+        "entries": []
+      },
+      {
+        "meaning": "(rare) OB \"enter\" s.th. on (= *ana*) a tablet; Am.; NA stat. (pl. subj.)",
+        "vowels": [],
+        "key": "D",
+        "entries": []
+      },
+      {
+        "meaning": "caus. of G \"introduce\" into presence; \"post, station\" troops in town, land; \"take into\" temple as offering, house as present; \"bring in\" harvest, \"import\" goods; \"deliver\" letter, tablet etc.; \"send in\" news; \"consign\" stele etc. to darkness etc.; \"insert\", stat. of part of liver \"is inserted\"",
+        "vowels": [],
+        "key": "Š",
+        "entries": []
+      },
+      {
+        "meaning": "iter. of Š",
+        "vowels": [],
+        "key": "Štn",
+        "entries": []
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "KU4",
+          "KU4.RA"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "KU4.KU4",
+          "KU4.KU4.MEŠ"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "erbu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "erbu"
+          ],
+          "homonym": "II",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ēribu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ēribtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ērib",
+            "bīti"
+          ],
+          "homonym": "I",
+          "notes": [
+            "",
+            "etc."
+          ]
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "errēbu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "errebtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "errēbūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "erubbātu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "urbu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "urubātu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "nērebu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "nērebtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "nērebūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šūrubtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "mušēribtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "tērubtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**erēbu(m)** I \"to enter\" **G** (Bab. *u/u*, Ass. *a/u*; OB perf. occas. *īterib*) \\[KU4(.RA)\\] **1.** \"come in\" (vent.), \"go in\" to (= *ana*) house, to (meet) s.o.; \"enter\" house (to take up residence; in marriage, adoption, servitude); land, city, heaven, underworld; *e. u (w)aṣû(m)* \"go/come in and out\" **2.** \"enter\" new condition, e.g. *ana wardūtim/qāt PN/ilkim/adê e.* \"go into slavery/possession of PN/state service/sworn contract\" **3.** \"report for duty, present o.s.\" to, before deity, king, lawcourt **4.** of food, drink, incense \"enter\" the body; of work, lament *ana libbi-/ina karši- e.*, i.e. be painful; of building, feature on liver \"encroach, overlap\" **5.** of goods, money etc. \"come in, arrive\"; of water, caravan, month, season; of sun \"set\" **Gtn** iter. \\[KU4.KU4(.MEŠ)\\], e.g. Lamaštu *mūterribtum ša bītāti* \"who continually enters houses\"; of caravans \"arrive at different times, successively\"; \"get into\" garment \"repeatedly\"; gramm. \"occur\" **Gt** O/jB \"enter permanently\"? **D** (rare) OB \"enter\" s.th. on (= *ana*) a tablet; Am.; NA stat. (pl. subj.) **Š** caus. of G \"introduce\" into presence; \"post, station\" troops in town, land; \"take into\" temple as offering, house as present; \"bring in\" harvest, \"import\" goods; \"deliver\" letter, tablet etc.; \"send in\" news; \"consign\" stele etc. to darkness etc.; \"insert\", stat. of part of liver \"is inserted\" **Štn** iter. of Š; \\> *erbu* I.II; *ēribu*, *ēribtum*, *ērib bīti* etc.; *errēbu*, *errebtu*, *errēbūtu*; *erubbātum*; *urbu* I, *urubātu* I; *nērebu*, *nērebtu*, *nērebūtum*; *šūrubtu*, *mušēribtum*; *tērubtu*",
+    "roots": [
+      "'rb"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "enter",
+    "oraccWords": [
+      {
+        "lemma": "erbu",
+        "guideWord": "incoming"
+      },
+      {
+        "lemma": "ereb šamši",
+        "guideWord": "sunset"
+      },
+      {
+        "lemma": "erēb-āli",
+        "guideWord": "entry into the city"
+      },
+      {
+        "lemma": "erēb-šamši",
+        "guideWord": "sunset"
+      },
+      {
+        "lemma": "erēb-šamši",
+        "guideWord": "west"
+      },
+      {
+        "lemma": "erēbu",
+        "guideWord": "enter"
+      },
+      {
+        "lemma": "mušēribu",
+        "guideWord": "one who brings in"
+      },
+      {
+        "lemma": "šērubu",
+        "guideWord": "brought in"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "1. Jt., bei Prozessionen",
+        "reference": "Pongratz-Leisten, BaFo 16, 159ff.",
+        "AfO": "AfO 44/45 (1997/1998) 682",
+        "agiID": "14502"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "aB; Kausativ-Bedeutung; Belege",
+        "reference": "deJ. Ellis, JCS 26, 226, 227<sup style=\"font-style: normal;\">67</sup>",
+        "AfO": "AfO 25 (1974/1977) 432",
+        "agiID": "02052"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "Gtn, in gramm. Texten “infigieren”",
+        "reference": "Shaffer, Or 38, 436<sup style=\"font-style: normal;\">1</sup>",
+        "AfO": "AfO Beiheft 21 (1986) 47",
+        "agiID": "00406"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "Gt-Stamm",
+        "reference": "Streck, AOAT 303, 66 (164)",
+        "AfO": "AfO 52 (2011) 692",
+        "agiID": "20227"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "hurrit. p/waš",
+        "reference": "Richter, AoF 32, 27",
+        "AfO": "AfO 52 (2011) 692",
+        "agiID": "20226"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "in `kanaanäischen' Amarna-Briefen",
+        "reference": "Rainey, UF 28, 518ff.",
+        "AfO": "AfO 46/47 (1999/2000) 570",
+        "agiID": "16198"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "Š, in Heiratsurkunden; manchmal Braut Objekt",
+        "reference": "Veenhof, Festschrift Bilgiç, 376<sup style=\"font-style: normal;\">+14</sup>",
+        "AfO": "AfO 48/49 (2001/2002) 422",
+        "agiID": "17502"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "zur Ehe in Nuzi, Mitgift und Brautpreis",
+        "reference": "Grosz, Festschrift Lacheman, 161ff.",
+        "AfO": "AfO 29/30 (1983/1984) 407",
+        "agiID": "05363"
+      },
+      {
+        "mainWord": "<i>erēbu</i>",
+        "note": "zur Ehe in Nuzi, Vergleich mit dem Alten Testament",
+        "reference": "Gordon, Festschrift Lacheman, 155ff.",
+        "AfO": "AfO 29/30 (1983/1984) 407",
+        "agiID": "05362"
+      },
+      {
+        "mainWord": "<i>erēbum</i>",
+        "note": "(<i>erābum</i>) s. <i>erubbātum</i> ",
+        "reference": "",
+        "AfO": "AfO 50 (2003/2004) 612",
+        "agiID": "18685"
+      },
+      {
+        "mainWord": "<i>erēbum</i>",
+        "note": "in: <i>ana ṭuppim erēbum</i> D (TLB 4, 3: 20f.)",
+        "reference": "Frankena, SLB 4, 15",
+        "AfO": "AfO 27 (1980) 414",
+        "agiID": "04157"
+      },
+      {
+        "mainWord": "<i>erābu</i>",
+        "note": "zu Schreibungen mit bzw. ohne Determinativ é, mA",
+        "reference": "Faist und Llop, Festschrift Watson, 24",
+        "AfO": "AfO 54 (2021) 723",
+        "agiID": "25005"
+      },
+      {
+        "mainWord": "<i>erāb āli</i>",
+        "note": "Darstellungen von Triumph und Kriegsritualen auf neuassyr. R.s",
+        "reference": "May, CRAI 54, 461ff.",
+        "AfO": "AfO 54 (2021) 723",
+        "agiID": "25006"
+      }
+    ],
+    "arabicGuideWord": "يعبر، يدخل"
+  },
+  {
+    "_id": "erṣetu I",
+    "lemma": [
+      "erṣetu"
+    ],
+    "attested": true,
+    "legacyLemma": "erṣetu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "arṣatu"
+        ],
+        "attested": true,
+        "notes": [
+          "OAkk"
+        ]
+      },
+      {
+        "lemma": [
+          "arṣatum"
+        ],
+        "attested": true,
+        "notes": [
+          "OAkk"
+        ]
+      },
+      {
+        "lemma": [
+          "erṣetum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"earth, land; underworld\" OAkk, Bab., NA \\[KI (often KI*tum/ tim* etc.)\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "",
+        "entries": [
+          {
+            "meaning": "\"the earth\" (as opp. to heaven)",
+            "vowels": []
+          },
+          {
+            "meaning": "the earth beneath the surface, i.e. \"underworld\"; DN ^d^*Bēlet-e.* \"Mistress of the Underworld\"; also in PNs",
+            "vowels": []
+          },
+          {
+            "meaning": "\"ground\", soaked; ploughed; quakes; for burial",
+            "vowels": []
+          },
+          {
+            "meaning": "politically \"land, territory\", jB \"district\", NB \"city quarter\"",
+            "vowels": []
+          },
+          {
+            "meaning": "ext. (area of liver)",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [],
+        "notes": [
+          "KI (often KI*tum/ tim* etc.)"
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "urṣu"
+          ],
+          "homonym": "II",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**erṣetu(m)**, OAkk *arṣatum* \"earth, land; underworld\" OAkk, Bab., NA \\[KI (often KI*tum/ tim* etc.)\\] **1.** \"the earth\" (as opp. to heaven) **2.** the earth beneath the surface, i.e. \"underworld\"; DN ^d^*Bēlet-e.* \"Mistress of the Underworld\"; also in PNs **3.** \"ground\", soaked; ploughed; quakes; for burial **4.** politically \"land, territory\", jB \"district\", NB \"city quarter\" **5.** ext. (area of liver); *cf.* *urṣu* II",
+    "pos": [],
+    "guideWord": "earth",
+    "oraccWords": [
+      {
+        "lemma": "erṣetu",
+        "guideWord": "earth"
+      },
+      {
+        "lemma": "erṣētu",
+        "guideWord": "district"
+      },
+      {
+        "lemma": "erṣētu",
+        "guideWord": "area"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>erṣetu</i>",
+        "note": "Differenzierung zwischen <i>e.</i> und <i>qaqqaru</i>",
+        "reference": "Wasserman, Style and Form, 84",
+        "AfO": "AfO 52 (2011) 692",
+        "agiID": "20243"
+      },
+      {
+        "mainWord": "<i>erṣetu</i>",
+        "note": "s. *<i>kirṣitu</i> ",
+        "reference": "",
+        "AfO": "AfO 40/41 (1993/1994) 457",
+        "agiID": "11136"
+      },
+      {
+        "mainWord": "<i>erṣetu</i>",
+        "note": "s. a. *<i>kirṣitu</i> ",
+        "reference": "",
+        "AfO": "AfO 46/47 (1999/2000) 570",
+        "agiID": "16205"
+      },
+      {
+        "mainWord": "<i>erṣetu</i>",
+        "note": "s. a. <i>kerṣitu</i> ",
+        "reference": "",
+        "AfO": "AfO 50 (2003/2004) 612",
+        "agiID": "18690"
+      },
+      {
+        "mainWord": "<i>erṣetu</i>",
+        "note": "sumer. und akkad. Bezeichnungen für die Erde und ihre Teile",
+        "reference": "Horowitz, MC 8, 272ff.",
+        "AfO": "AfO 46/47 (1999/2000) 570",
+        "agiID": "16204"
+      },
+      {
+        "mainWord": "<i>erṣetum</i>",
+        "note": "<i>ana/ina erṣet</i> … “vers/à l'emplacement de …”",
+        "reference": "Durand, ARM 26/1, 330<sup style=\"font-style: normal;\">b</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 352",
+        "agiID": "09134"
+      },
+      {
+        "mainWord": "<i>erṣetum</i>",
+        "note": "cf. aA <i>er-ṣa-tum/tim</i>; Plural?",
+        "reference": "Hecker, NABU 1996/30",
+        "AfO": "AfO 44/45 (1997/1998) 682",
+        "agiID": "14507"
+      },
+      {
+        "mainWord": "<i>erṣetum</i>",
+        "note": "Territorium bei/gehörig zu einer Stadt; vielleicht administrative Neuerung von Hammurabi",
+        "reference": "Stol, Zikir šumim 356f.",
+        "AfO": "AfO 29/30 (1983/1984) 407",
+        "agiID": "05368"
+      },
+      {
+        "mainWord": "<i>e-ṣi-it-ti</i>",
+        "note": "YOS 1, 43: 5. 13",
+        "reference": "Kaufman, AS 19, 50<sup style=\"font-style: normal;\">89</sup>",
+        "AfO": "AfO 25 (1974/1977) 432",
+        "agiID": "02068"
+      },
+      {
+        "mainWord": "<i>alap erṣetim</i>",
+        "note": "zur Deutung als “Bull of the Netherworld”; metaphorisch",
+        "reference": "Roudik, Orientalia/Studia Semitica, 378ff.",
+        "AfO": "AfO 52 (2011) 683",
+        "agiID": "19767"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "<i>erṣetu</i> zu lesen; “Grundstück”, nicht immer unbebaut",
+        "reference": "Beckman, HANE/M 2, 6",
+        "AfO": "AfO 46/47 (1999/2000) 573",
+        "agiID": "16424"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">ki</span>.<i>erṣetu</i> zu lesen",
+        "reference": "Huehnergard, NABU 1991/58",
+        "AfO": "AfO 40/41 (1993/1994) 465",
+        "agiID": "11420"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "doch <span style = \"font-variant: all-small-caps; font-style: normal\">ki</span> <i>erṣetu</i>",
+        "reference": "Pentiuc, Studies in the Emar Lexicon, 164ff.",
+        "AfO": "AfO 46/47 (1999/2000) 573",
+        "agiID": "16425"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "Emar, doch nicht <span style = \"font-variant: all-small-caps; font-style: normal\">ki</span><sup style=\"font-style: normal;\"><i>erṣetu</i></sup>",
+        "reference": "Seminara, UF 27, 467ff.",
+        "AfO": "AfO 46/47 (1999/2000) 573",
+        "agiID": "16426"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "lies <span style = \"font-variant: all-small-caps; font-style: normal\">ki</span> <i>erṣetu</i>, vgl. p. 47f.",
+        "reference": "Zaccagnini, VO 8/2, 42ff.",
+        "AfO": "AfO 40/41 (1993/1994) 465",
+        "agiID": "11422"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "Lit.",
+        "reference": "Adamthwaite, Abr-Nahrain 32, 26",
+        "AfO": "AfO 44/45 (1997/1998) 687",
+        "agiID": "14801"
+      },
+      {
+        "mainWord": "*<i>kirṣitu</i>",
+        "note": "Phantomwort; <span style = \"font-variant: all-small-caps; font-style: normal\">ki</span><sup style=\"font-style: normal;\"><i>er-ṣe-tum</i></sup> etc.",
+        "reference": "Wilcke, NABU 1990/35",
+        "AfO": "AfO 40/41 (1993/1994) 465",
+        "agiID": "11421"
+      },
+      {
+        "mainWord": "*<i>nigiṣ erṣeti</i>",
+        "note": "CAD N₂ 215a zu streichen",
+        "reference": "Mayer, Or 60, 109",
+        "AfO": "AfO 40/41 (1993/1994) 474",
+        "agiID": "11819"
+      },
+      {
+        "mainWord": "<i>ke/irṣītu</i>",
+        "note": "“Glosse” <i>kà-ad-ru</i>",
+        "reference": "Wa. Mayer, WVDOG 102, 130",
+        "AfO": "AfO 50 (2003/2004) 616",
+        "agiID": "18913"
+      },
+      {
+        "mainWord": "<i>ke/irṣītu</i>",
+        "note": "“Wirtschaftsgebäude, Nicht-Wohnhaus”",
+        "reference": "Wa. Mayer, WVDOG 102, 30",
+        "AfO": "AfO 50 (2003/2004) 616",
+        "agiID": "18912"
+      },
+      {
+        "mainWord": "<i>ke/irṣītu</i>",
+        "note": "kein Phantomwort, ∼ Haus, eventuell Wirtschaftsgebäude o. ä.",
+        "reference": "Adamthwaite, ANESt Suppl. 8, 115ff.",
+        "AfO": "AfO 50 (2003/2004) 616",
+        "agiID": "18911"
+      },
+      {
+        "mainWord": "<i>kirṣītu</i>",
+        "note": "“Ruine”",
+        "reference": "Mori, AOAT 349, 113ff.",
+        "AfO": "AfO 53 (2018) 767",
+        "agiID": "23464"
+      },
+      {
+        "mainWord": "<i>kirṣītu</i>",
+        "note": "“verfallen(enes Haus)”",
+        "reference": "Richardson, BiOr 64, 412",
+        "AfO": "AfO 53 (2018) 767",
+        "agiID": "23465"
+      },
+      {
+        "mainWord": "<i>erṣetu</i>",
+        "note": "ein Grundstück, Emar; Kaufurkunden, Preise, Lage",
+        "reference": "Viano, AuOr 30, 142ff.",
+        "AfO": "AfO 54 (2021) 723",
+        "agiID": "25010"
+      }
+    ],
+    "arabicGuideWord": "أرض"
+  },
+  {
+    "_id": "ilu I",
+    "lemma": [
+      "ilu"
+    ],
+    "attested": true,
+    "legacyLemma": "ilu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "elu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "elum"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "ilum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "pl. *ilū*, *ilānu* \"god, deity\" \\[DINGIR; jB NI; jB occas. DINGIR.NITA; OA also EL; pl. also DINGIR.DINGIR\\] \"a\" or \"the god\", also du.; personal \"god\", *i. išû(m)*, *i. rašû(m)* \"to be, get lucky\"; OA *bēl lā ilim*, jB *lā bēl ili* \"luckless person\"; ref. to divine statue, of metal, repaired, in ritual, plundered; OB divine symbols; demon, esp. *ilu lemnu*; mythical hero, deified king; *mārat i.* (a priestess) jB;",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "DINGIR"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "jB NI"
+        ]
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "jB occas. DINGIR.NITA"
+        ]
+      },
+      {
+        "logogram": [
+          "EL"
+        ],
+        "notes": [
+          "OA also"
+        ]
+      },
+      {
+        "logogram": [
+          "DINGIR.DINGIR"
+        ],
+        "notes": [
+          "pl. also"
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "iltu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ilūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "iliš"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ilānû"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "muštarīlu"
+          ],
+          "homonym": "I",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "rāšîlūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šerki-ilūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**ilu(m)**, *elu(m)*; pl. *ilū*, *ilānu* \"god, deity\" \\[DINGIR; jB NI; jB occas. DINGIR.NITA; OA also EL; pl. also DINGIR.DINGIR\\] \"a\" or \"the god\", also du.; personal \"god\", *i. išû(m)*, *i. rašû(m)* \"to be, get lucky\"; OA *bēl lā ilim*, jB *lā bēl ili* \"luckless person\"; ref. to divine statue, of metal, repaired, in ritual, plundered; OB divine symbols; demon, esp. *ilu lemnu*; mythical hero, deified king; *mārat i.* (a priestess) jB; \\> *iltu* I, *ilūtu*, *iliš*, *ilānû*; *cf.* *muštarîlu*; *rāšîlūtu*; *šerki-ilūtu*",
+    "pos": [],
+    "guideWord": "god",
+    "oraccWords": [
+      {
+        "lemma": "il āli",
+        "guideWord": "city god"
+      },
+      {
+        "lemma": "il-āli",
+        "guideWord": "city god"
+      },
+      {
+        "lemma": "ilu",
+        "guideWord": "god"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "(<i>qāt-</i>) <i>i.</i> <i>abi</i>, spB, med.",
+        "reference": "Hunger, SBTU 1, 45b 1; 39b 2",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02230"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<i>i.</i> <i>ḫāl awīli</i>",
+        "reference": "Renger, AfO 24, 104.107",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02231"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<i>i.</i> <i>rēši</i>, u. a., ∥ hurr.",
+        "reference": "Laroche, RA 67, 120<sup style=\"font-style: normal;\">+1</sup>",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02232"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<i>i.</i> <i>saḫḫiru</i>, Latarak",
+        "reference": "Hunger, SBTU 1, 37b zu 4′",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02236"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<i>mār</i>,<i> mārat</i> <i>i.</i>, ausf.",
+        "reference": "Renger, AfO 24, 103ff.",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02233"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span>: Begriff “Gott” in Mesopotamien; als Determinativ auch 204ff.",
+        "reference": "B.N. Porter, in B.N. Porter, What is a God?, 160ff.",
+        "AfO": "AfO 53 (2018) 765",
+        "agiID": "23313"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">dumu.meš</span> <i>ni-ši <span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span>-šu</i> u. ä., Mitglieder e. rel. Gemeinschaft",
+        "reference": "Kraus, Mensch 68",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02234"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">dumu.meš</span> <i>ni-ši <span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span>-šu</i>",
+        "reference": "Vriezen, Festschrift Böhl 390f.",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02235"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "jB Pl. <i>ilū</i>, nA <i>ilāni</i> (Landsberger)",
+        "reference": "W. Farber, Beschwörungsrit. 250 (3′)",
+        "AfO": "AfO 26 (1978/1979) 303",
+        "agiID": "03709"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "Pl. <i>ilānu</i> entspricht <i>elōhîm</i>",
+        "reference": "Parpola, SAA 10, lxxxiii<sup style=\"font-style: normal;\">31</sup>",
+        "AfO": "AfO 46/47 (1999/2000) 572",
+        "agiID": "16334"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "s. Hausgötter",
+        "reference": "van der Toorn, ZA 84, 38ff.",
+        "AfO": "AfO 44/45 (1997/1998) 685",
+        "agiID": "14680"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "s. a. <i>eṭemmu</i> ",
+        "reference": "",
+        "AfO": "AfO 25 (1974/1977) 441",
+        "agiID": "02237"
+      },
+      {
+        "mainWord": "<i>ilu</i>(<i>m</i>)",
+        "note": "i-lu in Atraḫasīs, Var. von Il/El, Name des Enlil",
+        "reference": "Jacobsen, Finkelstein-Gedenkschrift, 113ff.",
+        "AfO": "AfO 27 (1980) 419",
+        "agiID": "04273"
+      },
+      {
+        "mainWord": "<i>ilu</i>(<i>m</i>)",
+        "note": "in <i>il abim</i> s. Familiengott",
+        "reference": "Stol, SEL 8, 205ff.",
+        "AfO": "AfO 40/41 (1993/1994) 462",
+        "agiID": "11292"
+      },
+      {
+        "mainWord": "<i>ilu</i>(<i>m</i>)",
+        "note": "in <i>il abim</i> s. a. <span style = \"font-variant: all-small-caps; font-style: normal\">uru.meš</span> ",
+        "reference": "",
+        "AfO": "AfO 40/41 (1993/1994) 462",
+        "agiID": "11293"
+      },
+      {
+        "mainWord": "<i>ilu</i>(<i>m</i>)",
+        "note": "in <i>ilū mātim</i>",
+        "reference": "Lambert, Festschrift Moran, 293 zu Obv. 19",
+        "AfO": "AfO 40/41 (1993/1994) 462",
+        "agiID": "11294"
+      },
+      {
+        "mainWord": "<i>ilu</i>(<i>m</i>)",
+        "note": "in: <i>ilānu til-la-at <sup style=\"font-style: normal;\">d</sup>Adad</i>, = ug. <i>ʾil </i>[<i>t</i>]<i>ʿḏr bʿl</i>",
+        "reference": "Herdner, Ugaritica VII 3: 25",
+        "AfO": "AfO 27 (1980) 419",
+        "agiID": "04272"
+      },
+      {
+        "mainWord": "<i>ilu</i>(<i>m</i>)",
+        "note": "in: <i>kasap ilīšu</i>, aB",
+        "reference": "Greengus, Ishchali, p. 67, Nr. 34: 9f., s.p. 69",
+        "AfO": "AfO 27 (1980) 418",
+        "agiID": "04271"
+      },
+      {
+        "mainWord": "<i>ilum</i>",
+        "note": "Ebla, in Personennamen",
+        "reference": "H.-P. Müller, ZA 70, 90f. u. ö.",
+        "AfO": "AfO 29/30 (1983/1984) 409",
+        "agiID": "05435"
+      },
+      {
+        "mainWord": "<i>ilum</i>",
+        "note": "inim dingir-ra = <i>i-li</i>, folgt: inim lugal = <i>šar-ri</i>, inim-kal-la = <i>šu₁₁-qú-rum</i>, inim-kal-kal-la = <i>šu₁₁-qú-ra-tum</i> usf.; s. 337f. dug₄-<ga>-dingir-ra = <i>i-li</i>, dug₄-<ga>-lugal = <i>šar-r</i>[<i>i</i>]",
+        "reference": "Civil, MSL SS 1, 34: 290",
+        "AfO": "AfO 35 (1988) 342",
+        "agiID": "07947"
+      },
+      {
+        "mainWord": "<i>ilum</i>",
+        "note": "s. <i>mūtum</i>, in <i>mūt ilīšu</i> ",
+        "reference": "",
+        "AfO": "AfO 52 (2011) 699",
+        "agiID": "20573"
+      },
+      {
+        "mainWord": "<i>ilum</i>",
+        "note": "s. a. <sup style=\"font-style: normal;\">(d)</sup><span style = \"font-variant: all-small-caps; font-style: normal\">ni</span> ",
+        "reference": "",
+        "AfO": "AfO 29/30 (1983/1984) 409",
+        "agiID": "05436"
+      },
+      {
+        "mainWord": "<i>-</i>(<i>i</i>)<i>lum</i>",
+        "note": "s. <span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span> ",
+        "reference": "",
+        "AfO": "AfO 48/49 (2001/2002) 425",
+        "agiID": "17660"
+      },
+      {
+        "mainWord": "<i>ilśu</i>",
+        "note": "in Personennamen “His god is …” nicht in Ebla",
+        "reference": "Biggs, ARES 1, 97",
+        "AfO": "AfO 38/39 (1991/1992) 356",
+        "agiID": "09317"
+      },
+      {
+        "mainWord": "<i>ilśu</i>",
+        "note": "so immer in Personennamen der Fara-Zeit, nie <i>ili</i>",
+        "reference": "Westenholz, ARES 1, 101",
+        "AfO": "AfO 38/39 (1991/1992) 356",
+        "agiID": "09318"
+      },
+      {
+        "mainWord": "<i>I-lum-a-ḫi</i>",
+        "note": "“Der Gott ist mein Bruder” oder lies <i>ʾAₓ-lum-a-ḫi</i> “Wo ist mein Bruder”?",
+        "reference": "Hecker, Ebla 1975–1985, 224",
+        "AfO": "AfO 38/39 (1991/1992) 356",
+        "agiID": "09319"
+      },
+      {
+        "mainWord": "<i>il abi</i>",
+        "note": "s. Vatergott",
+        "reference": "van der Toorn, UF 25, 379ff.",
+        "AfO": "AfO 44/45 (1997/1998) 685",
+        "agiID": "14671"
+      },
+      {
+        "mainWord": "<i>il</i>(<i>um</i>)",
+        "note": "in PNN des 3. Jt.s, mit und ohne Endung bzw. Suffix",
+        "reference": "Di Vito, StP s.m. 16, 235ff.",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13212"
+      },
+      {
+        "mainWord": "<i>il</i>(<i>um</i>)",
+        "note": "s. Ahnenkult",
+        "reference": "Loretz, UF 24, 133ff.",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13213"
+      },
+      {
+        "mainWord": "<i>il</i>(<i>um</i>)",
+        "note": "s. a. <i>ilānu</i> ",
+        "reference": "",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13215"
+      },
+      {
+        "mainWord": "<i>il</i>(<i>um</i>)",
+        "note": "s. a. dingir ",
+        "reference": "",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13214"
+      },
+      {
+        "mainWord": "<i>ilān-</i>",
+        "note": "“die beiden Götter” in Personennamen",
+        "reference": "Stol, Festschrift Wilcke, 298ff.",
+        "AfO": "AfO 52 (2011) 699",
+        "agiID": "20558"
+      },
+      {
+        "mainWord": "<i>ilānu</i>",
+        "note": "als Sg. konstruiert",
+        "reference": "Parpola, JNES 52, 187<sup style=\"font-style: normal;\">97</sup>",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13199"
+      },
+      {
+        "mainWord": "<i>ilānū</i>",
+        "note": "Nuzi; s. Hausgötter",
+        "reference": "Cassin, Festschrift Lacheman, 42ff.",
+        "AfO": "AfO 29/30 (1983/1984) 409",
+        "agiID": "05428"
+      },
+      {
+        "mainWord": "<i>ilānū</i>",
+        "note": "Nuzi; s. Hausgötter",
+        "reference": "Deller, Festschrift Lacheman, 47ff.",
+        "AfO": "AfO 29/30 (1983/1984) 409",
+        "agiID": "05429"
+      },
+      {
+        "mainWord": "<i>ilānu</i>",
+        "note": "s. Ahnenkult",
+        "reference": "Loretz, UF 24, 133ff.",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13200"
+      },
+      {
+        "mainWord": "<i>ilānu</i>",
+        "note": "s. a. <span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span><sup style=\"font-style: normal;\">meš</sup> ",
+        "reference": "",
+        "AfO": "AfO 42/43 (1995/1996) 444",
+        "agiID": "13201"
+      },
+      {
+        "mainWord": "<i>ilānu</i>",
+        "note": "und <i>eṭemmu</i>, zur Differenzierung",
+        "reference": "Schmidt, Emar, 156ff.",
+        "AfO": "AfO 46/47 (1999/2000) 572",
+        "agiID": "16328"
+      },
+      {
+        "mainWord": "<i>apāl <span style = \"font-variant: all-small-caps; font-style: normal\">é dingir</span></i>",
+        "note": "“common expression for the daily meals in the temple?”",
+        "reference": "van Driel, Cult 65f.",
+        "AfO": "AfO Beiheft 21 (1986) 31",
+        "agiID": "00089"
+      },
+      {
+        "mainWord": "<i>ukulti ilim</i>",
+        "note": "für Ausbrüche von Epidemien",
+        "reference": "Farber, Magic and Rationality, 119",
+        "AfO": "AfO 52 (2011) 730",
+        "agiID": "22552"
+      },
+      {
+        "mainWord": "<i>uppudētu ša bītāt ilāni</i>",
+        "note": "Amt belegt unter Hyspaosines",
+        "reference": "Boiy, OLA 136, 211",
+        "AfO": "AfO 52 (2011) 730",
+        "agiID": "22573"
+      },
+      {
+        "mainWord": "<i>bāb-ilim</i>",
+        "note": "ká-dingir<sup style=\"font-style: normal;\">ki</sup>-ma spricht für akkad. <i>bāb-ilim</i>, zur Schreibung von Babylon; <i>bà-bà-lam</i>; <span style = \"font-variant: all-small-caps; font-style: normal\">bar.ki.bar</span>, s. dort",
+        "reference": "Lambert, in: Cancik-Kirschbaum et al., Babylon, 72f.",
+        "AfO": "AfO 53 (2018) 755",
+        "agiID": "22882"
+      },
+      {
+        "mainWord": "*<i>I-lul-<span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span>/</i>*<i>Ì-lul-<span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span></i>",
+        "note": "= <i>I-lu₅-<span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span></i>,<i> Ì-lu₅-<span style = \"font-variant: all-small-caps; font-style: normal\">dingir</span></i>, /ilu(m)-ilī/, nicht <i>īlul-</i> von <i>alālu</i>",
+        "reference": "Steinkeller, MC 4, 86",
+        "AfO": "AfO 40/41 (1993/1994) 462",
+        "agiID": "11295"
+      },
+      {
+        "mainWord": "*<i>rādi bīt ili</i>",
+        "note": "mA",
+        "reference": "Deller, AfO 34, 60",
+        "AfO": "AfO 35 (1988) 353",
+        "agiID": "08480"
+      },
+      {
+        "mainWord": "<i>ṭupšar bīt ili</i>",
+        "note": "",
+        "reference": "Henshaw, JAOS 100, 288f.",
+        "AfO": "AfO 28 (1981/1982) 345",
+        "agiID": "05250"
+      },
+      {
+        "mainWord": "<i>kašūš ilāni</i>",
+        "note": "",
+        "reference": "Oded, Festschrift Tadmor, 226",
+        "AfO": "AfO 40/41 (1993/1994) 464",
+        "agiID": "11396"
+      },
+      {
+        "mainWord": "<i>E-gu-lum</i>",
+        "note": "PN, aAkk, “ich war nachlässig, o Gott”",
+        "reference": "von Soden, ZA 66, 137<sup style=\"font-style: normal;\">1</sup>",
+        "AfO": "AfO 25 (1974/1977) 430",
+        "agiID": "02011"
+      },
+      {
+        "mainWord": "<i>ilu</i>",
+        "note": "<i>tuār ilī</i>",
+        "reference": "Cancik-Kirschbaum, CRAI 54, 39",
+        "AfO": "AfO 54 (2021) 725",
+        "agiID": "25081"
+      }
+    ],
+    "arabicGuideWord": "إله"
+  },
+  {
+    "_id": "ina I",
+    "lemma": [
+      "ina"
+    ],
+    "attested": true,
+    "legacyLemma": "ina",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "in"
+        ],
+        "attested": true,
+        "notes": []
+      }
+    ],
+    "meaning": "(*im-m...*, *ip-p...* etc.) \"in, on; by; from\" (freq. abbr. *in*, with assimilation of *n* to following consonant (OA often wr. *i*)) \\[AŠ; TA; Bogh. ŠÈ\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "",
+        "entries": [
+          {
+            "meaning": "of place \"in, on\"; of time \"on, at\", \"during\", *ina PN* \"in the reign of PN\"; before infin., *ina amārika* \"when you see\"",
+            "vowels": []
+          },
+          {
+            "meaning": "of condition, *ina balāṭim* \"in health\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"among\", *ina šarrāni* \"of, among the kings\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"from, out of\", *ina qāt PN* \"from the hand of PN\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"by means of, with\" tool, weapon etc.; word, incantation; \"with, out of\" material (brick, stone)",
+            "vowels": []
+          },
+          {
+            "meaning": "\"in consequence of, as a result of\", *ina mahāṣim* \"because of beating\"; *ina qibīt DN* \"at DN's command\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"with respect to; according to\", \"(measured) by\" cubit, *sūtu* etc.",
+            "vowels": []
+          },
+          {
+            "meaning": "*ina lā* (*cf.* *illā*) \"in, because of the absence of\", *ina lā idê* \"unwittingly\"",
+            "vowels": []
+          },
+          {
+            "meaning": "conj. + stat. subjunct. \"so long as\", *ina balṭu u šalmu* \"while alive and well\"",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "AŠ"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "TA"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "ŠÈ"
+        ],
+        "notes": [
+          "Bogh."
+        ]
+      }
+    ],
+    "derived": [],
+    "derivedFrom": null,
+    "source": "**ina**, *in* (*im-m...*, *ip-p...* etc.) \"in, on; by; from\" (freq. abbr. *in*, with assimilation of *n* to following consonant (OA often wr. *i*)) \\[AŠ; TA; Bogh. ŠÈ\\] **1.** of place \"in, on\"; of time \"on, at\", \"during\", *ina PN* \"in the reign of PN\"; before infin., *ina amārika* \"when you see\" **2.** of condition, *ina balāṭim* \"in health\" **3.** \"among\", *ina šarrāni* \"of, among the kings\" **4.** \"from, out of\", *ina qāt PN* \"from the hand of PN\" **5.** \"by means of, with\" tool, weapon etc.; word, incantation; \"with, out of\" material (brick, stone) **6.** \"in consequence of, as a result of\", *ina mahāṣim* \"because of beating\"; *ina qibīt DN* \"at DN's command\" **7.** \"with respect to; according to\", \"(measured) by\" cubit, *sūtu* etc. **8.** *ina lā* (*cf.* *illā*) \"in, because of the absence of\", *ina lā idê* \"unwittingly\" **9.** conj. + stat. subjunct. \"so long as\", *ina balṭu u šalmu* \"while alive and well\"",
+    "pos": [
+      "PRP"
+    ],
+    "guideWord": "in",
+    "oraccWords": [
+      {
+        "lemma": "ina",
+        "guideWord": "around (day x)"
+      },
+      {
+        "lemma": "ina",
+        "guideWord": "at"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>in</i>",
+        "note": "Präp., akk., Abū Ṣalābīḫ [dagegen Edzard, ZA 66, 162]",
+        "reference": "Biggs, OIP 99, 44<sup style=\"font-style: normal;\">+10</sup>",
+        "AfO": "AfO 25 (1974/1977) 442",
+        "agiID": "02244"
+      },
+      {
+        "mainWord": "<i>in</i>",
+        "note": "Präposition, lokale Innovation für <i>ina</i>, Ebla",
+        "reference": "Tonietti, QS 25, 328",
+        "AfO": "AfO 52 (2011) 699",
+        "agiID": "20579"
+      },
+      {
+        "mainWord": "<i>immal</i>",
+        "note": "< <i>ina mal</i>(<i>a</i>)",
+        "reference": "Birot, ARM 27, p. 219 c)",
+        "AfO": "AfO 44/45 (1997/1998) 685",
+        "agiID": "14684"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "“solange als”; aB, mit Prät.",
+        "reference": "Frankena, SLB 4, 216",
+        "AfO": "AfO 27 (1980) 419",
+        "agiID": "04279"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "<i>ina kīma šerti/inanna/mitḫurti</i>; Belege",
+        "reference": "Sjöberg, JCS 26, 170",
+        "AfO": "AfO 25 (1974/1977) 442",
+        "agiID": "02245"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "<i>ina-ma</i>,<i> ina ša</i> s. Grammatik, akkadisch, <i>-ma</i>",
+        "reference": "E. Cohen, ZA 90, 212",
+        "AfO": "AfO 50 (2003/2004) 614",
+        "agiID": "18824"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "als Akkadogramm in Verwaltungstexten aus Ugarit",
+        "reference": "Roche, Society and Administration in Ancient Ugarit, 112",
+        "AfO": "AfO 53 (2018) 765",
+        "agiID": "23319"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "als Subjunktion",
+        "reference": "Durand, FM 2, 89 g)",
+        "AfO": "AfO 44/45 (1997/1998) 685",
+        "agiID": "14686"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "s. a. <i>qību</i> ",
+        "reference": "",
+        "AfO": "AfO 44/45 (1997/1998) 685",
+        "agiID": "14687"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "Subjunktion, <i>ina šeʾum lā ibaššû</i> “solange es keine Gerste gibt”",
+        "reference": "Kraus, AbB 7, 60: 11 und Anm. a",
+        "AfO": "AfO 26 (1978/1979) 303",
+        "agiID": "03712"
+      },
+      {
+        "mainWord": "<i>ina</i>",
+        "note": "und <i>ana</i>; in Emar",
+        "reference": "Moran, NABU 1988/36",
+        "AfO": "AfO 38/39 (1991/1992) 356",
+        "agiID": "09325"
+      }
+    ],
+    "arabicGuideWord": "في"
+  },
+  {
+    "_id": "kakkabu I",
+    "lemma": [
+      "kakkabu"
+    ],
+    "attested": true,
+    "legacyLemma": "kakkabu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "kakkabum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"star\" \\[MUL; later also MÚL, UL, TE and ÁB\\] also ref. to planets; *k. šamê/šamāmī* \"stars of heaven\"; *ina k. biātum* Š \"to leave (a magic potion) outside overnight\" O/jB; *k. rabû* \"meteor\"; \"star(-shaped ornament)\" of metal, stone;",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "MUL"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "later also MÚL, UL, TE and ÁB"
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "kakkabtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "kakkabiš"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "kakkabānu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**kakkabu(m)** \"star\" \\[MUL; later also MÚL, UL, TE and ÁB\\] also ref. to planets; *k. šamê/šamāmī* \"stars of heaven\"; *ina k. biātum* Š \"to leave (a magic potion) outside overnight\" O/jB; *k. rabû* \"meteor\"; \"star(-shaped ornament)\" of metal, stone; \\< Sem. *kabkab-*; \\> *kakkabtu*, *kakkabiš*, *kakkabānu*",
+    "pos": [],
+    "guideWord": "star",
+    "oraccWords": [
+      {
+        "lemma": "kakkab-šamê",
+        "guideWord": "star of the sky"
+      },
+      {
+        "lemma": "kakkabu",
+        "guideWord": "star"
+      },
+      {
+        "lemma": "kakkabu-rabû",
+        "guideWord": "meteor"
+      },
+      {
+        "lemma": "kakkabānu",
+        "guideWord": "starry one"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>kakkabu</i>",
+        "note": "<i>ina kakkabi</i> = erstes Sichtbarwerden der Sterne am Abend",
+        "reference": "W. Farber, Or 58, 96f.",
+        "AfO": "AfO 38/39 (1991/1992) 358",
+        "agiID": "09387"
+      },
+      {
+        "mainWord": "<i>kakkabu</i>",
+        "note": "Mari, auch mit <i>qa-…</i>",
+        "reference": "Charpin, AfO 36/37, 94",
+        "AfO": "AfO 40/41 (1993/1994) 464",
+        "agiID": "11348"
+      }
+    ],
+    "arabicGuideWord": "كوكب، نجم"
+  },
+  {
+    "_id": "lawû I",
+    "lemma": [
+      "lawû"
+    ],
+    "attested": true,
+    "legacyLemma": "lawûm",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "lamû"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "lawûm"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"besieged\" OB of land; Nuzi \"fenced\" of threshing floor;",
+    "amplifiedMeanings": [],
+    "logograms": [],
+    "derived": [],
+    "derivedFrom": {
+      "lemma": [
+        "lawû"
+      ],
+      "homonym": "II",
+      "notes": []
+    },
+    "source": "**lawûm** I, *lamû* \"besieged\" OB of land; Nuzi \"fenced\" of threshing floor; \\< *lawûm* II",
+    "pos": [],
+    "guideWord": "besieged",
+    "oraccWords": [
+      {
+        "lemma": "lawû",
+        "guideWord": "besieged"
+      },
+      {
+        "lemma": "lawû",
+        "guideWord": "surrounded"
+      },
+      {
+        "lemma": "lawû",
+        "guideWord": "surrounded (with)"
+      },
+      {
+        "lemma": "lawi",
+        "guideWord": "surrounded with"
+      },
+      {
+        "lemma": "lawi",
+        "guideWord": "surrounded (with)"
+      }
+    ],
+    "origin": "cda",
+    "arabicGuideWord": "محاصَر/ مسيَّج"
+  },
+  {
+    "_id": "nebû I",
+    "lemma": [
+      "nebû"
+    ],
+    "attested": true,
+    "legacyLemma": "nebû",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "nabû"
+        ],
+        "attested": true,
+        "notes": []
+      }
+    ],
+    "meaning": "f. *nabītu*, *nebūtu* \"shining, brilliant\" M/NB \\[SA4\\] of stars, deities; transf. of dogs; MB as fPN;",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "SA4"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [],
+    "derivedFrom": {
+      "lemma": [
+        "nebû"
+      ],
+      "homonym": "II",
+      "notes": []
+    },
+    "source": "**nebû** I, *nabû*; f. *nabītu*, *nebūtu* \"shining, brilliant\" M/NB \\[SA4\\] of stars, deities; transf. of dogs; MB as fPN; \\< *nebû* II",
+    "pos": [],
+    "guideWord": "shining",
+    "oraccWords": [
+      {
+        "lemma": "nebû",
+        "guideWord": "shining"
+      }
+    ],
+    "origin": "cda",
+    "arabicGuideWord": "ساطع"
+  },
+  {
+    "_id": "rabû III",
+    "lemma": [
+      "rabû"
+    ],
+    "attested": true,
+    "legacyLemma": "rabû(m)",
+    "homonym": "III",
+    "forms": [
+      {
+        "lemma": [
+          "rabā'u"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "rabûm"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"to set\" of heavenly body Bab., M/NA",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(*i/i*) \\[ŠÚ; astr. also GAL, GIR5\\]; *ina pān šamši rabê* \"before sunset\"; *r. šamši* \"the West\"; *šamšu irta/ebi* \"the sun has set\"; of moon (Sîn), stars",
+        "vowels": [
+          {
+            "value": [
+              "i",
+              "i"
+            ],
+            "notes": []
+          }
+        ],
+        "key": "G",
+        "entries": []
+      },
+      {
+        "meaning": "astr. \\[ŠÚ.ŠÚ\\] iter. of G",
+        "vowels": [],
+        "key": "Gtn",
+        "entries": []
+      },
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "D",
+        "entries": [
+          {
+            "meaning": "\"submerge\" field, cloth, plant under water",
+            "vowels": []
+          },
+          {
+            "meaning": "\"douse, extinguish\" fire",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "ŠÚ"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "astr. also GAL, GIR5"
+        ]
+      },
+      {
+        "logogram": [
+          "ŠÚ.ŠÚ"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "rību"
+          ],
+          "homonym": "II",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "rūbu"
+          ],
+          "homonym": "II",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "narbâtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**rabû(m)** III, *rabā'u* \"to set\" of heavenly body Bab., M/NA **G** (*i/i*) \\[ŠÚ; astr. also GAL, GIR5\\]; *ina pān šamši rabê* \"before sunset\"; *r. šamši* \"the West\"; *šamšu irta/ebi* \"the sun has set\"; of moon (Sîn), stars **Gtn** astr. \\[ŠÚ.ŠÚ\\] iter. of G **D** **1.** \"submerge\" field, cloth, plant under water **2.** \"douse, extinguish\" fire; \\> *rību* II; *rūbu* II; *narbâtu*",
+    "roots": [
+      "rb'"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "set",
+    "oraccWords": [
+      {
+        "lemma": "rabû",
+        "guideWord": "set"
+      }
+    ],
+    "origin": "cda",
+    "arabicGuideWord": "يجلس",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>rubbû</i>",
+        "note": "faktitiver D-Stamm von <i>rabû</i>",
+        "reference": "Seidl und Sallaberger, AfO 51, 67<sup style=\"font-style: normal;\">38</sup>",
+        "AfO": "AfO 52 (2011) 718",
+        "agiID": "21853"
+      }
+    ]
+  },
+  {
+    "_id": "tarbaṣu I",
+    "lemma": [
+      "tarbaṣu"
+    ],
+    "attested": true,
+    "legacyLemma": "tarbaṣu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "tarbāṣu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "tarbāṣum"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "tarbaṣum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"animal stall; courtyard\" Bab., M/NA \\[TÙR\\] ext. (a feature on liver); astr. \"halo\" round moon;",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "TÙR"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [],
+    "derivedFrom": {
+      "lemma": [
+        "rabāṣu"
+      ],
+      "homonym": "I",
+      "notes": []
+    },
+    "source": "**tarbaṣu(m)**, *tarbāṣu(m)* \"animal stall; courtyard\" Bab., M/NA \\[TÙR\\] ext. (a feature on liver); astr. \"halo\" round moon; \\< *rabāṣu*",
+    "pos": [],
+    "guideWord": "animal stall",
+    "oraccWords": [
+      {
+        "lemma": "tarbaṣu",
+        "guideWord": "animal stall"
+      },
+      {
+        "lemma": "tarbaṣu",
+        "guideWord": "pen (for cattle, rarely for sheep and goats, horses)"
+      },
+      {
+        "lemma": "tarbaṣu",
+        "guideWord": "courtyard"
+      },
+      {
+        "lemma": "tarbāṣu",
+        "guideWord": "courtyard"
+      },
+      {
+        "lemma": "tarbaṣu",
+        "guideWord": "halo"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "<i>bēlet t.</i>, aB; Ištar",
+        "reference": "Dalley, Rimah 28 zu 8",
+        "AfO": "AfO 25 (1974/1977) 475",
+        "agiID": "03384"
+      },
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">kù.gi</span> <i>ša tarbaṣi</i>",
+        "reference": "Limet, ARMT 25, p. 287 zu 644",
+        "AfO": "AfO 35 (1988) 359",
+        "agiID": "08735"
+      },
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">tùr</span> = <i>t</i>.; auch “Tempelhof”",
+        "reference": "van Driel, Cult 105",
+        "AfO": "AfO Beiheft 21 (1986) 101",
+        "agiID": "01456"
+      },
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "Beleg",
+        "reference": "W.R. Mayer, Or 78, 430",
+        "AfO": "AfO 53 (2018) 785",
+        "agiID": "24570"
+      },
+      {
+        "mainWord": "<i>tarbāṣu</i>",
+        "note": "Ekalte, freie Fläche von Stadt zwischen Mauer und Fluß",
+        "reference": "Wa. Mayer, WVDOG 102, 10",
+        "AfO": "AfO 50 (2003/2004) 625",
+        "agiID": "19538"
+      },
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "in Omina",
+        "reference": "Jeyes, Festschrift Lambert, 369 zu 21",
+        "AfO": "AfO 48/49 (2001/2002) 434",
+        "agiID": "18333"
+      },
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "nA Haus",
+        "reference": "Radner, SAAS 6, 261f.",
+        "AfO": "AfO 46/47 (1999/2000) 582",
+        "agiID": "17185"
+      },
+      {
+        "mainWord": "<i>tarbaṣu</i>",
+        "note": "Zweifel an Deutung in BiMes 2, 1.2",
+        "reference": "Lambert, JAOS 107, 95",
+        "AfO": "AfO 35 (1988) 359",
+        "agiID": "08734"
+      },
+      {
+        "mainWord": "<i>tarbāṣu</i>(<i>m</i>)",
+        "note": "als Teil des `<span style = \"font-variant: all-small-caps; font-style: normal\">gur₇(.me)</span>' Schmuckstückes",
+        "reference": "Durand, MARI 6, 145f.",
+        "AfO": "AfO 40/41 (1993/1994) 487",
+        "agiID": "12608"
+      },
+      {
+        "mainWord": "<i>tarbāṣu</i>(<i>m</i>)",
+        "note": "im Palast von Mari",
+        "reference": "Durand, Système palatial, 53<sup style=\"font-style: normal;\">(39)</sup>",
+        "AfO": "AfO 40/41 (1993/1994) 487",
+        "agiID": "12609"
+      },
+      {
+        "mainWord": "<i>tarbaṣum</i>",
+        "note": "bei Gefäßen, Mari",
+        "reference": "Guichard, ARM 31, 139",
+        "AfO": "AfO 52 (2011) 727",
+        "agiID": "22418"
+      },
+      {
+        "mainWord": "<i>tarbaṣum</i>",
+        "note": "in der Opferschau",
+        "reference": "Glassner, ZA 95, 284",
+        "AfO": "AfO 52 (2011) 727",
+        "agiID": "22417"
+      },
+      {
+        "mainWord": "<i>tarbaṣum</i>",
+        "note": "",
+        "reference": "Talon, ARMT 24, p. 84",
+        "AfO": "AfO 34 (1987) 310",
+        "agiID": "07610"
+      }
+    ],
+    "arabicGuideWord": "حظيرة",
+    "supplementsAkkadianDictionaries": "**tarbāṣu** “animal stall; courtyard; an ornament; halo (of the moon)”  \n**1.** OB an ornament: \\[…\\] *ḫurāṣu ša tar-ba-ṣi* ARM 25, 644: 12 “gold for the *t*. ornament”; cf. 118 r. 25; 612: 3. On *t*. as part of GUR₇(.ME) jewellery in Mari (CAD T 220) s. Durand 1990e, 145f.; ARM 32, 94.  \n**2.** Mayer 2009, 430: SB *akulī alpa ina tar-ba-ṣi* LKA 153 r. 3 “eat a bull in the animal stall!”  \n**3.** MB Ugar. *bītu* : *ta-ar-bá-ṣí u bītu alpī ana šâšuma* PRU 3, 91: 17 “the house, (gloss:) the cattle-pen and the house of the oxen are his”. Cf. Huehnergard 1987, 176; Sivan 1984, 279. The gloss mark seems to denote *ta-ar-bá-ṣí* as a foreign word. Cf. alphabetic *trbṣ* Olmo Lete/ Sanmartín 2004, 877.  \n**4.** MB Ekalte *ḫarrānu ša ana tar-ba-ṣi ša āli urrad* WVDOG 102, 11: 5 “the street that leads down to the city square”, s. Mayer ib. p. 10.  \n**5.** For NA ref. s. Radner 1997, 261f.  \n**6.** NB *alluttu* *ina* ⸢TÙR⸣ *Sîn* \\[*izzīz*\\] SAA 18, 124: 3 “cancer \\[stood\\] in the moon’s halo”.  \n\\[JW (1, 4, 5), MPS (1, 3, 6), NR (2, 3)\\]"
+  },
+  {
+    "_id": "zuqiqīpu I",
+    "lemma": [
+      "zuqiqīpu"
+    ],
+    "attested": true,
+    "legacyLemma": "zuqiqīpu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "zuqaqīpu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "zuqaqqīpu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "zukaqīpu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "zukiqīpu"
+        ],
+        "attested": true,
+        "notes": []
+      },
+      {
+        "lemma": [
+          "zuqiqīpum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"scorpion\" \\[GÍR.TAB\\]; also in *aban z.* (desig. of stone); astr. \"Scorpius\";",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "GÍR.TAB"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "zuqiqīpānu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "zuqaqīpāniš"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": {
+      "lemma": [
+        "zaqāpu"
+      ],
+      "homonym": "I",
+      "notes": []
+    },
+    "source": "**zuqiqīpu(m)**, *zuqa(q)qīpu*, *zuka/iqīpu* \"scorpion\" \\[GÍR.TAB\\]; also in *aban z.* (desig. of stone); astr. \"Scorpius\"; \\< *zaqāpu*; \\> *zuqiqīpānu*, *zuqaqīpāniš*",
+    "pos": [],
+    "guideWord": "scorpion",
+    "oraccWords": [
+      {
+        "lemma": "zuqiqīpu",
+        "guideWord": "scorpion"
+      },
+      {
+        "lemma": "Zuqiqīpu",
+        "guideWord": "Scorpio"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>zuqaqīpu</i>",
+        "note": "<i>z.</i> und <i>tārītu</i>",
+        "reference": "Pientka, Amurru 3, 391ff.",
+        "AfO": "AfO 52 (2011) 733",
+        "agiID": "22724"
+      },
+      {
+        "mainWord": "<i>zuqaqīpu</i>",
+        "note": "Etymologie; zu ostsemitischen Diminutiven",
+        "reference": "Testen, Akkadian Language, 146ff.",
+        "AfO": "AfO 52 (2011) 733",
+        "agiID": "22725"
+      },
+      {
+        "mainWord": "<i>zuqiqīpum</i>",
+        "note": "“Skorpionschwänze” <i>zibbāt</i> <i>z.</i> als Schmuckgegenstand",
+        "reference": "Reiter, BiOr 46, 365 zu 353: 3",
+        "AfO": "AfO 40/41 (1993/1994) 492",
+        "agiID": "12811"
+      }
+    ],
+    "arabicGuideWord": "عقرب"
+  },
+  {
+    "_id": "Šabāṭu I",
+    "lemma": [
+      "Šabāṭu"
+    ],
+    "attested": true,
+    "legacyLemma": "Šabāṭu",
+    "homonym": "I",
+    "forms": [],
+    "meaning": "(11th Bab. month) OAkk, Bab., NA \\[OB ITI.ZÍZ.A; later ITI.ZÍZ(.A.AN)\\]",
+    "amplifiedMeanings": [],
+    "logograms": [
+      {
+        "logogram": [
+          "ITI.ZÍZ.A"
+        ],
+        "notes": [
+          "OB"
+        ]
+      },
+      {
+        "logogram": [
+          "ITI.ZÍZ",
+          "ITI.ZÍZ.A.AN"
+        ],
+        "notes": [
+          "later"
+        ]
+      }
+    ],
+    "derived": [],
+    "derivedFrom": null,
+    "source": "**Šabāṭu** I (11th Bab. month) OAkk, Bab., NA \\[OB ITI.ZÍZ.A; later ITI.ZÍZ(.A.AN)\\]",
+    "pos": [],
+    "guideWord": "(11th Babylonian month)",
+    "oraccWords": [],
+    "origin": "cda",
+    "arabicGuideWord": "الشهر البابلي الحادي عشر"
+  },
+  {
+    "_id": "šakānu I",
+    "lemma": [
+      "šakānu"
+    ],
+    "attested": true,
+    "legacyLemma": "šakānu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "sakānu"
+        ],
+        "attested": true,
+        "notes": [
+          "Mari also"
+        ]
+      },
+      {
+        "lemma": [
+          "sakānum"
+        ],
+        "attested": true,
+        "notes": [
+          "Mari also"
+        ]
+      },
+      {
+        "lemma": [
+          "šakānum"
+        ],
+        "notes": [],
+        "attested": true
+      },
+      {
+        "lemma": [
+          "šakāmu"
+        ],
+        "attested": true,
+        "notes": [
+          "occas.",
+          "?"
+        ]
+      }
+    ],
+    "meaning": "\"to put, place, lay down\" \\[GAR; occas. MAR\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(*a/u*)",
+        "vowels": [
+          {
+            "value": [
+              "a",
+              "u"
+            ],
+            "notes": []
+          }
+        ],
+        "key": "G",
+        "entries": [
+          {
+            "meaning": "\"set in place\" image, stele; ritual equipment, furniture; \"deposit\" document; \"plant\" tree, plant; \"put on\" jewellery, clothing; Am., Ug. \"put\" to the flames, burn; M/NB *ana utūni š.* \"melt down\"",
+            "vowels": []
+          },
+          {
+            "meaning": "stat. *šakin* \"is placed, is located, is present\" om. of parts, marks, signs; places, water, boundaries; of people \"are settled\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"provide, supply with\" (= 2 acc.), stat. \"is supplied with\" of people with jewellery, weapons, hairdo; field, subsistence; \"is provided\" with part of body, e.g. demon, monstrous birth with head, tail etc.; \"apply\" plaster to building; \"equip\" with life, understanding, \"mark\" with brand",
+            "vowels": []
+          },
+          {
+            "meaning": "\"place\" foot, hand etc.; transf. OB(Susa) \"place\" hand and tongue = \"to pledge\"; ear, eye, face = \"attend\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"put\" person(s) on stake, in lap etc.; \"appoint, assign, install\" to office; \"place\" as pledge",
+            "vowels": []
+          },
+          {
+            "meaning": "math. \"put down\" a number etc.",
+            "vowels": []
+          },
+          {
+            "meaning": "\"impose\" tax; victory",
+            "vowels": []
+          },
+          {
+            "meaning": "\"fix, arrange, contrive\" time, festival, boundary; assembly, consultation",
+            "vowels": []
+          },
+          {
+            "meaning": "\"confer, issue\" decision, pardon",
+            "vowels": []
+          },
+          {
+            "meaning": "\"pronounce, issue\" word(s), statement, oath, OB ellipt. \"declare, inform\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"make, conclude, establish\" agreement, treaty, friendship",
+            "vowels": []
+          },
+          {
+            "meaning": "\"create, cause, bring about\" good, evil, light, dark; peace, plenty; flood, trouble, need; freedom, protection; murder, rebellion; defeat; ominous result; cessation of work",
+            "vowels": []
+          },
+          {
+            "meaning": "\"carry out, organize\" actions, activities; OB ellipt. \"treat, process\" dates; NB *ina ṭābti š.* \"preserve, salt\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"make, install, set up, establish\" road, nest, dwelling, garden plot, account, name i.e. succession",
+            "vowels": []
+          },
+          {
+            "meaning": "*ana X š.* \"convert to, change into\", \"use as\"",
+            "vowels": []
+          }
+        ]
+      },
+      {
+        "meaning": "iter. of G (jB imper. *tišakkan*) \\[NB GAR.MEŠ ?\\]",
+        "vowels": [],
+        "key": "Gtn",
+        "entries": []
+      },
+      {
+        "meaning": "\"place permanently, enduringly\", esp. jB var. of G",
+        "vowels": [],
+        "key": "Gt",
+        "entries": []
+      },
+      {
+        "meaning": "jB/NA \"appoint as *šaknu*\"?",
+        "vowels": [],
+        "key": "D",
+        "entries": []
+      },
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "Š",
+        "entries": [
+          {
+            "meaning": "caus. of \"to place\" etc.",
+            "vowels": []
+          },
+          {
+            "meaning": "caus. of \"is present\" (*šakin*) \"make to be present\"; \"cause to settle, camp\"; \"make reside\" fear of god in s.o.; \"cause to be provided with\"",
+            "vowels": []
+          }
+        ]
+      },
+      {
+        "meaning": "iter. of Š 2",
+        "vowels": [],
+        "key": "Štn",
+        "entries": []
+      },
+      {
+        "meaning": "pass. of G \"be put\"; of goods \"be deposited\"; *zīm*, *pān X naškunu* \"have the appearance of, look like\"; MB, Am. \"come together with s.o.\"; \"become\"",
+        "vowels": [],
+        "key": "N",
+        "entries": []
+      },
+      {
+        "meaning": "iter. of N \\[GAR.GAR\\]",
+        "vowels": [],
+        "key": "Ntn",
+        "entries": []
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "GAR"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "MAR"
+        ],
+        "notes": [
+          "occas."
+        ]
+      },
+      {
+        "logogram": [
+          "GAR.MEŠ"
+        ],
+        "notes": [
+          "NB",
+          "?"
+        ]
+      },
+      {
+        "logogram": [
+          "GAR.GAR"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "šaknu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šakintu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šaknūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šakin",
+            "ṭēmi"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šakin",
+            "ṭēmūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šiknat",
+            "napišti"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šiknu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šikittu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šukuttu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šukānu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šākinu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šākinūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šukunnû"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šakkinu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "maškanu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "maškānu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "maškanūtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "maškattu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "maškittu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "muštaškinu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "iškinū"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "maškantu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šakinnu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šikinnu"
+          ],
+          "homonym": "II",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šikintu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "taškuttu"
+          ],
+          "homonym": "I",
+          "notes": [
+            "",
+            "?"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**šakānu(m)**, Mari also *sakānum*; occas. *šakāmu* ? \"to put, place, lay down\" \\[GAR; occas. MAR\\] **G** (*a/u*) **1.** \"set in place\" image, stele; ritual equipment, furniture; \"deposit\" document; \"plant\" tree, plant; \"put on\" jewellery, clothing; Am., Ug. \"put\" to the flames, burn; M/NB *ana utūni š.* \"melt down\" **2.** stat. *šakin* \"is placed, is located, is present\" om. of parts, marks, signs; places, water, boundaries; of people \"are settled\" **3.** \"provide, supply with\" (= 2 acc.), stat. \"is supplied with\" of people with jewellery, weapons, hairdo; field, subsistence; \"is provided\" with part of body, e.g. demon, monstrous birth with head, tail etc.; \"apply\" plaster to building; \"equip\" with life, understanding, \"mark\" with brand **4.** \"place\" foot, hand etc.; transf. OB(Susa) \"place\" hand and tongue = \"to pledge\"; ear, eye, face = \"attend\" **5.** \"put\" person(s) on stake, in lap etc.; \"appoint, assign, install\" to office; \"place\" as pledge **6.** math. \"put down\" a number etc. **7.** \"impose\" tax; victory **8.** \"fix, arrange, contrive\" time, festival, boundary; assembly, consultation **9.** \"confer, issue\" decision, pardon **10.** \"pronounce, issue\" word(s), statement, oath, OB ellipt. \"declare, inform\" **11.** \"make, conclude, establish\" agreement, treaty, friendship **12.** \"create, cause, bring about\" good, evil, light, dark; peace, plenty; flood, trouble, need; freedom, protection; murder, rebellion; defeat; ominous result; cessation of work **13.** \"carry out, organize\" actions, activities; OB ellipt. \"treat, process\" dates; NB *ina ṭābti š.* \"preserve, salt\" **14.** \"make, install, set up, establish\" road, nest, dwelling, garden plot, account, name i.e. succession **15.** *ana X š.* \"convert to, change into\", \"use as\" **Gtn** iter. of G (jB imper. *tišakkan*) \\[NB GAR.MEŠ ?\\] **Gt** \"place permanently, enduringly\", esp. jB var. of G **D** jB/NA \"appoint as *šaknu*\"? **Š** **1.** caus. of \"to place\" etc. **2.** caus. of \"is present\" (*šakin*) \"make to be present\"; \"cause to settle, camp\"; \"make reside\" fear of god in s.o.; \"cause to be provided with\" **Štn** iter. of Š 2 **N** pass. of G \"be put\"; of goods \"be deposited\"; *zīm*, *pān X naškunu* \"have the appearance of, look like\"; MB, Am. \"come together with s.o.\"; \"become\" **Ntn** iter. of N \\[GAR.GAR\\]; \\> *šaknu*, *šakintu*, *šaknūtu*, *šakin ṭēmi*, *šakin ṭēmūtu*; *šiknat napišti*; *šiknu*, *šikittu*; *šukuttu* I; *šukānu*; *šākinu*, *šākinūtum*; *šukunnû*; *šakkinu*; *maškanu*, *maškānum*, *maškanūtu*, *maškattu*, *maškittu*; *muštaškinu*; *iškinū*; *maškantu*; *šakinnu*; *šikinnu* II; *šikintu*; *taškuttu*?",
+    "roots": [
+      "skn",
+      "škm",
+      "škn"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "put",
+    "oraccWords": [
+      {
+        "lemma": "šakānu",
+        "guideWord": "put"
+      },
+      {
+        "lemma": "šiknu",
+        "guideWord": "act of putting/setting"
+      },
+      {
+        "lemma": "šiknu",
+        "guideWord": "setting"
+      },
+      {
+        "lemma": "šitkunu",
+        "guideWord": "situated"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "+ <i>eli</i>",
+        "reference": "Durand, LAPO 17, 150",
+        "AfO": "AfO 48/49 (2001/2002) 432",
+        "agiID": "18206"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>ida</i> <i>š.</i> in CT 42, 32 ist anders zu lesen",
+        "reference": "George, NABU 1995/68",
+        "AfO": "AfO 44/45 (1997/1998) 697",
+        "agiID": "15578"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>ina pān x šuškunu</i> “von jemandem fernhalten etc.”, Belege, Lit.; <i>ina pān x šakānu</i> ev. auch hierher?",
+        "reference": "Mayer, Or 59, 473f.",
+        "AfO": "AfO 40/41 (1993/1994) 483",
+        "agiID": "12387"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>pâ ištēn š./šuškunu</i>, (nA)",
+        "reference": "Schramm, EAK 2, 5",
+        "AfO": "AfO 25 (1974/1977) 469",
+        "agiID": "03163"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>qātam š.</i>, aB; “to start work”; Lit.",
+        "reference": "Dalley, Rimah 112 zu 19",
+        "AfO": "AfO 25 (1974/1977) 469",
+        "agiID": "03164"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>qība</i> <i>š</i>. “make a prognosis”",
+        "reference": "Biggs, RA 62, 58",
+        "AfO": "AfO Beiheft 21 (1986) 95",
+        "agiID": "01245"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>ša libbam gamram š.</i>, aB, Phrase, unklar",
+        "reference": "Dalley, Rimah 103 zu 7",
+        "AfO": "AfO 25 (1974/1977) 469",
+        "agiID": "03165"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>šuškunu</i> “to cause to move away”",
+        "reference": "Abusch, Witchcraft, 51<sup style=\"font-style: normal;\">69</sup>",
+        "AfO": "AfO 40/41 (1993/1994) 483",
+        "agiID": "12386"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<i>taqribtu</i> <i>š</i>., Belege",
+        "reference": "Borger, WeOr 5, 168",
+        "AfO": "AfO Beiheft 21 (1986) 95",
+        "agiID": "01246"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "<span style = \"font-variant: all-small-caps; font-style: normal\">(ki.)bala</span><i> </i>(<i>nabalkutu</i>)<i> … š.</i> “to effect a retreat”",
+        "reference": "Grayson, TCS 5, 73f., 281",
+        "AfO": "AfO 25 (1974/1977) 469",
+        "agiID": "03162"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "aB; “stellen”, “beistellen” u. a.",
+        "reference": "Kraus, BiOr 30, 62",
+        "AfO": "AfO 25 (1974/1977) 469",
+        "agiID": "03161"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "Belegstellen, Verwendung im Gilgameš-Epos",
+        "reference": "Hirsch, NABU 2010/19",
+        "AfO": "AfO 53 (2018) 781",
+        "agiID": "24323"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "N, “(Preis) festsetzen”",
+        "reference": "Postgate, RA 76, 188",
+        "AfO": "AfO 35 (1988) 356",
+        "agiID": "08614"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "N, “persönl.” Passiv",
+        "reference": "Mayer, Or 62, 334",
+        "AfO": "AfO 42/43 (1995/1996) 454",
+        "agiID": "13891"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "Š Stat. ausführliche Analyse der Bedeutung",
+        "reference": "Abusch, JCS 37, 92ff.",
+        "AfO": "AfO 35 (1988) 356",
+        "agiID": "08613"
+      },
+      {
+        "mainWord": "<i>šakānu</i>",
+        "note": "Verbesserungen und Ergänzungen zu CAD Š/1",
+        "reference": "Mayer, Or 63, 113ff.",
+        "AfO": "AfO 42/43 (1995/1996) 454",
+        "agiID": "13892"
+      },
+      {
+        "mainWord": "<i>sakānum</i>",
+        "note": "D; nicht nur Variante zu <i>šakānum</i>",
+        "reference": "Durand, ARM 26/1, 169<sup style=\"font-style: normal;\">a</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 371",
+        "agiID": "10214"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "Gt-Stamm",
+        "reference": "Streck, AOAT 303, 33 (46). 44 (82). 64 (158)",
+        "AfO": "AfO 52 (2011) 722",
+        "agiID": "22095"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in <i>qātam šakānum ina</i>",
+        "reference": "Veenhof, Security for Debt, 128f.",
+        "AfO": "AfO 50 (2003/2004) 623",
+        "agiID": "19412"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in <i>rittam eli … šakānum</i>; in Mari-Texten Äquivalent zu gleichem Idiom mit <i>qātum</i> statt <i>rittum</i>, Übernahme von Letztverantwortung für Entscheidungen ein Individuum betreffend",
+        "reference": "Fleming, Democracy's Ancient Ancestors, 286",
+        "AfO": "AfO 52 (2011) 722",
+        "agiID": "22097"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in <i>šuma šakānu</i> “einen Namen setzen” i. e. den Namen im Gedächtnis lebendig halten",
+        "reference": "Radner, SANTAG 8, 70ff.",
+        "AfO": "AfO 52 (2011) 722",
+        "agiID": "22098"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in <i>šumam</i> <i>š.</i>, “jem. rühmen”",
+        "reference": "Durand, ARM 26/1, 275<sup style=\"font-style: normal;\">d</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 374",
+        "agiID": "10412"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in <i>ultu ša aškunu aššâ</i> “Nachdem ich kurz gerastet hatte”",
+        "reference": "Kinnier Wilson, Gedenkschrift Cagni, 548",
+        "AfO": "AfO 50 (2003/2004) 623",
+        "agiID": "19413"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in Toponymen; Iškun-Ea, Iškun-Šamaš, Iškun-Ningirsu",
+        "reference": "Charpin, Archives 98",
+        "AfO": "AfO 28 (1981/1982) 343",
+        "agiID": "05177"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "in: <i>ana pāni … šakānum</i>",
+        "reference": "Kraus, AoF 10, 60",
+        "AfO": "AfO 33 (1986) 363",
+        "agiID": "07008"
+      },
+      {
+        "mainWord": "<i>sakānum</i>",
+        "note": "s. <i>sikkannum</i> ",
+        "reference": "",
+        "AfO": "AfO 35 (1988) 354",
+        "agiID": "08519"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "s. a. <i>ḫarrānu</i> ",
+        "reference": "",
+        "AfO": "AfO 38/39 (1991/1992) 374",
+        "agiID": "10413"
+      },
+      {
+        "mainWord": "<i>šakānum</i>",
+        "note": "s. a. <i>mītu</i> (Joannès) ",
+        "reference": "",
+        "AfO": "AfO 52 (2011) 722",
+        "agiID": "22096"
+      },
+      {
+        "mainWord": "<i>sakānum</i>",
+        "note": "",
+        "reference": "Durand, FM 8, 32f.",
+        "AfO": "AfO 52 (2011) 719",
+        "agiID": "21887"
+      },
+      {
+        "mainWord": "<i>šubarūtam šakānum</i>",
+        "note": "“die Freilassung verordnen”; aB",
+        "reference": "Kraus, AbB 7, p. 66 ad 88, Anm. a",
+        "AfO": "AfO 26 (1978/1979) 312",
+        "agiID": "03915"
+      },
+      {
+        "mainWord": "<i>rigmam šakānum</i>",
+        "note": "“ein Geschrei erheben”, Belege",
+        "reference": "Frankena, SLB 4, 87",
+        "AfO": "AfO 27 (1980) 429",
+        "agiID": "04618"
+      },
+      {
+        "mainWord": "<i>sakānum</i>",
+        "note": "von <i>šakānum</i> zu trennen, in den Wörterbüchern falsch",
+        "reference": "Durand, RA 105, 163<sup style = \"font-style: normal;\">39</sup>",
+        "AfO": "AfO 54 (2021) 729",
+        "agiID": "25324"
+      }
+    ],
+    "arabicGuideWord": "يضع"
+  },
+  {
+    "_id": "šaptu I",
+    "lemma": [
+      "šaptu"
+    ],
+    "attested": true,
+    "legacyLemma": "šaptu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "šabdu"
+        ],
+        "attested": true,
+        "notes": [
+          "occas."
+        ]
+      },
+      {
+        "lemma": [
+          "šaptum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "f.; du. *šaptā(n)*, *šaptī(n)*, *once šabā-*; pl. *šapātu*, once *šabātu* \"lip; rim\" \\[NUNDUN; occas. SUN4\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "",
+        "entries": [
+          {
+            "meaning": "of humans, animals; *š. elītu*, *šaplītu* \"upper, lower lip\"; (as speech organ) *ina š. šakānu* \"to utter\"",
+            "vowels": []
+          },
+          {
+            "meaning": "transf. \"words, opinion\"; *š. šemû* \"to listen to\" s.o.; *zikir*, *siqir š.* \"pronouncement\"; god *š.-ka* \"your spokesman\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"rim\" of vessel, jewel; cistern; \"crest\" of wall; \"bank\" of canal; Nuzi \"edge\" of path, field etc.",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "NUNDUN"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "SUN4"
+        ],
+        "notes": [
+          "occas."
+        ]
+      }
+    ],
+    "derived": [],
+    "derivedFrom": null,
+    "source": "**šaptu(m)**, occas. *šabdu* f.; du. *šaptā(n)*, *šaptī(n)*, *once šabā-*; pl. *šapātu*, once *šabātu* \"lip; rim\" \\[NUNDUN; occas. SUN4\\] **1.** of humans, animals; *š. elītu*, *šaplītu* \"upper, lower lip\"; (as speech organ) *ina š. šakānu* \"to utter\" **2.** transf. \"words, opinion\"; *š. šemû* \"to listen to\" s.o.; *zikir*, *siqir š.* \"pronouncement\"; god *š.-ka* \"your spokesman\" **3.** \"rim\" of vessel, jewel; cistern; \"crest\" of wall; \"bank\" of canal; Nuzi \"edge\" of path, field etc.",
+    "pos": [],
+    "guideWord": "lip",
+    "oraccWords": [
+      {
+        "lemma": "šaptu",
+        "guideWord": "lip"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>šaptu</i>",
+        "note": "<i>šaptam šemûm</i>",
+        "reference": "van Soldt, AbB 13, 64: 25. 105: 12f.",
+        "AfO": "AfO 42/43 (1995/1996) 455",
+        "agiID": "13929"
+      },
+      {
+        "mainWord": "<i>šaptum</i>",
+        "note": "<i>šapāt mātim šemûm</i> “écouter les propos du pays”",
+        "reference": "Charpin, ARM 26/2, 120",
+        "AfO": "AfO 38/39 (1991/1992) 374",
+        "agiID": "10448"
+      },
+      {
+        "mainWord": "<i>šaptum</i>",
+        "note": "bei Gefäßen, Mari",
+        "reference": "Guichard, ARM 31, 131",
+        "AfO": "AfO 52 (2011) 723",
+        "agiID": "22165"
+      },
+      {
+        "mainWord": "<i>šaptum</i>",
+        "note": "zu <i>šapat bēlīšu awīlum šakin</i>",
+        "reference": "Veenhof, RA 76, 121",
+        "AfO": "AfO 35 (1988) 357",
+        "agiID": "08636"
+      },
+      {
+        "mainWord": "<i>šaptum</i>",
+        "note": "",
+        "reference": "Durand, ARM 26/1, 176<sup style=\"font-style: normal;\">a</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 374",
+        "agiID": "10449"
+      }
+    ],
+    "arabicGuideWord": "شَّفة"
+  },
+  {
+    "_id": "šaqû II",
+    "lemma": [
+      "šaqû"
+    ],
+    "attested": true,
+    "legacyLemma": "šaqû(m)",
+    "homonym": "II",
+    "forms": [
+      {
+        "lemma": [
+          "šaqûm"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "\"to be(come) high, elevated\" \\[LAL; jB also NIM; astr. also E11, AN(.TA)\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "(*u/u* and *i/i*; stat. *šaqu* and *šaqi*) of gods, men; places; crops; parts of body, esp. *rēšu(m)* \"head\"; buildings; \"go upstream\", \"rise\" of sun etc.; of price, rank, position; stat. \"is sublime\" of lordship, strength, words etc.",
+        "vowels": [
+          {
+            "value": [
+              "i",
+              "i"
+            ],
+            "notes": [
+              "*u/u* and"
+            ]
+          },
+          {
+            "value": [],
+            "notes": [
+              "stat. *šaqu* and *šaqi*"
+            ]
+          }
+        ],
+        "key": "G",
+        "entries": []
+      },
+      {
+        "meaning": "\\[NIM.MEŠ\\] of heavenly body \"repeatedly rise\"; of heel \"walk with a springy gait\"",
+        "vowels": [],
+        "key": "Gtn",
+        "entries": []
+      },
+      {
+        "meaning": "\"raise up\" person, torch; \"exalt, extol\" god, person; kingship, throne, name; \"take upstream\" boat; absol. \"travel upstream\"; \"raise high\" building; terrace; of moon \"raise\" star above itself; *rēša/ī š.* \"raise head\" i.e. \"exert o.s.\"; \"look after\" s.o.; \"raise\" eyes, hands, tail; price",
+        "vowels": [],
+        "key": "D",
+        "entries": []
+      },
+      {
+        "meaning": "iter. of D",
+        "vowels": [],
+        "key": "Dtn",
+        "entries": []
+      },
+      {
+        "meaning": "? jB lex.",
+        "vowels": [],
+        "key": "Š",
+        "entries": []
+      },
+      {
+        "meaning": "\\~ G \"rise\" of price",
+        "vowels": [],
+        "key": "N",
+        "entries": []
+      },
+      {
+        "meaning": "mng. uncl.",
+        "vowels": [],
+        "key": "Ntn",
+        "entries": []
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "LAL"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "jB also NIM"
+        ]
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "astr. also E11, AN(.TA)"
+        ]
+      },
+      {
+        "logogram": [
+          "NIM.MEŠ"
+        ],
+        "notes": []
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "šaqû"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šaqîš"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šūqu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šušqûtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "šušqû"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "tašqītu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "mušaqqû"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**šaqû(m)** II \"to be(come) high, elevated\" \\[LAL; jB also NIM; astr. also E11, AN(.TA)\\] **G** (*u/u* and *i/i*; stat. *šaqu* and *šaqi*) of gods, men; places; crops; parts of body, esp. *rēšu(m)* \"head\"; buildings; \"go upstream\", \"rise\" of sun etc.; of price, rank, position; stat. \"is sublime\" of lordship, strength, words etc. **Gtn** \\[NIM.MEŠ\\] of heavenly body \"repeatedly rise\"; of heel \"walk with a springy gait\" **D** \"raise up\" person, torch; \"exalt, extol\" god, person; kingship, throne, name; \"take upstream\" boat; absol. \"travel upstream\"; \"raise high\" building; terrace; of moon \"raise\" star above itself; *rēša/ī š.* \"raise head\" i.e. \"exert o.s.\"; \"look after\" s.o.; \"raise\" eyes, hands, tail; price **Dtn** iter. of D **Š** \"exalt, elevate\" god, human; terrace; command; \"praise\" **Št(n)**? jB lex. **N** \\~ G \"rise\" of price **Ntn** mng. uncl.; \\> *šaqû* I, *šaqîš*; *šūqu* I; *šušqûtu*, *šušqûm*; *tašqītum*; *mušaqqû* I",
+    "roots": [
+      "šq'"
+    ],
+    "pos": [
+      "V"
+    ],
+    "guideWord": "be(come) high",
+    "oraccWords": [
+      {
+        "lemma": "šaqû",
+        "guideWord": "be(come) high"
+      },
+      {
+        "lemma": "šaqû",
+        "guideWord": "high one"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>šuqqû</i>",
+        "note": "und <i>ḫesû</i>, in Textilherstellung; “unter Ziehen drücken”",
+        "reference": "Lackenbacher, Syria 59, 143",
+        "AfO": "AfO 31 (1984) 299",
+        "agiID": "06585"
+      },
+      {
+        "mainWord": "<i>šaqû</i>",
+        "note": "Verb",
+        "reference": "Mayer, Or 66, 165",
+        "AfO": "AfO 46/47 (1999/2000) 579",
+        "agiID": "16881"
+      },
+      {
+        "mainWord": "<i>šaqû</i>",
+        "note": "vs. <i>šapālu</i>; Preise",
+        "reference": "Wunsch, Egibi 1/2, p. 190",
+        "AfO": "AfO 48/49 (2001/2002) 432",
+        "agiID": "18231"
+      },
+      {
+        "mainWord": "<i>šaqû</i>",
+        "note": "nB; “to go upstream”",
+        "reference": "Grayson, TCS 5, 82 zu iii 40",
+        "AfO": "AfO 25 (1974/1977) 470",
+        "agiID": "03204"
+      },
+      {
+        "mainWord": "<i>šaqûm</i>",
+        "note": "s. a. sag-íl-la (<i>šaqān rēši</i>) ",
+        "reference": "",
+        "AfO": "AfO 35 (1988) 357",
+        "agiID": "08643"
+      },
+      {
+        "mainWord": "<i>šaqû</i>",
+        "note": "“stromaufwärts gehen”, weiterer aB Beleg",
+        "reference": "van Soldt, AbB 13, 105: 14",
+        "AfO": "AfO 42/43 (1995/1996) 455",
+        "agiID": "13932"
+      },
+      {
+        "mainWord": "<i>šaqû</i>",
+        "note": "s. Gilg. XI 57",
+        "reference": "Edzard, ZA 90, 293<sup style=\"font-style: normal;\">6</sup>",
+        "AfO": "AfO 50 (2003/2004) 624",
+        "agiID": "19442"
+      },
+      {
+        "mainWord": "<i>šaqûm</i>",
+        "note": "",
+        "reference": "Joannès, Haradum II, 76",
+        "AfO": "AfO 52 (2011) 723",
+        "agiID": "22170"
+      }
+    ],
+    "arabicGuideWord": "يرتفع، يصعد"
+  },
+  {
+    "_id": "šumma I",
+    "lemma": [
+      "šumma"
+    ],
+    "attested": true,
+    "legacyLemma": "šumma",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "šummu"
+        ],
+        "attested": true,
+        "notes": [
+          "NA also"
+        ]
+      },
+      {
+        "lemma": [
+          "asummu"
+        ],
+        "attested": true,
+        "notes": [
+          "",
+          "^(New)^"
+        ]
+      }
+    ],
+    "meaning": "\"if\" (NB only lit.; *cf.* *kī* 4) \\[BAD; om., med. DIŠ; UD (also OB 360+40; MAŠ; AŠ); NA also MU (\\< *šumu*)\\]",
+    "amplifiedMeanings": [
+      {
+        "key": "",
+        "meaning": "",
+        "vowels": [],
+        "entries": [
+          {
+            "meaning": "introducing condit. clauses in indic.: \"if\" (*cf.* GAG §161)",
+            "vowels": []
+          },
+          {
+            "meaning": "introducing oaths, with subjunct. M/NA, M/jB (OB with indic.): *šumma lā* = pos., *šumma* = neg. oath",
+            "vowels": []
+          },
+          {
+            "meaning": "*šumma ... šumma* \"whether ... or\" (*cf.* GAG §§161b-c, 180b); ext. \"either ... or\"; MB also *(u) šumma* \"or rather ...\"",
+            "vowels": []
+          },
+          {
+            "meaning": "OA *š. libbika* \"if you wish\"; *š. lā* \"without, in the absence of\"",
+            "vowels": []
+          },
+          {
+            "meaning": "NA introducing indir. questions, with subjunct. \"whether, if\" (*cf.* GAG §180b)",
+            "vowels": []
+          },
+          {
+            "meaning": "Am., Nuzi, Bogh. conj. \"when\"",
+            "vowels": []
+          },
+          {
+            "meaning": "Bab., Am., NA adv. \"now see, truly\";",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "BAD"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "DIŠ"
+        ],
+        "notes": [
+          "om., med."
+        ]
+      },
+      {
+        "logogram": [
+          "UD"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [
+          "MAŠ"
+        ],
+        "notes": [
+          "OB"
+        ]
+      },
+      {
+        "logogram": [
+          "AŠ"
+        ],
+        "notes": [
+          "OB"
+        ]
+      },
+      {
+        "logogram": [
+          "MU"
+        ],
+        "notes": [
+          "NA also",
+          "(\\< *šumu*)"
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "šummaman"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šummu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ]
+    ],
+    "derivedFrom": {
+      "lemma": [
+        "šumu"
+      ],
+      "homonym": "I",
+      "notes": []
+    },
+    "source": "**šumma**, NA also *šummu* \"if\" (NB only lit.; *cf.* *kī* 4) \\[BAD; om., med. DIŠ; UD (also OB 360+40; MAŠ; AŠ); NA also MU (\\< *šumu*)\\] **1.** introducing condit. clauses in indic.: \"if\" (*cf.* GAG §161) **2.** introducing oaths, with subjunct. M/NA, M/jB (OB with indic.): *šumma lā* = pos., *šumma* = neg. oath **3.** *šumma ... šumma* \"whether ... or\" (*cf.* GAG §§161b-c, 180b); ext. \"either ... or\"; MB also *(u) šumma* \"or rather ...\" **4.** OA *š. libbika* \"if you wish\"; *š. lā* \"without, in the absence of\" **5.** NA introducing indir. questions, with subjunct. \"whether, if\" (*cf.* GAG §180b) **6.** Am., Nuzi, Bogh. conj. \"when\" **7.** Bab., Am., NA adv. \"now see, truly\"; \\> *šummaman*; *šummu* I",
+    "pos": [
+      "MOD"
+    ],
+    "guideWord": "if",
+    "oraccWords": [
+      {
+        "lemma": "šumma",
+        "guideWord": "if"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "“truly”",
+        "reference": "Stol, AbB 9, p. 155, 253c",
+        "AfO": "AfO 29/30 (1983/1984) 418",
+        "agiID": "05764"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "<i>šumma lā</i> / <i>summa ul</i>",
+        "reference": "del Monte, Trattato 68",
+        "AfO": "AfO 35 (1988) 358",
+        "agiID": "08703"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "= i-gi-in-zu",
+        "reference": "Wilcke, JNES 27, 230",
+        "AfO": "AfO Beiheft 21 (1986) 99",
+        "agiID": "01342"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "Etymologie usw.",
+        "reference": "Voigt, AOAT 240, 525ff.",
+        "AfO": "AfO 44/45 (1997/1998) 700",
+        "agiID": "15759"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "im Drohfluch",
+        "reference": "Farber, ZA 64, 177ff.",
+        "AfO": "AfO 25 (1974/1977) 473",
+        "agiID": "03301"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "in <i>adê</i>-Texten, mit und ohne Subjunktiv",
+        "reference": "Dalley, OLZ 85, 545f.",
+        "AfO": "AfO 40/41 (1993/1994) 486",
+        "agiID": "12542"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "Konditionalsatz: p. [IV], abstract: “as opposed to the standard account found in von Soden's <i>Grundriss</i>, it is established that the preterite (<i>iprus</i>) is associated with the statement of conditions in past time”. [S. Hirsch, AOAT 1 (1969), 125; Or 44 (1975), 321f.]",
+        "reference": "Maloney, T-Perfect 214ff.",
+        "AfO": "AfO 33 (1986) 363",
+        "agiID": "07025"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "Perfekt: in <i>šumma</i>-Satz “indicates future discovery of a past action”",
+        "reference": "Dalley und Postgate, CTN 3 p. 59",
+        "AfO": "AfO 33 (1986) 363",
+        "agiID": "07026"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "s. <i>asummu</i> ",
+        "reference": "",
+        "AfO": "AfO 46/47 (1999/2000) 581",
+        "agiID": "17093"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "s. Grammatik, akkadisch <i>-ma</i>",
+        "reference": "E. Cohen, ZA 90, 223",
+        "AfO": "AfO 50 (2003/2004) 625",
+        "agiID": "19503"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "Schreibungen",
+        "reference": "Metzler, AOAT 279, 50ff.",
+        "AfO": "AfO 52 (2011) 726",
+        "agiID": "22323"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "zur Schreibung diš",
+        "reference": "Fincke, JEOL 40, 133ff.",
+        "AfO": "AfO 53 (2018) 783",
+        "agiID": "24473"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "zwei <i>š.</i>-Sätze, zum Ausdruck entgegengesetzter Ergebnisse der Opferschau",
+        "reference": "Mayer, Or 57, 163",
+        "AfO": "AfO 38/39 (1991/1992) 376",
+        "agiID": "10544"
+      },
+      {
+        "mainWord": "<i>u₄-ma</i>",
+        "note": "für <i>šumma</i>",
+        "reference": "Durand, ARM 26/1, 65",
+        "AfO": "AfO 38/39 (1991/1992) 379",
+        "agiID": "10688"
+      },
+      {
+        "mainWord": "<i>asummu</i>",
+        "note": "nA Variante zu <i>šumma</i>",
+        "reference": "Parpola, AOAT 247, 318",
+        "AfO": "AfO 46/47 (1999/2000) 567",
+        "agiID": "16058"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "in Konditionalsätzen",
+        "reference": "E. Cohen, Conditional Structures, 29ff. 115ff.",
+        "AfO": "AfO 54 (2021) 731",
+        "agiID": "25423"
+      },
+      {
+        "mainWord": "<i>šumma</i>",
+        "note": "",
+        "reference": "von Dassow, BASOR 366, 85",
+        "AfO": "AfO 54 (2021) 731",
+        "agiID": "25424"
+      }
+    ],
+    "arabicGuideWord": "إذا",
+    "cdaAddenda": "**šumma** \\[Justification\\] **3**. for ext. “either ... or” see Mayer, Or. NS 57 (1988) 163."
+  },
+  {
+    "_id": "ūmu I",
+    "lemma": [
+      "ūmu"
+    ],
+    "attested": true,
+    "legacyLemma": "ūmu(m)",
+    "homonym": "I",
+    "forms": [
+      {
+        "lemma": [
+          "ūmum"
+        ],
+        "notes": [],
+        "attested": true
+      }
+    ],
+    "meaning": "pl. m. & f. \"day\" \\[UD; astr. *cf.* 1\\]",
+    "amplifiedMeanings": [
+      {
+        "meaning": "",
+        "vowels": [],
+        "key": "",
+        "entries": [
+          {
+            "meaning": "\"daytime\" as opp. to night \\[astr. ME\\]; is bright, cloudy etc.; *ū. kurû/arku* \"short/long day\" of winter/summer; times/parts of day *cf.* e.g. *mašlu*, *mišlu*, *qablu* I 3, *šērtu* II, *šēru* II; *kal(a) ūmi* \"all day\"",
+            "vowels": []
+          },
+          {
+            "meaning": "\"(whole) day\" (= 24 hours); as date \\[UD.X.KAM = \"Xth day\", but also \"X days\"\\]; favourable, unfavourable; MA UD-*um* \"per day\"; MA, jB *u/arah ūmāte* \"a whole month\"; OA *adi ū. annîm* \"till today\", jB *ištu ūmimma* \"from today\"; NA, NB *ūmu (...) ūmu* \"day by day; one day ... the other\"; st. abs. O/jB *ūm mašil*, *mašil ūm* \"half a day\"",
+            "vowels": []
+          },
+          {
+            "meaning": "special days: for rituals, festivals *cf.* e.g. *akītu*, *isinnu*, *tēliltu*; *ūm(u) ili* \"(personal?) god's day\"; of death, fate etc. *cf.* *bibbulu* 2, *mūtu*, *šīmtu*, *ištēn ū.* etc. \"in one day\", i.e. quickly",
+            "vowels": []
+          },
+          {
+            "meaning": "pl. \"days\" as period of time, of past, future; of s.o.'s lifetime; of allotted period in law, commerce, *umū/ātu* + *malû* \"time is up\"; of season, weather, harvest, OB *ūmāt šamaššammī* \"sesame time\"; *ina lā ūmišu* \"at the wrong time\"",
+            "vowels": []
+          },
+          {
+            "meaning": "in temporal expressions: *(ina) ū.* \"at the time of\"; *adi/ultu ū.* \"until/since\"; *in(a) ūmišu(ma)* \"at his time, then\", + pres. \"at the stipulated time\"",
+            "vowels": []
+          }
+        ]
+      }
+    ],
+    "logograms": [
+      {
+        "logogram": [
+          "UD"
+        ],
+        "notes": []
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "astr. *cf.* 1"
+        ]
+      },
+      {
+        "logogram": [
+          "ME"
+        ],
+        "notes": [
+          "astr."
+        ]
+      },
+      {
+        "logogram": [],
+        "notes": [
+          "UD.X.KAM = \"Xth day\", but also \"X days\""
+        ]
+      }
+    ],
+    "derived": [
+      [
+        {
+          "lemma": [
+            "ūm"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūma"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmiš"
+          ],
+          "homonym": "I",
+          "notes": [
+            "1"
+          ]
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmišam"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ūmussu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmšu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmītu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmtu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmakkal"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "ūmakkalû"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "anūmīšu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "inūmē"
+          ],
+          "homonym": "I",
+          "notes": []
+        },
+        {
+          "lemma": [
+            "inūmīšu"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "šalšūmi"
+          ],
+          "homonym": "I",
+          "notes": []
+        }
+      ],
+      [
+        {
+          "lemma": [
+            "ūmu"
+          ],
+          "homonym": "II",
+          "notes": [
+            "*cf.*"
+          ]
+        }
+      ]
+    ],
+    "derivedFrom": null,
+    "source": "**ūmu(m)** I; pl. m. & f. \"day\" \\[UD; astr. *cf.* 1\\] **1.** \"daytime\" as opp. to night \\[astr. ME\\]; is bright, cloudy etc.; *ū. kurû/arku* \"short/long day\" of winter/summer; times/parts of day *cf.* e.g. *mašlu*, *mišlu*, *qablu* I 3, *šērtu* II, *šēru* II; *kal(a) ūmi* \"all day\" **2.** \"(whole) day\" (= 24 hours); as date \\[UD.X.KAM = \"Xth day\", but also \"X days\"\\]; favourable, unfavourable; MA UD-*um* \"per day\"; MA, jB *u/arah ūmāte* \"a whole month\"; OA *adi ū. annîm* \"till today\", jB *ištu ūmimma* \"from today\"; NA, NB *ūmu (...) ūmu* \"day by day; one day ... the other\"; st. abs. O/jB *ūm mašil*, *mašil ūm* \"half a day\" **3.** special days: for rituals, festivals *cf.* e.g. *akītu*, *isinnu*, *tēliltu*; *ūm(u) ili* \"(personal?) god's day\"; of death, fate etc. *cf.* *bibbulu* 2, *mūtu*, *šīmtu*, *ištēn ū.* etc. \"in one day\", i.e. quickly **4.** pl. \"days\" as period of time, of past, future; of s.o.'s lifetime; of allotted period in law, commerce, *umū/ātu* + *malû* \"time is up\"; of season, weather, harvest, OB *ūmāt šamaššammī* \"sesame time\"; *ina lā ūmišu* \"at the wrong time\" **5.** in temporal expressions: *(ina) ū.* \"at the time of\"; *adi/ultu ū.* \"until/since\"; *in(a) ūmišu(ma)* \"at his time, then\", + pres. \"at the stipulated time\"; \\> *ūm*; *ūma*; *ūmiš* 1; *ūmišam*, *ūmussu*; *ūmšu*; *ūmītu*; *ūmtum*; *ūmakkal*, *ūmakkalûm*; *anūmīšu*; *inūmē*, *inūmīšu*; *šalšūmi*; *cf.* *ū.* II",
+    "pos": [],
+    "guideWord": "day",
+    "oraccWords": [
+      {
+        "lemma": "ina kal ūme",
+        "guideWord": "every day"
+      },
+      {
+        "lemma": "ūm",
+        "guideWord": "day"
+      },
+      {
+        "lemma": "ūmu",
+        "guideWord": "day"
+      },
+      {
+        "lemma": "ūmu-erpu",
+        "guideWord": "cloudy day"
+      },
+      {
+        "lemma": "ūmāya",
+        "guideWord": "each day"
+      },
+      {
+        "lemma": "ūmu",
+        "guideWord": "sunset to moonrise"
+      }
+    ],
+    "origin": "cda",
+    "akkadischeGlossareUndIndices": [
+      {
+        "mainWord": "<i>ūm qerbūti</i>",
+        "note": "temporaler Ausdruck ohne Präposition mit dem Plural des Adjektivs [?]",
+        "reference": "Durand, ARM 26/1, 107<sup style=\"font-style: normal;\">a</sup>",
+        "AfO": "AfO 38/39 (1991/1992) 379",
+        "agiID": "10696"
+      },
+      {
+        "mainWord": "<i>ūmā/ēti ša</i>",
+        "note": "“solange wie”, aB",
+        "reference": "Durand und Marti, NABU 2003/50",
+        "AfO": "AfO 52 (2011) 730",
+        "agiID": "22555"
+      },
+      {
+        "mainWord": "<i>ú-mi</i>",
+        "note": "= <i>u₄-mi</i>, aB",
+        "reference": "Kraus, AbB 7, 5: 3 und Anm. a",
+        "AfO": "AfO 26 (1978/1979) 313",
+        "agiID": "03944"
+      },
+      {
+        "mainWord": "<i>ūmū</i>",
+        "note": "in <i>u. mitḫarūtu</i>, unklar",
+        "reference": "Oppenheim, JNES 33, 206<sup style=\"font-style: normal;\">43</sup>",
+        "AfO": "AfO 25 (1974/1977) 479",
+        "agiID": "03512"
+      },
+      {
+        "mainWord": "<i>ûmum</i>",
+        "note": "<i>ûma</i>(<i>m</i>)<i> rêqa</i>(<i>m</i>), in Omina",
+        "reference": "Nougayrol, RA 65, 80",
+        "AfO": "AfO Beiheft 21 (1986) 105",
+        "agiID": "01611"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "als Obj. von <i>malûm</i>",
+        "reference": "Frankena, SLB 4, 113",
+        "AfO": "AfO 27 (1980) 436",
+        "agiID": "04840"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "in <i>ina ūmīma</i>",
+        "reference": "Fleming, HSS 42, 54<sup style=\"font-style: normal;\">17</sup>",
+        "AfO": "AfO 42/43 (1995/1996) 458",
+        "agiID": "14108"
+      },
+      {
+        "mainWord": "<i>ūmum</i>",
+        "note": "<i>ina ūmi</i> “at the time”",
+        "reference": "van Soldt, AbB 12, p. 155, 200b)",
+        "AfO": "AfO 38/39 (1991/1992) 379",
+        "agiID": "10698"
+      },
+      {
+        "mainWord": "<i>ūmum</i>",
+        "note": "<i>ištu ina ūmišu</i> “depuis ce jour-là”, une expression bizarre",
+        "reference": "Charpin, ARM 26/2, p. 27",
+        "AfO": "AfO 38/39 (1991/1992) 379",
+        "agiID": "10697"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "in <i>ūmu kunnu</i>, Nr. 9: 6; <i>ū.</i> <i>kunnu</i> vs. <i>ū.</i> <i>turru</i>",
+        "reference": "MacGinnis, Mesopotamia 31, 109",
+        "AfO": "AfO 46/47 (1999/2000) 583",
+        "agiID": "17244"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "Tages-Ration",
+        "reference": "Edel, ÄHK II 225",
+        "AfO": "AfO 44/45 (1997/1998) 702",
+        "agiID": "15888"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "vergöttlichter Tag; Mißinterpretation des Schreibers aus dem aAkk",
+        "reference": "Al-Rawi und George, Iraq 56, 148",
+        "AfO": "AfO 44/45 (1997/1998) 702",
+        "agiID": "15890"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "zu aA <i>ūm eṭārim</i> und <i>ūm gamālim</i>",
+        "reference": "Jankowskaya, VDI 208, 3ff.",
+        "AfO": "AfO 44/45 (1997/1998) 702",
+        "agiID": "15889"
+      },
+      {
+        "mainWord": "<i>ūmum</i>",
+        "note": "ad CAD U/W",
+        "reference": "Stol, BiOr 69, 532ff.",
+        "AfO": "AfO 54 (2021) 732",
+        "agiID": "25496"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "in <i>ūmi ūmatum</i>, “a period of x days”, “during x days”, Komm. irrig u₄-<i>ma-tim</i>",
+        "reference": "van Lerberghe und Voet, Ur-Utu 1, 32: 3",
+        "AfO": "AfO 40/41 (1993/1994) 489",
+        "agiID": "12717"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "in <i>ūmi ūmatum</i>; s. a. <i>qerēbum</i> ",
+        "reference": "",
+        "AfO": "AfO 40/41 (1993/1994) 489",
+        "agiID": "12718"
+      },
+      {
+        "mainWord": "<i>ūmu</i>",
+        "note": "in <i>pānêm ūmšu</i> ARM 28, 171",
+        "reference": "Kupper, NABU 1999/14",
+        "AfO": "AfO 48/49 (2001/2002) 435",
+        "agiID": "18393"
+      }
+    ],
+    "arabicGuideWord": "يوم"
+  },
+  {
+    "_id": "ṣalbatānu I",
+    "lemma": [
+      "ṣalbatānu"
+    ],
+    "attested": true,
+    "legacyLemma": "ṣalbatānu",
+    "homonym": "I",
+    "forms": [],
+    "meaning": "\"planet Mars\" M/NB, NA",
+    "amplifiedMeanings": [],
+    "logograms": [],
+    "derived": [],
+    "derivedFrom": null,
+    "source": "**ṣalbatānu** \"planet Mars\" M/NB, NA",
+    "pos": [],
+    "guideWord": "planet Mars",
+    "oraccWords": [],
+    "origin": "cda",
+    "arabicGuideWord": "كوكب المريخ"
+  }
+]

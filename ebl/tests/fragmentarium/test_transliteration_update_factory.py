@@ -5,7 +5,7 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.transliteration.domain.atf import Atf
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.transliteration_error import TransliterationError
 
 
@@ -36,8 +36,5 @@ def test_create_invalid_atf(sign_repository):
         factory.create(atf)
 
     assert excinfo.value.errors == [
-        {
-            "description": ("Invalid line:  {kur}?\n" "                    ^\n"),
-            "lineNumber": 1,
-        }
+        {"description": "Invalid line: 1. {kur}?", "lineNumber": 1}
     ]

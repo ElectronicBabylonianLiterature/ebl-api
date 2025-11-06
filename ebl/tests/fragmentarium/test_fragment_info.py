@@ -4,7 +4,7 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.record import Record, RecordEntry, RecordType
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 FRAGMENT = FragmentFactory.build()
 FRAGMENT_WITH_REFERENCES = FragmentFactory.build(

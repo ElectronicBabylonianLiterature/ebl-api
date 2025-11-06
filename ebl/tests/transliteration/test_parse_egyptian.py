@@ -7,7 +7,7 @@ from ebl.transliteration.domain.egyptian_metrical_feet_separator_token import (
     EgyptianMetricalFeetSeparator,
 )
 from ebl.transliteration.domain.enclosure_tokens import Removal
-from ebl.transliteration.domain.lark_parser import parse_atf_lark
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.line import Line
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.sign_tokens import Reading

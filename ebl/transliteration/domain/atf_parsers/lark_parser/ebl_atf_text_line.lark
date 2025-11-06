@@ -1,0 +1,290 @@
+%import .ebl_atf_common (AKKADIAN_ALPHABET, GREEK_ALPHABET)
+%import .ebl_atf_common (VALUE_CHARACTER, LOGOGRAM_CHARACTER)
+%import .ebl_atf_common (UNCERTAIN, CORRECTION, COLLATION, NO_LONGER_VISIBLE)
+%import .ebl_atf_common.line_number -> line_number
+%import .legacy_atf (LEGACY_OPEN_HALF_BRACKET, LEGACY_CLOSE_HALF_BRACKET)
+%import .legacy_atf (LEGACY_ORACC_JOINER, LEGACY_ORACC_DISH_DIVIDER)
+%import .legacy_atf (legacy_uncertain_sign_prefix)
+
+text_line: line_number "." _WORD_SEPARATOR+ text _WORD_SEPARATOR*
+
+text: (_shifted_text | _non_normalized_text) (_WORD_SEPARATOR+ _shifted_text)*
+_shifted_text: normalized_akkadian_shift _WORD_SEPARATOR+ _normalized_akkadian
+             | greek_shift _WORD_SEPARATOR+ _greek
+             | language_shift _WORD_SEPARATOR+ _non_normalized_text
+
+_non_normalized_text: _head _tail*
+_head: _have_both
+     | _require_both
+     | _omit_left
+     | _omit_right+ _have_both?
+_tail: _WORD_SEPARATOR _omit_right* _have_both?
+     | _WORD_SEPARATOR? _omit_left+
+     | _WORD_SEPARATOR _require_both
+     | _require_both_optional_ws
+
+_require_both: commentary_protocol
+            | divider_variant
+            | divider
+            | line_break
+
+_require_both_optional_ws.-5: _WORD_SEPARATOR? (divider_variant | divider)
+
+_have_both: word_omitted 
+         | tabulation
+         | column_token
+         | erasure
+         | word
+         | lone_determinative
+
+_omit_left.-1: close_broken_away
+             | close_perhaps_broken_away
+             | close_accidental_omission
+             | close_intentional_omission
+             | close_removal
+             | close_document_oriented_gloss
+_omit_right.-1: open_broken_away
+             | open_perhaps_broken_away
+             | open_accidental_omission
+             | open_intentional_omission
+             | open_removal
+             | open_document_oriented_gloss
+
+divider.5: DIVIDER_SYMBOL modifiers flags
+line_break.5: "|"
+close_document_oriented_gloss: CLOSE_DOCUMENT_ORIENTED_GLOSS
+open_document_oriented_gloss: OPEN_DOCUMENT_ORIENTED_GLOSS
+language_shift: SHIFT
+normalized_akkadian_shift: NORMALIZED_SHIFT
+greek_shift: GREEK_SHIFT
+
+divider_variant: divider _VARIANT_SEPARATOR divider
+               | divider _VARIANT_SEPARATOR variant_part
+               | variant_part _VARIANT_SEPARATOR divider
+
+word_omitted: WORD_OMITTED
+WORD_OMITTED: "ø"
+
+tabulation: TABULATION
+TABULATION: "($___$)"
+
+column_token: "&" [COLUMN_NUMBER]
+COLUMN_NUMBER: "1".."9" ("0".."9")*
+
+commentary_protocol: PROTOCOL_QUOTATION
+                   | PROTOCOL_BASE_TEXT
+                   | PROTOCOL_COMMENTARY
+                   | PROTOCOL_UNCERTAIN
+PROTOCOL_QUOTATION: "!qt"
+PROTOCOL_BASE_TEXT: "!bs"
+PROTOCOL_COMMENTARY: "!cm"
+PROTOCOL_UNCERTAIN: "!zz"
+
+DOCUMENT_ORIENTED_GLOSS: OPEN_DOCUMENT_ORIENTED_GLOSS
+                       | CLOSE_DOCUMENT_ORIENTED_GLOSS
+OPEN_DOCUMENT_ORIENTED_GLOSS: "{("
+CLOSE_DOCUMENT_ORIENTED_GLOSS: ")}"
+
+NORMALIZED_SHIFT: "%n"
+GREEK_SHIFT.1: "%grc" | "%akkgrc" | "%suxgrc"
+SHIFT: "%" ("a".."z" | "A".."Z" | "0".."9") ("a".."z" | "A".."Z" | "0".."9")+
+     | "%" ("a".."m" | "o".."z" | "A".."Z" | "0".."9") 
+
+erasure.-1: "°" erasure_part "\\" erasure_part "°"
+erasure_part: ((divider | word | lone_determinative) (_WORD_SEPARATOR (divider | word | lone_determinative))*)?
+
+_WORD_SEPARATOR: " "
+
+?any_word: lone_determinative
+         | word
+
+DIVIDER_SYMBOL: ":'" | ":\"" | ":." | "::" | ":" | ";" | "/"
+
+?broken_away: open_broken_away | close_broken_away
+open_broken_away: "["
+close_broken_away: "]"
+open_perhaps_broken_away: "("
+close_perhaps_broken_away: ")"
+open_accidental_omission: "<"
+close_accidental_omission: ">"
+open_intentional_omission: "<("
+close_intentional_omission: ")>"
+open_removal: "<<"
+close_removal: ">>"
+open_legacy_damage: LEGACY_OPEN_HALF_BRACKET
+close_legacy_damage: LEGACY_CLOSE_HALF_BRACKET
+
+lone_determinative.4: _any_open? (phonetic_gloss | determinative) _any_close?
+
+word.3: _any_open? _word_body _any_close?
+_word_body: (inline_erasure _loose_joiner?)* _parts (_loose_joiner? inline_erasure (_loose_joiner? _parts)?)*
+
+inline_erasure: "°" inline_erasure_part "\\" inline_erasure_part "°"
+inline_erasure_part: _parts?
+
+_parts: _parts_pattern | _parts_pattern_gloss
+_parts_pattern_gloss: gloss (_loose_joiner? value)? _parts_tail*
+_parts_pattern: value _parts_tail*
+_parts_tail: _strict_joiner value
+           | _loose_joiner? (gloss _loose_joiner?)+ value?
+
+?gloss: linguistic_gloss | phonetic_gloss | determinative
+linguistic_gloss: "{{" gloss_body "}}"
+phonetic_gloss: "{+" gloss_body "}"
+determinative: "{" gloss_body "}"
+gloss_body: open_omission_or_removal* value (_strict_joiner value)* close_omission_or_removal*
+?open_omission_or_removal: open_accidental_omission | open_intentional_omission | open_removal
+?close_omission_or_removal: close_accidental_omission | close_intentional_omission | close_removal
+
+
+
+_loose_joiner: _strict_joiner
+             | in_word_newline? _any_close joiner? _any_open?
+             | in_word_newline? _any_close? joiner? _any_open
+_strict_joiner: in_word_newline? _any_close? joiner _any_open?
+_any_open: (open_intentional_omission
+      | open_accidental_omission
+      | open_removal
+      | open_broken_away
+      | open_perhaps_broken_away
+      | open_legacy_damage)+
+_any_close: (close_intentional_omission
+      | close_accidental_omission
+      | close_removal
+      | close_broken_away 
+      | close_perhaps_broken_away  
+      | close_legacy_damage)+
+!joiner: _WORD_SEPARATOR* ("-" | "+" | "." | ":" | ";" | ","  | LEGACY_ORACC_JOINER) _WORD_SEPARATOR*
+
+?value: unidentified_sign
+      | unclear_sign
+      | unknown_number_of_signs
+      | legacy_uncertain_sign
+      | reading
+      | number
+      | logogram
+      | surrogate
+      | compound_grapheme
+      | variant
+      | egyptian_metrical_feet_separator
+
+variant: variant_part (_VARIANT_SEPARATOR variant_part)+
+?variant_part: unidentified_sign
+            | unclear_sign
+            | legacy_uncertain_sign
+            | reading
+            | logogram
+            | surrogate
+            | number
+            | compound_grapheme
+
+egyptian_metrical_feet_separator: "•" flags
+?legacy_uncertain_sign: legacy_uncertain_sign_prefix logogram
+
+number: number_name modifiers flags ["(" any_grapheme ")"]
+reading: value_name sub_index? modifiers? flags? ["(" any_grapheme ")"]
+logogram: logogram_name sub_index modifiers flags ["(" any_grapheme ")"]
+surrogate: logogram_name sub_index modifiers flags "<(" surrogate_text ")>"
+surrogate_text: reading (joiner reading)*
+
+number_name: number_name_head (broken_away number_name_part)*
+value_name: value_name_part (broken_away value_name_part)*
+logogram_name: logogram_name_part (broken_away logogram_name_part)* | LEGACY_ORACC_DISH_DIVIDER
+!number_name_head:  "0".."9" "0".."9"* | "½" | "⅓" | "¼" | "⅕" | "⅙" | "⅔" | "⅚"
+!number_name_part:  "0".."9"+
+value_name_part: VALUE_CHARACTER+
+logogram_name_part: LOGOGRAM_CHARACTER+
+
+?any_grapheme: compound_grapheme | grapheme
+compound_grapheme: "|" compound_fragment ("." compound_fragment)* "|"
+?compound_fragment: sub_compound (COMPOUND_OPERATOR sub_compound)*
+?sub_compound: "(" compound_part ((COMPOUND_OPERATOR) compound_part)* ")"
+            | compound_part
+?compound_part: grapheme (VARIANT_SEPARATOR grapheme)*
+COMPOUND_OPERATOR: "×" | "%" | "&" | "+" | "."
+
+grapheme: grapheme_name sub_index modifiers flags
+grapheme_name: grapheme_name_part
+grapheme_name_part: VALUE_CHARACTER+ 
+      | LOGOGRAM_CHARACTER+ 
+      | number_name_head number_name_part*
+
+sub_index: [SUB_INDEX]
+SUB_INDEX: NUMERIC_SUB_INDEX | "ₓ"
+NUMERIC_SUB_INDEX: "₀" | "₁".."₉" ("₀".."₉")* | "1".."9" ("0".."9")*
+
+unidentified_sign: "X" flags
+unclear_sign: "x" flags
+
+_VARIANT_SEPARATOR: VARIANT_SEPARATOR
+VARIANT_SEPARATOR: "/"
+
+flags: (UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE | DAMAGE)*
+FLAG: (UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE | DAMAGE)*
+DAMAGE: "#"
+
+modifiers: modifier*
+modifier: ((MODIFIER_PREFIX | LEGACY_MODIFIER_PREFIX) (MODIFIER_CHARACTER | ("0".."9")+))
+MODIFIER_PREFIX: "@"
+LEGACY_MODIFIER_PREFIX: "~"
+MODIFIER_CHARACTER: "c" | "f" | "g" | "s" | "t" | "n" | "z" | "k" | "r" | "h" | "v" | "aš"
+
+in_word_newline: IN_WORD_NEWLINE
+IN_WORD_NEWLINE: ";"
+
+unknown_number_of_signs: UNKNOWN_NUMBER_OF_SIGNS
+UNKNOWN_NUMBER_OF_SIGNS: "..."
+
+
+_normalized_akkadian: _normalized_text (_WORD_SEPARATOR break _WORD_SEPARATOR _normalized_text)*
+
+_normalized_text: (akkadian_word | _lacuna) (_WORD_SEPARATOR (akkadian_word | _lacuna))*
+
+?break: certain_caesura | uncertain_caesura | certain_foot_separator | uncertain_foot_separator
+certain_caesura: _CAESURA
+uncertain_caesura: "(" _CAESURA ")"
+_CAESURA: "||"
+certain_foot_separator: _FOOT_SEPARATOR
+uncertain_foot_separator: "(" _FOOT_SEPARATOR ")"
+_FOOT_SEPARATOR: "|"
+
+_lacuna: enclosure_open* unknown_number_of_signs enclosure_close*
+
+akkadian_word: parts normalized_modifiers closing_enclosures
+parts: _akkadian_word_head _akkadian_word_body*
+_akkadian_word_head: enclosure_open* (unknown_number_of_signs _between_strings)? _part_sequence
+_akkadian_word_body: _between_strings (akkadian_string unknown_number_of_signs)+ akkadian_string?
+                   | _between_strings (unknown_number_of_signs akkadian_string)+ unknown_number_of_signs?
+                   | _between_strings akkadian_string
+                   | _between_strings unknown_number_of_signs
+_part_sequence: (akkadian_string unknown_number_of_signs)+ akkadian_string?
+              | (unknown_number_of_signs akkadian_string)+ unknown_number_of_signs?
+              | akkadian_string
+
+normalized_modifiers: normalized_modifier~0..3
+normalized_modifier: DAMAGE | UNCERTAIN | CORRECTION
+_between_strings: enclosure+ separator
+                | separator enclosure+
+                | enclosure+
+                | separator
+separator: "-"
+
+closing_enclosures: enclosure_close*
+?enclosure: enclosure_open | enclosure_close
+?enclosure_open: open_broken_away | open_perhaps_broken_away | open_emendation
+?enclosure_close: close_broken_away | close_perhaps_broken_away | close_emendation
+open_emendation: "<"
+close_emendation: ">"
+
+akkadian_string: AKKADIAN_ALPHABET+
+
+_greek: greek_token (_WORD_SEPARATOR greek_token)*
+?greek_token: greek_word
+            | column_token
+greek_word: (greek_enclosure | greek_word_part)* greek_word_part (greek_enclosure | greek_word_part)*
+?greek_word_part: greek_letter
+                | unidentified_sign
+                | unclear_sign
+                | unknown_number_of_signs
+?greek_enclosure: _any_open | _any_close
+greek_letter: GREEK_ALPHABET flags
