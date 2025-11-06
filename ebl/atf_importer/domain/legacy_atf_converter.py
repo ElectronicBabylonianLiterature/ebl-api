@@ -1,5 +1,5 @@
 import codecs
-from lark import Lark
+from lark import Lark, ParseError
 from lark.visitors import Tree
 from typing import Tuple, Optional, List, Dict, Type, Any
 from ebl.atf_importer.domain.atf_preprocessor import AtfPreprocessor
@@ -22,8 +22,12 @@ from ebl.atf_importer.application.lemmatization import LemmaLookup
 from ebl.atf_importer.application.atf_importer_config import AtfImporterConfigData
 from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.transliteration_error import TransliterationError
+from ebl.transliteration.domain.transliteration_error import (
+    ExtentLabelError,
+)
 from ebl.atf_importer.domain.legacy_atf_line_validator import LegacyAtfLineValidator
 from ebl.atf_importer.application.glossary import Glossary
+
 
 glossary = Glossary(entries=[])
 
@@ -155,11 +159,18 @@ class LegacyAtfConverter:
     def _parse_and_validate_line(self, line: str) -> Tree:
         try:
             line_tree = self.ebl_parser.parse(self.preprocessor.preprocess_line(line))
-            if line_tree.children[0].data == "text_line":
+            if (
+                line_tree.children[0].data == "legacy_translation_line"
+                and not self.translation_block_transformer.active
+                and "legacy_translation_block_at_line"
+                not in line_tree.children[0].children[0].data
+            ):
+                raise ParseError
+            elif line_tree.children[0].data == "text_line":
                 if error := self.validate_text_line(line_tree.children[0]):
                     return self._report_and_correct_errors(line, error)
             return line_tree
-        except (*PARSE_ERRORS, TransliterationError) as error:
+        except (*PARSE_ERRORS, TransliterationError, ExtentLabelError) as error:
             return self._report_and_correct_errors(line, error)
 
     def _report_and_correct_errors(self, line: str, error: Type[Exception]) -> Tree:

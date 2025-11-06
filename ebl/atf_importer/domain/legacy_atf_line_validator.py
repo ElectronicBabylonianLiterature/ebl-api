@@ -14,6 +14,9 @@ from ebl.transliteration.domain.text import Text
 from ebl.atf_importer.domain.legacy_atf_visitor import (
     LegacyAtfVisitor,
 )
+from ebl.transliteration.domain.transliteration_error import (
+    ExtentLabelError,
+)
 
 
 class LegacyAtfLineValidator:
@@ -33,12 +36,12 @@ class LegacyAtfLineValidator:
             validate_line(line_tree)
             control_line = ControlLine(
                 prefix="&",
-                content="P000001 = BM.1",
+                content="P000001 = X.1",
             )
             assert self.transliteration_factory is not None
             self.transliteration_factory.create_from_text(
                 Text((control_line, line_tree), ATF_PARSER_VERSION)
             )
             return None
-        except (*PARSE_ERRORS, TransliterationError) as error:
+        except (*PARSE_ERRORS, TransliterationError, ExtentLabelError) as error:
             return error

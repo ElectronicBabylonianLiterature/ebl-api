@@ -165,3 +165,24 @@ def test_import_fragment_correct_parsing_errors(
     assert next(responses) == "end"
     assert capsys.readouterr().out == expected_captured
     check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+
+
+def test_import_fragment_correct_parsing_errors2(
+    fragment_repository, tmp_path, mock_input, capsys
+):
+    museum_number = "X.2"
+    atf = f"&P000001 = {museum_number}\n1. " + "{LÚ}ERÍN{ME[Š]}"
+    responses = mock_input(["1. EN", "end"])
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    setup_and_run_importer(atf, tmp_path, fragment_repository)
+    expected_captured = (
+        "Error: \n"
+        "The following text line cannot be parsed:\n"
+        "1. {LÚ}ERÍN{ME[Š]}\n"
+        "Please input the corrected line, then press enter:\n"
+    )
+    assert next(responses) == "end"
+    assert capsys.readouterr().out == expected_captured
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
