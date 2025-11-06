@@ -126,6 +126,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
             "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),
             "authorizedScopes": [],
+            "ocredSigns": "ABZ10 X",
             "dossiers": [
                 DossierReferenceSchema().dump(dossier)
                 for dossier in lemmatized_fragment.dossiers
