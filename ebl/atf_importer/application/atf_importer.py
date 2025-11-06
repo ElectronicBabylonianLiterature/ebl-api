@@ -69,11 +69,11 @@ class AtfImporter:
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
         for filepath in file_paths:
             self.logger.filepath = filepath
-            self.process_file(filepath, args)
+            self.process_file(filepath)
         self.logger.filepath = None
         self.logger.write_logs()
 
-    def process_file(self, filepath: str, args: AtfImporterArgs) -> None:
+    def process_file(self, filepath: str) -> None:
         filename = os.path.basename(filepath).split(".")[0]
         self.logger.info(LoggerUtil.print_frame(f"Importing {filename}.atf"))
         converted_lines, text = self.atf_converter.convert_lines_from_path(

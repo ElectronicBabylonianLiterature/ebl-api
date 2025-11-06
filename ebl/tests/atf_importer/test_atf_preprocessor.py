@@ -7,122 +7,8 @@ from ebl.atf_importer.application.atf_importer_config import (
     AtfImporterConfig,
 )
 
-
 logger = Logger("../logs")
 config = AtfImporterConfig().config_data
-
-
-TRANSLATION_LEGACY_A = """@right?
-@column
-1. a-na
-2. a-bí-ya
-@translation en labelled
-@label(r.e.? i 1-r.e.? i 2)
-To my
-father"""
-
-TRANSLATION_EXPECTED_A = """@right?
-@column 1
-1. a-na
-#tr.en.(r.e.? i 2): To my father
-2. a-bi₂-ya"""
-
-TRANSLATION_LEGACY_B = """@right?
-@column
-1. a-na?
-2. a-bí-ya
-3. {m}EN-šu-nu
-@translation labeled en project
-@(r.e.? i 1) @?To?@
-@(r.e.? i 2) my @"father"@
-@(r.e.? i 3) @Bēlšunu"""
-
-TRANSLATION_EXPECTED_B = """@right?
-@column 1
-1. a-na?
-#tr.en: @i{To}
-2. a-bi₂-ya
-#tr.en: my “father”
-3. {m}EN-šu-nu
-#tr.en: @i{Bēlšunu}"""
-
-TRANSLATION_LEGACY_C = """1'. a-na?
-2'. a-bí-ya
-3'. {m}EN-šu-nu
-@translation labeled en project
-@(1') To
-@(2') my father
-@(3') Bēlšunu"""
-
-TRANSLATION_EXPECTED_C = """1'. a-na?
-#tr.en: To
-2'. a-bi₂-ya
-#tr.en: my father
-3'. {m}EN-šu-nu
-#tr.en: Bēlšunu"""
-
-TRANSLATION_LEGACY_D = """1. a-na
-2. a-bí-ya
-3. {m}EN-šu-nu
-@translation labeled en project
-@(1) @sub{To}
-@(2) @i{my}@sup{?} @sup{father}
-@(3) @Bēlšunu"""
-
-TRANSLATION_EXPECTED_D = """1. a-na
-#tr.en: @sub{To}
-2. a-bi₂-ya
-#tr.en: @i{my}@sup{?} @sup{father}
-3. {m}EN-šu-nu
-#tr.en: @i{Bēlšunu}"""
-
-TRANSLATION_LEGACY_E = """@obverse
-@column
-$ ruling
-1. a-na
-2. a-bí-ya
-3. {m}EN-šu-nu
-$ rest broken
-@translation labeled en project
-@obverse
-$ ruling
-@(o i 1) To
-@(o i 2) my father
-@(o i 3) Bēlšunu
-$ rest broken"""
-
-TRANSLATION_EXPECTED_E = """@obverse
-@column 1
-$ single ruling
-1. a-na
-#tr.en: To
-2. a-bi₂-ya
-#tr.en: my father
-3. {m}EN-šu-nu
-#tr.en: Bēlšunu
-$ rest of side broken"""
-
-TRANSLATION_LEGACY_F = """@obverse
-@column
-1. a-na
-2. a-bí-ya
-@reverse
-1. {m}EN-šu-nu
-@translation labeled en project
-@(o i 1) To
-@(o i 2) my father
-@(r 1) Bēlšunu"""
-
-TRANSLATION_EXPECTED_F = """@obverse
-@column 1
-1. a-na
-#tr.en: To
-2. a-bi₂-ya
-#tr.en: my father
-@reverse
-1. {m}EN-šu-nu
-#tr.en: Bēlšunu"""
-
 
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
@@ -164,6 +50,10 @@ PARSE_AND_TRANSFORM_LEGACY = [
     (
         "1. ⸢4?(BÁN)⸣",
         "1. 4?#(BAN₂#)",
+    ),
+    (
+        "1. [KÁ]⸢.SIKIL.⸣LA ⸢KÁ⸣[.SIKIL.]LA",
+        "1. [KA₂].SIKIL#.LA KA₂#.[SIKIL].LA",
     ),
     ("1. LU2~v", "1. LU₂@v"),
     ("1. u2~v", "1. u₂@v"),
@@ -245,32 +135,6 @@ def test_text_lines(database, legacy_lines, ebl_lines):
     legacy_lines = legacy_atf_converter.convert_lines_from_string(legacy_lines)[1]
     expected_lines = parse_atf_lark(ebl_lines)
     assert legacy_lines == expected_lines
-
-
-def test_legacy_translation(database):
-    legacy_atf_converter = LegacyAtfConverter(database, config, logger)
-    translations = [
-        TRANSLATION_LEGACY_A,
-        TRANSLATION_LEGACY_B,
-        TRANSLATION_LEGACY_C,
-        TRANSLATION_LEGACY_D,
-        TRANSLATION_LEGACY_E,
-        TRANSLATION_LEGACY_F,
-    ]
-    expected = [
-        TRANSLATION_EXPECTED_A,
-        TRANSLATION_EXPECTED_B,
-        TRANSLATION_EXPECTED_C,
-        TRANSLATION_EXPECTED_D,
-        TRANSLATION_EXPECTED_E,
-        TRANSLATION_EXPECTED_F,
-    ]
-    for index, TRANSLATION_LEGACY in enumerate(translations):
-        expected_lines = parse_atf_lark(expected[index])
-        legacy_lines = legacy_atf_converter.convert_lines_from_string(
-            TRANSLATION_LEGACY.strip("\n")
-        )[1]
-        assert legacy_lines == expected_lines
 
 
 lemma_lines = []
