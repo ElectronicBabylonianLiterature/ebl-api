@@ -188,13 +188,7 @@ def write_fragment_numbers(
             file.write(f"{annotation.fragment_number}\n")
 
 
-if __name__ == "__main__":
-    """
-    # for detection finished fragments are filtered
-    poetry run python -m ebl.fragmentarium.retrieve_annotations -f
-    # for classification
-    poetry run python -m ebl.fragmentarium.retrieve_annotations -c
-    """
+def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-oa",
@@ -206,8 +200,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "-oi", "--output_imgs", type=str, default=None, help="Output Images Directory"
     )
-    # add argument string
-
     parser.add_argument(
         "-f",
         "--filter",
@@ -220,9 +212,10 @@ if __name__ == "__main__":
         action="store_true",
         help="Get Signs for detection or classification",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    print("args:", args, "argv:", argv)
 
-    if None not in (args.output_annotations, args.output_imgs):
+    if bool(args.output_annotations) ^ bool(args.output_imgs):
         raise argparse.ArgumentError(
             None, message="Either specify both argument options or none at all"
         )
@@ -234,9 +227,31 @@ if __name__ == "__main__":
         args.output_annotations = "./annotations/annotations"
         args.output_imgs = "./annotations/imgs"
 
-    context = create_context()
+    try:
+        context = create_context()
+        annotation_collection = context.annotations_repository.retrieve_all_non_empty()
+        photo_repository = context.photo_repository
+    except KeyError as e:
+        print(
+            f"Failed to create full context due to {type(e).__name__}: {e}. Using Mongo environment only."
+        )
+        from pymongo import MongoClient
+        from ebl.fragmentarium.infrastructure.mongo_annotations_repository import (
+            MongoAnnotationsRepository,
+        )
+        from ebl.files.infrastructure.grid_fs_file_repository import (
+            GridFsFileRepository,
+        )
 
-    annotation_collection = context.annotations_repository.retrieve_all_non_empty()
+        mongodb_uri = os.environ.get("MONGODB_URI")
+        if not mongodb_uri:
+            raise RuntimeError("Missing required environment variable: MONGODB_URI")
+        mongodb_db = os.environ.get("MONGODB_DB", "ebl")
+        client = MongoClient(mongodb_uri)
+        database = client.get_database(mongodb_db)
+        annotations_repository = MongoAnnotationsRepository(database)
+        photo_repository = GridFsFileRepository(database, "photos")
+        annotation_collection = annotations_repository.retrieve_all_non_empty()
 
     if args.filter:
         if args.filter not in ["finished", "unfinished", "selected"]:
@@ -267,7 +282,6 @@ if __name__ == "__main__":
             )
 
     if args.classification:
-        # For Sign Classification (Bounding Boxes have to be cropped for Image Classification)
         TO_FILTER = [
             AnnotationValueType.RULING_DOLLAR_LINE,
             AnnotationValueType.SURFACE_AT_LINE,
@@ -276,9 +290,6 @@ if __name__ == "__main__":
             AnnotationValueType.STRUCT,
         ]
     else:
-        # For Sign Detection aka Localized Bounding Boxes (Only Images where bounding boxes
-        # are complete can be used in contrast to Classification Task where all existing
-        # Bounding Boxes can be used by cropping the Images)
         TO_FILTER = [
             AnnotationValueType.RULING_DOLLAR_LINE,
             AnnotationValueType.ColumnAtLine,
@@ -289,10 +300,23 @@ if __name__ == "__main__":
         annotation_collection,
         args.output_annotations,
         args.output_imgs,
-        context.photo_repository,
+        photo_repository,
         to_filter=TO_FILTER,
     )
+    annotations_parent = Path(args.output_annotations).parent
+    annotations_file = annotations_parent / f"Annotations_{date.today()}.txt"
     write_fragment_numbers(
-        annotation_collection, f"./annotations/Annotations_{date.today()}.txt"
+        annotation_collection,
+        str(annotations_file),
     )
     print("Done")
+
+
+if __name__ == "__main__":
+    """
+    # for detection finished fragments are filtered
+    poetry run python -m ebl.fragmentarium.retrieve_annotations -f
+    # for classification
+    poetry run python -m ebl.fragmentarium.retrieve_annotations -c
+    """
+    main()
