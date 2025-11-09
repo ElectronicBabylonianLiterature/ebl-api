@@ -69,7 +69,9 @@ def update_from_json_file(collection, json_file_path: str) -> dict:
             museum_number_str = extract_museum_number_from_filename(filename)
             museum_number = parse_museum_number(museum_number_str)
 
-            is_success, error = update_ocred_signs(collection, museum_number, ocred_signs)
+            is_success, error = update_ocred_signs(
+                collection, museum_number, ocred_signs
+            )
 
             if is_success:
                 success_count += 1
