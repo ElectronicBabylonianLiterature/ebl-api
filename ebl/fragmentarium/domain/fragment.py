@@ -238,9 +238,6 @@ class Fragment(FragmentExternalNumbers):
     def set_colophon(self, colophon: Colophon) -> "Fragment":
         return attr.evolve(self, colophon=colophon)
 
-    def set_ocred_signs(self, ocred_signs: str) -> "Fragment":
-        return attr.evolve(self, ocred_signs=ocred_signs)
-
     def update_lemmatization(self, lemmatization: Lemmatization) -> "Fragment":
         text = self.text.update_lemmatization(lemmatization)
         return attr.evolve(self, text=text)
