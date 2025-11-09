@@ -1,7 +1,6 @@
 import os
 import argparse
 import json
-from typing import Dict, Tuple
 from tqdm import tqdm
 from pymongo import MongoClient
 
@@ -17,7 +16,7 @@ def update_ocred_signs(
     collection,
     museum_number: MuseumNumber,
     ocred_signs: str,
-) -> Tuple[bool, str]:
+) -> tuple:
     try:
         result = collection.update_one(
             {
@@ -31,7 +30,7 @@ def update_ocred_signs(
         if result.matched_count == 0:
             return False, "Fragment not found"
 
-        return True, None
+        return True, ""
     except Exception as error:
         return False, str(error)
 
@@ -49,41 +48,43 @@ def extract_museum_number_from_filename(filename: str) -> str:
     return filename
 
 
-def update_from_json_file(collection, json_file_path: str) -> Dict[str, int]:
+def update_from_json_file(collection, json_file_path: str) -> dict:
     with open(json_file_path, "r", encoding="utf-8") as file:
         data = json.load(file)
 
-    results = {"success": 0, "failed": 0, "errors": []}
+    success_count: int = 0
+    failed_count: int = 0
+    errors: list = []
 
     for entry in tqdm(data, desc="Updating fragments"):
         filename = entry.get("filename")
         ocred_signs = entry.get("ocredSigns", "")
 
         if not filename:
-            results["failed"] += 1
-            results["errors"].append({"number": "unknown", "error": "Missing filename"})
+            failed_count += 1
+            errors.append({"number": "unknown", "error": "Missing filename"})
             continue
 
         try:
             museum_number_str = extract_museum_number_from_filename(filename)
             museum_number = parse_museum_number(museum_number_str)
 
-            success, error = update_ocred_signs(collection, museum_number, ocred_signs)
+            is_success, error = update_ocred_signs(collection, museum_number, ocred_signs)
 
-            if success:
-                results["success"] += 1
+            if is_success:
+                success_count += 1
                 print(f"Updated {museum_number_str} (from {filename})")
             else:
-                results["failed"] += 1
-                results["errors"].append({"number": museum_number_str, "error": error})
+                failed_count += 1
+                errors.append({"number": museum_number_str, "error": error})
                 print(f"Failed {museum_number_str} (from {filename}): {error}")
 
         except Exception as error:
-            results["failed"] += 1
-            results["errors"].append({"number": filename, "error": str(error)})
+            failed_count += 1
+            errors.append({"number": filename, "error": str(error)})
             print(f"Failed {filename}: {error}")
 
-    return results
+    return {"success": success_count, "failed": failed_count, "errors": errors}
 
 
 def update_single_fragment(collection, number_str: str, ocred_signs: str) -> bool:
