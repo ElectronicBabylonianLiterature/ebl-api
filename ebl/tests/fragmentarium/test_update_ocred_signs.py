@@ -220,7 +220,7 @@ def test_update_from_json_file_with_errors(database, sample_fragments):
     assert len(results["errors"]) == 3
 
     # Verify error messages
-    excepted_errors = [
+    expected_errors = [
         {"number": "unknown", "error": "Missing filename"},
         {"number": "NONEXISTENT.999", "error": "Fragment not found"},
         {
@@ -229,7 +229,7 @@ def test_update_from_json_file_with_errors(database, sample_fragments):
         },
     ]
 
-    assert results["errors"] == excepted_errors
+    assert results["errors"] == expected_errors
 
     # Verify that the valid fragment was updated
     k1 = collection.find_one({"museumNumber.number": "1"})

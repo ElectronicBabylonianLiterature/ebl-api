@@ -43,8 +43,10 @@ def parse_museum_number(number_str: str) -> MuseumNumber:
 
 
 def extract_museum_number_from_filename(filename: str) -> str:
-    if filename.endswith(".jpg") or filename.endswith(".jpeg"):
-        return filename.rsplit(".jpg", 1)[0].rsplit(".jpeg", 1)[0]
+    if filename.endswith(".jpeg"):
+        return filename[:-5]
+    elif filename.endswith(".jpg"):
+        return filename[:-4]
     return filename
 
 
@@ -133,7 +135,6 @@ def main(args):
         update_single_fragment(fragments_collection, args.number, args.signs)
 
     else:
-        parser.print_help()
         print("\nError: Please provide either --file or both --number and --signs")
 
 
@@ -158,5 +159,5 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    print(args)
+
     main(args)
