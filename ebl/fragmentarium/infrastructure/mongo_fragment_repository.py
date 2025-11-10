@@ -74,6 +74,21 @@ class MongoFragmentRepository(
         except StopIteration:
             return 0
 
+    def count_fragments_by_genre(self) -> dict:
+        pipeline = [
+            {"$unwind": "$genres"},
+            {
+                "$group": {
+                    "_id": "$genres.category",
+                    "count": {"$sum": 1}
+                }
+            },
+            {"$sort": {"_id": 1}}
+        ]
+        
+        result = self._fragments.aggregate(pipeline)
+        return {tuple(item["_id"]): item["count"] for item in result}
+
     def update_field(self, field, fragment):
         fields_to_update = {
             "introduction": ("introduction",),

@@ -32,6 +32,9 @@ class FragmentRepository(ABC):
     def count_total_fragments(self) -> int: ...
 
     @abstractmethod
+    def count_fragments_by_genre(self) -> dict: ...
+
+    @abstractmethod
     def query_by_museum_number(
         self,
         number: Union[MuseumNumber, ExcavationNumber],

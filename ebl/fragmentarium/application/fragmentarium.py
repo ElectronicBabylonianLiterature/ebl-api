@@ -19,6 +19,9 @@ class Fragmentarium:
             "totalFragments": self._repository.count_total_fragments(),
         }
 
+    def genre_statistics(self) -> dict:
+        return self._repository.count_fragments_by_genre()
+        
     def find_needs_revision(
         self, user_scopes: Sequence[Scope] = ()
     ) -> List[FragmentInfo]:

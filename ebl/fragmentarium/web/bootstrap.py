@@ -30,6 +30,7 @@ from ebl.fragmentarium.web.fragments import (
     make_all_fragment_signs_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
+from ebl.fragmentarium.web.genre_statistics import make_genre_statistics_resource
 from ebl.fragmentarium.web.lemma_annotation import (
     LemmaAnnotationResource,
     AutofillLemmasResource,
@@ -109,6 +110,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     genres = GenresResource()
+    genre_statistics = make_genre_statistics_resource(context.cache, fragmentarium)
     provenances = ProvenancesResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
@@ -160,6 +162,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
         ("/genres", genres),
+        ("/genres/statistics", genre_statistics),
         ("/provenances", provenances),
         ("/periods", periods),
         ("/statistics", statistics),
