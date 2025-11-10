@@ -166,7 +166,9 @@ def test_update_from_json_file(database, sample_fragments, sample_ocred_signs_fi
     assert fragment_k1["ocredSigns"] == "ABZ001 \nABZ002 \nABZ003"
 
     fragment_bm_12345 = collection.find_one({"museumNumber.number": "12345"})
-    assert fragment_bm_12345["ocredSigns"] == "ABZ427 \nABZ354 \nABZ328 \nABZ579 \nABZ128"
+    assert (
+        fragment_bm_12345["ocredSigns"] == "ABZ427 \nABZ354 \nABZ328 \nABZ579 \nABZ128"
+    )
 
     fragment_bm_6789 = collection.find_one({"museumNumber.number": "6789"})
     assert fragment_bm_6789["ocredSigns"] == "ABZ597 \nABZ342 \nABZ343"
@@ -253,7 +255,9 @@ def test_main(database):
         collection, "K.1", "ABZ100 \nABZ101"
     ).thenReturn(True)
 
-    args_for_single_update = argparse.Namespace(file=None, number="K.1", signs="ABZ100 \nABZ101")
+    args_for_single_update = argparse.Namespace(
+        file=None, number="K.1", signs="ABZ100 \nABZ101"
+    )
 
     update_ocred_signs.main(args_for_single_update)
 
