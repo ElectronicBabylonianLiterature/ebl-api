@@ -8,7 +8,12 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def get_database():
-    client = MongoClient(os.environ["MONGODB_URI"])
+    mongodb_uri = os.environ.get("MONGODB_URI")
+    if not mongodb_uri:
+        raise RuntimeError(
+            "Environment variable MONGODB_URI is not set. Please set it to your MongoDB connection string."
+        )
+    client = MongoClient(mongodb_uri)
     return client.get_database(os.environ.get("MONGODB_DB"))
 
 
