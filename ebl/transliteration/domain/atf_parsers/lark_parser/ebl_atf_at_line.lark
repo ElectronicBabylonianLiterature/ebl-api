@@ -4,8 +4,13 @@
 
 at_line: "@" at_line_value
 
-?at_line_value: seal | column | legacy_column | heading | discourse | object_with_status 
-               | surface_with_status | divisions | composite
+?at_line_value: seal 
+    | column 
+    | legacy_column 
+    | heading 
+    | discourse 
+    | object_with_status 
+    | surface_with_status | divisions | composite
 
 surface_with_status: surface " "? status
 
