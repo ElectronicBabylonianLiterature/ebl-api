@@ -36,6 +36,18 @@ class CommonTransformer(Transformer):
     def ebl_atf_common__single_line_number(
         self, prefix_modifier, number, prime, suffix_modifier
     ) -> LineNumber:
+        prefix_modifier = str(prefix_modifier) if prefix_modifier else None
+        suffix_modifier = str(suffix_modifier) if suffix_modifier else None
+        return LineNumber(
+            int(number), prime is not None, prefix_modifier, suffix_modifier
+        )
+
+    @v_args(inline=True)
+    def ebl_atf_common__legacy_prefixed_single_line_number(
+        self, prefix_modifier, number, prime, suffix_modifier
+    ) -> LineNumber:
+        prefix_modifier = str(prefix_modifier) if prefix_modifier else None
+        suffix_modifier = str(suffix_modifier) if suffix_modifier else None
         return LineNumber(
             int(number), prime is not None, prefix_modifier, suffix_modifier
         )

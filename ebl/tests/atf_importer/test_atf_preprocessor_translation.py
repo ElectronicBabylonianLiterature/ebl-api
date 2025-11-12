@@ -125,28 +125,26 @@ TRANSLATION_EXPECTED_F = """@obverse
 
 TRANSLATION_LEGACY_G = """@obverse
 @column
-A1'. a-na
-A2'. a-bí-ya
+A1'a. a-na
+A2'b. a-bí-ya
 @reverse
 B1. {m}EN-šu-nu
 @translation labeled en project
-@(o i A1') To
-@(o i A2') my father
+@(o i A1'a) To
+@(o i A2'b) my father
 @(r B1) Bēlšunu"""
 
 TRANSLATION_EXPECTED_G = """@obverse
 @column 1
-A1'. a-na
+A+1'a. a-na
 #tr.en: To
-A2'. a-bi₂-ya
+A+2'b. a-bi₂-ya
 #tr.en: my father
 @reverse
-B1. {m}EN-šu-nu
+B+1. {m}EN-šu-nu
 #tr.en: Bēlšunu"""
 
 
-# ToDo: `G` is temporaraly removed.
-# Restore it after implementing a fix.
 @pytest.mark.parametrize(
     "legacy_atf,expected_atf",
     [
@@ -173,6 +171,10 @@ B1. {m}EN-šu-nu
         (
             TRANSLATION_LEGACY_F,
             TRANSLATION_EXPECTED_F,
+        ),
+        (
+            TRANSLATION_LEGACY_G,
+            TRANSLATION_EXPECTED_G,
         ),
     ],
 )

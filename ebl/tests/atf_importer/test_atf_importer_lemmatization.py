@@ -141,12 +141,33 @@ def test_lemmatization_with_tabulation(fragment_repository, tmp_path):
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_lemmatization_complex_indexing(fragment_repository, tmp_path):
+    museum_number = "X.112"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = (
+        f"&P000001 = {museum_number}\n"
+        "5'. <<2 KÚŠ>> x [...] ($___$) 20 10(BAN₂) ina\n"
+        "#lem: u; u; n; n; ina[in]PRP"
+    )
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    expected_lemmatization = [(), (), (), (), (), (), ("ina I",)]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
 def test_problematic_lemmatization(fragment_repository, tmp_path):
     museum_number = "X.111"
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
-    atf = f"&P000001 = {museum_number}\n5. [...] ⸢x⸣ TÙR NIGÍN\n#lem: u; u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ"
+    atf = f"&P000001 = {museum_number}\n5. [...] ⸢x⸣ TÙR NIGÍN\n#lem: u; u; +tarbaṣa[halo]N; lawi[surrounded (with)]AJ"
     setup_and_run_importer(
         atf,
         tmp_path,
@@ -187,7 +208,7 @@ def test_lemmatization_missing_lemmas(fragment_repository, tmp_path, mock_input)
     fragment_repository.create(
         FragmentFactory.build(number=MuseumNumber.of(museum_number))
     )
-    atf = f"&P000003 = {museum_number}\n64. * LU2 LUGAL\n#lem: šumma[if]CNJ; awīlu[man]N; šarru[king]N"
+    atf = f"&P000003 = {museum_number}\n64. * LU2 LUGAL\n#lem: šumma[if]CNJ; +awīlu[man]N; šarru[king]N"
     responses = mock_input(["amēlu I", "awīlu I", "", "end"])
     setup_and_run_importer(
         atf,
@@ -221,7 +242,7 @@ def test_manual_lemmatization_extended(fragment_repository, tmp_path, mock_input
     atf = (
         f"&P000001 = {museum_number}\n"
         "10. EN AN KI NUNDUN GÍR.TAB UŠ-id ana MÚL SA₄ GUR? NIM-a\n"
-        "#lem: Bēl[Bēl]DN$; Ṣalbaṭānu[Mars]CN; erṣētu[area]N'; šaptu[lip]N$; Zuqiqīpu[Scorpio]CN; "
+        "#lem: Bēl[Bēl]DN$; Ṣalbaṭānu[Mars]CN; erṣētu[area]N'; +šaptu[lip]N$; Zuqiqīpu[Scorpio]CN; "
         "emēdu[lean on//be at a stationary point]V'V$nenmudu; "
         "ana[to]PRP; kakkabu[star]N$; nebû[shining//bright]AJ'AJ$; "
         "baʾil[bright]AJ; šaqâ[high]AJ"

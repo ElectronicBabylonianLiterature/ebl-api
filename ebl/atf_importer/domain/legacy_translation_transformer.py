@@ -74,7 +74,7 @@ class LegacyTranslationBlockTransformer(LegacyTransformer):
 
     def _labels_to_string(self, labels: Tree) -> str:
         label_tokens = CommonTransformer().transform(labels).children
-        line_number_label = label_tokens[-1].label
+        line_number_label = label_tokens[-1].label.replace("+", "")
         if len(label_tokens) == 1:
             return line_number_label
         return " ".join(

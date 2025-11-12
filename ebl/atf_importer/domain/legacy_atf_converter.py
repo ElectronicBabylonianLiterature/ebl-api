@@ -192,16 +192,14 @@ class LegacyAtfConverter:
     ) -> List[Dict[str, Any]]:
         if translation_line.data == "!translation_line":
             translation_line.data = "translation_line"
-            insert_at = self.translation_block_transformer.start
-            lines_data = self._insert_translation_line(
-                translation_line, insert_at, lines_data
-            )
+            lines_data = self._insert_translation_line(translation_line, lines_data)
         return lines_data
 
     def _insert_translation_line(
-        self, translation_line: Tree, insert_at: str, lines_data: List[Dict[str, Any]]
+        self, translation_line: Tree, lines_data: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         for index, tree_line in enumerate(lines_data):
+            insert_at = self.translation_block_transformer.start
             if insert_at == tree_line["cursor"]:
                 insert_at_index = (
                     index + 2
