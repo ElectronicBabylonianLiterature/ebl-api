@@ -98,7 +98,8 @@ class AtfPreprocessor:
         return atf
 
     def _handle_dollar_line(self, atf: str) -> str:
-        return self._strip_dollar_line_excessive_parantheses(atf)
+        atf = self._strip_dollar_line_excessive_parantheses(atf)
+        return self.remove_plus_in_lem_lines(atf)
 
     def _handle_note_line(self, atf: str) -> str:
         if atf[0] == "#" and atf[1] == " " and "# note:" not in atf:
@@ -209,6 +210,11 @@ class AtfPreprocessor:
     def _strip_dollar_line_excessive_parantheses(self, line: str) -> str:
         _line = self._strip_matching_parentheses(line[1:].strip())
         return f"$ ({_line})"
+
+    def _remove_plus_in_lem_lines(atf: str) -> str:
+        if "#lem: " in atf:
+            atf.replace("+", "")
+        return atf
 
     def _strip_matching_parentheses(self, string: str) -> str:
         while True:
