@@ -141,6 +141,27 @@ def test_lemmatization_with_tabulation(fragment_repository, tmp_path):
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_lemmatization_complex_indexing(fragment_repository, tmp_path):
+    museum_number = "X.112"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = (
+        f"&P000001 = {museum_number}\n"
+        "5'. <<2 KÚŠ>> x [...] ($___$) 20 10(BAN₂) ina\n"
+        "#lem: u; u; n; n; ina[in]PRP"
+    )
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    expected_lemmatization = [(), (), (), (), (), (), ("ina I",)]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
 def test_problematic_lemmatization(fragment_repository, tmp_path):
     museum_number = "X.111"
     fragment_repository.create(

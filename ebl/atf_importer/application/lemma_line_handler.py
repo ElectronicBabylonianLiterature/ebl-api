@@ -145,7 +145,7 @@ class LemmaLineHandler:
                     if isinstance(part, (Removal, Reading, Logogram))
                 ]
                 remove_token, removal_status = self._is_remove_token(
-                    token, parts, remove_token, removal_status
+                    token, parts, removal_status
                 )
                 removals_map[token_index] = remove_token
         return removals_map
@@ -154,15 +154,15 @@ class LemmaLineHandler:
         self,
         token: Token,
         parts: Sequence[Token],
-        remove_token: bool,
         removal_status: bool,
     ) -> Tuple[bool, bool]:
+        remove_token = False
         for part_index, part in enumerate(parts):
             remove_token = removal_status
             if isinstance(part, Removal):
                 removal_status = True if str(part.side) == "Side.LEFT" else False
                 has_lemmatizable_content = any(
-                    isinstance(p, (Reading, Logogram)) for p in parts
+                    isinstance(part, (Reading, Logogram)) for part in parts
                 )
                 if not has_lemmatizable_content:
                     remove_token = True
