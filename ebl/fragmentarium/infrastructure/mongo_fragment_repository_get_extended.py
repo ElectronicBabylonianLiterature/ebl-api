@@ -165,13 +165,6 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             )
         )
 
-    def fetch_fragment_ocred_signs(self) -> Sequence[dict]:
-        return list(
-            self._fragments.find_many(
-                {"ocredSigns": {"$regex": "."}}, projection={"ocredSigns": True}
-            )
-        )
-
     def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
         try:
             if date := self._fragments.find_one(

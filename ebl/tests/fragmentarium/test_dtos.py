@@ -122,7 +122,6 @@ def expected_dto(lemmatized_fragment, has_photo):
                 ResearchProject["CAIC"].abbreviation,
                 ResearchProject["ALU_GENEVA"].abbreviation,
                 ResearchProject["AMPS"].abbreviation,
-                ResearchProject["RECC"].abbreviation,
             ],
             "archaeology": ArchaeologySchema().dump(lemmatized_fragment.archaeology),
             "colophon": ColophonSchema().dump(lemmatized_fragment.colophon),

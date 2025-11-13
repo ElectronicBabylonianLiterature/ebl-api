@@ -28,7 +28,6 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsRetrieveAllResource,
     make_latest_additions_resource,
     make_all_fragment_signs_resource,
-    make_all_fragment_ocred_signs_resource,
 )
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.lemma_annotation import (
@@ -136,9 +135,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     all_signs = make_all_fragment_signs_resource(
         context.fragment_repository, context.cache
     )
-    all_ocred_signs = make_all_fragment_ocred_signs_resource(
-        context.fragment_repository, context.cache
-    )
     colophon_names = ColophonNamesResource(context.fragment_repository)
     named_entities = NamedEntityResource(finder, updater)
 
@@ -174,7 +170,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/latest", latest_additions_query),
         ("/fragments/all", all_fragments),
         ("/fragments/all-signs", all_signs),
-        ("/fragments/all-ocred-signs", all_ocred_signs),
         ("/fragments/colophon-names", colophon_names),
         ("/findspots", findspots),
         ("/fragments/{number}/scopes", scopes),

@@ -188,20 +188,3 @@ def make_all_fragment_signs_resource(repository: FragmentRepository, cache: Cach
             resp.text = json.dumps(self._repository.fetch_fragment_signs())
 
     return AllFragmentSignsResource(repository)
-
-
-def make_all_fragment_ocred_signs_resource(
-    repository: FragmentRepository, cache: Cache
-):
-    class AllFragmentOcredSignsResource:
-        def __init__(
-            self,
-            repository: FragmentRepository,
-        ):
-            self._repository = repository
-
-        @cache.cached(timeout=DEFAULT_TIMEOUT)
-        def on_get(self, req: Request, resp: Response):
-            resp.text = json.dumps(self._repository.fetch_fragment_ocred_signs())
-
-    return AllFragmentOcredSignsResource(repository)

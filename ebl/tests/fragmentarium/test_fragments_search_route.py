@@ -388,12 +388,7 @@ def test_search_script_period(client, fragmentarium, params, expected):
 
 @pytest.mark.parametrize(
     "project",
-    [
-        ResearchProject.CAIC,
-        ResearchProject.ALU_GENEVA,
-        ResearchProject.AMPS,
-        ResearchProject.RECC,
-    ],
+    [ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS],
 )
 def test_search_project(client, fragmentarium, project):
     fragments = [

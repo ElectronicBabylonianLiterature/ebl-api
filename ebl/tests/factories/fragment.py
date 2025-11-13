@@ -263,12 +263,7 @@ class FragmentFactory(factory.Factory):
     introduction = Introduction("text", (StringPart("text"),))
     notes = Notes("notes", (StringPart("notes"),))
     external_numbers = factory.SubFactory(ExternalNumbersFactory)
-    projects = (
-        ResearchProject.CAIC,
-        ResearchProject.ALU_GENEVA,
-        ResearchProject.AMPS,
-        ResearchProject.RECC,
-    )
+    projects = (ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS)
     archaeology = factory.SubFactory(ArchaeologyFactory)
     colophon = factory.SubFactory(ColophonFactory)
     ocred_signs = "ABZ10 X"
