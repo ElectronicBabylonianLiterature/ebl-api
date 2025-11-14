@@ -83,6 +83,7 @@ class AtfPreprocessor:
 
     def _handle_text_line(self, atf: str) -> str:
         atf_text_line_methods = [
+            "_replace_traces_markup",
             "_replace_special_characters",
             "_uppercase_underscore",
             "_lowercase_braces",
@@ -148,6 +149,9 @@ class AtfPreprocessor:
             return lowered
 
         return re.sub(r"{(.*?)}", lambda m: "{" + callback_lower(m) + "}", atf)
+
+    def _replace_traces_markup(self, atf: str) -> str:
+        return re.sub(r"\(\$.*?traces.*?\$\)", "...", atf)
 
     def _replace_tabulation(self, atf: str) -> str:
         return re.sub(r"\(\$[^)]*\)", r"($___$)", atf)
