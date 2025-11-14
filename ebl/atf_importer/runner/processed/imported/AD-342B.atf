@@ -1,0 +1,132 @@
+&X103422 = AD -342B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. x [...]
+#lem: u; u
+
+2'. ina ŠÚ ina [...]
+#lem: ina[in]PRP; erbu[west]N; ina[in]PRP; u
+
+3'. 1(GUR) 1(BARIG) 5(BÁN) 3? [qa ...]
+#lem: n; n; n; n; qû[(one) litre]N; u
+
+$ ruling
+4'. ⸢KIN⸣? 30 ⸢x⸣ [...]
+#lem: Ulūlu[Month VI]MN; n; u; u
+
+5'. LUGAL? [...]
+#lem: LUGAL[α Leonis]CN; u
+
+6'. x [...]
+#lem: u; u
+
+7'. sin [...]
+#lem: Sîn[moon]N; u
+
+8'. 14 [...]
+#lem: n; u
+
+9'. 1 KÙŠ x [...]
+#lem: n; ammatu[unit]N; u; u
+
+10'. ina ZALÁG sin ár [...]
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u
+
+11'. ana ŠÚ ki U[Š?-a ...]
+#lem: ana[to]PRP; erbu[west]N; kī[when]SBJ; nenmudu[be at a stationary point]V; u
+
+12'. ina Z[ALÁG? ...] 
+#lem: ina[in]PRP; nūru[last part of the night]N; u
+
+@reverse
+1'. [...] TIR.AN Á S[I ...]
+#lem: u; Manziat[rainbow]N; idu[side]N; ištānu[north]N; u
+
+2'. GE₆ 28 DIR AN DIB ITU BI [...]
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; warhu[month]N; šū[that]'DP; u
+
+3'. MÚL.BABBAR ina GÍR.TAB ina TIL ITU ina PA.BIL dele-b[at ...]
+#lem: Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; ina[in]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Pabilsag[Sagittarius]CN; Dilbat[Venus]CN; u
+
+$ ruling
+4'. AB 30 18 AGA a-pir sin ina IGI MÚL-[IGI-šá-SUHUR-MÁŠ ...]
+#lem: Ṭebētu[Month X]MN; n; n; agû[tiara]N; apir[covered]AJ; Sîn[moon]N; ina[in]PRP; pānu[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; u
+
+5'. EN 6 ILLU 2 KÙŠ GIN GE₆ 7 SAG G[E₆ ...]
+#lem: adi[until]PRP; n; mīlu[river level]N; n; ammatu[unit]N; alāku[rise]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+6'. 8 9 ILLU 8 SI LAL GE₆ 10 SAG ⸢GE₆⸣ [...]
+#lem: n; n; mīlu[river level]N; n; ubānu[finger]N; nahāsu[recede]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+7'. ILLU 1 KÙŠ GIN GE₆ 12 S[AG GE₆ ...]
+#lem: mīlu[river level]N; n; ammatu[unit]N; alāku[rise]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+8'. 14 50 NINDA ŠÚ DIR NU [PAP ...]
+#lem: n; n; namaddu[measurement]N; erēpu[be(come) overcast]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+9'. [x x] ⸢ina ZALÁG⸣ sin á[r ...] 
+#lem: u; u; ina[in//in]PRP'PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u
+
+@left
+1. MU 16.KÁM {m}ú-ma-kuš LU[GAL? ...]
+#lem: šattu[year]N; n; Umakuš[Umakuš]RN; šarru[king]N; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') ... [...]
+
+@(o 2') in the west in [...]
+
+@(o 3') 1 kur 1 @i{pānu} 5 sât 3@sup{?} [@i{qa} ...]
+
+$ ruling
+
+@(o 4') ... 30 ... [...]
+
+@(o 5') α Leonis@sup{?} [...]
+
+@(o 6') ... [...]
+
+@(o 7') the moon [...]
+
+@(o 8') The 14th, [...]
+
+@(o 9') 1 cubit [...]
+
+@(o 10') last part of the night, the moon was behind [...]
+
+@(o 11') when it became [stationary@sup{?}] to the west [...]
+
+@(o 12') last p[art@sup{?} of the night ...] 
+
+@reverse
+
+@(r 1') [...] a rainbow on the nor[th] side [...]
+
+@(r 2') Night of the 28th, clouds crossed the sky. That month, [...]
+
+@(r 3') Jupiter was in Scorpius, at the end of the month in Sagittarius; Venu[s ...]
+
+$ ruling
+
+@(r 4') Month X, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18°; earthshine; the moon was in front of [γ Capricorni ...]
+
+@(r 5') until the 6th, the river level rose 2 cubits. Night of the 7th, beginning of the ni[ght, ...]
+
+@(r 6') The 8th, the 9th, the river level receded 8 fingers. Night of the 10th, beginning of the night, [...]
+
+@(r 7') the river level rose 1 cubit. Night of the 12th, be[ginning of the night, ...]
+
+@(r 8') The 14th, moonset to sunrise: 50 @i{ninda}; clouds, I did not [watch. ...]
+
+@(r 9') [...] last part of the night, the moon was be[hind ...] 
+
+@left
+
+@(l.e. 1) Year 16 of king@sup{?} Umakuš [...]

@@ -1,0 +1,146 @@
+&X103380 = AD -338
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [...] ⸢MU⸣-šú [...]
+#lem: u; šumšu[name]N; u
+
+2. [...] ⸢x x x⸣ [x] ŠÚ AN UTAH ⸢x x x⸣ [...]
+#lem: u; u; u; u; u; erēpu[be(come) overcast]V; šamû[rain]N; natāku[drip]V; u; u; u; u
+
+3. [...] 4 SI ana ŠÚ LAL [G]E₆ 5 SAG GE₆ sin ina IGI MÚL-ár-šá-[ALLA-šá-ULÙ N N ...]
+#lem: u; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[be(come) back]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; u
+
+4. [...] LUGAL 2 KÙŠ [GE₆ 8 S]AG GE₆ sin ina IGI GÌR-ár-tú-šá-U[R.A N N ...] 
+#lem: u; LUGAL[α Leonis]CN; n; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; n; n; u
+
+5. [... GE₆ 11 S]AG GE₆ sin ina IGI ⸢SA₄⸣-šá-ABSIN 1 1/2 KÙŠ TÙR NIGÍN [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; u
+
+6. [...] šamáš TÙR NIGÍN DIR AN DIB 12 ina KIN.SIG ŠÚ AN UTAH G[E₆ ...]
+#lem: u; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; ina[in]PRP; kinsikku[afternoon]N; erēpu[be(come) overcast]V; šamû[rain]N; natāku[drip]V; mūšu[night]N; u
+
+7. [... A]N še-ni TUH SI ŠÁR GE₆ 14 12.30 ME DIR [...]
+#lem: u; šamû[rain]N; šēnu[sandal]N; paṭāru[remove]V; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; n; ūmu[day]N; erpetu[cloud]N; u
+
+8. [...] 1+[x K]ÙŠ 14 2.30 <x> DIR muš ša[máš in]a DIR GE₆ KUR ŠÚ [...]
+#lem: u; n; ammatu[unit]N; n; n; u; erpetu[cloud]N; mašāhu[measure]V; šamšu[sun]N; ina[in]PRP; erpetu[cloud]N; ṣalmu[black]AJ; napāhu[rise]V; erēpu[be(come) overcast]V; u
+
+9. [... ina ZALÁG?] SI₄ ana SI sin šá SI TE ⸢15⸣ 2 na DIR [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; SI₄[α Scorpii]CN; ana[to]PRP; qarnu[horn]N; Sîn[moon]N; ša[of]DET; ištānu[north]N; ṭehû[come close]V; n; n; na[sunrise to moonset]N; erpetu[cloud]N; u
+
+10. [... G]E₆ 17 ŠÚ.ŠÚ AN DUL 17 ina še-rì [AN] UT[AH ...]
+#lem: u; mūšu[night]N; n; urrup[be(come) very overcast]V; šamû[rain]N; DUL[(meaning unclear)]V; n; ina[in]PRP; šēri[morning]N; šamû[rain]N; natāku[drip]V; u
+
+11. [...] u? KUR GÍR{ME} 18 ŠÚ.ŠÚ ina KIN.S[IG ...]
+#lem: u; u[and]CNJ; šadû[east]N; barāqu[flash]V; n; urrup[be(come) very overcast]V; ina[in]PRP; kinsikku[afternoon]N; u
+
+12. [...] ana ULÙ u KUR ⸢x x x⸣ [...]
+#lem: u; ana[to]PRP; šūtu[south]N; u[and]CNJ; šadû[east]N; u; u; u; u
+
+13. [...] KÙŠ 20 DIR AN DIB [...]
+#lem: u; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u
+
+14. [...] 6 SI LAL GE₆ 23 ina [ZALÁG ...]
+#lem: u; n; ubānu[finger]N; nahāsu[recede]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+15. [... I]GI GE₆ 25 ina ZALÁG sin ina [IGI MÚL-KUR-šá-DUR-nu-nu N N ...]
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; u
+
+16. [... UL]Ù ŠÁR AN DUL GE₆ [...]
+#lem: u; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; šamû[rain]N; DUL[unclear]V; mūšu[night]N; u
+
+17. [...] ⸢2⸣? PI ina TIL ITU 2(BARIG) 2(BÁN)? [...]
+#lem: u; n; pānu[bushel (36 litres)]N; ina[in]PRP; qītu[end]N; warhu[month]N; n; n; u
+
+18. [... i]-nu-šú MÚL.BABBAR [...]
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; u
+
+19. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+@reverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [... KÙ.BABBAR qa-lu]-ú i-nu-šú [...]
+#lem: u; kaspu[silver]N; qalû[refined]AJ; inūšu[at that time]AV; u
+
+3'. [...] ITU BI ILLU 1 [...]
+#lem: u; warhu[month]N; šū[that]'DP; mīlu[river level]N; n; u
+
+$ ruling
+4'. [EN.NUN šá gi-né-e šá TA] BAR EN ŠU M[U.20.K]ÁM {m}ú-ma-kuš šá {m}[...] 
+#lem: naṣāru[observation]'N; ša[which]REL; ginû[regularity]N; ša[which]REL; ištu[from]PRP; Nisannu[Month I]MN; adi[until]PRP; Duʾūzu[Month IV]MN; n; Umakuš[Umakuš]RN; ša[which]REL; u
+
+@top
+1. [EN.NUN šá gi-né-e šá T]A BAR EN TIL ŠU MU.20.KÁM {m}⸢ú⸣-[ma-kuš šá ...]
+#lem: naṣāru[observation]'N; ša[which]REL; ginû[regularity]N; ša[which]REL; ištu[from]PRP; Nisannu[Month I]MN; adi[until]PRP; qītu[end]N; Duʾūzu[Month IV]MN; n; Umakuš[Umakuš]RN; ša[which]REL; u
+
+2. MU-šú SA₄-[ú] 
+#lem: šumšu[name]N; nabû[named]AJ
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...] called [...]
+
+@(o 2) [...] ... overcast, rain shower ... [...]
+
+@(o 3) [...] being 4 fingers back to the west. [Ni]ght of the 5th, beginning of the night, the moon was [...] in front of δ Cancri [...]
+
+@(o 4) [...] 2 cubits [...] α Leonis. [Night of the 8th, be]ginning of the night, the moon was [...] in front of β Virginis [...]
+
+@(o 5) [... Night of the 11th, be]ginning of the night, the moon was 1 1/2 cubits in front of α Virginis, it was surrounded by α halo [...]
+
+@(o 6) [...] the sun was surrounded by α halo, clouds crossed the sky. The 12th, in the afternoon, overcast, rain shower. Ni[ght ...]
+
+@(o 7) [... r]ain so that the sandal was removed, gusty north wind. Night of the 14th, moonrise to sunset: 12° 30'; clouds [...]
+
+@(o 8) [...] 1+[x] cubits. The 14th, <moonset to sunrise:> 2° 30'; measured (despite) clouds; the sun rose in a black cloud; overcast, [...]
+
+@(o 9) [... last part of the night,] α Scorpii came close to the north horn of the moon. The 15th, sunrise to moonset: 2°; clouds [...]
+
+@(o 10) [... Ni]ght of the 17th, very overcast, rain DUL. The 17th, in the morning, [rain] sho[wer ...]
+
+@(o 11) [...] flashed continuously in the east. The 18th, very overcast; in the after[noon, ...]
+
+@(o 12) [...] stretched to the south and east [...]
+
+@(o 13) [...] cubits. The 20th, clouds crossed the sky [...]
+
+@(o 14) [...] receded 6 fingers. Night of the 23rd, last [part of the night, ...]
+
+@(o 15) [...] ... Night of the 25th, last part of the night, the moon was [...] in [front of η Piscium ...]
+
+@(o 16) [...] gusty [sou]th wind, rain DUL. Night [...]
+
+@(o 17) [...] 2@sup{?} @i{pānu}, at the end of the month, 2 @i{pānu} 2@sup{?} @i{sūtu} [...]
+
+@(o 18) [... At] that time, Jupiter [...]
+
+@(o 19) [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') [...] were bought@sup{?}. At that time, [...]
+
+@(r 3') [...] That month, the river level 1 [...]
+
+$ ruling
+
+$ (ca. 3 lines uninscribed)
+
+@(r 4') [Diary from] month I to month IV, year [20] of Umakuš, who [...] 
+
+@top
+
+@(t.e. 1) [Diary fr]om month I to the end of month IV, year 20 of U[makuš who ...]
+
+@(t.e. 2) is called [...]

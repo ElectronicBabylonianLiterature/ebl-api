@@ -1,0 +1,111 @@
+&X102611 = AD -261A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+$ ruling
+1'. GU₄ 30 ⸢12⸣ [...]
+#lem: Ayyaru[Month II]MN; n; n; u
+
+2'. GE₆ 8 USAN GU₄.U[D e MÚL-IGI-šá-še-pít-MAŠ.MAŠ ...]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; u
+
+3'. GE₆ 11 SAG GE₆ sin ina I[GI SA₄-šá-ABSIN ...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; u
+
+4'. 14 8.50 ŠÚ GE₆ 1[5 N GE₆ ...]
+#lem: n; n; rabû[moonset to sunrise]N; mūšu[night]N; n; n; mūšu[night]N; u
+
+5'. ⸢16⸣ KAK.BAN ŠÚ GE₆ 17 U[SAN? dele-bat? ...]
+#lem: n; Šiltāhu[Sirius]CN; rabû[set]V; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+6'. [SUH]UR-MÁŠ 1 2/3 KÙŠ ⸢x⸣ [...]
+#lem: SUHUR-MÁŠ[γ/δ Capricorni]CN; n; n; ammatu[unit]N; u; u
+
+7'. [ITU] BI KI.LAM š[e-im ...]
+#lem: warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; u
+
+8'. [x x] ⸢x x⸣ [...] 
+#lem: u; u; u; u; u
+
+@reverse
+1'. [x x Š]Ú? in? ⸢x x⸣ [... AN ...]
+#lem: u; u; u; ina[on]PRP; u; u; u; Ṣalbaṭānu[Mars]CN; u
+
+2'. ina MURUB₄ ITU ina ALLA I[TU? BI ...]
+#lem: ina[in]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Alluttu[Cancer]CN; warhu[month]N; šū[that]'DP; u
+
+3'. ITU BI {m}pa-i-ni LÚ [...]
+#lem: warhu[month]N; šū[that]'DP; Paini[Paini]PN$; awīlu[man]N$; u
+
+$ ruling
+4'. KIN 30 9.30 a-kám ki P[AP NU IGI ... GE₆ 5 SAG GE₆ sin]
+#lem: Ulūlu[Month VI]MN; n; n; akamu[mist]N; kī[when]SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+5'. ár SI₄ 1 KÙŠ 4 U GE₆ ⸢6⸣ [...]
+#lem: warki[behind]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; n; ubānu[finger]N; mūšu[night]N; n; u
+
+6'. GE₆ 9 SAG GE₆ sin [ár SI-MÁŠ ...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; u
+
+7'. 12 11 ŠÚ 13 2 [... GE₆ 15 ina ZALÁG sin]
+#lem: n; n; rabû[moonset to sunrise]'N; n; n; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+8'. SIG MÚL-ár-šá-SAG-HU[N ...]
+#lem: šapil[below]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; u
+
+9'. ⸢ina⸣ ZALÁG ⸢sin ina IGI⸣ M[ÚL? ...] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u; u
+
+@left
+1. [... MU 5]0.KÁM {m}an LUGAL GAL-⸢u⸣ [...]
+#lem: u; šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; rabû[great]AJ; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') Month II, (the 1st of which was identical with) the 30th (of the preceding month), [sunset to moonset:] 12° [...]
+
+@(o 2') Night of the 8th, first part of the night, Mercury was [... above η Geminorum ...]
+
+@(o 3') Night of the 11th, beginning of the night, the moon was [...] in front of [α Virginis ...]
+
+@(o 4') The 14th, moonset to sunrise: 8° 50'. Night of the 1[5th, ...]
+
+@(o 5') The 16th, Sirius’ last appearance. Night of the 17th, ... [...]
+
+@(o 6') 1 2/3 cubits [...] Capricorni [...]
+
+@(o 7') That [month,] the equivalent (for 1 shekel of silver was): ba[rley, ...]
+
+@(o 8') [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] ... on the ... [... Mars was ...]
+
+@(r 2') in the middle of the month, in Cancer. Th[at month, ...]
+
+@(r 3') That month, Paini ... [...]
+
+$ ruling
+
+@(r 4') Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 9° 30'; mist, when I watched [I did not see the moon ... Night of the 5th, beginning of the night, the moon was]
+
+@(r 5') 1 cubit 4 fingers behind α Scorpii. Night of the 6th, [...]
+
+@(r 6') Night of the 9th, beginning of the night,  the moon was [... behind β Capricorni ...]
+
+@(r 7') The 12th, moonset to sunrise: 11°. The 13th, 2° [... Night of the 15th, last part of the night, the moon was]
+
+@(r 8') [...] below α Arietis [...]
+
+@(r 9') last part of the night,, the moon was [...] in front of [...] 
+
+@left
+
+@(l.e. 1) [... year 5]0, Antiochus, the great king [...]
+

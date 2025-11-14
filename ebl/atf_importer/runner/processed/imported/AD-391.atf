@@ -1,0 +1,64 @@
+&X103910 = AD -391
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. [...] DIR.ŠE MU 13
+#lem: u; Addāru_Šanû[(Intercalary) Month XII₂]MN; šattu[year]N; n,
+
+2. [{d}SILIM]-⸢mu⸣ {d}asar-lú-hi
+#lem: šulmu[(divine) protection]N$šulum; Asalluhi[Asalluhi]RN$
+
+@obverse
+1. [...] ⸢šá {m}ar-tak-šat-su⸣ MU-šú SA₄-ú DIR.ŠE 30 sin? [x x]
+#lem: u; ša[who]REL; Artaxerxes[Artaxerxes]RN; šumšu[name]N; nabû[named]AJ; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; Sîn[moon]N; u; u
+
+2. [... IG]I? GE₆ 1 ina ZALÁG DIR AN ZA ULÙ ŠÁR 1 šamáš ina DIR GE₆ KUR
+#lem: u; nanmuru[be(come) visible]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; n; šamšu[sun]N; ina[in]PRP; erpetu[cloud]N; ṣalmu[black]AJ; napāhu[blow//rise]V'V
+
+3. [...] ⸢x⸣ TA 24 šá ŠE EN 1 ILLU 1/2 KÙŠ LAL
+#lem: u; u; ištu[from]PRP; n; ša[of]DET; Addaru[Month XII]MN$; adi[until]PRP; n; mīlu[river level]N; n; ammatu[unit]N; nahāsu[recede]V
+
+4. [...] ŠÁR ina ZALÁG MÚL GAL Á ULÙ TA KUR ana MAR ŠUR
+#lem: u; ŠÁR[gusty(?)]AJ; ina[in]PRP; nūru[last part of the night]N; kakkabu[star]N; rabû[big]AJ; idu[arm//side]N'N; šūtu[south]N; ištu[from]PRP; šadû[east]N; ana[to]PRP; amurru[west]N; zanānu[flash]V
+
+5. [... {d}]IM 1-en GÙ-šú ŠUB
+#lem: u; Adad[storm-god]DN$; ištēn[one]NU; rigimšu[voice]N; maqātu[fall]V$
+
+6. [... na-s]u ina 24 šá ŠE IGI
+#lem: u; na[rising to sunrise]'N; ina[on]PRP; n; ša[of]DET; Addaru[Month XII]MN$; nanmuru[be(come) visible]V
+
+7. [...] šá SI 1 KÙŠ 5 [SI]
+#lem: u; ša[of]DET; ištānu[north]N$; n; ammatu[unit]N; n; ubānu[finger]N
+
+8. [... DIR] AN ZA
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) [...] Month XII₂, year 13.
+
+@(t.e. 2) [...] Asalluhi.
+
+@obverse
+
+@(o 1) [...] who is called Artaxerxes. Month XII2, (the 1st of which was identical with) the 30th (of the preceding month); the moon@sup{?} [...]
+
+@(o 2) [... became visib]le@sup{?}. Night of the 1st, last part of the night, clouds were in the sky, gusty south wind. The 1st, the sun rose in a black cloud.
+
+@(o 3) [...] ... from the 24th of month XII to the 1st, the river level receded 1/2 cubit.
+
+@(o 4) [...] gusty [... wind;] last part of the night, a meteor flashed in the south from east to west.
+
+@(o 5) [...] it thundered once.
+
+@(o 6) [...;] (ideal) first appearance on the 24th of month XII.
+
+@(o 7) [...] northern star of [...] 1 cubit 5 [fingers.]
+
+@(o 8) [... clouds] were in the sky.
+

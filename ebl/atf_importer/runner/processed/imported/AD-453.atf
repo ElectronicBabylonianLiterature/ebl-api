@@ -1,0 +1,109 @@
+&X104530 = AD -453
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1. [...] ár-tak-šat-su SIG he-pí
+#lem: u; Artaxerxes[Artaxerxes]RN$; u; hepû[broken]AJ
+
+2. [... DIR A]N ZA GE₆ 25 DIR i sin ina IGI AN 1 KÙŠ LÁL
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; wīṣu[little]AJ; Sîn[moon]N; ina[in]PRP; pānu[front]N$pān; šamû[sky]N; n; ammatu[unit]N; alālu[balance]V
+
+3. [... D]IR i GE₆ 26 sin ár dele-bat he-pí 1/2 KÙŠ LÁL
+#lem: u; erpetu[cloud]N; wīṣu[little]AJ; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; hepû[broken]AJ; n; ammatu[unit]N; alālu[balance]V
+
+4. ($traces$)
+@column 2
+1. e [...]
+#lem: eli[above]PRP; u
+
+2. ITU [...]
+#lem: warhu[month]N; u
+
+3. 2(BARIG) x [...]
+#lem: n; u; u
+
+@reverse
+@column 3
+1'. x [...]
+#lem: u; u
+
+@column 4
+1'. ($traces$)
+2'. [... ana NI]M DIB ŠÚ 28 GU₄.UD ina ⸢NIM⸣ ina TIL GU.LA ŠÚ TA 28  
+#lem: u; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; rabû[set]V$; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; rabû[set]V; ištu[from]PRP; n
+
+3'. [EN ...] 29 ina KIN.SIG ŠÚ TA 24 EN 29 i ŠED₇
+#lem: adi[until]PRP; u; n; ina[in//in]PRP'PRP; kinsikku[afternoon]N; erēpu[be(come) overcast]V; ištu[from]PRP; n; adi[until]PRP; n; wīṣu[little]AJ; kūṣu[coldness]N
+
+4'. [...] ina SAG ITU 3(BÁN) ana 1 GÍN KÙ.BABBAR qa-lu ina MURUB₄ ITU 2(BÁN) 3 qa
+#lem: u; ina[in//in]PRP'PRP; rēšu[beginning]N; warhu[month]N; n; ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; qalû[roasted//refined]AJ'AJ$; ina[in//in]PRP'PRP; qabaltu[middle]N; warhu[month]N; n; n; qû[(one) litre]N
+
+@top
+1. [ina TIL IT]U 3(BÁN) ZÚ.LUM 1(BARIG) 2(BÁN) ka-si 4 PI ŠE.GIŠ 1(BÁN) 2 qa sa[h?]
+#lem: ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; suluppu[date]N; n; n; kasû[mustard]N; n; pānu[bushel (36 litres)]N; šamaššammū[sesame]N; n; n; qû[(one) litre]N; šamnu[oil]N
+
+2. [...] i-nu-šú MÚL.BABBAR ár ALLA ina IGI SAG UR.A dele-bat ina KUN{ME} A[N? ...]
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; warki[behind]PRP; Alluttu[Cancer]CN; ina[in]PRP; pānu[front]N$pān; rēšu[beginning]N; Nēšu[Leo]CN; Dilbat[Venus]CN; ina[in]PRP; Zibbātu[Pisces]CN; Ṣalbaṭānu[Mars]CN; u
+
+3. [...] x GENNA ina MÁŠ GU₄.UD ina GU 28 ŠÚ-bi
+#lem: u; u; Kayyamānu[Saturn]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; Šihṭu[Mercury]CN; ina[in]PRP; Gula[Aquarius]CN; n; rabû[set]V
+
+$ double ruling 
+4. [ZÍZ 30?] 14 na DIR KALAG-ma sin <<IGI>> NU IGI
+#lem: Šabāṭu[Month XI]MN$; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; dannu[strong//dense]AJ'AJ$; Sîn[moon]N; ul[not]MOD; amāru[see]V$
+
+5. EN.NUN šá gi-né-e šá MU.11.KÁM
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[regularity]N; ša[which]REL; n
+
+@translation labeled en project
+
+@obverse
+
+@column 1
+
+@(o i 1) [...] Artaxerxes ...
+
+@(o i 2)  [... clouds] were in the sky. Night of the 25th, a few clouds; the moon was balanced 1 cubit in front of Mars
+
+@(o i 3) [...] a few clouds. Night of the 26th, the moon was behind Venus - broken - balanced 1/2 cubit
+@column 2
+
+@(o ii 1) above [...]
+
+@(o ii 2) month [...]
+
+@(o ii 3) 2 @i{pānu} [...]
+
+@reverse
+
+@column 3
+
+@(r iii 1') ... [...]
+
+@column 4
+
+@(r iv 1') (traces)
+
+@(r iv 2') [...] having passed to the east, set. The 28th, Mercury’s last appearance in the east in the end of Aquarius. From the 28th [...]
+
+@(r iv 3') [...] The 29th, in the afternoon, overcast. From the 24th to the 29th, a little cold.
+
+@(r iv 4') [...] in the beginning of the month, 3 @i{sūtu} for one shekel of refined silver, in the middle of the month, 2 @i{sūtu} 3 @i{qa},
+
+@top
+
+@(t.e. 1) [at the end of the] month, 3 @i{sūtu}; dates, 1 @i{pānu} 2 @i{sūtu}; mustard, 4 @i{pānu}; sesame, 1 @i{sūtu} 2 @i{qa}; oil@sup{?} [...]
+
+@(t.e. 2) [...] At that time, Jupiter was behind Cancer in the beginning of Leo; Venus was in Pisces; M[ars@sup{?} ...]
+
+@(t.e. 3) [...]; Saturn was in Capricorn; Mercury was in Aquarius, (on the) 28th, last appearance.
+
+$ double ruling 
+
+@(t.e. 4) [...] sunset to moonset: 14°; there were dense clouds, so that I did not see the moon.
+
+@(t.e. 5) Diary for year 11.

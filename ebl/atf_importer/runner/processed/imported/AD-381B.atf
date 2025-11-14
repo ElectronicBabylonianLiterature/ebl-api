@@ -1,0 +1,122 @@
+&X103812 = AD -381B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+3'. [... G]E₆ 5 SAG GE₆
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+4'. [... G]E₆ 8 SAG GE₆
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+5'. [... N] KÙŠ 8 SI GE₆ 10
+#lem: u; n; ammatu[unit]N; n; ubānu[finger]N; mūšu[night]N; n
+
+6'. [... š]á ULÙ
+#lem: u; ša[of]DET; šūtu[south]N
+
+@column 2
+1'. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+2'. ki PAP NU ⸢IGI TA?⸣ [...]
+#lem: kī[when]SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ištu[from]PRP; u
+
+3'. KI.LAM še-im 1(BARIG) 1(BÁN) 2 [qa ...]
+#lem: mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; n; qû[(one) litre]N; u
+
+4'. 2(BARIG) 5(BÁN) 3 qa ina TIL ITU 3(BARIG) 1(BÁN) ⸢ka-si⸣? 1(BARIG) ⸢5(BÁN)⸣ s[ah ...]
+#lem: n; n; n; qû[(one) litre]N; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; n; kasû[mustard]N; n; n; sahlu[cress]N; u
+
+5'. SÍG 2 ma i-nu-šú MÚL.BABBAR ina ALLA ina TIL ITU ina UR.A dele-[bat ...]
+#lem: šīpātu[wool]N; n; manû[mina]N; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Nēšu[Leo]CN; Dilbat[Venus]CN; u
+
+6'. GENNA u AN šá ŠÚ-u NU IGI{ME} ITU BI ZI-ut BURU₅ ⸢i⸣ Z[I?-a? ...]
+#lem: Kayyamānu[Saturn]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ša[which]REL; rabû[set]V$; ul[not]MOD; nanmuru[be(come) visible]V; warhu[month]N; šū[that]'DP; tibûtu[rise//attack]N'N; erbû[locust]N; wīṣu[small]'AJ; tebû[attack]'V; u
+
+$ruling
+7'. ŠU 1 27 na ina šamáš GUB IGI AGA a-pir sin ár LUGAL 20 SI ár MÚL.B[ABBAR ...]
+#lem: Duʾūzu[Month IV]MN$; n; n; na₁[sunset to moonset]N; ina[in//in]PRP'PRP; šamšu[sun]N; izuzzu[stand]V; amāru[see]V; agû[tiara]N; apir[covered]AJ; Sîn[moon]N; warki[behind]PRP; LUGAL[α Leonis]CN$; n; ubānu[finger]N; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; u
+
+@column 3
+1. MÚL.BABBAR ina IGI LUGAL 1/2 KÙŠ MÚL.BABBAR 4 SI ana NIM DIB GE₆ 3 sin á[r]
+#lem: Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN$; n; ammatu[unit]N; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP
+
+2. [GÌR-ár]-šá-UR.A 1 1/2 KÙŠ ina ZALÁG dele-bat ár MÚL-IGI-šá-še-pit-MAŠ.MAŠ 5 [SI? dele-bat N N]
+#lem: GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; ina[in//in]PRP'PRP; nūru[last part of the night]N; Dilbat[Venus]CN; warki[behind]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ubānu[finger]N; Dilbat[Venus]CN; n; n
+
+3. [ana UL]Ù SIG GE₆ 4 SAG GE₆ sin ár DELE-šá-IGI-ABSIN 1 K[ÙŠ ... GE₆ 5 SAG GE₆ sin]
+#lem: ana[to]PRP; šūtu[south ]N; šapil[low]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+4. [ár S]A₄-šá-ABSIN 1 KÙŠ ina ZALÁG dele-bat SIG M[ÚL-ár-šá-še-pit-MAŠ.MAŠ N N]
+#lem: warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šaplat[below]PRP; MÚL-ár-šá-še-pit-MAŠ.MAŠ[μ Geminorum]CN$; n; n
+
+5. [GE₆ 6 SAG GE₆] sin ina I[GI?] ⸢RÍN-šá⸣-U[LÙ ...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN; u
+
+@column 4
+1. [...]
+#lem: u
+
+2. [...] ⸢x⸣
+#lem: u; u
+
+@translation labeled en project
+
+@column 1
+
+@(i 1') [...] ...
+
+@(i 2') [...] ...
+
+@(i 3') [... Ni]ght of the 6th@sup{?}, beginning of the night,
+
+@(i 4') [... Ni]ght of the 8th, beginning of the night,
+
+@(i 5') [... nn] cubits 8 fingers. Night of the 10th,
+
+@(i 6') [... o]f the south
+
+@column 2
+
+@(ii 1') ... [...]
+
+@(ii 2') when I watched I did not see it. From@sup{?} [...]
+
+@(ii 3') the equivalent (of 1 shekel of silver was): barley, 1 @i{pānu} 1 @i{sūtu} 2 [@i{qa} ...]
+
+@(ii 4') 2 @i{pānu} 5 @i{sūtu} 3 @i{qa}, at the end of the month 3 @i{pānu} 1 @i{sūtu}; mustard, 1 @i{pānu} 5 @i{sūtu} ... [...]
+
+@(ii 5') wool, 2 minas. At that time, Jupiter was in Cancer, at the end of the month, in Leo; Ve[nus ...]
+
+@(ii 6') Saturn and Mars, which had set, were not visible. That month, [there] was a small attack of locusts [...]
+
+$ ruling
+
+@(ii 7') Month IV, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 27°, (the moon) could be seen while the sun stood there; earthshine; the moon was 20 fingers behind α Leonis, behind Jupi[ter ...]
+@column 3
+
+@(iii 1) Jupiter was 1/2 cubit in front of α Leonis, Jupiter having passed 4 fingers to the east. Night of the 3rd, the moon was
+
+@(iii 2) 1 1/2 cubits behind β Virginis; last part of the night, Venus was 5 [fingers@sup{?}] behind η Geminorum, [Venus being]
+
+@(iii 3) [...] low [to the sou]th. Night of the 4th, beginning of the night, the moon was 1 cubit behind γ Virginis [... Night of the 5th, beginning of the night, the moon was]
+
+@(iii 4) 1 1/2 cubits [behind] α Virginis; last part of the night, Venus was [...] below μ Geminorum.
+
+@(iii 5) [Night of the 6th, beginning of the night,] the moon was [...] in fr[ont@sup{?} of] α Librae [...]
+
+@column 4
+
+@(iv 1) [...]
+
+@(iv 2) [...] ...
+

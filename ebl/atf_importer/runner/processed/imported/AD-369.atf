@@ -1,0 +1,106 @@
+&X103690 = AD -369
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] x KÙŠ GE₆ 24 ina ZALÁG [...]
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; ina[in//]PRP'PRP; nūru[last part of the night]N; u
+
+2'. [...] GE₆ 26 sin ina KUR-šú SI [...]
+#lem: u; mūšu[night]N; n; Sîn[moon]N; ina[in//]PRP'PRP; u; u; u
+
+3'. [... Š]ED₇ dan-nu Š[ED₇?] ⸢x⸣
+#lem: u; kūṣu[coldness]N; dannu[strong//severe]AJ'AJ$; kūṣu[coldness]N; u
+
+4'. [...] x še-am? 2(BARIG) 4(BÁN) 3 qa ⸢x x⸣
+#lem: u; u; šeʾu[barley]N$; n; n; n; qû[(one) litre]N; u; u
+
+5'. [... I]LLU TAR-i[s]
+#lem: u; mīlu[river level]N; paris[cut off]AJ
+
+$ ruling
+6'. [...] x GE₆ 4 4 [...]
+#lem: u; u; mūšu[night]N; n; n; u
+
+7'. [...] ⸢x⸣ [...]  
+#lem: u; u; u
+
+@reverse
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢IM⸣ ŠÁR AN UTAH
+#lem: u; šāru[wind]N; ŠÁR[gusty(?)]AJ; šamû[rain]N; natāku[drip]V
+
+3'. [...] UR.A NU KUR-á[d?] UŠ u ana NIM LAL
+#lem: u; Nēšu[Leo]CN; ul[not]MOD; kašādu[reach]V; nenmudu[be at a stationary point]V; u[and]CNJ; ana[to]PRP; Elamtu[east]N; nahāsu[move back]V
+
+4'. [... UL]Ù ŠÁR ŠIR ina 6 UŠ ME 1/3 HAB-rat ŠÚ-im
+#lem: u; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; X; ina[during]PRP; n; nenmudu[be at a stationary point]V; ūmu[day]N; n; HAB-rat[disc]N; arim[covered]V
+
+5'. [... KI.LAM š]e-im 1(BARIG) 4(BÁN) ina TIL ITU 1(BARIG) 5(BÁN) ZÚ.LUM 2(BARIG) 1(BÁN) ina TIL ITU
+#lem: u; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; ina[in//]PRP'PRP; qītu[end]N; warhu[month]N; n; n; suluppu[date]N; n; n; ina[in//]PRP'PRP; qītu[end]N; warhu[month]N
+
+6'. [...] 1 GÍN KÙ.BABBAR qa-lu-ú i-nu-šú MÚL.BABBAR ina UR.A
+#lem: u; n; šiqlu[shekel]N; kaspu[silver]N; qalû[refined]AJ; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in//]PRP'PRP; Nēšu[Leo]CN
+
+7'. [...] 7 šá BAR MU.36.KÁM ILLU 2 KÙŠ 8 SI
+#lem: u; n; ša[which]REL; Nisannu[Month I]MN; n; mīlu[river level]N; n; ammatu[unit]N; n; ubānu[finger]N
+
+8'. [... ERÍN]{MEŠ}-šú id-ke-e-ma ana ṣal-tu₄ ina KUR ra-za-un-du
+#lem: u; ṣābu[people//troops]N'N$; dekû[raise//call up]V'V$idkêma; ana[to]PRP; ṣāltu[combat]N$; ina[in]PRP; mātu[land]N; Razaundu[Razaundu]GN$
+
+9'. [...] ⸢x⸣-nu-uh TA TIL ur-hu SÙD-tú
+#lem: u; u; ištu[from]PRP; qītu[end]N; urhu[way//journey]N'N$; rūqu[distant//far]AJ'AJ$rūqtu
+
+10'. [...] ⸢x⸣ nu ⸢x x x⸣ a-na
+#lem: u; u; X; u; u; u; ana[to]PRP
+
+11'. [...] ⸢x x⸣
+#lem: u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ⸢nn⸣ cubits. Night of the 24th, last part of the night, [...]
+
+@(o 2') [...] Night of the 26th, at the last appearance of the moon, ... [...]
+
+@(o 3') [...] severe cold ...
+
+@(o 4') [...] barley, 2 @i{pānu} 4 @i{sūtu} 3 @i{qa} ...
+
+@(o 5') [...] the high water was cut off.
+
+$ ruling
+
+@(o 6') [...] ... Night of the 4th (and) the 4th, [...]
+
+@(o 7') [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] ...
+
+@(r 2') [...] gusty wind, rain shower.
+
+@(r 3') [... Jupiter] did not reach [...] of Leo, became stationary and went back to the east
+
+@(r 4') [...] gusty south wind ... at 6° night 1/3 of the disc was covered.
+
+@(r 5') [... the equivalent] for 1 shekel of refined silver was: barley, 1 @i{pānu} 4 @i{sūtu}, at the end of the month, 1 @i{pānu} 5 @i{sūtu}; dates, 2 @i{pānu} 1 @i{sūtu}, at the end of the month,
+
+@(r 6') [...] At that time, Jupiter was in Leo;
+
+@(r 7') [... to] the 7th of month I of year 36, the river level [...] 2 cubits 8 fingers.
+
+@(r 8') [...] mustered his [troops] and [went] to fight in the land Razaundu
+
+@(r 9') [...] ... from the end of a far journey
+
+@(r 10') [...] ... to
+
+@(r 11') [...] ...

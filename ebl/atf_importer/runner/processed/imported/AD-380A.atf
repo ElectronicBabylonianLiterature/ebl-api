@@ -1,0 +1,60 @@
+&X103801= AD -380A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] 1 KÙŠ 6 SI x [...]
+#lem: u; n; ammatu[unit]N; n; ubānu[finger]N; u; u
+
+2'. [...] 1 KÙŠ dele-bat e MÚL AN šá SAG GÍR.TAB 18 SI ⸢x⸣ [...]
+#lem: u; n; ammatu[unit]N; Dilbat[Venus]CN; eli[above]PRP; kakkabu[star]N; elû[upper]AJ; ša[which]REL; rēšu[beginning]N; Zuqiqīpu[Scorpio]CN; n; ubānu[finger]N; u; u
+
+3'. [...] TUH GE₆ 29 USAN AN DUL ITU BI KI.LAM [...]
+#lem: u; paṭāru[loosen//removed]V'AJ$; mūšu[night]N; n; šimītān[first part of the night]N; šamû[rain]N; DUL[(meaning unclear)]V$; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; u
+
+4'. [... MÚ]L.BABBAR ina ABSIN dele-bat ina RÍN ina TIL ITU ina GÍR.TAB GENNA ina A [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; Dilbat[Venus]CN; ina[in]PRP; Zibānītu[Libra]CN$; ina[in]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN$; u
+
+$ ruling
+5'. [AB ... A]N ina IGI MÚL-KUR-šá-DUR-SIM.MAH 6 SI AN ⸢8⸣ [SI ...]
+#lem: Ṭebētu[Month X]MN; u; Ṣalbaṭānu[Mars]CN; ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; u; Ṣalbaṭānu[Mars]CN; n; u; u
+
+6'. [... TÙ]R NIGÍN GE₆ 5 5 DIR AN DIB GE₆ 6 SAG [GE₆ ...]
+#lem: u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+7'. [... GE₆ 8 SAG GE₆ sin ár MÚL-ár-š]á-SAG-HUN.GÁ 1 KÙŠ 8 ŠÚ GE₆ 9 SAG [GE₆ ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; n; erēpu[be(come) overcast]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+8'. [... GE₆] 11 SAG GE₆ sin ina IGI ŠUR-GIGIR-šá [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR[β/ζ Tauri]CN; u
+
+9'. [...] AN UTAH ⸢ina ZALÁG sin⸣ [...]
+#lem: u; šamû[rain]N; natāku[drip]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+10'. [...] x [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(1') [...] 1 cubit 6 fingers ... [...]
+
+@(2') [...] 1 cubit; Venus was 18 fingers above the upper star of the head of the Scorpion ... [...]
+
+@(3') [...] removed. Night of the 29th, first part of the night, rain DUL. That month, the equivalent [...]
+
+@(4') [... J]upiter was in Virgo; Venus was in Libra, at the end of the month, in Scorpius; Saturn was in Leo [...]
+
+$ ruling
+
+@(5') [... Ma]rs was 6 fingers in front of η Piscium, Mars being 8 [fingers ...]
+
+@(6') [...] surrounded by a halo. Night of the 5th (and) the 5th, clouds crossed the sky. Night of the 6th, beginning [of the night, ...]
+
+@(7') [Night of the 8th, beginning of the night, the moon was 1 cubit behind α Ar]ietis. The 8th, overcast. Night of the 9th, beginning [of the night ...]
+
+@(8') [... Night] of the 11th, beginning of the night, the moon was [...] in front of [β/ζ] Tauri [...]
+
+@(9') [...] rain shower; last part of the night, the moon was [...]
+
+@(10') [...] ... [...] 

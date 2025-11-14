@@ -1,0 +1,76 @@
+&X102731 = AD -273A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... GE₆] 8 SAG G[E₆ si]n SIG GIŠ.[KUN-A ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]PRP; GIŠ.KUN-A[ϑ Leonis]CN; u
+
+3'. [...] ana NIM GUB ⸢ina ZALÁG⸣ DIR AN ZA [...]
+#lem: u; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+4'. [...] GE₆ 11 SAG GE₆ sin ár S[A₄-šá-ABSIN ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+5'. [...] 12 DIR AN DIB I[M ...]
+#lem: u; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šāru[wind]N; u
+
+6'. [...] ⸢x⸣ 12 20 ⸢x⸣ [...]
+#lem: u; u; n; n; u; u
+
+7'. [...] ($traces$) [...] 
+#lem: u; u
+
+@reverse
+1'. [...] MÚL.BABBAR 2/3 KÙŠ ana [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; ana[to]PRP; u
+
+2'. [... G]UR? sah-le₁₀ 2(BÁN) 3 ⸢qa⸣ [Š]E.GIŠ ⸢x⸣ [...]
+#lem: u; kurru[kor (180 litres)]N; sahlu[cress]N; n; n; qû[(one) litre]N; šamaššammū[sesame]N; u; u
+
+3'. [...] GENNA ina GU AN ina ⸢PA⸣ ITU BI ⸢ILLU⸣ [...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Gula[Aquarius]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N; u
+
+$ ruling
+4'. [... TI]L KIN MU.38.KÁM {m}an-[ti-ʾu-ku-su]
+#lem: u; qītu[end]N; Ulūlu[Month VI]MN; n; Antiochus[Antiochus]RN
+
+5'. u {m}s[e-lu-ku LUGAL{MEŠ}]
+#lem: u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [... Night] of the 8th, beginning of the night, the moon was [...] below ϑ Leonis [...]
+
+@(o 3') [...] stood to the east; last part of the night, clouds were in the sky [...]
+
+@(o 4') [...] Night of the 11th, beginning of the night, the moon was [...] behind α [Virginis ...]
+
+@(o 5') [... Night of?] the 12th, clouds crossed the sky, wi[nd ...]
+
+@(o 6') [...] ... The 12th, the sun? ... [...]
+
+@(o 7') [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] 2/3 cubit [...] Jupiter to the [...]
+
+@(r 2') [... @i{k}]@i{urru}; cress, 2 @i{sūtu} 3 @i{qa}; sesame, ... [...]
+
+@(r 3') [...] Saturn was in Aquarius; Mars was in Sagittarius. That month, the river level [...]
+
+$ ruling
+
+@(r 4') [... to the en]d of month VI, year 38, [kings] An[tiochus]
+
+@(r 5') and S[eleucus.]

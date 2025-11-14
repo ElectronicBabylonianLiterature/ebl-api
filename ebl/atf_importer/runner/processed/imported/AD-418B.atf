@@ -1,0 +1,89 @@
+&X104182 = AD -418B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 5.KÁ]M {m}ú-ma-kuš šá {m}da-a-ri-muš MU-šú SA₄
+#lem: šattu[year]N; n; Umakuš[Umakuš]RN$; ša[which]REL; Dariamuš[Darius]RN; šumu[name]N$šumšu; nabû[named]AJ
+
+2. [{ITU}APIN N] sin IGI 20 na AGA a-pir 1 DIR SAL AN ZA GE₆ 2
+#lem: Arahsamna[Month VIII]MN$; n; Sîn[moon]N; nanmuru[be(come) visible]'V; n; na₁[sunset]N; agû[tiara]N; apir[covered]AJ; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+3. [dele-bat] e SA₄-šá-ABSIN 1 2/3 KÙŠ NU PAP GE₆ 2 sin
+#lem: Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; Sîn[moon]N
+
+4. ⸢ina IGI⸣ AN 1 2/3 KÙŠ 2 DIR SAL AN ZA 5 6 DIR SAL
+#lem: ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN$; n; n; ammatu[unit]N; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; n; n; erpetu[cloud]N; raqqu[thin]AJ
+
+5. AN ZA GE₆ 7 DIR AN ZA 7 DIR SAL i AN ZA GE₆
+#lem: šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; raqqu[thin]AJ; wīṣu[little]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N
+
+6. 8 DIR SAL AN ZA sin TÙR NIGÍN 8 kal ME DIR MAH
+#lem: n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; n; kal[all]N; ūmu[day]N$; erpetu[cloud]N; ṣīru[great//many]AJ'AJ$
+
+7. AN DIB šamáš TÙR NIGIN GE₆ 9 USAN sin TÙR NIGÍN ana ULÙ BAD
+#lem: šamû[sky]N; etēqu[cross]V$; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]V; mūšu[night]N; n; šimītān[first part of the night]N; Sîn[moon]N; tarbaṣu[halo]N; lawi[surrounded (with)]AJ; ana[to]PRP; šūtu[south]N$; petû[open]V
+
+8. GENNA ina ŠÀ TÙR ana NIM GUB 9 kal ME DIR SAL MAH
+#lem: Kayyamānu[Saturn]CN; ina[in]PRP; libbu[interior]N$; tarbaṣu[halo]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; n; kal[all]N; ūmu[day]N$; erpetu[cloud]N; raqqu[thin]AJ; ṣīru[great//many]AJ'AJ$
+
+9. [AN ZA] šamáš TÙR NIGÍN GE₆ 10 MURUB₄ sin SIG GENNA 1 KÙŠ
+#lem: šamû[sky]N; ṣabātu[cover (the sky)]V; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mūšu[night]N; n; qablītu[middle watch (of the night)]N; Sîn[moon]N; šapil[below]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N
+
+10. [...]⸢x x⸣ ina še-rì  
+#lem: u; u; ina[in]PRP; šēri[morning]N
+
+@reverse  
+1'. [...]⸢x ABSIN x x x⸣ [...]
+#lem: u; Šerʾu[Virgo]CN; u; u; u; u
+
+2'. [x x] ⸢26⸣? U₄.ZAL sin ár dele-bat? 5? KÙŠ ana NIM DIB
+#lem: u; u; n; šāt-urri[last part of the night]N; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V$
+
+3'. 27 KUR
+#lem: n; šadû[east wind]N
+
+4'. EN.NUN šá gi-né-e šá {ITU}APIN MU 5.KÁM
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[regularity]N; ša[which]REL; Arahsamna[Month VIII]MN; šattu[year]N; n
+
+5'. {m}da-a-ri-ia-a-muš LUGAL
+#lem: Dariamuš[Darius]RN; šarru[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 5 of] Umakuš who is called Darius.
+
+@(o 2) [Month VIII ...] the moon became visible; sunset to moonset: 20'; earthshine. The 1st, thin clouds were in the sky. Night of the 2nd,
+
+@(o 3) [Venus was] 1 2/3 cubits above α Virginis; I did not watch. Night of the 2nd, the moon
+
+@(o 4) was 1 2/3 cubits in front of Mars. The 2nd, thin clouds were in the sky. The 5th, the 6th, thin
+
+@(o 5) clouds were in the sky. Night of the 7th, clouds were in the sky. The 7th, a few thin clouds were in the sky. Night
+
+@(o 6) of the 8th, thin clouds were in the sky; the moon was surrounded by a halo. The 8th, all day many clouds 
+
+@(o 7) crossed the sky; the sun was surrounded by a halo. Night of the 9th, first part of the night, the moon was surrounded by a halo, it was open to the south;
+
+@(o 8) Saturn stood inside the halo towards the east. The 9th, all day many thin clouds
+
+@(o 9) [...] the sun was surrounded by a halo. Night of the 10th, middle part of the night, the moon was 1 cubit below Saturn
+
+@(o 10)[...] ... in the morning 
+
+@reverse 
+
+@(r 1') [...] ...
+
+@(r 2') [... Night of the] 26th@sup{?}, last part of the night, the moon had passed 5@sup{?} cubits behind Venus@sup{?} to the east.
+
+@(r 3') The 27th, moonrise to sunrise: <...>
+
+@(r 4') Diary for month VIII, year 5
+
+@(r 5') of king Darius.
+

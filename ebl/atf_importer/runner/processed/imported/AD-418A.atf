@@ -1,0 +1,226 @@
+&X104181 = AD -418A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. [ina a-mat ...] x x liš-lim?
+#lem: ina[at]PRP; amāt[command]N; u; u; u; lišlim[be(come) well]V
+
+@obverse
+1. [MU].⸢5⸣.KÁM {m}ú-ma-kuš BAR GE₆ 7 USAN dele-bat SIG ŠUR-šá-GIGIR 8 SI dele-bat 4 U ana NIM DIB
+#lem: n; Umakuš[Umakuš]RN$; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šaplat[below]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ubānu[finger]N; Dilbat[Venus]CN; n; ubānu[finger]N$; ana[to]PRP; Elamtu[east]N; etēqu[pass]V
+
+2. GE₆ 9 MURUB₄ sin ina IGI AN 3? SI i sin ana ULÙ SIG in 12 ki 13 GENNA ina KUN{ME} IGI
+#lem: mūšu[night]N; n; qablītu[middle watch (of the night)]N; Sîn[moon]N; ina[in]PRP'PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N$; wīṣu[little]AJ; Sîn[moon]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; ina[around (day x)]PRP; n; kī[or]CNJ; n; Kayyamānu[Saturn]CN; ina[in//in]PRP'PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V
+
+3. GE₆ 21 IZI.ŠUB ina KI ŠU.AN.NA GÁL ITU BI KA₅.A ina SILA.DAGAL.LA URU IGI
+#lem: mūšu[night]N; n; miqit-išāti[fall of fire]N$; ina[in]PRP; erṣētu[district]N$; Šuanna[Šuanna]GN$; bašû[be]V$; warhu[month]N; šū[that]'DP; šēlebu[fox]V; ina[in//in]PRP'PRP; rebītu[square]N$; ālu[city]N; nanmuru[appear]V
+
+4. ŠE 4(BÁN) ina TIL ITU 3(BÁN) 5 qa ZÚ.LUM 2(BÁN) 4 1/2 qa ka-si 4 PI ZÀ 3(BÁN) 1 GÍN bit?-qa
+#lem: šeʾu[barley]N$; n; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; n; qû[(one) litre]N; suluppu[date]N$; n; n; n; qû[(one) litre]N; kasû[mustard]N; n; pānu[bushel (36 litres)]N; sahlu[cress]N$; n; n; šiqlu[shekel]N; bitqu[break(age)]N
+
+5. ŠE.GIŠ 1(BÁN) SÍG 1 ma SÀG.ME.GAR u dele-bat ina SAG MAŠ.MAŠ AN ina UR.A GENNA ina KUN{ME} 29 GU₄.UD ina ŠÚ ina GU₄.AN ŠÚ
+#lem: šamaššammū[sesame]N$; n; šīpātu[wool]N$; n; manû[mina]N$; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Dilbat[Venus]CN; ina[in]PRP; rēš[beginning]N; Māšu[Gemini]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Nēšu[Leo]CN; Kayyamānu[Saturn]CN; ina[in]PRP; Zibbātu[Pisces]CN; n; Šihṭu[Mercury]CN; ina[in]PRP; rabû[set]V; ina[in]PRP; Zappu[Taurus]CN; rabû[set]V
+
+$ ruling
+6. GU₄ GE₆ 7 sin ina IGI AN 2/3 KÙŠ i sin ana SI NIM GE₆ 9 AN SIG GIŠ.KUN-UR.A 4 KÙŠ
+#lem: Ayyaru[Month II]MN; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; wīṣu[little]AJ; Sîn[moon]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; GIŠ.KUN-A[ϑ Leonis]CN; n; ammatu[unit]N
+
+7. 22 dele-bat ina ŠÚ ár GIGIR ŠÚ AN.BAR₇ MÚL GAL šá GIM di-par TA ULÙ ana SI ŠUR-ma
+#lem: n; Dilbat[Venus]CN; ina[in]PRP; rabû[set]V; warki[behind]PRP; Narkabtu[Chariot]CN; rabû[set]V; muṣlālu[noon]N; kakkabu[star]N; rabû[big]AJ; ša[which]REL$; kīma[like]PRP; dipāru[torch]N; ištu[from]PRP; šūtu[south]N; ana[to]PRP; ištānu[north]N; ṣarāru[flash]V$
+
+8. ri-gim? AN-e? KUR? iš-me? 23 KAK.BAN ŠÚ ŠE 4(BÁN) ina MURUB₄ ITU 3(BÁN) ina TIL ⸢ITU⸣
+#lem: rigmu[noise]N; šamû[sky]N; mātu[land]N; šemû[hear]V; n; Šiltāhu[Sirius]CN; rabû[set]V; šeʾu[barley]N; n; ina[in]PRP; qabaltu[middle]N; warhu[month]N; n; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N
+
+9. ⸢4(BÁN)?⸣ 1 GÍN bit-⸢qa⸣ ZÚ.LUM 3(BÁN)? 1 qa LAL ka-si 3(BARIG) 2(BÁN) ZÀ 2(BÁN) 1 qa ŠE.GIŠ ⸢5⸣? [...]
+#lem: n; n; šiqlu[shekel]N; bitqu[break(age)]N; suluppu[date]N; n; n; qû[(one) litre]N; nahāsu[recede]V; kasû[mustard]N$; n; n; sahlu[cress]N; n; n; qû[(one) litre]N; šamaššammū[sesame]N; n; u
+
+10. [x x] SÍG 1 ⸢ma⸣ SÀG.ME.GAR ina MAŠ.MAŠ AN ina qí-it UR.A GENNA ina TIL KUN{ME} dele-bat u G[U₄.UD šá ŠÚ{MEŠ} NU IGI{MEŠ}]
+#lem: u; u; šīpātu[wool]N; n; manû[mina]N; Kakkabu-peṣû[Jupiter]CN; ina[in//in]PRP'PRP; Māšu[Gemini]CN; Ṣalbaṭānu[Mars]CN; ina[in//in]PRP'PRP; qītu[end]N$; Nēšu[Leo]CN; Kayyamānu[Saturn]CN; ina[in//in]PRP'PRP; qītu[end]N; Zibbātu[Pisces]CN; Dilbat[Venus]CN; u[and]CNJ; Šihṭu[Mercury]CN; ša[which]REL$; rabû[set]V$; ul[not]MOD; amāru[see//be(come) visible]V'V
+
+$ ruling
+11. [SIG ...] KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 3 dele-bat ina NIM ár GIGIR IGI G[E₆ ...]
+#lem: Simānu[Month III]MN; u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[be(come) back]V; n; Dilbat[Venus]CN; ina[in]PRP; Elamtu[east]N; warki[behind]PRP; Narkabtu[Chariot]CN; nanmuru[be(come) visible]V; mūšu[night]N; u
+
+12. [...] 9 SÀG.ME.GAR ina MAŠ.MAŠ ŠÚ GE₆ 11 ina ZALÁG MÚL GAL I[D? ...]
+#lem: u; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; kakkabu[star]N; rabû[big]AJ; idu[toward]PRP; u
+
+13. [...] GE₆ 17 IZI.ŠUB ina KI ŠÚ.AN.NA GÁL GE₆ ⸢24⸣ [...]
+#lem: u; mūšu[night]N; n; miqit-išāti[fall of fire]N; ina[in]PRP; erṣētu[district]N; Šuanna[Šuanna]GN; bašû[occur]V; mūšu[night]N; n; u
+
+14. [...] GÁL GE₆ 25 ina ZALÁG dele-bat ana SI sin šá ULÙ T[E? ...]
+#lem: u; bašû[occur]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; ana[to]PRP; qarnu[horn]N$; Sîn[moon]N; ša[which]REL$; šūtu[south]N; ṭehû[come close]V; u
+
+15. [...] ⸢x⸣ 2? KÙŠ ŠE 5(BÁN) ina TIL ITU 1 PI ZÚ.LUM x [...]
+#lem: u; u; n; ammatu[unit]N; šeʾu[barley]N; n; ina[in]PRP; qītu[end]N; warhu[month]N; n; pānu[bushel (36 litres)]N; suluppu[date]N; u; u
+
+16. [...] ZÀ 2(BÁN)? 4 qa ŠE.GIŠ 5 qa SÍG 1 ma dele-bat ina MÚL.GIGIR [...]
+#lem: u; sahlu[cress]N; n; n; qû[(one) litre]N; šamaššammū[sesame]N; n; qû[(one) litre]N; šīpātu[wool]N; n; manû[mina]N; Dilbat[Venus]CN; ina[in//in]PRP'PRP; Narkabtu[Chariot]CN; u
+
+17. [...] ⸢x⸣ SÀG.ME.GAR u GU₄.UD šá ŠÚ{MEŠ} NU IGI{MEŠ}
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Šihṭu[Mercury]CN; ša[which]REL$; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V
+
+$ ruling
+18. [ŠU ...] šamáš? GUB? in 21 GU₄.UD ina ŠÚ ina UR.A IGI GE₆ 23 x [...]
+#lem: Duʾūzu[Month IV]MN; u; šamšu[sun]N; izuzzu[stand]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP; erbu[west]N; ina[in//in]PRP'PRP; Nēšu[Leo]CN; nanmuru[be(come) visible]V; mūšu[night]N; n; u; u
+
+19. [... N] KÙŠ LÁL GE₆ 26 ina ZALÁG sin ina IGI SÀG.ME.GAR 1/2 KÙŠ x [...]
+#lem: u; n; ammatu[unit]N; alālu[balance]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; u; u
+
+20. [...] IGI ŠE 5(BÁN) 4? qa ina TIL ITU 5(BÁN) 1 qa ZÚ.LUM ⸢x⸣ [...]
+#lem: u; amāru[see]V; šeʾu[barley]N; n; n; qû[(one) litre]N; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; n; qû[(one) litre]N; suluppu[date]N; u; u
+
+21. [...] 5? qa SÍG 1 ⸢ma⸣ x x x [...]
+#lem: u; n; qû[(one) litre]N; šīpātu[wool]N; n; manû[mina]N; u; u; u; u
+
+22. ($traces$)
+23. ($traces$)
+@reverse
+1'. [...] SÍG 1 ma [i-nu-šú ...]
+#lem: u; šīpātu[wool]N; n; manû[mina]N; inūšu[at that time]AV; u
+
+2'. [... dele-bat u AN šá] ŠÚ{MEŠ} NU IGI{MEŠ} [...]
+#lem: u; Dilbat[Venus]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ša[which]REL$; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V; u
+
+$ ruling
+3'. [ŠE ... G]ÌR{MEŠ}-šú in 6 SÀG.ME.GAR 5 UŠ [...]
+#lem: Addaru[Month XII]MN; u; šēpu[foot]N; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; n; emēdu[be at a stationary point]V; u
+
+4'. [...] 1/2 KÙŠ GE₆ 12 IZI.ŠUB i ina ki-da-n[u ...]
+#lem: u; n; ammatu[unit]N; mūšu[night]N; n; miqit-išāti[fall of fire]N; wīṣu[little]AJ; ina[in//in]PRP'PRP; kīdānu[outside]AJ$; u
+
+5'. [... q]í-it KUN{ME} IGI GE₆ 29 SAG GE₆ GU₄.UD ina ⸢ŠÚ⸣ [ina HUN.GÁ IGI]
+#lem: u; qītu[end]N; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in//in]PRP'PRP; Agru[Aries]CN; nanmuru[be(come) visible]V
+
+6'. [...] ŠE 3(BÁN) 3 qa ina TIL ITU 3(BÁN) 4 qa ZÚ.LUM ina SAG ITU u ina TIL? [...]
+#lem: u; šeʾu[barley]N; n; n; qû[(one) litre]N; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; n; qû[(one) litre]N; suluppu[date]N; ina[in//in]PRP'PRP; rēšu[beginning]N; warhu[month]N; u[and]CNJ; ina[in//in]PRP'PRP; qītu[end]N; u
+
+7'. [x x x] ITU 1(BARIG) 2(BÁN) 4 1/2 qa ka-si 2(BARIG) 3(BÁN) ZÀ 3(BÁN) ŠE.GIŠ 1(BÁN) SÍG 50 GÍN [...]
+#lem: u; u; u; warhu[month]N; n; n; n; n; qû[(one) litre]N; kasû[mustard]N$; n; n; sahlu[cress]N; n; šamaššammū[sesame]N; n; šīpātu[wool]N; n; šiqlu[shekel]N; u
+
+8'. SÀG.ME.GAR ina IGI ALLA GU₄.UD ina HUN.GÁ GENNA ina qí-it KUN{ME} dele-bat u AN šá ŠÚ-ú [NU IGI{MEŠ}]
+#lem: Kakkabu-peṣû[Jupiter]CN; ina[in//in]PRP'PRP; pān[front]N; Alluttu[Cancer]CN; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP; Agru[Aries]CN; Kayyamānu[Saturn]CN; ina[in//in]PRP'PRP; qītu[end]N; Zibbātu[Pisces]CN; Dilbat[Venus]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ša[which]REL$; rabû[set]V$; ul[not]MOD; amāru[be(come) visible]V
+
+$ ruling
+9'. DIR.ŠE in 1 GENNA ina qí-it KUN{ME} ŠÚ 6 U₈ Ù.TU-ma la-hu-ú NU TUK
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; rabû[set]V; n; immertu[ewe]N; walādu[give birth]V; lahû[jaw]N$; ul[not]MOD; išû[have]V
+
+10'. 7 U₈ Ù.TU-ma la-hu-ú NU TUK GE₆ 13 SAG GE₆ GU₄.UD ina IGI MÚL.MÚL 1 2/3 KÙŠ
+#lem: n; immertu[ewe]N; walādu[give birth]V; lahû[jaw]N; ul[not]MOD; išû[have]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP; pānu[front]N; MÚL.MÚL[η Tauri]CN$; n; n; ammatu[unit]N
+
+11'. GE₆ 17 IZI.ŠUB ina KI ŠU.AN.NA{KI} GÁL 21 dele-bat ina ŠÚ ina HUN.GÁ IGI in 23 GU₄.UD
+#lem: mūšu[night]N; n; miqit-išāti[fall of fire]N; ina[in]PRP; erṣētu[district]N; Šuanna[Šuanna]GN; bašû[be]V; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in//in]PRP'PRP; Agru[Aries]CN; nanmuru[be(come) visible]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN
+
+12'. ina ŠÚ ina IGI MÚL.MÚL ŠÚ 24 MUŠEN iq-lu-up-ma 3 GÌR{MEŠ}-šú ŠE 4(BÁN) 1 qa ZÚ.LUM
+#lem: ina[in]PRP; erbu[west]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN$; rabû[set]V; n; iṣṣūru[bird]N$; qalāpu[peel//hatch]V'V$; n; šēpu[foot]N; šeʾu[barley]N; n; n; qû[(one) litre]N; suluppu[date]N
+
+13'. 1(BARIG) 2(BÁN) ina TIL ITU 1(BARIG) 2(BÁN) 1 1/2 qa ka-si 3(BARIG) 2(BÁN) ZÀ 3(BÁN) ŠE.GIŠ 1(BÁN) SÍG 1 ma SÀG.ME.GAR
+#lem: n; n; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; n; n; n; qû[(one) litre]N; kasû[mustard]N$; n; n; sahlu[cress]N; n; šamaššammū[sesame]N; n; šīpātu[wool]N; n; manû[mina]N; Kakkabu-peṣû[Jupiter]CN
+
+14'. ina SAG ALLA {d}dele-bat ina HUN.GÁ GENNA AN u GU₄.UD šá ŠÚ{MEŠ} NU IGI{MEŠ}
+#lem: ina[in//in]PRP'PRP; rēšu[beginning]N; Alluttu[Cancer]CN; Dilbat[Venus]CN$; ina[in//in]PRP'PRP; Agru[Aries]CN; Kayyamānu[Saturn]CN; Ṣalbaṭānu[Mars]CN; u[and]CNJ; Šihṭu[Mercury]CN; ša[which]REL$; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V
+
+$ double ruling
+$ (ca. 4 lines blank)
+15'. MU.5.KÁM {m}ú-ma-kuš ana IGI ZI-hi
+#lem: n; Umakuš[Umakuš]RN$; ana[to//for]PRP'PRP$; amāru[see//read]V'V; nasāhu[tear out//excerpted]V'AJ$
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) [At the command of ...] may it be well.
+
+@obverse
+
+@(o 1) Year 5 of Umakuš, month I, night of the 7th, first part of the night, Venus was 8 fingers below β Tauri, Venus having passed 4 fingers to the east.
+
+@(o 2) Night of the 9th, middle part of the night, the moon was 3 fingers@sup{?} in front of Mars, the moon being a little low to the south. Around the 12th or 13th, Saturn’s first appearance in Pisces.
+
+@(o 3) Night of the 21st, a “fall of fire” occurred in the district of Šuanna. That month, a fox appeared in a broad street of the city.
+
+@(o 4) Barley, 4 @i{sūtu}, at the end of the month, 3 @i{sūtu} 5 @i{qa}; dates, 2 @i{sūtu} 4 1/2 @i{qa}; mustard, 4 @i{pānu}; cress, 3 @i{sūtu} (for) 1 shekel (and) one-eighth;
+
+@(o 5) sesame, 1 @i{sūtu}; wool, 1 mina. Jupiter and Venus were in the beginning of Gemini; Mars was in Leo; Saturn was in Pisces; the 29th, Mercury’s last appearance in the west in Taurus.
+
+$ ruling
+
+@(o 6) Month II, night of the 7th, the moon was 2/3 cubit in front of Mars, the moon being a little high to the north. Night of the 9th, Mars was 4 cubits below ϑ Leonis.
+
+@(o 7) The 22nd, Venus’ last appearance in the west behind the Chariot. In the middle part of the day, a big star which was like a torch flashed from south to north, and
+
+@(o 8) the land heard the noise of the sky. The 23rd, Sirius’ last appearance. Barley, 4 @i{sūtu}; in the middle of the month, 3 @i{sūtu}; at the end of the month,
+
+@(o 9) ⸢4 @i{sūtu}⸣ (for) 1 shekel (and) one-eighth; dates, 3 @i{sūtu}@sup{?} minus 1 @i{qa}; mustard, 3 @i{pānu} 2 @i{sūtu}; cress, 2 @i{sūtu} 1 @i{qa}: sesame, 5@sup{?} [...]
+
+@(o 10) [...] wool, 1 mina. Jupiter was in Gemini; Mars was in the end of Leo; Saturn was in the end of Pisces; Venus and Mercury, [which had set, were not visible.]
+
+$ ruling
+
+@(o 11) [Month III ...] ..., the moon being 1/2 cubit back to the west. The 3rd, Venus’ first appearance in the east behind the Chariot. Ni[ght ...]
+
+@(o 12) [...] ... The 9th, Jupiter’s last appearance in Gemini. Night of the 11th, last part of the night, a meteor in the direc[tion ...]
+
+@(o 13) [...] ... Night of the 17th, a “fall of fire” occurred in the district of Šuanna. Night of the 24th, [...]
+
+@(o 14) [...] ... occurred. Night of the 25th, last part of the night, Venus came close to the southern horn of the moon [...]
+
+@(o 15) [...] ... 2@sup{?} cubits. Barley, 5 @i{sūtu}, at the end of the month, 1 @i{pānu}; dates, ... [...]
+
+@(o 16) [...] ... cress, 2 @i{sūtu}@sup{?} 4 @i{qa}; sesame, 5 @i{qa}; wool, 1 mina. Venus was in the Chariot [...]
+
+@(o 17) [...] ... Jupiter and Mercury, which had set, were not visible.
+
+$ ruling
+
+@(o 18) [Month IV, ...] ... solstice@sup{?}. Around the 21st, Mercury’s first appearance in the west in Leo. Night of the 23rd, ... [...]
+
+@(o 19) [...] ... was balanced [nn] cubits. Night of the 26th, last part of the night, the moon was 1/2 cubit in front of Jupiter ... [...]
+
+@(o 20) [...] ... was seen@sup{?}. Barley, 5 @i{sūtu} 4@sup{?} @i{qa}, at the end of the month, 5 @i{sūtu} 1 @i{qa}; dates, [...]
+
+@(o 21) [...] ... 5@sup{?} @i{qa}; wool, 1 mina. ... [...]
+
+@(o 22) (traces)
+
+@(o 23) (traces)
+
+@reverse
+
+@(r 1') [...] ... wool, 1 mina. [At that time, ...]
+
+@(r 2') [... Venus and Mars,] which had set, were not visible. [...]
+
+$ ruling
+
+@(r 3') [Month XII, ...] its feet. Around the 6th, Jupiter 5° [...]
+
+@(r 4') [...] 1/2 cubit. Night of the 12th, a small “fall of fire” outside of [...]
+
+@(r 5') [...] first appearance in the end of Pisces. Night of the 29th, Mercury’s [first appearance] in the west [in Aries].
+
+@(r 6') [...] Barley, 3 @i{sūtu} 3 @i{qa}; at the end of the month 3 @i{sūtu} 4 @i{qa}; dates, at the beginning of the month and at the end [...]
+
+@(r 7') [at the end] of the month, 1 @i{pānu} 2 @i{sūtu} 4 1/2 @i{qa}; mustard, 2 @i{pānu} 3 @i{sūtu}; cress, 3 @i{sūtu}; sesame, 1 @i{sūtu}; wool, 50 shekel [...]
+
+@(r 8') Jupiter was in front of Cancer; Mercury was in Aries; Saturn was in the end of Pisces; Venus and Mars, which had set, [were not visible].
+
+$ ruling
+
+@(r 9') Month XII₂, around the 1st, Saturn’s last appearance in the end of Pisces. The 6th, a ewe gave birth, and (the young) had no jaw.
+
+@(r 10') The 7th, a ewe gave birth, and (the young) had no jaw. Night of the 13th, beginning of the night, Mercury was 1 2/3 cubits in front of η Tauri.
+
+@(r 11') Night of the 17th, a “fall of fire” occurred in the district of Šuanna. The 21st, Venus’ first appearance in the west in Aries. Around the 23rd, Mercury’s
+
+@(r 12') last appearance in the west in front of η Tauri. The 24th, a bird hatched, and it had three feet. Barley, 4 @i{sūtu} 1 @i{qa}; dates,
+
+@(r 13') 1 @i{pānu} 2 @i{sūtu}, at the end of the month, 1 @i{pānu} 2 @i{sūtu} 1 1/2 @i{qa}; mustard, 3 @i{pānu} 2 @i{sūtu}; cress, 3 @i{sūtu}; sesame, 1 @i{sūtu}; wool, 1 mina. Jupiter
+
+@(r 14') was in the beginning of Cancer; Venus was in Aries; Saturn, Mars and Mercury, which had set, were not visible.
+
+$ double ruling
+
+@(r 15') Year 5 of Umakuš. Excerpted for reading.

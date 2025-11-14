@@ -1,0 +1,131 @@
+&X103670 = AD -367
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢IGI⸣ 
+#lem: u; amāru[see]V
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+3'. [...] ⸢MÚL-ár⸣-šá-⸢ALLA⸣-šá-ULÙ
+#lem: u; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN
+
+4'. [...] ⸢TÙR⸣ NIGÍN ma-diš iq-tur₇ GE₆ 12
+#lem: u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mādiš[very]AV; qatāru[billow]V; mūšu[night]N; n
+
+5'. [...] ILLU 4 SI LAL GE₆ 14 SAG GE₆
+#lem: u; mīlu[river level]N; n; ubānu[finger]N; nahāsu[recede]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+6'. [... a-kám mu]š sin TA a-kám ki E-a al 1/2 i
+#lem: u; akamu[mist]N; mašāhu[measure]V; Sîn[moon]N; ištu[from]PRP; akamu[mist]N; kī[when]SBJ; elû[go up//come out]V'V$; alla[beyond//more than]PRP'PRP$; n; wīṣu[little]AJ
+
+7'. [TAG₄ ... S]I u MAR ZALÁG 1.7 GAR ÍR u ZALÁG
+#lem: ezēbu[leave]V$; u; ištānu[north]N; u[and]CNJ; amurru[west]N; nawāru[clear]'V; n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nūru[clearing]N
+
+8'. [... ki? i]z-ku-ú MÚL.BABBAR E-a ina 10 UŠ ME ana ŠÚ šamáš
+#lem: u; kī[when]SBJ; zakû[be(come) clear]V$izkû; Kakkabu-peṣû[Jupiter]CN; elû[go up//come out]V'V$; ina[at]'PRP; n; nenmudu[be at a stationary point]V; ūmu[day]N; ana[for]PRP; rabû[setting]N; šamšu[sun]N
+
+9'. [...] ⸢16⸣ ILLU 2 KÙŠ ba-ab 3 KÙŠ 20 SI
+#lem: u; n; mīlu[river level]N; n; ammatu[unit]N; bābtu[remainder(?)]N; n; ammatu[unit]N; n; ubānu[finger]N
+
+10'. [...] ⸢ana ŠÚ LAL⸣ 18 DIR AN ZA GE₆ 19
+#lem: u; ana[for]PRP; erbu[west]N; nahāsu[recede]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+11'. [...] ⸢x⸣ 22 DIR AN DIB TA
+#lem: u; u; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; ištu[from]PRP
+
+12'. [...] ⸢x⸣ ár GENNA 3 KÙŠ ana NIM GUB 
+#lem: u; u; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[for]PRP; Elamtu[east]N; izuzzu[stand]V
+
+@reverse
+1. [... TA] 23 EN 26 ILLU 20 SI
+#lem: u; ištu[from]PRP; n; adi[until]PRP; n; mīlu[river level]N; n; ubānu[finger]N
+
+2. [... DIR A]N DIB 28 AN.KU₁₀ ša[máš]
+#lem: u; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; antallû[eclipse]N; šamšu[sun]N
+
+3. [...] 5(BÁN) sah-le₁₀ 4(BÁN) ŠE.[GIŠ.Ì]
+#lem: u; n; sahlu[cress]N; n; šamaššammū[sesame]N
+
+4. [... ina] HUN.GÁ GU₄.UD šá [ŠÚ-ú NU IGI]
+#lem: u; ina[in//in]PRP'PRP; Agru[Aries]CN; Šihṭu[Mercury]CN; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V
+
+5. [...] ($blank$)
+#lem: u
+
+6. [...] ⸢x⸣ IM ŠÁR DIR AN ZA
+#lem: u; u; šāru[wind]N; ŠÁR[gusty(?)]AJ; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+7. [... S]AG GE₆ sin
+#lem: u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+8. [...] ($traces$) ⸢28⸣
+#lem: u; n
+
+9. [...] ⸢x⸣
+#lem: u; u
+
+10. [...] ⸢4 SI⸣ [x x]
+#lem: u; n; ubānu[finger]N; u; u
+
+11. [...] ŠÁR 
+#lem: u; ŠÁR[gusty(?)]AJ
+
+$ (rest broken)
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... 
+
+@(o 2') [...] ... 
+
+@(o 3') [...] δ Cancri
+
+@(o 4') [...] was surrounded by a halo, it billowed very much. Night of the 12th,
+
+@(o 5') [...] the river level receded 4 fingers. Night of the 14th, beginning of the night,
+
+@(o 6') [...] measured (despite) [mist]; when the moon came out from the mist, a little more than half
+
+@(o 7') [of the disc was eclipsed ...] it cleared on the north-west side; 1,7° onset, totality and clearing;
+
+@(o 8') [... when?] it had cleared, Jupiter came out; (the eclipse began) at 10° before sunset
+
+@(o 9') [...] The 16th, the river level - remainder? 2 cubits - [...] 3 cubits 20 fingers
+
+@(o 10') [...] being back to the west. The 18th, clouds were in the sky. Night of the 19th,
+
+@(o 11') [...] ... The 22nd, clouds crossed the sky. From
+
+@(o 12') [...] ... stood 3 cubits behind Saturn to the east. 
+
+@reverse
+
+@(r 1) [... from] the 23rd to the 26th, the river level [...] 20 fingers.
+
+@(r 2) [... clouds] crossed the sky. The 28th, solar eclipse
+
+@(r 3) [which was omitted ...] 5 @i{sūtu}; cress, 4 @i{sūtu}; se[same,]
+
+@(r 4) [... was in] Aries; Mercury, which [had set, was not visible]
+
+@(r 5) [...]
+
+@(r 6) [...] gusty wind, clouds were in the sky.
+
+@(r 7) [... be]ginning of the night, the moon
+
+@(r 8) [...] ... The 28th
+
+@(r 9) [...] ... 
+
+@(r 10) [...] 4 fingers [...]
+
+@(r 11) [...] gusty@sup{?} [...]
+

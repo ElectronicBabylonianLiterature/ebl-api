@@ -1,0 +1,66 @@
+&X103610 = AD -361
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. EN.NUN šá gi-né-e šá TA A[B ...]
+#lem: naṣāru[observation]'N; ša[which]REL; ginû[regularity]N; ša[which]REL; ištu[from]PRP; Ṭebētu[Month X]MN; u
+
+2. [ina a-mat {d}EN] u {d}GAŠAN-iá liš-lim
+#lem: ina[in]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltu[Bēltu]DN$Bēltiya; lišlim[be(come) well]V
+
+@obverse
+1. [... MU 43].KÁM {m}ar-šú šá {m}ar-tak-šat-su LUGAL [...]
+#lem: u; šattu[year]N; n; Arses[Arses]RN$; ša[which]REL; Artaxerxes[Artaxerxes]RN; šarru[king]N; u
+
+2. [...] AN ana NIM LAL GE₆ 3 3 AN UTAH ⸢x⸣ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]N; nahāsu[be(come) back]V; mūšu[night]N; n; n; šamû[rain]N; natāku[drip]V; u; u
+
+3. [... GE₆ 5 SAG] GE₆ sin ár GENNA 2 KÙŠ 8 SI ana NI[M GUB ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+
+4. [...] ⸢KÙŠ⸣ GE₆ 9 SAG GE₆ sin ár M[ÚL.BABBAR ...]
+#lem: u; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; u
+
+5. [... sin N N ana NI]M ⸢DIB⸣ ina ⸢IGI AN 1 KÙŠ⸣ [ana ŠÚ GUB ...] 
+#lem: u; Sîn[moon]N; n; n; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; u
+
+@reverse
+1'. [...] ár-šú šá {m}⸢ár-tak-šat-su LUGAL⸣ [...]
+#lem: u; Arses[Arses]RN$; ša[which]REL; Artaxerxes[Artaxerxes]RN; šarru[king]N; u
+
+2'. [EN.NUN šá gi-né-e] šá TA AB EN TIL DIR.ŠE MU.⸢43⸣.[KÁM ...]
+#lem: naṣāru[observation]'N; ša[which]REL; ginû[regularity]N; ša[which]REL; ištu[from]PRP; Ṭebētu[Month X]MN; adi[until]PRP; qītu[end]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; u
+
+3'. [...] ŠU{II} {m}TIN-su-{d}EN DUMU šá {m}{d}EN-A-[MU? ...] 
+#lem: u; qātu[hand]N; Uballissu-Bēl[Uballissu-Bēl]PN; māru[son]N; ša[which]REL; Bēl-apla-iddin[Bēl-apla-iddin]PN; u
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) Diary from month X [...]
+
+@(t.e. 2) [At the command of Bēl] and Bēltiya may it be well.
+
+@obverse
+
+@(o 1) [... year 43] of Arses, who is [called] king Artaxerxes [...]
+
+@(o 2) [...] Mars being [...] back to the east. Night of the 3rd (and) the 3rd, rain shower ... [...]
+
+@(o 3) [... Night of the 5th, beginning] of the night, the moon [stood] 2 cubits 8 fingers behind Saturn to the east [...]
+
+@(o 4) [...] cubits. Night of the 9th, beginning of the night, the moon was behind Ju[piter ...]
+
+@(o 5) [... the moon] having passed to the east, [it stood] 1 cubit in front of Mars [to the west ...] 
+
+@reverse
+
+@(r 1') [...] Arses, who [is called] king Artaxerxes
+
+@(r 2') [Diary] from month X to the end of month XII₂, year 43 [...]
+
+@(r 3') [...] Hand of Uballissu-Bēl, son of Bēl-apla-[...]

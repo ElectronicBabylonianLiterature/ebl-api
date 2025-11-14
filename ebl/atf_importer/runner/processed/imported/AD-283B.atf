@@ -1,0 +1,49 @@
+&X102832 = AD -283B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [M]U 28.KÁM {m}se-lu-uk u {m}⸢an⸣-t[i-ʾu-uk-su ...]
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN$; u[and]CNJ; Antiochus[Antiochus]RN; u
+
+2. [N S]I i-ṣi GU₄.UD ana ⸢SI NIM⸣ [...]
+#lem: n; ubānu[finger]N; wīṣu[few//little]AJ'AJ$; Šihṭu[Mercury]CN; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u
+
+3. [x] ⸢x x⸣ KÙŠ GE₆ 6 ina ZALÁG DIR SAL AN ZA ⸢6⸣ [...]
+#lem: u; u; u; ammatu[unit]N; mūšu[night]N; n; ina[in//in]PRP'PRP$; nūru[last part of the night]N; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; n; u
+
+4. [sin] ár MÚL-ár-šá-SAG-HUN 1 1/2 KÙŠ ⸢x x⸣ [...]
+#lem: Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N; u; u; u
+
+5. [x] DIR AN ZA GE₆ 12 SAG GE₆ sin ⸢x⸣ [...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; u
+
+6. [x] ŠUR-GIGIR-šá-SI ⸢x⸣ [...]
+#lem: u; ŠUR-GIGIR-šá-SI[β Tauri]CN; u; u
+
+7. [x] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+$ (rest broken)
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 28, Seleucus and Ant[iochus ...]
+
+@(o 2) [nn fin]gers, Mercury being a little high to the north [...]
+
+@(o 3)  ... cubits. Night of the 6th, last part of the night, thin clouds were in the sky. The 6th, [...]
+
+@(o 4) [the moon was] 1 1/2 cubits behind α Arietis ...
+
+@(o 5) [...] clouds were in the sky. Night of the 12th, beginning of the night, the moon was ... [...]
+
+@(o 6) [...] β Tauri ... [...]
+
+@(o 7) [...] ... [...] [...]
+
+$ (rest broken)

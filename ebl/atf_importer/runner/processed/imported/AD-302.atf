@@ -1,0 +1,43 @@
+&X103020 = AD -302
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@reverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [... sin ár ... N K]ÙŠ ana NIM GUB 27 ⸢x⸣ [...]
+#lem: u; Sîn[moon]N; warki[behind]PRP; u; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; n; u; u
+
+3'. [... ana Š]Ú? LAL 30 LÁL NU PAP ITU BI [...]
+#lem: u; ana[to]PRP; erbu[west]'N; nahāsu[recede]V; n; šitqultu[equinox]'N; ul[not]MOD; naṣāru[watch]V; warhu[month]N; šū[that]'DP; u
+
+4'. [...] MA.NA in₆-úš MÚL.BABBAR ina HUN dele-bat [...]
+#lem: u; manû[mina]N; inūšu[at that time]AV$; Kakkabu-peṣû[Jupiter]CN; ina[for]PRP; Agru[Aries]CN; Dilbat[Venus]CN; u
+
+5'. [... šá] ŠÚ-u NU IGI <<ITU>> BI ILLU 4 U LAL [...]
+#lem: u; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V; šū[that]'DP; mīlu[river level]N; n; ubānu[finger]N; nahāsu[recede]V; u
+
+$ ruling
+6'. [...] ⸢TIL⸣ KIN MU.9.KÁ[M ...]
+#lem: u; qītu[end]N; Ulūlu[Month VI]MN; n; u
+
+@translation labeled en project
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') [... (the moon)] stood [nn cu]bits [behind ...] to the east. The 27th, ... [...]
+
+@(r 3') [... being] back [to the we]st. The 30th, equinox; I did not watch. That month, [...]
+
+@(r 4') [...,] minas. At that time, Jupiter was in Aries; Venus [...]
+
+@(r 5') [..., which] had set, was not visible. That month, the river level receded 4 fingers. [...]
+
+$ ruling
+
+@(r 6') [... to] the end of month VI, year 9 [...]
