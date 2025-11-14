@@ -1,0 +1,73 @@
+&X103722 = AD -372B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [...] 1 KAS.<BU> na sin ina IGI MÚL.MÚL 1 K[ÙŠ ...]
+#lem: u; n; X; na₁[sunset to moonset]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; u
+
+2. [... G]E₆ 2 2 ŠÚ 2 LÁL-tim NU PAP GE₆ ⸢3⸣ [...]
+#lem: u; mūšu[night]N; n; n; erēpu[be(come) overcast]V; n; šitqultu[opposition//equinox]N'N$; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; u
+
+3. [...] ⸢x⸣ GE₆ 5 USAN sin ár MAŠ.MAŠ-á[r ...]
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; u
+
+4. [...] KÙŠ GE₆ 9 DIR AN ZA 9 IM ŠÁR [...]
+#lem: u; ammatu[unit]N; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; šāru[wind]N; ŠÁR[gusty(?)]AJ; u
+
+5. [... GE₆ 12 USAN sin ár S]A₄-šá-ABSIN 2 KÙŠ GE₆ 13 1[3 ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Sîn[moon]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; mūšu[night]N; n; n; u
+
+6. [...] x GENNA ana ME E-a ⸢x⸣ [...]  
+#lem: u; u; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N$; elû[rise]V; u; u
+
+@reverse
+1'. [...] Ú x [...]
+#lem: u; X; u; u
+
+$ ruling
+$ ruling
+2'. [...] Ú ⸢x x x⸣ [...]
+#lem: u; X; u; u; u; u
+
+3'. [... š]á MU.32.KÁM {m}ár-šú šá {m}ar-[tak-šat-su ...]  
+#lem: u; ša[which]REL; n; Arses[Arses]RN; ša[which]REL; Artaxerxes[Artaxerxes]RN; u
+
+@top
+1. [...] šá MU 32.KÁM {m}ár-šú šá {m}ar-tak-šat-[su ...]
+#lem: u; ša[which]REL; šattu[year]N; n; Arses[Arses]RN; ša[which]REL; Artaxerxes[Artaxerxes]RN; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Month I, ...]; sunset to moonset: 1 double-hour (= 30°); the moon was 1 cubit in front of η Tauri [...]
+
+@(o 2) [...Ni]ght of the 2nd (and) the 2nd, overcast. The 2nd, equinox; I did not watch. Night of the 3rd, [...]
+
+@(o 3) [...] ... Night of the 5th, first part of the night, the moon was [...] behind β Geminorum [...]
+
+@(o 4) [...] cubits. Night of the 9th, clouds were in the sky. The 9th, gusty wind [...]
+
+@(o 5) [Night of the 12th, first part of the night, the moon was] 2 cubits [behind] α Virginis. Night of the 13th, [moonrise to sunset:] 13°. [...]
+
+@(o 6) [...] ... Saturn’s acronychal rising; [I did] not? [watch ...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+$ ruling
+
+$ ruling
+
+@(r 2') [...] ... [...]
+
+@(r 3') [...] of year 32 of Arses who [is called] Artaxerxes [...] 
+
+@top
+
+@(t.e. 1) [...] of year 32 of Arses who [is called] Artaxerxes [...] 
+

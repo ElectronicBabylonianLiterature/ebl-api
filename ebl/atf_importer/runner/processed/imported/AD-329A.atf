@@ -1,0 +1,66 @@
+&X103291 = AD -329A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] 1/2 KÙŠ [x] 4 SI ana NIM D[IB ...]
+#lem: u; n; ammatu[unit]N; u; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; u
+
+3'. [...] ⸢x⸣ GE₆ 7 SAG GE₆ sin e SI₄ [N N ...]
+#lem: u; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]PRP; SI₄[α Scorpii]CN; n; n; u
+
+4'. [... GENNA ana NIM k]i UŠ-ú SIG MÚL-IGI-šá-SA[G-HUN N N ...]
+#lem: u; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; kī[when]SBJ; nenmudu[be at a stationary point]V; šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; u
+
+5'. [... GU₄.UD ina N]IM ina UR.A ŠÚ GE₆ 10 [...]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; mūšu[night]N; n; u
+
+6'. [... GE₆ 1]4 8.30 ME ŠÚ ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erēpu[be(come) overcast]V; u; u
+
+7'. [... GE₆ 18 ina ZALÁG sin x MÚ]L-ár-šá-SAG-HU[N N N ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP$; nūru[last part of the night]N; Sîn[moon]N; u; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; u
+
+8'. [...] 21 ⸢x⸣ [...] 
+#lem: u; n; u; u
+
+@reverse
+1'. [EN.NUN šá g]i-né-e šá TA {ITU}⸢NE⸣ MU 7.KÁM EN TIL {ITU}AP[IN ...] 
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[(regularity]N; ša[which]REL; ištu[from]PRP; Abu[Month V]MN; šattu[year]N; n; adi[until]PRP; qītu[end]N; Arahsamna[Month VIII]MN; u
+
+@top
+1. [...] ⸢EN TIL {ITU}APIN MU 7.KÁM⸣ [...] 
+#lem: u; adi[until]PRP; qītu[end]N; Arahsamna[Month VIII]MN; šattu[year]N; n; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] 1/2 cubit, [...] having passed 4 fingers to the east. [...]
+
+@(o 3') [...] ... Night of the 7th, beginning of the night, the moon was [...] above α Scorpii [...]
+
+@(o 4') [... Saturn,] when it became stationary [to the east, ...] below β Arie[tis ...]
+
+@(o 5') [... Mercury's] last appearances in the east in Leo. Night of the 10th, [...]
+
+@(o 6') [... Night of the 1]4th, moonrise to sunset: 8° 30'; overcast ... [...]
+
+@(o 7') [... Night of the 18th, last part of the night, the moon was ...] α Arietis [...]
+
+@(o 8') [...] the 21st, ... [...]
+
+@reverse
+
+@(r 1') [Di]ary from month V of year 7 until the end of month VIII [...]
+
+@top
+
+@(t.e. 1) [...] to the end of month VIII of year 7.

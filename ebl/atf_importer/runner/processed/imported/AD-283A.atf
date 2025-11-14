@@ -1,0 +1,77 @@
+&X102831 = AD -283A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 28.KÁM {m}se DU₆ 1 12+[x na DI]R? NU PAP [...]
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN$; Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+2. 13 3.10 ŠÚ NU PAP GE₆ 14 [N 5]0 ME NU PAP [...]
+#lem: n; n; rabû[moonset to sunrise]N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; n; n; ūmu[moonrise to sunset]N; ul[not]MOD; naṣāru[watch]V; u
+
+3. GE₆ 15 30 NINDA GE₆ NU PAP 15 GENNA ina GÍR.TAB [ŠÚ x MÚL.BABBAR]
+#lem: mūšu[night]N; n; n; namaddu[measurement]N; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V; n; Kayyamānu[Saturn]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; u; Kakkabu-peṣû[Jupiter]CN
+
+4. ina GÍR.TAB ŠÚ NU PAP 27 GU₄.UD ina ŠÚ ŠÚ-šú DIB [...] PAP
+#lem: ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; rabû[set]V; etēqu[miss]V; u; naṣāru[watch]V
+
+5. ⸢30⸣ AN ina R[ÍN] IGI 19 na in 21 IGI ITU BI KI.LAM
+#lem: n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V; n; u; ina[on]PRP; n; nanmuru[be(come) visible]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N
+
+6. [x x x] ZÚ.LUM 3 PI kàs 1 GUR
+#lem: u; u; u; suluppu[date]N; n; pānu[bushel (36 litres)]N; kasû[mustard]N; n; kurru[kor (180 litres)]N
+
+7. sah-[le₁₀ x]+1 PI ŠE.GIŠ.Ì 4(BÁN) SÍG{HI.A} 4 MA.NA
+#lem: sahlu[cress]N; u; pānu[bushel (36 litres)]N; šamaššammū[sesame]N; n; šīpātu[wool]N; n; manû[(one mina)]N
+
+8. i-nu-š[i] MÚL.BABBAR u GENNA šá ŠÚ-ú NU IGI GU₄.UD ina ŠÚ ŠÚ-šú ⸢DIB⸣ 
+#lem: inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Kayyamānu[Saturn]CN; ša[which]REL; rabû[set]V; ul[not]MOD; nanmuru[be(come) visible]V; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; rabû[set]V; etēqu[miss]V
+
+@reverse
+1. dele-bat ina PA 30 AN <ina> RÍN IGI
+#lem: Dilbat[Venus]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V
+
+2. APIN 1 ⸢17⸣ na ina šamáš GUB IGI
+#lem: Arahsamna[Month VIII]MN; n; n; na₁[sunset to moonset]N; ina[while]SBJ; šamšu[sun]N; izuzzu[stand]V; amāru[see]V
+
+$ (one line blank)
+3. MU 28.KÁM {m}se-lu-ku 
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN
+
+@top
+1. MU 28.KÁM {m}se-lu-ku u {m}an-ti-ʾu-uk-su L[UGAL{MEŠ}] 
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN; u[and]CNJ; Antiochus[Antiochus]PN; šarrāni[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 28, Seleucus. Month VII, the 1st (of which followed the 30th of the preceding month), [sunset to moonset:] 12+[x]°, [cloud]s?, I did not watch [...]
+
+@(o 2) The 13th, moonset to sunrise: 3° 10', I did not watch. Night of the 14th, moonrise to sunset: [x]+50'; I did not watch. [...]
+
+@(o 3) Night of the 15th, sunset to moonrise: 30'; I did not watch. The 15th, Saturn’s [last appearance] in Scorpius. [The nnth, Jupiterd’s]
+
+@(o 4) last appearance in Scorpius; I did not watch. The 27th, Mercury’s last appearance in the west omitted [...] watch.
+
+@(o 5) The 30th, Mars’ first appearance in Libra; rising of Mars to sunrise: 19°; (ideal) first appearance on the 21st. That month, the equivalent
+
+@(o 6) [(for 1 shekel of silver was): barley, ...] dates, 3 @i{pānu}; mustard, 1 kur;
+
+@(o 7) cress, [x]+1 @i{pānu}; sesame, 4 @i{sūtu}; wool, 4 minas.
+
+@(o 8) At that time, Jupiter and Saturn, which had set, were not visible; Mercury’s last appearance in the west, omitted; 
+
+@reverse
+
+@(r 1) Venus was in Sagittarius; the 30th, Mars’ first appearance in Libra.
+
+@(r 2) Month VIII, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 17°; it could be seen while the sun stood there.
+
+@(r 3) Year 28, Seleucus. 
+
+@top
+
+@(t.e. 1) Year 28, kings Seleucus and Antiochus.

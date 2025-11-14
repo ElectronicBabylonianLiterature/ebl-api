@@ -1,0 +1,59 @@
+&X102862 = AD -286B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. EN.NUN [...]
+#lem: naṣāru[observation]'N; u
+
+2. ina a-mat {d}EN u {d}GAŠAN-iá l[iš-lim] 
+#lem: ina[in]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1. MU 25.KÁM {m}se-[...]
+#lem: šattu[year]N; n; u
+
+2. ina IGI ŠUR-GIGIR-šá-U[LÙ ...]
+#lem: ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u
+
+3. ⸢x x x x⸣ [...] 
+#lem: u; u; u; u; u
+
+@reverse
+1'. SÍG? [... GU₄.UD]
+#lem: šīpātu[wool]N; u; Šihṭu[Mercury]CN
+
+2'. šá ŠÚ-ú N[U IGI ...]
+#lem: ša[which]REL; rabû[set]V; ul[not]MOD; nanmuru[be(come) visible]V; u
+
+$ ruling
+3'. DU₆ 1 17 na [...] 
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N; u
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) Di[ary ...]
+
+@(t.e. 2) At the command of Bēl and Bēltiya may it be we[ll]. 
+
+@obverse
+
+@(o 1) Year 25, Se[leucus ...]
+
+@(o 2) in front of ζ Tauri [...]
+
+@(o 3) ... [...] 
+
+@reverse
+
+@(r 1') wool@sup{?} [... Mercury,]
+
+@(r 2') which had set, was n[ot visible ...]
+
+$ ruling
+
+@(r 3') Month VII, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 17° [...]

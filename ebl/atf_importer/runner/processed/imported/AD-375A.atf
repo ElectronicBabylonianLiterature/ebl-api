@@ -1,0 +1,64 @@
+&X103751 = AD -375A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse?
+1'. [...] x GE₆ 14 5.40 ⸢GE₆⸣ ⸢x⸣ [...]
+#lem: u; u; mūšu[night]N; n; n; mūšu[night]N; u; u
+
+2'. [...] GE₆ 17 ina ZALÁG sin ina IGI MAŠ.MAŠ-IGI [N N ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; n; n; u
+
+3'. [...]+1 2/3 KÙŠ 21 GU₄.UD ina ŠÚ UD.DA ŠÚ-šú D[IB ...]
+#lem: u; n; ammatu[unit]N; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ṣētu[bright light]N; rabû[set]V$; etēqu[miss]'V$; u
+
+4'. [GE₆ 25 ina ZALÁG sin ina IGI SA₄-šá-ABSIN N S]I? ina IGI GENNA ⸢2⸣ KÙŠ ana ŠÚ GUB GE₆ 26 ina ZALÁG dele-ba[t ...]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; ubānu[finger]N; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; u
+
+5'. [...] DIR AN ZA ITU BI KI.LAM še-im 1(BARIG) 4(BÁN) 3? qa ina TIL ITU 2(BARIG) P[I ...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; n; qû[(one) litre]N; ina[at]PRP; qītu[end]N; warhu[month]N; n; pānu[bushel (36 litres)]N; u
+
+6'. [... i-nu-šú MÚL.BABBAR ina] MÁŠ ina TIL ITU ina GU dele-bat ina UR.A ina TIL ITU ina ABSIN GENNA ina ABSIN GU₄.[UD u AN šá ŠÚ{MEŠ} NU IGI{MEŠ}]
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in//in]PRP'PRP; Suhurmāšu[Capricorn]CN; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in//in]PRP'PRP; Gula[Aquarius]CN; Dilbat[Venus]CN; ina[in//in]PRP'PRP; Nēšu[Leo]CN; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in//in]PRP'PRP; Šerʾu[Virgo]CN; Kayyamānu[Saturn]CN; ina[in//in]PRP'PRP; Šerʾu[Virgo]CN; Šihṭu[Mercury]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V
+
+$ double ruling
+7'. [APIN ... A]N ⸢ZA⸣ GE₆ 2 2 DIR AN ZA GE₆ 3 3 DIR AN ZA GE₆ ⸢4⸣ [...]
+#lem: Arahsamna[Month VIII]MN; u; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; u
+
+8'. [... GE₆] ⸢6⸣ DIR AN ZA ina ZALÁG dele-bat e SA₄-š[á-ABSIN ...]
+#lem: u; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+9'. [... ina ZALÁ]G dele-bat SIG GENNA 3 SI ⸢dele-bat⸣ x [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šaplat[below]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; Dilbat[Venus]CN; u; u
+
+10'. [...] x [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@obverse?
+
+@(o? 1') [...] ... Night of the 14th, sunset to moonrise: 5° 40' .... [...]
+
+@(o? 2') [...] Night of the 17th, last part of the night, the moon was [...] in front of α Geminorum [...]
+
+@(o? 3') [...]+1 2/3 cubits. The 21st, Mercury in the west ... its last appearance@sup{?} o[mitted; ...]
+
+@(o? 4') [Night of the 25th, last part of the night, the moon was ...], ..., it stood 2 cubits in front of Saturn to the west. Night of the 26th, last part of the night, Venus [...]
+
+@(o? 5') [...] clouds were in the sky. That month, the equivalent (for 1 shekel of silver was): barley, 1 @i{pānu} 4 @i{sūtu} 3@sup{?} @i{qa}, at the end of the month, 2 @i{pānu}@sup{?} [...]
+
+@(o? 6') [... At that time, Jupiter was in] Capricorn, at the end of the month, in Aquarius; Venus was in Leo, at the end of the month, in Virgo; Saturn was in Virgo; Mer[cury and Mars, which had set, were not visible.]
+
+$ double ruling
+
+@(o? 7') [Month VIII, ... clouds] were in the sky. Night of the 2nd (and) the 2nd, clouds were in the sky. Night of the 3rd (and) the 3rd, clouds were in the sky. Night of the 4th(or: 5th) [...]
+
+@(o? 8') [... Night of the] 6th, clouds were in the sky; last part of the night, Venus was [...] above α Vir[ginis ...]
+
+@(o? 9') [..., last part of the ni]ght, Venus was 3 fingers below Saturn, Venus ... [...]
+
+@(o? 10') [...] ... [...]
+

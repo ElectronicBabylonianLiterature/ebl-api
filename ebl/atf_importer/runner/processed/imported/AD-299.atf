@@ -1,0 +1,50 @@
+&X102990 = AD -299
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [...] IGI GE₆ 2 sin á[r] dele-bat 1 KÙŠ 8 [SI ...]
+#lem: u; nanmuru[be(come) visible]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N; n; ubānu[finger]N; u
+
+2. [...] GE₆ GE₆ 6 SAG GE₆ sin ár [MÚL-ár-šá-SUHUR-MÁŠ N N ...]
+#lem: u; mūšu[night]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; u
+
+3. [... GE₆ 11 SAG GE₆ sin ina IGI MÚL]-⸢KUR⸣-šá-DUR-šá-nu-nu 1/2 KÙŠ [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in//in]PRP'PRP$; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN$; n; ammatu[unit]N; u
+
+4. [... GE₆ 12  ... sin SI]G? MÚL-ár-šá-SAG-H[UN? ...]
+#lem: u; mūšu[night]N; n; u; Sîn[moon]N; šapil[below]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; u
+
+5. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+@top
+1'. [...] ⸢šá⸣ TA APIN MU.12.K[ÁM ...]
+#lem: u; ša[which]REL; ištu[from]PRP; Arahsamna[Month VIII]MN; n; u
+
+2'. [... M]U.12.KÁ[M ...] 
+#lem: u; n; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...] became visible. Night of the 2nd, the moon was 1 cubit 8 [fingers] behind Venus [...]
+
+@(o 2) [...] ... Night of the 6th, beginning of the night, the moon was [...] behind [δ Capricorni ...]
+
+@(o 3) [... Night of the 11th, beginning of the night, the moon was] 1/2 cubit [in front of] η Piscium [...]
+
+@(o 4) [... Night of the 12th, ... the moon was ... be]low@sup{?} α Arie[tis ...]
+
+@(o 5) [...] ... [...] 
+
+@top
+
+@(t.e. 1') [...] from month VIII of year 12 [...]
+
+@(t.e. 2') [... ye]ar 12 [...]
+

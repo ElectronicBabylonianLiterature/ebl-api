@@ -1,0 +1,89 @@
+&X104630 = AD -463
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse?
+1'. [...] x x x GE₆ 20+[x ...]
+#lem: u; u; u; u; mūšu[night]N; n; u
+
+2'. [ina?] 19 IGI 27 14 na ITU B[I ...]
+#lem: ina[around (day x)]PRP; n; nanmuru[be(come) visible]V; n; n; na[sunrise to moonset]N; warhu[month]N; šū[that]'DP; u
+
+3'. i-nu-šú dele-bat <u> GU₄.UD ina UR.A AN ina G[ÍR.TAB ...]
+#lem: inūšu[at that time]AV; Dilbat[Venus]CN; u[and]CNJ; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP; Nēšu[Leo]CN; Ṣalbaṭānu[Mars]CN; ina[in//in]PRP'PRP; Zuqiqīpu[Scorpio]CN; u
+
+4'. šá ina KUR a-na KI.LAM SUM-nu KI.MIN [...]
+#lem: ša[which]REL; ina[in//in]PRP'PRP; mātu[land]N; ana[for]PRP; mahīru[price (equivalent)]N; nadānu[sell]V; KI.MIN[ditto]N; u
+
+$ ruling
+5'. KIN 1 18 na 1 2 3 4 šamáš ina ⸢a⸣?-[kam? ...]
+#lem: Ulūlu[Month VI]MN$; n; n; na₁[sunset to moonset]N; n; n; n; n; šamšu[sun]N; ina[in]PRP; akamu[mist]N; u
+
+6'. 5 MÚL.BABBAR ár e-du-šá-IGI-ABSIN I[GI ...]
+#lem: n; Kakkabu-peṣû[Jupiter]CN; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; nanmuru[be(come) visible]V; u
+
+7'. ina 12 ki 13 GU₄.UD ina NIM ina ABSIN ŠÚ [...]
+#lem: ina[around (day x)]PRP; n; kī[like//or]PRP'CNJ$; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; u
+
+8'. GE₆ 14 3.30 GE₆ GE₆ 15 ina UD x [... ILLU]
+#lem: mūšu[night]N; n; n; mūšu[night]N; mūšu[night]N; n; ina[at]PRP'PRP; ūmu[sunset to moonrise]N$; u; u; mīlu[river level]N
+
+9'. 4 KÙŠ GIN GE₆ 17 U₄.ZAL sin ár G[IGIR? ...]
+#lem: n; ammatu[unit]N; alāku[rise]V; mūšu[night]N; n; šāt-urri[last part of the night]N; Sîn[moon]N; warki[behind]PRP; Narkabtu[Chariot]CN; u
+
+10'. GE₆ 21 1 LÍL ŠI Ù.TU?-ma? [... GE₆ 22 ina ZALÁG sin]
+#lem: mūšu[night]N; n; n; X; X; walādu[give birth]V; u; mūšu[night]N; n; ina[in//in]PRP'PRP; nūru[last part of the night]N; Sîn[moon]N
+
+11'. KI.TA {MÚL}LUGAL 3 KÙŠ LÁL GE₆ 2[0+x ...]
+#lem: šapil[below]PRP; LUGAL[α Leonis]CN$; n; ammatu[unit]N; alālu[hang up//balance]V'V$; mūšu[night]N; n; u
+
+12'. ár ABSIN IGI 1 KÙŠ GENNA ana SI NI[M? ...]
+#lem: warki[behind]PRP; Šerʾu[Virgo]CN; nanmuru[be(come) visible]V; n; ammatu[unit]N; Kayyamānu[Saturn]CN; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u
+
+13'. ka-⸢si x⸣ [ŠE.G]IŠ.Ì 1? (BÁN) [...]
+#lem: kasû[mustard]N$; u; šamaššammū[sesame]N; n; sūtu[sūtu]N$; u
+
+14'. x [...]
+#lem: u; u
+
+@reverse?
+$ (Traces of 9 lines. Only line 6 yields a whole word (i-nu-šú).)
+
+
+@translation labeled en project
+
+@obverse?
+
+@(o? 1') [...] ... Night of the 20[+xth, ...]
+
+@(o? 2') (Mercury’s) first appearance (in the east) [around] the 19th. The 27th, moonrise to sunrise@sup{!!}: 14°. That month, [...]
+
+@(o? 3') At that time, Venus <and> Mercury were in Leo; Mars was in S[corpius@sup{?} ...]
+
+@(o? 4') which were sold in the land (for one shekel of refined silver). ...[...]
+
+$ ruling
+
+@(o? 5') Month VI, the 1st (of which followed the 30th of the preceding month); sunset to moonset: 18°. The 1st, the 2nd, the 3rd, and the 4th, the sun [rose@sup{?} (or: set)] in a [...]
+
+@(o? 6') The 5th, Jupiter’s first appearance behind γ Virginis [...]
+
+@(o? 7') Around the 12th or the 13th, Mercury’s [last] appearance in the east in Virgo. [...]
+
+@(o? 8') Night of the 14th, sunset to moonrise: 3° 30'. Night of the 15th, ... [... the river level]
+
+@(o? 9') rose 4 cubits. Night of the 17th, last part of the night, the moon was behind the Ch[ariot@sup{?} ...]
+
+@(o? 10') Night of the 21st, one ... gave birth to [... Night of the 22nd, last part of the night, the moon was]
+
+@(o? 11') balanced 3 cubits below α Leonis. Night of the [...]
+
+@(o? 12') (Saturn’s) first appearance, behind Virgo, Saturn being 1 cubit high to the north. [...]
+
+@(o? 13') cress, [nn]; [se]same, 1@sup{?} @i{sūtu}; [...]
+
+@reverse?
+
+$ Traces of 9 lines. Only line 6 yields a whole word (“at that time”).

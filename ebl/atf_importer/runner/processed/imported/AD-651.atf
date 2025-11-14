@@ -1,0 +1,294 @@
+&X106510 = AD -651
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. [x x x] EN? liš-lim
+#lem: u; u; u; Bēl[Bēl]DN$; šalāmu[be(come) healthy//be(come) well]V'V$lišlim
+
+@obverse
+@column 1
+1. [x x x] sin ina! DIR IGI-mar GUR? NIM-a
+#lem: u; u; u; Sîn[moon]N; ina[in]PRP; erpetu[cloud]N; amāru[be(come) visible]V'V$ittanmar; baʾil[bright]AJ; šaqâ[high]AJ
+
+2. [SA]G GE₆ ŠÚ GE₆ 1 ILLU GIN 1 šamáš TÙR NIGÍN GE₆
+#lem: rēš[beginning]N; mūšu[night]N; erēpu[be(come) overcast]V; mūšu[night]N; n; mīlu[high water//river level]N'N$; alāku[go//rise]V'V; n; šamšu[sun]N$; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mūšu[night]N
+
+3. 2 2 ŠÚ-up ULÙ GIN 3 ma-diš ŠÚ ina KIN.SIG [Š]ÈG ŠUR
+#lem: n; n; erēpu[cloud over//be(come) overcast]V; šūtu[south wind]N; alāku[blow]V; n; mādiš[greatly//very]AV'AV$; erēpu[be(come) overcast]V; ina[in//in]PRP'PRP; kinsikku[afternoon]N; zunnu[rain]N$; zanānu[rain]V$
+
+4. GE₆ 4 4 ŠÈG ŠUR 6 AN.BAR₇ šamáš TÙR NIGÍN
+#lem: mūšu[night]N; n; n; zunnu[rain]N; zanānu[rain]V; n; muṣlālu[middle part of the day]N; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]V
+
+5. ana KUR TAR-is 7 sin TÙR NIGÍN ILLU GIN-kám
+#lem: ana[to]PRP; šadû[east]N; paris[split]AJ; n; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mīlu[river level]N; alāku[go//rise]V'V
+
+6. GE₆ 12 ŠÚ-up 12 13 14 ŠÚ 14 DINGIR KI DINGIR <x> IGI
+#lem: mūšu[night]N; n; erēpu[be(come) overcast]V; n; n; n; erēpu[be(come) overcast]V; n; ilu[god]N$; itti[with]PRP$; ilu[god]N; u; nanmuru[meet (with)]V
+
+7. ILLU LAL-is GU₄.UD ina NIM ár {MULₓ(ÁB)}KUN{ME} ŠÚ!
+#lem: mīlu[river level]N; nahāsu[recede]V$; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[Elam//east]GN'N$; warki[behind]PRP; Zibbātu[Pisces]CN$; rabû[set]V$
+
+8. ù SAG.UŠ ár {MULₓ(ÁB)}KUN{ME} ŠÚ U₄{ME} ŠÚ{ME} NU PAP
+#lem: u[and]CNJ$; Kayyamānu[Saturn]CN$; warki[behind]PRP; Zibbātu[Pisces]CN; rabû[set]V$; ūmu[day]N$; erēpu[cloud over//be(come) overcast]V; ul[not]MOD; naṣāru[watch]V
+
+9. 17 ina še-rì ŠÚ-up GÙ U ULÙ ŠÁR ŠÈG NA₄ TUR
+#lem: n; ina[in//in]PRP'PRP; šēri[morning]N; erēpu[be(come) overcast]V; rigmu[voice]N$rigim; Adad[storm-god]DN$; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; zunnu[rain]N; abnu[stone//hailstone]N'N$; ṣehru[small]AJ$
+
+10. AN KI NUNDUN GÍR.TAB UŠ-id ana MÚL SA₄
+#lem: Ṣalbaṭānu[Mars]CN; erṣētu[area]N'; šaptu[lip]N$; Zuqiqīpu[Scorpio]CN; emēdu[lean on//be at a stationary point]V'V$nenmudu; ana[to]PRP; kakkabu[star]N$; nebû[shining//bright]AJ'AJ$
+
+11. šá SAG {MULₓ(ÁB)}GÍR.TAB TE TA 22 EN 24 [x x]
+#lem: ša[that//of]REL'DET; rēš[head]N; Zuqiqīpu[Scorpio]CN; ṭehû[come close]V; ištu[from]PRP$; n; adi[until]PRP$; n; u; u
+
+12. 25 AN ina NIM MULₓ(ÁB) šá 15 {MULₓ(ÁB)}GÍR.TAB [x x x x]
+#lem: n; Ṣalbaṭānu[Mars]CN; ina[in//in]PRP'PRP; Elamtu[east]N; kakkabu[star]N; ša[which]REL$; imittu[right side]N; Zuqiqīpu[Scorpio]CN; u; u; u; u
+
+13. ILLU GIN GE₆ 20 ŠÚ-up GÍR G[Ù U x x x x]
+#lem: mīlu[river level]N; alāku[rise]V; mūšu[night]N; n; erēpu[be(come) overcast]V; birqu[lightning]N; rigim[voice]N; Adad[storm-god]DN$; u; u; u; u
+
+14. i IM KALAG GE₆ 21 ŠÈG [...]
+#lem: wīṣu[little]AJ; šāru[wind]N$; dannu[strong]AJ$; mūšu[night]N; n; zunnu[rain]N; u
+
+15. ŠÈG i GÍR GÍR ULÙ [...]
+#lem: zunnu[rain]N; wīṣu[little]AJ; birqu[lightning]N; barāqu[flash]V$; šūtu[south wind]N; u
+
+16. ina IGI {MULₓ(ÁB)}RÍN 2 KÙŠ ⸢x⸣ [...]
+#lem: ina[in]PRP; pān[front]N; Zibānītu[Libra]CN$; n; ammatu[unit]N; u; u
+
+17. šá 15 {MULₓ(ÁB)}GÍR.TAB ⸢x⸣ [...]
+#lem: ša[which]REL$; imittu[right side]N; Zuqiqīpu[Scorpio]CN; u; u
+
+18. DU šamáš ina DIR ŠÚ ⸢x⸣ [...]
+#lem: alāku[go]V; šamšu[sun]N; ina[in//in]PRP'PRP; erpetu[cloud]N; rabû[set]V$; u; u
+
+19. [A]N né ŠUR ULÙ [...]
+#lem: šamû[rain]N; nēhu[calm//slow]AJ'AJ$; zanānu[rain]V; šūtu[south wind]N; u
+
+20. [x] ⸢x⸣ GE₆ [...]
+#lem: u; u; mūšu[night]N; u
+
+$ ((rest of column broken))
+@column 2
+1. SI GIN 14 ⸢AN⸣.K[U₁₀ ...]
+#lem: ištānu[north wind]N; alāku[blow]V; n; antallû[eclipse]N; u
+
+2. {MULₓ(ÁB)}ŠU.GI IGI ILLU [...]
+#lem: Šību[Old Man]CN$; nanmuru[be(come visible)]V; mīlu[river level]N; u
+
+3. ana ⸢ULÙ⸣ GAR ⸢x x⸣ [...]
+#lem: ana[to]PRP; šūtu[south]N; šakānu[place]V; u; u; u
+
+4. USAN ⸢x x⸣ [...]
+#lem: šimītān[evening//first part of the night]N'N$; u; u; u
+
+5. U ⸢x⸣ [...]
+#lem: u; u; u
+
+6. ⸢x⸣
+#lem: u
+
+$ ((rest of column broken))
+@reverse
+@column 3
+1'. šá x [...]
+#lem: ša[of]DET; u; u
+
+2'. ina KI[N.SIG ...]
+#lem: ina[in//in]PRP'PRP; kinsikku[afternoon]N; u
+
+3'. x [...]
+#lem: u; u
+
+4'. SI GIN AN.KU₁₀ sin x [...]
+#lem: ištānu[north wind]N; alāku[blow]V; antallû[eclipse]N; Sîn[moon]N; u; u
+
+5'. 20? sin TÙR NIGÍN GU₄.UD ina Š[À GUB ...]
+#lem: n; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP; libbu[interior]N; izuzzu[stand]V; u
+
+6'. IM KALAG 21 x x [...]
+#lem: šāru[wind]N; dannu[strong]AJ; n; u; u; u
+
+@column 4
+1'. [...] MULₓ(ÁB) šá x [...]
+#lem: u; kakkabu[star]N$; ša[of]DET; u; u
+
+2'. [...] x x 15? sin? [...]
+#lem: u; u; u; imittu[right side]N; Sîn[moon]N; u
+
+3'. [...] x x x x x [...]
+#lem: u; u; u; u; u; u; u
+
+4'. [x x] x x x [x] DU x [...]
+#lem: u; u; u; u; u; u; u; u; u
+
+5'. [x x x] x KÙŠ? x PI 15 sin x 5? KÙŠ? x x [...]
+#lem: u; u; u; u; ammatu[unit]N; u; u; imittu[right side]N; Sîn[moon]N; u; n; ammatu[unit]N; u; u; u
+
+6'. [x] x x x x x {d}U GÙ-šú [...]
+#lem: u; u; u; u; u; u; Adad[storm-god]DN$; rigmu[voice]N$rigimšu; u
+
+7'. x x x x x 5 GU₄.UD ina NIM ina nu-nu IGI [...]
+#lem: u; u; u; u; u; n; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP; Elamtu[east]N; ina[in//in]PRP'PRP; Zibbātu[Pisces]CN$; amāru[see//be(come) visible)]V'V$nanmuru; u
+
+8'. x x x x x x DU{ME} ana ULÙ x [...]
+#lem: u; u; u; u; u; u; u; ana[towards]PRP; šūtu[south]N; u; u
+
+9'. x IM AN né ŠUR 12 TÙR? x ILLU GIN x [...]
+#lem: u; šāru[wind]N; šamû[rain]N; nēhu[slow]AJ$; zanānu[rain]V; n; tarbaṣu[halo]N; u; mīlu[river level]N; alāku[rise]V; u; u
+
+10'. ERÍN{ME} KUR URI{KI} ana ŠÀ ERÍN KUR aš-šur ṣal-tú DÙ{ME} ERÍN MU x [...]
+#lem: uqu[troops]N; mātu[land]N$; Akkad[Babylonia]GN; ana[to]PRP; libbu[interior]N; uqu[troops]N; mātu[land]N$; Aššur[Aššur]GN$; ṣāltu[combat]N$; epēšu[do]V$; uqu[troops]N; u; u; u
+
+11'. 13 ILLU i GIN 14 ni-di ina 15 šamáš ŠUB GE₆ 15 ŠÚ-up 3 TI[R.AN]
+#lem: n; mīlu[river level]N; wīṣu[little]AJ; alāku[rise]V; n; nīdu[cloud bank]N; ina[in]PRP; imittu[right side]N; šamšu[sun]N; maqātu[fall//lie]V'V$; mūšu[night]N; n; erēpu[be(come) overcast]V; n; Manziat[rainbow]N
+
+12'. 1 ina MAR 1 ina bi SI u MAR ù 1 ina SI IGI{MEŠ} ŠÈG GÍR GÙ U x
+#lem: n; ina[in]PRP; amurru[west]N; n; ina[in//in]PRP'PRP; birītu[space between]N$; ištānu[north]N; u[and]CNJ; amurru[west]N; u[and]CNJ; n; ina[in//in]PRP'PRP; ištānu[north]N; amāru[see//be(come) visible]V'V$nanmuru; zunnu[rain]N; birqu[lightning]N; rigim[voice]N; Adad[storm-god]DN; u
+
+13'. DIR 15 DINGIR KI DINGIR IGI ULÙ ŠÁR hi-lu IGI AN DIB GE₆ 16 sin TÙR GAL?
+#lem: erpetu[cloud]N; n; ilu[god]N; itti[with]PRP$; ilu[god]N; nanmuru[meet (with)]V; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; hillu[haze]N; pānu[front//face]N'N$; šamû[sky]N; ṣabātu[seize]V; mūšu[night]N; n; Sîn[moon]N; tarbaṣa[halo]N; rabû[large]AJ$
+
+14'. NIGÍN 16 TÙR šamáš NIGÍN 18 šamáš TÙR x NIGÍN ULÙ GIN 19 dele-bat ina KI
+#lem: lawi[surrounded (with)]AJ; n; tarbaṣa[halo]N; šamšu[sun]N; lawi[surrounded (with)]AJ; n; šamšu[sun]N; tarbaṣa[halo]N; u; lawi[surrounded (with)]AJ; šūtu[south wind]N; alāku[blow]V; n; Dilbat[Venus]CN; ina[in//in]PRP'PRP; erṣētu[area]N
+
+15'. {MULₓ(ÁB)}HUN.GÁ ár AN 10 SI GUB sin TÙR NIGÍN SI₄ ina ŠÀ GUB 20 AN ina 2.30
+#lem: Agru[Aries]CN$; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; izuzzu[stand]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; SI₄[α Scorpii]CN; ina[in]PRP; libbu[interior]'PRP; izuzzu[stand]V; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; n
+
+16'. ⸢x⸣ KI {MULₓ(ÁB)}HUN.GÁ 1 SI TE sin TÙR NIGÍN SÀG.ME.GAR ina ŠÀ GUB ULÙ GIN
+#lem: u; erṣētu[area]N; Agru[Aries]CN; n; ubānu[finger]N; ṭehû[come close]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; Kakkabu-peṣû[Jupiter]CN$; ina[in]PRP; libbu[interior]N$; izuzzu[stand]V; šūtu[south wind]N; alāku[blow]V
+
+17'. [x x] x A 27 TIR.AN šá SUH{ME}-šú ma-ʾ-diš MAH ina NIM GIB
+#lem: u; u; u; u; n; Manziat[rainbow]N; ša[which]REL$; zīmu[face//luster]N'N$zīmšu; mādiš[very]AV; ṣīru[exalted//great]AJ'AJ$; ina[in]PRP; Elamtu[east]N; parāku[stretch]V
+
+18'. [x x x x] hi-ri-tum NAM UD.KIB.NUN{KI} ERÍN KUR URI{KI} u KUR aš-šur
+#lem: u; u; u; u; Hiritu[Hiritu]SN$; pīhātu[responsibility//province]N'N$; Zimbir[Sippar]SN$; uqu[army]N; mātu[land]N; Akkad[Babylonia]GN; u[and]CNJ; mātu[land]N; Aššur[Aššur]GN
+
+19'. [ṣal-tú KI a-ha]-meš DÙ{MEŠ}-ma ERÍN KUR URI{KI} BAL{ME} ma-ʾ-diš GAZ
+#lem: ṣāltu[combat]N; itti[with]PRP$; ahāmiš[each other]IP$; epēšu[do//make]V'V$; uqu[army]N; mātu[land]N; Akkad[Babylonia]GN; enû[change//flee]V'V$; mādiš[greatly//heavily]AV'AV$; dâku[kill//defeat]V'V$
+
+20'. [x x x S]I GIN 28 ŠÈG i ina KIN.SIG TIR x DIR? ina KUR GIB
+#lem: u; u; u; ištānu[north wind]N; alāku[blow]V; n; zunnu[rain]N; wīṣu[little]AJ; ina[in//in]PRP'PRP; kinsikku[afternoon]N; Manziat[rainbow]N; u; sāmu[red]AJ$; ina[in//in]PRP'PRP; šadû[east]N; parāku[stretch]V
+
+21'. [x x x x] 29 ILLU i GIN AN UTAH ŠUR MU BI ŠÈG i KI TU x [...]
+#lem: u; u; u; u; n; mīlu[river level]N; wīṣu[little]AJ; alāku[rise]V; šamû[rain]N; natāku[drip]V; zanānu[rain]V; šattu[year]N; šū[he//that]IP'DP$; zunnu[rain]N; wīṣu[few//little]AJ'AJ$; u; u; u; u
+
+
+@translation labeled en project
+
+
+@(t.e. 1) [At the command of ...] Bēl@sup{?} may it be well.
+
+@(o i 1) [Month I, ...,] the moon became visible in a cloud; it was bright@sup{?} and high.
+
+@(o i 2) [Beginning] of the night, overcast. Night of the 1st, the river level rose. The 1st, the sun was surrounded by a halo. Night
+
+@(o i 3) of the 2nd, (and) the 2nd, overcast. The south wind blew. The 3rd, very overcast. In the afternoon it rained.
+
+@(o i 4) Night of the 4th, it rained. The 6th, middle part of the day, the sun was surrounded by a halo.
+
+@(o i 5) It was split towards the east. The 7th, the moon was surrounded by a halo. The river level rose.
+
+@(o i 6) Night of the 12th, overcast. The 12th, the 13th, the 14th, overcast. The 14th, one god was seen with the other.
+
+@(o i 7) The river level receded. Mercury’s last appearance in the east behind Pisces,
+
+@(o i 8) and Saturn’s last appearance behind Pisces, I did not watch because the days were overcast.
+
+@(o i 9) The 17th, in the morning, overcast. Thunder, gusty south wind, rain, small (hail)stones.
+
+@(o i 10) Mars became stationary in the area of the Lip of the Scorpion, it came close to the bright star
+
+@(o i 11) of the Scorpion’s head. From the 22nd to the 24th, [...]
+
+@(o i 12) The 25th, Mars was east of the star to the right of the Scorpion [...]
+
+@(o i 13) The river level rose. Night of the 20th, overcast. Lightning, thun[der, ...]
+
+@(o i 14) a little [...], strong wind. Night of the 21st, rain [...]
+
+@(o i 15) A little rain, lightning flashed, the south wind [...]
+
+@(o i 16) 2 cubits in front of the Scales. ... [...]
+
+@(o i 17) to the right of the Scorpion 1@sup{?} [...]
+
+@(o i 18) ... The sun set in a cloud. ... [...]
+
+@(o i 19) It rained slowly, the south wind [...]
+
+@(o i 20) [...] ... night [...] 
+
+$ (rest of column broken)
+
+@(o ii 1) The north wind blew. The 15th, rain@sup{?} ... [...]
+
+@(o ii 2) first appearance in the Old Man. The river level [...]
+
+@(o ii 3) was placed towards the south. Obscuration@sup{?} ... [...]
+
+@(o ii 4) first part of the night, [...]
+
+@(o ii 5) ... [...] 
+
+@(o ii 6) ... [...]
+
+$ (rest of column broken)
+
+@reverse
+
+@(r iii 1') of ... [...]
+
+@(r iii 2') in the after[noon ...]
+
+@(r iii 3') ... [...]
+
+@(r iii 4') The north wind blew. Lunar eclipse ... [...]
+
+@(r iii 5') The 20th@sup{?}, the moon was surrounded by a halo, (and) Mercury [stood] in i[t ...]
+
+@(r iii 6') strong wind. The 21st, ... [...]
+
+@(r iv 1') [...] the star of [...]
+
+@(r iv 2') [...] ... right@sup{?} of the moon [...]
+
+@(r iv 3') [...] ... [...]
+
+@(r iv 4') [...] ... [...]
+
+@(r iv 5') [...] ... right of the moon@sup{?} ... [...]
+
+@(r iv 6') [...] ... thunder, [...]
+
+@(r iv 7') ... The 5th, Mercury’s first appearance in the east in Pisces. [...]
+
+@(r iv 8') ... towards the south [...]
+
+@(r iv 9') ... It rained slowly. The 12th, a halo ... The river level rose [...]
+
+@(r iv 10') The troops of Babylonia fought against the troops of Assyria; the troops ...[...]
+
+@(r iv 11') The 13th, the river level rose a little. The 14th, a cloud bank lay to the right of the sun. Night of the 15th, overcast. Three ra[inbows,]
+
+@(r iv 12') one in the west, one between north and west, and one in the north, were seen. Rain, lightning, thunder, ...
+
+@(r iv 13') clouds@sup{?}. The 15th, one god was seen with the other. Gusty south wind, ... seized the face of the sky. Night of the 16th, the moon was surrounded by a large halo.
+
+@(r iv 14') The 16th, the sun was surrounded by a halo. The 18th, the sun was surrounded by a halo; all day the south wind blew. The 19th, Venus
+
+@(r iv 15') stood in the region of Aries, 10 fingers behind Mars; the moon was surrounded by a halo, and α Scorpii stood in it. The 20th, Mars was 1 finger to the left
+
+@(r iv 16') of the front@sup{?} of Aries; it came close. The moon was surrounded by a halo, Jupiter stood in it. The south wind blew.
+
+@(r iv 17') [...] ... The 27th, a rainbow whose brightness was very great stretched in the east.
+
+@(r iv 18') [... in] Hiritu in the region of Sippar the troops of Babylonia and of Assyria
+
+@(r iv 19') fou[ght with each] other, and the troops of Babylonia turned to flight and were heavily defeated.
+
+@(r iv 20') [... The no]rth wind blew. The 28th, a little rain. In the afternoon, a very red@sup{?} rainbow stretched in the east.
+
+@(r iv 21') [...] The 29th, the river level rose a little. A rain shower fell. That year little rain ... [...]

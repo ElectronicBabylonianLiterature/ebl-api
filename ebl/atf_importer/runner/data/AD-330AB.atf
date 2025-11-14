@@ -1,0 +1,191 @@
+&X103301 = AD -330AB
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ⸢x⸣ [...] 13 8 ŠÚ ⸢x⸣ [...]
+#lem: u; u; u; n; n; rabû[moonset to sunrise]N; u; u
+
+3'. [... sin AN].⸢KU₁₀⸣ gab-<bi>-šú ŠÚ 10 UŠ ⸢GE₆⸣ [GIN ...] he-pí MÚL.BABBAR ŠÚ ⸢GENNA⸣ [...]
+#lem: u; Sîn[moon]N; antallû[eclipse]N; gabbu[totality]N$gabbišu; īrup[be(come) overcast]'V; n; n; mūšu[night]N; u; u; hepû[broken]AJ; Kakkabu-peṣû[Jupiter]CN; rabû[set]V; Kayyamānu[Saturn]CN; u
+
+4'. [...] ina ÍR MAR ina ZALÁG KUR GIN{ME} x [...] 4 Ú KA+ŠID ina AN.KU₁₀ NAM.ÚŠ{ME} u šib-ṭi ina? [KUR MAH]
+#lem: u; ina[in//during]PRP'PRP; bikītu[maximal phase (of an eclipse)]N; amurru[west wind]N; ina[in//during]PRP'PRP$; nawāru[clearing]N; šadû[east wind]N; alāku[go//blow]V'V$; u; u; n; X; X; ina[during]'PRP; antallû[eclipse]N; mūtu[death]N; u[and]CNJ; šibṭu[blow//plague]N'N; ina[in]PRP; mātu[land]N; ṣīru[much]AJ
+
+5'. [... kal] U₄ DIR AN ZA GE₆ 15 6 GE₆ DI[R ... sin SIG MÚL-ár-šá-SAG-HUN] 3 2/3 KÙŠ sin he-pí ana NIM DIB MÚL GAL š[á ...]
+#lem: u; kal[all]N; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; u; Sîn[moon]N; šapil[below]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N; Sîn[moon]N; hepû[broken]AJ; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; kakkabu[star]N; rabû[big]AJ; ša[which]REL; u
+
+6'. [x x A]N ŠUR UD.DA-su ina KI IGI ŠÚ.ŠÚ GÍR G[ÍR ... GE₆ 17 ...] ⸢x⸣ he-pí AN DUL ina ZALÁG sin ár [is-le₁₀ N N ...]
+#lem: u; u; Ṣalbaṭānu[Mars]CN; ṣarāru[flash]V; ṣētu[bright light]N; ina[on]PRP; erṣētu[ground]N; nanmuru[see]V; urrup[be(come) very overcast]V; birqu[lightning]N; barāqu[flash]V; u; mūšu[night]N; n; u; u; hepû[broken]AJ; šamû[rain]N; DUL[(meaning unclear)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; is-le₁₀[α Tauri]CN; n; n; u
+
+7'. [DI]R AN ZA GE₆ 18 IZI.ŠUB ina KI ku-mar [u i]na KI tu-ba a-na tar-ṣi É {d}AG GÁL [...]
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; miqit-išāti[fall of fire]N; ina[in]PRP; erṣētu[district]N; Kumar[(the city-quarter) Kumar]GN$; u[and]CNJ; ina[in]PRP; erṣētu[district]N; Tuba[(the city-quarter) Tuba]GN; ana[to]PRP; tarṣu[towards]PRP; bītu[temple]N; Nabû[Nabû]DN$; bašû[occur]V; u
+
+8'. [x U]R?.KU IZI KÚ GE₆ 19 USAN IZI.Š[UB ... in]a ZALÁG sin ár MAŠ.MAŠ-šá-SIPA 20 SI dele-bat e [GÌR-ár-šá-A N N]
+#lem: u; kalbu[dog]N$; išātu[fire]N$; akālu[eat]V; mūšu[night]N; n; šimītān[first part of the night]N; miqit-išāti[fall of fire]N; u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ubānu[finger]N; Dilbat[Venus]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; n
+
+9'. [dele-bat N] SI ana NIM DIB GE₆ 20 ina ZALÁG sin SIG MAŠ.MAŠ-á[r N KÙ]Š sin 2/3 KÙŠ ana ŠÚ LAL 21 LÁL-tim NU PAP G[E₆ 22 ina ZALÁG]
+#lem: Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; n; šitqultu[equinox]N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N
+
+10'. [sin SIG SA]G-UR.A 6 KÙŠ sin 1/2 KÙŠ ana NIM DIB GE₆ 2[3 ina ZALÁG sin á]r LUGAL 1 KÙŠ GE₆ 24 DIR AN ZA GE₆ 25 D[IR AN ...]
+#lem: Sîn[moon]N; šapil[below]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; u
+
+11'. [x x] AN kab-bar DUL 25 ina še-rì DIR AN ZA GE₆ [26 ina ZALÁG sin SIG DELE-šá-IGI-ABSIN N N sin] ⸢2/3⸣? KÙŠ ana ŠÚ LAL ár dele-bat 1 KÙŠ 8 SI ana NIM GUB [...]
+#lem: u; u; šamû[rain]N; kabbaru[thick]AJ$; DUL[(meaning unclear)]V; n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+
+12'. GE₆ 29 AN.KU₁₀ šamáš šá DIB in 1 GE₆ GIN GE₆ 30 ina ZAL[ÁG ...] ⸢x⸣ GUR ka-si 3(GUR) GUR ina TIL ITU ⸢4⸣? [...]
+#lem: mūšu[night]N; n; antallû[eclipse]N; šamšu[sun]N; ša[which]REL; etēqu[miss]V; ina[in//at (plus numeral)]PRP'PRP; n; mūšu[night]N; alāku[come]V; mūšu[night]N; n; ina[in//in]PRP'PRP; nūru[last part of the night]N; u; u; kurru[kor (180 litres)]N; kasû[mustard]N; n; kurru[kor (180 litres)]N; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; n; u
+
+13'. ŠE.GIŠ 1 PI SÍG{HI.A} 5 ma i-nu-šú MÚL.BABBAR ina GÍR.TAB dele-[bat ina A ina TIL ITU ina ABSIN GENNA ina zib{ME} GU₄.UD u AN šá ŠÚ-ú N]U IGI{MEŠ} ITU BI I[LLU ...]
+#lem: šamaššammū[sesame]N; n; pānu[bushel (36 litres)]N; šīpātu[wool]N; n; manû[mina]N; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in//in]PRP'PRP; Zuqiqīpu[Scorpio]CN; Dilbat[Venus]CN; ina[in//in]PRP'PRP; Nēšu[Leo]CN; ina[in//in]PRP'PRP; qītu[end]N; warhu[month]N; ina[in//in]PRP'PRP; Šerʾu[Virgo]CN; Kayyamānu[Saturn]CN; ina[in//in]PRP'PRP; Zibbātu[Pisces]CN; Šihṭu[Mercury]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V; warhu[month]N; šū[that]'DP; mīlu[river level]N; u
+
+14'. ITU BI U₄ 11.KÁM hat-tu₄ ina ma-dàk-tu₄ ina qud-me LUGAL GAR-m[a? ...]
+#lem: warhu[month]N; šū[that]'DP; ūmu[day]N; n; hātu[terror//panic]N'N$; ina[in//in]PRP'PRP; madaktu[(military) camp]N$; ina[in//in]PRP'PRP; qudmu[before]PRP; šarru[king]N; šakānu[put//occur]V'V$; u
+
+15'. ana tar-ṣi LUGAL ŠUB-ú <U₄> 24.KÁM ina še-rì LUGAL ŠÚ za-qip-t[u₄? ...]
+#lem: ana[to]PRP; tarṣu[towards]PRP; šarru[king]N; maqātu[fall//lie]V'V$; X; n; ina[in]PRP; šēri[morning]N; šarru[king]N; kiššatu[totality//world]N'N$; zaqiptu[vertical//standard]AJ'N$; u
+
+16'. GABA a-ha-meš im-ha-ṣu-ma IGI.IGI {LÚ}ERÍN{MEŠ} kab-t[u₄? ...]
+#lem: mehretu[opposite side]N$; ahāmiš[each other]IP; mahāṣu[beat]V$imhaṣūma; dabdû[defeat]N; uqānī[troops]N; kabtu[heavy]AJ$; u
+
+17'. LUGAL ERÍN{MEŠ}-šú ú-maš-šìr-ú-ši-ma ana URU{MEŠ}-šú-nu [...]
+#lem: šarru[king]N; ṣābu[troops]N; wašāru[sink down//abandon]V'V$umašširūšuma; ana[to]PRP; ālu[city]N$ālānišunu; u
+
+18'. [ana m]at gu-ti-i ZÁH-it-uʾ ($blank$) [...]
+#lem: ana[to]PRP; mātu[land]N$; Guti[Guti]GN$; abātu[flee]V$innabitū; u
+
+$ ruling
+19'. [DU₆ 1] ⸢13⸣.30+[x] na GE₆ 2 sin e ⸢MÚL⸣.[BABBAR ...]
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N; mūšu[night]N; n; Sîn[moon]N; eli[above]PRP; Kakkabu-peṣû[Jupiter]CN; u
+
+20'. [... GE₆] 7 ⸢SAG⸣ [GE₆ ...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+@reverse
+1'. [x x] x [...]
+#lem: u; u; u; u
+
+2'. [a]-na 1 GÍN K[Ù.BABBAR ...]
+#lem: ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; u
+
+3'. [I]TU BI TA 1 E[N ...]
+#lem: warhu[month]N; šū[that]'DP; ištu[from]PRP; n; adi[until]PRP; u
+
+4'. ana E{KI} GIN-ku um-ma ⸢É.SAG.ÍL⸣ [...]
+#lem: ana[to]PRP; Bābilu[Babylon]SN; alāku[go//come]V'V$; umma[thus]PRP; Esangila[Esangila]TN; u
+
+5'. u DUMU{MEŠ} E{KI} a-na NÍG.GA É.SAG.ÍL [...]
+#lem: u[and]CNJ; māru[son]N$; Bābilu[Babylon]SN; ana[for]PRP; makkūru[goods//property]N'N$; Esangila[Esangila]TN; u
+
+6'. ⸢U₄⸣ 11.KÁM ina {URU}UD.KIB.NUN{KI} ṭè-e-mu šá {m}a-l[ik-sa-an-dar-ri-is ...]
+#lem: X; n; ina[in]PRP; Zimbir[Sippar]SN$; ṭēmu[report//order]N'N$; ša[of]DET; Alexander[Alexander]RN$; u
+
+7'. [x x] a-na É{MEŠ}-ku-nu ul er-ru-ub U₄ 13.KÁ[M ...]
+#lem: u; u; ana[to]PRP; bītu[house]N$; ul[not]MOD; erēbu[enter]V$errub; X; n; u
+
+8'. [KÁ].⸢SIKIL.⸣LA KÁ ka-mi-i šá É.SAG.GÍL ù ⸢x⸣ [...]
+#lem: X; bābu[gate]N; kawû[outer]AJ$; ša[which]REL; Esangila[Esangila]TN$; u[and]CNJ; u; u
+
+9'. [x x x] U₄ 14.KÁM {LÚ}ia-ma-na-a-a MU-tim GU₄ [...]
+#lem: u; u; u; X; n; Iamanāya[Ionian]EN$; šuāti[these]DP; alpu[bull]N; u
+
+10'. ($blank$) LUGUD.DA{MEŠ} {UZU}ME.HÉ⸢{MEŠ}⸣ [...]
+#lem: kurû[short]AJ; himṣu[fatty tissue]N$; u
+
+11'. [x x x] a-lik-sa-an-dar-ri-is LUGAL ŠÚ ana E{KI} K[U₄? ...]
+#lem: u; u; u; Alexander[Alexander]RN$; šarru[king]N; kiššatu[totality//world]N'N$; ana[into]PRP; Bābilu[Babylon]SN; erēbu[enter]V; u
+
+12'. [x ANŠE?.K]UR.RA{MEŠ} ù ú-⸢nu-ut⸣ [...]
+#lem: u; sisû[horse]N$; u[and]CNJ; unūtu[tools//equipment]N'N$; u
+
+13'. [x x x] u DUMU{MEŠ} E{KI} u UN⸢{MEŠ}⸣ [...]
+#lem: u; u; u; u[and]CNJ; māru[son]N; Bābilu[Babylon]SN; u[and]CNJ; nišu[people]N$; u
+
+14'. [...] ⸢x⸣ ši-piš-tú ana? [...]
+#lem: u; u; šipirtu[message]N$; ana[to]PRP; u
+
+15'. [...] ⸢um⸣-⸢ma⸣ [...] 
+#lem: u; X; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] ... [...] The 13th, moonset to sunrise: 8° ... [...]
+
+@(o 3') [... lunar] eclipse, in its totality covered. 10° night [totality@sup{?} ...] (broken) Jupiter set; Saturn [...]
+
+@(o 4') [...] during totality the west wind blew, during clearing the east wind. [...] fourth@sup{?} ...; during the eclipse, deaths and plague@sup{?} [occurred@sup{?}] in [...]
+
+@(o 5') [... all] day clouds were in the sky. Night of the 15th, sunset to moonrise: 16°; cl[ouds ... the moon was] 3 2/3 cubits [below α Arietis,] the moon having passed [...] to the east; a meteor which [...]
+
+@(o 6') [...] ... flashed, its light was seen on the ground; very overcast, lightning fl[ashed, ... Night of the 17th, ...] (broken) rain DUL; last part of the night, the moon was [...] behind [α Tauri ...]
+
+@(o 7') [clou]ds were in the sky. Night of the 18th, a "fall of fire" occurred in the district ... [...] entered@sup{?}, opposite of the Nabû temple [...]
+
+@(o 8') [... a d]og@sup{?} was burned. Night of the 19th, first part of the night, a "fall [of fire" ... last] part of the night, the moon was 20 fingers behind γ Geminorum; Venus was [...] above [β Virginis,]
+
+@(o 9') [Venus] having passed [nn] fingers to the east. Night of the 20th, last part of the night, the moon was [nn cubi]ts below β Geminorum, the moon being 2/3 cubit back to the west. The 21st, equinox; I did not watch. Ni[ght of the 22nd, last part of the night,]
+
+@(o 10') [the moon was] 6 cubits [below] ε Leonis, the moon having passed 1/2 cubit to the east. Night of the 2[3rd, last part of the night, the moon was] 1 cubit behind α Leonis. Night of the 24th, clouds were in the sky. Night of the 25th, cl[ouds ...]
+
+@(o 11') [...] thick rain DUL. The 25th, in the morning, clouds were in the sky. Night of [the 26th, last part of the night, the moon was ... below γ Virginis, the moon] being 2/3@sup{?} cubit back to the west, it stood 1 cubit 8 fingers behind Venus to the east. [...]
+
+@(o 12') Night of the 29th, solar eclipse which was omitted; (it was expected for) about 1° night after sunset. Night of the 30th, last part of the [night, ...] ... kur; mustard, 3 kur, at the end of the month, 4@sup{?} [kur; ...]
+
+@(o 13') sesame, 1 @i{pānu}; wool, 5 minas. At that time, Jupiter was in Scorpius; Ve[nus was in Leo, at the end of the month, in Virgo; Saturn was in Pisces; Mercury and Mars, which had set, were n]ot visible. That month, the ri[ver level ...]
+
+@(o 14') That month, on the 11th, panic [occurred] in the camp before the king [...]
+
+@(o 15') lay@sup{?} opposite the king. On the 24th, in the morning, the king of the world [...] the standard@sup{?} [...]
+
+@(o 16') they fought with each other, and a heavy@sup{?} defeat of the troops of [...]
+
+@(o 17') the troops of the king deserted him and [went@sup{?}] to their cities [...]
+
+@(o 18') they fled to the land of the Guti [...]
+
+$ ruling
+
+@(o 19') [Month VII, the 1st (of which followed the 30th of the preceding month); sunset to moonset: 13° 30+x'. Night of the 2nd, the moon was above Jupi[ter ...]
+
+@(o 20') [... Night] of the 7th, beginning [of the night, ...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') for 1 shekel of s[ilver ...]
+
+@(r 3') That month, from the 1st to [...]
+
+@(r 4') came to Babylon saying: "Esangila [..."]
+
+@(r 5') and the Babylonians for the property of Esangila [...]
+
+@(r 6') On the 11th, in Sippar an order of Al[exander ...]
+
+@(r 7') ["...] I shall not enter your houses". On the 13th, [...]
+
+@(r 8') [...] to@sup{?} the outer gate of Esangila and [...]
+
+@(r 9') [...] On the 14th, these@sup{?} Ionians a bull [...]
+
+@(r 10') short, fatty tissue [...]
+
+@(r 11') [...] Alexander, king of the world, [came@sup{?} in]to Babylon [...]
+
+@(r 12') [... hor]ses and equipment of [...]
+
+@(r 13') [...] and the Babylonians and the people of [...]
+
+@(r 14') [...] a message to [...]
+
+@(r 15') [...] ... [...]

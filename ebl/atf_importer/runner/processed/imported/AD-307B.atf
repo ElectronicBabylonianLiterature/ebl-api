@@ -1,0 +1,49 @@
+&X103072 = AD -307B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [... 2 šamáš GUB DIR? N]U PAP IM ŠÁR GE₆ 4 SAG GE₆ sin [...]
+#lem: u; n; šamšu[sun]N; izuzzu[stand]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; šāru[wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+3'. [GE₆ 7 SAG GE₆ sin ...] ⸢x⸣ ár MÚL.BABBAR 1 KÙŠ ana NIM GUB 7 GU₄.UD ina N[I]M ina M[AŠ ŠÚ DIB ...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; u; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; n; Šihṭu[Mercury]CN; ina[in//in]PRP'PRP$; Elamtu[east]N; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; etēqu[miss]V; u
+
+4'. [GE₆ 10 SAG GE₆ sin x MÚL-K]UR-šá-KIR₄-šil-PA 2 KÙŠ 8 SI GE₆ 12 USAN GEN[NA ...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N; n; ubānu[finger]N; mūšu[night]N; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; u
+
+5'. [GE₆ 13 AN ... SA₄]-šá-ABSIN <<2 KÚŠ>> ($erased$) 20 SI 10 UŠ GE₆ ana ZALÁG sin AN.K[U₁₀ ...]
+#lem: mūšu[night]N; n; šamû[sky]N; u; SA₄-šá-ABSIN[α Virginis]CN; n; ubānu[finger]N; n; UŠ[time degree]N; mūšu[night]N; ana[to]PRP; nūru[light//sunrise]N'N$; Sîn[moon]N; antallû[eclipse]N; u
+
+6'. [...] ⸢x⸣ ár SI MÁŠ ár 13 50 NINDA na IM ŠÁR GE₆ [14 ...]
+#lem: u; u; warki[behind]PRP; qarnu[horn]N; Suhurmāšu[Capricorn//Goat-fish]CN'CN$; warki[behind]PRP; n; n; namaddu[measurement]N; na[sunrise to moonset]N; šāru[wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; u
+
+7'. [GE₆ 24 ina] ZALÁG sin ár ŠUR-GIGIR-šá-U[LÙ ...]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u
+
+8'. [...] 26+[x] KI? [...] 
+#lem: u; n; u; u
+
+
+@translation labeled en project
+
+
+@(1') [...] ... [...]
+
+@(2') [... The 2nd, solstice; clouds, I did n]ot watch; gusty wind. Night of the 4th, beginning of the night, the moon was [...]
+
+@(3') [Night of the 7th, beginning of the night, the moon was ...], it stood 1 cubit behind Jupiter to the east. The 7th, [last appearance] of Mercury in the east in Gemini; [omitted. ...]
+
+@(4') [Night of the 10th, beginning of the night, the moon was] 2 cubits 8 fingers [...] ϑ Ophiuchi. Night of the 12th, first part of the night, Sat[urn ...]
+
+@(5') [Night of the 13th, Mars was] 20 fingers [... α] Virginis. 10° before sunrise, lunar eclipse [...]
+
+@(6') [...] behind the rear horn of the Goat-fish. The 13th, sunrise to moonset: 50'. Gusty wind. Night [of the 14th, ...]
+
+@(7') [Night of the 24th,] last part of the night, the moon was [...] behind ζ Tauri [...]
+
+@(8') [...] 26th@sup{?} ... [...]

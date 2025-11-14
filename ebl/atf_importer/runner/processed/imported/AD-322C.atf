@@ -1,0 +1,41 @@
+&X103223 = AD -322C
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] AN.BAR₇ GÍR [...]
+#lem: u; muṣlālu[noon]N; birqu[lightning]N; u
+
+3'. [...] ⸢1(BARIG) N(BÁN)⸣ ina MURUB₄ ITU 1(BARIG) 3(BÁN) ina TIL ITU 5(BÁN) ZÚ [...]
+#lem: u; n; n; ina[in//in]PRP'PRP$; qabaltu[middle]N; warhu[month]N; n; n; ina[in//in]PRP'PRP$; qītu[end]N; warhu[month]N; n; suluppu[date]N; u
+
+4'. [... MÚL.BABBA]R ina ALLA dele-bat ina MÚL.MÚL AN ina ABSIN GU₄.UD GE[NNA šá ŠÚ-ú NU IGI ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in//in]PRP'PRP$; Alluttu[Cancer]CN; Dilbat[Venus]CN; ina[in//in]PRP'PRP$; MÚL.MÚL[η Tauri]CN; Ṣalbaṭānu[Mars]CN; ina[in//in]PRP'PRP$; Šerʾu[Virgo]CN; Šihṭu[Mercury]CN; Kayyamānu[Saturn]CN; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V; u
+
+5'. [... MURU]B₄? ITU 1/2 KÙŠ LAL
+#lem: u; qabaltu[middle]N; warhu[month]N; n; ammatu[unit]N; nahāsu[recede]V
+
+$ ruling
+6'. [...] ⸢x⸣ 1 1/2 KÙŠ [...] 
+#lem: u; u; n; n; ammatu[unit]N; u
+
+@translation labeled en project
+
+
+@(1') [...] ... [...]
+
+@(2') [...] around noon, lightning [...]
+
+@(3') [...] ..., in the middle of the month, 1 @i{pānu} 3 @i{sūtu}, at the end of the month, 5 @i{sūtu}; dates@sup{?} [...]
+
+@(4') [... At that time, Jupite]r was in Cancer; Venus was in Taurus; Mars was in Virgo; Mercury (and) Sa[turn, which had set, were not visible ...]
+
+@(5') [... in the middl]e of the month, (the river level) receded 1/2 cubit.
+
+$ ruling
+
+@(6') [...] ... 1/2 cubit [...]

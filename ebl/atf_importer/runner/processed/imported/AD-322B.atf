@@ -1,0 +1,71 @@
+&X103222 = AD -322B
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [... GU₄.U]D ⸢SIG⸣ MAŠ.MAŠ-ár 2 1/2 KÙŠ G[E₆ ...]
+#lem: u; Šihṭu[Mercury]CN; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N; mūšu[night]N; u
+
+3'. [...] GE₆ 14 SAG GE₆ sin ina IGI M[ÚL-KUR-šá-KIR₄-šil-tah-PA.BIL N N ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN$; n; n; u
+
+4'. [... U]SAN GU₄.UD e GENNA 14 SI ⸢x⸣ [...]
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; u; u
+
+5'. [... A]N DIB 21 DIR AN DIB GE₆ 22 DIR [...]
+#lem: u; šamû[sky]N; etēqu[cross]V; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; mūšu[night]N; n; erpetu[cloud]N; u
+
+6'. [...] 2 2/3 KÙŠ DIR AN ZA 24 DIR AN [...]
+#lem: u; n; n; ammatu[unit]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; u
+
+7'. [...] DIR AN DIB GE₆ 27 DIR AN DIB ⸢27⸣ [...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; u
+
+8'. [...] NIM GUB 29 LUGAL NAM{MEŠ} DIR AN [...]
+#lem: u; Elamtu[east]N; izuzzu[stand]V; n; šarru[king]N; šīmātu[what is fixed//death]N'N; erpetu[cloud]N; šamû[sky]N; u
+
+9'. [...] ⸢x⸣ sah-le₁₀ 1(BÁN) 4 qa ŠE.GIŠ 3 1/2 qa [...]
+#lem: u; u; sahlu[cress]N; n; n; qû[(one) litre]N; šamaššammū[sesame]N; n; n; qû[(one) litre]N; u
+
+10'. [... GENNA ina MAŠ].MAŠ ina TIL ITU ina ALLA AN ina ABS[IN ...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Māšu[Gemini]CN; ina[in//in]PRP'PRP$; qītu[end]N; warhu[month]N; ina[in//in]PRP'PRP$; Alluttu[Cancer]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Šerʾu[Virgo]CN; u
+
+11'. [...] ⸢x⸣ KÁ.GAL {d}EN [...]
+#lem: u; u; abullu[gate]N; Bēl[Bēl]DN; u
+
+12'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [... Mercu]ry was 2 1/2 cubits below β Geminorum. Ni[ght ...]
+
+@(o 3') [...] Night of the 14th, beginning of the night, the moon was [...] in front of ϑ [Ophiuchi...]
+
+@(o 4') [... fi]rst part of the night, Mercury was 14 fingers above Saturn ... [...]
+
+@(o 5') [...] crossed the sky. The 21st, clouds crossed the sky. Night of the 22nd, clouds [...]
+
+@(o 6') [...] 2 2/3 cubits; clouds were in the sky. The 24th, clouds [...]
+
+@(o 7') [...] clouds crossed the sky. Night of the 27th, clouds crossed the sky. The 27th, [...]
+
+@(o 8') [...] stood [to] the east. The 29th, the king died; clouds [...]
+
+@(o 9') [...] ...; cress, 1 @i{sūtu} 4 @i{qa}; sesame, 3 1/2 @i{qa} [...]
+
+@(o 10') [... Saturn was in Ge]mini, at the end of the month in Cancer; Mars was in Vir[go ...]
+
+@(o 11') [...] the gate of Bēl [...]
+
+@(o 12') [...] ... [...]
+

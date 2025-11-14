@@ -1,0 +1,82 @@
+&X102781 = AD -278A
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [...]
+#lem: u
+
+2. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+3. [...] šá-ULÙ 20 ⸢SI⸣ [...]
+#lem: u; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N; u
+
+4. [... US]AN GU₄.UD SIG dele-bat ⸢2⸣ [...]
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]PRP; Dilbat[Venus]CN; n; u
+
+5. [...] ⸢7⸣ na šá GU₄.UD GE₆ 10 SAG GE₆ sin [...]
+#lem: u; n; na[sunset to setting]'N; ša[of]DET; Šihṭu[Mercury]CN; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+6. [... GE₆ 12 USAN GENN]A ana ŠÀ sin KU₄ GE₆ 13 SAG GE₆ [sin ina IGI SI-MÁŠ ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; libbu[interior]N; Sîn[moon]N; erēbu[enter]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SI-MÁŠ[β Capricorni]CN; u
+
+7. [... GE₆ 14 sin ina IGI MÚL-IGI-šá]-SUHUR-MÁŠ 1 1/2 KÙŠ 14 {MÚL}KAK?.B[AN? ...]
+#lem: u; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; ammatu[unit]N; n; Šiltāhu[Sirius]CN; u
+
+8. [...] MAŠ.MAŠ 8 U GE₆ 17 [...]
+#lem: u; MAŠ.MAŠ-ár[β Geminorum]CN; n; ubānu[finger]N; mūšu[night]N; n; u
+
+9. [...] DIR AN ZA [...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+10. [...] x [...] 
+#lem: u; u; u
+
+@reverse
+1'. [EN.NUN] šá gi-[n]é-e šá TA [...]
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[regularity]N; ša[which]REL; ištu[from]PRP; u
+
+2'. [...] MU.33.KÁM [...] 
+#lem: u; n; u
+
+@top
+1. [...]-⸢e šá TA⸣ [...] 
+#lem: u; ša[which]REL; ištu[from]PRP; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...]
+
+@(o 2) [...] ... [...]
+
+@(o 3) [...] 20 fingers [...] α [Librae@sup{?} ...]
+
+@(o 4) [... first] part of the night, Mercury was 2 [cubits] below Venus [...]
+
+@(o 5) [...] 7° na of Mercury. Night of the 10th, beginning of the night, the moon was [...]
+
+@(o 6) [... Night of the 12th, first part of the night, Sat]urn entered the moon. Night of the 13th, beginning of the night, [the moon was ... in front of β Capricorni ...]
+
+@(o 7) [... Night of the 14th, the moon was] 1 1/2 cubits [in front of γ Capri]corni. The 14th, Sirius@sup{?} [...]
+
+@(o 8) [...] Geminorum 8 fingers. Night of the 17th, [...]
+
+@(o 9) [...] clouds were in the sky [...]
+
+@(o 10) [...] ... [...] 
+
+@reverse
+
+@(r 1') [Diar]y from [...]
+
+@(r 2') [...] year 33 [...] 
+
+@top
+
+@(t.e. 1) [Diar]y from [...]
+

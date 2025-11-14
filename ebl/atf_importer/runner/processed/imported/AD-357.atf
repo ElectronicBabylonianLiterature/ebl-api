@@ -1,0 +1,83 @@
+&X103570 = AD -357
+#project: adsd/adart1
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...]+1/2 KÙŠ sin 8 ⸢SI⸣ [...]
+#lem: u; ammatu[unit]N; Sîn[moon]N; n; ubānu[finger]N; u
+
+3'. [...] ana NIM GUB GE₆ 10+[x ...]
+#lem: u; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; mūšu[night]N; n; u
+
+4'. [...] ⸢GÙ U AN⸣ né-hi PISAN i DIB GE₆ 10+[x ...]
+#lem: u; rigim[voice]N; Adad[storm-god]DN; šamû[rain]N; nēhu[slow]AJ; pisannu[(a meterological phenomenon)]N; wīṣu[little]AJ; DIB[(meaning unclear)]V; mūšu[night]N; n; u
+
+5'. [...] NU PAP ina 40 ME ana ŠÚ šamáš AN.KU₁₀ sin BAR DIB US[AN ...]
+#lem: u; ul[not]MOD; naṣāru[watch]V; ina[at (plus numeral)]PRP; n; u; ana[to//before]PRP'PRP$; rabû[set//setting]V'N$; šamšu[sun]N; antallû[eclipse]N; Sîn[moon]N; ahû[extraneous]'AJ$; etēqu[miss]'V$; šimītān[first part of the night]N; u
+
+6'. [... GE₆ 15] sin SIG DELE-šá-IGI-ABSIN 2 KÙŠ 15 MÚL.BABBAR ana ME ⸢E⸣ [...] 
+#lem: u; mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[rise]V; u
+
+@reverse
+1. [...] 1 KÙŠ 8 SI 17 AN.BAR₇ ni-di Á ⸢x⸣ [...]
+#lem: u; n; ammatu[unit]N; n; ubānu[finger]N; n; muṣlālu[noon]N; nīdu[cloud bank]N; idu[arm//side]N'N$; u; u
+
+2. [... D]IB? TA 12 EN 18 ILLU 1/2 KÙŠ LAL-is GE₆ 19 ⸢x⸣ [...]
+#lem: u; DIB[(meaning unclear)]V; ištu[from]PRP; n; adi[until]PRP; n; mīlu[river level]N; n; ammatu[unit]N; nahāsu[recede]V; mūšu[night]N; n; u; u
+
+3. [... PISA]N? MAH DIB GÙ U i in EN 19 AN ana ŠÚ ki U[Š-a ...]
+#lem: u; pisannu[(a meterological phenomenon)]N; ṣīru[much]AJ; DIB[(meaning unclear)]V; rigim[voice]N; Adad[storm-god]DN; wīṣu[little]AJ; ina[in]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]'N; kī[when]SBJ; nenmudu[be at a stationary point]V; u
+
+4. [... GE₆] 21 ina ZALÁG sin ár MÚL-KUR-šá-KIR₄-šil-tah-PA.BIL ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; u; u
+
+5. [...] KÙŠ DU? GE₆ 24 USAN GÍR ina ULÙ GÍ[R ...]
+#lem: u; ammatu[unit]N; alāku[rise]V; mūšu[night]N; n; šimītān[first part of the night]N; birqu[lightning]N; ina[in]PRP; šūtu[south]N; barāqu[flash]V; u
+
+6. [...] ⸢x⸣ 16 ME ana ŠÚ-e šamáš šamáš AN.KU₁₀ Á [...]
+#lem: u; u; n; u; ana[before]PRP; rabû[set//setting]V'N$; šamšu[sun]N; šamšu[sun]N; antallû[eclipse]N; idu[arm//side]N'N$; u
+
+7. [...] u ZALÁG ina AN.KU₁₀-šú ULÙ šá [...]
+#lem: u; u[and]CNJ; nūru[last part of the night]N; ina[in]PRP; antallû[eclipse]N$; šūtu[south wind]N; ša[which]REL; u
+
+8. [...] ⸢x x⸣ [...] 
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...]+1/2 cubit, the moon being 8 fingers [...]
+
+@(o 3') [...] stood to the east. Night of the 10+[x]th, [...]
+
+@(o 4') [...] thunder, slow rain, a little PISAN DIB. Night of the 10+[x]th, [...]
+
+@(o 5') [...] I did not watch. At 40° before sunset, lunar eclipse, excluded, omitted; first pa[rt of the night, ...]
+
+@(o 6') [... Night of the 15th,] the moon was 2 cubits below γ Virginis. The 15th, Jupiter’s acronychal rising [...] 
+
+@reverse
+
+@(r 1) [...] 1 cubit 8 fingers. The 17th, around noon, a cloud bank to the side of  ... [...]
+
+@(r 2) [...] ... From the 12th to the 18th, the river level receded 1/2 cubit. Night of the 19th, ... [...]
+
+@(r 3) [...] much [PISA]N DIB, a little thunder. Around the 19th, when Mars became stationary to the west, [...]
+
+@(r 4) [... Night] of the 21st, last part of the night, the moon was [...] behind ϑ Ophiuchi [...]
+
+@(r 5) [...] cubits ... Night of the 24th, first part of the night, lightning flashed in the south [...]
+
+@(r 6) [...] ... At 16° before sunset, solar eclipse on the [...] side [...]
+
+@(r 7) [...] and clearing; during its eclipse, the south wind which [...]
+
+@(r 8) [...] ... [...]
