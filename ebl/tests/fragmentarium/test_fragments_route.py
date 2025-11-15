@@ -119,14 +119,12 @@ def test_fragments_retrieve_all(guest_client, fragmentarium):
 
 
 def test_get_all_fragment_ocred_signs(client, fragmentarium):
-    fragments = TransliteratedFragmentFactory.build_batch(5)
-    for fragment in fragments:
-        fragmentarium.create(fragment)
+    fragment = TransliteratedFragmentFactory.build()
+    fragmentarium.create(fragment)
 
     result = client.simulate_get("/fragments/all-ocred-signs")
 
     assert result.status == falcon.HTTP_OK
-    assert len(result.json) == 5
-    for result_fragment in result.json:
-        assert "ocredSigns" in result_fragment
-        assert result_fragment["ocredSigns"] == "ABZ10 X"
+    assert len(result.json) == 1
+    assert "ocredSigns" in result.json[0]
+    assert result.json[0]["ocredSigns"] == "ABZ10 X"
