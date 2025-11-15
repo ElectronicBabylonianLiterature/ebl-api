@@ -116,3 +116,17 @@ def test_fragments_retrieve_all(guest_client, fragmentarium):
     assert result.status == falcon.HTTP_OK
     assert len(result.json["fragments"]) == 0
     assert result.json["totalCount"] == 0
+
+
+def test_get_all_fragment_ocred_signs(client, fragmentarium):
+    fragments = TransliteratedFragmentFactory.build_batch(5)
+    for fragment in fragments:
+        fragmentarium.create(fragment)
+
+    result = client.simulate_get("/fragments/all-ocred-signs")
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 5
+    for result_fragment in result.json:
+        assert "ocredSigns" in result_fragment
+        assert result_fragment["ocredSigns"] == "ABZ10 X"
