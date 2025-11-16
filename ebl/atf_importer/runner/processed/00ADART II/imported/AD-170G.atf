@@ -1,0 +1,98 @@
+&X201707 = AD -170G
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME ⸢41.KÁM⸣ [...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+2. APIN GE₆ 20 kal G[E₆ ... ina ZALÁG sin] 
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; kal[all]'DET; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+3. ina IGI DELE-šá-IGI-ABSIN ⸢x⸣ [N ina IGI GENNA] 
+#lem: ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN; u; n; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN
+
+4. 4 KÙŠ ana ŠÚ GUB G[E₆? 21 ...] 
+#lem: n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; mūšu[night]N; n; u
+
+5. 21 DIR AN ZA SI [GIN GE₆ 22] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n
+
+6. kal GE₆ DIR AN ZA ina ZALÁ[G sin ár SA₄-šá-ABSIN] 
+#lem: kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN
+
+7. 1 1/2 KÙŠ 22 DIR AN ZA [...] 
+#lem: n; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+8. GE₆ 23 ina ZALÁG sin ina IGI R[ÍN?-šá-ULÙ] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN
+
+9. 3 1/2 KÙŠ 2[3 ...]
+#lem: n; n; ammatu[unit]N; n; u
+
+10. GE₆ 24 [...] 
+#lem: mūšu[night]N; n; u
+
+11. ⸢SIG x⸣ [...]
+#lem: šapil[below]PRP; u; u
+
+@reverse
+1'. ⸢x⸣ [...] 
+#lem: u; u
+
+2'. 25 DIR AN [...] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; u
+
+3'. i-ṣa ZALÁG sin ár ⸢SI₄⸣ [...] 
+#lem: wīṣu[little]AJ; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; u
+
+4'. 26 21 [KUR ...] 
+#lem: n; n; KUR[moonrise to sunrise]N; u
+
+5'. kal ME DIR [...] 
+#lem: kal[all]'DET; ūmu[day]N; erpetu[cloud]N; u
+
+6'. GE₆ 24 ($sic$) [...]  
+#lem: mūšu[night]N; n; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 141 [...] 
+
+@(o 2) Month VIII, night of the 20th, all ni[ght ... last part of the night, the moon was] 
+
+@(o 3) ⸢x⸣ [mm] in front of γ Virginis, 
+
+@(o 4) it stood 4 cubits [in front of Saturn] to the west. Ni[ght@sup{?} of the 21st, ...] 
+
+@(o 5) The 21st, clouds were in the sky, the north wind [blew. Night of the 22nd,] 
+
+@(o 6) all night clouds were in the sky; last part of the ni[ght, the moon was] 1 1/2 cubits [behind α Virginis.] 
+
+@(o 7) The 22nd, clouds were in the sky [...] 
+
+@(o 8) Night of the 23rd, last part of the night, the moon was 3 1/2 cubits in front of α [Librae@sup{?}.] 
+
+@(o 9) The 2[3rd ...] 
+
+@(o 10) ??? [...] 
+
+@(o 11) below ... [...]
+
+@reverse
+
+@(r 1') ... [...] 
+
+@(r 2') The 25th, clouds [...] the sky [...] 
+
+@(r 3') last part of the night, the moon was [...] behind α Scorpii [...] 
+
+@(r 4') The 26th, [moonrise to sunrise:] 21° [...] 
+
+@(r 5') all day clouds [...] 
+
+@(r 6') Night of the 24th@sup{sic} [...]

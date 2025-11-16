@@ -1,0 +1,81 @@
+&X202111 = AD -211A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [... sin ina IGI dele-bat N N ana Š]Ú GUB GE₆ 2 sin ina IGI MÚL-MURU[B₄-šá-SAG-GÍR.TAB N N ...] 
+#lem: u; Sîn[moon]N; ina[in]PRP; pān[front]N; Dilbat[Venus]CN; n; n; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; n; u
+
+2. [... GE₆ 4 sin S]IG AN 5 SI USAN MÚL.BABBAR e MÚL-KUR-šá-KIR₄-š[il]-⸢PA⸣ [N N ...] 
+#lem: u; mūšu[night]N; n; Sîn[moon]N; šapil[below]'PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; n; u
+
+3. [... GE₆ 7 SAG GE₆ sin ár SI-M]ÁŠ 3 KÙŠ GE₆ 9 SAG GE₆ sin SIG MÚL-ár-šá-SUHUR-MÁŠ 1 [KÙŠ ...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; u
+
+4. [...] x SAG GE₆ sin ina IGI MÚL-KUR-šá-DUR-nu-nu 1 1/2 KÙŠ 14 [...] 
+#lem: u; u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; n; u
+
+5. [...] NU PAP GE₆ 17 ina ZALÁG sin ina IGI is-le₁₀ 3 KÙŠ GE₆ 18 [...] 
+#lem: u; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; u
+
+6. [... GE₆ 19 ina ZALÁG sin ... šá-š]e-pít-MAŠ.MAŠ 1 1/2 KÙŠ GE₆ 20 ina ZALÁG sin ár MAŠ.MAŠ-šá-SIP[A N N ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; u
+
+7. [... GE₆ 23 ina ZAL]ÁG sin ina IGI LUGAL 1 1/2 KÙŠ GE₆ 24 USAN ⸢dele-bat⸣? [...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN; n; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+8. [... GU₄.UD] ina ŠÚ IGI DIB GE₆ 26 ŠÚ.ŠÚ AN UTAH i 
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; amāru[be(come) visible]V; etēqu[pass]V; mūšu[night]N; n; urrup[be(come) overcast]V; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ
+
+9. [...] ⸢x⸣ ITU BI KI.LAM še-im 3(BARIG) 3(BÁN) 
+#lem: u; u; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n
+
+10. [... AN ina SAG IT]U ina GÍR.TAB ina TIL ITU ina PA 
+#lem: u; Ṣalbaṭānu[Mars]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Pabilsag[Sagittarius]CN
+
+11. [...] ⸢x⸣ 
+#lem: u; u
+
+$ ruling 
+12. [...] ár ⸢x x⸣ [...]  
+#lem: u; warki[behind]PRP; u; u; u
+
+@top
+1. [... MU 60]+⸢40?.KÁM⸣ {m}an-ti-ʾu-u[k-su LUGAL]
+#lem: u; šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [... the moon] stood [... in front of Venus to the we]st. Night of the 2nd, the moon was [...] in front of δ Sc[orpii ...] 
+
+@(o 2) [... Night of the 4th, the moon was] 5 fingers below Mars; first part of the night, Jupiter was [...] above ϑ Ophiuchi [...] 
+
+@(o 3) [... Night of the 7th, beginning of the night, the moon was] 3 cubits [behind β] Capricorni. Night of the 9th, beginning of the night, the moon was 1 [cubit] below δ Capricorni [...] 
+
+@(o 4) [...] ... beginning of the night, the moon was 1 1/2 cubits in front of η Piscium. The 14th, [...] 
+
+@(o 5) [...] I did not watch. Night of the 17th, last part of the night, the moon was 3 cubits in front of α Tauri. Night of the 18th, [...] 
+
+@(o 6) [... Night of the 19th, last part of the night, the moon was] 1 1/2 cubits [... η/μ] Geminorum. Night of the 20th, last part of the night, the moon was [...] behind γ Geminorum [...] 
+
+@(o 7) [... Night of the 23rd, last part of the] night, the moon was 1 1/2 cubits in front of α Leonis. Night of the 24th, first part of the night, Venus@sup{?} [...] 
+
+@(o 8) [... Mercury's] first appearance in the west, omitted. Night of the 26th, very overcast, a little rain shower. 
+
+@(o 9) [...] ... That month, the equivalent [for 1 shekel of silver was]: barley, 3 @i{pānu} 3 @i{sūtu}; 
+
+@(o 10) [... Mars, in the beginning of the mon]th, was in Scorpius, at the end of the month, in Sagittarius. 
+
+@(o 11) [...] ... 
+
+$ ruling 
+
+@(o 12) [...] behind ... [...]  
+
+@top
+
+@(t.e. 1) [... year 1]00@sup{?}, [king] Antiochus.

@@ -1,0 +1,95 @@
+&X202092 = AD -209B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] [x x] [...] 
+#lem: u; u; u; u
+
+2'. [...] [x] ULÙ ŠÁR AN DUL-⸢hat⸣ [...] 
+#lem: u; u; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; šamû[rain]N; DUL[(meaning unclear)]V; u
+
+3'. [... GE₆] 6 SAG GE₆ sin ina IGI MAŠ.M[AŠ-IGI N N ...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; n; n; u
+
+4'. [... x]+4 na GENNA GE₆ 8 ŠÚ.ŠÚ SAG G[E₆ ...] 
+#lem: u; u; na[sunset to setting]'N; Kayyamānu[Saturn]CN; mūšu[night]N; n; urrup[be(come) overcast]V; rēšu[beginning]N; mūšu[night]N; u
+
+5'. [... GE₆ 10 SAG GE₆ s]in ár MÚL-TUR-šá-ár-LUGAL 1 KÙŠ 10 ⸢x⸣ [...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N; n; u; u
+
+6'. [... GE₆ 13 ...] [x] SAG GE₆ sin e SA₄-šá-ABSIN 1+[x N ...] 
+#lem: u; mūšu[night]N; n; u; u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; u
+
+7'. [...] ME NIM-a ŠÚ.ŠÚ ina KIN.SIG AN UTAH [...] 
+#lem: u; ūmu[day]N; šaqâ[high]AJ; urrup[be(come) overcast]V; ina[in]PRP; kinsikku[afternoon]N; šamû[rain]N; natāku[drip]V; u
+
+8'. [... U]SAN dele-bat e is-le₁₀ 3 KÙŠ ŠÚ [...] 
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; erēpu[be(come) overcast]V; u
+
+9'. [...] ⸢KÙŠ⸣ GE₆ 21 ina ZALÁG sin SIG SUHUR-[IGI N N ...] 
+#lem: u; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; u
+
+10'. [...] ŠÚ.ŠÚ 23 ŠÚ.ŠÚ AN UTAH ⸢x⸣ [...] 
+#lem: u; urrup[be(come) overcast]V; n; urrup[be(come) overcast]V; šamû[rain]N; natāku[drip]V; u; u
+
+11'. [...] GÙ U MAH KALAG AN k[ab? ...] 
+#lem: u; rigim[voice]N; Adad[storm-god]DN; ṣīru[much]AJ; dannu[strong]AJ; šamû[rain]N; kabbaru[thick]AJ; u
+
+12'. [...] [x] GE₆ 28 USAN dele-b[at ...] 
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+13'. [...] ki ŠÚ šamáš 2 bu-tuq-tú {d}[TIR.AN.NA ...] 
+#lem: u; kī[at]PRP; rabû[setting]'N; šamšu[sun]N; n; butuqtu[section]N; Manziat[rainbow]N; u
+
+14'. [...] i-nu-šú MÚL.BABBAR ina GU dele-bat ina SAG I[TU ...] 
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Gula[Aquarius]CN; Dilbat[Venus]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; u
+
+15'. [...] ($blank$) 
+#lem: u
+
+16'. [GU₄ 1 ...] ⸢x⸣ sin ina IGI ŠUR-SI 2 1/2 KÙŠ ina IGI G[U₄.UD N N ana ŠÚ GUB ...] 
+#lem: Ayyaru[Month II]MN; n; u; u; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Šihṭu[Mercury]CN; n; n; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; u
+
+17'. [... U]SAN GU₄.UD SIG ⸢ŠUR-SI?⸣ [x x] [...]
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...] 
+
+@(o 2') [...] ... gusty south wind, rain DUL, [...] 
+
+@(o 3') [... Night] of the 6th, beginning of the night, the moon was [...] in front of α Gemi[norum ...] 
+
+@(o 4') [...] sunset to setting of Saturn: [x]+4°. Night of the 8th, very overcast; beginning of the ni[ght, ...] 
+
+@(o 5') [... Night of the 10th, beginning of the night, the m]oon was 1 cubit behind ρ Leonis. The 10th, ... [...] 
+
+@(o 6') [... Night of the 13th, ...] ...; beginning of the night, the moon was 1+[x mm] above α Virginis [...] 
+
+@(o 7') [...] after sunrise; very overcast; in the afternoon, rain shower [...] 
+
+@(o 8') [... first] part of the night, Venus was 3 cubits above α Tauri; overcast, [...] 
+
+@(o 9') [...] cubits. Night of the 21st, last part of the night, the moon was [...] below γ Capri[corni ...] 
+
+@(o 10') [...] very overcast. The 23rd, very overcast, rain shower, ... [...] 
+
+@(o 11') [...] much heavy thunder, th[ick@sup{?}] rain [...] 
+
+@(o 12') [...] ... Night of the 28th, first part of the night, Venu[s ...] 
+
+@(o 13') [...] at sunset, 2 sections [of a rainbow ...] 
+
+@(o 14') [...] At that time, Jupiter was in Aquarius; Venus in the beginning of the mon[th ...] 
+
+@(o 15') [...] 
+
+@(o 16') [Month II, the 1st (of which followed the 30th of the preceding month), ...] ... the moon was 2 1/2 cubits in front of β Tauri, [it stood ...] in front of Mer[cury to the west ...] 
+
+@(o 17') [... first] part of the night, Mercury was ... below β Tauri [...]

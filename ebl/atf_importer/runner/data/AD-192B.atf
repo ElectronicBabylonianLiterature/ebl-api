@@ -1,0 +1,71 @@
+&X201922 = AD -192B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 60+59.KÁM 
+#lem: šattu[year]N; n
+
+2. {ITU}NE 28 15 KUR 
+#lem: Abu[Month V]MN; n; n; KUR[moonrise to sunrise]N
+
+3. {ITU}KIN 1 16 na-su KUR₄ 
+#lem: Ulūlu[Month VI]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ
+
+4. ina GUB IGI GE₆ 2 sin ár 
+#lem: ina[while]'SBJ; izuzzu[stand]V; nanmuru[be(come) visible]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP
+
+5. RÍN-šá-SI 2 KÙŠ sin 2 1/2 KÙŠ 
+#lem: RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N
+
+6. ana ULÙ SIG GE₆ 3 sin 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; mūšu[night]N; n; Sîn[moon]N
+
+7. e SI₄ 1 1/2 KÙŠ 
+#lem: eli[above]PRP; SI₄[α Scorpii]CN; n; n; ammatu[unit]N
+
+8. GE₆ 4 sin ár šil-PA 1/2 KÙŠ  
+#lem: mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N
+
+@bottom
+1. sin 1/2 KÙŠ ana ULÙ SIG
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+@reverse
+1. SIG GENNA 2 KÙŠ sin 
+#lem: šapil[below]'PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; Sîn[moon]N
+
+2. 1/2 KÙŠ ana ŠÚ LAL  
+#lem: n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 119, 
+
+@(o 2) Month V, the 28th, moonrise to sunrise: 15°. 
+
+@(o 3) Month VI, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 16°, it was bright, 
+
+@(o 4) it could be seen while (the sun) stood there. Night of the 2nd, the moon was 2 cubits behind β 
+
+@(o 5) Librae, the moon being 2 1/2 cubits 
+
+@(o 6) low to the south. Night of the 3rd, the moon was 
+
+@(o 7) 1 1/2 cubits above α Scorpii. 
+
+@(o 8) Night of the 4th, the moon was 1/2 cubit behind ϑ Ophiuchi,  
+
+@bottom
+
+@(b.e. 1) the moon being 1/2 cubit low to the south,
+
+@reverse
+
+@(r 1) 2 cubits below Saturn, the moon being 
+
+@(r 2) 1/2 cubit back to the west.

@@ -1,0 +1,126 @@
+&X201685 = AD -168E
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 43.KÁM {m}an-ti-ʾu-uk-su LUGAL 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N
+
+2. ⸢GAN 30⸣ 14 na-su DIR muš DIR AN ZA in 2 GU₄.UD ina ŠÚ 
+#lem: Kislīmu[Month IX]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; mašāhu[measure]V; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N
+
+3. [ina MÁŠ ŠÚ 3? DI]R AN ZA 4 DIR AN DIB ina še-rì 2-ta 
+#lem: ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; ina[in]PRP; šēri[morning]N; šina[two]NU
+
+4. [bu-tuq-tu₄] {d}TIR.RA.AN Á SI u MAR [G]IB{MEŠ} 
+#lem: butuqtu[section]N; Manziat[rainbow]N$; idu[side]N; ištānu[north]N; u[and]CNJ; amurru[west]N; parāku[stretch]V
+
+5. [...] ⸢x⸣ GIB NU TUH ULÙ GIN GE₆ 7 
+#lem: u; u; parāku[stretch]V; ul[not]MOD; paṭāru[loosen]V; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n
+
+6. [sin SIG MÚL-KUR-šá-D]UR-nu-nu 3 1/2 KÙŠ 7 DIR AN ZA 
+#lem: Sîn[moon]N; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+7. [...] ⸢x⸣ TÙR NIGIN AN UTAH ki ŠÚ šamáš 
+#lem: u; u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; šamû[rain]N; natāku[drip]V; kī[at]PRP; erib[(sun)set]'N; šamši[sun]N
+
+8. [... A]N MAH PISAN i DIB GE₆ 8 DIR AN DIB 
+#lem: u; šamû[rain]N; ṣīru[much]AJ; pisannu[(a meterological phenomenon)]N; wīṣu[little]AJ; DIB[(meaning unclear)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+9. [... PISA]N i DIB 8 DIR AN ZA SI GIN 
+#lem: u; pisannu[(a meterological phenomenon)]N; wīṣu[little]AJ; DIB[(meaning unclear)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+10. [...] ⸢DIR⸣ AN ZA GE₆ 10 ŠÚ.ŠÚ 10 DIR AN ZA 
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; urrup[be(come) overcast]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+11. [...] 2+[x] KÙŠ 11 DIR AN ZA  
+#lem: u; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+@reverse
+1'. [...] ⸢in?⸣ 
+#lem: u; ina[in]PRP
+
+2'. [...] E-a 
+#lem: u; elû[rising]'N
+
+3'. [... MÚL]-ár-šá-ALLA-šá-ULÙ 
+#lem: u; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN
+
+4'. [...] GE₆ ana ZALÁG 14 
+#lem: u; mūšu[night]N; ana[to]PRP; nūru[light]N; n
+
+5'. [...] muš 14 DIR AN ZA 
+#lem: u; mašāhu[measure]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+6'. [...] GE₆ 15 5 GE₆ DIR muš 
+#lem: u; mūšu[night]N; n; n; mūšu[night]N; erpetu[cloud]N; mašāhu[measure]V
+
+7'. [ina ZALÁG sin] SIG SAG-A 3 KÙŠ sin 1/2 KÙŠ 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+8'. ⸢ana NIM⸣ DIB ITU BI ILLU 
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[cross]V; warhu[month]N; šū[that]'DP; mīlu[river level]N
+
+9'. TA 1 EN 13 2 KÙŠ GIN 
+#lem: ištu[from]PRP; n; adi[until]PRP; n; n; ammatu[unit]N; alāku[rise]V
+
+10'. PAP 15 na 14 15 8 SI LAL
+#lem: napharu[total]N; n; na[na-gauge]N; n; n; n; ubānu[finger]N; nahāsu[recede]V
+
+@top
+1. PAP 17 na
+#lem: napharu[total]N; n; na[na-gauge]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 143, king Antiochus. 
+
+@(o 2) Month IX, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 14°, measured (despite) clouds; clouds were in the sky. Around the 2nd, Mercury’s 
+
+@(o 3) [last appearance] in the west [in Capricorn. The 3rd@sup{?}, clou]ds were in the sky. The 4th, clouds crossed the sky; in the morning, two 
+
+@(o 4) [sections] of a rainbow stretched on the north and west side. 
+
+@(o 5) [...] stretched@sup{?} was not loosened@sup{?}; the south wind blew. Night of the 7th, 
+
+@(o 6) [the moon was] 3 1/2 cubits [below η ] Piscium. The 7th, clouds were in the sky. 
+
+@(o 7) [...] ... was surrounded by a halo, rain shower; at sunset, 
+
+@(o 8) [...] much rain, a little PISAN DIB. Night of the 8th, clouds crossed the sky. 
+
+@(o 9) [...] a little PISAN DIB. The 8th, clouds were in the sky, the north wind blew. 
+
+@(o 10) [...] clouds were in the sky. Night of the 10th, very overcast. The 10th, clouds were in the sky. 
+
+@(o 11) [...] 2+[x] cubits. The 11th, clouds were in the sky.
+
+@reverse
+
+@(r 1') [...] ... 
+
+@(r 2') [...] came out 
+
+@(r 3') [...] δ Cancri 
+
+@(r 4') [...] before sunrise 
+
+@(r 5') [...] measured. The 14th, clouds were in the sky 
+
+@(r 6') [...] Night of the 15th, sunset to moonrise: 5°, measured (despite) clouds; 
+
+@(r 7') [last part of the night, the moon was] 3 cubits below ε Leonis, the moon having passed 1/2 cubit 
+
+@(r 8') to the east. That month, the river level 
+
+@(r 9') from the 1st to the 13th rose 2 cubits, 
+
+@(r 10') total: 15 was the @i{na} na-gauge; the 14th (and) the 15th, it receded 8 fingers,  
+
+@top
+
+@(t.e. 1) total: 17 was the @i{na} na-gauge.

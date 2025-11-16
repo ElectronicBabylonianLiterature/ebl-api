@@ -1,0 +1,89 @@
+&X201984 = AD -198D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+$ (Completely effaced; the traces copied in LBAT cannot be verified any more.)
+
+@reverse
+1'. ⸢x⸣ [... GE₆ 27 ina ZALÁG sin ... ina] 
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; ina[in]PRP
+
+2'. IGI GU₄.UD 2 KÙŠ ana ŠÚ GU[B ... TIR.AN.NA] 
+#lem: pān[front]N; Šihṭu[Mercury]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; u; Manziat[rainbow]N
+
+3'. Á ULÙ u KUR GIB GE₆ 20+⸢x⸣ [...] 
+#lem: idu[side]N; šūtu[south]N; u[and]CNJ; šadû[east]N; parāku[stretch]V; mūšu[night]N; n; u
+
+4'. dele-bat ina MÁŠ ina MURUB₄ ITU ina GU in [...] 
+#lem: Dilbat[Venus]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; ina[at]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Gula[Aquarius]CN; ina[in]PRP; u
+
+5'. 1 KÙŠ 4 U EN TIL ITU 1 2/3 [KÙŠ ...] 
+#lem: n; ammatu[unit]N; n; ubānu[finger]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; ammatu[unit]N; u
+
+$ ruling 
+6'. ŠE 1 25 na KUR₄ a-pir muš ina GUB I[GI ... GE₆ 4 sin SIG] 
+#lem: Addaru[Month XII]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; apir[earthshine]'N; mašāhu[measure]V; ina[while]'SBJ; izuzzu[stand]V; amāru[see]V; u; mūšu[night]N; n; Sîn[moon]N; šapil[below]'PRP
+
+7'. ⸢ŠUR?⸣-[GIGIR]-šá-ULÙ 1 KÙŠ sin 1/2 KÙŠ ana NIM DIB [...] 
+#lem: ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+8'. [x x] AN UTAH GE₆ 8 DIR AN ZA sin TÙ[R NIGIN ...] 
+#lem: u; u; šamû[rain]N; natāku[drip]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; u
+
+9'. [GE₆ 10 SA]G GE₆ sin ár MÚL-TUR 1 1/2 KÙŠ 10 GENNA ana [ME E-a ...] 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; ammatu[unit]N; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[rising]'N; u
+
+10'. [... x]+2 KÙŠ 13 2.40? ŠÚ muš ŠÚ.ŠÚ [...] 
+#lem: u; u; ammatu[unit]N; n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V; urrup[be(come) overcast]V; u
+
+11'. [GE₆ 15 N GE₆ DIR?] muš ina ZALÁG sin e RÍN-šá-ULÙ 1+[x ...] 
+#lem: mūšu[night]N; n; n; mūšu[night]N; erpetu[cloud]N; mašāhu[measure]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; u
+
+12'. [...] ⸢x⸣ TÙR NIGÍN GE₆ 18 ŠÚ.ŠÚ [...] 
+#lem: u; u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mūšu[night]N; n; urrup[be(come) overcast]V; u
+
+13'. [... A]N ⸢UTAH⸣ GE₆ [...]  
+#lem: u; šamû[rain]N; natāku[drip]V; mūšu[night]N; u
+
+@left
+1. [...] an u {m}an ⸢A⸣-[šú LUGAL{MEŠ}]
+#lem: u; Antiochus[Antiochus]RN$; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N
+
+@translation labeled en project
+
+@reverse
+
+@(r 1') ... [... Night of the 27th, last part of the night, the moon ...] 
+
+@(r 2') stood 2 cubits in front of Mercury to the west [... a rainbow] 
+
+@(r 3') stretched on the south and east side. Night of the 20+xth, [...] 
+
+@(r 4') Venus was in Capricorn, in the middle of the month, in Aquarius; around [...] 
+
+@(r 5') 1 cubit 4 fingers; until the end of the month, 1 2/3 [cubits ...] 
+
+$ ruling 
+
+@(r 6') Month XII, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 25°; it was bright, earthshine, measured; it could be seen while (the sun) stood there [... Night of the 4th, the moon was] 
+
+@(r 7') 1 cubit [below ζ Tau]ri , the moon having passed 1/2 cubit to the east [...] 
+
+@(r 8') [...] rain shower. Night of the 8th, clouds were in the sky; the moon was [surrounded] by a halo [...] 
+
+@(r 9') [Night of the 10th, beginn]ing of the night, the moon was 1 1/2 cubits behind ρ Leonis. The 10th, Saturn’s [acronychal rising ...] 
+
+@(r 10') [... x]+2 cubits. The 13th, moonset to sunrise: 2° 40'@sup{?}, measured; very overcast, [...] 
+
+@(r 11') [Night of the 15th, sunset to moonrise: nn°;] measured (despite) [clouds@sup{?};] last part of the night, the moon was 1+[x ...] above α Librae [...] 
+
+@(r 12') [...] ... was surrounded by a halo. Night of the 18th, very overcast [...] 
+
+@(r 13') [... r]ain shower. Night [...]
+
+@left
+
+@(l.e. 1) [... kings] Antiochus and his son Antiochus.

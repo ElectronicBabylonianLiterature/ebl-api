@@ -1,0 +1,55 @@
+&X202590 = AD -259
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [... D]IR AN ZA GE₆ 21 DIR AN ZA 23 GU₄.UD [...] 
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; Šihṭu[Mercury]CN; u
+
+2. [... GE₆ 24 ina ZALÁG sin ina IGI MÚL.BABBAR N N] ⸢ana⸣ ŠÚ GUB GE₆ 27 ina ZALÁG sin SIG SI-MÁŠ 1 1/2 KÙ[Š ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; n; ana[to]PRP; erbu[west]N; izuzzu[stand]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; u
+
+3. [... še]-im 2(BÁN) 3(BÁN) ZÚ.LUM.MA 3(BARIG) 1(BÁN) kàs 1 GUR 1(BARIG) n(BÁN) [...] 
+#lem: u; šeʾu[barley]N; n; n; suluppu[date]N; n; n; kasû[mustard]N; n; kurru[kor (180 litres)]N; n; n; u
+
+4. ($traces$)  
+
+@reverse
+1'. [...] [x x x x x] [...] 
+#lem: u; u; u; u; u; u; u
+
+2'. [...] ⸢14⸣ 3.30 na GE₆ [...] 
+#lem: u; n; n; na₁[sunset to moonset]N; mūšu[night]N; u
+
+3'. [... A]N ZA ina ZALÁG sin ár GÌR-á[r-šá-A N N ...]  
+#lem: u; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; n; n; u
+
+@top
+1. [...] ⸢MU⸣.52.KÁM  
+#lem: u; n
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [..., cl]ouds were in the sky. Night of the 21st, clouds were in the 23rd, Mercury [...] 
+
+@(o 2) [... Night of the 24th, last part of the night, the moon] stood [... in front of Jupiter] to the west. Night of the 27th, last part of the night, the moon was 1 1/2 cubits below β Capricorni [...] 
+
+@(o 3) [... bar]ley, 2 @i{pānu} 3 @i{sūtu}; dates, 3 @i{pānu} 1 @i{sūtu}; mustard, 1 @i{kurru} 1 @i{pānu} x @i{sūtu} [...] 
+
+@(o 4) (traces)
+
+@reverse
+
+@(r 1') [...] ... [...] 
+
+@(r 2') [...] The 14th, sunrise to moonset: 3° 30'. Night [...] 
+
+@(r 3') [...] were in the sky; last part of the night, the moon was [...] behind β Virginis [...]
+
+@top
+
+@(t.e. 1) [...] year 52.

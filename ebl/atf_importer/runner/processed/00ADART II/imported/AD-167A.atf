@@ -1,0 +1,73 @@
+&X201671 = AD -167A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [M]U 1 ME 44.KÁM 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+2. GU₄ 30 GE₆ 15 15 
+#lem: Ayyaru[Month II]MN; n; mūšu[night]N; n; n
+
+3. DIR AN ZA MAR ŠÁR GIN GE₆ 16 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; amurru[west wind]N; ŠÁR[gusty(?)]AJ; alāku[blow]V; mūšu[night]N; n
+
+4. 16 DIR AN ZA SI ŠÁR GIN
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; alāku[blow]V
+
+5. 17 SI GIN GE₆ 18 
+#lem: n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n
+
+6. ina ZALÁG sin <<ina>> SIG SUHUR [x] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorni]CN; u
+
+7. 2 1/2 KÙŠ sin 1/2 KÙŠ 
+#lem: n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+8. ana NIM DIB 18 dele-bat 
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; Dilbat[Venus]CN
+
+9. ina NIM ina TIL MÚL.MÚL IGI
+#lem: ina[in]PRP; Elamtu[east]'N; ina[at]PRP; qītu[end]N; Zappu[Taurus]CN; nanmuru[be(come) visible]V
+
+@reverse
+1. KUR NIM-a 9.30 
+#lem: baʾil[bright]AJ; šaqâ[high]AJ; n
+
+2. na-su in 16 IGI 
+#lem: na[rising to sunrise]'N; ina[on]PRP; n; nanmuru[be(come) visible]V
+
+3. SI GIN 19 DIR AN ZA SI GIN
+#lem: ištānu[north wind]N; alāku[blow]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Y]ear 144, 
+
+@(o 2) month II, (the 1st of which was identical with) the 30th (of the preceding month), night of the 15th (and) the 15th, 
+
+@(o 3) clouds were in the sky, α gusty west wind blew. Night of the 16th 
+
+@(o 4) (and) the 16th, clouds were in the sky, α gusty north wind blew. 
+
+@(o 5) ??? 7th, the north wind blew. Night of the 18th, 
+
+@(o 6) last part of the night, the moon was 2 1/2 cubits below [g/d] Capricorni, 
+
+@(o 7) the moon having passed 1/2 cubit 
+
+@(o 8) to the east. The 18th, Venus’ 
+
+@(o 9) first appearance in the east in the end of Taurus;  
+
+@reverse
+
+@(r 1) it was bright (and) high, rising of Venus to sunrise: 9° 30'; 
+
+@(r 2) (ideal) first appearance on the 16th; 
+
+@(r 3) the north wind blew. The 19th, clouds were in the sky, the north wind blew.

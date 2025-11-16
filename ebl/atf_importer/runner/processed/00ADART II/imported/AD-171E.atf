@@ -1,0 +1,118 @@
+&X201715 = AD -171E
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 40.KÁM {m}an u {m}an A-šú LUGA[L{MEŠ} DIR.ŠE (x)]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarru[king]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; u
+
+2. GE₆ 10 DIR AN ZA sin ina IGI GIŠ.KUN-A ⸢1⸣ [KÙŠ]
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; ina[in]PRP; pān[front]N; GIŠ.KUN-A[ϑ Leonis]CN; n; ammatu[unit]N
+
+3. sin 2 [K]ÙŠ ana ULÙ SIG kal GE₆ DIR ⸢AN ZA⸣ [x x]
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u; u
+
+4. 10 DIR AN ZA KUR GIN GE₆ 11 DIR SAL AN ZA
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šadû[east wind]N; alāku[blow]V; mūšu[night]N; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5. sin ina IGI GÌR-ár-šá-A 1 1/2 KÙŠ ina IGI GENNA 1 KÙŠ ⸢ana ŠÚ GUB⸣
+#lem: Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V
+
+6. GE₆ 12 sin ina IGI DELE-šá-IGI-ABSIN 3 KÙŠ 12 DIR AN ZA SI GIN
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+7. GE₆ 13 sin ina IGI SA₄-šá-ABSIN 3 KÙŠ 13 DIR AN ZA SI GIN
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+8. GE₆ 14 9 ME DIR muš 14 1 ŠÚ muš DIR AN ZA ULÙ GIN
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V; n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V
+
+9. 14 LÁL-tì NU PAP GE₆ 15 5 GE₆ USAN sin
+#lem: n; šitqultu[equinox]N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; n; mūšu[night]N; šimītān[first part of the night]N; Sîn[moon]N
+
+10. ina IGI RÍN-šá-ULÙ 2 1/2 KÙŠ 15 5.40 GE₆ muš ULÙ GIN
+#lem: ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN; n; n; ammatu[unit]N; n; n; mūšu[night]N; mašāhu[measure]V; šūtu[south wind]N; alāku[blow]V
+
+11. ina KIN.SIG DIR AN ZA GE₆ 16 DIR AN ZA
+#lem: ina[in]PRP; kinsikku[afternoon]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+12. ina ZALÁG sin ina IGI SAG GÍR.TAB 2 KÙŠ 16 SI GIN
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; rēšu[head]N; Zuqiqīpu[Scorpio]CN; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V
+
+13. GE₆ 17 ina ZALÁG sin SIG SI₄ 1/2 KÙŠ sin i-ṣa ana NIM ⸢DIB⸣
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+14. 17 [S]I šá kap MAR GAR GIN ŠED₇ GE₆ 18
+#lem: n; ištānu[north wind]N; ša[which]REL; kappu[wing(?)]'N; amurru[west]N; šakānu[set]V; alāku[blow]V; kūṣu[coldness]N; mūšu[night]N; n
+
+15. SI GIN ŠED₇ ina ZALÁG sin SIG MÚL-KUR-šá-KIR₄-šil-PA 2 K[ÙŠ]
+#lem: ubānu[finger]N; alāku[rise]V; kūṣu[coldness]N; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N
+
+16. sin i-ṣa ana NIM DIB 18 IM ŠÁR
+#lem: Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; šāru[wind]N; ŠÁR[gusty(?)]AJ
+
+17. [... GE₆] 19 kal GE₆ DIR AN ⸢ZA⸣  
+#lem: u; mūšu[night]N; n; kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+@reverse
+1'. A.ITU ($error for: ILLU$) TA 1 EN 6 2/3 KÙŠ LAL PAP [N na TA] 7
+#lem: X; ištu[from]PRP; n; adi[until]PRP; n; n; ammatu[unit]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; ištu[from]PRP; n
+
+2'. EN 10 1 KÙŠ 8 SI GIN PAP ⸢9⸣ [na TA 11 E]N
+#lem: adi[until]PRP; n; n; ammatu[unit]N; n; ubānu[finger]N; alāku[rise]V; napharu[total]N; n; na[na-gauge]N; ištu[from]PRP; n; adi[until]PRP
+
+3'. 14 1/2 KÙŠ LAL PAP 12? na ⸢TA⸣ 15 E[N] ⸢17⸣
+#lem: n; n; ammatu[unit]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; ištu[from]PRP; n; adi[until]PRP; n
+
+4'. 1/2 KÙŠ GIN PAP 9 na TA 18 EN 20?+[x x]
+#lem: n; ammatu[unit]N; alāku[rise]V; napharu[total]N; n; na[na-gauge]N; ištu[from]PRP; n; adi[until]PRP; n; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 140, kings Antiochus and Antiochus, his son. [Month XII,2,] 
+
+@(o 2) Night of the 10th, clouds were in the sky; the moon was 1 [cubit] in front of ϑ Leonis, 
+
+@(o 3) the moon being 2 cubits low to the south; all night clouds were in the sky [...] 
+
+@(o 4) The 10th, clouds were in the sky, the east wind blew. Night of the 11th, thin clouds were in the sky; 
+
+@(o 5) the moon was 1 1/2 cubits in front of β Virginis, it stood 1 cubit in front of Saturn to the west. 
+
+@(o 6) Night of the 12th, the moon ws 3 cubits in front of γ Virginis. The 12th, clouds were in the sky, the north wind blew. 
+
+@(o 7) Night of the 13th, the moon was 3 cubits in front of α Virginis. The 13th, clouds were in the sky, the north wind blew. 
+
+@(o 8) Night of the 14th, moonrise to sunset: 9°; measured (despite) clouds. The 14th, moonset to sunrise: 1°, measrued; clouds were in the sky, the south wind blew. 
+
+@(o 9) The 14th, equinox; I did not watch. Night of the 15th, sunset to moonrise: 5°; first part of the night, the moon was 
+
+@(o 10) 2 1/2 cubits in front of α Librae. The 15th, sunrise to moonset@sup{!}: 5° 40', measured; the south wind blew; 
+
+@(o 11) in the afternoon, clouds were in the sky. Night of the 16th, clouds were in the sky;
+
+@(o 12) last part of the night, the moon was 2 cubits in front of the head of Scorpius. The 16th, the north wind blew. 
+
+@(o 13) Night of the 17th, last part of the night, the moon was 1/2 cubit below α Scorpii, the moon having passed a little to the east. 
+
+@(o 14) The 17th, the north wind which was set to the west side blew; cold. Night of the 18th, 
+
+@(o 15) the north wind blew; cold; last part of the night, the moon was 2 cu[bits] below ϑ Ophiuchi, 
+
+@(o 16) the moon having passed a little to the east. The 18th, gusty wind, 
+
+@(o 17) [... Night] of the 19th, all night clouds were in the sky.  
+
+@reverse
+
+@(r 1') The river level from the 1st to the 6th receded 2/3 cubit, total: [nn was the @i{na} na-gauge; from] the 7th 
+
+@(r 2') to the 10th, it rose 1 cubit 8 fingers, total: 9 [was the @i{na} na-gauge; from the 11th t]o 
+
+@(r 3') 14th, it receded 1/2 cubit, total: 12@sup{?} was the @i{na} na-gauge; from the 15th to the 17th, 
+
+@(r 4') it rose 1/2 cubit, total: 9 was the @i{na} na-gauge; from the 18th to the 20+[xth ...]

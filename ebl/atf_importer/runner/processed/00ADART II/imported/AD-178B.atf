@@ -1,0 +1,84 @@
+&X201782 = AD -178B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [... {m}se-lu]-⸢ku⸣ LUGAL {ITU}KIN 30 14.30 na-su
+#lem: u; Seleucus[Seleucus]RN; šarru[king]N; Ulūlu[Month VI]MN; n; n; na₁[sunset to moonset]N
+
+2. [...] [x x] GE₆ 2 sin ina IGI RÍN-šá-ULÙ 1/2 KÙŠ
+#lem: u; u; u; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N
+
+3. [... SI]G? DIR SAL AN ZA GE₆ 3 sin ár RÍN-šá-SI 1 1/2 KÙŠ
+#lem: u; šapil[low]AJ; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; n; ammatu[unit]N
+
+4. [... GE₆] ⸢4⸣ sin e MÚL-e-šá-SAG-GÍR.TAB 2 KÙŠ
+#lem: u; mūšu[night]N; n; Sîn[moon]N; eli[above]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; ammatu[unit]N
+
+5. [...] ⸢x x x x DIB?⸣ GE₆ 5
+#lem: u; u; u; u; u; etēqu[pass]V; mūšu[night]N; n
+
+6. [...] ⸢x⸣  
+#lem: u; u
+
+@reverse
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢UŠ?⸣
+#lem: u; UŠ[time degree]N
+
+3'. [...] [x x x x]
+#lem: u; u; u; u; u
+
+$ ruling
+4'. [{ITU}DU₆ ... mu]š? ana šamáš SIG MAR GIN GE₆ 2 ina ZALÁG dele-bat
+#lem: Tašrītu[Month VII]MN; u; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ; amurru[west wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN
+
+5'. [e MÚL.BABBAR N N dele-bat N N] ana ⸢NIM⸣ DIB ina ZALÁG AN e GÌR-á[r-šá-A]
+#lem: eli[above]PRP; Kakkabu-peṣû[Jupiter]CN; n; n; Dilbat[Venus]CN; n; n; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN
+
+@top
+1. [N N AN N N ana NI]M DIB in 2 GU₄.UD ina ŠÚ UD.DA-šú ŠÚ DIB
+#lem: n; n; Ṣalbaṭānu[Mars]CN; n; n; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; ina[in]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ṣētu[bright light]N; rabû[set]V; etēqu[omitted]'AJ
+
+2. [GE₆ 3 sin e MÚL-KUR-šá-K]IR₄-šil-PA 2 KÙŠ sin 1/2 KÙŠ ana NIM DIB ina ZALÁG ⸢x⸣
+#lem: mūšu[night]N; n; Sîn[moon]N; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; ina[in]PRP; nūru[last part of the night]N; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 133,] king [Seleu]cus, month VI, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 14° 30'. 
+
+@(o 2) [...] ... Night of the 2nd, the moon was 1/2 cubit in front of α Librae. 
+
+@(o 3) [... lo]w@sup{?}; thin clouds were in the sky. Night of the 3rd, the moon was 1 1/2 cubits behind β Librae. 
+
+@(o 4) [... Night] of the 4th, the moon was 2 cubits above β Scorpii. 
+
+@(o 5) [...] ... Night of the 5th, 
+
+@(o 6) [...] ...  
+
+@reverse
+
+@(r 1') [...] ... 
+
+@(r 2') [...] ... 
+
+@(r 3') [...] ... [...] ... 
+
+$ ruling 
+
+@(r 4') [Month VII, ... measu]red@sup{?}; it was low to the sun; the west wind blew. Night of the 2nd, last part of the night, Venus 
+
+@(r 5') [was ... above Jupiter, Venus] having passed [...] to the east; last part of the night, Mars was [...] above β Vir[ginis]
+
+@top
+
+@(t.e. 1) [Mars] having passed [... to the ea]st. Around the 2nd, Mercury’s first appearance in the west, ... omitted. 
+
+@(t.e. 2) [Night of the 3rd, the moon was] 2 cubits [above] ϑ Ophiuchi, the moon having passed 1/2 cubit to the east; last part of the night, ...

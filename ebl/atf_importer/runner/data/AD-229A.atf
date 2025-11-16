@@ -1,0 +1,96 @@
+&X202291 = AD -229A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ 8 ⸢SI?⸣ ana ŠÚ [LAL?] 
+#lem: u; u; u; n; ubānu[finger]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+2'. ⸢x 10+x GE₆ x⸣ [x x x] 6 15 ŠÚ AN DUL 
+#lem: u; n; mūšu[night]N; u; u; u; u; n; n; erēpu[be(come) overcast]V; šamû[rain]N; DUL[(meaning unclear)]V
+
+3'. GE₆ 10+[x x x] ⸢x⸣ ina ZAL[ÁG (x)] AN DUL GE₆ 17 ina ZALÁG sin 
+#lem: mūšu[night]N; n; u; u; u; ina[in]PRP; nūru[last part of the night]N; u; šamû[rain]N; DUL[(meaning unclear)]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+4'. ina IGI [x x x x] ⸢x⸣ GE₆ 18 ŠÚ AN [x x x] kal u₄-mu 
+#lem: ina[in]PRP; pān[front]N; u; u; u; u; u; mūšu[night]N; n; erēpu[be(come) overcast]V; šamû[rain]N; u; u; u; kal[all]'DET; ūmu[day]N$
+
+5'. AN ⸢x x x x⸣ 19? AN ana ME ⸢E⸣ GE₆ [...] 
+#lem: šamû[rain]N; u; u; u; u; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[rising]'N; mūšu[night]N; u
+
+6'. dele-bat ⸢x⸣ [x x x] GE₆ 20 ina ZALÁG si[n? ...] 
+#lem: Dilbat[Venus]CN; u; u; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+7'. 20 ŠÚ.⸢ŠÚ?⸣ [x x x x] ⸢x x⸣ [...]  
+#lem: n; urrup[be(come) overcast]V; u; u; u; u; u; u; u
+
+@bottom
+1. AN ⸢x⸣ [x x x] ⸢x x⸣ [...] 
+#lem: Ṣalbaṭānu[Mars]CN; u; u; u; u; u; u; u
+
+2. GE₆ 24 DIR AN DIB GE₆ ⸢25 AN⸣ [x] ⸢rad⸣ PISAN DIB 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; mūšu[night]N; n; šamû[rain]N; u; rādu[cloudburst]N; pisannu[(a meterological phenomenon)]N; DIB[(meaning unclear)]V
+
+3. 25 ŠÚ AN UTAH 26 17.30 KUR a-kám  
+#lem: n; erēpu[be(come) overcast]V; šamû[rain]N; natāku[drip]V; n; n; KUR[moonrise to sunrise]N; akamu[mist]N
+
+@reverse
+1. dan-nu NU PAP ina KIN.SIG ŠÚ AN UTAH GE₆ 27 USAN dele-bat 
+#lem: dannu[dense]AJ; ul[not]MOD; naṣāru[watch]V; ina[in]PRP; kinsikku[afternoon]N; erēpu[be(come) overcast]V; šamû[rain]N; natāku[drip]V; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+2. ITU BI KI.LAM ŠE 1(GUR) 3(BÁN) ZÚ 3(BARIG) PI ka-si 1(GUR) GUR 
+#lem: warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; suluppu[date]N; n; pānu[bushel (36 litres)]N; kasû[mustard]N; n; kurru[kor (180 litres)]N
+
+3. ŠE.GIŠ.Ì 1 PI sah-le₁₀ 2(BARIG) PI i-nu-šú MÚL.BABBAR ina MAŠ ($sic$) 
+#lem: šamaššammū[sesame]N; n; pānu[bushel (36 litres)]N; sahlu[cress]N; n; pānu[bushel (36 litres)]N; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN
+
+4. [dele-bat] ina MURUB₄ ITU ina zib{ME} ina TIL ITU ina HUN GU₄.UD ina GU 
+#lem: Dilbat[Venus]CN; ina[in]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Zibbātu[Pisces]CN; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Agru[Aries]CN; Šihṭu[Mercury]CN; ina[in]PRP; Gula[Aquarius]CN
+
+5. [GENNA ina x] AN ina KI ina TIL ITU ina A ITU BI ṣal-la-a-tú
+#lem: Kayyamānu[Saturn]CN; ina[in]PRP; u; Ṣalbaṭānu[Mars]CN; ina[in]PRP; u; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Nēšu[Leo]CN; warhu[month]N; šū[that]'DP; ṣāltu[combat//fight]N'N
+
+6. [...] ⸢É⸣.[GAL?] LUGAL šaṭ-ri ITU BI
+#lem: u; ēkallu[palace]N; šarru[king]N; šaṭir[written]AJ; warhu[month]N; šū[that]'DP
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... 8 fingers@sup{?} [back@sup{?}] to the west.
+
+@(o 2') ... sunset to moonrise: 10+x'; ... [...] 6. The 15th, overcast, rain DUL. 
+
+@(o 3') Night of the 10+[xth, ...] ... last part of the [night, ...] rain DUL. Night of the 17th, last part of the night, the moon was 
+
+@(o 4') [...] in front of [...] ... Night of the 18th, overcast, rain [...] all day 
+
+@(o 5') rain ... The 19th@sup{?}, Mars’ acronychal rising. Night [...] 
+
+@(o 6') Venus ... [...] Night of the 20th, last part of the night, the moo[n@sup{?} ...] 
+
+@(o 7') The 20th, very@sup{?} overcast [...] ... [...]  
+
+@bottom
+
+@(b.e. 1) rain ... [...] ... [...] 
+
+@(b.e. 2) Night of the 24th, clouds crossed the sky. Night of the 25th, rain [...], cloudburst, PISAN DIB. 
+
+@(b.e. 3) The 25th, overcast, rain shower. The 26th, moonrise to sunrise: 17° 30'; dense mist,  
+
+@reverse
+
+@(r 1) I did not watch; in the afternoon, overcast, rain shower. Night of the 27th, first part of the night, Venus <...> 
+
+@(r 2) That month, the equivalent was: barley, 1 @i{kurru} 3 @i{sūtu}; dates, 3 @i{pānu}; mustard, 1 @i{kurru}; 
+
+@(r 3) sesame, 1 @i{pānu}; cress, 2 @i{pānu}. At that time, Jupiter was in Gemini; 
+
+@(r 4) [Venus] in the middle of the month was in Pisces, at the end of the month, in Aries; Mercury was in Aquarius; 
+
+@(r 5) [Saturn was in ...;] Mars was in Virgo, at the end of the month, in Leo. That month, fights 
+
+@(r 6) [...] pa[lace@sup{?}] of the king of ... That month <...>

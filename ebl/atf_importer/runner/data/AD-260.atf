@@ -1,0 +1,90 @@
+&X202600 = AD -260
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. [... an-ti]-ʾu-uk-su LUGAL GAL-ú u an-[...]  
+#lem: u; Antiochus[Antiochus]RN; šarru[king]N; rabû[great]AJ; u[and]CNJ; u
+
+@obverse
+1. [... sin ár GU₄.U]D 1 1/2 KÙŠ ana NIM GUB sin ina IGI ŠU[R-GIGIR-šá-SI N N ...] 
+#lem: u; Sîn[moon]N; warki[behind]PRP; Šihṭu[Mercury]CN; n; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; u
+
+2. [...] ⸢KÙŠ⸣ GE₆ 3 ⸢USAN⸣? dele-bat ⸢e⸣ [...] 
+#lem: u; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u
+
+3. [...] KÙŠ 5 DIR AN ZA GE₆ ⸢6⸣ [...] 
+#lem: u; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; u
+
+4. [... GE₆ 8] ⸢SAG GE₆ sin x x⸣ GIŠ.⸢KUN⸣-A [N N ...]  
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; u; GIŠ.KUN-A[ϑ Leonis]CN; n; n; u
+
+@reverse
+1'. [...] ⸢x⸣ ana NI[M? ...] 
+#lem: u; u; ana[to]PRP; Elamtu[east]N; u
+
+2'. [...] ULÙ 1 1/2 KÙŠ GE₆ 20 ina ZALÁG ⸢sin ár⸣ [...] 
+#lem: u; šūtu[south wind]N; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u
+
+3'. [... AN] e MÚL-KUR-šá-KIR₄-šil-PA 8 U GE₆ 20+[x ...] 
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ubānu[finger]N; mūšu[night]N; n; u
+
+4'. [... GE₆ 23?] ina ZALÁG sin ina IGI GÌR-ár-šá-A 2 1/2 KÙŠ SIG G[ENNA N N ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; šapil[below]PRP; Kayyamānu[Saturn]CN; n; n; u
+
+5'. [... GE₆ 2]5 ina ZALÁG sin ina IGI SA₄-šá-ABSIN 3 KÙŠ ⸢x⸣ [...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; u; u
+
+6'. [...] 1(BÁN) 3 qa [s]ah-le₁₀ 4(BÁN) ŠE.GIŠ 1 PI SÍG 30+[x ...] 
+#lem: u; n; n; qû[(one) litre]N; sahlu[cress]N; n; šamaššammū[sesame]N; n; pānu[bushel (36 litres)]N; šīpātu[wool]N; n; u
+
+7'. [... AB]SIN in 22 GU₄.UD ina NIM ina SAG RÍN [ŠÚ ...]
+#lem: u; Šerʾu[Virgo]CN; ina[in]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[around (day x)]PRP; rēšu[beginning]N; Zibānītu[Libra]CN; rabû[set]V; u
+
+@translation labeled en project
+
+@top
+
+
+@(t.e. 1) [... Anti]ochus, great king, and An[tiochus ...]  
+
+
+@obverse
+
+
+@(o 1) [... the moon] stood 1 1/2 cubits [behind Mercu]ry to the east; the moon was [...] in front of β [Tauri ...]
+
+
+@(o 2) [...] cubits. Night of the 3rd, first part of the night@sup{?}, Venus was above [...] 
+
+
+@(o 3) [...] cubits. The 5th, clouds were in the sky. Night of the 6th, [...] 
+
+
+@(o 4) [... Night of the 8th], beginning of the night, the moon was [...] ϑ Leonis [...]  
+
+
+@reverse
+
+
+@(r 1') [...] ... to the ea[st@sup{?} ...] 
+
+
+@(r 2') [...] south 1 1/2 cubits. Night of the 20th, last part of the night, the moon was behind [...]
+
+
+@(r 3') [... Mars] was 8 fingers above ϑ Ophiuchi. Night of the 20+[xth, ...] 
+
+
+@(r 4') [... Night of the 23rd@sup{?}], last part of the night, the moon was 2 1/2 cubits in front of β Virginis, [...] below Saturn [...] 
+
+
+@(r 5') [... Night of the 2]5th, last part of the night, the moon was 3 cubits in front of α Virginis ... [...] 
+
+
+@(r 6') [...] 1 @i{sūtu} 3 @i{qa}; cress, 4 @i{sūtu}; sesame, 1 @i{pānu}; wool, 30+[x ...] 
+
+
+@(r 7') [... Vir]go; around the 22nd, Mercury’s [last appearance] in the east in the beginning of Libra; [...]

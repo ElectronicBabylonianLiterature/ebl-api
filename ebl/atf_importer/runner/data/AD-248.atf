@@ -1,0 +1,91 @@
+&X202480 = AD -248
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... GU₄.UD ina ŠÚ ina x IGI N na]-⸢su⸣ NU ⸢PAP⸣ in 6 IGI GE₆ 8 SAG [GE₆ ...] 
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; u; pān[front]N; n; na[sunset to setting]'N; ul[not]MOD; naṣāru[watch]V; ina[on]PRP; n; nanmuru[be(come) visible]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+2'. [... G]U₄.UD e is-le₁₀ 4 KÙŠ ŠÚ.ŠÚ 12 6.10 ŠÚ DIR N[U PAP ...] 
+#lem: u; Šihṭu[Mercury]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; urrup[be(come) overcast]V; n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+3'. [... AN].BAR₇ AN DUL AN.KU₁₀ sin 5 ÁB BAR DIB in 39 ME ana ŠÚ ⸢šamáš GE₆⸣ [...] 
+#lem: u; muṣlālu[noon]N; šamû[rain]N; DUL[(meaning unclear)]V; antallû[eclipse]N; Sîn[moon]N; n; warhu[month]N; ahû[extraneous]'AJ; etēqu[omitted]AJ; ina[in]PRP; n; ūmu[day]N; ana[before]PRP; erib[(sun)set]N; šamši[sun]N; mūšu[night]N; u
+
+4'. [... GE₆ 15 ina ZALÁG sin x MÚL-KUR-š]á-KIR₄-šil-PA 1 2/3 KÙŠ GE₆ 17 ina ZALÁG dele-bat SIG MÚL-KUR-šá-DUR-n[u-nu N N ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šaplat[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; u
+
+5'. [... GE₆ 19 ina ZALÁG sin x SI-MÁŠ N N ár] GENNA 1 1/2 KÙŠ ana NIM GUB GE₆ 20 ina ZALÁG sin ina IGI MÚL-IGI-šá-SUH[UR-MÁŠ N N ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; SI-MÁŠ[β Capricorni]CN; n; n; warki[behind]PRP; Kayyamānu[Saturn]CN; n; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; u
+
+6'. [... USAN] GU₄.UD e ŠUR-GIGIR-šá-ULÙ 2 KÙŠ ina ZALÁG dele-bat SIG MÚL-IGI-šá-[SAG-HUN N N ...] 
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šaplat[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; u
+
+7'. [... G]E₆ 27 DIR AN DIB MURUB₄ AN DUL [ina Z]ALÁG dele-bat SIG MÚL-ár-šá-[SAG-HUN N N ...] 
+#lem: u; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; qablītu[middle watch (of the night)]N; šamû[rain]N; DUL[(meaning unclear)]V; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šaplat[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; u
+
+8'. [... GU₄.UD x MÚL-IG]I-šá-še-pít-MAŠ.MAŠ 1 KÙŠ ⸢6⸣? SI ⸢28⸣ DIR AN ZA 1.30 ME [... AN.KU₁₀ šamáš ...] 
+#lem: u; Šihṭu[Mercury]CN; u; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N; n; ubānu[finger]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; ūmu[daytime]N; u; antallû[eclipse]N; šamšu[sun]N; u
+
+9'. [...] ($traces$) [x x] ⸢GAR?⸣ u ZALÁG ina AN.KU₁₀-šú [...]  
+#lem: u; u; u; šiknu[onset]'N; u[and]CNJ; nūru[clearing]N; ina[during]PRP; antallû[eclipse]N; u
+
+@reverse
+1'. [...] [x] ⸢GE₆ 28 ina ZALÁG?⸣ [...] 
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+2'. [...] ⸢GE₆⸣ 29 AN.KU₁₀ šamáš ⸢BAR? DIB⸣ [...] 
+#lem: u; mūšu[night]N; n; antallû[eclipse]N; šamši[sun]N; ahû[extraneous]'AJ; etēqu[omitted]'AJ; u
+
+3'. [... a-na 1 GÍN KÙ.BABBAR é]p-šú i-nu-šú MÚL.BABBAR ina SAG ITU ina ABSIN ina TIL [ITU ...] 
+#lem: u; ana[to]PRP; n; šiqlu[shekel]N; kaspu[silver]N; epšu[wrought]AJ; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Šerʾu[Virgo]CN; ina[at]PRP; qītu[end]N; warhu[month]N; u
+
+4'. [... ITU] BI {SAL}PEŠ₄{MEŠ} ina Ù.TU ÚŠ{MEŠ}-m[a? ...] 
+#lem: u; warhu[month]N; šū[that]'DP; arītu[pregnant (woman)]N$; ina[during]PRP; walādi[give birth]N; mâtu[die]V$; u
+
+$ ruling 
+5'. [APIN ... MÚL.BABBAR ina RÍN IGI N na-s]u in 29 šá ⸢DU₆ IGI⸣ [...] 
+#lem: Arahsamna[Month VIII]MN; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V; n; na[rising to sunrise]'N; ina[on]PRP; n; ša[of]DET; Tašrītu[Month VII]MN; nanmuru[be(come) visible]V; u
+
+6'. [...] 7 GU₄.UD [...]
+#lem: u; n; Šihṭu[Mercury]CN; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [... Mercury’s first appearance in the west in ..., sunset to setting of Mercury: nn°]; I did not watch; (ideal) first appearance on the 6th. Night of the 8th, beginning [of the night, ...] 
+
+@(o 2') [... Mer]cury was 4 cubits above α Tauri; very overcast. The 12th, moonset to sunrise: 6° 10'; clouds, I did not [watch ...]
+
+@(o 3') [... around] noon, rain DUL; lunar eclipse, (at) five months (distance), ... omitted; at 39° before sunset. Night [...] 
+
+@(o 4') [... Night of the 15th, last part of the night, the moon was] 1 2/3 cubits [... ϑ] Ophiuchi. Night of the 17th, last part of the night, Venus was [...] below η Pis[cium ...] 
+
+@(o 5') [... Night of the 19th, last part of the night, the moon was ... β Capricorni,] it stood 1 1/2 cubits [behind] Saturn to the east. Night of the 20th, last part of the night, the moon was [...] in front of γ Capricorni [...] 
+
+@(o 6') [... first part of the night,] Mercury was 2 cubits above ζ Tauri; last part of the night, Venus was [...] below β Arie[tis ...]
+
+@(o 7') [... Ni]ght of the 27th, clouds crossed the sky; middle of the night, rain DUL; last part of the night, Venus was [...] below α Arie[tis ...] 
+
+@(o 8') [... Mercury was] 1 cubit 6@sup{?} fingers [...] η Geminorum. The 28th, clouds were in the sky; 90° daytime [... solar eclipse ...] 
+
+@(o 9') [...] ... [...] onset and clearing; during its eclipse, [...]  
+
+@reverse
+
+@(r 1') [...] ... Night of the 28th, last part of the night@sup{?} [...] 
+
+@(r 2') [...] Night of the 29th, solar eclipse, ..., omitted [...] 
+
+@(r 3') [... were] sold [for 1 shekel of silver.] At that time, Jupiter, in the beginning of the month, was in Virgo, at the end [of the month, ...] 
+
+@(r 4') [...] That [month,] pregnant women died in childbirth ... [...] 
+
+$ ruling 
+
+@(r 5') [Month VIII, ... Jupiter’s first appearance in Libra, rising of Jupiter to sun]rise: [nn°]; (ideal) first appearance on the 29th of month VII [...] 
+
+@(r 6') [...] The 7th@sup{?}, Mercury [...]

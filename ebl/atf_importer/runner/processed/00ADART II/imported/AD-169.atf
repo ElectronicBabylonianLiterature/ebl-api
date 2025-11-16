@@ -1,0 +1,76 @@
+&X201690 = AD -169
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@left
+1. [BAR?] GE₆ 29 USAN dele-bat 
+#lem: Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+2. [SIG] MÚL.BABBAR 2/3 KÙŠ  
+#lem: šapil[below]'PRP; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N
+
+@obverse
+1. MU 1 ME 42.KÁM {m}an u {m}an A-šú ⸢LUGAL{MEŠ}⸣ 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N
+
+2. GU₄ 30 16 na-su DIR muš ana šamáš SIG 
+#lem: Ayyaru[Month II]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+3. GE₆ 2 DIR AN ZA sin ina IGI dele-bat 1 1/2 KÙŠ 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; ina[in]PRP; pān[front]N; Dilbat[Venus]CN; n; n; ammatu[unit]N
+
+4. ana ŠÚ GUB ina IGI MÚL.BABBAR 1 1/2 KÙŠ ana ŠÚ GUB 
+#lem: ana[to]PRP; erbu[west]'N; izuzzu[stand]V; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V
+
+5. e GU₄.UD 4 KÙŠ GE₆ 3 sin ina IGI 
+#lem: eli[above]PRP; Šihṭu[Mercury]CN; n; ammatu[unit]N; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+6. MAŠ.MAŠ-ár 2 KÙŠ GE₆ 4 sin ina IGI 
+#lem: MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+7. MÚL-ár-šá-ALLA-šá-ULÙ 2 KÙŠ 
+#lem: MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N
+
+8. GE₆ 5 sin SIG SAG-A 3 KÙŠ 
+#lem: mūšu[night]N; n; Sîn[moon]N; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N
+
+9. sin 1/2 KÙŠ ana ŠÚ LAL  
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+@reverse
+1. ITU BI ILLU  
+#lem: warhu[month]N; šū[that]'DP; mīlu[river level]N
+
+@translation labeled en project
+
+@left
+
+@(l.e. 1) [Month I@sup{?},] night of the 29th, first part of the night, Venus 
+
+@(l.e. 2) was 2/3 cubit [below] Jupiter.  
+
+@obverse
+
+@(o 1) Year 142, kings Antiochus and Antiochus, his son. 
+
+@(o 2) Month II, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 16°; measured (despite) clouds; it was low to the sun. 
+
+@(o 3) Night of the 2nd, clouds were in the sky; the moon stood 1 1/2 cubits in front of Venus 
+
+@(o 4) to the west, it stood 1 1/2 cubits in front of Jupiter to the west, 
+
+@(o 5) 4 cubits above Mercury. Night of the 3rd, the moon was 2 cubits in front 
+
+@(o 6) of β Geminorum. Night of the 4th, the moon was 2 cubits in front of 
+
+@(o 7) δ Cancri. 
+
+@(o 8) Night of the 5th, the moon was 3 cubits below ε Leonis, 
+
+@(o 9) the moon being 1/2 cubit back to the west.  
+
+@reverse
+
+@(r 1) That month, the river level

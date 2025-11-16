@@ -1,0 +1,78 @@
+&X201992 = AD -199B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU.1.52 {ITU}ŠE 
+#lem: n; Addaru[Month XII]MN
+
+2. GE₆ 16 16 ULÙ 
+#lem: mūšu[night]N; n; n; šūtu[south wind]N
+
+3. GIN kal ME DIR SAL AN ZA 
+#lem: alāku[blow]V; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+4. GE₆ 17 ULÙ GIN 
+#lem: mūšu[night]N; n; šūtu[south wind]N; alāku[blow]V
+
+5. [ina] ZALÁG sin SIG RÍN-šá-SI 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN
+
+6. [N] KÙŠ sin i-ṣa 
+#lem: n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ
+
+7. [ana NI]M DIB 17 ULÙ GIN
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; šūtu[south wind]N; alāku[blow]V
+
+@reverse
+1. [DI]R SAL AN ZA ina KIN.SIG 
+#lem: erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; kinsikku[afternoon]N
+
+2. [ŠÚ? G]E₆ 18 D[IR A]N ZA 
+#lem: erēpu[be(come) overcast]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+3. ina ZALÁG sin e
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP
+
+4. MÚL-e-šá-SAG-GÍR.TAB 1 KÙŠ 6 SI 
+#lem: MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; ammatu[unit]N; n; ubānu[finger]N
+
+5. sin i-ṣa ana NIM DIB 
+#lem: Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+6. 18 ŠÚ.ŠÚ ULÙ ŠÁR
+#lem: n; urrup[be(come) overcast]V; šūtu[south wind]N; ŠÁR[gusty(?)]AJ
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 112, month XII, 
+
+@(o 2) Night of the 16th (and) the 16th, the south wind 
+
+@(o 3) blew; all day thin clouds were in the sky. 
+
+@(o 4) Night of the 17th, the south wind blew; 
+
+@(o 5) last part of the night, the moon was [nn] cubits below β Librae, 
+
+@(o 6) the moon having passed a little 
+
+@(o 7) [to the ea]st. The 17th, the south wind blew,  
+
+@reverse
+
+@(r 1) thin clouds were in the sky; in the afternoon, 
+
+@(r 2) [overcast@sup{?}. Ni]ght of the 18th, cl[ouds] were in the sky; 
+
+@(r 3) last part of the night, the moon was 1 cubit 6 fingers above 
+
+@(r 4) β Scorpii, 
+
+@(r 5) the moon having passed a little to the east. 
+
+@(r 6) The 18th, very overcast, gusty south wind.

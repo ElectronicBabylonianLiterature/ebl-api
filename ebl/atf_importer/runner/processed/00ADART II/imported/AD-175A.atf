@@ -1,0 +1,35 @@
+&X201751 = AD -175A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 1 ME 36.KÁ]M {m}se-lu-ku LUGAL {ITU}⸢GU₄⸣ 1 24 na-su KUR₄ a-pir ⸢x⸣ [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Ayyāru[Month II]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; apir[earthshine]N; u; u
+
+2. [... a]na NIM GUB sin 2 1/2 KÙŠ ana ULÙ SIG GE₆ ⸢2 sin⸣ [ina I]GI [...]
+#lem: u; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; u
+
+3. [...] ⸢x⸣ 1 KÙŠ 6 SI ana NIM GUB ⸢GE₆ 4⸣ [...]
+#lem: u; u; n; ammatu[unit]N; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; mūšu[night]N; n; u
+
+4. [... GE₆] ⸢5⸣ ina ZALÁG AN SIG ⸢SUHUR-ár 2⸣ [N ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; u
+
+5. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 136,] king Seleucus. Month II, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 24°, it was bright, earthshine ... [...] 
+
+@(o 2) [...] stood to the east, the moon being 2 1/2 cubits low to the south. Night of the 2nd, the moon was [in] front of [...] 
+
+@(o 3) [...] ... stood 1 cubit 6 fingers to the east. Night of the 4th, [...] 
+
+@(o 4) [... Night] of the 5th, last part of the night, Mars was 2 [mm] below δ Capricorni [...] 
+
+@(o 5) [...] ... [...]

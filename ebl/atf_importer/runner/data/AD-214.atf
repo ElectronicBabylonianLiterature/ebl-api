@@ -1,0 +1,116 @@
+&X202140 = AD -214
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. GAN 12 GU₄.UD ina NIM ina PA IGI [...] 
+#lem: Kislīmu[Month IX]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; nanmuru[be(come) visible]'V; u
+
+2. ina a-mat? ⸢x x x x⸣ [...]  
+#lem: ina[in]PRP; amāt[command]N; u; u; u; u; u
+
+@obverse
+1. MU 60+37.KÁM GAN GE₆ 1[3? x] ⸢x x x⸣ muš 
+#lem: šattu[year]N; n; Kislīmu[Month IX]MN; mūšu[night]N; n; u; u; u; u; mašāhu[measure]V
+
+2. SA₄ šá {MÚL}ŠU.GI a-[n]a ziq-pi 
+#lem: u; ša[of]DET; Šību[Old Man]CN$; ana[to]PRP; zaqāpu[fix upright//culmination]V'N$
+
+3. GUB-uz {d}sin AN.⸢KU₁₀⸣ Á KUR.RA 
+#lem: izuzzu[stand]V; Sîn[moon]N; antallû[eclipse]N; idu[side]N; šadû[east]N
+
+4. ki TAB-ú ina 21 GE₆ gab-šú ŠÚ-im 
+#lem: kī[when]PRP; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; gabbu[totality//all]N'DET$; arim[covered]AJ
+
+5. 16 GE₆ ÍR ana ZALÁG-ru ki TAB-ú 
+#lem: n; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N; ana[to]PRP; nawāru[clearing]'N; kī[when]PRP; ušarrû[begin]V
+
+6. ina 19 GE₆ TA KUR.RA u SI a-na 
+#lem: ina[in]PRP; n; mūšu[night]N; ištu[from]PRP; šadû[east]N; u[and]CNJ; ištānu[north]N; ana[to]PRP
+
+7. ⸢{IM}MAR?⸣.TU ZALÁG-ir 56 GAR ÍR 
+#lem: amurru[west]N; nawāru[clear]V; n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N
+
+8. [u ZALÁG-r]u? in 30 DANNA GE₆ GIN 
+#lem: u[and]CNJ; nawāru[clearing]'N; ina[in]PRP; n; bēru[double hour]N; mūšu[night]N; alāku[come]V
+
+9. [x x x] ⸢AN?⸣.KU₁₀ ina AN.KU₁₀-šú {MÚL}KAK?.BAN?
+#lem: u; u; u; antallû[eclipse]N; ina[during]PRP; antallû[eclipse]N; Šiltāhu[Sirius]CN
+
+@reverse
+1. [GUB-uz GE]NNA? ŠÚ AN E-a [Í]B.TAG₄ {d}UDU.IDIM{MEŠ}
+#lem: izuzzu[stand]V; Kayyamānu[Saturn]CN; rabû[set]V; Ṣalbaṭānu[Mars]CN; elû[rise]V; rēhtu[remainder]N; bibbu[planet]N
+
+2. [N]U GUB-uʾ ina AN.KU₁₀-šú [S]I šá PA MAR 
+#lem: ul[not]MOD; izuzzu[stand]V; ina[during]PRP; antallû[eclipse]N; ištānu[north wind]N; ša[which]REL; kappu[wing(?)]'N; amurru[west]N
+
+3. GAR GIN ŠED₇ 2 KÙŠ ina I[GI] MÚL{MEŠ} IGI?{MEŠ} 
+#lem: šakānu[set]V; alāku[blow]V; kūṣu[coldness]N; n; ammatu[unit]N; ina[in]PRP; pān[front]N; kakkabu[star]N; mahrûti[front]AJ
+
+4. šá ALLA a-dir 13 9.10 [n]a muš SI ⸢GIN⸣ 
+#lem: ša[of]DET; Alluttu[Cancer]CN; adir[eclipsed]AJ; n; n; na₁[sunset to moonset]N; mašāhu[measure]V; ubānu[finger]N; alāku[rise]V
+
+5. ŠED₇ ik-te-šir G[E₆] 14 8.20 GE₆ 
+#lem: kūṣu[coldness]N; gašāru[be(come) severe]V; mūšu[night]N; n; n; mūšu[night]N
+
+6. DIR NU PAP ŠÚ.ŠÚ 14 kal ME DIR AN DIB 
+#lem: erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; urrup[be(come) very overcast]V; n; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+7. GE₆ 15 DIR AN DIB A[N] né-hi PISAN ⸢MAH⸣ DIB 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; nēhu[slow]AJ; pisannu[(a meterological phenomenon)]N; ṣīru[much]AJ; DIB[(meaning unclear)]V
+
+8. 15 ŠÚ.ŠÚ GE₆ 16 kal GE₆ DIR AN DIB 
+#lem: n; urrup[be(come) overcast]V; mūšu[night]N; n; kal[all]DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+9. 16 ina še-rì ⸢ŠÚ?⸣
+#lem: n; ina[in]PRP; šēri[morning]N; erēpu[be(come) overcast]V
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) Month IX, the 12th, Mercury’s first appearance in the east in Sagittarius [...] 
+
+@(t.e. 2) (traces, scratched)
+
+@obverse
+
+@(o 1) Year 97, month IX, night of the 1[3th@sup{?}, ...] ..., measured;
+
+@(o 2) the bright star of the Old Man ... [...] stood in culmination, 
+
+@(o 3) lunar eclipse; on the east side 
+
+@(o 4) when it began, in 21° of night all of it became covered; 
+
+@(o 5) 16° of night totality; when it began to clear, 
+
+@(o 6) it cleared in 19° of night from east and north to 
+
+@(o 7) the west@sup{?}; 56° onset, totality, 
+
+@(o 8) [and clear]ing; at one-half @i{bēru} after sunset. 
+
+@(o 9) [...] eclipse; in its eclipse, ...  
+
+@reverse
+
+@(r 1) [...] its [eclip]se@sup{?}, Mars came out; the remainder of the planets 
+
+@(r 2) did not stand there. In its eclipse, the north wind which was set to the west side 
+
+@(r 3) blew; it was cold. 2 cubits in front of the glow which is inside 
+
+@(r 4) of Cancer it became eclipsed. The 13th, sunrise to moonset: 9° 10', measured; the north wind blew, 
+
+@(r 5) the cold became severe. Ni[ght] of the 14th, sunset to moonrise: 8° 20'; 
+
+@(r 6) clouds, I did not watch; very overcast. The 14th, all day clouds crossed the sky. 
+
+@(r 7) Night of the 15th, clouds crossed the sky, slow rain, much PISAN DIB. 
+
+@(r 8) The 15th, very overcast. Night of the 16th, all night clouds crossed the sky. 
+
+@(r 9) The 16th, in the morning, overcast@sup{?} [...]

@@ -1,0 +1,107 @@
+&X202002 = AD -200B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 11.KÁM {m}a[n ...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u
+
+2. {ITU}ŠE GE₆ 17 ina ZALÁ[G ...] 
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+3. sin 2 KÙŠ ana UL[Ù SIG ...] 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+4. GE₆ 18 SAG GE₆ AN [...] 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Ṣalbaṭānu[Mars]CN; u
+
+5. ina ZALÁG sin e SI₄ 2+[x KÙŠ ...] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; u
+
+6. 18 ina še-rì DIR A[N ...] 
+#lem: n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; u
+
+7. GE₆ 19 ina ZALÁG sin [e (MÚL-KUR-šá-KIR₄)-šil-PA N N] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; n
+
+8. sin 5/6 KÙŠ ana ⸢NIM⸣ [DIB ... ina IGI MÚL.BABBAR N N] 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; n
+
+9. ana ŠÚ GUB ⸢x⸣ [...]
+#lem: ana[to]PRP; erbu[west]'N; izuzzu[stand]V; u; u
+
+@bottom
+1'. šá PA UŠ [...]  
+#lem: ša[of]DET; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V; u
+
+@reverse
+1. GE₆ 20 DIR [...] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; u
+
+2. 20 ina še-rì DIR [... GE₆ 22] 
+#lem: n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; u; mūšu[night]N; n
+
+3. ina ZALÁG sin ár S[I-MÁŠ N N] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; n
+
+4. 22 ina še-rì D[IR ...] 
+#lem: n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; u
+
+5. GE₆ 23 ina ZALÁG [sin x MÚL-IGI-šá-SUHUR-MÁŠ] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN
+
+6. 2 1/2 KÙŠ
+#lem: n; n; ammatu[unit]N
+
+@left
+1. EN? 18 16 na
+#lem: adi[around (day x)]PRP; n; n; na[na-gauge]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 111, A[ntiochus ...] 
+
+@(o 2) Month XII, night of the 17th, last part of the ni[ght, ...] 
+
+@(o 3) the moon being 2 cubits [low] to the south [...] 
+
+@(o 4) Night of the 18th, beginning of the night, rain@sup{?} [...] 
+
+@(o 5) last part of the night, the moon was 2+[x cubits] above α Scorpii [...] 
+
+@(o 6) The 18th, in the morning, clouds [...] the sky [...] 
+
+@(o 7) Night of the 19th, last part of the night, the moon was [... above ϑ Ophiuchi,] 
+
+@(o 8) the moon [having passed] 5/6 cubit to the east, it stood [... in front of Jupiter] 
+
+@(o 9) to the west ... [...]
+
+
+@bottom
+
+@(b.e. 1') became stationary [...] of Sagittarius  
+
+
+@reverse
+
+@(r 1) Night of the 20th, clouds [...] 
+
+@(r 2) The 20th, in the morning, clouds [... Night of the 22nd,] 
+
+@(r 3) last part of the night, the moon was [...] behind β [Capricorni.] 
+
+@(r 4) The 22nd, in the morning, cl[ouds ...] 
+
+@(r 5) Night of the 23rd, last part of the night, [the moon was] 
+
+@(r 6) 2 1/2 cubits [... γ Capricorni.]
+
+
+@left
+
+@(l.e. 1) Until@sup{?} the 18th, 16 was the @i{na} na-gauge.

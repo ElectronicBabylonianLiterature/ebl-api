@@ -1,0 +1,140 @@
+&X201712 = AD -171B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU] 1 ME 40 NE GE₆ 18 ina ZALÁG sin
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Abu[Month V]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+2. ⸢x MÚL⸣-KUR-šá-DUR-nu-nu 1 1/2 KÙŠ
+#lem: u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N
+
+3. [x] ⸢18⸣ GU₄.UD ina NIM ina SAG-A ŠÚ [x (x)]
+#lem: u; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; SAG-A[ε Leonis]CN; erēpu[be(come) overcast]V; u; u
+
+4. [GE₆ 19] ina ZALÁG sin ár MÚL-ár-šá-SA[G-HUN]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN
+
+5. [N N] 19 SI GIN GE₆ 20 ina ZAL[ÁG sin]
+#lem: n; n; n; ubānu[finger]N; alāku[rise]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+6. [SIG? MÚ]L.MÚL 2/3 KÙŠ ina IGI MÚ[L.BABBAR]
+#lem: šapil[below]PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN
+
+7. [N N] ana ŠÚ GUB 20 SI ŠÁR G[E₆ 21]
+#lem: n; n; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; n; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n
+
+8. [ina ZALÁG si]n e is-le₁₀ 3 [KÙŠ ina IGI]
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; ina[in]PRP; pān[front]N
+
+9. [AN N] KÙŠ ana ŠÚ GUB 21 S[I? x (x)]
+#lem: Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; n; ubānu[finger]N; u; u
+
+10. [GE₆ 2]2 ina ZALÁG sin SIG ŠUR-[GIGIR-šá-SI]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN
+
+11. [N N] sin i-ṣa ana NIM D[IB x x (x)]
+#lem: n; n; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u; u; u
+
+12. [x x] ⸢GE₆ 23⸣ ina ZALÁG s[in ...]  
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+@left
+1. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2. [...] ⸢1⸣ KÙŠ [...]  
+#lem: u; n; ammatu[unit]N; u
+
+@reverse
+
+$ (beginning broken, ca. 7 lines uninscribed)
+
+1'. ITU BI U₄ 11.KÁM {LÚ}GAL ERÍN{MEŠ} KUR [URI{KI} ...]
+#lem: warhu[month]N; šū[that]'DP; ūmu[day]N; n; rab[chief]N; uqānī[troops]N; mātu[land]N; Akkad[Babylonia]GN; u
+
+2'. ana E{KI} KU₄-ub U₄ 13.KÁM ana É.[SAG.ÍL KU₄-ub]
+#lem: ana[to]PRP; Bābilu[Babylon]SN; erēbu[enter]V; ūmu[day]N; n; ana[to]PRP; Esangila[Esangila]TN; erēbu[enter]V
+
+3'. 6 SISKUR.SISKUR{MEŠ} ana {d}EN {d}GAŠAN-iá DINGIR{MEŠ} GAL{MEŠ} ⸢u⸣ [ana bul-ṭu]
+#lem: n; nīqu[sacrifice]N; ana[to]PRP; Bēl[Bēl]DN; Bēltiya[Bēltu]DN; ilu[god]N; rabû[great]AJ; u[and]CNJ; ana[for]PRP; bulṭu[life]N
+
+4'. šá <<ana>> LUGAL{MEŠ} DÙ-uš U₄ BI ana É-U₄.1.KÁM KU₄-ub
+#lem: ša[which]REL; šarrāni[king]N; epēšu[make]V; ūmu[day]N; šū[that]'DP; ana[into]PRP; Bīt-Umakkal[All-Day-Temple]TN; erēbu[enter]V
+
+5'. ⸢ina?⸣ IGI šá {d}INNIN TIN.TIR{KI} AGA?{MEŠ} DINGIR{MEŠ} GAL{MEŠ}
+#lem: ina[in]PRP; pān[front]N; ša[of]DET; Ištar[Ištar]DN; Bābilu[Babylon]SN; agû[crown]N; ilu[god]N; rabû[great]AJ
+
+6'. ⸢šá⸣ ina lìb-bi šak-nu 3 SISKUR.SISKUR ana {d}EN {d}GAŠAN-iá {d}{m}NIN TIN.TI[R{KI}]
+#lem: ša[which]REL; ina[in]PRP; libbu[interior]N; šaknū[placed]AJ; n; nīqu[sacrifice]N'; ana[to]PRP; Bēl[Bēl]DN; Bēltiya[Bēltu]DN; Ištar[Ištar]DN$; Bābilu[Babylon]SN
+
+7'. ⸢DINGIR⸣{MEŠ} GAL{MEŠ} u ana bul-ṭu šá LUGAL{MEŠ} DÙ-uš uš-kin-nu
+#lem: ilu[god]N; rabû[great]AJ; u[and]CNJ; ana[for]PRP; bulṭu[life]N; ša[of]DET; šarrāni[king]N; epēšu[do]V; uškinnu[prostrate oneself]V
+
+8'. ⸢U₄⸣ x.KÁM? TA <E{KI} ana>
+#lem: ūmu[day]N; n; ištu[from]PRP; Bābilu[Babylon]SN; ana[to]PRP
+
+@top
+1. [{URU}]se-lu-ke-ʾa-a URU LUGAL?-ú?-⸢tu⸣ šá ana muh-hi
+#lem: Selukeʾa[Seleucia]SN; ālu[city]N; šarrūtu[kingship]N; ša[which]REL; ana[to]PRP; muhhi[top]N
+
+2. {ÍD}IDIGNA u ÍD LUGAL È
+#lem: Idiqlat[Tigris]WN; u[and]CNJ; nāru[canal]N; šarru[king]N; waṣû[go out]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year] 140, month V, night of the 18th, last part of the night, the moon 2 was 1 1/2 cubits ... η Piscium. 
+
+@(o 3) [...] The 18th, Mercury’s last appearance in the east in the beginning of Leo [...] 
+
+@(o 4) [Night of the 19th,] last part of the night, the moon was [...] behind α Arietis. 
+
+@(o 5) The 19th, the north wind blew. Night of the 20th, last part of the [night, the moon was] 
+
+@(o 6) 2/3 cubit [below@sup{?}] η Tauri, it stood [...] in front of Ju[piter] 
+
+@(o 7) to the west. The 20th, gusty north wind. Ni[ght of the 21st,] 
+
+@(o 8) [last part of the night, the moo]n was 3 [cubits] above α Tauri, 
+
+@(o 9) it stood [nn] cubits [in front of Mars] to the west. The 21st, the nor[th@sup{?} wind ...] 
+
+@(o 10) [Night of the 2]2nd, last part of the night, the moon was [...] below β Tau[ri,] 
+
+@(o 11) the moon having passed a little to the east [...] 
+
+@(o 12) [...] Night of the 23rd, last part of the night, the m[oon ...]  
+
+@left
+
+@(l.e. 1) [...] ... [...] 
+
+@(l.e. 2) [...] 1 cubit [...]
+
+@reverse
+
+@(r 1') That month, the 11th, The commander of the troops of [...] 
+
+@(r 2') entered Babylon. The 13th, to the temple [...] 
+
+@(r 3') he made 6 sacrifices to Bēl (and) Bēltiya, the great gods ... 
+
+@(r 4') of the kings. That day, he entered the @i{Akītu} temple. 
+
+@(r 5') In@sup{?} front of Ištar of Babylon (and) the crowns@sup{?} of the great gods 
+
+@(r 6') which are set up in it, he performed 3 sacrifices for Bēl, Bēltiya, Ištar of Babylon, 
+
+@(r 7') the great gods, and for the life of the kings, and prostrated himself. 
+
+@(r 8') The xth, he went out from <Babylon and to>
+
+@top
+
+@(t.e. 1) Seleucia, the royal city which is on 
+
+@(t.e. 2) the Tigris and the royal canal.

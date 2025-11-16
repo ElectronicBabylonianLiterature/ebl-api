@@ -1,0 +1,47 @@
+&X202072 = AD -207B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢x x⸣ [...] 
+#lem: u; u; u; u
+
+2'. [...] ana NIM DIB G[E₆ N ina] ⸢ZALÁG⸣ sin ina [IGI ...] 
+#lem: u; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u
+
+3'. [... ina ZAL]ÁG sin ina IGI GU₄.UD 2 KÙŠ ana ŠÚ GUB ina ZAL[ÁG ...] 
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Šihṭu[Mercury]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; ina[in]PRP; nūru[last part of the night]N; u
+
+4'. [... GENNA ... MÚL-IGI-šá]-še-pít-MAŠ.MAŠ 2 SI ana NIM DIB UŠ GE₆ 30 U[SAN? ...] 
+#lem: u; Kayyamānu[Saturn]CN; u; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; emēdu[be at a stationary point]V; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+5'. [... ina TI]L ITU 4(BARIG) 5(BÁN) ZÚ 4(BARIG) 2(BÁN) GAZI{SAR} 2(GUR) GUR 1 PI sah [...] 
+#lem: u; ina[at]PRP; qītu[end]N; warhu[month]N; n; n; suluppu[date]N; n; n; kasû[mustard]N$; n; kurru[kor (180 litres)]N; n; pānu[bushel (36 litres)]N; sahlu[cress]N; u
+
+6'. [...] ina KUR SUM i-nu-šú MÚL.BABBAR ina HUN dele-bat ina A ina SAG ITU ina A[LLA? ...]
+#lem: u; ina[in]PRP; mātu[land]N; nadānu[give]V; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Agru[Aries]CN; Dilbat[Venus]CN; ina[in]PRP; Nēšu[Leo]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Alluttu[Cancer]CN; u
+
+7'. [... ITU B]I ILLU GUB 
+#lem: u; warhu[month]N; šū[that]'DP; mīlu[river level]N; izuzzu[stand]V
+
+8'. [...] ⸢x x x x x⸣ ina IGI SI ⸢x KÙŠ⸣ [...]
+#lem: u; u; u; u; u; u; ina[in]PRP; pān[front]N; u; u; ammatu[unit]N; u
+
+@translation labeled en project
+
+@(1') [...] ... [...] 
+
+@(2') [...] having passed to the east. Ni[ght of the xth,] last part of the night, the moon was in [front of ...] 
+
+@(3') [... last part of the] night, the moon stood 2 cubits in front of Mercury to the west; last part of the [night, ...] 
+
+@(4') [... Saturn] became stationary [... η ] Geminorum, having passed 2 fingers to the east. Night of the 30th, first@sup{?} [part of the night, ...] 
+
+@(5') [... at the en]d of the month, 4 @i{pānu} 5 @i{sūtu}; dates, 4 @i{pānu} 2 @i{sūtu}; mustard, 2 @i{kurru} 1 @i{pānu}; cress, [...] 
+
+@(6') [...] were sold in the land. At that time, Jupiter was in Aries; Venus was in Leo, in the beginning of the month, in C[ancer@sup{?}; ...] 
+
+@(7') [... That mon]th, the river level remained constant. 
+
+@(8') [...] ... cubits in front of ... [...]

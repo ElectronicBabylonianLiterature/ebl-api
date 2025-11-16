@@ -1,0 +1,61 @@
+&X202572 = AD -257B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢KÙŠ⸣ GE₆ [x ina ZALÁG] sin ár [...] 
+#lem: u; ammatu[unit]N; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u
+
+2'. [...] KÙŠ ina ZALÁG AN SIG SAG-A 3 K[ÙŠ ...] 
+#lem: u; ammatu[unit]N; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; u
+
+3'. [...] sah 1(BARIG) 1(BÁN) ŠE.GIŠ 3(BÁN) SÍG [x]+1 ma a-⸢na 1⸣ [GÍN KÙ.BABBAR ...] 
+#lem: u; sahlu[cress]N; n; n; šamaššammū[sesame]N; n; šīpātu[wool]N; u; manû[mina]N; ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; u
+
+4'. [...] GENNA ina ABSIN ⸢in⸣ 16 AN ina ⸢ALLA⸣ IGI ITU [BI ...] 
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Šerʾu[Virgo]CN; ina[in]PRP; n; šamû[sky]N; ina[in]PRP; Alluttu[Cancer]CN; pān[front]N; warhu[month]N; šū[that]'DP; u
+
+5'. [... IZI].⸢ŠUB⸣ ina KI-tì TE.E{KI} [x x] [...] 
+#lem: u; miqit-išāti[fall of fire]N; ina[in]PRP; erṣetu[district]N; TE.E[(the city quarter) TE.E]GN; u; u; u
+
+$ ruling 
+
+6'. [NE ... GE₆ 3 sin in]a IGI dele-bat 2/3 KÙŠ ana ŠÚ GUB GE₆ 4 SAG [GE₆ ...] 
+#lem: Abu[Month V]MN; u; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; Dilbat[Venus]CN; n; ammatu[unit]N; ana[to]PRP; kiššatu[world]N; izuzzu[stand]V; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; u
+
+7'. [...] ⸢8⸣ SI GE₆ 7 SAG GE₆ sin ina IGI MÚL-KUR-[šá-KIR₄-šil-PA N N ...] 
+#lem: u; n; ubānu[finger]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; n; u
+
+8'. [...] GE₆ 12 SAG GE₆ sin á[r ...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; u
+
+9'. [...] [x] 15 MÚL.BABBAR ina MÁŠ [... UŠ ...] 
+#lem: u; u; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; u; emēdu[be at a stationary point]V; u
+
+10'. [... GE₆ 18 ina ZALÁG] sin ár MÚL-ár-š[á-SAG-HUN N N ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; u
+
+@translation labeled en project
+
+@(1') [...] cubits. Night of [the nnth,] the moon was behind [...] 
+
+@(2') [...] cubits; last part of the night, Mars was 3 cu[bits] below ε Leonis [...] 
+
+@(3') [...] cress, 1 @i{pānu} 1 @i{sūtu}; sesame, 3 @i{sūtu}; wool, [x]+1 minas [were sold] for 1 [shekel of silver ...] 
+
+@(4') [...] Saturn was in Virgo; around the 16th, Mars’ first appearance in Cancer. [That] month, [...] 
+
+@(5') [...] ... in the district of TE.E ... [...] 
+
+$ ruling
+
+@(6') [Month V, ... Night of the 3rd, the moon] stood 2/3 cubit in front of Venus to the west. Night of the 4th, beginning [of the night, ...] 
+
+@(7') [...] 8 fingers. Night of the 7th, beginning of the night, the moon was [...] in front of ϑ Ophi[uchi ...] 
+
+@(8') [...] Night of the 12th, beginning of the night, the moon was be[hind ...] 
+
+@(9') [...] ... The 15th, Jupiter [became stationary ...] in Capricorn [...] 
+
+@(10') [... Night of the 18th, last part of the night,] the moon was [...] behind α Ar[ietis ...]

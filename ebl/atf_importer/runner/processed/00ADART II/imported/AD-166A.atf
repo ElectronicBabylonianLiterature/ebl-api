@@ -1,0 +1,84 @@
+&X201661 = AD -166A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 1 M]E 45.KÁM {ITU}APIN 1[3 GENNA ina x IGI] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Arahsamna[Month VIII]MN; n; Kayyamānu[Saturn]CN; ina[in]PRP; u; pān[front]N
+
+2. [N] na-su in 11 IGI 13 12? Š[Ú ...] 
+#lem: n; na[rising to sunrise]'N; ina[on]PRP; n; nanmuru[be(come) visible]V; n; n; rabû[moonset to sunrise]N; u
+
+3. [x] 20 NINDA na DIR NU PAP GE₆ 15 1 ME DIR [NU PAP?] 
+#lem: u; n; namaddu[measurement]N; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+4. GE₆ ⸢16⸣ 19 GE₆ DIR muš GE₆ 19? DIR AN [x x] 
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; mašāhu[measure]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; u; u
+
+5. [ina ZAL]ÁG sin ár MÚL-ár-šá-ALLA-šá-SI 1 KÙŠ 19 [x x] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-IGI-šá-ALLA-šá-SI[γ Cancri]CN; n; ammatu[unit]N; n; u; u
+
+6. [GE₆] 20 DIR AN ZA ina ZALÁG sin ina IGI LUGAL 2 1/2 KÙ[Š] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN; n; n; ammatu[unit]N
+
+7. [2]0 DIR AN ZA GE₆ 21 DIR AN ZA ina ZALÁG <<sin>> ŠÚ.ŠÚ SI ŠÁ[R] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; urrup[be(come) overcast]V; ištānu[north wind]N; ŠÁR[gusty(?)]AJ
+
+8. [ina] ⸢ZALÁG sin⸣ SIG MÚL-TUR-šá-ár-LUGAL 1 KÙŠ sin 1/2 KÙŠ ana [x x] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u; u
+
+9. [x DI]R AN ZA GE₆ 22 DIR AN ZA ina ZALÁG sin ina IGI 
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+10. [GÌR-ár]-šá-A 2 1/2 KÙŠ 22 DIR AN ZA IM ŠÁ[R] 
+#lem: GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šāru[wind]N; ŠÁR[gusty(?)]AJ
+
+11. [GE₆ 2]3? DIR AN ZA ina ZALÁG sin ina IGI DELE-šá-IGI-ABSI[N] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN
+
+12. [N N] 23 DIR AN ZA GE₆ 24 kal G[E₆ x] 
+#lem: n; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; kal[all]'DET; mūšu[night]N; u
+
+13. [x x] ina ZALÁG sin TÙR NU KÁD NIGIN [x x] 
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; tarbaṣa[halo]N; ul[not]MOD; kaṣāru[become joined]'V; lawi[surrounded (with)]AJ; u; u
+
+14. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+$ blank
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 1]45, month VIII, the 1[3th, Saturn’s first appearance in ...] 
+
+@(o 2) rising of Saturn to sunrise: [nn°]; (ideal) first appearance on the 11th. The 13th, moonset to [sunrise:] 12°@sup{?} [...] 
+
+@(o 3) [...] sunrise to moonset: 20'; clouds, I did not watch. Night of the 15th, moonrise to sunset: 1°; clouds, [I did not watch@sup{?}.] 
+
+@(o 4) Night of the 16th, sunset to moonrise: 19°; measured (despite) clouds. Night of the 19th@sup{?}, clouds [...] the sky; 
+
+@(o 5) [last part of the ni]ght, the moon was 1 cubit behind γ Cancri. The 19th, [...] 
+
+@(o 6) [Night] of the 20th, clouds were in the sky; last part of the night, the moon was 2 1/2 cubits in front of α Leonis. 
+
+@(o 7) [The 2]0th, clouds were in the sky. Night of the 21st, clouds were in the sky; last part of the night, very overcast, gusty north wind; 
+
+@(o 8) last part of the night, the moon was 1 cubit below ρ Leonis, the moon being 1/2 cubit to [...] 
+
+@(o 9) [... clou]ds were in the sky. Night of the 22nd, clouds were in the sky; last part of the night, the moon was 2 1/2 cubits in front of 
+
+@(o 10) [β] Virginis. The 22nd, clouds were in the sky, gusty wind. 
+
+@(o 11) [Night of the 2]3rd, clouds were in the sky; last part of the night, the moon was [...] in front of γ Virginis. 
+
+@(o 12) The 23rd, clouds were in the sky. Night of the 24th, all ni[ght ...] 
+
+@(o 13) [...] last part of the night, the moon was surrounded by a halo which was not closed [...] 
+
+@(o 14) [...] ... [...]
+

@@ -1,0 +1,144 @@
+&X201904 = AD -190D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 2[1].KÁM {ITU}GAN 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Kislīmu[Month IX]MN
+
+2. GE₆ 9 SAG GE₆ sin ár MÚL-ár-šá-SAG-HUN 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN
+
+3. 2 KÙŠ sin ⸢4⸣ [KÙ]Š ana ULÙ SIG 9 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n
+
+4. kal ME ŠÚ.ŠÚ G[E₆ 1]0 DIR AN ZA 
+#lem: kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5. 10 ⸢DIR⸣ AN Z[A G]E₆ 11 SAG GE₆ ⸢sin⸣ 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+6. ⸢e⸣ is-⸢le₁₀⸣ [N] ⸢KÙŠ⸣ sin 
+#lem: eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; Sîn[moon]N
+
+7. [x] ⸢x x⸣ [x GE₆ 12 SAG GE₆] sin SIG ŠUR-SI 1/2 KÙŠ 
+#lem: u; u; u; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N
+
+8. [...] 13 9 ME muš 
+#lem: u; n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+9. [...] ⸢x⸣ GÙ U MAH 
+#lem: u; u; rigim[voice]N; Adad[storm-god]DN; ṣīru[much]AJ
+
+10. [...] ⸢x⸣ na muš  
+#lem: u; u; na[sunrise to moonset]N; mašāhu[measure]V
+
+@reverse
+1. [...] muš ina ZALÁG sin 
+#lem: u; mašāhu[measure]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+2. [...] sin 1/2 KÙŠ ana NIM DIB 
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+3. [...] GE₆ 15 ina ZALÁG sin 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+4. [x MÚL-ár-šá-ALLA-šá]-ULÙ 2 1/2 KÙŠ sin 3 KÙŠ 
+#lem: u; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+5. [ana x x x] ⸢x⸣ [ina ZALÁG sin x] SAG-A ⸢2⸣ KÙŠ 
+#lem: ana[to]PRP; u; u; u; u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; SAG-A[ε Leonis]CN; n; ammatu[unit]N
+
+6. sin [x x x x] ⸢x x x x⸣ 
+#lem: Sîn[moon]N; u; u; u; u; u; u; u; u
+
+7. ina ZALÁG s[in x x x KÙ]Š sin 1 1/2 KÙŠ 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; u; u; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N
+
+8. ana ⸢x⸣ [x x GE₆ 1]8 ina ZALÁG sin 
+#lem: ana[to]PRP; u; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+9. ⸢x⸣ [x x x x KÙ]Š sin 1 1/2 KÙŠ 
+#lem: u; u; u; u; u; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N
+
+10. ana ⸢x⸣ [x x G]E₆ 19 ina? ZALÁG? DIR SAL AN ZA 
+#lem: ana[to]PRP; u; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+11. ⸢x⸣ [x x x] ⸢x x x x⸣ KÙŠ
+#lem: u; u; u; u; u; u; u; u; ammatu[unit]N
+
+@top
+1. ILLU T[A] 11 EN 17 4 SI 
+#lem: mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n; n; ubānu[finger]N
+
+2. GIN PAP 37? na  
+#lem: alāku[rise]V; napharu[total]N; n; na[na-gauge]N
+
+@left
+1. [...] in 19 GENNA 
+#lem: u; ina[in]PRP; n; Kayyamānu[Saturn]CN
+
+2. [...] ina SAG MÁŠ ŠÚ  
+#lem: u; ina[in]PRP; rēšu[beginning]N; Suhurmāšu[Capricorn]CN; rabû[set]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 12[1], month IX. 
+
+@(o 2) Night of the 9th, beginning of the night, the moon was 2 cubits behind α Arietis, 
+
+@(o 3) the moon being 4 cubits low to the south. The 9th, 
+
+@(o 4) all day very overcast. Ni[ght of the 1]0th, clouds were in the sky. 
+
+@(o 5) The 10th, clouds were in the s[ky. Ni]ght of the 11th, beginning of the night, the moon was 
+
+@(o 6) [nn] cubits above α Tauri, the moon being 
+
+@(o 7) [...] ... [... Night of the 12th, beginning of the night,] the moon was 1/2 cubit below β Tauri. 
+
+@(o 8) [...] The 13th, moonrise to sunset: 9°, measured. 
+
+@(o 9) [...] ... much thunder 
+
+@(o 10) [...] sunrise to moonset: ⸢x⸣, measured.
+
+@reverse
+
+@(r 1) [...] measured; last part of the night, the moon was 
+
+@(r 2) [...], the moon having passed 1/2 cubit to the east. 
+
+@(r 3) [...] Night of the 15th, last part of the night, the moon was 
+
+@(r 4) 2 1/2 cubits [... δ Can]cri, the moon being 3 cubits 
+
+@(r 5) [to ...] ... [last part of the night, the moon was] 2 cubits [...] ε Leonis, 
+
+@(r 6) the moon [...] ... 
+
+@(r 7) last part of the night, the moon was [nn cu]bits [...] the moon being 1 1/2 cubits 
+
+@(r 8) to ... [... Night of the 1]8th, last part of the night, the moon was 
+
+@(r 9) ... [... cu]bits, the moon being 1 1/2 cubits 
+
+@(r 10) to ... [... Ni]ght of the 19th, last part of the night, thin clouds were in the sky 
+
+@(r 11) ... [...] ... cubits.
+
+@top
+
+@(t.e. 1) The river level from the 11th to the 17th rose 4 fingers, 
+
+@(t.e. 2) total: 37@sup{?} was the @i{na} na-gauge.  
+
+@left
+
+@(l.e. 1) [...] around the 19th, Saturn’s 
+
+@(l.e. 2) last appearance in the beginning of Capricorn [...]

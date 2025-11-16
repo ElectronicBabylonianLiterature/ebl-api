@@ -1,0 +1,2647 @@
+@project adsd/adart2
+@lang    akk
+@name    akk
+
+@letter A
+
+@entry ā [that] DP
+@form a₄ $ā
+@sense DP the afore-mentioned
+@end entry
+
+@entry abnu [stone] N
+@form NA₄ $abnu
+@sense N hail
+@sense N hail (stone)
+@end entry
+
+@entry abru [pile of brushwood] N
+@form ab-ri $abri
+@sense N pile of brushwood
+@end entry
+
+@entry Adad rigimšu [thunder] N
+@parts Adad[storm-god]DN rigmu[voice]N
+@form {d}U_GU₃-šu₂ $Adad $rigimšu
+@form {d}IM_GU₃-šu₂ $Adad $rigimšu
+@sense N thunder
+@end entry
+
+@entry Adad rigimšu maqit [thunder] V
+@parts Adad[storm-god]DN rigmu[voice]N maqātu[fall]V
+@form {d}IM_GU₃-šu₂_ŠUB $Adad $rigimšu $maqātu
+@form U_GU₃-šu₂_ŠUB $Adad $rigimšu $maqātu
+@sense V thunder
+@end entry
+
+@entry adi [until] PRP
+@form EN $adi
+@sense PRP until
+@sense PRP around (day x)
+@end entry
+
+@entry adir [dark] AJ
+@form a-dir $adir
+@form ad₂ $adir
+@form |KA×MI| $adir
+@sense V eclipsed
+@end entry
+
+@entry agâ apir [earthshine] N
+@parts agû[tiara]N apir[covered]AJ
+@form AGA_a-pir $agû $apir
+@sense N earthshine
+@end entry
+
+@entry agû [tiara] N
+@form AGA{MEŠ} $agû
+@form AGA $agû
+@sense N crown
+@end entry
+
+@entry agubbû [holy water vessel] N
+@form A.GUB₂.BA{MEŠ} $agubbû
+@sense N holy water vessel
+@end entry
+
+@entry ahāmiš [each other] IP
+@form a-ha-meš $ahāmiš
+@sense IP each other
+@end entry
+
+@entry ahû [outside(r)] AJ
+@form BAR $ahû
+@sense AJ extraneous
+@end entry
+
+@entry ahu [brother] N
+@form {LU₂}ŠEŠ $ahu
+@sense N brother
+@end entry
+
+@entry akālu [eat] V
+@form KU₂-uʾ $akālu
+@sense V eat
+@end entry
+
+@entry akalu [bread] N
+@form NINDA{HI.A} $akalu
+@sense N bread
+@end entry
+
+@entry akamu [mist] N
+@form a $akamu
+@form a-kam $akamu
+@form a-kam₂ $akamu
+@sense N mist
+@end entry
+
+@entry alāku [go] V
+@form GIN $alāku
+@form GIN{ME} $alāku
+@form tat-tal-ku $tattalkū
+@form GIN{MEŠ} $alāku
+@form DU $alāku
+@form il-lik-uʾ $illikū
+@form GIN-ku $alāku
+@form GIN{MEŠ}-ni $alāku
+@form GIN.GIN-ma $alāku
+@sense V rise
+@sense V blow
+@sense V go
+@sense V come
+@sense V reach
+@sense V march
+@end entry
+
+@entry alālu [hang up] V
+@form LAL₂ $alālu
+@sense V balance
+@end entry
+
+@entry alla [beyond] PRP
+@form al $alla
+@form al-la $alla
+@sense PRP more than
+@end entry
+
+@entry alpu [ox] N
+@form GU₄ $alpu
+@form GU₄{MEŠ} $alpu
+@form GU₄{HI.A} $alpu
+@sense N ox
+@sense N cattle
+@end entry
+
+@entry ālu [city] N
+@form URU $ālu
+@form URU{MEŠ} $ālu
+@sense N city
+@end entry
+
+@entry amāru [see] V
+@form IGI $nanmuru
+@form IGI-uʾ $nanmuru
+@form IGI{MEŠ} $nanmuru
+@form IGI-uʾ $amāru
+@sense V be(come) visible
+@sense V look
+@sense V see
+@sense V appear
+@end entry
+
+@entry ammatu [unit] N
+@form KUŠ₃ $ammatu
+@sense N unit
+@end entry
+
+@entry amurru [west] N
+@form MAR $amurru
+@form {IM}MAR.TU $amurru
+@sense N west wind
+@sense N west
+@end entry
+
+@entry ana [to] PRP
+@form ana $ana
+@form a-na $ana
+@sense PRP to
+@sense PRP for
+@sense PRP before
+@sense PRP towards
+@sense PRP into
+@sense PRP on
+@sense PRP against
+@sense PRP in
+@end entry
+
+@entry ana muhhi [on] PRP
+@parts ana[to]PRP muhhu[skull]N
+@form ana_muh-hi $ana $muhhi
+@sense PRP on
+@sense PRP before
+@sense PRP concerning
+@sense PRP against
+@end entry
+
+@entry ana nūri [before sunrise] PRP
+@parts ana[to]PRP nūru[light]N
+@form ana_ZALAG₂ $ana $nūru
+@sense PRP before sunise
+@end entry
+
+@entry ana tarṣi [towards] PRP
+@parts ana[to]PRP tarṣu[before]PRP
+@form ana_tar-ṣi $ana $tarṣi
+@form ana_tar-ṣa $ana $tarṣa
+@sense PRP towards
+@sense AJ opposite
+@end entry
+
+@entry ana ūmi elû [acronychal rising] N
+@parts ana[to]PRP ūmu[day]N elû[go up]V
+@form ana_ME_E-a $ana $ūmu $elû
+@form ana_ME_E₁₁ $ana $ūmu $elû
+@form ana_ME_E₃-a $ana $ūmu $elû
+@sense N acronychal rising
+@end entry
+
+@entry antallû [eclipse] N
+@form AN.KU₁₀-šu₂ $antallû
+@form AN.KU₁₀ $antallû
+@sense N eclipse
+@sense AJ eclipsed
+@end entry
+
+@entry apir [covered] AJ
+@form a-pir $apir
+@sense V cover the head
+@sense N earthshine
+@end entry
+
+@entry aptu [window] N
+@form a-pa-a-tu₂ $apâtu
+@form a-pa-a-tu₄ $apâtu
+@sense N opening
+@end entry
+
+@entry arāmu [covered] AJ
+@form a-rim $arim
+@form ŠU₂-im $arim
+@sense AJ covered
+@end entry
+
+@entry argamannu [purple] AJ
+@form SIG₂.SAG $argamannu
+@sense AJ purple
+@end entry
+
+@entry arītu [pregnant (woman)] N
+@form {SAL}PEŠ₄{MEŠ} $arītu
+@sense N pregnant (woman)
+@end entry
+
+@entry aššatu [wife] N
+@form DAM $aššatu
+@form DAM-šu₂ $aššatišu
+@sense N wife
+@end entry
+
+@entry awātu [word] N
+@form a-mat $amāt
+@sense N command
+@end entry
+
+@entry awīlu [man] N
+@form LU₂ $awīlu
+@form {LU₂}ULU₃ $awīlu
+@form NAM.LU₂ $awīlu
+@form NAM.LU₂.ULU₃ $awīlu
+@sense N man
+@end entry
+
+@letter B
+
+@entry baʾil [bright] AJ
+@form KUR₄ $baʾil
+@form KUR $baʾil
+@sense AJ bright
+@end entry
+
+@entry baʾūlātu [people] N
+@form ba-ʾu-u₂-lat $baʾūlātu
+@sense N people
+@end entry
+
+@entry babālu [carry] V
+@form ta-bal $babālu
+@sense V take away
+@end entry
+
+@entry babbanû [excellent] AJ
+@form bab-ba-ni-tu₄ $babbanû
+@form ba-DU₃-tu₂ $babbanītu
+@form bab-ba-ne₂-e-tu₂ $babbanû
+@sense AJ very good
+@end entry
+
+@entry bābtu [commercial goods] N
+@form ba-ab-tu₂ $bābtu
+@sense N remainder(?)
+@end entry
+
+@entry bābu [gate] N
+@form KA₂ $bābu
+@form KA₂-šu₂ $bābšu
+@sense N gate
+@end entry
+
+@entry Bāb-Lamassu-rabi [Lamassu-rabi-Gate] N
+@form KA₂-LAMA₃-ra-bi %akk $Bāb-Lamassu-rabi
+@sense N Lamassu-rabi-Gate
+@end entry
+
++@entry Balag [Balag-tablets] N
+@form {IM}BALAG $Balag
+@sense N Balag-tablets
+@end entry
+
+@entry barāqu [flash] V
+@form NIM.GIR₂.NIM.GIR₂ $burruq
+@sense V flash continuously
+@end entry
+
+@entry barāqu [lighten] V
+@form GIR₂ $barāqu
+@form NIM.GIR₂ $barāqu
+@form GIR₂.GIR₂ $burruq
+@sense V flash
+@sense V flash continuously
+@end entry
+
+@entry bašû [be] V
+@form GAL₂-ši $bašû
+@sense V be
+@sense V occur
+@sense V happen
+@end entry
+
+@entry batāqu [cut off] V
+@form bu-tuq $batāqu
+@sense N section
+@end entry
+
+@entry bēltu [lady] N
+@form NIN $bēltu
+@sense N lady
+@end entry
+
+@entry bēru [double hour] N
+@form DANNA $bēru
+@sense N double hour
+@sense N 30 UŠ (time degree)
+@end entry
+
+@entry bibbu [wild sheep] N
+@form UDU.IDIM{MEŠ} $bibbu
+@form {d}UDU.IDIM{ME} $bibbu
+@form {d}UDU.IDIM{MEŠ} $bibbu
+@sense N planet
+@end entry
+
+@entry bikītu [weeping] N
+@form IR₂ $bikītu
+@form bi-ki-tu₄ $bikītu
+@sense N maximal phase (of an eclipse)
+@sense N lamentation
+@end entry
+
+@entry birqu [lightning] N
+@form GIR₂ $birqu
+@form NIM.GIR₂ $birqu
+@sense N lightning
+@end entry
+
+@entry bīt būši [treasure house] N
+@parts bītu[house]N būšu[goods]N
+@form E₂_bu-še-e $bītu $būšu
+@sense N treasure house
+@end entry
+
+@entry bīt dayyāni [temple courthouse] N
+@parts bītu[house]N dayyānu[judge]N
+@form E₂_{LU₂}DI.KUD{MEŠ} $bītu $dayyānu
+@sense N temple courthouse
+@end entry
+
+@entry bīt ili [temple] N
+@parts bītu[house]N ilu[god]N
+@form E₂_DINGIR{MEŠ} $bītu $ilu
+@sense N temple
+@end entry
+
+@entry bīt kīli [prison] N
+@parts bītu[house]N kīlu[enclosure]N
+@form E₂_ki-li $bītu $kīli
+@sense N prison
+@end entry
+
+@entry bīt qāti [storehouse] N
+@parts bītu[house]N qātu[hand]N
+@form E₂_ŠU{II} $bītu $qātu
+@sense N storehouse
+@end entry
+
+@entry bītu [house] N
+@form E₂ $bītu
+@sense N house
+@sense N temple
+@end entry
+
+@entry bulṭu [life] N
+@form bul-ṭu $bulṭu
+@form bul-ṭi-šu₂ $bulṭu
+@sense N life
+@end entry
+
+@entry burāšu [(species of) juniper] N
+@form ŠIM.LI $burāšu
+@form {GIŠ}LI $burāšu
+@sense N juniper
+@end entry
+
+@entry būšu [goods] N
+@form bu-še-e $būšu
+@sense N goods
+@sense N property
+@end entry
+
+@entry butuqtu [breach] N
+@form bu-tuq-tu₂ $butuqtu
+@form bu-tuq-tu₄ $butuqtu
+@sense N section
+@end entry
+
+@letter D
+
+@entry dâku [kill] V
+@form di-i-ku $dâku
+@form GAZ $dâku
+@sense V kill
+@end entry
+
+@entry daltu [door] N
+@form {GIŠ}IG $daltu
+@sense N door
+@sense N writing board
+@end entry
+
+@entry dannu [strong] AJ
+@form KALAG $dannu
+@form dan-nu $dannu
+@sense AJ dense
+@sense AJ strong
+@end entry
+
+@entry dayyānu [judge] N
+@form {LU₂}DI.KUD $dayyānu
+@form {LU₂}DI.KUD{MEŠ} $dayyānu
+@sense N judge
+@sense N temple judge
+@end entry
+
+@entry dekû [raise] V
+@form id-ke-e-ma $idkema
+@sense V muster
+@end entry
+
+@entry DIB [(meaning unclear)] V
+@form DIB $DIB
+@sense V (meaning unclear)
+@end entry
+
+@entry dipāru [torch] N
+@form IZI.GAR $dipāru
+@sense N torch
+@sense N meteor
+@end entry
+
+@entry DUL [(meaning unclear)] V
+@form DUL-ha $DUL
+@form DUL-hat $DUL
+@form DUL $DUL
+@sense V (meaning unclear)
+@end entry
+
+@entry dullu [trouble] N
+@form dul-lu $dullu
+@sense N work
+@end entry
+
+@entry dūru [(city) wall] N
+@form BAD₃ $dūru
+@form dur $dūru
+@sense N (city) wall
+@sense N wall
+@end entry
+
+@letter E
+
+@entry ebertu [bank] N
+@form BAL.RI $ebertu
+@sense N bank
+@end entry
+
+@entry ebēru [cross over] V
+@form i-te-bir $ītebir
+@sense V cross over
+@end entry
+
+@entry ēkallu [palace] N
+@form E₂.GAL $ēkallu
+@form E₂.GAL-šu₂ $ēkallu
+@sense N palace
+@end entry
+
+@entry elēnu [above] PRP
+@form ele-nu $elēnu
+@sense PRP above
+@end entry
+
+@entry eli [high] AJ
+@form e $eli
+@sense PRP above
+@end entry
+
+@entry eli [on] PRP
+@form UGU $eli
+@sense PRP on
+@end entry
+
+@entry elû [go up] V
+@form E-a $elû
+@form E $elû
+@form E₁₁-ma $elû
+@form E₁₁-uʾ $elû
+@form E₁₁ $elû
+@form E₃-a $elû
+@sense N rising
+@sense V rise
+@sense V come out
+@sense V go up
+@sense V be(come) high
+@end entry
+
+@entry emēdu [lean on] V
+@form UŠ $nenmudu
+@form UŠ-a $nenmudu
+@form UŠ-u₂ $nenmudu
+@sense V be at a stationary point
+@end entry
+
+@entry eperu [earth] N
+@form SAHAR{HI.A} $eperu
+@sense N dust
+@end entry
+
+@entry epēšu [do] V
+@form DU₃ $epēšu
+@form DU₃-uʾ $epēšu
+@form DU₃-uš $epēšu
+@form e-pe-šu₂ $epēšu
+@form i-ne₂-ep-pu-uš $inneppuš
+@form DU₃-eš $epēšu
+@form ep-šu₂ $epēšu
+@form DU₃{MEŠ} $epēšu
+@form u₂-še-piš $ušēpiš
+@sense V make
+@sense V perform
+@sense V do
+@sense N building
+@sense V sacrifice
+@sense N making
+@end entry
+
+@entry epištu [deed] N
+@form ep₂-še-e-tu₂ $epištu
+@sense N deed
+@end entry
+
+@entry epšu [made] AJ
+@form ep₂-šu₂ $epšu
+@form ep-šu₂ $epšu
+@sense AJ wrought
+@sense AJ made
+@end entry
+
+@entry erbu [(sun)set] N
+@form ŠU₂ $erbu
+@form ŠU₂ $erib
+@sense N (sun)set
+@sense N west
+@end entry
+
+@entry erbû [locust] N
+@form BURU₅ $erbû
+@form BURU₅{HI.A} $erbu
+@sense N locust
+@end entry
+
+@entry ereb-šamši [sunset] N
+@form {d}UTU.ŠU₂.A $ereb-šamši
+@sense N west
+@end entry
+
+@entry erēbu [enter] V
+@form KU₄-uʾ $erēbu
+@form KU₄-ub $erēbu
+@form KU₄ $erēbu
+@sense V enter
+@end entry
+
+@entry erēpu [cloud over] V
+@form ŠU₂ $erēpu
+@form ŠU₂.ŠU₂ $urrup
+@form ŠU₂-uʾ $erēpu
+@form ŠU₂{MEŠ} $erēpu
+@form ŠU₂-ap $erēpu
+@sense V be(come) overcast
+@sense V be(come) very overcast
+@sense V cover
+@end entry
+
+@entry erpetu [cloud] N
+@form DIR $erpetu
+@sense N cloud
+@end entry
+
+@entry erṣetu [earth] N
+@form KI-ti₃ $erṣetu
+@form KI $erṣetu
+@sense N district
+@end entry
+
+@entry Eršahunga [Eršahunga-tablets] N
+@form {IM}ER₂.ŠA₃.HUN.GA₂{MEŠ} $Eršahunga
+@sense N Eršahunga-tablets
+@end entry
+
+@entry eššu [new] AJ
+@form BIL₂{MEŠ} $eššu
+@form GIBIL $eššu
+@sense AJ fresh
+@sense AJ new
+@end entry
+
+@entry etēqu [go past] V
+@form DIB $etēqu
+@form DIB-ma $etēqu
+@sense V cross
+@sense V pass
+@sense AJ omitted
+@end entry
+
+@letter G
+
+@entry gabbu [totality] N
+@form gab-bi $gabbu
+@form gab-šu₂ $gabbu
+@form gab-bi-šu₂ $gabbu
+@sense N totality
+@sense DET all
+@sense N all
+@sense AV completely
+@end entry
+
+@entry galamāhu [chief lamentation priest] N
+@form {LU₂}GAL.MAH $galamāhu
+@sense N chief lamentation priest
+@end entry
+
+@entry garakku [(small brick altar)] N
+@form gar-rak-ka-nu $garakkānu
+@sense N brazier
+@end entry
+
+@entry gašāru [be(come) strong] V
+@form šir $iktešir
+@form ik-te-šir $iktešir
+@sense V be(come) severe
+@end entry
+
+@entry ginû [regular contribution (to the temple)] N
+@form gi-ne₂-e $ginê
+@sense N regularity
+@end entry
+
+@entry gišimmaru [date palm] N
+@form {GIŠ}GIŠIMMAR $gišimmaru
+@sense N date palm
+@end entry
+
+@letter H
+
+@entry HAB-rat [disc] N
+@form HAB-rat $HAB-rat
+@form HAB $HAB-rat
+@sense N disc
+@end entry
+
+@entry hamṭu [quick] AJ
+@form ha-muṭ $hamṭu
+@sense AJ fast
+@end entry
+
+@entry harrānu [way] N
+@form KASKAL $harrānu
+@sense N path
+@end entry
+
++@entry harû [(a large container)] N
+@form ha-ru-u₂ $harû
+@sense N (designation of an offering ceremony)
+@end entry
+
+@entry hillu [covering] N
+@form hi $hillu
+@form hi-il $hillu
+@form hi-li $hillu
+@sense N haze
+@end entry
+
+@entry hurāṣu [gold] N
+@form KU₃.GI $hurāṣu
+@form KU₃.GI $hurāṣu
+@sense N gold
+@end entry
+
+@letter I
+
+@entry idu [arm] N
+@form A₂ $idu
+@sense N side
+@end entry
+
+@entry igāru [wall] N
+@form I.ZI $igāru
+@sense N wall
+@end entry
+
+@entry ilu [god] N
+@form DINGIR{MEŠ} $ilu
+@form DINGIR $ilu
+@sense N god
+@end entry
+
++@entry ilūtu [godhead] N
+@form DINGIR-ti-šu₂ $ilūtišu
+@sense N divinity
+@end entry
+
+@entry imbaru [fog] N
+@form DUGUD $imbaru
+@form IM.DUGUD $imbaru
+@form IM.DUGUD.DUGUD $imbaru
+@sense N fog
+@sense N heavy fog
+@end entry
+
+@entry ina [in] PRP
+@form in $ina
+@form ina $ina
+@sense PRP in
+@sense PRP at (plus numeral)
+@sense PRP during
+@sense PRP from
+@sense SBJ when
+@sense PRP around (day x)
+@sense PRP on
+@sense SBJ while
+@sense PRP by
+@sense PRP while
+@sense PRP with
+@sense PRP by means of
+@sense PRP through
+@end entry
+
+@entry ingâ [right now] AV
+@form in-ga-a $ingâ
+@sense AV right now
+@end entry
+
+@entry inūma [when] SBJ
+@form e-nu-ma $inūma
+@sense SBJ when
+@end entry
+
+@entry inūšu [at that time] AV
+@form i-nu-šu₂ $inūšu
+@sense AV at that time
+@end entry
+
+@entry IR [(meaning unclear)] N
+@form IR $IR
+@sense N (meaning unclear)
+@end entry
+
+@entry irtu [breast] N
+@form GABA $irtu
+@sense N breast
+@end entry
+
+@entry išātu [fire] N
+@form IZI $išātu
+@sense N fire
+@end entry
+
+@entry ištānu [north] N
+@form SI $ištānu
+@sense N north
+@sense N north wind
+@sense AJ northern
+@end entry
+
+@entry ištānu [north wind] N
+@form {IM}SI $ištānu
+@sense N north wind
+@end entry
+
+@entry ištēn [one] NU
+@form 1-en-šu₂ $ištēn
+@form 1-en $ištēn
+@sense NU once
+@sense NU one
+@end entry
+
+@entry ištu [from] PRP
+@form TA $ištu
+@sense PRP from
+@end entry
+
+@entry išû [have] V
+@form TUK $išû
+@sense V have
+@end entry
+
+@entry itti [with] PRP
+@form KI-šu₂ $ittišu
+@form KI $itti
+@sense PRP at
+@sense PRP with
+@end entry
+
+@entry izuzzu [stand] V
+@form GUB $izuzzu
+@form GUB-uʾ $izuzzu
+@form GUB{MEŠ} $izuzzu
+@form GUB{ME} $izuzzu
+@form ul-te-zi-zu-u₂ $ultezzizū
+@form GUB-uz $šūzuz
+@sense V provide
+@sense V stand
+@sense V remain constant
+@sense AJ erect
+@end entry
+
+@letter K
+
+@entry kabālu [be paralysed] V
+@form uk-tab-bi-lu $kabālu
+@sense V be bound
+@end entry
+
+@entry kabbaru [very thick] AJ
+@form kab $kabbaru
+@form kab-bar $kabbaru
+@sense AJ very thick
+@end entry
+
+@entry kabšarru [stone-carver] N
+@form {LU₂}KAB.SAR $kabšarru
+@sense N jeweler
+@end entry
+
+@entry kabtu [heavy] AJ
+@form IDIM $kabtu
+@sense AJ heavy
+@sense AJ dense
+@end entry
+
+@entry kakkabu [star] N
+@form MUL₂{MEŠ} $kakkabu
+@form MUL₂ $kakkabu
+@form MUL $kakkabu
+@sense N star
+@end entry
+
+@entry kalbatu [female dog] N
+@form SAL.UR $kalbatu
+@sense N female dog
+@end entry
+
+@entry kalbu [dog] N
+@form UR.KU{MEŠ} $kalbu
+@sense N dog
+@end entry
+
+@entry kalû [hold (back)] V
+@form kul-lu-mu $kullû
+@form kul-lu-uʾ $kullû
+@form ik-lu-u₂ $iklû
+@sense V hold (back)
+@sense AJ detained
+@sense V withhold
+@end entry
+
+@entry kalû [lamentation priest] N
+@form {LU₂}GALA{MEŠ} $kalû
+@sense N lamentation priest
+@end entry
+
+@entry kalû [totality] N
+@form kal $kal
+@sense DET all
+@sense N all
+@end entry
+
+@entry kânu [be(come) permanent] V
+@form kun-nu $kunnu
+@form GIN $kunnu
+@form uk-tin-nu-uš $uktinnūšu
+@form uk-tin-nu-uʾ $uktinnū
+@sense V be(come) set
+@sense V convict
+@end entry
+
+@entry kappu [wing] N
+@form PA $kappu
+@form kap $kappu
+@sense N wing(?)
+@end entry
+
+@entry kāru [quay] N
+@form kar-ri $kāru
+@sense N harbour district
+@end entry
+
+@entry kaspu [silver] N
+@form KU₃.BABBAR $kaspu
+@sense N silver
+@end entry
+
+@entry kasû [bind] V
+@form ik-ta-as-su-u₂ $iktassū
+@sense V bind
+@end entry
+
+@entry kasû [mustard] N
+@form kas₃ $kasû
+@form kas $kasû
+@form GAZI{SAR} $kasû
+@form ka-si $kasû
+@form kas₃-si-i $kasû
+@sense N cuscuta
+@end entry
+
+@entry kaṣāru [tie] V
+@form KAD₂ $kaṣāru
+@sense V become joined
+@end entry
+
+@entry kašādu [reach] V
+@form KUR-ad₂ $iktašad
+@form ka-šid $kašid
+@form KUR $kašādu
+@form kaš-du-uʾ $kašdū
+@sense V reach
+@sense AJ reached
+@sense AJ caught
+@sense V arrive
+@sense V bind
+@sense V catch
+@end entry
+
+@entry kī [like] PRP
+@form ki $kī
+@form ki-i $kī
+@sense PRP at
+@sense SBJ when
+@sense CNJ or
+@end entry
+
+@entry KI.MIN [ditto] N
+@form KI.MIN $KI.MIN
+@sense N ditto
+@end entry
+
+@entry kīdānu [outside] AJ
+@form ki-da-nu $kīdānu
+@sense AJ outside
+@end entry
+
+@entry kilīlu [wreath] N
+@form ki-li-li $kilīlu
+@sense N crown
+@end entry
+
++@entry kīlu [enclosure] N
+@form ki-li $kīli
+@sense N confinement
+@end entry
+
+@entry kīma [like] PRP
+@form GIM $kīma
+@form ki-ma $kīma
+@sense PRP like
+@end entry
+
+@entry kiništu [priesthood] N
+@form ki-niš-tu₂ $kiništu
+@form UKKIN $kiništu
+@form {LU₂}UKKIN $kiništu
+@sense N assembly
+@end entry
+
+@entry kinsikku [afternoon] N
+@form KIN.SIG $kinsikku
+@sense N afternoon
+@end entry
+
+@entry kirû [(fruit) plantation] N
+@form {GIŠ}KIRI₆ $kirû
+@sense N garden
+@end entry
+
+@entry kiṣru [knot] N
+@form ki-ṣir $kiṣru
+@sense N unit
+@end entry
+
+@entry kišādu [neck] N
+@form GU₂ $kišādu
+@sense N bank
+@end entry
+
+@entry kiššatu [totality] N
+@form ŠU₂ $kiššatu
+@sense N world
+@sense N peak
+@end entry
+
+@entry kūm [instead of] PRP
+@form ku-um $kūm
+@form ku-um-mi-šu₂ $kūmišu
+@sense N representative
+@sense PRP instead of
+@end entry
+
+@entry KUR [moonrise to sunrise] N
+@form KUR $KUR
+@sense N moonrise to sunrise
+@end entry
+
+@entry kurru [kor (180 litres)] N
+@form GUR $kurru
+@sense N kor (180 litres)
+@end entry
+
+@entry kūṣu [coldness] N
+@form ŠED₇ $kūṣu
+@sense N coldness
+@end entry
+
+@entry kutallu [back] N
+@form ku-tal $kutallu
+@sense N later part
+@end entry
+
+@entry kutīmu [goldsmith] N
+@form {LU₂}KU₃.DIM{MEŠ} $kutīmu
+@form {LU₂}KU₃.DIM $kutīmu
+@form {LU₂}ku-tim{MEŠ} $kutīmu
+@sense N goldsmith
+@end entry
+
+@entry kuzbu [attractiveness] N
+@form ku-uz-bi $kuzbu
+@sense N wig(?)
+@end entry
+
+@letter L
+
+@entry lā [not] MOD
+@form la $lā
+@sense MOD not
+@end entry
+
+@entry labīru [old] AJ
+@form SUMUN $labīru
+@sense AJ old
+@end entry
+
+@entry lawi [surrounded (with] AJ
+@form NIGIN $lawi
+@form NIGIN₂ $lawi
+@sense AJ surrounded (with)
+@end entry
+
+@entry lawû [surroud] V
+@form NIGIN $lawû
+@sense V go around
+@end entry
+
+@entry leqû [take] V
+@form TI-qe₂ $leqû
+@sense V take
+@end entry
+
+@entry libbu [interior] N
+@form ŠA₃-šu₂ $libbišu
+@form ŠA₃ $libbu
+@form lib₃-bi $libbu
+@form lib₃-bi-šu₂ $libbu
+@sense N inside
+@sense N interior
+@sense PRP into
+@end entry
+
+@entry libittu [mudbrick] N
+@form SIG₄{HI.A} $libittu
+@sense N mudbrick
+@end entry
+
+@entry lilissu [kettledrum] N
+@form {KUŠ}li-li-su $lilissu
+@sense N kettledrum
+@end entry
+
+@entry līm [thousand] NU
+@form lim $līm
+@sense NU thousand
+@end entry
+
+@entry limītu [perimeter] N
+@form li-mit $limītu
+@sense N environs
+@end entry
+
+@entry līpu [descendant] N
+@form li-pi-šu₂-nu $līpu
+@sense N descendant
+@end entry
+
+@entry lubuštu [clothing] N
+@form TUG₂ $lubuštu
+@sense N garment
+@end entry
+
+@entry lulīmu [red deer] N
+@form lu-lim $lulīmu
+@sense CN Stag
+@end entry
+
+@letter M
+
+@entry mādidu [measuring official] N
+@form {LU₂}man-di-di $mādidu
+@sense N measurer
+@end entry
+
+@entry mādiš [greatly] AV
+@form ma-diš $mādiš
+@sense AV very much
+@end entry
+
+@entry mādu [many] AJ
+@form ma-du-tu $mādu
+@sense AJ many
+@end entry
+
+@entry magal [very (much)] AV
+@form ma-gal $magal
+@sense AV very (much)
+@end entry
+
+@entry mahāru [face] V
+@form un-dah-hi-ru $umtahhir
+@sense V present
+@end entry
+
+@entry mahāṣu [beat] V
+@form RA-iṣ $mahāṣu
+@sense V devastate
+@end entry
+
+@entry mahīru [exchange rate] N
+@form KI.LAM $mahīru
+@sense N price (equivalent)
+@end entry
+
+@entry mahrû [first] AJ
+@form IGI-u₂ $mahrû
+@form IGI{MEŠ} $mahrûti
+@form IGI-ri-it $mahrīt
+@sense AJ front
+@sense AJ previous
+@end entry
+
+@entry makkūru [property] N
+@form NIG₂.GA $makkūru
+@sense N property
+@end entry
+
+@entry manû [count] V
+@form ŠID-u₂ $manû
+@form in-da-nu $imtanu
+@sense V recite
+@end entry
+
+@entry manû [mina] N
+@form ma $manû
+@form MA.NA $manû
+@sense N mina
+@sense N (one mina)
+@end entry
+
+@entry Manziat [rainbow] N
+@form {d}TIR.AN $Manziat
+@form {d}TIR.AN.NA $Manziat
+@form {d}TIR.RA.AN $Manziat
+@form TIR.AN $Manziat
+@form TIR.RA.AN $Manziat
+@form TIR.AN.NA $Manziat
+@sense N rainbow
+@end entry
+
+@entry maqātu [fall] V
+@form ŠUB $maqātu
+@sense V fall
+@end entry
+
+@entry mār šipri [messenger] N
+@parts māru[son]N šipru[sending]N
+@form A_šip-ri $mār $šipri
+@sense N messenger
+@end entry
+
+@entry marratu [sea] N
+@form ma-rat $marratu
+@sense N sea
+@end entry
+
+@entry māru [son] N
+@form A-šu₂ $māru
+@form A{MEŠ}-šu₂ $māru
+@form DUMU{MEŠ}-šu₂ $māru
+@form A $mār
+@form {LU₂}A{MEŠ}-šu₂ $māru
+@form {LU₂}DUMU $māru
+@sense N son
+@sense N inhabitant
+@end entry
+
+@entry maṣṣartu [observation] N
+@form EN.NUN $maṣṣartu
+@form EN.NUN{MEŠ} $maṣṣartu
+@sense N guard
+@sense N watch
+@end entry
+
+@entry mašʾāltu [questioning] N
+@form maš-a-a-al-tu₂ $mašʾāltu
+@sense N interrogation
+@end entry
+
+@entry mašāhu [measure] V
+@form muš $mašāhu
+@sense V measure
+@end entry
+
+@entry mašālu [equal] V
+@form maš-lu $mašālu
+@sense V be(come) similar
+@end entry
+
+@entry mātu [land] N
+@form KUR $mātu
+@form KUR.KUR $mātāte
+@sense N land
+@end entry
+
+@entry mâtu [die] V
+@form UŠ₂{MEŠ}-ma $mâtu
+@form UŠ₂{MEŠ} $mâtu
+@sense V die
+@sense N death
+@end entry
+
+@entry meʾatu [(one) hundred] NU
+@form ME $mē
+@sense NU (one) hundred
+@end entry
+
+@entry mehû [storm] N
+@form me-hu-u₂ $mehû
+@form me-he-e $mehû
+@sense N storm
+@end entry
+
+@entry mīlu [high water] N
+@form ILLU $mīlu
+@sense N river level
+@sense N flood
+@end entry
+
+@entry mimma [anything] XP
+@form mim-ma $mimma
+@sense XP anything
+@end entry
+
+@entry miqit-išāti [fall of fire] N
+@form IZI.ŠUB $miqit-išāti
+@form IZI.ŠUB-tu₄ $miqit-išāti
+@form IZI.ŠUB.BA $miqit-išāti
+@sense N fall of fire
+@end entry
+
+@entry mišhu [flash] N
+@form mi-ših-šu₂ $mišhu
+@sense N tail (of a comet)
+@end entry
+
+@entry mītu [dead] AJ
+@form UŠ₂{MEŠ} $mītu
+@sense N dead person
+@end entry
+
+@entry mû [water] N
+@form A $mû
+@sense N water
+@end entry
+
+@entry muhhu [skull] N
+@form UGU $muhhi
+@form muh-hi $muhhi
+@sense N top
+@end entry
+
+@entry muhhuru [offering] N
+@form mah-hu-ru $muhhuru
+@sense N offering
+@end entry
+
+@entry mumaʾʾeru [commander] N
+@form {LU₂}GAL.UKKIN{MEŠ} $mumaʾʾeru
+@form {LU₂}GAL.ERIN₂{MEŠ} $mumaʾʾeru
+@form {LU₂}GAL.ERIN₂ $mumaʾʾeru
+@sense N president
+@sense N commander
+@end entry
+
+@entry mummu [craftsman] N
+@form mu-um-ma $mummu
+@sense N workshop
+@end entry
+
+@entry muṣlālu [siesta(-time)] N
+@form AN.BAR₇ $muṣlālu
+@sense N noon
+@end entry
+
+@entry mūšu [night] N
+@form GE₆ $mūšu
+@sense N night
+@sense N sunset to moonrise
+@sense N nighttime
+@end entry
+
+@letter N
+
+@entry na [na-gauge] N
+@form na $na
+@sense N na-gauge
+@end entry
+
+@entry na [sunrise to moonset] N
+@form na $na
+@sense N sunrise to moonset
+@end entry
+
+@entry na [time interval between the rising of a planet and sunrise viz. sunset and the setting of a planet] N
+@form na-su $na
+@form na $na
+@sense N rising to sunrise
+@sense N sunset to setting
+@end entry
+
+@entry nabalkutu [cross over] V
+@form ib-bal-kit-ma $ibbalkitma
+@sense V cross over
+@end entry
+
+@entry nabi [named] AJ
+@form SA₄-u₂ $nabû
+@sense AJ named
+@end entry
+
+@entry nadānu [give] V
+@form SUM-nu $nadānu
+@form SUM $nadānu
+@form SUM-in $innaddin
+@form ina-an-din $innaddin
+@form SUM{MEŠ} $nadānu
+@sense V give
+@sense V put
+@end entry
+
+@entry nadû [throw (down)] V
+@form ŠUB-di $nadû
+@sense V throw (down)
+@end entry
+
+@entry nahāsu [recede] V
+@form LAL $nahāsu
+@form LAL-šu₂ $nahāsu
+@form i-ne-eh-hi-is $inehhis
+@form LAL-is $nahis
+@sense V be(come) back
+@sense V recede
+@sense V move back
+@end entry
+
+@entry nakāru [be(come) different] V
+@form ik-kir $ikkir
+@sense V revolt
+@end entry
+
+@entry nakru [enemy] N
+@form {LU₂}KUR₂ $nakru
+@sense N enemy
+@end entry
+
+@entry nalšu [(nocturnal) dew] N
+@form na-al-šu₂ $nalšu
+@sense N (nocturnal) dew
+@end entry
+
+@entry namaddu [measuring vessel] N
+@form NINDA $namaddu
+@sense N measurement
+@end entry
+
+@entry napharu [total] N
+@form PAP $napharu
+@sense N total
+@end entry
+
+@entry narkabtu [chariot] N
+@form {GIŠ}GIGIR{MEŠ}-šu₂ $narkabtu
+@sense N chariot
+@end entry
+
+@entry nāru [river] N
+@form ID₂ $nāru
+@sense N river
+@sense N canal
+@sense N river level
+@end entry
+
+@entry naṣāru [guard] V
+@form PAP $naṣāru
+@form na-ṣar $naṣāru
+@form EN.NUN $naṣāru
+@sense V watch
+@sense N observation
+@end entry
+
+@entry nāṣiru [guard] N
+@form {LU₂}na-ṣir{MEŠ} $nāṣiru
+@sense N guard
+@end entry
+
++@entry našû [lifting] N
+@form na-šu-u₂ $našû
+@sense N carrying
+@end entry
+
+@entry nâšu [rock] V
+@form i-nu-uš $inūš
+@sense V quake
+@end entry
+
+@entry natāku [drip] V
+@form UTAH $natāku
+@sense V drip
+@end entry
+
+@entry naṭālu [look] V
+@form ina-an-ṭal $naṭālu
+@sense V look
+@end entry
+
+@entry nawāru [be(come) bright] V
+@form ZALAG₂-ru $nawāru
+@form ZALAG₂-ir $nawāru
+@sense N clearing
+@sense V clear
+@end entry
+
+@entry na₁ [sunset to moonset] N
+@form na $na₁
+@form na-su $na₁
+@sense N sunset to moonset
+@end entry
+
+@entry nēhu [calm] AJ
+@form ne₂-hi $nēhu
+@form ne₂ $nēhu
+@sense AJ slow
+@end entry
+
+@entry nēhu [slow] AJ
+@form ne $nēhu
+@sense AJ slow
+@end entry
+
+@entry nēpešu [activity] N
+@form ne₂-peš $nēpešu
+@form ne₂-pe-šu₂ $nēpešu
+@sense N ritual
+@end entry
+
+@entry nešmû [hearing] N
+@form na-aš₂-mu-u₂ $nešmû
+@form na-aš₂-mu $nešmû
+@sense N rumour
+@end entry
+
+@entry nignakku [censer] N
+@form NIG₂.NA $nignakku
+@sense N censer
+@end entry
+
+@entry nigûtu [joyful song] N
+@form ni-gu-tu₂ $nigûtu
+@sense N festival
+@end entry
+
+@entry nindabû [(food) offering] N
+@form NIDBA $nindabû
+@sense N (food) offering
+@end entry
+
+@entry nīqu [offering] N
+@form SISKUR.SISKUR $nīqu
+@form SISKUR.SISKUR{MEŠ} $nīqu
+@form SISKUR{MEŠ} $nīqu
+@form {UDU}SISKUR{MEŠ} $nīqu
+@form SISKUR $nīqu
+@sense N sacrifice
+@sense N offering
+@end entry
+
+@entry nišu [people] N
+@form {LU₂}UN{MEŠ} $nišu
+@sense N people
+@end entry
+
+@entry nūru [light] N
+@form ZALAG₂ $nūru
+@sense N last part of the night
+@sense N clearing
+@sense N light
+@sense V clear
+@end entry
+
+@letter P
+
+@entry pānû [first] AJ
+@form IGI $pānû
+@form IGI-u₂ $pānu
+@form IGI{MEŠ} $pānûtu
+@sense AJ front
+@sense AV previously
+@end entry
+
+@entry pānu [bushel (36 litres)] N
+@form PI $pānu
+@sense N bushel (36 litres)
+@end entry
+
+@entry pānu [front] N
+@form IGI $pān
+@form IGI-ma $pān
+@form IGI{MEŠ}-šu₂-nu $pānīšunu
+@sense N front
+@sense N presence
+@end entry
+
+@entry papāhu [cella] N
+@form pa-pa-hu $papāhu
+@sense N cella
+@end entry
+
+@entry paqid [entrusted] AJ
+@form pe-eq-du $paqid
+@sense AJ entrusted
+@end entry
+
+@entry parakku [cult dais] N
+@form BARA₂ $parakku
+@sense N throne
+@end entry
+
+@entry parāku [lie across] V
+@form GIB $parāku
+@form GIB{MEŠ} $parāku
+@sense V stretch
+@end entry
+
+@entry paris [cut (off)] AJ
+@form TAR-is $paris
+@form TAR $paris
+@form TAR-uʾ $parsū
+@form TAR{MEŠ} $parsū
+@sense AJ split
+@sense AJ cut off
+@end entry
+
+@entry parzillu [iron] N
+@form AN.BAR $parzillu
+@sense N iron
+@end entry
+
+@entry patru [sword] N
+@form GIR₂ $patru
+@sense N dagger
+@end entry
+
+@entry paṭāru [loosen] V
+@form TUH $paṭāru
+@sense V remove
+@end entry
+
+@entry petû [open] V
+@form BAD $petû
+@sense V open
+@end entry
+
+@entry pīhātu [post] N
+@form {LU₂}pa-hat $pīhātu
+@sense N governor
+@end entry
+
+@entry pisannu [(a meterological phenomenon)] N
+@form PISAN $pisannu
+@sense N (a meterological phenomenon)
+@end entry
+
+@entry pišannu [(a bag] N
+@form {GADA}pi-ša₂-an-nu $pišannu
+@sense N (a bag for temple property)
+@end entry
+
+@entry pû [mouth] N
+@form KA $pû
+@sense N mouth
+@sense N opening
+@end entry
+
+@entry puhādu [lamb] N
+@form pu-ha-du $puhādu
+@sense N sheep
+@end entry
+
+@entry puliṭū [(Greek) citizenry] N
+@form {LU₂}pu-li-ṭe-e $puliṭū
+@sense N (Greek) citizenry
+@end entry
+
+@entry puluhtu [fear] N
+@form pu-luh-tu₄ $puluhtu
+@sense N fear
+@end entry
+
+@entry puppē [procession] N
+@form pu-up-pe-e $puppē
+@sense N procession
+@end entry
+
+@letter Q
+
+@entry qabaltu [middle] N
+@form MURUB₄ $qabaltu
+@sense N middle
+@end entry
+
+@entry qablītu [middle watch (of the night)] N
+@form EN.NUN.MURUB₄ $qablītu
+@form MURUB₄ $qablītu
+@form MURUB₄-ti₃ $qablītu
+@sense N middle watch (of the night)
+@end entry
+
+@entry qadūtu [silt] N
+@form IM.GU₂ $qadūtu
+@sense N mud
+@end entry
+
+@entry qalāpu [peel] V
+@form iq-lu-pu-u₂ $iqlupū
+@form qa-li-ip $qalip
+@sense AJ peeled off
+@sense V peel
+@end entry
+
+@entry qali [roasted] AJ
+@form qa-lu-u₂ $qalû
+@sense AJ burnt
+@end entry
+
+@entry qarnu [horn] N
+@form SI-šu₂ $qarnu
+@form SI $qarnu
+@sense N horn
+@end entry
+
+@entry qatāru [smoke] V
+@form iq-tur₇ $qatāru
+@sense V billow
+@end entry
+
+@entry qātu [hand] N
+@form ŠU{II}-šu₂ $qātu
+@form ŠU{II} $qātu
+@sense N hand
+@end entry
+
+@entry qību [command] N
+@form qi₂-bi $qību
+@sense N command
+@end entry
+
+@entry qītu [end] N
+@form TIL $qītu
+@sense N end
+@end entry
+
+@entry qû [(one) litre] N
+@form qa $qû
+@sense N (one) litre
+@end entry
+
+@letter R
+
+@entry rab sikkati [(a military official)] N
+@parts rabû[great one]N sikkatu[peg]N
+@form {LU₂}GAL_sik-kat $rab $sikkati
+@sense N (a military official)
+@end entry
+
+@entry rab-uqūti [general] N
+@form {LU₂}GAL.ERIN₂{MEŠ}-u₂-tu $rab-uqūti
+@sense N general
+@end entry
+
+@entry rabû [big] AJ
+@form GAL $rabû
+@sense N chief
+@end entry
+
+@entry rabû [great one] N
+@form {LU₂}GAL.MAH $rabû
+@form {LU₂}GAL $rabû
+@form {LU₂}GAL $rab
+@sense N chief
+@sense N commander
+@end entry
+
+@entry rabû [large] AJ
+@form GAL-tu₄ $rabitu
+@form GAL-u₂ $rabû
+@form GAL{MEŠ} $rabû
+@form GAL-i $rabû
+@form GAL $rabû
+@sense AJ great
+@sense AJ large
+@sense AJ big
+@end entry
+
+@entry rabû [set] V
+@form ŠU₂ $rabû
+@form ŠU₂ $rabû
+@form ŠU₂-u₂ $rabû
+@form ŠU₂-šu₂ $rabû
+@form ŠU₂{MEŠ} $rabû
+@form ŠU₂.ŠU₂ $rabû
+@form ŠU₂-u $rabû
+@sense N moonset to sunrise
+@sense V set
+@sense N setting
+@end entry
+
+@entry rādu [cloudburst] N
+@form rad $rādu
+@sense N cloudburst
+@end entry
+
+@entry raqqu [thin] AJ
+@form SAL $raqqu
+@sense AJ thin
+@end entry
+
+@entry rēhtu [remainder] N
+@form IB₂.TAG₄ $rēhtu
+@sense N rest
+@end entry
+
+@entry rēšu [head] N
+@form SAG $rēš
+@form SAG.DU{MEŠ} $rēšu
+@sense N beginning
+@sense N head
+@end entry
+
+@entry rigim Adad [thunder] N
+@parts rigmu[voice]N Adad[storm-god]DN
+@form GU₃_U $rigim $Adad
+@sense N thunder
+@end entry
+
+@entry rigmu [voice] N
+@form GU₃-šu₂ $rigimšu
+@form GU₃ $rigim
+@form GU₃ $rigmu
+@form ri-ig-im-mu $rigmu
+@sense N voice
+@sense N thunder
+@sense N complaint
+@end entry
+
+@letter S
+
+@entry sadir [regular] AJ
+@form sa-dir $sadir
+@sense AJ regular
+@end entry
+
+@entry sahāpu [envelop] V
+@form ŠU₂-ap $isahhap
+@form is-hup₂ $ishup
+@sense V spread
+@sense V sweep over
+@sense V cover
+@end entry
+
+@entry sahlu [cress] N
+@form sah-le₁₀ $sahlu
+@form sah $sahlu
+@sense N cress
+@end entry
+
+@entry sāmu [red] AJ
+@form SA₅ $sāmu
+@sense AJ red
+@end entry
+
+@entry sanāqu [check] V
+@form DIM₄ $sanāqu
+@sense V come near
+@end entry
+
+@entry sapih [scattered] AJ
+@form su-up-pu-hu-uʾ $suppuhū
+@sense AJ scattered
+@end entry
+
+@entry sattukku [regular delivery] N
+@form SA₂.DUG₄ $sattukku
+@sense N regular offering
+@end entry
+
+@entry sikillu [(a plant)] N
+@form SIKIL $sikillu
+@sense N (a semiprecious stone)
+@end entry
+
++@entry sikkatu [peg] N
+@form sik-kat $sikkati
+@sense N peg
+@end entry
+
+@entry simmiltu [stair(case)] N
+@form {GIŠ}sim-mil-tu₂ $simmiltu
+@form sim-mil-tu₄ $simmiltu
+@sense N rack
+@end entry
+
+@entry Sîn [moon(-god)] N
+@form sin $Sîn
+@form {d}sin $Sîn
+@sense N moon
+@sense AJ lunar
+@end entry
+
+@entry sinništu [woman] N
+@form SAL $sinništu
+@form {SAL}x{MEŠ} $sinništu
+@form MI₂ $sinništu
+@sense N woman
+@sense AJ female
+@end entry
+
+@entry sipdu [wailing] N
+@form si-ip-du $sipdu
+@sense N mourning
+@end entry
+
+@entry suluppu [date] N
+@form ZU₂.LUM.MA $suluppu
+@form ZU₂ $suluppu
+@form ZU₂.LUM $suluppu
+@sense N date
+@end entry
+
+@entry sūqu [street] N
+@form SILA{MEŠ} $sūqu
+@sense N street
+@end entry
+
+@entry sūtu [(a capacity measure)] N
+@form {GIŠ}BAN₂ $sūtu
+@sense N (a capacity measure)
+@end entry
+
+@letter Ṣ
+
+@entry ṣabātu [seize] V
+@form ZA $ṣabātu
+@form iṣ-ṣa-bat $iṣṣabat
+@form DIB-uʾ $ṣabtū
+@form DIB $ṣabātu
+@sense V cover (the sky)
+@sense V seize
+@sense V catch
+@sense AJ held captive
+@end entry
+
+@entry ṣalāpu [cut (at an angle)] V
+@form ṣal-pu $ṣalāpu
+@sense V slant
+@end entry
+
+@entry ṣallumû [meteor] N
+@form ṣal-lum-mu-u₂ $ṣallumû
+@sense N comet
+@end entry
+
+@entry ṣalmu [effigy] N
+@form ALAM{MEŠ} $ṣalmu
+@sense N statue
+@end entry
+
+@entry ṣāltu [combat] N
+@form ṣal-la-a-tu₂ $ṣāltu
+@form ṣal-tu₄ $ṣāltu
+@sense N fight
+@sense N combat
+@end entry
+
+@entry ṣarhu [plaintive] AJ
+@form ṣar-hi $ṣarhu
+@form ṣar-hu $ṣarhu
+@sense AJ wailing
+@end entry
+
+@entry ṣehēru [be(come) small] V
+@form TUR $ṣehēru
+@sense V be(come) small
+@end entry
+
+@entry ṣehru [small] AJ
+@form TUR $ṣehru
+@form TUR.TUR $ṣehru
+@sense AJ small
+@end entry
+
+@entry ṣētu [bright light] N
+@form UD.DA $ṣētu
+@form UD.DA-šu₂ $ṣētu
+@form UD.DA-su $ṣētu
+@sense N bright light
+@end entry
+
+@entry ṣīru [exalted] AJ
+@form MAH $ṣīru
+@form MAH{MEŠ} $ṣīru
+@form MAH-tu₂ $ṣīru
+@sense AJ much
+@sense AJ many
+@sense AJ big
+@end entry
+
+@entry ṣīt-šamši [sunrise] N
+@form {d}UTU.E₃.A $ṣīt-šamši
+@sense N east
+@end entry
+
+@entry ṣuhhuru [verysmall] AJ
+@form TUR.TUR $ṣuhhuru
+@sense AJ very small
+@end entry
+
+@letter Š
+
+@entry ša [that] REL
+@form ša₂ $ša
+@sense REL which
+@sense REL who
+@sense DET of
+@sense PRP from
+@end entry
+
+@entry šadduʾaya [mountain-dwellers] N
+@form {LU₂}ša₂-du-u₂-a-a $šadduʾaya
+@sense N mountain-dwellers
+@end entry
+
+@entry šadû [east] N
+@form KUR $šadû
+@form KUR.RA $šadû
+@form IM-3 $šadû
+@sense N east wind
+@sense N east
+@sense V reach
+@end entry
+
+@entry šakānu [put] V
+@form GAR $šakānu
+@form GAR-in $šakin
+@form GAR-an $ištakan
+@form šak-nu $šaknū
+@form il-ta-kan $ištakan
+@form il-tak-nu-u₂ $ištaknū
+@form GAR-nu $šakānu
+@form GAR-at₂ $šaknat
+@form GAR{MEŠ} $šakānu
+@form il-tak-nu-uʾ $ištaknū
+@form GAR-nu-uʾ $šakānu
+@form GAR-uʾ $šaknū
+@form ša₂-kin $šakin
+@form iš-ta-nak-kan $ištanakkan
+@sense V set
+@sense V hold
+@sense V perform
+@sense V set up
+@sense V present
+@sense V make
+@sense V place
+@sense N setting
+@sense AJ set up
+@sense AJ placed
+@end entry
+
+@entry šaknu [placed] AJ
+@form {LU₂}ša₂-kin₇ $šaknu
+@sense N governor
+@end entry
+
+@entry šalāmu [be(come) healthy] V
+@form liš-lim $lišlim
+@sense V be(come) well
+@end entry
+
+@entry šalāšišu [thrice] AV
+@form 3-šu₂ $šalāšišu
+@sense AV thrice
+@end entry
+
+@entry šalšu [third] NU
+@form šal-šu₂ $šalšu
+@sense NU third
+@end entry
+
+@entry šalṭāniš [in triumph] AV
+@form šal-ṭa-niš $šalṭāniš
+@sense AV victoriously
+@end entry
+
+@entry šâlu [ask] V
+@form i-ša₂-lu-uš $išālūšu
+@form i-ša₂-lu-uʾ $išālū
+@sense V interrogate
+@end entry
+
+@entry šamaššammū [sesame] N
+@form ŠE.GIŠ $šamaššammū
+@form ŠE.GIŠ.I₃ $šamaššammū
+@sense N sesame
+@end entry
+
+@entry šamšu [sun] N
+@form šamaš₂ $šamšu
+@form šamaš₂ $šamši
+@form {d}UTU $šamšu
+@sense N sun
+@end entry
+
+@entry šamû [sky] N
+@form AN $šamû
+@form AN-e $šamû
+@sense N sky
+@sense N rain
+@end entry
+
+@entry šangû [priest] N
+@form {LU₂}SANGA $šangû
+@sense N priest
+@end entry
+
+@entry šanû [second] AJ
+@form 2-tu₄ $šanû
+@sense AJ second
+@end entry
+
+@entry šapil [low] AJ
+@form SIG $šapil
+@form SIG $šaplat
+@sense PRP below
+@sense AJ low
+@sense AJ faint
+@end entry
+
+@entry šaqālu [weigh] V
+@form LAL-tu₄ $šaqālu
+@sense V measure
+@end entry
+
+@entry šaqi [high] AJ
+@form NIM-a $šaqâ
+@form NIM $šaqi
+@sense AJ high
+@end entry
+
+@entry ŠÁR [gusty(?)] AJ
+@form ŠAR₂ $ŠÁR
+@form ŠAR₂{ME} $ŠÁR
+@form ŠAR₂-uʾ $ŠÁR
+@sense AJ gusty(?)
+@end entry
+
+@entry šār-erbetti [four winds] N
+@form IM.LIMMU.BA $šār-erbetti
+@form IM.LIMMU₂.BA $šār-erbetti
+@sense N winds from all four directions
+@sense N all four directions
+@end entry
+
+@entry šarrāqu [thief] N
+@form {LU₂}šar-ra-qu $šarrāqu
+@form {LU₂}šar-ra-qa{MEŠ} $šarrāqu
+@sense N thief
+@end entry
+
+@entry šarrātu [queen] N
+@form GAŠAN $šarrātu
+@sense N queen
+@end entry
+
+@entry šarru [king] N
+@form LUGAL $šarru
+@form LUGAL{MEŠ} $šarrāni
+@sense N king
+@end entry
+
+@entry šarrūtu [kingship] N
+@form LUGAL-u₂-tu $šarrūtu
+@sense N kingship
+@end entry
+
+@entry šāru [wind] N
+@form IM $šāru
+@sense N wind
+@end entry
+
+@entry šarūru [brilliance] N
+@form ŠE.ER.ZI-šu₂-nu $šarūru
+@sense N glow
+@end entry
+
+@entry šasû [shout] V
+@form SAR $šasû
+@sense V read
+@end entry
+
+@entry šāt-urri [third watch of the night] N
+@form U₄.ZAL $šāt-urri
+@form USAN.ZAL.LA $šāt-urri
+@form U₄.ZAL.LA $šāt-urri
+@form EN.NUN.U₄.ZAL $šāt-urri
+@sense N third watch of the night
+@sense N last part of the night
+@end entry
+
+@entry šatammu [administrator] N
+@form {LU₂}ŠA₃.TAM.MU $šatammu
+@form {LU₂}ŠA₃.TAM $šatammu
+@form ŠA₃.TAM $šatammu
+@sense N temple administrator
+@sense N administrator
+@end entry
+
+@entry šatammūtu [post of @i{šatammu}] N
+@form {LU₂}ŠA₃.TAM-u₂-tu₂ $šatammūtu
+@sense N administrative duties
+@end entry
+
+@entry šattu [year] N
+@form MU $šattu
+@sense N year
+@end entry
+
+@entry šaṭāru [written] AJ
+@form SAR $šaṭir
+@form šaṭ-ri $šaṭir
+@sense AJ written
+@end entry
+
+@entry šeʾu [barley] N
+@form še-im $šeʾu
+@form ŠE $šeʾu
+@sense N barley
+@end entry
+
+@entry šemû [hear] V
+@form it-ti-šem-mu $ittešmû
+@form it-te-eš-me $ittešmû
+@form al-te-me $alteme
+@form al-te-e $alteme
+@form it-teš₂-mu-u₂ $ittešmû
+@form it-teš₂-mu $ittešmû
+@sense V hear
+@end entry
+
+@entry šēnu [sandal] N
+@form E.SIR₂ $šēnu
+@form {KUŠ}E.SIR₂ $šēnu
+@form še-ni $šēnu
+@form {KUŠ}GIL $šēnu
+@sense N sandal
+@end entry
+
+@entry šēpu [foot] N
+@form GIR₃ $šēpu
+@sense N foot
+@end entry
+
+@entry šēru [morning] N
+@form še-ri₃ $šēri
+@sense N morning
+@end entry
+
+@entry šiknu [act of putting] N
+@form GAR $šiknu
+@sense N onset
+@end entry
+
+@entry šimītān [evening] N
+@form USAN $šimītān
+@sense N first part of the night
+@end entry
+
+@entry šimtu [mark] N
+@form si-mat $šimtu
+@sense N mark
+@end entry
+
+@entry šīmtu [what is fixed] N
+@form šim-tu₄ $šīmtu
+@sense N death
+@end entry
+
+@entry šina [two] NU
+@form 2-ta $šina
+@form MIN $šina
+@sense NU two
+@end entry
+
+@entry šinīšu [twice] AV
+@form 2-šu₂ $šinīšu
+@sense AV twice
+@end entry
+
+@entry šīpātu [wool] N
+@form SIG₂ $šīpātu
+@form SIG₂{HI.A} $šīpātu
+@sense N wool
+@end entry
+
+@entry šipirtu [message] N
+@form {KUŠ}ši-piš-tu₄ $šipirtu
+@form {KUŠ}ši-piš-tu₂ $šipirtu
+@sense N message
+@end entry
+
+@entry šipru [sending] N
+@form šip-ri $šipri
+@sense N sending
+@end entry
+
+@entry šiptu [incantation] N
+@form EN₂{MEŠ} $šiptu
+@form KA.INIM $šiptu
+@sense N incantation
+@end entry
+
+@entry šiqlu [shekel] N
+@form GIN₂ $šiqlu
+@form GIN₂.AM₃ $šiqlu
+@sense N shekel
+@end entry
+
+@entry šitqultu [opposition] N
+@form LAL₂-ti₃ $šitqultu
+@form LAL₂ $šitqultu
+@sense N equinox
+@end entry
+
+@entry šū [he] IP
+@form BI $šū
+@form šu-u₂ $šū
+@sense DP that
+@end entry
+
+@entry šuāti [him] IP
+@form MU-a-ti₃ $šuāti
+@sense DP that
+@sense DP this
+@end entry
+
+@entry šukênu [prostrate oneself] V
+@form uš-kin-nu $uškinnu
+@sense V prostrate oneself
+@end entry
+
+@entry šulmānu [greeting-gift] N
+@form šul-lu-ma-nu $šulmānu
+@sense N dedication
+@end entry
+
+@entry šumēlu [the left] N
+@form 2.30 $šumēlu
+@form GUB₃ $šumēlu
+@sense N the left
+@end entry
+
+@entry šumu [name] N
+@form MU $šumu
+@form MU-šu₂ $šumšu
+@sense N name
+@end entry
+
+@entry šupālu [depression] N
+@form šu-pal-šu₂ $šupālšu
+@sense PRP beneath
+@end entry
+
+@entry šurqu [theft] N
+@form šur-qa $šurqu
+@sense N theft
+@end entry
+
+@entry šurrû [begin] V
+@form TAB-u₂ $ušarrû
+@sense V begin
+@end entry
+
+@entry šūt [who(m)] DET
+@form šu-ut $šūt
+@sense DET of
+@end entry
+
+@entry šūtu [south] N
+@form ULU₃ $šūtu
+@form {IM}ULU₃ $šūtu
+@sense N south wind
+@sense N south
+@sense AJ southern
+@end entry
+
+@letter T
+
+@entry tabālu [take away] V
+@form ta-bal $tabil
+@form it-bal-lu-uʾ $itbalū
+@sense V carry off
+@sense AJ taken away
+@end entry
+
+@entry tāhāzu [battle] N
+@form ME₃ $tāhāzu
+@sense N battle
+@end entry
+
+@entry tahû [side(?)] N
+@form ta-hu-šu₂ $tahû
+@sense N side(?)
+@end entry
+
+@entry tallu [dividing line] N
+@form {GIŠ}tal-lu $tallu
+@sense N beam
+@end entry
+
+@entry tāmartu [appearance] N
+@form IGI.LA₂ $tāmartu
+@form IGI-šu₂ $tāmartišu
+@sense N appearance
+@end entry
+
+@entry tamlīu [filling] N
+@form tam-lu-u₂ $tamlīu
+@sense N terrace
+@end entry
+
+@entry tamšīlu [image] N
+@form tam-šil $tamšīlu
+@sense N image
+@end entry
+
+@entry tarbaṣu [pen] N
+@form TUR₃ $tarbaṣu
+@form TUR₃ $tarbaṣa
+@form TUR₃{MEŠ} $tarbaṣu
+@sense N halo
+@end entry
+
+@entry tarṣu [before] PRP
+@form tar-ṣi $tarṣi
+@form tar-ṣa $tarṣa
+@form tar-ṣu $tarṣu
+@sense PRP opposite
+@end entry
+
+@entry târu [turn] V
+@form it-tu-ru-uʾ $ittūrū
+@sense V return
+@end entry
+
+@entry tebû [get up] V
+@form ZI-a $tebû
+@sense V attack
+@end entry
+
+@entry tehû [be(come) near] V
+@form TE{MEŠ} $tehû
+@sense V approach
+@end entry
+
+@letter Ṭ
+
+@entry ṭāhu [adjacent to] PRP
+@form DA $ṭāhu
+@sense PRP adjacent to
+@end entry
+
+@entry ṭehû [be(come) near to] V
+@form TE $ṭehû
+@form TE-šu₂ $ṭehû
+@sense V come close
+@sense V be(come) near to
+@end entry
+
+@letter U
+
+@entry u [and] CNJ
+@form u $u
+@form u₃ $u
+@sense CNJ and
+@end entry
+
+@entry ubānu [finger] N
+@form U $ubānu
+@form SI $ubānu
+@sense N finger
+@end entry
+
+@entry ul [not] MOD
+@form NU $ul
+@form ul $ul
+@sense MOD not
+@end entry
+
+@entry ūlū [or] CNJ
+@form lu $ūlū
+@sense CNJ or
+@end entry
+
+@entry umma [saying] PRP
+@form um-ma $umma
+@sense PRP thus
+@sense PRP as follows
+@end entry
+
+@entry ūmu [day] N
+@form ME $ūmu
+@form U₄ $ūmu
+@form u₄-mu $ūmu
+@form UD $ūmu
+@sense N day
+@sense N daytime
+@sense N moonrise to sunset
+@end entry
+
+@entry ūmu ana erib šamši [before sunset] PRP
+@parts ūmu[day]N ana[to]PRP erbu[(sun)set]N šamšu[sun]N
+@form ME_ana_ŠU₂_šamaš₂ $ūmu $ana $rabû $šamšu
+@sense PRP before sunset
+@end entry
+
+@entry unūtu [tools] N
+@form i-nu-tu₂ $unūtu
+@sense N equipment
+@end entry
+
+@entry uqu [people] N
+@form ERIN₂{MEŠ} $uqu
+@form ERIN₂{MEŠ} $uqānī
+@form ERIN₂ $uqu
+@form {LU₂}ERIN₂{MEŠ} $uqānī
+@form {LU₂}ERIN₂{MEŠ}-šu₂ $uqānī
+@form UKKIN{MEŠ} $uqānī
+@form {LU₂}u₂-qa $uqu
+@sense N troops
+@end entry
+
++@entry urigallu [standard] N
+@form {d}URI₃.GAL-lu $urigallu
+@sense N (divine) standard
+@end entry
+
+@entry uṣurtu [drawing] N
+@form u₂-ṣur-tu₂ $uṣurtu
+@sense N design
+@end entry
+
+@entry UŠ [(time degree)] N
+@form UŠ $UŠ
+@sense N (time degree)
+@end entry
+
+@letter W
+
+@entry wabālu [carry] V
+@form ub-til-šu₂ $ittabalšu
+@form ub-til $ittabal
+@sense V carry off
+@end entry
+
+@entry walādu [give birth] N
+@form U₃.TU $walādi
+@sense N give birth
+@end entry
+
+@entry warāqu [be(come) green-yellow] V
+@form SIG₇ $warāqu
+@sense AJ green
+@end entry
+
+@entry warhu [month] N
+@form ITU $warhu
+@form AB₂ $warhu
+@sense N month
+@end entry
+
+@entry warki [after] PRP
+@form ar₂ $warki
+@form ar₂{MEŠ} $warki
+@sense PRP behind
+@sense AJ rear
+@end entry
+
+@entry waṣû [go out] V
+@form E₃-ṣa $waṣû
+@form E₃ $waṣû
+@form E₃{MEŠ} $waṣû
+@form E₃-ni $waṣû
+@form E₃-u₂ $waṣû
+@sense V go out
+@sense V bring out
+@end entry
+
+@entry wēdu [single] AJ
+@form e-du $wēdu
+@sense AJ single
+@end entry
+
+@entry wīṣu [few] AJ
+@form i-ṣa $wīṣu
+@form i $wīṣu
+@form i-ṣu $wīṣu
+@form i-ṣi $wīṣu
+@sense AJ little
+@end entry
+
+@letter Z
+
+@entry zakāru [speak] V
+@form MU-ar₂ $zakāru
+@sense V call
+@end entry
+
+@entry zanānu [rain] V
+@form ŠUR-nun $zanānu
+@form ŠUR $zanānu
+@sense V rain
+@sense V flash
+@end entry
+
+@entry zaqāpu [fix upright] V
+@form ziq-pi $zaqāpu
+@sense N culmination
+@sense V culminate
+@end entry
+
+@entry zazakku [a registry official] N
+@form za-zak-ka $zazakku
+@form {LU₂}za-zak-ka $zazakku
+@form {LU₂}za-zak-ku $zazakku
+@form x-ku-u₂-tu₂ $zazakku
+@form {LU₂}za-zak-u₂-tu₂ $zazakku
+@sense N a registry official
+@sense N office of @i{zazakku}
+@end entry
+
+@entry zēru [seed(s)] N
+@form ŠE.NUMUN $zēru
+@sense N seed(s)
+@end entry
+
+@entry ZI [(meaning unclear)] N
+@form ZI $ZI
+@sense N (meaning unclear)
+@end entry
+
+@entry ZI IR [(meaning unclear)] N
+@parts ZI[(meaning unclear)]N IR[(meaning unclear)]N
+@form ZI_IR $ZI $IR
+@sense N (meaning unclear)
+@end entry
+
+@entry ziqqurratu [ziggurat] N
+@form ziq-qur-rat $ziqqurratu
+@sense N ziggurat
+@end entry
+
+@entry zunnu [rain] N
+@form ŠEG₃{MEŠ} $zunnu
+@sense N rain
+@end entry
+
+@letter 4
+
+@entry 4 [4] NU
+@form 4 $4
+@sense NU 4
+@end entry
+

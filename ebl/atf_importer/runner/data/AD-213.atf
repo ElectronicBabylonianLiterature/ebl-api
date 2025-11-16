@@ -1,0 +1,56 @@
+&X202130 = AD -213
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [... GE₆ 20 ina ZALÁG sin ina IGI GÌR]-ár-šá-A 2 1/2 KÙŠ ina ZALÁG MÚL.BABBAR e RÍN-šá-ULÙ 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN
+
+2. [N N ... GE₆ 21 i]na ZALÁG sin ina IGI DELE-šá-IGI-ABSIN 2 1/2 KÙŠ DIR AN ZA 21 DIR AN ZA
+#lem: n; n; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; ammatu[unit]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+3. [... GE₆] 24 ina ZALÁG sin e RÍN-šá-ULÙ 2 KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+4. [... GE₆ 25] ina ZALÁG sin ár RÍN-⸢šá-SI⸣ 1+[x] KÙŠ 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N
+
+5. [...] ($traces$)  
+#lem: u
+
+@reverse
+1'. [...] ⸢x x x x x x {m}⸣an LUGAL KUR.KUR 
+#lem: u; u; u; u; u; u; u; Antiochus[Antiochus]RN; šarru[king]N; mātu[land]N$mātāte
+
+@top
+1. [... MU 60+3]8.KÁM {m}an LUGAL ÍB.TAG₄ APIN ana muh-hi 
+#lem: u; šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; rēhtu[remainder//rest]N'N; Arahsamna[Month VIII]MN; ana[to]PRP; muhhi[top]N
+
+2. {GIŠ}IG GAL-tu₄ SAR
+#lem: daltu[door//writing board]N; rabitu[big]AJ; šaṭir[written]AJ
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [... Night of the 20th, last part of the night, the moon was] 2 1/2 cubits [in front of β] Virginis; last part of the night, Jupiter was [...] above α Librae 
+
+@(r 2) [... Night of the 21st,] last part of the night, the moon was 2 1/2 cubits in front of γ Virginis; clouds were in the sky. The 21st, clouds were in the sky. 
+
+@(r 3) [... Night] of the 24th, last part of the night, the moon was 2 cubits above α Librae, the moon being 1/2 cubit back to the west. 
+
+@(r 4) [... Night of the 25th,] last part of the night, the moon was 1+[x] cubits behind β Librae 
+
+@(r 5) [...] (traces)  
+
+@reverse
+
+@(r 1') [...] ...  
+
+@top
+
+@(t.e. 1) [... year 13]8, king Antiochus the rest ... 
+
+@(t.e. 2) the great door.

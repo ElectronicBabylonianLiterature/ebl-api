@@ -1,0 +1,99 @@
+&X202091 = AD -209A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [...] USAN dele-bat e GENNA 1 KÙŠ 1 ŠÚ.ŠÚ ULÙ ŠÁR GE₆ 2 SA[G GE₆] 
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; n; urrup[be(come) overcast]V; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+2. [... G]E₆ ŠÚ.ŠÚ AN UTAH GE₆ 4 SAG GE₆ sin SIG ŠUR-SI 1 1/2 KÙŠ G[E₆? 5?] 
+#lem: u; mūšu[night]N; urrup[be(come) overcast]V; šamû[rain]N; natāku[drip]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N; mūšu[night]N; n
+
+3. [...] MAH AN kab-bar PISAN MAH DIB NA₄ GAL{MEŠ} NA₄ ŠUR-nun 
+#lem: u; ṣīru[much]AJ; šamû[rain]N; kabbaru[thick]AJ; pisannu[(a meterological phenomenon)]N; ṣīru[much]AJ; DIB[(meaning unclear)]V; abnu[stone//hail stone]N'N$; rabû[large]AJ; abnu[hail]N; zanānu[rain]V$
+
+4. [... A]N? PISAN DIB 6 ŠÚ.ŠÚ ina KIN.SIG GÍR GÍR GÙ U MAH KALAG? AN kab-bar [x] 
+#lem: u; šamû[rain]N; pisannu[(a meterological phenomenon)]N; DIB[(meaning unclear)]V; n; urrup[be(come) overcast]V; ina[in]PRP; kinsikku[afternoon]N; birqu[lightning]N; barāqu[flash]V; rigmu[voice//thunder]N'N$; ubānu[finger]N; ṣīru[much]AJ; dannu[strong]AJ; šamû[rain]N; kabbaru[thick]AJ; u
+
+5. [... ALL]A-šá-ULÙ 1 KÙŠ 7 ⸢GENNA⸣ ina TIL LU ŠÚ GE₆ 9 ŠÚ.ŠÚ 
+#lem: u; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N; n; Kayyamānu[Saturn]CN; ina[in]PRP; qītu[end]N; Agru[Aries]CN; rabû[moonset to sunrise]'N; mūšu[night]N; n; urrup[be(come) overcast]V
+
+6. [... GE₆ 1]1? SAG GE₆ sin ina IGI ⸢GÌR-ár-šá-A x⸣ KÙŠ 11 ŠÚ.ŠÚ GE₆ 12 SAG GE₆ sin 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; u; ammatu[unit]N; n; urrup[be(come) overcast]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+7. [ina IGI DELE-šá-IGI-ABSIN N N ...] ⸢13? 16?⸣.30 ME DIR NU PAP DIR AN DIB 14 30 NINDA ŠÚ DIR muš 
+#lem: ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; n; namaddu[measurement]N; rabû[moonset to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+8. [... G]Ù U MAH AN UTAH 15 8.20 [n]a DIR NU PAP ŠÚ.ŠÚ ki ŠÚ šamáš 
+#lem: u; rigim[voice]N; Adad[storm-god]DN; ṣīru[much]AJ; šamû[rain]N; natāku[drip]V; n; n; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; urrup[be(come) overcast]V; kī[like//at]PRP'PRP$; rabû[setting]'N; šamšu[sun]N
+
+9. [... MA]H? DIB GE₆ 17 ŠÚ.ŠÚ ina ZALÁG sin ár šil-PA 2? KÙŠ GE₆ 20 
+#lem: u; ṣīru[much]AJ; DIB[(meaning unclear)]V; mūšu[night]N; n; urrup[be(come) overcast]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N; mūšu[night]N; n
+
+10. [...] sin 2 KÙŠ ana ULÙ SIG ŠÚ.ŠÚ 22 ŠÚ.ŠÚ ⸢GE₆ 23⸣ ŠÚ.ŠÚ 
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; urrup[be(come) overcast]V; n; urrup[be(come) overcast]V; mūšu[night]N; n; urrup[be(come) overcast]V
+
+11. [... K]IN.SIG GÍR GÍR GÙ U MAH DIR AN DIB ⸢x PISAN⸣ MAH DIB 
+#lem: u; kinsikku[afternoon]N; birqu[lightning]N; barāqu[flash]V; rigim[voice]N; ubānu[finger]N; ṣīru[much]AJ; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u; pisannu[(a meterological phenomenon)]N; ṣīru[much]AJ; DIB[(meaning unclear)]V
+
+12. [...] ⸢GÍR GÍR? GÙ⸣ U ⸢MAH PISAN?⸣ DIB 
+#lem: u; birqu[lightning]N; barāqu[flash]V; rigim[voice]N; ubānu[finger]N; ṣīru[much]AJ; pisannu[(a meterological phenomenon)]N; DIB[(meaning unclear)]V
+
+13. [...] ⸢x⸣ 
+#lem: u; u
+
+14. [...] ⸢x x x⸣  
+#lem: u; u; u; u
+
+@reverse
+$ ruling 
+1'. [... {m}an-ti-ʾu-uk-s]u LUGAL
+#lem: u; Antiochus[Antiochus]RN; šarru[king]N
+
+@top
+1. [... {m}a]n-ti-ʾu-uk-su LUGAL
+#lem: u; Antiochus[Antiochus]RN; šarru[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...] first part of the night, Venus was 1 cubit above Saturn. The 1st, very overcast, gusty south wind. Night of the 2nd, beginn[ing of the night,] 
+
+@(o 2) [... ni]ght, very overcast, rain shower. Night of the 4th, beginning of the night, the moon was 1 1/2 cubits below β Tauri. Ni[ght@sup{?} of the 5th@sup{?},] 
+
+@(o 3) [...] much [...], thick rain, much PISAN DIB, it rained large hail stones. 
+
+@(o 4) [... r]ain@sup{?}, PISAN DIB. The 6th, very overcast; in the afternoon, lightning flashed, much heavy thunder, thick rain [...] 
+
+@(o 5) [...] 1 cubit [... δ@sup{?} Can]cri. The 7th, Saturn’s last appearance in the end of Aries. Night of the 9th, very overcast. 
+
+@(o 6) [... Night of the 1]1th@sup{?}, beginning of the night, the moon was ⸢x⸣ cubits in front of β Virginis. The 11th, very overcast. Night of the 12th, beginning of the night, the moon was 
+
+@(o 7) [... in front of γ Virginis ...] The 13th@sup{?}, moonrise to sunset: 16°@sup{?} 30'; clouds, I did not watch; clouds crossed the sky. The 14th, moonset to sunrise: 30', measured (despite) clouds. 
+
+@(o 8) [...] much thunder, rain shower. The 15th, sunrise to moonset: 8° 20'; clouds, I did not watch; very overcast; at sunset, 
+
+@(o 9) [...] much@sup{?} [PISAN@sup{?}] DIB. Night of the 17th, very overcast; last part of the night, the moon was 2@sup{?} cubits behind ϑ Ophiuchi. Night of the 20th, 
+
+@(o 10) [...] the moon being 2 cubits low to the south; very overcast. The 22nd, very overcast. Night of the 23rd, very overcast. 
+
+@(o 11) [... in the af]ternoon, lightning flashed, much thunder, clouds crossed the sky, ..., much PISAN@sup{?} DIB@sup{?}. 
+
+@(o 12) [...] lightning flashed@sup{?}, much thunder, PISAN@sup{?} DIB. 
+
+@(o 13) [...] ... 
+
+@(o 14) [...] ...
+
+@reverse
+
+$ ruling 
+
+@(r 1') [...] king [Antioch]us.  
+
+@top
+
+@(t.e. 1) [...] king [A]ntiochus.

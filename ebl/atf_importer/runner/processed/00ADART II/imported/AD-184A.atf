@@ -1,0 +1,91 @@
+&X201841 = AD -184A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 27.KÁM {ITU}BAR GE₆ 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; mūšu[night]N
+
+2. 26 ina ZALÁG DIR AN ZA sin ár 
+#lem: n; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; warki[behind]PRP
+
+3. [M]ÚL-ár-šá-SAG-HUN 3 1/2 KÙŠ 
+#lem: MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N
+
+4. [26] DIR SAL AN ZA GE₆ ⸢27⸣ 
+#lem: n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+5. [ina ZALÁG] DIR SAL AN ZA sin ár dele-bat 1 KÙŠ 
+#lem: ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N
+
+6. [ana N]IM GUB sin 1 KÙŠ ana SI NIM 
+#lem: ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+7. [27 N] KUR DIR muš DIR 
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V; erpetu[cloud]N
+
+8. [...] MEŠ DIR AN DIB 
+#lem: u; X; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+9. [...] AN UTAH i-ṣa
+#lem: u; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ
+
+@bottom
+1. [... šá] kap MAR GAR GIN  
+#lem: u; ša[of]DET; kappu[wing(?)]'N; amurru[west wind]N; šakānu[set]V; alāku[blow]V
+
+@reverse
+1. ⸢GE₆ 28⸣ SAG <GE₆> DIR AN DIB 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+2. GÙ U MAH AN DUL 
+#lem: rigim[voice]N; Adad[storm-god]DN; ṣīru[much]AJ; šamû[rain]N; DUL[(meaning unclear)]V
+
+3. kal GE₆ ŠÚ.ŠÚ 28 kal ME ŠÚ.ŠÚ 
+#lem: kal[all]'DET; mūšu[night]N; urrup[be(come) overcast]V; n; kal[all]'DET; ūmu[day]N; urrup[be(come) very overcast]V
+
+4. AN.BAR₇ U 1-en-šú 2-šú GÙ-šú 
+#lem: muṣlālu[noon]N; Adad[storm-god]DN; ištēn[once]NU; šinīšu[twice]AV; rigimšu[voice]N
+
+5. ŠUB-di AN PISAN i-ṣa DIB  
+#lem: nadû[throw (down)]V; šamû[rain]N; pisannu[(a meterological phenomenon)]N; wīṣu[little]AJ; DIB[(meaning unclear)]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 127, month I, night
+
+@(o 2) 26th, last part of the night, clouds were in the sky; the moon was 
+
+@(o 3) 3 1/2 cubits behind α Arietis. 
+
+@(o 4) [The 26th], thin clouds were in the sky. Night of the 27th, 
+
+@(o 5) [last part of the night,] thin clouds were in the sky; the moon stood 1 cubit behind Venus 
+
+@(o 6) [to the ea]st, the moon being 1 cubit high to the north. 
+
+@(o 7) [The 27th,] moonrise to sunrise: [nn°], measured (despite) clouds; clouds 
+
+@(o 8) [...] ..., clouds crossed the sky, 
+
+@(o 9) [...] a little rain shower,
+
+@bottom
+
+@(b.e. 1) [... which] was set to the west side blew.
+
+@reverse
+
+@(r 1) Night of the 28th, beginning <of the night>, clouds crossed the sky, 
+
+@(r 2) much thunder, rain DUL, 
+
+@(r 3) all night very overcast. The 28th, all day very overcast; 
+
+@(r 4) around noon, it thundered once (or) twice; 
+
+@(r 5) rain, a little PISAN DIB.

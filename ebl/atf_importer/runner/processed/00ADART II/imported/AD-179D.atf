@@ -1,0 +1,52 @@
+&X201794 = AD -179D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 1 ME 32.KÁM {m}se-lu-ku L]UGAL {ITU}KIN.2.KÁM 1 13 na [x]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Ulūlu_Šanû[(Intercalary) Month VI₂]MN$; n; n; na₁[sunset to moonset]N; u
+
+2. [... GE₆ 2 sin ina IGI? RÍN-šá]-SI 1 1/2 KÙŠ ina IGI dele-bat ⸢2⸣ 5/6 KÙŠ
+#lem: u; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-SI[β Librae]CN; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Dilbat[Venus]CN; n; n; ammatu[unit]N
+
+3. [ana ŠÚ GUB ...] EN 2 GENNA ana NIM ki UŠ-ú
+#lem: ana[to]PRP; erbu[west]'N; izuzzu[stand]V; u; adi[until]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; kī[when]SBJ; nenmudu[be at a stationary point]V
+
+4. [... N N ana S]I NIM UŠ GE₆ 3 sin e
+#lem: u; n; n; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nenmudu[be at a stationary point]V; mūšu[night]N; n; Sîn[moon]N; eli[above]PRP
+
+5. [MÚL-x-šá-SAG-GÍR.TAB N N GE₆] ⸢4? sin ár? SI₄⸣ 2 1/2 KÙŠ sin 4 KÙ[Š]
+#lem: MÚL-x-šá-SAG-GÍR.TAB[β/δ Scorpii]CN; n; n; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+6. [ana SI NIM ... ana] ⸢SI⸣ NIM GE₆ ⸢x⸣
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; u
+
+7. [...] ⸢x x⸣  
+#lem: u; u; u
+
+@reverse
+1'. ($traces$)
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 132,] king [Seleucus], month VI,2, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 13° [...] 
+
+@(o 2) [... Night of the 2nd, the moon was] 1 1/2 cubits [in front@sup{?} of] β Lib[rae, it stood] 2 5/6 cubits in front of Venus 
+
+@(o 3) [to the west ...] Around the 2nd, when Saturn became stationary in the east, 
+
+@(o 4) it became stationary [..., being ...] high [to the nor[th]. Night of the 3rd, the moon was [...] above 
+
+@(o 5) [β/δ Scorpii. Night] of the 4th@sup{?}, the moon was 2 1/2 cubits behind@sup{?} α Scorpii, the moon being 4 cubits 
+
+@(o 6) [high to the north ...] being high to the north. Night of the ... 
+
+@(o 7) [...] ...  
+
+@reverse
+
+@(r 1') (traces)

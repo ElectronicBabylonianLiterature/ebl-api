@@ -1,0 +1,88 @@
+&X201703 = AD -170C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 41.KÁM SIG 1 14 11 ŠÚ ⸢muš⸣ 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Simānu[Month III]MN; n; n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+2. GE₆ 15 10 NINDA ME a-kám muš 15 1.10 na a-kám NU PAP 
+#lem: mūšu[night]N; n; n; namaddu[measurement]N; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V; n; n; na[sunrise to moonset]N; akamu[mist]N; ul[not]MOD; naṣāru[watch]V
+
+3. GE₆ 16 15 GE₆ ina ZALÁG sin ina IGI SUHUR-IGI 
+#lem: mūšu[night]N; n; n; mūšu[night]N; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN
+
+4. 3 KÙŠ sin 1 1/2 KÙŠ ana ULÙ SIG 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+5. [G]E₆ 17 ina ZALÁG sin ár SUHUR-ár 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN
+
+6. [x]+1/2 KÙŠ sin 2 KÙŠ ana ULÙ SIG 
+#lem: u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+7. [x] ⸢DIR AN⸣ ZA SI GIN 19 SI GIN 
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; n; ištānu[north wind]N; alāku[blow]V
+
+8. [...] ⸢x⸣ GIN 
+#lem: u; u; alāku[blow]V
+
+9. [...] ⸢x⸣  
+#lem: u; u
+
+@reverse
+1'. GE₆ 24 ina ZALÁG sin e [is]-⸢le₁₀⸣ 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; is-le₁₀[α Tauri]CN
+
+2'. ⸢5 KÙŠ sin i-ṣa ana⸣ NIM DIB 
+#lem: n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+3'. SI GIN 24 GU₄.UD ina NIM 
+#lem: ištānu[north wind]N; alāku[blow]V; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N
+
+4'. ina MAŠ.MAŠ IGI KUR NIM-a 
+#lem: ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ
+
+5'. 16 na-su in 22 IGI 
+#lem: n; na[rising to sunrise]'N; ina[on]PRP; n; nanmuru[be(come) visible]V
+
+6'. SI GIN GE₆ 25 ina ZALÁG sin
+#lem: ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 141, month III, the 1st (of which followed the 30th of the preceding month). The 14th, moonset to sunrise: 11°, measured. 
+
+@(o 2) Night of the 15th, moonrise to sunset: 10'; measured (despite) mist. The 15th, sunrise to moonset: 1° 10'; mist, I did not watch. 
+
+@(o 3) Night of the 16th, sunset to moonrise: 15°; last part of the night, the moon was 3 cubits in front of γ Capricorni, 
+
+@(o 4) the moon being 1 1/2 cubits low to the south. 
+
+@(o 5) [Ni]ght of the 17th, last part of the night, the moon was [x]+1/2 cubits behind δ Capricorni, 
+
+@(o 6) the moon being 2 cubits low to the south. 
+
+@(o 7) [...] clouds were in the sky, the north wind blew. The 19th, the north wind blew. 
+
+@(o 8) [...] ... blew. 
+
+@(o 9) [...] ...  
+
+@reverse
+
+@(r 1') [Night of the 24th, last part of the night, the moon was] 5 cubits [above α] Tauri, 
+
+@(r 2') the moon having passed a little to the east; 
+
+@(r 3') the north wind blew. The 24th, Mercury’s 
+
+@(r 4') first appearance in the east in Gemini; it was bright (and) high, 
+
+@(r 5') ???ng of Mercury to sunrise: 16°; (ideal) first appearance on the 22nd; 
+
+@(r 6') the north wind blew. Night of the 25th, last part of the night, the moon

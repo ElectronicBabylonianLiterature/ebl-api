@@ -1,0 +1,60 @@
+&X202080 = AD -208
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] [x] [...] 
+#lem: u; u; u
+
+2'. [... G]E₆? 14 14 [x x] ⸢GE₆ 15⸣ ina ZALÁG sin ár [...] 
+#lem: u; mūšu[night]N; n; n; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u
+
+3'. [...] MÚL.MÚL 1 1/2 KÙŠ GE₆ 18 ina ZALÁG sin ina IGI DUR [...] 
+#lem: u; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; u
+
+4'. [... KÙ]Š ana SI NIM GE₆ 20 ina ZALÁG sin e MÚL-IGI-šá-še-pít-MAŠ.MAŠ [N N ...] 
+#lem: u; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n; u
+
+5'. [... x]+2 KÙŠ sin 1/2 KÙŠ ana NIM DIB 22 MÚL.BABBAR ana ME E-a NU PA[P ...] 
+#lem: u; u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[rising]'N; ul[not]MOD; naṣāru[watch]V; u
+
+6'. [...] 2 1/2 KÙŠ GE₆ 25 ina ZALÁG sin [x] LUGAL 1 2/3 KÙŠ ⸢x x⸣ [...] 
+#lem: u; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; LUGAL[α Leonis]CN; n; n; ammatu[unit]N; u; u; u
+
+7'. [...] ana SI NIM 27 ⸢26⸣? KUR muš GE₆ 28 ina Z[ALÁG? ...] 
+#lem: u; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+8'. [... Z]Ú 4(BARIG) 2(BÁN) kàs 2(GUR) GUR 1(BARIG) 4(BÁN) sah-le₁₀ 1(BARIG) 4(BÁN) [...] 
+#lem: u; suluppu[date]N; n; n; kasû[mustard]N; n; kurru[kor (180 litres)]N; n; n; sahlu[cress]N; n; n; u
+
+9'. [...] [x] GU₄.UD ina ŠÚ ina ABSIN ŠÚ GENNA ina MÚL.MÚL AN ina [...] 
+#lem: u; u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; Kayyamānu[Saturn]CN; ina[in]PRP; Zappu[Taurus]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; u
+
+$ ruling 
+10'. [...] ($traces$) [...]
+#lem: u; u
+
+@translation labeled en project
+
+@(1') [...] ... [...] 
+
+@(2') [... Ni]ght of the 14th, ...: 14°. Night of the 15th, last part of the night, the moon was [...] behind [...] 
+
+@(3') [...] 1 1/2 cubits [...] η Tauri. Night of the 18th, last part of the night, the moon was [...] in front of η Pis[cium ...] 
+
+@(4') [... cu]bits high to the north. Night of the 20th, last part of the night, the moon was [...] above η Geminorum [...] 
+
+@(5') [... x]+2 cubits, the moon having passed 1/2 cubit to the east. The 22nd, Jupiter’s acronychal rising; I did not wat[ch ...] 
+
+@(6') [...] 2 1/2 cubits. Night of the 25th, last part of the night, the moon was 1 2/3 cubits [...] α Leonis, ... [...] 
+
+@(7') [...] high to the north. The 27th, moonrise to sunrise: 26°@sup{?}, measured. Night of the 28th, last [part of the night@sup{?}, ...] 
+
+@(8') [... da]tes, 4 @i{pānu} 2 @i{sūtu}; mustard, 2 @i{kurru} 1 @i{pānu} 4 @i{sūtu}; cress, 1 @i{pānu} 4 @i{sūtu} [...] 
+
+@(9') [...] ... Mercury’s last appearance in the west in Virgo; Saturn was in Taurus; Mars was in [...] 
+
+$ ruling 
+
+@(10') [...] ... [...]

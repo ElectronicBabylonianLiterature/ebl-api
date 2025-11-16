@@ -1,0 +1,129 @@
+&X201971 = AD -197A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [M]U.1.54.KÁM {ITU}B[AR ...] 
+#lem: n; Nisannu[Month I]MN; u
+
+2. GE₆ 10 SAG GE₆ sin ár [GÌR-ár-šá-A] 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN
+
+3. 2 1/2 KÙŠ ana lìb-bi-šú kun-nu 
+#lem: n; n; ammatu[unit]N; ana[towards]PRP; libbu[inside]N; kunnu[be(come) set]V
+
+4. 10 ULÙ GIN ina KIN.<SIG> DIR AN ZA 
+#lem: n; šūtu[south wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5. GE₆ 11 SAG GE₆ sin ár DELE-šá-IGI-ABSIN 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN
+
+6. 1 KÙŠ sin 1 KÙŠ ana ULÙ SIG 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+7. ina ZALÁG ŠÚ 11 DIR A[N x] 
+#lem: ina[in]PRP; nūru[last part of the night]N; erēpu[be(come) overcast]V; n; erpetu[cloud]N; šamû[sky]N; u
+
+8. AN ne E.SÍR [(NU) TUH] 
+#lem: šamû[rain]N; nēhu[slow]AJ$; šēnu[sandal]N; ul[not]MOD; paṭāru[remove]V
+
+9. GE₆ 12 DIR AN D[IB x]  
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u
+
+@bottom
+1. [...] [x x] [...] 
+#lem: u; u; u; u
+
+2. [...] [x] [...]  
+#lem: u; u; u
+
+@reverse
+1. [...] kal ME [...] 
+#lem: u; kal[all]'DET; ūmu[day]N; u
+
+2. [x x] GE₆ 10+[x ...] 
+#lem: u; u; mūšu[night]N; n; u
+
+3. DIR AN DIB AN UTAH [...] 
+#lem: erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; natāku[drip]V; u
+
+4. 13 7.40 ŠÚ DIR NU PA[P] 
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+5. ina še-rì DIR AN [DI]B AN UTAH 
+#lem: ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; natāku[drip]V
+
+6. GE₆ 14 DIR AN ZA sin ár? 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; warki[behind]PRP
+
+7. RÍN-šá-[x] 1 KÙŠ sin 2 KÙŠ? 
+#lem: RÍN-šá-x[α/β Librae]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+8. ana S[I?] NIM? kal GE₆ ŠÚ.ŠÚ 15 2 na 
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; kal[all]'DET; mūšu[night]N; urrup[be(come) overcast]V; n; n; na[sunrise to moonset]N
+
+9. [I]LLU TA 9 EN 11 
+#lem: mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n
+
+10. [N K]ÙŠ GIN ⸢x x x⸣  
+#lem: n; ammatu[unit]N; alāku[rise]V; u; u; u
+
+@left
+1. [...] AN.BAR₇ AN DUL [...]  
+#lem: u; muṣlālu[noon]N; šamû[rain]N; DUL[(meaning unclear)]V; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 114, month I, [...] 
+
+@(o 2) Night of the 10th, beginning of the night, the moon was 2 1/2 cubits behind [β Virginis,] 
+
+@(o 3) it was set towards its inside. 
+
+@(o 4) The 10th, the south wind blew; in the afternoon, clouds were in the sky. 
+
+@(o 5) Night of the 11th, beginning of the night, the moon was 1 cubit behind γ Virginis, 
+
+@(o 6) the moon being 1 cubit low to the south; 
+
+@(o 7) last part of the night, overcast. The 11th, clouds [...] the sky, 
+
+@(o 8) slow rain so that the sandal [was (not) removed.] 
+
+@(o 9) Night of the 12th, clouds crossed the sky [...]  
+
+@bottom
+
+@(b.e. 1) [...] ... [...] 
+
+@(b.e. 2) [...] ... [...]  
+
+@reverse
+
+@(r 1) [...] all day [...] 
+
+@(r 2) ... Night of the 10+[xth, ...] 
+
+@(r 3) clouds crossed the sky, rain shower [...] 
+
+@(r 4) the 13th, moonset to sunrise: 7° 40'; clouds, I did not watch; 
+
+@(r 5) in the morning, clouds crossed the sky, rain shower. 
+
+@(r 6) Night of the 14th, clouds were in the sky; the moon was 1 cubit behind@sup{?} 
+
+@(r 7) [α/β] Librae, the moon being 2 cubits@sup{?} 
+
+@(r 8) high@sup{?} to the north; all night very overcast. The 15th, sunrise to moonset: 2°. 
+
+@(r 9) The river level from the 9th to the 11th 
+
+@(r 10) rose [nn] cubits ...  
+
+@left
+
+@(l.e. 1) [...] around noon, rain DUL [...]

@@ -1,0 +1,33 @@
+&X201702 = AD -170B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 41.KÁM GU₄ GE₆ 7 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Ayyaru[Month II]MN; mūšu[night]N; n
+
+2. sin SIG GIŠ.KUN-A 3 KÙŠ 
+#lem: Sîn[moon]N; šapil[below]'PRP; GIŠ.KUN-A[ϑ Leonis]CN; n; ammatu[unit]N
+
+3. sin i-ṣa ana NIM DIB GE₆ 8 
+#lem: Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N; n
+
+4. sin ár GÌR-ár-⸢šá⸣-[A ...]  
+#lem: Sîn[moon]N; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; u
+
+@reverse
+$ (blank)
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 141, month II. Night of the 7th, 
+
+@(o 2) the moon was 3 cubits below ϑ Leonis, 
+
+@(o 3) the moon having passed a little to the east. Night of the 8th, 
+
+@(o 4) the moon was [...] behind β Virgi[nis ...]

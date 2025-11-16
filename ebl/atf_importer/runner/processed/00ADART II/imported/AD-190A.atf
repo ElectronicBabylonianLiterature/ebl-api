@@ -1,0 +1,119 @@
+&X201901 = AD -190A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 21.KÁM BAR 1 24 KUR₄ DIR muš sin ina IGI 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; n; n; baʾil[bright]AJ; erpetu[cloud]N; mašāhu[measure]V; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+2. MÚL.MÚL 2 KÙŠ sin 5/6 KÙŠ ana ULÙ SIG G[E₆] ⸢1 DIR⸣ AN ZA 
+#lem: MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+3. 1 DIR AN ZA GE₆ 2 sin ina IGI is-le₁₀ 1 KÙŠ 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; is-le₁₀[α Tauri]CN; n; ammatu[unit]N
+
+4. sin 4 KÙŠ ana SI NIM [x x x] ⸢2?⸣ kal ME ŠÚ.ŠÚ 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u; u; u; n; kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V
+
+5. GE₆ 3 DIR AN ZA [... k]al ME ŠÚ.ŠÚ 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u; kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V
+
+6. GE₆ 4 sin ina IGI [MÚL-IGI-šá-še-pít-MAŠ.M]AŠ 1 KÙŠ 
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N
+
+7. sin 2 1/2 KÙŠ ana SI [NIM ...] ⸢x⸣ GE₆ 5 sin 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u; u; mūšu[night]N; n; Sîn[moon]N
+
+8. ár MAŠ.MAŠ-šá-SIPA [N N ...] SI GIN 
+#lem: warki[behind]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; u; ištānu[north wind]N; alāku[blow]V
+
+9. 5 DIR AN ZA [... x]+1/2 KÙŠ 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u; u; ammatu[unit]N
+
+10. sin i [...] 
+#lem: Sîn[moon]N; wīṣu[little]AJ; u
+
+11. GE₆ ⸢x⸣ [...] 
+#lem: mūšu[night]N; u; u
+
+12. ⸢x⸣ [...]  
+#lem: u; u
+
+@reverse
+1'. [...] [x x x x] 1/2 KÙŠ 13 ⸢x⸣ 
+#lem: u; u; u; u; u; n; ammatu[unit]N; n; u
+
+2'. [x x x] GE₆ 14 14.30 ME muš 14 
+#lem: u; u; u; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V; n
+
+3'. [x x] ⸢x x x ZALÁG? sin? ár? ⸣ 
+#lem: u; u; u; u; u; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP
+
+4'. ⸢RÍN?⸣-[š]á-SI ⸢x⸣ KÙŠ 15 6.30 na? muš? 
+#lem: RÍN-šá-SI[β Librae]CN; u; ammatu[unit]N; n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+5'. GE₆ 16 ina ZALÁG ⸢sin e SI₄ 3+x⸣ 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; SI₄[α Scorpii]CN; n
+
+6'. ⸢KÙŠ⸣ sin 1/2 KÙŠ ana ⸢x x⸣ 
+#lem: ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u; u
+
+$ (ca. 2 lines blank) 
+7'. ILLU TA 1 EN 5 8 U LAL PAP 24 ⸢na⸣ 
+#lem: mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+8'. 6 4 U GIN PAP 23 na TA ⸢7⸣ 
+#lem: n; n; ubānu[finger]N; alāku[rise]V; napharu[total]N; n; na[na-gauge]N; ištu[from]PRP; n
+
+9'. EN 13 1 KÙŠ 8 U GIN PAP 16 ($sic$) na
+#lem: adi[until]PRP; n; n; ammatu[unit]N; n; ubānu[finger]N; alāku[rise]V; napharu[total]N; n; na[na-gauge]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 121, month I, the 1st (of which followed the 30th of the preceding month, sunset to moonset): 24°, it was bright; measured (despite) clouds; the moon was 
+
+@(o 2) 2 cubits in front of η Tauri, the moon being 5/6 cubit low to the south. Ni[ght] of the 1st, clouds were in the sky. 
+
+@(o 3) The 1st, clouds were in the sky. Night of the 2nd, the moon was 1 cubit in front of α Tauri, 
+
+@(o 4) the moon being 4 cubits high to the north [...] The 2nd@sup{?}, all day very overcast. 
+
+@(o 5) Night of the 3rd, clouds were in the sky [... a]ll day very overcast. 
+
+@(o 6) Night of the 4th, the moon was 1 cubit in front of [η Gemin]orum, 
+
+@(o 7) the moon being 2 1/2 cubits [high] to the north [...] ... Night of the 5th, the moon was 
+
+@(o 8) [...] behind γ Geminorum [...] the north wind blew. 
+
+@(o 9) The 5th, clouds were in the sky [... x]+1/2 cubits, 
+
+@(o 10) the moon [being] a little [...] 
+
+@(o 11) Night of the xth, [...] 
+
+@(o 12) ... [...]  
+
+@reverse
+
+@(r 1') [...] ... 1/2 cubit. The 13th, ... 
+
+@(r 2') [...] Night of the 14th, moonrise to sunset: 14° 30', measured. The 14th, 
+
+@(r 3') [...] ... last part of the night@sup{?}, the moon was ⸢x⸣ cubits behind@sup{?} β 
+
+@(r 4') Librae. The 15th, sunrise to moonset@sup{?}: 6° 30', measured@sup{?}. 
+
+@(r 5') Night of the 16th, last part of the night, the moon was 3+[x] cubits above α Scorpii, 
+
+@(r 6') the moon being 1/2 cubit ... 
+
+@(r 7') The river level, from the 1st to the 5th, receded 8 fingers, total: 24 was the @i{na} na-gauge; 
+
+@(r 8') the 6th, it rose 4 fingers, total: 23 was the @i{na} na-gauge; from the 7th 
+
+@(r 9') to the 13th, it rose 1 cubit 8 fingers, total: 16@sup{sic} was the @i{na} na-gauge [...]

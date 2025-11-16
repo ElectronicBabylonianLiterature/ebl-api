@@ -1,0 +1,165 @@
+&X202030 = AD -203
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. EN.NUN šá MU 1 ME 8.KÁM APIN GE₆ 24 DIR ⸢AN ZA⸣ ina ZALÁG sin 
+#lem: naṣāru[observation]'N; ša[which]REL; šattu[year]N; n; meʾatu[(one) hundred]NU$mē; n; Arahsamna[Month VIII]MN; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+2. ár RÍN-šá-SI 1 1/2 KÙŠ sin 4 1/2 KÙŠ ana ULÙ SIG 24 
+#lem: warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n
+
+3. kal ME DIR AN DIB GE₆ 25 ina ZALÁG sin ina IGI SI₄ 1 SI 
+#lem: kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SI₄[α Scorpii]CN; n; ubānu[finger]N
+
+4. sin 5/6 KÙŠ ana SI NIM GE₆ 26 ina ZALÁG sin šil-PA NU IGI 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; ul[not]MOD; amāru[be(come) visible]V
+
+5. 27 12 KUR DIR muš kal ME DIR AN ZA 
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+6. GE₆ 28 kal GE₆ DIR AN DIB 28 kal ME DIR AN ZA 
+#lem: mūšu[night]N; n; kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+7. GE₆ 29 DIR SAL AN DIB GÍR GÍR.GÍR 29 ina še-rì DIR AN DIB 
+#lem: mūšu[night]N; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; etēqu[cross]V; birqu[lightning]N; burruq[flash continuously]V; n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+8. ITU BI KI.LAM še-im bab-ba-ni-tu₄ 4(BARIG) 2(BÁN) 
+#lem: warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; babbanû[excellent//very good]AJ'AJ$; n; n
+
+9. ZÚ.LUM.MA SUMUN ina SAG ITU 1(GUR) 1(BARIG) 4(BÁN) ina MURUB₄ ITU 
+#lem: suluppu[date]N; labīru[old]AJ$; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; n; n; ina[in]PRP; qabaltu[middle]N; warhu[month]N
+
+10. 1(GUR) 5(BÁN) ina TIL ITU 1(GUR) 3(BÁN) kàs 3(GUR) GUR 
+#lem: n; n; ina[at]PRP; qītu[end]N; warhu[month]N; n; n; kasû[mustard]N; n; kurru[kor (180 litres)]N
+
+11. sah-⸢le₁₀⸣ 2(BARIG) 2(BÁN) ŠE.GIŠ.Ì 4(BÁN) 3 qa SÍG{HI.A}  
+#lem: sahlu[cress]N; n; n; šamaššammū[sesame]N; n; n; qû[(one) litre]N; šīpātu[wool]N
+
+@reverse
+1. MA.NA a-na 1 GÍN KÙ.BABBAR ép-šú 
+#lem: manû[mina]N; ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; epšu[wrought]AJ
+
+2. i-nu-šú MÚL.BABBAR EN MURUB₄ <ITU> ina A EN TIL ITU 
+#lem: inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; adi[until]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Nēšu[Leo]CN; adi[until]PRP; qītu[end]N; warhu[month]N
+
+3. ina ABSIN dele-bat ina MÁŠ 23 dele-bat GU KUR 
+#lem: ina[in]PRP; Šerʾu[Virgo]CN; Dilbat[Venus]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; n; Dilbat[Venus]CN; Gula[Aquarius]CN; šadû[east//reach]N'V$
+
+4. in 8 GU₄.UD ina NIM ina GÍR.TAB ŠÚ GENNA ina A AN 
+#lem: ina[in]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN; Ṣalbaṭānu[Mars]CN
+
+5. ina MÚL.MÚL ITU BI ILLU TA 10 EN 13 ($sic$) 
+#lem: ina[in]PRP; Zappu[Taurus]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n
+
+6. 5 SI GIN 32 na <TA> 23 ($sic$) EN 25 8 SI 
+#lem: n; ubānu[finger]N; alāku[rise]V; n; na[na-gauge]N; ištu[from]PRP; n; adi[until]PRP; n; n; ubānu[finger]N
+
+7. ba-ab-tú 5/6 KÙŠ GIN 30 na ina TIL ITU 
+#lem: bābtu[commercial goods//remainder(?)]N'N$; n; ammatu[unit]N; alāku[rise]V; n; na[na-gauge]N; ina[at]PRP; qītu[end]N; warhu[month]N
+
+8. 4 SI LAL 31 na 
+#lem: n; ubānu[finger]N; nahāsu[be(come) back]V; n; na[na-gauge]N
+
+$ ruling 
+9. GAN 30 17.30 na-su KUR₄ a-pir muš ana šamáš SIG 
+#lem: Kislīmu[Month IX]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; apir[earthshine]N; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+10. DIR AN ZA 1 DIR AN ZA GE₆ 2 sin ina IGI
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+11. MÚL-IGI-šá-SUHUR-MÁŠ 3 KÙŠ sin 2 KÙŠ ana SI NIM  
+#lem: MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+@top
+1. DIR AN ZA 2 DIR AN ZA ina KIN.SIG ŠÚ AN UTAH 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; kinsikku[afternoon]N; erēpu[be(come) overcast]V; šamû[rain]N; natāku[drip]V
+
+2. GE₆ 3 DIR AN DIB SAG GE₆ AN UTAH i-ṣa
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; rēšu[beginning]N; mūšu[night]N; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ
+
+@left
+1. USAN AN né-hi E.SÍR NU TUH 
+#lem: šimītān[first part of the night]N; šamû[rain]N; nēhu[slow]AJ; šēnu[sandal]N; ul[not]MOD; paṭāru[remove]V
+
+2. kal GE₆ DIR AN DIB 3 ina še-rì <<rì>> DIR AN DIB 
+#lem: kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+3. AN UTA[H A]N kab rad PISAN MAH DIB GÍR GÍR  
+#lem: šamû[rain]N; natāku[drip]V; šamû[rain]N; kabbaru[thick]AJ; rādu[cloudburst]N; pisannu[(a meterological phenomenon)]N; ṣīru[much]AJ; DIB[(meaning unclear)]V; birqu[lightning]N; barāqu[flash]V
+
+@bottom
+1. 3? kal ME AN NA  
+#lem: n; kal[all]'DET; ūmu[day]N; šamû[rain]N; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Diary of year 108, month VIII. Night of the 24th, clouds were in the sky; last part of the night, the moon was 
+
+@(o 2) 1 1/2 cubits behind β Librae, the moon being 4 1/2 cubits low to the south. The 24th, 
+
+@(o 3) all day clouds crossed the sky. Night of the 25th, last part of the night, the moon was 1 finger in front of α Scorpii, 
+
+@(o 4) the moon being 5/6 cubit high to the north. Night of the 26th, last part of the night, the moon ... ϑ Ophiuchi; not seen. 
+
+@(o 5) The 27th, moonrise to sunrise: 12°, measured (despite) clouds; all day clouds were in the sky. 
+
+@(o 6) Night of the 28th, all night clouds crossed the sky. The 28th, all day clouds were in the sky. 
+
+@(o 7) Night of the 29th, thin clouds crossed the sky, lightning flashed continuously. The 29th, in the morning, clouds crossed the sky. 
+
+@(o 8) That month, the equivalent was: very good barley, 4 @i{pānu} 2 @i{sūtu}; 
+
+@(o 9) old dates, in the beginning of the month, 1 @i{kurru} 1 @i{pānu} 4 @i{sūtu}, in the middle of the month, 
+
+@(o 10) 1 @i{kurru} 5 @i{sūtu}, at the end of the month, 1 @i{kurru} 3 @i{sūtu}; mustard, 3 @i{kurru}; 
+
+@(o 11) cress, 2 @i{pānu} 2 @i{sūtu}; sesame, 4 @i{sūtu} 3 @i{qa}; wool,  
+
+@reverse
+
+@(r 1) 3 1/2 minas were sold for 1 shekel of silver. 
+
+@(r 2) At that time, Jupiter, until the middle <of the month>, was in Leo, until the end of the month, 
+
+@(r 3) in Virgo; Venus was in Capricorn; the 23rd, Venus reached Aquarius; 
+
+@(r 4) on the 8th, Mercury’s last appearance in the east in Scorpius; Saturn was in Leo; Mars 
+
+@(r 5) was in Taurus. That month, the river level from the 10th to the 13th@sup{sic} 
+
+@(r 6) rose 5 fingers, 32 was the @i{na} na-gauge; <from> the 23rd@sup{sic} until the 25th, 
+
+@(r 7) - remainder@sup{?} 5/6 cubit - it rose 8 fingers, 30 was the @i{na} na-gauge; at the end of the month, 
+
+@(r 8) it receded 4 fingers, 31 was the @i{na} na-gauge. 
+
+$ ruling 
+
+@(r 9) Month IX, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 17° 30'; it was bright, earthshine, measured; it was low to the sun; 
+
+@(r 10) clouds were in the sky. The 1st, clouds were in the sky. Night of the 2nd, the moon was 3 cubits in front of γ 
+
+@(r 11) Capricorni, the moon being 2 cubits high to the north; 
+
+@top
+
+@(t.e. 1) clouds were in the sky. The 2nd, clouds were in the sky; in the afternoon, overcast, rain shower. 
+
+@(t.e. 2) Night of the 3rd, clouds crossed the sky; beginning of the night, a little  rain shower;
+
+@left
+
+@(l.e. 1) first part of the night, slow rain but the sandal was not removed; 
+
+@(l.e. 2) all night clouds crossed the sky. The 3rd, in the morning, clouds crossed the sky, 
+
+@(l.e. 3) rain shower, thick rain, cloudburst, much PISAN DIB, lightning flashed. 
+
+@bottom
+
+@(b.e. 1) The 3rd@sup{?}, all day rain ...

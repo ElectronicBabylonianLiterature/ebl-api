@@ -1,0 +1,81 @@
+&X201792 = AD -179B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 1] ME 32.KÁM {m}se-lu-ku LUGAL {ITU}[ŠU ... GE₆ 2]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Duʾūzu[Month IV]MN; u; mūšu[night]N; n
+
+2. [sin ár] SAG-A 2 KÙŠ sin 5 1/2 KÙŠ ana ULÙ S[IG ...]
+#lem: Sîn[moon]N; warki[behind]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+3. [GE₆ 3] sin SIG MÚL-TUR-1-KÙŠ-SIG-MÚL.BABBAR 1 KÙŠ 6 S[I ... GE₆ 4 sin ...]
+#lem: mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN$; n; ammatu[unit]N; n; ubānu[finger]N; u; mūšu[night]N; n; Sîn[moon]N; u
+
+4. [sin N] ⸢KÙŠ⸣ [ana Ù]LU SIG 4 ZI IR GE₆ 5 sin ár [GIŠ.KUN-A N N ...]
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; GIŠ.KUN-A[ϑ Leonis]CN; n; n; u
+
+5. [...] ($traces$) [...]  
+#lem: u; u
+
+@reverse
+1'. [...] ⸢Á ULÙ u MAR? ki TAB-ú [...]
+#lem: u; idu[side]N; šūtu[south]N; u[and]CNJ; amurru[west]N; kī[when]SBJ; ušarrû[begin]V; u
+
+2'. [...] [x] ina AN.KU₁₀-šú MAR GIN ina TIL ZALÁG-r[u ...]
+#lem: u; u; ina[during]PRP; antallû[eclipse]N; amurru[west wind]N; alāku[blow]V; ina[at]PRP; qītu[end]N; nawāru[clearing]'N; u
+
+3'. [...] 4(BÁN) EN TIL ITU 2(BARIG) 5(BÁN) ZÚ 4(BARIG) PI k[às ...]
+#lem: u; n; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; suluppu[date]N; n; pānu[bushel (36 litres)]N; kasû[mustard]N; u
+
+4'. [... ana 1 GÍ]N KÙ.BABBAR ep-šú i-nu-šú MÚL.BABBAR ina A 3 ⸢x⸣ [...]
+#lem: u; ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; epšu[wrought]AJ; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; n; u; u
+
+5'. [...] LUGAL NA? 20 TA? x TA? 16? [...]  
+#lem: u; LUGAL[α Leonis]CN; u; n; u; u; u; n; u
+
+@top
+1. [...] ITU 1 KÙŠ 4 SI LAL PAP? 30+[x na ...]
+#lem: u; warhu[month]N; n; ammatu[unit]N; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; u
+
+2. [...] ⸢x x x⸣ {URU}se-lu-ke-[ʾa-a ...]
+#lem: u; u; u; u; Selukeʾa[Seleucia]SN; u
+
+3. [... KU₄?]-ub
+#lem: u; erēbu[enter]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 1]32, king Seleucus, month [IV, ... Night of the 2nd,] 
+
+@(o 2) [the moon was] 2 cubits [behind] ε Leonis, the moon being 5 1/2 cubits ??? the south [...] 
+
+@(o 3) [Night of the 3rd], the moon was 1 cubit below ρ Leonis, 1 cubit 6@sup{?} fingers below Jupiter, [... Night of the 4th, the moon was ...,] 
+
+@(o 4) [the moon being nn] cubits low to the south. The 4th, ZI IR. Night of the 5th, the moon was [...] behind [j Leonis ...] 
+
+@(o 5) [...] (traces) [...]  
+
+@reverse
+
+@(r 1') [...] when (the eclipse) began on the south and west@sup{?} side [...] 
+
+@(r 2') [...] ... in its eclipse the west wind blew; at the end of the clearing [...] 
+
+@(r 3') [...] 4 @i{sūtu}, until the end of the month, 2 @i{pānu} 5 @i{sūtu}; dates, 4 @i{pānu}; mu[stard, ...] 
+
+@(r 4') [...] were sold [for 1 sh]ekel of silver. At that time, Jupiter was in Leo; the 3rd, ... [...] 
+
+@(r 5') [...] the king ... [...]  
+
+@top
+
+@(t.e. 1) [...] of the month, (the river level) receded 1 cubit 4 fingers, total@sup{?}: 30+[x was the @i{na} na-gauge ...] 
+
+@(t.e. 2) [...] ... Seleuc[ia ...] 
+
+@(t.e. 3) [... ente]red@sup{?}.

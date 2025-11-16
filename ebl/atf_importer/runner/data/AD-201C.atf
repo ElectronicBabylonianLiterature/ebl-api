@@ -1,0 +1,101 @@
+&X202013 = AD -201C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. {ITU}DIR.ŠE 1 19 na-su 
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n; na₁[sunset to moonset]N
+
+2. KUR₄ a-pir ina IGI GU₄.UD 
+#lem: baʾil[bright]AJ; apir[earthshine]'N; ina[in]PRP; pān[front]N; Šihṭu[Mercury]CN
+
+3. 1/2 KÙŠ sin 1 KÙŠ ana ULÙ SIG 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+4. GE₆ 1 ŠÚ.ŠÚ 1 ina še-rì 
+#lem: mūšu[night]N; n; urrup[be(come) overcast]V; n; ina[in]PRP; šēri[morning]N
+
+5. DIR AN DIB AN DUL 
+#lem: erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; DUL[(meaning unclear)]V
+
+6. ⸢U⸣ 1-en-šú 2-šú 3-šú 
+#lem: ubānu[finger]N; ištēn[once]NU; šinīšu[twice]AV; šalāšišu[thrice]AV
+
+7. GÙ-šú né-hi ŠUB-di ULÙ GIN  
+#lem: rigimšu[voice]N; nēhu[slow]AJ; nadû[throw (down)]V; šūtu[south wind]N; alāku[blow]V
+
+@bottom
+1. kal ME ŠÚ.ŠÚ
+#lem: kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V
+
+@reverse
+1. GE₆ 2 sin ina IGI M[ÚL.MÚL] 
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN
+
+2. 3 1/2 KÙŠ 2 DIR [x x] 
+#lem: n; n; ammatu[unit]N; n; erpetu[cloud]N; u; u
+
+3. ina KIN.SIG DIR AN ZA GE₆ 3 
+#lem: ina[in]PRP; kinsikku[afternoon]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+4. sin ár MÚL.MÚL 1 1/2 KÙŠ sin 
+#lem: Sîn[moon]N; warki[behind]PRP; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; Sîn[moon]N
+
+5. 2 KÙŠ ana ULÙ SIG 3 kal ME 
+#lem: n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; kal[all]'DET; ūmu[day]N
+
+6. ŠÚ.ŠÚ ULÙ GIN ina KIN.SIG AN UTAH 
+#lem: urrup[be(come) overcast]V; šūtu[south wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; šamû[rain]N; natāku[drip]V
+
+7. i-ṣa 
+#lem: wīṣu[little]AJ
+
+8. ITU BI ILLU x x x KÙŠ 
+#lem: warhu[month]N; šū[that]'DP; mīlu[river level]N; u; u; u; ammatu[unit]N
+
+9. LAL PAP 17 na
+#lem: nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Month XII,2, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 19°; 
+
+@(o 2) it was bright, earthshine, 1/2 cubit in front of Mercury, 
+
+@(o 3) the moon being 1 cubit low to the south. 
+
+@(o 4) Night of the 1st, very overcast. The 1st, in the morning, 
+
+@(o 5) clouds crossed the sky, rain DUL, 
+
+@(o 6) it thundered slowly once, twice, thrice, 
+
+@(o 7) the south wind blew;  
+
+@bottom
+
+@(b.e. 1) all day very overcast.
+
+@reverse
+
+@(r 1) Night of the 2nd, the moon was 3 1/2 cubits in front of η [Tauri.] 
+
+@(r 2) The 2nd, clouds [...] 
+
+@(r 3) in the afternoon, clouds were in the sky. Night of the 3rd, 
+
+@(r 4) the moon was 1 1/2 cubits behind η Tauri, the moon 
+
+@(r 5) being 2 cubits low to the south. The 3rd, all day 
+
+@(r 6) very overcast, the south wind blew; in the afternoon, 
+
+@(r 7) a little  rain shower. 
+
+@(r 8) That month, the river level 
+
+@(r 9) receded ... cubits, total: 17 was the @i{na} na-gauge.

@@ -1,0 +1,95 @@
+&X201672 = AD -167B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU] 1 ME 44.KÁM [...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+2. [x x] GE₆ 5 ($sic$) DIR [...] 
+#lem: u; u; mūšu[night]N; n; erpetu[cloud]N; u
+
+3. ⸢sin SIG⸣ MÚL.MÚL 8 KÙŠ ($sic$) [x] [...] 
+#lem: Sîn[moon]N; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; u; u
+
+4. kal GE₆ ŠÚ.ŠÚ <ina> ZALÁG AN UTAH 4 kal ME D[IR ...] 
+#lem: kal[all]'DET; mūšu[night]N; urrup[be(come) very overcast]V; ina[in]PRP; nūru[last part of the night]N; šamû[rain]N; natāku[drip]V; n; kal[all]N; ūmu[day]N; erpetu[cloud]N; u
+
+5. AN UTAH IM ŠÁR KALAG G[E₆ 5] 
+#lem: šamû[rain]N; natāku[drip]V; šāru[wind]N; ŠÁR[gusty(?)]AJ; dannu[strong]AJ; mūšu[night]N; n
+
+6. DIR AN ZA sin e [is-le₁₀] 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; eli[above]PRP; is-le₁₀[α Tauri]CN
+
+7. 3 KÙŠ sin ⸢x⸣ [...] 
+#lem: n; ammatu[unit]N; Sîn[moon]N; u; u
+
+8. GE₆ 6 D[IR ...]  
+#lem: mūšu[night]N; n; erpetu[cloud]N; u
+
+@reverse
+1'. ⸢2/3?⸣ KÙŠ [...] 
+#lem: n; ammatu[unit]N; u
+
+2'. 7 DIR AN ZA [...] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+3'. GE₆ 8 DIR AN ZA ⸢x⸣ [x sin x] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u; u; Sîn[moon]N; u
+
+4'. MAŠ.MAŠ-ár 1 KÙŠ sin 1+[x N] 
+#lem: MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; n
+
+5'. ana ULÙ SIG 8 DIR A[N x x] 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; erpetu[cloud]N; šamû[sky]N; u; u
+
+6'. ILLU TA ⸢6?⸣ [x x x] 
+#lem: mīlu[river level]N; ištu[from]PRP; n; u; u; u
+
+7'. [PA]P 25 na [x x x]  
+#lem: napharu[total]N; n; na[na-gauge]N; u; u; u
+
+@top
+1. ($traces$)  
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year] 144 [...] 
+
+@(o 2) [...] Night of the 5th@sup{sic} clouds [...] 
+
+@(o 3) the moon was 8 cubits@sup{sic} below η Tauri ... [...] 
+
+@(o 4) all night very overcast; last part of the night, rain shower. The 4th, all day cl[ouds ...] 
+
+@(o 5) rain shower, strong gusty wind. Ni[ght of the 5th,] 
+
+@(o 6) clouds were in the sky; the moon was 3 cubits above [α Tauri,] 
+
+@(o 7) the moon being ... [...] 
+
+@(o 8) Night of the 6th, cl[ouds ...]  
+
+@reverse
+
+@(r 1') 2/3@sup{?} cubit [...] 
+
+@(r 2') The 7th, clouds were in the sky [...] 
+
+@(r 3') Night of the 8th, clouds were in the sky ... [the moon was] 
+
+@(r 4') 1 cubit [...] β Geminorum, the moon being 1+[x mm] 
+
+@(r 5') low to the south. The 8th, clouds [...] the sky. 
+
+@(r 6') the river level from the 6th@sup{?} [...] 
+
+@(r 7') [tot]al: 25 was the @i{na} na-gauge [...]  
+
+@top
+
+@(t.e. 1) (traces)

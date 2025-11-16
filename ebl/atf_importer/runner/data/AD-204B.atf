@@ -1,0 +1,91 @@
+&X202042 = AD -204B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [x] ⸢GE₆⸣ 10+[x US]AN? DIR A[N ...] 
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; erpetu[cloud]N; šamû[sky]N; u
+
+2'. DIR muš DIR AN ZA SAG G[E₆ ...] 
+#lem: erpetu[cloud]N; mašāhu[measure]V; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; rēšu[beginning]N; mūšu[night]N; u
+
+3'. ina ZALÁG ŠÚ 14 2 ŠÚ DIR NU PAP [GE₆ 15 N GE₆] 
+#lem: ina[in]PRP; nūru[last part of the night]N; erēpu[be(come) overcast]V; n; n; rabû[moonset to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; n; mūšu[night]N
+
+4'. DIR muš USAN AN e MAŠ.MAŠ-šá-SIPA [N N] 
+#lem: erpetu[cloud]N; mašāhu[measure]V; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n
+
+5'. ina [ZALÁ]G sin SIG MÚL-SIG-šá-[SA]G-⸢GÍR.TAB⸣ 2 S[I ...] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-SIG-šá-SAG-GÍR.TAB[π Scorpii]CN; n; ubānu[finger]N; u
+
+6'. GE₆ 16 DIR AN ZA ina ZALÁG sin ár SI₄ [N N] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; n
+
+7'. 16 DIR AN ZA GE₆ 17 USAN dele-bat ⸢e⸣?
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP
+
+8'. [MÚL-IGI]-šá-še-pít-MAŠ.MAŠ 1 KÙŠ 4 SI DIR? [x x]  
+#lem: MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N; n; ubānu[finger]N; erpetu[cloud]N; u; u
+
+@reverse
+1. ina ZALÁG sin ár šil-PA 2 KÙŠ ⸢DIR⸣ [...] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N; erpetu[cloud]N; u
+
+2. 17 DIR AN ZA GE₆ ⸢18 x⸣ [...] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; u; u
+
+3. DIR SAL AN ZA ina KIN.SIG AN UTAH <i>-ṣa GE₆ [19 USAN dele-bat e] 
+#lem: erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; kinsikku[afternoon]N; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP
+
+4. MÚL-ár-šá-še-pít-MAŠ.MAŠ 1 KÙŠ 4 SI DIR SAL [AN ZA] 
+#lem: MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N; n; ubānu[finger]N; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5. ina ZALÁG sin TÙR NU ⸢KÁD NIGIN⸣ 19 DIR SAL AN Z[A] 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; tarbaṣa[halo]N; ul[not]MOD; kaṣāru[become joined]'V$; lawi[surrounded (with)]AJ; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+6. [x x x] ⸢x x⸣ [...]  
+#lem: u; u; u; u; u; u
+
+@left
+1. ⸢x⸣ x SAL HI? UD DU?
+#lem: u; u; u; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') ... Night of the 10+[xth], first part of the night@sup{?}, clouds [...] the sk[y ...]
+
+@(o 2') measured (despite) clouds; clouds were in the sky; beginning of the ni[ght, ...] 
+
+@(o 3') last part of the night, overcast. The 14th, moonset to sunrise: 2°; clouds, I did not watch. [Night of the 15th, sunset to moonrise: nn°,] 
+
+@(o 4') measured (despite) clouds; first part of the night, Mars was [...] above γ Geminorum; 
+
+@(o 5') last [part of the] night, the moon was 2 fin[gers] below π Scorpii [...] 
+
+@(o 6') Night of the 16th, clouds were in the sky; last part of the night, the moon was [...] behind α Scorpii. 
+
+@(o 7') The 16th, clouds were in the sky. Night of the 17th, first part of the night, Venus was 1 cubit 4 fingers above@sup{?} [η]
+
+@(o 8') Geminorum; clouds@sup{?} [...]  
+
+@reverse
+
+@(r 1) last part of the night, the moon was 2 cubits behind ϑ Ophiuchi; clouds [...] 
+
+@(r 2) The 17th, clouds were in the sky. Night of the 18th, ... [...] 
+
+@(r 3) thin clouds were in the sky; in the afternoon, a little rain shower. Night [of the 19th, first part of the night, Venus was] 
+
+@(r 4) 1 cubit 4 fingers [above] μ Geminorum; thin clouds were [in the sky;] 
+
+@(r 5) last part of the night, the moon was surrounded by a halo which was not closed. The 19th, thin clouds were in the sky. 
+
+@(r 6) [...] ... [...]  
+
+@left
+
+@(l.e. 1) ...

@@ -1,0 +1,60 @@
+&X201923 = AD -192C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 1] ME 19?.KÁM {m}an u {m}a[n ...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; u
+
+2. [{ITU}]ŠE GE₆ 21 DIR AN ZA ina Z[ALÁG sin] 
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+3. ina IGI SI-MÁŠ 2 KÙŠ sin 4 KÙŠ ana ⸢ULÙ⸣ [SIG] 
+#lem: ina[in]PRP; pān[front]N; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+4. 21 kal ME DIR AN ZA ina KIN.SIG ŠÚ GE₆ 22 
+#lem: n; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; kinsikku[afternoon]N; erēpu[be(come) overcast]V; mūšu[night]N; n
+
+5. DIR AN DIB ⸢22⸣ [DI]R AN DIB [x x] SI GIN 
+#lem: erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u; u; ištānu[north wind]N; alāku[blow]V
+
+6. GE₆ 23 DIR ⸢AN⸣ DIB AN [x x x] ⸢še-ni⸣ NU TUH 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; u; u; u; šēnu[sandal]N; ul[not]MOD; paṭāru[remove]V
+
+7. 23 ina še-rì DIR AN DIB AN U[TAH x x x] x x 
+#lem: n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; natāku[drip]V; u; u; u; u; u
+
+8. MAR GIN GE₆ 24 ŠÚ.ŠÚ A[N ...] 
+#lem: amurru[west wind]N; alāku[blow]V; mūšu[night]N; n; urrup[be(come) overcast]V; šamû[rain]N; u
+
+9. AN UTAH 24 ŠÚ.ŠÚ AN UT[AH ...] 
+#lem: šamû[rain]N; natāku[drip]V; n; urrup[be(come) overcast]V; šamû[rain]N; natāku[drip]V; u
+
+10. 25 DIR AN ZA GE₆ 26 D[IR ...]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 1]19@sup{?}, [kings] Antiochus and A[ntiochus ...] 
+
+@(o 2) [Month] XII, night of the 21st, clouds were in the sky; last part of the [night, the moon was] 
+
+@(o 3) 2 cubits in front of β Capricorni, the moon being 4 cubits [low] to the south. 
+
+@(o 4) The 21st, all day clouds were in the sky; in the afternoon, overcast. Night of the 22nd, 
+
+@(o 5) clouds crossed the sky. The 22nd, clouds crossed the sky, [...,] the north wind blew. 
+
+@(o 6) Night of the 23rd, clouds crossed the sky, rain ... but the sandal was not removed. 
+
+@(o 7) The 23rd, in the morning, clouds crossed the sky, rain sho[wer ...] ... 
+
+@(o 8) the west wind blew. Night of the 24th, very overcast, r[ain ...] 
+
+@(o 9) rain shower. The 24th, very overcast, rain sho[wer ...] 
+
+@(o 10) The 25th, clouds were in the sky. Night of the 26th, cl[ouds ...]

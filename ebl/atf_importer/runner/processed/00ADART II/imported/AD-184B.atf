@@ -1,0 +1,111 @@
+&X201842 = AD -184B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. 1 5/6 KÙŠ ⸢x⸣ [...] 
+#lem: n; n; ammatu[unit]N; u; u
+
+2'. sin 2 1/2 KÙŠ ana SI ⸢NIM⸣ [GE₆ 10 sin x MÚL-KUR-šá-DUR-nu-nu N N] 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; Sîn[moon]N; u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n
+
+3'. sin 1 1/2 KÙŠ ana ULÙ SIG 10 DIR ⸢AN ZA⸣ [...] 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+4'. 3 1/2 KÙŠ DIR AN ZA GE₆ 13 sin ár MÚL.MÚL ⸢1 KÙŠ⸣ 
+#lem: n; n; ammatu[unit]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N
+
+5'. sin 1 1/2 KÙŠ ana ULÙ SIG GE₆ 14 sin ina IGI ŠUR-SI 2 KÙŠ 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N
+
+6'. sin 2 1/2 KÙŠ ana ULÙ SIG 14 6.40 ŠÚ DIR NU PAP kal ME [DI]R AN ZA 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+7'. GE₆ 15 2.20 ME muš 4 šá MÚL ⸢lu-lim ziq⸣-p[i sin] 
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V; n; ša[which]REL; kakkabu[star]N; lulīmu[red deer//Stag]N'CN$; zaqāpu[culminate]V; Sîn[moon]N
+
+8'. AN.KU₁₀ ki <TAB>-ú 2 SI Á ⸢x⸣ [...] 
+#lem: antallû[eclipse]N; kī[when]SBJ; ušarrû[begin]V; n; ubānu[finger]N; idu[side]N; u; u
+
+9'. ina 44 GE₆ <ana> ZALÁG in 25? [...]  
+#lem: ina[in]PRP; n; mūšu[night]N; ana[to]PRP; nūru[last part of the night]N; ina[during]PRP; n; u
+
+@reverse
+1. MÚL.BABBAR u GENNA GUB{MEŠ} ina AN.KU₁₀-šú MÚL? [...] 
+#lem: Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Kayyamānu[Saturn]CN; izuzzu[stand]V; ina[in]PRP; antallû[eclipse]N; kakkabu[star]N; u
+
+2. ÍB.TAG₄ UDU.IDIM{MEŠ} NU GUB{MEŠ} ina? AN.KU₁₀-šú ⸢MAR⸣ [GIN? ...] 
+#lem: rēhtu[remainder]N; bibbu[wild sheep//planet]N'N$; ul[not]MOD; izuzzu[stand]V; ina[in]PRP; antallû[eclipse]N; amurru[west wind]N; alāku[blow]V; u
+
+3. 1 2/3 KÙŠ ina? IGI MÚL-IGI-šá-še-pít-MAŠ.MAŠ a-dir 15 8.40 [na] 
+#lem: n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; adir[eclipsed]AJ; n; n; na[sunrise to moonset]N
+
+4. muš GE₆ 16 9 GE₆ ⸢muš⸣ [x] DIR AN DIB GE₆ 
+#lem: mašāhu[measure]V; mūšu[night]N; n; n; mūšu[night]N; mašāhu[measure]V; u; erpetu[cloud]N; šamû[sky]N; etēqu[pass]V; mūšu[night]N
+
+5. 17 ina ZALÁG sin ⸢ár x x x x⸣ [x sin N] ⸢KÙŠ⸣ ana ULÙ SIG 
+#lem: n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u; u; u; u; u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+6. GE₆ 18 ŠÚ.ŠÚ [...] U 1-en-šú 2-šú 3-šú GÙ-šú ŠUB 
+#lem: mūšu[night]N; n; urrup[be(come) overcast]V; u; ubānu[finger]N; ištēn[once]NU; šinīšu[twice]AV; šalāšišu[thrice]AV; rigimšu[voice]N; maqātu[fall]V
+
+7. AN PISAN DIB GE₆ 19 ŠÚ ⸢x x x x⸣ [...] 
+#lem: šamû[rain]N; pisannu[(a meterological phenomenon)]N; DIB[(meaning unclear)]V; mūšu[night]N; n; erēpu[be(come) overcast]V; u; u; u; u; u
+
+8. ana NIM ⸢DIB⸣ [...]  
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+@left
+1. [...] GE₆ sin TÙR NIGIN 
+#lem: u; mūšu[night]N; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ
+
+2. [...] MÚL.BABBAR u GENNA GUB{MEŠ}
+#lem: u; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Kayyamānu[Saturn]CN; izuzzu[stand]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') 1 5/6 cubits ... [...] 
+
+@(o 2') the moon being 2 1/2 cubits high to the north. [Night of the 10th, the moon was ... η Piscium,] 
+
+@(o 3') the moon being 1 1/2 cubits low to the south. The 10th, clouds were in the sky [...] 
+
+@(o 4') 3 1/2 cubits; clouds were in the sky. Night of the 13th, the moon was 1 cubit behind η Tauri, 
+
+@(o 5') the moon being 1 1/2 cubits low to the south. Night of the 14th, the moon was 2 cubits in front of β Tauri, 
+
+@(o 6') the moon being 2 1/2 cubits low to the south. The 14th, moonset to sunrise: 6° 40'; clouds, I did not watch; all day clouds were in the sky. 
+
+@(o 7') Night of the 15th, moonrise to sunset: 2° 20', measured; (when) the 4 stars of the Stag culminated, [lunar] 
+
+@(o 8') eclipse; when it began, 2 fingers on the ... side [...] 
+
+@(o 9') at 44° before sunrise; at 25°@sup{?}, [...]  
+
+@reverse
+
+@(r 1) Jupiter and Saturn stood there; in its eclipse ... [...] 
+
+@(r 2) the remainder of the planets did not stand there; in its eclipse, the west wind [blew@sup{?} ...]
+
+@(r 3) it was eclipsed 1 2/3 cubits in@sup{?} front of η Geminorum. The 15th, [sunrise to moonset:] 8° 40', 
+
+@(r 4) measured. Night of the 16th, sunset to moonrise: 9°, measured [...]; clouds crossed the sky. Night 
+
+@(r 5) of the 17th, last part of the night, the moon was behind ..., [the moon being nn] cubits low to the south. 
+
+@(r 6) Night of the 18th, very overcast [...] it thundered once, twice, (or) thrice, 
+
+@(r 7) rain, PISAN DIB. Night of the 19th, overcast ... [...] 
+
+@(r 8) having passed to the east [...]  
+
+@left
+
+@(l.e. 1) [...] night, the moon was surrounded by a halo 
+
+@(l.e. 2) [...] Jupiter and Saturn stood (in it@sup{?}).

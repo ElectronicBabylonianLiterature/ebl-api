@@ -1,0 +1,59 @@
+&X201905 = AD -190E
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+2'. [... S]A₄-šá-ABSIN 2 [...] 
+#lem: u; SA₄-šá-ABSIN[α Virginis]CN; n; u
+
+3'. [... G]E₆ ⸢19⸣ ina ZALÁG sin ár RÍN-šá-SI 1 K[ÙŠ? ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; u
+
+4'. [... A]N e is-le₁₀ 3 KÙŠ GE₆ 24 ina ZALÁG sin SIG M[ÚL-x-šá-SUHUR-MÁŠ N N ...] 
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorni]CN; n; n; u
+
+5'. [... ana N]IM DIB 26 ŠÚ.ŠÚ 27 GU₄.UD ina NIM ina zib{ME} ŠÚ [...] 
+#lem: u; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; urrup[be(come) overcast]V; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V; u
+
+6'. [...] šú? HAB-rat DIR GAR-an ana ZALÁG-r[u] ⸢ki TAB-ú⸣ [...] 
+#lem: u; X; HAB-rat[disc]N; erpetu[cloud]N; šakānu[put//make]V'V; ana[to]PRP; nawāru[clearing]'N; kī[when]SBJ; ušarrû[begin]V; u
+
+7'. [... GUB]{MEŠ} ina ZALÁG-ru AN E-a ÍB.[TAG₄ UDU.IDIM{MEŠ} NU GUB{MEŠ} ...] 
+#lem: u; izuzzu[stand]V; ina[during]PRP; nawāru[clearing]'N; Ṣalbaṭānu[Mars]CN; elû[come out]V; rēhtu[remainder]N; bibbu[planet]N; ul[not]MOD; izuzzu[stand]V; u
+
+8'. [... sa]h-le₁₀ 1(BARIG) 3(BÁN) ŠE.GIŠ.Ì 3(BÁN)? [...] 
+#lem: u; sahlu[cress]N; n; n; šamaššammū[sesame]N; n; u
+
+9'. [... AN ina M]ÚL.MÚL ITU BI ILLU [...] 
+#lem: u; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zappu[Taurus]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N; u
+
+$ ruling 
+10'. ($traces$)
+
+@translation labeled en project
+
+@(1') [...] ... [...] 
+
+@(2') [... α] Virginis 2 [...] 
+
+@(3') [... Ni]ght of the 19th, last part of the night, the moon was 1 cu[bit@sup{?}] behind β Librae [...] 
+
+@(4') [... Ma]rs was 3 cubits above α Tauri. Night of the 24th, last part of the night, the moon was [...] below [γ/δ Capricorni ...] 
+
+@(5') [...] having passed [to the ea]st. The 26th, very overcast. The 27th, Mercury’s last appearance in the east in Pisces [...] 
+
+@(6') [... the sun] made (an eclipse) of more [than x] of the disc. When it began to clear, [...] 
+
+@(7') [... during the eclipse, ... stood] there; during clearing, Mars came out; the re[mainder of the planets did not stand there ...] 
+
+@(8') [... cr]ess, 1 @i{pānu} 3 @i{sūtu}; sesame, 3 @i{sūtu}@sup{?} [...] 
+
+@(9') [... Mars was in T]aurus. That month, the river level [...] 
+
+$ ruling 
+
+@(10') (traces)

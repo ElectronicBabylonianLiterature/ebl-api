@@ -1,0 +1,74 @@
+&X201683 = AD -168C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@reverse
+1'. [...] ⸢1 GUR x⸣ [...] 
+#lem: u; n; kurru[kor (180 litres)]N; u; u
+
+2'. [... i-nu]-šú MÚL.BABBAR ina A dele-bat ina SAG ⸢ITU ina PA EN TIL⸣ [ITU ...] 
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; Dilbat[Venus]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Pabilsag[Sagittarius]CN; adi[until]PRP; qītu[end]N; warhu[month]N; u
+
+3'. [... G]UB-uz TA 6 EN 12 2/3 KÙŠ GIN PAP 2[7 ...] 
+#lem: u; izuzzu[remain constant]V; ištu[from]PRP; n; adi[until]PRP; n; n; ammatu[unit]N; alāku[rise]V; napharu[total]N; n; u
+
+4'. [...] {LÚ}DUMU E{KI} {LÚ}KAB.SAR {LÚ}ŠEŠ šá {LÚ}[ŠÀ.TAM ...] 
+#lem: u; māru[inhabitant]N; Bābilu[Babylon]SN; kabšarru[jeweler]N; ahu[brother]N; ša[which]REL; šatammu[temple administrator]N; u
+
+5'. [... k]u-ú-tú pe-eq-du U₄ BI KÙ.GI šul [...] 
+#lem: u; X; paqid[entrusted]AJ; ūmu[day]N; šū[that]'DP; hurāṣu[gold]N; X; u
+
+6'. [... {LÚ}z]a-zak-ka a₄ u {LÚ}UKKIN šá {LÚ}KÙ.D[IM ...] 
+#lem: u; zazakku[a registry official]N; ā[the afore-mentioned]DP; u[and]CNJ; kiništu[assembly]N; ša[of]'DET; kutīmu[goldsmith]N; u
+
+7'. [... D]Ù{MEŠ} u DINGIR šá am-mi-i-ta-a MU-šú MU-[ár ...] ⸢x x⸣ [...] 
+#lem: u; epēšu[make]V; u[and]CNJ; ilu[god]N; ša[who]REL; Ammamiʾita[Ammamiʾita]DN; šumšu[name]N; zakāru[call]V; u; u; u; u
+
+8'. [... kul-l]u-mu! ina É [{LÚ}]DI.KUD šá É DINGIR{MEŠ} DI[B ...] ⸢x⸣{MEŠ} šá É DINGIR{ME[Š} ...] 
+#lem: u; kullû[detained]AJ; ina[in]PRP; bītu[house]N; dayyānu[judge]N; ša[of]'DET; bītu[house]N; ilu[god]N; ṣabātu[seize]V; u; u; ša[of]'DET; bītu[house]N; ilu[god]N; u
+
+9'. [... Š]À.TAM É.SAG.GÍL u {LÚ}DI.KUD{MEŠ} šá ⸢x⸣ [... i-šá]-lu-uʾ uk-tin-nu-⸢uʾ⸣ [...] 
+#lem: u; šatammu[temple administrator]N; Esangila[Esangila]TN; u[and]CNJ; dayyānu[judge]N; ša[which]REL; u; u; išālū[interrogate]V; uktinnū[convict]V; u
+
+10'. [... qa]-⸢lu⸣-ú ITU BI bu-še-e [... {GIŠ}K]IRI₆ {GIŠ}LI GAR-uʾ šá ana ku-u[m ...] 
+#lem: u; qalû[burnt]AJ; warhu[month]N; šū[that]'DP; būšu[property]N; u; kirû[garden]N; burāšu[juniper]N; šakānu[place]V; ša[who]REL; ana[to]PRP; kūm[representative]'N; u
+
+11'. [... É.SAG].GÍL u {LÚ}E{KI}{MEŠ} {LÚ}U[KKIN ...] I.ZI IM-3 šá É bu-še-e MU-a-[tì ...] 
+#lem: u; Esangila[Esangila]TN; u[and]CNJ; Bābilāya[Babylonian]EN; kiništu[assembly]N; u; igāru[wall]N; šadû[east]N; ša[of]'DET; bītu[house]N; būšu[goods]N; šuāti[that]'DP; u
+
+12'. [... D]IR muš 
+#lem: u; erpetu[cloud]N; mašāhu[measure]V
+
+13'. na-ṣar [...] šá MU 1 ME 43.KÁM {m}an LUGAL  
+#lem: naṣāru[observation]'N; u; ša[which]REL; šattu[year]N; n; ūmu[day]N; n; Antiochus[Antiochus]RN; šarru[king]N
+
+@translation labeled en project
+
+@(r 1) […] ⸢1 @i{kurru}⸣ [...]
+
+@(r 2) At that time, Jupiter was in Leo; Venus, in the beginning of the month, was in Sagittarius, until the end of the [month …]
+
+@(r 3) [… re]mained constant; from the 6th to the 12th, it rose 2/3 cubit, total: 2[7 was the @i{na} (gauge …]
+
+@(r 4) […] one inhabitant of Babylon, a jeweler, a brother of […]
+
+@(r 5) […] was entrusted with the office of [@i{zazakku}]. That day, gold […]
+
+@(r 6) […] this zazakku and the assembly of the goldsmi[ths …]
+
+@(r 7) […]  made, and the god who is called Ammamiʾita […] ⸢x x⸣ [...]
+
+@(r 8) […] held and taken into the temple courthouse […] of the temple courthouse […]
+
+@(r 9) […] the temple administrator und the [temple] judges […] interrogated and convicted […]
+
+@(r 10) […] burnt. That month, property […] placed [in the old treasury] in the juniper garden, the representative [of the @i{šatammu}]
+
+@(r 11) [of the E]sangila and the Babylonians, the assembly of the Esangila […] on the east wall of this treasury […]
+
+@(r 12) […] measured (despite) clouds […]
+
+@(r 13) Diary […] of year 143, king Antiochus
+

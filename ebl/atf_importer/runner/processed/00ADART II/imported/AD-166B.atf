@@ -1,0 +1,111 @@
+&X201662 = AD -166B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 45.K[ÁM ...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+2. kal GE₆ DIR AN [...] 
+#lem: kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; u
+
+3. AN kab-bar PISAN D[IB ...] 
+#lem: šamû[rain]N; kabbaru[thick]AJ; pisannu[(a meterological phenomenon)]N; DIB[(meaning unclear)]V; u
+
+4. ŠÚ.ŠÚ ULÙ ŠÁR GE₆ ⸢2⸣ [...] 
+#lem: urrup[be(come) overcast]V; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; u
+
+5. GÙ U MAH AN DUL [...] 
+#lem: rigim[voice]N; Adad[storm-god]DN; ṣīru[much]AJ; šamû[rain]N; DUL[(meaning unclear)]V; u
+
+6. [UL]Ù GIN GE₆ 3 ŠÚ.ŠÚ [...] 
+#lem: šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; urrup[be(come) overcast]V; u
+
+7. [N] KÙŠ ana ŠÚ LAL 3 [...] 
+#lem: n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; n; u
+
+8. [GE₆ 4? Š]Ú.ŠÚ sin e MÚL [...] 
+#lem: mūšu[night]N; n; urrup[be(come) very overcast]V; Sîn[moon]N; eli[above]PRP; kakkabu[star]N; u
+
+9. [sin N N ana] ⸢NIM DIB⸣ [...]  
+#lem: Sîn[moon]N; n; n; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+@reverse
+1'. [x x] ⸢x x⸣ [...] 
+#lem: u; u; u; u; u
+
+2'. [x] DIR AN ZA [...] 
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+3'. ⸢2?⸣-šú 3-šú GÙ-šú n[é-hi ŠUB ...] 
+#lem: šinīšu[twice]AV; šalāšišu[thrice]AV; rigimšu[voice]N; nēhu[slow]AJ; maqātu[fall]V; u
+
+4'. GE₆ 10 DIR AN Z[A ...] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+5'. 1 KÙŠ sin 1 [...] 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; u
+
+6'. ULÙ GIN G[E₆ ...] 
+#lem: šūtu[south wind]N; alāku[blow]V; mūšu[night]N; u
+
+7'. ILLU ⸢x⸣ [...] 
+#lem: mīlu[river level]N; u; u
+
+8'. PAP 11 [...]  
+#lem: napharu[total]N; n; u
+
+@left
+1. GE₆ 3 USA[N ...] 
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; u
+
+2. 2/3 KÙŠ ⸢ana⸣ [...]  
+#lem: n; ammatu[unit]N; ana[to]PRP; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 145 [...] 
+
+@(o 2) all night clouds [...] the sky [...] 
+
+@(o 3) thick rain, PISAN D[IB ...] 
+
+@(o 4) very overcast, gusty south wind. Night of the 2nd, [...] 
+
+@(o 5) much thunder, rain DUL [...] 
+
+@(o 6) the south wind blew. Night of the 3rd, very overcast [...] 
+
+@(o 7) [nn] cubits back to the west. The 3rd, [...] 
+
+@(o 8) [Night of the 4th@sup{?}, ve]ry overcast; the moon was [...] above [...,] 
+
+@(o 9) [the moon] having passed [... to] the east [...]  
+
+@reverse
+
+@(r 1') [...] ... [...] 
+
+@(r 2') [...] clouds were in the sky [...] 
+
+@(r 3') it thundered slowly twice or thrice [...] 
+
+@(r 4') Night of the 10th, clouds were in the sky [...] 
+
+@(r 5') 1 cubit, the moon being 1 [...] 
+
+@(r 6') the south wind blew. Ni[ght ...] 
+
+@(r 7') ??? [...] 
+
+@(r 8') total: 11 [...]
+
+@left
+
+@(l.e. 1) Night of the 3rd, first part of the night, [...] 
+
+@(l.e. 2) 2/3 cubit to [...]

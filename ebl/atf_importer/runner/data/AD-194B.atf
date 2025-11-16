@@ -1,0 +1,123 @@
+&X201942 = AD -194B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 60+57.KÁM {ITU}DU₆ 1 17 
+#lem: šattu[year]N; n; Tašrītu[Month VII]MN; n; n
+
+2. KUR₄ a-pir ina GUB IGI ina IGI GENNA 1 1/2 KÙŠ ana ŠÚ GUB 
+#lem: baʾil[bright]AJ; apir[earthshine]'N; ina[while]'SBJ; izuzzu[stand]V; amāru[see]V; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V
+
+3. GE₆ 2 sin ár SI₄ 2 KÙŠ sin 4 KÙŠ ana SI NIM 
+#lem: mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+4. 2 DIR AN ZA GE₆ 3 sin ár šil-PA 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN
+
+5. 2 1/2 KÙŠ 3 DIR AN ZA GE₆ 5 SAG GE₆ 
+#lem: n; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+6. sin ár AN 1 KÙŠ ana NIM GUB 5 SI GIN 
+#lem: Sîn[moon]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; n; ištānu[north wind]N; alāku[blow]V
+
+7. GE₆ 6 SAG GE₆ sin SIG SI-MÁŠ 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]'PRP; SI-MÁŠ[β Capricorni]CN
+
+8. 3 1/2 KÙŠ 6 SI ŠÁR GE₆ 7 SAG GE₆ 
+#lem: n; n; ammatu[unit]N; n; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+9. sin ina IGI SUHUR-IGI 2 1/2 KÙŠ 
+#lem: Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; ammatu[unit]N
+
+10. GE₆ 8 SAG GE₆ sin ár SUHUR-ár 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN
+
+11. 2 KÙŠ ina ZALÁG dele-bat e SA₄ 
+#lem: n; ammatu[unit]N; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN
+
+12. 2 KÙŠ 8 15 na GENNA  
+#lem: n; ammatu[unit]N; n; n; na[sunset to setting]'N; Kayyamānu[Saturn]CN
+
+@reverse
+1. ⸢in⸣ 11 GENNA ina GÍR.TAB ŠÚ GE₆ 
+#lem: ina[in]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; mūšu[night]N
+
+2. 13 SAG GE₆ sin SIG DUR-nu-nu 
+#lem: n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN
+
+3. 4 1/2 KÙŠ 13 SI GIN GE₆ 14 3.20 ME 
+#lem: n; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+4. muš SAG GE₆ sin ár 
+#lem: mašāhu[measure]V; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP
+
+5. MÚL-ár-šá-SAG-HUN 1 KÙŠ sin 6 KÙŠ ana ULÙ SIG 
+#lem: MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+6. 14 40 NINDA ŠÚ SI GIN GE₆ 15 
+#lem: n; n; namaddu[measurement]N; rabû[moonset to sunrise]'N; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n
+
+7. 4 GE₆ a-kám muš ina ZALÁG sin ár MÚL.MÚL 
+#lem: n; mūšu[night]N; akamu[mist]N; mašāhu[measure]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL.MÚL[η Tauri]CN
+
+8. 1 KÙŠ sin 3 KÙŠ ana ULÙ SIG 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+9. 15 13 na muš 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+10. ILLU 35 na
+#lem: mīlu[river level]N; n; na[na-gauge]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 117, month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset): 17°; 
+
+@(o 2) it was bright, earthshine, it could be seen while the sun stood there; it stood 1 1/2 cubits in front of Saturn to the west. 
+
+@(o 3) Night of the 2nd, the moon was 2 cubits behind α Scorpii, the moon being 4 cubits high to the north. 
+
+@(o 4) The 2nd, clouds were in the sky. Night of the 3rd, the moon was 2 1/2 cubits behind ϑ Ophiuchi. 
+
+@(o 5) The 3rd, clouds were in the sky. Night of the 5th, beginning of the night, 
+
+@(o 6) the moon stood 1 cubit behind Mars to the east. The 5th, the north wind blew. 
+
+@(o 7) Night of the 6th, beginning of the night, the moon was 3 1/2 cubits below β Capricorni. 
+
+@(o 8) The 6th, gusty north wind. Night of the 7th, beginning of the night, 
+
+@(o 9) the moon was 2 1/2 cubits in front of γ Capricorni. 
+
+@(o 10) Night of the 8th, beginning of the night, the moon was 2 cubits behind δ Capricorni; 
+
+@(o 11) last part of the night, Venus was 2 cubits above α Virginis. 
+
+@(o 12) The 8th, sunset to setting of Saturn: 15°.  
+
+@reverse
+
+@(r 1) Around the 11th, Saturn’s last appearance in Scorpius. Night
+
+@(r 2) of the 13th, beginning of the night, the moon was 4 1/2 cubits below η Piscium. 
+
+@(r 3) The 13th, the north wind blew. Night of the 14th, moonrise to sunset: 3° 20', 
+
+@(r 4) measured; beginning of the night, the moon was 1 cubit behind α 
+
+@(r 5) Arietis, the moon being 6 cubits low to the south. 
+
+@(r 6) The 14th, moonset to sunrise: 40'; the north wind blew. Night of the 15th, 
+
+@(r 7) sunset to moonrise: 4°; measured (despite) mist; last part of the night, the moon was 1 cubit behind η Tauri, 
+
+@(r 8) the moon being 3 cubits low to the south. 
+
+@(r 9) The 15th, sunrise to moonset: 13°, measured. 
+
+@(r 10) The river level: 35 was the @i{na} na-gauge.

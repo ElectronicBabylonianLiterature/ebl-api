@@ -1,0 +1,86 @@
+&X201714 = AD -171D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 M[E 40.KÁM ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+2. GE₆ 11 DIR SAL AN <ZA> sin? [...]
+#lem: mūšu[night]N; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; u
+
+3. ina IGI GENNA 1 KÙŠ ana ŠÚ GUB G[E₆ 12 ...]
+#lem: ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; mūšu[night]N; n; u
+
+4. sin ina IGI DELE 3 KÙŠ 12 [...]
+#lem: Sîn[moon]N; ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; n; u
+
+5. GE₆ 13 sin ina IGI SA₄-[šá-ABSIN N N ...]
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; n; u
+
+6. 13 DIR AN ZA ⸢SI?⸣ GIN ⸢GE₆⸣ [...]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; u
+
+7. [x x m]uš 14 1 ŠÚ [...]
+#lem: u; u; mašāhu[measure]V; n; n; erēpu[be(come) overcast]V; u
+
+8. [...] ULÙ GIN GE₆ 1[5 ...]
+#lem: u; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+9. [... ina ZAL]ÁG sin ina IGI R[ÍN-šá-ULÙ N N ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN; n; n; u
+
+10. [...] 15 5.40 [...]
+#lem: u; n; n; u
+
+11. [... 1]6? DIR AN ZA [...]  
+#lem: u; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+@reverse
+1'. [...] AN ZA ina ZALÁG sin [...]
+#lem: u; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+2'. [... I]GI? 2 KÙŠ 16 [...]
+#lem: u; pān[front]N; n; ammatu[unit]N; n; u
+
+@bottom
+1. 14 LÁL-tì NU [PAP]
+#lem: n; šitqultu[equinox]N; ul[not]MOD; naṣāru[watch]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 1[40 ...] 
+
+@(o 2) Night of the 11th, thin clouds were in the sky; the moon@sup{?} [...] 
+
+@(o 3) it stood 1 cubit in front of Saturn to the west. Ni[ght of the 12th, ...] 
+
+@(o 4) the moon was 3 cubits in front of γ Virginis. The 12th, [...] 
+
+@(o 5) Night of the 13th, the moon was [...] in front of α [Virginis ...] 
+
+@(o 6) The 13th, clouds were in the sky, the north@sup{?} wind blew. Night [...] 
+
+@(o 7) [... mea]sured. The 14th, moonset to sunrise: 1° [...] 
+
+@(o 8) [...] the south wind blew. Night of the 1[5th ...] 
+
+@(o 9) [... last part of the] night, the moon was [...] in front of α [Librae ...] 
+
+@(o 10) [...] The 15th, [sunrise to moonset@sup{?}:] 5° 40' [...] 
+
+@(o 11) [... 1]6th@sup{?}, clouds were in the sky [...]  
+
+@reverse
+
+@(r 1') [...] were in the sky; last part of the night, the moon [...] 
+
+@(r 2') [...] ... 2 cubits. The 16th, [...]  
+
+@bottom
+
+@(b.e. 1) The 14th, equinox; I did not [watch.]

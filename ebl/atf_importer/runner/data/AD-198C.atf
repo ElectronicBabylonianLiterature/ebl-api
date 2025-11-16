@@ -1,0 +1,136 @@
+&X201983 = AD -198C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'-3'. [...] ($blank$) 
+#lem: u
+
+4'. [...] ⸢x⸣ AN né-hi PISAN MAH DIB 
+#lem: u; u; šamû[rain]N; nēhu[slow]AJ; pisannu[(a meterological phenomenon)]N; ṣīru[much]AJ; DIB[(meaning unclear)]V
+
+5'. [... GE₆ 7 SAG GE₆ s]in ár DUR-nu-nu ⸢1+x⸣ KÙŠ 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N
+
+6'. [... GE₆] 9 SAG GE₆ sin SIG MÚL.[MÚL] 3 1/2 KÙŠ 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N
+
+7'. [...] GE₆ 11 SAG GE₆ sin 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+8'. [... in 12 MÚL.BABB]AR ina MÁŠ ŠÚ GE₆ 13 ŠÚ 13 ⸢8.30⸣ ŠÚ muš 
+#lem: u; ina[in]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; mūšu[night]N; n; erēpu[be(come) overcast]V; n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+9'. [...] ⸢x⸣ AN UTAH i-ṣa 15 kal ME 
+#lem: u; u; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ; n; kal[all]'DET; ūmu[day]N
+
+10'. [... TIR].AN.NA Á KUR GIB GE₆ 17 ŠÚ.ŠÚ SAG GE₆ 
+#lem: u; Manziat[rainbow]N; idu[side]N; šadû[east]N; parāku[stretch]V; mūšu[night]N; n; urrup[be(come) overcast]V; rēšu[beginning]N; mūšu[night]N
+
+11'. [... x]+1 SI 18 {MÚL}KAK.BAN ana ME E-a 
+#lem: u; u; ubānu[finger]N; n; Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; elû[rising]'N
+
+12'. [... Š]ED₇ šir 20 ma-diš ŠED₇ šir 
+#lem: u; kūṣu[coldness]N; gašāru[be(come) severe]V; n; mādiš[very much]AV; kūṣu[coldness]N; gašāru[be(come) severe]V
+
+13'. [... Š]ED₇ šir 
+#lem: u; kūṣu[coldness]N; gašāru[be(come) severe]V
+
+14'. [... GE₆ 2]4 ina [Z]ALÁG sin e SI₄ 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; SI₄[α Scorpii]CN
+
+15'. [N N ... Š]ED₇ šir GE₆ 27 ⸢ŠED₇⸣ i  
+#lem: n; n; u; kūṣu[coldness]N; gašāru[be(come) severe]V; mūšu[night]N; n; kūṣu[coldness]N; wīṣu[little]AJ
+
+@reverse
+1. [... ka]l ME DIR ⸢AN DIB⸣ 
+#lem: u; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; DIB[(meaning unclear)]V
+
+2. [...] ⸢x⸣ ŠÚ in 12 MÚL.BABBAR ina MÁŠ ŠÚ 
+#lem: u; u; rabû[set]V; ina[in]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V
+
+3. [...] LAL PAP 28 na 
+#lem: u; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+4. [...] 
+#lem: u
+
+$ ruling
+5. [AB ... GE₆ 4 sin] SIG MÚL-KUR-šá-DUR-nu-nu 1 KÙŠ 
+#lem: Ṭebētu[Month X]MN; u; mūšu[night]N; n; Sîn[moon]N; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N
+
+6. [... GE₆ 6] SAG ⸢GE₆⸣ sin ina IGI MÚL.MÚL 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN
+
+7. [N N ... Š]ED₇ šir GE₆ 8 
+#lem: n; n; u; kūṣu[coldness]N; gašāru[be(come) severe]V; mūšu[night]N; n
+
+8. [...] [x] DIR SAL AN ZA 
+#lem: u; u; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+9. [...] ⸢x⸣ TÙR NIGIN 
+#lem: u; u; tarbaṣa[halo]N; lawi[surrounded (with)]AJ
+
+10. [... G]U₄.UD ina ŠÚ 
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N
+
+11. [ina GU IGI ... x]+3 GE₆ GIN  
+#lem: ina[in]PRP; Gula[Aquarius]CN; nanmuru[be(come) visible]V; u; u; mūšu[night]N; alāku[go]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1'-3') (blank) 
+
+@(o 4') [...] ... slow rain, much PISAN DIB 
+
+@(o 5') [... Night of the 7th, beginning of the night, the m]oon was ⸢1+x⸣ cubits behind η Piscium. 
+
+@(o 6') [... Night] of the 9th, beginning of the night, the moon was 3 1/2 cubits below η Tau[ri]. 
+
+@(o 7') [...] Night of the 11th, beginning of the night, the moon was 
+
+@(o 8') [... around the 12th, Jupit]er’s last appearance in Capricorn. Night of the 13th, overcast. The 13th, moonset to sunrise: 8° 30', measured. 
+
+@(o 9') [...] ... a little  rain shower. The 15th, all day 
+
+@(o 10') [... a rain]bow stretched on the east side. Night of the 17th, very overcast; beginning of the night, 
+
+@(o 11') [... x]+1 finger. The 18th, Sirius’ acronychal rising. 
+
+@(o 12') [... the c]old became severe. The 20th, the cold became very severe. 
+
+@(o 13') [... the c]old became severe. 
+
+@(o 14') [... Night of the 2]4th, last part of the night, the moon was [...] above α Scorpii. 
+
+@(o 15') [... the c]old became severe. Night of the 27th, a little cold.  
+
+@reverse
+
+@(r 1) [... a]ll day clouds crossed the sky. 
+
+@(r 2) [...] moonset to sunrise: ⸢x⸣. Around the 12th, Jupiter’s last appearance in Capricorn. 
+
+@(r 3) [...] receded [...,] total: 28 was the @i{na} na-gauge. 
+
+@(r 4) [...] 
+
+$ ruling 
+
+@(r 5) [Month X, ... Night of the 4th, the moon was] 1 cubit below η Piscium. 
+
+@(r 6) [... Night of the 6th,] beginning of the night, the moon was [...] in front of η Tauri. 
+
+@(r 7) [... the c]old became severe. Night of the 8th, 
+
+@(r 8) [...] ... thin clouds were in the sky. 
+
+@(r 9) [...] ... was surrounded by a halo. 
+
+@(r 10) [... M]ercury’s [first appearance] in the west 
+
+@(r 11) [in Aquarius ... x]+3° after sunset.

@@ -1,0 +1,168 @@
+&X201952 = AD -195B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU.1.56.KÁM {IT[U}DU₆ GE₆] 
+#lem: n; Tašrītu[Month VII]MN; mūšu[night]N
+
+2. 16 DIR AN ZA ina ZALÁG s[in x] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+3. ŠUR-ULÙ 2 KÙŠ 16 ⸢DIR AN⸣ [x] 
+#lem: ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; u
+
+4. GE₆ 17 DIR AN ZA ina ZALÁG sin ina IGI! 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+5. ⸢MÚL⸣-ár-šá-še-pít-MAŠ.MAŠ 1 1/2 KÙŠ sin 1/2 KÙŠ ⸢ana⸣ [ULÙ SIG] 
+#lem: MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+6. 17 DIR SAL AN ZA GE₆ 18 
+#lem: n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+7. DIR AN ZA ina ZALÁG sin SIG MAŠ.MAŠ-IGI 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN
+
+8. 4 KÙŠ 18 ($erasure$) 
+#lem: n; ammatu[unit]N; n
+
+9. DIR AN ZA GE₆ 19 DIR AN ZA 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+10. ina ZALÁG sin ina IGI MÚL-ár-šá-ALLA-šá-ULÙ 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN
+
+11. 3 KÙŠ 19 DIR AN ZA GE₆ 20 
+#lem: n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+12. DIR AN ZA ina ZALÁG sin SIG ⸢SAG-A⸣ 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; SAG-A[ε Leonis]CN
+
+13. 4 1/2 KÙŠ sin 1/2 KÙŠ [ana x x]
+#lem: n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u; u
+
+@reverse
+1. 20 DIR AN ZA GE₆ 21 ⸢DIR AN⸣ ZA 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+2. ina ZALÁG sin ár LUGAL 1 1/2 KÙŠ sin 1 KÙŠ 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; LUGAL[α Leonis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+3. ana SI NIM 21 DIR AN DIB 
+#lem: ana[to]PRP; ištānu[north]N; Elamtu[east]'N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+4. GE₆ 22 DIR AN ZA ina ZALÁG sin 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+5. SIG GIŠ.KUN-A 4 KÙŠ sin 1/2 KÙŠ 
+#lem: šapil[below]'PRP; GIŠ.KUN-A[ϑ Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+6. ana NIM DIB 22 DIR AN ZA 
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+7. GE₆ 23 DIR AN ZA ina ZALÁG sin 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+8. ár GÌR-ár 1 1/2 KÙŠ sin 1 KÙŠ 
+#lem: warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+9. ana SI NIM ina IGI AN 2 1/2 [KÙŠ] 
+#lem: ana[to]PRP; ištānu[north]N; Elamtu[east]'N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N
+
+10. ana ŠÚ GUB sin 2 KÙŠ ana SI [NIM] 
+#lem: ana[to]PRP; erbu[west]'N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+11. 23 DIR AN ZA SI GIN 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+12. GE₆ 24 ina ZALÁG sin [x]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+@top
+1. [DELE-šá]-⸢IGI?-ABSIN? 2/3⸣ KÙŠ ⸢x x x⸣ 
+#lem: DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; u; u; u
+
+2. ⸢x x x x⸣  
+#lem: u; u; u; u
+
+@left
+1. ⸢GE₆ 25 ina ZALÁG⸣ sin ár
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP
+
+2. SA₄-[šá-ABSIN N N GE₆ 26] ina ZALÁG sin ina ⸢IGI⸣ [RÍN-šá-ULÙ] 
+#lem: SA₄-šá-ABSIN[α Virginis]CN; n; n; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN
+
+3. ⸢2? KÙŠ⸣  
+#lem: n; ammatu[unit]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 116, mon[th VII, night] 
+
+@(o 2) of the 16th, clouds were in the sky; last part of the night, the m[oon was] 
+
+@(o 3) 2 cubits [...] ζ Tauri. The 16th, clouds [...] the sky. 
+
+@(o 4) Night of the 17th, clouds were in the sky; last part of the night, the moon was 1 1/2 
+cubits in front of 
+
+@(o 5) μ Geminorum, the moon being 1/2 cubit [low to the south.] 
+
+@(o 6) The 17th, thin clouds were in the sky. Night of the 18th, 
+
+@(o 7) clouds were in the sky; last part of the night, the moon was 4 cubits ??? α Geminorum. 
+
+@(o 8) The 18th, 
+
+@(o 9) clouds were in the sky. Night of the 19th, clouds were in the sky; 
+
+@(o 10) last part of the night, the moon was 3 cubits in front of δ Cancri. 
+
+@(o 11) The 19th, clouds were in the sky. Night of the 20th, 
+
+@(o 12) clouds were in the sky; last part of the night, the moon was 4 1/2 cubits below ε Leonis, 
+
+@(o 13) the moon being 1/2 cubit [...]  
+
+@reverse
+
+@(r 1) The 20th, clouds were in the sky. Night of the 21st, clouds were in the sky; 
+
+@(r 2) last part of the night, the moon was 1 1/2 cubits behind α Leonis, the moon being 1 cubit 
+
+@(r 3) high to the north. The 21st, clouds crossed the sky.
+
+@(r 4) Night of the 22nd, clouds were in the sky; last part of the night, the moon was 
+
+@(r 5) 4 cubits below ϑ Leonis, the moon having passed 1/2 cubit
+
+@(r 6) to the east. The 22nd, clouds were in the sky. 
+
+@(r 7) Night of the 23rd, clouds were in the sky; last part of the night, the moon was 
+
+@(r 8) 1 1/2 cubits behind β Virginis, the moon being 1 cubit 
+
+@(r 9) high to the north, it stood 2 1/2 [cubits] in front of Mars 
+
+@(r 10) to the west, the moon being 2 cubits [high] to the north. 
+
+@(r 11) The 23rd, clouds were in the sky, the north wind blew. 
+
+@(r 12) Night of the 24th, last part of the night, the moon was  
+
+@top
+
+@(t.e. 1) 2/3 cubit [... γ] Virginis ... 
+
+@(t.e. 2) ...
+
+@left
+
+@(l.e. 1) [Night of the 25th, last part of the night,] the moon was [...] behind α
+
+@(l.e. 2) [Virginis. Night of the 26th,] last part of the night, the moon was 2@sup{?} cubits in front of [α Librae.]

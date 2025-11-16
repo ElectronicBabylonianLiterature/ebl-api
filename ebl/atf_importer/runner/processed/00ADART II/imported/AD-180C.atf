@@ -1,0 +1,124 @@
+&X201803 = AD -180C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 31.KÁM {ITU}ZÍZ G[E₆ ...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Šabāṭu[Month XI]MN; mūšu[night]N; u
+
+2. ULÙ GIN ITU BI KI.LAM še-⸢im⸣ [...] 
+#lem: šūtu[south wind]N; alāku[blow]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; u
+
+3. 2(BARIG) PI [x] 1(BARIG) 4(BÁN) ZÚ ina SAG ITU [...] 
+#lem: n; pānu[bushel (36 litres)]N; u; n; n; suluppu[date]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; u
+
+4. 1(GUR) GUR EN TIL ITU 4(BARIG) 2(BÁN) kàs 2(GUR) GU[R ...] 
+#lem: n; kurru[kor (180 litres)]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; kasû[mustard]N; n; kurru[kor (180 litres)]N; u
+
+5. [ŠE].GIŠ.Ì 4(BÁN) SÍG{HI.A} 2 1/2 MA.N[A ...] 
+#lem: šamaššammū[sesame]N; n; šīpātu[wool]N; n; n; manû[mina]N; u
+
+6. [i]-nu-šú MÚL.BABBAR ina A dele-bat ina MÁŠ [...] 
+#lem: inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; Dilbat[Venus]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; u
+
+7. [x] GU₄.UD ina ŠÚ ina zib{ME} IGI [...] 
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V; u
+
+8. [x x x] ⸢x x⸣ [...]  
+#lem: u; u; u; u; u; u
+
+@reverse
+1'. [...] sin 1/2 KÙŠ ana [...] 
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u
+
+2'. [DIR A]N ZA GE₆ 6 si[n ...] 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N; u
+
+3'. [x x] SI NIM DIR SAL AN [...] 
+#lem: u; u; ištānu[north]N; šaqi[high]AJ; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; u
+
+4'. ⸢ŠED₇⸣ ik-te-šir GE₆ 7 [sin SIG MAŠ.MAŠ-IGI] 
+#lem: kūṣu[coldness]N; gašāru[be(come) severe]V$iktešir; mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN
+
+5'. 6 1/2 KÙŠ 7 SI GIN ŠED₇ ik-[te-šir ...] 
+#lem: n; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; kūṣu[coldness]N; gašāru[be(come) severe]V; u
+
+6'. GE₆ 8 DIR AN ZA sin ár MAŠ.MAŠ-ár [N N sin N N] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; Sîn[moon]N; n; n
+
+7'. ana ULÙ SIG 8 DIR AN ZA ULÙ GIN [...] 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V; u
+
+8'. GE₆ 9 DIR AN DIB NIM.GÍR NIM.[GÍR ...] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; birqu[lightning]N; barāqu[lighten//flash]V'V$; u
+
+9'. AN {KUŠ}E.SÍR NU TUH [...]
+#lem: šamû[rain]N; šēnu[sandal]N; ul[not]MOD; paṭāru[remove]V; u
+
+@top
+1. DIR AN ZA GE₆ 10 DIR AN ZA [...] 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+2. sin 1 KÙŠ 6 SI ana ULÙ [SIG ...]  
+#lem: Sîn[moon]N; n; ammatu[unit]N; n; ubānu[finger]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+@left
+1. [...] AN UTAH 
+#lem: u; šamû[rain]N; natāku[drip]V
+
+2. [...] SI GIN x
+#lem: u; ištānu[north wind]N; alāku[blow]V; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 131, month XI, ni[ght@sup{?} ...] 
+
+@(o 2) the south wind blew. That month, the equivalent was: barley, [...] 
+
+@(o 3) 2 @i{pānu} ... 1 @i{pānu} 4 @i{sūtu}; dates, in the beginning of the month, [...] 
+
+@(o 4) 1 @i{kurru}, until the end of the month, 4 @i{pānu} 2 @i{sūtu}; mustard, 2 ku[r ...] 
+
+@(o 5) [se]same, 4 @i{sūtu}; wool, 2 1/2 minas [were sold for 1 shekel of silver.] 
+
+@(o 6) [At] that time, Jupiter was in Leo; Venus was in Capricorn [...] 
+
+@(o 7) [...] Mercury’s first appearance in the west in Pisces [...] 
+
+@(o 8) [...] ... [...]  
+
+@reverse
+
+@(r 1') [...] the moon being 1/2 cubit to [...] 
+
+@(r 2') [clouds were] in the sky. Night of the 6th, the moo[n ...] 
+
+@(r 3') ..., the north wind blew, thin clouds [...] the sky [...] 
+
+@(r 4') the cold became severe. Night of the 7th, [the moon was] 6 1/2 cubits [below α Geminorum.] 
+
+@(r 5') The 7th, the north wind blew, the cold became se[vere ...] 
+
+@(r 6') Night of the 8th, clouds were in the sky; the moon was [...] behind β Geminorum, [the moon being ...] 
+
+@(r 7') low to the south. The 8th, clouds were in the sky, the south wind blew [...] 
+
+@(r 8') Night of the 9th, clouds crossed the sky, lightning flashed [...] 
+
+@(r 9') rain (but) the sandal was not removed [...]  
+
+@top
+
+@(t.e. 1) clouds were in the sky. Night of the 10th, clouds were in the sky [...] 
+
+@(t.e. 2) the moon being 1 cubit 6 fingers [low] to the south [...]  
+
+@left
+
+@(l.e. 1) [...] rain shower 
+
+@(l.e. 2) [...] the north wind blew ...

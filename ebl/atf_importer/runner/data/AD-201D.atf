@@ -1,0 +1,129 @@
+&X202014 = AD -201D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. {ITU}DIR.ŠE GE₆ 28 [x]
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; u
+
+2. USAN AN e 
+#lem: šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP
+
+3. MÚL-ár-šá-ALLA-šá-ULÙ 1 KÙŠ ina ZALÁG DIR AN DIB 
+#lem: MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+4. 28 ina še-rì DIR AN DIB me-hu-ú ULÙ 
+#lem: n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; mehû[storm]N; šūtu[south wind]N
+
+5. kal ME ŠÚ.ŠÚ GE₆ 29 SAG GE₆ DIR AN ZA 
+#lem: kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+6. AN.KU₁₀ šamáš šá DIB in 58 GE₆ 
+#lem: antallû[eclipse]N; šamši[sun]N; ša[which]REL; etēqu[omitted]'AJ; ina[in]PRP; n; mūšu[night]N
+
+7. ana ZALÁG 29 ŠÚ.ŠÚ 30 ŠÚ.ŠÚ ina KIN.SIG 
+#lem: ana[to]PRP; nūru[light]N; n; urrup[be(come) overcast]V; n; erēpu[be(come) overcast]V; ina[in]PRP; kinsikku[afternoon]N
+
+8. ULÙ GIN 30? MÚL.BABBAR ana ME E-a 
+#lem: šūtu[south wind]N; alāku[blow]V; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[rising]'N
+
+9. [{ITU}]BAR 1 22 na-su KUR₄ 
+#lem: Nisannu[Month I]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ
+
+10. [GE₆ 1 sin] e is-le₁₀ 2 KÙŠ  
+#lem: mūšu[night]N; n; Sîn[moon]N; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N
+
+@reverse
+1. [x x] ⸢sin⸣? ana NIM DIB 1 
+#lem: u; u; Sîn[moon]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n
+
+2. [x] GIN GE₆ 2 sin ina IGI 
+#lem: u; alāku[blow]V; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+3. [Š]UR-ULÙ 1/2 KÙŠ sin 1/2 KÙŠ 
+#lem: ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+4. ana ULÙ SIG 2 DIR SAL AN ZA 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5. GE₆ 3 DIR SAL AN ZA sin SIG 
+#lem: mūšu[night]N; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; šapil[below]'PRP
+
+6. MÚL-ár-šá-še-pít-MAŠ.MAŠ 1 KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 
+#lem: MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+7. 3 DIR SAL AN ZA 
+#lem: n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+8. ITU BI ILLU TA 12 EN 22 
+#lem: warhu[month]N; šū[that]'DP; mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n
+
+9. 1 KÙŠ 4 SI LAL PAP 19 na TA 
+#lem: n; ammatu[unit]N; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; ištu[from]PRP
+
+10. 24 ($sic$) EN 30 1 5/6 KÙŠ GIN 
+#lem: n; adi[until]PRP; n; n; n; ammatu[unit]N; alāku[rise]V
+
+11. [PA]P 9 na 1 2 3.KÁM 20? SI GIN  
+#lem: napharu[total]N; n; na[na-gauge]N; n; n; n; n; ištānu[north wind]N; alāku[blow]V
+
+@top
+1. [PAP x]+8 na ITU BI 23 
+#lem: napharu[total]N; u; na[na-gauge]N; warhu[month]N; šū[that]'DP; n
+
+2.  BU[RU₅?{HI].A} ZI-a mim-ma NU TI-qé
+#lem: erbu[locust]N; tebû[attack]V; mimma[anything]XP; ul[not]MOD; leqû[take]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Month XII₂, night of the 28th, ... 
+
+@(o 2) first part of the night, Mars was 1 cubit above δ 
+
+@(o 3) Cancri; last part of the night, clouds crossed the sky. 
+
+@(o 4) The 28th, in the morning, clouds crossed the sky, south storm, 
+
+@(o 5) all day very overcast. Night of the 29th, beginning of the night, clouds were in the sky; 
+
+@(o 6) solar eclipse which was omitted; at 58° before 
+
+@(o 7) sunrise. The 29th, very overcast. The 30th, very overcast; in the afternoon, 
+
+@(o 8) the south wind blew. The 30th@sup{?}, Jupiter’s acronychal rising. 
+
+@(o 9) Month I, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 22°, it was bright. 
+
+@(o 10) [Night of the 1st, the moon was] 2 cubits above α Tauri,
+
+@reverse
+
+@(r 1) [the moon] having passed [...] to the east. The 1st, 
+
+@(r 2) [...] blew. Night of the 2nd, the moon was 
+
+@(r 3) 1/2 cubit in front of ζ Tauri, the moon being 1/2 cubit 
+
+@(r 4) low to the south. The 2nd, thin clouds were in the sky. 
+
+@(r 5) Night of the 3rd, thin clouds were in the sky; the moon was 1 cubit below 
+
+@(r 6) μ Geminorum, the moon being 1/2 cubit back to the west. 
+
+@(r 7) The 3rd, thin clouds were in the sky. 
+
+@(r 8) That month, the river level from the 12th to the 22nd 
+
+@(r 9) receded 1 cubit 4 fingers, total: 19 was the @i{na} na-gauge; from 
+
+@(r 10) the 24th@sup{sic} to the 30th, it rose 1 5/6 cubits, 11 total: 9 was the @i{na} na-gauge; the 1st, 2nd, and 3rd, it rose 20@sup{?} fingers,  
+
+@top
+
+@(t.e. 1) [total: x]+8 was the @i{na} na-gauge. That month, the 23rd, locusts 
+
+@(t.e. 2) attacked, but took nothing.

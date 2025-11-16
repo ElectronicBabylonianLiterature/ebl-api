@@ -1,0 +1,116 @@
+&X201981 = AD -198A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 60+53.KÁM {ITU}[BAR ... GE₆] 
+#lem: šattu[year]N; n; Nisannu[Month I]MN; u; mūšu[night]N
+
+2. 19 DIR AN ZA SI GIN 1[9 ...] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; n; u
+
+3. DIR SAL AN ZA SI [GIN] GE₆ 20 ⸢x⸣ [x x] 
+#lem: erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u; u; u
+
+4. GIN? DIR SAL AN ZA SI GIN 
+#lem: alāku[blow]V; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+5. DIR SAL AN ZA GE₆ [21 ina ZALÁ]G ⸢sin⸣ 
+#lem: erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+6. ár SI-MÁŠ 2 KÙŠ s[in N N] 
+#lem: warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; n
+
+7. ana ULÙ SIG ár MÚL.[BABBAR N N] 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; n; n
+
+8. ana NIM GUB sin ⸢4?⸣ [N ana SI] 
+#lem: ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; Sîn[moon]N; n; n; ana[to]PRP; ištānu[north]N
+
+9. NIM 21 ina KIN.SIG [...] 
+#lem: Elamtu[east]'N; n; ina[in]PRP; kinsikku[afternoon]N; u
+
+10. GE₆ 22 ina ZAL[ÁG ...]  
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+@reverse
+1'. ⸢x x⸣ [...] 
+#lem: u; u; u
+
+2'. [...] 
+#lem: u
+
+3'. GE₆ 24 DIR AN [...] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; u
+
+4'. GIN 24 DIR AN [...] 
+#lem: alāku[blow]V; n; erpetu[cloud]N; šamû[sky]N; u
+
+5'. DIR AN ZA ULÙ [GIN x x] 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V; u; u
+
+6'. ⸢DIR AN ZA ULÙ GIN⸣ x 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V; u
+
+7'. ⸢DIR AN ZA ULÙ GIN⸣ 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V
+
+8'. ILLU TA 19 ⸢EN⸣ 21 na? [x] ⸢x⸣ 
+#lem: mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n; na[na-gauge]N; u; u
+
+9'. ⸢x x⸣ [x x x] ⸢x⸣ [...]  
+#lem: u; u; u; u; u; u; u
+
+@top
+1. ⸢x x⸣
+#lem: u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 113, Month [I, ... Night] 
+
+@(o 2) of the 19th, clouds were in the sky, the north wind blew. The 1[9th, ...] 
+
+@(o 3) thin clouds were in the sky, the north wind [blew.] Night of the 20th, ... [...] 
+
+@(o 4) ... thin clouds were in the sky, the north wind blew. <...>@sup{?} 
+
+@(o 5) thin clouds were in the sky. Night [of the 21st, last part of the ni]ght, the moon was 
+
+@(o 6) 2 cubits behind β Capricorni, the m[oon being ...] 
+
+@(o 7) low to the south, it stood [...] behind Ju[piter] 
+
+@(o 8) to the east, the moon being 4@sup{?} [mm] 
+
+@(o 9) high [to the north.] The 21st, in the afternoon, [...] 
+
+@(o 10) Night of the 22nd, last part of the ni[ght, ...]  
+
+@reverse
+
+@(r 1') ... [...] 
+
+@(r 2') the north wind blew. The 23rd, [...] 
+
+@(r 3') Night of the 24th, clouds [...] the sky [...] 
+
+@(r 4') blew. The 24th, clouds [...] the sky [...] 
+
+@(r 5') clouds were in the sky, the south wind [blew ...] 
+
+@(r 6') clouds were in the sky, the south wind blew. 
+
+@(r 7') clouds were in the sky, the south wind blew. 
+
+@(r 8') The river level from the 19th to the 21st ... 
+
+@(r 9') ... [...] ... [...]  
+
+@top
+
+@(t.e. 1) ...

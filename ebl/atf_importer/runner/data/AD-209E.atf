@@ -1,0 +1,56 @@
+&X202095 = AD -209E
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. ina a-mat {d}EN u {d}GAŠ[AN-iá liš-lim]  
+#lem: ina[in]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1. MU.1.42.KÁM {m}a[n ... GE₆ 2 sin ár MÚL-e-šá-SAG-GÍR.TAB N N sin N N] 
+#lem: n; Antiochus[Antiochus]RN; u; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; n; Sîn[moon]N; n; n
+
+2. ana ULÙ SIG ár dele-bat 1 K[ÙŠ ana NIM GUB ...] 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; u
+
+3. MÚL.BABBAR 2 SI ana NIM D[IB ...] 
+#lem: Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+4. 6 DIR AN ZA GE₆ 7 S[AG GE₆ sin ...] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+5. ana ULÙ SIG 8 LÁL-tì [...] 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; šitqultu[equinox]N; u
+
+6. ⸢GE₆⸣ 13 4.30 ME [...] 
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N; u
+
+7. [x x] ⸢IGI⸣ 21 4? [...] 
+#lem: u; u; u; n; n; u
+
+8. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) At the command of Bēl and Bēl[tiya may it be well].
+
+@obverse
+
+@(o 1) Year 102, A[ntiochus ... Night of the 2nd, the moon was ... behind β Scorpii, the moon being ...] 
+
+@(o 2) low to the south, [it stood] 1 cu[bit] behind Venus [to the east ...] 3 Jupiter having passed 2 fingers to the east [...] 
+
+@(o 4) The 6th, coulds were in the sky. Night of the 7th, beg[inning of the night, the moon was ...] 
+
+@(o 5) low to the south. The 8th, equinox. [...] 
+
+@(o 6) Night of the 13th, moonrise to sunset: 4° 30'. [...] 
+
+@(o 7) [...] ... 21 4@sup{?} [...] 
+
+@(o 8) [...] ... [...]

@@ -1,0 +1,117 @@
+&X201872 = AD -187B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...] 
+#lem: u; u; u; u
+
+2'. ⸢AN? e⸣ MÚL-ár-šá-SUHUR-MÁŠ ⸢1/2⸣ [KÙŠ ...] 
+#lem: Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; u
+
+3'. ⸢x⸣ KÙŠ GE₆ 13 7.30 ME muš SAG GE₆ sin SIG [...] 
+#lem: u; ammatu[unit]N; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]PRP; u
+
+4'. 13 1.30 ŠÚ GE₆ 14 6.30 GE₆ USAN sin SIG DELE-šá?-I[GI-ABSIN N N ...] 
+#lem: n; n; rabû[moonset to sunrise]'N; mūšu[night]N; n; n; mūšu[night]N; šimītān[first part of the night]N; Sîn[moon]N; šapil[below]'PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u
+
+5'. DIR muš ina KIN.SIG ŠÚ.ŠÚ GE₆ 15 15 ŠÚ.ŠÚ GU₄.UD ina ŠÚ ina zib[{ME} IGI ...] 
+#lem: erpetu[cloud]N; mašāhu[measure]V; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) overcast]V; mūšu[night]N; n; n; rabû[set]V; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V; u
+
+6'. GE₆ 16 16 ŠÚ.ŠÚ GE₆ 17 ina ZALÁG sin ár RÍN-šá-SI 2 S[I ...] 
+#lem: mūšu[night]N; n; n; urrup[be(come) overcast]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; ubānu[finger]N; u
+
+7'. GE₆ 18 ina ZALÁG sin ina IGI SI₄ 1 1/2 KÙŠ GE₆ 19 ina ZALÁG sin ina IGI [MÚL-KUR-šá-KIR₄-šil-PA N N] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SI₄[α Scorpii]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; n
+
+8'. sin 1 1/2 KÙŠ ana ULÙ SIG DIR SAL AN ZA 19 DIR AN ⸢ZA⸣ [...] 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+9'. 20 ŠÚ.ŠÚ GE₆ 21 21 ŠÚ.ŠÚ GE₆ 22 DIR AN ZA [...] 
+#lem: n; urrup[be(come) overcast]V; mūšu[night]N; n; n; urrup[be(come) overcast]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+10'. ⸢22⸣ DIR AN ZA ULÙ GIN GE₆ 23 ina ZALÁG [sin SIG SI-MÁŠ N N sin] 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; n; Sîn[moon]N
+
+11'. [i]-ṣa ana NIM DIB SIG MÚL.BABBAR 1 KÙŠ sin [...]
+#lem: wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; šapil[below]PRP; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; Sîn[moon]N; u
+
+@bottom
+1. [GE₆] 24 ina ZALÁG sin ina IGI MÚL-IGI-šá-SUHUR-[MÁŠ N N sin N N] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; Sîn[moon]N; n; n
+
+2. [ana] ⸢SI⸣ NIM GE₆ 25 ina ZALÁG sin ár MÚL-ár-šá-[SUHUR-MÁŠ N N sin N N] 
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; Sîn[moon]N; n; n
+
+3. ana ⸢SI? NIM?⸣ ina IGI AN 1 5/6 KÙŠ ana ŠÚ GUB [...]  
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V; u
+
+@reverse
+1. [2]7 ⸢x⸣ [KUR] DIR muš GE₆ 28 x x [...] 
+#lem: n; u; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V; mūšu[night]N; n; u; u; u
+
+2. [2]9? ⸢MÚL.BABBAR⸣ [SIG] SI-MÁŠ 2 [KÙŠ] 30 ⸢x⸣ [...] 
+#lem: n; Kakkabu-peṣû[Jupiter]CN; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; n; u; u
+
+3. ($illegible$) 
+4. ⸢x x x x⸣ [...] 
+#lem: u; u; u; u; u
+
+5. a-na 1 GÍN KÙ.BA[BBAR ...] 
+#lem: ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; u
+
+6. [x] ⸢x KUR-ád x⸣  [...]
+#lem: u; u; kašādu[reach]V$iktašad; u; u
+
+@left
+$ (traces)
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...] 
+
+@(o 2') Mars@sup{?} was 1/2 [cubit] above δ Capricorni [...] 
+
+@(o 3') ⸢x⸣ cubits. Night of the 13th, moonrise to sunset: 7° 30', measured; beginning of the night, the moon was below [...] 
+
+@(o 4') The 13th, moonset to sunrise: 1° 30'. Night of the 14th, sunset to moonrise: 6° 30'; first part of the night, the moon was [...] below γ Vir[ginis ...] 
+
+@(o 5') measured (despite) clouds; in the afternoon, very overcast. Night of the 15th (and) the 15th, very overcast; Mercury’s [first appearance] in the west in Pisces [...] 
+
+@(o 6') Night of the 16th (and) the 16th, very overcast. Night of the 17th, last part of the night, the moon was 2 fingers@sup{?} behind β Librae [...] 
+
+@(o 7') Night of the 18th, last part of the night, the moon was 1 1/2 cubits in front of α Scorpii. Night of the 19th, last part of the night, the moon was [...] in front of [ϑ Ophiuchi ...,] 
+
+@(o 8') the moon being 1 1/2 cubits low to the south; thin clouds were in the sky. The 19th, clouds were in the sky [...] 
+
+@(o 9') The 20th, very overcast. Night of the 21st (and) the 21st, very overcast. Night of the 22nd, clouds were in the sky [...] 
+
+@(o 10') The 22nd, clouds were in the sky, the south wind blew. Night of the 23rd, last part of the night, [the moon was ... below β Capricorni, the moon] 
+
+@(o 11') having passed a little to the east, 1 cubit below Jupiter, the moon [...]
+
+@bottom
+
+@(b.e. 1) [Night] of the 24th, last part of the night, the moon was [...] in front of γ Capri[corni, the moon being ...] 
+
+@(b.e. 2) high to the north. Night of the 25th, last part of the night, the moon was [...] behind δ Capri[corni, the moon being ...] 
+
+@(b.e. 3) high@sup{?} to the north@sup{?}, it stood 1 5/6 cubits in front of Mars to the west [...]  
+
+@reverse
+
+@(r 1) [The 2]7th, [moonrise to sunrise:] ⸢x⸣, measured (despite) clouds. Night of the 28th, ... [...] 
+
+@(r 2) [The 2]9th@sup{?}, Jupiter was 2 [cubits below] β Capricorni. The 30th, ... [...] 
+
+@(r 3) (illegible) 
+
+@(r 4) ... [...] 
+
+@(r 5) for 1 shekel of sil[ver ...] 
+
+@(r 6) [...] ... reached ... [...]

@@ -1,0 +1,57 @@
+&X202410 = AD -241
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [... GE₆ 5 SAG GE₆ sin] ⸢ár LUGAL 3⸣ 1/2 KÙŠ [x] [...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; LUGAL[α Leonis]CN; n; n; ammatu[unit]N; u; u
+
+2'. [... GE₆ 11 ... AN á]r sin 1/2 KÙŠ GE₆ 15 3 ⸢GE₆⸣ [...] 
+#lem: u; mūšu[night]N; n; u; Ṣalbaṭānu[Mars]CN; warki[behind]PRP; Sîn[moon]N; n; ammatu[unit]N; mūšu[night]N; n; n; mūšu[night]N; u
+
+3'. [...] [x] ⸢AN⸣ ana NIM ina LAL-šú SIG RÍN-šá-ULÙ [N N ...] 
+#lem: u; u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]SBJ; nahāsu[move back]V; šapil[below]'PRP; RÍN-šá-ULÙ[α Librae]CN; n; n; u
+
+4'. [... GE₆ 23] ina ZALÁG sin SIG MÚL-IGI-šá-SAG-HUN 1 2/3 K[ÙŠ ...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; ammatu[unit]N; u
+
+5'. [... i]n 28 GU₄.UD ina NIM ina ⸢MAŠ⸣.MAŠ 1 KÙŠ ár MÚL.BABBAR I[GI DIB ...] 
+#lem: u; ina[in]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Māšu[Gemini]CN; n; ammatu[unit]N; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; nanmuru[be(come) visible]V; etēqu[omitted]'AJ; u
+
+6'. [... AN.KU₁₀ šamáš ... x]+⸢6⸣ GAR ana ZALÁG ki TAB-ú ina 18 ME TA MAR ana KUR ZALÁG 
+#lem: u; antallû[eclipse]N; šamši[sun]N; u; u; šiknu[onset]N; ana[to]PRP; nūru[clearing]N; kī[when]PRP; ušarrû[begin]V; ina[in]PRP; n; ūmu[daytime]N; ištu[from]PRP; amurru[west]N; ana[to]PRP; šadû[east]V; nūru[clear]V
+
+7'. [...] ITU BI KI.LAM še-im 1(GUR) 1(BARIG) 1(BÁN) 3 qa 
+#lem: u; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; n; n; qû[(one) litre]N
+
+8'. [...] in 16 MÚL.BABBAR ina TIL MÚL.MÚL IGI ina TIL ITU ina MAŠ.MAŠ 
+#lem: u; ina[in]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Zappu[Taurus]CN; nanmuru[be(come) visible]V; ina[at]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Māšu[Gemini]CN
+
+9'. [...] ⸢x⸣ {KUŠ}ši-piš-tú ana UGU {LÚ}E{KI}{MEŠ} [...] 
+#lem: u; u; šipirtu[message]N; ana[to]PRP; muhhi[top]N; Bābilāya[Babylonian]EN; u
+
+10'. [...] [x x] ⸢A šip-ri LUGAL?⸣ ⸢DÙ-uš?⸣ [...]
+#lem: u; u; u; māru[son]N; šipri[sending]N; šarru[king]N; epēšu[make]V; u
+
+@translation labeled en project
+
+@(1') [... Night of the 5th, beginning of the night, the moon was] 3 1/2 cubits behind α Leonis [...] 
+
+@(2') [... Night of the 11th, ... Mars was] 1/2 cubit [be]hind the moon. Night of the 15th, sunset to moonrise: 3° [...] 
+
+@(3') [...] Mars, while moving back to the east, was [...] below α Librae [...] 
+
+@(4') [... Night of the 23rd,] last part of the night, the moon was 1 2/3 cubits below β Arietis [...] 
+
+@(5') [... arou]nd the 28th, Mercury’s first appearance in the east in Gemini, 1 cubit behind Jupiter, [omitted ...] 
+
+@(6') [... solar eclipse, ... x]+6° onset; when it began to clear, in 18° daytime it cleared from west to east 
+
+@(7') [...] That month, the equivalent was: barley, 1 @i{kurru} 1 @i{pānu} 1 @i{sūtu} 3 @i{qa}; 
+
+@(8') [...] around the 16th, Jupiter’s first appearance in the end of Taurus; at the end of the month, it was in Gemini;
+
+@(9') [...] a message on a leather (scroll) to the Babylonians [...] 
+
+@(10') [...] ... made [...]

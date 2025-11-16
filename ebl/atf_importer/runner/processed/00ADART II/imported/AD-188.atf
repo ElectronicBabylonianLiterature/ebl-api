@@ -1,0 +1,144 @@
+&X201880 = AD -188
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 23.KÁM {m}an u {m}se-lu-ku LUGAL{MEŠ} 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N
+
+2. {ITU}BAR 1 20 na KUR₄ muš sin ár GU₄.UD 
+#lem: Nisannu[Month I]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; mašāhu[measure]V; Sîn[moon]N; warki[behind]PRP; Šihṭu[Mercury]CN
+
+3. 1? KÙŠ ana NIM GUB sin 1 1/2 KÙŠ ana SI NIM 
+#lem: n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+4. 1 GU₄.UD ina ŠÚ ina SAG MÚL.MÚL IGI KUR NIM-a 
+#lem: n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēšu[beginning]N; Zappu[Taurus]; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ
+
+5. ⸢x⸣ na-su DIR AN ZA in 20+[x] 
+#lem: u; na[sunset to setting]'N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[on]PRP; n
+
+6. šá {ITU}ŠE IGI GE₆ 2 sin ár is-l[e₁₀ N N sin N N] 
+#lem: ša[of]DET; Addaru[Month XII]MN;  nanmuru[be(come) visible]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; is-le₁₀[α Tauri]CN; n; n; Sîn[moon]N; n; n
+
+7. ana SI NIM 2 DIR AN ZA G[E₆ 3 sin] 
+#lem: ana[to]PRP; ištānu[north]N; Elamtu[east]'N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; Sîn[moon]N
+
+8. ár ŠUR-SI 2 KÙŠ ár dele-[bat N N ana NIM GUB] 
+#lem: warki[behind]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; warki[behind]PRP; Dilbat[Venus]CN; n; n; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V
+
+9. sin 1 1/2 KÙŠ ana SI NIM ⸢x⸣ [...] 
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u; u
+
+10. GE₆ 4 DIR AN ZA ⸢x⸣ [...] 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u; u
+
+11. sin 1/2 KÙŠ ana NIM [DIB ...]  
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+@reverse
+1. ⸢ina IGI x x⸣ [...] 
+#lem: ina[in]PRP; pān[front]N; u; u; u
+
+2. ana ŠÚ LAL DIR AN ZA [...] 
+#lem: ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+3. 6? ŠÚ.ŠÚ GE₆ ⸢x⸣ [...] 
+#lem: n; urrup[be(come) overcast]V; mūšu[night]N; u; u
+
+4. kal? GE₆ ⸢AN né-hi x⸣ [...] 
+#lem: kal[all]'DET; mūšu[night]N; šamû[rain]N; nēhu[slow]AJ; u; u
+
+5. DIR AN DIB [x] [...] 
+#lem: erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u; u
+
+6. [x (x)] SAG GE₆ sin e LUGAL 1/2? KÙŠ sin [N N] 
+#lem: u; u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; n
+
+7. [ana NIM?] DIB? USAN dele-bat e ŠUR-UL[Ù N N] 
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n
+
+8. [ina KI]N?.SIG? DIR AN ZA ULÙ GIN 
+#lem: ina[in]PRP; kinsikku[afternoon]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V
+
+9. GE₆ 9 sin SIG GIŠ.KUN 2 1/2 KÙŠ 
+#lem: mūšu[night]N; n; Sîn[moon]N; šapil[below]'PRP; GIŠ.KUN-A[ϑ Leonis]CN$; n; n; ammatu[unit]N
+
+10. sin 1/2 KÙŠ ana ŠÚ LAL 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+11. ILLU 1 ⸢6⸣? SI LAL PAP 8 na 
+#lem: mīlu[river level]N; n; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+12. EN 8? ⸢1 KÙŠ⸣ GIN PAP 1 na  
+#lem: adi[until]PRP; n; n; ammatu[unit]N; alāku[rise]V; napharu[total]N; n; na[na-gauge]N
+
+@top
+1. 9 10 8 U LAL PAP 3 na
+#lem: n; n; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+@left
+1. GE₆ 10 sin ina IGI GÌR-ár 5/6 KÙŠ
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; n; ammatu[unit]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 123, kings Antiochus and Seleucus. 
+
+@(o 2) Month I, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 20°; it was bright, measured; the moon stood 1@sup{?} cubit behind Mercury 
+
+@(o 3) to the east, the moon being 1 1/2 cubits high to the north. 
+
+@(o 4) The 1st, Mercury’s first appearance in the west in the beginning of Taurus; it was bright (and) high, 
+
+@(o 5) sunset to setting of Mercury: ⸢x⸣; clouds were in the sky; (ideal) first appearance on the 20+[xth] 
+
+@(o 6) of month XII. Night of the 2nd, the moon was [...] behind α Tau[ri, the moon being ...] 
+
+@(o 7) high to the north. The 2nd, clouds were in the sky. Ni[ght of the 3rd, the moon was] 
+
+@(o 8) 2 cubits behind β Tauri, [it stood ...] behind Ven[us to the east,] 
+
+@(o 9) the moon being 1 1/2 cubits high to the north ... [...] 
+
+@(o 10) Night of the 4th, clouds were in the sky ... [...] 
+
+@(o 11) the moon [having passed] 1/2 cubit to the east [...]
+
+@reverse
+
+@(r 1) in front of ... [...] 
+
+@(r 2) back to the west; clouds were in the sky [...] 
+
+@(r 3) The 6th@sup{?}, very overcast. Night of the xth, [...] 
+
+@(r 4) all@sup{?} night slow rain ... [...] 
+
+@(r 5) clouds crossed the sky ... [...] 
+
+@(r 6) [...] beginning of the night, the moon was 1/2@sup{?} cubit above α Leonis, the moon 
+
+@(r 7) having passed@sup{?} [... to the east@sup{?};] first part of the night, Venus was [...] above ζ Tauri; 
+
+@(r 8) [in the after]noon@sup{?}, clouds were in the sky, the south wind blew. 
+
+@(r 9) Night of the 9th, the moon was 2 1/2 cubits below ϑ Leonis, 
+
+@(r 10) the moon being 1/2 cubit back to the west. 
+
+@(r 11) The river level receded 6@sup{?} fingers on the 1st, total: 8 was the @i{na} na-gauge; 
+
+@(r 12) until the 8th@sup{?}, it rose 1 cubit, total: 1 was the @i{na} na-gauge;
+
+@top
+
+@(t.e. 1) the 9th (and) 10th, it receded 8 fingers, total: 3 was the @i{na} na-gauge. 
+
+@left
+
+@(l.e. 1) Night of the 10th, the moon was 5/6 cubit in front of β Virginis.

@@ -1,0 +1,131 @@
+&X201684 = AD -168D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [(x x) GE₆ 1]9 ina ZALÁG sin e MÚL-ár-šá-še-pít-[MAŠ.MAŠ] 
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN
+
+2. [n KÙŠ] sin 1/2 KÙŠ ana ŠÚ LAL 19 DIR AN [x x] 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; n; erpetu[cloud]N; šamû[sky]N; u; u
+
+3. [GE₆] 20 ina ZALÁG sin SIG MAŠ.MAŠ-IGI 3 KÙŠ [6 SI] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; n; ubānu[finger]N
+
+4. [GE₆] 21 ina ZALÁG sin ina IGI MÚL-ár-šá-ALLA-[šá-ULÙ] 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN
+
+5. [n] KÙŠ GE₆ 22 ina ZALÁG sin SIG SAG-A 
+#lem: n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; SAG-A[ε Leonis]CN
+
+6. [n] KÙŠ GE₆ 23 ina ZALÁG sin ina IGI MÚL TUR
+#lem: n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u; u
+
+7. (MÚL-TUR)-šá-4-KÙŠ-ár-LUGAL 1 1/2 KÙŠ ina IGI MÚL.BABBAR 
+#lem: MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN
+
+8. 1 KÙŠ 8 U 23 GU₄.UD ina NIM ina RÍN ŠÚ 
+#lem: n; ammatu[unit]N; n; ubānu[finger]N; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V
+
+9. GE₆ 24 ina ZALÁG sin SIG GIŠ.KUN-A 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; GIŠ.KUN-A[ϑ Leonis]CN
+
+10. 5 KÙŠ sin 1/2 KÙŠ ana NIM DIB GE₆ 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N
+
+11. 25 ina ZALÁG sin ár GÌR-ár-šá-A 2 1/2 KÙŠ 
+#lem: n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N
+
+12. GE₆ 26 ina ZALÁG sin ár DELE-šá-IGI-ABSIN 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN
+
+13. 2 1/2 KÙŠ GE₆ 27 ina ZALÁG sin
+#lem: n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+@bottom
+1. ár SA₄-šá-ABSIN 2 1/2 KÙŠ 
+#lem: warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N
+
+2. ina ZALÁG MÚL.BABBAR e MÚL-TUR 6! U 
+#lem: ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ubānu[finger]N
+
+3. ⸢27?⸣ 21 KUR? 
+#lem: n; n; KUR[moonrise to sunrise]N
+
+@reverse
+1. ITU BI KI.LAM ŠE 1(GUR) 2(BARIG) PI 
+#lem: warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; pānu[bushel (36 litres)]N
+
+2. ZÚ 2(GUR) GUR 3(BÁN)? kàs 4(GUR) GUR 
+#lem: suluppu[date]N; n; kurru[kor (180 litres)]N; n; kasû[cuscuta]N; n; kurru[kor (180 litres)]N
+
+3. sah 2(BARIG)? 4(BÁN)? ŠE.GIŠ 1(BARIG) 2(BÁN) SÍG 6 MA.NA 
+#lem: sahlu[cress]N; n; n; šamaššammū[sesame]N; n; n; šīpātu[wool]N; n; manû[mina]N
+
+4. i-nu-šú MÚL.BABBAR ina A dele-bat ina RÍN 
+#lem: inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; Dilbat[Venus]CN; ina[in]PRP; Zibānītu[Libra]CN
+
+5. ⸢ina TIL ITU⸣ ina GÍR.TAB in? 23 GU₄.UD 
+#lem: ina[in]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN
+
+6. ⸢ina NIM⸣ ina RÍN ŠÚ in? 29 GENNA ina RÍN IGI 
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; ina[in]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]'V
+
+7. ⸢in 16?⸣ AN ina RÍN ŠÚ ITU BI 
+#lem: ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]'V; warhu[month]N; šū[that]'DP
+
+8. [ILL]U 1/2? KÙŠ LAL PAP 34 na 
+#lem: mīlu[river level]N; n; ammatu[unit]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+@translation labeled en project
+
+@(o 1) [Night of the 1]9th, last part of the night, the moon was [n cubits] above μ Geminorum, 
+
+@(o 2) the moon being 1/2 cubit back to the west. The 19th, clouds [...] the sky 
+
+@(o 3) [Night] of the 20th, last part of the night, the moon was 3 cubits [6 fingers] below α Geminorum. 
+
+@(o 4) [Night] of the 21st, last part of the night, the moon was [nn] cubits in front of δ Cancri. 
+
+@(o 5) Night of the 22nd, last part of the night, the moon was [...] below ε Leonis, 
+
+@(o 6) [n] cubits. Night of the 23rd, last part of the night, the moon was 1 1/2 cubits in front of ρ
+
+@(o 7) Leonis, 1 cubit 8 fingers in front of Jupiter.
+
+@(o 8) The 23rd, Mercury’s] last appearance in the east in Libra.
+
+@(o 9) Night of the 24th, last part of the night, the moon was 5 cubits below ϑ Leonis,
+
+@(o 10) the moon having passed 1/2 cubit to the east. Night 
+
+@(o 11) of the 25th, last part of the night, the moon was 2 1/2 cubits behind β Virginis. 
+
+@(o 12) Night of the 26th, last part of the night, the moon was 2 1/2 cubits behind γ Virginis. 
+
+@(o 13) Night of the 27th, last part of the night, the moon was 
+
+@(b.e. 1) 2 1/2 cubits behind α Virginis
+
+@(b.e. 2) last part of the night, Jupiter was 6 (var. 8) fingers above ρ Leonis. 
+
+@(b.e. 3) The 27th@sup{?}, moonrise to sunrise@sup{?}: 21°. 
+
+@(r 1) That month, the equivalent (for 1 shekel of silver) was: barley, 1 @i{kurru} 2 @i{pānu}; 
+
+@(r 2) dates, 2 @i{kurru} 3 @i{sūtu}; mustard, 4 @i{kurru} (var. 3@sup{?}); 
+
+@(r 3) cress, 2 @i{pānu} 4@sup{?} @i{sūtu}; sesame, 1 @i{pānu} 2 (var. 1) @i{sūtu}; wool, 6 minas. 
+
+@(r 4) At that time, Jupiter was in Leo; Venus was in Libra, 
+
+@(r 5) at the end of the month, in Scorpius; around@sup{?} the 23rd, Mercury’s 
+
+@(r 6) last appearance in the east in Libra; around@sup{?} the 29th, Saturn’s first appearance in Libra; 
+
+@(r 7) around the 16th@sup{?}, Mars’ last appearance in Libra (var.: in the beginning of Scorpius). That month, 
+
+@(r 8) [the river] level receded 1/2@sup{?} cubit, total: 34 was the @i{na} (gauge). 
+

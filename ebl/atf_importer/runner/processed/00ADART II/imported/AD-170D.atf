@@ -1,0 +1,48 @@
+&X201704 = AD -170D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 41.KÁM {m}an u [{m}an LUGAL{MEŠ}] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; šarrāni[king]N
+
+2. NE GE₆ 16 7.30 GE₆ muš 
+#lem: Abu[Month V]MN; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+3. 16 SI GIN GE₆ 17 ina ZALÁG sin 
+#lem: n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+4. ⸢SIG⸣ MÚL-IGI-šá-SAG-HUN 2 1/2 KÙŠ 
+#lem: šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; ammatu[unit]N
+
+5. [sin] ⸢x KÙŠ⸣ [ana x x] ⸢GE₆ 18⸣  
+#lem: Sîn[moon]N; u; ammatu[unit]N; ana[to]PRP; u; u; mūšu[night]N; n
+
+@reverse
+1'. [x x x x x x x]
+#lem: u; u; u; u; u; u; u
+
+2'. [x x] GIN?  
+#lem: u; u; alāku[blow]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 141, [kings] Antiochus and [Antiochus.] 
+
+@(o 2) Month V, night of the 16th, sunset to moonrise: 7° 30', measured. 
+
+@(o 3) The 16th, the north wind blew. Night of the 17th, last part of the night, the moon was 
+
+@(o 4) 2 1/2 cubits below β Arietis, 
+
+@(o 5) [the moon being] ⸢x⸣ cubits [...] Night of the 18th,  
+
+@reverse
+
+@(r 1') [...] ... 
+
+@(r 2') [...] blew@sup{?}.

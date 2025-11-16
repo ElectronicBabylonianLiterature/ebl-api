@@ -1,0 +1,61 @@
+&X201706 = AD -170F
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1. [...] ⸢{d}GAŠAN⸣-[iá liš]-lim  
+#lem: u; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1. [MU 1 ME] 41.KÁM {m}an-ti-ʾu-uk-su u {m}an MIN A-šú LUG[AL{MEŠ} ...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; šina[two]NU$; māru[son]N; šarrāni[king]N; u
+
+2. [x x x x x x] ŠÚ? SI GIN GE₆ 2 2 ŠÚ.ŠÚ SI GIN GE₆ 3 ŠÚ.ŠÚ [...] 
+#lem: u; u; u; u; u; u; rabû[moonset to sunrise]'N; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; urrup[be(come) overcast]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; urrup[be(come) overcast]V; u
+
+3. [x x x] ⸢SI? GIN⸣ GE₆ 4 DIR AN ZA SAG GE₆ sin ina IGI MÚL-IGI-[šá-SUHUR-MÁŠ N N ...] 
+#lem: u; u; u; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; u
+
+4. [x x x GE₆] ⸢5⸣ SAG GE₆ sin ár MÚL-ár-šá-SUHUR-MÁŠ 1 1/2 KÙŠ [...] 
+#lem: u; u; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; ammatu[unit]N; u
+
+5. [...] kal GE₆ DIR AN ZA 7 15 na G[U₄?.UD? ...] 
+#lem: u; kal[all]'DET; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; n; na[rising to sunrise]'N; Šihṭu[Mercury]CN; u
+
+6. [... DUR]-nu-nu 2 KÙŠ sin 1 1/2 KÙŠ ana ULÙ [SIG ...]  
+#lem: u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+@reverse
+1'. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+2'. [EN.NUN šá] gi-né-e šá ⸢ITU?⸣ [...]  
+#lem: naṣāru[observation]'N; ša[which]REL; ginû[regularity]N; ša[which]REL; warhu[month]N; u
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) [At the command of Bēl and] Bēltiya [may] it be well.  
+
+@obverse
+
+@(o 1) [Year 1]41, kin[gs] Antiochus and Antiochus, his son [...] 
+
+@(o 2) [...] ... the north wind blew. Night of the 2nd (and) the 2nd, very overcast, the north wind blew. Night of the 3rd, very overcast [...] 
+
+@(o 3) [...] the north@sup{?} wind blew. Night of the 4th, clouds were in the sky; beginning of the night, the moon was [...] in front of γ [Capricorni ...] 
+
+@(o 4) [... Night] of the 5th, beginning of the night, the moon was 1 1/2 cubits behind δ Capricorni [...] 
+
+@(o 5) [...] all night clouds were in the sky. The 7th, rising of M[ercury@sup{?} to sunrise:] 15° [...] 
+
+@(o 6) [... the moon was] 2 cubits [... η] Piscium, the moon being 1 1/2 cubits [low] to the south [...]
+
+@reverse
+
+@(r 1') [...] ... [...] 
+
+@(r 2') [Dia]ry from month [...]

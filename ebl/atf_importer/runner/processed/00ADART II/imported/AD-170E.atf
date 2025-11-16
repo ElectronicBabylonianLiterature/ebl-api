@@ -1,0 +1,94 @@
+&X201705 = AD -170E
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 41.KÁM {m}an u {m}an A-šú LUGAL{MEŠ}
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N
+
+2. DU₆ 1 9 na-su muš 1 SI GIN GE₆ 2 
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N; mašāhu[measure]V; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n
+
+3. sin ár SI₄ 2 KÙŠ 2 SI GIN GE₆ 3 
+#lem: Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n
+
+4. sin ár MÚL-KUR-šá-KIR₄-šil-PA 2 1/2 KÙŠ 
+#lem: Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; n; ammatu[unit]N
+
+5. GE₆ 6 sin SIG SI-MÁŠ 4 KÙŠ sin 1/2 KÙŠ 
+#lem: mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+6. ana NIM DIB GE₆ 7 sin ina IGI SUHUR-IGI 
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN
+
+7. ⸢2?⸣ KÙŠ sin 1 KÙŠ ana ULÙ SIG 7 GU₄.UD 
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; Šihṭu[Mercury]CN
+
+8. [ina NIM] ina RÍN GU₄.UD ár dele-bat 2/3 KÙŠ 
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibānītu[Libra]CN; Šihṭu[Mercury]CN; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N
+
+9. [GU₄.UD N N] ⸢ana SI⸣ NIM IGI KUR ⸢NIM⸣-a 
+#lem: Šihṭu[Mercury]CN; n; n; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u; baʾil[bright]AJ; šaqâ[high]AJ
+
+10. [...] ⸢x⸣ IGI ⸢x x⸣  
+#lem: u; u; nanmuru[be(come) visible]V; u; u
+
+@reverse
+1'. [...] ⸢x x x⸣ 
+#lem: u; u; u; u
+
+2'. [x ŠUR-GIGIR]-⸢šá⸣-SI 2/3 KÙŠ 15 DIR AN ZA SI GIN 
+#lem: u; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+3'. [GE₆ 16] SAG GE₆ KI-tì i-nu-uš 
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; erṣetu[earth]N; nâšu[quake]V
+
+4'. [ina ZAL]ÁG sin e MÚL-IGI-šá-še-pít-MAŠ.MAŠ 2 KÙŠ 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N
+
+5'. sin 1/2 KÙŠ ana ŠÚ LAL e MÚL.BABBAR 2 KÙŠ 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; eli[above]PRP; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N
+
+6'. sin 1/2 KÙŠ ana ŠÚ LAL 16 DIR AN ZA SI GIN
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 141, kings Antiochus and Antiochus, his son. 
+
+@(o 2) Month VII, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 9°, measured. The 1st, the north wind blew. Night of the 2nd, 
+
+@(o 3) the moon was 2 cubits behind α Scorpii. The 2nd, the north wind blew. Night of the 3rd, 
+
+@(o 4) the moon was 2 1/2 cubits behind ϑ Ophiuchi. 
+
+@(o 5) Night of the 6th, the moon was 4 cubits below β Capricorni, the moon having passed 1/2 cubit 
+
+@(o 6) to the east. Night of the 7th, the moon was 2 cubits in front of γ Capricorni, 
+
+@(o 7) the moon being 1 cubit low to the south. The 7th, Mercury’s first appearance 
+
+@(o 8) [in the east] in Libra, Mercury was 2/3 cubit behind Venus, 
+
+@(o 9) [Mercury being ...] high to the north; it was bright (and) high, 
+
+@(o 10) [...] (ideal) first appearance ...  
+
+@reverse
+
+@(r 1') [...] ... 
+
+@(r 2') 2/3 cubit [... β Tau]ri. The 15th, clouds were in the sky, the north wind blew. 
+
+@(r 3') [Night of the 16th,] beginning of the night, the earth quaked; 
+
+@(r 4') ??? [last part] of the night, the moon was 2 cubits above η Geminorum, 
+
+@(r 5') the moon being 1/2 cubit back to the west, 2 cubits above Jupiter, 
+
+@(r 6') the moon being 1/2 cubit back to the west. The 16th, clouds were in the sky, the north 
+wind blew.

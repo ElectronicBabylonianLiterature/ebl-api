@@ -1,0 +1,54 @@
+&X202041 = AD -204A
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. ⸢MU⸣ 1 ME 7.KÁM BAR GE₆ 20 [...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; mūšu[night]N; n; u
+
+2. ⸢SIG⸣ [x] MÁŠ ⸢2 KÙŠ 20⸣ [...] 
+#lem: šapil[below]'PRP; u; Suhurmāšu[Capricorn]CN; n; ammatu[unit]N; n; u
+
+3. [x x G]E₆ 21 ina ZAL[ÁG ...] 
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+4. [x x x] IGI ⸢x⸣ [...]  
+#lem: u; u; u; u; u; u
+
+@reverse
+1'. [x x x] [...] 
+#lem: u; u; u; u
+
+2'. TA 18 EN 23 I[LLU] 
+#lem: ištu[from]PRP; n; adi[until]PRP; n; mīlu[river level]N
+
+3'. 1/2 KÙŠ LAL PAP 9 na  
+#lem: n; ammatu[unit]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+@top
+1. [...] ⸢x⸣ {KUŠ}ši-piš-tu₄ [...]
+#lem: u; u; šipirtu[message]N; u
+
+@translation labeled en project
+
+@(o 1) Year 107, month I, night of the 20th, [...]
+
+@(o 2) 2 cubits below ... Capricorni. The 20th, [...] 
+
+@(o 3) [... Ni]ght of the 21st, last part of the [night, ...] 
+
+@(o 4) [...] ... [...]  
+
+@reverse
+
+@(r 1') ... [...] 
+
+@(r 2') from the 18th to the 23rd, the river [level] 
+
+@(r 3') receded 1/2 cubit, total: 9 was the @i{na} na-gauge.
+
+@top
+
+@(t.e. 1) [...] ... a message [...]

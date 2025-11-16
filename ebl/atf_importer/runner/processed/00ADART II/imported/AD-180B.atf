@@ -1,0 +1,150 @@
+&X201802 = AD -180B
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. [MU 1 M]E 31.KÁM {ITU}⸢AB? x⸣ 40 ⸢na-su x x x⸣ [...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Ṭebētu[Month X]MN; u; n; na₁[sunset to moonset]N; u; u; u; u
+
+2. [x] AN? DUL? [x x x x x x]
+#lem: u; šamû[rain]N; DUL[(meaning unclear)]V; u; u; u; u; u; u
+
+3. [x x x A]N? DUL? [x x x x] GE₆ 4 ŠÚ.ŠÚ ⸢x 4?⸣ ina KIN.SIG DI[R? ...] 
+#lem: u; u; u; šamû[rain]N; DUL[(meaning unclear)]V; u; u; u; u; mūšu[night]N; n; urrup[be(come) overcast]V; u; n; ina[in]PRP; kinsikku[afternoon]N; erpetu[cloud]N; u
+
+4. [x bu-t]uq-tu₄ TIR.RA.A[N] ⸢Á⸣ [x] ⸢GIB⸣ GE₆ ⸢5?⸣ sin ina IGI ⸢DUR-nu-nu⸣ 
+#lem: u; butuqtu[section]N; Manziat[rainbow]N; idu[side]N; u; parāku[stretch]V; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN
+
+5. 1 1/2? [K]ÙŠ sin 3 KÙŠ ana ULÙ SIG G[E₆ 6 sin SIG MÚL-x]-šá-SAG-HUN 5 KÙŠ 
+#lem: n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; MÚL-x-šá-SAG-HUN[α/β Arietis]CN; n; ammatu[unit]N
+
+6. 6 {MÚL}KAK.BAN ana ME E-a GE₆ ⸢7 sin ina IGI MÚL.MÚL⸣ [N] ⸢KÙŠ⸣ sin 3 KÙŠ 
+#lem: n; Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; elû[rising]'N; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+7. ana ULÙ SIG ár? GENNA 2/3 KÙŠ sin [x x x x x x] sin? ina IGI is-le₁₀ 2 KÙŠ 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; Sîn[moon]N; u; u; u; u; u; u; Sîn[moon]N; ina[in]PRP; pān[front]N; is-le₁₀[α Tauri]CN; n; ammatu[unit]N
+
+8. 8 kal ME ŠÚ.ŠÚ AN né-hi PISAN DIB [x x x x x x x] ⸢x⸣ KUR GIN ⸢x⸣ 
+#lem: n; kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V; šamû[rain]N; nēhu[slow]AJ; pisannu[(a meterological phenomenon)]N; DIB[(meaning unclear)]V; u; u; u; u; u; u; u; u; šadû[east wind]N; alāku[blow]V; u
+
+9. GE₆ 10 DIR AN DIB NIM.GÍR NIM.GÍR ⸢GÙ? U?⸣ [x x x x x x] ⸢x⸣ ŠÚ.ŠÚ? ⸢x x⸣ 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; birqu[lightning]N; birqu[lightning]N; rigim[voice]N; Adad[storm-god]DN; u; u; u; u; u; u; u; urrup[be(come) overcast]V; u; u
+
+10. GE₆ 11 sin ár MAŠ.MAŠ-šá-SIPA 2 1/2 ⸢KÙŠ GE₆ 12 sin SIG MAŠ.MAŠ-ár 5? KÙŠ sin 1/2 KÙŠ⸣ 
+#lem: mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; ammatu[unit]N; mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+11. ana NIM? DIB? ina ZALÁG DIR AN ZA GE₆ 13? [...] 
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; u
+
+12. [x x] ⸢šá-ULÙ⸣ 1 KÙŠ 13 14? ŠÚ [...] ⸢x⸣ U GÙ-[šú ŠUB]-di 
+#lem: u; u; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; n; n; erēpu[be(come) overcast]V; u; u; Adad[storm-god]DN; rigimšu[voice]N; nadû[throw (down)]V
+
+13. [GE₆ 1]4? kal GE₆ ŠÚ.ŠÚ ina ZALÁG sin ina IGI [x x x] sin [x x] ana ULÙ SIG [...] 
+#lem: mūšu[night]N; n; kal[all]'DET; mūšu[night]N; urrup[be(come) overcast]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u; u; u; Sîn[moon]N; u; u; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+14. [x x x] muš? kal ME DIR AN ZA [...] 
+#lem: u; u; u; mašāhu[measure]V; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+15. [x x] ⸢x⸣ sin? 3 KÙŠ ana ULÙ SIG kal [GE₆ ...] 
+#lem: u; u; u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; kal[all]'DET; mūšu[night]N; u
+
+16. [...] GIŠ.KUN?-A 2 KÙŠ sin [...] 
+#lem: u; GIŠ.KUN-A[ϑ Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; u
+
+17. ($traces$)
+
+@reverse
+1'. [...] ⸢x⸣ [... Š]ED₇ ik-[te-šir ...] 
+#lem: u; u; u; kūṣu[coldness]N; gašāru[be(come) severe]V; u
+
+2'. [x] MÚL-e-šá-SAG-GÍR.TAB 5/6 KÙŠ sin [i]-ṣa ana N[IM DIB ...] 
+#lem: u; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+3'. 22 DIR AN ZA SI GIN ŠED₇ ik-te-šir 
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; kūṣu[coldness]N; gašāru[be(come) severe]V
+
+4'. GE₆ 23 ina ZALÁG sin ár SI₄ 3 KÙŠ sin 3 1/2 KÙŠ 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N
+
+5'. ana SI NIM 23 DIR AN ($sic$) ULÙ šá kap MAR GAR GIN 
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; erpetu[cloud]N; šamû[sky]N; šūtu[south wind]N; ša[which]REL; kappu[wing(?)]'N; amurru[west]N; šakānu[set]V; alāku[blow]V
+
+6'. ŠED₇ ik-te-šir GE₆ 24 ŠÚ.ŠÚ DIR? AN DIB 
+#lem: kūṣu[coldness]N; gašāru[be(come) severe]V; mūšu[night]N; n; urrup[be(come) overcast]V; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+7'. ($traces, scratched$) 
+8'. [x] ⸢x⸣ 25 ⸢x x⸣ ŠED₇ ik-te-šir 
+#lem: u; u; n; u; u; kūṣu[coldness]N; gašāru[be(come) severe]V
+
+9'. ILLU TA 5 EN 11 2/3 KÙŠ GIN PAP [...] 
+#lem: mīlu[river level]N; ištu[from]PRP; n; adi[until]PRP; n; n; ammatu[unit]N; alāku[rise]V; napharu[total]N; u
+
+10'. TA 12 EN 17 1/2 KÙŠ LAL PAP 31+[x ...] 
+#lem: ištu[from]PRP; n; adi[until]PRP; n; n; ammatu[unit]N; nahāsu[recede]V; napharu[total]N; n; u
+
+11'. [T]A 20 EN 22 1+[x] SI GIN [...]
+#lem: ištu[from]PRP; n; adi[until]PRP; n; n; ištānu[north wind]N; alāku[blow]V; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Year 1]31, month ... sunset to moonset: ... 40' ... [...] 
+
+@(o 2) ... [...] very overcast ... 
+
+@(o 3) [...] ... [...] Night of the 4th, very overcast ... in the afternoon, clou[ds@sup{?} ...] 
+
+@(o 4) [... a sec]tion of a rainbow stretched on the [...] side. Night of the 5th@sup{?}, the moon was 1 1/2@sup{?} cubits in front of η Piscium, 
+
+@(o 5) the moon being 3 cubits low to the south [...] 5 cubits [...] Arietis. 
+
+@(o 6) The 6th, Sirius’ acronychal rising. Night of the 7th, the moon was [nn] cubits in front of η Tauri, the moon being 3 cubits 
+
+@(o 7) low to the south, 2/3 cubit behind@sup{?} Saturn, the moon ... the moon was 2 cubits in front of α Tauri. 
+
+@(o 8) The 8th, all day very overcast, slow rain, PISAN DIB. 
+
+@(o 9) Night of the 10th, clouds crossed the sky, lighning flashed. 
+
+@(o 10) Night of the 11th, the moon was 2 1/2 cubits behind γ Geminorum. Night of the 12th, the moon was 5@sup{?} cubits below β Geminorum, the moon 
+
+@(o 11) having passed@sup{?} 1/2 cubit to the east; last part of the night, clouds were in the sky. Night of the 13th@sup{?}, 
+
+@(o 12) 1 cubit ??? The 13th, moonset to sunrise: 14°@sup{?} ... thunder [...] 
+
+@(o 13) all night very overcast; last part of the night, the moon was [...] in front of ??? the moon being [...] low to the south [...] 
+
+@(o 14) measured; all day clouds were in the sky 
+
+@(o 15) the moon being 3 cubits low to the south 
+
+@(o 16) 2 cubits [...] ϑ Leonis, the moon [...] 
+
+@(o 17) (traces)  
+
+@reverse
+
+(r 1') [...] ... [... the c]old became se[vere ...] 
+
+(r 2') 5/6 cubit ... β Scorpii, the moon [having passed@sup{?}] a little to the ea[st ...] 
+
+(r 3') The 22nd, clouds were in the sky; in ..., the cold became severe ... 
+
+(r 4') Night of the 23rd, last part of the night, the moon was 3 cubits behind α Scorpii, the moon being 3 1/2 cubits 
+
+(r 5') high to the north. The 23rd, clouds <...> the sky, the south wind which was set to the west side blew, 
+
+(r 6') the cold became severe. Night of the 24th, very overcast, clouds@sup{?} crossed the sky. 
+
+(r 7') (traces, scratched) 
+
+(r 8') The 25th, ... the cold became severe. 
+
+(r 9') The river level from the 5th to the 11th rose 2/3 cubit, total: [...] 
+
+(r 10') from the 12th to the 17th, it receded 1/2 cubit, total: 31+[x was the @i{na} na-gauge; ...] 
+
+(r 11') from the 20th to the 22nd, it rose x fingers [...]

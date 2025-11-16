@@ -1,0 +1,86 @@
+&X202380 = AD -238
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. {ITU}BAR GE₆ 13 5 ME DIR muš 
+#lem: Nisannu[Month I]MN; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+2. 1.20 GE₆ GIN {d}sin AN.KU₁₀ Á ⸢ULÙ⸣ 
+#lem: n; mūšu[night]N; alāku[come]V; Sîn[moon]N; antallû[eclipse]N; idu[side]N; šūtu[south]N
+
+3. u KUR ki-i TAB-ú ina 15 GE₆ al-la 
+#lem: u[and]CNJ; šadû[east]N; kī[when]PRP; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; alla[more than]PRP
+
+4. ⸢2/3?⸣ HAB i-ṣi GAR-an 10 UŠ GE₆ ÍR 
+#lem: n; HAB-rat[disc]N; wīṣu[little]AJ; ištakan[make]'V; n; nenmudu[be at a stationary point]V; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N
+
+5. ana ZALÁG ki-i <TAB>-ú ina 15 GE₆ TA KUR 
+#lem: ana[to]PRP; nūru[clearing]N; kī[when]PRP; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; ištu[from]PRP; šadû[east]N
+
+6. ana MAR ZALÁG 40 GAR ÍR u ZALÁG AN.KU₁₀-šú 
+#lem: ana[to]PRP; amurru[west]N; nūru[last part of the night]N; n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nūru[clearing]N; antallû[eclipse]N
+
+7. TÚG AN-e GAR-in ina AN.KU₁₀-šú SI ⸢GIN⸣ 
+#lem: lubuštu[garment]N; šamû[sky]N; šakānu[set]V; ina[in]PRP; antallû[eclipse]N; ištānu[north wind]N; alāku[blow]V
+
+8. ina AN.KU₁₀-šú MÚL.BABBAR GUB-uz Í[B.TAG₄] 
+#lem: ina[in]PRP; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN; izuzzu[stand]V; rēhtu[remainder]N
+
+9. {d}UDU.IDIM{ME} NU GUB[{ME} x x x]  
+#lem: bibbu[planet]N; ul[not]MOD; izuzzu[stand]V; u; u; u
+
+@reverse
+1. GÍR GÍR GÙ x GÙ-šú ŠUB-di [x] 
+#lem: birqu[lightning]N; barāqu[flash]V; rigmu[voice]N; u; rigimšu[voice]N; nadû[throw (down)]V; u
+
+2. sin TÙR [NIG]ÍN ana? ULÙ? ù ana? [NI]M? KA [x x] 
+#lem: Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; ana[to]PRP; šūtu[south]N; u[and]CNJ; ana[to]PRP; Elamtu[east]'N; pû[opening]N; u; u
+
+3. 1/2 KÙŠ ár ⸢MÚL-MURUB₄⸣-šá-SAG-GÍR.TAB ÍR? 
+#lem: n; ammatu[unit]N; warki[behind]PRP; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; bikītu[maximal phase (of an eclipse)]N
+
+4. ina ZALÁG sin ina IGI SI₄ 2 KÙŠ 
+#lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SI₄[α Scorpii]CN; n; ammatu[unit]N
+
+5. 13 4.40 na DIR NU PAP ŠÚ.ŠÚ 
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; urrup[be(come) very overcast]V
+
+6. ina še-rì AN DUL
+#lem: ina[in]PRP; šēri[morning]N; šamû[rain]N; DUL[(meaning unclear)]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Month I, night of the 13th, moonrise to sunset: 5°, measured (despite) clouds. 
+
+@(o 2) At 80° after sunset, lunar eclipse; when it began on the south 
+
+@(o 3) and east side, in 15° night 
+
+@(o 4) it made little over 2/3@sup{?} of the disc; 10° night maximal phase. 
+
+@(o 5) When it began to clear, in 15° night 
+
+@(o 6) it cleared from the east to the west; 40° onset, maximal phase, and clearing. <In> its eclipse, 
+
+@(o 7) the sky was cloudy; in its eclipse, the north wind blew. 
+
+@(o 8) In its eclipse, Jupiter stood there; the re[mainder] 
+
+@(o 9) of the planets did not stand there [...]  
+
+@reverse
+
+@(r 1) lightning flashed, it thundered once@sup{?}, [...] 
+
+@(r 2) the moon was surrounded by a halo, an opening@sup{?} to the south@sup{?} and to the east@sup{?} [...] 
+
+@(r 3) 1/2 cubit behind δ Scorpii it was ecli[psed]. 
+
+@(r 4) Last part of the night, the moon was 2 cubits in front of α Scorpii. 
+
+@(r 5) The 13th, sunrise to moonset: 4° 40'; clouds, I did not watch; very overcast; in the morning, rain DUL.

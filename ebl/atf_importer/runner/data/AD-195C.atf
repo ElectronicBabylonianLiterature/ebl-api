@@ -1,0 +1,78 @@
+&X201953 = AD -195C
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 60+56.⸢KÁM⸣ {ITU}APIN 1 ⸢12.20⸣+[x] 
+#lem: šattu[year]N; n; Arahsamna[Month VIII]MN; n; n
+
+2. na-su DIR muš 1 kal ME DIR AN ZA 
+#lem: na₁[sunset to moonset]N; erpetu[cloud]N; mašāhu[measure]V; n; kal[all]'DET; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+3. GE₆ 2 DIR AN ZA ina ZALÁG AN SIG 
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP
+
+4. DELE-šá-IGI-ABSIN 8 SI 2 DIR AN ZA 
+#lem: DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ubānu[finger]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5. SI GIN GE₆ 3 DIR AN ZA 
+#lem: ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+6. [sin] ina IGI dele-bat 2 1/2 KÙŠ ana ŠÚ GUB 
+#lem: Sîn[moon]N; ina[in]PRP; pān[front]N; Dilbat[Venus]CN; n; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V
+
+7. [sin N] KÙŠ ana SI NIM 3 kal ME 
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; kal[all]'DET; ūmu[day]N
+
+8. [DIR A]N ZA SI GIN GE₆ 4 SAG GE₆ 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+9. [sin ár SI-M]ÁŠ 2 KÙŠ sin 2 5/6 KÙŠ 
+#lem: Sîn[moon]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N
+
+10. [ana ULÙ SIG 4?] DIR AN ZA GE₆ 5 SAG GE₆ 
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N
+
+11. [sin x x MÚL]-IGI 6 SI sin 1/2 KÙŠ ana ŠÚ LAL  
+#lem: Sîn[moon]N; u; u; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN$; n; ubānu[finger]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V
+
+@reverse
+1. [... A]N ZA 6 kal ME 
+#lem: u; šamû[sky]N; ṣabātu[cover (the sky)]V; n; kal[all]'DET; ūmu[day]N
+
+2. [...]
+#lem: u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 116, month VIII, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 12° 20+[x]'; 
+
+@(o 2) measured (despite) clouds. The 1st, all day clouds were in the sky. 
+
+@(o 3) Night of the 2nd, clouds were in the sky; last part of the night, Mars ??? fingers below γ 
+
+@(o 4) Virginis. The 2nd, clouds were in the sky, 
+
+@(o 5) the north wind blew. Night of the 3rd, clouds were in the sky; 
+
+@(o 6) [the moon] stood 2 1/2 cubits in front of Venus to the west, 
+
+@(o 7) [the moon being nn] cubits high to the north. The 3rd, all day 
+
+@(o 8) [clouds] were in the sky, the north wind blew. Night of the 4th, beginning of the night, 
+
+@(o 9) [the moon was] 2 cubits [behind β Capri]corni, the moon being 2 5/6 cubits 
+
+@(o 10) [low to the south. The 4th@sup{?},] clouds were in the sky. Night of the 5th, beginning of the night, 
+
+@(o 11) [the moon was] 6 fingers [...] γ Capricorni, the moon being 1/2 cubit back to the west.
+
+@reverse
+
+@(r 1) [...] were in the sky. The 6th, all day 
+
+@(r 2) [...]

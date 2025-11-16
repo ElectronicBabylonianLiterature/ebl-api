@@ -1,0 +1,93 @@
+&X201784 = AD -178D
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 33.KÁM {m}se-[lu-ku ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; u
+
+2. DIR AN DIB kal ME ŠÚ.ŠÚ GE₆ 2 ⸢DIR⸣ [...]
+#lem: erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V; mūšu[night]N; n; erpetu[cloud]N; u
+
+3. GE₆ 3 sin SIG DUR-nu-nu 4 1/2 KÙŠ [...]
+#lem: mūšu[night]N; n; Sîn[moon]N; šapil[below]PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; u
+
+4. sin 6 KÙŠ ana ULÙ SIG 4 ina KIN.SIG DIR ⸢AN⸣ [...]
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; ina[in]PRP; kinsikku[afternoon]N; erpetu[cloud]N; Ṣalbaṭānu[Mars]CN; u
+
+5. 5 DIR AN ZA GE₆ 6 DIR AN ZA 6 DIR AN ZA GE₆ [...]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; u
+
+6. ár GENNA 1 KÙŠ ana NIM GUB sin [x] KÙŠ ana ULÙ SIG ina ZALÁG DIR AN [...]
+#lem: warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; Sîn[moon]N; u; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; ina[in]PRP; nūru[last part of the night]N; erpetu[cloud]N; šamû[sky]N; u
+
+7. GE₆ 8 ŠÚ.ŠÚ 8 ina še-rì DIR AN DIB ULÙ ⸢GIN⸣ [...]
+#lem: mūšu[night]N; n; urrup[be(come) overcast]V; n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šūtu[south wind]N; alāku[blow]V; u
+
+8. 5 KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 9 DIR A[N ...]
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; n; erpetu[cloud]N; šamû[sky]N; u
+
+9. ⸢DIR AN⸣ ZA 10 kal ME ŠÚ.ŠÚ KUR GIN [...]
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; kal[all]'DET; ūmu[day]N; urrup[be(come) overcast]V; šadû[east wind]N; alāku[blow]V; u
+
+10. [...] ZA KUR GIN GE₆ 11+[x ...]
+#lem: u; ṣabātu[cover (the sky)]V; šadû[east wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+11. [... á]r GÌR-ár-šá-A [...]  
+#lem: u; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; u
+
+@reverse
+1'. [...] [x x] [...]
+#lem: u; u; u; u
+
+2'. USAN dele-bat SIG MÚL-I[GI?-šá-SAG-HUN N N ...]
+#lem: šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; u
+
+3'. SI GIN GE₆ 9 SAG GE₆ [sin x SAG-A N N sin N N]
+#lem: ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; SAG-A[ε Leonis]CN; n; n; Sîn[moon]N; n; n
+
+4'. ana ULÙ SIG DIR SAL A[N ... GE₆ 10 SAG GE₆ sin x]
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+5'. LUGAL ⸢1/2 KÙŠ x⸣ [...]
+#lem: LUGAL[α Leonis]CN; n; ammatu[unit]N; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 133, Se[leucus ...] 
+
+@(o 2) clouds crossed the sky, all day very overcast. Night of the 2nd, clouds [...] 
+
+@(o 3) Night of the 3rd, the moon was 4 1/2 cubits below η Piscium [...] 
+
+@(o 4) the moon being 6 cubits low to the south. The 4th, in the afternoon, clouds [...] the sky [...] 
+
+@(o 5) The 5th, clouds were in the sky. Night of the 6th, clouds were in the sky. The 6th, clouds were in the sky. Night [... the moon] 
+
+@(o 6) stood 1 cubit behind Saturn to the east, the moon being x cubits low to the south; last part of the night, clouds [...] the sky [...] 
+
+@(o 7) Night of the 8th, very overcast. The 8th, in the morning, clouds crossed the sky, the south wind blew [...] 
+
+@(o 8) 5 cubits, the moon being 1/2 cubit back to the west. The 9th, clouds [were in] the sk[y ...] 
+
+@(o 9) clouds were in the sky. The 10th, all day very overcast, the east wind blew [...] 
+
+@(o 10) [...] ..., the east wind blew. Night of the 11+[xth, ...] 
+
+@(o 11) [...be]hind β Virginis [...]
+
+@reverse
+
+@(r 1') [...] ... [...] 
+
+@(r 2') first part of the night, Venus was [...] below β @sup{?} [Arietis ...] 
+
+@(r 3') the north wind blew. Night of the 9th, beginning of the night, [the moon was ... ε Leonis, the moon] 
+
+@(r 4') being [...] low to the south; thin clouds [were in] the sk[y ... Night of the 10th, beginning of the night, the moon was] 
+
+@(r 5') 1/2 cubit [...] α Leonis ... [...]
