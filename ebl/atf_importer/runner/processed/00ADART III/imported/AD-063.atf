@@ -1,0 +1,58 @@
+&X300630 = AD -63 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢GE₆⸣ [...]
+#lem: u; mūšu[night]N; u
+
+2'. [... ina] MAŠ.MAŠ IGI TUR [...]
+#lem: u; ina[in]PRP; Māšu[Gemini]CN; amāru[be(come) visible]V; ṣehru[small]AJ; u
+
+3'. [... x]-⸢šá⸣-ULÙ 2/3 KÙŠ 14 ⸢x⸣ [...]
+#lem: u; u; n; ammatu[unit]N; n; u; u
+
+4'. [... GE₆ 16 ina ZALÁG sin ina IGI SI-MÁ]Š 1 1/2 KÙŠ sin 4 KÙŠ ana ULÙ S[IG ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; Sîn[moon]N; 4[4]NU; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+5'. [... GE₆] 22 ina ZALÁG sin ina IGI MÚL-KUR-šá-DUR-[nu-nu n n ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; u
+
+6'. [... ana U]LÙ SIG in 23 GU₄.UD ina NIM ina MAŠ.MAŠ ŠÚ [...]
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; u
+
+7'. [... GE₆ 25 ina ZALÁG sin ...] ⸢x⸣ ina IGI dele-bat 1 KÙŠ ana ŠÚ GUB ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; u; ina[in]PRP; pān[front]N; Dilbat[Venus]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; u; u
+
+8'. [...] ⸢in⸣ 28? AN ina ALLA ŠÚ [...]
+#lem: u; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; u
+
+9'. [...] ŠE.GIŠ.Ì [...]  
+#lem: u; šamaššammū[sesame]N; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] night [...]
+
+@(o 2') [...] first appearance in Gemini; it was small [...]
+
+@(o 3') [...] 2/3 cubit [...] ... The 14th, ... [...]
+
+@(o 4') [... Night of the 16th, last part of the night, the moon was] 1 ½ cubits [in front of β Capri]corni, the moon being 4 cubits low to the south [...]
+
+@(o 5') [... Night] of the 22nd, last part of the night, the moon was [...] in front of η Pis[cium ...]
+
+@(o 6') [...] low to the south. Around the 23rd, Mercury’s last appearance in the east in Gemini [...]
+
+@(o 7') [... Night of the 25th, last part of the night, the moon ...] ..., it stood 1 cubit in front of Venus to the west ... [...]
+
+@(o 8') [...] around the 28th?, Mars’ last appearance in Cancer [...]
+
+@(o 9') [...] sesame, [...] 
+

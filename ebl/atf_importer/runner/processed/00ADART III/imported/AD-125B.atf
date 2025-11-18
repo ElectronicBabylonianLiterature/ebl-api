@@ -1,0 +1,66 @@
+&X301252 = AD -125B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x DIB ULÙ⸣ GIN GE₆ 19 x [...]
+#lem: u; u; u; etēqu[cross]V; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; u; u
+
+2'. [... sin e MÚL-KUR-šá-KI]R₄-šil-PA 2 KÙŠ sin 1/2 KÙŠ ana NIM DIB ina ZALÁG AN [e MÚL-ár-šá-SUHUR-MÁŠ n n ...]
+#lem: u; Sîn[moon]N; eli[above]'PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; u
+
+3'. [... D]IB U₄.ZAL AN DUL-hat ULÙ GIN 20 MÚL.BABBAR ina TIL z[ib{ME} ŠÚ ...]
+#lem: u; etēqu[cross]V; šāt-urri[third watch of the night]N; šamû[rain]N; DUL[(meaning unclear)]V; šūtu[south wind]N; alāku[blow]V; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; rabû[set]V; u
+
+4'. [...] GE₆ 22 ŠÚ.ŠÚ SAG GE₆ AN MAH PISAN DIB 2[2 ...]
+#lem: u; mūšu[night]N; n; urrup[be(come) very overcast]V; rēšu[beginning]N; mūšu[night]N; šamû[rain]N; ṣīru[great]AJ; pisannu[(a meterological phenomenon)]N; DIB[unclear]V; n; u
+
+5'. [...] ULÙ GIN GE₆ 25 25 ŠÚ.ŠÚ ULÙ [...]
+#lem: u; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; n; urrup[be(come) very overcast]V; šūtu[south wind]N; u
+
+6'. [... US]AN dele-bat SIG MÚL.MÚL 1 1/2 KÙŠ U₄.ZAL ŠÚ 20+[x ...]
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; šāt-urri[third watch of the night]N; īrup[overcast]V; n; u
+
+7'. [...] x i-ru-up  28 AN.KU₁₀ šámaš DIR NU P[AP ...]
+#lem: u; u; erēpu[cloud over//be(come) overcast]V'V$īrup; n; antallû[eclipse]N; šamši[sun]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+8'. [... IT]U BI KI.LAM še-im ina SAG ITU 4(BÁN) [...]
+#lem: u; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; u
+
+9'. [... IT]U 4(BÁN) 4 qa ina TIL ITU 5(BÁN) Z[Ú ...]
+#lem: u; warhu[month]N; n; 4[4]NU; qû[(one) litre]N; ina[in]PRP; qītu[end]N; warhu[month]N; n; suluppu[date]N; u
+
+10'. [...] ina SAG ITU 1 GUR [...]
+#lem: u; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; kurru[kor (180 litres)]N; u
+
+11'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... passed, the south wind blew. Night of the 19th, ... [...]
+
+@(o 2') [... the moon was] 2 cubits [above θ Ophigh]uchigh, the moon having passed ½ cubit to the east; last part of the night, Mars [was ... above δ Capricorni ...]
+
+@(o 3') [... pa]ssed; in the morning watch, rain DUL, the south wind blew. The 20th, Jupiter’s [last appearance] in the end of Pi[sces ...]
+
+@(o 4') [...] Night of the 22nd, very overcast; beginning of the night, much rain PISAN DIB. The 2[2nd, ...]
+
+@(o 5') [...] the south wind blew. Night of the 25th (and) the 25th, very overcast, the south wind [blew ...]
+
+@(o 6') [...] first part of the night, Venus was 1 1/2 cubits below η Tauri; in the morning watch, overcast. The 20+[xth, ...]
+
+@(o 7') [...] ... the day clouded over. The 28th, solar eclipse; clouds, I did not wa[tch ...]
+
+@(o 8') [...] That month, the equivalent was: barley, in the beginning of the month, 4 @i{sūtu} [...]
+
+@(o 9') [... of the mon]th, 4 @i{sūtu} 4 @i{qa}, at the end of the month, 5 @i{sūtu}; da[tes, ...]
+
+@(o 10') [...] in the beginning of the month, 1 @i{kurru} [...]
+
+@(o 11') [...] ... [...]
+

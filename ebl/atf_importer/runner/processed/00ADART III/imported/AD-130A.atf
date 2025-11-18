@@ -1,0 +1,66 @@
+&X301301 = AD -130A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] GIN GE₆ [x] SAG GE₆ sin ina I[GI ...]
+#lem: u; alāku[blow]V; mūšu[night]N; u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; amāru[be(come) visible]V; u
+
+3'. [... GE₆ 8 SAG GE₆ sin ár RÍN]-⸢šá⸣-SI 3 KÙŠ 8 šámaš GUB GE₆ 9 S[AG GE₆ ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; n; šamšu[sun]N; izuzzu[stand]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+4'. [... GE₆ 10 SA]G GE₆ sin ár MÚL-KUR-šá-KIR₄-šil-PA 1 K[ÙŠ ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; u
+
+5'. [... AN SIG MÚL-MU]RUB₄?-šá-SAG-GÍR.TAB 8 SI 10 SI GIN G[E₆? ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; ubānu[finger]N; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; u
+
+6'. [...] x ŠÚ SI šá PA MAR GAR GIN GE₆ 13 1.[x ...]
+#lem: u; u; īrup[be(come) overcast]V; ištānu[north wind]N; ša[which]REL; kappu[wing(?)]'N; amurru[west wind]N; šakānu[set]V; alāku[blow]V; mūšu[night]N; n; n; u
+
+7'. [...] ZALÁG-ru? ⸢x⸣ in? 10 UŠ GE₆ TA KUR [ana x ZALÁG ...]
+#lem: u; nawāru[clear]V; u; ina[in]PRP; n; UŠ[time degree]N; mūšu[night]N; ultu[from]PRP; šadû[east]N; ana[to]PRP; u; nawāru[clear]V; u
+
+8'. [...] ⸢x⸣ ina AN.KU₁₀-šú MÚL.BABBAR GENNA u AN [GUB{MEŠ} ...]
+#lem: u; u; ina[in]PRP; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN; Kayyamānu[Saturn]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; izuzzu[stand]V; u
+
+9'. [...] ⸢ana⸣ NIM DIB ár GENNA 2 ⸢KÙŠ⸣ [ana NIM GUB ...]
+#lem: u; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+
+10'. [...] muš MAR GIN ⸢x⸣ [...]
+#lem: u; mašāhu[measure]V; amurru[west wind]N; alāku[blow]V; u; u
+
+11'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] blew?. Night [of the xth], beginning of the night, the moon was [...] in front of [...]
+
+@(o 3') [... Night of the 8th, beginning of the night, the moon was] 3 cubits [behind β Lib]rae. The 8th, solstice. Night of the 9th, beg[inning of the night, ...]
+
+@(o 4') [... Night of the 10th, beginn]ing of the night, the moon was 1 cubit behind θ Ophiuchi [...]
+
+@(o 5') [... Mars was] 8 fingers [below] δ? Scorpii. The 10th, the north wind blew. Ni[ght? ...]
+
+@(o 6') [...] ... overcast; the north wind which was set to the west side blew. Night of the 13th, [...] 1.[...]
+
+@(o 7') [...] when ... it cleared, [it cleared] in 10° of night from east [to ...]
+
+@(o 8') [...] ... in its eclipse, Jupiter, Saturn, and Mars [stood there ...]
+
+@(o 9') [... the moon ...] having passed [...] to the east, [it stood] 2 cubits behind Saturn [to the east ...]
+
+@(o 10') [...] measured; the west wind blew ... [...]
+
+@(o 11') [...] ... [...]
+

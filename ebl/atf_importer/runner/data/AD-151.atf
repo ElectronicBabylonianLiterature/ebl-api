@@ -1,0 +1,60 @@
+&X301510 = AD -151
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [... i]-nu-šú MÚL.BABBAR ina PA dele-ba[t ...]
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; Dilbat[Venus]CN; u
+
+2'. [...] ($blank$)
+#lem: u
+
+$ ruling
+3'. [KIN ... sin SIG RÍN-šá-SI N] KÙŠ sin 1/2 KÙŠ ana NIM DIB SIG AN 1 KÙŠ [...]
+#lem: Ulūlu[Month VI]MN; u; Sîn[moon]N; šapil[below]AJ; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; šapil[below]AJ; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; u
+
+4'. [...] sin 1/2 KÙŠ ana ULÙ SIG GE₆ 5 SAG GE₆ sin [...]
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+5'. [... sin ina IGI] MÚL.BABBAR 1 1/2 KÙŠ ana ŠÚ GUB sin 1 1/2 KÙŠ ana ULÙ SIG
+#lem: u; Sîn[moon]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ
+
+6'. [... sin x MÚL-x-šá-SUHUR]-MÁŠ 1 1/2 KÙŠ GE₆ 13 ina ZALÁG dele-bat
+#lem: u; Sîn[moon]N; u; +MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorn]CN$; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN
+
+7'. [... S]AG GE₆ sin SIG MÚL-IGI-šá-SAG-HUN
+#lem: u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MÚL-IGI-šá-SAG-HUN[β Arietis]CN
+
+8'. [N N ...] ana ŠÚ LAL GE₆ 18 USAN AN
+#lem: n; n; u; ana[to]PRP; erbu[west]N; nahāsu[recede]V; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN
+
+9'. [... 19 LÁL]-tì NU PAP GE₆ 20 ina ZALÁG sin
+#lem: u; n; šitqultu[equinox]'N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+10'. [...] ⸢x⸣ [x x] ⸢x x x⸣ [...] 
+#lem: u; u; u; u; u; u; u; u
+
+@translation labeled en project
+
+@(1') [...] at that time, Jupiter was in Sagittarius; Venus [...]
+
+@(2') [...]
+
+$ ruling
+
+@(3') [Month VI, ... the moon was nn] cubits [below β Librae], the moon having passed 1/2 cubit to the east, 1 cubit below Mars [...]
+
+@(4') [...] the moon being 1/2 cubit low to the south. Night of the 5th, beginning of the night, the moon was [...]
+
+@(5') [... the moon] stood 1 1/2 cubits [in front of] Jupiter to the west, the moon being 1 1/2 cubits low to the south.
+
+@(6') [... the moon was] 1 1/2 cubits [... γ /δ] Capricorni. Night of the 13th, last part of the night, Venus
+
+@(7') [...] beginning of the night, the moon was [...] below β Arietis
+
+@(8') [...] being back to the west. Night of the 18th, first part of the night, Mars
+
+@(9') [... the 19th, equi]nox; I did not watch. Night of the 20th, last part of the night, the moon
+
+@(10') [...] ... [...]

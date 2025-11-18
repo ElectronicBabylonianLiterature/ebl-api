@@ -1,0 +1,134 @@
+&X301601 = AD -160A
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [...] ⸢ana⸣ DINGIR{MEŠ} GAL{MEŠ} u ana bul-ṭu šá {m}de-meṭ-ri LUGAL
+#lem: u; ana[to]PRP; ilu[god]N; rabûti[great]AJ; u[and]CNJ; ana[to]PRP; bulṭu[life]N$; ša[which]REL; Demetrius[Demetrius]PN; šarru[king]N
+
+3'. [DÙ ...]
+#lem: epēšu[make]V; u
+
+$ ruling
+4'. [APIN ... GE₆ 2 sin ... x]+1 1/2 KÙŠ ina IGI GENNA 2 KÙŠ ana ŠÚ GUB sin 1 KÙŠ ana SI NIM SI GIN
+#lem: Arahsamna[Month VIII]MN; u; mūšu[night]N; n; Sîn[moon]N; u; u; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; ištānu[north wind]N; alāku[blow]V
+
+5'. [...] USAN GÍR GÍR U 2-šú GÙ-šú né-hi ŠUB 4 ina še-rì ŠÚ.ŠÚ
+#lem: u; šimītān[first part of the night]N; birqu[lightning]N; barāqu[flash]V; Adad[storm-god]DN; šinīšu[twice]AV; rigimšu[voice]N; nēhu[slow]AJ; maqātu[fall]V; 4[4]NU; ina[in]PRP; šēri[morning]N; urrup[be(come) very overcast]V
+
+6'. [...] ina IGI GENNA 1 KÙŠ SI GIN EN 5 MÚL.BABBAR ana ŠÚ ki UŠ-a
+#lem: u; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ištānu[north wind]N; alāku[blow]V; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erib[west]N; kī[when]PRP; emēdu[be at a stationary point]V
+
+7'. [...] ⸢GIN⸣ GE₆ 9? SAG GE₆ sin ina IGI MÚL.BAB[BAR] 1 KÙŠ ana [ŠÚ] GUB
+#lem: u; alāku[blow]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V
+
+8'. [... A]N UTAH ina še-rì ŠÚ SI? GIN? [x x x x] ⸢x⸣ 
+#lem: u; šamû[sky]N; natāku[drip]V; ina[in]PRP; šēri[morning]N; īrup[be(come) very overcast]V; ištānu[north wind]N; alāku[blow]V; u; u; u; u; u
+
+9'. [... GE₆ 12 SAG GE₆] sin SIG MÚL.MÚL 4 KÙŠ [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; 4[4]NU; ammatu[unit]N; u
+
+10'. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+@reverse
+1'. [...] [...]
+#lem: u; u
+
+2'. [... ana UL]Ù SIG DIR AN ZA ULÙ G[IN?]
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V
+
+3'. [...] ⸢x⸣ {MÚL}MAŠ.MAŠ ziq-pi
+#lem: u; u; Māšu[Gemini]CN; zaqāpu[culminate]V
+
+4'. [...] SI? GIN ina AN.KU₁₀-šú DIR AN ZA
+#lem: u; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; antallû[eclipse]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+5'. [...] ⸢LUGAL⸣ |KA×MI| in 48 GE₆ GIN
+#lem: u; LUGAL[α Leonis]CN; adir[eclipsed]AJ; ina[at]PRP; n; mūšu[night]N; alāku[blow]V
+
+6'. [...] ULÙ ŠÁR GE₆ 15 15 DIR AN ZA SI GIN
+#lem: u; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+7'. [...] KÙŠ sin 1/2 KÙŠ ana NIM DIB 18 SI GIN
+#lem: u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; n; ištānu[north wind]N; alāku[blow]V
+
+8'. [... ina ZAL]ÁG sin e SI₄ 4 KÙŠ sin 1/2 KÙŠ ana NIM DIB
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]'PRP; SI₄[α Scorpii]CN; 4[4]NU; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+9'. [...] ULÙ u KUR GIN{MEŠ} 22 ŠÚ.ŠÚ ULÙ u KUR
+#lem: u; šūtu[south wind]N; u[and]CNJ; šadû[east wind]N; alāku[blow]V; n; urrup[be(come) very overcast]V; šūtu[south wind]N; u[and]CNJ; šadû[east wind]N
+
+10'. [...] USAN dele-bat e MÚL.BABBAR 1/2 KÙŠ
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]'PRP; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N
+
+11'. [... sin ár GENNA N] KÙŠ ana NIM GUB ina ZALÁG GENNA
+#lem: u; Sîn[moon]N; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN
+
+12'. [...] ⸢x⸣ GE₆ 27 ⸢27⸣ SI GIN
+#lem: u; u; mūšu[night]N; n; n; ištānu[north wind]N; alāku[blow]V
+
+13'. [...] ⸢x⸣ 
+#lem: u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [... performed an offering] to the great gods and for the life of king Demetrius.
+
+@(o 3') [...]
+
+$ ruling	
+
+@(o 4') [Month VIII, ... Night of the 2nd, (the moon)] stood [x]+1 1/2 cubits in front of Saturn to the west, the moon being 1 cubit high to the north; the north wind blew.
+
+@(o 5') [...] first part of the night, lightning flashed, it thundered slowly twice. The 4th, in the morning, very overcast
+
+@(o 6') [...] 1 cubit in front of Saturn; the north wind blew. Until the 5th, when Jupiter became stationary to the west,
+
+@(o 7') [...] blew. Night of the 9th?, beginning of the night, the moon stood 1 cubit in front of Jupiter to the [west]
+
+@(o 8') [...] rain shower; in the morning, overcast, the north? wind blew? [...] ...
+
+@(o 9') [... Night of the 12th, beginning of the night,] the moon was 4 cubits below η Tauri [...]
+
+@(o 10') [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') [...] low to the south; clouds were in the sky, the south wind bl[ew?.]
+
+@(r 3') [...] when Gemini culminated,
+
+@(r 4') [lunar eclipse ...] the north? wind blew; in its eclipse, clouds were in the sky
+
+@(r 5') [...] α Leonis it was eclipsed; at 48º after sunset.
+
+@(r 6') [...] gusty south wind. Night of the 15th (and) the 15th, clouds were in the sky, the north wind blew.
+
+@(r 7') [...] cubits, the moon having passed 1/2 cubit to the east. The 18th, the north wind blew.
+
+@(r 8') [... last part of the] night, the moon was 4 cubits above α Scorpii, the moon having passed 1/2 cubit to the east.
+
+@(r 9') [...] the south and east winds blew. The 22nd, very overcast, the south and east winds
+
+@(r 10') [...] first part of the night, Venus was 1/2 cubit above Jupiter
+
+@(r 11') [... the moon] stood [nn] cubits [behind Saturn] to the east; last part of the night, Saturn
+
+@(r 12') [...] ... Night of the 27th (and) the 27th, the north wind blew.
+
+@(r 13') [...] ...
+
+
+

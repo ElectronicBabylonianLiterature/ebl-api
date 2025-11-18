@@ -1,0 +1,122 @@
+&X301040 = AD -104 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1. [KIN] 30 17 KUR₄ muš ár dele-bat 2? KÙŠ sin [n n]
+#lem: Ulūlu[Month VI]MN; n; n; baʾil[bright]AJ; mašāhu[measure]V; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N; Sîn[moon]N; n; n
+
+2. [ana] SI NIM GE₆ 2 sin ina IGI ⸢SA₄?⸣ [n n]
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pānu[front]N; SA₄-ša₂-ABSIN[α Virginis]CN; n; n
+
+3. sin 1/2 KÙŠ ana SI NIM GE₆ 3 sin SI[G]
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; Sîn[moon]N; šapil[below]AJ
+
+4. RÍN-šá-SI ⸢2⸣ KÙŠ sin 1/2 KÙŠ ana NIM DIB
+#lem: RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+5. GE₆ 4 SAG GE₆ sin ⸢ár⸣ MÚL-e-šá-SAG-GÍR.TAB
+#lem: mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN
+
+6. 1 KÙŠ sin 2? ⸢KÙŠ ana⸣ SI NIM GE₆ 5
+#lem: n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n
+
+7. <sin> ina IGI šil-PA 1 KÙŠ sin 2? K[ÙŠ] ana SI NIM
+#lem: Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+8. [ár] GENNA 1 KÙŠ 6 SI ina IGI MÚL.BABBAR
+#lem: warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; n; ubānu[finger]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN
+
+9. 3 1/2 KÙŠ sin 2 KÙŠ ana SI NIM
+#lem: n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+10. ⸢USAN AN SIG⸣ RÍN-šá-U[LÙ n] ⸢SI?⸣
+#lem: šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N
+
+11. GE₆ 8 sin ina IGI SI-MÁ[Š] 2? KÙŠ
+#lem: mūšu[night]N; n; Sîn[moon]N; ina[in]PRP; pān[front]N; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N
+
+12. sin 1 KÙŠ ana ULÙ SIG GE₆ 10
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n
+
+13. <sin> ár SUHUR-ár 1 KÙŠ sin 1 KÙŠ
+#lem: Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N
+
+14. ana SI NIM GE₆ 
+#lem: ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N
+
+@reverse
+1. ŠE.GIŠ 1(BÁN) 3 1/2 qa
+#lem: šamaššammū[sesame]N; n; n; n; qû[(one) litre]N
+
+$ (space)
+
+2. A TA 3 EN 10 1 KÙŠ <x> 29 na
+#lem: u; ultu[from]PRP; n; adi[until]PRP; n; n; ammatu[unit]N; u; n; na[na-gauge]N
+
+3. še-im EN 6 2 PI 3 qa
+#lem: šeʾu[barley]N; adi[until]PRP; n; n; pānu[bushel (36 litres)]N; n; qû[(one) litre]N
+
+$ (space)
+
+4. ZÚ.LUM 1 2 2 PI
+#lem: suluppu[date]N; n; n; n; pānu[bushel (36 litres)]N
+
+5. TA 3 EN 10
+#lem: ultu[from]PRP; n; adi[until]PRP; n
+
+6. [1(BARIG)] ⸢5(BÁN)⸣ 
+#lem: n; n
+
+@translation labeled en project
+@obverse
+
+@(o 1) [Month VI,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 17°; it was bright, measured, 2? cubits behind Venus, the moon being [...]
+
+@(o 2) high to the north. Night of the 2nd, the moon was [...] in front of α Virginis,
+
+@(o 3) the moon being 1/2 cubit high to the north. Night of the 3rd, the moon was 2 cubits below
+
+@(o 4) β Librae, the moon having passed 1/2 cubit to the east.
+
+@(o 5) Night of the 4th, beginning of the night, the moon was 1 cubit behind β Scorpii,
+
+@(o 6) the moon being 2? cubits high to the north. Night of the 5th,
+
+@(o 7) <the moon> was 1 cubit in front of θ Ophiuchi, the moon being 2? cubits high to the north,
+
+@(o 8) 1 cubit 6 fingers [behind] Saturn, 3 1/2 cubits in front of Jupiter,
+
+@(o 9) the moon being 2 cubits high to the north;
+
+@(o 10) first part of the night, Mars was [n] fingers? below α Librae.
+
+@(o 11) Night of the 8th, the moon was 2? cubits in front of β Capricorni,
+
+@(o 12) the moon being 1 cubit low to the south. Night of the 10th,
+
+@(o 13) <the moon> was 1 cubit behind δ Capricorni, the moon being 1 cubit
+
+@(o 14) high to the north. Night 
+
+@reverse
+
+@(r 1) sesame, 1 @i{sūtu} 3 1/2 @i{qa};
+
+$space
+
+@(r 2) the river level, from the 3rd to the 10th, <...> 1 cubit, 29 was the @i{na} (gauge). 
+
+@(r 3) barley, until the 6th, 2 @i{pānu} 3 @i{qa}
+
+space
+
+@(r 4) dates, the 1st (and) 2nd, 2 @i{pānu};
+
+@(r 5) from the 3rd to the 10th,
+
+@(r 6) [1 @i{pānu}] 5 @i{sūtu}. 
+

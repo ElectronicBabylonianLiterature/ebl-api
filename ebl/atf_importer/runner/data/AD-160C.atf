@@ -1,0 +1,73 @@
+&X301603 = AD -160C
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. i-nu-šú MÚL.BABBAR ina ⸢HUN dele-bat⸣ [...]
+#lem: inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Agru[Aries]CN; Dilbat[Venus]CN; u
+
+2'. in 4 GU₄.UD ina ŠÚ ina zib{ME} IGI EN TIL ⸢ITU⸣ [...]
+#lem: ina[around (day x)]PRP; 4[4]NU; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V; adi[until]PRP; qītu[end]N; warhu[month]N; u
+
+3'. AN EN MURUB₄ ITU ina HUN ina TIL ITU ina MÚL.MÚL ITU BI I[LLU ...]
+#lem: Ṣalbaṭānu[Mars]CN; adi[until]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Agru[Aries]CN; ina[in]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Zappu[Taurus]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N; u
+
+4'. [TA] 1 EN 9 20 SI LAL PAP 28 na TA 11 E[N ...]
+#lem: ultu[from]PRP; n; adi[until]PRP; n; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; ultu[from]PRP; n; adi[until]PRP; u
+
+5'. [TA 1]6 EN 25 NU PAP TA 26 EN 20+[x ...]
+#lem: ultu[from]PRP; n; adi[until]PRP; n; ul[not]MOD; naṣāru[watch]V; ultu[from]PRP; n; adi[until]PRP; n; u
+
+6'. [x x SISKU]R? šá DINGIR{MEŠ} TAR{MEŠ} ITU BI {LÚ}UN{MEŠ} [...]
+#lem: u; u; nīqu[offering]N$; ša[which]REL; ilu[god]N; parsū[interrupted]AJ; warhu[month]N; šū[that]'DP; nišu[people]N; u
+
+7'. [x x x] ⸢x⸣ ú ITU BI ⸢x x x⸣ [...]
+#lem: u; u; u; u; X; warhu[month]N; šū[that]'DP; u; u; u; u
+
+8'-9'. ($traces$) 
+@reverse 
+1'. [...] šá É⸢{MEŠ?}⸣ G[AL? ...]
+#lem: u; ša[which]REL; bītu[temple]N; rabû[large]AJ; u
+
+2'. [... {d}G]AŠAN-iá DINGIR{MEŠ} GAL{MEŠ} u ana bul-ṭ[u ...]
+#lem: u; Bēltiya[Bēltu]DN; ilu[god]N; rabûti[great]AJ; u[and]CNJ; ana[to]PRP; bulṭu[life]N; u
+
+3'. [...] U₄ 12 13 [x] KAM ú [...]
+#lem: u; ūmu[day]N; n; n; u; X; X; u
+
+4'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') At that time, Jupiter was in Aries; Venus [...]
+
+@(o 2') around the 4th, Mercury’s first appearance in the west in Pisces; until the end of the month, [...]
+
+@(o 3') Mars, until the middle of the month, was in Aries, at the end of the month, in Taurus. That month, the river [level ...]
+
+@(o 4') [from] the 1st? to the 9th, it receded 20 fingers, total: 28 was the @i{na} (gauge); from the 11th to [...]
+
+@(o 5') [from the 1]6th to the 25th, I did not watch; from the 26th to the 20+[xth, ...]
+
+@(o 6') [... sacrifi]ces? to the gods were cut off. That month, the people [...]
+
+@(o 7') [...] ... That month, ... [...]
+
+@(o 8'-9') ($traces$)
+
+@reverse
+
+@(r 1') [...] ... of the houses? [...]
+
+@(r 2') [... to Bēl and] Bēltiya, the Great Gods, and for the life [...]
+
+@(r 3') [...] on the 12th (and) 13th day, ... [...]
+
+@(r 4') [...] ... [...]
+
+

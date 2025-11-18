@@ -1,0 +1,108 @@
+&X301233 = AD -123C 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] GENNA 1 ⸢x⸣ [...]
+#lem: u; Kayyamānu[Saturn]CN; n; u; u
+
+3'. [... x]+5 na-su in 10 IGI [...]
+#lem: u; u; na[time interval between the rising of a planet and sunrise viz. sunset and the setting of a planet]N; ina[around (day x)]PRP; n; amāru[be(come) visible]V; u
+
+4'. [...] 19 GE₆ gab-bi ŠÚ-im [...]
+#lem: u; n; mūšu[night]N; gabbu[totality]N; arim[covered]AJ; u
+
+5'. [...] GU₄.UD u dele-bat ŠÚ-uʾ SAG Í[R ...]
+#lem: u; Šihṭu[Mercury]CN; u[and]CNJ; Dilbat[Venus]CN; rabû[set]V$; rēšu[beginning]N; bikītu[maximal phase (of an eclipse)]N; u
+
+6'. [...] ⸢x⸣ 5 KÙŠ sin 4 U ana ŠÚ LAL id [...]
+#lem: u; u; n; ammatu[unit]N; Sîn[moon]N; 4[4]NU; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; u; u
+
+7'. [...] sin 1 1/2 KÙŠ ana ULÙ SIG 19 SI GIN GE₆ 20 ina ZALÁG [...]
+#lem: u; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+8'. [... K]ÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 21 SI ŠÁR GE₆ [...]
+#lem: u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; n; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; u
+
+9'. [... x]+1/2 KÙŠ sin 4 1/2 KÙŠ ana ULÙ SIG 24 SI GIN [...]
+#lem: u; u; ammatu[unit]N; Sîn[moon]N; 4[4]NU; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; ištānu[north wind]N; alāku[blow]V; u
+
+10'. [...] 4 1/2 qa EN MURUB₄ ITU 5(BÁN) 2 1/2 qa TA 21+[x ...]
+#lem: u; 4[4]NU; n; qû[(one) litre]N; adi[until]PRP; qabaltu[middle]N; warhu[month]N; n; n; n; qû[(one) litre]N; ultu[from]PRP; n; u
+
+11'. [...] x in 23 dele-bat RÍN KUR in 10 GU₄.UD ina [ŠÚ ina ABSIN IGI ...]
+#lem: u; u; ina[in]PRP; n; Dilbat[Venus]CN; Zibānītu[Libra]CN; kašādu[reach]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V; u
+
+12'. [...] ⸢x⸣ GIN{MEŠ}-nim-ma hu-ub-tu₄ GIM IGI-ú [...]
+#lem: u; u; alāku[come]V; hubtu[robbery//booty]N'N$; kīma[like]PRP; pānu[before]'AV; u
+
+13'. [...] ina muh-hi A x u a-ha-meš TA? [...]
+#lem: u; ina[in]PRP; muhhi[top]N; u; u; u[and]CNJ; ahāmiš[each other]IP; u; u
+
+14'. [...] ⸢x x⸣{MEŠ} ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u; u
+
+15'. [... TA {URU}se-lu-ke-ʾa-a šá ina muh-hi] ⸢{ÍD}⸣IDIGNA ana E{KI} KU₄-⸢ub⸣ U₄ 27.KÁ[M ...]
+#lem: u; ultu[from]PRP; Selukeʾa[Seleucia]SN; ša[which]REL; ina[in]PRP; muhhi[top]N; Idiqlat[Tigris]WN; ana[to]PRP; Bābilu[Babylon]SN; erēbu[enter]V; ūmu[day]N; n; u
+
+16'. [...] ⸢NU? KU₄?-ub x x⸣ ID x [...]
+#lem: u; lā[not]MOD; erēbu[enter]V; u; u; u; u; u
+
+17'. [...] I.ZI {IM}MIN u I.ZI {IM}EŠ₅? [...]
+#lem: u; igāru[wall]N$; ištānu[north]N$; u[and]CNJ; igāru[wall]N; šadû[east]N$; u
+
+18'. [{ITU}KIN 30 ...] na šá GU₄.UD GE₆ 1 sin ⸢SIG?⸣ [...]
+#lem: Ulūlu[Month VI]MN; n; u; na[sunset to setting]'N; ša[which]REL; Šihṭu[Mercury]CN; mūšu[night]N; n; Sîn[moon]N; šapil[below]AJ; u
+
+19'. [... KÙ]Š sin 1/2 ⸢KÙŠ ana x⸣ [...]
+#lem: u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] Saturn 1 ... [...]
+
+@(o 3') [... x]+5°, (ideal) first appearance on the 10th ... [...]
+
+@(o 4') [... in] 19° of night it was completely covered [...]
+
+@(o 5') [...] Mercury and Venus set; in the beginning of the maximal phase, [...]
+
+@(o 6') [...] ... 5 cubits, the moon being 4 fingers back to the west ... [...]
+
+@(o 7') [...] the moon being 1 1/2 cubits low to the south. The 19th, the north wind blew. Night of the 20th, last part of the night, [...]
+
+@(o 8') [... cu]bits, the moon being 1/2 cubit back to the west. The 21st, gusty north wind. Night [...]
+
+@(o 9') [... x]+1/2 cubits, the moon being 4 1/2 cubits low to the south. The 24th, the north wind blew [...]
+
+@(o 10') [...] 4 1/2 @i{qa}, until the middle of the month, 5 @i{sūtu} 2 1/2 @i{qa}; from the 21+[xth, ...]
+
+@(o 11') [...] ...; on the 23rd, Venus reached Libra; around the 10th, Mercury’s [first appearance in the west in Virgo ...]
+
+@(o 12') [...] came, and plundering as before [...]
+
+@(o 13') [...] against ... each other ... [...]
+
+@(o 14') [...] ... [...]
+
+@(o 15') [...] entered Babylon [from Seleucia which is on the] Tigris. The 27th, [...]
+
+@(o 16') [...] did not enter? ... [...]
+
+@(o 17') [...] the northern wall and the eastern? wall [...]
+
+$ruling
+
+@(o 18') [Month VI, (the 1st of which was identical with) the 30th (of the preceding month) ...] sunset to setting of Mercury: [...] Night of the 1st, the moon was [...] below? [...]
+
+@(o 19') [... cu]bits, the moon being 1/2 cubit to ... [...]
+

@@ -1,0 +1,139 @@
+&X301303 = AD -130C 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... dele-bat] ⸢e⸣ MAŠ.MAŠ-šá-SIP[A n n]
+#lem: u; Dilbat[Venus]CN; eli[above]'PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n
+
+3'. [... GE₆ 25 ina ZALÁG sin] e MAŠ.MAŠ-šá-SIP[A n n]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]'PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n
+
+4'. [... GE₆ 26 ina ZALÁG s]in SIG MAŠ.MAŠ-IGI ⸢4?⸣ [KÙŠ]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MAŠ.MAŠ-IGI[α Geminorum]CN; 4[4]NU; ammatu[unit]N
+
+5'. [... A]N e SI₄ 20 SI ⸢x⸣ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; SI₄[α Scorpii]CN; n; ubānu[finger]N; u; u
+
+6'. [... Z]Ú.⸢LUM⸣.MA 1 GUR 3(BARIG) [...]
+#lem: u; suluppu[date]N; n; kurru[kor (180 litres)]N; n; u
+
+7'. [... dele-bat ina] SAG ITU ina [MÚL.MÚL ...]
+#lem: u; Dilbat[Venus]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Zappu[Taurus]CN; u
+
+8'. [... GE]NNA ina MÁ[Š ...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; u
+
+9'. [... LA]L PAP 24 n[a ...]
+#lem: u; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; u
+
+10'. [...] ⸢x⸣ ana {KUR}ma-⸢di⸣-[na-tú ...] 
+#lem: u; u; ana[to]PRP; madīnatu[province]N; u
+
+@reverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... ina] ZALÁG sin [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+3'. [... sin x MÚL]-⸢ár⸣-šá-SAG-HUN [...]
+#lem: u; Sîn[moon]N; u; MÚL-ár-šá-SAG-HUN[α Arietis]CN; u
+
+4'. [... MÚL.BABBAR e] SA₄-šá-ABSIN 1 1/2 [KÙŠ ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; eli[above]'PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; u
+
+5'. [...] ⸢x⸣ 21 SI GI[N ...]
+#lem: u; u; n; ištānu[north wind]N; alāku[blow]V; u
+
+6'. [...] ($erasure$) [...]
+#lem: u; u
+
+7'. [... AN SIG MÚL-KUR]-šá-KIR₄-šil-PA 1/2 K[ÙŠ ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; u
+
+8'. [...] 2 1/2 KÙŠ sin 2 [...]
+#lem: u; n; n; ammatu[unit]N; Sîn[moon]N; n; u
+
+9'. [... sin S]IG? dele-bat 1 KÙŠ 8 SI [...]
+#lem: u; Sîn[moon]N; šapil[below]AJ; Dilbat[Venus]CN; n; ammatu[unit]N; n; ubānu[finger]N; u
+
+10'. [...] 4 KÙŠ 28 SI [...]
+#lem: u; 4[4]NU; ammatu[unit]N; n; ubānu[finger]N; u
+
+11'. [...] ⸢1(BARIG)⸣ 2(BÁN)? 3 qa NU DÙ [...]
+#lem: u; n; n; n; qû[(one) litre]N; ul[not]MOD; banû[good]AJ$; u
+
+12'. [... x]+1 1/2 qa SÍG{HI.A} 1 M[A.NA]
+#lem: u; u; n; qû[(one) litre]N; šīpātu[wool]N; n; manû[(one mina)]N
+
+13'. [... GU₄.UD šá ŠÚ]-ú NU IGI
+#lem: u; Šihṭu[Mercury]CN; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[see]V
+
+14'. [...] ⸢x⸣ GE₆ 21 [...]
+#lem: u; u; mūšu[night]N; n; u
+
+15'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [... Venus was ...] above γ Geminorum [...]
+
+@(o 3') [... Night of the 25th, last part of the night, the moon was ...] above γ Geminorum [...]
+
+@(o 4') [... Night of the 26th, last part of the night,] the moon was 4? [cubits] below α Geminorum
+
+@(o 5') [... Mars was] 20 fingers above α Scorpii ... [...]
+
+@(o 6') [...] dates, 1 @i{kurru} 3 @i{sūtu} [...]
+
+@(o 7') [... Venus, in] the beginning of the month, was in [Taurus ...]
+
+@(o 8') [...] ...; Saturn was in Capric[orn ...]
+
+@(o 9') [... rece]ded [...], total: 24 was the @i{na} [(gauge) ...]
+
+@(o 10') [...] ... to the land Ma[...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') [...] last part of the night, the moon was [...]
+
+@(r 3') [... the moon was ...] α Arietis [...]
+
+@(r 4') [... Jupiter was] 1 ½ [cubits above] α Virginis [...]
+
+@(r 5') [...] ... The 21st, the north wind bl[ew ...]
+
+@(r 6') [...] (erasure) [...]
+
+@(r 7') [... Mars was] ½ cubit [below θ] Ophiuchi [...]
+
+@(r 8') [...] 2 ½ cubits, the moon being 2 [...]
+
+@(r 9') [... the moon was] 1 cubit 8 fingers below? Venus [...]
+
+@(r 10') [...] 4 cubits. The 28th, the north wind [...]
+
+@(r 11') [...] 1 @i{pānu} 2? @i{sūtu} 3 @i{qa}; not good ones, [...]
+
+@(r 12') [... x]+1 ½ @i{qa}; wool, 1 mi[na ...]
+
+@(r 13') [... which had set,] was not visible.
+
+@(r 14') [...] ... Night of the 21st?, [...]
+
+@(r 15') [...] ... [...]
+

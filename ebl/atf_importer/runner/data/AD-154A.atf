@@ -1,0 +1,45 @@
+&X301541 = AD -154A
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+
+@obverse
+
+1'. [... ina ZALÁG sin] ⸢ina IGI MAŠ.MAŠ-ár⸣ [x] ⸢KÙŠ sin⸣ 1 KÙŠ ana ULÙ SIG [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-ár[β Geminorum]CN; u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+2'. [...] ⸢GE₆⸣ 27 ina ZALÁG dele-bat SIG MÚL-ár-šá-ALLA-šá-ULÙ x [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]AJ; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; u; u
+
+3'. [... E]N TIL ITU 1(BARIG) 2(BÁN) 4 qa 4-ʾu-ú ZÚ.LUM EN 15 [...]
+#lem: u; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; 4[4]NU; qû[(one) litre]N; rebû[fourth//one-fourth]NU'NU$; suluppu[date]N; adi[until]PRP; n; u
+
+4'. [...] MÚL.BABBAR ina ABSIN dele-bat ina MAŠ.MAŠ in 15 dele-bat ALLA KUR-ád? [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; Dilbat[Venus]CN; ina[in]PRP; Māšu[Gemini]CN; ina[around]PRP; n; Dilbat[Venus]CN; Alluttu[Cancer]CN; kašādu[reach]V; u
+
+5'. [...] ⸢x⸣ KI ⸢x x x⸣ 
+#lem: u; u; itti[with]PRP; u; u; u
+
+6'. [...] ⸢x x⸣ ina KUR GAR-an ITU BI U₄ 30.KAM {LÚ}GAL ERÍN[{MEŠ} ...]
+#lem: u; u; u; ina[in]PRP; mātu[land]N; šakānu[establish]V; warhu[month]N; šū[that]'DP; ūmu[day]N; n; rab[chief]N; uqu[troops]N; u
+
+7'. [...] ⸢x x x x⸣ [...] 
+#lem: u; u; u; u; u; u
+
+@translation labeled en project
+
+@(1') [... last part of the night, the moon was nn] cubits in front of β Geminorum, the moon being 1 cubit low to the south [...]
+
+@(2') [...] Night of the 27th, last part of the night, Venus was ... below δ Cancri [...]
+
+@(3') [...] until the end of the month, 1 @i{pānu} 2 @i{sūtu} 4 @i{qa} (and) one-fourth; dates, until the 15th, [...]
+
+@(4') [...] Jupiter was in Virgo; Venus was in Gemini; around the 15th, Venus reached Cancer; [...]
+
+@(5') [...] ...
+
+@(6') [...] ... was set up in the land. That month, on the 30th, the general [...]
+
+@(7') [...] ... [...]

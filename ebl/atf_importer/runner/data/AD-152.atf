@@ -1,0 +1,100 @@
+&X301520 = AD -152
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. ina KIN?.[SIG? ...]
+#lem: ina[in]PRP; kinsikku[afternoon]N; u
+
+3'. ⸢x⸣ [...]
+#lem: u; u
+
+4'. ina KIN.SIG ŠÚ.ŠÚ [...]
+#lem: ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; u
+
+5'. SI GIN GE₆ 16 [...]
+#lem: ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+6'. GE₆ 18 SAG GE₆ DIR [...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; erpetu[cloud]N; u
+
+7'. GE₆ ⸢20? kal⸣ GE₆ ŠÚ.ŠÚ AN UT[AH ...]
+#lem: mūšu[night]N; n; kal[all]N; mūšu[night]N; urrup[be(come) very overcast]V; šamû[rain]N; natāku[drip]V; u
+
+8'. SIG ⸢MÚL.MÚL⸣ 8 U DIR AN ZA [...]
+#lem: šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; ubānu[finger]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+9'. DIR AN ZA 24 DIR AN ZA S[I ...]
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; u
+
+10'. kal ME ŠÚ.ŠÚ SI GIN ina KIN.SIG SI [...]
+#lem: kal[all]N; ūmu[day]N; urrup[be(come) very overcast]V; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; ištānu[north wind]N; u
+
+11'. AN UTAH i-ṣa SI GIN ina KIN.SIG S[I ...]
+#lem: šamû[sky]N; natāku[drip]V; wīṣu[little]AJ; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; ištānu[north wind]N; u
+
+12'. [MÚ]L.BABBAR ina PA dele-bat EN MURUB₄ ITU ina HUN i[n? ...]
+#lem: Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; Dilbat[Venus]CN; adi[until]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Agru[Aries]CN; ina[around (day x)]PRP; u
+
+13'. [N S]I GIN 24 na TA 9 EN 14 GU[B-uz ...]
+#lem: n; ubānu[finger]N; alāku[rise]V; n; na[na-gauge]N; ultu[from]PRP; n; adi[until]PRP; n; izuzzu[stand]V; u
+
+14'. [{LÚ}GAL] ERÍN{MEŠ} KUR URI{KI} <<MEŠ>> šá 4 {LÚ}GAL ER[ÍN{MEŠ} ...]
+#lem: rab[chief]N; uqāni[troops]N; mātu[land]N; Akkad[Babylonia]GN; ša[which]REL; 4[4]NU; rab[chief]N; uqu[troops]N; u
+
+$ ruling
+15'. [DIR.ŠE ...] 19 na-su KUR₄ a-⸢pir⸣ [...] 
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; u; n; na₁[sunset to moonset]N; baʾil[bright]AJ; apir[earthshine]N; u
+
+@left
+1. [MU 1] ME 59.KÁM [...] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') ... [...]
+
+@(o 2') in the after[noon? ...]
+
+@(o 3') ... [...]
+
+@(o 4') in the afternoon, very overcast [...]
+
+@(o 5') the north wind blew. Night of the 16th, [...]
+
+@(o 6') Night of the 18th, beginning of the night, clouds [...]
+
+@(o 7') Night of the 20th?, all night very overcast, rain sho[wer ...]
+
+@(o 8') 8 fingers below η Tauri; clouds were in the sky [...]
+
+@(o 9') clouds were in the sky. The 24th, clouds were in the sky, the nor[th wind ...]
+
+@(o 10') all day very overcast, the north wind blew; in the afternoon, the north wind [...]
+
+@(o 11') a little rain shower, the north wind blew; in the afternoon, the nor[th wind ...]
+
+@(o 12') Jupiter was in Sagittarius; Venus, until the middle of the month, was in Aries; ar[ound? ...; the river level]
+
+@(o 13') rose [nn] fingers, 24 was the @i{na} (gauge); from the 9th to the 14th, it remained constant [...]
+
+@(o 14') [the gen]eral of Babylonia who <is above> the four generals [...]
+
+$ ruling
+
+@(o 15') [Month XII2 ...] sunset to moonset: 19°; it was bright, earthshine [...] 
+
+@left
+
+@(l.e. 1) [Year 1]59 [...]
+
+
+
+

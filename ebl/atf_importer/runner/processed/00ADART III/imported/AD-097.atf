@@ -1,0 +1,109 @@
+&X300970 = AD -97 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] sin ⸢x⸣ [...]
+#lem: u; Sîn[moon]N; u; u
+
+2'. [... x]{MEŠ} KUR NIGIN na? [...]
+#lem: u; u; u; u; u; u
+
+3'. [...] ⸢x⸣ ma i-na gi ⸢x⸣ [...]
+#lem: u; u; u; X; X; u; u
+
+4'. [... T]A 14 EN TIL ITU ina A x [...]
+#lem: u; ultu[from]PRP; n; adi[until]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Nēšu[Leo]CN; u; u
+
+5'. [...] ⸢x⸣ ina hi-it-tú dan ⸢x⸣ na? LAL-⸢is?⸣ a-na x [...] 
+#lem: u; u; ina[in]PRP; X; X; u; uN; nahis[recede]V; ana[to]PRP; u; u
+
+@reverse
+1'. [...] 4-ú mi-šil 4-ú TA 7 EN TIL [ITU ...]
+#lem: u; n; mišlu[half]N; n; ultu[from]PRP; n; adi[until]PRP; qītu[end]N; warhu[month]N; u
+
+2'. [...] dele-bat ina ABSIN GENNA ina GU G[U₄.UD u AN šá ŠÚ-u NU IGI ...]
+#lem: u; Dilbat[Venus]CN; ina[in]PRP; Šerʾu[Virgo]CN; Kayyamānu[Saturn]CN; ina[in]PRP; Gula[Aquarius]CN; Šihṭu[Mercury]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ša[which]REL; rabû[set]V; ul[not]MOD; amāru[be(come) visible]V; u
+
+3'. [... x]{MEŠ} MAH{MEŠ} a-na URU{MEŠ} KUR [...]
+#lem: u; u; ṣīru[numerous]AJ; ana[to]PRP; ālu[city]N; mātu[land]N; u
+
+$(ruling)
+4'. [{ITU}NE 30 ...] 3 GU₄.UD ina ŠÚ ina ABSIN IGI TUR <x?> n[a?-su? ...] 
+#lem: Abu[Month V]MN; n; u; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V; ṣehru[small]AJ; u; u; u
+
+5'. [...] ⸢x 6⸣ SI GIN GE₆ 7 SAG GE₆ sin S[IG MÚL-KUR-šá-KIR₄-šil-PA n n ...]
+#lem: u; u; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; n; u
+
+6'. [... KÙ]Š? ana ULÙ SIG GE₆ 14 SAG G[E₆ ...]
+#lem: u; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+7'. [... DU]R-nu-nu 2? KÙŠ <<1>> sin 2+[x KÙŠ ...]
+#lem: u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; u
+
+8'. [...] ⸢x⸣ 3 1/2 KÙŠ IM ŠÁR GI[N? ...]
+#lem: u; u; n; n; ammatu[unit]N; šāru[wind]N; ŠÁR[gusty(?)]AJ; alāku[blow]V; u
+
+9'.  [... n na] ⸢dele⸣-bat GE₆ 13 ina ZALÁG si[n ...]
+#lem: u; n; na[sunset to setting]'N; Dilbat[Venus]CN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+10'. [... dele-bat ina ŠÚ ina] ABSIN ŠÚ GE₆ 20+[x ...]
+#lem: u; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; mūšu[night]N; n; u
+
+11'. [...] ⸢x⸣ ŠÁR GIN [...]
+#lem: u; u; ŠÁR[gusty(?)]AJ; alāku[blow]V; u
+
+12'. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+@bottom
+1. [MU 2] ME 14.KÁM 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+
+@translation labeled en project
+@obverse
+
+@(o 1') [...] the moon ... [...]
+
+@(o 2') [...] ... [...]
+
+@(o 3') [...] ... [...]
+
+@(o 4') [... fr]om the 14th to the end of the month, in Leo ... [...]
+
+@(o 5') [...] in ... receded to ... [...] 
+
+@reverse
+@(r 1') [...] one-fourth (and) half of one-fourth; from the 7th to the end [of the month ...]
+
+@(r 2') [...] Venus was in Virgo; Saturn was in Aquarius; Mer[cury and Mars, which had set, were not visible ...]
+
+@(r 3') [...] many [...] to the cities of the land [...]
+
+$(ruling)
+
+@(r 4') [Month V, (the 1st of which was identical with) the 30th (of the preceding month) ,...] the 3rd, Mercury’s first appearance in the west in Virgo, it was small, [...]
+
+@(r 5') [...] ... The 6th, the north wind blew. Night of the 7th, beginning of the night, the moon was [...] be[low θ Ophiuchi ...]
+
+@(r 6') [... cubi]ts? low to the south. Night of the 14th, beginning of the ni[ght, ...]
+
+@(r 7') [...] 2? cubits [... η] Piscium, the moon being 2+[x ...]
+
+@(r 8') [...] 3 ½ cubits; a gusty wind bl[ew? ...]
+
+@(r 9') [... sunset to setting of] Venus: [n°]. Night of the 13th, last part of the night, the moo[n ...]
+
+@(r 10') [... Venus’] last appearance [in the west in] Virgo. Night of the 20+[xth, ...]
+
+@(r 11') [...] gusty wind blew [...]
+
+@(r 12') [...] ... [...] 
+
+@bottom
+@(b.e. 1) [Year 2]14 
+

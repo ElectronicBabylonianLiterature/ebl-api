@@ -1,0 +1,116 @@
+&X300750 = AD -75 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1.  [... n].KÁM {m}ar-šá-ka-a LUGAL u {f}is-pu-bar-[za-a (x)]
+#lem: u; X; Aršaka[Arsaces]RN; šarru[king]N; u[and]CNJ; Ispubarzā[Ispubarza]PN; u
+
+2. [... G]E₆ 3 sin ár dele-bat 1 KÙŠ 3 SI GIN
+#lem: u; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V
+
+3. [... n]+1 ina še-rì AN né-hi SI GIN 6
+#lem: u; X; ina[in]PRP; šēri[morning]N; šamû[rain]N; nēhu[slow]AJ; ištānu[north wind]N; alāku[blow]V; n
+
+4. [... GE₆ 8 SAG GE₆] ⸢sin SIG⸣ MÚL-ár-šá-SAG-HUN
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-SAG-HUN[α Arietis]CN
+
+5. [n n ... GU₄.UD ina NI]M ina PA IGI TUR 17 na-su
+#lem: n; n; u; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; ṣehru[small]AJ; n; na[rising to sunrise]'N
+
+6. [...] ⸢NU?⸣ PAP ina ZALÁG sin
+#lem: u; ul[not]MOD; naṣāru[watch]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+7. [...] 1 1/2 KÙŠ
+#lem: u; n; n; ammatu[unit]N
+
+8. [...] ⸢x⸣ SIG AN
+#lem: u; u; šapil[below]AJ; Ṣalbaṭānu[Mars]CN
+
+9. [... ina] ⸢ZALÁG sin⸣ 
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+@reverse
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+3'. [... TIR].AN.⸢NA⸣ [x x x G]IB
+#lem: u; Manziat[rainbow]N; u; u; u; parāku[stretch]V
+
+4'. [... KI.LAM] še-im 1(BARIG) 2(BÁN) [(n) 4-ʾ]u-ú
+#lem: u; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; n; rebû[one-fourth]NU
+
+5'. [...] i-nu-šú MÚL.BABBAR u AN ina [MAŠ.MAŠ]
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Māšu[Gemini]CN
+
+6'. [...] ⸢5⸣ 8 SI LAL [PA]P [n]+2 n[a]
+#lem: u; n; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+7'. [...] ⸢x⸣ ÍD GIM IGI-⸢ú⸣
+#lem: u; u; nāru[canal]N; kīma[like]PRP; pānu[before]'AV
+
+$ruling
+8'. [... MU 1 ME 1.1]2.KÁM šá ši-i MU 2 ME ⸢36⸣.[KÁM]
+#lem: u; šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n
+
+9'. [... {f}i]s-pu-bar-za-a NIN-s[u GAŠAN] 
+#lem: u; Ispubarzā[Ispubarza]PN; ahāssu[sister]N; šarrātu[queen]N
+
+@top
+1. [... {m}a]r-šá-kám LUGAL u {f}is-pu-bar-za-a NIN-su [GAŠAN]  
+#lem: u; Aršaka[Arsaces]RN; šarru[king]N; u[and]CNJ; Ispubarzā[Ispubarza]PN; ahātu[sister]N; šarrātu[queen]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...] Arsaces king and Ispubar[za,]
+
+@(o 2) [... Ni]ght of the 3rd, the moon was 1 cubit behind Venus. The 3rd, the north wind blew.
+
+@(o 3) [... x]+1; in the morning, slow rain, the north wind blew. The 6th,
+
+@(o 4) [... Night of the 8th, beginning of the night,] the moon was [...] below α Arietis
+
+@(o 5) [... Mercury’s] first appearance [in the ea]st in Sagittarius; it was small, rising of Mercury to sunrise: 17°
+
+@(o 6) [...] I did not watch; last part of the night, the moon was
+
+@(o 7) [...] 1 ½ cubits
+
+@(o 8) [...] x below Mars
+
+@(o 9) [...] last part of the night, the moon was 
+
+@reverse
+
+@(r 1') [...] ...
+
+@(r 2') [...] ... [...]
+
+@(r 3') [... a rain]bow stretched [...]
+
+@(r 4') [... the equivalent was:] barley, 1 @i{pānu}2 @i{sūtu}[... one-four]th
+
+@(r 5') [...] At that time, Jupiter and Mars were in [Gemini;]
+
+@(r 6') [...] the 5th, it receded 8 fingers, total: [x]+2 was the @i{na} (gauge)
+
+@(r 7') [...] ... the river as before.
+
+$ruling
+
+@(r 8') [... Year 17]2 which is year 236,
+
+@(r 9') [... I]spubarza, his sister, [queen.] 
+
+@top
+
+@(t.e. 1) [... A]rsaces king and Ispubarza, his sister, [queen.]  
+

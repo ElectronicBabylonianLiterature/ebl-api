@@ -1,0 +1,94 @@
+&X300962 = AD -96B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [... ZI] ⸢IR⸣ GE₆ 5 SAG GE₆ [sin]
+#lem: u; ZI[(meaning unclear)]N; IR[(meaning unclear))]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+2'. [... GE₆ 7 SAG GE₆ sin x MÚL-KUR-šá-KIR₄]-⸢šil-PA⸣ 1 KÙŠ sin 2 KÙŠ ana ULÙ [SIG]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ
+
+3'. [...] ana ULÙ SIG 11 DIR AN ZA SI GIN
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+4'. [... ana] ⸢ŠÚ⸣ LAL 13 9 ŠÚ GE₆ 14 2.40 ME AN.KU₁₀ sin
+#lem: u; ana[to]PRP; erbu[west]N; nahāsu[recede]V; n; n; rabû[moonset to sunrise]N; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; antallû[eclipse]N; Sîn[moon]N
+
+5'. [...] a-kám NU PAP DIR u a-kám AN-ú ŠÚ-im
+#lem: u; akamu[mist]N; ul[not]MOD; naṣāru[watch]V; erpetu[cloud]N; u[and]CNJ; akamu[mist]N; šamû[sky]N; arim[covered]AJ
+
+6'. [... GE₆ 18 ina ZALÁG sin SIG MÚL-ár]-šá-SAG-HUN 2 KÙŠ 6 SI sin 1/2 KÙŠ ana NIM DIB
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; n; ubānu[finger]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+7'. [... Z]I IR GE₆ 21 ina ZALÁG sin ina IGI ŠUR-GIGIR-šá-SI 3 K[ÙŠ]
+#lem: u; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N
+
+8'. [... S]I? NIM? ZI IR GE₆ 23 ina ZALÁG sin
+#lem: u; ištānu[north]N; šaqi[high]AJ; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+9'. [...] a-kám NU PAP ZI IR GE₆ 25 ŠÚ.ŠÚ
+#lem: u; akamu[mist]N; ul[not]MOD; naṣāru[watch]V; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; n; urrup[be(come) very overcast]V
+
+10'. [... MÚL.BABBAR ina] ⸢ABSIN⸣ IGI 15 na-su in 24 IGI
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V; n; na[rising to sunrise]'N; ina[around (day x)]PRP; n; amāru[be(come) visible]V
+
+11'. [... KI.LAM še]-im TA 1 EN 9
+#lem: u; mahīru[price (equivalent)]N; šeʾu[barley]N; ultu[from]PRP; n; adi[until]PRP; n
+
+12'. [... x]+1 qa ŠE.GIŠ.Ì TA 1
+#lem: u; u; qû[(one) litre]N; šamaššammū[sesame]N; ultu[from]PRP; n
+
+13'. [...] ⸢4⸣-ú mi-šil 4-ú
+#lem: u; rebû[fourth]NU; mišlu[half]N; rebû[fourth]NU
+
+14'. [...] AN ina GU ITU BI ILLU
+#lem: u; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Gula[Aquarius]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N
+
+15'. [...] ⸢x⸣
+#lem: u; u
+
+$ruling
+16'. [{ITU}KIN ...] ⸢TA⸣ ŠÀ-šú ⸢È⸣  
+#lem: Ulūlu[Month VI]MN; u; ultu[from]PRP; libbišu[inside]N; waṣû[go out]V
+
+@translation labeled en project
+@obverse
+
+@(o 1') [... ZI] IR. Night of the 5th, beginning of the night, [the moon was]
+
+@(o 2') [... Night of the 7th, beginning of the night, the moon was] 1 cubit [... θ Ophigh]uchigh, the moon being 2 cubits [low] to the south.
+
+@(o 3') [...] low to the south. The 11th, clouds were in the sky, the north wind blew.
+
+@(o 4') [...] back to the west. The 13th, moonset to sunrise: 9°. Night of the 14th, moonrise to sunset: 2° 40'; lunar eclipse
+
+@(o 5') [...] mist, I did not watch; clouds and mist covered the sky
+
+@(o 6') [... Night of the 18th, last part of the night, the moon was] 2 cubits 6 fingers [below α] Arietis, the moon having passed ½ cubit to the east.
+
+@(o 7') [... Z]I IR. Night of the 21st, last part of the night, the moon was 3 cubits in front of β Tauri
+
+@(o 8') [...] high to the north?; ZI IR. Night of the 23rd, last part of the night, the moon was
+
+@(o 9') [...] mist, I did not watch; ZI IR. Night of the 25th, very overcast
+
+@(o 10') [... Jupiter’s] first appearance in Virgo; rising of Jupiter to sunrise: 15°, (ideal) first appearance on the 24th.
+
+@(o 11') [... the equivalent was: bar]ley, from the 1st to the 9th,
+
+@(o 12') [... x]+1 @i{qa}; sesame, from the 1st
+
+@(o 13') [...] one-fourth (and) half of one-fourth
+
+@(o 14') [...] Mars was in Aquarius. That month, the river level
+
+@(o 15') [...] ...
+
+($ruling$)
+
+@(o 16') [Month VI, ...] came out from its inside. 
+

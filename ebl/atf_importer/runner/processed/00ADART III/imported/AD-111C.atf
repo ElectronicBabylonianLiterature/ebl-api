@@ -1,0 +1,70 @@
+&X301113 = AD -111C
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [... s]ah-le₁₀ 2(BARIG) PI ŠE.GIŠ.⸢Ì⸣ [...]
+#lem: u; sahlu[cress]N; n; pānu[bushel (36 litres)]N; šamaššammū[sesame]N; u
+
+3'. [... GENN]A ina ABSIN AN ina GU in 10 AN zib⸢{ME}⸣ [KUR-ád ...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Šerʾu[Virgo]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Gula[Aquarius]CN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; Zibbātu[Pisces]CN; kašādu[reach]V; u
+
+4'. [...] ⸢x x⸣ {m}mi-it-ra-da-⸢ta?⸣-a {LÚ}GA[L ...]
+#lem: u; u; u; Mitradatā[Mithridates]PN; rab[great one]N; u
+
+5'. [...] ⸢x⸣-šú-nu-tú EN NÍG.ŠU{MEŠ}-šú-nu DUGUD-tú ⸢x⸣ [...]
+#lem: u; u; adi[together with]PRP; būšu[goods//property]N'N$būšēšunu; kabtu[heavy]AJ$; u; u
+
+6'. [...] ana ár-šú LAL-is KUR ma-da-a-a at ⸢x x⸣ [...]
+#lem: u; ana[to]PRP; warkišu[behind]PRP; nahāsu[recede]V; mātu[land]N; Mādāya[Media]GN; X; u; u; u
+
+$ ruling
+7'. [{ITU}SIG 1 ... dele-bat e is]-le₁₀ 20 SI GE₆ 3 sin ⸢ár⸣ LUGAL 1 1/2 KÙŠ sin ⸢1 1/2⸣ [KÙŠ ana ULÙ SIG ...]
+#lem: Simānu[Month III]MN; n; u; Dilbat[Venus]CN; eli[above]'PRP; is-le₁₀[α Tauri]CN; n; ubānu[finger]N; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; LUGAL[α Leonis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+8'. [... GE₆ 5 SAG GE₆ sin ár? GÌR-ár-šá-A x]+1/2 KÙŠ sin 2 1/2 KÙŠ ana ULÙ? SIG? SIG [GENNA n n ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; u; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; šapil[below]AJ; Kayyamānu[Saturn]CN; n; n; u
+
+9'. [... ana UL]Ù SIG 7 SI ŠÁR ZI IR G[E₆? ...]
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; u
+
+10'. [...] ZI IR GE₆ 10 SAG GE₆ s[in x SI₄ n n ...]
+#lem: u; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; SI₄[α Scorpii]CN; n; n; u
+
+11'. [...] ⸢sin⸣ 1 KÙŠ 4 ⸢SI ana⸣ [x x ...]
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; 4[4]NU; ubānu[finger]N; ana[to]PRP; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] cress, 2 @i{pānu}; sesame, [...]
+
+@(o 3') [... Sat]urn was in Virgo; Mars was in Aquarius; on the 10th, Mars [reached] Pisces [...]
+
+@(o 4') [...] ... Mitradatā, the chief [...]
+
+@(o 5') [...] them together with their heavy possessions [...]
+
+@(o 6') [...] withdrew backwards. Media ... [...]
+
+$ruling
+
+@(o 7') [Month III, the 1st (of which followed the 30th of the preceding month), ... Venus] was 20 fingers [above α] Tauri. Night of the 3rd, the moon was 1 1/2 cubits behind α Leonis, the moon being 1 1/2 [cubits low to the south ...]
+
+@(o 8') [... Night of the 5th, beginning of the night, the moon was x]+1/2 cubits [behind? β Virginis], the moon being 2 1/2 cubits low to the south, [...] below [Saturn ...]
+
+@(o 9') [...] low to the south. The 7th, gusty north wind, ZI IR. Ni[ght? ...]
+
+@(o 10') [...] ZI IR. Night of the 10th, beginning of the night, the m[oon was ... α Scorpii ...]
+
+@(o 11') [...] the moon being 1 cubit 4 fingers to [...]
+

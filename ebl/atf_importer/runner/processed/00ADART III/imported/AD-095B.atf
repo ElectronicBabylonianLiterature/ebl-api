@@ -1,0 +1,83 @@
+&X300952 = AD -95B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] GE₆ ŠÚ.ŠÚ 8 ina še-r[ì ...]
+#lem: u; mūšu[night]N; urrup[be(come) very overcast]V; n; ina[in]PRP; šēri[morning]N; u
+
+2'. [... GE₆ 10 SAG GE₆ sin ina IGI MÚL.BABBAR n] KÙŠ 4 SI ana ŠÚ GUB USAN GU₄.UD SIG MÚL.MÚ[L ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; 4[4]NU; ubānu[finger]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; u
+
+3'. [... GE₆] 12 SAG GE₆ sin ina IGI SA₄-šá-ABSIN 1 KÙŠ [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; u
+
+4'. [... US]AN? {d}TIR.AN.NA TA ULÙ ana Á KUR GIB ⸢x⸣ [...]
+#lem: u; šimītān[first part of the night]N; Manziat[rainbow]N; ultu[from]PRP; šūtu[south]N; ana[to]PRP; idu[side]N; šadû[east]N; parāku[stretch]V; u; u
+
+5'. [... GE₆ 16 ina ZALÁG sin ár MÚL-KUR-šá-KIR₄-šil-PA n] KÙŠ sin 2 1/2 KÙŠ ana ULÙ SIG GE₆ 19 ina ZALÁG sin SIG [SI-MÁŠ n n ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; SI-MÁŠ[β Capricorni]CN; n; n; u
+
+6'. [...] GE₆ 23 ŠÚ.ŠÚ MURUB₄.BA AN DUL-hat 23 ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; urrup[be(come) very overcast]V; qablītu[middle watch (of the night)]N; šamû[rain]N; DUL[(meaning unclear)]V; n; u; u
+
+7'. [... MÚ]L.BABBAR ana ŠÚ ki-i UŠ-a 2/3 KÙŠ ina IGI GÌR-á[r-šá-A (...) UŠ ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; kī[when]PRP; emēdu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; u; emēdu[be at a stationary point]V; u
+
+8'. [...] ⸢x⸣ ULÙ ŠÁR 27 12.20 KUR DIR NU [PAP ...]
+#lem: u; u; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+9'. [...] ⸢8?⸣ 1(BARIG) 2(BÁN) EN 9 1(BARIG) 2(BÁN) 3 qa 10 [...]
+#lem: u; n; n; n; adi[until]PRP; n; n; n; n; qû[(one) litre]N; n; u
+
+10'. [...] 1/2 qa EN 25 1(BARIG) 2(BÁN) 3 qa [...]
+#lem: u; n; qû[(one) litre]N; adi[until]PRP; n; n; n; n; qû[(one) litre]N; u
+
+11'. [... E]N 24 2(BÁN) EN TIL ITU 1(BÁN) [...]
+#lem: u; adi[until]PRP; n; n; adi[until]PRP; qītu[end]N; warhu[month]N; n; u
+
+12'. [...] AN MAŠ.MAŠ KUR-ád in 20 ⸢x⸣ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; Māšu[Gemini]CN; kašādu[reach]V; ina[around (day x)]PRP; n; u; u
+
+13'. [... E]N TIL ITU 1/2 KÙŠ [...]
+#lem: u; adi[until]PRP; qītu[end]N; warhu[month]N; n; ammatu[unit]N; u
+
+14'. [...] ⸢x KAM x⸣ [...]  
+#lem: u; u; X; u; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] night very overcast. The 8th, in the morning, [...]
+
+@(o 2') [... Night of the 10th, beginning of the night, the moon] stood [n] cubits 4 fingers [in front of Jupiter] to the west; first part of the night, Mercury was [...] below η Tauri [...]
+
+@(o 3') [... Night] of the 12th, beginning of the night, the moon was 1 cubit in front of α Virginis [...]
+
+@(o 4') [... first] part of the night?, a rainbow stretched from the south to the east side ... [...]
+
+@(o 5') [... Night of the 16th, last part of the night, the moon was nn] cubits [behind θ Ophiuchi,] the moon being 2 1/2 cubits low to the south. Night of the 19th, last part of the night, the moon was [...] below [β Capricorni ...]
+
+@(o 6') [...] Night of the 23rd, very overcast; in the middle watch, rain DUL. The 23rd, ... [...]
+
+@(o 7') [...] when Jupiter became stationary to the west, [it became stationary 2/3 cubit in front of β Vir[ginis ...]
+
+@(o 8') [...] ..., gusty south wind. The 27th, moonrise to sunrise: 12° 20'; clouds, I did not [watch ...]
+
+@(o 9') [...] the 8th?, 1 @i{pānu} 2 @i{sūtu}; until the 9th, 1 p¤n 2 @i{sūtu} 3 @i{qa}; the 10th, [...]
+
+@(o 10') [...] 1/2 @i{qa}; until the 25th, 1 @i{pānu} 2 @i{sūtu} 3 @i{qa} [...]
+
+@(o 11') [... un]til the 24th, 2 @i{sūtu}; until the end of the month, 1 @i{sūtu} [...]
+
+@(o 12') [...] Mars reached Gemini; around the 20th, ... [...]
+
+@(o 13') [... un]til the end of the month, 1/2 cubit [...]
+
+@(o 14') [...] ... [...] 
+

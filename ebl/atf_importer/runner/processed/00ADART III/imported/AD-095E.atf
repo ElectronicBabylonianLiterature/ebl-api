@@ -1,0 +1,86 @@
+&X300955 = AD -95E 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ ú u lú[...]
+#lem: u; u; X; u[and]CNJ; u
+
+3'. [...]-tì ana DINGIR{MEŠ} ⸢GAL⸣[{MEŠ} ...]
+#lem: u; ana[to]PRP; ilu[god]N; rabûti[large]AJ; u
+
+$(ruling)
+4'. [{ITU}NE ...] DELE-šá-IGI-ABSIN 3 KÙŠ [...]
+#lem: Abu[Month V]MN; u; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; u
+
+5'. [... GE₆ 7 SAG GE₆ sin ár S]I₄ 2 1/2 KÙŠ sin 2/3 KÙŠ ana ULÙ SIG DIR AN ZA S[I? ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; u
+
+6'. [... GE₆] 12 SAG GE₆ SUHUR-ár la-pàn a-kám KI sin NU IGI 10+[x ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; lapāni[because of]PRP; akamu[mist]N; itti[with]PRP; Sîn[moon]N; ul[not]MOD; amāru[see]V; n; u
+
+7'. [... ZAL]ÁG-ru ki-i TAB-ú ina 20 GE₆ TA ULÙ ana SI u MA[R ...]
+#lem: u; nawāru[clear]V; kī[when]PRP; ušarrû[begin]V; ina[at (plus numeral)]PRP; n; mūšu[night]N; ultu[from]PRP; šūtu[south]N; ana[to]PRP; ištānu[north]N; u[and]CNJ; amurru[west]N; u
+
+8'. [... ÍB.TAG₄ {d}UDU.IDIM]⸢{MEŠ}⸣ NU GUB-uʾ ina GU ád in 57 GE₆ GIN 13 [...]
+#lem: u; rēhtu[remainder]N; bibbu[planet]N; ul[not]MOD; izuzzu[stand]V; ina[in]PRP; Gula[Aquarius]CN; adir[eclipsed]AJ; ina[at (plus numeral)]PRP; n; mūšu[night]N; alāku[go]V; n; u
+
+9'. [...] u MAR ŠÁR{MEŠ} GIN-uʾ GE₆ 17 ina ZALÁG sin SIG MÚL-KUR-šá-D[UR-nu-nu n n ...]
+#lem: u; u[and]CNJ; amurru[west wind]N; ŠÁR[gusty(?)]AJ; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; u
+
+10'. [...] 20 ŠÚ šá GU₄.UD ina ŠÚ ina ABSIN TA 18 ki PAP ⸢NU IGI⸣ 20+[x ...]
+#lem: u; n; rabû[setting]'N; ša[which]REL; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; ultu[from]PRP; n; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; n; u
+
+11'. [... i]-ṣa ana NIM DIB GE₆ 24 ina ZALÁG sin [...]
+#lem: u; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+12'. [... GE₆ 26] ina ZALÁG sin SIG SAG-A 3 KÙŠ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; SAG-A[ε Leonis]CN; n; ammatu[unit]N; u
+
+13'. [... KI].LAM še-⸢im⸣ EN 15 1(BARIG) ⸢2(BÁN)?⸣ [...]
+#lem: u; mahīru[price (equivalent)]N; šeʾu[barley]N; adi[until]PRP; n; n; n; u
+
+14'. [...] ⸢x x⸣ [...]  
+#lem: u; u; u; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] ... [...]
+
+@(o 3') [...] ... for the great gods [...]
+
+$(ruling)
+
+@(o 4') [Month V ...] 3 cubits [...] γ Virginis [...]
+
+@(o 5') [... Night of the 7th, beginning of the night, the moon was] 2 ½ cubits [behind] α Scorpii, the moon being 2/3 cubits low to the south; clouds were in the sky, the no[rth wind ...]
+
+@(o 6') [... Night] of the 12th, beginning of the night, δ Capricorni was not seen together with the moon because of mist. The 10+[xth ...]
+
+@(o 7') [...] when it began to clear, in 20° of night [it cleared] from south to the north and we[st ...]
+
+@(o 8') [... the remainder of the planet]s did not stand there; in Aquarius it became eclipsed; at 57° after sunset. The 13th, [...]
+
+@(o 9') [...] gusty [...] and west winds blew. Night of the 17th, last part of the night, the moon was [...] below η Pis[cium ...]
+
+@(o 10') [...] The 20th, Mercury’s last appearance in the west in Virgo: from the 18th, when I watched I did not see it. The 20+[xth ...]
+
+@(o 11') [...] having passed a little to the east. Night of the 24th, last part of the night, the moon was [...]
+
+@(o 12') [... Night of the 26th], last part of the night, the moon was 3 cubits below ε Leonis [...]
+
+@(o 13') [... the equi]valent was: barley, until the 15th, 1 p¤n 2? s¹t [...]
+
+@(o 14') [...] ... [...] 
+

@@ -1,0 +1,68 @@
+&X301480 = AD -148
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢x x⸣ GE₆ 12 S[A]G GE₆ sin ina I[GI ŠUR-GIGIR]-šá?-SI ⸢x⸣ [...]
+#lem: u; u; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; u; u
+
+2'. [...] ⸢x ina RÍN DIR NU PAP ULÙ?⸣ [x x] ŠÚ ULÙ u KUR GIN{MEŠ} ⸢x⸣ [...]
+#lem: u; u; ina[in]PRP; Zibānītu[Libra]CN; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; šūtu[south wind]N; u; u; īrup[overcast]V; šūtu[south wind]N; u[and]CNJ; šadû[east wind]N; alāku[blow]V; u; u
+
+3'. [...] NU PAP kal GE₆ DIR SAL AN ⸢ZA⸣ sin TÙR NIGIN ma-diš iq-tur₇ ⸢x⸣ [...]
+#lem: u; ul[not]MOD; naṣāru[watch]V; kal[all]N; mūšu[night]N; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mādiš[very]AV; qatāru[billow]V; u; u
+
+4'. [...] x ŠÚ 16 DIR AN DIB AN né-hi DUL-hat ULÙ GIN GE₆ 17 kal [GE₆ ...]
+#lem: u; u; īrup[overcast]V; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; nēhu[slow]AJ; DUL[(meaning unclear)]V; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; kal[all]N; mūšu[night]N; u
+
+5'. [... GE₆ 18 DI]R AN ZA SI GIN ina ZALÁG sin ár MÚL-TUR-šá-4-KÙŠ-ár-LUGAL 1 1/2 KÙŠ sin 2 KÙŠ [ana ULÙ SIG ...]
+#lem: u; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+6'. [...] USAN MÚL.BABBAR ana NIM ina LAL-šú SIG MÚL-KUR-šá-DUR-nu-nu 2 2/3 KÙŠ [...]
+#lem: u; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]N; ina[while]'PRP; nahāsu[recede]V; šapil[below]AJ; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; u
+
+7'. [... GE₆ 21 ina ZAL]ÁG sin SIG S[A₄-šá-ABS]IN 1 1/2 KÙŠ sin i-ṣa ana NIM DIB AN ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; šamû[rain]N; u; u
+
+8'. [...] 22 GU₄.UD ina NIM ina PA IGI NU PAP kal ME DI[R ...]
+#lem: u; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; kal[all]N; ūmu[day]N; erpetu[cloud]N; u
+
+9'. [...] ina KIN.SIG ŠÚ.ŠÚ GE₆ 22+[x ...]
+#lem: u; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; mūšu[night]N; n; u
+
+10'. [... SA]G GE₆ DIR AN ZA kal GE₆ DIR AN DIB [...]
+#lem: u; rēšu[beginning]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u
+
+11'. [...] u? AN.BAR₇ ŠÚ.ŠÚ GE₆ 20+x [...]
+#lem: u; u[and]CNJ; muṣlālu[noon]N; urrup[be(come) very overcast]V; mūšu[night]N; n; u
+
+12'. [...] ⸢x x x⸣ [...] 
+#lem: u; u; u; u; u
+
+@translation labeled en project
+
+@(1') [...] ... Night of the 12th, beginning of the night, the moon was [...] in front [of β Tau]ri [...]
+
+@(2') [...] ... in Libra; clouds, I did not watch; the south? wind [...] overcast, the south and east winds blew ... [...]
+
+@(3') [...] I did not watch; all night thin clouds were in the sky; the moon was surrounded by a halo, it billowed very much ... [...]
+
+@(4') [...] ... overcast?. The 16th, clouds crossed the sky, slow rain DUL, the south wind blew. Night of the 17th, all [night ...]
+
+@(5') [... Night of the 18th, cl]ouds were in the sky, the north wind blew; last part of the night, the moon was 1 1/2 cubits behind ρ Leonis, the moon being 2 cubits [low to the south ...]
+
+@(6') [...] first part of the night, Jupiter, whighle moving back to the east, was 2 2/3 cubits below η Piscium [...]
+
+@(7') [... Night of the 21st, last part of the] night, the moon was 1 1/2 cubits below α [Virgi]nis, the moon having passed a little to the east; rain? ... [...]
+
+@(8') [...] The 22nd, Mercury’s first appearance in the east in Sagittarius; I did not watch; all day clou[ds ...]
+
+@(9') [...] ...; in the afternoon, very overcast. Night of the 22+[xth, ...]
+
+@(10') [... beginn]ing of the night, clouds were in the sky; all night clouds crossed the sky [...]
+
+@(11') [...] and? at noon, very overcast. Night of the 20+[xth, ...]
+
+@(12') [...] ... [...]
+

@@ -1,0 +1,47 @@
+&X300760 = AD -76 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [... dele-bat e] AN 6 SI G[E₆ ...]
+#lem: u; Dilbat[Venus]CN; eli[above]'PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; mūšu[night]N; u
+
+2'. [... dele]-bat SIG SI-MÁŠ 3 KÙŠ GE₆ [...]
+#lem: u; Dilbat[Venus]CN; šapil[below]AJ; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; mūšu[night]N; u
+
+3'. [... MÚL.BABBAR] SIG MÚL.MÚL 2 KÙŠ GE₆ 11 SAG GE₆ si[n ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+4'. [...] ina ZALÁG AN SIG SI-MÁŠ 2 1/2 KÙŠ GE₆ 11+[n ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; mūšu[night]N; n; u
+
+5'. [...] TA SI ki TAB-ú ina 8 GE₆ 3 SI [...]
+#lem: u; ultu[from]PRP; ištānu[north]N; kī[when]PRP; ušarrû[begin]V; ina[at (plus numeral)]PRP; n; mūšu[night]N; n; ubānu[finger]N; u
+
+6'. [...] MÚL.BABBAR u {MÚL}KAK.SI.SÁ GUB⸢{MEŠ}⸣ [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Šiltāhu[Sirius]CN; izuzzu[stand]V; u
+
+7'. [...] sin 1/2 KÙŠ ana [...]  
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [... Venus was] 6 fingers [above] Mars. Ni[ght ...]
+
+@(o 2') [... Ve]nus was 3 cubits below β Capricorni. Night [...]
+
+@(o 3') [... Jupiter was] 2 cubits below η Tauri. Night of the 11th, beginning of the night, the moo[n ...]
+
+@(o 4') [...] last part of the night, Mars was 2 ½ cubits below β Capricorni. Night of the 11+[xth, ...]
+
+@(o 5') [...] when it began from the north, in 8° of night [it made] 3 fingers [...]
+
+@(o 6') [...] Jupiter and Sirius stood there [...]
+
+@(o 7') [...] the moon being ½ cubit to [...]  
+

@@ -1,0 +1,194 @@
+&X301542 = AD -154B
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. MU 1 ME 57 {ITU}ZÍZ 24 DIR [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Šabāṭu[Month XI]MN; n; erpetu[cloud]N; u
+
+2. kal GE₆ ŠÚ.ŠÚ 25 ina še-rì DIR [...]
+#lem: kal[all]N; mūšu[night]N; urrup[be(come) very overcast]V; n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; u
+
+3. GE₆ 26 ŠÚ.ŠÚ 26 kal ME ŠÚ.[ŠÚ? ...]
+#lem: mūšu[night]N; n; urrup[be(come) very overcast]V; n; kal[all]N; ūmu[day]N; urrup[be(come) very overcast]V; u
+
+4. GE₆ 27 kal GE₆ ŠÚ.ŠÚ 27 10 U[Š KUR ...]
+#lem: mūšu[night]N; n; kal[all]N; mūšu[night]N; urrup[be(come) very overcast]V; n; n; UŠ[time degree]N; KUR[moonrise to sunrise]N; u
+
+5. SI GIN ina KIN.SIG ŠÚ.ŠÚ GE₆ 2 ⸢9!⸣ [...]
+#lem: ištānu[north wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; mūšu[night]N; n; n; u
+
+6. 28! kal ME ŠÚ.ŠÚ SI GIN GE₆ 29 ⸢x⸣ [...]
+#lem: n; kal[all]N; ūmu[day]N; urrup[be(come) very overcast]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u; u
+
+7. 29 ina še-rì DIR AN ZA ina KIN.SIG ŠÚ
+#lem: n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; kinsikku[afternoon]N; īrup[overcast]V
+
+8. [me]-hu-ú ULÙ u KUR ŠÁR KALAG
+#lem: mehû[storm]N; šūtu[south wind]N; u[and]CNJ; šadû[east wind]N; ŠÁR[gusty(?)]AJ; dannu[strong]AJ
+
+9. [ITU] BI KI.LAM še-im ina SAG ITU 2 PI 2+[x qa]
+#lem: warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; pānu[bushel (36 litres)]N; n; qû[(one) litre]N
+
+10. [E]N MURUB₄ ITU 2(BARIG) 4(BÁN) ina TIL ITU
+#lem: adi[until]PRP; qabaltu[middle]N; warhu[month]N; n; n; ina[in]PRP; qītu[end]N; warhu[month]N
+
+11. [x x] 3 qa ZÚ ina SAG ITU 2(BARIG)? ⸢x⸣ 
+#lem: u; u; n; qû[(one) litre]N; suluppu[date]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; u
+
+12. [x x] ⸢ITU 2(BARIG)? x x⸣ [x x] 
+#lem: u; u; warhu[month]N; n; u; u; u; u
+
+@reverse
+1. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2. [...] DIR AN DIB AN UT[AH ...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[sky]N; natāku[drip]V; u
+
+3. [...] ⸢x⸣ SI šá kap MAR GAR GIN [...]
+#lem: u; u; ištānu[north wind]N; ša[which]REL; kappu[wing//wing(?)]N$; amurru[west]N; šakānu[set]V; alāku[blow]V; u
+
+4. [x x x x] ⸢GIN?⸣ sin ár MÚL-ár-šá-[SAG-HUN N N]
+#lem: u; u; u; u; alāku[blow]V; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n
+
+5. [x x x] kal GE₆ ŠÚ.ŠÚ USAN.U₄.[ZAL ...]
+#lem: u; u; u; kal[all]N; mūšu[night]N; urrup[be(come) very overcast]V; šimītān[evening//first part of the night]N'N$; u
+
+6. ⸢2⸣ DIR AN ZA ina KIN.SIG ŠÚ me-hu-[ú ...]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; kinsikku[afternoon]N; īrup[overcast]V; mehû[storm]N; u
+
+7. ⸢x x MAR? ŠÁR KALAG⸣ GE₆ 3 ŠÚ.ŠÚ ⸢x⸣ [x x sin]
+#lem: u; u; amurru[west wind]N; ŠÁR[gusty(?)]AJ; dannu[strong]AJ; mūšu[night]N; n; urrup[be(come) very overcast]V; u; u; u; Sîn[moon]N
+
+8. e? MÚL.MÚL 1 1/2 KÙŠ sin 1/2 K[ÙŠ ana x x]
+#lem: eli[above]'PRP; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u; u
+
+9. 3 DIR AN ZA ⸢SI šá kap⸣ MAR GAR [GIN x x]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; ša[which]REL; kappu[wing(?)]N; amurru[west]N; šakānu[set]V; alāku[blow]V; u; u
+
+10. ina KIN.SIG ŠÚ.ŠÚ AN UTAH i-ṣa ⸢x⸣ [x x U]
+#lem: ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; šamû[sky]N; natāku[drip]V; wīṣu[little]AJ; u; u; u; Adad[storm-god]DN
+
+11. GÙ-šú né-hi ŠUB GE₆ 4 DIR AN ZA si[n e? is-le₁₀]
+#lem: rigimšu[voice]N; nēhu[slow]AJ; maqātu[fall]V; mūšu[night]N; 4[4]NU; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; eli[above]'PRP; is-le₁₀[α Tauri]CN
+
+12. 3 KÙŠ USAN.U₄.ZAL AN ana ŠÚ [ina LA]L-[šú? x x x]
+#lem: n; ammatu[unit]N; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; ina[while]PRP; nahāsu[recede]V; u; u; u
+
+13. ina KIN.SIG AN UTAH MAR G[IN? GE₆ 5] 
+#lem: ina[in]PRP; kinsikku[afternoon]N; šamû[sky]N; natāku[drip]V; amurru[west wind]N; alāku[blow]V; mūšu[night]N; n
+
+@top 
+1. SAG GE₆ DIR AN DIB 5 DIR AN ZA [...]
+#lem: rēšu[beginning]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+2. ŠÚ AN UTAH i-ṣa GE₆ 6 ŠÚ.ŠÚ sin ina? I[GI?]
+#lem: īrup[be(come) very overcast]V; šamû[sky]N; natāku[drip]V; wīṣu[little]AJ; mūšu[night]N; n; urrup[be(come) very overcast]V; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+3. [MAŠ.MAŠ]-šá-SIPA 1 1/2 KÙŠ 6 DIR AN DIB SI G[IN ...]
+#lem: MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; ištānu[north wind]N; alāku[blow]V; u
+
+4. AN? UTAH? ⸢AN⸣ {KUŠ}še-ni NU TUH ⸢GE₆⸣ [x]
+#lem: šamû[sky]N; natāku[drip]V; šamû[rain]N; +šēnu[sandal]N$; ul[not]MOD; paṭāru[loosen]V; mūšu[night]N; u
+
+5. ⸢kal⸣ GE₆ AN né-hi PISAN ⸢rad? MAH? DIB?⸣ 
+#lem: kal[all]N; mūšu[night]N; šamû[rain]N; nēhu[slow]AJ; pisannu[(a meterological phenomenon)]N; +rādu[cloudburst]N$; ṣīru[great]AJ; etēqu[cross]V
+
+@left
+1. 7 kal ME ŠÚ.ŠÚ SI šá [...]
+#lem: n; kal[all]N; ūmu[day]N; urrup[be(come) very overcast]V; ištānu[north wind]N; ša[which]REL; u
+
+2. ZÍZ 21 GU₄.UD ina ŠÚ
+#lem: Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N
+
+3. ina TIL <GU> IGI KUR NIM-a 10+[x na-su]
+#lem: ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; amāru[be(come) visible]V; napāhu[light up]V; šaqi[high]AJ; n; na[sunset to setting]'N
+
+4. [i]n 18 IGI ⸢x⸣ [...] 
+#lem: ina[around (day x)]PRP; n; amāru[be(come) visible]V; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 157, month XI. The 24th, clouds [...]
+
+@(o 2) all night very overcast. The 25th, in the morning, clouds [...]
+
+@(o 3) Night of the 26th, very overcast. The 26th, all day [very?] overcast [...]
+
+@(o 4) Night of the 27th, all night very overcast. The 27th, [moonrise to sunrise:] 10° [...]
+
+@(o 5) the north wind blew; in the afternoon, very overcast. Night of the 28th!, [...]
+
+@(o 6) The 28th, all day very overcast, the north wind blew. Night of the 29th, ... [...]
+
+@(o 7) The 29th, in the morning, clouds were in the sky; in the afternoon, overcast;
+
+@(o 8) strong gusty south and east storm.
+
+@(o 9) That [month,] the equivalent was: barley, in the beginning of the month, 2 @i{pānu} 2+[x @i{qa}?,]
+
+@(o 10) until the middle of the month, 2 @i{pānu} 4 @i{sūtu}, at the end of the month,
+
+@(o 11) [...] 3 @i{qa}; dates, in the beginning of the month, 2 @i{pānu} ...
+
+@(o 12) [...] of the month, 2 @i{pānu} ... [...] 
+
+@reverse
+
+@(r 1) [...] ... [...]
+
+@(r 2) [...] clouds crossed the sky, rain sho[wer ...]
+
+@(r 3) [...] ..., the north wind which was set to the west side blew [...]
+
+@(r 4) [...] blew?; the moon was [...] behind α [Arietis]
+
+@(r 5) [...] all night very overcast; first part of the night, [...]
+
+@(r 6) The 2nd, clouds were in the sky; in the afternoon, overcast, storm [...]
+
+@(r 7) ... strong gusty west wind. Night of the 3rd, very overcast, ... [...; the moon was]
+
+@(r 8) 1 1/2 cubits above! η Tauri, the moon being 1/2 cubit [...]
+
+@(r 9) The 3rd, clouds were in the sky, the north wind which was set to the west side [blew ...]
+
+@(r 10) in the afternoon, very overcast, a little rain shower ... [...]
+
+@(r 11) it thundered slowly. Night of the 4th, clouds were in the sky; the moon was
+
+@(r 12) 3 cubits [above? α Tauri;] first part of the night, Mars, whighle moving back to the west, [...]
+
+@(r 13) in the afternoon, rain shower, the west wind bl[ew. Night of the 5th,] 
+@top 
+
+@(t.e. 1) beginning of the night, clouds crossed the sky. The 5th, clouds were in the sky [...]
+
+@(t.e. 2) overcast, a little rain shower. Night of the 6th, very overcast; the moon was 1 1/2 cubits in front of
+
+@(t.e. 3) γ Geminorum. The 6th, clouds crossed the sky, the north wind bl[ew ...]
+
+@(t.e. 4) rain shower?, rain (but) the sandal was not removed. Night [...]
+
+@(t.e. 5) all night slow rain, much? cloudburst?, PISAN DIB. 
+
+@left
+
+
+@(l.e. 1) The 7th, all day very overcast, the north wind which [...]
+
+
+@(l.e. 2) Month XI, the 21st, Mercury’s first appearance in the west
+
+
+@(l.e. 3) in the end <of Aquarius>; it was bright (and) high, [sunset to setting of Mercury:] 10+[x]°,
+
+@(l.e. 4) (ideal) first appearance on the 18th ... [...]
+
+
+

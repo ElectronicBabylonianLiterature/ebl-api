@@ -1,0 +1,88 @@
+&X301581 = AD -158A
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ina a-mat {d}EN u {d}GAŠAN-iá liš-lim
+#lem: ina[in]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+2'. MU 1 ME 53.KÁM {m}de-meṭ-ri LUGAL BAR ⸢1⸣ [x x x] ⸢x x⸣ [...]
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU; n; Demetrius[Demetrius]PN; šarru[king]N; Nisannu[Month I]MN; n; u; u; u; u; u; u
+
+3'. in 2 dele-bat ina ŠÚ ina HUN IGI DIR NU PAP [...]
+#lem: ina[around]PRP; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Agru[Aries]CN; amāru[be(come) visible]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+4'. GE₆ 5 ŠÚ.ŠÚ SAG GE₆ sin SIG MA[Š.MAŠ-ár N N ... GE₆ 6]
+#lem: mūšu[night]N; n; urrup[be(come) very overcast]V; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; u; mūšu[night]N; n
+
+5'. SAG GE₆ sin SIG ⸢MÚL-ár⸣-[šá-ALLA-šá-ULÙ ...]
+#lem: rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; u
+
+6'. ULÙ GIN 7 kal ME ⸢x x⸣ [...]
+#lem: šūtu[south wind]N; alāku[blow]V; n; kal[all]N; ūmu[day]N; u; u; u
+
+7'. AN 2 U ana NIM DIB ⸢8⸣ [...]
+#lem: Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; n; u
+
+8'. e DELE-šá-IGI-ABSIN ⸢x⸣ [...]
+#lem: eli[above]'PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; u; u
+
+9'. EN.⸢NUN.U₄?.ZAL?.LA?⸣ [...] 
+#lem: šāt-urri[third watch of the night]N; u
+
+@reverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ in 5 GU₄.UD ⸢x⸣ [...]
+#lem: u; u; ina[around]PRP; n; Šihṭu[Mercury]CN; u; u
+
+$ ruling	
+3'. APIN 30 12.20 na-su DIR NU PAP 
+#lem: Arahsamna[Month VIII]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+@top 
+1. EN.NUN šá gi-né-⸢e⸣ [...] 
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[regularity]N; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') At the command of Bēl and Bēltiya may it go well.
+
+@(o 2') Year 153, king Demetrius. Month I, the 1st (of which followed the 30th of the preceding month), [...] ... [...]
+
+@(o 3') Around the 2nd, Venus’ first appearance in the west in Aries; clouds, I did not watch [...]
+
+@(o 4') Night of the 5th, very overcast; beginning of the night, the moon was [...] below β [Geminorum ... Night of the 6th,]
+
+@(o 5') beginning of the night, the moon was [...] below δ C[ancri ...]
+
+@(o 6') the south wind blew. The 7th, all day ... [...]
+
+@(o 7') Mars having passed 2 fingers to the east. The 8th, [...]
+
+@(o 8') above γ Virginis ... [...]
+
+@(o 9') in the morning watch, [...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') [...] ... around the 5th, Mercury [...]
+
+$ ruling
+
+@(r 3') Month VIII, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 12° 20'; clouds, I did not watch. 	
+
+@top 
+
+@(t.e. 1) Diary [...]
+
+
+
+

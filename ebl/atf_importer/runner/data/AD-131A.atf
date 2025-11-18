@@ -1,0 +1,87 @@
+&X301311 = AD -131A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. SÍG{HI.A} 1 M[A.NA ...]
+#lem: šīpātu[wool]N; n; manû[(one mina)]N; u
+
+2'. G[U₄].UD ina NIM ina ⸢RÍN IGI⸣ [...]
+#lem: Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V; u
+
+3'. šá ana muh-hi 4 {LÚ}GAL ERÍN⸢{MEŠ}⸣ [...]
+#lem: ša[which]REL; ana[to]PRP; muhhi[top]N; 4[4]NU; rab[chief]N; uqāni[troops]N; u
+
+4'. áš-šú se-ker-ri šá KA [...]
+#lem: aššum[because (of)]PRP; sekēri[shut off//blocking]V'N; ša[which]REL; pû[mouth]N; u
+
+5'. al-te-me šá {LÚ}GAL ERÍN⸢{MEŠ}⸣ [...]
+#lem: alteme[hear]V; ša[which]REL; rab[chief]N; uqāni[troops]N; u
+
+$ ruling
+6'. {ITU}APIN 30 16 na-su KUR₄ a-[pir ...]
+#lem: Arahsamna[Month VIII]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; apir[earthshine]N; u
+
+7'. ana ULÙ SIG kal GE₆ DIR A[N ...]
+#lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; u
+
+8'. SI GIN GE₆ 4 SAG GE₆ si[n x SI-MÁŠ n n ... GE₆ 5 SAG GE₆ sin]
+#lem: ištānu[north wind]N; alāku[blow]V; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; SI-MÁŠ[β Capricorni]CN; n; n; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+9'. ina IGI MÚL-IGI-šá-SUHUR-M[ÁŠ n n ...]
+#lem: ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; u
+
+10'. NU KÁD NIGIN SI GIN x [...]
+#lem: ul[not]MOD; kaṣāru[become joined]V; lawi[surrounded (with)]AJ; ištānu[north wind]N; alāku[blow]V; u; u
+
+11'. GE₆ 8 DIR AN [... MÚL.BABBAR]
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; u; Kakkabu-peṣû[Jupiter]CN
+
+12'. SIG DELE-šá-IGI-[ABSIN n n ...]
+#lem: šapil[below]AJ; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u
+
+13'. ⸢x x⸣ [...] 
+#lem: u; u; u
+
+@left  
+1. [... MU 1] ME 16.KÁM šá ši-i MU 1 ME 60+20.KÁM {m}a[r-šá-ka-a LUGAL]
+#lem: u; šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') wool, 1 mi[na? ...]
+
+@(o 2')  Mercury’s first appearance in the east in Libra [...]
+
+@(o 3') who is above the four generals [...]
+
+@(o 4') because of damming up the mouth of [...]
+
+@(o 5') I heard that the general [...]
+
+$ruling$
+
+@(o 6') Month VIII, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 16°; it was bright, earth[shighne ...]
+
+@(o 7') low to the south; all night clouds [...] the sky [...]
+
+@(o 8') the north wind blew. Night of the 4th, beginning of the night, the moon was [... β Capricorni ... Night of the 5th, beginning of the night, the moon was]
+
+@(o 9') [...] in front of γ Capricorni [...]
+
+@(o 10') surrounded [by a halo] which was not closed, the north wind blew ... [...]
+
+@(o 11') Night of the 8th, clouds [...] the sky [... Jupiter was]
+
+@(o 12') [...] below g Vir[ginis ...]
+
+@(o 13') [...] [...] 
+
+@left
+
+@(l.e. 1) [... Year 1]16 which is year 180, [king] Arsaces.
+

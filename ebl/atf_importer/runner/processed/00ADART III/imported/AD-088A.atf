@@ -1,0 +1,74 @@
+&X300881 = AD -88A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1. [EN.NUN šá gi-né-e šá TA {ITU}BAR EN] TIL {ITU}KIN šá MU 1 ME 59.KÁM šá ši-i MU 2 ME 23.[KÁM {m}ar-šá-ka-a LUGAL ...]
+#lem: naṣāru[observation]'N; ša[which]REL; ginê[regularity]N; ša[which]REL; ultu[from]PRP; Nisannu[Month I]MN; adi[until]PRP; qītu[end]N; Ulūlu[Month VI]MN; ša[which]REL; šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; u
+
+2. [... GI]N{MEŠ} GE₆ 2 ŠÚ.ŠÚ 2 kal ME ŠÚ.ŠÚ ina še-rì AN UTA[H ...]
+#lem: u; alāku[blow]V; mūšu[night]N; n; urrup[be(come) very overcast]V; n; kal[all]N; ūmu[day]N; urrup[be(come) very overcast]V; ina[in]PRP; šēri[morning]N; šamû[rain]N; natāku[drip]V; u
+
+3. [... KÙ]Š 4 ŠÚ.ŠÚ AN.BAR₇ AN UTAH SI GIN [...]
+#lem: u; ammatu[unit]N; 4[4]NU; urrup[be(come) very overcast]V; muṣlālu[noon]N; šamû[rain]N; natāku[drip]V; ištānu[north wind]N; alāku[blow]V; u
+
+4. [... GE₆ 7 SAG GE₆ sin] SIG {MÚL}LUGAL 2 1/2 KÙŠ sin 1/2 KÙ[Š ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; LUGAL[α Leonis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; u
+
+5. [... GE₆] ⸢10⸣ SAG GE₆ sin SIG DELE-šá-I[GI-ABSIN n n ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u
+
+6. [... GE₆ 13 n] ME muš SAG GE₆ [...]
+#lem: u; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V; rēšu[beginning]N; mūšu[night]N; u
+
+7. [...] ina KIN.SIG [...]
+#lem: u; ina[in]PRP; kinsikku[afternoon]N; u
+
+8. [...] ⸢GIN⸣ [...] 
+#lem: u; alāku[blow]V; u
+
+@reverse
+1'. [... x]-⸢a LUGAL ù? {f}x⸣-[x ...] 
+#lem: u; u; šarru[king]N; u[and]CNJ; u; u
+
+@top
+1'. [... šá gi]-né-e šá TA {ITU}BAR EN TIL ⸢{ITU}⸣[KIN ...]
+#lem: u; ša[which]REL; ginê[regularity]N; ša[which]REL; ultu[from]PRP; Nisannu[Month I]MN; adi[until]PRP; qītu[end]N; Ulūlu[Month VI]MN; u
+
+2'. [... šá iṭ-ṭ]ar-ri-du {m}gu-tar-za LUGAL u [...]
+#lem: u; ša[which]REL; iṭṭarid[call]V; Gutarza[Gotarzes]PN$; šarru[king]N; u[and]CNJ; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [Diary from month I until] the end of month VI of year 159 which is year 223, [king Arsaces ...]
+
+@(o 2) [... bl]ew. Night of the 2nd, very overcast. The 2nd, all day very overcast; in the morning, rain shower [...]
+
+@(o 3) [... cubi]ts. The 4th, very overcast; at noon, rain shower, the north wind blew [...]
+
+@(o 4) [... Night of the 7th, beginning of the night, the moon was] 2 ½ cubits below α Leonis, the moon being ½ cubit [...]
+
+@(o 5) [... Night] of the 10th, beginning of the night, the moon was [...] below γ Vir[ginis ...]
+
+@(o 6) [... Night of the 13th], moonrise to sunset: [nn°], measured; beginning of the night, [...]
+
+@(o 7) [...] in the afternoon, [...]
+
+@(o 8) [...] ... [...] 
+
+@reverse
+
+@(r 1') [... Arsace]s king and? ... [...] 
+
+@top
+
+@(t.e. 1') [... Dia]ry from month I until the end of [month VI ...]
+
+@(t.e. 2') [... who] is called? king Gutarza, and [...]
+

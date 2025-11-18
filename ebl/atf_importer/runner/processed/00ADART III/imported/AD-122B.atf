@@ -1,0 +1,119 @@
+&X301222 = AD -122B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] DIR AN ZA SI ⸢GIN⸣ [...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; u
+
+2'. [...] DIR AN ZA sin TÙR NIGIN 16 [...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; n; u
+
+3'. [...] 18 ŠÚ.ŠÚ GE₆ 19 DIR AN ZA ina ZALÁG sin ár ⸢MÚL⸣-á[r-šá-SUHUR-MÁŠ n n ...]
+#lem: u; n; urrup[be(come) very overcast]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; u
+
+4'. [...] ŠÚ AN UTAH i-ṣa AN.BAR₇ DIR AN ZA SI GIN [...]
+#lem: u; īrup[be(come) overcast]V; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ; muṣlālu[noon]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; u
+
+5'. [... GE₆ 24 ina ZALÁG sin SIG MÚL-KUR]-šá-⸢DUR⸣-nu-nu 4 KÙŠ 24 SI GIN GE₆ 25 ina ZALÁG sin [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; 4[4]NU; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+6'. [... ina ZAL]ÁG dele-bat SIG MÚL-ár-šá-SAG-HUN 5 KÙŠ 25 ina KIN.SIG ŠÚ.ŠÚ ki ⸢ŠÚ⸣ [šámaš ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]AJ; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; n; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; kī[when]PRP; erbu[(sun)set]N; šamšu[sun]N; u
+
+7'. [...] DIR AN ZA SI GIN GE₆ 27 ŠÚ.ŠÚ SI ŠÁR KALAG 27 ŠÚ.ŠÚ AN.BAR₇ AN U[TAH ...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; urrup[be(come) very overcast]V; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; dannu[strong]AJ; n; urrup[be(come) very overcast]V; muṣlālu[noon]N; šamû[rain]N; natāku[drip]V; u
+
+8'. [... IT]U BI KI.LAM še-im ina SAG ITU 1(BARIG) 3(BÁN) 3 qa EN TIL ITU 1(BARIG) 2(BÁN) 3 qa GIBIL{MEŠ} [...]
+#lem: u; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; n; n; qû[(one) litre]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; n; qû[(one) litre]N; eššu[new]AJ; u
+
+9'. [... 1 GU]R 1(BARIG) 1(BÁN) 3 qa 26 27 1 GUR 4(BÁN) 28 1 GUR 29 4(BARIG) 3(BÁN) kàs 2 GUR [...]
+#lem: u; n; kurru[kor (180 litres)]N; n; n; n; qû[(one) litre]N; n; n; n; kurru[kor (180 litres)]N; n; n; n; kurru[kor (180 litres)]N; n; n; n; kasû[cuscuta]N; n; kurru[kor (180 litres)]N; u
+
+10'. [...] 7 AN HUN KUR-ád in 4 GU₄.U[D ina ŠÚ ina MÚL.MÚL ŠÚ ...]
+#lem: u; n; Ṣalbaṭānu[Mars]CN; Agru[Aries]CN; kašādu[reach]V; ina[around (day x)]PRP; 4[4]NU; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zappu[Taurus]CN; rabû[set]V; u
+
+11'. [... PA]P 16 u mi-šil na ITU BI x [...]
+#lem: u; napharu[total]N; n; u[and]CNJ; mišlu[half]N; na[na-gauge]N; warhu[month]N; šū[that]'DP; u; u
+
+12'. [...] ($traces$) [...] 
+#lem: u; u
+
+@reverse
+1'. [...] ⸢x x KU?⸣ ina IGI MAŠ.MAŠ-IGI 4? KÙŠ [...]
+#lem: u; u; u; u; ina[in]PRP; pān[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; 4[4]NU; ammatu[unit]N; u
+
+2'. [... AN] SIG ŠUR-GIGIR-šá-SI 2? 1/2 KÙŠ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N; u
+
+3'. [...] ⸢x x x x⸣ 1/3? KÙŠ GE₆ ⸢x⸣ SAG GE₆ sin ina [IGI ...]
+#lem: u; u; u; u; u; n; ammatu[unit]N; mūšu[night]N; u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u
+
+4'. [... GE₆ 11 SAG GE₆ sin ina IGI S]I-⸢MÁŠ⸣ 3 1/2 ⸢KÙŠ GE₆ 12 SAG GE₆⸣ sin ár ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; u; u
+
+5'. [...] ⸢x SI GIN⸣ GE₆ 14 2.20 ME a-k[am] ⸢muš x x⸣ [...]
+#lem: u; u; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V; u; u; u
+
+6'. [... T]ÚG ⸢AN-e⸣ GAR-in ina AN.KU₁₀-šú MAR? GIN ina? AN.KU₁₀?-šú? [...]
+#lem: u; ṣubātu[garment]N; šamû[sky]N; šakin[set]AJ; ina[in]PRP; antallû[eclipse]N; amurru[west wind]N; alāku[blow]V; ina[in]PRP; antallû[eclipse]N; u
+
+7'. [... GE₆ 1]5 7 GE₆ muš [...]
+#lem: u; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V; u
+
+8'. [...] GE₆ 20 ina ZALÁG sin ina IGI ⸢x x⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u; u; u
+
+9'. [... GE₆ 23 ina ZALÁG sin ár ŠUR-GIGIR-šá-ULÙ n] ⸢x⸣ ina IGI AN? 2 K[ÙŠ ana ŠÚ GUB ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; u; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] clouds were in the sky, the north wind blew [...]
+
+@(o 2') [...] clouds were in the sky; the moon was surrounded by a halo. The 16th, [...]
+
+@(o 3') [...] The 18th, very overcast. Night of the 19th, clouds were in the sky; last part of the night, the moon was [...] behind δ [Capricorni ...]
+
+@(o 4') [...] overcast, a little rain shower; at noon, clouds were in the sky, the north wind blew [...]
+
+@(o 5') [... Night of the 24th, last part of the night, the moon was] 4 cubits [below η] Piscium. The 24th, the north wind blew. Night of the 25th, last part of the night, the moon was [...]
+
+@(o 6') [... last part of] the night, Venus was 5 cubits below α Arietis. The 25th, in the afternoon, very overcast; at sunset, [...]
+
+@(o 7') [...] clouds were in the sky, the north wind blew. Night of the 27th, very overcast, strong gusty north wind. The 27th, very overcast; at noon, rain sho[wer ...]
+
+@(o 8') [...] That month, the equivalent was: barley, in the beginning of the month, 1 @i{pānu} 3 @i{sūtu} 3 @i{qa}, until the end of the month, 1 @i{pānu} 2 @i{sūtu} 3 @i{qa}; new ones, [...]
+
+@(o 9') [... 1] ⸢@i{kurru}⸣ 1 @i{pānu} 1 @i{sūtu} 3@i{qa}; the 26th (and) 27th, 1 @i{kurru} 4 @i{sūtu}; the 28th, 1 @i{kurru}; the 29th, 4 @i{pānu} 3 @i{sūtu}; mustard, 2 @i{kurru} [...]
+
+@(o 10') [...] the 7th, Mars reached Aries; around the 4th, Mercury’s [last appearance in the west in Taurus; ...]
+
+@(o 11') [...] total: 16 and half was the @i{na} (gauge). That month, ... [...]
+
+@(o 12') [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] ... was 4? cubits in front of α Geminorum [...]
+
+@(r 2') [... Mars was] 2? 1/2 cubits below β Tauri [...]
+
+@(r 3') [...] ... 1/3? cubit. Night of the xth, beginning of the night, the moon was [...] in [front of ...]
+
+@(r 4') [... Night of the 11th, beginning of the night, the moon was] 3 1/2 cubits [in front of β Capricorni]. Night of the 12th, beginning of the night, the moon was [...] behind ... [...]
+
+@(r 5') [...] ... the north wind blew. Night of the 14th, moonrise to sunset: 2° 20', measured (despite) mist; ... [...]
+
+@(r 6') [...] ... the garment of the sky was there. In its eclipse, the west? wind blew; in its eclipse?, [...]
+
+@(r 7') [... Night of the 1]5th, sunset to moonrise: 7°, measured [...]
+
+@(r 8') [...] Night of the 20th, last part of the night, the moon was [...] in front of ... [...]
+
+@(r 9') [... Night of the 23rd, last part of the night, the moon was ... behind ζ Tauri, it stood] 2 cubits in front of Mars? [to the west ...]
+

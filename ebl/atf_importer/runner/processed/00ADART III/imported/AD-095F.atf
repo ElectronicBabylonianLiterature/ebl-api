@@ -1,0 +1,67 @@
+&X300956 = AD -95F 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+3'. [...] 1/2 KÙŠ 10 SI GIN ZI ⸢IR GE₆ 11 SAG GE₆⸣ [...]
+#lem: u; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; ZI[(meaning unclear)]N; IR[(meaning unclear)]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+4'. [...] ⸢x⸣ 5 UŠ ár SA₄-šá-GABA-šú ziq-pi sin AN.KU₁₀ ⸢Á?⸣ [...]
+#lem: u; u; n; UŠ[time degree]N; warki[behind]PRP; SA₄-šá-GABA-šú[α Cygni]CN$; zaqāpu[culminate]V; Sîn[moon]N; antallû[eclipse]N; idu[side]N; u
+
+5'. [...] AN.KU₁₀-šú TÚG AN GAR-in AN.KU₁₀-šú SI GIN ina AN.KU₁₀-⸢šú⸣ GEN[NA? ...]
+#lem: u; antallû[eclipse]N; ṣubātu[garment]N; šamû[sky]N; šakin[set]AJ; antallû[eclipse]N; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; antallû[eclipse]N; Kayyamānu[Saturn]CN; u
+
+6'. [... GE₆ 1]5 ina ZALÁG dele-bat SIG MAŠ.MAŠ-ár 3 1/2 KÙŠ 15 SI GIN GE₆ 1[6 ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]AJ; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+7'. [... GE₆ 18 ina ZALÁG sin SIG MÚL-ár-šá-SA]G-[H]UN 2 1/2 KÙŠ 18 SI u MAR GIN-uʾ GE₆ 19 ina ZALÁG sin [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N; n; ištānu[north wind]N; u[and]CNJ; amurru[west wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+
+8'. [... GE₆ 22 ina ZALÁG] sin e ŠUR-GIGIR-šá-ULÙ 2 1/2 ⸢KÙŠ⸣ sin ⸢2⸣ KÙŠ ana NIM D[IB ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]'PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; u
+
+9'. [... GE₆ 25 ina ZALÁG sin ina IGI MÚL-ár-šá-ALLA]-⸢šá⸣-ULÙ 2 KÙŠ sin 1 1/2 KÙŠ ana SI NIM ⸢e dele⸣-b[at? ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; eli[above]'PRP; Dilbat[Venus]CN; u
+
+10'. [... AN.K]U₁₀ šamáš ki PAP NU IGI in ⸢x⸣ [...]
+#lem: u; antallû[eclipse]N; šamši[sun]N; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[in]PRP; u; u
+
+11'. [...] EN MURUB₄ ITU 1 ⸢x x⸣ [...]  
+#lem: u; adi[until]PRP; qabaltu[middle]N; warhu[month]N; n; u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] ... [...]
+
+@(o 3') [...] 1/2 cubit. The 10th, the north wind blew, ZI IR. Night of the 11th, beginning of the night, [...]
+
+@(o 4') [...] when (the point) 5° behind α Cygni culminated, lunar eclipse; on [...]
+
+@(o 5') [...] its eclipse had the ‘garment of the sky’ ; in its eclipse, the north wind blew; in its eclipse, Sa[turn? ...]
+
+@(o 6') [... Night of the 1]5th, last part of the night, Venus was 3 1/2 cubits below β Geminorum. The 15th, the north wind blew. Night of the 1[6th, ...]
+
+@(o 7') [... Night of the 18th, last part of the night, the moon was] 2 1/2 cubits [ below α] Arietis. The 18th, the north and west winds blew. Night of the 19th, last part of the night, the moon [...]
+
+@(o 8') [... Night of the 22nd, last part of the night,] the moon was 2 1/2 cubits above ζ Tauri, the moon having passed 2 cubits to the east [...]
+
+@(o 9') [... Night of the 25th, last part of the night, the moon was] 2 cubits [in front of δ Can]cri, the moon being 1 1/2 cubits high to the north, [...] above Ve[nus? ...]
+
+@(o 10') [...] solar eclipse; when I watched I did not see it; at ... [...]
+
+@(o 11') [...] until the middle of the month, 1 ... [...]
+

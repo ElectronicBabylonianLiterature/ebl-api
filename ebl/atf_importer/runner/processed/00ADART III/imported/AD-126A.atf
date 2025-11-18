@@ -1,0 +1,94 @@
+&X301261 = AD -126A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x 4 (BÁN) 3⸣ q[a x x x]
+#lem: u; u; 4[4]NU; sūtu[sūtu]N; n; qû[(one) litre]N; u; u; u
+
+2'. [... T]A 22 EN 24 2 (BARIG) PI
+#lem: u; ultu[from]PRP; n; adi[until]PRP; n; n; X; pānu[bushel (36 litres)]N
+
+3'. ⸢TA⸣ [... ŠE.GIŠ].Ì 1(BÁN) 1 qa ù 4-ú SÍG{HI.A} 4 MA.NA
+#lem: ultu[from]PRP; u; šamaššammū[sesame]N; n; n; qû[(one) litre]N; u[and]CNJ; n; šīpātu[wool]N; 4[4]NU; manû[(one mina)]N
+
+4'. i-nu-šú MÚL.BABBAR ina ⸢GU dele-bat ina⸣ [x x] ⸢x⸣ [... in] 13 GU₄.UD ina NIM ina GÍR.TAB IGI AN ina SAG ITU
+#lem: inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Gula[Aquarius]CN; Dilbat[Venus]CN; ina[in]PRP; u; u; u; u; ina[around]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; nanmuru[be(come) visible]V; Ṣalbaṭānu[Mars]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N
+
+5'. ina zib{ME} ina MURUB₄ ITU ina HUN ITU BI ILLU TA ⸢2?⸣ [EN 13 n n L]AL PAP 32 1/2 na
+#lem: ina[in]PRP; Zibbātu[Pisces]CN; ina[in]PRP; qabaltu[middle]N; warhu[month]N; ina[in]PRP; Agru[Aries]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N; ultu[from]PRP; n; adi[until]PRP; n; n; n; nahāsu[recede]V; napharu[total]N; n; n; na[na-gauge]N
+
+6'. TA 14 EN 19 2 SI LAL PAP 33 na 23 24 4 ⸢U GIN PAP 34⸣ na ITU BI U₄ 4 {m}ṭi-mar-ku-us-su
+#lem: ultu[from]PRP; n; adi[until]PRP; n; n; ubānu[finger]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N; n; n; 4[4]NU; ubānu[finger]N; alāku[rise]V; napharu[total]N; n; na[na-gauge]N; warhu[month]N; šū[that]'DP; ūmu[day]N; 4[4]NU; Ṭimarkussu[Timarchos]PN
+
+7'. šá ina IGI-a TA DA {m}ar-šá-ka-a LUGAL ina? {LÚ}GAL EN.NUN mun-nu-ú u ina {ITU}ŠU ina IGI
+#lem: ša[which]REL; ina[in]PRP; pānu[front//before]N'AV$; ultu[from]PRP; idu[side]N; Aršaka[Arsaces]RN; šarru[king]N; ina[in]PRP; rab[great one]'N; maṣṣartu[guard]'N; munnû[appointed]AJ; u[and]CNJ; ina[in]PRP; Duʾūzu[Month IV]MN; ina[in]PRP; pān[front]N
+
+8'. {m}as-pa-si-né-e iš-hi-i-ṭi TA DA {m}in-du-pa-né-e KI {LÚ}ERÍN{MEŠ} KUR ma-da-a-a
+#lem: Aspāsinē[Hyspaosines]PN$; šahāṭu[escape]'V$išhiṭ; ultu[from]PRP; idu[side]N; Indupanē[Intaphernes]PN$; itti[with]PRP; uqāni[troops]N; mātu[land]N; Mādāya[Media]GN
+
+9'. GIN{MEŠ} ana E{KI} KU₄{MEŠ} U₄ BI {LÚ}ŠÀ.TAM É.SAG.GÍL u {LÚ}E{KI}{MEŠ} 1-en GU₄ ù 3 SÍSKUR{MEŠ}
+#lem: alāku[come]V; ana[to]PRP; Bābilu[Babylon]SN; erēbu[enter]V; ūmu[day]N; šū[that]'DP; šatammu[temple administrator]N; Esangila[Esangila]TN; u[and]CNJ; Bābilāya[Babylonian]EN; ištēn[one]NU; alpu[ox]N; u[and]CNJ; n; nīqu[offering]N
+
+@reverse
+1. ina KÁ.DUMU.NUN.NA šá É.SAG.GÍL NIDBA ul-te-zi-zu-ni-šú U₄? 6 ana bar-sìp{KI} GIN{MEŠ} U₄ 8
+#lem: ina[in]PRP; Bāb-mār-rubê[Gate of the Son of the Prince]N; ša[which]REL; Esangila[Esangila]TN; nindabû[(food) offering]N; izuzzu[stand//provide]V'V$ultezzizūniššu; ūmu[day]N; n; ana[to]PRP; Barsip[Borsippa]SN; alāku[go]V; ūmu[day]N; n
+
+2. TA bar-sìp{KI} È ana DA {m}in-du-pa-né-e ana li-mit {URU}se-lu-ke-ʾa-a šá ina UGU
+#lem: ultu[from]PRP; Barsip[Borsippa]SN; waṣû[go out]V; ana[to]PRP; idu[side]N; Indupanē[Intaphernes]PN; ana[to]PRP; limītu[environs]N; Selukeʾa[Seleucia]SN; ša[which]REL; ina[in]PRP; muhhi[top]N
+
+3. {ÍD}IDIGNA GIN{MEŠ} U₄ 9 BÁR GAL-ú šá ina {ITU}BAR ana be x KÁ.SIKIL.LA ŠUB-ú
+#lem: Idiqlat[Tigris]WN; alāku[go]V; ūmu[day]N; n; parakku[dais]N; rabû[large]AJ; ša[which]REL; ina[in]PRP; Nisannu[Month I]MN; ana[to]PRP; X; u; Kasikila[Kasikila]TN; maqātu[fall]V
+
+4. SAG.DU-su na-kir GE₆ 27 GIM IGI-iʾ ITU BI U₄ 25 SÍSKUR šá ina É-U₄.1.KÁM
+#lem: qaqqassu[head//top]N'N; nakir[changed]AJ; mūšu[night]N; n; kīma[like]PRP; pānu[front//before]N'AV$; warhu[month]N; šū[that]'DP; ūmu[day]N; n; nīqu[offering]N; ša[which]REL; ina[in]PRP; Bīt-Umakkal[All-Day-Temple]TN
+
+5. ba-aṭ-⸢lu-ú x x x x x x x⸣ ana {d}EN {d}GAŠAN-iá u {d}INNIN TIN.TIR{KI}
+#lem: baṭlū[interrupted]'AJ; u; u; u; u; u; u; u; ana[to]PRP; Bēl[Bēl]DN; Bēltiya[Bēltu]DN; u[and]CNJ; Ištar[Ištar]DN; Bābilu[Babylon]SN
+
+6. ⸢x⸣ [...] ⸢x⸣ U₄ 28
+#lem: u; u; u; ūmu[day]N; n
+
+7. [...] ⸢x KIN?⸣-uʾ
+#lem: u; u; šapāru[send]V
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... 4 @i{sūtu} 3 @i{qa} [...]
+
+@(o 2') [... fr]om the 22nd to the 24th, 2 @i{pānu}
+
+@(o 3') from [... sesa]me, 1 @i{sūtu} 1 @i{qa} and one-fourth; wool, 4 minas.
+
+@(o 4') At that time, Jupiter was in Aquarius; Venus, in [...] ... [... around] the 13th, Mercury’s first appearance in the east in Scorpius; Mars, in the beginning of the month,
+
+@(o 5') was in Pisces, in the middle of the month, in Aries. That month, the river level from the 2nd? [to the 13th] receded [...], total: 32 ½ was the @i{na} (gauge);
+
+@(o 6') from the 14th to the 19th, it receded 2 fingers, total: 33 was the @i{na} (gauge); the 23rd (and) the 24th, it rose 4 fingers, total: 34 was the @i{na} (gauge). That month, on the 4th, Ṭimarkusu
+
+@(o 7') who previously from the side of king Arsaces was appointed the guard commander and who in month IV
+
+@(o 8') had escaped from Aspasinē, came from the side of Indupanē with troops of Media;
+
+@(o 9') entered Babylon. That day, the administrator of the Esangila and the Babylonians provided for highm one bull and 3 (sheep) sacrifices 
+
+@reverse
+
+@(r 1) as an offering at the ‘Gate of the Son of the Prince’ of the Esangila. The 6th, they went to Borsippa. The 8th,
+
+@(r 2) they came out from Borsippa and went to the side of Indupanē to the area of Seleucia which is on
+
+@(r 3) the Tigris. The 9th, the great dais which in month I had been put at ... of the ‘Pure Gate’,
+
+@(r 4) its top was changed. The night of the 27th, (it was) as before. That month, the 25th, the sacrifices which had been interrupted in the Day-1-Temple 
+
+@(r 5) ... to Bēl, Bēltiya and Ištar of Babylon
+
+@(r 6)... [...] The 28th,
+
+@(r 7) [...] ... they sent?.
+

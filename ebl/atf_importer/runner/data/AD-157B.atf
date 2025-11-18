@@ -1,0 +1,56 @@
+&X301572 = AD -157B
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 1 ME 54.KÁM {m}de-meṭ-ri LUGAL [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Demetrius[Demetrius]PN; šarru[king]N; u
+
+2'. ana šamáš SIG GE₆ 1 DIR AN ZA SI GIN [...]
+#lem: ana[to]PRP; šamšu[sun]N; šapil[below]AJ; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; u
+
+3'. GE₆ 3 DIR AN ZA SA[G GE₆ ...]
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; rēšu[beginning]N; mūšu[night]N; u
+
+4'. 3 DIR AN ZA SI G[IN ...]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; u
+
+5'. ⸢4? x x⸣ [...] 
+#lem: 4[4]NU; u; u; u
+
+@top 
+1'. [x x x] ⸢x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+2'. ⸢x x x⸣ šá? 1 KÙ[Š ...]
+#lem: u; u; u; ša[which]REL; n; ammatu[unit]N; u
+
+3'. ⸢DIR AN ZA x⸣ [...] 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') Year 154, king Demetrius [...]
+
+@(o 2') (the moon) was low to the sun. Night of the 1st, clouds were in the sky, the north wind blew [...]
+
+@(o 3') Night of the 3rd, clouds were in the sky; begi[nning of the night, ...]
+
+@(o 4') The 3rd, clouds were in the sky, the north wind bl[ew ...]
+
+@(o 5') The 4th?, ... [...] 
+
+@top 
+
+@(t.e. 1') [...] ... [...]
+
+@(t.e. 2') ... 1 cu[bit ...]
+
+@(t.e. 3') clouds were in the sky [...] 
+
+
+

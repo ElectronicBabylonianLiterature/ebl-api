@@ -1,0 +1,158 @@
+&X300790 = AD -79 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+3'. [... E]N TIL ITU 1(BÁN) 2 1/2 qa SÍG{HI.A} 2/3 MA.NA i-nu-šú ⸢MÚL.BABBAR⸣ ina ⸢x x⸣ [...]
+#lem: u; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; n; qû[(one) litre]N; šīpātu[wool]N; n; manû[(one mina)]N; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; u; u; u
+
+4'. [...] ⸢x⸣ šá ina {GIŠ}KIRI₆ {ŠIM}LI NÍG.[ŠU? ...]
+#lem: u; u; ša[which]REL; ina[in]PRP; kirû[garden]N; burāšu[juniper]N; būšu[property]'N; u
+
+5'. [...] ⸢LÚ?⸣ šá ⸢ku?⸣-um {LÚ}ŠÀ.TAM É.SAG.GÍL u {LÚ}E{KI} ⸢bu-še?-e? x⸣ [...]
+#lem: u; awīlu[man]N; ša[which]REL; kūm[instead of]PRP; šatammu[temple administrator]N; Esangila[Esangila]TN; u[and]CNJ; Bābilāya[Babylonian]EN$; būšē[property]N; u; u
+
+6'. [...]  MU-a-tì u {LÚ}E{KI} šá ana É-U₄.1.KÁM  K[U₄? ...]
+#lem: u; šuāti[that]'DP; u[and]CNJ; Bābilāya[Babylonian]EN; ša[which]REL; ana[to]PRP; Bīt-Umakkal[All-Day-Temple]TN; erēbu[enter]V; u
+
+$ruling
+7'. [{ITU}SIG ...] a-kám KALAG ki PAP NU IGI GE₆ 2 sin SIG MAŠ.MAŠ-ár 2? KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL ⸢in?⸣ [...]
+#lem: Simānu[Month III]MN; u; akamu[mist]N; dannu[strong]AJ; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; mūšu[night]N; n; Sîn[moon]N; šapil[below]AJ; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; ina[around (day x)]PRP; u
+
+8'. [...] sin i ana NIM DIB GE₆ 4 SAG GE₆ sin ár SAG-A 2 KÙŠ sin 2? KÙŠ ana ULÙ [SIG ...]
+#lem: u; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+9'. [... GE₆ 6 SAG GE₆ sin ina IG]I GÌR-ár-šá-A 1 1/2 KÙŠ sin 1 KÙŠ ana SI NIM GE₆ 7 SAG GE₆ sin ina IGI [DELE-šá-IGI-ABSIN ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN; u
+
+10'. [... GE₆ 10 SAG GE₆ sin ár] RÍN-šá-ULÙ 1 KÙŠ GE₆ 11 SAG GE₆ sin ina IGI ⸢MÚL?-MURUB₄?⸣-š[á-SAG-GÍR.TAB ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; u
+
+11'. [...] ⸢x⸣ GE₆ muš [x] ⸢x x⸣ [...]
+#lem: u; u; mūšu[sunset to moonrise]N; mašāhu[measure]V; u; u; u; u
+
+12'. [...] ⸢1? KÙŠ⸣ [...] 
+#lem: u; n; ammatu[unit]N; u
+
+@reverse
+1'. [...] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+2'. [... GE₆ 16 ina ZALÁG sin SIG MÚ]L-IGI-šá-SAG-HUN 4 K[ÙŠ ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; 4[4]NU; ammatu[unit]N; u
+
+3'. [...] NIM? GE₆ 20 ina ZALÁG sin ár ŠUR-G[IGIR-šá-SI? n n ...]
+#lem: u; šaqi[high]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; u
+
+4'. [...] ⸢x⸣ 1/2 KÙŠ GE₆ 23 ina ZALÁG [...]
+#lem: u; u; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+5'. [...] sin 1/2 KÙŠ ana NIM DIB G[E₆ ...]
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; mūšu[night]N; u
+
+6'. [... AN.K]U₁₀ šámaš ki PAP NU IGI in 10 UŠ ME [...]
+#lem: u; antallû[eclipse]N; šamši[sun]N; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at (plus numeral)]PRP; n; UŠ[time degree]N; ūmu[day]N; u
+
+7'. [...] 3(BARIG) 1(BÁN)? ⸢3⸣ qa kàs 1 GUR sah-le₁₀ [...]
+#lem: u; n; n; n; qû[(one) litre]N; kasû[cuscuta]N; n; kurru[kor (180 litres)]N; sahlu[cress]N; u
+
+8'. [...]-⸢ú⸣ 2[8 2]9 1(BÁN) 4 qa SÍG{HI.A} 2/3 [MA.NA i-nu-šú ...]
+#lem: u; n; n; n; 4[4]NU; qû[(one) litre]N; šīpātu[wool]N; n; manû[(one mina)]N; inūšu[at that time]AV; u
+
+9'. [... x]+16 na ITU BI U₄ 20 {KUŠ}ši-pir-tu₄ šá ⸢x⸣ [...]
+#lem: u; u; na[na-gauge]N; warhu[month]N; šū[that]'DP; ūmu[day]N; n; šipirtu[message]N$; ša[which]REL; u; u
+
+10'. [...] ⸢x⸣{MEŠ} {m}ar-šá-kám šá iṭ-ṭár-ri-d[u ...]
+#lem: u; u; Aršaka[Arsaces]RN; ša[which]REL; ṭarādu[call]V; u
+
+11'. [...] ⸢x⸣{MEŠ} ⸢u x x x x⸣ ú? du x x [...]
+#lem: u; u; u[and]CNJ; u; u; u; u; X; X; u; u; u
+
+$ruling
+12'. [MU 1 ME] 1+ŠU 8.KÁM šá ši-i MU 2 ME 32.KÁM {m}ar-šá-kám šá i[ṭ?-ṭár-ri-du ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; ša[which]REL; ṭarādu[call]V; u
+
+13'. [... S]I? GIN GE₆ 3 SAG GE₆ SI₄ ana ŠÀ sin KU₄-ub 3 [...]
+#lem: u; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; SI₄[α Scorpii]CN; ana[to]PRP; libbu[inside]N; Sîn[moon]N; erēbu[enter]V; n; u
+
+14'. [... 5] ⸢LÁL⸣-tì NU PAP GE₆ 7 SAG GE₆ sin ina I[GI ...]
+#lem: u; n; šitqultu[equinox]'N; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u
+
+15'. [... GE₆ 9 SAG GE₆ sin] SIG MÚL-⸢ár-šá-SUHUR⸣-M[ÁŠ n n ...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] ... [...]
+
+@(o 3') [... un]til the end of the month, 1 @i{sūtu} 2 1/2 @i{qa}; wool, 2/3 mina. At that time, Jupiter was in ... [...]
+
+@(o 4') [...] ... who in the Juniper Garden possessions? ... [...]
+
+@(o 5') [...] a man who was representative of the administrator of the Esangila, and the Babylonians, ... [...]
+
+@(o 6') [...] to this ... and the Babylonian who ente[red?] the Day One Temple ... [...]
+
+$ruling
+
+@(o 7') [Month III ...] dense mist, when I watched I did not see it. Night of the 2nd, the moon was 2? cubits below β Geminorum, the moon being 1/2 cubit back to the west. ... [...]
+
+@(o 8') [...] the moon having passed a little to the east. Night of the 4th, beginning of the night, the moon was 2 cubits behind ε Leonis, the moon being 2? cubits low to the south [...]
+
+@(o 9') [... Night of the 6th, beginning of the night, the moon was] 1 1/2 cubits in front? of β Virginis, the moon being 1 cubit high to the north. Night of the 7th, beginning of the night, the moon was [...] in front of [γ Virginis ...]
+
+@(o 10') [... Night of the 10th, beginning of the night, the moon was] 1 cubit [behind] α Librae. 
+Night of the 11th, beginning of the night, the moon was [...] in front of δ? Scorpii [...]
+
+@(o 11') [...] sunset to moonrise: ..., measured ... [...]
+
+@(o 12') [...] 1? cubit [...] 
+
+@reverse
+
+@(r 1') [...] ... [...]
+
+@(r 2') [... Night of the 16th, last part of the night, the moon was] 4 cu[bits below] β Arietis [...]
+
+@(r 3') [...] high?. Night of the 20th, last part of the night, the moon was [...] behind [β?] Tauri [...]
+
+@(r 4') [...] ... 1/2 cubit. Night of the 23rd, last part of the night, [...]
+
+@(r 5') [...] the moon having passed 1/2 cubit to the east. Ni[ght ...]
+
+@(r 6') [...] solar eclipse; when I watched I did not see it; at 10° after? [sunrise ...]
+
+@(r 7') [...] 3 @i{pānu} 1? @i{sūtu} 3 @i{qa}; mustard, 1 @i{kurru}; cress, [...]
+
+@(r 8') [... one-four]th; the 28th (and) 29th, 1 @i{sūtu} 4 @i{qa}; wool, 2/3 [mina. At that time, ...]
+
+@(r 9') [... x]+16 was the @i{na} (gauge). That month, the 20th, a message of ... [...]
+
+@(r 10') [...] ... Arsaces who is called? [...]
+
+@(r 11') [...] ... [...]
+
+$ruling
+
+@(r 12') [Year 1]68 which is year 232, Arsaces who is c[alled? ...]
+
+@(r 13') [... the no]rth wind blew. Night of the 3rd, beginning of the night, α Scorpii entered the moon. The 3rd, [...]
+
+@(r 14') [... The 5th], equinox; I did not watch. Night of the 7th, beginning of the night, the moon was in fro[nt of ...]
+
+@(r 15') [... Night of the 9th, beginning of the night, the moon was ...] below δ Capricorni [...] 
+

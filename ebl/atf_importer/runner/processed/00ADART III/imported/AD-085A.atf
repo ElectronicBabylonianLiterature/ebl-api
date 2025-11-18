@@ -1,0 +1,79 @@
+&X300851 = AD -85A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] 2 KÙŠ sin [...]
+#lem: u; n; ammatu[unit]N; Sîn[moon]N; u
+
+2'. [... G]E₆ 4 SAG GE₆ si[n ...]
+#lem: u; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u
+
+3'. [... GE₆ 9 SAG GE₆ sin ár AN] 1 KÙŠ ana NIM GUB 9 S[I ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; n; ištānu[north wind]N; u
+
+4'. [... GE₆ 10 SAG GE₆] sin e SA₄-šá-ABSIN 2 1/2 KÙ[Š ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]'PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; u
+
+5'. [... ana] ULÙ SIG GE₆ 13 SAG GE₆ sin e [SI₄ n n ...]
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]'PRP; SI₄[α Scorpii]CN; n; n; u
+
+6'. [...] i-ṣa SI GIN GE₆ 15 16 GE₆ DIR N[U PAP ...]
+#lem: u; wīṣu[little]AJ; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+7'. [... US]AN GU₄.UD SIG MAŠ.MAŠ-IGI 3 KÙŠ 17 S[I ...]
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]AJ; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; n; ištānu[north wind]N; u
+
+8'. [... GI]N GE₆ 21 USAN AN SIG DELE-šá-IGI-ABSI[N n n ...]
+#lem: u; alāku[blow]V; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u
+
+9'. [... ana] ULÙ SIG GE₆ 24 ina ZALÁG sin ár ⸢MÚL⸣-[IGI-šá-SAG-HUN n n ...]
+#lem: u; ana[to]PRP; šūtu[south wind]N; šapil[below]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; u
+
+10'. [...] MÚL.BABBAR e MÚL-ár-šá-ALLA-šá-UL[Ù n n ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; eli[above]'PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; u
+
+11'. [... TA n]+7 EN 19 1(BARIG) 2(BÁN) GIBIL{MEŠ} [...]
+#lem: u; ultu[from]PRP; X; adi[until]PRP; n; n; n; eššu[new]AJ; u
+
+12'. [...] ⸢x⸣ 3 qa TA 21 EN [...]
+#lem: u; u; n; qû[(one) litre]N; ultu[from]PRP; n; adi[until]PRP; u
+
+13'. [...] qa SÍG{HI.A} [...]  
+#lem: u; qû[(one) litre]N; šīpātu[wool]N; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] 2 cubits, the moon being [...]
+
+@(o 2') [... Ni]ght of the 4th, beginning of the night, the moo[n ...]
+
+@(o 3') [... Night of the 9th, beginning of the night, the moon] stood 1 cubit [behind Mars] to the east. The 9th, the nor[th wind ...]
+
+@(o 4') [... Night of the 10th, beginning of the night], the moon was 2 ½ cubits above α Virginis [...]
+
+@(o 5') [...] low to the south. Night of the 13th, beginning of the night, the moon was [...] above α Scorpii [...]
+
+@(o 6') [...] a little [...], the north wind blew. Night of the 15th, sunset to moonrise: 16°; clouds, I did not [watch ...]
+
+@(o 7') [... first part] of the night, Mercury was 3 cubits below α Geminorum. The 17th, the nor[th wind ...]
+
+@(o 8') [... bl]ew. Night of the 21st, first part of the night, Mars was [...] below γ Virginis [...]
+
+@(o 9') [...] low to the south. Night of the 24th, last part of the night, the moon was [...] behind [β Arietis ...]
+
+@(o 10') [...] Jupiter was [...] above δ Cancri [...]
+
+@(o 11') [... from the x]+7th to the 19th, 1 @i{pānu} 2 @i{sūtu}; new ones, [...]
+
+@(o 12') [...] ... 3 @i{qa}; from the 21st to [...]
+
+@(o 13') [...] @i{qa}; wool, [...] 
+
+

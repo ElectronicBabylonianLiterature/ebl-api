@@ -1,0 +1,172 @@
+&X301262 = AD -126B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... {m}ar-šá-ka]-a LUGAL ŠE 30 10+[x ...]
+#lem: u; Aršaka[Arsaces]RN; šarru[king]N; Addaru[Month XII]MN; n; n; u
+
+2'. [... x]{MEŠ} hi-il-lu [...]
+#lem: u; u; hillu[haze]N; u
+
+3'. [... kal] ME ŠÚ.ŠÚ ULÙ GIN ina K[IN.SIG ...]
+#lem: u; kal[all]N; ūmu[day]N; urrup[be(come) very overcast]V; šūtu[south wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; u
+
+4'. [... ka]l? ME ULÙ GIN ina KIN.S[IG ...]
+#lem: u; kal[all]N; ūmu[day]N; šūtu[south wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; u
+
+5'. [... GE₆ 5 SAG] GE₆ sin ina IGI ŠUR-GIGIR-[šá-x ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-x[β/ζ Tauri]CN$; u
+
+6'. [... dele-bat e] MÚL-ár-šá-SUHUR-MÁŠ [n n ...]
+#lem: u; Dilbat[Venus]CN; eli[above]'PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; n; u
+
+7'. [... GE₆] 6 SAG GE₆ sin ina IGI [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u
+
+8'. [...] ⸢AN x x⸣ GE₆ 7 SAG GE₆ sin ina IGI MAŠ.MAŠ-[IGI n n ...]
+#lem: u; šamû[rain]N; u; u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; n; n; u
+
+9'. [... GE₆ 8] ⸢SAG GE₆⸣ sin ár MAŠ.MAŠ-ár 1 KÙŠ sin 5 KÙŠ ana ULÙ SIG [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+10'. [...] SAG GE₆ ŠÚ.ŠÚ sin TÙR NIGIN kal GE₆ DIR AN Z[A ...]
+#lem: u; rēšu[beginning]N; mūšu[night]N; urrup[be(come) very overcast]V; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+11'. [... GE₆ 10 SAG GE₆ sin ár SAG-A x]+⸢1/2 KÙŠ⸣ sin 6 1/2 KÙŠ ana ULÙ SIG 10 DIR AN ZA SI G[IN ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SAG-A[ε Leonis]CN; u; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; u
+
+12'. [...] 11 DIR AN ZA SI GIN GE₆ 12 SAG GE₆ sin á[r GIŠ.KUN-A n n ...]
+#lem: u; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; GIŠ.KUN-A[θ Leonis]CN; n; n; u
+
+13'. [... DI]R ⸢AN ZA GE₆⸣ 13 SAG GE₆ sin ár GÌR-ár-šá-A 3 [KÙŠ ...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ammatu[unit]N; u
+
+14'. [...] DIR AN ZA GE₆ 14 5.30 ME DIR NU PAP SAG GE₆ [...]
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; rēšu[beginning]N; mūšu[night]N; u
+
+15'. [...] ⸢a-kám muš AN.KU₁₀ sin 5 ÁB BAR DIB in 28 ME [...]
+#lem: u; akamu[mist]N; mašāhu[measure]V; antallû[eclipse]N; Sîn[moon]N; n; warhu[month]N; ahû[extraneous]'AJ; etēqu[miss]V; ina[at]PRP; n; ūmu[day]N; u
+
+16'. [...] ⸢x⸣ šámaš TÙR NIGIN GE₆ 16 kal GE₆ ŠÚ.ŠÚ UL[Ù GIN ...]
+#lem: u; u; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mūšu[night]N; n; kal[all]N; mūšu[night]N; urrup[be(come) very overcast]V; šūtu[south wind]N; alāku[blow]V; u
+
+17'. [...] ⸢x⸣ šámaš TÙR NIGIN GE₆ 17 USAN AN SIG [ŠUR-GIGIR-šá-SI n n ...]
+#lem: u; u; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; u
+
+18'. [... AN].BAR₇ AN UTA[H ...] 
+#lem: u; muṣlālu[noon]N; šamû[rain]N; natāku[drip]V; u
+
+@reverse
+1'. [... T]A {URU}se-l[u-k]e-ʾa-[a ...]
+#lem: u; ultu[from]PRP; Selukeʾa[Seleucia]SN; u
+
+2'. [...] ⸢x⸣-a-a šá ú-še-piš <ku-um> 4 {LÚ}GAL ERÍN[{MEŠ} ...]
+#lem: u; u; ša[which]REL; ušēpiš[make]V; X; 4[4]NU; rab[chief]N; uqāni[troops]N; u
+
+3'. [...]-⸢TA-nu?⸣ E{KI} ana muh-hi ÍD{MEŠ} ana x{MEŠ} šul [...]
+#lem: u; Bābilu[Babylon]SN; ana[to]PRP; muhhi[top]N; nāru[canal]N; ana[to]PRP; u; X; u
+
+4'. [... {LÚ}GAL ERÍN]{MEŠ} MU-a-tì TA ma-dak-ta-šú ina šá {LÚ}pít-hal-la-šú [...]
+#lem: u; rab[chief]N; uqāni[troops]N; šuāti[that]'DP; ultu[from]PRP; madaktu[(military) camp]N; ina[with]PRP; ša[which]REL; pēthallušu[equid//cavalry]N'N; u
+
+5'. [...] ù {LÚ}e-piš dul-la-a-tú NIDBA šá GIM ú ⸢x⸣ [...]
+#lem: u; u[and]CNJ; ēpišu[doer//builder]N'N$; dullātu[work]N; nindabû[(food) offering]N; ša[which]REL; kīma[like]PRP; u; u; u
+
+6'. [... ul]-te-zi-zu-ni-šú {LÚ}ŠÀ.TAM É.SAG.GÍL u {LÚ}E[{KI}{MEŠ} ...]
+#lem: u; +izuzzu[stand//provide]V'V$ultezzizūniššu; šatammu[temple administrator]N; Esangila[Esangila]TN; u[and]CNJ; Bābilāya[Babylonian]EN; u
+
+7'. [... SISK]UR{MEŠ} ina KÁ.DUMU.NUN.NA šá É.SAG.GÍL ana {LÚ}GAL ERÍN[{MEŠ} ...]
+#lem: u; nīqu[offering]N; ina[in]PRP; Bāb-mār-rubê[Gate of the Son of the Prince]N; ša[which]REL; Esangila[Esangila]TN; ana[to]PRP; rab[chief]N; uqāni[troops]N; u
+
+8'. [... DINGIR]⸢{MEŠ}⸣ GAL{MEŠ} ana bul-ṭu šá {m}ar-šá-ka-a LUGAL [...]
+#lem: u; ilu[god]N; rabûti[great]AJ; ana[to]PRP; bulṭu[life]N; ša[which]REL; Aršaka[Arsaces]RN; šarru[king]N; u
+
+9'. [...] ⸢È⸣ U₄ 17 {LÚ}GAL ERÍN{MEŠ} MU-a-tì TA AN.T[A ...]
+#lem: u; waṣû[go out]V; ūmu[day]N; n; rab[chief]N; uqāni[troops]N; šuāti[that]'DP; ultu[from]PRP; elēnu[above]PRP; u
+
+10'. [...]-⸢nu⸣ E{KI} ina a ⸢x x la⸣ a ina É {d}U.GUR [...]
+#lem: u; Bābilu[Babylon]SN; ina[in]PRP; X; u; u; X; X; ina[in]PRP; bītu[temple]N; Nergal[Nergal]DN; u
+
+11'. [...] ⸢x⸣ ki e ⸢x⸣ [...] 
+#lem: u; u; X; X; u; u
+
+@top 
+1'. [...] ⸢x⸣-ú-tú x [...]
+#lem: u; u; u; u
+
+2'. [...] IM SI [...]
+#lem: u; X; X; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] king [Arsaces], month XII, (the 1st of which was identical with) the 30th (of the preceding month), [sunset to moonset]: 10+[x ...]
+
+@(o 2') [...] ... haze [...]
+
+@(o 3') [...all] day very overcast, the south wind blew; in the af[ternoon, ...]
+
+@(o 4') [... a]ll? day the south wind blew; in the after[noon ...]
+
+@(o 5') [... Night of the 5th, beginning] of the night, the moon was [...] in front of [β /ζ ] Tauri [...]
+
+@(o 6') [... Venus was ... above] δ Capricorni [...]
+
+@(o 7') [... Night] of the 6th, beginning of the night, the moon was [...] in front of [...]
+
+@(o 8') [...] rain? ... Night of the 7th, beginning of the night, the moon was [...] in front of [α] Geminorum [...]
+
+@(o 9') [... Night of the 8th,] beginning of the night, the moon was 1 cubit behind β Geminorum, the moon being 5 cubits low to the south [...]
+
+@(o 10') [...] beginning of the night, very overcast; the moon was surrounded by a halo; all night clouds were in the sky [...]
+
+@(o 11') [... Night of the 10th, beginning of the night, the moon was x]+1/2 cubits [behind ε Leonis], the moon being 6 1/2 cubits low to the south. The 10th, clouds were in the sky, the north wind bl[ew ...]
+
+@(o 12') [...] The 11th, clouds were in the sky, the north wind blew. Night of the 12th, beginning of the night, the moon was [...] be[highnd θ Leonis ...]
+
+@(o 13') [... clou]ds were in the sky. Night of the 13th, beginning of the night, the moon was 3 [cubits] behind β Virginis [...]
+
+@(o 14') [...] clouds were in the sky. Night of the 14th, moonrise to sunset: 5° 30'; clouds, I did not watch; beginning of the night, [...]
+
+@(o 15') [...] measured (despite) mist; lunar eclipse (after) 5 months, ... omitted; at 28°of day [...]
+
+@(o 16') [...] ... the sun was surrounded by a halo. Night of the 16th, all night very overcast, the sou[th wind blew ...]
+
+@(o 17') [...] ... the sun was surrounded by a halo. Night of the 17th, first part of the night, Mars was [...] below [β Tauri ...]
+
+@(o 18') [...] at noon, rain shower [...] 
+
+@reverse
+
+@(r 1') [...] from Seleucia [...]
+
+@(r 2') [...] ... which he had made, four generals [...]
+
+@(r 3') [...] ... Babylon towards the rivers to the ... [...]
+
+@(r 4') [...] this [general ...] from his camp with his riders [...]
+
+@(r 5') [...] and workmen an offering which was like ... [...]
+
+@(r 6') [...] they provided for highm. The administrator of the Esangila and the Babylon[ians ...]
+
+@(r 7') [...] sacrifices at the ‘Gate of the Son of the Prince’ of the Esangila for the general [...]
+
+@(r 8') [...] to the great [gods] for the life of king Arsaces [...]
+
+@(r 9') [...] went out. The 17th, this general from above [...]
+
+@(r 10') [...] of Babylon in ... in the temple of Nergal [...]
+
+@(r 11') [...] ... [...] 
+
+@top 
+
+@(t.e. 1') [...] ... [...]
+
+@(t.e. 2') [...] ... [...]
+

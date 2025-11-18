@@ -1,0 +1,150 @@
+&X300620 = AD -62 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1. [...] u {f}ṭe-le-ú-ni-qé-e
+#lem: u; u[and]CNJ; Teleunike[Teleunike]PN$
+
+2. [... m]e-he-e IM.LIMMU.BA ŠÁR{MEŠ} KALAG GIN-uʾ
+#lem: u; mehû[storm]N; šārū-erbetti[the four winds]N; ŠÁR[gusty(?)]AJ; dannu[strong]AJ; alāku[blow]V
+
+3. [... BUR]U₅ GAL.GAL ZI-a ki ŠÚ šámaš
+#lem: u; erbû[locust]N; rabû[large]AJ; tebû[attack]V; kī[when]PRP; erbu[(sun)set]N; šamši[sun]N
+
+4. [...] ⸢ana⸣ SI NIM GE₆ 9 SAG GE₆ sin
+#lem: u; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
+
+5. [...] GIN-uʾ GE₆ 10 kal GE₆ DIR AN DIB
+#lem: u; alāku[blow]V; mūšu[night]N; n; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V
+
+6. [...] SI GIN GE₆ 11 11 ŠÚ.ŠÚ SI ŠÁR
+#lem: u; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; urrup[be(come) very overcast]V; ištānu[north wind]N; ŠÁR[gusty(?)]AJ
+
+7. [...] ⸢in⸣ 9 UŠ ME NIM-a
+#lem: u; ina[at (plus numeral)]PRP; n; UŠ[time degree]N; ūmu[day]N; šaqi[high]AJ
+
+8. [...] 16 17 IM ŠÁR GE₆ 18 USAN dele-bat
+#lem: u; n; n; šāru[wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+9. [... GE₆ 19 ina ZALÁG sin x MÚL-x-šá-SUHUR-MÁŠ] ⸢4⸣ KÙŠ sin 2 KÙŠ ana ULÙ SIG GE₆ 20
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorn]CN; 4[4]NU; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n
+
+10. [...] 22 ŠÚ.ŠÚ ina KIN.SIG AN MAH PISAN DIB
+#lem: u; n; urrup[be(come) very overcast]V; ina[in]PRP; kinsikku[afternoon]N; šamû[rain]N; ṣīru[great]AJ; pisannu[(a meterological phenomenon)]N; DIB[unclear]V
+
+11. [...] 26 GENNA ina TIL HUN 1 KÙŠ ár sin ár MÚL.MÚL
+#lem: u; n; Kayyamānu[Saturn]CN; ina[in]PRP; qītu[end]N; Agru[Aries]CN; n; ammatu[unit]N; warki[behind]PRP; Sîn[moon]N; warki[behind]PRP; MÚL.MÚL[η Tauri]CN
+
+12. [... A]N.KU₁₀ šámaš ki PAP NU IGI in 30 ME ⸢NIM-a⸣
+#lem: u; antallû[eclipse]N; šamši[sun]N; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at (plus numeral)]PRP; n; ūmu[day]N; šaqi[high]AJ
+
+13. [... še]-im ina SILA{MEŠ} E{KI} TAR{MEŠ}
+#lem: u; šeʾu[barley]N; ina[in]PRP; sūqu[street]N; Bābilu[Babylon]SN; parsū[cut off]AJ
+
+14. [...] 4(BARIG)? 4(BÁN) 3 1/2 qa 4-ʾu-ú [(x)]
+#lem: u; n; n; n; n; qû[(one) litre]N; rebû[one-fourth]NU; u
+
+15. [...] a-na 1 GÍN KÙ.BABBAR ép-šú ⸢i-nu-šú⸣
+#lem: u; ana[to]PRP; n; šiqlu[shekel]N; kaspu[silver]N; epšu[wrought]AJ; inūšu[at that time]AV
+
+16. [... E]N TIL ITU 1 KÙŠ LAL PAP [n na]
+#lem: u; adi[until]PRP; qītu[end]N; warhu[month]N; n; ammatu[unit]N; nahāsu[recede]V; napharu[total]N; n; na[na-gauge]N
+
+17. [...] x sa-ha-aʾ šá ana ⸢x⸣ [...]
+#lem: u; u; X; ša[which]REL; ana[to]PRP; u; u
+
+18. [...] ⸢x⸣ UGU ⸢x x⸣ šá [...]
+#lem: u; u; muhhi[top]N; u; u; ša[which]REL; u
+
+19. [...] x lú ⸢x⸣ [...]
+#lem: u; u; X; u; u
+
+20. [...] ⸢x⸣ [...] 
+#lem: u; u; u
+
+@reverse
+1'. [...] ⸢x⸣ ki
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ KU ⸢x⸣ hu sa aʾ
+#lem: u; u; X; u; X; X; X
+
+3'. [...] {LÚ}pu-li-te-e
+#lem: u; puliṭū[(Greek) citizenry]N
+
+4'. [...] ($blank$)
+#lem: u
+
+$blank
+5'. [... LUG]AL{MEŠ} 
+#lem: u; šarrāni[king]N
+
+@top
+1. [... {m}a]r-šá-kam LUGAL LUGAL{MEŠ}
+#lem: u; Aršaka[Arsaces]RN; šarru[king]N; šarrāni[king]N
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...] and Teleunike
+
+@(o 2) [...] strong gusty storms from all four directions blew.
+
+@(o 3) [...] large locusts attacked; at sunset,
+
+@(o 4) [...] high to the north. Night of the 9th, beginning of the night, the moon was
+
+@(o 5) [...] blew. Night of the 10th, all night clouds crossed the sky
+
+@(o 6) [...] the north wind blew. Night of the 11th (and) the 11th, very overcast, gusty north wind
+
+@(o 7) [...] at 9° after sunrise
+
+@(o 8) [...] the 16th (and) the 17th, gusty wind. Night of the 18th, first part of the night, Venus
+
+@(o 9) [... Night of the 19th, last part of the night, the moon was] 4 cubits [... γ /δ Capricorni], the moon being 2 cubits low to the south. Night of the 20th,
+
+@(o 10) [...] The 22nd, very overcast; in the afternoon, much rain PISAN DIB
+
+@(o 11) [...] the 26th, Saturn’s [first appearance] in the end of Aries, 1 cubit behind the moon, [...] behind η Tauri
+
+@(o 12) [...] solar eclipse; when I watched I did not see it; at 30° after sunrise.
+
+@(o 13) [... trade in bar]ley was interrupted in the streets of Babylon
+
+@(o 14) [...] 4? @i{pānu} 4 @i{sūtu}3 ½ qa one-fourth
+
+@(o 15) [...] for 1 shekel of wrought silver. At that time,
+
+@(o 16) [... un]til the end of the month, it receded 1 cubit, total: [nn was the na (gauge).]
+
+@(o 17) [...] ... which to [...]
+
+@(o 18) [...] ... which [...]
+
+@(o 19) [...] ... [...]
+
+@(o 20) [...] ... [...] 
+
+@reverse
+
+@(r 1') [...] ...
+
+@(r 2') [...] ...
+
+@(r 3') [...] the citizens
+
+@(r 4') [...] (blank)
+
+@(r 5') [... of k]ings. 
+
+@top
+
+@(t.e. 1) [... A]rsaces king of kings.  
+

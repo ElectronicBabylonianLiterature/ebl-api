@@ -1,0 +1,79 @@
+&X300852 = AD -85B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] x 1/2 KÙŠ sin ⸢i-ṣa⸣ [...]
+#lem: u; u; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; u
+
+2'. [... sin ina IGI MÚ]L?.BABBAR ⸢1 KÙŠ?⸣ 4 SI ana ŠÚ GUB SIG GE[NNA n n ...]
+#lem: u; Sîn[moon]N; ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; 4[4]NU; ubānu[finger]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; šapil[below]AJ; Kayyamānu[Saturn]CN; n; n; u
+
+3'. [... GE₆ 26 ina ZALÁG sin x GÌR-ár-šá-A n] KÙŠ sin 1/2 KÙŠ ana SI NIM 26 SI GIN GE₆ 20+[x ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; GÌR-ár-šá-A[β Virginis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+4'. [...] ⸢2(BÁN)⸣ 2 qa ZÚ.LUM 1 2 1(BARIG) 3(BÁN) 2 1/2 qa TA 3 E[N ...]
+#lem: u; n; n; qû[(one) litre]N; suluppu[date]N; n; n; n; n; n; n; qû[(one) litre]N; ultu[from]PRP; n; adi[until]PRP; u
+
+5'. [... ŠE].GIŠ 1(BÁN) 3 1/2 qa SÍG{HI.A} 2/3 MA.NA i-nu-šú MÚL.BABBAR u GENNA ina A ⸢x⸣ [...]
+#lem: u; šamaššammū[sesame]N; n; n; n; qû[(one) litre]N; šīpātu[wool]N; n; manû[(one mina)]N; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; u[and]CNJ; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN; u; u
+
+6'. [... UN]{MEŠ} KUR A{MEŠ} NU DÙG.GA{MEŠ} NAG-uʾ
+#lem: u; nišu[people]N; mātu[land]N; mû[water]N; lā[not]MOD; ṭābu[good]AJ; šatû[drink]V
+
+7'. [{ITU}DU₆ 30 ...] ⸢x⸣ ana? SI NIM 2 SI GIN GE₆ 3 sin ár SI₄ 2 KÙŠ sin 4 [KÙŠ ana SI NIM ...]
+#lem: Tašrītu[Month VII]MN; n; u; u; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; 4[4]NU; ammatu[unit]N; ana[to]PRP; ištānu[north wind]N; šaqi[high]AJ; u
+
+8'. [... S]I GIN in 7 GU₄.UD ina ŠÚ UD.DA ŠÚ-šú DIB GE₆ 8 SAG G[E₆ ...]
+#lem: u; ištānu[north wind]N; alāku[blow]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ṣētu[bright light]N; rabû[setting]'N; etēqu[miss]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+9'. [... GE₆ 13 SAG GE₆ sin x MÚL-KUR-šá-DUR-nu-nu n n si]n 5 KÙŠ ana ULÙ SIG 13 8 ŠÚ muš GE₆ 14 1.20 G[E₆ ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V; mūšu[night]N; n; n; mūšu[night]N; u
+
+10'. [...] ⸢x⸣ 15 SI GIN GE₆ 16 {MÚL}rit-GÀM ziq-pi sin [... is-le₁₀ ...]
+#lem: u; u; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; Ritti-gamli[β Aurigae]CN$; zaqāpu[culminate]V; Sîn[moon]N; u; is-le₁₀[α Tauri]CN; u
+
+11'. [... GE₆ 17 ina ZALÁG sin SIG ŠUR-GIGIR?-š]á-ULÙ 1 KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 17 SI ŠÁR G[E₆ ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; n; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; u
+
+12'. [... GE₆ 20 ina ZALÁG sin ár MAŠ.MAŠ-ár n] KÙŠ sin 4 KÙŠ ana ULÙ SIG 20 SI GIN GE₆ 2[1? ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; 4[4]NU; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+13'. [... GE₆ 23 (...) MÚL.BABBAR e MÚL-TUR-šá]-4-KÙŠ-ár-LUGAL 6 SI ina ZALÁG sin ⸢ina IGI MÚL⸣-[TUR-šá-4-KÙŠ-ár-LUGAL n n ...] 
+#lem: u; mūšu[night]N; n; u; Kakkabu-peṣû[Jupiter]CN; eli[above]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ubānu[finger]N; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... 1/2 cubit, the moon being a little [...]
+
+@(o 2') [... the moon] stood 1 cubit [in front of Ju]piter to the west, [...] below Sat[urn ...]
+
+@(o 3') [... Night of the 26th, last part of the night, the moon was n] cubits [... β Virginis], the moon being 1/2 cubit high to the north. The 26th, the north wind blew. Night of the 20+[xth, ...]
+
+@(o 4') [...] 2 @i{sūtu} 2 @i{qa}; dates, the 1st (and) 2nd, 1 @i{pānu} 3 @i{sūtu} 2 1/2 @i{qa}; from the 3rd to [...]
+
+@(o 5') [... se]same, 1 @i{sūtu} 3 1/2 @i{qa}; wool, 2/3 mina. At that time, Jupiter and Saturn were in Leo ... [...]
+
+@(o 6') [... the people?] of the land drank bad water.
+
+@(o 7') [Month VII, (the 1st of which was identical with) the 30th (of the preceding month), ...] high to the north. The 2nd, the north wind blew. Night of the 3rd, the moon was 2 cubits behind α Scorpii, the moon being 4 [cubits high to the north ...]
+
+@(o 8') [... the nor]th wind blew. Around the 7th, Mercury’s last appearance in the west ..., omitted. Night of the 8th, beginning of the ni[ght, ...]
+
+@(o 9') [... Night of the 13th, beginning of the night, the moon was ... η Piscium, the moo]n being 5 cubits low to the south. The 13th, moonset to sunrise: 8°, measured. Night of the 14th, sunset to moonrise: 1° 20' [...]
+
+@(o 10') [...] ... The 15th, the north wind blew. Night of the 16th, when β Aurigae culminated, the moon [was ... α Tauri ...]
+
+@(o 11') [... Night of the 17th, last part of the night, the moon was] 1 cubit [below ζ Tau]ri, the moon being 1/2 cubit back to the west. The 17th, gusty north wind. Ni[ght ...]
+
+@(o 12') [... Night of the 20th, last part of the night, the moon was nn] cubits [behind β Geminorum], the moon being 4 cubits low to the south. The 20th, the north wind blew. Night of the 2[1st? ...]
+
+@(o 13') [... Night of the 23rd, (...) Jupiter was] 6 fingers [above ρ Leo]nis; last part of the night, the moon was [...] in front of ρ [Leonis ...] 
+
+

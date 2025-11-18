@@ -1,0 +1,68 @@
+&X300800 = AD -80 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u
+
+2'. [... ŠÁ]R{MEŠ} GE₆ 7 USAN AN e ŠUR-⸢GIGIR-šá-ULÙ⸣ [...]
+#lem: u; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u
+
+3'. [... S]I? ⸢u MAR? GIN⸣-uʾ GE₆ 8 DIR AN DIB 8 ŠÚ.ŠÚ ⸢ina⸣ [...]
+#lem: u; ištānu[north wind]N; u[and]CNJ; amurru[west wind]N; alāku[blow]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; urrup[be(come) very overcast]V; ina[in]PRP; u
+
+4'. [... SA]G GE₆ sin ina IGI ⸢SA₄-šá-ABSIN⸣ 2 KÙŠ sin 2 KÙ[Š ana ...]
+#lem: u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u
+
+5'. [...] ULÙ GIN ⸢x x x x x⸣ a 13 4.20 ŠÚ muš ⸢x⸣ [...]
+#lem: u; šūtu[south wind]N; alāku[blow]V; u; u; u; u; u; X; n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V; u; u
+
+6'. [...] GE₆ gab-bi-šú ŠÚ-im 22 GE₆ ÍR ana ZALÁG-ru ⸢ki⸣ [TAB-ú ...]
+#lem: u; mūšu[night]N; gabbišu[totality]N; arim[covered]AJ; n; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N; ana[to]PRP; nawāru[clearing]'N; kī[when]PRP; ušarrû[begin]V; u
+
+7'. [...] GIN ina AN.KU₁₀-šú ŠÚ ŠÚ AŠ GAR-in TÙR NU KÁD NIGIN  [...]
+#lem: u; alāku[blow]V; ina[in]PRP; antallû[eclipse]N; u; u; X; šakin[set]AJ; tarbaṣa[halo]N; ul[not]MOD; kaṣāru[become joined]V; lawi[surrounded (with)]AJ; u
+
+8'. [... MÚL-x]-šá-⸢SAG-GÍR.TAB⸣ ád in 1 GE₆ GIN 14 3.⸢30?⸣ [na? ...]
+#lem: u; MÚL-x-šá-SAG-GÍR.TAB[β/δ Scorpii]CN; adir[eclipsed]AJ; ina[at (plus numeral)]PRP; n; mūšu[night]N; alāku[go]V; n; n; na[sunrise to moonset]N; u
+
+9'. [... MÚL-KUR]-šá-KIR₄-šil-PA 1 1/2 KÙŠ 16 SI GIN GE₆ ⸢17⸣ [...]
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; n; ammatu[unit]N; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u
+
+10'. [...] GE₆ 20 USAN AN e ⸢MÚL-IGI⸣-[šá-še-pít-MAŠ.MAŠ n n ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n; u
+
+11'. [...] ⸢muš?⸣ GE₆ 22? [...]  
+#lem: u; mašāhu[measure]V; mūšu[night]N; n; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] gusty [...] winds. Night of the 7th, first part of the night, Mars was [...] above ζ Tauri [...]
+
+@(o 3') [...] the north? and west? winds blew. Night of the 8th, clouds crossed the sky. The 8th, very overcast; in [...]
+
+@(o 4') [... beginn]ing of the night, the moon was 2 cubits in front of α Virginis, the moon being 2 cubits [...]
+
+@(o 5') [...] the south wind blew ... The 13th, moonset to sunrise: 4° 20', measured ... [...]
+
+@(o 6') [...] of night all of it was covered; 22° of night maximal phase; when [it began] to clear, [...]
+
+@(o 7') [...] blew; in its eclipse, there was ...; it was surrounded by a halo which was not closed ... [...]
+
+@(o 8') [... δ /β] Scorpii it became eclipsed; at 1.0° after sunset. The 14th, [sunrise to moonset?:] 3° 30'? [...]
+
+@(o 9') [...] 1 ½ cubits [... θ ] Ophiuchi. The 16th, the north wind blew. Night of the 17th, [...]
+
+@(o 10') [...] Night of the 20th, first part of the night, Mars was [...] above η? [Geminorum ...]
+
+@(o 11') [...] measured?. Night of the 22nd? [...] 
+

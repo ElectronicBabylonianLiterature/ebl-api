@@ -1,0 +1,102 @@
+&X301072 = AD -107B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x⸣ [x] ⸢x x⸣
+#lem: u; u; u; u; u
+
+2'. [... x]+2 1/2 KÙŠ ana SI NIM
+#lem: u; u; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+3'. [... x]+1 ME ana ŠÚ šámaš GE₆ 15 2.20 ME NU PAP
+#lem: u; u; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; ul[not]MOD; naṣāru[watch]V
+
+4'. [...] sin 1/2 KÙŠ ana NIM DIB GE₆ 17 ina ZALÁG sin
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+5'. [... GE₆ 20 ina ZALÁG sin e] MAŠ.MAŠ-šá-SIPA 20 SI sin i-ṣa ana NIM DIB
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]'PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ubānu[finger]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+6'. [... GE₆] 22 ina ZALÁG sin SIG MÚL-ár-šá-ALLA-šá-ULÙ 2 KÙŠ
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N
+
+7'. [...] KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL GE₆ 25 ina ZALÁG sin ár GIŠ.KUN-A 1 KÙŠ
+#lem: u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N
+
+8'. [... x]+29 ME ana ŠÚ šámaš GE₆ 29 USAN dele-bat e SI₄ 2 KÙŠ
+#lem: u; u; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]'PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N
+
+9'. [...] ⸢x⸣ SÍG{HI.A} 2 MA.NA i-nu-šú in 19
+#lem: u; u; šīpātu[wool]N; n; manû[(one mina)]N; inūšu[at that time]AV; ina[in]PRP; n
+
+10'. [... IT]U BI ILLU EN MURUB₄ ITU 8 SI LAL
+#lem: u; warhu[month]N; šū[that]'DP; mīlu[river level]N; adi[until]PRP; qabaltu[middle]N; warhu[month]N; n; ubānu[finger]N; nahāsu[recede]V
+
+11'. [... a]-na? ÍD [x x] bir-ra-a [x x] ⸢x⸣ tú
+#lem: u; ana[to]PRP; nāru[canal]N; u; u; u; u; u; u; X
+
+12'. [...] ⸢x⸣ [x x x x] DUMU-šú ⸢x⸣ [x] u URU?{MEŠ}
+#lem: u; u; u; u; u; u; māru[son]N; u; u; u[and]CNJ; ālu[city]N
+
+13'. [...] ⸢x⸣ BI šá {LÚ}GAL ERÍN{MEŠ} KUR URI{KI} ÍD.hi-šal-la
+#lem: u; u; šū[that]'DP; ša[which]REL; rab[chief]N; uqāni[troops]N; mātu[land]N; Akkad[Babylonia]GN; Nār-Hišalla[Hišalla-canal]WN
+
+14'. [...] ⸢x x x x⸣ A ⸢x x x⸣ ZI? ⸢x⸣ [x] ⸢GIN?⸣-uʾ
+#lem: u; u; u; u; u; u; u; u; u; u; u; u; alāku[go]V
+
+15'. [...] ⸢uʾ?⸣ ITU BI ⸢{LÚ}⸣UN{MEŠ} MAH{MEŠ} [x] IGI?-ú ina GIG x [x x]
+#lem: u; X; warhu[month]N; šū[that]'DP; nišu[people]N; ṣīru[numerous]AJ; u; pānu[before]'AV; ina[in]PRP; murṣu[illness]N; u; u; u
+
+@top 
+1'. [...] LUGAL LUGAL{MEŠ}
+#lem: u; šarru[king]N; šarrāni[king]N
+
+@right 
+1'. [... šá MU 2] ME 4.KÁM ⸢TA {ITU}BAR EN TIL {ITU}KIN⸣
+#lem: u; ša[which]REL; šattu[year]N; n; mē[(one) hundred]NU; n; ultu[from]PRP; Nisannu[Month I]MN; adi[until]PRP; qītu[end]N; Ulūlu[Month VI]MN
+
+@translation labeled en project
+@obverse
+
+@(o 1') [...] ...
+
+@(o 2') [... x]+2 1/2 cubits high to the north
+
+@(o 3') [... x]+1° before sunset. Night of the 15th, moonrise to sunset: 2° 20'; I did not watch
+
+@(o 4') [...] the moon having passed 1/2 cubit to the east. Night of the 17th, last part of the night, the moon was
+
+@(o 5') [... Night of the 20th, last part of the night, the moon was] 20 fingers [above] γ Geminorum, the moon having passed a little to the east
+
+@(o 6') [... Night] of the 22nd, last part of the night, the moon was 2 cubits below δ Cancri
+
+@(o 7') [...] cubits, the moon being 1/2 cubit back to the west. Night of the 25th, last part of the night, the moon was 1 cubit behind θ Leonis
+
+@(o 8') [... x]+29° before sunset. Night of the 29th, first part of the night, Venus was 2 cubits above α Scorpii
+
+@(o 9') [...] ...; wool, 2 minas. At that time, around the 19th,
+
+@(o 10') [...] That month, the river level, until the middle of the month, receded 8 fingers
+
+@(o 11') [...] ... the river [...] ...
+
+@(o 12') [...] ... [...] his son ... and the cities
+
+@(o 13') [...] ... of the general of Babylonia the river ...
+
+@(o 14') [...] ... went?.
+
+@(o 15') [...] ... That month, many people [... as] before of disease ... [...]
+
+@top 
+
+@(t.e. 1') [...] king of kings. 
+
+@right 
+
+@(r.e. 1') [... of year 2]04 from month I until the end of month VI.
+

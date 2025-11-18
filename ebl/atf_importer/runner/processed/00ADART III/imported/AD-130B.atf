@@ -1,0 +1,107 @@
+&X301302 = AD -130B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢sin⸣ [n n] ⸢ana ULÙ⸣ S[IG ...]
+#lem: u; Sîn[moon]N; n; n; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+2'. [... u] MAR ŠÁR{MEŠ} GIN{MEŠ} 7 GU₄.UD [...]
+#lem: u; u[and]CNJ; amurru[west wind]N; ŠÁR[gusty(?)]AJ; alāku[blow]V; n; Šihṭu[Mercury]CN; u
+
+3'. [... GE₆ 8 SAG GE₆ sin ina IGI MÚL-x-šá]-SAG-GÍR.TAB 3 KÙŠ ina IGI AN 2 2/3 [KÙŠ ana ŠÚ GUB ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-x-šá-SAG-GÍR.TAB[β/δ Scorpii]CN; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; u
+
+4'. [... GE₆ 9 SAG GE₆ sin x] SI₄ 1/2 KÙŠ sin 8 SI ana SI NIM in [...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; SI₄[α Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; n; ubānu[finger]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; ina[around]PRP; u
+
+5'. [...] AN SIG MÚL-MURUB₄-šá-SAG-GÍR.TAB 8 SI 10+[x ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; ubānu[finger]N; n; u
+
+6'. [...] 3.30 ME a-kám muš sin ki E-a al-[la ...]
+#lem: u; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V; Sîn[moon]N; kī[when]PRP; elû[rise]V; alla[more than]PRP; u
+
+7'. [...] ⸢x x⸣ AN.KU₁₀-šú TÚG AN-e GAR-in ina A[N.KU₁₀-šú ...]
+#lem: u; u; u; antallû[eclipse]N; ṣubātu[textile//garment]N'N$; šamû[sky]N; šakin[set]AJ; ina[in]PRP; antallû[eclipse]N; u
+
+8'. [... x]+1/2 KÙŠ SIG SI-MÁŠ 1/2 KÙŠ ana NIM [DIB a-dir ...]
+#lem: u; u; ammatu[unit]N; šapil[below]AJ; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; adir[eclipsed]AJ; u
+
+9'. [... G]E₆ 14 9.30 GE₆ ina ZALÁG sin á[r ...]
+#lem: u; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u
+
+10'. [...] NU IGI ($erasure$)
+#lem: u; ul[not]MOD; amāru[see]V
+
+11'. [...] ⸢šá⸣-še-pít-MAŠ.MAŠ 4? [...] 
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; 4[4]NU; u
+
+@reverse
+1'. [... {IM}]U₁₈.LU ina ⸢x⸣ [...]
+#lem: u; šūtu[south]N; ina[in]PRP; u; u
+
+2'. [... pu-li?]-ta-an-nu ana {KUR}ma-di-na-tú? [...]
+#lem: u; puliṭū[(Greek) citizenry]N; ana[to]PRP; madīnatu[province]N$; u
+
+3'. [... IT]U BI al-te-me šá ina TIL ITU {LÚ}G[AL? ...]
+#lem: u; warhu[month]N; šū[that]'DP; alteme[hear]V; ša[which]REL; ina[in]PRP; qītu[end]N; warhu[month]N; rab[great one]'N; u
+
+4'. [... {URU}se-lu-ke-ʾa-a] šá ana UGU {ÍD}IDIGNA ana UR[U ...]
+#lem: u; Selukeʾa[Seleucia]SN; ša[which]REL; ana[to]PRP; muhhi[top]N; Idiqlat[Tigris]WN; ana[to]PRP; ālu[city]N; u
+
+5'. [...] {LÚ}DUMU šip-ri{MEŠ} šá {LÚ}GAL ERÍN{MEŠ} [...]
+#lem: u; māru[child]N; šipru[message]N; ša[which]REL; rab[chief]N; uqāni[troops]N; u
+
+6'. [...]  ITU BI U₄ 1.KÁM {LÚ}mu-ma-ʾi-ir [...]
+#lem: u; warhu[month]N; šū[that]'DP; ūmu[moonrise to sunset]N; n; mumaʾʾeru[satrap]N; u
+
+$ ruling
+7'. [...] ⸢na⸣-su ana šámaš SIG [...]
+#lem: u; na₁[sunset to moonset]N; ana[to]PRP; šamšu[sun]N; šapil[low]AJ; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] the moon being [...] low to the south [...]
+
+@(o 2') [...] gusty [... and] west winds blew. The 7th, Mercury [...]
+
+@(o 3') [... Night of the 8th, beginning of the night, the moon was] 3 cubits [in front of β /δ] Scorpii, [it stood] 2 2/3 cubits in front of Mars [to the west ...]
+
+@(o 4') [... Night of the 9th, beginning of the night, the moon was] ½ cubit [...] α Scorpii, the moon being 8 fingers high to the north. Around [...]
+
+@(o 5') [...] Mars was 8 fingers below δ Scorpii. The 10+[xth, ...]
+
+@(o 6') [...] moonrise to sunset: 3° 30', measured (despite) mist; when the moon came out, more than [...]
+
+@(o 7') [...] ... in its eclipse, the ‘garment of the sky’ was there; in [its] eclipse, [...]
+
+@(o 8') [... x]+½ cubit below β Capricorni, [(the moon) having passed] ½ cubit to the east, [it became eclipsed ...]
+
+@(o 9') [... Ni]ght of the 14th, sunset to moonrise: 9° 30'; last part of the night, the moon was beh[ind ...]
+
+@(o 10') [...] I did not see (it).
+
+@(o 11') [... η /μ ] Geminorum 4? [...] 
+
+@reverse
+
+@(r 1') [...] south ... [...]
+
+@(r 2') [...] citizens to the province [...]
+
+@(r 3') [...] That month, I heard that at the end of the month the [...]
+
+@(r 4') [... from Seleucia] which is on the Tigris to [...]
+
+@(r 5') [...] messengers of the general [...]
+
+@(r 6') [...] ... That month, the 1st, the satrap [...]
+
+$ruling
+
+@(r 7') [...] sunset to moonset: [...]; it was low to the sun [...]
+

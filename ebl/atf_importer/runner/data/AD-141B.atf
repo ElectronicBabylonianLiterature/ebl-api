@@ -1,0 +1,55 @@
+&X301412 = AD -141B
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... sin] ár GU₄.UD [N N ana NIM GUB ...]
+#lem: u; Sîn[moon]N; warki[behind]PRP; Šihṭu[Mercury]CN; n; n; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+
+2'. [... ana] ULÙ SIG 4 LÁL-tì ⸢NU⸣ PA[P ...] x x x [...]
+#lem: u; ana[to]PRP; šūtu[south ]N; šapil[below]AJ; 4[4]NU; šitqultu[equinox]'N$; ul[not]MOD; naṣāru[watch]V; u; u; u; u; u
+
+3'. [... x]+1 KÙŠ GE₆ 8 SAG GE₆ sin ⸢ina IGI LUGAL⸣ 1 KÙŠ sin 4 S[I ...]
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; 4[4]NU; ubānu[finger]N; u
+
+4'. [... GE₆ 10 SAG GE₆ sin e G]ÌR-ár-šá-A 1/2 KÙŠ sin i-ṣa ana NIM DIB ár GENNA 2+[x KÙŠ ana NIM GUB ...]
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]'PRP; GÌR-ár-šá-A[β Virginis]CN; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+
+5'. [... GU₄.U]D SIG MÚL.MÚL 2/3 KÙŠ 12 2 ŠÚ in 12 MÚL.BABBAR ana M[E] ⸢E⸣-[a ...]
+#lem: u; Šihṭu[Mercury]CN; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; n; n; rabû[moonset to sunrise]N; ina[around]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[rise]V; u
+
+6'. [... G]E₆ DIR muš GE₆ 15 ina ZALÁG sin e SI₄ 4 ⸢KÙŠ⸣ [...]
+#lem: u; mūšu[night]N; erpetu[cloud]N; mašāhu[measure]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]'PRP; SI₄[α Scorpii]CN; 4[4]NU; ammatu[unit]N; u
+
+7'. [... GENNA] ⸢ár MÚL⸣-SIG-šá-LÁL-tì-GIŠ.KUN-A UŠ G[E₆ ...]
+#lem: u; Kayyamānu[Saturn]CN; warki[behind]PRP; MÚL-SIG-šá-LÁL-tì-GIŠ.KUN-A[σ Leonis]CN$; emēdu[be at a stationary point]'V; mūšu[sunset to moonrise]N; u
+
+8'. [...] ⸢MÚL.BABBAR ina RÍN⸣ dele-bat ina SAG ITU ina G[U ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; Dilbat[Venus]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Gula[Aquarius]CN; u
+
+9'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [... the moon stood ...] behind Mercury [to the east ...]
+
+@(o 2') [...] low to the south. The 4th, equinox; I did not watch [...] ... [...]
+
+@(o 3') [... x]+1 cubits. Night of the 8th, beginning of the night, the moon was 1 cubit in front of α Leonis, the moon being 4 fingers [...]
+
+@(o 4') [... Night of the 10th, beginning of the night, the moon was] 1/2 cubit [above] β Virginis, the moon having passed a little to the east, [it stood] 2+[x cubits] behind Saturn [to the east ...]
+
+@(o 5') [... Mercu]ry was 2/3 cubit below η Tauri. The 12th, moonset to sunrise: 2°. Around the 12th, Jupiter’s acronychal rising [...]
+
+@(o 6') [...] sunset to moonrise: [nn°], measured (despite) clouds. Night of the 15th, last part of the night, the moon was 4 cubits above α Scorpii [...]
+
+@(o 7') [... Saturn] became stationary [...] behind σ Leonis. Ni[ght ...]
+
+@(o 8') [...] Jupiter was in Libra; Venus, in the beginning of the month, was in Aqua[rius ...]
+
+@(o 9') [...] ... [...]

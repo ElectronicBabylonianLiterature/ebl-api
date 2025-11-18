@@ -1,0 +1,76 @@
+&X300991 = AD -99A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [... ana] ULÙ SIG? [...]
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+2'. [...] ⸢AN DUL⸣-hat U₄.ZAL sin T[ÙR? NIGIN? ...]
+#lem: u; šamû[rain]N; DUL[(meaning unclear)]V; šāt-urri[third watch of the night]N; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; u
+
+3'. [...] ⸢2⸣ 1/2 KÙŠ sin 1 ⸢2/3?⸣ KÙŠ ana SI [NIM ...]
+#lem: u; n; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u
+
+4'. [...] 26 22 ⸢KUR KUR₄⸣ muš 26 ina [KIN].⸢SIG⸣ ŠÚ.ŠÚ SI [...]
+#lem: u; n; n; KUR[moonrise to sunrise]N; baʾil[bright]AJ; mašāhu[measure]V; n; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; ištānu[north wind]N; u
+
+5'. [... GI]N? 27 SI GIN 28 AN.KU₁₀ šámaš ki PAP NU IGI [...]
+#lem: u; alāku[blow]V; n; ištānu[north wind]N; alāku[blow]V; n; antallû[eclipse]N; šamši[sun]N; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u
+
+6'. [...] SI GIN 29 ina še-rì ŠÚ.ŠÚ AN {KUŠ}E.SÍR NU TU[H ...]
+#lem: u; ištānu[north wind]N; alāku[blow]V; n; ina[in]PRP; šēri[morning]N; urrup[be(come) very overcast]V; šamû[rain]N; šēnu[sandal]N; ul[not]MOD; paṭāru[loosen]'V; u
+
+7'. [...] ZÚ.LUM 2(BARIG) PI GIBIL{MEŠ} 2(BARIG) 3(BÁN) kàs 1 GUR [...]
+#lem: u; suluppu[date]N; n; pānu[bushel (36 litres)]N; eššu[new]AJ; n; n; kasû[cuscuta]N; n; kurru[kor (180 litres)]N; u
+
+8'. [... i-nu-šú MÚL].BABBAR ina MAŠ.MAŠ dele-bat ina SAG ITU ina GÍR.TAB EN TIL ITU ina PA i[n ...]
+#lem: u; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; Dilbat[Venus]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; adi[until]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Pabilsag[Sagittarius]CN; ina[around (day x)]PRP; u
+
+9'. [... x]{MEŠ} KI.TA ILLU ŠÚ TAG₄{MEŠ} ILLU GIM IGI-⸢ú⸣ [...]
+#lem: u; u; šaplānu[below]AV; mīlu[river level]N; kiššatu[totality]N; ezēbu[leave]V$; mīlu[river level]N; kīma[like]PRP; pānu[before]'AV; u
+
+10'. [...] ($blank$)
+#lem: u
+
+11'. [{ITU}APIN 1 ...] 2 GU₄.UD ina NIM ina TIL RÍN IGI DIR NU PAP kal ME [...]
+#lem: Arahsamna[Month VIII]MN; n; u; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]N; ina[in]PRP; qītu[end]N; Zibānītu[Libra]CN; amāru[be(come) visible]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; kal[all]N; ūmu[day]N; u
+
+12'. [... GE₆ 4 (SAG GE₆) sin ár SI-MÁ]Š 2 KÙŠ sin 5 K[ÙŠ] ana ULÙ SIG 4 ŠÚ.ŠÚ A[N ...]
+#lem: u; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; 4[4]NU; urrup[be(come) very overcast]V; šamû[rain]N; u
+
+13'. [...] ⸢x⸣ [x x] ⸢x⸣ [...]  
+#lem: u; u; u; u; u; u
+
+@translation labeled en project
+@obverse
+
+@(o 1') [...] low to the south [...]
+
+@(o 2') [...] rain DUL; in the morning watch, the moon was [surrounded? by a ha]lo? [...]
+
+@(o 3') [...] 2 1/2 cubits, the moon being 1 2/3? cubits [high] to the north [...]
+
+@(o 4') [...] The 26th, moonrise to sunrise: 22°; it was bright, measured. The 26th, in the afternoon, very overcast, the north wind [...]
+
+@(o 5') [... bl]ew. The 27th, the north wind blew. The 28th, solar eclipse; when I watched I did not see it [...]
+
+@(o 6') [...] the north wind blew. The 29th, in the morning, very overcast; rain but the sandal was not removed [...]
+
+@(o 7') [...] dates, 2 @i{pānu}; new ones, 2 @i{pānu} 3 @i{sūtu}; mustard, 1 @i{kurru} [...]
+
+@(o 8') [... At that time, Ju]piter was in Gemini; Venus, in the beginning of the month, was in Scorpius, until the end of the month, in Sagittarius; ar[ound ...]
+
+@(o 9') [...] were left below the peak flood level; the river level as before [...]
+
+@(o 10') [...] (blank)
+
+@(o 11') [Month VIII, the 1st (of which followed the 30th of the preceding month), ...] the 2nd, Mercury’s first appearance in the east in the end of Libra; clouds, I did not watch; all day [...]
+
+@(o 12') [... Night of the 4th, (beginning of the night,) the moon was] 2 cubits [behind β Capri]corni, the moon being 5 cubits low to the south. The 4th, very overcast, ra[in ...]
+
+@(o 13') [...] ... [...] ... [...] 
+

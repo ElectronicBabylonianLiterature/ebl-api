@@ -1,0 +1,89 @@
+&X300951 = AD -95A 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [... M]ÚL IGI š[á x x]
+#lem: u; kakkabu[star]N; mahrû[front]AJ; ša[which]REL; u; u
+
+2'. [...] ⸢x⸣ GE₆ 24 ina ZA[LÁG x x]
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u; u
+
+3'. [...] ⸢ŠÚ.ŠÚ⸣ ULÙ GIN GE₆ 26 26 [x x x]
+#lem: u; urrup[be(come) very overcast]V; šūtu[south wind]N; alāku[blow]V; mūšu[night]N; n; n; u; u; u
+
+4'. [... G]E₆ 28 USAN AN e MÚL-ár-šá-še-pít-MAŠ.MAŠ 1 K[ÙŠ?]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N
+
+5'. [... 1]5 1(BARIG) 2(BÁN) EN 19 1(BARIG) 2(BÁN) 3 qa 20 1(BARIG) 4(BÁN)?
+#lem: u; n; n; n; adi[until]PRP; n; n; n; n; qû[(one) litre]N; n; n; n
+
+6'. [...] qa 4-ʾu-ú kàs 1 GUR 3(BÁN) sah-le₁₀ 3(BÁN) 4 1/2 qa
+#lem: u; qû[(one) litre]N; rebû[one-fourth]NU; kasû[cuscuta]N; n; kurru[kor (180 litres)]N; n; sahlu[cress]N; n; 4[4]NU; n; qû[(one) litre]N
+
+7'. [...] SÍG{HI.A} 1 1/2 MA.NA a-na 1 GÍN KÙ.BABBAR ép-šú šá ina KUR SUM-in
+#lem: u; šīpātu[wool]N; n; n; manû[(one mina)]N; ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; epšu[wrought]AJ; ša[which]REL; ina[in]PRP; mātu[land]N; nadānu[give]V
+
+8'. [... GENN]A ina zib{ME} ITU BI ILLU EN 4 GUB-uz PAP 8 na
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Zibbātu[Pisces]CN; warhu[month]N; šū[that]'DP; mīlu[river level]N; adi[until]PRP; 4[4]NU; izuzzu[stand]V; napharu[total]N; n; na[na-gauge]N
+
+9'. [... {m}ar-šá-k]a-a LUGAL LUGAL{MEŠ} ina URU{MEŠ} šá ina li-[mit ...]
+#lem: u; Aršaka[Arsaces]RN; šarru[king]N; šarrāni[king]N; ina[in]PRP; ālu[city]N; ša[which]REL; ina[in]PRP; limītu[environs]N; u
+
+10'. [... MU]-a-tì šá {URU}ar-mi-ni [...]
+#lem: u; šuāti[that]'DP; ša[which]REL; Armini[Armenia]GN; u
+
+11'. [... {LÚ}]⸢GAL ú⸣-qa-a-nu ina KÁ? [x x x]
+#lem: u; rabû[great one]N; uqānu[troops]N; ina[in]PRP; bābu[gate]N; u; u; u
+
+12'. [... x]{MEŠ} DÙ-uʾ [...]
+#lem: u; u; epēšu[make]V; u
+
+$ruling
+13'. [GU₄ ...] ⸢x⸣ [...] 
+#lem: Ayyāru[Month II]MN; u; u; u
+
+@right 
+1'. [... MU] ⸢2 ME 16.KÁM⸣ [...]  
+#lem: u; šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] the front star of [...]
+
+@(o 2') [...] ... Night of the 24th, last part of the [night, ...]
+
+@(o 3') [...] very overcast, the south wind blew. Night of the 26th (and) the 26th, [...]
+
+@(o 4') [... Ni]ght of the 28th, first part of the night, Mars was 1 cubit above μ Geminorum
+
+@(o 5') [...] the 15th, 1 @i{pānu} 2 @i{sūtu}; until the 19th, 1 @i{pānu} 2 @i{sūtu} 3 @i{qa}; the 20th, 1 @i{pānu} 4 @i{sūtu?}
+
+@(o 6') [...] @i{qa} one-fourth; mustard, 1 @i{kurru} 3 @i{sūtu}; cress, 3 sūt 4 1/2 @i{qa}
+
+@(o 7') [...] wool, 1 1/2 minas for 1 shekel of wrought silver which were given in the land.
+
+@(o 8') [... Satur]n was in Pisces. That month, the river level remained constant until the 4th, total: 8 was the @i{na} (gauge);
+
+@(o 9') [... Arsac]es, king of kings, in the cities in the surround[ings ...]
+
+@(o 10') [...] this [...] of the city Armini [...]
+
+@(o 11') [...] the chief of troops at the gate? [...]
+
+@(o 12') [...] they made [...]
+
+$ruling
+
+@(o 13') [Month II ...] ... [...] 
+
+@right 
+
+@(r.e. 1') [... Year] 216 [...] 
+

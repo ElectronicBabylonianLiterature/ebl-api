@@ -1,0 +1,129 @@
+&X301194 = AD -119D 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [... a]-kám muš ana šámaš SIG sin ina IGI GENNA 1? KÙŠ?
+#lem: u; akamu[mist]N; mašāhu[measure]V; ana[to]PRP; šamšu[sun]N; šapil[low]AJ; Sîn[moon]N; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N
+
+2'. [...] DIR AN ZA SI GIN ina KIN.SIG ŠÚ.ŠÚ
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V
+
+3'. [...] GÍR GÍR.GÍR GÙ U MAH
+#lem: u; birqu[lightning]N; barāqu[flash]V; rigim[voice]N; Adad[storm-god]DN; ṣīru[great]AJ
+
+4'. [... ṣar]-hi AN DUL-hat SI GIN
+#lem: u; ṣarhu[wailing]AJ; šamû[rain]N; DUL[(meaning unclear)]V; ištānu[north wind]N; alāku[blow]V
+
+5'. [...] SI GIN ina KIN.SIG ŠÚ.ŠÚ
+#lem: u; ištānu[north wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V
+
+6'. [...] DIR AN ZA 8 DIR AN ZA
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+7'. [... A]N ZA ULÙ ŠÁR ina KIN.SIG ŠÚ
+#lem: u; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; ŠÁR[gusty(?)]AJ; ina[in]PRP; kinsikku[afternoon]N; īrup[be(come )overcast]V
+
+8'. [... DIR] SAL AN ZA SI GIN
+#lem: u; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+9'. [... hi]-il AN-ú ŠÚ-im
+#lem: u; hillu[haze]N; +šamû[sky]N$; arim[covered]AJ
+
+10'. [...] DIR AN ZA SI GIN
+#lem: u; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+11'. [...] SAG-GÍR.TAB 3 KÙŠ
+#lem: u; MÚL-x-šá-SAG-GÍR.TAB[β/δ Scorpii]CN; n; ammatu[unit]N
+
+12'. [... Z]A SI GIN GE₆ 15 1.40 ME a-kám m[uš]
+#lem: u; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+13'. [... ina ZALÁG] sin ár MÚL-KUR-šá-KIR₄-šil-PA 1 KÙŠ
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N
+
+14'. [... A]N ZA ina ZALÁG sin ina IGI
+#lem: u; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N
+
+15'. [...] AN ZA GÍR GÍR.GÍR
+#lem: u; šamû[sky]N; ṣabātu[cover (the sky)]V; birqu[lightning]N; barāqu[flash]V
+
+16'. [...] ár MÚL-ár-šá-SUHUR-MÁŠ
+#lem: u; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN
+
+17'. [...] ⸢AN.BAR₇⸣ SI ŠÁR
+#lem: u; muṣlālu[noon]N; ištānu[north wind]N; ŠÁR[gusty(?)]AJ
+
+18'. [...] ⸢GIN⸣
+#lem: u; alāku[blow]V
+
+@reverse
+
+$(traces) 
+
+@top
+1'. [...] ⸢x x⸣ [...] ⸢x x x⸣
+#lem: u; u; u; u; u; u; u
+
+2'. [... {URU}se]-lu-ke-ʾa-a šá ana UGU {ÍD}BURANUN{KI}
+#lem: u; Selukeʾa[Seleucia]SN; ša[which]REL; ana[to]PRP; muhhi[top]N; Purattu[Euphrates]WN
+
+3'. [... {m}a]r-šá-ka-a LUGAL
+#lem: u; Aršaka[Arsaces]RN; šarru[king]N
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] measured (despite) mist, (the moon) was low to the sun; the moon was 1? cubit in front of Saturn
+
+@(o 2') [...] clouds were in the sky, the north wind blew; in the afternoon, very overcast.
+
+@(o 3') [...] lightning flashed continuously, much thunder
+
+@(o 4') [... wai]ling [...], rain DUL, the north wind blew.
+
+@(o 5') [...] the north wind blew; in the afternoon, very overcast.
+
+@(o 6') [...] clouds were in the sky. The 8th, clouds were in the sky
+
+@(o 7') [...] were in the sky, gusty south wind; in the afternoon, overcast.
+
+@(o 8') [...] thin [clouds] were in the sky, the north wind blew.
+
+@(o 9') [...] haze covered the sky
+
+@(o 10') [...] clouds were in the sky, the north wind blew.
+
+@(o 11') [...] 3 cubits [... δ /β] Scorpii
+
+@(o 12') [...] were [in the sky], the north wind blew. Night of the 15th, moonrise to sunset: 1° 40', mea[sured (despite)] mist
+
+@(o 13') [... last part of the night,] the moon was 1 cubit behind θ Ophiuchi
+
+@(o 14') [...] were in the sky; last part of the night, the moon was in front of
+
+@(o 15') [...] were in the sky, lightning flashed continuously
+
+@(o 16') [... the moon was ...] behind δ Capricorni
+
+@(o 17') [...] at noon, gusty north wind
+
+@(o 18') [...] blew. 
+
+@reverse
+
+$traces
+
+@top
+
+@(t.e. 1') [...] ... [...] ...
+
+@(t.e. 2') [... Se]leucia which is on the Euphrates
+
+@(t.e. 3') [...] king Arsaces.
+
+

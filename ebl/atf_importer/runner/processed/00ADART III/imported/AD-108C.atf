@@ -1,0 +1,85 @@
+&X301083 = AD -108C 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢sin? x⸣ [x] ⸢x x⸣ [...]
+#lem: u; Sîn[moon]N; u; u; u; u; u
+
+2'. [GE₆ 16 ina Z]ALÁG sin SIG MÚL.MÚL 1 1/2 KÙ[Š] ⸢x⸣ [... GE₆ 18 ina ZALÁG sin]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+3'. ⸢ina IGI⸣ MÚL-IGI-šá-še-pít-MAŠ.MAŠ 1 1/2 KÙŠ sin 1/2? K[ÙŠ ana ...]
+#lem: ina[in]PRP; pān[front]N; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; u
+
+4'. DIR AN ZA 20 kal ME DIR AN ZA SI GIN GE₆ [...]
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; n; kal[all]N; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; u
+
+5'. 22 DIR AN ZA GE₆ 23 ina ZALÁG sin SIG MÚL-TUR-šá-[4-KÙŠ-ár-LUGAL n n ... GE₆ 24 ina ZALÁG sin]
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+6'. ina IGI MÚL.BABBAR 2 KÙŠ ana ŠÚ GUB sin 2 2/3 KÙŠ ana ULÙ [SIG ...]
+#lem: ina[in]PRP; pān[front]N; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
+
+7'. GE₆ 26 ina ZALÁG sin ár DELE-šá-IGI-ABSIN 1 1/2 KÙŠ sin 3 [KÙŠ ana ULÙ SIG ... GE₆ 27]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u; mūšu[night]N; n
+
+8'. ina ZALÁG dele-bat ár GÌR-ár-šá-A 2 SI áš-šá TE-šú ma-šil 20+[x ...]
+#lem: ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N; aššum[as if]PRP; ṭehû[be(come) near to]V$; mašil[equal]AJ; n; u
+
+9'. 29 30 SI GIN ITU BI KI.LAM še-im 2(BARIG)? [...]
+#lem: n; n; ištānu[north wind]N; alāku[blow]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; n; u
+
+10'. dele-bat EN 25 ina A ina TIL ITU ina ABS[IN ...]
+#lem: Dilbat[Venus]CN; adi[until]PRP; n; ina[in]PRP; Nēšu[Leo]CN; ina[in]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; Šerʾu[Virgo]CN; u
+
+11'. EN TIL ITU ina se-ke-[ri? ...]
+#lem: adi[until]PRP; qītu[end]N; warhu[month]N; ina[in]PRP; sekēri[blocking]N; u
+
+12'. U₄ 16 {LÚ}GAL ERÍN[{MEŠ} ...]
+#lem: ūmu[day]N; n; rab[chief]N; uqāni[troops]N; u
+
+$ruling
+13'. {ITU}DU₆ 1 13 [na-su ...]
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N; u
+
+14'. [GE₆] 8 SAG [GE₆ ...]
+#lem: mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] the moon? ... [...]
+
+@(o 2') [Night of the 16th, last] part of the night, the moon was 1 1/2 cubits below η Tauri ... [... Night of the 18th, last part of the night, the moon was]
+
+@(o 3') 1 1/2 cubits in front of η Geminorum, the moon being 1/2? cubit [...]
+
+@(o 4') clouds were in the sky. The 20th, all day clouds were in the sky, the north wind blew. Night [...]
+
+@(o 5') The 22nd, clouds were in the sky. Night of the 23rd, last part of the night, the moon was [...] below ρ Leo[nis ... Night of the 24th, last part of the night, the moon]
+
+@(o 6') stood 2 cubits in front of Jupiter to the west, the moon being 2 2/3 cubits [low] to the south [...]
+
+@(o 7') Night of the 26th, last part of the night, the moon was 1 1/2 cubits behind γ Virginis, the moon being 3 [cubits low to the south ... Night of the 27th,]
+
+@(o 8') last part of the night, Venus was 2 fingers behind β Virginis, it looked as if it came close to it. The 20+[xth? ...]
+
+@(o 9') The 29th (and) 30th, the north wind blew. That month, the equivalent was: barley, 2 @i{pānu} [...]
+
+@(o 10') Venus, until the 25th, was in Leo, at the end of the month, in Vir[go ...]
+
+@(o 11') until the end of the month, at the damming [...]
+
+@(o 12') the 16th, the general [...]
+
+$ruling
+
+@(o 13') Month VII, the 1st (of which followed the 30th of the preceding month), [sunset to moonset:] 13° [x ...]
+
+@(o 14') [Night] of the 8th, beginning [of the night, ...]
+

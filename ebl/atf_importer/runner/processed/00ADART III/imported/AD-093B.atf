@@ -1,0 +1,62 @@
+&X300932 = AD -93B 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... i]n 35 GE₆ GIN ⸢14?⸣ [...]
+#lem: u; ina[at]PRP; n; mūšu[night]N; alāku[go]V; n; u
+
+3'. [...]  in 18 {MÚL}KAK.BAN IGI ⸢NU PAP⸣ [...]
+#lem: u; ina[around (day x)]PRP; n; Šiltāhu[Sirius]CN; nanmuru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; u
+
+4'. [... GE₆ 22 ina ZALÁG sin x is-le₁₀ n n] sin 3 1/2 KÙŠ ana SI NIM GE₆ 23 ina ZALÁG [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u; is-le₁₀[α Tauri]CN; n; n; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+5'. [...] GE₆ 26 ina ZALÁG sin ina IGI MAŠ.MAŠ-ár 1 KÙŠ s[in ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; u
+
+6'. [... ina TIL IT]U 2(BARIG) 5(BÁN) NU DÙ-tú 3(BARIG) 4(BÁN) 3 qa [...]
+#lem: u; ina[in]PRP; qītu[end]N; warhu[month]N; n; n; ul[not]MOD; banītu[good]AJ; n; n; n; qû[(one) litre]N; u
+
+7'. [... GEN]NA ina HUN AN ina A in 17 A[N ... ŠÚ ...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Agru[Aries]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Nēšu[Leo]CN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; u; rabû[set]'V; u
+
+8'. [...] ⸢È⸣-a ITU BI G[IG?{MEŠ} ...]
+#lem: u; waṣû[come out]V; warhu[month]N; šū[that]'DP; murṣu[illness]N; u
+
+9'. [... {ÍD}BURA]NUN{KI} i-[na ...]
+#lem: u; Purattu[Euphrates]WN; ina[in]PRP; u
+
+10'. [...] ($blank$) [...] 
+#lem: u; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') [...] ... [...]
+
+@(o 2') [...] at 35° after sunset. The 14th? [...]
+
+@(o 3') [...] ... Around the 18th, Sirius’ first appearance; I did not watch [...]
+
+@(o 4') [... Night of the 22nd, last part of the night, the moon was ... α Tauri,] the moon being 3 ½ cubits high to the north. Night of the 23rd, last part of the night, [...]
+
+@(o 5') [...] Night of the 26th, last part of the night, the moon was 1 cubit in front of β Geminorum, the m[oon being ...]
+
+@(o 6') [... at the end of the mon]th, 2 @i{pānu} 5 @i{sūtu}; not good, 3 @i{pānu} 4 @i{sūtu} 3 @i{qa} [...]
+
+@(o 7') [... Sat]urn was in Aries; Mars was in Leo; around the 17th, Mars’ [last appearance ...]
+
+@(o 8') [...] went out. That month, s[ick? ...]
+
+@(o 9') [... Euphr]ates i[n ...]
+
+@(o 10') [...] (blank) [...] 
+

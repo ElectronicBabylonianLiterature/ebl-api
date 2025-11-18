@@ -1,0 +1,160 @@
+&X300993 = AD -99C 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1. ⸢MU⸣ 2 ME 12.KÁM APIN dele-bat u ⸢GENNA ina MÁŠ⸣ GE₆ 25 USAN dele-bat
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Arahsamna[Month VIII]MN; Dilbat[Venus]CN; u[and]CNJ; Kayyamānu[Saturn]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+2. ⸢SIG⸣ GENNA 2/3 KÙŠ AB in 2 <<GENNA>> KAK.BAN ana ME E-a
+#lem: šapil[below]AJ; Kayyamānu[Saturn]CN; n; ammatu[unit]N; Ṭebētu[Month X]MN; ina[around (day x)]PRP; n; Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; elû[rise]V
+
+3. in 2 GENNA ina TIL MÁŠ ŠÚ NU PAP
+#lem: ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; qītu[end]N; Suhurmāšu[Capricorn]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V
+
+4. MU 2 ME 13!.KÁM BAR 4 AN ina! PA ina UŠ IGI-tú UŠ GE₆ 14 sin
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; 4[4]NU; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; ina[in]PRP; X; mahritu[front]AJ; nenmudu[be at a stationary point]V; mūšu[night]N; n; Sîn[moon]N
+
+5. ki E-a 3 SI Á KUR ina TIL <<GÍR.TAB>> RÍN 2 KÙŠ ár RÍN-šá-ULÙ
+#lem: kī[when]PRP; elû[rise]V; n; ubānu[finger]N; idu[side]N; šadû[east]N; ina[in]PRP; qītu[end]N; Zibānītu[Libra]CN; n; ammatu[unit]N; warki[behind]PRP; RÍN-šá-ULÙ[α Librae]CN
+
+6. a-dir ina AN.KU₁₀-šú MÚL.BABBAR ina MAŠ.MAŠ u {MÚL}KAK.SI.SÁ GUB{MEŠ}
+#lem: adir[eclipsed]AJ; ina[during)]PRP; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; u[and]CNJ; Šiltāhu[Sirius]CN; izuzzu[stand]V
+
+7. GU₄ GE₆ 14 GU₄.UD ina MAŠ.MAŠ e MÚL.BABBAR 1 KÙŠ 8 SI GU₄.UD 4 SI ana ŠÚ LAL
+#lem: Ayyāru[Month II]MN; mūšu[night]N; n; Šihṭu[Mercury]CN; ina[in]PRP; Māšu[Gemini]CN; eli[above]'PRP; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; n; ubānu[finger]N; Šihṭu[Mercury]CN; 4[4]NU; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V
+
+8. in 18 AN ina GÍR.TAB ana ME E-a in 18 ⸢KAK.BAN⸣ ŠÚ NU PAP
+#lem: ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; ana[to]PRP; ūmu[day]N; elû[rise]V; ina[around (day x)]PRP; n; Šiltāhu[Sirius]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]'V
+
+9. ŠU GE₆ 10 sin ár ⸢SI₄⸣ 2 KÙŠ ár AN 2 SI ana šá TA SI-šú šá ULÙ e ma-šil
+#lem: Duʾūzu[Month IV]MN; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; ša[which]REL; ultu[from]PRP; qarnu[horn]N; ša[which]REL; šūtu[south]N; elû[go up]V; mašil[equal]AJ
+
+10. GE₆ 27 ina ZALÁG dele-bat ina MAŠ.MAŠ SIG MÚL.BABBAR 10 SI dele-bat 2 SI ana NIM DIB
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; ina[in]PRP; Māšu[Gemini]CN; šapil[below]AJ; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N; Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+11. DU₆ GE₆ 14 sin AN.KU₁₀ ina HUN Á KUR ki TAB-ú gab-bi ŠÚ-im
+#lem: Tašrītu[Month VII]MN; mūšu[night]N; n; Sîn[moon]N; antallû[eclipse]N; ina[in]PRP; Agru[Aries]CN; idu[side]N; šadû[east wind]N; kī[when]PRP; ušarrû[begin]V; gabbu[totality]N; arim[covered]AJ
+
+12. ina AN.KU₁₀-šú MÚL.BABBAR ina ALLA u {MÚL}KAK.SI.SÁ GUB{MEŠ}
+#lem: ina[in]PRP; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; u[and]CNJ; Šiltāhu[Sirius]CN; izuzzu[stand]V
+
+13. APIN GE₆ 19 USAN AN ina GU SIG GENNA 6 SI
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Gula[Aquarius]CN; šapil[below]AJ; Kayyamānu[Saturn]CN; n; ubānu[finger]N
+
+14. AB in 2 MÚL.BABBAR ina ALLA ana ME E-a AN ina zib{ME} 12 GU₄.UD ina ŠÚ
+#lem: Ṭebētu[Month X]MN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; ana[to]PRP; ūmu[day]N; elû[rise]V; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibbātu[Pisces]CN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N
+
+15. ina MÁŠ IGI 17 dele-bat ina ŠÚ ina MÁŠ IGI GE₆ 21 USAN
+#lem: ina[in]PRP; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V; mūšu[night]N; n; šimītān[first part of the night]N
+
+16. GU₄.UD ina GU e GENNA 2/3 KÙŠ in 25 ⸢GENNA⸣ [ina] ⸢GU⸣ [ŠÚ]
+#lem: Šihṭu[Mercury]CN; ina[in]PRP; Gula[Aquarius]CN; eli[above]'PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; Gula[Aquarius]CN; rabû[set]V
+
+17. in 27 GU₄.UD ina ŠÚ ina GU ŠÚ 
+#lem: ina[around] (day x)PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Gula[Aquarius]CN; rabû[set]V
+
+@reverse 
+1. [ŠE GE₆ x GENN]A ina GU 1/2 KÙŠ e GU₄.UD 6 SI ana NIM DIB
+#lem: Addaru[Month XII]MN; mūšu[night]N; u; Kayyamānu[Saturn]CN; ina[in]PRP; Gula[Aquarius]CN; n; ammatu[unit]N; eli[above]'PRP; Šihṭu[Mercury]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+2. [n] ⸢na-su⸣ in 7 IGI 12 DIB-qa šá GU₄.UD
+#lem: n; na[rising to sunrise]'N; ina[around (day x)]PRP; n; amāru[be(come) visible]V; n; etēqu[go past//passing by]V'N$; ša[which]REL; Šihṭu[Mercury]CN
+
+3. ⸢KI⸣ GENNA la-pàn DIR NU PAP
+#lem: itti[with]PRP; Kayyamānu[Saturn]CN; lapāni[because of]PRP; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]'V
+
+4. DIR.ŠE GE₆ 14 sin AN.KU₁₀ Á SI u KUR ki TAB-ú
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; Sîn[moon]N; antallû[eclipse]N; idu[side]N; ištānu[north]N; u[and]CNJ; šadû[east]N; kī[when]PRP; ušarrû[begin]V
+
+5. al-la šal-šú HAB-rat DIR GAR-an ina AN.KU₁₀-šú MÚL.BABBAR
+#lem: alla[more than]PRP; šalšu[third]NU; HAB-rat[disc]N; u; šakānu[set]V; ina[in]PRP; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN
+
+6. ina ALLA ⸢GUB⸣ ina GAR AN u dele-bat ina MÚL.MÚL ŠÚ-ú ina ZALÁG {MÚL}KAK.SI.SÁ ŠÚ
+#lem: ina[in]PRP; Alluttu[Cancer]CN; izuzzu[stand]V; ina[during]PRP; šiknu[onset]N; Ṣalbaṭānu[Mars]CN; u[and]CNJ; Dilbat[Venus]CN; ina[in]PRP; Zappu[Taurus]CN; rabû[set]V; ina[in]PRP; nūru[last part of the night]N; Šiltāhu[Sirius]CN; rabû[set]V
+
+7. ina RÍN a-dir GE₆ 18 USAN dele-bat ina MÚL.MÚL ina IGI
+#lem: ina[in]PRP; Zibānītu[Libra]CN; adir[eclipsed]AJ; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; ina[in]PRP; Zappu[Taurus]CN; ina[in]PRP; pān[front]N
+
+8. AN 1 SI TE
+#lem: Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ṭehû[come close]V
+
+9. MU 2 ME 14.KÁM BAR GE₆ 14 USAN GU₄.UD
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN
+
+10. ina MAŠ.MAŠ e AN 1/2 KÙŠ GU₄.UD 1/2 KÙŠ ana NIM DIB
+#lem: ina[in]PRP; Māšu[Gemini]CN; eli[above]'PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; Šihṭu[Mercury]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+11. GU₄ in 6 GU₄.UD ina ŠÚ ina MAŠ.MAŠ ŠÚ NU PAP
+#lem: Ayyāru[Month II]MN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V
+
+12. in 6 AN ina MAŠ.MAŠ ŠÚ 
+#lem: ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V
+
+
+@translation labeled en project
+@obverse
+
+@(o 1) Year 212, month VIII, Venus and Saturn were in Capricorn. Night of the 25th, first part of the night, Venus was
+
+@(o 2) 2/3 cubit below Saturn. Month X, around the 2nd, Sirius’ acronychal rising.
+
+@(o 3) Around the 2nd, Saturn’s last appearance in the end of Capricorn; I did not watch.
+
+@(o 4) Year 213, month I, the 4th, Mars became stationary in Sagittarius in the first stationary point. Night of the 14th, when the moon
+
+@(o 5) came out, it was eclipsed 3 fingers on the east side in the end of Libra, 2 cubits behind α Librae;
+
+@(o 6) in its eclipse, Jupiter in Gemini and Sirius stood there.
+
+@(o 7) Month II, night of the 14th, Mercury was in Gemini 1 cubit 8 fingers above Jupiter, Mercury being 4 fingers back to the west.
+
+@(o 8) Around the 18th, Mars’ acronychal rising in Scorpius. Around the 18th, Sirius’ last appearance; I did not watch.
+
+@(o 9) Month IV, night of the 10th, the moon was 2 cubits behind α Scorpii, 2 fingers behind Mars, it was as if it had come out of its southern horn.
+
+@(o 10) Night of the 27th, last part of the night, Venus was in Gemini 10 fingers below Jupiter, Venus having passed 2 fingers to the east. 
+
+@(o 11) Month VII, night of the 14th, lunar eclipse in Aries; when it began on the east side, it became all covered;
+
+@(o 12) in its eclipse, Jupiter in Cancer and Sirius stood there.
+
+@(o 13) Month VIII, night of the 19th, first part of the night, Mars in Aquarius was 6 fingers below Saturn.
+
+@(o 14) Month X, around the 2nd, Jupiter’s acronychal rising in Cancer; Mars was in Pisces. The 12th, Mercury’s first appearance in the west
+
+@(o 15) in Capricorn. The 17th, Venus’ first appearance in the west in Capricorn. Night of the 21st, first part of the night,
+
+@(o 16) Mercury in Aquarius was 2/3 cubit above Saturn. Around the 25th, Saturn’s [last appearance in] Aquarius.
+
+@(o 17) Around the 27th, Mercury’s last appearance in the west in Aquarius. 
+
+@reverse 
+
+@(r 1) [Month XII, night of the xth, Satu]rn in Aquarius was 1/2 cubit above Mercury, (Saturn) having passed 6 fingers to the east,
+
+@(r 2) rising of Saturn to sunrise: [n°], (ideal) first appearance on the 7th. The 12th, Mercury’s passing by
+
+@(r 3) of Saturn I did not watch because of clouds.
+
+@(r 4) Month XII₂, night of the 14th, lunar eclipse; when it began on the north and east side,
+
+@(r 5) it made (an eclipse) for more than a third of the disk; in its eclipse, Jupiter
+
+@(r 6) in Cancer stood there; during onset, Mars and Venus set in Taurus; during clearing, Sirius set;
+
+@(r 7) (the moon) became eclipsed in Libra. Night of the 18th, first part of the night, Venus in Taurus was
+
+@(r 8) 1 finger in front of Mars, it came close.
+
+@(r 9) Year 214, month I, night of the 14th, first part of the night, Mercury
+
+@(r 10) in Gemini was 1/2 cubit above Mars, Mercury having passed 1/2 cubit to the east.
+
+@(r 11) Month II, around the 6th, Mercury’s last appearance in the west in Gemini; I did not watch.
+
+@(r 12) Around the 6th, Mars’ last appearance in Gemini. 
+

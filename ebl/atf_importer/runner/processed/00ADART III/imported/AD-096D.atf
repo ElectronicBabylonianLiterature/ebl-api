@@ -1,0 +1,78 @@
+&X300964 = AD -96D 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+1'. [...] ⸢LAL?⸣
+#lem: u; nahāsu[recede]V
+
+2'. [...]
+#lem: u
+
+3'. [...] KÙŠ
+#lem: u; ammatu[unit]N
+
+4'. [...] ŠÚ.ŠÚ
+#lem: u; urrup[be(come) very overcast]V
+
+5'. [... AN UTA]H i-ṣa
+#lem: u; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ
+
+6'. [... ana UL]Ù SIG
+#lem: u; ana[to]PRP; šūtu[south]N; šapil[below]AJ
+
+7'. [... MÚL-KUR-šá-D]UR-nu-nu
+#lem: u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN
+
+8'. [...] NU PAP
+#lem: u; ul[not]MOD; naṣāru[watch]V
+
+9'. [...] 5(BÁN)
+#lem: u; n
+
+10'. [...] ⸢x⸣ 
+#lem: u; u
+
+@reverse
+1'. [...] ⸢x⸣ 
+#lem: u; u
+
+@right 
+1'. [...] MU 2 ME 15.KÁM [...] 
+#lem: u; šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+
+@translation labeled en project
+@obverse
+
+@(o 1') [...] back?
+
+@(o 2') [...]
+
+@(o 3') [...] cubits
+
+@(o 4') [...] very overcast
+
+@(o 5') [...] a little [rain sho]wer
+
+@(o 6') [...] low to the south
+
+@(o 7') [... η Pis]cium
+
+@(o 8') [...] I did not watch
+
+@(o 9') [...] 5 @i{sūtu}
+
+@(o 10') [...] ... 
+
+@reverse
+
+@(r 1') [...] ... 
+
+@right 
+
+@(r.e. 1') [...] Year 215 [...]  
+

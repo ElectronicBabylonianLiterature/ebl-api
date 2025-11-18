@@ -1,0 +1,95 @@
+&X301422 = AD -142B
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top 
+1. ina a-mat {d}EN u {d}GAŠAN-iá liš-lim 
+#lem: ina[in]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1. MU 1 ME 1+ŠU 9.KÁM {ITU}GAN 1 1 ⸢7?⸣ [n]a-⸢su⸣ a-kám muš
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; n; Kislīmu[Month IX]MN; n; n; n; na₁[sunset to moonset]N$; akamu[mist]N; mašāhu[measure]V
+
+2. GE₆ 1 kal GE₆ DIR AN ZA SI GIN
+#lem: mūšu[night]N; n; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+3. 1 DIR AN ZA SI GIN GE₆ 2 DIR AN ZA
+#lem: n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+4. sin e dele-bat 2 1/2 KÙŠ sin 1/2 KÙŠ ana NIM DIB
+#lem: Sîn[moon]N; eli[above]'PRP; Dilbat[Venus]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+
+5. 2 DIR SAL AN ZA AN.BAR₇ šamáš T[ÙR NIG]IN
+#lem: n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V; muṣlālu[noon]N; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ
+
+6. GE₆ 3 DIR AN ZA sin ⸢ár SI-MÁŠ⸣ 2 KÙŠ
+#lem: mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; Sîn[moon]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N
+
+7. sin 1 KÙŠ ana ULÙ SIG ⸢3⸣ DIR SAL AN ZA
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; erpetu[cloud]N; raqqu[thin]AJ; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+8. AN.BAR₇ šamáš TÙR [NU] KÁD NIGIN
+#lem: muṣlālu[noon]N; šamšu[sun]N; tarbaṣa[halo]N; ul[not]MOD; kaṣāru[become joined]V; lawi[surrounded (with)]AJ
+
+9. GE₆ 4 SAG GE₆ sin e 
+#lem: mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; eli[above]'PRP
+
+10. MÚL-IGI-šá-SUHUR-MÁŠ 2 [N] 
+#lem: MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n
+
+@bottom 
+1. sin 2 1/2 KÙŠ ana SI NIM
+#lem: Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
+
+2. kal GE₆ DIR AN ZA SI GIN 
+#lem: kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+@reverse
+1. 4 DIR AN ZA SI GIN
+#lem: 4[4]NU; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V
+
+2. GE₆ 5 ($blank$)
+#lem: mūšu[night]N; n
+
+@translation labeled en project
+
+@top 
+
+@(t.e. 1) At the command of Bēl and Bēltiya may it go well. 
+
+@obverse
+
+@(o 1) Year 169, month IX, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 17°?, measured (despite) mist.
+
+@(o 2) Night of the 1st, all night clouds were in the sky, the north wind blew.
+
+@(o 3) The 1st, clouds were in the sky, the north wind blew. Night of the 2nd, clouds were in the sky;
+
+@(o 4) the moon was 2 1/2 cubits above Venus, the moon having passed 1/2 cubit to the east.
+
+@(o 5) The 2nd, thin clouds were in the sky; at noon, the sun was sur[rounded by a ha]lo.
+
+@(o 6) Night of the 3rd, clouds were in the sky; the moon was 2 cubits behind β Capricorni,
+
+@(o 7) the moon being 1 cubit low to the south. The 3rd, thin clouds were in the sky;
+
+@(o 8) at noon, the sun was surrounded by a halo which was [not] closed.
+
+@(o 9) Night of the 4th, beginning of the night, the moon was 2 [...] above! γ 
+
+@(o 10) Capricorni,
+
+@bottom
+
+@(b.e. 1) the moon being 2 1/2 cubits high! to the north;
+
+@(b.e. 2) all night clouds were in the sky, the north wind blew. 
+
+@reverse
+
+@(r 1) The 4th, clouds were in the sky, the north wind blew.
+
+@(r 2) Night of the 5th,
+
