@@ -555,7 +555,7 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
 
 
 @pytest.mark.parametrize(
-    "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
+    "pages", ["163", "no. 163", "161-163", "163-161pl. 163", "pl. 42 no. 163"]
 )
 def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
@@ -1088,11 +1088,17 @@ def test_query_genres(fragment_repository, query, expected):
         ("CAIC", [0]),
         ("aluGeneva", [1]),
         ("AMPS", [2]),
-        (None, [0, 1, 2]),
+        ("RECC", [3]),
+        (None, [0, 1, 2, 3]),
     ],
 )
 def test_query_project(fragment_repository, query, expected):
-    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS]
+    projects = [
+        ResearchProject.CAIC,
+        ResearchProject.ALU_GENEVA,
+        ResearchProject.AMPS,
+        ResearchProject.RECC,
+    ]
 
     fragments = [
         FragmentFactory.build(
