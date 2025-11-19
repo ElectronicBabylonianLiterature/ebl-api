@@ -78,8 +78,10 @@ ANOTHER_LEMMATIZED_FRAGMENT = attr.evolve(
                     Word.of(
                         [Logogram.of_name("GI", 6)], unique_lemma=(WordId("ginâ I"),)
                     ),
-                    Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
-                    Word.of([Reading.of_name("ana")], unique_lemma=(WordId("ana II"),)),
+                    Word.of([Reading.of_name("ana")],
+                            unique_lemma=(WordId("ana II"),)),
+                    Word.of([Reading.of_name("ana")],
+                            unique_lemma=(WordId("ana II"),)),
                     Word.of(
                         [
                             Reading.of_name("u", 4),
@@ -107,7 +109,8 @@ def create_tranliteration_query_lines(
     transliteration: str, sign_repository: SignRepository
 ) -> List[str]:
     return [
-        TransliterationQuery(string=line, visitor=SignsVisitor(sign_repository)).regexp
+        TransliterationQuery(
+            string=line, visitor=SignsVisitor(sign_repository)).regexp
         for line in transliteration.split("\n")
     ]
 
@@ -222,7 +225,8 @@ def test_query_by_museum_number_joins(database, fragment_repository):
     fragment = LemmatizedFragmentFactory.build(
         number=museum_number, joins=Joins(((first_join,), (second_join,)))
     )
-    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    database[COLLECTION].insert_one(
+        FragmentSchema(exclude=["joins"]).dump(fragment))
     database[JOINS_COLLECTION].insert_one(
         {
             "fragments": [
@@ -237,7 +241,8 @@ def test_query_by_museum_number_joins(database, fragment_repository):
             ]
         }
     )
-    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+    assert fragment_repository.query_by_museum_number(
+        fragment.number) == fragment
 
 
 def test_query_by_museum_number_references(
@@ -245,9 +250,11 @@ def test_query_by_museum_number_references(
 ):
     reference = ReferenceFactory.build(with_document=True)
     fragment = LemmatizedFragmentFactory.build(references=(reference,))
-    database[COLLECTION].insert_one(FragmentSchema(exclude=["joins"]).dump(fragment))
+    database[COLLECTION].insert_one(
+        FragmentSchema(exclude=["joins"]).dump(fragment))
     bibliography_repository.create(reference.document)
-    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+    assert fragment_repository.query_by_museum_number(
+        fragment.number) == fragment
 
 
 def test_query_by_parallel_line_exists(database, fragment_repository):
@@ -269,18 +276,21 @@ def test_query_by_parallel_line_exists(database, fragment_repository):
         ]
     )
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == fragment
+    assert fragment_repository.query_by_museum_number(
+        fragment.number) == fragment
 
 
 def test_fragment_not_found(fragment_repository):
     with pytest.raises(NotFoundError):
-        fragment_repository.query_by_museum_number(MuseumNumber("unknown", "id"))
+        fragment_repository.query_by_museum_number(
+            MuseumNumber("unknown", "id"))
 
 
 def test_find_random(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
 
-    fragment_repository.create_many([FragmentFactory.build(), transliterated_fragment])
+    fragment_repository.create_many(
+        [FragmentFactory.build(), transliterated_fragment])
 
     assert fragment_repository.query_random_by_transliterated() == [
         transliterated_fragment
@@ -300,7 +310,8 @@ def test_find_random_skips_restricted_fragments(fragment_repository):
 def test_folio_pager_exception(fragment_repository):
     with pytest.raises(NotFoundError):
         museum_number = MuseumNumber.of("1841-07-26.54")
-        fragment_repository.query_next_and_previous_folio("test", "test", museum_number)
+        fragment_repository.query_next_and_previous_folio(
+            "test", "test", museum_number)
 
 
 @pytest.mark.parametrize(
@@ -349,9 +360,12 @@ def test_query_next_and_previous_fragment(museum_numbers, fragment_repository):
         results = fragment_repository.query_next_and_previous_fragment(
             MuseumNumber.of(museum_number)
         )
-        previous_index = (museum_numbers.index(museum_number) - 1) % len(museum_numbers)
-        next_index = (museum_numbers.index(museum_number) + 1) % len(museum_numbers)
-        assert results.previous == MuseumNumber.of(museum_numbers[previous_index])
+        previous_index = (museum_numbers.index(
+            museum_number) - 1) % len(museum_numbers)
+        next_index = (museum_numbers.index(
+            museum_number) + 1) % len(museum_numbers)
+        assert results.previous == MuseumNumber.of(
+            museum_numbers[previous_index])
         assert results.next == MuseumNumber.of(museum_numbers[next_index])
 
 
@@ -371,7 +385,8 @@ def test_update_transliteration_with_record(fragment_repository, user):
 def test_update_update_transliteration_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_field("transliteration", transliterated_fragment)
+        fragment_repository.update_field(
+            "transliteration", transliterated_fragment)
 
 
 def test_update_genres(fragment_repository):
@@ -421,13 +436,16 @@ def test_update_dates_in_text(fragment_repository):
 def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
-    tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
+    tokens = [list(line)
+              for line in transliterated_fragment.text.lemmatization.tokens]
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
     lemmatization = Lemmatization(tokens)
-    updated_fragment = transliterated_fragment.update_lemmatization(lemmatization)
+    updated_fragment = transliterated_fragment.update_lemmatization(
+        lemmatization)
 
     fragment_repository.update_field("lemmatization", updated_fragment)
-    result = fragment_repository.query_by_museum_number(transliterated_fragment.number)
+    result = fragment_repository.query_by_museum_number(
+        transliterated_fragment.number)
 
     assert result == updated_fragment
 
@@ -465,7 +483,8 @@ def test_update_script(fragment_repository: FragmentRepository):
 def test_update_update_lemmatization_not_found(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     with pytest.raises(NotFoundError):
-        fragment_repository.update_field("lemmatization", transliterated_fragment)
+        fragment_repository.update_field(
+            "lemmatization", transliterated_fragment)
 
 
 def test_statistics(database, fragment_repository):
@@ -494,14 +513,17 @@ def test_statistics(database, fragment_repository):
                         (
                             ControlLine("#", "ignore"),
                             TextLine(
-                                LineNumber(1), (Word.of([Reading.of_name("second")]),)
+                                LineNumber(1), (Word.of(
+                                    [Reading.of_name("second")]),)
                             ),
                             TextLine(
-                                LineNumber(2), (Word.of([Reading.of_name("third")]),)
+                                LineNumber(2), (Word.of(
+                                    [Reading.of_name("third")]),)
                             ),
                             ControlLine("#", "ignore"),
                             TextLine(
-                                LineNumber(3), (Word.of([Reading.of_name("fourth")]),)
+                                LineNumber(3), (Word.of(
+                                    [Reading.of_name("fourth")]),)
                             ),
                         )
                     )
@@ -538,7 +560,8 @@ def test_query_fragmentarium_number(database, fragment_repository):
 
 
 def test_query_fragmentarium_not_found(fragment_repository):
-    assert (fragment_repository.query({"number": "K.1"})) == QueryResult.create_empty()
+    assert (fragment_repository.query(
+        {"number": "K.1"})) == QueryResult.create_empty()
 
 
 def test_query_fragmentarium_reference_id(database, fragment_repository):
@@ -555,11 +578,13 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
 
 
 @pytest.mark.parametrize(
-    "pages", ["163", "no. 163", "161-163", "163-161" "pl. 163", "pl. 42 no. 163"]
+    "pages", ["163", "no. 163", "161-163",
+              "163-161" "pl. 163", "pl. 42 no. 163"]
 )
 def test_query_fragmentarium_id_and_pages(pages, database, fragment_repository):
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+        references=(ReferenceFactory.build(
+            pages=pages), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert fragment_repository.query(
@@ -577,11 +602,13 @@ def test_empty_result_query_reference_id_and_pages(
     pages, database, fragment_repository
 ):
     fragment = FragmentFactory.build(
-        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+        references=(ReferenceFactory.build(
+            pages=pages), ReferenceFactory.build())
     )
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
     assert (
-        fragment_repository.query({"bibId": fragment.references[0].id, "pages": "163"})
+        fragment_repository.query(
+            {"bibId": fragment.references[0].id, "pages": "163"})
     ) == QueryResult.create_empty()
 
 
@@ -601,7 +628,8 @@ def test_query_fragmentarium_transliteration(
     for sign in signs:
         sign_repository.create(sign)
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
+    fragment_repository.create_many(
+        [transliterated_fragment, FragmentFactory.build()])
 
     pattern = create_tranliteration_query_lines(string, sign_repository)
     result = fragment_repository.query({"transliteration": pattern})
@@ -650,7 +678,8 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     fragment_repository.create_many(random.sample(fragments, len(fragments)))
 
     result = fragment_repository.query(
-        {"transliteration": create_tranliteration_query_lines("KU", sign_repository)}
+        {"transliteration": create_tranliteration_query_lines(
+            "KU", sign_repository)}
     )
     assert result == QueryResultSchema().load(
         {
@@ -669,7 +698,8 @@ def test_query_fragmentarium_transliteration_and_number(
     for sign in signs:
         sign_repository.create(sign)
     transliterated_fragment = TransliteratedFragmentFactory.build()
-    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
+    fragment_repository.create_many(
+        [transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query(
         {
@@ -701,10 +731,12 @@ def test_query_fragmentarium_transliteration_and_number_and_references(
         sign_repository.create(sign)
     pages = "163"
     transliterated_fragment = TransliteratedFragmentFactory.build(
-        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+        references=(ReferenceFactory.build(
+            pages=pages), ReferenceFactory.build())
     )
 
-    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
+    fragment_repository.create_many(
+        [transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query(
         {
@@ -738,9 +770,11 @@ def test_query_fragmentarium_transliteration_and_number_and_references_not_found
         sign_repository.create(sign)
     pages = "163"
     transliterated_fragment = TransliteratedFragmentFactory.build(
-        references=(ReferenceFactory.build(pages=pages), ReferenceFactory.build())
+        references=(ReferenceFactory.build(
+            pages=pages), ReferenceFactory.build())
     )
-    fragment_repository.create_many([transliterated_fragment, FragmentFactory.build()])
+    fragment_repository.create_many(
+        [transliterated_fragment, FragmentFactory.build()])
 
     result = fragment_repository.query(
         {
@@ -775,7 +809,8 @@ def test_find_transliterated(database, fragment_repository):
 def test_find_transliterated_line_to_vec(database, fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     database[COLLECTION].insert_many(
-        [SCHEMA.dump(transliterated_fragment), SCHEMA.dump(FragmentFactory.build())]
+        [SCHEMA.dump(transliterated_fragment),
+         SCHEMA.dump(FragmentFactory.build())]
     )
     assert fragment_repository.query_transliterated_line_to_vec() == [
         LineToVecEntry(
@@ -925,7 +960,8 @@ def test_query_lemmas(
         LineNumber(2, True),
         (
             Word.of([Reading.of_name("uk")], unique_lemma=(WordId("uk I"),)),
-            Word.of([Reading.of_name("kur")], unique_lemma=(WordId("kur II"),)),
+            Word.of([Reading.of_name("kur")],
+                    unique_lemma=(WordId("kur II"),)),
             Word.of([Reading.of_name("ap")], unique_lemma=(WordId("ap III"),)),
         ),
     )
@@ -943,14 +979,16 @@ def test_query_lemmas(
     fragment_repository.create(fragment_with_phrase, sort_key=1)
 
     assert (
-        fragment_repository.query({"lemmaOperator": query_type, "lemmas": lemmas})
+        fragment_repository.query(
+            {"lemmaOperator": query_type, "lemmas": lemmas})
         == expected
     )
 
 
 def test_fetch_scopes(fragment_repository: FragmentRepository):
     fragment = FragmentFactory.build(
-        authorized_scopes=[Scope.READ_URUKLBU_FRAGMENTS, Scope.READ_CAIC_FRAGMENTS]
+        authorized_scopes=[Scope.READ_URUKLBU_FRAGMENTS,
+                           Scope.READ_CAIC_FRAGMENTS]
     )
     fragment_repository.create(fragment)
 
@@ -980,7 +1018,8 @@ def test_query_by_sort_key(
     museum_numbers = [MuseumNumber("B", str(i)) for i in range(5)]
 
     for index, number in enumerate(museum_numbers):
-        fragment_repository.create(FragmentFactory.build(number=number), sort_key=index)
+        fragment_repository.create(
+            FragmentFactory.build(number=number), sort_key=index)
 
     assert (
         fragment_repository.query_by_sort_key(sort_key)
@@ -989,7 +1028,8 @@ def test_query_by_sort_key(
 
 
 def test_query_by_sort_key_no_index(fragment_repository):
-    fragment_repository.create(FragmentFactory.build(number=MuseumNumber("B", "0")))
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber("B", "0")))
 
     with pytest.raises(NotFoundError, match="Unable to find fragment with _sortKey 0"):
         fragment_repository.query_by_sort_key(0)
@@ -1088,11 +1128,13 @@ def test_query_genres(fragment_repository, query, expected):
         ("CAIC", [0]),
         ("aluGeneva", [1]),
         ("AMPS", [2]),
-        (None, [0, 1, 2]),
+        ("RECC", [3]),
+        (None, [0, 1, 2, 3]),
     ],
 )
 def test_query_project(fragment_repository, query, expected):
-    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA, ResearchProject.AMPS]
+    projects = [ResearchProject.CAIC, ResearchProject.ALU_GENEVA,
+                ResearchProject.AMPS, ResearchProject.RECC]
 
     fragments = [
         FragmentFactory.build(
@@ -1179,7 +1221,8 @@ def test_query_latest_skips_restricted_fragments(fragment_repository):
 
 def test_fetch_fragment_signs(fragment_repository):
     signs = ["foo", "bar", "", "\n\n"]
-    fragments = [attr.evolve(FragmentFactory.build(), signs=signs_) for signs_ in signs]
+    fragments = [attr.evolve(FragmentFactory.build(), signs=signs_)
+                 for signs_ in signs]
     fragment_repository.create_many(fragments)
     expected = [
         {"_id": str(fragment.number), "signs": fragment.signs}
