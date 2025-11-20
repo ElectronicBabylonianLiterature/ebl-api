@@ -1,0 +1,177 @@
+&X500008 = ADART 5 8 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [x x] ⸢x⸣ [...]
+#lem: u; u; u; u
+
+2'. [x b]i-rit KUR u U[LÙ]
+#lem: u; birītu[space between]N; šadû[east]N; u[and]CNJ; šūtu[south]N
+
+3'. [x x] ⸢x x⸣ [...]
+#lem: u; u; u; u; u
+
+4'. [x x] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u
+
+5'. ⸢x x x ME NIM-a x x x⸣
+#lem: u; u; u; ūmu[day]N; šaqi[rise]V; u; u; u
+
+6'. ⸢x⸣ ($blank$)
+#lem: u
+
+7'. [x x] ($blank$)
+#lem: u; u
+
+8'. [x x x] ⸢x x x x x⸣
+#lem: u; u; u; u; u; u; u; u
+
+9'. [x x] ⸢x x x x x x⸣
+#lem: u; u; u; u; u; u; u; u
+
+10'. ⸢x x x x x x x x⸣
+#lem: u; u; u; u; u; u; u; u
+
+11'. [x x] ⸢x x x x x x⸣
+#lem: u; u; u; u; u; u; u; u
+
+12'. [x M]E NIM?
+#lem: u; ūmu[day]N; šaqi[rise]V
+
+13'. ⸢APIN?⸣ 13 ⸢2/3? KAS 4?⸣ UŠ G[E₆ GIN?]
+#lem: Arahsamna[Month VIII]MN; n; n; bēru[double hour]'N; n; UŠ[(time degree)]N; mūšu[night]N; alāku[go]V
+
+14'. ⸢šá ḪAB? TAB.TAB?⸣ ina 20 G[E₆? x x x]
+#lem: u; u; ušarrû[begin]'V; ina[in]PRP; n; mūšu[night]N; u; u; u
+
+15'. 5 UŠ GE₆ ÍR TA UL[Ù ...]
+#lem: n; UŠ[(time degree)]N; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N; ištu[from]PRP; šūtu[south]N; u
+
+16'. ina 2/3 KAS GE₆ ana UGU ULÙ ZÁ[LAG ...]
+#lem: ina[in]PRP; n; bēru[double hour]'N; mūšu[night]N; ana[to]PRP; muhhi[top]N; šūtu[south]N; nawāru[clear]'V; u
+
+17'. ⸢x {MÚL?}SAG.ME.GAR ina MURUB₄ [...]
+#lem: u; Nēberu[Jupiter]CN$; ina[in]PRP; qabaltu[middle]N; u
+
+18'. [x x x] ⸢x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+@column 2
+$traces
+
+@reverse
+@column 1
+1'. ina 12? GAR ⸢x⸣ [...]
+#lem: ina[at]PRP; n; u; u; u
+
+2'. MU 3 BAR 5 ITU ⸢x⸣ [x x x x]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; warhu[month]N; u; u; u; u; u
+
+3'. KIN.2.KAM 13 ⸢x x x x⸣
+#lem: Ulūlu-Šanû[Month VI₂]MN; n; u; u; u; u
+
+4'. ŠE 15 ina 25 ME ana ŠÚ šamáš
+#lem: Addaru[Month XII]MN; n; ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+5'. MU 4 KIN 13 2 KAS GE₆ GIN ina KUR TAB ina 18
+#lem: šattu[year]N; n; Ulūlu[Month VI]MN; n; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V; ina[in]PRP; šadû[east]N; ušarrû[begin]V; ina[in]PRP; n
+
+6'. [G]E₆ gab-bi-šú ŠÚ 2/3? KAS 4 UŠ GE₆ Í[R]
+#lem: mūšu[night]N; gabbišu[totality]N; erēpu[cover]'V; n; bēru[double hour]'N; n; UŠ[(time degree)]N; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N
+
+7'. TA KUR ana ZÁLAG ⸢TAB ina x⸣ GE₆? ana MAR ZÁLAG [x]
+#lem: ištu[from]PRP; šadû[east]N; ana[to]PRP; nawāru[clear]V; ušarrû[begin]V; ina[at]PRP; u; mūšu[night]N; ana[to]PRP; amurru[west]N; nawāru[clear]'V; u
+
+8'. GAR ÍR u ZÁLAG [SI šá P]A MAR GAR [GIN]
+#lem: šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nawāru[clearing]'N; ištānu[north wind]N; ša[which]REL; kappu[wing(?)]N; amurru[west]N; šakānu[set]V; alāku[blow]V
+
+9'. ⸢x x⸣ ina U[GU? ...]
+#lem: u; u; ina[at]PRP; muhhi[top]N; u
+
+10'. [D]UR-SIM.MAH ⸢|KA×MI|⸣? [...]
+#lem: DUR-SIM.MAH[Ribbon-of-the-Fish]CN; adir[eclipsed]AJ; u
+
+11'. [x x] ⸢x⸣ [...]
+#lem: u; u; u; u
+
+@column 2
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. [...]
+#lem: u
+
+3'. [...]
+#lem: u
+
+@translation labeled en project
+
+@(o i 1) [...] ... [...]
+
+@(o i 2) [...] between east and s[outh ....]
+
+@(o i 3) [...] ... [...]
+
+@(o i 4) [...] ... [...]
+
+@(o i 5) ... after sunrise ...
+
+@(o i 6) ...
+
+@(o i 7) [...]
+
+@(o i 8) [...] ...
+
+@(o i 9) [...] ...
+
+@(o i 10) ...
+
+@(o i 11) [...] ...
+
+@(o i 12) [...] after sunrise?.
+
+@(o i 13) Month VIII?, the 13th, 2/3 bēru 4°? after [sunset,]
+
+@(o i 14) ... it began?, in 20° of ni[ght ...]
+
+@(o i 15) 5° of night maximal phase. From the sou[th ...]
+
+@(o i 16) it clea[red] in 2/3 bēru of night towards the south. [...]
+
+@(o i 17) ... Jupiter in the middle [...]
+
+@(o i 18) [...] ... [...]
+
+
+
+@(r i 1) At 12? ... [...]
+
+@(r i 2) Year 3, month I, (after) 5 months, ... [...]
+
+@(r i 3) Month VI2, the 13th, ...
+
+@(r i 4) Month XII, the 15th, at 25° before sunset.
+
+@(r i 5) Year 4, month VI, the 13th, 2 bēru after sunset, it began in the east. In 18°
+
+@(r i 6) of night all of it was covered. 2/3? bēru 4° of night maximal [phase.]
+
+@(r i 7) It began to clear from the east, [in nn°] of night it cleared to the west. [nn°]
+
+@(r i 8) onset, maximal phase, and clearing. [The north wind which] was set to the west side [blew.]
+
+@(r i 9) ... on [...]
+
+@(r i 10) the Ribbon of the Fish it was ecl[ipsed? ...]
+
+@(r i 11) [...] ... [...]
+
+@(r ii 1) ... [...]
+
+@(r ii 2) [...]
+
+@(r ii 3) [...]

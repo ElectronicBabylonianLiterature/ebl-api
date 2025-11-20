@@ -1,0 +1,42 @@
+&X500088 = ADART 5 85
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x x x x⸣
+#lem: u; u; u; u; u; u; u
+
+2'. [x] 29 GU₄.UD ina ŠÚ ina TIL A UŠ ina 30
+#lem: u; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; qītu[end]N; Nēšu[Leo]CN; emēdu[be at a stationary point]V; ina[on]PRP; n
+
+3'. NE 30 GU₄.UD ina NIM ina A UŠ ina 22
+#lem: Abu[Month V]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Nēšu[Leo]CN; emēdu[be at a stationary point]V; ina[on]PRP; n
+
+4'. APIN 24 GU₄.UD ina ŠÚ ina PA UŠ ina 24
+#lem: Arahsamna[Month VIII]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V; ina[on]PRP; n
+
+5'. GAN 22 GU₄.UD <ina> NIM ina PA UŠ ina ⸢10+x⸣
+#lem: Kislīmu[Month IX]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V; ina[on]PRP; n
+
+6'. ŠE 24 GU₄.UD ina ŠÚ ina HUN UŠ ina [x]
+#lem: Addaru[Month XII]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Agru[Aries]CN; emēdu[be at a stationary point]V; ina[on]PRP; u
+
+$ blank
+
+@translation labeled en project
+
+@(o 1) [...] ...
+
+@(o 2) [Month x,] the 29th, Mercury became stationary in the west in the end of Leo; on the 30th.
+
+@(o 3) Month V, the 30th, Mercury became stationary in the east in Leo; on the 22nd.
+
+@(o 4) Month VIII, the 24th, Mercury became stationary in the west in Sagittarius; on the 24th.
+
+@(o 5) Month IX, the 22nd, Mercury became stationary <in> the east in Sagittarius; on the 10+xth.
+
+@(o 6) Month XII, the 24th, Mercury became stationary in the west in Aries; on the [xth.]
+
+one line blank; remainder broken, but probably uninscribed.

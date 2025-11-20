@@ -1,0 +1,42 @@
+&X500017 = ADART 5 17
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 1 ME 17.KAM S[IG ...]
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU; n; Simānu[Month III]MN; u
+
+2'. in 15 ME <ana> ŠÚ šá[maš]
+#lem: ina[in]PRP; n; ūmu[day]N; ana[to]PRP; u; u
+
+3'. APIN GE₆ 15 [...]
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; u
+
+$ ruling
+@reverse
+1'. MU 1 ME ⸢34?.KAM ŠU x⸣ [...]
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU; n; Duʾūzu[Month IV]MN; u; u
+
+2'. ku-mar-šá-MÚL.UD.KA.[TUḪ.A ziq-pi]
+#lem: ku-mar-šá-{MÚL}UD.KA.TUḪ.A[β Cygni]CN; zaqāpu[culminate]V
+
+3'. ⸢x x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+@translation labeled en project
+
+@(o 1) Year 117, month III, [...]
+
+@(o 2) at 15° before sun[rise.]
+
+@(o 3) Month VIII, night of the 15th, [...]
+
+$ ruling
+
+@(r 1) Year 134?, month IV, ... [...]
+
+@(r 2) [when] β Cygni [culminated, ...]
+
+@(r 3) ... [...]

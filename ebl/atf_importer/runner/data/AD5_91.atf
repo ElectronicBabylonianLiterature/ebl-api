@@ -1,0 +1,65 @@
+&X500094 = ADART 5 91
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] 6 SI ana ŠÚ LAL ⸢x⸣ [...]
+#lem: u; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; u; u
+
+3'. [...] 8 SI [...]
+#lem: u; n; ubānu[finger]N; u
+
+$ ruling
+4'. [... N]E 1 ina A IGI 20 ⸢x x⸣ 2 ⸢x⸣ [...]
+#lem: u; Abu[Month V]MN; n; ina[in]PRP; Nēšu[Leo]CN; amāru[be(come) visible]V; n; u; u; n; u; u
+
+$ ruling
+5'. [... ana NIM] ki UŠ-ú 2 KÙŠ ár SI-MÁŠ UŠ [...]
+#lem: u; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; emēdu[be at a stationary point]V; u
+
+6'. [...] SI-MÁŠ UŠ
+#lem: u; SI-MÁŠ[β Capricorni]CN; emēdu[be at a stationary point]V
+
+$ ruling
+7'. [... x]+8 ina ABSIN IGI 17 na-su ina [...]
+#lem: u; u; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N; ina[on]PRP; u
+
+$ ruling
+8'. [... i]s-⸢le₁₀⸣ 2 2/3 KÙŠ GU₄ [...]
+#lem: u; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; Ayyaru[Month II]MN; u
+
+9'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] being 6 fingers back to the west ... [...]
+
+@(o 3) [...] 8 fingers [...]
+
+$ ruling
+
+@(o 4) [... Mon]th V, the 1st, first appearance in Leo. The 20th, ... [...]
+
+$ ruling
+
+@(o 5) [...] when it became stationary [to the east], it became stationary 2 cubits behind β Capricorni [...]
+
+@(o 6) [...] became stationary [...] β Capricorni. 
+
+$ ruling
+
+@(o 7) [... the x]+8th, first appearance in Virgo; rising of Mars to sunrise: 17°; [(ideal) first appearance] on [...]
+
+$ ruling
+
+@(o 8) [...] 2 2/3 cubits [...] α Tauri. Month II, [...]
+
+@(o 9) [...] ... [...]

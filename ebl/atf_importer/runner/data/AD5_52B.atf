@@ -1,0 +1,125 @@
+&X500053 = ADART 5 52B
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢ana⸣ NIM GUB
+#lem: u; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V
+
+2'. [...] DIB
+#lem: u; etēqu[go past]V
+
+3'. [...] DIB
+#lem: u; etēqu[go past]V
+
+4'. [...] LÁL
+#lem: u; alālu[balance]V
+
+5'. [...] ⸢x⸣
+#lem: u; u
+
+6'. [...] sin TE
+#lem: u; Sîn[moon]N; ṭehû[come close]V
+
+7'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. MU ⸢x⸣ [...]
+#lem: šattu[year]N; u; u
+
+2'. šá ṣi tú ⸢x⸣ [...]
+#lem: u; u; u; u; u
+
+3'. MU 19 GAN 2 AN [x] ⸢x x x⸣
+#lem: šattu[year]N; n; Kislīmu[Month IX]MN; n; Ṣalbaṭānu[Mars]CN; u; u; u; u
+
+4'. 28 AN ana IGI 2 MUL TUR{ME} šá GEŠTU{II?} GÍR.TAB x
+#lem: n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; pān[front]N; n; kakkabu[star]N; ṣehru[small]AJ$; ša[which]REL; uznu[ear]N; Zuqiqīpu[Scorpio]CN; u
+
+5'. 29 ina bi-rit MÚL?{ME} šú-nu-tú KUR-ha ⸢x⸣
+#lem: n; ina[in]PRP; birītu[between]'PRP; kakkabu[star]N; šunūti[those]IP; napāhu[rise]'V$; u
+
+6'. ana ŠÀ a-ha-meš KU₄{M[EŠ?}]
+#lem: ana[to]PRP; libbu[interior]N; ahāmiš[each other]IP; erēbu[enter]V
+
+$ ruling
+7'. MU 12 A-a NE 15 AN e-lat SA₄-[šá-GU₄-AN ...]
+#lem: šattu[year]N; n; Aplāya[Nabopolassar]RN; Abu[Month V]MN; n; Ṣalbaṭānu[Mars]CN; elat[beyond]PRP; SA₄-šá-GU₄-AN[α Tauri]CN; u
+
+8'. 	2 KÙŠ LÁL RU [...]
+#lem: n; ammatu[unit]N; alālu[balance]V; X; u
+
+9'. ŠU GE₆ 18 AN KI MÚL.MÚL 4 K[ÙŠ x]
+#lem: Duʾūzu[Month IV]MN; mūšu[night]N; n; Ṣalbaṭānu[Mars]CN; itti[with]PRP; Zappu[Pleiades]CN; n; ammatu[unit]N; u
+
+10'. KIN 13 AN 2/3 KÙŠ e-lat GIGIR [...]
+#lem: Ulūlu[Month VI]MN; n; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; elat[beyond]PRP; Narkabtu[Chariot]CN; u
+
+11'. [MU] 13 SIG sin IGI AN e-lat LUGAL [...]
+#lem: šattu[year]N; n; Simānu[Month III]MN; Sîn[moon]N; amāru[be(come) visible]V; Ṣalbaṭānu[Mars]CN; elat[beyond]PRP; LUGAL[α Leonis]CN; u
+
+12'. [N]E? 3 KI GÌR.UR.A 5 KÙŠ [...]
+#lem: Abu[Month V]MN; n; itti[with]PRP; GÌR-ár-šá-A[β Virginis]CN$; n; ammatu[unit]N; u
+
+13'. [MU 1]4? BAR 27 AN TA [...]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Ṣalbaṭānu[Mars]CN; ištu[from]PRP; u
+
+14'. [x x] x 4 KÙŠ [...]
+#lem: u; u; u; n; ammatu[unit]N; u
+
+15'. [x x x] ⸢e⸣-l[at? ...]
+#lem: u; u; u; elat[beyond]PRP; u
+
+@translation labeled en project
+
+
+@(o i 1) [...] stood to the east
+
+@(o i 2) [...] passed
+
+@(o i 3) [...] passed
+
+@(o i 4) [...] balanced
+
+@(o i 5) [...] ...
+
+@(o i 6) [...] came close to the moon
+
+@(o i 7) [...] ...
+
+@(o ii 1) Year ... [...]
+
+@(o ii 2) ... [...]
+
+@(o ii 3) Year 19, month IX, the 2nd, Mars was ...
+
+@(o ii 4) The 28th, Mars was ... to the front of the 2 small stars of the ears of the Scorpion.
+
+@(o ii 5) The 29th, it rose in between these stars. ...
+
+
+@(o ii 6) they entered each other.
+
+$ ruling
+
+@(o ii 7) Year 12 of Nabopolassar, month V, the 15th, Mars was balanced 2 cubits above α [Tauri]
+
+@(o ii 8) ... [...]
+
+@(o ii 9) Month IV, night of the 18th, Mars was with Pleiades 4 cub[its ...]
+
+@(o ii 10) Month VI, the 13th, Mars was 2/3 cubit above the Chariot [...]
+
+@(o ii 11) [Year] 13, month III, (when) the moon became visible, Mars was [...] above α Leonis.
+
+@(o ii 12) [Month] V?, the 3rd, it was with β Virginis 5 cubits [...]
+
+@(o ii 13) [Year 1]4?, month I, the 27th, Mars [....] from [...]
+
+@(o ii 14) [...] ... 4 cubits [...]
+
+@(o ii 15) [...] above? [...]

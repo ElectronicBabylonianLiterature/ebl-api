@@ -1,0 +1,48 @@
+&X500029 = ADART 5 29
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [x] GIN ina AN.KU₁₀-š[ú MÚL.BABBAR]
+#lem: u; alāku[blow]V; ina[during]PRP; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN
+
+2'. GENNA AN u {MÚL}KAK.S[I.SÁ GUB{MEŠ}]
+#lem: Kayyamānu[Saturn]CN; Ṣalbaṭānu[Mars]CN; u[and]CNJ; Šiltāhu[Sirius]CN; izuzzu[stand]V
+
+3'. ina ZÁLAG-ru dele-bat ŠÚ Í[B.TAG₄]
+#lem: ina[during]PRP; nawāru[clearing]'N; Dilbat[Venus]CN; rabû[set]V; rēhtu[remainder]N
+
+4'. {d}UDU.IDIM{MEŠ} NU GUB[{MEŠ}]
+#lem: bibbu[planet]N; ul[not]MOD; izuzzu[stand]V
+
+5'. 2 KÙŠ ina IGI SAG-A 3? [KÙŠ]
+#lem: n; ammatu[unit]N; ina[in]PRP; pān[front]N; SAG-A[ε Leonis]CN; n; ammatu[unit]N
+
+6'. ana ULÙ SIG ⸢ád⸣ in 30 D[ANNA]
+#lem: ana[to]PRP; šūtu[south]N; šapil[below]PRP; adir[eclipsed]AJ; ina[at]PRP; n; bēru[double hour]N
+
+7'. [M]E ana ŠÚ šamáš
+#lem: ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+8'. [1]4 9 na a-kam mu[š]
+#lem: n; n; na[sunrise to moonset]N; akamu[mist]N; mašāhu[measure]V
+
+@translation labeled en project
+
+@(o 1) [... wind] blew. In its eclipse, [Jupiter],
+
+@(o 2) Saturn, Mars, and Sirius [stood there;]
+
+@(o 3) during clearing, Venus set; the re[mainder]
+
+@(o 4) of the planets did not stand there.
+
+@(o 5) 2 cubits in front of ε Leonis, 3? [cubits]
+
+@(o 6) low to the south it was eclipsed. At 30°, (i.e. one) b[ēru,]
+
+@(o 7) before sunset.
+
+@(o 8) [The 1]4th, sunrise to moonset: 9°, measured (despite) mist.

@@ -1,0 +1,610 @@
+&X500003 = ADART 5 3 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [... M]E NIM?
+#lem: u; ūmu[day]N; šaqi[high]V
+
+$ blank
+
+$ ruling
+2'. [...] KAM 1? {d}EN-DÙ 
+#lem: u; X; n; Bēl-ibni[Bēl-ibni]YN$
+
+3'. [...] ana bi ULÙ
+#lem: u; ana[to]PRP; birītu[space between]N; šūtu[south]N
+
+4'. [...] ád? ŠÚ 
+#lem: u; adir[eclipsed]AJ; rabû[set]V
+
+5'. [ina x GE₆ ana ZÁLA]G? 
+#lem: ina[at]PRP; u; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+@column 2
+1'.  [x] ⸢x⸣ BAR GIŠ? 
+#lem: u; u; u; u
+
+2'. [GU₄?] ⸢5⸣ ITU NI ina bi 
+#lem: Ayyaru[Month II]MN; n; warhu[month]N; X; ina[at]PRP; birītu[between]PRP
+
+3'. [S]I u KUR TAB 2/3 ḪAB 
+#lem: ištānu[north]N; u[and]CNJ; šadû[east]N; ušarrû[begin]V; n; HAB-rat[disc]N
+
+4'. [ŠÚ? MA]R? GIN 
+#lem: erēpu[cover]V; amurru[west wind]N; alāku[blow]V
+
+5'. [ina] 1.40 
+#lem: ina[at]PRP; n
+
+6'. [GE₆ G]IN 
+#lem: mūšu[night]N; alāku[go]V
+
+7'. [KIN] DIR 
+#lem: Ulūlu[Month VI]MN; N[extra]AJ
+
+$ ruling
+8'. [... 1]4? x šá DIB 
+#lem: u; n; u; ša[which]REL; etēqu[omit]V
+
+9'. [ina x] ME NIM
+#lem: ina[at]PRP; u; ūmu[day]N; šaqi[high]AJ
+
+$ (break)
+
+
+1''. [...] ⸢x⸣
+#lem: u; u
+
+2''. ⸢gab?⸣ ŠÚ ina? 6? UŠ 
+#lem: gabbu[totality]N; erēpu[cover]V; ina[in]PRP; n; UŠ[(time degree)]N
+
+3''. MURUB₄ ḪUN IGI? ULÙ 
+#lem: qabaltu[middle]N; Agru[Aries]CN; u; šūtu[south wind]N
+
+4''. GIN ina 20 GE₆ GIN 
+#lem: alāku[blow]V; ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+$ ruling
+5''. 5 [BAR] 15 šá DIB 
+#lem: n; Nisannu[Month I]MN; n; ša[which]REL; etēqu[omit]V
+
+6''. ina [x]+10 ME NIM
+#lem: ina[at]PRP; u; ūmu[day]N; šaqi[high]AJ
+
+@column 3
+1'. MU SAG šámaš-MU-GIN
+#lem: šanāt[year]N; rēš[beginning]N; Šamaš-šumu-ukīn[Šamaš-šumu-ukīn]RN$
+
+2'. GU₄ 5 ITU
+#lem: Ayyaru[Month II]MN; n; warhu[month]N
+
+3'. šá DIB
+#lem: ša[which]REL; etēqu[omit]V
+
+4'. ina 40 ME NIM
+#lem: ina[at]PRP; n; ūmu[day]N; šaqi[high]AJ
+
+$ ruling
+5'. APIN šá DIB
+#lem: Arahsamna[Month VIII]MN; ša[which]REL; etēqu[omit]V
+
+6'. ina 30 ana ŠÚ šámaš
+$ (break)
+#lem: ina[at]PRP; n; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+$ (break)
+
+
+1''. ⸢la? x⸣ [x x x]
+#lem: u; u; u; u; u
+
+2''. ád ŠÚ ina 20+[x]
+#lem: adir[eclipsed]AJ; rabû[set]V; ina[at]PRP; n
+
+3''. GE₆ ana ZÁL[AG]
+#lem: mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+$ ruling
+4''. 2 BAR 14 ⸢ina? x⸣
+#lem: n; Nisannu[Month I]MN; n; u; u
+
+5''. TAB? ina? ⸢3?⸣ [x]
+#lem: ušarrû[begin]V; ina[at]PRP; n; u
+
+6''. GE₆ G[IN]
+#lem: mūšu[night]N; alāku[go]V
+
+@column 4
+1'. 18 šámaš-MU-GIN
+#lem: n; Šamaš-šumu-ukīn[Šamaš-šumu-ukīn]RN
+
+2'. GU₄ 5 ITU
+#lem: Ayyaru[Month II]MN; n; warhu[month]N
+
+3'. šá DIB
+#lem: ša[which]REL; etēqu[omit]V
+
+4'. ina 1 ana ŠÚ šámaš
+#lem: ina[at]PRP; n; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+$ ruling
+5'. APIN 13 ⸢x⸣ [x x]
+#lem: Arahsamna[Month VIII]MN; n; u; u; u
+
+6'. u ULÙ [...]
+#lem: u[and]CNJ; šūtu[south]N; u
+
+7'. DIR [...]
+#lem: u; u
+
+8'. ⸢x⸣ [...]
+#lem: u; u
+
+@column 5
+1'. 16 kan-dal-an
+#lem: n; Kandalānu[Kandalānu]RN$
+
+2'. SIG 5 ITU 15 2 S[I?]
+#lem: Simānu[Month III]MN; n; warhu[month]N; n; n; ubānu[finger]N
+
+3'. ina bi SI u KUR ŠÚ
+#lem: ina[in]PRP; birītu[space between]N; ištānu[north]N; u[and]CNJ; šadû[east]N; erēpu[cover]V
+
+4'. ina SI ZÁLAG SI G[IN?]
+#lem: ina[in]PRP; ištānu[north]N; nawāru[clear]'V; ištānu[north wind]N; alāku[blow]V
+
+5'. 20 GAR ÍR [u ZÁLAG]
+#lem: n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nawāru[clearing]'N
+
+6'. ár SI₄ [ád]
+#lem: warki[behind]PRP; SI₄[α Scorpii]CN; adir[eclipsed]AJ
+
+@reverse
+@column 1
+1'. [...] šá DIB
+#lem: u; ša[which]REL; etēqu[omit]V
+
+2'. [ina] 12? ana ŠÚ šámaš
+#lem: ina[at]PRP; n; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+$ ruling
+3'. [x 1]4? 1 ME
+#lem: u; n; n; ūmu[moonrise to sunset]N
+
+4'. [...] ⸢x⸣
+#lem: u; u
+
+5'. [...] ⸢x⸣
+#lem: u; u
+
+6'. [G]E₆? GIN
+#lem: mūšu[night]N; alāku[go]V
+
+7'. [x D]IR? a-dir
+#lem: u; u; adir[eclipsed]AJ
+
+8'. [...] ⸢x⸣ 10
+#lem: u; u; n
+
+$ ruling
+9'. [...] DIR
+#lem: u; erpetu[cloud]N
+
+10'. [...] NU IGI
+#lem: u; ul[not]MOD; amāru[see]V
+
+11'. [...] IGI
+#lem: u; amāru[see]V
+
+12'. [... G]E₆ ana ZÁLAG
+#lem: u; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+$ ruling
+13'. [...] KI?
+#lem: u; u
+
+@column 2
+1'. [...] ⸢DIB⸣ [...]
+#lem: u; etēqu[omit]V; u
+
+$ ruling
+2'. DIR.ŠE 14
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n
+
+3'. Á ULÙ TAB
+#lem: idu[side]N; šūtu[south]N; ušarrû[begin]V
+
+4'. 4-ú ḪAB ŠÚ
+#lem: rebû[one-fourth]NU; HAB-rat[disc]N; erēpu[cover]V
+
+5'. ana MAR ZÁLAG 27
+#lem: ana[to]PRP; amurru[west]N; nawāru[clear]V; n
+
+6'. GAR ÍR u ZÁLAG
+#lem: šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nawāru[clearing]'N
+
+7'. TÚG AN GAR ULÙ GIN
+#lem: lubuštu[garment]N; šamû[sky]N; šakānu[set]V; šūtu[south wind]N; alāku[blow]V
+
+8'. ina 48 GE₆ GIN
+#lem: ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+$ ruling
+9'. 8 KIN 14 1 1/2
+#lem: n; Ulūlu[Month VI]MN; n; n; n
+
+10'. SI? ⸢x⸣
+#lem: ubānu[finger]N; u
+
+11'. ina 1.20 GE₆ ana ZÁLAG
+#lem: ina[at]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+$ ruling
+12'. ŠE 14 šá DIB
+#lem: Addaru[Month XII]MN; n; ša[which]REL; etēqu[omit]V
+
+13'. ina 1/3 KAS ana ŠÚ šamáš
+#lem: ina[at]PRP; n; bēru[double hour]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+$ ruling
+14'. 9 KIN 13
+#lem: n; Ulūlu[Month VI]MN; n
+
+15'. [...] ⸢x⸣
+#lem: u; u
+
+@column 3
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. ina 20 ME NIM
+#lem: ina[at]PRP; n; ūmu[day]N; šaqi[high]AJ
+
+$ ruling
+3'. 26 BAR 12+[x]
+#lem: n; Nisannu[Month I]MN; n
+
+4'. Á KUR TAB ád ŠÚ
+#lem: idu[side]N; šadû[east]N; ušarrû[begin]V; adir[eclipsed]AJ; rabû[set]V
+
+5'. 1 2/3 KÙŠ ina IGI S[I]
+#lem: n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; u
+
+6'. (SI)-MÁŠ ád SI šá PA
+#lem: SI-MÁŠ[β Capricorni]CN; adir[eclipsed]AJ; ištānu[north wind]N; ša[which]REL; kappu[wing]N
+
+7'. KUR GAR GIN
+#lem: šadû[east]N; šakānu[set]V; alāku[blow]V
+
+8'. ina 10 UŠ GE₆
+#lem: ina[at]PRP; n; UŠ[(time degree)]N; mūšu[night]N
+
+9'. ana KUR šámaš
+#lem: ana[to]PRP; kašādu[reach//arrive]V'V$; šamši[sun]N
+
+$ ruling
+10'. DU₆ 13 šá ⸢DIB⸣
+#lem: Tašrītu[Month VII]MN; n; ša[which]REL; etēqu[omit]V
+
+11'. ina ⸢12⸣ M[E NI]M
+#lem: ina[at]PRP; n; ūmu[day]N; šaqi[high]AJ
+
+$ ruling
+12'. DIR.ŠE 15 Á ULÙ
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; idu[side]N; šūtu[south]N
+
+13'. ki TAB ina 15 gab ŠÚ 21
+#lem: kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; gabbu[totality]N; erēpu[cover]V; n
+
+14'. ÍR TA KUR ana ZÁLAG
+#lem: bikītu[maximal phase (of an eclipse)]N; ištu[from]PRP; šadû[east]N; ana[to]PRP; nawāru[clear]'V
+
+15'. ki TAB ina 19 GE₆ ana MAR
+#lem: kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; ana[to]PRP; amurru[west]N
+
+16'. ZÁLAG 55! GAR ÍR u Z[ÁLAG]
+#lem: nawāru[clear]'V; n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nawāru[clearing]'N
+
+17'. 14 SI ina IGI RÍN-šá-[ULÙ]
+#lem: n; ubānu[finger]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN
+
+18'. ád AN.KU₁₀-šú M[AR?]
+#lem: adir[eclipsed]AJ; antallû[eclipse]N; amurru[west wind]N
+
+19'. šá ana ULÙ ṣal-[pu GIN]
+#lem: ša[which]REL; ana[to]PRP; šūtu[south]N; ṣalāpu[slant]V; alāku[blow]V
+
+20'. ina 37 [GE₆ GIN]
+#lem: ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+$ ruling
+21'. 2[7 ...]
+#lem: n; u
+
+@column 4
+1'. [x] ⸢x⸣ [...]
+#lem: u; u; u
+
+$ ruling
+2'. 45 BAR 10+[x ...]
+#lem: n; Nisannu[Month I]MN; n; u
+
+3'. ana KUR šámaš ⸢x⸣ [...]
+#lem: ana[to]PRP; kašādu[arrive]V; šamši[sun]N; u; u
+
+4'. TA ⸢x⸣ [...]
+#lem: ištu[from]PRP; u; u
+
+5'. šá? [...]
+#lem: u; u
+
+
+
+@translation labeled en project
+
+@obverse
+
+@(o i 1) [...] after sunrise?
+
+(blank)
+
+$ ruling
+
+@(o i 2) [...] ... (Year) 1? of Bēl-ibni
+
+@(o i 3) [...] to between south
+
+@(o i 4) [...] it set eclipsed.
+
+@(o i 5) [At ... before sunri]se.
+
+@(o ii 1') [...] ...
+
+@(o ii 2') [Month II?,] (after) 5 months ..., between
+
+@(o ii 3') [nor]th and east it began; two-thirds of the disk
+
+@(o ii 4') [was covered?. The we]st? wind blew.
+
+@(o ii 5') [At] 1.40°
+
+@(o ii 6') [after sun]set.
+
+@(o ii 7) [Month VI] was intercalary.
+
+$ ruling
+
+@(o ii 8) [... 1]4? ... which was omitted.
+
+@(o ii 9) [At ...] after sunrise.
+
+(break)
+
+@(o ii 1'') [...] ...
+
+@(o ii 2'') all? was covered. In 6°?
+
+@(o ii 3'') middle of Aries ... The south wind
+
+@(o ii 4'') blew. At 20° after sunset.
+
+$ ruling
+
+@(o ii 5'') (Year) 5, [month I], the 15th, (eclipse) which was omitted.
+
+@(o ii 6'') At [x]+10° after sunrise.
+
+@(o iii 1') Accession year of Šamaš-šumu-ukīn,
+
+@(o iii 2') month II, (after) 5 months;
+
+@(o iii 3') (eclipse) which was omitted.
+
+@(o iii 4') At 40° after sunrise.
+
+$ ruling
+
+@(o iii 5') Month VIII, (eclipse) which was omitted.
+
+@(o iii 6') At 30° before sunset.
+
+(break)
+
+@(o iii 1'') ... [...]
+
+@(o iii 2'') It set eclipsed. At 20°+[x]
+
+@(o iii 3'') before sunrise.
+
+$ ruling
+
+@(o iii 4'') (Year) 2, month I, the 14th, ...
+
+@(o iii 5'') began?. At 3°? [...]
+
+@(o iii 6'') after sunset.
+
+@(o iv 1) (Year) 18 of Šamaš-šumu-ukīn,
+
+@(o iv 2) month II, (after) 5 months,
+
+@(o iv 3) (eclipse) which was omitted.
+
+@(o iv 4) At 1.0° before sunset.
+
+$ ruling
+
+@(o iv 5) Month VIII, the 13th, ... [...]
+
+@(o iv 6) and south [...]
+
+@(o iv 7) ... [...]
+
+@(o iv 8) ... [...]
+
+@(o v 1) (Year) 16 of Kandalānu,
+
+@(o v 2) month III, (after) 5 months, the 15th, 2 fin[gers?]
+
+@(o v 3) between north and east were covered.
+
+@(o v 4) It cleared in the north. The north wind b[lew?.]
+
+@(o v 5) 20° onset, maximal phase, [and clearing ...]
+
+@(o v 6) behind a Scorpii [it was eclipsed.]
+
+@reverse
+
+@(r i 1) [...] which was omitted.
+
+@(r i 2) [At] 12°? before sunset.
+
+(blank)
+
+$ ruling
+
+@(r i 3) [... the 1]4th, moonrise to sunset: 1°;
+
+@(r i 4) [...] ...
+
+@(r i 5) [...] ...
+
+@(r i 6) [...] after sunset.
+
+@(r i 7) [...] ... it was eclipsed.
+
+@(r i 8) [...] ... 10?
+
+$ ruling
+
+@(r i 9) [...] clouds?
+
+@(r i 10) [...] not seen
+
+@(r i 11) [...] seen
+
+@(r i 12) [... be]fore sunrise.
+
+$ ruling
+
+@(r i 13) [...] ...
+
+@(r ii 1) [...] omitted [...]
+
+(blank)
+
+$ ruling
+
+@(r ii 2) Month XII₂, the 14th,
+
+@(r ii 3) it began on the south side,
+
+@(r ii 4) one-fourth of the disk was covered.
+
+@(r ii 5) It cleared to the west. 27°
+
+@(r ii 6) onset, maximal phase, and clearing.
+
+@(r ii 7) The "garment of the sky" was there, the south wind blew.
+
+@(r ii 8) At 48° after sunset.
+
+$ ruling
+
+@(r ii 9) (Year) 8, month VI, the 14th, 1 1⁄2
+
+@(r ii 10) fingers? ....
+
+@(r ii 11)At 1,20° before sunrise.
+
+(blank)
+
+$ ruling
+
+@(r ii 12) Month XII, the 14th, (eclipse) which was omitted.
+
+(blank)
+
+@(r ii 13) At 1/3 bēru before sunset.
+
+$ ruling
+
+@(r ii 14) (Year) 9, month VI, the 13th,
+
+@(r ii 15) [...] ...
+
+@(r iii 1) ... [...]
+
+@(r iii 2) At 20° after sunrise.
+
+$ ruling
+
+@(r iii 3) (Year) 26, month I, the 12+[xth,]
+
+@(r iii 4) it began on the east side; it set eclipsed.
+
+@(r iii 5) 1 2/3 cubits in front of ß
+
+@(r iii 6) Capricorni it was eclipsed. The north wind which was
+
+@(r iii 7) set to the east side blew.
+
+@(r iii 8) At 10°
+
+@(r iii 9) before sunrise.
+
+$ ruling 
+
+@(r iii 10) Month VII, the 13th, (eclipse) which was omitted.
+
+@(r iii 11) At 12°? after sunrise.
+
+(blank)
+
+$ruling
+
+@(r iii 12) Month XII2, the 15th, when it began on the south side,
+
+@(r iii 13) in 15° all was covered. 21°
+
+@(r iii 14) maximal phase. When it began to clear from the east,
+
+@(r iii 15) it cleared in 19° of night to the west.
+
+@(r iii 16) 55°! onset, maximal phase, and clearing.
+
+@(r iii 17) 14 fingers in front of 𝚊 Librae
+
+@(r iii 18) it was eclipsed. (In) its eclipse, the w[est? wind]
+
+@(r iii 19) which was slanted to the south [blew.]
+
+@(r iii 20) At 37° [after sunset.]
+
+(blank)
+
+$ ruling
+
+@(r iii 21) (Year) 2[7, ...]
+
+@(r iv 1) [...] ... [...]
+
+(blank)
+
+$ ruling
+
+@(r iv 2) (Year) 45, month I, the 10+[xth, ...]
+
+@(r iv 3) to sunrise ... [...]
+
+@(r iv 4)from ... [...]
+
+@(r iv 5) ... [...]
+
+
+

@@ -1,0 +1,132 @@
+&X500100 = ADART 5 97
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. ⸢GE₆ 18 USAN AN SIG⸣
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP
+
+2'. MÚL-ár-šá-SAG-HUN.GÁ 3 KÙŠ
+#lem: MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N
+
+3'. GE₆ 15 USAN AN SIG
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP
+
+4'. MÚL.MÚL 1 1/2 KÙŠ
+#lem: MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N
+
+5'. DIR.ŠE GE₆ 2 USAN
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N
+
+6'. AN e is-le₁₀ 2 1/2 KÙŠ
+#lem: Ṣalbaṭānu[Mars]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N
+
+7'. GE₆ 21 USAN AN SIG
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP
+
+8'. ŠUR-GIGIR-šá-SI 1 2/3 KÙŠ
+#lem: ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N
+
+9'. GE₆ 28? USAN AN
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN
+
+10'. e ŠUR-GIGIR-šá-ULÙ 1 KÙŠ
+#lem: eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N
+
+$ ruling
+@column 2
+1'. [...] ⸢x x⸣
+#lem: u; u; u
+
+2'. [...] A IGI
+#lem: u; Nēšu[Leo]CN; amāru[be(come) visible]V
+
+3'. [... NI]M ina ABSIN ŠÚ
+#lem: u; Elamtu[east]'N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V
+
+4'. [... GU₄.U]D ina ŠÚ ina PA IGI
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+5'. [...] ina ŠÚ ina PA ŠÚ
+#lem: u; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]V
+
+6'. [... ina NI]M ina PA IGI
+#lem: u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+7'. [...] ⸢x x x SAG?⸣
+#lem: u; u; u; u; u
+
+8'. [... x]+7 GU₄.UD
+#lem: u; u; Šihṭu[Mercury]CN
+
+9'. ⸢x⸣ [...] ⸢x x⸣
+#lem: u; u; u; u
+
+10'. ⸢x⸣ [...]
+#lem: u; u
+
+11'. DIR.ŠE [...]
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; u
+
+12'. ⸢x⸣ [...]
+#lem: u; u
+
+13'. ⸢x⸣ [...]
+#lem: u; u
+
+$ ruling
+
+@translation labeled en project
+
+@(o i 1) Night of the 18th, first part of the night, Mars was
+
+@(o i 2) 3 cubits below α Arietis.
+
+@(o i 3) Night of the 15th, first part of the night, Mars was
+
+@(o i 4) 1 1⁄2 cubits below η Tauri.
+
+@(o i 5) Month XII₂, night of the 2nd, first part of the night,
+
+@(o i 6) Mars was 2 1⁄2 cubits above α Tauri.
+
+@(o i 7) Night of the 21st, first part of the night, Mars was
+
+@(o i 8) 1 2/3 cubits below β Tauri.
+
+@(o i 9) Night of the 28th?, first part of the night, Mars was
+
+@(o i 10) 1 cubit above ζ Tauri.
+
+$ ruling
+
+@(o ii 1) [...] ...
+
+@(o ii 2) [...] first appearance [in the east in] Leo.
+
+@(o ii 3) [...] last appearance [in the ea]st in Virgo.
+
+@(o ii 4) [... Mercu]ry’s first appearance in the west in Sagittarius.
+
+@(o ii 5) [...] last appearance in the west in Sagittarius.
+
+@(o ii 6) [...] first appearance [in the ea]st in Sagittarius.
+
+@(o ii 7) [...] ...
+
+@(o ii 8) [... x]+7th, Mercury
+
+@(o ii 9) ... [...] ...
+
+@(o ii 10) ... [...]
+
+@(o ii 11) Month XII₂, [...]
+
+@(o ii 12) ... [...]
+
+@(o ii 13) ... [...]
+
+$ ruling

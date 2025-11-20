@@ -1,0 +1,113 @@
+&X500037 = ADART 5 37
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 27.KAM BAR 30 21+[x]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; n
+
+$ ruling
+2'. GU₄ 30 18
+#lem: Ayyaru[Month II]MN; n; n
+
+$ ruling
+3'. SIG 30 13
+#lem: Simānu[Month III]MN; n; n
+
+$ ruling
+4'. ŠU 1 20
+#lem: Duʾūzu[Month IV]MN; n; n
+
+$ ruling
+5'. NE 1 23.⸢30⸣
+#lem: Abu[Month V]MN; n; n
+
+$ ruling
+6'. KIN 30 [x]
+#lem: Ulūlu[Month VI]MN; n; u
+
+$ ruling
+7'. ⸢DU₆⸣ 1 [x]
+#lem: Tašrītu[Month VII]MN; n; u
+
+$ ruling
+8'. [APIN] 1 [x]
+#lem: Arahsamna[Month VIII]MN; n; u
+
+$ ruling
+@reverse
+1'. [G]AN 30 [x]
+#lem: Kislīmu[Month IX]MN; n; u
+
+$ ruling
+2'. AB 1 ⸢x⸣ [x]
+#lem: Ṭebētu[Month X]MN; n; u; u
+
+$ ruling
+3'. ZÍZ 1 21
+#lem: Šabāṭu[Month XI]MN; n; n
+
+$ ruling
+4'. ŠE 30 14.20
+#lem: Addaru[Month XII]MN; n; n
+
+$ ruling
+5'. MU 28 BAR 1 16.20
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; n
+
+6'. 11.10 ŠÚ
+#lem: n; rabû[moonset to sunrise]N
+
+7'. 2 ME
+#lem: n; ūmu[moonrise to sunset]N
+
+8'. 30 na
+#lem: n; na[sunrise to moonset]N
+
+9'. 18.30 GE₆
+#lem: n; mūšu[sunset to moonrise]N
+
+10'. 15.20 KUR
+#lem: n; KUR[moonrise to sunrise]N
+
+$ ruling
+
+@translation labeled en project
+
+@(o 1) 1 Year 27, month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 21+[x°].
+
+@(o 2) Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18°.
+
+@(o 3) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°.
+
+@(o 4) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 20°.
+
+@(o 5) Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23° 30'.
+
+@(o 6) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [x°].
+
+@(o 7) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [x°].
+
+@(o 8) [Month VIII,] the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [x°].
+
+@(r 1) Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [x°].
+
+@(r 2) Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) x°.
+
+@(r 3) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21°.
+
+@(r 4) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 14° 20'.
+
+@(r 5) Year 28, month I, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16° 20';
+
+@(r 6) moonset to sunrise: 11° 10'́;
+
+@(r 7) moonrise to sunset: 2°;
+
+@(r 8) sunrise to moonset: 30';
+
+@(r 9) sunset to moonrise: 18° 30';
+
+@(r 10) moonrise to sunrise: 15° 20'.

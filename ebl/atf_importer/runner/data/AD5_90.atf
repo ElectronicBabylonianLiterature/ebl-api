@@ -1,0 +1,39 @@
+&X500093 = ADART 5 90
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+$ ruling
+2'. [...] ana ME E-a 11 e SUHUR-IGI [...]
+#lem: u; ana[to]PRP; ūmu[day]N; elû[go up]V; n; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; u
+
+3'. [... e S]UHUR-ár 14 SI AB 13 ina GU? [...]
+#lem: u; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ubānu[finger]N; Ṭebētu[Month X]MN; n; ina[in]PRP; Gula[Aquarius]CN; u
+
+$ ruling
+4'. [...] ⸢x⸣ 30 NE? 1 NE ⸢x⸣ [...]
+#lem: u; u; n; u; n; u; u; u
+
+5'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+$ ruling
+
+@(o 2) [...] acronychal rising. The 11th, [...] above γ Capricorni [...]
+
+@(o 3) [...] 14 fingers [above] δ Capricorni. Month X, the 13th, [...] in Aquarius? [...]
+
+$ ruling
+
+@(o 4) [...] ... [...]
+
+@(o 5) [...] ... [...]

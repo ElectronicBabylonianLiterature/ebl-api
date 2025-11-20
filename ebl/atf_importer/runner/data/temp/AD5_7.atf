@@ -1,0 +1,86 @@
+&X500007 = ADART 5 7 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] GE₆
+#lem: u; mūšu[night]N
+
+3'. [... R]ÍN? 1 KÙŠ
+#lem: u; Zibānītu[Libra]CN; n; ammatu[unit]N
+
+4'. [...] DIR
+#lem: u; u
+
+5'. [...] ḪAB? DIR
+#lem: u; HAB-rat[disc]N; u
+
+6'. [... G]UB{ME}
+#lem: u; izuzzu[stand]V
+
+7'. [...] ⸢DIR⸣
+#lem: u; N[extra]AJ
+
+@column 2
+1'. ⸢45? x x x⸣ [...]
+#lem: n; u; u; u; u
+
+2'. 42 KIN 14 ád [E? ...]
+#lem: n; Ulūlu[Month VI]MN; n; adir[eclipsed]AJ; waṣû[go out]V; u
+
+3'. u ZÁLAG 6 UŠ ⸢x⸣ [...]
+#lem: u[and]CNJ; nawāru[clearing]'N; n; UŠ[(time degree)]N; u; u
+
+4'. ina 35 [ana ŠÚ šámaš]
+#lem: ina[at]PRP; n; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+5'. ŠE 15 1.30 G[E₆ GIN ...]
+#lem: Addaru[Month XII]MN; n; n; mūšu[night]N; alāku[go]V; u
+
+6'. 25 ÍR ina 18 ⸢x⸣ [...]
+#lem: n; bikītu[maximal phase (of an eclipse)]N; ina[in]PRP; n; u; u
+
+7'. MAR GIN 2 KÙŠ SIG MÚ[L]
+#lem: amurru[west wind]N; alāku[blow]V; n; ammatu[unit]N; šapil[be(come) deep//below]PRP; u
+
+8'. ({MÚL})DELE-<šá>-IGI-ABS[IN] á[d]
+#lem: DELE-šá-IGI-ABSIN[γ Virginis]CN; adir[eclipsed]AJ
+
+
+@translation labeled en project
+
+
+@(i 1) [...] ...
+
+@(i 2) [...] night
+
+@(i 3) [... Li]bra? 1 cubit
+
+@(i 4) [...] ...
+
+@(i 5) [...] disk? ...
+
+@(i 6) [...] stood there.
+
+@(i 7) [...] intercalary?.
+
+@(ii 1) 45? ... [...]
+
+@(ii 2) (Year) 42. Month VI, the 14th, [it came out] eclipsed [...]
+
+@(ii 3) and clearing. 6° ... [...]
+
+@(ii 4) At 35° [before sunset.]
+
+@(ii 5) Month XII, the 15th, 90° [after sunset ...]
+
+@(ii 6) 25° maximal phase. In 18° ... [...]
+
+@(ii 7) The west wind blew. 2 cubits below
+
+@(ii 8) ϒ Virginis it was eclipsed. 

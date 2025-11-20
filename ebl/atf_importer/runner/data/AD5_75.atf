@@ -1,0 +1,74 @@
+&X500078 = ADART 5 75
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x x x ŠUR-GIGIR-šá-SI⸣ [...]
+#lem: u; u; u; u; ŠUR-GIGIR-šá-SI[β Tauri]CN; u
+
+3'. [...] ⸢x⸣ ŠUR-GIGIR-šá-ULÙ 2/3? [KÙŠ ...]
+#lem: u; u; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; u
+
+4'. [... MÚL-x-šá-še]-pít-MAŠ.MAŠ 2 KÙŠ ⸢x⸣ [...]
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; ammatu[unit]N; u; u
+
+5'. [... MA]Š.MAŠ 2 KÙŠ GE₆ 10?+[x ...]
+#lem: u; Māšu[Gemini]CN; n; ammatu[unit]N; mūšu[night]N; n; u
+
+6'. [...] ⸢x x x⸣ 4 11? [...]
+#lem: u; u; u; u; n; n; u
+
+7'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+1'. GE₆ 13 ⸢x x x x⸣ [... dele-bat e]
+#lem: mūšu[night]N; n; u; u; u; u; u; Dilbat[Venus]CN; eli[above]PRP
+
+2'. šá-KIR₄-šil-PA 1 KÙŠ AB 1 ZÍZ [...]
+#lem: MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Ṭebētu[Month X]MN; n; Šabāṭu[Month XI]MN; u
+
+3'. ina GU ŠÚ NU PAP ŠE 30 DIR 1 [...]
+#lem: ina[in]PRP; Gula[Aquarius]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; Addaru[Month XII]MN; n; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; u
+
+4'. AB GE₆ 27 ina ZÁLAG dele-bat e [...]
+#lem: Ṭebētu[Month X]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u
+
+5'. MU 60+21 BAR 14 dele-bat ina ŠÚ ina MÚL IGI [... NU?]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zappu[Taurus]CN; amāru[be(come) visible]V; u; ul[not]MOD
+
+6'. PAP
+#lem: naṣāru[watch]V
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] β Tauri [...]
+
+@(o 3) [...] ζ Tauri 2/3? [cubit ...]
+
+@(o 4) [...] 2 cubits [...] η/μ Geminorum ... [...]
+
+@(o 5) [...] 2 cubits [...] Geminorum. Night of the 10+[xth, ...]
+
+@(o 6) [...] ... [...]
+
+@(o 7) [...] ... [...]
+
+@(r 1) Night of the 13th, ... [... Venus was]
+
+@(r 2) 1 cubit [above] 𝜗 Ophiuchi. Month X, the 1st (of which followed the 30th of the preceding month). Month XI, [...]
+
+@(r 3) last appearance in Aquarius; I did not watch. Month XII, (the 1st of which was identical with) the 30th (of the preceding month). Month XII₂, the 1st (of which followed the 30th of the preceding month). [...]
+
+@(r 4) Month X, night of the 27th, last part of the night, Venus was above [...]
+
+@(r 5) Year 81, month I, the 14th, Venus’ first appearance in the west in Taurus; [..., I did not?]
+
+@(r 6) watch?.

@@ -1,0 +1,878 @@
+&X500061 = ADART 5 60
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+0'. [MU 18 {I}ár-šú šá {I}ar-tak-šat-su LUGAL]
+#lem: šattu[year]N; n; Aršu[Aršu]RN; ša[which]REL; Artaxerxes[Artaxerxes]RN; šarru[king]N
+
+1'. MU-šú S[A₄-ú]
+#lem: šumu[name]N; nabû[name]V
+
+2'. BAR 1 GU₄ 1 SIG 30 in 23? ⸢x⸣ [x x ŠU 1]
+#lem: Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n; ina[around]PRP; n; u; u; u; Duʾūzu[Month IV]MN; n
+
+3'. NE 30 28 ana ME E-a KIN [1? DU₆ 30?]
+#lem: Abu[Month V]MN; n; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Ulūlu[Month VI]MN; n; Tašrītu[Month VII]MN; n
+
+4'. in EN 23 ana ŠÚ ⸢ki⸣ UŠ-[a x x x]
+#lem: ina[around]PRP; adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; u; u; u
+
+5'. qú-up-pu ár-ú šá GU ⸢x x x⸣ [UŠ APIN 30?]
+#lem: quppu[box//basket]N'N; warkû[rear]AJ; ša[which]REL; Gula[Aquarius]CN; u; u; u; emēdu[be at a stationary point]V; Arahsamna[Month VIII]MN; n
+
+6'. GAN 1 AB 30 ZÍZ 1 ŠE 30 11 ⸢ina⸣ [zib{ME} ŠÚ]
+#lem: Kislīmu[Month IX]MN; n; Ṭebētu[Month X]MN; n; Šabāṭu[Month XI]MN; n; Addaru[Month XII]MN; n; n; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]'V
+
+7'. DIR.ŠE 1 18 ina TIL zib{ME} IGI KUR NIM ina 10+[x IGI]
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; amāru[be(come) visible]'V; baʾil[bright]AJ; šaqi[high]V; ina[on]PRP; n; amāru[be(come) visible]'V
+
+$ ruling
+8'. MU 19 BAR 1 GE₆ 11 ina ZALÁG SIG MÚL-ár-šá-[SAG-HUN]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]'N; šapil[below]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN
+
+9'. 3 ⸢KÙŠ⸣ GU₄ 30 SIG 1 ŠU 1 in <EN> 19 [ana? NIM? ki? UŠ?-ú?]
+#lem: n; ammatu[unit]N; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n; ina[around]PRP; adi[until]PRP; n; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+10'. SIG? SAG? HUN UŠ NU PAP NE 30 KI[N 1]
+#lem: šapil[below]PRP; rēš[beginning]N; Agru[Aries]CN; nenmudu[be at a stationary point]'V; ul[not]MOD; naṣāru[watch]V; Abu[Month V]MN; n; Ulūlu[Month VI]MN; n
+
+11'. 16 ana ME E-a ⸢DU₆⸣ 30 GE₆ 27 USAN ana Š[Ú]
+#lem: n; ana[to]PRP; ūmu[day]N; elû[go up]V; Tašrītu[Month VII]MN; n; mūšu[night]N; n; šimītān[first part of the night]N; ana[to]PRP; erbu[west]'N
+
+12'. ina LAL-šú SIG MÚL MURUB₄ šá SAG HUN 3 KÙŠ API[N 30]
+#lem: ina[while]PRP; nahāsu[move back]V; šapil[below]PRP; kakkabu[star]N; qabaltu[middle]N; ša[which]REL; rēš[beginning]N; Agru[Aries]CN; n; ammatu[unit]N; Arahsamna[Month VIII]MN; n
+
+13'. in EN 14 ana ŠÚ k[i U]Š-a 3 KÙŠ 8 SI
+#lem: ina[around]PRP; adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; n; ubānu[finger]N
+
+14'. S[I]G MÚL-IGI-šá-SA[G]-HUN i ana ŠÚ LAL UŠ
+#lem: šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; wīṣu[little]AJ; ana[to]PRP; erbu[west]N; nahāsu[recede]'N; emēdu[be at a stationary point]V
+
+15'. GA[N] 1 AB 30 ZÍZ 1 ŠE 30 in 28 ki 29
+#lem: Kislīmu[Month IX]MN; n; Ṭebētu[Month X]MN; n; Šabāṭu[Month XI]MN; n; Addaru[Month XII]MN; n; ina[on]PRP; n; kī[or]'CNJ; n
+
+16'. ⸢SAG?.ME?⸣.GAR 1 2/3 KÙŠ ina IGI GU₄.UD ŠÚ
+#lem: Kakkabu-peṣû[Jupiter]CN; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; Šihṭu[Mercury]CN; rabû[set]'V
+
+$ ruling
+17'. MU 20 BAR 1 GU₄ 30 6 ina SAG MÚL.MÚL IGI NIM
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; n; ina[in]PRP; rēš[beginning]N; Zappu[Taurus]CN; amāru[be(come) visible]'V; šaqi[high]V
+
+18'. ina 1 IGI SIG 1 GE₆ 25 ina ZALÁG e is-le₁₀ 1 KÙŠ 6 U 
+#lem: ina[on]PRP; n;  amāru[be(come) visible]'V; Simānu[Month III]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]'N; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; n; ubānu[finger]N
+
+19'. ŠU 1 NE 30 KIN 1 in EN 6 ana NIM 
+#lem: Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n; Ulūlu[Month VI]MN; n; ina[around]PRP; adi[until]PRP; n; ana[to]PRP; Elamtu[east]'N
+
+20'. ki UŠ-ú 1 2/3 KÙŠ ina IGI ŠUR-GIGIR-šá-SI UŠ 
+#lem: kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; emēdu[be at a stationary point]'V
+
+21'. in 12 ana ŠÚ LAL DU₆ 30 APIN 13 ana ME E-a
+#lem: ina[on]PRP; n; ana[to]PRP; erbu[west]'N; nahāsu[recede]V; Tašrītu[Month VII]MN; n; Arahsamna[Month VIII]MN; n; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+22'. GE₆ 13? USAN ana ŠÚ ina LAL-šú e is-le₁₀
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; ana[to]PRP; erbu[west]'N; ina[while]PRP; nahāsu[move back]V; eli[above]PRP; is-le₁₀[α Tauri]CN
+
+23'. 1 KÙŠ 20 SI GAN 30 AB 1 EN 1 ana ŠÚ ki UŠ-a 
+#lem: n; ammatu[unit]N; n; ubānu[finger]N; Kislīmu[Month IX]MN; n; Ṭebētu[Month X]MN; n; adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+24'. 1 KÙŠ 8 SI ina IGI is-le₁₀ UŠ in 10 ana ŠÚ LAL
+#lem: n; ammatu[unit]N; n; ubānu[finger]N; ina[in]PRP; pān[front]N; is-le₁₀[α Tauri]CN; emēdu[be at a stationary point]V; ina[on]PRP; n; ana[to]PRP; erbu[west]'N; nahāsu[recede]V
+
+25'. ZÍZ 30 GE₆ 12 USAN ana NIM ina LAL-šú e is le₁₀
+#lem: Šabāṭu[Month XI]MN; n; mūšu[night]N; n; šimītān[first part of the night]N; ana[to]PRP; Elamtu[east]'N; ina[while]PRP; nahāsu[recede]'N; eli[above]PRP; is-le₁₀[α Tauri]CN; X
+
+26'. 1 2/3 KÙŠ ŠE 1 DIR.ŠE 30 GE₆ 18 USAN 
+#lem: n; n; ammatu[unit]N; Addaru[Month XII]MN; n; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; mūšu[night]N; n; šimītān[first part of the night]N
+
+27'. SIG ŠUR-GIGIR-šá-SI 2 KÙŠ 8 SI 
+#lem: šapil[below]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; n; ubānu[finger]N
+
+$ ruling
+28'. [MU 21] BAR 30 in 16 ár GIGIR ŠÚ GU₄ 1 
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; ina[on]PRP; n; warki[behind]PRP; Narkabtu[Chariot]CN; rabû[set]'V; Ayyaru[Month II]MN; n
+
+29'. [x x x] ⸢IGI⸣ KUR NIM in 14 ki 15 IGI 
+#lem: u; u; u; amāru[be(come) visible]'V; baʾil[bright]AJ; šaqi[high]V; ina[on]PRP; n; kī[when]'SBJ; n; amāru[be(come) visible]'V
+
+30'. [SIG x GE₆ x] ⸢ina ZALÁG⸣ e GENNA 8 SI ŠU 30
+#lem: Simānu[Month III]MN; u; mūšu[night]N; u; ina[during]PRP; nūru[last part of the night]'N; eli[above]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; Duʾūzu[Month IV]MN; n
+
+31'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@column 2
+1-4'. ⸢x⸣ [...]
+#lem: u; u
+
+5'. SIG 
+#lem: šapil[below]PRP
+
+6'. UD
+#lem: u
+
+7'. NE 
+#lem: Abu[Month V]MN
+
+8'. ⸢x⸣ [...]
+#lem: u; u
+
+9'. ⸢x⸣ [...]
+#lem: u; u
+
+10'. GE₆ [...]
+#lem: mūšu[night]N; u
+
+11'. ina ZALÁG [...] 
+#lem: ina[during]PRP; nūru[last part of the night]'N; u
+
+12'. MÚL ⸢x⸣ [...] 
+#lem: kakkabu[star]N; u; u
+
+13'. ⸢x⸣ [...]
+#lem: u; u
+
+@column 4
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] SI-MÁŠ [...]
+#lem: u; SI-MÁŠ[β Capricorni]CN; u
+
+3'. [...] ⸢x⸣ x x NU P[AP ...]
+#lem: u; u; u; u; ul[not]MOD; naṣāru[watch]V; u
+
+4'. [... ana ME E]-a? ŠU? 30 E[N? ...]
+#lem: u; ana[to]PRP; ūmu[day]N; elû[go up]V; Duʾūzu[Month IV]MN; n; adi[until]PRP; u
+
+5'. [... ana ŠÚ ki] UŠ-a [...]
+#lem: u; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; u
+
+6'. [...] ⸢x⸣
+#lem: u; u
+
+11'. [x] ⸢x⸣ [...]
+#lem: u; u; u
+
+12'. [x] ⸢x⸣ ŠÚ NU [PAP] ⸢x⸣ [...]
+#lem: u; u; rabû[set]'V; ul[not]MOD; naṣāru[watch]V; u; u
+
+$ ruling
+13'. [MU 4]1 BAR 30 GU₄ 30 in E[N x ana NIM]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; ina[around]PRP; adi[until]PRP; u; ana[to]PRP; Elamtu[east]'N
+
+14'. [ki U]Š-ú 2 KÙŠ 4 SI ár GENNA ana N[IM GUB]
+#lem: kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; n; ubānu[finger]N; warki[behind]PRP; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V
+
+15'. [UŠ S]IG 1 ŠU 30 15 ana ME E-a
+#lem: emēdu[be at a stationary point]V; Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n; n; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+16'. [NE 30 KI]N 1 in EN 10 ana ŠÚ ki UŠ-a
+#lem: Abu[Month V]MN; n; Ulūlu[Month VI]MN; n; ina[around]PRP; adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+17'. [n n ár GENNA] ana NIM GUB i ana ULÙ SIG
+#lem: n; n; warki[behind]PRP; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; wīṣu[little]AJ; ana[to]PRP; šūtu[south]'N; šapil[below]PRP
+
+18'. [UŠ (x) DU₆ 3]0 APIN 1 GAN 1 AB 1
+#lem: emēdu[be at a stationary point]V; u; Tašrītu[Month VII]MN; n; Arahsamna[Month VIII]MN; n; Kislīmu[Month IX]MN; n; Ṭebētu[Month X]MN; n
+
+19'. [x x x Š]Ú? ZÍZ 1 28 ina SAG zib{ME} IGI
+#lem: u; u; u; rabû[set]'V; Šabāṭu[Month XI]MN; n; n; ina[in]PRP; rēš[beginning]N; Zibbātu[Pisces]CN; amāru[be(come) visible]'V
+
+20'. [...] ⸢x⸣ ŠE 30
+#lem: u; u; Addaru[Month XII]MN; n
+
+$ ruling
+21'. [MU 42 BAR 1 GU₄] 30 SIG 30 ŠU 1
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n
+
+22'. [x x ana NIM ki] UŠ-ú 1/2 KÙŠ
+#lem: u; u; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N
+
+23'. [SIG? ŠÍM]-MAH UŠ N[E? x]
+#lem: šapil[below]PRP; ŠÍM-MAH[ε Piscium]CN; emēdu[be at a stationary point]V; Abu[Month V]MN; u
+
+24'. [...] ⸢x⸣ [x x]
+#lem: u; u; u; u
+
+@reverse
+@column 1
+1'. [...] ⸢x⸣ [x]
+#lem: u; u; u
+
+2'. [x SIG] 30 ŠU 30 N[E? 1 x x]
+#lem: u; Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n; u; u
+
+3'. [ana NIM ki UŠ-ú x] 1/2? KÙŠ ina IGI MÚL.M[ÚL UŠ]
+#lem: ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u; n; ammatu[unit]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN; emēdu[be at a stationary point]V
+
+4'. [KIN x D]U₆ 30 21? ana ME E-a A[PIN? x]
+#lem: Ulūlu[Month VI]MN; u; Tašrītu[Month VII]MN; n; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Arahsamna[Month VIII]MN; u
+
+5'. [GAN x i]n EN 18 ana ŠÚ ki U[Š-a]
+#lem: Kislīmu[Month IX]MN; u; ina[around]PRP; adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+6'. [n n] ár MÚL-ár-šá-SAG-HUN UŠ A[B x]
+#lem: n; n; warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; emēdu[be at a stationary point]V; Ṭebētu[Month X]MN; u
+
+7'. [ZÍZ x Š]E 30 DIR.ŠE 1 GE₆ 8 ⸢SIG⸣ [MÚL.MÚL n n]
+#lem: Šabāṭu[Month XI]MN; u; Addaru[Month XII]MN; n; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; mūšu[night]N; n; šapil[low]AJ; MÚL.MÚL[η Tauri]CN; n; n
+
+$ ruling
+8'. [MU] 44 BAR 1 4 ár MÚL.⸢MÚL ŠÚ⸣ [GU₄ x]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; n; warki[behind]PRP; MÚL.MÚL[η Tauri]CN; rabû[set]'V; Ayyaru[Month II]MN; u
+
+9'. [x] ina MÚL.MÚL I[GI (KUR)] ⸢NIM?⸣ in ⸢x⸣ [IGI]
+#lem: u; ina[in]PRP; Zappu[Taurus]CN; nanmuru[be(come) visible]'V; baʾil[bright]AJ; šaqi[high]V; ina[on]PRP; u; nanmuru[be(come) visible]'V
+
+10'. [SIG] 1 GE₆ 28 ina ZALÁG SIG [ŠUR-GIGIR-šá-SI]
+#lem: Simānu[Month III]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]'N; šapil[below]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN
+
+11'. [x]+1 KÙŠ ŠU 30 GE₆ 23 [ina ZALÁG]
+#lem: u; ammatu[unit]N; Duʾūzu[Month IV]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N
+
+12'. [e] ŠUR-GIGIR-šá-ULÙ 2/3 KÙŠ NE [x x]
+#lem: eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Abu[Month V]MN; u; u
+
+13'. ⸢x⸣ [...]
+#lem: u; u
+
+14'. ár ŠUR-GIGIR-šá-ULÙ UŠ ⸢NU?⸣ [PAP DU₆ x]
+#lem: warki[behind]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; emēdu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V; Tašrītu[Month VII]MN; u
+
+15'. GE₆ 24 ina ZALÁG e ŠUR-GIGIR-⸢šá⸣-[ULÙ n n]
+#lem: mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n
+
+16'. APIN 30 8 ana ME E-a G[AN x AB x]
+#lem: Arahsamna[Month VIII]MN; n; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Kislīmu[Month IX]MN; u; Ṭebētu[Month X]MN; u
+
+17'. EN 7 ana ŠÚ ki UŠ-a 3 [x x]
+#lem: adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; u; u
+
+18'. ŠUR-GIGIR-šá-SI UŠ NU PAP ZÍZ 1 G[E₆ x]
+#lem: ŠUR-GIGIR-šá-SI[β Tauri]CN; nenmudu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V; Šabāṭu[Month XI]MN; n; mūšu[night]N; u
+
+19'. USAN SIG ŠUR-GIGIR-šá-SI 3 K[ÙŠ ŠE x]
+#lem: šimītān[first part of the night]N; šapil[below]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; Addaru[Month XII]MN; u
+
+20'. GE₆ 21 USAN e ⸢ŠUR-GIGIR-šá⸣-[ULÙ n n]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n
+
+$ ruling
+21'. MU 45 BAR 1 GU₄ 30 G[E₆? x]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; mūšu[night]N; u
+
+22'. e MÚL-IGI-šá-še-pít-MAŠ.MAŠ [n n]
+#lem: eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n
+
+23'. ina MAŠ.MAŠ ŠÚ [NU] PAP SIG 1 10+[x]
+#lem: ina[in]PRP; Māšu[Gemini]CN; rabû[set]'V; ul[not]MOD; naṣāru[watch]V; Simānu[Month III]MN; n; n
+
+24'. 2/3 KÙŠ ár GU₄.UD ana NIM IGI [x]
+#lem: n; ammatu[unit]N; warki[behind]PRP; Šihṭu[Mercury]CN; ana[to]PRP; Elamtu[east]'N; amāru[be(come) visible]'V; u
+
+25'. in ⸢15?⸣ IGI [ŠU] 1 NE 30 G[E₆ x]
+#lem: ina[on]PRP; n; amāru[be(come) visible]'V; Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n; mūšu[night]N; u
+
+26'. ina ZALÁG SIG MAŠ.MAŠ-ár 2? KÙŠ K[IN? 1 DU₆ 1]
+#lem: ina[during]PRP; nūru[last part of the night]'N; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Ulūlu[Month VI]MN; n; Tašrītu[Month VII]MN; n
+
+27'. EN 21 ana NIM ki [U]Š-ú 1? 1/2? [KÙŠ ina IGI?]
+#lem: adi[until]PRP; n; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N
+
+28'. MÚL{ME}-IGI{MEŠ}-šá-ALLA [x] ⸢x x⸣ [x x]
+#lem: MÚL{ME}-IGI{MEŠ}-šá-ALLA[η+θ Cancri]CN; u; u; u; u; u
+
+29'. 2/3 KÙŠ ana ULÙ SIG UŠ ⸢x⸣ [x x]
+#lem: n; ammatu[unit]N; ana[to]PRP; šūtu[south]'N; šapil[low]AJ; u; u; u; u
+
+30'. ana ŠÚ ina LAL-šú SIG ⸢x x⸣ [x GAN x]
+#lem: ana[to]PRP; erbu[west]'N; ina[while]PRP; nahāsu[move back]V; šapil[below]PRP; u; u; u; Kislīmu[Month IX]MN; u
+
+31'. 22 ana ME E-a AB 1 ⸢x⸣ [x x]
+#lem: n; ana[to]PRP; ūmu[day]N; elû[go up]V; Ṭebētu[Month X]MN; n; u; u; u
+
+32'. ana ŠÚ ina LAL-šú SIG MAŠ.MAŠ-⸢ár⸣ 1+[x x ZÍZ? x]
+#lem: ana[to]PRP; erbu[west]'N; ina[while]PRP; nahāsu[move back]V; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; u; Šabāṭu[Month XI]MN; u
+
+33'. in EN 19 ana ŠÚ ki [UŠ-a n n]
+#lem: ina[around]PRP; adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n
+
+34'. ár MAŠ.MAŠ-IGI UŠ NU P[AP ...]
+#lem: warki[behind]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; emēdu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V; u
+
+35'. 4 ana NIM UD? IGI? [...]
+#lem: n; u; u; u; u; u
+
+$ ruling
+36'. MU 46 B[AR? x ...]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; u; u
+
+37'. 5 x [...]
+#lem: n; u; u
+
+38'. ⸢x⸣ [...]
+#lem: u; u
+
+@column 2
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] MÚL.BABBAR
+#lem: u; Kakkabu-peṣû[Jupiter]CN
+
+3'. [... ana NI]M? ki UŠ-ú
+#lem: u; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+4'. [...] ⸢x DIR.ŠE⸣ 30
+#lem: u; u; Addāru_Šanû[(Intercalary) Month XII₂]MN; n
+
+5'. [...]
+#lem: u
+
+6'. [MU 3 ...] ⸢x⸣ [US]AN?
+#lem: šattu[year]N; n; u; u; šimītān[first part of the night]N
+
+7'. [... GU₄] 1 GE₆ 14 U[SAN]
+#lem: u; Ayyaru[Month II]MN; n; mūšu[night]N; n; šimītān[first part of the night]N
+
+8'. [ana NIM ina LAL-šú e SA₄-šá-ABSI]N 1 2/3 KÙŠ
+#lem: ana[to]PRP; Elamtu[east]'N; ina[while]PRP; nahāsu[move back]V; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N
+
+9'. [... KIN x x] ina RÍN ŠÚ DU₆ 1
+#lem: u; Ulūlu[Month VI]MN; u; u; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; Tašrītu[Month VII]MN; n
+
+10'. [x ina RÍN IGI x n]a-su in 8 IGI
+#lem: u; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V; u; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]'V
+
+11'. [... RÍN-šá]-ULÙ 1 2/3 KÙŠ
+#lem: u; RÍN-šá-ULÙ[α Librae]CN; n; n; ammatu[unit]N
+
+12'. [...] GE₆ 20 ina ZALÁG ana MÚL e
+#lem: u; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]'N; ana[to]PRP; u; u
+
+13'. [MÚL-e-šá-SAG-GÍR.TAB x ZÍZ] 30 EN 12 ana NIM
+#lem: MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; u; Šabāṭu[Month XI]MN; n; adi[until]PRP; n; ana[to]PRP; Elamtu[east]'N
+
+14'. [ki UŠ-ú n n ár] MÚL-e-šá-SAG-GÍR.TAB UŠ
+#lem: kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n; warki[behind]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; nenmudu[be at a stationary point]V
+
+15'. [GE₆ x ina ZALÁG ana ŠÚ] ina LAL-šú ana MÚL-e-šá-SAG-GÍR.TAB
+#lem: mūšu[night]N; u; ina[during]PRP; nūru[last part of the night]'N; ana[to]PRP; erbu[west]'N; ina[while]PRP; nahāsu[move back]V; ana[to]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN
+
+16'. [TE ...] ⸢x⸣ MÚL-e-šá-SAG-GÍR.TAB TA
+#lem: ṭehû[come close]V; u; u; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; ištu[from]PRP
+
+17'. [... MÚL?.BABB]AR? E-a 
+#lem: u; Kakkabu-peṣû[Jupiter]CN; elû[come out]V
+
+$ ruling
+18'. [MU 4 BAR x 1]2 ana ME E-a GU₄ 30 SIG 1
+#lem: šattu[year]N; n; Nisannu[Month I]MN; u; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n
+
+19'. [x x ana ŠÚ k]i UŠ-a ina TIL RÍN UŠ NU PAP
+#lem: u; u; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; ina[in]PRP; qītu[end]N; Zibānītu[Libra]CN; emēdu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V
+
+20'. [...] KIN 1 GE₆ 12 SIG MÚL-e-šá-[SAG-GÍR.TAB]
+#lem: u; Ulūlu[Month VI]MN; n; mūšu[night]N; n; šapil[below]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN
+
+21'. [n n] DU₆ 30 20 ina GÍR.TAB ŠÚ
+#lem: n; n; Tašrītu[Month VII]MN; n; n; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]'V
+
+22'. [APIN x x ina GÍ]R.TAB IGI KUR 15 na-su
+#lem: Arahsamna[Month VIII]MN; u; u; ina[in]PRP; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]'V; baʾil[bright]AJ; n; na[rising to sunrise]N
+
+23'. [in x IGI GAN x] GE₆ 11 ina ZALÁG e
+#lem: ina[on]PRP; u; amāru[be(come) visible]'V; Kislīmu[Month IX]MN; u; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]'N; eli[above]PRP
+
+24'. [MÚL-KUR-šá-KIR₄-šil-PA n n AB x ZÍZ] ⸢30⸣ ŠE 1 EN 23
+#lem: MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; n; Ṭebētu[Month X]MN; u; Šabāṭu[Month XI]MN; n; Addaru[Month XII]MN; n; adi[until]PRP; n
+
+25'. [ana NIM ki UŠ-ú ...] ⸢x x⸣ 
+#lem: ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u; u; u
+
+@column 3
+1'. ⸢UŠ x⸣ [...]
+#lem: emēdu[be at a stationary point]V; u; u
+
+2'. KIN.II.KAM 1 DU₆ 3[0 ...]
+#lem: Ulūlu-Šanû[Month VIb]MN; n; Tašrītu[Month VII]MN; n; u
+
+3'. ina zib{ME} UŠ DIR NU PAP [...]
+#lem: ina[in]PRP; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+4'. ZÍZ 30 GE₆ 13 [...]
+#lem: Šabāṭu[Month XI]MN; n; mūšu[night]N; n; u
+
+5'. 3 KÙŠ ŠE 14 [... ŠÚ]
+#lem: n; ammatu[unit]N; Addaru[Month XII]MN; n; u; rabû[set]'V
+
+$ ruling
+6'. MU 9 BAR 30 7? [...]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; n; u
+
+7'. 14 ki IGI 12 n[a? ...]
+#lem: n; kī[when]'SBJ; amāru[be(come) visible]'V; n; na[rising to sunrise]N; u
+
+8'. EN ⸢13?⸣ [ana] ⸢NIM⸣ [ki UŠ-ú ...]
+#lem: adi[until]PRP; n; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+9'. ár{MEŠ} šá MÚL.M[ÚL? ...]
+#lem: warkû[rear]'AJ; ša[which]REL; Zappu[Pleiades]CN; u
+
+10'. APIN 1 GAN 30 [...]
+#lem: Arahsamna[Month VIII]MN; n; Kislīmu[Month IX]MN; n; u
+
+11'. UŠ NU PAP A[B x ... ana NIM]
+#lem: emēdu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V; Ṭebētu[Month X]MN; u; u; ana[to]PRP; Elamtu[east]'N
+
+12'. ina LAL-šú SIG M[ÚL?.MÚL? ...]
+#lem: ina[while]PRP; nahāsu[move back]V; šapil[below]PRP; MÚL.MÚL[η Tauri]CN; u
+
+$ ruling
+13'. MU 10 B[AR ...]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; u
+
+14'. 28 [...]
+#lem: n; u
+
+15'. SIG ⸢x⸣ [...]
+#lem: Simānu[Month III]MN; u; u
+
+16'. N[E? ...]
+#lem: Abu[Month V]MN; u
+
+17'. ⸢x⸣ [...]
+#lem: u; u
+
+18'. ⸢3?⸣ [...]
+#lem: n; u
+
+19'. ⸢x⸣ [...]
+#lem: u; u
+
+@column 4
+1'. [...] ⸢x⸣ [x x]
+#lem: u; u; u; u
+
+2'. [x x] ⸢8⸣ SI SIG 1 GE₆ 24
+#lem: u; u; n; ubānu[finger]N; Simānu[Month III]MN; n; mūšu[night]N; n
+
+3'. [USAN] e MÚL-TUR-šá-ár-LUGAL 1/2 KÙŠ
+#lem: šimītān[first part of the night]N; eli[above]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N
+
+4'. [ŠU x GE₆ x US]AN dele-bat e MÚL.BABBAR 8 U
+#lem: Duʾūzu[Month IV]MN; u; mūšu[night]N; u; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N
+
+5'. [GE₆ x] USAN AN e MÚL.BABBAR 1 SI TE
+#lem: mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N; ṭehû[come close]V
+
+6'. [x] ⸢U?⸣ ana NIM DIB GE₆ 19 USAN GU₄.UD
+#lem: u; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN
+
+7'. [SIG] MÚL.BABBAR 8 SI
+#lem: šapil[below]PRP; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N
+
+$ blank space
+8'. IGI.DU₈.A{MEŠ} šá {d}SAG.ME.GAR
+#lem: tāmartu[appearance]N; ša[which]REL; Kakkabu-peṣû[Jupiter]CN
+
+9'. šá TA MU 18.KAM {I}ár-šá
+#lem: ša[which]REL; ištu[from]PRP; šattu[year]N; n; Aršu[Aršu]RN
+
+10'. šá {I}ar-tak-šat-su LUGAL MU-šú
+#lem: ša[which]REL; Artaxerxes[Artaxerxes]RN; šarru[king]N; šumšu[name]N
+
+11'. SA₄-ú EN ŠU MU 13.KAM
+#lem: nabû[name]V; adi[until]PRP; Duʾūzu[Month IV]MN; šattu[year]N; n
+
+12'. {I}ú-ma-kuš šá {I}ar-tak-šat-su
+#lem: Umakuš[Umakuš]RN; ša[which]REL; Artaxerxes[Artaxerxes]RN
+
+13'. LUGAL MU-šú na-bu-ú GABA.RI
+#lem: šarru[king]N; šumšu[name]N; nabû[name]V; gabarû[copy]N
+
+14'. {IM}DUB{MEŠ} u {GIŠ}DA{MEŠ} [šá?]
+#lem: ṭuppu[tablet]N; u[and]CNJ; lēʾu[(writing-)board]N; ša[which]REL
+
+15'. EN.NUN šá gi-né-e šá {I}⸢x⸣ [x]
+#lem: naṣāru[guard]V; ša[that]REL; ginû[regular contribution (to the temple)]N; ša[which]REL; u; u
+
+16'. A šá {I}GI-im-{d}EN [x x]
+#lem: māru[son]N; ša[which]REL; Mušallim-Bēl[Mušallim-Bēl]RN; u; u
+
+17'. SAR-ma {IM}DUB {I}⸢x⸣ [x]
+#lem: šaṭāru[written]'AJ; ṭuppu[tablet]N; u; u
+
+18'. A šá {I}{d}ŠÚ.DUB.NUMUN [x x]
+#lem: māru[son]N; ša[which]REL; Marduk-šāpik-zēri[Marduk-šāpik-zēri]RN; u; u
+
+19'. qàt {I}EN-šú-nu ⸢A⸣ [x x x]
+#lem: qātu[hand]N; Bēl-šunu[Bēl-šunu]RN; māru[son]N; u; u; u
+
+20'. ⸢x⸣ [...]
+#lem: u; u
+
+@translation labeled en project
+
+@(o i 0) [Year 18 of Aršu]
+
+@(o i 1) who is call[ed king Artaxerxes.]
+
+@(o i 2) Month I, the 1st. Month II, the 1st. Month III, the 30th. Around the 23rd?, ... [... Month IV, the 1st.]
+
+@(o i 3) Month V, the 30th. The 28th, acronychal rising. Month VI, [the 1st?. Month VII, the 30th?.]
+
+@(o i 4) Until around the 23rd, when it became stationary to the west, [it became stationary ...]
+
+@(o i 5) the rear basket of Aquarius ... [Month VIII, the 30th?.]
+
+@(o i 6) Month IX, the 1st. Month X, the 30th. Month XI, the 1st. Month XII, the 30th. The 11th, [last appearance in Pisces.]
+
+@(o i 7) Month XII₂, the 1st. The 18th, first appearance in the end of Pisces; it was bright and high, [(ideal) first appearance] on the 10+[xth].
+
+$ ruling
+
+@(o i 8) Year 19. Month I, the 1st. Night of the 11th, last part of the night, it was 3 cubits below α Arietis.
+
+@(o i 9) Month II, the 30th. Month III, the 1st. Month IV, the 1st. Until around the 19th, [when it became stationary to the east,]
+
+@(o i 10) it became stationary below the beginning of Aries?; I did not watch. Month V, the 30th. Month [VI, the 1st.]
+
+@(o i 11) The 16th, acronychal rising. Month VII, the 30th. Night of the 27th, first part of the night, while moving back to the west,
+
+@(o i 12) it was 3 cubits below the middle star of the beginning of Aries. Month VIII, [the 30th.]
+
+@(o i 13) Until around the 14th, when it became stationary to the west, it became stationary 3 cubits 8 fingers
+
+@(o i 14) below β Arietis, being a little back to the west.
+
+@(o i 15) Month IX, the 1st. Month X, the 30th. Month XI, the 1st. Month XII, the 30th. On the 28th or 29th,
+
+@(o i 16) Jupiter’s? last appearance, 1 2/3 cubits in front of Mercury.
+
+$ ruling
+
+@(o i 17) Year 20. Month I, the 1st. Month II, the 30th. The 6th, first appearance in the beginning of Taurus; it was high,
+
+@(o i 18) (ideal) first appearance on the 1st. Month III, the 1st. Night of the 25th, last part of the night, it was 1 cubit 6 fingers above α Tauri.
+
+@(o i 19) Month IV, the 1st. Month V, the 30th. Month VI, the 1st. Until around the 6th, when it became stationary to the east, 
+
+@(o i 20) it became stationary 1 2/3 cubits in front of β Tauri.
+
+@(o i 21) On the 12th, it moved back to the west. Month VII, the 30th. Month VIII, the 1st. The 3rd, acronychal rising.
+
+@(o i 22) Night of the 13th?, first part of the night, while moving back to the west, it was 1 cubit 20 fingers above α Tauri.
+
+@(o i 23) Month IX, the 30th. Month X, the 1st. Until the 1st, when it became stationary to the west,
+
+@(o i 24) it became stationary 1 cubit 8 fingers in front of α Tauri. On the 10th, it moved back to the west{SIC}.
+
+@(o i 25) Month XI, the 30th. Night of the 12th, first part of the night, while moving back to the east, it was 1 2/3 cubits above α Tauri.
+
+@(o i 26) Month XII, the 1st. Month XII₂, the 30th. Night of the 18th, first part of the night,
+
+@(o i 27) is was 2 cubits 8 fingers below β Tauri.
+
+$ ruling
+
+@(o i 28) [Year 21.] Month I, the 30th. On the 16th, last appearance behind the Chariot. Month II, the 1st.
+
+@(o i 29) [...] first appearance [...]; it was bright and high; (ideal) first appearance on the 14th or 15th.
+
+@(o i 30) [Month III ... Night of the xth,] last part of the night, it was 8 fingers above Saturn. Month IV, the 30th.
+
+@(o i 31) [...] .... [...]
+
+@(o ii 1-4) ... [...]
+
+@(o ii 5) below [...]
+
+@(o ii 6) ... [...]
+
+@(o ii 7) Month V, [...]
+
+@(o ii 8) ... [...]
+
+@(o ii 9) ... [...]
+
+@(o ii 10) Night [...]
+
+@(o ii 11) last part of the night, [...] 
+
+@(o ii 12) star ... [...]
+
+@(o ii 13) ... [...]
+
+column 3 (and possibly 4?) destroyed
+
+column 4 or 5 (the first part of this column is called "mere traces" in LBAT 1399; there are many such traces, but a text cannot be established)
+
+@(o iv 1) [...] ... [...]
+
+@(o iv 2) [...] β Capricorni [...]
+
+@(o iv 3) [...] ... [...]
+
+@(o iv 4) [... acronychal ris]ing?. Month IV?, the 30th?. Un[til? ...]
+
+@(o iv 5) [... when] it became stationary [to the west],
+
+@(o iv 6) [...] ...
+
+(ca. 4 lines missing)
+
+@(o iv 11) [...] ... [...]
+
+@(o iv 12) [...] last appearance ...; I did not [watch ...]
+
+$ ruling
+
+@(o iv 13) [Year 4]1. Month I, the 30th. Month II, the 30th. Until around [the xth,]
+
+@(o iv 14) [when it became] stationary [to the east, it became stationary standing] 2 cubits 4 fingers behind Saturn to the ea[st.]
+
+@(o iv 15) [Mon]th III, the 1st. Month IV, the 30th. The 15th, acronychal rising.
+
+@(o iv 16) [Month V, the 30th. Mon]th VI, the 1st. Until around the 10th, when it became stationary to the west,
+
+@(o iv 17) [it became stationary] standing [... behind Saturn] to the east, being a little low to the south.
+
+@(o iv 18) [(...) Month VII, the 3]0th. Month VIII, the 1st. Month IX, the 1st. Month X, the 1st.
+
+@(o iv 19) [..., last] appearance?. Month XI, the 1st. The 28th, first appearance in the beginning of Pisces.
+
+@(o iv 20) [...] ... Month XII, the 30th.
+
+$ rulilng
+
+@(o iv 21) [Year 42. Month I, the 1st. Month II,] the 30th. Month III, the 30th. Month IV, the 1st.
+
+@(o iv 22) [...] when it became stationary [to the east,] it became stationary 1⁄2 cubit
+
+@(o iv 23) [below? ε Pis]cium?. Mo[nth V?, ...]
+
+@(o iv 24) [...] ... [...]
+
+@(r i 1) [...] ... [...]
+
+@(r i 2) [... Month III], the 30th. Month IV, the 30th. Mo[nth V, the 1st. ...,]
+
+@(r i 3) [when it became stationary to the east, it became stationary x]+1⁄2 cubit in front of η Tauri.
+
+@(r i 4) [Month VI, the xth. Mo]nth VII, the 30th. The 21st?, acronychal rising. Mo[nth VIII?, the xth.]
+
+@(r i 5) [Month IX, the xth.] Until around the 18th, when it became stationary to the west,
+
+@(r i 6) it became stationary [...] behind α Arietis. Mo[nth X, the xth.]
+
+@(r i 7) [Month XI, the xth. Mo]nth XII, the 30th. Month XII₂, the 1st. Night of the 8th, it was [...] below [η Tauri.]
+
+$ ruling
+
+@(r i 8) [Year] 44. Month I, the 1st. The 4th, last appearance behind η Tauri. [Month II, the xth.]
+
+@(r i 9) [...] first appearance in Taurus; [it was bright? and] high, [(ideal) first appearance] on the xth.
+
+@(r i 10) [Month III,] the 1st. Night of the 28th, last part of the night, it was [x]+1 cubits below [β Tauri.]
+
+@(r i 11) Month IV, the 30th. Night of the 23rd, [last part of the night,]
+
+@(r i 12) it was 2/3 cubit [above] 𝜁 Tauri. Month V, [the xth. ...]
+
+@(r i 13) ... [...]
+
+@(r i 14) it became stationary [...] behind 𝜁 Tauri; I did not watch. [Month VII, the xth.]
+
+@(r i 15) Night of the 24th, last part of the night, it was [...] above 𝜁 Tauri.
+
+@(r i 16) Month VIII, the 30th. The 8th, acronychal rising. Mo[nth IX, the xth. Month X, the xth.]
+
+@(r i 17) Until the 7th, when it became stationary to the west,
+
+@(r i 18) it became stationary 3 [cubits below β Tauri; I did not watch. Month XI, the 1st. Ni[ght of the xth,]
+
+@(r i 19) first part of the night, it was 3 cubits below β Tauri. [Month XII, the xth.]
+
+@(r i 20) Night of the 21st, first part of the night, it was [...] above 𝜁 Tauri.
+
+$ ruling
+
+@(r i 21) Year 45. Month I, the 1st. Month II, the 30th. Ni[ght? of the xth,]
+
+@(r i 22) it was [....] above η Geminorum. [The xth,]
+
+@(r i 23) last appearance in Gemini; [I did not] watch. Month III, the 1st. The 10+[xth,]
+
+@(r i 24) first appearance [...] 2/3 cubit behind Mercury to the east{sic}; [it was ...,]
+
+@(r i 25) (ideal) first appearance on the 15th?. [Month IV], the 1st. Month V, the 30th. Ni[ght of the xth,]
+
+@(r i 26) last part of the night, it was 2? cubits below β Geminorum. Mon[th VI, the 1st. Month VII, the 1st.]
+
+@(r i 27) Until the 21st, when it became stationary to the east, it became stationary 1 1⁄2? [cubits? in front of?]
+
+@(r i 28) η and 𝜗 Cancri, [...] ... [behind Mars?,]
+
+@(r i 29) being 2/3 cubit low to the south. ...
+
+@(r i 30) while moving back to the west, it was below ...
+
+@(r i 31) The 22nd, acronychal rising. Month X, the 1st. ... [...]
+
+@(r i 32) while moving back to the west, it was 1+[x ...] below β Geminorum. [Month XI?, the xth.]
+
+@(r i 33) Until around the 19th, when [it became stationary] to the west,
+
+@(r i 34) it became stationary [...] behind α Geminorum; I did not wa[tch ...]
+
+@(r i 35) The 4th, ... [...]
+
+$ ruling
+
+@(r i 36) Year 46. Mo[nth? I, the xth ...]
+
+@(r i 37) The 5th, ... [...]
+
+@(r i 38) ... [...]
+
+@(r ii 1) [...] ...
+
+@(r ii 2) [...] Jupiter?
+
+@(r ii 3) [...] when it became stationary to the east,
+
+@(r ii 4) [...] ... Month XII₂, the 30th.
+
+@(r ii 5) [...]
+
+@(r ii 6) [Year 3 ...] ... [first] part of the night,
+
+@(r ii 7) [... Month II], the 1st. Night of the 14th, first [part of the night,]
+
+@(r ii 8) [while moving back to the east, it was] 1 2/3 cubits [above α Virgi]nis.
+
+@(r ii 9) [... Month VI, the xth. The xth], last appearance in Libra. Month VII, the 1st.
+
+@(r ii 10) [The xth, first appearance in Libra]; rising of Jupiter to sunrise: [x°]; (ideal) first appearance on the 8th.
+
+@(r ii 11) [....] 1 2/3 cubits [....] α [Librae.]
+
+@(r ii 12) [....] Night of the 20th, last part of the night,
+
+@(r ii 13) [it came close?] to β [Scorpii. Month XI], the 30th. Until the 12th,
+
+@(r ii 14) [when it became stationary] to the east, it became stationary [... behind] β Scorpii.
+
+@(r ii 15) [Night of the xth, last part of the night,] while moving back [to the west, it came close?] to β Scorpii.
+
+@(r ii 16) [...] ... β Scorpii from
+
+@(r ii 17) [... of? Jupit]er? came out.
+
+$ ruling
+
+@(r ii 18) [Year 4. Month I, the xth. The 1]2th, acronychal rising. Month II, the 30th. Month III, the 1st.
+
+@(r ii 19) [...], when it became stationary [to the west], it became stationary in the end of Libra; I did not watch.
+
+@(r ii 20) [...] Month VI, the 1st. Night of the 12th, it was [...] below β
+
+@(r ii 21) [Scorpii]. Month VII, the 30th. The 20th, last appearance in Scorpius.
+
+@(r ii 22) [Month VIII, the xth. The xth], first appearance in Scorpius; it was bright, rising of Jupiter to sunrise: 15°;
+
+@(r ii 23) [(ideal) first appearance on the xth. Month IX, the xth.] Night of the 11th, last part of the night, it was [...] above 𝜗
+
+@(r ii 24) [Ophiuchi. Month X, the xth. Month XI,] the 30th. Month XII, the 1st. Until the 23rd,
+
+@(r ii 25) [when it became stationary to the east, ...] ...
+
+@(r iii 1) it became stationary ... [...]
+
+@(r iii 2) Month VI₂, the 1st. Month VII, the 3[0th ...]
+
+@(r iii 3) it became stationary in Pisces; clouds, I did not watch. [...]
+
+@(r iii 4) Month XI, the 30th. Night of the 13th, [...]
+
+@(r iii 5) 3 cubits. Month XII, the 1st. The 4th, [last appearance ...]
+
+$ ruling
+
+@(r iii 6) Year 9. Month I, the 30th. The 7th?, [first appearance? ...]
+
+@(r iii 7) the 14th, when it became visible, 12° was ri[sing? of Jupiter? to sunrise? ...]
+
+@(r iii 8) Until the 13th?, [when it became stationary to] the east?, [it became stationary ...]
+
+@(r iii 9) the rear stars of Plei[ades ...]
+
+@(r iii 10) Month VIII, the 1st. Month IX, the 30th. [...]
+
+@(r iii 11) it became stationary [...]; I did not watch. Mon[th X, the xth ...]
+
+@(r iii 12) while moving back [to the east,] it was [...] below η? [Tauri? ...]
+
+$ ruling
+
+@(r iii 13) Year 10. Mo[nth I, ...]
+
+@(r iii 14) The 28th, [...]
+
+@(r iii 15) Month III, ... [...]
+
+@(r iii 16) Mon[th V, ...]
+
+@(r iii 17) ... [...]
+
+@(r iii 18) ... [...]
+
+@(r iii 19) ... [...]
+
+@(r iv 1) [...] ... [...]
+
+@(r iv 2) [...] 8 fingers. Month III, the 1st. Night of the 24th,
+
+@(r iv 3) [first part of the night], it was 1⁄2 cubit above ϱ Leonis.
+
+@(r iv 4) [Month IV, the xth. Night of the xth, first] part of the night, Venus was 8 fingers above Jupiter.
+
+@(r iv 5) [Night of the xth], first part of the night, Mars was 1 finger above Jupiter; it came close,
+
+@(r iv 6) having passed [x] fingers to the east. Night of the 19th, first part of the night, Mercury
+
+@(r iv 7) was 8 fingers [below Jupiter.
+
+($blank space$)
+
+@(r iv 8) Appearances of Jupiter
+
+@(r iv 9) which are from year 18 of Aršu,
+
+@(r iv 10) who is called king Artaxerxes,
+
+@(r iv 11) until month IV of year 13
+
+@(r iv 12) of Umakuš, who is called king Artaxerxes.
+
+@(r iv 13) (As) a copy
+
+@(r iv 14) of tablets and writing-boards [of?]
+
+@(r iv 15) diaries belonging to ...
+
+@(r iv 16) son of Mušallim-Bēl [...]
+
+@(r iv 17) written. Tablet of ...,
+
+@(r iv 18) son of Marduk-šāpik-zēri [...]
+
+@(r iv 19) Hand of Bēl-šunu, son of [...]
+
+@(r iv 20) ... [...]

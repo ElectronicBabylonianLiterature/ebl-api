@@ -1,0 +1,1950 @@
+&X500039 = ADART 5 39
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+5'. [NE x x] ⸢x⸣
+#lem: Abu[Month V]MN; u; u; u
+
+6'. [KIN x] 15 28
+#lem: Ulūlu[Month VI]MN; u; n; n
+
+7'. [DU₆ x] 14 27
+#lem: Tašrītu[Month VII]MN; u; n; n
+
+8'. APIN 1 14 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+9'. GAN 1 13 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+10'. AB 30 x 12? 27
+#lem: Ṭebētu[Month X]MN; n; u; n; n
+
+11'. ZÍZ 1 13 26
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+12'. ŠE 30 13 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+13'. 60+3 BAR 1 13 27
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+14'. GU₄ 30 14 27
+#lem: Ayyaru[Month II]MN; n; n; n
+
+15'. SIG 30 15 28
+#lem: Simānu[Month III]MN; n; n; n
+
+16'. ŠU 30 16 28
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+17'. NE 1 15 27 28
+#lem: Abu[Month V]MN; n; n; n; n
+
+18'. KIN 30 16 28
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+19'. DU₆ 1 15 28
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+20'. APIN 1 14 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+21'. GAN 1 ina? 14 27
+#lem: Kislīmu[Month IX]MN; n; ina[in]PRP; n; n
+
+22'. AB 1 13? ⸢26⸣?
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+23'. ZÍZ 30 13 27
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+24'. ⸢ŠE 1 13+x⸣ [x]
+#lem: Addaru[Month XII]MN; n; n; u
+
+$ ruling
+25'. [60+4 BAR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+26'. [GU₄ x x 2]7?
+#lem: Ayyaru[Month II]MN; u; u; n
+
+27'. [SIG x x] 20+⸢x⸣
+#lem: Simānu[Month III]MN; u; u; n
+
+28'. [ŠU x x x]
+#lem: Duʾūzu[Month IV]MN; u; u; u
+
+29'. [NE x x x]
+#lem: Abu[Month V]MN; u; u; u
+
+30'. [KIN x x x]
+#lem: Ulūlu[Month VI]MN; u; u; u
+
+31'. [DU₆ x x x]
+#lem: Tašrītu[Month VII]MN; u; u; u
+
+32'. [API]N [x x 2]8?
+#lem: Arahsamna[Month VIII]MN; u; u; n
+
+33'. GAN 30 14 10+[x]
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+34'. AB 1 15? 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+35'. ZÍZ 30 ina 14 28
+#lem: Šabāṭu[Month XI]MN; n; ina[in]PRP; n; n
+
+36'. ⸢ŠE⸣ 1 14 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+37'. DIR 1 13 26
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n; n
+
+$ ruling
+38'. 60+5 BAR 30 14 27
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+39'. GU₄ 1 14 27
+#lem: Ayyaru[Month II]MN; n; n; n
+
+40'. SIG 30 14 28
+#lem: Simānu[Month III]MN; n; n; n
+
+41'. ŠU 30 14 28
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+42'. ⸢NE⸣ 1 14 27
+#lem: Abu[Month V]MN; n; n; n
+
+43'. ⸢KIN 30⸣ 15 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+44'. [D]U₆ 1 14 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+45'. [API]N 1 14 26
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+46'. [GAN] 30 14 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+47'. [AB] ⸢1⸣ 14 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+48'. [ZÍZ x] 14 27
+#lem: Šabāṭu[Month XI]MN; u; n; n
+
+49'. [ŠE x 1]4 27
+#lem: Addaru[Month XII]MN; u; n; n
+
+$ ruling
+50'. [60+6 x x] KAK.BAN ŠÚ
+#lem: n; u; u; Šiltāhu[Sirius]CN; rabû[set]V
+
+51'. [...] ⸢šámaš⸣ [GU]B
+#lem: u; šamšu[sun]N; izuzzu[stand]V
+
+52'. [... GU]B?
+#lem: u; izuzzu[stand]V
+
+53-55'. ($broken$)
+@column 2
+1-5'. ($broken$)
+6'. KIN 1? [x x]
+#lem: Ulūlu[Month VI]MN; n; u; u
+
+7'. DU₆ 30 [x x]
+#lem: Tašrītu[Month VII]MN; n; u; u
+
+8'. APIN 1 10+[x x]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+9'. GAN 30 14+[x x]
+#lem: Kislīmu[Month IX]MN; n; n; u
+
+10'. AB 1 ⸢14⸣+[x x]
+#lem: Ṭebētu[Month X]MN; n; n; u
+
+11'. ZÍZ 30 10+[x x]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+12'. ŠE 1 15 [x]
+#lem: Addaru[Month XII]MN; n; n; u
+
+$ ruling
+13'. 60+7 B[AR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+14'. GU₄ [x x x]
+#lem: Ayyaru[Month II]MN; u; u; u
+
+15'. SIG [x x x]
+#lem: Simānu[Month III]MN; u; u; u
+
+16'. Š[U x x x]
+#lem: Duʾūzu[Month IV]MN; u; u; u
+
+17'. N[E x x x]
+#lem: Abu[Month V]MN; u; u; u
+
+18'. K[IN x x] ⸢27⸣
+#lem: Ulūlu[Month VI]MN; u; u; n
+
+19'. [DU₆ x x] 26
+#lem: Tašrītu[Month VII]MN; u; u; n
+
+20'. [APIN x x] 27
+#lem: Arahsamna[Month VIII]MN; u; u; n
+
+21'. [GAN x x] 27
+#lem: Kislīmu[Month IX]MN; u; u; n
+
+22'. [AB x x] 27?
+#lem: Ṭebētu[Month X]MN; u; u; n
+
+23'. [ZÍZ x x] 27
+#lem: Šabāṭu[Month XI]MN; u; u; n
+
+24'. [ŠE x] 16 28
+#lem: Addaru[Month XII]MN; u; n; n
+
+$ ruling
+25'. 60+8 BAR 1 ⸢15 27⸣
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+26'. GU₄ 1 10+[x] ⸢27⸣
+#lem: Ayyaru[Month II]MN; n; n; n
+
+27'. SIG 30 15 27 19 GUB 26
+#lem: Simānu[Month III]MN; n; n; n; n; izuzzu[stand]V; n
+
+28'. ŠU 1 14 27
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+29'. NE 1 13 27
+#lem: Abu[Month V]MN; n; n; n
+
+30'. KIN 1 13 20+[x]
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+31'. DU₆ 30 13 27 
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+32'. APIN 1 13 20+[x]
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+33'. GAN 30 13 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+34'. AB 30 14 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+35'. ⸢ZÍZ⸣ 30 15 28
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+36'. ŠE 1 15 27 ⸢x⸣
+#lem: Addaru[Month XII]MN; n; n; n; u
+
+$ ruling
+37'. 60+9 BAR [x] 15 27
+#lem: n; Nisannu[Month I]MN; u; n; n
+
+38'. GU₄ 1 15 20+[x]
+#lem: Ayyaru[Month II]MN; n; n; n
+
+39'. SIG 30 16 ⸢28?⸣ 30 šamáš GUB
+#lem: Simānu[Month III]MN; n; n; n; n; šamšu[sun]N; izuzzu[stand]V
+
+40'. ŠU 1 15 28 
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+41'. NE 1 14 27
+#lem: Abu[Month V]MN; n; n; n
+
+42'. KIN 1 13 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+43'. DU₆ 1 13 26
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+44'. APIN 30 13 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+45'. GAN 1 13 26
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+46'. AB 30 13 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+47'. ZÍZ 30 14 28
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+48'. ŠE 30 15 28 DIR 1 15 27
+#lem: Addaru[Month XII]MN; n; n; n; Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; n
+
+$ ruling
+49'. 60+7 BAR 24 KAK.BAN ŠÚ
+#lem: n; Nisannu[Month I]MN; n; Šiltāhu[Sirius]CN; rabû[set]V
+
+50'. S[IG 8 šamáš] ⸢GUB⸣ 28 KAK.BAN IGI
+#lem: Simānu[Month III]MN; n; šamšu[sun]N; izuzzu[stand]V; n; Šiltāhu[Sirius]CN; amāru[be(come) visible]V
+
+51'. [KIN 11 L]ÁL-tì
+#lem: Ulūlu[Month VI]MN; n; šitqultu[equinox]N
+
+52'. [GAN 14 šámaš] GUB ⸢19⸣
+#lem: Kislīmu[Month IX]MN; n; šamšu[sun]N; izuzzu[stand]V; n
+
+53'. [KAK.BAN ana ME E] ŠE 1[7] LÁL-tì
+#lem: Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; waṣû[go out]V; Addaru[Month XII]MN; n; šitqultu[equinox]N
+
+@column 3
+1'. [60+10 BAR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+2'. [GU₄ x x x]
+#lem: Ayyaru[Month II]MN; u; u; u
+
+3'. [SIG x x x]
+#lem: Simānu[Month III]MN; u; u; u
+
+4'. ŠU [x x x]
+#lem: Duʾūzu[Month IV]MN; u; u; u
+
+5'. [N]E 1 [x x]
+#lem: Abu[Month V]MN; n; u; u
+
+6'. [K]IN 1 12+[x x]
+#lem: Ulūlu[Month VI]MN; n; n; u
+
+7'. [D]U₆ 30 ina ⸢14⸣ [x]
+#lem: Tašrītu[Month VII]MN; n; ina[in]PRP; n; u
+
+8'. [A]PIN 1 13 20+[x]
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+9'. [G]AN 30 13 20+⸢x⸣
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+10'. [A]B 1 13 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+11'. [Z]ÍZ 30 14 27
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+12'. [Š]E 1 14 27 28
+#lem: Addaru[Month XII]MN; n; n; n; n
+
+$ ruling
+13'. [60+11 BAR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+14'. [GU₄ x x x]
+#lem: Ayyaru[Month II]MN; u; u; u
+
+15'. ⸢SIG⸣ 1 ⸢15 27⸣
+#lem: Simānu[Month III]MN; n; n; n
+
+16'. ŠU 30 15 28?
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+17'. NE 1 14 28
+#lem: Abu[Month V]MN; n; n; n
+
+18'. KIN 1 14 28
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+19'. DU₆ 30 14 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+20'. APIN 1 14 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+21'. GAN 30 ina 14 28
+#lem: Kislīmu[Month IX]MN; n; ina[in]PRP; n; n
+
+22'. AB 1 14 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+23'. ZÍZ 1 13 27
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+24'. ŠE 30 14 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+25'. 60+12 BAR 30 15? 28
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+26'. GU₄ 1 14 27
+#lem: Ayyaru[Month II]MN; n; n; n
+
+27'. SIG 30 15 27 28
+#lem: Simānu[Month]MN; n; n; n; n
+
+28'. ŠU 1 14 27 3 GUB
+#lem: Duʾūzu[Month IV]MN; n; n; n; n; izuzzu[stand]V
+
+29'. NE 30 ina 14? 27
+#lem: Abu[Month V]MN; n; ina[in]PRP; n; n
+
+30'. KIN 1 14 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+31'. DU₆ 30 15 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+32'. APIN 1 14 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+33'. GAN 30 15 28?
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+34'. AB 1 14 28
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+35'. ZÍZ 30 14 27
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+36'. ŠE 30 14 28
+#lem: Addaru[Month XII]MN; n; n; n
+
+37'. DIR 1 14 27
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n; n
+
+$ ruling
+38'. 60+13 BAR 1 13 ⸢27⸣?
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+39'. GU₄ 30 13 20+[x]
+#lem: Ayyaru[Month II]MN; n; n; n
+
+40'. SIG 30 ina ⸢15⸣ [x] ⸢14⸣ GUB
+#lem: Simānu[Month III]MN; n; ina[in]PRP; n; u; n; izuzzu[stand]V
+
+41'. ŠU 1 14 20+[x]
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+42'. NE 30 15 27
+#lem: Abu[Month V]MN; n; n; n
+
+43'. K[I]N 1 15? 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+44'. DU₆ ⸢30⸣ 15 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+45'. APIN [x] 16 28
+#lem: Arahsamna[Month VIII]MN; u; n; n
+
+46'. GAN 1 [1]5 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+47'. AB 1 ⸢15?⸣ 27?
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+48'. ZÍZ 1 14 [x]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+49'. ŠE 30 14 20+[x]
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+50'. 60+8 GU₄ 5 [KAK.BA]N ŠÚ
+#lem: n; Ayyaru[Month II]MN; n; Šiltāhu[Sirius]CN; rabû[set]V
+
+51'. SI[G] ⸢19⸣ [šámaš GUB] ⸢ŠU? 9?⸣
+#lem: Simānu[Month III]MN; n; šamšu[sun]N; izuzzu[stand]V; Duʾūzu[Month IV]MN; n
+
+52'. [KAK.BAN IGI] KIN 22 LÁL
+#lem: Šiltāhu[Sirius]CN; amāru[be(come) visible]V; Ulūlu[Month VI]MN; n; šitqultu[equinox]N
+
+53'. ⸢GAN 25 GUB AB⸣ 1
+#lem: Kislīmu[Month IX]MN; n; izuzzu[stand]V; Ṭebētu[Month X]MN; n
+
+54'. ⸢KAK.BAN⸣ ana? [ME E]
+#lem: Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; waṣû[go out]V
+
+55'. ⸢ŠE 28 LÁL-tì⸣ 
+#lem: Addaru[Month XII]MN; n; šitqultu[equinox]N
+
+$ ruling
+@column 4
+1-14'. ($broken$)
+15'. SIG 1 ⸢12+x⸣ [x]
+#lem: Simānu[Month III]MN; n; n; u
+
+16'. ŠU 30 13 27
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+17'. NE 30 ina 14 27
+#lem: Abu[Month V]MN; n; ina[in]PRP; n; n
+
+18'. KIN 1? 13 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+19'. KIN.2.KAM 1 ina ⸢15 28⸣
+#lem: Ulūlu-Šanû[Month VI₂]MN; n; ina[in]PRP; n; n
+
+20'. DU₆ 30 15 28
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+21'. APIN 1 15 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+22'. GAN 30 15 28
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+23'. AB 1 15 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+24'. ZÍZ 30 15 27
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+25'. ŠE 1 15 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+26'. 60+16 BAR 1 14 26?
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+27'. GU₄ 1 13 26
+#lem: Ayyaru[Month II]MN; n; n; n
+
+28'. SIG 30 14 28
+#lem: Simānu[Month III]MN; n; n; n
+
+29'. ŠU 1 13 27
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+30'. NE 30 14 28
+#lem: Abu[Month V]MN; n; n; n
+
+31'. KIN 1 13 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+32'. DU₆ 30 14 20+⸢x⸣
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+33'. APIN 30 15? 20+⸢x⸣
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+34'. GAN 1 14 20+[x]
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+35'. AB 30 15 20+[x]
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+36'. ZÍZ 1 ina 15 ⸢27?⸣
+#lem: Šabāṭu[Month XI]MN; n; ina[in]PRP; n; n
+
+37'. ŠE ⸢30⸣ 15 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+38'. 60+17 BAR 1 ⸢14? 26⸣
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+39'. GU₄ 1 14 26?
+#lem: Ayyaru[Month II]MN; n; n; n
+
+40'. SIG 30 ⸢14?⸣ 27
+#lem: Simānu[Month III]MN; n; n; n
+
+41'. ŠU 1 ⸢14⸣? 27
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+42'. NE 1 [x] 27
+#lem: Abu[Month V]MN; n; u; n
+
+43'. KIN 30 [x] 27
+#lem: Ulūlu[Month VI]MN; n; u; n
+
+44'. DU₆ 30 10+[x] 28
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+45'. APIN 1 x 27
+#lem: Arahsamna[Month VIII]MN; n; u; n
+
+46'. GAN 1 [x]+1 27
+#lem: Kislīmu[Month IX]MN; n; u; n
+
+47'. AB [x x] 27
+#lem: Ṭebētu[Month X]MN; u; u; n
+
+48'. [ZÍZ x x] 27
+#lem: Šabāṭu[Month XI]MN; u; u; n
+
+49'. [ŠE x x x DIR x] ⸢x 28?⸣
+#lem: Addaru[Month XII]MN; u; u; u; Addaru_Šanû[(Intercalary) Month XII₂]MN; u; u; n
+
+$ ruling
+50'. 1.9 GU₄ 16 KAK.BAN ŠÚ
+#lem: n; Ayyaru[Month II]MN; n; Šiltāhu[Sirius]CN; rabû[set]V
+
+51'. SIG 30 GUB
+#lem: Simānu[Month III]MN; n; izuzzu[stand]V
+
+52'. ŠU 20 KAK.BAN IGI
+#lem: Duʾūzu[Month IV]MN; n; Šiltāhu[Sirius]CN; amāru[be(come) visible]V
+
+53'. DU₆ 3 LÁL-tì
+#lem: Tašrītu[Month VII]MN; n; šitqultu[equinox]N
+
+54'. AB 6 GUB 1[1]
+#lem: Ṭebētu[Month X]MN; n; izuzzu[stand]V; n
+
+55'. KAK.BAN ana ME [E]
+#lem: Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; waṣû[go out]V
+
+56'. DIR 9 [LÁL-tì]
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; šitqultu[equinox]N
+
+@column 5
+1-17'. ($broken$) 
+18-20'. ($traces$) 
+21-24'. ($broken$)
+$ ruling
+25'. 60+[20 BAR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+26'. G[U₄ x x x]
+#lem: Ayyaru[Month II]MN; u; u; u
+
+27'. [SIG x x x]
+#lem: Simānu[Month III]MN; u; u; u
+
+28'. [ŠU x x x]
+#lem: Duʾūzu[Month IV]MN; u; u; u
+
+29'. N[E x x 2]8
+#lem: Abu[Month V]MN; u; u; n
+
+30'. KIN 1 ⸢x x⸣
+#lem: Ulūlu[Month VI]MN; n; u; u
+
+31'. DU₆ 30 15 20+⸢x⸣
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+32'. APIN 1 15 28
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+33'. GAN 1 14 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+34'. AB 1 13 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+35'. ZÍZ 1 13 27
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+36'. ŠE 30 13 28
+#lem: Addaru[Month XII]MN; n; n; n
+
+37'. DIR 1 13 27
+#lem: erpetu[cloud]N; n; n; n
+
+$ ruling
+38'. 60+21 BAR [1 x x]
+#lem: n; Nisannu[Month I]MN; n; u; u
+
+39'. GU₄ 30 [x x]
+#lem: Ayyaru[Month II]MN; n; u; u
+
+40'. SIG 30 [x x]
+#lem: Simānu[Month III]MN; n; u; u
+
+41'. ŠU 30 [x x]
+#lem: Duʾūzu[Month IV]MN; n; u; u
+
+42'. NE [x x x]
+#lem: Abu[Month V]MN; u; u; u
+
+43'. KIN 1 [x x]
+#lem: Ulūlu[Month VI]MN; n; u; u
+
+44'. DU₆ 1 [x x]
+#lem: Tašrītu[Month VII]MN; n; u; u
+
+45'. APIN 1 10+[x x]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+46'. GAN 30 [x x]
+#lem: Kislīmu[Month IX]MN; n; u; u
+
+47'. AB 1 10+[x x]
+#lem: Ṭebētu[Month X]MN; n; n; u
+
+48'. ZÍZ 1 [x x]
+#lem: Šabāṭu[Month XI]MN; n; u; u
+
+49'. ⸢ŠE 30?⸣ [x x]
+#lem: Addaru[Month XII]MN; n; u; u
+
+$ ruling
+50'. [...]
+#lem: u
+
+51'. SI[G? ...]
+#lem: Simānu[Month III]MN; u
+
+@reverse
+@column 6
+1'. 60+[22 BAR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+2'. GU₄ 30 [x x]
+#lem: Ayyaru[Month II]MN; n; u; u
+
+3'. SIG 30 [x x]
+#lem: Simānu[Month III]MN; n; u; u
+
+4'. ŠU 30 [x x]
+#lem: Duʾūzu[Month IV]MN; n; u; u
+
+5'. NE 1 [x x]
+#lem: Abu[Month V]MN; n; u; u
+
+6'. KIN 30 [x x]
+#lem: Ulūlu[Month VI]MN; n; u; u
+
+7'. DU₆ 1 10+[x x]
+#lem: Tašrītu[Month VII]MN; n; n; u
+
+8'. APIN 1 14 [x]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+9'. GAN 1 14 [x]
+#lem: Kislīmu[Month IX]MN; n; n; u
+
+10'. AB 30 10+[x x]
+#lem: Ṭebētu[Month X]MN; n; n; u
+
+11'. ZÍZ 1 13 [x]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+12'. ŠE 30 14 [x]
+#lem: Addaru[Month XII]MN; n; n; u
+
+$ ruling
+13'. 60+23 BAR 1 13 20+[x]
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+14'. GU₄ 30 14 27
+#lem: Ayyaru[Month II]MN; n; n; n
+
+15'. SIG 1 14 27
+#lem: Simānu[Month III]MN; n; n; n
+
+16'. ŠU 30 14 28
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+17'. NE 1 14 27
+#lem: Abu[Month V]MN; n; n; n
+
+18'. KIN 30 14 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+19'. DU₆ 1 14 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+20'. APIN 30 15 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+21'. GAN 1 14 26
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+22'. AB 1 14 26
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+23'. ZÍZ 30 14 26
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+24'. ŠE 30 ina 15 27
+#lem: Addaru[Month XII]MN; n; ina[in]PRP; n; n
+
+25'. DIR 1 14 28?
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; n
+
+$ ruling
+26'. 60+[2]4 BAR 1 <x> 27
+#lem: n; Nisannu[Month I]MN; n; u; n
+
+27'. G[U₄ 3]0 14 28
+#lem: Ayyaru[Month II]MN; n; n; n
+
+28'. SIG [x] 14 27
+#lem: Simānu[Month III]MN; u; n; n
+
+29'. ŠU [x] 15 28
+#lem: Duʾūzu[Month IV]MN; u; n; n
+
+30'. NE ⸢1⸣ 13 27
+#lem: Abu[Month V]MN; n; n; n
+
+31'. KIN 30 14? 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+32'. DU₆ 1 10+[x] ⸢x⸣
+#lem: Tašrītu[Month VII]MN; n; n; u
+
+33'. APIN 30 10+[x x]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+34'. GAN 1 10+[x x]
+#lem: Kislīmu[Month IX]MN; n; n; u
+
+35'. AB 30 14? [x]
+#lem: Ṭebētu[Month X]MN; n; n; u
+
+36'. ZÍZ 30 ⸢15⸣? [x]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+37'. ŠE 1 10+[x x]
+#lem: Addaru[Month XII]MN; n; n; u
+
+$ ruling
+38'. 60+25 BAR [x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+39'. GU₄ 30 10+[x x]
+#lem: Ayyaru[Month II]MN; n; n; u
+
+40'. SIG 1 [x x]
+#lem: Simānu[Month III]MN; n; u; u
+
+41'. ŠU [x x x]
+#lem: Duʾūzu[Month IV]MN; u; u; u
+
+42-49'. ($broken$)
+@column 7
+1'. 60+26 BAR 30 15 28
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+2'. GU₄ 1 15 28
+#lem: Ayyaru[Month II]MN; n; n; n
+
+3'. SIG 1 14 27
+#lem: Simānu[Month III]MN; n; n; n
+
+4'. ŠU 30 14 28
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+5'. NE 1 14 27
+#lem: Abu[Month V]MN; n; n; n
+
+6'. KIN 1 13 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+7'. DU₆ 1 13 26
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+8'. APIN 30 13 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+9'. GAN 30 14 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+10'. AB 30 ina 15 28
+#lem: Ṭebētu[Month X]MN; n; ina[in]PRP; n; n
+
+11'. ⸢ZÍZ 1⸣ [x 2]6+[x]
+#lem: Šabāṭu[Month XI]MN; n; u; n
+
+12'. ŠE 30 16 20+[x]
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+13'. 60+[2]7 BAR 1 15 27?
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+14'. [GU₄] 30 16 27?
+#lem: Ayyaru[Month II]MN; n; n; n
+
+15'. [SIG] ⸢1⸣ 15 27
+#lem: Simānu[Month III]MN; n; n; n
+
+16'. ŠU 30 15 28
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+17'. NE 1 14 27
+#lem: Abu[Month V]MN; n; n; n
+
+18'. KIN 1 13 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+19'. DU₆ 1 13 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+20'. APIN 30 ina 13 27
+#lem: Arahsamna[Month VIII]MN; n; ina[in]PRP; n; n
+
+21'. GAN 1 13 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+22'. AB 30 14 27
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+23'. ZÍZ 30 15 28
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+24'. ŠE 1 15 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+25'. 60+28 BAR 30 15 27
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+26'. GU₄ 1 15 27
+#lem: Ayyaru[Month II]MN; n; n; n
+
+27'. SIG 30 15 27
+#lem: Simānu[Month III]MN; n; n; n
+
+28'. ŠU 1 15 27
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+29'. NE 30 15 ⸢28⸣
+#lem: Abu[Month V]MN; n; n; n
+
+30'. KIN 1 14 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+31'. DU₆ 1 14 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+32'. APIN 1 13 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+33'. GAN 30 13 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+34'. AB 1 13 27?
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+35'. ZÍZ 30 14 28
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+36'. ŠE 30 16? 28
+#lem: Addaru[Month XII]MN; n; n; n
+
+37'. DIR 1 14 27
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; n
+
+$ ruling
+38'. [60+29 BA]R? 30 ⸢15? 27?⸣
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+39'. GU₄ 1 ina [x] 20+[x]
+#lem: Ayyaru[Month II]MN; n; ina[in]PRP; u; n
+
+40'. SIG 30 10+[x x]
+#lem: Simānu[Month III]MN; n; n; u
+
+41'. ŠU 30 15 [x]
+#lem: Duʾūzu[Month IV]MN; n; n; u
+
+42'. NE 1 15 [x]
+#lem: Abu[Month V]MN; n; n; u
+
+43'. KIN ⸢30? 14?⸣ [x]
+#lem: Ulūlu[Month VI]MN; n; n; u
+
+44'. DU₆ ⸢30?⸣ [x x]
+#lem: Tašrītu[Month VII]MN; n; u; u
+
+45'. APIN 1 10+[x x]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+46'. GAN 1 10+[x x]
+#lem: Kislīmu[Month IX]MN; n; n; u
+
+47'. AB 30 [x x]
+#lem: Ṭebētu[Month X]MN; n; u; u
+
+48'. ZÍZ 1 [x x]
+#lem: Šabāṭu[Month XI]MN; n; u; u
+
+49'. ŠE 3[0? x x]
+#lem: Addaru[Month XII]MN; n; u; u
+
+@column 8
+1'. 60+30 BAR ⸢30⸣ [x] 27
+#lem: n; Nisannu[Month I]MN; n; u; n
+
+2'. ⸢GU₄ 30⸣ ina 14 27?
+#lem: Ayyaru[Month II]MN; n; ina[in]PRP; n; n
+
+3'. SIG 1 14 27
+#lem: Simānu[Month III]MN; n; n; n
+
+4'. ŠU 30 14 27
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+5'. [N]E 30 15 27
+#lem: Abu[Month V]MN; n; n; n
+
+6'. KIN 1 15 27
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+7'. DU₆ 1 14 26
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+8'. APIN 30 15 27
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+9'. GAN 1 10+[x] 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+10'. AB 30 10+[x x]
+#lem: Ṭebētu[Month X]MN; n; n; u
+
+11'. ZÍZ 1 15 [x]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+12'. ŠE 1 11+[x x]
+#lem: Addaru[Month XII]MN; n; n; u
+
+$ ruling
+13'. 60+[31 BAR x x x]
+#lem: n; Nisannu[Month I]MN; u; u; u
+
+14'. [GU₄ x x] 27
+#lem: Ayyaru[Month II]MN; u; u; n
+
+15'. [SIG x x] 27
+#lem: Simānu[Month III]MN; u; u; n
+
+16'. [ŠU] 1 ⸢13?⸣ 26
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+17'. NE 30 14 27
+#lem: Abu[Month V]MN; n; n; n
+
+18'. KIN 30 15 28?
+#lem: Ulūlu[Month VI]MN; n; n; n
+
+19'. DU₆ 1 15? 27
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+20'. APIN 30 15 28
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+21'. GAN 1 15 27
+#lem: Kislīmu[Month IX]MN; n; n; n
+
+22'. AB 30 15 28
+#lem: Ṭebētu[Month X]MN; n; n; n
+
+23'. ZÍZ 1 15 28
+#lem: Šabāṭu[Month XI]MN; n; n; n
+
+24'. ŠE 1 14 27
+#lem: Addaru[Month XII]MN; n; n; n
+
+25'. DIR 1 14 27
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; n
+
+$ ruling
+26'. 60+32 BAR 30 14 27
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+27'. GU₄ 1 13 27
+#lem: Ayyaru[Month II]MN; n; n; n
+
+28'. SIG 30 13 27
+#lem: Simānu[Month III]MN; n; n; n
+
+29'. ŠU 1 ⸢13 27⸣
+#lem: Duʾūzu[Month IV]MN; n; n; n
+
+30'. NE 30 14? ⸢x⸣
+#lem: Abu[Month V]MN; n; n; u
+
+31'. KIN 30 ina 15 28
+#lem: Ulūlu[Month VI]MN; n; ina[in]PRP; n; n
+
+32'. DU₆ 1 14? 28
+#lem: Tašrītu[Month VII]MN; n; n; n
+
+33'. APIN 30 15 28
+#lem: Arahsamna[Month VIII]MN; n; n; n
+
+34'. ⸢GAN⸣ 1 ina 15 27
+#lem: Kislīmu[Month IX]MN; n; ina[in]PRP; n; n
+
+35'. [AB x x] 28
+#lem: Ṭebētu[Month X]MN; u; u; n
+
+36'. ZÍZ 1 ⸢15⸣ [x]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+37'. ŠE 1 14 ⸢27⸣
+#lem: Addaru[Month XII]MN; n; n; n
+
+$ ruling
+38'. 1.33 BAR 30 14 27
+#lem: n; Nisannu[Month I]MN; n; n; n
+
+@left
+9'. 19 GUB 24? KAK.BAN ana ME? 
+#lem: n; izuzzu[stand]V; n; Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N
+
+12'. 22 LÁL-tì
+#lem: n; šitqultu[equinox]N
+
+$ ruling
+14'. 10 KAK.BAN ŠÚ
+#lem: n; Šiltāhu[Sirius]CN; rabû[set]V
+
+15'. ⸢24? GUB?⸣
+#lem: n; izuzzu[stand]V
+
+16'. ⸢14? KAK.BAN⸣ IGI
+#lem: n; Šiltāhu[Sirius]CN; amāru[be(come) visible]V
+
+18'. 2[7] LÁL-tì
+#lem: n; šitqultu[equinox]N
+
+21'. 30 ⸢GUB⸣
+#lem: n; izuzzu[stand]V
+
+22'. ($traces$)
+31'. 8 LÁL-t[ì]
+#lem: n; šitqultu[equinox]N
+
+34'. 11 GUB 16 KAK.BAN ana ME E 
+#lem: n; izuzzu[stand]V; n; Šiltāhu[Sirius]CN; ana[to]PRP; ūmu[day]N; waṣû[go out]V
+
+37'. 14 ⸢LÁL-tì⸣
+#lem: n; šitqultu[equinox]N
+
+$ ruling
+39'.  KAK.BAN ŠÚ
+#lem: Šiltāhu[Sirius]CN; rabû[set]V
+
+40'. 16 šamáš GU[B]
+#lem: n; šamšu[sun]N; izuzzu[stand]V
+
+41'. ⸢KAK⸣.BAN IGI 
+#lem: Šiltāhu[Sirius]CN; amāru[be(come) visible]V
+
+43'. 19 [LÁL]-⸢tì⸣
+#lem: n; šitqultu[equinox]N
+
+@translation labeled en project
+
+(4 lines broken)
+
+@(o i 5) [V x x] ⸢x⸣
+
+@(o i 6) [VI x] 15 28
+
+@(o i 7) [VII x] 14 27
+
+@(o i 8) VIII 1 14 27
+
+@(o i 9) IX 1 13 27
+
+@(o i 10) X 30 ⸢x⸣ 12? 27
+
+@(o i 11) XI 1 13 26
+
+@(o i 12) XII 30 13 27
+
+$ ruling
+
+@(o i 13) (Year) 63, I 1 13 27
+
+@(o i 14) II 30 14 27
+
+@(o i 15) III 30 15 28
+
+@(o i 16) IV 30 16 28
+
+@(o i 17) V 1 15 27/28
+
+@(o i 18) VI 30 16 28
+
+@(o i 19) VII 1 15 28 
+
+@(o i 20) VIII 1 14 27
+
+@(o i 21) IX 1 ina 14 27
+
+@(o i 22) X 1 13? 2⸢6⸣?
+
+@(o i 23) XI 30 13 27
+
+@(o i 24) XII 1 13? [x]
+
+$ ruling
+
+@(o i 25) [(Year) 64, I x x x]
+
+@(o i 26) [II x x 2]7?
+
+@(o i 27) [III x x] 20+⸢x⸣ 
+
+@(o i 28) [IV x x x]
+
+@(o i 29) [V xxx]
+
+@(o i 30) [VI x x x]
+
+@(o i 31) [VII x x x]
+
+@(o i 32) [VI]II [x x 2]8?
+
+@(o i 33) IX 30 14 10+[x]
+
+@(o i 34) X 1 15? 27
+
+@(o i 35) XI 30 ina 14 28
+
+@(o i 36) XII 1 14 27
+
+@(o i 37) XII₂ 1 13 26
+
+$ ruling
+
+@(o i 38) (Year) 65, I 30 14 27
+
+@(o i 39) II 1 14 27 
+
+@(o i 40) III 30 14 28 
+
+@(o i 41) IV 30 14 28 
+
+@(o i 42) V 1 14 27 
+
+@(o i 43) VI 30 15 27 
+
+@(o i 44) VII 1 14 27 
+
+@(o i 45) VIII 1 14 26 
+
+@(o i 46) [IX] 30 14 27 
+
+@(o i 47) [X] 1 14 27 
+
+@(o i 48) [XI x] 14 27 
+
+@(o i 49) [XII x 1]4 27
+
+$ ruling
+
+@(o i 50) [(Year) 66, ...] Sirius’ last appearance. 51 [...] solstice.
+
+@(o i 52) [...] ...
+
+@(o i 53-55) (broken)
+
+II
+
+@(o ii 1-5) (broken)
+
+@(o ii 6) VI 1? [x x]
+
+@(o ii 7) VII 30 [x x]
+
+@(o ii 8) VIII 1 10+[xx]
+
+@(o ii 9) IX 30 14+[xx]
+
+@(o ii 10) X 1 14+[xx]
+
+@(o ii 11) XI 30 10+[xx]
+
+@(o ii 12) XII 1 15 [x]
+
+$ ruling
+
+@(o ii 13) (Year) 67, I [x x x]
+
+@(o ii 14) II [x x x] 
+
+@(o ii 15) III [x x x] 
+
+@(o ii 16) IV [x x x] 
+
+@(o ii 17) V [x x x] 
+
+@(o ii 18) VI [x x] ⸢27⸣ 
+
+@(o ii 19) [VII x x] 26 
+
+@(o ii 20) [VIII x x] 27
+
+@(o ii 21) [IX x x] 27 
+
+@(o ii 22) [X x x] 27? 
+
+@(o ii 23) [XI x x] 27 
+
+@(o ii 24) [XII x] 16 28 
+
+$ ruling
+
+@(o ii 25) (Year) 68, I 1 15? 27
+
+@(o ii 26) II 1 10+[x] ⸢27⸣
+
+@(o ii 27) III 30 15 27 19 solstice
+
+@(o ii 28) IV 1 14 27
+
+@(o ii 29) V 1 13 27
+
+@(o ii 30) VI 1 13 20+[x]
+
+@(o ii 31) VII 30 13 27
+
+@(o ii 32) VIII 1 13 20+[x]
+
+@(o ii 33) IX 30 13 27
+
+@(o ii 34) X 30 14 27
+
+@(o ii 35) XI 30 15? 28
+
+@(o ii 36) XII 1 15 27 ⸢x⸣ 
+
+$ ruling
+
+@(o ii 37) (Year) 69, I [x] 15 27
+
+@(o ii 38) II 1 15 20+[x]
+
+@(o ii 39) III 30 16 28? 30 solstice
+
+@(o ii 40) IV 1 15 28
+
+@(o ii 41) V 1 14 27
+
+@(o ii 42) VI 1 13 27
+
+@(o ii 43) VII 1 13 26
+
+@(o ii 44) VIII 30 13 27
+
+@(o ii 45) IX 1 13 26
+
+@(o ii 46) X 30 13 27
+
+@(o ii 47) XI 30 14 28 
+
+@(o ii 48) XII 30 15 28 XII₂ 1 15 27 
+
+$ ruling
+
+@(o ii 49) (Year) 67, I 24, Sirius’ last appearance.
+
+@(o ii 50) [III 8, sol]stice. 28, Sirius’ first appearance.
+
+@(o ii 51) [VI 11,] equinox.
+
+@(o ii 52) [IX 14,] solstice. 19,
+
+@(o ii 53) [Sirius’ acronychal rising.] XII 1[7], equinox.
+
+@(o iii 1) [(Year) 70, I x x x] 
+
+@(o iii 2) [II x x x] 
+
+@(o iii 3) [III x x x] 
+
+@(o iii 4) IV [x x x] 
+
+@(o iii 5) V 1 [x x]
+
+@(o iii 6) VI 1 12+[xx]
+
+@(o iii 7) VII 30 ina 14 [x]
+
+@(o iii 8) VIII 1 13 20+[x]
+
+@(o iii 9) IX 30 13 20+[x]
+
+@(o iii 10) X 1 13 27
+
+@(o iii 11) XI 30 14 27
+
+@(o iii 12) XII 1 14 27/28
+
+$ ruling
+
+@(o iii 13) [(Year) 71, I x x x]
+
+@(o iii 14) [II x x x] 
+
+@(o iii 15) III 1 15 27 
+
+@(o iii 16) IV 30 15 28? 
+
+@(o iii 17) V 1 14 28 
+
+@(o iii 18) VI 1 14 28 
+
+@(o iii 19) VII 30 14 27
+
+@(o iii 20) VIII 1 14 27
+
+@(o iii 21) IX 30 ina 14 28
+
+@(o iii 22) X 1 14 27
+
+@(o iii 23) XI 1 13 27
+
+@(o iii 24) XII 30 14 27
+
+$ ruling
+
+@(o iii 25) (Year) 72, I 30 15? 28
+
+@(o iii 26) II 1 14 27
+
+@(o iii 27) III 30 15 27/28
+
+@(o iii 28) IV 1 14 27 3, solstice.
+
+@(o iii 29) V 30 ina 14? 27
+
+@(o iii 30) VI 1 14 27
+
+@(o iii 31) VII 30 15 27
+
+@(o iii 32) VIII 1 14 27
+
+@(o iii 33) IX 30 15 28?
+
+@(o iii 34) X 1 14 28
+
+@(o iii 35) XI 30 14 27
+
+@(o iii 36) XII 30 14 28
+
+@(o iii 37) XII₂ 1 14 27
+
+$ ruling
+
+@(o iii 38) (Year) 73, I 1 13 27?
+
+@(o iii 39) II 30 13 20+[x]
+
+@(o iii 40) III 30 ina 15 [x] 14, solstice
+
+@(o iii 41) IV 1 14 20+[x]
+
+@(o iii 42) V 30 15 27
+
+@(o iii 43) VI 1 15? 27
+
+@(o iii 44) VII 30 15 27
+
+@(o iii 45) VIII [x] 16 28
+
+
+@(o iii 46) IX 1 15 27
+
+@(o iii 47) X 1 15? 27?
+
+@(o iii 48) XI 1 14 [x]
+
+@(o iii 49) XII 30 14 20+[x]
+
+$ ruling
+
+@(o iii 50) (Year) 68. II 5, [Sirius’] last appearance. 
+
+@(o iii 51) III 19, [solstice.] IV? 9?,
+
+@(o iii 52) [Sirius’ first appearance.] VI 22, equinox. 
+
+@(o iii 53) IX 25, solstice. X 1{sic},
+
+@(o iii 54) Sirius’ [acronychal rising]. 
+
+@(o iii 55) XII 28, equinox. 
+
+$ ruling
+
+@(o iv 1-14) ($broken$)
+
+@(o iv 15) III 1 12+[x] [x]
+
+@(o iv 16) IV 30 13 27
+
+@(o iv 17) V 30 ina 14 27
+
+@(o iv 18) VI 1? 13 27
+
+@(o iv 19) VI₂ 1 ina 15 28
+
+@(o iv 20) VII 30 15 28
+
+@(o iv 21) VIII 1 15 27
+
+@(o iv 22) IX 30 15 27
+
+@(o iv 23) X 1 15 27
+
+@(o iv 24) XI 30 15 27
+
+@(o iv 25) XII 1 15 27
+
+$ ruling
+
+@(o iv 26) (Year) 76, I 1 14 26?
+
+@(o iv 27) II 1 13 26
+
+@(o iv 28) III 30 14 28
+
+@(o iv 29) IV 1 13 27
+
+@(o iv 30) V 30 14 28
+
+@(o iv 31) VI 1 13 27
+
+@(o iv 32) VII 30 14 20+⸢x⸣ 
+
+@(o iv 33) VIII 30 15? 20+⸢x⸣
+
+@(o iv 34) IX 1 14 20+[x]
+
+@(o iv 35) X 30 15 20+[x] 
+
+@(o iv 36) XI 1 ina 15 27?
+
+@(o iv 37) XII 30 15 27
+
+$ ruling
+
+@(o iv 38) (Year) 77, I 1 14? 26
+
+@(o iv 39) II 1 14 26?
+
+@(o iv 40) III 30 14? 27
+
+@(o iv 41) IV 1 14? 27
+
+@(o iv 42) V 1 [x] 27
+
+@(o iv 43) VI 30 [x] 27
+
+@(o iv 44) VII 30 10+[x] 28 
+
+@(o iv 45) VIII 1 x 27
+
+@(o iv 46) IX 1 [x]+1 27
+
+@(o iv 47) X [x x] 27
+
+@(o iv 48) [XI x x] 27
+
+@(o iv 49) [XII x x x XII₂ x] x 28?
+
+$ ruling
+
+@(o iv 50) (Year) 69. II 16, Sirius’ last appearance.
+
+@(o iv 51) III 30, solstice.
+
+@(o iv 52) IV 20, Sirius’ first appearance.
+
+@(o iv 53) VII 3, equinox.
+
+@(o iv 54) X 6, solstice. 1[1],
+
+@(o iv 55) Sirius’ acronychal [rising.]
+
+@(o iv 56) XII₂ 9, [equinox.]
+
+@(o v 1-17) ($broken$)
+
+@(o v 18-20) ($traces$)
+
+@(o v 21-24) ($broken$)
+
+$ ruling
+
+@(o v 25) (year 80 [I x x x]
+
+@(o v 26) II [x x x]
+
+@(o v 27) [III x x x]
+
+@(o v 28) [IV x x x]
+
+@(o v 29) V [x x 2]8
+
+@(o v 30) VI 1 x x
+
+@(o v 31) VII 30 15 20+[x]
+
+@(o v 32) VIII 1 15 28
+
+@(o v 33) IX 1 14 27
+
+@(o v 34) X 1 13 27
+
+@(o v 35) XI 1 13 27
+
+@(o v 36) XII 30 13 28
+
+@(o v 37) XII₂ 1 13 27
+
+$ ruling
+
+@(o v 38) (Year) 81 I [1 x x]
+
+@(o v 39) II 30 [x x]
+
+@(o v 40) III 30 [x x]
+
+@(o v 41) IV 30 [x x]
+
+@(o v 42) V [x x x]
+
+@(o v 43) VI 1 [x x]
+
+@(o v 44) VII 1 [x x]
+
+@(o v 45) VIII 1 10+[xx]
+
+@(o v 46) IX 30 [x x]
+
+@(o v 47) X 1 10+[xx]
+
+@(o v 48) XI 1 [x x]
+
+@(o v 49) XII 30? [x x]
+
+$ ruling
+
+@(o v 50) […]
+
+@(o v 51) III? […]
+
+@(r vi 1) (Year) 8[2, [I x x x] 
+
+@(r vi 2) II 30 [x x] 
+
+@(r vi 3) III 30 [x x] 
+
+@(r vi 4) IV 30 [x x] 
+
+@(r vi 5) V 1 [x x] 
+
+@(r vi 6) VI 30 [x x]
+
+@(r vi 7) VII 1 10+[xx]
+
+@(r vi 8) VIII 1 14 [x]
+
+@(r vi 9) IX 1 14 [x]
+
+@(r vi 10) X 30 10+[xx]
+
+@(r vi 11) XI 1 13 [x]
+
+@(r vi 12) XII 30 14 [x]
+
+$ ruling
+
+@(r vi 13) (Year) 83, I 1 13 20+[x]
+
+@(r vi 14) II 30 14 27 
+
+@(r vi 15) III 1 14 27 
+
+@(r vi 16) IV 30 14 28 
+
+@(r vi 17) V 1 14 27 
+
+@(r vi 18) VI 30 14 27 
+
+@(r vi 19) VII 1 14 27 
+
+@(r vi 20) VIII 30 15 27 
+
+@(r vi 21) IX 1 14 26 
+
+@(r vi 22) X 1 14 26
+
+@(r vi 23) XI 30 14 26
+
+@(r vi 24) XII 30 ina 15 27
+
+@(r vi 25) XII2 1 14 28?
+
+$ ruling
+
+@(r vi 26) (Year) 84, I 1 <x> 27
+
+@(r vi 27) II 30 14 28
+
+@(r vi 28) III [x] 14 27
+
+@(r vi 29) IV [x] 15 28
+
+@(r vi 30) V 1 13 27
+
+@(r vi 31) VI 30 14? 27
+
+@(r vi 32) VII 1 10+[x] ax¬ 
+
+@(r vi 33) VIII 30 10+[xx]
+
+@(r vi 34) IX 1 10+[xx] 
+
+@(r vi 35) X 30 14? [x]
+
+@(r vi 36) XI 30 15? [x] 
+
+@(r vi 37) XII 1 10+[xx]
+
+$ ruling
+
+@(r vi 38) (Year) 85, I [x x x]
+
+@(r vi 39) II 30 10+[xx] 
+
+@(r vi 40) III 1 [x x]
+
+@(r vi 41) IV [x x x]
+
+@(r vi 42-49) ($broken$)
+
+@(r vii 1) (Year) 86, I 30 15 28 
+
+@(r vii 2) II 1 15 28 
+
+@(r vii 3) III 1 14 27 
+
+@(r vii 4) IV 30 14 28 
+
+@(r vii 5) V 1 14 27 
+
+@(r vii 6) VI 1 13 27 
+
+@(r vii 7) VII 1 13 26
+
+@(r vii 8) VIII 30 13 27
+
+@(r vii 9) IX 30 14 27
+
+@(r vii 10) X 30 ina 15 28
+
+@(r vii 11) XI 1 [x 2]6+[x]
+
+@(r vii 12) XII 30 16 20+[x] 
+
+$ ruling
+
+@(r vii 13) (Year) 87, I 1 15 27?
+
+@(r vii 14) [II] 30 16 27?
+
+@(r vii 15) [III] 1 16 27
+
+@(r vii 16) IV 30 15 28
+
+@(r vii 17) V 1 14 27
+
+@(r vii 18) VI 1 13 27
+
+@(r vii 19) VII 1 13 27
+
+@(r vii 20) VIII 30 ina 13 27
+
+@(r vii 21) IX 1 13 27
+
+@(r vii 22) X 30 14 27
+
+@(r vii 23) XI 30 15 28
+
+@(r vii 24) XII 1 15 27 
+
+$ ruling
+
+@(r vii 25) (Year) 88, I 30 15 27
+
+@(r vii 26) II 1 15 27
+
+@(r vii 27) III 30 15 27
+
+@(r vii 28) IV 1 15 27
+
+@(r vii 29) V 30 15 2⸢8⸣
+
+@(r vii 30) VI 1 14 27
+
+@(r vii 31) VII 1 14 27
+
+@(r vii 32) VIII 1 13 27
+
+@(r vii 33) IX 30 13 27
+
+@(r vii 34) X 1 13 27?
+
+@(r vii 35) XI 30 14 28
+
+@(r vii 36) XII 30 16? 28
+
+@(r vii 37) XII₂ 1 14 27 
+
+$ ruling
+
+@(r vii 38) [(Year) 89,] I 30 15? 27?
+
+@(r vii 39) II 1 ina [x] 20+[x]
+
+@(r vii 40) III 30 10+[x x]
+
+@(r vii 41) IV 30 15 [x]
+
+@(r vii 42) V 1 15 [x]
+
+@(r vii 43) VI 30? 14? [x]
+
+@(r vii 44) VII 30? [x x]
+
+@(r vii 45) VIII 1 10+[x x]
+
+@(r vii 46) IX 1 10+[x x]
+
+@(r vii 47) X 30 [x x]
+
+@(r vii 48) XI 1 [x x]
+
+@(r vii 49) XII 3[0? x x]
+
+@(r viii 1) (Year) 90, I 30 [x] 27
+
+@(r viii 2) II 30 ina 14
+
+@(r viii 3) III 1 14 27
+
+@(r viii 4) IV 30 14 27
+
+@(r viii 5) V 30 14 27
+
+@(r viii 6) VI 1 14 27
+
+@(r viii 7) VII 1 14 26
+
+@(r viii 8) VIII 30 14 27
+
+@(r viii 9) IX 1 10+[x] 27
+
+@(r viii 10) X 30 10+[x]
+
+@(r viii 11) XI 1 15 [x]
+
+@(r viii 12) XII 1 11+[xx]
+
+$ ruling
+
+@(r viii 13) [(Year) 91, I x x x]
+
+@(r viii 14) [II x x] 27 
+
+@(r viii 15) [III x x] 27 
+
+@(r viii 16) [IV] 1 13? 26 
+
+@(r viii 17) V 30 14 27 
+
+@(r viii 18) VI 30 15 28? 
+
+@(r viii 19) VII 1 15? 27 
+
+@(r viii 20) VIII 30 15 28 
+
+@(r viii 21) IX 1 15 27 
+
+@(r viii 22) X 30 15 28 
+
+@(r viii 23) XI 1 15 28 
+
+@(r viii 24) XII 1 14 27 
+
+@(r viii 25) XII₂ 1 14 27
+
+$ ruling
+
+@(r viii 26) (Year) 92, I 30 14 27
+
+@(r viii 27) II 1 13 27 
+
+@(r viii 28) III 30 13 27
+
+@(r viii 29) IV 1 13 27
+
+@(r viii 30) V 30 14? x
+
+@(r viii 31) VI 30 ina 15 28
+
+@(r viii 32) VII 1 14? 28
+
+@(r viii 33) VIII 30 15 28
+
+@(r viii 34) IX 1 ina 15 27
+
+@(r viii 35) [X x x] 28
+
+@(r viii 36) XI 1 15 [x]
+
+@(r viii 37) XII 1 14 27
+
+$ ruling
+
+@(r viii 38) (Year) 93, I 30 14 27
+
+$Next line in column I$
+
+@(l.e. 9) 19, solstice. 24?, Sirius’ acronychal rising. 
+
+@(l.e. 12) 22, equinox.
+
+$ ruling
+
+@(l.e. 14) 10, Sirius’ last appearance. 
+
+@(l.e. 15) 24?, solstice?.
+
+@(l.e. 16) 14?, Sirius’ first appearance. 
+
+@(l.e. 18) 2[7], equinox.
+
+@(l.e. 21) 30, solstice.
+
+@(l.e. 22) ($traces$)
+
+@(l.e. 31) 8, equinox.
+
+@(l.e. 34) 11, solstice. 16, Sirius’ acronychal rising. 
+
+@(l.e. 37) 14, equinox.
+
+$ ruling
+
+@(l.e. 39) 2, Sirius’ last appearance. 
+
+@(l.e. 40) 16, solstice.
+
+@(l.e. 41) 6, Sirius’ first appearance. 
+
+@(l.e. 43) 19, [equi]nox. 
+
+The left edge is continued by the last section in each of columns I-IV (and prob
+ably V) of the obverse.

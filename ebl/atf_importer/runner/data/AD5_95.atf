@@ -1,0 +1,52 @@
+&X500098 = ADART 5 95
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ IGI KUR NIM in 10+[x]
+#lem: u; u; amāru[be(come) visible]'V; baʾil[bright]AJ; šaqi[high]V; ina[on]PRP; n
+
+3'. [...] 27 ina ŠÚ ina zib{ME} IGI
+#lem: u; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+4'. [...] DIR.ŠE NU PAP
+#lem: u; Addāru_Šanû[(Intercalary) Month XII₂]MN; ul[not]MOD; naṣāru[watch]V
+
+5'. [...] ⸢19?⸣ ina NIM ŠÚ-šú DIB
+#lem: u; n; ina[in]PRP; Elamtu[east]'N; rabû[set]V; etēqu[omit]V
+
+6'. [...] 20? na-su in 10
+#lem: u; n; na[sunset to setting]N; ina[on]PRP; n
+
+7'. [...] KÙŠ GE₆ 3
+#lem: u; ammatu[unit]N; mūšu[night]N; n
+
+8'. [...] 27 ina ŠÚ ina LU ŠÚ
+#lem: u; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Agru[Aries]CN; rabû[set]V
+
+9'. ($traces$)
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] first appearance [...;] it was bright (and) high, [(ideal) first appearance] on the 10+[xth.]
+
+@(o 3) [...] the 27th, first appearance in the west in Pisces.
+
+@(o 4) [...] Month XII₂, I did not watch.
+
+@(o 5) [...] the 19th?, its last appearance in the east, omitted.
+
+@(o 6) [...] sunset to setting of Mercury: 20°?; [(ideal) first appearance] on the 10th.
+
+@(o 7) [...] cubits. Night of the 3rd,
+
+@(o 8) [...] the 27th, last appearance in the west in Aries.
+
+@(o 9) ...

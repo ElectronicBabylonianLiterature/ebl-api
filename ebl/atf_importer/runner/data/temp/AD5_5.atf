@@ -1,0 +1,296 @@
+&X500005 = ADART 5 5
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'.  [...]
+#lem: u
+
+2'. [...] SAR
+#lem: u; u
+
+3'. [...] SAR u
+#lem: u; u; u
+
+4'. [...] AN-e i-te-rim
+#lem: u; šamû[sky]N; +arāmu[cover]V$īterim
+
+5'. [...] DIR TU TU
+#lem: u; erpetu[cloud]N; u; u
+
+6'. [...] bi-rit SI u MAR iz-za-ku
+#lem: u; birītu[space between]N; ištānu[north]N; u[and]CNJ; amurru[west]N; +zakû[be(come) clear]V$izzaku
+
+7'. [...] GE₆ GIN 3 KÙŠ e-lat
+#lem: u; mūšu[night]N; alāku[go]V; n; ammatu[unit]N; elat[beyond]PRP
+
+8'. [... A]N.KU₁₀ {d}SAG.ME.GAR 6 ŠU.SI
+#lem: u; antallû[eclipse]N; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N
+
+9'. [...] nen-mud
+#lem: u; +nenmudu[be at a stationary point//be at a stationary point]V'V$nenmud
+
+10'. [... ŠU].SI ina IGI MUL{MEŠ} EGIR{MEŠ}
+#lem: u; ubānu[finger]N; ina[in]PRP; pān[front]N; kakkabu[star]N$; warkû[rear]AJ$
+
+11'. [...] ⸢x⸣ {ITU}APIN U₄ 22.KÁM {LÚ}DI.KUD
+#lem: u; u; Arahsamna[Month VIII]MN; ūmu[day]N; n; dayyānu[judge]N
+
+12'. [... x{MEŠ}] KUR AN.ŠÁR MEŠ{MEŠ}
+#lem: u; u; mātu[land]N; Aššur[Assyria]GN; mādu[numerous]AJ
+
+13'. [...] šú-nu {ITU}GAN {ITU}AB {ITU}ZÍZ
+#lem: u; šunu[they]IP; Kislīmu[Month IX]MN; Ṭebētu[Month X]MN; Šabāṭu[Month XI]MN
+
+14'. [...] ⸢KI⸣ {LÚ}ŠID BÀD.AN{KI}
+#lem: u; u; iššakku[city-ruler]N; Dēru[Dēr]SN
+
+15'. [... K]I ù {LÚ}GÚ.EN.NA ÚŠ{MEŠ}
+#lem: u; u; u[and]CNJ; šandabakku[chief accountant//governor of Nippur]N; mâtu[die]V
+
+16'. [...] {ITU}GU₄ ÚŠ{MEŠ} KUR RA
+#lem: u; Ayyāru[Month II]MN; mâtu[die]V; u; u
+
+17'. [... S]U.KÚ GAR-an
+#lem: u; hušahhu[famine]N; šakānu[occur]V
+
+$ ruling
+@column 2
+1'. GIN ⸢EGIR?⸣ [x] ⸢SAR?⸣ [...]
+#lem: alāku[go]V; warki[behind]PRP; u; u; u
+
+2'. GE₆ šá-a-šú sin TÙR NIGÍN ⸢x⸣ [...]
+#lem: mūšu[night]N; šâšu[him]IP; Sîn[moon]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; u; u
+
+3'. SU.KÚ [GAR-an]
+#lem: hušahhu[famine]N; šakānu[occur]V
+
+$ ruling
+4'. MU 16.KÁM {ITU}GU₄ U₄ 20.KÁM [...]
+#lem: šattu[year]N; n; Ayyāru[Month II]MN; ūmu[day]N; n; u
+
+5'. ana DÙ-eš MÈ GIN {ITU}SIG U[D? ...]
+#lem: ana[to]PRP; epēšu[making]'N; tāhāzu[battle]N; alāku[go]V; Simānu[Month III]MN; u; u
+
+6'. TA KUR ru-ṣa-pu ḫub-t[ú ...]
+#lem: ištu[from]PRP; mātu[land]N; Ruṣapu[Ruṣapu]GN; ḫubtu[robbery//captives]N'N$; u
+
+7'. {ITU}KIN GE₆ 14.KAM 5 [...]
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; n; u
+
+8'. 10 UŠ GE₆ ina MURUB₄-tì [...]
+#lem: n; UŠ[(time degree)]N; mūšu[night]N; ina[in]PRP; qablītu[middle watch (of the night)]N; u
+
+9'. TAG₄ sin AN.KU₁₀ al-l[a ...]
+#lem: ezēbu[remain]V; Sîn[moon]N; antallû[eclipse]N; alla[more than]PRP; u
+
+10'. at-ra Á ULÙ ŠÚ-im [...]
+#lem: watru[huge//additional]AJ'AJ$; idu[side]N; šūtu[south]N; arim[covered]AJ; u
+
+11'. SAG šá GE₆ EGIR i za [...]
+#lem: rēšu[beginning]N; ša[which]REL; mūšu[night]N; warki[behind]PRP; u; X; u
+
+12'. {d}né-bu-ú šá M[UL ...]
+#lem: nebû[shining (star)]N; ša[which]REL; u; u
+
+13'. ana ULÙ im ma? [...]
+#lem: ana[to]PRP; šūtu[south]N; X; u; u
+
+14'. 10 UŠ GE₆ [...]
+#lem: n; UŠ[(time degree)]N; mūšu[night]N; u
+
+15'. ina KI ⸢x⸣ [...]
+#lem: ina[in]PRP; erṣetu[district]N; u; u
+
+16'. ⸢x⸣ [...]
+#lem: u; u
+
+17'. ⸢x⸣ [...]
+#lem: u; u
+
+@reverse
+@column 1
+1'. ⸢x x x x⸣
+#lem: u; u; u; u
+
+2'. ina NIM.MA{KI} GÌR k[a ...]
+#lem: ina[in]PRP; Elamtu[Elam]GN; u; u; u
+
+3'. ana UGU x ana E?[{KI} ...]
+#lem: ana[to]PRP; muhhi[top]N; u; ana[to]PRP; Bābilu[Babylon]SN; u
+
+4'. {ITU}KIN.DIR {ITU}AP[IN ...]
+#lem: Ulūlu-Šanû[Month VI₂]MN; Arahsamna[Month VIII]MN; u
+
+5'. bir-ti ul LU ⸢x⸣ [...]
+#lem: birtu[fort]N; ul[not]MOD; u; u; u
+
+$ ruling
+6'. MU 19.KAM ITU [...]
+#lem: šattu[year]N; n; warhu[month]N; u
+
+7'. U₄ 10+[x ...]
+#lem: ūmu[day]N; n; u
+
+8'. ⸢x⸣ [...]
+#lem: u; u
+
+@column 2
+1'. [... he]-pí eš-šú	TA AN.⸢KU₁₀⸣ [...]
+#lem: u; hīpu[break]N$; eššu[new]AJ; ištu[from]PRP; antallû[eclipse]N; u
+
+2'. [... he]-pí eš-šú	GIN 1 2/3 DANNA G[E₆ x]
+#lem: u; hīpu[break]N$; eššu[new]AJ; alāku[go]V; n; n; bēru[double hour]N; mūšu[night]N; u
+
+3'. [... he]-pí eš-šú	Ú {d}ṣal-bat-a-nu u {d}⸢dele-bat⸣
+#lem: u; hīpu[break]N$; eššu[new]AJ; X; Ṣalbatānu[Mars]CN; u[and]CNJ; Dilbat[Venus]CN
+
+4'. [... h]e-pí eš-šú	u {d}SAG.ME.GAR EGIR GÌR
+#lem: u; hīpu[break]N$; eššu[new]AJ; u[and]CNJ; Kakkabu-peṣû[Jupiter]CN; warki[behind]PRP; šēpu[foot]N
+
+5'. [...] he-pí eš-šú	GU.LA KUR 8 UŠ ana {MUL}LUGAL
+#lem: u; hīpu[break]N$; eššu[new]AJ; u; napāhu[rise]'V; n; UŠ[(time degree)]N; ana[to]PRP; LUGAL[α Leonis]CN
+
+6'. [... he-pí] eš-šú	ina AN.KU₁₀-šú šit-tú {d}UDU.IDIM{ME}
+#lem: u; hīpu[break]N$; eššu[new]AJ; ina[during]PRP; antallû[eclipse]N; šittu[remainder]N; bibbu[planet]N
+
+7'. [...] ⸢x⸣ ina AN.KU₁₀ NIM.GÍR GÙ
+#lem: u; u; ina[during]PRP; antallû[eclipse]N; birqu[lightning]N; rigim[voice]N
+
+8'. [...] {d}IM A.AN
+#lem: u; Adad[storm-god]DN; zunnu[rain]N
+
+9'. [...] tum šá qí-it mi-ṣir
+#lem: u; X; ša[which]REL; qītu[end]N; miṣru[border]N
+
+10'. [...] ⸢x⸣ bir tum ⸢x⸣ [x] ⸢x⸣
+#lem: u; u; u; u; u; u; u
+
+11'. [...] meš ⸢x⸣ [...]
+#lem: u; u; u; u
+
+12'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+
+@translation labeled en project
+
+
+@(o i 1) [...]
+
+@(o i 2) [...] ...
+
+@(o i 3) [...] ...
+
+@(o i 4) [...] covered the sky
+
+@(o i 5) [...] clouds? ...
+
+@(o i 6) [...] cleared between north and west
+
+@(o i 7) [...] after sunset, 3 cubits above
+
+@(o i 8) [...] eclipse, Jupiter 6 fingers
+
+@(o i 9) [...] was stationary.
+
+@(o i 10) [...] fingers in front of the rear stars
+
+@(o i 11) [...] ... Month VIII, the 22nd, the judge
+
+@(o i 12) [...] Assyria many?
+
+@(o i 13) [...] their [...] Months IX, X, XI
+
+@(o i 14) [...], the administrator of Dēr,
+
+@(o i 15) [...], and the governor of Nippur died.
+
+@(o i 16) [...] month II they died ....
+
+@(o i 17) [...] there was famine.
+
+$ ruling
+
+@(o ii 1) went?. Behind ... [...]
+
+@(o ii 2) That night, the moon was surrounded by a halo, ... [...]
+
+@(o ii 3) [... there was] famine.
+
+$ ruling
+
+@(o ii 4) Year 16, month II, the 20th [...]
+
+@(o ii 5) went in order to do battle. Month III, [...]
+
+@(o ii 6) captives from the land Ruṣapu [...]
+
+@(o ii 7) Month VI, night of the 14th, 5 [...]
+
+@(o ii 8) 10° of night in the middle (watch) [...]
+
+@(o ii 9) remained, lunar eclipse; more than [...]
+
+@(o ii 10) on the south side was covered [...]
+
+@(o ii 11) beginning of the night, after ... [...]
+
+@(o ii 12) the bright star of [...]
+
+@(o ii 13) to the south, ... [...]
+
+@(o ii 14) 10° night [...]
+
+@(o ii 15) in ... [...]
+
+@(o ii 16) ... [...]
+
+@(o ii 17) ... [...]
+
+@(r i 1) ... [...]
+
+@(r i 2) in Elam ... [...]
+
+@(r i 3) against .... to Babylon? [...]
+
+@(r i 4) Month VI2, Month VIII [...]
+
+@(r i 5) the fortress? not ... [...]
+
+$ ruling
+
+@(r i 6) Year 19, month
+
+@(r i 7) ... [...]
+
+@(r i 8) ... [...]
+
+@(r ii 1) [...] new break	from the eclipse […]
+
+@(r ii 2) [...] new break	wnet, 1 2/3 bēru of night […]
+
+@(r ii 3) [...] new break	... Mars and Venus
+
+@(r ii 4) [...] new break	and Jupiter behind the foot
+
+@(r ii 5) [...] new break	[Li]on? Rose, 8° to α Leonis
+
+@(r ii 6) [...] new break	during its eclipse, the remainder of the planets
+
+@(r ii 7) [did not stand there ...] ... during the eclipse, lightning, thunder,
+
+@(r ii 8) rain
+
+@(r ii 9) [...] of the end of the border?
+
+@(r ii 10) [...] ...
+
+@(r ii 11) [...] ...
+
+@(r ii 12) [...] ... [...]
+
+

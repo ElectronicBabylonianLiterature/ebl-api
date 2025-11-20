@@ -1,0 +1,619 @@
+&X500054 = ADART 5 53
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣ [x]
+#lem: u; u; u
+
+2'. [x x x x] ⸢ABSIN⸣ ŠÚ ⸢KIN?⸣
+#lem: u; u; u; u; Šerʾu[Virgo]CN; rabû[set]V; Ulūlu[Month VI]MN
+
+3'. [x ina N]IM? 2 ⸢SI? ár?⸣ SA₄-šá?-[ABSIN?]
+#lem: u; ina[in]PRP; Elamtu[east]'N; n; ubānu[finger]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN
+
+4'. ⸢x⸣ IGI DU₆ 17 ina NIM ina RÍN ŠÚ [API]N
+#lem: u; nanmuru[be(come) visible]V; Tašrītu[Month VII]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; Arahsamna[Month VIII]MN
+
+5'. 21 ina ŠÚ ina SAG MÁŠ IGI ⸢GAN? 11?⸣
+#lem: n; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēš[beginning]N; Suhurmāšu[Capricorn]CN; nanmuru[be(come) visible]'V; Kislīmu[Month IX]MN; n
+
+6'. ina ŠÚ ina MÁŠ ŠÚ ina 25 ina NIM ina MÁŠ
+#lem: ina[in]PRP; erbu[west]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; ina[on]PRP; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN
+
+7'. [IGI A]B? 18 ina NIM ina GU? ⸢ŠÚ?⸣
+#lem: amāru[be(come) visible]'V; Ṭebētu[Month X]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Gula[Aquarius]CN; rabû[set]V
+
+8'. [x x SA]G? HUN IGI GE₆ 10+[x] ⸢SIG?⸣
+#lem: u; u; rēš[beginning]N; Agru[Aries]CN; nanmuru[be(come) visible]'V; mūšu[night]N; n; šapil[below]PRP
+
+9'. [x x x] KÙŠ
+#lem: u; u; u; ammatu[unit]N
+
+$ ruling
+10'. [x x x] ⸢x x x⸣ [x x]
+#lem: u; u; u; u; u; u; u; u
+
+11'. [...] ⸢x x x⸣ [x x]
+#lem: u; u; u; u; u; u
+
+12'. [x x x] ⸢x⸣ [x x] ⸢x⸣ [x]
+#lem: u; u; u; u; u; u; u; u
+
+13'. [x x x] ⸢x x⸣ [x] A? ⸢x⸣ [x x]
+#lem: u; u; u; u; u; u; u; u; u; u
+
+14'. [x x x] KIN 5 ⸢x x⸣ [x x]
+#lem: u; u; u; Ulūlu[Month VI]MN; n; u; u; u; u
+
+15'. [x x x] ⸢x x⸣ [x x x x]
+#lem: u; u; u; u; u; u; u; u; u
+
+16'. [x x x x] ⸢x⸣ [x] SIG [x x]
+#lem: u; u; u; u; u; u; šapil[below]PRP; u; u
+
+17'. [...] ⸢x x⸣ [x x x]
+#lem: u; u; u; u; u; u
+
+18'. [...] ⸢x⸣ [x x x]
+#lem: u; u; u; u; u
+
+19'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+20'. [...] ina MÚL.MÚL
+#lem: u; ina[in]PRP; Zappu[Taurus]CN
+
+21'. [...] ⸢x x⸣
+#lem: u; u; u
+
+22'. [...] ⸢x⸣
+#lem: u; u
+
+23'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [x x] ⸢x x⸣ ina? NIM? [x x x]
+#lem: u; u; u; u; ina[in]PRP; Elamtu[east]'N; u; u; u
+
+3'. [x x] ⸢x⸣ KUR? ⸢GE₆?⸣ 11? SIG ⸢x⸣ [x x x]
+#lem: u; u; u; u; mūšu[night]N; n; šapil[below]PRP; u; u; u; u
+
+4'. ⸢x⸣ [x] ⸢x⸣ SIG? ⸢x x x x⸣
+#lem: u; u; u; šapil[below]PRP; u; u; u; u
+
+5'. ⸢x x⸣ NE 12? [ina x] ina SAG A ŠÚ
+#lem: u; u; Abu[Month V]MN; n; ina[on]PRP; u; ina[in]PRP; rēš[beginning]N; Nēšu[Leo]CN; rabû[set]V
+
+6'. DU₆ 1? [ina] ⸢NIM?⸣ x ⸢x x⸣ SIG? x x
+#lem: Tašrītu[Month VII]MN; n; ina[in]PRP; Elamtu[east]'N; u; u; u; u; u; u
+
+7'. ⸢APIN?⸣ ⸢x⸣ [x x x] ⸢x⸣ 18? ⸢x⸣
+#lem: Arahsamna[Month VIII]MN; u; u; u; u; u; n; u
+
+8'. [x] ⸢x⸣ [x x x] KÙŠ? ⸢x 4?⸣
+#lem: u; u; u; u; u; ammatu[unit]N; u; n
+
+9'. ina NIM ina MÁŠ? [x x] IGI? ⸢x⸣ [x]
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN; u; u; u; u; u
+
+10'. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+11'. ⸢x x⸣ [x x] ⸢x x⸣ [x x x]
+#lem: u; u; u; u; u; u; u; u; u
+
+12'. ⸢x⸣ [x x] ⸢x 8 x⸣ [x x x]
+#lem: u; u; u; u; n; u; u; u; u
+
+13'. ⸢x⸣ [x x] ⸢x x⸣ [x] SIG
+#lem: u; u; u; u; u; u; šapil[below]PRP
+
+14'. ⸢x⸣ [x x x] MÁŠ ⸢x x x⸣
+#lem: u; u; u; u; Suhurmāšu[Capricorn]CN; u; u; u
+
+15'. [x x x x] ⸢x x NIM?⸣ ina SAG
+#lem: u; u; u; u; u; u; Elamtu[east]'N; ina[in]PRP; rēš[beginning]N
+
+16'. [x x x] NE? ina 6 ina NIM ina ⸢ALLA?⸣ ŠÚ
+#lem: u; u; u; Abu[Month V]MN; ina[on]PRP; n; ina[in]PRP; Elamtu[east]GN; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V
+
+17'. [x x] ⸢x⸣ 1 ina ŠÚ ina MURUB₄ ⸢x x⸣ x LUGAL?
+#lem: u; u; u; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; qabaltu[middle]N; u; u; u; LUGAL[α Leonis]CN
+
+18'. [x x] x x ina 24 ⸢x⸣ x
+#lem: u; u; u; u; ina[on]PRP; n; u; u
+
+19'. [x x] ⸢x x ŠÚ? KIN?⸣ 26 ina ⸢NIM⸣ ina MURUB₄
+#lem: u; u; u; u; rabû[set]V; Ulūlu[Month VI]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; qabaltu[middle]N
+
+20'. [x (x) IGI x] ⸢e RÍN?⸣-šá-⸢ULÙ⸣ 2/3 KÙŠ
+#lem: u; u; amāru[be(come) visible]V; u; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N
+
+21'. [x x x] ⸢x x⸣ [x x] 6? ME? SIG x
+#lem: u; u; u; u; u; u; u; n; u; u; u
+
+22'. ⸢x x⸣ x AB? 12? ⸢ina ŠÚ ina TIL⸣
+#lem: u; u; u; Ṭebētu[Month X]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; qītu[end]N
+
+23'. MÁŠ IGI KUR ZÍZ? 4 ina ŠÚ ina GU ŠÚ 16? ⸢ina NIM⸣
+#lem: Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V; napāhu[light up]V; Šabāṭu[Month XI]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Gula[Aquarius]CN; rabû[set]'V; n; ina[in]PRP; Elamtu[east]'N
+
+24'. [ina] TIL GU ⸢IGI x 17? ina NIM x x⸣
+#lem: ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; amāru[be(come) visible]V; u; n; ina[in]PRP; Elamtu[east]GN; u; u
+
+25'. [x] ⸢ŠÚ?⸣ DI[R.Š]E? 27 ina ŠÚ ina SAG ⸢HUN?⸣ [x]
+#lem: u; rabû[set]'V; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēš[beginning]N; Agru[Aries]CN; u
+
+26'. IGI KUR ⸢x x⸣ ($space$) MU 1 an ⸢BAR?⸣ [x]
+#lem: amāru[be(come) visible]V; napāhu[light up]V; u; u; šattu[year]N; n; Antiochus[Antiochus]RN; Nisannu[Month I]MN; u
+
+27'. 20? e ŠUR-GIGIR ⸢šá x⸣ [x x]
+#lem: n; eli[above]PRP; ŠUR-GIGIR[β+ζ Tauri]CN; u; u; u; u
+
+28'. ⸢x x ŠÚ SIG? x ina NIM? x x⸣ [x x]
+#lem: u; u; rabû[set]V; Simānu[Month III]MN; u; ina[in]PRP; Elamtu[east]'N; u; u; u; u
+
+29'. 10? [x x] NIM? [x] ⸢x x⸣ [x x x]
+#lem: n; u; u; Elamtu[east]'N; u; u; u; u; u; u
+
+30'. x x [x x] x IGI [x x x]
+#lem: u; u; u; u; u; amāru[be(come) visible]V; u; u; u
+
+31'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@column 3
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. ŠE [...]
+#lem: Addaru[Month XII]MN; u
+
+3'. ina NI[M ...]
+#lem: ina[in]PRP; Elamtu[east]'N; u
+
+4'. ina SA[G ...]
+#lem: ina[in]PRP; rēš[beginning]N; u
+
+5'. ⸢x⸣ [...]
+#lem: u; u
+
+$(break of 5 lines) 
+
+10-15'. ⸢x⸣ [...]
+#lem: u; u
+
+@reverse
+@column 1
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. 10 ⸢x⸣ [...]
+#lem: n; u; u
+
+3'. 5+⸢x⸣ [...]
+#lem: n; u
+
+4'. ⸢x⸣ [...]
+#lem: u; u
+
+5'. ina ŠÚ ina [...]
+#lem: ina[in]PRP; erbu[west]'N; ina[in]PRP; u
+
+6'. ⸢x⸣ IGI [...]
+#lem: u; pān[front]N; u
+
+7'. SI? [...]
+#lem: u; u
+
+8'. ⸢x⸣ [...]
+#lem: u; u
+
+9'. PA ⸢x⸣ [...]
+#lem: u; u; u
+
+10'. 20 [...]
+#lem: n; u
+
+11'. ⸢x⸣ [...]
+#lem: u; u
+
+@column 2
+1'. ⸢ár 1 U?⸣ [...]
+#lem: warkû[rear]AJ; n; ubānu[finger]N; u
+
+2'. KU₄ GE₆ 20+⸢x⸣ [...]
+#lem: erēbu[enter]V; mūšu[night]N; n; u
+
+3'. ina ŠÚ ina ALLA ŠÚ 10+⸢x⸣ [...]
+#lem: ina[in]PRP; erbu[west]N; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]'V; n; u
+
+4'. IGI NE 29 [...]
+#lem: amāru[be(come) visible]'V; Abu[Month V]MN; n; u
+
+5'. KIN 14 ⸢SIG?⸣ GIŠ.K[UN-A]
+#lem: Ulūlu[Month VI]MN; n; šapil[below]PRP; GIŠ.KUN-A[θ Leonis]CN
+
+6'. 4 KÙŠ 20+x ár GÌR-á[r-šá-A]
+#lem: n; ammatu[unit]N; n; warki[behind]PRP; GÌR-ár-šá-A[β Virginis]CN
+
+7'. 3 ⸢KÙŠ?⸣ [DU₆] 6 SIG ⸢DELE⸣-[šá-IGI-ABSIN]
+#lem: n; ammatu[unit]N; Tašrītu[Month VII]MN; n; šapil[below]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN
+
+8'. ⸢N SI⸣ 18 e 
+#lem: u; ubānu[finger]N; n; eli[above]PRP
+
+9'. ⸢SA₄⸣-šá-ABSIN 1 2/3 KÙŠ ⸢APIN?⸣
+#lem: SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; Arahsamna[Month VIII]MN
+
+10'. 5 e RÍN-šá-ULÙ 1/2? K[ÙŠ]
+#lem: n; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N
+
+11'. 20 e MÚL-e-šá-SAG-[GÍR.TAB]
+#lem: n; eli[above]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN
+
+12'. 5 SI 27 e SI₄
+#lem: n; ubānu[finger]N; n; eli[above]PRP; SI₄[α Scorpii]CN
+
+13'. 2? 1/2 KÙŠ GAN 7 e KIR₄-[šil-PA]
+#lem: n; n; ammatu[unit]N; Kislīmu[Month IX]MN; n; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN$
+
+14'. 2/3? KÙŠ 25 e
+#lem: n; ammatu[unit]N; n; eli[above]PRP
+
+15'. 4-ÀM ár{MEŠ} LÁL?-át?
+#lem: n; warki[rear]'AJ; alālu[balance]'V$
+
+16'. AB 13 SIG SI-MÁŠ 3 KÙ[Š]
+#lem: Ṭebētu[Month X]MN; n; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N
+
+17'. ZÍZ 25 ina NIM ina zib? ŠÚ
+#lem: Šabāṭu[Month XI]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V
+
+$ ruling
+18'. MU 19 BAR 19 ina ŠÚ ina TIL
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; qītu[end]N
+
+19'. GU₄.AN IGI SIG 29 e
+#lem: Alû[Taurus]CN; nanmuru[be(come) visible]'V; Simānu[Month III]MN; n; eli[above]PRP
+
+20'. LUGAL 2/3 KÙŠ NE GE₆ 4
+#lem: LUGAL[α Leonis]CN; n; ammatu[unit]N; Abu[Month V]MN; mūšu[night]N; n
+
+21'. SIG DELE-šá-IGI-KI 1 KÙŠ GE₆
+#lem: šapil[below]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN$; n; ammatu[unit]N; mūšu[night]N
+
+22'. 14 e SA₄-šá-KI 1 KÙŠ KIN
+#lem: n; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN$; n; ammatu[unit]N; Ulūlu[Month VI]MN
+
+23'. GE₆ 3 SIG RÍN-šá-UL[Ù n n]
+#lem: mūšu[night]N; n; šapil[below]PRP; RÍN-šá-ULÙ[α Librae]CN; u; u
+
+24'. [GE₆ 1]9 e MÚL [x x x x]
+#lem: mūšu[night]N; n; eli[above]PRP; u; u; u; u; u
+
+25'. [x x] ⸢x⸣ [x x x x]
+#lem: u; u; u; u; u; u; u
+
+@column 3
+1'. [...] ⸢x⸣ DU₆
+#lem: u; u; Tašrītu[Month VII]MN
+
+2'. [x x DELE-šá]-IGI-KI 2/3 KÙŠ
+#lem: u; u; DELE-šá-IGI-ABSIN[γ Virginis]CN$; n; ammatu[unit]N
+
+3'. [x x x] SA₄-šá-ABSIN
+#lem: u; u; u; SA₄-šá-ABSIN[α Virginis]CN
+
+4'. [x x] ⸢APIN⸣ 2 ina NIM ina
+#lem: u; u; Arahsamna[Month VIII]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP
+
+5'. [x GÍ]R.TAB ŠÚ GAN 30 ina ŠÚ
+#lem: u; Zuqiqīpu[Scorpio]CN; rabû[set]V; Kislīmu[Month IX]MN; n; ina[in]PRP; erbu[west]'N
+
+6'. [ina x MÁ]Š IGI DIR.ŠE GE₆
+#lem: ina[in]PRP; u; Suhurmāšu[Capricorn]CN; nanmuru[be(come) visible]'V; Addāru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N
+
+7'. [x SI]G MÚL.MÚL 1 KÙŠ GE₆
+#lem: u; šapil[below]PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; mūšu[night]N
+
+8'. [x] e is-le₁₀ 2 2/3 KÙŠ
+#lem: u; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N
+
+9'. [GE₆] 28 SIG ŠUR-GIGIR-šá-ULÙ [x] ⸢SI?⸣
+#lem: mūšu[night]N; n; šapil[below]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u; ubānu[finger]N
+
+$ ruling
+10'. [M]U 21 BAR GE₆ 25 SIG
+#lem: šattu[year]N; n; Nisannu[Month I]MN; mūšu[night]N; n; šapil[below]PRP
+
+11'. MAŠ.MAŠ-ár 1 KÙŠ 2/3 KÙŠ ⸢GU₄⸣
+#lem: MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; n; ammatu[unit]N; Ayyaru[Month II]MN
+
+12'. GE₆ 7 ana ŠÀ ALLA KU₄ GE₆
+#lem: mūšu[night]N; n; ana[to]PRP; libbu[interior]N; Alluttu[Cancer]CN; erēbu[enter]V; mūšu[night]N
+
+13'. ⸢20?⸣ E-a GE₆ 27
+#lem: n; waṣû[come out]V; mūšu[night]N; n
+
+14'. SIG LUGAL 2/3 KÙŠ SIG GE₆ 24
+#lem: šapil[below]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; Simānu[Month III]MN; mūšu[night]N; n
+
+15'. SIG MÚL TUR šá GÌR ár šá A
+#lem: šapil[below]PRP; kakkabu[star]N; ṣehru[small]AJ; ša[which]REL; šēpu[foot]N; warkû[rear]AJ; ša[which]REL; Nēšu[Leo]CN
+
+16'. ⸢1/2⸣ KÙŠ ŠU GE₆ 9 SIG 
+#lem: n; ammatu[unit]N; Duʾūzu[Month IV]MN; mūšu[night]N; n; šapil[below]PRP
+
+17'. DELE-šá-⸢IGI⸣-KI 4 KÙŠ NE 11
+#lem: DELE-šá-IGI-ABSIN[γ Virginis]CN$; n; ammatu[unit]N; Abu[Month V]MN; n
+
+18'. [ina ŠÚ ina] ABSIN ŠÚ 27 ⸢ina⸣
+#lem: ina[in]PRP; erbu[west]N$; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; n; ina[in]PRP
+
+19'. ⸢NIM⸣ ina ABSIN IGI DU₆? 11?
+#lem: Elamtu[east]'N; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V; Tašrītu[Month VII]MN; n
+
+20'. [x x x] ⸢IGI?⸣-ABSIN 1 2/3 KÙŠ
+#lem: u; u; u; DELE-šá-IGI-ABSIN[γ Virginis]CN$; n; n; ammatu[unit]N
+
+21'. [... S]A₄-šá-KI
+#lem: u; SA₄-šá-ABSIN[α Virginis]CN$
+
+22'. [...] ⸢x⸣
+#lem: u; u
+
+
+@translation labeled en project
+
+@(o i 1) [...] ... [...]
+
+@(o i 2) [...] last appearance in Virgo. Month VI?,
+
+@(o i 3) [the xth,] first appearance [in] the east, 2 fingers? behind α [Virginis]
+
+@(o i 4) ... Month VII, the 17th, last appearance in the east in Libra. Month VIII,
+
+@(o i 5) the 21st, first appearance in the west in the beginning of Capricorn. Month IX, the 11th?,
+
+@(o i 6) last appearance in the west in Capricorn. On the 25th, [first appearance] in the east in Capricorn.
+
+@(o i 7) [Mon]th X, the 18th, last appearance in the east in Aquarius?.
+
+@(o i 8) [...] first appearance [in the west in the beginn]ing? of Aries. Night of the 10+[xth,] it was below?
+
+@(o i 9) [...] cubits.
+
+$ ruling
+
+@(o i 10) [...] ... [...]
+
+@(o i 11) [...] ... [...]
+
+@(o i 12) [...] ... [...] ... [...]
+
+@(o i 13) [...] ... [...] ... [...]
+
+@(o i 14) [...] Month VI, the 5th, ... [...]
+
+@(o i 15) [...] ... [...]
+
+@(o i 16) [...] ... [...] below? [...]
+
+@(o i 17) [...] ... [...]
+
+@(o i 18) [...] ... [...]
+
+@(o i 19) [...] ... [...]
+
+@(o i 20) [...] in Taurus
+
+@(o i 21) [...] ...
+
+@(o i 22) [...] ...
+
+@(o i 23) [...] ...
+
+@(o ii 1) [...] ... [...]
+
+@(o ii 2) [...] ... in the east? [...]
+
+@(o ii 3) [...] ... Night of the 11th?, it was below ... [...]
+
+@(o ii 4) ... [...] ... below? ...
+
+@(o ii 5) ... Month V, the 12th?, last appearance [in the ...] in the beginning of Leo.
+
+@(o ii 6) Month VII, the 1st?, [in] the east? ...
+
+@(o ii 7) Month VIII, ... [...] ... 18th? [...]
+
+@(o ii 8) [...] ... [...] cubits? ...
+
+@(o ii 9) [...] in the east in Capricorn? ... [...]
+
+@(o ii 10) ... [...]
+
+@(o ii 11) ... [...] ... [...]
+
+@(o ii 12) ... [...] ... the 8th [...]
+
+@(o ii 13) ... [...] ... [...] below?
+
+@(o ii 14) ... [...] Capricorn ...
+
+@(o ii 15) [...] ... east in the beginning
+
+@(o ii 16) [...] Month V?, on? the 6th, last appearance in the east in Cancer?.
+
+@(o ii 17) [...] ... the 1st, ... in the west in the middle of ... α Leonis?
+
+@(o ii 18) [...] ... on? the 24th ...
+
+@(o ii 19) last? appearance .... Month VI?, the 26th, [first appearance] in the east in the middle
+
+@(o ii 20) [... the xth,] it was 2/3 cubit above α Librae.
+
+@(o ii 21) [...] ... [...] the 6th?, ...
+
+@(o ii 22) ... Month X?, the 12th?, first appearance in the west? in the end
+
+@(o ii 23) of Capricorn; it was bright. Month XI?, the 4th, last appearance in the west in Aquarius. The 16th, first appearance in the east
+
+@(o ii 24) [in] the end of Aquarius. ..., the 17th?, last appearance in the east ...
+
+@(o ii 25) ... Month XII₂?, the 27th, first appearance in the west in the beginning of Aries?;
+
+@(o ii 26) it was bright, .... Year 1, Antiochus?, month I?, [....]
+
+@(o ii 27) the 20th, it was [....] above β/𝜁 Tauri.
+
+@(o ii 28) ... last appearance?. Month III?, ... [...] in the east? in ...
+
+@(o ii 29) The 10th?, [....] east? [...] ... [...]
+
+@(o ii 30) ... [...] ... [...]
+
+@(o ii 31) [...] ... [...]
+
+@(o iii 1) ... [...]
+
+@(o iii 2) Month XII [...]
+
+@(o iii 3) in the east [...]
+
+@(o iii 4) in the be[ginning ...]
+
+@(o iii 5) ... [...]
+
+($break of 5 lines$) 
+
+@(o iii 10-15) ... [...]
+
+@(r i 1) ... [...]
+
+@(r i 2) 10 ... [...]
+
+@(r i 3) 5 ... [...]
+
+@(r i 4) ... [...]
+
+@(r i 5) in the west in [...]
+
+@(r i 6) ... in front of [...]
+
+@(r i 7) ... [...]
+
+@(r i 8) ... [...]
+
+@(r i 9) ... [...]
+
+@(r i 10) 20 [...]
+
+@(r i 11) ... [...]
+
+@(r ii 1) rear [...] 1 finger? [...]
+
+@(r ii 2) entered. Night of the 20+xth, ... [...]
+
+@(r ii 3) last appearance in the west in Cancer. The 10+xth, [...]
+
+@(r ii 4) first appearance [....] Month V, the 29th, [...]
+
+@(r ii 5) Month VI, the 14th, it was 4 cubits below 𝜗 Le[onis.]
+
+@(r ii 6) The 20+xth, it was 3 cubits? behind β Vir[ginis.]
+
+@(r ii 7) [Month VII,] the 6th, it was .... fingers below γ
+
+@(r ii 8) Virginis. The 18th, it was 1 2/3 cubits above
+
+@(r ii 9) a Virginis. Month VIII,
+
+@(r ii 10) the 5th, it was 1⁄2? cu[bit] below α Librae.
+
+@(r ii 11) The 20th, it was 5 fingers above β
+
+@(r ii 12) Scorpii. The 27th, it was 2? 1⁄2 cubits above α Scorpii.
+
+@(r ii 13) Month IX, the 7th, it was 2/3 cubit above 𝜗
+
+@(r ii 14) Ophiuchi. The 25th, it was balanced? above
+
+@(r ii 15) the four rear stars (of Sagittarius).
+
+@(r ii 16) Month X, the 13th, it was 3 cubits below β Capricorni.
+
+@(r ii 17) Month XI, the 25th, last appearance in the east in Pisces?.
+
+$ ruling
+
+@(r ii 18) Year 19, month I, the 19th, first appearance in the west in the end
+
+@(r ii 19) of Taurus. Month III, the 29th, it was 2/3 cubit above
+
+@(r ii 20) α Leonis. Month V, night of the 4th,
+
+@(r ii 21) it was 1 cubit below γ Virginis. Night
+
+@(r ii 22) of the 14th, it was 1 cubit above α Virginis. Month VI,
+
+@(r ii 23) night of the 3rd, it was [...] below α Librae.
+
+@(r ii 24) [Night of the 1]9th, it was [...] above [...]
+
+@(r ii 25) [...] ... [...]
+
+@(r iii 1) [...] ... Month VII,
+
+@(r iii 2) [the xth, it was] 2/3 cubit [... γ] Virginis.
+
+@(r iii 3) [...] α Virginis.
+
+@(r iii 4) Month VIII, the 2nd, last appearance in the east in
+
+@(r iii 5) [...] Scorpius. Month IX, the 30th, first appearance in the west
+
+@(r iii 6) [in ... Capri]corn. Month XII2, night
+
+@(r iii 7) [of the xth, it was] 1 cubit below η Tauri. Night
+
+@(r iii 8) [of the xth,] it was 2 2/3 cubits above α Tauri.
+
+@(r iii 9) [Night] of the 28th, it was [nn] fingers below 𝜁 Tauri.
+
+$ ruling
+
+@(r iii 10) Year 21, month I, night of the 25th, it was 1 2/3 cubit below
+
+@(r iii 11) β Geminorum. Month II,
+
+@(r iii 12) night of the 7th, it entered the center of Cancer. Night
+
+@(r iii 13) of the 20th?, it came out. Night of the 27th,
+
+@(r iii 14) it was 2/3 cubit below α Leonis. Month III, night of the 24th,
+
+@(r iii 15) it was 1⁄2 cubit below the small star of the rear foot of the Lion.
+
+@(r iii 16) Month IV, night of the 9th, it was 4 cubits below γ
+
+@(r iii 17) Virginis. Month V, the 11th,
+
+@(r iii 18) last appearance [in the west in] Virgo. The 27th, first appearance in
+
+@(r iii 19) the east in Virgo. Month VII, the 11th?,
+
+@(r iii 20) it was 1 2/3 cubits [... γ] Virginis.
+
+@(r iii 21) [...] α? Virginis
+
+@(r iii 22) [...] ...

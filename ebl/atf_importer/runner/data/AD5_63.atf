@@ -1,0 +1,111 @@
+&X500064 = ADART 5 63
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 41.KAM {I}ár-tah-šat-su LUGAL KUR.KUR GU₄ 9 MÚL.BABBAR
+#lem: šattu[year]N; n; Artaxerxes[Artaxerxes]RN$; šarru[king]N; mātāte[lands]N; Ayyaru[Month II]MN; n; Kakkabu-peṣû[Jupiter]CN
+
+2'. ina GU UŠ ŠU 17 MÚL.BABBAR ina GU ana ME E-a
+#lem: ina[in]PRP; Gula[Aquarius]CN; emēdu[be at a stationary point]V; Duʾūzu[Month IV]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Gula[Aquarius]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+3'. AB 28 ár GU ŠÚ ZÍZ 29 ina KUN IGI ba-ìl
+#lem: Ṭebētu[Month X]MN; n; warki[behind]PRP; Gula[Aquarius]CN; rabû[set]'V; Šabāṭu[Month XI]MN; n; ina[in]PRP; Zibbātu[Pisces]CN$; nanmuru[be(come) visible]'V; baʾil[bright]AJ
+
+$ ruling
+4'. MU 42.KAM {I}ár-tah-šat-su LUGAL ŠU 3 MÚL.BABBAR UŠ
+#lem: šattu[year]N; n; Artaxerxes[Artaxerxes]RN; šarru[king]N; Duʾūzu[Month IV]MN; n; Kakkabu-peṣû[Jupiter]CN; emēdu[be at a stationary point]V
+
+5'. KIN 5 ana ME E-a APIN 8 ina KUN UŠ
+#lem: Ulūlu[Month VI]MN; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Arahsamna[Month VIII]MN; n; ina[in]PRP; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V
+
+6'. ŠE ina 21 ina SAG.KI HUN.GÁ ana ME E-a
+#lem: Addaru[Month XII]MN; ina[on]PRP; n; ina[in]PRP; X; Agru[Aries]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+$ ruling
+7'. MU 41 SIG 8 dele-bat ina NIM ina SAG ALLA ŠÚ
+#lem: šattu[year]N; n; Simānu[Month III]MN; n; Dilbat[Venus]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; rēš[beginning]N; Alluttu[Cancer]CN; rabû[set]'V
+
+8'. NE 10 ina ŠÚ ina SAG ABSIN IGI APIN GE₆ 19 SIG SI-MÁŠ
+#lem: Abu[Month V]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēš[beginning]N; Šerʾu[Virgo]CN; amāru[be(come) visible]'V; Arahsamna[Month VIII]MN; mūšu[night]N; n; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN
+
+9'. 3 KÙŠ ZÍZ GE₆ 6 2 5/6 KÙŠ SIG SAG.KI {MÚL}HUN.GÁ
+#lem: n; ammatu[unit]N; Šabāṭu[Month XI]MN; mūšu[night]N; n; n; n; ammatu[unit]N; šapil[below]PRP; X; Agru[Aries]CN$
+
+@bottom
+10'. ŠE GE₆ 3 2 ŠU.SI SIG MÚL.MÚL [M]U 42 BAR GE₆ 8
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; n; ubānu[finger]N; šapil[below]PRP; MÚL.MÚL[η Tauri]CN; šattu[year]N; n; Nisannu[Month I]MN; mūšu[night]N; n
+
+11'. [x x] GIGIR ana ŠÀ {d}dele-bat KU₄ G[U₄ x ina] ŠÚ ina GU₄.AN ŠÚ
+#lem: u; u; Narkabtu[Chariot]CN; ana[to]PRP; libbu[interior]N; Dilbat[Venus]CN; erēbu[enter]V; Ayyaru[Month II]MN; u; ina[in]PRP; erbu[west]'N; ina[in]PRP; Alû[Taurus]CN; rabû[set]'V
+
+$ ruling
+@reverse
+12'. M[U 4]1 BAR ina 6 GU₄.UD ina NIM IGI DIB 20 ina NIM ŠÚ DIB
+#lem: šattu[year]N; n; Nisannu[Month I]MN; ina[on]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; amāru[be(come) visible]'V; etēqu[omit]V; n; ina[in]PRP; Elamtu[east]'N; rabû[set]'V; etēqu[omit]V
+
+13'. GU₄ [x] ina ŠÚ ina MAŠ.MAŠ IGI KUR <SIG> 29 ina ŠÚ ina UR.A ŠÚ ŠU 27
+#lem: Ayyaru[Month II]MN; u; ina[in]PRP; erbu[west]'N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]'V; baʾil[bright]AJ; Simānu[Month III]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; Duʾūzu[Month IV]MN; n
+
+14'. ki I[GI? x] ina 21 ina NIM ina UR.A IGI TUR NE ina 18
+#lem: kī[when]'SBJ; amāru[be(come) visible]'V; u; ina[on]PRP; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Nēšu[Leo]CN; amāru[be(come) visible]'V; ṣehru[small]AJ; Abu[Month V]MN; ina[on]PRP; n
+
+15'. ina? KUR? ina ⸢ABSIN⸣ ŠÚ DU₆ ina 8 ina ŠÚ IGI ina 21 ina ŠÚ ŠÚ APIN
+#lem: ina[in]PRP; šadû[east]N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]'V; Tašrītu[Month VII]MN; ina[on]PRP; n; ina[in]PRP; erbu[west]'N; nanmuru[be(come) visible]'V; ina[on]PRP; n; ina[in]PRP; erbu[west]'N; rabû[set]V; Arahsamna[Month VIII]MN
+
+16'. 10 ki IGI? NIM? ina 8 ina NIM ina GÍR.TAB IGI A? LUH? A KAL NIM? DIB?
+#lem: n; kī[when]'SBJ; amāru[be(come) visible]'V; šaqi[high]V; ina[on]PRP; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]'V; u; u; u; u; u; u
+
+17'. GAN DIR ina 23 ina PA ŠÚ AB 21 ina ŠÚ ina GU IGI KUR
+#lem: Kislīmu[Month IX]MN; u; ina[on]PRP; n; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]'V; Ṭebētu[Month X]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Gula[Aquarius]CN; nanmuru[be(come) visible]'V; baʾil[bright]AJ
+
+18'. LUH? <ZÍZ?> ina 17 28 ina ŠÚ ina KUN ŠÚ ŠE ina 17 ina NIM ina KUN IGI TUR
+#lem: u; u; ina[on]PRP; n; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V; Addaru[Month XII]MN; ina[on]PRP; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]'V; ṣehru[small]AJ
+
+@translation labeled en project
+
+@(o 1) Year 41 of Artaxerxes, king of all lands. Month II, the 9th, Jupiter
+
+@(o 2) became stationary in Aquarius. Month IV, the 17th, Jupiter’s acronychal rising in Aquarius.
+
+@(o 3) Month X, the 28th, last appearance behind Aquarius. Month XI, the 29th, first appearance in Pisces; it was bright.
+
+$ ruling
+
+@(o 4) Year 42, king Artaxerxes. Month IV, the 3rd, Jupiter became stationary.
+
+@(o 5) Month VI, the 5th, acronychal rising. Month VIII, the 8th, it became stationary in Pisces.
+
+@(o 6) Month XII, on the 21st, acronychal rising in the front of Aries.
+
+$ ruling
+
+@(o 7) Year 41, month III, the 8th, Venus’ last appearance in the east in the beginning of Cancer.
+
+@(o 8) Month V, the 10th, first appearance in the west in the beginning of Virgo. Month VIII, night of the 19th, it was 3 cubits below β Capricorni.
+
+@(o 9) Month XI, night of the 6th, it was 2 5/6 cubits below the front of Aries.
+
+@bottom
+
+@(b.e. 10) Month XII, night of the 3rd, it was 2 fingers below η Tauri. Year 42, month I, night of the 8th,
+
+@(b.e. 11) [...] of the Chariot entered Venus. Mon[th II, the xth,] last appearance in the west in Taurus.
+
+$ ruling
+
+@(r 12) Year 41, month I, on the 6th, Mercury’s first appearance in the east, omitted. The 20th, last appearance in the east, omitted.
+
+@(r 13) Month II, [the xth,] first appearance in the west in Gemini; it was bright. <Month III,> the 29th, last appearance in the west in Leo. Month IV, the 27th,
+
+@(r 14) when it became vi[sible, ...;] on the 21st, (ideal?) first appearance in the east in Leo; it was small. Month V, on the 18th,
+
+@(r 15) last appearance in the east? in Virgo. Month VII, on the 8th, first appearance in the west. On the 21st, last appearance in the west. Month VIII,
+
+@(r 16) the 10th, when it became visible?, it was high?; on the 8th, (ideal) first appearance in the east in Scorpius. ...
+
+@(r 17) Month IX ... on the 23rd, last appearance in Sagittarius. Month X, the 21st, first appearance in the west in Aquarius; it was bright;
+
+@(r 18) ... on the 17th. The 28th, last appearance in the west in Pisces. Month XII, on the 17th, first appearance in the east in Pisces; it was small.

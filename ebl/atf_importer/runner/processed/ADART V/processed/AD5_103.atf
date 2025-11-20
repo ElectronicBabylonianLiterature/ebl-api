@@ -1,0 +1,97 @@
+&X500106 = ADART 5 103
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [D]U₆ 11 HI 13 AN?.KU₁₀ 13 na 17 19
+#lem: Tašrītu[Month VII]MN; n; u; n; antallû[eclipse]N; n; na[sunrise to moonset]N; n; n
+
+2'. 21 26 HI 27 KUR 28 AN.KU₁₀ 29 NU HI
+#lem: n; n; u; n; X; n; antallû[eclipse]N; n; ul[not]MOD; u
+
+3'. APIN 11 HI 14 na 15 18 HI 22 GU₄.UD
+#lem: Arahsamna[Month VIII]MN; n; u; n; na[sunrise to moonset]N; n; n; u; n; Šihṭu[Mercury]CN
+
+4'. ina PA IGI 26 HI 27 KUR 29 NU HI
+#lem: ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; n; u; n; X; n; ul[not]MOD; u
+
+5'. GAN 15 HI 9 GU₄.UD ina PA ŠÚ 11 13 HI 15 na
+#lem: Kislīmu[Month IX]MN; n; u; n; Šihṭu[Mercury]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]V; n; n; u; n; na[sunrise to moonset]N
+
+6'. 16 18 HI 23 GU₄ ina ⸢PA⸣ IGI HI 25 HI
+#lem: n; n; u; n; Šihṭu[Mercury]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; u; n; u
+
+7'. 28 KUR 30 HI
+#lem: n; X; n; u
+
+8'. AB 2 LÁL 7 11 13 HI 15 na 17? HI?
+#lem: Ṭebētu[Month X]MN; n; +šitqultu[opposition//equinox]N'N$; n; n; n; u; n; na[sunrise to moonset]N; n; u
+
+@reverse
+9'. x ma 21 25 26 HI 27 KUR 28 HI ⸢29⸣ x x
+#lem: u; u; n; n; n; u; n; X; n; X; n; u; u
+
+10'. ZÍZ 3? ma? 5 GU₄ ina MÁŠ ŠÚ 7 HI 11 ma a? HI
+#lem: Šabāṭu[Month XI]MN; n; u; n; Šihṭu[Mercury]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; n; X; n; u; u; X
+
+11'. 13 GENNA ina zib ŠÚ 15 na 17 19 25 HI
+#lem: n; Kayyamānu[Saturn]CN; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V; n; na[sunrise to moonset]N; n; n; n; u
+
+12'. 27 KUR 28 HI 29 NU HI
+#lem: n; X; n; u; n; ul[not]MOD; u
+
+13'. ŠE 1 2 5 HI 6 GU₄ ina zib IGI HI 8 ma-diš HI
+#lem: Addaru[Month XII]MN; n; n; n; u; n; Šihṭu[Mercury]CN; ina[in]PRP; Zibbātu[Pisces]CN; amāru[be(come) visible]V; u; n; mādiš[greatly]AV; u
+
+14'. 10? 11 15 HI 16 na ⸢19?⸣ GENNA
+#lem: n; n; n; u; n; na[sunrise to moonset]N; n; Kayyamānu[Saturn]CN
+
+15'. ina zib IGI 22 24 25 27 HI
+#lem: ina[in]PRP; Zibbātu[Pisces]CN; amāru[be(come) visible]V; n; n; n; n; u
+
+16'. 28 KUR 30 NU HI
+#lem: n; X; n; ul[not]MOD; u
+
+@top
+1'. KIN? GE₆ 29 1 x GE₆? GIN
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; n; u; mūšu[night]N; alāku[go]V
+
+@translation labeled en project
+
+@(o 1) [Mon]th VII, the 11th, HI. The 13th, eclipse. The 13th, sunrise before moonset. The 17th, the 19th,
+
+@(o 2) the 21st, the 26th, HI. The 27th, last appearance of the moon. The 28th, eclipse. The 29th, not HI.
+
+@(o 3) Month VIII, the 11th, HI. The 14th, sunrise before moonset. The 15th, the 18th, HI. The 22nd, Mercury’s
+
+@(o 4) first appearance in Sagittarius. The 26th, HI. The 27th, last appearance of the moon. The 29th, not HI.
+
+@(o 5) Month IX, the 1st, the 5th, HI. The 9th, Mercury’s last appearance in Sagittarius. The 11th, the 13th, HI. The 15th, sunrise before moonset.
+
+@(o 6) The 16th, the 18th, HI. The 23rd, Mercury’s first appearance in Sagittarius; HI. The 25th, HI.
+
+@(o 7) The 28th, last appearance of the moon. The 30th, HI.
+
+@(o 8) Month X, the 2nd, equinox?. The 7th, the 11th, the 13th, HI. The 15th, sunrise before moonset. The 17th?, HI?.
+
+@(r 9) ... The 21st, the 25th, the 26th, HI. The 27th, last appearance of the moon. The 28th, HI. The 29th, ...
+
+@(r 10) Month XI, the 3rd?, ... The 5th, Mercury’s last apearance in Capricorn. The 7th, HI. The 11th, ... HI.
+
+@(r 11) The 13th, Saturn’s last appearance in Pisces. The 15th, sunrise before moonset. The 17th, the 19th, the 25th, HI.
+
+@(r 12) The 27th, last appearance of the moon. The 28th, HI. The 29th, not HI.
+
+@(r 13) Month XII, the 1st, the 2nd, the 5th, HI. The 6th, Mercury’s first appearance in Pisces; HI. The 8th, much HI.
+
+@(r 14) The 10th?, the 11th, the 15th, HI. The 16th, sunrise before moonset. The 19th?, Saturn’s
+
+@(r 15) first appearance in Pisces. The 22nd, the 24th, the 25th, the 27th, HI.
+
+@(r 16) The 28th, last appearance of the moon. The 30th, not HI.
+
+@top
+
+@(t.e. 1) Month VI?, night of the 29th, ... after sunset.

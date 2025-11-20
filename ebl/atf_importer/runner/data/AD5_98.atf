@@ -1,0 +1,88 @@
+&X500101 = ADART 5 98
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+$ ruling
+2'. [...] TU ŠE [...]
+#lem: u; u; u; u
+
+$ ruling
+3'. [...] ⸢x⸣ 16 ⸢x⸣ [...]
+#lem: u; u; n; u; u
+
+4'. [...] ⸢x⸣ KIN? 17 e [...]
+#lem: u; u; Ulūlu[Month VI]MN; n; eli[above]PRP; u
+
+@reverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢SI?⸣ 2 KÙŠ [...]
+#lem: u; u; n; ammatu[unit]N; u
+
+3'. [...] ⸢APIN⸣ 26 e RÍN-šá?-[ULÙ ...]
+#lem: u; Arahsamna[Month VIII]MN; n; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; u
+
+$ ruling
+4'. [...] SI? KUR GAN 23 ina SAG GU₄ [...] 
+#lem: u; u; u; Kislīmu[Month IX]MN; n; ina[in]PRP; rēš[beginning]N; Alû[Taurus]CN$; u
+
+$ ruling
+5'. [... MAŠ.MA]Š-šá-SIPA 1 KÙŠ APIN 27 ⸢x⸣ [...]
+#lem: u; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; Arahsamna[Month VIII]MN; n; u; u
+
+6'. [... x]+1 KÙŠ DIR.ŠE 14 e SU[HUR ...]
+#lem: u; u; ammatu[unit]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; eli[above]PRP; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorn]CN$; u
+
+$ ruling
+7'. [...] ⸢x e GU₄.AN⸣ 4? ⸢x⸣
+#lem: u; u; eli[above]PRP; Alû[Taurus]CN; n; u
+
+8'. [...] ($blank$) [...]
+#lem: u; u
+
+$ ruling
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+$ ruling
+
+@(o 2) [...] ... [...]
+
+$ ruling
+
+@(o 3) [...] ... 16 ... [...]
+
+@(o 4) [...] ... Month VI?, the 17th, it was above [...]
+
+@(r 1) [...] ... [...]
+
+@(r 2) [...] ... 2 cubits [...]
+
+@(r 3) [...] Month VIII, the 26th, it was [...] above α Librae [...]
+
+$ ruling
+
+@(r 4) [...] ... Month IX, the 23rd, in the beginning of Taurus [...]
+
+$ ruling
+
+@(r 5) [...] 1 cubit [...] γ Geminorum. Month VIII, the 27th, ... [...]
+
+@(r 6) [... x]+1 cubit. Month XII₂, the 14th, it was [...] above [γ/δ] Cap[ricorni ...]
+
+$ ruling
+
+@(r 7) [...] ... 4? ... above Taurus [...]
+
+@(r 8) [...] (blank) [...]
+
+$ ruling

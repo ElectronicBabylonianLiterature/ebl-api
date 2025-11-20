@@ -1,0 +1,71 @@
+&X500089 = ADART 5 86
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ($traces$)
+#lem: u
+
+2'. [...] ⸢x⸣ KÙŠ GE₆ 12 ⸢ina ZÁLAG AN?⸣ [...]
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+3'. [...] KÙŠ GE₆ ⸢10+x⸣ [...]
+#lem: u; ammatu[unit]N; mūšu[night]N; n; u
+
+4'. [... MÚL-x-šá]-še-pít-MAŠ.MAŠ 8? SI x GE₆ ⸢x ina⸣ ZÁ[LAG] ⸢AN?⸣ [ina] ⸢IGI?⸣ [...]
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; ubānu[finger]N; u; mūšu[night]N; u; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; ina[in]PRP; pānu[front]N; u
+
+5'. [... GE₆] 13? ⸢ina ZÁLAG⸣ AN SIG MAŠ.MAŠ-IGI 4 KÙŠ ⸢GE₆ 18?⸣ [...]
+#lem: u; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; u
+
+6'. [...] in 10? AN ina TIL GÍR.TAB IGI KUR 8.30 ⸢na-su⸣ [...]
+#lem: u; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; qītu[end]N; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V; baʾil[bright]AJ; n; na[rising to sunrise]N; u
+
+7'. [...] ⸢GE₆ x⸣ USAN dele-bat SIG MÚL-IGI-šá-SAG-HUN 3 [KÙŠ ...]
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; ammatu[unit]N; u
+
+8'. [...] ⸢x x⸣ ŠE? GE₆ 5? USAN dele-bat [...]
+#lem: u; u; u; Addaru[Month XII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+9'. [...] ⸢ŠUR?-GIGIR?⸣-šá-⸢ULÙ?⸣ 1 [KÙŠ ...]
+#lem: u; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; u
+
+10'. [...] ⸢x x x⸣ 1/2 KÙŠ
+#lem: u; u; u; u; n; ammatu[unit]N
+
+$ ruling
+11'. [... GE₆] 26 ⸢USAN?⸣ [...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+12'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ...
+
+@(o 2) [...] x cubits. Night of the 12th, last part of the night, Mars? [...]
+
+@(o 3) [...] cubits. Night of the 10+xth, [...]
+
+@(o 4) [...] 8? fingers [....] η/μ Geminorum. Month? x, night of the xth, last part of the night?, Mars? was [...] in front? of [...]
+
+@(o 5) [... Night] of the 13th, last part of the night, Mars was 4 cubits below α Geminorum. Night of the 18th?, [...]
+
+@(o 6) [...] around the 10th?, Mars’ first appearance in the end of Scorpius; it was bright, rising of Mars to sunrise: 8° 30’ [...]
+
+@(o 7) [...] Night of the xth, first part of the night, Venus was 3 [cubits] below β Arietis [...]
+
+@(o 8) [...] ... Month XII?, night of the 5th?, first part of the night, Venus [...]
+
+@(o 9) [...] 1 [cubit ...] ζ? Tauri [...]
+
+@(o 10) [...] ... 1⁄2 cubit.
+
+$ ruling
+
+@(o 11) [... night] of the 26th, first part of the night?, [...]
+
+@(o 12) [...] ... [...]

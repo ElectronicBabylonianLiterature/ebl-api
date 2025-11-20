@@ -1,0 +1,70 @@
+&X500015 = ADART 5 15
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [x x] ⸢x⸣ [...]
+#lem: u; u; u; u
+
+2'. [x x] x x [...]
+#lem: u; u; u; u; u
+
+3'. [in] ⸢x ME⸣ ana ŠÚ šámaš x [...]
+#lem: ina[at]PRP; u; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N; u; u
+
+$ ruling
+4'. 33 SIG 14 AN.KU₁₀ ⸢šá⸣ [DIB?]
+#lem: n; Simānu[Month III]MN; n; antallû[eclipse]N; ša[which]REL; etēqu[omit]V
+
+5'. in 18 ME ana ŠÚ šámaš
+#lem: ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+$ ruling
+6'. [AP]IN GE₆ 13 AN.KU₁₀ sin [x]
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; antallû[eclipse]N; Sîn[moon]N; u
+
+7'. [x] ⸢šá?⸣ DIB ina 45 GE₆ G[IN]
+#lem: u; ša[which]REL; etēqu[omit]V; ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+$ ruling
+8'. [x x] GE₆ 15 AN.K[U₁₀]
+#lem: u; u; mūšu[night]N; n; antallû[eclipse]N
+
+9'. [x x]+19 GE₆ ana ZÁL[AG]
+#lem: u; u; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+$ ruling
+10'. [x x x x A]N.K[U₁₀]
+#lem: u; u; u; u; antallû[eclipse]N
+
+
+@translation labeled en project
+
+@(1') [...] ... [...]
+
+@(2') [...] ... [...]
+
+@(3') [At] ... of day before sunset [...]
+
+$ ruling
+
+@(4') 33, month III, the 14th, eclipse which? [was omitted?.]
+
+@(5') At 18° of day before sunset.
+
+$ ruling
+
+@(6') [Month VI]II, night of the 13th, lunar eclipse [...]
+
+@(7') [...] which was omitted. At 45° after [sunset.]
+
+$ ruling
+
+@(8') [...] night of the 15th, eclipse
+
+@(9') [... x]+19° before sunrise.
+
+$ ruling
+
+@(10') [...] ecli[pse ...]

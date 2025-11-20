@@ -1,0 +1,53 @@
+&X500102 = ADART 5 99
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... GE₆] ⸢8⸣ ina ZÁLAG AN SIG [...]
+#lem: u; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; u
+
+3'. [... Š]UR-ULÙ 10 SI G[E₆ ...]
+#lem: u; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ubānu[finger]N; mūšu[night]N; u
+
+4'. [...] ⸢GE₆⸣ 29 ina ZÁLAG AN [...]
+#lem: u; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+5'. [... A]N ana ŠÚ ina LAL-šú e MÚL-ár-šá-še-p[ít-MAŠ.MAŠ ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]'N; ina[while]PRP; nahāsu[move back]V; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; u
+
+6'. [... A]N e? MÚL-ár-šá-še-pít-MAŠ.MAŠ 2/3? [KÙŠ ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N; u
+
+7'. [... US]AN AN e ŠUR-ULÙ 1 1/2 KÙ[Š ...]
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n; ammatu[unit]N; u
+
+8'. [... USA]N AN ana NIM ina LAL-šú e MÚL [...]
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]PRP; nahāsu[move back]V; eli[above]PRP; u; u
+
+9'. [...] ⸢x x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [... Night of] the 8th, last part of the night, Mars was [...] below [...]
+
+@(o 3) [...] 10 fingers [...] ζ Tauri. Ni[ght of ...]
+
+@(o 4) [...] Night of the 29th, last part of the night, Mars [...]
+
+@(o 5) [... Ma]rs, while moving back to the west, was [...] above μ Geminorum [...]
+
+@(o 6) [... Ma]rs was 2/3? [cubit] above? μ Geminorum [...]
+
+@(o 7) [... first] part of the night, Mars was 1 1⁄2 cubits above ζ Tauri [...]
+
+@(o 8) [... first] part of the night, Mars, while moving back to the east, was [...] above [...]
+
+@(o 9) [...] ... [...]

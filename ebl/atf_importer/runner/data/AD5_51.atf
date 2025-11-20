@@ -1,0 +1,93 @@
+&X500051 = ADART 5 51
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. GE₆ 14 6 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+2'. 27 16
+#lem: n; n
+
+@column 2
+1'. [GE₆ x] [x]+3 ⸢ME⸣
+#lem: mūšu[night]N; u; u; ūmu[moonrise to sunset]N
+
+2'. GE₆ 14 9 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+3'. 24 21
+#lem: n; n
+
+@reverse
+@column 3
+1'. APIN 30 16
+#lem: Arahsamna[Month VIII]MN; n; n
+
+2'. 12 6 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+3'. 13 12 na
+#lem: n; n; na[sunrise to moonset]N
+
+4'. GE₆ 13 10 ME
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+5'. GE₆ 14 5.30 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+6'. [x] ⸢21⸣
+#lem: u; n
+
+@column 4
+1'. AB? 30 11.20
+#lem: Ṭebētu[Month X]MN; n; n
+
+2'. 13 10 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+3'. 14 3 na
+#lem: n; n; na[sunrise to moonset]N
+
+4'. GE₆ 14 10 ME
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+5'. [GE₆] ⸢15⸣ 1.40 ⸢GE₆⸣
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+@translation labeled en project
+
+@(o i 1) Night of the 14th, sunset to moonrise: 6°.
+
+@(o i 2) The 27th, (moonrise to sunrise:) 16°.
+
+@(o ii 1) [Night of the xth,] moonrise to sunset: [x]+3°.
+
+@(o ii 2) Night of the 14th, sunset to moonrise: 9°.
+
+@(o ii 3) The 24th, (moonrise to sunrise): 21°.
+
+@(r iii 1) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 16°.
+
+@(r iii 2) The 12th, moonset to sunrise: 6°.
+
+@(r iii 3) The 13th, sunrise to moonset: 12°.
+
+@(r iii 4) Night of the 13th, moonrise to sunset: 10°.
+
+@(r iii 5) Night of the 14th, sunset to moonrise: 5° 30’. 
+
+@(r iii 6) [The xth,] (moonrise to sunrise:) 21°.
+
+@(r iv 1) Month X, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 11° 20’.
+
+@(r iv 2) The 13th, moonset to sunrise: 10°.
+
+@(r iv 3) The 14th, sunrise to moonset: 3°.
+
+@(r iv 4) Night of the 14th, moonrise to sunset: 10°.
+
+@(r iv 5) [Night] of the 15th, sunset to moonrise: 1° 40’.

@@ -1,0 +1,148 @@
+&X500104 = ADART 5 101
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+3'. [...] ⸢x x⸣ [x x] ⸢x⸣
+#lem: u; u; u; u; u; u
+
+4'. [...] ana ŠÚ ina [x x] ⸢x⸣
+#lem: u; ana[to]PRP; erbu[west]'N; ina[in]PRP; u; u; u
+
+5'. [...] ⸢x x x x⸣
+#lem: u; u; u; u; u
+
+6'. [...] ⸢x x x x⸣ [x x] ⸢x⸣
+#lem: u; u; u; u; u; u; u; u
+
+7'. [...] ⸢x x⸣
+#lem: u; u; u
+
+8'. [...] ⸢x x⸣ [...] 
+#lem: u; u; u; u
+
+9'. [...]
+#lem: u
+
+10'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. ⸢x x⸣ [x] ⸢x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. ina NIM ina ABSIN ⸢ŠÚ⸣ [...]
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; u
+
+3'. 23 na in 10+[x ...]
+#lem: n; na[sunset to setting]N; ina[on]PRP; n; u
+
+4'. GAN 14 ina NIM ina PA [IGI ...]
+#lem: Kislīmu[Month IX]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; u
+
+5'. in 11 IGI GE₆ 30 ina ZÁLAG e MÚL-K[UR?-...]
+#lem: ina[around (day x)]PRP; n; amāru[be(come) visible]V; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN$
+
+6'. 10 SI 27 <ina> NIM ina SAG MÁŠ ŠÚ x [...]
+#lem: n; ubānu[finger]N; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; rēš[beginning]N; Suhurmāšu[Capricorn]CN; rabû[set]V; u; u
+
+7'. ŠE 26 ina ŠÚ ina HUN.GÁ [...]
+#lem: Addaru[Month XII]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Agru[Aries]CN; u
+
+$ ruling
+8'. MU 6.KAM BAR IGI šá GU₄.U[D ...]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; amāru[be(come) visible]V; ša[which]REL; Šihṭu[Mercury]CN; u
+
+9'. ina MAŠ.MAŠ IGI 12 na-su [...]
+#lem: ina[in]PRP; Māšu[Gemini]CN; amāru[be(come) visible]V; n; na[sunset to setting]N; u
+
+10'. ⸢x SIG⸣ SAG-UR.A 4 KÙŠ 10+[x ...]
+#lem: u; šapil[below]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; n; u
+
+11'. 8 SI 27 ina ŠÚ ina UR.[A ŠÚ ...]
+#lem: n; ubānu[finger]N; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; u
+
+12'. 23 ina NIM ina UR? [...]
+#lem: n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Nēšu[Leo]CN$; u
+
+13'. GE₆ 30 ina ZÁLAG e LUG[AL ...]
+#lem: mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; LUGAL[α Leonis]CN; u
+
+14'. [x] 8 [ina] ŠÚ ina PA.BI[L IGI ...]
+#lem: u; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; u
+
+15'. 23 ina ŠÚ ina PA.BIL [ŠÚ ...]
+#lem: n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]V; u
+
+16'. [x x] ⸢x⸣ 3 x x [...]
+#lem: u; u; u; n; u; u; u
+
+17'. [ina ZÁ]LAG e ⸢x⸣ [...]
+#lem: ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; u; u
+
+@translation labeled en project
+
+@(o i 1) (no translation possible)
+
+@(o i 2) (no translation possible)
+
+@(o i 3) (no translation possible)
+
+@(o i 4) (no translation possible)
+
+@(o i 5) (no translation possible)
+
+@(o i 6) (no translation possible)
+
+@(o i 7) (no translation possible)
+
+@(o i 8) (no translation possible)
+
+@(o i 9) (no translation possible)
+
+@(o i 10) (no translation possible)
+
+@(o ii 1) ... [...] ... [...]
+
+@(o ii 2) last appearance in the east in Virgo [...]
+
+@(o ii 3) sunset to setting of Mercury: 23°; [(ideal) first appearance] on the 10+[xth ...]
+
+@(o ii 4) Month IX, the 14th, [first appearance] in the east in Sagittarius; [...]
+
+@(o ii 5) (ideal) first appearance on the 11th. Night of the 30th, last part of the night, it was [...] above 𝜗 [Ophiuchi? ...]
+
+@(o ii 6) 10 fingers. The 27th, last appearance in the east in the beginning of Capricorn ... [...]
+
+@(o ii 7) Month XII, the 26th, [...] in the west in Aries.
+
+$ ruling
+
+@(o ii 8) Year 6, month I, first appearance of Mercury [omitted? ...]
+
+@(o ii 9) first appearance [in the west] in Gemini; sunset to setting of Mercury: 12° [...]
+
+@(o ii 10) The xth, it was 4 cubits below ε Leonis. The 10+[xth, ...]
+
+@(o ii 11) 8 fingers. The 27th, [last appearance] in the west in Leo [...]
+
+@(o ii 12) the 23rd, [first appearance] in the east in Leo? [...]
+
+@(o ii 13) Night of the 30th, last part of the night, it was [...] above α Leo[nis ...]
+
+@(o ii 14) [Month ...,] the 8th, [first appearance] in the west in Sagitta[rius ...]
+
+@(o ii 15) The 23rd, [last appearance] in the west in Sagittarius [...]
+
+@(o ii 16) [...] ... [...]
+
+@(o ii 17) [last] part of the night, it was [...] above ... [...]

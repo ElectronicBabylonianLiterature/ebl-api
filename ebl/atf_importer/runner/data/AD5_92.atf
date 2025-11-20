@@ -1,0 +1,72 @@
+&X500095 = ADART 5 92
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse	
+@column 1
+1'. [...] ⸢x x⸣
+#lem: u; u; u
+
+2'. [...] ⸢x x⸣ e 
+#lem: u; u; u; eli[above]PRP
+
+3'. [MÚL-TUR-šá-4-KÙŠ-ár]-LUGAL 1/2 KÙŠ ŠU 12 ina ŠÚ ina A ⸢ŠÚ⸣
+#lem: MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N; Duʾūzu[Month IV]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V
+
+4'. [NE x ina NIM] ina? A 2/3 [KÙŠ] SIG MÚL.BABBAR 4 U
+#lem: Abu[Month V]MN; u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Nēšu[Leo]CN; n; ammatu[unit]N; šapil[below]PRP; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N
+
+5'. [x x x IGI] 30 na in 2 IGI GE₆ 8 ina ZÁLAG
+#lem: u; u; u; amāru[be(come) visible]V; n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N
+
+6'. [...] x 29 ina NIM ina ABSIN ŠÚ KIN
+#lem: u; u; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; Ulūlu[Month VI]MN
+
+7'. [x ina ŠÚ] ina GÍR.TAB IGI APIN 2 ina ŠÚ ina PA ŠÚ
+#lem: u; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V; Arahsamna[Month VIII]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]V
+
+8'. [x x] ⸢x⸣ ina ⸢PA?⸣ IGI 30 na? GE₆ 24
+#lem: u; u; u; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N; mūšu[night]N; n
+
+9'. [x MÚ]L-KUR-šá-KIR₄-šil-PA 1 KÙŠ GAN
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Kislīmu[Month IX]MN
+
+10'. [x ina NIM] ina MÁŠ ŠÚ ⸢ZÍZ?⸣ 7 ina ŠÚ ina zib{ME} IGI
+#lem: u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; Šabāṭu[Month XI]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+11'. [...] ina ŠÚ ina HUN ⸢x⸣ ŠÚ ŠE [DIR?]
+#lem: u; ina[in]PRP; erbu[west]'N; ina[in]PRP; Agru[Aries]CN; u; rabû[set]V; Addaru[Month XII]MN; watru[extra]AJ
+
+@column 2
+$ traces
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] ... 1⁄2 cubit above ϱ
+
+@(o i 3) [Leon]is. Month IV, the 12th, last appearance in the west in Leo.
+
+@(o i 4) [Month V, the xth, first appearance in the east] in Leo, 2/3 [cubit] below Jupiter, 4 fingers
+
+@(o i 5) [...] rising of Mercury to sunrise: 30?; (ideal) first appearance on the 2nd. Night of the 8th, last part of the night,
+
+@(o i 6) [...] ... The 29th, last appearance in the east in Virgo. Month VI,
+
+@(o i 7) [the xth,] first appearance [in the west] in Scorpius. Month VIII, the 2nd, last appearance in the west in Sagittarius.
+
+@(o i 8) [The xth,] first appearance [in the east] ... in Sagittarius?; rising of Mercury to sunrise: 30? Night of the 24th,
+
+@(o i 9) it was 1 cubit [...] 𝜗 Ophiuchi. Month IX,
+
+@(o i 10) [the xth,] last appearance [in the east] in Capricorn. Month XI?, the 7th, first appearance in the west in Pisces.
+
+@(o i 11) [...] last appearance in the west in Aries ... Month XII [was intercalary.]
+
+@obverse
+
+@column 2
+traces of beginnings of lines

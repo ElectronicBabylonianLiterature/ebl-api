@@ -1,0 +1,74 @@
+&X500091 = ADART 5 88
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse	
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x 2?⸣ IGI ma šil? GAN 17 ⸢ina?⸣ [...]
+#lem: u; u; n; nanmuru[be(come) visible]V; u; u; Kislīmu[Month IX]MN; n; ina[in]PRP; u
+
+3'. [... x]+10? ina NIM ina IGI {UL}SUHUR{MUŠEN} KUR 6 [...]
+#lem: u; u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; pān[front]N; Suhurmāšu[Capricorn]CN$; u; n; u
+
+4'. [...] GE₆ 19 ŠÈG i-ṣa ma-diš ŠED₇
+#lem: u; mūšu[night]N; n; zunnu[rain]N; wīṣu[little]AJ; mādiš[very much]AV; kūṣu[coldness]N
+
+5'. [...] ⸢x⸣ 13 ina ŠÚ ŠÚ IM.DIR NU ŠEŠ
+#lem: u; u; n; ina[in]PRP; erbu[west]'N; rabû[set]V; erpetu[cloud]N$; ul[not]MOD; naṣāru[guard//watch]V'V$
+
+6'. [...] ⸢x⸣ SIG₄ 30 ina ŠÚ IGI
+#lem: u; u; Simānu[Month III]MN$; n; ina[in]PRP; erbu[west]'N; amāru[be(come) visible]V
+
+7'. [...] ŠÚ-šú {MÚL}SAG.ME.GAR ŠÚ
+#lem: u; rabû[setting]'N; Nēberu[Jupiter]CN$; rabû[set]V
+
+8'. [... ina] NIM IGI DU₆ 3 ina NIM TÙM
+#lem: u; ina[in]PRP; Elamtu[east]'N; amāru[be(come) visible]V; Tašrītu[Month VII]MN; n; ina[in]PRP; Elamtu[east]'N; +tabālu[take away]V$
+
+@reverse
+1'. [...] IGI GAN 7 ina ŠÚ ŠÚ ma šil? AB ⸢x⸣ [...]
+#lem: u; amāru[be(come) visible]V; Kislīmu[Month IX]MN; n; ina[in]PRP; erbu[west]'N; rabû[set]V; u; u; Ṭebētu[Month X]MN; u; u
+
+2'. [...] ŠE 8 ina ŠÚ IGI NIM-a 6 ⸢x⸣ [...]
+#lem: u; Addaru[Month XII]MN; n; ina[in]PRP; erbu[west]'N; amāru[be(come) visible]V; šaqi[high]V; n; u; u
+
+3'. [... NI]M? DIB SIG₄ 23 ina ŠÚ ina ⸢x⸣ [...]
+#lem: u; Elamtu[east]'N; etēqu[pass]V; Simānu[Month III]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; u; u
+
+4'. [...] KUR? KIN 16 ina NIM ina [...]
+#lem: u; baʾil[bright]AJ; Ulūlu[Month VI]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; u
+
+5'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] first appearance [in] ... Month IX, the 17th, in [...]
+
+@(o 3) [... x]+10th, first appearance in the east in front of Capricorn. 6 [...]
+
+@(o 4) [...] Night of the 19th, a little rain, very cold.
+
+@(o 5) [...] ... the 13th, last appearance in the west; clouds, I did not watch.
+
+@(o 6) [...] ... Month III, the 30th, first appearance in the west.
+
+@(o 7) [... at?] its? last appearance, Jupiter ́s last appearance?.
+
+@(o 8) [...] first appearance [in] the east. Month VII, the 3rd, disappearance in the east.
+
+@(r 1) [...] first appearance. Month IX, the 7th, last appearance in the west ... Month X, ... [...]
+
+@(r 2) [...] Month XII, the 8th, first appearance in the west; it was high, 6 ... [...]
+
+@(r 3) [...] having passed to the east. Month III, the 23rd, [last appearance] in the west in ... [...] 
+
+@(r 4) [...] first appearance. Month VI, the 16th, [last appearance] in the east in [...]
+
+@(r 5) [...] ... [...]

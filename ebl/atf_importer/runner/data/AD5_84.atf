@@ -1,0 +1,67 @@
+&X500087 = ADART 5 84
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ APIN GE₆ 12 [ina ZÁLAG]
+#lem: u; u; Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N
+
+3'. [x M]ÚL-e-šá-SAG-GÍR.TAB 8 SI GU₄.UD 2 SI ana NIM D[IB]
+#lem: u; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; ubānu[finger]N; Šihṭu[Mercury]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+4'. [x] 9 ina NIM ina PA ŠÚ AB 15 ina ŠÚ ina SAG GU IG[I] K[UR?]
+#lem: u; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]V; Ṭebētu[Month X]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēš[beginning]N; Gula[Aquarius]CN; amāru[be(come) visible]V; baʾil[bright]AJ
+
+5'. [N]IM?-a 15 na-su in 13 IGI ZÍZ 6 ina ŠÚ ina SAG? G[U? ŠÚ]
+#lem: šaqi[high]V; n; na[sunset to setting]N; ina[on]PRP; n; amāru[be(come) visible]V; Šabāṭu[Month XI]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēš[beginning]N; Gula[Aquarius]CN; rabû[set]V
+
+6'. [x]+18 ina NIM ina SAG zib{ME} IGI 16 na-su in 15 I[GI]
+#lem: u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; rēš[beginning]N; Zibbātu[Pisces]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V
+
+7'. [Š]E 20 24 na šá GU₄.UD in 25 ina NIM ina zib{ME} ŠÚ
+#lem: Addaru[Month XII]MN; n; n; na[rising to sunrise]N; ša[which]REL; Šihṭu[Mercury]CN; ina[around (day x)]PRP; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V
+
+$ ruling
+8'. [MU x]+9.KAM BAR GU₄ 2 ina ŠÚ ina MAŠ.MAŠ IGI 16 n[a-su]
+#lem: šattu[year]N; u; Nisannu[Month I]MN; Ayyaru[Month II]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Māšu[Gemini]CN; amāru[be(come) visible]V; n; na[sunset to setting]N
+
+9'. [in] 1 IGI GE₆ 9 USAN e ⸢x x⸣ [...]
+#lem: ina[on]PRP; n; amāru[be(come) visible]V; mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; u; u; u
+
+10'. [x]+8? USAN SIG MAŠ.MAŠ-[...]
+#lem: u; šimītān[first part of the night]N; šapil[below]PRP; MAŠ.MAŠ-x[α/β Geminorum]CN
+
+11'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ... Month VIII, night of the 12th, [last part of the night,]
+
+@(o 3) [it was] 8 fingers [...] β Scorpii, Mercury having passed 2 fingers to the east.
+
+@(o 4) [Month IX,] the 9th, last appearance in the east in Sagittarius. Month X, the 15th, first appearance in the west in the beginning of Aquarius; it was br[ight (and)]
+
+@(o 5) [h]igh, sunset to setting of Mercury: 15°; (ideal) first appearance on the 13th. Month XI, the 6th, [last appearance] in the west in the beginning? of Aqua[rius.]
+
+@(o 6) The [x]+18th, first appearance in the east in the beginning of Pisces; rising of Mercury to sunrise: 16°; (ideal) first appearance on the 15th.
+
+@(o 7) Month XII, the 20th, rising of Mercury to sunrise: 24°. Around the 25th, last appearance in the east in Pisces.
+
+$ ruling
+
+@(o 8) [Year x]+9, month I <>?. Month II, the 2nd, first appearance in the west in Gemini; sunset to setting of Mercury: 16°;
+
+@(o 9) (ideal) first appearance [on] the 1st. Night of the 9th, first part of the night, it was above ... [...]
+
+@(o 10) The [x]+8th, first part of the night, it was [...] below [α/β] Geminorum [...]
+
+@(o 11) [...] ... [...]

@@ -1,0 +1,339 @@
+&X500043 = ADART 5 43
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [GE₆ 13 x ME D]IR NU PAP
+#lem: mūšu[night]N; n; u; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+2'. [13 x].20 ŠÚ DIR NU PAP
+#lem: n; u; rabû[moonset to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. [GE₆ 1]4 3 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+4'. [14] 5?.30 na
+#lem: n; n; na[sunrise to moonset]N
+
+5'. [0] DIR muš
+#lem: n; erpetu[cloud]N; mašāhu[measure]V
+
+6'. [...] 23
+#lem: u; n
+
+$ ruling
+7'. [...] AGA a-pir
+#lem: u; agû[tiara]N; apāru[cover the head]V
+
+8'. [...] ŠÚ
+#lem: u; rabû[moonset to sunrise]N
+
+9'. [...] a-kam muš
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+10'. [... a-k]am muš
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+11'. [...] ⸢na?⸣
+#lem: u; na[sunrise to moonset]N
+
+12'. [...] ⸢x⸣
+#lem: u; u
+
+13'. [...] 24
+#lem: u; n
+
+@column 2
+1'. [...] ⸢na DIR?⸣ [...]
+#lem: u; na[sunrise to moonset]N; erpetu[cloud]N; u
+
+2'. [...] ⸢4?⸣ ME DIR NU PAP
+#lem: u; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. [...] ⸢15?⸣ 4 GE₆
+#lem: u; n; n; mūšu[sunset to moonrise]N
+
+4'. 27 14.30
+#lem: n; n
+
+$ ruling
+5'. DU₆ 30 18
+#lem: Tašrītu[Month VII]MN; n; n
+
+6'. ⸢13⸣ 10 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]N
+
+7'. ⸢14⸣ 5 na
+#lem: n; n; na[sunrise to moonset]N
+
+8'. G[E₆] 15 1 ME
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+9'. GE₆ 15 10.30 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+10'. 27 19
+#lem: n; n
+
+$ ruling
+11'. APIN 30 13 SIG
+#lem: Arahsamna[Month VIII]MN; n; n; šapil[faint]AJ
+
+12'. 14 6.30 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]N
+
+13'. GE₆ ⸢15⸣ [x].40? ME
+#lem: mūšu[night]N; n; u; ūmu[moonrise to sunset]N
+
+14'. 15 8.20 n[a]
+#lem: n; n; na[sunrise to moonset]N
+
+15'. GE₆ 16 7 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+16'. 27 29
+#lem: n; n
+
+$ ruling
+17'. GAN 1 24 DIR NU PAP
+#lem: Kislīmu[Month IX]MN; n; n; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+18'. [G]E₆ 14 10 ME DIR NU PAP
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+19'. [...] NU GAR
+#lem: u; ul[not]MOD; šakānu[have (a feature)]V
+
+20'. [...] ⸢DIR⸣ muš
+#lem: u; erpetu[cloud]N; mašāhu[measure]V
+
+21'. [...] ⸢x⸣
+#lem: u; u
+
+@column 3
+1'. ⸢GE₆ 14 5⸣ ME
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+2'. DIR NU PAP
+#lem: erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. 14 1 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]N
+
+4'. GE₆ 15 13.30 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N
+
+5'. 15 11 na
+#lem: n; n; na[sunrise to moonset]N
+
+6'. 27 15
+#lem: n; n
+
+@column 4
+1'. ($traces$)
+2'. ZÀ.HI 2(BÁN) 4 qa
+#lem: sahlu[cress]N$; n; n; qû[(one) litre]N
+
+3'. ŠE.GIŠ.Ì 1(BÁN) SÍG 2 MA.NA
+#lem: šamaššammū[sesame]N; n; šīpātu[wool]N; n; manû[mina]N$
+
+4'. GU₄ ŠE 4(BÁN)
+#lem: Ayyaru[Month II]MN; šeʾu[barley]N$; n
+
+5'. ZÚ 1(BARIG) 4(BÁN) GAZI{SAR} 1 GUR
+#lem: suluppu[date]N; n; n; kasû[mustard]N; n; kurru[kor (180 litres)]N
+
+6'. ŠE.GIŠ 1(BARIG) ZÀ.HI 3(BÁN) 2 qa
+#lem: šamaššammū[sesame]N; n; sahlu[cress]N; n; n; qû[(one) litre]N
+
+7'. SÍG 2 MA.NA
+#lem: šīpātu[wool]N; n; manû[mina]N$
+
+8'. SIG ŠE 4(BÁN) 4 qa
+#lem: Simānu[Month III]MN; šeʾu[barley]N$; n; n; qû[(one) litre]N
+
+9'. ZÚ 2(BARIG) PI GAZI{SAR}
+#lem: suluppu[date]N; n; pānu[bushel (36 litres)]N; kasû[mustard]N
+
+10'. 1 GUR ZÀ.HI 4
+#lem: n; kurru[kor (180 litres)]N; sahlu[cress]N$; n
+
+11'. ŠE.GIŠ 1(BÁN) SÍG 2 MA.NA
+#lem: šamaššammū[sesame]N; n; šīpātu[wool]N; n; manû[mina]N$
+
+12'. ŠU ŠE 5(BÁN) (2)
+#lem: Duʾūzu[Month IV]MN; šeʾu[barley]N$; n; n
+
+13'. ZÚ 1(BARIG) 4(BÁN) GAZI{SAR}
+#lem: suluppu[date]N; n; n; kasû[mustard]N
+
+14'. 1 GUR ZÀ 5(BÁN)
+#lem: n; kurru[kor (180 litres)]N; sahlu[cress]N$; n
+
+15'. ŠE.GIŠ 1(BÁN) SÍG 2 ma-na
+#lem: šamaššammū[sesame]N; n; šīpātu[wool]N; n; X
+
+16'. N[E Š]E 5(BÁN)
+#lem: Abu[Month V]MN; šeʾu[barley]N$; n
+
+17'. ($traces$)
+@column 5
+1'. Z[ÍZ? ...]
+#lem: Šabāṭu[Month XI]MN; u
+
+2'. ⸢x⸣ [...]
+#lem: u; u
+
+3'. ⸢x⸣ [...]
+#lem: u; u
+
+4'. ⸢x⸣ [...]
+#lem: u; u
+
+5'. ŠE [...]
+#lem: Addaru[Month XII]MN; u
+
+6'. ⸢x⸣ [...]
+$ (break)
+#lem: u; u
+
+$ traces
+
+@translation labeled en project
+
+@(o i 1) [Night of the 13th, moonrise to sunset: ...; cl]ouds, I did not watch.
+
+@(o i 2) [The 13th,] moonset to sunrise: [nn°] 20’; clouds, I did not watch.
+
+@(o i 3) [Night of the 1]4th, sunset to moonrise: 3°.
+
+@(o i 4) [The 14th,] sunrise to moonset: 5°? 30’,
+
+@(o i 5) measured (despite) clouds.
+
+@(o i 6) [...] (moonrise to sunrise): 23°.
+
+$ ruling
+
+@(o i 7) [...] earthshine.
+
+@(o i 8) [...] moonset to sunrise: [...]
+
+@(o i 9) [...] measured (despite) mist.
+
+@(o i 10) [...] measured (despite) mist.
+
+@(o i 11) [...] sunrise to moonset?: [...]
+
+@(o i 12) [...] ...
+
+@(o i 13) [...] (moonrise to sunrise:) 24°.
+
+@(o ii 1) [...] sunrise to moonset: [...] clouds? [...]
+
+@(o ii 2) [...] moonrise to sunset: 4°?; clouds, I did not watch.
+
+@(o ii 3) [Night] of the 15th?, sunset to moonrise: 4°.
+
+@(o ii 4) The 27th, (moonrise to sunrise): 14° 30’.
+
+$ ruling
+
+@(o ii 5) Month VII, (the 1st of which was identical with) the 30th (of the preceding month; sunset to moonset): 18°.
+
+@(o ii 6) The 13th, moonset to sunrise: 10°.
+
+@(o ii 7) The 14th, sunrise to moonset: 5°.
+
+@(o ii 8) Night of the 15th{sic}, moonrise to sunset: 1°.
+
+@(o ii 9) Night of the 15th{sic}, sunset to moonrise: 10° 30’.
+
+@(o ii 10) The 27th, (moonrise to sunrise): 19°.
+
+$ ruling
+
+@(o ii 11) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset): 13°, faint.
+
+@(o ii 12) The 14th, moonset to sunrise: 6° 30’.
+
+@(o ii 13) Night of the 15th, moonrise to sunset: [x°] 40’?.
+
+@(o ii 14) The 15th, [sunrise to moonset]: 8° 20’.
+
+@(o ii 15) Night of the 16th, sunset to moonrise: 7°. 
+
+@(o ii 16) The 27th, (moonrise to sunrise): 29°.
+
+$ ruling
+
+@(o ii 17) Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset): 24°; clouds, I did not watch.
+
+@(o ii 18) [Night of] the 14th, moonrise to sunset: 10°; clouds, I did not watch.
+
+@(o ii 19) [...] was not there.
+
+@(o ii 20) [...] measured (despite) clouds 
+
+@(o ii 21) [...] ...
+
+@(o iii 1) Night of the 14th, moonrise to sunset: 5°?;
+
+@(o iii 2) clouds, I did not watch.
+
+@(o iii 3) The 14th, moonset to sunrise: 1°.
+
+@(o iii 4) Night of the 15th, sunset to moonrise: 13° 30’. 
+
+@(o iii 5) The 15th, sunrise to moonset: 11°.
+
+@(o iii 6) The 27th, (moonrise to sunrise): 15°.
+
+@(o iv 1) ...
+
+@(o iv 2) cress, 2 sūt 4 qa?;
+
+@(o iv 3) sesame, 1 sūt; wool, 2 minas.
+
+@(o iv 4) Month II: barley, 4 sūt;
+
+@(o iv 5) dates, 1 pān 4 sūt; mustard, 1 kur; 
+
+@(o iv 6) sesame, 1 sūt; cress, 3 sūt 2 qa;
+
+@(o iv 7) wool, 2 minas.
+
+@(o iv 8) Month III: barley, 4 sūt 4 qa;
+
+@(o iv 9) dates, 2 pān; mustard,
+
+@(o iv 10) 1 kur; cress, 4 sūt;
+
+@(o iv 11) sesame, 1 sūt; wool, 2 minas.
+
+@(o iv 12) Month IV: barley, 5 sūt;
+
+@(o iv 13) dates, 1 pān 4 sūt; mustard,
+
+@(o iv 14) 1 kur; cress 5 sūt;
+
+@(o iv 15) sesame, 1 sūt; wool, 2 minas.
+
+@(o iv 16) Month V, barley 5 sūt;
+
+@(o iv 17) ...
+
+@(o v 1) Mo[nth XI?, ...] 
+
+@(o v 2) ... [...]
+
+@(o v 3) ... [...]
+
+@(o v 4) ... [...]
+
+@(o v 5) Month XII, [...] 
+
+@(o v 6) ... [...] 

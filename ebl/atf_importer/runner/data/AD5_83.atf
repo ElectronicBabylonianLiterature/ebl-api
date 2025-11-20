@@ -1,0 +1,87 @@
+&X500086 = ADART 5 83
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [e MAŠ].⸢MAŠ⸣-šá-SI[PA ...]
+#lem: eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; u
+
+2'. [x x] GE₆ 6 USAN ⸢AN SIG⸣ MAŠ.MAŠ-ár ⸢2⸣ K[ÙŠ GE₆ x USAN AN e]
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP
+
+3'. [MÚL-á]r-šá-ALLA-šá-ULÙ 2/3 KÙŠ SIG 30 8 20 ⸢na AN x⸣ [x]
+#lem: MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N; Simānu[Month III]MN; n; n; n; na[sunset to setting]N; Ṣalbaṭānu[Mars]CN; u; u
+
+4'. [ina A]LLA ŠÚ ŠU 1 NE 1 KIN 1 DU₆ 11 AN ina SAG RÍN 2 KÙŠ á[r]
+#lem: ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n; Ulūlu[Month VI]MN; n; Tašrītu[Month VII]MN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; rēš[beginning]N; Zibānītu[Libra]CN; n; ammatu[unit]N; warki[behind]PRP
+
+5'. [S]A₄-šá-ABSIN 1 2/3 KÙŠ ár GU₄.UD ana NIM GUB IGI TUR 14 na-s[u]
+#lem: SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; warki[behind]PRP; Šihṭu[Mercury]CN; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; amāru[be(come) visible]V; ṣehru[small]AJ; n; na[rising to sunrise]N
+
+6'. [G]E₆ 25 ina ZÁLAG AN SIG RÍN-šá-ULÙ 2 SI AN 2 U ana NIM D[IB]
+#lem: mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+7'. [API]N 30 GE₆ 1 ina ZÁLAG AN SIG MÚL.BABBAR 4 U AN i-ṣa ana NIM DIB [GE₆ x]
+#lem: Arahsamna[Month VIII]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; Kakkabu-peṣû[Jupiter]CN; n; ubānu[finger]N; Ṣalbaṭānu[Mars]CN; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N; u
+
+8'. [ina ZÁLA]G AN SIG RÍN-šá-SI 3 KÙŠ GE₆ 21 ina ZÁLAG AN SIG ⸢x⸣ [x x]
+#lem: ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; u; u; u
+
+9'. [n n] GAN 1 GE₆ 2 ina ZÁLAG AN e SI₄ 2 1/2 KÙŠ GE₆ ⸢18?⸣ ina ZÁL[AG AN]
+#lem: n; n; Kislīmu[Month IX]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; SI₄[α Scorpii]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
+
+10'. [e MÚL-KU]R-šá-KIR₄-šil-PA 2/3 KÙŠ AB 30 ZÍZ 30 GE₆ 20 ina ZÁLAG [AN]
+#lem: eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Ṭebētu[Month X]MN; n; Šabāṭu[Month XI]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
+
+11'. [SIG SI-MÁŠ] ⸢2⸣ 1/2 KÙŠ GE₆ 28 ina ZÁLAG AN SIG GENNA 4 KÙŠ ŠE 30 GE₆ [x]
+#lem: šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; Addaru[Month XII]MN; n; mūšu[night]N; u
+
+12'. [ina ZÁLAG AN e SUHU]R-IGI 10 SI <AN> i-ṣa ana NIM DIB GE₆ 14 ina ZÁLAG AN e SUHUR-ár ⸢10⸣ [x]
+#lem: ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ubānu[finger]N; Ṣalbaṭānu[Mars]CN; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; u
+
+$ ruling
+13'. [2.3 BAR x GU₄] 30 SIG 1 GE₆ 14 ina ZÁLAG AN SIG MÚL-KUR-šá-DUR-nu-nu 3 K[ÙŠ]
+#lem: n; Nisannu[Month I]MN; u; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N
+
+14'. [GE₆ x ina ZÁLAG A]N SIG MÚL-IGI-šá-SAG-HUN 4 1/2 KÙŠ ⸢ŠU⸣ 30 GE₆ 2 ina ZÁLAG A[N]
+#lem: mūšu[night]N; u; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; ammatu[unit]N; Duʾūzu[Month IV]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
+
+15'. [...] ⸢x NE? 1?⸣ GE₆ ⸢x⸣ [ina ZÁLAG] AN SIG MÚL.M[ÚL ...]
+#lem: u; u; Abu[Month V]MN; n; mūšu[night]N; u; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MÚL.MÚL[η Tauri]CN; u
+
+@translation labeled en project
+
+@(o 1) [above] γ Gemi[norum ...]
+
+@(o 2) [...] Night of the 6th, first part of the night, Mars was 2 cubits below β Geminorum. [Night of the xth, first part of the night, Mars was]
+
+@(o 3) 2/3 cubits [above] δ Cancri. Month III, (the 1st of which was identical with) the 30th (of the preceding month). The 8th, sunset to setting of Mars: 20° ... [The xth,]
+
+@(o 4) last appearance in Cancer. Month IV, the 1st (of which followed the 30th of the preceding month). Month V, the 1st (of which followed the 30th of the preceding month). Month VI, the 1st (of which followed the 30th of the preceding month). Month VII, the 1st (of which followed the 30th of the preceding month). The 1st, Mars’ first appearance in the beginning of Libra, 2 cubits behind
+
+@(o 5) α Virginis, it stood 1 2/3 cubits behind Mercury to the east; it was small, rising of Mars to sunrise: 14°.
+
+@(o 6) Night of the 25th, last part of the night, Mars was 2 fingers below α Librae, Mars having passed 2 fingers to the east.
+
+@(o 7) [Mo]nth VIII, (the 1st of which was identical with) the 30th (of the preceding month). Night of the 1st, last part of the night, Mars was 4 fingers below Jupiter, Mars having passed a little to the east. [Night of the xth,]
+
+@(o 8) [last part] of the night, Mars was 3 cubits below β Librae. Night of the 21st, last part of the night, Mars was [...] below [β Scorpii.]
+
+@(o 9) Month IX, the 1st (of which followed the 30th of the preceding month). Night of the 2nd, last part of the night, Mars was 2 1⁄2 cubits above α Scorpii. Night of the 18th?, last part of the [night, Mars was]
+
+@(o 10) 2/3 cubit [above] 𝜗 Ophiuchi. Month X, (the 1st of which was identical with) the 30th (of the preceding month). Month XI, (the 1st of which was identical with) the 30th (of the preceding month). Night of the 20th, last part of the night, [Mars was]
+
+@(o 11) 2 1⁄2 cubits [below β Capricorni]. Night of the 28th, last part of the night, Mars was 4 cubits below Saturn. Month XII, (the 1st of which was identical with) the 30th (of the preceding month). Night of the [xth,]
+
+@(o 12) [last part of the night, Mars was] 10 fingers [above] γ Capricorni, <Mars> having passed
+α little to the east. Night of the 14th, last part of the night, Mars was 10 [fingers] above δ Capricorni.
+
+$ ruling
+
+@(o 13) [(Year) 123, month I, ... Month II,] (the 1st of which was identical with) the 30th (of the preceding month). Month III, the 1st (of which followed the 30th of the preceding month). Night of the 14th, last part of the night, Mars was 3 cu[bits] below η Piscium.
+
+@(o 14) [Night of the xth, last part of the night, Ma]rs was 4 1⁄2 cubits below β Arietis. Month IV, (the 1st of which was identical with) the 30th (of the preceding month). Night of the 2nd, last part of the night, Ma[rs was]
+
+@(o 15) [... below α Arietis.] Month V?, the 1st? (of which followed the 30th of the preceding month). Night of the xth, [last part of the night], Mars was [...] below η [Tauri ...]

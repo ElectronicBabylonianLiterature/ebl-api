@@ -1,0 +1,50 @@
+&X500068 = ADART 5 65C
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [...] ⸢x⸣ in 29 šá ⸢SIG IGI⸣ [...]
+#lem: u; u; ina[around (day x)]PRP; n; ša[which]REL; Simānu[Month III]MN; amāru[be(come) visible]'V; u
+
+3'. [... N]E KIN 12 ina ŠÚ IGI DI[B ...]
+#lem: u; Abu[Month V]MN; Ulūlu[Month VI]MN; n; ina[in]PRP; erbu[west]'N; amāru[be(come) visible]'V; etēqu[omit]V; u
+
+4'. [...] DIB DU₆ 18 ina NIM ina RÍN I[GI ...]
+#lem: u; etēqu[omit]V; Tašrītu[Month VII]MN; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]'V; u
+
+5'. [...] 16? IGI? APIN 9 ina IGI MÚL [...]
+#lem: u; n; amāru[be(come) visible]'V; Arahsamna[Month VIII]MN; n; ina[in]PRP; pān[front]N; u; u
+
+6'. [... U]Š-tum ma-šil 25 ina NIM ina [...]
+#lem: u; u; mašālu[be(come) equal]V; n; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; u
+
+7'. [...] ⸢x⸣ x 17 na-su in 2+[x ...]
+#lem: u; u; u; n; na[sunset to setting]'N; ina[on]PRP; n; u
+
+8'. [...] ina ŠÚ ina ⸢GU⸣ IG[I ...]
+#lem: u; ina[in]PRP; erbu[west]'N; ina[in]PRP; Gula[Aquarius]CN; amāru[be(come) visible]'V; u
+
+
+@translation labeled en project
+
+(the position of this fragment is uncertain)
+
+@(1) [...] ... [...]
+
+@(2) [...] ... (ideal) first appearance on the 29th of month III [...]
+
+@(3) [... Mon]th V; Month VI; the 12th, first appearance in the west, omitted [...]
+
+@(4) [...] omitted. Month VII; the 18th, first appearance in the east in Libra [...]
+
+@(5) [...] (ideal) first appearance(?) on the 16th(?). Month VIII; the 9th, it was [...] in front of [...]
+
+@(6) [...] is similar to [...] The 25th, [last appearance] in the east in [...]
+
+@(7) [...] ... sunset to setting of Mercury: 17°; [(ideal) first appearance] on the 2+[xth ...]
+
+@(8) [...] first(?) appearance in the west in Aquarius [...]

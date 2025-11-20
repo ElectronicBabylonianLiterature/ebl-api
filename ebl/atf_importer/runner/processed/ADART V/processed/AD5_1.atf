@@ -1,0 +1,63 @@
+&X500001 = ADART 5 1 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+0. ina a-mat {d}EN u {d}GAŠAN-iá liš-lim
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN$; u[and]CNJ; Bēltu[Bēltu]DN$Bēltiya; lišlim[be(come) well]V
+
+1. 1.40 MU SAG NAM.LUGAL.LA [x x x]
+#lem: n; šattu[year]N; rēš[beginning]N; šarrūtu[kingship]N$šarrūti; u; u; u
+
+2. ŠE 5 ITU 14 U₄.ZAL GAR ád ⸢x⸣ [x x]
+#lem: Addaru[Month XII]MN$; n; warhu[month]N; n; šāt-urri[last part of the night]N; šakānu[put//make (an eclipse?)]'V; +adāru[be(come) eclipsed//eclipsed]V'AJ$adir; u; u; u
+
+3. 2.10 MU 1 KIN ⸢15?⸣ GAR ina SI SAR [x (x)]
+#lem: n; šattu[year]N; n; Ulūlu[Month VI]MN$; n; šakānu[make (an eclipse?)]'V; ina[in]PRP; ištānu[north]N; šurrû[begin]V$ušarrû; u; u
+
+4. [x] ULÙ ⸢GIN⸣ ád ŠÚ KIN D[IR]
+#lem: u; šūtu[south wind]N; alāku[blow]V; adir[eclipsed]AJ; rabû[set]V; Ulūlu[Month VI]MN$; watru[huge//extra]AJ'AJ
+
+5. [ZÍZ 1]4 GAR 1.40 ana ZÁLAG T[AG₄?]
+#lem: Šabāṭu[Month XI]MN$; n; šakānu[make (an eclipse?)]'V; n; ana[to]PRP; nawāru[clearing]'N; ezēbu[leave//remain]V'V
+
+6. [MU 2 N]E 14 TIL GAR
+#lem: šattu[year]N; n; Abu[Month V]MN$; n; gamāru[bring to conclusion//be complete]V'V$; šakānu[make (an eclipse?)]'V
+
+7. [ZÍZ] DIB
+#lem: Šabāṭu[Month XI]MN$; etēqu[go past//omit]V'V$
+
+8. [MU 3 NE DI]B KIN DIR
+#lem: šattu[year]N; n; Abu[Month V]MN$; etēqu[omit]'V; Ulūlu[Month VI]MN$; watru[extra]'AJ
+
+9. [x x x x] TIL ⸢x⸣
+#lem: u; u; u; u; gamāru[be complete]'V; u
+
+10. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 0) At the command of Bēl and Bēltiya may it go well.
+
+@(o 1) 1.40. Accession year [of ...]
+
+@(o 2) Month XII, (after) 5 months, the 14th, morning watch, it made (an eclipse)? ... [...]
+
+@(o 3) 2.10. Year 1. Month VI, [the] ⸢15th?⸣, it made (an eclipse)?. It began in the north [...]
+
+@(o 4) [...] the south wind blew. It set eclipsed. Month VI was in[tercalary.]
+
+@(o 5) [Month XI, the 1]4th, it made (an eclipse)?. 1.40° re[mained?] to clearing.
+
+@(o 6) [Year 2. Month] V, the 14th, it made a total (eclipse).
+
+@(o 7) [Month XI,] omitted.
+
+@(o 8) [Year 3. Month V, omitt]ed. Month VI was intercalary.
+
+@(o 9) [...] total? [...]
+
+@(o 10) [...] ... [...]

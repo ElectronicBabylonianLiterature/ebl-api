@@ -1,0 +1,541 @@
+&X500085 = ADART 5 82
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [120+40 ... MÚL.B]ABBAR ana ME E
+#lem: n; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+2'. [...] ⸢PA⸣ UŠ ár
+#lem: u; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+3'. [...] MÁŠ ŠÚ
+#lem: u; Suhurmāšu[Capricorn]CN; rabû[set]V
+
+4'. [...] MÁŠ IGI
+#lem: u; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V
+
+5'. [...] ⸢e⸣ SUHUR-MÁŠ IGI 2 KÙŠ
+#lem: u; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; amāru[be(come) visible]V; n; ammatu[unit]N
+
+6'. [x-x-x-SUHU]R-MÁŠ ár 20 SI
+#lem: MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; u; n; ubānu[finger]N
+
+$ ruling
+7'. [120+41 x x] MÚL.BABBAR ina TIL MÁŠ UŠ IGI
+#lem: n; u; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Suhurmāšu[Capricorn]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+8'. [x x MÚ]L.BABBAR ana ME E
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+9'. [x x M]ÚL.BABBAR e MÚL-ár-šá-SUHUR-MÁŠ 10 SI
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ubānu[finger]N
+
+10'. [x x M]ÚL.BABBAR e MÚL-IGI-šá-SUHUR-MÁŠ 2 SI
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ubānu[finger]N
+
+11'. [x x] ina MÁŠ UŠ ár
+#lem: u; u; ina[in]PRP; Suhurmāšu[Capricorn]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+12'. [x x x x] e MÚL-IGI-šá-SUHUR-MÁŠ 1/2 KÙŠ
+#lem: u; u; u; u; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ammatu[unit]N
+
+13'. [x x x x] e MÚL-ár-šá-SUHUR-MÁŠ 1/2 KÙŠ
+#lem: u; u; u; u; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N
+
+14'. [x x] MÚL.BABBAR ina GU ŠÚ
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Gula[Aquarius]CN; rabû[set]V
+
+15'. [x x] 1 MÚL.BABBAR ina TIL GU IGI
+#lem: u; u; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; amāru[be(come) visible]V
+
+$ ruling
+16'. [120+42 SIG] 2 ina ZÁLAG MÚL.BABBAR ina zib UŠ IGI
+#lem: n; Simānu[Month III]MN; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+17'. [x x x] ana ME E
+#lem: u; u; u; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+18'. [x x] ina zib UŠ ár
+#lem: u; u; ina[in]PRP; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+19'. [ZÍZ] 14 ina zib ŠÚ
+#lem: Šabāṭu[Month XI]MN; n; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V
+
+20'. ŠE 18 ina TIL zib IGI
+#lem: Addaru[Month XII]MN; n; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+$ ruling
+21'. 120+43 BAR GE₆ 19 ina ZÁLAG MÚL.BABBAR e
+#lem: n; Nisannu[Month I]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP
+
+22'. 	[MÚL-KUR]-šá-DUR-nu-nu 3 KÙŠ
+#lem: MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N
+
+23'. GU₄ GE₆ 11 ina ZÁLAG MÚL.BABBAR SIG MÚL-IGI-šá-SAG-HUN 3 KÙŠ
+#lem: Ayyaru[Month II]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; ammatu[unit]N
+
+24'. GE₆ 28 ina ZÁLAG MÚL.BABBAR SIG MÚL-ár-šá-SAG-HUN 4 KÙŠ
+#lem: mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N
+
+25'. ŠU 23 MÚL.BABBAR ina HUN UŠ IGI
+#lem: Duʾūzu[Month IV]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Agru[Aries]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+26'. KIN GE₆ 16 ina ZÁLAG MÚL.BABBAR SIG MÚL-ár-šá-SAG-HUN 4 1/2 KÙŠ
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N
+
+27'. 22 MÚL.BABBAR ana ME E
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+28'. APIN GE₆ 3 ina ZÁLAG MÚL.BABBAR SIG
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]PRP
+
+29'. 	[MÚL-IGI]-šá-SAG-HUN 4 1/2 KÙŠ
+#lem: MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; ammatu[unit]N
+
+30'. 20 MÚL.BABBAR ina HUN UŠ ár
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Agru[Aries]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+$ ruling
+31'. 2.44 BAR 3 MÚL.BABBAR ina TIL HUN ŠÚ
+#lem: n; Nisannu[Month I]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Agru[Aries]CN; rabû[set]V
+
+32'. GU₄ 16 MÚL.BABBAR ina MÚL IGI
+#lem: Ayyaru[Month II]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zappu[Taurus]CN; amāru[be(come) visible]V
+
+33'. ŠU GE₆ 7 ina ZÁLAG MÚL.BABBAR e is-le₁₀ 
+#lem: Duʾūzu[Month IV]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; is-le₁₀[α Tauri]CN
+
+34'. 1 1/2 KÙŠ
+#lem: n; n; ammatu[unit]N
+
+@column 2
+1'. KIN 11 MÚL.BABBAR [ina MÚL UŠ IGI]
+#lem: Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zappu[Taurus]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+2'. APIN 8 ana [ME E]
+#lem: Arahsamna[Month VIII]MN; n; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+3'. GAN 7 e ⸢is?-le₁₀?⸣ [n n]
+#lem: Kislīmu[Month IX]MN; n; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n
+
+4'. AB 7 MÚL.BABBAR ina [MÚL UŠ ár]
+#lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zappu[Taurus]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+5'. ZÍZ 19 e is-le₁₀ ⸢x⸣ [x]
+#lem: Šabāṭu[Month XI]MN; n; eli[above]PRP; is-le₁₀[α Tauri]CN; u; u
+
+$ ruling
+6'. 120+45 BAR GE₆ 11 EN e ŠUR-GIGIR-šá-SI 1 KÙŠ
+#lem: n; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N
+
+7'. 19 MÚL.BABBAR ina SAG MAŠ ŠÚ
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; rēš[beginning]N; Māšu[Gemini]CN; rabû[set]V
+
+8'. GU₄ 19 MÚL.BABBAR ina MAŠ IGI
+#lem: Ayyaru[Month II]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; amāru[be(come) visible]V
+
+9'. SIG GE₆ 16 ina ZÁLAG e MÚL-ár-⸢šá-še-pít⸣-MAŠ 1 KÙŠ
+#lem: Simānu[Month III]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N
+
+10'. NE GE₆ 17 ina ZÁLAG SIG MÚL IGI šá [x x] 3 KÙŠ
+#lem: Abu[Month V]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; kakkabu[star]N; pānu[front]N; ša[which]REL; u; u; n; ammatu[unit]N
+
+11'. KIN 22 MÚL.BABBAR ina M[AŠ] UŠ IGI
+#lem: Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+12'. APIN GE₆ 12 ina ZÁLAG SIG MAŠ-IGI 3 KÚŠ
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N
+
+13'. 22 MÚL.BABBAR ana M[E] E
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+14'. AB 19 MÚL.BABBAR ina [M]AŠ UŠ ár
+#lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+$ ruling
+15'. 120+46 BAR GE₆ 18 EN SIG MAŠ-[I]GI 4 KÙŠ
+#lem: n; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; šapil[below]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N
+
+16'. GU₄ GE₆ 12 EN SIG MAŠ-[á]r 3 KÙŠ
+#lem: Ayyaru[Month II]MN; mūšu[night]N; n; adi[until]PRP; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N
+
+17'. SIG 3 MÚL.BABBAR ina SAG ALLA ŠÚ
+#lem: Simānu[Month III]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; rēš[beginning]N; Alluttu[Cancer]CN; rabû[set]V
+
+18'. ŠU 2 MÚL.BABBAR ina ALLA IGI
+#lem: Duʾūzu[Month IV]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; amāru[be(come) visible]V
+
+19'. GE₆ 26 ina ZÁLAG MÚL.BABBAR SIG MÚL-ár-šá-ALLA 2 KÙŠ
+#lem: mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]PRP; MÚL-ár-šá-ALLA-šá-SI[γ Cancri]CN; n; ammatu[unit]N
+
+20'. KIN GE₆ 5 ina ZÁLAG SIG 2 MÚL šá SAG A 3 1/2 KÙŠ
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; n; kakkabu[star]N; ša[which]REL; rēš[beginning]N; Nēšu[Leo]CN; n; n; ammatu[unit]N
+
+21'. APIN 4 MÚL.BABBAR ina TIL ALLA UŠ IGI
+#lem: Arahsamna[Month VIII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Alluttu[Cancer]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+22'. GAN GE₆ 24 ina ZÁLAG SIG 2 MÚL šá SAG A 3 KÙŠ
+#lem: Kislīmu[Month IX]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; n; kakkabu[star]N; ša[which]REL; rēš[beginning]N; Nēšu[Leo]CN; n; ammatu[unit]N
+
+23'. AB 5 MÚL.BABBAR ana ME a
+#lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+24'. ŠE 5 MÚL.BABBAR ina ALLA UŠ ár
+#lem: Addaru[Month XII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+$ ruling
+25'. 2.47 GU₄ GE₆ 20 SIG 2 MÚL šá SAG A 3 1/2 KÙŠ
+#lem: n; Ayyaru[Month II]MN; mūšu[night]N; n; šapil[below]PRP; n; kakkabu[star]N; ša[which]REL; rēš[beginning]N; Nēšu[Leo]CN; n; n; ammatu[unit]N
+
+26'. ŠU 17 ina A ŠÚ
+#lem: Duʾūzu[Month IV]MN; n; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V
+
+27'. NE 15 ina A IGI
+#lem: Abu[Month V]MN; n; ina[in]PRP; Nēšu[Leo]CN; amāru[be(come) visible]V
+
+28'. DU₆ GE₆ 22 ina ZÁLAG SIG GIŠ.KUN-A 4 KÙŠ
+#lem: Tašrītu[Month VII]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N
+
+29'. GAN 18 MÚL.BABBAR ina TIL A UŠ IGI
+#lem: Kislīmu[Month IX]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Nēšu[Leo]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+30'. ZÍZ 15 ana ME a
+#lem: Šabāṭu[Month XI]MN; n; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+31'. ŠE GE₆ 19 EN SIG GIŠ.KUN-A 4 KÙŠ
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; adi[until]PRP; šapil[below]PRP; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N
+
+32'. DIR 13 MÚL.<BABBAR> ina A UŠ ár
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+$ ruling
+33'. 120+48 GU₄ GE₆ 29 EN SIG GIŠ.KUN-A 3 1/2 KÙŠ
+#lem: n; Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; šapil[below]PRP; GIŠ.KUN-A[θ Leonis]CN; n; n; ammatu[unit]N
+
+34'. ŠU 25 MÚL.BABBAR ina SAG ABSIN ŠÚ
+#lem: Duʾūzu[Month IV]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; rēš[beginning]N; Šerʾu[Virgo]CN; rabû[set]V
+
+35'. NE 28 ina ABSIN IGI
+#lem: Abu[Month V]MN; n; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V
+
+@column 3
+1'. 120+49 BAR 25 ina ABSIN UŠ [ár]
+#lem: n; Nisannu[Month I]MN; n; ina[in]PRP; Šerʾu[Virgo]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+2'. NE GE₆ 22 EN e SA₄-šá-ABSIN
+#lem: Abu[Month V]MN; mūšu[night]N; n; adi[until]PRP; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN
+
+3'. 1 KÙŠ 8 SI
+#lem:  n; ammatu[unit]N; n; ubānu[finger]N
+
+4'. KIN 7 MÚL.BABBAR ina SAG RÍN ŠÚ
+#lem: Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; rēš[beginning]N; Zibānītu[Libra]CN; rabû[set]V
+
+5'. DU₆ 9 ina RÍN IGI
+#lem: Tašrītu[Month VII]MN; n; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]V
+
+6'. ZÍZ 12 ina TIL RÍN UŠ IGI
+#lem: Šabāṭu[Month XI]MN; n; ina[in]PRP; qītu[end]N; Zibānītu[Libra]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+$ ruling
+7'. 120+50 BAR 13 ana ME a
+#lem: n; Nisannu[Month I]MN; n; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+8'. GU₄ GE₆ 26 EN e RÍN-šá-ULÙ 6 U
+#lem: Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N
+
+9'. SIG 12 ina RÍN UŠ ár
+#lem: Simānu[Month III]MN; n; ina[in]PRP; Zibānītu[Libra]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+10'. ŠU GE₆ 19 EN e RÍN-šá-ULÙ 6 U
+#lem: Duʾūzu[Month IV]MN; mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N
+
+11'. KIN GE₆ 2 EN SIG RÍN-šá-SI 3 KÙŠ
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; šimītān[first part of the night]N; šapil[below]PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N
+
+12'. KIN.II.KAM 11 ina SAG GÍR.TAB ŠÚ
+#lem: Ulūlu-Šanû[Month VIb]MN; n; ina[in]PRP; rēš[beginning]N; Zuqiqīpu[Scorpio]CN; rabû[set]V
+
+13'. DU₆ 20 ina GÍR.TAB IGI
+#lem: Tašrītu[Month VII]MN; n; ina[in]PRP; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V
+
+14'. GAN GE₆ 26 e MÚL-KUR-šá-KIR₄-šil-PA 2 KÙŠ
+#lem: Kislīmu[Month IX]MN; mūšu[night]N; n; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N
+
+15'. ZÍZ 23 ina GÍR.TAB UŠ IGI
+#lem: Šabāṭu[Month XI]MN; n; ina[in]PRP; Zuqiqīpu[Scorpio]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+$ ruling
+16'. 120+51 BAR GE₆ 19 ina ZÁLAG e KUR-šá-PA 2 KÙŠ
+#lem: n; Nisannu[Month I]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N
+
+17'. 17 ana ME a
+#lem: n; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+18'. SIG 19 ina GÍR.TAB UŠ ár
+#lem: Simānu[Month III]MN; n; ina[in]PRP; Zuqiqīpu[Scorpio]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+19'. KIN GE₆ 3 EN e MÚL-KUR-šá-PA 8 U
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ubānu[finger]N
+
+20'. APIN 5 ina PA ŠÚ
+#lem: Arahsamna[Month VIII]MN; n; ina[in]PRP; Pabilsag[Sagittarius]CN; rabû[set]V
+
+21'. GAN 6 ina PA IGI
+#lem: Kislīmu[Month IX]MN; n; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+$ ruling
+22'. 120+52 BAR 10 ina MÁŠ UŠ IGI
+#lem: n; Nisannu[Month I]MN; n; ina[in]PRP; Suhurmāšu[Capricorn]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V
+
+23'. SIG 12 MÚL.BABBAR ana ME a
+#lem: šapil[below]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+24'. NE 7 ina TIL PA UŠ ár
+#lem: Abu[Month V]MN; n; ina[in]PRP; qītu[end]N; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V; warkītu[posterity//secondary position]N'N
+
+25'. GAN GE₆ 7 SIG SI-MÁŠ 2 1/2 KÙŠ
+#lem: Kislīmu[Month IX]MN; mūšu[night]N; n; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N
+
+26'. 24 MÚL.BABBAR ina MÁŠ ŠÚ
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V
+
+27'. AB 25 ina MÁŠ IGI
+#lem: Ṭebētu[Month X]MN; n; ina[in]PRP; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V
+
+28'. ŠE GE₆ 2 ina ZÁLAG MÚL.BABBAR e
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP
+
+29'. [MÚL-IGI]-šá-SUHUR-MÁŠ 10 SI
+#lem: MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ubānu[finger]N
+
+$ ruling
+@reverse
+$ blank
+
+@translation labeled en project
+
+
+@(o i 1) [(Year) 160, ...] Jupiter’s acronychal rising.
+
+@(o i 2) [...] Sagittarius second stationary point.
+
+@(o i 3) [...] last appearance [in] Capricorn.
+
+@(o i 4) [...] first appearance [in] Capricorn.
+
+@(o i 5) [...] 2 cubits above γ Capricorni.
+
+@(o i 6) [...] 20 fingers [...] δ Capricorni.
+
+$ ruling
+
+@(o i 7) [(Year) 161, ...] Jupiter’s first stationary point in the end of Capricorn.
+
+@(o i 8) [...] Jupiter’s acronychal rising.
+
+@(o i 9) [...] Jupiter was 10 fingers above δ Capricorni.
+
+@(o i 10) [...] Jupiter was 2 fingers above γ Capricorni.
+
+@(o i 11) [...] second stationary point in Capricorn.
+
+@(o i 12) [... Jupiter was] 1⁄2 cubit above γ Capricorni.
+
+@(o i 13) [... Jupiter was] 1⁄2 cubit above δ Capricorni.
+
+@(o i 14) [...] Jupiter’s last appearance in Aquarius.
+
+@(o i 15) [...] the 1st?, Jupiter’s first appearance in the end of Aquarius.
+
+$ ruling
+
+@(o i 16) [(Year) 162, month III,] the 2nd, last part of the night, Jupiter’s first stationary point in Pisces.
+
+@(o i 17) [...] acronychal rising.
+
+@(o i 18) [...] second stationary point in Pisces.
+
+@(o i 19) [Month XI,] the 14th, last appearance in Pisces.
+
+@(o i 20) Month XII, the 18th, first appearance in the end of Pisces.
+
+$ ruling
+
+@(o i 21) (Year) 163, month I, night of the 19th, last part of the night, Jupiter was 3 cubits above
+
+@(o i 22) η Piscium.
+
+@(o i 23) Month II, night of the 11th, last part of the night, Jupiter was 3 cubits below β Arietis.
+
+@(o i 24) Night of the 28th, last part of the night, Jupiter was 4 cubits below α Arietis.
+
+@(o i 25) Month IV, the 23rd, Jupiter’s first stationary point in Aries.
+
+@(o i 26) Month VI, night of the 16th, last part of the night, Jupiter was 4 1⁄2 cubits below α Arietis.
+
+@(o i 27) The 22nd, Jupiter’s acronychal rising.
+
+@(o i 28) Month VIII, night of the 3rd, last part of the night, Jupiter was 4 1⁄2 cubits below
+
+@(o i 29) β Arietis.
+
+@(o i 30) The 20th, Jupiter’s second stationary point in Aries.
+
+$ ruling
+
+@(o i 31) (Year) 164, month I, the 3rd, Jupiter’s last appearance in the end of Aries.
+
+@(o i 32) Month II, the 16th, Jupiter’s first appearance in Taurus.
+
+@(o i 33) Month IV, night of the 7th, last part of the night, Jupiter was above α Tauri. 
+
+@(o i 34) 1 1⁄2 cubits
+
+@(o ii 1) Month VI, the 11th, Jupiter’s [first stationary point in Taurus.]
+
+@(o ii 2) Month VIII, the 8th, acro[nychal rising.]
+
+@(o ii 3) Month IX, the 7th, it was [...] above α Tauri.
+
+@(o ii 4) Month X, the 7th, Jupiter’s [second stationary point] in [Taurus.]
+
+@(o ii 5) Month XI, the 19th, it was [...] above α Tauri.
+
+$ ruling
+
+@(o ii 6) (Year) 165, month I, night of the 11th, first part of the night, it was 1 cubit above β Tauri.
+
+@(o ii 7) The 19th, Jupiter’s last appearance in the beginning of Gemini.
+
+@(o ii 8) Month II, the 19th, Jupiter’s first appearance in Gemini.
+
+@(o ii 9) Month III, night of the 16th, last part of the night, it was 1 cubit above μ Geminorum.
+
+@(o ii 10) Month V, night of the 17th, last part of the night, it was 3 cubits below the front star of [...]
+
+@(o ii 11) Month VI, the 22nd, Jupiter’s first stationary point in Gemini.
+
+@(o ii 12) Month VIII, night of the 12th, last part of the night, it was 3 cubits below α Geminorum.
+
+@(o ii 13) The 22nd, Jupiter’s acronychal rising.
+
+@(o ii 14) Month X, the 19th, Jupiter’s second stationary point in Gemini.
+
+$ ruling
+
+@(o ii 15) (Year) 166, month I, night of the 18th, first part of the night, it was 4 cubits below α Geminorum.
+
+@(o ii 16) Month II, night of the 12th, first part of the night, it was 3 cubits below β Geminorum.
+
+@(o ii 17) Month III, the 3rd, Jupiter’s last appearance in the beginning of Cancer.
+
+@(o ii 18) Month IV, the 2nd, Jupiter’s first appearance in Cancer.
+
+@(o ii 19) Night of the 26th, last part of the night, Jupiter was 2 cubits below γ Cancri.
+
+@(o ii 20) Month VI, night of the 5th, last part of the night, it was 3 1⁄2 cubits below the two stars in the beginning of Leo.
+
+@(o ii 21) Month VIII, the 4th, Jupiter’s first stationary point in the end of Cancer.
+
+@(o ii 22) Month IX, night of the 24th, last part of the night, it was 3 cubits below the two stars in the beginning of Leo.
+
+@(o ii 23) Month X, the 5th, Jupiter’s acronychal rising.
+
+@(o ii 24) Month XII, the 5th, Jupiter’s second stationary point in Cancer.
+
+$ ruling
+
+@(o ii 25) (Year) 167, month II, night of the 20th, it was 3 1⁄2 cubits below the two stars in the beginning of Leo.
+
+@(o ii 26) Month IV, the 17th, last appearance in Leo.
+
+@(o ii 27) Month V, the 15th, first appearance in Leo.
+
+@(o ii 28) Month VII, night of the 22nd, last part of the night, it was 4 cubits below 𝜗 Leonis.
+
+@(o ii 29) Month IX, the 18th, Jupiter’s first stationary point in the end of Leo.
+
+@(o ii 30) Month XI, the 15th, acronychal rising.
+
+@(o ii 31) Month XII, night of the 19th, first part of the night, it was 4 cubits below 𝜗 Leonis.
+
+@(o ii 32) Month XII₂, the 13th, Jupiter’s second stationary point in Leo.
+
+$ ruling
+
+@(o ii 33) (Year) 168, month II, night of the 29th, first part of the night, it was 3 1⁄2 cubits below 𝜗 Leonis.
+
+@(o ii 34) Month IV, the 25th, Jupiter’s last appearance in the beginning of Virgo.
+
+@(o ii 35) Month V, the 28th, first appearance in Virgo.
+
+@(o iii 1) (Year) 169, month I, the 25th, [second] stationary point in Virgo.
+
+@(o iii 2) Month V, night of the 22nd, first part of the night, it was above α Virginis
+
+@(o iii 3) 1 cubit 8 fingers.
+
+@(o iii 4) Month VI, the 7th, Jupiter’s last appearance in the beginning of Libra.
+
+@(o iii 5) Month VII, the 9th, first appearance in Libra.
+
+@(o iii 6) Month XI, the 12th, first stationary point in the end of Libra.
+
+$ ruling
+
+@(o iii 7) (Year) 170, month I, the 13th, acronychal rising.
+
+@(o iii 8) Month II, night of the 26th, first part of the night, it was 6 fingers above α Librae.
+
+@(o iii 9) Month III, the 12th, second stationary point in Libra.
+
+@(o iii 10) Month IV, night of the 19th, first part of the night, it was 6 fingers above α Librae.
+
+@(o iii 11) Month VI, night of the 2nd, first part of the night, it was 3 cubits below β Librae.
+
+@(o iii 12) Month VI₂, the 11th, last appearance in the beginning of Scorpius.
+
+@(o iii 13) Month VII, the 20th, first appearance in Scorpius.
+
+@(o iii 14) Month IX, night of the 26th, it was 2 cubits above 𝜗 Ophiuchi.
+
+@(o iii 15) Month XI, the 23rd, first stationary point in Scorpius.
+
+$ ruling
+
+@(o iii 16) (Year) 171, month I, night of the 19th, last part of the night, it was 2 cubits above 𝜗 Ophiuchi.
+
+@(o iii 17) The 17th, acronychal rising.
+
+@(o iii 18) Month III, the 19th, second stationary point in Scorpius.
+
+@(o iii 19) Month VI, night of the 3rd, first part of the night, it was 8 fingers above 𝜗 Ophiuchi.
+
+@(o iii 20) Month VIII, the 5th, last appearance in Sagittarius.
+
+@(o iii 21) Month IX, the 6th, first appearance in Sagittarius.
+
+$ ruling
+
+@(o iii 22) (Year) 172, month I, the 10th, first stationary point in Capricorn.
+
+@(o iii 23) Month III, the 12th, Jupiter’s acronychal rising.
+
+@(o iii 24) Month V, the 7th, second stationary point in the end of Sagittarius.
+
+@(o iii 25) Month IX, night of the 7th, it was 2 1⁄2 cubits below β Capricorni.
+
+@(o iii 26) The 24th, Jupiter’s last appearance in Capricorn.
+
+@(o iii 27) Month X, the 25th, first appearance in Capricorn.
+
+@(o iii 28) Month XII, night of the 2nd, last part of the night, Jupiter was 10 fingers above
+
+@(o iii 29) γ Capricorni.
+
+$ ruling

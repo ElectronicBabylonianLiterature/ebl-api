@@ -1,0 +1,367 @@
+&X500055 = ADART 5 54
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+$ (broken)
+@column 2
+$ (broken)
+@column 3
+1. [...] ana NIM LAL
+#lem: u; ana[to]PRP; Elamtu[east]'N; nahāsu[recede]V
+
+2. [...] ⸢x x⸣ ŠE 12 KI LUGAL LÁL
+#lem: u; u; u; Addaru[Month XII]MN; n; itti[with]PRP; LUGAL[α Leonis]CN; alālu[balance]V
+
+3. [...] šá šamáš
+#lem: u; ša[which]REL; šamšu[sun]N
+
+$ ruling
+4. [...] ⸢SIG⸣ 30 ŠU 1
+#lem: u; Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n
+
+5. [...] x KIN 30 8
+#lem: u; u; Ulūlu[Month VI]MN; n; n
+
+6. [...] ⸢x⸣ ŠÚ
+#lem: u; u; rabû[set]'V
+
+7. [...] ⸢x⸣
+#lem: u; u
+
+@column 4
+1. ⸢ŠE⸣ 23 ⸢ana ME E⸣
+#lem: Addaru[Month XII]MN; n; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+$ ruling
+2. 23 GU₄ 30 SIG 1 [... S]A₄?-šá-ABSIN 1 KÙŠ LÁL?
+#lem: n; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n; u; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; alālu[balance]V
+
+3. 1/2? KÙŠ LÁL ŠU 30 NE [...]
+#lem: n; ammatu[unit]N; alālu[balance]V; Duʾūzu[Month IV]MN; n; Abu[Month V]MN; u
+
+4. 25 5 UŠ [...]
+#lem: n; n; UŠ[(time degree)]N; u
+
+5. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+@reverse
+@column 1
+1. [...] ⸢x x⸣
+#lem: u; u; u
+
+2. [...] ⸢x x⸣
+#lem: u; u; u
+
+$ ruling
+3. [... G]U₄ 1
+#lem: u; Ayyaru[Month II]MN; n
+
+4. [...] ⸢x⸣ ŠÚ
+#lem: u; u; rabû[set]'V
+
+5. [...] ⸢x⸣ 30
+#lem: u; u; n
+
+6. [... MA]Š.MAŠ-ár IGI
+#lem: u; MAŠ.MAŠ-ár[β Geminorum]CN; amāru[be(come) visible]'V
+
+7. [...] ⸢x⸣ KIN 1
+#lem: u; u; Ulūlu[Month VI]MN; n
+
+8. [...] ⸢x⸣ KÙŠ?
+#lem: u; u; ammatu[unit]N
+
+9. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1. [...] ⸢IGI⸣ GIGIR IGI
+#lem: u; pānû[front]AJ; Narkabtu[Chariot]CN; amāru[be(come) visible]'V
+
+2. [...] NE 1 27
+#lem: u; Abu[Month V]MN; n; n
+
+3. [...] MÚL-IGI-ú-šá-še-[pít-(MAŠ.MAŠ)]
+#lem: u; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN$
+
+4. MAŠ.M[AŠ] ⸢x x⸣
+#lem: u; u; u
+
+5-9. ($traces$)
+10. ZÍZ 1 [x ana] NIM ⸢LAL ŠE 30?⸣ 
+#lem: Šabāṭu[Month XI]MN; n; u; ana[to]PRP; Elamtu[east]N; nahāsu[recede]V; Addaru[Month XII]MN; n
+
+$ ruling
+11. 8 ⸢BAR⸣ [x G]U₄ 30 SIG 30
+#lem: n; Nisannu[Month I]MN; u; Ayyaru[Month II]MN; n; Simānu[Month III]MN; n
+
+12. 4 ina MA[Š.MAŠ] ⸢ŠÚ⸣ ŠU 1 3
+#lem: n; ina[in]PRP; Māšu[Gemini]CN; rabû[set]'V; Duʾūzu[Month IV]MN; n; n
+
+13. 5 UŠ ina IGI ALLA
+#lem: n; UŠ[(time degree)]N; ina[in]PRP; pān[front]N; Alluttu[Cancer]CN
+
+14. IGI NE 30
+#lem: amāru[be(come) visible]'V; Abu[Month V]MN; n
+
+15. KIN 30 DU₆ 1
+#lem: Ulūlu[Month VI]MN; n; Tašrītu[Month VII]MN; n
+
+16. APIN 30 7 ina ⸢x⸣
+#lem: Arahsamna[Month VIII]MN; n; n; ina[in]PRP; u
+
+17. UŠ [...]
+#lem: emēdu[be at a stationary point]V; u
+
+@column 3
+
+1. [...] ⸢x⸣
+#lem: u; u
+
+2. [...] ⸢x x⸣ [x] GU₄.AN
+#lem: u; u; u; u; Alû[Taurus]CN
+
+3. [...] ⸢x⸣ ŠE? 30 ina 8
+#lem: u; u; Addaru[Month XII]MN; n; ina[in]PRP; n
+
+4. ina GU₄.AN ŠÚ
+#lem: ina[in]PRP; Alû[Taurus]CN; rabû[set]'V
+
+$ ruling
+5. 19 SIG 1 ⸢6 ár GIGIR⸣ IGI
+#lem: n; Simānu[Month III]MN; n; n; warki[behind]PRP; Narkabtu[Chariot]CN; amāru[be(come) visible]'V
+
+6. ŠU 30 ⸢NE 1⸣ KIN 30
+#lem: Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n; Ulūlu[Month VI]MN; n
+
+7. KIN.2.KAM 30 10 ⸢ár? MAŠ.MAŠ?⸣
+#lem: Ulūlu-Šanû[Month VI₂]MN$; n; n; warki[behind]PRP; u
+
+8. (MAŠ.MAŠ)-šá-SIPA? UŠ ⸢x⸣ [ana] ⸢ŠÚ⸣ LAL
+#lem: MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; emēdu[be at a stationary point]V; u; ana[to]PRP; erbu[west]N; nahāsu[recede]V
+
+9. ⸢DU₆ 30⸣ APIN 30 9 ana ME E
+#lem: Tašrītu[Month VII]MN; n; Arahsamna[Month VIII]MN; n; n; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+10. [GAN x] ⸢AB⸣ 30 12 ki
+#lem: Kislīmu[Month IX]MN; u; Ṭebētu[Month X]MN; n; n; u
+
+11. ⸢13? x GIGIR?⸣ UŠ x
+#lem: n; u; Narkabtu[Chariot]CN; emēdu[be at a stationary point]V; u
+
+12. [...] ZÍZ 1 ŠE 1
+#lem: u; Šabāṭu[Month XI]MN; n; Addaru[Month XII]MN; n
+
+$ ruling
+13. 2[0 ...] 1 21
+#lem: n; u; n; n
+
+14. ⸢x⸣ [... D]IR NU PAP
+#lem: u; u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+15. SIG? 1 ⸢20⸣ [...] ⸢x⸣
+#lem: Simānu[Month III]MN; n; n; u; u
+
+16. MÚL KUR šá MAŠ.M[AŠ] IGI KUR ŠU
+#lem: kakkabu[star]N; baʾil[bright]AJ; ša[which]'REL; MAŠ.MAŠ-ár[β Geminorum]CN$; amāru[be(come) visible]'V; napāhu[light up]'V; Duʾūzu[Month IV]MN
+
+17. 30 NE 1 27 ana ALLA KU₄ KIN 1 DU₆ 30
+#lem: n; Abu[Month V]MN; n; n; ana[to]PRP; zi-im-šá-ŠÀ-ALLA[Praesepe]CN; erēbu[enter]V; Ulūlu[Month VI]MN; n; Tašrītu[Month VII]MN; n
+
+18'. ($traces$)
+
+@column 4
+
+1. ZÍZ 30 ŠE 1 [...]
+#lem: Šabāṭu[Month XI]MN; n; Addaru[Month XII]MN; n; u
+
+2. 25 ina LU ⸢ŠÚ? x⸣ [...]
+#lem: n; ina[in]PRP; Agru[Aries]CN; rabû[set]'V; u; u
+
+$ ruling
+3. 31 GU₄ ⸢1⸣ 25? ina GIGIR IGI
+#lem: n; Ayyaru[Month II]MN; n; n; ina[in]PRP; Narkabtu[Chariot]CN; amāru[be(come) visible]'V
+
+4. SIG 30 ŠU 1 NE 30
+#lem: Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n
+
+5. KIN 1 28 ina MAŠ.MAŠ UŠ
+#lem: Ulūlu[Month VI]MN; n; n; ina[in]PRP; Māšu[Gemini]CN; emēdu[be at a stationary point]V
+
+6. ana ŠÚ LAL DU₆ 1 APIN 1
+#lem: ana[to]PRP; erbu[west]N; nahāsu[recede]V; Tašrītu[Month VII]MN; n; Arahsamna[Month VIII]MN; n
+
+7. GAN 30 AB 1 ZÍZ 30  
+#lem: Kislīmu[Month IX]MN; n; Ṭebētu[Month X]MN; n; Šabāṭu[Month XI]MN; n
+
+8. ŠE 1
+#lem: Addaru[Month XII]MN; n
+
+$ ruling
+9. 32 BAR 1 GU₄ 30
+#lem: n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n
+
+10. SIG 30 ina 10 ki 11
+#lem: Simānu[Month III]MN; n; ina[on]PRP; n; u; n
+
+11. 6 KÙŠ ár MAŠ.MAŠ ŠÚ ŠU 1
+#lem: n; ammatu[unit]N; warki[behind]PRP; Māšu[Gemini]CN; rabû[set]'V; Duʾūzu[Month IV]MN; n
+
+12. 9 5 UŠ ⸢ina IGI⸣ [... (IGI)]
+#lem: n; n; UŠ[(time degree)]N; ina[in]PRP; pān[front]N; u; amāru[be(come) visible]'V
+
+13. ⸢x⸣ [...]
+#lem: u; u
+
+@translation labeled en project
+
+$ Cols. I  and II  broken
+
+@(o iii 1) [...] it moved back to the east.
+
+@(o iii 2) [...] ... Month XII, the 12th, it was balanced with a Leonis.
+
+@(o iii 3) [...] of the sun@sup{?}.
+
+@(o iii 4) @sup{B} [...] Month III, (the 1st of which was identical with) the 30th (of the preceding month). Month IV, the 1st (of which followed the 30th of the preceding month).
+
+@(o iii 5) [...] ... Month VI, (the 1st of which was identical with) the 30th (of the preceding month). The 8th,
+
+@(o iii 6) [...] ... last appearance
+
+@(o iii 7) [...] ...
+
+@(o iv 1) @sup{A} Month XII, the 23rd, acronychal rising.
+
+@(o iv 2) @sup{B} (Year) 23. Month II, (the 1st of which was identical with) the 30th (of the preceding month). Month III, the 1st (of which followed the 30th of the preceding month). [....] balanced 1 cubit [...] α Virginis.
+
+@(o iv 3) balanced 1⁄2? cubit. Month IV, (the 1st of which was identical with) the 30th (of the preceding month). Month V, [... Month VI, ...;]
+
+@(o iv 4) the 25th, [first appearance] 5° [...]
+
+@(o iv 5) ... [...]
+
+@(r i 1)  @sup{J} [...] ...
+
+@(r i 2) [...] ...
+
+$ ruling
+
+@(r i 3)  @sup{K} [... Mon]th II, the 1st (of which followed the 30th of the preceding month).
+
+@(r i 4) [...] last appearance ...
+
+@(r i 5) [...] ... (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r i 6) [...] first appearance [...] β Geminorum.
+
+@(r i 7) [...] ... Month VI, the 1st (of which followed the 30th of the preceding month).
+
+@(r i 8) [...] x cubits
+
+@(r i 9) [...] ...
+
+@(r ii 1)  @sup{J} [...] first appearance [...] in front of the Chariot.
+
+@(r ii 2) [...] Month V, the 1st (of which followed the 30th of the preceding month); the 27th,
+
+@(r ii 3) [...] η Geminorum
+
+@(r ii 4) [...] ...
+
+$ 5-9 traces
+
+@(r ii 10) Month XI, the 1st (of which followed the 30th of the preceding month); [the xth,] it moved back to the east. Month XII, (the 1st of which was identical with) the 30th? (of the preceding month).
+
+$ ruling
+
+@(r ii 11)  @sup{K} (Year) 8. Month I, [x. Mon]th II, (the 1st of which was identical with) the 30th (of the preceding month). Month III, (the 1st of which was identical with) the 30th (of the preceding month);
+
+@(r ii 12) the 4th, last appearance in Gemini. Month IV, the 1st (of which followed the 30th of the preceding month); the 3rd,
+
+@(r ii 13) first appearance 5° in front of Cancer.
+
+@(r ii 14) Month V, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r ii 15) Month VI, (the 1st of which was identical with) the 30th (of the preceding month). Month VII, the 1st (of which followed the 30th of the preceding month).
+
+@(r ii 16) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month); the 7th,
+
+@(r ii 17) it became stationary in [...]
+
+@(r iii 1) [...] ⸢x⸣
+
+@(r iii 2) [...] ⸢x x⸣ [x] Taurus
+
+@(r iii 3) [...] ... Month XII, (the 1st of which was identical with) the 30th (of the preceding month); on the 8th,
+
+@(r iii 4) last appearance in Taurus.
+
+$ ruling
+
+@(r iii 5) @sup{J} (Year) 19. Month III, the 1st (of which followed the 30th of the preceding month); the 6th, first appearance behind the Chariot.
+
+@(r iii 6) Month IV, (the 1st of which was identical with) the 30th (of the preceding month). Month V, the 1st (of which followed the 30th of the preceding month). Month VI, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r iii 7) Month VI₂, (the 1st of which was identical with) the 30th (of the preceding month); the 10th,
+
+@(r iii 8) it became stationary behind γ Geminorum; the xth, it moved back to the west.
+
+@(r iii 9) Month VII, (the 1st of which was identical with) the 30th (of the preceding month). Month VIII, (the 1st of which was identical with) the 30th (of the preceding month); the 9th, acronychal rising.
+
+@(r iii 10) [Month IX, x.] Month X, (the 1st of which was identical with) the 30th (of the preceding month); the 12th or
+
+@(r iii 11) 13th?, it became stationary ... the Chariot. ...
+
+@(r iii 12) [...] Month XI, the 1st (of which followed the 30th of the preceding month). Month XII, the 1st (of which followed the 30th of the preceding month).
+
+($ruling$)
+K
+@(r iii 13) (Year) 20. [...] the 1st (of which followed the 30th of the preceding month); the 21st,
+
+@(r iii 14) ... [...] clouds, I did not watch.
+
+@(r iii 15) Month III, the 1st (of which followed the 30th of the preceding month); the 20th, [...]
+
+@(r iii 16) first appearance [...] the bright star of Gemini (β Gem); it (Jupiter) was bright. Month IV,
+
+@(r iii 17) (the 1st of which was identical with) the 30th (of the preceding month). Month V, the 1st (of which followed the 30th of the preceding month); the 27th, it entered Praesepe. Month VI, the 1st (of which followed the 30th of the preceding month). Month VII, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r iii 18) traces 
+
+@(r iv 1) Month XI, (the 1st of which was identical with) the 30th (of the preceding month). Month XII, the 1st (of which followed the 30th of the preceding month). [...]
+
+@(r iv 2) The 25th, last appearance in Aries. [...]
+
+($ruling$)
+J
+
+@(r iv 3) (Year) 31. Month II, the 1st (of which followed the 30th of the preceding month); the 25th, first appearance in the Chariot [...]
+
+@(r iv 4) Month III, (the 1st of which was identical with) the 30th (of the preceding month). Month IV, the 1st (of which followed the 30th of the preceding month). Month V, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r iv 5) Month VI, the 1st (of which followed the 30th of the preceding month); the 28th, it became stationary in Gemini;
+
+@(r iv 6) it moved back to the west. Month VII, the 1st (of which followed the 30th of the preceding month). Month VIII, the 1st (of which followed the 30th of the preceding month).
+
+@(r iv 7) Month IX, (the 1st of which was identical with) the 30th (of the preceding month). Month X, the 1st (of which followed the 30th of the preceding month). Month XI, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r iv 8) Month XII, the 1st (of which followed the 30th of the preceding month).
+
+($ruling$)
+K
+
+@(r iv 9) (Year) 32. Month I, the 1st (of which followed the 30th of the preceding month). Month II, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(r iv 10) Month III, (the 1st of which was identical with) the 30th (of the preceding month); on the 10th or 11th,
+
+@(r iv 11) last appearance 6 cubits behind Gemini. Month IV,the 1st (of which followed the 30th of the preceding month);
+
+@(r iv 12) the 9th, [first appearance] 5° in front of [...]
+
+@(r iv 13) ... [...]

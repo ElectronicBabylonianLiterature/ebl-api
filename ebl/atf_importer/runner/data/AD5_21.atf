@@ -1,0 +1,95 @@
+&X500021 = ADART 5 21
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+0'. ina a-mat {d}EN u {d}GAŠAN-iá liš-lim
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltu[Bēltu]DN; lišlim[be(come) well]
+
+1'. MU 1 ME 19.KAM šá ši-i MU 1 M[E 60+23.KAM]
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU$mē; n; ša[which]REL; šī[that]IP; šattu[year]N; n;  meʾatu[(one) hundred]NU$mē; n
+
+2'. {I}ar-šá-ka-a LUGAL
+#lem: Aršaka[Arsaces]RN; šarru[king]N
+
+3'. APIN GE₆ 13 7?.30 ME DIR muš [x]
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V; u
+
+4'. ár MAŠ.MAŠ ziq-pi sin AN.KU₁₀ Á [x]
+#lem: warkatu[rear//rear part]N'N$; Māšu[Gemini]CN; zaqāpu[culminate]V; Sîn[moon]N; antallû[eclipse]N; idu[side]N; u
+
+5'. ki-i TAB-⸢ú⸣ [ina 18] GE₆ ⸢x⸣ [...]
+#lem: kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; u; u
+
+6'. 6 GE₆ ÍR ana ZÁ[LAG ki-i TAB-ú]
+#lem: n; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N; ana[to]PRP; nawāru[clear]V; kī[when]'SBJ; ušarrû[begin]V
+
+7'. ina 16 GE₆ TA KUR u? [...]
+#lem: ina[in]PRP; n; mūšu[night]N; ištu[from]PRP; šadû[east]N; u[and]CNJ; u
+
+8'. 40 GAR ÍR u ZÁLAG-ru A[N.KU₁₀-šú SA₅]
+#lem: n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nawāru[clearing]'N; antallû[eclipse]N; sāmu[red]AJ
+
+9'. SA₅-šú SUD ina SAG GAR TÙR? [...]
+#lem: sāmtu[redness]N; edēhu[cover with patches]V; ina[in]PRP; rēš[beginning]N; šiknu[onset]N; tarbaṣu[halo]N; u
+
+10'. ina AN.KU₁₀-šú ana DIR KU₄-ub? [...]
+#lem: ina[in]PRP; antallû[eclipse]N; ana[to]PRP; erpetu[cloud]N; erēbu[enter]V; u
+
+@reverse
+1'. ina AN.KU₁₀-šú SI šá PA MAR GAR [GIN]
+#lem: ina[during]PRP; antallû[eclipse]N; ištānu[north wind]N; ša[which]REL; kappu[wing(?)]N; amurru[west]N; šakānu[set]V; alāku[blow]V
+
+2'. ina AN.KU₁₀-šú {MÚL}KAK.SI.SÁ [GUB]
+#lem: ina[during]PRP; antallû[eclipse]N; Šiltāhu[Sirius]CN; izuzzu[stand]V
+
+3'. ÍB.TAG₄ {d}UDU.IDIM{MEŠ} NU [GUB{MEŠ}]
+#lem: rēhtu[remainder]N; bibbu[planet]N; ul[not]MOD; izuzzu[stand]V
+
+4'. 2 KÙŠ e is-le₁₀ ⸢|KA×MI|⸣
+#lem: n; ammatu[unit]N; eli[above]PRP; is-le₁₀[α Tauri]CN; adir[eclipsed]AJ
+
+5'. in 55 GE₆ ana ZÁLAG
+#lem: ina[at]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]N
+
+6'. 13 3.30 na DIR NU PAP
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+
+@translation labeled en project
+
+@(o 0)At the command of Bel and Beltija may it go well.
+
+@(o 1) Year 119, which is year 1[83],
+
+@(o 2) king Arsaces.
+
+@(o 3) Month VIII, night of the 13th, moonrise to sunset: 7° 30’, measured (despite) clouds.
+
+@(o 4) (When) the rear part of Gemini culminated, lunar eclipse;
+
+@(o 5) when it began on the [...] side, [in 18°] of night ... [...]
+
+@(o 6) 6° of night maximal phase. [When it began] to clear,
+
+@(o 7) in 16° of night [it cleared] from the east and? [...]
+
+@(o 8) 40° onset, maximal phase, and clearing. [Its] ec[lipse was red,]
+
+@(o 9) its redness was red brown. In the beginning of onset, a halo? [...]
+
+@(o 10) In its eclipse, it entered a cloud [...]
+
+@(r 1) In its eclipse, the north wind which was set to the west side [blew.]
+
+@(r 2) In its eclipse, Sirius [stood there;]
+
+@(r 3) the remainder of the planets did not [stand there.]
+
+@(r 4) 2 cubits above α Tauri it was eclipsed.
+
+@(r 5) At 55° before sunrise.
+
+@(r 6) The 13th, sunrise to moonset: 3° 30’; clouds, I did not watch.

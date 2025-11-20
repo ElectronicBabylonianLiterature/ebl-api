@@ -1,0 +1,96 @@
+&X500097 = ADART 5 94
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+2'. [...] 1/2 KÙŠ
+#lem: u; n; ammatu[unit]N
+
+$ ruling
+3'. [...] KÙŠ KIN 9 e LUGAL
+#lem: u; ammatu[unit]N; Ulūlu[Month VI]MN; n; eli[above]PRP; LUGAL[α Leonis]CN
+
+4'. [...] ABSIN
+#lem: u; Šerʾu[Virgo]CN
+
+$ ruling
+5'. [...] e SI₄ 1 2/3 KÙŠ
+#lem: u; eli[above]PRP; SI₄[α Scorpii]CN; n; n; ammatu[unit]N
+
+6'. [...] LÁL? APIN 3
+#lem: u; alālu[balance]V; Arahsamna[Month VIII]MN; n
+
+7'. [...] ⸢x⸣ KU₄
+#lem: u; u; erēbu[enter]V
+
+$ ruling
+8'. [...] šá ABSIN 1+[x] KÙŠ
+#lem: u; ša[which]REL; Šerʾu[Virgo]CN; n; ammatu[unit]N
+
+9'. [...] 19 e SI₄ 2 KÙŠ AB 6?
+#lem: u; n; eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Ṭebētu[Month X]MN; n
+
+10'. [...] ⸢x⸣ 3 KÙŠ ŠE 13 SIG SI-⸢MÁŠ⸣ 2 KÙŠ
+#lem: u; u; n; ammatu[unit]N; Addaru[Month XII]MN; n; šapil[below]PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N
+
+$ ruling
+11'. [...] 3 SI
+#lem: u; n; ubānu[finger]N
+
+$ ruling
+12'. [... x]+3 SIG MAŠ.MAŠ 5 KÙŠ DU₆ 10 e ABSIN
+#lem: u; u; šapil[below]PRP; MAŠ.MAŠ[α/β Geminorum]CN$; n; ammatu[unit]N; Tašrītu[Month VII]MN; n; eli[above]PRP; Šerʾu[Virgo]CN
+
+13'. [...] IGI AB 4 e šil-tah-PA 1 KÙŠ
+#lem: u; nanmuru[be(come) visible]V; Ṭebētu[Month X]MN; n; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN$; n; ammatu[unit]N
+
+$ ruling
+14'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ...
+
+@(o 2) [...] 1⁄2 cubit.
+
+$ ruling
+
+@(o 3) [...] cubits. Month VI, the 9th, it was [...] above α Leonis.
+
+@(o 4) [...] Virginis.
+
+$ ruling
+
+@(o 5) [...] 1 2/3 cubits above α Scorpii.
+
+@(o 6) [...] balanced?. Month VIII, the 3rd,
+
+@(o 7) [...] entered ...
+
+$ ruling
+
+@(o 8) [...] 1+[x] cubits [...] Virginis.
+
+@(o 9) [...] the 19th, it was 2 cubits above α Scorpii. Month X, the 6th?,
+
+@(o 10) [...] 3 cubits ... Month XII, the 13th, it was 2 cubits below β Capricorni.
+
+$ ruling
+
+@(o 11) [...] 3 fingers.
+
+$ ruling
+
+@(o 12) [... the x]+3rd, it was 5 cubits below a/b Geminorum. Month VII, the 10th, it was [...] above Virgo.
+
+@(o 13) [...] first appearance?. Month X, the 4th, it was 1 cubit above 𝜗 Ophiuchi. 
+
+$ ruling
+
+@(o 14) [...] ...

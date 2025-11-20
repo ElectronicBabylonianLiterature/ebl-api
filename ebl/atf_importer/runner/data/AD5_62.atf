@@ -1,0 +1,534 @@
+&X500063 = ADART 5 62
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. ⸢14 3+x ME⸣
+#lem: n; n; ūmu[moonrise to sunset]N
+
+2'. 14 1.40 na ⸢SIG⸣ 
+#lem: n; n; na[sunrise to moonset]N; Simānu[Month III]MN
+
+p2'. ⸢28⸣ šámaš ⸢GUB⸣
+#lem:  n; šamšu[sun]N; izuzzu[stand]V
+
+3'. 15 18.20 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+4'. 28 16.30
+#lem: n; n
+
+$ ruling
+5'. ⸢ŠU⸣ 1 21 
+#lem: Duʾūzu[Month IV]MN; n; n 
+
+p5'. 12 GU₄.UD ina ŠÚ ina SAG UR.A
+#lem: n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; rēš[beginning]N; Nēšu[Leo]CN
+
+6'. 13 5.20 ME 
+#lem: n; n; ūmu[moonrise to sunset] 
+
+p6'. IGI 18 KAK.BAN IGI
+#lem: amāru[be(come) visible]'V; n; Šiltāhu[Sirius]CN; amāru[be(come) visible]'V
+
+7'. 13 6.20 ŠÚ  22 GENNA ina UR.A ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N; n; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN; rabû[set]'V
+
+p7'. 22 GENNA ina UR.A ŠÚ
+#lem: n; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN; rabû[set]'V
+
+8'. 14 6.10 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+9'. 14 8.10 na
+#lem: n; n; na[sunrise to moonset]N
+
+10'. 28 17.30
+#lem: n; n
+
+@column 2
+$ ruling
+1'. [D]U₆ 1 24?.40 ⸢x 11.40⸣ 1 LÁL-tì
+#lem: Tašrītu[Month VII]MN; n; n; u; n; n; šitqultu[equinox]N
+
+p1'. 1 LÁL-tì
+#lem: n; šitqultu[equinox]N
+
+2'. 12 12+[x] ŠÚ [x AN ana] ME ⸢a⸣
+#lem: n; n; rabû[moonset to sunrise]'N; u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmi[day]N; alāku[go]V$
+
+p2'. [x AN ana] ME ⸢a⸣
+#lem:  u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmi[day]N; alāku[go]V$
+
+3'. 13 5.50 ME AN.KU₁₀ sin šá DIB
+#lem: n; n; ūmu[moonrise to sunset]N; antallû[eclipse]N; Sîn[moon]N; ša[which]REL; etēqu[omit]V
+
+p3'. AN.KU₁₀ sin šá DIB
+#lem: antallû[eclipse]N; Sîn[moon]N; ša[which]REL; etēqu[omit]V
+
+4'. 13 10 NINDA na 15 MÚL.BABBAR ina TIL
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; na[sunrise to moonset]N; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N
+
+p4'. 15 MÚL.BABBAR ina TIL
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N
+
+5'. 14 50? NINDA GE₆  RÍN ŠÚ 28 AN.KU₁₀
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; mūšu[sunset to moonrise]N; Zibānītu[Libra]CN; rabû[set]'V; n; antallû[eclipse]N
+
+p5'. RÍN ŠÚ 28 AN.KU₁₀
+#lem: Zibānītu[Libra]CN; rabû[set]'V; n; antallû[eclipse]N
+
+6'. 26 28?.30 
+#lem: n; n
+
+p6'. šámaš šá DIB
+#lem: šamšu[sun]N; ša[which]REL; etēqu[omit]V
+
+$ ruling
+7'. APIN 30 13.20? 
+#lem: Arahsamna[Month VIII]MN; n; n
+
+p7'. 18 A[N ina] HUN UŠ
+#lem:  n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Agru[Aries]CN; emēdu[be at a stationary point]V
+
+8'. 13 10.40 ŠÚ 
+#lem: n; n; rabû[moonset to sunrise]'N
+
+p8'. ana ŠÚ LAL 16 [MÚL.BABBAR]
+#lem:  ana[to]PRP; erbu[west]N; nahāsu[recede]V; n; Kakkabu-peṣû[Jupiter]CN
+
+9'. 14 9 ME 
+#lem: n; n; ūmu[moonrise to sunset]N
+
+p9'.  ina GÍR.TAB IG[I x]
+#lem:  ina[in]PRP; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]'V; u
+
+10'. 14 4.30 na
+#lem: n; n; na[sunrise to moonset]N
+
+p10'.  GU₄.UD [ina ŠÚ IGI]
+#lem: Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; amāru[be(come) visible]'V
+
+11'. 15 ár šámaš GE₆
+#lem: n; warki[behind]PRP; šamšu[sun]N; mūšu[sunset to moonrise]N
+
+12'. 27 21.20
+#lem: n; n
+
+@reverse
+@column 3
+1'. GAN 30 11.10 
+#lem: Kislīmu[Month IX]MN; n; n
+
+p1'. [...]
+#lem: u
+
+2'. 13 7.50 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+p2'.  17 ⸢x⸣ [...]
+#lem:  n; u; u
+
+3'. 14 10 ME
+#lem: n; n; ūmu[moonrise to sunset]N
+
+p3'. 21 GENNA [ina UR.A]
+#lem: n; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN
+
+4'. 14 10+[x] na 
+#lem: n; n; na[sunrise to moonset]N
+
+p4'. UŠ ana ŠÚ LAL ⸢x⸣ [GU₄.UD]
+#lem: emēdu[be at a stationary point]V; ana[to]PRP; erbu[west]N; nahāsu[recede]V; u; Šihṭu[Mercury]CN
+
+5'. 15 2? GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+p5'. ina NIM ina PA I[GI]
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; amāru[be(come) visible]'V
+
+6'. 26 20.10
+#lem: n; n
+
+$ ruling
+7'. [A]B 1 22.10
+#lem: Ṭebētu[Month X]MN; n; n
+
+p7'. ⸢3?⸣ ⸢šámaš GUB⸣
+#lem:  n; šamšu[sun]N; izuzzu[stand]V
+
+8'. 13 14.20 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+9'. 14 2? na
+#lem: n; n; na[sunrise to moonset]N
+
+10'. 15 4 ME
+#lem: n; n; ūmu[moonrise to sunset]N
+
+11'. 16 12 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+12'. 27 15.30
+#lem: n; n
+
+$ ruling
+13'. ZÍZ 30 13+[x] 
+#lem: Šabāṭu[Month XI]MN; n; n
+
+p13'. [n] dele-bat ina NIM ina SAG
+#lem: n; Dilbat[Venus]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; rēš[beginning]N
+
+14'. 14 4.20? ŠÚ 
+#lem: n; n; rabû[moonset to sunrise]'N
+
+p14'. GU ŠÚ 5 GU₄.UD ina NIM
+#lem: Gula[Aquarius]CN; rabû[set]'V; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N
+
+15'. 15 13.40? ME  
+#lem: n; n; ūmu[moonrise to sunset]N
+
+p15'. ina GU ŠÚ 20 GENNA  
+#lem: ina[in]PRP; Gula[Aquarius]CN; rabû[set]V; n; Kayyamānu[Saturn]CN
+
+16'. 15 8.20 na
+#lem: n; n; na[sunrise to moonset]N
+
+p16'. ana ME E-a
+#lem: ana[to]PRP; ūmu[day]N; elû[go up]V
+
+17'. 16 7.30 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+18'. 28 13?.20
+#lem: n; n
+
+$ ruling
+19'. ŠE 1 23 ⸢x x⸣ 7.30 
+#lem: Addaru[Month XII]MN; n; n; u; u; n
+
+p19'. 5 GU₄.UD ina ŠÚ
+#lem:  n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N
+
+20'. [x x x] ŠÚ 
+#lem: u; u; u; rabû[moonset to sunrise]'N
+
+p20'. ina KUN{ME} IGI 20
+#lem: ina[in]PRP; Zibbātu[Pisces]CN; amāru[be(come) visible]'V; n
+
+21'. [x x x] na 
+#lem: u; u; u; na[sunrise to moonset]N
+
+p21'. MÚL.BABBAR ina GÍR.TAB UŠ
+#lem: Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; emēdu[be at a stationary point]V
+
+22'. [x x x] ME  
+#lem: u; u; u; ūmu[moonrise to sunset]N
+
+p22'. ana NIM LAL
+#lem: ana[to]PRP; Elamtu[east]'N; nahāsu[recede]V
+
+23'. [x x x G]E₆
+#lem: u; u; u; mūšu[sunset to moonrise]N
+
+p23'. [2]7 dele-bat ina ŠÚ
+#lem:  n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]'N
+
+24'. [x x x] 
+#lem: u; u; u
+
+p24'. [ina HU]N IGI
+#lem:  ina[in]PRP; Agru[Aries]CN; amāru[be(come) visible]'V
+
+@column 4
+1'. DIR.ŠE 30 12.30 
+#lem: +Addāru_Šanû[(Intercalary) Month XII₂]MN$; n; n
+
+p1'. 3 GU₄.UD ina ŠÚ ina LU
+#lem: n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Agru[Aries]CN
+
+2'. 14 5.10 ŠÚ  
+#lem: n; n; rabû[moonset to sunrise]'N
+
+p2'. ŠÚ 6 LÁL-tì 15 GENNA
+#lem: rabû[set]'V; n; šitqultu[equinox]N; n; Kayyamānu[Saturn]CN
+
+3'. 15 5.30 ME 
+#lem: n; n; ūmu[moonrise to sunset]
+
+p3'. ina ŠÀ GABA šá UR.A UŠ ana
+#lem: ina[in]PRP; libbu[interior]N; irtu[breast]N; ša[which]REL; Nēšu[Leo]CN; emēdu[be at a stationary point]V; ana[to]PRP
+
+4'. 15 5.30 na 
+#lem: n; n; na[sunrise to moonset]N
+
+p4'. NIM LAL GE₆ 15 37
+#lem: Elamtu[east]'N; nahāsu[recede]V; mūšu[night]N; n; n
+
+5'. 16 15.40? GE₆ 
+#lem: n; n; mūšu[sunset to moonrise]N
+
+p5'. GE₆ GIN sin AN.KU₁₀
+#lem: mūšu[night]N; alāku[go]V; Sîn[moon]N; antallû[eclipse]N
+
+6'. 28 17.10 
+#lem: n; n
+
+p6'. Á ULÙ TAB ina 17 GE₆
+#lem: idu[side]N; šūtu[south]N; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N
+
+7'. ⸢gab-bi⸣ ŠÚ 21 ÍR ina 19 TA KUR ana
+#lem: gabbu[totality]N; erēpu[cover]V; n; bikītu[maximal phase (of an eclipse)]N; ina[in]PRP; n; ištu[from]PRP; šadû[east]N; ana[to]PRP
+
+8'. MAR ZALÁG AN.KU₁₀-šú SA₅ ina IGI RÍN ⸢a?⸣-[dir?]
+#lem: amurru[west]N; nawāru[clear]V; antallû[eclipse]N; sāmu[red]AJ; ina[in]PRP; pān[front]N; Zibānītu[Libra]CN; adir[eclipsed]AJ
+
+9'. 28 AN.KU₁₀ šámaš DIB ⸢x x⸣
+#lem: n; antallû[eclipse]N; šamšu[sun]N; etēqu[omit]V; u; u
+
+$ ruling
+10'. BAR 2 dele-bat ina IGI ŠUR-GIGIR-šá-SI 4 [U x x] ŠUR-GIGIR
+#lem: Nisannu[Month I]MN; n; Dilbat[Venus]CN; ina[in]PRP; pānu[front]N; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ubānu[finger]N; u; u; +ŠUR-GIGIR[Tauri]CN$
+
+11'. ⸢1 SI⸣ TE 4 ár ŠUR-GIGIR-šá-SI [n n] 12 e
+#lem: n; ubānu[finger]N; ṭehû[come close]V; n; warki[behind]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; u; n; eli[above]PRP
+
+12'. [ŠUR-GIGIR-šá-UL]Ù 3? KÙŠ 28 SIG ŠUR-GIGIR-šá-SI
+#lem: ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; n; šapil[below]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN
+
+13'. [...] e ⸢is-le₁₀⸣ 1 KÙŠ 4 U [x] SIG
+#lem: u; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; n; ubānu[finger]N; u; šapil[below]PRP
+
+14'. [...] ⸢x⸣ 3 1/2 KÙŠ ŠU 1 SIG ŠUR-[GIGIR]-šá-ULÙ
+#lem: u; u; n; n; ammatu[unit]N; Duʾūzu[Month IV]MN; n; šapil[below]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN
+
+15'. [... ana] NIM DIB 10+[x] SIG MÚL-[IGI]-ú-šá-[še-pit-MAŠ.MAŠ]
+#lem: u; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; n; šapil[below]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN$
+
+16'. [n n] 15 SIG MÚL-ár-šá-š[e-pí]t-MAŠ.MAŠ 1 KÙŠ
+#lem: n; u; n; šapil[below]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N
+
+17'. [...] ⸢KÙŠ 8?⸣ U [x] ⸢SIG⸣ MAŠ.MAŠ-IGI
+#lem: u; ammatu[unit]N; n; ubānu[finger]N; u; šapil[below]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN
+
+18'. [...] ana?
+#lem: u; u
+
+@translation labeled en Project
+
+
+@(o i 1) The 14th, moonrise to sunset: 3+x°.
+
+@(o i 2) The 14th, sunrise to moonset: 1° 40’. 
+                    
+@(o i p2) Month III, the 28th, solstice.
+
+@(o i 3) The 15th, sunset to moonrise: 18° 20’.
+
+@(o i 4) The 28th, (moonrise to sunrise:) 16° 30’.
+
+$ ruling
+
+@(o i 5) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21°.
+
+@(o i p5) The 12th, Mercury’s first appearance in the west in the beginning of Leo.
+
+@(o i 6) The 13th, moonrise to sunset: 5° 20’.                       
+
+@(o i p6) The 18th, Sirius’ first appearance.
+
+@(o i 7) The 13th, moonset to sunrise: 6° 20’.  
+
+@(o i p7) The 22nd, Saturn’s last appearance in Leo.
+
+@(o i 8) The 14th, sunset to moonrise: 6° 10’.                       
+
+@(o i 9) The 14th, sunrise to moonset: 8° 10’.
+
+@(o i 10) The 28th, (moonrise to sunrise:) 17° 30’.
+
+$ ruling
+
+@(o ii 1) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24° 40’; ... 11° 40’.                                 
+
+@(o ii p1)  The 1st, equinox.                       
+
+@(o ii 2) The 12th, moonset to sunrise: 12° [...].                    
+
+@(o ii p2) [The xth, Mars’] acronychal rising.
+
+@(o ii 3) The 13th, moonrise to sunset: 5° 50’.                        
+
+@(o ii p3) Lunar eclipse which was omitted.
+
+@(o ii 4) The 13th, sunrise to moonset: 10’.                            
+
+@(o ii p4) The 15th, Jupiter’s last appearance in the
+
+@(o ii 5) The 14th, sunset to moonrise: 50’?.                           
+
+@(o ii p5) end of Libra. The 28th, solar eclipse
+
+@(o ii 6) The 26th, (moonrise to sunrise:) 28°? 30’.               
+
+@(o ii p6) which was omitted.
+
+$ ruling
+
+@(o ii 7) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13° 20’?.                                
+
+@(o ii p7) The 18th, Mars became stationary in Aries.
+
+@(o ii 8) The 13th, moonset to sunrise: 10° 40’.                     
+
+@(o ii p8) It moved back to the west. The 16th,
+
+@(o ii 9) The 14th, moonrise to sunset: 9°.                             
+
+@(o ii p9) [Jupiter’s] first appearance in Scorpius. [The xth,]
+
+@(o ii 10) The 14th, sunrise to moonset: 4° 30’.                     
+
+@(o ii p10) Mercury’s [first appearance in the west.]
+
+@(o ii 11) The 15th, sunset to moonrise: behind? the sun?
+
+@(o ii 12) The 27th, (moonrise to sunrise:) 21° 20’.
+
+@(r iii 1) Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 11° 10’.                                  
+
+@(r iii p1) [...]
+
+@(r iii 2) The 13th, moonset to sunrise: 7° 50’.                         
+
+@(r iii p2) The 17th, ... [...]                   
+
+@(r iii 3) The 14th, moonrise to sunset: 10°.                              
+
+@(r iii p3) The 21st, Saturn became stationary [in Leo;]
+
+@(r iii 4) The 14th, sunrise to moonset: 10+[x°].                       
+
+@(r iii p4) it moved back to the west. The xth, [Mercury’s]
+
+@(r iii 5) The 15th, sunset to moonrise: 2°?.                              
+
+@(r iii p5) first appearance in the east in Sagittarius.
+
+@(r iii 6) The 26th, (moonrise to sunrise:) 20° 10’.
+
+$ ruling
+
+@(r iii 7) [Mo]nth X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22° 10’.                                             
+
+@(r iii p7) ⸢The 3rd?⸣, solstice.
+
+@(r iii 8) The 13th, moonset to sunrise: 14° 20’.
+
+@(r iii 9) The 14th, sunrise to moonset: 2°?.
+
+@(r iii 10) The 15th, moonrise to sunset: 4°.
+
+@(r iii 11) The 16th, sunset to moonrise: 12°.
+
+@(r iii 12) The 27th, (moonrise to sunrise:) 15° 30’.
+
+$ ruling
+
+@(r iii 13) Month XI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13+[x°].                                 
+
+@(r iii p13)[The xth,] Venus’ last appearance in the east
+
+@(r iii 14) The 14th, moonset to sunrise: 4° 20’?.                 
+
+@(r iii p14) in the beginning of Aquarius. The 5th, Mercury’s
+
+@(r iii 15) The 15th, moonrise to sunset: 13° 40’?.               
+
+@(r iii p15) last appearance in the east in Aquarius. The 20th,
+
+@(r iii 16) The 15th, sunrise to moonset: 8° 20’.                   
+
+@(r iii p16) Saturn’s acronychal rising.
+
+@(r iii 17) The 16th, sunset to moonrise: 7° 30’.
+
+@(r iii 18) The 28th, (moonrise to sunrise:) 13°? 20’.
+
+$ ruling
+
+@(r iii 19) Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23° ... 7?,30.                                      
+
+@(r iii p19) The 5th, Mercury’s first appearance in the west
+
+@(r iii 20) [...] moonset to sunrise: [...]                                
+
+@(r iii p20) in Pisces. The 20th,
+
+@(r iii 21) [...] sunrise to moonset: [...]                                
+
+@(r iii p21) Jupiter became stationary in Scorpius.
+
+@(r iii 22) [...] moonrise to sunset: [...]                                
+
+@(r iii p22) It moved back to the east.
+
+@(r iii 23) [...] sunset to moonrise: [...]                                
+
+@(r iii p23) The [2]7th, Venus’ first appearance in the west
+
+@(r iii 24) [...]                                                                              
+
+@(r iii p24) [in Ari]es.
+
+@(r iv 1) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 30’.                                 
+@(r iv p1) The 3rd, Mercury’s last appearance in the west in
+
+@(r iv 2) The 14th, moonset to sunrise: 5° 10’.                     
+
+@(r iv p2) Aries. The 6th, equinox. The 15th, Saturn
+
+@(r iv 3) The 15th, moonrise to sunset: 5° 30’.                     
+
+@(r iv p3) became stationary inside the breast of Leo.
+
+@(r iv 4) The 15th, sunrise to moonset: 5° 30’.                     
+
+@(r iv p4) It moved back to the east. Night of the 15th, 37°
+
+@(r iv 5) The 16th, sunset to moonrise: 15° 40’?                  
+
+@(r iv p5) after sunset, lunar eclipse:
+
+@(r iv 6) The 28th, (moonrise to sunrise:) 17° 10’.               
+
+@(r iv p6) It began on the south side. In 17° of night
+
+@(r iv 7) all was covered. 21° maximal phase. In 19° it cleared from the east to
+
+@(r iv 8) the west. Its eclipse was red. In front of Libra it was ecl[ipsed].
+
+@(r iv 9) The 28th, solar eclipse, omitted ...
+
+$ ruling
+
+@(r iv 10) Month I, the 2nd, Venus was 4 [fingers] in front of β Tauri [...] 1 finger [...] Tauri;
+
+@(r iv 11) it came close. The 4th, it was [...] behind β Tauri. The 12th, it was 3 cubits above
+
+@(r iv 12) [𝜁 Tau]ri. The 28th, it was [...] below β Tauri.
+
+@(r iv 13) [The xth,] it was 1 cubit 4 fingers [above] a Tauri. [The xth,] it was below
+
+@(r iv 14) [...] 3 1⁄2 cubits. Month IV, the 1st?, it was [...] below 𝜁 Tauri,
+
+@(r iv 15) having passed [...] to the east. The 10+[xth], it was...] below η
+
+@(r iv 16) [Geminorum. The] 15th, it was 1 cubit below μ Geminorum.
+
+@(r iv 17) [...] cubits 8? fingers. [...] it was [...] below α Geminorum
+
+@(r iv 18) [...] ...

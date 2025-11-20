@@ -1,0 +1,45 @@
+&X500026 = ADART 5 26
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [MU 1 ME 1+ŠU.8.KAM šá] ši-i MU 2 ME 32
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n
+
+2'. [{I}ar-šá]-ka-a šá iṭ-ṭar-ri-d[u]
+#lem: Aršaka[Arsaces]RN; ša[which]REL; ṭarādu[call]V
+
+3'. [{I}ú-r]u-da-a LUGAL ù {f}is-[pu-bar-za-a]
+#lem: Orodes[Orodes]RN; šarru[king]N; u[and]CNJ; Ispubarzā[Ispubarza]PN
+
+4'. [NIN-šú] ⸢GAŠAN⸣ [x x x] ⸢x x⸣ [...]
+#lem: ahātu[sister]N; šarrātu[queen]N; u; u; u; u; u; u
+
+$ traces
+@reverse
+1'. [... M]ÚL-ár-[šá-SAG-HUN]
+#lem: u; MÚL-ár-šá-SAG-HUN[α Arietis]CN
+
+2'. [a-dir] ina 30 GE₆ GI[N]
+#lem: adir[eclipsed]AJ; ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+3'. [x x] na muš
+#lem: u; u; na[sunrise to moonset]N; mašāhu[measure]V
+
+@translation labeled en project
+
+@(o 1) [Year 168 which] is year 232,
+
+@(o 2) [Arsa]ces who was called?
+
+@(o 3) [Or]odes, king and Is[pubarza,]
+
+@(o 4) [his sister,] queen. [...] ... [...]
+
+@(r 1) [...] α A[rietis]
+
+@(r 2) [it was eclipsed.] At 30° after sunset.
+
+@(r 3) [...] sunrise to moonset: [nn°], measured.

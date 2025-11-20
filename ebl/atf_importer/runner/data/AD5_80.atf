@@ -1,0 +1,121 @@
+&X500083 = ADART 5 80
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [x] ⸢x⸣ x [...]
+#lem: u; u; u; u
+
+2'. ⸢11⸣ na-su in 10+[x IGI ŠU x GE₆ x ina ZÁLAG SIG MAŠ.MAŠ-ár]
+#lem: n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V; Duʾūzu[Month IV]MN; u; mūšu[night]N; u; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN
+
+3'. 3 KÙŠ NE 1 KIN 3[0 DU₆ x EN x ana NIM]
+#lem: n; ammatu[unit]N; Abu[Month V]MN; n; Ulūlu[Month VI]MN; n; Tašrītu[Month VII]MN; u; adi[until]PRP; u; ana[to]PRP; Elamtu[east]'N
+
+4'. ki UŠ-ú 8 U e [MÚL-IGI-šá-ALLA-šá-ULÙ UŠ]
+#lem: kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ubānu[finger]N; eli[above]PRP; MÚL-IGI-šá-ALLA-šá-ULÙ[θ Cancri]CN; emēdu[be at a stationary point]V
+
+5'. APIN 30 GAN 1 in 11 ana [ME E-a AB x ZÍZ x]
+#lem: Arahsamna[Month VIII]MN; n; Kislīmu[Month IX]MN; n; ina[around (day x)]PRP; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Ṭebētu[Month X]MN; u; Šabāṭu[Month XI]MN; u
+
+6'. EN 10 ana ŠÚ ki UŠ-a 2? [KÙŠ SIG MAŠ.MAŠ-ár n n]
+#lem: adi[until]PRP; n; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; n
+
+7'. ana NIM DIB UŠ ŠE 1 [...]
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; emēdu[be at a stationary point]V; Addaru[Month XII]MN; n; u
+
+$ ruling
+8'. MU 1 ME 31.KAM BAR 30 GU₄ 1 SIG [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; Simānu[Month III]MN; u
+
+9'. in 26? ina ALLA ŠÚ ŠU 30 i[n x ina ALLA IGI N na-su]
+#lem: ina[around (day x)]PRP; n; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; Duʾūzu[Month IV]MN; n; ina[around (day x)]PRP; u; ina[in]PRP; Alluttu[Cancer]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N
+
+10'. in 24 IGI NE 1 GE₆ 9 ina ZÁLAG [SIG SAG-A N KÙŠ]
+#lem: ina[on]PRP; n; amāru[be(come) visible]V; Abu[Month V]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; šapil[below]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N
+
+11'. KIN 1 GE₆ 24 ina ZÁLAG e LUGAL 2 U [DU₆ x APIN x]
+#lem: Ulūlu[Month VI]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; eli[above]PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N; Tašrītu[Month VII]MN; u; Arahsamna[Month VIII]MN; u
+
+12'. EN 27? ana NIM ki UŠ-ú 1/2 KÙ[Š ina IGI]
+#lem: adi[until]PRP; n; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pān[front]N
+
+13'. [MÚL-TUR-šá]-ár-LUGAL 1/2 KÙŠ ana SI NIM UŠ G[AN x AB x]
+#lem: MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]V; emēdu[be at a stationary point]V; Kislīmu[Month IX]MN; u; Ṭebētu[Month X]MN; u
+
+14'. in EN 26 ana ME E-a ZÍZ 30 G[E₆ x]
+#lem: ina[around (day x)]PRP; adi[until]PRP; n; ana[to]PRP; ūmu[day]N; elû[go up]V; Šabāṭu[Month XI]MN; n; mūšu[night]N; u
+
+15'. [U]SAN e MÚL-TUR-šá-ár-LUGAL [n n GE₆ x]
+#lem: šimītān[first part of the night]N; eli[above]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; mūšu[night]N; u
+
+16'. [U]SAN e LUGAL 10 SI ŠE 1 [EN x]
+#lem: šimītān[first part of the night]N; eli[above]PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N; Addaru[Month XII]MN; n; adi[until]PRP; u
+
+17'. [ana ŠÚ k]i UŠ-a 2 KÙŠ ina I[GI LUGAL UŠ]
+#lem: ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN; emēdu[be at a stationary point]V
+
+$ ruling
+18'. [MU 1 ME 32].KAM BAR 30 GU₄ 30 [SIG x]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; n; Ayyaru[Month II]MN; n; Simānu[Month III]MN; u
+
+19'. [GE₆ x USA]N e LUGAL 4? [U ...]
+#lem: mūšu[night]N; u; šimītān[first part of the night]N; eli[above]PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N; u
+
+20'. [...] ⸢x⸣ na? in ⸢x⸣ [ina A ŠÚ ...]
+#lem: u; u; na[sunset to setting]N; ina[around (day x)]PRP; u; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; u
+
+@reverse
+$ traces
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) rising of Jupiter to sunrise: 11°; (ideal) first appearance on the 10+[xth. Month IV, ... Night of the xth, last part of the night, it was] 3 cubits [below β Geminorum.]
+
+@(o 3) Month V, the 1st (of which followed the 30th of the preceding month). Month VI, (the 1st of which was identical with) the 30th (of the preceding month). [Month VII, ... Until the xth,]
+
+@(o 4) when it became stationary [to the east, it became stationary] 8 fingers above [ϑ Cancri.]
+
+@(o 5) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month).
+Month IX, the 1st (of which followed the 30th of the preceding month). Around the 11th, acro[nychal rising. Month X, ... Month XI, ...]
+
+@(o 6) Until the 10th, when it became stationary to the west, it became stationary 2? [cubits below β Geminorum,]
+
+@(o 7) having passed [...] to the east. Month XII, the 1st (of which followed the 30th of the preceding month). [...]
+
+$ ruling
+
+@(o 8) Year 131, month I, (the 1st of which was identical with) the 30th (of the preceding month). Month II, the 1st (of which followed the 30th of the preceding month). Month III, [...]
+
+@(o 9) Around the 26th?, last appearance in Cancer. Month IV, (the 1st of which was identical with) the 30th (of the preceding month). Ar[ound the xth, first appearance in Cancer; rising of Jupiter to sunrise: nn°;]
+
+@(o 10) (ideal) first appearance on the 24th. Month V, the 1st (of which followed the 30th of the preceding month). Night of the 9th, last part of the night, [it was nn cubits below ε Leonis.]
+
+@(o 11) Month VI, the 1st (of which followed the 30th of the preceding month). Night of the 24th, last part of the night, it was 2 fingers above α Leonis. [Month VII, ... Month VIII, ...]
+
+@(o 12) Until the 27th?, when it became stationary to the east, it became stationary 1⁄2 cubit [in front of ϱ]
+
+@(o 13) Leonis, being 1⁄2 cubit high to the north. Month [IX, ... Month X, ...]
+
+@(o 14) Until around the 26th, acronychal rising. Month XI, (the 1st of which was identical with) the 30th (of the preceding month). Ni[ght of the xth,]
+
+@(o 15) first part of the night, it was [...] above ϱ Leonis. [Night of the xth,]
+
+@(o 16) first part of the night, it was 10 fingers above a Leonis. Month XII, the 1st (of which followed the 30th of the preceding month). [Until the xth,]
+
+@(o 17) when it became stationary [to the west, it became stationary] 2 cubits in front of [α Leonis.]
+
+$ ruling
+
+@(o 18) [Year 132,] month I, (the 1st of which was identical with) the 30th (of the preceding month). Month II, (the 1st of which was identical with) the 30th (of the preceding month). [Month III, ...]
+
+@(o 19) [Night of the xth, first part of the] night, it was 4? [fingers] above α Leonis [...]
+
+@(o 20) [...] sunset to setting of Jupiter: ... Around the xth, [last appearance in Leo ...]
+
+@reverse
+(traces of several lines, illegible)

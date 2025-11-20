@@ -1,0 +1,95 @@
+&X500099 = ADART 5 96
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse	
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ina NIM?
+#lem: u; ina[in]PRP; Elamtu[east]'N
+
+3'. [...] GU₄? IGI KUR
+#lem: u; Šihṭu[Mercury]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ
+
+4'. [...] 14? ina ŠÚ ina UR.A
+#lem: u; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Nēšu[Leo]CN
+
+5'. [...] na-su
+#lem: u; na[time interval between the rising of a planet and sunrise viz. sunset and the setting of a planet]N
+
+6'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. MU 55 ⸢x⸣ [x] ⸢x⸣ [...]
+#lem: šattu[year]N; n; u; u; u; u
+
+2'. 8 S[I] ⸢x x x⸣ [...]
+#lem: n; ubānu[finger]N; u; u; u; u
+
+3'. ina GIGIR? ŠÚ DIR NU PAP ⸢x⸣ [...]
+#lem: ina[in]PRP; Narkabtu[Chariot]CN; rabû[set]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u; u
+
+4'. in 4? IGI 21 ⸢x⸣ [...]
+#lem: ina[on]PRP; n; nanmuru[be(come) visible]V; n; u; u
+
+5'. IGI in 12 IGI 11+[x ...]
+#lem: nanmuru[be(come) visible]V; ina[on]PRP; n; nanmuru[be(come) visible]V; n; u
+
+6'. ina NIM ina ABSIN IGI [...]
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Šerʾu[Virgo]CN; nanmuru[be(come) visible]V; u
+
+7'. DELE-šá-IGI-ABSIN 1/2 KÙŠ [...]
+#lem: DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; u
+
+8'. GAN 6 ina ŠÚ ina PA IGI [... in x]
+#lem: Kislīmu[Month IX]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Pabilsag[Sagittarius]CN; nanmuru[be(come) visible]V; u; u; u
+
+9'. IGI GAN 22 ina ŠÚ ina MÁŠ [ŠÚ ...]
+#lem: nanmuru[be(come) visible]V; Kislīmu[Month IX]MN; n; ina[in]PRP; erbu[west]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; u
+
+10'. [x] ⸢x⸣ IGI NU PAP ZÍZ 20+[x ...]
+#lem: u; u; nanmuru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; Šabāṭu[Month XI]MN; n; u
+
+11'. [...] ⸢x⸣ IGI KUR N[IM ...]
+#lem: u; u; nanmuru[be(come) visible]'V; baʾil[bright]AJ; šaqi[high]V; u
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] in the east?
+
+@(o i 3) [...] first appearance ... [...;] it was bright
+
+@(o i 4) [...] the 14th?, [...] in the west in Leo
+
+@(o i 5) [...] interval between sun and Mercury
+
+@(o i 6) [...] ...
+
+@(o ii 1) Year 55 ... [...]
+
+@(o ii 2) 8 fingers ... [...]
+
+@(o ii 3) last appearance [...] in the Chariot?; clouds, I did not watch ... [...]
+
+@(o ii 4) (ideal) first appearance on the 4th?. The 21st, ... [...]
+
+@(o ii 5) first appearance [...] (ideal) first appearance on the 12th. The 11+[xth, ...]
+
+@(o ii 6) first appearance in the east in Virgo [...]
+
+@(o ii 7) 1⁄2 cubit [...] γ Virginis [...]
+
+@(o ii 8) Month IX, the 6th, first appearance in the west in Sagittarius [...]
+
+@(o ii 9) (ideal) first appearance [...] Month IX, the 22nd, [last appearance] in the west in Capricorn [...]
+
+@(o ii 10) [...] first appearance ...; I did not watch. Month XI, the 20+[xth, ...]
+
+@(o ii 11) [...] first appearance [...;] it was bright (and) high [...]

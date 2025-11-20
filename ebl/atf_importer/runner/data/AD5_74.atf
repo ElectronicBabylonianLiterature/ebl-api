@@ -1,0 +1,780 @@
+&X500077 = ADART 5 74
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. 	⸢14⸣ ⸢x⸣ [x x x]
+#lem: n; u; u; u; u
+
+2'. 25 BABBAR 26? A[LLA ŠÚ]
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Alluttu[Cancer]CN; rabû[set]V
+
+3'. ŠU 4 dele-bat ŠÚ 28 ALLA IGI
+#lem: Duʾūzu[Month IV]MN; n; Dilbat[Venus]CN; erbu[west]N; n; Alluttu[Cancer]CN; amāru[be(come) visible]V
+
+4'. 6 GU₄ ŠÚ 3 A ŠÚ
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Nēšu[Leo]CN; rabû[set]V
+
+5'. 12 GENNA 26 GÍR.TAB UŠ
+#lem: n; Kayyamānu[Saturn]CN; n; Zuqiqīpu[Scorpio]CN; emēdu[be at a stationary point]V
+
+6'. 24 AN 23 A ŠÚ
+#lem: n; Ṣalbaṭānu[Mars]CN; n; Nēšu[Leo]CN; rabû[set]V
+
+7'. 24 BABBAR 30 ALLA IGI
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Alluttu[Cancer]CN; amāru[be(come) visible]V
+
+8'. 26 GU₄ KUR 28 ALLA IGI
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Alluttu[Cancer]CN; amāru[be(come) visible]V
+
+9'. NE 18 GU₄ KUR 18 A ŠÚ
+#lem: Abu[Month V]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Nēšu[Leo]CN; rabû[set]V
+
+10'. DU₆ 9 GU₄ ŠÚ 8 GÍR.TAB IGI DIB
+#lem: Tašrītu[Month VII]MN; n; Šihṭu[Mercury]CN; erbu[west]N; n; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V; etēqu[omit]V
+
+11'. 26 GU₄ ŠÚ 21 GÍR.TAB ŠÚ
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Zuqiqīpu[Scorpio]CN; rabû[set]V
+
+12'. APIN 9 GENNA 5 PA ŠÚ
+#lem: Arahsamna[Month VIII]MN; n; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; rabû[set]V
+
+13'. 11 AN 7 GÍR.TAB IGI
+#lem: n; Ṣalbaṭānu[Mars]CN; n; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V
+
+14'. 12 GU₄ KUR 14 GÍR.TAB IGI
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V
+
+15'. 29 BABBAR 17 A UŠ
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Nēšu[Leo]CN; emēdu[be at a stationary point]V
+
+16'. GAN 11 GENNA 7 PA IGI
+#lem: Kislīmu[Month IX]MN; n; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+17'. 14 20 ana ŠÚ šámaš 26 MAŠ
+#lem: n; n; ana[to]PRP; erib[(sun)set]N; šamši[sun]N; n; Māšu[Gemini]CN
+
+18'. 11.40 HAB LAL
+#lem: n; HAB-rat[disc]N; nahāsu[recede]V
+
+19'. 28 GU₄ KUR 28 PA ŠÚ
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Pabilsag[Sagittarius]CN; rabû[set]V
+
+20'. AB 27 BABBAR 13 A ana ME a
+#lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; n; Nēšu[Leo]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+21'. 29 GU₄ ŠÚ 25 GU IGI
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Gula[Aquarius]CN; amāru[be(come) visible]V
+
+22'. [ZÍZ] 24 GU₄ ŠÚ 16 zib ŠÚ
+#lem: Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN; erbu[west]N; n; Zibbātu[Pisces]CN; rabû[set]V
+
+23'. [ŠE 1]7 GU₄ KUR 13 zib IGI
+#lem: Addaru[Month XII]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+24'. [27] BABBAR 8 A UŠ
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Nēšu[Leo]CN; emēdu[be at a stationary point]V
+
+$ ruling
+25'. [x (x)] ⸢x x x x x⸣
+#lem: u; u; u; u; u; u; u
+
+26'. [x (x)] ⸢KUR⸣? 12 LU IGI
+#lem: u; u; šadû[east]N; n; Agru[Aries]CN; amāru[be(come) visible]V
+
+27'. [x] GENNA 15 PA UŠ
+#lem: u; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V
+
+28'. [x] ⸢GU₄ KUR x x x⸣
+#lem: u; Šihṭu[Mercury]CN; šadû[east]N; u; u; u
+
+@column 2
+1'. 13 ⸢x x⸣ [...]
+#lem: n; u; u; u
+
+2'. 22.⸢40⸣ HAB LAL?
+#lem: n; HAB-rat[disc]N; nahāsu[recede]V
+
+3'. 28 dele-bat K[UR] ⸢25⸣? PA ⸢ŠÚ⸣
+#lem: n; Dilbat[Venus]CN; šadû[east]N; n; Pabilsag[Sagittarius]CN; rabû[set]V
+
+4'. 28 GU₄ KUR ⸢5⸣? ⸢PA⸣ ŠÚ
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Pabilsag[Sagittarius]CN; rabû[set]V
+
+5'. AB 4 GENNA ⸢19 PA⸣ IGI
+#lem: Ṭebētu[Month X]MN; n; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+6'. 10 BABBAR 10+[x] ABSIN UŠ 
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Šerʾu[Virgo]CN; emēdu[be at a stationary point]V
+
+7'. 12 AN 25? [MÚL U]Š 
+#lem: n; Ṣalbaṭānu[Mars]CN; n; Zappu[Taurus]CN; emēdu[be at a stationary point]V
+
+8'. 24 GU₄ ŠÚ 8 [G]U IGI 
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Gula[Aquarius]CN; amāru[be(come) visible]V
+
+9'. ZÍZ 18 GU₄ ŠÚ 30 [G]U ŠÚ
+#lem: Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN; erbu[west]N; n; Gula[Aquarius]CN; rabû[set]V
+
+10'. 29 dele-bat ŠÚ 1 zi[b I]GI 
+#lem: n; Dilbat[Venus]CN; erbu[west]N; n; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+11'. ŠE 6 GU₄ KUR 23 G[U IGI]
+#lem: Addaru[Month XII]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Gula[Aquarius]CN; amāru[be(come) visible]V
+
+12'. 7 BABBAR 11 ABSIN ana ME [a] 
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Šerʾu[Virgo]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+13'. DIRI 10 GU₄ KUR 23 zib Š[Ú]
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Zibbātu[Pisces]CN; rabû[set]V
+
+$ ruling
+14'. 1+ŠU+2 BAR 3 GENNA 26 PA UŠ 
+#lem: n; Nisannu[Month I]MN; n; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V
+
+15'. 9 GU₄ ŠÚ 18 MÚL IGI
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Zappu[Taurus]CN; amāru[be(come) visible]V
+
+16'. 10 BABBAR 7 ABSIN UŠ
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; Šerʾu[Virgo]CN; emēdu[be at a stationary point]V
+
+17'. GU₄ 15 1 GE₆ GIN 11 PA
+#lem: Ayyaru[Month II]MN; n; n; mūšu[night]N; alāku[go]V; n; Pabilsag[Sagittarius]CN
+
+18'. 30.20 HAB SIG 
+#lem: n; HAB-rat[disc]N; šapil[below]PRP
+
+19'. 24 GU₄ ŠÚ 30 MAŠ ŠÚ 
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Māšu[Gemini]CN; rabû[set]V
+
+20'. 28 GENNA 23? PA ana ME a
+#lem: n; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+21'. SIG ⸢19⸣ [GU₄] ⸢KUR 28?⸣ MAŠ IGI 
+#lem: Simānu[Month III]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Māšu[Gemini]CN; amāru[be(come) visible]V
+
+22'. ŠU 8 GU₄ KUR ⸢17⸣? ALLA ŠÚ
+#lem: Duʾūzu[Month IV]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Alluttu[Cancer]CN; rabû[set]V
+
+23'. 29 GENNA 19 PA UŠ
+#lem: n; Kayyamānu[Saturn]CN; n; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V
+
+24'. NE 17 BABBAR 22 ABSIN ŠÚ 
+#lem: Abu[Month V]MN; n; Kakkabu-peṣû[Jupiter]CN; n; Šerʾu[Virgo]CN; rabû[set]V
+
+25'. [...]
+#lem: u
+
+26'. 25 AN 1 RÍN ŠÚ
+#lem: n; Ṣalbaṭānu[Mars]CN; n; Zibānītu[Libra]CN; rabû[set]V
+
+27'. [KI]N? ⸢x⸣
+#lem: Ulūlu[Month VI]MN; u
+
+@column 3
+1'. ⸢x⸣ [...] 
+#lem: u; u
+
+2'. S[IG ...]  
+#lem: Simānu[Month III]MN; u
+
+3'. 10+[x ...] 
+#lem: n; u
+
+4'. ŠU 4 [...] 
+#lem: Duʾūzu[Month IV]MN; n; u
+
+5'. 25? [...] 
+#lem: n; u
+
+6'. ⸢NE⸣ [...]
+#lem: Abu[Month V]MN; u
+
+7-13'. [...]
+#lem: u
+
+14'. 20+[x ...] 
+#lem: n; u
+
+15'. APIN [...] 
+#lem: Arahsamna[Month VIII]MN; u
+
+16'. GAN 10+[x ...] 
+#lem: Kislīmu[Month IX]MN; n; u
+
+17'. 20+[x ...]
+#lem: n; u
+
+18'. 29 [...]
+#lem: n; u
+
+19'. AB 5 G[U₄ ...] 
+#lem: Ṭebētu[Month X]MN; n; Šihṭu[Mercury]CN; u
+
+20'. 15? GU₄ [...]
+#lem: n; Šihṭu[Mercury]CN; u
+
+21'. 21 G[ENNA ...] 
+#lem: n; Kayyamānu[Saturn]CN; u
+
+22'. ZÍZ 5 A[N ...]
+#lem: Šabāṭu[Month XI]MN; n; Ṣalbaṭānu[Mars]CN; u
+
+23'. [...]
+#lem: u
+
+24'. ⸢ŠE⸣ [...]
+#lem: Addaru[Month XII]MN; u
+
+@column 4
+$ broken
+@reverse
+@column 5
+$ broken
+@column 6
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. 26 GE[NNA ...]
+#lem: n; Kayyamānu[Saturn]CN; u
+
+3'. ZÍZ 6 G[U₄ ...]
+#lem: Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN; u
+
+4'. 9 BABBAR [...]
+#lem: n; Kakkabu-peṣû[Jupiter]CN; u
+
+5'. 22 AN [...]
+#lem: n; Ṣalbaṭānu[Mars]CN; u
+
+6'. 24 G[U₄? ...]
+#lem: n; Šihṭu[Mercury]CN; u
+
+7'. 28 G[ENNA ...]
+#lem: n; Kayyamānu[Saturn]CN; u
+
+8'. ŠE 8 BA[BBAR? ...]
+#lem: Addaru[Month XII]MN; n; Kakkabu-peṣû[Jupiter]CN; u
+
+9'. 23 G[U₄ ...]
+#lem: n; Šihṭu[Mercury]CN; u
+
+$ ruling
+10'. 1+ŠU+8 BAR 1 A[N ...]
+#lem: n; Nisannu[Month I]MN; n; Ṣalbaṭānu[Mars]CN; u
+
+11'. 25 G[U₄ ...]
+#lem: n; Šihṭu[Mercury]CN; u
+
+12'. 28 [...]
+#lem: n; u
+
+13'. SIG 9 G[U₄ ...]
+#lem: Simānu[Month III]MN; n; Šihṭu[Mercury]CN; u
+
+14'. 28 GE[NNA ...]
+#lem: n; Kayyamānu[Saturn]CN; u
+
+15'. 30 dele-bat [...]
+#lem: n; Dilbat[Venus]CN; u
+
+16'. ŠU 3 GU₄ [...]
+#lem: Duʾūzu[Month IV]MN; n; Šihṭu[Mercury]CN; u
+
+17'. 14 50 ⸢x⸣ [...]
+#lem: n; n; u; u
+
+18'. 10.20? [HAB LAL]
+#lem: n; HAB-rat[disc]N; nahāsu[recede]V
+
+19'. 17 BABBAR 10+[x ...]
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; u
+
+20'. 26 GU₄ [...]
+#lem: n; Šihṭu[Mercury]CN; u
+
+21'. NE 22 GE[NNA ...]
+#lem: Abu[Month V]MN; n; Kayyamānu[Saturn]CN; u
+
+22'. KIN 12 GU₄ Š[Ú? ...]
+#lem: Ulūlu[Month VI]MN; n; Šihṭu[Mercury]CN; erbu[west]N; u
+
+23'. 14 BABBAR 6 [...]
+#lem: n; Kakkabu-peṣû[Jupiter]CN; n; u
+
+24'. 29 GU₄ ŠÚ 10+[x ...]
+#lem: n; Šihṭu[Mercury]CN; rabû[set]V; n; u
+
+25'. DU₆ 18 GU₄ KUR [...]
+#lem: Tašrītu[Month VII]MN; n; Šihṭu[Mercury]CN; šadû[east]N; u
+
+@column 7
+1'. [x x]+⸢3? ME NIM⸣ 21 MÁŠ
+#lem: u; u; ūmu[day]N; šaqi[rise]V; n; Suhurmāšu[Capricorn]CN
+
+2'. 6.10 HAB LAL
+#lem: n; HAB-rat[disc]N; nahāsu[recede]V
+
+3'. 15 AN 7 ALLA IGI
+#lem: n; Ṣalbaṭānu[Mars]CN; n; Alluttu[Cancer]CN; amāru[be(come) visible]V
+
+4'. 19 GU₄ KUR 11 ALLA IGI
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Alluttu[Cancer]CN; amāru[be(come) visible]V
+
+5'. 23 GENNA 24 zib UŠ
+#lem: n; Kayyamānu[Saturn]CN; n; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V
+
+6'. NE 29 GU₄ ŠÚ 16 ABSIN IGI DIB
+#lem: Abu[Month V]MN; n; Šihṭu[Mercury]CN; erbu[west]N; n; Šerʾu[Virgo]CN; amāru[be(come) visible]V; etēqu[omit]V
+
+7'. KIN 5 BABBAR 6 MÚL UŠ
+#lem: Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; n; Zappu[Taurus]CN; emēdu[be at a stationary point]V
+
+8'. 17 GENNA 20 zib ana ME a
+#lem: n; Kayyamānu[Saturn]CN; n; Zibbātu[Pisces]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+9'. 23 GU₄ ŠÚ 8 RÍN ŠÚ DIB
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Zibānītu[Libra]CN; rabû[set]V; etēqu[omit]V
+
+10'. DU₆ 11 GU₄ KUR 4 RÍN IGI
+#lem: Tašrītu[Month VII]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Zibānītu[Libra]CN; amāru[be(come) visible]V
+
+11'. APIN 2 BABBAR 12 MÚL ana ME a
+#lem: Arahsamna[Month VIII]MN; n; Kakkabu-peṣû[Jupiter]CN; n; Zappu[Taurus]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+12'. 16 GU₄ KUR 8 GÍR.TAB ŠÚ
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Zuqiqīpu[Scorpio]CN; rabû[set]V
+
+13'. 17 GENNA 15 zib UŠ
+#lem: n; Kayyamānu[Saturn]CN; n; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V
+
+14'. GAN 24 dele-bat KUR 12 PA ŠÚ
+#lem: Kislīmu[Month IX]MN; n; Dilbat[Venus]CN; šadû[east]N; n; Pabilsag[Sagittarius]CN; rabû[set]V
+
+15'. 29 GU₄ ŠÚ 16 MÁŠ IGI
+#lem: n; Šihṭu[Mercury]CN; erbu[west]N; n; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V
+
+16'. AB 3 BABBAR 6 MÚL UŠ
+#lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; n; Zappu[Taurus]CN; emēdu[be at a stationary point]V
+
+17'. 13 24 ME? NIM 16 ALLA
+#lem: n; n; ūmu[day]N; šaqi[rise]V; n; Alluttu[Cancer]CN
+
+18'. 35.10 HAB SIG
+#lem: n; HAB-rat[disc]N; šapil[below]PRP
+
+19'. 22 GU₄ ŠÚ 6 GU ŠÚ
+#lem: n; Šihṭu[Mercury]CN; erbu[west]; n; Gula[Aquarius]CN; rabû[set]V
+
+20'. ZÍZ 2 GU₄ KUR 22 MÁŠ IGI
+#lem: Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN; šadû[east]N; n; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V
+
+21'. 15 dele-bat ŠÚ 28 GU IGI
+#lem: n; Dilbat[Venus]CN; erbu[west]N; n; Gula[Aquarius]CN; amāru[be(come) visible]V
+
+22'. ŠE 8 AN 3 GÍR.TAB UŠ
+#lem: Addaru[Month XII]MN; n; Ṣalbaṭānu[Mars]CN; n; Zuqiqīpu[Scorpio]CN; emēdu[be at a stationary point]V
+
+23'. 16 GU₄ KUR 4 zib ŠÚ
+#lem: n; Šihṭu[Mercury]CN; šadû[east]N; n; Zibbātu[Pisces]CN; rabû[set]V
+
+24'. 16 GENNA 28 zib ŠÚ
+#lem: n; Kayyamānu[Saturn]CN; n; Zibbātu[Pisces]CN; rabû[set]V
+
+25'. DIRI 14 GU₄ ŠÚ 27 LU IGI
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; Šihṭu[Mercury]CN; rabû[set]V; n; Agru[Aries]CN; pān[front]N
+
+26'. 17 GENNA 29 zib IGI
+#lem: n; Kayyamānu[Saturn]CN; n; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+27'. 27 AN 27 RÍN ana ME a 
+#lem: n; Ṣalbaṭānu[Mars]CN; n; Zibānītu[Libra]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+$ ruling
+28'. ($traces$)
+@column 8
+1'. [...] ⸢GU₄?⸣ [...]
+#lem: u; u; u
+
+2'. [...] 5? [...]
+#lem: u; n; u
+
+3'. [x].20 H[AB] SIG
+#lem: u; HAB-rat[disc]N; šapil[below]PRP
+
+4'. [x BABBAR] 15 MAŠ ana ME a
+#lem: u; Kakkabu-peṣû[Jupiter]CN; n; Māšu[Gemini]CN; ana[to]PRP; ūmu[day]N; alāku[go]V
+
+5'. [x G]U₄? KUR 29 PA IGI
+#lem: u; Šihṭu[Mercury]CN; šadû[east]N; n; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+6'. [GAN x G]U₄ ŠÚ 16 MÁŠ ŠÚ
+#lem: Kislīmu[Month IX]MN; u; Šihṭu[Mercury]CN; erbu[west]N; n; Suhurmāšu[Capricorn]CN; rabû[set]V
+
+7'. [x G]U₄ KUR 4 MÁŠ IGI
+#lem: u; Šihṭu[Mercury]CN; šadû[east]N; n; Suhurmāšu[Capricorn]CN; amāru[be(come) visible]V
+
+8'. [AB x]+10 BABBAR 10 MAŠ UŠ
+#lem: Ṭebētu[Month X]MN; u; Kakkabu-peṣû[Jupiter]CN; n; Māšu[Gemini]CN; emēdu[be at a stationary point]V
+
+9'. [ZÍZ x G]U₄ KUR 16 GU ŠÚ
+#lem: Šabāṭu[Month XI]MN; u; Šihṭu[Mercury]CN; šadû[east]N; n; Gula[Aquarius]CN; rabû[set]V
+
+10'. [ŠE x G]U₄ ŠÚ 12 LU IGI
+#lem: Addaru[Month XII]MN; u; Šihṭu[Mercury]CN; erbu[west]N; n; Agru[Aries]CN; amāru[be(come) visible]V
+
+11'. [x] GENNA 9 LU ŠÚ
+#lem: u; Kayyamānu[Saturn]CN; n; Agru[Aries]CN; rabû[set]V
+
+$ ruling
+12'. [x] ⸢x⸣
+#lem: u; u
+
+13'. [ṭu]p-pi {I}{d}60-EN-šú-nu A šá
+#lem: ṭuppu[tablet]N; Anu-bēlšunu[Anu-bēlšunu]PN; māru[son]N; ša[which]REL
+
+14'. {I}ni-din-tu₄-{d}60 {LÚ}GALA {d}1
+#lem: Nidinti-Anu[Nidinti-Anu]PN; kalû[lamentation-priest]N; Anu[Anu]DN
+
+15'. ma-rù {I}{d}XXX-TI-ÍR UNUG{KI}-u
+#lem: māru[son//descendant]N'N; Sîn-leqe-unninnī[Sîn-leqe-unninnī]PN; Urukāya[Urukean]EN
+
+16'. qàt {I}{d}60-AD-GUR DUMU.A-šú
+#lem: qātu[hand]N; Anu-ab-utēr[Anu-ab-utēr]PN; māru[son]N
+
+17'. {LÚ}UMBISAG DIŠ.UD.{d}1.{d}EN.LÍL.LÁ
+#lem: ṭupšarru[scribe]N; Enūma-Anu-Enlil[(the astronomical series) Enūma Anu Enlil]N$
+
+18'. UNUG{KI} {ITU}GAN <UD> 14.KAM
+#lem: Uruk[Uruk]SN; Kislīmu[Month IX]MN; ūmu[day]N; n
+
+19'. [MU 1] ⸢ME 21⸣ {I}an-ti-ʾu-uk-su  LUGAL
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]PN; šarru[king]N
+
+20'. [...] UDU.IDIM{MEŠ}
+#lem: u; bibbu[planet]N
+
+21'. [...] 30
+#lem: u; n
+
+@translation labeled en project
+
+
+@(o i 1) The 14th? ... [...]
+
+@(o i 2) The 25th, Jupiter’s [last appearance] in 26°? of Cancer.
+
+@(o i 3) Month IV, the 4th, Venus’ first appearance in the west in 28° of Cancer.
+
+@(o i 4) The 6th, Mercury’s last appearance in the west in 3° of Leo.
+
+@(o i 5) The 12th, Saturn’s stationary point in 26° of Scorpius.
+
+@(o i 6) The 24th, Mars’ last appearance in 23° of Leo.
+
+@(o i 7) The 24th, Jupiter’s first appearance in 30° of Cancer.
+
+@(o i 8) The 26th, Mercury’s first appearance in the east in 28° of Cancer.
+
+@(o i 9) Month V, the 18th, Mercury’s last appearance in the east in 18° of Leo.
+
+@(o i 10) Month VII, the 9th, Mercury’s first appearance in the west in 8° of Scorpius, omitted.
+
+@(o i 11) The 26th, Mercury’s last appearance in the west in 21° of Scorpius.
+
+@(o i 12) Month VIII, the 9th, Saturn’s last appearance in 5° of Sagittarius.
+
+@(o i 13) The 11th, Mars’ first appearance in 7° of Scorpius.
+
+@(o i 14) The 12th, Mercury’s first appearance in the east in 14° of Scorpius.
+
+@(o i 15) The 29th, Jupiter’s stationary point in 17° of Leo.
+
+@(o i 16) Month IX, the 11th, Saturn’s first appearance in 7° of Sagittarius.
+
+@(o i 17) The 14th, 20° before sunset, in 26° of Gemini
+
+@(o i 18) 11,40 eclipse magnitude, ascending node.
+
+@(o i 19) The 28th, Mercury’s last appearance in the east in 28° of Sagittarius.
+
+@(o i 20) Month X, the 27th, Jupiter’s acronychal rising in 13° of Leo.
+
+@(o i 21) The 29th, Mercury’s first appearance in the west in 25° of Aquarius.
+
+@(o i 22) [Month XI,] the 24th, Mercury’s last appearance in the west in 16° of Pisces.
+
+@(o i 23) [Month XII, the 1]7th, Mercury’s first appearance in the east in 13° of Pisces.
+
+@(o i 24) [The 2]7th?, Jupiter’s stationary point in 8° of Leo.
+
+$ ruling
+
+@(o i 25) [...] ...
+
+@(o i 26) Venus’? first appearance in the east? in 12° of Aries.
+
+@(o i 27) [....] Saturn’s stationary point in 15° of Sagittarius.
+
+@(o i 28) [The xth,] Mercury’s ... appearance in the east ...
+
+@(o ii 1) The 13th, [...]
+
+@(o ii 2) 22.⸢40⸣ eclipse magnitude, ascending node.
+
+@(o ii 3) The 28th, Venus’ last appearance in the east in 25°? of Sagittarius.
+
+@(o ii 4) The 28th, Mercury’s last appearance in the east in 5°? of Sagittarius.
+
+@(o ii 5) Month X, the 4th, Saturn’s first appearance in 19°? of Sagittarius.
+
+@(o ii 6) The 10th, Jupiter’s stationary point in 10+[x°] of Virgo.
+
+@(o ii 7) The 12th, Mars’ stationary point in 25° [of Taurus.]
+
+@(o ii 8) The 24th, Mercury’s first appearance in the west in 8° of Aquarius.
+
+@(o ii 9) Month XI, the 18th, Mercury’s last appearance in the west in 30° of Aquarius. 
+
+@(o ii 10) The 29th, Venus’ first appearance in the west in 1° of Pisces.
+
+@(o ii 11) Month XII, the 6th, Mercury’s [first appearance] in the east in 23° of Aquarius. 
+
+@(o ii 12) The 7th, Jupiter’s acronychal rising in 11° of Virgo.
+
+@(o ii 13) Month XII₂, the 10th, Mercury’s last appearance in the east in 23° of Pisces. 
+
+$ ruling
+
+@(o ii 14) (Year) 62, month I, the 3rd, Saturn’s stationary point in 26° of Sagittarius. 
+
+@(o ii 15) The 9th, Mercury’s first appearance in the west in 18° of Taurus.
+
+@(o ii 16) The 10th, Jupiter’s stationary point in 7° of Virgo.
+
+@(o ii 17) Month II, the 15th, at 1.0° after sunset, in 11° of Sagittarius,
+
+@(o ii 18)	30.20 eclipse magnitude, descending node.
+
+@(o ii 19) The 24th, Mercury’s last appearance in the west in 30° of Gemini.
+
+@(o ii 20) The 28th, Saturn’s acronychal rising in 23°? of Sagittarius.
+
+@(o ii 21) Month III, the 19th, [Mercury’s] first appearance in the east in 28°? of Gemini. 
+
+@(o ii 22) Month IV, the 8th, Mercury’s last appearance in the east in 17° of Cancer.
+
+@(o ii 23) The 29th, Saturn’s stationary point in 19° of Sagittarius.
+
+@(o ii 24) Month V, the 17th, Jupiter’s last appearance in 22° of Virgo.
+
+@(o ii 25) [...]
+
+@(o ii 26) The 25th, Mars’ last appearance in 1° of Libra.
+
+@(o ii 27) [Month] VI?, ...
+
+@(o iii 1) ... [...]
+
+@(o iii 2) Mon[th III?, ...]
+
+@(o iii 3) The 10+[xth, ...] 
+
+@(o iii 4) Month IV, the 4th, [...] 
+
+@(o iii 5) The 24th?, [...]
+
+@(o iii 6) Month V, [...]
+
+@(o iii 7-13) [...]
+
+@(o iii 14) The 20+[xth, ...]
+
+@(o iii 15) Month VIII, [...]
+
+@(o iii 16) Month IX, the 10+[xth, ...]
+
+@(o iii 17) The 20+[xth, ...]
+
+@(o iii 18) The 29th, ... [...]
+
+@(o iii 19) Month X, the 5th, Mer[cury’s last appearance in the west ...] 
+
+@(o iii 20) The 15th?, Mercury’s [first appearance in the east ...]
+
+@(o iii 21) The 21st, Sa[turn’s first appearance ...]
+
+@(o iii 22) Month XI, the 5th, Ma[rs’ stationary point ...]
+
+@(o iii 23) [...]
+
+@(o iii 24) Month XII, [...]
+
+@obverse
+
+@column 4
+
+$ broken
+
+@reverse
+
+@column 5
+
+$ broken
+
+@(r vi 1) ... [...]
+
+@(r vi 2) The 26th, Sat[urn’s last appearance ...]
+
+@(r vi 3) Month XI, the 6th, Mer[cury’s last appearance in the west ...]
+
+@(r vi 4) The 9th, Jupiter’s [last appearance ...]
+
+@(r vi 5) The 22nd, Mars’ [acronychal rising ...]
+
+@(r vi 6) The 24th, Mer[cury’s first appearance in the east ...]
+
+@(r vi 7) The 28th, Sa[turn’s first appearance ...]
+
+@(r vi 8) Month XII, the 8th, Jupi[ter’s? first appearance ...]
+
+@(r vi 9) The 23rd, Mercury’s [last appearance in the east ...]
+
+$ ruling
+
+@(r vi 10) (Year) 68, month I, the 1st, Ma[rs’ stationary point ...]
+
+@(r vi 11) The 25th, Mer[cury’s first appearance in the west ...]
+
+@(r vi 12) The 28th, [...]
+
+@(r vi 13) Month III, the 9th, Mer[cury’s last appearance in the west ...]
+
+@(r vi 14) The 28th, Sat[urn’s stationary point ...]
+
+@(r vi 15) The 30th, Venus’ [first appearance in the west ...]
+
+@(r vi 16) Month IV, the 3rd, Mercury’s [first appearance in the east ...]
+
+@(r vi 17) The 14th, 50 ... [...]
+
+@(r vi 18) 10.20? [eclipse magnitude, ascending node.]
+
+@(r vi 19) The 17th, Jupiter’s [stationary point] in 10+[x° ...]
+
+@(r vi 20) The 26th, Mercury’s [last appearance in the east ...]
+
+@(r vi 21) Month V, the 22nd, Sat[urn’s acronychal rising ...]
+
+@(r vi 22) Month VI, the 12th, Mercury’s [first appearance] in the we[st ...]
+
+@(r vi 23) The 14th, Jupiter’s [acronychal rising] in 6° [...]
+
+@(r vi 24) The 29th, Mercury’s [last appearance] in the west in 10+[x° ...]
+
+@(r vi 25) Month VII, the 18th, Mercury’s [first appearance] in the east [...]
+
+@(r vii 1) [...] +3° after sunrise, in 21° of Capricorn,
+
+@(r vii 2) 6.10, eclipse magnitude, ascending node.
+
+@(r vii 3) The 15th, Mars’ first appearance in 8° of Cancer.
+
+@(r vii 4) The 19th, Mercury’s first@sup{SIC} appearance in the east in 11° of Cancer.
+
+@(r vii 5) The 23rd, Saturn’s stationary point in 24° of Pisces.
+
+@(r vii 6) Month V, the 29th, Mercury’s first appearance in the west in 16° of Virgo, omitted.
+
+@(r vii 7) Month VI, the 5th, Jupiter’s stationary point in 6° of Taurus.
+
+@(r vii 8) The 17th, Saturn’s acronychal rising in 20° of Pisces.
+
+@(r vii 9) The 23rd, Mercury’s last appearance in the west in 8° of Libra, omitted.
+
+@(r vii 10) Month VII, the 11th, Mercury’s first appearance in the east in 4° of Libra.
+
+@(r vii 11) Month VIII, the 2nd, Jupiter’s acronychal rising in 12° of Taurus.
+
+@(r vii 12) The 16th, Mercury’s last appearance in the east in 8° of Scorpius.
+
+@(r vii 13) The 17th, Saturn’s stationary point in 15° of Pisces.
+
+@(r vii 14) Month IX, the 24th, Venus’ last appearance in the east in 12° of Sagittarius.
+
+@(r vii 15) The 29th, Mercury’s first appearance in the west in 16° of Capricorn.
+
+@(r vii 16) Month X, the 3rd, Jupiter’s stationary point in 6° of Taurus.
+
+@(r vii 17) The 13th, 24° after sunrise, in 16° of Cancer,
+
+@(r vii 18) 35.10 eclipse magnitude, descending node.
+
+@(r vii 19) The 22nd, Mercury’s last appearance in the west in 6° of Aquarius.
+
+@(r vii 20) Month XI, the 2nd, Mercury’s first appearance in the east in 22° of Capricorn.
+
+@(r vii 21) The 15th, Venus’ first appearance in the west in 28° of Aquarius.
+
+@(r vii 22) Month XII, the 8th, Mars’ stationary point in 3° of Scorpius.
+
+@(r vii 23) The 16th, Mercury’s last appearance in the east in 4° of Pisces.
+
+@(r vii 24) The 16th, Saturn’s last appearance in 28° of Pisces.
+
+@(r vii 25) Month XII₂, the 14th, Mercury’s first appearance in the west in 27° of Aries.
+
+@(r vii 26) The 17th, Saturn’s first appearance in 29° of Pisces.
+
+@(r vii 27) The 27th, Mars’ acronychal rising in 27° of Libra.
+
+$ ruling
+
+@(r vii 28) (traces)
+
+@(r viii 1) [...] ... [...]
+
+@(r viii 2) [...] 5? [...]
+
+@(r viii 3) [x,] 20 eclipse magnitude, descending node.
+
+@(r viii 4) [The xth, Jupiter’s] acronychal rising in 15° of Gemini.
+
+@(r viii 5) [The xth, Mer]cury’s first appearance in the east@sup{SIC} (error for: west) in 29° of Sagittarius.
+
+@(r viii 6) [Month IX, the xth, Mer]cury’s last appearance in the west in 16° of Capricorn.
+
+@(r viii 7) [The xth, Mer]cury’s first appearance in the east in 4° of Capricorn.
+
+@(r viii 8) [Month X, the x]+10th, Jupiter’s stationary point in 10° of Gemini.
+
+@(r viii 9) [Month XI, the xth, Mer]cury’s last appearance in the east in 16° of Aquarius.
+
+@(r viii 10) [Month XII, the xth, Mer]cury’s first appearance in the west in 12° of Aries.
+
+@(r viii 11) [The xth,] Saturn’s last appearance in 9° of Aries.
+
+$ ruling
+
+@(r viii 12) [...]
+
+@(r viii 13) [Tab]let of Anu-bel-šunu, son of
+
+@(r viii 14) Nidinti-Ani, lamentation priest of Anu,
+
+@(r viii 15) descendant of Sin-leqe-unninni, the Urukean.
+
+@(r viii 16) Hand of Anu-aba-uter, his son,
+
+@(r viii 17) scribe of Enūma Anu Enlil.
+
+@(r viii 18) Uruk, Month IX, the 14th,
+
+@(r viii 19) [year 1]21, king Antiochus.
+
+@(r viii 20) [...] planets
+
+@(r viii 21) [...] moon?.

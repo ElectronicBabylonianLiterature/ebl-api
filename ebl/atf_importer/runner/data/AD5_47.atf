@@ -1,0 +1,42 @@
+&X500047 = ADART 5 47
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+$ traces
+@reverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ [...] GE₆ ana [x x x] ⸢x⸣ [...]
+#lem: u; u; u; mūšu[night]N; ana[to]PRP; u; u; u; u; u
+
+3'. [...] ⸢x⸣ [...] ⸢x x 30⸣ NU PAP [...]
+#lem: u; u; u; u; u; n; ul[not]MOD; naṣāru[watch]V; u
+
+4'. [...] 4 ⸢x⸣ [x x x x] ⸢x⸣ [...]
+#lem: u; 4[4]NU; u; u; u; u; u; u; u
+
+5'. [...] ⸢x⸣ [x x] 27 [x] ⸢x⸣ [x x] ⸢x⸣ [...]
+#lem: u; u; u; u; n; u; u; u; u; u; u
+
+6'. [...] 4 ME muš ⸢x⸣ UŠ ina IGI [x x] ŠÚ šá ⸢x⸣ [...]
+#lem: u; 4[4]NU; ūmu[moonrise to sunset]N; mašāhu[measure]V; u; UŠ[(time degree)]N; ina[in]PRP; pān[front]'N; u; u; rabû[setting]'N; ša[which]REL; u; u
+
+7'. [...] ⸢x⸣ u KUR PAP 28 GE₆ ana [x x x x] ⸢x x⸣ [...]
+#lem: u; u; u[and]CNJ; u; u; n; mūšu[night]N; ana[to]PRP; u; u; u; u; u; u; u
+
+8'. [...] ana? ZÁLAG 14 3 [...]
+#lem: u; ana[to]PRP; nūru[light]N; n; n; u
+
+9'. [...] PAP 22 ⸢x⸣ [...]
+#lem: u; u; n; u; u
+
+10'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+A meaningful translation is not possible. The remaining words may belong to eclipses or other lunar data.

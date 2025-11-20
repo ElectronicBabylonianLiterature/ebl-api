@@ -1,0 +1,191 @@
+&X500052 = ADART 5 52A
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [... ša]p-⸢lat⸣ LUGAL 1/2 KÙŠ GUB
+#lem: u; šapil[below]PRP$šaplat; LUGAL[α Leonis]CN; n; ammatu[unit]N; izuzzu[stand]V
+
+$ ruling
+3'. [...] ⸢e?⸣ MAŠ.MAŠ-EGIR šá IGI SIPA-ZI
+#lem: u; eli[above]PRP; MAŠ.MAŠ-EGIR[Rear Twin Star]CN$; ša[which]REL; pān[front]N; SIPA-ZI[True Shepherd]CN$
+
+4'. [...] ⸢x⸣ SAG.UŠ šap-lat MAŠ?.<MAŠ>-EGIR
+#lem: u; u; Kayyamānu[Saturn]CN; šaplat[below]PRP; MAŠ.MAŠ-EGIR[Rear Twin Star]CN
+
+5'. [...] KI LAL-sa? ŠE 8 a-na
+#lem: u; u; nahāsu[recede]V$; Addaru[Month XII]MN; n; ana[to]PRP
+
+6'. [...] x x x ana 1-en MÚL GUR
+#lem: u; u; u; u; ana[to]PRP; ištēn[one]NU; kakkabu[star]N; târu[turn into]'V
+
+$ ruling
+7'. [... SA]G.UŠ ana MÚL EGIR SIG-ú šá KUR
+#lem: u; Kayyamānu[Saturn]CN; ana[to]PRP; kakkabu[star]N; +warkû[rear]AJ; u; ša[which]REL; u
+
+8'. [...] ⸢x⸣ 26 SAG.UŠ
+#lem: u; u; n; Kayyamānu[Saturn]CN
+
+9'. [...] È
+#lem: u; waṣû[go out]V
+
+$ ruling
+10'. [...] ⸢e⸣-lat LUGAL 8? SI? BAD LÁL
+#lem: u; elat[beyond]PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N; u; alālu[balance]V
+
+11'. [...] ⸢ár⸣ LUGAL 1/2 KÙŠ LÁL
+#lem: u; warki[behind]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; alālu[balance]V
+
+$ ruling
+12'. [... SA]G.UŠ 2 KÙŠ e ABSIN LÁL
+#lem: u; Kayyamānu[Saturn]CN; n; ammatu[unit]N; eli[above]PRP; Šerʾu[Virgo]CN; alālu[balance]V
+
+13'. [...] e-lat ABSIN LÁL
+#lem: u; elat[beyond]PRP; Šerʾu[Virgo]CN; alālu[balance]V
+
+14'. [... M]UL TUR šá bi-rit ABSIN ⸢x⸣
+#lem: u; kakkabu[star]N; ṣehru[small]AJ; ša[which]REL; birītu[space between]N; Šerʾu[Virgo]CN; u
+
+15'. [... SAG].UŠ e-lat RÍN-šá-ULÙ 1 1/2 KÙŠ ⸢LÁL⸣
+#lem: u; Kayyamānu[Saturn]CN; elat[beyond]PRP; RÍN-šá-ULÙ[α Librae]CN; n; n; ammatu[unit]N; alālu[balance]V
+
+16'. [...] 1? 1/2 KÙŠ ŠÚ ($blank$)
+#lem: u; n; n; ammatu[unit]N; rabû[set]V
+
+$ blank
+
+
+17'. [...] MUL ⸢x x⸣
+#lem: u; kakkabu[star]N; u; u
+
+@column 2
+$ ruling
+1'. MU 8 hum-ba-hal-da-šú ⸢x⸣ [...] 
+#lem: šattu[year]N; n; Humbahaldašu[Humbahaldašu]RN$; u; u
+
+$ ruling
+2'. MU 2 AN.ŠÁR-PAP-MU SIG 16 ⸢x⸣ [x x x]
+#lem: šattu[year]N; n; Aššur-ahu-iddin[Esarhaddon]RN$; Simānu[Month III]MN; n; u; u; u; u
+
+$ ruling
+3'. MU 14 šamáš-MU-GIN ŠE 4 GU₄.UD ina ŠÚ? ina KI SIM IGI
+#lem: šattu[year]N; n; Šamaš-šumu-ukīn[Šamaš-šumu-ukīn]RN; Addaru[Month XII]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; erṣetu[district]N; Sinuntu[Swallow]CN; amāru[be(come) visible]'V
+
+4'. ki NIM NIM-a e-lat [A]N? 6 KÙŠ LÁL GU₄.UD ⸢x⸣ [...]
+#lem: kī[when]'SBJ; šaqi[high]V; šaqi[high]V; elat[beyond]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; alālu[balance]V; Šihṭu[Mercury]CN; u; u
+
+5'. MU 17 GU₄ 19 AN ina? ⸢x⸣ ŠU.GI ina 15 GU₄.UD 2 KÙ[Š? ...]
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; u; Šību[Old Man]CN$; ina[in]PRP; imittu[right side]N; Šihṭu[Mercury]CN; n; ammatu[unit]N; u
+
+6'. MU 19 DU₆ 4 GU₄.UD ⸢e?⸣-[la]t? AN a-na 2/3 KÙŠ GUB GU₄.UD [...]
+#lem: šattu[year]N; n; Tašrītu[Month VII]MN; n; Šihṭu[Mercury]CN; elat[beyond]PRP; Ṣalbaṭānu[Mars]CN; ana[to]PRP; n; ammatu[unit]N; izuzzu[stand]V; Šihṭu[Mercury]CN; u
+
+$ ruling
+7'. MU 1 kan-dal SIG₄ 28 GU₄.UD ina ku-tal AN ⸢x⸣ [...]
+#lem: šattu[year]N; n; Kandalānu[Kandalānu]RN$; Simānu[Month III]MN$; n; Šihṭu[Mercury]CN; ina[in]PRP; kutallu[rear side]N; Ṣalbaṭānu[Mars]CN; u; u
+
+8'. 29 e-lat GU₄.UD 14 SI ina KI UR.⸢A?⸣ [...]
+#lem: n; elat[beyond]PRP; Šihṭu[Mercury]CN; n; ubānu[finger]N; ina[in]PRP; erṣetu[district]N; Nēšu[Leo]CN$; u
+
+9'. MU 12 BÁR GE₆ 8 GU₄.UD ina KI MÚL.MÚL 2 2/3 KÙŠ e?-lat? AN? [...]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; mūšu[night]N; n; Šihṭu[Mercury]CN; ina[in]PRP; erṣetu[district]N; Zappu[Pleiades]CN; n; n; ammatu[unit]N; elat[beyond]PRP; Ṣalbaṭānu[Mars]CN; u
+
+10'. MU 16 SIG₄ GE₆ 20 GU₄.UD ár AN 1 KÙŠ 4 SI GUB
+#lem: šattu[year]N; n; Simānu[Month III]MN; mūšu[night]N; n; Šihṭu[Mercury]CN; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; n; ubānu[finger]N; izuzzu[stand]V
+
+$ ruling
+11'. MU 7 A-a ⸢x⸣ [x] GU₄.UD e-lat AN 6 SI LÁL 
+#lem: šattu[year]N; n; +Aplāya[Nabopolassar]RN$; u; u; Šihṭu[Mercury]CN; elat[beyond]PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; alālu[balance]V
+
+$ ruling
+12'. MU [x ...] ⸢x e-lat⸣ AN 1 1/2 KÙŠ [...]
+#lem: šattu[year]N; u; u; u; elat[beyond]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; u
+
+13'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] stood 1⁄2 cubit below α Leonis.
+
+$ ruling
+
+@(o i 3) [...] above? the rear twin star which is in front of the True Shepherd.
+
+@(o i 4) [...] ... Saturn was below the rear twin star
+
+@(o i 5) [...] .... moved back?. Month XII, the 8th, to
+
+@(o i 6) [...] ... turned into one star.
+
+$ ruling
+
+@(o i 7) [... Sa]turn to the rear lower star of ...
+
+@(o i 8) [...] ... the 26th, Saturn
+
+@(o i 9) [...] came out.
+
+$ ruling
+
+@(o i 10) [...] it was balanced 8 fingers .... above α Leonis
+
+@(o i 11) [...] it was balanced 1⁄2 cubit behind α Leonis.
+
+$ ruling
+
+@(o i 12) [...] Saturn was balanced 2 cubits above Virgo.
+
+@(o i 13) [...] balanced above Virgo.
+
+@(o i 14) [...] the small star which is between Virgo ...
+
+@(o i 15) [... Sat]urn was balanced 1 1⁄2 cubits above α Librae.
+
+@(o i 16) [...] 1? 1⁄2 cubits [...] last appearance.
+
+@(o i 17) [...] star ...
+
+@(o ii 1) Year 8 of Humbahaldašu ... [...]
+
+$ ruling
+
+@(o ii 2) Year 2 of Esarhaddon, month III, the 16th, ... [...] ...
+
+$ ruling
+
+@(o ii 3) Year 14 of Šamaš-šum-ukin, month XII, the 4th, Mercury’s first appearance in the west in the area of the Swallow.
+
+@(o ii 4) when it became high?, it was balanced 6 cubits above [Mar]s?, Mercury ... [...]
+
+@(o ii 5) Year 17, month II, the 19th, Mars was in [the area?] of the Old Man to the right of Mercury 2 cu[bits? ...]
+
+@(o ii 6) Year 19, month VII, the 4th, Mercury stood for 2/3 cubit above? Mars, Mercury [...]
+
+$ ruling
+
+@(o ii 7) Year 1 of Kandalanu, month III, the 28th, Mercury was in the back of Mars? ... [...]
+
+@(o ii 8) the 29th, it was 14 fingers above Mercury in the area of the Lion [...]
+
+@(o ii 9) Year 12, month I, night of the 8th, Mercury, in the area of Pleiades, was 2 2/3 cubits above? Mars? [...]
+
+@(o ii 10) Year 16, month III, night of the 20th, Mercury stood 1 cubit 4 fingers behind Mars.
+
+$ ruling
+
+@(o ii 11) Year 7 of Nabopolassar, month ..., [...] Mercury was balanced 6 fingers above Mars.
+
+$ ruling
+
+@(o ii 12) Year [...] 1 1⁄2 cubits above Mars
+
+@(o ii 13) [...] ... [...]

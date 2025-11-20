@@ -1,0 +1,37 @@
+&X500092 = ADART 5 89
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse	
+1'. [...] ⸢x x x x⸣ 8 ⸢x x 13 x⸣ [...]
+#lem: u; u; u; u; u; n; u; u; n; u; u
+
+2'. [...] ⸢x⸣ AB? 25 28? ZÍZ? 25 ŠE [...]
+#lem: u; u; Ṭebētu[Month X]MN; n; n; Šabāṭu[Month XI]MN; n; Addaru[Month XII]MN; u
+
+$ ruling
+3'. [...] ⸢x x⸣ [x x] x x dele-bat 6 SI 17? MÁŠ? 15 ⸢x⸣ [...]
+#lem: u; u; u; u; u; u; u; Dilbat[Venus]CN; n; ubānu[finger]N; n; u; n; u; u
+
+4'. [...] ⸢x⸣ GAN? 18 ⸢x x⸣ IGI
+#lem: u; u; Kislīmu[Month IX]MN; n; u; u; amāru[be(come) visible]V
+
+$ ruling
+5'. [...] 24 GAN 12? 23 ina ZÁLAG dele-bat SIG ⸢x⸣ 4 SI 14 ⸢x⸣ [...] 
+#lem: u; n; Kislīmu[Month IX]MN; n; n; ina[during]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]PRP; u; n; ubānu[finger]N; n; u; u
+
+$ ruling
+6'. [...] ⸢x⸣ [x] ina ZÁLAG dele-bat SIG ⸢x x⸣ 2 U LAL? ina? 9? ⸢x x⸣ [...]
+#lem: u; u; u; ina[during]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]PRP; u; u; n; ubānu[finger]N; nahāsu[recede]V; ina[in]PRP; n; u; u; u
+
+7'. [...] ⸢x x x x x x x⸣ dele-bat 5 U ana ŠÚ LAL IGI x [...]
+#lem: u; u; u; u; u; u; u; u; u; X; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; amāru[be(come) visible]V; u; u
+
+$ ruling
+$ blank
+
+@translation labeled en project
+
+Due to the bad state of preservation, a translation does not seem warranted.

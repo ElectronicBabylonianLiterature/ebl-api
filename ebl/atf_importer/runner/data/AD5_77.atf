@@ -1,0 +1,94 @@
+&X500080 = ADART 5 77
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [MU 60+37.(KAM) BAR x in? E]N? 13 MÚL.BABBAR ana ŠÚ
+#lem: šattu[year]N; n; Nisannu[Month I]MN; u; ina[around (day x)]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N
+
+2'. [ki UŠ-a N K]ÙŠ ina IGI GIŠ.KUN-A UŠ
+#lem: kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pānu[front]N; GIŠ.KUN-A[θ Leonis]CN; emēdu[be at a stationary point]V
+
+3'. [x x MÚL.BABB]AR ina ABSIN ŠÚ NU PAP x
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; u
+
+4'. [KIN x M]ÚL.BABBAR ina ABSIN <IGI> 14 na-su
+#lem: Ulūlu[Month VI]MN; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N
+
+5'. [in x šá N]E IGI KIN 1 GE₆ 18 ina ZÁLAG MÚL.BABBAR
+#lem: ina[on]PRP; u; ša[which]REL; Abu[Month V]MN; amāru[be(come) visible]V; Ulūlu[Month VI]MN; n; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN
+
+6'. SIG DELE 20 SI DU₆ 1 APIN 1 GAN 1 GE₆ 14
+#lem: šapil[below]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ubānu[finger]N; Tašrītu[Month VII]MN; n; Arahsamna[Month VIII]MN; n; Kislīmu[Month IX]MN; n; mūšu[night]N; n
+
+7'. ina ZÁLAG MÚL.BABBAR e SA₄-šá-ABSIN 1 1/2 KÙŠ
+#lem: ina[during]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N
+
+8'. AB 30 in EN 1 MÚL.BABBAR ana NIM ki UŠ-ú
+#lem: Ṭebētu[Month X]MN; n; ina[around (day x)]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+9'. 1/2 KÙŠ ár SA₄-šá-ABSIN UŠ ZÍZ 1
+#lem: n; ammatu[unit]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; emēdu[be at a stationary point]V; Šabāṭu[Month XI]MN; n
+
+10'. ŠE 30 1.38 BAR 30
+#lem: Addaru[Month XII]MN; n; n; Nisannu[Month I]MN; n
+
+11'. EN 25 MÚL.BABBAR ana ŠÚ ki UŠ-a
+#lem: adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+12'. 1 K[ÙŠ?] ár DELE-šá-IGI-ABSIN UŠ
+#lem: n; ammatu[unit]N; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; emēdu[be at a stationary point]V
+
+@reverse
+1'. GU₄ 1 SIG 30 ŠU 30 NE 1
+#lem: Ayyaru[Month II]MN; n; Simānu[Month III]MN; n; Duʾūzu[Month IV]MN; n; Abu[Month V]MN; n
+
+2'. GE₆ 7 USAN MÚL.BABBAR e SA₄ 1 1/2 KÙŠ
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N
+
+3'. [KI]N 30 4 13 na MÚL.BABBAR in 7 MÚL.BABBAR ina RÍN ŠÚ
+#lem: Ulūlu[Month VI]MN; n; n; n; na[sunset to setting]N; Kakkabu-peṣû[Jupiter]CN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V
+
+4'. [DU₆] 1 11 MÚL.BABBAR ina RÍN IGI
+#lem: Tašrītu[Month VII]MN; n; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]V
+
+5'. [N] na-su in 9 IGI
+#lem: n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V
+
+@translation labeled en project
+
+@(o 1) [Year 97. Month I, ... Un]til the 13th, [when] Jupiter [became stationary] to the west,
+
+@(o 2) it became stationary [nn cu]bits in front of 𝜗 Leonis.
+
+@(o 3) [..., Jupi]ter’s last appearance in Virgo; I did not watch.
+
+@(o 4) [Month VI, the xth, J]upiter’s <first appearance> in Virgo; rising of Jupiter to sunrise: 14°;
+
+@(o 5) (ideal) first appearance [on the xth of m]onth V. Month VI, the 1st (of which followed the 30th of the preceding month). Night of the 18th, last part of the night, Jupiter was
+
+@(o 6) 20 fingers below γ Virginis. Month VII, the 1st (of which followed the 30th of the preceding month). Month VIII, the 1st (of which followed the 30th of the preceding month). Month IX, the 1st (of which followed the 30th of the preceding month). Night of the 14th,
+
+@(o 7) last part of the night, Jupiter was 1 1⁄2 cubits above α Virginis.
+
+@(o 8) Month X, (the 1st of which was identical with) the 30th (of the preceding month). Until around the 1st, when Jupiter became stationary to the east,
+
+@(o 9) it became stationary 1⁄2 cubit behind α Virginis. Month XI, the 1st (of which followed the 30th of the preceding month).
+
+@(o 10) Month XII, (the 1st of which was identical with) the 30th (of the preceding month). (Year) 98. Month I, (the 1st of which was identical with) the 30th (of the preceding month).
+
+@(o 11) Until the 25th, when Jupiter became stationary to the west,
+
+@(o 12) it became stationary 1 cubit behind γ Virginis.
+
+@(r 1) Month II, the 1st (of which followed the 30th of the preceding month). Month III, (the 1st of which was identical with) the 30th (of the preceding month). Month IV, (the 1st of which was identical with) the 30th (of the preceding month). Month V, the 1st (of which followed the 30th of the preceding month).
+
+@(r 2) Night of the 7th, first part of the night, Jupiter was 1 1⁄2 cubits above α Virginis.
+
+@(r 3) Month VI, (the 1st of which was identical with) the 30th (of the preceding month). The 4th, sunset to setting of Jupiter: 13°. Around the 7th, Jupiter’s last appearance in Libra.
+
+@(r 4) [Month VII], the 1st (of which followed the 30th of the preceding month). The 11th, Jupiter’s first appearance in Libra;
+
+@(r 5) rising of Jupiter to sunrise: [nn°]; (ideal) first appearance on the 9th.

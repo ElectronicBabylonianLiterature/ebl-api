@@ -1,0 +1,312 @@
+&X500075 = ADART 5 72
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+$ ruling
+2'. [...] ⸢E⸣-a
+#lem: u; elû[go up]V
+
+3'. [... U]Š-a
+#lem: u; emēdu[be at a stationary point]V
+
+4'. [... x]+19
+#lem: u; u
+
+5'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. [...] ⸢x x⸣
+#lem: u; u; u
+
+2'. [...] ($blank$)
+#lem: u
+
+$ ruling
+3'. [MU 23] GU₄ U₄-19 MÚL.BABBAR ina MAŠ.MAŠ ŠÚ
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V
+
+4'. [SIG (x) 1]9 MÚL.BABBAR ina MAŠ.MAŠ IGI DU₆ in
+#lem: Simānu[Month III]MN; u; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; amāru[be(come) visible]V; Tašrītu[Month VII]MN; ina[around]PRP
+
+5'. [EN x MÚ]L.BABBAR ana NIM ki UŠ-ú 2/3 KÙŠ
+#lem: adi[until]PRP; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N
+
+6'. [x x x x U]Š GAN in 19 MÚL.BABBAR ana ME
+#lem: u; u; u; u; emēdu[be at a stationary point]V; Kislīmu[Month IX]MN; ina[around]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N
+
+7'. [E-a ZÍZ x]+9 MÚL.BABBAR ana ŠÚ ki UŠ-a
+#lem: elû[go up]V; Šabāṭu[Month XI]MN; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+8'. [n n ina] IGI MAŠ.MAŠ-IGI UŠ ŠE DIR
+#lem: n; n; ina[in]PRP; pān[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; N[extra]AJ
+
+$ ruling
+9'. [MU 24 SIG x MÚ]L.BABBAR ina ALLA ŠÚ ŠU in
+#lem: šattu[year]N; n; Simānu[Month III]MN; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; Duʾūzu[Month IV]MN; ina[around]PRP
+
+10'. [x ina ALLA IGI A]PIN EN 5 MÚL.BABBAR
+#lem: u; ina[in]PRP; Alluttu[Cancer]CN; amāru[be(come) visible]V; Arahsamna[Month VIII]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN
+
+11'. [ana NIM ki] ⸢UŠ⸣-ú 1 KÙŠ 8 <SI> ina IGI LUGAL
+#lem: ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; n; ubānu[finger]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN
+
+12'. ⸢UŠ AB⸣ 5 MÚL.BABBAR ana ME E-a
+#lem: emēdu[be at a stationary point]V; Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+13'. ŠE EN 5 MÚL.BABBAR ana ŠÚ ki UŠ-a ina ALLA UŠ
+#lem: Addaru[Month XII]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; ina[in]PRP; Alluttu[Cancer]CN; emēdu[be at a stationary point]V
+
+$ ruling
+14'. MU 25 ŠU in 8 MÚL.BABBAR ina A ŠÚ NE
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; ina[around]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; Abu[Month V]MN
+
+15'. U₄-15 MÚL.BABBAR ina A IGI GAN EN 15
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; amāru[be(come) visible]V; Kislīmu[Month IX]MN; adi[until]PRP; n
+
+16'. MÚL.BABBAR ana NIM ki UŠ-ú 1/2 KÙŠ ár
+#lem: Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP
+
+17'. GÌR-ár-šá-A UŠ ZÍZ 16 MÚL.BABBAR ana ME E-a
+#lem: GÌR-ár-šá-A[β Virginis]CN; emēdu[be at a stationary point]V; Šabāṭu[Month XI]MN; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+$ ruling
+18'. MU 26 BAR EN 13 MÚL.BABBAR ana ŠÚ ki UŠ-a
+#lem: šattu[year]N; n; Nisannu[Month I]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+19'. ⸢8⸣ SI ina IGI LÁL-tì-GIŠ.KUN-A UŠ NE 25+[x]
+#lem: n; ubānu[finger]N; ina[in]PRP; pānu[front]N; MÚL-SIG-šá-LÁL-tì-GIŠ.KUN-A[σ Leonis]CN$; emēdu[be at a stationary point]V; Abu[Month V]MN; n
+
+20'. [MÚ]L.BABBAR ina ABSIN ŠÚ KIN 28 MÚL.BABBAR ina ABSIN I[GI]
+#lem: Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Šerʾu[Virgo]CN; amāru[be(come) visible]V
+
+21'. [ZÍZ] EN 1 MÚL.BABBAR ana NIM ki UŠ-ú 1 KÙ[Š x x]
+#lem: Šabāṭu[Month XI]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; u; u
+
+22'. [x] ABSIN UŠ ŠE 27 MÚL.BABBAR ana [ME E-a]
+#lem: u; Šerʾu[Virgo]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+$ ruling
+@column 3
+1'. M[U 31 ...]
+#lem: šattu[year]N; n; u
+
+2'. ⸢x⸣ [...]
+#lem: u; u
+
+3'. i[n? ...]
+#lem: u; u
+
+4'. šá [...]
+#lem: ša[which]REL; u
+
+5'. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+$ ruling
+6'. M[U 3]2 SIG in EN 20 MÚL.B[ABBAR ana NIM ki UŠ-ú]
+#lem: šattu[year]N; n; Simānu[Month III]MN; ina[around]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+7'. [N] KÙŠ SIG DUR-SIM.MAH U[Š ...]
+#lem: n; ammatu[unit]N; šapil[below]PRP; DUR-SIM.MAH[Ribbon-of-the-Fish]CN; emēdu[be at a stationary point]V; u
+
+8'. [MÚ]L.BABBAR ana ME E-a DU₆ EN 20+[x MÚL.BABBAR ana ŠÚ]
+#lem: Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Tašrītu[Month VII]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N
+
+9'. ki UŠ-a ina zib{ME} UŠ ŠE [...]
+#lem: kī[when]'SBJ; emēdu[be at a stationary point]V; ina[in]PRP; Zibbātu[Pisces]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; u
+
+$ ruling
+10'. MU 33 BAR in 6 MÚL.BABBAR [... IGI]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; u; amāru[be(come) visible]V
+
+11'. NE in EN 11 MÚL.BABBAR ana NIM [ki UŠ-ú]
+#lem: Abu[Month V]MN; ina[around (day x)]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+12'. ina HUN UŠ DU₆ 10 MÚL.BABBAR ana [ME E-a]
+#lem: ina[in]PRP; Agru[Aries]CN; emēdu[be at a stationary point]V; Tašrītu[Month VII]MN; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+13'. GAN in EN 7 MÚL.BABBAR ana ŠÚ k[i UŠ-a n n]
+#lem: Kislīmu[Month IX]MN; ina[around]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n
+
+14'. ár MÚL-ár-šá-SAG-LU UŠ [...]
+#lem: warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; emēdu[be at a stationary point]V; u
+
+$ ruling
+15'. ⸢MU⸣ 34 BAR 21 MÚL.BABBAR ina [... ŠÚ]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; u; rabû[set]V
+
+16'. [x] ⸢x⸣ MÚL.BABBAR ina MÚL.MÚL [...]
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zappu[Taurus]CN; u
+
+17'. [x x] ⸢ana⸣ NIM ki ⸢UŠ⸣-[ú ...]
+#lem: u; u; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+18'. [x x x U]Š? [...]
+#lem: u; u; u; emēdu[be at a stationary point]V; u
+
+@reverse
+@column 1
+1'. [...] ana ⸢NIM ki UŠ-ú⸣
+#lem: u; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+2'. [...] ⸢UŠ⸣ DU₆ in 27
+#lem: u; emēdu[be at a stationary point]V; Tašrītu[Month VII]MN; ina[around]PRP; n
+
+3'. [...] GAN in EN 26 MÚL.BABBAR
+#lem: u; Kislīmu[Month IX]MN; ina[around]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN
+
+4'. [...] ⸢ina TIL⸣ LU UŠ ŠE DIR
+#lem: u; ina[in]PRP; qītu[end]N; Agru[Aries]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; N[extra]AJ
+
+$ ruling
+5'. [MU 46 B]AR 10 MÚL.BABBAR ina MÚL.MÚL ŠÚ
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zappu[Taurus]CN; rabû[set]V
+
+6'. [x x x] MÚL.BABBAR ina MÚL.MÚL IGI
+#lem: u; u; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zappu[Taurus]CN; amāru[be(come) visible]V
+
+7'. [x x x]+1 MÚL.BABBAR ana NIM ki UŠ-ú
+#lem: u; u; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+8'. [...] ⸢x UŠ⸣
+#lem: u; u; emēdu[be at a stationary point]V
+
+$ traces
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+$ ruling
+
+@(o i 2) [... acronychal] rising.
+
+@(o i 3) [... became] stationary
+
+@(o i 4) [... x]+19
+
+@(o i 5) [...] ...
+
+@(o ii 1) [...] ...
+
+@(o ii 2) [...] (blank)
+
+$ ruling
+
+@(o ii 3) [Year 23,] month II, 19th day, Jupiter’s last appearance in Gemini.
+
+@(o ii 4) [Month III, the 1]9th, Jupiter’s first appearance in Gemini. Month VII, around
+
+@(o ii 5) [until the xth,] when Jupiter became stationary to the east, it became stationary 2/3 cubits
+
+@(o ii 6) [...] Month IX, around the 19th, Jupiter’s acronychal
+
+@(o ii 7) [rising. Month XI, the x]+9th, when Jupiter became stationary to the west,
+
+@(o ii 8) it became stationary [... in] front of α Geminorum. Month XII was intercalary.
+
+$ ruling
+
+@(o ii 9) [Year 24, month III, the xth,] Jupiter’s last appearance in Cancer. Month IV, around
+
+@(o ii 10) [the xth, first appearance in Cancer. Month] VIII, until the 5th, [when] Jupiter
+
+@(o ii 11) became stationary [to the east,] it became stationary 1 cubit 8 <fingers> in front of α Leonis.
+
+@(o ii 12) Month X, the 5th, Jupiter’s acronychal rising.
+
+@(o ii 13) Month XII, until the 5th, when Jupiter became stationary to the west, it became stationary in Cancer.
+
+$ ruling
+
+@(o ii 14) Year 25, month IV, around the 8th, Jupiter’s last appearance in Leo. Month V,
+
+@(o ii 15) 15th day, Jupiter’s first appearance in Leo. Month IX, until the 15th,
+
+@(o ii 16) when Jupiter became stationary to the east, it became stationary 1⁄2 cubit behind β
+
+@(o ii 17) Virginis. Month XI, the 16th, Jupiter’s acronychal rising.
+
+$ ruling
+
+@(o ii 18) Year 26, month I, until the 13th, when Jupiter became stationary to the west,
+
+@(o ii 19) it became stationary 8 fingers in front of the Balance of the Rump of the Lion. Month V, the 25+[xth,]
+
+@(o ii 20) Jupiter’s last appearance in Virgo. Month VI, the 28th, Jupiter’s first appearance in Virgo.
+
+@(o ii 21) [Month XI,] until the 1st, when Jupiter became stationary to the east, it became stationary 1 cubit [...]
+
+@(o ii 22) [....] Virginis. Month XII, the 27th, Jupiter’s acro[nychal rising.]
+
+$ ruling
+
+@(o iii 1) Y[ear 31, ...]
+
+@(o iii 2) ... [...]
+
+@(o iii 3) ... [...]
+
+@(o iii 4) of [...]
+
+@(o iii 5) ... [...]
+
+$ ruling
+
+@(o iii 6) Y[ear 3]2, month III, until around the 20th, when Ju[piter became stationary to the east,]
+
+@(o iii 7) it became stationary [nn] cubits below the band of the Swallow [...]
+
+@(o iii 8) Jupiter’s acronychal rising. Month VII, until the 20+[xth, when Jupiter]
+
+@(o iii 9) became stationary [to the west,] it became stationary in Pisces. Month XII, [...]
+
+$ ruling
+
+@(o iii 10) Year 33, month I, around the 6th, Jupiter’s [first appearance ...]
+
+@(o iii 11) Month V, until around the 11th, when Jupiter [became stationary] to the east,
+
+@(o iii 12) it became stationary in Aries. Month VII, the 10th, Jupiter’s acro[nychal rising.]
+
+@(o iii 13) Month IX, until around the 7th, when Jupiter [became stationary] to the west,
+
+@(o iii 14) it became stationary [...] behind α Arietis [...]
+
+$ ruling
+
+@(o iii 15) Year 34, month I, the 21st, Jupiter’s [last appearance] in [...]
+
+@(o iii 16) [...] ... Jupiter in Taurus [...]
+
+@(o iii 17) [...] when [Jupiter] became stationary to the east [...]
+
+@(o iii 18) [... became sta]tionary? [...]
+
+@(r i 1) [...] when [Jupiter] became stationary to the east,
+
+@(r i 2) [...] became stationary [...] Month VII, around the 27th,
+
+@(r i 3) [...] Month IX, until around the 26th, Jupiter
+
+@(r i 4) [...] became stationary in the end of Aries. Month XII was intercalary.
+
+$ ruling
+
+@(r i 5) [Year 46,] month I, the 10th, Jupiter’s last appearance in Taurus.
+
+@(r i 6) [...] Jupiter’s first appearance in Taurus.
+
+@(r i 7) [... the x]+1st, when Jupiter became stationary to the east,
+
+@(r i 8) it became stationary [...] ...
+
+(traces of another column to the right of the preceding one)

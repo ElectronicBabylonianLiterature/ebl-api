@@ -1,0 +1,310 @@
+&X500006 = ADART 5 6 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [MU 1 {I}{d}AG-NÍG.D]U-ŠEŠ SIG DIB
+#lem: šattu[year]N; n; Nebuchadnezzar[Nebuchadnezzar]RN; Simānu[Month III]MN; etēqu[omit]V
+
+2'. [GAN] DIB
+#lem: Kislīmu[Month IX]MN; etēqu[omit]V
+
+$ ruling
+3'. [MU 2 G]U₄ ⸢5⸣ DIB KIN DIR
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; n; etēqu[omit]V; Ulūlu[Month VI]MN; N[extra]AJ
+
+4'. [DU₆ 1]4? 1 2/3 KAS 5 UŠ šá-niš 1 1/2 KAS [G]E₆ GIN
+#lem: Tašrītu[Month VII]MN; n; n; n; bēru[double hour]'N; n; UŠ[(time degree)]N; šaniš[otherwise]AJ$; n; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V
+
+5'. [...] 2? [S]AR 1/2 ŠÚ ina 2 u 4 SAR
+#lem: u; n; šurrû[begin]V; n; erēpu[cover]V; ina[in]PRP; ištānu[north]N$; u[and]CNJ; amurru[west]N$; šurrû[begin]V
+
+6'. [ZÁ]LAG [1] 1/2 KAS GAR u ZÁLAG 4 GIN
+#lem: nawāru[clear]V; n; n; bēru[double hour]'N; šiknu[onset]N; u[and]CNJ; nawāru[clearing]'N; amurru[west//west wind]N'N$; alāku[blow]V
+
+$ ruling
+7'. [MU 3] ⸢BAR DIB⸣ DU₆ DIB
+#lem: šattu[year]N; n; Nisannu[Month I]MN; etēqu[omit]V; Tašrītu[Month VII]MN; etēqu[omit]V
+
+$ ruling
+8'. [MU 4 B]AR ⸢13 MURUB₄⸣ 3 KAS 5 UŠ GE₆ GIN
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; qablītu[middle watch (of the night)]N; n; bēru[double hour]'N; n; UŠ[(time degree)]N; mūšu[night]N; alāku[go]V
+
+9'. [...] 4? u 2 SAR 3 re-bít
+#lem: u; amurru[west]N$; u[and]CNJ; ištānu[north]N$; šurrû[begin]V; n; rebû[fourth//quarter]NU'NU
+
+10'. [...] ina 2 ZÁLAG 2 GIN
+#lem: u; ina[in]PRP; ištānu[north]N$; nawāru[clear]V; ištānu[north//north wind]N'N$; alāku[blow]V
+
+11'. [...] DU₆ DIB
+#lem: u; Tašrītu[Month VII]MN; etēqu[omit]V
+
+$ ruling
+12'. [MU 5 BAR DIB] KIN.2.KAM D[IB]
+#lem: šattu[year]N; n; Nisannu[Month I]MN; etēqu[omit]V; Ulūlu-Šanû[Month VI₂]MN$; etēqu[omit]V
+
+13'. [ZÍZ] ⸢5 ITU⸣ 3 1/2 KAS GE₆ G[IN]
+#lem: Šabāṭu[Month XI]MN; n; warhu[month]N; n; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V
+
+14'. [...] 2/3 ŠÚ ina 1 ŠÚ ina ⸢4?⸣ [ZÁLAG]
+#lem: u; n; erēpu[cover]'V; ina[in]PRP; šūtu[south]N$; erēpu[cover]'V; ina[in]PRP; amurru[west]N; nawāru[clear]V
+
+15'. [... A]N.KU₁₀-šú GE₆? u ma? [x x]
+#lem: u; antallû[eclipse]N; u; u; u; u; u
+
+$ ruling
+16'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@column 2
+1'. ⸢APIN⸣ [...] x x [x]
+#lem: Arahsamna[Month VIII]MN; u; u; u; u
+
+2'. [4] u 1 ZÁLAG [x x] 2/3 KAS GE₆? [GIN]
+#lem: amurru[west]N; u[and]CNJ; šūtu[south]N$; nawāru[clear]V; u; u; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V
+
+$ ruling
+3'. MU 11 GU₄ [x x] 10 UŠ GE₆ GIN SAR ⸢x⸣?
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; u; u; n; UŠ[(time degree)]N; mūšu[night]N; alāku[go]V; šurrû[begin]V; u
+
+4'. TIL-ma 10+[x x] APIN DIB ŠE DIR
+#lem: gamāru[be complete]'V; n; u; Arahsamna[Month VIII]MN; etēqu[omit]V; Addaru[Month XII]MN; N[extra]AJ
+
+$ ruling
+5'. MU 12 B[AR DIB] DU₆ DIB
+#lem: šattu[year]N; n; Nisannu[Month I]MN; etēqu[omit]V; Tašrītu[Month VII]MN; etēqu[omit]V
+
+6'. ŠE 15 10? [x x] UŠ GE₆ G[IN x]
+#lem: Addaru[Month XII]MN; n; n; u; u; UŠ[(time degree)]N; mūšu[night]N; alāku[go]V; u
+
+7'. 1 KAS 6 UŠ GAR [u ZÁLAG]
+#lem: n; bēru[double hour]'N; n; UŠ[(time degree)]N; šiknu[onset]N; u[and]CNJ; nawāru[clearing]'N
+
+$ ruling
+8'. M[U] 13 KIN [DIB]
+#lem: šattu[year]N; n; Ulūlu[Month VI]MN; etēqu[omit]V
+
+9'. [ŠE 1]4? ád E 1 KAS 10 UŠ [x x]
+#lem: Addaru[Month XII]MN; n; adir[eclipsed]AJ; waṣû[go out]'V; n; bēru[double hour]'N; n; UŠ[(time degree)]N; u; u
+
+$ ruling
+10'. [MU 1]4 [KI]N [DIB]
+#lem: šattu[year]N; n; Ulūlu[Month VI]MN; etēqu[omit]V
+
+11'. [ŠE DI]B ⸢x⸣ ŠE [DIR] 
+#lem: Addaru[Month XII]MN; etēqu[omit]V; u; Addaru[Month XII]MN; N[extra]AJ
+
+$ ruling
+12'. [MU 1]5 NE [DI]B ZÍ[Z DIB]
+#lem: šattu[year]N; n; Abu[Month V]MN; etēqu[omit]V; Šabāṭu[Month XI]MN; etēqu[omit]V
+
+$ ruling
+13'. [MU] 16 ŠU [DIB]
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; etēqu[omit]V
+
+14'. [AB] 14 ZAL 2/3? KAS GE₆ GIN?
+#lem: Ṭebētu[Month X]MN; n; šāt-urri[third watch of the night]N; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V
+
+15'. 1/2-šú ŠÚ ád [ŠÚ]
+#lem: n; erēpu[cover]V; adir[eclipsed]AJ; rabû[set]V
+
+$ ruling
+16'. [MU] 17 ŠU [DIB]
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; etēqu[omit]V
+
+17'. [A]B 13 ZAL 1 KAS 5 U[Š x]
+#lem: Ṭebētu[Month X]MN; n; šāt-urri[third watch of the night]N; n; bēru[double hour]'N; n; UŠ[(time degree)]N; u
+
+18'. ⸢gab-bi-šú⸣ ŠÚ á[d ŠÚ]
+#lem: gabbišu[totality]N; erēpu[cover]'V; adir[eclipsed]AJ; rabû[set]V
+
+@reverse
+@column 3
+1'. [x x] x x [x x]
+#lem: u; u; u; u; u; u
+
+2'. [x] ⸢x SAG GE₆⸣ GAR [x x]
+#lem: u; u; rēš[beginning]N; mūšu[night]N; šiknu[onset]N; u; u
+
+$ ruling
+3'. MU 25 NE 1 1/2 KAS GE₆ G[IN]
+#lem: šattu[year]N; n; Abu[Month V]MN; n; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V
+
+4'. ZÍZ USAN GAR
+#lem: Šabāṭu[Month XI]MN; šimītān[first part of the night]N; šiknu[onset]N
+
+$ ruling
+5'. MU 26 NE DIB ZÍZ DIB ŠE DIR
+#lem: šattu[year]N; n; Abu[Month V]MN; etēqu[omit]V; Šabāṭu[Month XI]MN; etēqu[omit]V; Addaru[Month XII]MN; N[extra]AJ
+
+$ ruling
+6'. MU 27 SIG 5 DIB GAN DIB
+#lem: šattu[year]N; n; Simānu[Month III]MN; n; etēqu[omit]V; Kislīmu[Month IX]MN; etēqu[omit]V
+
+$ ruling
+7'. ⸢MU⸣ 28 SIG 14? [x x] x x
+#lem: šattu[year]N; n; Simānu[Month III]MN; n; u; u; u; u
+
+8'. [...] U TAG₄?
+#lem: u; ubānu[finger]N; ezēbu[remain]V
+
+9'. [... U]Š ád ŠÚ
+#lem: u; UŠ[(time degree)]N; adir[eclipsed]AJ; rabû[set]V
+
+10'. [GAN 1]5? 3 1/2 KAS GE₆ GIN
+#lem: Kislīmu[Month IX]MN; n; n; n; bēru[double hour]'N; mūšu[night]N; alāku[go]V
+
+11'. [ina] 3 SAR gab-bi-šú ŠÚ
+#lem: ina[in]PRP; šadû[east]N$; šurrû[begin]V; gabbišu[totality]N; erēpu[cover]'V
+
+12'. ina 4 ZÁLAG [x] KAS GAR u ZÁLAG
+#lem: ina[in]PRP; amurru[west]N; nawāru[clear]V; u; bēru[double hour]'N; šiknu[onset]N; u[and]CNJ; nawāru[clearing]'N
+
+$ ruling
+13'. MU 29 [G]U₄ 14 [...]
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; n; u
+
+14'. 1 KAS 10 [U]Š GE₆ [ana ZÁLAG]
+#lem: n; bēru[double hour]'N; n; UŠ[(time degree)]N; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+15'. [...]
+#lem: u
+
+
+@translation labeled en project
+
+@(o i 1) [Year 1 of Nebukad]nezar. Month III, omitted.
+
+@(o i 2) [Month IX,] omitted.
+
+$ ruling
+
+@(o i 3) [Year 2. Month II,] (after) 5? (months), omitted. Month VI was intercal
+ary.
+
+@(o i 4) [Month VII, the 1]4th?, 1 2/3 bēru 5°, variant 1 1⁄2 beru, after sunset,
+
+@(o i 5) it began in the [....] north; half was covered. In the north and west it began
+
+@(o i 6) [to cl]ear. [1] 1⁄2 bēru onset and clearing. The west wind blew.
+
+$ ruling
+
+@(o i 7) [Year 3.] Month I, omitted. Month VII, omitted.
+
+$ ruling
+
+@(o i 8) [Year 4. M]onth I, the 13th, middle watch, 3 bēru 5° after sunset,
+
+@(o i 9) it began in the west and north. Three quarters
+
+@(o i 10) [was covered.] It cleared in the north. The north wind blew.
+
+@(o i 11) Month VII, omitted.
+
+$ ruling
+
+@(o i 12) [Year 5. Month I, omitted.] Month VI₂, om[itted.]
+
+@(o i 13) [Month XI,] (after) 5 months, 3 1⁄2 bēru after sunset,
+
+@(o i 14) [....] two-thirds was covered. In the south it was covered. In the west? [it cleared.]
+
+@(o i 15) [In?] its eclipse, ... [...]
+
+$ ruling
+
+@(o i 16) [...] ... [...]
+
+@(o ii 1) Month VIII, [...] ... [...]
+
+@(o ii 2) It cleared [in the west] and south [....] 2/3 bēru after [sunset?]
+
+$ ruling
+
+@(o ii 3) Year 11. Month II, [...] 10° after sunset it began
+
+@(o ii 4) it was total, and 10? [...] Month VIII, omitted. Month XII was intercalary.
+
+$ ruling
+
+@(o ii 5) Year 12. Month [I, omitted.] Month VII, omitted.
+
+@(o ii 6) Month XII, the 15th, 10? [... nn]° after sunset [....]
+
+@(o ii 7) 1 bēru 6° onset [and clearing.]
+
+$ ruling
+
+@(o ii 8) Year 13. Month VI, [omitted.]
+
+@(o ii 9) [Month XII, the 1]4th, it came out eclipsed. 1 bēru 10° [...]
+
+$ ruling
+
+@(o ii 10) [Year 1]4. [Month] VI, [omitted.]
+
+@(o ii 11) [Month XII, omitt]ed ... Month XII [was intercalary.]
+
+$ ruling
+
+@(o ii 12) [Year 1]5. Month V, [omitt]ed. Month X[I, omitted.]
+
+$ ruling
+
+@(o ii 13) [Year] 16. Month IV, [omitted.]
+
+@(o ii 14) [Month X,] the 14th, morning watch, 2/3 bēru before sunrise?.
+
+@(o ii 15) half of it was covered. [It set] eclipsed.
+
+$ ruling
+
+@(o ii 16) [Year] 17. Month IV, [omitted.]
+
+@(o ii 17) [Month] X, the 13th, morning watch, 1 bēru 5° [before sunrise?]
+
+@(o ii 18) all of it was covered. [It set eclips]ed.
+
+@(r iii 1) [...] ... [...]
+
+@(r iii 2) ... beginning of night, onset [...]
+
+$ ruling
+
+@(r iii 3) Year 25. Month V, 1 1⁄2 bēru after sunset.
+
+@(r iii 4) Month XI, evening watch, onset.
+
+$ ruling
+
+@(r iii 5) Year 26. Month V, omitted. Month XI, omitted. Month XII was intercalary.
+
+$ ruling
+
+@(r iii 6) Year 27. Month III, (after) 5 (months), omitted. Month IX, omitted.
+
+$ ruling
+
+@(r iii 7) Year 28. Month III, the 14th, ...
+
+@(r iii 8) [...] ... [...] finger remaining
+
+@(r iii 9) [... nn]°, it set eclipsed.
+
+@(r iii 10) [Month IX, the 1]5th?, 3 1⁄2 bēru after sunset,
+
+@(r iii 11) it began [in] the east. All of it was covered.
+
+@(r iii 12) It cleared? in the west?. [nn] bēru onset and clearing.
+
+$ ruling
+
+@(r iii 13) Year 29. [Mon]th II, the 14th, [...]
+
+@(r iii 14) 1 bēru 10° before sunrise,
+
+@(r iii 15) [...]

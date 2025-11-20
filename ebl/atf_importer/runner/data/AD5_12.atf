@@ -1,0 +1,364 @@
+&X500012 = ADART 5 12 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣ 
+#lem: u; u
+
+2'. [...] muš
+#lem: u; mašāhu[measure]V
+
+3'. [...] ⸢x⸣
+#lem: u; u
+
+4'. [...] NU PAP
+#lem: u; ul[not]MOD; naṣāru[watch]V
+
+@column 2
+1'. GE₆ 16 ⸢1⸣ G[E₆] NU PAP
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]'N; ul[not]MOD; naṣāru[watch]V
+
+2'. 16 6.40 na NU PAP
+#lem: n; n; na[sunrise to moonset]N; ul[not]MOD; naṣāru[watch]V
+
+3'. 28 12.20?
+#lem: n; n
+
+$ ruling
+4'. MU 3 {I}da
+#lem: šattu[year]N; n; Dariamuš[Darius]RN
+
+@column 3
+1'. [...] ⸢GE₆⸣
+#lem: u; mūšu[sunset to moonrise]'N
+
+2'. ⸢x x x⸣ NU PAP
+#lem: u; u; u; ul[not]MOD; naṣāru[watch]V
+
+$ ruling
+3'. ŠE 1 21 na ⸢ina šamáš⸣
+#lem: Addaru[Month XII]MN; n; n; na₁[sunset to moonset]N; ina[while]PRP; šamšu[sun]N
+
+4'. 13 5 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+5'. GE₆ 14 11 ME NU PAP
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]'N; ul[not]MOD; naṣāru[watch]V
+
+6'. 14 20 NINDA na ⸢DIR? NU?⸣ [PAP]
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+7'. GE₆ 15 1.50 G[E₆]
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]'N
+
+8'. 26 19 [...]
+#lem: n; n; u
+
+$ ruling
+9'. MU 4 [...]
+#lem: šattu[year]N; n; u
+
+@column 4
+1'. [x x] ⸢x⸣ [x x]
+#lem: u; u; u; u; u
+
+2'. [x] ⸢6?⸣  x ⸢x⸣
+#lem: u; n; u; u
+
+3'. GE₆ 15 1 G[E₆] muš?
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]'N; mašāhu[measure]V
+
+4'. 27 15.20?
+#lem: n; n
+
+$ ruling
+5'. ⸢APIN 1?⸣ 25
+#lem: Arahsamna[Month VIII]MN; n; n
+
+@column 5
+1'. 10+[...]
+#lem: n
+
+2'. 10+[...]
+#lem: n
+
+3'. 20+[...]
+#lem: n
+
+$ ruling
+4'. ⸢DU₆ 30?⸣  [...]
+#lem: Tašrītu[Month VII]MN; n; u
+
+5'. 13 1+[x ...]
+#lem: n; n; u
+
+6'. ⸢GE₆⸣ 1[4 ...]
+#lem: mūšu[night]N; n; u
+
+@reverse
+@column 1
+1'. [...] ⸢x⸣ 3 ME
+#lem: u; u; n; ūmu[day]N
+
+2'. [... T]A ULÙ
+#lem: u; ištu[from]PRP; šūtu[south]N
+
+3'. [...] ⸢ana?⸣ SI
+#lem: u; ana[to]PRP; ištānu[north]N
+
+4'. [...] ⸢x⸣
+#lem: u; u
+
+5'. [...] IGI
+#lem: u; u
+
+6'. [...]
+#lem: u
+
+7'. [...]
+#lem: u
+
+$ ruling
+8'. [...] 30
+#lem: u; n
+
+9'. [...] ($blank$)
+#lem: u
+
+$ ruling
+10'. [...] AN.KU₁₀ sin
+#lem: u; antallû[eclipse]N; Sîn[moon]N
+
+11'. [...] GIN
+#lem: u; alāku[blow]V
+
+$ ruling
+12'. [... i]n 24?
+#lem: u; ina[at]PRP; n
+
+13'. [...] ⸢Á⸣ ULÙ
+#lem: u; idu[side]N; šūtu[south]N
+
+14'. [...] ⸢x GAR⸣ 4 UŠ
+#lem: u; u; u; n; UŠ[(time degree)]N
+
+15'. [...] u MAR
+#lem: u; u[and]CNJ; amurru[west]N
+
+16'. [... AN.K]U₁₀ BI
+#lem: u; antallû[eclipse]N; šū[that]'DP
+
+17'. [... x]{MEŠ}
+#lem: u; u
+
+@column 2
+1'. AB 13 20+[x ...]
+#lem: Ṭebētu[Month X]MN; n; n; u
+
+$ ruling
+2'. MU 9 {I}a-li[k]
+#lem: šattu[year]N; n; Alexander[Alexander]RN
+
+$ ruling
+3'. ⸢AB?⸣  [G]E₆ 14 8 [x x x] ⸢x⸣ GE₆ GIN sin AN.KU₁₀ ina KUR ki TAB-[ú]
+#lem: Ṭebētu[Month X]MN; mūšu[night]N; n; n; u; u; u; u; mūšu[night]N; alāku[go]V; Sîn[moon]N; antallû[eclipse]N; ina[in]PRP; šadû[east]N; kī[when]'SBJ; ušarrû[begin]V
+
+4'. [ina x GE₆] gab-bi-šú ŠÚ 7 GE₆ ÍR ina 16 GE₆ TA [x]
+#lem: ina[in]PRP; u; mūšu[night]N; gabbišu[totality]N; erēpu[cover]'V; n; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N; ina[in]PRP; n; mūšu[night]N; ištu[from]PRP; u
+
+5'. ⸢x x⸣ ULÙ u KUR ana MAR ZÁLAG 4 KÙŠ SIG SAG-UR.A ád 50+[x]
+#lem: u; u; šūtu[south]N; u[and]CNJ; šadû[east]N; ana[to]PRP; amurru[west]N; nawāru[clear]'V; n; ammatu[unit]N; šapil[below]PRP; SAG-A[ε Leonis]CN; adir[eclipsed]AJ; n
+
+6'. GE₆ GAR ÍR u ZÁLAG ina GAR u ZÁLAG ḫa-muṭ ina ÍR né-ḫi ina G[AR]
+#lem: mūšu[night]N; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N; u[and]CNJ; nawāru[clearing]'N; ina[during]PRP; šiknu[onset]N; u[and]CNJ; nawāru[clearing]'N; hamṭu[fast]AJ; ina[during]PRP; bikītu[maximal phase (of an eclipse)]N; nēhu[slow]AJ; ina[during]PRP; šiknu[onset]N
+
+7'. GENNA ŠÚ AN.KU₁₀-šú AN GUB ÍB.TAG₄ {d}UDU.IDIM{MEŠ} NU GUB{M[EŠ}]
+#lem: Kayyamānu[Saturn]CN; rabû[set]V; antallû[eclipse]N; Ṣalbaṭānu[Mars]CN; izuzzu[stand]V; rēhtu[remainder]N; bibbu[planet]N; ul[not]MOD; izuzzu[stand]V
+
+8'. AN.KU₁₀-š[ú] SA₅ ina GAR ⸢MÚL GAL šá ma⸣-gal KUR u meš-ḫat ⸢TUK-ú⸣
+#lem: antallû[eclipse]N; sāmu[red]AJ; ina[during]PRP; šiknu[onset]N; kakkabu[star]N; rabû[large]AJ; ša[which]REL; magal[very (much)]AV; napāhu[light up]'V; u[and]CNJ; mišḫu[flash//train (of meteor)]N'N; išû[have]V
+
+9'. TA KI ⸢x⸣ [...]
+#lem: ištu[from]PRP; erṣetu[district]N; u; u
+
+$ ruling
+10'. MU 10 ⸢x⸣ [...]
+#lem: šattu[year]N; n; u; u
+
+11'. sin TA a-k[am ...]
+#lem: Sîn[moon]N; ištu[from]PRP; akamu[mist]N; u
+
+12'. ina 9 GE₆ ZÁLAG-i[r? ...]
+#lem: ina[in]PRP; n; mūšu[night]N; nawāru[clear]V; u
+
+13'. NU GUB{MEŠ} AN.K[U₁₀ ...]
+#lem: ul[not]MOD; izuzzu[stand]V; antallû[eclipse]N; u
+
+$ ruling
+14'. AB GE₆ 15 2 ME [...]
+#lem: Ṭebētu[Month X]MN; mūšu[night]N; n; n; ūmu[moonrise to sunset]'N; u
+
+15'. al-la 4-ú ḪAB-⸢rat⸣  [...]
+#lem: alla[more than]PRP; rebû[one-fourth]NU; HAB-rat[disc]N; u
+
+16'. ana Á SI u ⸢MAR?⸣ [...]
+#lem: ana[to]PRP; idu[side]N; ištānu[north]N; u[and]CNJ; amurru[west]N; u
+
+17'. ⸢x⸣  [...]
+#lem: u; u
+
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] measured.
+
+@(o i 3) [...] ...
+
+@(o i 4) [...] I did not watch.
+
+@(o ii 1) Night of the 16th, sunset to moonrise: 1°; I did not watch.
+
+@(o ii 2) The 16th, sunrise to moonset: 6° 40'́; I did not watch.
+
+@(o ii 3) The 28th, (moonrise to sunrise:) 12° 20'́?.
+
+$ ruling
+
+@(o ii 4) Year 3, Darius.
+
+@(o iii 1) [...] sunset to moonrise: [...]
+
+@(o iii 2) ... I did not watch.
+
+$ ruling
+
+@(o iii 3) Month XII, the 1st (of which followed the 30th of the preceding month,) sunse
+t to moonset: 21°; while the sun (stood there).
+
+@(o iii 4) The 13th, moonset to sunrise: 5°.
+
+@(o iii 5) Night of the 14th, moonrise to sunset: 11°; I did not watch.
+
+@(o iii 6) The 14th, sunrise to moonset: 20'́; clouds?, I did not [watch.]
+
+@(o iii 7) Night of the 15th, sunset to moonrise: 1° 50'́.
+
+@(o iii 8) The 26th, (moonrise to sunrise:) 19°.
+
+$ ruling
+
+@(o iii 9) Year 4, [Darius.]
+
+@(o iv 1) [...] ... [...]
+
+@(o iv 2) [...] 6 ...
+
+@(o iv 3) Night of the 15th, sunset to moonrise: 1°, measured?.
+
+@(o iv 4) The 27th, (moonrise to sunrise:) 15° 20'́?.
+
+$ ruling
+
+@(o iv 5) Month VIII, the 1st (of which followed the 30th of the preceding month,) [sunset to moonset:] 25°.
+
+@(o v 1) The 10+[xth, ...]
+
+@(o v 2) The 10+[xth, ...]
+
+@(o v 3)́ The 20+[xth, ...]
+
+$ ruling
+
+@(o v 4) Month VII, (the 1st of which was identical with) the 30th (of the preceding month) [...]
+
+@(o v 5) The 13th, ... [...]
+
+@(o v 6) Night of the 14th, [...]
+
+@(r i 1) [...] ... 3° of daytime?
+
+@(r i 2) [...] from the south
+
+@(r i 3) [...] to the north
+
+@(r i 4) [...] ...
+
+@(r i 5) [...] ...
+
+@(r i 6) [...]
+
+@(r i 7) [...]
+
+$ ruling
+
+@(r i 8) [...] 30
+
+@(r i 9) [...]
+
+$ ruling
+
+@(r i 10) [...] lunar eclipse,
+
+@(r i 11) [...] ...
+
+$ ruling
+
+@(r i 12) [...] at 24°?
+
+@(r i 13) [...]south side
+
+@(r i 14) [...] ... 4°
+
+@(r i 15) [...] and west
+
+@(r i 16) [...] this ec[lipse]
+
+@(r i 17) [...]
+
+@(r ii 1) Month X, the 13th, 20+[x ...]
+
+$ ruling
+
+@(r ii 2) Year 9, Alexander [...]
+
+$ ruling
+
+@(r ii 3) Month X, night of the 14th, 8 [...] after sunset, lunar eclipse. When it began in the east,
+
+@(r ii 4) [in ... of night] all of it was covered. 7° of night maximal phase. In 16° of night from [...]
+
+@(r ii 5) it cleared from the south and east to the west. 4 cubits below e Leonis it was eclipsed. 50+[x°]
+
+@(r ii 6) of night onset, maximal phase, and clearing. During onset and clearing, it was fast, during maximal phase it was slow. During on[set]
+
+@(r ii 7) Saturn set. (In) its eclipse, Mars stood there; the remainder of the planets did not stand there.
+
+@(r ii 8) Its eclipse was red. During onset, a meteor which was very bright and had a tail,
+
+@(r ii 9) [...] from the area of ... [...]
+
+$ ruling
+
+@(r ii 10) Year 10 ... [...]
+
+@(r ii 11) the moon [came out] from mi[st ...]
+
+@(r ii 12) in 9° of night it cleared [...]
+
+@(r ii 13) did not stand there. Eclipse [...]
+
+$ ruling
+
+@(r ii 14) Month X, night of the 15th, moonrise to sunset: 2° [...]
+
+@(r ii 15) more than one-fourth of the disc [...]
+
+@(r ii 16) to the north and west? side [...]
+
+@(r ii 17) ... [...]

@@ -1,0 +1,204 @@
+&X500013 = ADART 5 13
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+3'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+4'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+5'. [...] ⸢x⸣
+#lem: u; u
+
+6'. [... G]E₆
+#lem: u; mūšu[sunset to moonrise]'N
+
+7'. [...] ⸢x⸣ KUR
+#lem: u; u; KUR[moonrise to sunrise]N
+
+$ ruling
+8'. [MU] 9 {I}a-lik
+#lem: šattu[year]N; n; Alexander[Alexander]RN
+
+@column 2
+1'. ŠE 30 14+[x ...]
+#lem: Addaru[Month XII]MN; n; n; u
+
+2'. DIR sin NU PA[P]
+#lem: erpetu[cloud]N; Sîn[moon]N; ul[not]MOD; naṣāru[watch]V
+
+3'. 13 7.40 ŠÚ muš
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+4'. GE₆ 14 ME u GE₆ NU TUK NU PAP
+#lem: mūšu[night]N; n; ūmu[moonrise to sunset]'N; u[and]CNJ; mūšu[sunset to moonrise]'N; ul[not]MOD; išû[have]V; ul[not]MOD; naṣāru[watch]V
+
+5'. 14 4.20 na NU PAP
+#lem: n; n; na[sunrise to moonset]N; ul[not]MOD; naṣāru[watch]V
+
+6'. GE₆ 15 16 GE₆ NU PAP
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]'N; ul[not]MOD; naṣāru[watch]V
+
+7'. 27 9 UŠ KUR
+#lem: n; n; UŠ[(time degree)]N; KUR[moonrise to sunrise]N
+
+$ ruling
+8'. DIR.ŠE 1 15? na muš
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n; na₁[sunset to moonset]N; mašāhu[measure]V
+
+9'. 12 9 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+10'. 13 20 NINDA na muš
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; na[sunrise to moonset]N; mašāhu[measure]V
+
+11'. 14 4 ME DIR muš
+#lem: n; n; ūmu[moonrise to sunset]'N; erpetu[cloud]N; mašāhu[measure]V
+
+12'. GE₆ 15 1 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]'N
+
+13'. 26 17.30 K[UR]
+#lem: n; n; KUR[moonrise to sunrise]N
+
+$ ruling
+14'. MU 10 {I}a-lik
+#lem: šattu[year]N; n; Alexander[Alexander]RN
+
+@right
+1'. 14 6 na
+#lem: n; n; na[sunrise to moonset]N
+
+2'. GE₆ 15 1 GE₆
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]'N
+
+3'. 26 13 KUR
+#lem: n; n; KUR[moonrise to sunrise]N
+
+$ ruling
+4'. MU 11
+#lem: šattu[year]N; n
+
+5'. {I}a-lik
+#lem: Alexander[Alexander]RN
+
+@reverse
+1'. [...] ⸢21⸣ KUR 28 AN.KU₁₀ šamáš
+#lem: u; n; KUR[moonrise to sunrise]N; n; antallû[eclipse]N; šamšu[sun]N
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+$ ruling
+3'. [... k]i PAP NU IGI ina 40 ME NIM 
+#lem: u; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at]PRP; n; ūmu[day]N; šaqi[high]AJ
+
+$ ruling
+4'. [... AN.K]U₁₀ šamáš ki PAP NU IGI ina 1 ME ana ŠÚ šamáš 
+#lem: u; antallû[eclipse]N; šamšu[sun]N; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+$ ruling
+5'. [...] ⸢x x⸣
+#lem: u; u; u
+
+6'. [...] ⸢x⸣
+#lem: u; u
+
+
+@translation labeled en project
+
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] ...
+
+@(o i 3) [..., meas]ured.
+
+@(o i 4) [..., meas]ured.
+
+@(o i 5) [...] ...
+
+@(o i 6) [...] sunset to moonrise: [...]
+
+@(o i 7) [...] moonrise to sunrise: ...
+
+$ ruling
+
+@(o i 8) [Year] 9, Alexander.
+
+@(o ii 1) Month XII, (the 1st of which was identical with) the 30th (of the preceding month), [sunset to moonset:] 14+[x°;]
+
+@(o ii 2) clouds, I did not see the moon.
+
+@(o ii 3) The 13th, moonset to sunrise: 7° 40’, measured.
+
+@(o ii 4) Night of the 14th, no śmoonrise to sunset’ and śsunset to moonrise’; I did not watch.
+
+@(o ii 5) The 14th, sunrise to moonset: 4° 20’; I did not watch.
+
+@(o ii 6) Night of the 15th, sunset to moonrise: 16°; I did not watch.
+
+@(o ii 7) The 27th, moonrise to sunrise: 9°.
+
+$ ruling
+
+@(o ii 8) Month XII₂, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 15°, measured.
+
+@(o ii 9) The 12th, moonset to sunrise: 9°.
+
+@(o ii 10) The 13th, sunrise to moonset: 20’, measured.
+
+@(o ii 11) The 14th, moonrise to sunset: 4°, measured (despite) clouds.
+
+@(o ii 12) Night of the 15th, sunset to moonrise: 1°.
+
+@(o ii 13) The 26th, moonrise to sunrise: 17° 30’.
+
+$ ruling
+
+@(o ii 14) Year 10, Alexander.
+
+@right
+
+@(r.e. 1) The 14th, sunrise to moonset: 6°.
+
+@(r.e. 2) Night of the 15th, sunset to moonrise: 1°.
+
+@(r.e. 3) The 26th, moonrise to sunrise: 13°.
+
+$ ruling
+
+@(r.e. 4) Year 11,
+
+@(r.e. 5) Alexander.
+
+@reverse
+
+@(r 1) [...] moonrise to sunrise: 21°. The 28th, solar eclipse.
+
+@(r 2) [...] ...
+
+$ ruling
+
+@(r 3) [...] when I watched I did not see it. At 40° after sunrise.
+
+$ ruling
+
+@(r 4) [...] solar eclipse; when I watched I did not see it. At 1.0° before sunset.
+
+$ ruling
+
+@(r 5) [...] x+30° after sunrise.
+
+@(r 6) [...] ...

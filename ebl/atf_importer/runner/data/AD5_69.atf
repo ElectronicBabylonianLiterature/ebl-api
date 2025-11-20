@@ -1,0 +1,391 @@
+&X500072 = ADART 5 69
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [...] 2/3? KÙŠ ina IGI ⸢MÚL⸣-IGI-[šá-SAG-HUN n n]
+#lem: u; n; ammatu[unit]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n
+
+3'. [n n ana U]LÙ SIG UŠ ⸢{ITU}⸣KIN 12 A[N ana ME E-a]
+#lem: n; n; ana[to]PRP; šūtu[south]N; šapil[low]AJ; nenmudu[be at a stationary point]V; Ulūlu[Month VI]MN; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+4'. [{ITU}DU₆ in] EN 15 AN ana ŠÚ ki UŠ-⸢a⸣
+#lem: Tašrītu[Month VII]MN; ina[around (day x)]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+5'. [...] MÚL-KUR-šá-DUR-SIM.MAH U[Š]
+#lem: u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; emēdu[be at a stationary point]V
+
+$ ruling
+6'. [MU 28] {ITU}ŠU in 18 AN ⸢ina⸣ U[R.A ŠÚ]
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; ina[on]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V
+
+7'. [{ITU}APIN i]n 1 AN ina RÍN IGI ŠE [DIR]
+#lem: Arahsamna[Month VIII]MN; ina[in]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]V; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+8'. [MU 29 ... {IT]U}KIN in EN 7 AN ana NIM [ki UŠ-ú]
+#lem: šattu[year]N; n; u; Ulūlu[Month VI]MN; ina[around]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+9'. [N KÙ]Š ina IGI ŠUR-GIGIR-šá-ULÙ UŠ {ITU}DU₆
+#lem: n; ammatu[unit]N; ina[in]PRP; pān[front]N; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; emēdu[be at a stationary point]V; Tašrītu[Month VII]MN
+
+10'. [x AN ana ME] ⸢E⸣-a ⸢{ITU}⸣APIN in EN 26 AN
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Arahsamna[Month VIII]MN; ina[around]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN
+
+11'. [ana ŠÚ ki U]Š-a 2 KÙŠ 8 SI ár MÚL.MÚL UŠ
+#lem: ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; n; ubānu[finger]N; warki[behind]PRP; MÚL.MÚL[η Tauri]CN; emēdu[be at a stationary point]V
+
+$ ruling
+12'. [MU 30 x] {ITU}NE in 1 AN ina ABSIN ŠÚ
+#lem: šattu[year]N; n; u; Abu[Month V]MN; ina[around]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V
+
+13'. [{ITU}GAN i]n 25 AN ina TIL PA IGI
+#lem: Kislīmu[Month IX]MN; ina[around]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; qītu[end]N; Pabilsag[Sagittarius]CN; amāru[be(come) visible]V
+
+$ ruling
+14'. [MU 31] {ITU}APIN in EN 7 AN ana NIM
+#lem: šattu[year]N; n; Arahsamna[Month VIII]MN; ina[around]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N
+
+15'. [ki UŠ-ú] 8 SI ina IGI MÚL-IGI-šá-ALLA-šá-ULÙ
+#lem: kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ubānu[finger]N; ina[in]PRP; pānu[front]N; MÚL-IGI-šá-ALLA-šá-ULÙ[θ Cancri]CN
+
+16'. [UŠ {ITU}GAN] 20 AN ana ME E-a {ITU}ZÍZ in EN
+#lem: emēdu[be at a stationary point]V; Kislīmu[Month IX]MN; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Šabāṭu[Month XI]MN; ina[around]PRP; adi[until]PRP
+
+17'. [x AN ana ŠÚ] ⸢ki⸣ UŠ-a 2 KÙŠ ina IGI MAŠ.MAŠ-ár UŠ
+ ($ruling$) ⸢ŠE? DIR?⸣
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-ár[β Geminorum]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; N[extra]AJ
+
+18'. [MU 32 {ITU}N]E 24 AN ina RÍN ŠÚ {ITU}ŠE
+#lem: šattu[year]N; n; Abu[Month V]MN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; Addaru[Month XII]MN
+
+19'. [in x AN ina TI]L? zib IGI
+#lem: ina[around]PRP; u; Ṣalbaṭānu[Mars]CN; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; amāru[be(come) visible]V
+
+$ ruling
+20'. [MU 33 {ITU}GAN] in EN 5 AN ana NIM ki UŠ-⸢ú⸣
+#lem: šattu[year]N; n; Kislīmu[Month IX]MN; ina[in]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+21'. [x x x] ⸢MÚL-TUR⸣-šá-ár-LUGAL UŠ {ITU}AB ⸢x⸣
+#lem: u; u; u; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; emēdu[be at a stationary point]V; Ṭebētu[Month X]MN; u
+
+22'. [AN ana M]E E-a {ITU}ZÍZ in EN 26 AN [ana ŠÚ]
+#lem: Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Šabāṭu[Month XI]MN; ina[around]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]'N
+
+23'. [ki UŠ]-a 1 KÙŠ ina IGI SAG-A UŠ
+#lem: kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pān[front]N; SAG-A[ε Leonis]CN; emēdu[be at a stationary point]V
+
+$ ruling
+24'. [MU 34 {IT]U}GAN 5 AN ina TIL PA ŠÚ ŠE [DIR] 
+#lem: šattu[year]N; n; Kislīmu[Month IX]MN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; qītu[end]N; Pabilsag[Sagittarius]CN; rabû[set]V; Addaru[Month XII]MN; N[extra]AJ
+
+$ ruling
+25'. [MU 35 {IT]U}⸢GU₄?⸣ 20+⸢x⸣ AN ina ⸢x⸣ [...]
+#lem: šattu[year]N; n; Ayyāru[Month II]MN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; u; u
+
+26'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@column 2
+1'. MU ⸢x⸣ [...]
+#lem: šattu[year]N; u; u
+
+2'. {ITU}⸢x⸣ [...]
+#lem: warhu[month]N; u
+
+$ ruling
+3'. MU ⸢x⸣ [...]
+#lem: šattu[year]N; u; u
+
+4'. ki UŠ-[a ...]
+#lem: kī[when]'SBJ; emēdu[be at a stationary point]V; u
+
+5'. {ITU}⸢x⸣ [...]
+#lem: warhu[month]N; u
+
+6'. {ITU}[...]
+#lem: warhu[month]N
+
+7'. 1 ⸢x⸣ [...]
+#lem: n; u; u
+
+$ ruling
+8'. ⸢x⸣ [...]
+#lem: u; u
+
+@reverse
+@column 1
+1'. ⸢5⸣ [...]
+#lem: n; u
+
+2'. ⸢10?⸣ [...]
+#lem: n; u
+
+3'. {ITU}[...]
+#lem: warhu[month]N
+
+4'. {ITU}[...]
+#lem: warhu[month]N
+
+5'. 1/2 KÙŠ [...]
+#lem: n; ammatu[unit]N; u
+
+$ ruling
+6'. MU 12 [...]
+#lem: šattu[year]N; n; u
+
+7'. šá-DUR-[SIM.MAH ...]
+#lem: šá-DUR-SIM.MAH[x Piscium]CN; u
+
+8'. AN SIG M[ÚL? ...]
+#lem: Ṣalbaṭānu[Mars]CN; šapil[below]PRP; kakkabu[star]N; u
+
+9'. 18 ⸢x⸣ [...]
+#lem: n; u; u
+
+10'. {ITU}AP[IN ...]
+#lem: Arahsamna[Month VIII]MN; u
+
+11'. 4 S[I ...]
+#lem: n; ubānu[finger]N; u
+
+12'. AN? [...]
+#lem: Ṣalbaṭānu[Mars]CN; u
+
+13'. ⸢x⸣ [...]
+#lem: u; u
+
+$ ruling
+@column 2
+1'. ($traces$)
+2'. [x x] {ITU}APIN GE₆ 9 ina ZÁLAG AN ana ŠÚ ina LA[L-šú]
+#lem: u; u; Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]'N; ina[while]PRP; nahāsu[move back]V
+
+3'. [e MÚL-á]r-šá-še-pít-MAŠ.MAŠ 1 KÙŠ {ITU}ZÍZ GE₆
+#lem: eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N; Šabāṭu[Month XI]MN; mūšu[night]N
+
+4'. [x USA]N AN ana NIM ina LAL-šú e
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]PRP; nahāsu[move back]V; eli[above]PRP
+
+5'. [MÚL-IGI-šá-še-pít-MAŠ].MAŠ 1 1/2 KÙŠ GE₆ 28 USAN AN
+#lem: MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN
+
+6'. [e MÚL-ár]-šá-še-pít-MAŠ.MAŠ 1 1/2 KÙŠ {ITU}ŠE
+#lem: eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; n; ammatu[unit]N; Addaru[Month XII]MN
+
+7'. [GE₆ x US]AN AN ana NIM ina LAL-šú e
+#lem: mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]PRP; nahāsu[move back]V; eli[above]PRP
+
+8'. [MAŠ.MAŠ-šá-SIP]A 4 KÙŠ GE₆ 30 USAN AN
+#lem: MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN
+
+9'. [SIG MAŠ.MAŠ-I]GI 3 KÙŠ
+#lem: šapil[below]PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N
+
+$ ruling
+10'. [MU 15 {ITU}BAR] GE₆ 8 USAN AN SIG MAŠ.MAŠ-ár
+#lem: šattu[year]N; n; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MAŠ.MAŠ-ár[β Geminorum]CN
+
+11'. [N KÙŠ GE₆] 28 USAN AN SIG
+#lem: n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP
+
+12'. [MÚL-IGI-šá-ALLA-šá-S]I 2 SI {ITU}GU₄ GE₆ 5
+#lem: MÚL-IGI-šá-ALLA-šá-SI[η Cancri]CN; n; ubānu[finger]N; Ayyaru[Month II]MN; mūšu[night]N; n
+
+13'. [USAN AN SIG MÚL-ár]-šá-ALLA-šá-SI 4 SI
+#lem: šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MÚL-ár-šá-ALLA-šá-SI[γ Cancri]CN; n; ubānu[finger]N
+
+14'. [GE₆ x USAN AN] SIG SAG-A 3 KÙŠ
+#lem: mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N
+
+15'. [{ITU}SIG GE₆] 15 <USAN> AN e LUGAL 2/3 KÙŠ
+#lem: Simānu[Month III]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N
+
+16'. [GE₆ x USAN AN] SIG MÚL-TUR-šá-ár-LUGAL 8 U
+#lem: mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ubānu[finger]N
+
+17'. [{ITU}ŠU GE₆ 2]6 USAN AN e
+#lem: Duʾūzu[Month IV]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP
+
+18'. [GÌR-ár-šá-A N SI] ŠE DIR
+#lem: GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+19'. [MU 16 {ITU}BAR G]E₆ 8 ina ZÁLAG AN SIG
+#lem: šattu[year]N; n; Nisannu[Month I]MN; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP
+
+20'. [MÚL-KUR-šá-DUR-SIM.MAH N] ⸢KÙŠ⸣ GE₆ 28 ina ZÁLAG AN ⸢SIG⸣
+#lem: MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[during]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP
+
+21'. [MÚL-IGI-šá-SAG-HUN ...]
+#lem: MÚL-IGI-šá-SAG-HUN[β Arietis]CN; u
+
+@translation labeled en project
+
+@(o i 1) [...] ... [...]
+
+@(o i 2) [... Mars] became stationary [...] 2/3? cubit in front of β [Arietis, being]
+
+@(o i 3) [...] low to the south. Month VI, the 12th, Ma[rs ́ acronychal rising.]
+
+@(o i 4) [Month VII,] until around the 15th, when Mars became stationary to the west,
+
+@(o i 5) it became stationary [...] η Piscium.
+
+$ ruling
+
+@(o i 6) [Year 28,] month IV, around the 18th, Mars’ [last appearance] in L[eo.]
+
+@(o i 7) [Month VIII, ar]ound the 1st, Mars’ first appearance in Libra. Month XII was intercalary.
+
+$ ruling
+
+@(o i 8) [Year 29, ...] month VI, until around the 7th, [when] Mars [became stationary] to the east,
+
+@(o i 9) it became stationary [nn cub]its in front of ζ Tauri. Month VII,
+
+@(o i 10) [the xth, Mars’ acronychal] rising. Month VIII, until around the 26th, [when] Mars
+
+@(o i 11) became stationary [to the west], it became stationary 2 cubits 8 fingers behind η Tauri.
+
+$ ruling
+
+@(o i 12) [Year 30, ...] month V, around the 1st, Mars’ last appearance in Virgo.
+
+@(o i 13) [Month IX, ar]ound the 25th, Mars’ first appearance in the end of Sagittarius.
+
+$ ruling
+
+@(o i 14) [Year 31,] month VIII, until around the 7th, [when] Mars [became stationary] to the east,
+
+@(o i 15) [it became stationary] 8 fingers in front of θ Cancri.
+
+@(o i 16) [Month IX,] the 20th, Mars’ acronychal rising. Month XI, until around
+
+@(o i 17) [the xth,] when [Mars] became stationary [to the west,] it became stationary 2 cubits in front of β Geminorum.
+
+$ ruling Month XII? was intercalary?.
+
+@(o i 18) [Year 32, month] V, the 24th, Mars’ last appearance in Libra. Month XII,
+
+@(o i 19) [around the xth, Mars’] first appearance [in the e]nd? of Pisces. 
+
+$ ruling
+
+@(o i 20) [Year 33, month IX,] until around the 5th, when Mars became stationary to the east,
+
+@(o i 21) it became stationary [...] ϱ Leonis. Month X, the xth,
+
+@(o i 22) [Mars’ acronychal] rising. Month XI, until around the 26th, [when] Mars
+
+@(o i 23) [became stationary to the west,] it became stationary 1 cubit in front of ε Leonis.
+
+$ ruling
+
+@(o i 24) [Year 34,] month IX, the 5th, Mars’ last appearance in the end of Sagittarius. Month XII [was intercalary.]
+
+$ ruling
+
+@(o i 25) [Year 35, month] II?, the 20+xth, Mars’ [first appearance] in ... [...]
+
+@(o i 26) [...] ... [...]
+
+@(o ii 1) Year ... [...]
+
+@(o ii 2) Month [...]
+
+$ ruling
+
+@(o ii 3) Year ... [...]
+
+@(o ii 4) when it became stationary [...]
+
+@(o ii 5) Month ... [...]
+
+@(o ii 6) Month [...]
+
+@(o ii 7) 1 ... [...]
+
+$ ruling
+
+@(o ii 8) ... [...]
+
+@(r i 1) 5 [...]
+
+@(r i 2) 10? [...]
+
+@(r i 3) Month [...]
+
+@(r i 4) Month [...]
+
+@(r i 5) 1⁄2 cubit [...]
+
+$ ruling
+
+@(r i 6) Year 12 [...]
+
+@(r i 7) Piscium [...]
+
+@(r i 8) Mars was [...] below [...]
+
+@(r i 9) the 18th, ... [...]
+
+@(r i 10) Month VI[II ...]
+
+@(r i 11) 4 fin[gers ...]
+
+@(r i 12) Mars? [...]
+
+@(r i 13) ... [...]
+
+@(r ii 1) (traces)
+
+@(r ii 2) [...] Month VIII, night of the 9th, last part of the night, Mars, while moving back to the west,
+
+@(r ii 3) was 1 cubit [above] μ Geminorum. Month XI, night
+
+@(r ii 4) [of the xth, first part] of the night, Mars, while moving back to the east, was 1 1⁄2 cubits above
+
+@(r ii 5) η Geminorum. Night of the 28th, first part of the night, Mars
+
+@(r ii 6) was 1 1⁄2 cubits [above μ] Geminorum. Month XII,
+
+@(r ii 7) [night of the xth, first part] of the night, Mars, while moving back to the east, was
+
+@(r ii 8) 4 cubits above [γ Gemino]rum. Night of the 30th, first part of the night, Mars
+
+@(r ii 9) was 3 cubits [below α [Geminorum.]
+
+$ ruling
+
+@(r ii 10) [Year 15, month I,] night of the 8th, first part of the night, Mars was [nn cubits] below β Geminorum.
+
+@(r ii 11) [Night] of the 28th, first part of the night, Mars was
+
+@(r ii 12) 2 fingers below η Cancri. Month II, night of the 5th,
+
+@(r ii 13) [first part of the night, Mars was] 4 fingers [below γ] Cancri.
+
+@(r ii 14) [Night of the xth, first part of the night, Mars] was 3 cubits below ε Leonis.
+
+@(r ii 15) [Month III, night] of the 15th, <first part of the night>, Mars was 2/3 cubits above α Leonis.
+
+@(r ii 16) [Night of the xth, first part of the night, Mars] was 8 fingers below ϱ Leonis.
+
+@(r ii 17) [Month IV, night of the 2]6th, first part of the night, Mars was [nn fingers] above β
+
+@(r ii 18) [Virginis]. Month XII was intercalary.
+
+$ ruling
+
+@(r ii 19) [Year 16, month I, ni]ght of the 8th, last part of the night, Mars was [nn] cubits below η
+
+@(r ii 20) [Piscium]. Night of the 28th, last part of the night, Mars was [...] below
+
+@(r ii 21) [β Arietis ...]
