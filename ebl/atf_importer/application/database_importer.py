@@ -208,11 +208,9 @@ class MuseumNumberGetter:
     def _get_lowest_join_number(self, museum_number: Optional[str]) -> Optional[str]:
         if museum_number:
             try:
-                print("!!!!!!!!!!", [museum_number])
                 fragment = self.fragment_repository.query_by_museum_number(
                     MuseumNumber.of(museum_number)
                 )
-                print(fragment)
                 if fragment.joins.lowest and museum_number != str(
                     fragment.joins.lowest
                 ):
