@@ -57,3 +57,247 @@ ebl/atf_importer/runner/data/AD5_2.atf: Incompatible lemmatization: No eBL word 
 ebl/atf_importer/runner/data/AD5_2.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
 ebl/atf_importer/runner/data/AD5_2.atf: Incompatible lemmatization: No eBL word found for lemma 'Antigonos' and guideword 'Antigonos'
 ebl/atf_importer/runner/data/AD5_2.atf: Manual lemmatization: eBL lemma 'Antigonus I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'niphu'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'niphu' and guideword '(the act of lighting)'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'niphu I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Nebuchadnezzar'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Addāru_Šanû'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_4.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_4.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'zakû'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'zakû' and guideword 'be(come) clear'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'zakû II' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'Dēru' and guideword 'Dēr'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'Der I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'Ruṣapu' and guideword 'Ruṣapu'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'ḫubtu' and guideword 'robbery'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'hubtu I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qablītu'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'qablītu' and guideword 'middle watch (of the night)'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'qablītu I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nebû'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'nebû' and guideword 'shining (star)'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'nebû I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'Ulūlu-Šanû' and guideword 'Month VI₂'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'Ululu I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_5.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_5.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Nebuchadnezzar'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'šaniš' and guideword 'otherwise'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'šanîš I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qablītu'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'qablītu' and guideword 'middle watch (of the night)'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'qablītu I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'Ulūlu-Šanû' and guideword 'Month VI₂'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'Ululu I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_6.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_6.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_7.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD5_7.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_7.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'šapil'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'be(come) deep'
+ebl/atf_importer/runner/data/AD5_7.atf: Manual lemmatization: eBL lemma 'šapālu I' entered by user
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD5_7.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_7.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'Nēberu' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'Neberu I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'Ulūlu-Šanû' and guideword 'Month VI₂'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'Ululu I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kappu'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'kappu' and guideword 'wing(?)'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'kappu I' entered by user
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'DUR-SIM.MAH' and guideword 'Ribbon-of-the-Fish'
+ebl/atf_importer/runner/data/AD5_8.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_8.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-ár' and guideword 'β Geminorum'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: In `AD5_9.atf`: The lemmatization of the following line:
+12'. [...] u AN GUB{me} x : GU₄.AN ad₂
+does not match its length. Lemmatization:
+#lem: u; u[and]CNJ; Ṣalbaṭānu[Mars]CN; izuzzu[stand]V; u; Alû[bull of heaven//Taurus]CN'CN; adir[eclipsed]AJ
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Alû' and guideword 'bull of heaven'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'Alu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Šušan' and guideword 'Susa'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-HUN' and guideword 'α+β Arietis'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Umakuš' and guideword 'Umakuš'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Dariamuš'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Dariamuš' and guideword 'Darius'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'Darius I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: In `AD5_9.atf`: The lemmatization of the following line:
+11'. [... KU]Š₃ IGI SAG-A ad₂ : 1 4? x# [...]
+does not match its length. Lemmatization:
+#lem: u; ammatu[unit]N; pān[front]N; SAG-A[ε Leonis]CN; adir[eclipsed]AJ; n; n; u; u
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'bikītu'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'bikītu' and guideword 'maximal phase (of an eclipse)'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'bikītu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD5_9.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD5_9.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
