@@ -1,0 +1,221 @@
+&X500033 = ADART 5 33
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x BAR?⸣ DIB
+#lem: u; u; ahû[extraneous]AJ; etēqu[omit]V
+
+2'. [...] ⸢x GE₆⸣ GIN ina SAG ḪUN AN.K[U₁₀]? ⸢sin?⸣
+#lem: u; u; mūšu[night]N; alāku[go]V; ina[in]PRP; rēš[beginning]N; Agru[Aries]CN; antallû[eclipse]N; Sîn[moon]N
+
+3'. [... GE₆] GIN TIL-tì GAR-an
+#lem: u; mūšu[night]N; alāku[go]V; gimirtu[totality]N; šakānu[have a feature]'V
+
+4'. [...] ⸢x⸣ TIL-tì GAR-an
+#lem: u; u; gimirtu[totality]N; šakānu[have a feature]'V
+
+5'. [...] BAR DIB
+#lem: u; ahû[extraneous]AJ; etēqu[omit]V
+
+6'. [...] ⸢x⸣ AN.KU₁₀ sin 1/2 SI GAR-an
+#lem: u; u; antallû[eclipse]N; Sîn[moon]N; n; ubānu[finger]N; šakānu[have a feature]'V
+
+7'. [... BA]R DIB
+#lem: u; ahû[extraneous]AJ; etēqu[omit]V
+
+8'. [...] AN.KU₁₀ sin 2 ⸢SI⸣ GAR-an
+#lem: u; antallû[eclipse]N; Sîn[moon]N; n; ubānu[finger]N; šakānu[have a feature]'V
+
+9'. [... x]+1 GE₆ GIN ina TIL ALLA [x x] GAR-an
+#lem: u; u; mūšu[night]N; alāku[go]V; ina[in]PRP; qītu[end]N; Alluttu[Cancer]CN; u; u; šakānu[have a feature]'V
+
+10'. [...] ⸢12?⸣ [G]E₆ GIN TIL-tì ⸢GAR⸣-a[n?]
+#lem: u; n; mūšu[night]N; alāku[go]V; gimirtu[totality]N; šakānu[have a feature]'V
+
+11'. ⸢x⸣ AB? ⸢x⸣ šá 1.10 GE₆ GIN ina ALLA TIL-[tì GAR-an]
+#lem: u; Ṭebētu[Month X]MN; u; u; n; mūšu[night]N; alāku[go]V; ina[in]PRP; Alluttu[Cancer]CN; gimirtu[totality]N; šakānu[have a feature]'V
+
+12'. DIR.ŠE
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN
+
+13'. x SIG 36 ana KUR šamáš ina MÁŠ 8 SI GAR-an
+#lem: u; Simānu[Month III]MN; n; ana[to]PRP; nipih[rising]'N; šamši[sun]N; ina[in]PRP; Suhurmāšu[Capricorn]CN; n; ubānu[finger]N; šakānu[have a feature]'V
+
+14'. GAN šá 60+36 ana KUR ina ALLA AN.KU₁₀ [...]
+#lem: Kislīmu[Month IX]MN; ša[which]REL; n; ana[to]PRP; niphu[rising]'N; ina[in]PRP; Alluttu[Cancer]CN; antallû[eclipse]N; u
+
+15'. ⸢x⸣ SIG ki ŠÚ šamáš ina TIL PA BAR DIB [...]
+#lem: u; Simānu[Month III]MN; kī[when]'SBJ; erib[(sun)set]N; šamšu[sun]N; ina[in]PRP; qītu[end]N; Pabilsag[Sagittarius]CN; u; etēqu[omit]V; u
+
+16'. APIN šá ⸢15⸣+[x ...]
+#lem: Arahsamna[Month VIII]MN; ša[which]REL; n; u
+
+17'. ⸢GU₄?⸣ [...]
+#lem: Ayyaru[Month II]MN; u
+
+18'. ⸢x x⸣ [...]
+#lem: u; u; u
+
+@reverse
+$ (at right angles)
+@column 1
+1'. [...] ($blank$)
+#lem: u
+
+2'. [...] ($blank$)
+#lem: u
+
+3'. [...] ($blank$)
+#lem: u
+
+4'. [...]
+#lem: u
+
+5'. [...]
+#lem: u
+
+6'. [...] ⸢GAR⸣
+#lem: u; šakānu[have a feature]'V
+
+7'. [... DI]B
+#lem: u; etēqu[omit]V
+
+8'. [...] ⸢x BAR DIB⸣
+#lem: u; u; ahû[extraneous]AJ; etēqu[omit]V
+
+9'. [...] ⸢x⸣ BAR DIB
+#lem: u; u; ahû[extraneous]AJ; etēqu[omit]V
+
+10'. [...] ⸢ina ALLA?⸣ BAR DIB [...]
+#lem: u; ina[in]PRP; Alluttu[Cancer]CN; ahû[extraneous]AJ; etēqu[omit]V; u
+
+11'. ⸢x⸣ 8 SI GAR-an
+#lem: u; n; ubānu[finger]; šakānu[have a feature]'V
+
+12'. [...] ana ŠÚ šamáš ina TIL MÚL? 8 SI 
+#lem: u; ana[to]PRP; erib[(sun)set]N; šamši[sun]N; ina[in]PRP; qītu[end]N; Zappu[Taurus]CN; n; ubānu[finger]N
+
+13'. [...] ⸢ina x TIL GAR?⸣
+#lem: u; ina[in]PRP; u; gimirtu[totality]N; šakānu[have a feature]'V
+
+14'. [...] ⸢x⸣ [x x] SI? [...]
+#lem: u; u; u; u; ubānu[finger]N; u
+
+15'. [...] ana KUR šamáš ⸢x x x⸣
+#lem: u; ana[to]PRP; nipih[rising]'N; šamši[sun]N; u; u; u
+
+16'. [...] ina SAG MÚL.MÚL 3 SI 
+#lem: u; ina[in]PRP; rēš[beginning]N; Zappu[Taurus]CN; n; ubānu[finger]N
+
+17'. [...] ⸢ŠÚ? šamáš?⸣ BAR DIB
+#lem: u; erib[(sun)set]N; šamši[sun]N; ahû[extraneous]AJ; etēqu[omit]V
+
+@column 2
+1'. 1.14 KIN? 10? ana KUR šamáš [...]
+#lem: n; Ulūlu[Month VI]MN; n; ana[to]PRP; nipih[rising]'N; šamši[sun]N; u
+
+2'. ⸢ŠE⸣ šá 22? ⸢x⸣ [...]
+#lem: Addaru[Month XII]MN; ša[which]REL; n; u; u
+
+3'. 1/2 SI ana? [...]
+#lem: n; ubānu[finger]N; ana[to]PRP; u
+
+4'. ⸢1.15?⸣ KIN? ina zib{ME} ⸢NU?⸣ [...]
+#lem: n; Ulūlu[Month VI]MN; ina[in]PRP; Zibbātu[Pisces]CN; u; u
+
+5'. [x x]+⸢15⸣ [...]
+#lem: u; n; u
+
+6'. ⸢x x⸣ [x] ⸢x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+7'. ($traces$)
+
+@translation labeled en project
+
+@(o 1') [...] ..., omitted.
+
+@(o 2') [...] ... after sunset, in the beginning of Aries, lunar? eclipse?
+
+@(o 3') [... after sun]set, it made a total (eclipse).
+
+@(o 4') [...] it made a total (eclipse).
+
+@(o 5') [...] ..., omitted.
+
+@(o 6') [...] ..., lunar eclipse, it made 1⁄2 finger.
+
+@(o 7') [...] ..., omitted.
+
+@(o 8') [...] lunar eclipse, it made 2 fingers.
+
+@(o 9') [... x]+1° after sunset, in the end of Cancer, it made [....]
+
+@(o 10') [...] 12°? after sunset, it made a total (eclipse)
+
+@(o 11') ... month X?, ... 70° after sunset, in Cancer [it made] a total (eclipse).
+
+@(o 12') Month XII was intercalary.
+
+@(o 13') ... month III, 36° before sunrise in Capricorn it made 8 fingers.
+
+@(o 14')  Month IX, when? 96° were to (sun)rise, [lunar] eclipse in Cancer.
+
+@(o 15')  ..., month III, at sunset, in the end of Sagittarius, ..., omitted.
+
+@(o 16') Month VIII, when 15?+[x° ...]
+
+@(o 17') month II?, [...]
+
+@(o 18') ... [...]
+
+@(r i 1') [...]
+
+@(r i 2') [...]
+
+@(r i 3') [...]
+
+@(r i 4') [...]
+
+@(r i 5') [...]
+
+@(r i 6') [...] it made?.
+
+@(r i 7') [... omitt]ed.
+
+@(r i 8') [...] ..., omitted.
+
+@(r i 9') [...] ..., omitted.
+
+@(r i 10') [...] In Cancer?, ..., omitted.
+
+@(r i 11') [...] ... it made 8 fingers.
+
+@(r i 12') [...] to sunset, in the end of Taurus?, 8 fingers
+
+@(r i 13') [...] in ... it made a total (eclipse)?.
+
+@(r i 14') [...] ... finger? [...]
+
+@(r i 15') [...] to sunrise ...
+
+@(r i 16') [...] in the beginning of Taurus, 3 fingers
+
+@(r i 17') [...] sunset?, ..., omitted.
+
+@(r ii 1')  (Year) 74, month VI?, 10°? before sunrise, [...] 
+
+@(r ii 2')  Month XII, of 22°?... [...]
+
+@(r ii 3')  1⁄2 finger to [...]
+
+@(r ii 4')  (Year) 75?, month VI?, in Pisces ... [...]
+
+@(r ii 5')   [...]+15? [...]
+
+@(r ii 6')  ... [...] ... [...]
+
+@(r ii 7')  (traces)

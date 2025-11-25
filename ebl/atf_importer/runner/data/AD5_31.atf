@@ -1,0 +1,73 @@
+&X500031 = ADART 5 31
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [x x x] ⸢x {I}ar?-šá?⸣-k[a? ...]
+#lem: u; u; u; u; Aršaka[Arsaces]RN; u
+
+2'. [x x x] ⸢x⸣ 28.KAM šamáš AN.KU₁₀ T[A ...]
+#lem: u; u; u; u; n; šamšu[sun]N; antallû[eclipse]N; ištu[from]PRP; u
+
+3'. [x x] TAB 23 ME ana ŠÀ? šamáš DA[R? x x]
+#lem: u; u; ušarrû[begin]V; n; ūmu[day]N; ana[to]PRP; libbu[interior]N; šamši[sun]N; u; u; u
+
+4'. [x (x)] ⸢UŠ?⸣ TU-šú ZÁLAG?{MEŠ} 2 UŠ [ÍR]
+#lem: u; u; u; u; nawāru[be(come) bright]V; n; UŠ[(time degree)]N; bikītu[maximal phase (of an eclipse)]N
+
+5'. dele-bat GU₄.UD AN MI GAR-nu šit-ti? [...]
+#lem: Dilbat[Venus]CN; Šihṭu[Mercury]CN; Ṣalbaṭānu[Mars]CN; u; u; šittu[remainder]N; u
+
+6'. {MÚL}KAK.SI.SÁ šá ŠÚ-ma ina la [...]
+#lem: Šiltāhu[Sirius]CN; ša[which]REL; rabû[set]V; ina[in]PRP; lā[not]MOD; u
+
+7'. ina AN.KU₁₀{MEŠ} DI IR GUB ⸢u?⸣ [...]
+#lem: ina[in]PRP; antallû[eclipse]N; u; u; izuzzu[stand]V; u; u
+
+8'. UN{MEŠ} DUG.SILÀ.GAZ{MEŠ} [...]
+#lem: nišu[people]N; silagazû[an offering vessel of 1/2 @{qû} capacity]N; u
+
+9'. GAZ{MEŠ} ⸢ina 23 ME TA SI⸣ [u MAR]
+#lem: dâku[break]'V; ina[in]PRP; n; ūmu[day]N; ištu[from]PRP; ištānu[north]N; u[and]CNJ; amurru[west]N
+
+10'. ana ULÙ u KUR ZÁLAG-ir 48 GAR [ÍR]
+#lem: ana[to]PRP; šūtu[south]N; u[and]CNJ; šadû[east]N; nawāru[clear]V; n; šiknu[onset]N; bikītu[maximal phase (of an eclipse)]N
+
+11'. u ZÁLAG ina AN.KU₁₀{MEŠ} SI u MAR GIN
+#lem: u[and]CNJ; nawāru[clearing]'N; ina[in]PRP; antallû[eclipse]N; ištānu[north wind]N; u[and]CNJ; amurru[west wind]N; alāku[blow]V
+
+12'. 1.30 ME ana ŠÚ šamáš 28 17.30 KUR muš
+#lem: n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamši[sun]N; n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+@reverse 
+$ (uninscribed as far as preserved)
+
+@translation labeled en project
+
+@(o 1') [...] ... Arsac[es? ...]
+
+@(o 2') [...] the 28th day, solar eclipse; from [...]
+
+@(o 3') [...] it began; 23° of day to the inside of the sun ... [...]
+
+@(o 4') [...] its ... were clear?; 2® [maximal phase?;]
+
+@(o 5') Venus, Mercury, Mars? .... the remainder? [...]
+
+@(o 6') Sirius, which had set, in its non-[...]
+
+@(o 7') In its eclipse, .... stood there? ... [...]
+
+@(o 8') people broke pots [...]
+
+@(o 9') they broke. In 23° of day it cleared from north [and west]
+
+@(o 10') to south and east. 48° onset, [maximal phase,]
+
+@(o 11') and clearing. In its eclipse, the north and west winds blew.
+
+@(o 12') At 1.30° of day before sunset. The 28th, moonrise to sunrise: 17° 30’, measured.
+
+@(r) uninscribed as far as preserved

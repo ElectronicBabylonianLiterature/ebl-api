@@ -1,0 +1,144 @@
+&X500016 = ADART 5 16 
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] 9
+#lem: u; n
+
+2'. [... x]+7 ana NIM
+#lem: u; u; ana[to]PRP; elû[upper//north(?)]AJ'N
+
+3'. [...] ana ŠÚ šámaš
+#lem: u; ana[to]PRP; erib[(sun)set]N; šamši[sun]N
+
+4'. [...]
+#lem: u
+
+5'. [...] ME NIM-a
+#lem: u; ūmu[day]N; šaqâ[high]AJ
+
+6'. [...]
+#lem: u
+
+7'. [...]
+#lem: u
+
+$ ruling
+8'. [...] ⸢x x⸣
+#lem: u; u; u
+
+@column 2
+1'. APIN GE₆ 15 5 ÁB BAR DIB ⸢in⸣ 46 GE₆ GIN
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; n; warhu[month]N; ahû[extraneous]AJ; etēqu[omit]V; ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+$ ruling
+2'. ⸢MU⸣ 1 ME 18.KAM GU₄ 13 šá DIB in 1.34
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU$mē; n; Ayyaru[Month II]MN; n; ša[which]REL; etēqu[omit]V; ina[at]PRP; n
+
+3'. [ME N]IM-a
+#lem: ūmu[day]N; šaqâ[high]AJ
+
+4'. APIN GE₆ 14 4-šá-GABA-šú ziq-pi Á KUR
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; +4-šá-GABA-šú[α, γ, η, ζ Leonis]CN$; zaqāpu[culminate]V; idu[side]N; šadû[east]N
+
+5'. ki TAB-ú ina 12 GE₆ 2-ta ŠU{II} ⸢x⸣ [x x]
+#lem: kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; u; u; u; u; u
+
+6'. ŠÚ?-im ⸢in 12 GE₆ ana ZÁLAG⸣ [...]
+#lem: arim[covered]AJ; ina[at]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]'N; u
+
+@column 3
+1'. ina 15 [...]
+#lem: ina[in]PRP; n; u
+
+2'. DI[R ...]
+#lem: erpetu[cloud]N; u
+
+3'. ⸢x⸣ [...]
+#lem: u; u
+
+@reverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢x⸣ ME NIM-a
+#lem: u; u; ūmu[day]N; šaqâ[rise]V
+
+3'. [...] ⸢x⸣ SI ki PAP NU IGI
+#lem: u; u; u; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+@column 2
+1'. AB ⸢GE₆⸣ 10+[x ...]
+#lem: Ṭebētu[Month X]MN; mūšu[night]N; n; u
+
+2'. Á KUR ki TAB-⸢ú⸣ ina ⸢x⸣ [...]
+#lem: idu[side]N; šadû[east]N; kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; u; u
+
+3'. in? 18 GE₆ GIN [...]
+#lem: ina[at]PRP; n; mūšu[night]N; alāku[go]V; u
+
+$ ruling
+4'. MU 1 ME 52.KAM ŠU 14 šá DIB ⸢in x⸣
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU$mē; n; Duʾūzu[Month IV]MN; n; ša[which]REL; etēqu[omit]V; ina[at]PRP; u
+
+
+@translation labeled en project
+
+@(o i 1') [...] 9
+
+@(o i 2') [... x]+7 to the north?
+
+@(o i 3') [...] before sunset 
+
+@(o i 4') [...]
+
+@(o i 5') [...] after sunrise
+
+@(o i 6') [...]
+
+@(o i 7') [...]
+
+$ ruling
+
+@(o i 8') [...] ...
+
+@(o ii 1') Month VIII, night of the 15th, (after) 5 months, ...., omitted. At 46° after sunset.
+
+$ ruling
+
+@(o ii 2') Year 118, month II, the 13th, (eclipse) which was omitted. At 94°
+
+@(o ii 3') [after] sunrise.
+
+@(o ii 4') Month VIII, night of the 14th, when the 4 stars of its breast culminated, 
+
+@(o ii 5') when it began on the east side, in 12° of night two thirds [of the disc?] 
+
+@(o ii 6') were covered?. ⸢At 12° before sunrise. ⸣ [...]
+
+@(o iii 1') in 15°? [...] 
+
+@(o iii 2') cl[ouds? ...] 
+
+@(o iii 3') ... [...]
+
+@(r i 1') [...] ...
+
+@(r i 2') [...] ... after sunrise
+
+@(r i 3') [...] ... when I watched I did not see it.
+
+@(r ii 1') Month X, night of the 10+[xth, ...]
+
+@(r ii 2') when it began on the east side, in ... [...]
+
+@(r ii 3') At? 18° after sunset [...]
+
+$ ruling
+
+@(r ii 4') Year 152, month IV, the 14th, (eclipse) which was omitted. At ... [...]

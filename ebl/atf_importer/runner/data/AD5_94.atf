@@ -55,42 +55,42 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ...
+@(o 1') [...] ...
 
-@(o 2) [...] 1⁄2 cubit.
-
-$ ruling
-
-@(o 3) [...] cubits. Month VI, the 9th, it was [...] above α Leonis.
-
-@(o 4) [...] Virginis.
+@(o 2') [...] 1⁄2 cubit.
 
 $ ruling
 
-@(o 5) [...] 1 2/3 cubits above α Scorpii.
+@(o 3') [...] cubits. Month VI, the 9th, it was [...] above α Leonis.
 
-@(o 6) [...] balanced?. Month VIII, the 3rd,
-
-@(o 7) [...] entered ...
+@(o 4') [...] Virginis.
 
 $ ruling
 
-@(o 8) [...] 1+[x] cubits [...] Virginis.
+@(o 5') [...] 1 2/3 cubits above α Scorpii.
 
-@(o 9) [...] the 19th, it was 2 cubits above α Scorpii. Month X, the 6th?,
+@(o 6') [...] balanced?. Month VIII, the 3rd,
 
-@(o 10) [...] 3 cubits ... Month XII, the 13th, it was 2 cubits below β Capricorni.
-
-$ ruling
-
-@(o 11) [...] 3 fingers.
+@(o 7') [...] entered ...
 
 $ ruling
 
-@(o 12) [... the x]+3rd, it was 5 cubits below a/b Geminorum. Month VII, the 10th, it was [...] above Virgo.
+@(o 8') [...] 1+[x] cubits [...] Virginis.
 
-@(o 13) [...] first appearance?. Month X, the 4th, it was 1 cubit above 𝜗 Ophiuchi. 
+@(o 9') [...] the 19th, it was 2 cubits above α Scorpii. Month X, the 6th?,
+
+@(o 10') [...] 3 cubits ... Month XII, the 13th, it was 2 cubits below β Capricorni.
 
 $ ruling
 
-@(o 14) [...] ...
+@(o 11') [...] 3 fingers.
+
+$ ruling
+
+@(o 12') [... the x]+3rd, it was 5 cubits below a/b Geminorum. Month VII, the 10th, it was [...] above Virgo.
+
+@(o 13') [...] first appearance?. Month X, the 4th, it was 1 cubit above 𝜗 Ophiuchi. 
+
+$ ruling
+
+@(o 14') [...] ...

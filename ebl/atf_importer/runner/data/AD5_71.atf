@@ -90,54 +90,54 @@ $ blank
 
 @translation labeled en project
 
-@(o i 1) [...] ... [...]
+@(o i 1') [...] ... [...]
 
-@(o i 2) [Mercury’s] last appearance in the east ..., omitted. Month II, the 22nd?, Mercury’s
+@(o i 2') [Mercury’s] last appearance in the east ..., omitted. Month II, the 22nd?, Mercury’s
 
-@(o i 3) [first appearance] in the west [in Gemini. Night] of the 26th, first part of the night, Mercury was 3 1⁄2 cubits below α Geminorum.
+@(o i 3') [first appearance] in the west [in Gemini. Night] of the 26th, first part of the night, Mercury was 3 1⁄2 cubits below α Geminorum.
 
-@(o i 4) [Night of the xth, fi]rst part of the night, Mercury, was 2 1⁄2 cubits below β Geminorum. Month III, night of the 14th,
+@(o i 4') [Night of the xth, fi]rst part of the night, Mercury, was 2 1⁄2 cubits below β Geminorum. Month III, night of the 14th,
 
-@(o i 5) [first part of the night, Mer]cury was [nn] cubits below ε Leonis. Night of the 25th, first part of the night, Mercury was
+@(o i 5') [first part of the night, Mer]cury was [nn] cubits below ε Leonis. Night of the 25th, first part of the night, Mercury was
 
-@(o i 6) [nn] cubits [below α Leonis]. Month IV, the 4th, Mercury’s last appearance in the west in Leo; I did not watch.
+@(o i 6') [nn] cubits [below α Leonis]. Month IV, the 4th, Mercury’s last appearance in the west in Leo; I did not watch.
 
-@(o i 7) [The xth, Merc]ury’s first appearance in the east in Leo. Month V, the 22nd, Mercury’s last appearance in the east in Leo; I did not watch.
+@(o i 7') [The xth, Merc]ury’s first appearance in the east in Leo. Month V, the 22nd, Mercury’s last appearance in the east in Leo; I did not watch.
 
-@(o i 8) [...]
+@(o i 8') [...]
 
-@(o i 9) [... Mercury’s] last appearance [in the west ...], omitted. Month VIII, the 13th, Mercury’s
+@(o i 9') [... Mercury’s] last appearance [in the west ...], omitted. Month VIII, the 13th, Mercury’s
 
-@(o i 10) [first appearance] in the ea[st ...] ... [...]
+@(o i 10') [first appearance] in the ea[st ...] ... [...]
 
-@(o ii 1) Month VI, the 9th, Me[rcury’s last appearance in the west in Libra. Month VII, the xth, Mercury’s]
+@(o ii 1') Month VI, the 9th, Me[rcury’s last appearance in the west in Libra. Month VII, the xth, Mercury’s]
 
-@(o ii 2) first appearance [in the east] in Libra. Night of the 17th, [last part of the night, Mercury was ... above α Librae. Month VIII, the xth, Mercury’s]
+@(o ii 2') first appearance [in the east] in Libra. Night of the 17th, [last part of the night, Mercury was ... above α Librae. Month VIII, the xth, Mercury’s]
 
-@(o ii 3) <last appearance> in the east in Scorpius. Month IX, the 10+[xth, Mercury’s first appearance in the west in Capricorn. Month X, the xth, Mercury’s]
+@(o ii 3') <last appearance> in the east in Scorpius. Month IX, the 10+[xth, Mercury’s first appearance in the west in Capricorn. Month X, the xth, Mercury’s]
 
-@(o ii 4) last appearance in the west in Aquarius. The 25th, Mercury’s [first appearance in the east in Capricorn. Month XII, the xth,]
+@(o ii 4') last appearance in the west in Aquarius. The 25th, Mercury’s [first appearance in the east in Capricorn. Month XII, the xth,]
 
-@(o ii 5) Mercury’s last appearance in the east in Pisces.
+@(o ii 5') Mercury’s last appearance in the east in Pisces.
 
 $ ruling
 
-@(o ii 6) Year 17, month I, the 6th, Mercury’s [first appearance] in the west [in Taurus. Month II,]
+@(o ii 6') Year 17, month I, the 6th, Mercury’s [first appearance] in the west [in Taurus. Month II,]
 
-@(o ii 7) night of the 3rd, first part of the night, Mercury was [...] ... [...]
+@(o ii 7') night of the 3rd, first part of the night, Mercury was [...] ... [...]
 
-@(o ii 8) Mercury was be[low ...]
+@(o ii 8') Mercury was be[low ...]
 
-@(o ii 9) Mercury [...]
+@(o ii 9') Mercury [...]
 
-@(r i 1) Year 15 [...]
+@(r i 1') Year 15 [...]
 
-@(r i 2) Night of the 28th, first [part of the night, ...]
+@(r i 2') Night of the 28th, first [part of the night, ...]
 
-@(r i 3) first part of the night, Mars was [....] below [...]
+@(r i 3') first part of the night, Mars was [....] below [...]
 
-@(r i 4) Mars was 3? [cubits] below ε Leonis [...]
+@(r i 4') Mars was 3? [cubits] below ε Leonis [...]
 
-@(r i 5) [Night] of the 18th?, first part of the night, Mars [...]
+@(r i 5') [Night] of the 18th?, first part of the night, Mars [...]
 
-@(r i 6) [first part of the night, Mars was] ... [below 𝜗] Leonis [...]
+@(r i 6') [first part of the night, Mars was] ... [below 𝜗] Leonis [...]

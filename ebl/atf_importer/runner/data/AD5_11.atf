@@ -1,0 +1,439 @@
+&X500011 = ADART 5 11
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...]
+#lem: u
+
+2'. [ZÍZ ...]
+#lem: Šabāṭu[Month XI]MN; u
+
+3'. [...]
+#lem: u
+
+4'. [...]
+#lem: u
+
+5'. [29 ZÍZ ...]
+#lem: n; Šabāṭu[Month XI]MN; u
+
+6'. [...]
+#lem: u
+
+7'. [...]
+#lem: u
+
+8'. [ZÍZ ...] ḪI DU
+#lem: Šabāṭu[Month XI]MN; u; u; u
+
+@column 2
+1'. [... ina AŠ.T]E TUŠ-a[b]
+#lem: u; ina[at]PRP; kussû[chair//throne]N'N$; wašābu[sit (down)]V
+
+2'. [ZÍZ 28] BAR DIB
+#lem: Šabāṭu[Month XI]MN; n; ahû[extraneous]AJ; etēqu[omit]V
+
+3'. 
+4'. ($blank$)
+5'. MU 1.KAM {I}ú-ma-kuš
+#lem: šattu[year]N; n; Umakuš[Umakuš]RN
+
+6'. NE 29 šá DIB
+#lem: Abu[Month V]MN; n; ša[which]REL; etēqu[omit]V
+
+7'. ina 50 GE₆ ana ⸢ZÁLAG⸣
+#lem: ina[at]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+8'. ⸢ZÍZ x?⸣ [...] 
+#lem: Šabāṭu[Month XI]MN; u; u
+
+@column 3
+1'. [...]
+#lem: u
+
+2'. Š[E ...]
+#lem: Addaru[Month XII]MN; u
+
+3'. ina 20 G[E₆ ...]
+#lem: ina[in]PRP; n; mūšu[night]N; u
+
+4'. KI ŠÚ [... ŠE DIR]
+#lem: u; u; u; Addaru[Month XII]MN; N[extra]AJ
+
+5'. 19 N[E ...]
+#lem: n; Abu[Month V]MN; u
+
+6'. ki? P[AP? NU IGI]
+#lem: kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+7'. [...]
+#lem: u
+
+8'. [ZÍZ ...]
+#lem: Šabāṭu[Month XI]MN; u
+
+@column 4
+1'. [...]
+#lem: u
+
+2'. [ŠE ...]
+#lem: Addaru[Month XII]MN; u
+
+3'. [...]
+#lem: u
+
+4'. [...]
+#lem: u
+
+5'. [2 KIN ...]
+#lem: n; Ulūlu[Month VI]MN; u
+
+6'. [...]
+#lem: u
+
+7'. [...]
+#lem: u
+
+8'. [ŠE ...]
+#lem: Addaru[Month XII]MN; u
+
+@reverse
+@column 1
+1'. [30 Š]U 28 BAR DIB
+#lem: n; Duʾūzu[Month IV]MN; n; ahû[extraneous]AJ; etēqu[omit]V
+
+2'. ($blank$)
+3'. ($blank$)
+4'. ($blank$)
+5'. [A]B ⸢28 BAR DIB⸣
+#lem: Ṭebētu[Month X]MN; n; ahû[extraneous]AJ; etēqu[omit]V
+
+6'. [...]
+#lem: u
+
+7'. [...]
+#lem: u
+
+8'. [31 SIG 5 ITU]
+#lem: n; Simānu[Month III]MN; n; warhu[month]N
+
+9'. [...] ⸢BAR DIB⸣
+#lem: u; ahû[extraneous]AJ; etēqu[omit]V
+
+10'. ($blank$)
+$ ruling
+11'. [GAN x B]AR DIB
+#lem: Kislīmu[Month IX]MN; u; ahû[extraneous]AJ; etēqu[omit]V
+
+12'. [...]
+#lem: u
+
+13'. [32 SIG ...]
+#lem: n; Simānu[Month III]MN; u
+
+14'. [...]
+#lem: u
+
+@column 2
+1'. 2 [NE x]
+#lem: n; Abu[Month V]MN; u
+
+2'. BAR DIB
+#lem: ahû[extraneous]AJ; etēqu[omit]V
+
+3'. ($blank$)
+4'. ($blank$)
+5'. ZÍZ 29 BAR DIB
+#lem: Šabāṭu[Month XI]MN; n; ahû[extraneous]AJ; etēqu[omit]V
+
+6'. ina 46 GE₆ ana ZÁLAG
+#lem: ina[at]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]'N
+
+7'. ŠE DIR
+#lem: Addaru[Month XII]MN; N[extra]AJ
+
+8'. 3 SIG 5 ITU
+#lem: n; Simānu[Month III]MN; n; warhu[month]N
+
+9'. 29 BAR DIB
+#lem: n; ahû[extraneous]AJ; etēqu[omit]V
+
+10'. ($blank$)
+$ ruling
+11'. GAN 29 BAR DIB
+#lem: Kislīmu[Month IX]MN; n; ahû[extraneous]AJ; etēqu[omit]V
+
+12'. ($blank$)
+13'. [4 SI]G 28 ⸢x⸣
+#lem: n; Simānu[Month III]MN; n; u
+
+14'. [...]
+#lem: u
+
+@column 3
+1'. [20 NE ...]
+#lem: n; Abu[Month V]MN; u
+
+2'. x [...]
+#lem: u; u
+
+3'. 2?-ú ḪAB i DIR ⸢x x⸣ [...] 
+#lem: n; HAB-rat[disc]N; wīṣu[little]AJ; watāru[be(come) outsize//exceed]V'V$; u; u; u
+
+4'. ULÙ u KUR ZÁLAG 25 GAR u ZÁLAG S[I? GIN?]
+#lem: šūtu[south]N; u[and]CNJ; šadû[east]N; nawāru[clear]V; n; šiknu[onset]N; u[and]CNJ; nawāru[clearing]'N; ištānu[north wind]N; alāku[blow]V
+
+5'. ZÍZ 28 1.15
+#lem: Šabāṭu[Month XI]MN; n; n
+
+6'. ⸢ME NIM⸣ ki PAP
+#lem: ūmu[day]N; šaqi[high]AJ; kī[when]'SBJ; naṣāru[watch]V
+
+7'. [NU] IGI
+#lem: ul[not]MOD; amāru[see]V
+
+8'. 21 ŠU 5 ITU 29 BAR DIB 
+#lem: n; Duʾūzu[Month IV]MN; n; warhu[month]N; n; ahû[extraneous]AJ; etēqu[omit]V
+
+9'. KIN {I}ú-ma-kuš NAM{ME}
+#lem: Ulūlu[Month VI]MN; Umakuš[Umakuš]RN; šīmtu[what is fixed//death]N'N
+
+10'. ár-šú ⸢DUMU⸣-šú ina AŠ.TE TUŠ-ab
+#lem: Aršu[Aršu]RN; māru[son]N; ina[in//on]PRP'PRP; kussû[chair//throne]N'N; wašābu[sit (down)]V
+
+$ ruling
+11'. AB 29 BAR DIB
+#lem: Ṭebētu[Month X]MN; n; ahû[extraneous]AJ; etēqu[omit]V
+
+12'. ŠE D[IR]
+#lem: Addaru[Month XII]MN; N[extra]AJ
+
+13'. MU 1.KAM {I}á[r-šu SIG]
+#lem: šattu[year]N; n; Aršu[Aršu]RN; Simānu[Month III]MN
+
+14'. 29 [...]
+#lem: n; u
+
+@column 4
+1'. [3 NE ...]
+#lem: n; Abu[Month V]MN; u
+
+2'. [...]
+#lem: u
+
+3'. [...]
+#lem: u
+
+4'. [...]
+#lem: u
+
+5'. ZÍZ 28 x [...]
+#lem: Šabāṭu[Month XI]MN; n; u; u
+
+6'. ki PAP NU [IGI]
+#lem: kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+7'. ($blank$)
+8'. 4 ŠU 5 ITU
+#lem: n; Duʾūzu[Month IV]MN; n; warhu[month]N
+
+9'. BAR DIB
+#lem: ahû[extraneous]AJ; etēqu[omit]V
+
+10'. ($blank$)
+$ ruling
+11'. AB 20+[x ...]
+#lem: Ṭebētu[Month X]MN; n; u
+
+12'. [...]
+#lem: u
+
+13'. [5 ŠU ...]
+#lem: n; Duʾūzu[Month IV]MN; u
+
+14'. [...]
+#lem: u
+
+
+@translation labeled en project
+
+@(o i 1') [...]
+ 
+@(o i 2') [Month XI, ...]
+
+@(o i 3') [...]
+
+@(o i 4') [...]
+
+@(o i 5') [(Year) 29, month XI, ...]
+
+@(o i 6') [...]
+
+@(o i 7') [...]
+
+@(o i 8') [Month XI, ...] ...
+
+@(o ii 1') [...] sat on the throne.
+
+@(o ii 2') [Month XI, the 2]8th, ..., omitted.
+
+@(o ii 3') (blank)
+
+@(o ii 4') (blank)
+
+@(o ii 5') Year 1 of Umakuš,
+
+@(o ii 6') month V, the 29th, (eclipse) which was omitted.
+
+@(o ii 7') At 50° before sunrise.
+
+@(o ii 8') Month XI?, ... [...]
+
+@(o iii 1') [...]
+ 
+@(o iii 2') Month X[II ...]
+
+@(o iii 3') In 20° of ni[ight ...]
+
+@(o iii 4') ... [... month XII was intercalary.]
+
+@(o iii 5') (Year) 19, mon[th V, ...]
+
+@(o iii 6') when? [I watched I did not see it?]
+
+@(o iii 7') [...]
+
+@(o iii 8') [Month XI, ...]
+
+@(o iv 1') [...]
+
+@(o iv 2') [Month XII, ...]
+
+@(o iv 3') [...]
+ 
+@(o iv 4') [...]
+
+@(o iv 5') [(Year) 2, month VI, ...]
+
+@(o iv 6') [...]
+
+@(o iv 7') [...]
+
+@(o iv 8') [Month XII, ...]
+
+@(r i 1') [(Year) 30,] month IV, the 28th, ..., omitted.
+
+@(r i 2') (blank)
+
+@(r i 3') (blank)
+
+@(r i 4') (blank)
+
+@(r i 5') [Mon]th X, the 28th, ..., omitted.
+
+@(r i 6') (blank)
+
+@(r i 7') (blank)
+
+@(r i 8') [(Year) 31, month III, (after) 5 months]
+
+@(r i 9') [...] ..., omitted.
+
+@(r i 10') (blank)
+
+@(r i 11') [Month IX, the xth,] ..., omitted.
+
+@(r i 12') (blank)
+
+@(r i 13') [(Year) 32, month III, ...]
+
+@(r i 14') [...]
+
+@(r ii 1') (Year) 2, [month V, the xth,]
+
+@(r ii 2') ..., omitted.
+
+@(r ii 3') (blank)
+
+@(r ii 4') (blank)
+
+@(r ii 5') Month XI, the 29th, ..., omitted.
+
+@(r ii 6') At 46° before sunrise.
+
+@(r ii 7') Month XII was intercalary.
+
+@(r ii 8') (Year) 3, month III, (after) 5 months,
+
+@(r ii 9') the 29th, ..., omitted.
+
+@(r ii 10') (blank)
+
+@(r ii 11') Month IX, the 29th, ..., omitted.
+
+@(r ii 12') (blank)
+
+@(r ii 13') [(Year) 4, mon]th III, the 28th, ...
+
+@(r ii 14') [...]
+
+@(r iii 1') [(Year) 20, month V, ...]
+
+@(r iii 2') ... [...]
+
+@(r iii 3') it exceeded? a little one-xth of the disc ... [...]
+
+@(r iii 4') it cleared in the south and east. 25° onset and clearing. The nor[th? wind blew?.]
+
+@(r iii 5') Month XI, the 28th, 75°
+
+@(r iii 6') after sunrise; when I watched
+
+@(r iii 7') I did [not] see it.
+
+@(r iii 8') (Year) 21, month IV, (after) 5 months, the 29th, ..., omitted.
+
+@(r iii 9') Month VI, Umakuš died.
+
+@(r iii 10') Aršu, his son, sat on the throne.
+
+@(r iii 11') Month X, the 29th, ..., omitted.
+
+@(r iii 12') Month XII was inter[calary.]
+
+@(r iii 13') Year 1 of A[ršu, month III,]
+
+@(r iii 14') the 29th, [...]
+
+@(r iv 1') [(Year) 3, month V, ....]
+
+@(r iv 2') [...]
+
+@(r iv 3') [...]
+
+@(r iv 4') [...]
+
+@(r iv 5') Month XI, the 28th, ... [...]
+
+@(r iv 6') when I watched I did not [see it.]
+
+@(r iv 7') (blank)
+
+@(r iv 8') (Year) 4, month IV, (after) 5 months,
+
+@(r iv 9') ..., omitted.
+
+@(r iv 10') (blank)
+
+@(r iv 11') Month X, the 20+[xth, ...]
+
+@(r iv 12') [...]
+
+@(r iv 13') [(Year) 5, month IV, ...]
+
+@(r iv 14') [...]
+

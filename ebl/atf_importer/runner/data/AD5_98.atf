@@ -51,38 +51,38 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
 $ ruling
 
-@(o 2) [...] ... [...]
+@(o 2') [...] ... [...]
 
 $ ruling
 
-@(o 3) [...] ... 16 ... [...]
+@(o 3') [...] ... 16 ... [...]
 
-@(o 4) [...] ... Month VI?, the 17th, it was above [...]
+@(o 4') [...] ... Month VI?, the 17th, it was above [...]
 
-@(r 1) [...] ... [...]
+@(r 1') [...] ... [...]
 
-@(r 2) [...] ... 2 cubits [...]
+@(r 2') [...] ... 2 cubits [...]
 
-@(r 3) [...] Month VIII, the 26th, it was [...] above α Librae [...]
-
-$ ruling
-
-@(r 4) [...] ... Month IX, the 23rd, in the beginning of Taurus [...]
+@(r 3') [...] Month VIII, the 26th, it was [...] above α Librae [...]
 
 $ ruling
 
-@(r 5) [...] 1 cubit [...] γ Geminorum. Month VIII, the 27th, ... [...]
-
-@(r 6) [... x]+1 cubit. Month XII₂, the 14th, it was [...] above [γ/δ] Cap[ricorni ...]
+@(r 4') [...] ... Month IX, the 23rd, in the beginning of Taurus [...]
 
 $ ruling
 
-@(r 7) [...] ... 4? ... above Taurus [...]
+@(r 5') [...] 1 cubit [...] γ Geminorum. Month VIII, the 27th, ... [...]
 
-@(r 8) [...] (blank) [...]
+@(r 6') [... x]+1 cubit. Month XII₂, the 14th, it was [...] above [γ/δ] Cap[ricorni ...]
+
+$ ruling
+
+@(r 7') [...] ... 4? ... above Taurus [...]
+
+@(r 8') [...] (blank) [...]
 
 $ ruling

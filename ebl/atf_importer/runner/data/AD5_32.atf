@@ -1,0 +1,52 @@
+&X500032 = ADART 5 32
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. ⸢x x x⸣ AM NE ZÁLAG? 5 I[TU? ...]
+#lem: u; u; u; u; u; u; n; warhu[month]N; u
+
+3'. 2 KÙŠ ina IGI 2 MÚL{ME} šá ⸢x⸣ [...]
+#lem: n; ammatu[unit]N; ina[in]PRP; pān[front]N; n; kakkabu[star]N; ša[which]REL; u; u
+
+4'. ina AN.KU₁₀ BI SAG.UŠ ina ⸢x⸣ [...]
+#lem: ina[in]PRP; antallû[eclipse]N; šū[that]'DP; Kayyamānu[Saturn]CN; ina[in]PRP; u; u
+
+5'. [x] GE₆ GIN na-as-qu [...]
+#lem: u; mūšu[night]N; alāku[go]V; u; u
+
+6'. [ana? I]M? SI u MAR ZÁLAG-ir? DUB? ⸢x⸣ [...]
+#lem: ana[to]PRP; u; ištānu[north]N; u[and]CNJ; amurru[west]N; nawāru[clear]V; u; u; u
+
+7'. [x x] ŠÀ? ina AN.KU₁₀ SAG.ME.GAR u A[Š ...]
+#lem: u; u; u; ina[in]PRP; antallû[eclipse]N; Nēberu[Jupiter]CN; u[and]CNJ; u; u
+
+8'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+$ ruling
+
+@translation labeled en project
+
+@(o 1') [...] ... [...]
+
+@(o 2') ... 5 m[onths? ...]
+
+@(o 3') 2 cubits in front of the two stars of ... [...]
+
+@(o 4') in its eclipse, Saturn was in ... [...]
+
+@(o 5') [...] after sunset. ... [...]
+
+@(o 6') it cleared [to?] the north and west ... [...]
+
+@(o 7') [...] ... in the eclipse, Jupiter and ... [...]
+
+@(o 8') [...] ... [...]
+
+$ ruling

@@ -1,0 +1,227 @@
+&X500059 = ADART 5 58
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [MU 1 da-ri-ia-m]uš A {I}ar-tak A {I}hi-ši
+#lem: šattu[year]N; n; Dariamuš[Darius]RN$; māru[son]N; Artaxerxes[Artaxerxes]RN$; māru[son]N; Xerxes[Xerxes]RN$
+
+2'. [x x US]AN sin SIG AN 4 KÙŠ
+#lem: u; u; šimītān[first part of the night]N; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N
+
+3'. [x x] ⸢sin⸣ SIG AN 2 KÙŠ
+#lem: u; u; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N
+
+4'. [x x] ⸢sin SIG⸣ AN 1 5/6 KÙŠ
+#lem: u; u; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N
+
+5'. MU 2 ŠU 23 ⸢ina ZÁLAG⸣ sin SIG AN 2 1/2 KÙŠ
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N
+
+6'. NE 22 ina ZÁLAG sin ⸢SIG AN⸣ 2 KÙŠ
+#lem: Abu[Month V]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N
+
+7'. APIN 19 ina ZÁLAG sin SIG AN ⸢2 KÙŠ⸣ LÁL
+#lem: Arahsamna[Month VIII]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; alālu[balance]V
+
+8'. ZÍZ U₄-12 USAN sin ár ⸢AN⸣ [N] ⸢KÙŠ⸣
+#lem: Šabāṭu[Month XI]MN; X; šimītān[first part of the night]N; Sîn[moon]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N
+
+9'. ŠE 9 USAN sin ina IGI AN 1 KÙŠ DIR.ŠE
+#lem: Addaru[Month XII]MN; n; šimītān[first part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; Addāru_Šanû[(Intercalary) Month XII₂]MN
+
+10'. MU 3 GU₄ 6 USAN sin SIG AN 2/3? KÙŠ
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; n; šimītān[first part of the night]N; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N
+
+11'. SIG 5 sin ár AN 1 1/2 KÙŠ sin 8 SI ana SI NIM
+#lem: Simānu[Month III]MN; n; Sîn[moon]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ubānu[finger]N; ana[to]PRP; ištānu[north]N; šaqi[high]V
+
+12'. NE 2 sin e AN 1 1/2 KÙŠ sin 1 KÙŠ ana ŠÚ LAL
+#lem: Abu[Month V]MN; n; Sîn[moon]N; eli[above]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V
+
+13'. MU 4 ŠU 24 ina ZÁLAG sin SIG AN 2 KÙŠ sin 1 KÙŠ ana NIM DIB
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; šapil[below]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+14'. APIN 20 ina ZÁLAG sin ina IGI AN 5/6 KÙŠ
+#lem: Arahsamna[Month VIII]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N
+
+15'. GAN 18 ina ZÁLAG sin ina IGI AN 8 SI ana ŠÚ GUB ana ŠÀ-šú GI
+#lem: Kislīmu[Month IX]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; ana[to]PRP; libbišu[inside]N; kânu[be(come) permanent//be(come) set]V'V$
+
+16'. MU 5 BAR 7 MURUB₄ sin ina IGI AN 3 SI i sin ana ULÙ SIG DIR.ŠE
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; qablītu[middle watch (of the night)]N; Sîn[moon]N; ina[in]PRP; pān[front]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; wīṣu[little]AJ; Sîn[moon]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; Addāru_Šanû[(Intercalary) Month XII₂]MN
+
+17'. MU 6 ZÍZ GE₆ 16 MURUB₄ sin ár AN 2 SI ana ŠÀ-šú GIN
+#lem: šattu[year]N; n; Šabāṭu[Month XI]MN; mūšu[night]N; n; qablītu[middle watch (of the night)]N; Sîn[moon]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; libbišu[inside]N; kânu[be(come) permanent//be(come) set]V'V$
+
+18'. MU 7 KIN 5 USAN AN SIG SI sin šá ULÙ 1 SI TE DIR.ŠE
+#lem: šattu[year]N; n; Ulūlu[Month VI]MN; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]PRP; qarnu[horn]N; Sîn[moon]N; ša[which]REL; šūtu[south]N; n; ubānu[finger]N; ṭehû[come close]V; Addāru_Šanû[(Intercalary) Month XII₂]MN
+
+19'. MU 11 DU₆ 7 SAG GE₆ sin ár AN 8 SI ana ŠÀ-šú GIN
+#lem: šattu[year]N; n; Tašrītu[Month VII]MN; n; rēš[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; libbišu[inside]N; kânu[be(come) permanent//be(come) set]V'V$
+
+20'. [x x] ⸢x x⸣ [...]⸢x x⸣
+#lem: u; u; u; u; u; u
+
+@reverse
+1'. [x] ⸢4?⸣ sin e G[ENNA ...]
+#lem: u; n; Sîn[moon]N; eli[above]PRP; Kayyamānu[Saturn]CN; u
+
+2'. GAN 4 sin e GENNA 1 1/2 KÙŠ sin ⸢1/2 KÙŠ ana⸣ N[IM? DIB?]
+#lem: Kislīmu[Month IX]MN; n; Sîn[moon]N; eli[above]PRP; Kayyamānu[Saturn]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+3'. MU 2 SIG 18 ina ZÁLAG sin e GENNA 1/2 KÙŠ sin 8 ⸢SI ana NIM DIB⸣
+#lem: šattu[year]N; n; Simānu[Month III]MN; n; ina[during]PRP; nūru[last part of the night]'N; Sîn[moon]N; eli[above]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; Sîn[moon]N; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+4'. KIN U₄-11 USAN sin e GENNA 5/6 KÙŠ LÁL
+#lem: Ulūlu[Month VI]MN; n; šimītān[first part of the night]N; Sîn[moon]N; eli[above]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; alālu[balance]V
+
+5'. GAN U₄-5 sin e GENNA 5/6 KÙŠ sin 8 SI ana NIM DIB ŠE DIR
+#lem: Kislīmu[Month IX]MN; n; Sîn[moon]N; eli[above]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; Sîn[moon]N; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; Addaru[Month XII]MN; watru[extra]AJ
+
+6'. MU 3 GU₄ 20 U₄.ZAL sin SIG GENNA 8 SI sin 1/2 KÙŠ ana NIM DIB
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; n; šāt-urri[third watch of the night]N; Sîn[moon]N; šapil[below]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V
+
+7'. ŠU 15 U₄.ZAL sin ár GENNA 6 SI ana ŠÀ-šú GI
+#lem: Duʾūzu[Month IV]MN; n; šāt-urri[third watch of the night]N; Sîn[moon]N; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; ana[to]PRP; libbišu[interior]N; kânu[be(come) permanent//be(come) set]V'V$
+
+8'. NE 13 sin ina IGI GENNA 8 SI ana ŠÚ GUB
+#lem: Abu[Month V]MN; n; Sîn[moon]N; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ubānu[finger]N; ana[to]PRP; erbu[west]'N; izuzzu[stand]V
+
+9'. MU 7 ŠU 22 1.4 ana ZÁLAG GENNA TA SI sin šá SI È
+#lem: šattu[year]N; n; Duʾūzu[Month IV]MN; n; n; ana[to]PRP; nūru[light]N; Kayyamānu[Saturn]CN; ištu[from]PRP; qarnu[horn]N; Sîn[moon]N; ša[which]REL; ištānu[north]N; waṣû[go out]V
+
+10'. APIN 12 MURUB₄ GENNA ana ŠÀ sin KU₄
+#lem: Arahsamna[Month VIII]MN; n; qablītu[middle watch (of the night)]N; Kayyamānu[Saturn]CN; ana[to]PRP; libbu[interior]N; Sîn[moon]N; erēbu[enter]V
+
+11'. MU 1 ár APIN 25 sin ár ⸢GENNA 4 SI⸣ ana ŠÀ-šú G[I?]
+#lem: šattu[year]N; n; Artaxerxes[Artaxerxes]RN$; Arahsamna[Month VIII]MN; n; Sîn[moon]N; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; ana[to]PRP; libbišu[inside]N; kânu[be(come) permanent//be(come) set]V'V$
+
+12'. MU 2 GU₄ GE₆ 12 ⸢MURUB₄⸣ sin e GENNA 2 SI DIM₄ DIR.ŠE
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; mūšu[night]N; n; qablītu[middle watch (of the night)]N; Sîn[moon]N; eli[above]PRP; Kayyamānu[Saturn]CN; n; ubānu[finger]N; sanāqu[come near]'V; Addāru_Šanû[(Intercalary) Month XII₂]MN
+
+13'. MU 5 BAR 17 ⸢USAN GENNA⸣ ana ŠÀ sin KU₄ 28 GE₆ ina ŠÀ-šú it-tur
+#lem: šattu[year]N; n; Nisannu[Month I]MN; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; libbu[interior]N; Sîn[moon]N; erēbu[enter]V; n; mūšu[night]N; ina[in]PRP; libbišu[inside]N; târu[turn//return]V'V$ittūr
+
+14'. ⸢GU₄? 14?⸣ [USA]N GENNA ana ŠÀ sin KU₄ DIR.<ŠE>
+#lem: Ayyaru[Month II]MN; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; libbu[interior]N; Sîn[moon]N; erēbu[enter]V; Addāru_Šanû[(Intercalary) Month XII₂]MN
+
+@left
+1'. [2 DIR]
+#lem: n; watru[extra]'AJ
+
+2'. [5 DIR]
+#lem: n; watru[extra]'AJ
+
+3'. [7 DIR]
+#lem: n; watru[extra]'AJ
+
+4'. 10 DIR
+#lem: n; watru[extra]'AJ
+
+5'. 13 DIR
+#lem: n; watru[extra]'AJ
+
+6'. 16 DIR 2.KAM
+#lem: n; watru[extra]'AJ; n
+
+7'. 18 DIR
+#lem: n; watru[extra]'AJ
+
+8'. 2 ár DIR
+#lem: n; Artaxerxes[Artaxerxes]RN$; watru[extra]'AJ
+
+9'. 5 DIR
+#lem: n; watru[extra]'AJ
+
+@translation labeled en project
+
+@(o 1') [Year 1 of Dari]us, son of Artaxerxes, son of Xerxes,
+
+@(o 2') [..., first] part of the night, the moon was 4 cubits below Mars.
+
+@(o 3') [...] the moon was 2 cubits below Mars.
+
+@(o 4') [...] the moon was 1 5/6 cubits below Mars.
+
+@(o 5') Year 2, month IV, the 23rd, last part of the night, the moon was 2 1⁄2 cubits below Mars.
+
+@(o 6') Month V, the 22nd, last part of the night, the moon was 2 cubits below Mars.
+
+@(o 7') Month VIII, the 19th, last part of the night, the moon was balanced 2 cubits below Mars.
+
+@(o 8') Month XI, the 12th day, first part of the night, the moon was [...] cubits behind Mars.
+
+@(o 9') Month XII, the 9th, first part of the night, the moon was 1 cubit in front of Mars. Month XII₂.
+
+@(o 10') Year 3, month II, the 6th, first part of the night, the moon was 2/3? cubit below Mars.
+
+@(o 11') Month III, the 5th, the moon was 1 1⁄2 cubits behind Mars, the moon being 8 fingers high to the north.
+
+@(o 12') Month V, the 2nd, the moon was 1 1⁄2 cubits above Mars, the moon being 1 cubit back to the west.
+
+@(o 13') Year 4, month IV, the 24th, last part of the night, the moon was 2 cubits below Mars, the moon having passed 1 cubit to the east.
+
+@(o 14') Month VIII, the 20th, last part of the night, the moon was 5/6 cubit in front of Mars.
+
+@(o 15') Month IX, the 18th, last part of the night, the moon stood 8 fingers in front of Mars to the west, it was set towards its inside.
+
+@(o 16') Year 5, month I, the 7th, in the middle watch, the moon was 3 fingers in front of Mars, the moon being a little low to the south. Month XII₂.
+
+@(o 17') Year 6, month XI, night of the 16th, in the middle watch, the moon was 2 fingers behind Mars, it was set towards its inside.
+
+@(o 18') Year 7, month VI, the 5th, first part of the night, Mars was 1 finger below the southern horn of the moon, it came close. Month XII₂.
+
+@(o 19') Year 11, month VII, the 7th, beginning of the night, the moon was 8 fingers behind Mars, it was set towards its inside.
+
+@(o 20') [...] ... [...] ...
+
+@(r 1') [...] the 4th?, the moon was [...] above Sa[turn ...]
+
+@(r 2') Month IX, the 4th, the moon was 1 1⁄2 cubits above Saturn, the moon [having passed?] 1⁄2 cubit [to the east.]
+
+@(r 3') Year 2, month III, the 18th, last part of the night, the moon was 1⁄2 cubit above Saturn, the moon having passed 8 fingers to the east.
+
+@(r 4') Month VI, the 11th day, first part of the night, the moon was balanced 5/6 cubit above Saturn.
+
+@(r 5') Month IX, the 5th day, the moon was 5/6 cubit above Saturn, the moon having passed 8 fingers to the east. Month XII was intercalary.
+
+@(r 6') Year 3, Month II, the 20th, in the morning watch, the moon was 8 fingers below Saturn, the moon having passed 1⁄2 cubit to the east.
+
+@(r 7') Month IV, the 15th, in the morning watch, the moon was 6 fingers behind Saturn, it was set towards its inside.
+
+@(r 8') Month V, the 13th, the moon stood 8 fingers in front of Saturn to the west.
+
+@(r 9') Year 7, Month IV, the 22nd, 64° before sunrise, Saturn came out from the northern horn of the moon.
+
+@(r 10') Month VIII, the 12th, in the middle watch, Saturn entered the moon.
+
+@(r 11') Year 1 of Ar(taxerxes), month VIII, the 25th, the moon was 4 fingers behind Saturn, it was set towards its inside.
+
+@(r 12') Year 2, month II, night of the 12th, in the middle watch, the moon was 2 fingers above Saturn, it came near. Month XII₂.
+
+@(r 13') Year 5, month I, the 17th, first part of the night, Saturn entered the moon. At 28° of night it returned from its inside.
+
+@(r 14') Month II?, the 14th?, first part of the night, Saturn entered the moon. Month <XII₂>.
+
+@left
+
+@(l.e. 1') [(Year) 2, intercalary month XII]
+
+@(l.e. 2') [(Year) 5, intercalary month XII]
+
+@(l.e. 3') [(Year) 7, intercalary month XII]
+
+@(l.e. 4') (Year) 10, intercalary month XII
+
+@(l.e. 5') (Year) 13, intercalary month XII
+
+@(l.e. 6') (Year) 16, intercalary month VI
+
+@(l.e. 7') (Year) 18, intercalary month XII
+
+@(l.e. 8') (Year) 2, of Ar(taxerxes) intercalary month XII
+
+@(l.e. 9') (Year) 5, intercalary month XII

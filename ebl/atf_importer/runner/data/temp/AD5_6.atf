@@ -176,135 +176,135 @@ $ ruling
 
 @translation labeled en project
 
-@(o i 1) [Year 1 of Nebukad]nezar. Month III, omitted.
+@(o i 1') [Year 1 of Nebukad]nezar. Month III, omitted.
 
-@(o i 2) [Month IX,] omitted.
+@(o i 2') [Month IX,] omitted.
 
 $ ruling
 
-@(o i 3) [Year 2. Month II,] (after) 5? (months), omitted. Month VI was intercal
+@(o i 3') [Year 2. Month II,] (after) 5? (months), omitted. Month VI was intercal
 ary.
 
-@(o i 4) [Month VII, the 1]4th?, 1 2/3 bēru 5°, variant 1 1⁄2 beru, after sunset,
+@(o i 4') [Month VII, the 1]4th?, 1 2/3 bēru 5°, variant 1 1⁄2 beru, after sunset,
 
-@(o i 5) it began in the [....] north; half was covered. In the north and west it began
+@(o i 5') it began in the [....] north; half was covered. In the north and west it began
 
-@(o i 6) [to cl]ear. [1] 1⁄2 bēru onset and clearing. The west wind blew.
-
-$ ruling
-
-@(o i 7) [Year 3.] Month I, omitted. Month VII, omitted.
+@(o i 6') [to cl]ear. [1] 1⁄2 bēru onset and clearing. The west wind blew.
 
 $ ruling
 
-@(o i 8) [Year 4. M]onth I, the 13th, middle watch, 3 bēru 5° after sunset,
-
-@(o i 9) it began in the west and north. Three quarters
-
-@(o i 10) [was covered.] It cleared in the north. The north wind blew.
-
-@(o i 11) Month VII, omitted.
+@(o i 7') [Year 3.] Month I, omitted. Month VII, omitted.
 
 $ ruling
 
-@(o i 12) [Year 5. Month I, omitted.] Month VI₂, om[itted.]
+@(o i 8') [Year 4. M]onth I, the 13th, middle watch, 3 bēru 5° after sunset,
 
-@(o i 13) [Month XI,] (after) 5 months, 3 1⁄2 bēru after sunset,
+@(o i 9') it began in the west and north. Three quarters
 
-@(o i 14) [....] two-thirds was covered. In the south it was covered. In the west? [it cleared.]
+@(o i 10') [was covered.] It cleared in the north. The north wind blew.
 
-@(o i 15) [In?] its eclipse, ... [...]
-
-$ ruling
-
-@(o i 16) [...] ... [...]
-
-@(o ii 1) Month VIII, [...] ... [...]
-
-@(o ii 2) It cleared [in the west] and south [....] 2/3 bēru after [sunset?]
+@(o i 11') Month VII, omitted.
 
 $ ruling
 
-@(o ii 3) Year 11. Month II, [...] 10° after sunset it began
+@(o i 12') [Year 5. Month I, omitted.] Month VI₂, om[itted.]
 
-@(o ii 4) it was total, and 10? [...] Month VIII, omitted. Month XII was intercalary.
+@(o i 13') [Month XI,] (after) 5 months, 3 1⁄2 bēru after sunset,
 
-$ ruling
+@(o i 14') [....] two-thirds was covered. In the south it was covered. In the west? [it cleared.]
 
-@(o ii 5) Year 12. Month [I, omitted.] Month VII, omitted.
-
-@(o ii 6) Month XII, the 15th, 10? [... nn]° after sunset [....]
-
-@(o ii 7) 1 bēru 6° onset [and clearing.]
+@(o i 15') [In?] its eclipse, ... [...]
 
 $ ruling
 
-@(o ii 8) Year 13. Month VI, [omitted.]
+@(o i 16') [...] ... [...]
 
-@(o ii 9) [Month XII, the 1]4th, it came out eclipsed. 1 bēru 10° [...]
+@(o ii 1') Month VIII, [...] ... [...]
 
-$ ruling
-
-@(o ii 10) [Year 1]4. [Month] VI, [omitted.]
-
-@(o ii 11) [Month XII, omitt]ed ... Month XII [was intercalary.]
+@(o ii 2') It cleared [in the west] and south [....] 2/3 bēru after [sunset?]
 
 $ ruling
 
-@(o ii 12) [Year 1]5. Month V, [omitt]ed. Month X[I, omitted.]
+@(o ii 3') Year 11. Month II, [...] 10° after sunset it began
+
+@(o ii 4') it was total, and 10? [...] Month VIII, omitted. Month XII was intercalary.
 
 $ ruling
 
-@(o ii 13) [Year] 16. Month IV, [omitted.]
+@(o ii 5') Year 12. Month [I, omitted.] Month VII, omitted.
 
-@(o ii 14) [Month X,] the 14th, morning watch, 2/3 bēru before sunrise?.
+@(o ii 6') Month XII, the 15th, 10? [... nn]° after sunset [....]
 
-@(o ii 15) half of it was covered. [It set] eclipsed.
-
-$ ruling
-
-@(o ii 16) [Year] 17. Month IV, [omitted.]
-
-@(o ii 17) [Month] X, the 13th, morning watch, 1 bēru 5° [before sunrise?]
-
-@(o ii 18) all of it was covered. [It set eclips]ed.
-
-@(r iii 1) [...] ... [...]
-
-@(r iii 2) ... beginning of night, onset [...]
+@(o ii 7') 1 bēru 6° onset [and clearing.]
 
 $ ruling
 
-@(r iii 3) Year 25. Month V, 1 1⁄2 bēru after sunset.
+@(o ii 8') Year 13. Month VI, [omitted.]
 
-@(r iii 4) Month XI, evening watch, onset.
-
-$ ruling
-
-@(r iii 5) Year 26. Month V, omitted. Month XI, omitted. Month XII was intercalary.
+@(o ii 9') [Month XII, the 1]4th, it came out eclipsed. 1 bēru 10° [...]
 
 $ ruling
 
-@(r iii 6) Year 27. Month III, (after) 5 (months), omitted. Month IX, omitted.
+@(o ii 10') [Year 1]4. [Month] VI, [omitted.]
+
+@(o ii 11') [Month XII, omitt]ed ... Month XII [was intercalary.]
 
 $ ruling
 
-@(r iii 7) Year 28. Month III, the 14th, ...
-
-@(r iii 8) [...] ... [...] finger remaining
-
-@(r iii 9) [... nn]°, it set eclipsed.
-
-@(r iii 10) [Month IX, the 1]5th?, 3 1⁄2 bēru after sunset,
-
-@(r iii 11) it began [in] the east. All of it was covered.
-
-@(r iii 12) It cleared? in the west?. [nn] bēru onset and clearing.
+@(o ii 12') [Year 1]5. Month V, [omitt]ed. Month X[I, omitted.]
 
 $ ruling
 
-@(r iii 13) Year 29. [Mon]th II, the 14th, [...]
+@(o ii 13') [Year] 16. Month IV, [omitted.]
 
-@(r iii 14) 1 bēru 10° before sunrise,
+@(o ii 14') [Month X,] the 14th, morning watch, 2/3 bēru before sunrise?.
 
-@(r iii 15) [...]
+@(o ii 15') half of it was covered. [It set] eclipsed.
+
+$ ruling
+
+@(o ii 16') [Year] 17. Month IV, [omitted.]
+
+@(o ii 17') [Month] X, the 13th, morning watch, 1 bēru 5° [before sunrise?]
+
+@(o ii 18') all of it was covered. [It set eclips]ed.
+
+@(r iii 1') [...] ... [...]
+
+@(r iii 2') ... beginning of night, onset [...]
+
+$ ruling
+
+@(r iii 3') Year 25. Month V, 1 1⁄2 bēru after sunset.
+
+@(r iii 4') Month XI, evening watch, onset.
+
+$ ruling
+
+@(r iii 5') Year 26. Month V, omitted. Month XI, omitted. Month XII was intercalary.
+
+$ ruling
+
+@(r iii 6') Year 27. Month III, (after) 5 (months), omitted. Month IX, omitted.
+
+$ ruling
+
+@(r iii 7') Year 28. Month III, the 14th, ...
+
+@(r iii 8') [...] ... [...] finger remaining
+
+@(r iii 9') [... nn]°, it set eclipsed.
+
+@(r iii 10') [Month IX, the 1]5th?, 3 1⁄2 bēru after sunset,
+
+@(r iii 11') it began [in] the east. All of it was covered.
+
+@(r iii 12') It cleared? in the west?. [nn] bēru onset and clearing.
+
+$ ruling
+
+@(r iii 13') Year 29. [Mon]th II, the 14th, [...]
+
+@(r iii 14') 1 bēru 10° before sunrise,
+
+@(r iii 15') [...]

@@ -179,118 +179,118 @@ $ ruling
 @translation labeled en project
 
 
-@(o i 1) [...]
+@(o i 1') [...]
 
-@(o i 2) [...] ...
+@(o i 2') [...] ...
 
-@(o i 3) [...] ...
+@(o i 3') [...] ...
 
-@(o i 4) [...] covered the sky
+@(o i 4') [...] covered the sky
 
-@(o i 5) [...] clouds? ...
+@(o i 5') [...] clouds? ...
 
-@(o i 6) [...] cleared between north and west
+@(o i 6') [...] cleared between north and west
 
-@(o i 7) [...] after sunset, 3 cubits above
+@(o i 7') [...] after sunset, 3 cubits above
 
-@(o i 8) [...] eclipse, Jupiter 6 fingers
+@(o i 8') [...] eclipse, Jupiter 6 fingers
 
-@(o i 9) [...] was stationary.
+@(o i 9') [...] was stationary.
 
-@(o i 10) [...] fingers in front of the rear stars
+@(o i 10') [...] fingers in front of the rear stars
 
-@(o i 11) [...] ... Month VIII, the 22nd, the judge
+@(o i 11') [...] ... Month VIII, the 22nd, the judge
 
-@(o i 12) [...] Assyria many?
+@(o i 12') [...] Assyria many?
 
-@(o i 13) [...] their [...] Months IX, X, XI
+@(o i 13') [...] their [...] Months IX, X, XI
 
-@(o i 14) [...], the administrator of Dēr,
+@(o i 14') [...], the administrator of Dēr,
 
-@(o i 15) [...], and the governor of Nippur died.
+@(o i 15') [...], and the governor of Nippur died.
 
-@(o i 16) [...] month II they died ....
+@(o i 16') [...] month II they died ....
 
-@(o i 17) [...] there was famine.
-
-$ ruling
-
-@(o ii 1) went?. Behind ... [...]
-
-@(o ii 2) That night, the moon was surrounded by a halo, ... [...]
-
-@(o ii 3) [... there was] famine.
+@(o i 17') [...] there was famine.
 
 $ ruling
 
-@(o ii 4) Year 16, month II, the 20th [...]
+@(o ii 1') went?. Behind ... [...]
 
-@(o ii 5) went in order to do battle. Month III, [...]
+@(o ii 2') That night, the moon was surrounded by a halo, ... [...]
 
-@(o ii 6) captives from the land Ruṣapu [...]
-
-@(o ii 7) Month VI, night of the 14th, 5 [...]
-
-@(o ii 8) 10° of night in the middle (watch) [...]
-
-@(o ii 9) remained, lunar eclipse; more than [...]
-
-@(o ii 10) on the south side was covered [...]
-
-@(o ii 11) beginning of the night, after ... [...]
-
-@(o ii 12) the bright star of [...]
-
-@(o ii 13) to the south, ... [...]
-
-@(o ii 14) 10° night [...]
-
-@(o ii 15) in ... [...]
-
-@(o ii 16) ... [...]
-
-@(o ii 17) ... [...]
-
-@(r i 1) ... [...]
-
-@(r i 2) in Elam ... [...]
-
-@(r i 3) against .... to Babylon? [...]
-
-@(r i 4) Month VI2, Month VIII [...]
-
-@(r i 5) the fortress? not ... [...]
+@(o ii 3') [... there was] famine.
 
 $ ruling
 
-@(r i 6) Year 19, month
+@(o ii 4') Year 16, month II, the 20th [...]
 
-@(r i 7) ... [...]
+@(o ii 5') went in order to do battle. Month III, [...]
 
-@(r i 8) ... [...]
+@(o ii 6') captives from the land Ruṣapu [...]
 
-@(r ii 1) [...] new break	from the eclipse […]
+@(o ii 7') Month VI, night of the 14th, 5 [...]
 
-@(r ii 2) [...] new break	wnet, 1 2/3 bēru of night […]
+@(o ii 8') 10° of night in the middle (watch) [...]
 
-@(r ii 3) [...] new break	... Mars and Venus
+@(o ii 9') remained, lunar eclipse; more than [...]
 
-@(r ii 4) [...] new break	and Jupiter behind the foot
+@(o ii 10') on the south side was covered [...]
 
-@(r ii 5) [...] new break	[Li]on? Rose, 8° to α Leonis
+@(o ii 11') beginning of the night, after ... [...]
 
-@(r ii 6) [...] new break	during its eclipse, the remainder of the planets
+@(o ii 12') the bright star of [...]
 
-@(r ii 7) [did not stand there ...] ... during the eclipse, lightning, thunder,
+@(o ii 13') to the south, ... [...]
 
-@(r ii 8) rain
+@(o ii 14') 10° night [...]
 
-@(r ii 9) [...] of the end of the border?
+@(o ii 15') in ... [...]
 
-@(r ii 10) [...] ...
+@(o ii 16') ... [...]
 
-@(r ii 11) [...] ...
+@(o ii 17') ... [...]
 
-@(r ii 12) [...] ... [...]
+@(r i 1') ... [...]
+
+@(r i 2') in Elam ... [...]
+
+@(r i 3') against .... to Babylon? [...]
+
+@(r i 4') Month VI2, Month VIII [...]
+
+@(r i 5') the fortress? not ... [...]
+
+$ ruling
+
+@(r i 6') Year 19, month
+
+@(r i 7') ... [...]
+
+@(r i 8') ... [...]
+
+@(r ii 1') [...] new break	from the eclipse […]
+
+@(r ii 2') [...] new break	wnet, 1 2/3 bēru of night […]
+
+@(r ii 3') [...] new break	... Mars and Venus
+
+@(r ii 4') [...] new break	and Jupiter behind the foot
+
+@(r ii 5') [...] new break	[Li]on? Rose, 8° to α Leonis
+
+@(r ii 6') [...] new break	during its eclipse, the remainder of the planets
+
+@(r ii 7') [did not stand there ...] ... during the eclipse, lightning, thunder,
+
+@(r ii 8') rain
+
+@(r ii 9') [...] of the end of the border?
+
+@(r ii 10') [...] ...
+
+@(r ii 11') [...] ...
+
+@(r ii 12') [...] ... [...]
 
 

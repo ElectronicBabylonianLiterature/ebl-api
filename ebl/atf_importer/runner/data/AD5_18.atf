@@ -1,0 +1,104 @@
+&X500018 = ADART 5 18
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 1 ME 21.KAM
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU; n
+
+2'. {ITU}ŠE GE₆ 15 [...]
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; u
+
+3'. ki šá-maš-⸢šá?⸣-a?-tú x z[iq?-p]i?
+#lem: kī[when]'SBJ;  Šá-Maš-šá-a-tú[β Herculis]CN$; u; zaqāpu[culminate]V
+
+4'. sin AN.KU₁₀ Á ÙLU u KUR
+#lem: Sîn[moon]N; antallû[eclipse]N; idu[side]N; šūtu[south]N; u[and]CNJ; šadû[east]N
+
+5'. ki-i TAB-ú ina 20 GE₆
+#lem: kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N
+
+6'. gab-bi ŠÚ 5? GE₆ ÍR
+#lem: gabbu[totality]N; erēpu[cover]V; n; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N
+
+7'. a-na ZÁLAG-ru ki-i TAB-ú
+#lem: ana[to]PRP; nawāru[clear]'V; kī[when]'SBJ; ušarrû[begin]V
+
+8'. Á KUR a-na MAR 2 SI? ZÁLAG?
+#lem: idu[side]N; šadû[east]N; ana[to]PRP; amurru[west]N; n; ubānu[finger]N; nawāru[clear]V
+
+9'. ÍB.TAG₄ ZÁLAG-ru NU PAP
+#lem: rēhtu[remainder]N; nawāru[clearing]'N; ul[not]MOD; naṣāru[watch]V
+
+10'. AN.KU₁₀-šú SA₅ AN.KU₁₀-šú x
+#lem: antallû[eclipse]N; sāmu[red]AJ; antallû[eclipse]N; u
+
+11'. ⸢SI? GIN⸣ ina AN.KU₁₀-šú
+#lem: ištānu[north wind]N; alāku[blow]V; ina[during]PRP; antallû[eclipse]N
+
+12'. ⸢MÚL⸣.BABBAR dele-⸢bat⸣ u x
+#lem: Kakkabu-peṣû[Jupiter]CN; Dilbat[Venus]CN; u[and]CNJ; u
+
+13'. GUB{MEŠ} ina GAR GU₄.UD
+#lem: izuzzu[stand]V; ina[during]PRP; šiknu[onset]N; Šihṭu[Mercury]CN
+
+@reverse
+1'. È-⸢a⸣ ÍB.TAG₄
+#lem: waṣû[go out]'V; rēhtu[remainder]N
+
+2'. UDU.IDIM{MEŠ} NU GUB{MEŠ}
+#lem: bibbu[planet]N; ul[not]MOD; izuzzu[stand]V
+
+3'. 2 KÙŠ ina IGI DELE-šá-IGI-ABSIN
+#lem: n; ammatu[unit]N; ina[in]PRP; pān[front]N; DELE-šá-IGI-ABSIN[γ Virginis]CN
+
+4'. a-dir ina 30 DANNA
+#lem: adir[eclipsed]AJ; ina[at]PRP; n; bēru[double hour]N
+
+5'. GE₆ ana ZÁLAG ád ŠÚ
+#lem: mūšu[night]N; ana[to]PRP; nūru[light]'N; adir[eclipsed]AJ; rabû[set]V
+
+6'. 15 3.30 na DIR muš
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+@translation labeled en project
+
+@(o 1') Year 121 [...]
+
+@(o 2') Month XII, night of the 15th, [...]
+
+@(o 3') when β Herculis? culminated,
+
+@(o 4') lunar eclipse; when it began on the south and east side,
+
+@(o 5') in 20° of night
+
+@(o 6') all was covered; 5°? of night maximal phase;
+
+@(o 7') when it began to clear,
+
+@(o 8') on the east side it cleared 2 fingers to the west;
+
+@(o 9') the remainder of the clearing (could) not be watched.
+
+@(o 10') Its eclipse was red; its eclipse ...
+
+@(o 11') the north wind blew. In its eclipse,
+
+@(o 12') Jupiter, Venus, and Saturn?
+
+@(o 13') stood there; during onset, Mercury
+
+@(r 1') came out; the remainder
+
+@(r 2') of the planets did not stand there.
+
+@(r 3') 2 cubits in front of γ Virginis
+
+@(r 4') it was eclipsed. At 30°, i.e. one bēru
+
+@(r 5') before sunrise; it set eclipsed.
+
+@(r 6') The 15th, sunrise to moonset: 3° 30’, measured (despite) clouds.

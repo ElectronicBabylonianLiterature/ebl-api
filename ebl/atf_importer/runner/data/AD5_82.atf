@@ -320,222 +320,222 @@ $ blank
 @translation labeled en project
 
 
-@(o i 1) [(Year) 160, ...] Jupiter’s acronychal rising.
+@(o i 1') [(Year) 160, ...] Jupiter’s acronychal rising.
 
-@(o i 2) [...] Sagittarius second stationary point.
+@(o i 2') [...] Sagittarius second stationary point.
 
-@(o i 3) [...] last appearance [in] Capricorn.
+@(o i 3') [...] last appearance [in] Capricorn.
 
-@(o i 4) [...] first appearance [in] Capricorn.
+@(o i 4') [...] first appearance [in] Capricorn.
 
-@(o i 5) [...] 2 cubits above γ Capricorni.
+@(o i 5') [...] 2 cubits above γ Capricorni.
 
-@(o i 6) [...] 20 fingers [...] δ Capricorni.
-
-$ ruling
-
-@(o i 7) [(Year) 161, ...] Jupiter’s first stationary point in the end of Capricorn.
-
-@(o i 8) [...] Jupiter’s acronychal rising.
-
-@(o i 9) [...] Jupiter was 10 fingers above δ Capricorni.
-
-@(o i 10) [...] Jupiter was 2 fingers above γ Capricorni.
-
-@(o i 11) [...] second stationary point in Capricorn.
-
-@(o i 12) [... Jupiter was] 1⁄2 cubit above γ Capricorni.
-
-@(o i 13) [... Jupiter was] 1⁄2 cubit above δ Capricorni.
-
-@(o i 14) [...] Jupiter’s last appearance in Aquarius.
-
-@(o i 15) [...] the 1st?, Jupiter’s first appearance in the end of Aquarius.
+@(o i 6') [...] 20 fingers [...] δ Capricorni.
 
 $ ruling
 
-@(o i 16) [(Year) 162, month III,] the 2nd, last part of the night, Jupiter’s first stationary point in Pisces.
+@(o i 7') [(Year) 161, ...] Jupiter’s first stationary point in the end of Capricorn.
 
-@(o i 17) [...] acronychal rising.
+@(o i 8') [...] Jupiter’s acronychal rising.
 
-@(o i 18) [...] second stationary point in Pisces.
+@(o i 9') [...] Jupiter was 10 fingers above δ Capricorni.
 
-@(o i 19) [Month XI,] the 14th, last appearance in Pisces.
+@(o i 10') [...] Jupiter was 2 fingers above γ Capricorni.
 
-@(o i 20) Month XII, the 18th, first appearance in the end of Pisces.
+@(o i 11') [...] second stationary point in Capricorn.
 
-$ ruling
+@(o i 12') [... Jupiter was] 1⁄2 cubit above γ Capricorni.
 
-@(o i 21) (Year) 163, month I, night of the 19th, last part of the night, Jupiter was 3 cubits above
+@(o i 13') [... Jupiter was] 1⁄2 cubit above δ Capricorni.
 
-@(o i 22) η Piscium.
+@(o i 14') [...] Jupiter’s last appearance in Aquarius.
 
-@(o i 23) Month II, night of the 11th, last part of the night, Jupiter was 3 cubits below β Arietis.
-
-@(o i 24) Night of the 28th, last part of the night, Jupiter was 4 cubits below α Arietis.
-
-@(o i 25) Month IV, the 23rd, Jupiter’s first stationary point in Aries.
-
-@(o i 26) Month VI, night of the 16th, last part of the night, Jupiter was 4 1⁄2 cubits below α Arietis.
-
-@(o i 27) The 22nd, Jupiter’s acronychal rising.
-
-@(o i 28) Month VIII, night of the 3rd, last part of the night, Jupiter was 4 1⁄2 cubits below
-
-@(o i 29) β Arietis.
-
-@(o i 30) The 20th, Jupiter’s second stationary point in Aries.
+@(o i 15') [...] the 1st?, Jupiter’s first appearance in the end of Aquarius.
 
 $ ruling
 
-@(o i 31) (Year) 164, month I, the 3rd, Jupiter’s last appearance in the end of Aries.
+@(o i 16') [(Year) 162, month III,] the 2nd, last part of the night, Jupiter’s first stationary point in Pisces.
 
-@(o i 32) Month II, the 16th, Jupiter’s first appearance in Taurus.
+@(o i 17') [...] acronychal rising.
 
-@(o i 33) Month IV, night of the 7th, last part of the night, Jupiter was above α Tauri. 
+@(o i 18') [...] second stationary point in Pisces.
 
-@(o i 34) 1 1⁄2 cubits
+@(o i 19') [Month XI,] the 14th, last appearance in Pisces.
 
-@(o ii 1) Month VI, the 11th, Jupiter’s [first stationary point in Taurus.]
-
-@(o ii 2) Month VIII, the 8th, acro[nychal rising.]
-
-@(o ii 3) Month IX, the 7th, it was [...] above α Tauri.
-
-@(o ii 4) Month X, the 7th, Jupiter’s [second stationary point] in [Taurus.]
-
-@(o ii 5) Month XI, the 19th, it was [...] above α Tauri.
+@(o i 20') Month XII, the 18th, first appearance in the end of Pisces.
 
 $ ruling
 
-@(o ii 6) (Year) 165, month I, night of the 11th, first part of the night, it was 1 cubit above β Tauri.
+@(o i 21') (Year) 163, month I, night of the 19th, last part of the night, Jupiter was 3 cubits above
 
-@(o ii 7) The 19th, Jupiter’s last appearance in the beginning of Gemini.
+@(o i 22') η Piscium.
 
-@(o ii 8) Month II, the 19th, Jupiter’s first appearance in Gemini.
+@(o i 23') Month II, night of the 11th, last part of the night, Jupiter was 3 cubits below β Arietis.
 
-@(o ii 9) Month III, night of the 16th, last part of the night, it was 1 cubit above μ Geminorum.
+@(o i 24') Night of the 28th, last part of the night, Jupiter was 4 cubits below α Arietis.
 
-@(o ii 10) Month V, night of the 17th, last part of the night, it was 3 cubits below the front star of [...]
+@(o i 25') Month IV, the 23rd, Jupiter’s first stationary point in Aries.
 
-@(o ii 11) Month VI, the 22nd, Jupiter’s first stationary point in Gemini.
+@(o i 26') Month VI, night of the 16th, last part of the night, Jupiter was 4 1⁄2 cubits below α Arietis.
 
-@(o ii 12) Month VIII, night of the 12th, last part of the night, it was 3 cubits below α Geminorum.
+@(o i 27') The 22nd, Jupiter’s acronychal rising.
 
-@(o ii 13) The 22nd, Jupiter’s acronychal rising.
+@(o i 28') Month VIII, night of the 3rd, last part of the night, Jupiter was 4 1⁄2 cubits below
 
-@(o ii 14) Month X, the 19th, Jupiter’s second stationary point in Gemini.
+@(o i 29') β Arietis.
 
-$ ruling
-
-@(o ii 15) (Year) 166, month I, night of the 18th, first part of the night, it was 4 cubits below α Geminorum.
-
-@(o ii 16) Month II, night of the 12th, first part of the night, it was 3 cubits below β Geminorum.
-
-@(o ii 17) Month III, the 3rd, Jupiter’s last appearance in the beginning of Cancer.
-
-@(o ii 18) Month IV, the 2nd, Jupiter’s first appearance in Cancer.
-
-@(o ii 19) Night of the 26th, last part of the night, Jupiter was 2 cubits below γ Cancri.
-
-@(o ii 20) Month VI, night of the 5th, last part of the night, it was 3 1⁄2 cubits below the two stars in the beginning of Leo.
-
-@(o ii 21) Month VIII, the 4th, Jupiter’s first stationary point in the end of Cancer.
-
-@(o ii 22) Month IX, night of the 24th, last part of the night, it was 3 cubits below the two stars in the beginning of Leo.
-
-@(o ii 23) Month X, the 5th, Jupiter’s acronychal rising.
-
-@(o ii 24) Month XII, the 5th, Jupiter’s second stationary point in Cancer.
+@(o i 30') The 20th, Jupiter’s second stationary point in Aries.
 
 $ ruling
 
-@(o ii 25) (Year) 167, month II, night of the 20th, it was 3 1⁄2 cubits below the two stars in the beginning of Leo.
+@(o i 31') (Year) 164, month I, the 3rd, Jupiter’s last appearance in the end of Aries.
 
-@(o ii 26) Month IV, the 17th, last appearance in Leo.
+@(o i 32') Month II, the 16th, Jupiter’s first appearance in Taurus.
 
-@(o ii 27) Month V, the 15th, first appearance in Leo.
+@(o i 33') Month IV, night of the 7th, last part of the night, Jupiter was above α Tauri. 
 
-@(o ii 28) Month VII, night of the 22nd, last part of the night, it was 4 cubits below 𝜗 Leonis.
+@(o i 34') 1 1⁄2 cubits
 
-@(o ii 29) Month IX, the 18th, Jupiter’s first stationary point in the end of Leo.
+@(o ii 1') Month VI, the 11th, Jupiter’s [first stationary point in Taurus.]
 
-@(o ii 30) Month XI, the 15th, acronychal rising.
+@(o ii 2') Month VIII, the 8th, acro[nychal rising.]
 
-@(o ii 31) Month XII, night of the 19th, first part of the night, it was 4 cubits below 𝜗 Leonis.
+@(o ii 3') Month IX, the 7th, it was [...] above α Tauri.
 
-@(o ii 32) Month XII₂, the 13th, Jupiter’s second stationary point in Leo.
+@(o ii 4') Month X, the 7th, Jupiter’s [second stationary point] in [Taurus.]
 
-$ ruling
-
-@(o ii 33) (Year) 168, month II, night of the 29th, first part of the night, it was 3 1⁄2 cubits below 𝜗 Leonis.
-
-@(o ii 34) Month IV, the 25th, Jupiter’s last appearance in the beginning of Virgo.
-
-@(o ii 35) Month V, the 28th, first appearance in Virgo.
-
-@(o iii 1) (Year) 169, month I, the 25th, [second] stationary point in Virgo.
-
-@(o iii 2) Month V, night of the 22nd, first part of the night, it was above α Virginis
-
-@(o iii 3) 1 cubit 8 fingers.
-
-@(o iii 4) Month VI, the 7th, Jupiter’s last appearance in the beginning of Libra.
-
-@(o iii 5) Month VII, the 9th, first appearance in Libra.
-
-@(o iii 6) Month XI, the 12th, first stationary point in the end of Libra.
+@(o ii 5') Month XI, the 19th, it was [...] above α Tauri.
 
 $ ruling
 
-@(o iii 7) (Year) 170, month I, the 13th, acronychal rising.
+@(o ii 6') (Year) 165, month I, night of the 11th, first part of the night, it was 1 cubit above β Tauri.
 
-@(o iii 8) Month II, night of the 26th, first part of the night, it was 6 fingers above α Librae.
+@(o ii 7') The 19th, Jupiter’s last appearance in the beginning of Gemini.
 
-@(o iii 9) Month III, the 12th, second stationary point in Libra.
+@(o ii 8') Month II, the 19th, Jupiter’s first appearance in Gemini.
 
-@(o iii 10) Month IV, night of the 19th, first part of the night, it was 6 fingers above α Librae.
+@(o ii 9') Month III, night of the 16th, last part of the night, it was 1 cubit above μ Geminorum.
 
-@(o iii 11) Month VI, night of the 2nd, first part of the night, it was 3 cubits below β Librae.
+@(o ii 10') Month V, night of the 17th, last part of the night, it was 3 cubits below the front star of [...]
 
-@(o iii 12) Month VI₂, the 11th, last appearance in the beginning of Scorpius.
+@(o ii 11') Month VI, the 22nd, Jupiter’s first stationary point in Gemini.
 
-@(o iii 13) Month VII, the 20th, first appearance in Scorpius.
+@(o ii 12') Month VIII, night of the 12th, last part of the night, it was 3 cubits below α Geminorum.
 
-@(o iii 14) Month IX, night of the 26th, it was 2 cubits above 𝜗 Ophiuchi.
+@(o ii 13') The 22nd, Jupiter’s acronychal rising.
 
-@(o iii 15) Month XI, the 23rd, first stationary point in Scorpius.
-
-$ ruling
-
-@(o iii 16) (Year) 171, month I, night of the 19th, last part of the night, it was 2 cubits above 𝜗 Ophiuchi.
-
-@(o iii 17) The 17th, acronychal rising.
-
-@(o iii 18) Month III, the 19th, second stationary point in Scorpius.
-
-@(o iii 19) Month VI, night of the 3rd, first part of the night, it was 8 fingers above 𝜗 Ophiuchi.
-
-@(o iii 20) Month VIII, the 5th, last appearance in Sagittarius.
-
-@(o iii 21) Month IX, the 6th, first appearance in Sagittarius.
+@(o ii 14') Month X, the 19th, Jupiter’s second stationary point in Gemini.
 
 $ ruling
 
-@(o iii 22) (Year) 172, month I, the 10th, first stationary point in Capricorn.
+@(o ii 15') (Year) 166, month I, night of the 18th, first part of the night, it was 4 cubits below α Geminorum.
 
-@(o iii 23) Month III, the 12th, Jupiter’s acronychal rising.
+@(o ii 16') Month II, night of the 12th, first part of the night, it was 3 cubits below β Geminorum.
 
-@(o iii 24) Month V, the 7th, second stationary point in the end of Sagittarius.
+@(o ii 17') Month III, the 3rd, Jupiter’s last appearance in the beginning of Cancer.
 
-@(o iii 25) Month IX, night of the 7th, it was 2 1⁄2 cubits below β Capricorni.
+@(o ii 18') Month IV, the 2nd, Jupiter’s first appearance in Cancer.
 
-@(o iii 26) The 24th, Jupiter’s last appearance in Capricorn.
+@(o ii 19') Night of the 26th, last part of the night, Jupiter was 2 cubits below γ Cancri.
 
-@(o iii 27) Month X, the 25th, first appearance in Capricorn.
+@(o ii 20') Month VI, night of the 5th, last part of the night, it was 3 1⁄2 cubits below the two stars in the beginning of Leo.
 
-@(o iii 28) Month XII, night of the 2nd, last part of the night, Jupiter was 10 fingers above
+@(o ii 21') Month VIII, the 4th, Jupiter’s first stationary point in the end of Cancer.
 
-@(o iii 29) γ Capricorni.
+@(o ii 22') Month IX, night of the 24th, last part of the night, it was 3 cubits below the two stars in the beginning of Leo.
+
+@(o ii 23') Month X, the 5th, Jupiter’s acronychal rising.
+
+@(o ii 24') Month XII, the 5th, Jupiter’s second stationary point in Cancer.
+
+$ ruling
+
+@(o ii 25') (Year) 167, month II, night of the 20th, it was 3 1⁄2 cubits below the two stars in the beginning of Leo.
+
+@(o ii 26') Month IV, the 17th, last appearance in Leo.
+
+@(o ii 27') Month V, the 15th, first appearance in Leo.
+
+@(o ii 28') Month VII, night of the 22nd, last part of the night, it was 4 cubits below 𝜗 Leonis.
+
+@(o ii 29') Month IX, the 18th, Jupiter’s first stationary point in the end of Leo.
+
+@(o ii 30') Month XI, the 15th, acronychal rising.
+
+@(o ii 31') Month XII, night of the 19th, first part of the night, it was 4 cubits below 𝜗 Leonis.
+
+@(o ii 32') Month XII₂, the 13th, Jupiter’s second stationary point in Leo.
+
+$ ruling
+
+@(o ii 33') (Year) 168, month II, night of the 29th, first part of the night, it was 3 1⁄2 cubits below 𝜗 Leonis.
+
+@(o ii 34') Month IV, the 25th, Jupiter’s last appearance in the beginning of Virgo.
+
+@(o ii 35') Month V, the 28th, first appearance in Virgo.
+
+@(o iii 1') (Year) 169, month I, the 25th, [second] stationary point in Virgo.
+
+@(o iii 2') Month V, night of the 22nd, first part of the night, it was above α Virginis
+
+@(o iii 3') 1 cubit 8 fingers.
+
+@(o iii 4') Month VI, the 7th, Jupiter’s last appearance in the beginning of Libra.
+
+@(o iii 5') Month VII, the 9th, first appearance in Libra.
+
+@(o iii 6') Month XI, the 12th, first stationary point in the end of Libra.
+
+$ ruling
+
+@(o iii 7') (Year) 170, month I, the 13th, acronychal rising.
+
+@(o iii 8') Month II, night of the 26th, first part of the night, it was 6 fingers above α Librae.
+
+@(o iii 9') Month III, the 12th, second stationary point in Libra.
+
+@(o iii 10') Month IV, night of the 19th, first part of the night, it was 6 fingers above α Librae.
+
+@(o iii 11') Month VI, night of the 2nd, first part of the night, it was 3 cubits below β Librae.
+
+@(o iii 12') Month VI₂, the 11th, last appearance in the beginning of Scorpius.
+
+@(o iii 13') Month VII, the 20th, first appearance in Scorpius.
+
+@(o iii 14') Month IX, night of the 26th, it was 2 cubits above 𝜗 Ophiuchi.
+
+@(o iii 15') Month XI, the 23rd, first stationary point in Scorpius.
+
+$ ruling
+
+@(o iii 16') (Year) 171, month I, night of the 19th, last part of the night, it was 2 cubits above 𝜗 Ophiuchi.
+
+@(o iii 17') The 17th, acronychal rising.
+
+@(o iii 18') Month III, the 19th, second stationary point in Scorpius.
+
+@(o iii 19') Month VI, night of the 3rd, first part of the night, it was 8 fingers above 𝜗 Ophiuchi.
+
+@(o iii 20') Month VIII, the 5th, last appearance in Sagittarius.
+
+@(o iii 21') Month IX, the 6th, first appearance in Sagittarius.
+
+$ ruling
+
+@(o iii 22') (Year) 172, month I, the 10th, first stationary point in Capricorn.
+
+@(o iii 23') Month III, the 12th, Jupiter’s acronychal rising.
+
+@(o iii 24') Month V, the 7th, second stationary point in the end of Sagittarius.
+
+@(o iii 25') Month IX, night of the 7th, it was 2 1⁄2 cubits below β Capricorni.
+
+@(o iii 26') The 24th, Jupiter’s last appearance in Capricorn.
+
+@(o iii 27') Month X, the 25th, first appearance in Capricorn.
+
+@(o iii 28') Month XII, night of the 2nd, last part of the night, Jupiter was 10 fingers above
+
+@(o iii 29') γ Capricorni.
 
 $ ruling

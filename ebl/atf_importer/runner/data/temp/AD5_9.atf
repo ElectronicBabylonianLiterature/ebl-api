@@ -167,121 +167,121 @@ $ ruling
 @translation labeled en project
 
 
-@(o i 1) [...] 70° after sunrise.
+@(o i 1') [...] 70° after sunrise.
 
-@(o i 2) [...] in ..., 68°
+@(o i 2') [...] in ..., 68°
 
-@(o i 3) [after sunset?, ...] began [from the ...] east, in 27° a little was left to totality.
+@(o i 3') [after sunset?, ...] began [from the ...] east, in 27° a little was left to totality.
 
-@(o i 4) [...] cleared to the north. 2 bēru onset, maximal phase, and cl[earing.]
+@(o i 4') [...] cleared to the north. 2 bēru onset, maximal phase, and cl[earing.]
 
-@(o i 5) [...] 5° behind b Geminorum it was eclipsed.
+@(o i 5') [...] 5° behind b Geminorum it was eclipsed.
 
-@(o i 6) [...] 8° after sunset, and? it cleared?. Clouds?. In the area of Sagittarius it was eclipsed.
+@(o i 6') [...] 8° after sunset, and? it cleared?. Clouds?. In the area of Sagittarius it was eclipsed.
 
-@(o i 7) [...] red brown? ...
-
-$ ruling
-
-@(o i 8)  [...] which was omitted. 70°? af[ter sunrise?].
-
-@(o i 9) [(Year) 16], month II, the 14th ..., omitted.
-
-@(o i 10) [Mo]nth VIII, the 15th, 15° after sunset, it began in the south and east. One-fourth of the disk was covered. It entered a cloud; during clearing, it did not come out.
-
-@(o i 11) [...] 27° onset, maximal phase, and clearing. During onset und clearing, it was slow. The north wind blew. 1 cubit in front of Taurus it was eclipsed.
-
-@(o i 12) [...] and Mars stood there.
+@(o i 7') [...] red brown? ...
 
 $ ruling
 
-@(r i 1) [...] ... [...]
+@(o i 8')  [...] which was omitted. 70°? af[ter sunrise?].
 
-@(r i 2) [...] it set eclipsed. [...] ... [...]
+@(o i 9') [(Year) 16], month II, the 14th ..., omitted.
 
-@(r i 3) [...] ... it was seen in Susa and the open country. 5° [behind?] α Vir[ginis it was eclipsed.]
+@(o i 10') [Mo]nth VIII, the 15th, 15° after sunset, it began in the south and east. One-fourth of the disk was covered. It entered a cloud; during clearing, it did not come out.
 
-@(r i 4) [...]
+@(o i 11') [...] 27° onset, maximal phase, and clearing. During onset und clearing, it was slow. The north wind blew. 1 cubit in front of Taurus it was eclipsed.
 
-@(r i 5) [...]
-
-@(r i 6) [...] ..., omitted.
+@(o i 12') [...] and Mars stood there.
 
 $ ruling
 
-@(r i 7) [...] ... omitted.
+@(r i 1') [...] ... [...]
+
+@(r i 2') [...] it set eclipsed. [...] ... [...]
+
+@(r i 3') [...] ... it was seen in Susa and the open country. 5° [behind?] α Vir[ginis it was eclipsed.]
+
+@(r i 4') [...]
+
+@(r i 5') [...]
+
+@(r i 6') [...] ..., omitted.
 
 $ ruling
 
-@(r i 8) [...] 8°, a little more than half of the disk was covered. 10° maximal phase.
+@(r i 7') [...] ... omitted.
 
-@(r i 9) [... on]set, maximal phase, and clearing. The "garment of the sky" was there; the south
+$ ruling
+
+@(r i 8') [...] 8°, a little more than half of the disk was covered. 10° maximal phase.
+
+@(r i 9') [... on]set, maximal phase, and clearing. The "garment of the sky" was there; the south
 wind blew.
 
-@(r i 10) [...] clouds?.
+@(r i 10') [...] clouds?.
 
 $ ruling
 
-@(r i 11) [Year 2]5, month IV, with sunrise; omitted.
+@(r i 11') [Year 2]5, month IV, with sunrise; omitted.
 
-@(r i 12) [... ] ...
+@(r i 12') [... ] ...
 
-@(r i 13) (traces)
+@(r i 13') (traces)
 
-@(r ii 1) [...] ...
+@(r ii 1') [...] ...
 
-@(r ii 2) [...] was seen. [...]
+@(r ii 2') [...] was seen. [...]
 
-@(r ii 3) [...] was eclipsed. Jupiter was in Sagittarius, Saturn was [...] behind β Capricorni [...]
-
-$ ruling
-
-@(r ii 4) [(Year) 41], month VI, the 14th?, 50°? after sunset, it began in the east and north. In 22° it left 2 fingers remaining to totality. 5° maximal phase. In 23° [it cleared] to [...]
-
-@(r ii 5) [...] 50° onset, maximal phase, and clearing. The "garment of the sky" was there, the west wind blew. 3 cubits below α +β Arietis [it was eclipsed.]
+@(r ii 3') [...] was eclipsed. Jupiter was in Sagittarius, Saturn was [...] behind β Capricorni [...]
 
 $ ruling
 
-@(r ii 6) Accession year of Umaku¡, who is called? Darius [...]
+@(r ii 4') [(Year) 41], month VI, the 14th?, 50°? after sunset, it began in the east and north. In 22° it left 2 fingers remaining to totality. 5° maximal phase. In 23° [it cleared] to [...]
+
+@(r ii 5') [...] 50° onset, maximal phase, and clearing. The "garment of the sky" was there, the west wind blew. 3 cubits below α +β Arietis [it was eclipsed.]
 
 $ ruling
 
-@(r ii 7) (Year) 1, month V, (after) 5 months, omitted. ... [...]
+@(r ii 6') Accession year of Umaku¡, who is called? Darius [...]
 
 $ ruling
 
-@(r ii 8) Month XI, the 14th, (eclipse) which was omitted. At 75°? [...]
+@(r ii 7') (Year) 1, month V, (after) 5 months, omitted. ... [...]
 
 $ ruling
 
-@(r ii 9) (Year) 2, month V, the 13th, (eclipse) which was omitted. At 35°? [...]
-
-@(r ii 10) Month XI, the 15th, 19° after sunset, it began in the east. In 15°? [...] 64° [...]
-
-@(r ii 11) [... cubi]ts before ε Leonis it was eclipsed.
-
-@(r ii 12) [...] ... [...]
-
-@(r iii 1) (Year) 17, month I, the 14th, which was omitted.
-
-@(r iii 2) [...]
-
-@(r iii 3) [...]
+@(r ii 8') Month XI, the 14th, (eclipse) which was omitted. At 75°? [...]
 
 $ ruling
 
-@(r iii 4) Month VII, the 14th, 48° before sunrise, it began in the east. In 21°? all was covered. 20°? ma[ximal phase? ...]
+@(r ii 9') (Year) 2, month V, the 13th, (eclipse) which was omitted. At 35°? [...]
 
-@(r iii 5) In? 15° ... clouds?, ... [...]
+@(r ii 10') Month XI, the 15th, 19° after sunset, it began in the east. In 15°? [...] 64° [...]
 
-@(r iii 6) [Jupiter and Ma]rs were in Cancer, Mercury in Libra; [... in front? of] η Tauri it was eclipsed? [...]
+@(r ii 11') [... cubi]ts before ε Leonis it was eclipsed.
 
-@(r iii 7) [(Year) 18, month I, the 14th, nn° after] sunset, it began in the east. In 25°? all was covered. 19° maximal phase [...] to the west it cleared.
+@(r ii 12') [...] ... [...]
 
-@(r iii 8) [... in the ecli]pse, ..., Jupiter, Mars, and Saturn stood there. 1+[x cubits behind α] Librae it was eclipsed.
+@(r iii 1') (Year) 17, month I, the 14th, which was omitted.
 
-@(r iii 9) [...] ... 14° before sunrise, it began in the east. ... [...] ...
+@(r iii 2') [...]
 
-@(r iii 10) [...] ..., Jupiter, Venus, Mercury, and Sa[turn stood there ...]
+@(r iii 3') [...]
+
+$ ruling
+
+@(r iii 4') Month VII, the 14th, 48° before sunrise, it began in the east. In 21°? all was covered. 20°? ma[ximal phase? ...]
+
+@(r iii 5') In? 15° ... clouds?, ... [...]
+
+@(r iii 6') [Jupiter and Ma]rs were in Cancer, Mercury in Libra; [... in front? of] η Tauri it was eclipsed? [...]
+
+@(r iii 7') [(Year) 18, month I, the 14th, nn° after] sunset, it began in the east. In 25°? all was covered. 19° maximal phase [...] to the west it cleared.
+
+@(r iii 8') [... in the ecli]pse, ..., Jupiter, Mars, and Saturn stood there. 1+[x cubits behind α] Librae it was eclipsed.
+
+@(r iii 9') [...] ... 14° before sunrise, it began in the east. ... [...] ...
+
+@(r iii 10') [...] ..., Jupiter, Venus, Mercury, and Sa[turn stood there ...]
 
 

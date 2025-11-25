@@ -6,7 +6,7 @@
 #atf: use legacy
 @obverse
 @column 1
-1'. 	⸢14⸣ ⸢x⸣ [x x x]
+1'. ⸢14⸣ ⸢x⸣ [x x x]
 #lem: n; u; u; u; u
 
 2'. 25 BABBAR 26? A[LLA ŠÚ]
@@ -193,7 +193,25 @@ $ ruling
 6'. ⸢NE⸣ [...]
 #lem: Abu[Month V]MN; u
 
-7-13'. [...]
+7'. [...]
+#lem: u
+
+8'. [...]
+#lem: u
+
+9'. [...]
+#lem: u
+
+10'. [...]
+#lem: u
+
+11'. [...]
+#lem: u
+
+12'. [...]
+#lem: u
+
+13'. [...]
 #lem: u
 
 14'. 20+[x ...] 
@@ -463,155 +481,155 @@ $ ruling
 @translation labeled en project
 
 
-@(o i 1) The 14th? ... [...]
+@(o i 1') The 14th? ... [...]
 
-@(o i 2) The 25th, Jupiter’s [last appearance] in 26°? of Cancer.
+@(o i 2') The 25th, Jupiter’s [last appearance] in 26°? of Cancer.
 
-@(o i 3) Month IV, the 4th, Venus’ first appearance in the west in 28° of Cancer.
+@(o i 3') Month IV, the 4th, Venus’ first appearance in the west in 28° of Cancer.
 
-@(o i 4) The 6th, Mercury’s last appearance in the west in 3° of Leo.
+@(o i 4') The 6th, Mercury’s last appearance in the west in 3° of Leo.
 
-@(o i 5) The 12th, Saturn’s stationary point in 26° of Scorpius.
+@(o i 5') The 12th, Saturn’s stationary point in 26° of Scorpius.
 
-@(o i 6) The 24th, Mars’ last appearance in 23° of Leo.
+@(o i 6') The 24th, Mars’ last appearance in 23° of Leo.
 
-@(o i 7) The 24th, Jupiter’s first appearance in 30° of Cancer.
+@(o i 7') The 24th, Jupiter’s first appearance in 30° of Cancer.
 
-@(o i 8) The 26th, Mercury’s first appearance in the east in 28° of Cancer.
+@(o i 8') The 26th, Mercury’s first appearance in the east in 28° of Cancer.
 
-@(o i 9) Month V, the 18th, Mercury’s last appearance in the east in 18° of Leo.
+@(o i 9') Month V, the 18th, Mercury’s last appearance in the east in 18° of Leo.
 
-@(o i 10) Month VII, the 9th, Mercury’s first appearance in the west in 8° of Scorpius, omitted.
+@(o i 10') Month VII, the 9th, Mercury’s first appearance in the west in 8° of Scorpius, omitted.
 
-@(o i 11) The 26th, Mercury’s last appearance in the west in 21° of Scorpius.
+@(o i 11') The 26th, Mercury’s last appearance in the west in 21° of Scorpius.
 
-@(o i 12) Month VIII, the 9th, Saturn’s last appearance in 5° of Sagittarius.
+@(o i 12') Month VIII, the 9th, Saturn’s last appearance in 5° of Sagittarius.
 
-@(o i 13) The 11th, Mars’ first appearance in 7° of Scorpius.
+@(o i 13') The 11th, Mars’ first appearance in 7° of Scorpius.
 
-@(o i 14) The 12th, Mercury’s first appearance in the east in 14° of Scorpius.
+@(o i 14') The 12th, Mercury’s first appearance in the east in 14° of Scorpius.
 
-@(o i 15) The 29th, Jupiter’s stationary point in 17° of Leo.
+@(o i 15') The 29th, Jupiter’s stationary point in 17° of Leo.
 
-@(o i 16) Month IX, the 11th, Saturn’s first appearance in 7° of Sagittarius.
+@(o i 16') Month IX, the 11th, Saturn’s first appearance in 7° of Sagittarius.
 
-@(o i 17) The 14th, 20° before sunset, in 26° of Gemini
+@(o i 17') The 14th, 20° before sunset, in 26° of Gemini
 
-@(o i 18) 11,40 eclipse magnitude, ascending node.
+@(o i 18') 11,40 eclipse magnitude, ascending node.
 
-@(o i 19) The 28th, Mercury’s last appearance in the east in 28° of Sagittarius.
+@(o i 19') The 28th, Mercury’s last appearance in the east in 28° of Sagittarius.
 
-@(o i 20) Month X, the 27th, Jupiter’s acronychal rising in 13° of Leo.
+@(o i 20') Month X, the 27th, Jupiter’s acronychal rising in 13° of Leo.
 
-@(o i 21) The 29th, Mercury’s first appearance in the west in 25° of Aquarius.
+@(o i 21') The 29th, Mercury’s first appearance in the west in 25° of Aquarius.
 
-@(o i 22) [Month XI,] the 24th, Mercury’s last appearance in the west in 16° of Pisces.
+@(o i 22') [Month XI,] the 24th, Mercury’s last appearance in the west in 16° of Pisces.
 
-@(o i 23) [Month XII, the 1]7th, Mercury’s first appearance in the east in 13° of Pisces.
+@(o i 23') [Month XII, the 1]7th, Mercury’s first appearance in the east in 13° of Pisces.
 
-@(o i 24) [The 2]7th?, Jupiter’s stationary point in 8° of Leo.
-
-$ ruling
-
-@(o i 25) [...] ...
-
-@(o i 26) Venus’? first appearance in the east? in 12° of Aries.
-
-@(o i 27) [....] Saturn’s stationary point in 15° of Sagittarius.
-
-@(o i 28) [The xth,] Mercury’s ... appearance in the east ...
-
-@(o ii 1) The 13th, [...]
-
-@(o ii 2) 22.⸢40⸣ eclipse magnitude, ascending node.
-
-@(o ii 3) The 28th, Venus’ last appearance in the east in 25°? of Sagittarius.
-
-@(o ii 4) The 28th, Mercury’s last appearance in the east in 5°? of Sagittarius.
-
-@(o ii 5) Month X, the 4th, Saturn’s first appearance in 19°? of Sagittarius.
-
-@(o ii 6) The 10th, Jupiter’s stationary point in 10+[x°] of Virgo.
-
-@(o ii 7) The 12th, Mars’ stationary point in 25° [of Taurus.]
-
-@(o ii 8) The 24th, Mercury’s first appearance in the west in 8° of Aquarius.
-
-@(o ii 9) Month XI, the 18th, Mercury’s last appearance in the west in 30° of Aquarius. 
-
-@(o ii 10) The 29th, Venus’ first appearance in the west in 1° of Pisces.
-
-@(o ii 11) Month XII, the 6th, Mercury’s [first appearance] in the east in 23° of Aquarius. 
-
-@(o ii 12) The 7th, Jupiter’s acronychal rising in 11° of Virgo.
-
-@(o ii 13) Month XII₂, the 10th, Mercury’s last appearance in the east in 23° of Pisces. 
+@(o i 24') [The 2]7th?, Jupiter’s stationary point in 8° of Leo.
 
 $ ruling
 
-@(o ii 14) (Year) 62, month I, the 3rd, Saturn’s stationary point in 26° of Sagittarius. 
+@(o i 25') [...] ...
 
-@(o ii 15) The 9th, Mercury’s first appearance in the west in 18° of Taurus.
+@(o i 26') Venus’? first appearance in the east? in 12° of Aries.
 
-@(o ii 16) The 10th, Jupiter’s stationary point in 7° of Virgo.
+@(o i 27') [....] Saturn’s stationary point in 15° of Sagittarius.
 
-@(o ii 17) Month II, the 15th, at 1.0° after sunset, in 11° of Sagittarius,
+@(o i 28') [The xth,] Mercury’s ... appearance in the east ...
 
-@(o ii 18)	30.20 eclipse magnitude, descending node.
+@(o ii 1') The 13th, [...]
 
-@(o ii 19) The 24th, Mercury’s last appearance in the west in 30° of Gemini.
+@(o ii 2') 22.⸢40⸣ eclipse magnitude, ascending node.
 
-@(o ii 20) The 28th, Saturn’s acronychal rising in 23°? of Sagittarius.
+@(o ii 3') The 28th, Venus’ last appearance in the east in 25°? of Sagittarius.
 
-@(o ii 21) Month III, the 19th, [Mercury’s] first appearance in the east in 28°? of Gemini. 
+@(o ii 4') The 28th, Mercury’s last appearance in the east in 5°? of Sagittarius.
 
-@(o ii 22) Month IV, the 8th, Mercury’s last appearance in the east in 17° of Cancer.
+@(o ii 5') Month X, the 4th, Saturn’s first appearance in 19°? of Sagittarius.
 
-@(o ii 23) The 29th, Saturn’s stationary point in 19° of Sagittarius.
+@(o ii 6') The 10th, Jupiter’s stationary point in 10+[x°] of Virgo.
 
-@(o ii 24) Month V, the 17th, Jupiter’s last appearance in 22° of Virgo.
+@(o ii 7') The 12th, Mars’ stationary point in 25° [of Taurus.]
 
-@(o ii 25) [...]
+@(o ii 8') The 24th, Mercury’s first appearance in the west in 8° of Aquarius.
 
-@(o ii 26) The 25th, Mars’ last appearance in 1° of Libra.
+@(o ii 9') Month XI, the 18th, Mercury’s last appearance in the west in 30° of Aquarius. 
 
-@(o ii 27) [Month] VI?, ...
+@(o ii 10') The 29th, Venus’ first appearance in the west in 1° of Pisces.
 
-@(o iii 1) ... [...]
+@(o ii 11') Month XII, the 6th, Mercury’s [first appearance] in the east in 23° of Aquarius. 
 
-@(o iii 2) Mon[th III?, ...]
+@(o ii 12') The 7th, Jupiter’s acronychal rising in 11° of Virgo.
 
-@(o iii 3) The 10+[xth, ...] 
+@(o ii 13') Month XII₂, the 10th, Mercury’s last appearance in the east in 23° of Pisces. 
 
-@(o iii 4) Month IV, the 4th, [...] 
+$ ruling
 
-@(o iii 5) The 24th?, [...]
+@(o ii 14') (Year) 62, month I, the 3rd, Saturn’s stationary point in 26° of Sagittarius. 
 
-@(o iii 6) Month V, [...]
+@(o ii 15') The 9th, Mercury’s first appearance in the west in 18° of Taurus.
 
-@(o iii 7-13) [...]
+@(o ii 16') The 10th, Jupiter’s stationary point in 7° of Virgo.
 
-@(o iii 14) The 20+[xth, ...]
+@(o ii 17') Month II, the 15th, at 1.0° after sunset, in 11° of Sagittarius,
 
-@(o iii 15) Month VIII, [...]
+@(o ii 18')	30.20 eclipse magnitude, descending node.
 
-@(o iii 16) Month IX, the 10+[xth, ...]
+@(o ii 19') The 24th, Mercury’s last appearance in the west in 30° of Gemini.
 
-@(o iii 17) The 20+[xth, ...]
+@(o ii 20') The 28th, Saturn’s acronychal rising in 23°? of Sagittarius.
 
-@(o iii 18) The 29th, ... [...]
+@(o ii 21') Month III, the 19th, [Mercury’s] first appearance in the east in 28°? of Gemini. 
 
-@(o iii 19) Month X, the 5th, Mer[cury’s last appearance in the west ...] 
+@(o ii 22') Month IV, the 8th, Mercury’s last appearance in the east in 17° of Cancer.
 
-@(o iii 20) The 15th?, Mercury’s [first appearance in the east ...]
+@(o ii 23') The 29th, Saturn’s stationary point in 19° of Sagittarius.
 
-@(o iii 21) The 21st, Sa[turn’s first appearance ...]
+@(o ii 24') Month V, the 17th, Jupiter’s last appearance in 22° of Virgo.
 
-@(o iii 22) Month XI, the 5th, Ma[rs’ stationary point ...]
+@(o ii 25') [...]
 
-@(o iii 23) [...]
+@(o ii 26') The 25th, Mars’ last appearance in 1° of Libra.
 
-@(o iii 24) Month XII, [...]
+@(o ii 27') [Month] VI?, ...
+
+@(o iii 1') ... [...]
+
+@(o iii 2') Mon[th III?, ...]
+
+@(o iii 3') The 10+[xth, ...] 
+
+@(o iii 4') Month IV, the 4th, [...] 
+
+@(o iii 5') The 24th?, [...]
+
+@(o iii 6') Month V, [...]
+
+@(o iii 7-o iii 13') [...]
+
+@(o iii 14') The 20+[xth, ...]
+
+@(o iii 15') Month VIII, [...]
+
+@(o iii 16') Month IX, the 10+[xth, ...]
+
+@(o iii 17') The 20+[xth, ...]
+
+@(o iii 18') The 29th, ... [...]
+
+@(o iii 19') Month X, the 5th, Mer[cury’s last appearance in the west ...] 
+
+@(o iii 20') The 15th?, Mercury’s [first appearance in the east ...]
+
+@(o iii 21') The 21st, Sa[turn’s first appearance ...]
+
+@(o iii 22') Month XI, the 5th, Ma[rs’ stationary point ...]
+
+@(o iii 23') [...]
+
+@(o iii 24') Month XII, [...]
 
 @obverse
 
@@ -625,156 +643,156 @@ $ broken
 
 $ broken
 
-@(r vi 1) ... [...]
+@(r vi 1') ... [...]
 
-@(r vi 2) The 26th, Sat[urn’s last appearance ...]
+@(r vi 2') The 26th, Sat[urn’s last appearance ...]
 
-@(r vi 3) Month XI, the 6th, Mer[cury’s last appearance in the west ...]
+@(r vi 3') Month XI, the 6th, Mer[cury’s last appearance in the west ...]
 
-@(r vi 4) The 9th, Jupiter’s [last appearance ...]
+@(r vi 4') The 9th, Jupiter’s [last appearance ...]
 
-@(r vi 5) The 22nd, Mars’ [acronychal rising ...]
+@(r vi 5') The 22nd, Mars’ [acronychal rising ...]
 
-@(r vi 6) The 24th, Mer[cury’s first appearance in the east ...]
+@(r vi 6') The 24th, Mer[cury’s first appearance in the east ...]
 
-@(r vi 7) The 28th, Sa[turn’s first appearance ...]
+@(r vi 7') The 28th, Sa[turn’s first appearance ...]
 
-@(r vi 8) Month XII, the 8th, Jupi[ter’s? first appearance ...]
+@(r vi 8') Month XII, the 8th, Jupi[ter’s? first appearance ...]
 
-@(r vi 9) The 23rd, Mercury’s [last appearance in the east ...]
-
-$ ruling
-
-@(r vi 10) (Year) 68, month I, the 1st, Ma[rs’ stationary point ...]
-
-@(r vi 11) The 25th, Mer[cury’s first appearance in the west ...]
-
-@(r vi 12) The 28th, [...]
-
-@(r vi 13) Month III, the 9th, Mer[cury’s last appearance in the west ...]
-
-@(r vi 14) The 28th, Sat[urn’s stationary point ...]
-
-@(r vi 15) The 30th, Venus’ [first appearance in the west ...]
-
-@(r vi 16) Month IV, the 3rd, Mercury’s [first appearance in the east ...]
-
-@(r vi 17) The 14th, 50 ... [...]
-
-@(r vi 18) 10.20? [eclipse magnitude, ascending node.]
-
-@(r vi 19) The 17th, Jupiter’s [stationary point] in 10+[x° ...]
-
-@(r vi 20) The 26th, Mercury’s [last appearance in the east ...]
-
-@(r vi 21) Month V, the 22nd, Sat[urn’s acronychal rising ...]
-
-@(r vi 22) Month VI, the 12th, Mercury’s [first appearance] in the we[st ...]
-
-@(r vi 23) The 14th, Jupiter’s [acronychal rising] in 6° [...]
-
-@(r vi 24) The 29th, Mercury’s [last appearance] in the west in 10+[x° ...]
-
-@(r vi 25) Month VII, the 18th, Mercury’s [first appearance] in the east [...]
-
-@(r vii 1) [...] +3° after sunrise, in 21° of Capricorn,
-
-@(r vii 2) 6.10, eclipse magnitude, ascending node.
-
-@(r vii 3) The 15th, Mars’ first appearance in 8° of Cancer.
-
-@(r vii 4) The 19th, Mercury’s first@sup{SIC} appearance in the east in 11° of Cancer.
-
-@(r vii 5) The 23rd, Saturn’s stationary point in 24° of Pisces.
-
-@(r vii 6) Month V, the 29th, Mercury’s first appearance in the west in 16° of Virgo, omitted.
-
-@(r vii 7) Month VI, the 5th, Jupiter’s stationary point in 6° of Taurus.
-
-@(r vii 8) The 17th, Saturn’s acronychal rising in 20° of Pisces.
-
-@(r vii 9) The 23rd, Mercury’s last appearance in the west in 8° of Libra, omitted.
-
-@(r vii 10) Month VII, the 11th, Mercury’s first appearance in the east in 4° of Libra.
-
-@(r vii 11) Month VIII, the 2nd, Jupiter’s acronychal rising in 12° of Taurus.
-
-@(r vii 12) The 16th, Mercury’s last appearance in the east in 8° of Scorpius.
-
-@(r vii 13) The 17th, Saturn’s stationary point in 15° of Pisces.
-
-@(r vii 14) Month IX, the 24th, Venus’ last appearance in the east in 12° of Sagittarius.
-
-@(r vii 15) The 29th, Mercury’s first appearance in the west in 16° of Capricorn.
-
-@(r vii 16) Month X, the 3rd, Jupiter’s stationary point in 6° of Taurus.
-
-@(r vii 17) The 13th, 24° after sunrise, in 16° of Cancer,
-
-@(r vii 18) 35.10 eclipse magnitude, descending node.
-
-@(r vii 19) The 22nd, Mercury’s last appearance in the west in 6° of Aquarius.
-
-@(r vii 20) Month XI, the 2nd, Mercury’s first appearance in the east in 22° of Capricorn.
-
-@(r vii 21) The 15th, Venus’ first appearance in the west in 28° of Aquarius.
-
-@(r vii 22) Month XII, the 8th, Mars’ stationary point in 3° of Scorpius.
-
-@(r vii 23) The 16th, Mercury’s last appearance in the east in 4° of Pisces.
-
-@(r vii 24) The 16th, Saturn’s last appearance in 28° of Pisces.
-
-@(r vii 25) Month XII₂, the 14th, Mercury’s first appearance in the west in 27° of Aries.
-
-@(r vii 26) The 17th, Saturn’s first appearance in 29° of Pisces.
-
-@(r vii 27) The 27th, Mars’ acronychal rising in 27° of Libra.
+@(r vi 9') The 23rd, Mercury’s [last appearance in the east ...]
 
 $ ruling
 
-@(r vii 28) (traces)
+@(r vi 10') (Year) 68, month I, the 1st, Ma[rs’ stationary point ...]
 
-@(r viii 1) [...] ... [...]
+@(r vi 11') The 25th, Mer[cury’s first appearance in the west ...]
 
-@(r viii 2) [...] 5? [...]
+@(r vi 12') The 28th, [...]
 
-@(r viii 3) [x,] 20 eclipse magnitude, descending node.
+@(r vi 13') Month III, the 9th, Mer[cury’s last appearance in the west ...]
 
-@(r viii 4) [The xth, Jupiter’s] acronychal rising in 15° of Gemini.
+@(r vi 14') The 28th, Sat[urn’s stationary point ...]
 
-@(r viii 5) [The xth, Mer]cury’s first appearance in the east@sup{SIC} (error for: west) in 29° of Sagittarius.
+@(r vi 15') The 30th, Venus’ [first appearance in the west ...]
 
-@(r viii 6) [Month IX, the xth, Mer]cury’s last appearance in the west in 16° of Capricorn.
+@(r vi 16') Month IV, the 3rd, Mercury’s [first appearance in the east ...]
 
-@(r viii 7) [The xth, Mer]cury’s first appearance in the east in 4° of Capricorn.
+@(r vi 17') The 14th, 50 ... [...]
 
-@(r viii 8) [Month X, the x]+10th, Jupiter’s stationary point in 10° of Gemini.
+@(r vi 18') 10.20? [eclipse magnitude, ascending node.]
 
-@(r viii 9) [Month XI, the xth, Mer]cury’s last appearance in the east in 16° of Aquarius.
+@(r vi 19') The 17th, Jupiter’s [stationary point] in 10+[x° ...]
 
-@(r viii 10) [Month XII, the xth, Mer]cury’s first appearance in the west in 12° of Aries.
+@(r vi 20') The 26th, Mercury’s [last appearance in the east ...]
 
-@(r viii 11) [The xth,] Saturn’s last appearance in 9° of Aries.
+@(r vi 21') Month V, the 22nd, Sat[urn’s acronychal rising ...]
+
+@(r vi 22') Month VI, the 12th, Mercury’s [first appearance] in the we[st ...]
+
+@(r vi 23') The 14th, Jupiter’s [acronychal rising] in 6° [...]
+
+@(r vi 24') The 29th, Mercury’s [last appearance] in the west in 10+[x° ...]
+
+@(r vi 25') Month VII, the 18th, Mercury’s [first appearance] in the east [...]
+
+@(r vii 1') [...] +3° after sunrise, in 21° of Capricorn,
+
+@(r vii 2') 6.10, eclipse magnitude, ascending node.
+
+@(r vii 3') The 15th, Mars’ first appearance in 8° of Cancer.
+
+@(r vii 4') The 19th, Mercury’s first@sup{SIC} appearance in the east in 11° of Cancer.
+
+@(r vii 5') The 23rd, Saturn’s stationary point in 24° of Pisces.
+
+@(r vii 6') Month V, the 29th, Mercury’s first appearance in the west in 16° of Virgo, omitted.
+
+@(r vii 7') Month VI, the 5th, Jupiter’s stationary point in 6° of Taurus.
+
+@(r vii 8') The 17th, Saturn’s acronychal rising in 20° of Pisces.
+
+@(r vii 9') The 23rd, Mercury’s last appearance in the west in 8° of Libra, omitted.
+
+@(r vii 10') Month VII, the 11th, Mercury’s first appearance in the east in 4° of Libra.
+
+@(r vii 11') Month VIII, the 2nd, Jupiter’s acronychal rising in 12° of Taurus.
+
+@(r vii 12') The 16th, Mercury’s last appearance in the east in 8° of Scorpius.
+
+@(r vii 13') The 17th, Saturn’s stationary point in 15° of Pisces.
+
+@(r vii 14') Month IX, the 24th, Venus’ last appearance in the east in 12° of Sagittarius.
+
+@(r vii 15') The 29th, Mercury’s first appearance in the west in 16° of Capricorn.
+
+@(r vii 16') Month X, the 3rd, Jupiter’s stationary point in 6° of Taurus.
+
+@(r vii 17') The 13th, 24° after sunrise, in 16° of Cancer,
+
+@(r vii 18') 35.10 eclipse magnitude, descending node.
+
+@(r vii 19') The 22nd, Mercury’s last appearance in the west in 6° of Aquarius.
+
+@(r vii 20') Month XI, the 2nd, Mercury’s first appearance in the east in 22° of Capricorn.
+
+@(r vii 21') The 15th, Venus’ first appearance in the west in 28° of Aquarius.
+
+@(r vii 22') Month XII, the 8th, Mars’ stationary point in 3° of Scorpius.
+
+@(r vii 23') The 16th, Mercury’s last appearance in the east in 4° of Pisces.
+
+@(r vii 24') The 16th, Saturn’s last appearance in 28° of Pisces.
+
+@(r vii 25') Month XII₂, the 14th, Mercury’s first appearance in the west in 27° of Aries.
+
+@(r vii 26') The 17th, Saturn’s first appearance in 29° of Pisces.
+
+@(r vii 27') The 27th, Mars’ acronychal rising in 27° of Libra.
 
 $ ruling
 
-@(r viii 12) [...]
+@(r vii 28') (traces)
 
-@(r viii 13) [Tab]let of Anu-bel-šunu, son of
+@(r viii 1') [...] ... [...]
 
-@(r viii 14) Nidinti-Ani, lamentation priest of Anu,
+@(r viii 2') [...] 5? [...]
 
-@(r viii 15) descendant of Sin-leqe-unninni, the Urukean.
+@(r viii 3') [x,] 20 eclipse magnitude, descending node.
 
-@(r viii 16) Hand of Anu-aba-uter, his son,
+@(r viii 4') [The xth, Jupiter’s] acronychal rising in 15° of Gemini.
 
-@(r viii 17) scribe of Enūma Anu Enlil.
+@(r viii 5') [The xth, Mer]cury’s first appearance in the east@sup{SIC} (error for: west) in 29° of Sagittarius.
 
-@(r viii 18) Uruk, Month IX, the 14th,
+@(r viii 6') [Month IX, the xth, Mer]cury’s last appearance in the west in 16° of Capricorn.
 
-@(r viii 19) [year 1]21, king Antiochus.
+@(r viii 7') [The xth, Mer]cury’s first appearance in the east in 4° of Capricorn.
 
-@(r viii 20) [...] planets
+@(r viii 8') [Month X, the x]+10th, Jupiter’s stationary point in 10° of Gemini.
 
-@(r viii 21) [...] moon?.
+@(r viii 9') [Month XI, the xth, Mer]cury’s last appearance in the east in 16° of Aquarius.
+
+@(r viii 10') [Month XII, the xth, Mer]cury’s first appearance in the west in 12° of Aries.
+
+@(r viii 11') [The xth,] Saturn’s last appearance in 9° of Aries.
+
+$ ruling
+
+@(r viii 12') [...]
+
+@(r viii 13') [Tab]let of Anu-bel-šunu, son of
+
+@(r viii 14') Nidinti-Ani, lamentation priest of Anu,
+
+@(r viii 15') descendant of Sin-leqe-unninni, the Urukean.
+
+@(r viii 16') Hand of Anu-aba-uter, his son,
+
+@(r viii 17') scribe of Enūma Anu Enlil.
+
+@(r viii 18') Uruk, Month IX, the 14th,
+
+@(r viii 19') [year 1]21, king Antiochus.
+
+@(r viii 20') [...] planets
+
+@(r viii 21') [...] moon?.

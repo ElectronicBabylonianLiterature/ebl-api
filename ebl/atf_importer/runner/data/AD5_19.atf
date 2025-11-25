@@ -1,0 +1,75 @@
+&X500019 = ADART 5 19
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 1 ME 21.KAM {I}an LUGAL
+#lem: šattu[year]N; n; meʾatu[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N
+
+2'. {ITU}ŠE 29 šámaš AN.KU₁₀
+#lem: Addaru[Month XII]MN; n; šamšu[sun]N; antallû[eclipse]N
+
+3'. Á SI u MAR ki TAB-ú
+#lem: idu[side]N; ištānu[north]N; u[and]CNJ; amurru[west]N; kī[when]'SBJ; ušarrû[begin]V
+
+4'. ina 15 ME al šal-šú ḪAB-rat DIR GAR-an
+#lem: ina[at]PRP; n; ūmu[day]N; alla[more than]PRP; šalšu[third]NU; HAB-rat[disc]N; u; šakānu[make (an eclipse?)]'V
+
+5'. ana ZÁLAG ki TAB-ú ina 15 ME
+#lem: ana[to]PRP; nawāru[clear]V; kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; ūmu[day]N
+
+6'. TA SI u MAR ana KUR ZÁLAG
+#lem: ištu[from]PRP; ištānu[north]N; u[and]CNJ; amurru[west]N; ana[to]PRP; šadû[east]N; nawāru[clear]V
+
+7'. 30 GAR u [ZÁLAG ina AN.KU₁₀-šú]
+#lem: n; šiknu[onset]N; u[and]CNJ; nawāru[clearing]'N; ina[during]PRP; antallû[eclipse]N
+
+8'. KUR GIN ina AN.KU₁₀-[šú]
+#lem: šadû[east wind]N; alāku[blow]V; ina[during]PRP; antallû[eclipse]N
+
+@reverse
+1'. dele-bat GU₄.UD u GENNA [GUB{MEŠ}]
+#lem: Dilbat[Venus]CN; Šihṭu[Mercury]CN; u[and]CNJ; Kayyamānu[Saturn]CN; izuzzu[stand]V
+
+2'. ina TIL ZÁLAG AN È-a
+#lem: ina[at]PRP; qītu[end]N; nawāru[clearing]'N; Ṣalbaṭānu[Mars]CN; waṣû[go out]V
+
+3'. ÍB.TAG₄ {d}UDU.IDIM{MEŠ}
+#lem: rēhtu[remainder]N; bibbu[planet]N
+
+4'. NU GUB{MEŠ} in 30 DANNA
+#lem: ul[not]MOD; izuzzu[stand]V; ina[at]PRP; n; bēru[double hour]N
+
+5'. ME NIM-a
+#lem: ūmu[day]N; šaqâ[high]AJ
+
+
+@translation labeled en project
+
+@(o 1') Year 121, king Antiochus,
+
+@(o 2') month XII, the 29th, solar eclipse.
+
+@(o 3') When it began on the north and west side,
+
+@(o 4') in 15° of daytime more than one third of the disk was eclipsed.
+
+@(o 5') When it began to clear, in 15° of daytime
+
+@(o 6') it cleared from the north and west to the east.
+
+@(o 7') 30° onset and [clearing. In its eclipse,]
+
+@(o 8') the east wind blew. In [its] eclipse,
+
+@(r 1') Venus, Mercury, and Saturn [stood there;]
+
+@(r 2') At the end of clearing, Mars came out;
+
+@(r 3') the remainder of the planets
+
+@(r 4') did not stand there. At 30°, i.e. one bēru,
+
+@(r 5') after sunrise.

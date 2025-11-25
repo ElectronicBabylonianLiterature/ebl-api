@@ -1,0 +1,421 @@
+&X500035 = ADART 5 35
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. ($blank$)
+2'. ($blank$)
+$ ruling
+3'. ($blank$)
+4'. ($blank$)
+$ ruling
+5'. KIN
+#lem: Ulūlu[Month VI]MN
+
+6'. ($blank$)
+7'. ($blank$)
+8'. ($blank$)
+9'. ($blank$)
+10'. ($blank$)
+11'. ($blank$)
+12'. ($blank$)
+13'. ($blank$)
+14'. ($blank$)
+@column 2
+1'. DU₆
+#lem: Tašrītu[Month VII]MN
+
+2'. ($blank$)
+$ ruling
+3'. ŠE 5 ITU
+#lem: Addaru[Month XII]MN; n; warhu[month]N
+
+4'. 5
+#lem: n
+
+$ ruling
+5'. MU 2 KIN
+#lem: šattu[year]N; n; Ulūlu[Month VI]MN
+
+6'. ⸢KIN?⸣
+#lem: Ulūlu[Month VI]MN
+
+7'. ($blank$)
+8'. ($blank$)
+9'. ($blank$)
+10'. ($blank$)
+11'. ($blank$)
+12'. ($blank$)
+13'. ($blank$)
+14'. ($blank$)
+@column 3
+1'. DU₆
+#lem: Tašrītu[Month VII]MN
+
+2'. 9 BE 
+#lem: n; BE[(eclipse impossible)]AJ
+
+$ ruling
+3'. ŠE 5 ITU
+#lem: Addaru[Month XII]MN; n; warhu[month]N
+
+4'. 5
+#lem: n
+
+$ ruling
+5'. MU 20
+#lem: šattu[year]N; n
+
+6'. KIN
+#lem: Ulūlu[Month VI]MN
+
+7'. ŠE
+#lem: Addaru[Month XII]MN
+
+8'. [x]+⸢8⸣
+#lem: u
+
+$ ruling
+9'. ($blank$)
+10'. ($blank$)
+11'. ($blank$)
+12'. ($blank$)
+13'. ($blank$)
+14'. ($blank$)
+@column 4
+1'. DU₆
+#lem: Tašrītu[Month VII]MN
+
+2'. ($blank$)
+$ ruling
+3'. ŠE 5 ITU
+#lem: Addaru[Month XII]MN; n; warhu[month]N
+
+4'. ($blank$)
+$ ruling
+5'. MU 16
+#lem: šattu[year]N; n
+
+6'. KIN
+#lem: Ulūlu[Month VI]MN
+
+7'. ŠE
+#lem: Addaru[Month XII]MN
+
+8'. ($blank$)
+$ ruling
+9'. MU 17
+#lem: šattu[year]N; n
+
+10'. KIN
+#lem: Ulūlu[Month VI]MN
+
+11'. [Š]E
+#lem: Addaru[Month XII]MN
+
+12'. ($blank$)
+$ ruling
+13'. ($blank$)
+14'. ($blank$)
+@column 5
+1'. DU₆
+#lem: Tašrītu[Month VII]MN
+
+2'. ($blank$)
+$ ruling
+3'. ŠE 5 ITU
+#lem: Addaru[Month XII]MN; n; warhu[month]N
+
+4'. 4
+#lem: n
+
+$ ruling
+5'. MU 13
+#lem: šattu[year]N; n
+
+6'. ⸢KIN 16?⸣
+#lem: Ulūlu[Month VI]MN; n
+
+7'. ŠE
+#lem: Addaru[Month XII]MN
+
+8'. 16
+#lem: n
+
+$ ruling
+9'. MU 14
+#lem: šattu[year]N; n
+
+10'. KIN 16
+#lem: Ulūlu[Month VI]MN; n
+
+11'. ŠE
+#lem: Addaru[Month XII]MN
+
+12'. 8
+#lem: n
+
+$ ruling
+13'. MU 15
+#lem: šattu[year]N; n
+
+14'. [N]E ⸢6?⸣
+#lem: Abu[Month V]MN; n
+
+@column 6
+1'. A[PIN?]
+#lem: Arahsamna[Month VIII]MN
+
+2'. 8 [...]
+#lem: n; u
+
+$ ruling
+3'. MU 10+[20]
+#lem: šattu[year]N; n
+
+4'. ⸢x⸣ [...]
+#lem: u; u
+
+$ ruling
+5'. [...]
+#lem: u
+
+6'. ⸢x⸣ [...]
+#lem: u; u
+
+7'. [...]
+#lem: u
+
+8'. [...]
+#lem: u
+
+$ ruling
+9'. [...]
+#lem: u
+
+10'. [...]
+#lem: u
+
+11'. [...]
+#lem: u
+
+12'. [...]
+#lem: u
+
+$ ruling
+13'. [...]
+#lem: u
+
+14'. [...]
+#lem: u
+
+@translation labeled en project
+
+@(o i 1')
+
+@(o i 2')
+
+$ ruling
+
+@(o i 3')
+
+@(o i 4')
+
+$ ruling
+
+@(o i 5') [V]I
+
+@(o i 6')
+
+@(o i 7')
+
+@(o i 8')
+
+@(o i 9')
+
+@(o i 10')
+
+@(o i 11')
+
+@(o i 12')
+
+@(o i 13')
+
+@(o i 14')
+
+@(o ii 1') [VII]
+
+@(o ii 2')
+
+$ ruling
+
+@(o ii 3') XII 5 mos.
+
+@(o ii 4')
+
+$ ruling
+
+@(o ii 5') Year 2 (of)
+
+@(o ii 6') (Kandlanu)
+
+@(o ii 7') VI?
+
+@(o ii 8')
+
+@(o ii 9')
+
+@(o ii 10')
+
+@(o ii 11')
+
+@(o ii 12')
+
+@(o ii 13')
+
+@(o ii 14')
+
+@(o iii 1') VII
+
+@(o iii 2') 9; invisible
+
+$ ruling
+
+@(o iii 3') XII, 5 mos.
+
+@(o iii 4') 5
+
+$ ruling
+
+@(o iii 5') Year 20 (of Kandalanu)
+
+@(o iii 6') VI
+
+@(o iii 7') [X]II
+
+@(o iii 8') [x]+8 
+
+$ ruling
+
+@(o iii 9')
+
+@(o iii 10')
+
+@(o iii 11')
+
+@(o iii 12')
+
+@(o iii 13')
+
+@(o iii 14')
+
+@(o iv 1') VII
+
+@(o iv 2')
+
+$ ruling
+
+@(o iv 3') XII, 5 mos. 
+
+@(o iv 4')
+
+$ ruling
+
+@(o iv 5') Year 16 (of Nabopolassar)
+
+@(o iv 6') VI
+
+@(o iv 7') XII
+
+@(o iv 8')
+
+$ ruling
+
+@(o iv 9') Year 17
+
+@(o iv 10') VI
+
+@(o iv 11') [X]II
+
+@(o iv 12')
+
+$ ruling
+
+@(o iv 13')
+
+@(o iv 14')
+
+@(o v 1') VII
+
+@(o v 2')
+
+$ ruling
+
+@(o v 3') XII, 5 mos. 
+
+@(o v 4') 4
+
+$ ruling
+
+@(o v 5') Year 14 (of Nebukadnezzar)
+
+@(o v 6') VI 16?
+
+@(o v 7') XII
+
+@(o v 8') 16
+
+$ ruling
+
+@(o v 9') Year 14
+
+@(o v 10') VI 16
+
+@(o v 11') XII
+
+@(o v 12') 8
+
+$ ruling
+
+@(o v 13') Year 15
+
+@(o v 14') [...] ⸢V? 6?⸣
+
+@(o vi 1') V[III?]
+
+@(o vi 2') 8 [...]
+
+$ ruling
+
+@(o vi 3') Year 3[0 (of Nebukadnezzar)]
+
+@(o vi 4') ... [...]
+
+$ ruling
+
+@(o vi 5') [...]
+
+@(o vi 6') ... [...]
+
+@(o vi 7') [...]
+
+@(o vi 8') [...]
+
+$ ruling
+
+@(o vi 9') [...]
+
+@(o vi 10') [...]
+
+@(o vi 11') [...]
+
+@(o vi 12') [...]
+
+$ ruling
+
+@(o vi 13') [...]
+
+@(o vi 14') [...]
