@@ -1,0 +1,57 @@
+&X600056 = ADART 6 56
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1'. [... li]š-lim
+#lem: u; lišlim[be(come) well]V
+
+@obverse
+1'. [... MÚL.BABBAR] ina MAŠ.MAŠ ŠÚ SIG 9 MÚL.BABBAR ina ⸢MAŠ.MAŠ IGI⸣
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; Simānu[Month III]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V
+
+2'. [... N] KÙŠ ár MAŠ.MAŠ-ár UŠ NU PAP
+#lem: u; n; ammatu[unit]N; warki[behind]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; nenmudu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V
+
+3'. [... N KÙ]Š ina IGI MAŠ.MAŠ-IGI UŠ
+#lem: u; n; ammatu[unit]N; ina[in]PRP; nanmuru[be(come) visible]V; MAŠ.MAŠ-IGI[α Geminorum]CN; nenmudu[be at a stationary point]V
+
+$ ruling
+4'. [...] SI? 3 KÙŠ ŠU GE₆ 6 ina ZÁLAG MÚL.BABBAR
+#lem: u; ubānu[finger]N; n; ammatu[unit]N; Duʾūzu[Month IV]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN
+
+5'. [... e MAŠ.MAŠ]-šá-SIPA 3 1/2 KÙŠ KIN GE₆ 27
+#lem: u; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; ammatu[unit]N; Ulūlu[Month VI]MN; mūšu[night]N; n
+
+6'. [... MÚ]L.BABBAR ana ŠÚ ina LAL-šú SIG MAŠ.MAŠ-IGI 3 1/2 KÙŠ KIN DIR
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; ina[while]PRP; nahāsu[recede]V; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; n; ammatu[unit]N; Ulūlu[Month VI]MN; watru[extra]AJ
+
+$ ruling
+7'. [...] ⸢x x⸣ [x x] ⸢x x x x x x KÙŠ⸣
+#lem: u; u; u; u; u; u; u; u; u; u; u; ammatu[unit]N
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) [...] may it go well.
+
+@(o 1) [... Jupiter’s] last appearance in Gemini. Month III, the 9th, Jupiter’s first appearance in Gemini.
+
+@(o 2) [...] it became stationary [N] cubits behind β Geminorum; I did not watch.
+
+@(o 3) [...] it became stationary [N] cubits in front of α Geminorum.
+
+$ ruling
+
+@(o 4) [...] ... 3 cubits [...] Month IV, night of the 6th, last part of the night, Jupiter was
+
+@(o 5) [...] 3 1/2 cubits [above γ] Geminorum. Month VI, night of the 27th,
+
+@(o 6) [...] Jupiter, while moving back to the west, was 3 1/2 cubits below α Geminorum. Month VI was intercalary.
+
+$ ruling
+
+@(o 7) [...] ... [...] ... cubits.

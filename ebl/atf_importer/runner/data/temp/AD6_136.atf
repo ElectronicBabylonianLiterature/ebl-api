@@ -1,0 +1,91 @@
+&X600138 = ADART 6 136
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢SIG⸣ MAŠ.MAŠ-IGI 5 KÙŠ 27? [...]
+#lem: u; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; n; u
+
+2'. [...] ina ŠÚ ina ABSIN ŠÚ NU PAP ⸢x x⸣ [...]
+#lem: u; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; u; u; u
+
+3'. [...] KÙŠ in ⸢x x⸣ [...]
+#lem: u; ammatu[unit]N; ina[around (day x)]PRP; u; u; u
+
+4'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+@reverse
+@column 1
+1'. [... ŠÚ n]a
+#lem: u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+2'. [... ME] GE₆
+#lem: u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+3'. [... ŠÚ na]
+#lem: u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+4'. [... ME] GE₆
+#lem: u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+5'. [... ŠÚ n]a
+#lem: u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+@column 2
+1'. [15] ⸢x x⸣ [ŠÚ ...]
+#lem: n; u; u; rabû[moonset to sunrise]'N; u
+
+2'. 16 10.30 GE₆ muš
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+3'. 16 7.30 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+4'. 27 15.30 DIR muš
+#lem: n; n; erpetu[cloud]N; mašāhu[measure]V
+
+5'. GU₄ 30 12 SIG muš ana šamáš SIG
+#lem: Ayyaru[Month II]MN; n; n; šapil[faint]AJ; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+6'. 15 14 ME DIR NU PAP
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+7'. 15 ⸢6⸣.10 ŠÚ DIR NU PAP
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+@translation labeled en project
+
+@(o 1) [...] 5 cubits below α Geminorum. The 27th?, [...]
+
+@(o 2) [...] last appearance in the west in Virgo; I did not watch ... [...]
+
+@(o 3) [...] cubits. Around ..., [...]
+
+@(o 4) [...] ... [...]
+
+@(r i 1) [..., ‘moonset to sunrise’ (plus) ‘sunrise] to moonset’: [...]
+
+@(r i 2) [‘moonrise to sunset’ (plus)] ‘sunset to moonrise’: [...] 
+
+@(r i 3) [..., ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: ...] 
+
+@(r i 4) [‘moonrise to sunset’ (plus)] ‘moonrise to sunset’: [...]
+
+@(r i 5) [..., ‘moonset to sunrise’ (plus) ‘sunrise] to moonset’: [...]
+
+@(r ii 1) [The 15th, moonset to sunrise:] ... [...]
+
+@(r ii 2) The 16th, sunset to moonrise: 10° 30'; measured. 
+
+@(r ii 3) The 16th, sunrise to moonset: 7° 30'; measured. 
+
+@(r ii 4) The 27th, (moonrise to sunrise:) 15° 30'; measured (despite) clouds. 
+
+@(r ii 5) Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12°; it was faint, measured; it was low to the sun.
+
+@(r ii 6) The 15th, moonrise to sunset: 14°; clouds, I did not watch.
+
+@(r ii 7) The 15th, moonset to sunrise: 6° 10'; clouds, I did not watch.

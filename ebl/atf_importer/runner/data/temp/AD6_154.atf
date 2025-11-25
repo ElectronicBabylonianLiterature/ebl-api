@@ -1,0 +1,57 @@
+&X600156 = ADART 6 154
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [x] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+$ ruling
+2'. ⸢MU⸣ 1 ME 30+[x.KAM ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+3'. SIG MAŠ.MAŠ-I[GI ...]
+#lem: šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; u
+
+4'. dele-bat 3 U ana [...]
+#lem: Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; u
+
+5'. e MÚL [...]
+#lem: eli[above]PRP; kakkabu[star]N; u
+
+6'. NE GE₆ [...]
+#lem: Abu[Month V]MN; mūšu[night]N; u
+
+7'. SIG RÍN-šá-U[LÙ ...]
+#lem: šapil[below]'PRP; RÍN-šá-ULÙ[α Librae]CN; u
+
+8'. GE₆ 28 U[SAN ...]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; u
+
+9'. ⸢x⸣ [...]
+#lem: u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+$ ruling
+
+@(o 2) Year 130+[x, ...]
+
+@(o 3) below α Geminorum [...]
+
+@(o 4) Venus being 3 fingers to [...]
+
+@(o 5) above ... [...]
+
+@(o 6) Month V, night of [...]
+
+@(o 7) below α Librae [...]
+
+@(o 8) Night of the 28th, first [part of the night, ...]
+
+@(o 9) ... [...]
+ 

@@ -1,0 +1,935 @@
+&X600070 = ADART 6 69
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [MU 1 ME 23.KAM] ⸢x x⸣ [x] ⸢BAR⸣ in 15 MÚL.BABBAR ana ME [E-a ...] 19 MÚL.BABBAR ana ŠÚ ki UŠ-a
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u; u; u; Nisannu[Month I]MN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+2'. [N] ⸢KÙŠ ár⸣ [RÍN-šá-S]I 3 KÙŠ [ana] ULÙ SIG UŠ DU₆ 20 [x] na MÚL.BABBAR in 24 MÚL.BABBAR ina GÍR.TAB ŠÚ
+#lem: n; ammatu[unit]N; warki[behind]PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]'PRP; nenmudu[be at a stationary point]V; Tašrītu[Month VII]MN; n; u; na[sunset to setting]N; Kakkabu-peṣû[Jupiter]CN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V
+
+3'. ⸢APIN⸣ 25 MÚ[L.BABB]AR ina GÍR.TAB 3 1/2 KÙŠ ár SI₄ IGI 11 n[a]-su in 24 IGI ŠE in EN 28
+#lem: Arahsamna[Month VIII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; n; n; ammatu[unit]N; warki[behind]PRP; SI₄[α Scorpii]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V; Addaru[Month XII]MN; ina[around (day x)]PRP; adi[until]PRP; n
+
+4'. [M]ÚL.BABBAR ana NIM k[i] UŠ-ú 1 KÙŠ ár 4.ÀM [IGI]{MEŠ} šá PA UŠ ŠE DIR
+#lem: Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elam[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP; erbe[four]NU; pānu[front]N; ša[of]'DET; Pabilsag[Sagittarius]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+5'. MU 1 ME 10.KAM [ŠE DIR? MU 1.me.11.KAM {I}an u {I}an] A-šú LUGAL{MEŠ} BAR GE₆ 20 USAN MÚL.BABBAR
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Addaru[Month XII]MN; watru[extra]AJ; šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN
+
+6'. ana ŠÚ ina LAL-šú SIG ⸢RÍN⸣-[šá-SI n n ...] MÚL.BABBAR ana NIM ina LAL-šú SIG RÍN-šá-SI 3 KÙŠ
+#lem: ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[recede]V; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; n; n; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; ina[in]PRP; nahāsu[recede]V; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N
+
+7'. GAN GE₆ 24 ⸢ina⸣ Z[ÁLAG MÚL.BABBAR e MÚL-KUR-šá-KI]R₄-šil-PA 1 KÙŠ 
+#lem: Kislīmu[Month IX]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N
+
+$ ruling
+8'. MU 1 ME 1.2[6.KAM {I}ar-šá-ka-a] LUGAL GU₄ GE₆ 4 ina ZÁLAG dele-bat SIG MÚL-KUR-šá-DUR-nu-nu 4 KÙŠ
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; Ayyaru[Month II]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N
+
+9'. ⸢GE₆ 9 ina⸣ ZÁL[AG dele-bat SIG MÚL-IGI-šá-SAG-HUN] 5 KÙŠ GE₆ 13 ina ZÁLAG dele-bat SIG MÚL-ár-šá-SAG-HUN 6? [KÙŠ]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N
+
+10'. SIG? GE₆? 1? [ina ZÁLAG dele-bat SIG MÚL.MÚL n n G]E₆ 10? ina ZÁLAG dele-bat e is-le₁₀ 2 KÙŠ GE₆ 20 ina ZÁLAG dele-bat SIG ŠUR-G[IGIR-šá-SI] 2 1/2 KÙŠ
+#lem: Simānu[Month III]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; n; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N
+
+11'. GE₆ 20+[x ...] ŠU GE₆ 1 [ina ZÁLAG dele]-bat e MÚL-IGI-šá-še-pít-MAŠ.MAŠ 8 SI ⸢dele-bat⸣
+#lem: mūšu[night]N; n; u; Duʾūzu[Month IV]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ubānu[finger]N; Dilbat[Venus]CN
+
+12'. ⸢ana NIM⸣ D[IB ...] dele-bat 4 SI ana NIM DIB GE₆ 6 ina ZÁLAG dele-bat e MAŠ.MAŠ-šá-⸢SIPA⸣ 2? KÙŠ
+#lem: ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; u; Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N
+
+13'. ⸢GE₆ 15?⸣ ina [ZÁLAG dele-bat SIG MAŠ.MAŠ]-IGI 4 KÙŠ GE₆ 1[8] ina ZÁLAG dele-bat SIG MAŠ.MAŠ-ár 5 [KÙŠ]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N
+
+14'. ⸢KIN?⸣ [x x] na? dele-bat in 6 dele-[bat ina NIM] ⸢ina TIL A?⸣ ŠÚ APIN 23 dele-bat ina ⸢ŠÚ ina SAG PA⸣ IGI
+#lem: Ulūlu[Month VI]MN; u; u; na[rising to sunrise]N; Dilbat[Venus]CN; ina[around (day x)]PRP; n; Dilbat[Venus]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; qītu[end]N; Nēšu[Leo]CN; rabû[set]V; Arahsamna[Month VIII]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; rēšu[beginning]N; Pabilsag[Sagittarius]CN; nanmuru[be(come) visible]V
+
+15'. ⸢x⸣ [x] ⸢na-su in⸣ 22 I[GI?] ZÍZ GE₆ [x USA]N dele-bat SIG MÚL-KUR-šá-DUR-nu-nu 2 1/2 KÙŠ x x [...]
+#lem: u; u; na[sunset to setting]N; ina[on]PRP; n; nanmuru[be(come) visible]V; Šabāṭu[Month XI]MN; mūšu[night]N; u; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; u; u; u
+
+16'. [SIG] MÚL-IGI-šá-SAG-HUN 3 1/2 KÙŠ G[E₆ x USAN] dele-bat SIG MÚL-⸢ár⸣-šá-SAG?-HUN? 4 1/2 KÙŠ GE₆ 10+[x] US[AN dele-bat SIG MÚL].⸢MÚL⸣
+#lem: šapil[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; ammatu[unit]N; mūšu[night]N; u; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN
+
+17'. 1? 1/2 KÙŠ? DIR.ŠE GE₆ 7 USAN dele-bat [e is-l]e₁₀ 3 KÙŠ GE₆ 14? USAN dele-bat SIG ŠUR-GIGIR-šá-[SI n n]
+#lem: n; n; ammatu[unit]N; Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n
+
+18'. GE₆ 20 USAN dele-bat e ŠUR-GIGIR-šá-ULÙ [N] KÙŠ GE₆ 28 USAN dele-bat e MÚL-IGI-šá-še-pít-[MAŠ.MAŠ n n]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n
+
+19'. GE₆ 30 USAN dele-bat e MÚL-ár-šá-še-pít-MAŠ.MAŠ [x x x] ⸢x⸣
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; u; u; u; u
+
+$ ruling
+20'. MU 1 ME 48.KAM {I}an LUGAL BAR 26 GU₄.UD ina [ŠÚ ina MÚL].MÚL IGI KUR NIM-a 16 na-su in [x IGI]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N; Nisannu[Month I]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zappu[Taurus]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ; n; na[sunset to setting]N; ina[on]PRP; u; nanmuru[be(come) visible]V
+
+21'. GU₄ GE₆ 2 USAN GU₄.UD SIG ŠUR-GIGIR-šá-SI 1 1/2 KÙŠ G[E₆ x USA]N GU₄.UD e ŠUR-GIGIR-šá-ULÙ [n n]
+#lem: Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N; mūšu[night]N; u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n
+
+22'. GE₆ 9 USAN GU₄.UD e MÚL-IGI-šá-še-pít-MAŠ.MAŠ 1 KÙŠ 4 SI [GU₄.U]D 4 U ana ŠÚ LAL GE₆ 11 USAN [GU₄.UD]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N; n; ubānu[finger]N; Šihṭu[Mercury]CN; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN
+
+23'. e MÚL-ár-šá-še-pít-MAŠ.MAŠ 1 KÙŠ 4 SI GE₆ 15 USAN GU₄.UD [e MAŠ.MA]Š-šá-SIPA 4 1/2 KÙŠ ⸢x⸣ [... ŠÚ šá GU₄.UD]
+#lem: eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N; n; ubānu[finger]N; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; ammatu[unit]N; u; u; rabû[setting]N; ša[which]REL; Šihṭu[Mercury]CN
+
+24'. ina ŠÚ ina MAŠ.MAŠ TA 1 ki PAP NU IGI ŠU 7 GU₄.UD ina ⸢NIM⸣ ina MAŠ.MAŠ IGI ⸢x⸣ [x] ⸢na-su⸣ in 4 [IGI]
+#lem: ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; Duʾūzu[Month IV]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; u; u; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V
+
+25'. 23 GU₄.UD ina NIM ina ALLA ŠÚ NU PAP KIN 4 GU₄.UD ina ŠÚ ina ABSIN IGI TUR 11 [x x x] ⸢x⸣ [... ŠÚ šá GU₄.UD]
+#lem: n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; Ulūlu[Month VI]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; nanmuru[be(come) visible]V; ṣehru[small]AJ; n; u; u; u; u; u; rabû[setting]N; ša[which]REL; Šihṭu[Mercury]CN
+
+26'. ina ŠÚ ina SAG RÍN TA 16 ki PAP NU IGI DU₆ 18 GU₄.UD ina NIM ina SAG RÍN 1 1/2 [KÙŠ ...]
+#lem: ina[in]PRP; erbu[west]N; ina[in]PRP; rēšu[beginning]N; Zibānītu[Libra]CN; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; Tašrītu[Month VII]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; rēšu[beginning]N; Zibānītu[Libra]CN; n; n; ammatu[unit]N; u
+
+27'. 1 KÙŠ ana SI NIM IGI KUR NIM-a 17 na-su in 14 IGI APIN 16 12 na G[U₄.UD x GU₄.UD]
+#lem: n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ; n; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; Arahsamna[Month VIII]MN; n; n; na[rising to sunrise]N; Šihṭu[Mercury]CN; u; Šihṭu[Mercury]CN
+
+28'. ina NIM ina GÍR.TAB ŠÚ AB 5 GU₄.UD ina ŠÚ ina MÁŠ IGI KUR 15.30 na-su in 4 IGI G[E₆? ... ŠÚ šá GU₄.UD ina ŠÚ]
+#lem: ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; Ṭebētu[Month X]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Suhurmāšu[Capricorn]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; n; na[sunset to setting]N; ina[on]PRP; n; nanmuru[be(come) visible]V; mūšu[night]N; u; rabû[setting]N; ša[which]REL; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N
+
+29'. ina GU TA 20 ki PAP NU IGI ZÍZ 10 GU₄.UD ina NIM ina MÁŠ 3 KÙŠ ár SI-MÁŠ ⸢1 1/2?⸣ KÙŠ [x x x]
+#lem: ina[in]PRP; Gula[Aquarius]CN; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN; n; ammatu[unit]N; warki[behind]PRP; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; u; u; u
+
+30'. ana ⸢NIM⸣ IGI KUR 17 na-su in 8 IGI GE₆ 25 ina ZÁLAG GU₄.UD e MÚL-IGI-šá-SUHUR-MÁŠ 1/2 [KÙŠ]
+#lem: ana[to]PRP; Elamtu[east]'N; nanmuru[be(come) visible]V; baʾil[bright]AJ; n; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ammatu[unit]N
+
+31'. GE₆ 27 ina ZÁLAG GU₄.UD e MÚL-ár-šá-SUHUR-MÁŠ 1/2 KÙŠ GU₄.UD 2/3 KÙŠ ana [ŠÚ LAL? Š]E 17 ŠÚ šá GU₄.[UD ina NI]M
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; Šihṭu[Mercury]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; Addaru[Month XII]MN; n; rabû[setting]N; ša[which]REL; Šihṭu[Mercury]CN; ina[in]PRP; Elam[east]'N
+
+32'. [ina] zib{ME} TA 14 ina TIL GU ki PAP NU IGI DIR.ŠE 23 GU₄.[UD ina ŠÚ] ina MÚL.MÚL IGI KUR NIM-a
+#lem: ina[in]PRP; Zibbātu[Pisces]CN; ištu[from]PRP; n; ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; Addaru_Šanû[(Intercalary) Month XII₂]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zappu[Taurus]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ
+
+33'. 17 na-su in 20 ina TIL HUN IGI GE₆ 29 USAN GU₄.U[D SIG MÚL-ár-šá-SA]G-⸢HUN⸣ 4 KÙŠ
+#lem: n; na[sunset to setting]N; ina[on]PRP; n; ina[in]PRP; qītu[end]N; Agru[Aries]CN; nanmuru[be(come) visible]V; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N
+
+$ ruling
+34'. MU 1 ME 34.KAM ŠE.DIR MU 1 ME 35.KAM {I}se LUGAL BAR GE₆ 3 USAN GENNA e [MAŠ.MAŠ-šá]-SIPA 3 KÙŠ GU₄ 17 GENNA ina MAŠ.MAŠ ŠÚ NU PAP
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; X; šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; Ayyaru[Month II]MN; n; Kayyamānu[Saturn]CN; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V
+
+35'. SIG 21 GENNA ina [MAŠ.MAŠ] IGI KUR NIM-a 17 ⸢na-su in⸣ [x x IGI] x GE₆ 23 ina ZÁLAG? GENNA
+#lem: Simānu[Month III]MN; n; Kayyamānu[Saturn]CN; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ; n; na[rising to sunrise]N; ina[on]PRP; u; u; nanmuru[be(come) visible]V; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN
+
+36'. [ana] ŠÚ ina LAL-šú [x x] ⸢x x x x x⸣ GENNA [...] ⸢GE₆? x x x x x x⸣ 4? KÙŠ?
+#lem: ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[recede]V; u; u; u; u; u; u; u; Kayyamānu[Saturn]CN; u; mūšu[night]N; u; u; u; u; u; u; n; ammatu[unit]N
+
+@bottom
+1'. [x x GE₆] 4 ina ZÁLAG GENNA ana ŠÚ ina LAL-šú [...] in 11 GENNA ana ME E-a NU [PAP]
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; ina[in]PRP; nahāsu[recede]V; u; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; ul[not]MOD; naṣāru[watch]V
+
+2'. ⸢ZÍZ in⸣ 11 GENNA ana ŠÚ ki UŠ-a 6 SI ina IGI ⸢MAŠ.MAŠ⸣-[IGI x]+1/2 KÙŠ ana ULÙ SIG UŠ
+#lem: Šabāṭu[Month XI]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ubānu[finger]N; ina[in]PRP; pānu[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; u; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; nenmudu[be at a stationary point]V
+
+3'. MU 1 ME 15.KAM {I}an u {I}an A-šú LUGAL{MEŠ} ŠE 1 19 na AN in 8 AN ina TIL zib{ME} ŠÚ ŠE DI[R]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; Addaru[Month XII]MN; n; n; na[sunset to setting]N; Ṣalbaṭānu[Mars]CN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; rabû[set]V; Addaru[Month XII]MN; watru[extra]AJ
+
+4'. MU 1 ME 47.KAM GU₄ GE₆ 20 USAN AN ana NIM ina LAL-šú SIG DELE-šá-IGI-ABSIN 1 KÙŠ SIG GE₆ 15
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elam[east]'N; ina[while]'SBJ; nahāsu[recede]V; šapil[below]'PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; Simānu[Month III]MN; mūšu[night]N; n
+
+5'. [US]AN AN e SA₄-šá-ABSIN  1 KÙŠ ŠU GE₆ 26 USAN AN SIG RÍN-šá-ULÙ 2/3 KÙŠ
+#lem: šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; Duʾūzu[Month IV]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N
+
+6'. ⸢NE⸣ GE₆ [x] USAN AN SIG RÍN-šá-SI 3 KÙŠ GE₆ 22? USAN AN e MÚL-MURUB₄-[šá-SAG-GÍR.TAB]
+#lem: Abu[Month V]MN; mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN
+
+@reverse
+1'. 6 SI AN 2 SI ana NIM DIB KIN GE₆ 4 USAN AN e SI₄ 2 KÙŠ GE₆ 19
+#lem: n; ubānu[finger]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; Ulūlu[Month VI]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; mūšu[night]N; n
+
+2'. USAN AN e MÚL-KUR-šá-KIR₄-šil-PA 1 SI TE APIN GE₆ 16? USAN AN SIG SI-MÁŠ 2 KÙŠ
+#lem: šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ubānu[finger]N; ṭehû[come close]V; Arahsamna[Month VIII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N
+
+3'. GAN GE₆ 7 USAN AN e MÚL-IGI-šá-SUHUR-MÁŠ 10 SI AN 4 U ana ŠÚ LAL GE₆ 10 USAN AN e SUHUR-ár 10 SI
+#lem: Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ubānu[finger]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ubānu[finger]N
+
+$ ruling
+@column 1
+1'. MU 1 ME 1.15.KAM
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+2'. DU₆ 15 ŠÚ na 
+#lem: Tašrītu[Month VII]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+3'. 8 ME GE₆ 
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+4'. APIN 15 ŠÚ na
+#lem: Arahsamna[Month VIII]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+5'. 9.40 ME GE₆
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+6'. GAN 14.50 ŠÚ na
+#lem: Kislīmu[Month IX]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+7'. 12.10 ME GE₆
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+8'. AB 14 ŠÚ na
+#lem: Ṭebētu[Month X]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+9'. 13 ME GE₆
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+10'. ZÍZ 9.30 ŠÚ na
+#lem: Šabāṭu[Month XI]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+11'. 13.30 ME GE₆
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+12'. ŠE 8.40 ŠÚ na
+#lem: Addaru[Month XII]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+13'. 14.30 ME GE₆
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+14'. MU 1 ME 1.15.KAM
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+15'. DIR.ŠE GE₆ 15 7.40 ME
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+16'. DIR NU PAP kip-pat ziq-pi
+#lem: erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; Kippatu[α Coronae]CN; zaqāpu[culminate]V
+
+17'. sin AN.KU₁₀ Á ULÙ u KUR
+#lem: Sîn[moon]N; antallû[eclipse]N; idu[side]N; šūtu[south]N; u[and]CNJ; šadû[east]N
+
+18'. ⸢ki TAB-ú⸣ ina 18 GE₆
+#lem: kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N
+
+19'. 8 SI [GAR]-an in 1 DANNA
+#lem: n; ubānu[finger]N; šakānu[put]V; ina[at]PRP; n; bēru[double hour]N
+
+20'. GE₆ ana ⸢ZÁLAG⸣
+#lem: mūšu[night]N; ana[to]PRP; nūru[light]N
+
+21'. 29 šamáš AN.[KU₁₀] ⸢Á⸣
+#lem: n; šamšu[sun]N; antallû[eclipse]N; idu[side]N
+
+22'. ULÙ u M[AR ki TAB-ú]
+#lem: šūtu[south]N; u[and]CNJ; amurru[west]N; kī[when]'SBJ; ušarrû[begin]V
+
+23'. ina 18 ME ana ŠÀ? [x?]
+#lem: ina[in]PRP; n; ūmu[day]N; ana[to]PRP; u; u
+
+24'. TIL-ma TIL-tì GAR-an
+#lem: gamāru[be complete]V; gamartu[totality]N; šakānu[establish]V
+
+25'. in 24 ME NIM-a
+#lem: ina[at]PRP; n; ūmu[day]N; šaqâ[high]AJ
+
+26'. MU 1 ME 1.16.KAM
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+27'. KIN GE₆ 14 1.30 [ME]
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+28'. [D]IR u a-kam muš [si]n
+#lem: erpetu[cloud]N; u[and]CNJ; akamu[mist]N; mašāhu[measure]V; Sîn[moon]N
+
+29'. [T]A a-kam ki ⸢E-a⸣
+#lem: ištu[from]PRP; akamu[mist]N; kī[when]'SBJ; elû[go up]V
+
+30'. [x] ⸢x⸣ Á SI u [MA]R
+#lem: u; u; idu[side]N; ištānu[north]N; u[and]CNJ; amurru[west]N
+
+31'. [x x] in 30 DANNA
+#lem: u; u; ina[at]PRP; n; bēru[double hour]N
+
+32'. [x x x] ⸢šamáš?⸣
+#lem: u; u; u; šamšu[sun]N
+
+33'. [x x x] ⸢x⸣
+#lem: u; u; u; u
+
+@column 2
+1'. MU 1 ME 1.15.KAM
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+2'. DIR.ŠE 30 11 na-su
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; na₁[sunset to moonset]N
+
+3'. DIR u a-kam ki PAP NU PAP
+#lem: erpetu[cloud]N; u[and]CNJ; akamu[mist]N; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; naṣāru[watch]V
+
+4'. 14 3.50 ŠÚ DIR NU PAP
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+5'. 15 7.40 ME DIR NU PAP
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+6'. 15 3 na DIR muš
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+7'. 16 6.20 GE₆ DIR muš
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+8'. 27 16.30 KUR DIR NU PAP
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+9'. MU 1 ME 60+16.KAM
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+10'. {I}ar-šá-ka-a LUGAL
+#lem: Aršaka[Arsaces]RN; šarru[king]N
+
+11'. BAR 1 21 na-su sin? IGI-mar?
+#lem: Nisannu[Month I]MN; n; n; na₁[sunset to moonset]N; Sîn[moon]N; amāru[see]V
+
+12'. DIR NU PAP
+#lem: erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+13'. 14 4.10 ŠÚ DIR NU PAP
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+14'. 15 3.20 ME DIR NU PAP
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+15'. 15 4 na DIR muš
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+16'. 16 10.40 GE₆ DIR NU PAP
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+17'. 27 15 KUR DIR ⸢NU PAP⸣
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+18'. GU₄ 30 12+[x n]a-su
+#lem: Ayyaru[Month II]MN; n; n; na₁[sunset to moonset]N
+
+19'. S[IG? x x x] ⸢x⸣ IGI?
+#lem: šapil[faint]AJ; u; u; u; u; u
+
+20'. 15 10+[x ME] a-kam muš
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+21'. 15 [x] ŠÚ
+#lem: n; u; rabû[moonset to sunrise]'N
+
+22'. 16 6 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+23'. 16 9 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+24'. 28 9.50 KUR a-kam
+#lem: n; n; KUR[moonrise to sunrise]N; akamu[mist]N
+
+25'. KALAG ki PAP NU IGI 
+#lem: dannu[dense]AJ; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+26'. SIG 1 23 na-su KUR₄
+#lem: Simānu[Month III]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ
+
+27'. [a]-pir muš ina GUB IGI ana šamáš NIM
+#lem: apir[earthshine]'N; mašāhu[measure]V; ina[while]'SBJ; izuzzu[stand]V; nanmuru[be(come) visible]V; ana[to]PRP; šamšu[sun]N; šaqi[high]AJ
+
+28'. ⸢14⸣ 10 UŠ ME DIR muš 
+#lem: n; n; UŠ[(time degree)]N; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+29'. 14 9 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+30'. 15 4.20? GE₆ a-kam muš
+#lem: n; n; mūšu[sunset to moonrise]N; akamu[mist]N; mašāhu[measure]V
+
+31'. 15 5.30 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+32'. 27 20.30 KUR muš 
+#lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+33'. ŠU 30 13 na-su a-kam
+#lem: Duʾūzu[Month IV]MN; n; n; na₁[sunset to moonset]N; akamu[mist]N
+
+34'. KALAG ki PAP NU IGI
+#lem: dannu[dense]AJ; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+35'. 14 12.20 ME muš
+#lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+36'. 14 15 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+37'. 15 40 NINDA GE₆
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; mūšu[sunset to moonrise]N
+
+38'. 15 2.20 na 28 14.20 KUR DIR NU PAP
+#lem: n; n; na[sunrise to moonset]N; n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+39'. ⸢x x x NU PAP⸣
+#lem: u; u; u; ul[not]MOD; naṣāru[watch]V
+
+@column 3
+1'. NE 1 15.10 na-su
+#lem: Abu[Month V]MN; n; n; na₁[sunset to moonset]N
+
+2'. DIR u a-kam KALAG NU PAP
+#lem: erpetu[cloud]N; u[and]CNJ; akamu[mist]N; dannu[dense]AJ; ul[not]MOD; naṣāru[watch]V
+
+3'. 14 4 ME a-kam muš
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+4'. 14 2.20 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+5'. 15 5 GE₆ muš 
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+6'. 15 15 na muš 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+7'. 27 20 KUR DIR muš
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+8'. KIN 1 12 na-[su]
+#lem: Ulūlu[Month VI]MN; n; n; na₁[sunset to moonset]N
+
+9'. KUR₄ muš ana [šamáš x]
+#lem: baʾil[bright]AJ; mašāhu[measure]V; ana[to]PRP; šamšu[sun]N; u
+
+10'. 13 7 [ŠÚ] muš 
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+11'. 14 [x] ME DIR u a muš 
+#lem: n; u; ūmu[moonrise to sunset]N; erpetu[cloud]N; u[and]CNJ; akamu[mist]N; mašāhu[measure]V
+
+12'. 14 [x n]a muš 
+#lem: n; u; na[sunrise to moonset]N; mašāhu[measure]V
+
+13'. 1[5 x] GE₆ muš 
+#lem: n; u; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+14'. ⸢27 16⸣ KUR
+#lem: n; n; KUR[moonrise to sunrise]N
+
+15'. DU₆ 1 11.30 na-su
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N
+
+16'. KUR₄ a-kam? muš ana šamáš SIG
+#lem: baʾil[bright]AJ; akamu[mist]N; mašāhu[measure]V; ana[to]PRP; šamšu[sun]N; šapil[low]AJ
+
+17'. 12 13 ŠÚ muš 
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+18'. 13 7 ME NU PAP
+#lem: n; n; ūmu[moonrise to sunset]N; ul[not]MOD; naṣāru[watch]V
+
+19'. 13 3.40 na a-kam muš
+#lem: n; n; na[sunrise to moonset]N; akamu[mist]N; mašāhu[measure]V
+
+20'. 14 1.10+⸢x⸣ GE₆ muš
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+21'. 27 15.30 KUR muš
+#lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+22'. APIN 1 15 na-su KUR₄
+#lem: Arahsamna[Month VIII]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ
+
+23'. a-pir muš ina GUB IGI ana šamáš SIG
+#lem: apir[earthshine]'N; mašāhu[measure]V; ina[while]'SBJ; izuzzu[stand]V; nanmuru[see]V; ana[to]PRP; šamšu[sun]N; šapil[low]AJ
+
+24'. 12 2 ŠÚ DIR NU PAP 
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+25'. 13 5 ME DIR NU PAP 
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+26'. 13 13 na DIR NU PAP 
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+27'. 14 4 GE₆ DIR NU PAP 
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+28'. 26 22 KUR DIR muš 
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+@column 4
+1'. GAN 30 10.20 DIR NU PAP
+#lem: Kislīmu[Month IX]MN; n; n; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+2'. ⸢13⸣ 7.30 ŠÚ? [x x] 
+#lem: n; n; rabû[moonset to sunrise]'N; u; u
+
+3'. 10+[x] 6.30 [x x x]
+#lem: n; n; u; u; u
+
+4'. 10+[x] ⸢x⸣ [x x x]
+#lem: n; u; u; u; u
+
+5'. 10+[x x x x x]
+#lem: n; u; u; u; u
+
+6'. [...]
+#lem: u
+
+7'. AB 1 22 n[a-su?]
+#lem: Ṭebētu[Month X]MN; n; n; na₁[sunset to moonset]N
+
+8'. a-pir muš ina ⸢GUB IGI?⸣
+#lem: apāru[earthshine]'N; mašāhu[measure]V; ina[while]'SBJ; izuzzu[stand]V; amāru[be(come) visible]V
+
+9'. 11 13.40 ŠÚ NU PAP
+#lem: n; n; rabû[moonset to sunrise]N; ul[not]MOD; naṣāru[watch]V
+
+10'. 12 1.30 na
+#lem: n; n; na[sunrise to moonset]N
+
+11'. 13 5.30 ME a-kam muš 
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+12'. 14 7.30 GE₆ DIR NU PAP
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+13'. 27 10.10 KUR DIR NU PAP
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+14'. ZÍZ 30 17 na-su KUR₄
+#lem: Šabāṭu[Month XI]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ
+
+15'. a-pir muš ina GUB IGI
+#lem: apāru[earthshine]'N; mašāhu[measure]V; ina[while]'SBJ; izuzzu[stand]V; nanmuru[see]V
+
+16'. 12 6 ŠÚ DIR NU PAP 
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+17'. 13 2.50 na DIR NU PAP
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+18'. 14 ME GE₆ NU ⸢TUK DIR⸣ NU PAP
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N; ul[not]MOD; išû[have]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+19'. 15 15 GE₆ DIR NU PAP
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+20'. 27 11 KUR a-kam muš
+#lem: n; n; KUR[moonrise to sunrise]N; akamu[mist]N; mašāhu[measure]V
+
+21'. ŠE 30 13 na-su DIR NU PAP
+#lem: Addaru[Month XII]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+22'. 13 4.30 ŠÚ muš 
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+23'. 14 7 ME a-kam muš
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+24'. 14 2.30 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+25'. 15 6 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+26'. 27 16 KUR DIR muš
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+27'. BAR 30 10.40 na a-kam
+#lem: Nisannu[Month I]MN; n; n; na₁[sunset to moonset]N; akamu[mist]N
+
+28'. ki PAP NU IGI
+#lem: kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+29'. U₄ 1.KAM IGI.DU₈.A{MEŠ} DIB-qa{MEŠ} u AN.KU₁₀{MEŠ} 
+#lem: ūmu[day]N; n; tāmartu[appearance]N; etēqu[passings]'N; u[and]CNJ; antallû[eclipse]N
+
+30'. šá ana MU 1 ME 60+34.KAM {I}ar-šá-ka-a LUGAL kun-nu-uʾ
+#lem: ša[which]REL; ana[for]PRP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; kunnu[establish]V
+
+@top
+1'. [...] in 18 ME ana ŠÚ šamáš IGI.TAB
+#lem: u; ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamšu[sun]N; barû[see//check]V'V
+
+2'. [... AN.KU₁₀] šamáš? a-kam ki PAP NU IGI in 1.8 ME ana ŠÚ šamáš
+#lem: u; antallû[eclipse]N; šamšu[sun]N; akamu[mist]N; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at (plus numeral)]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamšu[sun]N
+
+3'. [...] ⸢x a-kam muš⸣ MÚL-ŠUDUN.ANŠE-⸢ár⸣-ú ziq-pi
+#lem: u; u; akamu[mist]N; mašāhu[measure]V; MÚL-ŠUDUN.ANŠE-ár-ú['Rear Donkey Yoke']CN$MÚL-ŠUDUN.ANŠE-ár-ú; zaqāpu[culminate]V
+
+4'. [... Á UL]Ù u KUR ki-i TAB-ú ina 30+[x GE₆] gab-bi ŠÚ-im in 1.5 GE₆ ana ZÁLAG
+#lem: u; idu[side]N; šūtu[south]N; u[and]CNJ; šadû[east]N; kī[when]'SBJ; ušarrû[begin]V; ina[in]PRP; n; mūšu[night]N; gabbu[totality]N; arim[covered]AJ; ina[at]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]N
+
+5'. [ina a-mat {d}EN u {d}GAŠAN-iá liš]-lim
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+
+@translation labeled en project
+
+@(o 1) [Year 123,] ... Month I, around the 15th, Jupiter’s acronychal [rising ...] the 19th, when Jupiter became stationary to the west,
+
+@(o 2) it became stationary [N] cubits behind β [Librae], 3 cubits low to the south. Month VII, the 20th, sunset to setting of Jupiter: [...]; around the 24th, Jupiter’s last appearance in Scorpius.
+
+@(o 3) Month VIII, the 25th, Jupiter’s first appearance in Scorpius, 3 1/2 cubits behind α Scorpii; rising of Jupiter to sunrise: 11°; (ideal) first appearance on the 24th. Month XII, around until the 28th,
+
+@(o 4) when Jupiter became stationary to the east, it became stationary 1 cubit behind the four [front ones] of Sagittarius. Month XII was intercalary.
+
+$ ruling
+
+@(o 5) Year 110: [month XII was intercalary. Year 111,] kings [Antiochus and Antiochus,] his son. Month I, night of the 20th, first part of the night, Jupiter,
+
+@(o 6) while moving back to the west, was [...] below [β] Librae. [...] Jupiter, while moving back to the east, was 3 cubits below β Librae.
+
+@(o 7) Month IX, night of the 24th, last [part of the night, Jupiter was] 1 cubit [above θ] Ophiuchi.
+
+$ ruling
+
+@(o 8) Year 18[6,] king [Arsaces.] Month II, night of the 4th, last part of the night, Venus was 4 cubits below η Piscium.
+
+@(o 9) Night of the 9th, last part of the [night, Venus was] 5 cubits [below β Arietis.] Night of the 13th, last part of the night, Venus was 6? [cubits] below α Arietis.
+
+@(o 10) Month III?, night of the 1st?, [last part of the night, Venus was ... below η Tauri. Ni]ght of the 10th?, last part of the night, Venus was 2 cubits above α Tauri. Night of the 20th, last part of the night, Venus was 2 1/2 cubits below β Tauri.
+
+@(o 11) Night of the 20+[xth, ...] Month IV, night of the 1st, [last part of the night, Ve]nus was 8 fingers above η Geminorum, Venus
+
+@(o 12) having passed <...> to the east. [...] Venus having passed 4 fingers to the east. Night of the 6th, last part of the night, Venus was 2? cubits above γ Geminorum.
+
+@(o 13) Night of the 15th?, [last part of the night, Venus was] 4 cubits [below] α [Geminorum.] Night of the 18th, last part of the night, Venus was 5 [cubits] below β Geminorum. 
+
+@(o 14) Month VI, [the xth,] rising of Venus to sunrise: [...] Around the 6th, Venus’ last appearance [in the east] in the end of Leo. Month VIII, the 23rd, Venus’ first appearance in the west in the beginning of Sagittarius;
+
+@(o 15) sunset to setting of Venus: ...; (ideal) first appearance [on] the 22nd. Month XI, night of the [xth, first part of the ni]ght, Venus was 2 1/2 cubits below η Piscium ... [... Venus was]
+
+@(o 16) 3 1/2 cubits [below] β Arietis. Ni[ght of the xth, first part of the night,] Venus was 4 1/2 cubits below α Arietis. Night of the 10+[xth, first part of the night, Venus was] 1? 1/2 cubits [below η Tau]ri.
+
+@(o 17) Month XII₂, night of the 7th, first part of the night, Venus was 3 cubits [above α] Tauri. Night of the 14th?, first part of the night, Venus was [...] below [β] Tauri.
+
+@(o 18) Night of the 20th, first part of the night, Venus was [N] cubits above ζ Tauri. Night of the 28th, first part of the night, Venus was [...] above η Geminorum.
+
+@(o 19) Night of the 30th, first part of the night, Venus was [...] above μ Geminorum. 
+
+$ ruling
+
+@(o 20) Year 148, king Antiochus. Month I, the 26th, Mercury’s first appearance in the [west in Tau]rus; it was bright (and) high, sunset to setting of Mercury: 16°; [(ideal) first appearance] on [the xth.]
+
+@(o 21) Month II, night of the 2nd, first part of the night, Mercury was 1 1/2 cubits below β Tauri. Night [of the xth, first part] of the night, Mercury was [...] above ζ Tauri.
+
+@(o 22) Night of the 9th, first part of the night, Mercury was 1 cubit 4 fingers above η Geminorum, Mercury being 4 fingers back to the west. Night of the 11th, first part of the night, [Mercury was]
+
+@(o 23) 1 cubit 4 fingers above μ Geminorum. Night of the 15th, first part of the night, Mercury was 4 1/2 cubits [above γ] Geminorum ... [... Mercury’s last appearance]
+
+@(o 24) in the west in Gemini: from the 1st, when I watched I did not see it. Month IV, the 7th, Mercury’s first appearance in the east in Gemini; ... rising of Mercury to sunrise: ...; [(ideal) first appearance] on the 4th.
+
+@(o 25) The 23rd, Mercury’s last appearance in the east in Cancer; I did not watch. Month VI, the 4th, Mercury’s first appearance in the west in Virgo; it was small, [sunset to setting of Mercury:] 11° [... Mercury’s last appearance]
+
+@(o 26) in the west in the beginning of Libra: from the 16th, when I watched I did not see it. Month VII, the 18th, Mercury’s first appearance in the east in the beginning of Libra, 1 1/2 [cubits ...,]
+
+@(o 27) 1 cubit high to the north; it was bright (and) high, rising of Mercury to sunrise: 17°; (ideal) first appearance on the 14th. Month VIII, the 16th, rising of Mercury to sunrise: 12°. [The xth, Mercury’s]
+
+@(o 28) last appearance in the east in Scorpius. Month X, the 5th, Mercury’s first appearance in the west in Capricorn; it was bright, sunset to setting of Mercury: 15° 30'; (ideal) first appearance on the 4th. Ni[ght? ... Mercury’s last appearance in the west]
+
+@(o 29) in Aquarius: from the 20th, when I watched I did not see it. Month XI, the 10th, Mercury’s first appearance in the east in Capricorn, 3 cubits behind β Capricorni, 1 1/2? cubits [...]
+
+@(o 30) to the east; it was bright, rising of Mercury to sunrise: 17°; (ideal) first appearance on the 8th. Night of the 25th, last part of the night, Mercury was 1/2 [cubit] above γ Capricorni.
+
+@(o 31) Night of the 27th, last part of the night, Mercury was 1/2 cubit above δ Capricorni, Mercury being 2/3 cubit [back to the west?. Month] XII, the 17th, Mercury’s last appearance [in the ea]st
+
+@(o 32) [in] Pisces: from the 14th in the end of Aquarius, when I watched I did not see it. Month XII₂, the 23rd, Mercury’s first appearance [in the west] in Taurus; it was bright (and) high,
+
+@(o 33) sunset to setting of Mercury; 17°; (ideal) first appearance on the 20th in the end of Aries. Night of the 29th, first part of the night, Mercury was 4 cubits [below α] Arietis.
+
+$ ruling
+
+@(o 34) Year 134, month XII was intercalary. Year 135, king Seleucus. Month I, night of the 3rd, first part of the night, Saturn was 3 cubits above γ Ge[minorum.] Month II, the 17th, Saturn’s last appearance in Gemini; I did not watch.
+
+@(o 35) Month III, the 21st, Saturn’s first appearance in [Gemini;] it was bright (and) high, rising of Saturn to sunrise: 17°; [(ideal) first appearance] on [the xth.] Month ..., night of the 23rd, last part of the night, Saturn,
+
+@(o 36) while moving back to the west, was ... [...] Saturn [...] night? ... 4 cubits? ...
+
+@bottom
+
+@(b.e. 1) [... night] of the 4th, last part of the night, Saturn, while moving back to the west, [...] Around the 11th, Saturn’s acronychal rising; I did not [watch.]
+
+@(b.e. 2) Month XI, around the 11th, when Saturn became stationary to the west, it became stationary 6 fingers in front of [α] Geminorum, being [x]+1/2 cubit low to the south.
+
+@(b.e. 3) Year 115, kings Antiochus and his son Antiochus. Month XII, the 1st, sunset to setting of Mars: 19°. Around the 8th, Mars’ last appearance in the end of Pisces. Month XII was intercalary.
+
+@(b.e. 4) Year 147, month II, night of the 20th, first part of the night, Mars, while moving back to the east, was 1 cubit below γ Virginis. Month III, night of the 15th,
+
+@(b.e. 5) [first] part of the night, Mars was 1 cubit above α Virginis. Month IV, night of the 26th, first part of the night, Mars was 2/3 cubit below α Librae.
+
+@(b.e. 6) Month V, night of the [xth,] first part of the night, Mars was 3 cubits below β Librae. Night of the 22nd?, first part of the night, Mars was 6 fingers above δ
+
+@(r 1) Scorpii, Mars having passed 2 fingers to the east. Month VI, night of the 4th, first part of the night, Mars was 2 cubits above α Scorpii. Night of the 19th,
+
+@(r 2) first part of the night, Mars was 1 finger above θ Ophiuchi, it came close. Month VIII, night of the 16th, first part of the night, Mars was 2 cubits below β Capricorni.
+
+@(r 3) Month IX, night of the 7th, first part of the night, Mars was 10 fingers above γ Capricorni, Mars being 4 fingers back to the west. Night of the 10th, first part of the night, Mars was 10 fingers above δ Capricorni.
+
+$ ruling
+
+@(r i 1) Year 175.
+
+@(r i 2) Month VII ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 15°
+
+@(r i 3) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 8°
+
+@(r i 4) Month VIII ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 15°
+
+@(r i 5) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 9° 40'
+
+@(r i 6) Month IX ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 14° 50'
+
+@(r i 7) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 12° 10'
+
+@(r i 8) Month X ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 14°
+
+@(r i 9) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 13°
+
+@(r i 10) Month XI ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9° 30'
+
+@(r i 11) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 13° 30'
+
+@(r i 12) Month XII ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 8° 40'
+
+@(r i 13) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 14° 30'
+
+@(r i 14) Year 175
+
+@(r i 15) Month XII₂, night of the 15th, moonrise to sunset: 7° 40';
+
+@(r i 16) clouds, I did not watch. When Corona culminated,
+
+@(r i 17) lunar eclipse: when it began on the south and east side,
+
+@(r i 18) in 18° of night
+
+@(r i 19) it made 8 fingers. At 1 bēru
+
+@(r i 20) before sunrise.
+
+@(r i 21) The 29th, solar eclipse:
+
+@(r i 22) [when it began] on the south and we[st] side,
+
+@(r i 23) in 18° of daylight into? [...]
+
+@(r i 24) it ended? and made a total (eclipse).
+
+@(r i 25) At 24° after sunrise.
+
+@(r i 26) Year 176
+
+@(r i 27) Month VI, night of the 14th, [moonrise to sunset:] 1° 30',
+
+@(r i 28) measured (despite) clouds and mist.
+
+@(r i 29) When the moon came out from the mist,
+
+@(r i 30) [...] on the north and west side
+
+@(r i 31) [...] At 30°, i.e. one bēru,
+
+@(r i 32) [...] solar? [eclipse]
+
+@(r i 33) [...] ...
+
+@(r ii 1) Year 175
+
+@(r ii 2) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset: 11° 20';
+
+@(r ii 3) clouds and mist, when I watched I did not see it.
+
+@(r ii 4) The 14th, moonset to sunrise: 3° 50'; clouds, I did not watch.
+
+@(r ii 5) The 15th, moonrise to sunset: 7° 40'; clouds, I did not watch.
+
+@(r ii 6) The 15th, sunrise to moonset: 3°; measured (despite) clouds.
+
+@(r ii 7) The 16th, sunset to moonrise: 6° 20'; measured (despite) clouds.
+
+@(r ii 8) The 27th, moonrise to sunrise: 16° 30'; clouds, I did not watch.
+
+@(r ii 9) Year 176,
+
+@(r ii 10) king Arsaces.
+
+@(r ii 11) Month I, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 21°; the moon? could be seen;
+
+@(r ii 12) clouds, I did not watch. 
+
+@(r ii 13) The 14th, moonset to sunrise: 4° 10'; clouds, I did not watch. 
+
+@(r ii 14) The 15th, moonrise to sunset: 3° 20'; clouds, I did not watch. 
+
+@(r ii 15) The 15th, sunrise to moonset: 4°; measured (despite) clouds. 
+
+@(r ii 16) The 16th, sunset to moonrise: 10° 40'; clouds, I did not watch. 
+
+@(r ii 17) The 27th, moonrise to sunrise: 15°; clouds, I did not watch.
+
+@(r ii 18) Month II, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 12+[x°;]
+
+@(r ii 19) it was f[aint, ...] ...
+
+@(r ii 20) The 15th, [moonrise to sunset]: 10+[x°;] measured (despite) mist.
+
+@(r ii 21) The 15th, moonset to sunrise: [x°.] 
+
+@(r ii 22) The 16th, sunset to moonrise: 6°.
+
+@(r ii 23) The 16th, sunrise to moonset: 9°; measured.
+
+@(r ii 24) The 28th, moonrise to sunrise: 9° 50'; 
+
+@(r ii 25) dense mist, when I watched I did not see it.
+
+@(r ii 26) Month III, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 23°; it was bright,
+
+@(r ii 27) earthshine, measured; it could be seen while (the sun) stood there; it was high to the sun.
+
+@(r ii 28) The 14th, moonrise to sunset: 10°; measured (despite) clouds.
+
+@(r ii 29) The 14th, moonset to sunrise: 9°.
+
+@(r ii 30) The 15th, sunset to moonrise: 4° 20'?; measured (despite) mist.
+
+@(r ii 31) The 15th, sunrise to moonset: 5° 30'; measured.
+
+@(r ii 32) The 27th, moonrise to sunrise: 20° 30'; measured.
+
+@(r ii 33) Month IV, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 13°;
+
+@(r ii 34) dense mist, when I watched I did not see it.
+
+@(r ii 35) The 14th, moonrise to sunset: 12° 20'; measured. 
+
+@(r ii 36) The 14th, moonset to sunrise: 15°. 
+
+@(r ii 37) The 15th, sunset to moonrise: 40'. 
+
+@(r ii 38) The 15th, sunrise to moonset: 2° 20'. The 28th, moonrise to sunrise: 14° 20'; clouds, I did not watch.
+
+@(r ii 39) ... I did not watch.
+
+@(r iii 1) Month V, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15° 10';
+
+@(r iii 2) clouds and dense mist, I did not watch.
+
+@(r iii 3) The 14th, moonrise to sunset: 4°; measured (despite) mist.
+
+@(r iii 4) The 14th, moonset to sunrise: 2° 20'.
+
+@(r iii 5) The 15th, sunset to moonrise: 5°; measured. 
+
+@(r iii 6) The 15th, sunrise to moonset: 15°; measured.
+
+@(r iii 7) The 27th, moonrise to sunrise: 20°; measured (despite) clouds.
+
+@(r iii 8) Month VI, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 12°; 
+
+@(r iii 9) it was bright, measured; it was [...] to [the sun.]
+
+@(r iii 10) The 13th, [moonset to sunrise:] 7°; measured. 
+
+@(r iii 11) The 14th, moonrise to sunset: [x°]; measured (despite) clouds and mist. 
+
+@(r iii 12) The 14th, sunrise to moonset: [x°;] measured. 
+
+@(r iii 13) The 15th, sunset to moonrise: [x°;] measured. 
+
+@(r iii 14) The 27th, moonrise to sunrise: 16°. 
+
+@(r iii 15) Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 11° 30';
+
+@(r iii 16) it was bright, measured (despite) mist; it was low to the sun.
+
+@(r iii 17) The 12th, moonset to sunrise: 13°; measured. 
+
+@(r iii 18) The 13th, moonrise to sunset: 7°; I did not watch.
+
+@(r iii 19) The 13th, sunrise to moonset: 3° 40'; measured (despite) mist.
+
+@(r iii 20) The 14th, sunset to moonrise: 1° 10+x’; measured.
+
+@(r iii 21) The 27th, moonrise to sunrise: 15° 30'; measured.
+
+@(r iii 22) Month VIII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15°; it was bright,
+
+@(r iii 23) earthshine, measured; it could be seen while (the sun) stood there; it was low to the sun.
+
+@(r iii 24) The 12th, moonset to sunrise: 2°; clouds, I did not watch.
+
+@(r iii 25) The 13th, moonrise to sunset: 5°; clouds, I did not watch. 
+
+@(r iii 26) The 13th, sunrise to moonset: 13°; clouds, I did not watch.
+
+@(r iii 27) The 14th, sunset to moonrise: 4°; clouds, I did not watch. 
+
+@(r iii 28) The 26th, moonrise to sunrise: 22°; measured (despite) clouds. 
+
+@(r iv 1) Month IX, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 10° 20'; clouds, I did not watch.
+
+@(r iv 2) The 13th, moonset to sunrise?: 7° 30'; [...]
+
+@(r iv 3) The 10+[xth, ...] 6° 30'; [...]
+
+@(r iv 4) The 10+[xth,] ... [...]
+
+@(r iv 5) The 10+[xth,] ... [...]
+
+@(r iv 6) [...]
+
+@(r iv 7) Month X, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 22°; [...]
+
+@(r iv 8) earthshine, measured; it could be seen while (the sun) stood there.
+
+@(r iv 9) The 11th, moonset to sunrise: 13° 40'; I did not watch.
+
+@(r iv 10) The 12th, sunrise to moonset: 1° 30'.
+
+@(r iv 11) The 13th, moonrise to sunset: 5° 30'; measured (despite) clouds.
+
+@(r iv 12) The 14th, sunset to moonrise: 7° 30'; clouds, I did not watch.
+
+@(r iv 13) The 27th, moonrise to sunrise: 10° 10'; clouds, I did not watch.
+
+@(r iv 14) Month XI, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 17°; it was bright,
+
+@(r iv 15) earthshine, measured; it could be seen while (the sun) stood there.
+
+@(r iv 16) The 12th, moonset to sunrise: 6°; clouds, I did not watch.
+
+@(r iv 17) The 13th, sunrise to moonset: 2° 50'; clouds, I did not watch.
+
+@(r iv 18) The 14th, there was no ‘moonrise to sunset’ (or) ‘sunset to moonrise’; clouds, I did not watch.
+
+@(r iv 19) The 15th, sunset to moonrise: 15°; clouds, I did not watch.
+
+@(r iv 20) The 27th, moonrise to sunrise: 11°; measured (despite) mist.
+
+@(r iv 21) Month XII, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 13°; clouds, I did not watch.
+
+@(r iv 22) The 13th, moonset to sunrise: 4° 30'; measured.
+
+@(r iv 23) The 14th, moonrise to sunset: 7°; measured (despite) mist.
+
+@(r iv 24) The 14th, sunrise to moonset: 2° 30'; measured.
+
+@(r iv 25) The 15th, sunset to moonrise: 6°.
+
+@(r iv 26) The 27th, moonrise to sunrise: 16°; measured (despite) clouds.
+
+@(r iv 27) Month I, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 10° 40'; mist,
+
+@(r iv 28) when I watched I did not see it.
+
+@(r iv 29) First days, appearances, passings, and eclipses 
+
+@(r iv 30) which were established for year 194, king Arsaces.
+
+@top (continuation of rev. I)
+
+@(t.e. 1) [...] At 18° before sunset. 				Checked.
+
+@(t.e. 2) [...] solar? [eclipse]; mist, when I watched I did not see it. At 68° before sunset.
+
+@(t.e. 3) [...] ... measured (despite) mist. When the ‘Rear Donkey Yoke’ culminated,
+
+@(t.e. 4) [lunar eclipse;] when it began on the south and east [side,] in 30+[x° of night] all was covered. At 65° before sunrise.
+
+@(t.e. 5) (at beginning of obv.) [At the command of Bel and Beltija may it go] well.

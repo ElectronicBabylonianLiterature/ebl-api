@@ -1,0 +1,71 @@
+&X600146 = ADART 6 144
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [... S]IG? ana šamáš NIM
+#lem: u; šapil[faint]AJ; ana[to]PRP; šamši[sun]N; šaqi[high]AJ
+
+3'. [...] muš 
+#lem: u; mašāhu[measure]V
+
+4'. [...] muš 
+#lem: u; mašāhu[measure]V
+
+5'. [...] ⸢muš⸣
+#lem: u; mašāhu[measure]V
+
+@column 2
+1'. [...] ⸢x x⸣ [...] 
+#lem: u; u; u; u
+
+2'. [12] 9 ŠÚ DIR muš 
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
+
+3'. 13 3 na a-kam muš 
+#lem: n; n; na[sunrise to moonset]N; akamu[mist]N; mašāhu[measure]V
+
+4'. 14 3 ME a-kam ⸢muš⸣ 
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+5'. 15 6 GE₆ [...] 
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+6'. 27 12 KUR a-k[am x]
+#lem: n; n; KUR[moonrise to sunrise]N; akamu[mist]N; u
+
+7'. [x] ⸢x⸣ 11 [...]
+#lem: u; u; n; u
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] faint?; it was high to the sun.
+
+@(o i 3) [...] measured.
+
+@(o i 4) [...] measured.
+
+@(o i 5) [...] measured.
+
+@(o ii 1) [...] ... [...]
+
+@(o ii 2) [The 12th,] moonset to sunrise: 9°; measured (despite) clouds. 
+
+@(o ii 3) The 13th, sunrise to moonset: 3°; measured (despite) mist.
+
+@(o ii 4) The 14th, moonrise to sunset: 3°; measured (despite) mist.
+
+@(o ii 5) The 15th, sunset to moonrise: 6°; [...]
+
+@(o ii 6) The 27th, moonrise to sunrise: 12°, [...] mist.
+
+@(o ii 7) [...] ... 11 [...]
+ 

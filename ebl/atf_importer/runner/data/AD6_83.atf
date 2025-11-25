@@ -1,0 +1,62 @@
+&X600084 = ADART 6 83
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+$ ruling
+2'. [MU 1 ME 60+13.KAM {I}ar-šá-ka]-⸢a⸣ LUGAL GU₄ 10+[x ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; Ayyaru[Month II]MN; n; u
+
+3'. [... x]+⸢5⸣ na GENNA in [...]
+#lem: u; u; na[sunset to setting]N; Kayyamānu[Saturn]CN; ina[around (day x)]PRP; u
+
+4'. [...] in 6 IGI GAN GE₆ 29 ina ZALÁG GENNA ⸢e⸣ [RÍN-šá-ULÙ ...]
+#lem: u; ina[on]PRP; n; nanmuru[be(come) visible]V; Kislīmu[Month IX]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; u
+
+5'. [... ana NIM ki U]Š-ú 2/3 KÙŠ e RÍN-šá-[UL]Ù 8 SI [ana NIM DIB UŠ ...]
+#lem: u; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; nenmudu[be at a stationary point]V; u
+
+6'. [... e RÍN-šá-UL]Ù 2/3 KÙŠ ŠE in 30 GENNA ana [ME E-a (...)]
+#lem: u; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; Addaru[Month XII]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u
+
+$ ruling
+7'. [... G]U₄? 20 18.30 na AN in 25 A[N ...]
+#lem: u; Ayyaru[Month II]MN; n; n; na[sunset to setting]N; Ṣalbaṭānu[Mars]CN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; u
+
+8'. [...] KÙŠ ana SI NIM IGI TUR 16.30 n[a-su ...]
+#lem: u; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nanmuru[be(come) visible]V; ṣehru[small]AJ; n; na[rising to sunrise]N; u
+
+$ ruling
+9'. [...] ⸢x⸣ EN 25 AN ana N[IM? ...]
+#lem: u; u; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+$ ruling
+
+@(o 2) [Year 173,] king [Arsace]s. Month II, the 10+[xth?, ...]
+
+@(o 3) [...] sunset to setting of Saturn: [x]+5°. Around [...]
+
+@(o 4) [...] (ideal) first appearance on the 6th. Month IX, night of the 29th, last part of the night, Saturn was [...] above [α Librae ...]
+
+@(o 5) [... when Saturn] became stationary [to the east, it became stationary] 2/3 cubit above α Librae, [having passed] 8 fingers [to the east ...]
+
+@(o 6) [...] 2/3 cubits [above α Libr]ae. Month XII, around the 30th, Saturn’s acro[nychal rising ...] 
+
+$ ruling
+
+@(o 7) [... Mon]th II?, the 20th, sunset to setting of Mars: 18° 30'. Around the 25th, Mars’ [last appearance in ...]
+
+@(o 8) [...] first appearance [...] cubits high to the north; it was small, rising of Mars to sunrise: 16° 30' [...]
+
+$ ruling
+
+@(o 9) [...] ... until the 25th, [when] Mars [became stationary] to the ea[st?, ...]

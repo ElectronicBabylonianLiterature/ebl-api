@@ -1,0 +1,53 @@
+&X600024 = ADART 6 24
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1-3'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x⸣ USAN [...]
+#lem: u; u; šimītān[first part of the night]N; u
+
+3'. [...] ⸢x⸣ [ina] MÚL.MÚL ŠÚ ŠE ⸢DIR⸣
+#lem: u; u; ina[in]PRP; Zappu[Taurus]CN; rabû[set]V; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+4'. MU 1.17.KAM ŠE DIR MU 60+18.KAM [...]
+#lem: šattu[year]N; n; Addaru[Month XII]MN; watru[extra]AJ; šattu[year]N; n; u
+
+5'. UD.DA IGI DIB GU₄ 17 GU₄.UD ina NI[M ...]
+#lem: X; nanmuru[be(come) visible]V; etēqu[omit]V; Ayyaru[Month II]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; u
+
+6'. [GU₄.UD] ⸢ina ŠÚ ina⸣ ALLA IGI 13 na-su [...]
+#lem: Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Alluttu[Cancer]CN; nanmuru[be(come) visible]V; n; na[sunset to setting]N; u
+
+7'. [...] ⸢x GU₄.UD⸣ ina N[IM? ...]
+#lem: u; u; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; u
+
+@translation labeled en project
+
+@(o i 1-3) [...] ...
+
+@(o ii 1) [...] ... [...]
+
+@(o ii 2) [...] ..., first part of the night, [...]
+
+@(o ii 3) [...] ... last appearance in Taurus. Month XII was intercalary.
+
+$ ruling
+
+@(o ii 4) Year 77: month XII was intercalary. Year 78, [...]
+
+@(o ii 5) first appearance ..., omitted. Month II, the 17th, Mercury’s [last appearance] in the east [...]
+
+@(o ii 6) [Mercury’s] first appearance in the west in Cancer; sunset to setting of Mercury: 13°; [...]
+
+@(o ii 7) [...] ... Mercury’s [...] in the ea[st? ...]

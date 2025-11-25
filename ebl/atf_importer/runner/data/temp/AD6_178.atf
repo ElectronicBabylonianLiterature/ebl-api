@@ -1,0 +1,89 @@
+&X600180 = ADART 6 178
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... ana] ⸢ŠÚ⸣ ki UŠ-⸢a 2?⸣ [...]
+#lem: u; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; u
+
+2'. [...] ⸢x⸣ EN 27 GENNA ana NI[M ki UŠ-ú ...]
+#lem: u; u; adi[until]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+$ ruling
+3'. [... {m}s]e-⸢lu⸣-ku LUGAL {ITU}[...]
+#lem: u; Seleucus[Seleucus]RN; šarru[king]N; warhu[month]N
+
+@reverse
+@column 1
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] u na
+#lem: u; u[and]CNJ; na[sunrise to moonset]N
+
+3'. [...] ME u GE₆
+#lem: u; ūmu[moonrise to sunset]N; u[and]CNJ; mūšu[sunset to moonrise]N
+
+4'. [... Š]Ú u na
+#lem: u; rabû[moonset to sunrise]'N; u[and]CNJ; na[sunrise to moonset]N
+
+5'. [...] ME u GE₆
+#lem: u; ūmu[moonrise to sunset]N; u[and]CNJ; mūšu[sunset to moonrise]N
+
+6'. [... ŠÚ] u na
+#lem: u; rabû[moonset to sunrise]'N; u[and]CNJ; na[sunrise to moonset]N
+
+@column 2
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. 13 [x ME ...]
+#lem: n; u; ūmu[moonrise to sunset]N; u
+
+3'. 13 1.40 [ŠÚ ...] 
+#lem: n; n; rabû[moonset to sunrise]'N; u
+
+4'. 14 6.30 [GE₆ ...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+5'. 14 10 n[a ...] 
+#lem: n; n; na[sunrise to moonset]N; u
+
+6'. 27? ⸢14?⸣ ⸢a?⸣ [...]
+#lem: n; n; akamu[mist]N; u
+
+@translation labeled en project
+
+@(o 1) [...] when [Saturn] became stationary [to the] west, [...]
+
+@(o 2) [...] ... until the 27th, [when] Saturn [became stationary] to the east, [...]
+
+$ ruling
+
+@(o 3) [...] king Seleucus. Month [...]
+
+@(r i 1) [...] ... [...]
+
+@(r i 2) [... ‘moonset to sunrise’] plus ‘sunrise to moonset’: [...]
+
+@(r i 3) [...] ‘moonrise to sunset’ plus ‘sunset to moonrise’: [...]
+
+@(r i 4) [... ‘moonset] to sunrise’ plus ‘sunrise to moonset’: [...]
+
+@(r i 5) [...] ‘moonrise to sunset’ plus ‘sunset to moonrise’: [...]
+
+@(r i 6) [... ‘moonset to sunrise’] plus ‘sunrise to moonset’: [...]
+
+@(r ii 1) ... [...]
+
+@(r ii 2) The 13th, [moonrise to sunset: ...]
+
+@(r ii 3) The 13th, [moonset to sunrise:] 1° 40' [...]
+
+@(r ii 4) The 14th, [sunset to moonrise:] 6° 30' [...]
+
+@(r ii 5) The 14th, sunrise to [moonset:] 10° [...]
+
+@(r ii 6) The 27th?, (moonrise to sunrise:) 14°? ... [...]

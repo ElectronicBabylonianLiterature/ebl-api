@@ -1,0 +1,49 @@
+&X600170 = ADART 6 168
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ina ZÁLAG dele-bat SIG ⸢MÚL-ár⸣-[šá-še-pít-MAŠ.MAŠ ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; u
+
+3'. [... ina] ZÁLAG dele-bat SIG MAŠ.MAŠ-IGI [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; u
+
+4'. [... MÚL-x]-šá-ALLA-šá-ULÙ 10? SI? [...]
+#lem: u; MÚL-x-šá-ALLA-šá-ULÙ[θ/δ Cancri]CN; n; ubānu[finger]N; u
+
+5'. [... GE₆ x]+12 ina ZÁLAG dele-bat SIG MÚL-TU[R-šá-4-KÙŠ-ár-LUGAL ...]
+#lem: u; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; u
+
+6'. [...] ina ZÁLAG dele-bat e GÌR-ár-[šá-A ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; u
+
+7'. [... dele]-bat e SA₄-[šá-ABSIN ...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+8'. [... GE₆ x]+4 ina ZÁLAG dele-[bat ...]
+#lem: u; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] last part of the night, Venus was [...] below μ Gemi[norum ...]
+
+@(o 3) [...] last part of the night, Venus was [...] below α Geminorum [...]
+
+@(o 4) [...] 10? fingers [... θ/δ] Cancri [...]
+
+@(o 5) [... Night of the x]+12th, last part of the night, Venus was [...] below ϱ [Leonis ...]
+
+@(o 6) [...] last part of the night, Venus was [...] above β Vi[rginis ...]
+
+@(o 7) [... Ve]nus was [...] above α [Virginis ...]
+
+@(o 8) [... Night of the x]+4th, last part of the night, Ve[nus ...]
+ 

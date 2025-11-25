@@ -1,0 +1,81 @@
+&X600143 = ADART 6 141
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [... ŠÚ] DIR NU PAP
+#lem: u; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. [...] ME DIR NU PAP
+#lem: u; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+4'. [... n]a NU PAP
+#lem: u; na[sunrise to moonset]N; ul[not]MOD; naṣāru[watch]V
+
+5'. [...] GE₆ NU PAP
+#lem: u; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V
+
+6'. [...]+10 a-kam
+#lem: u; akamu[mist]N
+
+7'. [...] ⸢NU IGI⸣
+#lem: u; ul[not]MOD; amāru[see]V
+
+@column 2
+1'. ⸢DU₆⸣ [...]
+#lem: Tašrītu[Month VII]MN; u
+
+2'. 12 12 [ŠÚ ...]
+#lem: n; n; rabû[moonset to sunrise]'N; u
+
+3'. 13 30 NINDA [ME ...] 
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; ūmu[moonrise to sunset]N; u
+
+4'. 13 1+[x na ...]
+#lem: n; n; na[sunrise to moonset]N; u
+
+5'. 14 7 [GE₆ ...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+6'. 27 19 [...]
+#lem: n; n; u
+
+7'. ⸢APIN⸣ [...]
+#lem: Arahsamna[Month VIII]MN; u
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [..., moonset to sunrise: ...;] clouds, I did not watch. 
+
+@(o i 3) [...,] moonrise to sunset: [...;] clouds, I did not watch. 
+
+@(o i 4) [...,] sunrise to moonset: [...;] I did not watch. 
+
+@(o i 5) [...,] sunset to moonrise: [...;] I did not watch. 
+
+@(o i 6) [..., moonrise to sunrise: x]+10°; mist,
+
+@(o i 7) [...] I did not see (it).
+
+@(o ii 1) Month VII, [...]
+
+@(o ii 2) The 12th, [moonset to sunrise:] 12°; [...] 
+
+@(o ii 3) The 13th, [moonrise to sunset:] 30'; [...] 
+
+@(o ii 4) The 13th, [sunrise to moonset:] 1+[x°; ...] 
+
+@(o ii 5) The 14th, [sunset to moonrise:] 7°; [...]
+
+@(o ii 6) The 27th, [moonrise to sunrise:] 19° [...]
+
+@(o ii 7) Month VIII, [...]
+ 

@@ -1,0 +1,51 @@
+&X600134 = ADART 6 132
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢AN ana ŠÚ ki⸣ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; u
+
+2'. [...] ⸢x⸣ GE₆ 2 USAN A[N ...]
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+3'. [...] AN SIG MÚL-IGI-šá-SAG-[HUN n n ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n; u
+
+4'. [... SIG M]ÚL-ár-šá-SAG-HUN 4 KÙŠ x x [...]
+#lem: u; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; u; u; u
+
+5'. [... SIG] MÚL.MÚL 1 KÙŠ GE₆ 22 USAN AN e is-l[e₁₀ n n ...]
+#lem: u; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; u
+
+6'. [...] GE₆ 12 USAN AN SIG ŠUR-GIGIR-šá-SI 1 1/2 KÙŠ [...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; n; ammatu[unit]N; u
+
+7'. [... US]AN AN e ŠUR-GIGIR-šá-ULÙ 2 1/2 KÙŠ ŠE DIR
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n; ammatu[unit]N; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+8'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] when Mars [became stationary] to the west, [...]
+
+@(o 2) [...] ... Night of the 2nd, first part of the night, Mars [...]
+
+@(o 3) [...] Mars was [...] below β Arietis [...]
+
+@(o 4) [...] 4 cubits [below] α Arietis ... [...]
+
+@(o 5) [...] 1 cubit [below] η Tauri. Night of the 22nd, first part of the night, Mars was [...] above α Tauri [...]
+
+@(o 6) [...] Night of the 12th, first part of the night, Mars was 1 1/2 cubits below β Tauri [...]
+
+@(o 7) [... first] part of the night, Mars was 2 1/2 cubits above ζ Tauri. Month XII was intercalary.
+
+$ ruling
+
+@(o 8) [...] ... [...]

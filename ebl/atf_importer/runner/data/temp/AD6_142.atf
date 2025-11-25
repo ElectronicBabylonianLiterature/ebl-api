@@ -1,0 +1,91 @@
+&X600144 = ADART 6 142
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. 15 12 GE₆? [...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+3'. 27 14.50 muš
+#lem: n; n; mašāhu[measure]V
+
+4'. ⸢GAN⸣ 30 11.20 a NU IGI
+#lem: Kislīmu[Month IX]MN; n; n; akamu[mist]N; ul[not]MOD; amāru[see]V
+
+5'. [1]3? 12.40 ŠÚ NU PAP
+#lem: n; n; rabû[moonset to sunrise]V; ul[not]MOD; naṣāru[watch]V
+
+6'. [x x]+3 ME muš
+#lem: u; u; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+7'. [x x]+10 na DIR NU PAP
+#lem: u; u; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+8'. [x x] GE₆ DIR NU PAP
+#lem: u; u; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+9'. [x x DI]R NU PAP
+#lem: u; u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+@column 2
+1'. 10+[x ...]
+#lem: n; u
+
+2'. x [...]
+#lem: u; u
+
+3'. 14 [...]
+#lem: n; u
+
+4'. 15 [...]
+#lem: n; u
+
+5'. 15 [...]
+#lem: n; u
+
+6'. 16 [...]
+#lem: n; u
+
+7'. 23+[x ...]
+#lem: n; u
+
+@translation labeled en project
+
+@(o i 1) [...] ... [...]
+
+@(o i 2) The 15th, sunset to moonrise: 12° [...]
+
+@(o i 3) The 27th, (moonrise to sunrise:) 14° 50’, measured 
+
+@(o i 4) Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 11° 20'; mist, I did not see (the moon).
+
+@(o i 5) [The 1]3th?, moonset to sunrise: 12° 40'; I did not watch.
+
+@(o i 6) [The xth,] moonrise to sunset: [x]+3°, measured.
+
+@(o i 7) [The xth,] sunrise to moonset: [x]+10'; clouds, I did not watch.
+
+@(o i 8) [The xth,] sunset to moonrise: [...]; clouds, I did not watch.
+
+@(o i 9) [The xth,] (moonrise to sunrise:) [...; clou]ds, I did not watch.
+
+@(o ii 1) 10+[x ...]
+
+@(o ii 2) ... [...]
+
+@(o ii 3) The 14th, [...]
+
+@(o ii 4) The 15th, [...]
+
+@(o ii 5) The 15th, [...]
+
+@(o ii 6) The 16th, [...]
+
+@(o ii 7) The 23+[xth, ...]
+ 

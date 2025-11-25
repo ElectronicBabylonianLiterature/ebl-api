@@ -1,0 +1,48 @@
+&X600135 = ADART 6 133
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢dele-bat?⸣ [...]
+#lem: u; Dilbat[Venus]CN; u
+
+2'. [...] šá? KA? x [...]
+#lem: u; u; u; u; u
+
+3'. [...] ina x ŠÚ x x [...]
+#lem: u; ina[in]PRP; u; rabû[set]V; u; u; u
+
+4'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+5'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+6'. [...] 17? GU₄.UD x x [...]
+#lem: u; n; Šihṭu[Mercury]CN; u; u; u
+
+7'. [...] ⸢x GU₄.UD x⸣ [...]
+#lem: u; u; Šihṭu[Mercury]CN; u; u
+
+8'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] Venus? [...]
+
+@(o 2) [...] ... [...]
+
+@(o 3) [...] last appearance in ... [...]
+
+@(o 4) [...] ... [...]
+
+@(o 5) [...] ... [...]
+
+@(o 6) [...] the 17th?, Mercury ... [...]
+
+@(o 7) [...] ... Mercury ... [...]
+
+@(o 8) [...] ... [...]

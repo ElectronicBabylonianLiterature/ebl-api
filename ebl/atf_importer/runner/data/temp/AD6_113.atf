@@ -1,0 +1,70 @@
+&X600115 = ADART 6 113
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [... m]uš
+#lem: u; mašāhu[measure]V
+
+3'. [... D]IR NU PAP
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+4'. [...] ⸢x⸣ muš
+#lem: u; u; mašāhu[measure]V
+
+@column 2
+1'. 13 20+[x] ⸢NINDA ME⸣ 
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; ūmu[moonrise to sunset]N
+
+2'. 13 3 na ⸢a?-kam⸣ [...] 
+#lem: n; n; na[sunrise to moonset]N; akamu[mist]N; u
+
+3'. 14 11 GE₆ a-[kam ...] 
+#lem: n; n; mūšu[sunset to moonrise]N; akamu[mist]N; u
+
+4'. 27 18.50 KUR ⸢x⸣ [...]
+#lem: n; n; KUR[moonrise to sunrise]N; u; u
+
+5'. KIN 30 13 na-su ⸢x x⸣
+#lem: Ulūlu[Month VI]MN; n; n; na₁[sunset to moonset]N; u; u
+
+6'. 13 3?.40? ME [...] 
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+7'. 13 4.20 ŠÚ [...] 
+#lem: n; n; rabû[moonset to sunrise]'N; u
+
+8'. [14 x] ⸢x⸣ ⸢GE₆⸣ [...] 
+#lem: n; u; u; mūšu[sunset to moonrise]N; u
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] measured.
+
+@(o i 3) [...] clouds, I did not watch.
+
+@(o i 4) [...] ..., measured.
+
+@(o ii 1) The 13th, moonrise to sunset: 20+[x]'.
+
+@(o ii 2) The 13th, sunrise to moonset: 3°; [measured (despite)] mist.
+
+@(o ii 3) The 14th, sunset to moonrise: 11°; [measured (despite)] mist.
+
+@(o ii 4) The 27th, moonrise to sunrise: 18° 50'; ... [...]
+
+@(o ii 5) Month VI, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 13°; ... [...]
+
+@(o ii 6) The 13th, moonrise to sunset: 3°? 40'? [...]
+
+@(o ii 7) The 13th, moonset to sunrise: 4° 20' [...]
+
+@(o ii 8) [The 14th,] sunset to moonrise: x° [...]

@@ -1,0 +1,72 @@
+&X600108 = ADART 6 106
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢is?⸣-le₁₀ ⸢x⸣ [...]
+#lem: u; is-le₁₀[α Tauri]CN; u; u
+
+2'. [...] ŠUR-GIGIR-šá-SI 1 KÙŠ 4? [SI ...]
+#lem: u; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; n; ubānu[finger]N; u
+
+3'. [... K]ÙŠ GE₆ 14 USAN e? [...]
+#lem: u; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; eli[above]PRP; u
+
+@reverse 
+@column 1
+1'. [...] ⸢x⸣ IGI? muš?
+#lem: u; u; u; mašāhu[measure]V
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. KIN 1 17? ⸢x x x⸣
+#lem: Ulūlu[Month VI]MN; n; n; u; u; u
+
+2'. 12 7 ŠÚ a muš
+#lem: n; n; rabû[moonset to sunrise]'N; akamu[mist]N; mašāhu[measure]V
+
+3'. 13 6.30 ME muš
+#lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+4'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@column 3
+1'. AB [...]
+#lem: Ṭebētu[Month X]MN; u
+
+2'. 12 [...]
+#lem: n; u
+
+3'. 12 [...]
+#lem: n; u
+
+@translation labeled en project
+
+@(o 1) [...] α Tauri ... [...]
+
+@(o 2) [...] 1 cubit 4? [fingers ...] β Tauri. [...]
+
+@(o 3) [... cu]bits. Night of the 14th, first part of the night, above? [...]
+
+@(r i 1) [...] ..., measured.
+
+@(r i 2) [...] ...
+
+@(r ii 1) Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°, ...
+
+@(r ii 2) The 12th, moonset to sunrise: 7°, measured (despite) mist.
+
+@(r ii 3) The 13th, moonrise to sunset: 6° 30', measured.
+
+@(r ii 4) [...] ... [...]
+
+@(r iii 1) Month X, [...]
+
+@(r iii 2) The 12th, [...]
+
+@(r iii 3) The 12th, [...]

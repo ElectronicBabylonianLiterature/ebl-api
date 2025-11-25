@@ -1,0 +1,48 @@
+&X600148 = ADART 6 146
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [x x x] ⸢x⸣
+#lem: u; u; u; u; u; u
+
+2'. [...] GU₄ GE₆ 5 ina ZALÁG [dele-b]at? ⸢x⸣
+#lem: u; Ayyaru[Month II]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; u
+
+3'. [...] SIG MÚL.MÚL 2+[x KÙŠ]
+#lem: u; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N
+
+4'. [...] dele-bat e ŠUR-GIGIR-[šá-ULÙ] 4 SI
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ubānu[finger]N
+
+5'. [... x]+1 SI {ITU}ŠU GE₆ [x] dele-bat
+#lem: u; u; ubānu[finger]N; Duʾūzu[Month IV]MN; mūšu[night]N; u; Dilbat[Venus]CN
+
+6'. [... dele-bat SIG MAŠ].MAŠ-ár 3 1/2 KÙŠ G[E₆ x x x] ⸢x⸣
+#lem: u; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N; mūšu[night]N; u; u; u; u
+
+7'. [...] dele-bat e LUGAL 1 [x dele-bat x] ⸢x⸣ ana ŠÚ LAL
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; u; Dilbat[Venus]CN; u; u; ana[to]PRP; erbu[west]N; nahāsu[recede]V
+
+8'. [...] A? šá ⸢x⸣ [x x x] ⸢x⸣
+#lem: u; u; u; u; u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...] ... [...]
+
+@(o 2) [...] Month II, night of the 5th, last part of the night, [Venu]s was ...
+
+@(o 3) [...] 2+[x cubits] below η Tauri.
+
+@(o 4) [...] Venus was 4 fingers above [ζ] Tauri.
+
+@(o 5) [... x]+1 fingers. Month IV, night [of the xth,] Venus was
+
+@(o 6) [... Venus was] 3 1/2 cubits [below] β Geminorum. Ni[ght of the xth, ...] ...
+
+@(o 7) [...] Venus was 1 [M] above α Leonis, [Venus being] ... back to the west.
+
+@(o 8) [...] ... [...] ...

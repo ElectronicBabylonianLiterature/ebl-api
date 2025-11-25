@@ -1,0 +1,57 @@
+&X600147 = ADART 6 145
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ in [...]
+#lem: u; u; ina[on]PRP; u
+
+2'. [...] UD.DA ŠÚ-šú DIB [...]
+#lem: u; u; rabû[setting]'N; etēqu[omit]V; u
+
+3'. [... x]+6 ina ZALÁG GU₄.UD SIG [...]
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Šihṭu[Mercury]CN; šapil[below]'PRP; u
+
+4'. [... x]+4 ina ZALÁG GU₄.UD e [...]
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; u
+
+5'. [... na-s]u in 25 IGI ZÍZ in [...]
+#lem: u; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; Šabāṭu[Month XI]MN; ina[around (day x)]PRP; u
+
+6'. [...] ⸢x⸣ DIR.ŠE in 8 GU₄.UD [...]
+#lem: u; u; Addaru_Šanû[(Intercalary) Month XII₂]MN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; u
+
+$ ruling
+7'. [...] GU₄ U₄ ⸢x⸣ GENNA ana ŠÚ ki x [...]
+#lem: u; Ayyaru[Month II]MN; ūmu[day]N; u; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; u; u
+
+8'. [...] x GENNA? i[n? ...]
+#lem: u; u; Kayyamānu[Saturn]CN; u; u
+
+9'. [...] ⸢x⸣ IGI KUR [...]
+#lem: u; u; nanmuru[be(come) visible]V; baʾil[bright]AJ; u
+
+@translation labeled en project
+
+@(o 1) [...] ... on [...]
+
+@(o 2) [... Mercury’s] last appearance [...] ..., omitted [...]
+
+@(o 3) [... The x]+6th, last part of the night, Mercury was [...] below [...]
+
+@(o 4) [... The x]+4th, last part of the night, Mercury was [...] above [...]
+
+@(o 5) [...] of Mercury to [...]; (ideal) first appearance on the 25th. Month XI, around the [...]
+
+@(o 6) [...] ... Month XII₂, around the 8th, Mercury’s [...]
+
+$ ruling
+
+@(o 7) [...] Month II, day ..., when Saturn [became stationary] to the west, [...]
+
+@(o 8) [...] ... Saturn ... [...]
+
+@(o 9) [... Saturn’s] first appearance [in] ...; it was bright, [...]
+ 

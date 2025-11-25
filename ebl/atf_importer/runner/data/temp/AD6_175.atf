@@ -1,0 +1,72 @@
+&X600177 = ADART 6 175
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+$ ruling
+2'. [... G]U₄ 1 8 na dele-bat in [...]
+#lem: u; Ayyaru[Month II]MN; n; n; na[sunset to setting]N; Dilbat[Venus]CN; ina[around (day x)]PRP; u
+
+3'. [...] KUR N[IM]-⸢a⸣ 9.30 na-⸢su⸣ [...]
+#lem: u; baʾil[bright]AJ; šaqâ[high]AJ; n; na[rising to sunrise]N; u
+
+4'. [...] ⸢x⸣ GE₆ 5 ina ZÁLAG dele-bat S[IG ...]
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; u
+
+5'. [... MÚL-x-šá]-še-pít-MAŠ.MAŠ 1 KÙŠ [...]
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; ammatu[unit]N; u
+
+6'. [...] ina ZÁLAG dele-bat SIG MAŠ.MAŠ-[x ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-x[(x) Geminorum]CN; u
+
+7'. [...] dele-bat [x] MÚL-ár-šá-[ALLA-šá-x ...]
+#lem: u; Dilbat[Venus]CN; u; MÚL-ár-šá-ALLA-šá-x[γ/δ Cancri]CN; u
+
+@reverse
+1'. [... m]uš
+#lem: u; mašāhu[measure]V
+
+2'. [... G]E₆
+#lem: u; mūšu[sunset to moonrise]N
+
+3'. 27 19 KUR muš
+#lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+4'. DU₆? 1 9 na-su
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N
+
+5'. SIG muš ana šámaš SIG
+#lem: šapil[faint]AJ; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+$ ruling
+
+@(o 2) [... Mo]nth II, the 1st, sunset to setting of Venus: 8°. Around [the xth, ...]
+
+@(o 3) [...] it was bright (and) high, rising of Venus to sunrise: 9° 30' [...]
+
+@(o 4) [...] ... Night of the 5th, last part of the night, Venus was [...] be[low ...]
+
+@(o 5) [...] 1 cubit [... η/μ] Geminorum. [...]
+
+@(o 6) [...] last part of the night, Venus was [...] below [α/β] Geminorum [...]
+
+@(o 7) [...] Venus was [... γ/δ] Cancri [...]
+
+@(r 1) [... mea]sured.
+
+@(r 2) [..., sunset] to moonrise: [...]
+
+@(r 3) The 27th, moonrise to sunrise: 19°; measured.
+
+@(r 4) Month VII?, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 9°;
+
+@(r 5) it was faint, measured; it was low to the sun.

@@ -1,0 +1,124 @@
+&X600133 = ADART 6 131
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] NE 20+[x ...]
+#lem: u; Abu[Month V]MN; n; u
+
+2'. [...] ŠE DIR
+#lem: u; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+3'. [... SIG ŠUR-GIGIR]-šá!-SI 2 KÙŠ GE₆ 14 USAN dele-bat e ŠUR-GIGIR-šá-U[LÙ x] KÙŠ
+#lem: u; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u; ammatu[unit]N
+
+4'. [...] dele-bat e MÚL-ár-šá-še-pít-MAŠ.MAŠ 1 KÙŠ GE₆ 26
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n
+
+5'. [... SIG MAŠ.MA]Š-IGI 3 KÙŠ GE₆ 10 USAN dele-bat SIG MAŠ.MAŠ-ár 2 KÙŠ
+#lem: u; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N
+
+6'. [... SIG S]AG-A 3 KÙŠ GE₆ 11 USAN dele-bat
+#lem: u; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+7'. [... US]AN dele-bat SIG GIŠ.KUN-A 4 [KÙŠ]
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N
+
+8'. [... GE₆ x]+3 USAN dele-bat ⸢x⸣ [x]
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Dilbat[Venus]CN; u; u
+
+9'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+$ broken
+@column 3
+1'. [...] ⸢x⸣
+#lem: u; u
+
+@column 4
+1'. [...] ⸢x x⸣ [...] 
+#lem: u; u; u; u
+
+2'. [...] i-ṣa ana šamáš ⸢NIM⸣ 
+#lem: u; wīṣu[little]AJ; ana[to]PRP; šamšu[sun]N; šaqi[high]AJ
+
+3'. [14 x]+11 ME DIR muš 
+#lem: n; u; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+4'. [14 x] ŠÚ DIR muš
+#lem: n; u; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
+
+5'. [15] 4 GE₆ DIR muš 
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+6'. 15 9 na DIR muš 
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+7'. 27 15 KUR DIR muš
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+8'. DIR.ŠE 30 14 na-su DIR muš
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; na₁[sunset to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+9'. [...] ⸢x x x x⸣
+#lem: u; u; u; u; u
+
+
+@translation labeled en project
+
+@(o 1) [...] Month V, the 20+[xth, ...]
+
+@(o 2) [...] Month XII was intercalary.
+
+$ ruling
+
+@(o 3) [...] 2 cubits [below] β Tauri. Night of the 14th, first part of the night, Venus was [x] cubits above ζ Tauri.
+
+@(o 4) [...] Venus was 1 cubit above μ Geminorum. Night of the 26th,
+
+@(o 5) [...] 3 cubits [below α] Geminorum. Night of the 10th, first part of the night, Venus was 2 cubits below β Geminorum.
+
+@(o 6) [...] 3 cubits [below] ε Leonis. Night of the 11th, first part of the night, Venus was
+
+@(o 7) [... first] part of the night, Venus was 4 [cubits] below θ Leonis.
+
+@(o 8) [... night of the x]+3rd, first part of the night, Venus was ... [...]
+
+@(o 9) [...] ... [...]
+
+@reverse
+
+@column 1
+
+$ broken
+
+@column 2
+
+$ broken
+
+@(r iii 1) [...] ...
+
+@(r iv 1) [...] ... [...]
+
+@(r iv 2) [...] it was a little high to the sun.
+
+@(r iv 3) [The 14th,] moonrise to sunset: [x]+11°; measured (despite) clouds. 
+
+@(r iv 4) [The 14th,] moonset to sunrise: [x°;] measured (despite) clouds. 
+
+@(r iv 5) [The 15th,] sunset to moonrise: 4°; measured (despite) clouds.
+
+@(r iv 6) The 15th, sunrise to moonset: 9°; measured (despite) clouds. 
+
+@(r iv 7) The 27th, moonrise to sunrise: 15°; measured (despite) clouds. 
+
+@(r iv 8) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 14°; measured (despite) clouds.
+
+@(r iv 9) [...] ...

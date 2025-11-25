@@ -1,0 +1,45 @@
+&X600095 = ADART 6 94
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. MU 2 ME 9.KAM BAR GE₆ [x] U[SAN ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; mūšu[night]N; u; šimītān[first part of the night]N; u
+
+2'. šá GU₄.UD ina ŠÚ ina MÚL.MÚL TA ⸢10⸣ k[i PAP NU IGI ...]
+#lem: ša[which]REL; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zappu[Taurus]CN; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u
+
+3'. [x x n]a-su in 20 IGI? SIG ⸢5?⸣ [...]
+#lem: u; u; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; Simānu[Month III]MN; n; u
+
+4'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@reverse
+1'. [x] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. ZÍZ 2 AN ana ME E-a G[E₆ ...]
+#lem: Šabāṭu[Month XI]MN; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; mūšu[night]N; u
+
+3'. ŠE 10 ina 15 A U[Š ...]
+#lem: Addaru[Month XII]MN; n; ina[on]PRP; imittu[right side]N; Nēšu[Leo]CN; nenmudu[be at a stationary point]V; u
+
+
+@translation labeled en project
+
+@(o 1) Year 209, month I, night of [the xth,] first [part of the night, ...]
+
+@(o 2) Mercury’s [last appearance] in the west in Taurus: from the 10th, wh[en I watched I did not see it ...]
+
+@(o 3) rising of Mercury to sunrise: [...]; (ideal) first appearance on the 20th. Month III, the 5th?, [...]
+
+@(o 4) [...] ... [...]
+
+@(r 1) [...] ... [...]
+
+@(r 2) Month XI, the 2nd, Mars’ acronychal rising. Ni[ght ...]
+
+@(r 3) Month XII, the 10th, it became stationary on the right side of Leo [...]

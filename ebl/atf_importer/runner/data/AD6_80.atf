@@ -1,0 +1,61 @@
+&X600081 = ADART 6 80
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy 
+@obverse
+1'. [...] na ⸢dele⸣-b[at? ...]
+#lem: u; na[sunset to setting]N; Dilbat[Venus]CN; u
+
+2'. [... dele-bat SIG SAG]-A 5 KÙŠ GE₆ 17 ina ⸢ZÁLAG dele⸣-b[at x LUGAL ...]
+#lem: u; Dilbat[Venus]CN; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; u; LUGAL[α Leonis]CN; u
+
+3'. [... MÚL-TUR-šá-4-KÙŠ-ár-LUG]AL? 3? SI KIN.II.KAM GE₆ 2 ina [ZÁLAG dele-bat SIG GIŠ.KUN-A ...]
+#lem: u; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ubānu[finger]N; Ulūlu-Šanû[Month VIb]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; u
+
+4'. [...] ⸢x dele-bat⸣ 2 SI ana NIM DIB GE₆ 10+[x ...]
+#lem: u; u; Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; mūšu[night]N; n; u
+
+5'. [...] ⸢x KÙŠ⸣ GE₆ 21? ina ZÁLAG dele-bat e RÍN-šá-[ULÙ ...]
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; u
+
+6'. [...] ⸢e⸣ MÚL-e-šá-SAG-GÍR.TAB 5 SI G[E₆ ...]
+#lem: u; eli[above]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; ubānu[finger]N; mūšu[night]N; u
+
+7'. [... e MÚL-KUR-šá-KIR₄-šil-P]A 1 KÙŠ GAN 27 9 na dele-bat i[n x dele-bat ina NIM ina MÁŠ ŠÚ ...]
+#lem: u; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Kislīmu[Month IX]MN; n; n; na[rising to sunrise]N; Dilbat[Venus]CN; ina[around (day x)]PRP; u; Dilbat[Venus]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; u
+
+8'. [...] ⸢x x⸣
+#lem: u; u; u
+
+$ ruling
+9'. [...] ⸢x x⸣ USAN [...]
+#lem: u; u; u; šimītān[first part of the night]N; u
+
+10'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] sunset to setting of Venus [...]
+
+@(o 2) [... Venus was] 5 cubits [below ε] Leonis. Night of the 17th, last part of the night, Venus [was ... α Leonis ...]
+
+@(o 3) [...] 3? fingers [... ϱ Leoni]s. Month VI₂, night of the 2nd, last [part of the night, Venus was ... below θ Leonis ...]
+
+@(o 4) [...] ..., Venus having passed 2 fingers to the east. Night of the 10+[xth, ...]
+
+@(o 5) [...] ... cubits. Night of the 21st?, last part of the night, Venus was [...] above α Lib[rae ...]
+
+@(o 6) [...] 5 fingers above β Scorpii. Ni[ght ...]
+
+@(o 7) [...] 1 cubit [above θ Ophiu]chi. Month IX, the 27th, rising of Venus to sunrise: 9°. Ar[ound the xth, Venus’ last appearance in the east in Capricorn ...]
+
+@(o 8) [...] ...
+
+$ ruling
+
+@(o 9) [...] ..., first part of the night, [...]
+
+@(o 10) [...] ... [...]

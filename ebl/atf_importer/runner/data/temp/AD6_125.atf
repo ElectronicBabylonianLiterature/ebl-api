@@ -1,0 +1,127 @@
+&X600127 = ADART 6 125
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢x⸣
+#lem: u; u
+
+3'. [...] ⸢x⸣
+#lem: u; u
+
+4'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. DIR KALAG NU IGI
+#lem: erpetu[cloud]N; dannu[dense]AJ; ul[not]MOD; amāru[see]V
+
+2'. 13 20 NINDA ŠÚ
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; rabû[moonset to sunrise]'N
+
+3'. 14 7.30 ME NU PAP
+#lem: n; n; ūmu[moonrise to sunset]N; ul[not]MOD; naṣāru[watch]V
+
+4'. 14 11.50 na NU PAP
+#lem: n; n; na[sunrise to moonset]N; ul[not]MOD; naṣāru[watch]V
+
+5'. 15 10.40 GE₆ NU PAP
+#lem: n; n; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V
+
+6'. 26 11 KUR
+#lem: n; n; KUR[moonrise to sunrise]N
+
+@column 3
+1'. 14 [...]
+#lem: n; u
+
+2'. 14 ⸢x⸣ [...]
+#lem: n; u; u
+
+3'. 15 1 ⸢x⸣ [...] 
+#lem: n; n; u; u
+
+4'. 26 13 KUR
+#lem: n; n; KUR[moonrise to sunrise]N
+
+5'. DIR.ŠE 30 12.30
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n
+
+6'. 13 10.30 ŠÚ NU PAP
+#lem: n; n; rabû[moonset to sunrise]V; ul[not]MOD; naṣāru[watch]V
+
+7'. 14 1.30 ⸢na NU PAP⸣
+#lem: n; n; na[sunrise to moonset]N; ul[not]MOD; naṣāru[watch]V
+
+8'. 15 5 M[E ...]
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+9'. 16 11+[x GE₆ ...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+10'. 26? [...]
+#lem: n; u
+
+@column 4
+1'. 14 ⸢x⸣ [...] 
+#lem: n; u; u
+
+2'. 15 15.20 [...] 
+#lem: n; n; u
+
+3'. 15 6+[x ...] 
+#lem: n; n; u
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] ...
+
+@(o i 3) [...] ...
+
+@(o i 4) [...] ...
+
+@(o ii 1) dense clouds, I did not see (the moon).
+
+@(o ii 2) The 13th, moonset to sunrise: 20'.
+
+@(o ii 3) The 14th, moonrise to sunset: 7° 30'; I did not watch. 
+
+@(o ii 4) The 14th, sunrise to moonset: 11° 50'; I did not watch. 
+
+@(o ii 5) The 15th, sunset to moonrise: 10° 40'; I did not watch. 
+
+@(o ii 6) The 26th, moonrise to sunrise: 11°.
+
+@(o iii 1) The 14th, [moonrise to sunset: ...]
+
+@(o iii 2) The 14th, [sunrise to moonset:] ... [...]
+
+@(o iii 3) The 15th, [sunset to moonrise:] 1° ... [...]
+
+@(o iii 4) The 26th, moonrise to sunrise: 13°.
+
+@(o iii 5) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 30'.
+
+@(o iii 6) The 13th, moonset to sunrise: 10° 30'; I did not watch. 
+
+@(o iii 7) The 14th, sunrise to moonset: 1° 30'; I did not watch. 
+
+@(o iii 8) The 15th, moonrise to sunset: 5° [...]
+
+@(o iii 9) The 16th, [sunset to moonrise:] 11+[x° ...]
+
+@(o iii 10) The 26th?, [...]
+
+@(o iv 1) The 14th, [...] ... [...]
+
+@(o iv 2) The 15th, [...] 15° 20' [...]
+
+@(o iv 3) The 15th, [...] 6+[x° ...]

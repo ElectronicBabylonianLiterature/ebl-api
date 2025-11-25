@@ -1,0 +1,28 @@
+&X600114 = ADART 6 112
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@reverse
+1'. [... G]E₆ 6 USAN GU₄.UD e is-le₁₀ 4 K[ÙŠ ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; u
+
+2'. [...] e is-le₁₀ 3 KÙŠ GE₆ 15 ina ZÁLAG ⸢x⸣ [...]
+#lem: u; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u; u
+
+3'. [... x]+13 GU₄.UD ina ŠÚ ina PA I[GI? ...]
+#lem: u; u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Pabilsag[Sagittarius]CN; nanmuru[be(come) visible]V; u
+
+4'. [...] ⸢x⸣ 1 KÙŠ [...]
+#lem: u; u; n; ammatu[unit]N; u
+
+@translation labeled en project
+
+@(r 1) [...] night of the 6th, first part of the night, Mercury was 4 cubits above α Tauri [...]
+
+@(r 2) [...] 3 cubits above α Tauri. Night of the 15th, last part of the night, ... [...]
+
+@(r 3) [... x]+13th, Mercury’s first? appearance in the west in Sagittarius [...]
+
+@(r 4) [...] ... 1 cubit [...]

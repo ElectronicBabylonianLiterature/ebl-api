@@ -1,0 +1,93 @@
+&X600153 = ADART 6 151
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x x x-IGI?-šá-še-pít-MAŠ⸣.[MAŠ ...]
+#lem: u; u; u; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN$; u
+
+$ ruling
+3'. [... x]+3 GENNA e MÚL-IGI-šá-še-pít-MAŠ.MAŠ [...]
+#lem: u; u; Kayyamānu[Saturn]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; u
+
+4'. [... n]a-su in 5 IGI GE₆ 10+⸢x x x⸣ [...]
+#lem: u; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; mūšu[night]N; n; u; u; u
+
+5'. [...] in? 25? GENNA ana ME E-a GAN? x [...]
+#lem: u; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Kislīmu[Month IX]MN; u; u
+
+6'. [... x]+⸢8?⸣ USAN GENNA e MAŠ.MAŠ-šá-SIPA [...]
+#lem: u; u; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; u
+
+7'. [...] ($ruling$) 5 KÙŠ ana ULÙ? [...]
+#lem: u; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; u
+
+8'. [... A]N? 1 KÙŠ ina IGI MAŠ.MAŠ-IGI IGI ⸢KUR? NIM?-a?⸣ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ina[in]PRP; pānu[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ; u
+
+9'. [... R]ÍN-šá-ULÙ 3 SI ár GENNA ana NIM ⸢GUB⸣ U[Š ...]
+#lem: u; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N; warki[behind]PRP; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; nenmudu[be at a stationary point]V; u
+
+$ ruling
+10'. [... ana] ⸢ŠÚ?⸣ ki UŠ-a 2/3 KÙŠ ár SA₄ ⸢x⸣ [...] 
+#lem: u; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; u; u
+
+$ ruling
+11'. [... LUGAL?]{MEŠ} SIG? GE₆ 22 ina ZÁLAG AN SIG MAŠ.MAŠ-I[GI] ⸢4?⸣ [KÙŠ ...]
+#lem: u; šarrāni[king]N; Simānu[Month III]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; u
+
+12'. [... MÚL-x-šá-ALLA]-⸢šá⸣-ULÙ 10 SI NE GE₆ 8 ina ZÁLAG AN [...]
+#lem: u;  MÚL-x-šá-ALLA-šá-ULÙ[θ/δ Cancri]CN; n; ubānu[finger]N; Abu[Month V]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+13'. [... MÚL]-TUR-šá-4-KÙŠ-ár-LUGAL 10? [...]
+#lem: u; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; u
+
+14'. [...] GE₆ 2 ina ZÁLAG AN [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+15'. [... U]SAN AN [...]
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ... η? Geminorum [...]
+
+$ ruling
+
+@(o 3) [... the x]+3rd, Saturn was [...] above η Geminorum [...]
+
+@(o 4) [...] rising of Saturn to sunrise: [...]; (ideal) first appearance on the 5th. Night of the 10+xth, ... [...]
+
+@(o 5) [...] Around? the 25th?, Saturn’s acronychal rising. Month IX?, ... [...]
+
+@(o 6) [... night of the x]+8th?, first part of the night, Saturn was [...] above γ Geminorum, [...]
+
+@(o 7) [...] ————————— 5 cubits [low] to the south [...]
+
+@(o 8) [...] Mars’ first appearance 1? cubit in front of α Geminorum; it was bright? (and) high?, [...]
+
+@(o 9) [...] it became sta[tionary ...] α Librae, it stood 3 fingers behind Saturn to the east [...]
+
+$ ruling
+
+@(o 10) [...] when [Mars] became stationary [to the we]st?, [it became stationary] 2/3 cubit behind α [Virginis].
+
+$ ruling
+
+@(o 11) [Year ..., king]s [...] Month III?, night of the 22nd, last part of the night, Mars was 4? cubits below α Geminorum. [...]
+
+@(o 12) [...] 10 fingers [...] Cancri. Month V, night of the 8th, last part of the night, Mars [...]
+
+@(o 13) [...] 10? [fingers ...] ϱ Leonis [...]
+
+@(o 14) [...] night of the 2nd, last part of the night, Mars was [...]
+
+@(o 15) [... fir]st part of the night, Mars was [...]
+ 

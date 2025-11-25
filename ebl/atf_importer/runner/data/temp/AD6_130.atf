@@ -1,0 +1,204 @@
+&X600132 = ADART 6 130
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... x]+12 GENNA ⸢x⸣ [...]
+#lem: u; u; Kayyamānu[Saturn]CN; u; u
+
+2'. [... ina SA]G? GÍR.TAB ŠÚ APIN 10 GENNA ina GÍR.TAB 2/3 [KÙŠ ... IGI ...]
+#lem: u; ina[in]PRP; rēšu[beginning]N; Zuqiqīpu[Scorpio]CN; rabû[set]V; Arahsamna[Month VIII]MN; n; Kayyamānu[Saturn]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; n; ammatu[unit]N; u; nanmuru[be(come) visible]V; u
+
+3'. [... e] SI₄ 3 KÙŠ ŠE in EN 8 GENNA ana NIM ki U[Š-ú ...]
+#lem: u; eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Addaru[Month XII]MN; ina[around (day x)]PRP; adi[until]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+$ ruling
+4'. [... ina SA]G? MAŠ.MAŠ 2 1/2 KÙŠ ár ŠUR-GIGIR-šá-SI 2 KÙŠ ana ULÙ SIG I[GI ...]
+#lem: u; ina[in]PRP; rēšu[beginning]N; Māšu[Gemini]CN; n; n; ammatu[unit]N; warki[behind]PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; nanmuru[be(come) visible]V; u
+
+5'. [... k]i UŠ-ú 3 KÙŠ ár DELE-šá-IGI-ABSIN UŠ ZÍZ in 18 AN ana ME [E-a ...]
+#lem: u; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; nenmudu[be at a stationary point]V; Šabāṭu[Month XI]MN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u
+
+6'. [... GÌR]-ár-šá-A UŠ NU PAP
+#lem: u; GÌR-ár-šá-A[β Virginis]CN; nenmudu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V
+
+$ ruling
+7'. [...] MÚL-IGI-šá-še-pít-MAŠ.MAŠ 2 SI šá šu-ut KA GE₆ 24 ina ZÁLAG AN ⸢x⸣ [...]
+#lem: u; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ubānu[finger]N; ša[that]REL; šūt[of]DET; pû[mouth]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; u; u
+
+8'. [...] ⸢šu-ut KA⸣ SIG GE₆ 16 ina ZÁLAG AN SIG MAŠ.MAŠ-IGI 4 KÙŠ [...]
+#lem: u; šūt[of]DET; pû[mouth]N; Simānu[Month III]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+1'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+2'. [...] muš
+#lem: u; mašāhu[measure]V
+
+3'. [... D]IR muš
+#lem: u; erpetu[cloud]N; mašāhu[measure]V
+
+4'. [... D]IR muš
+#lem: u; erpetu[cloud]N; mašāhu[measure]V
+
+5'. [... DI]R muš
+#lem: u; erpetu[cloud]N; mašāhu[measure]V
+
+6'. [... D]IR NU PAP
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+7'. [... DI]R muš
+#lem: u; erpetu[cloud]N; mašāhu[measure]V
+
+8'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+@column 3
+1'. [N]E 1 17 KUR₄ x [...]
+#lem: Abu[Month V]MN; n; n; baʾil[bright]AJ; u; u
+
+2'. 12 3 [...] 
+#lem: n; n; u
+
+3'. [13] [x]+6 ME m[uš] 
+#lem: n; u; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+4'. 13 ⸢x⸣ na muš
+#lem: n; u; na[sunrise to moonset]N; mašāhu[measure]V
+
+5'. 14 3 GE₆ NU PA[P] 
+#lem: n; n; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V
+
+6'. 27 8.30 KUR a-ka[m x]
+#lem: n; n; KUR[moonrise to sunrise]N; akamu[mist]N; u
+
+7'. KIN 30 12+[x] KUR₄ muš ana šamáš ⸢SIG⸣
+#lem: Ulūlu[Month VI]MN; n; n; baʾil[bright]AJ; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+8'. 12 11.30 ŠÚ muš 
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+9'. 13 1.10 ⸢na⸣ a-kam muš 
+#lem: n; n; na[sunrise to moonset]N; akamu[mist]N; mašāhu[measure]V
+
+10'. 14 ⸢2⸣ ⸢ME a⸣-kam muš 
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+11'. 15 7 GE₆ 
+#lem: n; n; mūšu[sunset to moonrise]N
+
+12'. 27 16 KUR muš
+#lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+13'. [DU₆] ⸢30⸣ [x]+10.40 DIR ⸢x⸣
+#lem: Tašrītu[Month VII]MN; n; u; erpetu[cloud]N; u
+
+@column 4
+1'. AB [...]
+#lem: Ṭebētu[Month X]MN; u
+
+2'. ⸢15?⸣ [...]
+#lem: n; u
+
+3'. ⸢15?⸣ [...]
+#lem: n; u
+
+4'. 10+[x ...]
+#lem: n; u
+
+5'. 10+[x ...]
+#lem: n; u
+
+6'. 10+[x ...]
+#lem: n; u
+
+@translation labeled en project
+
+
+@(o 1) [... the x]+12th, Saturn’s ... [...]
+
+@(o 2) [...] last appearance [in the beginn]ing? of Scorpius. Month VIII, the 10th, Saturn’s [first appearance] in Scorpius, 2/3 [cubit ...]
+
+@(o 3) [...] 3 cubits [above] α Scorpii. Month XII, around until the 8th, when Saturn became stationary to the east, [...]
+
+$ ruling
+
+@(o 4) [... first appea]rance [in the beginn]ing? of Gemini, 2 1/2 cubits behind β Tauri, 2 cubits low to the south [...]
+
+@(o 5) [...] when [Mars] became stationary [to the east,] it became stationary 3 cubits behind γ Virginis. Month XI, around the 18th, Mars’ acronychal rising [...]
+
+@(o 6) [...] it became stationary [...] β Virginis; I did not watch.
+
+$ ruling
+
+@(o 7) [...] 2 fingers [...] η Geminorum; according to oral information. Night of the 24th, last part of the night, Mars ... [...]
+
+@(o 8) [...] oral information. Month III, night of the 16th, last part of the night, Mars was 4 cubits below α Geminorum.
+
+@reverse
+
+@column 1
+
+$ broken 
+
+@column 2
+
+@(r ii 1) [... mea]sured.
+
+@(r ii 2) [...] measured.
+
+@(r ii 3) [...] measured (despite) clouds.
+
+@(r ii 4) [...] measured (despite) clouds.
+
+@(r ii 5) [...] measured (despite) clouds.
+
+@(r ii 6) [... cl]ouds, I did not watch.
+
+@(r ii 7) [...] measured (despite) clouds.
+
+@(r ii 8) [... measu]red.
+
+@(r iii 1) [Mon]th V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, ... [...]
+
+@(r iii 2) The 12th, [moonset to sunrise:] 3° [...]
+
+@(r iii 3) [The 13th,] moonrise to sunset: [x]+6°; mea[sured.] 
+
+@(r iii 4) The 13th, sunrise to moonset: x°; measured.
+
+@(r iii 5) The 14th, sunset to moonrise: 3°; I did not watch.
+
+@(r iii 6) The 27th, moonrise to sunrise: 8° 30'; mist, [...]
+
+@(r iii 7) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12+[x°]; it was bright, measured; it was low to the sun.
+
+@(r iii 8) The 12th, moonset to sunrise: 11° 30'; measured. 
+
+@(r iii 9) The 13th, sunrise to moonset: 1° 10'; measured (despite) mist. 
+
+@(r iii 10) The 14th, moonrise to sunset: 2°; measured (despite) mist. 
+
+@(r iii 11) The 15th, sunset to moonrise: 7°. 
+
+@(r iii 12) The 27th, moonrise to sunrise: 16°; measured. 
+
+@(r iii 13) [Month VII,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [x]+10° 40'; clouds, ...
+
+@(r iv 1) Month X, [...]
+
+@(r iv 2) The 15th?, [...]
+
+@(r iv 3) The 15th?, [...]
+
+@(r iv 4) The 10+[xth, ...]
+
+@(r iv 5) The 10+[xth, ...]
+
+@(r iv 6) The 10+[xth, ...]

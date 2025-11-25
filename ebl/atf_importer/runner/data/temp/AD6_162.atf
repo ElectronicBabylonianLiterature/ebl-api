@@ -1,0 +1,105 @@
+&X600164 = ADART 6 162
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ⸢x x⸣ [...]
+#lem: u; u; u
+
+2'. ár MÚL ⸢x⸣ [...]
+#lem: warki[behind]PRP; kakkabu[star]N; u; u
+
+3'. in 20+[x ...]
+#lem: ina[around (day x)]PRP; n; u
+
+4'. GE₆ 20+[x ...]
+#lem: mūšu[night]N; n; u
+
+5'. šá U[LÙ ...]
+#lem: ša[which]REL; šūtu[south]N; u
+
+6'. ⸢SI?⸣ NIM? [...]
+#lem: ištānu[north]N; šaqi[high]AJ; u
+
+7'. 19? ⸢x⸣ [...]
+#lem: n; u; u
+
+8'. še-pít [...]
+#lem: MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN$; u
+
+9'. MÚL [...]
+#lem: kakkabu[star]N; u
+
+10'. ⸢x⸣ [...]
+#lem: u; u
+
+@reverse
+1'. 8 [...]
+#lem: n; u
+
+$ ruling
+2'. MU 54.[...]
+#lem: šattu[year]N; n
+
+3'. ŠUR-SI 2? [...]
+#lem: ŠUR-GIGIR-šá-SI[β Tauri]CN; n; u
+
+4'. (ŠUR-GIGIR)-šá-ULÙ 1+[x ...]
+#lem: ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN$; n; u
+
+5'. (ŠUR-GIGIR)-šá-ULÙ 2/3? [KÙŠ ...]
+#lem: ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; u
+
+6'. ŠUR-GIGIR-šá-SI [...]
+#lem: ŠUR-GIGIR-šá-SI[β Tauri]CN; u
+
+7'. e ŠUR-GIGIR-šá-U[LÙ ...]
+#lem: eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u
+
+$ ruling
+8'. ⸢MU⸣ [x]+5?.⸢KAM x⸣ [...]
+#lem: šattu[year]N; u; u; u
+
+@translation labeled en project
+
+@(o 1) ... [...]
+
+@(o 2) behind ... [...]
+
+@(o 3) around the 20+[xth, ...]
+
+@(o 4) Night of the 20+[xth, ...]
+
+@(o 5) southern [...]
+
+@(o 6) ... [...]
+
+@(o 7) the 19th? ... [...]
+
+@(o 8) η/μ? Gem[inorum ...]
+
+@(o 9) star [...]
+
+@(o 10) ... [...]
+
+@(r 1) the 8th, [...]
+
+$ ruling
+
+@(r 2) Year 54?, [...]
+
+@(r 3) 2 [...] β Tauri [...]
+
+@(r 4) 1+[x ...] ζ Tau[ri ...]
+
+@(r 5) 2/3? [cubit ...] ζ Tau[ri ...]
+
+@(r 6) β Tauri [...]
+
+@(r 7) above ζ Tauri [...]
+
+$ ruling
+
+@(r 8) Year [x]+5?, ... [...]

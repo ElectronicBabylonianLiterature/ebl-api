@@ -1,0 +1,33 @@
+&X600163 = ADART 6 161
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u; u
+
+2'. [... S]IG GIŠ.KUN-A 4 1/2 KÙŠ APIN [...]
+#lem: u; šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; n; ammatu[unit]N; Arahsamna[Month VIII]MN; u
+
+3'. [... x]+1 KÙŠ 18 AN ABSIN ⸢KUR⸣ GAN 20 AN [...]
+#lem: u; u; ammatu[unit]N; n; Ṣalbaṭānu[Mars]CN; Šerʾu[Virgo]CN; kašādu[reach]V; Kislīmu[Month IX]MN; n; Ṣalbaṭānu[Mars]CN; u
+
+4'. [... A]N ana ŠÚ ina LAL-šú e ⸢x⸣ [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; ina[while]SBJ; nahāsu[recede]V; eli[above]PRP; u; u
+
+5'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] 4 1/2 cubits below θ Leonis. Month VIII, [...]
+
+@(o 3) [... x]+1 cubits. The 18th, Mars reached Virgo. Month IX, the 20th, Mars [...]
+
+@(o 4) [... M]ars, while moving back to the west, was [...] above [...]
+
+@(o 5) [...] ... [...]

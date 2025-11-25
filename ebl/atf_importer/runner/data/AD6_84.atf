@@ -1,0 +1,66 @@
+&X600085 = ADART 6 84
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [MU x].KAM
+#lem: šattu[year]N; u
+
+2'. [DU₆] ⸢x ŠÚ⸣ na 
+#lem: Tašrītu[Month VII]MN; u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+3'. [x] ME GE₆ 
+#lem: u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+4'. [APIN x ŠÚ] ⸢na⸣
+#lem: Arahsamna[Month VIII]MN; u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+@column 2
+1'. MU 2 ME 13.KA[M]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n
+
+2'. DIR.ŠE 30 11.10? DIR [...]
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; erpetu[cloud]N; u
+
+3'. 13 5 Š[Ú]
+#lem: n; n; rabû[moonset to sunrise]'N
+
+4'. ⸢14⸣ 2+[x] ⸢na?⸣
+#lem: n; n; na[sunrise to moonset]N
+
+5'. [x x] ⸢x⸣
+#lem: u; u; u
+
+@reverse
+1'. [... x]+1 KÙŠ GE₆ 10+[x ...]
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; u
+
+2'. [...] ⸢e⸣ SI₄? 1 1/2 KÙŠ GE₆ [...]
+#lem: u; eli[above]PRP; SI₄[α Scorpii]CN; n; n; ammatu[unit]N; mūšu[night]N; u
+
+@translation labeled en project
+
+@(o i 1) [Year ...]
+
+@(o i 2) [Month VII,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: ... 
+
+@(o i 3) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
+
+@(o i 4) [Month VIII, ‘moonset to sunrise’] (plus) ‘sunrise to moonset’: [...]
+
+@(o ii 1) Year 213,
+
+@(o ii 2) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 11° 10'?; clouds, [...]
+
+@(o ii 3) The 13th, moonset [to sunrise:] 5° [...]
+
+@(o ii 4) The 14th, sunrise to moonset?: 2+[x° ...]
+
+@(o ii 5) [...] ...
+
+@(r 1) [... x]+1 cubit. Night of the 10+[xth, ...]
+
+@(r 2) [...] 1 1/2 cubits above α Scorpii?. Night [...]

@@ -1,0 +1,159 @@
+&X600023 = ADART 6 23
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1'. ina a-mat {d}EN u {d}GAŠAN-iá liš-lim
+#lem: ina[at (plus numeral)]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1'. MU 50.KAM ŠE DIR MU 51.KAM {I}a[n ...]
+#lem: šattu[year]N; n; Addaru[Month XII]MN; watru[extra]AJ; šattu[year]N; n; Antiochus[Antiochus]RN; u
+
+2'. [ina] ⸢SAG?⸣ RÍN UŠ ($erasure$) KIN [...]
+#lem: ina[in]PRP; rēšu[beginning]N; Zibānītu[Libra]CN; nenmudu[be at a stationary point]V; Ulūlu[Month VI]MN; u
+
+3'. [x] ⸢x IGI KUR⸣ 10 UŠ na-su in 12 [IGI ...]
+#lem: u; u; nanmuru[be(come) visible]V; baʾil[bright]AJ; n; UŠ[(time degree)]N; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; u
+
+4'. [... ina S]AG GÍR.TAB UŠ
+#lem: u; ina[in]PRP; rēšu[beginning]N; Zuqiqīpu[Scorpio]CN; nenmudu[be at a stationary point]V
+
+$ ruling
+5'. [MU 39.KAM] {I}an u {I}se LUGAL{MEŠ} [...]
+#lem: šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N; u
+
+6'. [...] ana NIM ina LAL-šú e S[A₄?-šá-ABSIN? ...] ($erasure$)
+#lem: u; ana[to]PRP; Elam[east]'N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+7'. [...] DIR ⸢x x x⸣ [...] ($erasure$)
+#lem: u; erpetu[cloud]N; u; u; u; u
+
+$ ruling
+8'. [MU 1.me.1]3.KAM KIN DIR ⸢MU⸣ 1.me.14.KAM {I}an u {I}an A-šú [LUGAL{MEŠ} ...]
+#lem: šattu[year]N; n; Ulūlu[Month VI]MN; watru[extra]AJ; šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
+
+9'. [DUR]-nu-nu 3 1/2 KÙŠ [GE₆] 26 ina ZÁLAG dele-bat SIG MÚL-IGI-šá-S[AG-HUN ...]
+#lem: MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; u
+
+10'. [šá-SAG-H]UN 6 KÙŠ [x x] ⸢x⸣ ina ZÁLAG dele-bat SIG MÚL.MÚL 2 KÙŠ [...]
+#lem: MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; u; u; u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; u
+
+11'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+@reverse 
+@column 1
+1'. [...] ZÁLAG?
+#lem: u; u
+
+2'. [...] sin?
+#lem: u; Sîn[moon]N
+
+3'. [...] ⸢x⸣
+#lem: u; u
+
+4'. [...] ⸢x⸣
+#lem: u; u
+
+@column 2
+1'. 13 [x ŠÚ ...]
+#lem: n; u; rabû[moonset to sunrise]N; u
+
+2'. 14	2+[x] ME muš 
+#lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+3'. 14	2.10 na muš 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+4'. 15	10.30 GE₆ muš 
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+5'. 27	17.30 muš
+#lem: n; n; mašāhu[measure]V
+
+@column 3
+1'. 12	1+[x ŠÚ ...] 
+#lem: n; n; rabû[moonset to sunrise]N; u
+
+2'. 13	7 [ME ...] 
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+3'. 13	11+[x na ...]
+#lem: n; n; na[sunrise to moonset]N; u
+
+4'. 14 	2? [GE₆ ...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+5'. 26+[x x ...]
+#lem: n; u; u
+
+6'. [...] IGI.DU₈.A{MEŠ} DIB-qa{MEŠ} [...]
+#lem: u; tāmartu[appearance]N; etēqu[passings]N; u
+
+
+
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) At the command of Bel and Beltija may it go well.
+
+@(o 1) Year 50, month XII was intercalary. Year 51, [kings?] Antiochus [and Antiochus? ...]
+
+@(o 2) it became stationary [in] the beginning? of Libra. Month VI, [...]
+
+@(o 3) first appearance [in] ...; it was bright, rising of Jupiter to sunr{I}se: 10°; [(ideal) first appearance] on the 12th [...]
+
+@(o 4) [...] it became stationary in the beginning of Scorpius.
+
+$ ruling
+
+@(o 5) [Year 39,] kings Antiochus and Seleucus [...]
+
+@(o 6) [...] when moving back to the east, was [...] above α? [Virginis ...]
+
+@(o 7) [...] clouds? ... [...]
+
+$ ruling
+
+@(o 8) [Year 11]3, month VI was intercalary. Year 114, [kings] Antiochus and his son Antiochus [...]
+
+@(o 9) 3 1⁄2 cubits [below η] Piscium. [Night] of the 26th, last part of the night, Venus was [...] below β Arietis [...]
+
+@(o 10) 6 cubits [below α Arie]tis. [...,] last part of the night, Venus was 2 cubits below η Tauri [...]
+
+@(o 11) [...] ... [...]
+
+@(r i 1) [...] ...
+
+@(r i 2) [...] moon?
+
+@(r i 3) [...] ...
+
+@(r i 4) [...] ...
+
+@(r ii 1) The 13th,	 [moonset to sunr{I}se: ...]
+
+@(r ii 2) The 14th,	moonr{I}se to sunset: 2+[x°]; measured.
+
+@(r ii 3) The 14th,	sunr{I}se to moonset: 2° 10'; measured.
+
+@(r ii 4) The 15th,	sunset to moonr{I}se: 10° 30'; measured.
+
+@(r ii 5) The 27th,	(moonr{I}se to sunr{I}se:) 17° 30'; measured.
+
+@(r iii 1) The 12th,	[moonset to sunr{I}se:] 1+[x° ...]
+
+@(r iii 2) The 13th,	[moonr{I}se to sunset:] 7+[x° ...] 
+
+@(r iii 3) The 13th,	[sunr{I}se to moonset:] 11+[x° ...] 
+
+@(r iii 4) The 14th,	[sunset to moonr{I}se:] 2°? [...]
+
+@(r iii 5) The 26+[xth, ...]
+
+@(r iii 6) [First days,] appearances, passings, [and eclipses ...]

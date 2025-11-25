@@ -1,0 +1,65 @@
+&X600174 = ADART 6 172
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse?
+1'. [...] ZÁLAG? [...]
+#lem: u; nūru[last part of the night]N; u
+
+2'. [...] ⸢x⸣ ŠÚ? ⸢x⸣ [...]
+#lem: u; u; u; u; u
+
+3'. [...] ina ZÁLAG ⸢x x⸣ [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; u; u; u
+
+4'. [...] ⸢x⸣ DU₆ GE₆ 7 ina ZÁLAG ⸢x⸣ [...]
+#lem: u; u; Tašrītu[Month VII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u; u
+
+5'. [...] KÙŠ APIN GE₆ 29 ina ZÁLAG ⸢x⸣ [...]
+#lem: u; ammatu[unit]N; Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u; u
+
+6'. [...] ⸢x⸣ KÙŠ AB GE₆ 9? ⸢ina ZÁLAG⸣ [...]
+#lem: u; u; ammatu[unit]N; Ṭebētu[Month X]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+@reverse?
+1'. [...] ⸢x⸣ [GEN]NA ana [NIM ki UŠ-ú ...]
+#lem: u; u; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+2'. [...] ⸢x⸣ UŠ GU₄? 5? GENNA ana [ME E-a ...]
+#lem: u; u; nenmudu[be at a stationary point]V; Ayyaru[Month II]MN; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u
+
+3'. [...] ⸢ŠÚ?⸣ ki UŠ-a ina TIL PA UŠ [...]
+#lem: u; u; kī[when]'SBJ; nenmudu[be at a stationary point]V; ina[in]PRP; qītu[end]N; Pabilsag[Sagittarius]CN; nenmudu[be at a stationary point]V; u
+
+4'. [... GEN]NA ina MÁŠ ŠÚ AB 10+[x ...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; Ṭebētu[Month X]MN; n; u
+
+5'. [...] ⸢x⸣ ina ZÁLAG GENNA ⸢x⸣ [...]
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; u; u
+
+@translation labeled en project
+
+@(o? 1) [...] last part of the night?, [...]
+
+@(o? 2) [...] ... [...]
+
+@(o? 3) [...] last part of the night, ... [...]
+
+@(o? 4) [...] ... Month VII, night of the 7th, last part of the night, ... [...]
+
+@(o? 5) [...] cubits [...] Month VIII, night of the 29th, last part of the night, ... [...]
+
+@(o? 6) [...] ... cubits [...] Month X, night of the 9th?, last part of the night, [...]
+
+@(r? 1) [...] ... [ when] Saturn [became stationary] to [the east,]
+
+@(r? 2) [...] it became stationary ... [...] Month II?, the 5th, Saturn’s [acronychal rising? ...]
+
+@(r? 3) [...] when [Saturn] became stationary to the west, it became stationary in the end of Sagittarius [...]
+
+@(r? 4) [...] Saturn’s last appearance in Capricorn. Month X, the 10+[xth, ...]
+
+@(r? 5) [...] ..., last part of the night, Saturn was ... [...]
+ 

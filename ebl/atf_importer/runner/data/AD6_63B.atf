@@ -1,0 +1,52 @@
+&X600064 = ADART 6 63B
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... SIG MÚL-KUR-šá-DU]R-nu-nu 2 1/2 KÙŠ GE₆ 12? [x?]
+#lem: u; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n; ammatu[unit]N; mūšu[night]N; n; u
+
+2'. [...] ŠU GE₆ 18 ina ZÁLAG AN SIG MÚL.MÚL 2 KÙŠ
+#lem: u; Duʾūzu[Month IV]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N
+
+3'. [... is-l]e₁₀? 2 1/2 KÙŠ GE₆ 23 ina ZÁLAG AN
+#lem: u; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
+
+4'. [... e ŠUR-GIGIR]-šá-ULÙ 2/3 KÙŠ APIN GE₆ 9 ina ZÁLAG ⸢AN⸣
+#lem: u; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
+
+5'. [... G]UB? GE₆ 15 USAN AN ana NIM ina LAL-šú
+#lem: u; izuzzu[stand]V; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V
+
+6'. [... x]+1 USAN AN e ŠUR-GIGIR-šá-ULÙ
+#lem: u; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN
+
+7'. [... ŠE 1]5? USAN AN e MÚL-ár-[šá-še-pít-MAŠ.MAŠ ...]
+#lem: u; Addaru[Month XII]MN; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; u
+
+@bottom
+1'. [... DIR].ŠE GE₆ 13 USAN AN [...]
+#lem: u; Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+@translation labeled en project
+
+BM 34411:
+@(o 1) [... Mars was] 2 1/2 cubits [below η] Piscium. Night of the 12th,
+
+@(o 2) [...] Month IV, night of the 18th, last part of the night, Mars was 2 cubits below η Tauri.
+
+@(o 3) [...] 2 1/2 cubits [above α] Tauri. Night of the 23rd, last part of the night, Mars was
+
+@(o 4) [...] 2/3 cubit [above] ζ [Tauri.] Month VIII, night of the 9th, last part of the night, Mars was
+
+@(o 5) [...] ... Night of the 15th, first part of the night, Mars, while moving back to the east,
+
+@(o 6) [... night of the x]+1st, first part of the night, Mars was [...] above ζ Tauri.
+
+@(o 7) [... Month XII, night of the 1]5th?, first part of the night, Mars was [...] above μ Ge[minorum.]
+
+@bottom
+
+@(b.e. 1) [...] Month XII₂?, night of the 13th, first part of the night, Mars was [...] 

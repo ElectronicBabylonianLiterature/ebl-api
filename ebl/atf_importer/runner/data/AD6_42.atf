@@ -1,0 +1,227 @@
+&X600042 = ADART 6 42
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse 
+@column 1
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] ⸢x⸣ ME?
+#lem: u; u; u
+
+3'. [... i]š-ta-haṭ
+#lem: u; ištahaṭ[cast off]V
+
+4'. [... ina] TIL ZÁLAG-ru
+#lem: u; ina[at]PRP; qītu[end]N; nawāru[clearing]'N
+
+5'. [...]-ru
+#lem: u
+
+6'. [... M]E ana ŠÚ šámaš
+#lem: u; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamši[sun]N
+
+7'. [... x]+5.40? ME DIR NU PAP
+#lem: u; u; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+8'. [... ziq?-p]i? {d}sin AN.KU₁₀
+#lem: u; zaqāpu[culminate]V; Sîn[moon]N; antallû[eclipse]N
+
+9'. [...] ina 22 GE₆
+#lem: u; ina[in]PRP; n; mūšu[night]N
+
+10'. [...] ⸢SI⸣ TAG₄?
+#lem: u; ubānu[finger]N; ezēbu[remain]V
+
+11'. [...] ⸢ana SI ZÁLAG-ir 37?⸣
+#lem: u; ana[to]PRP; ištānu[north]N; nawāru[clear]V; n
+
+12'. [... AN].KU₁₀-šú SA₅
+#lem: u; antallû[eclipse]N; sāmu[red]AJ
+
+13'. [...] ⸢x x⸣{MEŠ}
+#lem: u; u; u
+
+14'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+15'. [...] ⸢x⸣ ina ZÁLAG?-⸢ru⸣
+#lem: u; u; ina[during]PRP; nawāru[clearing]'N
+
+16'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+17'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@column 2
+1'. [...] ina IGI ⸢GENNA⸣
+#lem: u; ina[in]PRP; pānu[front]N; Kayyamānu[Saturn]CN
+
+2'. [ana Š]Ú GUB sin 1 KÙŠ
+#lem: ana[to]PRP; erbu[west]N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N
+
+3'. [x x x 13] 4.30 ŠÚ DIR muš
+#lem: u; u; u; n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
+
+4'. ⸢14⸣ 11? ME? ⸢x⸣ 14 4.20 na muš
+#lem: n; n; ūmu[moonrise to sunset]N; u; n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+5'. 15 2.10 GE₆ 27 [x] KUR DIR [...]
+#lem: n; n; mūšu[sunset to moonrise]N; n; u; KUR[moonrise to sunrise]N; erpetu[cloud]N; u
+
+6'. GU₄ 30 13 DIR muš ana šamáš SIG
+#lem: Ayyaru[Month II]MN; n; n; erpetu[cloud]N; mašāhu[measure]V; ana[to]PRP; šamšu[sun]N; šapil[low]AJ
+
+7'. 14 	1 ŠÚ DI[R ...]
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; u
+
+8'. 15	10.20 ME DIR NU [PAP] 
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+9'. 15	7 na DIR NU [PAP] 
+#lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+10'. 16	⸢10?⸣ GE₆ DIR N[U PAP] 
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+11'. 27	12 KUR DIR NU [PAP]
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+12'. SIG 1 20 KUR₄ ⸢a⸣-pir
+#lem: Simānu[Month III]MN; n; n; baʾil[bright]AJ; apir[earthshine]'N
+
+13'. ina GUB IGI ana šamáš SIG ⸢x⸣ [x x x]
+#lem: ina[while]'SBJ; izuzzu[stand]V; nanmuru[be(come) visible]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ; u; u; u; u
+
+14'. 5 KÙŠ 13 7 ŠÚ 
+#lem: n; ammatu[unit]N; n; n; rabû[moonset to sunrise]'N
+
+15'. 14	2.20 na m[uš] 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+16'. 15	1.20 ME m[uš]
+#lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+17'. 16	<x> GE₆ DIR ⸢muš⸣
+#lem: n; u; mūšu[sunset to moonrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+18'. 26? 21 KUR muš
+#lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+19'. ŠU 30 14 a?-kam muš ⸢14? 8?⸣ [ŠÚ?]
+#lem: Duʾūzu[Month IV]MN; n; n; akamu[mist]N; mašāhu[measure]V; n; n; rabû[moonset to sunrise]'N
+
+20'. 15 7.30 ME muš 15? 5+x [...]
+#lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V; n; n; u
+
+21'. 16? [x] ⸢x x⸣ [...]
+#lem: n; u; u; u; u
+
+@column 3
+1'. 15? [...]
+#lem: n; u
+
+2'. 15 2.30 [...]
+#lem: n; n; u
+
+3'. ⸢16⸣ 13 [...]
+#lem: n; n; u
+
+4'. ⸢x⸣ [x] ⸢x⸣ [...]
+#lem: u; u; u; u
+
+5'. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+
+@translation labeled en project
+
+@(o i 1) [...] ...
+
+@(o i 2) [...] ...
+
+@(o i 3) [...] it threw off (the shadow)
+
+@(o i 4) [... at] the end of clearing,
+
+@(o i 5) [...] ...
+
+@(o i 6) [...] before sunrise
+
+@(o i 7) [...] moonrise to sunset: [x]+5° 40'; clouds, I did not watch.
+
+@(o i 8) [...When ... culminat]ed?, lunar eclipse;
+
+@(o i 9) [...] in 22° of night
+
+@(o i 10) [...] it left [...] fingers
+
+@(o i 11) [...] it cleared [...] to the north. 37°?
+
+@(o i 12) [...] Its eclipse was red.
+
+@(o i 13) [...] ...
+
+@(o i 14) [...] ...
+
+@(o i 15) [...] ..., during clearing?
+
+@(o i 16) [...] ...
+
+@(o i 17) [...] ...
+
+@(o ii 1) [... (the moon)] stood in front of Saturn
+
+@(o ii 2) [to] the west, the moon being 1 cubit
+
+@(o ii 3) [... The 13th,] moonset to sunrise: 4° 30'; measured (despite) clouds.
+
+@(o ii 4) The 14th, moonrise to sunset: 11°?; ... The 14th, sunrise to moonset: 4° 20'; measured.
+
+@(o ii 5) The 15th, sunset to moonrise: 2° 10'. The 27th, moonrise to sunrise: [...;] clouds [...]
+
+@(o ii 6) Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°; measured (despite) clouds; it was low to the sun.
+
+@(o ii 7) The 14th,	moonset to sunrise: 1°; clou[ds, ...]
+
+@(o ii 8) The 15th,	moonrise to sunset: 10° 20'; clouds, I did not [watch.] 
+
+@(o ii 9) The 15th,	sunrise to moonset: 7°; clouds, I did not [watch.] 
+
+@(o ii 10) The 16th,	sunset to moonrise: 10°?; clouds, I did not [watch.] 
+
+@(o ii 11) The 27th,	moonrise to sunrise: 12°; clouds, I did not [watch.]
+
+@(o ii 12) Month III, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 20°; it was bright, earthshine;
+
+@(o ii 13) it could be seen while (the sun) stood there; it was low to the sun; ... [...]
+
+@(o ii 14) 5 cubits. The 13th, moonset to sunrise: 7°.
+
+@(o ii 15) The 14th,	sunrise to moonset: 2° 20'; mea[sured.]
+
+@(o ii 16) The 15th,	moonrise to sunset: 1° 20'; mea[sured.]
+
+@(o ii 17) The 16th,	sunset to moonrise: <...>; measured (despite) clouds. 
+
+@(o ii 18) The 26th?,	moonrise to sunrise: 21°; measured.
+
+@(o ii 19) Month IV, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 14°; measured (despite) mist. The 14th?, [moonset to sunrise:] 8°? [...]
+
+@(o ii 20) The 15th, moonrise to sunset: 7° 30'; measured. The 15th?, [...] 5+x° [...]
+
+@(o ii 21) The 16th?, [...] ... [...]
+
+@(o iii 1) The 15th?, [...]
+
+@(o iii 2) The 15th, [...] 2° 30' [...]
+
+@(o iii 3) The 16th, [...] 13° [...]
+
+@(o iii 4) ... [... ] ... [...]
+
+@(o iii 5) ... [...]

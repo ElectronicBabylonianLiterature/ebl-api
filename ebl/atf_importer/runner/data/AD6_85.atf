@@ -1,0 +1,135 @@
+&X600086 = ADART 6 85
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... ina MAŠ].MAŠ UŠ APIN ⸢in⸣ 30? [...]
+#lem: u; ina[in]PRP; Māšu[Gemini]CN; nenmudu[be at a stationary point]V; Arahsamna[Month VIII]MN; ina[around (day x)]PRP; n; u
+
+2'. [... UŠ?]-⸢a⸣ 1/2 KÙŠ ina IGI MÚL-ár-šá-še-pít-MAŠ.MAŠ 8 S[I ... UŠ]
+#lem: u; nenmudu[be at a stationary point]V; n; ammatu[unit]N; ina[in]'SBJ; pān[front]N; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ubānu[finger]N; u; nenmudu[be at a stationary point]V
+
+$ ruling
+3'. [MU 1 ME 53.KAM ...] ŠU GE₆ 24 ina ZÁLAG MÚL.BABBAR e MÚL-IGI-šá-še-pít-MAŠ.[MAŠ n n ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u; Duʾūzu[Month IV]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; n; u
+
+4'. [... e MÚL-ár-šá]-še-pít-MAŠ.MAŠ 2 SI KIN GE₆ 2 ina ZÁLAG MÚL.BABBAR e MAŠ.MAŠ-šá-[SIPA n n ...]
+#lem: u; eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; ubānu[finger]N; Ulūlu[Month VI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; u
+
+5'. [... ana ŠÚ] ina LAL-šú e MAŠ.MAŠ-šá-SIPA 3 KÙŠ GAN GE₆ 10 USAN [...]
+#lem: u; ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+6'. [... GE₆ x]+2 USAN MÚL.BABBAR e MÚL-IGI-šá-še-pít-MAŠ.MAŠ 8 S[I ...]
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ubānu[finger]N; u
+
+7'. [...] ⸢e⸣ [M]ÚL-IGI-šá-[še-pí]t-MAŠ.[M]AŠ ⸢8? SI⸣ ŠE? DIR ⸢GE₆⸣ 1+[x ...]
+#lem: u; eli[above]PRP; u; n; ubānu[finger]N; u; Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; u
+
+8'. [... GE₆] ⸢27 USAN MÚL⸣.BABBAR e MAŠ.MAŠ-šá-SIPA 3 K[ÙŠ]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N
+
+$ ruling
+9'. [... MU 2 ME 28.KAM {I}ar-šá-ka]-⸢a⸣ LUGAL GU₄ in 11 dele-bat ina ŠÚ ina MAŠ.MAŠ IGI NU PAP ⸢in⸣ [...]
+#lem: u; šattu[year]N; n; mē[(one) hundred]NU; n;  Aršaka[Arsaces]RN; šarru[king]N; Ayyaru[Month II]MN; ina[around (day x)]PRP; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; ina[around (day x)]PRP; u
+
+10'. [... ana N]IM DIB GE₆ 11 USAN dele-bat e SA₄-šá-ABSIN 1 [KÙŠ ...]
+#lem: u; ana[to]PRP; Elam[east]'N; etēqu[go past]V; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; u
+
+11'. [...] GE₆ 5 USAN dele-bat SIG RÍN-šá-SI 3 1/2 KÙŠ GE₆ 16 US[AN ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; n; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+12'. [...] dele-bat e SI₄ 2 KÙŠ DU₆ GE₆ 1 USAN dele-bat SIG MÚL-[KUR-šá-KIR₄-šil-PA ...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; Tašrītu[Month VII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; u
+
+13'. [...] ⸢x GE₆ 25 USAN⸣ dele-bat e MÚL-IGI-šá-S[UHUR-MÁŠ ...]
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; u
+
+14'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+@column 1
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [1]4? 4 ME m[uš] 
+#lem: n; 4[4]NU; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+3'. [1]4? 5.30 na m[uš] 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+4'. [1]5? 8.30 GE₆ muš 
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+5'. [x] [x]+11.10 KUR ki PAP NU IGI
+#lem: u; u; KUR[moonrise to sunrise]N; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+@column 2
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. 14 [...]
+#lem: n; u
+
+3'. ⸢x⸣ [...]
+ ($break$)
+#lem: u; u
+
+4'. [...{ME]Š} DIB?-q[a?{MEŠ} ...]
+#lem: u; etēqu[passings]'N; u
+
+@translation labeled en project
+
+@(o 1) [...] became stationary [in Ge]mini. Month VIII, around the 30th?, [...]
+
+@(o 2) [... when it became station]ary [in ..., it became stationary] 1/2 cubit in front of μ Geminorum, 8 fin[gers ...]
+
+$ ruling
+
+@(o 3) [Year 153, ...] Month IV, night of the 24th, last part of the night, Jupiter was [...] above η Geminorum [...]
+
+@(o 4) [...] 2 fingers [above μ] Geminorum. Month VI, night of the 2nd, last part of the night, Jupiter was [...] above γ Geminorum [...]
+
+@(o 5) [...Jupiter,] while moving back [to the west,] was 3 cubits above γ Geminorum. Month IX, night of the 10th, first part of the night, [...]
+
+@(o 6) [... night of the x]+2nd, first part of the night, Jupiter was 8 fingers above η Geminorum [...]
+
+@(o 7) [...] 8 [fingers] above μ Geminorum. Month XII₂, night of the 1[+xth, ...]
+
+@(o 8) [... Night] of the 27th, first part of the night, Jupiter was 3 cubits above γ Geminorum.
+
+$ ruling
+
+@(o 9) [Year ... 228,] king [Arsace]s. Month II, around the 11th, Venus’ first appearance in the west in Gemini; I did not watch. Around [...]
+
+@(o 10) [...] having passed [... to the ea]st. Night of the 11th, first part of the night, Venus was 1 [cubit] above α Virginis [...]
+
+@(o 11) [...] night of the 5th, first part of the night, Venus was 3 1/2 cubits below β Librae. Night of the 16th, first part [of the night, ...]
+
+@(o 12) [...] Venus was 2 cubits above α Scorpii. Month VII, night of the 1st, first part of the night, Venus was [...] below θ [Ophiuchi ...]
+
+@(o 13) [...] ... Night of the 25th, first part of the night, Venus was [...] above γ C[apricorni ...]
+
+@(o 14) [...] ... [...]
+
+@(r i 1) [...] ... [...]
+
+@(r i 2) [The 1]4th?, moonrise to sunset: 4°; mea[sured.]
+
+@(r i 3) [The 1]4th?, sunrise to moonset: 5° 30'; mea[sured.]
+
+@(r i 4) [The 1]5th?, sunset to moonrise: 8° 30'; measured.
+
+@(r i 5) [The xth,] moonrise to sunrise: [x]+11° 10'; when I watched I did not see it.
+
+@(r ii 1) ... [...]
+
+@(r ii 2) The 14th, [...]
+
+@(r ii 3) ... [...]
+
+$ break
+
+@(r ii 4) [...] passin[gs, ...]

@@ -1,0 +1,47 @@
+&X600088 = ADART 6 87
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [M]U 1 ME 1+ŠU+9.KAM {m}d[e-met-ri LUGAL ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Demetrius[Demetrius]RN; šarru[king]N; u
+
+2'. ⸢KIN?⸣ 1 15.30 na MÚL.[BABBAR ...]
+#lem: Ulūlu[Month VI]MN; n; n; na[rising to sunrise]N; Kakkabu-peṣû[Jupiter]CN; u
+
+3'. ár AN 2 KÙŠ ana NIM? GUB 1/2 KÙŠ ana SI [NIM IGI ...]
+#lem: warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; izuzzu[stand]V; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; u; u
+
+4'. ár RÍN-šá-ULÙ 1/2 KÙŠ ana SI NIM U[Š ...]
+#lem: warki[behind]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nenmudu[be at a stationary point]V; u
+
+$ ruling
+5'. ⸢MU 1 ME⸣ 57.⸢KAM {m}de⸣-met-ri LUGAL [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Demetrius[Demetrius]RN; šarru[king]N; u
+
+6'. [...] ⸢x⸣ 4 ⸢x⸣ [...]
+#lem: u; u; n; u; u
+
+@reverse
+1'. šá ši-i M[U 2 ME 40.KAM ...]
+#lem: ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+@translation labeled en project
+
+@(o 1) Year 169, [king] D[emetrius ...]
+
+@(o 2) Month VI, the 1st, rising of Jupi[ter] to sunrise: 15° 30' [...]
+
+@(o 3) it stood 2 cubits behind Mars to the east?, 1/2 cubit [high] to the north [...]
+
+@(o 4) it became sta[tionary ...] behind α Librae, 1/2 cubit high to the north. [...] 
+
+$ ruling
+
+@(o 5) Year 157, king Demetrius. [...]
+
+@(o 6) [...] ... 4 ... [...]
+
+@(r 1) which is year [240 ...] 

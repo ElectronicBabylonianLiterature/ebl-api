@@ -1,0 +1,51 @@
+&X600110 = ADART 6 108
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ SIG 10? [...]
+#lem: u; u; Simānu[Month III]MN; n; u
+
+2'. [... GEN]NA ina A IGI TUR? [...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Nēšu[Leo]CN; nanmuru[be(come) visible]V; ṣehru[small]AJ; u
+
+3'. [...] ⸢x⸣ 26 GENNA ana ME [E-a ...]
+#lem: u; u; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u
+
+4'. [...] NE ina 29 GENNA ⸢x⸣ [...]
+#lem: u; Abu[Month V]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; u; u
+
+5'. [...] ⸢x⸣ ina SAG ABSIN UŠ
+#lem: u; u; ina[in]PRP; rēšu[beginning]N; Šerʾu[Virgo]CN; nenmudu[be at a stationary point]V
+
+6'. [...] ⸢e⸣ GÌR-ár-šá-A 14 SI
+#lem: u; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N
+
+$ ruling
+7'. [... MÚ]L-IGI-šá-ALLA-šá-SI
+#lem: u; MÚL-IGI-šá-ALLA-šá-SI[η Cancri]CN
+
+8'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... Month III, the 10th? [...]
+
+@(o 2) [... Sat]urn’s first appearance in Leo; it was small?, [...]
+
+@(o 3) [...] ... The 26th, Saturn’s acronychal [rising ...]
+
+@(o 4) [...] Month V, around the 29th, Saturn’s ... [...]
+
+@(o 5) [...] became stationary in the beginning of Virgo.
+
+@(o 6) [...] 14 fingers above β Virginis.
+
+$ ruling
+
+@(o 7) [...] η Cancri.
+
+@(o 8) [...] ...

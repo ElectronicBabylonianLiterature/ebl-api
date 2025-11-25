@@ -1,0 +1,111 @@
+&X600076 = ADART 6 75
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy 
+@obverse
+1'. [...] ⸢GE₆ 20 ina ZÁLAG MÚL.BABBAR⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; u
+
+2'. [...] ⸢x x⸣ šá? ⸢x 1/2 KÙŠ? x x⸣ [...]
+#lem: u; u; u; ša[which]REL; u; n; ammatu[unit]N; u; u; u
+
+$ ruling
+3'. [MU 1 ME 60+37.K]AM {I}ar-šá-ka-a LUGAL GU₄ GE₆ 12 ina ZÁ[LAG ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; Ayyaru[Month II]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+4'. [...] ⸢x x⸣ GE₆ 14? ina ZÁLAG dele-bat SIG MÚL-ár-šá-SAG-HUN 5 1/2 KÙŠ G[E₆ ...]
+#lem: u; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N; mūšu[night]N; u
+
+5'. [...] ⸢ina ZÁLAG⸣ dele-bat e is-le₁₀ 1 2/3 KÙŠ ŠU GE₆ 6 ina ZÁLAG dele-bat SIG ŠUR-GIGIR-šá-[SI ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; Duʾūzu[Month IV]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; ŠUR-GIGIR-šá-SI[β Tauri]CN; u
+
+6'. [...] ⸢GE₆ 15?⸣ ina ZÁLAG dele-bat e MÚL-IGI-šá-še-pít-MAŠ.MAŠ 4 U GE₆ 18 ⸢ina ZÁLAG⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ubānu[finger]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+7'. [...] dele-bat ⸢e⸣ MAŠ.MAŠ-šá-SIPA  3 KÙŠ GE₆ 20 ina ZÁLAG dele-bat SIG MAŠ.MAŠ-IGI ⸢4?⸣ [KÙŠ ...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; u
+
+8'. [...] ⸢x⸣ ina ZÁLAG dele-bat e MÚL-ár-šá-ALLA-šá-ULÙ 2 SI GE₆ 24+[x ...]
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; mūšu[night]N; n; u
+
+9'. [...] ⸢x KIN⸣ GE₆ 9 ina ZÁLAG dele-bat e MÚL-TUR-šá-4-KÙŠ-ár-LUGAL 8? S[I ...]
+#lem: u; u; Ulūlu[Month VI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ubānu[finger]N; u
+
+10'. [... x]+5 ina ZÁLAG dele-bat e GÌR-ár-šá-A 6 U DU₆ ⸢GE₆ 5? ina ZÁLAG dele-bat⸣ [...]
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N; Tašrītu[Month VII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; u
+
+11'. [... x]+⸢5 10 UŠ⸣ na dele-bat in 20 dele-bat ina NIM ina GÍR.TAB ŠÚ ZÍZ 1 dele-bat [ina ŠÚ ina x IGI ...]
+#lem: u; u; n; UŠ[(time degree)]N; na[rising to sunrise]N; Dilbat[Venus]CN; ina[around (day x)]PRP; n; Dilbat[Venus]CN; ina[in]PRP; Elam[east]'N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; Šabāṭu[Month XI]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; u; amāru[be(come) visible]V; u
+
+12'. [...] USAN dele-bat SIG MÚL-⸢IGI?⸣-šá-SAG-HUN ⸢4?⸣ KÙŠ GE₆ 16 U[SAN ...]
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+13'. [... SIG] ⸢MÚL.MÚL x KÙŠ⸣ GE₆ 21 USAN dele-bat e ⸢is⸣-l[e₁₀] ⸢x x⸣
+#lem: u; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; u; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; u; u
+
+14'. [...] SI ⸢x⸣ [x] ⸢x⸣
+#lem: u; ubānu[finger]N; u; u; u
+
+$ ruling
+15'. [...] KÙŠ 4 SI ár AN 2 1/2 KÙŠ [ana] ⸢NIM? DIB? x x x x x⸣ [...]
+#lem: u; ammatu[unit]N; n; ubānu[finger]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; ana[to]PRP; Elam[east]'N; etēqu[go past]V; u; u; u; u; u; u
+
+16'. [...] ⸢x⸣ SIG 1 GU₄.UD ina ŠÚ ina ⸢MAŠ.MAŠ⸣ [IGI ...]
+#lem: u; u; Simānu[Month III]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; amāru[be(come) visible]V; u
+
+17'. [...] ⸢GU₄.UD⸣ ina ⸢x⸣ [...]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; u; u
+
+18'. [...] ⸢x⸣ na? ⸢GU₄⸣.U[D ...]
+#lem: u; u; u; Šihṭu[Mercury]CN; u
+
+@reverse
+$ traces
+
+@translation labeled en project
+
+@(o 1) [...] ⸢Night of the 20th, last part of the night, Jupiter⸣ [...] ... [...]
+
+@(o 2) [...] ... 1/2 cubit? ... [...]
+
+$ ruling
+
+@(o 3) [Year 197,] king Arsaces. Month II, night of the 12th, last part of the night, [...]
+
+@(o 4) [...] ... Night of the 14th, last part of the night, Venus was 5 1/2 cubits below α Arietis. Ni[ght ...]
+
+@(o 5) [...] last part of the night, Venus was 1 2/3 cubits above α Tauri. Month IV, night of the 6th, last part of the night, Venus was [...] below β Tauri [...]
+
+@(o 6) [...] Night of the 15th?, last part of the night, Venus was 4 fingers above η Geminorum. Night of the 18th, last part of the night, [...]
+
+@(o 7) [...] Venus was 3 cubits above γ Geminorum. Night of the 20th, last part of the night, Venus was 4? [cubits] below α Geminorum. [...]
+
+@(o 8) [...] ..., last part of the night, Venus was 2 fingers above δ Cancri. Night of the 24+[xth ...]
+
+@(o 9) [...] ... Month VI, night of the 9th, last part of the night, Venus was 8? fingers above ϱ Leonis [...]
+
+@(o 10) [... Night of the x]+5th, last part of the night, Venus was 6 fingers above β Virginis. Month VII, night of the 5th?, last part of the night, Venus [...]
+
+@(o 11) [... the x]+5th, rising of Venus to sunrise: 10°. Around the 20th, Venus’ last appearance in the east in Scorpius. Month XI, the 1st, Venus’ [first appearance in the west in ...]
+
+@(o 12) [...] first part of the night, Venus was 4? cubits below β Arietis. Night of the 16th, first [part of the night, ...]
+
+@(o 13) [...] x cubits [below] η Tauri ... Night of the 21st, first part of the night, Venus was ... above α Tauri.
+
+@(o 14) [...] fingers? ...
+
+$ ruling
+
+@(o 15) [...] cubit 4 fingers, having passed 2 1/2 cubits behind Mars to the east ... [...]
+
+@(o 16) [...] ... Month III, the 1st, Mercury’s [first appearance] in the west in Gemini [...]
+
+@(o 17) [...] Mercury’s [...] in ... [...]
+
+@(o 18) [...] ... visibility of Mercury [...]
+
+@reverse
+
+(traces only of Lunar Six)

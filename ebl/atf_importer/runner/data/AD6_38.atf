@@ -1,0 +1,62 @@
+&X600038 = ADART 6 38
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ($traces$)
+2'. [...] ⸢x⸣ APIN EN 2 [...]
+#lem: u; u; Arahsamna[Month VIII]MN; adi[until]PRP; n; u
+
+3'. [... ana ME] ⸢E⸣-a ŠE in EN 2 [...]
+#lem: u; ana[to]PRP; ūmu[day]N; elû[go up]V; Addaru[Month XII]MN; ina[around (day x)]PRP; adi[until]PRP; n; u
+
+$ ruling
+4'. [... G]E₆ 16 USAN MÚL.BA[BBAR ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; u
+
+5'. [... MÚ]L-ár-šá-ALLA-šá-ULÙ 1 [...]
+#lem: u; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; u
+
+$ ruling
+6'. [... e i]s-le₁₀ 2 2/3 K[ÙŠ ...]
+#lem: u; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; u
+
+7'. [...] ⸢ana⸣ NIM ⸢DIB? x⸣ [...]
+#lem: u; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; u; u
+
+8'. [...] ⸢x x⸣ 1 K[ÙŠ? ...]
+#lem: u; u; u; n; ammatu[unit]N; u
+
+9'. [... dele]-bat SIG [...]
+#lem: u; Dilbat[Venus]CN; šapil[below]'PRP; u
+
+10'. [... dele-b]at e [...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; u
+
+@translation labeled en project
+
+@(o 1) (traces)
+
+@(o 2) [...] ... Month VIII, until the 2nd, [...]
+
+@(o 3) [... acronychal] rising. Month XII, around until the 2nd, [...]
+
+$ ruling
+
+@(o 4) [... Ni]ght? of the 16th, first part of the night, Jupi[ter ...]
+
+@(o 5) [...] 1 [...] δ Cancri. [...]
+
+$ ruling
+
+@(o 6) [...] 2 2/3 cubits [above] α Tauri. [...]
+
+@(o 7) [...] having passed [...] to the east. ... [...]
+
+@(o 8) [...] ... 1 cu[bit? ...]
+
+@(o 9) [... Ve]nus was [...] below [...]
+
+@(o 10) [... Ven]us was [...] above [...]

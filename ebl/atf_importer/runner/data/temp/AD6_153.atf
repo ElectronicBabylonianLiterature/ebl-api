@@ -1,0 +1,78 @@
+&X600155 = ADART 6 153
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ŠÚ?
+#lem: u; rabû[set]V
+
+2'. [... x]+8? MÚL.BABBAR
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN
+
+3'. [...] 28 MÚL.BABBAR
+#lem: u; n; Kakkabu-peṣû[Jupiter]CN
+
+4'. [...] ($blank$)
+#lem: u
+
+$ ruling
+5'. [...] {ITU}ŠU GE₆ 24
+#lem: u; Duʾūzu[Month IV]MN; mūšu[night]N; n
+
+6'. [...] ($blank$)
+#lem: u
+
+$ ruling
+7'. [... GE₆] 8? USAN dele-bat
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+8'. [...] ár LUGAL 5/6 KÙŠ
+#lem: u; warki[behind]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N
+
+9'. [...] ⸢x x⸣
+#lem: u; u; u
+
+@reverse
+1'. [...] ⸢ME⸣ NIM-a
+#lem: u; ūmu[day]N; šaqâ[high]AJ
+
+2'. [...] ⸢DIB?⸣
+#lem: u; etēqu[omit]V
+
+@top
+1'. [...] x GE₆?
+#lem: u; u; mūšu[night]N
+
+@translation labeled en project
+
+@(o 1) [...] last appearance?
+
+@(o 2) [... The x]+8th?, Jupiter’s
+
+@(o 3) [...] The 28th, Jupiter’s
+
+@(o 4) [...]
+
+$ ruling
+
+@(o 5) [...] Month IV, night of the 24th,
+
+@(o 6) [...]
+
+$ ruling
+
+@(o 7) [... night of the] 8th?, first part of the night, Venus was
+
+@(o 8) [...] 5/6 cubit behind α Leonis
+
+@(o 9) [...] ...
+
+@(r 1) [...] after sunrise.
+
+@(r 2) [...] omitted?.
+
+@top
+
+@(t.e. 1) [...] ... night?.

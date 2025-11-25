@@ -1,0 +1,19 @@
+&X600123 = ADART 6 121
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [AN.KU₁₀] šamáš šá DIB ⸢in⸣
+#lem: antallû[eclipse]N; šamšu[sun]N; ša[which]REL; etēqu[omit]V; ina[at (plus numeral)]PRP
+
+2'. [x] GE₆ GIN
+#lem: u; mūšu[night]N; alāku[go]V
+
+@translation labeled en project
+
+@(o 1) solar [eclipse] which was omitted. At
+
+@(o 2) [...] after sunset.
+ 

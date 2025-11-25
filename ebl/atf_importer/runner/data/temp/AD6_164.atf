@@ -1,0 +1,125 @@
+&X600166 = ADART 6 164
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+$ broken
+@column 2
+1'. [... m]uš
+#lem: u; mašāhu[measure]V
+
+2'. [...] ⸢x⸣ UD?
+#lem: u; u; u
+
+3'. [...] ⸢x⸣
+#lem: u; u
+
+@column 3
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [DU₆ ...] ina GUB IGI
+#lem: Tašrītu[Month VII]MN; u; ina[while]'SBJ; izuzzu[stand]V; amāru[see]V
+
+3'. [12] ⸢x⸣ ŠÚ
+#lem: n; u; rabû[moonset to sunrise]'N
+
+4'. [1]3 2.30 ME a-kam muš
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+5'. 13 9 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+6'. 14 7 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+7'. 27 13 KUR DIR muš
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+8'. APIN 30 13.10+[x ...]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+9'. DIR [...]
+#lem: erpetu[cloud]N; u
+
+10'. [1]3 ⸢4+x⸣ ⸢x⸣ [...]
+#lem: n; n; u; u
+
+@column 4
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. ZÍZ 30 12 ⸢na-su⸣ [...]
+#lem: Šabāṭu[Month XI]MN; n; n; na₁[sunset to moonset]N; u
+
+3'. 14 11 ME D[IR ...] 
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; u
+
+4'. 14 6.30 ŠÚ D[IR ...]
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; u
+
+5'. 15 4? GE₆ [...] 
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+6'. 16 6 n[a ...] 
+#lem: n; n; na[sunrise to moonset]N; u
+
+7'. 28 12+[x ...]
+#lem: n; n; u
+
+8'. ŠE 1 ⸢x⸣ [...]
+#lem: Addaru[Month XII]MN; n; u; u
+
+
+@translation labeled en project
+
+@obverse
+
+@column 1
+
+$ broken
+
+@(o ii 1) [... mea]sured.
+
+@(o ii 2) [...] ...
+
+@(o ii 3) [...] ...
+
+@(o iii 1) [...] ...
+
+@(o iii 2) [Month VII, ...] it could be seen while (the sun) stood there.
+
+@(o iii 3) [The 12th,] moonset to sunrise: ...
+
+@(o iii 4) [The 1]3th, moonrise to sunset: 2° 30'; measured (despite) mist.
+
+@(o iii 5) The 13th, sunrise to moonset: 9°; measured.
+
+@(o iii 6) The 14th, sunset to moonrise: 7°.
+
+@(o iii 7) The 27th, moonrise to sunrise: 13°; measured (despite) clouds.
+
+@(o iii 8) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13° 10+[x’ ...]
+
+@(o iii 9) clouds, [...]
+
+@(o iii 10) [The 1]3th, [...] 4+x° [...]
+
+@(o iv 1) [...] ... [...]
+
+@(o iv 2) Month XI, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 12°, [...]
+
+@(o iv 3) The 14th, moonrise to sunset: 11°; cl[ouds ...] 
+
+@(o iv 4) The 14th, moonset to sunrise: 6° 30'; cl[ouds, ...] 
+
+@(o iv 5) The 15th, sunset to moonrise: 4°? [...] 
+
+@(o iv 6) The 16th,@sup{SIC} sunrise to moonset: 6° [...]
+
+@(o iv 7) The 28th, [moonrise to sunrise:] 12+[x° ...]
+
+@(o iv 8) Month XII, the 1st (of which followed the 30th of the preceding month,) [sunset to moonset:] ... [...]

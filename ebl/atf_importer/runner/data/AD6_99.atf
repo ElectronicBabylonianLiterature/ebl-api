@@ -1,0 +1,33 @@
+&X600101 = ADART 6 99
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ŠE? ⸢x⸣ [...]
+#lem: u; Addaru[Month XII]MN; u; u
+
+2'. [...] šá A ⸢x⸣ [...]
+#lem: u; ša[of]DET; Nēšu[Leo]CN; u; u
+
+3'. [...] ⸢x⸣ 5 GENNA [...]
+#lem: u; u; n; Kayyamānu[Saturn]CN; u
+
+4'. [...] šá? A 8 SI [...]
+#lem: u; u; Nēšu[Leo]CN; n; ubānu[finger]N; u
+
+5'. [...] šá ULÙ [...]
+#lem: u; ša[of]DET; šūtu[south]N; u
+
+@translation labeled en project
+
+@(o 1) [...] Month XII? ... [...]
+
+@(o 2) [...] Leonis? ... [...]
+
+@(o 3) [...] ..., the 5th, Saturn [...]
+
+@(o 4) [...] 8 fingers [...] Leonis. [...]
+
+@(o 5) [...] southern [...]

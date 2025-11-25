@@ -1,0 +1,68 @@
+&X600118 = ADART 6 116
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+2'. [...] ($blank$)
+#lem: u
+
+3'. [...] ⸢SIG MÚL-e-šá-SAG-GÍR.TAB 6⸣ U ⸢x⸣ [...]
+#lem: u; šapil[below]'PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; n; ubānu[finger]N; u; u
+
+4'. [...] ($blank$)
+#lem: u
+
+5'. [...] ⸢x⸣ GE₆ ⸢x⸣ [...] ŠUR-GIGIR-šá [...]
+#lem: u; u; mūšu[night]N; u; u; ŠUR-GIGIR[β/ζ Tauri]CN; u
+
+6'. [... MÚ]L-ár-šá [...] ⸢GE₆ 15 x x⸣ [...]
+#lem: u; u; u; mūšu[night]N; n; u; u; u
+
+7'. [...] 2 KÙŠ ⸢x x x⸣ [x x x] ⸢x x x x⸣ [...]
+#lem: u; n; ammatu[unit]N; u; u; u; u; u; u; u; u; u; u; u
+
+8'. [...] 2/3 KÙŠ dele-bat 2 ⸢x x x x⸣ [...]
+#lem: u; n; ammatu[unit]N; Dilbat[Venus]CN; n; u; u; u; u; u
+
+9'. [...] KÙŠ ⸢x⸣ [...] dele-bat SIG GÌR-ár-šá-A 4 [...]
+#lem: u; ammatu[unit]N; u; u; Dilbat[Venus]CN; šapil[below]'PRP; GÌR-ár-šá-A[β Virginis]CN; n; u
+
+10'. [...] ⸢x⸣ [...] ⸢x⸣ U ana NIM DIB KIN 1 e? [...]
+#lem: u; u; u; u; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; Ulūlu[Month VI]MN; n; u; u
+
+11'. [...] ⸢x x x⸣ dele-bat e S[A₄? ...]
+#lem: u; u; u; u; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+12'. [... dele-b]at e MÚL ⸢x⸣ [...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...] 
+
+@(o 2) [...] ($blank$) 
+
+@(o 3) [...] 6 fingers below β Scorpii ... [...] 
+
+@(o 4) [...] ($blank$) 
+
+@(o 5) [...] ... night ... [...] β/ζ Tauri [...] 
+
+@(o 6) [...] ... [...] Night of the 15th, ... [...] 
+
+@(o 7) [...] 2 cubits ... [...] ... [...] 
+
+@(o 8) [...] 2/3 cubit, Venus being 2 ... [...] 
+
+@(o 9) [...] cubit ... [...] Venus was 4 [fingers?] below β Virginis [...] 
+
+@(o 10) [...] ... [...] having passed x fingers to the east. Month VI, the 1st ... [...] 
+
+@(o 11) [...] ..., Venus was [...] above α? [Virginis ...] 
+
+@(o 12) [...] Venus was [...] above ... [...]

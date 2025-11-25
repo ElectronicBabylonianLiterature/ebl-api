@@ -1,0 +1,91 @@
+&X600073 = ADART 6 72
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy 
+@obverse
+1'. [...] [...] ⸢x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ⸢x 2? x⸣ [...]
+#lem: u; u; n; u; u
+
+3'. [...] ⸢x x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u
+
+$ ruling
+4'. [MU 1 ME 40].KAM {I}an u {I}an ⸢A⸣-[šú LUGAL{MEŠ} ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
+
+5'. [... GIŠ.K]UN?-A? 4? KÙŠ? [...]
+#lem: u; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N; u
+
+6'. [...] ⸢x⸣ ina ZÁLAG? GENNA e [...]
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; eli[above]PRP; u
+
+7'. [...] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+@reverse
+@column 1
+1'. [A]B 12.40 [ŠÚ na] 
+#lem: Ṭebētu[Month X]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+2'. 18 ME G[E₆] 
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+3'. ZÍZ 10.30 ŠÚ na 
+#lem: Šabāṭu[Month XI]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+4'. 15.30? ME GE₆ 
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+5'. ŠE 9 ŠÚ na 
+#lem: Addaru[Month XII]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+6'. 14.50? ME GE₆
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+7'. MU 1 ME 60+21.KAM {I}ar LUGAL
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u; šarru[king]N
+
+8'. GU₄ 28 AN.KU₁₀ šámaš ki PAP NU IGI
+#lem: Ayyaru[Month II]MN; n; antallû[eclipse]N; šamšu[sun]N; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
+
+9'. ⸢in 2+x UŠ?⸣ ME ⸢ana ŠÚ⸣ šámaš
+#lem: ina[at]PRP; n; UŠ[(time degree)]N; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamšu[sun]N
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [....] ... 2 ... [...] 3 [...] ... [...]
+
+$ ruling
+
+@(o 4) [Year 140, kings] Antiochus and [his] son Antiochus ...]
+
+@(o 5) [... Saturn was] 4? cubits? [below θ Leo]nis? [...]
+
+@(o 6) [...] ..., last part of the night, Saturn was [...] above [...]
+
+@(o 7) [...] ... [...]
+
+@(r i 1) Month X, [‘moonset to sunrise’ (plus) ‘sunrise to moonset’:] 12° 40'. 
+
+@(r i 2) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 18°. 
+
+@(r i 3) Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 10° 30'. 
+
+@(r i 4) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 15° 30'?. 
+
+@(r i 5) Month XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9°. 
+
+@(r i 6) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 14° 50'?.
+
+@(r i 7) Year 181, king Arsaces.
+
+@(r i 8) Month II, the 28th, solar eclipse; when I watched I did not see it.
+
+@(r i 9) At 2+x° before sunset.

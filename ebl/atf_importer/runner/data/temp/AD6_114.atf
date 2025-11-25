@@ -1,0 +1,106 @@
+&X600116 = ADART 6 114
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ina ŠÚ ina A ⸢x⸣ [(x)]
+#lem: u; ina[in]PRP; erbu[west]N; ina[in]PRP; Nēšu[Leo]CN; u; u
+
+3'. [...]+17 GU₄.UD ina N[IM]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N
+
+4'. [...] 8 GU₄.UD ina NIM
+#lem: u; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N
+
+5'. [... ina NI]M? ina GU ŠÚ ŠE 22
+#lem: u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Gula[Aquarius]CN; rabû[set]V; Addaru[Month XII]MN; n
+
+6'. [...] ⸢x⸣ GE₆ 11 USAN GU₄.UD
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN
+
+7'. [...] ($blank$)
+#lem: u
+
+$ ruling
+8'. [...] DU₆? 12 GENNA ana ME ⸢E-a x x⸣
+#lem: u; Tašrītu[Month VII]MN; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u; u
+
+9'. [...] 17 GENNA ina MÁŠ ⸢x⸣ KÙŠ? ⸢x x⸣
+#lem: u; n; Kayyamānu[Saturn]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; u; ammatu[unit]N; u; u
+
+10'. [...] RÍN? 2/3 KÙŠ ⸢x x⸣ GE₆? x ⸢x x⸣
+#lem: u; Zibānītu[Libra]CN; n; ammatu[unit]N; u; u; mūšu[night]N; u; u; u
+
+11'. [...] ⸢x x x x x x x⸣ [...]
+#lem: u; u; u; u; u; u; u; u; u
+
+12'. [...] ⸢x⸣
+#lem: u; u
+
+13'. [...] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+14'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+15'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+16'. [...] ⸢x e x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+17'. [...] ⸢x šá x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+18'. [...] ⸢še-pít-MAŠ.MAŠ⸣ [...]
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; u
+
+19'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] in the west in Leo [...]
+
+@(o 3) [... x]+17th, Mercury’s [...] in the east
+
+@(o 4) [...] the 8th, Mercury’s [...] in the east
+
+@(o 5) [... Mercury’s] last appearance [in the east?] in Aquarius. Month XII, the 22nd,
+
+@(o 6) [...] ... Night of the 11th, first part of the night, Mercury was
+
+@(o 7) [...] ($blank$)
+
+$ ruling
+
+@(o 8) [...] Month VII?, the 12th, Saturn’s acronychal rising ...
+
+@(o 9) [...] 17th, [when?] Saturn [became stationary? to the west?] in Capricorn x cubits? ...
+
+@(o 10) [...] Libra? 2/3 cubit ... Night? ...
+
+@(o 11) [...] ... [...]
+
+@(o 12) [...] ... [...]
+
+@(o 13) [...] ... [...]
+
+@(o 14) [...] ... [...]
+
+@(o 15) [...] ... [...]
+
+@(o 16) [...] ... [...]
+
+@(o 17) [...] ... [...]
+
+@(o 18) [... η/μ] Geminorum [...]
+
+@(o 19) [...] ... [...]

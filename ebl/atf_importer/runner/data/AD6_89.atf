@@ -1,0 +1,67 @@
+&X600090 = ADART 6 89
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] šá? KUR [...]
+#lem: u; u; u; u
+
+3'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+4'. [...] ⸢x IGI? x⸣ [...]
+#lem: u; u; u; u; u
+
+5'. [...] dele-bat e MÚL [...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; u; u
+
+6'. [...] ina RÍN ŠÚ DIR NU P[AP ...]
+#lem: u; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V; u
+
+7'. [... SIG MÚL-ár?-šá-S]AG-HUN 4 KÙŠ GE₆ ⸢15?⸣ [...]
+#lem: u; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; mūšu[night]N; n; u
+
+8'. [... dele-bat SIG M]ÚL.MÚL 1 KÙŠ 8 SI [...]
+#lem: u; Dilbat[Venus]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N; n; ubānu[finger]N; u
+
+$ ruling
+9'. [...] BAR 4 13.30 na GU₄.UD [...]
+#lem: u; Nisannu[Month I]MN; n; n; na[rising to sunrise]N; Šihṭu[Mercury]CN; u
+
+10'. [... G]E₆ 23 USAN [...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+11'. [...] TA 23 [ki PAP NU IGI ...]
+#lem: u; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u
+
+@translation labeled en project
+
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ... [...]
+
+@(o 3) [...] ... [...]
+
+@(o 4) [...] ... [...]
+
+@(o 5) [...] Venus was [...] above ... [...]
+
+@(o 6) [... Venus’] last appearance [...] in Libra; clouds, I did not watch [...]
+
+@(o 7) [...] 4 cubits [below α?] Arietis. Night of the 15th?, [...]
+
+@(o 8) [... Venus was] 1 cubit 8 fingers [below] η Tauri [...]
+
+$ ruling
+
+@(o 9) [...] Month I, the 4th, rising of Mercury to sunrise: 13° 30' [...]
+
+@(o 10) [... Ni]ght of the 23rd, first part of the night, [...]
+
+@(o 11) [...] from the 23rd [when I watched I did not see it ...]

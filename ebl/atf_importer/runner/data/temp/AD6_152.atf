@@ -1,0 +1,33 @@
+&X600154 = ADART 6 152
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ($blank$) [...]
+#lem: u; u
+
+2'. [...] IGI DIB in 20 GU₄.UD ina ⸢NIM⸣ U[D.DA ŠÚ-šú DIB ...]
+#lem: u; nanmuru[be(come) visible]V; etēqu[omit]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; u; rabû[set]V; etēqu[omit]V; u
+
+3'. [...] 18? IGI GE₆ 28 USAN ⸢GU₄⸣.[UD ...]
+#lem: u; n; nanmuru[be(come) visible]V; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; u
+
+4'. [...] ⸢NIM⸣ TA 24 ⸢ki PAP⸣ N[U IGI ...]
+#lem: u; Elamtu[east]'N; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u
+
+5'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ($blank$) [...]
+
+@(o 2) [...] first appearance [...], omitted. Around the 20th, Mercury’s [last appearance] in the east ..., [omitted ...]
+
+@(o 3) [...] (ideal) first appearance [on] the 18th. Night of the 28th, first part of the night, Mer[cury was ...]
+
+@(o 4) [...] east?: from the 24th, when I watched I did not [see it ...]
+
+@(o 5) [...] ... [...]

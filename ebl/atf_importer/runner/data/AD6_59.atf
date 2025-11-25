@@ -1,0 +1,44 @@
+&X600059 = ADART 6 59
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ($traces$)
+2'. SIG MÚL.MÚL 6 ⸢U⸣ [...]
+#lem: šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; ubānu[finger]N; u
+
+$ ruling
+3'. MU 1 ME 37.KAM {I}[se LUGAL ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; u
+
+4'. in 22 GU₄.UD ina [NIM UD.DA IGI DIB ...]
+#lem: ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; X; nanmuru[be(come) visible]V; etēqu[omit]V; u
+
+5'. GU₄.UD ina NIM UD.DA [ŠÚ-šú DIB ...]
+#lem: Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; X; rabû[set]V; etēqu[omit]V; u
+
+6'. [KUR?] NIM-a 16 n[a-su ... ina ŠÚ]
+#lem: baʾil[bright]AJ; šaqâ[high]AJ; n; na[sunset to setting]N; u; ina[in]PRP; erbu[west]N
+
+7'. [ina] ⸢ABSIN? ŠÚ⸣ KIN ⸢x⸣ [...]
+#lem: ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; Ulūlu[Month VI]MN; u; u
+
+@translation labeled en project
+
+@(o 1) (traces)
+
+@(o 2) 6 fingers below η Tauri [...]
+
+$ ruling
+
+@(o 3) Year 137, [king Seleucus ...]
+
+@(o 4) Around the 22nd, Mercury’s [first appearance] in [the east ..., omitted. ...]
+
+@(o 5) Mercury’s [last appearance] in the east, ... [omitted ...]
+
+@(o 6) [it was bright?] (and) high, sunset to setting of Mercury: 16° [...]
+
+@(o 7) last appearance [in the west in] Virgo. Month VI, ... [...]

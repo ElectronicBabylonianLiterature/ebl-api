@@ -1,0 +1,112 @@
+&X600058 = ADART 6 58
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1'. [ina a-mat {d}EN u {d}GAŠAN-iá liš]-⸢lim⸣
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1'. [MU 1 ME 11.KAM {I}an u {I}]an A-šú LUGAL SIG ⸢x x⸣ [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarru[king]N; Simānu[Month III]MN; u; u; u
+
+2'. [... ina GÍR].TAB ŠÚ APIN 13 MÚL.BABBAR ⸢ina⸣ [...]
+#lem: u; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; Arahsamna[Month VIII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; u
+
+3'. [... MÚL-KUR-šá-K]IR₄-šil-PA UŠ
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; nenmudu[be at a stationary point]V
+
+$ ruling
+4'. [MU 60+39.KAM] {I}an LUGAL GU₄ GE₆ 11? USAN [...]
+#lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+5'. [... RÍN-šá]-ULÙ 6 U NE GE₆ 30 USAN [...]
+#lem: u; RÍN-šá-ULÙ[α Librae]CN; n; ubānu[finger]N; Abu[Month V]MN; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+6'. [...] ina ZÁLAG MÚL.BABBAR e MÚL-KUR-šá-KIR₄-š[il-PA n n]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; n
+
+7'. [MU 1 ME] 10.KAM šá ši-i MU 1 ME 60+14.KAM {I}ar-šá-k[a-a LUGAL ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; u
+
+8'. [... e Š]UR-GIGIR-šá-ULÙ 1 KÙŠ GE₆ 17 USAN dele-bat e [...]
+#lem: u; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u
+
+9'. [... GE₆] ⸢22⸣ USAN dele-bat e MAŠ.MAŠ-šá-SIPA 4 KÙŠ GU₄ G[E₆ ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; Ayyaru[Month II]MN; mūšu[night]N; u
+
+10'. [... GE₆] 18 USAN dele-bat e MÚL-ár-šá-ALLA-šá-ULÙ 1 [KÙŠ ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N; u
+
+11'. [... e] LUGAL 2/3 KÙŠ dele-bat 4 U ana NIM DIB GE₆ 13 U[SAN ...]
+#lem: u; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+12'. [... SIG GI]Š.KUN-A 4 1/2 KÙŠ ŠU GE₆ 2 USAN dele-bat [...]
+#lem: u; šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; n; ammatu[unit]N; Duʾūzu[Month IV]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+13'. [... NE G]E₆ 1 USAN dele-bat SIG SA₄-šá-ABSIN  4 U dele-b[at ...]
+#lem: u; Abu[Month V]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ubānu[finger]N; Dilbat[Venus]CN; u
+
+14'. [...] ár SA₄-šá-ABSIN  1 KÙŠ ana ULÙ SIG IGI ⸢x⸣ [...]
+#lem: u; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; nanmuru[be(come) visible]V; u; u
+
+15'. [...] ⸢x⸣ GE₆ 24 ina ZÁLAG dele-bat e RÍN-šá-ULÙ 1 KÙ[Š ...]
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; u
+
+16'. [... dele]-bat e MÚL-KUR-šá-KIR₄-šil-PA 2/3 KÙŠ ZÍZ [...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; Šabāṭu[Month XI]MN; u
+
+17'. [...] e MÚL-ár-šá-SUHUR-MÁŠ 1 KÙŠ [...]
+#lem: u; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; u
+
+$ ruling
+18'. [MU 1 ME 36.KAM {I}]se LUGAL BAR GE₆ 4 USAN G[U₄.UD ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; u
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) [At the command of Bel and Beltija may it go] well.
+
+@(o 1) [Year 111,] king [Antiochus and] his son Antiochus. Month III, ... [...]
+
+@(o 2) [... Jupiter’s] last appearance [in Scor]pius. Month VIII, the 13th, Jupiter’s [first appearance] in [...]
+
+@(o 3) [...] became stationary [...] θ Ophiuchi.
+
+$ ruling
+
+@(o 4) [Year 99,] king Antiochus. Month II, night of the 11th?, first part of the night, [...]
+
+@(o 5) [...] 6 fingers [...] α [Librae.] Month V, night of the 30th, first part of the night, [...]
+
+@(o 6) [...] last part of the night, Jupiter was [...] above θ Ophiuchi.
+
+@(o 7) [Year 1]10, which is year 174, [king] Arsaces. [...]
+
+@(o 8) [...] 1 cubit [above] ζ Tauri. Night of the 17th, first part of the night, Venus was [...] above [η Geminorum ...]
+
+@(o 9) [... Night] of the 22nd, first part of the night, Venus was 4 cubits above γ Geminorum. Month II, night [...]
+
+@(o 10) [... Night] of the 18th, first part of the night, Venus was 1 [cubit] above δ Cancri [...]
+
+@(o 11) [...] 2/3 cubit [above] α Leonis, Venus having passed 4 fingers to the east. Night of the 13th, first [part of the night, ...]
+
+@(o 12) [...] 4 1/2 cubits [below] θ Leonis. Month IV, night of the 2nd, first part of the night, Venus was [...]
+
+@(o 13) [... Month V, ni]ght of the 1st, first part of the night, Venus was 4 fingers below α Virginis, Venus [...]
+
+@(o 14) [...] first appearance [in the east in Virgo, [...] behind α Virginis, 1 cubit low to the south ... [...]
+
+@(o 15) [...] ... Night of the 24th, last part of the night, Venus was 1 cubit above α Librae [...]
+
+@(o 16) [...] Venus was 2/3 cubit above θ Ophiuchi. Month XI, [...]
+
+@(o 17) [...] 1 cubit above δ Capricorni [...]
+
+$ ruling
+
+@(o 18) [Year 136,] king Seleucus. Month I, night of the 4th, first part of the night, Me[rcury was ...]

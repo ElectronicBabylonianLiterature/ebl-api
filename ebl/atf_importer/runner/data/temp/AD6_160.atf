@@ -1,0 +1,62 @@
+&X600162 = ADART 6 160
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ana? MÚL ⸢x⸣ [...]
+#lem: u; ana[to]PRP; kakkabu[star]N; u; u
+
+2'. [... ina N]IM ina ALLA IGI? ⸢GU₄?⸣ [...]
+#lem: u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Alluttu[Cancer]CN; nanmuru[be(come) visible]V; Ayyaru[Month II]MN; u
+
+3'. [...] 4 1/2 KÙŠ APIN in EN [...]
+#lem: u; n; n; ammatu[unit]N; Arahsamna[Month VIII]MN; ina[around (day x)]PRP; adi[until]PRP; u
+
+4'. [...] in 15 GENNA ana ME E-a G[E₆ ...]
+#lem: u; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; mūšu[night]N; u
+
+5'. [...] ⸢x GENNA x⸣ [...]
+#lem: u; u; Kayyamānu[Saturn]CN; u; u
+
+@reverse
+1'. [... ina] IGI GÌR-ár-šá-A UŠ AB i[n? ...]
+#lem: u; ina[in]PRP; pānu[front]N; GÌR-ár-šá-A[β Virginis]CN; nenmudu[be at a stationary point]V; Ṭebētu[Month X]MN; ina[around (day x)]PRP; u
+
+2'. [... x]+10 AN ana ŠÚ ki UŠ-a [...]
+#lem: u; u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+3'. [...] ($blank$)
+#lem: u
+
+$ ruling
+4'. [...] SIG ŠUR-G[IGIR ...]
+#lem: u; šapil[below]'PRP; ŠUR-GIGIR[β/ζ Tauri]CN; u
+
+5'. [... GE₆ x]+⸢7⸣ ina Z[ÁLAG ...]
+#lem: u; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; u
+
+@translation labeled en project
+
+@(o 1) [...] to? ... [...]
+
+@(o 2) [... Mercury’s] first appearance [in] the east in Cancer. Month II?, [...]
+
+@(o 3) [...] 4 1/2 cubits [...] Month VIII, around until? [...]
+
+@(o 4) [...] around the 15th, Saturn’s acronychal rising. Ni[ght ...]
+
+@(o 5) [...] ... Saturn ... [...]
+
+@(r 1) [... Mars ...] became stationary [... in] front of β Virginis. Month X, ar[ound ...]
+
+@(r 2) [... the x]+10th, when Mars became stationary to the west, [...]
+
+@(r 3) [...] ($blank$)
+
+$ ruling
+
+@(r 4) [...] below β/ζ Tau[ri ...]
+
+@(r 5) [... Night of the x]+7th, last [part of the night, ...]

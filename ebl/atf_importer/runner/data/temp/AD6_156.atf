@@ -1,0 +1,107 @@
+&X600158 = ADART 6 156
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ MÚL.BABBAR [...]
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; u
+
+$ ruling
+2'. [... ŠUR-GIGIR]-šá-ULÙ UŠ NU PAP DU₆ [...]
+#lem: u; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; nenmudu[be at a stationary point]V; ul[not]MOD; naṣāru[watch]V; Tašrītu[Month VII]MN; u
+
+3'. [... i]n? EN 8 MÚL.BABBAR ana NIM ki UŠ-ú
+#lem: u; ina[around (day x)]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+4'. [...] ($blank$)
+#lem: u
+
+$ ruling
+5'. [... GE₆ x]+5 USAN MÚL.BABBAR SIG MAŠ.MAŠ-IGI 4 1/2 KÙŠ
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; n; ammatu[unit]N
+
+6'. [...] ⸢x x x⸣ [...] ⸢x x⸣
+#lem: u; u; u; u; u; u; u
+
+@reverse
+1'. [...] ⸢SI NIM⸣ [...]
+#lem: u; ištānu[north]N; šaqi[high]AJ; u
+
+2'. [...] 26 ina NIM ina [...]
+#lem: u; n; ina[in]PRP; Elam[east]'N; ina[in]PRP; u
+
+$ ruling
+3'. [...] ana NIM ina LAL-šú e ⸢GÌR-ár⸣-šá-A 6 SI
+#lem: u; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N
+
+4'. [...] ⸢e⸣ SA₄ ⸢1 KÙŠ NE⸣ GE₆ 4 USAN A[N]
+#lem: u; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; Abu[Month V]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN
+
+5'. [... x]+1 KÙŠ GE₆ 30 USAN AN e MÚL-MURUB₄-šá-SAG-GÍR.TAB 4 SI
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; ubānu[finger]N
+
+6'. [...] e šil-PA 8? SI ⸢APIN⸣ GE₆ 25
+#lem: u; eli[above]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ubānu[finger]N; Arahsamna[Month VIII]MN; mūšu[night]N; n
+
+7'. [... SU]HUR?-IGI 10 SI GE₆ 15 USAN AN? ⸢e⸣ [SUH]UR-⸢ár⸣ 10 ⸢SI⸣
+#lem: u; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ubānu[finger]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ubānu[finger]N
+
+$ ruling
+8'. [...] AN e LUGAL 6 SI KIN 1+[x ...]
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N; Ulūlu[Month VI]MN; n; u
+
+9'. [...] GE₆ 5 ina ZÁLAG x [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u; u
+
+10'. [...] e SA₄-šá-ABSIN 1 K[ÙŠ ...]
+#lem: u; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; u
+
+11'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... Jupiter [...]
+
+$ ruling
+
+@(o 2) [...] it became stationary [...] ζ [Tauri;] I did not watch. Month VII, [...]
+
+@(o 3) [...] around until the 8th, when Jupiter became stationary to the east,
+
+@(o 4) [...] ($blank$)
+
+$ ruling
+
+@(o 5) [... night of the x]+5th, first part of the night, Jupiter was 4 1/2 cubits below α Geminorum.
+
+@(o 6) [...] ... [...] ...
+
+@(r 1) [...] high to the north [...]
+
+@(r 2) [...] 26th in the east in [...]
+
+$ ruling
+
+@(r 3) [...] while moving back to the east, was 6 fingers above β Virginis.
+
+@(r 4) [...] 1 cubit above α (Virginis). Month V, night of the 4th, first part of the night, Mars was
+
+@(r 5) [... x]+1 cubits. Night of the 30th, first part of the night, Mars was 4 fingers above δ Scorpii.
+
+@(r 6) [...] 8? fingers above θ Ophiuchi. Month VIII, night of the 25th,
+
+@(r 7) [...] 10 fingers [...] γ Capricorni. Night of the 15th, first part of the night, Mars was 10 fingers above δ Capricorni.
+
+$ ruling
+
+@(r 8) [...] Mars was 6 fingers above α Leonis. Month VI, the 1+[xth, ...]
+
+@(r 9) [...] night of the 5th, last part of the night, ... [...]
+
+@(r 10) [...] 1 cubit above α Virginis. [...]
+
+@(r 11) [...] ... [...]	
+ 

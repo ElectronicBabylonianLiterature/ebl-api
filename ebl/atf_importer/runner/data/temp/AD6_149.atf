@@ -1,0 +1,110 @@
+&X600151 = ADART 6 149
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ($traces$)
+2'. [... SU]HUR-MÁŠ 1.40
+#lem: u; Suhurmāšu[Capricorn]CN; n
+
+3'. [...] ⸢20?⸣ ŠE GU
+#lem: u; n; Addaru[Month XII]MN; Gula[Aquarius]CN
+
+$ ruling
+4'. [... x]+4 ina NIM ina MAŠ.MAŠ ŠÚ
+#lem: u; u; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V
+
+5'. [...] ⸢GIŠ⸣ RÍN ina TIL ITU GÍR
+#lem: u; u; Zibānītu[Libra]CN; ina[in]PRP; qītu[end]N; warhu[month]N; Zuqiqīpu[Scorpio]CN
+
+6'. [...] nu? 3 ⸢KÙŠ⸣
+#lem: u; X; n; ammatu[unit]N
+
+7'. [...] ⸢x⸣ MÚL ár
+#lem: u; u; kakkabu[star]N; warki[rear]'AJ
+
+8'. [... KÙ]Š
+#lem: u; ammatu[unit]N
+
+9'. [... DI]R? NU PAP
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+@right
+1'. ⸢x x⸣ na
+#lem: u; u; na₁[sunset to moonset]N
+
+2'. GE₆ 13 7 ME
+#lem: mūšu[night]N; n; n; ūmu[moonrise to sunset]N
+
+3'. 13 3.30 ŠÚ muš
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+4'. GE₆ 14 4 GE₆ NU [PAP]
+#lem: mūšu[night]N; n; n; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V
+
+5'. 14 11 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+6'. 27? 22 KUR
+#lem: n; n; KUR[moonrise to sunrise]N
+
+$ ruling
+7'. [x 3]0 13 na
+#lem: u; n; n; na₁[sunset to moonset]N
+
+8'. [x x] ŠÚ muš
+#lem: u; u; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+9'. [x x] ME
+#lem: u; u; ūmu[moonrise to sunset]N
+
+10'. [x x x] ⸢x⸣
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) ($traces$)
+
+@(o 2) [...] Capricorn, 100
+
+@(o 3) [...] 20?. Month XII, Aquarius.
+
+$ ruling
+
+@(o 4) [... the x]+4th, last appearance in the east in Gemini.
+
+@(o 5) [...] Libra, at the end of the month Scorpius.
+
+@(o 6) [...] ... 3 cubits.
+
+@(o 7) [...] ... the rear star
+
+@(o 8) [... cub]its.
+
+@(o 9) [... clou]ds?, I did not watch.
+
+@right
+
+@(r.e. 1) Sunset to moonset: ...
+
+@(r.e. 2) Night of the 13th, moonrise to sunset: 7°.
+
+@(r.e. 3) The 13th, moonset to sunrise: 3° 30'; measured.
+
+@(r.e. 4) Night of the 14th, sunset to moonrise: 4°; I did not [watch.]
+
+@(r.e. 5) The 14th, sunrise to moonset: 11°.
+
+@(r.e. 6) The 27th?, moonrise to sunrise: 22°.
+
+$ ruling
+
+@(r.e. 7) [Month ...,] (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 13°.
+
+@(r.e. 8) [The xth,] moonset to sunrise: [...]; measured.
+
+@(r.e. 9) [Night of the xth,] moonrise to sunset: [...]
+
+@(r.e. 10) [...] ...

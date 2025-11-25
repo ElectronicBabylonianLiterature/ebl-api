@@ -1,0 +1,68 @@
+&X600098 = ADART 6 97A
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@left
+1'. [...] ⸢x x x x⸣
+#lem: u; u; u; u; u
+
+2'. [...] ina 20 ME ana ŠÚ šamáš
+#lem: u; ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamši[sun]N
+
+3'. [GE₆] ⸢29⸣ šá DIB ina 1 GE₆ GIN
+#lem: mūšu[night]N; n; ša[which]REL; etēqu[omit]V; ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+4'. [x] GE₆ 14 8.50? ⸢ME x x⸣
+#lem: u; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; u; u
+
+5'. [x] ⸢E?-ú? 2 x x x x⸣
+#lem: u; X; n; u; u; u; u
+
+6'. [(x)] ina 16 GE₆ TA U[LÙ]
+#lem: u; ina[in]PRP; n; mūšu[night]N; ištu[from]PRP; šūtu[south]N
+
+7'. [ana] KUR ZÁLAG ina 36 ⸢x⸣ [x x]
+#lem: ana[to]PRP; šadû[east]N; nawāru[clear]V; ina[at (plus numeral)]PRP; n; u; u; u
+
+@right
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. U[Š? ...]
+#lem: u; u
+
+3'. ina [...]
+#lem: ina[at]PRP; u
+
+4'. ⸢x⸣ [...]
+#lem: u; u
+
+@translation labeled en project
+
+@left
+
+@(l.e. 1) [...] ...
+
+@(l.e. 2) [...] At 20° before sunset.
+
+@(l.e. 3) [Night? of the] 29th?, (solar eclipse) which was omitted. At 1° after sunset.
+
+@(l.e. 4) [MN,] night of the 14th, moonrise to sunset?: 8° 50'?. ...
+
+@(l.e. 5) [...] ...
+
+@(l.e. 6) [...] in 16° of night it cleared from south
+
+@(l.e. 7) [to] east. At 36° ... [...]
+
+@right
+
+@(r.e. 1) ... [...]
+
+@(r.e. 2) ... [...]
+
+@(r.e. 3) at [...]
+
+@(r.e. 4) ... [...]

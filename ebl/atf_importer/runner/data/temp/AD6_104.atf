@@ -1,0 +1,53 @@
+&X600106 = ADART 6 104
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. KIN 20 MÚL.BABBAR [ina] ⸢SAG RÍN?⸣ [ŠÚ ...]
+#lem: Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; rēšu[beginning]N; Zibānītu[Libra]CN; rabû[set]V; u
+
+2'. 24 MÚL.BABBAR ana NIM ki UŠ-[ú ...]
+#lem: n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u
+
+$ ruling
+3'. MU 16.KAM GU₄ in EN 10+[x ...]
+#lem: šattu[year]N; n; Ayyaru[Month II]MN; ina[around (day x)]PRP; adi[until]PRP; n; u
+
+4'. in 3 MÚL.BABBAR ina GÍR.TAB I[GI? ...]
+#lem: ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; nanmuru[be(come) visible]V; u
+
+5'. 1 KÙŠ 8 SI ár MÚL-KUR-š[á-KIR₄-šil-PA UŠ ...]
+#lem: n; ammatu[unit]N; n; ubānu[finger]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; nenmudu[be at a stationary point]V; u
+
+$ ruling
+6'. MU 5.KAM {I}an-ti-gu-[nu-us ...]
+#lem: šattu[year]N; n; Antigonos[Antigonos]RN; u
+
+7'. ⸢NE⸣ GE₆ 3 ina ZÁLAG MÚL.[BABBAR ...]
+#lem: Abu[Month V]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; u
+
+8'. ($traces$)
+
+@translation labeled en project
+
+@(o 1) Month VI, the 20th, Jupiter’s [last appearance in] the beginning of Libra [...]
+
+@(o 2) The 24th, when Jupiter became stationary to the east, [...]
+
+$ ruling
+
+@(o 3) Year 16, month II, around until the 10+[xth, ...]
+
+@(o 4) Around the 3rd, Jupiter’s first appearance in Scorpius [...]
+
+@(o 5) [it became stationary] 1 cubit 8 fingers behind θ [Ophiuchi ...] 
+
+$ ruling
+
+@(o 6) Year 5, Antigonus [...]
+
+@(o 7) Month V, night of the 3rd, last part of the night, Jup[iter ...]
+
+@(o 8) ($traces$)

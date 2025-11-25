@@ -1,0 +1,44 @@
+&X600111 = ADART 6 109
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [GAN x]+5.⸢50?⸣ Š[Ú u na] 
+#lem: Kislīmu[Month IX]MN; u; rabû[moonset to sunrise]'N; u[and]CNJ; na[sunrise to moonset]N
+
+2'. 10.40 ME [u GE₆] 
+#lem: n; ūmu[moonrise to sunset]N; u[and]CNJ; mūšu[sunset to moonrise]N
+
+3'. AB 14.10 ŠÚ u n[a] 
+#lem: Ṭebētu[Month X]MN; n; rabû[moonset to sunrise]'N; u[and]CNJ; na[sunrise to moonset]N
+
+4'. 16.50 ME u [GE₆] 
+#lem: n; ūmu[moonrise to sunset]N; u[and]CNJ; mūšu[sunset to moonrise]N
+
+5'. ZÍZ 9.20 Š[Ú u na] 
+#lem: Šabāṭu[Month XI]MN; n; rabû[moonset to sunrise]'N; u[and]CNJ; na[sunrise to moonset]N
+
+6'. 16 [(x) ME u GE₆]
+#lem: n; u; ūmu[moonrise to sunset]N; u[and]CNJ; mūšu[sunset to moonrise]N
+
+7'. ŠE [...] 
+#lem: Addaru[Month XII]MN; u
+
+@translation labeled en project
+
+@(o i 1) [Month IX, ‘moonset to [sunrise’ plus ‘sunrise to moonset’: x]+5° 50'?
+
+@(o i 2) ‘moonrise to sunset’ [plus ‘sunset to moonrise’:] 10° 40'
+
+@(o i 3) Month X, ‘moonset to sunrise’ plus ‘sunrise to moonset’: 14° 10'
+
+@(o i 4) ‘moonrise to sunset’ plus [‘sunset to moonrise’:] 16° 50'
+
+@(o i 5) Month XI, ‘moonset to sunrise’ [plus ‘sunrise to moonset’:] 9° 20'
+
+@(o i 6) [‘moonrise to sunset’ plus ‘sunset to moonrise’:] 16° [(...)]
+
+@(o i 7) Month XII [...]

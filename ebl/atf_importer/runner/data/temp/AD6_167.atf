@@ -1,0 +1,161 @@
+&X600169 = ADART 6 167
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] MÚL IGI [...]
+#lem: u; kakkabu[star]N; mahrû[front]AJ; u
+
+3'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+4'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+5'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+1'. [...] ⸢x⸣ muš
+#lem: u; u; mašāhu[measure]V
+
+2'. [...] ⸢x⸣ DIR muš
+#lem: u; u; erpetu[cloud]N; mašāhu[measure]V
+
+3'. [...] ⸢x⸣ DIR muš
+#lem: u; u; erpetu[cloud]N; mašāhu[measure]V
+
+4'. [...] DIR NU PAP
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+5'. [...] ⸢x⸣ DIR NU? PAP?
+#lem: u; u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+6'. [...] ⸢x⸣ muš
+#lem: u; u; mašāhu[measure]V
+
+7'. [...] DIR NU PAP
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+8'. [...] ⸢a⸣-pir muš
+#lem: u; apir[earthshine]'N; mašāhu[measure]V
+
+9'. [...] ⸢x⸣
+#lem: u; u
+
+@column 3
+1'. [2]8 [...]
+#lem: n; u
+
+2'. KIN 3[0 ...]
+#lem: Ulūlu[Month VI]MN; n; u
+
+3'. 13 2+[x ME ...] 
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+4'. 13 1?.10 [ŠÚ ...] 
+#lem: n; n; rabû[moonset to sunrise]'N; u
+
+5'. 14 2.20 ⸢GE₆⸣ [...] 
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+6'. 14 14 na [...] 
+#lem: n; n; na[sunrise to moonset]N; u
+
+7'. 27 20 KUR ⸢x⸣ [...] 
+#lem: n; n; KUR[moonrise to sunrise]N; u; u
+
+8'. DU₆ 1 13 muš
+#lem: Tašrītu[Month VII]MN; n; n; mašāhu[measure]V
+
+9'. 12 8 ŠÚ 
+#lem: n; n; rabû[moonset to sunrise]'N
+
+10'. 13 6 ME DIR muš 
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+11'. ⸢13⸣ ⸢x⸣ na DIR muš
+#lem: n; u; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+@column 4
+1'. ZÍZ [...]
+#lem: Šabāṭu[Month XI]MN; u
+
+2'. 13 ⸢x⸣ [...]
+#lem: n; u; u
+
+3'. 10+[x ...]
+#lem: n; u
+
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] the front star of [...]
+
+@(o 3) [...] ... [...]
+
+@(o 4) [...] ... [...]
+
+@(o 5) [...] ... [...]
+
+@reverse
+
+@column 1
+
+$ broken
+
+@(r ii 1) [...] ...; measured.
+
+@(r ii 2) [...] ...; measured (despite) clouds.
+
+@(r ii 3) [...] ...; measured (despite) clouds.
+
+@(r ii 4) [...]; clouds, I did not watch.
+
+@(r ii 5) [...] ...; clouds, I did not watch.
+
+@(r ii 6) [...] ... measured.
+
+@(r ii 7) [...]; clouds, I did not watch.
+
+@(r ii 8) [...] earthshine, measured.
+
+@(r ii 9) [...] ...
+
+@(r iii 1) [The 2]8th, [...]
+
+@(r iii 2) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+
+@(r iii 3) The 13th, [moonrise to sunset:] 2+[x° ...] 
+
+@(r iii 4) The 13th, [moonset to sunrise:] 1°? 10' [...]
+
+@(r iii 5) The 14th, sunset to moonrise: 2° 20' [...]
+
+@(r iii 6) The 14th, sunrise to moonset: 14° [...]
+
+@(r iii 7) The 27th, moonrise to sunrise: 20° ... [...]
+
+@(r iii 8) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 13°; measured.
+
+@(r iii 9) The 12th, moonset to sunrise: 8°. 
+
+@(r iii 10) The 13th, moonrise to sunset: 6°; measured (despite) clouds.
+
+@(r iii 11) The 13th, sunrise to moonset: ... measured (despite) clouds.
+
+@(r iv 1) Month XI, [...]
+
+@(r iv 2) The 13th, ... [...]
+
+@(r iv 3) The 10+[xth, ...]

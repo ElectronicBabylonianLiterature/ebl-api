@@ -1,0 +1,137 @@
+&X600021 = ADART 6 21
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse’
+1'. [...] ⸢MÚL⸣.BABBAR ana NIM ki-i UŠ-⸢ú⸣
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+2'. [...] ($blank$)
+#lem: u
+
+$ ruling
+3'. [... D]U₆ GE₆ 3 ina ZÁLAG MÚL.BABBAR e GÌR-ár-šá-A
+#lem: u; Tašrītu[Month VII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN
+
+4'. [...] ($blank$)
+#lem: u
+
+$ ruling
+5'. [... e MÚL-IGI-šá]-⸢še-pít⸣-MAŠ.MAŠ 2 KÙŠ GE₆ 13 US[AN] ⸢dele-bat⸣
+#lem: u; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+6'. [e MÚL-ár-šá-še-pít-MAŠ.MAŠ n n ...] ⸢GU₄⸣ 21 dele-bat ina ŠÚ ina A? [ŠÚ]
+#lem: eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; n; u; Ayyaru[Month II]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V
+
+7'. [...] ⸢MÚL⸣-IGI-šá-še-pít-M[AŠ.MAŠ]
+#lem: u; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN
+
+8'. [... MAŠ.MAŠ-š]á-SIPA 1 1/2? [KÙŠ ...]
+#lem: u; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; ammatu[unit]N; u
+
+9'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+$ broken
+@column 3
+1'. [... n]a? DIR NU PAP
+#lem: u; na[sunrise to moonset]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+2'. [... G]E₆ DIR NU PAP
+#lem: u; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. [...] ⸢x⸣ muš
+#lem: u; u; mašāhu[measure]V
+
+@column 4
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [ŠE x x]+1.30 DIR ⸢NU PAP⸣
+#lem: Addaru[Month XII]MN; u; u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. [14] 	30 NINDA	ŠÚ 
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; rabû[moonset to sunrise]'N
+
+4'. 15 	40 NINDA 	ME 
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; ūmu[moonrise to sunset]N
+
+5'. 15	8 		na 
+#lem: n; n; na[sunrise to moonset]N
+
+6'. 16	15.40 		GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+7'. 26 	15.50 	NU PAP
+#lem: n; n; ul[not]MOD; naṣāru[watch]V
+
+8'. DIR.ŠE 30 16 ⸢x⸣ [x] ⸢muš?⸣
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; n; n; u; u; mašāhu[measure]V
+
+9'. [...] kun-nu-⸢uʾ⸣
+#lem: u; kunnu[establish]V
+
+
+@translation labeled en project
+
+@(o 1) [...] when Jupiter became stationary to the east,
+
+@(o 2) [...] (blank)
+
+$ ruling
+
+@(o 3) [... Mo]nth VII, night of the 3rd, last part of the night, Jupiter was [...] above β Virginis
+
+@(o 4) [...] (blank)
+
+$ ruling
+
+@(o 5) [... Venus was] 2 cubits [above η] Geminorum. Night of the 13th, first part of the night, Venus
+
+@(o 6) [was ... above μ Geminorum ...] Month II, the 21st, Venus’ [last appearance] in the west in Leo.
+
+@(o 7) [...] η Geminorum
+
+@(o 8) [...] 1 1⁄2? [cubits above] γ Gemi[norum ...]
+
+@(o 9) [...] ... [...]
+
+@reverse
+
+@column 1
+
+$ broken
+
+@column 2
+
+$ broken
+
+@(r iii 1) [The xth,] moonr{I}se to sunset: [...]; clouds, I did not watch.
+
+@(r iii 2) [The xth,] sunset to moonr{I}se: [...]; clouds, I did not watch.
+
+@(r iii 3) [The xth, (moonr{I}se to sunr{I}se:)] ..., measured.
+
+@(r iv 1) [...] ... [...]
+
+@(r iv 2) [Month XII, ... (sunset to moonset:) x]+1° 30'; clouds, I did not watch.
+
+@(r iv 3) [The 14th,] moonset to sunr{I}se: 30'.
+
+@(r iv 4) The 15th, sunr{I}se to moonset: 40'.
+
+@(r iv 5) The 15th, moonr{I}se to sunset: 8°.
+
+@(r iv 6) The 16th, sunset to moonr{I}se: 15° 40'.
+
+@(r iv 7) The 26th, (moonr{I}se to sunr{I}se:) 15° 50'; I did not watch.
+
+@(r iv 8) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 16° ...[...], measured?.
+
+@(r iv 9) [...] were established [...]

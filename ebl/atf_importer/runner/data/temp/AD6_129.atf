@@ -1,0 +1,43 @@
+&X600131 = ADART 6 129
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [x x x] ⸢x⸣ [...]
+#lem: u; u; u; u; u; u; u
+
+2'. [...] GE₆ 13 USAN dele-bat ⸢x⸣ [...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u; u
+
+3'. [...] GE₆ 27 USAN dele-bat ⸢e⸣ [...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u
+
+4'. [...] GE₆ 13 USAN ⸢dele-bat⸣ [...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+5'. [...] ⸢KÙŠ⸣ GAN GE₆ 6 USA[N ...]
+#lem: u; ammatu[unit]N; Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+6'. [... MÚL]-ár-šá-SUHUR-MÁŠ 1 [...]
+#lem: u; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; u
+
+7'. [...] ⸢x AB? in? 5?⸣ [...]
+#lem: u; u; Ṭebētu[Month X]MN; ina[around (day x)]PRP; n; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...] ... [...]
+
+@(o 2) [...] Night of the 13th, first part of the night, Venus was ... [...]
+
+@(o 3) [...] Night of the 27th, first part of the night, Venus was [...] above [...]
+
+@(o 4) [...] Night of the 13th, first part of the night, Venus was [...]
+
+@(o 5) [...] cubits. Month IX, night of the 6th, first part of the night, [...]
+
+@(o 6) [...] 1 [...] δ Capricorni [...]
+
+@(o 7) [...] ... Month X?, around? the 5th?, [...]

@@ -1,0 +1,141 @@
+&X600104 = ADART 6 102
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... MÚL.BA]BBAR e is-⸢le₁₀ 2+x⸣ [KÙ]Š? [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; u
+
+2'. [...] ($blank$)
+#lem: u
+
+$ ruling
+3'. [... še]-pít-MAŠ.MAŠ 1 1/2 KÙŠ
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; n; ammatu[unit]N
+
+4'. [...] dele-bat e MAŠ.MAŠ-šá-SIPA 4 KÙŠ
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N
+
+5'. [... x]+1 KÙŠ GU₄ GE₆ 11 USAN dele-bat e MÚL-ár-šá-ALLA-šá-ULÙ 1 1/2 KÙŠ
+#lem: u; u; ammatu[unit]N; Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; ammatu[unit]N
+
+6'. [...] ⸢x⸣ GE₆ 18 USAN dele-bat SIG ⸢MÚL-TUR-šá-4-KÙŠ⸣-ár-LUGAL 4 U
+#lem: u; u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ubānu[finger]N
+
+7'. [...] SIG LUGAL 2 S[I?]
+#lem: u; šapil[below]'PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N
+
+8'. [...] SIG GIŠ.KUN-[A N K]ÙŠ
+#lem: u; šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N
+
+9'. [...] ⸢x⸣ A[BSIN? ...]
+#lem: u; u; Šerʾu[Virgo]CN; u
+
+10'. [... RÍN-šá]-ULÙ [...]
+#lem: u; RÍN-šá-ULÙ[α Librae]CN; u
+
+11'. [...] ⸢x⸣ [...] e SI₄ 3 KÙŠ
+#lem: u; u; u; eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N
+
+12'. [...] ⸢x⸣ [...] ⸢x⸣
+#lem: u; u; u; u
+
+@reverse
+1'. [...] ⸢x⸣
+#lem: u; u
+
+2'. [...] KÙŠ 6 U
+#lem: u; ammatu[unit]N; n; ubānu[finger]N
+
+3'. [...] ($blank$)
+#lem: u
+
+$ ruling
+4'. [...] in EN 3
+#lem: u; ina[around (day x)]PRP; adi[until]PRP; n
+
+5'. [... M]E E-a
+#lem: u; ūmu[day]N; elû[go up]V
+
+$ ruling
+6'. [...] MÚL.MÚL ŠÚ NU PAP
+#lem: u; Zappu[Taurus]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V
+
+$ ruling
+7'. [... SIG] ⸢MAŠ.MAŠ⸣-ár 3 KÙŠ
+#lem: u; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N
+
+8'. [...] ⸢x⸣
+#lem: u; u
+
+9'. [... x]+⸢4⸣ KÙŠ
+#lem: u; u; ammatu[unit]N
+
+10'. [...] ⸢e⸣ SA₄-šá-ABSIN 1 1/2 KÙŠ
+#lem: u; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N
+
+11'. [...] 4 KÙŠ
+#lem: u; n; ammatu[unit]N
+
+12'. [... KI]R₄-šil-PA 6 U
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ubānu[finger]N
+
+@translation labeled en project
+
+@(o 1) [... Jupi]ter was 2+x [cubi]ts? above α Tauri [...]
+
+@(o 2) [...] ($blank$)
+
+$ ruling
+
+@(o 3) [...] 1 1/2 cubits [... η/μ] Geminorum
+
+@(o 4) [...] Venus was 4 cubits above γ Geminorum.
+
+@(o 5) [... x]+1 cubits. Month II, night of the 11th, first part of the night, Venus was 1 1/2 cubits above δ Cancri.
+
+@(o 6) [...] ... Night of the 18th, first part of the night, Venus was 4 fingers below ϱ Leonis.
+
+@(o 7) [... Venus was] 2 fingers? below α Leonis.
+
+@(o 8) [... Venus was nn] cubits below θ Leonis.
+
+@(o 9) [...] ... V[irginis ...]
+
+@(o 10) [...] α [Librae...]
+
+@(o 11) [...] ... [...] 3 cubits above α Scorpii.
+
+@(o 12) [...] ... [...] ...
+
+@(r 1) [...] ...
+
+@(r 2) [...] cubits 6 fingers.
+
+@(r 3) [...] ($blank$)
+
+$ ruling
+
+@(r 4) [...] Around until the 3rd,
+
+@(r 5) [... Saturn’s] acronychal rising.
+
+$ ruling
+
+@(r 6) [... Mars’] last appearance in Taurus; I did not watch.
+
+$ ruling
+
+@(r 7) [...] 3 cubits [below] β Geminorum.
+
+@(r 8) [...] ...
+
+@(r 9) [... x]+4 cubits.
+
+@(r 10) [...] 1 1/2 cubits above α Virginis.
+
+@(r 11) [...] 4 cubits
+
+@(r 12) [...] 6 fingers [... θ] Ophiuchi.

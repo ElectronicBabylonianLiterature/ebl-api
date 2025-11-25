@@ -1,0 +1,50 @@
+&X600120 = ADART 6 118
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ($blank$)
+#lem: u
+
+$ ruling
+3'. [... MÚ]L.BABBAR 1 KÙŠ [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; n; ammatu[unit]N; u
+
+4'. [... UŠ]-a ina GU U[Š ...]
+#lem: u; nenmudu[be at a stationary point]V; ina[in]PRP; Gula[Aquarius]CN; nenmudu[be at a stationary point]V; u
+
+5'. [...] IGI 14 ⸢MÚL⸣.[BABBAR ...]
+#lem: u; nanmuru[be(come) visible]V; n; Kakkabu-peṣû[Jupiter]CN; u
+
+$ ruling
+6'. [...] 1? KÙŠ ina IGI MÚL [...]
+#lem: u; n; ammatu[unit]N; ina[in]PRP; pānu[front]N; u; u
+
+7'. [...] UŠ-a ina TIL zib[{ME} UŠ ...]
+#lem: u; nenmudu[be at a stationary point]V; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; nenmudu[be at a stationary point]V; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ($blank$)
+
+$ ruling
+
+@(o 3) [...] Jupiter being 1 cubit [...]
+
+@(o 4) [when it became stationary to the west,] it became stationary in Aquarius [...]
+
+@(o 5) [...] first appearance [...] The 14th, Jupi[ter ...]
+
+$ ruling
+
+@(o 6) [...] 1? cubit in front of ... [...]
+
+@(o 7) [... when] it became stationary [to the west, it became stationary] in the end of Pisces [...]
+ 

@@ -1,0 +1,49 @@
+&X600125 = ADART 6 123
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...] ⸢x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+2'. [... MÚ]L.BABBAR ina RÍN ŠÚ [x x]+2 MÚL.BABBAR [ina] RÍN IGI KUR 10 UŠ ⸢na?⸣
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; u; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; n; UŠ[(time degree)]N; na[rising to sunrise]N
+
+3'. [...] ⸢ár⸣ MÚL-e-[šá-SA]G-GÍR.TAB UŠ
+#lem: u; warki[behind]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; nenmudu[be at a stationary point]V
+
+$ ruling
+4'. [...] ⸢x⸣ [...] 1 1/2 KÙŠ SIG GE₆ 8 USAN MÚL.BABBAR
+#lem: u; u; u; n; n; ammatu[unit]N; Simānu[Month III]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN
+
+5'. [...] ⸢x x x x x x⸣
+#lem: u; u; u; u; u; u; u
+
+@reverse
+1'. [...] GE₆ DIR NU PAP
+#lem: u; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+2'. [...] DIR NU PAP
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+@translation labeled en project
+
+
+@(o 1) [...] ... [...] ... [...]
+
+@(o 2) [...] Jupiter’s last appearance in Libra. Month ..., the [x]+2nd, Jupiter’s first appearance [in] Libra; it was bright, rising of Jupiter to sunrise: 10°;
+
+@(o 3) [...] it became stationary [...] behind β Scorpii.
+
+$ ruling
+
+@(o 4) [...] ... [...] 1 1/2 cubits. Month III, night of the 8th, first part of the night, Jupiter
+
+@(o 5) [...] ...
+
+@(r 1) [...] sunset to moonrise: [...]; clouds, I did not watch.
+
+@(r 2) [...]; clouds, I did not watch.
+ 

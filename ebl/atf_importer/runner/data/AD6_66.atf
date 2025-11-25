@@ -1,0 +1,169 @@
+&X600067 = ADART 6 66
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... ŠÚ šá GENNA ina] ⸢HUN? TA 10? ki⸣ PAP NU ⸢IGI⸣ [...]
+#lem: u; rabû[setting]N; ša[which]REL; Kayyamānu[Saturn]CN; ina[in]PRP; Agru[Aries]CN; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u
+
+2'. [...] GE₆ 2 ina ZÁLAG GENNA e is-le₁₀ ⸢1? KÙŠ⸣ [...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; u
+
+3'. [... N]IM? UŠ DU₆ GE₆ 8 ina ZÁLAG GENNA ana ŠÚ ina [LAL-šú ...]
+#lem: u; u; emēdu[be at a stationary point]V; Tašrītu[Month VII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; ina[in]PRP; nahāsu[recede]V; u
+
+4'. [... x]+1 KÙŠ ina IGI is-le₁₀ 1 1/2? KÙŠ ana SI NIM ⸢UŠ x⸣ [...]
+#lem: u; u; ammatu[unit]N; ina[in]PRP; pānu[front]N; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nenmudu[be at a stationary point]V; u; u
+
+5'. [...] ($blank$)
+#lem: u
+
+$ ruling
+6'. [... x]+⸢8⸣ na-su in 7 IGI GAN in EN 10? AN ana NIM ⸢ki UŠ-ú⸣
+#lem: u; u; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; Kislīmu[Month IX]MN; ina[around (day x)]PRP; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elam[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+7'. [...] ⸢x⸣ AN ana ME E-a ŠE EN 3 AN ana ŠÚ ⸢ki? UŠ?-a⸣
+#lem: u; u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Addaru[Month XII]MN; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+8'. [...] ($blank$)
+#lem: u
+
+$ ruling
+9'. [...] ⸢x⸣ ina ZÁLAG AN e is-le₁₀ 2? 1/2 KÙŠ
+#lem: u; u; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N
+
+10'. [... ŠUR-GIGIR-šá-UL]Ù? 2/3 KÙŠ AN 4 U ana NIM DIB
+#lem: u; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Ṣalbaṭānu[Mars]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V
+
+11'. [... MÚL-x-šá-še]-pít-MAŠ.MAŠ 10 SI GE₆ 16
+#lem: u; MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; ubānu[finger]N; mūšu[night]N; n
+
+12'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+$broken
+@column 3
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] muš? ⸢ana šámaš SIG?⸣
+#lem: u; mašāhu[measure]V; ana[to]PRP; šamšu[sun]N; šapil[low]AJ
+
+3'. [... ME DI]R? muš
+#lem: u; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+4'. [...] ŠÚ DIR muš
+#lem: u; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
+
+5'. [... x]+10 GE₆ DIR NU PAP
+#lem: u; u; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+6'. [... x]+1 na DIR muš
+#lem: u; u; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
+
+7'. [...] KUR₄ muš
+#lem: u; baʾil[bright]AJ; mašāhu[measure]V
+
+@column 4
+1'. ($traces$)
+2'. ⸢14⸣ 50 NINDA ŠÚ [...]
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; rabû[moonset to sunrise]'N; u
+
+3'. 15 11 ME DIR [...] 
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; u
+
+4'. 15 13?.30 ⸢na x⸣ [...]
+#lem: n; n; na[sunrise to moonset]N; u; u
+
+5'. 16 5.30 GE₆ muš?
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+6'. ⸢27⸣ 17 KUR DIR muš
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+7'. ZÍZ 1 25 KUR₄ a-pir muš?
+#lem: Šabāṭu[Month XI]MN; n; n; baʾil[bright]AJ; apir[earthshine]'N; mašāhu[measure]V
+
+8'. 13 5 ŠÚ DIR muš 
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
+
+9'. 14 5 na ⸢muš⸣
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+@translation labeled en project
+
+@(o 1) [... Saturn’s last appearance in] Aries?: from the 10th?, when I watched I did not see it. [...]
+
+@(o 2) [...] night of the 2nd, last part of the night, Saturn was 1? cubit above α Tauri [...]
+
+@(o 3) [...] became stationary [...] Month VII, night of the 8th, last part of the night, Saturn, while [moving back] to the west, was [...]
+
+@(o 4) [...] it became stationary [x]+1 cubit in front of α Tauri, being 1 1/2? cubits high to the north ... [...]
+
+@(o 5) [...] (blank)
+
+$ ruling
+
+@(o 6) [...] rising of Saturn to sunrise: [x]+8°; (ideal) first appearance on the 7th. Month IX, around until the 10th?, when Mars became stationary to the east,
+
+@(o 7) [...] ... Mars’ acronychal rising. Month XII, until the 3rd, when Mars became stationary to the west,
+
+@(o 8) [...] (blank)
+
+$ ruling
+
+@(o 9) [...] ..., last part of the night, Mars was 2? 1/2 cubits above α Tauri.
+
+@(o 10) [... Mars was] 2/3 cubit [above ζ Tau]ri, Mars having passed 4 fingers to the east.
+
+@(o 11) [...] 10 fingers [... η/μ] Geminorum. Night of the 16th,
+
+@(o 12) [...] ...
+
+@reverse
+
+@column 1
+
+$ broken
+
+@column 2
+
+$ broken
+
+@(r iii 1) [...] ... [...]
+
+@(r iii 2) [...] measured?; it was low? to the sun.
+
+@(r iii 3) [... moonrise to sunset: ...;] measured (despite) [clou]ds?.
+
+@(r iii 4) [...] moonset to sunrise: [...;] measured (despite) clouds.
+
+@(r iii 5) [...] sunset to moonrise: [x]+10'; clouds, I did not watch.
+
+@(r iii 6) [...] sunrise to moonset: [x]+1°; measured (despite) clouds.
+
+@(r iii 7) [...] bright, measured.
+
+@(r iv 1) ...
+
+@(r iv 2) The 14th, moonset to sunrise: 50' [...]
+
+@(r iv 3) The 15th, moonrise to sunset: 11°; clouds [...]
+
+@(r iv 4) The 15th, sunrise to moonset: 13°? 30'; ... [...]
+
+@(r iv 5) The 16th, sunset to moonrise: 5° 30', measured.
+
+@(r iv 6) The 27th, moonrise to sunrise: 17°; measured (despite) clouds.
+
+@(r iv 7) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25°; it was bright, earthshine, measured.
+
+@(r iv 8) The 13th, moonset to sunrise: 5°; measured (despite) clouds.
+
+@(r iv 9) The 14th, sunrise to moonset: 5°, measured.

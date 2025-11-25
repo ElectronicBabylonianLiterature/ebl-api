@@ -1,0 +1,90 @@
+&X600175 = ADART 6 173
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. (MÚL-x)-šá-še-pít-MAŠ.MAŠ 1 K[ÙŠ ...]
+#lem: MÚL-x-šá-še-pít-MAŠ.MAŠ[η/μ Geminorum]CN; n; ammatu[unit]N; u
+
+3'. SIG MAŠ.MAŠ-IGI 3 K[ÙŠ ...]
+#lem: šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; u
+
+4'. GE₆ 25 USAN dele-bat [...]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+5'. SIG MÚL-TUR-šá-4-KÙŠ-á[r-LUGAL ...]
+#lem: šapil[below]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; u
+
+6'. KIN GE₆ 5 ina ZÁLAG de[le-bat ...]
+#lem: Ulūlu[Month VI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; u
+
+7'. SIG GIŠ.KUN-A 5 1/2 K[ÙŠ ...]
+#lem: šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; n; ammatu[unit]N; u
+
+8'. dele-bat 2 U ana NIM DIB ⸢x⸣ [...]
+#lem: Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; u; u
+
+9'. dele-bat 4 U ana ŠÚ LAL G[E₆ ...]
+#lem: Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; mūšu[night]N; u
+
+10'. [dele-bat N] ⸢U⸣ ana ŠÚ LAL [...]
+#lem: Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; u
+
+11'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+1'. ⸢x x⸣ [...]
+#lem: u; u; u
+
+2'. a-kám muš šámaš? ina? [...]
+#lem: akamu[mist]N; mašāhu[measure]V; šamšu[sun]N; u; u
+
+3'. ki E-a ana U[LÙ?]
+#lem: kī[when]'SBJ; elû[go up]V; ana[to]PRP; šūtu[south]N
+
+4'. u KUR ana ZÁLAG-ru T[AB? ...]
+#lem: u[and]CNJ; šadû[east]N; ana[to]PRP; nawāru[clear]V; ušarrû[begin]V; u
+
+5'. in ⸢36⸣ ME ana [ŠÚ šámaš]
+#lem: ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamšu[sun]N
+
+@translation labeled en project
+
+@(o 1) ... [...]
+
+@(o 2) 1 cubit [... η/μ] Geminorum [...]
+
+@(o 3) 3 cubits below α Geminorum [...]
+
+@(o 4) Night of the 25th, first part of the night, Venus was [...]
+
+@(o 5) below ϱ Leon[is ...]
+
+@(o 6) Month VI, night of the 5th, last part of the night, [...]
+
+@(o 7) 5 1/2 cubits below θ Leonis [...]
+
+@(o 8) Venus having passed 2 fingers to the east ... [...]
+
+@(o 9) Venus being 4 fingers back to the west. Ni[ght ...]
+
+@(o 10) [Venus] being [N] fingers back to the west [...]
+
+@(o 11) [...] ... [...]
+
+@(r 1) ... [...]
+
+@(r 2) measured (despite) mist. When the sun? from? [...]
+
+@(r 3) came out, to s[outh?]
+
+@(r 4) and east it b[egan?] to clear [...]
+
+@(r 5) At 36° before [sunset.]
+ 

@@ -1,0 +1,127 @@
+&X600071 = ADART 6 70
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy 
+@obverse
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+$ ruling
+2'. MU 1 ME 13.KAM ⸢{I}an⸣ [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u
+
+3'. MÚL.BABBAR e MÚL-ár-[šá-SUHUR-MÁŠ ...]
+#lem: Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; u
+
+$ ruling
+4'. MU 1 ME 24.KAM šá ši-⸢i⸣ [MU 1 ME 1.28.KAM ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+5'. NE GE₆ 21 USAN dele-bat ⸢e⸣ [SA₄-šá-ABSIN ...]
+#lem: Abu[Month V]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; u
+
+6'. USAN dele-bat SIG RÍN-šá-SI 3 [KÙŠ ... dele-bat]
+#lem: šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; n; ammatu[unit]N; u; Dilbat[Venus]CN
+
+7'. e SI₄ 2 KÙŠ GE₆ 12 U[SAN ...]
+#lem: eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+8'. [GAN] ⸢GE₆⸣ 4 USAN dele-bat ⸢e MÚL⸣-[IGI-šá-SUHUR-MÁŠ ...]
+#lem: Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; u
+
+9'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse 
+@column 1
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. ina 10 UŠ GE₆ ⸢3 SI⸣ GAR-⸢an⸣
+#lem: ina[in]PRP; n; UŠ[(time degree)]N; mūšu[night]N; n; ubānu[finger]N; šakānu[establish]V
+
+3'. ⸢4? GE₆⸣ ÍR ana ZÁLAG ki-i TAB-ú
+#lem: n; mūšu[night]N; bikītu[maximal phase (of an eclipse)]N; ana[to]PRP; nawāru[clear]V; kī[when]'SBJ; ušarrû[begin]V
+
+4'. ina 10 UŠ GE₆ TA KUR ana SI ZÁLAG
+#lem: ina[in]PRP; n; UŠ[(time degree)]N; mūšu[night]N; ištu[from]PRP; šadû[east]N; ana[to]PRP; ištānu[north]N; nawāru[be(come) bright//clear]V'V
+
+5'. in 32 GE₆ GIN ZÍZ GE₆
+#lem: ina[at (plus numeral)]PRP; n; mūšu[night]N; alāku[go]V; Šabāṭu[Month XI]MN; mūšu[night]N
+
+6'. 13 AN.KU₁₀ sin 5 ÁB BAR DIB
+#lem: n; antallû[eclipse]N; Sîn[moon]N; n; warhu[month]N; ahû[extraneous]AJ; etēqu[omit]V
+
+7'. in 60+32 GE₆ ana ZÁLAG 28?
+#lem: ina[at (plus numeral)]PRP; n; mūšu[night]N; ana[to]PRP; nūru[light]N; n
+
+8'. šámaš AN.KU₁₀ Á ULÙ u MAR
+#lem: šamšu[sun]N; antallû[eclipse]N; idu[side]N; šūtu[south]N; u[and]CNJ; amurru[west]N
+
+9'. [k]i-⸢i TAB-ú⸣ [...]
+#lem: kī[when]'SBJ; ušarrû[begin]V; u
+
+@column 2
+1'. ⸢x 30?⸣ [...]
+#lem: u; n; u
+
+2'. 14 [...]
+#lem: n; u
+
+3'. 14+[x ...]
+#lem: n; u
+
+4'. 10+[x ...]
+#lem: n; u
+
+@translation labeled en Project
+
+@(o 1) ... [...]
+
+$ ruling
+
+@(o 2) Year 113, [kings] Antiochus [and his son Antiochus ...]
+
+@(o 3) Jupiter was [...] above δ [Capricorni.]
+
+$ ruling
+
+@(o 4) Year 124, which is [year 188, ...]
+
+@(o 5) Month V, night of the 21st, first part of the night, Venus was [...] above [α Virginis ...]
+
+@(o 6) first part of the night, Venus was 3 [cubits] below β Librae [... Venus was]
+
+@(o 7) 2 cubits above α Scorpii. Night of the 12th, fir[st part of the night, ...]
+
+@(o 8) [Month IX,] night of the 4th, first part of the night, Venus was [...] above [γ Capricorni ...]
+
+@(o 9) [...] ... [...]
+
+@(r i 1) ... [...]
+
+@(r i 2) in 10° of night, it made 3 fingers.
+
+@(r i 3) 4°? of night maximal phase. When it began to clear,
+
+@(r i 4) it cleared in 10° of night from east to north.
+
+@(r i 5) At 32° after sunset. Month XI, night
+
+@(r i 6) of the 13th, lunar eclipse (after) 5 months, BAR, omitted.
+
+@(r i 7) At 92° before sunrise. The 28th?,
+
+@(r i 8) solar eclipse;
+
+@(r i 9) when it began on the south and west side, ... [...]
+
+@(r ii 1) Month ..., (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+
+@(r ii 2) The 14th, [...]
+
+@(r ii 3) The 14+[xth, ...]
+
+@(r ii 4) The 10+[xth, ...]

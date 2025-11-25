@@ -1,0 +1,59 @@
+&X600176 = ADART 6 174
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ⸢USAN⸣ GU₄.UD e MÚL [...]
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; u; u
+
+3'. [...] ⸢USAN⸣ GU₄.UD e MAŠ.MAŠ-šá-SIPA 4 [KÙŠ ...]
+#lem: u; šimītān[first part of the night]N; Šihṭu[Mercury]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; u
+
+4'. [... N na]-su in 12 IGI ŠU? 2 ⸢GU₄.UD ina NIM?⸣ [ina x ŠÚ ...]
+#lem: u; n; na[rising to sunrise]N; ina[on]PRP; n; nanmuru[be(come) visible]V; Duʾūzu[Month IV]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; u; rabû[set]V; u
+
+5'. [...] ⸢x x⸣ 13 na šá GU₄.UD in 17 G[U₄.UD ...]
+#lem: u; u; u; n; na[sunset to setting]N; ša[which]REL; Šihṭu[Mercury]CN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; u
+
+6'. [...] ⸢x ina ALLA?⸣ IGI KUR NIM-a 19 na-su in 10+[x IGI ...]
+#lem: u; u; ina[in]PRP; Alluttu[Cancer]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ; n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V; u
+
+7'. [... N na šá] GU₄.UD in 28 GU₄.UD ina NIM ina RÍN ŠÚ [...]
+#lem: u; n; na[rising to sunrise]N; ša[which]REL; Šihṭu[Mercury]CN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; u
+
+8'. [... N] na šá GU₄.UD in 4 GU₄.UD ina ŠÚ ina TIL [x ŠÚ ...]
+#lem: u; n; na[sunset to setting]N; ša[which]REL; Šihṭu[Mercury]CN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; qītu[end]N; u; rabû[set]V; u
+
+9'. [...] ⸢x⸣ in 16 IGI GE₆ 21 ina ZÁLAG GU₄.U[D ...]
+#lem: u; u; ina[on]PRP; n; nanmuru[be(come) visible]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Šihṭu[Mercury]CN; u
+
+10'. [...] ⸢MÚL?-ár?⸣-[šá]-⸢SUHUR⸣-MÁŠ 2 [...]
+#lem: u; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] first part of the night, Mercury was [...] above ... [...]
+
+@(o 3) [...] first part of the night, Mercury was 4 [cubits] above γ Geminorum [...]
+
+@(o 4) [...] rising [of Mercury to sunrise: N°;] (ideal) first appearance on the 12th. Month IV?, the 2nd, Mercury’s [last appearance] in the east [in ...]
+
+@(o 5) [...] the xth, sunset to setting of Mercury: 13°. Around the 17th?, [Mercury’s last appearance in the west ...]
+
+@(o 6) [...] first appearance [in the east in] Cancer?; it was bright (and) high, rising of Mercury to sunrise: 19°; [(ideal) first appearance] on the 10+[xth ...]
+
+@(o 7) [... rising] of Mercury to sunrise: [N°.] Around the 28th, Mercury’s last appearance in the east in Libra [...]
+
+@(o 8) [...] sunset to setting of Mercury: [N°.] Around the 4th, Mercury’s [last appearance] in the west in the end of [...]
+
+@(o 9) [...] ... (ideal) first appearance on the 16th. Night of the 21st, last part of the night, Mercury [...]
+
+@(o 10) [...] ... [...] 2 [...] δ? Capricorni [...]
+ 

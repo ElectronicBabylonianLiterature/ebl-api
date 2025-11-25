@@ -1,0 +1,234 @@
+&X600092 = ADART 6 91
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1'. ina a-mat {d}EN u ⸢{d}GAŠAN-iá⸣ [liš-lim]
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1'. MU 1 ME 60+15.[KA]M {I}a[r-šá-ka-a LUGAL ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; u
+
+2'. in 6 ina TIL zib{ME} IGI [...]
+#lem: ina[around (day x)]PRP; n; ina[in]PRP; qītu[end]N; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V; u
+
+3'. šá-SAG-HUN 4 KÙŠ ⸢x⸣ [...]
+#lem: šá-SAG-HUN[β/α Arietis]CN; n; ammatu[unit]N; u; u
+
+4'. ár MÚL-ár-ú-šá-S[AG-HUN ...]
+#lem: warki[behind]PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; u
+
+5'. DU₆ in 10 MÚL.BABBAR [ana ME E-a ...]
+#lem: Tašrītu[Month VII]MN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; u
+
+6'. 1 1/2 KÙŠ ár MÚL-KUR-[šá-DUR-nu-nu UŠ ...]
+#lem: n; n; ammatu[unit]N; warki[behind]PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; emēdu[be at a stationary point]V; u
+
+7'. [š]á-SAG-HUN 4 KÙŠ [... DIR.ŠE]
+#lem: šá-SAG-HUN[β/α Arietis]CN; n; ammatu[unit]N; u; Addaru_Šanû[(Intercalary) Month XII₂]MN
+
+8'. [i]n 20 MÚL.BABBAR ina T[IL HUN ŠÚ]
+#lem: ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Agru[Aries]CN; rabû[set]V
+
+$ ruling
+9'. [M]U 1 ME 1+ŠU+2.KAM ZÍZ i[n ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Šabāṭu[Month XI]MN; ina[around (day x)]PRP; u
+
+10'. MU 1 ME 1+ŠU+3.KAM {m}a-l[ik-sa-an-dar LUGAL ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Alexander[Alexander]RN; šarru[king]N; u
+
+11'. ⸢x⸣ GE₆ ⸢15?⸣ ina ZÁLAG MÚL.[BABBAR ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; u
+
+12'. 4 [x] ⸢MÚL.BABBAR⸣ SIG [...]
+#lem: n; u; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; u
+
+13'. ⸢x⸣ [...]
+#lem: u; u
+
+@reverse
+@column 1
+1'. ZÍZ 12.20 ŠÚ ⸢na⸣ 
+#lem: Šabāṭu[Month XI]MN; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+2'. 10.10 ME GE₆ 
+#lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+3'. ⸢ŠE⸣ 10 UŠ ŠÚ na 
+#lem: Addaru[Month XII]MN; n; UŠ[(time degree)]N; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+4'. [x]+1.30 ME GE₆
+#lem: u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+$ ruling
+5'. [GU₄ x] AN.KU₁₀ šámaš
+#lem: Ayyaru[Month II]MN; u; antallû[eclipse]N; šamšu[sun]N
+
+6'. [ki PAP NU] IGI in 1.15
+#lem: kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at (plus numeral)]PRP; n
+
+7'. [ME N]IM-a
+#lem: ūmu[day]N; šaqâ[high]AJ
+
+8'. [SIG x] AN.KU₁₀ sin šá DIB
+#lem: Simānu[Month III]MN; u; antallû[eclipse]N; Sîn[moon]N; ša[which]REL; etēqu[omit]V
+
+9'. ⸢in⸣ 19 ME ana ŠÚ šámaš
+#lem: ina[at (plus numeral)]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamši[sun]N
+
+10'. APIN 28 AN.KU₁₀ šámaš
+#lem: Arahsamna[Month VIII]MN; n; antallû[eclipse]N; šamši[sun]N
+
+11'. la-pàn DIR NU PAP
+#lem: lapāni[in front of//because of]PRP'PRP; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+12'. in 5 UŠ GE₆ ana ZÁLAG
+#lem: ina[at]PRP; n; UŠ[(time degree)]N; mūšu[night]N; ana[to]PRP; nūru[light]N
+
+13'. [GAN x] AN.KU₁₀ sin šá ⸢DIB⸣
+#lem: Kislīmu[Month IX]MN; u; antallû[eclipse]N; Sîn[moon]N; ša[which]REL; etēqu[omit]V
+
+14'. in ($blank$)
+#lem: ina[at]PRP
+
+@column 2
+1'. [BAR] ⸢30 x⸣ [...]
+#lem: Nisannu[Month I]MN; n; u; u
+
+2'. 14 50 NINDA Š[Ú ...] 
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; rabû[moonset to sunrise]'N; u
+
+3'. 15 5.30 M[E ...] 
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+4'. 15 8.20+[x na ...] 
+#lem: n; n; na[sunrise to moonset]N; u
+
+5'. 16 11.10+[x GE₆ ...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+6'. 27 ⸢x⸣ [...]
+#lem: n; u; u
+
+7'. GU₄ 1 10+[x ...]
+#lem: Ayyaru[Month II]MN; n; n; u
+
+8'. 13 ⸢x⸣ [...] 
+#lem: n; u; u
+
+9'. 14 10+[x ...] 
+#lem: n; n; u
+
+10'. 14 1+[x ...]
+#lem: n; n; u
+
+11'. 15 ⸢x⸣  [...]
+#lem: n; u; u
+
+12'. 28 [...] 
+#lem: n; u
+
+13'. U₄ 1.⸢KAM⸣ [...]
+#lem: ūmu[day]N; n; u
+
+@left
+1'. in 24 [...]
+#lem: ina[at]PRP; n; u
+
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) At the command of Bel and Beltija may it go well.
+
+@(o 1) Year 175, [king] A[rsaces ...]
+
+@(o 2) around the 6th, (Jupiter’s) first appearance in the end of Pisces [...]
+
+@(o 3) 4 cubits [below] [β?] Arietis ... [...]
+
+@(o 4) [it became stationary ...] behind α Ar[ietis.]
+
+@(o 5) Month VII, around the 10th, Jupiter’s [acronychal rising ...]
+
+@(o 6) [it became stationary] 1 1/2 cubits behind η [Piscium ...]
+
+@(o 7) 4 cubits [below β/α] Arietis [... Month XII₂,]
+
+@(o 8) around the 20th, Jupiter’s [last appearance] in the e[nd of Aries.]
+
+$ ruling
+
+@(o 9) Year 162, month XI, ar[ound ...]
+
+@(o 10) Year 163, [king] Al[exander ...]
+
+@(o 11) ..., night of the 15th?, last part of the night, Jupi[ter ...]
+
+@(o 12) the 4th, [...] Jupiter was [...] below [...]
+
+@(o 13) ... [...]
+
+@(r i 1) Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 12° 20'. 
+
+@(r i 2) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 10° 10'. 
+
+@(r i 3) Month XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 10°. 
+
+@(r i 4) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+1° 30'.
+
+$ ruling
+
+@(r i 5) [Month II, ...] solar eclipse;
+
+@(r i 6) [when I watched I did not] see it. At 75°
+
+@(r i 7) [after sun]rise.
+
+@(r i 8) [Month III, ...] lunar eclipse which was omitted.
+
+@(r i 9) At 19° before sunset.
+
+@(r i 10) Month VIII, the 28th, solar eclipse;
+
+@(r i 11) on account of clouds I did not watch.
+
+@(r i 12) At 5° before sunrise.
+
+@(r i 13) [Month IX, ...] lunar eclipse which was omitted.
+
+@(r i 14) At ($blank$)
+
+@(r ii 1) [Month I,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ... [...]
+
+@(r ii 2) The 14th, moonset to sunrise: 50'; [...] 
+
+@(r ii 3) The 15th, moonrise to sunset: 5° 30'; [...] 
+
+@(r ii 4) The 15th, [sunrise to moonset:] 8° 20+[x’; ...] 
+
+@(r ii 5) The 16th, [sunset to moonrise:] 11° 20+[x’; ...] 
+
+@(r ii 6) The 27th, [moonrise to sunrise:] ... [...]
+
+@(r ii 7) Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 10+[x°; ...]
+
+@(r ii 8) The 13th, [moonset to sunrise:] ... [...] 
+
+@(r ii 9) The 14th, [moonrise to sunset:] 10+[x°; ...] 
+
+@(r ii 10) The 14th, [sunrise to moonset:] 1+[x°; ...] 
+
+@(r ii 11) The 15th, [sunset to moonrise:] ... [...] 
+
+@(r ii 12) The 28th, [...] 
+
+@(r ii 13) First days, [...]
+
+@left
+
+@(l.e. 1) At 24° [...]

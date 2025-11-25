@@ -1,0 +1,96 @@
+&X600025 = ADART 6 25
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ 5 [...]
+#lem: u; u; n; u
+
+2'. [...] ⸢x x MÚL⸣.BABBAR SIG MÚL-KUR-šá-DUR-⸢nu⸣-[nu ...]
+#lem: u; u; u; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; u
+
+$ ruling
+3'. [...] GE₆ 5 ina ZÁLAG dele-bat SIG MÚL-KUR-šá-DUR-nu-nu 2 K[ÙŠ ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N; u
+
+4'. [...] ⸢KÙŠ⸣ GE₆ 16 ina ZÁLAG dele-bat SIG MÚL-ár-šá-SAG-HUN 5 [KÙŠ ...]
+#lem: u; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; ammatu[unit]N; u
+
+5'. [...] GE₆ 13? ina ZÁLAG dele-bat e is-le₁₀ 2 KÙŠ ⸢GE₆ 22? ina?⸣ [ZÁLAG ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+6'. [...] ina ZÁLAG dele-bat e ŠUR-GIGIR-šá-ULÙ 1 KÙŠ SIG 22 dele-bat [ina NIM ina x ŠÚ ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N; Simānu[Month III]MN; n; Dilbat[Venus]CN; ina[in]PRP; Elam[east]'N; ina[in]PRP; u; rabû[set]V; u
+
+7'. [... dele]-⸢bat ina ŠÚ⸣ ina ⸢ABSIN?⸣ IGI KUR NIM-a 9 na-su in 6 [IGI ...]
+#lem: u; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ; n; na[sunset to setting]N; ina[on]PRP; n; nanmuru[be(come) visible]V; u
+
+8'. [...] ⸢KÙŠ?⸣ GAN GE₆ 5 USAN dele-bat e MÚL-IGI-šá-SU[HUR-MÁŠ ...]
+#lem: u; ammatu[unit]N; Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; u
+
+9'. [...] ⸢x⸣ ZÍZ GE₆ 2 USAN dele-bat SIG MÚL-KUR-šá-DUR-[nu-nu ...]
+#lem: u; u; Šabāṭu[Month XI]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; u
+
+10'. [...] ⸢KÙŠ⸣ GE₆ 13 USAN dele-bat SIG MÚL-ár-šá-S[AG-HUN ...]
+#lem: u; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; u
+
+11'. [...] dele-bat e is-le₁₀ 2 2/3 KÙŠ GE₆? ⸢x⸣ [...]
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; mūšu[night]N; u; u
+
+12'. [... e] ⸢ŠUR-GIGIR⸣-šá-ULÙ 2 1/2 KÙŠ [...]
+#lem: u; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n; ammatu[unit]N; u
+
+13'. [...] ⸢x⸣ ana? NIM 20? [...]
+#lem: u; u; u; u; n; u
+
+14'. [...] GU₄ GE₆ 6 U[SAN ...]
+#lem: u; Ayyaru[Month II]MN; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+15'. [...] x IGI KUR₄? 19 na-s[u ...]
+#lem: u; u; nanmuru[be(come) visible]V; baʾil[bright]AJ; n; u; u
+
+16'. [...] ⸢x⸣ NU PAP in 20+[x ...]
+#lem: u; u; ul[not]MOD; naṣāru[watch]V; ina[around (day x)]PRP; n; u
+
+17'. [...] ⸢APIN?⸣ 26? [...]
+#lem: u; Arahsamna[Month VIII]MN; n; u
+
+@translation labeled en project
+
+@(o 1) [...] ... 25? [...]
+
+@(o 2) [...] ..., Jupiter was [...] below η Pis[cium ...]
+
+$ ruling
+
+@(o 3) [...] Night of the 5th, last part of the night, Venus was 2 cubits below η Piscium [...]
+
+@(o 4) [...] cubits?. Night of the 16th, last part of the night, Venus was 5 [cubits] below α Arietis [...]
+
+@(o 5) [...] Night of the 13th?, last part of the night, Venus was 2 cubits above α Tauri. Night of the 22nd?, [last part of the night?, ...]
+
+@(o 6) [...] last part of the night, Venus was 1 cubit above ζ Tauri. Month III, the 22nd, Venus’ [last appearance in the east in ...]
+
+@(o 7) [...] first appearance [in the] west in Virgo?; it was bright (and) high, sunset to setting of Venus: 9°; [(ideal) first appearance] on the 6th. [...]
+
+@(o 8) [...] cubits. Month IX, night of the 5th, first part of the night, Venus was [...] above γ Capri[corni ...]
+
+@(o 9) [...] ... Month XI, night of the 2nd, first part of the night, Venus was [...] below η Pis[cium ...]
+
+@(o 10) [...] cubits. Night of the 13th, first part of the night, Venus was [...] below α Arietis. [...]
+
+@(o 11) [...] Venus was 2 2/3 cubits above α Tauri. Night of the xth, [...] 
+
+@(o 12) [...] 2 1⁄2 cubits [above] ζ Tauri [...] 
+
+@(o 13) [...] ... 20? [...] 
+
+@(o 14) [...] Month II, night of the 6th, first [part of the night, ... ] 
+
+@(o 15) [...] first appearance [...]; it was bright, ... 19° [...] 
+
+@(o 16) [...] ... I did not watch. Around the 20+[xth, ...] 
+
+@(o 17) [...] Month VIII?, the 26th?, [...]

@@ -1,0 +1,105 @@
+&X600141 = ADART 6 139
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] x x [...]
+#lem: u; u; u; u
+
+3'. [...] ⸢x⸣ IGI ⸢x⸣ [...]
+#lem: u; u; u; u; u
+
+4'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+@column 1
+1'. [...] ⸢x⸣ 50? ⸢ŠÚ? na?⸣
+#lem: u; u; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+2'. [...] 50? [...]
+#lem: u; n; u
+
+3'. [...] 9.20 ⸢ŠÚ⸣ [na]
+#lem: u; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+4'. [...] 4? 10+⸢x x⸣ [x]
+#lem: u; n; n; u; u
+
+5'. [...] 12? ⸢ŠÚ na⸣
+#lem: u; n; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+6'. [...] ⸢x ME? GE₆⸣
+#lem: u; u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
+
+7'. [...] ⸢ŠÚ? na?⸣
+#lem: u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
+
+@column 2
+1'. MU [...]
+#lem: šattu[year]N; u
+
+2'. BAR ⸢x⸣ [...]
+#lem: Nisannu[Month I]MN; u; u
+
+3'. 13 [x ŠÚ ...]
+#lem: n; u; rabû[moonset to sunrise]'N; u
+
+4'. 14 ⸢x⸣ [ME ...]
+#lem: n; u; ūmu[moonrise to sunset]N; u
+
+5'. 1[4] ⸢x⸣ [na ...]
+#lem: n; u; na[sunrise to moonset]N; u
+
+6'. ⸢15⸣ 15 G[E₆ ...]
+#lem: n; n; mūšu[sunset to moonrise]N; u
+
+7'. 26 15 [...]
+#lem: n; n; u
+
+8'. GU₄ 30 ⸢11 x⸣ [...]
+#lem: Ayyaru[Month II]MN; n; n; u; u
+
+9'. 10+[x] 5.30 ŠÚ
+#lem: n; n; rabû[moonset to sunrise]'N
+
+10'. [...] ⸢x⸣ ME
+#lem: u; u; ūmu[moonrise to sunset]N
+
+@translation labeled en project
+
+@obverse
+
+Translation not warranted.
+
+@reverse
+
+@column 1
+
+Translation not warranted.
+
+@(r ii 1) Year [...]
+
+@(r ii 2) Month I, ... [...]
+
+@(r ii 3) The 13th, [moonset to sunrise: ...]
+
+@(r ii 4) The 14th, [moonrise to sunset:] ... [...]
+
+@(r ii 5) The 1[4th, sunrise to moonset:] ... [...]
+
+@(r ii 6) The 15th, sunset [to moonrise:] 15° [...]
+
+@(r ii 7) The 26th, (moonrise to sunrise:) 15° [...]
+
+@(r ii 8) Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 11° ... [...]
+
+@(r ii 9) The 10+[xth, moonset to sunrise: 5° 30'.
+
+@(r ii 10) [The xth,] moonrise to sunset: ...
+ 

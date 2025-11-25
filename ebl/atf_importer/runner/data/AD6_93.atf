@@ -1,0 +1,51 @@
+&X600094 = ADART 6 93
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢UŠ?⸣ [...]
+#lem: u; emēdu[be at a stationary point]V; u
+
+$ ruling
+2'. [MU 1 ME 60]+39.KAM ŠE ⸢x⸣ [... ŠE DIR]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Addaru[Month XII]MN; u; u; Addaru[Month XII]MN; watru[extra]AJ
+
+3'. [MU 2 ME KAM] {I}ar-šá-kam LUGAL LUGAL⸢{MEŠ}⸣ [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; šarrāni[king]N; u
+
+4'. [... GAN] GE₆ 25 USAN AN SIG MÚ[L-ár-šá-SAG-HUN ...]
+#lem: u; Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; u
+
+5'. [... AN] ⸢e⸣ is-le₁₀ 2 1/2 KÙŠ ŠE [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; Addaru[Month XII]MN; u
+
+6'. [... e ŠUR-GIGIR-šá]-ULÙ 1 1/2 KÙŠ
+#lem: u; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; n; ammatu[unit]N
+
+$ ruling
+@bottom
+$ illegible
+
+@translation labeled en project
+
+@(o 1) [...] became stationary? [...]
+
+$ ruling
+
+@(o 2) [Year 1]99, month XII, ... [... Month XII was intercalary.]
+
+@(o 3) [Year 200,] Arsaces king of kings. [...]
+
+@(o 4) [... Month IX,] night of the 25th, first part of the night, Mars was [...] below [α Arietis ...]
+
+@(o 5) [... Mars was] 2 1/2 cubits above α Tauri. Month XII, [...]
+
+@(o 6) [...] 1 1/2 cubits [above ζ Tauri.]
+
+$ ruling
+
+@bottom
+
+$ illegible 

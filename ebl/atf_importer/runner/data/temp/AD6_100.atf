@@ -1,0 +1,85 @@
+&X600102 = ADART 6 100
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse 
+@column 1
+1'. [x x]+12 KUR a-⸢kam⸣ [...]
+#lem: u; u; KUR[moonrise to sunrise]N; akamu[mist]N; u
+
+2'. [x] 30 13 na-su KUR₄ ⸢muš⸣
+#lem: u; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; mašāhu[measure]V
+
+3'. [14] 5.40 ŠÚ DIR NU PAP 
+#lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+4'. [15] 7 ME DIR muš
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+5'. [15] 5.30 na x muš
+#lem: n; n; na[sunrise to moonset]N; u; mašāhu[measure]V
+
+6'. [1]6 7 GE₆ DIR muš 
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+7'. [2]8? 13.30 KUR DIR muš
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+8'. [x x 1]6 na-su KUR₄ muš
+#lem: u; u; n; na₁[sunset to moonset]N; baʾil[bright]AJ; mašāhu[measure]V
+
+9'. [x x] ŠÚ DIR m[uš]
+#lem: u; u; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
+
+@column 2
+1'. ⸢x⸣ [...]
+#lem: u; u
+
+2'. ⸢13⸣ [x ME ...] 
+#lem: n; u; ūmu[moonrise to sunset]N; u
+
+3'. ⸢13⸣ [x ŠÚ ...] 
+#lem: n; u; rabû[moonset to sunrise]'N; u
+
+4'. ⸢14⸣ [x GE₆ ...] 
+#lem: n; u; mūšu[sunset to moonrise]N; u
+
+5'. ⸢14⸣ [x na ...]
+#lem: n; u; na[sunrise to moonset]N; u
+
+6'. 20+[x ...]
+#lem: n; u
+
+@translation labeled en project
+
+@(o i 1) [...] moonrise to sunrise: [x]+12°; mist [...]
+
+@(o i 2) [Month ...,] (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 13°; it was bright, measured.
+
+@(o i 3) [The 14th,] moonset to sunrise: 5° 40'; clouds, I did not watch.
+
+@(o i 4) [The 15th,] moonrise to sunset: 7°; measured (despite) clouds.
+
+@(o i 5) [The 15th,] sunrise to moonset: 5° 30', measured.
+
+@(o i 6) [The 1]6th, sunset to moonrise: 7°; measured (despite) clouds.
+
+@(o i 7) [The 2]8th?, moonrise to sunrise: 13° 30'; measured (despite) clouds.
+
+@(o i 8) [Month ...] sunset to moonset: 16°; it was bright, measured.
+
+@(o i 9) [The xth,] moonset to sunrise: [...] measured (despite) clouds.
+
+@(o ii 1) ... [...]
+
+@(o ii 2) The 13th, [moonrise to sunset: ...] 
+
+@(o ii 3) The 13th, [moonset to sunrise: ...]
+
+@(o ii 4) The 14th, [sunset to moonrise: ...] 
+
+@(o ii 5) The 14th, [sunrise to moonset: ...]
+
+@(o ii 6) The 20+[xth, moonrise to sunrise: ...]

@@ -1,0 +1,81 @@
+&X600019 = ADART 6 19
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1'. ŠU 1 GENNA ina ALLA IGI 15.30 na-su
+#lem: Duʾūzu[Month IV]MN; n; Kayyamānu[Saturn]CN; ina[in]PRP; Alluttu[Cancer]CN; nanmuru[be(come) visible]V; n; na[rising to sunrise]N
+
+@obverse
+1'. [... i]n 28 GENNA ina ALLA ŠÚ SIG in 29 GENNA ina ALLA IGI DU₆ in EN 24
+#lem: u; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; Simānu[Month III]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; Alluttu[Cancer]CN; amāru[be(come) visible]V; Tašrītu[Month VII]MN; ina[around (day x)]PRP; adi[until]PRP; n
+
+2'. [GENNA ana NIM ki UŠ-ú] 2? KÙŠ ár MÚL-ár-šá-ALLA-šá-ULÙ UŠ GAN in 18 GENNA ana ME E-a
+#lem: Kayyamānu[Saturn]CN; ana[to]PRP; Elam[east]'N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; emēdu[be at a stationary point]V; Kislīmu[Month IX]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+3'. [ZÍZ GE₆ x USAN GENNA ana ŠÚ] ina LAL-šú e MÚL-ár-šá-ALLA-šá-ULÙ 2 SI DIM₄ in EN 26
+#lem: Šabāṭu[Month XI]MN; mūšu[night]N; u; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; sanāqu[come near]V; ina[around (day x)]PRP; adi[until]PRP; n
+
+4'. [GENNA ana ŠÚ ki UŠ]-a ⸢x?⸣ 2 SI ina IGI MÚL-ár-šá-ALLA-šá-ULÙ 2 SI ana SI NIM ⸢UŠ?⸣
+#lem: Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u; n; ubānu[finger]N; ina[in]PRP; pān[front]'N; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nenmudu[be at a stationary point]V
+
+5'. [ŠE GE₆ x US]AN GENNA ana NIM ina LAL-šú e MÚL-ár-šá-ALLA-šá-⸢ULÙ⸣ [n n ...]
+#lem: Addaru[Month XII]MN; mūšu[night]N; u; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; u
+
+$ ruling
+6'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. GE₆ 13 USAN AN ⸢e?⸣ [...]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; u
+
+3'. GE₆ 22 USAN AN e MAŠ.MAŠ-šá-SIPA ⸢4⸣ [(x) KÙŠ]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; u; ammatu[unit]N
+
+4'. DIR GE₆ 13 USAN AN SIG MAŠ.MAŠ-IGI 3 1/2 KÙŠ
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; n; ammatu[unit]N
+
+5'. GE₆ 22 USAN AN SIG MAŠ.MAŠ-ár 2 1/2 KÙŠ
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N
+
+6'. ŠE.DIR
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN
+
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) Month IV, the 1st, Saturn’s first appearance in Cancer; rising of Saturn to sunr{I}se: 15° 30'.
+
+@(o 1) [... Ar]ound the 28th, Saturn’s last appearance in Cancer. Month III, around the 29th, Saturn’s first appearance in Cancer. Month VII, around until the 24th,
+
+@(o 2) [when Saturn became stationary to the east, it] became stationary 2? cubits behind δ Cancri. Month IX, around the 18th, Saturn’s acronychal rising.
+
+@(o 3) [Month XI, night of the xth, first part of the night, Saturn,] while moving back [to the west,] was 2 fingers above δ Cancri; it came near. Around until the 26th,
+
+@(o 4) [when Saturn became stationary to the west,] it became stationary 2 fingers in front of δ Cancri, being 2 fingers high to the north.
+
+@(o 5) [Month XII, night of the xth, first] part of the night, Saturn, while moving back to the east, was [...] above δ Cancri.
+
+$ ruling
+
+@(o 6) [...] ... [...]
+
+@(r 1) [...] ... [...]
+
+@(r 2) Night of the 13th, first part of the night, Mars was [...] above? [...]
+
+@(r 3) Night of the 22nd, first part of the night, Mars was 4 [cubits (...)] above γ Geminorum.
+
+@(r 4) Month XII₂, night of the 13th, first part of the night, Mars was 3 1⁄2 cubits below α Geminorum.
+
+@(r 5) Night of the 22nd, first part of the night, Mars was 2 1⁄2 cubits below β Geminorum.
+
+@(r 6) Month XII was intercalary.

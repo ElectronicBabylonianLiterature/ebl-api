@@ -1,0 +1,83 @@
+&X600099 = ADART 6 97B
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy 
+@left
+1'. [...] ⸢muš⸣
+#lem: u; mašāhu[measure]V
+
+2'. [... mu]š?
+#lem: u; mašāhu[measure]V
+
+3'. [...] ⸢DIR NU PAP⸣
+#lem: u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+4'. [...] ⸢x⸣ muš
+#lem: u; u; mašāhu[measure]V
+
+5'. [...] ⸢x x muš⸣
+#lem: u; u; u; mašāhu[measure]V
+
+6'. [...] ⸢x muš⸣
+#lem: u; u; mašāhu[measure]V
+
+7'. [...] ⸢muš⸣
+#lem: u; mašāhu[measure]V
+
+@right
+1'. 10+[x ...]
+#lem: n; u
+
+2'. 20+[x ...]
+#lem: n; u
+
+3'. KIN? [...]
+#lem: Ulūlu[Month VI]MN; u
+
+4'. 13 [x ŠÚ ...]
+#lem: n; u; rabû[moonset to sunrise]'N; u
+
+5'. 14 [x ME ...]
+#lem: n; u; ūmu[moonrise to sunset]N; u
+
+6'. 14 ⸢5?⸣ [na ...]
+#lem: n; n; na[sunrise to moonset]N; u
+
+7'. 15 [x GE₆ ...]
+#lem: n; u; mūšu[sunset to moonrise]N; u
+
+@translation labeled en project
+
+@left 
+
+@(l.e. 1) [...] measured.
+
+@(l.e. 2) [... measu]red?.
+
+@(l.e. 3) [...] clouds, I did not watch.
+
+@(l.e. 4) [...] ..., measured.
+
+@(l.e. 5) [...] ..., measured.
+
+@(l.e. 6) [...] ..., measured.
+
+@(l.e. 7) [...,] measured.
+
+@right
+
+@(r.e. 1) The 10+[xth, ...]
+
+@(r.e. 2) The 20+[xth, ...]
+
+@(r.e. 3) Month VI?, [...]
+
+@(r.e. 4) The 13th, [moonset to sunrise: ...]
+
+@(r.e. 5) The 14th, [moonrise to sunset: ...]
+
+@(r.e. 6) The 14th, [sunrise to moonset:] 5°? [...]
+
+@(r.e. 7) The 15th, [sunset to moonrise: ...]

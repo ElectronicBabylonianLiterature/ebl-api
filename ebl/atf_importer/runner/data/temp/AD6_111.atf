@@ -1,0 +1,144 @@
+&X600113 = ADART 6 111
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] ⸢x x x⸣ GE₆ 10+[x ...]
+#lem: u; u; u; u; mūšu[night]N; n; u
+
+3'. [...] GE₆ 3 ina ZÁLAG AN SIG MAŠ.MAŠ-[...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MAŠ.MAŠ-x[α/β Geminorum]CN
+
+4'. [...] 4? SI? GE₆ 8 ina ZÁLAG AN e MÚL-ár-[šá-ALLA-šá-x ...]
+#lem: u; n; ubānu[finger]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-ALLA-šá-x[γ/δ Cancri]CN; u
+
+5'. [...] APIN? GE₆ 1 ina ZÁLAG AN e MÚL-TUR-šá-4-K[ÙŠ-ár-LUGAL ...]
+#lem: u; Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; u
+
+6'. [... U]SAN AN ana ŠÚ ina LAL-šú e LUGAL 1/2? KÙŠ GE₆ 2? [...]
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; mūšu[night]N; n; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+1'. [...]
+#lem: u
+
+2'. [...] ⸢x NIM?⸣
+#lem: u; u; šaqi[high]AJ
+
+3-4'. [...]
+#lem: u
+
+5'. [...] muš
+#lem: u; mašāhu[measure]V
+
+6'. [...] ⸢x⸣
+#lem: u; u
+
+7'. [... N]U PAP?
+#lem: u; ul[not]MOD; naṣāru[watch]V
+
+8'. [...] muš
+#lem: u; mašāhu[measure]V
+
+9'. [...] ⸢muš?⸣
+#lem: u; mašāhu[measure]V
+
+@column 3
+1'. NE 1 17 KUR₄ muš ⸢x x⸣
+#lem: Abu[Month V]MN; n; n; baʾil[bright]AJ; mašāhu[measure]V; u; u
+
+2'. 12 15 ⸢ŠÚ muš⸣
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+3'. 12 1 M[E] ⸢a-kam⸣ muš
+#lem: n; n; ūmu[moonrise to sunset]N; akamu[mist]N; mašāhu[measure]V
+
+4'. 13 1 ⸢na muš⸣
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+5'. 14 9 ⸢GE₆ muš⸣ 
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+6'. 27 ⸢25⸣ [...]
+#lem: n; n; u
+
+7'. KIN 30 12+[...]
+#lem: Ulūlu[Month VI]MN; n; n
+
+8'. [ina] ⸢GUB? x⸣ [...]
+#lem: ina[while]'SBJ; izuzzu[stand]V; u; u
+
+9'. 13 6+[x ME ...]
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+10'. 13 7+[x ŠÚ ...]
+#lem: n; n; rabû[moonset to sunrise]'N; u
+
+11'. ⸢14⸣ [x GE₆ ...]
+#lem: n; u; mūšu[night]N; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ... Night of the 10+[xth, ...]
+
+@(o 3) [...] Night of the 3rd, last part of the night, Mars was [...] below [α/β] Geminorum  [...]
+
+@(o 4) [...] 4 fingers?. Night of the 8th, last part of the night, Mars was [...] above γ/δ [Cancri ...]
+
+@(o 5) [...] Month VIII?, night of the 1st, last part of the night, Mars was [...] above ϱ Leo[nis ...]
+
+@(o 6) [...] first part of the night, Mars, while moving back to the west, was 1/2 cubit above α Leonis. Night of the 2nd?, [...]
+
+@reverse
+
+@column 1
+
+$ broken
+
+@(r ii 1) (broken)
+
+@(r ii 2) [...] ... high?
+
+@(r ii 3-4) ($broken$)
+
+@(r ii 5) [...] measured.
+
+@(r ii 6) [...] ...
+
+@(r ii 7) [...] I did not watch.
+
+@(r ii 8) [...] measured.
+
+@(r ii 9) [...] measured?.
+
+@(r iii 1) Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, measured, ...
+
+@(r iii 2) The 12th, moonset to sunrise: 15°, measured.
+
+@(r iii 3) The 13th (text 12@sup{SIC}), moonrise to sunset: 1°, measured (despite) mist.
+
+@(r iii 4) The 13th, sunrise to moonset: 1°, measured.
+
+@(r iii 5) The 14th, sunset to moonrise: 9°, measured.
+
+@(r iii 6) The 27th, [moonrise to sunrise:] 25° [...]
+
+@(r iii 7) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12+[x° ...]
+
+@(r iii 8) [it could be seen while (the sun)] stood there ...
+
+@(r iii 9) The 13th, [moonrise to sunset:] 6+[x° ...]
+
+@(r iii 10) The 13th, [moonset to sunrise:] 7+[x° ...]
+
+@(r iii 11) The 14th, [sunset to moonrise: ...]

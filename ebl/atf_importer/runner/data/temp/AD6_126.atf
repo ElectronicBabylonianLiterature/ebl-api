@@ -1,0 +1,63 @@
+&X600128 = ADART 6 126
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] x x [...]
+#lem: u; u; u; u
+
+3'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+4'. [...] LUGAL GU₄ GE₆ 20? [...]
+#lem: u; LUGAL[α Leonis]CN; Ayyaru[Month II]MN; mūšu[night]N; n; u
+
+5'. [...] AN SIG MÚL ár [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; u; u; u
+
+6'. [...] AN e MÚL? [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; u; u
+
+7'. [...] ⸢x⸣ AN S[IG? ...]
+#lem: u; u; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; u
+
+8'. [...] AN SIG [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; u
+
+9'. [...] ⸢x⸣ AN e M[ÚL ...]
+#lem: u; u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; u; u
+
+10'. [...] USAN AN e MAŠ.[MAŠ-šá-SIPA ...]
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; u
+
+11'. [...] ⸢IGI⸣.DU₈.A{MEŠ} D[IB ...]
+#lem: u; tāmartu[appearance]'N; etēqu[omit]V; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ... [...]
+
+@(o 3) [...] ... [...]
+
+@(o 4) [...] king [...] Month II, night of the 20th? [...]
+
+@(o 5) [...] Mars was [...] below ... [...]
+
+@(o 6) [...] Mars was [...] above ... [...]
+
+@(o 7) [...] ... Mars was [...] be[low? ...]
+
+@(o 8) [...] Mars was [...] below [...]
+
+@(o 9) [...] ... Mars was [...] above ... [...]
+
+@(o 10) [...] first part of the night, Mars was [...] above γ Ge[minorum ...]
+
+@(o 11) [...] first appearances, pa[ssings, ...] 

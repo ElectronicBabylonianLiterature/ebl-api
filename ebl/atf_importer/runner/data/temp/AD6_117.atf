@@ -1,0 +1,104 @@
+&X600119 = ADART 6 117
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+$ broken
+@column 2
+1'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+2'. [...]
+#lem: u
+
+3'. [...] ⸢x⸣
+#lem: u; u
+
+4'. [... n]a?
+#lem: u; u
+
+5'. [...] ⸢x⸣
+#lem: u; u
+
+@column 3
+1'. DU₆ 1 9? ⸢na?⸣ [...]
+#lem: Tašrītu[Month VII]MN; n; n; na₁[sunset to moonset]N; u
+
+2'. 14 ŠÚ u na NU TUK DIR NU [PAP]
+#lem: n; rabû[moonset to sunrise]'N; u[and]CNJ; na[sunrise to moonset]N; ul[not]MOD; išû[have]V; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+3'. 15 5 ME DIR muš
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
+
+4'. 15 14 na
+#lem: n; n; na[sunrise to moonset]N
+
+5'. 16 3.30 GE₆ muš
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+6'. 27 12 KUR
+#lem: n; n; KUR[moonrise to sunrise]N
+
+7'. ⸢APIN⸣ 1 13 na
+#lem: Arahsamna[Month VIII]MN; n; n; na₁[sunset to moonset]N
+
+@column 4
+1'. 11 [...]
+#lem: n; u
+
+2'. [...]
+#lem: u
+
+3'. 15 2+[x ...]
+#lem: n; n; u
+
+4'. 16 7+[x ...]
+#lem: n; n; u
+
+5'. 27 10+[x ...]
+#lem: n; n; u
+
+@translation labeled en project
+
+@obverse
+
+@column 1
+
+$ broken
+
+@(o ii 1) [... measu]red.
+
+@(o ii 2) [...]
+
+@(o ii 3) [...] ...
+
+@(o ii 4) [...] ...
+
+@(o ii 5) [...] ...
+
+@(o iii 1) Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 9°? [...]
+
+@(o iii 2) The 14th, there was no ‘moonset to sunrise’ and ‘sunrise to moonset’; clouds, I did not [watch.]
+
+@(o iii 3) The 15th, moonrise to sunset: 5°; measured (despite) clouds. 
+
+@(o iii 4) The 15th, sunrise to moonset: 14°. 
+
+@(o iii 5) The 16th, sunset to moonrise: 3° 30'; measured. 
+
+@(o iii 6) The 27th, moonrise to sunrise: 12°.
+
+@(o iii 7) Month VIII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 13°.
+
+@(o iv 1) The 11+[xth, ...]
+
+@(o iv 2) [...]
+
+@(o iv 3) The 15th, [...] 2+[x° ...]
+
+@(o iv 4) The 16th, [...] 7+[x° ...]
+
+@(o iv 5) The 27th, [moonrise to sunrise:] 10+[x° ...]

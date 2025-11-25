@@ -1,0 +1,46 @@
+&X600043 = ADART 6 43
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ⸢x⸣ [...] ⸢x⸣ [...]
+#lem: u; u; u; u
+
+$ ruling
+2'. MU 60+16.[KAM] {I}se? ⸢x⸣ [...]
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN; u; u
+
+3'. SIG GE₆ 11 ina ZÁLAG AN SIG MÚ[L ...]
+#lem: Simānu[Month III]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; u; u
+
+4'. ina ZÁLAG AN SIG MÚL.MÚL 2 ⸢x⸣ [...]
+#lem: ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; u; u
+
+5'. e is-le₁₀ 2 2/3 K[ÙŠ ...]
+#lem: eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; u
+
+6'. ŠE GE₆ 10 USA[N AN ...]
+#lem: Addaru[Month XII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+7'. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) ... [...] ... [...]
+
+$ ruling
+
+@(o 2) Year 76, Seleucus ... [...]
+
+@(o 3) Month III, night of the 11th, last part of the night, Mars was [...] below ... [...]
+
+@(o 4) last part of the night, Mars was 2 ... below η Tauri [...]
+
+@(o 5) 2 2/3 cubits above α Tauri [...]
+
+@(o 6) Month XII, night of the 10th, first part of the night, [Mars was ...]
+
+@(o 7) ... [...]

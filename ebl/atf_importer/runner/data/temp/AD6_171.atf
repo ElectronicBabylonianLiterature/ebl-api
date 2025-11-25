@@ -1,0 +1,71 @@
+&X600173 = ADART 6 171
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] SAG? HUN? [...]
+#lem: u; u; Agru[Aries]CN; u
+
+2'. [...] ina MÚL.MÚL I[GI? ...]
+#lem: u; ina[in]PRP; Zappu[Taurus]CN; nanmuru[be(come) visible]V; u
+
+3'. [...] DIB? ŠU ⸢x⸣ [...]
+#lem: u; etēqu[omit]V; Duʾūzu[Month IV]MN; u; u
+
+4'. [...] ⸢x⸣ in? 6 ⸢x⸣ [...]
+#lem: u; u; ina[around (day x)]PRP; n; u; u
+
+5'. [... G]U₄.UD ina NIM ina ⸢x⸣ [...]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; u; u
+
+6'. [...] ⸢x⸣ in 6 G[U₄.UD ...]
+#lem: u; u; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; u
+
+7'. [... in x] šá APIN IGI [...]
+#lem: u; ina[on]PRP; u; ša[which]REL; Arahsamna[Month VIII]MN; nanmuru[be(come) visible]V; u
+
+8'. [... NIM]-a 20 na-su [...]
+#lem: u; šaqâ[high]AJ; n; na[time interval between the rising of a planet and sunrise viz. sunset and the setting of a planet]N; u
+
+9'. [...] ina zib{ME} IGI KUR [...]
+#lem: u; ina[in]PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; u
+
+10'. [... x]+6?.KAM {I}x [...]
+#lem: u; u; u; u
+
+11'. [... SIG S]I-MÁŠ 2/3 [KÙŠ ...]
+#lem: u; šapil[below]'PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; u
+
+12'. [... ana] ⸢ME E-a⸣ [...]
+#lem: u; ana[to]PRP; ūmu[day]N; elû[go up]V; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) [...] Arietis? [...]
+
+@(o 2) [...] first? appearance [...] in Taurus [...]
+
+@(o 3) [...] omitted?. Month IV, ... [...]
+
+@(o 4) [...] ... Around the 6th, ... [...]
+
+@(o 5) [... M]ercury’s [...] in the east in ... [...]
+
+@(o 6) [...] Around the 6th, Mer[cury’s ...]
+
+@(o 7) [...] (ideal) first appearance [on the xth] of month VIII. [...]
+
+@(o 8) [... it was hi]gh, interval between Mercury’s appearance and sunrise/sunset: 20° [...]
+
+@(o 9) [...] first appearance [...] in Pisces; it was bright, [...]
+
+@(o 10) [... x]+6, [king] ... [...]
+
+@(o 11) [...] 2/3 cubit [below] β Capricorni [...]
+
+@(o 12) [...] acronychal rising. [...]
+ 

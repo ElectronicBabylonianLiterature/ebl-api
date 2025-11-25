@@ -1,0 +1,56 @@
+&X600149 = ADART 6 147
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. [...] ⸢x x 4? SI?⸣ GE₆ 6 [...]
+#lem: u; u; u; n; ubānu[finger]N; mūšu[night]N; n; u
+
+3'. [... GU₄.UD e MAŠ.MAŠ]-šá-SIPA 4? KÙŠ? 10? GU₄.UD [...]
+#lem: u; Šihṭu[Mercury]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; n; Šihṭu[Mercury]CN; u
+
+4'. [...] ⸢GU₄.UD⸣ SIG MAŠ.MAŠ-IGI 2? [KÙŠ ...]
+#lem: u; Šihṭu[Mercury]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; u
+
+5'. [... GU₄.UD SIG MAŠ.MAŠ]-ár 1 2/3 KÙŠ ⸢x x⸣ [...]
+#lem: u; Šihṭu[Mercury]CN; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N; u; u; u
+
+6'. [... MÚL]-IGI-šá-ALLA-šá-ULÙ [...]
+#lem: u; MÚL-IGI-šá-ALLA-šá-ULÙ[θ Cancri]CN; u
+
+$ ruling
+7'. [...] ⸢x⸣ GENNA e MÚL TUR šá ⸢ár?⸣ [...]
+#lem: u; u; Kayyamānu[Saturn]CN; eli[above]PRP; kakkabu[star]N; ṣehru[small]AJ; ša[that]REL; warki[behind]PRP; u
+
+8'. [...] ⸢x⸣ e MÚL-ár-šá-ALLA-šá-[x ...]
+#lem: u; u; eli[above]PRP; MÚL-ár-šá-ALLA-šá-x[γ/δ Cancri]CN; u
+
+9'. [...] ⸢x GE₆? x x⸣ [...]
+#lem: u; u; mūšu[night]N; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] 4? fingers ... Night of the 6th, [...]
+
+@(o 3) [... Mercury was] 4? cubits [above] γ Geminorum. The 10th?, Mercury’s [...]
+
+@(o 4) [...] Mercury was 2? [cubits] below α Geminorum. [...]
+
+@(o 5) [... Mercury was] 1 2/3 cubits [below β Gemi]norum ... [...]
+
+@(o 6) [...] θ Cancri [...]
+
+$ ruling
+
+@(o 7) [...] ..., Saturn was above the small star which is behind [...]
+
+@(o 8) [...] ... above γ/δ Cancri [...]
+
+@(o 9) [...] ... night? ... [...]

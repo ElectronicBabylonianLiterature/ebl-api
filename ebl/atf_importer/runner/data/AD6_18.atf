@@ -1,0 +1,96 @@
+&X600018 = ADART 6 18
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ ZÍZ 18 GU₄.[UD]
+#lem: u; u; Šabāṭu[Month XI]MN; n; Šihṭu[Mercury]CN
+
+2'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+$ ruling
+3'. [MU 48.KAM {I}an-ti-ʾu-uk]-su LUGAL GAL-ú u {I}an-ti-ʾu-uk-su A-šú LUGAL
+#lem: šattu[year]N; n; Antiochus[Antiochus]'RN; šarru[king]N; rabû[great]AJ; u[and]CNJ; Antiochus[Antiochus]'RN; māru[son]N; šarru[king]N
+
+4'. [...] ⸢x ina⸣ ALLA IGI DU₆ in EN 24 GENNA ana NIM ki UŠ-[ú]
+#lem: u; u; ina[in]PRP; Alluttu[Cancer]CN; amāru[be(come) visible]V; Tašrītu[Month VII]MN; ina[around (day x)]PRP; adi[until]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; Elam[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
+
+5'. [... U]Š GAN in 18 GENNA ana ME E-a ZÍZ GE₆ 10 USAN GENNA
+#lem: u; emēdu[be at a stationary point]V; Kislīmu[Month IX]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Šabāṭu[Month XI]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN
+
+6'. [e MÚL-ár-šá-ALLA-šá-UL]Ù 1 SI ŠE in EN 26 GENNA ana ŠÚ ki UŠ-a
+#lem: eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; Addaru[Month XII]MN; ina[around (day x)]PRP; adi[until]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; emēdu[be at a stationary point]V
+
+7'. [...] ⸢x⸣ ana SI NIM UŠ ŠE GE₆ 26 USAN GENNA
+#lem: u; u; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nenmudu[be at a stationary point]V; Addaru[Month XII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN
+
+8'. [e MÚL-ár-šá-ALLA-šá-ULÙ] 2 SI i-ṣa GENNA ana NIM DIB
+#lem: eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; wīṣu[little]AJ; Kayyamānu[Saturn]CN; ana[to]PRP; Elam[east]'N; etēqu[go past]V
+
+$ ruling
+@reverse
+1'. [...] ITU? in 18? AN ina A ŠÚ DU₆ 23 AN ina RÍN IGI 18 na ina 19? IGI
+#lem: u; u; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; Tašrītu[Month VII]MN; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V
+
+$ ruling
+2'. [... USA]N AN e MÚL-IGI-šá-še-pít-MAŠ.MAŠ 5/6 KÙŠ GE₆ 23? ⸢USAN AN⸣
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-IGI-šá-še-pít-MAŠ.MAŠ[η Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN
+
+3'. [e MÚL-ár-šá-še-pít-MAŠ.MAŠ n n ... AN e MAŠ.MAŠ]-⸢šá-SIPA⸣ 4 KÙŠ GE₆ 17 USAN AN SIG MAŠ.MAŠ-IGI 2 [KÙŠ]
+#lem: eli[above]PRP; MÚL-ár-šá-še-pít-MAŠ.MAŠ[μ Geminorum]CN; n; n; u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N
+
+4'. [... AN e MÚL-ár-šá-ALLA]-šá-ULÙ 14 ⸢SI⸣ GE₆ 22
+#lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; mūšu[night]N; n
+
+5'. [AN e MÚL.BABBAR n n ...] GE₆ 25 USAN AN e LUGAL [n n]
+#lem: Ṣalbaṭānu[Mars]CN; eli[above]PRP; Kakkabu-peṣû[Jupiter]CN; n; n; u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; n
+
+6'. [...] ZÍZ GE₆ 11 ina ZALÁG AN [(x)]
+#lem: u; Šabāṭu[Month XI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; u
+
+7'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+
+@translation labeled en project
+
+@(o 1) [...] ... Month XI, the 18th, Mer[cury’s]
+
+@(o 2) [...] ...
+
+$ ruling
+
+@(o 3) [Year 48, Antioch]us was great king and his son Antiochus king.
+
+@(o 4) [... Saturn’s] first appearance in Cancer. Month VII, around until the 24th, when Saturn became stationary to the east,
+
+@(o 5) it became [stationary ...] Month IX, around the 18th, Saturn’s acronychal rising. Month XI, night of the 10th, first part of the night, Saturn was
+
+@(o 6) 1 finger [above δ Canc]ri. Month XII, around until the 26th, when Saturn became stationary to the west,
+
+@(o 7) it became stationary [...] ... high to the north. Month XII, night of the 26th, first part of the night, Saturn was
+
+@(o 8) 2 fingers [above δ Cancri], Saturn having passed a little to the east.
+
+$ ruling
+
+@reverse
+
+@(r 1) [...] ... Around the 18th, Mars’ last appearance in Leo. Month VII, the 23rd, Mars’ first appearance in Libra; rising of Mars to sunr{I}se: 18°; (ideal) first appearance on the 19th?.
+
+$ ruling
+
+@(r 2) [... first part of the ni]ght, Mars was 5/6 cubit above η Geminorum. Night of the 23rd?, first part of the night, Mars was
+
+@(r 3) [... above μ Geminorum ... Mars was] 4 cubits [above γ Ge]minorum. Night of the 17th, first part of the night, Mars was 2 [cubits] below α Geminorum.
+
+@(r 4) [... Mars was] 14 fingers [above δ] Cancri. Night of the 22nd,
+
+@(r 5) [Mars was ... above Jupiter ...] Night of the 25th, first part of the night, Mars was [...] above α Leonis.
+
+@(r 6) [...] Month XI, night of the 11th, last part of the night, Mars was
+
+@(r 7) [...] ... [...]

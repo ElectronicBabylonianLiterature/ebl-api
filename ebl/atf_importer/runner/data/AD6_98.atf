@@ -1,0 +1,111 @@
+&X600100 = ADART 6 98
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 2
+1'. [...] PAP?
+#lem: u; naṣāru[watch]V
+
+2'. [...] a-kam muš
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+3'. [...] a-kam muš
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+4'. [...] GE₆
+#lem: u; mūšu[sunset to moonrise]N
+
+5'. [...]
+#lem: u
+
+6'. [... ina? GU]B? IGI
+#lem: u; ina[while]'SBJ; izuzzu[stand]V; nanmuru[see]V
+
+@column 3
+1'. [... x]+20 GE₆
+#lem: u; u; mūšu[sunset to moonrise]N
+
+2'. ⸢26⸣ 20.30 muš 
+#lem: n; n; mašāhu[measure]V
+
+3'. APIN 1 11+⸢x⸣ muš ana šámaš SIG 
+#lem: Arahsamna[Month VIII]MN; n; n; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+4'. 12 9 ŠÚ NU PAP 
+#lem: n; n; rabû[moonset to sunrise]N; ul[not]MOD; naṣāru[watch]V
+
+5'. 13 8 ME muš 
+#lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+6'. 13 8.10 na muš 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+7'. 14 4.50 GE₆ DIR NU PAP 
+#lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+8'. 27 9.30 DIR NU PAP
+#lem: n; n; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+@column 4
+1'. 1[3 ...]
+#lem: n; u
+
+2'. [13 ...]
+#lem: n; u
+
+3'. 14 [...]
+#lem: n; u
+
+4'. 14 [...]
+#lem: n; u
+
+5'. 27? [...]
+#lem: n; u
+
+6'. ZÍZ [...]
+#lem: Šabāṭu[Month XI]MN; u
+
+@translation labeled en project
+
+@(o ii 1) [...] watch?. 
+
+@(o ii 2) [...] measured (despite) mist. 
+
+@(o ii 3) [...] measured (despite) mist.
+
+@(o ii 4) [...] sunset to moonrise: [...]
+
+@(o ii 5) [...]
+
+@(o ii 6) [...] it could be seen while (the sun) stood there.)
+
+@(o iii 1) [...] sunset to moonrise: [x]+20'. 
+
+@(o iii 2) The 26th, (moonrise to sunrise:) 20° 30', measured.
+
+@(o iii 3) Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 11+x°, measured; it was low to the sun.
+
+@(o iii 4) The 12th, moonset to sunrise: 9°, I did not watch.
+
+@(o iii 5) The 13th, moonrise to sunset: 8°, measured.
+
+@(o iii 6) The 13th, sunrise to moonset: 8° 10', measured.
+
+@(o iii 7) The 14th, sunset to moonrise: 4° 50'; clouds, I did not watch.
+
+@(o iii 8) The 27th, (moonrise to sunrise:) 9° 30'; clouds, I did not watch. 
+
+@(o iv 1) The 1[3th, ...]
+
+@(o iv 2) [The 13th, ...]
+
+@(o iv 3) The 14th, [...]
+
+@(o iv 4) The 14th, [...]
+
+@(o iv 5) The 27th?, [...]
+
+@(o iv 6) Month XI, [...]

@@ -1,0 +1,46 @@
+&X600150 = ADART 6 148
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] 1 S[I ...] ⸢x x⸣ [x]
+#lem: u; n; ubānu[finger]N; u; u; u; u
+
+3'. [...] ⸢SI⸣ dele-bat 2 SI ana NIM DIB GE₆ 5
+#lem: u; ubānu[finger]N; Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V; mūšu[night]N; n
+
+4'. [...] ⸢x⸣ dele-bat e GÌR-ár-šá-A 2 SI dele-bat 2 SI ana N[IM DIB] 
+#lem: u; u; Dilbat[Venus]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N; Dilbat[Venus]CN; n; ubānu[finger]N; ana[to]PRP; Elamtu[east]'N; etēqu[go past]V
+
+5-6'. ($blank$)
+
+$ ruling
+
+7'. [... GU₄].UD ina ŠÚ ina MAŠ.MAŠ IGI KUR NIM-[a]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; baʾil[bright]AJ; šaqâ[high]AJ
+
+8'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] 1 fing[er ...] ... [...]
+
+@(o 3) [...] fingers, Venus having passed 2 fingers to the east. Night of the 5th,
+
+@(o 4) [...] ..., Venus was 2 fingers above β Virginis, Venus [having passed] 2 fingers to the east.
+
+@(o 5-6) ($blank$)
+
+$ ruling
+
+@(o 7) [... Mer]cury’s first appearance in the west in Gemini; it was bright (and) high,
+
+@(o 8) [...] ...

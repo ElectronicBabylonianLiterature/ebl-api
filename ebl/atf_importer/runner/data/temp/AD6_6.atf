@@ -1,0 +1,125 @@
+&X600006 = ADART 6 6
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+2'. ⸢ina a-mat {d}EN⸣ u {d}GAŠAN-iá liš-lim
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltu[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1'. MU 19.KAM {I}se-lu-ku LUGAL {ITU}GU₄ EN 16 MÚL.[BABBAR ...]
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N; Ayyaru[Month II]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; u
+
+2'. UŠ {ITU}ŠU 16 MÚL.BABBAR ana ME E-a {ITU}KIN EN [...]
+#lem: emēdu[be at a stationary point]V; Duʾūzu[Month IV]MN; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[rise]'V; Ulūlu[Month VI]MN; adi[until]PRP; u
+
+3'. {ITU}AB 26 MÚL.BABBAR ina TIL GU ŠÚ {ITU}ŠE 2 M[ÚL.BABBAR ...]
+#lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; rabû[set]V; Addaru[Month XII]MN; n; Kakkabu-peṣû[Jupiter]CN; u
+
+$ ruling
+4'. MU 1.KAM {I}se-lu-ku šá IGI-ta MU 7 {ITU}N[E? ...]
+#lem: šattu[year]N; n; Seleucus[Seleucus]RN; ša[which]REL; mahrīta[previously]AV; šattu[year]N; n; Abu[Month V]MN; u
+
+5'. GE₆ 23 USAN MÚL.BABBAR ana ŠÚ ina ⸢LAL-šú x⸣ [...]
+#lem: mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[move back]V; u; u
+
+6'. ⸢e⸣ MÚL-IGI-šá-SUHUR-MÁŠ [...]
+#lem: eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; u
+
+$ ruling
+7'. [MU 1.2]2.⸢KAM⸣ I[...]
+#lem: šattu[year]N; n; u
+
+@reverse
+@column 1
+1'. {ITU}DU₆ GE₆ 28 ⸢x x x⸣
+#lem: Tašrītu[Month VII]MN; mūšu[night]N; n; u; u; u
+
+2'. AN.KU₁₀ šámaš šá DIB
+#lem: antallû[eclipse]N; šamši[sun]N; ša[which]REL; etēqu[omit]V
+
+3'. {ITU}APIN GE₆ 14 in 3 UŠ
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[around (day x)]PRP; n; UŠ[(time degree)]N
+
+4'. ana KUR šámaš Á KUR ki-i
+#lem: ana[before]PRP; napāhu[rise]V; šamšu[sun]N; idu[side]N; šadû[east]N; kī[when]'SBJ
+
+5'. TAB-ú ád ŠÚ ⸢ŠE⸣.DIR
+#lem: ušarrû[begin]V; adir[eclipsed]AJ; rabû[set]V; Addaru_Šanû[(Intercalary) Month XII₂]MN
+
+@column 2
+1'. N[E ...]
+#lem: Abu[Month V]MN; u
+
+2'. 1[4 	x	ŠÚ ...]	
+#lem: n; u; rabû[moonset to sunrise]N; u
+
+3'. ⸢15⸣ [x	ME ...]	
+#lem: n; u; ūmu[moonrise to sunset]N; u
+
+4'. 15	[x 	na ...]
+#lem: n; u; na[sunrise to moonset]N; u
+
+5'. 16	[x 	GE₆ ...]
+#lem: n; u; mūšu[sunset to moonrise]N; u
+
+6'. 27	10+[x ...]
+#lem: n; n; u
+
+@bottom
+1'. U₄ 1.KAM IGI.DU₈.A{MEŠ} DIB-qa{MEŠ} u AN.KU₁₀[{MEŠ} ...]
+#lem: ūmu[day]N; n; tāmartu[appearance]N; etēqu[go past//passings]V'N; u[and]CNJ; antallû[eclipse]N; u
+
+@translation labeled en project
+
+@top
+
+@(t.e. 2) At the command of Bel and Beltija may it go well.
+
+@obverse
+
+@(o 1) Year 19, king Seleucus. Month II, until the 16th, Jupi[ter ...]
+
+@(o 2) became stationary. Month IV, the 16th, Jupiter's acronychal rising. Month VI, until [...]
+
+@(o 3) Month X, the 26th, Jupiter's last appearance in the end of Aquarius. Month XII, the 2nd, J[upiter's first appearance ...]
+
+$ ruling
+
+@(o 4) Year 1, Seleucus, which before (was) year 7. Month V?, [...]
+
+@(o 5) Night of the 23rd, first part of the night, Jupiter, while moving back to the west, was ... [...]
+
+@(o 6) [...] above γ Capricorni.
+
+$ ruling
+
+@(o 7) [Year 8]2, [...]
+
+@(r i 1) Month VII, night of the 28th, ...
+
+@(r i 2) solar eclipse which was omitted.
+
+@(r i 3) Month VIII, night of the 14th, at 3°
+
+@(r i 4) before sunrise, when it began on the east side,
+
+@(r i 5) it set eclipsed. Month XII was intercalary.
+
+@(r ii 1) Month V, [...]
+
+@(r ii 2) The 1[4th,	moonset to sunrise: ...]
+
+@(r ii 3) The 15th,	[moonrise to sunset: ...]
+
+@(r ii 4) The 15th,	[sunrise to moonset: ...]
+
+@(r ii 5) The 16th,	[sunset to moonrise: ...]
+
+@(r ii 6) The 27th,	(moonrise to sunrise:) 10+[x° ...]
+
+@bottom
+
+@(b.e. 1) First days, appearances, passings and eclipses [...]

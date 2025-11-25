@@ -1,0 +1,51 @@
+&X600096 = ADART 6 95
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... dele-b]at SIG SAG-A 3 [KÙŠ ... dele-bat]
+#lem: u; Dilbat[Venus]CN; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; u; Dilbat[Venus]CN
+
+2'. [SIG GIŠ.KUN-A] 5 KÙŠ DU₆ GE₆ 1 ina ZÁ[LAG dele-bat e GÌR-ár-šá-A n n ...]
+#lem: šapil[below]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; ammatu[unit]N; Tašrītu[Month VII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; n; u
+
+3'. [APIN] GE₆ 21 ina ZÁLAG dele-bat e RÍN-šá-[ULÙ n n ... dele-bat]
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; RÍN-šá-ULÙ[α Librae]CN; n; n; u; Dilbat[Venus]CN
+
+4'. [e] SI₄ 2 KÙŠ GE₆ 12 ina ZÁLAG dele-bat ⸢e⸣ [...]
+#lem: eli[above]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u
+
+5'. [DI]R?.ŠE GE₆ 18 USAN dele-[bat SIG GU₄.UD? ...]
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; Šihṭu[Mercury]CN; u
+
+$ ruling
+6'. [M]U 2 ME 10.KAM {I}ar-šá-kam LUG[AL LUGAL{MEŠ} ...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n;  Aršaka[Arsaces]RN; šarru[king]N; šarrāni[king]N; u
+
+7'. ⸢x x x⸣ [x x] ⸢x x⸣ USAN? [...]
+#lem: u; u; u; u; u; u; u; šimītān[first part of the night]N; u
+
+8'. ⸢x⸣ [...] ⸢x x⸣ [...]
+#lem: u; u; u; u; u
+
+@translation labeled en project
+
+@(o 1) [... Venu]s was 3 [cubits] below ε Leonis. [... Venus was]
+
+@(o 2) 5 cubits [below θ Leonis.] Month VII, night of the 1st, la[st part of the night, Venus was ... above β Virginis ...]
+
+@(o 3) [Month VIII,] night of the 21st, last part of the night, Venus was [...] above α Lib[rae ... Venus was]
+
+@(o 4) 2 cubits [above] α Scorpii. Night of the 12th, last part of the night, Venus was [...] above [θ Ophiuchi ...]
+
+@(o 5) Month XII₂, night of the 18th, first part of the night, Venus was [ ... below Mercury? ...]
+
+$ ruling
+
+@(o 6) Year 210, Arsaces king [of kings ...]
+
+@(o 7) ... [...] ... first part of the night, [...]
+
+@(o 8) ... [...] ... [...]

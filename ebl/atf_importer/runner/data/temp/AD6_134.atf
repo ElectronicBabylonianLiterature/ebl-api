@@ -1,0 +1,78 @@
+&X600136 = ADART 6 134
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@top
+1'. ⸢ina a⸣-mat {d}EN u {d}GAŠAN-[iá liš-lim]
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1'. MU 1 ME 29.KAM [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+2'. ki UŠ-a 1 1/2 [KÙŠ ...]
+#lem: kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n; ammatu[unit]N; u
+
+3'. GE₆ 4 x [...]
+#lem: mūšu[night]N; n; u; u
+
+4'. MU 60+15.[KAM ...]
+#lem: šattu[year]N; n; u
+
+@reverse
+@column 1
+1'. ⸢x x⸣ [...]
+#lem: u; u; u
+
+2'. ⸢28⸣ 15 K[UR?]
+#lem: n; n; KUR[moonrise to sunrise]N
+
+3'. ŠU 1 16 KUR₄ ⸢x⸣ [...]
+#lem: Duʾūzu[Month IV]MN; n; n; baʾil[bright]AJ; u; u
+
+4'. a-pir muš ina GUB IGI
+#lem: apir[earthshine]'N; mašāhu[measure]V; ina[while]'SBJ; izuzzu[stand]V; nanmuru[see]V
+
+5'. ⸢15⸣ 7? ŠÚ muš
+#lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+6'. 15 30 NINDA ME muš
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; ūmu[moonrise to sunset]N; mašāhu[measure]V
+
+7'. 16 9 na muš
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+8'. 16 10 UŠ GE₆ m[uš]
+#lem: n; n; UŠ[(time degree)]N; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) At the commmand of Bel and Belti[ja may it go well.]
+
+@(o 1) Year 129, [...]
+
+@(o 2) when [...] became stationary [to the west, it became stationary] 1 1/2 [cubits ...]
+
+@(o 3) Night of the 4th, ... [...]
+
+@(o 4) Year 75, [...]
+
+@(r i 1) ... [...]
+
+@(r i 2) The 28th, moonrise to sunrise: 15°.
+
+@(r i 3) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16°; it was bright, ... [...]
+
+@(r i 4) earthshine, measured; it could be seen while (the sun) stood there.
+
+@(r i 5) The 15th, moonset to sunrise: 7°?, measured. 
+
+@(r i 6) The 15th, moonrise to sunset: 30', measured. 
+
+@(r i 7) The 16th, sunrise to moonset: 9°, measured. 
+
+@(r i 8) The 16th, sunset to moonrise: 10°, mea[sured.]

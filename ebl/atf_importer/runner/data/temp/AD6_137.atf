@@ -1,0 +1,90 @@
+&X600139 = ADART 6 137
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. ⸢x⸣ [...] ⸢x x⸣ [...]
+#lem: u; u; u; u; u
+
+2'. ⸢x x⸣ [...] šá ⸢SI?⸣ [...]
+#lem: u; u; u; ša[which]REL; ištānu[north]N; u
+
+3'. ⸢GE₆?⸣ 9? ⸢x x x x⸣ 13? ⸢x⸣ [...]
+#lem: mūšu[night]N; n; u; u; u; u; n; u; u
+
+4'. GE₆ 9 ina ZÁLAG dele-bat SIG LUGAL 1 [...]
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; LUGAL[α Leonis]CN; n; u
+
+5'. x 1 ⸢GE₆ x⸣ dele-bat SIG ⸢x⸣ [...]
+#lem: u; n; mūšu[night]N; u; Dilbat[Venus]CN; šapil[below]'PRP; u; u
+
+6'. 1/2 KÙŠ? 16? SIG RÍN-šá-S[I? ...]
+#lem: n; ammatu[unit]N; n; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; u
+
+7'. 13 ⸢x x⸣ AB 17 [...]
+#lem: n; u; u; Ṭebētu[Month X]MN; n; u
+
+8'. ⸢x x⸣ [x x] ⸢x ŠE? x⸣ [...]
+#lem: u; u; u; u; u; Addaru[Month XII]MN; u; u
+
+@reverse
+1'. ($traces$)
+$ ruling
+2'. ⸢MU 1 ME? 48?.KAM?⸣ I[...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u
+
+3'. ⸢ziq-pi AN?.KU₁₀?⸣ [...]
+#lem: zaqāpu[culminate]V; antallû[eclipse]N; u
+
+4'. ⸢x x x⸣ [...]
+#lem: u; u; u; u
+
+5'. 28 ⸢x x ár?⸣ [...]
+#lem: n; u; u; warki[behind]PRP; u
+
+6'. DU₆ 13 1.50? [...]
+#lem: Tašrītu[Month VII]MN; n; n; u
+
+7'. GE₆ 29 4? [...]
+#lem: mūšu[night]N; n; n; u
+
+8'. ŠE? 29 ⸢1⸣ [...]
+#lem: Addaru[Month XII]MN; n; n; u
+
+@translation labeled en project
+
+@(o 1) ... [...] ... [...]
+
+@(o 2) ... [...] northern? [...]
+
+@(o 3) Ni[ght?] of the 9th?, [...] ... [...]
+
+@(o 4) Night of the 9th, last part of the night, Venus was 1+[x ...] below α Leonis [...]
+
+@(o 5) ... night of the xth, Venus was [...] below ... [...]
+
+@(o 6) 1/2 cubit?. ... below β Librae [...]
+
+@(o 7) 13? ... Month X, the 1st, 7°? [...]
+
+@(o 8) ... [...] ... Month XII ... [...]
+
+@(r 1) ($traces$)
+
+$ ruling
+
+@(r 2) Year 148?, [...]
+
+@(r 3) culminated, eclipse [...]
+
+@(r 4) ... [...]
+
+@(r 5) The 28th, ... behind? [...]
+
+@(r 6) Month VII, the 13th, [...] 1° 50' [...]
+
+@(r 7) Night of the 29th, 4? [...]
+
+@(r 8) Month XII?, the 29th, 1 [...]

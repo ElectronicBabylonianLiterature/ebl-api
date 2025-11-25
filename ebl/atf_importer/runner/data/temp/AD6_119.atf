@@ -1,0 +1,42 @@
+&X600121 = ADART 6 119
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣
+#lem: u; u; u
+
+2'. [...] A 3 1/2 KÙŠ
+#lem: u; Nēšu[Leo]CN; n; n; ammatu[unit]N
+
+@reverse
+1'. [... AP]IN GE₆ 20 ina ZÁLAG AN
+#lem: u; Arahsamna[Month VIII]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
+
+2'. [...] ŠÚ? ina LAL-šú
+#lem: u; erbu[west]N; ina[while]PRP; nahāsu[recede]V
+
+3'. [...] ($blank$)
+#lem: u
+
+$ ruling
+4'. [...] ⸢x x⸣
+#lem: u; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ...
+
+@(o 2) [...] 3 1/2 cubits [...] Leonis.
+
+@(r 1) [... Mon]th VIII, night of the 20th, last part of the night, Mars was
+
+@(r 2) [...] while moving back to the west?
+
+@(r 3) [...] ($blank$)
+
+$ ruling
+
+@(r 4) [...] ...

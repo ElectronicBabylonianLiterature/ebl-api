@@ -1,0 +1,60 @@
+&X600152 = ADART 6 150
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. ⸢13⸣ 50? NINDA na [(0)]
+#lem: n; n; NINDA[time degree, 1/60 UŠ]N; na[sunrise to moonset]N; n
+
+2'. [1]4 12 ME ⸢DIR⸣ [...]
+#lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; u
+
+3'. 15 3.40 GE₆
+#lem: n; n; mūšu[sunset to moonrise]N
+
+4'. 27 12 KUR DIR NU PAP
+#lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+5'. [ZÍ]Z 1 21 ⸢x x⸣ DIR NU PAP
+#lem: Šabāṭu[Month XI]MN; n; n; u; u; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
+
+6'. [1]3 5?.30+[x] ⸢x⸣
+#lem: n; n; u
+
+7'. [1]4 [...]
+#lem: n; u
+
+@column 2
+1'. G[E₆? ...]
+#lem: mūšu[night]N; u
+
+2'. ⸢Á⸣ [...]
+#lem: idu[side]N; u
+
+3'. G[E₆? ...]	
+#lem: mūšu[night]N; u
+
+@translation labeled en project
+
+@(o i 1) The 13th, sunrise to moonset: 50'. 
+
+@(o i 2) [The 1]4th, moonrise to sunset: 12°; clouds, [...] 
+
+@(o i 3) The 15th, sunset to moonrise: 3° 40'. 
+
+@(o i 4) The 27th, moonrise to sunrise: 12°; clouds, I did not watch. 
+
+@(o i 5) [Month] XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21° ...; clouds, I did not watch.
+
+@(o i 6) [The 1]3th, [...] 5°? 30+[x’]
+
+@(o i 7) [The 1]4th, [...]
+
+@(o ii 1) Ni[ght? ...]
+
+@(o ii 2) side [...]
+
+@(o ii 3) Ni[ght? ...]

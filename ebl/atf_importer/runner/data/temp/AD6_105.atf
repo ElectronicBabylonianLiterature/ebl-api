@@ -1,0 +1,67 @@
+&X600107 = ADART 6 105
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [...] IGI MÚL ⸢x⸣ [...]
+#lem: u; pānu[front]N; kakkabu[star]N; u; u
+
+3'. [...] ⸢x⸣ UŠ
+#lem: u; u; nenmudu[be at a stationary point]V
+
+$ ruling
+4'. [... ina] LAL-šú e ŠUR-GIGIR-šá-U[LÙ ...]
+#lem: u; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; u
+
+5'. [...] KÙŠ GAN GE₆ 14 ina ZÁLAG M[ÚL.BABBAR ...]
+#lem: u; ammatu[unit]N; Kislīmu[Month IX]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; u
+
+6'. [...] GE₆ 6 USAN MÚL.BABBAR S[IG? ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; u
+
+$ ruling
+$ ruling
+7'. [...] 2 1/2 KÙŠ GE₆ 29 ina ZÁLAG [...]
+#lem: u; n; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; u
+
+8'. [...] ina ZÁLAG dele-bat SIG MÚL.MÚL ⸢4?⸣ [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; MÚL.MÚL[η Tauri]CN; n; u
+
+9'. [... GE₆] 15 ina ZÁLAG dele-bat e ŠUR-GIGI[R ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; ŠUR-GIGIR[β/ζ Tauri]CN; u
+
+10'. [... GE₆ x]+8 ina ZÁLAG dele-bat e ⸢x⸣ [...]
+#lem: u; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] in front of ... [...]
+
+@(o 3) [...] it became stationary [...]
+
+$ ruling
+
+@(o 4) [... Jupiter,] while moving back [to ...,] was [...] above ζ Tauri [...]
+
+@(o 5) [...] cubits. Month IX, night of the 14th, last part of the night, Ju[piter ...]
+
+@(o 6) [...] Night of the 6th, first part of the night, Jupiter was [...] be[low? ...]
+
+$ ruling
+
+$ ruling
+
+@(o 7) [...] 2 1/2 cubits. Night of the 29th, last part of the night, [...]
+
+@(o 8) [...] last part of the night, Venus was 4 [...] below η Tauri [...]
+
+@(o 9) [... Night] of the 15th, last part of the night, Venus was [...] above β/ζ Tauri [...]
+
+@(o 10) [... Night of the x]+8th, last part of the night, Venus was [...] above [...]

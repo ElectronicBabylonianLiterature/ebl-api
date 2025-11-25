@@ -1,0 +1,103 @@
+&X600077 = ADART 6 76
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy 
+@top
+1'. IGI.DU₈.A{MEŠ} ⸢u DIB-qa{MEŠ}⸣ šá AN [x (x)] MU 2 ME 5.KAM u MU 2 ME 6.KAM
+#lem: tāmartu[appearance]N; u[and]CNJ; etēqu[passing by]'N; ša[which]REL; Ṣalbaṭānu[Mars]CN; u; u; šattu[year]N; n; mē[(one) hundred]NU; n; u[and]CNJ; šattu[year]N; n; mē[(one) hundred]NU; n
+
+2'. ina a-mat {d}EN u {d}[GAŠAN-iá liš-lim]
+#lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
+
+@obverse
+1'. [MU 1 ME 34?].KAM {I}se LUGAL GU₄ EN 15 MÚL.BABBAR ana ŠÚ ki-[i U]Š-a 1 KÙŠ 4 SI 8 SI ár SA₄-šá-ABSIN 1 1/2 KÙŠ ana SI NIM UŠ
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Ayyaru[Month II]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; n; ubānu[finger]N; n; ubānu[finger]N; warki[behind]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; nenmudu[be at a stationary point]V
+
+2'. [KIN 2]8? MÚL.BABBAR ina RÍN ŠÚ NU PAP APIN 1 MÚL.BABBAR [ina R]ÍN IGI 10 UŠ na-su in 30 šá DU₆ IGI ŠE in EN 3
+#lem: Ulūlu[Month VI]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; Arahsamna[Month VIII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]V; n; UŠ[(time degree)]N; na[rising to sunrise]N; ina[on]PRP; n; ša[which]REL; Tašrītu[Month VII]MN; amāru[be(come) visible]V; Addaru[Month XII]MN; ina[around (day x)]PRP; adi[until]PRP; n
+
+3'. [MÚL.BABBAR ana] NIM ki-i UŠ-ú 1 1/2 KÙŠ ár MÚL-e-š[á]-SAG-GÍR.TAB UŠ ŠE DIR
+#lem: Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elam[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; n; ammatu[unit]N; warki[behind]PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; emēdu[be at a stationary point]V; Addaru[Month XII]MN; watru[extra]AJ
+
+$ ruling
+4'. [MU 1 ME 3]5.KAM {I}se LUGAL BAR in 3 MÚL.BABBAR ana ME E-⸢a⸣ GU₄ EN 27 MÚL.BABBAR ana ŠÚ ki-i UŠ-a 3 1/2 KÙŠ
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Nisannu[Month I]MN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Ayyaru[Month II]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; emēdu[be at a stationary point]V; n; n; ammatu[unit]N
+
+5'. [ina IGI MÚL-x-šá]-SAG-GÍR.TAB UŠ DU₆ ⸢12 MÚL.BABBAR⸣ [ina G]ÍR.TAB ŠÚ NU PAP APIN 13 MÚL.BABBAR ina GÍR.TAB IGI 11 na-su
+#lem: ina[in]PRP; pānu[front]N; MÚL-x-šá-SAG-GÍR.TAB[β/δ Scorpii]CN; emēdu[be at a stationary point]V; Tašrītu[Month VII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; Arahsamna[Month VIII]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; amāru[be(come) visible]V; n; na[rising to sunrise]N
+
+6'. [in x] IGI ŠE in E[N 2]2? MÚL.BABBAR [ana NIM ki-i UŠ-ú ... ina] IGI 4.ÀM ár{ME} ⸢šá⸣ [PA UŠ]
+#lem: ina[on]PRP; u; nanmuru[be(come) visible]V; Addaru[Month XII]MN; ina[around (day x)]PRP; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elamtu[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u; ina[in]PRP; pānu[front]N; erbe[four]NU; warkûtu[rear]'AJ; ša[of]'DET; Pabilsag[Sagittarius]CN; nenmudu[be at a stationary point]V
+
+$ ruling
+7'. [MU 1 ME] 21.KAM ŠE DIR MU 1 ME 22.KAM {I}a[n ...] ⸢x x⸣ [...]
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; Addaru[Month XII]MN; watru[extra]AJ; šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u; u; u; u
+
+8'. [... GE₆ x]+1 USAN MÚL.BABBAR [ana] ⸢NIM⸣ ina LAL-šú e [SA₄-šá-ABSIN n n ...]
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; Elam[east]'N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN; n; n; u
+
+9'. [... ina ZÁ]LAG MÚL.BABBAR S[IG RÍN-šá-S]I 3? ⸢1/2⸣ [KÙŠ ...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; RÍN-šá-SI[β Librae]CN; n; n; ammatu[unit]N; u
+
+@reverse
+1'. [... GE₆] 13 ina ZÁLAG AN e MAŠ.MAŠ-šá-SIPA  3 1/2 [KÙŠ ...]
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; n; ammatu[unit]N; u
+
+2'. [... SIG M]AŠ.MAŠ-ár 3 KÙŠ GE₆ 27 ina ZÁLAG AN SIG MÚL-⸢IGI⸣-[šá-ALL]A-šá-SI 2 [SI? ...]
+#lem: u; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MÚL-IGI-šá-ALLA-šá-SI[η Cancri]CN; n; ubānu[finger]N; u
+
+3'. [... e MÚ]L-ár-šá-ALLA-šá-ULÙ 8 U GE₆ 29 ina ZÁLAG AN S[IG] SAG-A 4 KÙŠ GAN 15 ⸢ina x⸣ [x UŠ]
+#lem: u; eli[above]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ubānu[finger]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N; Kislīmu[Month IX]MN; n; ina[in]PRP; u; u; nenmudu[be at a stationary point]V
+
+4'. [...] USAN AN ana ŠÚ ina LAL-šú SIG SAG-A 2 1/2 KÙŠ ŠE 9 ina 15 ALLA UŠ
+#lem: u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; erbu[west]N; ina[while]'SBJ; nahāsu[recede]V; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; n; ammatu[unit]N; Addaru[Month XII]MN; n; ina[in]PRP; imittu[right side]N; Alluttu[Cancer]CN; nenmudu[be at a stationary point]V
+
+5'. [DIR.ŠE GE₆] ⸢25?⸣ USAN AN ana NIM ina LAL-šú SIG SAG-A 4? KÙŠ
+#lem: Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; ammatu[unit]N
+
+6'. [(...) GE₆ x] USAN AN e LUGAL 2/3 KÙŠ
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N
+
+@translation labeled en project
+
+@top
+
+@(t.e. 1) Appearances and passings of Mars? [...] year 205 and year 206.
+
+@(t.e. 2) At the command of Bel and [Beltija may it go well.]
+
+@(o 1) [Year 13]4, king Seleucus. Month II, until the 15th, when Jupiter became stationary to the west, it became stationary 1 cubit 4 fingers (or) 8 fingers behind α Virginis, 1 1/2 cubits high to the north.
+
+@(o 2) [Month VI?, the 2]8th?, Jupiter’s last appearance in Libra; I did not watch. Month VIII, the 1st, Jupiter’s first appearance [in Lib]ra; rising of Jupiter to sunrise: 10°; (ideal) first appearance on the 30th of month VII. Month XII, around until the 3rd,
+
+@(o 3) when [Jupiter] became stationary to the east, it became stationary 1 1/2 cubits behind β Scorpii. Month XII was intercalary.
+
+$ ruling
+
+@(o 4) [Year 13]5, king Seleucus. Month I, around the 3rd, Jupiter’s acronychal rising. Month II, until the 27th, when Jupiter became stationary to the west, it became stationary 3 1/2 cubits
+
+@(o 5) [in front of δ/β] Scorpii. Month VII, the 12th, Jupiter’s last appearance [in] Scorpius; I did not watch. Month VIII, the 13th, Jupiter’s first appearance in Scorpius; rising of Jupiter to sunrise: 11°;
+
+@(o 6) (ideal) first appearance [on the xth.] Month XII, around until the [2]2nd?, [when] Jupiter [became stationary to the east, it became stationary ...] in front of the four rear ones of [Sagittarius.]
+
+$ ruling
+
+@(o 7) [Year 1]21, month XII was intercalary. Year 122, [king] An[tiochus ...] ... [...]
+
+@(o 8) [... night of the x]+1st, first part of the night, Jupiter, while moving back to the east, was [...] above [α Virginis ...]
+
+@(o 9) [... last] part of the night, Jupiter was 3? 1/2 [cubits] be[low β Lib]rae [...]
+
+@(r 1) [... night of the] 13th, last part of the night, Mars was 3 1/2 [cubits] above γ Geminorum [...]
+
+@(r 2) [...] 3 cubits [below] β Geminorum. Night of the 27th, last part of the night, Mars was 2 [fingers] below η Cancri [...]
+
+@(r 3) [...] 8 fingers [above] δ Cancri. Night of the 29th, last part of the night, Mars was 4 cubits bel[ow] ε Leonis. Month IX, the 15th, [it became stationary?] in ... [...]
+
+@(r 4) [...] first part of the night, Mars, while moving back to the west, was 2 1/2 cubits below ε Leonis. Month XII, the 9th, it became stationary on the right of Cancer.
+
+@(r 5) [Month XII₂, night] of the 25th?, first part of the night, Mars, while moving back to the east, was 4? cubits below ε Leonis.
+
+@(r 6) [(...,) night of the xth,] first part of the night, Mars was 2/3 cubit below α Leonis.

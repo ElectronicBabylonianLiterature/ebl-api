@@ -1,0 +1,86 @@
+&X600145 = ADART 6 143	
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... M]ÚL.BA[BBAR ...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; u
+
+3'. [... U]DU.IDIM{MEŠ} NU [GUB{MEŠ}]
+#lem: u; bibbu[planet]N; ul[not]MOD; izuzzu[stand]V
+
+4'. [...] 18 GE₆ GIN
+#lem: u; n; mūšu[night]N; alāku[go]V
+
+5'. [... AN.KU₁₀ s]in 5 ÁB BAR DIB in 10 U[Š]
+#lem: u; antallû[eclipse]N; Sîn[moon]N; n; warhu[month]N; ahû[extraneous]AJ; etēqu[omit]V; ina[at (plus numeral)]PRP; n; UŠ[(time degree)]N
+
+6'. [...] ⸢x⸣
+#lem: u; u
+
+7'. ⸢GE₆?⸣ 29 AN.KU₁₀ šamáš šá DIB
+#lem: mūšu[night]N; n; antallû[eclipse]N; šamši[sun]N; ša[which]REL; etēqu[omit]V
+
+8'. in 1.40 GE₆ GIN
+#lem: ina[at (plus numeral)]PRP; n; mūšu[night]N; alāku[go]V
+
+9'. [...] ⸢x⸣
+#lem: u; u
+
+10'. [...] ⸢x x⸣
+#lem: u; u; u
+
+11'. [...] in? 1 GE₆ ana ZALÁG
+#lem: u; u; n; mūšu[night]N; ana[to]PRP; nūru[light]N
+
+@column 2
+1'. 10+[x ...]
+#lem: n; u
+
+2'. ⸢15⸣ [...]
+#lem: n; u
+
+3'. 28 [...]
+#lem: n; u
+
+4'. G[U₄ ...]	
+#lem: Ayyaru[Month II]MN; u
+
+@translation labeled en project
+
+@(o i 1) [...] ... [...]
+
+@(o i 2) [...] Jup[iter? ...]
+
+@(o i 3) [...] planets did not [stand there]
+
+@(o i 4) [...] 18° after sunset.
+
+@(o i 5) [...] lunar [eclipse] (after) 5 months, BAR, omitted. At 10°
+
+@(o i 6) [...] ...
+
+@(o i 7) Night of the 29th, solar eclipse which was omitted.
+
+@(o i 8) At 1,40° after sunset.
+
+@(o i 9) [...] ...
+
+@(o i 10) [...] ...
+
+@(o i 11) [...] measured?. 1° before sunrise?.
+
+@(o ii 1) The 10+[xth, ...]
+
+@(o ii 2) The 15th, [...]
+
+@(o ii 3) The 28th, [...]
+
+@(o ii 4) Month II, [...]
+ 

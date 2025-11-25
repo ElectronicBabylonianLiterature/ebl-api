@@ -1,0 +1,89 @@
+&X600157 = ADART 6 155
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+2'. [...] ⸢x⸣ GE₆ 20 ⸢x⸣ [...]
+#lem: u; u; mūšu[night]N; n; u; u
+
+3'. [...] dele-bat ina ŠÚ ina RÍN [ŠÚ ...]
+#lem: u; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; u
+
+4'. [...] ⸢IGI?⸣ APIN GE₆ 20+[x ...]
+#lem: u; nanmuru[be(come) visible]V; Arahsamna[Month VIII]MN; mūšu[night]N; n; u
+
+5'. [...] ina ZÁLAG dele-bat e MÚL [...]
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u; u
+
+6'. [... MÚL-KUR-šá]-KIR₄-šil-PA 2 KÙŠ [...]
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN$; n; ammatu[unit]N; u
+
+7'. [... MÚL-x-šá-SU]HUR-MÁŠ 1 KÙŠ 4 U ŠE [...]
+#lem: u; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorni]CN; n; ammatu[unit]N; n; ubānu[finger]N; Addaru[Month XII]MN; u
+
+$ ruling
+8'. [... A-š]ú? LUGAL{MEŠ} BAR in 10 GU₄.[UD ...]
+#lem: u; u; šarrāni[king]N; Nisannu[Month I]MN; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; u
+
+9'. [... G]U₄.UD ina ŠÚ ina ALLA IGI 14? n[a-su ...]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Alluttu[Cancer]CN; nanmuru[be(come) visible]V; n; na[sunset to setting]N; u
+
+10'. [...] ⸢x⸣ ŠU 22 ŠÚ šá GU₄.[UD ...]
+#lem: u; u; Duʾūzu[Month IV]MN; n; rabû[setting]N; ša[which]REL; Šihṭu[Mercury]CN; u
+
+11'. [...] ⸢x GE₆ 20⸣+[x ...]
+#lem: u; u; mūšu[night]N; n; u
+
+@reverse
+@column 1
+1'. [... m]uš
+#lem: u; mašāhu[measure]V
+
+2'. [x x G]E₆ DIR muš
+#lem: u; u; mūšu[sunset to moonrise]N; erpetu[cloud]N; mašāhu[measure]V
+
+@column 2
+1'. 14 [...]
+#lem: n; u
+
+2'. 15 [...]
+#lem: n; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [...] ... Night of the 20th, ... [...]
+
+@(o 3) [...] Venus [last appearance?] in the west in Libra [...]
+
+@(o 4) [...] first appearance [...] Month VIII, night of the 20+[xth, ...]
+
+@(o 5) [...] last part of the night, Venus was [...] above [...]
+
+@(o 6) [...] 2 cubits [...] θ Ophiuchi [...]
+
+@(o 7) [...] 1 cubit 4 fingers [... γ/δ] Capricorni. Month XII, [...]
+
+$ ruling
+
+@(o 8) [...] kings [...] Month I, around the 10th, Mer[cury’s ...]
+
+@(o 9) [...] Mercury’s first appearance in the west in Cancer; sunset to setting of Mercury: 14°? [...]
+
+@(o 10) [...] ... Month IV, the 22nd, Mercury’s last appearance [...]
+
+@(o 11) [...] ... Night of the 20+[xth, ...]
+
+@(r i 1) [...] measured.
+
+@(r i 2) [The xth, sunset] to moonrise: [...]; measured (despite) clouds.
+
+@(r ii 1) The 14th, [...]
+
+@(r ii 2) The 15th, [...]

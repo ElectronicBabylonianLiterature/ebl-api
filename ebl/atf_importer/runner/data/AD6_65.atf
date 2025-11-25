@@ -1,0 +1,164 @@
+&X600066 = ADART 6 65
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ MÚL.BABBAR [...]
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN; u
+
+2'. [... ana] ME E-a AB EN [...]
+#lem: u; ana[to]PRP; ūmu[day]N; elû[go up]V; Ṭebētu[Month X]MN; adi[until]PRP; u
+
+3'. [...] ($blank$)
+#lem: u
+
+$ ruling
+4'. [...] ⸢x⸣ GE₆ 5 ina ZÁLAG MÚL.BABBAR ⸢e⸣ [...] 
+#lem: u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; u
+
+$ ruling
+5'. [... SIG] 5 dele-bat ina ŠÚ ina MAŠ.MAŠ IGI [...]
+#lem: u; Simānu[Month III]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; u
+
+6'. [...] ⸢8⸣ SI GE₆ 17 USA[N ...]
+#lem: u; n; ubānu[finger]N; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+7'. [...] GÍR.TAB 8? SI DU₆ [...]
+#lem: u; Zuqiqīpu[Scorpio]CN; n; ubānu[finger]N; Tašrītu[Month VII]MN; u
+
+8'. [... MÚL-KUR-šá-KI]R₄-šil-PA 1 SI [x x] ⸢x⸣ 29? [...]
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ubānu[finger]N; u; u; u; n; u
+
+9'. [... MÚL-x]-šá-SUHUR-MÁŠ 1 SI [GE₆] 24 U[SAN dele-bat ...]
+#lem: u; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorni]CN; n; ubānu[finger]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
+
+10'. [...] 10 na dele-bat in 3 dele-bat [ina Š]Ú ina zib{ME} ŠÚ
+#lem: u; n; na[sunset to setting]N; Dilbat[Venus]CN; ina[around (day x)]PRP; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zibbātu[Pisces]CN; rabû[set]V
+
+11'. [...] ($blank$)
+#lem: u
+
+$ ruling
+12'. [...] IGI NU PAP GE₆ 14 USA[N] GU₄.UD [...]
+#lem: u; nanmuru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; u
+
+13'. [...] SI GE₆ 24 USAN G[U₄.U]D [...]
+#lem: u; ubānu[finger]N; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; u
+
+14'. [... GU₄.U]D ina NIM ina MAŠ.MAŠ I[GI ...]
+#lem: u; Šihṭu[Mercury]CN; ina[in]PRP; Elam[east]'N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; u
+
+15'. [...] ⸢x x x⸣ [...]
+#lem: u; u; u; u; u
+
+@reverse
+@column 1
+$ broken
+@column 2
+$ broken
+@column 3
+1'. [...] ⸢a-kam? muš?⸣
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+2'. [...] ME
+#lem: u; ūmu[moonrise to sunset]N
+
+3'. [...] GE₆
+#lem: u; mūšu[sunset to moonrise]N
+
+4'. [...] KUR? a-kam muš
+#lem: u; KUR[moonrise to sunrise]N; akamu[mist]N; mašāhu[measure]V
+
+5'. [...] ⸢x muš⸣
+#lem: u; u; mašāhu[measure]V
+
+6'. [...]
+#lem: u
+
+7'. [...] ⸢x⸣
+#lem: u; u
+
+8'. [...] ⸢x x x⸣
+#lem: u; u; u; u
+
+@column 4
+1'. 10+[x ...]
+#lem: n; u
+
+2'. 20+[x ...]
+#lem: n; u
+
+3'. ŠE 30 [...]
+#lem: Addaru[Month XII]MN; n; u
+
+@translation labeled en project
+
+@(o 1) [...] ... Jupiter [...]
+
+@(o 2) [...] acronychal rising. Month X, until [...]
+
+@(o 3) [...] (blank)
+
+$ ruling
+
+@(o 4) [...] ... night of the 5th, last part of the night, Jupiter was [...] above [...]
+
+$ ruling
+
+@(o 5) [... Month III,] the 5th, Venus’ first appearance in the west in Gemini [...]
+
+@(o 6) [...] 8 fingers. Night of the 17th, first part of the night, [...]
+
+@(o 7) [...] 8? fingers [...] Scorpii. Month VII, [...]
+
+@(o 8) [...] 1 finger [... θ] Ophiuchi [...] 29th? [...]
+
+@(o 9) [...] 1 finger [...] Capricorni. [Night of] the 24th, [first part of the night, Venus ...]
+
+@(o 10) [...] sunset to setting of Venus: 10°. Around the 3rd, Venus’ last appearance [in] the west in Pisces.
+
+@(o 11) [...] (blank)
+
+$ ruling
+
+@(o 12) [...] first appearance [...;] I did not watch. Night of the 14th, first part of the night, Mercury [...]
+
+@(o 13) [...] fingers [...] Night of the 24th, first part of the night, Mercury [...]
+
+@(o 14) [... Mer]cury’s first appearance in the east in Gemini [...]
+
+@(o 15) [...] ... [...]
+
+@reverse
+
+@column 1
+
+$ broken
+
+@column 2
+
+$broken
+
+@(r iii 1) [...] measured (despite) mist. 
+
+@(r iii 2) [...] moonrise to sunset: [...] 
+
+@(r iii 3) [...] sunset to moonrise: [...]
+
+@(r iii 4) [...] moonrise to sunrise: [...] measured (despite) mist. 
+
+@(r iii 5) [...] ... measured.
+
+@(r iii 6) [...]
+
+@(r iii 7) [...] ...
+
+@(r iii 8) [...] ...
+
+@(r iv 1) The 10+[xth, ...] 
+
+@(r iv 2) The 20+[xth, ...]
+
+@(r iv 3) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]

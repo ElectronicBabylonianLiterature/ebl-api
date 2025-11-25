@@ -1,0 +1,29 @@
+&X600160 = ADART 6 158
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse?
+1'. [... ki U]Š-ú 1 KÙŠ ár 4.ÀM ár⸢{MEŠ}⸣ šá PA UŠ
+#lem: u; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; warki[behind]PRP; erbe[four]NU; warkû[rear]'AJ; ša[of]'DET; Pabilsag[Sagittarius]CN; nenmudu[be at a stationary point]V
+
+2'. [...] ⸢x x x x⸣ [...]
+#lem: u; u; u; u; u; u
+
+@reverse?
+1'. [...] ⸢x x x x x x x x⸣
+#lem: u; u; u; u; u; u; u; u; u
+
+2'. [... G]U₄.UD? SIG MÚL-ár-šá-SAG-HUN 3 1/2 KÙŠ
+#lem: u; Šihṭu[Mercury]CN; šapil[below]'PRP; MÚL-ár-šá-SAG-HUN[α Arietis]CN; n; n; ammatu[unit]N
+
+@translation labeled en project
+
+@(o? 1) [... when it] became stationary [to the east,] it became stationary 1 cubit behind the four rear ones of Sagittarius.
+
+@(o? 2) [...] ... [...]
+
+@(r? 1) [...] ...
+
+@(r? 2) [...] Mercury was 3 1/2 cubits below α Arietis.

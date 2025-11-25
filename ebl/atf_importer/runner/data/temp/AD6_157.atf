@@ -1,0 +1,92 @@
+&X600159 = ADART 6 157
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... US]AN dele-bat e ⸢x x⸣ [...]
+#lem: u; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; u; u; u
+
+3'. [... x]+1 KÙŠ in 19 dele-bat ABSIN [KUR ...]
+#lem: u; u; ammatu[unit]N; ina[around (day x)]PRP; n; Dilbat[Venus]CN; Šerʾu[Virgo]CN; kašādu[reach]V; u
+
+4'. [... dele-b]at ina ŠÚ ina ABSIN TA 10 ki [PAP NU IGI ...]
+#lem: u; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; ištu[from]PRP; n; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; u
+
+5'. [... x]+1 KÙŠ GE₆ ⸢20⸣+[x ...]
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; u
+
+6'. [... GE₆] 16 US[AN ...]
+#lem: u; mūšu[night]N; n; šimītān[first part of the night]N; u
+
+7'. [...] e ⸢x⸣ [...]
+#lem: u; eli[above]PRP; u; u
+
+8'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+1'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+2'. [... RÍN]-⸢šá⸣-ULÙ 1+[x ...]
+#lem: u; RÍN-šá-ULÙ[α Librae]CN; n; u
+
+3'. [...] ⸢x⸣ [x] AN SIG MÚL-e-šá-SA[G-GÍR.TAB ...]
+#lem: u; u; u; Ṣalbaṭānu[Mars]CN; šapil[below]'PRP; MÚL-e-šá-SAG-GÍR.TAB[β Scorpii]CN; u
+
+4'. [... MÚL-KUR-šá-KIR₄-ši]l-PA 2/3 KÙŠ 29 AN PA KUR [...]
+#lem: u; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; n; Ṣalbaṭānu[Mars]CN; Pabilsag[Sagittarius]CN; kašādu[reach]V; u
+
+5'. [... GE₆ x]+1 ina ZALÁG AN e MÚL-IGI-šá-SU[HUR-MÁŠ n n ...]
+#lem: u; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; u
+
+6'. [...] ($blank$)
+#lem: u
+
+$ ruling
+7'. [...] ⸢x⸣ 13 3.40 ŠÚ DIR [...]
+#lem: u; u; n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; u
+
+8'. [...] ⸢14 3⸣.30 na ⸢DIR⸣ [...]
+#lem: u; n; n; na[sunrise to moonset]N; erpetu[cloud]N; u
+
+@translation labeled en project
+
+@(o 1) [...] ... [...]
+
+@(o 2) [... first] part of the night, Venus was [...] above ... [...]
+
+@(o 3) [...] x+1 cubits. Around the 19th, Venus [reached] Virgo. [...]
+
+@(o 4) [... Ven]us [last appearance] in the west in Virgo: from the 10th, when [I watched I did not see it ...]
+
+@(o 5) [... x]+1 cubits. Night of the 20+[xth, ...]
+
+@(o 6) [... Night] of the 16th, first [part of the night, ...]
+
+@(o 7) [...] above ... [...]
+
+@(o 8) [...] ... [...]
+
+@(r 1) [...] ... [...]
+
+@(r 2) [...] 1+[x ...] β Lib[rae ...]
+
+@(r 3) [...] ... Mars was [...] below β Scor[pii ...]
+
+@(r 4) [...] 2/3 cubit [...] θ Ophiuchi. The 29th, Mars reached Sagittarius. [...]
+
+@(r 5) [... Night of the x]+1st, last part of the night, Mars was [...] above γ Capricorni. [...]
+
+@(r 6) [...] ($blank$)
+
+$ ruling
+
+@(r 7) [...] ... The 13th, moonset to sunrise: 3° 40'; clouds [...]
+
+@(r 8) [...] The 14th, sunrise to moonset: 3° 30'; clouds [...]

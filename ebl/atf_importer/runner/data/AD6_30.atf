@@ -1,0 +1,62 @@
+&X600030 = ADART 6 30
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+$ broken
+@reverse
+@column 1
+1'. ⸢x x⸣
+#lem: u; u
+
+@column 2
+1'. [in 15] ME ana ŠÚ ⸢šamáš⸣
+#lem: ina[at]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]'N; šamšu[sun]N
+
+2'. [APIN?] GE₆ 15 AN.KU₁₀ sin
+#lem: Arahsamna[Month VIII]MN; mūšu[night]N; n; antallû[eclipse]N; Sîn[moon]N
+
+3'. ⸢5 ÁB⸣ BAR DIB
+#lem: n; warhu[month]N; ahû[extraneous]AJ; etēqu[omit]V
+
+4'. [ina] 46? GE₆ GIN
+#lem: ina[at]PRP; n; mūšu[night]N; alāku[go]V
+
+5'. GE₆ 29 AN.KU₁₀ šamáš
+#lem: mūšu[night]N; n; antallû[eclipse]N; šamšu[sun]N
+
+6'. šá DIB ina 1.31
+#lem: ša[which]REL; etēqu[omit]V; ina[at]PRP; n
+
+7'. GE₆ G[IN]
+#lem: mūšu[night]N; alāku[go]V
+
+8'. [... AN].KU₁₀{MEŠ} šá a-na MU 1.me.32.[KAM ...]
+#lem: u; antallû[eclipse]N; ša[which]REL; ana[for]PRP; šattu[year]N; n; u
+
+	
+
+@translation labeled en project
+
+@obverse
+not preserved;
+
+@(r i 1) ...
+
+@(r ii 1) [At 1]5° before sunset.
+
+@(r ii 2) [Month VIII?,] night of the 15th, lunar eclipse
+
+@(r ii 3) (after) 5 months; BAR, omitted.
+
+@(r ii 4) [At] 46° after sunset.
+
+@(r ii 5) Night of the 29th, solar eclipse
+
+@(r ii 6) which was omitted. At 91°
+
+@(r ii 7) after sunset.
+
+@(r ii 8) [... and eclip]ses which [were established] for year 132 [...]

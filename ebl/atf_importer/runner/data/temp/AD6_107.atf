@@ -1,0 +1,151 @@
+&X600109 = ADART 6 107
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse 
+@column 1
+1'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+2'. [...] muš
+#lem: u; mašāhu[measure]V
+
+3'. [... a]-kam muš
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+4'. [... m]uš
+#lem: u; mašāhu[measure]V
+
+@column 2
+1'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+2'. [... m]uš
+#lem: u; mašāhu[measure]V
+
+3'. [...] muš
+#lem: u; mašāhu[measure]V
+
+4'. [...] muš
+#lem: u; mašāhu[measure]V
+
+5'. [...] muš
+#lem: u; mašāhu[measure]V
+
+6'. [... ana šámaš] SIG
+#lem: u; ana[to]PRP; šamšu[sun]N; šapil[low]AJ
+
+7'. [12 x]+30 ⸢ŠÚ⸣ muš 
+#lem: n; u; rabû[moonset to sunrise]'N; mašāhu[measure]V
+
+8'. 13 4 na ⸢muš⸣ 
+#lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
+
+9'. 14 40 NINDA ME mu[š ...]
+#lem: n; n; X; ūmu[moonrise to sunset]N; mašāhu[measure]V; u
+
+10'. 15 9.20 GE₆ muš
+#lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
+
+11'. 26 21 KUR m[uš ...]
+#lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V; u
+
+12'. APIN 1 14 KUR₄ m[uš ...]
+#lem: Arahsamna[Month VIII]MN; n; n; baʾil[bright]AJ; mašāhu[measure]V; u
+
+13'. ina GUB IGI ana šámaš [...]
+#lem: ina[while]'SBJ; izuzzu[stand]V; nanmuru[see]V; ana[to]PRP; šamši[sun]N; u
+
+14'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@column 3
+1'. ⸢AB?⸣ [...]
+#lem: Ṭebētu[Month X]MN; u
+
+2'. 13 1+[x ŠÚ ...] 
+#lem: n; n; rabû[moonset to sunrise]'N; u
+
+3'. 14 3+[x ME ...] 
+#lem: n; n; ūmu[moonrise to sunset]N; u
+
+4'. 14 10 U[Š na ...] 
+#lem: n; n; UŠ[(time degree)]N; na[sunrise to moonset]N; u
+
+5'. 15 10 UŠ GE₆ ⸢x⸣ 
+#lem: n; n; UŠ[(time degree)]N; mūšu[sunset to moonrise]N; u
+
+6'. 28 9.30 K[UR ...] 
+#lem: n; n; KUR[moonrise to sunrise]N; u
+
+7'. u a-kam ⸢x x⸣
+#lem: u[and]CNJ; akamu[mist]N; u; u
+
+8'. ZÍZ 1 17.40 [...]
+#lem: Šabāṭu[Month XI]MN; n; n; u
+
+9'. 12 ⸢x⸣ [...]
+#lem: n; u; u
+
+10'. ⸢x⸣ [...]
+#lem: u; u
+
+@translation labeled en project
+
+@(o i 1) [... measu]red.
+
+@(o i 2) [...] measured.
+
+@(o i 3) [...] measured (despite) mist.
+
+@(o i 4) [... mea]sured.
+
+@(o ii 1) [...] measured.
+
+@(o ii 2) [...] measured.
+
+@(o ii 3) [...] measured.
+
+@(o ii 4) [...] measured.
+
+@(o ii 5) [...] measured.
+
+@(o ii 6) [...] low [to the sun.]
+
+@(o ii 7) [The 12th, moonset to sunrise: x°] 30', measured. 
+
+@(o ii 8) The 13th, sunrise to moonset: 4°, measured.
+
+@(o ii 9) The 14th, moonrise to sunset: 40', measured.
+
+@(o ii 10) The 15th, sunset to moonrise: 9° 20', measured.
+
+@(o ii 11) The 26th, moonrise to sunrise: 21°, measured.
+
+@(o ii 12) Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 14°; it was bright, mea[sured;]
+
+@(o ii 13) it could be seen while (the sun) stood there; [it was ...] to the sun.
+
+@(o ii 14) [...] ... [...]
+
+@(o iii 1) Month X, [...]
+
+@(o iii 2) The 13th, [moonset to sunrise:] 1+[x° ...]
+
+@(o iii 3) The 14th, [moonrise to sunset:] 3+[x° ...]
+
+@(o iii 4) The 14th, [sunrise to moonset:] 10° [...]
+
+@(o iii 5) The 15th, sunset to moonrise: 10° ... 
+
+@(o iii 6) The 28th, moonrise [to sunrise:] 9° 30' [...]
+
+@(o iii 7) and mist, ...
+
+@(o iii 8) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17° 40' [...]
+
+@(o iii 9) The 12th, ... [...]
+
+@(o iii 10) ... [...] 

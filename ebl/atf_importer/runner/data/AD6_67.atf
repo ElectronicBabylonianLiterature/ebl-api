@@ -1,0 +1,90 @@
+&X600068 = ADART 6 67
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1'. [... MÚL.BABBAR ina] A ŠÚ NE 21 MÚL.BABBAR ina A IGI 12.10? n[a?-su]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; rabû[set]V; Abu[Month V]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Nēšu[Leo]CN; nanmuru[be(come) visible]V; n; na[rising to sunrise]N
+
+2'. [... G]ÌR-ár-šá-A UŠ ZÍZ in 22 MÚL.BABBAR ana ME E-[a]
+#lem: u; GÌR-ár-šá-A[β Virginis]CN; nenmudu[be at a stationary point]V; Šabāṭu[Month XI]MN; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V
+
+3'. [...] GÌR-ár-šá-A UŠ
+#lem: u; GÌR-ár-šá-A[β Virginis]CN; nenmudu[be at a stationary point]V
+
+$ ruling
+4'. [...] ana NIM ina LAL-šú SIG SAG-A 3 1/2 KÙŠ
+#lem: u; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V; šapil[low]'PRP; SAG-A[ε Leonis]CN; n; n; ammatu[unit]N
+
+5'. [...] SIG GIŠ.KUN-A 4 1/2 KÙŠ
+#lem: u; šapil[low]'PRP; GIŠ.KUN-A[θ Leonis]CN; n; n; ammatu[unit]N
+
+6'. [...] ($blank$)
+#lem: u
+
+$ ruling
+7'. [...] KIN 1 dele-bat ina ŠÚ ina ABSIN IGI
+#lem: u; Ulūlu[Month VI]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Šerʾu[Virgo]CN; nanmuru[be(come) visible]V
+
+8'. [... dele]-bat e MÚL-IGI-šá-SUHUR-MÁŠ 1 U
+#lem: u; Dilbat[Venus]CN; eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ubānu[finger]N
+
+9'. [... GE₆ x]+6 USAN dele-bat
+#lem: u; mūšu[night]N; u; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+10'. [... x]+1 ⸢KÙŠ?⸣ GE₆ 26 USAN dele-bat
+#lem: u; u; ammatu[unit]N; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN
+
+11'. [... DIR.Š]E GE₆ 8 USAN dele-bat e ⸢is⸣-[le₁₀]
+#lem: u; Addaru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN
+
+12'. [...] ina NIM [...]
+#lem: u; ina[in]PRP; Elamtu[east]'N; u
+
+13'. [...] ⸢x⸣ [...]
+#lem: u; u; u
+
+@reverse
+1'. [...] MU 1 ME 27.KAM
+#lem: u; šattu[year]N; n; mē[(one) hundred]NU; n
+
+2'. [šá ši-i MU 1 ME 60+31.KAM {I}ar]-šá-ka-a LUGAL kun-nu-[uʾ]
+#lem: ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; kunnu[establish]V
+
+@translation labeled en project
+
+@(o 1) [... Jupiter’s] last appearance [in] Leo. Month V, the 21st, Jupiter’s first appearance in Leo; ri[sing of Jupiter to sunrise:] 12° 10'?.
+
+@(o 2) [...] became stationary [...] β Virginis. Month XI, around the 22nd, Jupiter’s acronychal rising.
+
+@(o 3) [...] became stationary [...] β Virginis.
+
+$ ruling
+
+@(o 4) [...] when moving back to the east, was 3 1/2 cubits below ε Leonis.
+
+@(o 5) [...] 4 1/2 cubits below θ Leonis.
+
+@(o 6) [...] (blank)
+
+$ ruling
+
+@(o 7) [...] Month VI, the 1st, Venus’ first appearance in the west in Virgo.
+
+@(o 8) [...] Venus was 1 finger above γ Capricorni.
+
+@(o 9) [... night of the x]+6th, first part of the night, Venus was
+
+@(o 10) [... x]+1 cubit?. Night of the 26th, first part of the night, Venus was
+
+@(o 11) [... Mon]th XII₂, night of the 8th, first part of the night, Venus was [...] above α [Tauri.]
+
+@(o 12) [...] in the east [...]
+
+@(o 13) [...] ... [...]
+
+@(r 1) [... which] were established for year 127,
+
+@(r 2) [which is year 191,] king Arsaces.

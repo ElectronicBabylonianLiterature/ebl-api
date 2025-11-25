@@ -1,0 +1,76 @@
+&X600179 = ADART 6 177
+#project: adsd/adart6
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+@column 1
+1'. [... mu]š
+#lem: u; mašāhu[measure]V
+
+2'. [...] ⸢a⸣-kam muš
+#lem: u; akamu[mist]N; mašāhu[measure]V
+
+3'. [...] ⸢x⸣ muš
+#lem: u; u; mašāhu[measure]V
+
+4'. [...] KUR muš
+#lem: u; KUR[moonrise to sunrise]N; mašāhu[measure]V
+
+$ ruling
+5'. [... x]+2.40 ⸢KUR₄ muš⸣ ana šámaš SIG
+#lem: u; u; baʾil[bright]AJ; mašāhu[measure]V; ana[to]PRP; šamši[sun]N; šapil[low]AJ
+
+6'. [...] ⸢muš⸣
+#lem: u; mašāhu[measure]V
+
+@column 2
+1'. 10+[x ...]
+#lem: n; u
+
+2'. 14 50 [...]
+#lem: n; n; u
+
+3'. 15 9.20? [...]
+#lem: n; n; u
+
+4'. 26 25 [...]
+#lem: n; n; u
+
+$ ruling
+5'. APIN 1 24 [...]
+#lem: Arahsamna[Month VIII]MN; n; n; u
+
+6'. 12 [...]
+#lem: n; u
+
+@translation labeled en project
+
+@(o i 1) [... mea]sured.
+
+@(o i 2) [...] measured (despite) mist.
+
+@(o i 3) [...] ..., measured.
+
+@(o i 4) [...] moonrise to sunrise: [...;] measured.
+
+$ ruling
+
+@(o i 5) [Month ..., sunset to moonset: x]+2° 40'; it was bright, measured; it was low to the sun.
+
+@(o i 6) [...] measured.
+
+@(o ii 1) The 10+[xth, ...]
+
+@(o ii 2) The 14th, [...] 50' [...]
+
+@(o ii 3) The 15th, [...] 9° 20'? [...]
+
+@(o ii 4) The 26th, [moonrise to sunrise:] 25° [...]
+
+$ ruling
+
+@(o ii 5) Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24° [...]
+
+@(o ii 6) The 12th, [...]
