@@ -86,8 +86,9 @@ $ broken
 #lem: u; mašāhu[measure]V
 
 2'. [...] muš?
- ($break$)
 #lem: u; mašāhu[measure]V
+
+($break$)
 
 1''. [...] NU PAP 
 #lem: u; ul[not]MOD; naṣāru[watch]V
@@ -135,7 +136,10 @@ $ broken
 10'. [1]4 1.20 G[E₆?]
 #lem: n; n; mūšu[sunset to moonrise]N
 
-11-12'. [...]
+11'. [...]
+#lem: u
+
+12'. [...]
 #lem: u
 
 13'. ⸢KIN⸣ [...]
@@ -164,57 +168,57 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] ... 8 fingers ... [...]
+@(o 2') [...] ... 8 fingers ... [...]
 
-@(o 3) [...] 3 1/2 cubits [below β/α] Arietis. Night of the 18th?, [...]
+@(o 3') [...] 3 1/2 cubits [below β/α] Arietis. Night of the 18th?, [...]
 
-@(o 4) [... cu]bits. Month XII, night of the 4th, first part of the night, Venus was [...] above [...]
+@(o 4') [... cu]bits. Month XII, night of the 4th, first part of the night, Venus was [...] above [...]
 
-@(o 5) [...] 1 1/2 cubits [... θ/δ] Cancri. Night of the 10+[xth, ...]
+@(o 5') [...] 1 1/2 cubits [... θ/δ] Cancri. Night of the 10+[xth, ...]
 
-@(o 6) [...] ... Night of the 29th, first part of the night, Venus was [...] above [...]
-
-$ ruling
-
-@(o 7) [... Mercury’s] last appearance ...; I did not watch. Month II, ... [...]
-
-@(o 8) [...] Month V?, night of the 6th?, first part of the night, Mer[cury was ...]
-
-@(o 9) [...] first appearance [...] θ Leonis, being 1/2 cubit back to the west; it was bright, [...]
-
-@(o 10) [... Mon]th VIII?, the 20th, Mercury’s first appearance in the east in Sagittarius; it was small, [rising of Mercury to sunrise:] 11° [...]
-
-@(o 11) [...] ... The 28th, Mercury’s [...] in ... [...]
-
-@(o 12) [... ar]ound? the 25th, Mercury’s first appearance in the east in Aries; [...] rising of Mercury to sunrise: ... [...]
+@(o 6') [...] ... Night of the 29th, first part of the night, Venus was [...] above [...]
 
 $ ruling
 
-@(o 13) [... first part] of the night, Saturn was 8? fingers? below ... [...]
+@(o 7') [... Mercury’s] last appearance ...; I did not watch. Month II, ... [...]
 
-@(o 14) [...] ... Month VIII, the 23rd?, Saturn’s last appearance in [...: from] the 24th?, when [I watched I did not see it ...]
+@(o 8') [...] Month V?, night of the 6th?, first part of the night, Mer[cury was ...]
 
-@(o 15) [...] rising of Saturn to sunrise: ...; (ideal) first appearance on the 30th? of month IX ... [...]
+@(o 9') [...] first appearance [...] θ Leonis, being 1/2 cubit back to the west; it was bright, [...]
 
-@(o 16) [...] ($blank$)
+@(o 10') [... Mon]th VIII?, the 20th, Mercury’s first appearance in the east in Sagittarius; it was small, [rising of Mercury to sunrise:] 11° [...]
+
+@(o 11') [...] ... The 28th, Mercury’s [...] in ... [...]
+
+@(o 12') [... ar]ound? the 25th, Mercury’s first appearance in the east in Aries; [...] rising of Mercury to sunrise: ... [...]
 
 $ ruling
 
-@(o 17) [...] ... around the 16th?, Mars’ ... in ... [...]
+@(o 13') [... first part] of the night, Saturn was 8? fingers? below ... [...]
+
+@(o 14') [...] ... Month VIII, the 23rd?, Saturn’s last appearance in [...: from] the 24th?, when [I watched I did not see it ...]
+
+@(o 15') [...] rising of Saturn to sunrise: ...; (ideal) first appearance on the 30th? of month IX ... [...]
+
+@(o 16') [...] ($blank$)
 
 $ ruling
 
-@(o 18) [...] ... Geminorum ... Night of the 9th, first? part of the night, [...]
+@(o 17') [...] ... around the 16th?, Mars’ ... in ... [...]
 
-@(o 19) [...] ... [...] ... [...]
+$ ruling
 
-@(o 20) [...] Month VII, night of the 3rd, first part of the night, Mars [...]
+@(o 18') [...] ... Geminorum ... Night of the 9th, first? part of the night, [...]
 
-@(o 21) [...] ... γ? Virginis? ... [...]
+@(o 19') [...] ... [...] ... [...]
 
-@(o 22) [...] ($blank$)
+@(o 20') [...] Month VII, night of the 3rd, first part of the night, Mars [...]
+
+@(o 21') [...] ... γ? Virginis? ... [...]
+
+@(o 22') [...] ($blank$)
 
 $ ruling
 
@@ -246,40 +250,40 @@ $ break
 
 @(r ii 5'') [...] ...
 
-@(r iii 1) [Month IV, ...] 
+@(r iii 1') [Month IV, ...] 
 
-@(r iii 2) [The 1]2th, moonset to sunrise: 8°? 20' [...]
+@(r iii 2') [The 1]2th, moonset to sunrise: 8°? 20' [...]
 
-@(r iii 3) [The 1]3th, [sunrise to moonset:] 8° [...]
+@(r iii 3') [The 1]3th, [sunrise to moonset:] 8° [...]
 
-@(r iii 4) [The 1]4th, [moonrise to sunset:] 5° 30' [...]
+@(r iii 4') [The 1]4th, [moonrise to sunset:] 5° 30' [...]
 
-@(r iii 5) [The 1]5th, sunset to [moonrise:] 8° [...]
+@(r iii 5') [The 1]5th, sunset to [moonrise:] 8° [...]
 
-@(r iii 6) [The 2]7th, moonrise to sunrise: 20° [...]
+@(r iii 6') [The 2]7th, moonrise to sunrise: 20° [...]
 
-@(r iii 7) Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10° ... [...]
+@(r iii 7') Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10° ... [...]
 
-@(r iii 8) The 13th, [moonrise to sunset:] 10+[x° ...]
+@(r iii 8') The 13th, [moonrise to sunset:] 10+[x° ...]
 
-@(r iii 9) The 13th, moonset to [sunrise:] 12°? [...]
+@(r iii 9') The 13th, moonset to [sunrise:] 12°? [...]
 
-@(r iii 10) [The 1]4th, sunset to [moonrise:] 1° 20' [...]
+@(r iii 10') [The 1]4th, sunset to [moonrise:] 1° 20' [...]
 
-@(r iii 11-12) [...]
+@(r iii 11'-r iii 12') [...]
 
-@(r iii 13) Month VI, [...]
+@(r iii 13') Month VI, [...]
 
-@(r iii 14) The 13th, [moonrise to sunset: ...]
+@(r iii 14') The 13th, [moonrise to sunset: ...]
 
-@(r iii 15) The 13th, [moonset to sunrise: ...]
+@(r iii 15') The 13th, [moonset to sunrise: ...]
 
-@(r iii 16) The 14th, [sunset to moonrise: ...]
+@(r iii 16') The 14th, [sunset to moonrise: ...]
 
-@(r iii 17) The 14th, [sunrise to moonset:] 10+[x° ...]
+@(r iii 17') The 14th, [sunrise to moonset:] 10+[x° ...]
 
-@(r iii 18) The 27th, [...]
+@(r iii 18') The 27th, [...]
 
-@(r iii 19) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [...]
+@(r iii 19') Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [...]
 
-@(r iii 20) The 12th, [...]
+@(r iii 20') The 12th, [...]

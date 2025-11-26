@@ -48,42 +48,42 @@ $ ruling
 #lem: u; antallû[eclipse]N; šamšu[sun]N; kī[when]'SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V
 
 @top
-1'. [...] AN.KU₁₀{MEŠ} šá a-na MU 1.37.KAM {I}an ⸢LUGAL⸣ k[un-nu-uʾ]
+1'. [...] AN.KU₁₀{MEŠ} šá a-na MU 1.37.KAM {m}an ⸢LUGAL⸣ k[un-nu-uʾ]
 #lem: u; antallû[eclipse]N; ša[which]REL; ana[for]PRP; šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; kunnu[establish]V
 
 
 @translation labeled en project
 
-@(o 1) [...] when Jupiter became stationary to the west, it became stationary 8 fingers in front of ... Month [V?],
+@(o 1') [...] when Jupiter became stationary to the west, it became stationary 8 fingers in front of ... Month [V?],
 
-@(o 2) [...] first appearance ... Month XI, 1st day, when Jupiter became stationary to the east,  [it became stationary] 1 cubit behind? ...
+@(o 2') [...] first appearance ... Month XI, 1st day, when Jupiter became stationary to the east,  [it became stationary] 1 cubit behind? ...
 
-@(o 3) [... acronychal] rising. Month XII was intercalary.
-
-$ ruling
-
-@(o 4) [... Jupiter was] 3 1⁄2 cubits [below θ] Leonis. Month IV, night of the 24th, first part of the night, Jupiter was 6 fingers above β Virginis.
+@(o 3') [... acronychal] rising. Month XII was intercalary.
 
 $ ruling
 
-@(o 5) [Year 89, ... Venus] first appearance [in the west in] Taurus; I did not watch. Month III, night of the 7th, first part of the night, Venus was 3 1/2 cubits below ε Leonis.
+@(o 4') [... Jupiter was] 3 1⁄2 cubits [below θ] Leonis. Month IV, night of the 24th, first part of the night, Jupiter was 6 fingers above β Virginis.
 
-@(o 6) [...] 5/6 cubit. Night of the 29th, Venus was 4 1/2 cubits below θ Leonis{SIC}. Month IV, night of the 6th, first part of the night, Venus was
+$ ruling
 
-@(o 7) [... above β Virginis ...] 14 fingers [... γ Virgi]nis. Month V, night of the 1st, first part of the night, Venus was 1 cubit 8 fingers above α Virginis.
+@(o 5') [Year 89, ... Venus] first appearance [in the west in] Taurus; I did not watch. Month III, night of the 7th, first part of the night, Venus was 3 1/2 cubits below ε Leonis.
 
-@(o 8) [...] 4 1⁄2 cubits [below β Li]brae. Month VI, night of the 5th, first part of the night, Venus was 2 fingers above δ Scorpii, Venus having passed a little to the east.
+@(o 6') [...] 5/6 cubit. Night of the 29th, Venus was 4 1/2 cubits below θ Leonis{SIC}. Month IV, night of the 6th, first part of the night, Venus was
 
-@(o 9) [... first part] of the night, Venus was 5? fingers below θ Ophiuchi. Month VIII, night of the 1st, first part of the night, Venus was 3 cubits below β Capricorni.
+@(o 7') [... above β Virginis ...] 14 fingers [... γ Virgi]nis. Month V, night of the 1st, first part of the night, Venus was 1 cubit 8 fingers above α Virginis.
 
-@(o 10) [...] 1/2 cubit [...] δ? [Capricorni?. Month X, [the xth,] Venus’ last appearance in the west in Capricorn. The 6th, Venus’ [first appearance in the east ...]
+@(o 8') [...] 4 1⁄2 cubits [below β Li]brae. Month VI, night of the 5th, first part of the night, Venus was 2 fingers above δ Scorpii, Venus having passed a little to the east.
 
-@(o 11) [...] Capricorni ... [...]
+@(o 9') [... first part] of the night, Venus was 5? fingers below θ Ophiuchi. Month VIII, night of the 1st, first part of the night, Venus was 3 cubits below β Capricorni.
 
-@(r 1) [... when] I watched I did not see it.
+@(o 10') [...] 1/2 cubit [...] δ? [Capricorni?. Month X, [the xth,] Venus’ last appearance in the west in Capricorn. The 6th, Venus’ [first appearance in the east ...]
 
-@(r 2) [...] solar eclipse; when I watched I did not see it.
+@(o 11') [...] Capricorni ... [...]
+
+@(r 1') [... when] I watched I did not see it.
+
+@(r 2') [...] solar eclipse; when I watched I did not see it.
 
 @top
 
-@(t.e. 1) [...] and eclipses which were est[ablished] for year 97, king Antiochus.
+@(t.e. 1') [...] and eclipses which were est[ablished] for year 97, king Antiochus.

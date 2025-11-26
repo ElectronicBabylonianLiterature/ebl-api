@@ -8,7 +8,7 @@
 $ broken
 @reverse
 @column 1
-1'. [...] {I}se LUGAL
+1'. [...] {m}se LUGAL
 #lem: u; Seleucus[Seleucus]RN; šarru[king]N
 
 2'. [DU₆ 	x]	ŠÚ na
@@ -48,7 +48,7 @@ $ broken
 #lem: u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
 
 $ ruling
-14'. [M]U 1.me.[2]6.KAM {I}se LUGAL
+14'. [M]U 1.me.[2]6.KAM {m}se LUGAL
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N
 
 15'. ⸢BAR⸣ 28 [x] ⸢x x⸣
@@ -58,7 +58,7 @@ $ ruling
 #lem: u; u; u; u; u; u
 
 @column 2
-1'. MU 1 ME 26.KAM {I}se LUGAL
+1'. MU 1 ME 26.KAM {m}se LUGAL
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N
 
 2'. BAR 30 13.10 DIR NU PAP
@@ -143,88 +143,88 @@ $ ruling
 
 $ broken
 
-@(r i 1) [Year 125,] king Seleucus.
+@(r i 1') [Year 125,] king Seleucus.
 
-@(r i 2) [Month VII,]	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 2') [Month VII,]	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 3)		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
+@(r i 3')		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
 
-@(r i 4) [Month VIII, 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 4') [Month VIII, 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 5)		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+5°? 
+@(r i 5')		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+5°? 
 
-@(r i 6) [Month IX,] 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x]+2° 10' 
+@(r i 6') [Month IX,] 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x]+2° 10' 
 
-@(r i 7)		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 24° 20' ‘
+@(r i 7')		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 24° 20' ‘
 
-@(r i 8) [Mon]th X, 	moonset to sunrise’ (plus) ‘sunrise to moonset’: 2°? 30' 
+@(r i 8') [Mon]th X, 	moonset to sunrise’ (plus) ‘sunrise to moonset’: 2°? 30' 
 
-@(r i 9)		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 17° 
+@(r i 9')		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 17° 
 
-@(r i 10) Month XI, 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9° 50' 
+@(r i 10') Month XI, 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9° 50' 
 
-@(r i 11)		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 11° 10' 
+@(r i 11')		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 11° 10' 
 
-@(r i 12) [Mon]th XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9° 
+@(r i 12') [Mon]th XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9° 
 
-@(r i 13)		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+6° 30'
+@(r i 13')		‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+6° 30'
 
 $ ruling
 
-@(r i 14) [Year] 126, king Seleucus.
+@(r i 14') [Year] 126, king Seleucus.
 
-@(r i 15) Month I, the 28th, [...] ...
+@(r i 15') Month I, the 28th, [...] ...
 
-@(r i 16) ...
+@(r i 16') ...
 
-@(r ii 1) Year 126, king Seleucus.
+@(r ii 1') Year 126, king Seleucus.
 
-@(r ii 2) Month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13° 10'; clouds, I did not watch.
+@(r ii 2') Month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13° 10'; clouds, I did not watch.
 
-@(r ii 3) The 13th,	moonrise to sunset: 14°; clouds, I did not watch. 
+@(r ii 3') The 13th,	moonrise to sunset: 14°; clouds, I did not watch. 
 
-@(r ii 4) The 13th,	moonset to sunrise: 6° 20'; clouds, I did not watch. 
+@(r ii 4') The 13th,	moonset to sunrise: 6° 20'; clouds, I did not watch. 
 
-@(r ii 5) The 14th,	sunset to moonrise: 1° 30'; measured (despite) clouds. 
+@(r ii 5') The 14th,	sunset to moonrise: 1° 30'; measured (despite) clouds. 
 
-@(r ii 6) The 14th,	sunrise to moonset: 4° 30'; measured (despite) clouds. 
+@(r ii 6') The 14th,	sunrise to moonset: 4° 30'; measured (despite) clouds. 
 
-@(r ii 7) The 27th,	moonrise to sunrise: 20° 30'; measured (despite) clouds.
+@(r ii 7') The 27th,	moonrise to sunrise: 20° 30'; measured (despite) clouds.
 
-@(r ii 8) Month II, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 24°; it was bright, earthshine; it could be seen while (the sun) stood there.
+@(r ii 8') Month II, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 24°; it was bright, earthshine; it could be seen while (the sun) stood there.
 
-@(r ii 9) The 12th,	moonset to sunrise: 9° 50'; measured (despite) clouds. 
+@(r ii 9') The 12th,	moonset to sunrise: 9° 50'; measured (despite) clouds. 
 
-@(r ii 10) The 13th,	moonrise to sunset: 6° 30'; measured (despite) clouds. 
+@(r ii 10') The 13th,	moonrise to sunset: 6° 30'; measured (despite) clouds. 
 
-@(r ii 11) The 13th,	sunrise to moonset: [x]'; clouds, I did not watch. 
+@(r ii 11') The 13th,	sunrise to moonset: [x]'; clouds, I did not watch. 
 
-@(r ii 12) The 14th,	sunset to moonrise: [x]+10'; measured. 
+@(r ii 12') The 14th,	sunset to moonrise: [x]+10'; measured. 
 
-@(r ii 13) The 27th,	moonrise to sunrise: 15°?; measured.
+@(r ii 13') The 27th,	moonrise to sunrise: 15°?; measured.
 
-@(r ii 14) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18°; it was bright, earthshine, ...
+@(r ii 14') Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18°; it was bright, earthshine, ...
 
-@(r ii 15) The 13th, 	moonrise to [sunset:] 2° 50' [...]
+@(r ii 15') The 13th, 	moonrise to [sunset:] 2° 50' [...]
 
-@(r ii 16) The 13th, 	moonset to [sunrise:] 3° [...]
+@(r ii 16') The 13th, 	moonset to [sunrise:] 3° [...]
 
-@(r ii 17) The 1[4th, ...]
+@(r ii 17') The 1[4th, ...]
 
-@(r iii 1) Month V, [...]
+@(r iii 1') Month V, [...]
 
-@(r iii 2) The 10+[xth, ...]
+@(r iii 2') The 10+[xth, ...]
 
-@(r iii 3) The 10+[xth, ...]
+@(r iii 3') The 10+[xth, ...]
 
-@(r iii 4) The 11+[xth, ...]
+@(r iii 4') The 11+[xth, ...]
 
-@(r iii 5) The 15th, [...]
+@(r iii 5') The 15th, [...]
 
-@(r iii 6) The 20+[xth, ...]
+@(r iii 6') The 20+[xth, ...]
 
-@(r iii 7) Month VI, [...]
+@(r iii 7') Month VI, [...]
 
-@(r iii 8) The 11+[xth, ...]
+@(r iii 8') The 11+[xth, ...]
 
-@(r iii 9) The 12+[xth, ...]
+@(r iii 9') The 12+[xth, ...]

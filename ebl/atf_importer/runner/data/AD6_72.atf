@@ -15,7 +15,7 @@
 #lem: u; u; u; u; u; u; u
 
 $ ruling
-4'. [MU 1 ME 40].KAM {I}an u {I}an ⸢A⸣-[šú LUGAL{MEŠ} ...]
+4'. [MU 1 ME 40].KAM {m}an u {m}an ⸢A⸣-[šú LUGAL{MEŠ} ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
 
 5'. [... GIŠ.K]UN?-A? 4? KÙŠ? [...]
@@ -47,7 +47,7 @@ $ ruling
 6'. 14.50? ME GE₆
 #lem: n; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
 
-7'. MU 1 ME 60+21.KAM {I}ar LUGAL
+7'. MU 1 ME 60+21.KAM {m}ar LUGAL
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; u; šarru[king]N
 
 8'. GU₄ 28 AN.KU₁₀ šámaš ki PAP NU IGI
@@ -58,34 +58,34 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [....] ... 2 ... [...] 3 [...] ... [...]
+@(o 2') [....] ... 2 ... [...] 3 [...] ... [...]
 
 $ ruling
 
-@(o 4) [Year 140, kings] Antiochus and [his] son Antiochus ...]
+@(o 4') [Year 140, kings] Antiochus and [his] son Antiochus ...]
 
-@(o 5) [... Saturn was] 4? cubits? [below θ Leo]nis? [...]
+@(o 5') [... Saturn was] 4? cubits? [below θ Leo]nis? [...]
 
-@(o 6) [...] ..., last part of the night, Saturn was [...] above [...]
+@(o 6') [...] ..., last part of the night, Saturn was [...] above [...]
 
-@(o 7) [...] ... [...]
+@(o 7') [...] ... [...]
 
-@(r i 1) Month X, [‘moonset to sunrise’ (plus) ‘sunrise to moonset’:] 12° 40'. 
+@(r i 1') Month X, [‘moonset to sunrise’ (plus) ‘sunrise to moonset’:] 12° 40'. 
 
-@(r i 2) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 18°. 
+@(r i 2') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 18°. 
 
-@(r i 3) Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 10° 30'. 
+@(r i 3') Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 10° 30'. 
 
-@(r i 4) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 15° 30'?. 
+@(r i 4') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 15° 30'?. 
 
-@(r i 5) Month XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9°. 
+@(r i 5') Month XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 9°. 
 
-@(r i 6) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 14° 50'?.
+@(r i 6') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 14° 50'?.
 
-@(r i 7) Year 181, king Arsaces.
+@(r i 7') Year 181, king Arsaces.
 
-@(r i 8) Month II, the 28th, solar eclipse; when I watched I did not see it.
+@(r i 8') Month II, the 28th, solar eclipse; when I watched I did not see it.
 
-@(r i 9) At 2+x° before sunset.
+@(r i 9') At 2+x° before sunset.

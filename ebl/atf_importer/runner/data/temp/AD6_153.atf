@@ -47,32 +47,32 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] last appearance?
+@(o 1') [...] last appearance?
 
-@(o 2) [... The x]+8th?, Jupiter’s
+@(o 2') [... The x]+8th?, Jupiter’s
 
-@(o 3) [...] The 28th, Jupiter’s
+@(o 3') [...] The 28th, Jupiter’s
 
-@(o 4) [...]
-
-$ ruling
-
-@(o 5) [...] Month IV, night of the 24th,
-
-@(o 6) [...]
+@(o 4') [...]
 
 $ ruling
 
-@(o 7) [... night of the] 8th?, first part of the night, Venus was
+@(o 5') [...] Month IV, night of the 24th,
 
-@(o 8) [...] 5/6 cubit behind α Leonis
+@(o 6') [...]
 
-@(o 9) [...] ...
+$ ruling
 
-@(r 1) [...] after sunrise.
+@(o 7') [... night of the] 8th?, first part of the night, Venus was
 
-@(r 2) [...] omitted?.
+@(o 8') [...] 5/6 cubit behind α Leonis
+
+@(o 9') [...] ...
+
+@(r 1') [...] after sunrise.
+
+@(r 2') [...] omitted?.
 
 @top
 
-@(t.e. 1) [...] ... night?.
+@(t.e. 1') [...] ... night?.

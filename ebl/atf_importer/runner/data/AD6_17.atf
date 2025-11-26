@@ -12,7 +12,7 @@
 #lem: u; ina[in]PRP; pānu[front]N; SAG-A[ε Leonis]CN; emēdu[be at a stationary point]V
 
 $ ruling
-3'. [MU 24.KAM {I}se-lu-ku u {I}an-ti-ʾu]-⸢uk⸣-su LUGAL{MEŠ} {ITU}BAR GE₆ 18 USAN MÚL.BA[BBAR ...]
+3'. [MU 24.KAM {m}se-lu-ku u {m}an-ti-ʾu]-⸢uk⸣-su LUGAL{MEŠ} {ITU}BAR GE₆ 18 USAN MÚL.BA[BBAR ...]
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; u[and]CNJ; Antiochus[Antiochus]'RN; šarrāni[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; u
 
 4'. [...] USAN MÚL.BABBAR ana ŠÚ ina LAL-šú SIG SAG-[A n n ...] 
@@ -76,21 +76,21 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] it became stationary [...] 4 fingers behind α Leonis. Month X, the 20th, Jupiter’s [acronychal rising ...]
+@(o 1') [...] it became stationary [...] 4 fingers behind α Leonis. Month X, the 20th, Jupiter’s [acronychal rising ...]
 
-@(o 2) [...] it became stationary [...] in front of ε Leonis.
-
-$ ruling
-
-@(o 3) [Year 24,] kings [Seleucus and Antio]chus. Month I, night of the 18th , first part of the night, Jupit[er was ...]
-
-@(o 4) [...] first part of the night, Jupiter, while moving back to the west, was [...] below ε Leonis.
+@(o 2') [...] it became stationary [...] in front of ε Leonis.
 
 $ ruling
 
-@(o 5) [...] cubits?. Night of the 11th, first part of the night, [...]
+@(o 3') [Year 24,] kings [Seleucus and Antio]chus. Month I, night of the 18th , first part of the night, Jupit[er was ...]
 
-@(o 6) [...] ... [...]
+@(o 4') [...] first part of the night, Jupiter, while moving back to the west, was [...] below ε Leonis.
+
+$ ruling
+
+@(o 5') [...] cubits?. Night of the 11th, first part of the night, [...]
+
+@(o 6') [...] ... [...]
 
 @reverse
 
@@ -104,30 +104,30 @@ $ broken
 
 @column 3
 
-@(r iii 1) [Month VIII, ..., sunset to moonset: x°] 30'; clouds, I did not watch.
+@(r iii 1') [Month VIII, ..., sunset to moonset: x°] 30'; clouds, I did not watch.
 
-@(r iii 2) The 13th,	moonset to sunr{I}se: 2° 50'. 
+@(r iii 2') The 13th,	moonset to sunr{I}se: 2° 50'. 
 
-@(r iii 3) The 14th,	moonr{I}se to sunset: 3° 30'; measured. 
+@(r iii 3') The 14th,	moonr{I}se to sunset: 3° 30'; measured. 
 
-@(r iii 4) The 14th,	sunr{I}se to moonset: 12° 30'; measured. 
+@(r iii 4') The 14th,	sunr{I}se to moonset: 12° 30'; measured. 
 
-@(r iii 5) The 15th,	sunset to moonr{I}se: 8° 40'. 
+@(r iii 5') The 15th,	sunset to moonr{I}se: 8° 40'. 
 
-@(r iii 6) The 26th,	(moonr{I}se to sunr{I}se:) 20°; measured.
+@(r iii 6') The 26th,	(moonr{I}se to sunr{I}se:) 20°; measured.
 
-@(r iii 7) Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10° 30'; clouds, I did not watch.
+@(r iii 7') Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10° 30'; clouds, I did not watch.
 
-@(r iv 1) The 28th, (moonr{I}se to sunr{I}se:) 10° 50'; clouds, I did not [watch.]
+@(r iv 1') The 28th, (moonr{I}se to sunr{I}se:) 10° 50'; clouds, I did not [watch.]
 
-@(r iv 2) Month XII₂, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°; it was bright, measured (despite) clouds.
+@(r iv 2') Month XII₂, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°; it was bright, measured (despite) clouds.
 
-@(r iv 3) The 12th,	moonset to sunr{I}se: 10+[x°] 30'?; clouds, I did not watch. 
+@(r iv 3') The 12th,	moonset to sunr{I}se: 10+[x°] 30'?; clouds, I did not watch. 
 
-@(r iv 4) The 13th,	[moonr{I}se to sunset: ...] I did not watch. 
+@(r iv 4') The 13th,	[moonr{I}se to sunset: ...] I did not watch. 
 
-@(r iv 5) The 1[3th,	sunr{I}se to moonset: ...;] measured.
+@(r iv 5') The 1[3th,	sunr{I}se to moonset: ...;] measured.
 
-@(r iv 6) The 14th,	sunset to moonr{I}se: 11°?; measured? (despite) clouds?.
+@(r iv 6') The 14th,	sunset to moonr{I}se: 11°?; measured? (despite) clouds?.
 
-@(r iv 7) The 26+[xth,] (moonr{I}se to sunr{I}se:) [x°] 40'?; clouds, I did not watch.
+@(r iv 7') The 26+[xth,] (moonr{I}se to sunr{I}se:) [x°] 40'?; clouds, I did not watch.

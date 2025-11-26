@@ -12,7 +12,7 @@
 #lem: u; u; Šihṭu[Mercury]CN; ina[in]PRP; Elamtu[east]'N; ina[in]PRP; Gula[Aquarius]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V; Addaru[Month XII]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; u; nanmuru[be(come) visible]V; u
 
 $ ruling
-3'. [MU 37.KAM {I}an u {I}s]e LUGAL{MEŠ} KIN.DIR MU 3[8].KAM SIG in [...]
+3'. [MU 37.KAM {m}an u {m}s]e LUGAL{MEŠ} KIN.DIR MU 3[8].KAM SIG in [...]
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N; +lūlu-Šanû[Month VI₂]MN$; šattu[year]N; n; Simānu[Month III]MN; ina[around (day x)]PRP; u
 
 4'. [...] ⸢x⸣ GENNA ana ME E-a [x x GENN]A ⸢ana⸣ [ŠÚ ...]
@@ -32,20 +32,20 @@ $ ruling
 @translation labeled en project
 
 
-@(o 1) [...] ..., the 12th, Mercury’s first appearance? in the east in Aquarius? ... [...]
+@(o 1') [...] ..., the 12th, Mercury’s first appearance? in the east in Aquarius? ... [...]
 
-@(o 2) [...] the [x]+19th, Mercury’s last appearance in the east in Aquarius; I did not watch. Month XII, the 1st, Mer[cury’s first appearance in the west in ...]
-
-$ ruling
-
-@(o 3) [Year 37,] kings [Antiochus and Seleuc]us; month VI was intercalary. Year 3[8], month III, around [...]
-
-@(o 4) [...] the xth, Saturn’s acronychal rising. [..., when Sat]urn [became stationary] to [the west, ...]
-
-@(o 5) [... x]+11th, Saturn’s [... appearance] in P[isces ...]
+@(o 2') [...] the [x]+19th, Mercury’s last appearance in the east in Aquarius; I did not watch. Month XII, the 1st, Mer[cury’s first appearance in the west in ...]
 
 $ ruling
 
-@(o 6) [...] the 25th, ... [...]
+@(o 3') [Year 37,] kings [Antiochus and Seleuc]us; month VI was intercalary. Year 3[8], month III, around [...]
 
-@(o 7) [...] ... [...]
+@(o 4') [...] the xth, Saturn’s acronychal rising. [..., when Sat]urn [became stationary] to [the west, ...]
+
+@(o 5') [... x]+11th, Saturn’s [... appearance] in P[isces ...]
+
+$ ruling
+
+@(o 6') [...] the 25th, ... [...]
+
+@(o 7') [...] ... [...]

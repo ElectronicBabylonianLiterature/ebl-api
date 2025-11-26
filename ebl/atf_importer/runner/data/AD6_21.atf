@@ -80,27 +80,27 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] when Jupiter became stationary to the east,
+@(o 1') [...] when Jupiter became stationary to the east,
 
-@(o 2) [...] (blank)
-
-$ ruling
-
-@(o 3) [... Mo]nth VII, night of the 3rd, last part of the night, Jupiter was [...] above β Virginis
-
-@(o 4) [...] (blank)
+@(o 2') [...] (blank)
 
 $ ruling
 
-@(o 5) [... Venus was] 2 cubits [above η] Geminorum. Night of the 13th, first part of the night, Venus
+@(o 3') [... Mo]nth VII, night of the 3rd, last part of the night, Jupiter was [...] above β Virginis
 
-@(o 6) [was ... above μ Geminorum ...] Month II, the 21st, Venus’ [last appearance] in the west in Leo.
+@(o 4') [...] (blank)
 
-@(o 7) [...] η Geminorum
+$ ruling
 
-@(o 8) [...] 1 1⁄2? [cubits above] γ Gemi[norum ...]
+@(o 5') [... Venus was] 2 cubits [above η] Geminorum. Night of the 13th, first part of the night, Venus
 
-@(o 9) [...] ... [...]
+@(o 6') [was ... above μ Geminorum ...] Month II, the 21st, Venus’ [last appearance] in the west in Leo.
+
+@(o 7') [...] η Geminorum
+
+@(o 8') [...] 1 1⁄2? [cubits above] γ Gemi[norum ...]
+
+@(o 9') [...] ... [...]
 
 @reverse
 
@@ -112,26 +112,26 @@ $ broken
 
 $ broken
 
-@(r iii 1) [The xth,] moonr{I}se to sunset: [...]; clouds, I did not watch.
+@(r iii 1') [The xth,] moonr{I}se to sunset: [...]; clouds, I did not watch.
 
-@(r iii 2) [The xth,] sunset to moonr{I}se: [...]; clouds, I did not watch.
+@(r iii 2') [The xth,] sunset to moonr{I}se: [...]; clouds, I did not watch.
 
-@(r iii 3) [The xth, (moonr{I}se to sunr{I}se:)] ..., measured.
+@(r iii 3') [The xth, (moonr{I}se to sunr{I}se:)] ..., measured.
 
-@(r iv 1) [...] ... [...]
+@(r iv 1') [...] ... [...]
 
-@(r iv 2) [Month XII, ... (sunset to moonset:) x]+1° 30'; clouds, I did not watch.
+@(r iv 2') [Month XII, ... (sunset to moonset:) x]+1° 30'; clouds, I did not watch.
 
-@(r iv 3) [The 14th,] moonset to sunr{I}se: 30'.
+@(r iv 3') [The 14th,] moonset to sunr{I}se: 30'.
 
-@(r iv 4) The 15th, sunr{I}se to moonset: 40'.
+@(r iv 4') The 15th, sunr{I}se to moonset: 40'.
 
-@(r iv 5) The 15th, moonr{I}se to sunset: 8°.
+@(r iv 5') The 15th, moonr{I}se to sunset: 8°.
 
-@(r iv 6) The 16th, sunset to moonr{I}se: 15° 40'.
+@(r iv 6') The 16th, sunset to moonr{I}se: 15° 40'.
 
-@(r iv 7) The 26th, (moonr{I}se to sunr{I}se:) 15° 50'; I did not watch.
+@(r iv 7') The 26th, (moonr{I}se to sunr{I}se:) 15° 50'; I did not watch.
 
-@(r iv 8) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 16° ...[...], measured?.
+@(r iv 8') Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 16° ...[...], measured?.
 
-@(r iv 9) [...] were established [...]
+@(r iv 9') [...] were established [...]

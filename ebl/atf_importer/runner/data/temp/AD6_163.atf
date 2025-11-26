@@ -244,45 +244,45 @@ $ traces
 
 @translation labeled en project
 
-@(o 1) [...] above [...] 
+@(o 1') [...] above [...] 
 
-@(o 2) [...] ... [...] 
+@(o 2') [...] ... [...] 
 
-@(o 3) [...] 
+@(o 3') [...] 
 
-@(o 4) [...] ... [...] 
+@(o 4') [...] ... [...] 
 
-@(o 5) [...] ... [...] 
+@(o 5') [...] ... [...] 
 
-@(o 6) [...] (ideal) first appearance on the 20th? [...] ... 
+@(o 6') [...] (ideal) first appearance on the 20th? [...] ... 
 
-@(o 7) [...] ... Mercury was [...] below [...] ... 
+@(o 7') [...] ... Mercury was [...] below [...] ... 
 
-@(o 8) [...] ... [...] ...
+@(o 8') [...] ... [...] ...
 
-@(o 9) [... night of] the 28th?, first part of the night,
+@(o 9') [... night of] the 28th?, first part of the night,
 
-@(o 10) [...] ... measured ...
+@(o 10') [...] ... measured ...
 
-@(o 11) [...] it became stationary ...
+@(o 11') [...] it became stationary ...
 
-@(o 12) [...] ... last appearance
+@(o 12') [...] ... last appearance
 
-@(o 13) [...] ...
+@(o 13') [...] ...
 
-@(o 14) [...] ...
+@(o 14') [...] ...
 
-@(o 15) [...] ...
+@(o 15') [...] ...
 
-@(o 16) [...] ...
+@(o 16') [...] ...
 
-@(o 17) [...] ...
+@(o 17') [...] ...
 
-@(o 18) [...] ... Mars? ...
+@(o 18') [...] ... Mars? ...
 
-@(o 19) [...] Night of the 7th, [...] ...
+@(o 19') [...] Night of the 7th, [...] ...
 
-@(o 20) [...] ... last part of the night, Mars was [...]
+@(o 20') [...] ... last part of the night, Mars was [...]
 
 @reverse
 
@@ -290,116 +290,116 @@ $ traces
 
 $ traces
 
-@(r ii 1) [Month II, ...] ...; I did not watch.
+@(r ii 1') [Month II, ...] ...; I did not watch.
 
-@(r ii 2) [The 15th,] moonrise to sunset: 19°?; measured. 
+@(r ii 2') [The 15th,] moonrise to sunset: 19°?; measured. 
 
-@(r ii 3) The 15th, moonset to sunrise: 2° 20'; I did not watch. 
+@(r ii 3') The 15th, moonset to sunrise: 2° 20'; I did not watch. 
 
-@(r ii 4) The 16th, sunset to moonrise: 12°?; I did not watch. 
+@(r ii 4') The 16th, sunset to moonrise: 12°?; I did not watch. 
 
-@(r ii 5) The 16th, [sunrise to moonset: ...;] I did not watch. 
+@(r ii 5') The 16th, [sunrise to moonset: ...;] I did not watch. 
 
-@(r ii 6) The 28th, [moonrise to sunrise:] ... watch.
+@(r ii 6') The 28th, [moonrise to sunrise:] ... watch.
 
-@(r ii 7) Month III, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 17°; ..., measured.
+@(r ii 7') Month III, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 17°; ..., measured.
 
-@(r ii 8) The 14th, [moonrise to sunset:] 15°; measured. 
+@(r ii 8') The 14th, [moonrise to sunset:] 15°; measured. 
 
-@(r ii 9) The 14th, moonset to sunrise: ...; measured. 
+@(r ii 9') The 14th, moonset to sunrise: ...; measured. 
 
-@(r ii 10) The 15th, [sunset to moonrise:] 1°?; measured?. 
+@(r ii 10') The 15th, [sunset to moonrise:] 1°?; measured?. 
 
-@(r ii 11) The 1[5th, sunrise] to moonset: [x°] 30'; ...
+@(r ii 11') The 1[5th, sunrise] to moonset: [x°] 30'; ...
 
-@(r ii 12) The 20+[xth,] moonrise to sunrise: 18°?; I did not watch.
+@(r ii 12') The 20+[xth,] moonrise to sunrise: 18°?; I did not watch.
 
-@(r ii 13) [Month IV, ...] ...
+@(r ii 13') [Month IV, ...] ...
 
-@(r ii 14) [...] ... [...] I did not watch.
+@(r ii 14') [...] ... [...] I did not watch.
 
-@(r ii 15) [...] measured.
+@(r ii 15') [...] measured.
 
-@(r ii 16) [...] ... measured.
+@(r ii 16') [...] ... measured.
 
-@(r ii 17) [...] ...
+@(r ii 17') [...] ...
 
-@(r ii 18) [...] ...
+@(r ii 18') [...] ...
 
-@(r iii 1) ...
+@(r iii 1') ...
 
-@(r iii 2) Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 13°? 20'; it was bright?. 
+@(r iii 2') Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 13°? 20'; it was bright?. 
 
-@(r iii 3) The 12th, moonset to sunrise: 5° 30'; measured. 
+@(r iii 3') The 12th, moonset to sunrise: 5° 30'; measured. 
 
-@(r iii 4) The 13th, moonrise to sunset: 6° 30'; measured. 
+@(r iii 4') The 13th, moonrise to sunset: 6° 30'; measured. 
 
-@(r iii 5) The 13th, sunrise to moonset: 10°; measured. 
+@(r iii 5') The 13th, sunrise to moonset: 10°; measured. 
 
-@(r iii 6) The 14th, sunset to moonrise: 4°; measured. 
+@(r iii 6') The 14th, sunset to moonrise: 4°; measured. 
 
-@(r iii 7) The 26th, moonrise to sunrise: 17°?; overcast?, measured.
+@(r iii 7') The 26th, moonrise to sunrise: 17°?; overcast?, measured.
 
-@(r iii 8) Month VII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ..., mist,
+@(r iii 8') Month VII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ..., mist,
 
-@(r iii 9) ...
+@(r iii 9') ...
 
-@(r iii 10) The 12th, moonset to sunrise: 9° 40'; I did not watch. 
+@(r iii 10') The 12th, moonset to sunrise: 9° 40'; I did not watch. 
 
-@(r iii 11) The 13th, [moonrise to sunset:] 10° 30'; I did not watch. 
+@(r iii 11') The 13th, [moonrise to sunset:] 10° 30'; I did not watch. 
 
-@(r iii 12) The 13th, sunrise to moonset: 11° 20'?; I did not watch. 
+@(r iii 12') The 13th, sunrise to moonset: 11° 20'?; I did not watch. 
 
-@(r iii 13) The 14th, sunset to moonrise: [...]; I did not watch. 
+@(r iii 13') The 14th, sunset to moonrise: [...]; I did not watch. 
 
-@(r iii 14) The 27th, moonrise to sunrise: 21°; measured. 
+@(r iii 14') The 27th, moonrise to sunrise: 21°; measured. 
 
-@(r iii 15) Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) ...; it was bright, it was low to the sun.
+@(r iii 15') Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) ...; it was bright, it was low to the sun.
 
-@(r iii 16) The 12th, moonset to sunrise: 1° 30'; measured.
+@(r iii 16') The 12th, moonset to sunrise: 1° 30'; measured.
 
-@(r iii 17) The 13th, [moonrise to sunset:] 3° 20'.
+@(r iii 17') The 13th, [moonrise to sunset:] 3° 20'.
 
-@(r iii 18) The 13th, sunrise to moonset: 12°; measured. 
+@(r iii 18') The 13th, sunrise to moonset: 12°; measured. 
 
-@(r iii 19) The 14th, sunset to moonrise: 8°; measured. 
+@(r iii 19') The 14th, sunset to moonrise: 8°; measured. 
 
-@(r iii 20) The 26th?, moonrise to sunrise: 23°; [...] 
+@(r iii 20') The 26th?, moonrise to sunrise: 23°; [...] 
 
-@(r iv 1) ...
+@(r iv 1') ...
 
-@(r iv 2) The 13th, moonset to sunrise: 6° 20'; I did not watch. 
+@(r iv 2') The 13th, moonset to sunrise: 6° 20'; I did not watch. 
 
-@(r iv 3) The 14th, moonrise to sunset: 12° 50'; I did not watch. 
+@(r iv 3') The 14th, moonrise to sunset: 12° 50'; I did not watch. 
 
-@(r iv 4) The 14th, sunrise to moonset: 4° 20'; I did not watch. 
+@(r iv 4') The 14th, sunrise to moonset: 4° 20'; I did not watch. 
 
-@(r iv 5) The 15th, sunset to moonrise: 9° 20'; I did not watch. 
+@(r iv 5') The 15th, sunset to moonrise: 9° 20'; I did not watch. 
 
-@(r iv 6) The 27th, moonrise to sunrise: 12° 50'; I did not watch
+@(r iv 6') The 27th, moonrise to sunrise: 12° 50'; I did not watch
 
-@(r iv 7) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22° 50'; I did not watch.
+@(r iv 7') Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22° 50'; I did not watch.
 
-@(r iv 8) The 13th, moonrise to sunset: 11°; I did not watch. 
+@(r iv 8') The 13th, moonrise to sunset: 11°; I did not watch. 
 
-@(r iv 9) The 13th, moonset to sunrise: 4°; I did not [watch.] 
+@(r iv 9') The 13th, moonset to sunrise: 4°; I did not [watch.] 
 
-@(r iv 10) The 14th, sunset to moonrise: 40'; [...] 
+@(r iv 10') The 14th, sunset to moonrise: 40'; [...] 
 
-@(r iv 11) The 14th, sunrise to moonset: 5°; [...] 
+@(r iv 11') The 14th, sunrise to moonset: 5°; [...] 
 
-@(r iv 12) The 27th, moonrise to sunrise: 18°; I did not [watch.]
+@(r iv 12') The 27th, moonrise to sunrise: 18°; I did not [watch.]
 
-@(r iv 13) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 19°; ... [...]
+@(r iv 13') Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 19°; ... [...]
 
-@(r iv 14) The 14th, [moonrise to sunset:] 10°; [...] 
+@(r iv 14') The 14th, [moonrise to sunset:] 10°; [...] 
 
-@(r iv 15) The 14th, [moonset to sunrise:] 5° 20'?; [...] 
+@(r iv 15') The 14th, [moonset to sunrise:] 5° 20'?; [...] 
 
-@(r iv 16) The 15th, [sunset to moonrise:] 3° 10+[x']; [...]
+@(r iv 16') The 15th, [sunset to moonrise:] 3° 10+[x']; [...]
 
-@(r iv 17) The 15th, [sunrise to moonset:] ... [...]
+@(r iv 17') The 15th, [sunrise to moonset:] ... [...]
 
-@(r iv 18) The 20+[xth, ...]
+@(r iv 18') The 20+[xth, ...]
 
-@(r iv 19) Month XII₂, [...]
+@(r iv 19') Month XII₂, [...]

@@ -87,25 +87,25 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] ... 20? [...]
+@(o 1') [...] ... 20? [...]
 
-@(o 2) [...] ... [η] Piscium? [...]
+@(o 2') [...] ... [η] Piscium? [...]
 
-@(o 3) [...] Month V, around until [...]
+@(o 3') [...] Month V, around until [...]
 
-@(o 4) [... Night] of the 20th, last part of the night, Jupiter, while moving back to the west, [...]
+@(o 4') [... Night] of the 20th, last part of the night, Jupiter, while moving back to the west, [...]
 
-@(o 5) [...] 3 1/2 cubits [below] β Arietis [...]
+@(o 5') [...] 3 1/2 cubits [below] β Arietis [...]
 
-@(o 6) [...] ... Month X, night of the 28th, first part of the night, Jupi[ter ...]
+@(o 6') [...] ... Month X, night of the 28th, first part of the night, Jupi[ter ...]
 
-@(o 7) [...] 5 cubits [below β/α] Arietis. Month XII₂, [...]
+@(o 7') [...] 5 cubits [below β/α] Arietis. Month XII₂, [...]
 
-@(o 8) [...] ($blank$)
+@(o 8') [...] ($blank$)
 
 $ ruling
 
-@(o 9) [...] ... [...]
+@(o 9') [...] ... [...]
 
 @reverse
 
@@ -117,32 +117,32 @@ $ broken
 
 $ broken
 
-@(r iii 1) [...] ... [...]
+@(r iii 1') [...] ... [...]
 
-@(r iii 2) [...] measured (despite) mist.
+@(r iii 2') [...] measured (despite) mist.
 
-@(r iii 3) [The 12th,] moonrise to sunset: [x°] 20'; clouds, I did not watch. 
+@(r iii 3') [The 12th,] moonrise to sunset: [x°] 20'; clouds, I did not watch. 
 
-@(r iii 4) [The 12th,] moonset to sunrise: [x°] 20'; clouds, I did not watch.
+@(r iii 4') [The 12th,] moonset to sunrise: [x°] 20'; clouds, I did not watch.
 
-@(r iii 5) The 13th, sunset to moonrise: 50'; clouds, I did not watch.
+@(r iii 5') The 13th, sunset to moonrise: 50'; clouds, I did not watch.
 
-@(r iii 6) The 13th, sunrise to moonset: 9° 40'; I did not watch. 
+@(r iii 6') The 13th, sunrise to moonset: 9° 40'; I did not watch. 
 
-@(r iii 7) The xth, moonrise to sunrise: 14°; measured (despite) clouds.
+@(r iii 7') The xth, moonrise to sunrise: 14°; measured (despite) clouds.
 
-@(r iii 8) [...], sunset to moonset: ...
+@(r iii 8') [...], sunset to moonset: ...
 
-@(r iii 9) [...] ...
+@(r iii 9') [...] ...
 
-@(r iv 1) The 13th, [...]
+@(r iv 1') The 13th, [...]
 
-@(r iv 2) The 14th, [...]
+@(r iv 2') The 14th, [...]
 
-@(r iv 3) The 14th, [...]
+@(r iv 3') The 14th, [...]
 
-@(r iv 4) The 15th, [...]
+@(r iv 4') The 15th, [...]
 
-@(r iv 5) The 27th, [...]
+@(r iv 5') The 27th, [...]
 
-@(r iv 6) Month XII, (the 1st of which was identical with) the 30th (of the preceding month,) [sunset to moonset: ...] 
+@(r iv 6') Month XII, (the 1st of which was identical with) the 30th (of the preceding month,) [sunset to moonset: ...] 

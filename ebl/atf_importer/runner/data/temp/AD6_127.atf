@@ -63,38 +63,38 @@
 
 @translation labeled en project
 
-@(i 1) [...] ... [...]
+@(i 1') [...] ... [...]
 
-@(i 2) [...] sunset to moonrise: [x°] 30' [...]
+@(i 2') [...] sunset to moonrise: [x°] 30' [...]
 
-@(i 3) [...] moonrise to sunrise: [...;] measured (despite) clouds.
+@(i 3') [...] moonrise to sunrise: [...;] measured (despite) clouds.
 
-@(i 4) [...] sunset to moonset: [...;] it was bright, earthshine, measured.
+@(i 4') [...] sunset to moonset: [...;] it was bright, earthshine, measured.
 
-@(i 5) [...] measured (despite) clouds.
+@(i 5') [...] measured (despite) clouds.
 
-@(i 6) [...] measured (despite) clouds.
+@(i 6') [...] measured (despite) clouds.
 
-@(i 7) [...] measured (despite) clouds.
+@(i 7') [...] measured (despite) clouds.
 
-@(i 8) [...] measured.
+@(i 8') [...] measured.
 
-@(ii 1) [Month VI,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ... [...]
+@(ii 1') [Month VI,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ... [...]
 
-@(ii 2) The 14th, moonrise to sunset: 7° 30'; measured (despite) mist. 
+@(ii 2') The 14th, moonrise to sunset: 7° 30'; measured (despite) mist. 
 
-@(ii 3) The 14th, moonset to sunrise: 9°; measured. 
+@(ii 3') The 14th, moonset to sunrise: 9°; measured. 
 
-@(ii 4) The 15th, sunset to moonrise: 30'; measured (despite) mist.
+@(ii 4') The 15th, sunset to moonrise: 30'; measured (despite) mist.
 
-@(ii 5) The 15th, sunrise to moonset: 3° 30'; measured (despite) mist.
+@(ii 5') The 15th, sunrise to moonset: 3° 30'; measured (despite) mist.
 
-@(ii 6) The 28th, moonrise to sunrise: 10°; measured (despite) mist. 
+@(ii 6') The 28th, moonrise to sunrise: 10°; measured (despite) mist. 
 
-@(ii 7) Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15°; it was bright, [...]
+@(ii 7') Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15°; it was bright, [...]
 
-@(ii 8) The 14th, [moonrise to sunset:] 6+[x° ...]
+@(ii 8') The 14th, [moonrise to sunset:] 6+[x° ...]
 
-@(ii 9) The 14th, [moonset to sunrise:] ... [...]
+@(ii 9') The 14th, [moonset to sunrise:] ... [...]
 
-@(ii 10) ... [...]
+@(ii 10') ... [...]

@@ -15,7 +15,7 @@
 #lem: ina[in]PRP; Gula[Aquarius]CN; rabû[set]V; Addaru[Month XII]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; u; nanmuru[be(come) visible]'V; u
 
 $ ruling
-4'. MU 17.KAM  {I}se-lu-ku [LUGAL ...]
+4'. MU 17.KAM  {m}se-lu-ku [LUGAL ...]
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N; u
 
 5'. ina ZÁLAG GENNA [SIG] MAŠ.MAŠ-IGI ⸢x⸣ [...]
@@ -137,94 +137,94 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) sunset to setting of Mercury: [x]+5° ... [...]
+@(o 1') sunset to setting of Mercury: [x]+5° ... [...]
 
-@(o 2) rising of Mercury to sunrise: x°; (ideal) first appearance on the xth. Night of the 23rd, last [part of the night, ...]
+@(o 2') rising of Mercury to sunrise: x°; (ideal) first appearance on the xth. Night of the 23rd, last [part of the night, ...]
 
-@(o 3) [Mercury’s] last appearance [in the east] in Aquarius. Month XII, the 29th, Mer[cury’s first appearance in the west in ...]
-
-$ ruling
-
-@(o 4) Year 17, [king] Seleucus. [...]
-
-@(o 5) last part of the night, Saturn was ... [below] α Geminorum [...]
-
-@(o 6) Month VIII, ni[ght] of the 5th, last part of the night, Saturn was [... below β Geminorum ...]
-
-@(o 7) Month X, night of the 11th?, first part of the night, Saturn was [...] below α [Geminorum ...]
+@(o 3') [Mercury’s] last appearance [in the east] in Aquarius. Month XII, the 29th, Mer[cury’s first appearance in the west in ...]
 
 $ ruling
 
-@(o 8) [...] ... [...]
+@(o 4') Year 17, [king] Seleucus. [...]
 
-@(o 9) [...] it became stationary [...] Month VII?, the 26th, Mars’ acro[nychal rising ...]
+@(o 5') last part of the night, Saturn was ... [below] α Geminorum [...]
 
-$ ruling
+@(o 6') Month VIII, ni[ght] of the 5th, last part of the night, Saturn was [... below β Geminorum ...]
 
-@(o 10) [...] ...
-
-@(r i 1) [The 14th,]	moonrise to sunset: ...; measured.
-
-@(r i 2) [The 14th,]	sunrise to moonset: 11° 40'; measured (despite) clouds.
-
-@(r i 3) The 15th,	sunset to moonrise: 10°; measured.
-
-@(r i 4) [The 2]6th?,	moonrise to sunrise: 10° 30'. 
+@(o 7') Month X, night of the 11th?, first part of the night, Saturn was [...] below α [Geminorum ...]
 
 $ ruling
 
-@(r i 5) [Month II, ...] sunset to moonset: 13°; it was bright.
+@(o 8') [...] ... [...]
 
-@(r i 6) [The xth,] 	moonset to sunrise: ...
-
-@(r i 7) [The xth,] 	moonrise to sunset: [...]; measured (despite) clouds.
-
-@(r i 8) [The xth,] 	sunrise to moonset: [...]; measured.
-
-@(r i 9) [The xth,] 	sunset to moonrise: [...]; measured.
-
-@(r ii 1) [The xth,] ... 30' ... [...]
-
-@(r ii 2) [The xth,] 	sunset to moonrise: 6° 30'; ...
-
-@(r ii 3) ... The 27th, 	moonrise to sunrise: 16°.
+@(o 9') [...] it became stationary [...] Month VII?, the 26th, Mars’ acro[nychal rising ...]
 
 $ ruling
 
-@(r ii 4) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°; mist, I did not see (the moon) [...]
+@(o 10') [...] ...
 
-@(r ii 5) The 1[3th,] 	moonrise to sunset: [...]; measured.
+@(r i 1') [The 14th,]	moonrise to sunset: ...; measured.
 
-@(r ii 6) The 13th, 	[moonset to sunrise: ...]
+@(r i 2') [The 14th,]	sunrise to moonset: 11° 40'; measured (despite) clouds.
 
-@(r ii 7) The 14th, 	sunset to moonrise: ...
+@(r i 3') The 15th,	sunset to moonrise: 10°; measured.
 
-@(r ii 8) The 14th, 	sunrise to moonset: 9°; measured.
-
-@(r ii 9) The 28th, 	moonrise to sunrise: 12° 10'.
+@(r i 4') [The 2]6th?,	moonrise to sunrise: 10° 30'. 
 
 $ ruling
 
-@(r ii 10) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16°; it was bright.
+@(r i 5') [Month II, ...] sunset to moonset: 13°; it was bright.
 
-@(r ii 11) The 13th, 	moonrise to sunset: 2° 40'?.
+@(r i 6') [The xth,] 	moonset to sunrise: ...
 
-@(r ii 12) The 13th, 	moonset to sunrise: 50'.
+@(r i 7') [The xth,] 	moonrise to sunset: [...]; measured (despite) clouds.
 
-@(r ii 13) The 14th, 	sunset to moonrise: 4° 30'.
+@(r i 8') [The xth,] 	sunrise to moonset: [...]; measured.
 
-@(r ii 14) The 14th, 	sunrise to moonset: 12°; measured.
+@(r i 9') [The xth,] 	sunset to moonrise: [...]; measured.
 
-@(r iii 1) The 10+[xth, ...]
+@(r ii 1') [The xth,] ... 30' ... [...]
 
-@(r iii 2) The 10+[xth, ...]
+@(r ii 2') [The xth,] 	sunset to moonrise: 6° 30'; ...
 
-@(r iii 3) The 20+[xth, ...]
+@(r ii 3') ... The 27th, 	moonrise to sunrise: 16°.
 
-@(r iii 4) Month XII, [...]
+$ ruling
 
-@(r iii 5) The 10+[xth, ...]
+@(r ii 4') Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°; mist, I did not see (the moon) [...]
 
-@(r iii 6) The 10+[xth, ...]
+@(r ii 5') The 1[3th,] 	moonrise to sunset: [...]; measured.
 
-@(r iii 7) The 10+[xth, ...]
+@(r ii 6') The 13th, 	[moonset to sunrise: ...]
+
+@(r ii 7') The 14th, 	sunset to moonrise: ...
+
+@(r ii 8') The 14th, 	sunrise to moonset: 9°; measured.
+
+@(r ii 9') The 28th, 	moonrise to sunrise: 12° 10'.
+
+$ ruling
+
+@(r ii 10') Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16°; it was bright.
+
+@(r ii 11') The 13th, 	moonrise to sunset: 2° 40'?.
+
+@(r ii 12') The 13th, 	moonset to sunrise: 50'.
+
+@(r ii 13') The 14th, 	sunset to moonrise: 4° 30'.
+
+@(r ii 14') The 14th, 	sunrise to moonset: 12°; measured.
+
+@(r iii 1') The 10+[xth, ...]
+
+@(r iii 2') The 10+[xth, ...]
+
+@(r iii 3') The 20+[xth, ...]
+
+@(r iii 4') Month XII, [...]
+
+@(r iii 5') The 10+[xth, ...]
+
+@(r iii 6') The 10+[xth, ...]
+
+@(r iii 7') The 10+[xth, ...]

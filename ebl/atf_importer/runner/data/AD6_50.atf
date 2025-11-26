@@ -18,7 +18,7 @@
 #lem: u; n; n; na[rising to sunrise]N; Dilbat[Venus]CN; ina[around (day x)]PRP; u
 
 $ ruling
-5'. [MU 1 ME] 22.KAM  {I}an LUGAL BAR 2 GU₄.UD ina ŠÚ ina MÚL.⸢MÚL⸣ I[GI ...]
+5'. [MU 1 ME] 22.KAM  {m}an LUGAL BAR 2 GU₄.UD ina ŠÚ ina MÚL.⸢MÚL⸣ I[GI ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N; Nisannu[Month I]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Zappu[Taurus]CN; nanmuru[be(come) visible]V; u
 
 6'. [USAN] GU₄.UD SIG ŠUR-GIGIR-šá-SI 1 1/2 KÙŠ GE₆ 15 US[AN GU₄.UD e ŠUR-GIGIR-šá-ULÙ ...]
@@ -52,7 +52,7 @@ $ ruling
 #lem: u; šattu[year]N; n; mē[(one) hundred]NU; n; Nisannu[Month I]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; qītu[end]N; Agru[Aries]CN; n; n; ammatu[unit]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN; ana[to]PRP; u; u; u
 
 $ ruling
-16'. [MU 1 ME 9.KAM {I}an u {I}an A]-šú LUGAL{MEŠ} SIG GE₆ 25 USAN GENNA ana NIM ina LAL-šú e LUGAL 2 SI ŠU 1 ⸢13⸣ [na GENNA ...]
+16'. [MU 1 ME 9.KAM {m}an u {m}an A]-šú LUGAL{MEŠ} SIG GE₆ 25 USAN GENNA ana NIM ina LAL-šú e LUGAL 2 SI ŠU 1 ⸢13⸣ [na GENNA ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; Simānu[Month III]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kayyamānu[Saturn]CN; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V; eli[above]PRP; LUGAL[α Leonis]CN; n; ubānu[finger]N; Duʾūzu[Month IV]MN; n; n; na[sunset to setting]N; Kayyamānu[Saturn]CN; u
 
 17'. [... GENN]A ina A 2 2/3 KÙŠ ár LUGAL ana NIM IGI 15.30 na-su in 11 IGI GE₆ 26 ina ZÁLAG GENN[A ...]
@@ -83,7 +83,7 @@ $ ruling
 
 @reverse 
 @column 1
-1'. [MU 1 ME 49.KA]M {I}an LUGAL
+1'. [MU 1 ME 49.KA]M {m}an LUGAL
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N
 
 2'. [DU₆ x Š]Ú na
@@ -122,7 +122,7 @@ $ ruling
 13'. [x]+40 ME GE₆
 #lem: u; ūmu[moonrise to sunset]N; mūšu[sunset to moonrise]N
 
-14'. [M]U 1 ME 50.KAM  {I}an LUGAL
+14'. [M]U 1 ME 50.KAM  {m}an LUGAL
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N
 
 15'. [N]E 14 5 ŠÚ muš
@@ -153,7 +153,7 @@ $ ruling
 #lem: mūšu[night]N; n; u; u
 
 @column 2
-1'. MU 1 ME 50.KAM  {I}an LUGAL
+1'. MU 1 ME 50.KAM  {m}an LUGAL
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N
 
 2'. BAR 30 13.30 DIR NU PAP
@@ -310,206 +310,206 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] 1 1/2 [cubits above] α Virginis [...]
+@(o 2') [...] 1 1/2 [cubits above] α Virginis [...]
 
-@(o 3) [...] Night of the 17th?, last part of the night, Venus was [...] above β/δ [Scorpii ...]
+@(o 3') [...] Night of the 17th?, last part of the night, Venus was [...] above β/δ [Scorpii ...]
 
-@(o 4) [... the 1]6th, rising of Venus to sunrise: 9°. Ar[ound ...]
-
-$ ruling
-
-@(o 5) [Year 1]22, king Antiochus. Month I, the 2nd, Mercury’s first appearance in the west in Taurus [...]
-
-@(o 6) [first part of the night,] Mercury was 1 1/2 cubits below β Tauri. Night of the 15th, first part of the night, [Mercury was ... aboveζ Tauri ...]
-
-@(o 7) 1 1/2 cubits [above] η Geminorum. Night of the 23rd, first part of the night, Mercury was [...] above [...]
-
-@(o 8) 4 cubits [above γ Gemino]rum. Month II, the 8th, Mercury’s last appearance in the west in Gemini; I did not watch. Month III, the 15th, [...]
-
-@(o 9) [...] Mercury was 5 cubits below α Geminorum. Night [of the xth,] last part of the night, Mercury was [...] below β Geminorum. [...]
-
-@(o 10) [Month V, the xth, Mercury’s] first appearance in the west in Virgo; I did not watch [...] sunset to setting of Mercury: [...] Around the 18th, Mercury’s [last appearance] in the west in [...]
-
-@(o 11) [...] first part of the night, [Mercury was] 1 1/2 cubits [above] α Virginis. Month VII, the 23rd, [rising of Mercury] to sunrise: 11° [...]
-
-@(o 12) [... Mercury’s] first appearance [in the west... behind] Venus to the east; it was bright (and) high, sunset to setting of Mercury: 15°; [(ideal) first appearance] on the 10th. [...]
-
-@(o 13) [...] ... Mercury’s [first appearance] in the east in Capricorn, 1 cubit behind β Capricorni ... [...]
-
-@(o 14) [... it was (bright and)] high, rising of Mercury to sunrise: 16°; (ideal) first appearance on the 12th. Night of the 20th, last part of the night, Mercury was [...] above [Saturn ...]
-
-@(o 15) [... Year] 123, month I, the 1st, Mercury’s [first appearance] in the west in the end of Aries, 1 1/2 cubits in front of η Tauri, to ... [...]
+@(o 4') [... the 1]6th, rising of Venus to sunrise: 9°. Ar[ound ...]
 
 $ ruling
 
-@(o 16) [Year 109,] kings [Antiochus and] his [son Antiochus.] Month III, night of the 25th, first part of the night, Saturn, while moving back to the east, was 2 fingers above α Leonis. Month IV, the 1st, [sunset to setting of Saturn:] 13° [...]
+@(o 5') [Year 1]22, king Antiochus. Month I, the 2nd, Mercury’s first appearance in the west in Taurus [...]
 
-@(o 17) [... Sat]urn’s first appearance in Leo, 2 2/3 cubits behind α Leonis to the east; rising of Saturn to sunrise: 15° 30'; (ideal) first appearance on the 11th. Night of the 26th, last part of the night, Saturn was [...]
+@(o 6') [first part of the night,] Mercury was 1 1/2 cubits below β Tauri. Night of the 15th, first part of the night, [Mercury was ... aboveζ Tauri ...]
 
-@(o 18) [...] when [Saturn] became stationary to the east, it became stationary 1 1/2 cubits in front of θ Leonis, being 4 1/2 cubits low to the south. Month XI, around the 6th, Saturn’s acronychal [rising.]
+@(o 7') 1 1/2 cubits [above] η Geminorum. Night of the 23rd, first part of the night, Mercury was [...] above [...]
+
+@(o 8') 4 cubits [above γ Gemino]rum. Month II, the 8th, Mercury’s last appearance in the west in Gemini; I did not watch. Month III, the 15th, [...]
+
+@(o 9') [...] Mercury was 5 cubits below α Geminorum. Night [of the xth,] last part of the night, Mercury was [...] below β Geminorum. [...]
+
+@(o 10') [Month V, the xth, Mercury’s] first appearance in the west in Virgo; I did not watch [...] sunset to setting of Mercury: [...] Around the 18th, Mercury’s [last appearance] in the west in [...]
+
+@(o 11') [...] first part of the night, [Mercury was] 1 1/2 cubits [above] α Virginis. Month VII, the 23rd, [rising of Mercury] to sunrise: 11° [...]
+
+@(o 12') [... Mercury’s] first appearance [in the west... behind] Venus to the east; it was bright (and) high, sunset to setting of Mercury: 15°; [(ideal) first appearance] on the 10th. [...]
+
+@(o 13') [...] ... Mercury’s [first appearance] in the east in Capricorn, 1 cubit behind β Capricorni ... [...]
+
+@(o 14') [... it was (bright and)] high, rising of Mercury to sunrise: 16°; (ideal) first appearance on the 12th. Night of the 20th, last part of the night, Mercury was [...] above [Saturn ...]
+
+@(o 15') [... Year] 123, month I, the 1st, Mercury’s [first appearance] in the west in the end of Aries, 1 1/2 cubits in front of η Tauri, to ... [...]
 
 $ ruling
 
-@(o 19) [Year 89, ...] Month III, around until the 27th, when Mars became stationary to the east, it became stationary in Aquarius; I did not watch. Month V, around the 1st, Mars’ acronychal rising; I did not watch. Until the 27th, [...]
+@(o 16') [Year 109,] kings [Antiochus and] his [son Antiochus.] Month III, night of the 25th, first part of the night, Saturn, while moving back to the east, was 2 fingers above α Leonis. Month IV, the 1st, [sunset to setting of Saturn:] 13° [...]
 
-@(o 20) became stationary? [...] I did not see it.
+@(o 17') [... Sat]urn’s first appearance in Leo, 2 2/3 cubits behind α Leonis to the east; rising of Saturn to sunrise: 15° 30'; (ideal) first appearance on the 11th. Night of the 26th, last part of the night, Saturn was [...]
+
+@(o 18') [...] when [Saturn] became stationary to the east, it became stationary 1 1/2 cubits in front of θ Leonis, being 4 1/2 cubits low to the south. Month XI, around the 6th, Saturn’s acronychal [rising.]
 
 $ ruling
 
-@(o 21) [Year 121, ...] Night of the 24th, last part of the night, Mars was 10 fingers above γ Capricorni. Night of the 25th, last part of the night, Mars was [...] above δ Capricorni [...]
+@(o 19') [Year 89, ...] Month III, around until the 27th, when Mars became stationary to the east, it became stationary in Aquarius; I did not watch. Month V, around the 1st, Mars’ acronychal rising; I did not watch. Until the 27th, [...]
 
-@(o 22) [...] Mars was 2 cubits below η Piscium. Night of the 23rd, first part of the night, Mars was 3 cubits below α Arietis. Ni[ght? ...]
+@(o 20') became stationary? [...] I did not see it.
 
-@(o 23) [...] 4 cubits [...] Arietis. Month XII, night of the 2nd, first part of the night, Mars was 1 cubit 4 fingers below η Tauri. Night of the 22nd?, first part of the night, Mars was [...] above [α Tauri ...]
+$ ruling
 
-@(o 24) [... first] part of the night, Mars was 1 1/2 cubits below β Tauri.
+@(o 21') [Year 121, ...] Night of the 24th, last part of the night, Mars was 10 fingers above γ Capricorni. Night of the 25th, last part of the night, Mars was [...] above δ Capricorni [...]
 
-@(r i 1) [Year 149,] king Antiochus.
+@(o 22') [...] Mars was 2 cubits below η Piscium. Night of the 23rd, first part of the night, Mars was 3 cubits below α Arietis. Ni[ght? ...]
 
-@(r i 2) [Month VII,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(o 23') [...] 4 cubits [...] Arietis. Month XII, night of the 2nd, first part of the night, Mars was 1 cubit 4 fingers below η Tauri. Night of the 22nd?, first part of the night, Mars was [...] above [α Tauri ...]
 
-@(r i 3) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
+@(o 24') [... first] part of the night, Mars was 1 1/2 cubits below β Tauri.
 
-@(r i 4) [Month VIII,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 1') [Year 149,] king Antiochus.
 
-@(r i 5) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+20' 
+@(r i 2') [Month VII,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 6) [Month IX,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 3') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
 
-@(r i 7) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
+@(r i 4') [Month VIII,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 8) [Month X,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...]
+@(r i 5') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+20' 
 
-@(r i 9) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
+@(r i 6') [Month IX,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 10) [Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: ...]
+@(r i 7') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
 
-@(r i 11) [‘moonrise to sunset’ (plus) ‘sunset to moonrise’: ...]
+@(r i 8') [Month X,] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...]
 
-@(r i 12) [Month XII,] ‘moonset to [sunrise’ (plus) ‘sunrise to moonset’: x]+10'
+@(r i 9') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
 
-@(r i 13) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+40'
+@(r i 10') [Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: ...]
 
-@(r i 14) Year 150, king Antiochus.
+@(r i 11') [‘moonrise to sunset’ (plus) ‘sunset to moonrise’: ...]
 
-@(r i 15) Month V, the 14th, moonset to sunrise: 5°, measured.
+@(r i 12') [Month XII,] ‘moonset to [sunrise’ (plus) ‘sunrise to moonset’: x]+10'
 
-@(r i 16) Lunar eclipse which was omitted.
+@(r i 13') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+40'
 
-@(r i 17) At 25° before sunset.
+@(r i 14') Year 150, king Antiochus.
 
-@(r i 18) Night of the 29th, solar eclipse which was omitted.
+@(r i 15') Month V, the 14th, moonset to sunrise: 5°, measured.
 
-@(r i 19) At 16° after sunset.
+@(r i 16') Lunar eclipse which was omitted.
 
-@(r i 20) Month XI, the 13th, moonset to sunrise: 1°; measured (despite) clouds.
+@(r i 17') At 25° before sunset.
 
-@(r i 21) Lunar eclipse which was omitted.
+@(r i 18') Night of the 29th, solar eclipse which was omitted.
 
-@(r i 22) At 70°? after sunrise.
+@(r i 19') At 16° after sunset.
 
-@(r i 23) [Night] of the 29th, ... [...]
+@(r i 20') Month XI, the 13th, moonset to sunrise: 1°; measured (despite) clouds.
 
-@(r ii 1) Year 150, king Antiochus.
+@(r i 21') Lunar eclipse which was omitted.
 
-@(r ii 2) Month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13° 30'; clouds, I did not watch.
+@(r i 22') At 70°? after sunrise.
 
-@(r ii 3) The 13th, moonset to sunrise: 7° 30'; I did not watch.
+@(r i 23') [Night] of the 29th, ... [...]
 
-@(r ii 4) The 14th, sunrise to moonset: 1° 20'; clouds, I did not watch.
+@(r ii 1') Year 150, king Antiochus.
 
-@(r ii 5) The 15th, moonrise to sunset: 2° 20'; clouds, I did not watch.
+@(r ii 2') Month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13° 30'; clouds, I did not watch.
 
-@(r ii 6) The 16th, sunset to moonrise: 10°; clouds, I did not watch.
+@(r ii 3') The 13th, moonset to sunrise: 7° 30'; I did not watch.
 
-@(r ii 7) The 27th, moonrise to sunrise: 14° 30'; clouds, I did not watch.
+@(r ii 4') The 14th, sunrise to moonset: 1° 20'; clouds, I did not watch.
 
-@(r ii 8) Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23° 40'; clouds, I did not watch.
+@(r ii 5') The 15th, moonrise to sunset: 2° 20'; clouds, I did not watch.
 
-@(r ii 9) The 13th, moonset to sunrise: 4° 20'; clouds, I did not watch.
+@(r ii 6') The 16th, sunset to moonrise: 10°; clouds, I did not watch.
 
-@(r ii 10) The 14th, moonrise to sunset: 6° 10'; clouds, I did not watch.
+@(r ii 7') The 27th, moonrise to sunrise: 14° 30'; clouds, I did not watch.
 
-@(r ii 11) [The 14th,] sunrise to moonset: 5° 10'; I did not watch.
+@(r ii 8') Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23° 40'; clouds, I did not watch.
 
-@(r ii 12) [The 15th,] sunset to moonrise: [x]+5°; clouds, I did not watch.
+@(r ii 9') The 13th, moonset to sunrise: 4° 20'; clouds, I did not watch.
 
-@(r ii 13) The 26th, moonrise to sunrise: ...; I did not watch.
+@(r ii 10') The 14th, moonrise to sunset: 6° 10'; clouds, I did not watch.
 
-@(r ii 14) Month III, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 17°; it was bright, earthshine,
+@(r ii 11') [The 14th,] sunrise to moonset: 5° 10'; I did not watch.
 
-@(r ii 15) measured; it was low to the sun.
+@(r ii 12') [The 15th,] sunset to moonrise: [x]+5°; clouds, I did not watch.
 
-@(r ii 16) The 14th, moonset to sunrise: 1° 40'.
+@(r ii 13') The 26th, moonrise to sunrise: ...; I did not watch.
 
-@(r ii 17) The 15th, moonrise to sunset: 5°; measured (despite) mist.
+@(r ii 14') Month III, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 17°; it was bright, earthshine,
 
-@(r ii 18) The 15th, sunrise to moonset: 10°; measured (despite) mist.
+@(r ii 15') measured; it was low to the sun.
 
-@(r ii 19) The 16th, sunset to moonrise: 8° 10'; I did not [watch.]
+@(r ii 16') The 14th, moonset to sunrise: 1° 40'.
 
-@(r ii 20) The 27th, moonrise to sunrise: 17°; I did not [watch.]
+@(r ii 17') The 15th, moonrise to sunset: 5°; measured (despite) mist.
 
-@(r ii 21) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 20+[x° ...] 
+@(r ii 18') The 15th, sunrise to moonset: 10°; measured (despite) mist.
 
-@(r iii 1) Month V, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 15°; measured (despite) clouds.
+@(r ii 19') The 16th, sunset to moonrise: 8° 10'; I did not [watch.]
 
-@(r iii 2) The 14th, moonset to sunrise: 5°. 
+@(r ii 20') The 27th, moonrise to sunrise: 17°; I did not [watch.]
 
-@(r iii 3) The 15th, moonrise to sunset (error for ME): 2°; clouds, I did not watch.
+@(r ii 21') Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 20+[x° ...] 
 
-@(r iii 4) The 15th, sunrise to moonset: 8°; measured (despite) mist.
+@(r iii 1') Month V, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 15°; measured (despite) clouds.
 
-@(r iii 5) The 16th, sunset to moonrise: 9°; measured.
+@(r iii 2') The 14th, moonset to sunrise: 5°. 
 
-@(r iii 6) The 28th, moonrise to sunrise: 18° 30'; measured.
+@(r iii 3') The 15th, moonrise to sunset (error for ME): 2°; clouds, I did not watch.
 
-@(r iii 7) Month VI, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15° 30'; it was bright, earthshine, measured.
+@(r iii 4') The 15th, sunrise to moonset: 8°; measured (despite) mist.
 
-@(r iii 8) The 13th, moonset to sunrise: 12°.
+@(r iii 5') The 16th, sunset to moonrise: 9°; measured.
 
-@(r iii 9) The 14th, moonrise to sunset: 4°; measured (despite) mist.
+@(r iii 6') The 28th, moonrise to sunrise: 18° 30'; measured.
 
-@(r iii 10) The 14th, sunrise to moonset: 4°; measured (despite) mist.
+@(r iii 7') Month VI, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15° 30'; it was bright, earthshine, measured.
 
-@(r iii 11) The 15th, sunset to moonrise: 7° 30'.
+@(r iii 8') The 13th, moonset to sunrise: 12°.
 
-@(r iii 12) The 27th, moonrise to sunrise: 16°; meausred (despite) mist.
+@(r iii 9') The 14th, moonrise to sunset: 4°; measured (despite) mist.
 
-@(r iii 13) Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 21°; it was bright, earthshine, measured;
+@(r iii 10') The 14th, sunrise to moonset: 4°; measured (despite) mist.
 
-@(r iii 14) it could be seen while (the sun) stood there; it was high to the sun.
+@(r iii 11') The 15th, sunset to moonrise: 7° 30'.
 
-@(r iii 15) The 13th, moonrise to sunset: 5° 40'; I did not watch.
+@(r iii 12') The 27th, moonrise to sunrise: 16°; meausred (despite) mist.
 
-@(r iii 16) The 13th, moonset to sunrise: 3° [...]
+@(r iii 13') Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 21°; it was bright, earthshine, measured;
 
-@(r iii 17) The 14th, [sunset to moonrise:] 3+[x° ...]
+@(r iii 14') it could be seen while (the sun) stood there; it was high to the sun.
 
-@(r iii 18) The 14th, [sunrise to moonset: ...]
+@(r iii 15') The 13th, moonrise to sunset: 5° 40'; I did not watch.
 
-@(r iv 1) Month IX, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 17° 30'; it was bright, earthshine, [...]
+@(r iii 16') The 13th, moonset to sunrise: 3° [...]
 
-@(r iv 2) it could be seen while (the sun) stood there; it was high to the sun.
+@(r iii 17') The 14th, [sunset to moonrise:] 3+[x° ...]
 
-@(r iv 3) The 12th, moonset to sunrise: 16° 20'; clouds, I did not watch.
+@(r iii 18') The 14th, [sunrise to moonset: ...]
 
-@(r iv 4) The 13th, moonrise to sunset: 6° 30'; measured (despite) clouds.
+@(r iv 1') Month IX, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 17° 30'; it was bright, earthshine, [...]
 
-@(r iv 5) The 13th, sunrise to moonset: 2° 40'; clouds, I did not watch.
+@(r iv 2') it could be seen while (the sun) stood there; it was high to the sun.
 
-@(r iv 6) The 14th, sunset to moonrise: 6°; measured (despite) mist.
+@(r iv 3') The 12th, moonset to sunrise: 16° 20'; clouds, I did not watch.
 
-@(r iv 7) The 27th, moonrise to sunrise: 19° 30'; measured.
+@(r iv 4') The 13th, moonrise to sunset: 6° 30'; measured (despite) clouds.
 
-@(r iv 8) Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23° 10'; clouds, I did not watch.
+@(r iv 5') The 13th, sunrise to moonset: 2° 40'; clouds, I did not watch.
 
-@(r iv 9) The 12th, moonset to sunrise: 9° 20'; clouds, I did not [watch.]
+@(r iv 6') The 14th, sunset to moonrise: 6°; measured (despite) mist.
 
-@(r iv 10) The 13th, [moonrise to sunset:] 2° 40'? [...]
+@(r iv 7') The 27th, moonrise to sunrise: 19° 30'; measured.
 
-@(r iv 11) The 13th, [sunrise to moonset: ...]
+@(r iv 8') Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23° 10'; clouds, I did not watch.
 
-@(r iv 12) The 14th, [sunset to moonrise: ...]
+@(r iv 9') The 12th, moonset to sunrise: 9° 20'; clouds, I did not [watch.]
+
+@(r iv 10') The 13th, [moonrise to sunset:] 2° 40'? [...]
+
+@(r iv 11') The 13th, [sunrise to moonset: ...]
+
+@(r iv 12') The 14th, [sunset to moonrise: ...]

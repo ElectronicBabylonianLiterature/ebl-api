@@ -93,32 +93,32 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] (blank)
-
-$ ruling
-@(o 3) [Year ...] which is year 6. Month V, around the 21st,
-
-@(o 4) [Mars’ last appearance in ... Month XII₂, ..., Mars’] first appearance [in Pis]ces.
+@(o 2') [...] (blank)
 
 $ ruling
+@(o 3') [Year ...] which is year 6. Month V, around the 21st,
 
-@(o 5) [Year 31, ... Month XII₂, night of the xth, first part of the night, Mars was] 2 fingers [above η Can]cri. Night of the 25th, first part of the night, Mars was 2 fingers below γ Cancri.
+@(o 4') [Mars’ last appearance in ... Month XII₂, ..., Mars’] first appearance [in Pis]ces.
 
-@(o 6) [Year 32, ... Mon]th II, night of the 6th, first part of the night, Mars was 10 fingers above α Leonis. Night of the 17th, first part of the night,
+$ ruling
 
-@(o 7) [Mars was ... above ϱ Leonis. Month III, night of the xth, first] part of the night, Mars was 4 1⁄2 cubits below θ Leonis. Night of the 21st, first part of the night, Mars
+@(o 5') [Year 31, ... Month XII₂, night of the xth, first part of the night, Mars was] 2 fingers [above η Can]cri. Night of the 25th, first part of the night, Mars was 2 fingers below γ Cancri.
 
-@(o 8) [was ... β Virginis. Month IV, night of the xth, first part of the night, Mars was] 1 cubit below γ Virginis. Month V, night of the 4th, first part of the night, Mars
+@(o 6') [Year 32, ... Mon]th II, night of the 6th, first part of the night, Mars was 10 fingers above α Leonis. Night of the 17th, first part of the night,
 
-@(o 9) [was ... above α Virginis.] $ ruling
+@(o 7') [Mars was ... above ϱ Leonis. Month III, night of the xth, first] part of the night, Mars was 4 1⁄2 cubits below θ Leonis. Night of the 21st, first part of the night, Mars
 
-@(o 10) [...] At 10° before sunrise. Month III, the 14th, lunar eclipse which was omitted.
+@(o 8') [was ... β Virginis. Month IV, night of the xth, first part of the night, Mars was] 1 cubit below γ Virginis. Month V, night of the 4th, first part of the night, Mars
 
-@(o 11) [...] solar eclipse which was omitted. At 84° before sunrise.
+@(o 9') [was ... above α Virginis.] $ ruling
 
-@(o 12) [...] before sunrise. Month XII was intercalary.
+@(o 10') [...] At 10° before sunrise. Month III, the 14th, lunar eclipse which was omitted.
+
+@(o 11') [...] solar eclipse which was omitted. At 84° before sunrise.
+
+@(o 12') [...] before sunrise. Month XII was intercalary.
 
 $ ruling
 
@@ -131,28 +131,28 @@ $ broken
 @column 2
 $ broken
 
-@(r iii 1) [...] ... [...]
+@(r iii 1') [...] ... [...]
 
-@(r iii 2) [...] while the sun stood there, earthshine.
+@(r iii 2') [...] while the sun stood there, earthshine.
 
 $ ruling
 
-@(r iv 1) [... I did not] watch.
+@(r iv 1') [... I did not] watch.
 
-@(r iv 2) [...] clouds, I did not watch.
+@(r iv 2') [...] clouds, I did not watch.
 
-@(r iv 3) [...] sunset to moonrise: [...] clouds, I did not watch.
+@(r iv 3') [...] sunset to moonrise: [...] clouds, I did not watch.
 
-@(r iv 4) The 26th, (moonrise to sunrise:) 25° 30'; I did not watch.
+@(r iv 4') The 26th, (moonrise to sunrise:) 25° 30'; I did not watch.
 
-@(r iv 5) Month XI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18°; clouds, I did not watch.
+@(r iv 5') Month XI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18°; clouds, I did not watch.
 
-@(r iv 6) The 12th, moonset to sunrise: 7° 30'; clouds, I did not watch.
+@(r iv 6') The 12th, moonset to sunrise: 7° 30'; clouds, I did not watch.
 
-@(r iv 7) The 13th, moonrise to sunset: 16° 30', measured.
+@(r iv 7') The 13th, moonrise to sunset: 16° 30', measured.
 
-@(r iv 8) [The 13th,] sunrise to moonset: [x]+4°, measured.
+@(r iv 8') [The 13th,] sunrise to moonset: [x]+4°, measured.
 
-@(r iv 9) [The 14th,] sunset to moonrise: [...]
+@(r iv 9') [The 14th,] sunset to moonrise: [...]
 
-@(r iv 10) [...] watch?.
+@(r iv 10') [...] watch?.

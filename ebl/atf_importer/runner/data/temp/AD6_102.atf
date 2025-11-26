@@ -84,58 +84,58 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [... Jupi]ter was 2+x [cubi]ts? above α Tauri [...]
+@(o 1') [... Jupi]ter was 2+x [cubi]ts? above α Tauri [...]
 
-@(o 2) [...] ($blank$)
-
-$ ruling
-
-@(o 3) [...] 1 1/2 cubits [... η/μ] Geminorum
-
-@(o 4) [...] Venus was 4 cubits above γ Geminorum.
-
-@(o 5) [... x]+1 cubits. Month II, night of the 11th, first part of the night, Venus was 1 1/2 cubits above δ Cancri.
-
-@(o 6) [...] ... Night of the 18th, first part of the night, Venus was 4 fingers below ϱ Leonis.
-
-@(o 7) [... Venus was] 2 fingers? below α Leonis.
-
-@(o 8) [... Venus was nn] cubits below θ Leonis.
-
-@(o 9) [...] ... V[irginis ...]
-
-@(o 10) [...] α [Librae...]
-
-@(o 11) [...] ... [...] 3 cubits above α Scorpii.
-
-@(o 12) [...] ... [...] ...
-
-@(r 1) [...] ...
-
-@(r 2) [...] cubits 6 fingers.
-
-@(r 3) [...] ($blank$)
+@(o 2') [...] ($blank$)
 
 $ ruling
 
-@(r 4) [...] Around until the 3rd,
+@(o 3') [...] 1 1/2 cubits [... η/μ] Geminorum
 
-@(r 5) [... Saturn’s] acronychal rising.
+@(o 4') [...] Venus was 4 cubits above γ Geminorum.
+
+@(o 5') [... x]+1 cubits. Month II, night of the 11th, first part of the night, Venus was 1 1/2 cubits above δ Cancri.
+
+@(o 6') [...] ... Night of the 18th, first part of the night, Venus was 4 fingers below ϱ Leonis.
+
+@(o 7') [... Venus was] 2 fingers? below α Leonis.
+
+@(o 8') [... Venus was nn] cubits below θ Leonis.
+
+@(o 9') [...] ... V[irginis ...]
+
+@(o 10') [...] α [Librae...]
+
+@(o 11') [...] ... [...] 3 cubits above α Scorpii.
+
+@(o 12') [...] ... [...] ...
+
+@(r 1') [...] ...
+
+@(r 2') [...] cubits 6 fingers.
+
+@(r 3') [...] ($blank$)
 
 $ ruling
 
-@(r 6) [... Mars’] last appearance in Taurus; I did not watch.
+@(r 4') [...] Around until the 3rd,
+
+@(r 5') [... Saturn’s] acronychal rising.
 
 $ ruling
 
-@(r 7) [...] 3 cubits [below] β Geminorum.
+@(r 6') [... Mars’] last appearance in Taurus; I did not watch.
 
-@(r 8) [...] ...
+$ ruling
 
-@(r 9) [... x]+4 cubits.
+@(r 7') [...] 3 cubits [below] β Geminorum.
 
-@(r 10) [...] 1 1/2 cubits above α Virginis.
+@(r 8') [...] ...
 
-@(r 11) [...] 4 cubits
+@(r 9') [... x]+4 cubits.
 
-@(r 12) [...] 6 fingers [... θ] Ophiuchi.
+@(r 10') [...] 1 1/2 cubits above α Virginis.
+
+@(r 11') [...] 4 cubits
+
+@(r 12') [...] 6 fingers [... θ] Ophiuchi.

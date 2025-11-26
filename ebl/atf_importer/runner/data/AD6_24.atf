@@ -6,7 +6,7 @@
 #atf: use legacy
 @obverse
 @column 1
-1-3'. [...] ⸢x⸣
+1'-3'. [...] ⸢x⸣
 #lem: u; u
 
 @column 2
@@ -34,20 +34,20 @@ $ ruling
 
 @translation labeled en project
 
-@(o i 1-3) [...] ...
+@(o i 1'-o i 3') [...] ...
 
-@(o ii 1) [...] ... [...]
+@(o ii 1') [...] ... [...]
 
-@(o ii 2) [...] ..., first part of the night, [...]
+@(o ii 2') [...] ..., first part of the night, [...]
 
-@(o ii 3) [...] ... last appearance in Taurus. Month XII was intercalary.
+@(o ii 3') [...] ... last appearance in Taurus. Month XII was intercalary.
 
 $ ruling
 
-@(o ii 4) Year 77: month XII was intercalary. Year 78, [...]
+@(o ii 4') Year 77: month XII was intercalary. Year 78, [...]
 
-@(o ii 5) first appearance ..., omitted. Month II, the 17th, Mercury’s [last appearance] in the east [...]
+@(o ii 5') first appearance ..., omitted. Month II, the 17th, Mercury’s [last appearance] in the east [...]
 
-@(o ii 6) [Mercury’s] first appearance in the west in Cancer; sunset to setting of Mercury: 13°; [...]
+@(o ii 6') [Mercury’s] first appearance in the west in Cancer; sunset to setting of Mercury: 13°; [...]
 
-@(o ii 7) [...] ... Mercury’s [...] in the ea[st? ...]
+@(o ii 7') [...] ... Mercury’s [...] in the ea[st? ...]

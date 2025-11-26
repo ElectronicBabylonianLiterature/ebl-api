@@ -52,32 +52,32 @@
 
 @left 
 
-@(l.e. 1) [...] measured.
+@(l.e. 1') [...] measured.
 
-@(l.e. 2) [... measu]red?.
+@(l.e. 2') [... measu]red?.
 
-@(l.e. 3) [...] clouds, I did not watch.
+@(l.e. 3') [...] clouds, I did not watch.
 
-@(l.e. 4) [...] ..., measured.
+@(l.e. 4') [...] ..., measured.
 
-@(l.e. 5) [...] ..., measured.
+@(l.e. 5') [...] ..., measured.
 
-@(l.e. 6) [...] ..., measured.
+@(l.e. 6') [...] ..., measured.
 
-@(l.e. 7) [...,] measured.
+@(l.e. 7') [...,] measured.
 
 @right
 
-@(r.e. 1) The 10+[xth, ...]
+@(r.e. 1') The 10+[xth, ...]
 
-@(r.e. 2) The 20+[xth, ...]
+@(r.e. 2') The 20+[xth, ...]
 
-@(r.e. 3) Month VI?, [...]
+@(r.e. 3') Month VI?, [...]
 
-@(r.e. 4) The 13th, [moonset to sunrise: ...]
+@(r.e. 4') The 13th, [moonset to sunrise: ...]
 
-@(r.e. 5) The 14th, [moonrise to sunset: ...]
+@(r.e. 5') The 14th, [moonrise to sunset: ...]
 
-@(r.e. 6) The 14th, [sunrise to moonset:] 5°? [...]
+@(r.e. 6') The 14th, [sunrise to moonset:] 5°? [...]
 
-@(r.e. 7) The 15th, [sunset to moonrise: ...]
+@(r.e. 7') The 15th, [sunset to moonrise: ...]

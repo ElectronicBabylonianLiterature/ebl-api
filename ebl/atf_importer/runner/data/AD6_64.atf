@@ -27,7 +27,7 @@
 #lem: u; šapil[low]'PRP; SI-MÁŠ[β Capricorni]CN; n; n; ammatu[unit]N; n; u
 
 $ ruling
-8'. [MU] 1 ME 29.KAM {I}se LUGAL ⸢BAR⸣ [x GENNA ina zib{ME} IGI]
+8'. [MU] 1 ME 29.KAM {m}se LUGAL ⸢BAR⸣ [x GENNA ina zib{ME} IGI]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Nisannu[Month I]MN; u; Kayyamānu[Saturn]CN; ina[in]PRP; Zibbātu[Pisces]CN; nanmuru[be(come) visible]V
 
 9'. [x] ⸢x⸣ GENNA SIG MÚL-KUR-šá-DUR-[nu-nu n n ŠU x GENNA ana NIM ki UŠ-ú]
@@ -46,7 +46,7 @@ $ ruling
 #lem: Kayyamānu[Saturn]CN; šapil[low]'PRP; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; n
 
 $ ruling
-14'. [... n].⸢KAM⸣ {I}an u {I}an ⸢A⸣-[šú LUGAL{MEŠ} ...]
+14'. [... n].⸢KAM⸣ {m}an u {m}an ⸢A⸣-[šú LUGAL{MEŠ} ...]
 #lem: u; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
 
 15'. [...] 5 ⸢x⸣ [...]
@@ -108,70 +108,70 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [... Mercury’s] first appearance [in the west in] Virgo; sunset to setting of Mercury: 14° [...]
+@(o 2') [... Mercury’s] first appearance [in the west in] Virgo; sunset to setting of Mercury: 14° [...]
 
-@(o 3) [...] Mercury’s [first appearance] in the east in Virgo, 1 cubit [in front of Saturn ...]
+@(o 3') [...] Mercury’s [first appearance] in the east in Virgo, 1 cubit [in front of Saturn ...]
 
-@(o 4) [...] last part of the night, Mercury was [...] above α [Virginis ...]
+@(o 4') [...] last part of the night, Mercury was [...] above α [Virginis ...]
 
-@(o 5) [...] Mercury’s first appearance in the west in Capricorn [...]
+@(o 5') [...] Mercury’s first appearance in the west in Capricorn [...]
 
-@(o 6) [...] Mercury’s first appearance in the east in Capricorn [...]
+@(o 6') [...] Mercury’s first appearance in the east in Capricorn [...]
 
-@(o 7) [...] 2 1/2 cubits [below] β Capricorni. The 27th, [...]
-
-$ ruling
-
-@(o 8) [Year] 129, king Seleucus. Month I, [the xth, Saturn’s first appearance in Pisces.]
-
-@(o 9) [...] ..., Saturn was [...] below η Piscium. [Month IV, the xth, when Saturn became stationary to the east,]
-
-@(o 10) [it became stationary N] cubits behind η Piscium. [..., last part of the night, Saturn was]
-
-@(o 11) 2 2/3 cubits [below] η Piscium. [Month IX, the xth, when Saturn became stationary to the west,]
-
-@(o 12) [it became stationary N] cubits in front of η Piscium [..., first part of the night,]
-
-@(o 13) [Satu]rn was [...] below η Piscium.
+@(o 7') [...] 2 1/2 cubits [below] β Capricorni. The 27th, [...]
 
 $ ruling
 
-@(o 14) [Year 109, kings] Antiochus and [his] son Antiochus. [...]
+@(o 8') [Year] 129, king Seleucus. Month I, [the xth, Saturn’s first appearance in Pisces.]
 
-@(o 15) [...] ... [...]
+@(o 9') [...] ..., Saturn was [...] below η Piscium. [Month IV, the xth, when Saturn became stationary to the east,]
 
-@(o 16) [...] ... [...]
+@(o 10') [it became stationary N] cubits behind η Piscium. [..., last part of the night, Saturn was]
 
-@(o 17) [...] ... [...]
+@(o 11') 2 2/3 cubits [below] η Piscium. [Month IX, the xth, when Saturn became stationary to the west,]
 
-@(r i 1) [...] ... [...]
+@(o 12') [it became stationary N] cubits in front of η Piscium [..., first part of the night,]
 
-@(r i 2) [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(o 13') [Satu]rn was [...] below η Piscium.
 
-@(r i 3) [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
+$ ruling
 
-@(r i 4) [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x°] 30'
+@(o 14') [Year 109, kings] Antiochus and [his] son Antiochus. [...]
 
-@(r i 5) [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x°] 30'
+@(o 15') [...] ... [...]
 
-@(r i 6) [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x]+1° 40'
+@(o 16') [...] ... [...]
 
-@(r i 7) [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+1° 20'
+@(o 17') [...] ... [...]
 
-@(r i 8) [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x°] 50'
+@(r i 1') [...] ... [...]
 
-@(r i 9) [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+5°
+@(r i 2') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 10) [...] ... [...]
+@(r i 3') [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
 
-@(r ii 1) The 10+]xth, ...]
+@(r i 4') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x°] 30'
 
-@(r ii 2) The 10+[xth, ...]
+@(r i 5') [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x°] 30'
 
-@(r ii 3) The 20+[xth, ...]
+@(r i 6') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x]+1° 40'
 
-@(r ii 4) ... [...]
+@(r i 7') [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+1° 20'
 
-@(r ii 5) The 10+[xth, ...]
+@(r i 8') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x°] 50'
+
+@(r i 9') [...] ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+5°
+
+@(r i 10') [...] ... [...]
+
+@(r ii 1') The 10+]xth, ...]
+
+@(r ii 2') The 10+[xth, ...]
+
+@(r ii 3') The 20+[xth, ...]
+
+@(r ii 4') ... [...]
+
+@(r ii 5') The 10+[xth, ...]

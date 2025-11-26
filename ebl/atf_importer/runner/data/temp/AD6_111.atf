@@ -33,7 +33,10 @@ $ broken
 2'. [...] ⸢x NIM?⸣
 #lem: u; u; šaqi[high]AJ
 
-3-4'. [...]
+3'. [...]
+#lem: u
+
+4'. [...]
 #lem: u
 
 5'. [...] muš
@@ -87,17 +90,17 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] ... Night of the 10+[xth, ...]
+@(o 2') [...] ... Night of the 10+[xth, ...]
 
-@(o 3) [...] Night of the 3rd, last part of the night, Mars was [...] below [α/β] Geminorum  [...]
+@(o 3') [...] Night of the 3rd, last part of the night, Mars was [...] below [α/β] Geminorum  [...]
 
-@(o 4) [...] 4 fingers?. Night of the 8th, last part of the night, Mars was [...] above γ/δ [Cancri ...]
+@(o 4') [...] 4 fingers?. Night of the 8th, last part of the night, Mars was [...] above γ/δ [Cancri ...]
 
-@(o 5) [...] Month VIII?, night of the 1st, last part of the night, Mars was [...] above ϱ Leo[nis ...]
+@(o 5') [...] Month VIII?, night of the 1st, last part of the night, Mars was [...] above ϱ Leo[nis ...]
 
-@(o 6) [...] first part of the night, Mars, while moving back to the west, was 1/2 cubit above α Leonis. Night of the 2nd?, [...]
+@(o 6') [...] first part of the night, Mars, while moving back to the west, was 1/2 cubit above α Leonis. Night of the 2nd?, [...]
 
 @reverse
 
@@ -105,40 +108,40 @@ $ broken
 
 $ broken
 
-@(r ii 1) (broken)
+@(r ii 1') (broken)
 
-@(r ii 2) [...] ... high?
+@(r ii 2') [...] ... high?
 
-@(r ii 3-4) ($broken$)
+@(r ii 3-r ii 4') ($broken$)
 
-@(r ii 5) [...] measured.
+@(r ii 5') [...] measured.
 
-@(r ii 6) [...] ...
+@(r ii 6') [...] ...
 
-@(r ii 7) [...] I did not watch.
+@(r ii 7') [...] I did not watch.
 
-@(r ii 8) [...] measured.
+@(r ii 8') [...] measured.
 
-@(r ii 9) [...] measured?.
+@(r ii 9') [...] measured?.
 
-@(r iii 1) Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, measured, ...
+@(r iii 1') Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, measured, ...
 
-@(r iii 2) The 12th, moonset to sunrise: 15°, measured.
+@(r iii 2') The 12th, moonset to sunrise: 15°, measured.
 
-@(r iii 3) The 13th (text 12@sup{SIC}), moonrise to sunset: 1°, measured (despite) mist.
+@(r iii 3') The 13th (text 12@sup{SIC}), moonrise to sunset: 1°, measured (despite) mist.
 
-@(r iii 4) The 13th, sunrise to moonset: 1°, measured.
+@(r iii 4') The 13th, sunrise to moonset: 1°, measured.
 
-@(r iii 5) The 14th, sunset to moonrise: 9°, measured.
+@(r iii 5') The 14th, sunset to moonrise: 9°, measured.
 
-@(r iii 6) The 27th, [moonrise to sunrise:] 25° [...]
+@(r iii 6') The 27th, [moonrise to sunrise:] 25° [...]
 
-@(r iii 7) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12+[x° ...]
+@(r iii 7') Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12+[x° ...]
 
-@(r iii 8) [it could be seen while (the sun)] stood there ...
+@(r iii 8') [it could be seen while (the sun)] stood there ...
 
-@(r iii 9) The 13th, [moonrise to sunset:] 6+[x° ...]
+@(r iii 9') The 13th, [moonrise to sunset:] 6+[x° ...]
 
-@(r iii 10) The 13th, [moonset to sunrise:] 7+[x° ...]
+@(r iii 10') The 13th, [moonset to sunrise:] 7+[x° ...]
 
-@(r iii 11) The 14th, [sunset to moonrise: ...]
+@(r iii 11') The 14th, [sunset to moonrise: ...]

@@ -5,7 +5,7 @@
 #atf: use math
 #atf: use legacy
 @obverse 
-1'. [... {I}se-lu]-ku? ⸢LUGAL? ŠU?⸣ [...]
+1'. [... {m}se-lu]-ku? ⸢LUGAL? ŠU?⸣ [...]
 #lem: u; Seleucus[Seleucus]RN; šarru[king]N; Duʾūzu[Month IV]MN; u
 
 2'. [...] SIG ⸢UŠ⸣ KIN ⸢in⸣ [...]
@@ -14,10 +14,10 @@
 3'. [... MÚL]-KUR-šá-DUR-nu-nu ⸢UŠ? ŠE⸣ [...]
 #lem: u; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; nenmudu[be at a stationary point]V; Addaru[Month XII]MN; u
 
-4'. [MU 56].KAM {I}an LUGAL KIN DIR ZÍZ G[E₆? ...]
+4'. [MU 56].KAM {m}an LUGAL KIN DIR ZÍZ G[E₆? ...]
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Ulūlu[Month VI]MN; watru[extra]AJ; Šabāṭu[Month XI]MN; mūšu[night]N; u
 
-5'. [MU 1] ⸢ME⸣ 31.KAM {I}se LUGAL BAR GE₆ 5 U[SAN dele-bat ...]
+5'. [MU 1] ⸢ME⸣ 31.KAM {m}se LUGAL BAR GE₆ 5 U[SAN dele-bat ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; u
 
 6'. [... MÚL-x]-šá-še-pít-MAŠ.MAŠ 1 1/2 KÙŠ GE₆ 14 US[AN dele-bat ...]
@@ -40,31 +40,31 @@
 3'. U₄ 1.KAM I[GI.DU₈.A{MEŠ} ...]
 #lem: ūmu[day]N; n; tāmartu[appearance]'N; u
 
-4'. {I}an-ti-[ʾu-uk-su ...]
+4'. {m}an-ti-[ʾu-uk-su ...]
 #lem: Antiochus[Antiochus]RN; u
 
 @translation labeled en project
 
-@(o 1) [...] king? [Seleu]cus?. Month IV?, [...]
+@(o 1') [...] king? [Seleu]cus?. Month IV?, [...]
 
-@(o 2) [...] it became stationary [...] low. Month VI, around [the xth, ...]
+@(o 2') [...] it became stationary [...] low. Month VI, around [the xth, ...]
 
-@(o 3) [...] became stationary [...] η Piscium. Month XII, [...]
+@(o 3') [...] became stationary [...] η Piscium. Month XII, [...]
 
-@(o 4) [Year 5]6, king Antiochus. Month VI was intercalary. Month XI, ni[ght? ...]
+@(o 4') [Year 5]6, king Antiochus. Month VI was intercalary. Month XI, ni[ght? ...]
 
-@(o 5) [Year 1]31, king Seleucus. Month I, night of the 5th, first [part of the night, Venus was ...]
+@(o 5') [Year 1]31, king Seleucus. Month I, night of the 5th, first [part of the night, Venus was ...]
 
-@(o 6) [...] 1 1⁄2 cubits [... η/μ] Geminorum. Night of the 14th, first part [of the night, Venus was ...]
+@(o 6') [...] 1 1⁄2 cubits [... η/μ] Geminorum. Night of the 14th, first part [of the night, Venus was ...]
 
-@(o 7) [...] cubit. Night of the 26th, first part of the night, Ve[nus ...]
+@(o 7') [...] cubit. Night of the 26th, first part of the night, Ve[nus ...]
 
-@(o 8) [... night of the] 22nd, first [part of the night, Venus was ...]
+@(o 8') [... night of the] 22nd, first [part of the night, Venus was ...]
 
-@(r i 1) [...] ...
+@(r i 1') [...] ...
 
-@(r i 2) [...] At 30° after sunrise.
+@(r i 2') [...] At 30° after sunrise.
 
-@(r i 3) First days, app[earances, ...]
+@(r i 3') First days, app[earances, ...]
 
-@(r i 4) [king] Anti[ochus ...]
+@(r i 4') [king] Anti[ochus ...]

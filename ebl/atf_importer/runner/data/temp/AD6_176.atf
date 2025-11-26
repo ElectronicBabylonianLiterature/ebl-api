@@ -51,30 +51,30 @@
 
 @translation labeled en project
 
-@(o i 1) [Month ...] ..., it was faint; measured (despite) mist;
+@(o i 1') [Month ...] ..., it was faint; measured (despite) mist;
 
-@(o i 2) it was low to the sun.
+@(o i 2') it was low to the sun.
 
-@(o i 3) [The xth,] moonrise to sunset: 10°; measured.
+@(o i 3') [The xth,] moonrise to sunset: 10°; measured.
 
-@(o i 4) [The xth,] moonset to sunrise: 8°?; measured.
+@(o i 4') [The xth,] moonset to sunrise: 8°?; measured.
 
-@(o i 5) [The xth,] sunset to moonrise: 2°; measured.
+@(o i 5') [The xth,] sunset to moonrise: 2°; measured.
 
-@(o i 6) [The xth,] sunrise to moonset: 8°; measured.
+@(o i 6') [The xth,] sunrise to moonset: 8°; measured.
 
-@(o i 7) [The xth,] moonrise to sunrise: [x]+1°; measured (despite) mist.
+@(o i 7') [The xth,] moonrise to sunrise: [x]+1°; measured (despite) mist.
 
-@(o ii 1) Month IX?, [...]
+@(o ii 1') Month IX?, [...]
 
-@(o ii 2) [...]
+@(o ii 2') [...]
 
-@(o ii 3) The 11th, [moonset to sunrise:] 13° [...] 
+@(o ii 3') The 11th, [moonset to sunrise:] 13° [...] 
 
-@(o ii 4) The 12th, [sunrise to moonset:] 1° 20+[x' ...]
+@(o ii 4') The 12th, [sunrise to moonset:] 1° 20+[x' ...]
 
-@(o ii 5) The 13th, [moonrise to sunset:] 3° [...] 
+@(o ii 5') The 13th, [moonrise to sunset:] 3° [...] 
 
-@(o ii 6) The 14th, [sunset to moonrise:] 5+[x° ...]
+@(o ii 6') The 14th, [sunset to moonrise:] 5+[x° ...]
 
-@(o ii 7) ... [...]
+@(o ii 7') ... [...]

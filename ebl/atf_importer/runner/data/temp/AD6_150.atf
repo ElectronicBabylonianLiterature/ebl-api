@@ -39,22 +39,22 @@
 
 @translation labeled en project
 
-@(o i 1) The 13th, sunrise to moonset: 50'. 
+@(o i 1') The 13th, sunrise to moonset: 50'. 
 
-@(o i 2) [The 1]4th, moonrise to sunset: 12°; clouds, [...] 
+@(o i 2') [The 1]4th, moonrise to sunset: 12°; clouds, [...] 
 
-@(o i 3) The 15th, sunset to moonrise: 3° 40'. 
+@(o i 3') The 15th, sunset to moonrise: 3° 40'. 
 
-@(o i 4) The 27th, moonrise to sunrise: 12°; clouds, I did not watch. 
+@(o i 4') The 27th, moonrise to sunrise: 12°; clouds, I did not watch. 
 
-@(o i 5) [Month] XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21° ...; clouds, I did not watch.
+@(o i 5') [Month] XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21° ...; clouds, I did not watch.
 
-@(o i 6) [The 1]3th, [...] 5°? 30+[x’]
+@(o i 6') [The 1]3th, [...] 5°? 30+[x’]
 
-@(o i 7) [The 1]4th, [...]
+@(o i 7') [The 1]4th, [...]
 
-@(o ii 1) Ni[ght? ...]
+@(o ii 1') Ni[ght? ...]
 
-@(o ii 2) side [...]
+@(o ii 2') side [...]
 
-@(o ii 3) Ni[ght? ...]
+@(o ii 3') Ni[ght? ...]

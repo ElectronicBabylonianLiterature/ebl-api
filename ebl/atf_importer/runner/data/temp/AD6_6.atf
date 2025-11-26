@@ -9,7 +9,7 @@
 #lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltu[Bēltu]DN; lišlim[be(come) well]V
 
 @obverse
-1'. MU 19.KAM {I}se-lu-ku LUGAL {ITU}GU₄ EN 16 MÚL.[BABBAR ...]
+1'. MU 19.KAM {m}se-lu-ku LUGAL {ITU}GU₄ EN 16 MÚL.[BABBAR ...]
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N; Ayyaru[Month II]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; u
 
 2'. UŠ {ITU}ŠU 16 MÚL.BABBAR ana ME E-a {ITU}KIN EN [...]
@@ -19,7 +19,7 @@
 #lem: Ṭebētu[Month X]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; qītu[end]N; Gula[Aquarius]CN; rabû[set]V; Addaru[Month XII]MN; n; Kakkabu-peṣû[Jupiter]CN; u
 
 $ ruling
-4'. MU 1.KAM {I}se-lu-ku šá IGI-ta MU 7 {ITU}N[E? ...]
+4'. MU 1.KAM {m}se-lu-ku šá IGI-ta MU 7 {ITU}N[E? ...]
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; ša[which]REL; mahrīta[previously]AV; šattu[year]N; n; Abu[Month V]MN; u
 
 5'. GE₆ 23 USAN MÚL.BABBAR ana ŠÚ ina ⸢LAL-šú x⸣ [...]
@@ -76,50 +76,50 @@ $ ruling
 
 @top
 
-@(t.e. 2) At the command of Bel and Beltija may it go well.
+@(t.e. 2') At the command of Bel and Beltija may it go well.
 
 @obverse
 
-@(o 1) Year 19, king Seleucus. Month II, until the 16th, Jupi[ter ...]
+@(o 1') Year 19, king Seleucus. Month II, until the 16th, Jupi[ter ...]
 
-@(o 2) became stationary. Month IV, the 16th, Jupiter's acronychal rising. Month VI, until [...]
+@(o 2') became stationary. Month IV, the 16th, Jupiter's acronychal rising. Month VI, until [...]
 
-@(o 3) Month X, the 26th, Jupiter's last appearance in the end of Aquarius. Month XII, the 2nd, J[upiter's first appearance ...]
-
-$ ruling
-
-@(o 4) Year 1, Seleucus, which before (was) year 7. Month V?, [...]
-
-@(o 5) Night of the 23rd, first part of the night, Jupiter, while moving back to the west, was ... [...]
-
-@(o 6) [...] above γ Capricorni.
+@(o 3') Month X, the 26th, Jupiter's last appearance in the end of Aquarius. Month XII, the 2nd, J[upiter's first appearance ...]
 
 $ ruling
 
-@(o 7) [Year 8]2, [...]
+@(o 4') Year 1, Seleucus, which before (was) year 7. Month V?, [...]
 
-@(r i 1) Month VII, night of the 28th, ...
+@(o 5') Night of the 23rd, first part of the night, Jupiter, while moving back to the west, was ... [...]
 
-@(r i 2) solar eclipse which was omitted.
+@(o 6') [...] above γ Capricorni.
 
-@(r i 3) Month VIII, night of the 14th, at 3°
+$ ruling
 
-@(r i 4) before sunrise, when it began on the east side,
+@(o 7') [Year 8]2, [...]
 
-@(r i 5) it set eclipsed. Month XII was intercalary.
+@(r i 1') Month VII, night of the 28th, ...
 
-@(r ii 1) Month V, [...]
+@(r i 2') solar eclipse which was omitted.
 
-@(r ii 2) The 1[4th,	moonset to sunrise: ...]
+@(r i 3') Month VIII, night of the 14th, at 3°
 
-@(r ii 3) The 15th,	[moonrise to sunset: ...]
+@(r i 4') before sunrise, when it began on the east side,
 
-@(r ii 4) The 15th,	[sunrise to moonset: ...]
+@(r i 5') it set eclipsed. Month XII was intercalary.
 
-@(r ii 5) The 16th,	[sunset to moonrise: ...]
+@(r ii 1') Month V, [...]
 
-@(r ii 6) The 27th,	(moonrise to sunrise:) 10+[x° ...]
+@(r ii 2') The 1[4th,	moonset to sunrise: ...]
+
+@(r ii 3') The 15th,	[moonrise to sunset: ...]
+
+@(r ii 4') The 15th,	[sunrise to moonset: ...]
+
+@(r ii 5') The 16th,	[sunset to moonrise: ...]
+
+@(r ii 6') The 27th,	(moonrise to sunrise:) 10+[x° ...]
 
 @bottom
 
-@(b.e. 1) First days, appearances, passings and eclipses [...]
+@(b.e. 1') First days, appearances, passings and eclipses [...]

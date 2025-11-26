@@ -64,42 +64,42 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) ... [...]
+@(o 1') ... [...]
 
-@(o 2) behind ... [...]
+@(o 2') behind ... [...]
 
-@(o 3) around the 20+[xth, ...]
+@(o 3') around the 20+[xth, ...]
 
-@(o 4) Night of the 20+[xth, ...]
+@(o 4') Night of the 20+[xth, ...]
 
-@(o 5) southern [...]
+@(o 5') southern [...]
 
-@(o 6) ... [...]
+@(o 6') ... [...]
 
-@(o 7) the 19th? ... [...]
+@(o 7') the 19th? ... [...]
 
-@(o 8) η/μ? Gem[inorum ...]
+@(o 8') η/μ? Gem[inorum ...]
 
-@(o 9) star [...]
+@(o 9') star [...]
 
-@(o 10) ... [...]
+@(o 10') ... [...]
 
-@(r 1) the 8th, [...]
-
-$ ruling
-
-@(r 2) Year 54?, [...]
-
-@(r 3) 2 [...] β Tauri [...]
-
-@(r 4) 1+[x ...] ζ Tau[ri ...]
-
-@(r 5) 2/3? [cubit ...] ζ Tau[ri ...]
-
-@(r 6) β Tauri [...]
-
-@(r 7) above ζ Tauri [...]
+@(r 1') the 8th, [...]
 
 $ ruling
 
-@(r 8) Year [x]+5?, ... [...]
+@(r 2') Year 54?, [...]
+
+@(r 3') 2 [...] β Tauri [...]
+
+@(r 4') 1+[x ...] ζ Tau[ri ...]
+
+@(r 5') 2/3? [cubit ...] ζ Tau[ri ...]
+
+@(r 6') β Tauri [...]
+
+@(r 7') above ζ Tauri [...]
+
+$ ruling
+
+@(r 8') Year [x]+5?, ... [...]

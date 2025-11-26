@@ -56,34 +56,34 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] when [Saturn] became stationary [to the] west, [...]
+@(o 1') [...] when [Saturn] became stationary [to the] west, [...]
 
-@(o 2) [...] ... until the 27th, [when] Saturn [became stationary] to the east, [...]
+@(o 2') [...] ... until the 27th, [when] Saturn [became stationary] to the east, [...]
 
 $ ruling
 
-@(o 3) [...] king Seleucus. Month [...]
+@(o 3') [...] king Seleucus. Month [...]
 
-@(r i 1) [...] ... [...]
+@(r i 1') [...] ... [...]
 
-@(r i 2) [... ‘moonset to sunrise’] plus ‘sunrise to moonset’: [...]
+@(r i 2') [... ‘moonset to sunrise’] plus ‘sunrise to moonset’: [...]
 
-@(r i 3) [...] ‘moonrise to sunset’ plus ‘sunset to moonrise’: [...]
+@(r i 3') [...] ‘moonrise to sunset’ plus ‘sunset to moonrise’: [...]
 
-@(r i 4) [... ‘moonset] to sunrise’ plus ‘sunrise to moonset’: [...]
+@(r i 4') [... ‘moonset] to sunrise’ plus ‘sunrise to moonset’: [...]
 
-@(r i 5) [...] ‘moonrise to sunset’ plus ‘sunset to moonrise’: [...]
+@(r i 5') [...] ‘moonrise to sunset’ plus ‘sunset to moonrise’: [...]
 
-@(r i 6) [... ‘moonset to sunrise’] plus ‘sunrise to moonset’: [...]
+@(r i 6') [... ‘moonset to sunrise’] plus ‘sunrise to moonset’: [...]
 
-@(r ii 1) ... [...]
+@(r ii 1') ... [...]
 
-@(r ii 2) The 13th, [moonrise to sunset: ...]
+@(r ii 2') The 13th, [moonrise to sunset: ...]
 
-@(r ii 3) The 13th, [moonset to sunrise:] 1° 40' [...]
+@(r ii 3') The 13th, [moonset to sunrise:] 1° 40' [...]
 
-@(r ii 4) The 14th, [sunset to moonrise:] 6° 30' [...]
+@(r ii 4') The 14th, [sunset to moonrise:] 6° 30' [...]
 
-@(r ii 5) The 14th, sunrise to [moonset:] 10° [...]
+@(r ii 5') The 14th, sunrise to [moonset:] 10° [...]
 
-@(r ii 6) The 27th?, (moonrise to sunrise:) 14°? ... [...]
+@(r ii 6') The 27th?, (moonrise to sunrise:) 14°? ... [...]

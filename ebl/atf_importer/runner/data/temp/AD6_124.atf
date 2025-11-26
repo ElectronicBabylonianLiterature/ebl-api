@@ -57,34 +57,34 @@
 
 @translation labeled en project
 
-@(o i 1) [...] ...
+@(o i 1') [...] ...
 
-@(o i 2) [...] Month V, the 13th,
+@(o i 2') [...] Month V, the 13th,
 
-@(o i 3) lu[nar eclipse] which was omitted.
+@(o i 3') lu[nar eclipse] which was omitted.
 
-@(o i 4) [At ...] after sunrise.
+@(o i 4') [At ...] after sunrise.
 
-@(o i 5) [...] solar [eclipse;] when I watched I did not see it.
+@(o i 5') [...] solar [eclipse;] when I watched I did not see it.
 
-@(o i 6) [At ...] after sunrise.
+@(o i 6') [At ...] after sunrise.
 
-@(o i 7) [...] ...
+@(o i 7') [...] ...
 
-@(o ii 1) [...] sunset to moonrise: ... [...] 
+@(o ii 1') [...] sunset to moonrise: ... [...] 
 
-@(o ii 2) The 16th, sunrise to moonset: 4° 10'; measured.
+@(o ii 2') The 16th, sunrise to moonset: 4° 10'; measured.
 
-@(o ii 3) The 28th, (moonrise to sunrise:) 16° 30'; measured.
+@(o ii 3') The 28th, (moonrise to sunrise:) 16° 30'; measured.
 
-@(o ii 4) Month III, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, measured; it was high? to the sun. 
+@(o ii 4') Month III, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, measured; it was high? to the sun. 
 
-@(o ii 5) The 14th, moonrise to sunset: 16° 50'; clouds, I did not watch. 
+@(o ii 5') The 14th, moonrise to sunset: 16° 50'; clouds, I did not watch. 
 
-@(o ii 6) The 14th, moonset to sunrise: 11°; measured. 
+@(o ii 6') The 14th, moonset to sunrise: 11°; measured. 
 
-@(o ii 7) The 15th, sunset to moonrise: 2°; measured. 
+@(o ii 7') The 15th, sunset to moonrise: 2°; measured. 
 
-@(o ii 8) The 15th, sunrise to moonset: 3° 50'; clouds, I did not watch. 
+@(o ii 8') The 15th, sunrise to moonset: 3° 50'; clouds, I did not watch. 
 
-@(o ii 9) The 28th, (moonrise to sunrise:) 12°; mist, I did not watch.
+@(o ii 9') The 28th, (moonrise to sunrise:) 12°; mist, I did not watch.

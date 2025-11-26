@@ -5,61 +5,61 @@
 #atf: use math
 #atf: use legacy
 @obverse
-1'. [38 {I}{d}AG-NÍG.D]U-[ŠEŠ 18]
+1'. [38 {m}{d}AG-NÍG.D]U-[ŠEŠ 18]
 #lem: n; Nebuchadnezzar[Nebuchadnezzar II]RN; n
 
-2'. [7 {I}{d}A]G-I [18]
+2'. [7 {m}{d}A]G-I [18]
 #lem: n; Nabonidus[Nabonidus]RN; n
 
-3'. [8 {I}ku-raš 18]
+3'. [8 {m}ku-raš 18]
 #lem: n; Cyrus[Cyrus]RN$Kuraš; n
 
-4'. {I}da-ra-muš 18
+4'. {m}da-ra-muš 18
 #lem: Dariamuš[Darius I]RN; n
 
-5'. 27 {I}da-ra-muš 18
+5'. 27 {m}da-ra-muš 18
 #lem: n; Dariamuš[Darius I]RN; n
 
-6'. 9 {I}hi-ši-ár-šú 18
+6'. 9 {m}hi-ši-ár-šú 18
 #lem: n; Xerxes[Xerxes]RN; n
 
-7'. ⸢6⸣ {I}ár-tak-šat-su 18
+7'. ⸢6⸣ {m}ár-tak-šat-su 18
 #lem: n; Artaxerxes[Artaxerxes I]RN; n
 
-8'. [24 {I}ár-tak-šat-s]u [18]
+8'. [24 {m}ár-tak-šat-s]u [18]
 #lem: n; Artaxerxes[Artaxerxes I]RN; n
 
 9'. [1] ⸢{I}da⸣-[ra-muš 18]
 #lem: n; Dariamuš[Darius II]RN; n
 
-10'. 19 {I}da-ra-muš 18
+10'. 19 {m}da-ra-muš 18
 #lem: n; Dariamuš[Darius II]RN; n
 
-11'. 18 {I}ár-tak-šat-su 18
+11'. 18 {m}ár-tak-šat-su 18
 #lem: n; Artaxerxes[Artaxerxes II]RN; n
 
-12'. 36 {I}ár-tak-šat-su 18
+12'. 36 {m}ár-tak-šat-su 18
 #lem: n; Artaxerxes[Artaxerxes II]RN; n
 
-13'. 8 {I}ú-ma-kuš 18
+13'. 8 {m}ú-ma-kuš 18
 #lem: n; Artaxerxes[Artaxerxes III]RN$Umakuš; n
 
-14'. 3 {I}da-ra-muš 18
+14'. 3 {m}da-ra-muš 18
 #lem: n; Dariamuš[Darius III]RN; n
 
-15'. 3 {I}an-ti-gu 18
+15'. 3 {m}an-ti-gu 18
 #lem: n; Antigonus[Antigonus]RN; n
 
-16'. 15 {I}se 18
+16'. 15 {m}se 18
 #lem: n; Seleucus[Seleucus]RN; n
 
-17'. 33 {I}se
+17'. 33 {m}se
 #lem: n; Seleucus[Seleucus]RN
 
-18'. 51 {I}se 18
+18'. 51 {m}se 18
 #lem: n; Seleucus[Seleucus]RN; n
 
-19'. 1.9 {I}se 18
+19'. 1.9 {m}se 18
 #lem: n; Seleucus[Seleucus]RN; n
 
 @reverse

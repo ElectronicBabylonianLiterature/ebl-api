@@ -45,26 +45,26 @@
 
 @translation labeled en project
 
-@(o i 1) [...] ...
+@(o i 1') [...] ...
 
-@(o i 2) [...] measured.
+@(o i 2') [...] measured.
 
-@(o i 3) [...] clouds, I did not watch.
+@(o i 3') [...] clouds, I did not watch.
 
-@(o i 4) [...] ..., measured.
+@(o i 4') [...] ..., measured.
 
-@(o ii 1) The 13th, moonrise to sunset: 20+[x]'.
+@(o ii 1') The 13th, moonrise to sunset: 20+[x]'.
 
-@(o ii 2) The 13th, sunrise to moonset: 3°; [measured (despite)] mist.
+@(o ii 2') The 13th, sunrise to moonset: 3°; [measured (despite)] mist.
 
-@(o ii 3) The 14th, sunset to moonrise: 11°; [measured (despite)] mist.
+@(o ii 3') The 14th, sunset to moonrise: 11°; [measured (despite)] mist.
 
-@(o ii 4) The 27th, moonrise to sunrise: 18° 50'; ... [...]
+@(o ii 4') The 27th, moonrise to sunrise: 18° 50'; ... [...]
 
-@(o ii 5) Month VI, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 13°; ... [...]
+@(o ii 5') Month VI, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 13°; ... [...]
 
-@(o ii 6) The 13th, moonrise to sunset: 3°? 40'? [...]
+@(o ii 6') The 13th, moonrise to sunset: 3°? 40'? [...]
 
-@(o ii 7) The 13th, moonset to sunrise: 4° 20' [...]
+@(o ii 7') The 13th, moonset to sunrise: 4° 20' [...]
 
-@(o ii 8) [The 14th,] sunset to moonrise: x° [...]
+@(o ii 8') [The 14th,] sunset to moonrise: x° [...]

@@ -10,7 +10,7 @@
 
 @obverse
 @column 1
-1'. [MU 60]+15.KAM {I}se LUGAL
+1'. [MU 60]+15.KAM {m}se LUGAL
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N
 
 2'. [DU₆] 12.20	ŠÚ u na
@@ -50,7 +50,7 @@
 #lem: n; ūmu[moonrise to sunset]N; u[and]CNJ; mūšu[sunset to moonrise]N
 
 $ ruling
-14'. [M]U 1.16.KAM {I}se LUGAL
+14'. [M]U 1.16.KAM {m}se LUGAL
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N
 
 15'. [BAR x] 13.20 DIR NU PAP
@@ -177,7 +177,7 @@ $ ruling
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; SI-MÁŠ[β Capricorni]CN; n; n; u
 
 $ ruling
-3'. [M]U 48 {I}an u {I}a[n A-šú LUGAL{MEŠ} ...]
+3'. [M]U 48 {m}an u {m}a[n A-šú LUGAL{MEŠ} ...]
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
 
 4'. [i]n 19 IGI ⸢GU₄ x⸣ [...]
@@ -205,11 +205,11 @@ $ ruling
 #lem: u; u; na[rising to sunrise]N; ina[on]PRP; n; ša[which]REL; Ṭebētu[Month X]MN; nanmuru[be(come) visible]V; Šabāṭu[Month XI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kayyamānu[Saturn]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ubānu[finger]N
 
 $ ruling
-12'. ⸢MU 15⸣.KAM {I}se LUGAL NE in 24 AN ina ABSIN ŠÚ {ITU}ZÍZ in 25 AN ina GU IGI ŠE.DIR
+12'. ⸢MU 15⸣.KAM {m}se LUGAL NE in 24 AN ina ABSIN ŠÚ {ITU}ZÍZ in 25 AN ina GU IGI ŠE.DIR
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N; Abu[Month V]MN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Šerʾu[Virgo]CN; rabû[set]V; Šabāṭu[Month XI]MN; ina[around (day x)]PRP; n; Ṣalbaṭānu[Mars]CN; ina[in]PRP; Gula[Aquarius]CN; nanmuru[be(come) visible]V; Addaru_Šanû[(Intercalary) Month XII₂]MN
 
 $ ruling
-13'. MU 46.KAM {I}an u {I}se LUGAL{MEŠ} {ITU}ŠE GE₆ 24 USAN AN ana NIM ina LAL-šú SIG MAŠ.MAŠ-ár 2 KÙŠ
+13'. MU 46.KAM {m}an u {m}se LUGAL{MEŠ} {ITU}ŠE GE₆ 24 USAN AN ana NIM ina LAL-šú SIG MAŠ.MAŠ-ár 2 KÙŠ
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N; Addaru[Month XII]MN; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]'N; ina[while]'SBJ; nahāsu[recede]V; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N
 
 14'. MU 47.KAM BAR GE₆ 17 USAN AN e MÚL-IGI-šá-ALLA-šá-SI 4 SI i AN ana ŠÚ LAL GE₆ 22 USAN [AN]
@@ -225,161 +225,161 @@ $ ruling
 #lem: mūšu[night]N; u; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N
 
 $ ruling
-18'. [U₄ 1.KAM] IGI.DU₈.A{MEŠ} DIB-qa{MEŠ} u AN.KU₁₀{MEŠ} šá a-na MU 1.34.KAM {I}an [LUGAL]
+18'. [U₄ 1.KAM] IGI.DU₈.A{MEŠ} DIB-qa{MEŠ} u AN.KU₁₀{MEŠ} šá a-na MU 1.34.KAM {m}an [LUGAL]
 #lem: ūmu[day]N; n; tāmartu[appearance]N; etēqu[passings]N; u[and]CNJ; antallû[eclipse]N; ša[which]REL; ana[for]PRP; šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N
 
 @translation labeled en project
 
 @top
 
-@(t.e. 1) [At the command of Bēl and] Bēltiya may it go well.
+@(t.e. 1') [At the command of Bēl and] Bēltiya may it go well.
 
-@(o i 1) [Year 7]5, king Seleucus.
+@(o i 1') [Year 7]5, king Seleucus.
 
-@(o i 2) [Month VII,] 	‘moonset to sunrise’ plus ‘sunrise to moonset’: 12° 20'.
+@(o i 2') [Month VII,] 	‘moonset to sunrise’ plus ‘sunrise to moonset’: 12° 20'.
 
-@(o i 3)		‘moonrise to sunset’ plus ‘sunset to moonrise’: 9° 10'.
+@(o i 3')		‘moonrise to sunset’ plus ‘sunset to moonrise’: 9° 10'.
 
-@(o i 4) Month VIII, 	‘moonset to sunrise’ plus ‘sunrise to moonset’: 13°.
+@(o i 4') Month VIII, 	‘moonset to sunrise’ plus ‘sunrise to moonset’: 13°.
 
-@(o i 5)		‘moonrise to sunset’ plus ‘sunset to moonrise’: 9°.
+@(o i 5')		‘moonrise to sunset’ plus ‘sunset to moonrise’: 9°.
 
-@(o i 6) Month IX,	‘moonset to sunrise’ plus ‘sunrise to moonset’: 14° 10'.
+@(o i 6') Month IX,	‘moonset to sunrise’ plus ‘sunrise to moonset’: 14° 10'.
 
-@(o i 7)		‘moonrise to sunset’ plus ‘sunset to moonrise’: 9°?.
+@(o i 7')		‘moonrise to sunset’ plus ‘sunset to moonrise’: 9°?.
 
-@(o i 8) Month X,	‘moonset to sunrise’ plus ‘sunrise to moonset’: 14° 10'.
+@(o i 8') Month X,	‘moonset to sunrise’ plus ‘sunrise to moonset’: 14° 10'.
 
-@(o i 9)	 	‘moonrise to sunset’ plus ‘sunset to moonrise’: 15° 50'.
+@(o i 9')	 	‘moonrise to sunset’ plus ‘sunset to moonrise’: 15° 50'.
 
-@(o i 10) Month XI,	‘moonset to sunrise’ plus ‘sunrise to moonset’: 12°.
+@(o i 10') Month XI,	‘moonset to sunrise’ plus ‘sunrise to moonset’: 12°.
 
-@(o i 11)		‘moonrise to sunset’ plus ‘sunset to moonrise’: 14° 20'.
+@(o i 11')		‘moonrise to sunset’ plus ‘sunset to moonrise’: 14° 20'.
 
-@(o i 12) Month XII, 	‘moonset to sunrise’ plus ‘sunrise to moonset’: 10° 20'.
+@(o i 12') Month XII, 	‘moonset to sunrise’ plus ‘sunrise to moonset’: 10° 20'.
 
-@(o i 13)		‘moonrise to sunset’ plus ‘sunset to moonrise’: 14° 50'.
-
-$ ruling
-
-@(o i 14) [Y]ear 76, king Seleucus.
-
-@(o i 15) [Month I, ... (sunset to moonset:)] 13° 20'; clouds, I did not watch.
-
-@(o i 16) [...] 		moonrise to sunset: ...
-
-@(o i 17) [...] 		moonset to sunrise: [...]
-
-@(o ii 1) Month IV, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12°; mist, it was very faint.
-
-@(o ii 2) The 13th,	moonset to sunrise: 2° 30'.
-
-@(o ii 3) The 14th,	moonrise to sunset: 3° 20'; measured.
-
-@(o ii 4) The 14th,	sunrise to moonset: 10° 30’: measured
-
-@(o ii 5) The 15th,	sunset to moonrise: 14° 50'; I did not watch.
-
-@(o ii 6) The 27th,	(moonrise to sunrise:) 13° 20'.
-
-@(o ii 7) Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 15° 30'.
-
-@(o ii 8) The 12th,	moonset to sunrise: 9° 10'.
-
-@(o ii 9) The 13th,	moonrise to sunset: 7° 30'; measured.
-
-@(o ii 10) The 13th,	sunrise to moonset: 5°; measured?. (erased?)
-
-@(o ii 11) The 14th,	sunset to moonrise: 5°.
-
-@(o ii 12) The 27th,	(moonrise to sunrise:) 14° 30'.
-
-@(o ii 13) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 8° 10'; when I watched I did not see it.
-
-@(o ii 14) The 13th, 	moonrise to sunset: 11° 30'; I did not watch.
-
-@(o ii 15) The 13th,	 moonset to sunrise: 2° 20'.
-
-@(o ii 16) The 14th, 	sunset to moonrise: 1° 50'.
-
-@(o ii 17) The 14th, 	sunrise to moonset: 14°? 30'?; measured.
-
-@(o iii 1) The 15th, [...]
-
-@(o iii 2) The 27th, 	(moonrise to sunrise:) ...
-
-@(o iii 3) Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) ... [...]
-
-@(o iii 4) The 10+[xth, ...]
-
-@(o iii 5) The 10+[xth, ...]
-
-@(o iii 6) The 15th?, [...]
-
-@(o iii 7) The 15th?, [...]
-
-@(o iii 8) The 20+[xth,] ...
-
-@(o iii 9) Month X, [...]
-
-@(o iii 10) The 10+[xth, ...]
-
-@(o iii 11) The 10+[xth, ...]
-
-@(o iii 12) The 15th?, [...]
-
-@(o iii 13) The 16th, [...] 7° [...]
-
-@(o iii 14) The 28th, 	(moonrise to sunrise:) 11+[x°.]
-
-@(o iii 15) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22° [...]
-
-@(o iii 16) The 14th,	[moonset to sunrise:] 1° 10'
-
-@(o iii 17) The 15th,	[...] [moonrise to sunset:] 3° [...]
-
-@(o iii 18) The 15th,	[sunrise to moonset:] 5°? [...]
-
-@(r 1) [...] ..., last part of the night, Venus was [...] above [...]
-
-@(r 2) [... Ni]ght of the 29th, last part of the night, Venus was [...] below β Capricorni [...]
+@(o i 13')		‘moonrise to sunset’ plus ‘sunset to moonrise’: 14° 50'.
 
 $ ruling
 
-@(r 3) [Y]ear 48, [kings] Antiochus and [his son] Antiochus. [...]
+@(o i 14') [Y]ear 76, king Seleucus.
 
-@(r 4) (ideal) first appearance on the 19th. Month II, the xth, [...]
+@(o i 15') [Month I, ... (sunset to moonset:)] 13° 20'; clouds, I did not watch.
 
-@(r 5) first part of the night, Mercury [...]
+@(o i 16') [...] 		moonrise to sunset: ...
 
-@(r 6) ... [...]
+@(o i 17') [...] 		moonset to sunrise: [...]
 
-@(r 7) ... [...]
+@(o ii 1') Month IV, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12°; mist, it was very faint.
 
-@(r 8) [...]
+@(o ii 2') The 13th,	moonset to sunrise: 2° 30'.
 
-@(r 9) [Year 35, ... Month] III, the 25th, [...]
+@(o ii 3') The 14th,	moonrise to sunset: 3° 20'; measured.
 
-@(r 10) it became stationary [...;] I did not watch. Month IX, the 21st, Saturn’s last appearance in Capricorn. Month XI, the 2nd, Saturn’s first appearance in the end of Capricorn.
+@(o ii 4') The 14th,	sunrise to moonset: 10° 30’: measured
 
-@(r 11) [...] rising of Saturn to sunrise: ...; (ideal) first appearance on the 20+[xth of month X.] Month XI, night of the 10th?, last part of the night, Saturn was 20 fingers above δ Capricorni.
+@(o ii 5') The 15th,	sunset to moonrise: 14° 50'; I did not watch.
+
+@(o ii 6') The 27th,	(moonrise to sunrise:) 13° 20'.
+
+@(o ii 7') Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 15° 30'.
+
+@(o ii 8') The 12th,	moonset to sunrise: 9° 10'.
+
+@(o ii 9') The 13th,	moonrise to sunset: 7° 30'; measured.
+
+@(o ii 10') The 13th,	sunrise to moonset: 5°; measured?. (erased?)
+
+@(o ii 11') The 14th,	sunset to moonrise: 5°.
+
+@(o ii 12') The 27th,	(moonrise to sunrise:) 14° 30'.
+
+@(o ii 13') Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 8° 10'; when I watched I did not see it.
+
+@(o ii 14') The 13th, 	moonrise to sunset: 11° 30'; I did not watch.
+
+@(o ii 15') The 13th,	 moonset to sunrise: 2° 20'.
+
+@(o ii 16') The 14th, 	sunset to moonrise: 1° 50'.
+
+@(o ii 17') The 14th, 	sunrise to moonset: 14°? 30'?; measured.
+
+@(o iii 1') The 15th, [...]
+
+@(o iii 2') The 27th, 	(moonrise to sunrise:) ...
+
+@(o iii 3') Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) ... [...]
+
+@(o iii 4') The 10+[xth, ...]
+
+@(o iii 5') The 10+[xth, ...]
+
+@(o iii 6') The 15th?, [...]
+
+@(o iii 7') The 15th?, [...]
+
+@(o iii 8') The 20+[xth,] ...
+
+@(o iii 9') Month X, [...]
+
+@(o iii 10') The 10+[xth, ...]
+
+@(o iii 11') The 10+[xth, ...]
+
+@(o iii 12') The 15th?, [...]
+
+@(o iii 13') The 16th, [...] 7° [...]
+
+@(o iii 14') The 28th, 	(moonrise to sunrise:) 11+[x°.]
+
+@(o iii 15') Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22° [...]
+
+@(o iii 16') The 14th,	[moonset to sunrise:] 1° 10'
+
+@(o iii 17') The 15th,	[...] [moonrise to sunset:] 3° [...]
+
+@(o iii 18') The 15th,	[sunrise to moonset:] 5°? [...]
+
+@(r 1') [...] ..., last part of the night, Venus was [...] above [...]
+
+@(r 2') [... Ni]ght of the 29th, last part of the night, Venus was [...] below β Capricorni [...]
 
 $ ruling
 
-@(r 12) Year 15, king Seleucus. Month V, around the 24th, Mars’ last appearance in Virgo. Month XI, around the 25th, Mars’ first appearance in Aquarius. Month XII was intercalary.
+@(r 3') [Y]ear 48, [kings] Antiochus and [his son] Antiochus. [...]
+
+@(r 4') (ideal) first appearance on the 19th. Month II, the xth, [...]
+
+@(r 5') first part of the night, Mercury [...]
+
+@(r 6') ... [...]
+
+@(r 7') ... [...]
+
+@(r 8') [...]
+
+@(r 9') [Year 35, ... Month] III, the 25th, [...]
+
+@(r 10') it became stationary [...;] I did not watch. Month IX, the 21st, Saturn’s last appearance in Capricorn. Month XI, the 2nd, Saturn’s first appearance in the end of Capricorn.
+
+@(r 11') [...] rising of Saturn to sunrise: ...; (ideal) first appearance on the 20+[xth of month X.] Month XI, night of the 10th?, last part of the night, Saturn was 20 fingers above δ Capricorni.
 
 $ ruling
 
-@(r 13) Year 46, kings Antiochus and Seleucus. Month XII, night of the 24th, first part of the night, Mars, while moving back to the east, was 2 cubits below β Geminorum.
-
-@(r 14) Year 47. Month I, night of the 17th, first part of the night, Mars was 4 fingers above η Cancri, Mars being a little back to the west. Night of the 22nd, first part of the night, [Mars was]
-
-@(r 15) 1⁄2 cubit below γ Cancri. Month II, night of the 12th, first part of the night, Mars was 4 1⁄2 cubits below ε Leonis. Month III, night of the 1st, first part of the night, Mars was [... above α Leonis.]
-
-@(r 16) Night of the 12th, first part of the night, Mars was 10 fingers above ϱ Leonis. Month IV, night of the 3rd, first part of the night, Mars was [...] below θ Leonis.
-
-@(r 17) [Night of the x]+5th, first part of the night, Mars was 2 fingers above β Virginis. 
+@(r 12') Year 15, king Seleucus. Month V, around the 24th, Mars’ last appearance in Virgo. Month XI, around the 25th, Mars’ first appearance in Aquarius. Month XII was intercalary.
 
 $ ruling
 
-@(r 18) [First days,] appearances, passings, and eclipses which [were established] for year 94, [king] Antiochus.
+@(r 13') Year 46, kings Antiochus and Seleucus. Month XII, night of the 24th, first part of the night, Mars, while moving back to the east, was 2 cubits below β Geminorum.
+
+@(r 14') Year 47. Month I, night of the 17th, first part of the night, Mars was 4 fingers above η Cancri, Mars being a little back to the west. Night of the 22nd, first part of the night, [Mars was]
+
+@(r 15') 1⁄2 cubit below γ Cancri. Month II, night of the 12th, first part of the night, Mars was 4 1⁄2 cubits below ε Leonis. Month III, night of the 1st, first part of the night, Mars was [... above α Leonis.]
+
+@(r 16') Night of the 12th, first part of the night, Mars was 10 fingers above ϱ Leonis. Month IV, night of the 3rd, first part of the night, Mars was [...] below θ Leonis.
+
+@(r 17') [Night of the x]+5th, first part of the night, Mars was 2 fingers above β Virginis. 
+
+$ ruling
+
+@(r 18') [First days,] appearances, passings, and eclipses which [were established] for year 94, [king] Antiochus.

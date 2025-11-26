@@ -30,21 +30,21 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] ($blank$)
-
-$ ruling
-
-@(o 3) [...] Jupiter being 1 cubit [...]
-
-@(o 4) [when it became stationary to the west,] it became stationary in Aquarius [...]
-
-@(o 5) [...] first appearance [...] The 14th, Jupi[ter ...]
+@(o 2') [...] ($blank$)
 
 $ ruling
 
-@(o 6) [...] 1? cubit in front of ... [...]
+@(o 3') [...] Jupiter being 1 cubit [...]
 
-@(o 7) [... when] it became stationary [to the west, it became stationary] in the end of Pisces [...]
+@(o 4') [when it became stationary to the west,] it became stationary in Aquarius [...]
+
+@(o 5') [...] first appearance [...] The 14th, Jupi[ter ...]
+
+$ ruling
+
+@(o 6') [...] 1? cubit in front of ... [...]
+
+@(o 7') [... when] it became stationary [to the west, it became stationary] in the end of Pisces [...]
  

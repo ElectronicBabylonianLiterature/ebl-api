@@ -122,47 +122,47 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [Year 97, ...] ... Month V, the 30th, Jupiter’s [first appearance] in Virgo, 2 1/2 cubits behind M[ercury ...]
+@(o 1') [Year 97, ...] ... Month V, the 30th, Jupiter’s [first appearance] in Virgo, 2 1/2 cubits behind M[ercury ...]
 
-@(o 2) [...] it became stationary [...] α Virginis, being 2 1/2 cubits high to the north. Month XI, around the 10+[xth, ...]
-
-$ ruling
-
-@(o 3) [Year 85, ... Jupiter,] while moving back to the east, was 4 1/2 cubits below θ Leonis. Month VII, night of the 22nd, [...]
+@(o 2') [...] it became stationary [...] α Virginis, being 2 1/2 cubits high to the north. Month XI, around the 10+[xth, ...]
 
 $ ruling
 
-@(o 4) [Year 160, ...] the 29th, Venus’ last appearance in the west (error for NIM) in the end of Taurus. Month II, the 11th, Venus’ [first appearance] in the east! in Tau[rus ...]
-
-@(o 5) [...] 3 1/2 cubits [below] β Tauri. Night of the 24th, last part of the night, Venus was [...] below ζ [Tauri ...]
-
-@(o 6) [... night] of the 9th, last part of the night, Venus was 1 cubit below μ Geminorum. Night of the 13th, last [part of the night, Venus was]
-
-@(o 7) [...] 1/2 cubit. Night of the 28th, last part of the night, Venus was 3 1/2 cubits below β Geminorum. Month V, [...]
-
-@(o 8) [...] 5 cubits below ε Leonis. Night of the 29th, last part of the night, Venus was 2 fingers below α Leonis, Venus being 2 fingers [...]
-
-@(o 9) [... Night of the x]+1st, last part of the night, Venus was 5 cubits below θ Leonis. Night of the 22nd, last part of the night, Venus was
-
-@(o 10) [...] 2/3 cubit [below] γ Virginis, Venus being 4 fingers back to the west. Night of the 14th, last part of the night, Venus was
-
-@(o 11) [... Month VIII, ...] 8 fingers [above α Libr]ae. Night of the 6th, last part of the night, Venus was 2 1/2 cubits below β Librae.
-
-@(o 12) [...] 2 2/3 cubits above a Scorpii. Month IX, night of the 3rd, last part of the night, Venus was 1 cubit above θ Ophiuchi.
-
-@(o 13) [...] first appearance in the west in Aries; it was small, sunset to setting of Venus: 8°; (ideal) first appearance on the 28th.
+@(o 3') [Year 85, ... Jupiter,] while moving back to the east, was 4 1/2 cubits below θ Leonis. Month VII, night of the 22nd, [...]
 
 $ ruling
 
-@(o 14) [Year 122, ...] Mercury was 3 1/2 cubits above α Tauri. Night of the 11th,
+@(o 4') [Year 160, ...] the 29th, Venus’ last appearance in the west (error for NIM) in the end of Taurus. Month II, the 11th, Venus’ [first appearance] in the east! in Tau[rus ...]
 
-@(o 15) [...] 1 1/2 cubits [above ζ] Tauri. Night of the 21st, first part of the night, Mercury was
+@(o 5') [...] 3 1/2 cubits [below] β Tauri. Night of the 24th, last part of the night, Venus was [...] below ζ [Tauri ...]
 
-@(o 16) [...] 1 1/2 cubits [above μ] Geminorum. Night of the 27th, first part of the night, Mercury was
+@(o 6') [... night] of the 9th, last part of the night, Venus was 1 cubit below μ Geminorum. Night of the 13th, last [part of the night, Venus was]
 
-@(o 17) [...] first appearance [in the east in] Gemini; it was bright (and) high, rising of Mercury to sunrise: 19°?; (ideal) first appearance on the 10th.
+@(o 7') [...] 1/2 cubit. Night of the 28th, last part of the night, Venus was 3 1/2 cubits below β Geminorum. Month V, [...]
 
-@(o 18) [...] ...
+@(o 8') [...] 5 cubits below ε Leonis. Night of the 29th, last part of the night, Venus was 2 fingers below α Leonis, Venus being 2 fingers [...]
+
+@(o 9') [... Night of the x]+1st, last part of the night, Venus was 5 cubits below θ Leonis. Night of the 22nd, last part of the night, Venus was
+
+@(o 10') [...] 2/3 cubit [below] γ Virginis, Venus being 4 fingers back to the west. Night of the 14th, last part of the night, Venus was
+
+@(o 11') [... Month VIII, ...] 8 fingers [above α Libr]ae. Night of the 6th, last part of the night, Venus was 2 1/2 cubits below β Librae.
+
+@(o 12') [...] 2 2/3 cubits above a Scorpii. Month IX, night of the 3rd, last part of the night, Venus was 1 cubit above θ Ophiuchi.
+
+@(o 13') [...] first appearance in the west in Aries; it was small, sunset to setting of Venus: 8°; (ideal) first appearance on the 28th.
+
+$ ruling
+
+@(o 14') [Year 122, ...] Mercury was 3 1/2 cubits above α Tauri. Night of the 11th,
+
+@(o 15') [...] 1 1/2 cubits [above ζ] Tauri. Night of the 21st, first part of the night, Mercury was
+
+@(o 16') [...] 1 1/2 cubits [above μ] Geminorum. Night of the 27th, first part of the night, Mercury was
+
+@(o 17') [...] first appearance [in the east in] Gemini; it was bright (and) high, rising of Mercury to sunrise: 19°?; (ideal) first appearance on the 10th.
+
+@(o 18') [...] ...
 
 @reverse
 
@@ -174,36 +174,36 @@ $ broken
 
 $ broken
 
-@(r iii 1) [...] ...
+@(r iii 1') [...] ...
 
-@(r iii 2) [...] clouds, I did not watch.
+@(r iii 2') [...] clouds, I did not watch.
 
-@(r iii 3) [...] sunset to moonrise: [...;] clouds, I did not watch. 
+@(r iii 3') [...] sunset to moonrise: [...;] clouds, I did not watch. 
 
-@(r iii 4) [...] sunrise to moonset: 6° 40'; I did not watch. 
+@(r iii 4') [...] sunrise to moonset: 6° 40'; I did not watch. 
 
-@(r iii 5) [...] moonrise to sunrise: 22° 50'; clouds, I did not watch.
+@(r iii 5') [...] moonrise to sunrise: 22° 50'; clouds, I did not watch.
 
-@(r iv 1) [...] ...
+@(r iv 1') [...] ...
 
-@(r iv 2) The xth, sunrise to moonset: 10°; measured (despite) mist.
+@(r iv 2') The xth, sunrise to moonset: 10°; measured (despite) mist.
 
-@(r iv 3) The 27th, moonrise to sunrise: 17° 30'; clouds, I did not watch.
+@(r iv 3') The 27th, moonrise to sunrise: 17° 30'; clouds, I did not watch.
 
-@(r iv 4) Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°? 10'; clouds, I did not watch.
+@(r iv 4') Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°? 10'; clouds, I did not watch.
 
-@(r iv 5) The 12th, moonset to sunrise: 6° 50'; clouds, I did not watch. 
+@(r iv 5') The 12th, moonset to sunrise: 6° 50'; clouds, I did not watch. 
 
-@(r iv 6) The 13th, moonrise to sunset: 8°; clouds [...]
+@(r iv 6') The 13th, moonrise to sunset: 8°; clouds [...]
 
-@(r iv 7) The 13th, sunrise to moonset: 5° 50'; cl[ouds, ...] 
+@(r iv 7') The 13th, sunrise to moonset: 5° 50'; cl[ouds, ...] 
 
-@(r iv 8) The 14th, sunset to moonrise: 4°; measured (despite) clouds.
+@(r iv 8') The 14th, sunset to moonrise: 4°; measured (despite) clouds.
 
-@(r iv 9) The 28th?, moonrise to sunrise: 8° 50'?; when I watched I did not see it.
+@(r iv 9') The 28th?, moonrise to sunrise: 8° 50'?; when I watched I did not see it.
 
-@(r iv 10) Month I, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 18°; measured (despite) clouds.
+@(r iv 10') Month I, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 18°; measured (despite) clouds.
 
-@(r iv 11) [...pa]ssings, and eclipses which were established for year 168,
+@(r iv 11') [...pa]ssings, and eclipses which were established for year 168,
 
-@(r iv 12) king Demetrius.
+@(r iv 12') king Demetrius.

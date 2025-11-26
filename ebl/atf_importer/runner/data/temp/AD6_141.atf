@@ -51,31 +51,31 @@
 
 @translation labeled en project
 
-@(o i 1) [...] ...
+@(o i 1') [...] ...
 
-@(o i 2) [..., moonset to sunrise: ...;] clouds, I did not watch. 
+@(o i 2') [..., moonset to sunrise: ...;] clouds, I did not watch. 
 
-@(o i 3) [...,] moonrise to sunset: [...;] clouds, I did not watch. 
+@(o i 3') [...,] moonrise to sunset: [...;] clouds, I did not watch. 
 
-@(o i 4) [...,] sunrise to moonset: [...;] I did not watch. 
+@(o i 4') [...,] sunrise to moonset: [...;] I did not watch. 
 
-@(o i 5) [...,] sunset to moonrise: [...;] I did not watch. 
+@(o i 5') [...,] sunset to moonrise: [...;] I did not watch. 
 
-@(o i 6) [..., moonrise to sunrise: x]+10°; mist,
+@(o i 6') [..., moonrise to sunrise: x]+10°; mist,
 
-@(o i 7) [...] I did not see (it).
+@(o i 7') [...] I did not see (it).
 
-@(o ii 1) Month VII, [...]
+@(o ii 1') Month VII, [...]
 
-@(o ii 2) The 12th, [moonset to sunrise:] 12°; [...] 
+@(o ii 2') The 12th, [moonset to sunrise:] 12°; [...] 
 
-@(o ii 3) The 13th, [moonrise to sunset:] 30'; [...] 
+@(o ii 3') The 13th, [moonrise to sunset:] 30'; [...] 
 
-@(o ii 4) The 13th, [sunrise to moonset:] 1+[x°; ...] 
+@(o ii 4') The 13th, [sunrise to moonset:] 1+[x°; ...] 
 
-@(o ii 5) The 14th, [sunset to moonrise:] 7°; [...]
+@(o ii 5') The 14th, [sunset to moonrise:] 7°; [...]
 
-@(o ii 6) The 27th, [moonrise to sunrise:] 19° [...]
+@(o ii 6') The 27th, [moonrise to sunrise:] 19° [...]
 
-@(o ii 7) Month VIII, [...]
+@(o ii 7') Month VIII, [...]
  

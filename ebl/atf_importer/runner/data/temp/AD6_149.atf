@@ -65,46 +65,46 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) ($traces$)
+@(o 1') ($traces$)
 
-@(o 2) [...] Capricorn, 100
+@(o 2') [...] Capricorn, 100
 
-@(o 3) [...] 20?. Month XII, Aquarius.
+@(o 3') [...] 20?. Month XII, Aquarius.
 
 $ ruling
 
-@(o 4) [... the x]+4th, last appearance in the east in Gemini.
+@(o 4') [... the x]+4th, last appearance in the east in Gemini.
 
-@(o 5) [...] Libra, at the end of the month Scorpius.
+@(o 5') [...] Libra, at the end of the month Scorpius.
 
-@(o 6) [...] ... 3 cubits.
+@(o 6') [...] ... 3 cubits.
 
-@(o 7) [...] ... the rear star
+@(o 7') [...] ... the rear star
 
-@(o 8) [... cub]its.
+@(o 8') [... cub]its.
 
-@(o 9) [... clou]ds?, I did not watch.
+@(o 9') [... clou]ds?, I did not watch.
 
 @right
 
-@(r.e. 1) Sunset to moonset: ...
+@(r.e. 1') Sunset to moonset: ...
 
-@(r.e. 2) Night of the 13th, moonrise to sunset: 7°.
+@(r.e. 2') Night of the 13th, moonrise to sunset: 7°.
 
-@(r.e. 3) The 13th, moonset to sunrise: 3° 30'; measured.
+@(r.e. 3') The 13th, moonset to sunrise: 3° 30'; measured.
 
-@(r.e. 4) Night of the 14th, sunset to moonrise: 4°; I did not [watch.]
+@(r.e. 4') Night of the 14th, sunset to moonrise: 4°; I did not [watch.]
 
-@(r.e. 5) The 14th, sunrise to moonset: 11°.
+@(r.e. 5') The 14th, sunrise to moonset: 11°.
 
-@(r.e. 6) The 27th?, moonrise to sunrise: 22°.
+@(r.e. 6') The 27th?, moonrise to sunrise: 22°.
 
 $ ruling
 
-@(r.e. 7) [Month ...,] (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 13°.
+@(r.e. 7') [Month ...,] (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 13°.
 
-@(r.e. 8) [The xth,] moonset to sunrise: [...]; measured.
+@(r.e. 8') [The xth,] moonset to sunrise: [...]; measured.
 
-@(r.e. 9) [Night of the xth,] moonrise to sunset: [...]
+@(r.e. 9') [Night of the xth,] moonrise to sunset: [...]
 
-@(r.e. 10) [...] ...
+@(r.e. 10') [...] ...

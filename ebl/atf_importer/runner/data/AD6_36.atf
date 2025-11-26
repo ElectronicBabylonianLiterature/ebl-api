@@ -9,7 +9,7 @@
 #lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
 
 @obverse
-1'. [M]U 60+11.KAM {I}se LUGAL [...]
+1'. [M]U 60+11.KAM {m}se LUGAL [...]
 #lem: šattu[year]N; n; Seleucus[Seleucus]RN; šarru[king]N; u
 
 2'. [ŠU x]+1 MÚL.BABBAR ina ALLA 8 SI SIG dele-bat 4 SI ana ŠÚ LAL IGI 22? na-s[u]
@@ -25,7 +25,7 @@
 #lem: Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; n; ammatu[unit]N; ina[in]PRP; pān[front]N; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; nenmudu[be at a stationary point]V
 
 $ ruling
-6'. MU 59.KAM {I}an LUGAL BAR GE₆ 16 USAN MÚL.BABBAR e MAŠ.MAŠ-šá-SIPA 31/2 KÙŠ
+6'. MU 59.KAM {m}an LUGAL BAR GE₆ 16 USAN MÚL.BABBAR e MAŠ.MAŠ-šá-SIPA 31/2 KÙŠ
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N
 
 7'. NE GE₆ 24 ina ZÁLAG MÚL.BABBAR e MÚL-IGI-šá-ALLA-šá-ULÙ 1/2 KÙŠ GE₆ 28 ina ZÁLAG MÚL.BABBAR
@@ -35,7 +35,7 @@ $ ruling
 #lem: šapil[below]'PRP;  MÚL-IGI-šá-ALLA-šá-SI[η Cancri]CN; n; ammatu[unit]N; Kislīmu[Month IX]MN; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; MÚL-IGI-šá-ALLA-šá-SI[η Cancri]CN; n; ubānu[finger]N
 
 $ ruling
-9'. MU 1 ME 34.KAM {I}se LUGAL BAR GE₆ 8 USAN dele-bat e is-le₁₀ 2 2/3 KÙŠ
+9'. MU 1 ME 34.KAM {m}se LUGAL BAR GE₆ 8 USAN dele-bat e is-le₁₀ 2 2/3 KÙŠ
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Nisannu[Month I]MN; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N
 
 10'. GE₆ 17 USAN dele-bat e ŠUR-GIGIR-šá-SI 1 KÙŠ GE₆ 20 USAN dele-bat e ŠUR-GIGIR-šá-ULÙ
@@ -78,7 +78,7 @@ $ ruling
 #lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; n; ubānu[finger]N
 
 @reverse
-1'. [MU 60+36.KAM {I}]an LUGAL BAR 7 GU₄.UD ina MÚL.MÚL IGI NU PAP GE₆ 15 USAN GU₄.U[D ...]
+1'. [MU 60+36.KAM {m}]an LUGAL BAR 7 GU₄.UD ina MÚL.MÚL IGI NU PAP GE₆ 15 USAN GU₄.U[D ...]
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Nisannu[Month I]MN; n; Šihṭu[Mercury]CN; ina[in]PRP; Zappu[Taurus]CN; nanmuru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; mūšu[night]N; n; šimītān[first part of the night]N; Šihṭu[Mercury]CN; u
 
 2'. [...] ŠÚ? LAL? GE₆ 23 USAN GU₄.UD
@@ -90,58 +90,58 @@ $ ruling
 
 @top
 
-@(t.e. 1) [At] the command of Bel and Beltija may it go well.
+@(t.e. 1') [At] the command of Bel and Beltija may it go well.
 
-@(o 1) [Y]ear 71, king Seleucus. [...]
+@(o 1') [Y]ear 71, king Seleucus. [...]
 
-@(o 2) [Month IV, the x]+1st, Jupiter’s first appearance in Cancer, 8 fingers below Venus, being 4 fingers back to the west; rising of Jupiter to sunrise: 22°?;
+@(o 2') [Month IV, the x]+1st, Jupiter’s first appearance in Cancer, 8 fingers below Venus, being 4 fingers back to the west; rising of Jupiter to sunrise: 22°?;
 
-@(o 3) (ideal) first appearance [on] the 29th of month III. Month VIII, until the 2nd, when Jupiter became stationary to the east, it became stationary 2 cubits
+@(o 3') (ideal) first appearance [on] the 29th of month III. Month VIII, until the 2nd, when Jupiter became stationary to the east, it became stationary 2 cubits
 
-@(o 4) [...] δ Cancri. Month X, the 2nd, Jupiter’s acronychal rising. Month XII, around until the 2nd,
+@(o 4') [...] δ Cancri. Month X, the 2nd, Jupiter’s acronychal rising. Month XII, around until the 2nd,
 
-@(o 5) when Jupiter became stationary to the west, it became stationary 2 cubits in front of δ Cancri.
-
-$ ruling
-
-@(o 6) Year 59, king Antiochus. Month I, night of the 16th, first part of the night, Jupiter was 3 1/2 cubits above γ Geminorum.
-
-@(o 7) Month V, night of the 24th, last part of the night, Jupiter was 1/2 cubit above θ Cancri. Night of the 28th, last part of the night, Jupiter was
-
-@(o 8) 1/2 cubit below η Cancri. Month IX, night of the 12th, first part of the night, Jupiter was 20 fingers below η Cancri.
+@(o 5') when Jupiter became stationary to the west, it became stationary 2 cubits in front of δ Cancri.
 
 $ ruling
 
-@(o 9) Year 134, king Seleucus. Month I, night of the 8th, first part of the night, Venus was 2 2/3 cubits above α Tauri.
+@(o 6') Year 59, king Antiochus. Month I, night of the 16th, first part of the night, Jupiter was 3 1/2 cubits above γ Geminorum.
 
-@(o 10) Night of the 17th, first part of the night, Venus was 1 cubit abovesic β Tauri. Night of the 20th, first part of the night, Venus was 1 cubit above ζ Tauri.
+@(o 7') Month V, night of the 24th, last part of the night, Jupiter was 1/2 cubit above θ Cancri. Night of the 28th, last part of the night, Jupiter was
 
-@(o 11) Night of the 26th, first part of the night, Venus was 1 cubit above η Geminorum, Venus being 6 fingers back to the west.
+@(o 8') 1/2 cubit below η Cancri. Month IX, night of the 12th, first part of the night, Jupiter was 20 fingers below η Cancri.
 
-@(o 12) Night of the 28th, first part of the night, Venus was 1 cubit above μ Geminorum. Month II, night of the 2nd, first part of the night, Venus was
+$ ruling
 
-@(o 13) 4 cubits above γ Geminorum, Venus having passed 6 fingers to the east. Night of the 11th, first part of the night, Venus was 3 cubits below α Geminorum.
+@(o 9') Year 134, king Seleucus. Month I, night of the 8th, first part of the night, Venus was 2 2/3 cubits above α Tauri.
 
-@(o 14) Night of the 15th, first part of the night, Venus was 2 cubits below β Geminorum. Night of the 27th, first part of the night, Venus was 1 cubit above δ? Cancri.
+@(o 10') Night of the 17th, first part of the night, Venus was 1 cubit abovesic β Tauri. Night of the 20th, first part of the night, Venus was 1 cubit above ζ Tauri.
 
-@(o 15) Month III, night of the 7th, first part of the night, Venus was 3 1/2 cubits below ε Leonis. Night of the 30th, first part of the night, Venus was
+@(o 11') Night of the 26th, first part of the night, Venus was 1 cubit above η Geminorum, Venus being 6 fingers back to the west.
 
-@(o 16) 4 1/2 cubits below θ Leonis. Month IV, night of the 11th, first part of the night, Venus was 2 fingers below β Leonis. Month V, night of the 8th,
+@(o 12') Night of the 28th, first part of the night, Venus was 1 cubit above μ Geminorum. Month II, night of the 2nd, first part of the night, Venus was
 
-@(o 17) first part of the night, Venus was 2 fingers above α Virginis, Venus having passed 2 fingers to the east. Month VI, <night> of the 7th, first part of the night, Venus was
+@(o 13') 4 cubits above γ Geminorum, Venus having passed 6 fingers to the east. Night of the 11th, first part of the night, Venus was 3 cubits below α Geminorum.
 
-@(o 18) 3 1/2 cubits below β Librae. Month VIII, night of the 27th, last part of the night, Venus was 1/2 cubit above α Librae. Month IX, night of the 5th,
+@(o 14') Night of the 15th, first part of the night, Venus was 2 cubits below β Geminorum. Night of the 27th, first part of the night, Venus was 1 cubit above δ? Cancri.
 
-@(o 19) last part of the night, Venus was 2 1/2 cubits below β Librae. Night of the 21st, last part of the night, Venus was 1 cubit above β Scorpii.
+@(o 15') Month III, night of the 7th, first part of the night, Venus was 3 1/2 cubits below ε Leonis. Night of the 30th, first part of the night, Venus was
 
-@(o 20) Night of the 28th, last part of the night, Venus was 2 1/2 cubits above α Scorpii. Month )X, night of the 9th, last part of the night, Venus was 2 cubits above θ Ophiuchi.
+@(o 16') 4 1/2 cubits below θ Leonis. Month IV, night of the 11th, first part of the night, Venus was 2 fingers below β Leonis. Month V, night of the 8th,
 
-@(o 21) Month XI, night of the 17th, last part of the night, Venus was 1 1/2 cubits below β Capricorni. Month XII, night of the 2nd, last part of the night, Venus was 1 cubit 8 fingers above γ Capricorni.
+@(o 17') first part of the night, Venus was 2 fingers above α Virginis, Venus having passed 2 fingers to the east. Month VI, <night> of the 7th, first part of the night, Venus was
 
-@(o 22) [Night] of the 4th, last part of the night, Venus was 1 cubit 8 fingers above δ Capricorni.
+@(o 18') 3 1/2 cubits below β Librae. Month VIII, night of the 27th, last part of the night, Venus was 1/2 cubit above α Librae. Month IX, night of the 5th,
 
-@(r 1) [Year 96,] king Antiochus. Month I, the 7th, Mercury’s first appearance in Taurus; I did not watch. Night of the 15th, first part of the night, Mercury [...]
+@(o 19') last part of the night, Venus was 2 1/2 cubits below β Librae. Night of the 21st, last part of the night, Venus was 1 cubit above β Scorpii.
 
-@(r 2)[...] back? to the west?. Night of the 23rd, first part of the night, Mercury 
+@(o 20') Night of the 28th, last part of the night, Venus was 2 1/2 cubits above α Scorpii. Month )X, night of the 9th, last part of the night, Venus was 2 cubits above θ Ophiuchi.
+
+@(o 21') Month XI, night of the 17th, last part of the night, Venus was 1 1/2 cubits below β Capricorni. Month XII, night of the 2nd, last part of the night, Venus was 1 cubit 8 fingers above γ Capricorni.
+
+@(o 22') [Night] of the 4th, last part of the night, Venus was 1 cubit 8 fingers above δ Capricorni.
+
+@(r 1') [Year 96,] king Antiochus. Month I, the 7th, Mercury’s first appearance in Taurus; I did not watch. Night of the 15th, first part of the night, Mercury [...]
+
+@(r 2') [...] back? to the west?. Night of the 23rd, first part of the night, Mercury 
 
 (rest uninscribed)

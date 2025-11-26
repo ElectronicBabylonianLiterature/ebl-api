@@ -33,18 +33,18 @@
 
 @translation labeled en project
 
-@(o i 1) [The 1]5th, [moonrise to sunset: ... [...] 
+@(o i 1') [The 1]5th, [moonrise to sunset: ... [...] 
 
-@(o i 2) [The 1]5th, sunrise to moonset: 1°; ... 
+@(o i 2') [The 1]5th, sunrise to moonset: 1°; ... 
 
-@(o i 3) [The 1]6th, sunset to moonrise: 10° 30'. 
+@(o i 3') [The 1]6th, sunset to moonrise: 10° 30'. 
 
-@(o i 4) [The 2]7th?, moonrise to sunrise: 17°; it was bright, measured. 
+@(o i 4') [The 2]7th?, moonrise to sunrise: 17°; it was bright, measured. 
 
-@(o ii 1) The 15th, [...:] 10+[x° ...] 
+@(o ii 1') The 15th, [...:] 10+[x° ...] 
 
-@(o ii 2) The 27th, moonrise to sunrise: 18° ... [...]
+@(o ii 2') The 27th, moonrise to sunrise: 18° ... [...]
 
-@(o ii 3) [...] and eclipses [...]
+@(o ii 3') [...] and eclipses [...]
 
-@(o ii 4) [... king] Ar[saces.]
+@(o ii 4') [... king] Ar[saces.]

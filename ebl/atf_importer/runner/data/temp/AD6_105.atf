@@ -40,28 +40,28 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] in front of ... [...]
+@(o 2') [...] in front of ... [...]
 
-@(o 3) [...] it became stationary [...]
-
-$ ruling
-
-@(o 4) [... Jupiter,] while moving back [to ...,] was [...] above ζ Tauri [...]
-
-@(o 5) [...] cubits. Month IX, night of the 14th, last part of the night, Ju[piter ...]
-
-@(o 6) [...] Night of the 6th, first part of the night, Jupiter was [...] be[low? ...]
+@(o 3') [...] it became stationary [...]
 
 $ ruling
 
+@(o 4') [... Jupiter,] while moving back [to ...,] was [...] above ζ Tauri [...]
+
+@(o 5') [...] cubits. Month IX, night of the 14th, last part of the night, Ju[piter ...]
+
+@(o 6') [...] Night of the 6th, first part of the night, Jupiter was [...] be[low? ...]
+
 $ ruling
 
-@(o 7) [...] 2 1/2 cubits. Night of the 29th, last part of the night, [...]
+$ ruling
 
-@(o 8) [...] last part of the night, Venus was 4 [...] below η Tauri [...]
+@(o 7') [...] 2 1/2 cubits. Night of the 29th, last part of the night, [...]
 
-@(o 9) [... Night] of the 15th, last part of the night, Venus was [...] above β/ζ Tauri [...]
+@(o 8') [...] last part of the night, Venus was 4 [...] below η Tauri [...]
 
-@(o 10) [... Night of the x]+8th, last part of the night, Venus was [...] above [...]
+@(o 9') [... Night] of the 15th, last part of the night, Venus was [...] above β/ζ Tauri [...]
+
+@(o 10') [... Night of the x]+8th, last part of the night, Venus was [...] above [...]

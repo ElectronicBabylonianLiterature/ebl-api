@@ -63,45 +63,45 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... Jupiter [...]
+@(o 1') [...] ... Jupiter [...]
 
 $ ruling
 
-@(o 2) [...] it became stationary [...] ζ [Tauri;] I did not watch. Month VII, [...]
+@(o 2') [...] it became stationary [...] ζ [Tauri;] I did not watch. Month VII, [...]
 
-@(o 3) [...] around until the 8th, when Jupiter became stationary to the east,
+@(o 3') [...] around until the 8th, when Jupiter became stationary to the east,
 
-@(o 4) [...] ($blank$)
-
-$ ruling
-
-@(o 5) [... night of the x]+5th, first part of the night, Jupiter was 4 1/2 cubits below α Geminorum.
-
-@(o 6) [...] ... [...] ...
-
-@(r 1) [...] high to the north [...]
-
-@(r 2) [...] 26th in the east in [...]
+@(o 4') [...] ($blank$)
 
 $ ruling
 
-@(r 3) [...] while moving back to the east, was 6 fingers above β Virginis.
+@(o 5') [... night of the x]+5th, first part of the night, Jupiter was 4 1/2 cubits below α Geminorum.
 
-@(r 4) [...] 1 cubit above α (Virginis). Month V, night of the 4th, first part of the night, Mars was
+@(o 6') [...] ... [...] ...
 
-@(r 5) [... x]+1 cubits. Night of the 30th, first part of the night, Mars was 4 fingers above δ Scorpii.
+@(r 1') [...] high to the north [...]
 
-@(r 6) [...] 8? fingers above θ Ophiuchi. Month VIII, night of the 25th,
-
-@(r 7) [...] 10 fingers [...] γ Capricorni. Night of the 15th, first part of the night, Mars was 10 fingers above δ Capricorni.
+@(r 2') [...] 26th in the east in [...]
 
 $ ruling
 
-@(r 8) [...] Mars was 6 fingers above α Leonis. Month VI, the 1+[xth, ...]
+@(r 3') [...] while moving back to the east, was 6 fingers above β Virginis.
 
-@(r 9) [...] night of the 5th, last part of the night, ... [...]
+@(r 4') [...] 1 cubit above α (Virginis). Month V, night of the 4th, first part of the night, Mars was
 
-@(r 10) [...] 1 cubit above α Virginis. [...]
+@(r 5') [... x]+1 cubits. Night of the 30th, first part of the night, Mars was 4 fingers above δ Scorpii.
 
-@(r 11) [...] ... [...]	
+@(r 6') [...] 8? fingers above θ Ophiuchi. Month VIII, night of the 25th,
+
+@(r 7') [...] 10 fingers [...] γ Capricorni. Night of the 15th, first part of the night, Mars was 10 fingers above δ Capricorni.
+
+$ ruling
+
+@(r 8') [...] Mars was 6 fingers above α Leonis. Month VI, the 1+[xth, ...]
+
+@(r 9') [...] night of the 5th, last part of the night, ... [...]
+
+@(r 10') [...] 1 cubit above α Virginis. [...]
+
+@(r 11') [...] ... [...]	
  

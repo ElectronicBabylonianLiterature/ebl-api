@@ -5,7 +5,7 @@
 #atf: use math
 #atf: use legacy
 @obverse
-1'. [MU 60+30.KAM] {I}an LUGAL GU₄ in 22 GENNA ana ME ⸢E⸣-a ⸢NE⸣
+1'. [MU 60+30.KAM] {m}an LUGAL GU₄ in 22 GENNA ana ME ⸢E⸣-a ⸢NE⸣
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Ayyaru[Month II]MN; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Abu[Month V]MN
 
 2'. [x GENNA ana ŠÚ ki] UŠ-a 3 KÙŠ ár MÚL-KUR-šá-KIR-4-šil-PA UŠ NU PAP APIN
@@ -18,7 +18,7 @@
 #lem: n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V
 
 $ ruling
-5'. MU 1.31.KAM {I}an LUGAL BAR in EN 12 GENNA ana NIM ki UŠ-ú
+5'. MU 1.31.KAM {m}an LUGAL BAR in EN 12 GENNA ana NIM ki UŠ-ú
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Nisannu[Month I]MN; ina[around (day x)]PRP; adi[until]PRP; n; Kayyamānu[Saturn]CN; ana[to]PRP; Elam[east]'N; kī[when]'SBJ; nenmudu[be at a stationary point]V
 
 6'. 1 1/2 KÙŠ ⸢e⸣ [x x] ⸢x x x šá PA UŠ⸣ SIG in 11 GENNA ana M[E E]-a
@@ -48,7 +48,7 @@ $ ruling
 #lem: mūšu[night]N; n; u
 
 $ ruling
-4'. MU 1.[me.4.KAM {I}an] u {I}[an] A-⸢šú⸣ LUGAL{ME[Š}] BAR ⸢GE₆⸣ [x ina] ZÁLAG AN
+4'. MU 1.[me.4.KAM {m}an] u {m}[an] A-⸢šú⸣ LUGAL{ME[Š}] BAR ⸢GE₆⸣ [x ina] ZÁLAG AN
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; Nisannu[Month I]MN; mūšu[night]N; u; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN
 
 5'. SIG S[I-MÁŠ N] KÙŠ KIN GE₆ 29 USAN AN ana NIM ina LAL-šú S[IG]
@@ -77,52 +77,52 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [Year 90,] king Antiochus. Month II, around the 22nd, Saturn’s acronychal rising. Month V,
+@(o 1') [Year 90,] king Antiochus. Month II, around the 22nd, Saturn’s acronychal rising. Month V,
 
-@(o 2) [the xth, when Saturn] became stationary [to the west,] it became stationary 3 cubits behind θ Ophiuchi; I did not watch. Month VIII,
+@(o 2') [the xth, when Saturn] became stationary [to the west,] it became stationary 3 cubits behind θ Ophiuchi; I did not watch. Month VIII,
 
-@(o 3) the 15th, sunset to setting of Saturn: 18°. Around the 18th, Saturn’s last appearance in Sagittarius. Month IX, the 20th, Saturn’s first appearance in Sagittarius;
+@(o 3') the 15th, sunset to setting of Saturn: 18°. Around the 18th, Saturn’s last appearance in Sagittarius. Month IX, the 20th, Saturn’s first appearance in Sagittarius;
 
-@(o 4) rising of Saturn to sunrise: 17°; (ideal) first appearance on the 18th.
-
-$ ruling
-
-@(o 5) Year 91, king Antiochus. Month I, around until the 12th, when Saturn became stationary to the east,
-
-@(o 6) it became stationary 1 1/2 cubits above ... of Sagittarius. Month III, around the 11th, Saturn’s acronychal rising.
-
-@(o 7) Month V, [around until the xth, when Saturn became stationary to the west,] it became stationary [... in] front? of the four [...]
-
-@(o 8) of Sagittarius [...] ... [...]
-
-@(o 9) 4 cubits behind [...]
+@(o 4') rising of Saturn to sunrise: 17°; (ideal) first appearance on the 18th.
 
 $ ruling
 
-@(o 10) Year [...]
+@(o 5') Year 91, king Antiochus. Month I, around until the 12th, when Saturn became stationary to the east,
 
-@(r 1) Night of the 24+[xth, ...]
+@(o 6') it became stationary 1 1/2 cubits above ... of Sagittarius. Month III, around the 11th, Saturn’s acronychal rising.
 
-@(r 2) Month IX?, the 20+[xth, ...]
+@(o 7') Month V, [around until the xth, when Saturn became stationary to the west,] it became stationary [... in] front? of the four [...]
 
-@(r 3) Night of the 20+[xth, ...]
+@(o 8') of Sagittarius [...] ... [...]
+
+@(o 9') 4 cubits behind [...]
 
 $ ruling
 
-@(r 4) Year 1[04,] kings [Antiochus] and his son [Antiochus.] Month I, night of [the xth,] last part of the night, Mars was
+@(o 10') Year [...]
 
-@(r 5) [N] cubits below β [Capricorni.] Month VI, night of the 29th, first part of the night, Mars, while moving back to the east, was 1/2 cubit below
+@(r 1') Night of the 24+[xth, ...]
 
-@(r 6) [γ Capri]corni. Month VII, night of the 3rd, first part of the night, Mars was 1/2 cubit below δ]
+@(r 2') Month IX?, the 20+[xth, ...]
 
-@(r 7) [Capri]corni. Month X, night of the 17th, first part of the night, Mars was [...] below η [Piscium.]
+@(r 3') Night of the 20+[xth, ...]
 
-@(r 8) [Night of the xth, first part of the night, Ma]rs was 4 cubits below β Arietis. Month XI, [night of the xth, first part of the night, Mars was]
+$ ruling
 
-@(r 9) 5 cubits [below α Arie]tis. Month XII, night of the 10th, first part [of the night, Ma]rs was [...] be[low η Tauri.]
+@(r 4') Year 1[04,] kings [Antiochus] and his son [Antiochus.] Month I, night of [the xth,] last part of the night, Mars was
+
+@(r 5') [N] cubits below β [Capricorni.] Month VI, night of the 29th, first part of the night, Mars, while moving back to the east, was 1/2 cubit below
+
+@(r 6') [γ Capri]corni. Month VII, night of the 3rd, first part of the night, Mars was 1/2 cubit below δ]
+
+@(r 7') [Capri]corni. Month X, night of the 17th, first part of the night, Mars was [...] below η [Piscium.]
+
+@(r 8') [Night of the xth, first part of the night, Ma]rs was 4 cubits below β Arietis. Month XI, [night of the xth, first part of the night, Mars was]
+
+@(r 9') 5 cubits [below α Arie]tis. Month XII, night of the 10th, first part [of the night, Ma]rs was [...] be[low η Tauri.]
 
 @bottom
 
-@(b.e. 1) [Night of the xth, first part of the night, Mars was] 2 1/2 cubits above α Tauri. Month XII₂, ni[ght of the xth, first part of the night, Mars was]
+@(b.e. 1') [Night of the xth, first part of the night, Mars was] 2 1/2 cubits above α Tauri. Month XII₂, ni[ght of the xth, first part of the night, Mars was]
 
-@(b.e. 2) [N] cubits [below β Tauri.] Night of the 20th, first part of the night, Mars was [...] above ζ Tauri.
+@(b.e. 2') [N] cubits [below β Tauri.] Night of the 20th, first part of the night, Mars was [...] above ζ Tauri.

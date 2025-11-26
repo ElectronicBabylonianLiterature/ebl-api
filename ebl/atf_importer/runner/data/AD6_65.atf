@@ -95,41 +95,41 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] ... Jupiter [...]
+@(o 1') [...] ... Jupiter [...]
 
-@(o 2) [...] acronychal rising. Month X, until [...]
+@(o 2') [...] acronychal rising. Month X, until [...]
 
-@(o 3) [...] (blank)
-
-$ ruling
-
-@(o 4) [...] ... night of the 5th, last part of the night, Jupiter was [...] above [...]
+@(o 3') [...] (blank)
 
 $ ruling
 
-@(o 5) [... Month III,] the 5th, Venus’ first appearance in the west in Gemini [...]
-
-@(o 6) [...] 8 fingers. Night of the 17th, first part of the night, [...]
-
-@(o 7) [...] 8? fingers [...] Scorpii. Month VII, [...]
-
-@(o 8) [...] 1 finger [... θ] Ophiuchi [...] 29th? [...]
-
-@(o 9) [...] 1 finger [...] Capricorni. [Night of] the 24th, [first part of the night, Venus ...]
-
-@(o 10) [...] sunset to setting of Venus: 10°. Around the 3rd, Venus’ last appearance [in] the west in Pisces.
-
-@(o 11) [...] (blank)
+@(o 4') [...] ... night of the 5th, last part of the night, Jupiter was [...] above [...]
 
 $ ruling
 
-@(o 12) [...] first appearance [...;] I did not watch. Night of the 14th, first part of the night, Mercury [...]
+@(o 5') [... Month III,] the 5th, Venus’ first appearance in the west in Gemini [...]
 
-@(o 13) [...] fingers [...] Night of the 24th, first part of the night, Mercury [...]
+@(o 6') [...] 8 fingers. Night of the 17th, first part of the night, [...]
 
-@(o 14) [... Mer]cury’s first appearance in the east in Gemini [...]
+@(o 7') [...] 8? fingers [...] Scorpii. Month VII, [...]
 
-@(o 15) [...] ... [...]
+@(o 8') [...] 1 finger [... θ] Ophiuchi [...] 29th? [...]
+
+@(o 9') [...] 1 finger [...] Capricorni. [Night of] the 24th, [first part of the night, Venus ...]
+
+@(o 10') [...] sunset to setting of Venus: 10°. Around the 3rd, Venus’ last appearance [in] the west in Pisces.
+
+@(o 11') [...] (blank)
+
+$ ruling
+
+@(o 12') [...] first appearance [...;] I did not watch. Night of the 14th, first part of the night, Mercury [...]
+
+@(o 13') [...] fingers [...] Night of the 24th, first part of the night, Mercury [...]
+
+@(o 14') [... Mer]cury’s first appearance in the east in Gemini [...]
+
+@(o 15') [...] ... [...]
 
 @reverse
 
@@ -141,24 +141,24 @@ $ broken
 
 $broken
 
-@(r iii 1) [...] measured (despite) mist. 
+@(r iii 1') [...] measured (despite) mist. 
 
-@(r iii 2) [...] moonrise to sunset: [...] 
+@(r iii 2') [...] moonrise to sunset: [...] 
 
-@(r iii 3) [...] sunset to moonrise: [...]
+@(r iii 3') [...] sunset to moonrise: [...]
 
-@(r iii 4) [...] moonrise to sunrise: [...] measured (despite) mist. 
+@(r iii 4') [...] moonrise to sunrise: [...] measured (despite) mist. 
 
-@(r iii 5) [...] ... measured.
+@(r iii 5') [...] ... measured.
 
-@(r iii 6) [...]
+@(r iii 6') [...]
 
-@(r iii 7) [...] ...
+@(r iii 7') [...] ...
 
-@(r iii 8) [...] ...
+@(r iii 8') [...] ...
 
-@(r iv 1) The 10+[xth, ...] 
+@(r iv 1') The 10+[xth, ...] 
 
-@(r iv 2) The 20+[xth, ...]
+@(r iv 2') The 20+[xth, ...]
 
-@(r iv 3) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+@(r iv 3') Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]

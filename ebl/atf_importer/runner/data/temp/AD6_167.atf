@@ -98,15 +98,15 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] the front star of [...]
+@(o 2') [...] the front star of [...]
 
-@(o 3) [...] ... [...]
+@(o 3') [...] ... [...]
 
-@(o 4) [...] ... [...]
+@(o 4') [...] ... [...]
 
-@(o 5) [...] ... [...]
+@(o 5') [...] ... [...]
 
 @reverse
 
@@ -114,48 +114,48 @@ $ broken
 
 $ broken
 
-@(r ii 1) [...] ...; measured.
+@(r ii 1') [...] ...; measured.
 
-@(r ii 2) [...] ...; measured (despite) clouds.
+@(r ii 2') [...] ...; measured (despite) clouds.
 
-@(r ii 3) [...] ...; measured (despite) clouds.
+@(r ii 3') [...] ...; measured (despite) clouds.
 
-@(r ii 4) [...]; clouds, I did not watch.
+@(r ii 4') [...]; clouds, I did not watch.
 
-@(r ii 5) [...] ...; clouds, I did not watch.
+@(r ii 5') [...] ...; clouds, I did not watch.
 
-@(r ii 6) [...] ... measured.
+@(r ii 6') [...] ... measured.
 
-@(r ii 7) [...]; clouds, I did not watch.
+@(r ii 7') [...]; clouds, I did not watch.
 
-@(r ii 8) [...] earthshine, measured.
+@(r ii 8') [...] earthshine, measured.
 
-@(r ii 9) [...] ...
+@(r ii 9') [...] ...
 
-@(r iii 1) [The 2]8th, [...]
+@(r iii 1') [The 2]8th, [...]
 
-@(r iii 2) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+@(r iii 2') Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
 
-@(r iii 3) The 13th, [moonrise to sunset:] 2+[x° ...] 
+@(r iii 3') The 13th, [moonrise to sunset:] 2+[x° ...] 
 
-@(r iii 4) The 13th, [moonset to sunrise:] 1°? 10' [...]
+@(r iii 4') The 13th, [moonset to sunrise:] 1°? 10' [...]
 
-@(r iii 5) The 14th, sunset to moonrise: 2° 20' [...]
+@(r iii 5') The 14th, sunset to moonrise: 2° 20' [...]
 
-@(r iii 6) The 14th, sunrise to moonset: 14° [...]
+@(r iii 6') The 14th, sunrise to moonset: 14° [...]
 
-@(r iii 7) The 27th, moonrise to sunrise: 20° ... [...]
+@(r iii 7') The 27th, moonrise to sunrise: 20° ... [...]
 
-@(r iii 8) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 13°; measured.
+@(r iii 8') Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 13°; measured.
 
-@(r iii 9) The 12th, moonset to sunrise: 8°. 
+@(r iii 9') The 12th, moonset to sunrise: 8°. 
 
-@(r iii 10) The 13th, moonrise to sunset: 6°; measured (despite) clouds.
+@(r iii 10') The 13th, moonrise to sunset: 6°; measured (despite) clouds.
 
-@(r iii 11) The 13th, sunrise to moonset: ... measured (despite) clouds.
+@(r iii 11') The 13th, sunrise to moonset: ... measured (despite) clouds.
 
-@(r iv 1) Month XI, [...]
+@(r iv 1') Month XI, [...]
 
-@(r iv 2) The 13th, ... [...]
+@(r iv 2') The 13th, ... [...]
 
-@(r iv 3) The 10+[xth, ...]
+@(r iv 3') The 10+[xth, ...]

@@ -5,7 +5,7 @@
 #atf: use math
 #atf: use legacy 
 @obverse
-1'. [MU 1 ME 30.KAM {I}se LUGAL GU₄ x MÚL.BABBAR ina MAŠ.MAŠ ŠÚ SIG] 13 MÚL.BABBAR ina MAŠ.MAŠ IGI
+1'. [MU 1 ME 30.KAM {m}se LUGAL GU₄ x MÚL.BABBAR ina MAŠ.MAŠ ŠÚ SIG] 13 MÚL.BABBAR ina MAŠ.MAŠ IGI
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Seleucus[Seleucus]RN; šarru[king]N; Ayyaru[Month II]MN; u; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; rabû[set]V; Simānu[Month III]MN; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V
 
 2'. [DU₆ ... MÚL.BABBAR ana NIM ki UŠ]-ú 8 SI e MÚL-IGI-šá-ALLA-[šá-ULÙ]
@@ -23,7 +23,7 @@
 6'. [UŠ AB x MÚL.BABBAR] ana ME E-a ŠE EN 20+[x MÚL.BABBAR ina ... UŠ]
 #lem: nenmudu[be at a stationary point]V; Ṭebētu[Month X]MN; u; Kakkabu-peṣû[Jupiter]CN; ana[to]PRP; ūmu[day]N; elû[go up]V; Addaru[Month XII]MN; adi[until]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; u; nenmudu[be at a stationary point]V
 
-7'. [MU 1 ME 18.KAM {I}an u {I}an A-šú LUGAL{MEŠ} ... ina ZÁLAG] MÚL.BABBAR SIG MAŠ.MAŠ-I[GI? ...]
+7'. [MU 1 ME 18.KAM {m}an u {m}an A-šú LUGAL{MEŠ} ... ina ZÁLAG] MÚL.BABBAR SIG MAŠ.MAŠ-I[GI? ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; MAŠ.MAŠ-IGI[α Geminorum]CN; u
 
 8'. [... MÚL.BABBA]R ana ŠÚ ina LAL-šú S[IG? ...]
@@ -38,7 +38,7 @@
 11'. [...] ⸢x⸣ [...]
 #lem: u; u; u
 
-12-20'. ($broken$)
+12'-20'. ($broken$)
 21'. [...] ⸢x⸣ [...]
 #lem: u; u; u
 
@@ -145,7 +145,7 @@
 15'. in 26 GU₄.UD ina ŠÚ ina SAG MÚL.MÚL ŠÚ NU [PAP]
 #lem: ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; rēšu[beginning]N; Zappu[Taurus]CN; rabû[set]V; ul[not]MOD; naṣāru[watch]V
 
-16'. MU 1 ME 42.KAM {I}an u {I}an A-šú LUGAL{MEŠ} G[U₄ x x GENNA ana ŠÚ] ki [UŠ-a x]+1/2 KÙŠ ina IG[I DELE-šá-IGI-ABSIN UŠ]
+16'. MU 1 ME 42.KAM {m}an u {m}an A-šú LUGAL{MEŠ} G[U₄ x x GENNA ana ŠÚ] ki [UŠ-a x]+1/2 KÙŠ ina IG[I DELE-šá-IGI-ABSIN UŠ]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; Ayyaru[Month II]MN; u; u; Kayyamānu[Saturn]CN; ana[to]PRP; erbu[west]N; kī[when]'SBJ; nenmudu[be at a stationary point]V; u; ammatu[unit]N; ina[in]PRP; pānu[front]'N; DELE-šá-IGI-ABSIN[γ Virginis]CN; nenmudu[be at a stationary point]V
 
 17'. ŠU GE₆ 12 USAN GENNA ana NIM [ina LAL-šú SIG DELE-šá-IGI-ABSIN x (x x)] U NE ⸢27⸣ ŠÚ šá GENNA ina ABSIN
@@ -169,7 +169,7 @@
 23'. [...] ⸢GE₆? 24+x⸣ [...]
 #lem: u; mūšu[night]N; n; u
 
-24-32'. ($broken$)
+24'-32'. ($broken$)
 33'. [...] ⸢x⸣ [...]
 #lem: u; u; u
 
@@ -231,155 +231,155 @@
 
 @translation labeled en project
 
-@(o 1) [Year 130, king Seleucus. Month II, the xth, Jupiter’s last appearance in Gemini. Month III,] the 13th, Jupiter’s first appearance in Gemini.
+@(o 1') [Year 130, king Seleucus. Month II, the xth, Jupiter’s last appearance in Gemini. Month III,] the 13th, Jupiter’s first appearance in Gemini.
 
-@(o 2) [Month VII, ..., when Jupiter became stationary to the east, it became stationary] 8 fingers above θ Cancri.
+@(o 2') [Month VII, ..., when Jupiter became stationary to the east, it became stationary] 8 fingers above θ Cancri.
 
-@(o 3) [Month IX, the xth, Jupiter’s acronychal rising. Month XI, ... when Jupiter] became stationary [to the west,] it became stationary 3 cubits below β Geminorum, having passed 6? fingers to the east.
+@(o 3') [Month IX, the xth, Jupiter’s acronychal rising. Month XI, ... when Jupiter] became stationary [to the west,] it became stationary 3 cubits below β Geminorum, having passed 6? fingers to the east.
 
-@(o 4) [Year 131. Month III, the xth, Jupiter’s] last appearance [in Can]cer. Month IV, the 25th, Jupiter’s [first appearance] in Cancer.
+@(o 4') [Year 131. Month III, the xth, Jupiter’s] last appearance [in Can]cer. Month IV, the 25th, Jupiter’s [first appearance] in Cancer.
 
-@(o 5) [Month VIII, ...] when Jupiter became stationary [to the east, it became stationary] 1/2 cubit in front of ϱ
+@(o 5') [Month VIII, ...] when Jupiter became stationary [to the east, it became stationary] 1/2 cubit in front of ϱ
 
-@(o 6) [Leonis. Month X, the xth, Jupiter’s] acronychal rising. Month XII, until the 20+[xth, Jupiter ... became stationary in ...]
+@(o 6') [Leonis. Month X, the xth, Jupiter’s] acronychal rising. Month XII, until the 20+[xth, Jupiter ... became stationary in ...]
 
-@(o 7) [Year 118, kings Antiochus and his son Antiochus ... last part of the night,] Jupiter was [...] below α? Geminorum ...]
+@(o 7') [Year 118, kings Antiochus and his son Antiochus ... last part of the night,] Jupiter was [...] below α? Geminorum ...]
 
-@(o 8) [... Jupite]r, while moving back to the west, was [...] be[low? ...]
+@(o 8') [... Jupite]r, while moving back to the west, was [...] be[low? ...]
 
-@(o 9) [...] cubits?. Night of the 20+[xth, ...]
+@(o 9') [...] cubits?. Night of the 20+[xth, ...]
 
-@(o 10) [...] last part of the night, J[upiter ...]
+@(o 10') [...] last part of the night, J[upiter ...]
 
-@(o 11) [...] ... [...]
+@(o 11') [...] ... [...]
 
-@(o 12-20) ca. 10 lines broken
+@(o 12'-o 20') ca. 10 lines broken
 
-@(o 21) [...] ... [...]
+@(o 21') [...] ... [...]
 
-@(o 22) [...] ... 5 [...]
+@(o 22') [...] ... 5 [...]
 
-@(o 23) [...] 1+[x cubits] above γ Geminorum.
+@(o 23') [...] 1+[x cubits] above γ Geminorum.
 
-@(o 24) [...] ... [...] 2? cubits. Month VI, the 4th, rising [of Venus] to sunrise: 7°.
+@(o 24') [...] ... [...] 2? cubits. Month VI, the 4th, rising [of Venus] to sunrise: 7°.
 
-@(o 25) [Around?] the xth, Venus’ last appearance in the east? in Virgo? [Month VIII, the xth, Venus’ first appearance in the west in ...] sunset to setting of Venus: 8° 30'; (ideal) first appearance on the 18th.
+@(o 25') [Around?] the xth, Venus’ last appearance in the east? in Virgo? [Month VIII, the xth, Venus’ first appearance in the west in ...] sunset to setting of Venus: 8° 30'; (ideal) first appearance on the 18th.
 
-@(o 26) Month XI, night of the 24th?, first part of the night, Venus was [...] below [η Piscium. Month XII, night] of the 4th?, first part of the night, Venus was [x]+1/2 cubits below β
+@(o 26') Month XI, night of the 24th?, first part of the night, Venus was [...] below [η Piscium. Month XII, night] of the 4th?, first part of the night, Venus was [x]+1/2 cubits below β
 
-@(o 27) Arietis. Night of the 9th, first part of the night, [Venus was N] cubits [below α Arietis.] Night of the 25th, first part of the night, Venus was
+@(o 27') Arietis. Night of the 9th, first part of the night, [Venus was N] cubits [below α Arietis.] Night of the 25th, first part of the night, Venus was
 
-@(o 28) 2? cubits? below η Tauri. Month XII₂, night of the 5th, first [part of the night, Venus was ... above α Tauri. Ni]ght of the 15th, first part of the night, Venus was 1 1/2 cubits below β Tauri.
+@(o 28') 2? cubits? below η Tauri. Month XII₂, night of the 5th, first [part of the night, Venus was ... above α Tauri. Ni]ght of the 15th, first part of the night, Venus was 1 1/2 cubits below β Tauri.
 
-@(o 29) Night of the 16th?, first part of the night, Venus was [...] above ζ Tauri. [Night of the xth, first part of the night, Ven]us was 1 1/2 cubits above η Geminorum.
+@(o 29') Night of the 16th?, first part of the night, Venus was [...] above ζ Tauri. [Night of the xth, first part of the night, Ven]us was 1 1/2 cubits above η Geminorum.
 
-@(o 30) Night of the xth, first part of the night, Venus was [...] above μ Geminorum. Year 195,] month I, night of the 2nd, first part of the night, Venus was 4 cubits above γ Geminorum.
+@(o 30') Night of the xth, first part of the night, Venus was [...] above μ Geminorum. Year 195,] month I, night of the 2nd, first part of the night, Venus was 4 cubits above γ Geminorum.
 
-@(o 31) Year 155, king Demetrius. [Month I, the xth, Mercury’s first appearance in the west in Taurus ...;] sunset to setting of Mercury: [1]4°. Night of the 9th, first part of the night, Mercury was
+@(o 31') Year 155, king Demetrius. [Month I, the xth, Mercury’s first appearance in the west in Taurus ...;] sunset to setting of Mercury: [1]4°. Night of the 9th, first part of the night, Mercury was
 
-@(o 32) 1 cubit above α Tauri. Night of the 17th?, first part of the night, [Mercury was ... below β Tauri. Night of the 1]9th, first part of the night, Mercury was
+@(o 32') 1 cubit above α Tauri. Night of the 17th?, first part of the night, [Mercury was ... below β Tauri. Night of the 1]9th, first part of the night, Mercury was
 
-@(o 33) 1 1/2 cubits above ζ Tauri. Night of the 10+[xth, first part of the night, Mercury was] 1? cubit 4 fingers [above η Geminorum.]
+@(o 33') 1 1/2 cubits above ζ Tauri. Night of the 10+[xth, first part of the night, Mercury was] 1? cubit 4 fingers [above η Geminorum.]
 
-@(o 34) Night of the 28th, first part of the night, Mercury was [...] above μ Ge[minorum. Month II, night of the xth, first part of the night, Mercury was]
+@(o 34') Night of the 28th, first part of the night, Mercury was [...] above μ Ge[minorum. Month II, night of the xth, first part of the night, Mercury was]
 
-@(o 35) 4 cubits above γ Geminorum. Around the 11+[xth, Mercury’s last appearance] in the west in Gem[ini. Month III, the xth, Mercury’s first appearance in the east in Gemini;]
+@(o 35') 4 cubits above γ Geminorum. Around the 11+[xth, Mercury’s last appearance] in the west in Gem[ini. Month III, the xth, Mercury’s first appearance in the east in Gemini;]
 
-@(o 36) it was bright; rising of Mercury to sunrise: 15° 30'; (ideal) first appearance on the 14th [...] rising of Mercury of sunrise: 14° [... Mercury’s last appearance in] the east? in [...]
+@(o 36') it was bright; rising of Mercury to sunrise: 15° 30'; (ideal) first appearance on the 14th [...] rising of Mercury of sunrise: 14° [... Mercury’s last appearance in] the east? in [...]
 
-@(o 37) Month V, around the 5th, Mercury’s first appearance in the west in Vir[go?;] I did not watch. Around the 27th, [Mercury’s last appearance in the west in ...]
+@(o 37') Month V, around the 5th, Mercury’s first appearance in the west in Vir[go?;] I did not watch. Around the 27th, [Mercury’s last appearance in the west in ...]
 
-@(o 38) Month VI, the 28th, Mercury’s [first appearance] in the east in Virgo; It was bright; rising of Mercury to sunrise: 16°; [(ideal) first appearance] on [the xth. Month VII, night of the 6th?, last part of the night, Mercury was]
+@(o 38') Month VI, the 28th, Mercury’s [first appearance] in the east in Virgo; It was bright; rising of Mercury to sunrise: 16°; [(ideal) first appearance] on [the xth. Month VII, night of the 6th?, last part of the night, Mercury was]
 
-@(o 39) 2 cubits [above] α Virginis. [...] Mercury’s last appearance in the east [in ..., from the xth when I watched I did not see it.]
+@(o 39') 2 cubits [above] α Virginis. [...] Mercury’s last appearance in the east [in ..., from the xth when I watched I did not see it.]
 
-@(o 40) [Month IX,] the 9th?, Mercury’s [first appearance] in the west in [Capricorn ...;] sunset to setting of Mercury: 15°; [(ideal) first appearance] on [the xth ... Mercury’s last appearance in the west in ...]
+@(o 40') [Month IX,] the 9th?, Mercury’s [first appearance] in the west in [Capricorn ...;] sunset to setting of Mercury: 15°; [(ideal) first appearance] on [the xth ... Mercury’s last appearance in the west in ...]
 
-@(r 1) [Month X, the xth, Mercury’s first appearance] in the east in Capricorn, 1 cubit behind β Capricorni, 1 cubit 8 fingers low to the south [...]
+@(r 1') [Month X, the xth, Mercury’s first appearance] in the east in Capricorn, 1 cubit behind β Capricorni, 1 cubit 8 fingers low to the south [...]
 
-@(r 2) rising of Mercury to sunrise: [...;] (ideal) first appearance on the 14th. Month XI, night of the 6th? ... Night of the 8th, the passing of Mercury [...]
+@(r 2') rising of Mercury to sunrise: [...;] (ideal) first appearance on the 14th. Month XI, night of the 6th? ... Night of the 8th, the passing of Mercury [...]
 
-@(r 3) The 28th, Mercury’s last appearance in the east in Aquarius: from the 26th, when I watched I did not see it.
+@(r 3') The 28th, Mercury’s last appearance in the east in Aquarius: from the 26th, when I watched I did not see it.
 
-@(r 4) Year 156. Month I, the 1st, Mercury’s first appearance in the west in Aries; sunset to setting of Mercury: 14°; (ideal) first appearance on the 30th of month XII. Ni[ght of the xth, first part of the night,]
+@(r 4') Year 156. Month I, the 1st, Mercury’s first appearance in the west in Aries; sunset to setting of Mercury: 14°; (ideal) first appearance on the 30th of month XII. Ni[ght of the xth, first part of the night,]
 
-@(r 5) Mercury was 2/3 cubit below η Tauri. Night of the 16th, first part of the night, Mercury was 3 cubits above α Tauri. [Month II, the xth, sunset to setting of Mercury: ...]
+@(r 5') Mercury was 2/3 cubit below η Tauri. Night of the 16th, first part of the night, Mercury was 3 cubits above α Tauri. [Month II, the xth, sunset to setting of Mercury: ...]
 
-@(r 6) Around the 7th, Mercury’s last appearance in the west in the end of Taurus. Month III, the 13th, Mercury’s first appearance in the east in Gemini; rising of Mercury to sunrise: 13° [... rising of]
+@(r 6') Around the 7th, Mercury’s last appearance in the west in the end of Taurus. Month III, the 13th, Mercury’s first appearance in the east in Gemini; rising of Mercury to sunrise: 13° [... rising of]
 
-@(r 7) of Mercury to sunrise: [...] Around the 25th, Mercury’s last appearance in the east in Gemini. Month IV, the 24th, Mercury’s [first appearance] in the west in Leo, 4 fingers below [Venus, being 2 fingers back to the west;]
+@(r 7') of Mercury to sunrise: [...] Around the 25th, Mercury’s last appearance in the east in Gemini. Month IV, the 24th, Mercury’s [first appearance] in the west in Leo, 4 fingers below [Venus, being 2 fingers back to the west;]
 
-@(r 8) it was small, sunset to setting of Mercury: 15°. Month V, the 24th, sunset to setting of Mercury: 13°. Around the 26th, Mercury’s [last appearance] in the west in Virgo. [Month VI, the xth, Mercury’s]
+@(r 8') it was small, sunset to setting of Mercury: 15°. Month V, the 24th, sunset to setting of Mercury: 13°. Around the 26th, Mercury’s [last appearance] in the west in Virgo. [Month VI, the xth, Mercury’s]
 
-@(r 9) first appearance [in the east] in Virgo, it stood 2 cubits 8 fingers behind Jupiter to the east; it was bright (and) high, rising of Mercury to sunrise: 18° 30'; [(ideal) first appearance on the xth.]
+@(r 9') first appearance [in the east] in Virgo, it stood 2 cubits 8 fingers behind Jupiter to the east; it was bright (and) high, rising of Mercury to sunrise: 18° 30'; [(ideal) first appearance on the xth.]
 
-@(r 10) Month VII, the 12th, rising of Mercury to sunrise: 14° 30'. Around the 17th, Mercury’s last appearance in the east in Libra. Month IX, the 11th, Mercury’s [first appearance in the west in the end of Sagittarius; it was bright (and) high,]
+@(r 10') Month VII, the 12th, rising of Mercury to sunrise: 14° 30'. Around the 17th, Mercury’s last appearance in the east in Libra. Month IX, the 11th, Mercury’s [first appearance in the west in the end of Sagittarius; it was bright (and) high,]
 
-@(r 11) sunset to setting of Mercury: 14° 30'; (ideal) first appearance on the 9th in Sagittarius. Night of the 20th, first part of the night, Mercury was [...] below β Capricorni [...]
+@(r 11') sunset to setting of Mercury: 14° 30'; (ideal) first appearance on the 9th in Sagittarius. Night of the 20th, first part of the night, Mercury was [...] below β Capricorni [...]
 
-@(r 12) Mercury’s last appearance in the west in Capricorn; I did not watch. Month X, around the 8th, Mercury’s first appearance in the east in Sagittarius; I did not watch. Month XI, night of the 6th, [last part of the night, Mercury was]
+@(r 12') Mercury’s last appearance in the west in Capricorn; I did not watch. Month X, around the 8th, Mercury’s first appearance in the east in Sagittarius; I did not watch. Month XI, night of the 6th, [last part of the night, Mercury was]
 
-@(r 13) 2 cubits [below] β Capricorni. Around the 22nd, Mercury’s last appearance in the east in Aquarius; I did not watch. Month XII, the 28th, Mercury’s [first appearance in the west in Aries ...]
+@(r 13') 2 cubits [below] β Capricorni. Around the 22nd, Mercury’s last appearance in the east in Aquarius; I did not watch. Month XII, the 28th, Mercury’s [first appearance in the west in Aries ...]
 
-@(r 14) sunset to setting of Mercury: 16°; (ideal) first appearance on the 24th. Month XII₂, night of the 17th, first part of the night, Mercury was [...] below [η Tauri ...]
+@(r 14') sunset to setting of Mercury: 16°; (ideal) first appearance on the 24th. Month XII₂, night of the 17th, first part of the night, Mercury was [...] below [η Tauri ...]
 
-@(r 15) Around the 26th, Mercury’s last appearance in the west in the beginning of Taurus; I did not [watch.]
+@(r 15') Around the 26th, Mercury’s last appearance in the west in the beginning of Taurus; I did not [watch.]
 
-@(r 16) Year 142, kings Antiochus and his son Antiochus. Mon[th II, the xth,] when [Saturn became stationary to the west, it became stationary x]+1/2 cubits in front of [γ Virginis.]
+@(r 16') Year 142, kings Antiochus and his son Antiochus. Mon[th II, the xth,] when [Saturn became stationary to the west, it became stationary x]+1/2 cubits in front of [γ Virginis.]
 
-@(r 17) Month IV, night of the 12th, first part of the night, Saturn, [while moving back] to the east, was [...] fingers [below γ Virginis.] Month V, the 27th, Saturn’s last appearance in Virgo:
+@(r 17') Month IV, night of the 12th, first part of the night, Saturn, [while moving back] to the east, was [...] fingers [below γ Virginis.] Month V, the 27th, Saturn’s last appearance in Virgo:
 
-@(r 18)  from the 23rd, when I watched I did not see it. Mon[th VII, the xth, Saturn’s] first appearance [in Virgo, ... behind Mercu]ry to the east; rising of Saturn to sunrise: 15°? 30';
+@(r 18')  from the 23rd, when I watched I did not see it. Mon[th VII, the xth, Saturn’s] first appearance [in Virgo, ... behind Mercu]ry to the east; rising of Saturn to sunrise: 15°? 30';
 
-@(r 19) (ideal) first appearance on the 12th. Month IX, night of the 4+[xth, last part of the night, Saturn was x]+1 cubits [above α Virginis.] Month XI, around until the 7th?, when Saturn became stationary to the east,
+@(r 19') (ideal) first appearance on the 12th. Month IX, night of the 4+[xth, last part of the night, Saturn was x]+1 cubits [above α Virginis.] Month XI, around until the 7th?, when Saturn became stationary to the east,
 
-@(r 20) [it became stationary ... behind α Virginis ...] last part of the night, Saturn, while moving back to the west, was 2+[x cubits] above α Virginis.
+@(r 20') [it became stationary ... behind α Virginis ...] last part of the night, Saturn, while moving back to the west, was 2+[x cubits] above α Virginis.
 
-@(r 21) [...] 2 1/2 cubits in front of α Virginis
+@(r 21') [...] 2 1/2 cubits in front of α Virginis
 
-@(r 22) [...] 2 cubits [...] Virginis. Month V, ...
+@(r 22') [...] 2 cubits [...] Virginis. Month V, ...
 
-@(r 23) [...] Night? of the 24+xth [...]
+@(r 23') [...] Night? of the 24+xth [...]
 
-@(r 24-32) ca. 10 lines broken
+@(r 24'-r 32') ca. 10 lines broken
 
-@(r 33) [...] ... [...]
+@(r 33') [...] ... [...]
 
-@(r 34) [...] ... 1 1/2 cubits [...]
+@(r 34') [...] ... 1 1/2 cubits [...]
 
-@(r 35) [... Night of the xth, first] part of the night, Mars was [...] above μ Ge[minorum.]
+@(r 35') [... Night of the xth, first] part of the night, Mars was [...] above μ Ge[minorum.]
 
-@(r 36) [...] 4 cubits [above] γ Geminorum.
+@(r 36') [...] 4 cubits [above] γ Geminorum.
 
-@(r 37) [...] Mars was 3 1/2 cubits below α Geminorum. Night of the 21st, first part of the night, Mars was
+@(r 37') [...] Mars was 3 1/2 cubits below α Geminorum. Night of the 21st, first part of the night, Mars was
 
-@(r 38) [...] Mars was 1/2 cubit above δ Cancri. Month III, night of the 6th,
+@(r 38') [...] Mars was 1/2 cubit above δ Cancri. Month III, night of the 6th,
 
-@(r 39) [first part of the night, Mars was ... below ε Leonis. Month VII, night of the xth,] last part of the night, Mars was 8 fingers below α Librae. Night of the 23rd, last part of the night, Mars was
+@(r 39') [first part of the night, Mars was ... below ε Leonis. Month VII, night of the xth,] last part of the night, Mars was 8 fingers below α Librae. Night of the 23rd, last part of the night, Mars was
 
-@(r 40) [... below β Librae. Month VIII, night of the xth, last part of the night, Mars was] 8 fingers below β Scorpii. Night of the 23rd, last part of the night, Mars was
-@(r 41) [... above α Scorpii. Month IX, night of the xth, last part of the night, Mars was] 1/2 cubit [above θ] Ophiuchi. Month XI, night of the 6th, last part of the night, Mars was 2 1/2 cubits below β Capricorni.
+@(r 40') [... below β Librae. Month VIII, night of the xth, last part of the night, Mars was] 8 fingers below β Scorpii. Night of the 23rd, last part of the night, Mars was
+@(r 41') [... above α Scorpii. Month IX, night of the xth, last part of the night, Mars was] 1/2 cubit [above θ] Ophiuchi. Month XI, night of the 6th, last part of the night, Mars was 2 1/2 cubits below β Capricorni.
 
-@(r 42) [... Month XII, night of the x]+1st, last part of the night, Mars was 1/2 cubit above δ Capricorni.
+@(r 42') [... Month XII, night of the x]+1st, last part of the night, Mars was 1/2 cubit above δ Capricorni.
 
-@(r 43) [Year 155. Month III, night of the xth, last part of the night, Mars was] 3 cubits [below η Pis]cium. Night of the 14th, last part of the night, Mars was [...] below β
+@(r 43') [Year 155. Month III, night of the xth, last part of the night, Mars was] 3 cubits [below η Pis]cium. Night of the 14th, last part of the night, Mars was [...] below β
 
-@(r 44) [Arietis. Night of the xth, last part of the night, Mars was ...] cubits [below α Arietis.] Month IV, night of the 22nd, last part of the night, Mars was 2 cubits below η Tauri.
+@(r 44') [Arietis. Night of the xth, last part of the night, Mars was ...] cubits [below α Arietis.] Month IV, night of the 22nd, last part of the night, Mars was 2 cubits below η Tauri.
 
-@(r 45) [... Night of the xth, fir]st part of the night, Mars, while moving back to the west, was 2 1/2 cubits above α Tauri.
+@(r 45') [... Night of the xth, fir]st part of the night, Mars, while moving back to the west, was 2 1/2 cubits above α Tauri.
 
 @top
 
-@(t.e. 1) [...] cubits. Month XI, night of the 20th, first part of the night, Mars was
+@(t.e. 1') [...] cubits. Month XI, night of the 20th, first part of the night, Mars was
 
-@(t.e. 2) [... Night of the xth, first part of the night, Mars was] 1? 1/2 cubits [above ζ Tau]ri. Month XII, night of the 13th, first part of the night,
+@(t.e. 2') [... Night of the xth, first part of the night, Mars was] 1? 1/2 cubits [above ζ Tau]ri. Month XII, night of the 13th, first part of the night,
 
-@(t.e. 3) [Mars was ... above η Geminorum. Night of the xth, first part of the night, Mars was [...] above μ Geminorum. 
+@(t.e. 3') [Mars was ... above η Geminorum. Night of the xth, first part of the night, Mars was [...] above μ Geminorum. 
 
-@(t.e. 4) [...]
+@(t.e. 4') [...]
 
 @left
 
-@(l.e. 1) Year 156. Month I, night of the 12th, first part of the night, Mars was [...] below [α Gemino]rum. [...]
+@(l.e. 1') Year 156. Month I, night of the 12th, first part of the night, Mars was [...] below [α Gemino]rum. [...]
 
-@(l.e. 2) passing ... [...]
+@(l.e. 2') passing ... [...]

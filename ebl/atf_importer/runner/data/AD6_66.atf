@@ -98,33 +98,33 @@ $broken
 
 @translation labeled en project
 
-@(o 1) [... Saturn’s last appearance in] Aries?: from the 10th?, when I watched I did not see it. [...]
+@(o 1') [... Saturn’s last appearance in] Aries?: from the 10th?, when I watched I did not see it. [...]
 
-@(o 2) [...] night of the 2nd, last part of the night, Saturn was 1? cubit above α Tauri [...]
+@(o 2') [...] night of the 2nd, last part of the night, Saturn was 1? cubit above α Tauri [...]
 
-@(o 3) [...] became stationary [...] Month VII, night of the 8th, last part of the night, Saturn, while [moving back] to the west, was [...]
+@(o 3') [...] became stationary [...] Month VII, night of the 8th, last part of the night, Saturn, while [moving back] to the west, was [...]
 
-@(o 4) [...] it became stationary [x]+1 cubit in front of α Tauri, being 1 1/2? cubits high to the north ... [...]
+@(o 4') [...] it became stationary [x]+1 cubit in front of α Tauri, being 1 1/2? cubits high to the north ... [...]
 
-@(o 5) [...] (blank)
-
-$ ruling
-
-@(o 6) [...] rising of Saturn to sunrise: [x]+8°; (ideal) first appearance on the 7th. Month IX, around until the 10th?, when Mars became stationary to the east,
-
-@(o 7) [...] ... Mars’ acronychal rising. Month XII, until the 3rd, when Mars became stationary to the west,
-
-@(o 8) [...] (blank)
+@(o 5') [...] (blank)
 
 $ ruling
 
-@(o 9) [...] ..., last part of the night, Mars was 2? 1/2 cubits above α Tauri.
+@(o 6') [...] rising of Saturn to sunrise: [x]+8°; (ideal) first appearance on the 7th. Month IX, around until the 10th?, when Mars became stationary to the east,
 
-@(o 10) [... Mars was] 2/3 cubit [above ζ Tau]ri, Mars having passed 4 fingers to the east.
+@(o 7') [...] ... Mars’ acronychal rising. Month XII, until the 3rd, when Mars became stationary to the west,
 
-@(o 11) [...] 10 fingers [... η/μ] Geminorum. Night of the 16th,
+@(o 8') [...] (blank)
 
-@(o 12) [...] ...
+$ ruling
+
+@(o 9') [...] ..., last part of the night, Mars was 2? 1/2 cubits above α Tauri.
+
+@(o 10') [... Mars was] 2/3 cubit [above ζ Tau]ri, Mars having passed 4 fingers to the east.
+
+@(o 11') [...] 10 fingers [... η/μ] Geminorum. Night of the 16th,
+
+@(o 12') [...] ...
 
 @reverse
 
@@ -136,34 +136,34 @@ $ broken
 
 $ broken
 
-@(r iii 1) [...] ... [...]
+@(r iii 1') [...] ... [...]
 
-@(r iii 2) [...] measured?; it was low? to the sun.
+@(r iii 2') [...] measured?; it was low? to the sun.
 
-@(r iii 3) [... moonrise to sunset: ...;] measured (despite) [clou]ds?.
+@(r iii 3') [... moonrise to sunset: ...;] measured (despite) [clou]ds?.
 
-@(r iii 4) [...] moonset to sunrise: [...;] measured (despite) clouds.
+@(r iii 4') [...] moonset to sunrise: [...;] measured (despite) clouds.
 
-@(r iii 5) [...] sunset to moonrise: [x]+10'; clouds, I did not watch.
+@(r iii 5') [...] sunset to moonrise: [x]+10'; clouds, I did not watch.
 
-@(r iii 6) [...] sunrise to moonset: [x]+1°; measured (despite) clouds.
+@(r iii 6') [...] sunrise to moonset: [x]+1°; measured (despite) clouds.
 
-@(r iii 7) [...] bright, measured.
+@(r iii 7') [...] bright, measured.
 
-@(r iv 1) ...
+@(r iv 1') ...
 
-@(r iv 2) The 14th, moonset to sunrise: 50' [...]
+@(r iv 2') The 14th, moonset to sunrise: 50' [...]
 
-@(r iv 3) The 15th, moonrise to sunset: 11°; clouds [...]
+@(r iv 3') The 15th, moonrise to sunset: 11°; clouds [...]
 
-@(r iv 4) The 15th, sunrise to moonset: 13°? 30'; ... [...]
+@(r iv 4') The 15th, sunrise to moonset: 13°? 30'; ... [...]
 
-@(r iv 5) The 16th, sunset to moonrise: 5° 30', measured.
+@(r iv 5') The 16th, sunset to moonrise: 5° 30', measured.
 
-@(r iv 6) The 27th, moonrise to sunrise: 17°; measured (despite) clouds.
+@(r iv 6') The 27th, moonrise to sunrise: 17°; measured (despite) clouds.
 
-@(r iv 7) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25°; it was bright, earthshine, measured.
+@(r iv 7') Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25°; it was bright, earthshine, measured.
 
-@(r iv 8) The 13th, moonset to sunrise: 5°; measured (despite) clouds.
+@(r iv 8') The 13th, moonset to sunrise: 5°; measured (despite) clouds.
 
-@(r iv 9) The 14th, sunrise to moonset: 5°, measured.
+@(r iv 9') The 14th, sunrise to moonset: 5°, measured.

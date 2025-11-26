@@ -9,11 +9,11 @@
 #lem: u; n; na[rising to sunrise]N; ina[on]PRP; n; amāru[be(come) visible]V; u
 
 $ ruling
-2'. [M]U 1 ME 24.KAM {I}an LUGAL ZÍZ GE₆ 29 ina ZÁLAG MÚL.BABBAR SIG S[I-MÁŠ ...]
+2'. [M]U 1 ME 24.KAM {m}an LUGAL ZÍZ GE₆ 29 ina ZÁLAG MÚL.BABBAR SIG S[I-MÁŠ ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; šarru[king]N; Šabāṭu[Month XI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN; šapil[below]'PRP; SI-MÁŠ[β Capricorni]CN; u
 
 $ ruling
-3'. [M]U 1 ME 60+39.KAM {I}ar-šá-kam LUGAL SIG 2 9 na dele-bat [...]
+3'. [M]U 1 ME 60+39.KAM {m}ar-šá-kam LUGAL SIG 2 9 na dele-bat [...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; Simānu[Month III]MN; n; n; na[rising to sunrise]N; Dilbat[Venus]CN; u
 
 4'. 8 na-su in 24 IGI GAN GE₆ 2 ina ZÁLAG dele-bat SIG SI-[MÁŠ ...]
@@ -148,39 +148,39 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] rising of Jupiter to sunrise: 11°; (ideal) first appearance on the 1st. [...]
+@(o 1') [...] rising of Jupiter to sunrise: 11°; (ideal) first appearance on the 1st. [...]
 
 $ ruling
 
-@(o 2) Year 124, king Antiochus. Month XI, night of the 29th, last part of the night, Jupiter was [...] below β [Capricorni.]
+@(o 2') Year 124, king Antiochus. Month XI, night of the 29th, last part of the night, Jupiter was [...] below β [Capricorni.]
 
 $ ruling
 
-@(o 3) Year 199, king Arsaces. Month III, the 2nd, rising of Venus to sunrise: 9° [...]
+@(o 3') Year 199, king Arsaces. Month III, the 2nd, rising of Venus to sunrise: 9° [...]
 
-@(o 4) sunset to setting of Venus: 8°; (ideal) first appearance on the 24th. Month IX, night of the 2nd, last part of the night@sup{SIC} (error for: first part of the night), Venus was [...] below β [Capricorni ...]
+@(o 4') sunset to setting of Venus: 8°; (ideal) first appearance on the 24th. Month IX, night of the 2nd, last part of the night@sup{SIC} (error for: first part of the night), Venus was [...] below β [Capricorni ...]
 
-@(o 5) 4 fingers [above γ Capricor]ni. Night of the 18th, first part of the night, Venus was [...] below δ Capricor[ni ...]
+@(o 5') 4 fingers [above γ Capricor]ni. Night of the 18th, first part of the night, Venus was [...] below δ Capricor[ni ...]
 
-@(o 6) 3 cubits [...] Night of the 18th, first part of the night, Venus was [...] below β Arietis [...]
+@(o 6') 3 cubits [...] Night of the 18th, first part of the night, Venus was [...] below β Arietis [...]
 
-@(o 7) [...] cubits [...] Month XII, night of the 17th, first part of the night, Venus was 1 finger above η Tauri; it came close. Month I, [...]
+@(o 7') [...] cubits [...] Month XII, night of the 17th, first part of the night, Venus was 1 finger above η Tauri; it came close. Month I, [...]
 
-@(o 8) [...] (blank)
+@(o 8') [...] (blank)
 
 $ ruling
 
-@(o 9) [Year 161, ... Month I,] the 21st, Mercury’s [first appearance] in the west in T[aurus,] it stood 1 cubit behind Venus to the east, 8 fin[gers ...]
+@(o 9') [Year 161, ... Month I,] the 21st, Mercury’s [first appearance] in the west in T[aurus,] it stood 1 cubit behind Venus to the east, 8 fin[gers ...]
 
-@(o 10) [... night of the] xth, first part of the night, Mer[cury was] 2 cubits [below] β [Tauri.] Night of the 10+[xth, ...]
+@(o 10') [... night of the] xth, first part of the night, Mer[cury was] 2 cubits [below] β [Tauri.] Night of the 10+[xth, ...]
 
-@(o 11) [...] 2 cubits [above η/μ] Geminorum. Night [...]
+@(o 11') [...] 2 cubits [above η/μ] Geminorum. Night [...]
 
-@(o 12) [...] Night of the 20th, [...]
+@(o 12') [...] Night of the 20th, [...]
 
-@(o 13) [...] ... [...]
+@(o 13') [...] ... [...]
 
-@(o 14) [...] ... [...]
+@(o 14') [...] ... [...]
 
 @reverse
 
@@ -188,62 +188,62 @@ $ ruling
 
 $ broken
 
-@(r ii 1) [...] measured.
+@(r ii 1') [...] measured.
 
-@(r ii 2) [...] clouds, I did not watch.
+@(r ii 2') [...] clouds, I did not watch.
 
-@(r ii 3) [...] moonrise to sunrise [...]; measured.
+@(r ii 3') [...] moonrise to sunrise [...]; measured.
 
-@(r ii 4) [...] ..., measured.
+@(r ii 4') [...] ..., measured.
 
-@(r ii 5) [...] measured.
+@(r ii 5') [...] measured.
 
-@(r ii 6) [...] measured.
+@(r ii 6') [...] measured.
 
-@(r ii 7) [The 13th,] sunrise to moonset: [...]; measured. 
+@(r ii 7') [The 13th,] sunrise to moonset: [...]; measured. 
 
-@(r ii 8) The 14th, sunset to moonrise: 3°; measured. 
+@(r ii 8') The 14th, sunset to moonrise: 3°; measured. 
 
-@(r ii 9) The 27th, moonrise to sunrise: 19°; it was bright, measured. 
+@(r ii 9') The 27th, moonrise to sunrise: 19°; it was bright, measured. 
 
-@(r iii 1) The 15th, sunset to moonrise: 6°; measured. 
+@(r iii 1') The 15th, sunset to moonrise: 6°; measured. 
 
-@(r iii 2) The 15th, sunrise to moonset: 12°; measured. 
+@(r iii 2') The 15th, sunrise to moonset: 12°; measured. 
 
-@(r iii 3) The 27th, moonrise to sunrise: 20°?; it was bright, measured.
+@(r iii 3') The 27th, moonrise to sunrise: 20°?; it was bright, measured.
 
-@(r iii 4) Month VII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12°; it was faint, measured (despite) mist.
+@(r iii 4') Month VII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12°; it was faint, measured (despite) mist.
 
-@(r iii 5) The 14th, moonrise to sunset: 7°; measured. 
+@(r iii 5') The 14th, moonrise to sunset: 7°; measured. 
 
-@(r iii 6) The 14th, moonset to sunrise: 10°. 
+@(r iii 6') The 14th, moonset to sunrise: 10°. 
 
-@(r iii 7) The 15th, sunset to moonrise: 30'. 
+@(r iii 7') The 15th, sunset to moonrise: 30'. 
 
-@(r iii 8) The 15th, sunrise to moonset: 4+x° 20'; measured. 
+@(r iii 8') The 15th, sunrise to moonset: 4+x° 20'; measured. 
 
-@(r iii 9) The 28th, moonrise to sunrise: 13°; it was bright, measured.
+@(r iii 9') The 28th, moonrise to sunrise: 13°; it was bright, measured.
 
-@(r iv 1) The 10+[xth, ...]
+@(r iv 1') The 10+[xth, ...]
 
-@(r iv 2) The 10+[xth, ...]
+@(r iv 2') The 10+[xth, ...]
 
-@(r iv 3) The 27th, [moonrise to sunrise:] 16°? [...]
+@(r iv 3') The 27th, [moonrise to sunrise:] 16°? [...]
 
-@(r iv 4) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16° [...]
+@(r iv 4') Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16° [...]
 
-@(r iv 5) The 13th, [moonset to sunrise:] 7° [...] 
+@(r iv 5') The 13th, [moonset to sunrise:] 7° [...] 
 
-@(r iv 6) The 14th, [moonrise to sunset:] ... [...] 
+@(r iv 6') The 14th, [moonrise to sunset:] ... [...] 
 
-@(r iv 7) The 14th, [sunrise to moonset:] 4+x° [...] 
+@(r iv 7') The 14th, [sunrise to moonset:] 4+x° [...] 
 
-@(r iv 8) The 15th, [sunset to moonrise: ...]
+@(r iv 8') The 15th, [sunset to moonrise: ...]
 
-@(r iv 9) The 20+xth, [moonrise to sunrise: ...]
+@(r iv 9') The 20+xth, [moonrise to sunrise: ...]
 
-@(r iv 10) Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [...]
+@(r iv 10') Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [...]
 
-@(r iv 11) [First days, appea]rances, passings, and eclipses which [were established] for year 1[43,]
+@(r iv 11') [First days, appea]rances, passings, and eclipses which [were established] for year 1[43,]
 
-@(r iv 12) [which is year 207,] Arsaces king of kings.
+@(r iv 12') [which is year 207,] Arsaces king of kings.

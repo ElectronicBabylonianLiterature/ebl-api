@@ -41,25 +41,25 @@
 
 @translation labeled en project
 
-@(o? 1) [...] last part of the night?, [...]
+@(o? 1') [...] last part of the night?, [...]
 
-@(o? 2) [...] ... [...]
+@(o? 2') [...] ... [...]
 
-@(o? 3) [...] last part of the night, ... [...]
+@(o? 3') [...] last part of the night, ... [...]
 
-@(o? 4) [...] ... Month VII, night of the 7th, last part of the night, ... [...]
+@(o? 4') [...] ... Month VII, night of the 7th, last part of the night, ... [...]
 
-@(o? 5) [...] cubits [...] Month VIII, night of the 29th, last part of the night, ... [...]
+@(o? 5') [...] cubits [...] Month VIII, night of the 29th, last part of the night, ... [...]
 
-@(o? 6) [...] ... cubits [...] Month X, night of the 9th?, last part of the night, [...]
+@(o? 6') [...] ... cubits [...] Month X, night of the 9th?, last part of the night, [...]
 
-@(r? 1) [...] ... [ when] Saturn [became stationary] to [the east,]
+@(r? 1') [...] ... [ when] Saturn [became stationary] to [the east,]
 
-@(r? 2) [...] it became stationary ... [...] Month II?, the 5th, Saturn’s [acronychal rising? ...]
+@(r? 2') [...] it became stationary ... [...] Month II?, the 5th, Saturn’s [acronychal rising? ...]
 
-@(r? 3) [...] when [Saturn] became stationary to the west, it became stationary in the end of Sagittarius [...]
+@(r? 3') [...] when [Saturn] became stationary to the west, it became stationary in the end of Sagittarius [...]
 
-@(r? 4) [...] Saturn’s last appearance in Capricorn. Month X, the 10+[xth, ...]
+@(r? 4') [...] Saturn’s last appearance in Capricorn. Month X, the 10+[xth, ...]
 
-@(r? 5) [...] ..., last part of the night, Saturn was ... [...]
+@(r? 5') [...] ..., last part of the night, Saturn was ... [...]
  

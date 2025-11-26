@@ -47,30 +47,30 @@ $ ruling
 
 @translation labeled en project
 
-@(o i 1) [... mea]sured.
+@(o i 1') [... mea]sured.
 
-@(o i 2) [...] measured (despite) mist.
+@(o i 2') [...] measured (despite) mist.
 
-@(o i 3) [...] ..., measured.
+@(o i 3') [...] ..., measured.
 
-@(o i 4) [...] moonrise to sunrise: [...;] measured.
-
-$ ruling
-
-@(o i 5) [Month ..., sunset to moonset: x]+2° 40'; it was bright, measured; it was low to the sun.
-
-@(o i 6) [...] measured.
-
-@(o ii 1) The 10+[xth, ...]
-
-@(o ii 2) The 14th, [...] 50' [...]
-
-@(o ii 3) The 15th, [...] 9° 20'? [...]
-
-@(o ii 4) The 26th, [moonrise to sunrise:] 25° [...]
+@(o i 4') [...] moonrise to sunrise: [...;] measured.
 
 $ ruling
 
-@(o ii 5) Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24° [...]
+@(o i 5') [Month ..., sunset to moonset: x]+2° 40'; it was bright, measured; it was low to the sun.
 
-@(o ii 6) The 12th, [...]
+@(o i 6') [...] measured.
+
+@(o ii 1') The 10+[xth, ...]
+
+@(o ii 2') The 14th, [...] 50' [...]
+
+@(o ii 3') The 15th, [...] 9° 20'? [...]
+
+@(o ii 4') The 26th, [moonrise to sunrise:] 25° [...]
+
+$ ruling
+
+@(o ii 5') Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24° [...]
+
+@(o ii 6') The 12th, [...]

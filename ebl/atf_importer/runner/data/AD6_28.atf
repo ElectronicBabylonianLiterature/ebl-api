@@ -134,90 +134,90 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
 $ ruling
 
-@(o 2) [...] Month II, the 13th, Mercury’s [...] in the east ... [...]
+@(o 2') [...] Month II, the 13th, Mercury’s [...] in the east ... [...]
 
-@(o 3) [...] ... Month IV, night of the 4th, first part of the night, Mercury was ... above α Leonis [...]
+@(o 3') [...] ... Month IV, night of the 4th, first part of the night, Mercury was ... above α Leonis [...]
 
-@(o 4) [...] rising of Mercury to sunrise: [...;] (ideal) first appearance on the 24th. Month VI, the 18th, Mercury’s [last appearance] in the east in Virgo. Month VIII, the 17th,
+@(o 4') [...] rising of Mercury to sunrise: [...;] (ideal) first appearance on the 24th. Month VI, the 18th, Mercury’s [last appearance] in the east in Virgo. Month VIII, the 17th,
 
-@(o 5) [...] last appearance [...] in Sagittarius; I did not watch. Month IX, the 12th, Mercury’s first appearance in the east in Sagittarius?
+@(o 5') [...] last appearance [...] in Sagittarius; I did not watch. Month IX, the 12th, Mercury’s first appearance in the east in Sagittarius?
 
-@(o 6) [...] first appearance [in the west in] Pisces; I did not watch. Month XII, night of the 17th, first part of the night, Mercury was
+@(o 6') [...] first appearance [in the west in] Pisces; I did not watch. Month XII, night of the 17th, first part of the night, Mercury was
 
-@(o 7) [... Mercury’s] last appearance [in the west] in Aries; I did not watch. Month XII was intercalary.
-
-$ ruling
-
-@(o 8) [...] I did not watch. Month VI, until the 13th, when Saturn became stationary to the east,
-
-@(o 9) [... acronychal] rising. Month X, until the 19th, when Saturn [became stationary] to the west, ...
-
-@(o 10) [...] ... [...] ...
+@(o 7') [... Mercury’s] last appearance [in the west] in Aries; I did not watch. Month XII was intercalary.
 
 $ ruling
 
-@(o 11) [...] first appearance in Gemini; I did not watch. [...] ... Month XII, the 12th, Mars’ acronychal rising.
+@(o 8') [...] I did not watch. Month VI, until the 13th, when Saturn became stationary to the east,
+
+@(o 9') [... acronychal] rising. Month X, until the 19th, when Saturn [became stationary] to the west, ...
+
+@(o 10') [...] ... [...] ...
 
 $ ruling
 
-@(o 12) [...] last part of the night, Mars was [x]+1⁄2 cubits below [α] Geminorum. Month IV, night of the 6th, last part of the night, Mars was
+@(o 11') [...] first appearance in Gemini; I did not watch. [...] ... Month XII, the 12th, Mars’ acronychal rising.
 
-@(o 13) [... below β Geminorum ...] ... θ? Cancri. [Month V, night of the x]+1st, last part of the night, Mars was
+$ ruling
 
-@(o 14) [... Ni]ght of the 18th, last part of the night, Mars was [N] cubits below [ε Leonis.] Month VI, night of the 3rd,
+@(o 12') [...] last part of the night, Mars was [x]+1⁄2 cubits below [α] Geminorum. Month IV, night of the 6th, last part of the night, Mars was
 
-@(o 15) [last part of the night, Mars was ... above α Leonis ...] 6 fingers above ϱ Leonis. Month VII, night of the 5th,
+@(o 13') [... below β Geminorum ...] ... θ? Cancri. [Month V, night of the x]+1st, last part of the night, Mars was
 
-@(o 16) [... last part of] the night, Mars was 6 fingers above β Virginis. Month VIII, night of the 14th, last part of the night, Mars was
+@(o 14') [... Ni]ght of the 18th, last part of the night, Mars was [N] cubits below [ε Leonis.] Month VI, night of the 3rd,
 
-@(o 17) [... below γ Virginis ...] ...
+@(o 15') [last part of the night, Mars was ... above α Leonis ...] 6 fingers above ϱ Leonis. Month VII, night of the 5th,
 
-@(r i 1) [...] ...
+@(o 16') [... last part of] the night, Mars was 6 fingers above β Virginis. Month VIII, night of the 14th, last part of the night, Mars was
 
-@(r i 2) [...]
+@(o 17') [... below γ Virginis ...] ...
 
-@(r i 3) [...] ..., measured. 
+@(r i 1') [...] ...
 
-@(r i 4) [...] measured (despite) mist.
+@(r i 2') [...]
 
-@(r i 5) [...] ... faint{?}.
+@(r i 3') [...] ..., measured. 
 
-@(r i 6) [...] moonset to sunrise [...]; measured
+@(r i 4') [...] measured (despite) mist.
 
-@(r i 7) [...] measured.
+@(r i 5') [...] ... faint{?}.
 
-@(r i 8) [...] measured.
+@(r i 6') [...] moonset to sunrise [...]; measured
 
-@(r ii 1) The 11+[xth, ...]
+@(r i 7') [...] measured.
 
-@(r ii 2) The 10+[xth, ...]
+@(r i 8') [...] measured.
 
-@(r ii 3) The 10+[xth, ...]
+@(r ii 1') The 11+[xth, ...]
 
-@(r ii 4) The 27th?, ... [...]
+@(r ii 2') The 10+[xth, ...]
 
-@(r ii 5) Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10+[x° ...]
+@(r ii 3') The 10+[xth, ...]
 
-@(r ii 6) The 13th,	[moonset to sunrise:] 7°? 10+[x’ ...] 
+@(r ii 4') The 27th?, ... [...]
 
-@(r ii 7) The 14th,	[moonrise to sunset:] 2° [...] 
+@(r ii 5') Month IX, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10+[x° ...]
 
-@(r ii 8) The 14th,	[sunrise to moonset:] 3° [...]
+@(r ii 6') The 13th,	[moonset to sunrise:] 7°? 10+[x’ ...] 
 
-@(r ii 9) The 15th,	sunset [to moonrise:] 12° [...] 
+@(r ii 7') The 14th,	[moonrise to sunset:] 2° [...] 
 
-@(r ii 10) The 28th,	[moonrise to sunrise:] 16°? [...]
+@(r ii 8') The 14th,	[sunrise to moonset:] 3° [...]
 
-@(r ii 11) Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [...]
+@(r ii 9') The 15th,	sunset [to moonrise:] 12° [...] 
 
-@(r ii 12) [...] ... [...]
+@(r ii 10') The 28th,	[moonrise to sunrise:] 16°? [...]
 
-@(r ii 13) [...] ... [...]
+@(r ii 11') Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) [...]
 
-@(r ii 14) [...] ... [...]
+@(r ii 12') [...] ... [...]
 
-@(r ii 15) [...] ... [...]
+@(r ii 13') [...] ... [...]
+
+@(r ii 14') [...] ... [...]
+
+@(r ii 15') [...] ... [...]

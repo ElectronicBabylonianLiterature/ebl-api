@@ -62,42 +62,41 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] ... [...]
+@(o 1') [...] ... [...]
 
-@(o 2) [...] ...Month XII, the 29th, Mercury’s [last appearance] in the we[st in ...]
-
-$ ruling
-@(o 3) [Year 37, ...] month VI was intercalary. Year 38, month III, around until the 15th, when Saturn [became stationary] to the east,
-
-@(o 4) [... acronychal] rising. Month VII, until the 4th, when Saturn became stationary to the west, [it became stationary] in Aqua[rius.]
-
-@(o 5) [... the 2]1st, Saturn’s first appearance in Pisces; it was bright (and) high, rising of Saturn to sunr{I}se: 18°; (ideal) first appearance on the 19th.
+@(o 2') [...] ...Month XII, the 29th, Mercury’s [last appearance] in the we[st in ...]
 
 $ ruling
+@(o 3') [Year 37, ...] month VI was intercalary. Year 38, month III, around until the 15th, when Saturn [became stationary] to the east,
 
-@(o 6) ($erasure$)
+@(o 4') [... acronychal] rising. Month VII, until the 4th, when Saturn became stationary to the west, [it became stationary] in Aqua[rius.]
 
-@(o 7) [...] (ideal) first appearance [on the x]+5th. Month VIII, around until the 29th, [when] Mars [became stationary] to the east,
-
-@(o 8) [...] the 16th, Mars’ acronychal rising. Month XI, until the 22nd, [when Mars became stationary to the west, ...]
-
-@(r 1) [Year 50, ...] Month III, night of the 7th, last part of the night, Mars was 2 5/6 cubits above α Tauri. Night of the 10+[xth, ...]
-
-@(r 2) [... cu]bits. Night of the 29th, last part of the night, Mars was 1 cubit above ζ Tauri. Month IV, night [...]
-
-@(r 3) [... last part] of the night, Mars was 1⁄2 cubit above μ Geminorum. Night of the 21st, <last part of the night,> Mars was [...] above γ [Geminorum.]
-
-@(r 4) [... night] of the 14th, last part of the night, Mars was 2 1⁄2 cubits below β Geminorum. Month VI, night of the 2nd, last part of the night, Mars was [...]
-
-@(r 5) [...] being back to the west. Night of the 8th, last part of the night, Mars was 8 fingers above δ Cancri. [...]
-
-@(r 6) [...] Night of the 17th, last part of the night, Mars was 8 fingers above α Leonis. Night of the 28th, last part of the night, Mars was [...] above [ϱ Leonis ...]
-
-@(r 7) [...] cubits. Month IX, night of the 25th, last part of the night, Mars was 1 cubit above β Virginis. Month [X, ...]
-
-@(r 8) [...] cubits 8 fingers [...] Month XI, night of the 25th, first part of the night, Mars was [...] below θ Leonis. 
+@(o 5') [... the 2]1st, Saturn’s first appearance in Pisces; it was bright (and) high, rising of Saturn to sunr{I}se: 18°; (ideal) first appearance on the 19th.
 
 $ ruling
-Of the continuation in 4 columns, I and II are broken;
 
-@(r iii 9) Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15° 30' ... [...]
+@(o 6') ($erasure$)
+
+@(o 7') [...] (ideal) first appearance [on the x]+5th. Month VIII, around until the 29th, [when] Mars [became stationary] to the east,
+
+@(o 8') [...] the 16th, Mars’ acronychal rising. Month XI, until the 22nd, [when Mars became stationary to the west, ...]
+
+@(r 1') [Year 50, ...] Month III, night of the 7th, last part of the night, Mars was 2 5/6 cubits above α Tauri. Night of the 10+[xth, ...]
+
+@(r 2') [... cu]bits. Night of the 29th, last part of the night, Mars was 1 cubit above ζ Tauri. Month IV, night [...]
+
+@(r 3') [... last part] of the night, Mars was 1⁄2 cubit above μ Geminorum. Night of the 21st, <last part of the night,> Mars was [...] above γ [Geminorum.]
+
+@(r 4') [... night] of the 14th, last part of the night, Mars was 2 1⁄2 cubits below β Geminorum. Month VI, night of the 2nd, last part of the night, Mars was [...]
+
+@(r 5') [...] being back to the west. Night of the 8th, last part of the night, Mars was 8 fingers above δ Cancri. [...]
+
+@(r 6') [...] Night of the 17th, last part of the night, Mars was 8 fingers above α Leonis. Night of the 28th, last part of the night, Mars was [...] above [ϱ Leonis ...]
+
+@(r 7') [...] cubits. Month IX, night of the 25th, last part of the night, Mars was 1 cubit above β Virginis. Month [X, ...]
+
+@(r 8') [...] cubits 8 fingers [...] Month XI, night of the 25th, first part of the night, Mars was [...] below θ Leonis. 
+
+$ ruling
+
+@(r iii 9') Month VII, the 1st (of which followed the 30th of the preceding month,) sunset to moonset: 15° 30' ... [...]

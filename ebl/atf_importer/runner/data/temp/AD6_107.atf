@@ -94,58 +94,58 @@
 
 @translation labeled en project
 
-@(o i 1) [... measu]red.
+@(o i 1') [... measu]red.
 
-@(o i 2) [...] measured.
+@(o i 2') [...] measured.
 
-@(o i 3) [...] measured (despite) mist.
+@(o i 3') [...] measured (despite) mist.
 
-@(o i 4) [... mea]sured.
+@(o i 4') [... mea]sured.
 
-@(o ii 1) [...] measured.
+@(o ii 1') [...] measured.
 
-@(o ii 2) [...] measured.
+@(o ii 2') [...] measured.
 
-@(o ii 3) [...] measured.
+@(o ii 3') [...] measured.
 
-@(o ii 4) [...] measured.
+@(o ii 4') [...] measured.
 
-@(o ii 5) [...] measured.
+@(o ii 5') [...] measured.
 
-@(o ii 6) [...] low [to the sun.]
+@(o ii 6') [...] low [to the sun.]
 
-@(o ii 7) [The 12th, moonset to sunrise: x°] 30', measured. 
+@(o ii 7') [The 12th, moonset to sunrise: x°] 30', measured. 
 
-@(o ii 8) The 13th, sunrise to moonset: 4°, measured.
+@(o ii 8') The 13th, sunrise to moonset: 4°, measured.
 
-@(o ii 9) The 14th, moonrise to sunset: 40', measured.
+@(o ii 9') The 14th, moonrise to sunset: 40', measured.
 
-@(o ii 10) The 15th, sunset to moonrise: 9° 20', measured.
+@(o ii 10') The 15th, sunset to moonrise: 9° 20', measured.
 
-@(o ii 11) The 26th, moonrise to sunrise: 21°, measured.
+@(o ii 11') The 26th, moonrise to sunrise: 21°, measured.
 
-@(o ii 12) Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 14°; it was bright, mea[sured;]
+@(o ii 12') Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 14°; it was bright, mea[sured;]
 
-@(o ii 13) it could be seen while (the sun) stood there; [it was ...] to the sun.
+@(o ii 13') it could be seen while (the sun) stood there; [it was ...] to the sun.
 
-@(o ii 14) [...] ... [...]
+@(o ii 14') [...] ... [...]
 
-@(o iii 1) Month X, [...]
+@(o iii 1') Month X, [...]
 
-@(o iii 2) The 13th, [moonset to sunrise:] 1+[x° ...]
+@(o iii 2') The 13th, [moonset to sunrise:] 1+[x° ...]
 
-@(o iii 3) The 14th, [moonrise to sunset:] 3+[x° ...]
+@(o iii 3') The 14th, [moonrise to sunset:] 3+[x° ...]
 
-@(o iii 4) The 14th, [sunrise to moonset:] 10° [...]
+@(o iii 4') The 14th, [sunrise to moonset:] 10° [...]
 
-@(o iii 5) The 15th, sunset to moonrise: 10° ... 
+@(o iii 5') The 15th, sunset to moonrise: 10° ... 
 
-@(o iii 6) The 28th, moonrise [to sunrise:] 9° 30' [...]
+@(o iii 6') The 28th, moonrise [to sunrise:] 9° 30' [...]
 
-@(o iii 7) and mist, ...
+@(o iii 7') and mist, ...
 
-@(o iii 8) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17° 40' [...]
+@(o iii 8') Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17° 40' [...]
 
-@(o iii 9) The 12th, ... [...]
+@(o iii 9') The 12th, ... [...]
 
-@(o iii 10) ... [...] 
+@(o iii 10') ... [...] 

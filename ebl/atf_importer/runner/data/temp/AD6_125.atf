@@ -80,48 +80,48 @@
 
 @translation labeled en project
 
-@(o i 1) [...] ...
+@(o i 1') [...] ...
 
-@(o i 2) [...] ...
+@(o i 2') [...] ...
 
-@(o i 3) [...] ...
+@(o i 3') [...] ...
 
-@(o i 4) [...] ...
+@(o i 4') [...] ...
 
-@(o ii 1) dense clouds, I did not see (the moon).
+@(o ii 1') dense clouds, I did not see (the moon).
 
-@(o ii 2) The 13th, moonset to sunrise: 20'.
+@(o ii 2') The 13th, moonset to sunrise: 20'.
 
-@(o ii 3) The 14th, moonrise to sunset: 7° 30'; I did not watch. 
+@(o ii 3') The 14th, moonrise to sunset: 7° 30'; I did not watch. 
 
-@(o ii 4) The 14th, sunrise to moonset: 11° 50'; I did not watch. 
+@(o ii 4') The 14th, sunrise to moonset: 11° 50'; I did not watch. 
 
-@(o ii 5) The 15th, sunset to moonrise: 10° 40'; I did not watch. 
+@(o ii 5') The 15th, sunset to moonrise: 10° 40'; I did not watch. 
 
-@(o ii 6) The 26th, moonrise to sunrise: 11°.
+@(o ii 6') The 26th, moonrise to sunrise: 11°.
 
-@(o iii 1) The 14th, [moonrise to sunset: ...]
+@(o iii 1') The 14th, [moonrise to sunset: ...]
 
-@(o iii 2) The 14th, [sunrise to moonset:] ... [...]
+@(o iii 2') The 14th, [sunrise to moonset:] ... [...]
 
-@(o iii 3) The 15th, [sunset to moonrise:] 1° ... [...]
+@(o iii 3') The 15th, [sunset to moonrise:] 1° ... [...]
 
-@(o iii 4) The 26th, moonrise to sunrise: 13°.
+@(o iii 4') The 26th, moonrise to sunrise: 13°.
 
-@(o iii 5) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 30'.
+@(o iii 5') Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 30'.
 
-@(o iii 6) The 13th, moonset to sunrise: 10° 30'; I did not watch. 
+@(o iii 6') The 13th, moonset to sunrise: 10° 30'; I did not watch. 
 
-@(o iii 7) The 14th, sunrise to moonset: 1° 30'; I did not watch. 
+@(o iii 7') The 14th, sunrise to moonset: 1° 30'; I did not watch. 
 
-@(o iii 8) The 15th, moonrise to sunset: 5° [...]
+@(o iii 8') The 15th, moonrise to sunset: 5° [...]
 
-@(o iii 9) The 16th, [sunset to moonrise:] 11+[x° ...]
+@(o iii 9') The 16th, [sunset to moonrise:] 11+[x° ...]
 
-@(o iii 10) The 26th?, [...]
+@(o iii 10') The 26th?, [...]
 
-@(o iv 1) The 14th, [...] ... [...]
+@(o iv 1') The 14th, [...] ... [...]
 
-@(o iv 2) The 15th, [...] 15° 20' [...]
+@(o iv 2') The 15th, [...] 15° 20' [...]
 
-@(o iv 3) The 15th, [...] 6+[x° ...]
+@(o iv 3') The 15th, [...] 6+[x° ...]

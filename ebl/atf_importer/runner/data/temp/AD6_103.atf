@@ -70,42 +70,42 @@
 
 @translation labeled en project
 
-@(o i 1) [...] eclipse
+@(o i 1') [...] eclipse
 
-@(o i 2) [...] At 13° after sunrise.
+@(o i 2') [...] At 13° after sunrise.
 
-@(o i 3) [The xth,] solar eclipse; when I watched I did not see it.
+@(o i 3') [The xth,] solar eclipse; when I watched I did not see it.
 
-@(o i 4) [...] 20?
+@(o i 4') [...] 20?
 
-@(o i 5) [...] measured (despite) clouds?.
+@(o i 5') [...] measured (despite) clouds?.
 
-@(o i 6) [...] ...
+@(o i 6') [...] ...
 
-@(o ii 1) The 27th, ... [...]
+@(o ii 1') The 27th, ... [...]
 
-@(o ii 2) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°; it was b[right? ...]
+@(o ii 2') Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°; it was b[right? ...]
 
-@(o ii 3) The 14th, moonrise to sunset: 4°; clou[ds ...]
+@(o ii 3') The 14th, moonrise to sunset: 4°; clou[ds ...]
 
-@(o ii 4) The 14th, moonset to sunrise: 30'; clouds, I did not [watch.]
+@(o ii 4') The 14th, moonset to sunrise: 30'; clouds, I did not [watch.]
 
-@(o ii 5) The 15th, sunset to moonrise: 12° 40'.
+@(o ii 5') The 15th, sunset to moonrise: 12° 40'.
 
-@(o ii 6) The 15th, sunrise to moonset: 12°, measured.
+@(o ii 6') The 15th, sunrise to moonset: 12°, measured.
 
-@(o ii 7) The 27th, (moonrise to sunrise:) 14°, measured.
+@(o ii 7') The 27th, (moonrise to sunrise:) 14°, measured.
 
-@(o ii 8) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 19°; it was bright, earthshine, measured.
+@(o ii 8') Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 19°; it was bright, earthshine, measured.
 
-@(o ii 9) [The xth,] moonrise to sunset: 6°, measured.
+@(o ii 9') [The xth,] moonrise to sunset: 6°, measured.
 
-@(o ii 10) [The xth,] moonset to sunrise: [x]+5°, mea[sured.]
+@(o ii 10') [The xth,] moonset to sunrise: [x]+5°, mea[sured.]
 
-@(o iii 1) The 20+[xth, ...]
+@(o iii 1') The 20+[xth, ...]
 
-@(o iii 2) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+@(o iii 2') Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
 
-@(o iii 3) [...]
+@(o iii 3') [...]
 
-@(o iii 4) The 13th, [...] 1+[x° ...]
+@(o iii 4') The 13th, [...] 1+[x° ...]

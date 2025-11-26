@@ -9,7 +9,7 @@
 #lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
 
 @obverse
-1'. MU 1 ME 60+15.[KA]M {I}a[r-šá-ka-a LUGAL ...]
+1'. MU 1 ME 60+15.[KA]M {m}a[r-šá-ka-a LUGAL ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; u
 
 2'. in 6 ina TIL zib{ME} IGI [...]
@@ -143,92 +143,92 @@ $ ruling
 
 @top
 
-@(t.e. 1) At the command of Bel and Beltija may it go well.
+@(t.e. 1') At the command of Bel and Beltija may it go well.
 
-@(o 1) Year 175, [king] A[rsaces ...]
+@(o 1') Year 175, [king] A[rsaces ...]
 
-@(o 2) around the 6th, (Jupiter’s) first appearance in the end of Pisces [...]
+@(o 2') around the 6th, (Jupiter’s) first appearance in the end of Pisces [...]
 
-@(o 3) 4 cubits [below] [β?] Arietis ... [...]
+@(o 3') 4 cubits [below] [β?] Arietis ... [...]
 
-@(o 4) [it became stationary ...] behind α Ar[ietis.]
+@(o 4') [it became stationary ...] behind α Ar[ietis.]
 
-@(o 5) Month VII, around the 10th, Jupiter’s [acronychal rising ...]
+@(o 5') Month VII, around the 10th, Jupiter’s [acronychal rising ...]
 
-@(o 6) [it became stationary] 1 1/2 cubits behind η [Piscium ...]
+@(o 6') [it became stationary] 1 1/2 cubits behind η [Piscium ...]
 
-@(o 7) 4 cubits [below β/α] Arietis [... Month XII₂,]
+@(o 7') 4 cubits [below β/α] Arietis [... Month XII₂,]
 
-@(o 8) around the 20th, Jupiter’s [last appearance] in the e[nd of Aries.]
-
-$ ruling
-
-@(o 9) Year 162, month XI, ar[ound ...]
-
-@(o 10) Year 163, [king] Al[exander ...]
-
-@(o 11) ..., night of the 15th?, last part of the night, Jupi[ter ...]
-
-@(o 12) the 4th, [...] Jupiter was [...] below [...]
-
-@(o 13) ... [...]
-
-@(r i 1) Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 12° 20'. 
-
-@(r i 2) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 10° 10'. 
-
-@(r i 3) Month XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 10°. 
-
-@(r i 4) ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+1° 30'.
+@(o 8') around the 20th, Jupiter’s [last appearance] in the e[nd of Aries.]
 
 $ ruling
 
-@(r i 5) [Month II, ...] solar eclipse;
+@(o 9') Year 162, month XI, ar[ound ...]
 
-@(r i 6) [when I watched I did not] see it. At 75°
+@(o 10') Year 163, [king] Al[exander ...]
 
-@(r i 7) [after sun]rise.
+@(o 11') ..., night of the 15th?, last part of the night, Jupi[ter ...]
 
-@(r i 8) [Month III, ...] lunar eclipse which was omitted.
+@(o 12') the 4th, [...] Jupiter was [...] below [...]
 
-@(r i 9) At 19° before sunset.
+@(o 13') ... [...]
 
-@(r i 10) Month VIII, the 28th, solar eclipse;
+@(r i 1') Month XI, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 12° 20'. 
 
-@(r i 11) on account of clouds I did not watch.
+@(r i 2') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: 10° 10'. 
 
-@(r i 12) At 5° before sunrise.
+@(r i 3') Month XII, ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: 10°. 
 
-@(r i 13) [Month IX, ...] lunar eclipse which was omitted.
+@(r i 4') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x]+1° 30'.
 
-@(r i 14) At ($blank$)
+$ ruling
 
-@(r ii 1) [Month I,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ... [...]
+@(r i 5') [Month II, ...] solar eclipse;
 
-@(r ii 2) The 14th, moonset to sunrise: 50'; [...] 
+@(r i 6') [when I watched I did not] see it. At 75°
 
-@(r ii 3) The 15th, moonrise to sunset: 5° 30'; [...] 
+@(r i 7') [after sun]rise.
 
-@(r ii 4) The 15th, [sunrise to moonset:] 8° 20+[x’; ...] 
+@(r i 8') [Month III, ...] lunar eclipse which was omitted.
 
-@(r ii 5) The 16th, [sunset to moonrise:] 11° 20+[x’; ...] 
+@(r i 9') At 19° before sunset.
 
-@(r ii 6) The 27th, [moonrise to sunrise:] ... [...]
+@(r i 10') Month VIII, the 28th, solar eclipse;
 
-@(r ii 7) Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 10+[x°; ...]
+@(r i 11') on account of clouds I did not watch.
 
-@(r ii 8) The 13th, [moonset to sunrise:] ... [...] 
+@(r i 12') At 5° before sunrise.
 
-@(r ii 9) The 14th, [moonrise to sunset:] 10+[x°; ...] 
+@(r i 13') [Month IX, ...] lunar eclipse which was omitted.
 
-@(r ii 10) The 14th, [sunrise to moonset:] 1+[x°; ...] 
+@(r i 14') At ($blank$)
 
-@(r ii 11) The 15th, [sunset to moonrise:] ... [...] 
+@(r ii 1') [Month I,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) ... [...]
 
-@(r ii 12) The 28th, [...] 
+@(r ii 2') The 14th, moonset to sunrise: 50'; [...] 
 
-@(r ii 13) First days, [...]
+@(r ii 3') The 15th, moonrise to sunset: 5° 30'; [...] 
+
+@(r ii 4') The 15th, [sunrise to moonset:] 8° 20+[x’; ...] 
+
+@(r ii 5') The 16th, [sunset to moonrise:] 11° 20+[x’; ...] 
+
+@(r ii 6') The 27th, [moonrise to sunrise:] ... [...]
+
+@(r ii 7') Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 10+[x°; ...]
+
+@(r ii 8') The 13th, [moonset to sunrise:] ... [...] 
+
+@(r ii 9') The 14th, [moonrise to sunset:] 10+[x°; ...] 
+
+@(r ii 10') The 14th, [sunrise to moonset:] 1+[x°; ...] 
+
+@(r ii 11') The 15th, [sunset to moonrise:] ... [...] 
+
+@(r ii 12') The 28th, [...] 
+
+@(r ii 13') First days, [...]
 
 @left
 
-@(l.e. 1) At 24° [...]
+@(l.e. 1') At 24° [...]

@@ -31,7 +31,7 @@ $ ruling
 #lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MAŠ.MAŠ-šá-SIPA[γ Geminorum]CN; n; ammatu[unit]N
 
 $ ruling
-9'. [... MU 2 ME 28.KAM {I}ar-šá-ka]-⸢a⸣ LUGAL GU₄ in 11 dele-bat ina ŠÚ ina MAŠ.MAŠ IGI NU PAP ⸢in⸣ [...]
+9'. [... MU 2 ME 28.KAM {m}ar-šá-ka]-⸢a⸣ LUGAL GU₄ in 11 dele-bat ina ŠÚ ina MAŠ.MAŠ IGI NU PAP ⸢in⸣ [...]
 #lem: u; šattu[year]N; n; mē[(one) hundred]NU; n;  Aršaka[Arsaces]RN; šarru[king]N; Ayyaru[Month II]MN; ina[around (day x)]PRP; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; ina[around (day x)]PRP; u
 
 10'. [... ana N]IM DIB GE₆ 11 USAN dele-bat e SA₄-šá-ABSIN 1 [KÙŠ ...]
@@ -82,54 +82,54 @@ $ ruling
 
 @translation labeled en project
 
-@(o 1) [...] became stationary [in Ge]mini. Month VIII, around the 30th?, [...]
+@(o 1') [...] became stationary [in Ge]mini. Month VIII, around the 30th?, [...]
 
-@(o 2) [... when it became station]ary [in ..., it became stationary] 1/2 cubit in front of μ Geminorum, 8 fin[gers ...]
-
-$ ruling
-
-@(o 3) [Year 153, ...] Month IV, night of the 24th, last part of the night, Jupiter was [...] above η Geminorum [...]
-
-@(o 4) [...] 2 fingers [above μ] Geminorum. Month VI, night of the 2nd, last part of the night, Jupiter was [...] above γ Geminorum [...]
-
-@(o 5) [...Jupiter,] while moving back [to the west,] was 3 cubits above γ Geminorum. Month IX, night of the 10th, first part of the night, [...]
-
-@(o 6) [... night of the x]+2nd, first part of the night, Jupiter was 8 fingers above η Geminorum [...]
-
-@(o 7) [...] 8 [fingers] above μ Geminorum. Month XII₂, night of the 1[+xth, ...]
-
-@(o 8) [... Night] of the 27th, first part of the night, Jupiter was 3 cubits above γ Geminorum.
+@(o 2') [... when it became station]ary [in ..., it became stationary] 1/2 cubit in front of μ Geminorum, 8 fin[gers ...]
 
 $ ruling
 
-@(o 9) [Year ... 228,] king [Arsace]s. Month II, around the 11th, Venus’ first appearance in the west in Gemini; I did not watch. Around [...]
+@(o 3') [Year 153, ...] Month IV, night of the 24th, last part of the night, Jupiter was [...] above η Geminorum [...]
 
-@(o 10) [...] having passed [... to the ea]st. Night of the 11th, first part of the night, Venus was 1 [cubit] above α Virginis [...]
+@(o 4') [...] 2 fingers [above μ] Geminorum. Month VI, night of the 2nd, last part of the night, Jupiter was [...] above γ Geminorum [...]
 
-@(o 11) [...] night of the 5th, first part of the night, Venus was 3 1/2 cubits below β Librae. Night of the 16th, first part [of the night, ...]
+@(o 5') [...Jupiter,] while moving back [to the west,] was 3 cubits above γ Geminorum. Month IX, night of the 10th, first part of the night, [...]
 
-@(o 12) [...] Venus was 2 cubits above α Scorpii. Month VII, night of the 1st, first part of the night, Venus was [...] below θ [Ophiuchi ...]
+@(o 6') [... night of the x]+2nd, first part of the night, Jupiter was 8 fingers above η Geminorum [...]
 
-@(o 13) [...] ... Night of the 25th, first part of the night, Venus was [...] above γ C[apricorni ...]
+@(o 7') [...] 8 [fingers] above μ Geminorum. Month XII₂, night of the 1[+xth, ...]
 
-@(o 14) [...] ... [...]
+@(o 8') [... Night] of the 27th, first part of the night, Jupiter was 3 cubits above γ Geminorum.
 
-@(r i 1) [...] ... [...]
+$ ruling
 
-@(r i 2) [The 1]4th?, moonrise to sunset: 4°; mea[sured.]
+@(o 9') [Year ... 228,] king [Arsace]s. Month II, around the 11th, Venus’ first appearance in the west in Gemini; I did not watch. Around [...]
 
-@(r i 3) [The 1]4th?, sunrise to moonset: 5° 30'; mea[sured.]
+@(o 10') [...] having passed [... to the ea]st. Night of the 11th, first part of the night, Venus was 1 [cubit] above α Virginis [...]
 
-@(r i 4) [The 1]5th?, sunset to moonrise: 8° 30'; measured.
+@(o 11') [...] night of the 5th, first part of the night, Venus was 3 1/2 cubits below β Librae. Night of the 16th, first part [of the night, ...]
 
-@(r i 5) [The xth,] moonrise to sunrise: [x]+11° 10'; when I watched I did not see it.
+@(o 12') [...] Venus was 2 cubits above α Scorpii. Month VII, night of the 1st, first part of the night, Venus was [...] below θ [Ophiuchi ...]
 
-@(r ii 1) ... [...]
+@(o 13') [...] ... Night of the 25th, first part of the night, Venus was [...] above γ C[apricorni ...]
 
-@(r ii 2) The 14th, [...]
+@(o 14') [...] ... [...]
 
-@(r ii 3) ... [...]
+@(r i 1') [...] ... [...]
+
+@(r i 2') [The 1]4th?, moonrise to sunset: 4°; mea[sured.]
+
+@(r i 3') [The 1]4th?, sunrise to moonset: 5° 30'; mea[sured.]
+
+@(r i 4') [The 1]5th?, sunset to moonrise: 8° 30'; measured.
+
+@(r i 5') [The xth,] moonrise to sunrise: [x]+11° 10'; when I watched I did not see it.
+
+@(r ii 1') ... [...]
+
+@(r ii 2') The 14th, [...]
+
+@(r ii 3') ... [...]
 
 $ break
 
-@(r ii 4) [...] passin[gs, ...]
+@(r ii 4') [...] passin[gs, ...]

@@ -73,25 +73,25 @@ $ broken
 
 @translation labeled en project
 
-@(o 1) [...] Month V, the 20+[xth, ...]
+@(o 1') [...] Month V, the 20+[xth, ...]
 
-@(o 2) [...] Month XII was intercalary.
+@(o 2') [...] Month XII was intercalary.
 
 $ ruling
 
-@(o 3) [...] 2 cubits [below] β Tauri. Night of the 14th, first part of the night, Venus was [x] cubits above ζ Tauri.
+@(o 3') [...] 2 cubits [below] β Tauri. Night of the 14th, first part of the night, Venus was [x] cubits above ζ Tauri.
 
-@(o 4) [...] Venus was 1 cubit above μ Geminorum. Night of the 26th,
+@(o 4') [...] Venus was 1 cubit above μ Geminorum. Night of the 26th,
 
-@(o 5) [...] 3 cubits [below α] Geminorum. Night of the 10th, first part of the night, Venus was 2 cubits below β Geminorum.
+@(o 5') [...] 3 cubits [below α] Geminorum. Night of the 10th, first part of the night, Venus was 2 cubits below β Geminorum.
 
-@(o 6) [...] 3 cubits [below] ε Leonis. Night of the 11th, first part of the night, Venus was
+@(o 6') [...] 3 cubits [below] ε Leonis. Night of the 11th, first part of the night, Venus was
 
-@(o 7) [... first] part of the night, Venus was 4 [cubits] below θ Leonis.
+@(o 7') [... first] part of the night, Venus was 4 [cubits] below θ Leonis.
 
-@(o 8) [... night of the x]+3rd, first part of the night, Venus was ... [...]
+@(o 8') [... night of the x]+3rd, first part of the night, Venus was ... [...]
 
-@(o 9) [...] ... [...]
+@(o 9') [...] ... [...]
 
 @reverse
 
@@ -103,22 +103,22 @@ $ broken
 
 $ broken
 
-@(r iii 1) [...] ...
+@(r iii 1') [...] ...
 
-@(r iv 1) [...] ... [...]
+@(r iv 1') [...] ... [...]
 
-@(r iv 2) [...] it was a little high to the sun.
+@(r iv 2') [...] it was a little high to the sun.
 
-@(r iv 3) [The 14th,] moonrise to sunset: [x]+11°; measured (despite) clouds. 
+@(r iv 3') [The 14th,] moonrise to sunset: [x]+11°; measured (despite) clouds. 
 
-@(r iv 4) [The 14th,] moonset to sunrise: [x°;] measured (despite) clouds. 
+@(r iv 4') [The 14th,] moonset to sunrise: [x°;] measured (despite) clouds. 
 
-@(r iv 5) [The 15th,] sunset to moonrise: 4°; measured (despite) clouds.
+@(r iv 5') [The 15th,] sunset to moonrise: 4°; measured (despite) clouds.
 
-@(r iv 6) The 15th, sunrise to moonset: 9°; measured (despite) clouds. 
+@(r iv 6') The 15th, sunrise to moonset: 9°; measured (despite) clouds. 
 
-@(r iv 7) The 27th, moonrise to sunrise: 15°; measured (despite) clouds. 
+@(r iv 7') The 27th, moonrise to sunrise: 15°; measured (despite) clouds. 
 
-@(r iv 8) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 14°; measured (despite) clouds.
+@(r iv 8') Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 14°; measured (despite) clouds.
 
-@(r iv 9) [...] ...
+@(r iv 9') [...] ...

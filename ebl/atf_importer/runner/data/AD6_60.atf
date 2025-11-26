@@ -9,7 +9,7 @@
 #lem: ina[at]PRP; amāt[command]N; Bēl[Bēl]DN; u[and]CNJ; Bēltiya[Bēltu]DN; lišlim[be(come) well]V
 
 @obverse
-1'. [M]U 1 ME 13.KAM {I}an ⸢u⸣ [{I}an A-šú LUGAL{MEŠ} ...]
+1'. [M]U 1 ME 13.KAM {m}an ⸢u⸣ [{I}an A-šú LUGAL{MEŠ} ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
 
 2'. MÚL.BABBAR ana ŠÚ ki UŠ-a ina TIL ⸢PA⸣ [...] ⸢x⸣ [... GAN]
@@ -19,14 +19,14 @@
 #lem: ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Suhurmāšu[Capricorn]CN; rabû[set]V; Ṭebētu[Month X]MN; u; u; u; u; u; u; u
 
 $ ruling
-4'. MU 60+41.KAM {I}an LUGAL GAN GE₆ [... SIG] SI-MÁŠ 2 KÙŠ ZÍZ GE₆ 25 [ina ZÁLAG MÚL.BABBAR?]
+4'. MU 60+41.KAM {m}an LUGAL GAN GE₆ [... SIG] SI-MÁŠ 2 KÙŠ ZÍZ GE₆ 25 [ina ZÁLAG MÚL.BABBAR?]
 #lem: šattu[year]N; n; Antiochus[Antiochus]RN; šarru[king]N; Kislīmu[Month IX]MN; mūšu[night]N; u; šapil[below]'PRP; SI-MÁŠ[β Capricorni]CN; n; ammatu[unit]N; Šabāṭu[Month XI]MN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Kakkabu-peṣû[Jupiter]CN
 
 5'. e MÚL-IGI-šá-SUHUR-MÁŠ 1/2 [KÙŠ x (x) M]ÚL.BABBAR e MÚL-ár-šá-SUHUR-MÁŠ 1/2 KÙŠ
 #lem: eli[above]PRP; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; ammatu[unit]N; u; u; Kakkabu-peṣû[Jupiter]CN; eli[above]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N
 
 $ ruling
-6'. MU 1 ME 12.KAM šá ši-i MU 1 M[E 60+16.KAM {I}ar-šá-k]a-a LUGAL BAR 17 12 na dele-bat
+6'. MU 1 ME 12.KAM šá ši-i MU 1 M[E 60+16.KAM {m}ar-šá-k]a-a LUGAL BAR 17 12 na dele-bat
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; ša[which]REL; šī[that]IP; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; Nisannu[Month I]MN; n; n; na[sunset to setting]N; Dilbat[Venus]CN
 
 7'. in 22 dele-bat ina ŠÚ ina MÚL.MÚL [ŠÚ ... M]ÚL.MÚL IGI KUR 9 na-su in 1 IGI
@@ -72,7 +72,7 @@ $ ruling
 #lem: Addaru[Month XII]MN; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Agru[Aries]CN; nanmuru[be(come) visible]V; n; na[sunset to setting]N; u
 
 $ ruling
-21'. MU 1 ME 38.KAM {I}an u {I}an A-šú [LUGAL{MEŠ} ...]
+21'. MU 1 ME 38.KAM {m}an u {m}an A-šú [LUGAL{MEŠ} ...]
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u[and]CNJ; Antiochus[Antiochus]RN; māru[son]N; šarrāni[king]N; u
 
 22'. [x x x] ŠÚ-šú DIB SIG [x] ⸢GU₄.UD⸣ [...]
@@ -96,62 +96,62 @@ $ ruling
 
 @top
 
-@(t.e. 1) [At] the command of Bel and [Beltija may it go well.]
+@(t.e. 1') [At] the command of Bel and [Beltija may it go well.]
 
-@(o 1) Year 113, [kings] Antiochus and [his son Antiochus ...]
+@(o 1') Year 113, [kings] Antiochus and [his son Antiochus ...]
 
-@(o 2) when Jupiter became stationary to the west, [it became stationary] in the end of ⸢Sagittarius⸣ [... Month IX,]
+@(o 2') when Jupiter became stationary to the west, [it became stationary] in the end of ⸢Sagittarius⸣ [... Month IX,]
 
-@(o 3) around the 12th, Jupiter’s last appearance in Capricorn. Month X, the xth, [...] ... [...]
-
-$ ruling
-
-@(o 4) Year 101, king Antiochus. Month IX, night [...] 2 cubits [below] β Capricorni. Month XI, night of the 25th, [last part of the night, Jupiter was]
-
-@(o 5) 1/2 cubit above γ Capricorni. [...] Jupiter was 1/2 cubit above δ Capricorni. 
+@(o 3') around the 12th, Jupiter’s last appearance in Capricorn. Month X, the xth, [...] ... [...]
 
 $ ruling
 
-@(o 6) Year 112, which is year 1[76,] king Arsaces. Month I, the 17th, sunset to setting of Venus: 12°.
+@(o 4') Year 101, king Antiochus. Month IX, night [...] 2 cubits [below] β Capricorni. Month XI, night of the 25th, [last part of the night, Jupiter was]
 
-@(o 7) Around the 22nd, Venus’ [last appearance] in the west in Taurus [... Venus’] first appearance [in the east in] Taurus; it was bright, rising of Venus to sunrise: 9°; (ideal) first appearance on the 1st.
-
-@(o 8) [Month III, ni]ght of the 1st, last part of the night, Venus was [...] above ...[ ... Venu]s was 4 cubits below β Tauri. Night of the 22+[xth,]
-
-@(o 9) [... Venus was] 1 cubit [below] η Geminorum. Night [...]
-
-@(o 10) [...] ... [... Venus was] 2 cubits [above] γ Geminorum, Venus being 4 [fingers ...]
-
-@(o 11) [...] ... Night of the 7th?, [last part of the night, Venus was] 3 1/2 cubits [below] β Geminorum ... [...]
-
-@(o 12) [...Venus was] 4 1/2 cubits [below] α Geminorum [...] ... [...]
-
-@(o 13) [... Venus was] 1/2 cubit [below δ? Can]cri?, Venus being 2 fingers to [...] ... [...]
-
-@(o 14) [...] Venus having passed 2 fingers to the east. Month VI, ... [...]
-
-@(o 15) 5? cubits [below θ] Leonis. Night of the 17th, last part of the night, Venus was [...]
-
-@(o 16) 2/3 cubit below γ Virginis, Venus being 4 fingers back to the west [...]
-
-@(o 17) Night of th 27th, last part of the night, Venus was 2/3 cubit above α Librae [...]
-
-@(o 18) Night of the 12th, last part of the night, Venus was [...] above β Scorpii [...]
-
-@(o 19) Night of the 27th, last part of the night, Venus was [...] above θ Ophiuchi [...]
-
-@(o 20) Month XII, the 28th, Venus first appearance in the west in Aries; sunset to setting of Venus: 7°? [...]
+@(o 5') 1/2 cubit above γ Capricorni. [...] Jupiter was 1/2 cubit above δ Capricorni. 
 
 $ ruling
 
-@(o 21) Year 138, [kings] Antiochus and his son Antiochus. [...]
+@(o 6') Year 112, which is year 1[76,] king Arsaces. Month I, the 17th, sunset to setting of Venus: 12°.
 
-@(o 22) [...] its last appearance omitted. Month III, [the xth,] Mercury’s [...]
+@(o 7') Around the 22nd, Venus’ [last appearance] in the west in Taurus [... Venus’] first appearance [in the east in] Taurus; it was bright, rising of Venus to sunrise: 9°; (ideal) first appearance on the 1st.
 
-@(o 23) [...] ... [...]
+@(o 8') [Month III, ni]ght of the 1st, last part of the night, Venus was [...] above ...[ ... Venu]s was 4 cubits below β Tauri. Night of the 22+[xth,]
 
-@(r i 1) Night [...]
+@(o 9') [... Venus was] 1 cubit [below] η Geminorum. Night [...]
 
-@(r i 2) eclipse [...]
+@(o 10') [...] ... [... Venus was] 2 cubits [above] γ Geminorum, Venus being 4 [fingers ...]
 
-@(r i 3) 87°? [...]
+@(o 11') [...] ... Night of the 7th?, [last part of the night, Venus was] 3 1/2 cubits [below] β Geminorum ... [...]
+
+@(o 12') [...Venus was] 4 1/2 cubits [below] α Geminorum [...] ... [...]
+
+@(o 13') [... Venus was] 1/2 cubit [below δ? Can]cri?, Venus being 2 fingers to [...] ... [...]
+
+@(o 14') [...] Venus having passed 2 fingers to the east. Month VI, ... [...]
+
+@(o 15') 5? cubits [below θ] Leonis. Night of the 17th, last part of the night, Venus was [...]
+
+@(o 16') 2/3 cubit below γ Virginis, Venus being 4 fingers back to the west [...]
+
+@(o 17') Night of th 27th, last part of the night, Venus was 2/3 cubit above α Librae [...]
+
+@(o 18') Night of the 12th, last part of the night, Venus was [...] above β Scorpii [...]
+
+@(o 19') Night of the 27th, last part of the night, Venus was [...] above θ Ophiuchi [...]
+
+@(o 20') Month XII, the 28th, Venus first appearance in the west in Aries; sunset to setting of Venus: 7°? [...]
+
+$ ruling
+
+@(o 21') Year 138, [kings] Antiochus and his son Antiochus. [...]
+
+@(o 22') [...] its last appearance omitted. Month III, [the xth,] Mercury’s [...]
+
+@(o 23') [...] ... [...]
+
+@(r i 1') Night [...]
+
+@(r i 2') eclipse [...]
+
+@(r i 3') 87°? [...]

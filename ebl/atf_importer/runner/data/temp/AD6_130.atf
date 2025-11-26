@@ -121,25 +121,25 @@ $ broken
 @translation labeled en project
 
 
-@(o 1) [... the x]+12th, Saturn’s ... [...]
+@(o 1') [... the x]+12th, Saturn’s ... [...]
 
-@(o 2) [...] last appearance [in the beginn]ing? of Scorpius. Month VIII, the 10th, Saturn’s [first appearance] in Scorpius, 2/3 [cubit ...]
+@(o 2') [...] last appearance [in the beginn]ing? of Scorpius. Month VIII, the 10th, Saturn’s [first appearance] in Scorpius, 2/3 [cubit ...]
 
-@(o 3) [...] 3 cubits [above] α Scorpii. Month XII, around until the 8th, when Saturn became stationary to the east, [...]
-
-$ ruling
-
-@(o 4) [... first appea]rance [in the beginn]ing? of Gemini, 2 1/2 cubits behind β Tauri, 2 cubits low to the south [...]
-
-@(o 5) [...] when [Mars] became stationary [to the east,] it became stationary 3 cubits behind γ Virginis. Month XI, around the 18th, Mars’ acronychal rising [...]
-
-@(o 6) [...] it became stationary [...] β Virginis; I did not watch.
+@(o 3') [...] 3 cubits [above] α Scorpii. Month XII, around until the 8th, when Saturn became stationary to the east, [...]
 
 $ ruling
 
-@(o 7) [...] 2 fingers [...] η Geminorum; according to oral information. Night of the 24th, last part of the night, Mars ... [...]
+@(o 4') [... first appea]rance [in the beginn]ing? of Gemini, 2 1/2 cubits behind β Tauri, 2 cubits low to the south [...]
 
-@(o 8) [...] oral information. Month III, night of the 16th, last part of the night, Mars was 4 cubits below α Geminorum.
+@(o 5') [...] when [Mars] became stationary [to the east,] it became stationary 3 cubits behind γ Virginis. Month XI, around the 18th, Mars’ acronychal rising [...]
+
+@(o 6') [...] it became stationary [...] β Virginis; I did not watch.
+
+$ ruling
+
+@(o 7') [...] 2 fingers [...] η Geminorum; according to oral information. Night of the 24th, last part of the night, Mars ... [...]
+
+@(o 8') [...] oral information. Month III, night of the 16th, last part of the night, Mars was 4 cubits below α Geminorum.
 
 @reverse
 
@@ -149,56 +149,56 @@ $ broken
 
 @column 2
 
-@(r ii 1) [... mea]sured.
+@(r ii 1') [... mea]sured.
 
-@(r ii 2) [...] measured.
+@(r ii 2') [...] measured.
 
-@(r ii 3) [...] measured (despite) clouds.
+@(r ii 3') [...] measured (despite) clouds.
 
-@(r ii 4) [...] measured (despite) clouds.
+@(r ii 4') [...] measured (despite) clouds.
 
-@(r ii 5) [...] measured (despite) clouds.
+@(r ii 5') [...] measured (despite) clouds.
 
-@(r ii 6) [... cl]ouds, I did not watch.
+@(r ii 6') [... cl]ouds, I did not watch.
 
-@(r ii 7) [...] measured (despite) clouds.
+@(r ii 7') [...] measured (despite) clouds.
 
-@(r ii 8) [... measu]red.
+@(r ii 8') [... measu]red.
 
-@(r iii 1) [Mon]th V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, ... [...]
+@(r iii 1') [Mon]th V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°; it was bright, ... [...]
 
-@(r iii 2) The 12th, [moonset to sunrise:] 3° [...]
+@(r iii 2') The 12th, [moonset to sunrise:] 3° [...]
 
-@(r iii 3) [The 13th,] moonrise to sunset: [x]+6°; mea[sured.] 
+@(r iii 3') [The 13th,] moonrise to sunset: [x]+6°; mea[sured.] 
 
-@(r iii 4) The 13th, sunrise to moonset: x°; measured.
+@(r iii 4') The 13th, sunrise to moonset: x°; measured.
 
-@(r iii 5) The 14th, sunset to moonrise: 3°; I did not watch.
+@(r iii 5') The 14th, sunset to moonrise: 3°; I did not watch.
 
-@(r iii 6) The 27th, moonrise to sunrise: 8° 30'; mist, [...]
+@(r iii 6') The 27th, moonrise to sunrise: 8° 30'; mist, [...]
 
-@(r iii 7) Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12+[x°]; it was bright, measured; it was low to the sun.
+@(r iii 7') Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12+[x°]; it was bright, measured; it was low to the sun.
 
-@(r iii 8) The 12th, moonset to sunrise: 11° 30'; measured. 
+@(r iii 8') The 12th, moonset to sunrise: 11° 30'; measured. 
 
-@(r iii 9) The 13th, sunrise to moonset: 1° 10'; measured (despite) mist. 
+@(r iii 9') The 13th, sunrise to moonset: 1° 10'; measured (despite) mist. 
 
-@(r iii 10) The 14th, moonrise to sunset: 2°; measured (despite) mist. 
+@(r iii 10') The 14th, moonrise to sunset: 2°; measured (despite) mist. 
 
-@(r iii 11) The 15th, sunset to moonrise: 7°. 
+@(r iii 11') The 15th, sunset to moonrise: 7°. 
 
-@(r iii 12) The 27th, moonrise to sunrise: 16°; measured. 
+@(r iii 12') The 27th, moonrise to sunrise: 16°; measured. 
 
-@(r iii 13) [Month VII,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [x]+10° 40'; clouds, ...
+@(r iii 13') [Month VII,] (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [x]+10° 40'; clouds, ...
 
-@(r iv 1) Month X, [...]
+@(r iv 1') Month X, [...]
 
-@(r iv 2) The 15th?, [...]
+@(r iv 2') The 15th?, [...]
 
-@(r iv 3) The 15th?, [...]
+@(r iv 3') The 15th?, [...]
 
-@(r iv 4) The 10+[xth, ...]
+@(r iv 4') The 10+[xth, ...]
 
-@(r iv 5) The 10+[xth, ...]
+@(r iv 5') The 10+[xth, ...]
 
-@(r iv 6) The 10+[xth, ...]
+@(r iv 6') The 10+[xth, ...]
