@@ -4,6 +4,9 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
+# note: Translation not warranted.
+
 @obverse
 1'. [...] ⸢x⸣ [...]
 #lem: u; u; u
@@ -72,16 +75,6 @@
 #lem: u; u; ūmu[moonrise to sunset]N
 
 @translation labeled en project
-
-@obverse
-
-Translation not warranted.
-
-@reverse
-
-@column 1
-
-Translation not warranted.
 
 @(r ii 1') Year [...]
 

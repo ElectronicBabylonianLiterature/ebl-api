@@ -186,7 +186,7 @@ $ ruling
 5'. ⸢x⸣ [...]
 #lem: u; u
 
-$(break of 5 lines) 
+$ (break of 5 lines) 
 
 10-15'. ⸢x⸣ [...]
 #lem: u; u
@@ -319,6 +319,8 @@ $ ruling
 5'. [x GÍ]R.TAB ŠÚ GAN 30 ina ŠÚ
 #lem: u; Zuqiqīpu[Scorpio]CN; rabû[set]V; Kislīmu[Month IX]MN; n; ina[in]PRP; erbu[west]'N
 
+$ (break of 5 lines)
+
 6'. [ina x MÁ]Š IGI DIR.ŠE GE₆
 #lem: ina[in]PRP; u; Suhurmāšu[Capricorn]CN; nanmuru[be(come) visible]'V; Addāru_Šanû[(Intercalary) Month XII₂]MN; mūšu[night]N
 
@@ -374,246 +376,244 @@ $ ruling
 
 @translation labeled en project
 
-@(o i 1) [...] ... [...]
+@(o i 1') [...] ... [...]
 
-@(o i 2) [...] last appearance in Virgo. Month VI?,
+@(o i 2') [...] last appearance in Virgo. Month VI?,
 
-@(o i 3) [the xth,] first appearance [in] the east, 2 fingers? behind α [Virginis]
+@(o i 3') [the xth,] first appearance [in] the east, 2 fingers? behind α [Virginis]
 
-@(o i 4) ... Month VII, the 17th, last appearance in the east in Libra. Month VIII,
+@(o i 4') ... Month VII, the 17th, last appearance in the east in Libra. Month VIII,
 
-@(o i 5) the 21st, first appearance in the west in the beginning of Capricorn. Month IX, the 11th?,
+@(o i 5') the 21st, first appearance in the west in the beginning of Capricorn. Month IX, the 11th?,
 
-@(o i 6) last appearance in the west in Capricorn. On the 25th, [first appearance] in the east in Capricorn.
+@(o i 6') last appearance in the west in Capricorn. On the 25th, [first appearance] in the east in Capricorn.
 
-@(o i 7) [Mon]th X, the 18th, last appearance in the east in Aquarius?.
+@(o i 7') [Mon]th X, the 18th, last appearance in the east in Aquarius?.
 
-@(o i 8) [...] first appearance [in the west in the beginn]ing? of Aries. Night of the 10+[xth,] it was below?
+@(o i 8') [...] first appearance [in the west in the beginn]ing? of Aries. Night of the 10+[xth,] it was below?
 
-@(o i 9) [...] cubits.
+@(o i 9') [...] cubits.
 
 $ ruling
 
-@(o i 10) [...] ... [...]
+@(o i 10') [...] ... [...]
 
-@(o i 11) [...] ... [...]
+@(o i 11') [...] ... [...]
 
-@(o i 12) [...] ... [...] ... [...]
+@(o i 12') [...] ... [...] ... [...]
 
-@(o i 13) [...] ... [...] ... [...]
+@(o i 13') [...] ... [...] ... [...]
 
-@(o i 14) [...] Month VI, the 5th, ... [...]
+@(o i 14') [...] Month VI, the 5th, ... [...]
 
-@(o i 15) [...] ... [...]
+@(o i 15') [...] ... [...]
 
-@(o i 16) [...] ... [...] below? [...]
+@(o i 16') [...] ... [...] below? [...]
 
-@(o i 17) [...] ... [...]
+@(o i 17') [...] ... [...]
 
-@(o i 18) [...] ... [...]
+@(o i 18') [...] ... [...]
 
-@(o i 19) [...] ... [...]
+@(o i 19') [...] ... [...]
 
-@(o i 20) [...] in Taurus
+@(o i 20') [...] in Taurus
 
-@(o i 21) [...] ...
+@(o i 21') [...] ...
 
-@(o i 22) [...] ...
+@(o i 22') [...] ...
 
-@(o i 23) [...] ...
+@(o i 23') [...] ...
 
-@(o ii 1) [...] ... [...]
+@(o ii 1') [...] ... [...]
 
-@(o ii 2) [...] ... in the east? [...]
+@(o ii 2') [...] ... in the east? [...]
 
-@(o ii 3) [...] ... Night of the 11th?, it was below ... [...]
+@(o ii 3') [...] ... Night of the 11th?, it was below ... [...]
 
-@(o ii 4) ... [...] ... below? ...
+@(o ii 4') ... [...] ... below? ...
 
-@(o ii 5) ... Month V, the 12th?, last appearance [in the ...] in the beginning of Leo.
+@(o ii 5') ... Month V, the 12th?, last appearance [in the ...] in the beginning of Leo.
 
-@(o ii 6) Month VII, the 1st?, [in] the east? ...
+@(o ii 6') Month VII, the 1st?, [in] the east? ...
 
-@(o ii 7) Month VIII, ... [...] ... 18th? [...]
+@(o ii 7') Month VIII, ... [...] ... 18th? [...]
 
-@(o ii 8) [...] ... [...] cubits? ...
+@(o ii 8') [...] ... [...] cubits? ...
 
-@(o ii 9) [...] in the east in Capricorn? ... [...]
+@(o ii 9') [...] in the east in Capricorn? ... [...]
 
-@(o ii 10) ... [...]
+@(o ii 10') ... [...]
 
-@(o ii 11) ... [...] ... [...]
+@(o ii 11') ... [...] ... [...]
 
-@(o ii 12) ... [...] ... the 8th [...]
+@(o ii 12') ... [...] ... the 8th [...]
 
-@(o ii 13) ... [...] ... [...] below?
+@(o ii 13') ... [...] ... [...] below?
 
-@(o ii 14) ... [...] Capricorn ...
+@(o ii 14') ... [...] Capricorn ...
 
-@(o ii 15) [...] ... east in the beginning
+@(o ii 15') [...] ... east in the beginning
 
-@(o ii 16) [...] Month V?, on? the 6th, last appearance in the east in Cancer?.
+@(o ii 16') [...] Month V?, on? the 6th, last appearance in the east in Cancer?.
 
-@(o ii 17) [...] ... the 1st, ... in the west in the middle of ... α Leonis?
+@(o ii 17') [...] ... the 1st, ... in the west in the middle of ... α Leonis?
 
-@(o ii 18) [...] ... on? the 24th ...
+@(o ii 18') [...] ... on? the 24th ...
 
-@(o ii 19) last? appearance .... Month VI?, the 26th, [first appearance] in the east in the middle
+@(o ii 19') last? appearance .... Month VI?, the 26th, [first appearance] in the east in the middle
 
-@(o ii 20) [... the xth,] it was 2/3 cubit above α Librae.
+@(o ii 20') [... the xth,] it was 2/3 cubit above α Librae.
 
-@(o ii 21) [...] ... [...] the 6th?, ...
+@(o ii 21') [...] ... [...] the 6th?, ...
 
-@(o ii 22) ... Month X?, the 12th?, first appearance in the west? in the end
+@(o ii 22') ... Month X?, the 12th?, first appearance in the west? in the end
 
-@(o ii 23) of Capricorn; it was bright. Month XI?, the 4th, last appearance in the west in Aquarius. The 16th, first appearance in the east
+@(o ii 23') of Capricorn; it was bright. Month XI?, the 4th, last appearance in the west in Aquarius. The 16th, first appearance in the east
 
-@(o ii 24) [in] the end of Aquarius. ..., the 17th?, last appearance in the east ...
+@(o ii 24') [in] the end of Aquarius. ..., the 17th?, last appearance in the east ...
 
-@(o ii 25) ... Month XII₂?, the 27th, first appearance in the west in the beginning of Aries?;
+@(o ii 25') ... Month XII₂?, the 27th, first appearance in the west in the beginning of Aries?;
 
-@(o ii 26) it was bright, .... Year 1, Antiochus?, month I?, [....]
+@(o ii 26') it was bright, .... Year 1, Antiochus?, month I?, [....]
 
-@(o ii 27) the 20th, it was [....] above β/𝜁 Tauri.
+@(o ii 27') the 20th, it was [....] above β/𝜁 Tauri.
 
-@(o ii 28) ... last appearance?. Month III?, ... [...] in the east? in ...
+@(o ii 28') ... last appearance?. Month III?, ... [...] in the east? in ...
 
-@(o ii 29) The 10th?, [....] east? [...] ... [...]
+@(o ii 29') The 10th?, [....] east? [...] ... [...]
 
-@(o ii 30) ... [...] ... [...]
+@(o ii 30') ... [...] ... [...]
 
-@(o ii 31) [...] ... [...]
+@(o ii 31') [...] ... [...]
 
-@(o iii 1) ... [...]
+@(o iii 1') ... [...]
 
-@(o iii 2) Month XII [...]
+@(o iii 2') Month XII [...]
 
-@(o iii 3) in the east [...]
+@(o iii 3') in the east [...]
 
-@(o iii 4) in the be[ginning ...]
+@(o iii 4') in the be[ginning ...]
 
-@(o iii 5) ... [...]
+@(o iii 5') ... [...]
 
-($break of 5 lines$) 
+@(o iii 10-15') ... [...]
 
-@(o iii 10-15) ... [...]
+@(r i 1') ... [...]
 
-@(r i 1) ... [...]
+@(r i 2') 10 ... [...]
 
-@(r i 2) 10 ... [...]
+@(r i 3') 5 ... [...]
 
-@(r i 3) 5 ... [...]
+@(r i 4') ... [...]
 
-@(r i 4) ... [...]
+@(r i 5') in the west in [...]
 
-@(r i 5) in the west in [...]
+@(r i 6') ... in front of [...]
 
-@(r i 6) ... in front of [...]
+@(r i 7') ... [...]
 
-@(r i 7) ... [...]
+@(r i 8') ... [...]
 
-@(r i 8) ... [...]
+@(r i 9') ... [...]
 
-@(r i 9) ... [...]
+@(r i 10') 20 [...]
 
-@(r i 10) 20 [...]
+@(r i 11') ... [...]
 
-@(r i 11) ... [...]
+@(r ii 1') rear [...] 1 finger? [...]
 
-@(r ii 1) rear [...] 1 finger? [...]
+@(r ii 2') entered. Night of the 20+xth, ... [...]
 
-@(r ii 2) entered. Night of the 20+xth, ... [...]
+@(r ii 3') last appearance in the west in Cancer. The 10+xth, [...]
 
-@(r ii 3) last appearance in the west in Cancer. The 10+xth, [...]
+@(r ii 4') first appearance [....] Month V, the 29th, [...]
 
-@(r ii 4) first appearance [....] Month V, the 29th, [...]
+@(r ii 5') Month VI, the 14th, it was 4 cubits below 𝜗 Le[onis.]
 
-@(r ii 5) Month VI, the 14th, it was 4 cubits below 𝜗 Le[onis.]
+@(r ii 6') The 20+xth, it was 3 cubits? behind β Vir[ginis.]
 
-@(r ii 6) The 20+xth, it was 3 cubits? behind β Vir[ginis.]
+@(r ii 7') [Month VII,] the 6th, it was .... fingers below γ
 
-@(r ii 7) [Month VII,] the 6th, it was .... fingers below γ
+@(r ii 8') Virginis. The 18th, it was 1 2/3 cubits above
 
-@(r ii 8) Virginis. The 18th, it was 1 2/3 cubits above
+@(r ii 9') a Virginis. Month VIII,
 
-@(r ii 9) a Virginis. Month VIII,
+@(r ii 10') the 5th, it was 1⁄2? cu[bit] below α Librae.
 
-@(r ii 10) the 5th, it was 1⁄2? cu[bit] below α Librae.
+@(r ii 11') The 20th, it was 5 fingers above β
 
-@(r ii 11) The 20th, it was 5 fingers above β
+@(r ii 12') Scorpii. The 27th, it was 2? 1⁄2 cubits above α Scorpii.
 
-@(r ii 12) Scorpii. The 27th, it was 2? 1⁄2 cubits above α Scorpii.
+@(r ii 13') Month IX, the 7th, it was 2/3 cubit above 𝜗
 
-@(r ii 13) Month IX, the 7th, it was 2/3 cubit above 𝜗
+@(r ii 14') Ophiuchi. The 25th, it was balanced? above
 
-@(r ii 14) Ophiuchi. The 25th, it was balanced? above
+@(r ii 15') the four rear stars (of Sagittarius).
 
-@(r ii 15) the four rear stars (of Sagittarius).
+@(r ii 16') Month X, the 13th, it was 3 cubits below β Capricorni.
 
-@(r ii 16) Month X, the 13th, it was 3 cubits below β Capricorni.
-
-@(r ii 17) Month XI, the 25th, last appearance in the east in Pisces?.
+@(r ii 17') Month XI, the 25th, last appearance in the east in Pisces?.
 
 $ ruling
 
-@(r ii 18) Year 19, month I, the 19th, first appearance in the west in the end
+@(r ii 18') Year 19, month I, the 19th, first appearance in the west in the end
 
-@(r ii 19) of Taurus. Month III, the 29th, it was 2/3 cubit above
+@(r ii 19') of Taurus. Month III, the 29th, it was 2/3 cubit above
 
-@(r ii 20) α Leonis. Month V, night of the 4th,
+@(r ii 20') α Leonis. Month V, night of the 4th,
 
-@(r ii 21) it was 1 cubit below γ Virginis. Night
+@(r ii 21') it was 1 cubit below γ Virginis. Night
 
-@(r ii 22) of the 14th, it was 1 cubit above α Virginis. Month VI,
+@(r ii 22') of the 14th, it was 1 cubit above α Virginis. Month VI,
 
-@(r ii 23) night of the 3rd, it was [...] below α Librae.
+@(r ii 23') night of the 3rd, it was [...] below α Librae.
 
-@(r ii 24) [Night of the 1]9th, it was [...] above [...]
+@(r ii 24') [Night of the 1]9th, it was [...] above [...]
 
-@(r ii 25) [...] ... [...]
+@(r ii 25') [...] ... [...]
 
-@(r iii 1) [...] ... Month VII,
+@(r iii 1') [...] ... Month VII,
 
-@(r iii 2) [the xth, it was] 2/3 cubit [... γ] Virginis.
+@(r iii 2') [the xth, it was] 2/3 cubit [... γ] Virginis.
 
-@(r iii 3) [...] α Virginis.
+@(r iii 3') [...] α Virginis.
 
-@(r iii 4) Month VIII, the 2nd, last appearance in the east in
+@(r iii 4') Month VIII, the 2nd, last appearance in the east in
 
-@(r iii 5) [...] Scorpius. Month IX, the 30th, first appearance in the west
+@(r iii 5') [...] Scorpius. Month IX, the 30th, first appearance in the west
 
-@(r iii 6) [in ... Capri]corn. Month XII2, night
+@(r iii 6') [in ... Capri]corn. Month XII2, night
 
-@(r iii 7) [of the xth, it was] 1 cubit below η Tauri. Night
+@(r iii 7') [of the xth, it was] 1 cubit below η Tauri. Night
 
-@(r iii 8) [of the xth,] it was 2 2/3 cubits above α Tauri.
+@(r iii 8') [of the xth,] it was 2 2/3 cubits above α Tauri.
 
-@(r iii 9) [Night] of the 28th, it was [nn] fingers below 𝜁 Tauri.
+@(r iii 9') [Night] of the 28th, it was [nn] fingers below 𝜁 Tauri.
 
 $ ruling
 
-@(r iii 10) Year 21, month I, night of the 25th, it was 1 2/3 cubit below
+@(r iii 10') Year 21, month I, night of the 25th, it was 1 2/3 cubit below
 
-@(r iii 11) β Geminorum. Month II,
+@(r iii 11') β Geminorum. Month II,
 
-@(r iii 12) night of the 7th, it entered the center of Cancer. Night
+@(r iii 12') night of the 7th, it entered the center of Cancer. Night
 
-@(r iii 13) of the 20th?, it came out. Night of the 27th,
+@(r iii 13') of the 20th?, it came out. Night of the 27th,
 
-@(r iii 14) it was 2/3 cubit below α Leonis. Month III, night of the 24th,
+@(r iii 14') it was 2/3 cubit below α Leonis. Month III, night of the 24th,
 
-@(r iii 15) it was 1⁄2 cubit below the small star of the rear foot of the Lion.
+@(r iii 15') it was 1⁄2 cubit below the small star of the rear foot of the Lion.
 
-@(r iii 16) Month IV, night of the 9th, it was 4 cubits below γ
+@(r iii 16') Month IV, night of the 9th, it was 4 cubits below γ
 
-@(r iii 17) Virginis. Month V, the 11th,
+@(r iii 17') Virginis. Month V, the 11th,
 
-@(r iii 18) last appearance [in the west in] Virgo. The 27th, first appearance in
+@(r iii 18') last appearance [in the west in] Virgo. The 27th, first appearance in
 
-@(r iii 19) the east in Virgo. Month VII, the 11th?,
+@(r iii 19') the east in Virgo. Month VII, the 11th?,
 
-@(r iii 20) it was 1 2/3 cubits [... γ] Virginis.
+@(r iii 20') it was 1 2/3 cubits [... γ] Virginis.
 
-@(r iii 21) [...] α? Virginis
+@(r iii 21') [...] α? Virginis
 
-@(r iii 22) [...] ...
+@(r iii 22') [...] ...

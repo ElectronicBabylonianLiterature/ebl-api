@@ -5,7 +5,8 @@
 #atf: use math
 #atf: use legacy
 @obverse
-$ (broken except for the word @i{sin} "moon" in one place)
+$ (broken) 
+# note: broken except for the word @i{sin} "moon" in one place.
 
 @reverse
 1'. [...] [x x x] {LÚ}GALA{M[EŠ} x x] ⸢x⸣ [...] 
@@ -70,10 +71,6 @@ $ ruling
 #lem: u; u; u
 
 @translation labeled en project
-
-@obverse
-
-($broken except for the word "moon" in one place$)
 
 @reverse
 

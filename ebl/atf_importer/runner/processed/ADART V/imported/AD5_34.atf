@@ -5,6 +5,9 @@
 #atf: use math
 #atf: use legacy
 @obverse
+
+$ (ten? lines missing)
+
 1'. [38 {m}{d}AG-NÍG.D]U-[ŠEŠ 18]
 #lem: n; Nebuchadnezzar[Nebuchadnezzar II]RN; n
 
@@ -104,68 +107,66 @@
 
 @translation labeled en project
 
-($ten? lines missing$)
+@(o 1') [38 Nebukad]ne[zar II 18] 567/66
 
-@(o 1) [38 Nebukad]ne[zar II 18] 567/66
+@(o 2') [7 Na]bonidus [18] 549/48
 
-@(o 2) [7 Na]bonidus [18] 549/48
+@(o 3') [8] Cyrus 18 531/30
 
-@(o 3) [8] Cyrus 18 531/30
+@(o 4') 9 Darius I 18 513/12
 
-@(o 4) 9 Darius I 18 513/12
+@(o 5') 27 Darius I 18 495/94
 
-@(o 5) 27 Darius I 18 495/94
+@(o 6') 9 Xerxes 18 477/76
 
-@(o 6) 9 Xerxes 18 477/76
+@(o 7') 6 Artaxerxes I 18 459/58
 
-@(o 7) 6 Artaxerxes I 18 459/58
+@(o 8') [24 Artaxer]xes I [18] 441/40
 
-@(o 8) [24 Artaxer]xes I [18] 441/40
+@(o 9') [1] Da[rius II 18] 423/22
 
-@(o 9) [1] Da[rius II 18] 423/22
+@(o 10') 19 Darius II 18 405/04
 
-@(o 10) 19 Darius II 18 405/04
+@(o 11') 18 Artaxerxes II 18 387/86
 
-@(o 11) 18 Artaxerxes II 18 387/86
+@(o 12') 36 Artaxerxes II 18 369/68
 
-@(o 12) 36 Artaxerxes II 18 369/68
+@(o 13') 8 Artaxerxes III 18 351/50
 
-@(o 13) 8 Artaxerxes III 18 351/50
+@(o 14') 3 Darius III 18 333/332
 
-@(o 14) 3 Darius III 18 333/332
+@(o 15') 3 Antigonus 18 315/14
 
-@(o 15) 3 Antigonus 18 315/14
+@(o 16') 15 Seleucus 18 297/96
 
-@(o 16) 15 Seleucus 18 297/96
+@(o 17') 33 Seleucus 18 279/78
 
-@(o 17) 33 Seleucus 18 279/78
+@(o 18') 51 Seleucus 18 261/60
 
-@(o 18) 51 Seleucus 18 261/60
+@(o 19') 69 Seleucus 18 243/42
 
-@(o 19) 69 Seleucus 18 243/42
+@(r 20') 87 18 225/24
 
-@(r 20) 87 18 225/24
+@(r 21') 105 18 207/06	 
 
-@(r 21) 105 18 207/06	 
+@(r 22') 123 18 189/88
 
-@(r 22) 123 18 189/88
+@(r 23') 141 18 171/70
 
-@(r 23) 141 18 171/70
+@(r 24') 159 18 153/52
 
-@(r 24) 159 18 153/52
+@(r 25') 177 18 135/34
 
-@(r 25) 177 18 135/34
+@(r 26') 195 18 117/16
 
-@(r 26) 195 18 117/16
+@(r 27') 213 18 99/98
 
-@(r 27) 213 18 99/98
+@(r 28') year [...]
 
-@(r 28) year [...]
+@(r 29') Pleiades/Taurus ... [...]
 
-@(r 29) Pleiades/Taurus ... [...]
+@(r 30') below Gemini [...]
 
-@(r 30) below Gemini [...]
+@(r 31') behind ... [...]
 
-@(r 31) behind ... [...]
-
-@(r 32) 2 2/3 cubits? [...]
+@(r 32') 2 2/3 cubits? [...]

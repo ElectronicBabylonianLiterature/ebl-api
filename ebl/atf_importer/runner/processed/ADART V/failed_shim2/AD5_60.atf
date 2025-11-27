@@ -136,6 +136,8 @@ $ ruling
 13'. ⸢x⸣ [...]
 #lem: u; u
 
+$ (column 3 and possibly 4? destroyed)
+
 @column 4
 1'. [...] ⸢x⸣ [...]
 #lem: u; u; u
@@ -154,6 +156,8 @@ $ ruling
 
 6'. [...] ⸢x⸣
 #lem: u; u
+
+$ (ca. 4 lines missing)
 
 11'. [x] ⸢x⸣ [...]
 #lem: u; u; u
@@ -198,6 +202,8 @@ $ ruling
 
 24'. [...] ⸢x⸣ [x x]
 #lem: u; u; u; u
+
+$ (column 4 or 5: the first part of this column is called "mere traces" in LBAT 1399; there are many such traces, but a text cannot be established)
 
 @reverse
 @column 1
@@ -519,360 +525,352 @@ $ blank space
 
 @translation labeled en project
 
-@(o i 0) [Year 18 of Aršu]
+@(o i 0') [Year 18 of Aršu]
 
-@(o i 1) who is call[ed king Artaxerxes.]
+@(o i 1') who is call[ed king Artaxerxes.]
 
-@(o i 2) Month I, the 1st. Month II, the 1st. Month III, the 30th. Around the 23rd?, ... [... Month IV, the 1st.]
+@(o i 2') Month I, the 1st. Month II, the 1st. Month III, the 30th. Around the 23rd?, ... [... Month IV, the 1st.]
 
-@(o i 3) Month V, the 30th. The 28th, acronychal rising. Month VI, [the 1st?. Month VII, the 30th?.]
+@(o i 3') Month V, the 30th. The 28th, acronychal rising. Month VI, [the 1st?. Month VII, the 30th?.]
 
-@(o i 4) Until around the 23rd, when it became stationary to the west, [it became stationary ...]
+@(o i 4') Until around the 23rd, when it became stationary to the west, [it became stationary ...]
 
-@(o i 5) the rear basket of Aquarius ... [Month VIII, the 30th?.]
+@(o i 5') the rear basket of Aquarius ... [Month VIII, the 30th?.]
 
-@(o i 6) Month IX, the 1st. Month X, the 30th. Month XI, the 1st. Month XII, the 30th. The 11th, [last appearance in Pisces.]
+@(o i 6') Month IX, the 1st. Month X, the 30th. Month XI, the 1st. Month XII, the 30th. The 11th, [last appearance in Pisces.]
 
-@(o i 7) Month XII₂, the 1st. The 18th, first appearance in the end of Pisces; it was bright and high, [(ideal) first appearance] on the 10+[xth].
-
-$ ruling
-
-@(o i 8) Year 19. Month I, the 1st. Night of the 11th, last part of the night, it was 3 cubits below α Arietis.
-
-@(o i 9) Month II, the 30th. Month III, the 1st. Month IV, the 1st. Until around the 19th, [when it became stationary to the east,]
-
-@(o i 10) it became stationary below the beginning of Aries?; I did not watch. Month V, the 30th. Month [VI, the 1st.]
-
-@(o i 11) The 16th, acronychal rising. Month VII, the 30th. Night of the 27th, first part of the night, while moving back to the west,
-
-@(o i 12) it was 3 cubits below the middle star of the beginning of Aries. Month VIII, [the 30th.]
-
-@(o i 13) Until around the 14th, when it became stationary to the west, it became stationary 3 cubits 8 fingers
-
-@(o i 14) below β Arietis, being a little back to the west.
-
-@(o i 15) Month IX, the 1st. Month X, the 30th. Month XI, the 1st. Month XII, the 30th. On the 28th or 29th,
-
-@(o i 16) Jupiter’s? last appearance, 1 2/3 cubits in front of Mercury.
+@(o i 7') Month XII₂, the 1st. The 18th, first appearance in the end of Pisces; it was bright and high, [(ideal) first appearance] on the 10+[xth].
 
 $ ruling
 
-@(o i 17) Year 20. Month I, the 1st. Month II, the 30th. The 6th, first appearance in the beginning of Taurus; it was high,
+@(o i 8') Year 19. Month I, the 1st. Night of the 11th, last part of the night, it was 3 cubits below α Arietis.
 
-@(o i 18) (ideal) first appearance on the 1st. Month III, the 1st. Night of the 25th, last part of the night, it was 1 cubit 6 fingers above α Tauri.
+@(o i 9') Month II, the 30th. Month III, the 1st. Month IV, the 1st. Until around the 19th, [when it became stationary to the east,]
 
-@(o i 19) Month IV, the 1st. Month V, the 30th. Month VI, the 1st. Until around the 6th, when it became stationary to the east, 
+@(o i 10') it became stationary below the beginning of Aries?; I did not watch. Month V, the 30th. Month [VI, the 1st.]
 
-@(o i 20) it became stationary 1 2/3 cubits in front of β Tauri.
+@(o i 11') The 16th, acronychal rising. Month VII, the 30th. Night of the 27th, first part of the night, while moving back to the west,
 
-@(o i 21) On the 12th, it moved back to the west. Month VII, the 30th. Month VIII, the 1st. The 3rd, acronychal rising.
+@(o i 12') it was 3 cubits below the middle star of the beginning of Aries. Month VIII, [the 30th.]
 
-@(o i 22) Night of the 13th?, first part of the night, while moving back to the west, it was 1 cubit 20 fingers above α Tauri.
+@(o i 13') Until around the 14th, when it became stationary to the west, it became stationary 3 cubits 8 fingers
 
-@(o i 23) Month IX, the 30th. Month X, the 1st. Until the 1st, when it became stationary to the west,
+@(o i 14') below β Arietis, being a little back to the west.
 
-@(o i 24) it became stationary 1 cubit 8 fingers in front of α Tauri. On the 10th, it moved back to the west{SIC}.
+@(o i 15') Month IX, the 1st. Month X, the 30th. Month XI, the 1st. Month XII, the 30th. On the 28th or 29th,
 
-@(o i 25) Month XI, the 30th. Night of the 12th, first part of the night, while moving back to the east, it was 1 2/3 cubits above α Tauri.
-
-@(o i 26) Month XII, the 1st. Month XII₂, the 30th. Night of the 18th, first part of the night,
-
-@(o i 27) is was 2 cubits 8 fingers below β Tauri.
+@(o i 16') Jupiter’s? last appearance, 1 2/3 cubits in front of Mercury.
 
 $ ruling
 
-@(o i 28) [Year 21.] Month I, the 30th. On the 16th, last appearance behind the Chariot. Month II, the 1st.
+@(o i 17') Year 20. Month I, the 1st. Month II, the 30th. The 6th, first appearance in the beginning of Taurus; it was high,
 
-@(o i 29) [...] first appearance [...]; it was bright and high; (ideal) first appearance on the 14th or 15th.
+@(o i 18') (ideal) first appearance on the 1st. Month III, the 1st. Night of the 25th, last part of the night, it was 1 cubit 6 fingers above α Tauri.
 
-@(o i 30) [Month III ... Night of the xth,] last part of the night, it was 8 fingers above Saturn. Month IV, the 30th.
+@(o i 19') Month IV, the 1st. Month V, the 30th. Month VI, the 1st. Until around the 6th, when it became stationary to the east, 
 
-@(o i 31) [...] .... [...]
+@(o i 20') it became stationary 1 2/3 cubits in front of β Tauri.
 
-@(o ii 1-4) ... [...]
+@(o i 21') On the 12th, it moved back to the west. Month VII, the 30th. Month VIII, the 1st. The 3rd, acronychal rising.
 
-@(o ii 5) below [...]
+@(o i 22') Night of the 13th?, first part of the night, while moving back to the west, it was 1 cubit 20 fingers above α Tauri.
 
-@(o ii 6) ... [...]
+@(o i 23') Month IX, the 30th. Month X, the 1st. Until the 1st, when it became stationary to the west,
 
-@(o ii 7) Month V, [...]
+@(o i 24') it became stationary 1 cubit 8 fingers in front of α Tauri. On the 10th, it moved back to the west{SIC}.
 
-@(o ii 8) ... [...]
+@(o i 25') Month XI, the 30th. Night of the 12th, first part of the night, while moving back to the east, it was 1 2/3 cubits above α Tauri.
 
-@(o ii 9) ... [...]
+@(o i 26') Month XII, the 1st. Month XII₂, the 30th. Night of the 18th, first part of the night,
 
-@(o ii 10) Night [...]
-
-@(o ii 11) last part of the night, [...] 
-
-@(o ii 12) star ... [...]
-
-@(o ii 13) ... [...]
-
-column 3 (and possibly 4?) destroyed
-
-column 4 or 5 (the first part of this column is called "mere traces" in LBAT 1399; there are many such traces, but a text cannot be established)
-
-@(o iv 1) [...] ... [...]
-
-@(o iv 2) [...] β Capricorni [...]
-
-@(o iv 3) [...] ... [...]
-
-@(o iv 4) [... acronychal ris]ing?. Month IV?, the 30th?. Un[til? ...]
-
-@(o iv 5) [... when] it became stationary [to the west],
-
-@(o iv 6) [...] ...
-
-(ca. 4 lines missing)
-
-@(o iv 11) [...] ... [...]
-
-@(o iv 12) [...] last appearance ...; I did not [watch ...]
+@(o i 27') is was 2 cubits 8 fingers below β Tauri.
 
 $ ruling
 
-@(o iv 13) [Year 4]1. Month I, the 30th. Month II, the 30th. Until around [the xth,]
+@(o i 28') [Year 21.] Month I, the 30th. On the 16th, last appearance behind the Chariot. Month II, the 1st.
 
-@(o iv 14) [when it became] stationary [to the east, it became stationary standing] 2 cubits 4 fingers behind Saturn to the ea[st.]
+@(o i 29') [...] first appearance [...]; it was bright and high; (ideal) first appearance on the 14th or 15th.
 
-@(o iv 15) [Mon]th III, the 1st. Month IV, the 30th. The 15th, acronychal rising.
+@(o i 30') [Month III ... Night of the xth,] last part of the night, it was 8 fingers above Saturn. Month IV, the 30th.
 
-@(o iv 16) [Month V, the 30th. Mon]th VI, the 1st. Until around the 10th, when it became stationary to the west,
+@(o i 31') [...] .... [...]
 
-@(o iv 17) [it became stationary] standing [... behind Saturn] to the east, being a little low to the south.
+@(o ii 1-4') ... [...]
 
-@(o iv 18) [(...) Month VII, the 3]0th. Month VIII, the 1st. Month IX, the 1st. Month X, the 1st.
+@(o ii 5') below [...]
 
-@(o iv 19) [..., last] appearance?. Month XI, the 1st. The 28th, first appearance in the beginning of Pisces.
+@(o ii 6') ... [...]
 
-@(o iv 20) [...] ... Month XII, the 30th.
+@(o ii 7') Month V, [...]
+
+@(o ii 8') ... [...]
+
+@(o ii 9') ... [...]
+
+@(o ii 10') Night [...]
+
+@(o ii 11') last part of the night, [...] 
+
+@(o ii 12') star ... [...]
+
+@(o ii 13') ... [...]
+
+@(o iv 1') [...] ... [...]
+
+@(o iv 2') [...] β Capricorni [...]
+
+@(o iv 3') [...] ... [...]
+
+@(o iv 4') [... acronychal ris]ing?. Month IV?, the 30th?. Un[til? ...]
+
+@(o iv 5') [... when] it became stationary [to the west],
+
+@(o iv 6') [...] ...
+
+@(o iv 11') [...] ... [...]
+
+@(o iv 12') [...] last appearance ...; I did not [watch ...]
+
+$ ruling
+
+@(o iv 13') [Year 4]1. Month I, the 30th. Month II, the 30th. Until around [the xth,]
+
+@(o iv 14') [when it became] stationary [to the east, it became stationary standing] 2 cubits 4 fingers behind Saturn to the ea[st.]
+
+@(o iv 15') [Mon]th III, the 1st. Month IV, the 30th. The 15th, acronychal rising.
+
+@(o iv 16') [Month V, the 30th. Mon]th VI, the 1st. Until around the 10th, when it became stationary to the west,
+
+@(o iv 17') [it became stationary] standing [... behind Saturn] to the east, being a little low to the south.
+
+@(o iv 18') [(...) Month VII, the 3]0th. Month VIII, the 1st. Month IX, the 1st. Month X, the 1st.
+
+@(o iv 19') [..., last] appearance?. Month XI, the 1st. The 28th, first appearance in the beginning of Pisces.
+
+@(o iv 20') [...] ... Month XII, the 30th.
 
 $ rulilng
 
-@(o iv 21) [Year 42. Month I, the 1st. Month II,] the 30th. Month III, the 30th. Month IV, the 1st.
+@(o iv 21') [Year 42. Month I, the 1st. Month II,] the 30th. Month III, the 30th. Month IV, the 1st.
 
-@(o iv 22) [...] when it became stationary [to the east,] it became stationary 1⁄2 cubit
+@(o iv 22') [...] when it became stationary [to the east,] it became stationary 1⁄2 cubit
 
-@(o iv 23) [below? ε Pis]cium?. Mo[nth V?, ...]
+@(o iv 23') [below? ε Pis]cium?. Mo[nth V?, ...]
 
-@(o iv 24) [...] ... [...]
+@(o iv 24') [...] ... [...]
 
-@(r i 1) [...] ... [...]
+@(r i 1') [...] ... [...]
 
-@(r i 2) [... Month III], the 30th. Month IV, the 30th. Mo[nth V, the 1st. ...,]
+@(r i 2') [... Month III], the 30th. Month IV, the 30th. Mo[nth V, the 1st. ...,]
 
-@(r i 3) [when it became stationary to the east, it became stationary x]+1⁄2 cubit in front of η Tauri.
+@(r i 3') [when it became stationary to the east, it became stationary x]+1⁄2 cubit in front of η Tauri.
 
-@(r i 4) [Month VI, the xth. Mo]nth VII, the 30th. The 21st?, acronychal rising. Mo[nth VIII?, the xth.]
+@(r i 4') [Month VI, the xth. Mo]nth VII, the 30th. The 21st?, acronychal rising. Mo[nth VIII?, the xth.]
 
-@(r i 5) [Month IX, the xth.] Until around the 18th, when it became stationary to the west,
+@(r i 5') [Month IX, the xth.] Until around the 18th, when it became stationary to the west,
 
-@(r i 6) it became stationary [...] behind α Arietis. Mo[nth X, the xth.]
+@(r i 6') it became stationary [...] behind α Arietis. Mo[nth X, the xth.]
 
-@(r i 7) [Month XI, the xth. Mo]nth XII, the 30th. Month XII₂, the 1st. Night of the 8th, it was [...] below [η Tauri.]
-
-$ ruling
-
-@(r i 8) [Year] 44. Month I, the 1st. The 4th, last appearance behind η Tauri. [Month II, the xth.]
-
-@(r i 9) [...] first appearance in Taurus; [it was bright? and] high, [(ideal) first appearance] on the xth.
-
-@(r i 10) [Month III,] the 1st. Night of the 28th, last part of the night, it was [x]+1 cubits below [β Tauri.]
-
-@(r i 11) Month IV, the 30th. Night of the 23rd, [last part of the night,]
-
-@(r i 12) it was 2/3 cubit [above] 𝜁 Tauri. Month V, [the xth. ...]
-
-@(r i 13) ... [...]
-
-@(r i 14) it became stationary [...] behind 𝜁 Tauri; I did not watch. [Month VII, the xth.]
-
-@(r i 15) Night of the 24th, last part of the night, it was [...] above 𝜁 Tauri.
-
-@(r i 16) Month VIII, the 30th. The 8th, acronychal rising. Mo[nth IX, the xth. Month X, the xth.]
-
-@(r i 17) Until the 7th, when it became stationary to the west,
-
-@(r i 18) it became stationary 3 [cubits below β Tauri; I did not watch. Month XI, the 1st. Ni[ght of the xth,]
-
-@(r i 19) first part of the night, it was 3 cubits below β Tauri. [Month XII, the xth.]
-
-@(r i 20) Night of the 21st, first part of the night, it was [...] above 𝜁 Tauri.
+@(r i 7') [Month XI, the xth. Mo]nth XII, the 30th. Month XII₂, the 1st. Night of the 8th, it was [...] below [η Tauri.]
 
 $ ruling
 
-@(r i 21) Year 45. Month I, the 1st. Month II, the 30th. Ni[ght? of the xth,]
+@(r i 8') [Year] 44. Month I, the 1st. The 4th, last appearance behind η Tauri. [Month II, the xth.]
 
-@(r i 22) it was [....] above η Geminorum. [The xth,]
+@(r i 9') [...] first appearance in Taurus; [it was bright? and] high, [(ideal) first appearance] on the xth.
 
-@(r i 23) last appearance in Gemini; [I did not] watch. Month III, the 1st. The 10+[xth,]
+@(r i 10') [Month III,] the 1st. Night of the 28th, last part of the night, it was [x]+1 cubits below [β Tauri.]
 
-@(r i 24) first appearance [...] 2/3 cubit behind Mercury to the east{sic}; [it was ...,]
+@(r i 11') Month IV, the 30th. Night of the 23rd, [last part of the night,]
 
-@(r i 25) (ideal) first appearance on the 15th?. [Month IV], the 1st. Month V, the 30th. Ni[ght of the xth,]
+@(r i 12') it was 2/3 cubit [above] 𝜁 Tauri. Month V, [the xth. ...]
 
-@(r i 26) last part of the night, it was 2? cubits below β Geminorum. Mon[th VI, the 1st. Month VII, the 1st.]
+@(r i 13') ... [...]
 
-@(r i 27) Until the 21st, when it became stationary to the east, it became stationary 1 1⁄2? [cubits? in front of?]
+@(r i 14') it became stationary [...] behind 𝜁 Tauri; I did not watch. [Month VII, the xth.]
 
-@(r i 28) η and 𝜗 Cancri, [...] ... [behind Mars?,]
+@(r i 15') Night of the 24th, last part of the night, it was [...] above 𝜁 Tauri.
 
-@(r i 29) being 2/3 cubit low to the south. ...
+@(r i 16') Month VIII, the 30th. The 8th, acronychal rising. Mo[nth IX, the xth. Month X, the xth.]
 
-@(r i 30) while moving back to the west, it was below ...
+@(r i 17') Until the 7th, when it became stationary to the west,
 
-@(r i 31) The 22nd, acronychal rising. Month X, the 1st. ... [...]
+@(r i 18') it became stationary 3 [cubits below β Tauri; I did not watch. Month XI, the 1st. Ni[ght of the xth,]
 
-@(r i 32) while moving back to the west, it was 1+[x ...] below β Geminorum. [Month XI?, the xth.]
+@(r i 19') first part of the night, it was 3 cubits below β Tauri. [Month XII, the xth.]
 
-@(r i 33) Until around the 19th, when [it became stationary] to the west,
-
-@(r i 34) it became stationary [...] behind α Geminorum; I did not wa[tch ...]
-
-@(r i 35) The 4th, ... [...]
+@(r i 20') Night of the 21st, first part of the night, it was [...] above 𝜁 Tauri.
 
 $ ruling
 
-@(r i 36) Year 46. Mo[nth? I, the xth ...]
+@(r i 21') Year 45. Month I, the 1st. Month II, the 30th. Ni[ght? of the xth,]
 
-@(r i 37) The 5th, ... [...]
+@(r i 22') it was [....] above η Geminorum. [The xth,]
 
-@(r i 38) ... [...]
+@(r i 23') last appearance in Gemini; [I did not] watch. Month III, the 1st. The 10+[xth,]
 
-@(r ii 1) [...] ...
+@(r i 24') first appearance [...] 2/3 cubit behind Mercury to the east{sic}; [it was ...,]
 
-@(r ii 2) [...] Jupiter?
+@(r i 25') (ideal) first appearance on the 15th?. [Month IV], the 1st. Month V, the 30th. Ni[ght of the xth,]
 
-@(r ii 3) [...] when it became stationary to the east,
+@(r i 26') last part of the night, it was 2? cubits below β Geminorum. Mon[th VI, the 1st. Month VII, the 1st.]
 
-@(r ii 4) [...] ... Month XII₂, the 30th.
+@(r i 27') Until the 21st, when it became stationary to the east, it became stationary 1 1⁄2? [cubits? in front of?]
 
-@(r ii 5) [...]
+@(r i 28') η and 𝜗 Cancri, [...] ... [behind Mars?,]
 
-@(r ii 6) [Year 3 ...] ... [first] part of the night,
+@(r i 29') being 2/3 cubit low to the south. ...
 
-@(r ii 7) [... Month II], the 1st. Night of the 14th, first [part of the night,]
+@(r i 30') while moving back to the west, it was below ...
 
-@(r ii 8) [while moving back to the east, it was] 1 2/3 cubits [above α Virgi]nis.
+@(r i 31') The 22nd, acronychal rising. Month X, the 1st. ... [...]
 
-@(r ii 9) [... Month VI, the xth. The xth], last appearance in Libra. Month VII, the 1st.
+@(r i 32') while moving back to the west, it was 1+[x ...] below β Geminorum. [Month XI?, the xth.]
 
-@(r ii 10) [The xth, first appearance in Libra]; rising of Jupiter to sunrise: [x°]; (ideal) first appearance on the 8th.
+@(r i 33') Until around the 19th, when [it became stationary] to the west,
 
-@(r ii 11) [....] 1 2/3 cubits [....] α [Librae.]
+@(r i 34') it became stationary [...] behind α Geminorum; I did not wa[tch ...]
 
-@(r ii 12) [....] Night of the 20th, last part of the night,
-
-@(r ii 13) [it came close?] to β [Scorpii. Month XI], the 30th. Until the 12th,
-
-@(r ii 14) [when it became stationary] to the east, it became stationary [... behind] β Scorpii.
-
-@(r ii 15) [Night of the xth, last part of the night,] while moving back [to the west, it came close?] to β Scorpii.
-
-@(r ii 16) [...] ... β Scorpii from
-
-@(r ii 17) [... of? Jupit]er? came out.
+@(r i 35') The 4th, ... [...]
 
 $ ruling
 
-@(r ii 18) [Year 4. Month I, the xth. The 1]2th, acronychal rising. Month II, the 30th. Month III, the 1st.
+@(r i 36') Year 46. Mo[nth? I, the xth ...]
 
-@(r ii 19) [...], when it became stationary [to the west], it became stationary in the end of Libra; I did not watch.
+@(r i 37') The 5th, ... [...]
 
-@(r ii 20) [...] Month VI, the 1st. Night of the 12th, it was [...] below β
+@(r i 38') ... [...]
 
-@(r ii 21) [Scorpii]. Month VII, the 30th. The 20th, last appearance in Scorpius.
+@(r ii 1') [...] ...
 
-@(r ii 22) [Month VIII, the xth. The xth], first appearance in Scorpius; it was bright, rising of Jupiter to sunrise: 15°;
+@(r ii 2') [...] Jupiter?
 
-@(r ii 23) [(ideal) first appearance on the xth. Month IX, the xth.] Night of the 11th, last part of the night, it was [...] above 𝜗
+@(r ii 3') [...] when it became stationary to the east,
 
-@(r ii 24) [Ophiuchi. Month X, the xth. Month XI,] the 30th. Month XII, the 1st. Until the 23rd,
+@(r ii 4') [...] ... Month XII₂, the 30th.
 
-@(r ii 25) [when it became stationary to the east, ...] ...
+@(r ii 5') [...]
 
-@(r iii 1) it became stationary ... [...]
+@(r ii 6') [Year 3 ...] ... [first] part of the night,
 
-@(r iii 2) Month VI₂, the 1st. Month VII, the 3[0th ...]
+@(r ii 7') [... Month II], the 1st. Night of the 14th, first [part of the night,]
 
-@(r iii 3) it became stationary in Pisces; clouds, I did not watch. [...]
+@(r ii 8') [while moving back to the east, it was] 1 2/3 cubits [above α Virgi]nis.
 
-@(r iii 4) Month XI, the 30th. Night of the 13th, [...]
+@(r ii 9') [... Month VI, the xth. The xth], last appearance in Libra. Month VII, the 1st.
 
-@(r iii 5) 3 cubits. Month XII, the 1st. The 4th, [last appearance ...]
+@(r ii 10') [The xth, first appearance in Libra]; rising of Jupiter to sunrise: [x°]; (ideal) first appearance on the 8th.
 
-$ ruling
+@(r ii 11') [....] 1 2/3 cubits [....] α [Librae.]
 
-@(r iii 6) Year 9. Month I, the 30th. The 7th?, [first appearance? ...]
+@(r ii 12') [....] Night of the 20th, last part of the night,
 
-@(r iii 7) the 14th, when it became visible, 12° was ri[sing? of Jupiter? to sunrise? ...]
+@(r ii 13') [it came close?] to β [Scorpii. Month XI], the 30th. Until the 12th,
 
-@(r iii 8) Until the 13th?, [when it became stationary to] the east?, [it became stationary ...]
+@(r ii 14') [when it became stationary] to the east, it became stationary [... behind] β Scorpii.
 
-@(r iii 9) the rear stars of Plei[ades ...]
+@(r ii 15') [Night of the xth, last part of the night,] while moving back [to the west, it came close?] to β Scorpii.
 
-@(r iii 10) Month VIII, the 1st. Month IX, the 30th. [...]
+@(r ii 16') [...] ... β Scorpii from
 
-@(r iii 11) it became stationary [...]; I did not watch. Mon[th X, the xth ...]
-
-@(r iii 12) while moving back [to the east,] it was [...] below η? [Tauri? ...]
+@(r ii 17') [... of? Jupit]er? came out.
 
 $ ruling
 
-@(r iii 13) Year 10. Mo[nth I, ...]
+@(r ii 18') [Year 4. Month I, the xth. The 1]2th, acronychal rising. Month II, the 30th. Month III, the 1st.
 
-@(r iii 14) The 28th, [...]
+@(r ii 19') [...], when it became stationary [to the west], it became stationary in the end of Libra; I did not watch.
 
-@(r iii 15) Month III, ... [...]
+@(r ii 20') [...] Month VI, the 1st. Night of the 12th, it was [...] below β
 
-@(r iii 16) Mon[th V, ...]
+@(r ii 21') [Scorpii]. Month VII, the 30th. The 20th, last appearance in Scorpius.
 
-@(r iii 17) ... [...]
+@(r ii 22') [Month VIII, the xth. The xth], first appearance in Scorpius; it was bright, rising of Jupiter to sunrise: 15°;
 
-@(r iii 18) ... [...]
+@(r ii 23') [(ideal) first appearance on the xth. Month IX, the xth.] Night of the 11th, last part of the night, it was [...] above 𝜗
 
-@(r iii 19) ... [...]
+@(r ii 24') [Ophiuchi. Month X, the xth. Month XI,] the 30th. Month XII, the 1st. Until the 23rd,
 
-@(r iv 1) [...] ... [...]
+@(r ii 25') [when it became stationary to the east, ...] ...
 
-@(r iv 2) [...] 8 fingers. Month III, the 1st. Night of the 24th,
+@(r iii 1') it became stationary ... [...]
 
-@(r iv 3) [first part of the night], it was 1⁄2 cubit above ϱ Leonis.
+@(r iii 2') Month VI₂, the 1st. Month VII, the 3[0th ...]
 
-@(r iv 4) [Month IV, the xth. Night of the xth, first] part of the night, Venus was 8 fingers above Jupiter.
+@(r iii 3') it became stationary in Pisces; clouds, I did not watch. [...]
 
-@(r iv 5) [Night of the xth], first part of the night, Mars was 1 finger above Jupiter; it came close,
+@(r iii 4') Month XI, the 30th. Night of the 13th, [...]
 
-@(r iv 6) having passed [x] fingers to the east. Night of the 19th, first part of the night, Mercury
+@(r iii 5') 3 cubits. Month XII, the 1st. The 4th, [last appearance ...]
 
-@(r iv 7) was 8 fingers [below Jupiter.
+$ ruling
 
-($blank space$)
+@(r iii 6') Year 9. Month I, the 30th. The 7th?, [first appearance? ...]
 
-@(r iv 8) Appearances of Jupiter
+@(r iii 7') the 14th, when it became visible, 12° was ri[sing? of Jupiter? to sunrise? ...]
 
-@(r iv 9) which are from year 18 of Aršu,
+@(r iii 8') Until the 13th?, [when it became stationary to] the east?, [it became stationary ...]
 
-@(r iv 10) who is called king Artaxerxes,
+@(r iii 9') the rear stars of Plei[ades ...]
 
-@(r iv 11) until month IV of year 13
+@(r iii 10') Month VIII, the 1st. Month IX, the 30th. [...]
 
-@(r iv 12) of Umakuš, who is called king Artaxerxes.
+@(r iii 11') it became stationary [...]; I did not watch. Mon[th X, the xth ...]
 
-@(r iv 13) (As) a copy
+@(r iii 12') while moving back [to the east,] it was [...] below η? [Tauri? ...]
 
-@(r iv 14) of tablets and writing-boards [of?]
+$ ruling
 
-@(r iv 15) diaries belonging to ...
+@(r iii 13') Year 10. Mo[nth I, ...]
 
-@(r iv 16) son of Mušallim-Bēl [...]
+@(r iii 14') The 28th, [...]
 
-@(r iv 17) written. Tablet of ...,
+@(r iii 15') Month III, ... [...]
 
-@(r iv 18) son of Marduk-šāpik-zēri [...]
+@(r iii 16') Mon[th V, ...]
 
-@(r iv 19) Hand of Bēl-šunu, son of [...]
+@(r iii 17') ... [...]
 
-@(r iv 20) ... [...]
+@(r iii 18') ... [...]
+
+@(r iii 19') ... [...]
+
+@(r iv 1') [...] ... [...]
+
+@(r iv 2') [...] 8 fingers. Month III, the 1st. Night of the 24th,
+
+@(r iv 3') [first part of the night], it was 1⁄2 cubit above ϱ Leonis.
+
+@(r iv 4') [Month IV, the xth. Night of the xth, first] part of the night, Venus was 8 fingers above Jupiter.
+
+@(r iv 5') [Night of the xth], first part of the night, Mars was 1 finger above Jupiter; it came close,
+
+@(r iv 6') having passed [x] fingers to the east. Night of the 19th, first part of the night, Mercury
+
+@(r iv 7') was 8 fingers [below Jupiter.
+
+@(r iv 8') Appearances of Jupiter
+
+@(r iv 9') which are from year 18 of Aršu,
+
+@(r iv 10') who is called king Artaxerxes,
+
+@(r iv 11') until month IV of year 13
+
+@(r iv 12') of Umakuš, who is called king Artaxerxes.
+
+@(r iv 13') (As) a copy
+
+@(r iv 14') of tablets and writing-boards [of?]
+
+@(r iv 15') diaries belonging to ...
+
+@(r iv 16') son of Mušallim-Bēl [...]
+
+@(r iv 17') written. Tablet of ...,
+
+@(r iv 18') son of Marduk-šāpik-zēri [...]
+
+@(r iv 19') Hand of Bēl-šunu, son of [...]
+
+@(r iv 20') ... [...]

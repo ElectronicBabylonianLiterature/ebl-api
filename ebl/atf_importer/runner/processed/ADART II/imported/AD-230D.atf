@@ -4,6 +4,7 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
 
 1'. [...] x [...] 
@@ -58,37 +59,35 @@
 
 @translation labeled en project 
   
-(o 1') [...] ... [...] 
+@(o 1') [...] ... [...] 
 
-(o 2')  [Night of the 2nd, the moon was] 6 cubits [below] α Arietis, the moon having passed 5/6 cubit to the east [...] 
+@(o 2')  [Night of the 2nd, the moon was] 6 cubits [below] α Arietis, the moon having passed 5/6 cubit to the east [...] 
 
-(o 3') [the moon was] 1 5/6 cubits [... η] Tauri. Night of the 4th, beginning of the night, the moon was [...] above α Tauri, 
+@(o 3') [the moon was] 1 5/6 cubits [... η] Tauri. Night of the 4th, beginning of the night, the moon was [...] above α Tauri, 
 
-(o 4') [the moon being] 1/2 cubit back to the west, it was in balance 8 fingers above Jupiter. Night of the 5th, the m[oon ...] 
+@(o 4') [the moon being] 1/2 cubit back to the west, it was in balance 8 fingers above Jupiter. Night of the 5th, the m[oon ...] 
 
-(o 5') [...] cubits, the moon having passed 1/2 cubit to the east. Night of the 7th, beg[inning of the night,] 
+@(o 5') [...] cubits, the moon having passed 1/2 cubit to the east. Night of the 7th, beg[inning of the night,] 
 
-(o 6') [the moon was ... α Geminorum, the moon] having passed ⸢x⸣ cubits to  the east. The 7th, very overcast, rain [...] 
+@(o 6') [the moon was ... α Geminorum, the moon] having passed ⸢x⸣ cubits to  the east. The 7th, very overcast, rain [...] 
 
-(o 7') [... Night of the 8th, beginning of the night, the moon was ...] in front of δ Cancri. 
+@(o 7') [... Night of the 8th, beginning of the night, the moon was ...] in front of δ Cancri. 
 
-(o 8') [... Night of the 9th, beginning of the night, the moon was] 1 1/2 cubits [...] ε Leonis. Ni[ght ...] 
+@(o 8') [... Night of the 9th, beginning of the night, the moon was] 1 1/2 cubits [...] ε Leonis. Ni[ght ...] 
 
-(o 9') [...] ... [...]  
+@(o 9') [...] ... [...]  
 
-@reverse
+@(r 1') [...] The 13th?, sunrise to moonset: 6° [x]+10'; clouds, I did not wa[tch;] slow [rain], PISAN [DIB ...] 
 
-(r 1') [...] The 13th?, sunrise to moonset: 6° [x]+10'; clouds, I did not wa[tch;] slow [rain], PISAN [DIB ...] 
+@(r 2') [...] I did not watch; beginning of the night, the moon was 3 cubits behind α Virginis; gusty wind [...] 
 
-(r 2') [...] I did not watch; beginning of the night, the moon was 3 cubits behind α Virginis; gusty wind [...] 
+@(r 3') [... Night of the 15th, the moon was] 2 ½ cubits [behind] α Librae. The 15th, very overcast, rain shower. Night [of the 16th, ...] 
 
-(r 3') [... Night of the 15th, the moon was] 2 ½ cubits [behind] α Librae. The 15th, very overcast, rain shower. Night [of the 16th, ...] 
+@(r 4') [...] ..., thick rain and large hail DUL; last part of the night, the moon was ...] behind δ [Scorpii] 
 
-(r 4') [...] ..., thick rain and large hail DUL; last part of the night, the moon was ...] behind δ [Scorpii] 
+@(r 5') [...] The 16th, in the afternoon, overcast, a little rain shower. Night of the 17th, very overca[st ...] 
 
-(r 5') [...] The 16th, in the afternoon, overcast, a little rain shower. Night of the 17th, very overca[st ...] 
+@(r 6') [...] ... rain so that the sandal was removed. Night of the 18th, last part of the night, the moon was [...] behind [θ Ophiuchi.] 
 
-(r 6') [...] ... rain so that the sandal was removed. Night of the 18th, last part of the night, the moon was [...] behind [θ Ophiuchi.] 
-
-(r 7') [...] Night of the 20th, very overcast. The 20th, very overcast, rain [...]  
+@(r 7') [...] Night of the 20th, very overcast. The 20th, very overcast, rain [...]  
 

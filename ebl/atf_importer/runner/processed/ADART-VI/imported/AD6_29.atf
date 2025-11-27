@@ -6,7 +6,10 @@
 #atf: use legacy
 @obverse 
 $ broken
-@reverse 
+
+# note: in very bad condition, only occasional groups of signs which show that it is planetary data.
+
+@reverse
 @column 1
 1'. [...] ⸢x.40 ŠÚ na⸣
 #lem: u; u; rabû[moonset to sunrise]'N; na[sunrise to moonset]N
@@ -60,37 +63,37 @@ $ broken
 6'. BAR 1 25.30 DIR NU PAP
 #lem: Nisannu[Month I]MN; n; n; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
 
-7'. 12   4 ŠÚ muš 
+7'. 12 4 ŠÚ muš 
 #lem: n; n; rabû[moonset to sunrise]'N; mašāhu[measure]V
 
-8'. 13   12.50 ME muš 
+8'. 13 12.50 ME muš 
 #lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
 
-9'. 13   3.40 na muš 
+9'. 13 3.40 na muš 
 #lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
 
-10'. 14   1 GE₆ muš
+10'. 14 1 GE₆ muš
 #lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
 
-11'. 26   15 KUR DIR muš
+11'. 26 15 KUR DIR muš
 #lem: n; n; KUR[moonrise to sunrise]N; erpetu[cloud]N; mašāhu[measure]V
 
 12'. GU₄ 30 19 KUR₄ a-pir muš
 #lem: Ayyaru[Month II]MN; n; n; baʾil[bright]AJ; apir[earthshine]'N; mašāhu[measure]V
 
-13'. 13      4   ŠÚ DIR muš 
+13'. 13 4 ŠÚ DIR muš 
 #lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; mašāhu[measure]V
 
-14'. [1]4   8   ME DIR muš 
+14'. [1]4 8 ME DIR muš 
 #lem: n; n; ūmu[moonrise to sunset]N; erpetu[cloud]N; mašāhu[measure]V
 
-15'. [14]   5? na muš
+15'. [14] 5? na muš
 #lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
 
-16'. [15   x]   GE₆ muš
+16'. [15 x] GE₆ muš
 #lem: n; u; mūšu[sunset to moonrise]N; mašāhu[measure]V
 
-17'. [x     x]+10 KUR muš
+17'. [x x]+10 KUR muš
 #lem: u; u; KUR[moonrise to sunrise]N; mašāhu[measure]V
 
 18'. [...] ⸢x⸣ muš
@@ -115,16 +118,16 @@ $ broken
 5'. 14 ⸢2⸣+[x] ME muš
 #lem: n; n; ūmu[moonrise to sunset]N; mašāhu[measure]V
 
-6'. 14   [x] ⸢ŠÚ⸣ muš 
+6'. 14 [x] ⸢ŠÚ⸣ muš 
 #lem: n; u; rabû[moonset to sunrise]'N; mašāhu[measure]V
 
-7'. 15   5+[x GE₆] muš 
+7'. 15 5+[x GE₆] muš 
 #lem: n; n; mūšu[sunset to moonrise]N; mašāhu[measure]V
 
-8'. 15   15 [n]a? muš
+8'. 15 15 [n]a? muš
 #lem: n; n; na[sunrise to moonset]N; mašāhu[measure]V
 
-9'. 27   14 KUR muš
+9'. 27 14 KUR muš
 #lem: n; n; KUR[moonrise to sunrise]N; mašāhu[measure]V
 
 10'. DU₆ 30 12 na-⸢su⸣ muš
@@ -136,10 +139,10 @@ $ broken
 12'. 14 8.50 ŠÚ D[IR] NU PAP 
 #lem: n; n; rabû[moonset to sunrise]'N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
 
-13'. 15 1       GE₆ DIR N[U P]AP 
+13'. 15 1 GE₆ DIR N[U P]AP 
 #lem: n; n; mūšu[sunset to moonrise]N; erpetu[cloud]N; ul[not]MOD; naṣāru[watch]V
 
-14'. 15 8?     na DIR m[u]š
+14'. 15 8? na DIR m[u]š
 #lem: n; n; na[sunrise to moonset]N; erpetu[cloud]N; mašāhu[measure]V
 
 15'. 28 10.30 KUR a-ka[m x]
@@ -215,27 +218,26 @@ $ broken
 @translation labeled en project
 
 @obverse
-in very bad condition, only occasional groups of signs which show that it is planetary data.
 
-@(r i 1') [...]	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: x° 40' 
+@(r i 1') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: x° 40' 
 
-@(r i 2')	‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x°] 40' 
+@(r i 2') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [x°] 40' 
 
-@(r i 3') [...]	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x°] 10+[x]’ 
+@(r i 3') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [x°] 10+[x]’ 
 
-@(r i 4')	‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
+@(r i 4') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
 
-@(r i 5') [...] 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 5') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 6')	‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
+@(r i 6') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...] 
 
-@(r i 7') [...] 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 7') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 8')	‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
+@(r i 8') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
 
-@(r i 9') [...] 	‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
+@(r i 9') [...] ‘moonset to sunrise’ (plus) ‘sunrise to moonset’: [...] 
 
-@(r i 10')	‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
+@(r i 10') ‘moonrise to sunset’ (plus) ‘sunset to moonrise’: [...]
 
 @(r i 11') [...] ...
 
@@ -251,71 +253,71 @@ in very bad condition, only occasional groups of signs which show that it is pla
 
 @(r ii 6') Month I, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25° 30'; clouds, I did not watch.
 
-@(r ii 7') The 12th,	moonset to sunrise: 4°, measured. 
+@(r ii 7') The 12th, moonset to sunrise: 4°, measured. 
 
-@(r ii 8') The 13th,	moonrise to sunset: 12° 50', measured. 
+@(r ii 8') The 13th, moonrise to sunset: 12° 50', measured. 
 
-@(r ii 9') The 13th,	sunrise to moonset: 3° 40', measured. 
+@(r ii 9') The 13th, sunrise to moonset: 3° 40', measured. 
 
-@(r ii 10') The 14th,	sunset to moonrise: 1°, measured. 
+@(r ii 10') The 14th, sunset to moonrise: 1°, measured. 
 
-@(r ii 11') The 26th,	moonrise to sunrise: 15°; measured (despite) clouds. 
+@(r ii 11') The 26th, moonrise to sunrise: 15°; measured (despite) clouds. 
 
 @(r ii 12') Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 19°; it was bright, earthshine, measured.
 
-@(r ii 13') The 13th,	moonset to sunrise: 4°, measured (despite) clouds. 
+@(r ii 13') The 13th, moonset to sunrise: 4°, measured (despite) clouds. 
 
-@(r ii 14') The 14th,	moonrise to sunset: 8°, measured (despite) clouds. 
+@(r ii 14') The 14th, moonrise to sunset: 8°, measured (despite) clouds. 
 
-@(r ii 15') [The 14th,]	sunrise to moonset: 5°?, measured. 
+@(r ii 15') [The 14th,] sunrise to moonset: 5°?, measured. 
 
-@(r ii 16') [The 15th,]	sunset to moonrise: [x°], measured. 
+@(r ii 16') [The 15th,] sunset to moonrise: [x°], measured. 
 
-@(r ii 17') [...]	moonrise to sunrise: [x]+10°, measured. 
+@(r ii 17') [...] moonrise to sunrise: [x]+10°, measured. 
 
 @(r ii 18') [...] ..., measured. 
 
 @(r ii 19') [...] measured. 
 
-@(r iii 1') [...]	moonrise to sunset: [...], measured. 
+@(r iii 1') [...] moonrise to sunset: [...], measured. 
 
-@(r iii 2') [...]	moonrise to sunrise: [x]+1°, measured.
+@(r iii 2') [...] moonrise to sunrise: [x]+1°, measured.
 
 @(r iii 3') Month VI, [...] it was bright, earthshine, measured.
 
 @(r iii 4') It was seen [while (the sun) stood there], it was low to the sun.
 
-@(r iii 5') The 14th,	moonrise to sunset: 2+[x°], measured. 
+@(r iii 5') The 14th, moonrise to sunset: 2+[x°], measured. 
 
-@(r iii 6') The 14th,	moonset to sunrise: [x°], measured. 
+@(r iii 6') The 14th, moonset to sunrise: [x°], measured. 
 
-@(r iii 7') The 15th,	[sunset to moonrise:] 5+[x°], measured. 
+@(r iii 7') The 15th, [sunset to moonrise:] 5+[x°], measured. 
 
-@(r iii 8') The 15th,	sunrise to moonset: 15°, measured. 
+@(r iii 8') The 15th, sunrise to moonset: 15°, measured. 
 
-@(r iii 9') The 27th,	moonrise to sunrise: 14°, measured. 
+@(r iii 9') The 27th, moonrise to sunrise: 14°, measured. 
 
 @(r iii 10') Month VII, (the 1st of which was identical with) the 30th (of the preceding month,) sunset to moonset: 12°, measured.
 
-@(r iii 11') The 14th,	moonrise to sunset: 7° 30', measured. 
+@(r iii 11') The 14th, moonrise to sunset: 7° 30', measured. 
 
-@(r iii 12') The 14th,	moonset to sunrise: 8° 50'; clouds, I did not watch. 
+@(r iii 12') The 14th, moonset to sunrise: 8° 50'; clouds, I did not watch. 
 
-@(r iii 13') The 15th,	sunset to moonrise: 1°; clouds, I did not watch. 
+@(r iii 13') The 15th, sunset to moonrise: 1°; clouds, I did not watch. 
 
-@(r iii 14') The 15th,	sunrise to moonset: 8°?; measured (despite) clouds. 
+@(r iii 14') The 15th, sunrise to moonset: 8°?; measured (despite) clouds. 
 
-@(r iii 15') The 28th,	moonrise to sunrise: 10° 30'; mist [...]
+@(r iii 15') The 28th, moonrise to sunrise: 10° 30'; mist [...]
 
 @(r iii 16') Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 12° 30'; it was bright, ... [...]
 
-@(r iii 17') The 13th,	moonset to sunrise: 16°; clouds, I did not watch. 
+@(r iii 17') The 13th, moonset to sunrise: 16°; clouds, I did not watch. 
 
-@(r iii 18') The 14th,	moonrise to sunset: 8°?, measured.
+@(r iii 18') The 14th, moonrise to sunset: 8°?, measured.
 
-@(r iii 19') [The 14th,]	sunrise to moonset: [x]+20'; I did not watch. 
+@(r iii 19') [The 14th,] sunrise to moonset: [x]+20'; I did not watch. 
 
-@(r iii 20') [The 15th,]	sunset to moonrise: [...], measured.	
+@(r iii 20') [The 15th,] sunset to moonrise: [...], measured. 
 
 @(r iv 1') The 14th, [...] ...
 
@@ -325,27 +327,27 @@ in very bad condition, only occasional groups of signs which show that it is pla
 
 @(r iv 4') Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17° 30'; it was bright, measured. 
 
-@(r iv 5') The 12th,	moonset to sunrise: 7° 30', measured. 
+@(r iv 5') The 12th, moonset to sunrise: 7° 30', measured. 
 
-@(r iv 6') The 13th,	moonrise to sunset: 12° 30', measured. 
+@(r iv 6') The 13th, moonrise to sunset: 12° 30', measured. 
 
-@(r iv 7') The 13th,	sunrise to moonset: 5°, measured. 
+@(r iv 7') The 13th, sunrise to moonset: 5°, measured. 
 
-@(r iv 8') The 14th,	sunset to moonrise: 4°; cl[ouds, ...] 
+@(r iv 8') The 14th, sunset to moonrise: 4°; cl[ouds, ...] 
 
-@(r iv 9') The 26th,	moonrise to sunrise: 17°, measured.
+@(r iv 9') The 26th, moonrise to sunrise: 17°, measured.
 
 @(r iv 10') Month XI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 10'; clou[ds, ...]
 
-@(r iv 11') The 12th,	moonset to sunrise: 11° 30'; clou[ds, ...] 
+@(r iv 11') The 12th, moonset to sunrise: 11° 30'; clou[ds, ...] 
 
-@(r iv 12') The 13th,	sunrise to moonset: 1° 20'; cl[ouds?, ...] 
+@(r iv 12') The 13th, sunrise to moonset: 1° 20'; cl[ouds?, ...] 
 
-@(r iv 13') The 14th,	moonrise to sunset: 4°; clouds, [...] 
+@(r iv 13') The 14th, moonrise to sunset: 4°; clouds, [...] 
 
-@(r iv 14') The 15th,	sunset to moonrise: 14° 10'; cl[ouds, ...] 
+@(r iv 14') The 15th, sunset to moonrise: 14° 10'; cl[ouds, ...] 
 
-@(r iv 15') The 27th,	moonrise to sunrise: 11° [...]
+@(r iv 15') The 27th, moonrise to sunrise: 11° [...]
 
 @(r iv 16') Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 10+[x°; ...] 
 

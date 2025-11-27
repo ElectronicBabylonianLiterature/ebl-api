@@ -5,6 +5,7 @@
 #atf: use math
 #atf: use legacy
 @obverse
+
 @column 1
 $ (broken)
 @column 2
@@ -220,8 +221,6 @@ $ ruling
 
 @translation labeled en project
 
-$ Cols. I  and II  broken
-
 @(o iii 1) [...] it moved back to the east.
 
 @(o iii 2) [...] ... Month XII, the 12th, it was balanced with a Leonis.
@@ -320,8 +319,6 @@ $ ruling
 
 @(r iii 12) [...] Month XI, the 1st (of which followed the 30th of the preceding month). Month XII, the 1st (of which followed the 30th of the preceding month).
 
-($ruling$)
-K
 @(r iii 13) (Year) 20. [...] the 1st (of which followed the 30th of the preceding month); the 21st,
 
 @(r iii 14) ... [...] clouds, I did not watch.
@@ -338,9 +335,6 @@ K
 
 @(r iv 2) The 25th, last appearance in Aries. [...]
 
-($ruling$)
-J
-
 @(r iv 3) (Year) 31. Month II, the 1st (of which followed the 30th of the preceding month); the 25th, first appearance in the Chariot [...]
 
 @(r iv 4) Month III, (the 1st of which was identical with) the 30th (of the preceding month). Month IV, the 1st (of which followed the 30th of the preceding month). Month V, (the 1st of which was identical with) the 30th (of the preceding month).
@@ -352,9 +346,6 @@ J
 @(r iv 7) Month IX, (the 1st of which was identical with) the 30th (of the preceding month). Month X, the 1st (of which followed the 30th of the preceding month). Month XI, (the 1st of which was identical with) the 30th (of the preceding month).
 
 @(r iv 8) Month XII, the 1st (of which followed the 30th of the preceding month).
-
-($ruling$)
-K
 
 @(r iv 9) (Year) 32. Month I, the 1st (of which followed the 30th of the preceding month). Month II, (the 1st of which was identical with) the 30th (of the preceding month).
 
