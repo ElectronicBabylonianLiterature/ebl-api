@@ -29,6 +29,7 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("$ seal impression broken", "$ (seal impression broken)"),
     ("# note: some note", "#note: some note"),
     ("# some note", "#note: some note"),
+    ("# note: @akk{a-bu-um}", "#note: @akk{a-bu-um}"),
     ("1. kur    \t  \t kur", "1. kur kur"),
     ("1. kur\tkur\r", "1. kur kur"),
     ("1. x[x]x ⸢x⸣[x]⸢x⸣ ⌈x⌉[x]⌈x⌉", "1. x [x] x x# [x] x# x# [x] x#"),
@@ -37,6 +38,10 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("1. ⸢kur⸣? ⌈kur⌉! ⸢kur⸣?! ⌈kur⌉!?", "1. kur?# kur!# kur?!# kur!?#"),
     ("1. ⸢GE₆⸣[...]⸢GE₆ 24⸣", "1. GE₆# [...] GE₆# 24#"),
     ("1. ($$) kur ($anything12 345!@$)", "1. ($___$) kur ($___$)"),
+    (
+        "1. ($traces$) a ($some traces$) ba ($ some more traces $)",
+        "1. ... a ... ba ...",
+    ),
     ("1. a–a a--a", "1. a-a a-a"),
     ("1. sza ca s,a t,a ḫa ja ŋa g̃a 'a", "1. ša ša ṣa ṭa ha ga ga ga ʾa"),
     ("1. SZA CA S,A T,A ḪA JA ŊA G̃A", "1. ŠA ŠA ṢA ṬA HA GA GA GA"),

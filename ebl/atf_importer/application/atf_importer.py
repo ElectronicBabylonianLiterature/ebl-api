@@ -67,6 +67,7 @@ class AtfImporter:
     def run_importer(self, args: AtfImporterArgs) -> None:
         self.setup_importer(args)
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
+        file_paths = sorted(file_paths, key=lambda p: os.path.basename(p).lower())
         for filepath in file_paths:
             self.logger.filepath = filepath
             self.process_file(filepath)
