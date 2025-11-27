@@ -67,8 +67,7 @@ class AtfImporter:
     def run_importer(self, args: AtfImporterArgs) -> None:
         self.setup_importer(args)
         file_paths = glob.glob(os.path.join(args["input_dir"], "*.atf"))
-        file_paths = sorted(
-            file_paths, key=lambda p: os.path.basename(p).lower())
+        file_paths = sorted(file_paths, key=lambda p: os.path.basename(p).lower())
         for filepath in file_paths:
             self.logger.filepath = filepath
             self.process_file(filepath)
@@ -98,8 +97,7 @@ class AtfImporter:
         self, text: Text, control_lines: List, filename: str
     ) -> None:
         try:
-            self.database_importer.import_into_database(
-                text, control_lines, filename)
+            self.database_importer.import_into_database(text, control_lines, filename)
         except Exception as e:
             self.logger.exception(f"Error while importing into database: {e}")
 
