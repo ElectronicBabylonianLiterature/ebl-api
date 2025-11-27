@@ -29,6 +29,7 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("$ seal impression broken", "$ (seal impression broken)"),
     ("# note: some note", "#note: some note"),
     ("# some note", "#note: some note"),
+    ("# note: @akk{a-bu-um}", "#note: @akk{a-bu-um}"),
     ("1. kur    \t  \t kur", "1. kur kur"),
     ("1. kur\tkur\r", "1. kur kur"),
     ("1. x[x]x ⸢x⸣[x]⸢x⸣ ⌈x⌉[x]⌈x⌉", "1. x [x] x x# [x] x# x# [x] x#"),
