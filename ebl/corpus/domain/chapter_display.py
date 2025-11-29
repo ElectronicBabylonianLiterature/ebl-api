@@ -49,12 +49,14 @@ class LineDisplay:
         line_atf_blocks = []
         for index, variant in enumerate(self.variants):
             reconstruction = f"{self.number.atf} {variant.reconstruction_atf}"
+            reconstruction_note = variant.note.atf if variant.note else ""
             translation = (
                 self.translation[index].atf if len(self.translation) > index else ""
             )
             atf_blocks = [
                 translation,
                 reconstruction,
+                reconstruction_note,
                 variant.parallels_atf,
                 variant.get_manuscript_lines_atf(get_manuscript),
             ]
