@@ -57,7 +57,6 @@ class LineDisplay:
                 translation,
                 reconstruction,
                 variant.note_atf,
-                reconstruction_note,
                 variant.parallels_atf,
                 variant.get_manuscript_lines_atf(get_manuscript),
             ]
