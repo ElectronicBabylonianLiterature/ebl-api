@@ -39,6 +39,10 @@ class LineVariant:
         return Atf(" ".join([token.value for token in self.reconstruction]))
 
     @property
+    def note_atf(self) -> Atf:
+        return self.note.atf if self.note else Atf("")
+
+    @property
     def parallels_atf(self) -> Atf:
         return (
             Atf("\n".join(parallel.atf for parallel in self.parallel_lines))
