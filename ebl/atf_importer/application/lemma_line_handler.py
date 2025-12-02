@@ -9,7 +9,7 @@ from ebl.transliteration.domain.text import TextLine
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.domain.tokens import Token, Tabulation
 from ebl.transliteration.domain.enclosure_tokens import Removal
-from ebl.transliteration.domain.sign_tokens import Reading, Logogram
+from ebl.transliteration.domain.sign_tokens import Reading, Logogram, Divider
 from ebl.atf_importer.domain.legacy_atf_converter import LegacyAtfConverter
 from ebl.atf_importer.application.glossary import Glossary
 
@@ -136,7 +136,7 @@ class LemmaLineHandler:
         removal_status = remove_token = False
         removals_map = {}
         for token_index, token in enumerate(transliteration_line.content):
-            if isinstance(token, Tabulation):
+            if isinstance(token, (Tabulation, Divider)):
                 removals_map[token_index] = True
             else:
                 parts = [

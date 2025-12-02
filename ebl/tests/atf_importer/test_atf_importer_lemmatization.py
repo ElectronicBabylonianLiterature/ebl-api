@@ -141,6 +141,26 @@ def test_lemmatization_with_tabulation(fragment_repository, tmp_path):
     check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
 
 
+def test_lemmatization_with_dividers(fragment_repository, tmp_path):
+    museum_number = "X.121"
+    fragment_repository.create(
+        FragmentFactory.build(number=MuseumNumber.of(museum_number))
+    )
+    atf = f"&P000001 = {museum_number}\n2. : ina :: [...]\n#lem: ina[in]PRP; u"
+    setup_and_run_importer(
+        atf,
+        tmp_path,
+        fragment_repository,
+        {"akk": GLOSSARY, "qpn": QPN_GLOSSARY},
+    )
+    check_importing_and_logs(museum_number, fragment_repository, tmp_path)
+    expected_lemmatization = [
+        ("ina I",),
+        (),
+    ]
+    check_lemmatization(fragment_repository, museum_number, expected_lemmatization)
+
+
 def test_lemmatization_complex_indexing(fragment_repository, tmp_path):
     museum_number = "X.112"
     fragment_repository.create(
