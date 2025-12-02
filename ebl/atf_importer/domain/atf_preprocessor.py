@@ -29,6 +29,7 @@ preprocess_text_replacements = {
     "\t": " ",
     "--": "-",
     "{f}": "{munus}",
+    "{I}": "{m}",
     "1/2": "½",
     "1/3": "⅓",
     "1/4": "¼",
@@ -48,19 +49,6 @@ preprocess_text_replacements = {
     "⌉[...": "⌉ [...",
 }
 
-subscripts = {
-    "0": "₀",
-    "1": "₁",
-    "2": "₂",
-    "3": "₃",
-    "4": "₄",
-    "5": "₅",
-    "6": "₆",
-    "7": "₇",
-    "8": "₈",
-    "9": "₉",
-}
-
 
 class AtfPreprocessor:
     def __init__(self, logger: Logger) -> None:
@@ -71,9 +59,7 @@ class AtfPreprocessor:
         return self.preprocess_line_by_type(atf)
 
     def preprocess_line_by_type(self, atf: str) -> str:
-        if atf and atf[0].isdigit():
-            for old, new in preprocess_text_replacements.items():
-                atf = atf.replace(old, new)
+        if atf and (atf[0].isdigit() or atf[1].isdigit()):
             atf = self._handle_text_line(atf)
         elif atf and atf[0] == "$":
             atf = self._handle_dollar_line(atf)
@@ -82,18 +68,32 @@ class AtfPreprocessor:
         return atf
 
     def _handle_text_line(self, atf: str) -> str:
+        atf = self._replace_tabs_and_excessive_whitespaces(atf)
+        separator = ". "
+        split_index = atf.find(separator)
+        if split_index != -1:
+            number_part = atf[:split_index]
+            content_part = atf[split_index + len(separator) :]
+            content_part = self._handle_text_line_content(content_part)
+            number_part = self._convert_multiple_primes_in_line(number_part)
+            number_part = self._insert_plus_after_leading_letters(number_part)
+            return f"{number_part}{separator}{content_part}"
+        return atf
+
+    def _handle_text_line_content(self, atf: str) -> str:
         atf_text_line_methods = [
             "_replace_traces_markup",
             "_replace_special_characters",
             "_uppercase_underscore",
             "_lowercase_braces",
             "_replace_tabulation",
-            "_replace_tabs_and_excessive_whitespaces",
             "_move_brackets_before_subscripts",
             "_reorder_bracket_punctuation",
             "_reorder_round_bracket_punctuation",
             "_reorder_bracket_and_joiner",
         ]
+        for old, new in preprocess_text_replacements.items():
+            atf = atf.replace(old, new)
         for method_name in atf_text_line_methods:
             atf = getattr(self, method_name)(atf)
         return atf
@@ -243,3 +243,39 @@ class AtfPreprocessor:
         )
         atf_string = re.sub(r"(?<!-)-\]", r"]-", atf_string)
         return atf_string
+
+    def _convert_multiple_primes_in_line(self, atf: str) -> str:
+        char_counts = {"'": 1, "’": 1, "′": 1, "ʾ": 1, "″": 2, "‴": 3}
+
+        def index_to_letters(index: int) -> str:
+            if index < 0:
+                return ""
+            parts = []
+            i = index
+            while True:
+                parts.append(chr(ord("A") + (i % 26)))
+                i = i // 26 - 1
+                if i < 0:
+                    break
+            return "".join(reversed(parts))
+
+        def replace(match: re.Match) -> str:
+            num = match.group("num")
+            count = sum(char_counts.get(ch, 0) for ch in match.group("primes"))
+            return (
+                match.group(0)
+                if count <= 1
+                else f"{index_to_letters(count - 2)}+{num}'"
+            )
+
+        result = re.compile(
+            r"(?P<num>\d+)(?P<primes>(?:['’′ʾ]{2,}|['’′ʾ]*[″‴]+['’′ʾ]*))"
+        ).sub(replace, atf)
+        return re.sub(r"[’′″‴ʾ]", "'", result)
+
+    def _insert_plus_after_leading_letters(self, atf: str) -> str:
+        return re.sub(
+            r"^(?P<letters>[A-Z]+)(?P<num>\d+)",
+            lambda match: f"{match.group('letters')}+{match.group('num')}",
+            atf,
+        )
