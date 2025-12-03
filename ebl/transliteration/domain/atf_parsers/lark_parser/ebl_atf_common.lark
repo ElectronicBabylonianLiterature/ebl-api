@@ -75,10 +75,12 @@ TOP: "t.e."
 
 ?line_number: line_number_range 
       | single_line_number 
-      | legacy_prefixed_single_line_number
+      | legacy_single_line_number
 line_number_range: single_line_number "-" single_line_number
 single_line_number: [LETTER "+"] INT [PRIME | LEGACY_PRIME] [LETTER]
-legacy_prefixed_single_line_number.-1: LETTER INT [PRIME | LEGACY_PRIME] [LETTER]
+legacy_single_line_number.-1: [LETTER] INT [legacy_multiprimes] [LETTER]
+
+legacy_multiprimes: (PRIME | LEGACY_PRIME)+
 
 status: (PRIME | LEGACY_PRIME | UNCERTAIN | CORRECTION | COLLATION | NO_LONGER_VISIBLE)*
 PRIME: "'"

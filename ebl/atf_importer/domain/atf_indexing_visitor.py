@@ -1,3 +1,4 @@
+from ebl.transliteration.domain.common_transformer import CommonTransformer
 import roman
 from lark.visitors import Visitor, Tree, Token
 
@@ -53,9 +54,7 @@ class IndexingVisitor(Visitor):
         return tree
 
     def text_line(self, tree: Tree) -> Tree:
-        line_number = "".join(
-            str(child) for child in tree.children[0].children if child
-        )
+        line_number = CommonTransformer().transform(tree).children[0].label
         self.cursor["line"] = line_number
         return tree
 

@@ -7,7 +7,7 @@ from ebl.transliteration.domain.labels import (
     SurfaceLabel,
 )
 from ebl.transliteration.domain.line_number import LineNumber, LineNumberRange
-from ebl.transliteration.domain.atf import Object, Status, Surface
+from ebl.transliteration.domain.atf import Object, Status, Surface, Optional
 
 PREFIXES = [
     "ebl_atf_at_line",
@@ -16,6 +16,28 @@ PREFIXES = [
     "ebl_atf_parallel_line",
     "ebl_atf_manuscript_line",
 ]
+
+
+class LegacyPrimeUtil:
+    @staticmethod
+    def _index_to_letters(index: int) -> str:
+        if index < 0:
+            return ""
+        parts = []
+        current = index
+        while True:
+            parts.append(chr(ord("A") + (current % 26)))
+            current = current // 26 - 1
+            if current < 0:
+                break
+        return "".join(reversed(parts))
+
+    @classmethod
+    def primes_to_prefix(cls, primes: str) -> Optional[str]:
+        if not primes:
+            return None
+        count = len(primes)
+        return cls._index_to_letters(count - 2) if count > 1 else None
 
 
 class CommonTransformer(Transformer):
@@ -43,13 +65,22 @@ class CommonTransformer(Transformer):
         )
 
     @v_args(inline=True)
-    def ebl_atf_common__legacy_prefixed_single_line_number(
-        self, prefix_modifier, number, prime, suffix_modifier
+    def ebl_atf_common__legacy_single_line_number(
+        self, prefix_modifier, number, primes, suffix_modifier
     ) -> LineNumber:
-        prefix_modifier = str(prefix_modifier) if prefix_modifier else None
+        prime_str = ""
+        if primes:
+            if hasattr(primes, "children"):
+                prime_str = "".join(str(token) for token in primes.children)
+            else:
+                prime_str = str(primes)
+        prime_prefix = LegacyPrimeUtil.primes_to_prefix(prime_str)
+        prefix_modifier = (
+            str(prefix_modifier) if prefix_modifier else None
+        ) or prime_prefix
         suffix_modifier = str(suffix_modifier) if suffix_modifier else None
         return LineNumber(
-            int(number), prime is not None, prefix_modifier, suffix_modifier
+            int(number), prime_str != "", prefix_modifier, suffix_modifier
         )
 
     @v_args(inline=True)
