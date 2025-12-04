@@ -9,7 +9,6 @@ from ebl.atf_importer.application.atf_importer_config import (
 
 logger = Logger("../logs")
 config = AtfImporterConfig().config_data
-
 PARSE_AND_TRANSFORM_LEGACY = [
     ("", ""),
     ("@column", "@column 1"),
@@ -54,9 +53,7 @@ PARSE_AND_TRANSFORM_LEGACY = [
     ("1’. A", "1'. A"),
     ("1ʾ. A", "1'. A"),
     ("1′′. A", "A+1'. A"),
-    ("1″. A", "A+1'. A"),
     ("1’’’. A", "B+1'. A"),
-    ("1‴. A", "B+1'. A"),
     ("1ʾʾʾʾ. A", "C+1'. A"),
     ("1. 4(BÁN)? 4(BÁN)! 4(BÁN)?!", "1. 4?(BAN₂) 4!(BAN₂) 4?!(BAN₂)"),
     (

@@ -75,8 +75,6 @@ class AtfPreprocessor:
             number_part = atf[:split_index]
             content_part = atf[split_index + len(separator) :]
             content_part = self._handle_text_line_content(content_part)
-            number_part = self._convert_multiple_primes_in_line(number_part)
-            number_part = self._insert_plus_after_leading_letters(number_part)
             return f"{number_part}{separator}{content_part}"
         return atf
 
@@ -243,39 +241,3 @@ class AtfPreprocessor:
         )
         atf_string = re.sub(r"(?<!-)-\]", r"]-", atf_string)
         return atf_string
-
-    def _convert_multiple_primes_in_line(self, atf: str) -> str:
-        char_counts = {"'": 1, "’": 1, "′": 1, "ʾ": 1, "″": 2, "‴": 3}
-
-        def index_to_letters(index: int) -> str:
-            if index < 0:
-                return ""
-            parts = []
-            i = index
-            while True:
-                parts.append(chr(ord("A") + (i % 26)))
-                i = i // 26 - 1
-                if i < 0:
-                    break
-            return "".join(reversed(parts))
-
-        def replace(match: re.Match) -> str:
-            num = match.group("num")
-            count = sum(char_counts.get(ch, 0) for ch in match.group("primes"))
-            return (
-                match.group(0)
-                if count <= 1
-                else f"{index_to_letters(count - 2)}+{num}'"
-            )
-
-        result = re.compile(
-            r"(?P<num>\d+)(?P<primes>(?:['’′ʾ]{2,}|['’′ʾ]*[″‴]+['’′ʾ]*))"
-        ).sub(replace, atf)
-        return re.sub(r"[’′″‴ʾ]", "'", result)
-
-    def _insert_plus_after_leading_letters(self, atf: str) -> str:
-        return re.sub(
-            r"^(?P<letters>[A-Z]+)(?P<num>\d+)",
-            lambda match: f"{match.group('letters')}+{match.group('num')}",
-            atf,
-        )
