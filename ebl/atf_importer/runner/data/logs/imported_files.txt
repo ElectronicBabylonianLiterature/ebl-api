@@ -1,3 +1,2 @@
-ebl/atf_importer/runner/data/AD5_3.atf: AD5_3.atf successfully imported as BM.35115
-ebl/atf_importer/runner/data/AD5_55.atf: AD5_55.atf successfully imported as BM.33066
-ebl/atf_importer/runner/data/AD5_66.atf: AD5_66.atf successfully imported as BM.35531
+ebl/atf_importer/runner/data/AD6_101.atf: AD6_101.atf successfully imported as BM.32512
+ebl/atf_importer/runner/data/AD6_62.atf: AD6_62.atf successfully imported as BM.34658

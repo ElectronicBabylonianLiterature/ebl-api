@@ -341,166 +341,166 @@ $ ruling
 @translation labeled en project
 
 
-@(o i 1) Year 7 of Cambyses.
+@(o i 1') Year 7 of Cambyses.
 
-@(o i 2) Month I, the 1st (of which followed the 30th of the preceding month), ....; the moon became visible;
+@(o i 2') Month I, the 1st (of which followed the 30th of the preceding month), ....; the moon became visible;
 
-@(o i 3) 1 bēru sunset to moonset.
+@(o i 3') 1 bēru sunset to moonset.
 
-@(o i 4) Night of the 13th, ...; moonrise to sunset: at 9°.
+@(o i 4') Night of the 13th, ...; moonrise to sunset: at 9°.
 
-@(o i 5) The 13th, moonset to sunrise: 2° 30’.
+@(o i 5') The 13th, moonset to sunrise: 2° 30’.
 
-@(o i 6) Night of the 14th, ...; sunset to moonrise: 8° 20’.
+@(o i 6') Night of the 14th, ...; sunset to moonrise: 8° 20’.
 
-@(o i 7) The 14th, sunrise to moonset: 7° 40’.
+@(o i 7') The 14th, sunrise to moonset: 7° 40’.
 
-@(o i 8) The 27th, ...; (moonrise to sunrise:) at 16°.
-
-$ ruling
-
-@(o i 9) Month II, (the 1st of which was identical with) the 30th (of the preceding month; sunset to moonset:) 23°.
-
-@(o i 10) The 13th, moonset to sunrise: 8° 20’.
-
-@(o i 11) Night of the 14th, moonrise to sunset: 1°.
-
-@(o i 12) The 14th, sunrise to moonset: 1° 40’.
-
-@(o i 13) Night of the 15th, sunset to moonrise: 14° 30’.
-
-@(o i 14) The 27th, (moonrise to sunrise:) 21°.
+@(o i 8') The 27th, ...; (moonrise to sunrise:) at 16°.
 
 $ ruling
 
-@(o i 15) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18° 30’.
+@(o i 9') Month II, (the 1st of which was identical with) the 30th (of the preceding month; sunset to moonset:) 23°.
 
-@(o i 16) Night of the 14th, moonrise to sunset: 9° 30’.
+@(o i 10') The 13th, moonset to sunrise: 8° 20’.
 
-@(o i 17) The 14th, moonset to sunrise: 4°.
+@(o i 11') Night of the 14th, moonrise to sunset: 1°.
 
-@(o i 18) Night of the 15th, sunset to moonrise: 5°.
+@(o i 12') The 14th, sunrise to moonset: 1° 40’.
 
-@(o i 19) The 15th, sunrise to moonset: 8° 30’.
+@(o i 13') Night of the 15th, sunset to moonrise: 14° 30’.
 
-@(o i 20) The 27th, (moonrise to sunrise:) 15°.
-
-$ ruling
-
-@(o i 21) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 27°.
-
-@(o i 22) The 13th, moonset to sunrise: 11°.
-
-@(o i 23) Night of the 14th, moonrise to sunset: 4°.
-
-@(o i 24) The 14th, sunrise to moonset: 4°.
-
-@(o i 25) Night of the 15th, sunset to moonrise: 8° 30’.
-
-@(o i 26) The 27th, (moonrise to sunrise:) 15°.
+@(o i 14') The 27th, (moonrise to sunrise:) 21°.
 
 $ ruling
 
-@(o ii 1) Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10+[x]°.
+@(o i 15') Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 18° 30’.
 
-@(o ii 2) The 14th, [moonset to sunrise:] 3° 30’.
+@(o i 16') Night of the 14th, moonrise to sunset: 9° 30’.
 
-@(o ii 3) Night of the 15th, [moonrise to sunset:] 2° 20+[x]’.
+@(o i 17') The 14th, moonset to sunrise: 4°.
 
+@(o i 18') Night of the 15th, sunset to moonrise: 5°.
 
-@(o ii 4) The 15th, sunrise to moonset: 11°.
+@(o i 19') The 15th, sunrise to moonset: 8° 30’.
 
-@(o ii 5) Night of the 16th, sunset [to moonrise:] 7° 30’.
-
-@(o ii 6) The 27th, (moonrise to sunrise:) 22° 30’.
-
-$ ruling
-
-@(o ii 7) Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 15° 40’.
-
-@(o ii 8) The 13th, moonset to sunrise: 11°.
-
-@(o ii 9) The 14th, sunrise to moonset: 4°.
-
-@(o ii 10) Night of the 15th, moonrise to sunset: 1° 20’.
-
-@(o ii 11) Night of the 16th, sunset to moonrise: 8° 40’.
-
-@(o ii 12) The 28th, (moonrise to sunrise:) 15°.
+@(o i 20') The 27th, (moonrise to sunrise:) 15°.
 
 $ ruling
 
-@(o ii 13) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16° 40’.
+@(o i 21') Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 27°.
 
-@(o ii 14) The 13th, moonset to sunrise: 6° 30’.
+@(o i 22') The 13th, moonset to sunrise: 11°.
 
-@(o ii 15) Night of the 14th, moonrise to sunset: 7° 30’.
+@(o i 23') Night of the 14th, moonrise to sunset: 4°.
 
-@(o ii 16) The 14th, sunrise to moonset: 12°.
+@(o i 24') The 14th, sunrise to moonset: 4°.
 
-@(o ii 17) Night of the 15th, sunset to moonrise: 3°.
+@(o i 25') Night of the 15th, sunset to moonrise: 8° 30’.
 
-@(o ii 18) The 26th, (moonrise to sunrise:) 22°.
-
-$ ruling
-
-@(o ii 19) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 40’.
-
-@(o ii 20) The 13th, moonset to sunrise: 15°.
-
-@(o ii 21) The 14th, sunrise to moonset: 5°.
-
-@(o ii 22) Night of the 15th, moonrise to sunset: 1°.
-
-@(o ii 23) Night of the 16th, sunset to moonrise: 14°.
-
-@(o ii 24) The 26th, (moonrise to sunrise:) 26°.(the following paragraph extends over cols. II and III)
+@(o i 26') The 27th, (moonrise to sunrise:) 15°.
 
 $ ruling
 
-@(o ii 25) Month XII₂, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 19°. Night of the 13th, moonrise to sunset: [x]+1° 30’.
+@(o ii 1') Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10+[x]°.
 
-@(o ii 26) The 13th, moonset to sunrise: 5° 20’. Night of the 14th, sunset to moonrise: 3°.
+@(o ii 2') The 14th, [moonset to sunrise:] 3° 30’.
 
-@(o ii 27) The 14th, sunrise to moonset: 5° 40’. The 27th, (moonrise to sunrise:) 21°.
+@(o ii 3') Night of the 15th, [moonrise to sunset:] 2° 20+[x]’.
 
-@(o iii 1) The 1[3th, moonset to sunrise: ...]
 
-@(o iii 2) Night of the 1[4th, moonrise to sunset: ...]
+@(o ii 4') The 15th, sunrise to moonset: 11°.
 
-@(o iii 3) The 14th, [sunrise to moonset:] 5°.
+@(o ii 5') Night of the 16th, sunset [to moonrise:] 7° 30’.
 
-@(o iii 4) Night of the 15th, [sunset to moonrise:] 10° 20’?.
-
-@(o iii 5) The 27th, (moonrise to sunrise:) 24°?.
+@(o ii 6') The 27th, (moonrise to sunrise:) 22° 30’.
 
 $ ruling
 
-@(o iii 6) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22°.
+@(o ii 7') Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 15° 40’.
 
-@(o iii 7) Night of the 13th, moonrise to sunset: 17° 20’.
+@(o ii 8') The 13th, moonset to sunrise: 11°.
 
-@(o iii 8) The 13th, moonset to sunrise: 4° 40’.
+@(o ii 9') The 14th, sunrise to moonset: 4°.
 
-@(o iii 9) Night of the 14th, sunset to moonrise: 1° 40’.
+@(o ii 10') Night of the 15th, moonrise to sunset: 1° 20’.
 
-@(o iii 10) The 14th, sunrise to moonset: 7°.
+@(o ii 11') Night of the 16th, sunset to moonrise: 8° 40’.
 
-@(o iii 11) The 27th, (moonrise to sunrise:) 17°.
+@(o ii 12') The 28th, (moonrise to sunrise:) 15°.
 
 $ ruling
 
-@(o iii 12) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 15° 30’.
+@(o ii 13') Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16° 40’.
 
-@(o iii 13) The 12th, moonset to sunrise: 10° 30’.
+@(o ii 14') The 13th, moonset to sunrise: 6° 30’.
 
-@(o iii 14) Night of the 13th, moonrise to sunset: 5° 20’.
+@(o ii 15') Night of the 14th, moonrise to sunset: 7° 30’.
 
-@(o iii 15) The 13th, there was no "moonset to sunrise" or "sunrise to moonset".
+@(o ii 16') The 14th, sunrise to moonset: 12°.
 
-@(o iii 16) Night of the 14th, sunset to moonrise: 10°.
+@(o ii 17') Night of the 15th, sunset to moonrise: 3°.
 
-@(o iii 17) The 25th{SIC}, (moonrise to sunrise:) 23°; the 27th, (moonrise to sunrise:) 12°.
+@(o ii 18') The 26th, (moonrise to sunrise:) 22°.
+
+$ ruling
+
+@(o ii 19') Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 12° 40’.
+
+@(o ii 20') The 13th, moonset to sunrise: 15°.
+
+@(o ii 21') The 14th, sunrise to moonset: 5°.
+
+@(o ii 22') Night of the 15th, moonrise to sunset: 1°.
+
+@(o ii 23') Night of the 16th, sunset to moonrise: 14°.
+
+@(o ii 24') The 26th, (moonrise to sunrise:) 26°.(the following paragraph extends over cols. II and III)
+
+$ ruling
+
+@(o ii 25') Month XII₂, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 19°. Night of the 13th, moonrise to sunset: [x]+1° 30’.
+
+@(o ii 26') The 13th, moonset to sunrise: 5° 20’. Night of the 14th, sunset to moonrise: 3°.
+
+@(o ii 27') The 14th, sunrise to moonset: 5° 40’. The 27th, (moonrise to sunrise:) 21°.
+
+@(o iii 1') The 1[3th, moonset to sunrise: ...]
+
+@(o iii 2') Night of the 1[4th, moonrise to sunset: ...]
+
+@(o iii 3') The 14th, [sunrise to moonset:] 5°.
+
+@(o iii 4') Night of the 15th, [sunset to moonrise:] 10° 20’?.
+
+@(o iii 5') The 27th, (moonrise to sunrise:) 24°?.
+
+$ ruling
+
+@(o iii 6') Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22°.
+
+@(o iii 7') Night of the 13th, moonrise to sunset: 17° 20’.
+
+@(o iii 8') The 13th, moonset to sunrise: 4° 40’.
+
+@(o iii 9') Night of the 14th, sunset to moonrise: 1° 40’.
+
+@(o iii 10') The 14th, sunrise to moonset: 7°.
+
+@(o iii 11') The 27th, (moonrise to sunrise:) 17°.
+
+$ ruling
+
+@(o iii 12') Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 15° 30’.
+
+@(o iii 13') The 12th, moonset to sunrise: 10° 30’.
+
+@(o iii 14') Night of the 13th, moonrise to sunset: 5° 20’.
+
+@(o iii 15') The 13th, there was no "moonset to sunrise" or "sunrise to moonset".
+
+@(o iii 16') Night of the 14th, sunset to moonrise: 10°.
+
+@(o iii 17') The 25th{SIC}, (moonrise to sunrise:) 23°; the 27th, (moonrise to sunrise:) 12°.
 
 $ ruling
 
@@ -524,64 +524,64 @@ $ ruling
 
 @(r.e. 2'') [...] ... [...]
 
-@(r.e. 3'')Month XII, the 19th, last appearance in the west
+@(r.e. 3'') Month XII, the 19th, last appearance in the west
 
 @(r.e. 4'') in the Ribbon of the Fishes.
 
 $ ruling (year numbers in lines 1, 4, 7, and 9 are written on the left edge)
 
-@(r 1) Year 7, month V, the 22nd, Jupiter’s last appearance in front of Virgo.
+@(r 1') Year 7, month V, the 22nd, Jupiter’s last appearance in front of Virgo.
 
-@(r 2) Month VI, the 22nd, first appearance behind Virgo. Month X, the 27th, it became stationary in front of Libra. Month XII was intercalary.
+@(r 2') Month VI, the 22nd, first appearance behind Virgo. Month X, the 27th, it became stationary in front of Libra. Month XII was intercalary.
 
-@(r 3) Year 8, month II, the 25th, it became stationary in the area of Virgo. Month VI, the 4th, last appearance behind Libra.
-
-$ ruling
-
-@(r 4) Year 7, month III, the 10th, Venus’ last appearance in the west in the beginning of Leo. Month III, the 27th,
-
-@(r 5) first appearance in the east in the area of Cancer. Month XII, the 7th, last appearance in the east in the area of Pisces. Month XII was intercalary.
-
-@(r 6) Year 8, month I, the 13th, first appearance in the west in the area of the Chariot.
+@(r 3') Year 8, month II, the 25th, it became stationary in the area of Virgo. Month VI, the 4th, last appearance behind Libra.
 
 $ ruling
 
-@(r 7) Year 7, month VI, the 3rd, Saturn’s last appearance in the area of Virgo. Month VII, the 13th, first appearance behind Virgo. Month XII was intercalary.
+@(r 4') Year 7, month III, the 10th, Venus’ last appearance in the west in the beginning of Leo. Month III, the 27th,
 
-@(r 8) Year 8, month V, the 29th, last appearance.
+@(r 5') first appearance in the east in the area of Cancer. Month XII, the 7th, last appearance in the east in the area of Pisces. Month XII was intercalary.
 
-$ ruling
-
-@(r 9) Year 7, month II, the 28th, Mars’ last appearance in front of Gemini.
-
-@(r 10) Month VI, the 13th, first appearance in the foot of Leo. Month XII was intercalary. Year 8, month V, the 12th, it became stationary.
-
-@(r 11) Year 9, month II, the 9th, last appearance behind α Leonis.
+@(r 6') Year 8, month I, the 13th, first appearance in the west in the area of the Chariot.
 
 $ ruling
 
-@(r 12) Year 7, month VII, the 1st, the moon became visible 3 cubits behind Mercury. Month VI, the 24th, Venus was 1+[x cubits?] above Mars.
+@(r 7') Year 7, month VI, the 3rd, Saturn’s last appearance in the area of Virgo. Month VII, the 13th, first appearance behind Virgo. Month XII was intercalary.
 
-@(r 13) Month VII, the 23rd, last part of the night, Jupiter was 3 cubits above the moon.
-
-@(r 14) Month VII, the 29th, last part of the night, Venus on the north side [came near?] 2 fingers to Ju[piter].
-
-@(r 15) Month VII, the 12th, Saturn was 1 cubit in front of Jupiter.
-
-@(r 16) Month VII, the 11th, Mars came near to Jupiter 2 fingers.
-
-@(r 17) Month VIII, the 2nd, Saturn passed 8 fingers above Venus.
-
-@(r 18) Month X, the 5th, Mercury was 1⁄2 cubit behind Venus.
+@(r 8') Year 8, month V, the 29th, last appearance.
 
 $ ruling
 
-@(r 19) Year 7, month IV, night of the 14th, 1 2/3 bēru after sunset,
+@(r 9') Year 7, month II, the 28th, Mars’ last appearance in front of Gemini.
 
-@(r 20) the moon made a total eclipse, a little remained; the north wind blew.
+@(r 10') Month VI, the 13th, first appearance in the foot of Leo. Month XII was intercalary. Year 8, month V, the 12th, it became stationary.
 
-@(r 21) Month X, night of the 14th, when 2 1⁄2 bēru remained to sunrise,
+@(r 11') Year 9, month II, the 9th, last appearance behind α Leonis.
 
-@(r 22) the moon made a total eclipse; the south and north winds blew in it.
+$ ruling
+
+@(r 12') Year 7, month VII, the 1st, the moon became visible 3 cubits behind Mercury. Month VI, the 24th, Venus was 1+[x cubits?] above Mars.
+
+@(r 13') Month VII, the 23rd, last part of the night, Jupiter was 3 cubits above the moon.
+
+@(r 14') Month VII, the 29th, last part of the night, Venus on the north side [came near?] 2 fingers to Ju[piter].
+
+@(r 15') Month VII, the 12th, Saturn was 1 cubit in front of Jupiter.
+
+@(r 16') Month VII, the 11th, Mars came near to Jupiter 2 fingers.
+
+@(r 17') Month VIII, the 2nd, Saturn passed 8 fingers above Venus.
+
+@(r 18') Month X, the 5th, Mercury was 1⁄2 cubit behind Venus.
+
+$ ruling
+
+@(r 19') Year 7, month IV, night of the 14th, 1 2/3 bēru after sunset,
+
+@(r 20') the moon made a total eclipse, a little remained; the north wind blew.
+
+@(r 21') Month X, night of the 14th, when 2 1⁄2 bēru remained to sunrise,
+
+@(r 22') the moon made a total eclipse; the south and north winds blew in it.
 
 $ ruling

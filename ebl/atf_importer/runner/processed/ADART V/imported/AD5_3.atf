@@ -348,19 +348,17 @@ $ ruling
 
 @obverse
 
-@(o i 1) [...] after sunrise?
-
-(blank)
+@(o i 1') [...] after sunrise?
 
 $ ruling
 
-@(o i 2) [...] ... (Year) 1? of Bēl-ibni
+@(o i 2') [...] ... (Year) 1? of Bēl-ibni
 
-@(o i 3) [...] to between south
+@(o i 3') [...] to between south
 
-@(o i 4) [...] it set eclipsed.
+@(o i 4') [...] it set eclipsed.
 
-@(o i 5) [At ... before sunri]se.
+@(o i 5') [At ... before sunri]se.
 
 @(o ii 1') [...] ...
 
@@ -374,13 +372,13 @@ $ ruling
 
 @(o ii 6') [after sun]set.
 
-@(o ii 7) [Month VI] was intercalary.
+@(o ii 7') [Month VI] was intercalary.
 
 $ ruling
 
-@(o ii 8) [... 1]4? ... which was omitted.
+@(o ii 8') [... 1]4? ... which was omitted.
 
-@(o ii 9) [At ...] after sunrise.
+@(o ii 9') [At ...] after sunrise.
 
 (break)
 
@@ -428,183 +426,171 @@ $ ruling
 
 @(o iii 6'') after sunset.
 
-@(o iv 1) (Year) 18 of Šamaš-šumu-ukīn,
+@(o iv 1') (Year) 18 of Šamaš-šumu-ukīn,
 
-@(o iv 2) month II, (after) 5 months,
+@(o iv 2') month II, (after) 5 months,
 
-@(o iv 3) (eclipse) which was omitted.
+@(o iv 3') (eclipse) which was omitted.
 
-@(o iv 4) At 1.0° before sunset.
+@(o iv 4') At 1.0° before sunset.
 
 $ ruling
 
-@(o iv 5) Month VIII, the 13th, ... [...]
+@(o iv 5') Month VIII, the 13th, ... [...]
 
-@(o iv 6) and south [...]
+@(o iv 6') and south [...]
 
-@(o iv 7) ... [...]
+@(o iv 7') ... [...]
 
-@(o iv 8) ... [...]
+@(o iv 8') ... [...]
 
-@(o v 1) (Year) 16 of Kandalānu,
+@(o v 1') (Year) 16 of Kandalānu,
 
-@(o v 2) month III, (after) 5 months, the 15th, 2 fin[gers?]
+@(o v 2') month III, (after) 5 months, the 15th, 2 fin[gers?]
 
-@(o v 3) between north and east were covered.
+@(o v 3') between north and east were covered.
 
-@(o v 4) It cleared in the north. The north wind b[lew?.]
+@(o v 4') It cleared in the north. The north wind b[lew?.]
 
-@(o v 5) 20° onset, maximal phase, [and clearing ...]
+@(o v 5') 20° onset, maximal phase, [and clearing ...]
 
-@(o v 6) behind a Scorpii [it was eclipsed.]
+@(o v 6') behind a Scorpii [it was eclipsed.]
 
 @reverse
 
-@(r i 1) [...] which was omitted.
+@(r i 1') [...] which was omitted.
 
-@(r i 2) [At] 12°? before sunset.
+@(r i 2') [At] 12°? before sunset.
+
+$ ruling
+
+@(r i 3') [... the 1]4th, moonrise to sunset: 1°;
+
+@(r i 4') [...] ...
+
+@(r i 5') [...] ...
+
+@(r i 6') [...] after sunset.
+
+@(r i 7') [...] ... it was eclipsed.
+
+@(r i 8') [...] ... 10?
+
+$ ruling
+
+@(r i 9') [...] clouds?
+
+@(r i 10') [...] not seen
+
+@(r i 11') [...] seen
+
+@(r i 12') [... be]fore sunrise.
+
+$ ruling
+
+@(r i 13') [...] ...
+
+@(r ii 1') [...] omitted [...]
 
 (blank)
 
 $ ruling
 
-@(r i 3) [... the 1]4th, moonrise to sunset: 1°;
+@(r ii 2') Month XII₂, the 14th,
 
-@(r i 4) [...] ...
+@(r ii 3') it began on the south side,
 
-@(r i 5) [...] ...
+@(r ii 4') one-fourth of the disk was covered.
 
-@(r i 6) [...] after sunset.
+@(r ii 5') It cleared to the west. 27°
 
-@(r i 7) [...] ... it was eclipsed.
+@(r ii 6') onset, maximal phase, and clearing.
 
-@(r i 8) [...] ... 10?
+@(r ii 7') The "garment of the sky" was there, the south wind blew.
 
-$ ruling
-
-@(r i 9) [...] clouds?
-
-@(r i 10) [...] not seen
-
-@(r i 11) [...] seen
-
-@(r i 12) [... be]fore sunrise.
+@(r ii 8') At 48° after sunset.
 
 $ ruling
 
-@(r i 13) [...] ...
+@(r ii 9') (Year) 8, month VI, the 14th, 1 1⁄2
 
-@(r ii 1) [...] omitted [...]
+@(r ii 10') fingers? ....
 
-(blank)
-
-$ ruling
-
-@(r ii 2) Month XII₂, the 14th,
-
-@(r ii 3) it began on the south side,
-
-@(r ii 4) one-fourth of the disk was covered.
-
-@(r ii 5) It cleared to the west. 27°
-
-@(r ii 6) onset, maximal phase, and clearing.
-
-@(r ii 7) The "garment of the sky" was there, the south wind blew.
-
-@(r ii 8) At 48° after sunset.
+@(r ii 11') At 1,20° before sunrise.
 
 $ ruling
 
-@(r ii 9) (Year) 8, month VI, the 14th, 1 1⁄2
+@(r ii 12') Month XII, the 14th, (eclipse) which was omitted.
 
-@(r ii 10) fingers? ....
-
-@(r ii 11)At 1,20° before sunrise.
-
-(blank)
+@(r ii 13') At 1/3 bēru before sunset.
 
 $ ruling
 
-@(r ii 12) Month XII, the 14th, (eclipse) which was omitted.
+@(r ii 14') (Year) 9, month VI, the 13th,
 
-(blank)
+@(r ii 15') [...] ...
 
-@(r ii 13) At 1/3 bēru before sunset.
+@(r iii 1') ... [...]
 
-$ ruling
-
-@(r ii 14) (Year) 9, month VI, the 13th,
-
-@(r ii 15) [...] ...
-
-@(r iii 1) ... [...]
-
-@(r iii 2) At 20° after sunrise.
+@(r iii 2') At 20° after sunrise.
 
 $ ruling
 
-@(r iii 3) (Year) 26, month I, the 12+[xth,]
+@(r iii 3') (Year) 26, month I, the 12+[xth,]
 
-@(r iii 4) it began on the east side; it set eclipsed.
+@(r iii 4') it began on the east side; it set eclipsed.
 
-@(r iii 5) 1 2/3 cubits in front of ß
+@(r iii 5') 1 2/3 cubits in front of ß
 
-@(r iii 6) Capricorni it was eclipsed. The north wind which was
+@(r iii 6') Capricorni it was eclipsed. The north wind which was
 
-@(r iii 7) set to the east side blew.
+@(r iii 7') set to the east side blew.
 
-@(r iii 8) At 10°
+@(r iii 8') At 10°
 
-@(r iii 9) before sunrise.
+@(r iii 9') before sunrise.
 
 $ ruling 
 
-@(r iii 10) Month VII, the 13th, (eclipse) which was omitted.
+@(r iii 10') Month VII, the 13th, (eclipse) which was omitted.
 
-@(r iii 11) At 12°? after sunrise.
-
-(blank)
+@(r iii 11') At 12°? after sunrise.
 
 $ruling
 
-@(r iii 12) Month XII2, the 15th, when it began on the south side,
+@(r iii 12') Month XII2, the 15th, when it began on the south side,
 
-@(r iii 13) in 15° all was covered. 21°
+@(r iii 13') in 15° all was covered. 21°
 
-@(r iii 14) maximal phase. When it began to clear from the east,
+@(r iii 14') maximal phase. When it began to clear from the east,
 
-@(r iii 15) it cleared in 19° of night to the west.
+@(r iii 15') it cleared in 19° of night to the west.
 
-@(r iii 16) 55°! onset, maximal phase, and clearing.
+@(r iii 16') 55°! onset, maximal phase, and clearing.
 
-@(r iii 17) 14 fingers in front of 𝚊 Librae
+@(r iii 17') 14 fingers in front of 𝚊 Librae
 
-@(r iii 18) it was eclipsed. (In) its eclipse, the w[est? wind]
+@(r iii 18') it was eclipsed. (In) its eclipse, the w[est? wind]
 
-@(r iii 19) which was slanted to the south [blew.]
+@(r iii 19') which was slanted to the south [blew.]
 
-@(r iii 20) At 37° [after sunset.]
-
-(blank)
+@(r iii 20') At 37° [after sunset.]
 
 $ ruling
 
-@(r iii 21) (Year) 2[7, ...]
+@(r iii 21') (Year) 2[7, ...]
 
-@(r iv 1) [...] ... [...]
-
-(blank)
+@(r iv 1') [...] ... [...]
 
 $ ruling
 
-@(r iv 2) (Year) 45, month I, the 10+[xth, ...]
+@(r iv 2') (Year) 45, month I, the 10+[xth, ...]
 
-@(r iv 3) to sunrise ... [...]
+@(r iv 3') to sunrise ... [...]
 
-@(r iv 4)from ... [...]
+@(r iv 4') from ... [...]
 
-@(r iv 5) ... [...]
+@(r iv 5') ... [...]
 
 
 
