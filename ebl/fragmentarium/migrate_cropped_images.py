@@ -1,5 +1,7 @@
 import logging
 import os
+import multiprocessing
+from functools import partial
 
 from pymongo import MongoClient
 from ebl.app import create_context
@@ -7,8 +9,11 @@ from ebl.context import Context
 from ebl.fragmentarium.application.annotations_service import AnnotationsService
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+worker_context: Context = None
 
 
 def get_database():
@@ -26,6 +31,41 @@ def create_annotations_service(context: Context) -> AnnotationsService:
         context.photo_repository,
         context.cropped_sign_images_repository,
     )
+
+
+def init_worker():
+    global worker_context
+    worker_context = create_context()
+
+
+def process_single_fragment(fragment_number_str: str):
+    try:
+        global worker_context
+        if worker_context is None:
+            worker_context = create_context()
+
+        repo = worker_context.annotations_repository
+        images_repo = worker_context.cropped_sign_images_repository
+        service = create_annotations_service(worker_context)
+
+        fragment_number = MuseumNumber.of(fragment_number_str)
+        annotations = repo.query_by_museum_number(fragment_number)
+
+        if not annotations.annotations:
+            return 0
+        annotations_with_ids, cropped_images = service._cropped_image_from_annotations(
+            annotations)
+
+        if cropped_images:
+            images_repo.create_many(cropped_images)
+
+        repo.create_or_update(annotations_with_ids)
+
+        return 1
+
+    except Exception as e:
+        logger.error(f"Error processing {fragment_number_str}: {e}")
+        return 0
 
 
 def show_statistics(context: Context) -> tuple:
@@ -68,55 +108,35 @@ def cleanup_existing_images(context: Context):
 
 
 def regenerate_images(context: Context):
-    annotations_repository = context.annotations_repository
-    cropped_sign_images_repository = context.cropped_sign_images_repository
-    annotations_service = create_annotations_service(context)
     database = get_database()
-
-    logger.info("Fetching all annotations...")
     annotations_collection = database["annotations"]
-    annotations_cursor = annotations_collection.find({})
+
+    logger.info("Fetching list of fragments to process...")
+    cursor = annotations_collection.find({}, {"fragmentNumber": 1})
+
+    fragment_numbers = [
+        doc["fragmentNumber"]
+        for doc in cursor
+        if "fragmentNumber" in doc
+    ]
+
+    total_fragments = len(fragment_numbers)
+    logger.info(
+        f"Found {total_fragments} fragments. Starting parallel processing...")
+
+    cpu_count = os.cpu_count() or 4
+    logger.info(f"Using {cpu_count} worker processes.")
 
     processed_count = 0
-    error_count = 0
 
-    for annotation_doc in annotations_cursor:
-        try:
-            fragment_number = MuseumNumber.of(annotation_doc["fragmentNumber"])
-            annotations = annotations_repository.query_by_museum_number(fragment_number)
-
-            if annotations.annotations:
+    with multiprocessing.Pool(processes=cpu_count, initializer=init_worker) as pool:
+        for result in pool.imap_unordered(process_single_fragment, fragment_numbers, chunksize=10):
+            processed_count += result
+            if processed_count % 100 == 0:
                 logger.info(
-                    f"Processing fragment {fragment_number} with {len(annotations.annotations)} annotations"
-                )
+                    f"Progress: {processed_count} fragments processed successfully...")
 
-                (
-                    annotations_with_image_ids,
-                    cropped_sign_images,
-                ) = annotations_service._cropped_image_from_annotations(annotations)
-
-                if cropped_sign_images:
-                    cropped_sign_images_repository.create_many(cropped_sign_images)
-                    logger.info(
-                        f"Created {len(cropped_sign_images)} cropped images for fragment {fragment_number}"
-                    )
-
-                annotations_repository.create_or_update(annotations_with_image_ids)
-                processed_count += 1
-
-                if processed_count % 100 == 0:
-                    logger.info(f"Processed {processed_count} fragments so far...")
-
-        except Exception as e:
-            error_count += 1
-            logger.error(
-                f"Error processing fragment {annotation_doc.get('fragmentNumber', 'unknown')}: {str(e)}"
-            )
-            continue
-
-    logger.info(
-        f"Regeneration completed. Processed {processed_count} fragments, {error_count} errors."
-    )
+    logger.info(f"Regeneration completed.")
 
 
 def migrate_cropped_images():
@@ -126,13 +146,13 @@ def migrate_cropped_images():
     logger.info("=" * 40)
 
     logger.info("BEFORE migration:")
-    individual_annotations_count, cropped_images_count = show_statistics(context)
+    individual_annotations_count, cropped_images_count = show_statistics(
+        context)
 
-    if cropped_images_count == 0:
-        logger.info("No cropped images found. Nothing to clean up.")
-        logger.info("Proceeding with regeneration...")
-    else:
+    if cropped_images_count > 0:
         cleanup_existing_images(context)
+    else:
+        logger.info("No existing images found, skipping cleanup.")
 
     logger.info("Starting regeneration...")
     regenerate_images(context)
