@@ -1,49 +1,76 @@
-&X1027702 = AD -277ABC // B = BM 132279, C = BM 132279 + ...
+&X1027702 = BM.34725
 #project: adsd/adart1
 #atf: use unicode
 #atf: lang akk
 #atf: use math
 #atf: use legacy
 
+# note: The two pieces B (BM.34725) and C (BM.132279+) are almost certainly part of the same tablet. The first 8 lines overlap with rev. 25-31 of exemplar A (BM.34099+).
+
 @obverse
+
+$ (BM.34725)
 
 B1. [...] 2 2/3 KÙŠ GE₆ 3 sin e ŠUR-ULÙ 1/3 KÙŠ
 #lem: u; n; n; ammatu[unit]N; mūšu[night]N; n; Sîn[moon]N; eli[above]PRP; ŠUR-GIGIR-šá-ULÙ[ζ Tauri]CN; n; ammatu[unit]N
+// F BM.34099 o 1
+// F BM.34099 o 2
 
 B2. [... GIŠ.KUN]-A 4 KÙŠ sin 2/3 KÙŠ ana NIM DIB GE₆ 11
 #lem: u; GIŠ.KUN-A[ϑ Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V; mūšu[night]N; n
+// F BM.34099 o 2
+// F BM.34099 o 3
 
 B3. [... S]A₄ 2 KÙŠ GE₆ 14 12 ME SAG GE₆
 #lem: u; SA₄-šá-ABSIN[α Virginis]CN$; n; ammatu[unit]N; mūšu[night]N; n; n; ūmu[moonrise to sunset]N; rēšu[beginning]N; mūšu[night]N
+// F BM.34099 o 3
+// F BM.34099 o 4
 
 B4. [...] ⸢16⸣ DIR AN DIB 21 MÚL.BABBAR
 #lem: u; n; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; n; Kakkabu-peṣû[Jupiter]CN
+// F BM.34099 o 4
+// F BM.34099 o 5
 
-B5. [... A]N e LUGAL 2/3 KÙŠ GE₆ 25 ina ZALÁG sin
+B5. [... A]N e LUGAL 2/3 KÙŠ GE₆ 25 ina ZALÁG sin // F BM.34099 o 5
 #lem: u; Ṣalbaṭānu[Mars]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+// F BM.34099 o 5
+// F BM.34099 o 6
 
 B6. [... KI.LA]M še-im 1(GUR) 3(BÁN) ZÚ 2(BARIG) 4(BÁN) 3 qa
 #lem: u; mahīru[price (equivalent)]N; šeʾu[barley]N; n; n; suluppu[date]N; n; n; n; qû[(one) litre]N
+// F BM.34099 o 6
+// F BM.34099 o 7
 
 B7. [...] dele-bat ina zib{ME} GU₄.UD šá ŠÚ-ú NU IGI
 #lem: u; Dilbat[Venus]CN; ina[in]PRP; Zibbātu[Pisces]CN; Šihṭu[Mercury]CN; ša[which]REL; rabû[set]V; ul[not]MOD; nanmuru[be(come) visible]V
+// F BM.34099 o 7
+// F BM.34099 o 8
 
 B8. [...] ($blank$)
 #lem: u
 
 B9. [... MAŠ].MAŠ-ár 1 1/2 KÙŠ GE₆ 5
 #lem: u; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N; mūšu[night]N; n
+// F BM.34099 o 9
+// F BM.34099 o 10
 
 B10. [...] sin 2/3 KÙŠ ana NIM DIB
 #lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; etēqu[pass]V
+// F BM.34099 o 10
+// F BM.34099 o 11
 
 B11. [...] GÌR{II}-ár-šá-A 2 1/2 KÙŠ
 #lem: u; GÌR-ár-šá-A[β Virginis]CN$; n; n; ammatu[unit]N
+// F BM.34099 o 11
+// F BM.34099 o 12
 
 B12. [...] GE₆ 11 SAG GE₆ [sin?]
 #lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N
 
-@h1 C obverse
+$ (BM.34220+)
+
+@reverse
+
 C1. [... MÚL-MURUB₄-š]á-SAG-GÍR.TAB 1/2 KÙŠ GE₆ 2 sin ár MÚL-MURUB₄-šá-SAG-GÍR.TAB 1+[x KÙŠ]
 #lem: u; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; ammatu[unit]N; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; ammatu[unit]N
 
@@ -96,7 +123,8 @@ C17. [...] ⸢x⸣ MÚL ⸢x⸣ [...]
 #lem: u; u; kakkabu[star]N; u; u
 
 $ (break)
-@h1 C obverse (continued from Rm 800+)
+
+$ (Continued from Rm.800+)
 C1'. [...] ⸢x x x x⸣ [...]
 #lem: u; u; u; u; u; u
 
@@ -153,195 +181,39 @@ C17'. [AB ...] AN UTAH 2 dele-bat ina ⸢ŠÚ⸣ ina ⸢MÁŠ⸣ [IG]I 11? na �
 C18'. [...] SAG GE₆ s[in ...] ⸢x x⸣ [...] 
 #lem: u; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; u; u; u; u
 
-@h1 C reverse (BM 132279+) 
-Cr1'. [... D]U₆ EN TIL DIRI.ŠE MU 34.KÁM {m}an-ti-ʾu-ku-⸢su⸣ [...]
+$ (BM.132279+)
+
+D1'. [... D]U₆ EN TIL DIRI.ŠE MU 34.KÁM {m}an-ti-ʾu-ku-⸢su⸣ [...]
 #lem: u; Tašrītu[Month VII]MN; adi[until]PRP; qītu[end]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; šattu[year]N; n; Antiochus[Antiochus]RN$; u
 
 $ (space of about 5 lines)
-Cr2'. [... T]A ⸢DU₆⸣ EN TIL DIRI.ŠE MU.34.KÁM {m}an u {m}se LUGAL{MEŠ}
+D2'. [... T]A ⸢DU₆⸣ EN TIL DIRI.ŠE MU.34.KÁM {m}an u {m}se LUGAL{MEŠ}
 #lem: u; ištu[from]PRP; Tašrītu[Month VII]MN; adi[until]PRP; qītu[end]N; Addāru_Šanû[(Intercalary) Month XII₂]MN$; n; Antiochus[Antiochus]RN$; u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N
 
 $ (space of about 5 lines)
-Cr3'. [... M]U 34.KÁM {m}an [u] {m}se LUGAL{MEŠ} 
+D3'. [... M]U 34.KÁM {m}an [u] {m}se LUGAL{MEŠ} 
 #lem: u; šattu[year]N; n; Antiochus[Antiochus]RN$; u[and]CNJ; Seleucus[Seleucus]RN; šarrāni[king]N
 
-@h1 B top
+@top
+
+$ (BM.34725)
+
 B1. [...] se LUGAL{MEŠ} 
 #lem: u; Seleucus[Seleucus]RN$; šarrāni[king]N
 
 @translation labeled en project
 
-@obverse
-
-@(o A1) [Month I, ... the moon was] 1 cubit [...] η Tauri; Jupiter was 2 1/2 cubits below η Tauri. The 1st, equinox. Night [of the 2nd, the moon was] 2 2/3 cubits above α Tauri. Night of the 3rd, the moon was 1/3 cubit above ζ Tauri.
-
-@(o A2) [The 4th@sup{?}, Mercury’s] first appearance [in the east,] omitted. Night of the 5th, clouds crossed the sky. Night of the 9th, beginning of the night, the moon was 2 [cubits] behind ρ Leonis. Night of the 10th, beginning of the night, the moon was 4 cubits below ϑ Leonis,
-
-@(o A3) the moon having passed 2/3 cubit to the east. Night of the 11th, beginning of the night, the moon was 2 1/2 cubits behind β Virginis. Night of the 12th, beginning of the night, [the moon was] 1 cubit [behind] γ Virginis. Night of the 13th, beginning of the night, 
-
-@(o A4) [the moon was] 2 cubits [behind] α Virginis. Night of the 14th, moonrise to sunset: 12°; beginning of the night, the moon was ... cubits in [front of α Librae.] The 14th, [moonset to sunrise:] 6° 30+[x]'; [...] Night of the 15th, sunset to moonrise: 50'; clouds, I did not watch. The 15th, [sunrise to moonset:] 5° 30+[x]'.
-
-@(o A5) [... The 16th,] clouds crossed the sky. The 21st, Jupiter’s last appearance in Taurus [...] 4 cubits [..., the m]oon was 2 cubits behind δ Capricorni. Night of the 23rd, first part of the night, 
-
-@(o A6) [Mars] was 2/3 cubit above α Leonis. Night of the 25th, last part of the night, the moon was [...] be[hind Venus ... The 2]7th, panic and fear occurred in the land.
-
-@(o A7) That month, the equivalent of 1 shekel of silver was: barley, 1 kur 3 @i{sūtu}; dates, 2 @i{pānu} 4 @i{sūtu} 3 @i{qa}; [...]
-
-@(o A8) At that time, Jupiter which had set was not visible; Venus was in Pisces; Mercury, which had set, was not visible; Saturn was in [Capricorn; Mars was in Leo ...] the high [water] came; 1 was the @i{na} (gauge).
-
-$ ruling
-
-@(o A9) [Mon]th II, (the 1st of which was identical with) the 30th (of the preceding month), sunset to moonset: 19°; the moon was [...] in front of β Tauri. [Night of the 2nd,] the moon was [...] in front of η Gemin[orum. Night of the 3rd, the moon was ... in front of α Geminorum. Ni]ght of the 4th, the moon was 1 1/2 cubits behind β Geminorum.
-
-@(o A10) Night of the 5th, clouds crossed the sky. Night of the 6th, [...] night, thunder, lightning fla[shed ...] ... Night of the 7th, beginning of the night, 
-
-@(o A11) the moon was 2 1/2 cubits below α Leonis, the moon having passed 2/3 cubit to the east; the moon [was surrounded] by a halo, α Leonis [stood] in it. [... the moon was] 4 cubits below ϑ Leonis,
-
-@(o A12) [the moon] being 3 cubits back to the west. Night of the 9th, beginning of the night, the moon was 2 1/2 cubits below β Virginis@sup{?} [...] Night of the 10th, beginning of the night, the moon was
-
-@(o A13) 2 cubits below γ Virginis; the 10th, last part of the night, Venus was 10+[x ...] below η Piscium [... when Saturn became stationary to the east,] it became stationary [...] behind β Capricorni.
-
 @(o B12) [...] Night of the 11th, beginning of the night, [the moon@sup{?}]
-
-@(o A14) Night of the 13th, beginning of the night, the moon was 2 1/2 cubits below α Librae, the moon being 2/3 cubit [... Night of the 14th, the moon ... Scorpii x]+1/2 cubit.
-
-@(o A15) [The 14th,] moonset to sunrise: 7° 40'. Night of the 15th, moonrise to sunset: 6°, measured; beginning of the night, the moon was [... behind@sup{?} α Scorpii ..., mea]sured. {The 15th,} fir[st part of the night, Venus was]
-
-@(o A16) 4 cubits [below] β Arietis; in the morning, clouds ... [... The 19th@sup{?}, Siriu]s’ last appearance. Ni[ght of the 18th,]
-
-@(o A17) [last part of the night,] the moon was 2 1/2 cubits in front of β Capricorni, [it stood] 3 cubits in front of Saturn to the west [...] ... [Night of the 25th,]
-
-@(o A18) [last part of the night,] the moon was 6 cubits below α Arietis. Night [...]
-
-@(o A19) [The 27th,] moonrise to sunrise: 18° 50'. The 28th, Jupiter’s first appearance in Taurus; [rising of Jupiter to sunrise:] 11+[x ...]
-
-@(o A20) [...] That month, the equivalent [of 1 shekel of silver was]: barley, 1 kur 3 @i{sūtu}; dates, 2 @i{pānu} 2 @i{sūtu} [...]
-
-@(o A21) [At that] time, Jupiter was in Taurus; Venus was in Aries; Mer[cury ...]
-
-$ ruling
-
-@(o A22) [Month III, the 1st (of which followed the 30th of the preceding month),] sunset to moonset: [2]5°; (it could be seen while) the sun (stood there); the moon was in front of β Geminorum [... x]+1 cubit [...]
-
-@(o A23) [...] 1 cubit. Night of the 5th, the moon was [...] be[low ϑ Leonis ... Night of the 6th, beginning of the night, the moon was] 2 2/3 cubits [below] β Virginis. [Night of the 7th,]
-
-@(o A24) [beginning of the night, the m]oon was 2 1/2 [cubits] in front of γ Virginis. [Night of the 8th, beginning of the night, the moon was] 2+[x cubits in front of α] Virginis.
-
-@(o A25) [Night of the 10th, beginning of the night, the moon was ...] behind [α] Librae [... Night of the 12th, beginning of the ni]ght, the moon was 1+[x ...] above α Scorpii [...]
-
-@(o A26) [... The 15th,] sunrise to moonset: [x]+1° 30'. Night of the 1[6th, ...]
-
-@(o A27) [... first] part of the night, Mars was [...] below β Virginis [...]
-
-@(o A28) [... Night of the 22nd, last part of the night, the m]oon was 1+[x ...] below β Arietis [...]
-
-@(o A29) [... Night of the 25th, last part of the ni]ght, the moon was 4 cubits above α Tauri; last part of the night, the moon was above [Jupiter@sup{?} ...]
-
-@(o A30) [... last part of the ni]ght, Venus was 3 cubits below β Tauri. That month, the equivalent for 1 shekel of silver was: bar[ley, ...]
-
-@(o A31) [...] At that time, Jupiter and Venus were in Taurus; Mercury was in Cancer; Sat[urn was in Capricorn; Mars was in Leo, at the end of the month, in Virgo.]
-
-$ ruling
-
-@(o A32) [Month IV, (the 1st of which was identical with) the 30th (of the preceding month), ...] 5@sup{?} fingers. The 3rd, solstice. The 6th, Saturn’s acronychal rising. Night of the 7th, beginning of the night, [...]
-
-@(o A33) [... Night of the 8th, beginning of the night, the moon was] 2 1/2 cubits [in front of α Libr]ae. Night of the 9th, last part of the night, Venus was [nn fingers] below η Geminorum.
-
-@(o A34) [... Night of the 1]1th, beginning of the night, the moon was 1 cubit in front of ϑ Ophiuchi; last part of the night, Venus was [...] below μ Gemin[orum].
-
-@(o A35) [... Night of the 14th, beginning of the night, the moon was] 1 1/2 cubits above Saturn, the moon being 2/3 cubit back to the west; last part of the night, Venus was [...] above γ Ge[minorum.]
-
-@(o A36) [... Night of the 15th, last part of the night, the moon was] 2 1/2 cubits [in front of] γ Capricorni. The 15th, sunrise to moonset: 12°. Night of the 16th, sunset to moonrise: 11° [...]
-
-@(o A37) [... last part of the night, Venus was] 5 cubits [below] α Geminorum. Night of the 21st, last part of the night, Jupiter was [...] below β Tauri.
-
-@(o A38) [... Night of the 22nd, last part of the night, the moon was] 1/2 cubit [...] η Tauri. Night of the 23rd, last part of the night, the moon was [...] above α Tauri.
-
-@(o A39) [... Night of the 24th, last part of the night, ..., Venus was] 3 1/2 cubits below β Geminorum. Night of the 25th, last part of the night, [...]
-
-@(o A40) [... Night of the 26th, last part of the night, the moon was] 2 1/2 cubits in front of Venus. The 27th, moonrise to sunrise: 18°. The 28th, [...] 
 
 @reverse
 
-@(r A1) [...] mustard, [...;] cress, 2 @i{pānu}; sesame, 2 @i{sūtu} 3 @i{qa}; wool, [...]
-
-@(r A2) [... Ve]nus was in Gemini, at the end of the month, in Cancer; Mercury, which had set, was not visible; Saturn was in [Capricorn; Mars was in Virgo.]
-
-$ ruling
-
-@(r A3) [Month V, the 1st (of which followed the 30th of the preceding month), ...] Night of the 4th, the moon was 1/2 cubit behind α Virginis. Night of the 6th, beginning of the night, the moon was [...]
-
-@(r A4) [in front@sup{?} of β Librae ... Night] of the 7th, beginning of the night, the moon was 1 cubit in front of δ Scorpii. The 7th, Mercury’s [first appearance] in the east [in Cancer]
-
-@(r A5) [...] Night of the 9th, beginning of the night, the moon was 1 1/2 cubits behind ϑ Ophiuchi. Night of the 12th, beginning of the night, the moon was [...] behind β [Capricorni]
-
-@(r A6) [... Night of the 13th, beginning of the night, the moon was] 1 2/3 cubits [...] γ Capricorni. The 13th, moonset to sunrise: 12°. Night of the 14th, moonrise to sunset: 12°, measured. The 14th, sunrise to moonset: 5° 20'. Ni[ght of the 15th, sunset to moonrise: ...]
-
-@(r A7) [... Night] of the 16th, last part of the night, Jupiter was 2/3 cubits above ζ Tauri. Night of the 17th, last part of the night, the moon was [...] in front of η Piscium.
-
-@(r A8) [... Night of the 18th, last part of the night, the moon was] 1 cubit [behind α A]rietis. Night of the 19th, last part of the night, the moon was 2 cubits in front of η Tauri. Night of the 20th, last part of the [night, the moon was]
-
-@(r A9) [... Night of the 21st, last part of the night, the moo]n was 2/3 cubit in front of Jupiter, 1/2 cubit in front of ζ Tauri. Night of the 22nd, last part of the night, the moon was behind [...]
-
-@(r A10) [... Venus was] 4 fingers above α Leonis. The 27th, moonrise to sunrise: 17°. The 28th, Mercury’s [last appearance] in the east in Leo [...]
-
-@(r A11) [...] @i{pānu}; cress, 1 @i{pānu} 4 @i{sūtu}; sesame, 4 @i{sūtu}; wool, 3 mi[nas.]
-
-@(r A12) [At that time, Jupiter was in] Gemini; Venus was in Leo; Mercury, which had set, was not visible; Saturn was in Capricorn; [Mars was in Libra.]
-
-$ ruling
-
-@(r A13) [Month VI, the 1st (of which followed the 30th of the preceding month), ... last part of the night, Venus was ... above] ρ Leonis. [Night] of the 3rd, the moon was 2 1/2 cubits below α Librae, 1 1/2 cubits below Mars [...]
-
-@(r A14) [...] Night of the 5th, the moon was 2/3 cubit in front of α Scorpii. [Night] of the 6th, beginn[ing of the night, the m]oon was 8 fingers above ϑ Ophiuchi; first part of the night, Mars was [...] below α Librae.
-
-@(r A15) [Night of the 9th, beginning of the night, the moon was] 2/3 cubit [above@sup{?}] Saturn, 1 2/3 cubits in front of β Capricorni. Night of the 10th, beg[inning of the night, the moon was] 3 1/2 cubits in front of γ Capricorni. Night of the 11th, beginning of the night, [the moon was]
-
-@(r A16) [nn] cubits [behind δ Capricorni.] Night of the 13th, first part of the night, Mars was 4 1/2 cubits below β Librae; [last part of the night, Venus was] 4 1/2 cubits below ϑ Leonis. The 13th, moonset to sunrise: 1° 50'. Night [of the 14th,]
-
-@(r A17) [moonrise to sunset: nn, (measured).] The 14th, sunrise to moonset: 16°, measured. Night of the 15th, sunset to moonrise: 7° 30'; last part of the night, the moon was 1 1/2 cubits below [β] Arietis. Night of the 17th, last part of the night, the moon was [...] behind η Tauri.
-
-@(r A18) Night of the 18th, last part of the night, the moon was 2 1/2 cubits in front of β Tauri. Night of the 19th, last part of the night, the moon was [nn] cubits in front of η [Geminorum.] Night of the 20th, last part of the night, the moon was 3 cubits in front of α Geminorum.
-
-@(r A19) The 20th, Jupiter became stationary in Gemini. Night of the 23rd, last part of the night, the moon was 4 cubits below ε Leonis. Night of the 2[4th, ...] Night of the 25th, last part of the night, the moon was 6 cubits below ϑ Leonis.
-
-@(r A20) Night of the 26th, last part of the night, the moon was 2 cubits behind β Virginis. The 27th, moonrise to sunrise: 13° 10'. [That month, the equivalent] for 1 shekel of silver was: [barley, ...] 2 @i{sūtu}; dates, 3 @i{pānu} 2 @i{sūtu}; mustard, 1 kur; cress, 1 @i{pānu} 4 @i{sūtu};
-
-@(r A21) sesame, 5 @i{sūtu}; wool, 3 minas. At that time, Jupiter was in Gemini; [Venus was in Virgo@sup{?}; Mercury, which had set, was not visible; Sat]urn was in Capricorn; Mars was in Libra, at the end of the month in Scorpius.
-
-$ ruling
-
-@(r A22) Month VII, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 15°; first part of the night, Mars was 1/2 cubit above δ Scorpii. Night of the 2nd, the moon was 1+[x] cubits behind δ Scorpii, 2/3 cubit behind Mars.
-
-@(r A23) Night of the 3rd, the moon was 2 cubits in front of ϑ Ophiuchi. Night of the 6th, beginning of the night, the moon was 2 cubits in front of Saturn. The 6th, equinox. Night [of the 7th, beginning of the night, the moon was] 2 cubits behind β Capricorni.
-
-@(r A24) Night of the 8th, beginning of the night, the moon was 1 2/3 cubits above δ Capricorni. Night of the 12th, beginning of the night, the moon was 1 cubit  ... [...]
-
 @(r C3) [...] Night of the 11th, first part of the night, Mars was 2 1/2 cubits above α Scorpii. Night of the 12th, first part of the night, the moon was  ... in front of η Piscium.
 
-@(r A25) The 12th, moonset to sunrise: 8°. Night of the 13th, moonrise to sunset: 7° 20'; beginning of the night, the moon was 2 cubits below α Arietis. The 13th, sunrise to moonset: 9°. Night of the 14th, sunset to moonrise: 5°, measured; last part of the night,
-
-@(r A26) the moon was 1 cubit behind η Tauri. Night of the 15th, last part of the night, the moon was 1 cubit behind α Tauri. Night of the 16th, last part of the night, the moon was 2/3 cubit behind ζ Tauri. Night of the 17th, last part of the night, the moon was
-
 @(r C5) [...] Night of the 16th, last part of the night, the moon was 2/3 cubit behind ζ Tauri; last part of the night, Jupiter entered the moon. Night of the 17th, last part of the night, the moon was
-
-@(r A27) 1 cubit behind γ Geminorum. Night of the 18th, last part of the night, the moon was 3 cubits below β Geminorum. Night of the 1[9th, last part of the night, the moon was 2/3 cubit below ϑ Cancri.] The 20th, Mercury’s
-
-@(r A28) first appearance in the west, omitted. Night of the 21st, last part of the night, the moon was 1 1/2 cubits below α Leonis. (From ex.C: Night of the 22nd, last part of the night, the moon was 2 cubits in front of ϑ Leonis.) Night of the 23rd, last part of the night, the moon was 1 1/2 cubits in front of β Virginis. [Night of the 24th, last part of the night,] the moon was
-
-@(r A29) 2 1/2 cubits in front of γ Virginis. The 24th, Venus’ last appearance in the east in the end of Libra. Night of the 25th, [...] 8 fingers; last part of the night, the moon was 
-
-@(r A30) 2 cubits in front of α Virginis. The 27th, moonrise to sunrise: 21° 40'; clouds, I did not watch. That month, the equivalent for 1 shekel of silver was: barley, 1 kur 2 @i{pānu} 3 @i{sūtu}; dates, 3 @i{pānu}; mustard, 1 kur 2 @i{pānu} 3 @i{sūtu}; cress, 2 @i{pānu} (var. 1 @i{pānu} 4 @i{sūtu}); sesame, 1 @i{pānu};
-
-@(r A31) wool, 3 minas. At that time, Jupiter was in Gemini; Venus’ last appearance on the 24th in Libra; Mercury, which had set, was not visible; Saturn was in Capricorn; Mars was in Scorpius. That month, the river level receded 1/2 cubit; 30 was the @i{na} (gauge).
 
 @(r C11) [...] 23 was the @i{na} (gauge).
 
 $ ruling
-
-@(r A32) Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset): 12° 30'.
-
-@(r A33) Diary from month I to the end of month VII, year 34, kings [Antiochus and S]eleucus.
 
 @(r C12) [Month VIII, ... Night of the 2nd, the moon was] 4 fingers [...] Mars. Night of the 5th, the moon was 1 cubit behind Saturn, [...] behind β Capricorni. Night of the 6th, the moon was 1 1/2 cubits in front of γ Capricorni, the moon being 2 2/3 cubits above Capricorn.
 
@@ -399,25 +271,13 @@ $ ruling
 
 @h1 C reverse
 
-@(r Cr1') [... month V]II to the end of month XII₂, year 34, Antiochus [...]
+@(r D1') [... month V]II to the end of month XII₂, year 34, Antiochus [...]
 
-@(r Cr2') [...] from month VII to the end of month XII₂, year 34, kings Antiochus and Seleucus.
+@(r D2') [...] from month VII to the end of month XII₂, year 34, kings Antiochus and Seleucus.
 
-@(r Cr3') [...] year 34, kings Antiochus and Seleucus. 
+@(r D3') [...] year 34, kings Antiochus and Seleucus. 
 
-@h1 A top
-
-@(t.e. A1) [Diar]y from month I to the end of month VII of year 34, kings [Anti]ochus and Seleucus. 
-
-@h1 A right
-
-@(r.e. A1) Diary from month I [to the end of month VII, year 34 ...] 
-
-@h1 A left
-
-@(l.e. A1) [...] kings Antiochus and Seleucus. 
-
-@(l.e. B1) [...] kings [Antiochus and] Seleucus.
+@(t.e. B1) [...] kings [Antiochus and] Seleucus.
 
 
 
