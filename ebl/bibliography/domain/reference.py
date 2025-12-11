@@ -14,6 +14,7 @@ class ReferenceType(Enum):
     TRANSLATION = auto()
     ARCHAEOLOGY = auto()
     ACQUISITION = auto()
+    SEAL = auto()
 
 
 @attr.s(auto_attribs=True, frozen=True)
