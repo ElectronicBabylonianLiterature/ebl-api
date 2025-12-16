@@ -25,7 +25,7 @@ def get_search_params(query: str) -> dict[str, Any]:
                 vowel_class_values.append(parts)
         else:
             other_params[key] = value
-    result = {
+    result: dict[str, Any] = {
         param.field: param for param in make_query_params(other_params) if param.value
     }
     if vowel_class_values:

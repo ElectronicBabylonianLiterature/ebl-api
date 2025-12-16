@@ -3,6 +3,7 @@ from typing import Sequence, Optional
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
+from ebl.dictionary.infrastructure.akkadian_sort import create_mongo_sort_key
 from ebl.mongo_collection import MongoCollection
 from ebl.common.query.query_collation import CollatedFieldQuery
 
@@ -174,7 +175,10 @@ class MongoWordRepository(WordRepository):
                             ),
                         ]
                     },
-                }
+                },
+                {"$addFields": {"_sortKey": create_mongo_sort_key()}},
+                {"$sort": {"_sortKey": 1, "_id": 1}},
+                {"$project": {"_sortKey": 0}},
             ],
         )
         return list(cursor)
