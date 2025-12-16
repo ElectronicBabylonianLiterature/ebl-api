@@ -2,21 +2,34 @@ import pydash
 import pytest
 import copy
 
-from typing import Dict
-from urllib.parse import urlencode
-from ebl.common.query.query_collation import CollatedFieldQuery
+from typing import Dict, Any
 from ebl.errors import NotFoundError
-from ebl.common.query.query_collation import make_query_params_from_string
 
 COLLECTION = "words"
 
 
-def _make_query_params(query: Dict) -> Dict[str, CollatedFieldQuery]:
-    return {
-        param.field: param
-        for param in make_query_params_from_string(urlencode(query))
-        if param.value
-    }
+def _make_query_params(query: Dict) -> Dict[str, Any]:
+    query = dict(query)
+    vowel_class_values: list[tuple[str, ...]] = []
+    if "vowelClass" in query:
+        parts = tuple(
+            vowel.strip()
+            for vowel in query.pop("vowelClass").replace(",", "/").split("/")
+            if vowel.strip()
+        )
+        if parts:
+            vowel_class_values.append(parts)
+    from ebl.common.query.query_collation import make_query_params
+
+    params: Dict[str, Any] = {}
+    for param in make_query_params(query):
+        if param.value:
+            params[param.field] = param
+
+    if vowel_class_values:
+        params["vowel_class"] = vowel_class_values
+
+    return params
 
 
 def test_create(database, word_repository, word):
@@ -126,7 +139,7 @@ def test_search_finds_by_vowel_class(database, word_repository, word):
     )
     another_word["amplifiedMeanings"][0]["vowels"][0]["value"] = ["e", "u"]
     database[COLLECTION].insert_many([word, another_word])
-    query = {"vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])}
+    query = {"vowelClass": ",".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])}
 
     assert word_repository.query_by_lemma_meaning_root_vowels(
         **_make_query_params(query)
@@ -141,7 +154,7 @@ def test_search_finds_by_all_params(database, word_repository, word):
         "word": '"Parṭ2"',
         "meaning": word["meaning"],
         "root": word["roots"][0],
-        "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
+        "vowelClass": ",".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
     }
     assert word_repository.query_by_lemma_meaning_root_vowels(
         **_make_query_params(query)
