@@ -187,8 +187,6 @@ def make_query_params_from_string(
 def make_query_params(
     query_dict: dict, data_type: DataType = "dictionary"
 ) -> Iterable[CollatedFieldQuery]:
-    if "vowelClass" in query_dict:
-        query_dict["vowel_class"] = query_dict.pop("vowelClass")
     return (
         CollatedFieldQuery(string, field, data_type)
         for field, string in query_dict.items()

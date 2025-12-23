@@ -3,6 +3,7 @@ from typing import Sequence, Optional
 from ebl.changelog import Changelog
 from ebl.dictionary.application.word_repository import WordRepository
 from ebl.dictionary.domain.word import WordId
+from ebl.dictionary.infrastructure.akkadian_sort import create_mongo_sort_key
 from ebl.mongo_collection import MongoCollection
 from ebl.common.query.query_collation import CollatedFieldQuery
 
@@ -108,13 +109,13 @@ def _create_query_by_root(root: str, collate: bool) -> dict:
     return {"roots": {"$regex": rf"^{root}$", "$options": regex_options}}
 
 
-def _create_query_by_vowel_class(vowel_class: str) -> dict:
-    return {
-        "$or": [
-            {"amplifiedMeanings.vowels.value": vowel_class.split("/")},
-            {"amplifiedMeanings.entries.vowels.value": vowel_class.split("/")},
-        ]
-    }
+def _create_query_by_vowel_class(vowel_classes: list[tuple[str, ...]]) -> dict:
+    conditions = []
+    for cls in vowel_classes:
+        vals = list(cls)
+        conditions.append({"amplifiedMeanings.vowels.value": {"$eq": vals}})
+        conditions.append({"amplifiedMeanings.entries.vowels.value": {"$eq": vals}})
+    return {"$or": conditions} if conditions else {}
 
 
 class MongoWordRepository(WordRepository):
@@ -143,7 +144,7 @@ class MongoWordRepository(WordRepository):
         word: Optional[CollatedFieldQuery] = None,
         meaning: Optional[CollatedFieldQuery] = None,
         root: Optional[CollatedFieldQuery] = None,
-        vowel_class: Optional[CollatedFieldQuery] = None,
+        vowel_class: Optional[list[tuple[str, ...]]] = None,
     ) -> Sequence:
         cursor = self._collection.aggregate(
             [
@@ -168,13 +169,16 @@ class MongoWordRepository(WordRepository):
                                 else {}
                             ),
                             (
-                                _create_query_by_vowel_class(vowel_class.value)
+                                _create_query_by_vowel_class(vowel_class)
                                 if vowel_class
                                 else {}
                             ),
                         ]
                     },
-                }
+                },
+                {"$addFields": {"_sortKey": create_mongo_sort_key()}},
+                {"$sort": {"_sortKey": 1, "_id": 1}},
+                {"$project": {"_sortKey": 0}},
             ],
         )
         return list(cursor)
