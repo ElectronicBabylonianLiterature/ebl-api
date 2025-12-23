@@ -571,7 +571,7 @@ def word():
         "guideWord": "meaning",
         "arabicGuideWord": "meaning",
         "oraccWords": [{"lemma": "oracc lemma", "guideWord": "oracc meaning"}],
-        "origin": "cda",
+        "origin": "CDA",
         "akkadischeGlossareUndIndices": [
             {
                 "mainWord": "word",

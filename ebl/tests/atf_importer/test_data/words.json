@@ -27,7 +27,7 @@
     "homonym": "I",
     "legacyLemma": "Bel",
     "guideWord": "Bel",
-    "origin": "oracc/saao",
+    "origin": "ORACC_SAAO",
     "arabicGuideWord": ""
   },
   {
@@ -102,7 +102,7 @@
     "pos": [],
     "guideWord": "the moon(-god)",
     "oraccWords": [],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<sup style=\"font-style: normal;\">d</sup><i>Šiena</i>",
@@ -157,7 +157,7 @@
         "guideWord": "dark"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>adrūtu</i>",
@@ -468,7 +468,7 @@
         "guideWord": "eat"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>akālu</i>",
@@ -714,7 +714,7 @@
         "guideWord": "to"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>ana</i>",
@@ -869,7 +869,7 @@
       }
     ],
     "guideWord": "unit",
-    "origin": "cda",
+    "origin": "CDA",
     "arabicGuideWord": ""
   },
   {
@@ -956,7 +956,7 @@
         "guideWord": "eclipse"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>attalû</i>",
@@ -1127,7 +1127,7 @@
         "guideWord": "man"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>aʾīlu</i>",
@@ -1583,7 +1583,7 @@
         "guideWord": "be(come) dominant"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>baʾālum</i>",
@@ -1879,7 +1879,7 @@
         "guideWord": "lean on"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>emēdu</i>",
@@ -2235,7 +2235,7 @@
         "guideWord": "brought in"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>erēbu</i>",
@@ -2435,7 +2435,7 @@
         "guideWord": "area"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>erṣetu</i>",
@@ -2756,7 +2756,7 @@
         "guideWord": "god"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>ilu</i>",
@@ -3199,7 +3199,7 @@
         "guideWord": "at"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>in</i>",
@@ -3361,7 +3361,7 @@
         "guideWord": "starry one"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>kakkabu</i>",
@@ -3440,7 +3440,7 @@
         "guideWord": "surrounded (with)"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "arabicGuideWord": "محاصَر/ مسيَّج"
   },
   {
@@ -3487,7 +3487,7 @@
         "guideWord": "shining"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "arabicGuideWord": "ساطع"
   },
   {
@@ -3616,7 +3616,7 @@
         "guideWord": "set"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "arabicGuideWord": "يجلس",
     "akkadischeGlossareUndIndices": [
       {
@@ -3702,7 +3702,7 @@
         "guideWord": "halo"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>tarbaṣu</i>",
@@ -3892,7 +3892,7 @@
         "guideWord": "Scorpio"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>zuqaqīpu</i>",
@@ -3954,7 +3954,7 @@
     "pos": [],
     "guideWord": "(11th Babylonian month)",
     "oraccWords": [],
-    "origin": "cda",
+    "origin": "CDA",
     "arabicGuideWord": "الشهر البابلي الحادي عشر"
   },
   {
@@ -4413,7 +4413,7 @@
         "guideWord": "situated"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>šakānu</i>",
@@ -4717,7 +4717,7 @@
         "guideWord": "lip"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>šaptu</i>",
@@ -4941,7 +4941,7 @@
         "guideWord": "high one"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>šuqqû</i>",
@@ -5154,7 +5154,7 @@
         "guideWord": "if"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>šumma</i>",
@@ -5519,7 +5519,7 @@
         "guideWord": "sunset to moonrise"
       }
     ],
-    "origin": "cda",
+    "origin": "CDA",
     "akkadischeGlossareUndIndices": [
       {
         "mainWord": "<i>ūm qerbūti</i>",
@@ -5661,7 +5661,7 @@
     "pos": [],
     "guideWord": "planet Mars",
     "oraccWords": [],
-    "origin": "cda",
+    "origin": "CDA",
     "arabicGuideWord": "كوكب المريخ"
   }
 ]
