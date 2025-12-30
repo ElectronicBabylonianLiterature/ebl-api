@@ -22,6 +22,7 @@ class WordRepository(ABC):
         meaning: Optional[CollatedFieldQuery],
         root: Optional[CollatedFieldQuery],
         vowel_class: Optional[list[tuple[str, ...]]],
+        origin: Optional[list[str]] = None,
     ) -> Sequence: ...
 
     @abstractmethod

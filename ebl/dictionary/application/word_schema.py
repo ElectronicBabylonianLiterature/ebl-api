@@ -105,17 +105,12 @@ class WordSchema(Schema):
     supplementsAkkadianDictionaries = fields.String()
     origin = ValueEnumField(WordOrigin, required=True)
 
-    # ToDo: Remove once all origins are normalized.
-
     @pre_dump
     def _coerce_origin_for_dump(self, data, **kwargs):
         obj = dict(data) if isinstance(data, dict) else data
         origin = obj.get("origin") if isinstance(obj, dict) else None
         if isinstance(origin, str):
-            try:
-                obj["origin"] = WordOrigin(origin)
-            except Exception:
-                pass
+            obj["origin"] = WordOrigin(origin)
         return obj
 
     @post_load

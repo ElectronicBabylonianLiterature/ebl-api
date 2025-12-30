@@ -9,3 +9,5 @@ Provide project context and coding guidelines that AI should follow when generat
 - Ensure that all functions and methods have appropriate type hints.
 - Do not add comments to the code unless explicitly requested.
 - When running shell commands always use `poetry run` unless using `task`.
+- Functions should be small and focused on a single task.
+- Refactor long and complex code automatically.

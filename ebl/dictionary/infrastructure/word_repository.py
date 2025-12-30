@@ -78,6 +78,7 @@ def _create_query_by_lemma(word: str, collate: bool) -> dict:
     return {
         "$or": [
             {"lemma": {"$regex": rf"^{word}", "$options": regex_options}},
+            {"legacyLemma": {"$regex": rf"^{word}", "$options": regex_options}},
             {"forms.lemma": {"$regex": rf"^{word}", "$options": regex_options}},
         ]
     }
@@ -118,6 +119,12 @@ def _create_query_by_vowel_class(vowel_classes: list[tuple[str, ...]]) -> dict:
     return {"$or": conditions} if conditions else {}
 
 
+def _create_query_by_origin(origin: Optional[list[str]]) -> dict:
+    if origin:
+        return {"origin": {"$in": origin}} if len(origin) > 1 else {"origin": origin[0]}
+    return {}
+
+
 class MongoWordRepository(WordRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
@@ -145,6 +152,7 @@ class MongoWordRepository(WordRepository):
         meaning: Optional[CollatedFieldQuery] = None,
         root: Optional[CollatedFieldQuery] = None,
         vowel_class: Optional[list[tuple[str, ...]]] = None,
+        origin: Optional[list[str]] = None,
     ) -> Sequence:
         cursor = self._collection.aggregate(
             [
@@ -173,6 +181,7 @@ class MongoWordRepository(WordRepository):
                                 if vowel_class
                                 else {}
                             ),
+                            _create_query_by_origin(origin),
                         ]
                     },
                 },

@@ -150,6 +150,27 @@ def test_search_not_found(dictionary) -> None:
     assert dictionary.search(query) == []
 
 
+def test_search_filters_by_origin(dictionary, word) -> None:
+    another_word = {**word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(word)
+    dictionary.create(another_word)
+
+    query = urlencode({"word": "part", "origin": "CDA"})
+    assert dictionary.search(query) == [word]
+
+    query = urlencode({"word": "part", "origin": "EBL"})
+    assert dictionary.search(query) == [another_word]
+
+
+def test_search_defaults_to_cda_origin(dictionary, word) -> None:
+    another_word = {**word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(word)
+    dictionary.create(another_word)
+
+    query = urlencode({"word": "part"})
+    assert dictionary.search(query) == [word]
+
+
 def test_update(dictionary, word, user) -> None:
     new_lemma = ["new"]
     word_id = dictionary.create(word)

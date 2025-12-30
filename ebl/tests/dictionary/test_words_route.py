@@ -56,6 +56,14 @@ def test_search_word_lemma(client, saved_word):
     assert result.json == [saved_word]
 
 
+def test_search_word_lemma_with_origin(client, saved_word):
+    lemma = saved_word["lemma"][0][:2]
+    result = client.simulate_get("/words", params={"lemma": lemma, "origin": "CDA"})
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [saved_word]
+
+
 def test_search_word_no_query(client):
     result = client.simulate_get("/words")
 
@@ -72,6 +80,42 @@ def test_search_word_double_query(client):
     result = client.simulate_get("/words", params={"query": "lemma", "lemma": "lemma"})
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_word_origin_only_is_invalid(client):
+    result = client.simulate_get("/words", params={"origin": "CDA"})
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_word_with_origin_filter(client, saved_word, dictionary):
+    another_word = {**saved_word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(another_word)
+
+    result = client.simulate_get("/words", params={"query": "part", "origin": "CDA"})
+
+    assert result.json == [saved_word]
+    assert result.status == falcon.HTTP_OK
+
+
+def test_search_word_with_different_origin(client, saved_word, dictionary):
+    another_word = {**saved_word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(another_word)
+
+    result = client.simulate_get("/words", params={"query": "part", "origin": "EBL"})
+
+    assert result.json == [another_word]
+    assert result.status == falcon.HTTP_OK
+
+
+def test_search_word_defaults_to_cda_origin(client, saved_word, dictionary):
+    another_word = {**saved_word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(another_word)
+
+    result = client.simulate_get("/words", params={"query": "part"})
+
+    assert result.json == [saved_word]
+    assert result.status == falcon.HTTP_OK
 
 
 @pytest.mark.parametrize(
