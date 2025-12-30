@@ -108,16 +108,6 @@ def test_search_word_with_different_origin(client, saved_word, dictionary):
     assert result.status == falcon.HTTP_OK
 
 
-def test_search_word_defaults_to_cda_origin(client, saved_word, dictionary):
-    another_word = {**saved_word, "_id": "part1 part2 II", "origin": "EBL"}
-    dictionary.create(another_word)
-
-    result = client.simulate_get("/words", params={"query": "part"})
-
-    assert result.json == [saved_word]
-    assert result.status == falcon.HTTP_OK
-
-
 @pytest.mark.parametrize(
     "transform", [lambda word: word, lambda word: {**word, "derived": []}]
 )

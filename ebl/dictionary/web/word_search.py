@@ -28,7 +28,7 @@ class WordSearch:
 
     @staticmethod
     def _build_query_string(params: dict) -> str:
-        return urlencode(params)
+        return urlencode(params, doseq=True)
 
     @staticmethod
     def _parse_nested_query_string(params: dict) -> dict:
@@ -65,7 +65,12 @@ class WordSearch:
         if not query_value:
             return {}
 
-        sanitized = {"query": query_value}
+        search_query: dict = {"word": query_value}
+        for key in ["meaning", "root", "vowelClass"]:
+            if key in parsed_params:
+                search_query[key] = parsed_params[key]
+
+        sanitized = {"query": WordSearch._build_query_string(search_query)}
         if "origin" in parsed_params:
             sanitized["origin"] = WordSearch._normalize_origin_values(
                 parsed_params["origin"]

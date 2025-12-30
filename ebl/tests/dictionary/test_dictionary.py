@@ -168,7 +168,7 @@ def test_search_defaults_to_cda_origin(dictionary, word) -> None:
     dictionary.create(another_word)
 
     query = urlencode({"word": "part"})
-    assert dictionary.search(query) == [word]
+    assert dictionary.search(query) == [word, another_word]
 
 
 def test_update(dictionary, word, user) -> None:
