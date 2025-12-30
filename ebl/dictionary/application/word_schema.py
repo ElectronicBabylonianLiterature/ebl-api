@@ -1,5 +1,8 @@
-from marshmallow import fields, Schema
+from marshmallow import fields, Schema, pre_dump, post_load
 from marshmallow.validate import Length
+
+from ebl.schemas import ValueEnumField
+from ebl.dictionary.domain.word import WordOrigin
 
 
 def lemma():
@@ -100,4 +103,19 @@ class WordSchema(Schema):
     )
     cdaAddenda = fields.String()
     supplementsAkkadianDictionaries = fields.String()
-    origin = fields.String(required=True)
+    origin = ValueEnumField(WordOrigin, required=True)
+
+    @pre_dump
+    def _coerce_origin_for_dump(self, data, **kwargs):
+        obj = dict(data) if isinstance(data, dict) else data
+        origin = obj.get("origin") if isinstance(obj, dict) else None
+        if isinstance(origin, str):
+            obj["origin"] = WordOrigin(origin)
+        return obj
+
+    @post_load
+    def _normalize_origin_after_load(self, data, **kwargs):
+        origin = data.get("origin")
+        if isinstance(origin, WordOrigin):
+            data["origin"] = origin.value
+        return data

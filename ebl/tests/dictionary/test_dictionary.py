@@ -113,7 +113,7 @@ def test_search_finds_by_vowel_class(dictionary, word):
     dictionary.create(word)
     dictionary.create(another_word)
     query = urlencode(
-        {"vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])},
+        {"vowelClass": ",".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])},
     )
 
     assert dictionary.search(query) == [word]
@@ -129,7 +129,7 @@ def test_search_finds_by_all_params(dictionary, word) -> None:
             "word": '"Parṭ2"',
             "meaning": word["meaning"],
             "root": word["roots"][0],
-            "vowelClass": "/".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
+            "vowelClass": ",".join(word["amplifiedMeanings"][0]["vowels"][0]["value"]),
         },
     )
 
@@ -148,6 +148,27 @@ def test_search_finds_duplicates(dictionary, word) -> None:
 def test_search_not_found(dictionary) -> None:
     query = urlencode({"word": "lemma"})
     assert dictionary.search(query) == []
+
+
+def test_search_filters_by_origin(dictionary, word) -> None:
+    another_word = {**word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(word)
+    dictionary.create(another_word)
+
+    query = urlencode({"word": "part", "origin": "CDA"})
+    assert dictionary.search(query) == [word]
+
+    query = urlencode({"word": "part", "origin": "EBL"})
+    assert dictionary.search(query) == [another_word]
+
+
+def test_search_defaults_to_cda_origin(dictionary, word) -> None:
+    another_word = {**word, "_id": "part1 part2 II", "origin": "EBL"}
+    dictionary.create(word)
+    dictionary.create(another_word)
+
+    query = urlencode({"word": "part"})
+    assert dictionary.search(query) == [word, another_word]
 
 
 def test_update(dictionary, word, user) -> None:
