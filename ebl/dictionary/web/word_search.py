@@ -62,10 +62,17 @@ class WordSearch:
     @staticmethod
     def _extract_search_params(parsed_params: dict) -> dict:
         query_value = parsed_params.get("query") or parsed_params.get("word")
-        if not query_value:
+        has_filter_params = any(
+            key in parsed_params for key in ["meaning", "root", "vowelClass"]
+        )
+
+        if not query_value and not has_filter_params:
             return {}
 
-        search_query: dict = {"word": query_value}
+        search_query: dict = {}
+        if query_value:
+            search_query["word"] = query_value
+
         for key in ["meaning", "root", "vowelClass"]:
             if key in parsed_params:
                 search_query[key] = parsed_params[key]

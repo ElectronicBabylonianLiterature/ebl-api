@@ -98,6 +98,23 @@ class TestExtractSearchParams:
         assert "vowelClass=a%2Fi" in result["query"]
         assert "vowelClass=u%2Fu" in result["query"]
 
+    def test_vowel_class_without_query_returns_query_with_vowel_class(self):
+        result = WordSearch._extract_search_params({"vowelClass": ["a/i", "u/u"]})
+        assert "vowelClass=a%2Fi" in result["query"]
+        assert "vowelClass=u%2Fu" in result["query"]
+        assert "word=" not in result["query"]
+
+    def test_origin_and_vowel_class_without_query(self):
+        result = WordSearch._extract_search_params(
+            {"vowelClass": "a/i", "origin": "CDA"}
+        )
+        assert "vowelClass=a%2Fi" in result["query"]
+        assert result["origin"] == "CDA"
+
+    def test_origin_only_without_query_returns_empty(self):
+        result = WordSearch._extract_search_params({"origin": "CDA"})
+        assert result == {}
+
     def test_multiple_search_params_all_included(self):
         result = WordSearch._extract_search_params(
             {"word": "test", "meaning": "definition", "root": "prs", "origin": "CDA"}

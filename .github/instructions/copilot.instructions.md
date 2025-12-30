@@ -11,3 +11,6 @@ Provide project context and coding guidelines that AI should follow when generat
 - When running shell commands always use `poetry run` unless using `task`.
 - Functions should be small and focused on a single task.
 - Refactor long and complex code automatically.
+- Add / update tests for any new functionality or significant changes.
+- When writing tests, ensure they are isolated and do not depend on external state.
+- Ensure that coverage is 100% after changes in affected code.
