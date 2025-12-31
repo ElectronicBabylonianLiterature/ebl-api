@@ -1,0 +1,992 @@
+@project adsd/adart1
+@lang qpn
+@name qpn
+
+@letter A
+
+@entry Abu [Month V] MN
+@form NE %akk $Abu
+@form {ITU}NE %akk $Abu
+@sense MN Month V
+@end entry
+
+@entry Adad [storm-god] DN
+@form U %akk $Adad
+@form {d}U %akk $Adad
+@form {d}IM %akk $Adad
+@sense DN storm-god
+@sense N thunder
+@end entry
+
+@entry Addaru [Month XII] MN
+@form ŠE %akk $Addaru
+@form {ITU}ŠE %akk $Addaru
+@sense MN Month XII
+@end entry
+
+@entry Addāru_Šanû [(Intercalary) Month XII₂] MN
+@form DIR.ŠE %akk $Addāru_Šanû
+@form DIRI.ŠE %akk $Addāru_Šanû
+@form {ITU}DIR.ŠE %akk $Addāru_Šanû
+@sense MN (Intercalary) Month XII₂
+@end entry
+
+@entry Agru [Aries] CN
+@form HUN %akk $Agru
+@form HUN.GA₂ %akk $Agru
+@form LU %akk $Agru
+@form {MULₓ(AB₂)}HUN.GA₂ %akk $Agru
+@sense CN Aries
+@end entry
+
+@entry AG.NIG₂.DU.ŠEŠ [Nebukadnezar] RN
+@form {m}{d}+AG.NIG₂.DU.ŠEŠ. %akk $AG.NIG₂.DU.ŠEŠ
+@sense RN Nebukadnezar
+@end entry
+
+@entry Akkad [Akkad] GN
+@form URI{KI} %akk $Akkad
+@sense GN Babylonia
+@end entry
+
+@entry Alexander [Alexander] RN
+@form a-lik-sa-an-dar-ri-is %akk $Alexander
+@form {m}a-lik-sa-an-dar-ri-is %akk $Alexander
+@form {m}a-lik-sa-an-dar %akk $Alexander
+@sense RN Alexander
+@sense PN Alexander
+@end entry
+
+@entry Alluttu [Cancer] CN
+@form {MULₓ(AB₂)}ALLA %akk $Alluttu
+@form ALLA %akk $Alluttu
+@sense CN Cancer
+@end entry
+
+@entry alû [Taurus (Bull of Heaven)] CN
+@form GU₄.AN %akk $alû
+@sense CN Taurus (Bull of Heaven)
+@end entry
+
+@entry Amēl-ilāni [Amēl-ilāni] PN
+@form {m}LU₂-DINGIR{MEŠ} %akk $Amēl-ilāni
+@sense PN Amēl-ilāni
+@end entry
+
+@entry Antigonos [Antigonos] RN
+@form {m}an-ti-gu-nu-su %akk $Antigonos
+@sense RN Antigonos
+@end entry
+
+@entry Antiochus [Antiochus] RN
+@form {m}an-ti-ku-us-su %akk $Antiochus
+@form {m}an-ti-ʾu-ku-su %akk $Antiochus
+@form {m}an-ti-ʾu-uk-su %akk $Antiochus
+@form {m}an %akk $Antiochus
+@form {m}an-ti %akk $Antiochus
+@sense RN Antiochus
+@sense PN Antiochus
+@end entry
+
+@entry Anunītu [Anunītu] DN
+@form A-nu-ni-tu₄ %akk $Anunītu
+@sense DN Anunītu
+@end entry
+
+@entry Apāmu [Apamea] SN
+@form {URU}A-pa-am-a %akk $Apāmu
+@sense SN Apamea
+@end entry
+
+@entry Arahsamna [Month VIII] MN
+@form APIN %akk $Arahsamna
+@form {ITU}APIN %akk $Arahsamna
+@sense MN Month VIII
+@end entry
+
+@entry Arbaya [Arabs] EN
+@form {LU₂}ar-ba-a-a %akk $Arbaya
+@sense EN Arabs
+@end entry
+
+@entry Arcturus [Arcturus] CN
+@form MUL₂-ŠU.PA %akk $Arcturus
+@sense CN Arcturus
+@end entry
+
+@entry Arqaniʾa [Hyrcania] GN
+@form {URU}ar₂-qa-ni-ʾa-a %akk $Arqaniʾa
+@sense GN Hyrcania
+@end entry
+
+@entry Arses [Arses] RN
+@form {m}ar₂-šu₂ %akk $Arses
+@form ar₂-šu₂ %akk $Arses
+@form {m}ar-šu₂ %akk $Arses
+@sense RN Arses
+@end entry
+
+@entry Aršaka [Arsaces] RN
+@form {m}ar₂-ša₂-ka-a %akk $Aršaka
+@sense RN Arsaces
+@end entry
+
+@entry Artašata [Artašata] RN
+@form {m}ar₂-ta-ša₂-ta %akk $Artašata
+@sense RN Artašata
+@end entry
+
+@entry Artaxerxes [Artaxerxes] RN
+@form ar₂-tak-šat-su %akk $Artaxerxes
+@form {m}ar-tak-šat-su %akk $Artaxerxes
+@form {m}ar₂-tak-šat-su %akk $Artaxerxes
+@form ar-tak-šat-su %akk $Artaxerxes
+@sense RN Artaxerxes
+@end entry
+
+@entry Asalluhi [Asalluhi] RN
+@form {d}asar-lu₂-hi %akk $Asalluhi
+@sense RN Asalluhi
+@end entry
+
+@entry Aššur [Aššur] GN
+@form aš-šur %akk $Aššur
+@sense GN Aššur
+@end entry
+
+@entry Ayyaru [Month II] MN
+@form GU₄ %akk $Ayyaru
+@sense MN Month II
+@end entry
+
+@entry A.HA [A.HA] SN
+@form A.HA{KI} %akk $A.HA
+@sense SN A.HA
+@end entry
+
+@letter B
+
+@entry Bābilāya [Babylonian] EN
+@form {LU₂}E{KI}{MEŠ} %akk $Bābilāya
+@sense EN Babylonian
+@end entry
+
+@entry Bābilu [Babylon] SN
+@form E{KI} %akk $Bābilu
+@form TIN.TIR{KI} %akk $Bābilu
+@sense SN Babylon
+@end entry
+
+@entry Bahtar [Bactria] GN
+@form ba-ah-tar %akk $Bahtar
+@form {URU}ba-ah-tar %akk $Bahtar
+@sense GN Bactria
+@sense SN Bactria
+@end entry
+
+@entry Barsip [Borsippa] SN
+@form BAR.SIP{KI} %akk $Barsip
+@sense SN Borsippa
+@end entry
+
+@entry Bēl [Bēl] DN
+@form {d}EN %akk $Bēl
+@form EN %akk $Bēl
+@form {d}+EN %akk $Bēl
+@sense DN Bēl
+@end entry
+
+@entry Bēl-apla-iddin [Bēl-apla-iddin] PN
+@form {m}{d}EN-A-MU %akk $Bēl-apla-iddin
+@sense PN Bēl-apla-iddin
+@end entry
+
+@entry Bēlet-bīti [Bēlet-bīti] DN
+@form {d}GAŠAN.E₂ %akk $Bēlet-bīti
+@sense DN Bēlet-bīti
+@end entry
+
+@entry Bēltu [Bēltu] DN
+@form {d}GAŠAN-ia₂ %akk $Bēltiya
+@sense DN Bēltu
+@end entry
+
+@letter D
+
+@entry Dariamuš [Darius] RN
+@form {m}da-ri-ia-a-muš %akk $Dariamuš
+@form da-ri-ia-a-muš %akk $Dariamuš
+@form {m}da-a-ri-ia-a-muš %akk $Dariamuš
+@form {m}da-a-ri-muš %akk $Dariamuš
+@sense RN Darius
+@end entry
+
+@entry DELE-šá-IGI-ABSIN [γ Virginis] CN
+@form DELE-ša₂-IGI-ABSIN %akk $DELE-šá-IGI-ABSIN
+@form DELE-ša₂-ABSIN %akk $DELE-šá-IGI-ABSIN
+@form e-du-ša₂-IGI-ABSIN %akk $DELE-šá-IGI-ABSIN
+@form DELE %akk $DELE-šá-IGI-ABSIN
+@form DELE-ša₂-ina-IGI-ABSIN %akk $DELE-šá-IGI-ABSIN
+@sense CN γ Virginis
+@end entry
+
+@entry Dilbat [Venus] CN
+@form dele-bat %akk $Dilbat
+@form {d}dele-bat %akk $Dilbat
+@sense CN Venus
+@end entry
+
+@entry Duʾūzu [Month IV] MN
+@form ŠU %akk $Duʾūzu
+@sense MN Month IV
+@end entry
+
+@letter E
+
+@entry Ea-uballiṭ [Ea-uballiṭ] PN
+@form {m}{d}BE.TIN %akk $Ea-uballiṭ
+@sense PN Ea-uballiṭ
+@end entry
+
+@entry ebēr-nāri [Transpotamia] GN
+@form e-ber-ID₂ %akk $ebēr-nāri
+@sense GN Transpotamia
+@end entry
+
+@entry Elamtu [Elam] GN
+@form NIM %akk $Elamtu
+@sense N east
+@end entry
+
+@entry Egišhurankia [Egišhurankia] TN
+@form E₂.GIŠ.HUR.AN.KI.A %akk $Egišhurankia
+@sense TN Egišhurankia
+@end entry
+
+@entry Eridu [Eridu] SN
+@form ERI.DU₁₀ %akk $Eridu
+@sense SN Eridu
+@end entry
+
+@entry Esangila [Esangila] TN
+@form E₂.SAG.IL₂ %akk $Esangila
+@form E₂.SAG.GIL₂ %akk $Esangila
+@sense TN Esangila
+@end entry
+
+@entry Eturkalama [Eturkalama] TN
+@form E₂.TUR₃.KALAM.MA %akk $Eturkalama
+@sense TN Eturkalama
+@end entry
+
+@letter G
+
+@entry GÌR-ár-šá-A [β Virginis] CN
+@form GIR₃-ar₂-ša₂-A %akk $GÌR-ár-šá-A
+@form GIR₃-ar₂-ša₂-UR %akk $GÌR-ár-šá-A
+@form GIR₃-ar₂-ša₂-UR.A %akk $GÌR-ár-šá-A
+@form GIR₃-ar₂-tu₂-ša₂-UR.A %akk $GÌR-ár-šá-A
+@form {MULₓ(AB₂)}GIR₃ %akk $GÌR-ár-šá-A
+@form {MULₓ(AB₂)}GIR₃-ar₂-ša₂-UR.A %akk $GÌR-ár-šá-A
+@form GIR₃{II}-ar₂-tu₂-ša₂-A %akk $GÌR-ár-šá-A
+@form GIR₃{II}-ar₂-ša₂-A %akk $GÌR-ár-šá-A
+@form GIR₃{II}-ar₂ %akk $GÌR-ár-šá-A
+@sense CN β Virginis
+@end entry
+
+@entry GIŠ.KUN-A [ϑ Leonis] CN
+@form GIŠ.KUN-UR.A %akk $GIŠ.KUN-A
+@form GIŠ.KUN-A %akk $GIŠ.KUN-A
+@sense CN ϑ Leonis
+@end entry
+
+@entry Gula [Aquarius] CN
+@form GU %akk $Gula
+@form GU.LA %akk $Gula
+@sense CN Aquarius
+@end entry
+
+@entry Guti [Guti] GN
+@form gu-ti-i %akk $Guti
+@sense GN Guti
+@end entry
+
+@letter H
+
+@entry Hana [Hana] GN
+@form ha-ni-i %akk $Hana
+@sense GN Hana
+@end entry
+
+@entry Hiritu [Hiritu] SN
+@form hi-ri-tum %akk $Hiritu
+@sense SN Hiritu
+@end entry
+
+@letter I
+
+@entry Iamanāya [Ionian] EN
+@form {LU₂}ia-ma-na-a-a %akk $Iamanāya
+@form {LU₂}e-man-a-a %akk $Iamanāya
+@sense EN Ionians
+@end entry
+
+@entry Iamannu [Ionia] GN
+@form ia-man-nu %akk $Iamannu
+@sense GN Ionia
+@end entry
+
+@entry Iamun-Yammu [Ionian Sea (?)] WN
+@form ia-a-mu-un-ia-am-mu %akk $Iamun-Yammu
+@sense WN Iamun-Yammu
+@end entry
+
+@entry Idiqlat [Tigris] WN
+@form {ID₂}IDIGNA %akk $Idiqlat
+@sense WN Tigris
+@end entry
+
+@entry is-le₁₀ [α Tauri] CN
+@form is-le₁₀ %akk $is-le₁₀
+@form SA₄-ša₂-GU₄.AN %akk $is-le₁₀
+@sense CN α Tauri
+@end entry
+
+@entry Ištar [Ištar] DN
+@form {d}15 %akk $Ištar
+@sense DN Ištar
+@end entry
+
+@letter K
+
+@entry Kakkabu-peṣû [Jupiter] CN
+@form MUL₂.BABBAR %akk $Kakkabu-peṣû
+@form SAG.ME.GAR %akk $Kakkabu-peṣû
+@form SAG₃.ME.GAR %akk $Kakkabu-peṣû
+@form {d}SAG.ME.GAR %akk $Kakkabu-peṣû
+@sense CN Jupiter
+@end entry
+
+@entry Kayyamānu [Saturn] CN
+@form GENNA %akk $Kayyamānu
+@form SAG.UŠ %akk $Kayyamānu
+@form {d}GENNA %akk $Kayyamānu
+@form {d}SAG.UŠ %akk $Kayyamānu
+@sense CN Saturn
+@end entry
+
+@entry Kislīmu [Month IX] MN
+@form GAN %akk $Kislīmu
+@form {ITU}GAN %akk $Kislīmu
+@sense MN Month IX
+@end entry
+
+@entry Kumar [(the city-quarter) Kumar] GN
+@form ku-mar %akk $Kumar
+@sense GN (the city-quarter) Kumar
+@end entry
+
+@entry Kupru [Kupru] GN
+@form ku-up-ru %akk $Kupru
+@sense GN Kupru
+@end entry
+
+@entry Kutāya [person from Cutha] EN
+@form {LU₂}GU₂.DU₈.A{KI}{MEŠ} %akk $Kutāya
+@sense EN people from Cutha
+@end entry
+
+@letter L
+
+@entry LUGAL [α Leonis] CN
+@form {MUL₂}LUGAL %akk $LUGAL
+@form LUGAL %akk $LUGAL
+@sense CN α Leonis
+@end entry
+
+@letter M
+
+@entry Māšu [Gemini] CN
+@form MAŠ %akk $Māšu
+@form MAŠ.MAŠ %akk $Māšu
+@form MAŠ.TAB-TUR %akk $Māšu
+@sense CN Gemini
+@end entry
+
+@entry MAŠ.MAŠ-ár [β Geminorum] CN
+@form MAŠ.MAŠ-ar₂ %akk $MAŠ.MAŠ-ár
+@form MAŠ.MAŠ %akk $MAŠ.MAŠ-ár
+@form MULₓ(AB₂)-KUR-EGIR-ša₂-MAŠ.TAB-GAL %akk $MAŠ.MAŠ-ár
+@sense CN β Geminorum
+@end entry
+
+@entry MAŠ.MAŠ-IGI [α Geminorum] CN
+@form MAŠ.MAŠ-IGI %akk $MAŠ.MAŠ-IGI
+@form IGI-u₂ %akk $MAŠ.MAŠ-IGI
+@form MAŠ.MAŠ-IGI-u₂ %akk $MAŠ.MAŠ-IGI
+@sense CN α Geminorum
+@end entry
+
+@entry MAŠ.MAŠ-šá-SIPA [γ Geminorum] CN
+@form MAŠ.MAŠ-ša₂-SIPA %akk $MAŠ.MAŠ-šá-SIPA
+@form SIPA %akk $MAŠ.MAŠ-šá-SIPA
+@form MAŠ.MAŠ %akk $MAŠ.MAŠ-šá-SIPA
+@sense CN γ Geminorum
+@end entry
+
+@entry Miṣir [Egypt] GN
+@form mi-ṣir %akk $Miṣir
+@sense GN Egypt
+@end entry
+
+@entry MÚL-ár-šá-ALLA-šá-SI [γ Cancri] CN
+@form MUL₂-ar₂-ša₂-ALLA-ša₂-SI %akk $MÚL-ár-šá-ALLA-šá-SI
+@sense CN γ Cancri
+@end entry
+
+@entry MÚL-ár-šá-ALLA-šá-ULÙ [δ Cancri] CN
+@form MUL₂-ar₂-ša₂-ALLA-ša₂-ULU₃ %akk $MÚL-ár-šá-ALLA-šá-ULÙ
+@form MUL₂-ar₂-ša₂-ALLA-ša₂-x %akk $MÚL-ár-šá-ALLA-šá-ULÙ
+@sense CN δ Cancri
+@end entry
+
+@entry MÚL-ár-šá-SAG-HUN [α Arietis] CN
+@form MUL₂-ar₂-ša₂-SAG-HUN %akk $MÚL-ár-šá-SAG-HUN
+@form MUL₂-ar₂-ša₂-SAG-HUN.GA₂ %akk $MÚL-ár-šá-SAG-HUN
+@form MUL₂-ar₂-ša₂-SAG-LU %akk $MÚL-ár-šá-SAG-HUN
+@form MUL₂-ar₂-ša₂-SAG.KI-HUN.GA₂ %akk $MÚL-ár-šá-SAG-HUN
+@sense CN α Arietis
+@end entry
+
+@entry MÚL-ár-šá-SUHUR-MÁŠ [δ Capricorni] CN
+@form MUL₂-ar₂-ša₂-SUHUR-MAŠ₂ %akk $MÚL-ár-šá-SUHUR-MÁŠ
+@form SUHUR-ar₂ %akk $MÚL-ár-šá-SUHUR-MÁŠ
+@sense CN δ Capricorni
+@end entry
+
+@entry MÚL-ár-šá-še-pit-MAŠ.MAŠ [μ Geminorum] CN
+@form MUL₂-ar₂-ša₂-še-pit-MAŠ.MAŠ %akk $MÚL-ár-šá-še-pit-MAŠ.MAŠ
+@form MUL₂-ar₂-ša₂-še-pit₂-MAŠ.MAŠ %akk $MÚL-ár-šá-še-pit-MAŠ.MAŠ
+@form ša₂-še-pit-MAŠ.MAŠ %akk $MÚL-ár-šá-še-pit-MAŠ.MAŠ
+@sense CN μ Geminorum
+@end entry
+
+@entry MÚL-ár-šá-še-pít-MAŠ.MAŠ [μ Geminorum] CN
+@form MUL₂-ar₂-ša₂-še-pit₂-MAŠ.MAŠ %akk $MÚL-ár-šá-še-pít-MAŠ.MAŠ
+@sense CN μ Geminorum
+@end entry
+
+@entry MÚL-e-šá-SAG-GÍR.TAB [β Scorpii] CN
+@form MUL₂-e-ša₂-SAG-GIR₂.TAB %akk $MÚL-e-šá-SAG-GÍR.TAB
+@form MUL₂-AN.TA-ša₂-SAG-GIR₂.TAB %akk $MÚL-e-šá-SAG-GÍR.TAB
+@sense CN β Scorpii
+@end entry
+
+@entry MÚL-IGI-šá-ALLA-šá-SI [γ Cancri] CN
+@form MUL₂-IGI-ša₂-ALLA-ša₂-SI %akk $MÚL-IGI-šá-ALLA-šá-SI
+@form MUL₂-ar₂-ša₂-ALLA-ša₂-SI %akk $MÚL-IGI-šá-ALLA-šá-SI
+@sense CN γ Cancri
+@end entry
+
+@entry MÚL-IGI-šá-ALLA-šá-ULÙ [ϑ Cancri] CN
+@form MUL₂-IGI-ša₂-ALLA-ša₂-ULU₃ %akk $MÚL-IGI-šá-ALLA-šá-ULÙ
+@sense CN ϑ Cancri
+@end entry
+
+@entry MÚL-IGI-šá-SAG-HUN [β Arietis] CN
+@form MUL₂-IGI-ša₂-SAG-HUN %akk $MÚL-IGI-šá-SAG-HUN
+@form MUL₂-IGI-ša₂-SAG-HUN.GA₂ %akk $MÚL-IGI-šá-SAG-HUN
+@form MUL₂-IGI %akk $MÚL-IGI-šá-SAG-HUN
+@form MUL₂-IGI-ša₂-SAG-LU %akk $MÚL-IGI-šá-SAG-HUN
+@form MUL₂-IGI-ša₂-SAG.KI-HUN %akk $MÚL-IGI-šá-SAG-HUN
+@sense CN β Arietis
+@end entry
+
+@entry MÚL-IGI-šá-SUHUR-MÁŠ [γ Capricorni] CN
+@form MUL₂-IGI-ša₂-SUHUR-MAŠ₂ %akk $MÚL-IGI-šá-SUHUR-MÁŠ
+@form MUL₂-IGI-SUHUR-MAŠ₂ %akk $MÚL-IGI-šá-SUHUR-MÁŠ
+@form SUHUR-IGI %akk $MÚL-IGI-šá-SUHUR-MÁŠ
+@form MUL₂-IGI-ša₂ %akk $MÚL-IGI-šá-SUHUR-MÁŠ
+@form MUL₂-IGI-ša₂-SUHUR %akk $MÚL-IGI-šá-SUHUR-MÁŠ
+@sense CN γ Capricorni
+@end entry
+
+@entry MÚL-IGI-šá-še-pít-MAŠ.MAŠ [η Geminorum] CN
+@form MUL₂-IGI-ša₂-še-pit₂-MAŠ.MAŠ %akk $MÚL-IGI-šá-še-pít-MAŠ.MAŠ
+@form MUL₂-IGI-ša₂-še-pit-MAŠ.MAŠ %akk $MÚL-IGI-šá-še-pít-MAŠ.MAŠ
+@sense CN η Geminorum
+@end entry
+
+@entry MÚL-KUR-šá-DUR-nu-nu [η Piscium] CN
+@form MUL₂-KUR-ša₂-DUR-nu-nu %akk $MÚL-KUR-šá-DUR-nu-nu
+@form MUL₂-KUR-ša₂-DUR-SIM.MAH %akk $MÚL-KUR-šá-DUR-nu-nu
+@form DUR-nu-nu %akk $MÚL-KUR-šá-DUR-nu-nu
+@form ša₂-DUR-nu-nu %akk $MÚL-KUR-šá-DUR-nu-nu
+@form MUL₂-KUR-ša₂-DUR-ša₂-nu-nu %akk $MÚL-KUR-šá-DUR-nu-nu
+@sense CN η Piscium
+@end entry
+
+@entry MÚL-KUR-šá-KIR₄-šil-PA [ϑ Ophiuchi] CN
+@form MUL₂-KUR-ša₂-KIR₄-šil-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form KIR₄-šil-tah-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR-ša₂-šil %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR-ša₂-šil-tah-PA.BIL %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR-ša₂-šil-tah-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR-ša₂-KIR₄-šil-tah-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR-ša₂-KIR₄-šil-tah-PA.BIL %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form šil-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR-ša₂-šil-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form KIR₄-šil-PA %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@form MUL₂-KUR %akk $MÚL-KUR-šá-KIR₄-šil-PA
+@sense CN ϑ Ophiuchi
+@end entry
+
+@entry MÚL-MURUB₄-šá-SAG-GÍR.TAB [δ Scorpii] CN
+@form MUL₂-MURUB₄-ša₂-SAG-GIR₂.TAB %akk $MÚL-MURUB₄-šá-SAG-GÍR.TAB
+@form MUL₂-MURUB₄-ša₂-SAG.KI-GIR₂.TAB %akk $MÚL-MURUB₄-šá-SAG-GÍR.TAB
+@form MUL₂-e-ša₂-SAG.KI-GIR₂.TAB %akk $MÚL-MURUB₄-šá-SAG-GÍR.TAB
+@sense CN δ Scorpii
+@end entry
+
+@entry MÚL-SIG-šá-SAG-GÍR.TAB [π Scorpii] CN
+@form MUL₂-SIG-ša₂-SAG-GIR₂.TAB %akk $MÚL-SIG-šá-SAG-GÍR.TAB
+@sense CN π Scorpii
+@end entry
+
+@entry MÚL-SIG-šá-SI-MÁŠ [τ Capricorni] CN
+@form MUL₂-SIG-ša₂-SI-MAŠ₂ %akk $MÚL-SIG-šá-SI-MÁŠ
+@sense CN τ Capricorni
+@end entry
+
+@entry MÚL-SIG-šá-SI-MÁŠ [ϑ Capricorni] CN
+@form MUL₂-SIG-ša₂-SI-MAŠ₂ %akk $MÚL-SIG-šá-SI-MÁŠ
+@sense CN ϑ Capricorni
+@end entry
+
+@entry MÚL-TUR-šá-4-KÙŠ-ár-LUGAL [ρ Leonis] CN
+@form MUL₂-TUR-ša₂-ar₂-LUGAL %akk $MÚL-TUR-šá-4-KÙŠ-ár-LUGAL
+@form MUL₂-TUR-ša₂-4-KUŠ₃-ar₂-LUGAL %akk $MÚL-TUR-šá-4-KÙŠ-ár-LUGAL
+@form MUL₂-TUR-ša₂-4-KUŠ₃ %akk $MÚL-TUR-šá-4-KÙŠ-ár-LUGAL
+@sense CN ρ Leonis
+@end entry
+
+@entry MÚL-x-šá-ALLA-šá [x Cancri] CN
+@form MUL₂-x-ša₂-ALLA-ša₂ %akk $MÚL-x-šá-ALLA-šá
+@form ša₂-ALLA %akk $MÚL-x-šá-ALLA-šá
+@form MUL₂ %akk $MÚL-x-šá-ALLA-šá
+@sense CN x Cancri
+@end entry
+
+@entry MÚL-x-šá-SAG-GÍR.TAB [β/δ Scorpii] CN
+@form MUL₂-x-ša₂-SAG-GIR₂.TAB %akk $MÚL-x-šá-SAG-GÍR.TAB
+@form SAG-GIR₂.TAB %akk $MÚL-x-šá-SAG-GÍR.TAB
+@sense CN β/δ Scorpii
+@end entry
+
+@entry MÚL-x-šá-SUHUR-MÁŠ [γ/δ Capricorni] CN
+@form MUL₂-x-ša₂-SUHUR-MAŠ₂ %akk $MÚL-x-šá-SUHUR-MÁŠ
+@sense CN γ/δ Capricorni
+@end entry
+
+@entry MÚL-x-šá-še-pít-MAŠ.MAŠ [η/μ Geminorum] CN
+@form ša₂-še-pit₂-MAŠ.MAŠ %akk $MÚL-x-šá-še-pít-MAŠ.MAŠ
+@sense CN η/μ Geminorum
+@end entry
+
+@entry MÚL.MÚL [Pleiades] CN
+@form MUL₂.MUL₂ %akk $MÚL.MÚL
+@form MULₓ(AB₂).MULₓ(AB₂) %akk $MÚL.MÚL
+@sense CN Pleiades
+@end entry
+
+@entry MÚL.MÚL [η Tauri] CN
+@form MUL₂.MUL₂ %akk $MÚL.MÚL
+@form MUL₂-KUR-ša₂-MUL₂.MUL₂ %akk $MÚL.MÚL
+@form MULₓ(AB₂).MULₓ(AB₂) %akk $MÚL.MÚL
+@form MUL₂-KUR-ša₂-MUL₂.MUL₂ %akk $MÚL.MÚL
+@sense CN η Tauri
+@end entry
+
+@entry Mušallim-Bēl [Mušallim-Bēl] PN
+@form {m}GI-im-{d}EN %akk $Mušallim-Bēl
+@sense PN Mušallim-Bēl
+@end entry
+
+@entry Mušēzib [Mušēzib] PN
+@form {m}mu-še-zi-bu %akk $Mušēzib
+@sense PN Mušēzib
+@end entry
+
+@letter N
+
+@entry Nabonidus [Nabonidus] RN
+@form {m}{d}AG-I %akk $Nabonidus
+@sense RN Nabonidus
+@end entry
+
+@entry Nabû [Nabû] DN
+@form {d}AG %akk $Nabû
+@form {d}PA %akk $Nabû
+@sense DN Nabû
+@end entry
+
+@entry Nabû-uballissu [Nabû-uballissu] PN
+@form {m}{d}PA.TIN-su %akk $Nabû-uballissu
+@sense PN Nabû-uballissu
+@end entry
+
+@entry Narkabtu [Chariot] CN
+@form GIGIR %akk $Narkabtu
+@form MUL₂.GIGIR %akk $Narkabtu
+@form {GIŠ}GIGIR %akk $Narkabtu
+@sense CN Chariot
+@end entry
+
+@entry Nebuchadnezzar [Nebuchadnezzar] RN
+@form {m}{d}+AG-NIG₂.DU-ŠEŠ %akk $Nebuchadnezzar
+@sense RN Nebuchadnezzar
+@end entry
+
+@entry Nēšu [Leo] CN
+@form UR.A %akk $Nēšu
+@form A %akk $Nēšu
+@form {MULₓ(AB₂)}UR.A %akk $Nēšu
+@sense CN Leo
+@end entry
+
+@entry Nippurāya [person from Nippur] EN
+@form {LU₂}NIBRU{KI}{MEŠ} %akk $Nippurāya 
+@sense EN people from Nippur
+@end entry
+
+@entry Nisannu [Month I] MN
+@form BAR %akk $Nisannu
+@form {ITU}BAR %akk $Nisannu
+@form BAR₂ %akk $Nisannu
+@sense MN Month I
+@end entry
+
+@letter P
+
+@entry Pabilsag [Sagittarius] CN
+@form PA %akk $Pabilsag
+@form PA.BIL %akk $Pabilsag
+@form PA.BIL.SAG %akk $Pabilsag
+@sense CN Sagittarius
+@end entry
+
+@entry Paini [Paini] PN
+@form {m}pa-i-ni %akk $Paini
+@sense PN Paini
+@end entry
+
+@entry Pallukatu [Pallukat canal] WN
+@form {ID₂}pal-lu-ka-tu₄ %akk $Pallukatu
+@form {ID₂}pal-lu-kat₂ %akk $Pallukatu
+@form {ID₂}pal-lu-kat₃ %akk $Pallukatu
+@sense WN Pallukat canal
+@end entry
+
+@entry Pallukatu [Pallukatu] SN
+@form {URU}pal-lu-ka-tum %akk $Pallukatu
+@sense SN Pallukatu
+@end entry
+
+@entry Philip [Philip] RN
+@form {m}pi-lip₂-i-si %akk $Philip
+@form {m}pi-il-ip-su %akk $Philip
+@form pi-il-ip-su %akk $Philip
+@sense RN Philip
+@end entry
+
+@entry Purattu [Euphrates] WN
+@form {ID₂}BURANUN %akk $Purattu
+@sense WN Euphrates
+@end entry
+
+@letter R
+
+@entry Razaundu [Razaundu] GN
+@form ra-za-un-du %akk $Razaundu
+@sense GN Razaundu
+@end entry
+
+@entry RÍN-šá-SI [β Librae] CN
+@form RIN₂-ša₂-SI %akk $RÍN-šá-SI
+@sense CN β Librae
+@end entry
+
+@entry RÍN-šá-ULÙ [α Librae] CN
+@form RIN₂-ša₂-ULU₃ %akk $RÍN-šá-ULÙ
+@form ša₂-ULU₃ %akk $RÍN-šá-ULÙ
+@sense CN α Librae
+@end entry
+
+@letter S
+
+@entry SAG-A [ε Leonis] CN
+@form SAG-A %akk $SAG-A
+@form SAG-UR.A %akk $SAG-A
+@form SAG-UR %akk $SAG-A
+@form SAG %akk $SAG-A
+@sense CN ε Leonis
+@end entry
+
+@entry SAG-GÍR.TAB [β/δ Scorpii] CN
+@form SAG-GIR₂.TAB %akk $SAG-GÍR.TAB
+@sense CN β/δ Scorpii
+@end entry
+
+@entry Saminê [Saminê] SN
+@form sa-mi-ne₂-e %akk $Saminê
+@sense SN Saminê
+@end entry
+
+@entry Sapardu [Sardis] SN
+@form sa-par-du %akk $Sapardu
+@sense SN Sardis
+@end entry
+
+@entry SA₄-šá-ABSIN [α Virginis] CN
+@form SA₄-ša₂-ABSIN %akk $SA₄-šá-ABSIN
+@form SA₄ %akk $SA₄-šá-ABSIN
+@sense CN α Virginis
+@end entry
+
+@entry Seleucus [Seleucus] RN
+@form {m}se-lu-ku %akk $Seleucus
+@form {m}se-lu-uk %akk $Seleucus
+@form {m}se %akk $Seleucus
+@form se %akk $Seleucus
+@form {m}se-lu %akk $Seleucus
+@sense RN Seleucus
+@sense PN Seleucus
+@end entry
+
+@entry Selukeʾa [Seleucia] SN
+@form {URU}se-lu-ke-ʾa-a %akk $Selukeʾa
+@form {URU}se-lu-ku-ʾa-a %akk $Selukeʾa
+@sense SN Seleucia
+@end entry
+
+@entry Simānu [Month III] MN
+@form SIG %akk $Simānu
+@sense MN Month III
+@end entry
+
+@entry Sinuntu [Swallow] CN
+@form SIM %akk $Sinuntu
+@form SIM.MAH %akk $Sinuntu
+@sense CN Swallow
+@end entry
+
+@entry SI-MÁŠ [β Capricorni] CN
+@form SI-MAŠ₂ %akk $SI-MÁŠ
+@form SI-ša₂-MAŠ₂ %akk $SI-MÁŠ
+@form MULₓ(AB₂)-MURUB₄-ša₂-SI-MAŠ₂ %akk $SI-MÁŠ
+@sense CN β Capricorni
+@end entry
+
+@entry SI₄ [α Scorpii] CN
+@form SI₄ %akk $SI₄
+@sense CN α Scorpii
+@end entry
+
+@entry Suhurmāšu [Capricorn] CN
+@form MAŠ₂ %akk $Suhurmāšu
+@form SUHUR %akk $Suhurmāšu
+@form SUHUR-ša₂-MAŠ₂ %akk $Suhurmāšu
+@form SUHUR-MAŠ₂ %akk $Suhurmāšu
+@sense CN Capricorn
+@sense CN Goat-fish
+@end entry
+
+@entry SUHUR-MÁŠ [γ/δ Capricorni] CN
+@form SUHUR-MAŠ₂ %akk $SUHUR-MÁŠ
+@sense CN γ/δ Capricorni
+@end entry
+
+@letter Ṣ
+
+@entry Ṣalbaṭānu [Mars] CN
+@form AN %akk $Ṣalbaṭānu
+@sense CN Mars
+@end entry
+
+@letter Š
+
+@entry Šabāṭu [Month XI] MN
+@form ZIZ₂ %akk $Šabāṭu
+@form {ITU}ZIZ₂ %akk $Šabāṭu
+@sense MN Month XI
+@end entry
+
+@entry Šerʾu [Virgo] CN
+@form ABSIN %akk $Šerʾu
+@sense CN Virgo
+@end entry
+
+@entry Šību [Old Man] CN
+@form {MULₓ(AB₂)}ŠU.GI %akk $Šību
+@sense CN Old Man
+@end entry
+
+@entry Šihṭu [Mercury] CN
+@form GU₄.UD %akk $Šihṭu
+@form GU₆.UD %akk $Šihṭu
+@sense CN Mercury
+@end entry
+
+@entry Šiltāhu [Sirius] CN
+@form KAK.BAN %akk $Šiltāhu
+@form MUL₂.KAK.BAN %akk $Šiltāhu
+@form {MUL₂}KAK.BAN %akk $Šiltāhu
+@sense CN Sirius
+@end entry
+
+@entry Šuan [Šuan] SN
+@form ŠU.AN %akk $Šuan
+@form ŠU₂.AN %akk $Šuan
+@sense SN Šuan
+@end entry
+
+@entry Šuanna [Šuanna] GN
+@form ŠU.AN.NA %akk $Šuanna
+@form ŠU.AN.NA{KI} %akk $Šuanna
+@form ŠU₂.AN.NA %akk $Šuanna
+@sense GN Šuanna
+@end entry
+
+@entry ŠUR-GIGIR [β/ζ Tauri] CN
+@form ŠUR-GIGIR %akk $ŠUR-GIGIR
+@form ŠUR-GIGIR-ša₂ %akk $ŠUR-GIGIR
+@sense CN β/ζ Tauri
+@end entry
+
+@entry ŠUR-GIGIR-šá-SI [β Tauri] CN
+@form ŠUR-GIGIR-ša₂-SI %akk $ŠUR-GIGIR-šá-SI
+@form ŠUR-ša₂-GIGIR %akk $ŠUR-GIGIR-šá-SI
+@form ŠUR-SI %akk $ŠUR-GIGIR-šá-SI
+@form ŠUR-GIGIR %akk $ŠUR-GIGIR-šá-SI
+@sense CN β Tauri
+@end entry
+
+@entry ŠUR-GIGIR-šá-ULÙ [ζ Tauri] CN
+@form ŠUR-GIGIR-ša₂-ULU₃ %akk $ŠUR-GIGIR-šá-ULÙ
+@form ŠUR-ULU₃ %akk $ŠUR-GIGIR-šá-ULÙ
+@sense CN ζ Tauri
+@end entry
+
+@entry Šušan [Susa] SN
+@form {URU}šu-ša₂-an %akk $Šušan
+@form šu-ša₂-an{KI} %akk $Šušan
+@sense SN Susa
+@end entry
+
+@letter T
+
+@entry Tašrītu [Month VII] MN
+@form DU₆ %akk $Tašrītu
+@form {ITU}DU₆ %akk $Tašrītu
+@sense MN Month VII
+@end entry
+
+@entry Tattannu [Tattannu] PN
+@form {m}tat-tan-nu %akk $Tattannu
+@sense PN Tattannu
+@end entry
+
+@entry Terunu [Terunu] PN
+@form {m}te-ru-nu %akk $Terunu
+@sense PN Terunu
+@end entry
+
+@entry TIN.TIR [(the city-quarter) TIN.TIR] SN
+@form TIN.TIR{KI} %akk $TIN.TIR
+@sense SN TIN.TIR
+@end entry
+
+@entry Tuba [(the city-quarter) Tuba] GN
+@form tu-ba %akk $Tuba
+@sense GN (the city-quarter) Tuba
+@end entry
+
+@letter Ṭ
+
+@entry Ṭebētu [Month X] MN
+@form AB %akk $Ṭebētu
+@form {ITU}AB %akk $Ṭebētu
+@sense MN Month X
+@end entry
+
+@letter U
+
+@entry Uballissu-Bēl [Uballissu-Bēl] PN
+@form {m}TIN-su-{d}EN %akk $Uballissu-Bēl
+@sense PN Uballissu-Bēl
+@end entry
+
+@entry Ulūlu [Month VI] MN
+@form KIN %akk $Ulūlu
+@form {ITU}KIN %akk $Ulūlu
+@sense MN Month VI
+@end entry
+
+@entry Umakuš [Umakuš] RN
+@form {m}u₂-ma-kuš %akk $Umakuš
+@sense RN Umakuš
+@end entry
+
+@letter X
+
+@entry X-uṣur-šu [X-uṣur-šu] PN
+@form x.ŠEŠ-šu₂ %akk $X-uṣur-šu
+@sense PN X-uṣur-šu
+@end entry
+
+@letter Z
+
+@entry Zappu [Taurus] CN
+@form MUL₂ %akk $Zappu
+@form GU₄ %akk $Zappu
+@form GU₄.AN %akk $Zappu
+@form MUL₂.MUL₂ %akk $Zappu
+@sense CN Taurus
+@sense CN Bull of Heaven
+@end entry
+
+@entry Zibānītu [Libra] CN
+@form RIN₂ %akk $Zibānītu
+@form {MULₓ(AB₂)}RIN₂ %akk $Zibānītu
+@sense CN Libra
+@end entry
+
+@entry Zibbātu [Pisces] CN
+@form zib{ME} %akk $Zibbātu
+@form KUN{ME} %akk $Zibbātu
+@form {MULₓ(AB₂)}KUN{ME} %akk $Zibbātu
+@form zib{ME} %akk $Zibbātu
+@form nu-nu %akk $Zibbātu
+@form zib %akk $Zibbātu
+@sense CN Pisces
+@end entry
+
+@entry Zimbir [Sippar] SN
+@form UD.KIB.NUN{KI} %akk $Zimbir
+@form {URU}UD.KIB.NUN{KI} %akk $Zimbir
+@sense SN Sippar
+@end entry
+
+@entry zi-im-šá-ŠÀ-ALLA [Praesepe] CN
+@form zi-im-ša₂-ŠA₃-ALLA %akk $zi-im-šá-ŠÀ-ALLA
+@form ALLA %akk $zi-im-šá-ŠÀ-ALLA
+@form {MULₓ(AB₂)}ALLA %akk $zi-im-šá-ŠÀ-ALLA
+@sense CN Praesepe
+@end entry
+
+@entry Zuqiqīpu [Scorpio] CN
+@form GIR₂.TAB %akk $Zuqiqīpu
+@form {MULₓ(AB₂)}GIR₂.TAB %akk $Zuqiqīpu
+@sense CN Scorpio
+@end entry
+
