@@ -1,0 +1,55 @@
+&X201650 = BM.45819
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+
+@reverse
+
+1'. [... DI]R AN DI[B ...] 
+#lem: u; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; u
+
+2'. [...] ⸢ina⸣ IGI-ma ina {ITU}ŠE ⸢x⸣ [...] 
+#lem: u; ina[in]PRP; pān[front]N; ina[in]PRP; Addaru[Month XII]MN; u; u
+
+3'. [...] ZI DA MU-a-tì ṢU [...] 
+#lem: u; u; u; šuāti[this]'DP; X; u
+
+4'. [...] ⸢a-kám⸣ ki PAP NU IGI 1 SI GIN GE₆ 2 sin SIG [...] 
+#lem: u; akamu[mist]N; kī[when]SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; Sîn[moon]N; šapil[below]'PRP; u
+
+5'. [... G]E₆ 4 SAG GE₆ sin ár MÚL-KUR-šá-KIR₄-šil-PA 2/3 KÙŠ [...] 
+#lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; warki[behind]PRP; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N; u
+
+6'. [... ana] SI NIM EN.NUN.U₄.ZAL IZI.GAR TA ULÙ ana SI [...] 
+#lem: u; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; šāt-urri[third watch of the night]N; dipāru[meteor]N; ištu[from]PRP; šūtu[south]N; ana[to]PRP; ištānu[north]N; u
+
+7'. [...] ina ZALÁG AN e LUGAL 8 U 11 12 na MÚL.BABBAR [...] 
+#lem: u; ina[in]PRP; nūru[last part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]PRP; LUGAL[α Leonis]CN; n; Adad[storm-god]DN; n; n; na[sunset to setting]N; Kakkabu-peṣû[Jupiter]CN; u
+
+8'. [...] 14 LÁL-tì NU PAP in 14 MÚL.BABBAR ina RÍN Š[Ú ...]
+#lem: u; n; šitqultu[equinox]N; ul[not]MOD; naṣāru[watch]V; ina[around (day x)]PRP; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zibānītu[Libra]CN; rabû[set]V; u
+
+9'. [... G]E₆ 17 [ina] ZALÁG sin e is-le₁₀ 2 KÙŠ sin ⸢i⸣ [...] 
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; eli[above]PRP; is-le₁₀[α Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; u
+
+10'. [...] ⸢x⸣ [x N] KÙŠ sin 5 KÙŠ ana ULÙ SIG [...] 
+#lem: u; u; u; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+
+11'. [...] sin 1 KÙŠ ana ⸢NIM?⸣ D[IB? ...] 
+#lem: u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; u
+
+@translation labeled en project
+
+@(r 2') [...] before in month XII ... [...] 
+
+@(r 3') [...] ... this ... [...] 
+
+@(r 7') [...] last part of the night, Mars was 8 fingers above α Leonis. The 11th, sunset to setting of Jupiter: 12° [...] 
+
+@(r 8') [...] The 14th, equinox; I did not watch; around the 14th, Jupiter’s last appearance in Libra [...] 
+
+@(r 9') [... Ni]ght of the 17th, last part of the night, the moon was 2 cubits above α Tauri, the moon being a little [...] 
+
+@(r 10') [... nn] cubits ..., the moon being 5 cubits low to the south [...]

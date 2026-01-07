@@ -14,7 +14,7 @@ A: BM 32844 ( = 77-2-22,6)
 B: BM 45819 ( = SH 81-7-6,240)
 C: BM 32555 (= S+ 76-11-17,2298)
 
-The tablets preserved for this year arc partial duplicates; the translation combines them. 
+The tablets preserved for this year arc partial duplicates; the translation combines them.
 
 ## AD -197BC
 

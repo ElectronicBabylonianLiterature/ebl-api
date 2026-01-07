@@ -1,0 +1,55 @@
+&X201650 = BM.32555
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+
+@reverse
+1. [MU 1] ME 46.[KÁM ... GE₆ 22 ina ZALÁG sin] 
+#lem: šattu[year]N; n; mē[(one) hundred]NU; n; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+2. [ár] MÚL-ár-šá-ALLA-šá-[ULÙ N N ... AN] 
+#lem: warki[behind]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; u; Ṣalbaṭānu[Mars]CN
+
+3. SIG MÚL-TUR-šá-ár-LUGAL [N N AN N N] 
+#lem: šapil[below]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; n; Ṣalbaṭānu[Mars]CN; n; n
+
+4. ana ŠÚ LAL GE₆ 23 ina ZALÁG s[in ina IGI LUGAL?] 
+#lem: ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN
+
+5. 2 KÙŠ GE₆ 24 ina ZALÁG sin S[IG?] 
+#lem: n; ammatu[unit]N; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP
+
+6. [MÚL-TUR]-šá-ár-LUGAL 2 KÙŠ sin 1/2 KÙŠ [ana NIM DIB] 
+#lem: MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V
+
+7. SIG AN 2 1/2 KÙŠ sin i-ṣa ana [x x] 
+#lem: šapil[below]'PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; u; u
+
+8. 24 14 na GENNA <GE₆> ⸢25?⸣ [ina ZALÁG sin?] 
+#lem: n; n; na[sunset to setting]'N; Kayyamānu[Saturn]CN; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+9. [SI]G? GÌR-ár-šá-A 2 KÙŠ sin? [...] 
+#lem: šapil[below]'PRP; GÌR-ár-šá-A[β Virginis]CN; n; ammatu[unit]N; Sîn[moon]N; u
+
+10. [x x] ⸢x⸣ [...]  
+#lem: u; u; u; u
+
+@translation labeled en project
+
+@(r 2) was [... behind δ ] Cancri [... Mars] 
+
+@(r 3) was [...] below ρ Leonis, [Mars being ...] 
+
+@(r 4) back to the west. Night of the 23rd, last part of the night, the m[oon was] 2 cubits [in front of α Leonis@sup{?}.] 
+
+@(r 6) 2 cubits be[low@sup{?}] ρ Leonis, the moon [having passed] 1/2 cubit [to the east,] 
+
+@(r 7) it was 2 1/2 cubits below Mars, the moon being a little to [...] 
+
+@(r 8) The 24th, sunset to setting of Saturn: 14°. <Night> of the 25th@sup{?}, [last part of the night, the moon@sup{?}] 
+
+@(r 9) was 2 cubits [bel]ow@sup{?} β Virginis, the moon@sup{?} being [...] 
+
+@(r 10) [...] ... [...]
