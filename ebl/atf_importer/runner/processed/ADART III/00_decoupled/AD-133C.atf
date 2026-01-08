@@ -1,0 +1,186 @@
+&X301332 = AD -133B-C 
+#project: adsd/adart3
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+C1'. [...] ⸢AN ana NIM⸣ ki [...]
+#lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]N; kī[when]PRP; u
+
+C2'. [... na]-su in 20 IGI [...]
+#lem: u; na[sunset to setting]'N; ina[around (day x)]PRP; n; amāru[be(come) visible]V; u
+
+C3'. [... AN.BA]R₇ šámaš TÙR NIGIN ma-diš [...]
+#lem: u; muṣlālu[noon]N; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mādiš[very]AV; u
+
+C4'. [...] kal ME DIR AN ZA U[LÙ ...]
+#lem: u; kal[all]N; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; u
+
+C5'. [...] kal GE₆ DIR AN ZA [...]
+#lem: u; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
+
+C6'. [...] u MAR ki TAB-ú ina 20 [...]
+#lem: u; u[and]CNJ; amurru[west]N; kī[when]PRP; ušarrû[begin]V; ina[at]PRP; n; u
+
+C7'. [...] ⸢x⸣ IGI in 50 ME ana ŠÚ šám[aš ...]
+#lem: u; u; nanmuru[be(come) visible]; ina[at (plus numeral)]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamšu[sun]N; u
+
+C8'. [... E]N 26 3(BARIG) 2(BÁN) 27 3(BARIG) 1(BÁN) 3 q[a ...]
+#lem: u; adi[until]PRP; n; n; n; n; n; n; n; qû[(one) litre]N; u
+
+C9'. [...] 3(BARIG) PI TA 16 EN 20 1 GUR ⸢2(BARIG) 3(BÁN)⸣ [...]
+#lem: u; n; pānu[bushel (36 litres)]N; ultu[from]PRP; n; adi[until]PRP; n; n; kurru[kor (180 litres)]N; n; n; u
+
+C10'. [... ina MURU]B₄ ITU 4(BÁN) EN TIL ITU 3(BÁN) 4 1/2 qa SÍG[{HI.A} ...]
+#lem: u; ina[in]PRP; qabaltu[middle]N; warhu[month]N; n; adi[until]PRP; qītu[end]N; warhu[month]N; n; 4[4]NU; n; qû[(one) litre]N; šīpātu[wool]N; u
+
+C11'. [... GENN]A ina PA AN ina SAG ⸢ITU ina⸣ A[BSIN ...]
+#lem: u; Kayyamānu[Saturn]CN; ina[in]PRP; Pabilsag[Sagittarius]CN; Ṣalbaṭānu[Mars]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Šerʾu[Virgo]CN; u
+
+C12'. [...] ⸢šá? ana?⸣ [...]
+#lem: u; ša[which]REL; ana[to]PRP; u
+
+@translation labeled en project
+
+@obverse
+
+@(o 1') The 4th, the north wind blew, the cold became severe. The 5th? [...] ... [...]
+
+@(o 2') clouds were in the sky. Night of the 7th, beginning of the night, the moon was [... η Tauri ... clou]ds were in the sky, the north wind which was set to the west [side blew ...] very overcast, the north wind which was set to the west [side blew,]
+
+@(o 3') the cold became severe. Night of the 8th, beginning of the ni[ght, ...] The 8th, the north wind which was set to the west side blew ... [... Night of the 9th, beginning] of the night, the moon was 1 1/2 cubits in front of η Geminorum,
+
+@(o 4') the moon being 2 cubits high to the north; the north wind which was set to the we[st side blew ... Night] of the 10th, beginning of the night, the moon was 2 cubits in front of α Geminorum, [the moon being nn] cubits low to the south. The 10th, the north wind blew;
+
+@(o 5') in the afternoon, clouds were in the sky. Night of the 11th, beg[inning of the night, ...] ... The 11th, clouds were in the sky, the south wind blew; in the afternoon, very overcast. Night of the 12th, beginning of the night, the moon was 2/3 cubit above Jupiter;
+
+@(o 6') all night very overcast; last part of the night, overcast, the south wind bl[ew ...] clouds were in the sky, the north wind blew; in the afternoon, lightning flashed, much thunder, the east wind blew; after it, large hailstones
+
+@(o 7') which were as big as plums? [...] ... lunar eclipse, (after) 5 months, ... omitted; at 1.32° before sunrise. The 13th, sunrise to moonset: 3° 50'; clouds, I did not watch;
+
+@(o 8') in the morning, clouds crossed the sky; all day overcast [...] cubits?. The 14th, clouds were in the sky, the north wind blew. Night of the 15th, clouds were in the sky; in the morning watch, the moon was surrounded by a halo; last part of the night, the moon was
+
+@(o 9') 2 cubits in front of γ Virginis, the moon being [...] of the night, clouds were in the sky, the south wind blew; last part of the night, the moon was 2 cubits in front of α Virginis, the moon being 1/2 cubit low to the south. The 16th, all day very overcast, the south wind blew,
+
+@(o 10') [...] large rain DUL. Night [of the 17th, ... last part of the night, the moon] stood [... behind Mars to the east], the moon being 2 1/2 cubits low to the south. The 17th, in the morning, clouds crossed the sky; all day clouds were in the sky, the north wind blew. Night of the 18th, clouds were in the sky;
+
+@(o 11') [last part of the night, the moon was 2 cu[bits be]low α Librae [... Night of the 19th, last part of the night, the moon was] 2 1/2 cubits [in front of δ] Scorpii, the moon being 2 cubits low to the south. The 19th, clouds were in the sky, the north wind blew. Night of the 20th, last part of the night, the moon was 2/3 cubit below α Scorpii, the moon having passed a little to the east.
+
+@(o 12') [...] until the 20th, when Mars [became stationary] to the east, [... Night] of the 21st, last part of the night, the moon was 2 cubits below θ Ophiuchi. The 21st, Mercury’s first appearance in the west in the beginning of Pisces; it was bright, sunset to setting of Mercury: 15°, (ideal) first appearance on the 20th.
+
+@(o 13') [...] ... [... bl]ew. The 22nd, all day clouds were in the sky; in the morning and at noon, the sun was surrounded by a halo, it billowed very much. Night of the 23rd, all night very overcast
+
+@(o 14') [...] The 24th, in the morning, clouds crossed the sky, rain DUL; all day clouds were in the sky, the south and east winds blew. Night of the 25th, clouds were in the sky
+
+@(o 15') [... the sou]th wind blew. Night of the 26th, all night clouds were in the sky; last part of the night, overcast, the north wind blew. The 26th, clouds were in the sky, the north wind blew. Night of the 27th, the north wind blew
+
+@(o 16') [... solar eclipse;] when it began [on the ...] and west side, in 20° of day it made two thirds of the disk; when it began to clear, in 18° of day
+
+@(o 17') [...] ... was visible?; at 51° (var. in C: 50°) before sunset; clouds were in the sky, the north wind blew. Night of the 29th (and) the 29th, the north wind blew. That month, the equivalent was: barley,
+
+@(o 18') [...] to the 26th, 3 @i{pānu} 2 @i{sūtu}; the 27th, 3 @i{pānu} 1 @i{sūtu} 3 @i{qa}; the 28th, 3 @i{pānu} 1 @i{sūtu}; the 29th, 3 @i{pānu}; dates, from the 1st to the 5th, 1 @i{kurru} 4 @i{pānu} 3 @i{sūtu}; from the 6th to the 9th, 1 @i{kurru} 4 @i{pānu}
+
+@(o 19') [...] 3 @i{pānu}; from the 16th to the 20th, 1 @i{kurru} 2 @i{pānu} 3 @i{sūtu}; from the 21st to the 26th, 1 @i{kurru} 2 @i{pānu}; the 27th, 28th, (and) 29th, 1 @i{kurru} 2 @i{pānu} 1 @i{sūtu} 3 @i{qa}
+
+@(o 20') [...  in the midd]le of the month, 4 @i{sūtu}, until the end of the month, 3 @i{sūtu} 4 1/2 @i{qa}; wool, 1 2/3 minas. At that time, Jupiter was in Cancer; Venus, in the beginning of the month, was in Aquarius,
+
+@(o 21') [...] Pisces; Saturn was in Sagittarius; Mars, in the beginning of the month, was in Virgo, until the end of the month, in Libra. That month, the river level receded 20 fingers, total: 27 was the @i{na} (gauge).
+
+@(o 22') [...] Seleucia on the Tigris entered Babylon. The 10th, the satrap of Babylonia
+
+@(o 23') [...] the assembly of Esangil [provided] one bull and 4 (sheep) sacrifices in the ‘Gate of the Son of the Prince’ of Esangil
+
+@(o 24') [...] he performed [offerings for the li]fe of the king and his own life. The 15th, one bull and 3 (sheep) sacrifices
+
+@(o 25') they provided for this [satrap of Baby]lonia in the ‘Gate of the Son of the Prince’ of Esangil; he performed offerings as before.
+
+@(o 26') [...] of the Euphrates went out. That month, a goat gave birth, and there was no right thigh (of the young).
+
+$(ruling)
+
+@(o 27') [Month XII, (the 1st of which was identical with) the 30th (of the preceding month), ... Night of the 2nd, the moon] stood 2 cubits [behind Mercury] to the east, the moon being 2 cubits high to the north; first part of the night, Venus was 2 1/2 cubits below η Piscium
+
+@(o 28') [... Night of the 3rd, the moon was] 1 cubit [behind η] Piscium, the moon being 1 1/2 cubits low to the south, 1 cubit above Venus, the moon having passed 1/2 cubit to the east. The 3rd, the north wind blew.
+
+@(o 29') [... the moon] was surrounded by a halo. The 4th, the north wind blew. Night of the 5th, beginning of the night, the moon was 1/2 cubit in front of η Tauri. The 5th, clouds [...]
+
+@(o 30') [...] the north wind blew. The 6th, in the morning, clouds crossed the sky, rain DUL, all day clouds [...] 
+
+@reverse
+
+@(r 1) [... Venus was ...] β Arietis
+
+@(r 2) [...] the moon was [...] above [γ /δ ] Cancri
+
+@(r 3) [...] all night very overcast. The 11th, all day very overcast, the north wind blew. Ni[ght ...]
+
+@(r 4) [...] ... the south and east winds blew. Night of the 13th, all night very overcast, the north wind blew. The 13th, [...]
+
+@(r 5) [...] low [to the sou]th; clouds were in the sky, the north wind blew. The 14th, sunrise to moonset: 7°, measured; all day clouds were in the sky, the north wind bl[ew.]
+
+@(r 6) [... Night of the 15th, last part of the night, the moon] stood [... behind Mars to] the east, the moon being 2 2/3 cubits low to the south; clouds were in the sky. The 15th, all day clouds were in the sky, the north wind blew.
+
+@(r 7) [... Night] of the 17th, clouds were in the sky; last part of the night, the moon was 1 1/2 cubits behind β Librae, the moon being 5 1/2 cubits low to the south. The 17th, clouds were in the [sky], the north wind blew.
+
+@(r 8) [... bl]ew. Night of the 19th, clouds were in the sky; last part of the night, the moon was 1 1/2 cubits in front of θ Ophiuchi, the moon being 2 1/2 cubits low to the south.
+
+@(r 9) [... bl]ew. The 20th, clouds were in the sky, the north wind blew. Night of the 21st, clouds were in the sky; last part of the night, the moon was 2 1/2 cubits below Saturn
+
+@(r 10) [...] were in the sky, the south wind blew. Night of the 23rd, clouds were in the sky; last part of the night, the moon was 4 cubits below β Capricorni, the moon having passed 1/2 cubit to the east.
+
+@(r 11) [... last part] of the night, the moon was 3 cubits behind δ Capricorni, the moon being 1/2 cubit high to the north. The 25th, the north wind blew.
+
+@(r 12) [...] were in the sky, the north wind blew. Around the 28th, Mars’ acronychal rising. The 28th, all day clouds were in the sky, the south and east winds blew. Night of the 29th,
+
+@(r 13) [... the equivalent was: bar]ley, the 1st (and) 2nd, 2 @i{pānu} 5? @i{sūtu}; the 3rd (and) 4th, 2 @i{pānu} 4 @i{sūtu} 3 @i{qa}; the 5th, 6th, (and) 7th, 3 @i{pānu};
+
+@(r 14) [...] ... [...] 1 kur 2 @i{pānu} 1 @i{sūtu} 3 @i{qa}, in the middle of the month, 1 @i{kurru} 2 @i{pānu}, at the end of the month, 1 @i{kurru} 2 @i{pānu} 1 @i{sūtu} 3 @i{qa};
+
+@(r 15) [...] 1 @i{kurru}; cress, 2 @i{pānu} 1 @i{sūtu} 1 1/2 @i{qa} [... Venus was in Aries, at the end of the month, in Tau]rus; Mercury, until the middle of the month, was in Pisces; around the 16th, Mercury’s last appearance in the west in the end of Pisces;
+
+@(r 16) [Sat]urn was in Sagittarius; Mars, until the middle of the month, was in Libra, until the end [of the month, in Virgo ... 2]2 was the @i{na} (gauge); from the 9th to the 14th, it receded 10 fingers, 24 and half was the @i{na} (gauge); the 16th (and) 17th, it rose 2 fingers, 24 was the @i{na} (gauge);
+
+@(r 17) the 18th, it remained constant; night of the 19th (and) the 19th, [it rose] 3 cubits [...] the 21st, it rose 2 fingers, total: 3 and half was the @i{na} (gauge); from the 22nd to the end of the month, it receded 1 2/3 cubits, total: 13 and half was the @i{na} (gauge).
+
+@(r 18) That [month], the satrap of Babylonia fr[om? ...] this [...] went out from Babylon to Seleucia which is on the Tigris.
+
+@(r 19) That month, the 28th, Pilinus, the [...] came [from] Seleucia, and above Babylon below the wall of king Seleucus
+
+@(r 20) he did not enter Babylon. The 29th, he departed? from [...] The 29th, the satrap of Babylonia [went] from Seleucia
+
+@(r 21) which is on the Tigris to [...]
+
+$(ruling)$
+
+@(r 22) Month XII₂, the 1st (of which followed the 30th of the preceding month), sunset to moonset: 22°; it was bright, earthshine, measured (despite) clouds [...] beginning of the night, clouds were in the sky, lightning flashed; in the evening watch, overcast, lightning flashed, slow thunder, large rain DUL,
+
+@(r 23) a little hail fell; all night clouds were in the sky, the north wind [blew ...] ... the south and east winds blew. Night of the 2nd, the moon was 2 1/2 cubits in front of η Tauri; all night clouds were in the sky;
+
+@(r 24) in the morning watch, very overcast, rain DUL. The 2nd, ... [... Night of the 3rd, the moon was ... α Tauri, the moon being ...] high to the north, it stood 2 cubits behind Venus to the east, the moon being 1 1/2 cubits high to the north; beginning of the night, very overcast, strong gusty south wind,
+
+@(r 25) a little rain shower; all night clouds were in the sky. The 3rd, [... Night of the 4th, the moon was ... in front of β Tauri], it was set towards its inside. The 4th, clouds were in the sky, the north wind blew. Night of the 5th, beginning of the night, the moon was 2 cubits above μ Geminorum;
+
+@(r 26) all night clouds were in the sky [...] The 6th, all day very overcast, the south wind blew; in the afternoon, overcast, a little rain shower. Night of the 7th, beginning of the night, clouds crossed the sky,
+
+@(r 27) rain shower; in the middle watch, a little rain sh[ower ... Night of the 8th, beginning of the night, the moon was ... ε Leonis], it stood 3 cubits [behind] Jupiter to the east, the moon being 1/2 cubit high to the north. The 8th, clouds were in the sky, the north wind blew.
+
+@(r 28) Night of the 9th, beginning of the ni[ght, ... Night of the 10th, beginning of the ni]ght, the moon was 5 cubits below θ Leonis, the moon having passed 1/2 cubit to the east; the north wind blew. The 10th, very overcast; at noon,
+
+@(r 29) [it thun]dered thrice [... Night of the 11th, beginning of the night, the moon was nn cub]its [...] β Virginis, the moon being 1/2 cubit low to the south; the north wind blew. The 11th, clouds were in the sky, the north wind blew [...] ...
+
+@(r 30) [...] moonrise to sunset: [x°] 40'; clouds, I did not watch; all night very overcast [...]
+
+@(r 31) [... beginn]ing? of the night, clouds crossed the sky, a little rain shower [...]
+
+@(r 32) [...] blew. The 15th, clouds were in the sky, the north wind bl[ew  ...]
+
+@(r 33) [...] 2 cub[its ... θ] Ophiuchi [...]
+
+@(r 34) [...] ... [...] 
+
+@left 
+
+@(l.e. 1) [Diary from month] X to the end of month XII₂, year 114 [...]
+

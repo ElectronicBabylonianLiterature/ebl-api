@@ -30,7 +30,7 @@ A: BM 41647 + 41853 (=81-6-25,263+473)
 B: BM 34285 ( = Sp.394)
 C: Rm 728
 
-All three pieces are parts of the same tablet. They will be presented in chronological order. 
+All three pieces are parts of the same tablet. They will be presented in chronological order.
 
 ## AD -234AB
 
