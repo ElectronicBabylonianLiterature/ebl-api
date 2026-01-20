@@ -34,4 +34,5 @@ class Period(NamedEnumWithParent):
 class PeriodModifier(Enum):
     NONE = "None"
     EARLY = "Early"
+    MIDDLE = "Middle"
     LATE = "Late"
