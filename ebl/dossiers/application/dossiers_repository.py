@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
+    DossierPagination,
 )
 
 
@@ -12,3 +13,11 @@ class DossiersRepository(ABC):
 
     @abstractmethod
     def create(self, dossier_record: DossierRecord) -> str: ...
+
+    @abstractmethod
+    def search(
+        self,
+        text: str,
+        offset: int,
+        limit: int,
+    ) -> DossierPagination: ...

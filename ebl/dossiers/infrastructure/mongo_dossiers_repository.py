@@ -1,10 +1,11 @@
 import attr
-from typing import Sequence, List, Dict
+from typing import Sequence, List, Dict, Any
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
 from ebl.mongo_collection import MongoCollection
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
+    DossierPagination,
 )
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.common.domain.provenance import Provenance
@@ -48,6 +49,18 @@ class DossierRecordSchema(Schema):
     def make_record(self, data, **kwargs):
         data["references"] = tuple(data["references"])
         return DossierRecord(**data)
+
+
+class DossierPaginationSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    total_count = fields.Integer(required=True, data_key="totalCount")
+    dossiers = fields.Nested(DossierRecordSchema, many=True, required=True)
+
+    @post_load
+    def make_pagination(self, data, **kwargs):
+        return DossierPagination(**data)
 
 
 class MongoDossiersRepository(DossiersRepository):
@@ -107,3 +120,28 @@ class MongoDossiersRepository(DossiersRepository):
                     )
                 ),
             )
+
+    def search(self, text: str, offset: int, limit: int) -> DossierPagination:
+        query = self._build_search_query(text)
+        
+        cursor = self._dossiers_collection.find_many(query).skip(offset).limit(limit)
+        dossiers = DossierRecordSchema(many=True).load(cursor)
+        
+        reference_ids = self._extract_reference_ids(dossiers)
+        bibliography_entries = self._fetch_bibliography_entries(reference_ids)
+        self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
+        
+        total_count = self._dossiers_collection.count_documents(query)
+        
+        return DossierPagination(total_count=total_count, dossiers=dossiers)
+
+    def _build_search_query(self, text: str) -> Dict[str, Any]:
+        if not text:
+            return {}
+        
+        return {
+            "$or": [
+                {"_id": {"$regex": text, "$options": "i"}},
+                {"description": {"$regex": text, "$options": "i"}},
+            ]
+        }
