@@ -32,5 +32,5 @@
 		}
 	},
 	"postCreateCommand": "bash .devcontainer/setup.sh",
-	"postStartCommand": "mkdir -p /workspaces/data && mongod --dbpath /workspaces/data --bind_ip 127.0.0.1 --fork --logpath /workspaces/data/mongodb.log"
+	"postStartCommand": "mongod --dbpath /workspaces/data --bind_ip 127.0.0.1 --fork --logpath /workspaces/data/mongodb.log"
 }

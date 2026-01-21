@@ -11,9 +11,9 @@ if ! command -v mongod &> /dev/null; then
     wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
     echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
 
-    # Install MongoDB and mongo-tools
+    # Install MongoDB
     sudo apt-get update
-    sudo apt-get install -y mongodb-org mongodb-org-tools mongo-tools
+    sudo apt-get install -y mongodb-org
 else
     echo "MongoDB already installed, skipping..."
 fi
@@ -47,8 +47,9 @@ if ! command -v poetry &> /dev/null; then
 fi
 poetry --version
 
-# Create MongoDB data directory
-mkdir -p /workspaces/data
+# Create MongoDB data directory with proper permissions
+sudo mkdir -p /workspaces/data
+sudo chown -R $(whoami):$(whoami) /workspaces/data
 
 # Setup .env file if it doesn't exist
 if [ ! -f .env ]; then
