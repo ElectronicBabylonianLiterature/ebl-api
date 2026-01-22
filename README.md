@@ -15,28 +15,50 @@
 
 ## Setup
 
-Requirements:
+This project uses [Dev Containers](https://containers.dev/) to provide a consistent, pre-configured development environment. Dev containers automatically handle all dependencies including Python, MongoDB, Poetry, Task, and the Rust compiler.
+
+### Prerequisites
+
+**Recommended: Local Development**
+* [Docker Desktop](https://www.docker.com/products/docker-desktop) (or Docker Engine + Docker Compose)
+* [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+**Alternative: Cloud Development**
+* [GitHub Codespaces](https://github.com/features/codespaces) ⚠️ May fail with insufficient storage space
+
+⚠️ **Note**: GitHub Codespaces may encounter errors due to storage limitations when installing MongoDB and all dependencies. Local development with Docker Desktop is recommended for a more reliable setup.
+
+### Getting Started
+
+1. **Configure Environment Variables**: Copy `.env.example` to `.env` and add your credentials:
+   ```bash
+   cp .env.example .env
+   ```
+   The container will initially fail without valid environment variables. Edit `.env` with your Auth0, MongoDB, Sentry, and other service credentials (see [environment variables](#environment-variables) section).
+
+2. **Open in Dev Container**: 
+   - In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
+   - In GitHub Codespaces: Create a new codespace from your repository
+
+3. **Rebuild After Configuration**: After adding your `.env` file, rebuild the container:
+   - VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
+   - GitHub Codespaces: Restart the workspace
+
+The dev container automatically installs all dependencies including MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler. No manual installation required.
+
+### Manual Setup (Alternative)
+
+If not using dev containers:
 
 * [PyPy3.9](https://www.pypy.org) & pip
 * [Task](https://taskfile.dev/)
-
-```shell script
-pip install poetry
-poetry install --no-root
-```
-
-For development, use `poetry install --no-root --with dev`.
-
-If `libcst` installation fails (because a binary wheel is not available for Linux/Windows + Pypy) you may need to install
-the [rust compiler](https://www.rust-lang.org/tools/install) to solve it.
-
-The following are needed to run application:
-
 * MongoDB 4.4.4
-* [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api)
-* [Auth0](https://auth0.com)
-* [Sentry](https://sentry.io)
-* Docker (optional, see [Running the application](#running-the-application))
+* [Rust compiler](https://www.rust-lang.org/tools/install) (for libcst)
+
+```bash
+pip install poetry
+poetry install --no-root --with dev
+```
 
 ### Auth0
 
@@ -124,25 +146,17 @@ The users should `eblName` property in the `user_metadata`. E.g.:
 
 An organization and project need to be setup in Sentry. *DSN* under *Client Keys* is needed for the for the environment variables (see below).
 
+### Environment Variables
+
+The following are needed to run the application:
+
+* [Auth0](https://auth0.com)
+* [Sentry](https://sentry.io)
+* [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api)
+
+See the [Auth0](#auth0) and [Sentry](#sentry) sections below for setup details.
+
 ## Development
-
-The project uses [Dev Containers](https://containers.dev/) for a consistent development environment. The configuration includes:
-- Python 3.12 with Poetry for dependency management
-- MongoDB 4.4 for local database
-- VS Code extensions for Python, MongoDB, Docker, and more
-- All required development tools (go-task, Rust compiler)
-
-### Setup
-
-1. **Environment Variables**: Copy `.env.example` to `.env` and configure your credentials:
-   ```bash
-   cp .env.example .env
-   ```
-   See `.devcontainer/README.md` for details on required environment variables.
-
-2. **Start Development Environment**: Open the project in a Dev Container-compatible environment (VS Code, GitHub Codespaces, or Gitpod Flex).
-
-3. **Import Data** (optional): If you wish to use a local database, import your data after the container is running.
 
 ### Running the tests
 
@@ -308,7 +322,15 @@ unless ran via [Task](https://taskfile.dev/). Alternatively and external program
 handle the file e.g. [direnv](https://direnv.net/) or
 [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv).
 
-### Locally
+### With Dev Container (Recommended)
+
+If using the dev container, MongoDB is already running locally. Start the application:
+
+```shell script
+task start
+```
+
+### Locally (Without Dev Container)
 
 ```shell script
 task start
