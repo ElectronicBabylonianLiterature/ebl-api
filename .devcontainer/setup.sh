@@ -48,7 +48,8 @@ fi
 poetry --version
 
 # Create MongoDB data directory
-mkdir -p /workspaces/data
+sudo mkdir -p /workspaces/data
+sudo chown -R $(whoami):$(whoami) /workspaces/data
 
 # Setup .env file if it doesn't exist
 if [ ! -f .env ]; then
