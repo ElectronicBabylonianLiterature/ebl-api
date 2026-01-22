@@ -51,6 +51,7 @@ class Scope(ScopeItem):
     READ_COPENHAGEN_FRAGMENTS = ("read:COPENHAGEN-fragments", RESTRICTED)
     READ_URUKLBU_FRAGMENTS = ("read:URUKLBU-fragments", RESTRICTED)
     READ_ARG_FOLIOS = ("read:ARG-folios", RESTRICTED)
+    READ_ARGC_FOLIOS = ("read:ARGC-folios", OPEN)
     READ_EVW_FOLIOS = ("read:EVW-folios", RESTRICTED)
     READ_ILF_FOLIOS = ("read:ILF-folios", RESTRICTED)
     READ_HHF_FOLIOS = ("read:HHF-folios", OPEN)
