@@ -24,8 +24,6 @@ class CroppedSignImage:
     cluster_size: Optional[int] = None
     is_main: Optional[bool] = None
 
-
-
     @classmethod
     def create(cls, image: Base64, fragment_number: MuseumNumber) -> "CroppedSignImage":
         return cls(str(uuid.uuid4()), image, fragment_number)
@@ -41,15 +39,11 @@ class CroppedSignImageSchema(Schema):
     period = fields.Str(required=False, allow_none=True)
     form = fields.Str(required=False, allow_none=True)
 
-    is_centroid = fields.Boolean(
-        required=False, allow_none=True, data_key="isCentroid"
-    )
+    is_centroid = fields.Boolean(required=False, allow_none=True, data_key="isCentroid")
     cluster_size = fields.Integer(
         required=False, allow_none=True, data_key="clusterSize"
     )
-    is_main = fields.Boolean(
-        required=False, allow_none=True, data_key="isMain"
-    )
+    is_main = fields.Boolean(required=False, allow_none=True, data_key="isMain")
 
     @post_load
     def load(self, data, **kwargs):
@@ -81,11 +75,8 @@ class CroppedSignImageSchema(Schema):
         ]
 
         return {
-            k: v
-            for k, v in data.items()
-            if k not in optional_keys or v is not None
+            k: v for k, v in data.items() if k not in optional_keys or v is not None
         }
-
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
