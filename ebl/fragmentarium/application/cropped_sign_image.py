@@ -1,5 +1,6 @@
 import uuid
 from typing import NewType
+from typing import Optional
 
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
@@ -30,61 +31,59 @@ class CroppedSignImage:
 
 
 class CroppedSignImageSchema(Schema):
-    image_id = fields.Str(required=True)
+    image_id = fields.Str(required=True, data_key="_id")
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
 
-    # NEW
+    # Optional clustering metadata
     sign = fields.Str(required=False, allow_none=True)
     period = fields.Str(required=False, allow_none=True)
     form = fields.Str(required=False, allow_none=True)
-    isCentroid = fields.Boolean(required=False, allow_none=True)
-    clusterSize = fields.Integer(required=False, allow_none=True)
-    isMain = fields.Boolean(required=False, allow_none=True)
 
+    is_centroid = fields.Boolean(
+        required=False, allow_none=True, data_key="isCentroid"
+    )
+    cluster_size = fields.Integer(
+        required=False, allow_none=True, data_key="clusterSize"
+    )
+    is_main = fields.Boolean(
+        required=False, allow_none=True, data_key="isMain"
+    )
 
     @post_load
     def load(self, data, **kwargs):
         return CroppedSignImage(
-            data["_id"],
-            data["image"],
-            MuseumNumber.of(data["fragment_number"]),
-            data.get("sign"),
-            data.get("period"),
-            data.get("form"),
-            data.get("isCentroid"),
-            data.get("clusterSize"),
-            data.get("isMain"),
-            )
+            image_id=data["image_id"],
+            image=data["image"],
+            fragment_number=MuseumNumber.of(data["fragment_number"]),
+            sign=data.get("sign"),
+            period=data.get("period"),
+            form=data.get("form"),
+            is_centroid=data.get("is_centroid"),
+            cluster_size=data.get("cluster_size"),
+            is_main=data.get("is_main"),
+        )
 
-
-    @post_dump
-    def cropped_sign_image_dump(self, data, **kwargs):
-        result = {
-            "_id": data["image_id"],
-            "image": data["image"],
-            "fragment_number": str(data["fragment_number"]),
-            }
-
-        # include clustering metadata only if present
-        for key in [
+    @post_dump(pass_original=True)
+    def cropped_sign_image_dump(self, data, original, **kwargs):
+        """
+        Remove optional metadata fields when they are None.
+        Keeps backward compatibility with old documents.
+        """
+        optional_keys = [
             "sign",
             "period",
             "form",
-            "is_centroid",
-            "cluster_size",
-            "is_main",
-            ]:
-            value = getattr(data, key)
-            if value is not None:
-                result_key = {
-                    "is_centroid": "isCentroid",
-                    "cluster_size": "clusterSize",
-                    "is_main": "isMain",
-                    }.get(key, key)
-                result[result_key] = value
-                
-        return result
+            "isCentroid",
+            "clusterSize",
+            "isMain",
+        ]
+
+        return {
+            k: v
+            for k, v in data.items()
+            if k not in optional_keys or v is not None
+        }
 
 
 
