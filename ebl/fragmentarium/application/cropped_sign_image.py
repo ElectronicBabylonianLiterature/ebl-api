@@ -48,7 +48,7 @@ class CroppedSignImageSchema(Schema):
     @post_load
     def load(self, data, **kwargs):
         return CroppedSignImage(
-            image_id=data["image_id"],
+            image_id=data["_id"],
             image=data["image"],
             fragment_number=MuseumNumber.of(data["fragment_number"]),
             sign=data.get("sign"),
