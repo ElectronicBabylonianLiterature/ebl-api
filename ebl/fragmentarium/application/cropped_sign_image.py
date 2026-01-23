@@ -1,6 +1,6 @@
 import uuid
-from typing import NewType
-from typing import Optional
+from typing import NewType, Optional
+
 
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
@@ -16,13 +16,14 @@ class CroppedSignImage:
     image: Base64
     fragment_number: MuseumNumber
 
-    # NEW (all optional)
-    sign: str | None = None
-    period: str | None = None
-    form: str | None = None
-    is_centroid: bool | None = None
-    cluster_size: int | None = None
-    is_main: bool | None = None
+    # Optional clustering metadata (Python 3.9 compatible)
+    sign: Optional[str] = None
+    period: Optional[str] = None
+    form: Optional[str] = None
+    is_centroid: Optional[bool] = None
+    cluster_size: Optional[int] = None
+    is_main: Optional[bool] = None
+
 
 
     @classmethod
