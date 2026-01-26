@@ -1,6 +1,12 @@
 #!/bin/bash
 set -e
 
+# Fix expired Yarn GPG key issue in base image
+if [ -f /etc/apt/sources.list.d/yarn.list ]; then
+    echo "Removing Yarn repository (not needed for this project)..."
+    sudo rm -f /etc/apt/sources.list.d/yarn.list
+fi
+
 # Install MongoDB 4.4 if not already installed
 if ! command -v mongod &> /dev/null; then
     echo "Installing MongoDB 4.4..."

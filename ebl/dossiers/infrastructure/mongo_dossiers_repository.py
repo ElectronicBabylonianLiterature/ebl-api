@@ -69,6 +69,19 @@ class MongoDossiersRepository(DossiersRepository):
         self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
         return dossiers
 
+    def search(self, query: str) -> Sequence[DossierRecord]:
+        if not query:
+            return []
+        search_filter = {
+            "$or": [
+                {"_id": {"$regex": query, "$options": "i"}},
+                {"description": {"$regex": query, "$options": "i"}},
+            ]
+        }
+        cursor = self._dossiers_collection.find_many(search_filter)
+        dossiers = DossierRecordSchema(many=True).load(cursor)
+        return dossiers[:10]
+
     def _fetch_dossiers(self, ids: Sequence[str]) -> List[DossierRecord]:
         cursor = self._dossiers_collection.find_many({"_id": {"$in": ids}})
         return DossierRecordSchema(many=True).load(cursor)
