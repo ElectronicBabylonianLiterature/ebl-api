@@ -102,17 +102,6 @@ class PatternMatcher:
             }
         return {"references": {"$elemMatch": parameters}}
 
-    def _filter_by_reference(self) -> Dict:
-        if "bibId" not in self._query:
-            return {}
-
-        parameters = {"id": self._query["bibId"]}
-        if "pages" in self._query:
-            parameters["pages"] = {
-                "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
-            }
-        return {"references": {"$elemMatch": parameters}}
-
     def _filter_by_dossier(self) -> Dict:
         return (
             {"dossiers.dossierId": dossier}
