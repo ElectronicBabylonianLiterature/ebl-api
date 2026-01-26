@@ -27,3 +27,13 @@ class DossiersResource:
             ) from error
 
         resp.media = DossierRecordSchema(unknown=EXCLUDE, many=True).dump(dossiers)
+
+
+class DossiersSearchResource:
+    def __init__(self, _dossiersRepository: DossiersRepository):
+        self._dossiersRepository = _dossiersRepository
+
+    def on_get(self, req: Request, resp: Response) -> None:
+        query = req.get_param("query", default="")
+        dossiers = self._dossiersRepository.search(query)
+        resp.media = DossierRecordSchema(unknown=EXCLUDE, many=True).dump(dossiers)
