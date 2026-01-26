@@ -102,6 +102,24 @@ class PatternMatcher:
             }
         return {"references": {"$elemMatch": parameters}}
 
+    def _filter_by_reference(self) -> Dict:
+        if "bibId" not in self._query:
+            return {}
+
+        parameters = {"id": self._query["bibId"]}
+        if "pages" in self._query:
+            parameters["pages"] = {
+                "$regex": rf".*?(^|[^\d]){self._query['pages']}([^\d]|$).*?"
+            }
+        return {"references": {"$elemMatch": parameters}}
+
+    def _filter_by_dossier(self) -> Dict:
+        return (
+            {"dossiers.dossierId": dossier}
+            if (dossier := self._query.get("dossier"))
+            else {}
+        )
+
     def _prefilter(self) -> List[Dict]:
         constraints = {
             "$and": compact(
@@ -113,6 +131,7 @@ class PatternMatcher:
                     self._filter_by_site(),
                     self._filter_by_script(),
                     self._filter_by_reference(),
+                    self._filter_by_dossier(),
                     match_user_scopes(self._scopes),
                 ]
             ),

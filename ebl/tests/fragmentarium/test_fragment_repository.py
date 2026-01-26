@@ -1198,3 +1198,83 @@ def test_fetch_fragment_signs(fragment_repository):
     assert sort_by_id(fragment_repository.fetch_fragment_signs()) == sort_by_id(
         expected
     )
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ("DOSSIER001", [0]),
+        ("DOSSIER002", [1]),
+        ("DOSSIER003", [2]),
+        (None, [0, 1, 2, 3]),
+    ],
+)
+def test_query_dossier(fragment_repository, query, expected):
+    from ebl.fragmentarium.domain.fragment import DossierReference
+
+    dossiers = ["DOSSIER001", "DOSSIER002", "DOSSIER003", "DOSSIER004"]
+
+    fragments = [
+        FragmentFactory.build(
+            number=MuseumNumber.of(f"X.{i}"),
+            dossiers=[DossierReference(dossierId=dossier, isUncertain=False)],
+            script=Script(),
+        )
+        for i, dossier in enumerate(dossiers)
+    ]
+
+    fragment_repository.create_many(fragments)
+
+    expected_result = QueryResult(
+        [
+            QueryItem(
+                fragments[i].number,
+                (),
+                0,
+            )
+            for i in expected
+        ],
+        0,
+    )
+
+    assert fragment_repository.query({"dossier": query}) == expected_result
+
+
+def test_query_dossier_multiple_dossiers(fragment_repository):
+    from ebl.fragmentarium.domain.fragment import DossierReference
+
+    fragment_with_multiple = FragmentFactory.build(
+        number=MuseumNumber.of("X.1"),
+        dossiers=[
+            DossierReference(dossierId="DOSSIER001", isUncertain=False),
+            DossierReference(dossierId="DOSSIER002", isUncertain=False),
+            DossierReference(dossierId="DOSSIER003", isUncertain=False),
+        ],
+        script=Script(),
+    )
+    fragment_with_one = FragmentFactory.build(
+        number=MuseumNumber.of("X.2"),
+        dossiers=[DossierReference(dossierId="DOSSIER004", isUncertain=False)],
+        script=Script(),
+    )
+
+    fragment_repository.create(fragment_with_multiple)
+    fragment_repository.create(fragment_with_one)
+
+    result = fragment_repository.query({"dossier": "DOSSIER002"})
+    assert len(result.items) == 1
+    assert result.items[0].museum_number == fragment_with_multiple.number
+
+
+def test_query_dossier_no_matches(fragment_repository):
+    from ebl.fragmentarium.domain.fragment import DossierReference
+
+    fragment = FragmentFactory.build(
+        number=MuseumNumber.of("X.1"),
+        dossiers=[DossierReference(dossierId="DOSSIER001", isUncertain=False)],
+        script=Script(),
+    )
+    fragment_repository.create(fragment)
+
+    result = fragment_repository.query({"dossier": "NONEXISTENT"})
+    assert len(result.items) == 0

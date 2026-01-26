@@ -12,6 +12,7 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_pages,
     parse_genre,
+    parse_dossier,
 )
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import DataError, NotFoundError
@@ -107,7 +108,7 @@ class FragmentsQueryResource:
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
-            parse_genre,
+            flow(parse_genre, parse_dossier),
             parse_integer_field("limit"),
         )
 

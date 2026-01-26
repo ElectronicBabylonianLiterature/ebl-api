@@ -52,3 +52,67 @@ def test_fetch_dossier_record_route(
     ) == DossierRecordSchema(many=True).dump(
         sorted([dossier_record, another_dossier_record], key=lambda record: record.id)
     )
+
+
+def test_search_dossiers_route(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier1 = DossierRecordFactory.build(id="TEST001", description="First test")
+    dossier2 = DossierRecordFactory.build(id="TEST002", description="Second test")
+    dossier3 = DossierRecordFactory.build(id="OTHER001", description="Different")
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = client.simulate_get("/dossiers/search", params={"query": "TEST"})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 2
+    assert {r["_id"] for r in result.json} == {dossier1.id, dossier2.id}
+
+
+def test_search_dossiers_by_description(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier1 = DossierRecordFactory.build(id="ABC001", description="Test description")
+    dossier2 = DossierRecordFactory.build(id="DEF002", description="Another test")
+    dossier3 = DossierRecordFactory.build(id="GHI003", description="Different")
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = client.simulate_get("/dossiers/search", params={"query": "test"})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 2
+    assert {r["_id"] for r in result.json} == {dossier1.id, dossier2.id}
+
+
+def test_search_dossiers_empty_query(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier = DossierRecordFactory.build()
+    dossiers_repository.create(dossier)
+
+    result = client.simulate_get("/dossiers/search", params={"query": ""})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 0
+
+
+def test_search_dossiers_no_query_param(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier = DossierRecordFactory.build()
+    dossiers_repository.create(dossier)
+
+    result = client.simulate_get("/dossiers/search")
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 0
