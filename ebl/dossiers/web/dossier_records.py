@@ -35,5 +35,10 @@ class DossiersSearchResource:
 
     def on_get(self, req: Request, resp: Response) -> None:
         query = req.get_param("query", default="")
-        dossiers = self._dossiersRepository.search(query)
+        provenance = req.get_param("provenance")
+        script_period = req.get_param("scriptPeriod")
+        
+        dossiers = self._dossiersRepository.search(
+            query, provenance=provenance, script_period=script_period
+        )
         resp.media = DossierRecordSchema(unknown=EXCLUDE, many=True).dump(dossiers)

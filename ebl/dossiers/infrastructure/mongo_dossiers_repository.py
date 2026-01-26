@@ -1,5 +1,5 @@
 import attr
-from typing import Sequence, List, Dict
+from typing import Sequence, List, Dict, Optional
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
 from ebl.mongo_collection import MongoCollection
@@ -69,15 +69,32 @@ class MongoDossiersRepository(DossiersRepository):
         self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
         return dossiers
 
-    def search(self, query: str) -> Sequence[DossierRecord]:
+    def search(
+        self,
+        query: str,
+        provenance: Optional[str] = None,
+        script_period: Optional[str] = None,
+    ) -> Sequence[DossierRecord]:
         if not query:
             return []
-        search_filter = {
-            "$or": [
-                {"_id": {"$regex": query, "$options": "i"}},
-                {"description": {"$regex": query, "$options": "i"}},
-            ]
-        }
+        
+        filters = [
+            {
+                "$or": [
+                    {"_id": {"$regex": query, "$options": "i"}},
+                    {"description": {"$regex": query, "$options": "i"}},
+                ]
+            }
+        ]
+        
+        if provenance:
+            filters.append({"provenance": provenance})
+        
+        if script_period:
+            filters.append({"script.period": script_period})
+        
+        search_filter = {"$and": filters} if len(filters) > 1 else filters[0]
+        
         cursor = self._dossiers_collection.find_many(search_filter)
         dossiers = DossierRecordSchema(many=True).load(cursor)
         return dossiers[:10]

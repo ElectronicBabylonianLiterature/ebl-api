@@ -81,3 +81,87 @@ def test_search_limits_results(dossiers_repository: DossiersRepository):
 
     result = dossiers_repository.search("TEST")
     assert len(result) == 10
+
+
+def test_search_with_provenance_filter(dossiers_repository: DossiersRepository):
+    from ebl.common.domain.provenance import Provenance
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001", description="Test", provenance=Provenance.BABYLON
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002", description="Test", provenance=Provenance.NIPPUR
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003", description="Test", provenance=Provenance.BABYLON
+    )
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search("TEST", provenance="Babylon")
+    assert len(result) == 2
+    assert {r.id for r in result} == {dossier1.id, dossier3.id}
+
+
+def test_search_with_script_period_filter(dossiers_repository: DossiersRepository):
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001",
+        description="Test",
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002",
+        description="Test",
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003",
+        description="Test",
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search("TEST", script_period="Neo-Babylonian")
+    assert len(result) == 2
+    assert {r.id for r in result} == {dossier1.id, dossier3.id}
+
+
+def test_search_with_multiple_filters(dossiers_repository: DossiersRepository):
+    from ebl.common.domain.provenance import Provenance
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001",
+        description="Test",
+        provenance=Provenance.BABYLON,
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002",
+        description="Test",
+        provenance=Provenance.BABYLON,
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003",
+        description="Test",
+        provenance=Provenance.NIPPUR,
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search(
+        "TEST", provenance="Babylon", script_period="Neo-Babylonian"
+    )
+    assert len(result) == 1
+    assert result[0].id == dossier1.id

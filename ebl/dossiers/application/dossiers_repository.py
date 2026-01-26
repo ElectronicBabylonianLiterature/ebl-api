@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Optional
 from abc import ABC, abstractmethod
 
 from ebl.dossiers.domain.dossier_record import (
@@ -12,7 +12,12 @@ class DossiersRepository(ABC):
         pass
 
     @abstractmethod
-    def search(self, query: str) -> Sequence[DossierRecord]:
+    def search(
+        self,
+        query: str,
+        provenance: Optional[str] = None,
+        script_period: Optional[str] = None,
+    ) -> Sequence[DossierRecord]:
         pass
 
     @abstractmethod
