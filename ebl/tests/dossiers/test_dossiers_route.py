@@ -54,6 +54,18 @@ def test_fetch_dossier_record_route(
     )
 
 
+def _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3):
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+
+def _assert_search_result(result, expected_ids):
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == len(expected_ids)
+    assert {r["_id"] for r in result.json} == expected_ids
+
+
 def test_search_dossiers_route(
     dossiers_repository: DossiersRepository,
     client,
@@ -62,15 +74,11 @@ def test_search_dossiers_route(
     dossier2 = DossierRecordFactory.build(id="TEST002", description="Second test")
     dossier3 = DossierRecordFactory.build(id="OTHER001", description="Different")
 
-    dossiers_repository.create(dossier1)
-    dossiers_repository.create(dossier2)
-    dossiers_repository.create(dossier3)
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
 
     result = client.simulate_get("/dossiers/search", params={"query": "TEST"})
 
-    assert result.status == falcon.HTTP_OK
-    assert len(result.json) == 2
-    assert {r["_id"] for r in result.json} == {dossier1.id, dossier2.id}
+    _assert_search_result(result, {dossier1.id, dossier2.id})
 
 
 def test_search_dossiers_by_description(
@@ -81,15 +89,11 @@ def test_search_dossiers_by_description(
     dossier2 = DossierRecordFactory.build(id="DEF002", description="Another test")
     dossier3 = DossierRecordFactory.build(id="GHI003", description="Different")
 
-    dossiers_repository.create(dossier1)
-    dossiers_repository.create(dossier2)
-    dossiers_repository.create(dossier3)
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
 
     result = client.simulate_get("/dossiers/search", params={"query": "test"})
 
-    assert result.status == falcon.HTTP_OK
-    assert len(result.json) == 2
-    assert {r["_id"] for r in result.json} == {dossier1.id, dossier2.id}
+    _assert_search_result(result, {dossier1.id, dossier2.id})
 
 
 def test_search_dossiers_empty_query(

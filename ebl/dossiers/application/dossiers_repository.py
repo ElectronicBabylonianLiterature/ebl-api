@@ -8,10 +8,13 @@ from ebl.dossiers.domain.dossier_record import (
 
 class DossiersRepository(ABC):
     @abstractmethod
-    def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]: ...
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]:
+        pass
 
     @abstractmethod
-    def search(self, query: str) -> Sequence[DossierRecord]: ...
+    def search(self, query: str) -> Sequence[DossierRecord]:
+        pass
 
     @abstractmethod
-    def create(self, dossier_record: DossierRecord) -> str: ...
+    def create(self, dossier_record: DossierRecord) -> str:
+        pass
