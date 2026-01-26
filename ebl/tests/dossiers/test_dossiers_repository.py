@@ -165,3 +165,17 @@ def test_search_with_multiple_filters(dossiers_repository: DossiersRepository):
     )
     assert len(result) == 1
     assert result[0].id == dossier1.id
+
+
+def test_search_escapes_regex_metacharacters(dossiers_repository: DossiersRepository):
+    dossier1 = DossierRecordFactory.build(id="TEST.123", description="Test with dot")
+    dossier2 = DossierRecordFactory.build(id="TEST*456", description="Test with star")
+    dossier3 = DossierRecordFactory.build(id="TESTA123", description="No match")
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search("TEST.")
+    assert len(result) == 1
+    assert result[0].id == dossier1.id

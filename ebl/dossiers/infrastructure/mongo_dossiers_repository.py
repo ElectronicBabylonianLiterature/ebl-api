@@ -1,4 +1,5 @@
 import attr
+import re
 from typing import Sequence, List, Dict, Optional
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
@@ -14,6 +15,7 @@ from ebl.bibliography.domain.reference import BibliographyId
 
 DOSSIERS_COLLECTION = "dossiers"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
+MAX_QUERY_LENGTH = 256
 
 
 class DossierRecordSchema(Schema):
@@ -78,11 +80,13 @@ class MongoDossiersRepository(DossiersRepository):
         if not query:
             return []
         
+        safe_query = re.escape(query[:MAX_QUERY_LENGTH])
+        
         filters = [
             {
                 "$or": [
-                    {"_id": {"$regex": query, "$options": "i"}},
-                    {"description": {"$regex": query, "$options": "i"}},
+                    {"_id": {"$regex": safe_query, "$options": "i"}},
+                    {"description": {"$regex": safe_query, "$options": "i"}},
                 ]
             }
         ]
@@ -95,9 +99,14 @@ class MongoDossiersRepository(DossiersRepository):
         
         search_filter = {"$and": filters} if len(filters) > 1 else filters[0]
         
-        cursor = self._dossiers_collection.find_many(search_filter)
+        cursor = self._dossiers_collection.find_many(search_filter).limit(10)
         dossiers = DossierRecordSchema(many=True).load(cursor)
-        return dossiers[:10]
+        
+        reference_ids = self._extract_reference_ids(dossiers)
+        bibliography_entries = self._fetch_bibliography_entries(reference_ids)
+        self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
+        
+        return dossiers
 
     def _fetch_dossiers(self, ids: Sequence[str]) -> List[DossierRecord]:
         cursor = self._dossiers_collection.find_many({"_id": {"$in": ids}})
