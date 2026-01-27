@@ -25,5 +25,14 @@ class DossiersRepository(ABC):
         pass
 
     @abstractmethod
+    def filter_by_fragment_criteria(
+        self,
+        provenance: Optional[str] = None,
+        script_period: Optional[str] = None,
+        genre: Optional[str] = None,
+    ) -> Sequence[DossierRecord]:
+        pass
+
+    @abstractmethod
     def create(self, dossier_record: DossierRecord) -> str:
         pass

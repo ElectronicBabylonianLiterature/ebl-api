@@ -1,0 +1,54 @@
+version: "3"
+
+dotenv: [".env"]
+
+tasks:
+  cp:
+    cmds:
+      - poetry run black ebl
+      - task: lint
+      - task: type
+      - git add --all && git commit -m "{{.CLI_ARGS}}" && git push
+
+  test-all:
+    cmds:
+      - task: format
+      - task: lint
+      - task: type
+      - task: test
+
+  python3:
+    cmds:
+      - poetry run python3 {{.CLI_ARGS}}
+
+  test:
+    cmds:
+      - poetry run pytest {{.CLI_ARGS}}
+
+  lint:
+    cmds:
+      - poetry run ruff check ebl {{.CLI_ARGS}}
+
+  type:
+    cmds:
+      - poetry run pyre check
+
+  format:
+    cmds:
+      - poetry run ruff format --check ebl
+
+  start:
+    cmds:
+      - poetry run waitress-serve --port=8001 --call ebl.app:get_app
+
+  validate-fragments:
+    cmds:
+      - poetry run python -m ebl.io.fragments.importer validate {{.CLI_ARGS}}
+
+  reindex-fragments:
+    cmds:
+      - poetry run python -m ebl.io.fragments.importer reindex {{.CLI_ARGS}}
+
+  import-fragments:
+    cmds:
+      - poetry run python -m ebl.io.fragments.importer import {{.CLI_ARGS}}

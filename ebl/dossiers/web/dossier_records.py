@@ -46,3 +46,19 @@ class DossiersSearchResource:
         )
 
         resp.media = DossierRecordSchema(unknown=EXCLUDE, many=True).dump(dossiers)
+
+
+class DossiersFilterResource:
+    def __init__(self, _dossiersRepository: DossiersRepository):
+        self._dossiersRepository = _dossiersRepository
+
+    def on_get(self, req: Request, resp: Response) -> None:
+        provenance = req.params.get("provenance")
+        script_period = req.params.get("scriptPeriod")
+        genre = req.params.get("genre")
+
+        dossiers = self._dossiersRepository.filter_by_fragment_criteria(
+            provenance=provenance, script_period=script_period, genre=genre
+        )
+
+        resp.media = DossierRecordSchema(unknown=EXCLUDE, many=True).dump(dossiers)

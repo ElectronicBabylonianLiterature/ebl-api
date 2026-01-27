@@ -15,6 +15,7 @@ from ebl.bibliography.domain.reference import BibliographyId
 
 DOSSIERS_COLLECTION = "dossiers"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
+FRAGMENTS_COLLECTION = "fragments"
 MAX_QUERY_LENGTH = 256
 
 
@@ -58,6 +59,7 @@ class MongoDossiersRepository(DossiersRepository):
         self._bibliography_collection = MongoCollection(
             database, BIBLIOGRAPHY_COLLECTION
         )
+        self._fragments_collection = MongoCollection(database, FRAGMENTS_COLLECTION)
 
     def create(self, dossier_record: DossierRecord) -> str:
         return self._dossiers_collection.insert_one(
@@ -115,6 +117,54 @@ class MongoDossiersRepository(DossiersRepository):
         self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
 
         return dossiers
+
+    def filter_by_fragment_criteria(
+        self,
+        provenance: Optional[str] = None,
+        script_period: Optional[str] = None,
+        genre: Optional[str] = None,
+    ) -> Sequence[DossierRecord]:
+        if not any([provenance, script_period, genre]):
+            return self.find_all()
+
+        fragment_filters = []
+
+        if provenance:
+            fragment_filters.append({"archaeology.site": provenance})
+
+        if script_period:
+            fragment_filters.append({"script.period": script_period})
+
+        if genre:
+            genre_parts = genre.split(":")
+            if len(genre_parts) == 1:
+                fragment_filters.append({"genres.category.0": genre_parts[0]})
+            else:
+                for index, part in enumerate(genre_parts):
+                    fragment_filters.append({f"genres.category.{index}": part})
+
+        fragment_query = (
+            {"$and": fragment_filters} if len(fragment_filters) > 1 else fragment_filters[0]
+        )
+
+        matching_fragments = self._fragments_collection.find_many(
+            fragment_query, projection={"dossiers": 1}
+        )
+
+        dossier_ids = set()
+        for fragment in matching_fragments:
+            for dossier_ref in fragment.get("dossiers", []):
+                if isinstance(dossier_ref, dict):
+                    dossier_ids.add(dossier_ref.get("dossierId"))
+                elif isinstance(dossier_ref, str):
+                    dossier_ids.add(dossier_ref)
+
+        dossier_ids = list(filter(None, dossier_ids))
+
+        if not dossier_ids:
+            return []
+
+        return self.query_by_ids(dossier_ids)
 
     def _fetch_dossiers(self, ids: Sequence[str]) -> List[DossierRecord]:
         cursor = self._dossiers_collection.find_many({"_id": {"$in": ids}})
