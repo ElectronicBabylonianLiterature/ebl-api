@@ -12,3 +12,4 @@ class WordOrigin(Enum):
     ORACC_GKAB = "ORACC_GKAB"
     AFO_REGISTER = "AFO_REGISTER"
     SAD = "SAD"
+    CAIC = "CAIC"

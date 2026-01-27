@@ -89,7 +89,7 @@ def test_search_word_origin_only_is_invalid(client):
 
 
 def test_search_word_with_origin_filter(client, saved_word, dictionary):
-    another_word = {**saved_word, "_id": "part1 part2 II", "origin": "EBL"}
+    another_word = {**saved_word, "_id": "part1 part2 II", "origin": ["EBL"]}
     dictionary.create(another_word)
 
     result = client.simulate_get("/words", params={"query": "part", "origin": "CDA"})
@@ -99,12 +99,58 @@ def test_search_word_with_origin_filter(client, saved_word, dictionary):
 
 
 def test_search_word_with_different_origin(client, saved_word, dictionary):
-    another_word = {**saved_word, "_id": "part1 part2 II", "origin": "EBL"}
+    another_word = {**saved_word, "_id": "part1 part2 II", "origin": ["EBL"]}
     dictionary.create(another_word)
 
     result = client.simulate_get("/words", params={"query": "part", "origin": "EBL"})
 
     assert result.json == [another_word]
+    assert result.status == falcon.HTTP_OK
+
+
+def test_search_word_with_multiple_origins_filter(client, saved_word, dictionary):
+    ebl_word = {**saved_word, "_id": "part1 part2 II", "origin": ["EBL"]}
+    caic_word = {**saved_word, "_id": "part1 part2 III", "origin": ["CAIC"]}
+    dictionary.create(ebl_word)
+    dictionary.create(caic_word)
+
+    result = client.simulate_get(
+        "/words", params={"query": "part", "origin": "CDA,EBL"}
+    )
+
+    assert len(result.json) == 2
+    assert result.status == falcon.HTTP_OK
+
+
+def test_search_word_with_word_having_multiple_origins(client, dictionary):
+    word_with_multiple_origins = {
+        "lemma": ["multi"],
+        "attested": True,
+        "legacyLemma": "multi",
+        "homonym": "I",
+        "_id": "multi I",
+        "forms": [],
+        "meaning": "multiple sources",
+        "amplifiedMeanings": [],
+        "logograms": [],
+        "derived": [[]],
+        "derivedFrom": None,
+        "source": "multi",
+        "roots": [],
+        "pos": [],
+        "guideWord": "multi",
+        "arabicGuideWord": "multi",
+        "oraccWords": [],
+        "origin": ["CDA", "EBL", "CAIC"],
+        "akkadischeGlossareUndIndices": [],
+        "cdaAddenda": None,
+        "supplementsAkkadianDictionaries": None,
+    }
+    dictionary.create(word_with_multiple_origins)
+
+    result = client.simulate_get("/words", params={"query": "multi", "origin": "CDA"})
+
+    assert result.json == [word_with_multiple_origins]
     assert result.status == falcon.HTTP_OK
 
 

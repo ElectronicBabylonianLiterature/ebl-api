@@ -121,7 +121,7 @@ def _create_query_by_vowel_class(vowel_classes: list[tuple[str, ...]]) -> dict:
 
 def _create_query_by_origin(origin: Optional[list[str]]) -> dict:
     if origin:
-        return {"origin": {"$in": origin}} if len(origin) > 1 else {"origin": origin[0]}
+        return {"origin": {"$in": origin}}
     return {}
 
 
