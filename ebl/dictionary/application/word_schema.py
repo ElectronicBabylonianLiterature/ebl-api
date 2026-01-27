@@ -119,7 +119,9 @@ class WordSchema(Schema):
     def _normalize_origin_after_load(self, data, **kwargs):
         origin = data.get("origin")
         if isinstance(origin, list):
-            data["origin"] = [item.value if isinstance(item, WordOrigin) else item for item in origin]
+            data["origin"] = [
+                item.value if isinstance(item, WordOrigin) else item for item in origin
+            ]
         elif isinstance(origin, WordOrigin):
             data["origin"] = [origin.value]
         return data

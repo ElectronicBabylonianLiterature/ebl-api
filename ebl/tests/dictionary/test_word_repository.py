@@ -198,7 +198,10 @@ def test_search_filters_by_origin(database, word, word_repository):
         **params, origin=["CDA", "EBL"]
     ) == [word, another_word]
 
-def test_search_filters_by_multiple_origins_in_single_word(database, word, word_repository):
+
+def test_search_filters_by_multiple_origins_in_single_word(
+    database, word, word_repository
+):
     word_with_multiple_origins = {**word, "origin": ["CDA", "EBL"]}
     database[COLLECTION].insert_one(word_with_multiple_origins)
 
@@ -210,9 +213,11 @@ def test_search_filters_by_multiple_origins_in_single_word(database, word, word_
     assert word_repository.query_by_lemma_meaning_root_vowels(
         **params, origin=["EBL"]
     ) == [word_with_multiple_origins]
-    assert word_repository.query_by_lemma_meaning_root_vowels(
-        **params, origin=["SAD"]
-    ) == []
+    assert (
+        word_repository.query_by_lemma_meaning_root_vowels(**params, origin=["SAD"])
+        == []
+    )
+
 
 def test_update(word_repository, word):
     new_lemma = ["new"]
