@@ -33,7 +33,6 @@ class CroppedSignImageSchema(Schema):
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
 
-
     sign = fields.Str(required=False, allow_none=True)
     period = fields.Str(required=False, allow_none=True)
     form = fields.Str(required=False, allow_none=True)

@@ -94,4 +94,3 @@ def test_cropped_sign_image_schema_with_clustering_metadata():
     assert loaded.is_centroid is True
     assert loaded.cluster_size == 27
     assert loaded.is_main is True
-
