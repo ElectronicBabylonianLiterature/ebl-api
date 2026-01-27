@@ -59,10 +59,7 @@ class CroppedSignImageSchema(Schema):
 
     @post_dump(pass_original=True)
     def cropped_sign_image_dump(self, data, original, **kwargs):
-        """
-        Remove optional metadata fields when they are None.
-        Keeps backward compatibility with old documents.
-        """
+       
         optional_keys = [
             "sign",
             "period",
