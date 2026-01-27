@@ -59,7 +59,6 @@ class CroppedSignImageSchema(Schema):
 
     @post_dump(pass_original=True)
     def cropped_sign_image_dump(self, data, original, **kwargs):
-       
         optional_keys = [
             "sign",
             "period",
@@ -68,7 +67,6 @@ class CroppedSignImageSchema(Schema):
             "clusterSize",
             "isMain",
         ]
-
         return {
             k: v for k, v in data.items() if k not in optional_keys or v is not None
         }
