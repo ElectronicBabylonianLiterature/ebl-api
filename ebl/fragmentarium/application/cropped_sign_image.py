@@ -16,7 +16,6 @@ class CroppedSignImage:
     image: Base64
     fragment_number: MuseumNumber
 
-    # Optional clustering metadata (Python 3.9 compatible)
     sign: Optional[str] = None
     period: Optional[str] = None
     form: Optional[str] = None
@@ -34,7 +33,7 @@ class CroppedSignImageSchema(Schema):
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
 
-    # Optional clustering metadata
+
     sign = fields.Str(required=False, allow_none=True)
     period = fields.Str(required=False, allow_none=True)
     form = fields.Str(required=False, allow_none=True)
