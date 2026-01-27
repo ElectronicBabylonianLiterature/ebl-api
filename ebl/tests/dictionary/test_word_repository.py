@@ -183,7 +183,7 @@ def test_search_not_found(word_repository):
 
 
 def test_search_filters_by_origin(database, word, word_repository):
-    another_word = {**word, "_id": "part1 part2 II", "origin": "EBL"}
+    another_word = {**word, "_id": "part1 part2 II", "origin": ["EBL"]}
     database[COLLECTION].insert_many([word, another_word])
 
     params = _make_query_params({"word": "part"})
@@ -198,6 +198,21 @@ def test_search_filters_by_origin(database, word, word_repository):
         **params, origin=["CDA", "EBL"]
     ) == [word, another_word]
 
+def test_search_filters_by_multiple_origins_in_single_word(database, word, word_repository):
+    word_with_multiple_origins = {**word, "origin": ["CDA", "EBL"]}
+    database[COLLECTION].insert_one(word_with_multiple_origins)
+
+    params = _make_query_params({"word": "part"})
+
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **params, origin=["CDA"]
+    ) == [word_with_multiple_origins]
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **params, origin=["EBL"]
+    ) == [word_with_multiple_origins]
+    assert word_repository.query_by_lemma_meaning_root_vowels(
+        **params, origin=["SAD"]
+    ) == []
 
 def test_update(word_repository, word):
     new_lemma = ["new"]

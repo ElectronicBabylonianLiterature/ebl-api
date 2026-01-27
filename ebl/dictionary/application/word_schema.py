@@ -103,19 +103,23 @@ class WordSchema(Schema):
     )
     cdaAddenda = fields.String()
     supplementsAkkadianDictionaries = fields.String()
-    origin = ValueEnumField(WordOrigin, required=True)
+    origin = fields.List(ValueEnumField(WordOrigin), required=True)
 
     @pre_dump
     def _coerce_origin_for_dump(self, data, **kwargs):
         obj = dict(data) if isinstance(data, dict) else data
         origin = obj.get("origin") if isinstance(obj, dict) else None
         if isinstance(origin, str):
-            obj["origin"] = WordOrigin(origin)
+            obj["origin"] = [WordOrigin(origin)]
+        elif isinstance(origin, list) and origin and isinstance(origin[0], str):
+            obj["origin"] = [WordOrigin(item) for item in origin]
         return obj
 
     @post_load
     def _normalize_origin_after_load(self, data, **kwargs):
         origin = data.get("origin")
-        if isinstance(origin, WordOrigin):
-            data["origin"] = origin.value
+        if isinstance(origin, list):
+            data["origin"] = [item.value if isinstance(item, WordOrigin) else item for item in origin]
+        elif isinstance(origin, WordOrigin):
+            data["origin"] = [origin.value]
         return data
