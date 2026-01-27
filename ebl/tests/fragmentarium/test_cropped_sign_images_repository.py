@@ -50,3 +50,48 @@ def test_cropped_sign_image_schema_with_fragment_number():
     assert loaded.image_id == "test-id"
     assert loaded.image == "test-data"
     assert loaded.fragment_number == fragment_number
+
+
+def test_cropped_sign_image_schema_with_clustering_metadata():
+    fragment_number = MuseumNumber("HS", "2087")
+
+    image = CroppedSignImage(
+        image_id="test-id",
+        image=Base64("test-data"),
+        fragment_number=fragment_number,
+        sign="BA",
+        period="Neo-Babylonian",
+        form="canonical1",
+        is_centroid=True,
+        cluster_size=27,
+        is_main=True,
+    )
+
+    schema = CroppedSignImageSchema()
+
+    dumped = schema.dump(image)
+
+    assert dumped == {
+        "_id": "test-id",
+        "image": "test-data",
+        "fragment_number": "HS.2087",
+        "sign": "BA",
+        "period": "Neo-Babylonian",
+        "form": "canonical1",
+        "isCentroid": True,
+        "clusterSize": 27,
+        "isMain": True,
+    }
+
+    loaded = schema.load(dumped)
+
+    assert loaded.image_id == "test-id"
+    assert loaded.image == "test-data"
+    assert loaded.fragment_number == fragment_number
+    assert loaded.sign == "BA"
+    assert loaded.period == "Neo-Babylonian"
+    assert loaded.form == "canonical1"
+    assert loaded.is_centroid is True
+    assert loaded.cluster_size == 27
+    assert loaded.is_main is True
+
