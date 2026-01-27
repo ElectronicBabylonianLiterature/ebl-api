@@ -108,7 +108,8 @@ class FragmentsQueryResource:
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
-            flow(parse_genre, parse_dossier),
+            parse_genre,
+            parse_dossier,
             parse_integer_field("limit"),
         )
 

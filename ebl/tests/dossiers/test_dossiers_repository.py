@@ -3,6 +3,27 @@ from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 
 
+def test_find_all(
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+):
+    dossier1 = DossierRecordFactory.build()
+    dossier2 = DossierRecordFactory.build()
+    dossier3 = DossierRecordFactory.build()
+    
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+    
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+
+    result = dossiers_repository.find_all()
+    
+    assert len(result) == 3
+    assert {d.id for d in result} == {dossier1.id, dossier2.id, dossier3.id}
+
+
 def test_query_by_ids(
     dossiers_repository: DossiersRepository,
     bibliography_repository: BibliographyRepository,

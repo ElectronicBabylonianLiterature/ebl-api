@@ -64,6 +64,14 @@ class MongoDossiersRepository(DossiersRepository):
             DossierRecordSchema().dump(dossier_record)
         )
 
+    def find_all(self) -> Sequence[DossierRecord]:
+        cursor = self._dossiers_collection.find_many({})
+        dossiers = DossierRecordSchema(many=True).load(cursor)
+        reference_ids = self._extract_reference_ids(dossiers)
+        bibliography_entries = self._fetch_bibliography_entries(reference_ids)
+        self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
+        return dossiers
+
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]:
         dossiers = self._fetch_dossiers(ids)
         reference_ids = self._extract_reference_ids(dossiers)
@@ -79,9 +87,9 @@ class MongoDossiersRepository(DossiersRepository):
     ) -> Sequence[DossierRecord]:
         if not query:
             return []
-        
+
         safe_query = re.escape(query[:MAX_QUERY_LENGTH])
-        
+
         filters = [
             {
                 "$or": [
@@ -90,22 +98,22 @@ class MongoDossiersRepository(DossiersRepository):
                 ]
             }
         ]
-        
+
         if provenance:
             filters.append({"provenance": provenance})
-        
+
         if script_period:
             filters.append({"script.period": script_period})
-        
+
         search_filter = {"$and": filters} if len(filters) > 1 else filters[0]
-        
+
         cursor = self._dossiers_collection.find_many(search_filter).limit(10)
         dossiers = DossierRecordSchema(many=True).load(cursor)
-        
+
         reference_ids = self._extract_reference_ids(dossiers)
         bibliography_entries = self._fetch_bibliography_entries(reference_ids)
         self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
-        
+
         return dossiers
 
     def _fetch_dossiers(self, ids: Sequence[str]) -> List[DossierRecord]:

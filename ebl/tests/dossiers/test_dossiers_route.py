@@ -54,6 +54,38 @@ def test_fetch_dossier_record_route(
     )
 
 
+def test_fetch_all_dossiers_route(
+    dossier_record,
+    another_dossier_record,
+    unrelated_dossier_record,
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    dossiers_repository.create(dossier_record)
+    dossiers_repository.create(another_dossier_record)
+    dossiers_repository.create(unrelated_dossier_record)
+    for reference in (
+        dossier_record.references
+        + another_dossier_record.references
+        + unrelated_dossier_record.references
+    ):
+        bibliography_repository.create(reference.document)
+    
+    get_result = client.simulate_get("/dossiers")
+
+    assert get_result.status == falcon.HTTP_OK
+    assert len(get_result.json) == 3
+    assert sorted(
+        get_result.json, key=lambda record: record["_id"]
+    ) == DossierRecordSchema(many=True).dump(
+        sorted(
+            [dossier_record, another_dossier_record, unrelated_dossier_record],
+            key=lambda record: record.id,
+        )
+    )
+
+
 def _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3):
     dossiers_repository.create(dossier1)
     dossiers_repository.create(dossier2)
