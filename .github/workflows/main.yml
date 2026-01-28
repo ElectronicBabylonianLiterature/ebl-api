@@ -78,6 +78,7 @@ jobs:
       - name: Unit Tests
         if: ${{ startsWith(matrix.python-version, 'pypy') }}
         env:
+          CI: true
           MONGODB_URI: mongodb://localhost:27017
           MONGODB_DB: ebltest
           EBL_AI_API: http://localhost:8001
@@ -91,6 +92,7 @@ jobs:
       - name: Unit Tests with Coverage
         if: ${{ !startsWith(matrix.python-version, 'pypy') }}
         env:
+          CI: true
           MONGODB_URI: mongodb://localhost:27017
           MONGODB_DB: ebltest
           EBL_AI_API: http://localhost:8001
