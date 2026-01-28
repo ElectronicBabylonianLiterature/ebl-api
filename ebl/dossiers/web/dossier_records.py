@@ -37,9 +37,9 @@ class DossiersSearchResource:
         self._dossiersRepository = _dossiersRepository
 
     def on_get(self, req: Request, resp: Response) -> None:
-        query = req.params.get("query", "")
-        provenance = req.params.get("provenance")
-        script_period = req.params.get("scriptPeriod")
+        query = req.get_param("query", default="")
+        provenance = req.get_param("provenance")
+        script_period = req.get_param("scriptPeriod")
 
         dossiers = self._dossiersRepository.search(
             query, provenance=provenance, script_period=script_period
@@ -53,9 +53,9 @@ class DossiersFilterResource:
         self._dossiersRepository = _dossiersRepository
 
     def on_get(self, req: Request, resp: Response) -> None:
-        provenance = req.params.get("provenance")
-        script_period = req.params.get("scriptPeriod")
-        genre = req.params.get("genre")
+        provenance = req.get_param("provenance")
+        script_period = req.get_param("scriptPeriod")
+        genre = req.get_param("genre")
 
         dossiers = self._dossiersRepository.filter_by_fragment_criteria(
             provenance=provenance, script_period=script_period, genre=genre

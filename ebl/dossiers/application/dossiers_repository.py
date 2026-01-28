@@ -8,10 +8,12 @@ from ebl.dossiers.domain.dossier_record import (
 
 class DossiersRepository(ABC):
     @abstractmethod
-    def find_all(self) -> Sequence[DossierRecord]: ...
+    def find_all(self) -> Sequence[DossierRecord]:
+        raise NotImplementedError()
 
     @abstractmethod
-    def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]: ...
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence[DossierRecord]:
+        raise NotImplementedError()
 
     @abstractmethod
     def search(
@@ -19,7 +21,8 @@ class DossiersRepository(ABC):
         query: str,
         provenance: Optional[str] = None,
         script_period: Optional[str] = None,
-    ) -> Sequence[DossierRecord]: ...
+    ) -> Sequence[DossierRecord]:
+        raise NotImplementedError()
 
     @abstractmethod
     def filter_by_fragment_criteria(
@@ -27,7 +30,9 @@ class DossiersRepository(ABC):
         provenance: Optional[str] = None,
         script_period: Optional[str] = None,
         genre: Optional[str] = None,
-    ) -> Sequence[DossierRecord]: ...
+    ) -> Sequence[DossierRecord]:
+        raise NotImplementedError()
 
     @abstractmethod
-    def create(self, dossier_record: DossierRecord) -> str: ...
+    def create(self, dossier_record: DossierRecord) -> str:
+        raise NotImplementedError()

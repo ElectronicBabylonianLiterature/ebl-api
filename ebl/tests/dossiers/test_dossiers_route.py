@@ -4,6 +4,7 @@ from ebl.dossiers.domain.dossier_record import DossierRecord
 from ebl.tests.factories.dossier import (
     DossierRecordFactory,
 )
+from ebl.tests.factories.fragment import FragmentFactory
 from ebl.dossiers.application.dossiers_repository import (
     DossiersRepository,
 )
@@ -89,7 +90,9 @@ def test_fetch_all_dossiers_route(
 def _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3):
     dossiers_repository.create(dossier1)
     dossiers_repository.create(dossier2)
-    dossiers_repository.create(dossier3)
+    if dossier3 is not None:
+        dossiers_repository.create(dossier3)
+
 
 
 def _assert_search_result(result, expected_ids):
@@ -368,14 +371,14 @@ def test_filter_dossiers_by_genre(
         bibliography_repository.create(reference.document)
 
     from ebl.tests.factories.fragment import FragmentDossierReferenceFactory
-    from ebl.fragmentarium.domain.genres import Genre
+    from ebl.fragmentarium.domain.fragment import Genre
 
     fragment1 = FragmentFactory.build(
-        genres=(Genre(["LITERATURE", "HYMNS"], False),),
+        genres=(Genre(["CANONICAL", "Literature", "Hymns"], False),),
         dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier1.id)],
     )
     fragment2 = FragmentFactory.build(
-        genres=(Genre(["MAGIC"], False),),
+        genres=(Genre(["ARCHIVAL"], False),),
         dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier2.id)],
     )
 
@@ -383,7 +386,7 @@ def test_filter_dossiers_by_genre(
     fragmentarium.create(fragment2)
 
     result = client.simulate_get(
-        "/dossiers/filter", params={"genre": "LITERATURE:HYMNS"}
+        "/dossiers/filter", params={"genre": "CANONICAL:Literature:Hymns"}
     )
 
     assert result.status == falcon.HTTP_OK

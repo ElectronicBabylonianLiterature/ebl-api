@@ -127,6 +127,26 @@ class MongoDossiersRepository(DossiersRepository):
         if not any([provenance, script_period, genre]):
             return self.find_all()
 
+        try:
+            fragment_query = self._build_fragment_query(
+                provenance, script_period, genre
+            )
+            dossier_ids = self._extract_dossier_ids_from_fragments(fragment_query)
+
+            if not dossier_ids:
+                return []
+
+            return self.query_by_ids(dossier_ids)
+        except Exception as e:
+            logger.error(f"Error filtering dossiers by fragment criteria: {e}")
+            return []
+
+    def _build_fragment_query(
+        self,
+        provenance: Optional[str],
+        script_period: Optional[str],
+        genre: Optional[str],
+    ) -> Dict:
         fragment_filters = []
 
         if provenance:
@@ -136,19 +156,29 @@ class MongoDossiersRepository(DossiersRepository):
             fragment_filters.append({"script.period": script_period})
 
         if genre:
-            genre_parts = genre.split(":")
-            if len(genre_parts) == 1:
-                fragment_filters.append({"genres.category.0": genre_parts[0]})
-            else:
-                for index, part in enumerate(genre_parts):
-                    fragment_filters.append({f"genres.category.{index}": part})
+            fragment_filters.append(self._build_genre_filter(genre))
 
-        fragment_query = (
+        return (
             {"$and": fragment_filters}
             if len(fragment_filters) > 1
             else fragment_filters[0]
         )
 
+    def _build_genre_filter(self, genre: str) -> Dict:
+        # Genre format: "CATEGORY" or "CATEGORY:SUBCATEGORY:..."
+        # Fragments store genres as: genres.category = ["CATEGORY", "SUBCATEGORY", ...]
+        # We build filters to match each part at its corresponding array index
+        genre_parts = genre.split(":")
+        if len(genre_parts) == 1:
+            return {"genres.category.0": genre_parts[0]}
+        else:
+            genre_filters = [
+                {f"genres.category.{index}": part}
+                for index, part in enumerate(genre_parts)
+            ]
+            return {"$and": genre_filters} if len(genre_filters) > 1 else genre_filters[0]
+
+    def _extract_dossier_ids_from_fragments(self, fragment_query: Dict) -> List[str]:
         matching_fragments = self._fragments_collection.find_many(
             fragment_query, projection={"dossiers": 1}
         )
@@ -156,17 +186,18 @@ class MongoDossiersRepository(DossiersRepository):
         dossier_ids = set()
         for fragment in matching_fragments:
             for dossier_ref in fragment.get("dossiers", []):
-                if isinstance(dossier_ref, dict):
-                    dossier_ids.add(dossier_ref.get("dossierId"))
-                elif isinstance(dossier_ref, str):
-                    dossier_ids.add(dossier_ref)
+                dossier_id = self._extract_dossier_id(dossier_ref)
+                if dossier_id:
+                    dossier_ids.add(dossier_id)
 
-        dossier_ids = list(filter(None, dossier_ids))
+        return list(dossier_ids)
 
-        if not dossier_ids:
-            return []
-
-        return self.query_by_ids(dossier_ids)
+    def _extract_dossier_id(self, dossier_ref) -> Optional[str]:
+        if isinstance(dossier_ref, dict):
+            return dossier_ref.get("dossierId")
+        elif isinstance(dossier_ref, str):
+            return dossier_ref
+        return None
 
     def _fetch_dossiers(self, ids: Sequence[str]) -> List[DossierRecord]:
         cursor = self._dossiers_collection.find_many({"_id": {"$in": ids}})

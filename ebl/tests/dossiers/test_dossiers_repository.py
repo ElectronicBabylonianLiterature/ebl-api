@@ -10,14 +10,11 @@ def test_find_all(
     dossier1 = DossierRecordFactory.build()
     dossier2 = DossierRecordFactory.build()
     dossier3 = DossierRecordFactory.build()
-
     dossiers_repository.create(dossier1)
     dossiers_repository.create(dossier2)
     dossiers_repository.create(dossier3)
-
     for reference in dossier1.references + dossier2.references + dossier3.references:
         bibliography_repository.create(reference.document)
-
     result = dossiers_repository.find_all()
 
     assert len(result) == 3
