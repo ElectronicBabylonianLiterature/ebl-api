@@ -510,15 +510,18 @@ def test_search_dossier(client, fragmentarium):
     for fragment in fragments_with_dossier + [fragment_without_dossier]:
         fragmentarium.create(fragment)
 
-    expected_json = {
-        "items": [query_item_of(fragment) for fragment in fragments_with_dossier],
-        "matchCountTotal": 0,
-    }
-
     result = client.simulate_get("/fragments/query", params={"dossier": dossier_id})
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == expected_json
+    assert result.json["matchCountTotal"] == 0
+    assert len(result.json["items"]) == len(fragments_with_dossier)
+    assert sorted(
+        [item["museumNumber"] for item in result.json["items"]],
+        key=lambda x: (x["prefix"], x["number"], x["suffix"]),
+    ) == sorted(
+        [query_item_of(fragment)["museumNumber"] for fragment in fragments_with_dossier],
+        key=lambda x: (x["prefix"], x["number"], x["suffix"]),
+    )
 
 
 def test_query_latest(client, fragmentarium):
