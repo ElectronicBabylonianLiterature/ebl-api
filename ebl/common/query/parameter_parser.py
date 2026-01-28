@@ -92,10 +92,3 @@ def parse_genre(parameters: Dict) -> Dict:
     genre = parameters.get("genre", "").split(":")
 
     return {**parameters, "genre": genre} if any(genre) else parameters
-
-
-def parse_dossier(parameters: Dict) -> Dict:
-    if "dossier" not in parameters:
-        return parameters
-
-    return {**parameters, "dossier": parameters["dossier"]}

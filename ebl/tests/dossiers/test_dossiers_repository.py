@@ -3,6 +3,24 @@ from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 
 
+def test_find_all(
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+):
+    dossier1 = DossierRecordFactory.build()
+    dossier2 = DossierRecordFactory.build()
+    dossier3 = DossierRecordFactory.build()
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+    result = dossiers_repository.find_all()
+
+    assert len(result) == 3
+    assert {d.id for d in result} == {dossier1.id, dossier2.id, dossier3.id}
+
+
 def test_query_by_ids(
     dossiers_repository: DossiersRepository,
     bibliography_repository: BibliographyRepository,
@@ -81,3 +99,101 @@ def test_search_limits_results(dossiers_repository: DossiersRepository):
 
     result = dossiers_repository.search("TEST")
     assert len(result) == 10
+
+
+def test_search_with_provenance_filter(dossiers_repository: DossiersRepository):
+    from ebl.common.domain.provenance import Provenance
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001", description="Test", provenance=Provenance.BABYLON
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002", description="Test", provenance=Provenance.NIPPUR
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003", description="Test", provenance=Provenance.BABYLON
+    )
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search("TEST", provenance="Babylon")
+    assert len(result) == 2
+    assert {r.id for r in result} == {dossier1.id, dossier3.id}
+
+
+def test_search_with_script_period_filter(dossiers_repository: DossiersRepository):
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001",
+        description="Test",
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002",
+        description="Test",
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003",
+        description="Test",
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search("TEST", script_period="Neo-Babylonian")
+    assert len(result) == 2
+    assert {r.id for r in result} == {dossier1.id, dossier3.id}
+
+
+def test_search_with_multiple_filters(dossiers_repository: DossiersRepository):
+    from ebl.common.domain.provenance import Provenance
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001",
+        description="Test",
+        provenance=Provenance.BABYLON,
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002",
+        description="Test",
+        provenance=Provenance.BABYLON,
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003",
+        description="Test",
+        provenance=Provenance.NIPPUR,
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search(
+        "TEST", provenance="Babylon", script_period="Neo-Babylonian"
+    )
+    assert len(result) == 1
+    assert result[0].id == dossier1.id
+
+
+def test_search_escapes_regex_metacharacters(dossiers_repository: DossiersRepository):
+    dossier1 = DossierRecordFactory.build(id="TEST.123", description="Test with dot")
+    dossier2 = DossierRecordFactory.build(id="TEST*456", description="Test with star")
+    dossier3 = DossierRecordFactory.build(id="TESTA123", description="No match")
+
+    dossiers_repository.create(dossier1)
+    dossiers_repository.create(dossier2)
+    dossiers_repository.create(dossier3)
+
+    result = dossiers_repository.search("TEST.")
+    assert len(result) == 1
+    assert result[0].id == dossier1.id
