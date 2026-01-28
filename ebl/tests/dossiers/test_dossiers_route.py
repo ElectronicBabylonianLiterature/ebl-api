@@ -94,7 +94,6 @@ def _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3):
         dossiers_repository.create(dossier3)
 
 
-
 def _assert_search_result(result, expected_ids):
     assert result.status == falcon.HTTP_OK
     assert len(result.json) == len(expected_ids)

@@ -1,5 +1,6 @@
 import attr
 import re
+import logging
 from typing import Sequence, List, Dict, Optional
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
@@ -17,6 +18,8 @@ DOSSIERS_COLLECTION = "dossiers"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
 FRAGMENTS_COLLECTION = "fragments"
 MAX_QUERY_LENGTH = 256
+
+logger = logging.getLogger(__name__)
 
 
 class DossierRecordSchema(Schema):
@@ -92,7 +95,7 @@ class MongoDossiersRepository(DossiersRepository):
 
         safe_query = re.escape(query[:MAX_QUERY_LENGTH])
 
-        filters = [
+        filters: List[Dict] = [
             {
                 "$or": [
                     {"_id": {"$regex": safe_query, "$options": "i"}},
@@ -176,7 +179,9 @@ class MongoDossiersRepository(DossiersRepository):
                 {f"genres.category.{index}": part}
                 for index, part in enumerate(genre_parts)
             ]
-            return {"$and": genre_filters} if len(genre_filters) > 1 else genre_filters[0]
+            return (
+                {"$and": genre_filters} if len(genre_filters) > 1 else genre_filters[0]
+            )
 
     def _extract_dossier_ids_from_fragments(self, fragment_query: Dict) -> List[str]:
         matching_fragments = self._fragments_collection.find_many(
