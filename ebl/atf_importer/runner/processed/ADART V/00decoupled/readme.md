@@ -1,9 +1,9 @@
 # Decoupled texts information
 
-## AD 52A & B
+## AD 52 A & B
 
-BM.41222 (= 8 1 -4-28, 770)
-Photo: PI . 19
+BM.41222 (= 81-4-28,770)
+Photo: Pl. 19
 No. 52
 Side A I': Saturn; II': Approaches of Mars and Mercury; Side B: Mars.
 
@@ -18,4 +18,4 @@ C: BM 42083 (= 8 1 -6-25, 705)
 A: BM 34368 (= Sp 485) + 4 1 590 (= 8 1 -6-25, 205)
 B: BM 421 47 (= 8 1 -6-25, 770)
 
-Greek-Letter phenomena for several planets. The columns correspond to months; years are separated by lines on the tablet.
+Greek-letter phenomena for several planets. The columns correspond to months; years are separated by lines on the tablet.

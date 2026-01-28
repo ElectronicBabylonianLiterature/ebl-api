@@ -1,10 +1,12 @@
-&X301332 = AD -133B-C 
+&X301332 = BM.34039
 #project: adsd/adart3
 #atf: use unicode
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
+
 1'. ⸢4 SI GIN ŠED₇ šir 5?⸣ [...] ⸢x⸣ [...]
 #lem: 4[4]NU; ištānu[north wind]N; alāku[blow]V; kūṣu[coldness]N; iktešir[be(come) severe]V; n; u; u; u
 
@@ -53,7 +55,6 @@
 16'. [... u MAR] ki-i TAB-ú ina 20 ME 2-ta ŠU{II} HAB-rat GAR-an a-na ZALÁG-ru ki-i TAB-ú ina 18 ME
 #lem: u; u[and]CNJ; amurru[west]N; kī[when]PRP; ušarrû[begin]V; ina[at]PRP; n; ūmu[day]N; šina[two]NU; qātu[hand]N$qātāt; HAB-rat[disc]N; šakānu[place]V; ana[to]PRP; nawāru[clearing]'N; kī[when]PRP; ušarrû[begin]V; ina[at (plus numeral)]PRP; n; ūmu[day]N
 
-
 17'. [... IGI i]n 51 ME ana ŠÚ šámaš DIR AN ZA SI GIN GE₆ 29 29 SI GIN ITU BI KI.LAM še-im
 #lem: u; nanmuru[be(come) visible]V; ina[at (plus numeral)]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamšu[sun]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; ištānu[north wind]N; alāku[blow]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N
 
@@ -98,6 +99,7 @@ $ ruling
 #lem: u; ištānu[north wind]N; alāku[blow]V; n; ina[in]PRP; šēri[morning]N; erpetu[cloud]N; šamû[sky]N; etēqu[cross]V; šamû[rain]N; DUL[(meaning unclear)]V; kal[all]N; ūmu[day]N; erpetu[cloud]N; u; u; u
 
 @reverse
+
 1. [... dele-bat x MÚL]-IGI-šá-SAG-HU[N n n]
 #lem: u; Dilbat[Venus]CN; u; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; n
 
@@ -162,6 +164,7 @@ $ ruling
 #lem: ša[which]REL; ana[to]PRP; muhhi[top]N; Idiqlat[Tigris]WN; ana[to]PRP; u
 
 $ ruling
+
 22. DIR.ŠE 1 22 na-su KUR₄ a-pir DIR m[uš ...] SAG GE₆ DIR AN ZA GÍR GÍR EN.NUN.USAN ŠÚ GÍR GÍR GÙ U né-hi AN GAL.GAL DUL-hat
 #lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; apir[earthshine]'N; erpetu[cloud]N; mašāhu[measure]V; u; rēšu[beginning]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; birqu[lightning]N; barāqu[flash]V; šimītān[first part of the night]N; īrup[be(come) overcast]V; birqu[lightning]N; barāqu[flash]V; rigim[voice]N; Adad[storm-god]DN; nēhu[slow]AJ; šamû[rain]N; rabû[large]AJ$; DUL[(meaning unclear)]V
 

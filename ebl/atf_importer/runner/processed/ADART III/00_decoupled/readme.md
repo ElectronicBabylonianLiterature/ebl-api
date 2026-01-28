@@ -37,7 +37,7 @@ A1: BM 35810 (=Sp III 339+539)
 A2: BM 35677 + 35684 + 36009 (= Sp III 195+202+533)
 These two pieces are certainly part of one tablet.
 
-B: ! Missing info ! (I.Kh.)
+B: BM 41131 + BM 41149 + BM 41206 (+) Rm 0756 + BM 42110 (+) BM 41189
 
 C: BM 35759 (=Sp III 282) + 45621 (=SH 81-7-6,14)
 
@@ -47,15 +47,19 @@ Since exemplars A, B, and C are partial duplicates, their transliterations are p
 
 A1: BM 34040 (=Sp 136)
 A2: Rm 701 + BM 41478 + 41646 (= 81-6-25,90+262)
+
 A1 and A2 are parts of the same tablet.
 
 ## AD -132C-E
 
 C: BM 47748 + 47885 (=81-11-3,443+592)
+
 D1: BM 34157 + 34341 (= Sp 262+456)
 D2: BM 34086 (= Sp 185+199)
 D1 and D2 are parts of the same tablet but cannot be joined.
+
 E: BM 34177 (= Sp 282)
+
 These three exemplars duplicate each other and are therefore presented in parallel transliteration.
 
 ## AD -133B-C

@@ -5,7 +5,7 @@
 #atf: use math
 #atf: use legacy
 
-#note: A = BM.35810; B = BM.35677+BM.35684+BM.36009.
+#note: A: BM.35810; B: BM.35677 + BM.35684 + BM.36009.
 
 @obverse
 

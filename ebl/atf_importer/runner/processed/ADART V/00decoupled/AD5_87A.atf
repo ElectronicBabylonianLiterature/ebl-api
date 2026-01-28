@@ -1,0 +1,163 @@
+&X500090 = ADART 5 87
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+
+A1.	($blank$) & ($blank$) & ($blank$) & ($blank$) & ...  & ($blank$) &
+#lem: u
+#tr.en: @& @& @& @& @& @&
+
+A2.	($blank$) & ($blank$) & ($blank$) &  ...  & GU₄ 29 & ($blank$) & ($blank$)
+#lem: u; Šihṭu[Mercury]CN; n
+#tr.en: @& @& @& @& Mercury 29 @& @&
+
+A3.	($blank$) & ($blank$) & ... & ⸢IGI?⸣ & ŠÚ KUR & [...] & ($blank$)
+#lem: u; amāru[be(come) visible]V; rabû[set]V; šadû[east]N; u
+#tr.en: @& @& @& became visible@sup? @&  last appearance east @& @&
+
+$ ruling
+
+A4.	($blank$) & [...] & ⸢GU₄?⸣ & SIG & ŠU & NE & K[IN] 
+#lem: u; Ayyaru[Month II]MN; Simānu[Month III]MN; Duʾūzu[Month IV]MN; Abu[Month V]MN; Ulūlu[Month VI]MN
+#tr.en: @& @& Month II @& Month III @& Month IV @& Month V @& Mon[th VI]
+
+A5.	($blank$) & [...] & ⸢BABBAR?⸣ 23 & dele-bat 18 & ($blank$) & GENNA & [...]
+#lem: u; Kakkabu-peṣû[Jupiter] CN; n; Dilbat[Venus]CN; n; Kayyamānu[Saturn]CN; u
+#tr.en: @& @& Jupiter? 23 @& Venus 18  @& @& Saturn @&
+
+A6.	($blank$) & [...] & ŠÚ & IGI & ($blank$) & 8 ŠÚ & [($blank$)...]
+#lem: u; rabû[set]V; amāru[be(come) visible]V; n; rabû[set]V; u
+#tr.en: @& @& last appearance @& first appearance @& @& 8 last appearance @&
+
+A7.	($blank$) & [...] & 29 30 & AN? 24 & ($blank$) & 11 50 & [...]
+#lem: u; n; n; Ṣalbaṭānu[Mars]CN; n; n; n; u
+#tr.en: @& @& 29 30 @& Mars 24 @&  @& 11 50 @&
+
+A8.	($blank$) & [...] & IGI? & GU UŠ & ($blank$) & IGI & [...]
+#lem: u; amāru[be(come) visible]V; Gula[Aquarius]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V; u
+#tr.en: @& @& first appearance @& Aquarius station @& @& first appearance @&
+
+A9.	($blank$) & [...] & ($blank$) & ⸢x x⸣ & GU₄ & ($blank$) & [...]
+#lem: u; u; u; u; u
+#tr.en: @& @& @& @& Mercury @& @&
+
+A10.	($blank$) & [...] & ($blank$) & ⸢x⸣ [x] & ⸢12?⸣ & ($blank$) & [...]
+#lem: u; u; u; n; u
+#tr.en: @& @& @& @& 12@sup? @& @&
+
+A11.	($blank$) & [...] & ($blank$) & ($blank$) & ⸢x⸣ [x] & ($blank$) & [...]
+#lem: u; u; u; u
+#tr.en: @& @& @& @& @& @&
+
+A12.  	($blank$) & [...] & ($blank$) & ($blank$) & ($blank$) & [...] & ($blank$)
+#lem: u; u
+#tr.en: @& @& @& @& @& @&
+
+$ ruling
+A13.	[...] & BAR & GU₄ & SIG & ŠU & ($blank$) & ($blank$) & ($blank$)
+#lem: u; Nisannu[Month I]MN; Ayyaru[Month II]MN; Simānu[Month III]MN; Duʾūzu[Month IV]MN
+#tr.en: @& Month I @& Month II @& Month III @& Month I[V] @& @&
+
+A14.	[...] & ($blank$) & ($blank$) & BABBAR & GU₄ & ($blank$) & ($blank$)
+#lem: u; Kakkabu-peṣû[Jupiter]CN; Šihṭu[Mercury]CN
+#tr.en: @& @& @& Jupiter @& Mercury@sup? @& @&
+
+A15.	[...] & ($blank$) & ($blank$) & 27.30 & ⸢x⸣ & ($blank$) & ($blank$)
+#lem: u; n; u
+#tr.en: @& @& @& 27 30 @& @& @&
+
+A16.	($blank$) & ($blank$) & [...] & ŠÚ & [...] & ($blank$) & ($blank$)
+#lem: u; rabû[set]V; u
+#tr.en: @& @& @& last appearance @& @& @&
+
+A17.	($blank$) & [...] & ($blank$) & GU₄ & [...] & ($blank$) & ($blank$)
+#lem: u; Šihṭu[Mercury]CN; u
+#tr.en: @& @& @& Mercury @& @& @&
+
+A18.	($blank$) & [...] & ⸢GU₄⸣ & [...] & ($blank$) & ($blank$) & ($blank$)
+#lem: u; Ayyaru[Month II]MN; u
+#tr.en: @& @& Mercury @& @& @&  @&
+
+@reverse
+
+A1.	[...] & ($blank$) & ⸢x⸣ & ($blank$) & ($blank$)  & ($blank$) 
+#lem: u; u
+#tr.en: @& @& @& @& @&
+
+A2.	[...] ⸢x⸣ & ($blank$) & BA[BBAR] & ($blank$) & ($blank$) & ($blank$)
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN
+#tr.en: @& @& Jupiter @& @& @&
+
+A3.	[...] ⸢x⸣ & ($blank$) & 11 & ($blank$) & ($blank$) & ($blank$)
+#lem: u; u; n
+#tr.en: @& @& 11 @& @& @&
+
+A4.	[...] ⸢x⸣ & GU₄ 25 & KI U[Š] & ($blank$) & ($blank$) & ($blank$)
+#lem: u; u; Šihṭu[Mercury]CN; n; u; emēdu[be at a stationary point]V
+#tr.en: @& Mercury 25 @& Virgo station @&  @& @&
+
+A5.	[...] & ŠÚ KUR & ($blank$) & [...] & ($blank$) & ($blank$) 
+#lem: u; rabû[set]V; šadû[east]N; u
+#tr.en: @& last appearance east& @&  @& @&
+
+A6.	[...] & DIB & ($blank$) & [...] & ($blank$) & ($blank$) 
+#lem: u; etēqu[omit]V; u
+#tr.en: @& omitted @& @&  @& @&
+
+$ ruling
+A7.	[...] & BAR  & GU₄ & SIG [...] & ($blank$) & ($blank$) 
+#lem: u; Nisannu[Month I]MN; Ayyaru[Month II]MN; Simānu[Month III]MN; u
+#tr.en: @& Month I@& Month II @& Month III @& @&
+
+A8.	[...] & dele-bat? 4.30 & ($blank$) & BABBAR 9 & ($blank$) & ($blank$)
+#lem: u; Dilbat[Venus]CN; n; Kakkabu-peṣû[Jupiter]CN; n
+#tr.en: @& Venus 4 30 @& @& Jupiter 9  @& @&
+
+A9.	[...] & IGI & ($blank$) & RÍN UŠ & [...] & ($blank$) 
+#lem: u; amāru[be(come) visible]V; Zibānītu[Libra]CN; emēdu[be at a stationary point]V; u
+#tr.en: @& first appearance @& @& Libra station @& @&
+
+A10.	[...] & ($blank$) & ⸢x⸣ & ($blank$) & [...] & ($blank$) 
+#lem: u; u; u
+#tr.en: @& @& @& @& @&
+
+A11.	[...] KI & GU₄ 8 & ($blank$) & GU₄ 28 & [...] & ($blank$)
+#lem: u; u; Šihṭu[Mercury]CN; n; Šihṭu[Mercury]CN; n; u
+#tr.en: @& Mercury 8 @& @& Mercury 28 @& @&
+
+A12.  	[...] & ŠÚ KUR & ($blank$) & IGI & ($blank$) & ⸢x⸣ [...]
+#lem: u; rabû[set]V; šadû[east]N; amāru[be(come) visible]V; u; u
+#tr.en: @& last appearance east @& @& first appearance @& @&
+
+A13.	[...] & DIB & ($blank$) & ($blank$) & ($blank$) & ⸢x⸣ [...]
+#lem: u; etēqu[omit]V; u; u
+#tr.en: @& omitted @& @& @& @&
+
+A14.	($blank$) & [...] & ($blank$) & ($blank$) & ($blank$) & ⸢x⸣ [...]
+#lem: u; u; u
+#tr.en: @& @& @&  @& @&
+
+$ ruling
+
+A15.	($blank$) & [...] & GU₄ & SIG & ŠU & NE [...] 
+#lem: u; Ayyaru[Month II]MN; Simānu[Month III]MN; Duʾūzu[Month IV]MN; Abu[Month V]MN; u
+#tr.en: @& @& Month II @& Month III @& Month IV @& Month V
+
+A16.	($blank$) & ($blank$) & [...] & ($blank$) & BABBAR 9 & [...]
+#lem: u; Kakkabu-peṣû[Jupiter]CN; n; u
+#tr.en: @& @& @& @& Jupiter 9 @&
+
+A17.	($blank$) & ($blank$) & ($blank$) & [...] & GÍR UŠ & [...]
+#lem: u; u; emēdu[be at a stationary point]V; u
+#tr.en: @& @& @& @& Scorpius station @&
+
+A18.	($blank$) & ($blank$) & ($blank$) & [...] & ($blank$) & [...]
+#lem: u; u
+#tr.en: @& @& @&  & @&
+
+A19.	($blank$) & ($blank$) & ($blank$) & ($blank$) & [...] ⸢GU₄?⸣ [...] & ($blank$)
+#lem: u; Šihṭu[Mercury]CN; u
+#tr.en: @& @& @& @& Mercury @&

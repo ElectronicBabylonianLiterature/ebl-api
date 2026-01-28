@@ -1,0 +1,77 @@
+&X500057 = BM.42083
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+
+@reverse
+
+@column 8
+
+Co1. [...] ⸢AN?⸣ [...] ⸢x⸣
+#lem: u; u; u; u
+
+Co2. [... MÚ]L-ár-šá-⸢ALLA-šá⸣-SI
+#lem: u; MÚL-ár-šá-ALLA-šá-SI[γ Cancri]CN
+
+Co3. [... SIG] 30 22 6 SIG
+#lem: u; Simānu[Month III]MN; n; n; n; šapil[below]PRP
+
+Co4. [... K]ÙŠ LÁL
+#lem: u; ammatu[unit]N; alālu[balance]V
+
+Co5. [...] ana LUGAL TE ŠU 30
+#lem: u; ana[to]PRP; LUGAL[α Leonis]CN; ṭehû[come close]V; Duʾūzu[Month IV]MN; n
+
+Co6. [...] UR? ŠÚ
+#lem: u; Nēšu[Leo]CN; rabû[set]V
+
+Co7. [...] ina NIM IGI KUR
+#lem: u; ina[in]PRP; Elamtu[east]N; amāru[be(come) visible]V; baʾil[bright]AJ
+
+Co8. [...] UR? IGI
+#lem: u; Nēšu[Leo]CN; amāru[be(come) visible]V
+
+Co9. [...]  ⸢x⸣ LUGAL?
+#lem: u; u; LUGAL[α Leonis]CN
+
+Co10. [...] ⸢x⸣
+#lem: u; u
+
+Cr1. [...] ⸢x⸣
+#lem: u; u
+
+Cr2. [x x x] MÁŠ? ⸢x x⸣ 1 KAS
+#lem: u; u; u; Suhurmāšu[Capricorn]CN; u; u; n; bēru[double hour]'N
+
+Cr3. [Z]ÍZ 30 21 19 DUR nu-nu KUR
+#lem: Šabāṭu[Month XI]MN; n; n; n; riksu[band]N; Zibbātu[Pisces]CN; kašādu[reach]V
+
+Cr4. 23 SIG MÚL-IGI-šá-SAG-LU
+#lem: n; šapil[below]PRP; MÚL-IGI-šá-SAG-HUN[β Arietis]CN
+
+Cr5. [x] 2/3 KÙŠ ŠE 30 16
+#lem: u; n; ammatu[unit]N; Addaru[Month XII]MN; n; n
+
+Cr6. [x] SIG MÚL.MÚL 1 1/2 KÙŠ
+#lem: u; šapil[below]PRP; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N
+
+Cr7. [x] ⸢e⸣ is-le₁₀ 2 2/3 KÙŠ LÁL
+#lem: u; eli[above]PRP; is-le₁₀[α Tauri]CN; n; n; ammatu[unit]N; alālu[balance]V
+
+@translation labeled en project
+
+@(viii Cr1) [...] ...
+
+@(viii Cr2) [...] Capricorn ... 1 bēru.
+
+@(viii Cr3) Month XI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 21°. The 19th, it reached the band of the fish.
+
+@(viii Cr4) The 23rd, is was [x]+ 2/3 cubits below β Arietis.
+
+@(viii Cr5) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 16°.
+
+@(viii Cr6) [The xth,] it was 1 1⁄2 cubits below η Tauri.
+
+@(viii Cr7) [The xth,] it was balanced 2 2/3 cubits above α Tauri.

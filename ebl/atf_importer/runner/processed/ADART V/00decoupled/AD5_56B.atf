@@ -1,0 +1,463 @@
+&X500057 = BM.32299
+#project: adsd/adart5
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@column 1
+
+Bo1. [x x x] ⸢x⸣ [x x x]
+#lem: u; u; u; u; u; u; u
+
+Bo2. [x x x] ⸢AB⸣ 30 28
+#lem: u; u; u; Ṭebētu[Month X]MN; n; n
+
+Bo3. [x ina ŠÚ ina x] IGI ZÍZ 1 28
+#lem: u; ina[in]PRP; erbu[west]N; ina[in]PRP; u; amāru[be(come) visible]V; Šabāṭu[Month XI]MN; n; n
+
+Bo4. [ŠE] ⸢30⸣ 14
+#lem: Addaru[Month XII]MN; n; n
+
+$ ruling
+Bo5. 4 BAR <1> 28 GU₄ 1 21 SIG 30
+#lem: 4[4]NU; Nisannu[Month I]MN; n; n; Ayyaru[Month II]MN; n; n; Simānu[Month III]MN; n
+
+Bo6. 15.30 8 e LUGAL 1 KÙŠ ŠU
+#lem: n; n; eli[above]PRP; LUGAL[α Leonis]CN; n; ammatu[unit]N; Duʾūzu[Month IV]MN
+
+Bo7. 1 27 26 e SA₄-šá-(ABSIN)
+#lem: n; n; n; eli[above]PRP; SA₄-šá-ABSIN[α Virginis]CN
+
+Bo8. ABSIN 2/3 KÙŠ LÁL NE 30 13
+#lem: u; n; ammatu[unit]N; alālu[balance]V; Abu[Month V]MN; n; n
+
+Bo9. KIN 1 24 ina 25 SIG SI₄ 2 KÙŠ
+#lem: Ulūlu[Month VI]MN; n; n; ina[on]PRP; n; šapil[below]PRP; SI₄[α Scorpii]CN; n; ammatu[unit]N
+
+Bo10. DU₆ 30 17 13 ina ŠÚ ina GÍR?.[TAB? ŠÚ]
+#lem: Tašrītu[Month VII]MN; n; n; n; ina[in]PRP; erbu[west]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V
+
+Bo11. 26 ki 27 ina NIM ina
+#lem: n; kī[or]'CNJ; n; ina[in]PRP; Elamtu[east]N; ina[in]PRP
+
+Bo12. [API]N 1 22 GA[N ...]
+#lem: Arahsamna[Month VIII]MN; n; n; Kislīmu[Month IX]MN; u
+
+Bo13. [x] ⸢x x⸣ [...]
+#lem: u; u; u; u
+
+Bo14. [...]
+#lem: u
+
+Bo15. [...] ⸢x⸣ ŠE 1
+#lem: u; u; Addaru[Month XII]MN; n
+
+Bo16. [x] 26
+#lem: u; n
+
+$ ruling
+Br1. 5 BAR 30 13 GU₄ 1 28
+#lem: n; Nisannu[Month I]MN; n; n; Ayyaru[Month II]MN; n; n
+
+Br2. SIG 30 25 ŠU 30 15
+#lem: Simānu[Month III]MN; n; n; Duʾūzu[Month IV]MN; n; n
+
+Br3. ina 22 ina NIM ár ALLA ŠÚ NE 1
+#lem: ina[on]PRP; n; ina[in]PRP; Elamtu[east]N; warki[behind]PRP; Alluttu[Cancer]CN; rabû[set]V; Abu[Month V]MN; n
+
+Br4. 22 KIN 30 17.30
+#lem: n; Ulūlu[Month VI]MN; n; n
+
+Br5. 26 ina ŠÚ ina SAG RÍN IGI ma-diš
+#lem: n; ina[in]PRP; erbu[west]N; ina[in]PRP; rēš[beginning]N; Zibānītu[Libra]CN; amāru[be(come) visible]V; mādiš[very much]AV
+
+Br6. TUR DU₆ 30 14? APIN 1
+#lem: ṣehru[small]AJ; Tašrītu[Month VII]MN; n; n; Arahsamna[Month VIII]MN; n
+
+Br7. 22 GAN 30 15 AB
+#lem: n; Kislīmu[Month IX]MN; n; n; Ṭebētu[Month X]MN
+
+Br8. 1 19 ZÍZ 1 17.30 ŠE
+#lem: n; n; Šabāṭu[Month XI]MN; n; n; Addaru[Month XII]MN
+
+Br9. 1 29 17 SIG MÚL.MÚL
+#lem: n; n; n; šapil[below]PRP; MÚL.MÚL[η Tauri]CN
+
+Br10. ⸢4? SI⸣ DIR.<ŠE> 30 18
+#lem: 4[4]NU; ištānu[north]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; n
+
+Br11. [x] ⸢x⸣ ŠUR-šá-GIGIR 2/3 KÙŠ LÁL
+#lem: u; u; ŠUR-šá-GIGIR[β/ζ Tauri]CN; n; ammatu[unit]N; alālu[balance]V
+
+@column 2
+
+Bo1. 12 BAR 12 5 GU₄ 30 9
+#lem: n; Nisannu[Month I]MN; n; n; Ayyaru[Month II]MN; n; n
+
+Bo2. SIG 30 15 ŠU 1 26 : 24? [e SA₄-šá]
+#lem: Simānu[Month III]MN; n; n; Duʾūzu[Month IV]MN; n; n; n; eli[above]PRP; u
+
+Bo3. (SA₄-šá)-ABSIN 1/2 KÙŠ NE 30 17 KIN 1 16
+#lem: SA₄-šá-ABSIN[α Virginis]CN; n; ammatu[unit]N; Abu[Month V]MN; n; n; Ulūlu[Month VI]MN; n; n
+
+Bo4. DU₆ 1 16 9 ina ŠÚ ina GÍR.TAB ŠÚ
+#lem: Tašrītu[Month VII]MN; n; n; n; ina[in]PRP; erbu[west]N; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V
+
+Bo5. ŠÚ 22 ina NIM ina RÍN IGI
+#lem: u; n; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Zibānītu[Libra]CN; nanmuru[be(come) visible]V
+
+Bo6. [APIN x x]+5 ⸢GAN⸣ 1 21
+#lem: Arahsamna[Month VIII]MN; u; u; Kislīmu[Month IX]MN; n; n
+
+Bo7. [AB x x ZÍZ] 1 28
+#lem: Ṭebētu[Month X]MN; u; u; Šabāṭu[Month XI]MN; n; n
+
+Bo8. [...]
+#lem: u
+
+$ ruling
+Br1. 13 BAR 11 KAS GU₄ 30
+#lem: n; Nisannu[Month I]MN; n; bēru[double hour]'N; Ayyaru[Month II]MN; n
+
+Br2. 27 SIG 30 22 ŠU 30
+#lem: n; Simānu[Month III]MN; n; n; Duʾūzu[Month IV]MN; n
+
+Br3. 17 20 ina NIM ina ALLA ŠÚ
+#lem: n; n; ina[in]PRP; Elamtu[east]N; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V
+
+Br4. NE 1 21 KIN 30 13
+#lem: Abu[Month V]MN; n; n; Ulūlu[Month VI]MN; n; n
+
+Br5. 25 ina ŠÚ ina RÍN IGI NIM ina 24
+#lem: n; ina[in]PRP; erbu[west]N; ina[in]PRP; Zibānītu[Libra]CN; amāru[be(come) visible]V; šaqi[high]V; ina[on]PRP; n
+
+Br6. IGI DU₆ 1 13 APIN 1 15
+#lem: amāru[be(come) visible]V; Tašrītu[Month VII]MN; n; n; Arahsamna[Month VIII]MN; n; n
+
+Br7. GAN 1 19 AB 30 15
+#lem: Kislīmu[Month IX]MN; n; n; Ṭebētu[Month X]MN; n; n
+
+Br8. ZÍZ 1 23 ŠE 30 15
+#lem: Šabāṭu[Month XI]MN; n; n; Addaru[Month XII]MN; n; n
+
+Br9. 25 e SA₄-šá-GU₄.AN
+#lem: n; eli[above]PRP; is-le₁₀[α Tauri]CN
+
+Br10. 4 KÙŠ DIR.ŠE 1 ⸢x⸣
+#lem: 4[4]NU; ammatu[unit]N; Addāru_Šanû[(Intercalary) Month XII₂]MN; n; u
+
+@column 3
+
+Bo1. 20 BAR 30 10.30 GU₄ 30
+#lem: n; Nisannu[Month I]MN; n; n; Ayyaru[Month II]MN; n
+
+Bo2. [x x] ⸢x⸣ SIG 1 20.40
+#lem: u; u; u; Simānu[Month III]MN; n; n
+
+Bo3. ŠU 1 24?.⸢20?⸣ NE 30
+#lem: Duʾūzu[Month IV]MN; n; n; Abu[Month V]MN; n
+
+Bo4. 12.40 KIN 1 14.30
+#lem: n; Ulūlu[Month VI]MN; n; n
+
+Bo5. DU₆ 11 75 ŠÚ NU PAP
+#lem: Tašrītu[Month VII]MN; n; n; rabû[set]V; ul[not]MOD; naṣāru[watch]V
+
+Bo6. 17 IGI NU PAP APIN 30
+#lem: n; amāru[be(come) visible]V; ul[not]MOD; naṣāru[watch]V; Arahsamna[Month VIII]MN; n
+
+Bo7. 14.40? GAN 1 20 AB
+#lem: n; Kislīmu[Month IX]MN; n; n; Ṭebētu[Month X]MN
+
+Bo8. 30 13 ZÍZ 1 25
+#lem: n; n; Šabāṭu[Month XI]MN; n; n
+
+Bo9. ŠE 30 14 [x x?]
+#lem: Addaru[Month XII]MN; n; n; u; u
+
+$ ruling
+Br1. 21 BAR 1 25 GU₄ 30 22.30
+#lem: n; Nisannu[Month I]MN; n; n; Ayyaru[Month II]MN; n; n
+
+Br2. SIG 30 13 ŠU 1 20 ŠÚ-šú
+#lem: Simānu[Month III]MN; n; n; Duʾūzu[Month IV]MN; n; n; rabû[setting]'N
+
+Br3. ana IGI-rù? NE 1
+#lem: ana[to]PRP; X; Abu[Month V]MN; n
+
+Br4. 22 KIN 30 13 16 ina ŠÚ
+#lem: n; Ulūlu[Month VI]MN; n; n; n; ina[in]PRP; erbu[west]N
+
+Br5. ina TIL AB.SÍN IGI DU₆
+#lem: ina[in]PRP; qītu[end]N; Šerʾu[Virgo]CN; amāru[be(come) visible]V; Tašrītu[Month VII]MN
+
+Br6. 1 18 APIN 30 15
+#lem: n; n; Arahsamna[Month VIII]MN; n; n
+
+Br7. GAN 1 18 AB 1 24
+#lem: Kislīmu[Month IX]MN; n; n; Ṭebētu[Month X]MN; n; n
+
+Br8. ZÍZ 30 16 ŠE 1 22
+#lem: Šabāṭu[Month XI]MN; n; n; Addaru[Month XII]MN; n; n
+
+Br9. ina? 15 SIG MÚL.MÚL 1/2 KÙŠ
+#lem: ina[on]PRP; n; šapil[below]PRP; MÚL.MÚL[η Tauri]CN; n; ammatu[unit]N
+
+Br10. DIR.ŠE 30 [x x]
+#lem: Addāru_Šanû[(Intercalary) Month XII₂]MN; n; u; u
+
+@column 4
+
+Bo1. 28 [BAR ...]
+#lem: n; Nisannu[Month I]MN; u
+
+Bo2. 22? ⸢x⸣ [...]
+#lem: n; u; u
+
+Bo3. 1 22? [x SIG DELE-šá-IGI]
+#lem: n; n; u; šapil[below]PRP; u
+
+Bo4. (DELE-šá-IGI)-ABSIN [n n x e]
+#lem: DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u; eli[above]PRP
+
+Bo5. SA₄-[šá-ABSIN n n]
+#lem: SA₄-šá-ABSIN[α Virginis]CN; n; n
+
+Bo6. NE 1 10+[x KIN x x]
+#lem: Abu[Month V]MN; n; n; Ulūlu[Month VI]MN; u; u
+
+Bo7. DU₆ 1 10+[x ...]
+#lem: Tašrītu[Month VII]MN; n; n; u
+
+Bo8. x ŠÚ? ⸢ina?⸣ [x x x]
+#lem: u; rabû[set]V; ina[in]PRP; u; u; u
+
+Bo9. NIM [...]
+#lem: šaqi[high]V; u
+
+Br1. 2[9 BAR x x]
+#lem: n; Nisannu[Month I]MN; u; u
+
+Br2. GU₄ 3[0 x SIG x x]
+#lem: Ayyaru[Month II]MN; n; u; Simānu[Month III]MN; u; u
+
+Br3. ŠU 30 [...]
+#lem: Duʾūzu[Month IV]MN; n; u
+
+Br4. ŠÚ N[E x x KIN x x]
+#lem: rabû[set]V; Abu[Month V]MN; u; u; Ulūlu[Month VI]MN; u; u
+
+Br5. 15 ina ŠÚ i[na x IGI DU₆ x]
+#lem: n; ina[in]PRP; erbu[west]N; ina[in]PRP; u; amāru[be(come) visible]V; Tašrītu[Month VII]MN; u
+
+Br6. 12 APIN [x x GAN x]
+#lem: n; Arahsamna[Month VIII]MN; u; u; Kislīmu[Month IX]MN; u
+
+Br7. 16 AB [...]
+#lem: n; Ṭebētu[Month X]MN; u
+
+Br8. ⸢16?.30⸣ [...]
+#lem: n; u
+
+@translation labeled en project
+
+@column 1
+
+B Obv.
+
+@(i Bo1) [...] ... [...]
+
+@(i Bo2) [...] Month X, (the 1st of which was identical with) the 30th (of the preceding month,
+sunset to moonset:) 28°.
+
+@(i Bo3) [The xth,] first appearance [in the west in ....] Month XI, the 1st (of which followed the
+30th of the preceding month, sunset to moonset:) 28°.
+
+@(i Bo4) [Month XII,] (the 1st of which was identical with) the 30th (of the preceding month,
+sunset to moonset:) 14°.
+
+($ruling$)
+
+@(i Bo5) (Year) 4, month I, <the 1st (of which followed the 30th of the preceding month)>, sunset to moonset: 28°. Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21°. Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:)
+
+@(i Bo6) 15° 30’. The 8th, it was 1 cubit above a Leonis. Month IV,
+
+@(i Bo7) the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 27°. The 26th, it was balanced 2/3 cubit above a
+
+@(i Bo8) Virginis. Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°.
+
+@(i Bo9) Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°. On the 25th, it was 2 cubits below a Scorpii.
+
+@(i Bo10) Month VII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 17°. The 13th, [last appearance] in the west in Scor[pius.]
+
+@(i Bo11) The 26th or 27th, [first appearance] in the east in [....]
+
+@(i Bo12) [Month V]III, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22°. Month I[X, ...]
+
+@(i Bo13) [...] ... [...]
+
+@(i Bo14) [...]
+
+@(i Bo15) [...] ... Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:)
+
+@(i Bo16) ... The 26th?,
+
+B Rev.
+
+($ruling$)
+
+@(i Br1) (Year) 5, month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°. Month II, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 28°.
+
+@(i Br2) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 25°. Month IV, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 15°.
+
+@(i Br3) On the 22nd, last appearance in the east behind Cancer. Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:)
+
+@(i Br4) 22°. Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 17° 30’.
+
+@(i Br5) The 26th, first appearance in the west in the beginning of Libra; it was very
+
+@(i Br6) small. Month VII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 14°?. Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:)
+
+@(i Br7) 22°. Month IX, (the 1st of which was identical with) the 30th (of the preceding month,
+sunset to moonset:) 15°. Month X,
+
+@(i Br8) the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 19°.
+Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17° 30’. Month XII,
+
+@(i Br9) the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 29°. The 17th, it was 4? fingers? below η Tauri.
+
+@(i Br10) Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to mooonset:) 18°.
+
+@(i Br11) [The xth,] it was balanced 2/3 cubit ... β/𝜁 Tauri.
+
+A Rev.
+
+@column 2
+
+B Obv.
+
+@(ii Bo1)(Year) 12, month I, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25°. Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 9°.
+
+@(ii Bo2) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 15°. Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 26°. The 24th?, it was 1⁄2 cubit [above α]
+
+@(ii Bo3) Virginis. Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 17°. Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16°.
+
+@(ii Bo4) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 16°. The 9th, last appearance in the west in Scorpius.
+
+@(ii Bo5) ... The 22nd, first appearance in the east in Libra.
+
+@(ii Bo6) [Month VIII, ... (sunset to moonset:) x]+5°. Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21°.
+
+@(ii Bo7) [Month X, ... Month XI,] the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 28°.
+
+@(ii Bo8) [...]
+
+B Rev.
+
+($ruling$)
+
+@(ii Br1) (Year) 13, month I, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 1 bēru. Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:)
+
+@(ii Br2) 27°. Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 22°. Month IV, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:)
+
+@(ii Br3) 17°. The 20th, last appearance in the east in Cancer.
+
+@(ii Br4) Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 21°. Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°.
+
+@(ii Br5) The 25th, first appearance in the west in Libra; it was high, (ideal) first appearance on
+the 24th.
+
+@(ii Br6) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 13°. Month VIII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 15°.
+
+@(ii Br7) Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 19°. Month X, (the 1st of which was identical with) the 30th (of the preceding month,sunset to moonset:) 15°.
+
+@(ii Br8) Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 23°. Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 15°.
+
+@(ii Br9) The 25th, it was 4 cubits above α Tauri.
+10 Month XII₂, the 1st (of which followed the 30th of the preceding month, sunset to
+moonset:) ...
+
+@column 3
+
+B Obv.
+
+@(iii Bo1) (Year) 20, month I, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 10° 30’. Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:)
+
+@(iii Bo2) [...] ... Month III, the 1st (of which followed the 30th of the preceding month, sunset to
+moonset:) 20° 40’.
+
+@(iii Bo3) Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°? 20’?. Month V, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:)
+
+@(iii Bo4) 12° 40’. Month VI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 14° 30’.
+
+@(iii Bo5) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 17°. The 5th, last appearance; I did not watch.
+
+@(iii Bo6) The 17th, first appearance; I did not watch. Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:)
+
+@(iii Bo7) 14° 40’?. Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 20°. Month X,
+
+@(iii Bo8) (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°. Month XI, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25°.
+
+@(iii Bo9) Month XII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 14° [...]
+
+B Rev.
+
+($ruling$)
+
+@(iii Br1) (Year) 21, month I, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 25°. Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 22° 30’.
+
+@(iii Br2) Month III, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°. Month IV, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 20°. Its last appearance
+
+@(iii Br3) to see?. Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:)
+
+@(iii Br4) 22°. Month VI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 13°. The 16th, first appearance in the west
+
+@(iii Br5) in the end of Virgo. Month VII,
+
+@(iii Br6) the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 18°. Month VIII, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 15°.
+
+@(iii Br7) Month IX, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 18°. Month X, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 24°. 
+
+@(iii Br8) Month XI, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) 16°. Month XII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22°.
+
+@(iii Br9) On? the 15th, it was 1⁄2 cubit below η Tauri. 10 Month XII₂, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+
+@column 4
+
+B Obv.
+
+@(iv Bo1) (Year) 28, [month I ....]
+
+@(iv Bo2) 22°? ... [... Month IV,]
+
+@(iv Bo3) the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 22°?. [The xth, it was ... below γ]
+
+@(iv Bo4) Virginis. [The xth, it was ... above]
+
+@(iv Bo5) α [Virginis.]
+
+@(iv Bo6) Month V, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 10+[x°. Month VI, ....]
+
+@(iv Bo7) Month VII, the 1st (of which followed the 30th of the preceding month, sunset to moonset:) 10+[x° ...]
+
+@(iv Bo8) last appearance ... [...]
+
+@(iv Bo9) high? [...]
+
+B Rev.
+
+@(iv Br1) (Year) 2[9, month I, ...]
+
+@(iv Br2) Month II, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [... Month III, ...]
+
+@(iv Br3) Month IV, (the 1st of which was identical with) the 30th (of the preceding month, sunset to moonset:) [...]
+
+@(iv Br4) last appearance. Month V, [... Month VI, ...]
+
+@(iv Br5) The 15th, [first appearance] in the west in [... Month VII, ...]
+
+@(iv Br6) (sunset to moonset:) 12°. Month VIII, [... Month IX, ...]
+
+@(iv Br7) (sunset to moonset:) 16°. Month X, [...]
+
+@(iv Br8) (sunset to moonset:) 16° 30’. [...]
