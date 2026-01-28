@@ -519,7 +519,10 @@ def test_search_dossier(client, fragmentarium):
         [item["museumNumber"] for item in result.json["items"]],
         key=lambda x: (x["prefix"], x["number"], x["suffix"]),
     ) == sorted(
-        [query_item_of(fragment)["museumNumber"] for fragment in fragments_with_dossier],
+        [
+            query_item_of(fragment)["museumNumber"]
+            for fragment in fragments_with_dossier
+        ],
         key=lambda x: (x["prefix"], x["number"], x["suffix"]),
     )
 
