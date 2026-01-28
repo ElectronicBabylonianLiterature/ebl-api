@@ -41,7 +41,7 @@ class CroppedSignImageSchema(Schema):
     is_main = fields.Boolean(required=False, allow_none=True, data_key="isMain")
 
     @post_load
-    def load(self, data, **kwargs):
+    def make_cropped_sign_image(self, data, **kwargs):
         return CroppedSignImage(
             image_id=data["image_id"],
             image=data["image"],
