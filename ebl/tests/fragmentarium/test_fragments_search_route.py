@@ -495,6 +495,32 @@ def test_search_site(client, fragmentarium, site, attribute):
     assert result.json == expected_json
 
 
+def test_search_dossier(client, fragmentarium):
+    from ebl.tests.factories.fragment import FragmentDossierReferenceFactory
+
+    dossier_id = "TEST_DOSSIER_123"
+    fragments_with_dossier = [
+        FragmentFactory.build(
+            dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier_id)]
+        )
+        for _ in range(2)
+    ]
+    fragment_without_dossier = FragmentFactory.build(dossiers=[])
+
+    for fragment in fragments_with_dossier + [fragment_without_dossier]:
+        fragmentarium.create(fragment)
+
+    expected_json = {
+        "items": [query_item_of(fragment) for fragment in fragments_with_dossier],
+        "matchCountTotal": 0,
+    }
+
+    result = client.simulate_get("/fragments/query", params={"dossier": dossier_id})
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == expected_json
+
+
 def test_query_latest(client, fragmentarium):
     number_of_fragments = LATEST_TRANSLITERATION_LIMIT + 10
     start_date = date(2023, 5, 1)

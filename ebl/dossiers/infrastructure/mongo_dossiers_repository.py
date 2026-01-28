@@ -144,7 +144,9 @@ class MongoDossiersRepository(DossiersRepository):
                     fragment_filters.append({f"genres.category.{index}": part})
 
         fragment_query = (
-            {"$and": fragment_filters} if len(fragment_filters) > 1 else fragment_filters[0]
+            {"$and": fragment_filters}
+            if len(fragment_filters) > 1
+            else fragment_filters[0]
         )
 
         matching_fragments = self._fragments_collection.find_many(
