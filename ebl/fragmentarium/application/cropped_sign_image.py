@@ -15,7 +15,6 @@ class CroppedSignImage:
     image_id: str
     image: Base64
     fragment_number: MuseumNumber
-
     sign: Optional[str] = None
     period: Optional[str] = None
     form: Optional[str] = None
@@ -32,11 +31,9 @@ class CroppedSignImageSchema(Schema):
     image_id = fields.Str(required=True, data_key="_id")
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
-
     sign = fields.Str(required=False, allow_none=True)
     period = fields.Str(required=False, allow_none=True)
     form = fields.Str(required=False, allow_none=True)
-
     is_centroid = fields.Boolean(required=False, allow_none=True, data_key="isCentroid")
     cluster_size = fields.Integer(
         required=False, allow_none=True, data_key="clusterSize"
@@ -46,7 +43,7 @@ class CroppedSignImageSchema(Schema):
     @post_load
     def load(self, data, **kwargs):
         return CroppedSignImage(
-            image_id=data["_id"],
+            image_id=data["image_id"],
             image=data["image"],
             fragment_number=MuseumNumber.of(data["fragment_number"]),
             sign=data.get("sign"),
