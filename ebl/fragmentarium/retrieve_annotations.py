@@ -261,9 +261,8 @@ def main(argv=None):
             )
         print(f"'{args.filter}' Fragments are filtered.")
         if args.filter == "selected" or args.filter == "finished":
-            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
-                args.filter
-            ]
+            with open("ebl/fragmentarium/annotations.json") as f:
+                filter_fragments = json.load(f)[args.filter]
             annotation_collection = list(
                 filter(
                     lambda elem: str(elem.fragment_number) in filter_fragments,
@@ -271,9 +270,8 @@ def main(argv=None):
                 )
             )
         else:
-            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
-                "finished"
-            ]
+            with open("ebl/fragmentarium/annotations.json") as f:
+                filter_fragments = json.load(f)["finished"]
             annotation_collection = list(
                 filter(
                     lambda elem: str(elem.fragment_number) not in filter_fragments,

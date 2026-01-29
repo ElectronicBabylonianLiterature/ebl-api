@@ -20,7 +20,6 @@ class BibliographyEntryFactory(factory.Factory):
     DOI = "10.1210/MEND.16.4.0808"
     issued = {"date-parts": [[2002, 1, 1]]}
     PMID = "11923479"
-    volume = "16"
     page = "837-846"
     issue = "4"
     container_title = "Molecular Endocrinology"
