@@ -57,7 +57,7 @@ class FragmentSchema(Schema):
     folios = fields.Pluck(FoliosSchema, "entries")
     text = fields.Nested(TextSchema)
     signs = fields.String(load_default="")
-    notes = fields.Nested(NotesSchema, default=Notes())
+    notes = fields.Nested(NotesSchema, dump_default=Notes(), load_default=Notes())
     references = fields.Nested(ReferenceSchema, many=True, required=True)
     uncurated_references = fields.Nested(
         UncuratedReferenceSchema,
@@ -76,7 +76,7 @@ class FragmentSchema(Schema):
         data_key="authorizedScopes",
     )
     ocred_signs = fields.String(load_default="", data_key="ocredSigns")
-    introduction = fields.Nested(IntroductionSchema, default=Introduction())
+    introduction = fields.Nested(IntroductionSchema, dump_default=Introduction(), load_default=Introduction())
     script = fields.Nested(ScriptSchema, load_default=Script())
     external_numbers = fields.Nested(
         ExternalNumbersSchema,
@@ -84,17 +84,18 @@ class FragmentSchema(Schema):
         data_key="externalNumbers",
     )
     projects = fields.List(ResearchProjectField())
-    date = fields.Nested(DateSchema, allow_none=True, default=None)
+    date = fields.Nested(DateSchema, allow_none=True, dump_default=None, load_default=None)
     dates_in_text = fields.Nested(
-        DateSchema, data_key="datesInText", many=True, allow_none=True, default=[]
+        DateSchema, data_key="datesInText", many=True, allow_none=True, dump_default=[], load_default=[]
     )
-    archaeology = fields.Nested(ArchaeologySchema, allow_none=True, default=None)
-    colophon = fields.Nested(ColophonSchema, allow_none=True, default=None)
-    dossiers = fields.Nested(DossierReferenceSchema, many=True, default=[])
+    archaeology = fields.Nested(ArchaeologySchema, allow_none=True, dump_default=None, load_default=None)
+    colophon = fields.Nested(ColophonSchema, allow_none=True, dump_default=None, load_default=None)
+    dossiers = fields.Nested(DossierReferenceSchema, many=True, dump_default=[], load_default=[])
     named_entities = fields.Nested(
         NamedEntitySchema,
         many=True,
-        default=(),
+        dump_default=(),
+        load_default=(),
         data_key="namedEntities",
     )
 

@@ -11,7 +11,7 @@ class ReferenceSchema(Schema):
     pages = fields.String(required=True)
     notes = fields.String(required=True)
     lines_cited = fields.List(fields.String(), required=True, data_key="linesCited")
-    document = fields.Mapping(load_default=None, load_only=True)
+    document = fields.Dict(load_default=None, load_only=True)
 
     @post_load
     def make_reference(self, data, **kwargs) -> Reference:
@@ -22,4 +22,4 @@ class ReferenceSchema(Schema):
 
 
 class ApiReferenceSchema(ReferenceSchema):
-    document = fields.Mapping(load_default=None)
+    document = fields.Dict(load_default=None)

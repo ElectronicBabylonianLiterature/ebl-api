@@ -46,7 +46,7 @@ class ChapterQueryColophonLines:
 
 
 class ChapterQueryColophonLinesSchema(Schema):
-    colophon_lines_in_query = fields.Mapping(
+    colophon_lines_in_query = fields.Dict(
         keys=fields.Str(),
         values=fields.List(fields.Int()),
         load_default={},
