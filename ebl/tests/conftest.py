@@ -100,6 +100,9 @@ def mongo_client() -> MongoClient:
     if os.getenv("CI") == "true":
         return MongoClient(os.environ["MONGODB_URI"])
     else:
+        os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
+        os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")
+
         from pymongo_inmemory import MongoClient as InMemoryMongoClient
 
         return InMemoryMongoClient()

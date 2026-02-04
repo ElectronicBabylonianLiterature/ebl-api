@@ -37,6 +37,16 @@ from functools import singledispatch
 ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
 ATF_COMMON_PATH = "lark_parser/ebl_atf_common.lark"
 kwargs_lark = {"maybe_placeholders": True, "rel_to": __file__}
+LINE_PARSER_STARTS = [
+    "start",
+    "text_line",
+    "ebl_atf_text_line__text",
+    "ebl_atf_text_line__akkadian_word",
+    "ebl_atf_text_line__greek_word",
+    "ebl_atf_text_line__compound_grapheme",
+    "ebl_atf_text_line__reading",
+    "ebl_atf_text_line__erasure",
+]
 
 WORD_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="any_word")
 NOTE_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="note_line")
@@ -47,12 +57,16 @@ TRANSLATION_LINE_PARSER = Lark.open(
 )
 PARATEXT_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="paratext")
 CHAPTER_PARSER = Lark.open(
-    "lark_parser/ebl_atf_chapter.lark", **kwargs_lark, start="chapter"
+    "lark_parser/ebl_atf_chapter.lark",
+    **kwargs_lark,
+    start=["chapter", "chapter_line", "line_variant", "reconstruction"],
 )
 MANUSCRIPT_PARSER = Lark.open(
-    "lark_parser/ebl_atf_manuscript_line.lark", **kwargs_lark, start="manuscript_line"
+    "lark_parser/ebl_atf_manuscript_line.lark",
+    **kwargs_lark,
+    start=["manuscript_line", "siglum"],
 )
-LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
+LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start=LINE_PARSER_STARTS)
 LINE_NUMBER_PARSER = Lark.open(ATF_COMMON_PATH, **kwargs_lark, start="line_number")
 
 LABEL_PARSER = Lark.open(
@@ -94,7 +108,7 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 
 def parse_line(atf: str) -> Line:
-    tree = LINE_PARSER.parse(atf).children[0]
+    tree = LINE_PARSER.parse(atf, start="start").children[0]
     return LineTransformer().transform(tree)
 
 

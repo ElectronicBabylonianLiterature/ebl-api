@@ -5,7 +5,7 @@ description = ""
 authors = []
 
 [tool.poetry.dependencies]
-python = ">=3.9.2,<4.0"
+python = ">=3.11,<4.0"
 falcon = "^3.0.1"
 falcon-auth = "*"
 pymongo = "*"
@@ -19,7 +19,7 @@ attrs = "*"
 sentry-sdk = {extras = ["falcon"],version = "*"}
 roman = "*"
 waitress = "*"
-lark-parser = "0.11.2"
+lark-parser = "0.12.0"
 marshmallow = "^3.23.2"
 inflect = "*"
 tqdm = "*"
@@ -32,10 +32,10 @@ falcon-caching = "^1.0.1"
 redis = "^4.5.3"
 althaia = "^3.14.1-alpha.2"
 cairosvg = "^2.7.0"
-pyyaml = "6.0.1"
+pyyaml = "6.0.3"
 python-dateutil = "^2.8.2"
 natsort = "^8.4.0"
-ruff = "^0.5.5"
+ruff = "^0.15.0"
 attr = "^0.3.2"
 
 

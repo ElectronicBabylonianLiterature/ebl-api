@@ -18,7 +18,8 @@ def parse_chapter(
     atf: str, manuscripts: Iterable[Manuscript], start: Optional[str] = None
 ) -> Sequence[Line]:
     try:
-        tree = CHAPTER_PARSER.parse(atf, start=start)
+        start_rule = start or "chapter"
+        tree = CHAPTER_PARSER.parse(atf, start=start_rule)
         return ChapterTransformer(manuscripts).transform(tree)
     except PARSE_ERRORS as error:
         raise DataError(error) from error
@@ -28,7 +29,8 @@ def parse_manuscript(
     atf: str, manuscripts: Iterable[Manuscript], start: Optional[str] = None
 ) -> Sequence[Line]:
     try:
-        tree = MANUSCRIPT_PARSER.parse(atf, start=start)
+        start_rule = start or "manuscript_line"
+        tree = MANUSCRIPT_PARSER.parse(atf, start=start_rule)
         return ChapterTransformer(manuscripts).transform(tree)
     except PARSE_ERRORS as error:
         raise DataError(error) from error

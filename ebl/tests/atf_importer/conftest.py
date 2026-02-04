@@ -61,6 +61,9 @@ def pytest_configure(config):
         print(f"Test database: {temp_db_name}")
         print(f"{'='*80}\n")
 
+        os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
+        os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")
+
         from pymongo_inmemory import MongoClient as InMemoryMongoClient
 
         client = InMemoryMongoClient()
