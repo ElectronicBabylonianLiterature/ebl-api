@@ -111,7 +111,7 @@ def test_akkadian_word(word: AkkadianWord, expected: str, lemmatizable: bool) ->
 
 
 def test_akkadian_word_invalid_modifier() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         AkkadianWord.of((ValueToken.of("ibnû"),), (Flag.COLLATION,))
 
 

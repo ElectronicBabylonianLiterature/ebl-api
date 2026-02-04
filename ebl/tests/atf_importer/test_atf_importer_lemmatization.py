@@ -1,4 +1,4 @@
-from itertools import repeat
+from itertools import repeat, zip_longest
 from ebl.tests.factories.fragment import FragmentFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.atf_importer.test_glossaries_data import GLOSSARY, QPN_GLOSSARY
@@ -381,8 +381,10 @@ def test_lemmatized_and_translated(fragment_repository, tmp_path, mock_input):
     )
     expected_types = [SurfaceAtLine, ColumnAtLine, TextLine, TranslationLine]
     assert len(fragment.text.lines) == len(expected_types)
-    for line, expected_instance in zip(
+    for line, expected_instance in zip_longest(
         fragment.text.lines,
         expected_types,
     ):
+        assert line is not None
+        assert expected_instance is not None
         assert isinstance(line, expected_instance) is True

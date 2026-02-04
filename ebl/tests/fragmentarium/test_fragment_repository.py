@@ -1,6 +1,7 @@
 from datetime import date, timedelta
 from functools import partial
-from typing import Tuple, List
+from itertools import zip_longest
+from typing import List, Tuple
 import attr
 import pytest
 import random
@@ -652,12 +653,15 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     result = fragment_repository.query(
         {"transliteration": create_tranliteration_query_lines("KU", sign_repository)}
     )
+    items = []
+    for fragment, fragment_lines in zip_longest(fragments, lines):
+        assert fragment is not None
+        assert fragment_lines is not None
+        items.append(query_item_of(fragment, fragment_lines))
+
     assert result == QueryResultSchema().load(
         {
-            "items": [
-                query_item_of(fragment, lines)
-                for fragment, lines in zip(fragments, lines)
-            ],
+            "items": items,
             "matchCountTotal": 5,
         }
     )

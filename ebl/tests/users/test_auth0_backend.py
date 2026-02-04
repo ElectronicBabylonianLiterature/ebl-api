@@ -3,6 +3,7 @@ from typing import Any, Dict, Optional, Tuple
 
 import falcon
 from falcon import testing
+from falcon.testing.client import _ResultBase
 from falcon_auth import FalconAuthMiddleware
 import jwt
 from Cryptodome.PublicKey import RSA
@@ -55,7 +56,7 @@ def create_client(auth_backend: Auth0Backend) -> testing.TestClient:
     return testing.TestClient(api)
 
 
-def simulate_get(auth_backend: Auth0Backend, token: Optional[str]) -> testing.Result:
+def simulate_get(auth_backend: Auth0Backend, token: Optional[str]) -> _ResultBase:
     client = create_client(auth_backend)
     headers = {}
     if token is not None:

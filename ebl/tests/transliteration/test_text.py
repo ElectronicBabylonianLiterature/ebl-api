@@ -67,7 +67,7 @@ def test_lemmatization() -> None:
 
 
 def test_atf() -> None:
-    assert TEXT.atf == atf.Atf("1. ha-am\n" "$ single ruling")
+    assert TEXT.atf == atf.Atf("1. ha-am\n$ single ruling")
 
 
 def test_update_lemmatization() -> None:
@@ -100,14 +100,14 @@ def test_update_lemmatization() -> None:
 
 def test_update_lemmatization_incompatible() -> None:
     lemmatization = Lemmatization(((LemmatizationToken("mu", ()),),))
-    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
+    with pytest.raises(LemmatizationError):
         TEXT.update_lemmatization(lemmatization)
 
 
 def test_update_lemmatization_wrong_lines() -> None:
     lemmatization = Lemmatization((*TEXT.lemmatization.tokens, ()))
 
-    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
+    with pytest.raises(LemmatizationError):
         TEXT.update_lemmatization(lemmatization)
 
 
@@ -125,12 +125,12 @@ def test_labels(text_with_labels) -> None:
 
 
 def test_translation_before_text() -> None:
-    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):
         Text.of_iterable([TranslationLine(()), *LINES])
 
 
 def test_invalid_extent() -> None:
-    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
@@ -141,7 +141,7 @@ def test_invalid_extent() -> None:
 
 
 def test_extent_before_translation() -> None:
-    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),
@@ -152,7 +152,7 @@ def test_extent_before_translation() -> None:
 
 
 def test_exent_overlapping() -> None:
-    with pytest.raises(ExtentLabelError):  # pyre-ignore[16]
+    with pytest.raises(ExtentLabelError):
         Text.of_iterable(
             [
                 TextLine.of_iterable(LineNumber(1), [Word.of([Reading.of_name("bu")])]),

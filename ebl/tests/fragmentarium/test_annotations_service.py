@@ -1,4 +1,5 @@
 import attr
+from itertools import zip_longest
 
 from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
@@ -46,7 +47,12 @@ def test_cropped_images_from_sign(
     annotations, cropped_images = annotations_service._cropped_image_from_annotations(
         annotation
     )
-    for annotation, cropped_image in zip(annotations.annotations, cropped_images):
+    for annotation, cropped_image in zip_longest(
+        annotations.annotations,
+        cropped_images,
+    ):
+        assert annotation is not None
+        assert cropped_image is not None
         assert annotation.cropped_sign.image_id == cropped_image.image_id
         assert annotation.cropped_sign.label == "i Stone wig"
 

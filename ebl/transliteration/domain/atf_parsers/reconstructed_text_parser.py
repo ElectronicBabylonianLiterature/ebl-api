@@ -33,9 +33,7 @@ def parse_break(break_: str) -> Break:
 
 def parse_reconstructed_line(text: str) -> Sequence[Token]:
     try:
-        tree = RECONSTRUCTED_LINE_PARSER.parse(
-            text, start="ebl_atf_text_line__text"
-        )
+        tree = RECONSTRUCTED_LINE_PARSER.parse(text, start="ebl_atf_text_line__text")
         return TextLineTransformer().transform(tree)
     except (UnexpectedInput, ParseError) as error:
         raise ValueError(f"Invalid reconstructed line: {text}. {error}")

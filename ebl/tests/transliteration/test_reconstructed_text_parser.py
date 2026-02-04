@@ -573,7 +573,7 @@ def test_reconstructed_line(text, expected) -> None:
     ],
 )
 def test_invalid_reconstructed_line(text) -> None:
-    with pytest.raises(  # pyre-ignore[16]
+    with pytest.raises(
         ValueError, match=f"Invalid reconstructed line: %n {re.escape(text)}"
     ):
         parse_reconstructed_line(f"%n {text}")
@@ -606,7 +606,7 @@ def test_invalid_reconstructed_line(text) -> None:
 )
 def test_validate_invalid(text) -> None:
     line = parse_reconstructed_line(f"%n {text}")
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         validate(line)
 
 

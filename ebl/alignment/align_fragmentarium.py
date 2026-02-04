@@ -160,9 +160,10 @@ if __name__ == "__main__":
 
     Executor = ThreadPoolExecutor if args.threads else ProcessPoolExecutor
 
-    with Executor(max_workers=args.workers) as executor, open(
-        args.output, "w", encoding="utf-8"
-    ) as file:
+    with (
+        Executor(max_workers=args.workers) as executor,
+        open(args.output, "w", encoding="utf-8") as file,
+    ):
         results = tqdm(
             executor.map(
                 partial(
@@ -195,4 +196,4 @@ if __name__ == "__main__":
                 writer.writerow(result)
 
     t = time.time()
-    print(f"\nTime: {round((t-t0)/60, 2)} min")
+    print(f"\nTime: {round((t - t0) / 60, 2)} min")

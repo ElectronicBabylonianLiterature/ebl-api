@@ -38,12 +38,12 @@ def pytest_configure(config):
     config._temp_db_name = temp_db_name
 
     if os.getenv("CI") == "true":
-        print(f"\n{'='*80}")
+        print(f"\n{'=' * 80}")
         print("CI ENVIRONMENT DETECTED")
-        print(f"{'='*80}")
+        print(f"{'=' * 80}")
         print(f"Using MongoDB service at: {os.environ.get('MONGODB_URI')}")
         print(f"Test database: {temp_db_name}")
-        print(f"{'='*80}\n")
+        print(f"{'=' * 80}\n")
 
         ci_uri = os.environ.get("MONGODB_URI", "")
         if "localhost" not in ci_uri and "127.0.0.1" not in ci_uri:
@@ -54,12 +54,12 @@ def pytest_configure(config):
 
         os.environ["MONGODB_DB"] = temp_db_name
     else:
-        print(f"\n{'='*80}")
+        print(f"\n{'=' * 80}")
         print("LOCAL DEVELOPMENT ENVIRONMENT")
-        print(f"{'='*80}")
+        print(f"{'=' * 80}")
         print("Starting in-memory MongoDB for isolated testing...")
         print(f"Test database: {temp_db_name}")
-        print(f"{'='*80}\n")
+        print(f"{'=' * 80}\n")
 
         os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
         os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")

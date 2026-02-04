@@ -842,7 +842,7 @@ def test_lone_determinative(atf, expected) -> None:
 
 @pytest.mark.parametrize("atf", ["{udu}?"])
 def test_invalid_lone_determinative(atf) -> None:
-    with pytest.raises(UnexpectedInput):  # pyre-ignore[16]
+    with pytest.raises(UnexpectedInput):
         parse_word(atf)
 
 
@@ -860,7 +860,7 @@ def test_invalid_lone_determinative(atf) -> None:
         "KA₂?].DINGIR.RA[{ki}?",
         "k[a]?",
         ":-sal",
-        "gam/:" "//sal",
+        "gam/://sal",
         "Š[A₃?...]",
         "|KU]R|",
         "|KUR.[KUR|",
@@ -871,5 +871,5 @@ def test_invalid_lone_determinative(atf) -> None:
     ],
 )
 def test_invalid(invalid_atf) -> None:
-    with pytest.raises((UnexpectedInput, ParseError)):  # pyre-ignore[16]
+    with pytest.raises((UnexpectedInput, ParseError)):
         parse_word(invalid_atf)

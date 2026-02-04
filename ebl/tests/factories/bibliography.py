@@ -49,8 +49,8 @@ class ReferenceFactory(factory.Factory):
 
     id = factory.Sequence(lambda n: BibliographyId(f"RN.{n}"))
     type = factory.fuzzy.FuzzyChoice(ReferenceType)
-    pages = factory.Sequence(lambda n: f"{n}-{n+2}, {n+5}")
+    pages = factory.Sequence(lambda n: f"{n}-{n + 2}, {n + 5}")
     notes = factory.Faker("paragraph")
     lines_cited = factory.List(
-        [factory.Sequence(lambda n: f"r. iii*! {n}'.{n+1}a")], TupleFactory
+        [factory.Sequence(lambda n: f"r. iii*! {n}'.{n + 1}a")], TupleFactory
     )

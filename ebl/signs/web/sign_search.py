@@ -11,10 +11,10 @@ class SignsSearch:
         self.sign_repository = signs
         self._dispatch = create_dispatcher(
             {
-                frozenset(
-                    ["listsName", "listsNumber"]
-                ): lambda params: signs.search_by_lists_name(
-                    params["listsName"], params["listsNumber"]
+                frozenset(["listsName", "listsNumber"]): lambda params: (
+                    signs.search_by_lists_name(
+                        params["listsName"], params["listsNumber"]
+                    )
                 ),
                 frozenset(["value", "subIndex"]): lambda params: signs.search_all(
                     params["value"], params["subIndex"]
@@ -22,10 +22,8 @@ class SignsSearch:
                 frozenset(
                     ["value", "isIncludeHomophones", "subIndex"]
                 ): lambda params: signs.search_include_homophones(params["value"]),
-                frozenset(
-                    ["value", "subIndex", "isComposite"]
-                ): lambda params: signs.search_composite_signs(
-                    params["value"], params["subIndex"]
+                frozenset(["value", "subIndex", "isComposite"]): lambda params: (
+                    signs.search_composite_signs(params["value"], params["subIndex"])
                 ),
                 frozenset(["wordId"]): lambda params: signs.search_by_lemma(
                     params["wordId"]

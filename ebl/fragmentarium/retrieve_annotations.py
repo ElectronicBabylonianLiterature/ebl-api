@@ -4,6 +4,7 @@ import os
 import shutil
 from datetime import date
 from io import BytesIO
+from itertools import zip_longest
 from os.path import join
 from pathlib import Path
 from typing import Sequence, Union, Tuple
@@ -165,7 +166,9 @@ def write_annotations(
     path: Union[str, Path], bounding_boxes: Sequence[BoundingBox], signs: Sequence[str]
 ) -> None:
     with open(path, "w+") as file:
-        for bounding_box, sign in zip(bounding_boxes, signs):
+        for bounding_box, sign in zip_longest(bounding_boxes, signs):
+            if bounding_box is None or sign is None:
+                raise ValueError("Bounding boxes and signs must match.")
             rectangle_attributes = [
                 str(int(rectangle_attribute))
                 for rectangle_attribute in bounding_box.to_list()

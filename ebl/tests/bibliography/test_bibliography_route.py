@@ -23,7 +23,7 @@ def saved_entry(bibliography, user):
 def saved_entries(bibliography, user):
     number_of_entries = 5
     entries = [
-        BibliographyEntryFactory.build(id=f"XY{i+1:05}")
+        BibliographyEntryFactory.build(id=f"XY{i + 1:05}")
         for i in range(number_of_entries)
     ]
 

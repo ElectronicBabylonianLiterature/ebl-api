@@ -8,6 +8,7 @@ from pymongo_inmemory import MongoClient as InMemoryMongoClient
 
 import ebl.app
 import ebl.context
+from ebl.ebl_ai_client import EblAiClient
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.transliteration_update_factory import (
     TransliterationUpdateFactory,
@@ -17,9 +18,7 @@ from ebl.transliteration.application.transliteration_query_factory import (
 )
 
 
-def configure_environment(
-    monkeypatch: pytest.MonkeyPatch, public_key: bytes
-) -> None:
+def configure_environment(monkeypatch: pytest.MonkeyPatch, public_key: bytes) -> None:
     monkeypatch.setenv("AUTH0_PEM", base64.b64encode(public_key).decode())
     monkeypatch.setenv("AUTH0_AUDIENCE", "test-audience")
     monkeypatch.setenv("AUTH0_ISSUER", "https://test.auth0.com/")
@@ -64,4 +63,4 @@ def test_create_context_helpers(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
     with pytest.raises(FrozenInstanceError):
-        context.ebl_ai_client = None
+        context.ebl_ai_client = EblAiClient("http://localhost:8001")

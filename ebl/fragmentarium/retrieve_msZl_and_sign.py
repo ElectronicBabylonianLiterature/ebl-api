@@ -13,4 +13,4 @@ if __name__ == "__main__":
             unicode = sign.unicode[0]
             print(f"{sign.name} {chr(unicode)}")
     for counter, sign in enumerate(no_unicode):
-        print(f"{sign.name} {chr(counter+ 200)}")
+        print(f"{sign.name} {chr(counter + 200)}")
