@@ -513,9 +513,7 @@ class EnsureAnnotationPost:
 
 @pytest.fixture
 def guest_client(context):
-    api = ebl.app.create_app(
-        attr.evolve(context, auth_backend=NoneAuthBackend(Guest))
-    )
+    api = ebl.app.create_app(attr.evolve(context, auth_backend=NoneAuthBackend(Guest)))
     api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
     return testing.TestClient(api)
 
