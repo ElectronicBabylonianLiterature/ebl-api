@@ -46,8 +46,9 @@ class DatabaseImporter:
                 f"{filename}.atf could not be imported: Museum number not found",
                 "not_imported_files",
             )
-            return
-        return self.check_and_import(text, museum_number, filename)
+            return None
+        self.check_and_import(text, museum_number, filename)
+        return None
 
     def check_and_import(self, text: Text, museum_number: str, filename: str) -> None:
         self.logger.info(f"Museum number found: {museum_number}")

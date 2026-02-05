@@ -169,7 +169,7 @@ class DateFactory(factory.Factory):
     month = factory.SubFactory(MonthFactory)
     day = factory.SubFactory(DayFactory)
     king = factory.Iterator(
-        chronology.kings, getter=lambda king: create_date_king(king)
+        chronology.kings, getter=create_date_king
     )
     is_seleucid_era = factory.Faker("boolean")
     ur3_calendar = factory.Iterator(Ur3Calendar)

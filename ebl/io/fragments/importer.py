@@ -202,7 +202,7 @@ if __name__ == "__main__":
     )
 
     import_info = "Validate input files, write to the database, and reindex"
-    import_parser = subparsers.add_parser(
+    subparsers.add_parser(
         IMPORT_CMD,
         help=import_info,
         description=import_info,
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     )
 
     validation_info = "Validate input files without writing to the database"
-    validation_parser = subparsers.add_parser(
+    subparsers.add_parser(
         VALIDATION_CMD,
         help=validation_info,
         description=validation_info,
@@ -218,7 +218,7 @@ if __name__ == "__main__":
     )
 
     index_info = "Rebuild the sort index"
-    index_parser = subparsers.add_parser(
+    subparsers.add_parser(
         INDEX_CMD,
         help=index_info,
         description=index_info,
@@ -240,8 +240,6 @@ if __name__ == "__main__":
     CLIENT = MongoClient(os.environ["MONGODB_URI"])
     TARGET_DB = CLIENT.get_database(args.database)
     COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
-    INVALID = set()
-    DUPLICATES = set()
     FAILS = []
     IS_COLLECTION = False
 
