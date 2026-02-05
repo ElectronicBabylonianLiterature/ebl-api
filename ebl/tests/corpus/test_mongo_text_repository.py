@@ -179,7 +179,7 @@ def test_it_is_not_possible_to_create_duplicate_texts(text_repository) -> None:
     text_repository.create_indexes()
     text_repository.create(TEXT)
 
-    with pytest.raises(DuplicateError):  # pyre-ignore[16]
+    with pytest.raises(DuplicateError):
         text_repository.create(TEXT)
 
 
@@ -187,7 +187,7 @@ def test_it_is_not_possible_to_create_duplicate_chapters(text_repository) -> Non
     text_repository.create_indexes()
     text_repository.create(CHAPTER)
 
-    with pytest.raises(DuplicateError):  # pyre-ignore[16]
+    with pytest.raises(DuplicateError):
         text_repository.create(CHAPTER)
 
 
@@ -214,7 +214,7 @@ def test_finding_text(
 
 
 def test_find_raises_exception_if_text_not_found(text_repository) -> None:
-    with pytest.raises(NotFoundError):  # pyre-ignore[16]
+    with pytest.raises(NotFoundError):
         text_repository.find(TextId(Genre.LITERATURE, 1, 1))
 
 
@@ -265,12 +265,12 @@ def test_finding_line(database, text_repository) -> None:
 def test_finding_line_not_found(database, text_repository) -> None:
     when_chapter_in_collection(database)
 
-    with pytest.raises(NotFoundError):  # pyre-ignore[16]
+    with pytest.raises(NotFoundError):
         text_repository.find_line(CHAPTER.id_, len(CHAPTER.lines))
 
 
 def test_finding_line_chapter_not_found(database, text_repository) -> None:
-    with pytest.raises(NotFoundError):  # pyre-ignore[16]
+    with pytest.raises(NotFoundError):
         text_repository.find_line(CHAPTER.id_, 0)
 
 
@@ -413,7 +413,7 @@ def test_query_manuscripts_by_chapter(database, text_repository) -> None:
 
 
 def test_query_manuscripts_by_chapter_not_found(database, text_repository) -> None:
-    with pytest.raises(NotFoundError):  # pyre-ignore[16]
+    with pytest.raises(NotFoundError):
         assert text_repository.query_manuscripts_by_chapter(CHAPTER.id_)
 
 

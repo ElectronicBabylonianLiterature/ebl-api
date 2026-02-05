@@ -23,7 +23,7 @@ class BibliographyResource:
         bibliography_entry = req.media
         self._bibliography.create(bibliography_entry, req.context.user)
         resp.status = falcon.HTTP_CREATED
-        resp.location = f'/bibliography/{bibliography_entry["id"]}'
+        resp.location = f"/bibliography/{bibliography_entry['id']}"
         resp.media = bibliography_entry
 
 

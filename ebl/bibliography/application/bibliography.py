@@ -133,5 +133,5 @@ class Bibliography:
         ]
         if invalid_references:
             raise DataError(
-                "Unknown bibliography entries: " f'{", ".join(invalid_references)}.'
+                f"Unknown bibliography entries: {', '.join(invalid_references)}."
             )

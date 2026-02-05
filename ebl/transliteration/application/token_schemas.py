@@ -372,7 +372,8 @@ class BaseWordSchema(BaseTokenSchema):
     named_entities = fields.List(
         fields.String(),
         data_key="namedEntities",
-        default=(),
+        dump_default=(),
+        load_default=(),
     )
 
 

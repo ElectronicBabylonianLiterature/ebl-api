@@ -1,4 +1,4 @@
-FROM pypy:3.9-7.3.10
+FROM pypy:3.11
 
 RUN pip install --upgrade pip
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y

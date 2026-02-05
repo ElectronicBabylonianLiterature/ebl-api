@@ -195,11 +195,7 @@ def test_validate_references_invalid(
     (when(bibliography).find(second_invalid.id).thenRaise(NotFoundError))
 
     expected_error = (
-        "Unknown bibliography entries: "
-        f"{first_invalid.id}"
-        ", "
-        f"{second_invalid.id}"
-        "."
+        f"Unknown bibliography entries: {first_invalid.id}, {second_invalid.id}."
     )
 
     with pytest.raises(DataError, match=expected_error):

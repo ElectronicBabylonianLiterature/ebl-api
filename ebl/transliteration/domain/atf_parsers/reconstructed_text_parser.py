@@ -11,7 +11,11 @@ RECONSTRUCTED_LINE_PARSER = Lark.open(
     "lark_parser/ebl_atf.lark",
     maybe_placeholders=True,
     rel_to=__file__,
-    start="ebl_atf_text_line__text",
+    start=[
+        "ebl_atf_text_line__text",
+        "ebl_atf_text_line__akkadian_word",
+        "ebl_atf_text_line__break",
+    ],
 )
 
 
@@ -29,7 +33,7 @@ def parse_break(break_: str) -> Break:
 
 def parse_reconstructed_line(text: str) -> Sequence[Token]:
     try:
-        tree = RECONSTRUCTED_LINE_PARSER.parse(text)
+        tree = RECONSTRUCTED_LINE_PARSER.parse(text, start="ebl_atf_text_line__text")
         return TextLineTransformer().transform(tree)
     except (UnexpectedInput, ParseError) as error:
         raise ValueError(f"Invalid reconstructed line: {text}. {error}")

@@ -12,7 +12,7 @@ def test_invalid_extent() -> None:
         (), extent=Extent(LineNumber(1), (SurfaceLabel((), Surface.OBVERSE),))
     )
 
-    with pytest.raises(  # pyre-ignore[16]
+    with pytest.raises(
         ValueError, match="Labels are not allowed in line translations."
     ):
         (Line(LineNumber(1), (), translation=(translation,)),)

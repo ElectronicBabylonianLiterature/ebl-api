@@ -200,7 +200,7 @@ class LineFactory(factory.Factory):
             )
         )
 
-    number = factory.Sequence(lambda n: LineNumber(n))
+    number = factory.Sequence(LineNumber)
     variants = factory.List([factory.SelfAttribute("..variant")], TupleFactory)
     is_second_line_of_parallelism = factory.Faker("boolean")
     is_beginning_of_section = factory.Faker("boolean")

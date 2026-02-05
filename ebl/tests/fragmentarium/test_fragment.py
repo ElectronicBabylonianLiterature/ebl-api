@@ -401,7 +401,7 @@ def test_updating_fragment_sets_token_ids(transliterated_fragment, user):
     )
     words = updated_fragment.words
 
-    assert [word.id_ for word in words] == [f"Word-{i+1}" for i in range(len(words))]
+    assert [word.id_ for word in words] == [f"Word-{i + 1}" for i in range(len(words))]
 
 
 def test_deleting_words_keeps_remaining_ids(transliterated_fragment, user):

@@ -12,4 +12,4 @@ def validate(line: Iterable[Token]):
             token.accept(visitor)
         visitor.done()
     except EnclosureError as error:
-        raise ValueError(f"Invalid line {[str(part) for part in line]}: " f"{error}")
+        raise ValueError(f"Invalid line {[str(part) for part in line]}: {error}")

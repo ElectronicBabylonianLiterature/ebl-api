@@ -1155,8 +1155,7 @@ def test_parser_version(parser, version):
                             [
                                 GreekLetter.of(letter)
                                 for letter in (
-                                    "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμ"
-                                    "ΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω"
+                                    "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσςΤτΥυΦφΧχΨψΩω"
                                 )
                             ]
                         ),
@@ -1329,7 +1328,7 @@ def test_parse_normalized_akkadain_shift() -> None:
     ],
 )
 def test_invalid_text_line(atf, line_numbers) -> None:
-    with pytest.raises(TransliterationError) as exc_info:  # pyre-ignore[16]
+    with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))
@@ -1339,7 +1338,7 @@ def test_invalid_text_line(atf, line_numbers) -> None:
     "atf,line_numbers", [("1. x\n2. [", [2]), ("1. [\n2. ]", [1, 2])]
 )
 def test_invalid_brackets(atf, line_numbers) -> None:
-    with pytest.raises(TransliterationError) as exc_info:  # pyre-ignore[16]
+    with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, "Invalid brackets.")

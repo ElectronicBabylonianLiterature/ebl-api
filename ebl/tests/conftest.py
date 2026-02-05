@@ -100,6 +100,9 @@ def mongo_client() -> MongoClient:
     if os.getenv("CI") == "true":
         return MongoClient(os.environ["MONGODB_URI"])
     else:
+        os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
+        os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")
+
         from pymongo_inmemory import MongoClient as InMemoryMongoClient
 
         return InMemoryMongoClient()
@@ -510,9 +513,7 @@ class EnsureAnnotationPost:
 
 @pytest.fixture
 def guest_client(context):
-    api = ebl.app.create_app(
-        attr.evolve(context, auth_backend=NoneAuthBackend(lambda: Guest()))
-    )
+    api = ebl.app.create_app(attr.evolve(context, auth_backend=NoneAuthBackend(Guest)))
     api.add_route("/fragments/K.123/annotations", EnsureAnnotationPost())
     return testing.TestClient(api)
 

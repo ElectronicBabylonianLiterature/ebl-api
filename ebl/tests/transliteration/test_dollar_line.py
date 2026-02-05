@@ -119,7 +119,7 @@ def test_state_dollar_line_content() -> None:
 
 
 def test_state_dollar_line_non_empty_string_error() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         StateDollarLine(
             None, None, ScopeContainer(atf.Surface.REVERSE, "test"), None, None
         )

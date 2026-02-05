@@ -50,7 +50,7 @@ The dev container automatically installs all dependencies including MongoDB 4.4,
 
 If not using dev containers:
 
-* [PyPy3.9](https://www.pypy.org) & pip
+* [PyPy3.11](https://www.pypy.org) & pip
 * [Task](https://taskfile.dev/)
 * MongoDB 4.4.4
 * [Rust compiler](https://www.rust-lang.org/tools/install) (for libcst)
@@ -239,6 +239,7 @@ of MongoDB. E.g. for Ubuntu add the following environment variables:
 ```dotenv
 PYMONGOIM__MONGO_VERSION=4.4
 PYMONGOIM__OPERATING_SYSTEM=ubuntu
+PYMONGOIM__OS_VERSION=20
 ```
 
 ### Caching
