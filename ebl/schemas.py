@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Type, Any
+from typing import Type, Any, cast
 
 from marshmallow import fields
 
@@ -60,8 +60,8 @@ class StageField(EnumField):
     def __init__(self, **kwargs):
         super().__init__(Stage, **kwargs)
 
-    def _serialize_enum(self, value: Stage) -> str:
-        return value.long_name
+    def _serialize_enum(self, value: Enum) -> str:
+        return cast(Stage, value).long_name
 
     def _deserialize_enum(self, value: str) -> Enum:
         return Stage.from_name(value)
@@ -71,7 +71,7 @@ class ScopeField(EnumField):
     def __init__(self, **kwargs):
         super().__init__(Scope, **kwargs)
 
-    def _serialize_enum(self, value: Scope) -> str:
+    def _serialize_enum(self, value: Enum) -> str:
         return str(value)
 
     def _deserialize_enum(self, value: str) -> Enum:
@@ -82,8 +82,8 @@ class ResearchProjectField(EnumField):
     def __init__(self, **kwargs):
         super().__init__(ResearchProject, **kwargs)
 
-    def _serialize_enum(self, value: ResearchProject) -> str:
-        return value.abbreviation
+    def _serialize_enum(self, value: Enum) -> str:
+        return cast(ResearchProject, value).abbreviation
 
     def _deserialize_enum(self, value: str) -> Enum:
         return ResearchProject.from_abbreviation(value)
