@@ -1,1 +1,8 @@
-ebl/atf_importer/runner/data/AD-366B.atf: AD-366B.atf successfully imported as BM.35184
+ebl/atf_importer/runner/data/AD-197A.atf: AD-197A.atf successfully imported as BM.36733
+ebl/atf_importer/runner/data/AD-197B.atf: AD-197B.atf successfully imported as BM.34362
+ebl/atf_importer/runner/data/AD-197C.atf: AD-197C.atf successfully imported as BM.34938
+ebl/atf_importer/runner/data/AD-230ABC.atf: AD-230ABC.atf successfully imported as BM.34285
+ebl/atf_importer/runner/data/AD-234AB.atf: AD-234AB.atf successfully imported as BM.41850
+ebl/atf_importer/runner/data/AD-247ABC.atf: AD-247ABC.atf successfully imported as BM.45949
+ebl/atf_importer/runner/data/AD-253A.atf: AD-253A.atf successfully imported as BM.34105
+ebl/atf_importer/runner/data/AD-253B.atf: AD-253B.atf successfully imported as BM.42015

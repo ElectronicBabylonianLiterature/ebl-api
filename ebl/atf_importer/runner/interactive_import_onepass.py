@@ -8,7 +8,7 @@ the JSON file and reused when the same lemma+guideword appears again.
 
 IMPORTANT: Run this script with poetry to ensure database access:
     cd /workspaces/ebl-api
-    
+    poetry run python ebl/atf_importer/runner/interactive_import_onepass.py
 """
 
 import subprocess

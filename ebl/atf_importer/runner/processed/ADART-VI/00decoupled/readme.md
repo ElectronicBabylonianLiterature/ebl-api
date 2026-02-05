@@ -1,5 +1,14 @@
 # Decoupled texts information
 
+// ToDo:
+// 2. Check decoupled texts:
+//     a. Museum numbers
+//     b. Comments on partition
+//     c. Line sigla are proper
+// 3. Add parallel lines, if possible
+// 4. Add translations, if possible
+// 5. Import
+
 ## AD 63A & B
 
 BM.34646 + 35026 (= Sp II 129+441 +553)

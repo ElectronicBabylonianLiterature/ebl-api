@@ -4,7 +4,9 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
+
 A1. [... ana] NIM DIB GE₆ 2 sin ár ŠUR-GIGIR-[šá-x N N ...] 
 #lem: u; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; ŠUR-GIGIR[β/ζ Tauri]CN; n; n; u
 
@@ -99,6 +101,7 @@ B15'. [...] [x] [...]
 #lem: u; u; u
 
 @reverse
+
 A1'. [... G]E₆ 9 SAG GE₆ sin ⸢ina?⸣ I[GI? MÚL-x-šá-SUHUR-MÁŠ N N ...] 
 #lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-x-šá-SUHUR-MÁŠ[γ/δ Capricorni]CN; n; n; u
 

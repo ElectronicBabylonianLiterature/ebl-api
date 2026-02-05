@@ -1,32 +1,34 @@
-&X500090 = ADART 5 87
+&X500090 = BM.42147
 #project: adsd/adart5
 #atf: use unicode
 #atf: lang akk
 #atf: use math
 #atf: use legacy
 
+#note: Greek-letter phenomena for several planets. The columns correspond to months; years are separated by lines on the tablet.
+
 @obverse
 
-B1.	[...] & GAN & AB & ⸢x⸣
+1.	[...] & GAN & AB & ⸢x⸣
 #lem: u; Kislīmu[Month IX]MN; Ṭebētu[Month X]MN; u
 #tr.en: @& Month IX @& Month X @&
 
-B2.	[...]+3? & ($blank$) & dele-bat & [...]
+2.	[...]+3? & ($blank$) & dele-bat & [...]
 #lem: u; Dilbat[Venus]CN; u
 #tr.en: x+3 @& Venus @&
 
-B3.	[...] ⸢x⸣ & ($blank$) & 28.30 & ⸢x⸣ [...]
+3.	[...] ⸢x⸣ & ($blank$) & 28.30 & ⸢x⸣ [...]
 #lem: u; u; n; u; u
 #tr.en: @& @& 28 30 @&
 
-B4.	[...] ⸢x⸣ & ($blank$) & IGI & [...]
+4.	[...] ⸢x⸣ & ($blank$) & IGI & [...]
 #lem: u; u; amāru[be(come) visible]V; u
 #tr.en: @& @& first appearance @&
 
-B5.	[...] ⸢x⸣ & ($blank$) & GENNA [...] & ($blank$)
+5.	[...] ⸢x⸣ & ($blank$) & GENNA [...] & ($blank$)
 #lem: u; u; Kayyamānu[Saturn]CN; u
 #tr.en: @& @& Saturn @&
 
-B6.	[...] ⸢x⸣ & GU₄ & 58? [...] & ($blank$)
+6.	[...] ⸢x⸣ & GU₄ & 58? [...] & ($blank$)
 #lem: u; u; Šihṭu[Mercury]CN; n; u
 #tr.en: @& Mercury @& 58 @&

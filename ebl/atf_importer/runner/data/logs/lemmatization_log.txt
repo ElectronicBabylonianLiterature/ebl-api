@@ -1,68 +1,1348 @@
-ebl/atf_importer/runner/data/AD-366B.atf: In `AD-366B.atf`: The lemmatization of the following line:
-1'. [...] ... [...]
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kunnu'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'kunnu' and guideword 'be(come) set'
+ebl/atf_importer/runner/data/AD-197A.atf: Manual lemmatization: eBL lemma 'kânu I' entered by user
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197A.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197A.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197A.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197A.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197A.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-še-pít-MAŠ.MAŠ' and guideword 'η Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-ár' and guideword 'β Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA-šá-ULÙ' and guideword 'δ Cancri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣehēru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣehēru' and guideword 'be(come) small'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣehēru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kabbaru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'kabbaru' and guideword 'thick'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kabbaru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA-šá-ULÙ' and guideword 'δ Cancri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-še-pít-MAŠ.MAŠ' and guideword 'μ Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA-šá-ULÙ' and guideword 'δ Cancri'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'UŠ'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'UŠ' and guideword '(time degree)'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around(day x)'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kabbaru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'kabbaru' and guideword 'thick'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kabbaru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA-šá-ULÙ' and guideword 'δ Cancri'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'miqit-išāti' and guideword 'fall of fire'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'miqtu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'TIN.TIR'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'TIN.TIR' and guideword '(the city-quarter) TIN.TIR'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mē'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'mē' and guideword '(one) hundred'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'me'atu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erib'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'erib' and guideword '(sun)set'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'erbu II' entered by user
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-197C.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-197C.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunset to setting'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'HAB-rat' and guideword 'disc'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-še-pít-MAŠ.MAŠ' and guideword 'η Geminorum'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-230ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Addāru_Šanû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Bēltiya' and guideword 'Bēltu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'Beltu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lišlim'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'lišlim' and guideword 'be(come) well'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'šalāmu II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SI₄' and guideword 'α Scorpii'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'miqit-išāti' and guideword 'fall of fire'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'miqtu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Kumar'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kumar' and guideword '(the city-quarter) Kumar'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ikkir'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ikkir' and guideword 'be(come) different'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nakāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SUHUR-MÁŠ' and guideword 'δ Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-SI' and guideword 'β Librae'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-ALLA-šá-SI' and guideword 'γ Cancri'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣallumû' and guideword 'comet'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣallummû I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'šá-SUHUR-MÁŠ' and guideword 'x Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṭehû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṭehû' and guideword 'be(come) near to'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṭehû I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-ár' and guideword 'β Geminorum'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-TUR-šá-4-KÙŠ-ár-LUGAL' and guideword 'ρ Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Addāru_Šanû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-še-pít-MAŠ.MAŠ' and guideword 'μ Geminorum'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kabbaru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'kabbaru' and guideword 'thick'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kabbaru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) very overcast'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-234AB.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Addāru_Šanû'
+ebl/atf_importer/runner/data/AD-234AB.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Addāru_Šanû'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-MURUB₄-šá-SAG-GÍR.TAB' and guideword 'δ Scorpii'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-ár' and guideword 'β Geminorum'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Laodice' and guideword 'Laodice'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-še-pít-MAŠ.MAŠ' and guideword 'μ Geminorum'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mādiš'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'mādiš' and guideword 'much'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'mādiš I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'gašāru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'gašāru' and guideword 'be(come) severe'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'gašāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-še-pít-MAŠ.MAŠ' and guideword 'η Geminorum'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SAG-A' and guideword 'ε Leonis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'GIŠ.KUN-A' and guideword 'ϑ Leonis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: In `AD-247ABC.atf`: The lemmatization of the following line:
+B+1'. [...] ... [...]
 does not match its length. Lemmatization:
 #lem: u; u
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunset to setting'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'SUHUR-MÁŠ' and guideword 'γ/δ Capricorni'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-še-pít-MAŠ.MAŠ' and guideword 'η Geminorum'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'magal'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'magal' and guideword 'very (much)'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'magal I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'adir' and guideword 'eclipsed'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'adāru I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'aššum'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'aššum' and guideword 'because (of)'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'aššu I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ZI'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'ZI' and guideword '(meaning unclear)'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'IR'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'IR' and guideword '(meaning unclear)'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
-ebl/atf_importer/runner/data/AD-366B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ZI'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'ZI' and guideword '(meaning unclear)'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'IR'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'IR' and guideword '(meaning unclear)'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
-ebl/atf_importer/runner/data/AD-366B.atf: Incompatible lemmatization: No eBL word found for lemma 'Arses' and guideword 'Arses'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'urrup'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'urrup' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DUL'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'DUL' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SUHUR-MÁŠ' and guideword 'δ Capricorni'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No eBL word found for lemma 'miqit-išāti' and guideword 'fall of fire'
+ebl/atf_importer/runner/data/AD-247ABC.atf: Manual lemmatization: eBL lemma 'miqtu I' entered by user
+ebl/atf_importer/runner/data/AD-247ABC.atf: In `AD-247ABC.atf`: The lemmatization of the following line:
+B+9'. [...] ... [...]
+does not match its length. Lemmatization:
+#lem: u; u
+ebl/atf_importer/runner/data/AD-247ABC.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Addāru_Šanû'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-e-šá-SAG-GÍR.TAB' and guideword 'β Scorpii'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'šitqultu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'šitqultu' and guideword 'opposition/equinox'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'šitqultu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-KIR₄-šil-PA' and guideword 'ϑ Ophiuchi'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SUHUR-MÁŠ' and guideword 'δ Capricorni'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēpu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'erēpu' and guideword 'be(come) overcast'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'erēpu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA-šá-ULÙ' and guideword 'δ Cancri'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kurru'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'kurru' and guideword 'kor (180 litres)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'kurru I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'around (day x)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'na-gauge'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'Stratonikē' and guideword 'Stratonice'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SUHUR-MÁŠ' and guideword 'δ Capricorni'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SUHUR-MÁŠ' and guideword 'γ Capricorni'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-SI' and guideword 'β Tauri'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pisannu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'pisannu' and guideword '(a meterological phenomenon)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'pišannu I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'DIB'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'DIB' and guideword '(meaning unclear)'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SUHUR-MÁŠ' and guideword 'δ Capricorni'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma '4' and guideword '4'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-253A.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-253A.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA-šá-ULÙ' and guideword 'δ Cancri'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'GÌR-ár-šá-A' and guideword 'β Virginis'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'SA₄-šá-ABSIN' and guideword 'α Virginis'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'qû'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'qû' and guideword '(one) litre'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'qû II' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ina'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'ina' and guideword 'at (plus numeral)'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'ina I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Stratonikē' and guideword 'Stratonice'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'šarrātu' and guideword 'queen'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'šarratu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Sapardu' and guideword 'Sardis'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-še-pit-MAŠ.MAŠ' and guideword 'μ Geminorum'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma '4' and guideword '4'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SUHUR-MÁŠ' and guideword 'δ Capricorni'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ŠÁR'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠÁR' and guideword 'gusty(?)'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-IGI-šá-SAG-HUN' and guideword 'β Arietis'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nahāsu'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'nahāsu' and guideword 'be(come) back'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'nahāsu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma '4' and guideword '4'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'is-le₁₀' and guideword 'α Tauri'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'ŠUR-GIGIR-šá-ULÙ' and guideword 'ζ Tauri'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-šá-SIPA' and guideword 'γ Geminorum'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-ALLA' and guideword 'γ/δ Cancri'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma '4' and guideword '4'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'DELE-šá-IGI-ABSIN' and guideword 'γ Virginis'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'RÍN-šá-ULÙ' and guideword 'α Librae'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mahīru'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'mahīru' and guideword 'price (equivalent)'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'mahīru I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'pānu'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'pānu' and guideword 'bushel (36 litres)'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'pānu II' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-ár-šá-SAG-HUN' and guideword 'α Arietis'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'lawi'
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'lawi' and guideword 'surrounded (with)'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'lawû II' entered by user
+ebl/atf_importer/runner/data/AD-253B.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
+ebl/atf_importer/runner/data/AD-253B.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user

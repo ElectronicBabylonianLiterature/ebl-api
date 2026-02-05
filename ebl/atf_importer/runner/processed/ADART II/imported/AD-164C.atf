@@ -4,7 +4,9 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
+
 1'. [...] ⸢x⸣ [...]
 #lem: u; u; u
 
@@ -13,6 +15,7 @@
 
 3'. [... si]n? ina IGI? MAŠ.MAŠ?-IGI? 2 KÙŠ sin 5 1/2 KÙŠ ana ULÙ [SIG ...] 
 #lem: u; Sîn[moon]N; ina[in]PRP; pān[front]N; MAŠ.MAŠ-IGI[α Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; u
+// F BM.35015 o 7'
 
 4'. [... ina KI]N.SIG ⸢ŠÚ.ŠÚ⸣ GE₆ 20 DIR AN ZA ina ZALÁG ŠÚ.ŠÚ ⸢x⸣ [...] 
 #lem: u; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) overcast]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; urrup[be(come) overcast]V; u; u
@@ -28,9 +31,11 @@
 
 8'. [...] KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL [x x x] GE₆ 25 ⸢DIR⸣ [...] 
 #lem: u; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; u; u; u; mūšu[night]N; n; erpetu[cloud]N; u
+// F BM.35015 o 11'
 
 9'. [... ina] ⸢ZALÁG⸣ sin ár? [...] ana ⸢ULÙ⸣ SIG GU₄.UD SIG? ⸢x⸣ [x x]+1/2 KÙŠ [...] 
 #lem: u; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; u; ana[to]PRP; šūtu[south]N; šapil[low]AJ; Šihṭu[Mercury]CN; šapil[below]PRP; u; u; u; ammatu[unit]N; u
+// F BM.35015 o 12'
 
 10'. [...] 4 GE₆ GIN 2[9 ...] ⸢x⸣ 30 MÚL.BABBAR ina GÍR.TAB ŠÚ ŠÚ.ŠÚ I[TU BI ...] 
 #lem: u; n; mūšu[night]N; alāku[go]V; n; u; u; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; urrup[be(come) very overcast]V; warhu[month]N; šū[that]'DP; u

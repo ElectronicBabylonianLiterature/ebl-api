@@ -4,7 +4,9 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
+
 1'. [...] ⸢x x x x x x⸣ [...] 
 #lem: u; u; u; u; u; u; u; u
 
@@ -25,6 +27,7 @@
 
 7'. [... GE₆ 19] DIR AN ZA ULÙ GIN ina ZALÁG sin ár MAŠ.MAŠ-ár 1 KÙŠ sin 5 KÙŠ ana ULÙ SIG 19 DIR AN ZA ULÙ GIN ina KIN.SIG ŠÚ.ŠÚ GE₆ 20 DIR AN ZA ina ZALÁG ŠÚ.ŠÚ ⸢x⸣ [...] 
 #lem: u; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MAŠ.MAŠ-ár[β Geminorum]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; šūtu[south wind]N; alāku[blow]V; ina[in]PRP; kinsikku[afternoon]N; urrup[be(come) very overcast]V; mūšu[night]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; nūru[last part of the night]N; urrup[be(come) overcast]V; u; u
+// F BM.45848 o 3'
 
 8'. [...] ⸢x x⸣ ŠÚ.ŠÚ? AN UTAH i-ṣa ULÙ GIN in 20 GENNA ina GÍR.TAB ŠÚ GE₆ 21 ina ZALÁG sin SIG SAG-A 6 1/2 KÙŠ sin 1/2 KÙŠ ana NIM DIB ina ZALÁG dele-bat SIG DELE-šá-IGI-A[BSIN 2/3 KÙŠ dele-bat 2 ...] 
 #lem: u; u; u; urrup[be(come)very  overcast]V; šamû[rain]N; natāku[drip]V; wīṣu[little]AJ; šūtu[south wind]N; alāku[blow]V; ina[around (day x)]PRP; n; Kayyamānu[Saturn]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]'PRP; SAG-A[ε Leonis]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; ina[in]PRP; nūru[last part of the night]N; Dilbat[Venus]CN; šapil[below]'PRP; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; ammatu[unit]N; Dilbat[Venus]CN; n; u
@@ -37,9 +40,11 @@
 
 11'. [...] ⸢x⸣ 26 11 na MÚL.BABBAR ŠÚ.ŠÚ SI GIN GE₆ 27 ŠÚ.ŠÚ ina ZALÁG sin ina IGI RÍN-šá-ULÙ 2 1/2 KÙŠ SIG GU₄.UD 2 1/2 KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL 20+[x ...] 
 #lem: u; u; n; n; na[sunset to setting]'N; Kakkabu-peṣû[Jupiter]CN; urrup[be(come)very overcast]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; urrup[be(come) overcast]V; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; RÍN-šá-ULÙ[α Librae]CN; n; n; ammatu[unit]N; šapil[below]'PRP; Šihṭu[Mercury]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]'N; nahāsu[be(come) back]V; n; u
+// F BM.45848 o 8'
 
 12'. [... AN.KU₁₀] šamáš šá DIB in 1.4 GE₆ GIN 29 ŠÚ.ŠÚ GE₆ 30 ŠÚ.ŠÚ 30 MÚL.BABBAR ina GÍR.TAB ŠÚ ŠÚ.ŠÚ ITU BI KI.LAM še-im ina SAG ITU 1(GUR) GUR [...] 
 #lem: u; antallû[eclipse]N; šamši[sun]N; ša[which]REL; etēqu[omitted]'AJ; ina[in]PRP; n; mūšu[night]N; alāku[go]V; n; urrup[be(come) very overcast]V; mūšu[night]N; n; urrup[be(come) very overcast]V; n; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Zuqiqīpu[Scorpio]CN; rabû[set]V; urrup[be(come) very overcast]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; kurru[kor (180 litres)]N; u
+// F BM.45848 o 9'
 
 13'. [...] 1(GUR) GUR 5(BÁN) kàs 4(GUR) GUR sah-le₁₀ 1(BARIG) 1(BÁN) ŠE.GIŠ.Ì 1 PI 3 qa ina TIL ITU 1(BARIG) 1(BÁN) SÍG{HI.A} 4 MA.NA a-na 1 GÍN KÙ.BABBAR ép-[šú ...] 
 #lem: u; n; kurru[kor (180 litres)]N; n; kasû[mustard]N; n; kurru[kor (180 litres)]N; sahlu[cress]N; n; n; šamaššammū[sesame]N; n; pānu[bushel (36 litres)]N; n; qû[(one) litre]N; ina[at]PRP; qītu[end]N; warhu[month]N; n; n; šīpātu[wool]N; n; manû[mina]N; ana[for]PRP; n; šiqlu[shekel]N; kaspu[silver]N; epšu[wrought]AJ; u

@@ -4,7 +4,9 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
+
 1. [M]U 1 ME 46.⸢KÁM⸣ {m}an-ti-ʾu-uk-[su ...] 
 #lem: šattu[year]N; n; mē[(one) hundred]NU; n; Antiochus[Antiochus]RN; u
 
@@ -54,6 +56,7 @@
 #lem: u; u; u
 
 @reverse
+
 1'. [... G]E₆ 22 ina ZALÁG sin ina I[GI ...] 
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; u
 
@@ -82,12 +85,15 @@ $ ruling
 
 9'. KIN 30 9.40 a-kám ki PAP NU IGI 1 SI ⸢GIN⸣ [... GE₆ 4] 
 #lem: Ulūlu[Month VI]MN; n; n; akamu[mist]N; kī[when]SBJ; naṣāru[watch]V; ul[not]MOD; amāru[see]V; n; ištānu[north wind]N; alāku[blow]V; u; mūšu[night]N; n
+// F BM.45819 r 4'
 
 10'. SAG GE₆ sin ina IGI MÚL-KUR-šá-KIR₄-šil-PA 2/3 [KÙŠ ...] 
 #lem: rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-KUR-šá-KIR₄-šil-PA[ϑ Ophiuchi]CN; n; ammatu[unit]N; u
+// F BM.45819 r 5'
 
 11'. IZI.GAR TA ULÙ ana SI DIB-ma UD.DA-su [...] 
 #lem: dipāru[torch]N$; ištu[from]PRP; šūtu[south]N; ana[to]PRP; ištānu[north]N; etēqu[go past//cross]V'V$; ṣētu[bright light]N; u
+// F BM.45819 r 6'
 
 12'. 12 SI GIN 13 2.40 ŠÚ GE₆ 14 ⸢5? x⸣ [... sin x MÚL-x] 
 #lem: n; ištānu[north wind]N; alāku[blow]V; n; n; rabû[moonset to sunrise]'N; mūšu[night]N; n; n; u; u; Sîn[moon]N; u; u
@@ -100,9 +106,11 @@ $ ruling
 
 15'. ana ULÙ SIG 21 SI GIN GE₆ 22 ina ZALÁG si[n ...] 
 #lem: ana[to]PRP; šūtu[south]N; šapil[low]AJ; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+// F BM.32555 r 1'
 
 16'. ⸢ana⸣ NIM DIB 23 SI GIN GE₆ 24 ina ZALÁG s[in ...] 
 #lem: ana[to]PRP; Elamtu[east]'N; etēqu[pass]V; n; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+// F BM.45819 r 11'
 
 17'. [x x x x x x x] [...] 
 #lem: u; u; u; u; u; u; u; u
