@@ -19,14 +19,12 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 
 ### Prerequisites
 
-**Recommended: Local Development**
+**Cloud Development**
+* [GitHub Codespaces](https://github.com/features/codespaces)
+
+**Local Development**
 * [Docker Desktop](https://www.docker.com/products/docker-desktop) (or Docker Engine + Docker Compose)
 * [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-
-**Alternative: Cloud Development**
-* [GitHub Codespaces](https://github.com/features/codespaces) ⚠️ May fail with insufficient storage space
-
-⚠️ **Note**: GitHub Codespaces may encounter errors due to storage limitations when installing MongoDB and all dependencies. Local development with Docker Desktop is recommended for a more reliable setup.
 
 ### Getting Started
 
@@ -46,7 +44,7 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 
 The dev container automatically installs all dependencies including MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler. No manual installation required.
 
-### Manual Setup (Alternative)
+### Manual Setup
 
 If not using dev containers:
 
@@ -557,3 +555,4 @@ CSL-JSON schema is based on
 [citation-style-language/schema](https://github.com/citation-style-language/schema)
 Copyright (c) 2007-2018 Citation Style Language and contributors.
 Licensed under MIT License.
+
