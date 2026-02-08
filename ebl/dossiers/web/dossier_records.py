@@ -1,4 +1,3 @@
-import logging
 from falcon import Request, Response
 from urllib.parse import parse_qs
 from ebl.errors import NotFoundError
@@ -7,9 +6,8 @@ from marshmallow import EXCLUDE
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     DossierRecordSchema,
+    DossierRecordSuggestionSchema,
 )
-
-logger = logging.getLogger(__name__)
 
 
 class DossiersResource:
@@ -62,3 +60,13 @@ class DossiersFilterResource:
         )
 
         resp.media = DossierRecordSchema(unknown=EXCLUDE, many=True).dump(dossiers)
+
+
+class DossiersSuggestionsResource:
+    def __init__(self, _dossiersRepository: DossiersRepository):
+        self._dossiersRepository = _dossiersRepository
+
+    def on_get(self, req: Request, resp: Response) -> None:
+        query = req.get_param("query", default="")
+        suggestions = self._dossiersRepository.search_suggestions(query)
+        resp.media = DossierRecordSuggestionSchema(many=True).dump(suggestions)

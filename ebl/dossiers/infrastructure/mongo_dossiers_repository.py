@@ -1,12 +1,12 @@
 import attr
 import re
-import logging
 from typing import Sequence, List, Dict, Optional
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
 from ebl.mongo_collection import MongoCollection
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
+    DossierRecordSuggestion,
 )
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.common.domain.provenance import Provenance
@@ -18,8 +18,7 @@ DOSSIERS_COLLECTION = "dossiers"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
 FRAGMENTS_COLLECTION = "fragments"
 MAX_QUERY_LENGTH = 256
-
-logger = logging.getLogger(__name__)
+MAX_SUGGESTION_WORDS = 7
 
 
 class DossierRecordSchema(Schema):
@@ -54,6 +53,15 @@ class DossierRecordSchema(Schema):
     def make_record(self, data, **kwargs):
         data["references"] = tuple(data["references"])
         return DossierRecord(**data)
+
+
+class DossierRecordSuggestionSchema(Schema):
+    id = fields.String(required=True)
+    description_snippet = fields.String(required=True, data_key="descriptionSnippet")
+
+    @post_load
+    def make_suggestion(self, data, **kwargs):
+        return DossierRecordSuggestion(**data)
 
 
 class MongoDossiersRepository(DossiersRepository):
@@ -121,6 +129,42 @@ class MongoDossiersRepository(DossiersRepository):
 
         return dossiers
 
+    def search_suggestions(self, query: str) -> Sequence[DossierRecordSuggestion]:
+        if not query:
+            return []
+
+        safe_query = re.escape(query[:MAX_QUERY_LENGTH])
+        search_filter = {
+            "$or": [
+                {"_id": {"$regex": safe_query, "$options": "i"}},
+                {"description": {"$regex": safe_query, "$options": "i"}},
+            ]
+        }
+
+        pipeline = [
+            {"$match": search_filter},
+            {
+                "$project": {
+                    "_id": 1,
+                    "description": 1,
+                }
+            },
+            {"$limit": 10},
+        ]
+
+        results = list(self._dossiers_collection.aggregate(pipeline))
+
+        suggestions = []
+        for result in results:
+            description = result.get("description", "")
+            words = description.split() if description else []
+            snippet = " ".join(words[:MAX_SUGGESTION_WORDS])
+            suggestions.append(
+                DossierRecordSuggestion(id=result["_id"], description_snippet=snippet)
+            )
+
+        return suggestions
+
     def filter_by_fragment_criteria(
         self,
         provenance: Optional[str] = None,
@@ -140,8 +184,7 @@ class MongoDossiersRepository(DossiersRepository):
                 return []
 
             return self.query_by_ids(dossier_ids)
-        except Exception as e:
-            logger.error(f"Error filtering dossiers by fragment criteria: {e}")
+        except Exception:
             return []
 
     def _build_fragment_query(
@@ -168,9 +211,6 @@ class MongoDossiersRepository(DossiersRepository):
         )
 
     def _build_genre_filter(self, genre: str) -> Dict:
-        # Genre format: "CATEGORY" or "CATEGORY:SUBCATEGORY:..."
-        # Fragments store genres as: genres.category = ["CATEGORY", "SUBCATEGORY", ...]
-        # We build filters to match each part at its corresponding array index
         genre_parts = genre.split(":")
         if len(genre_parts) == 1:
             return {"genres.category.0": genre_parts[0]}

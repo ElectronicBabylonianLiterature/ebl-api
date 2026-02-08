@@ -391,3 +391,41 @@ def test_filter_dossiers_by_genre(
     assert result.status == falcon.HTTP_OK
     assert len(result.json) == 1
     assert result.json[0]["_id"] == dossier1.id
+
+
+def test_dossiers_suggestions_route(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001", description="This is a long description with many words"
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002", description="Testing another description here"
+    )
+    dossier3 = DossierRecordFactory.build(id="OTHER001", description="Different text")
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+
+    result = client.simulate_get("/dossiers/suggestions", params={"query": "TEST"})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 2
+    suggestion_ids = {s["id"] for s in result.json}
+    assert suggestion_ids == {dossier1.id, dossier2.id}
+    for suggestion in result.json:
+        assert "descriptionSnippet" in suggestion
+        assert len(suggestion["descriptionSnippet"].split()) <= 7
+
+
+def test_dossiers_suggestions_empty_query(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier = DossierRecordFactory.build()
+    dossiers_repository.create(dossier)
+
+    result = client.simulate_get("/dossiers/suggestions", params={"query": ""})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 0

@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 
 from ebl.dossiers.domain.dossier_record import (
     DossierRecord,
+    DossierRecordSuggestion,
 )
 
 
@@ -22,6 +23,10 @@ class DossiersRepository(ABC):
         provenance: Optional[str] = None,
         script_period: Optional[str] = None,
     ) -> Sequence[DossierRecord]:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def search_suggestions(self, query: str) -> Sequence[DossierRecordSuggestion]:
         raise NotImplementedError()
 
     @abstractmethod
