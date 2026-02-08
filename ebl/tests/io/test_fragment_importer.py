@@ -220,7 +220,7 @@ def test_set_word_ids(valid_fragment_data):
         for word in line.content
         if hasattr(word, "id_")
     ]
-    expected_ids = [f"Word-{index+1}" for index in range(len(ids))]
+    expected_ids = [f"Word-{index + 1}" for index in range(len(ids))]
 
     assert ids and ids == expected_ids
     assert FragmentSchema().load(data_with_ids) == fragment_with_ids

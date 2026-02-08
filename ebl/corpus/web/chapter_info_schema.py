@@ -17,11 +17,11 @@ class ChapterInfoLineSchema(ApiLineSchema):
 class ChapterInfoSchema(Schema):
     id_ = fields.Nested(ChapterIdSchema, data_key="id")
     text_name = fields.String(data_key="textName")
-    siglums = fields.Mapping(fields.String(), fields.String())
+    siglums = fields.Dict(fields.String(), fields.String())
     matching_lines = fields.Nested(
         ChapterInfoLineSchema, many=True, data_key="matchingLines"
     )
-    matching_colophon_lines = fields.Mapping(
+    matching_colophon_lines = fields.Dict(
         fields.String(),
         fields.Nested(TextLineSchema, many=True),
         data_key="matchingColophonLines",

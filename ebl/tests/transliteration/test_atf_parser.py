@@ -73,7 +73,7 @@ def test_parse_atf(line: str, expected_tokens: List[Line]) -> None:
     ],
 )
 def test_invalid_atf(atf, line_numbers) -> None:
-    with pytest.raises(TransliterationError) as exc_info:  # pyre-ignore[16]
+    with pytest.raises(TransliterationError) as exc_info:
         parse_atf_lark(atf)
 
     assert_exception_has_errors(exc_info, line_numbers, starts_with("Invalid line"))

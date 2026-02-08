@@ -1,3 +1,5 @@
+from unicodedata import normalize
+
 from ebl.merger import Merger
 
 
@@ -14,6 +16,10 @@ def map_(entry):
 
 def remove_values(row):
     return [{**entry, "value": None} for entry in row]
+
+
+def map_normalized(entry: dict) -> str:
+    return normalize("NFC", entry["key"])
 
 
 def test_merge_empty():
@@ -52,3 +58,26 @@ def test_merge_edit_lines():
         {"key": "a1.1", "value": None},
         {"key": "b1", "value": 3},
     ]
+
+
+def test_merge_repeated_tokens_is_deterministic() -> None:
+    old = [
+        {"key": "a", "value": 1},
+        {"key": "a", "value": 2},
+    ]
+    new = [{"key": "a", "value": None}]
+
+    merger = Merger(map_, inner_merge)
+    first = merger.merge(old, new)
+    second = merger.merge(old, new)
+
+    assert first == second
+
+
+def test_merge_unicode_normalization() -> None:
+    old = [{"key": "é", "value": 1}]
+    new = [{"key": "e\u0301", "value": None}]
+
+    merged = Merger(map_normalized, inner_merge).merge(old, new)
+
+    assert merged == old

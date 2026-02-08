@@ -83,7 +83,7 @@ def test_parse_labels_empty() -> None:
 
 @pytest.mark.parametrize("labels", ["o r", "i iii", "i o"])
 def test_parse_labels_invalud(labels) -> None:
-    with pytest.raises(PARSE_ERRORS):  # pyre-ignore[16]
+    with pytest.raises(PARSE_ERRORS):
         parse_labels(labels)
 
 
@@ -115,5 +115,5 @@ def test_duplicate_status_is_invalid() -> None:
         def accept(self, visitor: LabelVisitor) -> LabelVisitor:
             return visitor
 
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         TestLabel((Status.PRIME, Status.PRIME))

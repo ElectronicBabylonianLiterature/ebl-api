@@ -1,4 +1,5 @@
 import json
+from itertools import zip_longest
 
 import falcon
 import httpretty
@@ -85,9 +86,12 @@ def test_update(client, fragment_repository, photo_repository):
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json["fragmentNumber"] == expected_json["fragmentNumber"]
-    for annotation, expected_annotation in zip(
-        post_result.json["annotations"], expected_json["annotations"]
+    for annotation, expected_annotation in zip_longest(
+        post_result.json["annotations"],
+        expected_json["annotations"],
     ):
+        assert annotation is not None
+        assert expected_annotation is not None
         assert annotation["geometry"] == expected_annotation["geometry"]
         assert annotation["data"] == expected_annotation["data"]
         assert annotation["croppedSign"] is not None

@@ -53,8 +53,7 @@ class MongoFragmentRepository(
                 ("fragments.museumNumber.prefix", pymongo.ASCENDING),
                 ("fragments.museumNumber.number", pymongo.ASCENDING),
                 ("fragments.museumNumber.suffix", pymongo.ASCENDING),
-            ],
-            name="fragments_museum_number_idx",
+            ]
         )
 
     def count_total_fragments(self) -> int:

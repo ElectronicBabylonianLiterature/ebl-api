@@ -36,11 +36,7 @@ class Auth0User(User):
     ) -> List[Scope]:
         scopes = []
 
-        scope_string = self._access_token.get("scope", "")
-        if not scope_string:
-            return scopes
-
-        for scope in scope_string.split():
+        for scope in self._access_token["scope"].split():
             if scope.startswith(prefix) and scope.endswith(suffix):
                 try:
                     scopes.append(Scope.from_string(scope))

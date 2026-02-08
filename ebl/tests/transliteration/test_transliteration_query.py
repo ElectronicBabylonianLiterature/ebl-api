@@ -39,11 +39,7 @@ def test_regexp(string, is_match, sign_repository, signs):
     query = TransliterationQuery(string=string, visitor=visitor)
     match = re.search(
         query.regexp,
-        "KU NU IGI\n"
-        "MI DIŠ MI UD MA\n"
-        "KI DU ABZ411 BA MA TA\n"
-        "X MU TA MA UD\n"
-        "BA ŠU/BU",
+        "KU NU IGI\nMI DIŠ MI UD MA\nKI DU ABZ411 BA MA TA\nX MU TA MA UD\nBA ŠU/BU",
     )
     if is_match:
         assert match is not None

@@ -4,6 +4,7 @@ import os
 import shutil
 from datetime import date
 from io import BytesIO
+from itertools import zip_longest
 from os.path import join
 from pathlib import Path
 from typing import Sequence, Union, Tuple
@@ -165,7 +166,9 @@ def write_annotations(
     path: Union[str, Path], bounding_boxes: Sequence[BoundingBox], signs: Sequence[str]
 ) -> None:
     with open(path, "w+") as file:
-        for bounding_box, sign in zip(bounding_boxes, signs):
+        for bounding_box, sign in zip_longest(bounding_boxes, signs):
+            if bounding_box is None or sign is None:
+                raise ValueError("Bounding boxes and signs must match.")
             rectangle_attributes = [
                 str(int(rectangle_attribute))
                 for rectangle_attribute in bounding_box.to_list()
@@ -261,9 +264,8 @@ def main(argv=None):
             )
         print(f"'{args.filter}' Fragments are filtered.")
         if args.filter == "selected" or args.filter == "finished":
-            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
-                args.filter
-            ]
+            with open("ebl/fragmentarium/annotations.json") as f:
+                filter_fragments = json.load(f)[args.filter]
             annotation_collection = list(
                 filter(
                     lambda elem: str(elem.fragment_number) in filter_fragments,
@@ -271,9 +273,8 @@ def main(argv=None):
                 )
             )
         else:
-            filter_fragments = json.load(open("ebl/fragmentarium/annotations.json"))[
-                "finished"
-            ]
+            with open("ebl/fragmentarium/annotations.json") as f:
+                filter_fragments = json.load(f)["finished"]
             annotation_collection = list(
                 filter(
                     lambda elem: str(elem.fragment_number) not in filter_fragments,

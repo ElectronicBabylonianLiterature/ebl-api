@@ -46,8 +46,9 @@ No manual steps are required - everything works automatically after container re
 ## What Gets Installed
 
 ### Via Dev Container Features
-1. **Poetry** - Python dependency management (installed via `ghcr.io/devcontainers-contrib/features/poetry:2`)
-2. **go-task** - Task runner (installed via `ghcr.io/devcontainers-contrib/features/go-task:1`)
+1. **Python 3.11** - Runtime for local development
+2. **Poetry** - Python dependency management (installed via `ghcr.io/devcontainers-contrib/features/poetry:2`)
+3. **go-task** - Task runner (installed via `ghcr.io/devcontainers-contrib/features/go-task:1`)
 
 ### Via setup.sh Script
 1. **MongoDB 4.4** - Database server

@@ -39,7 +39,7 @@ WORD3 = Word.of(
     ],
 )
 def test_invalid_labels(labels: Sequence[Label]) -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         ManuscriptLine(manuscript_id=1, labels=labels, line=TextLine(LineNumber(1)))
 
 

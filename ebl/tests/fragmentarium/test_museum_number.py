@@ -23,27 +23,27 @@ def test_str_no_suffix() -> None:
 
 
 def test_invalid_empty_prefix() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         MuseumNumber("", NUMBER)
 
 
 def test_invalid_period_in_prefix_no_suffix() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         MuseumNumber("K.A", NUMBER)
 
 
 def test_invalid_empty_number() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         MuseumNumber(PREFIX, "")
 
 
 def test_invalid_period_in_number() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         MuseumNumber(PREFIX, "1.1")
 
 
 def test_invalid_period_in_suffix() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         MuseumNumber(PREFIX, NUMBER, "a.1")
 
 
@@ -65,7 +65,7 @@ def test_of_long_prefix() -> None:
 
 
 def test_of_invalid() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         MuseumNumber.of("K.")
 
 

@@ -1,4 +1,7 @@
+import datetime
+
 import pytest
+from bson import ObjectId
 
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -153,3 +156,21 @@ def test_count(collection):
     collection.insert_one({"data": "another payload"})
 
     assert collection.count_documents({"data": "payload"}) == 2
+
+
+def test_get_all_values_ignores_object_ids(collection) -> None:
+    object_id = ObjectId()
+    collection.insert_one({"data": object_id})
+    collection.insert_one({"data": "value"})
+
+    assert collection.get_all_values("data") == ["value"]
+
+
+def test_unicode_and_datetime_roundtrip(collection) -> None:
+    timestamp = datetime.datetime(2023, 7, 12, 10, 11, 12)
+    document = {"data": "šà-ḫa", "created": timestamp}
+
+    insert_id = collection.insert_one(document)
+    stored = collection.find_one_by_id(insert_id)
+
+    assert stored == {"_id": insert_id, "data": "šà-ḫa", "created": timestamp}

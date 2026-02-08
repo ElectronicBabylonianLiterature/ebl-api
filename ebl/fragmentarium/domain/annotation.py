@@ -147,4 +147,4 @@ class Annotations:
                 bbox.height / image_width * 100,
             )
             annotations.append(Annotation.from_prediction(geometry))
-        return cls(fragment_number, annotations)
+        return cls(fragment_number, tuple(annotations))

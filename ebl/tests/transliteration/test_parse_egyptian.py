@@ -104,9 +104,9 @@ def test_egpytian_feet_metrical_feet_line(
         "1. a • a",
         "1. •",
         "1. a-na-ku • a-ka-na • ep-še-e-ku • ma-an#-nu • i-lu • še-na • ša i-na (•) "
-        "ma-a-ti •",
+        + "ma-a-ti •",
         "1. ha-al-qu₂ • {d}dumu#-zi •* u₃ {d}giz-zi-da • šu-nu • a-ha-mi-iš • "
-        "ip-pa-la-su₂-ma •",
+        + "ip-pa-la-su₂-ma •",
         "1. iṣ-ṣe#-ne₂-eh-hu • šu-nu • a-ma-ta da-mi-iq-ta •",
         "1. a-na# {d}a-ni • i#-qa₂#-ab-bu-u₂ • pa-<<•>>-ni • ba-nu-ti •* ša {d}a-ni •",
     ],

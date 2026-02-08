@@ -56,7 +56,7 @@ def create_error_message(siglum: Siglum, entry: TextLineEntry, chapter: Chapter)
     return (
         f"{siglum} colophon {entry.line.atf}"
         if entry.source is None
-        else f"{chapter.lines[entry.source].number.atf}" f" {siglum} {entry.line.atf}"
+        else f"{chapter.lines[entry.source].number.atf} {siglum} {entry.line.atf}"
     )
 
 

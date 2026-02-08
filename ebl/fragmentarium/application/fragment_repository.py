@@ -14,22 +14,28 @@ from ebl.fragmentarium.domain.date import Date
 
 class FragmentRepository(ABC):
     @abstractmethod
-    def create_indexes(self) -> None: ...
+    def create_indexes(self) -> None:
+        raise NotImplementedError
 
     @abstractmethod
-    def create(self, fragment: Fragment, sort_key: Optional[int] = None) -> str: ...
+    def create(self, fragment: Fragment, sort_key: Optional[int] = None) -> str:
+        raise NotImplementedError
 
     @abstractmethod
-    def create_many(self, fragments: Sequence[Fragment]) -> Sequence[str]: ...
+    def create_many(self, fragments: Sequence[Fragment]) -> Sequence[str]:
+        raise NotImplementedError
 
     @abstractmethod
-    def count_transliterated_fragments(self, only_authorized=True) -> int: ...
+    def count_transliterated_fragments(self, only_authorized: bool = True) -> int:
+        raise NotImplementedError
 
     @abstractmethod
-    def count_lines(self) -> int: ...
+    def count_lines(self) -> int:
+        raise NotImplementedError
 
     @abstractmethod
-    def count_total_fragments(self) -> int: ...
+    def count_total_fragments(self) -> int:
+        raise NotImplementedError
 
     @abstractmethod
     def query_by_museum_number(
@@ -37,77 +43,97 @@ class FragmentRepository(ABC):
         number: Union[MuseumNumber, ExcavationNumber],
         lines: Optional[Sequence[int]] = None,
         exclude_lines: bool = False,
-    ) -> Fragment: ...
+    ) -> Fragment:
+        raise NotImplementedError
 
     @abstractmethod
     def query_by_traditional_references(
         self,
         traditional_references: Sequence[str],
         user_scopes: Sequence[Scope],
-    ) -> AfORegisterToFragmentQueryResult: ...
+    ) -> AfORegisterToFragmentQueryResult:
+        raise NotImplementedError
 
     @abstractmethod
     def query_random_by_transliterated(
         self, user_scopes: Sequence[Scope]
-    ) -> List[Fragment]: ...
+    ) -> List[Fragment]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_path_of_the_pioneers(
         self, user_scopes: Sequence[Scope]
-    ) -> List[Fragment]: ...
+    ) -> List[Fragment]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_by_transliterated_not_revised_by_other(
         self, user_scopes: Sequence[Scope]
-    ) -> List[FragmentInfo]: ...
+    ) -> List[FragmentInfo]:
+        raise NotImplementedError
 
     @abstractmethod
-    def query_transliterated_numbers(self) -> List[MuseumNumber]: ...
+    def query_transliterated_numbers(self) -> List[MuseumNumber]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_transliterated_line_to_vec(
         self,
-    ) -> List[LineToVecEntry]: ...
+    ) -> List[LineToVecEntry]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_next_and_previous_folio(
         self, folio_name: str, folio_number: str, number: MuseumNumber
-    ) -> dict: ...
+    ) -> dict:
+        raise NotImplementedError
 
     @abstractmethod
     def query_next_and_previous_fragment(
         self, museum_number: MuseumNumber
-    ) -> FragmentPagerInfo: ...
+    ) -> FragmentPagerInfo:
+        raise NotImplementedError
 
     @abstractmethod
-    def update_field(self, field: str, fragment: Fragment) -> None: ...
+    def update_field(self, field: str, fragment: Fragment) -> None:
+        raise NotImplementedError
 
     @abstractmethod
-    def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult: ...
+    def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult:
+        raise NotImplementedError
 
     @abstractmethod
-    def query_latest(self) -> QueryResult: ...
+    def query_latest(self) -> QueryResult:
+        raise NotImplementedError
 
     @abstractmethod
-    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]: ...
+    def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
+        raise NotImplementedError
 
     @abstractmethod
-    def fetch_names(self, name_query: str) -> List[str]: ...
+    def fetch_names(self, name_query: str) -> List[str]:
+        raise NotImplementedError
 
     @abstractmethod
-    def fetch_date(self, number: MuseumNumber) -> Optional[Date]: ...
+    def fetch_date(self, number: MuseumNumber) -> Optional[Date]:
+        raise NotImplementedError
 
     @abstractmethod
-    def list_all_fragments(self) -> Sequence[str]: ...
+    def list_all_fragments(self) -> Sequence[str]:
+        raise NotImplementedError
 
     @abstractmethod
-    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]: ...
+    def retrieve_transliterated_fragments(self, skip: int) -> Sequence[dict]:
+        raise NotImplementedError
 
     @abstractmethod
-    def fetch_fragment_signs(self) -> Sequence[dict]: ...
+    def fetch_fragment_signs(self) -> Sequence[dict]:
+        raise NotImplementedError
 
     @abstractmethod
-    def fetch_fragment_ocred_signs(self) -> Sequence[dict]: ...
+    def fetch_fragment_ocred_signs(self) -> Sequence[dict]:
+        raise NotImplementedError
 
     @abstractmethod
-    def collect_lemmas(self, number: MuseumNumber) -> dict: ...
+    def collect_lemmas(self, number: MuseumNumber) -> dict:
+        raise NotImplementedError
