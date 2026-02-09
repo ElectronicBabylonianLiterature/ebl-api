@@ -4,6 +4,7 @@ from ebl.dossiers.domain.dossier_record import DossierRecord
 from ebl.tests.factories.dossier import (
     DossierRecordFactory,
 )
+from ebl.tests.factories.fragment import FragmentFactory
 from ebl.dossiers.application.dossiers_repository import (
     DossiersRepository,
 )
@@ -54,10 +55,43 @@ def test_fetch_dossier_record_route(
     )
 
 
+def test_fetch_all_dossiers_route(
+    dossier_record,
+    another_dossier_record,
+    unrelated_dossier_record,
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    dossiers_repository.create(dossier_record)
+    dossiers_repository.create(another_dossier_record)
+    dossiers_repository.create(unrelated_dossier_record)
+    for reference in (
+        dossier_record.references
+        + another_dossier_record.references
+        + unrelated_dossier_record.references
+    ):
+        bibliography_repository.create(reference.document)
+
+    get_result = client.simulate_get("/dossiers")
+
+    assert get_result.status == falcon.HTTP_OK
+    assert len(get_result.json) == 3
+    assert sorted(
+        get_result.json, key=lambda record: record["_id"]
+    ) == DossierRecordSchema(many=True).dump(
+        sorted(
+            [dossier_record, another_dossier_record, unrelated_dossier_record],
+            key=lambda record: record.id,
+        )
+    )
+
+
 def _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3):
     dossiers_repository.create(dossier1)
     dossiers_repository.create(dossier2)
-    dossiers_repository.create(dossier3)
+    if dossier3 is not None:
+        dossiers_repository.create(dossier3)
 
 
 def _assert_search_result(result, expected_ids):
@@ -120,3 +154,279 @@ def test_search_dossiers_no_query_param(
 
     assert result.status == falcon.HTTP_OK
     assert len(result.json) == 0
+
+
+def test_search_dossiers_with_provenance(
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    from ebl.common.domain.provenance import Provenance
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001", description="Babylon test", provenance=Provenance.BABYLON
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002", description="Another test", provenance=Provenance.NIPPUR
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003", description="Babylon test 2", provenance=Provenance.BABYLON
+    )
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+
+    result = client.simulate_get(
+        "/dossiers/search", params={"query": "test", "provenance": "Babylon"}
+    )
+
+    _assert_search_result(result, {dossier1.id, dossier3.id})
+
+
+def test_search_dossiers_with_script_period(
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001",
+        description="Neo test",
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002",
+        description="Old test",
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003",
+        description="Neo test 2",
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+
+    result = client.simulate_get(
+        "/dossiers/search", params={"query": "test", "scriptPeriod": "Neo-Babylonian"}
+    )
+
+    _assert_search_result(result, {dossier1.id, dossier3.id})
+
+
+def test_search_dossiers_with_multiple_filters(
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    from ebl.common.domain.provenance import Provenance
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001",
+        description="Matching test",
+        provenance=Provenance.BABYLON,
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002",
+        description="Non matching",
+        provenance=Provenance.BABYLON,
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+    )
+    dossier3 = DossierRecordFactory.build(
+        id="TEST003",
+        description="Non matching",
+        provenance=Provenance.NIPPUR,
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+    )
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+
+    result = client.simulate_get(
+        "/dossiers/search",
+        params={
+            "query": "test",
+            "provenance": "Babylon",
+            "scriptPeriod": "Neo-Babylonian",
+        },
+    )
+
+    _assert_search_result(result, {dossier1.id})
+
+
+def test_filter_dossiers_no_params(
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    dossier1 = DossierRecordFactory.build(id="TEST001")
+    dossier2 = DossierRecordFactory.build(id="TEST002")
+    dossier3 = DossierRecordFactory.build(id="TEST003")
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+
+    result = client.simulate_get("/dossiers/filter")
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 3
+    assert {r["_id"] for r in result.json} == {dossier1.id, dossier2.id, dossier3.id}
+
+
+def test_filter_dossiers_by_provenance(
+    fragmentarium,
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    from ebl.common.domain.provenance import Provenance
+
+    dossier1 = DossierRecordFactory.build(id="DOSS001")
+    dossier2 = DossierRecordFactory.build(id="DOSS002")
+    dossier3 = DossierRecordFactory.build(id="DOSS003")
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+    for reference in dossier1.references + dossier2.references + dossier3.references:
+        bibliography_repository.create(reference.document)
+
+    from ebl.tests.factories.fragment import FragmentDossierReferenceFactory
+
+    fragment1 = FragmentFactory.build(
+        archaeology__site=Provenance.BABYLON,
+        dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier1.id)],
+    )
+    fragment2 = FragmentFactory.build(
+        archaeology__site=Provenance.NIPPUR,
+        dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier2.id)],
+    )
+
+    fragmentarium.create(fragment1)
+    fragmentarium.create(fragment2)
+
+    result = client.simulate_get("/dossiers/filter", params={"provenance": "Babylon"})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 1
+    assert result.json[0]["_id"] == dossier1.id
+
+
+def test_filter_dossiers_by_script_period(
+    fragmentarium,
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
+
+    dossier1 = DossierRecordFactory.build(id="DOSS001")
+    dossier2 = DossierRecordFactory.build(id="DOSS002")
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, None)
+    for reference in dossier1.references + dossier2.references:
+        bibliography_repository.create(reference.document)
+
+    from ebl.tests.factories.fragment import FragmentDossierReferenceFactory
+
+    fragment1 = FragmentFactory.build(
+        script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
+        dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier1.id)],
+    )
+    fragment2 = FragmentFactory.build(
+        script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
+        dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier2.id)],
+    )
+
+    fragmentarium.create(fragment1)
+    fragmentarium.create(fragment2)
+
+    result = client.simulate_get(
+        "/dossiers/filter", params={"scriptPeriod": "Neo-Babylonian"}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 1
+    assert result.json[0]["_id"] == dossier1.id
+
+
+def test_filter_dossiers_by_genre(
+    fragmentarium,
+    dossiers_repository: DossiersRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    dossier1 = DossierRecordFactory.build(id="DOSS001")
+    dossier2 = DossierRecordFactory.build(id="DOSS002")
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, None)
+    for reference in dossier1.references + dossier2.references:
+        bibliography_repository.create(reference.document)
+
+    from ebl.tests.factories.fragment import FragmentDossierReferenceFactory
+    from ebl.fragmentarium.domain.fragment import Genre
+
+    fragment1 = FragmentFactory.build(
+        genres=(Genre(["CANONICAL", "Literature", "Hymns"], False),),
+        dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier1.id)],
+    )
+    fragment2 = FragmentFactory.build(
+        genres=(Genre(["ARCHIVAL"], False),),
+        dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier2.id)],
+    )
+
+    fragmentarium.create(fragment1)
+    fragmentarium.create(fragment2)
+
+    result = client.simulate_get(
+        "/dossiers/filter", params={"genre": "CANONICAL:Literature:Hymns"}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 1
+    assert result.json[0]["_id"] == dossier1.id
+
+
+def test_dossiers_suggestions_route(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier1 = DossierRecordFactory.build(
+        id="TEST001", description="This is a long description with many words"
+    )
+    dossier2 = DossierRecordFactory.build(
+        id="TEST002", description="Testing another description here"
+    )
+    dossier3 = DossierRecordFactory.build(id="OTHER001", description="Different text")
+
+    _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
+
+    result = client.simulate_get("/dossiers/suggestions", params={"q": "TEST"})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 2
+    suggestion_ids = {s["id"] for s in result.json}
+    assert suggestion_ids == {dossier1.id, dossier2.id}
+    for suggestion in result.json:
+        assert "descriptionSnippet" in suggestion
+        assert len(suggestion["descriptionSnippet"].split()) <= 7
+
+
+def test_dossiers_suggestions_empty_query(
+    dossiers_repository: DossiersRepository,
+    client,
+) -> None:
+    dossier = DossierRecordFactory.build()
+    dossiers_repository.create(dossier)
+
+    result = client.simulate_get("/dossiers/suggestions", params={"q": ""})
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 1
+    assert result.json[0]["id"] == dossier.id
