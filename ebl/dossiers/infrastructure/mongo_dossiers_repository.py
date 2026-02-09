@@ -130,16 +130,16 @@ class MongoDossiersRepository(DossiersRepository):
         return dossiers
 
     def search_suggestions(self, query: str) -> Sequence[DossierRecordSuggestion]:
-        if not query:
-            return []
-
-        safe_query = re.escape(query[:MAX_QUERY_LENGTH])
-        search_filter = {
-            "$or": [
-                {"_id": {"$regex": safe_query, "$options": "i"}},
-                {"description": {"$regex": safe_query, "$options": "i"}},
-            ]
-        }
+        if query:
+            safe_query = re.escape(query[:MAX_QUERY_LENGTH])
+            search_filter = {
+                "$or": [
+                    {"_id": {"$regex": safe_query, "$options": "i"}},
+                    {"description": {"$regex": safe_query, "$options": "i"}},
+                ]
+            }
+        else:
+            search_filter = {}
 
         pipeline = [
             {"$match": search_filter},

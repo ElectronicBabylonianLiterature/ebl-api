@@ -407,7 +407,7 @@ def test_dossiers_suggestions_route(
 
     _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
 
-    result = client.simulate_get("/dossiers/suggestions", params={"query": "TEST"})
+    result = client.simulate_get("/dossiers/suggestions", params={"q": "TEST"})
 
     assert result.status == falcon.HTTP_OK
     assert len(result.json) == 2
@@ -425,7 +425,8 @@ def test_dossiers_suggestions_empty_query(
     dossier = DossierRecordFactory.build()
     dossiers_repository.create(dossier)
 
-    result = client.simulate_get("/dossiers/suggestions", params={"query": ""})
+    result = client.simulate_get("/dossiers/suggestions", params={"q": ""})
 
     assert result.status == falcon.HTTP_OK
-    assert len(result.json) == 0
+    assert len(result.json) == 1
+    assert result.json[0]["id"] == dossier.id

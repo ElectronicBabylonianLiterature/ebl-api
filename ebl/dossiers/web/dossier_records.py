@@ -67,6 +67,6 @@ class DossiersSuggestionsResource:
         self._dossiersRepository = _dossiersRepository
 
     def on_get(self, req: Request, resp: Response) -> None:
-        query = req.get_param("query", default="")
+        query = req.get_param("q", default="")
         suggestions = self._dossiersRepository.search_suggestions(query)
         resp.media = DossierRecordSuggestionSchema(many=True).dump(suggestions)
