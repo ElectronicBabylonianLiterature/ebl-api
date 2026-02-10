@@ -1,0 +1,63 @@
+&X201921 = MNB.1879
+#project: adsd/adart2
+#atf: use unicode
+#atf: lang akk
+#atf: use math
+#atf: use legacy
+@obverse
+1. ⸢MU⸣ 60+59.KÁM {ITU}[GU₄] 
+#lem: šattu[year]N; n; Ayyāru[Month II]MN
+
+2. 18 GU₄.UD ina ŠÚ ina MAŠ.MAŠ I[GI] 
+#lem: n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]'N; ina[in]PRP; Māšu[Gemini]CN; nanmuru[be(come) visible]V
+
+3. KUR NIM-a ⸢15?⸣ na-su 
+#lem: baʾil[bright]AJ; šaqâ[high]AJ; n; na[sunset to setting]'N
+
+4. in 16 IGI 19 kal ME 
+#lem: ina[on]PRP; n; pān[front]N; n; kal[all]'DET; ūmu[day]N
+
+5. DIR? AN ZA GE₆ 20 
+#lem: erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; mūšu[night]N; n
+
+6. USAN? <GU₄.UD> SIG? MAŠ.MAŠ-ár? 
+#lem: šimītān[first part of the night]N; Šihṭu[Mercury]CN; šapil[below]'PRP; MAŠ.MAŠ-ár[β Geminorum]CN
+
+7. 2 1/2? KÙŠ? 20? DIR AN ZA  
+#lem: n; n; ammatu[unit]N; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V
+
+@reverse
+1. GE₆ 21 [ina ZALÁG?] sin 
+#lem: mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N
+
+2. ina IGI DUR-nu-nu 5/6? KÙŠ 
+#lem: ina[in]PRP; pān[front]N; MÚL-KUR-šá-DUR-nu-nu[η Piscium]CN; n; ammatu[unit]N
+
+3. sin 4 KÙŠ ana ULÙ SIG
+#lem: Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[low]AJ
+
+@translation labeled en project
+
+@obverse
+
+@(o 1) Year 119, month [II,] 
+
+@(o 2) the 18th, Mercury’s first [appearance] in the west in Gemini; 
+
+@(o 3) it was bright (and) high, sunset to setting of Mercury: 15°; 
+
+@(o 4) (ideal) first appearance on the 16th. The 19th, all day 
+
+@(o 5) clouds@sup{?} were in the sky. Night of the 20th, 
+
+@(o 6) first part of the night@sup{?}, <Mercury>@sup{?} was 2 1/2@sup{?} cubits@sup{?} below@sup{?} β Geminorum. 
+
+@(o 7) The 20th, clouds were in the sky.  
+
+@reverse
+
+@(r 1) Night of the 21st, [last part of the night@sup{?},] the moon was 
+
+@(r 2) 5/6@sup{?} cubit in front of η Piscium, 
+
+@(r 3) the moon being 4 cubits low to the south.
