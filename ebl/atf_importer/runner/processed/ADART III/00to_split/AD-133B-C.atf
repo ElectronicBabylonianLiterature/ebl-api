@@ -4,7 +4,9 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
+
 1'. ⸢4 SI GIN ŠED₇ šir 5?⸣ [...] ⸢x⸣ [...]
 #lem: 4[4]NU; ištānu[north wind]N; alāku[blow]V; kūṣu[coldness]N; iktešir[be(come) severe]V; n; u; u; u
 
@@ -38,19 +40,19 @@
 11'. [ina ZALÁG sin S]IG RÍN-šá-ULÙ 2 K[ÙŠ ... GE₆ 19 ina ZALÁG sin ina IGI MÚL-MURUB₄-šá-SA]G-GÍR.TAB 2 1/2 KÙŠ sin 2 KÙŠ ana ULÙ SIG 19 DIR AN ZA SI GIN GE₆ 20 ina ZALÁG sin SIG SI₄ 2/3 KÙŠ sin i-ṣa ana NIM DIB
 #lem: ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; RÍN-šá-ULÙ[α Librae]CN; n; ammatu[unit]N; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-MURUB₄-šá-SAG-GÍR.TAB[δ Scorpii]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; SI₄[α Scorpii]CN; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
 
-12'. [x x x x] EN 20 AN ana N[IM ki UŠ-ú ... GE₆] 21 ina ZALÁG sin SIG MÚL-KUR-šá-KIR₄-šil-PA 2 KÙŠ 21 GU₄.UD ina ŠÚ ina SAG zib{ME} IGI KUR 15 na-su in 20 IGI
+> 12'. [x x x x] EN 20 AN ana N[IM ki UŠ-ú ... GE₆] 21 ina ZALÁG sin SIG MÚL-KUR-šá-KIR₄-šil-PA 2 KÙŠ 21 GU₄.UD ina ŠÚ ina SAG zib{ME} IGI KUR 15 na-su in 20 IGI
 #lem: u; u; u; u; adi[until]PRP; n; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]N; kī[when]PRP; nenmudu[be at a stationary point]V; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-KUR-šá-KIR₄-šil-PA[θ Ophiuchi]CN; n; ammatu[unit]N; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; rēšu[beginning]N; Zibbātu[Pisces]CN; amāru[be(come) visible]V; napāhu[light up]V; n; na[sunset to setting]'N; ina[around]PRP; n; amāru[be(come) visible]V
 
-C1'. [...] ⸢AN ana NIM⸣ ki [...]
+> C1'. [...] ⸢AN ana NIM⸣ ki [...]
 #lem: u; Ṣalbaṭānu[Mars]CN; ana[to]PRP; Elamtu[east]N; kī[when]PRP; u
 
 C2'. [... na]-su in 20 IGI [...]
 #lem: u; na[sunset to setting]'N; ina[around (day x)]PRP; n; amāru[be(come) visible]V; u
 
-13'.  [x x x x x] ⸢x⸣ [... G]IN 22 kal ME DIR AN ZA ina še-rì u AN.BAR₇ šámaš TÙR NIGIN ma-diš iq-tur₇ GE₆ 23 kal GE₆ ŠÚ.ŠÚ
+> 13'.  [x x x x x] ⸢x⸣ [... G]IN 22 kal ME DIR AN ZA ina še-rì u AN.BAR₇ šámaš TÙR NIGIN ma-diš iq-tur₇ GE₆ 23 kal GE₆ ŠÚ.ŠÚ
 #lem: u; u; u; u; u; u; u; alāku[blow]V; n; kal[all]N; ūmu[day]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ina[in]PRP; šēri[morning]N; u[and]CNJ; muṣlālu[noon]N; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mādiš[very]AV; qatāru[billow]V; mūšu[night]N; n; kal[all]N; mūšu[night]N; urrup[be(come) very overcast]V
 
-C3'. [... AN.BA]R₇ šámaš TÙR NIGIN ma-diš [...]
+> C3'. [... AN.BA]R₇ šámaš TÙR NIGIN ma-diš [...]
 #lem: u; muṣlālu[noon]N; šamšu[sun]N; tarbaṣa[halo]N; lawi[surrounded (with)]AJ; mādiš[very]AV; u
 
 14'. [...] 24 ina še-rì DIR AN DIB AN DUL-hat kal ME DIR AN ZA ULÙ u KUR GIN{MEŠ} GE₆ 25 DIR AN ZA
@@ -65,34 +67,34 @@ C4'. [...] kal ME DIR AN ZA U[LÙ ...]
 C5'. [...] kal GE₆ DIR AN ZA [...]
 #lem: u; kal[all]N; mūšu[night]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; u
 
-16'. [... u MAR] ki-i TAB-ú ina 20 ME 2-ta ŠU{II} HAB-rat GAR-an a-na ZALÁG-ru ki-i TAB-ú ina 18 ME
+> 16'. [... u MAR] ki-i TAB-ú ina 20 ME 2-ta ŠU{II} HAB-rat GAR-an a-na ZALÁG-ru ki-i TAB-ú ina 18 ME
 #lem: u; u[and]CNJ; amurru[west]N; kī[when]PRP; ušarrû[begin]V; ina[at]PRP; n; ūmu[day]N; šina[two]NU; qātu[hand]N$qātāt; HAB-rat[disc]N; šakānu[place]V; ana[to]PRP; nawāru[clearing]'N; kī[when]PRP; ušarrû[begin]V; ina[at (plus numeral)]PRP; n; ūmu[day]N
 
-C6'. [...] u MAR ki TAB-ú ina 20 [...]
+> C6'. [...] u MAR ki TAB-ú ina 20 [...]
 #lem: u; u[and]CNJ; amurru[west]N; kī[when]PRP; ušarrû[begin]V; ina[at]PRP; n; u
 
-17'. [... IGI i]n 51 ME ana ŠÚ šámaš DIR AN ZA SI GIN GE₆ 29 29 SI GIN ITU BI KI.LAM še-im
+> 17'. [... IGI i]n 51 ME ana ŠÚ šámaš DIR AN ZA SI GIN GE₆ 29 29 SI GIN ITU BI KI.LAM še-im
 #lem: u; nanmuru[be(come) visible]V; ina[at (plus numeral)]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamšu[sun]N; erpetu[cloud]N; šamû[sky]N; ṣabātu[cover (the sky)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; n; ištānu[north wind]N; alāku[blow]V; warhu[month]N; šū[that]'DP; mahīru[price (equivalent)]N; šeʾu[barley]N
 
-C7'. [...] ⸢x⸣ IGI in 50 ME ana ŠÚ šám[aš ...]
+> C7'. [...] ⸢x⸣ IGI in 50 ME ana ŠÚ šám[aš ...]
 #lem: u; u; nanmuru[be(come) visible]; ina[at (plus numeral)]PRP; n; ūmu[day]N; ana[to]PRP; erib[(sun)set]N; šamšu[sun]N; u
 
-18'. [...] 3? qa 28 3(BARIG) 1(BÁN) 29 3(BARIG) PI ZÚ.LUM TA 1 EN 5 1 GUR 4(BARIG) 3(BÁN) TA 6 EN 9 1 GUR 4(BARIG) PI
+> 18'. [...] 3? qa 28 3(BARIG) 1(BÁN) 29 3(BARIG) PI ZÚ.LUM TA 1 EN 5 1 GUR 4(BARIG) 3(BÁN) TA 6 EN 9 1 GUR 4(BARIG) PI
 #lem: u; n; qû[(one) litre]N; n; n; n; n; n; pānu[bushel (36 litres)]N; suluppu[date]N; ultu[from]PRP; n; adi[until]PRP; n; n; kurru[kor (180 litres)]N; n; n; ultu[from]PRP; n; adi[until]PRP; n; n; kurru[kor (180 litres)]N; n; pānu[bushel (36 litres)]N
 
-C8'. [... E]N 26 3(BARIG) 2(BÁN) 27 3(BARIG) 1(BÁN) 3 q[a ...]
+> C8'. [... E]N 26 3(BARIG) 2(BÁN) 27 3(BARIG) 1(BÁN) 3 q[a ...]
 #lem: u; adi[until]PRP; n; n; n; n; n; n; n; qû[(one) litre]N; u
 
-19'. [... EN] 20 1 GUR 2(BARIG) 3(BÁN) TA 21 EN 26 1 GUR 2(BARIG) PI 27 28 29 1 GUR 2(BARIG) 1(BÁN) 3 qa
+> 19'. [... EN] 20 1 GUR 2(BARIG) 3(BÁN) TA 21 EN 26 1 GUR 2(BARIG) PI 27 28 29 1 GUR 2(BARIG) 1(BÁN) 3 qa
 #lem: u; adi[until]PRP; n; n; kurru[kor (180 litres)]N; n; n; ultu[from]PRP; n; adi[until]PRP; n; n; kurru[kor (180 litres)]N; n; pānu[bushel (36 litres)]N; n; n; n; n; kurru[kor (180 litres)]N; n; n; n; qû[(one) litre]N
 
-C9'. [...] 3(BARIG) PI TA 16 EN 20 1 GUR ⸢2(BARIG) 3(BÁN)⸣ [...]
+> C9'. [...] 3(BARIG) PI TA 16 EN 20 1 GUR ⸢2(BARIG) 3(BÁN)⸣ [...]
 #lem: u; n; pānu[bushel (36 litres)]N; ultu[from]PRP; n; adi[until]PRP; n; n; kurru[kor (180 litres)]N; n; n; u
 
-20'. [...] ⸢4(BÁN)⸣ EN TIL ITU 3(BÁN) 4 1/2 qa SÍG{HI.A} 1 2/3 MA.NA i-nu-šú MÚL.BABBAR ina ALLA dele-bat ina SAG ITU ina GU
+> 20'. [...] ⸢4(BÁN)⸣ EN TIL ITU 3(BÁN) 4 1/2 qa SÍG{HI.A} 1 2/3 MA.NA i-nu-šú MÚL.BABBAR ina ALLA dele-bat ina SAG ITU ina GU
 #lem: u; n; adi[until]PRP; qītu[end]N; warhu[month]N; n; 4[4]NU; n; qû[(one) litre]N; šīpātu[wool]N; n; n; manû[(one mina)]N; inūšu[at that time]AV; Kakkabu-peṣû[Jupiter]CN; ina[in]PRP; Alluttu[Cancer]CN; Dilbat[Venus]CN; ina[in]PRP; rēšu[beginning]N; warhu[month]N; ina[in]PRP; Gula[Aquarius]CN
 
-C10'. [... ina MURU]B₄ ITU 4(BÁN) EN TIL ITU 3(BÁN) 4 1/2 qa SÍG[{HI.A} ...]
+> C10'. [... ina MURU]B₄ ITU 4(BÁN) EN TIL ITU 3(BÁN) 4 1/2 qa SÍG[{HI.A} ...]
 #lem: u; ina[in]PRP; qabaltu[middle]N; warhu[month]N; n; adi[until]PRP; qītu[end]N; warhu[month]N; n; 4[4]NU; n; qû[(one) litre]N; šīpātu[wool]N; u
 
 21'. [...] zib{ME} GENNA ina PA AN ina SAG ITU ina ABSIN EN TIL ITU ina RÍN ITU BI ILLU 20 SI LAL PAP 27 na

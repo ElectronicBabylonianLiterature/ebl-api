@@ -4,6 +4,7 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
 
 1'. [...] ina KIN.SIG DIR AN ZA GE₆ 2 sin ina IGI ŠUR-GIGIR-š[á-x]
@@ -32,6 +33,7 @@
 
 9'. [...] 5.30 na muš GE₆ 16 8.30 GE₆ NU PAP USAN dele-bat SIG MAŠ.MAŠ-ár 1 1/2 KÙŠ
 #lem: u; n; na[sunrise to moonset]N; mašāhu[measure]V; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]AJ; MAŠ.MAŠ-ár[β Geminorum]CN; n; n; ammatu[unit]N
+// cf. F BM.34892 o 4'
 
 10'. [... GE₆ 2]1 ina ZALÁG sin ár MÚL-ár-šá-SUHUR-MÁŠ 2 KÙŠ sin 2 1/2 [KÙŠ] ana SI ⸢NIM⸣
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ
@@ -56,9 +58,11 @@
 
 17'. [{ITU}GU₄ 1 ... GE₆ 2 USAN dele-bat] e MÚL-ár-šá-ALLA-šá-UL[Ù n n ...]
 #lem: Ayyāru[Month II]MN; n; u; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]'PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; u
+// cf. F BM.34892 o 15'
 
 18'. [...] ár AN 1 KÙŠ ana NIM G[UB ...]
 #lem: u; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+// cf. F BM.34892 o 16'
 
 19'. [...] ⸢SI⸣ GIN GE₆ ⸢5⸣ [...]
 #lem: u; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; u
@@ -132,6 +136,7 @@ $ruling
 #lem: u; šattu[year]N; n; mē[(one) hundred]NU; n; Aršaka[Arsaces]RN; šarru[king]N; šarrāni[king]N
 
 @translation labeled en project
+
 @obverse
 
 @(o 1') [...] in the afternoon, clouds were in the sky. Night of the 2nd, the moon was [...] in front of [β /ζ] Tauri

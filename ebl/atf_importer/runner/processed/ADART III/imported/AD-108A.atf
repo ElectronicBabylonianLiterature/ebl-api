@@ -4,6 +4,7 @@
 #atf: lang akk
 #atf: use math
 #atf: use legacy
+
 @obverse
 
 1'. [...] ⸢x⸣ [...]
@@ -17,6 +18,7 @@
 
 4'. [... G]E₆ 16 8.30 GE₆ NU PAP USAN dele-bat SIG MAŠ.MAŠ-á[r ...]
 #lem: u; mūšu[night]N; n; n; mūšu[sunset to moonrise]N; ul[not]MOD; naṣāru[watch]V; šimītān[first part of the night]N; Dilbat[Venus]CN; šapil[below]AJ; MAŠ.MAŠ-ár[β Geminorum]CN; u
+// cf. F BM.40622 o 9'
 
 5'. [... GE₆ 20 ina ZALÁG] sin ina IGI MÚL-IGI-šá-SUHUR-MÁŠ 3 1/2 KÙŠ 20 ina še-rì ⸢x⸣ [...]
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SUHUR-MÁŠ[γ Capricorni]CN; n; n; ammatu[unit]N; n; ina[in]PRP; šēri[morning]N; u; u
@@ -49,11 +51,14 @@
 #lem: u
 
 $ruling
+
 15'. [{ITU}GU₄ 1 ...] ⸢x⸣ [x] AN kab-bar DUL-hat SI GIN GE₆ 2 USAN dele-bat e MÚL-ár-šá-ALLA-šá-ULÙ 1 KÙŠ ka[l GE₆ ...]
 #lem: Ayyāru[Month II]MN; n; u; u; u; šamû[rain]N; kabbaru[very thick]AJ; DUL[(meaning unclear)]V; ištānu[north wind]N; alāku[blow]V; mūšu[night]N; n; šimītān[first part of the night]N; Dilbat[Venus]CN; eli[above]'PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; ammatu[unit]N; kal[all]N; mūšu[night]N; u
+// cf. F BM.40622 o 17'
 
 16'. [... GE₆ 3 sin ár MÚL-ár-šá-ALLA-šá-ULÙ n n KÙ]Š sin 1 1/2 KÙŠ ana ULÙ SIG á[r dele-bat x]+1 KÙŠ ana NIM GUB sin 3 KÙŠ ana ULÙ SIG ár AN 1 [KÙŠ ana NIM GUB ...]
 #lem: u; mūšu[night]N; n; Sîn[moon]N; warki[behind]PRP; MÚL-ár-šá-ALLA-šá-ULÙ[δ Cancri]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; warki[behind]PRP; Dilbat[Venus]CN; u; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; u
+// cf. F BM.40622 o 18'
 
 17'. [...] ⸢x⸣-ú MAH ŠUR-nun PISAN DIB MAR ŠÁR GE₆ 4 ŠÚ.ŠÚ SAG GE₆ sin ina IGI LUGAL 2 KÙŠ sin [...]
 #lem: u; u; ṣīru[great]AJ; zanānu[rain]V; pisannu[(a meterological phenomenon)]N; DIB[unclear]V; amurru[west wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; 4[4]NU; urrup[be(come) very overcast]V; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; LUGAL[α Leonis]CN; n; ammatu[unit]N; Sîn[moon]N; u
@@ -101,6 +106,7 @@ $ruling
 #lem: u
 
 $ruling
+
 32'. [{ITU}SIG 30 ... GE₆ 3 sin ... sin n] ⸢KÙŠ ana ULÙ⸣ SIG ár MÚL.BABBAR 1 2/3 KÙŠ ár AN 2 1/2 KÙŠ ana NIM GUB sin 2 ⸢1/2⸣ [KÙŠ ana ULÙ SIG ...]
 #lem: Simānu[Month III]MN; n; u; mūšu[night]N; n; Sîn[moon]N; u; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; n; n; ammatu[unit]N; warki[behind]PRP; Ṣalbaṭānu[Mars]CN; n; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u
 
@@ -123,10 +129,12 @@ $ruling
 #lem: u; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; MÚL-TUR-šá-4-KÙŠ-ár-LUGAL[ρ Leonis]CN; n; ammatu[unit]N; ina[around (day x)]PRP; n; Dilbat[Venus]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; Alluttu[Cancer]CN; rabû[set]V; mūšu[night]N; n; u
 
 @reverse
+
 1'. [...] ($traces$) [...]
 #lem: u; u
 
 $ruling
+
 2'. [{ITU}ŠU 1 ... sin ár MÚ]L.BABBAR 2 1/2 KÙŠ sin 2 1/2 KÙŠ ana ULÙ SIG ⸢x⸣ [...]
 #lem: Duʾūzu[Month IV]MN; n; u; Sîn[moon]N; warki[behind]PRP; Kakkabu-peṣû[Jupiter]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; u; u
 
@@ -161,6 +169,7 @@ $ruling
 #lem: u; ina[in]PRP; n; Šihṭu[Mercury]CN; Šerʾu[Virgo]CN; kašādu[reach]V; ina[around (day x)]PRP; n; Šihṭu[Mercury]CN; ina[in]PRP; erbu[west]N; ina[in]PRP; rēšu[beginning]N; Šerʾu[Virgo]CN; rabû[set]V; Kayyamānu[Saturn]CN; u
 
 $ruling
+
 13'. [{ITU}NE 1 ... n] ⸢KÙŠ⸣ GE₆ 3 sin SIG GENNA 2 1/2 KÙŠ GE₆ 4 SAG GE₆ sin SI[G ...]
 #lem: Abu[Month V]MN; n; u; n; ammatu[unit]N; mūšu[night]N; n; Sîn[moon]N; šapil[below]AJ; Kayyamānu[Saturn]CN; n; n; ammatu[unit]N; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; Sîn[moon]N; šapil[below]AJ; u
 
@@ -192,6 +201,7 @@ $ruling
 #lem: u; u; nišu[people]N; u
 
 $ruling
+
 23'. [{ITU}KIN ... K]ÙŠ GE₆ 4 SAG GE₆ [...]
 #lem: Ulūlu[Month VI]MN; u; ammatu[unit]N; mūšu[night]N; 4[4]NU; rēšu[beginning]N; mūšu[night]N; u
 
@@ -223,6 +233,7 @@ $ruling
 #lem: u; u; u; u
 
 @translation labeled en project
+
 @obverse
 
 @(o 2') [...] when it began, it made 6 fingers in 8° of night [...]

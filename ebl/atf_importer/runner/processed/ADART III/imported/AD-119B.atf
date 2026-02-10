@@ -25,6 +25,7 @@ A5'. [... dele-bat ina NIM ina x IGI n n]a-⸢su⸣ in 25 IGI 29 {d}ṣal-lum-mu
 
 A6'. [...] x x [...] x x x ŠUB-ú IGI 29 AN.KU₁₀ šámaš ki PAP NU IGI in 10+[x ...]
 #lem: u; u; u; u; u; u; u; maqātu[fall]V; amāru[be(come) visible]V; n; antallû[eclipse]N; šamši[sun]N; kī[when]PRP; naṣāru[watch]V; ul[not]MOD; amāru[see]V; ina[at]PRP; n; u
+// cf. F BM.35677 o B10'
 
 A7'. [... KI.LAM še-i]m ina SAG ITU 5(BÁN) 2 qa EN TI[L IT]U 5(BÁN) 3 1/2 qa GIBIL{MEŠ} TA MURUB₄ ITU EN TIL ITU 1 PI ZÚ.LUM [...]
 #lem: u; mahīru[price (equivalent)]N; šeʾu[barley]N; ina[in]PRP; rēšu[beginning]N; warhu[month]N; n; n; qû[(one) litre]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; n; qû[(one) litre]N; eššu[new]AJ; ultu[from]PRP; qabaltu[middle]N; warhu[month]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; pānu[bushel (36 litres)]N; suluppu[date]N; u
@@ -67,27 +68,56 @@ B3'. [... 2? K]ÙŠ ár 4.ÀM IGI{MEŠ} šá PA |KA×MI| in 1.6 G[E₆ GIN]
 
 B4'. [... K]ÙŠ sin 2 1/2 KÙŠ ana U[LÙ] SIG GE₆ 17 ina ZALÁG sin SIG SUHUR-ár 2/3 KÙŠ sin 1/2 KÙŠ ana ŠÚ LAL
 #lem: u; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL-ár-šá-SUHUR-MÁŠ[δ Capricorni]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V
+// cf. F BM.35759 o 5'
 
 B5'. [... G]E₆ 22 ina ZALÁG sin ina IGI MÚL-IGI-šá-SAG-HUN 1 KÙŠ sin 4 1/2 KÙŠ ana ULÙ SIG 22 SI GIN 
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL-IGI-šá-SAG-HUN[β Arietis]CN; n; ammatu[unit]N; Sîn[moon]N; 4[4]NU; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; n; ištānu[north wind]N; alāku[blow]V
+// cf. F BM.35759 o 6'
+
+@reverse
+
+B1. [... G]IN GE₆ 24 USAN AN e GÌR-ár-šá-A [2 SI ina ZALÁG sin SIG] MÚL.MÚL 2 2/3 KÙŠ sin i-ṣa ana NIM DIB
+#lem: u; alāku[blow]V; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
+// cf. F BM.35759 o 7'
+
+B2. [... GE₆ 25 ina ZALÁG sin ár dele-bat n n ana N]IM GUB sin 1 KÙŠ ana SI NIM 25 [x x GE₆ 26 ina ZAL]ÁG sin ár GENNA 2/3 KÙŠ ana NIM GUB
+#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; n; n; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V
+// cf. F BM.35759 o 8'
+
+B3. [... GI]N 29 šam-mu KUR-i IM 1  ú [... KI.LAM] ⸢še-im x x⸣ [...]
+#lem: u; alāku[blow]V; n; šammû[plant(s)]N$; šadî[mountain]N; u; n; X; u; mahīru[price (equivalent)]N; šeʾu[barley]N; u; u; u
+// cf. F BM.35759 o 8'
+
+B4. [... q]a EN TIL ITU 1(BARIG) 1(BÁN) ZÚ.LUM EN MU[RUB₄ ITU ...]
+#lem: u; qû[(one) litre]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; suluppu[date]N; adi[until]PRP; qabaltu[middle]N; warhu[month]N; u
+// cf. F BM.35759 o 9'
+
+B5. [... EN TI]L ⸢ITU 1(BÁN) 5 qa⸣ [...]
+#lem: u; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; qû[(one) litre]N; u
+// cf. F BM.35759 o 10'
 
 C1'. [...] ⸢{LÚ}pa-hat E{KI}⸣ [...]
 #lem: u; pīhātu[governor]N; Bābilu[Babylon]SN; u
+// cf. F BM.35759 o 11'
 
 C2'. [(šá) ana m]uh-hi 4 {LÚ}GAL ERÍN-ni[{MEŠ} ...]
 #lem: ša[which]REL; ana[to]PRP; muhhi[top]N; 4[4]NU; rab[great one]'N; uqāni[troops]'N; u
 
 C3'. ⸢{ITU}⸣SIG 30 14 na-su KUR₄ a-kám [...]
 #lem: Simānu[Month III]MN; n; n; na₁[sunset to moonset]N; baʾil[bright]AJ; akamu[mist]N; u
+// cf. F BM.35759 o 13'
 
 C4'. 2 SI ŠÁR GE₆ 3 sin e LUGAL [n n ...]
 #lem: n; ištānu[north wind]N; ŠÁR[gusty(?)]AJ; mūšu[night]N; n; Sîn[moon]N; eli[above]'PRP; LUGAL[α Leonis]CN; n; n; u
+// cf. F BM.35759 o 13'
 
 C5'. ⸢e⸣ GÌR-ár-šá-A 1 1/2 KÙŠ ⸢sin⸣ [...]
 #lem: eli[above]'PRP; GÌR-ár-šá-A[β Virginis]CN; n; n; ammatu[unit]N; Sîn[moon]N; u
+// cf. F BM.35759 o 14'
 
 C6'. ana NIM GUB sin 1 1/2 KÙŠ [...]
 #lem: ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; Sîn[moon]N; n; n; ammatu[unit]N; u
+// cf. F BM.35759 o 15'
 
 C7'. u meš-hi TUK-ú TA [...]
 #lem: u[and]CNJ; mišhu[train (of meteor)]N; išû[have]V; ultu[from]PRP; u
@@ -95,31 +125,16 @@ C7'. u meš-hi TUK-ú TA [...]
 C8'. ⸢10⸣ šámaš GUB ⸢GE₆ 11⸣ S[AG GE₆ ...]
 #lem: n; šamšu[sun]N; izuzzu[stand]V; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; u
 
-@reverse
-
-B1. [... G]IN GE₆ 24 USAN AN e GÌR-ár-šá-A [2 SI ina ZALÁG sin SIG] MÚL.MÚL 2 2/3 KÙŠ sin i-ṣa ana NIM DIB
-#lem: u; alāku[blow]V; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; eli[above]'PRP; GÌR-ár-šá-A[β Virginis]CN; n; ubānu[finger]N; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; Sîn[moon]N; wīṣu[little]AJ; ana[to]PRP; Elamtu[east]N; etēqu[cross]V
-
-B2. [... GE₆ 25 ina ZALÁG sin ár dele-bat n n ana N]IM GUB sin 1 KÙŠ ana SI NIM 25 [x x GE₆ 26 ina ZAL]ÁG sin ár GENNA 2/3 KÙŠ ana NIM GUB
-#lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; Dilbat[Venus]CN; n; n; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; ištānu[north]N; šaqi[high]AJ; n; u; u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; warki[behind]PRP; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; Elamtu[east]N; izuzzu[stand]V
-
-B3. [... GI]N 29 šam-mu KUR-i IM 1  ú [... KI.LAM] ⸢še-im x x⸣ [...]
-#lem: u; alāku[blow]V; n; šammû[plant(s)]N$; šadî[mountain]N; u; n; X; u; mahīru[price (equivalent)]N; šeʾu[barley]N; u; u; u
-
-B4. [... q]a EN TIL ITU 1(BARIG) 1(BÁN) ZÚ.LUM EN MU[RUB₄ ITU ...]
-#lem: u; qû[(one) litre]N; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; suluppu[date]N; adi[until]PRP; qabaltu[middle]N; warhu[month]N; u
-
-B5. [... EN TI]L ⸢ITU 1(BÁN) 5 qa⸣ [...]
-#lem: u; adi[until]PRP; qītu[end]N; warhu[month]N; n; n; qû[(one) litre]N; u
-
 A1'. [...] ⸢GE₆ 21 USAN AN⸣ SIG DELE-šá-IGI-[ABSIN n n ...]
 #lem: u; mūšu[night]N; n; šimītān[first part of the night]N; Ṣalbaṭānu[Mars]CN; šapil[below]AJ; DELE-šá-IGI-ABSIN[γ Virginis]CN; n; n; u
 
 A2'. [... GE₆] ⸢22 ina⸣ Z[ALÁG sin ina IG]I MÚL.MÚL 1 1/2 KÙŠ sin 2 2/3 KÙŠ ana ULÙ SIG G[E₆ ...]
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; ina[in]PRP; pān[front]N; MÚL.MÚL[η Tauri]CN; n; n; ammatu[unit]N; Sîn[moon]N; n; n; ammatu[unit]N; ana[to]PRP; šūtu[south]N; šapil[below]AJ; mūšu[night]N; u
+// cf. F BM.35759 o 20'
 
 A3'. [... GE₆ 24 ina ZALÁG sin SIG ŠUR-GIGIR]-šá-SI 3 KÙŠ si[n] 1/2 KÙŠ ana ŠÚ LAL ina IGI GENNA 2? KÙŠ ana ŠÚ GUB GE₆ 25 ina ZALÁG s[in ...]
 #lem: u; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; šapil[below]AJ; ŠUR-GIGIR-šá-SI[β Tauri]CN; n; ammatu[unit]N; Sîn[moon]N; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; nahāsu[recede]V; ina[in]PRP; pān[front]N; Kayyamānu[Saturn]CN; n; ammatu[unit]N; ana[to]PRP; erbu[west]N; izuzzu[stand]V; mūšu[night]N; n; ina[in]PRP; nūru[last part of the night]N; Sîn[moon]N; u
+// cf. F BM.35759 o 21'
 
 A4'. [... G]E₆ 26 SAG GE₆ {d}ṣa[l-l]um-mu-ú šá ina NIM? BAR U₄ 29.KÁM ina HUN ina KASKAL šu-ut {d}60 [...]
 #lem: u; mūšu[night]N; n; rēšu[beginning]N; mūšu[night]N; ṣallumû[comet]N; ša[which]REL; ina[in]PRP; Elamtu[east]N; Nisannu[Month I]MN; ūmu[day]N; n; ina[in]PRP; Agru[Aries]CN; ina[in]PRP; harrānu[path]N; šūt[of]DET; Anu[Anu]DN$; u
