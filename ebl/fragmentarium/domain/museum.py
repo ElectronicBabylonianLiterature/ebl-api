@@ -21,11 +21,23 @@ class Museum(Enum):
         "AU",
         "https://www.aiarch.org.au/",
     )
+    BANQUE_NATIONALE_DE_BELGIQUE = (
+        "Banque Nationale de Belgique",
+        "Brussels",
+        "BE",
+        "https://www.nbb.be/",
+    )
     CHESTER_BEATTY_LIBRARY = (
         "Chester Beatty Library",
         "Dublin",
         "IE",
         "https://chesterbeatty.ie/",
+    )
+    COUVENT_SAINTE_ANNE = (
+        "Couvent Sainte-Anne",
+        "Jerusalem",
+        "IL",
+        "https://ste-anne-jerusalem.org/",
     )
     COUVENT_SAINT_ETIENNE = (
         "Couvent Saint-Étienne",
@@ -51,6 +63,12 @@ class Museum(Enum):
         "US",
         "https://hmane.harvard.edu/",
     )
+    HARVARD_ART_MUSEUMS = (
+        "Harvard Art Museums",
+        "Cambridge",
+        "US",
+        "https://harvardartmuseums.org/",
+    )
     HATAY_ARCHAEOLOGY_MUSEUM = (
         "Hatay Archaeology Museum",
         "Antakya",
@@ -62,6 +80,12 @@ class Museum(Enum):
         "Berkeley",
         "US",
         "https://hearstmuseum.berkeley.edu/",
+    )
+    HERMITAGE = (
+        "The State Hermitage Museum",
+        "Saint Petersburg",
+        "RU",
+        "https://www.hermitagemuseum.org/",
     )
     HILPRECHT_COLLECTION = (
         "Frau Professor Hilprecht Collection of Babylonian Antiquities",
@@ -193,6 +217,12 @@ class Museum(Enum):
         "US",
         "https://egyptianmuseum.org/",
     )
+    ROYAL_ONTARIO_MUSEUM = (
+        "Royal Ontario Museum",
+        "Toronto",
+        "CA",
+        "https://www.rom.on.ca/",
+    )
     RYLANDS_INSTITUTE = (
         "John Rylands Research Institute and Library",
         "Manchester",
@@ -204,6 +234,18 @@ class Museum(Enum):
         "Şanlıurfa",
         "TR",
         "https://muze.gov.tr/muze-detay?SectionId=SUM02&DistId=SUM",
+    )
+    SCHOYEN_COLLECTION = (
+        "Schøyen Collection",
+        "Oslo",
+        "NO",
+        "https://www.schoyencollection.com/",
+    )
+    SEPHARDIC_MUSEUM_OF_TOLEDO = (
+        "Sephardic Museum of Toledo",
+        "Toledo",
+        "ES",
+        "https://www.cultura.gob.es/msefardi/",
     )
     SLEMANI_MUSEUM = (
         "Slemani Museum",
