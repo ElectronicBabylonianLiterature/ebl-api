@@ -1,6 +1,9 @@
+from dataclasses import dataclass
 from typing import List, Optional, Sequence, Tuple
 import attr
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.common.query.query_result import CorpusQueryResult
+from ebl.changelog import Changelog
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
@@ -22,6 +25,7 @@ from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.lines_update import LinesUpdate
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.corpus.domain.parser import parse_chapter
+from ebl.common.application.provenance_service import ProvenanceService
 from ebl.corpus.domain.text import Text, TextId
 from ebl.errors import DataError, Defect, NotFoundError
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
@@ -36,20 +40,27 @@ from ebl.users.domain.user import User
 COLLECTION = "chapters"
 
 
+@dataclass(frozen=True)
+class CorpusDependencies:
+    repository: TextRepository
+    bibliography: Bibliography
+    changelog: Changelog
+    sign_repository: SignRepository
+    parallel_line_injector: ParallelLineInjector
+    provenance_service: ProvenanceService
+
+
 class Corpus:
     def __init__(
         self,
-        repository: TextRepository,
-        bibliography,
-        changelog,
-        sign_repository: SignRepository,
-        parallel_injector: ParallelLineInjector,
-    ):
-        self._repository: TextRepository = repository
-        self._bibliography = bibliography
-        self._changelog = changelog
-        self._sign_repository = sign_repository
-        self._parallel_injector = parallel_injector
+        dependencies: CorpusDependencies,
+    ) -> None:
+        self._repository: TextRepository = dependencies.repository
+        self._bibliography = dependencies.bibliography
+        self._changelog = dependencies.changelog
+        self._sign_repository = dependencies.sign_repository
+        self._parallel_injector = dependencies.parallel_line_injector
+        self._provenance_service = dependencies.provenance_service
 
     def find(self, id_: TextId) -> Text:
         return self._repository.find(id_)
@@ -171,7 +182,7 @@ class Corpus:
 
     def import_lines(self, id_: ChapterId, atf: str, user: User) -> Chapter:
         chapter = self.find_chapter(id_)
-        lines = parse_chapter(atf, chapter.manuscripts)
+        lines = parse_chapter(atf, chapter.manuscripts, self._provenance_service)
         return self.update_lines(id_, LinesUpdate(lines, set(), {}), user)
 
     def update_lines(self, id_: ChapterId, lines: LinesUpdate, user: User) -> Chapter:

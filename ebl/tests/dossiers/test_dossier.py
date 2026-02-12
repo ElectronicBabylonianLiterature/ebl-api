@@ -7,7 +7,7 @@ from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
 )
 from ebl.tests.factories.dossier import DossierRecordFactory
 from ebl.fragmentarium.domain.fragment import Script
-from ebl.common.domain.provenance import Provenance
+from ebl.common.domain.provenance_model import ProvenanceRecord
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 
@@ -26,7 +26,7 @@ def test_dossier_record_creation(
     assert isinstance(dossier_record.year_range_from, (float, int, type(None)))
     assert isinstance(dossier_record.year_range_to, (float, int, type(None)))
     assert isinstance(dossier_record.related_kings, (list, type(None)))
-    assert isinstance(dossier_record.provenance, (Provenance, type(None)))
+    assert isinstance(dossier_record.provenance, (ProvenanceRecord, type(None)))
     assert isinstance(dossier_record.script, (Script, type(None)))
     assert isinstance(dossier_record.references, (tuple, type(None)))
 
@@ -65,9 +65,12 @@ def test_dossier_record_to_dict(
 
 def test_dossier_record_from_dict(
     dossier_record: DossierRecord,
+    seeded_provenance_service,
 ) -> None:
     serialized_data = DossierRecordSchema().dump(dossier_record)
-    deserialized_object = DossierRecordSchema().load(serialized_data)
+    deserialized_object = DossierRecordSchema(
+        context={"provenance_service": seeded_provenance_service}
+    ).load(serialized_data)
 
     assert deserialized_object.id == dossier_record.id
     assert deserialized_object.description == dossier_record.description

@@ -3,10 +3,10 @@ from typing import Optional, Sequence
 from enum import Enum, auto
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.date_range import DateRange
-from ebl.common.domain.provenance import Provenance
+from ebl.common.domain.provenance_model import ProvenanceRecord
 
 
-ExcavationSite = Provenance
+ExcavationSite = ProvenanceRecord
 
 
 class BuildingType(Enum):

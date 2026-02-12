@@ -43,6 +43,7 @@ from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.afo_register.web.bootstrap import create_afo_register_routes
 from ebl.dossiers.web.bootstrap import create_dossiers_routes
+from ebl.common.web.bootstrap import create_common_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
@@ -58,6 +59,10 @@ from ebl.users.infrastructure.auth0 import Auth0Backend
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
+from ebl.common.infrastructure.mongo_provenance_repository import (
+    MongoProvenanceRepository,
+)
+from ebl.common.application.provenance_service import ProvenanceService
 
 althaia.patch()
 
@@ -85,6 +90,8 @@ def create_context():
     guest_backend = NoneAuthBackend(Guest)
     cache = create_cache()
     custom_cache = ChapterCache(MongoCacheRepository(database))
+    provenance_repository = MongoProvenanceRepository(database)
+    provenance_service = ProvenanceService(provenance_repository)
     return Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=MultiAuthBackend(auth_backend, guest_backend),
@@ -95,15 +102,17 @@ def create_context():
         photo_repository=GridFsFileRepository(database, "photos"),
         folio_repository=GridFsFileRepository(database, "folios"),
         thumbnail_repository=GridFsFileRepository(database, "thumbnails"),
-        fragment_repository=MongoFragmentRepository(database),
+        fragment_repository=MongoFragmentRepository(database, provenance_service),
         changelog=Changelog(database),
         bibliography_repository=MongoBibliographyRepository(database),
-        text_repository=MongoTextRepository(database),
+        text_repository=MongoTextRepository(database, provenance_service),
         annotations_repository=MongoAnnotationsRepository(database),
         lemma_repository=MongoLemmaRepository(database),
         afo_register_repository=MongoAfoRegisterRepository(database),
-        dossiers_repository=MongoDossiersRepository(database),
-        findspot_repository=MongoFindspotRepository(database),
+        dossiers_repository=MongoDossiersRepository(database, provenance_service),
+        findspot_repository=MongoFindspotRepository(database, provenance_service),
+        provenance_repository=provenance_repository,
+        provenance_service=provenance_service,
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
@@ -132,6 +141,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_markup_routes(api, context)
     create_afo_register_routes(api, context)
     create_dossiers_routes(api, context)
+    create_common_routes(api, context)
 
     return api
 

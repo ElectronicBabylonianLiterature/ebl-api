@@ -1,5 +1,4 @@
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
 from marshmallow import (
     Schema,
     ValidationError,
@@ -11,6 +10,7 @@ from marshmallow import (
 
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.provenance_model import ProvenanceRecord
 from ebl.corpus.application.id_schemas import TextIdSchema, ChapterIdSchema
 from ebl.corpus.application.record_schemas import RecordSchema
 from ebl.corpus.domain.chapter import (
@@ -93,9 +93,9 @@ class ManuscriptSchema(Schema):
         lambda value: Period.from_name(value),
         required=True,
     )
-    provenance = fields.Function(
-        lambda manuscript: manuscript.provenance.long_name,
-        lambda value: Provenance.from_name(value),
+    provenance = fields.Method(
+        "serialize_provenance",
+        "deserialize_provenance",
         required=True,
     )
     type = fields.Function(
@@ -149,6 +149,18 @@ class ManuscriptSchema(Schema):
             data["joins"],
             data["is_in_fragmentarium"],
         )
+
+    def serialize_provenance(self, manuscript: Manuscript) -> str:
+        return manuscript.provenance.long_name
+
+    def deserialize_provenance(self, value: str) -> ProvenanceRecord:
+        provenance_service = self.context.get("provenance_service")
+        if provenance_service is None:
+            raise ValidationError("Provenance service not configured.")
+        record = provenance_service.find_by_name(value)
+        if record is None:
+            raise ValidationError(f"Invalid provenance: {value}")
+        return record
 
 
 def manuscript_id():

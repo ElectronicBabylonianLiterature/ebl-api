@@ -11,7 +11,13 @@ from ebl.fragmentarium.domain.colophon import (
     ColophonOwnership,
     IndividualTypeAttestation,
 )
-from ebl.common.domain.provenance import Provenance
+from ebl.common.domain.provenance_data import build_provenance_records
+
+
+PROVENANCE_VALUES = [
+    f"{record.long_name} ({record.parent})" if record.parent else record.long_name
+    for record in build_provenance_records()
+]
 
 
 class NameAttestationFactory(factory.Factory):
@@ -27,9 +33,7 @@ class ProvenanceAttestationFactory(factory.Factory):
     class Meta:
         model = ProvenanceAttestation
 
-    value = factory.fuzzy.FuzzyChoice(
-        [f"{p.long_name} ({p.parent})" if p.parent else p.long_name for p in Provenance]
-    )
+    value = factory.fuzzy.FuzzyChoice(PROVENANCE_VALUES)
     is_broken = factory.Faker("boolean")
     is_uncertain = factory.Faker("boolean")
 

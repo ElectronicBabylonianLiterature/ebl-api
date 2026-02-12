@@ -33,7 +33,13 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.genres import genres
 from ebl.common.domain.scopes import Scope
-from ebl.fragmentarium.domain.findspot import ExcavationSite
+from ebl.common.domain.provenance_data import build_provenance_records
+
+
+def get_provenance_record(record_id: str):
+    return next(
+        record for record in build_provenance_records() if record.id == record_id
+    )
 
 
 def expected_fragment_info_dto(fragment: Fragment, text=None) -> Dict:
@@ -463,16 +469,20 @@ def test_search_museum(client, fragmentarium, museum, attribute):
 
 @pytest.mark.parametrize(
     "site",
-    [ExcavationSite.UR, ExcavationSite.TELL_EL_AMARNA, ExcavationSite.KIS],
+    [
+        get_provenance_record("UR"),
+        get_provenance_record("TELL_EL_AMARNA"),
+        get_provenance_record("KIS"),
+    ],
 )
 @pytest.mark.parametrize(
     "attribute",
-    ["long_name", "name"],
+    ["long_name", "id"],
 )
 def test_search_site(client, fragmentarium, site, attribute):
     fragments = [
         FragmentFactory.build(archaeology__site=site)
-        for site in [site, ExcavationSite.ASSUR]
+        for site in [site, get_provenance_record("ASSUR")]
     ]
 
     for fragment in fragments:

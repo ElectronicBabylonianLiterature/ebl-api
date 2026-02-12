@@ -3,6 +3,7 @@ from typing import Iterable, Optional, Sequence, Union
 from ebl.corpus.domain.chapter_transformer import ChapterTransformer
 from ebl.corpus.domain.line import Line
 from ebl.corpus.domain.manuscript import Manuscript
+from ebl.common.application.provenance_service import ProvenanceService
 from ebl.errors import DataError
 from ebl.transliteration.domain.dollar_line import DollarLine
 from ebl.transliteration.domain.atf_parsers.lark_parser import (
@@ -15,27 +16,35 @@ from ebl.transliteration.domain.note_line import NoteLine
 
 
 def parse_chapter(
-    atf: str, manuscripts: Iterable[Manuscript], start: Optional[str] = None
+    atf: str,
+    manuscripts: Iterable[Manuscript],
+    provenance_service: ProvenanceService,
+    start: Optional[str] = None,
 ) -> Sequence[Line]:
     try:
         start_rule = start or "chapter"
         tree = CHAPTER_PARSER.parse(atf, start=start_rule)
-        return ChapterTransformer(manuscripts).transform(tree)
+        return ChapterTransformer(manuscripts, provenance_service).transform(tree)
     except PARSE_ERRORS as error:
         raise DataError(error) from error
 
 
 def parse_manuscript(
-    atf: str, manuscripts: Iterable[Manuscript], start: Optional[str] = None
+    atf: str,
+    manuscripts: Iterable[Manuscript],
+    provenance_service: ProvenanceService,
+    start: Optional[str] = None,
 ) -> Sequence[Line]:
     try:
         start_rule = start or "manuscript_line"
         tree = MANUSCRIPT_PARSER.parse(atf, start=start_rule)
-        return ChapterTransformer(manuscripts).transform(tree)
+        return ChapterTransformer(manuscripts, provenance_service).transform(tree)
     except PARSE_ERRORS as error:
         raise DataError(error) from error
 
 
-def parse_paratext(atf: str) -> Union[NoteLine, DollarLine]:
+def parse_paratext(
+    atf: str, provenance_service: ProvenanceService
+) -> Union[NoteLine, DollarLine]:
     tree = PARATEXT_PARSER.parse(atf)
-    return ChapterTransformer(()).transform(tree)
+    return ChapterTransformer((), provenance_service).transform(tree)

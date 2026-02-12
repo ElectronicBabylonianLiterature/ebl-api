@@ -10,17 +10,21 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
+from ebl.common.application.provenance_service import ProvenanceService
+from ebl.common.domain.provenance_model import ProvenanceRecord
 from ebl.transliteration.domain.line_transformer import LineTransformer
 from ebl.transliteration.domain.label_transformer import LabelTransformer
 
 
 class ChapterTransformer(LineTransformer, LabelTransformer):
-    def __init__(self, manuscripts: Iterable[Manuscript]):
+    def __init__(
+        self, manuscripts: Iterable[Manuscript], provenance_service: ProvenanceService
+    ):
         super().__init__()
         self._manuscripts = {
             manuscript.siglum: manuscript.id for manuscript in manuscripts
         }
+        self._provenance_service = provenance_service
 
     def manuscript_label(self, children):
         return children
@@ -28,21 +32,30 @@ class ChapterTransformer(LineTransformer, LabelTransformer):
     @v_args(inline=True)
     def get_siglum(self, provenance=None, period=None, type_=None, disambiquator=None):
         _disambiquator = str(disambiquator) if disambiquator else ""
+        standard_text = self._provenance_service.find_by_id("STANDARD_TEXT")
+        if standard_text is None:
+            raise ValueError("Standard Text provenance not found.")
         return (
             Siglum(
-                Provenance.from_abbreviation(provenance or ""),
+                self._resolve_provenance(provenance or ""),
                 Period.from_abbreviation(period),
                 ManuscriptType.from_abbreviation(type_ or ""),
                 _disambiquator,
             )
             if period
             else Siglum(
-                Provenance.STANDARD_TEXT,
+                standard_text,
                 Period.NONE,
                 ManuscriptType.NONE,
                 _disambiquator,
             )
         )
+
+    def _resolve_provenance(self, abbreviation: str) -> ProvenanceRecord:
+        record = self._provenance_service.find_by_abbreviation(abbreviation)
+        if record is None:
+            raise ValueError("Unknown provenance.")
+        return record
 
     @v_args(inline=True)
     def detailed_siglum(

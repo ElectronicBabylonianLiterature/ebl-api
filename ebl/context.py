@@ -30,6 +30,8 @@ from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
+from ebl.common.application.provenance_repository import ProvenanceRepository
+from ebl.common.application.provenance_service import ProvenanceService
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -55,6 +57,8 @@ class Context:
     parallel_line_injector: ParallelLineInjector
     afo_register_repository: AfoRegisterRepository
     dossiers_repository: DossiersRepository
+    provenance_repository: ProvenanceRepository
+    provenance_service: ProvenanceService
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)
@@ -73,3 +77,6 @@ class Context:
 
     def get_transliteration_query_factory(self):
         return TransliterationQueryFactory(self.sign_repository)
+
+    def get_provenance_service(self):
+        return self.provenance_service

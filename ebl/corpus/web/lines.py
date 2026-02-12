@@ -39,12 +39,12 @@ class LinesImportSchema(Schema):
 
 
 class LinesResource:
-    def __init__(self, corpus: Corpus, cache: ChapterCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache, provenance_service):
         self._corpus = corpus
         self._cache = cache
+        self._provenance_service = provenance_service
 
     @falcon.before(require_scope, "write:texts")
-    @validate(LinesUpdateSchema())
     def on_post(
         self,
         req: falcon.Request,
@@ -57,8 +57,16 @@ class LinesResource:
     ) -> None:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         self._cache.delete_chapter(chapter_id)
+        schema = LinesUpdateSchema(
+            context={"provenance_service": self._provenance_service}
+        )
+        errors = schema.validate(req.media)
+        if errors:
+            raise falcon.HTTPBadRequest(
+                title="Request data failed validation", description=errors
+            )
         updated_chapter = self._corpus.update_lines(
-            chapter_id, LinesUpdateSchema().load(req.media), req.context.user
+            chapter_id, schema.load(req.media), req.context.user
         )
         resp.media = ApiChapterSchema().dump(updated_chapter)
 

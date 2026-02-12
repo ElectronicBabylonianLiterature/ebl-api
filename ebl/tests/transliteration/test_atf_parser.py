@@ -5,7 +5,7 @@ import re
 import pytest
 from hamcrest.library import starts_with
 from ebl.common.domain.period import Period
-from ebl.common.domain.provenance import Provenance
+from ebl.common.domain.provenance_data import build_provenance_records
 
 from ebl.transliteration.domain.transliteration_error import DuplicateLabelError
 from ebl.tests.assertions import assert_exception_has_errors
@@ -126,7 +126,7 @@ def test_stages_periods_equality(siglum_parser):
     assert line_parser_stages == enum_stages
 
 
-@pytest.mark.parametrize("provenance", Provenance)
+@pytest.mark.parametrize("provenance", build_provenance_records())
 def test_provenances_coverage(siglum_parser, provenance):
     abbreviation = provenance.abbreviation
     mock_siglum = f"{abbreviation}NA"

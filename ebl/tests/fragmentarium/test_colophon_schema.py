@@ -12,11 +12,16 @@ from ebl.fragmentarium.domain.colophon import (
     NameAttestation,
     ProvenanceAttestation,
 )
-from ebl.common.domain.provenance import Provenance
+from ebl.common.domain.provenance_data import build_provenance_records
+
+
+BABYLON_PROVENANCE = next(
+    record for record in build_provenance_records() if record.id == "BABYLON"
+)
 
 name_attestation = {"value": "John Doe"}
 type_attestation = {"value": IndividualType.Scribe}
-provenance_attestation = {"value": Provenance.BABYLON.long_name}
+provenance_attestation = {"value": BABYLON_PROVENANCE.long_name}
 colophon_data = {
     "colophon_status": ColophonStatus.OnlyColophon,
     "colophon_ownership": ColophonOwnership.Individual,
@@ -49,7 +54,7 @@ def test_provenance_attestation_schema():
     serialized = schema.dump(attestation)
     deserialized = schema.load(serialized)
     assert isinstance(deserialized, ProvenanceAttestation)
-    assert deserialized.value == Provenance.BABYLON.long_name
+    assert deserialized.value == BABYLON_PROVENANCE.long_name
 
 
 def test_colophon_schema_integration():

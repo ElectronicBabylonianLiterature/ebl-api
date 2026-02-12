@@ -11,7 +11,6 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.parser import (
     parse_chapter,
     parse_paratext,
@@ -19,6 +18,7 @@ from ebl.corpus.domain.parser import (
 )
 from ebl.errors import DataError
 from ebl.tests.factories.corpus import ManuscriptFactory
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
 from ebl.transliteration.domain.atf_parsers.lark_parser import (
     parse_note_line,
     parse_parallel_line,
@@ -37,39 +37,50 @@ MANUSCRIPTS: Sequence[Manuscript] = (
 )
 
 
-def parse_siglum(siglum):
-    return _parse_manuscript(siglum, MANUSCRIPTS, "siglum")
+STANDARD_TEXT = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "STANDARD_TEXT"
+)
+URUK = next(record for record in DEFAULT_PROVENANCES if record.id == "URUK")
+UR = next(record for record in DEFAULT_PROVENANCES if record.id == "UR")
+PERIPHERY = next(record for record in DEFAULT_PROVENANCES if record.id == "PERIPHERY")
+
+
+def parse_siglum(siglum, provenance_service):
+    return _parse_manuscript(siglum, MANUSCRIPTS, provenance_service, "siglum")
 
 
 @pytest.mark.parametrize("period", [Period.NEO_ASSYRIAN])
-@pytest.mark.parametrize(
-    "provenance", [Provenance.URUK, Provenance.UR, Provenance.PERIPHERY]
-)
+@pytest.mark.parametrize("provenance", [URUK, UR, PERIPHERY])
 @pytest.mark.parametrize("type_", [ManuscriptType.SCHOOL, ManuscriptType.LIBRARY])
 @pytest.mark.parametrize("disambiquator", ["", "a"])
 def test_parse_siglum(
-    period: Period, provenance: Provenance, type_: ManuscriptType, disambiquator: str
+    period: Period,
+    provenance,
+    type_: ManuscriptType,
+    disambiquator: str,
+    seeded_provenance_service,
 ) -> None:
     assert parse_siglum(
-        f"{provenance.abbreviation}{period.abbreviation}{type_.abbreviation}{disambiquator}"
+        f"{provenance.abbreviation}{period.abbreviation}{type_.abbreviation}{disambiquator}",
+        seeded_provenance_service,
     ) == Siglum(provenance, period, type_, disambiquator)
 
 
 @pytest.mark.parametrize("disambiquator", ["", "a"])
-def test_parse_siglum_standard_text(disambiquator: str) -> None:
+def test_parse_siglum_standard_text(
+    disambiquator: str, seeded_provenance_service
+) -> None:
     assert parse_siglum(
-        f"{Provenance.STANDARD_TEXT.abbreviation}{disambiquator}"
-    ) == Siglum(
-        Provenance.STANDARD_TEXT, Period.NONE, ManuscriptType.NONE, disambiquator
-    )
+        f"{STANDARD_TEXT.abbreviation}{disambiquator}", seeded_provenance_service
+    ) == Siglum(STANDARD_TEXT, Period.NONE, ManuscriptType.NONE, disambiquator)
 
 
-def parse_manuscript(atf):
-    return _parse_manuscript(atf, MANUSCRIPTS, "manuscript_line")
+def parse_manuscript(atf, provenance_service):
+    return _parse_manuscript(atf, MANUSCRIPTS, provenance_service, "manuscript_line")
 
 
 @pytest.mark.parametrize(
-    "lines,expected",
+    "lines,expected_builder",
     [
         (
             [
@@ -77,52 +88,63 @@ def parse_manuscript(atf):
                 "#note: a note",
                 "$ single ruling",
             ],
-            ManuscriptLine(
+            lambda provenance_service: ManuscriptLine(
                 MANUSCRIPTS[0].id,
                 parse_labels("o iii"),
                 parse_text_line("1. kur"),
-                (parse_paratext("#note: a note"), parse_paratext("$ single ruling")),
+                (
+                    parse_paratext("#note: a note", provenance_service),
+                    parse_paratext("$ single ruling", provenance_service),
+                ),
             ),
         ),
         (
             [f"{MANUSCRIPTS[0].siglum} 1. kur"],
-            ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f"    {MANUSCRIPTS[0].siglum} 1. kur"],
-            ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f" {MANUSCRIPTS[0].siglum} 1. kur"],
-            ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f"{MANUSCRIPTS[0].siglum} o iii", "#note: a note", "$ single ruling"],
-            ManuscriptLine(
+            lambda provenance_service: ManuscriptLine(
                 MANUSCRIPTS[0].id,
                 parse_labels("o iii"),
                 EmptyLine(),
-                (parse_paratext("#note: a note"), parse_paratext("$ single ruling")),
+                (
+                    parse_paratext("#note: a note", provenance_service),
+                    parse_paratext("$ single ruling", provenance_service),
+                ),
             ),
         ),
         (
             [f"{MANUSCRIPTS[0].siglum}"],
-            ManuscriptLine(MANUSCRIPTS[0].id, (), EmptyLine()),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), EmptyLine()),
         ),
     ],
 )
-def test_parse_manuscript(lines, expected) -> None:
+def test_parse_manuscript(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n".join(lines)
-    assert parse_manuscript(atf) == expected
+    assert parse_manuscript(atf, seeded_provenance_service) == expected_builder(
+        seeded_provenance_service
+    )
 
 
-def test_parse_manuscript_invalid() -> None:
+def test_parse_manuscript_invalid(seeded_provenance_service) -> None:
     with pytest.raises(DataError):
-        parse_manuscript(f"{UNKNOWN_MANUSCRIPT.siglum} o iii 1. kur")
+        parse_manuscript(
+            f"{UNKNOWN_MANUSCRIPT.siglum} o iii 1. kur",
+            seeded_provenance_service,
+        )
 
 
-def parse_reconstruction(atf):
-    return parse_chapter(atf, MANUSCRIPTS, "reconstruction")
+def parse_reconstruction(atf, provenance_service):
+    return parse_chapter(atf, MANUSCRIPTS, provenance_service, "reconstruction")
 
 
 @pytest.mark.parametrize(
@@ -154,24 +176,29 @@ def parse_reconstruction(atf):
         ),
     ],
 )
-def test_parse_reconstruction(lines, expected) -> None:
+def test_parse_reconstruction(lines, expected, seeded_provenance_service) -> None:
     atf = "\n".join(lines)
-    assert parse_reconstruction(atf) == expected
+    assert parse_reconstruction(atf, seeded_provenance_service) == expected
 
 
-def parse_line_variant(atf):
-    return parse_chapter(atf, MANUSCRIPTS, "line_variant")
+def parse_line_variant(atf, provenance_service):
+    return parse_chapter(atf, MANUSCRIPTS, provenance_service, "line_variant")
 
 
 @pytest.mark.parametrize(
-    "lines,expected",
+    "lines,expected_builder",
     [
         (
             ["1. kur", f"{MANUSCRIPTS[0].siglum} o iii 1. kur"],
-            LineVariant(
+            lambda provenance_service: LineVariant(
                 parse_text_line("1. kur").content,
                 None,
-                (parse_manuscript(f"{MANUSCRIPTS[0].siglum} o iii 1. kur"),),
+                (
+                    parse_manuscript(
+                        f"{MANUSCRIPTS[0].siglum} o iii 1. kur",
+                        provenance_service,
+                    ),
+                ),
                 (),
             ),
         ),
@@ -181,12 +208,18 @@ def parse_line_variant(atf):
                 f"{MANUSCRIPTS[0].siglum} o iii 1. kur",
                 f"{MANUSCRIPTS[1].siglum} o iii 2. kur",
             ],
-            LineVariant(
+            lambda provenance_service: LineVariant(
                 parse_text_line("1. kur").content,
                 None,
                 (
-                    parse_manuscript(f"{MANUSCRIPTS[0].siglum} o iii 1. kur"),
-                    parse_manuscript(f"{MANUSCRIPTS[1].siglum} o iii 2. kur"),
+                    parse_manuscript(
+                        f"{MANUSCRIPTS[0].siglum} o iii 1. kur",
+                        provenance_service,
+                    ),
+                    parse_manuscript(
+                        f"{MANUSCRIPTS[1].siglum} o iii 2. kur",
+                        provenance_service,
+                    ),
                 ),
                 (),
             ),
@@ -201,14 +234,18 @@ def parse_line_variant(atf):
                 "#note: a note",
                 "$ single ruling",
             ],
-            LineVariant(
+            lambda provenance_service: LineVariant(
                 parse_text_line("1. kur").content,
                 parse_note_line("#note: a note"),
                 (
-                    parse_manuscript(f"{MANUSCRIPTS[1].siglum} o iii 1. kur"),
+                    parse_manuscript(
+                        f"{MANUSCRIPTS[1].siglum} o iii 1. kur",
+                        provenance_service,
+                    ),
                     parse_manuscript(
                         f"{MANUSCRIPTS[2].siglum} o iii 2. kur\n"
-                        "#note: a note\n$ single ruling"
+                        "#note: a note\n$ single ruling",
+                        provenance_service,
                     ),
                 ),
                 (parse_parallel_line("// (parallel line 1)"),),
@@ -216,59 +253,76 @@ def parse_line_variant(atf):
         ),
     ],
 )
-def test_parse_line_variant(lines, expected) -> None:
+def test_parse_line_variant(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n".join(lines)
-    assert parse_line_variant(atf) == (LineNumber(1), expected)
+    assert parse_line_variant(atf, seeded_provenance_service) == (
+        LineNumber(1),
+        expected_builder(seeded_provenance_service),
+    )
 
 
-def parse_chapter_line(atf):
-    return parse_chapter(atf, MANUSCRIPTS, "chapter_line")
+def parse_chapter_line(atf, provenance_service):
+    return parse_chapter(atf, MANUSCRIPTS, provenance_service, "chapter_line")
 
 
 @pytest.mark.parametrize(
-    "lines,expected",
+    "lines,expected_builder",
     [
-        (["1. kur"], Line(LineNumber(1), (parse_line_variant("1. kur")[1],))),
+        (
+            ["1. kur"],
+            lambda provenance_service: Line(
+                LineNumber(1),
+                (parse_line_variant("1. kur", provenance_service)[1],),
+            ),
+        ),
         (
             ["1. kur", "1. ra"],
-            Line(
+            lambda provenance_service: Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[1], parse_line_variant("1. ra")[1]),
+                (
+                    parse_line_variant("1. kur", provenance_service)[1],
+                    parse_line_variant("1. ra", provenance_service)[1],
+                ),
             ),
         ),
         (
             [f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur", "1. ra"],
-            Line(
+            lambda provenance_service: Line(
                 LineNumber(1),
                 (
-                    parse_line_variant(f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur")[1],
-                    parse_line_variant("1. ra")[1],
+                    parse_line_variant(
+                        f"1. kur\n{MANUSCRIPTS[0].siglum} 1. kur",
+                        provenance_service,
+                    )[1],
+                    parse_line_variant("1. ra", provenance_service)[1],
                 ),
             ),
         ),
     ],
 )
-def test_parse_chapter_line(lines, expected) -> None:
+def test_parse_chapter_line(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n".join(lines)
-    assert parse_chapter_line(atf) == expected
+    assert parse_chapter_line(atf, seeded_provenance_service) == expected_builder(
+        seeded_provenance_service
+    )
 
 
 @pytest.mark.parametrize(
-    "lines,expected",
+    "lines,expected_builder",
     [
         (
             ["#tr.en: translation", "1. kur"],
-            Line(
+            lambda provenance_service: Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[1],),
+                (parse_line_variant("1. kur", provenance_service)[1],),
                 translation=(parse_translation_line("#tr.en: translation"),),
             ),
         ),
         (
             ["#tr.en: translation", "#tr.de: translation", "1. kur"],
-            Line(
+            lambda provenance_service: Line(
                 LineNumber(1),
-                (parse_line_variant("1. kur")[1],),
+                (parse_line_variant("1. kur", provenance_service)[1],),
                 translation=(
                     parse_translation_line("#tr.en: translation"),
                     parse_translation_line("#tr.de: translation"),
@@ -277,28 +331,45 @@ def test_parse_chapter_line(lines, expected) -> None:
         ),
     ],
 )
-def test_parse_translation(lines, expected) -> None:
+def test_parse_translation(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n".join(lines)
-    assert parse_chapter_line(atf) == expected
+    assert parse_chapter_line(atf, seeded_provenance_service) == expected_builder(
+        seeded_provenance_service
+    )
 
 
 @pytest.mark.parametrize(
-    "lines,expected",
+    "lines,expected_builder",
     [
-        (["1. kur"], (parse_chapter_line("1. kur"),)),
-        (["1. kur\n1. ra"], (parse_chapter_line("1. kur\n1. ra"),)),
+        (
+            ["1. kur"],
+            lambda provenance_service: (
+                parse_chapter_line("1. kur", provenance_service),
+            ),
+        ),
+        (
+            ["1. kur\n1. ra"],
+            lambda provenance_service: (
+                parse_chapter_line("1. kur\n1. ra", provenance_service),
+            ),
+        ),
         (
             ["1. kur", "2. ra"],
-            (parse_chapter_line("1. kur"), parse_chapter_line("2. ra")),
+            lambda provenance_service: (
+                parse_chapter_line("1. kur", provenance_service),
+                parse_chapter_line("2. ra", provenance_service),
+            ),
         ),
     ],
 )
-def test_parse_chapter(lines, expected) -> None:
+def test_parse_chapter(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n\n".join(lines)
-    assert parse_chapter(atf, MANUSCRIPTS) == expected
+    assert parse_chapter(
+        atf, MANUSCRIPTS, seeded_provenance_service
+    ) == expected_builder(seeded_provenance_service)
 
 
-def test_parse_chapter_empty() -> None:
+def test_parse_chapter_empty(seeded_provenance_service) -> None:
     with pytest.raises(DataError):
-        f = parse_chapter("", MANUSCRIPTS)
+        f = parse_chapter("", MANUSCRIPTS, seeded_provenance_service)
         print(f)
