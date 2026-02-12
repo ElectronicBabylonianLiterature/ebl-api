@@ -14,7 +14,7 @@ class Provenance(ProvenanceEnum):
     PERIPHERY = ("Periphery", "", None, None)
     STANDARD_TEXT = ("Standard Text", "Std", None, None)
     UNCERTAIN = ("Uncertain", "Unc", None, None)
-    
+
     ADAB = ("Adab", "Adb", "Babylonia", "ADB")
     ALALAKS = ("Alalakh", "Ala", "Periphery", "ALA")
     ANAH = ("‘Anah", "Anh", "Periphery", "TNA")
