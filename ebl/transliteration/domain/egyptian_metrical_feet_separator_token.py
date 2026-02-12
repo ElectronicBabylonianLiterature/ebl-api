@@ -33,7 +33,7 @@ class EgyptianMetricalFeetSeparator(Token):
 
     @property
     def value(self) -> str:
-        return f'{self._sign}{"".join(self.string_flags)}'
+        return f"{self._sign}{''.join(self.string_flags)}"
 
     def accept(self, visitor: TokenVisitor) -> None:
         visitor.visit_egyptian_metrical_feet_separator(self)

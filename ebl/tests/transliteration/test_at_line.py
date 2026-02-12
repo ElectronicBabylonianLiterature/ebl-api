@@ -69,7 +69,7 @@ def test_at_line_surface_no_status() -> None:
 
 
 def test_at_line_surface_instantiate_text_with_wrong_surface() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         at_line = SurfaceAtLine(
             SurfaceLabel((atf.Status.CORRECTION,), atf.Surface.OBVERSE, "Stone wig")
         )
@@ -130,5 +130,5 @@ def test_at_line_composite_milestone() -> None:
 
 
 def test_at_line_composite_raise_error() -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         CompositeAtLine(atf.Composite.END, "paragraph", 1)

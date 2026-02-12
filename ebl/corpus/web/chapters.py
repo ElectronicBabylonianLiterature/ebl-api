@@ -1,6 +1,7 @@
 import json
 from collections import defaultdict
-from typing import Sequence, Optional
+from itertools import zip_longest
+from typing import Optional, Sequence
 import falcon
 from falcon_caching import Cache
 from pydash.arrays import flatten_deep
@@ -63,7 +64,9 @@ class ChaptersDisplayResource:
     ) -> dict:
         line_variants = defaultdict(set)
 
-        for line, variant in zip(lines, variants):
+        for line, variant in zip_longest(lines, variants):
+            if line is None or variant is None:
+                continue
             line_variants[line].add(variant)
 
         return line_variants

@@ -3,12 +3,12 @@
 	"image": "mcr.microsoft.com/devcontainers/universal:2",
 	"features": {
 		"ghcr.io/devcontainers/features/python:1": {
-			"version": "3.9.23"
+			"version": "3.11"
 		},
-		"ghcr.io/devcontainers-contrib/features/poetry:2": {
+		"ghcr.io/devcontainers-extra/features/poetry:2": {
 			"version": "latest"
 		},
-		"ghcr.io/devcontainers-contrib/features/go-task:1": {
+		"ghcr.io/devcontainers-extra/features/go-task:1": {
 			"version": "latest"
 		}
 	},

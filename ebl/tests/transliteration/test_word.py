@@ -214,7 +214,7 @@ def test_set_unique_lemma_empty() -> None:
 )
 def test_set_unique_lemma_invalid(word) -> None:
     lemma = LemmatizationToken("bu", (WordId("nu I"),))
-    with pytest.raises(LemmatizationError):  # pyre-ignore[16]
+    with pytest.raises(LemmatizationError):
         word.set_unique_lemma(lemma)
 
 

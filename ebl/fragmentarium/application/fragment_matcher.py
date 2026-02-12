@@ -75,8 +75,9 @@ class FragmentMatcher:
         ranker = LineToVecRanker()
         if candidate_line_to_vecs:
             for entry in filter(
-                lambda line_to_vec_entry: line_to_vec_entry.museum_number
-                != MuseumNumber.of(candidate),
+                lambda line_to_vec_entry: (
+                    line_to_vec_entry.museum_number != MuseumNumber.of(candidate)
+                ),
                 line_to_vec_entries,
             ):
                 line_to_vec_score = LineToVecScore(

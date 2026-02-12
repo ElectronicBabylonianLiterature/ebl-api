@@ -23,73 +23,93 @@ class CorpusFragmentsMapping(TypedDict):
 
 class TextRepository(ABC):
     @abstractmethod
-    def create(self, text: Text) -> None: ...
+    def create(self, text: Text) -> None:
+        raise NotImplementedError
 
     @abstractmethod
-    def create_chapter(self, chapter: Chapter) -> None: ...
+    def create_chapter(self, chapter: Chapter) -> None:
+        raise NotImplementedError
 
     @abstractmethod
-    def find(self, id_: TextId) -> Text: ...
+    def find(self, id_: TextId) -> Text:
+        raise NotImplementedError
 
     @abstractmethod
-    def find_chapter(self, id_: ChapterId) -> Chapter: ...
+    def find_chapter(self, id_: ChapterId) -> Chapter:
+        raise NotImplementedError
 
     @abstractmethod
-    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay: ...
+    def find_chapter_for_display(self, id_: ChapterId) -> ChapterDisplay:
+        raise NotImplementedError
 
     @abstractmethod
-    def find_line(self, id_: ChapterId, number: int) -> Line: ...
+    def find_line(self, id_: ChapterId, number: int) -> Line:
+        raise NotImplementedError
 
     @abstractmethod
-    def list(self) -> List[Text]: ...
+    def list(self) -> List[Text]:
+        raise NotImplementedError
 
     @abstractmethod
-    def list_all_texts(self) -> Sequence: ...
+    def list_all_texts(self) -> Sequence:
+        raise NotImplementedError
 
     @abstractmethod
-    def list_all_chapters(self) -> Sequence: ...
+    def list_all_chapters(self) -> Sequence:
+        raise NotImplementedError
 
     @abstractmethod
-    def update(self, id_: ChapterId, chapter: Chapter) -> None: ...
+    def update(self, id_: ChapterId, chapter: Chapter) -> None:
+        raise NotImplementedError
 
     @abstractmethod
     def query_by_transliteration(
         self, query: TransliterationQuery, pagination_index: int
-    ) -> Tuple[Sequence[Chapter], int]: ...
+    ) -> Tuple[Sequence[Chapter], int]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_by_lemma(
         self, lemma: str, genre: Optional[Genre] = None
-    ) -> Sequence[DictionaryLine]: ...
+    ) -> Sequence[DictionaryLine]:
+        raise NotImplementedError
 
     @abstractmethod
-    def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]: ...
+    def query_manuscripts_by_chapter(self, id_: ChapterId) -> Sequence[Manuscript]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_corpus_by_manuscripts(
         self, museum_numbers: List[MuseumNumber]
-    ) -> List[ManuscriptAttestation]: ...
+    ) -> List[ManuscriptAttestation]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_corpus_by_uncertain_fragments(
         self, museum_numbers: List[MuseumNumber]
-    ) -> List[UncertainFragmentAttestation]: ...
+    ) -> List[UncertainFragmentAttestation]:
+        raise NotImplementedError
 
     @abstractmethod
     def query_corpus_by_related_fragments(
         self, museum_numbers: List[MuseumNumber]
-    ) -> CorpusFragmentsMapping: ...
+    ) -> CorpusFragmentsMapping:
+        raise NotImplementedError
 
     @abstractmethod
     def query_manuscripts_with_joins_by_chapter(
         self, id_: ChapterId
-    ) -> Sequence[Manuscript]: ...
+    ) -> Sequence[Manuscript]:
+        raise NotImplementedError
 
     @abstractmethod
-    def query(self, query: dict) -> CorpusQueryResult: ...
+    def query(self, query: dict) -> CorpusQueryResult:
+        raise NotImplementedError
 
     @abstractmethod
-    def get_sign_data(self, id_: ChapterId) -> dict: ...
+    def get_sign_data(self, id_: ChapterId) -> dict:
+        raise NotImplementedError
 
     @abstractmethod
-    def get_all_sign_data(self) -> Sequence[dict]: ...
+    def get_all_sign_data(self) -> Sequence[dict]:
+        raise NotImplementedError

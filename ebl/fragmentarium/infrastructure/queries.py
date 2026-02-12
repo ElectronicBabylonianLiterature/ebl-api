@@ -31,7 +31,7 @@ def number_is(number: str) -> dict:
         try:
             or_.append(query_number_is(number_class.of(number), allow_wildcard=True))
         except ValueError:
-            pass
+            continue
     return {"$or": or_}
 
 

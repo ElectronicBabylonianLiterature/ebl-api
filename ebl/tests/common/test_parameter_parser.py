@@ -6,7 +6,6 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_lines,
     parse_transliteration,
-    parse_dossier,
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.errors import DataError
@@ -114,13 +113,3 @@ def test_pipeline(sign_repository):
             for line in PARAMS["transliteration"].splitlines()
         ],
     }
-
-
-def test_parse_dossier():
-    params_with_dossier = {"dossier": "DOSSIER001"}
-    assert parse_dossier(params_with_dossier) == {"dossier": "DOSSIER001"}
-
-
-def test_parse_dossier_missing():
-    params_without_dossier = {"other": "value"}
-    assert parse_dossier(params_without_dossier) == {"other": "value"}

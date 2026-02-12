@@ -17,3 +17,9 @@ class DossierRecord:
     provenance: Optional[Provenance] = None
     script: Optional[Script] = None
     references: Sequence[Reference] = ()
+
+
+@attr.s(frozen=True, auto_attribs=True)
+class DossierRecordSuggestion:
+    id: str
+    description_snippet: str

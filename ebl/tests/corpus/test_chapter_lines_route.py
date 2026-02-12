@@ -252,7 +252,7 @@ def test_importing_invalidates_chapter_display_cache(
         + 1
     )
     atf = (
-        f"{chapter.lines[0].number.number+1}. bu\n"
+        f"{chapter.lines[0].number.number + 1}. bu\n"
         f"{chapter.manuscripts[0].siglum} {next_line_mumber}. ..."
     )
 

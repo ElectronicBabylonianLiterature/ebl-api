@@ -34,5 +34,5 @@ def test_bibliography_part_escape() -> None:
     ],
 )
 def test_invalid_reference(type, pages, note, lines) -> None:
-    with pytest.raises(ValueError):  # pyre-ignore[16]
+    with pytest.raises(ValueError):
         BibliographyPart(Reference(BIBLIOGRAPHY_ID, type, pages, note, lines))
