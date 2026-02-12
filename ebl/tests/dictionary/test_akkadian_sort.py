@@ -1,4 +1,7 @@
-from ebl.dictionary.infrastructure.akkadian_sort import akkadian_sort_key
+from ebl.dictionary.infrastructure.akkadian_sort import (
+    akkadian_sort_key,
+    _split_prefix_and_roman,
+)
 
 
 def test_akkadian_sort_orders_words_with_roman_suffixes():
@@ -45,3 +48,17 @@ def test_akkadian_sort_orders_words_with_roman_suffixes():
     ]
 
     assert sorted(test_words, key=akkadian_sort_key) == expected
+
+
+def test_split_prefix_without_roman_suffix() -> None:
+    prefix, value = _split_prefix_and_roman("abalu")
+
+    assert prefix == "abalu"
+    assert value == 0
+
+
+def test_split_prefix_with_invalid_roman_suffix() -> None:
+    prefix, value = _split_prefix_and_roman("abalu IIV")
+
+    assert prefix == "abalu IIV"
+    assert value == 0
