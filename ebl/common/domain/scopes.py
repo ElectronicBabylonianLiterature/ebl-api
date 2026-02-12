@@ -79,6 +79,7 @@ class Scope(ScopeItem):
     ANNOTATE_FRAGMENTS = ("annotate:fragments", RESTRICTED)
     CREATE_TEXTS = ("create:texts", RESTRICTED)
     LEMMATIZE_FRAGMENTS = ("lemmatize:fragments", RESTRICTED)
+    CREATE_PROPER_NOUNS = ("create:proper_nouns", RESTRICTED)
     TRANSLITERATE_FRAGMENTS = ("transliterate:fragments", RESTRICTED)
     WRITE_BIBLIOGRAPHY = ("write:bibliography", RESTRICTED)
     WRITE_TEXTS = ("write:texts", RESTRICTED)

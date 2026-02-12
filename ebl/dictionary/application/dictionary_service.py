@@ -74,6 +74,9 @@ class Dictionary:
     def create(self, word) -> WordId:
         return self._repository.create(word)
 
+    def create_proper_noun(self, lemma: str, pos_tags: list[str]) -> WordId:
+        return self._repository.create_proper_noun(lemma, pos_tags)
+
     def find(self, id_):
         return self._repository.query_by_id(id_)
 

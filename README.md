@@ -84,6 +84,7 @@ Bibliography:
 
 Dictionary:
 `write:words`,
+`create:proper_nouns`,
 
 ##### Legacy (currently unused) scopes
 

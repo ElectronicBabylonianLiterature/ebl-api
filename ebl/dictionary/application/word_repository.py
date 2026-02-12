@@ -10,6 +10,9 @@ class WordRepository(ABC):
     def create(self, word) -> WordId: ...
 
     @abstractmethod
+    def create_proper_noun(self, lemma: str, pos_tags: list[str]) -> WordId: ...
+
+    @abstractmethod
     def query_by_id(self, id_: WordId): ...
 
     @abstractmethod
