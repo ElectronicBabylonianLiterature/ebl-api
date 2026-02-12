@@ -7,15 +7,23 @@ from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
-from ebl.common.domain.provenance import Provenance
+from ebl.common.application.provenance_service import ProvenanceService
+from ebl.common.domain.provenance_data import build_provenance_records
+from ebl.common.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
 
 
 class PatternMatcher:
-    def __init__(self, query: Dict, user_scopes: Sequence[Scope] = ()):
+    def __init__(
+        self,
+        query: Dict,
+        provenance_service: ProvenanceService,
+        user_scopes: Sequence[Scope] = (),
+    ):
         self._query = query
         self._scopes = user_scopes
+        self._provenance_service = provenance_service
 
         self._lemma_matcher = (
             LemmaMatcher(
@@ -80,16 +88,35 @@ class PatternMatcher:
 
     def _filter_by_site(self) -> Dict:
         if provenance := self._query.get("site"):
-            children = [p.long_name for p in Provenance if p.parent == provenance]
+            record = self._lookup_provenance_record(provenance)
+            if record is None:
+                return {"archaeology.site": provenance}
+            children = [
+                child.long_name
+                for child in self._provenance_service.find_children(record.long_name)
+            ]
             if children:
-                return {"archaeology.site": {"$in": [provenance] + children}}
-            else:
-                search_value = next(
-                    (p.long_name for p in Provenance if p.name == provenance.upper()),
-                    provenance,
-                )
-            return {"archaeology.site": search_value}
+                return {"archaeology.site": {"$in": [record.long_name] + children}}
+            return {"archaeology.site": record.long_name}
         return {}
+
+    def _lookup_provenance_record(
+        self, provenance: str
+    ) -> Optional[ProvenanceRecord]:
+        record = self._provenance_service.find_by_name(provenance)
+        if record is not None:
+            return record
+        record = self._provenance_service.find_by_id(provenance.upper())
+        if record is not None:
+            return record
+        return next(
+            (
+                item
+                for item in build_provenance_records()
+                if item.id == provenance.upper() or item.long_name == provenance
+            ),
+            None,
+        )
 
     def _filter_by_reference(self) -> Dict:
         if "bibId" not in self._query:

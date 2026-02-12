@@ -7,7 +7,7 @@ import pytest
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import ChapterFactory, TextFactory
@@ -17,6 +17,14 @@ from ebl.tests.corpus.support import (
     allow_signs,
     create_chapter_dto,
     create_chapter_url,
+)
+
+
+BABYLON_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "BABYLON"
+)
+STANDARD_TEXT_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "STANDARD_TEXT"
 )
 
 
@@ -106,7 +114,7 @@ def test_updating_invalid_reference(
         "accession": "",
         "periodModifier": PeriodModifier.NONE.value,
         "period": Period.OLD_ASSYRIAN.long_name,
-        "provenance": Provenance.BABYLON.long_name,
+        "provenance": BABYLON_PROVENANCE.long_name,
         "type": ManuscriptType.SCHOOL.long_name,
         "notes": "",
         "colophon": "",
@@ -159,7 +167,7 @@ AMBIGUOUS_MANUSCRIPTS = {
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
             "period": Period.OLD_ASSYRIAN.long_name,
-            "provenance": Provenance.BABYLON.long_name,
+            "provenance": BABYLON_PROVENANCE.long_name,
             "type": ManuscriptType.SCHOOL.long_name,
             "notes": "",
             "colophon": "",
@@ -174,7 +182,7 @@ AMBIGUOUS_MANUSCRIPTS = {
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
             "period": Period.OLD_ASSYRIAN.long_name,
-            "provenance": Provenance.BABYLON.long_name,
+            "provenance": BABYLON_PROVENANCE.long_name,
             "type": ManuscriptType.SCHOOL.long_name,
             "notes": "",
             "colophon": "",
@@ -196,7 +204,7 @@ INVALID_MUSEUM_NUMBER = {
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
             "period": Period.OLD_ASSYRIAN.long_name,
-            "provenance": Provenance.BABYLON.long_name,
+            "provenance": BABYLON_PROVENANCE.long_name,
             "type": ManuscriptType.SCHOOL.long_name,
             "notes": "",
             "colophon": "",
@@ -218,7 +226,7 @@ INVALID_PROVENANCE = {
             "accession": "",
             "periodModifier": PeriodModifier.NONE.value,
             "period": Period.OLD_ASSYRIAN.long_name,
-            "provenance": Provenance.STANDARD_TEXT.long_name,
+            "provenance": STANDARD_TEXT_PROVENANCE.long_name,
             "type": ManuscriptType.NONE.long_name,
             "notes": "",
             "colophon": "",

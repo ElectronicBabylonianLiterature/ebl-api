@@ -16,13 +16,13 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.corpus import OldSiglumFactory
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
 from ebl.transliteration.domain.atf import Ruling, Surface
 from ebl.transliteration.domain.dollar_line import RulingDollarLine
 from ebl.transliteration.domain.genre import Genre
@@ -59,7 +59,7 @@ MUSEUM_NUMBER = MuseumNumber("BM", "x")
 ACCESSION = ""
 PERIOD_MODIFIER = PeriodModifier.LATE
 PERIOD = Period.OLD_BABYLONIAN
-PROVENANCE = Provenance.NINEVEH
+PROVENANCE = next(record for record in DEFAULT_PROVENANCES if record.id == "NINEVEH")
 TYPE = ManuscriptType.LIBRARY
 NOTES = "some notes"
 COLOPHON = Transliteration.of_iterable(
@@ -154,6 +154,10 @@ CHAPTER = Chapter(
     (LINE_1, LINE_2, LINE_3),
     SIGNS,
     RECORD,
+)
+
+BABYLON_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "BABYLON"
 )
 
 
@@ -442,7 +446,7 @@ def test_extant_lines_mixed_sides() -> None:
         old_sigla=(),
         period_modifier=PeriodModifier.NONE,
         period=Period.LATE_BABYLONIAN,
-        provenance=Provenance.BABYLON,
+        provenance=BABYLON_PROVENANCE,
         type=ManuscriptType.SCHOOL,
     )
     manuscript_line = ManuscriptLine(

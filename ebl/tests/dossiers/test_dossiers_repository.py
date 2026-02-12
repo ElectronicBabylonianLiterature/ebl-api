@@ -1,6 +1,15 @@
 from ebl.tests.factories.dossier import DossierRecordFactory
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
+
+
+BABYLON_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "BABYLON"
+)
+NIPPUR_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "NIPPUR"
+)
 
 
 def test_find_all(
@@ -102,16 +111,14 @@ def test_search_limits_results(dossiers_repository: DossiersRepository):
 
 
 def test_search_with_provenance_filter(dossiers_repository: DossiersRepository):
-    from ebl.common.domain.provenance import Provenance
-
     dossier1 = DossierRecordFactory.build(
-        id="TEST001", description="Test", provenance=Provenance.BABYLON
+        id="TEST001", description="Test", provenance=BABYLON_PROVENANCE
     )
     dossier2 = DossierRecordFactory.build(
-        id="TEST002", description="Test", provenance=Provenance.NIPPUR
+        id="TEST002", description="Test", provenance=NIPPUR_PROVENANCE
     )
     dossier3 = DossierRecordFactory.build(
-        id="TEST003", description="Test", provenance=Provenance.BABYLON
+        id="TEST003", description="Test", provenance=BABYLON_PROVENANCE
     )
 
     dossiers_repository.create(dossier1)
@@ -152,25 +159,24 @@ def test_search_with_script_period_filter(dossiers_repository: DossiersRepositor
 
 
 def test_search_with_multiple_filters(dossiers_repository: DossiersRepository):
-    from ebl.common.domain.provenance import Provenance
     from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
 
     dossier1 = DossierRecordFactory.build(
         id="TEST001",
         description="Test",
-        provenance=Provenance.BABYLON,
+        provenance=BABYLON_PROVENANCE,
         script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
     )
     dossier2 = DossierRecordFactory.build(
         id="TEST002",
         description="Test",
-        provenance=Provenance.BABYLON,
+        provenance=BABYLON_PROVENANCE,
         script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
     )
     dossier3 = DossierRecordFactory.build(
         id="TEST003",
         description="Test",
-        provenance=Provenance.NIPPUR,
+        provenance=NIPPUR_PROVENANCE,
         script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
     )
 

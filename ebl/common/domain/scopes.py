@@ -82,6 +82,7 @@ class Scope(ScopeItem):
     TRANSLITERATE_FRAGMENTS = ("transliterate:fragments", RESTRICTED)
     WRITE_BIBLIOGRAPHY = ("write:bibliography", RESTRICTED)
     WRITE_TEXTS = ("write:texts", RESTRICTED)
+    WRITE_PROVENANCES = ("write:provenances", RESTRICTED)
     READ_WORDS = ("read:words", OPEN)
     READ_TEXTS = ("read:texts", OPEN)
     WRITE_WORDS = ("write:words", RESTRICTED)

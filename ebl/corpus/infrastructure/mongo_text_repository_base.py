@@ -23,6 +23,7 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
 
 
 class MongoTextRepositoryBase(TextRepository):
-    def __init__(self, database: Database):
+    def __init__(self, database: Database, provenance_service):
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
+        self._provenance_service = provenance_service

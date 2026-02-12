@@ -173,11 +173,14 @@ def test_serialize_manuscript() -> None:
     }
 
 
-def test_deserialize_manuscript() -> None:
+def test_deserialize_manuscript(seeded_provenance_service) -> None:
     references = (ReferenceFactory.build(with_document=False),)
     manuscript = ManuscriptFactory.build(references=references, with_old_sigla=True)
+    schema = ApiManuscriptSchema(
+        context={"provenance_service": seeded_provenance_service}
+    )
     assert (
-        ApiManuscriptSchema().load(
+        schema.load(
             {
                 "id": manuscript.id,
                 "siglumDisambiguator": manuscript.siglum_disambiguator,
@@ -207,7 +210,10 @@ def test_serialize() -> None:
     assert ApiChapterSchema().dump(chapter) == dto
 
 
-def test_deserialize() -> None:
+def test_deserialize(seeded_provenance_service) -> None:
     chapter, dto = create(False)
     del dto["lines"][0]["variants"][0]["reconstructionTokens"]
-    assert ApiChapterSchema().load(dto) == chapter
+    schema = ApiChapterSchema(
+        context={"provenance_service": seeded_provenance_service}
+    )
+    assert schema.load(dto) == chapter

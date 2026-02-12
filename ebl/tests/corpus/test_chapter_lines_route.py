@@ -231,7 +231,12 @@ def test_update_invalid_entity(
 
 
 def test_importing_invalidates_chapter_display_cache(
-    cached_client, bibliography, sign_repository, signs, text_repository
+    cached_client,
+    bibliography,
+    sign_repository,
+    signs,
+    text_repository,
+    seeded_provenance_service,
 ):
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
@@ -260,7 +265,7 @@ def test_importing_invalidates_chapter_display_cache(
         chapter,
         lines=(
             *(line.set_variant_alignment_flags() for line in chapter.lines),
-            *parse_chapter(atf, chapter.manuscripts),
+            *parse_chapter(atf, chapter.manuscripts, seeded_provenance_service),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,

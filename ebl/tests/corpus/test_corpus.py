@@ -792,7 +792,15 @@ def test_updating_lines_add(
 
 
 def test_importing_lines(
-    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+    corpus,
+    text_repository,
+    bibliography,
+    changelog,
+    signs,
+    sign_repository,
+    user,
+    when,
+    seeded_provenance_service,
 ) -> None:
     line_number = CHAPTER_WITHOUT_DOCUMENTS.lines[-1].number.number + 1
     siglum = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].siglum
@@ -801,7 +809,7 @@ def test_importing_lines(
         CHAPTER,
         lines=(  # pyre-ignore[60]
             *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
-            *parse_chapter(atf, CHAPTER.manuscripts),
+            *parse_chapter(atf, CHAPTER.manuscripts, seeded_provenance_service),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,

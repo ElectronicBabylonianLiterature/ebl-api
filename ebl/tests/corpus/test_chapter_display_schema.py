@@ -105,23 +105,23 @@ def test_dump():
     }
 
 
-def test_load():
-    assert (
-        ChapterDisplaySchema().load(to_dict(CHAPTER_DISPLAY, for_loading=True))
-        == CHAPTER_DISPLAY
+def test_load(seeded_provenance_service):
+    schema = ChapterDisplaySchema(
+        context={"provenance_service": seeded_provenance_service}
     )
+    assert schema.load(to_dict(CHAPTER_DISPLAY, for_loading=True)) == CHAPTER_DISPLAY
 
 
-def test_load_missing_data():
+def test_load_missing_data(seeded_provenance_service):
     lines = list(CHAPTER_DISPLAY.lines)
     lines[0] = attr.evolve(CHAPTER_DISPLAY.lines[0], translation=())
     chapter_display = attr.evolve(
         CHAPTER_DISPLAY,
         lines=tuple(lines),
     )
-    assert (
-        ChapterDisplaySchema().load(
-            to_dict(chapter_display, missing_translation=True, for_loading=True)
-        )
-        == chapter_display
+    schema = ChapterDisplaySchema(
+        context={"provenance_service": seeded_provenance_service}
     )
+    assert schema.load(
+        to_dict(chapter_display, missing_translation=True, for_loading=True)
+    ) == chapter_display

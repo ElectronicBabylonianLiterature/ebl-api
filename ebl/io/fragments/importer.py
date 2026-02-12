@@ -9,6 +9,10 @@ from pymongo import MongoClient
 import pymongo
 from ebl.common.query.util import sort_by_museum_number
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
+from ebl.common.application.provenance_service import ProvenanceService
+from ebl.common.infrastructure.mongo_provenance_repository import (
+    MongoProvenanceRepository,
+)
 from ebl.mongo_collection import MongoCollection
 from ebl.transliteration.application.token_schemas import WORD_SCHEMAS
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -57,9 +61,20 @@ def load_collection(path: str) -> dict:
     return fragments
 
 
-def validate(data: dict, filename="") -> None:
+def validate(
+    data: dict,
+    filename: str = "",
+    provenance_service: Optional[ProvenanceService] = None,
+) -> None:
     try:
-        validation_errors = FragmentSchema(unknown="exclude").validate(data)
+        if provenance_service is not None:
+            schema = FragmentSchema(
+                unknown="exclude",
+                context={"provenance_service": provenance_service},
+            )
+        else:
+            schema = FragmentSchema(unknown="exclude")
+        validation_errors = schema.validate(data)
     except Exception as error:
         raise ValidationError(f"Invalid data in {filename}: {error}") from error
     if validation_errors:
@@ -240,6 +255,8 @@ if __name__ == "__main__":
     CLIENT = MongoClient(os.environ["MONGODB_URI"])
     TARGET_DB = CLIENT.get_database(args.database)
     COLLECTION = MongoCollection(TARGET_DB, FRAGMENTS_COLLECTION)
+    provenance_repository = MongoProvenanceRepository(TARGET_DB)
+    provenance_service = ProvenanceService(provenance_repository)
     FAILS = []
     IS_COLLECTION = False
 
@@ -274,12 +291,12 @@ if __name__ == "__main__":
 
     for filename, data in fragments.items():
         if args.strict:
-            validate(data, filename)
+            validate(data, filename, provenance_service)
             validate_id(data, filename)
             ensure_unique(data, COLLECTION, filename)
         else:
             try:
-                validate(data, filename)
+                validate(data, filename, provenance_service)
                 validate_id(data, filename)
             except Exception as error:
                 FAILS.append([filename, str(error)])

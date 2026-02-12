@@ -16,4 +16,5 @@ class MongoTextRepository(
     MongoTextRepositoryModify,
     MongoTextRepositoryQuery,
 ):
-    pass
+    def __init__(self, database, provenance_service):
+        super().__init__(database, provenance_service)

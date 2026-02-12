@@ -9,7 +9,6 @@ from ebl.corpus.web.chapter_schemas import (
     MuseumNumberString,
 )
 from ebl.corpus.web.text_utils import create_chapter_id
-from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
 
@@ -21,9 +20,10 @@ class ManuscriptDtoSchema(Schema):
 
 
 class ManuscriptsResource:
-    def __init__(self, corpus: Corpus, cache: ChapterCache):
+    def __init__(self, corpus: Corpus, cache: ChapterCache, provenance_service):
         self._corpus = corpus
         self._cache = cache
+        self._provenance_service = provenance_service
 
     def on_get(
         self,
@@ -40,7 +40,6 @@ class ManuscriptsResource:
         resp.media = ApiManuscriptSchema().dump(manuscripts, many=True)
 
     @falcon.before(require_scope, "write:texts")
-    @validate(ManuscriptDtoSchema())
     def on_post(
         self,
         req: falcon.Request,
@@ -54,7 +53,15 @@ class ManuscriptsResource:
         chapter_id = create_chapter_id(genre, category, index, stage, name)
         self._cache.delete_chapter(chapter_id)
 
-        dto = ManuscriptDtoSchema().load(req.media)
+        schema = ManuscriptDtoSchema(
+            context={"provenance_service": self._provenance_service}
+        )
+        errors = schema.validate(req.media)
+        if errors:
+            raise falcon.HTTPBadRequest(
+                title="Request data failed validation", description=errors
+            )
+        dto = schema.load(req.media)
         updated_chapter = self._corpus.update_manuscripts(
             chapter_id,
             dto["manuscripts"],

@@ -1,0 +1,1106 @@
+[
+  {
+    "id": "STANDARD_TEXT",
+    "long_name": "Standard Text",
+    "abbreviation": "Std",
+    "parent": null,
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "ASSYRIA",
+    "long_name": "Assyria",
+    "abbreviation": "Assa",
+    "parent": null,
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "ASSUR",
+    "long_name": "A\u0161\u0161ur",
+    "abbreviation": "A\u0161\u0161",
+    "parent": "Assyria",
+    "cigs_key": "ASS",
+    "sort_key": -1
+  },
+  {
+    "id": "DUR_KATLIMMU",
+    "long_name": "D\u016br-Katlimmu",
+    "abbreviation": "Dka",
+    "parent": "Assyria",
+    "cigs_key": "DKA",
+    "sort_key": -1
+  },
+  {
+    "id": "GUZANA",
+    "long_name": "Guzana",
+    "abbreviation": "Guz",
+    "parent": "Assyria",
+    "cigs_key": "HLF",
+    "sort_key": -1
+  },
+  {
+    "id": "HARRAN",
+    "long_name": "\u1e2aarr\u0101n",
+    "abbreviation": "Har",
+    "parent": "Assyria",
+    "cigs_key": "HAR",
+    "sort_key": -1
+  },
+  {
+    "id": "HUZIRINA",
+    "long_name": "\u1e2auzirina",
+    "abbreviation": "Huz",
+    "parent": "Assyria",
+    "cigs_key": "HUZ",
+    "sort_key": -1
+  },
+  {
+    "id": "IMGUR_ENLIL",
+    "long_name": "Imgur-Enlil",
+    "abbreviation": "Img",
+    "parent": "Assyria",
+    "cigs_key": "BLW",
+    "sort_key": -1
+  },
+  {
+    "id": "KALHU",
+    "long_name": "Kal\u1e2bu",
+    "abbreviation": "Kal",
+    "parent": "Assyria",
+    "cigs_key": "NIM",
+    "sort_key": -1
+  },
+  {
+    "id": "KAR_TUKULTI_NINURTA",
+    "long_name": "K\u0101r-Tukulti-Ninurta",
+    "abbreviation": "Ktn",
+    "parent": "Assyria",
+    "cigs_key": "KTN",
+    "sort_key": -1
+  },
+  {
+    "id": "KHORSABAD",
+    "long_name": "Khorsabad",
+    "abbreviation": "Kho",
+    "parent": "Assyria",
+    "cigs_key": "SAR",
+    "sort_key": -1
+  },
+  {
+    "id": "NINEVEH",
+    "long_name": "Nineveh",
+    "abbreviation": "Nin",
+    "parent": "Assyria",
+    "cigs_key": "NNV",
+    "sort_key": -1
+  },
+  {
+    "id": "SIBANIBA",
+    "long_name": "\u0160ibaniba",
+    "abbreviation": "Shi",
+    "parent": "Assyria",
+    "cigs_key": "SHI",
+    "sort_key": -1
+  },
+  {
+    "id": "SUBAT_ENLIL",
+    "long_name": "\u0160ubat-Enlil",
+    "abbreviation": "\u0160ub",
+    "parent": "Assyria",
+    "cigs_key": "SZE",
+    "sort_key": -1
+  },
+  {
+    "id": "TARBISU",
+    "long_name": "Tarbi\u1e63u",
+    "abbreviation": "Tar",
+    "parent": "Assyria",
+    "cigs_key": "SKH",
+    "sort_key": -1
+  },
+  {
+    "id": "BABYLONIA",
+    "long_name": "Babylonia",
+    "abbreviation": "Baba",
+    "parent": null,
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "ADAB",
+    "long_name": "Adab",
+    "abbreviation": "Adb",
+    "parent": "Babylonia",
+    "cigs_key": "ADB",
+    "sort_key": -1
+  },
+  {
+    "id": "BABYLON",
+    "long_name": "Babylon",
+    "abbreviation": "Bab",
+    "parent": "Babylonia",
+    "cigs_key": "BAB",
+    "sort_key": -1
+  },
+  {
+    "id": "BAD_TIBIRA",
+    "long_name": "Bad-Tibira",
+    "abbreviation": "Btb",
+    "parent": "Babylonia",
+    "cigs_key": "BTB",
+    "sort_key": -1
+  },
+  {
+    "id": "BORSIPPA",
+    "long_name": "Borsippa",
+    "abbreviation": "Bor",
+    "parent": "Babylonia",
+    "cigs_key": "BOR",
+    "sort_key": -1
+  },
+  {
+    "id": "CUTHA",
+    "long_name": "Cutha",
+    "abbreviation": "Cut",
+    "parent": "Babylonia",
+    "cigs_key": "GUD",
+    "sort_key": -1
+  },
+  {
+    "id": "DILBAT",
+    "long_name": "Dilbat",
+    "abbreviation": "Dil",
+    "parent": "Babylonia",
+    "cigs_key": "DLB",
+    "sort_key": -1
+  },
+  {
+    "id": "DIQDIQQAH",
+    "long_name": "Diqdiqqah",
+    "abbreviation": "Diqd",
+    "parent": "Babylonia",
+    "cigs_key": "DQD",
+    "sort_key": -1
+  },
+  {
+    "id": "DUR_KURIGALZU",
+    "long_name": "D\u016br-Kurigalzu",
+    "abbreviation": "Dku",
+    "parent": "Babylonia",
+    "cigs_key": "AQA",
+    "sort_key": -1
+  },
+  {
+    "id": "ERIDU",
+    "long_name": "Eridu",
+    "abbreviation": "Eri",
+    "parent": "Babylonia",
+    "cigs_key": "ERI",
+    "sort_key": -1
+  },
+  {
+    "id": "ESNUNNA",
+    "long_name": "E\u0161nunna",
+    "abbreviation": "E\u0161n",
+    "parent": "Babylonia",
+    "cigs_key": "ESH",
+    "sort_key": -1
+  },
+  {
+    "id": "GARSANA",
+    "long_name": "Gar\u0161ana",
+    "abbreviation": "Gar",
+    "parent": "Babylonia",
+    "cigs_key": "GRS",
+    "sort_key": -1
+  },
+  {
+    "id": "GIRSU",
+    "long_name": "Girsu",
+    "abbreviation": "Gir",
+    "parent": "Babylonia",
+    "cigs_key": "GIR",
+    "sort_key": -1
+  },
+  {
+    "id": "GIRUMU",
+    "long_name": "Girumu",
+    "abbreviation": "Grm",
+    "parent": "Babylonia",
+    "cigs_key": "BAR",
+    "sort_key": -1
+  },
+  {
+    "id": "HURSAGKALAMA",
+    "long_name": "\u1e2aursagkalama",
+    "abbreviation": "Hur",
+    "parent": "Babylonia",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "IRISAGRIG",
+    "long_name": "Irisagrig",
+    "abbreviation": "Irs",
+    "parent": "Babylonia",
+    "cigs_key": "IRS",
+    "sort_key": -1
+  },
+  {
+    "id": "ISHAN_DHAHAK",
+    "long_name": "Ish\u0101n Dhahak",
+    "abbreviation": "Dha",
+    "parent": "Babylonia",
+    "cigs_key": "IDH",
+    "sort_key": -1
+  },
+  {
+    "id": "ISHAN_MIZIYAD",
+    "long_name": "Ish\u0101n Miziyad",
+    "abbreviation": "Miz",
+    "parent": "Babylonia",
+    "cigs_key": "MZA",
+    "sort_key": -1
+  },
+  {
+    "id": "ISIN",
+    "long_name": "Isin",
+    "abbreviation": "Isn",
+    "parent": "Babylonia",
+    "cigs_key": "ISN",
+    "sort_key": -1
+  },
+  {
+    "id": "ISHAN_HAFUDH",
+    "long_name": "Ish\u0101n H\u0101fudh",
+    "abbreviation": "Haf",
+    "parent": "Babylonia",
+    "cigs_key": "IHF",
+    "sort_key": -1
+  },
+  {
+    "id": "JAMDAT_NASR",
+    "long_name": "Jamdat Na\u1e63r",
+    "abbreviation": "Nasr",
+    "parent": "Babylonia",
+    "cigs_key": "NSR",
+    "sort_key": -1
+  },
+  {
+    "id": "KISURRA",
+    "long_name": "Kisurra",
+    "abbreviation": "Ksr",
+    "parent": "Babylonia",
+    "cigs_key": "KSR",
+    "sort_key": -1
+  },
+  {
+    "id": "KIS",
+    "long_name": "Ki\u0161",
+    "abbreviation": "Ki\u0161",
+    "parent": "Babylonia",
+    "cigs_key": "KSH",
+    "sort_key": -1
+  },
+  {
+    "id": "KUTALLA",
+    "long_name": "Kutalla",
+    "abbreviation": "Kut",
+    "parent": "Babylonia",
+    "cigs_key": "SFR",
+    "sort_key": -1
+  },
+  {
+    "id": "LAGABA",
+    "long_name": "Lagaba",
+    "abbreviation": "Lagab",
+    "parent": "Babylonia",
+    "cigs_key": "LGBunk",
+    "sort_key": -1
+  },
+  {
+    "id": "LAGAS",
+    "long_name": "Laga\u0161",
+    "abbreviation": "Lag",
+    "parent": "Babylonia",
+    "cigs_key": "LAG",
+    "sort_key": -1
+  },
+  {
+    "id": "LARAK",
+    "long_name": "Larak",
+    "abbreviation": "Lrk",
+    "parent": "Babylonia",
+    "cigs_key": "LRK",
+    "sort_key": -1
+  },
+  {
+    "id": "LARSA",
+    "long_name": "Larsa",
+    "abbreviation": "Lar",
+    "parent": "Babylonia",
+    "cigs_key": "LAR",
+    "sort_key": -1
+  },
+  {
+    "id": "MALGIUM",
+    "long_name": "Malgium",
+    "abbreviation": "Mal",
+    "parent": "Babylonia",
+    "cigs_key": "TYA",
+    "sort_key": -1
+  },
+  {
+    "id": "MARAD",
+    "long_name": "Marad",
+    "abbreviation": "Mrd",
+    "parent": "Babylonia",
+    "cigs_key": "MRD",
+    "sort_key": -1
+  },
+  {
+    "id": "MASKAN_SAPIR",
+    "long_name": "Ma\u0161kan-\u0161\u0101pir",
+    "abbreviation": "Ma\u0161",
+    "parent": "Babylonia",
+    "cigs_key": "MSK",
+    "sort_key": -1
+  },
+  {
+    "id": "METURAN",
+    "long_name": "Meturan",
+    "abbreviation": "Met",
+    "parent": "Babylonia",
+    "cigs_key": "HDD",
+    "sort_key": -1
+  },
+  {
+    "id": "TELL_AL_SIB",
+    "long_name": "Meturan (Tell al-Sib)",
+    "abbreviation": "MetS",
+    "parent": "Babylonia",
+    "cigs_key": "LSB",
+    "sort_key": -1
+  },
+  {
+    "id": "MUKDAN",
+    "long_name": "Mukdan",
+    "abbreviation": "Muk",
+    "parent": "Babylonia",
+    "cigs_key": "MUG",
+    "sort_key": -1
+  },
+  {
+    "id": "NEREBUN",
+    "long_name": "N\u0113rebtum",
+    "abbreviation": "N\u0113r",
+    "parent": "Babylonia",
+    "cigs_key": "NRB",
+    "sort_key": -1
+  },
+  {
+    "id": "NIGIN",
+    "long_name": "Nigin",
+    "abbreviation": "Nig",
+    "parent": "Babylonia",
+    "cigs_key": "NGN",
+    "sort_key": -1
+  },
+  {
+    "id": "NIPPUR",
+    "long_name": "Nippur",
+    "abbreviation": "Nip",
+    "parent": "Babylonia",
+    "cigs_key": "NIP",
+    "sort_key": -1
+  },
+  {
+    "id": "PI_KASI",
+    "long_name": "P\u012b-Kas\u00ee",
+    "abbreviation": "Pik",
+    "parent": "Babylonia",
+    "cigs_key": "ANT",
+    "sort_key": -1
+  },
+  {
+    "id": "PUZRIS_DAGAN",
+    "long_name": "Puzri\u0161-Dag\u0101n",
+    "abbreviation": "Puz",
+    "parent": "Babylonia",
+    "cigs_key": "DRE",
+    "sort_key": -1
+  },
+  {
+    "id": "SELEUCIA",
+    "long_name": "Sil\u016bq\u012bah",
+    "abbreviation": "Sel",
+    "parent": "Babylonia",
+    "cigs_key": "SEL",
+    "sort_key": -1
+  },
+  {
+    "id": "SIPPAR",
+    "long_name": "Sippar",
+    "abbreviation": "Sip",
+    "parent": "Babylonia",
+    "cigs_key": "SAP",
+    "sort_key": -1
+  },
+  {
+    "id": "SIPPAR_AMNANUM",
+    "long_name": "Sippar-Amn\u0101num",
+    "abbreviation": "Sipam",
+    "parent": "Babylonia",
+    "cigs_key": "SIP",
+    "sort_key": -1
+  },
+  {
+    "id": "SULAIYMAH",
+    "long_name": "Sulaiymah",
+    "abbreviation": "Sul",
+    "parent": "Babylonia",
+    "cigs_key": "HMR",
+    "sort_key": -1
+  },
+  {
+    "id": "SADUPPUM",
+    "long_name": "\u0160adupp\u00fbm",
+    "abbreviation": "\u0160ad",
+    "parent": "Babylonia",
+    "cigs_key": "SDP",
+    "sort_key": -1
+  },
+  {
+    "id": "SAHRINU",
+    "long_name": "\u0160a\u1e2br\u012bnu",
+    "abbreviation": "\u0160ah",
+    "parent": "Babylonia",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "SURUPPAK",
+    "long_name": "\u0160uruppak",
+    "abbreviation": "\u0160ur",
+    "parent": "Babylonia",
+    "cigs_key": "SUR",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_ABU_SALABIKH",
+    "long_name": "Tall Ab\u016b \u1e62\u0101lab\u012bkh",
+    "abbreviation": "Abs",
+    "parent": "Babylonia",
+    "cigs_key": "ASK",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_AJRAB",
+    "long_name": "Tall Ajrab",
+    "abbreviation": "Ajr",
+    "parent": "Babylonia",
+    "cigs_key": "AGR",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_IMLIHIYAH",
+    "long_name": "Tall Iml\u012b\u1e25iyah",
+    "abbreviation": "Iml",
+    "parent": "Babylonia",
+    "cigs_key": "MLH",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_JIDAR",
+    "long_name": "Tall Jidar",
+    "abbreviation": "Jid",
+    "parent": "Babylonia",
+    "cigs_key": "JDR",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_KHAIBAR",
+    "long_name": "Tall Khaibar",
+    "abbreviation": "Kha",
+    "parent": "Babylonia",
+    "cigs_key": "KHA",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_AL_LAHAM",
+    "long_name": "Tall al-La\u1e25am",
+    "abbreviation": "Lah",
+    "parent": "Babylonia",
+    "cigs_key": "TLH",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_MUHAMAD",
+    "long_name": "Tall Mu\u1e25amad",
+    "abbreviation": "Muh",
+    "parent": "Babylonia",
+    "cigs_key": "TMH",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_AL_UBAID",
+    "long_name": "Tall al-\u02bbUba\u012bd",
+    "abbreviation": "Ubd",
+    "parent": "Babylonia",
+    "cigs_key": "UBD",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_UMM_AL_AJARIB",
+    "long_name": "Tall Umm al-\u02bbAjarib",
+    "abbreviation": "Uaaj",
+    "parent": "Babylonia",
+    "cigs_key": "UQR",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_UQAIR",
+    "long_name": "Tall \u02bbUqair",
+    "abbreviation": "Uqa",
+    "parent": "Babylonia",
+    "cigs_key": "UQA",
+    "sort_key": -1
+  },
+  {
+    "id": "TULUL_AL_BAQARAT",
+    "long_name": "Tul\u016bl al-Baqar\u0101t",
+    "abbreviation": "Baq",
+    "parent": "Babylonia",
+    "cigs_key": "TBA",
+    "sort_key": -1
+  },
+  {
+    "id": "TULUL_KHATAB",
+    "long_name": "Tul\u016bl Kha\u1e6d\u0101b",
+    "abbreviation": "Khat",
+    "parent": "Babylonia",
+    "cigs_key": "TKH",
+    "sort_key": -1
+  },
+  {
+    "id": "TUMMAL",
+    "long_name": "Tummal",
+    "abbreviation": "Tum",
+    "parent": "Babylonia",
+    "cigs_key": "DLH",
+    "sort_key": -1
+  },
+  {
+    "id": "TUTUB",
+    "long_name": "Tutub",
+    "abbreviation": "Ttb",
+    "parent": "Babylonia",
+    "cigs_key": "TTB",
+    "sort_key": -1
+  },
+  {
+    "id": "UMMA",
+    "long_name": "Umma",
+    "abbreviation": "Umm",
+    "parent": "Babylonia",
+    "cigs_key": "JOK",
+    "sort_key": -1
+  },
+  {
+    "id": "UMM_AL_HAFRIYAT",
+    "long_name": "Umm al-\u1e24afriy\u0101t",
+    "abbreviation": "Hafr",
+    "parent": "Babylonia",
+    "cigs_key": "UFR",
+    "sort_key": -1
+  },
+  {
+    "id": "UMM_AL_WAWIYA",
+    "long_name": "Umm al-Wawiya",
+    "abbreviation": "Waw",
+    "parent": "Babylonia",
+    "cigs_key": "UWW",
+    "sort_key": -1
+  },
+  {
+    "id": "UR",
+    "long_name": "Ur",
+    "abbreviation": "Ur",
+    "parent": "Babylonia",
+    "cigs_key": "URI",
+    "sort_key": -1
+  },
+  {
+    "id": "URUK",
+    "long_name": "Uruk",
+    "abbreviation": "Urk",
+    "parent": "Babylonia",
+    "cigs_key": "URU",
+    "sort_key": -1
+  },
+  {
+    "id": "YELKHI",
+    "long_name": "Yelkhi",
+    "abbreviation": "Ylk",
+    "parent": "Babylonia",
+    "cigs_key": "YEL",
+    "sort_key": -1
+  },
+  {
+    "id": "ZABALAM",
+    "long_name": "Zabalam",
+    "abbreviation": "Zab",
+    "parent": "Babylonia",
+    "cigs_key": "ZAB",
+    "sort_key": -1
+  },
+  {
+    "id": "ZARALULU",
+    "long_name": "Zaralulu",
+    "abbreviation": "Zar",
+    "parent": "Babylonia",
+    "cigs_key": "TDB",
+    "sort_key": -1
+  },
+  {
+    "id": "PERIPHERY",
+    "long_name": "Periphery",
+    "abbreviation": "",
+    "parent": null,
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "ALALAKS",
+    "long_name": "Alalakh",
+    "abbreviation": "Ala",
+    "parent": "Periphery",
+    "cigs_key": "ALA",
+    "sort_key": -1
+  },
+  {
+    "id": "TELL_EL_AMARNA",
+    "long_name": "Tell el-Amarna",
+    "abbreviation": "Ama",
+    "parent": "Periphery",
+    "cigs_key": "AKH",
+    "sort_key": -1
+  },
+  {
+    "id": "ANAH",
+    "long_name": "\u2018Anah",
+    "abbreviation": "Anh",
+    "parent": "Periphery",
+    "cigs_key": "TNA",
+    "sort_key": -1
+  },
+  {
+    "id": "ANSAN",
+    "long_name": "An\u0161an",
+    "abbreviation": "An\u0161",
+    "parent": "Periphery",
+    "cigs_key": "ANS",
+    "sort_key": -1
+  },
+  {
+    "id": "ASNAKKUM",
+    "long_name": "A\u0161nakkum",
+    "abbreviation": "A\u0161n",
+    "parent": "Periphery",
+    "cigs_key": "ASZ",
+    "sort_key": -1
+  },
+  {
+    "id": "BAKR_AWA",
+    "long_name": "Bakr \u0100w\u0101",
+    "abbreviation": "Bakr",
+    "parent": "Periphery",
+    "cigs_key": "BAW",
+    "sort_key": -1
+  },
+  {
+    "id": "BARAH",
+    "long_name": "B\u0101rah",
+    "abbreviation": "Bar",
+    "parent": "Periphery",
+    "cigs_key": "PRA",
+    "sort_key": -1
+  },
+  {
+    "id": "BITWATA",
+    "long_name": "Bitw\u0101t\u0101",
+    "abbreviation": "Bitw",
+    "parent": "Periphery",
+    "cigs_key": "SNJ",
+    "sort_key": -1
+  },
+  {
+    "id": "CHUGHA_MISH",
+    "long_name": "Chugh\u0101 M\u012bsh",
+    "abbreviation": "Chugh\u0101",
+    "parent": "Periphery",
+    "cigs_key": "CGM",
+    "sort_key": -1
+  },
+  {
+    "id": "DER",
+    "long_name": "D\u0113r",
+    "abbreviation": "Der",
+    "parent": "Periphery",
+    "cigs_key": "DER",
+    "sort_key": -1
+  },
+  {
+    "id": "DUGIRDKHAN",
+    "long_name": "Dugirdkhan",
+    "abbreviation": "Dgr",
+    "parent": "Periphery",
+    "cigs_key": "DGK",
+    "sort_key": -1
+  },
+  {
+    "id": "DUR_UNTAS",
+    "long_name": "D\u016br-Unta\u0161",
+    "abbreviation": "Dun",
+    "parent": "Periphery",
+    "cigs_key": "COZ",
+    "sort_key": -1
+  },
+  {
+    "id": "EBLA",
+    "long_name": "Ebla",
+    "abbreviation": "Ebl",
+    "parent": "Periphery",
+    "cigs_key": "EBA",
+    "sort_key": -1
+  },
+  {
+    "id": "ELAM",
+    "long_name": "Elam",
+    "abbreviation": "Elam",
+    "parent": "Periphery",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "EMAR",
+    "long_name": "Emar",
+    "abbreviation": "Emr",
+    "parent": "Periphery",
+    "cigs_key": "EMR",
+    "sort_key": -1
+  },
+  {
+    "id": "GLAYA",
+    "long_name": "Glay\u2018a",
+    "abbreviation": "Gla",
+    "parent": "Periphery",
+    "cigs_key": "GLA",
+    "sort_key": -1
+  },
+  {
+    "id": "HADATU",
+    "long_name": "\u1e2aadatu",
+    "abbreviation": "Had",
+    "parent": "Periphery",
+    "cigs_key": "ART",
+    "sort_key": -1
+  },
+  {
+    "id": "HAMATH",
+    "long_name": "Hamath",
+    "abbreviation": "Ham",
+    "parent": "Periphery",
+    "cigs_key": "HAM",
+    "sort_key": -1
+  },
+  {
+    "id": "HATTUSA",
+    "long_name": "\u1e2aattu\u0161a",
+    "abbreviation": "Hat",
+    "parent": "Periphery",
+    "cigs_key": "HAT",
+    "sort_key": -1
+  },
+  {
+    "id": "JERICHO",
+    "long_name": "Jericho",
+    "abbreviation": "Jer",
+    "parent": "Periphery",
+    "cigs_key": "JRO",
+    "sort_key": -1
+  },
+  {
+    "id": "KAYSERI",
+    "long_name": "Kayseri",
+    "abbreviation": "Kay",
+    "parent": "Periphery",
+    "cigs_key": "KRI",
+    "sort_key": -1
+  },
+  {
+    "id": "KANES",
+    "long_name": "Kane\u0161",
+    "abbreviation": "Kan",
+    "parent": "Periphery",
+    "cigs_key": "KNS",
+    "sort_key": -1
+  },
+  {
+    "id": "KARKEMIS",
+    "long_name": "Karkemi\u0161",
+    "abbreviation": "Kar",
+    "parent": "Periphery",
+    "cigs_key": "KRK",
+    "sort_key": -1
+  },
+  {
+    "id": "KIMUNAH",
+    "long_name": "Kim\u016bnah",
+    "abbreviation": "Kmn",
+    "parent": "Periphery",
+    "cigs_key": "KMN",
+    "sort_key": -1
+  },
+  {
+    "id": "LACHISH",
+    "long_name": "Lachish",
+    "abbreviation": "Lac",
+    "parent": "Periphery",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "MARDAMAN",
+    "long_name": "Mardaman",
+    "abbreviation": "Mard",
+    "parent": "Periphery",
+    "cigs_key": "BAS",
+    "sort_key": -1
+  },
+  {
+    "id": "MARI",
+    "long_name": "Mari",
+    "abbreviation": "Mar",
+    "parent": "Periphery",
+    "cigs_key": "MAR",
+    "sort_key": -1
+  },
+  {
+    "id": "MEGIDDO",
+    "long_name": "Megiddo",
+    "abbreviation": "Meg",
+    "parent": "Periphery",
+    "cigs_key": "MGD",
+    "sort_key": -1
+  },
+  {
+    "id": "MILA_MERGI",
+    "long_name": "Mila Mergi",
+    "abbreviation": "Milm",
+    "parent": "Periphery",
+    "cigs_key": "MMG",
+    "sort_key": -1
+  },
+  {
+    "id": "NAGAR",
+    "long_name": "Nagar",
+    "abbreviation": "Nag",
+    "parent": "Periphery",
+    "cigs_key": "BRK",
+    "sort_key": -1
+  },
+  {
+    "id": "NUZI",
+    "long_name": "Nuzi",
+    "abbreviation": "Nuzi",
+    "parent": "Periphery",
+    "cigs_key": "NUZ",
+    "sort_key": -1
+  },
+  {
+    "id": "PASIME",
+    "long_name": "Pa\u0161ime",
+    "abbreviation": "Pa\u0161",
+    "parent": "Periphery",
+    "cigs_key": "PAS",
+    "sort_key": -1
+  },
+  {
+    "id": "PERSEPOLIS",
+    "long_name": "Persepolis",
+    "abbreviation": "Per",
+    "parent": "Periphery",
+    "cigs_key": "PRS",
+    "sort_key": -1
+  },
+  {
+    "id": "QATARA",
+    "long_name": "Qatara",
+    "abbreviation": "Qat",
+    "parent": "Periphery",
+    "cigs_key": "QAT",
+    "sort_key": -1
+  },
+  {
+    "id": "QATNA",
+    "long_name": "Qa\u1e6dn\u0101",
+    "abbreviation": "Qa\u1e6d",
+    "parent": "Periphery",
+    "cigs_key": "QTN",
+    "sort_key": -1
+  },
+  {
+    "id": "SUR_JARA",
+    "long_name": "Sur Jar\u2018a",
+    "abbreviation": "Surj",
+    "parent": "Periphery",
+    "cigs_key": "SJR",
+    "sort_key": -1
+  },
+  {
+    "id": "SUSA",
+    "long_name": "Susa",
+    "abbreviation": "Sus",
+    "parent": "Periphery",
+    "cigs_key": "SUS",
+    "sort_key": -1
+  },
+  {
+    "id": "SHISHIN",
+    "long_name": "Sh\u012bsh\u012bn",
+    "abbreviation": "Shn",
+    "parent": "Periphery",
+    "cigs_key": "SIN",
+    "sort_key": -1
+  },
+  {
+    "id": "SUSARRA",
+    "long_name": "\u0160u\u0161arra",
+    "abbreviation": "\u0160u\u0161",
+    "parent": "Periphery",
+    "cigs_key": "SZU",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_BAZ_MUSIYAN",
+    "long_name": "Tall B\u0101z Musiy\u0101n",
+    "abbreviation": "Bazm",
+    "parent": "Periphery",
+    "cigs_key": "BZM",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_AL_FAKHAR",
+    "long_name": "Tall al-Fakhar",
+    "abbreviation": "Fakh",
+    "parent": "Periphery",
+    "cigs_key": "FAK",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_AL_FAKHIRIYA",
+    "long_name": "Tall al-Fakh\u012briyah",
+    "abbreviation": "Fakh\u012b",
+    "parent": "Periphery",
+    "cigs_key": "FKR",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_GHADAIYRIFAH",
+    "long_name": "Tall Gha\u1e0daiyr\u012bfah",
+    "abbreviation": "Ghad",
+    "parent": "Periphery",
+    "cigs_key": "GDR",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_AL_HAWA",
+    "long_name": "Tall al-Hawa",
+    "abbreviation": "Haw",
+    "parent": "Periphery",
+    "cigs_key": "THW",
+    "sort_key": -1
+  },
+  {
+    "id": "TALL_IBRAHIM_BAYIS",
+    "long_name": "Tall Ibr\u0101h\u012bm Bayis",
+    "abbreviation": "Iba",
+    "parent": "Periphery",
+    "cigs_key": "IBA",
+    "sort_key": -1
+  },
+  {
+    "id": "TELL_BASHIR",
+    "long_name": "Tell B\u0101shir",
+    "abbreviation": "Bash",
+    "parent": "Periphery",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "TEPE_GOTVAND",
+    "long_name": "Tepe Gotvand",
+    "abbreviation": "Tgo",
+    "parent": "Periphery",
+    "cigs_key": "GTV",
+    "sort_key": -1
+  },
+  {
+    "id": "TERQA",
+    "long_name": "Terqa",
+    "abbreviation": "Ter",
+    "parent": "Periphery",
+    "cigs_key": "TRQ",
+    "sort_key": -1
+  },
+  {
+    "id": "TIKRIT",
+    "long_name": "Tikr\u012bt",
+    "abbreviation": "Tikr",
+    "parent": "Periphery",
+    "cigs_key": "TIK",
+    "sort_key": -1
+  },
+  {
+    "id": "TRIPOLI",
+    "long_name": "Tripoli",
+    "abbreviation": "Tri",
+    "parent": "Periphery",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "TUTTUL",
+    "long_name": "Tuttul",
+    "abbreviation": "Ttl",
+    "parent": "Periphery",
+    "cigs_key": "TUT",
+    "sort_key": -1
+  },
+  {
+    "id": "UGARIT",
+    "long_name": "Ugarit",
+    "abbreviation": "Uga",
+    "parent": "Periphery",
+    "cigs_key": "UGA",
+    "sort_key": -1
+  },
+  {
+    "id": "ZAWIYAH",
+    "long_name": "Zawiyah",
+    "abbreviation": "Zaw",
+    "parent": "Periphery",
+    "cigs_key": "ZWY",
+    "sort_key": -1
+  },
+  {
+    "id": "UNCERTAIN",
+    "long_name": "Uncertain",
+    "abbreviation": "Unc",
+    "parent": null,
+    "cigs_key": null,
+    "sort_key": -1
+  }
+]

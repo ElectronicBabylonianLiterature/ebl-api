@@ -53,6 +53,7 @@ from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResou
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
     context.fragment_repository.create_indexes()
+    provenance_service = context.get_provenance_service()
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.get_bibliography(),
@@ -79,6 +80,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.changelog,
         context.sign_repository,
         context.parallel_line_injector,
+        provenance_service,
     )
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
@@ -110,7 +112,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     genres = GenresResource()
-    provenances = ProvenancesResource()
+    provenances = ProvenancesResource(provenance_service)
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
     lemma_annotation = LemmaAnnotationResource(updater)
@@ -122,7 +124,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     scopes = FragmentAuthorizedScopesResource(
         context.fragment_repository, finder, updater
     )
-    archaeology = ArchaeologyResource(updater)
+    archaeology = ArchaeologyResource(updater, provenance_service)
     colophon = ColophonResource(updater)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)

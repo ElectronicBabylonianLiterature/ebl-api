@@ -42,7 +42,9 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
                     ]
                 )
             )
-            return TextSchema().load(mongo_text)
+            return TextSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(mongo_text)
 
         except StopIteration as error:
             raise text_not_found(id_) from error
@@ -52,7 +54,9 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
             chapter = self._chapters.find_one(
                 chapter_id_query(id_), projection={"_id": False}
             )
-            return ChapterSchema().load(chapter)
+            return ChapterSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(chapter)
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
 
@@ -60,7 +64,9 @@ class MongoTextRepositoryFind(MongoTextRepositoryBase):
         try:
             text = self.find(id_.text_id)
             chapters = self._chapters.aggregate(aggregate_chapter_display(id_))
-            return ChapterDisplaySchema().load(
+            return ChapterDisplaySchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(
                 {
                     **next(chapters),
                     "textName": text.name,

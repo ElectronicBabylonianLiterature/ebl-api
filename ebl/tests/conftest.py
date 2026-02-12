@@ -89,6 +89,11 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     MongoDossiersRepository,
 )
+from ebl.common.application.provenance_service import ProvenanceService
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
+from ebl.common.infrastructure.mongo_provenance_repository import (
+    MongoProvenanceRepository,
+)
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
 from ebl.fragmentarium.web.annotations import AnnotationResource
@@ -203,13 +208,18 @@ def parallel_line_injector(
 
 
 @pytest.fixture
-def text_repository(database: Database):
-    return MongoTextRepository(database)
+def text_repository(database: Database, seeded_provenance_service):
+    return MongoTextRepository(database, seeded_provenance_service)
 
 
 @pytest.fixture
 def corpus(
-    text_repository, bibliography, changelog, sign_repository, parallel_line_injector
+    text_repository,
+    bibliography,
+    changelog,
+    sign_repository,
+    parallel_line_injector,
+    seeded_provenance_service,
 ):
     return Corpus(
         text_repository,
@@ -217,17 +227,18 @@ def corpus(
         changelog,
         sign_repository,
         parallel_line_injector,
+        seeded_provenance_service,
     )
 
 
 @pytest.fixture
-def fragment_repository(database):
-    return MongoFragmentRepository(database)
+def fragment_repository(database, seeded_provenance_service):
+    return MongoFragmentRepository(database, seeded_provenance_service)
 
 
 @pytest.fixture
-def findspot_repository(database):
-    return MongoFindspotRepository(database)
+def findspot_repository(database, seeded_provenance_service):
+    return MongoFindspotRepository(database, seeded_provenance_service)
 
 
 @pytest.fixture
@@ -437,6 +448,7 @@ def user() -> User:
                     "read:texts",
                     "write:texts",
                     "create:texts",
+                    "write:provenances",
                 ]
             )
         },
@@ -448,8 +460,25 @@ def user() -> User:
 
 
 @pytest.fixture
-def dossiers_repository(database):
-    return MongoDossiersRepository(database)
+def dossiers_repository(database, seeded_provenance_service):
+    return MongoDossiersRepository(database, seeded_provenance_service)
+
+
+@pytest.fixture
+def provenance_repository(database):
+    return MongoProvenanceRepository(database)
+
+
+@pytest.fixture
+def provenance_service(provenance_repository):
+    return ProvenanceService(provenance_repository)
+
+
+@pytest.fixture
+def seeded_provenance_service(provenance_repository):
+    for record in DEFAULT_PROVENANCES:
+        provenance_repository.create(record)
+    return ProvenanceService(provenance_repository)
 
 
 @pytest.fixture
@@ -471,6 +500,8 @@ def context(
     afo_register_repository,
     dossiers_repository,
     findspot_repository,
+    provenance_repository,
+    seeded_provenance_service,
     user,
     parallel_line_injector,
     mongo_cache_repository,
@@ -488,6 +519,8 @@ def context(
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,
+        provenance_repository=provenance_repository,
+        provenance_service=seeded_provenance_service,
         text_repository=text_repository,
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,
