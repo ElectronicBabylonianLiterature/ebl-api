@@ -2,7 +2,7 @@ import pydash
 import pytest
 import copy
 
-from typing import Dict, Any
+from typing import Dict, Any, cast
 from ebl.errors import NotFoundError
 from ebl.dictionary.infrastructure import word_repository as word_repository_module
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
@@ -251,8 +251,8 @@ def test_create_lemma_search_pipeline_structure() -> None:
 def test_query_by_lemma_prefix_uses_collation(database) -> None:
     class DummyCollection:
         def __init__(self):
-            self.pipeline = None
-            self.collation = None
+            self.pipeline: Any = None
+            self.collation: Any = None
 
         def aggregate(self, pipeline, collation=None):
             self.pipeline = pipeline
@@ -261,13 +261,15 @@ def test_query_by_lemma_prefix_uses_collation(database) -> None:
 
     repository = MongoWordRepository(database)
     dummy_collection = DummyCollection()
-    repository._collection = dummy_collection
+    repository_any = cast(Any, repository)
+    repository_any._collection = dummy_collection
 
     result = repository.query_by_lemma_prefix("ab")
 
     assert result == [{"_id": "word"}]
-    assert dummy_collection.pipeline == word_repository_module._create_lemma_search_pipeline(
-        "ab"
+    assert (
+        dummy_collection.pipeline
+        == word_repository_module._create_lemma_search_pipeline("ab")
     )
     assert dummy_collection.collation == {
         "locale": "en",
