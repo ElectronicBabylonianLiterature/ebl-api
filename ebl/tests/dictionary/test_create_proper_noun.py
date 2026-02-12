@@ -4,7 +4,7 @@ import pytest
 import falcon
 
 from falcon import testing
-from falcon_auth import NoneAuthBackend
+from falcon_auth import JWTAuthBackend, NoneAuthBackend
 from marshmallow import ValidationError
 
 import ebl.app
@@ -252,7 +252,7 @@ class TestDictionaryCreateProperNoun:
 
 class TestProperNounCreationEndpoint:
     @pytest.fixture
-    def create_proper_noun_client(self, context):
+    def create_proper_noun_client(self, context) -> testing.TestClient:
         user = Auth0User(
             {"scope": "create:proper_nouns"},
             lambda: {
@@ -265,7 +265,22 @@ class TestProperNounCreationEndpoint:
         )
         return testing.TestClient(api)
 
-    def test_create_proper_noun_success(self, create_proper_noun_client):
+    @pytest.fixture
+    def unauthorized_client(self, context) -> testing.TestClient:
+        def user_loader(_payload):
+            return Auth0User({"scope": ""}, lambda: {"name": "Unauthorized"})
+
+        auth_backend = JWTAuthBackend(
+            user_loader,
+            "secret",
+            auth_header_prefix="Bearer",
+        )
+        api = ebl.app.create_app(
+            attr.evolve(context, auth_backend=auth_backend)
+        )
+        return testing.TestClient(api)
+
+    def test_create_proper_noun_success(self, create_proper_noun_client) -> None:
         body = json.dumps({"lemma": "Marduk", "pos": ["DN"]})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -290,7 +305,9 @@ class TestProperNounCreationEndpoint:
         assert result.json["oraccWords"] == []
         assert result.json["roots"] == []
 
-    def test_create_proper_noun_with_empty_pos(self, create_proper_noun_client):
+    def test_create_proper_noun_with_empty_pos(
+        self, create_proper_noun_client
+    ) -> None:
         body = json.dumps({"lemma": "Ishtar"})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -299,7 +316,9 @@ class TestProperNounCreationEndpoint:
         assert result.status == falcon.HTTP_CREATED
         assert result.json["pos"] == []
 
-    def test_create_proper_noun_with_multiple_pos(self, create_proper_noun_client):
+    def test_create_proper_noun_with_multiple_pos(
+        self, create_proper_noun_client
+    ) -> None:
         body = json.dumps({"lemma": "Ninurta", "pos": ["DN", "GN"]})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -308,7 +327,9 @@ class TestProperNounCreationEndpoint:
         assert result.status == falcon.HTTP_CREATED
         assert result.json["pos"] == ["DN", "GN"]
 
-    def test_create_proper_noun_missing_lemma(self, create_proper_noun_client):
+    def test_create_proper_noun_missing_lemma(
+        self, create_proper_noun_client
+    ) -> None:
         body = json.dumps({"pos": ["DN"]})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -316,7 +337,9 @@ class TestProperNounCreationEndpoint:
 
         assert result.status == falcon.HTTP_BAD_REQUEST
 
-    def test_create_proper_noun_empty_lemma(self, create_proper_noun_client):
+    def test_create_proper_noun_empty_lemma(
+        self, create_proper_noun_client
+    ) -> None:
         body = json.dumps({"lemma": "", "pos": ["DN"]})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -324,7 +347,9 @@ class TestProperNounCreationEndpoint:
 
         assert result.status == falcon.HTTP_BAD_REQUEST
 
-    def test_create_proper_noun_pos_not_list(self, create_proper_noun_client):
+    def test_create_proper_noun_pos_not_list(
+        self, create_proper_noun_client
+    ) -> None:
         body = json.dumps({"lemma": "Marduk", "pos": "DN"})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -334,7 +359,7 @@ class TestProperNounCreationEndpoint:
 
     def test_create_proper_noun_pos_has_non_string_values(
         self, create_proper_noun_client
-    ):
+    ) -> None:
         body = json.dumps({"lemma": "Marduk", "pos": ["DN", 123]})
         result = create_proper_noun_client.simulate_post(
             "/words/create-proper-noun", body=body
@@ -342,7 +367,9 @@ class TestProperNounCreationEndpoint:
 
         assert result.status == falcon.HTTP_BAD_REQUEST
 
-    def test_create_proper_noun_duplicate(self, create_proper_noun_client):
+    def test_create_proper_noun_duplicate(
+        self, create_proper_noun_client
+    ) -> None:
         body = json.dumps({"lemma": "Marduk", "pos": ["DN"]})
         create_proper_noun_client.simulate_post("/words/create-proper-noun", body=body)
         result = create_proper_noun_client.simulate_post(
@@ -351,8 +378,70 @@ class TestProperNounCreationEndpoint:
 
         assert result.status == falcon.HTTP_CONFLICT
 
-    def test_create_proper_noun_missing_scope(self, client):
+    def test_create_proper_noun_missing_scope(self, client) -> None:
         body = json.dumps({"lemma": "Marduk", "pos": ["DN"]})
         result = client.simulate_post("/words/create-proper-noun", body=body)
 
         assert result.status == falcon.HTTP_FORBIDDEN
+
+    def test_create_proper_noun_missing_auth_token(
+        self, unauthorized_client
+    ) -> None:
+        body = json.dumps({"lemma": "Marduk", "pos": ["DN"]})
+        result = unauthorized_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.status == falcon.HTTP_UNAUTHORIZED
+
+    def test_create_proper_noun_invalid_auth_token(
+        self, unauthorized_client
+    ) -> None:
+        body = json.dumps({"lemma": "Marduk", "pos": ["DN"]})
+        result = unauthorized_client.simulate_post(
+            "/words/create-proper-noun",
+            body=body,
+            headers={"Authorization": "Bearer invalid"},
+        )
+
+        assert result.status == falcon.HTTP_UNAUTHORIZED
+
+    def test_create_proper_noun_response_content_type(
+        self, create_proper_noun_client
+    ) -> None:
+        body = json.dumps({"lemma": "Marduk", "pos": ["DN"]})
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.headers["Content-Type"] == "application/json"
+
+    def test_create_proper_noun_response_id_matches_word_id(
+        self, create_proper_noun_client
+    ) -> None:
+        body = json.dumps({"lemma": "Shamash", "pos": ["DN"]})
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.json["_id"] == "Shamash I"
+
+    def test_create_proper_noun_rejects_unknown_fields(
+        self, create_proper_noun_client
+    ) -> None:
+        body = json.dumps({"lemma": "Marduk", "pos": ["DN"], "extra": "value"})
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.status == falcon.HTTP_BAD_REQUEST
+
+    def test_create_proper_noun_preserves_lemma_case(
+        self, create_proper_noun_client
+    ) -> None:
+        body = json.dumps({"lemma": "MaRdUk", "pos": ["DN"]})
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.json["lemma"] == ["MaRdUk"]
