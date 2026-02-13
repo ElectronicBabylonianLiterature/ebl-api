@@ -11,10 +11,9 @@ from ebl.fragmentarium.domain.findspot import (
     BuildingType,
     ExcavationPlan,
     Findspot,
-    ExcavationSite,
 )
 from ebl.schemas import NameEnumField
-from marshmallow import Schema, fields, post_load
+from marshmallow import Schema, fields, post_load, ValidationError
 
 
 class ExcavationNumberSchema(AbstractMuseumNumberSchema):
@@ -33,16 +32,29 @@ class ExcavationPlanSchema(Schema):
         return ExcavationPlan(**data)
 
 
-site_field = fields.Function(
-    lambda object_: getattr(object_.site, "long_name", None),
-    lambda value: ExcavationSite.from_name(value) if value else None,
-    allow_none=True,
-)
+class ProvenanceSiteMixin:
+    def _get_provenance_service(self):
+        provenance_service = self.context.get("provenance_service")
+        if provenance_service is None:
+            raise ValidationError("Provenance service not configured.")
+        return provenance_service
+
+    def serialize_site(self, obj):
+        return getattr(obj.site, "long_name", None)
+
+    def deserialize_site(self, value):
+        if value is None:
+            return None
+        provenance_service = self._get_provenance_service()
+        record = provenance_service.find_by_name(value)
+        if record is None:
+            raise ValidationError(f"Invalid provenance: {value}")
+        return record
 
 
-class FindspotSchema(Schema):
+class FindspotSchema(ProvenanceSiteMixin, Schema):
     id_ = fields.Integer(required=True, data_key="_id")
-    site = site_field
+    site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     sector = fields.String()
     area = fields.String()
     building = fields.String()
@@ -66,11 +78,11 @@ class FindspotSchema(Schema):
         return Findspot(**data)
 
 
-class ArchaeologySchema(Schema):
+class ArchaeologySchema(ProvenanceSiteMixin, Schema):
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
-    site = site_field
+    site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     regular_excavation = fields.Boolean(
         load_default=False, data_key="isRegularExcavation"
     )

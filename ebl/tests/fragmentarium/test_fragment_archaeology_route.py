@@ -1,4 +1,7 @@
 import json
+from dataclasses import dataclass
+from typing import Any
+
 import attr
 
 import falcon
@@ -8,7 +11,7 @@ from ebl.fragmentarium.domain.archaeology import (
     Archaeology,
     ExcavationNumber,
 )
-from ebl.fragmentarium.domain.findspot import ExcavationSite
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
 from ebl.fragmentarium.domain.fragment import Fragment
 
 from ebl.fragmentarium.web.dtos import create_response_dto
@@ -16,27 +19,58 @@ from ebl.tests.factories.archaeology import DateRangeFactory
 from ebl.tests.factories.fragment import FragmentFactory
 
 
-ARCHAEOLOGY = Archaeology(ExcavationNumber("F", "1"), ExcavationSite.KALHU)
+KALHU = next(record for record in DEFAULT_PROVENANCES if record.id == "KALHU")
+NIPPUR = next(record for record in DEFAULT_PROVENANCES if record.id == "NIPPUR")
+
+ARCHAEOLOGY = Archaeology(ExcavationNumber("F", "1"), KALHU)
 ARCHAEOLOGIES = [
     ARCHAEOLOGY,
     attr.evolve(ARCHAEOLOGY, site=None),
     attr.evolve(ARCHAEOLOGY, excavation_number=None),
     attr.evolve(ARCHAEOLOGY, findspot_id=None),
-    attr.evolve(ARCHAEOLOGY, site=ExcavationSite.NIPPUR),
+    attr.evolve(ARCHAEOLOGY, site=NIPPUR),
     attr.evolve(ARCHAEOLOGY, regular_excavation=False),
     attr.evolve(ARCHAEOLOGY, excavation_date=DateRangeFactory.build()),
     attr.evolve(ARCHAEOLOGY, findspot_id=1),
 ]
 
 
+@dataclass(frozen=True)
+class UpdateArchaeologyDependencies:
+    client: Any
+    fragmentarium: Any
+    user: Any
+    provenance_service: Any
+
+
+@pytest.fixture
+def update_archaeology_dependencies(
+    request: pytest.FixtureRequest,
+) -> UpdateArchaeologyDependencies:
+    return UpdateArchaeologyDependencies(
+        client=request.getfixturevalue("client"),
+        fragmentarium=request.getfixturevalue("fragmentarium"),
+        user=request.getfixturevalue("user"),
+        provenance_service=request.getfixturevalue("seeded_provenance_service"),
+    )
+
+
 @pytest.mark.parametrize("old_archaeology", ARCHAEOLOGIES)
 @pytest.mark.parametrize("new_archaeology", ARCHAEOLOGIES)
 def test_update_archaeology(
-    client, fragmentarium, user, old_archaeology, new_archaeology
-):
+    update_archaeology_dependencies: UpdateArchaeologyDependencies,
+    old_archaeology,
+    new_archaeology,
+) -> None:
+    client = update_archaeology_dependencies.client
+    fragmentarium = update_archaeology_dependencies.fragmentarium
+    user = update_archaeology_dependencies.user
+    seeded_provenance_service = update_archaeology_dependencies.provenance_service
     fragment: Fragment = FragmentFactory.build(archaeology=old_archaeology)
     fragment_number = fragmentarium.create(fragment)
-    data = ArchaeologySchema().dump(new_archaeology)
+    data = ArchaeologySchema(
+        context={"provenance_service": seeded_provenance_service}
+    ).dump(new_archaeology)
 
     if number := new_archaeology.excavation_number:
         data["excavationNumber"] = str(number)

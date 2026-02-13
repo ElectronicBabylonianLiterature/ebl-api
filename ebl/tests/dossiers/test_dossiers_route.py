@@ -12,6 +12,15 @@ from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     DossierRecordSchema,
 )
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
+
+
+BABYLON_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "BABYLON"
+)
+NIPPUR_PROVENANCE = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "NIPPUR"
+)
 
 
 @pytest.fixture
@@ -161,16 +170,14 @@ def test_search_dossiers_with_provenance(
     bibliography_repository: BibliographyRepository,
     client,
 ) -> None:
-    from ebl.common.domain.provenance import Provenance
-
     dossier1 = DossierRecordFactory.build(
-        id="TEST001", description="Babylon test", provenance=Provenance.BABYLON
+        id="TEST001", description="Babylon test", provenance=BABYLON_PROVENANCE
     )
     dossier2 = DossierRecordFactory.build(
-        id="TEST002", description="Another test", provenance=Provenance.NIPPUR
+        id="TEST002", description="Another test", provenance=NIPPUR_PROVENANCE
     )
     dossier3 = DossierRecordFactory.build(
-        id="TEST003", description="Babylon test 2", provenance=Provenance.BABYLON
+        id="TEST003", description="Babylon test 2", provenance=BABYLON_PROVENANCE
     )
 
     _create_test_dossiers(dossiers_repository, dossier1, dossier2, dossier3)
@@ -223,25 +230,24 @@ def test_search_dossiers_with_multiple_filters(
     bibliography_repository: BibliographyRepository,
     client,
 ) -> None:
-    from ebl.common.domain.provenance import Provenance
     from ebl.fragmentarium.domain.fragment import Script, Period, PeriodModifier
 
     dossier1 = DossierRecordFactory.build(
         id="TEST001",
         description="Matching test",
-        provenance=Provenance.BABYLON,
+        provenance=BABYLON_PROVENANCE,
         script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
     )
     dossier2 = DossierRecordFactory.build(
         id="TEST002",
         description="Non matching",
-        provenance=Provenance.BABYLON,
+        provenance=BABYLON_PROVENANCE,
         script=Script(Period.OLD_BABYLONIAN, PeriodModifier.NONE),
     )
     dossier3 = DossierRecordFactory.build(
         id="TEST003",
         description="Non matching",
-        provenance=Provenance.NIPPUR,
+        provenance=NIPPUR_PROVENANCE,
         script=Script(Period.NEO_BABYLONIAN, PeriodModifier.NONE),
     )
 
@@ -287,8 +293,6 @@ def test_filter_dossiers_by_provenance(
     bibliography_repository: BibliographyRepository,
     client,
 ) -> None:
-    from ebl.common.domain.provenance import Provenance
-
     dossier1 = DossierRecordFactory.build(id="DOSS001")
     dossier2 = DossierRecordFactory.build(id="DOSS002")
     dossier3 = DossierRecordFactory.build(id="DOSS003")
@@ -300,11 +304,11 @@ def test_filter_dossiers_by_provenance(
     from ebl.tests.factories.fragment import FragmentDossierReferenceFactory
 
     fragment1 = FragmentFactory.build(
-        archaeology__site=Provenance.BABYLON,
+        archaeology__site=BABYLON_PROVENANCE,
         dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier1.id)],
     )
     fragment2 = FragmentFactory.build(
-        archaeology__site=Provenance.NIPPUR,
+        archaeology__site=NIPPUR_PROVENANCE,
         dossiers=[FragmentDossierReferenceFactory.build(dossierId=dossier2.id)],
     )
 

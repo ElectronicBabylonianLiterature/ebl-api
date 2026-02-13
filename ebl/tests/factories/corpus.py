@@ -12,7 +12,7 @@ from ebl.corpus.domain.manuscript import (
     OldSiglum,
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
+from ebl.tests.factories.provenance import DEFAULT_NON_STANDARD_PROVENANCES
 from ebl.corpus.domain.record import Author, AuthorRole, Record, Translator
 from ebl.corpus.domain.text import ChapterListing, Text
 from ebl.fragmentarium.domain.joins import Joins
@@ -91,7 +91,7 @@ class ManuscriptFactory(factory.Factory):
     accession = factory.Sequence(lambda n: f"A.{n}" if pydash.is_even(n) else "")
     period_modifier = factory.fuzzy.FuzzyChoice(PeriodModifier)
     period = factory.fuzzy.FuzzyChoice(set(Period) - {Period.NONE})
-    provenance = factory.fuzzy.FuzzyChoice(set(Provenance) - {Provenance.STANDARD_TEXT})
+    provenance = factory.fuzzy.FuzzyChoice(DEFAULT_NON_STANDARD_PROVENANCES)
     type = factory.fuzzy.FuzzyChoice(set(ManuscriptType) - {ManuscriptType.NONE})
     notes = factory.Faker("sentence")
     colophon = Transliteration.of_iterable(

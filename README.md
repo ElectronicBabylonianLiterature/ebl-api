@@ -501,6 +501,27 @@ docker build -t ebl/api .
 docker run --rm -it --env-file=.env --name ebl-migration ebl/api poetry run python -m ebl.fragmentarium.migrate_cropped_images
 ```
 
+### Provenance Migration
+
+The provenance migration populates the database with georeferenced provenance data, transitioning from the hardcoded
+enum to a database-backed system. This enables spatial queries and allows curators to add new provenances without code changes.
+
+The script can be run locally:
+
+```shell script
+poetry run python -m ebl.common.migrate_provenances
+```
+
+, as stand alone container:
+
+```shell script
+docker build -t ebl/api .
+docker run --rm -it --env-file=.env --name ebl-provenance-migration ebl/api poetry run python -m ebl.common.migrate_provenances
+```
+
+This migration is idempotent and safe to run multiple times. The application includes fallback logic to use the enum
+if provenance data is not yet in the database, ensuring backward compatibility during the transition.
+
 ### Steps to update the production database
 
 1) Implement the new functionality.

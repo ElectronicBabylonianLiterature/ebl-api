@@ -5,7 +5,7 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
+from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
@@ -14,7 +14,7 @@ from ebl.transliteration.domain.text_line import TextLine
 
 @attr.s(auto_attribs=True, frozen=True)
 class Siglum:
-    provenance: Provenance
+    provenance: ProvenanceRecord
     period: Period
     type: ManuscriptType
     disambiquator: str
@@ -36,15 +36,31 @@ class OldSiglum:
     reference: Reference
 
 
-def is_invalid_standard_text(provenance, period, type_) -> bool:
-    return provenance is Provenance.STANDARD_TEXT and (
+def is_standard_text_provenance(provenance: ProvenanceRecord) -> bool:
+    return provenance.id == "STANDARD_TEXT"
+
+
+def is_invalid_standard_text(provenance: ProvenanceRecord, period, type_) -> bool:
+    return is_standard_text_provenance(provenance) and (
         period is not Period.NONE or type_ is not ManuscriptType.NONE
     )
 
 
-def is_invalid_non_standard_text(provenance, period, type_) -> bool:
-    return provenance is not Provenance.STANDARD_TEXT and (
+def is_invalid_non_standard_text(provenance: ProvenanceRecord, period, type_) -> bool:
+    return not is_standard_text_provenance(provenance) and (
         period is Period.NONE or type_ is ManuscriptType.NONE
+    )
+
+
+def default_provenance() -> ProvenanceRecord:
+    return ProvenanceRecord(
+        id="NINEVEH",
+        long_name="Nineveh",
+        abbreviation="Nin",
+        parent="Assyria",
+        cigs_key="NNV",
+        sort_key=-1,
+        coordinates=GeoCoordinate(latitude=36.3589, longitude=43.1522),
     )
 
 
@@ -57,7 +73,7 @@ class Manuscript:
     accession: str = attr.ib(default="")
     period_modifier: PeriodModifier = PeriodModifier.NONE
     period: Period = Period.NEO_ASSYRIAN
-    provenance: Provenance = attr.ib(default=Provenance.NINEVEH)
+    provenance: ProvenanceRecord = attr.ib(factory=default_provenance)
     type: ManuscriptType = ManuscriptType.LIBRARY
     notes: str = ""
     colophon: Text = Text()
