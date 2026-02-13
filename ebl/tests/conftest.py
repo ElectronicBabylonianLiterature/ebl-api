@@ -90,7 +90,7 @@ from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     MongoDossiersRepository,
 )
 from ebl.common.application.provenance_service import ProvenanceService
-from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
+from ebl.common.domain.provenance_data import build_provenance_records
 from ebl.common.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
@@ -474,7 +474,7 @@ def provenance_service(provenance_repository):
 
 @pytest.fixture
 def seeded_provenance_service(provenance_repository):
-    for record in DEFAULT_PROVENANCES:
+    for record in build_provenance_records():
         provenance_repository.create(record)
     return ProvenanceService(provenance_repository)
 

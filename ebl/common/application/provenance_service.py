@@ -10,6 +10,7 @@ class ProvenanceService:
         self._repository = repository
         self._by_name_cache: Dict[str, Optional[ProvenanceRecord]] = {}
         self._by_abbreviation_cache: Dict[str, Optional[ProvenanceRecord]] = {}
+        self._by_id_cache: Dict[str, Optional[ProvenanceRecord]] = {}
         self._all_cache: Optional[Sequence[ProvenanceRecord]] = None
 
     def find_by_name(self, name: str) -> Optional[ProvenanceRecord]:
@@ -33,10 +34,14 @@ class ProvenanceService:
         return record
 
     def find_by_id(self, id_: str) -> Optional[ProvenanceRecord]:
+        if id_ in self._by_id_cache:
+            return self._by_id_cache[id_]
         try:
-            return self._repository.query_by_id(id_)
+            record = self._repository.query_by_id(id_)
         except NotFoundError:
-            return None
+            record = None
+        self._by_id_cache[id_] = record
+        return record
 
     def find_all(self) -> Sequence[ProvenanceRecord]:
         if self._all_cache is None:
@@ -50,4 +55,5 @@ class ProvenanceService:
         self._repository.update(provenance)
         self._by_name_cache.clear()
         self._by_abbreviation_cache.clear()
+        self._by_id_cache.clear()
         self._all_cache = None

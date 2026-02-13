@@ -1,5 +1,6 @@
 import factory
 
+from ebl.common.domain.provenance_data import build_provenance_records
 from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 
 
@@ -26,27 +27,24 @@ class ProvenanceRecordFactory(factory.Factory):
     coordinates = factory.SubFactory(GeoCoordinateFactory)
 
 
-DEFAULT_PROVENANCES = (
-    ProvenanceRecord(id="STANDARD_TEXT", long_name="Standard Text", abbreviation="Std"),
-    ProvenanceRecord(id="ASSYRIA", long_name="Assyria", abbreviation="Assa"),
-    ProvenanceRecord(id="BABYLONIA", long_name="Babylonia", abbreviation="Baba"),
-    ProvenanceRecord(
-        id="BABYLON", long_name="Babylon", abbreviation="Bab", parent="Babylonia"
-    ),
-    ProvenanceRecord(
-        id="NINEVEH", long_name="Nineveh", abbreviation="Nin", parent="Assyria"
-    ),
-    ProvenanceRecord(
-        id="KALHU", long_name="Kalhu", abbreviation="Kal", parent="Assyria"
-    ),
-    ProvenanceRecord(
-        id="NIPPUR", long_name="Nippur", abbreviation="Nip", parent="Babylonia"
-    ),
-    ProvenanceRecord(id="UR", long_name="Ur", abbreviation="Ur", parent="Babylonia"),
-    ProvenanceRecord(
-        id="URUK", long_name="Uruk", abbreviation="Urk", parent="Babylonia"
-    ),
-    ProvenanceRecord(id="PERIPHERY", long_name="Periphery", abbreviation=""),
+_PROVENANCE_BY_ID = {
+    record.id: record for record in build_provenance_records()
+}
+
+DEFAULT_PROVENANCES = tuple(
+    _PROVENANCE_BY_ID[id_]
+    for id_ in (
+        "STANDARD_TEXT",
+        "ASSYRIA",
+        "BABYLONIA",
+        "BABYLON",
+        "NINEVEH",
+        "KALHU",
+        "NIPPUR",
+        "UR",
+        "URUK",
+        "PERIPHERY",
+    )
 )
 
 DEFAULT_NON_STANDARD_PROVENANCES = tuple(

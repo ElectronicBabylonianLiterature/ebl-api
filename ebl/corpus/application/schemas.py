@@ -159,7 +159,7 @@ class ManuscriptSchema(Schema):
             raise ValidationError("Provenance service not configured.")
         record = provenance_service.find_by_name(value)
         if record is None:
-            raise ValidationError("Invalid provenance.")
+            raise ValidationError(f"Invalid provenance: {value}")
         return record
 
 

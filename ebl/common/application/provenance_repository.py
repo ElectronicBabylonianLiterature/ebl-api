@@ -6,6 +6,10 @@ from ebl.common.domain.provenance_model import ProvenanceRecord
 
 class ProvenanceRepository(ABC):
     @abstractmethod
+    def create_indexes(self) -> None:
+        raise NotImplementedError()
+
+    @abstractmethod
     def create(self, provenance: ProvenanceRecord) -> str:
         raise NotImplementedError()
 

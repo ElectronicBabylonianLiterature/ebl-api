@@ -48,7 +48,7 @@ class ProvenanceSiteMixin:
         provenance_service = self._get_provenance_service()
         record = provenance_service.find_by_name(value)
         if record is None:
-            raise ValidationError("Invalid provenance.")
+            raise ValidationError(f"Invalid provenance: {value}")
         return record
 
 

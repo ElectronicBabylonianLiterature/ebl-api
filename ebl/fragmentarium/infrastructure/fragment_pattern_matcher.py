@@ -8,7 +8,6 @@ from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
 from ebl.common.application.provenance_service import ProvenanceService
-from ebl.common.domain.provenance_data import build_provenance_records
 from ebl.common.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
@@ -107,14 +106,7 @@ class PatternMatcher:
         record = self._provenance_service.find_by_id(provenance.upper())
         if record is not None:
             return record
-        return next(
-            (
-                item
-                for item in build_provenance_records()
-                if item.id == provenance.upper() or item.long_name == provenance
-            ),
-            None,
-        )
+        return None
 
     def _filter_by_reference(self) -> Dict:
         if "bibId" not in self._query:

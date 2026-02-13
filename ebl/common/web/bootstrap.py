@@ -9,6 +9,7 @@ from ebl.common.web.provenances import (
 
 
 def create_common_routes(api: falcon.App, context: Context):
+    context.provenance_repository.create_indexes()
     provenance_repository = context.provenance_repository
     routes = [
         ("/provenances", ProvenancesResource(provenance_repository)),

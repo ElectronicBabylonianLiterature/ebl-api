@@ -1,3 +1,4 @@
+import math
 from typing import Sequence
 from pymongo.database import Database
 
@@ -49,8 +50,12 @@ class MongoProvenanceRepository(ProvenanceRepository):
         self, latitude: float, longitude: float, radius_km: float
     ) -> Sequence[ProvenanceRecord]:
         lat_delta = radius_km / 111.0
-        lon_delta = radius_km / (
-            111.0 * abs(latitude / 90.0) if latitude != 0 else 111.0
+        cos_latitude = math.cos(math.radians(latitude))
+        longitude_denominator = 111.0 * abs(cos_latitude)
+        lon_delta = (
+            radius_km / longitude_denominator
+            if longitude_denominator != 0
+            else radius_km / 111.0
         )
 
         cursor = self._collection.find_many(
