@@ -11,7 +11,7 @@ def clear_provenances(provenance_repository: MongoProvenanceRepository) -> None:
         try:
             provenance_repository._collection.delete_many({"_id": {"$exists": True}})
         except NotFoundError:
-            pass
+            return
 
 
 def test_find_by_name_from_repository(provenance_repository):

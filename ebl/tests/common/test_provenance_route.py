@@ -12,12 +12,10 @@ def clear_provenances(repository: MongoProvenanceRepository) -> None:
         try:
             repository._collection.delete_many({"_id": {"$exists": True}})
         except NotFoundError:
-            pass
+            return
 
 
-def test_get_provenances(
-    client, provenance_repository: MongoProvenanceRepository
-):
+def test_get_provenances(client, provenance_repository: MongoProvenanceRepository):
     clear_provenances(provenance_repository)
     record1 = ProvenanceRecord(
         id="TEST_BABYLON", long_name="Test Babylon", abbreviation="Bab"
@@ -36,9 +34,7 @@ def test_get_provenances(
     assert {"TEST_BABYLON", "TEST_NINEVEH"}.issubset(ids)
 
 
-def test_get_provenance_by_id(
-    client, provenance_repository: MongoProvenanceRepository
-):
+def test_get_provenance_by_id(client, provenance_repository: MongoProvenanceRepository):
     clear_provenances(provenance_repository)
     coord = GeoCoordinate(latitude=32.5, longitude=44.4)
     record = ProvenanceRecord(

@@ -18,9 +18,7 @@ def test_create_provenance(provenance_repository: ProvenanceRepository):
 
 
 def test_find_all(provenance_repository: ProvenanceRepository):
-    record1 = ProvenanceRecord(
-        id="BABYLON", long_name="Babylon", abbreviation="Bab"
-    )
+    record1 = ProvenanceRecord(id="BABYLON", long_name="Babylon", abbreviation="Bab")
     record2 = ProvenanceRecord(id="NINEVEH", long_name="Nineveh", abbreviation="Nin")
     record3 = ProvenanceRecord(id="URUK", long_name="Uruk", abbreviation="Urk")
 
@@ -103,9 +101,7 @@ def test_find_children(provenance_repository: ProvenanceRepository):
 
 
 def test_find_children_none(provenance_repository: ProvenanceRepository):
-    record = ProvenanceRecord(
-        id="BABYLON", long_name="Babylon", abbreviation="Bab"
-    )
+    record = ProvenanceRecord(id="BABYLON", long_name="Babylon", abbreviation="Bab")
     provenance_repository.create(record)
 
     result = provenance_repository.find_children("BABYLON")

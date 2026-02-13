@@ -100,9 +100,7 @@ class PatternMatcher:
             return {"archaeology.site": record.long_name}
         return {}
 
-    def _lookup_provenance_record(
-        self, provenance: str
-    ) -> Optional[ProvenanceRecord]:
+    def _lookup_provenance_record(self, provenance: str) -> Optional[ProvenanceRecord]:
         record = self._provenance_service.find_by_name(provenance)
         if record is not None:
             return record

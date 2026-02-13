@@ -7,7 +7,7 @@ import attr
 from tqdm import tqdm
 
 from ebl.app import create_context
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.text import Text, TextId
 from ebl.users.domain.user import ApiUser
@@ -55,12 +55,14 @@ class State:
 def update(number) -> State:
     context = create_context()
     corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
-        context.get_provenance_service(),
+        CorpusDependencies(
+            repository=context.text_repository,
+            bibliography=context.get_bibliography(),
+            changelog=context.changelog,
+            sign_repository=context.sign_repository,
+            parallel_line_injector=context.parallel_line_injector,
+            provenance_service=context.get_provenance_service(),
+        )
     )
     state = State()
     text = corpus.find(number)
@@ -77,12 +79,14 @@ def update(number) -> State:
 def get_text_ids() -> List[TextId]:
     context = create_context()
     corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
-        context.get_provenance_service(),
+        CorpusDependencies(
+            repository=context.text_repository,
+            bibliography=context.get_bibliography(),
+            changelog=context.changelog,
+            sign_repository=context.sign_repository,
+            parallel_line_injector=context.parallel_line_injector,
+            provenance_service=context.get_provenance_service(),
+        )
     )
     return [text.id for text in corpus.list()]
 

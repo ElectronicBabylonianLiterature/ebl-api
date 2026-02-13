@@ -122,6 +122,9 @@ def test_load_missing_data(seeded_provenance_service):
     schema = ChapterDisplaySchema(
         context={"provenance_service": seeded_provenance_service}
     )
-    assert schema.load(
-        to_dict(chapter_display, missing_translation=True, for_loading=True)
-    ) == chapter_display
+    assert (
+        schema.load(
+            to_dict(chapter_display, missing_translation=True, for_loading=True)
+        )
+        == chapter_display
+    )

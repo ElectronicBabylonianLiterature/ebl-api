@@ -213,7 +213,5 @@ def test_serialize() -> None:
 def test_deserialize(seeded_provenance_service) -> None:
     chapter, dto = create(False)
     del dto["lines"][0]["variants"][0]["reconstructionTokens"]
-    schema = ApiChapterSchema(
-        context={"provenance_service": seeded_provenance_service}
-    )
+    schema = ApiChapterSchema(context={"provenance_service": seeded_provenance_service})
     assert schema.load(dto) == chapter

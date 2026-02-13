@@ -30,17 +30,25 @@ DEFAULT_PROVENANCES = (
     ProvenanceRecord(id="STANDARD_TEXT", long_name="Standard Text", abbreviation="Std"),
     ProvenanceRecord(id="ASSYRIA", long_name="Assyria", abbreviation="Assa"),
     ProvenanceRecord(id="BABYLONIA", long_name="Babylonia", abbreviation="Baba"),
-    ProvenanceRecord(id="BABYLON", long_name="Babylon", abbreviation="Bab", parent="Babylonia"),
-    ProvenanceRecord(id="NINEVEH", long_name="Nineveh", abbreviation="Nin", parent="Assyria"),
-    ProvenanceRecord(id="KALHU", long_name="Kalhu", abbreviation="Kal", parent="Assyria"),
-    ProvenanceRecord(id="NIPPUR", long_name="Nippur", abbreviation="Nip", parent="Babylonia"),
+    ProvenanceRecord(
+        id="BABYLON", long_name="Babylon", abbreviation="Bab", parent="Babylonia"
+    ),
+    ProvenanceRecord(
+        id="NINEVEH", long_name="Nineveh", abbreviation="Nin", parent="Assyria"
+    ),
+    ProvenanceRecord(
+        id="KALHU", long_name="Kalhu", abbreviation="Kal", parent="Assyria"
+    ),
+    ProvenanceRecord(
+        id="NIPPUR", long_name="Nippur", abbreviation="Nip", parent="Babylonia"
+    ),
     ProvenanceRecord(id="UR", long_name="Ur", abbreviation="Ur", parent="Babylonia"),
-    ProvenanceRecord(id="URUK", long_name="Uruk", abbreviation="Urk", parent="Babylonia"),
+    ProvenanceRecord(
+        id="URUK", long_name="Uruk", abbreviation="Urk", parent="Babylonia"
+    ),
     ProvenanceRecord(id="PERIPHERY", long_name="Periphery", abbreviation=""),
 )
 
 DEFAULT_NON_STANDARD_PROVENANCES = tuple(
-    record
-    for record in DEFAULT_PROVENANCES
-    if record.id != "STANDARD_TEXT"
+    record for record in DEFAULT_PROVENANCES if record.id != "STANDARD_TEXT"
 )

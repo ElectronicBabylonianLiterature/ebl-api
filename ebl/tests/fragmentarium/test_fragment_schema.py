@@ -65,9 +65,7 @@ def test_number_deserialization(fragment_schema):
 
 def test_scope_serialization(fragment_schema):
     fragment = FragmentFactory.build(authorized_scopes=SCOPES)
-    assert (
-        fragment_schema.dump(fragment)["authorizedScopes"] == SERIALIZED_SCOPES
-    )
+    assert fragment_schema.dump(fragment)["authorizedScopes"] == SERIALIZED_SCOPES
 
 
 def test_scope_deserialization(fragment_schema):

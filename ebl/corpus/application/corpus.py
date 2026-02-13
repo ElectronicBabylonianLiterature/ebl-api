@@ -1,6 +1,9 @@
+from dataclasses import dataclass
 from typing import List, Optional, Sequence, Tuple
 import attr
+from ebl.bibliography.application.bibliography import Bibliography
 from ebl.common.query.query_result import CorpusQueryResult
+from ebl.changelog import Changelog
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.application.alignment_updater import AlignmentUpdater
 from ebl.corpus.application.manuscript_reference_injector import (
@@ -37,22 +40,27 @@ from ebl.users.domain.user import User
 COLLECTION = "chapters"
 
 
+@dataclass(frozen=True)
+class CorpusDependencies:
+    repository: TextRepository
+    bibliography: Bibliography
+    changelog: Changelog
+    sign_repository: SignRepository
+    parallel_line_injector: ParallelLineInjector
+    provenance_service: ProvenanceService
+
+
 class Corpus:
     def __init__(
         self,
-        repository: TextRepository,
-        bibliography,
-        changelog,
-        sign_repository: SignRepository,
-        parallel_injector: ParallelLineInjector,
-        provenance_service: ProvenanceService,
-    ):
-        self._repository: TextRepository = repository
-        self._bibliography = bibliography
-        self._changelog = changelog
-        self._sign_repository = sign_repository
-        self._parallel_injector = parallel_injector
-        self._provenance_service = provenance_service
+        dependencies: CorpusDependencies,
+    ) -> None:
+        self._repository: TextRepository = dependencies.repository
+        self._bibliography = dependencies.bibliography
+        self._changelog = dependencies.changelog
+        self._sign_repository = dependencies.sign_repository
+        self._parallel_injector = dependencies.parallel_line_injector
+        self._provenance_service = dependencies.provenance_service
 
     def find(self, id_: TextId) -> Text:
         return self._repository.find(id_)

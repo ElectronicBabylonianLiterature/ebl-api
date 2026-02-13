@@ -1,5 +1,6 @@
 import json
-from typing import cast
+from dataclasses import dataclass
+from typing import Any, cast
 
 import attr
 import falcon
@@ -21,6 +22,30 @@ from ebl.transliteration.domain.text_line import TextLine
 
 
 EMPTY_EDIT_DTO = {"new": [], "deleted": [], "edited": []}
+
+
+@dataclass(frozen=True)
+class ChapterDisplayCacheDependencies:
+    cached_client: Any
+    bibliography: Any
+    sign_repository: Any
+    signs: Any
+    text_repository: Any
+    provenance_service: Any
+
+
+@pytest.fixture
+def chapter_display_cache_dependencies(
+    request: pytest.FixtureRequest,
+) -> ChapterDisplayCacheDependencies:
+    return ChapterDisplayCacheDependencies(
+        cached_client=request.getfixturevalue("cached_client"),
+        bibliography=request.getfixturevalue("bibliography"),
+        sign_repository=request.getfixturevalue("sign_repository"),
+        signs=request.getfixturevalue("signs"),
+        text_repository=request.getfixturevalue("text_repository"),
+        provenance_service=request.getfixturevalue("seeded_provenance_service"),
+    )
 
 
 def test_updating_invalidates_chapter_display_cache(
@@ -231,13 +256,14 @@ def test_update_invalid_entity(
 
 
 def test_importing_invalidates_chapter_display_cache(
-    cached_client,
-    bibliography,
-    sign_repository,
-    signs,
-    text_repository,
-    seeded_provenance_service,
-):
+    chapter_display_cache_dependencies: ChapterDisplayCacheDependencies,
+) -> None:
+    cached_client = chapter_display_cache_dependencies.cached_client
+    bibliography = chapter_display_cache_dependencies.bibliography
+    sign_repository = chapter_display_cache_dependencies.sign_repository
+    signs = chapter_display_cache_dependencies.signs
+    text_repository = chapter_display_cache_dependencies.text_repository
+    seeded_provenance_service = chapter_display_cache_dependencies.provenance_service
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
     allow_references(chapter, bibliography)

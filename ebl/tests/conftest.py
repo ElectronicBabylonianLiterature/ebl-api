@@ -27,7 +27,7 @@ from ebl.bibliography.infrastructure.bibliography import MongoBibliographyReposi
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
@@ -213,22 +213,20 @@ def text_repository(database: Database, seeded_provenance_service):
 
 
 @pytest.fixture
-def corpus(
-    text_repository,
-    bibliography,
-    changelog,
-    sign_repository,
-    parallel_line_injector,
-    seeded_provenance_service,
-):
-    return Corpus(
-        text_repository,
-        bibliography,
-        changelog,
-        sign_repository,
-        parallel_line_injector,
-        seeded_provenance_service,
+def corpus_dependencies(request: pytest.FixtureRequest) -> CorpusDependencies:
+    return CorpusDependencies(
+        repository=request.getfixturevalue("text_repository"),
+        bibliography=request.getfixturevalue("bibliography"),
+        changelog=request.getfixturevalue("changelog"),
+        sign_repository=request.getfixturevalue("sign_repository"),
+        parallel_line_injector=request.getfixturevalue("parallel_line_injector"),
+        provenance_service=request.getfixturevalue("seeded_provenance_service"),
     )
+
+
+@pytest.fixture
+def corpus(corpus_dependencies: CorpusDependencies) -> Corpus:
+    return Corpus(corpus_dependencies)
 
 
 @pytest.fixture
@@ -482,54 +480,33 @@ def seeded_provenance_service(provenance_repository):
 
 
 @pytest.fixture
-def context(
-    ebl_ai_client,
-    cropped_sign_images_repository,
-    word_repository,
-    sign_repository,
-    file_repository,
-    photo_repository,
-    folio_repository,
-    thumbnail_repository,
-    fragment_repository,
-    text_repository,
-    changelog,
-    bibliography_repository,
-    annotations_repository,
-    lemma_repository,
-    afo_register_repository,
-    dossiers_repository,
-    findspot_repository,
-    provenance_repository,
-    seeded_provenance_service,
-    user,
-    parallel_line_injector,
-    mongo_cache_repository,
-):
+def context(request: pytest.FixtureRequest) -> ebl.context.Context:
     return ebl.context.Context(
-        ebl_ai_client=ebl_ai_client,
-        auth_backend=NoneAuthBackend(lambda: user),
-        cropped_sign_images_repository=cropped_sign_images_repository,
-        word_repository=word_repository,
-        sign_repository=sign_repository,
-        public_file_repository=file_repository,
-        photo_repository=photo_repository,
-        folio_repository=folio_repository,
-        thumbnail_repository=thumbnail_repository,
-        fragment_repository=fragment_repository,
-        changelog=changelog,
-        bibliography_repository=bibliography_repository,
-        provenance_repository=provenance_repository,
-        provenance_service=seeded_provenance_service,
-        text_repository=text_repository,
-        annotations_repository=annotations_repository,
-        lemma_repository=lemma_repository,
-        afo_register_repository=afo_register_repository,
-        dossiers_repository=dossiers_repository,
-        findspot_repository=findspot_repository,
+        ebl_ai_client=request.getfixturevalue("ebl_ai_client"),
+        auth_backend=NoneAuthBackend(lambda: request.getfixturevalue("user")),
+        cropped_sign_images_repository=request.getfixturevalue(
+            "cropped_sign_images_repository"
+        ),
+        word_repository=request.getfixturevalue("word_repository"),
+        sign_repository=request.getfixturevalue("sign_repository"),
+        public_file_repository=request.getfixturevalue("file_repository"),
+        photo_repository=request.getfixturevalue("photo_repository"),
+        folio_repository=request.getfixturevalue("folio_repository"),
+        thumbnail_repository=request.getfixturevalue("thumbnail_repository"),
+        fragment_repository=request.getfixturevalue("fragment_repository"),
+        changelog=request.getfixturevalue("changelog"),
+        bibliography_repository=request.getfixturevalue("bibliography_repository"),
+        provenance_repository=request.getfixturevalue("provenance_repository"),
+        provenance_service=request.getfixturevalue("seeded_provenance_service"),
+        text_repository=request.getfixturevalue("text_repository"),
+        annotations_repository=request.getfixturevalue("annotations_repository"),
+        lemma_repository=request.getfixturevalue("lemma_repository"),
+        afo_register_repository=request.getfixturevalue("afo_register_repository"),
+        dossiers_repository=request.getfixturevalue("dossiers_repository"),
+        findspot_repository=request.getfixturevalue("findspot_repository"),
         cache=Cache({"CACHE_TYPE": "null"}),
-        custom_cache=ChapterCache(mongo_cache_repository),
-        parallel_line_injector=parallel_line_injector,
+        custom_cache=ChapterCache(request.getfixturevalue("mongo_cache_repository")),
+        parallel_line_injector=request.getfixturevalue("parallel_line_injector"),
     )
 
 

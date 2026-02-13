@@ -47,7 +47,7 @@ from ebl.fragmentarium.web.fragments_afo_register import (
     AfoRegisterFragmentsQueryResource,
 )
 from ebl.corpus.web.chapters import ChaptersByFragmentResource
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
 
 
@@ -75,12 +75,14 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.cropped_sign_images_repository,
     )
     corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
-        provenance_service,
+        CorpusDependencies(
+            repository=context.text_repository,
+            bibliography=context.get_bibliography(),
+            changelog=context.changelog,
+            sign_repository=context.sign_repository,
+            parallel_line_injector=context.parallel_line_injector,
+            provenance_service=provenance_service,
+        )
     )
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)

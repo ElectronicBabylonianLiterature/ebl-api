@@ -53,14 +53,16 @@ class MongoProvenanceRepository(ProvenanceRepository):
             111.0 * abs(latitude / 90.0) if latitude != 0 else 111.0
         )
 
-        cursor = self._collection.find_many({
-            "coordinates.latitude": {
-                "$gte": latitude - lat_delta,
-                "$lte": latitude + lat_delta
-            },
-            "coordinates.longitude": {
-                "$gte": longitude - lon_delta,
-                "$lte": longitude + lon_delta
+        cursor = self._collection.find_many(
+            {
+                "coordinates.latitude": {
+                    "$gte": latitude - lat_delta,
+                    "$lte": latitude + lat_delta,
+                },
+                "coordinates.longitude": {
+                    "$gte": longitude - lon_delta,
+                    "$lte": longitude + lon_delta,
+                },
             }
-        })
+        )
         return ProvenanceRecordSchema(many=True).load(cursor)

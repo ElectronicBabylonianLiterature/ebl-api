@@ -100,21 +100,15 @@ def parse_manuscript(atf, provenance_service):
         ),
         (
             [f"{MANUSCRIPTS[0].siglum} 1. kur"],
-            lambda _: ManuscriptLine(
-                MANUSCRIPTS[0].id, (), parse_text_line("1. kur")
-            ),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f"    {MANUSCRIPTS[0].siglum} 1. kur"],
-            lambda _: ManuscriptLine(
-                MANUSCRIPTS[0].id, (), parse_text_line("1. kur")
-            ),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f" {MANUSCRIPTS[0].siglum} 1. kur"],
-            lambda _: ManuscriptLine(
-                MANUSCRIPTS[0].id, (), parse_text_line("1. kur")
-            ),
+            lambda _: ManuscriptLine(MANUSCRIPTS[0].id, (), parse_text_line("1. kur")),
         ),
         (
             [f"{MANUSCRIPTS[0].siglum} o iii", "#note: a note", "$ single ruling"],
@@ -136,9 +130,8 @@ def parse_manuscript(atf, provenance_service):
 )
 def test_parse_manuscript(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n".join(lines)
-    assert (
-        parse_manuscript(atf, seeded_provenance_service)
-        == expected_builder(seeded_provenance_service)
+    assert parse_manuscript(atf, seeded_provenance_service) == expected_builder(
+        seeded_provenance_service
     )
 
 
@@ -348,7 +341,12 @@ def test_parse_translation(lines, expected_builder, seeded_provenance_service) -
 @pytest.mark.parametrize(
     "lines,expected_builder",
     [
-        (["1. kur"], lambda provenance_service: (parse_chapter_line("1. kur", provenance_service),)),
+        (
+            ["1. kur"],
+            lambda provenance_service: (
+                parse_chapter_line("1. kur", provenance_service),
+            ),
+        ),
         (
             ["1. kur\n1. ra"],
             lambda provenance_service: (
@@ -366,9 +364,9 @@ def test_parse_translation(lines, expected_builder, seeded_provenance_service) -
 )
 def test_parse_chapter(lines, expected_builder, seeded_provenance_service) -> None:
     atf = "\n\n".join(lines)
-    assert parse_chapter(atf, MANUSCRIPTS, seeded_provenance_service) == expected_builder(
-        seeded_provenance_service
-    )
+    assert parse_chapter(
+        atf, MANUSCRIPTS, seeded_provenance_service
+    ) == expected_builder(seeded_provenance_service)
 
 
 def test_parse_chapter_empty(seeded_provenance_service) -> None:
