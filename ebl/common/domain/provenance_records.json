@@ -704,6 +704,14 @@
     "sort_key": -1
   },
   {
+    "id": "ARRAPHA",
+    "long_name": "Arrap\u1e2ba",
+    "abbreviation": "Arr",
+    "parent": "Periphery",
+    "cigs_key": "ARR",
+    "sort_key": -1
+  },
+  {
     "id": "ASNAKKUM",
     "long_name": "A\u0161nakkum",
     "abbreviation": "A\u0161n",
@@ -864,9 +872,25 @@
     "sort_key": -1
   },
   {
+    "id": "KUMIDI",
+    "long_name": "Kumidi",
+    "abbreviation": "Kum",
+    "parent": "Periphery",
+    "cigs_key": "KAL",
+    "sort_key": -1
+  },
+  {
     "id": "LACHISH",
     "long_name": "Lachish",
     "abbreviation": "Lac",
+    "parent": "Periphery",
+    "cigs_key": null,
+    "sort_key": -1
+  },
+  {
+    "id": "MAALLANATE",
+    "long_name": "Ma\u02beallanate",
+    "abbreviation": "Maal",
     "parent": "Periphery",
     "cigs_key": null,
     "sort_key": -1
@@ -1053,6 +1077,14 @@
     "abbreviation": "Ter",
     "parent": "Periphery",
     "cigs_key": "TRQ",
+    "sort_key": -1
+  },
+  {
+    "id": "TIGUNANUM",
+    "long_name": "Tigun\u0101num",
+    "abbreviation": "Tig",
+    "parent": "Periphery",
+    "cigs_key": null,
     "sort_key": -1
   },
   {

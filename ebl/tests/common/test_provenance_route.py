@@ -1,7 +1,6 @@
 import falcon
 
 from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
-from ebl.common.application.provenance_repository import ProvenanceRepository
 from ebl.common.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
