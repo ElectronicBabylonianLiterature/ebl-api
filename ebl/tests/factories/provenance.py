@@ -27,9 +27,7 @@ class ProvenanceRecordFactory(factory.Factory):
     coordinates = factory.SubFactory(GeoCoordinateFactory)
 
 
-_PROVENANCE_BY_ID = {
-    record.id: record for record in build_provenance_records()
-}
+_PROVENANCE_BY_ID = {record.id: record for record in build_provenance_records()}
 
 DEFAULT_PROVENANCES = tuple(
     _PROVENANCE_BY_ID[id_]

@@ -263,9 +263,7 @@ def test_importing_invalidates_chapter_display_cache(
     sign_repository = chapter_display_cache_dependencies.sign_repository
     signs = chapter_display_cache_dependencies.signs
     text_repository = chapter_display_cache_dependencies.text_repository
-    seeded_provenance_service = (
-        chapter_display_cache_dependencies.provenance_service
-    )
+    seeded_provenance_service = chapter_display_cache_dependencies.provenance_service
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
     allow_references(chapter, bibliography)
@@ -292,9 +290,7 @@ def test_importing_invalidates_chapter_display_cache(
         f"{chapter.manuscripts[0].siglum} {next_line_mumber}. ..."
     )
 
-    existing_lines = tuple(
-        line.set_variant_alignment_flags() for line in chapter.lines
-    )
+    existing_lines = tuple(line.set_variant_alignment_flags() for line in chapter.lines)
     imported_lines = tuple(
         parse_chapter(atf, chapter.manuscripts, seeded_provenance_service)
     )
