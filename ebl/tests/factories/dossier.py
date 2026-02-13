@@ -13,7 +13,7 @@ class DossierRecordFactory(factory.Factory):
     class Meta:
         model = DossierRecord
 
-    id = factory.Faker("word")
+    id = factory.Sequence(lambda index: f"dossier_{index}")
     description = factory.Faker("sentence")
     is_approximate_date = factory.Faker("boolean")
     year_range_from = factory.Maybe("is_approximate_date", randint(-2500, -400), None)
