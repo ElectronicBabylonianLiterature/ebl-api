@@ -11,6 +11,7 @@ class Period(NamedEnumWithParent):
     FARA = ("Fara", "Fara", None, 5)
     PRESARGONIC = ("Presargonic", "PSarg", None, 6)
     SARGONIC = ("Sargonic", "Sarg", None, 7)
+    LAGASH_II = ("Lagash II", "Lag2", None, 7.5)
     UR_III = ("Ur III", "Ur3", None, 8)
     OLD_ASSYRIAN = ("Old Assyrian", "OA", None, 9)
     OLD_BABYLONIAN = ("Old Babylonian", "OB", None, 10)

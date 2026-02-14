@@ -16,6 +16,10 @@ class ExternalNumbers:
     metropolitan_number: str = ""
     pierpont_morgan_number: str = ""
     louvre_number: str = ""
+    ontario_number: str = ""
+    harvard_ham_number: str = ""
+    sketchfab_number: str = ""
+    ark_number: str = ""
     dublin_tcd_number: str = ""
     cambridge_maa_number: str = ""
     ashmolean_number: str = ""
@@ -87,6 +91,22 @@ class FragmentExternalNumbers:
     @property
     def louvre_number(self) -> str:
         return self._get_external_number("louvre_number")
+
+    @property
+    def ontario_number(self) -> str:
+        return self._get_external_number("ontario_number")
+
+    @property
+    def harvard_ham_number(self) -> str:
+        return self._get_external_number("harvard_ham_number")
+
+    @property
+    def sketchfab_number(self) -> str:
+        return self._get_external_number("sketchfab_number")
+
+    @property
+    def ark_number(self) -> str:
+        return self._get_external_number("ark_number")
 
     @property
     def dublin_tcd_number(self) -> str:
