@@ -1,0 +1,8 @@
+# This file contains commit hashes that should be ignored by git blame
+# See https://docs.github.com/en/repositories/working-with-files/using-files/about-the-code-owners-file
+
+# Backend optimization commit (2026-02-05) - Line ending normalization only
+# This commit changed CRLF/LF line endings via ruff format and other formatting tools
+# It affected 600+ files.
+# Ignoring this commit preserves blame history visibility
+2fc6fea0b561d20504736ecb5e21f1dd6b16cb95
