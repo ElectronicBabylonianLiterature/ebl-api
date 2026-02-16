@@ -10,4 +10,4 @@
 # Line ending normalization commit (2026-02-16)
 # This commit normalized 619 files from CRLF to LF per .gitattributes
 # No actual code changes, just line ending consistency
-7b57f250011c5b13883b34d1814581be22867b4c
+1213c20ec6620f5face135a694b791de7bc87301

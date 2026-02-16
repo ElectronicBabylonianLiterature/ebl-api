@@ -5,7 +5,7 @@
 This PR fixes the GitLens blame history issue caused by PR #671 (Backend optimization), which inadvertently changed line endings across 600+ files. This PR:
 
 1. **Restores blame history visibility** via `.git-blame-ignore-revs`
-2. **Normalizes all remaining line endings** to LF for consistency
+2. **Normalizes all remaining line endings** to LF for consistency (separate PR)
 3. **Prevents future CRLF disasters** with `.gitattributes` enforcement
 4. **Provides team guidance** with clear instructions
 
@@ -43,7 +43,7 @@ This PR fixes the GitLens blame history issue caused by PR #671 (Backend optimiz
 | Commit | Files | Purpose |
 |--------|-------|---------|
 | `bca7f499` | 4 | Initial config setup (ignore file, gitattributes) |
-| `7b57f250` | 619 | Line ending normalization (the bulk change) |
+| `1213c20e` | 619 | Line ending normalization (separate PR) |
 | `cf279732` | 1 | Added 2nd commit hash to ignore file |
 
 ### Documentation Files (Reference)
@@ -62,7 +62,7 @@ CRLF_TEAM_INSTRUCTIONS.md     - Team instructions (share with team)
 
 - [ ] Contains exactly 2 commit hashes (40-character SHAs)
 - [ ] First hash is `2fc6fea0b561d20504736ecb5e21f1dd6b16cb95` (original CRLF commit)
-- [ ] Second hash is `7b57f250011c5b13883b34d1814581be22867b4c` (normalization commit)
+- [ ] Second hash is `1213c20ec6620f5face135a694b791de7bc87301` (normalization commit, separate PR)
 - [ ] Both have clear explanatory comments
 - [ ] File ends with a newline character
 - [ ] No trailing whitespace
@@ -77,7 +77,7 @@ CRLF_TEAM_INSTRUCTIONS.md     - Team instructions (share with team)
 ### Commit History
 
 - [ ] Commit `bca7f499` only modifies 4 files (config files, no code)
-- [ ] Commit `7b57f250` modifies 619 files (all line-ending changes)
+- [ ] Commit `1213c20e` modifies 619 files (all line-ending changes, separate PR)
 - [ ] Commit `cf279732` only modifies `.git-blame-ignore-revs`
 - [ ] No other code changes or refactoring mixed in
 
@@ -105,7 +105,7 @@ git checkout fix-crlf-change-consequences
 cat .git-blame-ignore-revs
 # Should output:
 #   2fc6fea0b561d20504736ecb5e21f1dd6b16cb95
-#   7b57f250011c5b13883b34d1814581be22867b4c
+#   1213c20ec6620f5face135a694b791de7bc87301
 
 # Test git blame (should use ignore file)
 git blame ebl/app.py | head -10
@@ -136,7 +136,7 @@ file ebl/app.py ebl/errors.py pyproject.toml
 
 ```bash
 # Should show original developers, not our CRLF commits
-git blame ebl/errors.py | grep -v "7b57f250" | head -10
+git blame ebl/errors.py | grep -v "1213c20e" | head -10
 
 # Expected output shows developers from 2018-2023, not February 2026
 ```
@@ -158,7 +158,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 ### Normal Behavior (Not Bugs)
 
-1. **Lines with only whitespace changes may show 7b57f250**: This is expected. The normalization commit actually changed those lines' endings. Once GitLens reloads, it should ignore this commit.
+1. **Lines with only whitespace changes may show 1213c20e**: This is expected. The normalization commit actually changed those lines' endings. Once GitLens reloads, it should ignore this commit.
 
 2. **Some developers may still see the old CRLF commit**: They need to reload VS Code after pulling. The git config change doesn't auto-propagate.
 
@@ -169,7 +169,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 Check that commit messages are clear:
 
 - `bca7f499`: Explains that CRLF commit (2fc6fea0) is being ignored
-- `7b57f250`: Explains 619 files are normalized to LF
+- `1213c20e`: Explains 619 files are normalized to LF (separate PR)
 - `cf279732`: Explains normalization commit is also being ignored
 
 ---

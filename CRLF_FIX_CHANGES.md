@@ -2,7 +2,7 @@
 
 ## Summary
 
-Mitigation of CRLF line ending commit that affected 609 files and broke Git blame history/GitLens functionality.
+Mitigation of CRLF line ending commit that affected 609 files and broke Git blame history/GitLens functionality. The line-ending normalization is tracked in a separate PR, and the config/docs PR is being cleaned to exclude that commit.
 
 ---
 
@@ -42,6 +42,8 @@ Mitigation of CRLF line ending commit that affected 609 files and broke Git blam
 | 2026-02-16 | Created .gitattributes | ✅ Complete | LF enforcement rules added |
 | 2026-02-16 | Configured git blame | ✅ Complete | Config saved to .git/config |
 | 2026-02-16 | Verified GitLens | ✅ Complete | All configurations verified |
+| 2026-02-16 | Split normalization PR | ✅ Complete | Normalization in separate PR (1213c20e) |
+| 2026-02-16 | Clean config/docs PR | ⏳ Pending | Remove normalization commit from config PR |
 
 ---
 
@@ -52,6 +54,12 @@ Mitigation of CRLF line ending commit that affected 609 files and broke Git blam
 .gitattributes                  [NEW]
 CRLF_FIX_TODO.md               [NEW]
 CRLF_FIX_CHANGES.md            [NEW] <- this file
+
+Separate normalization PR:
+- Commit 1213c20ec6620f5face135a694b791de7bc87301
+
+Pending in config/docs PR:
+- Remove normalization commit 7b57f250 from this branch
 ```
 
 ---

@@ -121,7 +121,54 @@ git config blame.ignoreRevsFile
 
 ---
 
-## Step 6: Verify GitLens Works Correctly
+## Step 6: Split Normalization into Separate PR
+
+**Objective:** Keep the line-ending normalization in its own PR and keep the config/docs PR clean
+
+**Details:**
+
+- Create a normalization-only branch from `master`
+- Cherry-pick the normalization commit onto that branch
+- Open a PR and merge with a regular merge (not squash)
+- Ensure the config/docs PR does not include the normalization commit
+- Update `.git-blame-ignore-revs` and documentation with the new normalization hash
+
+**Commands to use:**
+
+```bash
+git checkout master
+git checkout -b crlf-normalization
+git cherry-pick 7b57f250
+git push -u origin crlf-normalization
+```
+
+**Expected outcome:** Normalization is merged from a separate PR and the config/docs PR contains only configuration and documentation
+
+---
+
+## Step 7: Clean Config/Docs PR
+
+**Objective:** Remove the line-ending normalization commit from the config/docs PR branch
+
+**Details:**
+
+- Drop the normalization commit from `fix-crlf-change-consequences`
+- Ensure only config and documentation changes remain
+- Keep `.git-blame-ignore-revs` pointing to the normalization commit from the separate PR
+
+**Commands to use:**
+
+```bash
+git checkout fix-crlf-change-consequences
+git revert 7b57f250
+git push
+```
+
+**Expected outcome:** Config/docs PR no longer contains any line-ending changes
+
+---
+
+## Step 8: Verify GitLens Works Correctly
 
 **Objective:** Confirm that blame history is restored and changes are no longer visible
 
@@ -148,10 +195,11 @@ git config blame.ignoreRevsFile
 
 | File/Config | Action | Purpose |
 |---|---|---|
-| `.git-blame-ignore-revs` | Create | List commits that broke blame history |
+| `.git-blame-ignore-revs` | Create/Update | List commits that broke blame history |
 | `.gitattributes` | Create | Enforce consistent line endings |
 | Git config | Update | Set `blame.ignoreRevsFile` |
-| `master` branch | No changes | Preserve existing history |
+| Normalization PR | Create | Line ending normalization only |
+| Config/docs PR | Clean | No line-ending changes |
 
 ---
 

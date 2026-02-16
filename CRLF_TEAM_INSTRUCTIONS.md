@@ -11,7 +11,7 @@ A recent PR (#671 - Backend optimization) inadvertently changed line endings acr
 | Issue | Solution |
 |-------|----------|
 | GitLens showed all lines pointing to CRLF commit | Created `.git-blame-ignore-revs` to exclude whitespace-only commits |
-| 600+ files still had inconsistent line endings | Created normalization commit (7b57f250) to enforce LF globally |
+| 600+ files still had inconsistent line endings | Created normalization commit (1213c20e) in a separate PR to enforce LF globally |
 | Git blame not configured | Set `blame.ignoreRevsFile` in git config |
 | Future CRLF disasters possible | Added `.gitattributes` with LF enforcement rules |
 
@@ -70,8 +70,8 @@ If you don't have a `.vscode/settings.json` file, create one in the project root
 # Should NOT show 2fc6fea0 (original CRLF commit) for real code:
 git blame ebl/app.py | head -20
 
-# Should NOT show 7b57f250 (normalization commit) for code content:
-git blame ebl/errors.py | grep "^[^7]"
+# Should NOT show 1213c20e (normalization commit) for code content:
+git blame ebl/errors.py | grep "^[^1]"
 ```
 
 ### Test in GitLens (VS Code)
@@ -79,7 +79,7 @@ git blame ebl/errors.py | grep "^[^7]"
 1. Open any Python file
 2. Hover over a line of code
 3. Check the blame annotation — should show original author, not CRLF commits
-4. Lines with only whitespace changes may briefly show 7b57f250 before being ignored
+4. Lines with only whitespace changes may briefly show 1213c20e before being ignored
 
 ### Expected Output
 
@@ -129,12 +129,12 @@ git blame ebl/errors.py | grep "^[^7]"
 - [ ] Did you reload VS Code?
 - [ ] Check: `git config blame.ignoreRevsFile` (should output `.git-blame-ignore-revs`)
 
-### "I see 7b57f250 on many lines"
+### "I see 1213c20e on many lines"
 
 This is normal for whitespace-only changes. It means:
 
 - The line had CRLF/LF inconsistency
-- Our normalization commit (7b57f250) fixed it
+- Our normalization commit (1213c20e) fixed it
 - Git blame is correctly showing this
 
 The ignore rules will hide these from blame once GitLens reloads.
