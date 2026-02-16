@@ -14,11 +14,13 @@ This PR fixes the GitLens blame history issue caused by PR #671 (Backend optimiz
 ## 🎯 Problem Statement
 
 **Original Issue (PR #671):**
+
 - Changed line endings from LF → CRLF across 609 files
 - GitLens couldn't show blame history (all lines appeared "changed" in that commit)
 - Made code attribution and debugging extremely difficult
 
 **This PR's Solution:**
+
 - Creates `.git-blame-ignore-revs` to tell git/GitLens to skip whitespace-only commits
 - Normalizes 619 files to enforce LF line endings
 - Adds ignore rules so future line-ending changes don't break blame
@@ -57,6 +59,7 @@ CRLF_TEAM_INSTRUCTIONS.md     - Team instructions (share with team)
 ## ✅ Review Checklist
 
 ### `.git-blame-ignore-revs`
+
 - [ ] Contains exactly 2 commit hashes (40-character SHAs)
 - [ ] First hash is `2fc6fea0b561d20504736ecb5e21f1dd6b16cb95` (original CRLF commit)
 - [ ] Second hash is `7b57f250011c5b13883b34d1814581be22867b4c` (normalization commit)
@@ -65,18 +68,21 @@ CRLF_TEAM_INSTRUCTIONS.md     - Team instructions (share with team)
 - [ ] No trailing whitespace
 
 ### `.gitattributes`
+
 - [ ] Starts with `* text=auto eol=lf` (enforces LF for all text)
 - [ ] Includes specific rules for common file types (.py, .md, .yml, .json, etc.)
-- [ ] Binary files marked as `binary` (*.png, *.jpg, *.pdf, etc.)
+- [ ] Binary files marked as `binary` (*.png,*.jpg, *.pdf, etc.)
 - [ ] No conflicting rules
 
 ### Commit History
+
 - [ ] Commit `bca7f499` only modifies 4 files (config files, no code)
 - [ ] Commit `7b57f250` modifies 619 files (all line-ending changes)
 - [ ] Commit `cf279732` only modifies `.git-blame-ignore-revs`
 - [ ] No other code changes or refactoring mixed in
 
 ### Team Documentation
+
 - [ ] `CRLF_TEAM_INSTRUCTIONS.md` clearly explains what to do
 - [ ] Instructions are actionable and step-by-step
 - [ ] Troubleshooting section covers common issues
@@ -89,6 +95,7 @@ CRLF_TEAM_INSTRUCTIONS.md     - Team instructions (share with team)
 ### For Reviewer (Pre-Merge)
 
 #### Test 1: Verify Blame Ignore Rules
+
 ```bash
 # Clone/fetch the PR branch
 git fetch origin fix-crlf-change-consequences
@@ -106,6 +113,7 @@ git blame ebl/app.py | head -10
 ```
 
 #### Test 2: Verify Line Ending Configuration
+
 ```bash
 # Check .gitattributes exists
 cat .gitattributes
@@ -117,6 +125,7 @@ git config blame.ignoreRevsFile
 ```
 
 #### Test 3: Spot-Check Files
+
 ```bash
 # Verify that files don't have mixed line endings
 file ebl/app.py ebl/errors.py pyproject.toml
@@ -124,6 +133,7 @@ file ebl/app.py ebl/errors.py pyproject.toml
 ```
 
 #### Test 4: Blame on Real Code
+
 ```bash
 # Should show original developers, not our CRLF commits
 git blame ebl/errors.py | grep -v "7b57f250" | head -10
@@ -134,6 +144,7 @@ git blame ebl/errors.py | grep -v "7b57f250" | head -10
 ### Post-Merge (Team Verification)
 
 After merging, ask 1-2 team members to:
+
 ```bash
 git pull origin master
 git config blame.ignoreRevsFile .git-blame-ignore-revs
@@ -146,6 +157,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 ## 🔸 Known Issues & Limitations
 
 ### Normal Behavior (Not Bugs)
+
 1. **Lines with only whitespace changes may show 7b57f250**: This is expected. The normalization commit actually changed those lines' endings. Once GitLens reloads, it should ignore this commit.
 
 2. **Some developers may still see the old CRLF commit**: They need to reload VS Code after pulling. The git config change doesn't auto-propagate.
@@ -153,7 +165,9 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 3. **`.vscode/settings.json` isn't committed**: This is intentional (it's in `.gitignore`). Provide instructions for optional setup.
 
 ### Commit Message Quality
+
 Check that commit messages are clear:
+
 - `bca7f499`: Explains that CRLF commit (2fc6fea0) is being ignored
 - `7b57f250`: Explains 619 files are normalized to LF
 - `cf279732`: Explains normalization commit is also being ignored
@@ -175,17 +189,20 @@ Check that commit messages are clear:
 ## 🚀 Merge Considerations
 
 ✅ **Safe to merge:**
+
 - No code logic changes
 - No dependency changes
 - Config files only
 - Fully backward compatible
 
 ⚠️ **Before merging:**
+
 - [ ] Verify commit hashes are correct
 - [ ] Team has instructions ready
 - [ ] Plan to communicate with team after merge
 
 📢 **After merging:**
+
 - Announce to team in Slack/Discord
 - Link to `CRLF_TEAM_INSTRUCTIONS.md`
 - Offer support for developers who need help with git config
@@ -203,6 +220,7 @@ Check that commit messages are clear:
 ## ✨ Summary
 
 This PR is a **quality-of-life fix** that:
+
 - ✅ Restores GitLens functionality
 - ✅ Prevents future CRLF issues  
 - ✅ Contains no code changes

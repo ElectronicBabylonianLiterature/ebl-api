@@ -20,6 +20,7 @@ A recent PR (#671 - Backend optimization) inadvertently changed line endings acr
 ## 📥 What You Need to Do
 
 ### Step 1: Pull the Latest Changes
+
 ```bash
 git pull origin master
 # or if you're on a feature branch:
@@ -28,7 +29,9 @@ git merge origin/master
 ```
 
 ### Step 2: Update Git Configuration (Local)
+
 After pulling, run this command **once per repository**:
+
 ```bash
 git config blame.ignoreRevsFile .git-blame-ignore-revs
 ```
@@ -36,6 +39,7 @@ git config blame.ignoreRevsFile .git-blame-ignore-revs
 ✅ **That's it!** Git blame will now automatically ignore whitespace-only commits.
 
 ### Step 3: (Optional) Update VS Code Settings
+
 For enhanced GitLens support, add this to your workspace `.vscode/settings.json`:
 
 ```json
@@ -61,6 +65,7 @@ If you don't have a `.vscode/settings.json` file, create one in the project root
 ## 🔍 How to Verify It Works
 
 ### Test Git Blame (Command Line)
+
 ```bash
 # Should NOT show 2fc6fea0 (original CRLF commit) for real code:
 git blame ebl/app.py | head -20
@@ -70,12 +75,14 @@ git blame ebl/errors.py | grep "^[^7]"
 ```
 
 ### Test in GitLens (VS Code)
+
 1. Open any Python file
 2. Hover over a line of code
 3. Check the blame annotation — should show original author, not CRLF commits
 4. Lines with only whitespace changes may briefly show 7b57f250 before being ignored
 
 ### Expected Output
+
 ```
 ✅ CORRECT:
 3317e80aa (Jussi Laasonen 2018-11-21) class NotFoundError(Exception):
@@ -101,6 +108,7 @@ git blame ebl/errors.py | grep "^[^7]"
 ## ⚠️ Important Notes
 
 1. **Git version requirement**: You need Git 2.23+ (most developers have this)
+
    ```bash
    git --version  # Should be 2.23.0 or newer
    ```
@@ -116,12 +124,15 @@ git blame ebl/errors.py | grep "^[^7]"
 ## 🆘 Troubleshooting
 
 ### "GitLens still shows the CRLF commit"
+
 - [ ] Did you run `git config blame.ignoreRevsFile .git-blame-ignore-revs`?
 - [ ] Did you reload VS Code?
 - [ ] Check: `git config blame.ignoreRevsFile` (should output `.git-blame-ignore-revs`)
 
 ### "I see 7b57f250 on many lines"
+
 This is normal for whitespace-only changes. It means:
+
 - The line had CRLF/LF inconsistency
 - Our normalization commit (7b57f250) fixed it
 - Git blame is correctly showing this
@@ -129,6 +140,7 @@ This is normal for whitespace-only changes. It means:
 The ignore rules will hide these from blame once GitLens reloads.
 
 ### "Old CRLF commit (2fc6fea0) still shows up"
+
 - This is expected only for lines that had actual code changes in that commit
 - Check if the line is really code or just whitespace
 - Reload VS Code and GitLens
@@ -146,6 +158,7 @@ The ignore rules will hide these from blame once GitLens reloads.
 ## Questions?
 
 If you have issues or questions:
+
 1. Check the troubleshooting section above
 2. Verify your git version (`git --version`)
 3. Confirm config is set: `git config blame.ignoreRevsFile`

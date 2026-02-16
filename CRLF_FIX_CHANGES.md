@@ -1,6 +1,7 @@
 # CRLF Line Ending Fix - Change Log
 
 ## Summary
+
 Mitigation of CRLF line ending commit that affected 609 files and broke Git blame history/GitLens functionality.
 
 ---
@@ -8,6 +9,7 @@ Mitigation of CRLF line ending commit that affected 609 files and broke Git blam
 ## Changes Made
 
 ### 1. .git-blame-ignore-revs
+
 - **Status:** ✅ Complete
 - **Location:** `/workspaces/ebl-api/.git-blame-ignore-revs`
 - **Description:** Git configuration file listing commits to ignore in blame operations
@@ -15,6 +17,7 @@ Mitigation of CRLF line ending commit that affected 609 files and broke Git blam
 - **Impact:** Restores GitLens blame history visibility
 
 ### 2. .gitattributes
+
 - **Status:** ✅ Complete
 - **Location:** `/workspaces/ebl-api/.gitattributes`
 - **Description:** Git attributes configuration for consistent line endings
@@ -22,6 +25,7 @@ Mitigation of CRLF line ending commit that affected 609 files and broke Git blam
 - **Impact:** Prevents future CRLF normalization disasters
 
 ### 3. Git Configuration
+
 - **Status:** ✅ Complete
 - **Command:** `git config blame.ignoreRevsFile .git-blame-ignore-revs`
 - **Impact:** Enables GitLens to respect the blame ignore file
@@ -77,6 +81,7 @@ CRLF_FIX_CHANGES.md            [NEW] <- this file
 ## Notes for Future Reference
 
 If similar issues occur:
+
 1. Always check for line ending changes before approving large PRs
 2. Enforce `.gitattributes` from project inception
 3. Use pre-commit hooks to catch line ending issues early
