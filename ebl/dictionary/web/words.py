@@ -1,6 +1,9 @@
 import falcon
 
-from ebl.dictionary.application.word_schema import WordSchema
+from ebl.dictionary.application.word_schema import (
+    WordSchema,
+    ProperNounCreationRequestSchema,
+)
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 
@@ -26,3 +29,18 @@ class WordsListResource:
 
     def on_get(self, req, resp):
         resp.media = self._dictionary.list_all_words()
+
+
+class ProperNounCreationResource:
+    def __init__(self, dictionary):
+        self._dictionary = dictionary
+
+    @falcon.before(require_scope, "create:proper_nouns")
+    @validate(ProperNounCreationRequestSchema())
+    def on_post(self, req, resp):
+        lemma = req.media["lemma"]
+        pos_tags = req.media.get("pos", [])
+        word_id = self._dictionary.create_proper_noun(lemma, pos_tags)
+        word = self._dictionary.find(word_id)
+        resp.media = word
+        resp.status = falcon.HTTP_CREATED

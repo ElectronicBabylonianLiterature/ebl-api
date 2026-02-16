@@ -2,8 +2,10 @@ import pydash
 import pytest
 import copy
 
-from typing import Dict, Any
+from typing import Dict, Any, cast
 from ebl.errors import NotFoundError
+from ebl.dictionary.infrastructure import word_repository as word_repository_module
+from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
 
 COLLECTION = "words"
 
@@ -227,3 +229,50 @@ def test_update(word_repository, word):
     word_repository.update(updated_word)
 
     assert word_repository.query_by_id(word_id) == updated_word
+
+
+def test_create_substring_expression_structure() -> None:
+    expression = word_repository_module._create_substring_expression("ab", "$lemma")
+
+    assert expression["$eq"][1] == "ab"
+    assert expression["$eq"][0]["$substrCP"][2] == 2
+
+
+def test_create_lemma_search_pipeline_structure() -> None:
+    pipeline = word_repository_module._create_lemma_search_pipeline("ab")
+
+    assert pipeline[0]["$match"]["$or"][0]["$expr"] == (
+        word_repository_module._create_substring_expression("ab", "$lemma")
+    )
+    assert pipeline[1]["$addFields"]["lemmaLength"]["$sum"]["$map"]["input"] == "$lemma"
+    assert pipeline[-1]["$project"] == {"lemmaLength": 0}
+
+
+def test_query_by_lemma_prefix_uses_collation(database) -> None:
+    class DummyCollection:
+        def __init__(self):
+            self.pipeline: Any = None
+            self.collation: Any = None
+
+        def aggregate(self, pipeline, collation=None):
+            self.pipeline = pipeline
+            self.collation = collation
+            return [{"_id": "word"}]
+
+    repository = MongoWordRepository(database)
+    dummy_collection = DummyCollection()
+    repository_any = cast(Any, repository)
+    repository_any._collection = dummy_collection
+
+    result = repository.query_by_lemma_prefix("ab")
+
+    assert result == [{"_id": "word"}]
+    assert (
+        dummy_collection.pipeline
+        == word_repository_module._create_lemma_search_pipeline("ab")
+    )
+    assert dummy_collection.collation == {
+        "locale": "en",
+        "strength": 1,
+        "normalization": True,
+    }
