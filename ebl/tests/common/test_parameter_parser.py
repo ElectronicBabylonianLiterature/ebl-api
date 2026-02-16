@@ -6,6 +6,7 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_lines,
     parse_transliteration,
+    parse_genre,
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.errors import DataError
@@ -113,3 +114,27 @@ def test_pipeline(sign_repository):
             for line in PARAMS["transliteration"].splitlines()
         ],
     }
+
+
+@pytest.mark.parametrize(
+    "genre_input,expected_genre",
+    [
+        (["CANONICAL"], ["CANONICAL"]),
+        (["CANONICAL", "Technical"], ["CANONICAL", "Technical"]),
+        (["Non defined"], ["Non defined"]),
+        (["CANONICAL", "Non defined"], ["CANONICAL", "Non defined"]),
+        ("CANONICAL:Technical", ["CANONICAL", "Technical"]),
+        ("CANONICAL", ["CANONICAL"]),
+        ([], None),
+        ("", None),
+    ],
+)
+def test_parse_genre(genre_input, expected_genre):
+    if expected_genre is None:
+        assert parse_genre({"genre": genre_input}) == {"genre": genre_input}
+    else:
+        assert parse_genre({"genre": genre_input}) == {"genre": expected_genre}
+
+
+def test_parse_genre_missing():
+    assert parse_genre({}) == {}

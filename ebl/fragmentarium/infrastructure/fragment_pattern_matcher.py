@@ -68,9 +68,30 @@ class PatternMatcher:
         }
 
     def _filter_by_genre(self) -> Dict:
-        if genre := self._query.get("genre"):
-            return {"genres.category": {"$all": genre}}
-        return {}
+        if not (genre := self._query.get("genre")):
+            return {}
+
+        criteria = []
+        regular_genres = [g for g in genre if g != "Non defined"]
+
+        if "Non defined" in genre:
+            criteria.append({
+                "$or": [
+                    {"genres": {"$exists": False}},
+                    {"genres": {"$size": 0}}
+                ]
+            })
+
+        if regular_genres:
+            criteria.append({"genres.category": {"$in": regular_genres}})
+
+        if not criteria:
+            return {}
+
+        if len(criteria) == 1:
+            return criteria[0]
+
+        return {"$or": criteria}
 
     def _filter_by_museum(self) -> Dict:
         return {"museum": museum} if (museum := self._query.get("museum")) else {}
