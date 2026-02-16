@@ -89,6 +89,13 @@ def parse_pages(parameters: Dict) -> Dict:
 
 
 def parse_genre(parameters: Dict) -> Dict:
-    genre = parameters.get("genre", "").split(":")
-
-    return {**parameters, "genre": genre} if any(genre) else parameters
+    genre_param = parameters.get("genre", "")
+    
+    if isinstance(genre_param, list):
+        genre = genre_param
+    elif isinstance(genre_param, str) and genre_param:
+        genre = genre_param.split(":")
+    else:
+        return parameters
+    
+    return {**parameters, "genre": genre} if genre else parameters

@@ -1046,10 +1046,13 @@ def test_query_script(fragment_repository, query, expected):
         (["MONUMENTAL"], [0]),
         (["ARCHIVAL"], [2]),
         (["CANONICAL"], [1, 2]),
-        (["CANONICAL", "Technical"], [1]),
-        (["CANONICAL", "Divination"], [2]),
-        (["CANONICAL", "Divination", "Celestial"], [2]),
-        (["MONUMENTAL", "Narrative"], []),
+        (["CANONICAL", "Technical"], [1, 2]),
+        (["CANONICAL", "Divination"], [1, 2]),
+        (["CANONICAL", "Divination", "Celestial"], [1, 2]),
+        (["MONUMENTAL", "Narrative"], [0]),
+        (["Non defined"], [3]),
+        (["CANONICAL", "Non defined"], [1, 2, 3]),
+        (["Hymns"], []),
     ],
 )
 def test_query_genres(fragment_repository, query, expected):
@@ -1061,6 +1064,7 @@ def test_query_genres(fragment_repository, query, expected):
             Genre(["CANONICAL", "Divination", "Celestial"], False),
             Genre(["ARCHIVAL", "Letter"], False),
         ),
+        (),
     ]
     fragments = [
         FragmentFactory.build(
