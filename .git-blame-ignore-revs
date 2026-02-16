@@ -6,3 +6,8 @@
 # It affected 600+ files.
 # Ignoring this commit preserves blame history visibility
 2fc6fea0b561d20504736ecb5e21f1dd6b16cb95
+
+# Line ending normalization commit (2026-02-16)
+# This commit normalized 619 files from CRLF to LF per .gitattributes
+# No actual code changes, just line ending consistency
+7b57f250011c5b13883b34d1814581be22867b4c
