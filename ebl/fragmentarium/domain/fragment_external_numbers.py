@@ -17,6 +17,7 @@ class ExternalNumbers:
     pierpont_morgan_number: str = ""
     louvre_number: str = ""
     ontario_number: str = ""
+    kelsey_number: str = ""
     harvard_ham_number: str = ""
     sketchfab_number: str = ""
     ark_number: str = ""
@@ -95,6 +96,10 @@ class FragmentExternalNumbers:
     @property
     def ontario_number(self) -> str:
         return self._get_external_number("ontario_number")
+
+    @property
+    def kelsey_number(self) -> str:
+        return self._get_external_number("kelsey_number")
 
     @property
     def harvard_ham_number(self) -> str:
