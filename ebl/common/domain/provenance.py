@@ -138,7 +138,7 @@ class Provenance(ProvenanceEnum):
     TIGUNANUM = ("Tigunānum", "Tig", "Periphery", None)
     TIKRIT = ("Tikrīt", "Tikr", "Periphery", "TIK")
     TRIPOLI = ("Tripoli", "Tri", "Periphery", None)
-    TULUL_KHATAB = ("Tulūl Khaṭāb", "Tkh", "Babylonia", "TKH")
+    TULUL_KHATAB = ("Tulūl Khaṭāb", "Khat", "Babylonia", "TKH")
     TUMMAL = ("Tummal", "Tum", "Babylonia", "DLH")
     TUTUB = ("Tutub", "Ttb", "Babylonia", "TTB")
     TUTTUL = ("Tuttul", "Ttl", "Periphery", "TUT")
