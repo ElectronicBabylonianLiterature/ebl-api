@@ -150,5 +150,5 @@ class FragmentExternalNumbers:
         return self._get_external_number("philadelphia")
 
     @property
-    def seal_number(self) -> str:
+    def seal_numbers(self) -> str:
         return self._get_external_number("seal")
