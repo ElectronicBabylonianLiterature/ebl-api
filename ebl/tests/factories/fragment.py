@@ -192,6 +192,7 @@ class ExternalNumbersFactory(factory.Factory):
     pierpont_morgan_number = factory.Sequence(lambda n: f"pierpont-morgan-number-{n}")
     louvre_number = factory.Sequence(lambda n: f"louvre-number-{n}")
     ontario_number = factory.Sequence(lambda n: f"ontario-number-{n}")
+    kelsey_number = factory.Sequence(lambda n: f"kelsey-number-{n}")
     harvard_ham_number = factory.Sequence(lambda n: f"harvard-ham-number-{n}")
     sketchfab_number = factory.Sequence(lambda n: f"sketchfab-number-{n}")
     ark_number = factory.Sequence(lambda n: f"ark-number-{n}")
