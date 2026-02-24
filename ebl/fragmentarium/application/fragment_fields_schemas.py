@@ -59,6 +59,7 @@ class ExternalNumbersSchema(Schema):
     yale_peabody_number = fields.String(load_default="", data_key="yalePeabodyNumber")
     louvre_number = fields.String(load_default="", data_key="louvreNumber")
     ontario_number = fields.String(load_default="", data_key="ontarioNumber")
+    kelsey_number = fields.String(load_default="", data_key="kelseyNumber")
     harvard_ham_number = fields.String(load_default="", data_key="harvardHamNumber")
     sketchfab_number = fields.String(load_default="", data_key="sketchfabNumber")
     ark_number = fields.String(load_default="", data_key="arkNumber")

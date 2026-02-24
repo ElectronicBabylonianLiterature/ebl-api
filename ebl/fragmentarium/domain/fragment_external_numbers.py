@@ -17,6 +17,7 @@ class ExternalNumbers:
     pierpont_morgan_number: str = ""
     louvre_number: str = ""
     ontario_number: str = ""
+    kelsey_number: str = ""
     harvard_ham_number: str = ""
     sketchfab_number: str = ""
     ark_number: str = ""
@@ -82,51 +83,55 @@ class FragmentExternalNumbers:
 
     @property
     def metropolitan_number(self) -> str:
-        return self._get_external_number("metropolitan_number")
+        return self._get_external_number("metropolitan")
 
     @property
     def pierpont_morgan_number(self) -> str:
-        return self._get_external_number("pierpont_morgan_number")
+        return self._get_external_number("pierpont_morgan")
 
     @property
     def louvre_number(self) -> str:
-        return self._get_external_number("louvre_number")
+        return self._get_external_number("louvre")
 
     @property
     def ontario_number(self) -> str:
-        return self._get_external_number("ontario_number")
+        return self._get_external_number("ontario")
+
+    @property
+    def kelsey_number(self) -> str:
+        return self._get_external_number("kelsey")
 
     @property
     def harvard_ham_number(self) -> str:
-        return self._get_external_number("harvard_ham_number")
+        return self._get_external_number("harvard_ham")
 
     @property
     def sketchfab_number(self) -> str:
-        return self._get_external_number("sketchfab_number")
+        return self._get_external_number("sketchfab")
 
     @property
     def ark_number(self) -> str:
-        return self._get_external_number("ark_number")
+        return self._get_external_number("ark")
 
     @property
     def dublin_tcd_number(self) -> str:
-        return self._get_external_number("dublin_tcd_number")
+        return self._get_external_number("dublin_tcd")
 
     @property
     def cambridge_maa_number(self) -> str:
-        return self._get_external_number("cambridge_maa_number")
+        return self._get_external_number("cambridge_maa")
 
     @property
     def ashmolean_number(self) -> str:
-        return self._get_external_number("ashmolean_number")
+        return self._get_external_number("ashmolean")
 
     @property
     def alalah_hpm_number(self) -> str:
-        return self._get_external_number("alalah_hpm_number")
+        return self._get_external_number("alalah_hpm")
 
     @property
     def australianinstituteofarchaeology_number(self) -> str:
-        return self._get_external_number("australianinstituteofarchaeology_number")
+        return self._get_external_number("australianinstituteofarchaeology")
 
     @property
     def achemenet_number(self) -> str:
@@ -138,12 +143,12 @@ class FragmentExternalNumbers:
 
     @property
     def digitale_keilschrift_bibliothek_number(self) -> str:
-        return self._get_external_number("digitale_keilschrift_bibliothek_number")
+        return self._get_external_number("digitale_keilschrift_bibliothek")
 
     @property
     def philadelphia_number(self) -> str:
-        return self._get_external_number("philadelphia_number")
+        return self._get_external_number("philadelphia")
 
     @property
-    def seal_number(self) -> str:
-        return self._get_external_number("seal_number")
+    def seal_numbers(self) -> str:
+        return self._get_external_number("seal")
