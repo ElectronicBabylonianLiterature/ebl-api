@@ -1,7 +1,9 @@
 import datetime
+from unittest.mock import Mock, MagicMock
 
 import pytest
 from bson import ObjectId
+from pymongo.errors import AutoReconnect
 
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -174,3 +176,19 @@ def test_unicode_and_datetime_roundtrip(collection) -> None:
     stored = collection.find_one_by_id(insert_id)
 
     assert stored == {"_id": insert_id, "data": "šà-ḫa", "created": timestamp}
+
+
+def test_insert_one_retries_on_autoreconnect() -> None:
+    inserted_id = "ID"
+    pymongo_collection = Mock()
+    pymongo_collection.insert_one.side_effect = [
+        AutoReconnect("operation cancelled"),
+        Mock(inserted_id=inserted_id),
+    ]
+    database = MagicMock()
+    database.__getitem__.return_value = pymongo_collection
+
+    collection = MongoCollection(database, "collection")
+
+    assert collection.insert_one({"_id": inserted_id, "data": "payload"}) == inserted_id
+    assert pymongo_collection.insert_one.call_count == 2
