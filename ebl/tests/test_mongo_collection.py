@@ -192,3 +192,18 @@ def test_insert_one_retries_on_autoreconnect() -> None:
 
     assert collection.insert_one({"_id": inserted_id, "data": "payload"}) == inserted_id
     assert pymongo_collection.insert_one.call_count == 2
+
+
+def test_update_one_retries_on_autoreconnect() -> None:
+    pymongo_collection = Mock()
+    pymongo_collection.update_one.side_effect = [
+        AutoReconnect("connection pool paused"),
+        Mock(matched_count=1),
+    ]
+    database = MagicMock()
+    database.__getitem__.return_value = pymongo_collection
+
+    collection = MongoCollection(database, "collection")
+
+    collection.update_one({"_id": "ID"}, {"$set": {"data": "payload"}})
+    assert pymongo_collection.update_one.call_count == 2
