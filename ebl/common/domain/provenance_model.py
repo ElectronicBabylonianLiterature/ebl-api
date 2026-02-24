@@ -1,5 +1,5 @@
 import attr
-from typing import Optional
+from typing import Optional, Sequence
 
 
 @attr.s(frozen=True, auto_attribs=True)
@@ -33,3 +33,4 @@ class ProvenanceRecord:
     cigs_key: Optional[str] = None
     sort_key: int = -1
     coordinates: Optional[GeoCoordinate] = None
+    polygon_coordinates: Optional[Sequence[GeoCoordinate]] = None

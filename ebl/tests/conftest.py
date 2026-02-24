@@ -105,6 +105,12 @@ def mongo_client() -> MongoClient:
     if os.getenv("CI") == "true":
         return MongoClient(os.environ["MONGODB_URI"])
     else:
+        os_name = os.environ.get("PYMONGOIM__OPERATING_SYSTEM")
+        if os_name is not None:
+            os.environ["PYMONGOIM__OPERATING_SYSTEM"] = os_name.strip()
+        os_version = os.environ.get("PYMONGOIM__OS_VERSION")
+        if os_version is not None:
+            os.environ["PYMONGOIM__OS_VERSION"] = os_version.strip()
         os.environ.setdefault("PYMONGOIM__OPERATING_SYSTEM", "ubuntu")
         os.environ.setdefault("PYMONGOIM__OS_VERSION", "20")
 

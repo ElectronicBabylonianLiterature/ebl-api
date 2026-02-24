@@ -29,6 +29,12 @@ class ProvenanceRecordSchema(Schema):
     cigs_key = fields.String(allow_none=True, data_key="cigsKey")
     sort_key = fields.Integer(load_default=-1, data_key="sortKey")
     coordinates = fields.Nested(GeoCoordinateSchema, allow_none=True)
+    polygon_coordinates = fields.Nested(
+        GeoCoordinateSchema,
+        allow_none=True,
+        many=True,
+        data_key="polygonCoordinates",
+    )
 
     @post_load
     def make_provenance_record(self, data, **kwargs) -> ProvenanceRecord:

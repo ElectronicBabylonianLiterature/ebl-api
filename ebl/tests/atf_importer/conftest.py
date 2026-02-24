@@ -11,7 +11,15 @@ from ebl.transliteration.domain.text import TextLine
 from ebl.tests.atf_importer.test_data.database_setup import populate_database_for_tests
 
 
+def _normalize_env_var(name: str) -> None:
+    value = os.environ.get(name)
+    if value is not None:
+        os.environ[name] = value.strip()
+
+
 def pytest_configure(config):
+    _normalize_env_var("PYMONGOIM__OPERATING_SYSTEM")
+    _normalize_env_var("PYMONGOIM__OS_VERSION")
     temp_db_name = f"ebltest_{uuid.uuid4().hex[:8]}"
     production_dbs = ["ebl", "ebldev"]
 

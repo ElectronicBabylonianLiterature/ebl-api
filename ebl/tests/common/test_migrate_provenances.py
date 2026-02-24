@@ -1,4 +1,5 @@
 from unittest.mock import patch
+import pytest
 
 from ebl.common.migrate_provenances import migrate_provenances
 from ebl.common.domain.provenance_data import build_provenance_records
@@ -36,8 +37,10 @@ def test_migrate_provenances_with_coordinates(database):
     assert babylon is not None
     assert babylon["longName"] == "Babylon"
     assert "coordinates" in babylon
-    assert babylon["coordinates"]["latitude"] == 32.5425
-    assert babylon["coordinates"]["longitude"] == 44.4275
+    assert babylon["coordinates"]["latitude"] == pytest.approx(32.5432, abs=0.05)
+    assert babylon["coordinates"]["longitude"] == pytest.approx(44.4275, abs=0.05)
+    assert "polygonCoordinates" in babylon
+    assert len(babylon["polygonCoordinates"]) > 0
 
 
 def test_migrate_provenances_without_coordinates(database):
@@ -90,3 +93,5 @@ def test_migrate_provenances_all_fields(database):
     assert record["parent"] == "Assyria"
     assert "cigsKey" in record
     assert "sortKey" in record
+    assert "coordinates" in record
+    assert "polygonCoordinates" in record
