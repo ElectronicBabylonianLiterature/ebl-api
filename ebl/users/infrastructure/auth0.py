@@ -35,8 +35,22 @@ class Auth0User(User):
         self, prefix: Optional[str] = "", suffix: Optional[str] = ""
     ) -> List[Scope]:
         scopes = []
+        access_token_scope = self._access_token.get("scope")
+        access_token_permissions = self._access_token.get("permissions")
+        scope_tokens = (
+            access_token_scope.split() if isinstance(access_token_scope, str) else []
+        )
+        permission_tokens = (
+            [
+                permission
+                for permission in access_token_permissions
+                if isinstance(permission, str)
+            ]
+            if isinstance(access_token_permissions, (list, tuple))
+            else []
+        )
 
-        for scope in self._access_token["scope"].split():
+        for scope in dict.fromkeys(scope_tokens + permission_tokens):
             if scope.startswith(prefix) and scope.endswith(suffix):
                 try:
                     scopes.append(Scope.from_string(scope))

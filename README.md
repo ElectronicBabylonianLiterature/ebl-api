@@ -60,7 +60,7 @@ poetry install --no-root --with dev
 
 ### Auth0
 
-An *API* and *Application* have to be setup in Auth0 and it the API needs to have the *Scopes* listed below.
+An *API* and *Application* have to be setup in Auth0 and the API needs to have the *Scopes* listed below.
 
 API *Identifier*, Application *Domain* (or the customdomain if one is used), and Application *Signing Certificate*
 are needed for the environment variables (see below). The whole certificate needs (everything in the field or the downloaded PEM file)
@@ -99,10 +99,23 @@ Fragments have additional scopes in the following format:
 
 `read:<Fragment group>-fragments`
 
-#### Rules
+#### Access token authorization claims
 
-"Add permissions to the user object" must bet set in Authorization Extension and the rule published.
-The following rules should be added to the *Auth Pipeleine*.
+The backend authorization layer accepts permissions from either claim in the access token:
+
+- `scope` (space-separated string)
+- `permissions` (array of scope strings)
+
+Both sources are merged and unknown values are ignored.
+
+#### Rules / Actions
+
+Rules/Actions that add custom profile fields (for example `eblName`) are still supported.
+
+Rules/Actions that copy permissions into the `scope` claim are no longer required for backend authorization,
+because the backend reads `permissions` directly.
+
+The following legacy Rule examples are kept for reference.
 
 eBL name:
 
@@ -114,7 +127,7 @@ function (user, context, callback) {
 }
 ```
 
-Access token scopes (must be after the Authorization Extension's rule):
+Access token scopes (legacy compatibility example):
 
 ```javascript
 function (user, context, callback) {
