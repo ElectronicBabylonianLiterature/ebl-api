@@ -117,3 +117,76 @@ def test_get_scopes():
         create_default_profile,
     )
     assert user.get_scopes() == [Scope.READ_BIBLIOGRAPHY, Scope.WRITE_TEXTS]
+
+
+def test_permissions_only_has_scope():
+    user = Auth0User(
+        {
+            "scope": "openid profile offline_access",
+            "permissions": ["transliterate:fragments"],
+        },
+        create_default_profile,
+    )
+
+    assert user.has_scope(Scope.TRANSLITERATE_FRAGMENTS) is True
+
+
+def test_get_scopes_merges_and_deduplicates_scope_and_permissions():
+    user = Auth0User(
+        {
+            "scope": "write:texts transliterate:fragments",
+            "permissions": ["transliterate:fragments", "lemmatize:fragments"],
+        },
+        create_default_profile,
+    )
+
+    assert user.get_scopes() == [
+        Scope.WRITE_TEXTS,
+        Scope.TRANSLITERATE_FRAGMENTS,
+        Scope.LEMMATIZE_FRAGMENTS,
+    ]
+
+
+def test_get_scopes_filters_permissions_by_prefix_and_suffix():
+    user = Auth0User(
+        {
+            "permissions": [
+                "read:CAIC-fragments",
+                "read:WGL-folios",
+                "transliterate:fragments",
+            ]
+        },
+        create_default_profile,
+    )
+
+    assert user.get_scopes(prefix="read:", suffix="-fragments") == [
+        Scope.READ_CAIC_FRAGMENTS
+    ]
+
+
+def test_get_scopes_ignores_unknown_and_invalid_permissions_values():
+    user = Auth0User(
+        {
+            "scope": "write:texts",
+            "permissions": [
+                "unknown_scope_that_should_be_skipped",
+                "annotate:fragments",
+                1,
+                None,
+            ],
+        },
+        create_default_profile,
+    )
+
+    assert user.get_scopes() == [Scope.WRITE_TEXTS, Scope.ANNOTATE_FRAGMENTS]
+
+
+def test_get_scopes_without_scope_claim_uses_permissions_only():
+    user = Auth0User(
+        {
+            "permissions": ["transliterate:fragments"],
+        },
+        create_default_profile,
+    )
+
+    assert user.get_scopes() == [Scope.TRANSLITERATE_FRAGMENTS]
