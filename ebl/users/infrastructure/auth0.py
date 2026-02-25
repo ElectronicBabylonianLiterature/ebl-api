@@ -37,9 +37,15 @@ class Auth0User(User):
         scopes = []
         access_token_scope = self._access_token.get("scope")
         access_token_permissions = self._access_token.get("permissions")
-        scope_tokens = access_token_scope.split() if isinstance(access_token_scope, str) else []
+        scope_tokens = (
+            access_token_scope.split() if isinstance(access_token_scope, str) else []
+        )
         permission_tokens = (
-            [permission for permission in access_token_permissions if isinstance(permission, str)]
+            [
+                permission
+                for permission in access_token_permissions
+                if isinstance(permission, str)
+            ]
             if isinstance(access_token_permissions, (list, tuple))
             else []
         )
