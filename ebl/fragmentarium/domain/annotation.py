@@ -44,6 +44,7 @@ class AnnotationData:
     path: Sequence[int]
     sign_name: str
 
+
 @attr.attrs(auto_attribs=True, frozen=True)
 class PcaClustering:
     cluster_id: str
@@ -52,6 +53,7 @@ class PcaClustering:
     is_centroid: bool
     cluster_size: int
     is_main: bool
+
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class Annotation:

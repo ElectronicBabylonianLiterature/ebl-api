@@ -75,6 +75,7 @@ class AnnotationSchema(Schema):
     def filter_none(self, data, **kwargs):
         return pydash.omit_by(data, pydash.is_none)
 
+
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
     provenance = fields.String(required=False, load_default=None)
