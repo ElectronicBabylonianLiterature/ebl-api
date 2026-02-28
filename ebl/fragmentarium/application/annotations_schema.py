@@ -8,6 +8,7 @@ from ebl.fragmentarium.domain.annotation import (
     Annotation,
     Annotations,
     AnnotationValueType,
+    PcaClustering,
 )
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -39,11 +40,31 @@ class AnnotationDataSchema(Schema):
         return AnnotationData(**data)
 
 
+class PcaClusteringSchema(Schema):
+    cluster_id = fields.String(required=True, data_key="clusterId")
+    cluster_rank = fields.Integer(required=True, data_key="clusterRank")
+    form = fields.String(required=True)
+    is_centroid = fields.Boolean(required=True, data_key="isCentroid")
+    cluster_size = fields.Integer(required=True, data_key="clusterSize")
+    is_main = fields.Boolean(required=True, data_key="isMain")
+
+    @post_load
+    def make_pca_clustering(self, data, **kwargs):
+        return PcaClustering(**data)
+
+    @post_dump
+    def filter_none(self, data, **kwargs):
+        return pydash.omit_by(data, pydash.is_none)
+
+
 class AnnotationSchema(Schema):
     geometry = fields.Nested(GeometrySchema(), required=True)
     data = fields.Nested(AnnotationDataSchema(), required=True)
     cropped_sign = fields.Nested(
         CroppedSignSchema(), load_default=None, data_key="croppedSign"
+    )
+    pca_clustering = fields.Nested(
+        PcaClusteringSchema(), load_default=None, data_key="pcaClustering"
     )
 
     @post_load
@@ -53,7 +74,6 @@ class AnnotationSchema(Schema):
     @post_dump
     def filter_none(self, data, **kwargs):
         return pydash.omit_by(data, pydash.is_none)
-
 
 class AnnotationsSchema(Schema):
     fragment_number = fields.String(required=True, data_key="fragmentNumber")
