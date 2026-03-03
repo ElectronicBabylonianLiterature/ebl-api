@@ -2,7 +2,7 @@ import uuid
 from typing import NewType
 
 import attr
-from marshmallow import Schema, fields, post_load, post_dump
+from marshmallow import Schema, fields, post_load
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
@@ -33,13 +33,6 @@ class CroppedSignImageSchema(Schema):
             fragment_number=MuseumNumber.of(data["fragment_number"]),
         )
 
-    @post_dump
-    def cropped_sign_image_dump(self, data, **kwargs):
-        return {
-            "_id": data["image_id"],
-            "image": data["image"],
-            "fragment_number": str(data["fragment_number"]),
-        }
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
