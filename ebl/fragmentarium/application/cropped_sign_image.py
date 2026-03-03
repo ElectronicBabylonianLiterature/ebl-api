@@ -34,7 +34,6 @@ class CroppedSignImageSchema(Schema):
         )
 
 
-
 @attr.attrs(auto_attribs=True, frozen=True)
 class CroppedSign:
     image_id: str
