@@ -25,8 +25,11 @@ Provide project context and coding guidelines that AI should follow when generat
 ## Testing and Quality
 
 - Add / update tests for any new functionality or significant changes.
-- When writing tests, ensure they are isolated and do not depend on external state (pytest conventions).
+- When writing tests, ensure they are isolated and do not depend on external state (Jest + React Testing Library conventions).
 - Ensure that coverage is 100% after changes in affected code.
+- Never remove, disable, skip, or comment out existing tests without explicit user confirmation.
+- Only propose removing a test when the underlying code path was removed or changed such that the assertion is no longer meaningful.
+- If test removal is proposed, provide detailed justification first and wait for explicit user approval before making that change.
 
 ## Task Tracking and Cleanup
 

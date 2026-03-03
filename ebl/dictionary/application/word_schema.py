@@ -126,6 +126,7 @@ class WordSchema(Schema):
             data["origin"] = [origin.value]
         return data
 
+
 class ProperNounCreationRequestSchema(Schema):
     lemma = fields.String(required=True, validate=Length(min=1))
     pos = fields.List(fields.String(), load_default=[])

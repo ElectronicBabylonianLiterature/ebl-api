@@ -8,7 +8,6 @@ from ebl.dictionary.web.words import (
     WordsListResource,
     ProperNounCreationResource,
 )
-from ebl.dictionary.web.words import WordsResource, WordsListResource
 
 
 def create_dictionary_routes(api: falcon.App, context: Context):
