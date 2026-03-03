@@ -21,14 +21,16 @@ class CroppedSignImage:
 
 
 class CroppedSignImageSchema(Schema):
-    image_id = fields.Str(required=True, data_key= "_id")
+    image_id = fields.Str(required=True, data_key="_id")
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
 
     @post_load
-    def load(self, data, **kwargs):
+    def make_cropped_sign_image(self, data, **kwargs):
         return CroppedSignImage(
-            data["_id"], data["image"], MuseumNumber.of(data["fragment_number"])
+            image_id=data["image_id"],
+            image=data["image"],
+            fragment_number=MuseumNumber.of(data["fragment_number"]),
         )
 
     @post_dump
