@@ -4,6 +4,7 @@ from ebl.dictionary.application.word_schema import (
     WordSchema,
     ProperNounCreationRequestSchema,
 )
+from ebl.dictionary.application.word_schema import WordSchema
 from ebl.marshmallowschema import validate
 from ebl.users.web.require_scope import require_scope
 

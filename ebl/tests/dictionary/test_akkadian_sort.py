@@ -2,6 +2,7 @@ from ebl.dictionary.infrastructure.akkadian_sort import (
     akkadian_sort_key,
     _split_prefix_and_roman,
 )
+from ebl.dictionary.infrastructure.akkadian_sort import akkadian_sort_key
 
 
 def test_akkadian_sort_orders_words_with_roman_suffixes():
@@ -46,7 +47,6 @@ def test_akkadian_sort_orders_words_with_roman_suffixes():
         "šarru I",
         "zāru I",
     ]
-
     assert sorted(test_words, key=akkadian_sort_key) == expected
 
 

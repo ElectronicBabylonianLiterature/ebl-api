@@ -9,6 +9,7 @@ class Stage(NamedEnum):
     FARA = ("Fara", "Fara")
     PRESARGONIC = ("Presargonic", "PSarg")
     SARGONIC = ("Sargonic", "Sarg")
+    LAGASH_II = ("Lagash II", "Lag2")
     UR_III = ("Ur III", "Ur3")
     OLD_ASSYRIAN = ("Old Assyrian", "OA")
     OLD_BABYLONIAN = ("Old Babylonian", "OB")

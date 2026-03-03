@@ -115,7 +115,8 @@ def _create_query_by_vowel_class(vowel_classes: list[tuple[str, ...]]) -> dict:
     for cls in vowel_classes:
         vals = list(cls)
         conditions.append({"amplifiedMeanings.vowels.value": {"$eq": vals}})
-        conditions.append({"amplifiedMeanings.entries.vowels.value": {"$eq": vals}})
+        conditions.append(
+            {"amplifiedMeanings.entries.vowels.value": {"$eq": vals}})
     return {"$or": conditions} if conditions else {}
 
 
@@ -182,7 +183,8 @@ class MongoWordRepository(WordRepository):
                     "$match": {
                         "$and": [
                             (
-                                _create_query_by_lemma(word.value, word.use_collations)
+                                _create_query_by_lemma(
+                                    word.value, word.use_collations)
                                 if word
                                 else {}
                             ),
@@ -194,7 +196,8 @@ class MongoWordRepository(WordRepository):
                                 else {}
                             ),
                             (
-                                _create_query_by_root(root.value, root.use_collations)
+                                _create_query_by_root(
+                                    root.value, root.use_collations)
                                 if root
                                 else {}
                             ),

@@ -1,11 +1,12 @@
 import pydash
 import pytest
 import copy
-
 from typing import Dict, Any, cast
 from ebl.errors import NotFoundError
 from ebl.dictionary.infrastructure import word_repository as word_repository_module
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
+from typing import Dict, Any
+from ebl.errors import NotFoundError
 
 COLLECTION = "words"
 
@@ -141,7 +142,8 @@ def test_search_finds_by_vowel_class(database, word_repository, word):
     )
     another_word["amplifiedMeanings"][0]["vowels"][0]["value"] = ["e", "u"]
     database[COLLECTION].insert_many([word, another_word])
-    query = {"vowelClass": ",".join(word["amplifiedMeanings"][0]["vowels"][0]["value"])}
+    query = {"vowelClass": ",".join(
+        word["amplifiedMeanings"][0]["vowels"][0]["value"])}
 
     assert word_repository.query_by_lemma_meaning_root_vowels(
         **_make_query_params(query)
@@ -149,7 +151,8 @@ def test_search_finds_by_vowel_class(database, word_repository, word):
 
 
 def test_search_finds_by_all_params(database, word_repository, word):
-    another_word = copy.deepcopy({**word, "_id": "part1 part2 II", "homonym": "II"})
+    another_word = copy.deepcopy(
+        {**word, "_id": "part1 part2 II", "homonym": "II"})
     another_word["roots"][0] = "lmm"
     database[COLLECTION].insert_many([word, another_word])
     query = {
@@ -179,7 +182,8 @@ def test_search_finds_duplicates(database, word_repository, word):
 def test_search_not_found(word_repository):
     query = {"word": "lemma"}
     assert (
-        word_repository.query_by_lemma_meaning_root_vowels(**_make_query_params(query))
+        word_repository.query_by_lemma_meaning_root_vowels(
+            **_make_query_params(query))
         == []
     )
 
@@ -216,7 +220,8 @@ def test_search_filters_by_multiple_origins_in_single_word(
         **params, origin=["EBL"]
     ) == [word_with_multiple_origins]
     assert (
-        word_repository.query_by_lemma_meaning_root_vowels(**params, origin=["SAD"])
+        word_repository.query_by_lemma_meaning_root_vowels(
+            **params, origin=["SAD"])
         == []
     )
 
@@ -232,7 +237,8 @@ def test_update(word_repository, word):
 
 
 def test_create_substring_expression_structure() -> None:
-    expression = word_repository_module._create_substring_expression("ab", "$lemma")
+    expression = word_repository_module._create_substring_expression(
+        "ab", "$lemma")
 
     assert expression["$eq"][1] == "ab"
     assert expression["$eq"][0]["$substrCP"][2] == 2
