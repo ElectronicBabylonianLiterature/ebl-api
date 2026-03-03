@@ -9,6 +9,12 @@ Provide project context and coding guidelines that AI should follow when generat
 - This is a backend Python API project. Use backend-appropriate patterns, architecture, and tooling.
 - Do not make any changes to the codebase unless explicitly requested.
 
+## API Contract Authority
+
+- The backend API schema is the source of truth for request and response field names.
+- When a client/backend field naming mismatch exists, align the client to the backend schema by default.
+- Do not introduce backend aliases for alternate client field names unless explicitly requested as a backward-compatibility requirement.
+
 ## Coding Standards
 
 - Follow the existing coding style and conventions used in the project.
@@ -25,7 +31,7 @@ Provide project context and coding guidelines that AI should follow when generat
 ## Testing and Quality
 
 - Add / update tests for any new functionality or significant changes.
-- When writing tests, ensure they are isolated and do not depend on external state (Jest + React Testing Library conventions).
+- When writing tests, ensure they are isolated and do not depend on external state (pytest conventions).
 - Ensure that coverage is 100% after changes in affected code.
 - Never remove, disable, skip, or comment out existing tests without explicit user confirmation.
 - Only propose removing a test when the underlying code path was removed or changed such that the assertion is no longer meaningful.

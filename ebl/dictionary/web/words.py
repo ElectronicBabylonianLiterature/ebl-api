@@ -38,8 +38,9 @@ class ProperNounCreationResource:
     @falcon.before(require_scope, "create:proper_nouns")
     @validate(ProperNounCreationRequestSchema())
     def on_post(self, req, resp):
-        lemma = req.media["lemma"]
-        pos_tags = req.media.get("pos", [])
+        request_data = ProperNounCreationRequestSchema().load(req.media)
+        lemma = request_data["lemma"]
+        pos_tags = request_data["pos"]
         word_id = self._dictionary.create_proper_noun(lemma, pos_tags)
         word = self._dictionary.find(word_id)
         resp.media = word
