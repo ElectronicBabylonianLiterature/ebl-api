@@ -21,7 +21,7 @@ class CroppedSignImage:
 
 
 class CroppedSignImageSchema(Schema):
-    image_id = fields.Str(required=True)
+    image_id = fields.Str(required=True data_key= "_id")
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
 
