@@ -1,6 +1,5 @@
 import uuid
-from typing import NewType, Optional
-
+from typing import NewType
 
 import attr
 from marshmallow import Schema, fields, post_load, post_dump
@@ -15,12 +14,6 @@ class CroppedSignImage:
     image_id: str
     image: Base64
     fragment_number: MuseumNumber
-    sign: Optional[str] = None
-    period: Optional[str] = None
-    form: Optional[str] = None
-    is_centroid: Optional[bool] = None
-    cluster_size: Optional[int] = None
-    is_main: Optional[bool] = None
 
     @classmethod
     def create(cls, image: Base64, fragment_number: MuseumNumber) -> "CroppedSignImage":
@@ -28,44 +21,22 @@ class CroppedSignImage:
 
 
 class CroppedSignImageSchema(Schema):
-    image_id = fields.Str(required=True, data_key="_id")
+    image_id = fields.Str(required=True)
     image = fields.Str(required=True)
     fragment_number = fields.Str(required=True)
-    sign = fields.Str(required=False, allow_none=True)
-    period = fields.Str(required=False, allow_none=True)
-    form = fields.Str(required=False, allow_none=True)
-    is_centroid = fields.Boolean(required=False, allow_none=True, data_key="isCentroid")
-    cluster_size = fields.Integer(
-        required=False, allow_none=True, data_key="clusterSize"
-    )
-    is_main = fields.Boolean(required=False, allow_none=True, data_key="isMain")
 
     @post_load
-    def make_cropped_sign_image(self, data, **kwargs):
+    def load(self, data, **kwargs):
         return CroppedSignImage(
-            image_id=data["image_id"],
-            image=data["image"],
-            fragment_number=MuseumNumber.of(data["fragment_number"]),
-            sign=data.get("sign"),
-            period=data.get("period"),
-            form=data.get("form"),
-            is_centroid=data.get("is_centroid"),
-            cluster_size=data.get("cluster_size"),
-            is_main=data.get("is_main"),
+            data["_id"], data["image"], MuseumNumber.of(data["fragment_number"])
         )
 
-    @post_dump(pass_original=True)
-    def cropped_sign_image_dump(self, data, original, **kwargs):
-        optional_keys = [
-            "sign",
-            "period",
-            "form",
-            "isCentroid",
-            "clusterSize",
-            "isMain",
-        ]
+    @post_dump
+    def cropped_sign_image_dump(self, data, **kwargs):
         return {
-            k: v for k, v in data.items() if k not in optional_keys or v is not None
+            "_id": data["image_id"],
+            "image": data["image"],
+            "fragment_number": str(data["fragment_number"]),
         }
 
 
