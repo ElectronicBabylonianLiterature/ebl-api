@@ -35,6 +35,23 @@ class ProperNounCreationResource:
     def __init__(self, dictionary):
         self._dictionary = dictionary
 
+    @staticmethod
+    def _is_valid_created_word_payload(word: object) -> bool:
+        if not isinstance(word, dict):
+            return False
+
+        lemma = word.get("lemma")
+        pos = word.get("pos")
+        word_id = word.get("_id")
+
+        return (
+            isinstance(word_id, str)
+            and isinstance(lemma, list)
+            and all(isinstance(lemma_item, str) for lemma_item in lemma)
+            and isinstance(pos, list)
+            and all(isinstance(pos_item, str) for pos_item in pos)
+        )
+
     @falcon.before(require_scope, "create:proper_nouns")
     @validate(ProperNounCreationRequestSchema())
     def on_post(self, req, resp):
@@ -42,6 +59,14 @@ class ProperNounCreationResource:
         lemma = request_data["lemma"]
         pos_tags = request_data["pos"]
         word_id = self._dictionary.create_proper_noun(lemma, pos_tags)
+        if not isinstance(word_id, str) or not word_id:
+            raise falcon.HTTPInternalServerError(
+                description="Proper noun creation failed to return a valid word id."
+            )
         word = self._dictionary.find(word_id)
+        if not self._is_valid_created_word_payload(word):
+            raise falcon.HTTPInternalServerError(
+                description="Created proper noun could not be retrieved as a valid word."
+            )
         resp.media = word
         resp.status = falcon.HTTP_CREATED

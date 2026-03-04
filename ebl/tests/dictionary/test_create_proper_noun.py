@@ -8,6 +8,7 @@ from falcon_auth import JWTAuthBackend, NoneAuthBackend
 from marshmallow import ValidationError
 
 import ebl.app
+from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.dictionary.application.word_schema import ProperNounCreationRequestSchema
 from ebl.users.infrastructure.auth0 import Auth0User
 
@@ -429,3 +430,47 @@ class TestProperNounCreationEndpoint:
         )
 
         assert result.json["lemma"] == ["MaRdUk"]
+
+    def test_create_proper_noun_success_payload_has_required_shape(
+        self, create_proper_noun_client
+    ) -> None:
+        body = json.dumps({"lemma": "Adad", "pos": ["DN"]})
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.status == falcon.HTTP_CREATED
+        assert result.json is not None
+        assert isinstance(result.json["_id"], str)
+        assert isinstance(result.json["lemma"], list)
+        assert all(isinstance(lemma, str) for lemma in result.json["lemma"])
+        assert isinstance(result.json["pos"], list)
+        assert all(isinstance(pos_tag, str) for pos_tag in result.json["pos"])
+
+    def test_create_proper_noun_returns_500_when_created_word_not_found(
+        self, create_proper_noun_client, monkeypatch
+    ) -> None:
+        monkeypatch.setattr(Dictionary, "find", lambda _self, _word_id: None)
+        body = json.dumps({"lemma": "Dagan", "pos": ["DN"]})
+
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.status == falcon.HTTP_INTERNAL_SERVER_ERROR
+
+    def test_create_proper_noun_returns_500_when_create_returns_invalid_id(
+        self, create_proper_noun_client, monkeypatch
+    ) -> None:
+        monkeypatch.setattr(
+            Dictionary,
+            "create_proper_noun",
+            lambda _self, _lemma, _pos_tags: None,
+        )
+        body = json.dumps({"lemma": "Ea", "pos": ["DN"]})
+
+        result = create_proper_noun_client.simulate_post(
+            "/words/create-proper-noun", body=body
+        )
+
+        assert result.status == falcon.HTTP_INTERNAL_SERVER_ERROR
