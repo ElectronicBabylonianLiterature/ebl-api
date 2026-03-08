@@ -5,7 +5,7 @@ from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 
 def sample_annotation_with_pca():
     return {
-        "fragmentNumber": "A123",
+        "fragmentNumber": "K.123",
         "annotations": [
             {
                 "geometry": {"x": 0, "y": 0, "width": 10, "height": 10},
@@ -25,7 +25,7 @@ def sample_annotation_with_pca():
 
 def sample_annotation_without_pca():
     return {
-        "fragmentNumber": "A123",
+        "fragmentNumber": "K.123",
         "annotations": [
             {
                 "geometry": {"x": 0, "y": 0, "width": 10, "height": 10},
