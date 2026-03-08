@@ -45,14 +45,17 @@ def test_save_load_cycle_with_pca(schema):
     annotation = sample_annotation_with_pca()
     dumped = schema.dump(annotation)
     loaded = schema.load(dumped)
-    assert loaded["pcaClustering"] == annotation["pcaClustering"]
+    assert (
+        loaded["annotations"][0]["pcaClustering"]
+        == annotation["annotations"][0]["pcaClustering"]
+    )
 
 
 def test_omit_pca_when_none(schema):
     annotation = sample_annotation_without_pca()
     dumped = schema.dump(annotation)
     loaded = schema.load(dumped)
-    assert loaded.get("pcaClustering") is None
+    assert loaded["annotations"][0].get("pcaClustering") is None
 
 
 @pytest.mark.parametrize(
@@ -64,7 +67,8 @@ def test_omit_pca_when_none(schema):
     ],
 )
 def test_malformed_pcaClustering(schema, malformed_payload):
-    annotation = {"annotationId": "1234", "pcaClustering": malformed_payload}
+    annotation = sample_annotation_with_pca()
+    annotation["annotations"][0]["pcaClustering"] = malformed_payload
     with pytest.raises(ValidationError):
         schema.load(annotation)
 
@@ -72,10 +76,12 @@ def test_malformed_pcaClustering(schema, malformed_payload):
 def test_complete_pca_required(schema):
     annotation = sample_annotation_with_pca()
     loaded = schema.load(annotation)
-    assert loaded["pcaClustering"]["clusterId"] == "abcd-1234"
-    incomplete = annotation.copy()
-    incomplete["pcaClustering"] = {
-        k: v for k, v in annotation["pcaClustering"].items() if k != "clusterSize"
-    }
+    assert (
+        loaded["annotations"][0]["pcaClustering"]["clusterId"]
+        == "abcd-1234"
+    )
+
+    incomplete = sample_annotation_with_pca()
+    del incomplete["annotations"][0]["pcaClustering"]["clusterSize"]
     with pytest.raises(ValidationError):
         schema.load(incomplete)
