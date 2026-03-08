@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, post_dump, ValidationError
+from marshmallow import Schema, fields, post_load, post_dump
 import pydash
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
