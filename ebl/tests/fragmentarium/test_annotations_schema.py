@@ -1,4 +1,7 @@
-from ebl.fragmentarium.application.annotations_schema import AnnotationsWithScriptSchema, AnnotationsSchema
+from ebl.fragmentarium.application.annotations_schema import (
+    AnnotationsWithScriptSchema,
+    AnnotationsSchema,
+)
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSign
 from ebl.fragmentarium.application.fragment_schema import ScriptSchema
 from ebl.fragmentarium.domain.annotation import (
@@ -12,8 +15,6 @@ from ebl.tests.factories.fragment import ScriptFactory
 from ebl.transliteration.domain.museum_number import MuseumNumber
 import pytest
 from marshmallow import ValidationError
-
-
 
 
 HEIGHT = 34.5
@@ -70,6 +71,7 @@ def test_load():
 
 def test_dump():
     assert AnnotationsWithScriptSchema().dump(ANNOTATIONS) == SERIALIZED
+
 
 def sample_annotation_with_pca():
     return {
