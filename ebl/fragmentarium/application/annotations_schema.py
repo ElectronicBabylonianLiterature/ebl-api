@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, post_dump
+from marshmallow import Schema, fields, post_load, post_dump, ValidationError
 import pydash
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignSchema
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
@@ -44,9 +44,9 @@ class PcaClusteringSchema(Schema):
     cluster_id = fields.String(required=True, data_key="clusterId")
     cluster_rank = fields.Integer(required=True, data_key="clusterRank")
     form = fields.String(required=True)
-    is_centroid = fields.Boolean(required=True, data_key="isCentroid")
+    is_centroid = fields.Boolean(required=True, data_key="isCentroid", truthy={True, False})
     cluster_size = fields.Integer(required=True, data_key="clusterSize")
-    is_main = fields.Boolean(required=True, data_key="isMain")
+    is_main = fields.Boolean(required=True, data_key="isMain", truthy={True, False})
 
     @post_load
     def make_pca_clustering(self, data, **kwargs):
