@@ -44,13 +44,9 @@ class PcaClusteringSchema(Schema):
     cluster_id = fields.String(required=True, data_key="clusterId")
     cluster_rank = fields.Integer(required=True, data_key="clusterRank")
     form = fields.String(required=True)
-    is_centroid = fields.Boolean(
-        required=True, data_key="isCentroid", truthy={True, False}, missing=False
-    )
+    is_centroid = fields.Boolean(required=True, data_key="isCentroid")
     cluster_size = fields.Integer(required=True, data_key="clusterSize")
-    is_main = fields.Boolean(
-        required=True, data_key="isMain", truthy={True, False}, missing=False
-    )
+    is_main = fields.Boolean(required=True, data_key="isMain")
 
     @post_load
     def make_pca_clustering(self, data, **kwargs):
