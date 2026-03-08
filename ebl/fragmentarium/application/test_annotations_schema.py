@@ -55,7 +55,9 @@ def test_pca_clustering_omitted_when_none(base_annotation_data):
         ("isMain", "yes"),
     ],
 )
-def test_invalid_pca_clustering_fields_raise_validation_error(base_annotation_data, invalid_field, invalid_value):
+def test_invalid_pca_clustering_fields_raise_validation_error(
+    base_annotation_data, invalid_field, invalid_value
+):
     schema = AnnotationSchema()
     invalid_data = base_annotation_data.copy()
     invalid_data["pcaClustering"] = invalid_data["pcaClustering"].copy()
