@@ -1,11 +1,6 @@
 import pytest
 from marshmallow import ValidationError
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
-from ebl.fragmentarium.domain.annotation import (
-    PcaClustering,
-    Annotation,
-    AnnotationData,
-)
 
 
 def sample_annotation_with_pca():
