@@ -76,10 +76,7 @@ def test_malformed_pcaClustering(schema, malformed_payload):
 def test_complete_pca_required(schema):
     annotation = sample_annotation_with_pca()
     loaded = schema.load(annotation)
-    assert (
-        loaded["annotations"][0]["pcaClustering"]["clusterId"]
-        == "abcd-1234"
-    )
+    assert loaded["annotations"][0]["pcaClustering"]["clusterId"] == "abcd-1234"
 
     incomplete = sample_annotation_with_pca()
     del incomplete["annotations"][0]["pcaClustering"]["clusterSize"]
