@@ -5,19 +5,35 @@ from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
 
 def sample_annotation_with_pca():
     return {
-        "annotationId": "1234",
-        "pcaClustering": {
-            "clusterId": "abcd-1234",
-            "clusterRank": 0,
-            "form": "canonical1",
-            "isCentroid": True,
-            "clusterSize": 10,
-        },
+        "fragmentNumber": "A123",
+        "annotations": [
+            {
+                "geometry": {"x": 0, "y": 0, "width": 10, "height": 10},
+                "data": {"id": "d1", "value": "X", "path": [1, 2, 3]},
+                "pcaClustering": {
+                    "clusterId": "abcd-1234",
+                    "clusterRank": 0,
+                    "form": "canonical1",
+                    "isCentroid": True,
+                    "clusterSize": 10,
+                    "isMain": True,
+                },
+            }
+        ],
     }
 
 
 def sample_annotation_without_pca():
-    return {"annotationId": "1234", "pcaClustering": None}
+    return {
+        "fragmentNumber": "A123",
+        "annotations": [
+            {
+                "geometry": {"x": 0, "y": 0, "width": 10, "height": 10},
+                "data": {"id": "d1", "value": "X", "path": [1, 2, 3]},
+                "pcaClustering": None,
+            }
+        ],
+    }
 
 
 @pytest.fixture
