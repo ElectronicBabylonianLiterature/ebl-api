@@ -1,7 +1,11 @@
 import pytest
 from marshmallow import ValidationError
 from ebl.fragmentarium.application.annotations_schema import AnnotationsSchema
-from ebl.fragmentarium.domain.annotation import PcaClustering, Annotation, AnnotationData
+from ebl.fragmentarium.domain.annotation import (
+    PcaClustering,
+    Annotation,
+    AnnotationData,
+)
 
 
 def sample_annotation_with_pca():
@@ -60,9 +64,7 @@ def test_complete_pca_required(schema):
     assert loaded["pcaClustering"]["clusterId"] == "abcd-1234"
     incomplete = annotation.copy()
     incomplete["pcaClustering"] = {
-        k: v
-        for k, v in annotation["pcaClustering"].items()
-        if k != "clusterSize"
+        k: v for k, v in annotation["pcaClustering"].items() if k != "clusterSize"
     }
     with pytest.raises(ValidationError):
         schema.load(incomplete)
