@@ -46,6 +46,7 @@ def test_save_load_cycle_with_pca(schema):
     loaded = schema.load(annotation)
     pca = loaded.annotations[0].pca_clustering
     expected = annotation["annotations"][0]["pcaClustering"]
+
     assert pca.cluster_id == expected["clusterId"]
     assert pca.cluster_rank == expected["clusterRank"]
     assert pca.form == expected["form"]
