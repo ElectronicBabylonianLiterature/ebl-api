@@ -20,27 +20,31 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 ### Prerequisites
 
 **Cloud Development**
+
 * [GitHub Codespaces](https://github.com/features/codespaces)
 
 **Local Development**
+
 * [Docker Desktop](https://www.docker.com/products/docker-desktop) (or Docker Engine + Docker Compose)
 * [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### Getting Started
 
 1. **Configure Environment Variables**: Copy `.env.example` to `.env` and add your credentials:
+
    ```bash
    cp .env.example .env
    ```
+
    The container will initially fail without valid environment variables. Edit `.env` with your Auth0, MongoDB, Sentry, and other service credentials (see [environment variables](#environment-variables) section).
 
-2. **Open in Dev Container**: 
-   - In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
-   - In GitHub Codespaces: Create a new codespace from your repository
+2. **Open in Dev Container**:
+   * In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
+   * In GitHub Codespaces: Create a new codespace from your repository
 
 3. **Rebuild After Configuration**: After adding your `.env` file, rebuild the container:
-   - VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
-   - GitHub Codespaces: Restart the workspace
+   * VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
+   * GitHub Codespaces: Restart the workspace
 
 The dev container automatically installs all dependencies including MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler. No manual installation required.
 
@@ -82,6 +86,7 @@ Bibliography:
 
 Dictionary:
 `write:words`,
+`create:proper_nouns`,
 
 ##### Legacy (currently unused) scopes
 
@@ -103,8 +108,8 @@ Fragments have additional scopes in the following format:
 
 The backend authorization layer accepts permissions from either claim in the access token:
 
-- `scope` (space-separated string)
-- `permissions` (array of scope strings)
+* `scope` (space-separated string)
+* `permissions` (array of scope strings)
 
 Both sources are merged and unknown values are ignored.
 
@@ -568,4 +573,3 @@ CSL-JSON schema is based on
 [citation-style-language/schema](https://github.com/citation-style-language/schema)
 Copyright (c) 2007-2018 Citation Style Language and contributors.
 Licensed under MIT License.
-
