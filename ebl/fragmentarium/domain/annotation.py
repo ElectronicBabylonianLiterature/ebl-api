@@ -46,10 +46,21 @@ class AnnotationData:
 
 
 @attr.attrs(auto_attribs=True, frozen=True)
+class PcaClustering:
+    cluster_id: str
+    cluster_rank: int
+    form: str
+    is_centroid: bool
+    cluster_size: int
+    is_main: bool
+
+
+@attr.attrs(auto_attribs=True, frozen=True)
 class Annotation:
     geometry: Geometry
     data: AnnotationData
     cropped_sign: Optional[CroppedSign]
+    pca_clustering: Optional[PcaClustering] = None
 
     def crop_image(self, image: Image.Image) -> Base64:
         bounding_box = BoundingBox.from_annotations(
