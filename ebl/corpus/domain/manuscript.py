@@ -5,7 +5,7 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
@@ -57,10 +57,6 @@ def default_provenance() -> ProvenanceRecord:
         id="NINEVEH",
         long_name="Nineveh",
         abbreviation="Nin",
-        parent="Assyria",
-        cigs_key="NNV",
-        sort_key=-1,
-        coordinates=GeoCoordinate(latitude=36.3589, longitude=43.1522),
     )
 
 

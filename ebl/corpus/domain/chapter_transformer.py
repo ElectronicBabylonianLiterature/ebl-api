@@ -54,7 +54,9 @@ class ChapterTransformer(LineTransformer, LabelTransformer):
     def _resolve_provenance(self, abbreviation: str) -> ProvenanceRecord:
         record = self._provenance_service.find_by_abbreviation(abbreviation)
         if record is None:
-            raise ValueError("Unknown provenance.")
+            raise ValueError(
+                f'Unknown provenance abbreviation: "{abbreviation}".'
+            )
         return record
 
     @v_args(inline=True)
