@@ -7,7 +7,7 @@ from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
 )
 from ebl.tests.factories.dossier import DossierRecordFactory
 from ebl.fragmentarium.domain.fragment import Script
-from ebl.common.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 

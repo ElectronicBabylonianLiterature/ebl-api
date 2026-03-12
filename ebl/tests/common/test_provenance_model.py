@@ -1,6 +1,6 @@
 import pytest
 
-from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 
 
 def test_geo_coordinate_valid():

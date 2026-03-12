@@ -30,8 +30,8 @@ from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
-from ebl.common.application.provenance_repository import ProvenanceRepository
-from ebl.common.application.provenance_service import ProvenanceService
+from ebl.provenance.application.provenance_repository import ProvenanceRepository
+from ebl.provenance.application.provenance_service import ProvenanceService
 
 
 @attr.s(auto_attribs=True, frozen=True)

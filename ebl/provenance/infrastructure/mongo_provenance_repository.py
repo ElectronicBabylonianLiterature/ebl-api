@@ -2,9 +2,9 @@ import math
 from typing import Sequence
 from pymongo.database import Database
 
-from ebl.common.application.provenance_repository import ProvenanceRepository
-from ebl.common.application.provenance_schema import ProvenanceRecordSchema
-from ebl.common.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.application.provenance_repository import ProvenanceRepository
+from ebl.provenance.application.provenance_schema import ProvenanceRecordSchema
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "provenances"
@@ -38,9 +38,6 @@ class MongoProvenanceRepository(ProvenanceRepository):
     def query_by_abbreviation(self, abbreviation: str) -> ProvenanceRecord:
         data = self._collection.find_one({"abbreviation": abbreviation})
         return ProvenanceRecordSchema().load(data)
-
-    def update(self, provenance: ProvenanceRecord) -> None:
-        self._collection.replace_one(ProvenanceRecordSchema().dump(provenance))
 
     def find_children(self, parent: str) -> Sequence[ProvenanceRecord]:
         cursor = self._collection.find_many({"parent": parent})

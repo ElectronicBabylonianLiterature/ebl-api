@@ -1,7 +1,7 @@
 import attr
 from typing import Sequence, Optional
 
-from ebl.common.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.bibliography.domain.reference import Reference
 

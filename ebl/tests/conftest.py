@@ -89,9 +89,9 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     MongoDossiersRepository,
 )
-from ebl.common.application.provenance_service import ProvenanceService
-from ebl.common.domain.provenance_data import build_provenance_records
-from ebl.common.infrastructure.mongo_provenance_repository import (
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.tests.factories.provenance import build_provenance_records
+from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.users.domain.user import Guest, User
@@ -446,7 +446,6 @@ def user() -> User:
                     "read:texts",
                     "write:texts",
                     "create:texts",
-                    "write:provenances",
                 ]
             )
         },

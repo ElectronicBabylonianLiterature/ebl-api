@@ -9,8 +9,8 @@ from pymongo import MongoClient
 import pymongo
 from ebl.common.query.util import sort_by_museum_number
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.common.application.provenance_service import ProvenanceService
-from ebl.common.infrastructure.mongo_provenance_repository import (
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.mongo_collection import MongoCollection

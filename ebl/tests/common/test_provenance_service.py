@@ -1,6 +1,6 @@
-from ebl.common.application.provenance_service import ProvenanceService
-from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
-from ebl.common.infrastructure.mongo_provenance_repository import (
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.errors import NotFoundError
@@ -76,25 +76,3 @@ def test_find_all_caching(provenance_repository):
     assert result1 == result2
 
 
-def test_update_clears_cache(provenance_repository):
-    clear_provenances(provenance_repository)
-    record = ProvenanceRecord(
-        id="TEST_BABYLON",
-        long_name="Test Babylon",
-        abbreviation="Bab",
-    )
-    provenance_repository.create(record)
-
-    service = ProvenanceService(provenance_repository)
-    service.find_by_name("Test Babylon")
-
-    updated_record = ProvenanceRecord(
-        id="TEST_BABYLON",
-        long_name="Test Babylon Updated",
-        abbreviation="BabU",
-    )
-    service.update(updated_record)
-
-    result = service.find_by_name("Test Babylon Updated")
-    assert result is not None
-    assert result.long_name == "Test Babylon Updated"

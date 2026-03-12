@@ -1,8 +1,8 @@
 import pytest
 from marshmallow import ValidationError
 
-from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
-from ebl.common.application.provenance_schema import (
+from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.application.provenance_schema import (
     GeoCoordinateSchema,
     ProvenanceRecordSchema,
     ApiProvenanceRecordSchema,

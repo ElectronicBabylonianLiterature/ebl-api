@@ -1,7 +1,7 @@
 import falcon
 
-from ebl.common.application.provenance_schema import ApiProvenanceRecordSchema
-from ebl.common.domain.provenance_data import build_provenance_records
+from ebl.provenance.application.provenance_schema import ApiProvenanceRecordSchema
+from ebl.tests.factories.provenance import build_provenance_records
 
 
 def test_get_provenance(client):

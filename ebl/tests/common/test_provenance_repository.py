@@ -1,7 +1,7 @@
 import pytest
 
-from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
-from ebl.common.application.provenance_repository import ProvenanceRepository
+from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.application.provenance_repository import ProvenanceRepository
 from ebl.errors import NotFoundError
 
 
@@ -51,29 +51,6 @@ def test_query_by_id(provenance_repository: ProvenanceRepository):
 def test_query_by_id_not_found(provenance_repository: ProvenanceRepository):
     with pytest.raises(NotFoundError):
         provenance_repository.query_by_id("NONEXISTENT")
-
-
-def test_update(provenance_repository: ProvenanceRepository):
-    record = ProvenanceRecord(
-        id="BABYLON",
-        long_name="Babylon",
-        abbreviation="Bab",
-    )
-    provenance_repository.create(record)
-
-    updated_record = ProvenanceRecord(
-        id="BABYLON",
-        long_name="Babylon Updated",
-        abbreviation="BabU",
-        coordinates=GeoCoordinate(latitude=32.5, longitude=44.4),
-    )
-    provenance_repository.update(updated_record)
-
-    result = provenance_repository.query_by_id("BABYLON")
-    assert result.long_name == "Babylon Updated"
-    assert result.abbreviation == "BabU"
-    assert result.coordinates is not None
-    assert result.coordinates.latitude == 32.5
 
 
 def test_find_children(provenance_repository: ProvenanceRepository):

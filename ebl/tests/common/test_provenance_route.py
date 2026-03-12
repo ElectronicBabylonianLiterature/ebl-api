@@ -1,7 +1,7 @@
 import falcon
 
-from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
-from ebl.common.infrastructure.mongo_provenance_repository import (
+from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
 from ebl.errors import NotFoundError
@@ -89,9 +89,7 @@ def test_get_provenance_children(
     assert ids == {"TEST_CHILD_1", "TEST_CHILD_2"}
 
 
-def test_update_provenance(
-    client, provenance_repository: MongoProvenanceRepository, user
-):
+def test_put_provenance_not_allowed(client, provenance_repository: MongoProvenanceRepository):
     clear_provenances(provenance_repository)
     record = ProvenanceRecord(
         id="TEST_BABYLON",
@@ -111,10 +109,4 @@ def test_update_provenance(
 
     result = client.simulate_put("/provenances/TEST_BABYLON", json=update_data)
 
-    assert result.status == falcon.HTTP_OK
-    assert result.json["longName"] == "Babylon Updated"
-
-    updated = provenance_repository.query_by_id("TEST_BABYLON")
-    assert updated.long_name == "Babylon Updated"
-    assert updated.coordinates is not None
-    assert updated.coordinates.latitude == 32.5
+    assert result.status == falcon.HTTP_METHOD_NOT_ALLOWED

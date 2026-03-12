@@ -1,14 +1,14 @@
 import falcon
 
 from ebl.context import Context
-from ebl.common.web.provenances import (
+from ebl.provenance.web.provenances import (
     ProvenancesResource,
     ProvenanceResource,
     ProvenanceChildrenResource,
 )
 
 
-def create_common_routes(api: falcon.App, context: Context):
+def create_provenance_routes(api: falcon.App, context: Context):
     context.provenance_repository.create_indexes()
     provenance_repository = context.provenance_repository
     routes = [

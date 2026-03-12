@@ -1,7 +1,7 @@
 from typing import Sequence, Optional, Dict
 
-from ebl.common.application.provenance_repository import ProvenanceRepository
-from ebl.common.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.application.provenance_repository import ProvenanceRepository
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.errors import NotFoundError
 
 
@@ -50,10 +50,3 @@ class ProvenanceService:
 
     def find_children(self, parent: str) -> Sequence[ProvenanceRecord]:
         return self._repository.find_children(parent)
-
-    def update(self, provenance: ProvenanceRecord) -> None:
-        self._repository.update(provenance)
-        self._by_name_cache.clear()
-        self._by_abbreviation_cache.clear()
-        self._by_id_cache.clear()
-        self._all_cache = None

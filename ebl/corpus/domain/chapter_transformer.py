@@ -10,8 +10,8 @@ from ebl.corpus.domain.manuscript import (
     Siglum,
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.application.provenance_service import ProvenanceService
-from ebl.common.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.transliteration.domain.line_transformer import LineTransformer
 from ebl.transliteration.domain.label_transformer import LabelTransformer
 

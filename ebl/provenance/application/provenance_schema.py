@@ -1,7 +1,7 @@
 import pydash
 from marshmallow import Schema, fields, post_load, post_dump
 
-from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
+from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 
 
 class GeoCoordinateSchema(Schema):

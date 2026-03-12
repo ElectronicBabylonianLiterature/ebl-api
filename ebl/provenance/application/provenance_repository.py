@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Sequence
 
-from ebl.common.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 
 class ProvenanceRepository(ABC):
@@ -27,10 +27,6 @@ class ProvenanceRepository(ABC):
 
     @abstractmethod
     def query_by_abbreviation(self, abbreviation: str) -> ProvenanceRecord:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def update(self, provenance: ProvenanceRecord) -> None:
         raise NotImplementedError()
 
     @abstractmethod

@@ -5,7 +5,7 @@ import re
 import pytest
 from hamcrest.library import starts_with
 from ebl.common.domain.period import Period
-from ebl.common.domain.provenance_data import build_provenance_records
+from ebl.tests.factories.provenance import build_provenance_records
 
 from ebl.transliteration.domain.transliteration_error import DuplicateLabelError
 from ebl.tests.assertions import assert_exception_has_errors

@@ -33,7 +33,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.genres import genres
 from ebl.common.domain.scopes import Scope
-from ebl.common.domain.provenance_data import build_provenance_records
+from ebl.tests.factories.provenance import build_provenance_records
 
 
 def get_provenance_record(record_id: str):

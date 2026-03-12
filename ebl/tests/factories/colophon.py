@@ -11,7 +11,7 @@ from ebl.fragmentarium.domain.colophon import (
     ColophonOwnership,
     IndividualTypeAttestation,
 )
-from ebl.common.domain.provenance_data import build_provenance_records
+from ebl.tests.factories.provenance import build_provenance_records
 
 
 PROVENANCE_VALUES = [

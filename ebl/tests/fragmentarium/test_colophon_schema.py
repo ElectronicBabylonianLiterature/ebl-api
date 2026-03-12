@@ -12,7 +12,7 @@ from ebl.fragmentarium.domain.colophon import (
     NameAttestation,
     ProvenanceAttestation,
 )
-from ebl.common.domain.provenance_data import build_provenance_records
+from ebl.tests.factories.provenance import build_provenance_records
 
 
 BABYLON_PROVENANCE = next(

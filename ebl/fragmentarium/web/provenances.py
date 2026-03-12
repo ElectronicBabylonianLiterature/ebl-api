@@ -1,6 +1,6 @@
 from falcon import Response, Request
 
-from ebl.common.application.provenance_service import ProvenanceService
+from ebl.provenance.application.provenance_service import ProvenanceService
 
 
 class ProvenancesResource:

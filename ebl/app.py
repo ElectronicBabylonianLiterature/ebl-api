@@ -43,7 +43,7 @@ from ebl.signs.infrastructure.mongo_sign_repository import MongoSignRepository
 from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.afo_register.web.bootstrap import create_afo_register_routes
 from ebl.dossiers.web.bootstrap import create_dossiers_routes
-from ebl.common.web.bootstrap import create_common_routes
+from ebl.provenance.web.bootstrap import create_provenance_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
@@ -59,10 +59,10 @@ from ebl.users.infrastructure.auth0 import Auth0Backend
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
-from ebl.common.infrastructure.mongo_provenance_repository import (
+from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
 )
-from ebl.common.application.provenance_service import ProvenanceService
+from ebl.provenance.application.provenance_service import ProvenanceService
 
 althaia.patch()
 
@@ -141,7 +141,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_markup_routes(api, context)
     create_afo_register_routes(api, context)
     create_dossiers_routes(api, context)
-    create_common_routes(api, context)
+    create_provenance_routes(api, context)
 
     return api
 
