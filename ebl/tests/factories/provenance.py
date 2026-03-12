@@ -28,7 +28,9 @@ class ProvenanceRecordFactory(factory.Factory):
 
 def build_provenance_records():
     return (
-        ProvenanceRecord(id="STANDARD_TEXT", long_name="Standard Text", abbreviation="Std"),
+        ProvenanceRecord(
+            id="STANDARD_TEXT", long_name="Standard Text", abbreviation="Std"
+        ),
         ProvenanceRecord(id="ASSYRIA", long_name="Assyria", abbreviation="Assa"),
         ProvenanceRecord(id="BABYLONIA", long_name="Babylonia", abbreviation="Baba"),
         ProvenanceRecord(

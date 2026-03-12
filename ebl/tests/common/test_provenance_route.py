@@ -89,7 +89,9 @@ def test_get_provenance_children(
     assert ids == {"TEST_CHILD_1", "TEST_CHILD_2"}
 
 
-def test_put_provenance_not_allowed(client, provenance_repository: MongoProvenanceRepository):
+def test_put_provenance_not_allowed(
+    client, provenance_repository: MongoProvenanceRepository
+):
     clear_provenances(provenance_repository)
     record = ProvenanceRecord(
         id="TEST_BABYLON",

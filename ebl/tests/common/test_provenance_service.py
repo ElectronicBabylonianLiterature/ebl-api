@@ -74,5 +74,3 @@ def test_find_all_caching(provenance_repository):
     result2 = service.find_all()
 
     assert result1 == result2
-
-
