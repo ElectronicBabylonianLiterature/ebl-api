@@ -34,7 +34,7 @@ class ProvenanceRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def find_children(self, parent_id: str) -> Sequence[ProvenanceRecord]:
+    def find_children(self, parent: str) -> Sequence[ProvenanceRecord]:
         raise NotImplementedError()
 
     @abstractmethod

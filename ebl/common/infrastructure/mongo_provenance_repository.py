@@ -42,8 +42,8 @@ class MongoProvenanceRepository(ProvenanceRepository):
     def update(self, provenance: ProvenanceRecord) -> None:
         self._collection.replace_one(ProvenanceRecordSchema().dump(provenance))
 
-    def find_children(self, parent_id: str) -> Sequence[ProvenanceRecord]:
-        cursor = self._collection.find_many({"parent": parent_id})
+    def find_children(self, parent: str) -> Sequence[ProvenanceRecord]:
+        cursor = self._collection.find_many({"parent": parent})
         return ProvenanceRecordSchema(many=True).load(cursor)
 
     def find_by_coordinates(

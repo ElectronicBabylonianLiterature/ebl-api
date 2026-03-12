@@ -69,13 +69,13 @@ def test_get_provenance_children(
         id="TEST_CHILD_1",
         long_name="Test Child 1",
         abbreviation="Tc1",
-        parent="TEST_PARENT",
+        parent="Test Parent",
     )
     child2 = ProvenanceRecord(
         id="TEST_CHILD_2",
         long_name="Test Child 2",
         abbreviation="Tc2",
-        parent="TEST_PARENT",
+        parent="Test Parent",
     )
 
     provenance_repository.create(parent)

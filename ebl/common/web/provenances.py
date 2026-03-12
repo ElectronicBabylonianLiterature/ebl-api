@@ -28,7 +28,7 @@ class ProvenanceResource:
         resp.media = ApiProvenanceRecordSchema().dump(provenance)
 
     @falcon.before(require_scope, "write:provenances")
-    @validate(ProvenanceRecordSchema())
+    @validate(ProvenanceRecordSchema(partial=("id",)))
     def on_put(self, req: Request, resp: Response, id_: str) -> None:
         provenance = ProvenanceRecordSchema().load({**req.media, "_id": id_})
         self._provenance_repository.update(provenance)
@@ -40,5 +40,6 @@ class ProvenanceChildrenResource:
         self._provenance_repository = provenance_repository
 
     def on_get(self, _req: Request, resp: Response, id_: str) -> None:
-        children = self._provenance_repository.find_children(id_)
+        parent = self._provenance_repository.query_by_id(id_)
+        children = self._provenance_repository.find_children(parent.long_name)
         resp.media = ApiProvenanceRecordSchema(many=True).dump(children)

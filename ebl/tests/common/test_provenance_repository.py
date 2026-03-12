@@ -81,13 +81,13 @@ def test_find_children(provenance_repository: ProvenanceRepository):
         id="BABYLONIA", long_name="Babylonia", abbreviation="Baba"
     )
     child1 = ProvenanceRecord(
-        id="BABYLON", long_name="Babylon", abbreviation="Bab", parent="BABYLONIA"
+        id="BABYLON", long_name="Babylon", abbreviation="Bab", parent="Babylonia"
     )
     child2 = ProvenanceRecord(
-        id="URUK", long_name="Uruk", abbreviation="Urk", parent="BABYLONIA"
+        id="URUK", long_name="Uruk", abbreviation="Urk", parent="Babylonia"
     )
     child3 = ProvenanceRecord(
-        id="NINEVEH", long_name="Nineveh", abbreviation="Nin", parent="ASSYRIA"
+        id="NINEVEH", long_name="Nineveh", abbreviation="Nin", parent="Assyria"
     )
 
     provenance_repository.create(parent)
@@ -95,7 +95,7 @@ def test_find_children(provenance_repository: ProvenanceRepository):
     provenance_repository.create(child2)
     provenance_repository.create(child3)
 
-    result = provenance_repository.find_children("BABYLONIA")
+    result = provenance_repository.find_children("Babylonia")
     assert len(result) == 2
     assert {r.id for r in result} == {"BABYLON", "URUK"}
 
@@ -104,5 +104,5 @@ def test_find_children_none(provenance_repository: ProvenanceRepository):
     record = ProvenanceRecord(id="BABYLON", long_name="Babylon", abbreviation="Bab")
     provenance_repository.create(record)
 
-    result = provenance_repository.find_children("BABYLON")
+    result = provenance_repository.find_children("Babylon")
     assert len(result) == 0

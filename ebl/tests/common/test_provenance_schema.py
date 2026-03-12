@@ -1,3 +1,6 @@
+import pytest
+from marshmallow import ValidationError
+
 from ebl.common.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 from ebl.common.application.provenance_schema import (
     GeoCoordinateSchema,
@@ -134,3 +137,17 @@ def test_api_provenance_record_schema():
     assert result["id"] == "BABYLON"
     assert result["longName"] == "Babylon"
     assert result["abbreviation"] == "Bab"
+
+
+def test_provenance_record_schema_requires_id():
+    schema = ProvenanceRecordSchema()
+
+    with pytest.raises(ValidationError) as error:
+        schema.load(
+            {
+                "longName": "Babylon",
+                "abbreviation": "Bab",
+            }
+        )
+
+    assert error.value.messages == {"_id": ["Missing data for required field."]}

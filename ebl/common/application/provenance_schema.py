@@ -22,7 +22,7 @@ class GeoCoordinateSchema(Schema):
 
 
 class ProvenanceRecordSchema(Schema):
-    id = fields.String(data_key="_id")
+    id = fields.String(required=True, data_key="_id")
     long_name = fields.String(required=True, data_key="longName")
     abbreviation = fields.String(required=True)
     parent = fields.String(allow_none=True)
