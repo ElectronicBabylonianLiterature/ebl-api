@@ -9,9 +9,15 @@ from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 
 
 class MongoFragmentRepositoryBase(FragmentRepository):
-    def __init__(self, database):
+    def __init__(self, database, provenance_service):
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self._provenance_service = provenance_service
+
+    def _schema(self, **kwargs):
+        return FragmentSchema(
+            context={"provenance_service": self._provenance_service}, **kwargs
+        )
 
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
-        return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
+        return self._schema(unknown=EXCLUDE, many=True).load(cursor)

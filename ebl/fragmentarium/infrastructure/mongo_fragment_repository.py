@@ -9,14 +9,13 @@ from ebl.fragmentarium.infrastructure.queries import (
     HAS_TRANSLITERATION,
     fragment_is,
 )
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 
 
 class MongoFragmentRepository(
     MongoFragmentRepositoryCreate, MongoFragmentRepositoryGet
 ):
-    def __init__(self, database):
-        super().__init__(database)
+    def __init__(self, database, provenance_service):
+        super().__init__(database, provenance_service)
 
     def create_indexes(self) -> None:
         self._fragments.create_index(
@@ -103,7 +102,7 @@ class MongoFragmentRepository(
             raise ValueError(
                 f"Unexpected update field {field}, must be one of {','.join(fields_to_update)}"
             )
-        query = FragmentSchema(only=fields_to_update[field]).dump(fragment)
+        query = self._schema(only=fields_to_update[field]).dump(fragment)
         self._fragments.update_one(
             fragment_is(fragment),
             {"$set": query if query else {field: None}},

@@ -12,10 +12,17 @@ from ebl.tests.factories.archaeology import (
 
 
 @pytest.mark.parametrize("with_findspot", [True, False])
-def test_serialize_archaeology(with_findspot):
+def test_serialize_archaeology(with_findspot, seeded_provenance_service):
     archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
 
-    assert ArchaeologySchema().dump(archaeology) == {
+    schema = ArchaeologySchema(
+        context={"provenance_service": seeded_provenance_service}
+    )
+    findspot_schema = FindspotSchema(
+        context={"provenance_service": seeded_provenance_service}
+    )
+
+    assert schema.dump(archaeology) == {
         "excavationNumber": ExcavationNumberSchema().dump(
             archaeology.excavation_number
         ),
@@ -23,17 +30,18 @@ def test_serialize_archaeology(with_findspot):
         "isRegularExcavation": archaeology.regular_excavation,
         "date": DateRangeSchema().dump(archaeology.excavation_date),
         "findspotId": archaeology.findspot_id,
-        "findspot": archaeology.findspot
-        and FindspotSchema().dump(archaeology.findspot),
+        "findspot": archaeology.findspot and findspot_schema.dump(archaeology.findspot),
     }
 
 
 @pytest.mark.parametrize("with_findspot", [True, False])
-def test_deserialize_archaeology(with_findspot):
+def test_deserialize_archaeology(with_findspot, seeded_provenance_service):
     archaeology: Archaeology = ArchaeologyFactory.build(with_findspot=with_findspot)
 
     assert (
-        ArchaeologySchema().load(
+        ArchaeologySchema(
+            context={"provenance_service": seeded_provenance_service}
+        ).load(
             {
                 "excavationNumber": ExcavationNumberSchema().dump(
                     archaeology.excavation_number
@@ -43,7 +51,9 @@ def test_deserialize_archaeology(with_findspot):
                 "date": DateRangeSchema().dump(archaeology.excavation_date),
                 "findspotId": archaeology.findspot_id,
                 "findspot": archaeology.findspot
-                and FindspotSchema().dump(archaeology.findspot),
+                and FindspotSchema(
+                    context={"provenance_service": seeded_provenance_service}
+                ).dump(archaeology.findspot),
             }
         )
         == archaeology

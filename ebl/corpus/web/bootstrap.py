@@ -1,7 +1,7 @@
 import falcon
 
 from ebl.context import Context
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.web.alignments import AlignmentResource
 from ebl.corpus.web.chapters import (
     ChaptersByLemmaResource,
@@ -31,11 +31,14 @@ from ebl.transliteration.application.transliteration_query_factory import (
 
 def create_corpus_routes(api: falcon.App, context: Context):
     corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
+        CorpusDependencies(
+            repository=context.text_repository,
+            bibliography=context.get_bibliography(),
+            changelog=context.changelog,
+            sign_repository=context.sign_repository,
+            parallel_line_injector=context.parallel_line_injector,
+            provenance_service=context.get_provenance_service(),
+        )
     )
     context.text_repository.create_indexes()
 
@@ -50,8 +53,12 @@ def create_corpus_routes(api: falcon.App, context: Context):
     chapters_by_lemma = ChaptersByLemmaResource(corpus)
     alignment = AlignmentResource(corpus, context.custom_cache)
     manuscript_lemmatization = LemmatizationResource(corpus, context.custom_cache)
-    manuscript = ManuscriptsResource(corpus, context.custom_cache)
-    lines = LinesResource(corpus, context.custom_cache)
+    manuscript = ManuscriptsResource(
+        corpus, context.custom_cache, context.get_provenance_service()
+    )
+    lines = LinesResource(
+        corpus, context.custom_cache, context.get_provenance_service()
+    )
     lines_import = LinesImportResource(corpus, context.custom_cache)
     colophons = CorpusColophonsResource(corpus)
     unplaced_lines = UnplacedLinesResource(corpus)
