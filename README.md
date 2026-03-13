@@ -20,27 +20,31 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 ### Prerequisites
 
 **Cloud Development**
+
 * [GitHub Codespaces](https://github.com/features/codespaces)
 
 **Local Development**
+
 * [Docker Desktop](https://www.docker.com/products/docker-desktop) (or Docker Engine + Docker Compose)
 * [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### Getting Started
 
 1. **Configure Environment Variables**: Copy `.env.example` to `.env` and add your credentials:
+
    ```bash
    cp .env.example .env
    ```
+
    The container will initially fail without valid environment variables. Edit `.env` with your Auth0, MongoDB, Sentry, and other service credentials (see [environment variables](#environment-variables) section).
 
-2. **Open in Dev Container**: 
-   - In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
-   - In GitHub Codespaces: Create a new codespace from your repository
+2. **Open in Dev Container**:
+   * In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
+   * In GitHub Codespaces: Create a new codespace from your repository
 
 3. **Rebuild After Configuration**: After adding your `.env` file, rebuild the container:
-   - VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
-   - GitHub Codespaces: Restart the workspace
+   * VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
+   * GitHub Codespaces: Restart the workspace
 
 The dev container automatically installs all dependencies including MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler. No manual installation required.
 
@@ -60,7 +64,7 @@ poetry install --no-root --with dev
 
 ### Auth0
 
-An *API* and *Application* have to be setup in Auth0 and it the API needs to have the *Scopes* listed below.
+An *API* and *Application* have to be setup in Auth0 and the API needs to have the *Scopes* listed below.
 
 API *Identifier*, Application *Domain* (or the customdomain if one is used), and Application *Signing Certificate*
 are needed for the environment variables (see below). The whole certificate needs (everything in the field or the downloaded PEM file)
@@ -82,6 +86,7 @@ Bibliography:
 
 Dictionary:
 `write:words`,
+`create:proper_nouns`,
 
 ##### Legacy (currently unused) scopes
 
@@ -99,10 +104,23 @@ Fragments have additional scopes in the following format:
 
 `read:<Fragment group>-fragments`
 
-#### Rules
+#### Access token authorization claims
 
-"Add permissions to the user object" must bet set in Authorization Extension and the rule published.
-The following rules should be added to the *Auth Pipeleine*.
+The backend authorization layer accepts permissions from either claim in the access token:
+
+* `scope` (space-separated string)
+* `permissions` (array of scope strings)
+
+Both sources are merged and unknown values are ignored.
+
+#### Rules / Actions
+
+Rules/Actions that add custom profile fields (for example `eblName`) are still supported.
+
+Rules/Actions that copy permissions into the `scope` claim are no longer required for backend authorization,
+because the backend reads `permissions` directly.
+
+The following legacy Rule examples are kept for reference.
 
 eBL name:
 
@@ -114,7 +132,7 @@ function (user, context, callback) {
 }
 ```
 
-Access token scopes (must be after the Authorization Extension's rule):
+Access token scopes (legacy compatibility example):
 
 ```javascript
 function (user, context, callback) {
@@ -555,4 +573,3 @@ CSL-JSON schema is based on
 [citation-style-language/schema](https://github.com/citation-style-language/schema)
 Copyright (c) 2007-2018 Citation Style Language and contributors.
 Licensed under MIT License.
-
