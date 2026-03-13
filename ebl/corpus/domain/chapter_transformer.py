@@ -32,23 +32,23 @@ class ChapterTransformer(LineTransformer, LabelTransformer):
     @v_args(inline=True)
     def get_siglum(self, provenance=None, period=None, type_=None, disambiquator=None):
         _disambiquator = str(disambiquator) if disambiquator else ""
-        standard_text = self._provenance_service.find_by_id("STANDARD_TEXT")
-        if standard_text is None:
-            raise ValueError("Standard Text provenance not found.")
-        return (
-            Siglum(
+        if period:
+            return Siglum(
                 self._resolve_provenance(provenance or ""),
                 Period.from_abbreviation(period),
                 ManuscriptType.from_abbreviation(type_ or ""),
                 _disambiquator,
             )
-            if period
-            else Siglum(
-                standard_text,
-                Period.NONE,
-                ManuscriptType.NONE,
-                _disambiquator,
-            )
+
+        standard_text = self._provenance_service.find_by_id("STANDARD_TEXT")
+        if standard_text is None:
+            raise ValueError("Standard Text provenance not found.")
+
+        return Siglum(
+            standard_text,
+            Period.NONE,
+            ManuscriptType.NONE,
+            _disambiquator,
         )
 
     def _resolve_provenance(self, abbreviation: str) -> ProvenanceRecord:
