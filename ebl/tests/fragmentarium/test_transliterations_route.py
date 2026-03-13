@@ -1,9 +1,11 @@
 import json
+import time
 import attr
 
 import falcon
 import pytest
 from freezegun import freeze_time
+from pymongo.errors import PyMongoError
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.fragment import Notes, Introduction, Fragment
@@ -50,6 +52,16 @@ INTRO_FIXTURE = [
 ]
 
 
+def find_changelog_entry(database, query):
+    for attempt in range(3):
+        try:
+            return database["changelog"].find_one(query)
+        except PyMongoError as error:
+            if "operation cancelled" not in str(error).lower() or attempt == 2:
+                raise
+            time.sleep(0.1)
+
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
@@ -77,12 +89,13 @@ def test_update_transliteration(client, fragmentarium, user, database):
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": str(fragment.number),
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
 
 
@@ -232,12 +245,13 @@ def test_update_notes(client, fragmentarium, user, database, old_notes, new_note
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": fragment_number,
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
 
 
@@ -274,12 +288,13 @@ def test_update_introduction(
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": fragment_number,
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
 
 
@@ -338,10 +353,11 @@ def test_update_multiple_fields(
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": fragment_number,
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
