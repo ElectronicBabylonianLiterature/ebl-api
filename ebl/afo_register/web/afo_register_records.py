@@ -43,7 +43,10 @@ class AfoRegisterSuggestionsResource:
         self._afoRegisterRepository = afoRegisterRepository
 
     def on_get(self, req: Request, resp: Response) -> None:
+        text_query = req.params["text_query"]
+        if isinstance(text_query, list):
+            text_query = text_query[0]
         response = self._afoRegisterRepository.search_suggestions(
-            req.params["text_query"]
+            text_query
         )
         resp.media = AfoRegisterRecordSuggestionSchema().dump(response, many=True)

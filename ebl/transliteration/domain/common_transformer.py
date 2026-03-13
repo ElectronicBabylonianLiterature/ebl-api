@@ -94,14 +94,14 @@ class CommonTransformer(Transformer):
     def ebl_atf_common__column_label(
         self, numeral: Token, status: Sequence[Status]
     ) -> ColumnLabel:
-        return ColumnLabel.from_label(numeral, status)  # pyre-ignore[6]
+        return ColumnLabel.from_label(numeral, status)
 
     @v_args(inline=True)
     def ebl_atf_common__surface_label(
         self, surface: Token, status: Sequence[Status]
     ) -> SurfaceLabel:
         return SurfaceLabel.from_label(
-            Surface.from_label(surface),  # pyre-ignore[6]
+            Surface.from_label(surface),
             status,
         )
 

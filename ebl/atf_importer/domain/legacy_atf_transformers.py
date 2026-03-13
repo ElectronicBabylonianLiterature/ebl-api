@@ -1,5 +1,5 @@
 import re
-from typing import Optional, List, Sequence, Union, Type
+from typing import Any, Optional, List, Sequence, Union
 from lark.visitors import Transformer, Tree, Token, v_args, Discard
 from ebl.transliteration.domain.atf import _SUB_SCRIPT
 
@@ -31,6 +31,8 @@ class LegacyTransformer(Transformer):
             self._exit_node()
             if result is not Discard:
                 yield result
+            else:
+                index_correction += 1
 
     def _get_child_result(self, child: Tree) -> Tree:
         if self.is_classes_break_at(self.get_ancestors()):
@@ -55,9 +57,13 @@ class LegacyTransformer(Transformer):
         tree = self.current_tree
         ancestors = [tree.data]
         for parent_index in self.current_path[:-1]:
+            if parent_index < 0 or parent_index >= len(tree.children):
+                break
             ancestor = tree.children[parent_index]
+            if not isinstance(ancestor, Tree):
+                break
             ancestors.append(ancestor.data)
-            tree = tree.children[parent_index]
+            tree = ancestor
         return ancestors
 
     def is_classes_break_at(self, node_classes: Sequence[str]) -> bool:
@@ -82,10 +88,11 @@ class LegacyTransformer(Transformer):
     def to_tree(
         self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
     ) -> Tree:
+        tree_children = [child for child in children if child is not None]
         return (
-            Tree(f"{self.prefix}__{name}", children)
+            Tree(f"{self.prefix}__{name}", tree_children)
             if self.prefix
-            else Tree(name, children)
+            else Tree(name, tree_children)
         )
 
 
@@ -131,13 +138,13 @@ class HalfBracketsTransformer(LegacyTransformer):
         self.open = False
 
     @v_args(inline=True)
-    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Type[Discard]:
+    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Any:
         self.legacy_found = True
         self.open = True
         return Discard
 
     @v_args(inline=True)
-    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Type[Discard]:
+    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Any:
         self.legacy_found = True
         self.open = False
         return Discard
@@ -201,6 +208,15 @@ class AccentedIndexTransformer(LegacyTransformer):
         super().clear()
         self.sub_index = None
 
+    def _transform_tree(self, tree: Tree) -> Tree:
+        if tree.data == "ebl_atf_text_line__surrogate_text":
+            previous_sub_index = self.sub_index
+            self.sub_index = None
+            transformed_tree = super()._transform_tree(tree)
+            self.sub_index = previous_sub_index
+            return transformed_tree
+        return super()._transform_tree(tree)
+
     @v_args(inline=True)
     def ebl_atf_text_line__VALUE_CHARACTER(self, char: str) -> str:
         if char in self.replacement_chars.keys():
@@ -215,7 +231,9 @@ class AccentedIndexTransformer(LegacyTransformer):
 
     @v_args(inline=True)
     def ebl_atf_text_line__sub_index(self, sub_index: Optional[str]) -> Optional[str]:
-        if sub_index and sub_index[0] in _SUB_SCRIPT.keys():
+        if self.is_classes_break_at(self.get_ancestors()):
+            self._set_sub_index(sub_index)
+        elif sub_index and sub_index[0] in _SUB_SCRIPT.keys():
             self.legacy_found = True
             self._set_sub_index("".join(_SUB_SCRIPT[digit] for digit in sub_index))
         elif not self.sub_index:

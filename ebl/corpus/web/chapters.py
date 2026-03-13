@@ -158,8 +158,11 @@ class ChaptersByLemmaResource:
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
         genre = req.params.get("genre")
+        lemma = req.params["lemma"]
+        if isinstance(lemma, list):
+            lemma = lemma[0]
         dictionary_lines = self._corpus.search_lemma(
-            req.params["lemma"], Genre(genre) if genre else None
+            lemma, Genre(genre) if genre else None
         )
 
         resp.media = DictionaryLineDisplaySchema().dump(
@@ -184,9 +187,10 @@ class CorpusQueryResource:
         parse = flow(
             parse_lemmas, parse_transliteration(self._transliteration_query_factory)
         )
+        params = dict(req.params)
 
         resp.media = CorpusQueryResultSchema().dump(
-            self._corpus.query(parse(req.params))
+            self._corpus.query(parse(params))
         )
 
 

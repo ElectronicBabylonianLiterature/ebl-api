@@ -15,7 +15,10 @@ class BibliographyResource:
         self._bibliography = bibliography
 
     def on_get(self, req: Request, resp: Response) -> None:
-        resp.media = self._bibliography.search(req.params["query"])
+        query = req.params["query"]
+        if isinstance(query, list):
+            query = query[0]
+        resp.media = self._bibliography.search(query)
 
     @falcon.before(require_scope, "write:bibliography")
     @validate(CSL_JSON_SCHEMA)
@@ -48,7 +51,10 @@ class BibliographyList:
         self._cache = cache
 
     def on_get(self, req: Request, resp: Response) -> None:
-        ids = req.params["ids"].split(",")
+        ids_value = req.params["ids"]
+        if isinstance(ids_value, list):
+            ids_value = ids_value[0]
+        ids = ids_value.split(",")
         cache_key = ",".join(sorted(set(ids)))
 
         if cached := self._cache.get(cache_key):

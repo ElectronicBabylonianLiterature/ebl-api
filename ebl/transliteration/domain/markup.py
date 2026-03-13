@@ -185,7 +185,17 @@ def rstrip(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
 
 
 def title_case(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:
-    return tuple(part.title_case() for part in parts)
+    title_cased_parts = []
+
+    for index, part in enumerate(parts):
+        previous_part = parts[index - 1] if index > 0 else None
+        should_preserve_case = isinstance(part, StringPart) and isinstance(
+            previous_part, MarkupTokenPart
+        ) and previous_part.text.endswith("[")
+
+        title_cased_parts.append(part if should_preserve_case else part.title_case())
+
+    return tuple(title_cased_parts)
 
 
 def to_title(parts: Sequence[MarkupPart]) -> Sequence[MarkupPart]:

@@ -6,7 +6,7 @@ authors = []
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
-falcon = "^3.0.1"
+falcon = "^4.0.0"
 falcon-auth = "*"
 pymongo = "*"
 pydash = "*"
@@ -19,7 +19,6 @@ attrs = "*"
 sentry-sdk = {extras = ["falcon"],version = "*"}
 roman = "*"
 waitress = "*"
-lark-parser = "0.12.0"
 marshmallow = "^3.23.2"
 inflect = "*"
 tqdm = "*"
@@ -37,6 +36,7 @@ python-dateutil = "^2.8.2"
 natsort = "^8.4.0"
 ruff = "^0.15.0"
 attr = "^0.3.2"
+lark = "^1.2.2"
 
 
 [tool.poetry.group.dev]

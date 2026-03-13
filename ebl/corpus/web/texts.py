@@ -39,11 +39,17 @@ class TextSearchResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: falcon.Request, resp: falcon.Response) -> None:
+        transliteration = req.params["transliteration"]
+        if isinstance(transliteration, list):
+            transliteration = transliteration[0]
         query = self._transliteration_query_factory.create(
-            req.params["transliteration"]
+            transliteration
         )
+        pagination_index_value = req.params["paginationIndex"]
+        if isinstance(pagination_index_value, list):
+            pagination_index_value = pagination_index_value[0]
         try:
-            pagination_index = int(req.params["paginationIndex"])
+            pagination_index = int(pagination_index_value)
         except ValueError as error:
             raise DataError("Pagination Index has to be a number") from error
         chapters = self._corpus.search_transliteration(query, pagination_index)
