@@ -109,12 +109,9 @@ def test_title_case(
     [
         (
             [StringPart("t"), EmphasisPart("["), StringPart("igris")],
-            [StringPart("T"), EmphasisPart("["), StringPart("igris")],
+            (StringPart("T"), EmphasisPart("["), StringPart("igris")),
         ),
     ],
-)
-@pytest.mark.xfail(
-    reason="Token-internal StringParts are always capitalized but in this case shouldn't."
 )
 def test_context_aware_title_case(
     parts: Sequence[MarkupPart], expected: Sequence[MarkupPart]
