@@ -55,8 +55,11 @@ class FragmentsRetrieveAllResource:
 
     def on_get(self, req: Request, resp: Response):
         total_count = self._repo.count_transliterated_fragments(only_authorized=True)
+        skip_value = req.params.get("skip", "0")
+        if isinstance(skip_value, list):
+            skip_value = skip_value[0]
         skip = self._parse_skip(
-            req.params.get("skip", 0),
+            str(skip_value),
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
@@ -110,10 +113,11 @@ class FragmentsQueryResource:
             parse_genre,
             parse_integer_field("limit"),
         )
+        params = dict(req.params)
 
         resp.media = QueryResultSchema().dump(
             self._repository.query(
-                parse(req.params),
+                parse(params),
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
         )

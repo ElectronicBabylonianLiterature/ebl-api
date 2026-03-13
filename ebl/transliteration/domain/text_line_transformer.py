@@ -122,7 +122,7 @@ class NormalizedAkkadianTransformer(EnclosureTransformer, SignTransformer):
     def ebl_atf_text_line__akkadian_string(
         self, children: Iterable[Token]
     ) -> ValueToken:
-        return ValueToken.of("".join(children))  # pyre-ignore[6]
+        return ValueToken.of("".join(children))
 
     def ebl_atf_text_line__separator(self, _) -> Joiner:
         return Joiner.hyphen()

@@ -35,4 +35,7 @@ class ColophonNamesResource:
         self._repository = repository
 
     def on_get(self, req: Request, resp: Response):
-        resp.media = self._repository.fetch_names(req.params["query"])
+        query = req.params["query"]
+        if isinstance(query, list):
+            query = query[0]
+        resp.media = self._repository.fetch_names(query)

@@ -2,7 +2,7 @@ from typing import List, Tuple
 from lark import Visitor, Tree, lexer
 
 
-class DepthFirstSearch(Visitor):
+class DepthFirstSearch:
     def visit_topdown(self, tree: Tree, result: str) -> str:
         if not hasattr(tree, "data"):
             return result

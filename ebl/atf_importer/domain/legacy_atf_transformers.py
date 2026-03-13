@@ -1,5 +1,5 @@
 import re
-from typing import Optional, List, Sequence, Union, Type
+from typing import Any, Optional, List, Sequence, Union
 from lark.visitors import Transformer, Tree, Token, v_args, Discard
 from ebl.transliteration.domain.atf import _SUB_SCRIPT
 
@@ -88,10 +88,11 @@ class LegacyTransformer(Transformer):
     def to_tree(
         self, name: str, children: Sequence[Optional[Union[Tree, Token]]]
     ) -> Tree:
+        tree_children = [child for child in children if child is not None]
         return (
-            Tree(f"{self.prefix}__{name}", children)
+            Tree(f"{self.prefix}__{name}", tree_children)
             if self.prefix
-            else Tree(name, children)
+            else Tree(name, tree_children)
         )
 
 
@@ -137,13 +138,13 @@ class HalfBracketsTransformer(LegacyTransformer):
         self.open = False
 
     @v_args(inline=True)
-    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Type[Discard]:
+    def ebl_atf_text_line__open_legacy_damage(self, bracket: str) -> Any:
         self.legacy_found = True
         self.open = True
         return Discard
 
     @v_args(inline=True)
-    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Type[Discard]:
+    def ebl_atf_text_line__close_legacy_damage(self, bracket: str) -> Any:
         self.legacy_found = True
         self.open = False
         return Discard

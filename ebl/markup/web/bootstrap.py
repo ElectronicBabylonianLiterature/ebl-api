@@ -12,7 +12,10 @@ class Markup:
     auth = {"auth_disabled": True}
 
     def on_get(self, req: Request, resp: Response) -> None:
-        resp.media = markup_string_to_json(req.params["text"])
+        text = req.params["text"]
+        if isinstance(text, list):
+            text = text[0]
+        resp.media = markup_string_to_json(text)
 
 
 class CachedMarkup(Markup):
@@ -21,11 +24,13 @@ class CachedMarkup(Markup):
 
     def on_get(self, req: Request, resp: Response) -> None:
         cache_key = req.params["text"]
+        if isinstance(cache_key, list):
+            cache_key = cache_key[0]
 
         if cached := self._cache.get(cache_key):
             resp.text = cached
         else:
-            data = json.dumps(markup_string_to_json(req.params["text"]))
+            data = json.dumps(markup_string_to_json(cache_key))
             self._cache.set(cache_key, data, timeout=DAILY_TIMEOUT)
             resp.text = data
 

@@ -18,7 +18,7 @@ def _token_to_list(token):
 def tokens_to_value_tokens(children: Sequence) -> Sequence[EblToken]:
     return tuple(
         (
-            ValueToken.of(token.value)  # pyre-ignore[16]
+            ValueToken.of(token.value)
             if isinstance(token, Token)
             else token
         )
