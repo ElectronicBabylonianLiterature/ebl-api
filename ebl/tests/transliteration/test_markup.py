@@ -109,7 +109,7 @@ def test_title_case(
     [
         (
             [StringPart("t"), EmphasisPart("["), StringPart("igris")],
-            [StringPart("T"), EmphasisPart("["), StringPart("igris")],
+            (StringPart("T"), EmphasisPart("["), StringPart("igris")),
         ),
     ],
 )
