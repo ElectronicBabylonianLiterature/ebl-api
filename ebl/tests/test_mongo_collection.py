@@ -213,7 +213,9 @@ def test_insert_one_reraises_auto_reconnect_after_last_attempt(collection) -> No
     assert mocked_collection.insert_one.call_count == 2
 
 
-def test_insert_one_duplicate_after_auto_reconnect_returns_document_id(collection) -> None:
+def test_insert_one_duplicate_after_auto_reconnect_returns_document_id(
+    collection,
+) -> None:
     document = {"_id": "fixed-id", "data": "payload"}
 
     mocked_collection = Mock()
