@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 from bson import ObjectId
-from pymongo.errors import AutoReconnect
+from pymongo.errors import AutoReconnect, DuplicateKeyError
 
 from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
@@ -210,4 +210,19 @@ def test_insert_one_reraises_auto_reconnect_after_last_attempt(collection) -> No
     with pytest.raises(AutoReconnect):
         collection.insert_one(document)
 
+    assert mocked_collection.insert_one.call_count == 2
+
+
+def test_insert_one_duplicate_after_auto_reconnect_returns_document_id(collection) -> None:
+    document = {"_id": "fixed-id", "data": "payload"}
+
+    mocked_collection = Mock()
+    mocked_collection.insert_one.side_effect = [
+        AutoReconnect("operation cancelled"),
+        DuplicateKeyError("duplicate"),
+    ]
+
+    collection._MongoCollection__get_collection = lambda: mocked_collection
+
+    assert collection.insert_one(document) == "fixed-id"
     assert mocked_collection.insert_one.call_count == 2
