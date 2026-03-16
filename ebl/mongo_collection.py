@@ -3,7 +3,7 @@ import inflect
 from bson import ObjectId
 from pymongo.collection import Collection
 from pymongo.database import Database
-from pymongo.errors import DuplicateKeyError
+from pymongo.errors import AutoReconnect, DuplicateKeyError
 from ebl.errors import DuplicateError, NotFoundError
 
 
@@ -27,12 +27,16 @@ class MongoCollection:
         return bool(self.__get_collection().find_one(query))
 
     def insert_one(self, document):
-        try:
-            return self.__get_collection().insert_one(document).inserted_id
-        except DuplicateKeyError:
-            raise DuplicateError(
-                f"{self.__resource_noun} {document['_id']} already exists."
-            )
+        for attempt in range(2):
+            try:
+                return self.__get_collection().insert_one(document).inserted_id
+            except DuplicateKeyError:
+                raise DuplicateError(
+                    f"{self.__resource_noun} {document['_id']} already exists."
+                )
+            except AutoReconnect:
+                if attempt == 1:
+                    raise
 
     def find_one_by_id(self, id_):
         return self.find_one({"_id": id_})
