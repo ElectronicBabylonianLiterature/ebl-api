@@ -22,7 +22,15 @@ class GridFsFile(File):
 
     @property
     def content_type(self) -> Optional[str]:
-        return self._grid_out.content_type
+        grid_out_content_type = getattr(self._grid_out, "contentType", None)
+        if grid_out_content_type:
+            return grid_out_content_type
+
+        metadata = self._grid_out.metadata
+        if isinstance(metadata, Mapping):
+            return metadata.get("contentType")
+
+        return None
 
     def read(self, size=-1) -> bytes:
         return self._grid_out.read(size)
