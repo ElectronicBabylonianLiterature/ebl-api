@@ -3,7 +3,7 @@ import inflect
 from bson import ObjectId
 from pymongo.collection import Collection
 from pymongo.database import Database
-from pymongo.errors import DuplicateKeyError
+from pymongo.errors import AutoReconnect, DuplicateKeyError
 from ebl.errors import DuplicateError, NotFoundError
 
 
@@ -27,12 +27,20 @@ class MongoCollection:
         return bool(self.__get_collection().find_one(query))
 
     def insert_one(self, document):
-        try:
-            return self.__get_collection().insert_one(document).inserted_id
-        except DuplicateKeyError:
-            raise DuplicateError(
-                f"{self.__resource_noun} {document['_id']} already exists."
-            )
+        had_auto_reconnect = False
+        for attempt in range(2):
+            try:
+                return self.__get_collection().insert_one(document).inserted_id
+            except DuplicateKeyError:
+                if had_auto_reconnect and "_id" in document:
+                    return document["_id"]
+                raise DuplicateError(
+                    f"{self.__resource_noun} {document['_id']} already exists."
+                )
+            except AutoReconnect:
+                had_auto_reconnect = True
+                if attempt == 1:
+                    raise
 
     def find_one_by_id(self, id_):
         return self.find_one({"_id": id_})
@@ -75,7 +83,13 @@ class MongoCollection:
             raise self.__not_found_error(query)
 
     def update_one(self, query, update):
-        result = self.__get_collection().update_one(query, update)
+        for attempt in range(2):
+            try:
+                result = self.__get_collection().update_one(query, update)
+                break
+            except AutoReconnect:
+                if attempt == 1:
+                    raise
         if result.matched_count == 0:
             raise self.__not_found_error(query)
         else:
