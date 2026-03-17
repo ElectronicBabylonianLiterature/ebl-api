@@ -1,4 +1,5 @@
 from ebl.dictionary.application.word_schema import WordSchema
+from ebl.dictionary.domain.word import WordOrigin
 
 
 def test_serialization_and_deserialization(word):
@@ -25,3 +26,21 @@ def test_single_origin_string_converted_to_array(word):
     assert data["origin"] == ["CDA"]
     loaded = schema.load(data)
     assert loaded["origin"] == ["CDA"]
+
+
+def test_origin_enum_list_normalized() -> None:
+    schema = WordSchema()
+    data = {"origin": [WordOrigin.CDA, WordOrigin.EBL]}
+
+    normalized = schema._normalize_origin_after_load(data)
+
+    assert normalized["origin"] == ["CDA", "EBL"]
+
+
+def test_origin_enum_value_normalized() -> None:
+    schema = WordSchema()
+    data = {"origin": WordOrigin.CDA}
+
+    normalized = schema._normalize_origin_after_load(data)
+
+    assert normalized["origin"] == ["CDA"]
