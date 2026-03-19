@@ -88,6 +88,7 @@ class Provenance(ProvenanceEnum):
     MILA_MERGI = ("Mila Mergi", "Milm", "Periphery", "MMG")
     MUKDAN = ("Mukdan", "Muk", "Babylonia", "MUG")
     NAGAR = ("Nagar", "Nag", "Periphery", "BRK")
+    NEREB = ("Nereb", "Ner", "Periphery", "NER")
     NEREBUN = ("Nērebtum", "Nēr", "Babylonia", "NRB")
     NIGIN = ("Nigin", "Nig", "Babylonia", "NGN")
     NINEVEH = ("Nineveh", "Nin", "Assyria", "NNV")
