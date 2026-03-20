@@ -38,6 +38,16 @@ ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
 ATF_COMMON_PATH = "lark_parser/ebl_atf_common.lark"
 kwargs_lark = {"maybe_placeholders": True, "rel_to": __file__}
 
+LINE_PARSER_STARTS = [
+    "start",
+    "text_line",
+    "ebl_atf_text_line__akkadian_word",
+    "ebl_atf_text_line__greek_word",
+    "ebl_atf_text_line__compound_grapheme",
+    "ebl_atf_text_line__reading",
+    "ebl_atf_text_line__erasure",
+]
+
 WORD_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="any_word")
 NOTE_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="note_line")
 MARKUP_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="markup")
@@ -52,7 +62,7 @@ CHAPTER_PARSER = Lark.open(
 MANUSCRIPT_PARSER = Lark.open(
     "lark_parser/ebl_atf_manuscript_line.lark", **kwargs_lark, start="manuscript_line"
 )
-LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark)
+LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start=LINE_PARSER_STARTS)
 LINE_NUMBER_PARSER = Lark.open(ATF_COMMON_PATH, **kwargs_lark, start="line_number")
 
 LABEL_PARSER = Lark.open(

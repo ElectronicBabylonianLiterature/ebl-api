@@ -11,7 +11,11 @@ RECONSTRUCTED_LINE_PARSER = Lark.open(
     "lark_parser/ebl_atf.lark",
     maybe_placeholders=True,
     rel_to=__file__,
-    start="ebl_atf_text_line__text",
+    start=[
+        "ebl_atf_text_line__text",
+        "ebl_atf_text_line__akkadian_word",
+        "ebl_atf_text_line__break",
+    ],
 )
 
 

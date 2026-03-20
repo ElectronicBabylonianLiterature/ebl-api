@@ -1,134 +1,172 @@
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunset to setting'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'kal'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'kal' and guideword 'all'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'kalû II' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'šamû'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'šamû' and guideword 'sky'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'šamû I' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-ár' and guideword 'β Geminorum'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'šamû'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'šamû' and guideword 'sky'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'šamû I' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'ṣabātu'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'ṣabātu' and guideword 'cover (the sky)'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'ṣabātu I' entered by user
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'MÚL-KUR-šá-DUR-nu-nu' and guideword 'η Piscium'
-ebl/atf_importer/runner/data/AD-192A.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'low'
-ebl/atf_importer/runner/data/AD-192A.atf: Manual lemmatization: eBL lemma 'šaplu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Artaxerxes'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'mātāte'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'mātāte' and guideword 'lands'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'mātu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Artaxerxes'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Kakkabu-peṣû' and guideword 'Jupiter'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'kakkabu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'rēš'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'rēš' and guideword 'beginning'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'rēšu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'rēš'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'rēš' and guideword 'beginning'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'rēšu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'SI-MÁŠ' and guideword 'β Capricorni'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'erēbu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'erēbu' and guideword 'enter'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'erēbu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Alû' and guideword 'Taurus'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Alu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'amāru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'amāru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD5_63.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD5_63.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunset to setting'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'rising to sunrise'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'see'
-ebl/atf_importer/runner/data/AD6_1.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'Elamtu'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'Elamtu' and guideword 'east'
-ebl/atf_importer/runner/data/AD6_1.atf: Manual lemmatization: eBL lemma 'Elamtu I' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No citation form and guideword (by sense) found in the glossary for 'nanmuru'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'nanmuru' and guideword 'be(come) visible'
-ebl/atf_importer/runner/data/AD6_1.atf: Manual lemmatization: eBL lemma 'amāru I' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD6_1.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD6_1.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-ár' and guideword 'β Geminorum'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'šapil' and guideword 'below'
-ebl/atf_importer/runner/data/AD6_1.atf: Manual lemmatization: eBL lemma 'šaplu II' entered by user
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'MAŠ.MAŠ-IGI' and guideword 'α Geminorum'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na₁' and guideword 'sunset to moonset'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'KUR' and guideword 'moonrise to sunrise'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'NINDA' and guideword 'time degree, 1/60 UŠ'
-ebl/atf_importer/runner/data/AD6_1.atf: Incompatible lemmatization: No eBL word found for lemma 'na' and guideword 'sunrise to moonset'
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+1. ($___$) & ($___$) & ($___$) & ($___$) & ... & ($___$) &
+does not match its length. Lemmatization:
+#lem: u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+2. ($___$) & ($___$) & ($___$) & ... & GU₄ 29 & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Šihṭu[Mercury]CN; n
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+3. ($___$) & ($___$) & ... & IGI?# & ŠU₂ KUR & [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; amāru[be(come) visible]V; rabû[set]V; šadû[east]N; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+4. ($___$) & [...] & GU₄?# & SIG & ŠU & NE & K[IN]
+does not match its length. Lemmatization:
+#lem: u; Ayyaru[Month II]MN; Simānu[Month III]MN; Duʾūzu[Month IV]MN; Abu[Month V]MN; Ulūlu[Month VI]MN
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+5. ($___$) & [...] & BABBAR?# 23 & dele-bat 18 & ($___$) & GENNA & [...]
+does not match its length. Lemmatization:
+#lem: u; Kakkabu-peṣû[Jupiter]CN; n; Dilbat[Venus]CN; n; Kayyamānu[Saturn]CN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+6. ($___$) & [...] & ŠU₂ & IGI & ($___$) & 8 ŠU₂ & ($___$) [...]
+does not match its length. Lemmatization:
+#lem: u; rabû[set]V; amāru[be(come) visible]V; n; rabû[set]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+7. ($___$) & [...] & 29 30 & AN? 24 & ($___$) & 11 50 & [...]
+does not match its length. Lemmatization:
+#lem: u; n; n; Ṣalbaṭānu[Mars]CN; n; n; n; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+8. ($___$) & [...] & IGI? & GU UŠ & ($___$) & IGI & [...]
+does not match its length. Lemmatization:
+#lem: u; amāru[be(come) visible]V; Gula[Aquarius]CN; emēdu[be at a stationary point]V; amāru[be(come) visible]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+9. ($___$) & [...] & ($___$) & x# x# & GU₄ & ($___$) & [...]
+does not match its length. Lemmatization:
+#lem: u; u; u; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+10. ($___$) & [...] & ($___$) & x# [x] & 12?# & ($___$) & [...]
+does not match its length. Lemmatization:
+#lem: u; u; u; n; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+11. ($___$) & [...] & ($___$) & ($___$) & x# [x] & ($___$) & [...]
+does not match its length. Lemmatization:
+#lem: u; u; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+12. ($___$) & [...] & ($___$) & ($___$) & ($___$) & [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+13. [...] & BAR & GU₄ & SIG & ŠU & ($___$) & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Nisannu[Month I]MN; Ayyaru[Month II]MN; Simānu[Month III]MN; Duʾūzu[Month IV]MN
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+14. [...] & ($___$) & ($___$) & BABBAR & GU₄ & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Kakkabu-peṣû[Jupiter]CN; Šihṭu[Mercury]CN
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+15. [...] & ($___$) & ($___$) & 27.30 & x# & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; n; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+16. ($___$) & ($___$) & [...] & ŠU₂ & [...] & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; rabû[set]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+17. ($___$) & [...] & ($___$) & GU₄ & [...] & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Šihṭu[Mercury]CN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+18. ($___$) & [...] & GU₄# & [...] & ($___$) & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Ayyaru[Month II]MN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+1'. [...] & GAN & AB & x#
+does not match its length. Lemmatization:
+#lem: u; Kislīmu[Month IX]MN; Ṭebētu[Month X]MN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+2'. [...]+3? & ($___$) & dele-bat & [...]
+does not match its length. Lemmatization:
+#lem: u; Dilbat[Venus]CN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+3'. [...] x# & ($___$) & 28.30 & x# [...]
+does not match its length. Lemmatization:
+#lem: u; u; n; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+4'. [...] x# & ($___$) & IGI & [...]
+does not match its length. Lemmatization:
+#lem: u; u; amāru[be(come) visible]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+5'. [...] x# & ($___$) & GENNA [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; Kayyamānu[Saturn]CN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+6'. [...] x# & GU₄ & 58? [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; Šihṭu[Mercury]CN; n; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+1. [...] & ($___$) & x# & ($___$) & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+2. [...] x# & ($___$) & BA[BBAR] & ($___$) & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; Kakkabu-peṣû[Jupiter]CN
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+3. [...] x# & ($___$) & 11 & ($___$) & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; n
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+4. [...] x# & GU₄ 25 & KI U[Š] & ($___$) & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; Šihṭu[Mercury]CN; n; u; emēdu[be at a stationary point]V
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+5. [...] & ŠU₂ KUR & ($___$) & [...] & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; rabû[set]V; šadû[east]N; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+6. [...] & DIB & ($___$) & [...] & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; etēqu[omit]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+7. [...] & BAR & GU₄ & SIG [...] & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Nisannu[Month I]MN; Ayyaru[Month II]MN; Simānu[Month III]MN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+8. [...] & dele-bat? 4.30 & ($___$) & BABBAR 9 & ($___$) & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Dilbat[Venus]CN; n; Kakkabu-peṣû[Jupiter]CN; n
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+9. [...] & IGI & ($___$) & RIN₂ UŠ & [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; amāru[be(come) visible]V; Zibānītu[Libra]CN; emēdu[be at a stationary point]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+10. [...] & ($___$) & x# & ($___$) & [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+11. [...] KI & GU₄ 8 & ($___$) & GU₄ 28 & [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; u; Šihṭu[Mercury]CN; n; Šihṭu[Mercury]CN; n; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+12. [...] & ŠU₂ KUR & ($___$) & IGI & ($___$) & x# [...]
+does not match its length. Lemmatization:
+#lem: u; rabû[set]V; šadû[east]N; amāru[be(come) visible]V; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+13. [...] & DIB & ($___$) & ($___$) & ($___$) & x# [...]
+does not match its length. Lemmatization:
+#lem: u; etēqu[omit]V; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+14. ($___$) & [...] & ($___$) & ($___$) & ($___$) & x# [...]
+does not match its length. Lemmatization:
+#lem: u; u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+15. ($___$) & [...] & GU₄ & SIG & ŠU & NE [...]
+does not match its length. Lemmatization:
+#lem: u; Ayyaru[Month II]MN; Simānu[Month III]MN; Duʾūzu[Month IV]MN; Abu[Month V]MN; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+16. ($___$) & ($___$) & [...] & ($___$) & BABBAR 9 & [...]
+does not match its length. Lemmatization:
+#lem: u; Kakkabu-peṣû[Jupiter]CN; n; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+17. ($___$) & ($___$) & ($___$) & [...] & GIR₂ UŠ & [...]
+does not match its length. Lemmatization:
+#lem: u; u; emēdu[be at a stationary point]V; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+18. ($___$) & ($___$) & ($___$) & [...] & ($___$) & [...]
+does not match its length. Lemmatization:
+#lem: u; u
+ebl/atf_importer/runner/data/AD5_87.atf: In `AD5_87.atf`: The lemmatization of the following line:
+19. ($___$) & ($___$) & ($___$) & ($___$) & [...] GU₄?# [...] & ($___$)
+does not match its length. Lemmatization:
+#lem: u; Šihṭu[Mercury]CN; u
