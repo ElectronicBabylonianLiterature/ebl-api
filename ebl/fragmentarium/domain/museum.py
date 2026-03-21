@@ -33,6 +33,12 @@ class Museum(Enum):
         "IE",
         "https://chesterbeatty.ie/",
     )
+    COLUMBIA_UNIVERSITY = (
+        "Columbia University Cuneiform Collection",
+        "New York",
+        "US",
+        "https://library.columbia.edu/libraries/rbml.html",
+    )
     COUVENT_SAINTE_ANNE = (
         "Couvent Sainte-Anne",
         "Jerusalem",
