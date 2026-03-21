@@ -105,6 +105,12 @@ class Museum(Enum):
         "ZA",
         "https://www.iziko.org.za/",
     )
+    KATZ_CENTER = (
+        "Katz Center for Advanced Judaic Studies",
+        "Philadelphia",
+        "US",
+        "https://katz.sas.upenn.edu/",
+    )
     KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
         "Ann Arbor",
