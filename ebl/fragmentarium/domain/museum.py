@@ -8,6 +8,12 @@ class Museum(Enum):
         self.country = country
         self.url = url
 
+    ABBEY_MUSEUM = (
+        "Abbey Museum",
+        "Queensland",
+        "AU",
+        "https://abbeymuseum.com.au",
+    )
     ANCIENT_CULTURES_CHICAGO = (
         "Institute for the Study of Ancient Cultures, West Asia & North Africa",
         "Chicago",
