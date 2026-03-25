@@ -1,4 +1,5 @@
 from typing import Union
+from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.fragmentarium.application.archaeology_schemas import (
     ArchaeologySchema,
     ExcavationNumberSchema,
@@ -12,8 +13,11 @@ from ebl.users.web.require_scope import require_scope
 
 
 class ArchaeologyResource:
-    def __init__(self, updater: FragmentUpdater):
+    def __init__(
+        self, updater: FragmentUpdater, provenance_service: ProvenanceService
+    ) -> None:
         self._updater = updater
+        self._provenance_service = provenance_service
 
     def _parse_excavation_number(
         self, excavation_number: Union[str, None]
@@ -34,7 +38,9 @@ class ArchaeologyResource:
         )
         updated_fragment, has_photo = self._updater.update_archaeology(
             parse_museum_number(number),
-            ArchaeologySchema().load(data),
+            ArchaeologySchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(data),
             user,
         )
         resp.media = create_response_dto(updated_fragment, user, has_photo)

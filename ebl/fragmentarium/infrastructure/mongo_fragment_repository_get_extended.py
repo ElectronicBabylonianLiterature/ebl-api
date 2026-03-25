@@ -59,9 +59,6 @@ def _get_colophon_names_query(name_regex: str) -> Sequence[dict]:
 
 
 class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
-    def __init__(self, database):
-        super().__init__(database)
-
     def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = ()):
         cursor = self._fragments.aggregate(
             [*aggregate_random(user_scopes), {"$project": {"joins": False}}]

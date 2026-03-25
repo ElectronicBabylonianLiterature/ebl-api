@@ -1,4 +1,5 @@
 from pymongo.database import Database
+from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.corpus.application.text_repository import TextRepository
 from ebl.corpus.domain.chapter import ChapterId
 from ebl.corpus.domain.text import TextId
@@ -23,6 +24,9 @@ def line_not_found(id_: ChapterId, number: int) -> Exception:
 
 
 class MongoTextRepositoryBase(TextRepository):
-    def __init__(self, database: Database):
+    def __init__(
+        self, database: Database, provenance_service: ProvenanceService
+    ) -> None:
         self._texts = MongoCollection(database, TEXTS_COLLECTION)
         self._chapters = MongoCollection(database, CHAPTERS_COLLECTION)
+        self._provenance_service = provenance_service

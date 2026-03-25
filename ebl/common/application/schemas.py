@@ -1,5 +1,10 @@
-from marshmallow import Schema, fields, validate, post_load
+from typing import Optional
+
+from marshmallow import Schema, ValidationError, fields, post_load, validate
+
+from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.common.domain.accession import Accession
+from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 
 class AbstractMuseumNumberSchema(Schema):
@@ -14,3 +19,17 @@ class AccessionSchema(AbstractMuseumNumberSchema):
     @post_load
     def create_accession(self, data, **kwargs) -> Accession:
         return Accession(**data)
+
+
+def deserialize_provenance_record(
+    schema: Schema, value: Optional[str]
+) -> Optional[ProvenanceRecord]:
+    if value is None:
+        return None
+    provenance_service = schema.context.get("provenance_service")
+    if not isinstance(provenance_service, ProvenanceService):
+        raise ValidationError("Provenance service not configured.")
+    record = provenance_service.find_by_name(value)
+    if record is None:
+        raise ValidationError(f"Invalid provenance: {value}")
+    return record

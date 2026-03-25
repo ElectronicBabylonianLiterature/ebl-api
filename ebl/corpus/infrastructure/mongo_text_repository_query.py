@@ -35,6 +35,11 @@ from ebl.corpus.infrastructure.mongo_text_repository_query_fragment import (
 
 
 class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
+    def _manuscript_schema(self) -> ManuscriptSchema:
+        return ManuscriptSchema(
+            context={"provenance_service": self._provenance_service}
+        )
+
     def query_by_transliteration(
         self, query: TransliterationQuery, pagination_index: int
     ) -> Tuple[Sequence[Chapter], int]:
@@ -77,7 +82,9 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             ],
             allowDiskUse=True,
         )
-        return ChapterSchema().load(
+        return ChapterSchema(
+            context={"provenance_service": self._provenance_service}
+        ).load(
             filter_query_by_transliteration(query, cursor), many=True
         ), self._chapters.count_documents(mongo_query)
 
@@ -139,7 +146,9 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             ]
         )
 
-        return DictionaryLineSchema().load(
+        return DictionaryLineSchema(
+            context={"provenance_service": self._provenance_service}
+        ).load(
             self._limit_by_genre(lemma_lines),
             many=True,
         )
@@ -168,7 +177,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
-            return ManuscriptSchema().load(
+            return self._manuscript_schema().load(
                 self._chapters.find_one(
                     chapter_id_query(id_), projection={"manuscripts": True}
                 )["manuscripts"],
@@ -181,7 +190,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
         self, id_: ChapterId
     ) -> List[Manuscript]:
         try:
-            return ManuscriptSchema().load(
+            return self._manuscript_schema().load(
                 self._chapters.aggregate(
                     [
                         {"$match": chapter_id_query(id_)},

@@ -14,7 +14,6 @@ from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.fragmentarium.infrastructure.fragment_pattern_matcher import PatternMatcher
@@ -168,9 +167,6 @@ def aggregate_counts() -> List[dict]:
 
 
 class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
-    def __init__(self, database):
-        super().__init__(database)
-
     def _omit_text_lines(self) -> List:
         return [{"$addFields": {"text.lines": []}}]
 
@@ -216,7 +212,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         )
         try:
             fragment_data = next(data)
-            return FragmentSchema(unknown=EXCLUDE).load(fragment_data)
+            return self._schema(unknown=EXCLUDE).load(fragment_data)
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error
 
@@ -278,7 +274,9 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
     def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult:
         cursor = (
             self._fragments.aggregate(
-                PatternMatcher(query, user_scopes).build_pipeline(),
+                PatternMatcher(
+                    query, self._provenance_service, user_scopes
+                ).build_pipeline(),
                 collation=Collation(
                     locale="en", numericOrdering=True, alternate="shifted"
                 ),
@@ -376,5 +374,4 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
 class MongoFragmentRepositoryGet(
     MongoFragmentRepositoryGetBase, MongoFragmentRepositoryGetExtended
 ):
-    def __init__(self, database):
-        super().__init__(database)
+    pass
