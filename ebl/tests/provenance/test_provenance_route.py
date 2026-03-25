@@ -1,5 +1,6 @@
 import falcon
 
+from ebl.provenance.application.provenance_schema import ApiProvenanceRecordSchema
 from ebl.provenance.domain.provenance_model import GeoCoordinate, ProvenanceRecord
 from ebl.provenance.infrastructure.mongo_provenance_repository import (
     MongoProvenanceRepository,
@@ -30,11 +31,11 @@ def test_get_provenances(client, provenance_repository: MongoProvenanceRepositor
     result = client.simulate_get("/provenances")
 
     assert result.status == falcon.HTTP_OK
-    assert ["Test Babylon", None] in result.json
-    assert ["Test Nineveh", None] in result.json
+    ids = {item["id"] for item in result.json}
+    assert {"TEST_BABYLON", "TEST_NINEVEH"}.issubset(ids)
 
 
-def test_get_provenances_excludes_standard_text(
+def test_get_provenances_includes_standard_text(
     client, provenance_repository: MongoProvenanceRepository
 ):
     clear_provenances(provenance_repository)
@@ -52,8 +53,28 @@ def test_get_provenances_excludes_standard_text(
     result = client.simulate_get("/provenances")
 
     assert result.status == falcon.HTTP_OK
-    assert ["Test Babylon", None] in result.json
-    assert ["Standard Text", None] not in result.json
+    ids = {item["id"] for item in result.json}
+    assert {"STANDARD_TEXT", "TEST_BABYLON"}.issubset(ids)
+
+
+def test_get_provenances_payload_schema(
+    client, provenance_repository: MongoProvenanceRepository
+):
+    clear_provenances(provenance_repository)
+    record1 = ProvenanceRecord(
+        id="TEST_BABYLON", long_name="Test Babylon", abbreviation="Bab"
+    )
+    record2 = ProvenanceRecord(
+        id="TEST_NINEVEH", long_name="Test Nineveh", abbreviation="Nin"
+    )
+    provenance_repository.create(record1)
+    provenance_repository.create(record2)
+
+    result = client.simulate_get("/provenances")
+
+    assert result.status == falcon.HTTP_OK
+    expected_payload = ApiProvenanceRecordSchema(many=True).dump([record1, record2])
+    assert result.json == expected_payload
 
 
 def test_get_provenance_by_id(client, provenance_repository: MongoProvenanceRepository):
