@@ -14,8 +14,6 @@ from ebl.fragmentarium.infrastructure.queries import (
 class MongoFragmentRepository(
     MongoFragmentRepositoryCreate, MongoFragmentRepositoryGet
 ):
-    pass
-
     def create_indexes(self) -> None:
         self._fragments.create_index(
             [
