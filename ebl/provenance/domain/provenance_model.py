@@ -2,6 +2,13 @@ import attr
 from typing import Optional, Sequence
 
 
+STANDARD_TEXT_PROVENANCE_ID = "STANDARD_TEXT"
+STANDARD_TEXT_PROVENANCE_LONG_NAME = "Standard Text"
+DEFAULT_PROVENANCE_ID = "NINEVEH"
+DEFAULT_PROVENANCE_LONG_NAME = "Nineveh"
+DEFAULT_PROVENANCE_ABBREVIATION = "Nin"
+
+
 @attr.s(frozen=True, auto_attribs=True)
 class GeoCoordinate:
     latitude: float

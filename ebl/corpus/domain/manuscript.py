@@ -5,7 +5,13 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.provenance.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.domain.provenance_model import (
+    ProvenanceRecord,
+    DEFAULT_PROVENANCE_ABBREVIATION,
+    DEFAULT_PROVENANCE_ID,
+    DEFAULT_PROVENANCE_LONG_NAME,
+    STANDARD_TEXT_PROVENANCE_ID,
+)
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
@@ -37,7 +43,7 @@ class OldSiglum:
 
 
 def is_standard_text_provenance(provenance: ProvenanceRecord) -> bool:
-    return provenance.id == "STANDARD_TEXT"
+    return provenance.id == STANDARD_TEXT_PROVENANCE_ID
 
 
 def is_invalid_standard_text(provenance: ProvenanceRecord, period, type_) -> bool:
@@ -54,9 +60,9 @@ def is_invalid_non_standard_text(provenance: ProvenanceRecord, period, type_) ->
 
 def default_provenance() -> ProvenanceRecord:
     return ProvenanceRecord(
-        id="NINEVEH",
-        long_name="Nineveh",
-        abbreviation="Nin",
+        id=DEFAULT_PROVENANCE_ID,
+        long_name=DEFAULT_PROVENANCE_LONG_NAME,
+        abbreviation=DEFAULT_PROVENANCE_ABBREVIATION,
     )
 
 

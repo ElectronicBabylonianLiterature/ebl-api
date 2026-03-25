@@ -11,7 +11,10 @@ from ebl.corpus.domain.manuscript import (
 )
 from ebl.common.domain.manuscript_type import ManuscriptType
 from ebl.provenance.application.provenance_service import ProvenanceService
-from ebl.provenance.domain.provenance_model import ProvenanceRecord
+from ebl.provenance.domain.provenance_model import (
+    ProvenanceRecord,
+    STANDARD_TEXT_PROVENANCE_ID,
+)
 from ebl.transliteration.domain.line_transformer import LineTransformer
 from ebl.transliteration.domain.label_transformer import LabelTransformer
 
@@ -40,7 +43,7 @@ class ChapterTransformer(LineTransformer, LabelTransformer):
                 _disambiquator,
             )
 
-        standard_text = self._provenance_service.find_by_id("STANDARD_TEXT")
+        standard_text = self._provenance_service.find_by_id(STANDARD_TEXT_PROVENANCE_ID)
         if standard_text is None:
             raise ValueError("Standard Text provenance not found.")
 
