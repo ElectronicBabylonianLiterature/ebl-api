@@ -81,8 +81,8 @@ class ArchaeologySchema(Schema):
         allow_none=True, dump_default=None, load_default=None, data_key="findspotId"
     )
     findspot = fields.Nested(FindspotSchema, allow_none=True, load_default=None)
-    is_findspot_certain = fields.Boolean(
-        allow_none=True, load_default=None, data_key="isFindspotCertain"
+    is_findspot_uncertain = fields.Boolean(
+        allow_none=True, load_default=None, data_key="isFindspotUncertain"
     )
 
     @post_load

@@ -25,7 +25,7 @@ def test_serialize_archaeology(with_findspot):
         "findspotId": archaeology.findspot_id,
         "findspot": archaeology.findspot
         and FindspotSchema().dump(archaeology.findspot),
-        "isFindspotCertain": archaeology.is_findspot_certain,
+        "isFindspotUncertain": archaeology.is_findspot_uncertain,
     }
 
 
@@ -45,7 +45,7 @@ def test_deserialize_archaeology(with_findspot):
                 "findspotId": archaeology.findspot_id,
                 "findspot": archaeology.findspot
                 and FindspotSchema().dump(archaeology.findspot),
-                "isFindspotCertain": archaeology.is_findspot_certain,
+                "isFindspotUncertain": archaeology.is_findspot_uncertain,
             }
         )
         == archaeology

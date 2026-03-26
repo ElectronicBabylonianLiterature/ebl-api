@@ -77,7 +77,7 @@ class ArchaeologyFactory(factory.Factory):
     regular_excavation = factory.Faker("boolean")
     excavation_date = factory.SubFactory(DateRangeFactory)
 
-    is_findspot_certain = factory.Faker("boolean")
+    is_findspot_uncertain = factory.Faker("boolean")
 
     class Params:
         with_findspot = factory.Trait(
