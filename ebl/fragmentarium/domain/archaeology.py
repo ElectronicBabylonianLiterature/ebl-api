@@ -23,3 +23,4 @@ class Archaeology:
     excavation_date: Optional[DateRange] = None
     findspot_id: Optional[int] = None
     findspot: Optional[Findspot] = None
+    is_findspot_uncertain: Optional[bool] = None
