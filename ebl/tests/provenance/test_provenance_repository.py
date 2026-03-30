@@ -31,6 +31,23 @@ def test_find_all(provenance_repository: ProvenanceRepository):
     assert {r.id for r in result} == {"BABYLON", "NINEVEH", "URUK"}
 
 
+def test_find_all_returns_alphabetical_order(provenance_repository: ProvenanceRepository):
+    provenance_repository.create(
+        ProvenanceRecord(id="URUK", long_name="Uruk", abbreviation="Urk")
+    )
+    provenance_repository.create(
+        ProvenanceRecord(id="BABYLON", long_name="Babylon", abbreviation="Bab")
+    )
+    provenance_repository.create(
+        ProvenanceRecord(id="NINEVEH", long_name="Nineveh", abbreviation="Nin")
+    )
+
+    result = provenance_repository.find_all()
+
+    names = [r.long_name for r in result]
+    assert names == sorted(names)
+
+
 def test_query_by_id(provenance_repository: ProvenanceRepository):
     coord = GeoCoordinate(latitude=32.5, longitude=44.4)
     record = ProvenanceRecord(

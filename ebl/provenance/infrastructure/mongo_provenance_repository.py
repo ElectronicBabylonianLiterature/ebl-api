@@ -23,7 +23,7 @@ class MongoProvenanceRepository(ProvenanceRepository):
         return self._collection.insert_one(ProvenanceRecordSchema().dump(provenance))
 
     def find_all(self) -> Sequence[ProvenanceRecord]:
-        cursor = self._collection.find_many({})
+        cursor = self._collection.find_many({}).sort("longName", 1)
         return ProvenanceRecordSchema(many=True).load(cursor)
 
     def query_by_id(self, id_: str) -> ProvenanceRecord:
@@ -39,7 +39,7 @@ class MongoProvenanceRepository(ProvenanceRepository):
         return ProvenanceRecordSchema().load(data)
 
     def find_children(self, parent: str) -> Sequence[ProvenanceRecord]:
-        cursor = self._collection.find_many({"parent": parent})
+        cursor = self._collection.find_many({"parent": parent}).sort("longName", 1)
         return ProvenanceRecordSchema(many=True).load(cursor)
 
     def find_by_coordinates(

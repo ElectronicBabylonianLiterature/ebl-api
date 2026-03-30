@@ -24,7 +24,7 @@ class AccessionSchema(AbstractMuseumNumberSchema):
 def deserialize_provenance_record(
     schema: Schema, value: Optional[str]
 ) -> Optional[ProvenanceRecord]:
-    if value is None:
+    if not value:
         return None
     provenance_service = schema.context.get("provenance_service")
     if not isinstance(provenance_service, ProvenanceService):

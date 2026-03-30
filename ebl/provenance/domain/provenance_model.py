@@ -1,5 +1,5 @@
 import attr
-from typing import Optional, Sequence
+from typing import Optional
 
 
 STANDARD_TEXT_PROVENANCE_ID = "STANDARD_TEXT"
@@ -40,4 +40,4 @@ class ProvenanceRecord:
     cigs_key: Optional[str] = None
     sort_key: int = -1
     coordinates: Optional[GeoCoordinate] = None
-    polygon_coordinates: Optional[Sequence[GeoCoordinate]] = None
+    polygon_coordinates: Optional[tuple] = None

@@ -151,3 +151,33 @@ def test_provenance_record_schema_requires_id():
         )
 
     assert error.value.messages == {"_id": ["Missing data for required field."]}
+
+
+def test_provenance_record_schema_loads_polygon_coordinates_as_tuple():
+    data = {
+        "_id": "BABYLON",
+        "longName": "Babylon",
+        "abbreviation": "Bab",
+        "polygonCoordinates": [
+            {"latitude": 32.5, "longitude": 44.4},
+            {"latitude": 32.6, "longitude": 44.5},
+        ],
+    }
+    result = ProvenanceRecordSchema().load(data)
+
+    assert isinstance(result.polygon_coordinates, tuple)
+    assert len(result.polygon_coordinates) == 2
+
+
+def test_provenance_record_with_polygon_coordinates_is_hashable():
+    data = {
+        "_id": "BABYLON",
+        "longName": "Babylon",
+        "abbreviation": "Bab",
+        "polygonCoordinates": [
+            {"latitude": 32.5, "longitude": 44.4},
+        ],
+    }
+    record = ProvenanceRecordSchema().load(data)
+
+    assert hash(record) is not None

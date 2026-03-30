@@ -2,6 +2,7 @@ from falcon import Request, Response
 
 from ebl.provenance.application.provenance_repository import ProvenanceRepository
 from ebl.provenance.application.provenance_schema import ApiProvenanceRecordSchema
+from ebl.provenance.domain.provenance_model import STANDARD_TEXT_PROVENANCE_ID
 
 
 class ProvenancesResource:
@@ -9,7 +10,11 @@ class ProvenancesResource:
         self._provenance_repository = provenance_repository
 
     def on_get(self, _req: Request, resp: Response) -> None:
-        provenances = self._provenance_repository.find_all()
+        provenances = [
+            p
+            for p in self._provenance_repository.find_all()
+            if p.id != STANDARD_TEXT_PROVENANCE_ID
+        ]
         resp.media = ApiProvenanceRecordSchema(many=True).dump(provenances)
 
 

@@ -35,28 +35,6 @@ def test_get_provenances(client, provenance_repository: MongoProvenanceRepositor
     assert {"TEST_BABYLON", "TEST_NINEVEH"}.issubset(ids)
 
 
-def test_get_provenances_includes_standard_text(
-    client, provenance_repository: MongoProvenanceRepository
-):
-    clear_provenances(provenance_repository)
-    provenance_repository.create(
-        ProvenanceRecord(
-            id="STANDARD_TEXT", long_name="Standard Text", abbreviation="Std"
-        )
-    )
-    provenance_repository.create(
-        ProvenanceRecord(
-            id="TEST_BABYLON", long_name="Test Babylon", abbreviation="Bab"
-        )
-    )
-
-    result = client.simulate_get("/provenances")
-
-    assert result.status == falcon.HTTP_OK
-    ids = {item["id"] for item in result.json}
-    assert {"STANDARD_TEXT", "TEST_BABYLON"}.issubset(ids)
-
-
 def test_get_provenances_payload_schema(
     client, provenance_repository: MongoProvenanceRepository
 ):

@@ -38,6 +38,8 @@ class ProvenanceRecordSchema(Schema):
 
     @post_load
     def make_provenance_record(self, data, **kwargs) -> ProvenanceRecord:
+        if data.get("polygon_coordinates") is not None:
+            data["polygon_coordinates"] = tuple(data["polygon_coordinates"])
         return ProvenanceRecord(**data)
 
     @post_dump
