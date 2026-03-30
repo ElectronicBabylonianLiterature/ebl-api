@@ -31,6 +31,7 @@ def test_serialize_archaeology(with_findspot, seeded_provenance_service):
         "date": DateRangeSchema().dump(archaeology.excavation_date),
         "findspotId": archaeology.findspot_id,
         "findspot": archaeology.findspot and findspot_schema.dump(archaeology.findspot),
+        "isFindspotUncertain": archaeology.is_findspot_uncertain,
     }
 
 
@@ -54,6 +55,7 @@ def test_deserialize_archaeology(with_findspot, seeded_provenance_service):
                 and FindspotSchema(
                     context={"provenance_service": seeded_provenance_service}
                 ).dump(archaeology.findspot),
+                "isFindspotUncertain": archaeology.is_findspot_uncertain,
             }
         )
         == archaeology
