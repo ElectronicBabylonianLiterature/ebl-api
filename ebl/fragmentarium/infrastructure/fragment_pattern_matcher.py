@@ -90,6 +90,8 @@ class PatternMatcher:
             record = self._lookup_provenance_record(provenance)
             if record is None:
                 return {"archaeology.site": provenance}
+            if record.parent is None:
+                return {"archaeology.site": record.long_name}
             children = [
                 child.long_name
                 for child in self._provenance_service.find_children(record.long_name)

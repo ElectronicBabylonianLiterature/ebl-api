@@ -1,5 +1,6 @@
 import math
 from typing import Sequence
+from pymongo.collation import Collation
 from pymongo.database import Database
 
 from ebl.provenance.application.provenance_repository import ProvenanceRepository
@@ -8,6 +9,7 @@ from ebl.provenance.domain.provenance_model import ProvenanceRecord
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "provenances"
+_COLLATION = Collation(locale="en", strength=1, normalization=True)
 
 
 class MongoProvenanceRepository(ProvenanceRepository):
@@ -23,7 +25,9 @@ class MongoProvenanceRepository(ProvenanceRepository):
         return self._collection.insert_one(ProvenanceRecordSchema().dump(provenance))
 
     def find_all(self) -> Sequence[ProvenanceRecord]:
-        cursor = self._collection.find_many({}).sort("longName", 1)
+        cursor = (
+            self._collection.find_many({}).sort("longName", 1).collation(_COLLATION)
+        )
         return ProvenanceRecordSchema(many=True).load(cursor)
 
     def query_by_id(self, id_: str) -> ProvenanceRecord:
@@ -39,7 +43,11 @@ class MongoProvenanceRepository(ProvenanceRepository):
         return ProvenanceRecordSchema().load(data)
 
     def find_children(self, parent: str) -> Sequence[ProvenanceRecord]:
-        cursor = self._collection.find_many({"parent": parent}).sort("longName", 1)
+        cursor = (
+            self._collection.find_many({"parent": parent})
+            .sort("longName", 1)
+            .collation(_COLLATION)
+        )
         return ProvenanceRecordSchema(many=True).load(cursor)
 
     def find_by_coordinates(

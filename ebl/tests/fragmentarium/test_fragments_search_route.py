@@ -505,6 +505,33 @@ def test_search_site(client, fragmentarium, site, attribute):
     assert result.json == expected_json
 
 
+@pytest.mark.parametrize(
+    "parent_site",
+    [
+        get_provenance_record("ASSYRIA"),
+        get_provenance_record("BABYLONIA"),
+        get_provenance_record("PERIPHERY"),
+    ],
+)
+@pytest.mark.parametrize(
+    "attribute",
+    ["long_name", "id"],
+)
+def test_search_parent_site_returns_no_results(
+    client, fragmentarium, parent_site, attribute
+):
+    child = get_provenance_record("UR")
+    fragment = FragmentFactory.build(archaeology__site=child)
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get(
+        "/fragments/query", params={"site": getattr(parent_site, attribute)}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == {"items": [], "matchCountTotal": 0}
+
+
 def test_query_latest(client, fragmentarium):
     number_of_fragments = LATEST_TRANSLITERATION_LIMIT + 10
     start_date = date(2023, 5, 1)

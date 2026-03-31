@@ -49,3 +49,9 @@ class ProvenanceRecordSchema(Schema):
 
 class ApiProvenanceRecordSchema(ProvenanceRecordSchema):
     id = fields.String(required=True, dump_only=True)
+
+    @post_dump
+    def wrap_parent(self, data, **kwargs):
+        if data.get("parent"):
+            data["parent"] = f"[{data['parent']}]"
+        return data
