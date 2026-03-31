@@ -1,5 +1,7 @@
 from marshmallow import EXCLUDE
 from typing import Sequence
+from pymongo.database import Database
+from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.mongo_collection import MongoCollection
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
@@ -9,9 +11,17 @@ from ebl.fragmentarium.infrastructure.collections import JOINS_COLLECTION
 
 
 class MongoFragmentRepositoryBase(FragmentRepository):
-    def __init__(self, database):
+    def __init__(
+        self, database: Database, provenance_service: ProvenanceService
+    ) -> None:
         self._fragments = MongoCollection(database, FRAGMENTS_COLLECTION)
         self._joins = MongoCollection(database, JOINS_COLLECTION)
+        self._provenance_service = provenance_service
+
+    def _schema(self, **kwargs):
+        return FragmentSchema(
+            context={"provenance_service": self._provenance_service}, **kwargs
+        )
 
     def _map_fragments(self, cursor) -> Sequence[Fragment]:
-        return FragmentSchema(unknown=EXCLUDE, many=True).load(cursor)
+        return self._schema(unknown=EXCLUDE, many=True).load(cursor)

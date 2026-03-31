@@ -38,13 +38,25 @@ def fragment() -> Fragment:
 
 
 @pytest.fixture
-def valid_fragment_data(fragment) -> dict:
-    return FragmentSchema().dump(fragment)
+def fragment_schema(seeded_provenance_service) -> FragmentSchema:
+    return FragmentSchema(context={"provenance_service": seeded_provenance_service})
+
+
+@pytest.fixture
+def valid_fragment_data(fragment, fragment_schema) -> dict:
+    return fragment_schema.dump(fragment)
 
 
 @pytest.fixture
 def fragments_collection(fragment_repository) -> MongoCollection:
     return fragment_repository._fragments
+
+
+@pytest.fixture
+def validate_fragment(seeded_provenance_service):
+    return partial(
+        validate, filename=MOCKFILE, provenance_service=seeded_provenance_service
+    )
 
 
 def mock_json_file(contents, path) -> str:
@@ -76,11 +88,11 @@ def test_load_invalid_json(tmp_path):
         load_data([path])
 
 
-def test_validation(valid_fragment_data):
-    validate(valid_fragment_data)
+def test_validation(valid_fragment_data, validate_fragment):
+    validate_fragment(valid_fragment_data)
 
 
-def test_missing_required_field(valid_fragment_data):
+def test_missing_required_field(valid_fragment_data, validate_fragment):
     del valid_fragment_data["museumNumber"]
 
     with pytest.raises(
@@ -90,10 +102,10 @@ def test_missing_required_field(valid_fragment_data):
             "{'museumNumber': ['Missing data for required field.']}"
         ),
     ):
-        validate(valid_fragment_data)
+        validate_fragment(valid_fragment_data)
 
 
-def test_invalid_enum(valid_fragment_data):
+def test_invalid_enum(valid_fragment_data, validate_fragment):
     unknown_period = "Neo-Foobarian"
     valid_fragment_data["script"]["period"] = unknown_period
 
@@ -101,17 +113,17 @@ def test_invalid_enum(valid_fragment_data):
         ValidationError,
         match=f"Invalid data in {MOCKFILE}: Unknown Period.long_name: {unknown_period}",
     ):
-        validate(valid_fragment_data)
+        validate_fragment(valid_fragment_data)
 
 
-def test_invalid_input_type(valid_fragment_data):
+def test_invalid_input_type(valid_fragment_data, validate_fragment):
     with pytest.raises(
         ValidationError,
         match=re.escape(
             f"Invalid data in {MOCKFILE}: {{'_schema': ['Invalid input type.']}}"
         ),
     ):
-        validate("invalid input")
+        validate_fragment("invalid input")
 
 
 def test_ensure_id(valid_fragment_data):
@@ -210,9 +222,9 @@ def test_update_sort_index(fragment, fragment_repository, fragments_collection):
     ]
 
 
-def test_set_word_ids(valid_fragment_data):
+def test_set_word_ids(valid_fragment_data, fragment_schema):
     data_with_ids = set_word_ids(valid_fragment_data)
-    fragment = FragmentSchema().load(data_with_ids)
+    fragment = fragment_schema.load(data_with_ids)
     fragment_with_ids = fragment.set_text(fragment.text.set_token_ids())
     ids = [
         word.id_
@@ -223,5 +235,5 @@ def test_set_word_ids(valid_fragment_data):
     expected_ids = [f"Word-{index + 1}" for index in range(len(ids))]
 
     assert ids and ids == expected_ids
-    assert FragmentSchema().load(data_with_ids) == fragment_with_ids
-    assert FragmentSchema().dump(fragment_with_ids) == data_with_ids
+    assert fragment_schema.load(data_with_ids) == fragment_with_ids
+    assert fragment_schema.dump(fragment_with_ids) == data_with_ids

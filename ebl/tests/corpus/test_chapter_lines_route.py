@@ -1,5 +1,6 @@
 import json
-from typing import cast
+from dataclasses import dataclass
+from typing import Any, cast
 
 import attr
 import falcon
@@ -21,6 +22,30 @@ from ebl.transliteration.domain.text_line import TextLine
 
 
 EMPTY_EDIT_DTO = {"new": [], "deleted": [], "edited": []}
+
+
+@dataclass(frozen=True)
+class ChapterDisplayCacheDependencies:
+    cached_client: Any
+    bibliography: Any
+    sign_repository: Any
+    signs: Any
+    text_repository: Any
+    provenance_service: Any
+
+
+@pytest.fixture
+def chapter_display_cache_dependencies(
+    request: pytest.FixtureRequest,
+) -> ChapterDisplayCacheDependencies:
+    return ChapterDisplayCacheDependencies(
+        cached_client=request.getfixturevalue("cached_client"),
+        bibliography=request.getfixturevalue("bibliography"),
+        sign_repository=request.getfixturevalue("sign_repository"),
+        signs=request.getfixturevalue("signs"),
+        text_repository=request.getfixturevalue("text_repository"),
+        provenance_service=request.getfixturevalue("seeded_provenance_service"),
+    )
 
 
 def test_updating_invalidates_chapter_display_cache(
@@ -231,8 +256,14 @@ def test_update_invalid_entity(
 
 
 def test_importing_invalidates_chapter_display_cache(
-    cached_client, bibliography, sign_repository, signs, text_repository
-):
+    chapter_display_cache_dependencies: ChapterDisplayCacheDependencies,
+) -> None:
+    cached_client = chapter_display_cache_dependencies.cached_client
+    bibliography = chapter_display_cache_dependencies.bibliography
+    sign_repository = chapter_display_cache_dependencies.sign_repository
+    signs = chapter_display_cache_dependencies.signs
+    text_repository = chapter_display_cache_dependencies.text_repository
+    seeded_provenance_service = chapter_display_cache_dependencies.provenance_service
     allow_signs(signs, sign_repository)
     chapter = ChapterFactory.build()
     allow_references(chapter, bibliography)
@@ -247,8 +278,11 @@ def test_importing_invalidates_chapter_display_cache(
     assert first_result.status == falcon.HTTP_OK
     next_line_mumber = (
         cast(
-            TextLine, chapter.lines[0].variants[0].manuscripts[0].line
-        ).line_number.number
+            LineNumber,
+            cast(
+                TextLine, chapter.lines[0].variants[0].manuscripts[0].line
+            ).line_number,
+        ).number
         + 1
     )
     atf = (
@@ -256,12 +290,13 @@ def test_importing_invalidates_chapter_display_cache(
         f"{chapter.manuscripts[0].siglum} {next_line_mumber}. ..."
     )
 
+    existing_lines = tuple(line.set_variant_alignment_flags() for line in chapter.lines)
+    imported_lines = tuple(
+        parse_chapter(atf, chapter.manuscripts, seeded_provenance_service)
+    )
     updated_chapter = attr.evolve(
         chapter,
-        lines=(
-            *(line.set_variant_alignment_flags() for line in chapter.lines),
-            *parse_chapter(atf, chapter.manuscripts),
-        ),
+        lines=existing_lines + imported_lines,
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\n\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,
     )

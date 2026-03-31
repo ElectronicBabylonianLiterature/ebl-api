@@ -9,10 +9,11 @@ from ebl.dossiers.domain.dossier_record import (
     DossierRecordSuggestion,
 )
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
-from ebl.common.domain.provenance import Provenance
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
 from ebl.bibliography.domain.reference import BibliographyId
+from ebl.common.application.schemas import deserialize_provenance_record
+from ebl.provenance.application.provenance_service import ProvenanceService
 
 DOSSIERS_COLLECTION = "dossiers"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
@@ -39,9 +40,9 @@ class DossierRecordSchema(Schema):
     related_kings = fields.List(
         fields.Float(), data_key="relatedKings", load_default=list
     )
-    provenance = fields.Function(
-        lambda object_: getattr(object_.provenance, "long_name", None),
-        lambda value: Provenance.from_name(value) if value else None,
+    provenance = fields.Method(
+        "serialize_provenance",
+        "deserialize_provenance",
         allow_none=True,
     )
     script = fields.Nested(ScriptSchema, allow_none=True, load_default=None)
@@ -54,6 +55,12 @@ class DossierRecordSchema(Schema):
         data["references"] = tuple(data["references"])
         return DossierRecord(**data)
 
+    def serialize_provenance(self, record: DossierRecord) -> Optional[str]:
+        return getattr(record.provenance, "long_name", None)
+
+    def deserialize_provenance(self, value: Optional[str]):
+        return deserialize_provenance_record(self, value)
+
 
 class DossierRecordSuggestionSchema(Schema):
     id = fields.String(required=True)
@@ -65,21 +72,28 @@ class DossierRecordSuggestionSchema(Schema):
 
 
 class MongoDossiersRepository(DossiersRepository):
-    def __init__(self, database: Database):
+    def __init__(
+        self, database: Database, provenance_service: ProvenanceService
+    ) -> None:
         self._dossiers_collection = MongoCollection(database, DOSSIERS_COLLECTION)
         self._bibliography_collection = MongoCollection(
             database, BIBLIOGRAPHY_COLLECTION
         )
         self._fragments_collection = MongoCollection(database, FRAGMENTS_COLLECTION)
+        self._provenance_service = provenance_service
 
     def create(self, dossier_record: DossierRecord) -> str:
         return self._dossiers_collection.insert_one(
-            DossierRecordSchema().dump(dossier_record)
+            DossierRecordSchema(
+                context={"provenance_service": self._provenance_service}
+            ).dump(dossier_record)
         )
 
     def find_all(self) -> Sequence[DossierRecord]:
         cursor = self._dossiers_collection.find_many({})
-        dossiers = DossierRecordSchema(many=True).load(cursor)
+        dossiers = DossierRecordSchema(
+            many=True, context={"provenance_service": self._provenance_service}
+        ).load(cursor)
         reference_ids = self._extract_reference_ids(dossiers)
         bibliography_entries = self._fetch_bibliography_entries(reference_ids)
         self._inject_dossiers_with_bibliography(dossiers, bibliography_entries)
@@ -121,7 +135,9 @@ class MongoDossiersRepository(DossiersRepository):
         search_filter = {"$and": filters} if len(filters) > 1 else filters[0]
 
         cursor = self._dossiers_collection.find_many(search_filter).limit(10)
-        dossiers = DossierRecordSchema(many=True).load(cursor)
+        dossiers = DossierRecordSchema(
+            many=True, context={"provenance_service": self._provenance_service}
+        ).load(cursor)
 
         reference_ids = self._extract_reference_ids(dossiers)
         bibliography_entries = self._fetch_bibliography_entries(reference_ids)
@@ -246,7 +262,9 @@ class MongoDossiersRepository(DossiersRepository):
 
     def _fetch_dossiers(self, ids: Sequence[str]) -> List[DossierRecord]:
         cursor = self._dossiers_collection.find_many({"_id": {"$in": ids}})
-        return DossierRecordSchema(many=True).load(cursor)
+        return DossierRecordSchema(
+            many=True, context={"provenance_service": self._provenance_service}
+        ).load(cursor)
 
     def _extract_reference_ids(
         self, dossiers: List[DossierRecord]
