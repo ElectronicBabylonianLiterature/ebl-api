@@ -66,7 +66,9 @@ def test_deserialize_archaeology(with_findspot, seeded_provenance_service):
 def test_deserialize_archaeology_empty_site_returns_none(
     empty_site_value, seeded_provenance_service
 ):
-    schema = ArchaeologySchema(context={"provenance_service": seeded_provenance_service})
+    schema = ArchaeologySchema(
+        context={"provenance_service": seeded_provenance_service}
+    )
     result = schema.load(
         {
             "excavationNumber": None,

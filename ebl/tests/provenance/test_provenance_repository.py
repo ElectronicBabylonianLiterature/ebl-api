@@ -31,7 +31,9 @@ def test_find_all(provenance_repository: ProvenanceRepository):
     assert {r.id for r in result} == {"BABYLON", "NINEVEH", "URUK"}
 
 
-def test_find_all_returns_alphabetical_order(provenance_repository: ProvenanceRepository):
+def test_find_all_returns_alphabetical_order(
+    provenance_repository: ProvenanceRepository,
+):
     provenance_repository.create(
         ProvenanceRecord(id="URUK", long_name="Uruk", abbreviation="Urk")
     )
