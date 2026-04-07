@@ -5,6 +5,7 @@ class ManuscriptType(NamedEnum):
     LIBRARY = ("Library", "")
     SCHOOL = ("School", "Sch")
     VARIA = ("Varia", "Var")
+    AMULET = ("Amulet", "Amu")
     COMMENTARY = ("Commentary", "Com")
     QUOTATION = ("Quotation", "Quo")
     EXCERPT = ("Excerpt", "Ex")
