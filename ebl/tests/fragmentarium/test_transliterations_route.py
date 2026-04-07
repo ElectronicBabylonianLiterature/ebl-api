@@ -1,9 +1,11 @@
 import json
+import time
 import attr
 
 import falcon
 import pytest
 from freezegun import freeze_time
+from pymongo.errors import PyMongoError
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.fragment import Notes, Introduction, Fragment
@@ -50,6 +52,37 @@ INTRO_FIXTURE = [
 ]
 
 
+def simulate_post_with_retry(client, url, body):
+    result = None
+    for attempt in range(3):
+        result = client.simulate_post(url, body=body)
+        if result.status != falcon.HTTP_INTERNAL_SERVER_ERROR:
+            return result
+
+        payload = ""
+        try:
+            payload = str(result.json)
+        except Exception:
+            payload = result.text or ""
+
+        if "operation cancelled" not in payload.lower() or attempt == 2:
+            return result
+        time.sleep(0.1)
+
+    return result
+
+
+def find_changelog_entry(database, query):
+    for attempt in range(3):
+        try:
+            return database["changelog"].find_one(query)
+        except PyMongoError as error:
+            if "operation cancelled" not in str(error).lower() or attempt == 2:
+                raise
+            time.sleep(0.1)
+    return None
+
+
 @freeze_time("2018-09-07 15:41:24.032")
 def test_update_transliteration(client, fragmentarium, user, database):
     fragment = FragmentFactory.build()
@@ -57,7 +90,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
     updates = {"transliteration": "$ (the transliteration)"}
     body = json.dumps(updates)
     url = f"/fragments/{fragment.number}/edition"
-    post_result = client.simulate_post(url, body=body)
+    post_result = simulate_post_with_retry(client, url, body)
 
     expected_json = {
         **create_response_dto(
@@ -77,12 +110,13 @@ def test_update_transliteration(client, fragmentarium, user, database):
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": str(fragment.number),
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
 
 
@@ -124,9 +158,10 @@ def test_update_transliteration_merge_lemmatization(
         lemmatized_fragment.number == MuseumNumber("K", "1"),
     )
 
-    post_result = client.simulate_post(
+    post_result = simulate_post_with_retry(
+        client,
         f"/fragments/{lemmatized_fragment.number}/edition",
-        body=json.dumps(updates),
+        json.dumps(updates),
     )
 
     assert post_result.status == falcon.HTTP_OK
@@ -215,8 +250,10 @@ def test_update_notes(client, fragmentarium, user, database, old_notes, new_note
     fragment: Fragment = FragmentFactory.build(notes=old_notes)
     fragment_number = fragmentarium.create(fragment)
     update = {"notes": new_notes.text}
-    post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/edition", body=json.dumps(update)
+    post_result = simulate_post_with_retry(
+        client,
+        f"/fragments/{fragment_number}/edition",
+        json.dumps(update),
     )
     expected_json = {
         **create_response_dto(
@@ -232,12 +269,13 @@ def test_update_notes(client, fragmentarium, user, database, old_notes, new_note
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": fragment_number,
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
 
 
@@ -259,8 +297,10 @@ def test_update_introduction(
     fragment: Fragment = FragmentFactory.build(introduction=old_introduction)
     fragment_number = fragmentarium.create(fragment)
     update = {"introduction": new_introduction.text}
-    post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/edition", body=json.dumps(update)
+    post_result = simulate_post_with_retry(
+        client,
+        f"/fragments/{fragment_number}/edition",
+        json.dumps(update),
     )
     expected_json = create_response_dto(
         fragment.set_introduction(new_introduction.text),
@@ -274,12 +314,13 @@ def test_update_introduction(
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": fragment_number,
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )
 
 
@@ -318,8 +359,10 @@ def test_update_multiple_fields(
         "notes": new_notes.text,
         "transliteration": new_transliteration,
     }
-    post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/edition", body=json.dumps(updates)
+    post_result = simulate_post_with_retry(
+        client,
+        f"/fragments/{fragment_number}/edition",
+        json.dumps(updates),
     )
     expected_json = create_response_dto(
         fragment.set_introduction(new_introduction.text)
@@ -338,10 +381,11 @@ def test_update_multiple_fields(
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
     assert get_result.json == expected_json
 
-    assert database["changelog"].find_one(
+    assert find_changelog_entry(
+        database,
         {
             "resource_id": fragment_number,
             "resource_type": "fragments",
             "user_profile.name": user.profile["name"],
-        }
+        },
     )

@@ -1,4 +1,5 @@
-from typing import cast
+from dataclasses import dataclass
+from typing import Any, cast
 
 import attr
 import pytest
@@ -52,6 +53,36 @@ CHAPTER_WITHOUT_DOCUMENTS = attr.evolve(
         for manuscript in CHAPTER.manuscripts
     ),
 )
+
+
+@dataclass(frozen=True)
+class ImportingLinesDependencies:
+    corpus: Corpus
+    text_repository: Any
+    bibliography: Any
+    changelog: Any
+    signs: Any
+    sign_repository: Any
+    user: Any
+    when: Any
+    provenance_service: Any
+
+
+@pytest.fixture
+def importing_lines_dependencies(
+    request: pytest.FixtureRequest,
+) -> ImportingLinesDependencies:
+    return ImportingLinesDependencies(
+        corpus=request.getfixturevalue("corpus"),
+        text_repository=request.getfixturevalue("text_repository"),
+        bibliography=request.getfixturevalue("bibliography"),
+        changelog=request.getfixturevalue("changelog"),
+        signs=request.getfixturevalue("signs"),
+        sign_repository=request.getfixturevalue("sign_repository"),
+        user=request.getfixturevalue("user"),
+        when=request.getfixturevalue("when"),
+        provenance_service=request.getfixturevalue("seeded_provenance_service"),
+    )
 
 
 def expect_bibliography(bibliography, when) -> None:
@@ -792,8 +823,17 @@ def test_updating_lines_add(
 
 
 def test_importing_lines(
-    corpus, text_repository, bibliography, changelog, signs, sign_repository, user, when
+    importing_lines_dependencies: ImportingLinesDependencies,
 ) -> None:
+    corpus = importing_lines_dependencies.corpus
+    text_repository = importing_lines_dependencies.text_repository
+    bibliography = importing_lines_dependencies.bibliography
+    changelog = importing_lines_dependencies.changelog
+    signs = importing_lines_dependencies.signs
+    sign_repository = importing_lines_dependencies.sign_repository
+    user = importing_lines_dependencies.user
+    when = importing_lines_dependencies.when
+    seeded_provenance_service = importing_lines_dependencies.provenance_service
     line_number = CHAPTER_WITHOUT_DOCUMENTS.lines[-1].number.number + 1
     siglum = CHAPTER_WITHOUT_DOCUMENTS.manuscripts[0].siglum
     atf = f"{line_number}. kur\n{siglum} {line_number}. ba"
@@ -801,7 +841,7 @@ def test_importing_lines(
         CHAPTER,
         lines=(  # pyre-ignore[60]
             *(line.set_variant_alignment_flags() for line in CHAPTER.lines),
-            *parse_chapter(atf, CHAPTER.manuscripts),
+            *parse_chapter(atf, CHAPTER.manuscripts, seeded_provenance_service),
         ),
         signs=("KU ABZ075 ABZ207a\\u002F207b\\u0020X\nBA\nKU\nABZ075",),
         parser_version=ATF_PARSER_VERSION,

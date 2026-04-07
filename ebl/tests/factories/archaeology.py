@@ -3,11 +3,11 @@ from ebl.fragmentarium.domain.date_range import DateRange, PartialDate
 from ebl.fragmentarium.domain.findspot import (
     BuildingType,
     ExcavationPlan,
-    ExcavationSite,
     Findspot,
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.collections import TupleFactory
+from ebl.tests.factories.provenance import DEFAULT_NON_STANDARD_PROVENANCES
 
 import factory.fuzzy
 
@@ -50,9 +50,7 @@ class FindspotFactory(factory.Factory):
         model = Findspot
 
     id_ = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
-    site = factory.fuzzy.FuzzyChoice(
-        set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
-    )
+    site = factory.fuzzy.FuzzyChoice(DEFAULT_NON_STANDARD_PROVENANCES)
     sector = factory.Faker("word")
     area = factory.Faker("word")
     building = factory.Faker("word")
@@ -71,9 +69,7 @@ class ArchaeologyFactory(factory.Factory):
         model = Archaeology
 
     excavation_number = factory.Sequence(lambda n: ExcavationNumber("X", str(n)))
-    site = factory.fuzzy.FuzzyChoice(
-        set(ExcavationSite) - {ExcavationSite.STANDARD_TEXT}
-    )
+    site = factory.fuzzy.FuzzyChoice(DEFAULT_NON_STANDARD_PROVENANCES)
     regular_excavation = factory.Faker("boolean")
     excavation_date = factory.SubFactory(DateRangeFactory)
 

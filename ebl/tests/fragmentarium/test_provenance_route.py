@@ -1,18 +1,18 @@
 import falcon
 
-from ebl.common.domain.provenance import Provenance
+from ebl.provenance.application.provenance_schema import ApiProvenanceRecordSchema
+from ebl.provenance.domain.provenance_model import STANDARD_TEXT_PROVENANCE_ID
+from ebl.provenance.web.provenances import _sort_key
+from ebl.tests.factories.provenance import build_provenance_records
 
 
 def test_get_provenance(client):
     get_result = client.simulate_get("/provenances")
-    provenances_data = tuple(
-        (
-            (prov.long_name, prov.parent)
-            if prov.parent is None
-            else (prov.long_name, f"[{prov.parent}]")
-        )
-        for prov in Provenance
-        if prov.long_name != "Standard Text"
-    )
     assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == list(map(list, provenances_data))
+    filtered = [
+        r for r in build_provenance_records() if r.id != STANDARD_TEXT_PROVENANCE_ID
+    ]
+    parents = sorted([r for r in filtered if r.parent is None], key=_sort_key)
+    children = sorted([r for r in filtered if r.parent is not None], key=_sort_key)
+    expected_payload = ApiProvenanceRecordSchema(many=True).dump([*parents, *children])
+    assert get_result.json == expected_payload

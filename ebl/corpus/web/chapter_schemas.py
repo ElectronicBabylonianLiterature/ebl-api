@@ -135,6 +135,9 @@ class ApiManuscriptLineSchema(Schema):
     def make_manuscript_line(self, data: dict, **kwargs) -> ManuscriptLine:
         has_text_line = len(data["number"]) > 0
         lines = data["atf"].split("\n")
+        provenance_service = self.context.get("provenance_service")
+        if provenance_service is None:
+            raise ValidationError("Provenance service not configured.")
         try:
             text = (
                 parse_text_line(f"{data['number']}. {lines[0]}")
@@ -146,7 +149,7 @@ class ApiManuscriptLineSchema(Schema):
                 data["manuscript_id"],
                 tuple(data["labels"]),
                 text,
-                tuple(parse_paratext(line) for line in paratext),
+                tuple(parse_paratext(line, provenance_service) for line in paratext),
                 tuple(data["omitted_words"]),
             )
         except PARSE_ERRORS as error:

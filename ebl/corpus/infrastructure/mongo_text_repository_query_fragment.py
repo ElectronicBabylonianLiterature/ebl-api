@@ -79,7 +79,9 @@ class MongoTextRepositoryQueryFragment(MongoTextRepositoryBase):
                 {"$unwind": "$text"},
             ]
         )
-        return ManuscriptAttestationSchema().load(cursor, many=True)
+        return ManuscriptAttestationSchema(
+            context={"provenance_service": self._provenance_service}
+        ).load(cursor, many=True)
 
     def query_corpus_by_uncertain_fragments(
         self, museum_numbers: List[MuseumNumber]
@@ -118,7 +120,9 @@ class MongoTextRepositoryQueryFragment(MongoTextRepositoryBase):
                 {"$unwind": "$text"},
             ]
         )
-        return UncertainFragmentAttestationSchema().load(cursor, many=True)
+        return UncertainFragmentAttestationSchema(
+            context={"provenance_service": self._provenance_service}
+        ).load(cursor, many=True)
 
     def query_corpus_by_related_fragments(
         self, museum_numbers: List[MuseumNumber]

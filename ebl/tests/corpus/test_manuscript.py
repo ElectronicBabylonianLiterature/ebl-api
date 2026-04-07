@@ -5,12 +5,18 @@ from ebl.common.domain.period import Period
 
 from ebl.corpus.domain.manuscript import Manuscript
 from ebl.common.domain.manuscript_type import ManuscriptType
-from ebl.common.domain.provenance import Provenance
+from ebl.tests.factories.provenance import DEFAULT_PROVENANCES
 from ebl.tests.factories.corpus import ManuscriptLineFactory
 from ebl.transliteration.domain.line import EmptyLine
 from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text_line import TextLine
+
+
+STANDARD_TEXT = next(
+    record for record in DEFAULT_PROVENANCES if record.id == "STANDARD_TEXT"
+)
+ASSYRIA = next(record for record in DEFAULT_PROVENANCES if record.id == "ASSYRIA")
 
 
 @pytest.mark.parametrize(
@@ -24,12 +30,12 @@ def test_is_empty(line: Union[TextLine, EmptyLine], expected: bool) -> None:
 @pytest.mark.parametrize(
     "provenance,period,type_",
     [
-        (Provenance.STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.NONE),
-        (Provenance.STANDARD_TEXT, Period.NONE, ManuscriptType.LIBRARY),
-        (Provenance.STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.SCHOOL),
-        (Provenance.ASSYRIA, Period.OLD_ASSYRIAN, ManuscriptType.NONE),
-        (Provenance.MEGIDDO, Period.NONE, ManuscriptType.LIBRARY),
-        (Provenance.UNCERTAIN, Period.NONE, ManuscriptType.NONE),
+        (STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.NONE),
+        (STANDARD_TEXT, Period.NONE, ManuscriptType.LIBRARY),
+        (STANDARD_TEXT, Period.OLD_ASSYRIAN, ManuscriptType.SCHOOL),
+        (ASSYRIA, Period.OLD_ASSYRIAN, ManuscriptType.NONE),
+        (ASSYRIA, Period.NONE, ManuscriptType.LIBRARY),
+        (ASSYRIA, Period.NONE, ManuscriptType.NONE),
     ],
 )
 def test_invalid_siglum(provenance, period, type_) -> None:
