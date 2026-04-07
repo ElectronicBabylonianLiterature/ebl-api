@@ -7,7 +7,7 @@ class ManuscriptType(NamedEnum):
     VARIA = ("Varia", "Var")
     AMULET = ("Amulet", "Amu")
     COMMENTARY = ("Commentary", "Com")
+    QUOTATION = ("Quotation", "Quo")
     EXCERPT = ("Excerpt", "Ex")
     PARALLEL = ("Parallel", "Par")
-    QUOTATION = ("Quotation", "Quo")
     NONE = ("None", "")
