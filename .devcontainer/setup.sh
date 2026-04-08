@@ -53,6 +53,16 @@ if ! command -v poetry &> /dev/null; then
 fi
 poetry --version
 
+echo "Installing ggshield..."
+export PATH="$HOME/.local/bin:$PATH"
+if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.bashrc"; then
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+fi
+if ! command -v ggshield &> /dev/null; then
+    python3 -m pip install --user --upgrade ggshield
+fi
+ggshield --version
+
 # Create MongoDB data directory
 sudo mkdir -p /workspaces/data
 sudo chown -R $(whoami):$(whoami) /workspaces/data
