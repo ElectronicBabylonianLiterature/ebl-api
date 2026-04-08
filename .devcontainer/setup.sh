@@ -55,8 +55,13 @@ poetry --version
 
 echo "Installing ggshield..."
 export PATH="$HOME/.local/bin:$PATH"
-if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "$HOME/.bashrc"; then
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+profile_file="$HOME/.profile"
+path_export='export PATH="$HOME/.local/bin:$PATH"'
+if [ ! -f "$profile_file" ]; then
+    touch "$profile_file"
+fi
+if ! grep -Fxq "$path_export" "$profile_file"; then
+    printf '\n%s\n' "$path_export" >> "$profile_file"
 fi
 if ! command -v ggshield &> /dev/null; then
     python3 -m pip install --user --upgrade ggshield
