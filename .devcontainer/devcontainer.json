@@ -12,7 +12,7 @@
 			"version": "latest"
 		}
 	},
-	"runArgs": ["--env-file", ".env"],
+	//"runArgs": ["--env-file", ".env"],
 	"customizations": {
 		"vscode": {
 			"extensions": [
