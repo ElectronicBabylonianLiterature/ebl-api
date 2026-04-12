@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
@@ -17,11 +19,11 @@ from ebl.fragmentarium.domain.date import DateSchema
 
 
 def test_find_annotations_by_sign(
-    annotations_repository,
-    cropped_sign_images_repository,
     fragment_repository: MongoFragmentRepository,
-    when,
 ):
+    annotations_repository = Mock()
+    cropped_sign_images_repository = Mock()
+
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
     )
@@ -34,17 +36,17 @@ def test_find_annotations_by_sign(
     image_id_1 = annotation[0].cropped_sign.image_id
     image_id_2 = annotation[1].cropped_sign.image_id
 
-    when(annotations_repository).find_by_sign("test-sign").thenReturn([annotations])
-    when(cropped_sign_images_repository).query_by_id(image_id_1).thenReturn(
-        CroppedSignImage(
+    annotations_repository.find_by_sign.return_value = [annotations]
+
+    cropped_sign_images_repository.query_by_id.side_effect = lambda image_id: {
+        image_id_1: CroppedSignImage(
             image_id_1, Base64("test-base64-1"), annotations.fragment_number
-        )
-    )
-    when(cropped_sign_images_repository).query_by_id(image_id_2).thenReturn(
-        CroppedSignImage(
+        ),
+        image_id_2: CroppedSignImage(
             image_id_2, Base64("test-base64-2"), annotations.fragment_number
-        )
-    )
+        ),
+    }[image_id]
+
     fragment_number = annotations.fragment_number
     provenance = annotations.provenance
 
@@ -55,6 +57,7 @@ def test_find_annotations_by_sign(
         "label": annotation[0].cropped_sign.label,
         "date": DateSchema().dump(fragment.date),
         "provenance": provenance,
+        "annotationId": annotation[0].data.id,
     }
     expected_2 = {
         "fragmentNumber": str(fragment_number),
@@ -63,6 +66,10 @@ def test_find_annotations_by_sign(
         "label": annotation[1].cropped_sign.label,
         "date": DateSchema().dump(fragment.date),
         "provenance": provenance,
+        "annotationId": annotation[1].data.id,
     }
 
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]
+    annotations_repository.find_by_sign.assert_called_once_with(
+        "test-sign", False, None, None
+        )
