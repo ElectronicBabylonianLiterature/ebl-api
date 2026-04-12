@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 from marshmallow import EXCLUDE
 from pymongo.database import Database
@@ -48,14 +48,14 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
     ) -> Sequence[Annotations]:
-        query = {"$regex": re.escape(sign), "$options": "i"}
+        query: Dict[str, str] = {"$regex": re.escape(sign), "$options": "i"}
 
-        match_conditions = {"annotations.data.signName": query}
+        match_conditions: Dict[str, Any] = {"annotations.data.signName": query}
 
         if script_filter:
             match_conditions["fragment.script.period"] = script_filter
 
-        annotation_filter_conditions = [
+        annotation_filter_conditions: List[Dict[str, Any]] = [
             {"$eq": ["$$annotation.data.signName", sign]}
         ]
 
