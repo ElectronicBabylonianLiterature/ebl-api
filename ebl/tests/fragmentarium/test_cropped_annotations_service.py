@@ -72,4 +72,4 @@ def test_find_annotations_by_sign(
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]
     annotations_repository.find_by_sign.assert_called_once_with(
         "test-sign", False, None, None
-        )
+    )
