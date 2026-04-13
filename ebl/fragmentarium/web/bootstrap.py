@@ -57,6 +57,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository.create_indexes()
     except OperationFailure as error:
         print(f"Skipping fragment index creation: {error}")
+
+    fragmentarium = Fragmentarium(context.fragment_repository)
+
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.get_bibliography(),
