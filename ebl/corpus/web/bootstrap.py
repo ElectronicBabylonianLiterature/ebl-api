@@ -38,6 +38,7 @@ def create_corpus_routes(api: falcon.App, context: Context):
         context.parallel_line_injector,
     )
     from pymongo.errors import OperationFailure
+
     try:
         context.text_repository.create_indexes()
     except OperationFailure as error:
