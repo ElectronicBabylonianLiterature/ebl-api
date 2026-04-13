@@ -181,8 +181,9 @@ def test_dump() -> None:
     assert ChapterSchema().dump(CHAPTER) == to_dict(CHAPTER)
 
 
-def test_load() -> None:
-    assert ChapterSchema().load(to_dict(CHAPTER)) == strip_documents(CHAPTER)
+def test_load(seeded_provenance_service) -> None:
+    schema = ChapterSchema(context={"provenance_service": seeded_provenance_service})
+    assert schema.load(to_dict(CHAPTER)) == strip_documents(CHAPTER)
 
 
 def test_author_schema() -> None:

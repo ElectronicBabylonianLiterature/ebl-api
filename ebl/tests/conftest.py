@@ -27,7 +27,7 @@ from ebl.bibliography.infrastructure.bibliography import MongoBibliographyReposi
 from ebl.cache.application.custom_cache import ChapterCache
 from ebl.cache.infrastructure.mongo_cache_repository import MongoCacheRepository
 from ebl.changelog import Changelog
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.infrastructure.mongo_text_repository import MongoTextRepository
 from ebl.dictionary.application.dictionary_service import Dictionary
 from ebl.dictionary.infrastructure.word_repository import MongoWordRepository
@@ -88,6 +88,11 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 )
 from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     MongoDossiersRepository,
+)
+from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.tests.factories.provenance import build_provenance_records
+from ebl.provenance.infrastructure.mongo_provenance_repository import (
+    MongoProvenanceRepository,
 )
 from ebl.users.domain.user import Guest, User
 from ebl.users.infrastructure.auth0 import Auth0User
@@ -203,31 +208,42 @@ def parallel_line_injector(
 
 
 @pytest.fixture
-def text_repository(database: Database):
-    return MongoTextRepository(database)
+def text_repository(database: Database, seeded_provenance_service):
+    return MongoTextRepository(database, seeded_provenance_service)
 
 
 @pytest.fixture
-def corpus(
-    text_repository, bibliography, changelog, sign_repository, parallel_line_injector
-):
-    return Corpus(
-        text_repository,
-        bibliography,
-        changelog,
-        sign_repository,
-        parallel_line_injector,
+def corpus_dependencies(
+    text_repository,
+    bibliography,
+    changelog,
+    sign_repository,
+    parallel_line_injector,
+    seeded_provenance_service,
+) -> CorpusDependencies:
+    return CorpusDependencies(
+        repository=text_repository,
+        bibliography=bibliography,
+        changelog=changelog,
+        sign_repository=sign_repository,
+        parallel_line_injector=parallel_line_injector,
+        provenance_service=seeded_provenance_service,
     )
 
 
 @pytest.fixture
-def fragment_repository(database):
-    return MongoFragmentRepository(database)
+def corpus(corpus_dependencies: CorpusDependencies) -> Corpus:
+    return Corpus(corpus_dependencies)
 
 
 @pytest.fixture
-def findspot_repository(database):
-    return MongoFindspotRepository(database)
+def fragment_repository(database, seeded_provenance_service):
+    return MongoFragmentRepository(database, seeded_provenance_service)
+
+
+@pytest.fixture
+def findspot_repository(database, seeded_provenance_service):
+    return MongoFindspotRepository(database, seeded_provenance_service)
 
 
 @pytest.fixture
@@ -448,8 +464,25 @@ def user() -> User:
 
 
 @pytest.fixture
-def dossiers_repository(database):
-    return MongoDossiersRepository(database)
+def dossiers_repository(database, seeded_provenance_service):
+    return MongoDossiersRepository(database, seeded_provenance_service)
+
+
+@pytest.fixture
+def provenance_repository(database):
+    return MongoProvenanceRepository(database)
+
+
+@pytest.fixture
+def provenance_service(provenance_repository):
+    return ProvenanceService(provenance_repository)
+
+
+@pytest.fixture
+def seeded_provenance_service(provenance_repository):
+    for record in build_provenance_records():
+        provenance_repository.create(record)
+    return ProvenanceService(provenance_repository)
 
 
 @pytest.fixture
@@ -466,6 +499,8 @@ def context(
     text_repository,
     changelog,
     bibliography_repository,
+    provenance_repository,
+    seeded_provenance_service,
     annotations_repository,
     lemma_repository,
     afo_register_repository,
@@ -474,7 +509,7 @@ def context(
     user,
     parallel_line_injector,
     mongo_cache_repository,
-):
+) -> ebl.context.Context:
     return ebl.context.Context(
         ebl_ai_client=ebl_ai_client,
         auth_backend=NoneAuthBackend(lambda: user),
@@ -488,6 +523,8 @@ def context(
         fragment_repository=fragment_repository,
         changelog=changelog,
         bibliography_repository=bibliography_repository,
+        provenance_repository=provenance_repository,
+        provenance_service=seeded_provenance_service,
         text_repository=text_repository,
         annotations_repository=annotations_repository,
         lemma_repository=lemma_repository,

@@ -37,7 +37,6 @@ from ebl.fragmentarium.web.lemma_annotation import (
     AutofillLemmasResource,
 )
 from ebl.fragmentarium.web.named_entities import NamedEntityResource
-from ebl.fragmentarium.web.provenances import ProvenancesResource
 from ebl.fragmentarium.web.periods import PeriodsResource
 from ebl.fragmentarium.web.lemmatizations import LemmatizationResource
 from ebl.fragmentarium.web.photo import PhotoResource
@@ -48,17 +47,18 @@ from ebl.fragmentarium.web.fragments_afo_register import (
     AfoRegisterFragmentsQueryResource,
 )
 from ebl.corpus.web.chapters import ChaptersByFragmentResource
-from ebl.corpus.application.corpus import Corpus
+from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResource
 
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
-    try:
-        context.fragment_repository.create_indexes()
-    except OperationFailure as error:
-        print(f"Skipping fragment index creation: {error}")
+  try:
+      context.fragment_repository.create_indexes()
+  except OperationFailure as error:
+      print(f"Skipping fragment index creation: {error}") 
 
-    fragmentarium = Fragmentarium(context.fragment_repository)
+  provenance_service = context.provenance_service
+  fragmentarium = Fragmentarium(context.fragment_repository)
 
     finder = FragmentFinder(
         context.get_bibliography(),
@@ -80,11 +80,14 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.cropped_sign_images_repository,
     )
     corpus = Corpus(
-        context.text_repository,
-        context.get_bibliography(),
-        context.changelog,
-        context.sign_repository,
-        context.parallel_line_injector,
+        CorpusDependencies(
+            repository=context.text_repository,
+            bibliography=context.get_bibliography(),
+            changelog=context.changelog,
+            sign_repository=context.sign_repository,
+            parallel_line_injector=context.parallel_line_injector,
+            provenance_service=provenance_service,
+        )
     )
     statistics = make_statistics_resource(context.cache, fragmentarium)
     fragments = FragmentsResource(finder)
@@ -116,7 +119,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     genres = GenresResource()
-    provenances = ProvenancesResource()
     periods = PeriodsResource()
     lemmatization = LemmatizationResource(updater)
     lemma_annotation = LemmaAnnotationResource(updater)
@@ -128,7 +130,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     scopes = FragmentAuthorizedScopesResource(
         context.fragment_repository, finder, updater
     )
-    archaeology = ArchaeologyResource(updater)
+    archaeology = ArchaeologyResource(updater, provenance_service)
     colophon = ColophonResource(updater)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
@@ -170,7 +172,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         ("/fragments/{number}/photo", photo),
         ("/fragments/{number}/corpus", chapters),
         ("/genres", genres),
-        ("/provenances", provenances),
         ("/periods", periods),
         ("/statistics", statistics),
         ("/fragments/{number}/pager/{folio_name}/{folio_number}", folio_pager),

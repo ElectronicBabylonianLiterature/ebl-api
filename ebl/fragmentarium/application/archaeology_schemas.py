@@ -11,8 +11,8 @@ from ebl.fragmentarium.domain.findspot import (
     BuildingType,
     ExcavationPlan,
     Findspot,
-    ExcavationSite,
 )
+from ebl.common.application.schemas import deserialize_provenance_record
 from ebl.schemas import NameEnumField
 from marshmallow import Schema, fields, post_load
 
@@ -33,16 +33,17 @@ class ExcavationPlanSchema(Schema):
         return ExcavationPlan(**data)
 
 
-site_field = fields.Function(
-    lambda object_: getattr(object_.site, "long_name", None),
-    lambda value: ExcavationSite.from_name(value) if value else None,
-    allow_none=True,
-)
+class ProvenanceSiteMixin:
+    def serialize_site(self, obj):
+        return getattr(obj.site, "long_name", None)
+
+    def deserialize_site(self, value):
+        return deserialize_provenance_record(self, value)
 
 
-class FindspotSchema(Schema):
+class FindspotSchema(ProvenanceSiteMixin, Schema):
     id_ = fields.Integer(required=True, data_key="_id")
-    site = site_field
+    site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     sector = fields.String()
     area = fields.String()
     building = fields.String()
@@ -66,11 +67,11 @@ class FindspotSchema(Schema):
         return Findspot(**data)
 
 
-class ArchaeologySchema(Schema):
+class ArchaeologySchema(ProvenanceSiteMixin, Schema):
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )
-    site = site_field
+    site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     regular_excavation = fields.Boolean(
         load_default=False, data_key="isRegularExcavation"
     )
@@ -81,6 +82,9 @@ class ArchaeologySchema(Schema):
         allow_none=True, dump_default=None, load_default=None, data_key="findspotId"
     )
     findspot = fields.Nested(FindspotSchema, allow_none=True, load_default=None)
+    is_findspot_uncertain = fields.Boolean(
+        allow_none=True, load_default=None, data_key="isFindspotUncertain"
+    )
 
     @post_load
     def create_archaeology(self, data, **kwargs) -> Archaeology:
