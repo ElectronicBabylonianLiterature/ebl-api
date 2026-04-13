@@ -60,7 +60,6 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
 
     fragmentarium = Fragmentarium(context.fragment_repository)
 
-    fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.get_bibliography(),
         context.fragment_repository,
