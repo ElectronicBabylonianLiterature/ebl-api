@@ -1,4 +1,5 @@
 import falcon
+from pymongo.errors import OperationFailure
 
 from ebl.context import Context
 from ebl.dictionary.application.dictionary_service import Dictionary
@@ -52,7 +53,10 @@ from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResou
 
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
-    context.fragment_repository.create_indexes()
+    try:
+        context.fragment_repository.create_indexes()
+    except OperationFailure as error:
+        print(f"Skipping fragment index creation: {error}")
     fragmentarium = Fragmentarium(context.fragment_repository)
     finder = FragmentFinder(
         context.get_bibliography(),

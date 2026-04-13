@@ -37,7 +37,11 @@ def create_corpus_routes(api: falcon.App, context: Context):
         context.sign_repository,
         context.parallel_line_injector,
     )
-    context.text_repository.create_indexes()
+    from pymongo.errors import OperationFailure
+    try:
+        context.text_repository.create_indexes()
+    except OperationFailure as error:
+        print(f"Skipping index creation: {error}")
 
     texts = TextsResource(corpus)
     text = TextResource(corpus)

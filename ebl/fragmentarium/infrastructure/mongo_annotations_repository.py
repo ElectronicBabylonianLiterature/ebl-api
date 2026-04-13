@@ -52,9 +52,6 @@ class MongoAnnotationsRepository(AnnotationsRepository):
 
         match_conditions: Dict[str, Any] = {"annotations.data.signName": query}
 
-        if script_filter:
-            match_conditions["fragment.script.period"] = script_filter
-
         annotation_filter_conditions: List[Dict[str, Any]] = [
             {"$eq": ["$$annotation.data.signName", sign]}
         ]
