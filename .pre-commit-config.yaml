@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: ggshield-secret-scan
+        name: ggshield secret scan
+        entry: sh scripts/ggshield-scan-pre-commit.sh
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]

@@ -19,11 +19,11 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 
 ### Prerequisites
 
-**Cloud Development**
+#### Cloud Development
 
 * [GitHub Codespaces](https://github.com/features/codespaces)
 
-**Local Development**
+#### Local Development
 
 * [Docker Desktop](https://www.docker.com/products/docker-desktop) (or Docker Engine + Docker Compose)
 * [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
@@ -55,6 +55,7 @@ If not using dev containers:
 * [PyPy3.11](https://www.pypy.org) & pip
 * [Task](https://taskfile.dev/)
 * MongoDB 4.4.4
+* [ggshield](https://docs.gitguardian.com/ggshield-docs/getting-started)
 * [Rust compiler](https://www.rust-lang.org/tools/install) (for libcst)
 
 ```bash
@@ -171,6 +172,45 @@ The following are needed to run the application:
 * [Ebl-AI-Api](https://github.com/ElectronicBabylonianLiterature/ebl-ai-api)
 
 See the [Auth0](#auth0) and [Sentry](#sentry) sections below for setup details.
+
+## Secret scanning
+
+This repository blocks commits that introduce detected secrets.
+
+* Local pre-commit scanning is run through GitGuardian ggshield.
+* CI also runs GitGuardian in [.github/workflows/secret-scan.yml](.github/workflows/secret-scan.yml).
+* In dev containers and Codespaces, ggshield is installed automatically by [.devcontainer/setup.sh](.devcontainer/setup.sh).
+
+Set up local scanning:
+
+```bash
+poetry run pre-commit install
+ggshield auth login
+```
+
+You can also authenticate by exporting `GITGUARDIAN_API_KEY`.
+
+Create a `GITGUARDIAN_API_KEY` for CI and optional local authentication:
+
+1. Sign in to GitGuardian at <https://dashboard.gitguardian.com>.
+2. Open your user settings and go to API keys / Personal access tokens.
+3. Create a new token with at least scan scope.
+4. Copy the token immediately.
+5. Add it to your local environment and to the repository GitHub Actions secrets.
+
+Manual commands:
+
+```bash
+ggshield secret scan pre-commit
+ggshield secret scan path --recursive --use-gitignore .
+task test-secrets
+```
+
+If a scan fails:
+
+1. Investigate the finding in GitGuardian.
+2. Replace real secrets immediately; do not commit them.
+3. For test payloads, generate values dynamically instead of storing secret-like literals in the repository.
 
 ## Development
 

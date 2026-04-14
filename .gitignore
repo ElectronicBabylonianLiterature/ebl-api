@@ -134,3 +134,6 @@ Taskfile.yml
 
 # Core dumps
 core.*
+
+# Added by ggshield
+.cache_ggshield

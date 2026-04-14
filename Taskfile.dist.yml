@@ -25,6 +25,10 @@ tasks:
     cmds:
       - poetry run pytest {{.CLI_ARGS}}
 
+  test-secrets:
+    cmds:
+      - bash scripts/test-secret-scanning.sh
+
   lint:
     cmds:
       - poetry run ruff check ebl {{.CLI_ARGS}}
