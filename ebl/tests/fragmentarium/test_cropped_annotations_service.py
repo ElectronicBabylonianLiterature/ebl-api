@@ -75,6 +75,7 @@ def test_find_annotations_by_sign(
         "test-sign", False, None, None
     )
 
+
 def test_find_annotations_by_sign_includes_pca_clustering(
     fragment_repository: MongoFragmentRepository,
 ):
@@ -113,6 +114,7 @@ def test_find_annotations_by_sign_includes_pca_clustering(
     assert result[0]["annotationId"] == annotation.data.id
     assert "pcaClustering" in result[0]
 
+
 def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
     fragment_repository: MongoFragmentRepository,
 ):
@@ -142,6 +144,7 @@ def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
     assert result[0]["annotationId"] == annotation.data.id
     assert "pcaClustering" not in result[0]
 
+
 def test_find_annotations_by_sign_passes_centroids_only_filter(
     fragment_repository: MongoFragmentRepository,
 ):
@@ -160,6 +163,7 @@ def test_find_annotations_by_sign_passes_centroids_only_filter(
     annotations_repository.find_by_sign.assert_called_once_with(
         "test-sign", True, None, None
     )
+
 
 def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     fragment_repository: MongoFragmentRepository,

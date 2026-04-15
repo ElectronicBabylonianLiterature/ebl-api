@@ -110,11 +110,13 @@ def test_signs_get_with_centroids_only(
     assert len(result.json) > 0
     assert result.status == falcon.HTTP_OK
 
+
 def test_signs_get_cluster_without_script_returns_bad_request(client):
     result = client.simulate_get("/signs/signName/images/cluster/test-cluster-id")
 
     assert result.status == falcon.HTTP_BAD_REQUEST
     assert "script" in result.json["error"].lower()
+
 
 def test_signs_get_cluster_with_script(
     client,

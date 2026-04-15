@@ -34,6 +34,7 @@ def test_find_by_sign(database, annotations_repository, fragment_repository):
             assert annotation.data.sign_name == sign_query
         assert result.script == expected_scripts[str(result.fragment_number)]
 
+
 def test_find_by_sign_with_script_filter(
     database, annotations_repository, fragment_repository
 ):
@@ -64,6 +65,7 @@ def test_find_by_sign_with_script_filter(
         assert result.script.period == target_script.period
         for annotation in result.annotations:
             assert annotation.data.sign_name == sign_query
+
 
 def test_retrieve_all(database, annotations_repository):
     annotations = AnnotationsFactory.build_batch(5)
