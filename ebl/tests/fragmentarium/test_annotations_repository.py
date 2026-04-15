@@ -34,6 +34,36 @@ def test_find_by_sign(database, annotations_repository, fragment_repository):
             assert annotation.data.sign_name == sign_query
         assert result.script == expected_scripts[str(result.fragment_number)]
 
+def test_find_by_sign_with_script_filter(
+    database, annotations_repository, fragment_repository
+):
+    annotations = AnnotationsFactory.build_batch(3)
+    scripts = ScriptFactory.build_batch(3)
+
+    assert len({script.period for script in scripts}) > 1
+
+    for i, annotation in enumerate(annotations):
+        fragment = FragmentFactory.build(
+            number=annotation.fragment_number, script=scripts[i]
+        )
+        fragment_repository.create(fragment)
+
+    sign_query = annotations[0].annotations[0].data.sign_name
+    target_script = scripts[0]
+
+    database[COLLECTION].insert_many(
+        AnnotationsWithScriptSchema(many=True).dump(annotations)
+    )
+
+    results = annotations_repository.find_by_sign(
+        sign_query, script_filter=target_script.period.long_name
+    )
+
+    assert len(results) >= 1
+    for result in results:
+        assert result.script.period == target_script.period
+        for annotation in result.annotations:
+            assert annotation.data.sign_name == sign_query
 
 def test_retrieve_all(database, annotations_repository):
     annotations = AnnotationsFactory.build_batch(5)

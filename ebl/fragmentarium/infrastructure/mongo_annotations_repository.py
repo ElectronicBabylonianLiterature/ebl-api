@@ -66,6 +66,9 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                 {"$eq": ["$$annotation.pcaClustering.clusterId", cluster_id]}
             )
 
+        if script_filter:
+            match_conditions["fragment.script.period"] = script_filter
+
         result = self._collection.aggregate(
             [
                 {
