@@ -1,3 +1,4 @@
+import falcon
 from falcon import Request, Response
 
 from ebl.fragmentarium.application.cropped_annotations_service import (
@@ -27,7 +28,7 @@ class ClusterCroppedAnnotationsResource:
         script_filter = req.get_param("script")
 
         if not script_filter:
-            resp.status = "400 Bad Request"
+            resp.status = falcon.HTTP_BAD_REQUEST
             resp.media = {
                 "error": "Query parameter 'script' is required for cluster queries"
             }
