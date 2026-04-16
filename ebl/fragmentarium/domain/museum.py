@@ -271,6 +271,12 @@ class Museum(Enum):
         "IQ",
         "https://slemanimuseum.org/",
     )
+    SPURLOCK_MUSEUM = (
+        "Spurlock Museum, University of Illinois",
+        "Urbana",
+        "US",
+        "https://www.spurlock.illinois.edu/",
+    )
     THE_BRITISH_MUSEUM = (
         "The British Museum",
         "London",
