@@ -1,6 +1,6 @@
-from unittest.mock import Mock
-from ebl.fragmentarium.domain.annotation import PcaClustering
+from mockito import mock, verify, when
 
+from ebl.fragmentarium.domain.annotation import PcaClustering
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
@@ -22,8 +22,8 @@ from ebl.fragmentarium.domain.date import DateSchema
 def test_find_annotations_by_sign(
     fragment_repository: MongoFragmentRepository,
 ):
-    annotations_repository = Mock()
-    cropped_sign_images_repository = Mock()
+    annotations_repository = mock()
+    cropped_sign_images_repository = mock()
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -37,16 +37,20 @@ def test_find_annotations_by_sign(
     image_id_1 = annotation[0].cropped_sign.image_id
     image_id_2 = annotation[1].cropped_sign.image_id
 
-    annotations_repository.find_by_sign.return_value = [annotations]
+    when(annotations_repository).find_by_sign(
+        "test-sign", False, None, None
+    ).thenReturn([annotations])
 
-    cropped_sign_images_repository.query_by_id.side_effect = lambda image_id: {
-        image_id_1: CroppedSignImage(
+    when(cropped_sign_images_repository).query_by_id(image_id_1).thenReturn(
+        CroppedSignImage(
             image_id_1, Base64("test-base64-1"), annotations.fragment_number
-        ),
-        image_id_2: CroppedSignImage(
+        )
+    )
+    when(cropped_sign_images_repository).query_by_id(image_id_2).thenReturn(
+        CroppedSignImage(
             image_id_2, Base64("test-base64-2"), annotations.fragment_number
-        ),
-    }[image_id]
+        )
+    )
 
     fragment_number = annotations.fragment_number
     provenance = annotations.provenance
@@ -71,16 +75,14 @@ def test_find_annotations_by_sign(
     }
 
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]
-    annotations_repository.find_by_sign.assert_called_once_with(
-        "test-sign", False, None, None
-    )
+    verify(annotations_repository, times=1).find_by_sign("test-sign", False, None, None)
 
 
 def test_find_annotations_by_sign_includes_pca_clustering(
     fragment_repository: MongoFragmentRepository,
 ):
-    annotations_repository = Mock()
-    cropped_sign_images_repository = Mock()
+    annotations_repository = mock()
+    cropped_sign_images_repository = mock()
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -102,11 +104,13 @@ def test_find_annotations_by_sign_includes_pca_clustering(
     fragment_repository.create(fragment)
 
     image_id = annotation.cropped_sign.image_id
-    cropped_sign_images_repository.query_by_id.return_value = CroppedSignImage(
-        image_id, Base64("test-base64"), annotations.fragment_number
-    )
 
-    annotations_repository.find_by_sign.return_value = [annotations]
+    when(annotations_repository).find_by_sign(
+        "test-sign", False, None, None
+    ).thenReturn([annotations])
+    when(cropped_sign_images_repository).query_by_id(image_id).thenReturn(
+        CroppedSignImage(image_id, Base64("test-base64"), annotations.fragment_number)
+    )
 
     result = service.find_annotations_by_sign("test-sign")
 
@@ -118,8 +122,8 @@ def test_find_annotations_by_sign_includes_pca_clustering(
 def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
     fragment_repository: MongoFragmentRepository,
 ):
-    annotations_repository = Mock()
-    cropped_sign_images_repository = Mock()
+    annotations_repository = mock()
+    cropped_sign_images_repository = mock()
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -132,11 +136,13 @@ def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
     fragment_repository.create(fragment)
 
     image_id = annotation.cropped_sign.image_id
-    cropped_sign_images_repository.query_by_id.return_value = CroppedSignImage(
-        image_id, Base64("test-base64"), annotations.fragment_number
-    )
 
-    annotations_repository.find_by_sign.return_value = [annotations]
+    when(annotations_repository).find_by_sign(
+        "test-sign", False, None, None
+    ).thenReturn([annotations])
+    when(cropped_sign_images_repository).query_by_id(image_id).thenReturn(
+        CroppedSignImage(image_id, Base64("test-base64"), annotations.fragment_number)
+    )
 
     result = service.find_annotations_by_sign("test-sign")
 
@@ -148,34 +154,36 @@ def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
 def test_find_annotations_by_sign_passes_centroids_only_filter(
     fragment_repository: MongoFragmentRepository,
 ):
-    annotations_repository = Mock()
-    cropped_sign_images_repository = Mock()
+    annotations_repository = mock()
+    cropped_sign_images_repository = mock()
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
     )
 
-    annotations_repository.find_by_sign.return_value = []
+    when(annotations_repository).find_by_sign("test-sign", True, None, None).thenReturn(
+        []
+    )
 
     result = service.find_annotations_by_sign("test-sign", centroids_only=True)
 
     assert result == []
-    annotations_repository.find_by_sign.assert_called_once_with(
-        "test-sign", True, None, None
-    )
+    verify(annotations_repository, times=1).find_by_sign("test-sign", True, None, None)
 
 
 def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     fragment_repository: MongoFragmentRepository,
 ):
-    annotations_repository = Mock()
-    cropped_sign_images_repository = Mock()
+    annotations_repository = mock()
+    cropped_sign_images_repository = mock()
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
     )
 
-    annotations_repository.find_by_sign.return_value = []
+    when(annotations_repository).find_by_sign(
+        "test-sign", False, "test-cluster-id", "Neo-Assyrian"
+    ).thenReturn([])
 
     result = service.find_annotations_by_sign(
         "test-sign",
@@ -184,6 +192,6 @@ def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     )
 
     assert result == []
-    annotations_repository.find_by_sign.assert_called_once_with(
+    verify(annotations_repository, times=1).find_by_sign(
         "test-sign", False, "test-cluster-id", "Neo-Assyrian"
     )
