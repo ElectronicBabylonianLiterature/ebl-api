@@ -13,7 +13,7 @@ from ebl.signs.web.signs import (
 )
 from ebl.signs.web.cropped_annotations import (
     CroppedAnnotationsResource,
-    ClusterCroppedAnnotationsResource,  # NEW
+    ClusterCroppedAnnotationsResource,
 )
 
 
@@ -22,14 +22,14 @@ def create_signs_routes(api: falcon.App, context: Context):
     signs = SignsResource(context.sign_repository)
     ordered_signs = SignsOrderResource(context.sign_repository)
 
-    cropped_service = CroppedAnnotationService(  # NEW (reuse service)
+    cropped_service = CroppedAnnotationService(
         context.annotations_repository,
         context.cropped_sign_images_repository,
         context.fragment_repository,
     )
 
     signs_images = CroppedAnnotationsResource(cropped_service)
-    cluster_images = ClusterCroppedAnnotationsResource(cropped_service)  # NEW
+    cluster_images = ClusterCroppedAnnotationsResource(cropped_service)
 
     atf_parser = TransliterationResource(context.sign_repository)
     signs_all = SignsListResource(context.sign_repository)
