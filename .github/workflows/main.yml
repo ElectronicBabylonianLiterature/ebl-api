@@ -94,7 +94,7 @@ jobs:
           add-prefix: ebl/
 
   docker:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
     needs: [test]
     runs-on: ubuntu-24.04
     steps:
