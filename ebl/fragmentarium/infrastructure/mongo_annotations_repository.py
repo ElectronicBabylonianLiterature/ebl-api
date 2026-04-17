@@ -66,35 +66,46 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                 {"$eq": ["$$annotation.pcaClustering.clusterId", cluster_id]}
             )
 
+        lookup_stages = [
+            {
+                "$lookup": {
+                    "from": "fragments",
+                    "localField": "fragmentNumber",
+                    "foreignField": "_id",
+                    "as": "fragment",
+                }
+            },
+            {"$unwind": "$fragment"},
+        ]
+
         if script_filter:
             match_conditions["fragment.script.period"] = script_filter
-
-        result = self._collection.aggregate(
-            [
-                {
-                    "$lookup": {
-                        "from": "fragments",
-                        "localField": "fragmentNumber",
-                        "foreignField": "_id",
-                        "as": "fragment",
-                    }
-                },
-                {"$unwind": "$fragment"},
+            pipeline = [
+                *lookup_stages,
                 {"$match": match_conditions},
-                {
-                    "$project": {
-                        "fragmentNumber": 1,
-                        "annotations": {
-                            "$filter": {
-                                "input": "$annotations",
-                                "as": "annotation",
-                                "cond": {"$and": annotation_filter_conditions},
-                            }
-                        },
-                        "script": "$fragment.script",
-                        "provenance": "$fragment.archaeology.site",
-                    }
-                },
             ]
+        else:
+            pipeline = [
+                {"$match": match_conditions},
+                *lookup_stages,
+            ]
+
+        pipeline.append(
+            {
+                "$project": {
+                    "fragmentNumber": 1,
+                    "annotations": {
+                        "$filter": {
+                            "input": "$annotations",
+                            "as": "annotation",
+                            "cond": {"$and": annotation_filter_conditions},
+                        }
+                    },
+                    "script": "$fragment.script",
+                    "provenance": "$fragment.archaeology.site",
+                }
+            }
         )
+
+        result = self._collection.aggregate(pipeline)
         return AnnotationsWithScriptSchema().load(result, many=True, unknown=EXCLUDE)
