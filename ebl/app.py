@@ -147,8 +147,6 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
 
 
 def get_app():
-    dsn = os.environ.get("SENTRY_DSN")
-    if dsn:
-        sentry_sdk.init(dsn=dsn, integrations=[FalconIntegration()])
+    sentry_sdk.init(dsn=os.environ["SENTRY_DSN"], integrations=[FalconIntegration()])
     context = create_context()
     return create_app(context, os.environ["AUTH0_ISSUER"], os.environ["AUTH0_AUDIENCE"])
