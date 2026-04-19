@@ -1,5 +1,4 @@
 import falcon
-
 from ebl.context import Context
 from ebl.corpus.application.corpus import Corpus, CorpusDependencies
 from ebl.corpus.web.alignments import AlignmentResource
@@ -40,12 +39,8 @@ def create_corpus_routes(api: falcon.App, context: Context):
             provenance_service=context.provenance_service,
         )
     )
-    from pymongo.errors import OperationFailure
 
-    try:
-        context.text_repository.create_indexes()
-    except OperationFailure as error:
-        print(f"Skipping index creation: {error}")
+    context.text_repository.create_indexes()
 
     texts = TextsResource(corpus)
     text = TextResource(corpus)
