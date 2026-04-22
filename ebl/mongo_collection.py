@@ -86,13 +86,12 @@ class MongoCollection:
         for attempt in range(2):
             try:
                 result = self.__get_collection().update_one(query, update)
-                break
             except AutoReconnect:
                 if attempt == 1:
                     raise
-        if result.matched_count == 0:
-            raise self.__not_found_error(query)
-        else:
+                continue
+            if result.matched_count == 0:
+                raise self.__not_found_error(query)
             return result
 
     def update_many(self, query, update, **kwargs):
