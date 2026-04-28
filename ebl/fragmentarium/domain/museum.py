@@ -14,6 +14,12 @@ class Museum(Enum):
         "AU",
         "https://abbeymuseum.com.au",
     )
+    ADANA_ARKEOLOJI_MUZESI = (
+        "Adana Arkeoloji Müzesi",
+        "Adana",
+        "TR",
+        "https://muze.gov.tr/muze-detay?SectionId=AAR01&DistId=MRK",
+    )
     ANCIENT_CULTURES_CHICAGO = (
         "Institute for the Study of Ancient Cultures, West Asia & North Africa",
         "Chicago",
