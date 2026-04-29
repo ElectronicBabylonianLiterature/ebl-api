@@ -23,6 +23,8 @@ class Year:
     value: str
     is_broken: Optional[bool] = attr.ib(default=None)
     is_uncertain: Optional[bool] = attr.ib(default=None)
+    is_reconstructed: Optional[bool] = attr.ib(default=None)
+    is_emended: Optional[bool] = attr.ib(default=None)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -82,10 +84,56 @@ class LabeledSchema(Schema):
         return pydash.omit_by(data, pydash.is_none)
 
 
+def _set_flag_if_missing(data: dict, key: str) -> None:
+    if data.get(key) is None:
+        data[key] = True
+
+
+def _apply_wrapped_value_rule(data: dict, value: str, start: str, end: str, key: str) -> bool:
+    if value.startswith(start) and value.endswith(end) and len(value) > len(start) + len(end):
+        data["value"] = value[len(start) : -len(end)]
+        _set_flag_if_missing(data, key)
+        return True
+    return False
+
+
+def _apply_trailing_marker_rule(data: dict, value: str, marker: str, key: str) -> bool:
+    if value.endswith(marker) and len(value) > len(marker):
+        data["value"] = value[: -len(marker)]
+        _set_flag_if_missing(data, key)
+        return True
+    return False
+
+
+def _parse_year_value(data: dict) -> dict:
+    value = data.get("value", "")
+    data["value"] = value
+
+    wrapped_value_rules = [
+        ("<", ">", "is_reconstructed"),
+        ("[", "]", "is_broken"),
+        ("(", ")", "is_uncertain"),
+    ]
+    for start, end, key in wrapped_value_rules:
+        if _apply_wrapped_value_rule(data, value, start, end, key):
+            break
+
+    value = data["value"]
+    trailing_marker_rules = [("!", "is_emended"), ("?", "is_uncertain")]
+    for marker, key in trailing_marker_rules:
+        if _apply_trailing_marker_rule(data, value, marker, key):
+            break
+
+    return data
+
+
 class YearSchema(LabeledSchema):
+    is_reconstructed = fields.Boolean(data_key="isReconstructed", allow_none=True)
+    is_emended = fields.Boolean(data_key="isEmended", allow_none=True)
+
     @post_load
     def make_year(self, data, **kwargs) -> Year:
-        return Year(**data)
+        return Year(**_parse_year_value(data))
 
 
 class MonthSchema(LabeledSchema):
