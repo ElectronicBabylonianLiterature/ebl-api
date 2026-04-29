@@ -129,6 +129,12 @@ class Museum(Enum):
         "US",
         "https://katz.sas.upenn.edu/",
     )
+    KAYSERI_ARKEOLOJI_MUZESI = (
+        "Kayseri Arkeoloji Müzesi",
+        "Kayseri",
+        "TR",
+        "https://www.turkishmuseums.com/museum/detail/2111-kayseri-arkeoloji-muzesi/2111/1",
+    )
     KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
         "Ann Arbor",
