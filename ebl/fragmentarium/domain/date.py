@@ -89,8 +89,14 @@ def _set_flag_if_missing(data: dict, key: str) -> None:
         data[key] = True
 
 
-def _apply_wrapped_value_rule(data: dict, value: str, start: str, end: str, key: str) -> bool:
-    if value.startswith(start) and value.endswith(end) and len(value) > len(start) + len(end):
+def _apply_wrapped_value_rule(
+    data: dict, value: str, start: str, end: str, key: str
+) -> bool:
+    if (
+        value.startswith(start)
+        and value.endswith(end)
+        and len(value) > len(start) + len(end)
+    ):
         data["value"] = value[len(start) : -len(end)]
         _set_flag_if_missing(data, key)
         return True
