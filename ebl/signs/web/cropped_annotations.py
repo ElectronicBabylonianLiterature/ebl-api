@@ -1,9 +1,17 @@
 import falcon
 from falcon import Request, Response
 
+from ebl.common.domain.period import Period
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
 )
+
+
+def period_name_from_abbreviation(abbreviation: str) -> str:
+    for period in Period:
+        if period.value[1] == abbreviation:
+            return period.value[0]
+    return abbreviation
 
 
 class CroppedAnnotationsResource:
@@ -33,6 +41,8 @@ class ClusterCroppedAnnotationsResource:
                 "error": "Query parameter 'script' is required for cluster queries"
             }
             return
+
+        script_filter = period_name_from_abbreviation(script_filter)
 
         cropped_signs = self._cropped_annotations_service.find_annotations_by_sign(
             sign_name,
