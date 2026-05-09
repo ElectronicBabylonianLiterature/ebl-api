@@ -14,6 +14,12 @@ class Museum(Enum):
         "AU",
         "https://abbeymuseum.com.au",
     )
+    ADANA_ARKEOLOJI_MUZESI = (
+        "Adana Arkeoloji Müzesi",
+        "Adana",
+        "TR",
+        "https://muze.gov.tr/muze-detay?SectionId=AAR01&DistId=MRK",
+    )
     ANCIENT_CULTURES_CHICAGO = (
         "Institute for the Study of Ancient Cultures, West Asia & North Africa",
         "Chicago",
@@ -122,6 +128,12 @@ class Museum(Enum):
         "Philadelphia",
         "US",
         "https://katz.sas.upenn.edu/",
+    )
+    KAYSERI_ARKEOLOJI_MUZESI = (
+        "Kayseri Arkeoloji Müzesi",
+        "Kayseri",
+        "TR",
+        "https://www.turkishmuseums.com/museum/detail/2111-kayseri-arkeoloji-muzesi/2111/1",
     )
     KELSEY_MUSEUM = (
         "Kelsey Museum of Archaeology",
