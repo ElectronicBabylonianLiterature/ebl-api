@@ -9,10 +9,6 @@ from ebl.fragmentarium.application.cropped_annotations_service import (
 ABBREV_TO_NAME = {period.value[1]: period.value[0] for period in Period}
 
 
-def period_name_from_abbreviation(abbreviation: str) -> str:
-    return ABBREV_TO_NAME.get(abbreviation, abbreviation)
-
-
 class CroppedAnnotationsResource:
     def __init__(self, cropped_annotations_service: CroppedAnnotationService):
         self._cropped_annotations_service = cropped_annotations_service
@@ -41,7 +37,7 @@ class ClusterCroppedAnnotationsResource:
             }
             return
 
-        script_filter = period_name_from_abbreviation(script_filter)
+        script_filter = ABBREV_TO_NAME.get(script_filter, script_filter)
 
         cropped_signs = self._cropped_annotations_service.find_annotations_by_sign(
             sign_name,
