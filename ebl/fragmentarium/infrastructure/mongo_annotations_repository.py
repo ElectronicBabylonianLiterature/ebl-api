@@ -63,11 +63,10 @@ class MongoAnnotationsRepository(AnnotationsRepository):
                         {"$eq": ["$$annotation.pcaClustering.isCentroid", True]},
                         {
                             "$eq": [
-                                {"$type": "$$annotation.pcaClustering"},
-                                "missing",
+                                {"$ifNull": ["$$annotation.pcaClustering", None]},
+                                None,
                             ]
                         },
-                        {"$eq": ["$$annotation.pcaClustering", None]},
                     ]
                 }
             )
