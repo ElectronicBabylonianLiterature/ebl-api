@@ -39,6 +39,12 @@ class Museum(Enum):
         "BE",
         "https://www.nbb.be/",
     )
+    BRYN_MAWR_COLLEGE = (
+        "Bryn Mawr College Special Collections",
+        "Bryn Mawr",
+        "US",
+        "https://www.brynmawr.edu/about-college/special-collections",
+    )
     CHESTER_BEATTY_LIBRARY = (
         "Chester Beatty Library",
         "Dublin",
