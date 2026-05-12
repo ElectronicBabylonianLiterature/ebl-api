@@ -1,10 +1,17 @@
 import attr
 import pydash
-from typing import Optional
+from typing import Optional, Set
 from marshmallow import Schema, fields, post_load, post_dump, EXCLUDE
 from enum import Enum
 from ebl.schemas import ValueEnumField
 from ebl.chronology.chronology import chronology, King, Eponym, EponymSchema
+
+WRAPPERS = {
+    "<": (">", "is_reconstructed"),
+    "[": ("]", "is_broken"),
+    "(": (")", "is_uncertain"),
+}
+TRAILING_MARKERS = {"!": "is_emended", "?": "is_uncertain"}
 
 
 class Ur3Calendar(Enum):
@@ -23,6 +30,9 @@ class Year:
     value: str
     is_broken: Optional[bool] = attr.ib(default=None)
     is_uncertain: Optional[bool] = attr.ib(default=None)
+    is_reconstructed: Optional[bool] = attr.ib(default=None)
+    is_emended: Optional[bool] = attr.ib(default=None)
+    original_value: Optional[str] = attr.ib(default=None)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -82,10 +92,62 @@ class LabeledSchema(Schema):
         return pydash.omit_by(data, pydash.is_none)
 
 
+def _caller_set_flags(data: dict) -> Set[str]:
+    flag_keys = {key for _, key in WRAPPERS.values()} | set(TRAILING_MARKERS.values())
+    return {key for key in flag_keys if data.get(key) is not None}
+
+
+def _strip_trailing_marker(
+    value: str, data: dict, caller_set: Set[str]
+) -> Optional[str]:
+    if len(value) <= 1 or value[-1] not in TRAILING_MARKERS:
+        return None
+    key = TRAILING_MARKERS[value[-1]]
+    if key in caller_set:
+        return None
+    data[key] = True
+    return value[:-1]
+
+
+def _strip_wrapper(value: str, data: dict, caller_set: Set[str]) -> Optional[str]:
+    if len(value) <= 2 or value[0] not in WRAPPERS:
+        return None
+    end, key = WRAPPERS[value[0]]
+    if not value.endswith(end) or key in caller_set:
+        return None
+    data[key] = True
+    return value[1:-1]
+
+
+def _peel_year_value(value: str, data: dict, caller_set: Set[str]) -> str:
+    while value:
+        stripped = _strip_trailing_marker(value, data, caller_set)
+        if stripped is None:
+            stripped = _strip_wrapper(value, data, caller_set)
+        if stripped is None:
+            return value
+        value = stripped
+    return value
+
+
+def _parse_year_value(data: dict) -> dict:
+    data = dict(data)
+    raw_value = data.get("value", "")
+    value = _peel_year_value(raw_value, data, _caller_set_flags(data))
+    data["value"] = value
+    if value != raw_value and "original_value" not in data:
+        data["original_value"] = raw_value
+    return data
+
+
 class YearSchema(LabeledSchema):
+    is_reconstructed = fields.Boolean(data_key="isReconstructed", allow_none=True)
+    is_emended = fields.Boolean(data_key="isEmended", allow_none=True)
+    original_value = fields.String(data_key="originalValue", allow_none=True)
+
     @post_load
     def make_year(self, data, **kwargs) -> Year:
-        return Year(**data)
+        return Year(**_parse_year_value(data))
 
 
 class MonthSchema(LabeledSchema):
