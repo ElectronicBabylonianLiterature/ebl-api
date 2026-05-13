@@ -1,9 +1,6 @@
 import falcon
-import pytest
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
-from ebl.errors import NotFoundError
-from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.infrastructure.mongo_realia_repository import (
     MongoRealiaRepository,
     RealiaEntrySchema,
@@ -27,7 +24,7 @@ def _seed_entry(
 
 
 def test_get_realia_by_id(
-    realia_repository: RealiaRepository,
+    realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,
     client,
 ) -> None:
@@ -46,7 +43,7 @@ def test_get_realia_not_found(client) -> None:
 
 
 def test_search_realia(
-    realia_repository: RealiaRepository,
+    realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,
     client,
 ) -> None:

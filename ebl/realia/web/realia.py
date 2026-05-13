@@ -13,9 +13,7 @@ class RealiaResource:
         try:
             entry = self._realia_repository.find(realia_id)
         except NotFoundError as error:
-            raise NotFoundError(
-                f"Realia entry '{realia_id}' not found."
-            ) from error
+            raise NotFoundError(f"Realia entry '{realia_id}' not found.") from error
         resp.media = RealiaEntrySchema().dump(entry)
 
 

@@ -2,12 +2,11 @@ import pytest
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.realia.application.realia_repository import RealiaRepository
-from ebl.realia.domain.realia_entry import RealiaEntry, RealiaType
+from ebl.realia.domain.realia_entry import RealiaEntry
 from ebl.realia.infrastructure.mongo_realia_repository import (
     MongoRealiaRepository,
     RealiaEntrySchema,
 )
-from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.tests.factories.realia import RealiaEntryFactory
 from ebl.errors import NotFoundError
 
@@ -27,7 +26,7 @@ def _create_entry_with_bibliography(
 
 
 def test_find_existing_entry(
-    realia_repository: RealiaRepository,
+    realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,
 ) -> None:
     entry = RealiaEntryFactory.build()
