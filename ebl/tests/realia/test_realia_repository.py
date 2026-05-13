@@ -7,7 +7,7 @@ from ebl.realia.infrastructure.mongo_realia_repository import (
     MongoRealiaRepository,
     RealiaEntrySchema,
 )
-from ebl.tests.factories.realia import RealiaEntryFactory
+from ebl.tests.factories.realia import RealiaEntryFactory, ReallexikonEntryFactory
 from ebl.errors import NotFoundError
 
 
@@ -38,6 +38,11 @@ def test_find_existing_entry(
     assert result.related_terms == entry.related_terms
     assert result.type == entry.type
     assert result.wikidata_id == entry.wikidata_id
+    assert any(ref.document is not None for ref in result.references)
+    assert any(
+        rlex.reference is not None and rlex.reference.document is not None
+        for rlex in result.reallexikon
+    )
 
 
 def test_find_not_found(realia_repository: RealiaRepository) -> None:
@@ -96,3 +101,18 @@ def test_search_no_match_returns_empty(
 ) -> None:
     results = realia_repository.search("zzz_no_match_xyz")
     assert results == []
+
+
+def test_search_entry_with_reallexikon_no_reference(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+) -> None:
+    entry = RealiaEntryFactory.build(
+        reallexikon=(ReallexikonEntryFactory.build(reference=None),)
+    )
+    _create_entry_with_bibliography(realia_repository, bibliography_repository, entry)
+
+    results = realia_repository.search(entry.id)
+
+    assert len(results) == 1
+    assert results[0].reallexikon[0].reference is None

@@ -53,3 +53,20 @@
 - Ran 18 realia tests (all pass), coverage (98%), flake8 (clean), mypy
 - Identified 8 findings; 2 are must-fix before merge (F1 HIGH, F2 MEDIUM)
 - TASK-1-review.md created
+
+## 2026-05-13 (review findings addressed)
+
+### Changes made to address findings
+- **F1+F2** `mongo_realia_repository.py` `find()`: removed dead `if document is None:` guard; fixed bibliography injection by using `entries[0]`; standardised error message with try/except around `find_one_by_id`
+- **F3** `web/realia.py` `on_get`: removed redundant `NotFoundError` re-wrap; removed unused `NotFoundError` import
+- **F4** `mongo_realia_repository.py` `search()`: added `.sort("_id")` before `.limit(MAX_SEARCH_RESULTS)`
+- **F5a** `test_realia_repository.py`: added bibliography injection assertions to `test_find_existing_entry`; added `test_search_entry_with_reallexikon_no_reference` to cover `None`-reference branch in `_inject_reallexikon`
+- **F5b** `test_realia_route.py`: added `test_search_realia_missing_query`
+- **F6** `mongo_realia_repository.py`: fixed `ids: set` → `ids: set[BibliographyId]`
+
+### Test results after fixes
+- `pytest ebl/tests/realia/` → **20 passed** ✅ (2 new tests added)
+- `pytest ebl/tests/common/ ebl/tests/test_app_bootstrap.py` → **26 passed** ✅
+- Coverage `ebl/realia/` → **100%** ✅ (was 98%)
+
+### Status: FIXES APPLIED — awaiting user approval to commit/push

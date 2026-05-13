@@ -230,11 +230,11 @@ Before merging, the following files must be removed from the repository:
 
 | # | Severity | Status |
 |---|----------|--------|
-| F1 — `find()` returns un-injected entry | **HIGH** | Must fix before merge |
-| F2 — Dead code guard in `find()` | MEDIUM | Must fix before merge |
-| F3 — Redundant exception wrapping | LOW-MEDIUM | Fix alongside F2 |
-| F4 — Missing sort on search results | LOW-MEDIUM | Should fix |
-| F5 — Coverage gaps | LOW | Should fix |
-| F6 — Weak generic type annotation | LOW | Should fix |
+| F1 — `find()` returns un-injected entry | **HIGH** | ✅ Fixed |
+| F2 — Dead code guard in `find()` | MEDIUM | ✅ Fixed |
+| F3 — Redundant exception wrapping | LOW-MEDIUM | ✅ Fixed |
+| F4 — Missing sort on search results | LOW-MEDIUM | ✅ Fixed |
+| F5 — Coverage gaps | LOW | ✅ Fixed |
+| F6 — Weak generic type annotation | LOW | ✅ Fixed |
 | F7 — Pre-existing mypy errors | INFO | Out of scope |
 | F8 — Fixture parameter count | INFO | Accepted pattern |

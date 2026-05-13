@@ -90,47 +90,46 @@ class MongoRealiaRepository(RealiaRepository):
         )
 
     def find(self, realia_id: str) -> RealiaEntry:
-        document = self._realia_collection.find_one_by_id(realia_id)
-        if document is None:
+        try:
+            document = self._realia_collection.find_one_by_id(realia_id)
+        except NotFoundError:
             raise NotFoundError(f"Realia entry '{realia_id}' not found.")
-        entry = RealiaEntrySchema().load(document)
-        self._inject_bibliography([entry])
-        return entry
+        entries = [RealiaEntrySchema().load(document)]
+        self._inject_bibliography(entries)
+        return entries[0]
 
     def search(self, query: str) -> Sequence[RealiaEntry]:
         stripped = strip_realia_query_chars(query).strip()
         if not stripped:
             return []
-
-        id_cfq = CollatedFieldQuery(stripped, "_id", "realia")
-        terms_cfq = CollatedFieldQuery(stripped, "relatedTerms", "realia")
-
-        id_options = "i" if id_cfq.use_collations else ""
-        terms_options = "i" if terms_cfq.use_collations else ""
-
-        mongo_query = {
-            "$or": [
-                {"_id": {"$regex": id_cfq.value, "$options": id_options}},
-                {
-                    "relatedTerms": {
-                        "$regex": terms_cfq.value,
-                        "$options": terms_options,
-                    }
-                },
-            ]
-        }
-
-        cursor = self._realia_collection.find_many(mongo_query).limit(
-            MAX_SEARCH_RESULTS
+        cursor = (
+            self._realia_collection
+            .find_many(self._build_search_query(stripped))
+            .sort("_id")
+            .limit(MAX_SEARCH_RESULTS)
         )
         entries = RealiaEntrySchema(many=True).load(list(cursor))
         self._inject_bibliography(entries)
         return entries
 
+    def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
+        options = "i" if cfq.use_collations else ""
+        return {"$regex": cfq.value, "$options": options}
+
+    def _build_search_query(self, stripped: str) -> dict:
+        id_cfq = CollatedFieldQuery(stripped, "_id", "realia")
+        terms_cfq = CollatedFieldQuery(stripped, "relatedTerms", "realia")
+        return {
+            "$or": [
+                {"_id": self._make_regex_condition(id_cfq)},
+                {"relatedTerms": self._make_regex_condition(terms_cfq)},
+            ]
+        }
+
     def _collect_reference_ids(
         self, entries: List[RealiaEntry]
     ) -> List[BibliographyId]:
-        ids: set = set()
+        ids: set[BibliographyId] = set()
         for entry in entries:
             for ref in entry.references:
                 ids.add(ref.id)

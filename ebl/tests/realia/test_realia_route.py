@@ -67,3 +67,10 @@ def test_search_realia_no_match(client) -> None:
 
     assert result.status == falcon.HTTP_OK
     assert result.json == []
+
+
+def test_search_realia_missing_query(client) -> None:
+    result = client.simulate_get("/realia")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == []

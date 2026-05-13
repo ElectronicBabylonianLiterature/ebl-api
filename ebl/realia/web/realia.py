@@ -1,6 +1,5 @@
 from falcon import Request, Response
 
-from ebl.errors import NotFoundError
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.infrastructure.mongo_realia_repository import RealiaEntrySchema
 
@@ -10,10 +9,7 @@ class RealiaResource:
         self._realia_repository = realia_repository
 
     def on_get(self, _req: Request, resp: Response, realia_id: str) -> None:
-        try:
-            entry = self._realia_repository.find(realia_id)
-        except NotFoundError as error:
-            raise NotFoundError(f"Realia entry '{realia_id}' not found.") from error
+        entry = self._realia_repository.find(realia_id)
         resp.media = RealiaEntrySchema().dump(entry)
 
 
