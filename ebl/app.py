@@ -44,6 +44,8 @@ from ebl.signs.web.bootstrap import create_signs_routes
 from ebl.afo_register.web.bootstrap import create_afo_register_routes
 from ebl.dossiers.web.bootstrap import create_dossiers_routes
 from ebl.provenance.web.bootstrap import create_provenance_routes
+from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
+from ebl.realia.web.bootstrap import create_realia_routes
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.infrastructure.mongo_parallel_repository import (
     MongoParallelRepository,
@@ -113,6 +115,7 @@ def create_context():
         findspot_repository=MongoFindspotRepository(database, provenance_service),
         provenance_repository=provenance_repository,
         provenance_service=provenance_service,
+        realia_repository=MongoRealiaRepository(database),
         custom_cache=custom_cache,
         cache=cache,
         parallel_line_injector=ParallelLineInjector(MongoParallelRepository(database)),
@@ -142,6 +145,7 @@ def create_app(context: Context, issuer: str = "", audience: str = ""):
     create_afo_register_routes(api, context)
     create_dossiers_routes(api, context)
     create_provenance_routes(api, context)
+    create_realia_routes(api, context)
 
     return api
 

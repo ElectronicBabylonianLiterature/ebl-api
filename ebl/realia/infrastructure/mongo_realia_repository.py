@@ -1,0 +1,176 @@
+import attr
+import re
+from typing import Dict, List, Sequence
+
+from marshmallow import Schema, fields, post_load, EXCLUDE
+from pymongo.database import Database
+
+from ebl.bibliography.application.reference_schema import ApiReferenceSchema
+from ebl.bibliography.domain.reference import BibliographyId
+from ebl.common.query.query_collation import CollatedFieldQuery, strip_realia_query_chars
+from ebl.errors import NotFoundError
+from ebl.mongo_collection import MongoCollection
+from ebl.realia.application.realia_repository import RealiaRepository
+from ebl.realia.domain.realia_entry import (
+    AfoRegisterEntry,
+    RealiaEntry,
+    RealiaType,
+    ReallexikonEntry,
+)
+from ebl.schemas import NameEnumField
+
+REALIA_COLLECTION = "realia"
+BIBLIOGRAPHY_COLLECTION = "bibliography"
+MAX_SEARCH_RESULTS = 15
+
+
+class AfoRegisterEntrySchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    main_word = fields.String(data_key="mainWord", load_default="")
+    note = fields.String(load_default="")
+    afo = fields.String(data_key="AfO", load_default="")
+    reference = fields.String(load_default="")
+    cross_reference = fields.String(data_key="crossReference", load_default="")
+
+    @post_load
+    def make_entry(self, data, **kwargs) -> AfoRegisterEntry:
+        return AfoRegisterEntry(**data)
+
+
+class ReallexikonEntrySchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.String(load_default="")
+    title = fields.String(load_default="")
+    reference = fields.Nested(ApiReferenceSchema, allow_none=True, load_default=None)
+    content = fields.String(load_default="")
+
+    @post_load
+    def make_entry(self, data, **kwargs) -> ReallexikonEntry:
+        return ReallexikonEntry(**data)
+
+
+class RealiaEntrySchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    id = fields.String(required=True, data_key="_id")
+    related_terms = fields.List(
+        fields.String(), data_key="relatedTerms", load_default=list
+    )
+    type = fields.List(NameEnumField(RealiaType), load_default=list)
+    afo_register = fields.List(
+        fields.Nested(AfoRegisterEntrySchema), data_key="afoRegister", load_default=list
+    )
+    references = fields.Nested(ApiReferenceSchema, many=True, load_default=list)
+    wikidata_id = fields.List(
+        fields.String(), data_key="wikidataId", load_default=list
+    )
+    reallexikon = fields.List(
+        fields.Nested(ReallexikonEntrySchema), load_default=list
+    )
+
+    @post_load
+    def make_entry(self, data, **kwargs) -> RealiaEntry:
+        data["related_terms"] = tuple(data["related_terms"])
+        data["type"] = tuple(data["type"])
+        data["afo_register"] = tuple(data["afo_register"])
+        data["references"] = tuple(data["references"])
+        data["wikidata_id"] = tuple(data["wikidata_id"])
+        data["reallexikon"] = tuple(data["reallexikon"])
+        return RealiaEntry(**data)
+
+
+class MongoRealiaRepository(RealiaRepository):
+    def __init__(self, database: Database) -> None:
+        self._realia_collection = MongoCollection(database, REALIA_COLLECTION)
+        self._bibliography_collection = MongoCollection(database, BIBLIOGRAPHY_COLLECTION)
+
+    def find(self, realia_id: str) -> RealiaEntry:
+        document = self._realia_collection.find_one_by_id(realia_id)
+        if document is None:
+            raise NotFoundError(f"Realia entry '{realia_id}' not found.")
+        entry = RealiaEntrySchema().load(document)
+        self._inject_bibliography([entry])
+        return entry
+
+    def search(self, query: str) -> Sequence[RealiaEntry]:
+        stripped = strip_realia_query_chars(query).strip()
+        if not stripped:
+            return []
+
+        id_cfq = CollatedFieldQuery(stripped, "_id", "realia")
+        terms_cfq = CollatedFieldQuery(stripped, "relatedTerms", "realia")
+
+        id_options = "i" if id_cfq.use_collations else ""
+        terms_options = "i" if terms_cfq.use_collations else ""
+
+        mongo_query = {
+            "$or": [
+                {"_id": {"$regex": id_cfq.value, "$options": id_options}},
+                {
+                    "relatedTerms": {
+                        "$regex": terms_cfq.value,
+                        "$options": terms_options,
+                    }
+                },
+            ]
+        }
+
+        cursor = self._realia_collection.find_many(mongo_query).limit(MAX_SEARCH_RESULTS)
+        entries = RealiaEntrySchema(many=True).load(list(cursor))
+        self._inject_bibliography(entries)
+        return entries
+
+    def _collect_reference_ids(self, entries: List[RealiaEntry]) -> List[BibliographyId]:
+        ids: set = set()
+        for entry in entries:
+            for ref in entry.references:
+                ids.add(ref.id)
+            for rlex in entry.reallexikon:
+                if rlex.reference is not None:
+                    ids.add(rlex.reference.id)
+        return list(ids)
+
+    def _fetch_bibliography_entries(
+        self, reference_ids: List[BibliographyId]
+    ) -> Dict[str, dict]:
+        entries = self._bibliography_collection.find_many(
+            {"_id": {"$in": reference_ids}}
+        )
+        return {entry["_id"]: entry for entry in entries}
+
+    def _inject_bibliography(self, entries: List[RealiaEntry]) -> None:
+        reference_ids = self._collect_reference_ids(entries)
+        bibliography = self._fetch_bibliography_entries(reference_ids)
+
+        for index, entry in enumerate(entries):
+            injected_refs = [
+                {
+                    **ApiReferenceSchema().dump(ref),
+                    "document": bibliography.get(ref.id, {}),
+                }
+                for ref in entry.references
+            ]
+            injected_reallexikon = []
+            for rlex in entry.reallexikon:
+                if rlex.reference is not None:
+                    injected_ref = {
+                        **ApiReferenceSchema().dump(rlex.reference),
+                        "document": bibliography.get(rlex.reference.id, {}),
+                    }
+                    loaded_ref = ApiReferenceSchema(unknown=EXCLUDE).load(injected_ref)
+                    injected_reallexikon.append(attr.evolve(rlex, reference=loaded_ref))
+                else:
+                    injected_reallexikon.append(rlex)
+
+            entries[index] = attr.evolve(
+                entry,
+                references=tuple(
+                    ApiReferenceSchema(unknown=EXCLUDE, many=True).load(injected_refs)
+                ),
+                reallexikon=tuple(injected_reallexikon),
+            )

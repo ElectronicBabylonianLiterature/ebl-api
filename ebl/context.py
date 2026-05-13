@@ -32,6 +32,7 @@ from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
 from ebl.dossiers.application.dossiers_repository import DossiersRepository
 from ebl.provenance.application.provenance_repository import ProvenanceRepository
 from ebl.provenance.application.provenance_service import ProvenanceService
+from ebl.realia.application.realia_repository import RealiaRepository
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -59,6 +60,7 @@ class Context:
     dossiers_repository: DossiersRepository
     provenance_repository: ProvenanceRepository
     provenance_service: ProvenanceService
+    realia_repository: RealiaRepository
 
     def get_bibliography(self):
         return Bibliography(self.bibliography_repository, self.changelog)

@@ -89,6 +89,7 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
 from ebl.dossiers.infrastructure.mongo_dossiers_repository import (
     MongoDossiersRepository,
 )
+from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.tests.factories.provenance import build_provenance_records
 from ebl.provenance.infrastructure.mongo_provenance_repository import (
@@ -469,6 +470,11 @@ def dossiers_repository(database, seeded_provenance_service):
 
 
 @pytest.fixture
+def realia_repository(database):
+    return MongoRealiaRepository(database)
+
+
+@pytest.fixture
 def provenance_repository(database):
     return MongoProvenanceRepository(database)
 
@@ -506,6 +512,7 @@ def context(
     afo_register_repository,
     dossiers_repository,
     findspot_repository,
+    realia_repository,
     user,
     parallel_line_injector,
     mongo_cache_repository,
@@ -531,6 +538,7 @@ def context(
         afo_register_repository=afo_register_repository,
         dossiers_repository=dossiers_repository,
         findspot_repository=findspot_repository,
+        realia_repository=realia_repository,
         cache=Cache({"CACHE_TYPE": "null"}),
         custom_cache=ChapterCache(mongo_cache_repository),
         parallel_line_injector=parallel_line_injector,
