@@ -43,4 +43,13 @@
 - `pytest ebl/tests/common/` → **24 passed** (collation unchanged) ✅
 - `pytest ebl/tests/test_app_bootstrap.py` → **2 passed** ✅
 
-### Status: COMPLETE ✅ — awaiting user review before commit
+### Status: UNDER REVIEW — PR #715 open; TASK-1-review.md written; 4 actionable findings require fixes before merge
+
+## 2026-05-13 (review)
+
+### Review completed
+- Fetched Sourcery + qlty automated reviews from GitHub
+- Audited all 22 changed files locally
+- Ran 18 realia tests (all pass), coverage (98%), flake8 (clean), mypy
+- Identified 8 findings; 2 are must-fix before merge (F1 HIGH, F2 MEDIUM)
+- TASK-1-review.md created
