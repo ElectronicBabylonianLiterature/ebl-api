@@ -191,6 +191,12 @@ class Museum(Enum):
         "https://muze.gov.tr/muze-detay?SectionId=AMM01&DistId=AMM",
     )
     NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DK", "https://en.natmus.dk/")
+    NATIONAL_MUSEUM_OF_WORLD_WRITING_SYSTEMS = (
+        "National Museum of World Writing Systems",
+        "Incheon",
+        "KR",
+        "https://mow.or.kr/",
+    )
     OAKLAND_MUSEUM = (
         "Oakland Museum of California",
         "Oakland",
