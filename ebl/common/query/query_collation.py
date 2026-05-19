@@ -1,10 +1,16 @@
 import re
 import attr
 from enum import Enum
-from typing import Dict, Iterable, Literal, Sequence
+from typing import Dict, Iterable, Literal, Mapping, Sequence
 from urllib.parse import parse_qsl
 
-DataType = Literal["dictionary", "afo-register", "colophons"]
+DataType = Literal["dictionary", "afo-register", "colophons", "realia"]
+
+REALIA_STRIP_CHARS = str.maketrans("", "", "“”„ʾ‘’'")
+
+
+def strip_realia_query_chars(query: str) -> str:
+    return query.translate(REALIA_STRIP_CHARS)
 
 
 class Fields(Enum):
@@ -23,15 +29,22 @@ class Fields(Enum):
         "WILDCARD_FIELDS": [],
         "MARKDOWN_FIELDS": [],
     }
+    REALIA = {
+        "COLLATED_FIELDS": ["_id", "relatedTerms"],
+        "WILDCARD_FIELDS": [],
+        "MARKDOWN_FIELDS": [],
+    }
 
     @staticmethod
-    def findByDataType(data_type: DataType) -> Dict[str, Sequence[str]]:
+    def findByDataType(data_type: DataType) -> Mapping[str, Sequence[str]]:
         if data_type == "dictionary":
             return Fields.DICTIONARY.value
         elif data_type == "afo-register":
             return Fields.AFO_REGISTER.value
         elif data_type == "colophons":
             return Fields.COLOPHONS.value
+        elif data_type == "realia":
+            return Fields.REALIA.value
         else:
             raise ValueError("Invalid data type")
 

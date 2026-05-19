@@ -29,6 +29,18 @@ Provide project context and coding guidelines that AI should follow when generat
 
 - When running shell commands for project tasks, always use `poetry run` unless using `task`.
 
+## Pre-Commit Hard Gates (mandatory before every commit)
+
+Run all of the following in order and confirm each passes before committing:
+
+1. `task format` — auto-format code (must exit 0 with no unstaged changes left)
+2. `task test` — full test suite (must pass with 0 failures)
+3. `poetry run pytest <changed modules> --cov=<changed modules> --cov-report=term-missing` — 100% coverage on all changed files
+4. `poetry run flake8 <changed modules> --max-line-length=120` — zero lint errors
+5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type errors (pre-existing errors are not acceptable; fix them)
+
+Never commit if any gate fails or was skipped.
+
 ## Testing and Quality
 
 - Add / update tests for any new functionality or significant changes.
