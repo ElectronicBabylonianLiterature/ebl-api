@@ -1,7 +1,7 @@
 import re
 import attr
 from enum import Enum
-from typing import Dict, Iterable, Literal, Sequence
+from typing import Dict, Iterable, Literal, Mapping, Sequence
 from urllib.parse import parse_qsl
 
 DataType = Literal["dictionary", "afo-register", "colophons", "realia"]
@@ -36,7 +36,7 @@ class Fields(Enum):
     }
 
     @staticmethod
-    def findByDataType(data_type: DataType) -> Dict[str, Sequence[str]]:
+    def findByDataType(data_type: DataType) -> Mapping[str, Sequence[str]]:
         if data_type == "dictionary":
             return Fields.DICTIONARY.value
         elif data_type == "afo-register":

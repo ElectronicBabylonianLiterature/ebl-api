@@ -103,8 +103,7 @@ class MongoRealiaRepository(RealiaRepository):
         if not stripped:
             return []
         cursor = (
-            self._realia_collection
-            .find_many(self._build_search_query(stripped))
+            self._realia_collection.find_many(self._build_search_query(stripped))
             .sort("_id")
             .limit(MAX_SEARCH_RESULTS)
         )
