@@ -210,6 +210,7 @@ def test_find_by_sign_with_centroids_only_and_include_unclustered(
     assert unclustered_annotation in returned_annotations
     assert non_centroid_annotation not in returned_annotations
 
+
 def test_find_by_sign_with_cluster_id_and_script_filter(
     database, annotations_repository, fragment_repository
 ):

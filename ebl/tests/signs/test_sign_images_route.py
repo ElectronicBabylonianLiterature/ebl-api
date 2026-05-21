@@ -175,6 +175,7 @@ def test_signs_get_with_centroids_only_and_include_unclustered(
     images = {item["image"] for item in result.json}
     assert images == {"centroid-base64-string", "unclustered-base64-string"}
 
+
 def test_signs_get_cluster_without_script_returns_bad_request(client):
     result = client.simulate_get("/signs/signName/images/cluster/test-cluster-id")
 

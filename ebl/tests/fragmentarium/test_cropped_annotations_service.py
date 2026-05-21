@@ -76,7 +76,9 @@ def test_find_annotations_by_sign(
     }
 
     assert service.find_annotations_by_sign("test-sign") == [expected_1, expected_2]
-    verify(annotations_repository, times=1).find_by_sign("test-sign", False, False, None, None)
+    verify(annotations_repository, times=1).find_by_sign(
+        "test-sign", False, False, None, None
+    )
 
 
 def test_find_annotations_by_sign_includes_pca_clustering(
@@ -162,14 +164,16 @@ def test_find_annotations_by_sign_passes_centroids_only_filter(
         annotations_repository, cropped_sign_images_repository, fragment_repository
     )
 
-    when(annotations_repository).find_by_sign("test-sign", True, False, None, None).thenReturn(
-        []
-    )
+    when(annotations_repository).find_by_sign(
+        "test-sign", True, False, None, None
+    ).thenReturn([])
 
     result = service.find_annotations_by_sign("test-sign", centroids_only=True)
 
     assert result == []
-    verify(annotations_repository, times=1).find_by_sign("test-sign", True, False, None, None)
+    verify(annotations_repository, times=1).find_by_sign(
+        "test-sign", True, False, None, None
+    )
 
 
 def test_find_annotations_by_sign_passes_cluster_and_script_filters(

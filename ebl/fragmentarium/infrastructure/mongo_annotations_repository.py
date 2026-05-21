@@ -58,7 +58,9 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         ]
 
         if centroids_only:
-            centroid_condition = {"$eq": ["$$annotation.pcaClustering.isCentroid", True]}
+            centroid_condition = {
+                "$eq": ["$$annotation.pcaClustering.isCentroid", True]
+            }
 
             if include_unclustered:
                 annotation_filter_conditions.append(

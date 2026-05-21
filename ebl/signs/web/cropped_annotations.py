@@ -22,7 +22,9 @@ class CroppedAnnotationsResource:
 
     def on_get(self, req: Request, resp: Response, sign_name: str):
         centroids_only = req.get_param_as_bool("centroids_only", default=False)
-        include_unclustered = req.get_param_as_bool("include_unclustered", default=False)
+        include_unclustered = req.get_param_as_bool(
+            "include_unclustered", default=False
+        )
 
         cropped_signs = self._cropped_annotations_service.find_annotations_by_sign(
             sign_name,
