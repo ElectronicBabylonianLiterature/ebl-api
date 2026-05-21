@@ -45,6 +45,7 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         self,
         sign: str,
         centroids_only: bool = False,
+        include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
     ) -> Sequence[Annotations]:
@@ -57,19 +58,24 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         ]
 
         if centroids_only:
-            annotation_filter_conditions.append(
-                {
-                    "$or": [
-                        {"$eq": ["$$annotation.pcaClustering.isCentroid", True]},
-                        {
-                            "$eq": [
-                                {"$ifNull": ["$$annotation.pcaClustering", None]},
-                                None,
-                            ]
-                        },
-                    ]
-                }
-            )
+            centroid_condition = {"$eq": ["$$annotation.pcaClustering.isCentroid", True]}
+
+            if include_unclustered:
+                annotation_filter_conditions.append(
+                    {
+                        "$or": [
+                            centroid_condition,
+                            {
+                                "$eq": [
+                                    {"$ifNull": ["$$annotation.pcaClustering", None]},
+                                    None,
+                                ]
+                            },
+                        ]
+                    }
+                )
+            else:
+                annotation_filter_conditions.append(centroid_condition)
 
         if cluster_id:
             annotation_filter_conditions.append(

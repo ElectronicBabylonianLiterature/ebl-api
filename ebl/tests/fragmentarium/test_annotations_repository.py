@@ -136,6 +136,80 @@ def test_find_by_sign_with_centroids_only(
             assert annotation.pca_clustering.is_centroid is True
 
 
+def test_find_by_sign_with_centroids_only_and_include_unclustered(
+    database, annotations_repository, fragment_repository
+):
+    sign_query = "test-sign"
+
+    centroid_annotation = AnnotationFactory.build(
+        data=AnnotationDataFactory.build(sign_name=sign_query),
+        pca_clustering=PcaClustering(
+            cluster_id="cluster-1",
+            cluster_rank=0,
+            form="canonical1",
+            is_centroid=True,
+            cluster_size=10,
+            is_main=True,
+        ),
+    )
+    unclustered_annotation = AnnotationFactory.build(
+        data=AnnotationDataFactory.build(sign_name=sign_query),
+        pca_clustering=None,
+    )
+    non_centroid_annotation = AnnotationFactory.build(
+        data=AnnotationDataFactory.build(sign_name=sign_query),
+        pca_clustering=PcaClustering(
+            cluster_id="cluster-1",
+            cluster_rank=0,
+            form="variant1",
+            is_centroid=False,
+            cluster_size=10,
+            is_main=True,
+        ),
+    )
+
+    annotations = [
+        AnnotationsFactory.build(
+            fragment_number=MuseumNumber("X", "300"),
+            annotations=[centroid_annotation],
+        ),
+        AnnotationsFactory.build(
+            fragment_number=MuseumNumber("X", "301"),
+            annotations=[unclustered_annotation],
+        ),
+        AnnotationsFactory.build(
+            fragment_number=MuseumNumber("X", "302"),
+            annotations=[non_centroid_annotation],
+        ),
+    ]
+
+    scripts = ScriptFactory.build_batch(3)
+    for i, annotation_group in enumerate(annotations):
+        fragment_repository.create(
+            FragmentFactory.build(
+                number=annotation_group.fragment_number,
+                script=scripts[i],
+            )
+        )
+
+    database[COLLECTION].insert_many(
+        AnnotationsWithScriptSchema(many=True).dump(annotations)
+    )
+
+    results = annotations_repository.find_by_sign(
+        sign_query,
+        centroids_only=True,
+        include_unclustered=True,
+    )
+
+    returned_annotations = [
+        annotation for result in results for annotation in result.annotations
+    ]
+
+    assert centroid_annotation in returned_annotations
+    assert unclustered_annotation in returned_annotations
+    assert non_centroid_annotation not in returned_annotations
+
 def test_find_by_sign_with_cluster_id_and_script_filter(
     database, annotations_repository, fragment_repository
 ):
