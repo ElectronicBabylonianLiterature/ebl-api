@@ -1,4 +1,3 @@
-from ebl.tests.conftest import annotations_repository
 from mockito import mock, verify, when
 
 from ebl.fragmentarium.domain.annotation import PcaClustering
