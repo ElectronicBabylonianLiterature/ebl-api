@@ -30,21 +30,23 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 
 ### Getting Started
 
-1. **Configure Environment Variables**: Copy `.env.example` to `.env` and add your credentials:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   The container will initially fail without valid environment variables. Edit `.env` with your Auth0, MongoDB, Sentry, and other service credentials (see [environment variables](#environment-variables) section).
-
-2. **Open in Dev Container**:
+1. **Open in Dev Container**:
    * In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
    * In GitHub Codespaces: Create a new codespace from your repository
 
-3. **Rebuild After Configuration**: After adding your `.env` file, rebuild the container:
+   Before the container is built, `.devcontainer/init.sh` runs automatically and creates `.env`
+   from `.env.example` if it does not already exist. No manual copy step is needed.
+
+2. **Configure credentials**: The auto-created `.env` contains placeholder values. Replace them
+   with your actual Auth0, MongoDB, Sentry, and other service credentials (see
+   [environment variables](#environment-variables) section), then rebuild the container:
    * VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
-   * GitHub Codespaces: Restart the workspace
+   * GitHub Codespaces: Run "Codespaces: Rebuild Container" from the Command Palette
+
+   **Tip — skip this step with Codespaces secrets**: If you configure your credentials as
+   [Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
+   using the same names as the keys in `.env.example`, `init.sh` will inject them into `.env`
+   automatically and the container will be fully configured on first start with no manual editing.
 
 The dev container automatically installs all dependencies including MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler. No manual installation required.
 
