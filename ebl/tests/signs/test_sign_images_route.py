@@ -183,6 +183,64 @@ def test_signs_get_cluster_without_script_returns_bad_request(client):
     assert "script" in result.json["error"].lower()
 
 
+def test_signs_get_cluster_with_script_abbreviation(
+    client,
+    annotations_repository,
+    photo_repository,
+    fragment_repository,
+    text_with_labels,
+    cropped_sign_images_repository,
+):
+    fragment = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("K.6"), text=text_with_labels
+    )
+    fragment_repository.create(fragment)
+
+    annotation_data = AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0])
+    cropped_sign = CroppedSignFactory.build()
+
+    annotation = AnnotationFactory.build(
+        data=annotation_data,
+        cropped_sign=cropped_sign,
+        pca_clustering=PcaClustering(
+            cluster_id="test-cluster-id",
+            cluster_rank=0,
+            form="canonical1",
+            is_centroid=True,
+            cluster_size=10,
+            is_main=True,
+        ),
+    )
+
+    fragment_number = MuseumNumber("K", "6")
+
+    cropped_sign_images_repository.create_many(
+        [
+            CroppedSignImage(
+                annotation.cropped_sign.image_id,
+                Base64("test-base64-string"),
+                fragment_number,
+            )
+        ]
+    )
+
+    annotations_repository.create_or_update(
+        AnnotationsFactory.build(
+            fragment_number=fragment_number,
+            annotations=[annotation],
+        )
+    )
+
+    result = client.simulate_get(
+        "/signs/signName/images/cluster/test-cluster-id",
+        params={"script": fragment.script.period.abbreviation},
+    )
+
+    assert len(result.json) > 0
+    assert result.status == falcon.HTTP_OK
+    assert result.json[0]["annotationId"] == annotation.data.id
+
+
 def test_signs_get_cluster_with_script(
     client,
     annotations_repository,
