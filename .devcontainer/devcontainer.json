@@ -12,6 +12,7 @@
 			"version": "latest"
 		}
 	},
+	"initializeCommand": "bash .devcontainer/init.sh",
 	"runArgs": ["--env-file", ".env"],
 	"customizations": {
 		"vscode": {

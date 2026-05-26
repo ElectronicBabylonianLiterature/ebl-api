@@ -14,14 +14,14 @@ The project requires environment variables to be configured in a `.env` file at 
 
 ### Setup
 
-1. **Automatic Setup**: When the dev container is created, if `.env` doesn't exist, it will be automatically created from `.env.example` with placeholder values.
+1. **Automatic Setup**: Before the container is created, `initializeCommand` runs
+   `.devcontainer/init.sh` on the host. This script:
+   - Creates `.env` from `.env.example` if `.env` does not already exist.
+   - For each key defined in `.env.example`, if a [Codespaces secret](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
+     with the same name is available in the host environment, its value is written into `.env`,
+     replacing the placeholder. Secrets that are not configured are left as placeholders.
 
-2. **Manual Setup**: Copy `.env.example` to `.env` and update with your actual credentials:
-   ```bash
-   cp .env.example .env
-   ```
-
-3. **Update Values**: Edit `.env` with your actual credentials for:
+2. **Update Values**: Edit `.env` with your actual credentials for:
    - Auth0 configuration (audience, issuer, PEM certificate)
    - MongoDB connection URI and database name
    - Sentry DSN
