@@ -9,13 +9,6 @@ from ebl.fragmentarium.application.cropped_annotations_service import (
 ABBREV_TO_NAME = {period.value[1]: period.value[0] for period in Period}
 
 
-def period_name_from_abbreviation(abbreviation: str) -> str:
-    for period in Period:
-        if period.value[1] == abbreviation:
-            return period.value[0]
-    return abbreviation
-
-
 class CroppedAnnotationsResource:
     def __init__(self, cropped_annotations_service: CroppedAnnotationService):
         self._cropped_annotations_service = cropped_annotations_service
