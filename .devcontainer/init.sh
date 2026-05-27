@@ -22,11 +22,11 @@ with open('.env') as f:
 
 injected = []
 for key in keys:
-    value = os.environ.get(key, '')
-    if value:
+    if key in os.environ:
+        value = os.environ[key]
         content = re.sub(
             r'^' + re.escape(key) + r'=.*',
-            key + '=' + value,
+            lambda m: f'{key}={value}',
             content,
             flags=re.MULTILINE
         )

@@ -16,6 +16,7 @@ tasks:
       - task: lint
       - task: type
       - task: test
+      - task: lint-md
 
   python3:
     cmds:
@@ -29,9 +30,11 @@ tasks:
     cmds:
       - bash scripts/test-secret-scanning.sh
 
-  lint:
+  lint-md:
     cmds:
-      - poetry run ruff check ebl {{.CLI_ARGS}}
+      - npx markdownlint-cli2 "**/*.md" '#.venv/**' '#.pytest_cache/**'
+
+  lint:
 
   type:
     cmds:
