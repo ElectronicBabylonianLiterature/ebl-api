@@ -35,6 +35,8 @@ tasks:
       - npx markdownlint-cli2 "**/*.md" '#.venv/**' '#.pytest_cache/**'
 
   lint:
+    cmds:
+      - poetry run ruff check ebl {{.CLI_ARGS}}
 
   type:
     cmds:
