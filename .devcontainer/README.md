@@ -25,6 +25,12 @@ file at the root of the repository.
      written into `.env`, replacing the placeholder. Secrets that are not
      configured are left as placeholders.
 
+   > **Host prerequisites**: `initializeCommand` runs on the host machine
+   > before the container is built. It requires `bash` and `python3` on the
+   > host `PATH`. This is satisfied automatically on Linux, macOS, and GitHub
+   > Codespaces. Windows hosts without WSL or Git Bash may need to run
+   > `cp .env.example .env` manually before opening the devcontainer.
+
 2. **Update Values**: Edit `.env` with your actual credentials for:
    - Auth0 configuration (audience, issuer, PEM certificate)
    - MongoDB connection URI and database name
@@ -57,9 +63,9 @@ No manual steps are required - everything works automatically after container re
 
 1. **Python 3.11** - Runtime for local development
 2. **Poetry** - Python dependency management
-   (installed via `ghcr.io/devcontainers-contrib/features/poetry:2`)
+   (installed via `ghcr.io/devcontainers-extra/features/poetry:2`)
 3. **go-task** - Task runner
-   (installed via `ghcr.io/devcontainers-contrib/features/go-task:1`)
+   (installed via `ghcr.io/devcontainers-extra/features/go-task:1`)
 
 ### Via setup.sh Script
 

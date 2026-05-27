@@ -23,7 +23,7 @@ with open('.env') as f:
 injected = []
 for key in keys:
     if key in os.environ:
-        value = os.environ[key]
+        value = os.environ[key].replace('\r', '').replace('\n', '')
         content = re.sub(
             r'^' + re.escape(key) + r'=.*',
             lambda m: f'{key}={value}',

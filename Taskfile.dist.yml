@@ -32,7 +32,7 @@ tasks:
 
   lint-md:
     cmds:
-      - npx markdownlint-cli2 "**/*.md" '#.venv/**' '#.pytest_cache/**'
+      - npx markdownlint-cli2@0.22.1 "**/*.md" '#.venv/**' '#.pytest_cache/**'
 
   lint:
     cmds:
