@@ -1,9 +1,8 @@
 import falcon
+import pytest
 
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
-
 from ebl.fragmentarium.domain.annotation import PcaClustering
-
 from ebl.tests.factories.annotation import (
     AnnotationsFactory,
     AnnotationFactory,
@@ -111,6 +110,71 @@ def test_signs_get_with_centroids_only(
     assert result.status == falcon.HTTP_OK
 
 
+def test_signs_get_with_centroids_only_and_include_unclustered(
+    client,
+    annotations_repository,
+    photo_repository,
+    fragment_repository,
+    text_with_labels,
+    cropped_sign_images_repository,
+):
+    fragment = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("K.5"), text=text_with_labels
+    )
+    fragment_repository.create(fragment)
+
+    centroid_annotation = AnnotationFactory.build(
+        data=AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 0]),
+        cropped_sign=CroppedSignFactory.build(),
+        pca_clustering=PcaClustering(
+            cluster_id="test-centroid-cluster-id",
+            cluster_rank=0,
+            form="canonical1",
+            is_centroid=True,
+            cluster_size=10,
+            is_main=True,
+        ),
+    )
+
+    unclustered_annotation = AnnotationFactory.build(
+        data=AnnotationDataFactory.build(sign_name="signName", path=[2, 0, 1]),
+        cropped_sign=CroppedSignFactory.build(),
+        pca_clustering=None,
+    )
+
+    fragment_number = MuseumNumber("K", "5")
+    cropped_sign_images_repository.create_many(
+        [
+            CroppedSignImage(
+                centroid_annotation.cropped_sign.image_id,
+                Base64("centroid-base64-string"),
+                fragment_number,
+            ),
+            CroppedSignImage(
+                unclustered_annotation.cropped_sign.image_id,
+                Base64("unclustered-base64-string"),
+                fragment_number,
+            ),
+        ]
+    )
+    annotations_repository.create_or_update(
+        AnnotationsFactory.build(
+            fragment_number=fragment_number,
+            annotations=[centroid_annotation, unclustered_annotation],
+        )
+    )
+
+    result = client.simulate_get(
+        "/signs/signName/images?centroids_only=true&include_unclustered=true"
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 2
+
+    images = {item["image"] for item in result.json}
+    assert images == {"centroid-base64-string", "unclustered-base64-string"}
+
+
 def test_signs_get_cluster_without_script_returns_bad_request(client):
     result = client.simulate_get("/signs/signName/images/cluster/test-cluster-id")
 
@@ -118,6 +182,7 @@ def test_signs_get_cluster_without_script_returns_bad_request(client):
     assert "script" in result.json["error"].lower()
 
 
+@pytest.mark.parametrize("script_param", ["long_name", "abbreviation"])
 def test_signs_get_cluster_with_script(
     client,
     annotations_repository,
@@ -125,6 +190,7 @@ def test_signs_get_cluster_with_script(
     fragment_repository,
     text_with_labels,
     cropped_sign_images_repository,
+    script_param,
 ):
     fragment = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("K.4"), text=text_with_labels
@@ -164,7 +230,7 @@ def test_signs_get_cluster_with_script(
 
     result = client.simulate_get(
         "/signs/signName/images/cluster/test-cluster-id",
-        params={"script": fragment.script.period.long_name},
+        params={"script": getattr(fragment.script.period, script_param)},
     )
 
     assert len(result.json) > 0

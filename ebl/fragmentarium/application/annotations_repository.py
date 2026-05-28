@@ -11,6 +11,7 @@ class AnnotationsRepository(ABC):
         self,
         sign: str,
         centroids_only: bool = False,
+        include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
     ) -> Sequence[Annotations]: ...

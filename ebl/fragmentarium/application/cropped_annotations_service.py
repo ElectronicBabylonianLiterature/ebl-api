@@ -27,11 +27,12 @@ class CroppedAnnotationService:
         self,
         sign: str,
         centroids_only: bool = False,
+        include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
     ) -> Sequence[dict]:
         annotations = self._annotations_repository.find_by_sign(
-            sign, centroids_only, cluster_id, script_filter
+            sign, centroids_only, include_unclustered, cluster_id, script_filter
         )
         cropped_image_annotations = []
 
