@@ -203,7 +203,7 @@ def test_create_indexes_includes_query_indexes(database, text_repository) -> Non
         for index in database[CHAPTERS_COLLECTION].index_information().values()
     ]
 
-    assert [("genre", 1)] in text_index_keys
+    assert [("genre", 1), ("category", 1), ("index", 1)] in text_index_keys
     assert [("category", 1)] in text_index_keys
     assert [("index", 1)] in text_index_keys
     assert [
