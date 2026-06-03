@@ -35,11 +35,16 @@ class CroppedAnnotationService:
             sign, centroids_only, include_unclustered, cluster_id, script_filter
         )
         cropped_image_annotations = []
+        date_cache = {}
+        image_cache = {}
 
         for annotation in annotations:
-            date = DateSchema().dump(
-                self._fragment_repository.fetch_date(annotation.fragment_number)
-            )
+            fragment_number = str(annotation.fragment_number)
+            if fragment_number not in date_cache:
+                date_cache[fragment_number] = DateSchema().dump(
+                    self._fragment_repository.fetch_date(annotation.fragment_number)
+                )
+            date = date_cache[fragment_number]
             annotation = attr.evolve(
                 annotation,
                 annotations=[
@@ -52,11 +57,13 @@ class CroppedAnnotationService:
             for annotation_elem in annotation.annotations:
                 if cropped_sign := annotation_elem.cropped_sign:
                     try:
-                        cropped_sign_image = (
-                            self._cropped_sign_image_repository.query_by_id(
-                                cropped_sign.image_id
+                        if cropped_sign.image_id not in image_cache:
+                            image_cache[cropped_sign.image_id] = (
+                                self._cropped_sign_image_repository.query_by_id(
+                                    cropped_sign.image_id
+                                )
                             )
-                        )
+                        cropped_sign_image = image_cache[cropped_sign.image_id]
 
                         response = {
                             "fragmentNumber": str(annotation.fragment_number),

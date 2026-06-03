@@ -7,6 +7,9 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 class AnnotationsRepository(ABC):
     @abstractmethod
+    def create_indexes(self) -> None: ...
+
+    @abstractmethod
     def find_by_sign(
         self,
         sign: str,

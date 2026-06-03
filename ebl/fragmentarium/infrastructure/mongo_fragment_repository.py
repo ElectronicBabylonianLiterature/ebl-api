@@ -34,7 +34,18 @@ class MongoFragmentRepository(
                 ("text.lines.content.uniqueLemma.0", pymongo.ASCENDING),
             ]
         )
+        self._fragments.create_index(
+            [("text.lines.content.uniqueLemma", pymongo.ASCENDING)]
+        )
         self._fragments.create_index([("text.lines.type", pymongo.ASCENDING)])
+        self._fragments.create_index([("dossiers.dossierId", pymongo.ASCENDING)])
+        self._fragments.create_index(
+            [
+                ("archaeology.excavationNumber.prefix", pymongo.ASCENDING),
+                ("archaeology.excavationNumber.number", pymongo.ASCENDING),
+                ("archaeology.excavationNumber.suffix", pymongo.ASCENDING),
+            ]
+        )
         self._fragments.create_index([("record.type", pymongo.ASCENDING)])
         self._fragments.create_index(
             [

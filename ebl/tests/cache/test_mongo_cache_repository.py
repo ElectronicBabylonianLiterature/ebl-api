@@ -50,3 +50,11 @@ def test_delete_all(database, mongo_cache_repository) -> None:
     assert database[CACHE_COLLECTION].find_one({"cache_key": "test"}) is None
     assert database[CACHE_COLLECTION].find_one({"cache_key": "test line-42"}) is None
     assert database[CACHE_COLLECTION].find_one({"cache_key": "foobar"}) is not None
+
+
+def test_create_indexes(database, mongo_cache_repository) -> None:
+    mongo_cache_repository.create_indexes()
+
+    assert [("cache_key", 1)] in [
+        index["key"] for index in database[CACHE_COLLECTION].index_information().values()
+    ]

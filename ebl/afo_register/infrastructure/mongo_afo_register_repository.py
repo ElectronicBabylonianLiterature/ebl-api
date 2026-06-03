@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
-from typing import cast, Sequence
+from typing import Optional, Tuple, cast, Sequence
 from pymongo.database import Database
+import pymongo
 from natsort import natsorted
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
@@ -37,6 +38,18 @@ def cast_with_sorting(
     )
 
 
+def split_text_and_number(query: str) -> Optional[Tuple[str, str]]:
+    if not isinstance(query, str):
+        return None
+    split_query = query.rsplit(" ", 1)
+    if len(split_query) != 2:
+        return None
+    text, text_number = split_query
+    if not text or not text_number:
+        return None
+    return text, text_number
+
+
 class AfoRegisterRecordSchema(Schema):
     class Meta:
         unknown = EXCLUDE
@@ -68,6 +81,13 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def __init__(self, database: Database):
         self._afo_register = MongoCollection(database, COLLECTION)
 
+    def create_indexes(self) -> None:
+        self._afo_register.create_index([("text", pymongo.ASCENDING)])
+        self._afo_register.create_index([("textNumber", pymongo.ASCENDING)])
+        self._afo_register.create_index(
+            [("text", pymongo.ASCENDING), ("textNumber", pymongo.ASCENDING)]
+        )
+
     def create(self, afo_register_record: AfoRegisterRecord) -> str:
         return self._afo_register.insert_one(
             AfoRegisterRecordSchema().dump(afo_register_record)
@@ -81,18 +101,35 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def search_by_texts_and_numbers(
         self, query_list: Sequence[str], *args, **kwargs
     ) -> Sequence[AfoRegisterRecord]:
-        pipeline = [
-            {
-                "$addFields": {
-                    "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
-                }
-            },
-            {"$match": {"combined_field": {"$in": query_list}}},
-            {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
-            {"$replaceRoot": {"newRoot": "$document"}},
-            {"$project": {"combined_field": 0}},
-        ]
-        data = self._afo_register.aggregate(pipeline)
+        if not query_list:
+            return []
+
+        parsed_pairs = [split_text_and_number(query) for query in query_list]
+        if all(pair is not None for pair in parsed_pairs):
+            text_number_query = {
+                "$or": [
+                    {"text": pair[0], "textNumber": pair[1]}
+                    for pair in parsed_pairs
+                    if pair is not None
+                ]
+            }
+            data = self._afo_register.find_many(text_number_query)
+        else:
+            pipeline = [
+                {
+                    "$addFields": {
+                        "combined_field": {
+                            "$concat": ["$text", " ", "$textNumber"]
+                        }
+                    }
+                },
+                {"$match": {"combined_field": {"$in": query_list}}},
+                {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
+                {"$replaceRoot": {"newRoot": "$document"}},
+                {"$project": {"combined_field": 0}},
+            ]
+            data = self._afo_register.aggregate(pipeline)
+
         records = AfoRegisterRecordSchema().load(data, many=True)
         return cast_with_sorting(records)
 

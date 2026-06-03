@@ -64,3 +64,59 @@ def test_create_context_helpers(monkeypatch: pytest.MonkeyPatch) -> None:
 
     with pytest.raises(FrozenInstanceError):
         context.ebl_ai_client = EblAiClient("http://localhost:8001")
+
+
+def test_create_context_bootstraps_cache_indexes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    key = RSA.generate(2048)
+    configure_environment(monkeypatch, key.publickey().export_key())
+    monkeypatch.setattr(ebl.app, "MongoClient", InMemoryMongoClient)
+
+    calls = {"cache": 0}
+
+    def cache_create_indexes(_self):
+        calls["cache"] += 1
+
+    monkeypatch.setattr(
+        ebl.app.MongoCacheRepository,
+        "create_indexes",
+        cache_create_indexes,
+    )
+
+    ebl.app.create_context()
+
+    assert calls["cache"] == 1
+
+
+def test_create_app_bootstraps_annotations_and_afo_indexes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    key = RSA.generate(2048)
+    configure_environment(monkeypatch, key.publickey().export_key())
+    monkeypatch.setattr(ebl.app, "MongoClient", InMemoryMongoClient)
+
+    calls = {"annotations": 0, "afo": 0}
+
+    def annotations_create_indexes(_self):
+        calls["annotations"] += 1
+
+    def afo_create_indexes(_self):
+        calls["afo"] += 1
+
+    monkeypatch.setattr(
+        ebl.app.MongoAnnotationsRepository,
+        "create_indexes",
+        annotations_create_indexes,
+    )
+    monkeypatch.setattr(
+        ebl.app.MongoAfoRegisterRepository,
+        "create_indexes",
+        afo_create_indexes,
+    )
+
+    context = ebl.app.create_context()
+    ebl.app.create_app(context)
+
+    assert calls["annotations"] == 1
+    assert calls["afo"] == 1

@@ -191,6 +191,32 @@ def test_it_is_not_possible_to_create_duplicate_chapters(text_repository) -> Non
         text_repository.create(CHAPTER)
 
 
+def test_create_indexes_includes_query_indexes(database, text_repository) -> None:
+    text_repository.create_indexes()
+
+    text_index_keys = [
+        index["key"] for index in database[TEXTS_COLLECTION].index_information().values()
+    ]
+    chapter_index_keys = [
+        index["key"]
+        for index in database[CHAPTERS_COLLECTION].index_information().values()
+    ]
+
+    assert [("genre", 1)] in text_index_keys
+    assert [("category", 1)] in text_index_keys
+    assert [("index", 1)] in text_index_keys
+    assert [
+        ("manuscripts.museumNumber.prefix", 1),
+        ("manuscripts.museumNumber.number", 1),
+        ("manuscripts.museumNumber.suffix", 1),
+    ] in chapter_index_keys
+    assert [
+        ("uncertainFragments.prefix", 1),
+        ("uncertainFragments.number", 1),
+        ("uncertainFragments.suffix", 1),
+    ] in chapter_index_keys
+
+
 def test_finding_text(
     database, text_repository, bibliography_repository, fragment_repository
 ) -> None:

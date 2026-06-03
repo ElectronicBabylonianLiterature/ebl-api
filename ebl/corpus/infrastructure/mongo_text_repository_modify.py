@@ -21,6 +21,9 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
             ],
             unique=True,
         )
+        self._texts.create_index([("genre", pymongo.ASCENDING)])
+        self._texts.create_index([("category", pymongo.ASCENDING)])
+        self._texts.create_index([("index", pymongo.ASCENDING)])
         self._chapters.create_index(
             [
                 ("textId.genre", pymongo.ASCENDING),
@@ -45,6 +48,20 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
                 ("name", pymongo.ASCENDING),
             ],
             unique=True,
+        )
+        self._chapters.create_index(
+            [
+                ("manuscripts.museumNumber.prefix", pymongo.ASCENDING),
+                ("manuscripts.museumNumber.number", pymongo.ASCENDING),
+                ("manuscripts.museumNumber.suffix", pymongo.ASCENDING),
+            ]
+        )
+        self._chapters.create_index(
+            [
+                ("uncertainFragments.prefix", pymongo.ASCENDING),
+                ("uncertainFragments.number", pymongo.ASCENDING),
+                ("uncertainFragments.suffix", pymongo.ASCENDING),
+            ]
         )
 
     def create(self, text: Text) -> None:

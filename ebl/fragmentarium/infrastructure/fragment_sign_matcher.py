@@ -79,8 +79,12 @@ class SignMatcher:
             },
         ]
 
+    def _prefilter(self) -> List[Dict]:
+        return [{"$match": {"text.lines.type": "TextLine", "signs": {"$exists": True}}}]
+
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         return [
+            *self._prefilter(),
             *self._map_signs_to_textlines(),
             *(
                 self._match_multiline()

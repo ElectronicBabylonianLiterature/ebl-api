@@ -269,39 +269,12 @@ def is_in_fragmentarium(local_field: str, as_: str) -> List[dict]:
         {
             "$lookup": {
                 "from": FRAGMENTS_COLLECTION,
-                "let": {"number": f"${local_field}"},
-                "pipeline": [
-                    {
-                        "$match": {
-                            "$expr": {
-                                "$and": [
-                                    {
-                                        "$eq": [
-                                            "$museumNumber.prefix",
-                                            "$$number.prefix",
-                                        ]
-                                    },
-                                    {
-                                        "$eq": [
-                                            "$museumNumber.number",
-                                            "$$number.number",
-                                        ]
-                                    },
-                                    {
-                                        "$eq": [
-                                            "$museumNumber.suffix",
-                                            "$$number.suffix",
-                                        ]
-                                    },
-                                ]
-                            }
-                        }
-                    }
-                ],
+                "localField": local_field,
+                "foreignField": "museumNumber",
                 "as": as_,
             }
         },
-        {"$set": {as_: {"$anyElementTrue": f"${as_}"}}},
+        {"$set": {as_: {"$gt": [{"$size": f"${as_}"}, 0]}}},
     ]
 
 

@@ -89,7 +89,9 @@ def create_context():
     )
     guest_backend = NoneAuthBackend(Guest)
     cache = create_cache()
-    custom_cache = ChapterCache(MongoCacheRepository(database))
+    cache_repository = MongoCacheRepository(database)
+    cache_repository.create_indexes()
+    custom_cache = ChapterCache(cache_repository)
     provenance_repository = MongoProvenanceRepository(database)
     provenance_service = ProvenanceService(provenance_repository)
     return Context(
