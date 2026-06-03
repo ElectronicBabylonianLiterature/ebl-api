@@ -192,9 +192,7 @@ class CorpusLemmaMatcher:
         lemma_paths = [self.reconstruction_lemma_path, self.manuscriptlines_lemma_path]
 
         if self.query_type == LemmaQueryType.OR:
-            return {
-                "$or": [{path: {"$in": self.pattern}} for path in lemma_paths]
-            }
+            return {"$or": [{path: {"$in": self.pattern}} for path in lemma_paths]}
 
         return {
             "$and": [

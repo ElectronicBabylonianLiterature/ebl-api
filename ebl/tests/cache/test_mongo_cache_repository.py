@@ -56,5 +56,6 @@ def test_create_indexes(database, mongo_cache_repository) -> None:
     mongo_cache_repository.create_indexes()
 
     assert [("cache_key", 1)] in [
-        index["key"] for index in database[CACHE_COLLECTION].index_information().values()
+        index["key"]
+        for index in database[CACHE_COLLECTION].index_information().values()
     ]

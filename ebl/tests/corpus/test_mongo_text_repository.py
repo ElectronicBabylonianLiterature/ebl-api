@@ -195,7 +195,8 @@ def test_create_indexes_includes_query_indexes(database, text_repository) -> Non
     text_repository.create_indexes()
 
     text_index_keys = [
-        index["key"] for index in database[TEXTS_COLLECTION].index_information().values()
+        index["key"]
+        for index in database[TEXTS_COLLECTION].index_information().values()
     ]
     chapter_index_keys = [
         index["key"]

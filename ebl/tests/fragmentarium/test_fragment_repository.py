@@ -141,7 +141,8 @@ def test_create_indexes(database, fragment_repository):
         index["key"] for index in database[COLLECTION].index_information().values()
     ]
     join_index_keys = [
-        index["key"] for index in database[JOINS_COLLECTION].index_information().values()
+        index["key"]
+        for index in database[JOINS_COLLECTION].index_information().values()
     ]
 
     assert [("text.lines.content.uniqueLemma", 1)] in fragment_index_keys
