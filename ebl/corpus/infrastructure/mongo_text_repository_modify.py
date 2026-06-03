@@ -21,7 +21,6 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
             ],
             unique=True,
         )
-        self._texts.create_index([("genre", pymongo.ASCENDING)])
         self._texts.create_index([("category", pymongo.ASCENDING)])
         self._texts.create_index([("index", pymongo.ASCENDING)])
         self._chapters.create_index(
