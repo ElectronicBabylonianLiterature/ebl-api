@@ -105,7 +105,8 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
         if not query_list:
             return []
 
-        parsed_pairs = [split_text_and_number(query) for query in query_list]
+        normalized_query_list = [" ".join(query.strip().split()) for query in query_list]
+        parsed_pairs = [split_text_and_number(query) for query in normalized_query_list]
         if all(pair is not None for pair in parsed_pairs):
             text_number_query = {
                 "$or": [
@@ -122,7 +123,7 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
                         "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
                     }
                 },
-                {"$match": {"combined_field": {"$in": query_list}}},
+                {"$match": {"combined_field": {"$in": normalized_query_list}}},
                 {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
                 {"$replaceRoot": {"newRoot": "$document"}},
                 {"$project": {"combined_field": 0}},
