@@ -51,10 +51,11 @@ Task, and the Rust compiler.
    * GitHub Codespaces: Run "Codespaces: Rebuild Container" from the Command Palette
 
    **Tip — skip this step with Codespaces secrets**: Configure your
-   credentials as [Codespaces secrets][codespaces-secrets] using the same
-   names as the keys in `.env.example`. After the container is built,
-   `inject-secrets.py` runs automatically and injects them into `.env`.
-   The container will be fully configured with no manual editing.
+   credentials as [Codespaces secrets][codespaces-secrets] using the
+   same names as the keys in `.env.example`. Codespaces injects them
+   as native process environment variables at container start — they
+   take precedence over the placeholder values in `.env` without being
+   written to disk. No manual editing required.
 
 [codespaces-secrets]: https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces
 

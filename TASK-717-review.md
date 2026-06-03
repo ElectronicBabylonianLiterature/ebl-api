@@ -260,3 +260,122 @@ Suggested implementation order:
 5. Mark resolved threads as resolved on GitHub.
 6. Remove `TASK-2-todo.md` and `TASK-2-log.md` before merge (task files
    must not be in the final PR).
+
+---
+
+## Round 2 Review — 2026-06-03
+
+**Scope:** Audit of the current branch state after implementation of Round 1
+findings, devcontainer failure debugging, and CodeQL security alert remediation.
+
+**Branch HEAD:** `bbf4cfc7b` (after suppression commit reverted)
+
+**Current state of changed files:**
+
+- `.devcontainer/devcontainer.json` — updated
+- `.devcontainer/init.sh` — deleted
+- `.devcontainer/inject-secrets.py` — created (secret injection removed,
+  new-key sync only)
+- `.devcontainer/README.md` — updated
+- `README.md` — updated
+
+---
+
+### New finding: F-06 — Script name no longer reflects its behaviour
+
+**Severity:** MEDIUM
+
+**File:** `.devcontainer/inject-secrets.py`
+
+#### F-06 Details
+
+After removing the secret-injection block (CodeQL remediation), the script
+only appends missing placeholder keys from `.env.example` to `.env`. The
+name `inject-secrets.py` now actively misleads contributors into thinking
+the script writes secrets to disk, which it does not.
+
+The `postCreateCommand` reference in `devcontainer.json` and descriptions
+in both READMEs will also be inaccurate until the rename is applied.
+
+#### F-06 Recommendation
+
+Rename to `sync-env.py`. Update `postCreateCommand` in `devcontainer.json`
+and all references in `.devcontainer/README.md` and `README.md`.
+
+---
+
+### New finding: F-07 — README ambiguous about `.env` and Codespaces runtime
+
+**Severity:** MEDIUM
+
+**File:** `.devcontainer/README.md`
+
+#### F-07 Details
+
+The current README states: "Codespaces secrets are injected as process
+environment variables by the platform — they are never written to disk
+by this project." While accurate, it does not explain the mechanism or
+the continued role of `.env` at runtime.
+
+Specifically:
+
+- `.env` must still exist — `runArgs: ["--env-file", ".env"]` causes
+  Docker to fail if the file is absent
+- `.env` must contain all keys (placeholders if no real value is
+  needed); `sync-env.py` ensures this
+- In Codespaces, the platform passes `--secrets-file` to Docker, which
+  translates to explicit `-e KEY=value` flags that **take precedence**
+  over `--env-file` values — real secrets override placeholders at
+  runtime without being written to the file
+- Local (non-Codespaces) developers must still manually edit `.env`
+
+The README implies `.env` plays a minor role, which could confuse
+developers debugging missing-variable errors.
+
+#### F-07 Recommendation
+
+Add a "How it works" subsection explaining the two-layer env mechanism:
+
+1. `.env` provides all keys (placeholders) for Docker via `--env-file`
+2. Codespaces injects real values over the top at runtime via `-e`
+
+---
+
+### Cross-comparison Round 2: ebl-frontend PR #733
+
+**New activity on frontend PR #733 (Fabdulla1, yesterday):**
+
+Fabdulla1 raised three new review findings on the frontend PR that are
+directly relevant here:
+
+| Frontend finding | Backend? | Status |
+| --- | --- | --- |
+| `initializeCommand` hardcoded to `bash` | ✅ Same | ✅ Fixed |
+| Injection via host env fails in Codespaces | ✅ Same | ✅ Fixed |
+| New template key silently skipped | ✅ Same | ✅ Fixed |
+| `.env.local` permissions too broad | N/A | Not applicable |
+| `sudo` blocks non-interactive context | N/A | Not applicable |
+
+The backend PR is ahead of the frontend PR on all shared concerns. However,
+the frontend's `inject-secrets.sh` retains the Codespaces injection
+approach — just moved inside the container. This differs from the backend's
+decision to drop injection entirely and rely on Codespaces native env var
+delivery. Both are valid; the backend approach is more secure (no
+cleartext-to-disk path).
+
+---
+
+### Round 2 overall status
+
+| Finding | Severity | Status |
+| --- | --- | --- |
+| F-01: host bash/python3 required | HIGH | ✅ Resolved |
+| F-02: clobber guard missing | HIGH | ✅ Resolved (injection removed) |
+| F-03: no new-key sync | MEDIUM | ✅ Resolved |
+| F-04: multi-line value thread | LOW | ✅ Resolved on GitHub |
+| F-05: setup.sh duplicate block thread | LOW | ✅ Resolved on GitHub |
+| F-06: script name misleading | MEDIUM | ⬜ Pending |
+| F-07: README ambiguous about `.env` runtime role | MEDIUM | ⬜ Pending |
+| CodeQL clear-text storage | HIGH | ✅ Resolved at source |
+
+**Do not merge** until F-06 and F-07 are addressed and task docs removed.

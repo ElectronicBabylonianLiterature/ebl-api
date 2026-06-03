@@ -7,8 +7,8 @@ EBL API project.
 
 - `devcontainer.json` - Main dev container configuration
 - `setup.sh` - Post-create setup script that installs dependencies
-- `inject-secrets.py` - Post-create script that injects Codespaces secrets
-  and syncs missing keys
+- `sync-env.py` - Post-create script that syncs missing keys from
+  `.env.example` into `.env`
 - `README.md` - This file
 
 ## Environment Variables
@@ -23,17 +23,21 @@ file at the root of the repository.
      `.env.example` if it does not already exist. This step uses only POSIX
      `sh` and works on all host platforms (Linux, macOS, Windows with Git
      Bash or WSL, Codespaces). No bash or Python required on the host.
-   - **After container build** (`postCreateCommand`): Runs
-     `inject-secrets.py` inside the container. This script:
-     - Injects any
-       [Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
-       whose names match keys in `.env.example`, but only if the current
-       `.env` value still matches the placeholder (user-edited values are
-       preserved on rebuild).
-     - Appends any keys present in `.env.example` but missing from `.env`,
-       keeping your environment in sync when new variables are introduced.
+   - **After container build** (`postCreateCommand`): Runs `sync-env.py`
+     inside the container. This script appends any keys present in
+     `.env.example` but missing from `.env`, keeping your environment in
+     sync when new variables are introduced.
 
-2. **Update Values**: Edit `.env` with your actual credentials for:
+2. **Codespaces Secrets**: When using GitHub Codespaces, configure your
+   secrets in
+   [Codespaces settings](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces).
+   Codespaces automatically injects matching secrets as environment
+   variables inside the container — no manual steps or file writes are
+   needed. The `.env` file holds placeholder values only; live secrets
+   reach the application through the process environment.
+
+3. **Update Values**: Edit `.env` with your actual credentials for local
+   (non-Codespaces) development:
    - Auth0 configuration (audience, issuer, PEM certificate)
    - MongoDB connection URI and database name
    - Sentry DSN
@@ -51,13 +55,44 @@ including:
 - `task` commands
 - Any other processes running in the container
 
-No manual steps are required - everything works automatically after container rebuild.
+No manual steps are required - everything works automatically after
+container rebuild.
+
+### How it works (two-layer env mechanism)
+
+`.env` must exist and contain every key that the application reads
+(placeholder values are fine). Docker will fail at startup if the file
+is absent because `--env-file` is unconditional.
+
+`sync-env.py` ensures `.env` always has all keys by appending any that
+are present in `.env.example` but not yet in `.env`. This keeps the
+file complete when new variables are introduced.
+
+In **Codespaces**, real secret values reach the container through a
+separate path:
+
+1. Codespaces passes `--secrets-file` to the Docker CLI when creating
+   the container.
+2. The devcontainer CLI translates each secret into an explicit
+   `-e KEY=value` flag.
+3. Docker applies explicit `-e` flags **after** `--env-file`, so they
+   override the placeholder values from `.env`.
+
+The result: every key is present in the process environment (from
+`.env`), and every key that has a Codespaces secret configured receives
+its real value — without writing it to disk.
+
+In **local** (non-Codespaces) development, step 1-3 do not apply.
+Edit `.env` directly with your actual credentials.
 
 ### Security
 
-- ✅ `.env` is in `.gitignore` and will never be committed
-- ✅ `.env.example` contains only placeholder values and is committed to the repository
-- ⚠️ Never commit actual credentials to version control
+- `.env` is in `.gitignore` and will never be committed
+- `.env.example` contains only placeholder values and is committed to
+  the repository
+- Codespaces secrets are injected as process environment variables by
+  the platform — they are never written to disk by this project
+- Never commit actual credentials to version control
 
 ## What Gets Installed
 
