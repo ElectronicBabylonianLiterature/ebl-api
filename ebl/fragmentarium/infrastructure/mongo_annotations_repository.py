@@ -1,3 +1,4 @@
+import re
 from typing import Any, Dict, List, Optional, Sequence
 
 from marshmallow import EXCLUDE
@@ -58,7 +59,9 @@ class MongoAnnotationsRepository(AnnotationsRepository):
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
     ) -> Sequence[Annotations]:
-        match_conditions: Dict[str, Any] = {"annotations.data.signName": sign}
+        query: Dict[str, str] = {"$regex": re.escape(sign), "$options": "i"}
+
+        match_conditions: Dict[str, Any] = {"annotations.data.signName": query}
 
         annotation_filter_conditions: List[Dict[str, Any]] = [
             {"$eq": ["$$annotation.data.signName", sign]}

@@ -66,7 +66,9 @@ def test_search_by_texts_and_numbers_with_spaces(
     record = AfoRegisterRecordFactory.build(text="Text With Space", text_number="4")
     afo_register_repository.create(record)
 
-    results = afo_register_repository.search_by_texts_and_numbers(["Text With Space 4"])
+    results = afo_register_repository.search_by_texts_and_numbers(
+        ["  Text With Space   4  "]
+    )
 
     assert results == [record]
 
@@ -75,8 +77,7 @@ def test_create_indexes(database, afo_register_repository: AfoRegisterRepository
     afo_register_repository.create_indexes()
 
     index_keys = [
-        index["key"]
-        for index in database["afo_register"].index_information().values()
+        index["key"] for index in database["afo_register"].index_information().values()
     ]
 
     assert [("text", 1)] in index_keys

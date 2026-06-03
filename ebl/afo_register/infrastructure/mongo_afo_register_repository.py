@@ -41,7 +41,8 @@ def cast_with_sorting(
 def split_text_and_number(query: str) -> Optional[Tuple[str, str]]:
     if not isinstance(query, str):
         return None
-    split_query = query.rsplit(" ", 1)
+    normalized_query = " ".join(query.strip().split())
+    split_query = normalized_query.rsplit(" ", 1)
     if len(split_query) != 2:
         return None
     text, text_number = split_query
@@ -118,9 +119,7 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
             pipeline = [
                 {
                     "$addFields": {
-                        "combined_field": {
-                            "$concat": ["$text", " ", "$textNumber"]
-                        }
+                        "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
                     }
                 },
                 {"$match": {"combined_field": {"$in": query_list}}},
