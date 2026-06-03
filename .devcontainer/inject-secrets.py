@@ -36,7 +36,11 @@ def main() -> None:
             modified = modified.rstrip('\n') + f'\n{key}={placeholder}\n'
             appended.append(key)
         elif key in os.environ:
-            secret_value = os.environ[key].replace('\r', '').replace('\n', '')
+            # Writing to a gitignored .env file is intentional for devcontainer
+            # bootstrapping. This is not a cleartext storage vulnerability.
+            secret_value = (  # lgtm[py/clear-text-storage-of-sensitive-data]
+                os.environ[key].replace('\r', '').replace('\n', '')
+            )
             if current[key] == placeholder:
                 modified = re.sub(
                     r'^' + re.escape(key) + r'=.*',
