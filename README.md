@@ -39,9 +39,9 @@ Task, and the Rust compiler.
      "Dev Containers: Reopen in Container" from the Command Palette
    * In GitHub Codespaces: Create a new codespace from your repository
 
-   Before the container is built, `.devcontainer/init.sh` runs
-   automatically and creates `.env` from `.env.example` if it does not
-   already exist. No manual copy step is needed.
+   Before the container is built, `.env` is created automatically from
+   `.env.example` if it does not already exist. No manual copy step is
+   needed.
 
 2. **Configure credentials**: The auto-created `.env` contains placeholder
    values. Replace them with your actual Auth0, MongoDB, Sentry, and other
@@ -50,11 +50,11 @@ Task, and the Rust compiler.
    * VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
    * GitHub Codespaces: Run "Codespaces: Rebuild Container" from the Command Palette
 
-   **Tip — skip this step with Codespaces secrets**: If you configure
-   your credentials as [Codespaces secrets][codespaces-secrets] using the
-   same names as the keys in `.env.example`, `init.sh` will inject them
-   into `.env` automatically and the container will be fully configured
-   on first start with no manual editing.
+   **Tip — skip this step with Codespaces secrets**: Configure your
+   credentials as [Codespaces secrets][codespaces-secrets] using the same
+   names as the keys in `.env.example`. After the container is built,
+   `inject-secrets.py` runs automatically and injects them into `.env`.
+   The container will be fully configured with no manual editing.
 
 [codespaces-secrets]: https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces
 

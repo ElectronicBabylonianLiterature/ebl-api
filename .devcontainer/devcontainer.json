@@ -12,7 +12,7 @@
 			"version": "latest"
 		}
 	},
-	"initializeCommand": "bash .devcontainer/init.sh",
+	"initializeCommand": ["sh", "-c", "test -f .env || cp .env.example .env"],
 	"runArgs": ["--env-file", ".env"],
 	"customizations": {
 		"vscode": {
@@ -32,6 +32,6 @@
 			"onAutoForward": "ignore"
 		}
 	},
-	"postCreateCommand": "bash .devcontainer/setup.sh",
+	"postCreateCommand": "bash .devcontainer/setup.sh && python3 .devcontainer/inject-secrets.py",
 	"postStartCommand": "mkdir -p /workspaces/data && mongod --dbpath /workspaces/data --bind_ip 127.0.0.1 --fork --logpath /workspaces/data/mongodb.log"
 }

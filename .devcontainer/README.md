@@ -7,6 +7,8 @@ EBL API project.
 
 - `devcontainer.json` - Main dev container configuration
 - `setup.sh` - Post-create setup script that installs dependencies
+- `inject-secrets.py` - Post-create script that injects Codespaces secrets
+  and syncs missing keys
 - `README.md` - This file
 
 ## Environment Variables
@@ -16,20 +18,20 @@ file at the root of the repository.
 
 ### Setup
 
-1. **Automatic Setup**: Before the container is created, `initializeCommand` runs
-   `.devcontainer/init.sh` on the host. This script:
-   - Creates `.env` from `.env.example` if `.env` does not already exist.
-   - For each key defined in `.env.example`, if a
-     [Codespaces secret](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
-     with the same name is available in the host environment, its value is
-     written into `.env`, replacing the placeholder. Secrets that are not
-     configured are left as placeholders.
-
-   > **Host prerequisites**: `initializeCommand` runs on the host machine
-   > before the container is built. It requires `bash` and `python3` on the
-   > host `PATH`. This is satisfied automatically on Linux, macOS, and GitHub
-   > Codespaces. Windows hosts without WSL or Git Bash may need to run
-   > `cp .env.example .env` manually before opening the devcontainer.
+1. **Automatic Setup**: Environment configuration happens in two phases:
+   - **Before container build** (`initializeCommand`): Creates `.env` from
+     `.env.example` if it does not already exist. This step uses only POSIX
+     `sh` and works on all host platforms (Linux, macOS, Windows with Git
+     Bash or WSL, Codespaces). No bash or Python required on the host.
+   - **After container build** (`postCreateCommand`): Runs
+     `inject-secrets.py` inside the container. This script:
+     - Injects any
+       [Codespaces secrets](https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces)
+       whose names match keys in `.env.example`, but only if the current
+       `.env` value still matches the placeholder (user-edited values are
+       preserved on rebuild).
+     - Appends any keys present in `.env.example` but missing from `.env`,
+       keeping your environment in sync when new variables are introduced.
 
 2. **Update Values**: Edit `.env` with your actual credentials for:
    - Auth0 configuration (audience, issuer, PEM certificate)
