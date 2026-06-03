@@ -105,7 +105,9 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
         if not query_list:
             return []
 
-        normalized_query_list = [" ".join(query.strip().split()) for query in query_list]
+        normalized_query_list = [
+            " ".join(query.strip().split()) for query in query_list
+        ]
         parsed_pairs = [split_text_and_number(query) for query in normalized_query_list]
         if all(pair is not None for pair in parsed_pairs):
             text_number_query = {
