@@ -65,13 +65,14 @@ class CroppedAnnotationService:
         annotations: Annotations,
         annotation: Annotation,
         image: CroppedSignImage,
+        label: str,
         date: dict,
     ) -> dict:
         response = {
             "fragmentNumber": str(annotations.fragment_number),
             "image": image.image,
             "script": str(annotations.script),
-            "label": annotation.cropped_sign.label,
+            "label": label,
             "date": date,
             "provenance": annotations.provenance,
             "annotationId": annotation.data.id,
@@ -115,7 +116,13 @@ class CroppedAnnotationService:
                     continue
 
                 cropped_image_annotations.append(
-                    self._build_response(filtered_annotations, annotation, image, date)
+                    self._build_response(
+                        filtered_annotations,
+                        annotation,
+                        image,
+                        cropped_sign.label,
+                        date,
+                    )
                 )
 
         return cropped_image_annotations
