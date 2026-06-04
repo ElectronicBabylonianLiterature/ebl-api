@@ -1,3 +1,4 @@
+import pymongo
 from pymongo.database import Database
 
 from ebl.cache.application.cache_repository import CacheRepository
@@ -10,6 +11,9 @@ COLLECTION = "cache"
 class MongoCacheRepository(CacheRepository):
     def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
+
+    def create_indexes(self) -> None:
+        self._collection.create_index([("cache_key", pymongo.ASCENDING)])
 
     def has(self, cache_key: str, regex=False) -> bool:
         return self._collection.exists(

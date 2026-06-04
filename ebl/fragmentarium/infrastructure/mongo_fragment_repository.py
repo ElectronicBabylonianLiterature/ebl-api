@@ -14,7 +14,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 class MongoFragmentRepository(
     MongoFragmentRepositoryCreate, MongoFragmentRepositoryGet
 ):
-    def create_indexes(self) -> None:
+    def _create_fragment_indexes(self) -> None:
         self._fragments.create_index(
             [
                 ("museumNumber.prefix", pymongo.ASCENDING),
@@ -34,7 +34,18 @@ class MongoFragmentRepository(
                 ("text.lines.content.uniqueLemma.0", pymongo.ASCENDING),
             ]
         )
+        self._fragments.create_index(
+            [("text.lines.content.uniqueLemma", pymongo.ASCENDING)]
+        )
         self._fragments.create_index([("text.lines.type", pymongo.ASCENDING)])
+        self._fragments.create_index([("dossiers.dossierId", pymongo.ASCENDING)])
+        self._fragments.create_index(
+            [
+                ("archaeology.excavationNumber.prefix", pymongo.ASCENDING),
+                ("archaeology.excavationNumber.number", pymongo.ASCENDING),
+                ("archaeology.excavationNumber.suffix", pymongo.ASCENDING),
+            ]
+        )
         self._fragments.create_index([("record.type", pymongo.ASCENDING)])
         self._fragments.create_index(
             [
@@ -44,6 +55,8 @@ class MongoFragmentRepository(
             ]
         )
         self._fragments.create_index([("_sortKey", pymongo.ASCENDING)])
+
+    def _create_join_indexes(self) -> None:
         self._joins.create_index(
             [
                 ("fragments.museumNumber.prefix", pymongo.ASCENDING),
@@ -51,6 +64,10 @@ class MongoFragmentRepository(
                 ("fragments.museumNumber.suffix", pymongo.ASCENDING),
             ]
         )
+
+    def create_indexes(self) -> None:
+        self._create_fragment_indexes()
+        self._create_join_indexes()
 
     def count_total_fragments(self) -> int:
         return self._fragments.count_documents({})

@@ -9,6 +9,7 @@ from ebl.afo_register.web.afo_register_records import (
 
 
 def create_afo_register_routes(api: falcon.App, context: Context):
+    context.afo_register_repository.create_indexes()
     afo_register_search = AfoRegisterResource(context.afo_register_repository)
     afo_register_search_texts_and_numbers = AfoRegisterTextsAndNumbersResource(
         context.afo_register_repository

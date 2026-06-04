@@ -16,6 +16,18 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 COLLECTION = "annotations"
 
 
+def test_create_indexes(database, annotations_repository):
+    annotations_repository.create_indexes()
+
+    index_keys = [
+        index["key"] for index in database[COLLECTION].index_information().values()
+    ]
+
+    assert [("fragmentNumber", 1)] in index_keys
+    assert [("annotations.data.signName", 1)] in index_keys
+    assert [("annotations.pcaClustering.clusterId", 1)] in index_keys
+
+
 def test_find_by_sign(database, annotations_repository, fragment_repository):
     annotations = AnnotationsFactory.build_batch(3)
     scripts = ScriptFactory.build_batch(3)

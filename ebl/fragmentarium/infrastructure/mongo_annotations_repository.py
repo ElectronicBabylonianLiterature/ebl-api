@@ -2,6 +2,7 @@ import re
 from typing import Any, Dict, List, Optional, Sequence
 
 from marshmallow import EXCLUDE
+import pymongo
 from pymongo.database import Database
 
 from ebl.errors import NotFoundError
@@ -20,6 +21,15 @@ COLLECTION = "annotations"
 class MongoAnnotationsRepository(AnnotationsRepository):
     def __init__(self, database: Database) -> None:
         self._collection = MongoCollection(database, COLLECTION)
+
+    def create_indexes(self) -> None:
+        self._collection.create_index([("fragmentNumber", pymongo.ASCENDING)])
+        self._collection.create_index(
+            [("annotations.data.signName", pymongo.ASCENDING)]
+        )
+        self._collection.create_index(
+            [("annotations.pcaClustering.clusterId", pymongo.ASCENDING)]
+        )
 
     def create_or_update(self, annotations: Annotations) -> None:
         self._collection.replace_one(
