@@ -1,14 +1,19 @@
-from typing import Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
 import attr
 
 from ebl.fragmentarium.application.annotations_repository import AnnotationsRepository
 from ebl.fragmentarium.application.annotations_schema import PcaClusteringSchema
+from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage
 from ebl.fragmentarium.application.cropped_sign_images_repository import (
     CroppedSignImagesRepository,
 )
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.domain.annotation import AnnotationValueType
+from ebl.fragmentarium.domain.annotation import (
+    Annotation,
+    Annotations,
+    AnnotationValueType,
+)
 from ebl.fragmentarium.domain.date import DateSchema
 
 
@@ -23,6 +28,62 @@ class CroppedAnnotationService:
         self._fragment_repository = fragment_repository
         self._cropped_sign_image_repository = cropped_sign_images_repository
 
+    def _filter_has_sign_annotations(self, annotations: Annotations) -> Annotations:
+        return attr.evolve(
+            annotations,
+            annotations=[
+                annotation
+                for annotation in annotations.annotations
+                if annotation.data.type == AnnotationValueType.HAS_SIGN
+            ],
+        )
+
+    def _find_fragment_date(
+        self, annotations: Annotations, date_cache: Dict[str, dict]
+    ) -> dict:
+        fragment_number = str(annotations.fragment_number)
+        if fragment_number not in date_cache:
+            date_cache[fragment_number] = DateSchema().dump(
+                self._fragment_repository.fetch_date(annotations.fragment_number)
+            )
+        return date_cache[fragment_number]
+
+    def _find_cropped_sign_image(
+        self, image_id: str, image_cache: Dict[str, CroppedSignImage]
+    ) -> Optional[CroppedSignImage]:
+        try:
+            if image_id not in image_cache:
+                image_cache[image_id] = self._cropped_sign_image_repository.query_by_id(
+                    image_id
+                )
+            return image_cache[image_id]
+        except Exception:
+            return None
+
+    def _build_response(
+        self,
+        annotations: Annotations,
+        annotation: Annotation,
+        image: CroppedSignImage,
+        date: dict,
+    ) -> dict:
+        response = {
+            "fragmentNumber": str(annotations.fragment_number),
+            "image": image.image,
+            "script": str(annotations.script),
+            "label": annotation.cropped_sign.label,
+            "date": date,
+            "provenance": annotations.provenance,
+            "annotationId": annotation.data.id,
+        }
+
+        if annotation.pca_clustering:
+            response["pcaClustering"] = PcaClusteringSchema().dump(
+                annotation.pca_clustering
+            )
+
+        return response
+
     def find_annotations_by_sign(
         self,
         sign: str,
@@ -34,54 +95,27 @@ class CroppedAnnotationService:
         annotations = self._annotations_repository.find_by_sign(
             sign, centroids_only, include_unclustered, cluster_id, script_filter
         )
-        cropped_image_annotations = []
-        date_cache = {}
-        image_cache = {}
+        cropped_image_annotations: List[dict] = []
+        date_cache: Dict[str, dict] = {}
+        image_cache: Dict[str, CroppedSignImage] = {}
 
-        for annotation in annotations:
-            fragment_number = str(annotation.fragment_number)
-            if fragment_number not in date_cache:
-                date_cache[fragment_number] = DateSchema().dump(
-                    self._fragment_repository.fetch_date(annotation.fragment_number)
+        for annotation_group in annotations:
+            filtered_annotations = self._filter_has_sign_annotations(annotation_group)
+            date = self._find_fragment_date(filtered_annotations, date_cache)
+
+            for annotation in filtered_annotations.annotations:
+                cropped_sign = annotation.cropped_sign
+                if cropped_sign is None:
+                    continue
+
+                image = self._find_cropped_sign_image(
+                    cropped_sign.image_id, image_cache
                 )
-            date = date_cache[fragment_number]
-            annotation = attr.evolve(
-                annotation,
-                annotations=[
-                    x
-                    for x in annotation.annotations
-                    if x.data.type == AnnotationValueType.HAS_SIGN
-                ],
-            )
+                if image is None:
+                    continue
 
-            for annotation_elem in annotation.annotations:
-                if cropped_sign := annotation_elem.cropped_sign:
-                    try:
-                        if cropped_sign.image_id not in image_cache:
-                            image_cache[cropped_sign.image_id] = (
-                                self._cropped_sign_image_repository.query_by_id(
-                                    cropped_sign.image_id
-                                )
-                            )
-                        cropped_sign_image = image_cache[cropped_sign.image_id]
-
-                        response = {
-                            "fragmentNumber": str(annotation.fragment_number),
-                            "image": cropped_sign_image.image,
-                            "script": str(annotation.script),
-                            "label": cropped_sign.label,
-                            "date": date,
-                            "provenance": annotation.provenance,
-                            "annotationId": annotation_elem.data.id,
-                        }
-
-                        if annotation_elem.pca_clustering:
-                            response["pcaClustering"] = PcaClusteringSchema().dump(
-                                annotation_elem.pca_clustering
-                            )
-
-                        cropped_image_annotations.append(response)
-                    except Exception:
-                        pass
+                cropped_image_annotations.append(
+                    self._build_response(filtered_annotations, annotation, image, date)
+                )
 
         return cropped_image_annotations

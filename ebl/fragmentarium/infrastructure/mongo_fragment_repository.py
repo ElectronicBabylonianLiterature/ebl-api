@@ -14,7 +14,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 class MongoFragmentRepository(
     MongoFragmentRepositoryCreate, MongoFragmentRepositoryGet
 ):
-    def create_indexes(self) -> None:
+    def _create_fragment_indexes(self) -> None:
         self._fragments.create_index(
             [
                 ("museumNumber.prefix", pymongo.ASCENDING),
@@ -55,6 +55,8 @@ class MongoFragmentRepository(
             ]
         )
         self._fragments.create_index([("_sortKey", pymongo.ASCENDING)])
+
+    def _create_join_indexes(self) -> None:
         self._joins.create_index(
             [
                 ("fragments.museumNumber.prefix", pymongo.ASCENDING),
@@ -62,6 +64,10 @@ class MongoFragmentRepository(
                 ("fragments.museumNumber.suffix", pymongo.ASCENDING),
             ]
         )
+
+    def create_indexes(self) -> None:
+        self._create_fragment_indexes()
+        self._create_join_indexes()
 
     def count_total_fragments(self) -> int:
         return self._fragments.count_documents({})

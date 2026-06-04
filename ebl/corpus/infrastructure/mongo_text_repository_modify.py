@@ -12,7 +12,7 @@ from ebl.corpus.infrastructure.mongo_text_repository_base import MongoTextReposi
 
 
 class MongoTextRepositoryModify(MongoTextRepositoryBase):
-    def create_indexes(self) -> None:
+    def _create_text_indexes(self) -> None:
         self._texts.create_index(
             [
                 ("genre", pymongo.ASCENDING),
@@ -23,6 +23,8 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
         )
         self._texts.create_index([("category", pymongo.ASCENDING)])
         self._texts.create_index([("index", pymongo.ASCENDING)])
+
+    def _create_chapter_indexes(self) -> None:
         self._chapters.create_index(
             [
                 ("textId.genre", pymongo.ASCENDING),
@@ -62,6 +64,10 @@ class MongoTextRepositoryModify(MongoTextRepositoryBase):
                 ("uncertainFragments.suffix", pymongo.ASCENDING),
             ]
         )
+
+    def create_indexes(self) -> None:
+        self._create_text_indexes()
+        self._create_chapter_indexes()
 
     def create(self, text: Text) -> None:
         self._texts.insert_one(TextSchema(exclude=["chapters"]).dump(text))

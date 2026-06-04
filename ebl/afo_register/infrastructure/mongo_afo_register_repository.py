@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
-from typing import Optional, Tuple, cast, Sequence
+from typing import Dict, List, Optional, Tuple, cast, Sequence
 from pymongo.database import Database
 import pymongo
 from natsort import natsorted
@@ -99,12 +99,41 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
         records = AfoRegisterRecordSchema().load(data, many=True)
         return cast_with_sorting(records)
 
+    def _build_indexed_query(
+        self, query_list: Sequence[str]
+    ) -> Optional[Dict[str, List[Dict[str, str]]]]:
+        parsed_pairs = [split_text_and_number(query) for query in query_list]
+        valid_pairs = [pair for pair in parsed_pairs if pair is not None]
+        if len(valid_pairs) != len(parsed_pairs):
+            return None
+
+        return {
+            "$or": [
+                {"text": text, "textNumber": text_number}
+                for text, text_number in valid_pairs
+            ]
+        }
+
+    def _build_fallback_pipeline(self, query_list: Sequence[str]) -> List[dict]:
+        return [
+            {
+                "$addFields": {
+                    "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
+                }
+            },
+            {"$match": {"combined_field": {"$in": query_list}}},
+            {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
+            {"$replaceRoot": {"newRoot": "$document"}},
+            {"$project": {"combined_field": 0}},
+        ]
+
     def search_by_texts_and_numbers(
         self, query_list: Sequence[str], *args, **kwargs
     ) -> Sequence[AfoRegisterRecord]:
         if not query_list:
             return []
 
+<<<<<<< HEAD
         normalized_query_list = [
             " ".join(query.strip().split()) for query in query_list
         ]
@@ -131,6 +160,15 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
                 {"$project": {"combined_field": 0}},
             ]
             data = self._afo_register.aggregate(pipeline)
+=======
+        indexed_query = self._build_indexed_query(query_list)
+        if indexed_query is not None:
+            data = self._afo_register.find_many(indexed_query)
+        else:
+            data = self._afo_register.aggregate(
+                self._build_fallback_pipeline(query_list)
+            )
+>>>>>>> 74755891 (fix: address PR comments)
 
         records = AfoRegisterRecordSchema().load(data, many=True)
         return cast_with_sorting(records)
