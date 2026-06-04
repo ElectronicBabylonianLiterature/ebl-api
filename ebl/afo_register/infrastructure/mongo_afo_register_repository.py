@@ -3,15 +3,14 @@ from typing import Dict, List, Optional, Tuple, cast, Sequence
 from pymongo.database import Database
 import pymongo
 from natsort import natsorted
+
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecord,
     AfoRegisterRecordSuggestion,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
-from ebl.common.query.query_collation import (
-    make_query_params,
-)
+from ebl.common.query.query_collation import make_query_params
 
 
 COLLECTION = "afo_register"
@@ -133,42 +132,17 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
         if not query_list:
             return []
 
-<<<<<<< HEAD
         normalized_query_list = [
             " ".join(query.strip().split()) for query in query_list
         ]
-        parsed_pairs = [split_text_and_number(query) for query in normalized_query_list]
-        if all(pair is not None for pair in parsed_pairs):
-            text_number_query = {
-                "$or": [
-                    {"text": pair[0], "textNumber": pair[1]}
-                    for pair in parsed_pairs
-                    if pair is not None
-                ]
-            }
-            data = self._afo_register.find_many(text_number_query)
-        else:
-            pipeline = [
-                {
-                    "$addFields": {
-                        "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
-                    }
-                },
-                {"$match": {"combined_field": {"$in": normalized_query_list}}},
-                {"$group": {"_id": "$_id", "document": {"$first": "$$ROOT"}}},
-                {"$replaceRoot": {"newRoot": "$document"}},
-                {"$project": {"combined_field": 0}},
-            ]
-            data = self._afo_register.aggregate(pipeline)
-=======
-        indexed_query = self._build_indexed_query(query_list)
+
+        indexed_query = self._build_indexed_query(normalized_query_list)
         if indexed_query is not None:
             data = self._afo_register.find_many(indexed_query)
         else:
             data = self._afo_register.aggregate(
-                self._build_fallback_pipeline(query_list)
+                self._build_fallback_pipeline(normalized_query_list)
             )
->>>>>>> 74755891 (fix: address PR comments)
 
         records = AfoRegisterRecordSchema().load(data, many=True)
         return cast_with_sorting(records)
