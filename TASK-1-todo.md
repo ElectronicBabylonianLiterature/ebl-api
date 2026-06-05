@@ -4,6 +4,14 @@
 
 ---
 
+## ⛔ Pre-Merge Hard Gates
+
+- [ ] **Delete seed data from dev database** — run `PYTHONPATH=.venv/lib/python3.11/site-packages python3 scripts/seed_realia.py --delete` (or `poetry run python scripts/seed_realia.py --delete`)
+- [ ] **Remove seed script from branch** — delete `scripts/seed_realia.py` and `realia-seed-pig.json` before merge
+- [ ] **Remove task docs from branch** — delete `TASK-1-todo.md`, `TASK-1-log.md`, `TASK-1-realia_trello_card.json` before merge
+
+---
+
 ## Decisions (Clarifications Resolved)
 
 | # | Question | Decision |

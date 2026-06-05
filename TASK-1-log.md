@@ -70,3 +70,28 @@
 - Coverage `ebl/realia/` → **100%** ✅ (was 98%)
 
 ### Status: FIXES APPLIED — awaiting user approval to commit/push
+
+## 2026-05-13 (post-commit refactor & gate fixes)
+
+### Changes made after initial commit
+- **`_inject_bibliography` refactored**: split into `_inject_entry`, `_inject_references`, `_inject_reallexikon` — each with a single responsibility
+- **Pyre type errors fixed**: helper method signatures updated to `Sequence[Reference]` / `Sequence[ReallexikonEntry]` / `Tuple[..., ...]`; test fixtures using `_realia_collection` typed as `MongoRealiaRepository` instead of abstract `RealiaRepository`
+- **Lint errors fixed**: removed unused imports (`re`, `RealiaType`, `BibliographyEntryFactory`, `pytest`, `NotFoundError`, `RealiaRepository`) from infrastructure and test files
+- **Committed**: `4b08062b` — "refactor: split _inject_bibliography into focused helpers; fix lint and type errors"
+
+### Gate results (all pass)
+- `task format` ✅
+- `task lint` ✅
+- `task type` ✅
+- `pytest ebl/tests/realia/` → 18 passed ✅
+
+## 2026-06-02 (dev database seed)
+
+### Seed data
+- Created `realia-seed-pig.json` — "Pig" entry based on UI screenshot, matching the `RealiaEntrySchema` wire format:
+  - `_id`: "Pig", `relatedTerms`: ["Schwein", "Schweinefett"], `wikidataId`: ["Q787"]
+  - 3 reallexikon entries (Schwein A/B/C with RlA article IDs and titles)
+  - 2 afoRegister entries (AfO 52 (2018) 645)
+  - 1 reference: De Zorzi 2016 (DISCUSSION type)
+- Upserted into dev `realia` collection — confirmed `upserted_id='Pig'`
+- File saved for later reuse: `realia-seed-pig.json`

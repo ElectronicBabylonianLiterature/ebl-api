@@ -1,0 +1,51 @@
+{
+  "_id": "Pig",
+  "relatedTerms": ["Schwein", "Schweinefett"],
+  "type": [],
+  "wikidataId": ["Q787"],
+  "reallexikon": [
+    {
+      "id": "Schwein.A",
+      "title": "Schwein A. In Mesopotamien \u00b7 Pig A. In Mesopotamia",
+      "reference": null,
+      "content": ""
+    },
+    {
+      "id": "Schwein.B",
+      "title": "Schwein B. Bei den Hethitern \u00b7 Pig B. In Hittite tradition",
+      "reference": null,
+      "content": ""
+    },
+    {
+      "id": "Schwein.C",
+      "title": "Schwein C. Arch\u00e4ozoologisch \u00b7 Pig C. Archaezoological",
+      "reference": null,
+      "content": ""
+    }
+  ],
+  "afoRegister": [
+    {
+      "mainWord": "Schwein",
+      "note": "S.zucht und ihre Verwaltung Ende 4. bis Ende 3. Jts., in jedem (gr\u00f6\u00dferen) institutionellen Haushalt, p. 33: Nebenprodukte",
+      "AfO": "AfO 52 (2018) 645",
+      "reference": "Dahl, in: Lion und Michel, De la domestication, 31ff.",
+      "crossReference": ""
+    },
+    {
+      "mainWord": "Schwein",
+      "note": "S. in abwertenden Wendungen, Mari-Briefe",
+      "AfO": "AfO 52 (2018) 645",
+      "reference": "Durand, JA 294, 12",
+      "crossReference": ""
+    }
+  ],
+  "references": [
+    {
+      "id": "De Zorzi 2016",
+      "type": "DISCUSSION",
+      "pages": "",
+      "notes": "",
+      "linesCited": []
+    }
+  ]
+}
