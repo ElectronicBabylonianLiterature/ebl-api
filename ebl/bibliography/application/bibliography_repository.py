@@ -38,5 +38,9 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_duplicate_candidates(self, entry: Any, limit: int) -> Sequence[Any]:
+        raise NotImplementedError
+
+    @abstractmethod
     def list_all_bibliography(self) -> Sequence[Any]:
         raise NotImplementedError

@@ -3,6 +3,9 @@ from typing import Optional, Sequence
 
 from pydash import uniq_with
 
+from ebl.bibliography.application.duplicate_detection import (
+    BibliographyDuplicateDetector,
+)
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
@@ -70,6 +73,13 @@ class Bibliography:
 
     def list_all_bibliography(self) -> Sequence[str]:
         return self._repository.list_all_bibliography()
+
+    def find_duplicate_candidates(self, entry: dict, limit: int = 10) -> dict:
+        return (
+            BibliographyDuplicateDetector(self._repository)
+            .find_candidates(entry, limit)
+            .to_dict()
+        )
 
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:

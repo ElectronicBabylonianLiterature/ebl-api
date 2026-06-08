@@ -5,7 +5,10 @@ from falcon.media.validators.jsonschema import validate
 import json
 from ebl.cache.application.cache import DAILY_TIMEOUT
 
-from ebl.bibliography.domain.bibliography_entry import CSL_JSON_SCHEMA
+from ebl.bibliography.domain.bibliography_entry import (
+    CSL_JSON_SCHEMA,
+    DUPLICATE_CANDIDATE_JSON_SCHEMA,
+)
 from ebl.users.web.require_scope import require_scope
 from ebl.bibliography.application.bibliography import Bibliography
 
@@ -65,3 +68,14 @@ class BibliographyAll:
 
     def on_get(self, req: Request, resp: Response) -> None:
         resp.media = self._bibliography.list_all_bibliography()
+
+
+class BibliographyDuplicateCandidatesResource:
+    def __init__(self, bibliography: Bibliography):
+        self._bibliography = bibliography
+
+    @falcon.before(require_scope, "write:bibliography")
+    @validate(DUPLICATE_CANDIDATE_JSON_SCHEMA)
+    def on_post(self, req: Request, resp: Response) -> None:
+        limit = min(req.get_param_as_int("limit") or 10, 25)
+        resp.media = self._bibliography.find_duplicate_candidates(req.media, limit)

@@ -149,3 +149,49 @@ def test_list_bibliography(client, saved_entries):
 
     assert result.json == saved_entries
     assert result.status == falcon.HTTP_OK
+
+
+def test_duplicate_candidates(client, saved_entry):
+    proposed_entry = {**saved_entry, "id": "Q30000001"}
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps(proposed_entry),
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["decision"] == "likely_duplicate"
+    assert result.json["highestScore"] >= 0.92
+    assert result.json["candidates"][0]["id"] == saved_entry["id"]
+    assert result.json["candidates"][0]["recommendation"] == "block_or_request_override"
+    assert result.json["candidates"][0]["matchedFields"]["doi"] == 1.0
+
+
+def test_duplicate_candidates_allows_missing_id(client, saved_entry):
+    proposed_entry = pydash.omit(saved_entry, "id")
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps(proposed_entry),
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["decision"] == "likely_duplicate"
+
+
+def test_duplicate_candidates_invalid(client):
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps({"title": "Missing type"}),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_duplicate_candidates_requires_bibliography_write_scope(
+    guest_client, saved_entry
+):
+    result = guest_client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps(saved_entry),
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN

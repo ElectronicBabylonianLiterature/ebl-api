@@ -160,3 +160,8 @@ CSL_JSON_SCHEMA = {
     "required": ["type", "id"],
     "additionalProperties": False,
 }
+
+DUPLICATE_CANDIDATE_JSON_SCHEMA = {
+    **CSL_JSON_SCHEMA,
+    "required": ["type"],
+}
