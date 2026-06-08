@@ -5,7 +5,7 @@ import json
 import re
 import unicodedata
 from collections import Counter, defaultdict
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Optional, Sequence
@@ -24,6 +24,44 @@ ARTICLE_LIKE_TYPES = {
     "review-book",
 }
 BOOK_LIKE_TYPES = {"book", "thesis", "manuscript", "report"}
+DEFAULT_WEIGHTS = {
+    "title": 0.27,
+    "contributors": 0.23,
+    "year": 0.14,
+    "containerTitle": 0.08,
+    "publisher": 0.06,
+    "collectionTitle": 0.05,
+    "volume": 0.03,
+    "issue": 0.02,
+    "page": 0.02,
+    "edition": 0.03,
+    "language": 0.01,
+    "type": 0.01,
+    "issn": 0.03,
+}
+ARTICLE_WEIGHT_OVERRIDES = {
+    "title": 0.24,
+    "contributors": 0.20,
+    "containerTitle": 0.13,
+    "publisher": 0.03,
+    "collectionTitle": 0.04,
+    "volume": 0.06,
+    "issue": 0.04,
+    "page": 0.05,
+    "edition": 0.01,
+    "issn": 0.04,
+}
+BOOK_WEIGHT_OVERRIDES = {
+    "title": 0.28,
+    "contributors": 0.24,
+    "containerTitle": 0.03,
+    "publisher": 0.09,
+    "volume": 0.02,
+    "issue": 0.01,
+    "page": 0.01,
+    "edition": 0.05,
+    "issn": 0.02,
+}
 PROJECTION = {
     "_id": 1,
     "type": 1,
@@ -35,7 +73,6 @@ PROJECTION = {
     "DOI": 1,
     "ISBN": 1,
     "ISSN": 1,
-    "URL": 1,
     "language": 1,
     "container-title": 1,
     "container-title-short": 1,
@@ -47,7 +84,6 @@ PROJECTION = {
     "page": 1,
     "page-first": 1,
     "edition": 1,
-    "genre": 1,
 }
 
 
@@ -156,7 +192,6 @@ class NormalizedBibliographyEntry:
     raw: Mapping[str, Any]
     type: str
     title: str
-    title_without_diacritic_fold: str
     title_tokens: set[str]
     contributors: tuple[str, ...]
     primary_family: str
@@ -174,8 +209,6 @@ class NormalizedBibliographyEntry:
     page_first: str
     edition: str
     language: str
-    genre: str
-    url: str
 
 
 def normalize_entry(entry: Mapping[str, Any]) -> NormalizedBibliographyEntry:
@@ -186,9 +219,6 @@ def normalize_entry(entry: Mapping[str, Any]) -> NormalizedBibliographyEntry:
         raw=entry,
         type=str(entry.get("type") or ""),
         title=normalized_title,
-        title_without_diacritic_fold=normalize_text(
-            entry.get("title"), fold_diacritics=False
-        ),
         title_tokens=title_tokens(normalized_title),
         contributors=contributor_names(entry),
         primary_family=primary_family(entry),
@@ -206,8 +236,6 @@ def normalize_entry(entry: Mapping[str, Any]) -> NormalizedBibliographyEntry:
         page_first=normalize_short_field(entry.get("page-first")),
         edition=normalize_short_field(entry.get("edition")),
         language=normalize_text(entry.get("language")),
-        genre=normalize_text(entry.get("genre")),
-        url=normalize_text(entry.get("URL")),
     )
 
 
@@ -270,53 +298,18 @@ def field_score(left: str, right: str) -> Optional[float]:
 
 
 def type_weights(entry_type: str) -> dict[str, float]:
+    weights = dict(DEFAULT_WEIGHTS)
     if entry_type in ARTICLE_LIKE_TYPES:
-        return {
-            "title": 0.24,
-            "contributors": 0.20,
-            "year": 0.14,
-            "containerTitle": 0.13,
-            "publisher": 0.03,
-            "collectionTitle": 0.04,
-            "volume": 0.06,
-            "issue": 0.04,
-            "page": 0.05,
-            "edition": 0.01,
-            "language": 0.01,
-            "type": 0.01,
-            "issn": 0.04,
-        }
+        weights.update(ARTICLE_WEIGHT_OVERRIDES)
     if entry_type in BOOK_LIKE_TYPES:
-        return {
-            "title": 0.28,
-            "contributors": 0.24,
-            "year": 0.14,
-            "containerTitle": 0.03,
-            "publisher": 0.09,
-            "collectionTitle": 0.05,
-            "volume": 0.02,
-            "issue": 0.01,
-            "page": 0.01,
-            "edition": 0.05,
-            "language": 0.01,
-            "type": 0.01,
-            "issn": 0.02,
-        }
-    return {
-        "title": 0.27,
-        "contributors": 0.23,
-        "year": 0.14,
-        "containerTitle": 0.08,
-        "publisher": 0.06,
-        "collectionTitle": 0.05,
-        "volume": 0.03,
-        "issue": 0.02,
-        "page": 0.02,
-        "edition": 0.03,
-        "language": 0.01,
-        "type": 0.01,
-        "issn": 0.03,
-    }
+        weights.update(BOOK_WEIGHT_OVERRIDES)
+    return weights
+
+
+def pair_type(
+    left: NormalizedBibliographyEntry, right: NormalizedBibliographyEntry
+) -> str:
+    return left.type if left.type == right.type else left.type or right.type
 
 
 @dataclass
@@ -333,112 +326,149 @@ class PairScore:
     previously_reviewed_not_duplicate: bool = False
 
 
+def best_score(*scores: Optional[float]) -> Optional[float]:
+    available = [score for score in scores if score is not None]
+    return max(available) if available else None
+
+
+def title_similarity(
+    left: NormalizedBibliographyEntry, right: NormalizedBibliographyEntry
+) -> Optional[float]:
+    if not left.title or not right.title:
+        return None
+    return best_score(
+        ratio(left.title, right.title),
+        token_overlap(left.title_tokens, right.title_tokens),
+    )
+
+
+def container_title_similarity(
+    left: NormalizedBibliographyEntry, right: NormalizedBibliographyEntry
+) -> Optional[float]:
+    return best_score(
+        field_score(left.container_title, right.container_title),
+        field_score(left.container_title_short, right.container_title_short),
+    )
+
+
+def page_similarity(
+    left: NormalizedBibliographyEntry, right: NormalizedBibliographyEntry
+) -> Optional[float]:
+    return best_score(
+        exact_field_score(left.page, right.page),
+        exact_field_score(left.page_first, right.page_first),
+    )
+
+
+def matched_signals(
+    left: NormalizedBibliographyEntry, right: NormalizedBibliographyEntry
+) -> dict[str, Optional[float]]:
+    return {
+        "doi": exact_field_score(left.doi, right.doi),
+        "isbn": exact_field_score(left.isbn, right.isbn),
+        "issn": exact_field_score(left.issn, right.issn),
+        "title": title_similarity(left, right),
+        "contributors": contributor_similarity(left, right),
+        "year": year_similarity(left.year, right.year),
+        "containerTitle": container_title_similarity(left, right),
+        "publisher": field_score(left.publisher, right.publisher),
+        "collectionTitle": field_score(left.collection_title, right.collection_title),
+        "volume": exact_field_score(left.volume, right.volume),
+        "issue": exact_field_score(left.issue, right.issue),
+        "page": page_similarity(left, right),
+        "edition": exact_field_score(left.edition, right.edition),
+        "language": exact_field_score(left.language, right.language),
+        "type": exact_field_score(left.type, right.type),
+    }
+
+
+def conflicting_signals(matched: Mapping[str, Optional[float]]) -> list[str]:
+    return [
+        signal
+        for signal in ("doi", "isbn", "year", "volume", "issue", "page", "edition")
+        if matched.get(signal) == 0.0
+    ]
+
+
+def usable_signal_weight(
+    matched: Mapping[str, Optional[float]], weights: Mapping[str, float]
+) -> float:
+    return float(
+        sum(
+            weight
+            for signal, weight in weights.items()
+            if matched.get(signal) is not None
+        )
+    )
+
+
+def signal_evidence_completeness(
+    matched: Mapping[str, Optional[float]], weights: Mapping[str, float]
+) -> float:
+    total_weight = float(sum(weights.values()))
+    return round(usable_signal_weight(matched, weights) / total_weight, 4)
+
+
+def weighted_match_score(
+    matched: Mapping[str, Optional[float]], weights: Mapping[str, float]
+) -> float:
+    usable_weight = usable_signal_weight(matched, weights)
+    if not usable_weight:
+        return 0.0
+    return (
+        sum((matched.get(signal) or 0.0) * weight for signal, weight in weights.items())
+        / usable_weight
+    )
+
+
+def adjust_identifier_score(
+    score: float, matched: Mapping[str, Optional[float]], conflicts: Sequence[str]
+) -> float:
+    if matched["doi"] == 1.0:
+        score = max(score, 0.86 if conflicts else 0.97)
+    if matched["isbn"] == 1.0 and (matched.get("title") or 0.0) >= 0.7:
+        score = max(score, 0.94)
+    # ISSN is deliberately supporting evidence only.
+    if matched["issn"] == 1.0 and score < 0.76:
+        score = min(score + 0.06, 0.75)
+    return score
+
+
+def pair_decision(
+    score: float,
+    evidence_completeness: float,
+    previously_reviewed_not_duplicate: bool,
+) -> tuple[str, str]:
+    if previously_reviewed_not_duplicate:
+        return "not_duplicate", "ignore_previously_reviewed"
+    if evidence_completeness < 0.35:
+        return "insufficient_data", "manual_review_if_important"
+    if score >= 0.92:
+        return "likely_duplicate", "confirm_before_cleanup"
+    if score >= 0.76:
+        return "possible_duplicate", "review_before_create_or_cleanup"
+    return "not_duplicate", "allow_create"
+
+
 def score_pair(
     left: NormalizedBibliographyEntry,
     right: NormalizedBibliographyEntry,
     *,
     previously_reviewed_not_duplicate: bool = False,
 ) -> PairScore:
-    matched: dict[str, Optional[float]] = {
-        "doi": exact_field_score(left.doi, right.doi),
-        "isbn": exact_field_score(left.isbn, right.isbn),
-        "issn": exact_field_score(left.issn, right.issn),
-        "title": (
-            max(
-                score
-                for score in (
-                    ratio(left.title, right.title),
-                    token_overlap(left.title_tokens, right.title_tokens),
-                )
-                if score is not None
-            )
-            if left.title and right.title
-            else None
+    matched = matched_signals(left, right)
+    conflicts = conflicting_signals(matched)
+    weights = type_weights(pair_type(left, right))
+    evidence_completeness = signal_evidence_completeness(matched, weights)
+    score = round(
+        adjust_identifier_score(
+            weighted_match_score(matched, weights), matched, conflicts
         ),
-        "contributors": contributor_similarity(left, right),
-        "year": year_similarity(left.year, right.year),
-        "containerTitle": (
-            max(
-                score
-                for score in (
-                    field_score(left.container_title, right.container_title),
-                    field_score(
-                        left.container_title_short, right.container_title_short
-                    ),
-                )
-                if score is not None
-            )
-            if (
-                (left.container_title and right.container_title)
-                or (left.container_title_short and right.container_title_short)
-            )
-            else None
-        ),
-        "publisher": field_score(left.publisher, right.publisher),
-        "collectionTitle": field_score(left.collection_title, right.collection_title),
-        "volume": exact_field_score(left.volume, right.volume),
-        "issue": exact_field_score(left.issue, right.issue),
-        "page": (
-            max(
-                score
-                for score in (
-                    exact_field_score(left.page, right.page),
-                    exact_field_score(left.page_first, right.page_first),
-                )
-                if score is not None
-            )
-            if (left.page and right.page) or (left.page_first and right.page_first)
-            else None
-        ),
-        "edition": exact_field_score(left.edition, right.edition),
-        "language": exact_field_score(left.language, right.language),
-        "type": exact_field_score(left.type, right.type),
-    }
-    conflicts = [
-        field
-        for field in ("doi", "isbn", "year", "volume", "issue", "page", "edition")
-        if matched.get(field) == 0.0
-    ]
-    weights = type_weights(
-        left.type if left.type == right.type else left.type or right.type
+        4,
     )
-    usable_weight = sum(
-        weight for field, weight in weights.items() if matched.get(field) is not None
+    decision, recommendation = pair_decision(
+        score, evidence_completeness, previously_reviewed_not_duplicate
     )
-    evidence_completeness = round(usable_weight / sum(weights.values()), 4)
-    score = (
-        sum((matched[field] or 0.0) * weight for field, weight in weights.items())
-        / usable_weight
-        if usable_weight
-        else 0.0
-    )
-    if matched["doi"] == 1.0:
-        score = max(score, 0.86 if conflicts else 0.97)
-    if (
-        matched["isbn"] == 1.0
-        and matched.get("title", 0)
-        and matched.get("title", 0) >= 0.7
-    ):
-        score = max(score, 0.94)
-    # ISSN is deliberately supporting evidence only.
-    if matched["issn"] == 1.0 and score < 0.76:
-        score = min(score + 0.06, 0.75)
-    score = round(score, 4)
-    if previously_reviewed_not_duplicate:
-        decision = "not_duplicate"
-        recommendation = "ignore_previously_reviewed"
-    elif evidence_completeness < 0.35:
-        decision = "insufficient_data"
-        recommendation = "manual_review_if_important"
-    elif score >= 0.92:
-        decision = "likely_duplicate"
-        recommendation = "confirm_before_cleanup"
-    elif score >= 0.76:
-        decision = "possible_duplicate"
-        recommendation = "review_before_create_or_cleanup"
-    else:
-        decision = "not_duplicate"
-        recommendation = "allow_create"
     reason = build_reason(matched, conflicts, decision)
     return PairScore(
         left.id,
@@ -500,49 +530,86 @@ def generate_candidate_pairs(
 ) -> list[PairScore]:
     false_positive_pairs = false_positive_pairs or set()
     by_id = {entry.id: entry for entry in entries}
-    candidate_ids: set[tuple[str, str]] = set()
+    scored = [
+        score_candidate_pair(pair, by_id, false_positive_pairs)
+        for pair in candidate_pair_ids(entries)
+    ]
+    return sorted(
+        [score for score in scored if is_reportable_pair(score)],
+        key=lambda item: item.score,
+        reverse=True,
+    )
 
+
+def candidate_pair_ids(
+    entries: Sequence[NormalizedBibliographyEntry],
+) -> set[tuple[str, str]]:
+    candidate_ids: set[tuple[str, str]] = set()
+    add_exact_identifier_pairs(candidate_ids, entries)
+    add_bucket_pairs(candidate_ids, blocking_buckets(entries))
+    return candidate_ids
+
+
+def add_exact_identifier_pairs(
+    candidate_ids: set[tuple[str, str]],
+    entries: Sequence[NormalizedBibliographyEntry],
+) -> None:
     for field_name in ("doi", "isbn", "issn"):
         for group in group_by_exact(entries, field_name).values():
             add_all_pairs(candidate_ids, [entry.id for entry in group])
 
+
+def blocking_buckets(
+    entries: Sequence[NormalizedBibliographyEntry],
+) -> dict[tuple[Any, ...], list[str]]:
     buckets: dict[tuple[Any, ...], list[str]] = defaultdict(list)
     for entry in entries:
-        if entry.primary_family and entry.year is not None:
-            buckets[("author_year", entry.primary_family, entry.year)].append(entry.id)
-        if entry.year is not None:
-            for token in sorted(entry.title_tokens):
-                buckets[("year_title_token", entry.year, token)].append(entry.id)
-        if entry.container_title and entry.year is not None:
-            buckets[("container_year", entry.container_title, entry.year)].append(
-                entry.id
-            )
-        if entry.title:
-            buckets[("title_prefix", entry.title[:20])].append(entry.id)
+        add_entry_to_blocking_buckets(buckets, entry)
+    return buckets
 
+
+def add_entry_to_blocking_buckets(
+    buckets: dict[tuple[Any, ...], list[str]], entry: NormalizedBibliographyEntry
+) -> None:
+    if entry.primary_family and entry.year is not None:
+        buckets[("author_year", entry.primary_family, entry.year)].append(entry.id)
+    if entry.year is not None:
+        for token in sorted(entry.title_tokens):
+            buckets[("year_title_token", entry.year, token)].append(entry.id)
+    if entry.container_title and entry.year is not None:
+        buckets[("container_year", entry.container_title, entry.year)].append(entry.id)
+    if entry.title:
+        buckets[("title_prefix", entry.title[:20])].append(entry.id)
+
+
+def add_bucket_pairs(
+    candidate_ids: set[tuple[str, str]],
+    buckets: Mapping[tuple[Any, ...], Sequence[str]],
+) -> None:
     for ids in buckets.values():
         if 1 < len(ids) <= 250:
             add_all_pairs(candidate_ids, ids)
 
-    scored = [
-        score_pair(
-            by_id[left_id],
-            by_id[right_id],
-            previously_reviewed_not_duplicate=pair_key(left_id, right_id)
-            in false_positive_pairs,
-        )
-        for left_id, right_id in candidate_ids
-    ]
-    return sorted(
-        [
-            score
-            for score in scored
-            if score.score >= 0.70
-            or score.decision in {"possible_duplicate", "likely_duplicate"}
-            or score.previously_reviewed_not_duplicate
-        ],
-        key=lambda item: item.score,
-        reverse=True,
+
+def score_candidate_pair(
+    pair: tuple[str, str],
+    entries_by_id: Mapping[str, NormalizedBibliographyEntry],
+    false_positive_pairs: set[tuple[str, str]],
+) -> PairScore:
+    left_id, right_id = pair
+    return score_pair(
+        entries_by_id[left_id],
+        entries_by_id[right_id],
+        previously_reviewed_not_duplicate=pair_key(left_id, right_id)
+        in false_positive_pairs,
+    )
+
+
+def is_reportable_pair(score: PairScore) -> bool:
+    return (
+        score.score >= 0.70
+        or score.decision in {"possible_duplicate", "likely_duplicate"}
+        or score.previously_reviewed_not_duplicate
     )
 
 
@@ -587,34 +654,54 @@ class UsageCounts:
 def collect_usage_counts(database: Any, ids: Iterable[str]) -> dict[str, UsageCounts]:
     counts = {id_: UsageCounts() for id_ in ids}
     for id_ in counts:
-        counts[id_].fragments = count_documents(
-            database, "fragments", {"references.id": id_}
+        assign_count(
+            counts[id_],
+            "fragments",
+            count_documents(database, "fragments", {"references.id": id_}),
         )
-        counts[id_].corpus_texts = count_documents(
-            database, "texts", {"references.id": id_}
+        assign_count(
+            counts[id_],
+            "corpus_texts",
+            count_documents(database, "texts", {"references.id": id_}),
         )
-        counts[id_].corpus_manuscripts = count_documents(
-            database,
-            "chapters",
-            {
-                "$or": [
-                    {"manuscripts.references.id": id_},
-                    {"manuscripts.oldSigla.reference.id": id_},
-                ]
-            },
+        assign_count(
+            counts[id_],
+            "corpus_manuscripts",
+            count_documents(
+                database,
+                "chapters",
+                {
+                    "$or": [
+                        {"manuscripts.references.id": id_},
+                        {"manuscripts.oldSigla.reference.id": id_},
+                    ]
+                },
+            ),
         )
-        counts[id_].dossiers = count_documents(
-            database, "dossiers", {"references.id": id_}
+        assign_count(
+            counts[id_],
+            "dossiers",
+            count_documents(database, "dossiers", {"references.id": id_}),
         )
     add_note_markup_counts(database, counts)
     return counts
 
 
-def count_documents(database: Any, collection: str, query: Mapping[str, Any]) -> int:
+def count_documents(
+    database: Any, collection: str, query: Mapping[str, Any]
+) -> Optional[int]:
     try:
         return database[collection].count_documents(query)
     except Exception:
-        return 0
+        return None
+
+
+def assign_count(usage: UsageCounts, field_name: str, count: Optional[int]) -> None:
+    if count is None:
+        usage.fully_checked = False
+        setattr(usage, field_name, 0)
+    else:
+        setattr(usage, field_name, count)
 
 
 def add_note_markup_counts(database: Any, counts: dict[str, UsageCounts]) -> None:
@@ -635,7 +722,7 @@ def add_note_markup_counts(database: Any, counts: dict[str, UsageCounts]) -> Non
     }
     for collection, fields in collections_and_fields.items():
         try:
-            cursor = database[collection].find({}, {field: 1 for field in fields})
+            cursor = database[collection].find({}, dict.fromkeys(fields, 1))
         except Exception:
             for usage in counts.values():
                 usage.fully_checked = False
@@ -782,12 +869,12 @@ def suggest_canonical(
     entries: Sequence[NormalizedBibliographyEntry],
     usage_counts: Mapping[str, UsageCounts] | None = None,
 ) -> tuple[str, str]:
-    usage_counts = usage_counts or {}
+    usage_counts_by_id = usage_counts or {}
 
     def score(entry: NormalizedBibliographyEntry) -> tuple[float, int, str]:
         identifier_bonus = 0.15 if entry.doi else 0.08 if entry.isbn else 0.0
         completeness = metadata_completeness(entry)
-        usage = usage_counts.get(entry.id, UsageCounts()).total
+        usage = usage_counts_by_id.get(entry.id, UsageCounts()).total
         stable_id_bonus = 0.02 if re.match(r"^[A-Za-z0-9_.:-]+$", entry.id) else 0.0
         return (
             completeness + identifier_bonus + min(usage, 50) / 500 + stable_id_bonus,
@@ -796,7 +883,7 @@ def suggest_canonical(
         )
 
     winner = max(entries, key=score)
-    usage = usage_counts.get(winner.id, UsageCounts()).total
+    usage = usage_counts_by_id.get(winner.id, UsageCounts()).total
     return (
         winner.id,
         f"Highest metadata completeness ({metadata_completeness(winner)}), "

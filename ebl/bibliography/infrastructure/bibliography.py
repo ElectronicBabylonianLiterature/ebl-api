@@ -1,3 +1,4 @@
+import re
 from typing import Any, Dict, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
@@ -145,9 +146,7 @@ class MongoBibliographyRepository(BibliographyRepository):
                 limit
             ):
                 candidates[data["_id"]] = create_object_entry(data)
-                if len(candidates) >= limit:
-                    return list(candidates.values())
-        return list(candidates.values())
+        return list(candidates.values())[:limit]
 
     def _query(self, match: Dict[str, Any]) -> Sequence[dict]:
         return [
@@ -184,9 +183,7 @@ class MongoBibliographyRepository(BibliographyRepository):
 
 def duplicate_candidate_queries(entry: dict) -> Sequence[dict]:
     queries = []
-    identifier_query = duplicate_identifier_query(entry)
-    if identifier_query:
-        queries.append(identifier_query)
+    queries.extend(duplicate_strong_identifier_queries(entry))
     if author_year_query := contributor_year_query(entry):
         queries.append(author_year_query)
     if title_year_query := year_title_query(entry):
@@ -195,18 +192,23 @@ def duplicate_candidate_queries(entry: dict) -> Sequence[dict]:
         queries.append(container_query)
     if series_query := series_query_from_entry(entry):
         queries.append(series_query)
+    queries.extend(duplicate_supporting_identifier_queries(entry))
     return queries
 
 
-def duplicate_identifier_query(entry: dict) -> Optional[dict]:
-    clauses = []
+def duplicate_strong_identifier_queries(entry: dict) -> Sequence[dict]:
+    queries = []
     if doi_values := doi_variants(entry.get("DOI")):
-        clauses.append({"DOI": {"$in": doi_values}})
+        queries.append({"DOI": {"$in": doi_values}})
     if isbn_values := identifier_variants(entry.get("ISBN")):
-        clauses.append({"ISBN": {"$in": isbn_values}})
+        queries.append(identifier_query("ISBN", isbn_values))
+    return queries
+
+
+def duplicate_supporting_identifier_queries(entry: dict) -> Sequence[dict]:
     if issn_values := identifier_variants(entry.get("ISSN")):
-        clauses.append({"ISSN": {"$in": issn_values}})
-    return {"$or": clauses} if clauses else None
+        return [identifier_query("ISSN", issn_values)]
+    return []
 
 
 def doi_variants(value: Any) -> Sequence[str]:
@@ -232,6 +234,24 @@ def identifier_variants(value: Any) -> Sequence[str]:
     if not normalized:
         return []
     return sorted({str(value).strip(), normalized})
+
+
+def identifier_query(field_name: str, values: Sequence[str]) -> dict:
+    normalized_values = {
+        normalized for value in values if (normalized := normalize_identifier(value))
+    }
+    patterns = [identifier_pattern(value) for value in sorted(normalized_values)]
+    clauses: list[dict[str, Any]] = [{field_name: {"$in": list(values)}}]
+    clauses.extend({field_name: {"$regex": pattern}} for pattern in patterns)
+    return {"$or": clauses}
+
+
+def identifier_pattern(value: str) -> str:
+    separator = r"[^0-9A-Za-z]*"
+    characters = [
+        "[Xx]" if character == "X" else re.escape(character) for character in value
+    ]
+    return f"^{separator}{separator.join(characters)}{separator}$"
 
 
 def contributor_year_query(entry: dict) -> Optional[dict]:

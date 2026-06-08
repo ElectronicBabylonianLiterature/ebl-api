@@ -113,7 +113,9 @@ def test_same_author_year_fuzzy_title_is_possible() -> None:
     right = normalize_entry(entry("B", title="The Gilgamesh Epic: Introduction"))
     score = score_pair(left, right)
     assert score.decision in {"possible_duplicate", "likely_duplicate"}
-    assert score.matched_signals["contributors"] >= 0.9
+    contributor_score = score.matched_signals["contributors"]
+    assert contributor_score is not None
+    assert contributor_score >= 0.9
     assert score.matched_signals["year"] == 1.0
 
 

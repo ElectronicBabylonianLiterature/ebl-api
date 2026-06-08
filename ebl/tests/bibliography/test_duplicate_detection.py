@@ -1,15 +1,50 @@
-from ebl.bibliography.application.duplicate_detection import BibliographyDuplicateDetector
+from typing import Any, Optional, Sequence
+
+from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.duplicate_detection import (
+    BibliographyDuplicateDetector,
+)
 
 
-class FakeBibliographyRepository:
-    def __init__(self, candidates):
+class FakeBibliographyRepository(BibliographyRepository):
+    def __init__(self, candidates: Sequence[dict[str, Any]]):
         self._candidates = candidates
 
-    def query_duplicate_candidates(self, _entry, _limit):
+    def create(self, entry: Any) -> str:
+        raise NotImplementedError
+
+    def query_by_id(self, id_: str) -> Any:
+        raise NotImplementedError
+
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
+        raise NotImplementedError
+
+    def update(self, entry: Any) -> None:
+        raise NotImplementedError
+
+    def query_by_author_year_and_title(
+        self, author: Optional[str], year: Optional[int], title: Optional[str]
+    ) -> Sequence[Any]:
+        raise NotImplementedError
+
+    def query_by_container_title_and_collection_number(
+        self, container_title_short: Optional[str], collection_number: Optional[str]
+    ) -> Sequence[Any]:
+        raise NotImplementedError
+
+    def query_by_title_short_and_volume(
+        self, title_short: Optional[str], volume: Optional[str]
+    ) -> Sequence[Any]:
+        raise NotImplementedError
+
+    def query_duplicate_candidates(self, entry: Any, limit: int) -> Sequence[Any]:
         return self._candidates
 
+    def list_all_bibliography(self) -> Sequence[Any]:
+        raise NotImplementedError
 
-def entry(id_, **overrides):
+
+def entry(id_: str, **overrides: Any) -> dict[str, Any]:
     data = {
         "id": id_,
         "type": "article-journal",
@@ -39,6 +74,43 @@ def test_duplicate_detector_response_shape() -> None:
     assert result["candidates"][0]["citationKey"] is None
     assert result["candidates"][0]["recommendation"] == "block_or_request_override"
     assert result["candidates"][0]["matchedFields"]["doi"] == 1.0
+
+
+def test_duplicate_detector_possible_duplicate_response() -> None:
+    detector = BibliographyDuplicateDetector(
+        FakeBibliographyRepository(
+            [entry("Q30000000", issued={"date-parts": [[1999]]})]
+        )
+    )
+
+    result = detector.find_candidates(entry("Q30000001")).to_dict()
+
+    assert result["decision"] == "possible_duplicate"
+    assert result["highestScore"] >= 0.76
+    assert result["candidates"][0]["decision"] == "possible_duplicate"
+    assert result["candidates"][0]["recommendation"] == "confirm_before_create"
+
+
+def test_duplicate_detector_no_duplicate_response_with_low_score_candidate() -> None:
+    detector = BibliographyDuplicateDetector(
+        FakeBibliographyRepository(
+            [
+                entry(
+                    "Q30000000",
+                    DOI="",
+                    title="Different Article",
+                    page="800-820",
+                )
+            ]
+        )
+    )
+
+    result = detector.find_candidates(entry("Q30000001")).to_dict()
+
+    assert result["decision"] == "no_duplicate"
+    assert result["highestScore"] >= 0.70
+    assert result["candidates"][0]["decision"] == "no_duplicate"
+    assert result["candidates"][0]["recommendation"] == "allow_create"
 
 
 def test_duplicate_detector_no_candidates() -> None:
