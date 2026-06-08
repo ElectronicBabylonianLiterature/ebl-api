@@ -74,8 +74,27 @@ class BibliographyDuplicateCandidatesResource:
     def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
 
-    @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(require_scope, "check:bibliography_duplicates")
     @validate(DUPLICATE_CANDIDATE_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response) -> None:
         limit = min(req.get_param_as_int("limit") or 10, 25)
         resp.media = self._bibliography.find_duplicate_candidates(req.media, limit)
+
+
+class PartnerBibliographyResource:
+    def __init__(self, bibliography: Bibliography):
+        self._bibliography = bibliography
+
+    @falcon.before(require_scope, "export:bibliography")
+    def on_get(self, req: Request, resp: Response) -> None:
+        limit = min(req.get_param_as_int("limit") or 50, 100)
+        resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
+
+
+class PartnerBibliographyEntryResource:
+    def __init__(self, bibliography: Bibliography):
+        self._bibliography = bibliography
+
+    @falcon.before(require_scope, "export:bibliography")
+    def on_get(self, _req: Request, resp: Response, id_or_citation_key: str) -> None:
+        resp.media = self._bibliography.find_partner_entry(id_or_citation_key)

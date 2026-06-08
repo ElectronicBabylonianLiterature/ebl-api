@@ -15,6 +15,7 @@ from ebl.bibliography.application.serialization import (
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography"
+DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS = 5000
 
 
 def join_reference_documents() -> Sequence[dict]:
@@ -142,11 +143,17 @@ class MongoBibliographyRepository(BibliographyRepository):
     def query_duplicate_candidates(self, entry: Any, limit: int) -> Sequence[Any]:
         candidates: dict[str, dict] = {}
         for query in duplicate_candidate_queries(entry):
-            for data in self._collection.find_many(query, projection=PROJECTION).limit(
-                limit
-            ):
+            cursor = self._collection.find_many(
+                query, projection=PROJECTION
+            ).max_time_ms(DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS)
+            for data in cursor.limit(limit):
                 candidates[data["_id"]] = create_object_entry(data)
         return list(candidates.values())[:limit]
+
+    def query_page(self, after: Optional[str], limit: int) -> Sequence[Any]:
+        query = {"_id": {"$gt": after}} if after else {}
+        data = self._collection.find_many(query).sort("_id", 1).limit(limit)
+        return [create_object_entry(item) for item in data]
 
     def _query(self, match: Dict[str, Any]) -> Sequence[dict]:
         return [
@@ -199,7 +206,7 @@ def duplicate_candidate_queries(entry: dict) -> Sequence[dict]:
 def duplicate_strong_identifier_queries(entry: dict) -> Sequence[dict]:
     queries = []
     if doi_values := doi_variants(entry.get("DOI")):
-        queries.append({"DOI": {"$in": doi_values}})
+        queries.append(doi_query(doi_values))
     if isbn_values := identifier_variants(entry.get("ISBN")):
         queries.append(identifier_query("ISBN", isbn_values))
     return queries
@@ -234,6 +241,15 @@ def identifier_variants(value: Any) -> Sequence[str]:
     if not normalized:
         return []
     return sorted({str(value).strip(), normalized})
+
+
+def doi_query(values: Sequence[str]) -> dict:
+    clauses: list[dict[str, Any]] = [{"DOI": {"$in": list(values)}}]
+    clauses.extend(
+        {"DOI": {"$regex": f"^{re.escape(value)}$", "$options": "i"}}
+        for value in values
+    )
+    return {"$or": clauses}
 
 
 def identifier_query(field_name: str, values: Sequence[str]) -> dict:

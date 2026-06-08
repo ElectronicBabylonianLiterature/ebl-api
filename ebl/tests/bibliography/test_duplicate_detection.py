@@ -40,6 +40,9 @@ class FakeBibliographyRepository(BibliographyRepository):
     def query_duplicate_candidates(self, entry: Any, limit: int) -> Sequence[Any]:
         return self._candidates
 
+    def query_page(self, after: Optional[str], limit: int) -> Sequence[Any]:
+        raise NotImplementedError
+
     def list_all_bibliography(self) -> Sequence[Any]:
         raise NotImplementedError
 
@@ -111,6 +114,21 @@ def test_duplicate_detector_no_duplicate_response_with_low_score_candidate() -> 
     assert result["highestScore"] >= 0.70
     assert result["candidates"][0]["decision"] == "no_duplicate"
     assert result["candidates"][0]["recommendation"] == "allow_create"
+
+
+def test_duplicate_detector_caps_response_limit() -> None:
+    detector = BibliographyDuplicateDetector(
+        FakeBibliographyRepository(
+            [
+                entry(f"Q{index:08}", DOI=f"10.1210/MEND.16.4.{index:04}")
+                for index in range(30)
+            ]
+        )
+    )
+
+    result = detector.find_candidates(entry("Q30000001"), limit=999).to_dict()
+
+    assert len(result["candidates"]) == 25
 
 
 def test_duplicate_detector_no_candidates() -> None:

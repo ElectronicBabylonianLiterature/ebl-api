@@ -42,5 +42,9 @@ class BibliographyRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def query_page(self, after: Optional[str], limit: int) -> Sequence[Any]:
+        raise NotImplementedError
+
+    @abstractmethod
     def list_all_bibliography(self) -> Sequence[Any]:
         raise NotImplementedError

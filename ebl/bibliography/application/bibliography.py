@@ -1,5 +1,5 @@
 import re
-from typing import Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from pydash import uniq_with
 
@@ -14,6 +14,8 @@ from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
+DEFAULT_EXPORT_LIMIT = 50
+MAX_EXPORT_LIMIT = 100
 
 
 class Bibliography:
@@ -81,6 +83,21 @@ class Bibliography:
             .to_dict()
         )
 
+    def export_page(
+        self, cursor: Optional[str] = None, limit: int = DEFAULT_EXPORT_LIMIT
+    ) -> dict:
+        result_limit = max(1, min(limit, MAX_EXPORT_LIMIT))
+        entries = list(self._repository.query_page(cursor, result_limit + 1))
+        items = entries[:result_limit]
+        return {
+            "items": [partner_bibliography_entry(entry) for entry in items],
+            "nextCursor": items[-1]["id"] if len(entries) > result_limit else None,
+            "limit": result_limit,
+        }
+
+    def find_partner_entry(self, id_: str) -> dict:
+        return partner_bibliography_entry(self.find(id_))
+
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
         parsed_query = dict.fromkeys(["author", "year", "title"])
@@ -145,3 +162,11 @@ class Bibliography:
             raise DataError(
                 f"Unknown bibliography entries: {', '.join(invalid_references)}."
             )
+
+
+def partner_bibliography_entry(entry: Mapping[str, Any]) -> dict:
+    return {
+        "id": entry["id"],
+        "citationKey": entry.get("citationKey"),
+        "bibliographyEntry": dict(entry),
+    }
