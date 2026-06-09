@@ -4,7 +4,13 @@
 
 This review covers the `m2m-changes` branch. The change adds M2M (Machine-to-Machine / client credentials) Auth0 token support to the API backend. Two code files and two documentation files were changed or added.
 
-**Verified locally:** `poetry run pytest ebl/tests/users/ --cov=ebl.users.infrastructure.auth0 --cov-report=term-missing` — 33 passed, 87% coverage.
+**Verified locally:** `poetry run pytest ebl/tests/users/ --cov=ebl.users.infrastructure.auth0 --cov-report=term-missing` — 36 passed, **100% coverage**.
+
+---
+
+## GitHub PR Reviews — PR #721
+
+Two automated reviewers left feedback: **Sourcery AI** (2026-06-09T16:17) and **Copilot** (2026-06-09T16:22).
 
 ---
 
@@ -12,95 +18,96 @@ This review covers the `m2m-changes` branch. The change adds M2M (Machine-to-Mac
 
 ---
 
-### Finding 1 — Staged vs. working-tree divergence (lambda vs. named function)
+### Finding 1 — ~~Staged vs. working-tree divergence (lambda vs. named function)~~ RESOLVED
 
-**Severity:** Medium
-
-**Description:**  
-The staged (`git diff --cached`) version of `auth0.py` uses lambda assignments:
-
-```python
-if is_m2m:
-    profile_factory = lambda: {"name": access_token["sub"]}
-else:
-    profile_factory = lambda: fetch_user_profile(self.issuer, req.auth)
-```
-
-The working tree version uses named `def` blocks (the version currently on disk). The named-function style is the correct one. Committing the staged version would introduce flake8 E731 violations (`do not assign a lambda expression`) and diverge from the project's style. The staged index must be updated to match the working tree before committing.
-
-**Reproduction Steps:**  
-`git diff --cached ebl/users/infrastructure/auth0.py` shows lambdas.  
-`git diff ebl/users/infrastructure/auth0.py` (unstaged) shows named functions.
-
-**Recommendation:**  
-Unstage the current version and re-stage the working-tree version:  
-`git restore --staged ebl/users/infrastructure/auth0.py && git add ebl/users/infrastructure/auth0.py`
+The staged index previously contained lambdas; the correct named-function version was re-staged and committed.
 
 ---
 
-### Finding 2 — Coverage is 87%, below required 100%
+### Finding 2 — ~~Coverage is 87%, below required 100%~~ RESOLVED
 
-**Severity:** High
-
-**Description:**  
-Coverage report after the change:
-
-```
-Name                                Stmts   Miss  Cover   Missing
-ebl/users/infrastructure/auth0.py      53      7    87%   13-17, 87, 92
-```
-
-- **Lines 13–17**: The body of `fetch_user_profile` (the HTTP call to Auth0's `/userinfo` endpoint) is never executed in the test suite.
-- **Line 87**: The `return {"name": access_token["sub"]}` body inside the M2M `profile_factory` closure.
-- **Line 92**: The `return fetch_user_profile(...)` body inside the non-M2M `profile_factory` closure.
-
-The project rule is: *"Ensure that coverage is 100% after changes in affected code."*
-
-Lines 87 and 92 are directly inside the new code introduced by this change. `fetch_user_profile` (lines 13–17) is unchanged, but it was previously reachable through the (now removed) inline lambda in the old `authenticate`. Its coverage was already a pre-existing gap — though the refactor made it more explicit.
-
-**Reproduction Steps:**  
-```
-poetry run pytest ebl/tests/users/ --cov=ebl.users.infrastructure.auth0 --cov-report=term-missing
-```
-
-**Recommendation:**  
-Add tests to cover all three gaps:
-
-1. `test_auth_backend_m2m_token` must trigger `user.profile` to cover line 87. This requires the test to access the returned `Auth0User`, which the current `simulate_get` helper does not expose. One option is to capture the user object via the `set_user` callback or to test `Auth0User` with the M2M `profile_factory` directly in `test_auth0_user.py`.
-2. Cover `fetch_user_profile` (lines 13–17) by mocking `requests.get` and calling `fetch_user_profile` directly, or by triggering the non-M2M path and calling `profile` on the returned `Auth0User`.
-3. The non-M2M `profile_factory` body (line 92) can be covered together with point 2.
+Three new tests added covering all previously uncovered lines:
+- `test_auth_backend_m2m_token_profile`: triggers M2M `profile_factory`, asserts `profile == {"name": sub}`, asserts `fetch_user_profile` not called.
+- `test_auth_backend_non_m2m_profile_calls_userinfo`: triggers non-M2M `profile_factory`, mocks `requests.get`, asserts it is called and profile is returned (covers lines 13–17 and 92).
+- Coverage is now **100%** (57/57 statements).
 
 ---
 
-### Finding 3 — `token.txt` and `token_response.json` not in `.gitignore`
+### Finding 3 — ~~Token files not in `.gitignore`; prefer `/tmp`~~ RESOLVED
 
-**Severity:** Low
-
-**Description:**  
-`M2M_Auth0_manual.md` instructs operators to save the raw JWT to `token.txt` and the full token response to `token_response.json` on disk. It warns these must never be committed. However, neither filename appears in `.gitignore`, meaning a developer following the manual could accidentally stage them.
-
-**Reproduction Steps:**  
-`grep -E "token\.txt|token_response" .gitignore` → no match.
-
-**Recommendation:**  
-Add to `.gitignore`:
-```
-token.txt
-token_response.json
-negative_token.txt
-```
+All token file paths in `M2M_Auth0_manual.md` and `M2M_Auth0_instructions.md` changed to `/tmp/token.txt`, `/tmp/token_response.json`, `/tmp/negative_token.txt`, `/tmp/new_token_response.json`, `/tmp/new_token.txt`. Notes updated to instruct deletion immediately after use.
 
 ---
 
 ### Finding 4 — ~~Documentation references wrong branch (`add-realia`, PR #715)~~ RESOLVED
 
-`M2M_Auth0_instructions.md` Step N5 now references the `m2m-changes` branch. The stale PR #715 / `add-realia` references and the option A/B split have been removed.
+`M2M_Auth0_instructions.md` Step N5 now references the `m2m-changes` branch.
 
 ---
 
 ### Finding 5 — ~~`access_token["sub"]` raises `KeyError` if `sub` is absent~~ RESOLVED
 
-`"sub"` has been added to `required_claims` in `Auth0Backend.__init__`. The JWT library now rejects tokens missing `sub` with a 401 before `authenticate` is ever called, eliminating the `KeyError` at the source.
+Revised approach: instead of relying on `required_claims` enforcement by the JWT library (which proved insufficient — `falcon_auth` passed through tokens without `sub` causing a 500), an explicit guard was added at the top of `authenticate()`:
+
+```python
+sub = access_token.get("sub")
+if sub is None:
+    raise falcon.HTTPUnauthorized()
+```
+
+This guarantees a clean 401 for any token missing `sub`, regardless of library behaviour.
+
+---
+
+### Finding 6 — ~~Missing negative test for absent `sub` claim~~ RESOLVED
+
+Added `test_auth_backend_missing_sub_is_unauthorized`: uses `overrides={"sub": None}` to drop the claim, asserts HTTP 401. The explicit guard in `authenticate()` (Finding 5) makes this return 401 cleanly.
+
+---
+
+### Finding 7 — ~~`test_auth_backend_m2m_token` does not assert M2M-specific behaviour~~ RESOLVED
+
+Added `test_auth_backend_m2m_token_profile` which:
+- Uses `Mock()` as `set_user` and patches `fetch_user_profile`.
+- Asserts `set_user.assert_called_once_with(sub)` — confirms `sub` is extracted.
+- Asserts `mock_fetch.assert_not_called()` — confirms `/userinfo` is not called.
+- Asserts `resource.captured_profile == {"name": sub}` via `ProfileCapturingResource`.
+
+---
+
+### Finding 8 — ~~Auth0 instructions: "Dictionary" label ambiguous~~ RESOLVED
+
+Step 3 updated to: *"Select the `Dictionary` API (audience: `dictionary-api`)."*
+
+---
+
+### Finding 9 — ~~Manual: "Command for step 4" caption is wrong (off-by-one)~~ RESOLVED
+
+Caption changed to "Command for step 5:" (step 5 in the numbered list is the re-run write test step).
+
+---
+
+### Finding 10 — ~~Instructions bash script has inline secret literals~~ RESOLVED
+
+Minimal API Test Script updated to use `${M2M_CLIENT_ID:?M2M_CLIENT_ID is not set}` and `${M2M_CLIENT_SECRET:?M2M_CLIENT_SECRET is not set}`. Minimal single-command variant updated to use `${M2M_CLIENT_ID:?}` / `${M2M_CLIENT_SECRET:?}` with a `source .env` preamble.
+
+---
+
+### Finding 11 — ~~Instructions: Step N4 token files written to working directory~~ RESOLVED
+
+Step N4 now writes to `/tmp/new_token_response.json` and reads from `/tmp/new_token.txt` consistently.
+
+---
+
+### Finding 12 — `TASK-m2m-review.md` must be removed before merge
+
+**Severity:** Low | **Source:** Sourcery AI (overall comment), Copilot ([r3382218008](https://github.com/ElectronicBabylonianLiterature/ebl-api/pull/721#discussion_r3382218008))
+
+**Description:**  
+Both reviewers flag that this file is an internal task artifact and should not be shipped to `master`. The project instructions also require removing `TASK-*` files before merging.
+
+**Recommendation:**  
+Delete this file in a final clean-up commit before the PR is merged.
 
 ---
 
@@ -116,21 +123,28 @@ negative_token.txt
 | No secrets in committed files | ✓ All credential fields are placeholders. |
 | flake8 (working tree) | ✓ No violations. |
 | mypy errors introduced by this change | ✓ None. All mypy errors in the file are pre-existing. |
-| All 33 user tests pass | ✓ |
+| All 33 user tests pass | ✓ Now 36 tests, 100% coverage. |
 
 ---
 
 ## Severity Summary
 
-| # | Finding | Severity | Status |
-|---|---|---|---|
-| 1 | Staged vs. working-tree lambda divergence | Medium | Open |
-| 2 | Coverage 87% — lines 13–17, 87, 92 uncovered | High | Open |
-| 3 | `token.txt` / `token_response.json` not in `.gitignore` | Low | Open |
-| 4 | Documentation references wrong branch/PR | Low | **Resolved** |
-| 5 | `access_token["sub"]` KeyError on missing claim | Low | **Resolved** |
+| # | Finding | Severity | Status | Source |
+|---|---|---|---|---|
+| 1 | Staged vs. working-tree lambda divergence | Medium | **Resolved** | Local |
+| 2 | Coverage 87% — lines 13–17, 87, 92 uncovered | High | **Resolved** | Local + Sourcery + Copilot |
+| 3 | Token files not in `.gitignore`; prefer `/tmp` | Low | **Resolved** | Local + Copilot |
+| 4 | Documentation references wrong branch/PR | Low | **Resolved** | Local |
+| 5 | `access_token["sub"]` KeyError on missing claim | Low | **Resolved** | Local |
+| 6 | Missing negative test for absent `sub` claim | Medium | **Resolved** | Sourcery |
+| 7 | M2M test only asserts HTTP 200, not behaviour | Medium | **Resolved** | Sourcery + Copilot |
+| 8 | Instructions: "Dictionary" label ambiguous | Low | **Resolved** | Sourcery |
+| 9 | Manual: "Command for step 4" caption off-by-one | Low | **Resolved** | Sourcery |
+| 10 | Instructions script has inline secret literals | Low | **Resolved** | Copilot |
+| 11 | Instructions Step N4 writes token files to working dir | Low | **Resolved** | Copilot |
+| 12 | `TASK-m2m-review.md` must be removed before merge | Low | Open | Sourcery + Copilot |
 
-**Blockers before merge:** Findings 1 and 2.
+**All blockers resolved. Remaining before merge: Finding 12 (remove task files).**
 
 ---
 

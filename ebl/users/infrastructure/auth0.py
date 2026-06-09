@@ -1,6 +1,7 @@
 import copy
 from typing import Any, Callable, List, Optional
 
+import falcon
 import pydash
 import requests
 from falcon_auth import JWTAuthBackend
@@ -79,12 +80,15 @@ class Auth0Backend(JWTAuthBackend):
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
-        self._set_user(access_token["sub"])
+        sub = access_token.get("sub")
+        if sub is None:
+            raise falcon.HTTPUnauthorized()
+        self._set_user(sub)
         is_m2m = access_token.get("gty") == "client-credentials"
         if is_m2m:
 
             def profile_factory():
-                return {"name": access_token["sub"]}
+                return {"name": sub}
 
         else:
 

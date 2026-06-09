@@ -118,7 +118,7 @@ Record both values securely for later distribution. Do not share them over unenc
 
 1. After creating the application, Auth0 should display a list of APIs.
 
-2. Select Dictionary.
+2. Select the `Dictionary` API (audience: `dictionary-api`).
 
 3. Authorize the application.
 
@@ -332,11 +332,11 @@ Here’s a minimal **bash script (curl-based)** that:
 ```bash
 #!/usr/bin/env bash
 
-# === CONFIG ===
-AUTH0_DOMAIN="https://auth.ebl.lmu.de"
-CLIENT_ID="YOUR_CLIENT_ID"
-CLIENT_SECRET="YOUR_CLIENT_SECRET"
-AUDIENCE="dictionary-api"
+# === CONFIG === (load secrets from .env: source .env)
+AUTH0_DOMAIN="${M2M_AUTH0_DOMAIN:-https://auth.ebl.lmu.de}"
+CLIENT_ID="${M2M_CLIENT_ID:?M2M_CLIENT_ID is not set}"
+CLIENT_SECRET="${M2M_CLIENT_SECRET:?M2M_CLIENT_SECRET is not set}"
+AUDIENCE="${M2M_AUDIENCE:-dictionary-api}"
 
 # Bibliography API endpoint
 API_URL="https://www.ebl.lmu.de/api/bibliography"
@@ -375,15 +375,15 @@ curl -s -X GET "$API_URL" \
 If you just want the shortest possible check:
 
 ```bash
-TOKEN=$(curl -s --request POST \
-  --url https://auth.ebl.lmu.de/oauth/token \
+TOKEN=$(source .env 2>/dev/null; curl -s --request POST \
+  --url "${M2M_AUTH0_DOMAIN:-https://auth.ebl.lmu.de}/oauth/token" \
   --header 'content-type: application/json' \
-  --data '{
-    "client_id":"YOUR_CLIENT_ID",
-    "client_secret":"YOUR_CLIENT_SECRET",
-    "audience":"dictionary-api",
-    "grant_type":"client_credentials"
-  }' | jq -r .access_token)
+  --data "{
+    \"client_id\":\"${M2M_CLIENT_ID:?}\",
+    \"client_secret\":\"${M2M_CLIENT_SECRET:?}\",
+    \"audience\":\"${M2M_AUDIENCE:-dictionary-api}\",
+    \"grant_type\":\"client_credentials\"
+  }" | jq -r .access_token)
 
 curl -H "Authorization: Bearer $TOKEN" \
      https://www.ebl.lmu.de/api/bibliography/LS139
@@ -520,14 +520,14 @@ def authenticate(self, req, resp, resource):
        "client_secret":"CLIENT_SECRET",
        "audience":"dictionary-api",
        "grant_type":"client_credentials"
-     }' > new_token_response.json
+     }' > /tmp/new_token_response.json
 
-   cat new_token_response.json | jq -r '.access_token' > new_token.txt
+   cat /tmp/new_token_response.json | jq -r '.access_token' > /tmp/new_token.txt
    ```
 5. Run the write test again:
 
    ```bash
-   NEW_TOKEN=$(cat new_token.txt | tr -d '\n')
+   NEW_TOKEN=$(cat /tmp/new_token.txt | tr -d '\n')
 
    curl -s -w "HTTP %{http_code}\n" \
      -X POST \

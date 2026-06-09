@@ -143,27 +143,27 @@ curl -s --request POST \
     \"client_secret\":\"$M2M_CLIENT_SECRET\",
     \"audience\":\"$M2M_AUDIENCE\",
     \"grant_type\":\"client_credentials\"
-  }" > token_response.json   # example filename — delete immediately after use
+  }" > /tmp/token_response.json   # temporary file — delete immediately after use
 
-jq -r '.access_token' token_response.json > token.txt   # example filename
-chmod 600 token.txt
+jq -r '.access_token' /tmp/token_response.json > /tmp/token.txt
+chmod 600 /tmp/token.txt
 
 # Validate
-if [[ ! -s token.txt ]] || [[ "$(cat token.txt)" == "null" ]]; then
+if [[ ! -s /tmp/token.txt ]] || [[ "$(cat /tmp/token.txt)" == "null" ]]; then
   echo "Token retrieval failed"
-  cat token_response.json
+  cat /tmp/token_response.json
   exit 1
 fi
 
 # Delete the full response immediately — it is not needed further
-rm -f token_response.json
+rm -f /tmp/token_response.json
 ```
 
-> The filenames `token.txt` and `token_response.json` used here are **examples only**. Use whatever names suit your workflow — but ensure they are in `.gitignore` and deleted after use. Never commit them.
+> Writing token files under `/tmp` keeps them outside the repository. Delete them immediately after use.
 
 ### 5.2 Decode and Verify Claims
 ```bash
-TOKEN=$(cat token.txt | tr -d '\n')
+TOKEN=$(cat /tmp/token.txt | tr -d '\n')
 echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null | python3 -m json.tool
 ```
 
@@ -172,7 +172,7 @@ If `base64` decoding fails on your shell, use this safe Python fallback:
 ```bash
 python3 - <<'EOF'
 import base64, json
-token = open("token.txt").read().strip()
+token = open("/tmp/token.txt").read().strip()
 payload_part = token.split(".")[1]
 payload_part += "=" * ((4 - len(payload_part) % 4) % 4)
 payload = json.loads(base64.urlsafe_b64decode(payload_part))
@@ -191,7 +191,7 @@ Fail fast checks:
 ```bash
 python3 - <<'EOF'
 import base64, json, sys
-token = open("token.txt").read().strip()
+token = open("/tmp/token.txt").read().strip()
 payload_part = token.split(".")[1]
 payload_part += "=" * ((4 - len(payload_part) % 4) % 4)
 payload = json.loads(base64.urlsafe_b64decode(payload_part))
@@ -220,7 +220,7 @@ EOF
 
 ### 6.1 Read Test (Reference)
 ```bash
-TOKEN=$(cat token.txt | tr -d '\n')
+TOKEN=$(cat /tmp/token.txt | tr -d '\n')
 curl -s -o /tmp/read_result.json -w "HTTP %{http_code}\n" \
   -H "Authorization: Bearer $TOKEN" \
   https://www.ebl.lmu.de/api/bibliography/LS139
@@ -237,7 +237,7 @@ Quick assertion:
 
 ```bash
 STATUS=$(curl -s -o /tmp/read_result.json -w "%{http_code}" \
-  -H "Authorization: Bearer $(cat token.txt | tr -d '\n')" \
+  -H "Authorization: Bearer $(cat /tmp/token.txt | tr -d '\n')" \
   https://www.ebl.lmu.de/api/bibliography/LS139)
 
 [[ "$STATUS" == "200" ]] || { echo "Read test failed (HTTP $STATUS)"; cat /tmp/read_result.json; exit 1; }
@@ -246,7 +246,7 @@ echo "Read test passed"
 
 ### 6.2 Write Test (Local)
 ```bash
-TOKEN=$(cat token.txt | tr -d '\n')
+TOKEN=$(cat /tmp/token.txt | tr -d '\n')
 curl -s -o /tmp/write_result.json -w "HTTP %{http_code}\n" \
   -X POST \
   -H "Authorization: Bearer $TOKEN" \
@@ -264,7 +264,7 @@ Quick assertion:
 ```bash
 STATUS=$(curl -s -o /tmp/write_result.json -w "%{http_code}" \
   -X POST \
-  -H "Authorization: Bearer $(cat token.txt | tr -d '\n')" \
+  -H "Authorization: Bearer $(cat /tmp/token.txt | tr -d '\n')" \
   -H "Content-Type: application/json" \
   -d '{"id":"M2M-TEST-LOCAL","type":"article-journal","title":"M2M Write Test","author":[{"family":"Test","given":"M2M"}],"issued":{"date-parts":[[2026]]}}' \
   http://localhost:8001/bibliography)
@@ -284,11 +284,11 @@ db.getCollection("bibliography").deleteOne({ id: "M2M-TEST-LOCAL" })
 ## 7. Negative Permission Test (Required)
 1. In Auth0, remove `write:bibliography` from the M2M app (keep `read:bibliography`).
 2. Request a new token from `https://auth.ebl.lmu.de/oauth/token`.
-3. Save that token to `negative_token.txt` (same extraction pattern as Section 5.1).
-4. Decode `negative_token.txt` and confirm claims before testing:
+3. Save that token to `/tmp/negative_token.txt` (same extraction pattern as Section 5.1).
+4. Decode `/tmp/negative_token.txt` and confirm claims before testing:
    - `permissions` must NOT contain `write:bibliography`
    - `permissions` should still contain `read:bibliography`
-5. Re-run write test with `negative_token.txt`.
+5. Re-run write test with `/tmp/negative_token.txt`.
 
 Expected:
 - HTTP 403
@@ -296,12 +296,12 @@ Expected:
 6. Restore `write:bibliography`.
 7. Request a fresh token again and verify write returns HTTP 201.
 
-Command for step 4:
+Command for step 5:
 
 ```bash
 STATUS=$(curl -s -o /tmp/negative_write_result.json -w "%{http_code}" \
   -X POST \
-  -H "Authorization: Bearer $(cat negative_token.txt | tr -d '\n')" \
+  -H "Authorization: Bearer $(cat /tmp/negative_token.txt | tr -d '\n')" \
   -H "Content-Type: application/json" \
   -d '{"id":"M2M-TEST-NEGATIVE","type":"article-journal","title":"Should Fail","author":[{"family":"Test","given":"M2M"}],"issued":{"date-parts":[[2026]]}}' \
   http://localhost:8001/bibliography)
