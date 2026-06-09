@@ -35,7 +35,6 @@ def create_token(
         "iss": issuer,
         "iat": now,
         "exp": now + datetime.timedelta(seconds=expires_in_seconds),
-        "openid": True,
         "scope": "read:texts",
     }
 
@@ -145,3 +144,23 @@ def test_auth_backend_expired_token() -> None:
     result = simulate_get(auth_backend, token)
 
     assert result.status == falcon.HTTP_UNAUTHORIZED
+
+
+def test_auth_backend_m2m_token() -> None:
+    private_key, public_key = create_key_pair()
+    auth_backend = Auth0Backend(
+        public_key, "test-audience", "https://issuer/", lambda _id: None
+    )
+    token = create_token(
+        private_key,
+        "test-audience",
+        "https://issuer/",
+        overrides={
+            "gty": "client-credentials",
+            "scope": "write:bibliography read:bibliography",
+        },
+    )
+
+    result = simulate_get(auth_backend, token)
+
+    assert result.status == falcon.HTTP_OK

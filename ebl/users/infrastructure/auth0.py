@@ -73,13 +73,22 @@ class Auth0Backend(JWTAuthBackend):
             audience=audience,
             issuer=issuer,
             verify_claims=["signature", "exp", "iat"],
-            required_claims=["exp", "iat", "openid"],
+            required_claims=["exp", "iat", "sub"],
         )
         self._set_user = set_user
 
     def authenticate(self, req, resp, resource):
         access_token = super().authenticate(req, resp, resource)
         self._set_user(access_token["sub"])
-        return Auth0User(
-            access_token, lambda: fetch_user_profile(self.issuer, req.auth)
-        )
+        is_m2m = access_token.get("gty") == "client-credentials"
+        if is_m2m:
+
+            def profile_factory():
+                return {"name": access_token["sub"]}
+
+        else:
+
+            def profile_factory():
+                return fetch_user_profile(self.issuer, req.auth)
+
+        return Auth0User(access_token, profile_factory)
