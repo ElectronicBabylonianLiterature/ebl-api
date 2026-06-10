@@ -1,7 +1,6 @@
 import importlib.util
 import os
 import runpy
-import sys
 import types
 from pathlib import Path
 
