@@ -241,7 +241,7 @@ another shift or the end of the line. Shifts are marked with `%` followed by a l
 code. If no shifts are present *Akkadian* is used as the default language.
 
 | Shift | Language | Variety | Normalized | Parsed to standard signs |
-| ------|----------|---------|------------|--------------------------|
+| ------ | ---------- | --------- | ------------ | -------------------------- |
 | `%n` | Akkadian | | Yes | No |
 | `%ma` | Akkadian | Middle Assyrian | No | Yes |
 | `%mb` | Akkadian | Middle Babylonian | No | Yes |
@@ -277,13 +277,23 @@ shift = '%', { word-character }-;
 
 A presence cannot be nested within itself.
 
-| Presence Type | Open | Close | Scope | Constraint | Semantics |
-| --------------|------|-------|-------|------------|-----------|
-| Intentional Omission | `<(` | `)>` | Top-level, Word | Cannot be inside *Accidental Omission*. | |
-| Accidental Omission | `<` | `>` | Top-level, Word| Cannot be inside *Intentional Omission*. | |
-| Removal | `<<` | `>>` | Top-level, Word | | |
-| Broken Away | `[` | `]`| Top-level, Word, Grapheme | Cannot be inside *Perhaps Broken Away* (E.g. `(x) [(x)] (x)` not `(x [x] x)`). | |
-| Perhaps Broken Away | `(` | `)` | Top-level, Word | Can be inside of *Broken Away*, and must be fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside *Accidental Omission* or *Intentional Omission*. | |
+| Presence Type | Open | Close | Scope |
+| -------------- | ------ | ------- | ------- |
+| Intentional Omission | `<(` | `)>` | Top-level, Word |
+| Accidental Omission | `<` | `>` | Top-level, Word |
+| Removal | `<<` | `>>` | Top-level, Word |
+| Broken Away | `[` | `]` | Top-level, Word, Grapheme |
+| Perhaps Broken Away | `(` | `)` | Top-level, Word |
+
+Constraints:
+
+- *Intentional Omission*: Cannot be inside *Accidental Omission*.
+- *Accidental Omission*: Cannot be inside *Intentional Omission*.
+- *Broken Away*: Cannot be inside *Perhaps Broken Away*
+  (E.g. `(x) [(x)] (x)` not `(x [x] x)`).
+- *Perhaps Broken Away*: Can be inside of *Broken Away*, and must be
+  fully in or out (E.g. `[(x)] (x)` not `[(x] x)`). Cannot be inside
+  *Accidental Omission* or *Intentional Omission*.
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
@@ -335,19 +345,35 @@ column = '&', { decimal-digit };
 Text is a series of tokens separated by a word separator (space). Sometimes
 the separator is ignored (see Word below) or can be omitted.
 
-| Token Type   | Definition | Lemmatizable | Alignable | Notes |
-|--------------|------------|--------------|-----------|-------|
-| WordOmitted | `ø` | No | No | |
-| Tabulation   | `($___$)` | No | No | |
-| Divider      | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
-| Egyptian Metrical Feet Separator | `•` | No | No | Can be within a word or standing alone between words. Can be followed by flags and surrounded with broken away and presence indicators . |
-| Line Break   | `\|` | No | No | Must be followed by the separator or end of the line. Can be followed by flags and modifiers and surrounded with broken away. |
-| Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No | See  Commentary Protocols below. |
-| Erasure | `°` + erased words + `\` +  words written over erasure+ `°` | Special | Special | Must be followed by a separator or end of line. Erasure markers and erased words are not lemmatizable or alignable, but words written over erasure can be. |
-| Word | Readings or graphemes separated by a joiner. | Maybe | Maybe | See Word below for full definition. |
-| Lone Determinative | A word consisting only a determinative part. | No | No | See Word and Glosses below. |
-| Document Oriented Gloss | `{(` or `)}` | No | No | See Glosses below. |
-| Presence | `<<`, `>>`,  `<(`, `<`, `)>`, `>`, `[`, `]`, `(` or `)` | No | No | See Presence above. |
+| Token Type | Definition | Lemmatizable | Alignable |
+| ----------- | ------------ | -------------- | ----------- |
+| WordOmitted | `ø` | No | No |
+| Tabulation | `($___$)` | No | No |
+| Divider | `:'`, `:"`, `:.`, `::`, `:?`, `:`, `;`, or `/` | No | No |
+| Egyptian Metrical Feet Separator | `•` | No | No |
+| Line Break | `\|` | No | No |
+| Commentary Protocol | `!qt`, `!bs`, `!cm`, or `!zz` | No | No |
+| Erasure | `°` + erased + `\` + overwritten + `°` | Special | Special |
+| Word | Readings or graphemes separated by a joiner. | Maybe | Maybe |
+| Lone Determinative | A word consisting only a determinative part. | No | No |
+| Document Oriented Gloss | `{(` or `)}` | No | No |
+| Presence | Enclosure markers (see *Presence* section) | No | No |
+
+Notes:
+
+- *Divider*: Must be followed by the word separator or end of line.
+  Can be followed by flags and modifiers and surrounded with broken away.
+- *Egyptian Metrical Feet Separator*: Can be within a word or standing
+  alone between words. Can be followed by flags and surrounded with
+  broken away and presence indicators.
+- *Line Break*: Must be followed by the word separator or end of line.
+  Can be followed by flags and modifiers and surrounded with broken away.
+- *Erasure*: Must be followed by a separator or end of line. Erasure
+  markers and erased words are not lemmatizable or alignable, but words
+  written over erasure can be.
+- *Word*: See Word below for full definition.
+- *Lone Determinative*: See Word and Glosses below.
+- *Commentary Protocol*: See Commentary Protocols below.
 
 ```ebnf
 non-normalized-text = token, { [ word-separator ], token };
@@ -405,12 +431,19 @@ erasure-part = ( divider | word | lone-determinative ),
 
 Glosses cannot be nested within other glosses in the same scope.
 
-| Gloss Type | Open | Close | Scope | Constraints | Semantics | Examples |
-|------------|------|-------|-------|-------------|-----------|----------|
-| Document Oriented Gloss | `{(` | `)}` | Top-level | | | `{(1(u))}` `{(%a he-pi₂ eš-šu₂)}` |
-| Linguistic Gloss | `{{` | `}}` | Word | | | `du₃-am₃{{mu-un-<(du₃)>}}` |
-| Determinative | `{` | `}` | Word | | | `{d}utu` `larsa{ki}` |
-| Phonetic Gloss | `{+` | `}` | Word | Cannot appear alone. | | `{+u₃-mu₂}u₂-mu₁₁` `AN{+e}` |
+| Gloss Type | Open | Close | Scope | Constraints |
+| ------------ | ------ | ------- | ------- | ------------- |
+| Document Oriented Gloss | `{(` | `)}` | Top-level | |
+| Linguistic Gloss | `{{` | `}}` | Word | |
+| Determinative | `{` | `}` | Word | |
+| Phonetic Gloss | `{+` | `}` | Word | Cannot appear alone. |
+
+Examples:
+
+- *Document Oriented Gloss*: `{(1(u))}` `{(%a he-pi₂ eš-šu₂)}`
+- *Linguistic Gloss*: `du₃-am₃{{mu-un-<(du₃)>}}`
+- *Determinative*: `{d}utu` `larsa{ki}`
+- *Phonetic Gloss*: `{+u₃-mu₂}u₂-mu₁₁` `AN{+e}`
 
 See: [ATF Inline Tutorial](http://oracc.museum.upenn.edu/doc/help/editinginatf/primer/inlinetutorial/index.html)
 
@@ -421,7 +454,7 @@ follows it. It has to be declared at the beginning of every line. Once declared,
 it is valid until another protocol replaces it.
 
 | Protocol | Description |
-|----------|-----------|
+| ---------- | ----------- |
 | `!qt` | `Quotation` |
 | `!bs` | `Base Text` |
 | `!cm` | `Commentary` |

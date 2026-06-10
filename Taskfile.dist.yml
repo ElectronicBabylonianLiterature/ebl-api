@@ -16,6 +16,7 @@ tasks:
       - task: lint
       - task: type
       - task: test
+      - task: lint-md
 
   python3:
     cmds:
@@ -28,6 +29,10 @@ tasks:
   test-secrets:
     cmds:
       - bash scripts/test-secret-scanning.sh
+
+  lint-md:
+    cmds:
+      - npx markdownlint-cli2@0.22.1 "**/*.md" '#.venv/**' '#.pytest_cache/**'
 
   lint:
     cmds:

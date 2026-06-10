@@ -72,15 +72,6 @@ ggshield --version
 sudo mkdir -p /workspaces/data
 sudo chown -R $(whoami):$(whoami) /workspaces/data
 
-# Setup .env file if it doesn't exist
-if [ ! -f .env ]; then
-    echo "Creating .env from .env.example..."
-    cp .env.example .env
-    echo "⚠️  Please update .env with your actual credentials"
-else
-    echo ".env file already exists"
-fi
-
 echo "Installing Python dependencies..."
 # Ensure Rust is in PATH (needed for libcst build)
 export PATH="$HOME/.cargo/bin:$PATH"
