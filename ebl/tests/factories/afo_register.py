@@ -52,7 +52,7 @@ class AfoRegisterRecordFactory(factory.Factory):
     afo_number = factory.LazyAttribute(lambda obj: get_afo_number())
     page = factory.LazyAttribute(lambda obj: get_page())
     text = factory.LazyAttribute(lambda obj: get_text())
-    text_number = factory.LazyAttribute(lambda obj: get_text_number())
+    text_number = factory.Sequence(lambda n: f"Nr. {n}")
     lines_discussed = factory.LazyAttribute(lambda obj: get_lines_discussed())
     discussed_by = factory.LazyAttribute(lambda obj: get_discussed_by())
     discussed_by_notes = factory.Faker("sentence")

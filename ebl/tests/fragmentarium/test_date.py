@@ -1,4 +1,6 @@
 from ebl.fragmentarium.domain.date import (
+    DateKing,
+    DateEponymSchema,
     DateSchema,
     YearSchema,
     MonthSchema,
@@ -23,6 +25,37 @@ def test_labeled_schema():
         "value": "1",
         "isUncertain": True,
     }
+
+
+def test_month_schema_excludes_year_only_fields():
+    month = MonthSchema().load(
+        {"value": "5", "isReconstructed": True, "isEmended": True}
+    )
+    assert not hasattr(month, "is_reconstructed")
+    assert not hasattr(month, "is_emended")
+
+
+def test_day_schema_excludes_year_only_fields():
+    day = DaySchema().load({"value": "1", "isReconstructed": True, "isEmended": True})
+    assert not hasattr(day, "is_reconstructed")
+    assert not hasattr(day, "is_emended")
+
+
+def test_date_king_king_property_found():
+    date_king = DateKing(order_global=1)
+    assert date_king.king is not None
+
+
+def test_date_king_king_property_not_found():
+    date_king = DateKing(order_global=99999)
+    assert date_king.king is None
+
+
+def test_date_eponym_schema_round_trip():
+    data = {"phase": "Neo-Assyrian", "isBroken": True, "isUncertain": False}
+    eponym = DateEponymSchema().load(data)
+    assert eponym.is_broken is True
+    assert eponym.is_uncertain is False
 
 
 def test_date_schema():

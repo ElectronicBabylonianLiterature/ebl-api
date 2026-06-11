@@ -20,6 +20,7 @@ class ExternalNumbers:
     kelsey_number: str = ""
     harvard_ham_number: str = ""
     sketchfab_number: str = ""
+    spurlock_number: str = ""
     ark_number: str = ""
     dublin_tcd_number: str = ""
     cambridge_maa_number: str = ""
@@ -148,6 +149,10 @@ class FragmentExternalNumbers:
     @property
     def philadelphia_number(self) -> str:
         return self._get_external_number("philadelphia")
+
+    @property
+    def spurlock_number(self) -> str:
+        return self._get_external_number("spurlock")
 
     @property
     def seal_numbers(self) -> str:

@@ -243,6 +243,7 @@ def test_scopes():
         "pierpont_morgan_number",
         "rsti_number",
         "sketchfab_number",
+        "spurlock_number",
         "yale_peabody_number",
     ],
 )

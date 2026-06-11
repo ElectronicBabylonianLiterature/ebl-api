@@ -23,6 +23,7 @@ Provide project context and coding guidelines that AI should follow when generat
 - Functions should be small and focused on a single task.
 - Refactor long and complex code automatically.
 - Do not add comments to the code unless explicitly requested.
+- HARD GATE: no `*.py` file may exceed 250 total lines. If a change pushes a file past this limit, refactor by extracting modules or splitting test files before completing the task. This is non-negotiable and applies to both source and test files.
 
 ## Commands and Tooling
 

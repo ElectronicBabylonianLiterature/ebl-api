@@ -130,6 +130,8 @@ class YearFactory(factory.Factory):
     value = factory.Faker("word")
     is_broken = factory.Faker("boolean")
     is_uncertain = factory.Faker("boolean")
+    is_reconstructed = factory.Faker("boolean")
+    is_emended = factory.Faker("boolean")
 
 
 class MonthFactory(factory.Factory):

@@ -52,8 +52,10 @@ from ebl.fragmentarium.web.colophons import ColophonResource, ColophonNamesResou
 
 def create_fragmentarium_routes(api: falcon.App, context: Context):
     context.fragment_repository.create_indexes()
+
     provenance_service = context.provenance_service
     fragmentarium = Fragmentarium(context.fragment_repository)
+
     finder = FragmentFinder(
         context.get_bibliography(),
         context.fragment_repository,
