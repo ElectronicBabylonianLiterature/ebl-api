@@ -123,7 +123,9 @@ class FragmentQuerySummarySchema(Schema):
     match_count = fields.Integer(required=True, data_key="matchCount")
     has_photo = fields.Boolean(required=True, data_key="hasPhoto")
     thumbnail_path = fields.Function(
-        lambda summary: f"/fragments/{summary.museum_number}/thumbnail/{DEFAULT_THUMBNAIL_RESOLUTION}",
+        lambda summary: (
+            f"/fragments/{summary.museum_number}/thumbnail/{DEFAULT_THUMBNAIL_RESOLUTION}"
+        ),
         dump_only=True,
         data_key="thumbnailPath",
     )

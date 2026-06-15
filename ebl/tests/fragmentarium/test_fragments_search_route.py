@@ -14,6 +14,9 @@ from ebl.fragmentarium.application.fragment_info_schema import (
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQuerySummarySchema,
 )
+from ebl.fragmentarium.application.fragment_fields_schemas import (
+    DossierReferenceSchema,
+)
 from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQuerySummary,
@@ -105,8 +108,16 @@ def query_summary_of(
             genres=fragment.genres,
             archaeology=archaeology,
             references=fragment.references,
-            projects=fragment.projects,
-            dossiers=fragment.dossiers,
+            projects=tuple(
+                project
+                if isinstance(project, ResearchProject)
+                else ResearchProject.from_abbreviation(str(project))
+                for project in fragment.projects
+            ),
+            dossiers=tuple(
+                DossierReferenceSchema().load(DossierReferenceSchema().dump(dossier))
+                for dossier in fragment.dossiers
+            ),
             matching_lines=tuple(lines),
             matching_line_preview=preview,
             match_count=len(lines) if match_count is None else match_count,

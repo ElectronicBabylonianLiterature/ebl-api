@@ -270,11 +270,7 @@ def aggregate_path_of_the_pioneers(
                 ]
             }
         },
-        {
-            "$addFields": {
-                "filename": fragment_photo_filename_expression()
-            }
-        },
+        {"$addFields": {"filename": fragment_photo_filename_expression()}},
         {
             "$lookup": {
                 "from": "photos.files",

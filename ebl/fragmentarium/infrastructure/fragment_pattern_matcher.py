@@ -283,9 +283,7 @@ class PatternMatcher:
             {
                 "$group": {
                     "_id": None,
-                    "matchCountTotal": {
-                        "$sum": {"$ifNull": ["$matchCount", 0]}
-                    },
+                    "matchCountTotal": {"$sum": {"$ifNull": ["$matchCount", 0]}},
                 }
             },
             {"$project": {"_id": False, "matchCountTotal": True}},

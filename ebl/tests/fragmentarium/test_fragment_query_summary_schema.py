@@ -50,9 +50,7 @@ def build_summary() -> FragmentQuerySummary:
         references=fragment.references,
         projects=(ResearchProject.CAIC, ResearchProject.RECC),
         dossiers=(
-            FragmentDossierReferenceFactory.build(
-                dossierId="DOS.1", isUncertain=True
-            ),
+            FragmentDossierReferenceFactory.build(dossierId="DOS.1", isUncertain=True),
         ),
         matching_lines=matching_lines,
         matching_line_preview=preview,

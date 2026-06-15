@@ -51,7 +51,11 @@ def load_query_result(cursor: Iterator) -> QueryResult:
 
 def load_fragment_query_result(cursor: Iterator) -> FragmentQueryResult:
     data = next(cursor, None)
-    return FragmentQueryResultSchema().load(data) if data else FragmentQueryResult.create_empty()
+    return (
+        FragmentQueryResultSchema().load(data)
+        if data
+        else FragmentQueryResult.create_empty()
+    )
 
 
 def chapter_lemma_pipeline(clean_values: List[str]) -> List[dict]:
