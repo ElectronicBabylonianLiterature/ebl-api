@@ -14,7 +14,10 @@ from ebl.fragmentarium.application.fragment_info_schema import (
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQuerySummarySchema,
 )
-from ebl.fragmentarium.domain.fragment_query_summary import FragmentQuerySummary
+from ebl.fragmentarium.domain.fragment_query_summary import (
+    FragmentQueryArchaeology,
+    FragmentQuerySummary,
+)
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
@@ -38,6 +41,7 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.fragmentarium.domain.genres import genres
 from ebl.common.domain.scopes import Scope
 from ebl.tests.factories.provenance import build_provenance_records
+from ebl.transliteration.domain.text import Text
 
 
 def get_provenance_record(record_id: str):
@@ -77,6 +81,19 @@ def query_summary_of(
     has_photo: bool = False,
 ) -> Dict:
     lines = [] if matching_lines is None else matching_lines
+    archaeology = (
+        FragmentQueryArchaeology(
+            excavation_number=fragment.archaeology.excavation_number,
+            site=(
+                fragment.archaeology.site.long_name
+                if fragment.archaeology.site
+                else None
+            ),
+        )
+        if fragment.archaeology is not None
+        else None
+    )
+    preview = Text.of_iterable(fragment.text.lines[index] for index in lines)
 
     return FragmentQuerySummarySchema().dump(
         FragmentQuerySummary(
@@ -86,7 +103,12 @@ def query_summary_of(
             script=fragment.script,
             date=fragment.date,
             genres=fragment.genres,
+            archaeology=archaeology,
+            references=fragment.references,
+            projects=fragment.projects,
+            dossiers=fragment.dossiers,
             matching_lines=tuple(lines),
+            matching_line_preview=preview,
             match_count=len(lines) if match_count is None else match_count,
             has_photo=has_photo,
         )
@@ -132,8 +154,10 @@ def test_query_fragmentarium_number_summary_only(client, fragmentarium):
         "items": [query_summary_of(fragment, has_photo=True)],
         "matchCountTotal": 0,
     }
+    assert result.json["items"][0]["matchingLinePreview"]["lines"] == []
     assert "text" not in result.json["items"][0]
     assert "record" not in result.json["items"][0]
+    assert "atf" not in result.json["items"][0]
 
 
 def test_query_fragmentarium_number_not_found(client):
@@ -206,6 +230,16 @@ def test_query_fragmentarium_transliteration(
         ],
         "matchCountTotal": 3,
     }
+    preview = result.json["items"][0]["matchingLinePreview"]
+    assert preview["numberOfLines"] == 1
+    assert (
+        preview["lines"][0]["prefix"]
+        == transliterated_fragments[0].text.lines[3].line_number.atf
+    )
+    assert preview["lines"][0]["content"]
+    assert "text" not in result.json["items"][0]
+    assert "record" not in result.json["items"][0]
+    assert "atf" not in result.json["items"][0]
 
 
 def test_query_fragmentarium_transliteration_limit_preserves_total_count(

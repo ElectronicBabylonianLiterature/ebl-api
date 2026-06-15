@@ -28,11 +28,20 @@ class LemmaMatcher:
     def _summary_projection() -> Dict:
         return {
             "accession": 1,
+            "archaeology": {
+                "excavationNumber": "$archaeology.excavationNumber",
+                "site": "$archaeology.site",
+            },
             "date": 1,
             "description": 1,
+            "dossiers": 1,
             "genres": 1,
             "museumNumber": 1,
+            "projects": 1,
+            "references": 1,
             "script": 1,
+            "textLines": "$text.lines",
+            "textParserVersion": "$text.parser_version",
         }
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
@@ -81,10 +90,16 @@ class LemmaMatcher:
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
                     "accession": {"$first": "$accession"},
+                    "archaeology": {"$first": "$archaeology"},
                     "date": {"$first": "$date"},
                     "description": {"$first": "$description"},
+                    "dossiers": {"$first": "$dossiers"},
                     "genres": {"$first": "$genres"},
+                    "projects": {"$first": "$projects"},
+                    "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
+                    "textLines": {"$first": "$textLines"},
+                    "textParserVersion": {"$first": "$textParserVersion"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
@@ -131,7 +146,18 @@ class LemmaMatcher:
                 "$project": {
                     "ngram": ngrams(f"${self.flat_path}", n=len(self.pattern)),
                     "lineIndex": True,
-                    **self._summary_projection(),
+                    "accession": True,
+                    "archaeology": True,
+                    "date": True,
+                    "description": True,
+                    "dossiers": True,
+                    "genres": True,
+                    "museumNumber": True,
+                    "projects": True,
+                    "references": True,
+                    "script": True,
+                    "textLines": True,
+                    "textParserVersion": True,
                     "_sortKey": True,
                 }
             },

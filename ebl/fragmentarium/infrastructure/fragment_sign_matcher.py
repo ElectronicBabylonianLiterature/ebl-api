@@ -7,11 +7,20 @@ class SignMatcher:
     def _summary_projection() -> Dict:
         return {
             "accession": 1,
+            "archaeology": {
+                "excavationNumber": "$archaeology.excavationNumber",
+                "site": "$archaeology.site",
+            },
             "date": 1,
             "description": 1,
+            "dossiers": 1,
             "genres": 1,
             "museumNumber": 1,
+            "projects": 1,
+            "references": 1,
             "script": 1,
+            "textLines": "$text.lines",
+            "textParserVersion": "$text.parser_version",
         }
 
     def __init__(self, pattern: List[str]):
@@ -61,7 +70,7 @@ class SignMatcher:
                     ]
                 },
                 "as": "index",
-                "in": {"$arrayElemAt": ["$textLines", "$$index"]},
+                "in": {"$arrayElemAt": ["$textLineIndices", "$$index"]},
             }
         }
 
@@ -83,11 +92,17 @@ class SignMatcher:
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
                     "accession": {"$first": "$accession"},
+                    "archaeology": {"$first": "$archaeology"},
                     "date": {"$first": "$date"},
                     "description": {"$first": "$description"},
+                    "dossiers": {"$first": "$dossiers"},
                     "genres": {"$first": "$genres"},
+                    "projects": {"$first": "$projects"},
+                    "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
-                    "textLines": {"$push": "$lineIndex"},
+                    "textLines": {"$first": "$textLines"},
+                    "textParserVersion": {"$first": "$textParserVersion"},
+                    "textLineIndices": {"$push": "$lineIndex"},
                     "signLines": {"$first": {"$split": ["$signs", "\n"]}},
                 }
             },
@@ -107,17 +122,28 @@ class SignMatcher:
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
                     "accession": {"$first": "$accession"},
+                    "archaeology": {"$first": "$archaeology"},
                     "date": {"$first": "$date"},
                     "description": {"$first": "$description"},
+                    "dossiers": {"$first": "$dossiers"},
                     "genres": {"$first": "$genres"},
+                    "projects": {"$first": "$projects"},
+                    "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
                     "matchingLines": {
                         "$push": (
                             self._expand_line_ranges()
                             if self._is_multiline
-                            else {"$arrayElemAt": ["$textLines", "$signLineIndex"]}
+                            else {
+                                "$arrayElemAt": [
+                                    "$textLineIndices",
+                                    "$signLineIndex",
+                                ]
+                            }
                         )
                     },
+                    "textLines": {"$first": "$textLines"},
+                    "textParserVersion": {"$first": "$textParserVersion"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },

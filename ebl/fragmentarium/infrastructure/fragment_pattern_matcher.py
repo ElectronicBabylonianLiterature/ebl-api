@@ -81,16 +81,40 @@ class PatternMatcher:
                 }
             },
             {
+                "$addFields": {
+                    "matchingLinePreview": {
+                        "lines": {
+                            "$map": {
+                                "input": {"$ifNull": ["$matchingLines", []]},
+                                "as": "lineIndex",
+                                "in": {
+                                    "$arrayElemAt": [
+                                        {"$ifNull": ["$textLines", []]},
+                                        "$$lineIndex",
+                                    ]
+                                },
+                            }
+                        },
+                        "parser_version": "$textParserVersion",
+                    }
+                }
+            },
+            {
                 "$project": {
                     "_id": False,
                     "accession": True,
+                    "archaeology": True,
                     "date": True,
                     "description": True,
+                    "dossiers": True,
                     "genres": True,
                     "hasPhoto": True,
                     "matchCount": True,
                     "matchingLines": True,
+                    "matchingLinePreview": True,
                     "museumNumber": True,
+                    "projects": True,
+                    "references": True,
                     "script": True,
                 }
             },
@@ -188,12 +212,21 @@ class PatternMatcher:
                     "_id": True,
                     "museumNumber": True,
                     "accession": True,
+                    "archaeology": {
+                        "excavationNumber": "$archaeology.excavationNumber",
+                        "site": "$archaeology.site",
+                    },
                     "date": True,
                     "description": True,
+                    "dossiers": True,
                     "genres": True,
-                    "matchingLines": [],
+                    "matchingLines": {"$literal": []},
                     "matchCount": {"$literal": 0},
                     "script": True,
+                    "projects": True,
+                    "references": True,
+                    "textLines": {"$literal": []},
+                    "textParserVersion": "$text.parser_version",
                 }
             },
         ]
@@ -224,10 +257,16 @@ class PatternMatcher:
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
                     "accession": {"$first": "$accession"},
+                    "archaeology": {"$first": "$archaeology"},
                     "date": {"$first": "$date"},
                     "description": {"$first": "$description"},
+                    "dossiers": {"$first": "$dossiers"},
                     "genres": {"$first": "$genres"},
+                    "projects": {"$first": "$projects"},
+                    "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
+                    "textLines": {"$first": "$textLines"},
+                    "textParserVersion": {"$first": "$textParserVersion"},
                 },
             },
             {

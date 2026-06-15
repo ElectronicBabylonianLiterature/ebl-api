@@ -1,56 +1,151 @@
-from ebl.common.domain.period import Period
+from ebl.bibliography.application.reference_schema import ReferenceSchema
+from ebl.common.application.schemas import AccessionSchema
+from ebl.common.domain.project import ResearchProject
 from ebl.common.query.query_result import QueryItem, QueryResult
+from ebl.fragmentarium.application.fragment_fields_schemas import (
+    DossierReferenceSchema,
+)
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
     FragmentQuerySummarySchema,
 )
-from ebl.fragmentarium.domain.fragment import Script
+from ebl.fragmentarium.application.genre_schema import GenreSchema
+from ebl.fragmentarium.domain.date import DateSchema
 from ebl.fragmentarium.domain.fragment_query_summary import (
+    FragmentQueryArchaeology,
     FragmentQueryResult,
     FragmentQuerySummary,
 )
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.schemas import ResearchProjectField
+from ebl.tests.factories.bibliography import ReferenceFactory
+from ebl.tests.factories.fragment import (
+    FragmentDossierReferenceFactory,
+    TransliteratedFragmentFactory,
+)
+from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.application.text_schema import TextSchema
+from ebl.transliteration.domain.text import Text
 
 
 def build_summary() -> FragmentQuerySummary:
+    fragment = TransliteratedFragmentFactory.build(
+        references=(ReferenceFactory.build(), ReferenceFactory.build())
+    )
+    matching_lines = (0, 2)
+    preview = Text.of_iterable(fragment.text.lines[index] for index in matching_lines)
+
     return FragmentQuerySummary(
-        museum_number=MuseumNumber.of("K.1"),
-        accession=None,
-        description="desc",
-        script=Script(Period.OLD_ASSYRIAN),
-        matching_lines=(1, 3),
+        museum_number=fragment.number,
+        accession=fragment.accession,
+        description=fragment.description,
+        script=fragment.script,
+        date=fragment.date,
+        genres=fragment.genres,
+        archaeology=FragmentQueryArchaeology(
+            excavation_number=MuseumNumberSchema().load(
+                MuseumNumberSchema().dump(fragment.archaeology.excavation_number)
+            ),
+            site=fragment.archaeology.site.long_name,
+        ),
+        references=fragment.references,
+        projects=(ResearchProject.CAIC, ResearchProject.RECC),
+        dossiers=(
+            FragmentDossierReferenceFactory.build(
+                dossierId="DOS.1", isUncertain=True
+            ),
+        ),
+        matching_lines=matching_lines,
+        matching_line_preview=preview,
         match_count=2,
         has_photo=True,
     )
 
 
-def test_fragment_query_summary_schema_dump_is_compact():
-    dumped = FragmentQuerySummarySchema().dump(build_summary())
+def test_fragment_query_summary_schema_dump_exact_shape():
+    summary = build_summary()
+    dumped = FragmentQuerySummarySchema().dump(summary)
 
-    assert dumped["museumNumber"] == {"prefix": "K", "number": "1", "suffix": ""}
-    assert dumped["matchingLines"] == [1, 3]
-    assert dumped["matchCount"] == 2
-    assert dumped["hasPhoto"] is True
-    assert dumped["thumbnailPath"] == "/fragments/K.1/thumbnail/small"
+    assert set(dumped) == {
+        "museumNumber",
+        "accession",
+        "description",
+        "script",
+        "date",
+        "genres",
+        "archaeology",
+        "references",
+        "projects",
+        "dossiers",
+        "matchingLines",
+        "matchingLinePreview",
+        "matchCount",
+        "hasPhoto",
+        "thumbnailPath",
+    }
+    assert dumped == {
+        "museumNumber": MuseumNumberSchema().dump(summary.museum_number),
+        "accession": AccessionSchema().dump(summary.accession),
+        "description": summary.description,
+        "script": {
+            "period": summary.script.period.abbreviation,
+            "periodModifier": summary.script.period_modifier.value,
+            "uncertain": summary.script.uncertain,
+        },
+        "date": DateSchema().dump(summary.date),
+        "genres": GenreSchema().dump(summary.genres, many=True),
+        "archaeology": {
+            "excavationNumber": MuseumNumberSchema().dump(
+                summary.archaeology.excavation_number
+            ),
+            "site": {"name": summary.archaeology.site},
+        },
+        "references": ReferenceSchema().dump(summary.references, many=True),
+        "projects": [
+            ResearchProjectField()._serialize(project, None, None)
+            for project in summary.projects
+        ],
+        "dossiers": DossierReferenceSchema().dump(summary.dossiers, many=True),
+        "matchingLines": [0, 2],
+        "matchingLinePreview": TextSchema().dump(summary.matching_line_preview),
+        "matchCount": 2,
+        "hasPhoto": True,
+        "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
+    }
+    assert dumped["matchingLinePreview"]["numberOfLines"] == 2
+    assert dumped["matchingLinePreview"]["lines"][0]["prefix"] == (
+        summary.matching_line_preview.lines[0].line_number.atf
+    )
+    assert dumped["matchingLinePreview"]["lines"][1]["prefix"] == (
+        summary.matching_line_preview.lines[1].line_number.atf
+    )
     assert "text" not in dumped
     assert "record" not in dumped
+    assert "atf" not in dumped
 
 
 def test_fragment_query_summary_schema_roundtrip():
     summary = build_summary()
 
-    assert FragmentQuerySummarySchema().load(FragmentQuerySummarySchema().dump(summary)) == summary
+    assert (
+        FragmentQuerySummarySchema().load(FragmentQuerySummarySchema().dump(summary))
+        == summary
+    )
 
 
 def test_fragment_query_result_schema_roundtrip_and_compatibility():
     summary = build_summary()
-    result = FragmentQueryResult((summary,), 2)
+    result = FragmentQueryResult((summary,), 7)
     dumped = FragmentQueryResultSchema().dump(result)
 
-    assert dumped["matchCountTotal"] == 2
-    assert dumped["items"][0]["thumbnailPath"] == "/fragments/K.1/thumbnail/small"
+    assert dumped == {
+        "items": [FragmentQuerySummarySchema().dump(summary)],
+        "matchCountTotal": 7,
+    }
     assert FragmentQueryResultSchema().load(dumped) == result
 
-    old_result = QueryResult([QueryItem(summary.museum_number, summary.matching_lines, 2)], 2)
+    old_result = QueryResult(
+        [QueryItem(summary.museum_number, summary.matching_lines, summary.match_count)],
+        7,
+    )
     assert result == old_result
     assert old_result == result
