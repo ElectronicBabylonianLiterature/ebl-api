@@ -1,6 +1,10 @@
 from typing import List, Dict, Sequence, Optional
 from ebl.common.domain.scopes import Scope
-from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
+from ebl.fragmentarium.infrastructure.queries import (
+    fragment_photo_filename_expression,
+    match_user_scopes,
+    number_is,
+)
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
     LemmaMatcher,
     EmptyMatcher,
@@ -45,28 +49,14 @@ class PatternMatcher:
     def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
         return [{"$sort": sort_fields}] if sort_fields else []
 
-    @staticmethod
-    def _photo_filename_expression() -> Dict:
-        return {
-            "$concat": [
-                "$museumNumber.prefix",
-                ".",
-                "$museumNumber.number",
-                {
-                    "$cond": {
-                        "if": {"$eq": ["$museumNumber.suffix", ""]},
-                        "then": "",
-                        "else": {"$concat": [".", "$museumNumber.suffix"]},
-                    }
-                },
-                ".jpg",
-            ]
-        }
-
     def _items_pipeline(self) -> List[Dict]:
         return [
             *self._limit_result(),
-            {"$addFields": {"filename": self._photo_filename_expression()}},
+            {
+                "$addFields": {
+                    "filename": fragment_photo_filename_expression(),
+                }
+            },
             {
                 "$lookup": {
                     "from": "photos.files",

@@ -34,24 +34,27 @@ class FragmentQuerySummary:
     projects: Sequence[ResearchProject] = ()
     dossiers: Sequence[DossierReference] = ()
 
+    def _comparison_values(self):
+        return (
+            self.museum_number,
+            self.description,
+            self.script,
+            tuple(self.matching_lines),
+            self.matching_line_preview,
+            self.match_count,
+            self.has_photo,
+            self.accession,
+            self.date,
+            tuple(self.genres),
+            self.archaeology,
+            tuple(self.references),
+            tuple(self.projects),
+            tuple(self.dossiers),
+        )
+
     def __eq__(self, other):
         if isinstance(other, FragmentQuerySummary):
-            return (
-                self.museum_number == other.museum_number
-                and self.description == other.description
-                and self.script == other.script
-                and tuple(self.matching_lines) == tuple(other.matching_lines)
-                and self.matching_line_preview == other.matching_line_preview
-                and self.match_count == other.match_count
-                and self.has_photo == other.has_photo
-                and self.accession == other.accession
-                and self.date == other.date
-                and tuple(self.genres) == tuple(other.genres)
-                and self.archaeology == other.archaeology
-                and tuple(self.references) == tuple(other.references)
-                and tuple(self.projects) == tuple(other.projects)
-                and tuple(self.dossiers) == tuple(other.dossiers)
-            )
+            return self._comparison_values() == other._comparison_values()
 
         try:
             other_museum_number = other.museum_number
@@ -65,6 +68,13 @@ class FragmentQuerySummary:
             and tuple(self.matching_lines) == tuple(other_matching_lines)
             and self.match_count == other_match_count
         )
+
+
+def matching_line_preview_of(text: Text, matching_lines: Sequence[int]) -> Text:
+    return Text.of_iterable(
+        (text.lines[index] for index in matching_lines),
+        text.parser_version,
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True, eq=False)

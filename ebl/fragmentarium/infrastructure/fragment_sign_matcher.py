@@ -1,28 +1,9 @@
 from typing import List, Dict
 from ebl.common.query.util import flatten_field, ngrams
+from ebl.fragmentarium.infrastructure.queries import fragment_summary_projection
 
 
 class SignMatcher:
-    @staticmethod
-    def _summary_projection() -> Dict:
-        return {
-            "accession": 1,
-            "archaeology": {
-                "excavationNumber": "$archaeology.excavationNumber",
-                "site": "$archaeology.site",
-            },
-            "date": 1,
-            "description": 1,
-            "dossiers": 1,
-            "genres": 1,
-            "museumNumber": 1,
-            "projects": 1,
-            "references": 1,
-            "script": 1,
-            "textLines": "$text.lines",
-            "textParserVersion": "$text.parser_version",
-        }
-
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
         self._pattern_length = len(pattern)
@@ -78,7 +59,7 @@ class SignMatcher:
         return [
             {
                 "$project": {
-                    **self._summary_projection(),
+                    **fragment_summary_projection(),
                     "_sortKey": True,
                     "lineTypes": "$text.lines.type",
                     "signs": True,

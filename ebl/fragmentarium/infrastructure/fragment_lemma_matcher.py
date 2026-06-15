@@ -1,5 +1,6 @@
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.common.query.util import flatten_field, drop_duplicates, ngrams
+from ebl.fragmentarium.infrastructure.queries import fragment_summary_projection
 from typing import List, Dict
 
 
@@ -23,26 +24,6 @@ class LemmaMatcher:
     ):
         self.pattern = pattern
         self.query_type = query_type
-
-    @staticmethod
-    def _summary_projection() -> Dict:
-        return {
-            "accession": 1,
-            "archaeology": {
-                "excavationNumber": "$archaeology.excavationNumber",
-                "site": "$archaeology.site",
-            },
-            "date": 1,
-            "description": 1,
-            "dossiers": 1,
-            "genres": 1,
-            "museumNumber": 1,
-            "projects": 1,
-            "references": 1,
-            "script": 1,
-            "textLines": "$text.lines",
-            "textParserVersion": "$text.parser_version",
-        }
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipelines = {
@@ -68,7 +49,7 @@ class LemmaMatcher:
         return [
             {
                 "$project": {
-                    **self._summary_projection(),
+                    **fragment_summary_projection(),
                     "_sortKey": 1,
                     self.flat_path: f"${self.unique_lemma_path}",
                 }

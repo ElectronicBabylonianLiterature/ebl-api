@@ -17,6 +17,7 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
 from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQuerySummary,
+    matching_line_preview_of,
 )
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
@@ -41,7 +42,6 @@ from ebl.transliteration.application.museum_number_schema import MuseumNumberSch
 from ebl.fragmentarium.domain.genres import genres
 from ebl.common.domain.scopes import Scope
 from ebl.tests.factories.provenance import build_provenance_records
-from ebl.transliteration.domain.text import Text
 
 
 def get_provenance_record(record_id: str):
@@ -93,7 +93,7 @@ def query_summary_of(
         if fragment.archaeology is not None
         else None
     )
-    preview = Text.of_iterable(fragment.text.lines[index] for index in lines)
+    preview = matching_line_preview_of(fragment.text, lines)
 
     return FragmentQuerySummarySchema().dump(
         FragmentQuerySummary(

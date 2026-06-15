@@ -15,6 +15,7 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQueryResult,
     FragmentQuerySummary,
+    matching_line_preview_of,
 )
 from ebl.schemas import ResearchProjectField
 from ebl.tests.factories.bibliography import ReferenceFactory
@@ -24,7 +25,6 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
-from ebl.transliteration.domain.text import Text
 
 
 def build_summary() -> FragmentQuerySummary:
@@ -32,7 +32,7 @@ def build_summary() -> FragmentQuerySummary:
         references=(ReferenceFactory.build(), ReferenceFactory.build())
     )
     matching_lines = (0, 2)
-    preview = Text.of_iterable(fragment.text.lines[index] for index in matching_lines)
+    preview = matching_line_preview_of(fragment.text, matching_lines)
 
     return FragmentQuerySummary(
         museum_number=fragment.number,
