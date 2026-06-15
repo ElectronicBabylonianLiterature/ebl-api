@@ -45,21 +45,55 @@ class PatternMatcher:
     def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
         return [{"$sort": sort_fields}] if sort_fields else []
 
-    def _wrap_query_items_with_total(
-        self, sort_fields: Optional[Dict] = None
-    ) -> List[Dict]:
+    @staticmethod
+    def _photo_filename_expression() -> Dict:
+        return {
+            "$concat": [
+                "$museumNumber.prefix",
+                ".",
+                "$museumNumber.number",
+                {
+                    "$cond": {
+                        "if": {"$eq": ["$museumNumber.suffix", ""]},
+                        "then": "",
+                        "else": {"$concat": [".", "$museumNumber.suffix"]},
+                    }
+                },
+                ".jpg",
+            ]
+        }
+
+    def _items_pipeline(self) -> List[Dict]:
         return [
-            *self._sort_by(sort_fields),
             *self._limit_result(),
-            {"$project": {"_id": False, "script": False, "_sortKey": False}},
+            {"$addFields": {"filename": self._photo_filename_expression()}},
             {
-                "$group": {
-                    "_id": None,
-                    "items": {"$push": "$$ROOT"},
-                    "matchCountTotal": {"$sum": "$matchCount"},
+                "$lookup": {
+                    "from": "photos.files",
+                    "localField": "filename",
+                    "foreignField": "filename",
+                    "as": "photoFiles",
                 }
             },
-            {"$project": {"_id": False}},
+            {
+                "$addFields": {
+                    "hasPhoto": {"$gt": [{"$size": "$photoFiles"}, 0]},
+                }
+            },
+            {
+                "$project": {
+                    "_id": False,
+                    "accession": True,
+                    "date": True,
+                    "description": True,
+                    "genres": True,
+                    "hasPhoto": True,
+                    "matchCount": True,
+                    "matchingLines": True,
+                    "museumNumber": True,
+                    "script": True,
+                }
+            },
         ]
 
     def _filter_by_script(self) -> Dict:
@@ -153,6 +187,10 @@ class PatternMatcher:
                 "$project": {
                     "_id": True,
                     "museumNumber": True,
+                    "accession": True,
+                    "date": True,
+                    "description": True,
+                    "genres": True,
                     "matchingLines": [],
                     "matchCount": {"$literal": 0},
                     "script": True,
@@ -185,6 +223,11 @@ class PatternMatcher:
                     "matchingLines": {"$push": "$matchingLines"},
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
+                    "accession": {"$first": "$accession"},
+                    "date": {"$first": "$date"},
+                    "description": {"$first": "$description"},
+                    "genres": {"$first": "$genres"},
+                    "script": {"$first": "$script"},
                 },
             },
             {
@@ -206,6 +249,19 @@ class PatternMatcher:
             {"$match": {"matchCount": {"$gt": 0}}},
         ]
 
+    def _count_pipeline(self) -> List[Dict]:
+        return [
+            {
+                "$group": {
+                    "_id": None,
+                    "matchCountTotal": {
+                        "$sum": {"$ifNull": ["$matchCount", 0]}
+                    },
+                }
+            },
+            {"$project": {"_id": False, "matchCountTotal": True}},
+        ]
+
     def _get_pipeline_components(self) -> List[Dict]:
         dispatcher = {
             (True, True): self._merge_pipelines,
@@ -221,9 +277,27 @@ class PatternMatcher:
         return [
             *self._prefilter(),
             *dispatcher[key](),
-            *self._wrap_query_items_with_total(
-                sort_fields={"script.sortKey": 1, "_sortKey": 1}
-            ),
+            {
+                "$facet": {
+                    "items": [
+                        *self._sort_by({"script.sortKey": 1, "_sortKey": 1}),
+                        *self._items_pipeline(),
+                    ],
+                    "count": self._count_pipeline(),
+                }
+            },
+            {
+                "$project": {
+                    "_id": False,
+                    "items": True,
+                    "matchCountTotal": {
+                        "$ifNull": [
+                            {"$arrayElemAt": ["$count.matchCountTotal", 0]},
+                            0,
+                        ]
+                    },
+                }
+            },
         ]
 
     def build_pipeline(self) -> List[Dict]:

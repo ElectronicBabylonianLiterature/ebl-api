@@ -24,6 +24,17 @@ class LemmaMatcher:
         self.pattern = pattern
         self.query_type = query_type
 
+    @staticmethod
+    def _summary_projection() -> Dict:
+        return {
+            "accession": 1,
+            "date": 1,
+            "description": 1,
+            "genres": 1,
+            "museumNumber": 1,
+            "script": 1,
+        }
+
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         pipelines = {
             LemmaQueryType.AND: self._and,
@@ -48,10 +59,9 @@ class LemmaMatcher:
         return [
             {
                 "$project": {
-                    "museumNumber": 1,
+                    **self._summary_projection(),
                     "_sortKey": 1,
                     self.flat_path: f"${self.unique_lemma_path}",
-                    "script": 1,
                 }
             },
             {
@@ -70,6 +80,10 @@ class LemmaMatcher:
                     "matchingLines": {"$push": "$lineIndex"},
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
+                    "accession": {"$first": "$accession"},
+                    "date": {"$first": "$date"},
+                    "description": {"$first": "$description"},
+                    "genres": {"$first": "$genres"},
                     "script": {"$first": "$script"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
@@ -117,9 +131,8 @@ class LemmaMatcher:
                 "$project": {
                     "ngram": ngrams(f"${self.flat_path}", n=len(self.pattern)),
                     "lineIndex": True,
-                    "museumNumber": True,
+                    **self._summary_projection(),
                     "_sortKey": True,
-                    "script": True,
                 }
             },
             {"$addFields": {"ngram": {"$setUnion": ["$ngram", []]}}},

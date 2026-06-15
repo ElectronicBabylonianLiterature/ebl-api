@@ -6,6 +6,7 @@ from ebl.common.query.query_result import QueryResult, AfORegisterToFragmentQuer
 from ebl.fragmentarium.application.line_to_vec import LineToVecEntry
 from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment_query_summary import FragmentQueryResult
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_pager_info import FragmentPagerInfo
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -99,7 +100,9 @@ class FragmentRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult:
+    def query(
+        self, query: dict, user_scopes: Sequence[Scope] = ()
+    ) -> FragmentQueryResult:
         raise NotImplementedError
 
     @abstractmethod

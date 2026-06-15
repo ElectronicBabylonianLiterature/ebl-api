@@ -3,6 +3,17 @@ from ebl.common.query.util import flatten_field, ngrams
 
 
 class SignMatcher:
+    @staticmethod
+    def _summary_projection() -> Dict:
+        return {
+            "accession": 1,
+            "date": 1,
+            "description": 1,
+            "genres": 1,
+            "museumNumber": 1,
+            "script": 1,
+        }
+
     def __init__(self, pattern: List[str]):
         self.pattern = pattern
         self._pattern_length = len(pattern)
@@ -58,9 +69,8 @@ class SignMatcher:
         return [
             {
                 "$project": {
-                    "museumNumber": True,
+                    **self._summary_projection(),
                     "_sortKey": True,
-                    "script": True,
                     "lineTypes": "$text.lines.type",
                     "signs": True,
                 }
@@ -72,6 +82,10 @@ class SignMatcher:
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
+                    "accession": {"$first": "$accession"},
+                    "date": {"$first": "$date"},
+                    "description": {"$first": "$description"},
+                    "genres": {"$first": "$genres"},
                     "script": {"$first": "$script"},
                     "textLines": {"$push": "$lineIndex"},
                     "signLines": {"$first": {"$split": ["$signs", "\n"]}},
@@ -92,6 +106,10 @@ class SignMatcher:
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
+                    "accession": {"$first": "$accession"},
+                    "date": {"$first": "$date"},
+                    "description": {"$first": "$description"},
+                    "genres": {"$first": "$genres"},
                     "script": {"$first": "$script"},
                     "matchingLines": {
                         "$push": (

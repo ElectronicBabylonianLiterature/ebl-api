@@ -18,6 +18,9 @@ from ebl.errors import DataError, NotFoundError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryResultSchema,
+)
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import (
     create_response_dto,
@@ -111,7 +114,7 @@ class FragmentsQueryResource:
             parse_integer_field("limit"),
         )
 
-        resp.media = QueryResultSchema().dump(
+        resp.media = FragmentQueryResultSchema().dump(
             self._repository.query(
                 parse(req.params),
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),

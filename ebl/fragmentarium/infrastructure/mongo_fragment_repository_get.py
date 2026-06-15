@@ -10,7 +10,11 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryResultSchema,
+)
 from ebl.fragmentarium.domain.archaeology import ExcavationNumber
+from ebl.fragmentarium.domain.fragment_query_summary import FragmentQueryResult
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
@@ -43,6 +47,11 @@ def load_museum_number(data: dict) -> MuseumNumber:
 def load_query_result(cursor: Iterator) -> QueryResult:
     data = next(cursor, None)
     return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+
+
+def load_fragment_query_result(cursor: Iterator) -> FragmentQueryResult:
+    data = next(cursor, None)
+    return FragmentQueryResultSchema().load(data) if data else FragmentQueryResult.create_empty()
 
 
 def chapter_lemma_pipeline(clean_values: List[str]) -> List[dict]:
@@ -271,7 +280,9 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
 
         return FragmentPagerInfo(prev, next_)
 
-    def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult:
+    def query(
+        self, query: dict, user_scopes: Sequence[Scope] = ()
+    ) -> FragmentQueryResult:
         cursor = (
             self._fragments.aggregate(
                 PatternMatcher(
@@ -284,7 +295,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             if set(query) - {"lemmaOperator"}
             else iter([])
         )
-        return load_query_result(cursor)
+        return load_fragment_query_result(cursor)
 
     def query_latest(self) -> QueryResult:
         return load_query_result(

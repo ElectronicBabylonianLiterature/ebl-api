@@ -11,6 +11,10 @@ from ebl.fragmentarium.application.fragment_info_schema import (
     ApiFragmentInfoSchema,
     ApiFragmentInfosPaginationSchema,
 )
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQuerySummarySchema,
+)
+from ebl.fragmentarium.domain.fragment_query_summary import FragmentQuerySummary
 from ebl.fragmentarium.domain.fragment import Fragment, Script
 from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.domain.fragment_infos_pagination import FragmentInfosPagination
@@ -66,6 +70,29 @@ def query_item_of(
     }
 
 
+def query_summary_of(
+    fragment: Fragment,
+    matching_lines: Optional[List[int]] = None,
+    match_count: Optional[int] = None,
+    has_photo: bool = False,
+) -> Dict:
+    lines = [] if matching_lines is None else matching_lines
+
+    return FragmentQuerySummarySchema().dump(
+        FragmentQuerySummary(
+            museum_number=fragment.number,
+            accession=fragment.accession,
+            description=fragment.description,
+            script=fragment.script,
+            date=fragment.date,
+            genres=fragment.genres,
+            matching_lines=tuple(lines),
+            match_count=len(lines) if match_count is None else match_count,
+            has_photo=has_photo,
+        )
+    )
+
+
 @pytest.mark.parametrize(
     "get_number",
     [
@@ -87,9 +114,26 @@ def test_query_fragmentarium_number(get_number, client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == {
-        "items": [query_item_of(fragment)],
+        "items": [query_summary_of(fragment)],
         "matchCountTotal": 0,
     }
+
+
+def test_query_fragmentarium_number_summary_only(client, fragmentarium):
+    fragment = FragmentFactory.build(number=MuseumNumber.of("K.1"))
+    fragmentarium.create(fragment)
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": str(fragment.number)},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == {
+        "items": [query_summary_of(fragment, has_photo=True)],
+        "matchCountTotal": 0,
+    }
+    assert "text" not in result.json["items"][0]
+    assert "record" not in result.json["items"][0]
 
 
 def test_query_fragmentarium_number_not_found(client):
@@ -124,7 +168,7 @@ def test_query_fragmentarium_references(client, fragmentarium, bibliography, use
 
     assert result.status == falcon.HTTP_OK
     assert result.json == {
-        "items": [query_item_of(fragment)],
+        "items": [query_summary_of(fragment)],
         "matchCountTotal": 0,
     }
 
@@ -157,11 +201,38 @@ def test_query_fragmentarium_transliteration(
     assert result.status == falcon.HTTP_OK
     assert result.json == {
         "items": [
-            query_item_of(fragment, matching_lines=[3])
+            query_summary_of(fragment, matching_lines=[3])
             for fragment in transliterated_fragments
         ],
         "matchCountTotal": 3,
     }
+
+
+def test_query_fragmentarium_transliteration_limit_preserves_total_count(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(5)
+    ]
+
+    for fragment in transliterated_fragments:
+        fragmentarium.create(fragment)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "2"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json["items"]) == 2
+    assert result.json["matchCountTotal"] == 5
 
 
 @pytest.mark.parametrize(
@@ -186,7 +257,7 @@ def test_query_fragmentarium_lemmas(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == {
-        "items": [query_item_of(fragment, matching_lines=expected_lines)],
+        "items": [query_summary_of(fragment, matching_lines=expected_lines)],
         "matchCountTotal": len(expected_lines),
     }
 
@@ -240,7 +311,7 @@ def test_query_fragmentarium_combined_query(
     assert result.status == falcon.HTTP_OK
 
     assert result.json == {
-        "items": [query_item_of(fragment, matching_lines=[1, 3])],
+        "items": [query_summary_of(fragment, matching_lines=[1, 3])],
         "matchCountTotal": 2,
     }
 
@@ -344,7 +415,7 @@ def test_search_with_scopes(client, guest_client, fragmentarium):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == {
-        "items": [query_item_of(fragment)],
+        "items": [query_summary_of(fragment)],
         "matchCountTotal": 0,
     }
 
@@ -382,7 +453,7 @@ def test_search_script_period(client, fragmentarium, params, expected):
         fragmentarium.create(fragment)
 
     expected_json = {
-        "items": [query_item_of(fragments[i]) for i in expected],
+        "items": [query_summary_of(fragments[i]) for i in expected],
         "matchCountTotal": 0,
     }
 
@@ -411,7 +482,7 @@ def test_search_project(client, fragmentarium, project):
 
     expected_json = {
         "items": [
-            query_item_of(fragment)
+            query_summary_of(fragment)
             for fragment in fragments
             if project in fragment.projects
         ],
@@ -447,7 +518,7 @@ def test_search_museum(client, fragmentarium, museum, attribute):
 
     expected_json = {
         "items": [
-            query_item_of(fragment)
+            query_summary_of(fragment)
             for fragment in fragments
             if fragment.museum == museum
         ],
@@ -490,7 +561,7 @@ def test_search_site(client, fragmentarium, site, attribute):
 
     expected_json = {
         "items": [
-            query_item_of(fragment)
+            query_summary_of(fragment)
             for fragment in fragments
             if fragment.archaeology.site == site
         ],
