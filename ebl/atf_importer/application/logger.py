@@ -14,8 +14,11 @@ LogKey = Literal[
 
 class Logger:
     def __init__(self, logdir: Union[PathLike[str], str, None] = None):
-        logging.basicConfig(level=logging.DEBUG)
+        # Keep root logging at INFO so third-party debug logs (e.g. pymongo)
+        # do not flood interactive importer output.
+        logging.basicConfig(level=logging.INFO)
         self.logger = logging.getLogger("Atf-Importer")
+        self.logger.setLevel(logging.INFO)
         self.logdir = logdir
         self.filepath: Optional[str] = None
         self.log_keys = get_args(LogKey)
