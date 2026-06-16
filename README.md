@@ -15,7 +15,10 @@
 
 ## Setup
 
-This project uses [Dev Containers](https://containers.dev/) to provide a consistent, pre-configured development environment. Dev containers automatically handle all dependencies including Python, MongoDB, Poetry, Task, and the Rust compiler.
+This project uses [Dev Containers](https://containers.dev/) to provide a
+consistent, pre-configured development environment. Dev containers
+automatically handle all dependencies including Python, MongoDB, Poetry,
+Task, and the Rust compiler.
 
 ### Prerequisites
 
@@ -25,28 +28,40 @@ This project uses [Dev Containers](https://containers.dev/) to provide a consist
 
 #### Local Development
 
-* [Docker Desktop](https://www.docker.com/products/docker-desktop) (or Docker Engine + Docker Compose)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop) (or
+  Docker Engine + Docker Compose)
 * [VS Code](https://code.visualstudio.com/) with the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
 ### Getting Started
 
-1. **Configure Environment Variables**: Copy `.env.example` to `.env` and add your credentials:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-   The container will initially fail without valid environment variables. Edit `.env` with your Auth0, MongoDB, Sentry, and other service credentials (see [environment variables](#environment-variables) section).
-
-2. **Open in Dev Container**:
-   * In VS Code: Click "Reopen in Container" when prompted, or run "Dev Containers: Reopen in Container" from the Command Palette
+1. **Open in Dev Container**:
+   * In VS Code: Click "Reopen in Container" when prompted, or run
+     "Dev Containers: Reopen in Container" from the Command Palette
    * In GitHub Codespaces: Create a new codespace from your repository
 
-3. **Rebuild After Configuration**: After adding your `.env` file, rebuild the container:
-   * VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
-   * GitHub Codespaces: Restart the workspace
+   Before the container is built, `.env` is created automatically from
+   `.env.example` if it does not already exist. No manual copy step is
+   needed.
 
-The dev container automatically installs all dependencies including MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler. No manual installation required.
+2. **Configure credentials**: The auto-created `.env` contains placeholder
+   values. Replace them with your actual Auth0, MongoDB, Sentry, and other
+   service credentials (see [environment variables](#environment-variables)
+   section), then rebuild the container:
+   * VS Code: Run "Dev Containers: Rebuild Container" from the Command Palette
+   * GitHub Codespaces: Run "Codespaces: Rebuild Container" from the Command Palette
+
+   **Tip — skip this step with Codespaces secrets**: Configure your
+   credentials as [Codespaces secrets][codespaces-secrets] using the
+   same names as the keys in `.env.example`. Codespaces injects them
+   as native process environment variables at container start — they
+   take precedence over the placeholder values in `.env` without being
+   written to disk. No manual editing required.
+
+[codespaces-secrets]: https://docs.github.com/en/codespaces/managing-your-codespaces/managing-secrets-for-your-codespaces
+
+The dev container automatically installs all dependencies including
+MongoDB 4.4, Poetry, Python packages, Task, and the Rust compiler.
+No manual installation required.
 
 ### Manual Setup
 
@@ -65,11 +80,14 @@ poetry install --no-root --with dev
 
 ### Auth0
 
-An *API* and *Application* have to be setup in Auth0 and the API needs to have the *Scopes* listed below.
+An *API* and *Application* have to be setup in Auth0 and the API needs to
+have the *Scopes* listed below.
 
-API *Identifier*, Application *Domain* (or the customdomain if one is used), and Application *Signing Certificate*
-are needed for the environment variables (see below). The whole certificate needs (everything in the field or the downloaded PEM file)
-has to be base64 encoded before being added to the environment variable.
+API *Identifier*, Application *Domain* (or the customdomain if one is used),
+and Application *Signing Certificate* are needed for the environment variables
+(see below). The whole certificate (everything in the field or the downloaded
+PEM file) has to be base64 encoded before being added to the environment
+variable.
 
 #### Scopes
 
@@ -107,7 +125,8 @@ Fragments have additional scopes in the following format:
 
 #### Access token authorization claims
 
-The backend authorization layer accepts permissions from either claim in the access token:
+The backend authorization layer accepts permissions from either claim in the
+access token:
 
 * `scope` (space-separated string)
 * `permissions` (array of scope strings)
@@ -118,7 +137,8 @@ Both sources are merged and unknown values are ignored.
 
 Rules/Actions that add custom profile fields (for example `eblName`) are still supported.
 
-Rules/Actions that copy permissions into the `scope` claim are no longer required for backend authorization,
+Rules/Actions that copy permissions into the `scope` claim are no longer
+required for backend authorization,
 because the backend reads `permissions` directly.
 
 The following legacy Rule examples are kept for reference.
@@ -161,7 +181,8 @@ The users should `eblName` property in the `user_metadata`. E.g.:
 
 ### Sentry
 
-An organization and project need to be setup in Sentry. *DSN* under *Client Keys* is needed for the for the environment variables (see below).
+An organization and project need to be setup in Sentry. *DSN* under
+*Client Keys* is needed for the environment variables (see below).
 
 ### Environment Variables
 
@@ -210,7 +231,8 @@ If a scan fails:
 
 1. Investigate the finding in GitGuardian.
 2. Replace real secrets immediately; do not commit them.
-3. For test payloads, generate values dynamically instead of storing secret-like literals in the repository.
+3. For test payloads, generate values dynamically instead of storing
+   secret-like literals in the repository.
 
 ## Development
 
@@ -223,7 +245,7 @@ task lint  # Run linter.
 task type  # Run type check
 task test  # Run tests.  
 task test -- -n auto  # Run tests in parallel.
-task test -- --cov=ebl --cov-report term --cov-report xml  # Run tests with coverage (slow in PyPy).
+task test -- --cov=ebl --cov-report term --cov-report xml  # Slow in PyPy.
 task test-all  # Run format, lint and type checks, and tests.
 ```
 
@@ -231,12 +253,15 @@ See [pytest-xdist](https://github.com/pytest-dev/pytest-xdist) documentation
 for more information on parallel tests. To avoid race condition when running
 the tests in parallel run `poetry run python -m ebl.tests.downloader`.
 
-⚠️ Sometimes test results may differ for PyPy and non-PyPy Python (the latter is used for some automatic checks in this repository). If tests fail with non-PyPy Python alone, make sure to install and use the same Python version for debugging.
+⚠️ Sometimes test results may differ for PyPy and non-PyPy Python (the latter
+is used for some automatic checks in this repository). If tests fail with
+non-PyPy Python alone, make sure to install and use the same Python version
+for debugging.
 
 ## Custom Git Shortcut
 
 ```shell script
-task cp --- commit-message  # Runs black, flake8 and pyre-check and git add, commit and push
+task cp --- commit-message  # Format, lint, git add, commit and push
 ```
 
 ### Codestyle
@@ -269,13 +294,16 @@ pydepgraph -p . -e tests -g 2 | dot -Tpng -o graph.png
 See
 [dictionary-parser](https://github.com/ElectronicBabylonianLiterature/dictionary-parser),
 [proper-name-importer](https://github.com/ElectronicBabylonianLiterature/proper-name-importer),
-[fragmentarium-parser](https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser), and
+[fragmentarium-parser][frag-parser], and
 [sign-list-parser](https://github.com/ElectronicBabylonianLiterature/sign-list-parser)
-about generating the initial data. There have been chanages to the database structure since the
-scripts were initally used and they most likely require updates to work with latest version
-of the API.
+about generating the initial data. There have been chanages to the database
+structure since the scripts were initally used and they most likely require
+updates to work with latest version of the API.
 
-`pull-db.sh` script can be used to pull a database from an another MongoDB instance to
+[frag-parser]: https://github.com/ElectronicBabylonianLiterature/fragmentarium-parser
+
+`pull-db.sh` script can be used to pull a database from an another MongoDB
+instance to
 your development MongoDB. It will use `mongodump` and `mongorestore` to get
 all data except `changelog` collection, and `photos` and `folios` buckets.
 
@@ -288,9 +316,12 @@ PULL_DB_DEFAULT_SOURCE_USER=<source MongoDB user>
 PULL_DB_DEFAULT_SOURCE_PASSWORD=<source MongoDB password>
 ```
 
-The test use [pymongo_inmemory](https://github.com/kaizendorks/pymongo_inmemory) for tests.
-Depending on your OS it might be necessary to configure it in order to get the correct version
+The test use [pymongo_inmemory][pymongo-im] for tests.
+Depending on your OS it might be necessary to configure it in order to get the
+correct version
 of MongoDB. E.g. for Ubuntu add the following environment variables:
+
+[pymongo-im]: https://github.com/kaizendorks/pymongo_inmemory
 
 ```dotenv
 PYMONGOIM__MONGO_VERSION=4.4
@@ -300,11 +331,15 @@ PYMONGOIM__OS_VERSION=20
 
 ### Caching
 
-[Falcon-Caching](https://falcon-caching.readthedocs.io/) middleware can be used for caching.
-See the documentation for more information. Configuration is read from `CACHE_CONFIG` environment variable.
+[Falcon-Caching][falcon-caching] middleware can be used for caching.
+See the documentation for more information. Configuration is read from
+`CACHE_CONFIG` environment variable.
+
+[falcon-caching]: https://falcon-caching.readthedocs.io/
 
 ```shell script
-CACHE_CONFIG='{"CACHE_TYPE": "simple"}' poetry run waitress-serve --port=8000 --call ebl.app:get_app
+CACHE_CONFIG='{"CACHE_TYPE": "simple"}' \
+  poetry run waitress-serve --port=8000 --call ebl.app:get_app
 ```
 
 Falcon-Caching v1.0.1 does not cache `media`. `text` must be used.
@@ -338,9 +373,13 @@ are used for authentication and authorization.
 
 An endpoint can be protected using the `@falcon.before` decorator three ways:
 
-* `@falcon.before(require_scope, "your scope name here")`: Simple check if the user is allowed to use the endpoint. Dynamic checks based on the fetched data is not possible.
-* `@falcon.before(require_folio_scope)`: Dynamically checks if the user can read folios based on the folio name from the url
-* `@falcon.before(require_fragment_read_scope)`: Dynamically checks if the user can read individual fragments by comparing the
+* `@falcon.before(require_scope, "your scope name here")`: Simple check if the
+  user is allowed to use the endpoint. Dynamic checks based on the fetched
+  data is not possible.
+* `@falcon.before(require_folio_scope)`: Dynamically checks if the user can
+  read folios based on the folio name from the url
+* `@falcon.before(require_fragment_read_scope)`: Dynamically checks if the
+  user can read individual fragments by comparing the
 `authorized_scopes` from the fragment with the user scopes
 
 For example:
@@ -364,19 +403,20 @@ The application reads the configuration from following environment variables:
 
  ```dotenv
 AUTH0_AUDIENCE=<the Identifier from Auth0 API Settings>
-AUTH0_ISSUER=<the Domain from Auth Application Setttings, or the custom domain from Branding>
-AUTH0_PEM=<Signing Certificate (PEM) from the Auth0 Application Advanced Settings. The whole certificate needs to be base64 encoded again before adding to environment.>
+AUTH0_ISSUER=<Domain from Auth Application Settings or custom Branding domain>
+AUTH0_PEM=<Signing Certificate (PEM) from Auth0 App, base64 encoded>
 MONGODB_URI=<MongoDB connection URI with database>
-MONGODB_DB=<MongoDB database. Optional, authentication database will be used as default.>
-EBL_AI_API=<AI API URL. If you do not have access to and do not need the AI API use a safe dummy value.>
+MONGODB_DB=<MongoDB database. Optional, defaults to authentication database.>
+EBL_AI_API=<AI API URL. Use a dummy value if you don't need the AI API.>
 SENTRY_DSN=<Sentry DSN>
 SENTRY_ENVIRONMENT=<development or production>
-CACHE_CONFIG=<Falcon-Caching configuration. Optional, Null backend will be used as default.>
+CACHE_CONFIG=<Falcon-Caching config. Optional, defaults to Null backend.>
 ```
 
-Poetry does not support .env-files. The environment variables need to be configured in the shell,
-unless ran via [Task](https://taskfile.dev/). Alternatively and external program can be used to
-handle the file e.g. [direnv](https://direnv.net/) or
+Poetry does not support .env-files. The environment variables need to be
+configured in the shell, unless ran via [Task](https://taskfile.dev/).
+Alternatively an external program can be used to handle the file e.g.
+[direnv](https://direnv.net/) or
 [Set-PsEnv](https://github.com/rajivharris/Set-PsEnv).
 
 ### With Dev Container (Recommended)
@@ -407,7 +447,8 @@ docker run -p 8000:8000 --rm -it --env-file=FILE --name ebl-api ebl/api
 If you need to run custom operations inside Docker you can start the shell:
 
 ```shell script
-docker run --rm -it --env-file=.env --name ebl-shell --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api bash
+docker run --rm -it --env-file=.env --name ebl-shell \
+  --mount type=bind,source="$(pwd)",target=/usr/src/ebl ebl/api bash
 ```
 
 ### Docker Compose
@@ -482,7 +523,8 @@ poetry run python -m ebl.fragmentarium.update_fragments
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-updater ebl/api poetry run python -m ebl.fragmentarium.update_fragments
+docker run --rm -it --env-file=.env --name ebl-updater ebl/api \
+  poetry run python -m ebl.fragmentarium.update_fragments
 ```
 
 , or with `docker-compose`:
@@ -507,7 +549,8 @@ poetry run python -m ebl.corpus.update_texts
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api poetry run python -m ebl.corpus.update_texts
+docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api \
+  poetry run python -m ebl.corpus.update_texts
 ```
 
 ### Alignment
@@ -537,14 +580,16 @@ or as stand alone container:
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api poetry run python -m ebl.alignment.align_fragmentarium
+docker run --rm -it --env-file=.env --name ebl-corpus-updater ebl/api \
+  poetry run python -m ebl.alignment.align_fragmentarium
 ```
 
 ### Cropped Sign Images Migration
 
-When annotation updates accumulate orphaned cropped sign images, the `ebl.fragmentarium.migrate_cropped_images` module
-can be used to clean up and regenerate all cropped images from annotations. This resolves synchronization
-issues where multiple images exist per annotation.
+When annotation updates accumulate orphaned cropped sign images, the
+`ebl.fragmentarium.migrate_cropped_images` module can be used to clean up
+and regenerate all cropped images from annotations. This resolves
+synchronization issues where multiple images exist per annotation.
 
 The script can be run locally:
 
@@ -556,7 +601,8 @@ poetry run python -m ebl.fragmentarium.migrate_cropped_images
 
 ```shell script
 docker build -t ebl/api .
-docker run --rm -it --env-file=.env --name ebl-migration ebl/api poetry run python -m ebl.fragmentarium.migrate_cropped_images
+docker run --rm -it --env-file=.env --name ebl-migration ebl/api \
+  poetry run python -m ebl.fragmentarium.migrate_cropped_images
 ```
 
 ### Steps to update the production database
@@ -565,22 +611,28 @@ docker run --rm -it --env-file=.env --name ebl-migration ebl/api poetry run pyth
 2) Implement fallback to handle old data, if the new model is incompatible.
 3) Test that fragments are updated correctly in the development database.
 4) Deploy to production.
-5) Run the migration script. Do not start the script until the deployment has been succesfully completed.
+5) Run the migration script. Do not start the script until the deployment
+   has been succesfully completed.
 6) Fix invalid fragments.
 7) Remove fallback logic.
 8) Deploy to production.
 
 ### Importing .atf files
 
-Importing and conversion of external .atf files which are encoded according to the oracc and c-ATF standards to the eBL-ATF standard.
+Importing and conversion of external .atf files which are encoded according
+to the oracc and c-ATF standards to the eBL-ATF standard.
 
 * For a description of eBL-ATF see: [eBL-ATF specification](https://github.com/ElectronicBabylonianLiterature/ebl-api/blob/master/docs/ebl-atf.md)
-* For a list of differences between the ATF flavors see: [eBL ATF and other ATF flavors](https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/eBL-ATF-and-other-ATF-flavors)
+* For a list of differences between the ATF flavors see: [eBL ATF and other
+  ATF flavors][atf-flavors]
+
+[atf-flavors]: https://github.com/ElectronicBabylonianLiterature/generic-documentation/wiki/eBL-ATF-and-other-ATF-flavors
 
 To run use:
 <!-- usage -->
 ```sh-session
-poetry run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g GLOSSARIES_DIRECTORY -l LOGDIR [-a] [-s]
+poetry run python -m ebl.atf_importer.application.atf_importer \
+  [-h] -i INPUT -g GLOSSARIES_DIRECTORY -l LOGDIR [-a] [-s]
 
 ```
 <!-- usagestop -->
@@ -589,23 +641,48 @@ poetry run python -m ebl.atf_importer.application.atf_importer [-h] -i INPUT -g 
 * `-h` shows help message and exits the script.
 * `-i` INPUT, `--input` INPUT : Path of the input directory (`required`).
 * `-l` LOGDIR, `--logdir` LOGDIR : Path of the log files directory (`required`).
-* `-g` GLODIR, `--glodir` GLODIR : Path to the glossaries (`.glo` files) directory (`required`).
-* `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported fragements. If not specified a name needs to be entered manually for every fragment (`optional`).
+* `-g` GLODIR, `--glodir` GLODIR : Path to the glossaries (`.glo` files)
+  directory (`required`).
+* `-a` AUTHOR, `--author` AUTHOR : Name of the author of the imported
+  fragments. If not specified a name needs to be entered manually for every
+  fragment (`optional`).
 
-* The importer always tries to import all `.atf` files from one given input `-i` folder. To every imported folder a path to a folder with glossary file(s) (`.glo`) must be specified via `-g`. You can also assign an author to all imported fragments which are processed in one run via the `-a` option. If `-a` is omitted the atf-importer will ask for an author for each imported fragment.
+* The importer always tries to import all `.atf` files from one given input
+  `-i` folder. To every imported folder a path to a folder with glossary
+  file(s) (`.glo`) must be specified via `-g`. You can also assign an author
+  to all imported fragments which are processed in one run via the `-a`
+  option. If `-a` is omitted the atf-importer will ask for an author for
+  each imported fragment.
 
 Example calls:
 
 ```sh-session
-poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/data/input/" -l "ebl/atf_importer/data/logs/" -g  "ebl/atf_importer/data/glossary" -a "atf_importer"
-poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/data/input_cdli_atf/" -l "ebl/atf_importer/data/logs/" -g  "ebl/atf_importer/data/glossary" -a "test"
-poetry run python -m ebl.atf_importer.application.atf_importer -i "ebl/atf_importer/data/input_c_atf/" -l "ebl/atf_importer/data/logs/" -g  "ebl/atf_importer/data/glossary" -a "test"
+poetry run python -m ebl.atf_importer.application.atf_importer \
+  -i "ebl/atf_importer/data/input/" \
+  -l "ebl/atf_importer/data/logs/" \
+  -g "ebl/atf_importer/data/glossary" \
+  -a "atf_importer"
+poetry run python -m ebl.atf_importer.application.atf_importer \
+  -i "ebl/atf_importer/data/input_cdli_atf/" \
+  -l "ebl/atf_importer/data/logs/" \
+  -g "ebl/atf_importer/data/glossary" \
+  -a "test"
+poetry run python -m ebl.atf_importer.application.atf_importer \
+  -i "ebl/atf_importer/data/input_c_atf/" \
+  -l "ebl/atf_importer/data/logs/" \
+  -g "ebl/atf_importer/data/glossary" \
+  -a "test"
 ```
 
 #### Troubleshooting
 
-If a fragment cannot be imported check the console output for errors. Also check the specified log folder (`error_lines.txt`,`unparsable_lines_[fragment_file].txt`, `not_imported_files.txt`) and see which lines could not be parsed.
-If lines are faulty, fix them manually and retry the import process. If tokes are not lemmatized correctly, check the log-file `lemmatization_log.txt`.
+If a fragment cannot be imported check the console output for errors. Also
+check the specified log folder (`error_lines.txt`,
+`unparsable_lines_[fragment_file].txt`, `not_imported_files.txt`) and see
+which lines could not be parsed.
+If lines are faulty, fix them manually and retry the import process. If
+tokes are not lemmatized correctly, check the log-file
+`lemmatization_log.txt`.
 
 ## Acknowledgements
 

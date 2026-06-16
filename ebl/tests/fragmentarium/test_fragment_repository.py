@@ -134,6 +134,31 @@ def test_create_many(database, fragment_repository):
         ) == FragmentSchema(exclude=["joins"]).dump(fragment)
 
 
+def test_create_indexes(database, fragment_repository):
+    fragment_repository.create_indexes()
+
+    fragment_index_keys = [
+        index["key"] for index in database[COLLECTION].index_information().values()
+    ]
+    join_index_keys = [
+        index["key"]
+        for index in database[JOINS_COLLECTION].index_information().values()
+    ]
+
+    assert [("text.lines.content.uniqueLemma", 1)] in fragment_index_keys
+    assert [("dossiers.dossierId", 1)] in fragment_index_keys
+    assert [
+        ("archaeology.excavationNumber.prefix", 1),
+        ("archaeology.excavationNumber.number", 1),
+        ("archaeology.excavationNumber.suffix", 1),
+    ] in fragment_index_keys
+    assert [
+        ("fragments.museumNumber.prefix", 1),
+        ("fragments.museumNumber.number", 1),
+        ("fragments.museumNumber.suffix", 1),
+    ] in join_index_keys
+
+
 def test_create_join(database, fragment_repository):
     first_join = JoinFactory.build()
     second_join = JoinFactory.build()

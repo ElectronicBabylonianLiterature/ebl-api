@@ -1,16 +1,16 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
-from typing import cast, Sequence
+from typing import Dict, List, Optional, Tuple, cast, Sequence
 from pymongo.database import Database
+import pymongo
 from natsort import natsorted
+
 from ebl.mongo_collection import MongoCollection
 from ebl.afo_register.domain.afo_register_record import (
     AfoRegisterRecord,
     AfoRegisterRecordSuggestion,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
-from ebl.common.query.query_collation import (
-    make_query_params,
-)
+from ebl.common.query.query_collation import make_query_params
 
 
 COLLECTION = "afo_register"
@@ -35,6 +35,19 @@ def cast_with_sorting(
         Sequence[AfoRegisterRecord],
         natsorted(records, key=lambda record: f"${record.text} ${record.text_number}"),
     )
+
+
+def split_text_and_number(query: str) -> Optional[Tuple[str, str]]:
+    if not isinstance(query, str):
+        return None
+    normalized_query = " ".join(query.strip().split())
+    split_query = normalized_query.rsplit(" ", 1)
+    if len(split_query) != 2:
+        return None
+    text, text_number = split_query
+    if not text or not text_number:
+        return None
+    return text, text_number
 
 
 class AfoRegisterRecordSchema(Schema):
@@ -68,6 +81,13 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def __init__(self, database: Database):
         self._afo_register = MongoCollection(database, COLLECTION)
 
+    def create_indexes(self) -> None:
+        self._afo_register.create_index([("text", pymongo.ASCENDING)])
+        self._afo_register.create_index([("textNumber", pymongo.ASCENDING)])
+        self._afo_register.create_index(
+            [("text", pymongo.ASCENDING), ("textNumber", pymongo.ASCENDING)]
+        )
+
     def create(self, afo_register_record: AfoRegisterRecord) -> str:
         return self._afo_register.insert_one(
             AfoRegisterRecordSchema().dump(afo_register_record)
@@ -78,10 +98,23 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
         records = AfoRegisterRecordSchema().load(data, many=True)
         return cast_with_sorting(records)
 
-    def search_by_texts_and_numbers(
-        self, query_list: Sequence[str], *args, **kwargs
-    ) -> Sequence[AfoRegisterRecord]:
-        pipeline = [
+    def _build_indexed_query(
+        self, query_list: Sequence[str]
+    ) -> Optional[Dict[str, List[Dict[str, str]]]]:
+        parsed_pairs = [split_text_and_number(query) for query in query_list]
+        valid_pairs = [pair for pair in parsed_pairs if pair is not None]
+        if len(valid_pairs) != len(parsed_pairs):
+            return None
+
+        return {
+            "$or": [
+                {"text": text, "textNumber": text_number}
+                for text, text_number in valid_pairs
+            ]
+        }
+
+    def _build_fallback_pipeline(self, query_list: Sequence[str]) -> List[dict]:
+        return [
             {
                 "$addFields": {
                     "combined_field": {"$concat": ["$text", " ", "$textNumber"]}
@@ -92,7 +125,25 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
             {"$replaceRoot": {"newRoot": "$document"}},
             {"$project": {"combined_field": 0}},
         ]
-        data = self._afo_register.aggregate(pipeline)
+
+    def search_by_texts_and_numbers(
+        self, query_list: Sequence[str], *args, **kwargs
+    ) -> Sequence[AfoRegisterRecord]:
+        if not query_list:
+            return []
+
+        normalized_query_list = [
+            " ".join(query.strip().split()) for query in query_list
+        ]
+
+        indexed_query = self._build_indexed_query(normalized_query_list)
+        if indexed_query is not None:
+            data = self._afo_register.find_many(indexed_query)
+        else:
+            data = self._afo_register.aggregate(
+                self._build_fallback_pipeline(normalized_query_list)
+            )
+
         records = AfoRegisterRecordSchema().load(data, many=True)
         return cast_with_sorting(records)
 

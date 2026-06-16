@@ -160,6 +160,7 @@ class CorpusLemmaMatcher:
         pre_join_steps: Optional[List[Dict]] = None,
     ) -> List[Dict]:
         return [
+            {"$match": self._create_chapter_prefilter()},
             *self._join_vocabulary(),
             {"$match": chapter_query},
             {
@@ -186,6 +187,19 @@ class CorpusLemmaMatcher:
     @property
     def _flat_lemma_paths(self) -> List[str]:
         return ["flatReconstruction", "flatManuscriptLine"]
+
+    def _create_chapter_prefilter(self) -> Dict:
+        lemma_paths = [self.reconstruction_lemma_path, self.manuscriptlines_lemma_path]
+
+        if self.query_type == LemmaQueryType.OR:
+            return {"$or": [{path: {"$in": self.pattern}} for path in lemma_paths]}
+
+        return {
+            "$and": [
+                {"$or": [{path: lemma} for path in lemma_paths]}
+                for lemma in self.pattern
+            ]
+        }
 
     def _lemma_path_combinations(self, flat=False) -> List[dict]:
         return [
@@ -217,6 +231,7 @@ class CorpusLemmaMatcher:
                     {"flatManuscriptLine": {"$all": self.pattern}},
                 ]
             },
+            count_matches_per_item,
         )
 
     def _phrase(self, count_matches_per_item=True) -> List[Dict]:

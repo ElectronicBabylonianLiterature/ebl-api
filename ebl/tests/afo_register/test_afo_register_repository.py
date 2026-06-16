@@ -60,6 +60,31 @@ def test_search_by_texts_and_numbers(afo_register_repository: AfoRegisterReposit
     assert record3 in results
 
 
+def test_search_by_texts_and_numbers_with_spaces(
+    afo_register_repository: AfoRegisterRepository,
+):
+    record = AfoRegisterRecordFactory.build(text="Text With Space", text_number="4")
+    afo_register_repository.create(record)
+
+    results = afo_register_repository.search_by_texts_and_numbers(
+        ["  Text With Space   4  "]
+    )
+
+    assert results == [record]
+
+
+def test_create_indexes(database, afo_register_repository: AfoRegisterRepository):
+    afo_register_repository.create_indexes()
+
+    index_keys = [
+        index["key"] for index in database["afo_register"].index_information().values()
+    ]
+
+    assert [("text", 1)] in index_keys
+    assert [("textNumber", 1)] in index_keys
+    assert [("text", 1), ("textNumber", 1)] in index_keys
+
+
 def test_find_record_suggestions(afo_register_repository: AfoRegisterRepository):
     afo_register_record = AfoRegisterRecordFactory.build()
     another_afo_register_record = AfoRegisterRecordFactory.build(

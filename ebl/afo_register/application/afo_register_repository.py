@@ -9,6 +9,10 @@ from ebl.afo_register.domain.afo_register_record import (
 
 class AfoRegisterRepository(ABC):
     @abstractmethod
+    def create_indexes(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     def create(self, afo_register_record: AfoRegisterRecord) -> str:
         raise NotImplementedError
 

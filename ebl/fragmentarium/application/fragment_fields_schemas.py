@@ -63,6 +63,7 @@ class ExternalNumbersSchema(Schema):
     harvard_ham_number = fields.String(load_default="", data_key="harvardHamNumber")
     sketchfab_number = fields.String(load_default="", data_key="sketchfabNumber")
     spurlock_number = fields.String(load_default="", data_key="spurlockNumber")
+    etcsri_number = fields.String(load_default="", data_key="etcsriNumber")
     ark_number = fields.String(load_default="", data_key="arkNumber")
     dublin_tcd_number = fields.String(load_default="", data_key="dublinTcdNumber")
     cambridge_maa_number = fields.String(load_default="", data_key="cambridgeMaaNumber")
