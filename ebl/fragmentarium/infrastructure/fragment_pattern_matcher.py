@@ -71,6 +71,43 @@ class PatternMatcher:
                 }
             },
             {
+                "$lookup": {
+                    "from": "fragments",
+                    "let": {"fid": "$_id"},
+                    "pipeline": [
+                        {"$match": {"$expr": {"$eq": ["$_id", "$$fid"]}}},
+                        {
+                            "$project": {
+                                "textLines": "$text.lines",
+                                "textParserVersion": "$text.parser_version",
+                            }
+                        },
+                    ],
+                    "as": "_textData",
+                }
+            },
+            {
+                "$addFields": {
+                    "textLines": {
+                        "$ifNull": [
+                            {"$arrayElemAt": ["$_textData.textLines", 0]},
+                            [],
+                        ]
+                    },
+                    "textParserVersion": {
+                        "$ifNull": [
+                            {
+                                "$arrayElemAt": [
+                                    "$_textData.textParserVersion",
+                                    0,
+                                ]
+                            },
+                            None,
+                        ]
+                    },
+                }
+            },
+            {
                 "$addFields": {
                     "matchingLinePreview": {
                         "lines": {
@@ -79,7 +116,7 @@ class PatternMatcher:
                                 "as": "lineIndex",
                                 "in": {
                                     "$arrayElemAt": [
-                                        {"$ifNull": ["$textLines", []]},
+                                        "$textLines",
                                         "$$lineIndex",
                                     ]
                                 },
@@ -215,8 +252,6 @@ class PatternMatcher:
                     "script": True,
                     "projects": True,
                     "references": True,
-                    "textLines": {"$literal": []},
-                    "textParserVersion": "$text.parser_version",
                 }
             },
         ]
@@ -255,8 +290,6 @@ class PatternMatcher:
                     "projects": {"$first": "$projects"},
                     "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
-                    "textLines": {"$first": "$textLines"},
-                    "textParserVersion": {"$first": "$textParserVersion"},
                 },
             },
             {

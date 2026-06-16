@@ -1,6 +1,8 @@
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.common.query.util import flatten_field, drop_duplicates, ngrams
-from ebl.fragmentarium.infrastructure.queries import fragment_summary_projection
+from ebl.fragmentarium.infrastructure.queries import (
+    fragment_summary_projection_lightweight,
+)
 from typing import List, Dict
 
 
@@ -49,7 +51,7 @@ class LemmaMatcher:
         return [
             {
                 "$project": {
-                    **fragment_summary_projection(),
+                    **fragment_summary_projection_lightweight(),
                     "_sortKey": 1,
                     self.flat_path: f"${self.unique_lemma_path}",
                 }
@@ -79,8 +81,6 @@ class LemmaMatcher:
                     "projects": {"$first": "$projects"},
                     "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
-                    "textLines": {"$first": "$textLines"},
-                    "textParserVersion": {"$first": "$textParserVersion"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
@@ -137,8 +137,6 @@ class LemmaMatcher:
                     "projects": True,
                     "references": True,
                     "script": True,
-                    "textLines": True,
-                    "textParserVersion": True,
                     "_sortKey": True,
                 }
             },

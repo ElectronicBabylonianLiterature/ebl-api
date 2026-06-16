@@ -1,6 +1,8 @@
 from typing import List, Dict
 from ebl.common.query.util import flatten_field, ngrams
-from ebl.fragmentarium.infrastructure.queries import fragment_summary_projection
+from ebl.fragmentarium.infrastructure.queries import (
+    fragment_summary_projection_lightweight,
+)
 
 
 class SignMatcher:
@@ -59,7 +61,7 @@ class SignMatcher:
         return [
             {
                 "$project": {
-                    **fragment_summary_projection(),
+                    **fragment_summary_projection_lightweight(),
                     "_sortKey": True,
                     "lineTypes": "$text.lines.type",
                     "signs": True,
@@ -81,8 +83,6 @@ class SignMatcher:
                     "projects": {"$first": "$projects"},
                     "references": {"$first": "$references"},
                     "script": {"$first": "$script"},
-                    "textLines": {"$first": "$textLines"},
-                    "textParserVersion": {"$first": "$textParserVersion"},
                     "textLineIndices": {"$push": "$lineIndex"},
                     "signLines": {"$first": {"$split": ["$signs", "\n"]}},
                 }
@@ -123,8 +123,6 @@ class SignMatcher:
                             }
                         )
                     },
-                    "textLines": {"$first": "$textLines"},
-                    "textParserVersion": {"$first": "$textParserVersion"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },

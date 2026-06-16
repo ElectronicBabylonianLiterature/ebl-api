@@ -40,6 +40,24 @@ def fragment_summary_projection() -> Dict:
     }
 
 
+def fragment_summary_projection_lightweight() -> Dict:
+    return {
+        "accession": 1,
+        "archaeology": {
+            "excavationNumber": "$archaeology.excavationNumber",
+            "site": "$archaeology.site",
+        },
+        "date": 1,
+        "description": 1,
+        "dossiers": 1,
+        "genres": 1,
+        "museumNumber": 1,
+        "projects": 1,
+        "references": 1,
+        "script": 1,
+    }
+
+
 def fragment_photo_filename_expression() -> Dict:
     suffix = {"$ifNull": ["$museumNumber.suffix", ""]}
     return {
