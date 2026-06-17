@@ -39,6 +39,28 @@ DEFAULT_WEIGHTS = {
     "type": 0.01,
     "issn": 0.03,
 }
+SERIES_NUMBER_WORDS = {
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
+    "first": 1,
+    "second": 2,
+    "third": 3,
+    "fourth": 4,
+    "fifth": 5,
+    "sixth": 6,
+    "seventh": 7,
+    "eighth": 8,
+    "ninth": 9,
+    "tenth": 10,
+}
 ARTICLE_WEIGHT_OVERRIDES = {
     "title": 0.24,
     "contributors": 0.20,
@@ -93,7 +115,12 @@ def normalize_doi(value: Any) -> str:
     value = value.strip().casefold()
     value = re.sub(r"^doi:\s*", "", value)
     value = re.sub(r"^https?://(dx\.)?doi\.org/", "", value)
-    return value.strip()
+    value = value.strip()
+    if value in {"", "-", "--", "n/a", "na", "none", "null", "pending", "<>"}:
+        return ""
+    if re.search(r"[<>\s]", value) or not re.match(r"^10\.\d+/\S+$", value):
+        return ""
+    return value
 
 
 def normalize_identifier(value: Any) -> str:
@@ -103,11 +130,19 @@ def normalize_identifier(value: Any) -> str:
 
 
 def normalize_isbn(value: Any) -> str:
-    return normalize_identifier(value)
+    normalized = normalize_identifier(value)
+    if len(normalized) == 10 and re.match(r"^\d{9}[\dX]$", normalized):
+        return normalized
+    if len(normalized) == 13 and normalized.isdigit():
+        return normalized
+    return ""
 
 
 def normalize_issn(value: Any) -> str:
-    return normalize_identifier(value)
+    normalized = normalize_identifier(value)
+    if len(normalized) == 8 and re.match(r"^\d{7}[\dX]$", normalized):
+        return normalized
+    return ""
 
 
 def normalize_text(value: Any, *, fold_diacritics: bool = True) -> str:
@@ -127,7 +162,10 @@ def normalize_text(value: Any, *, fold_diacritics: bool = True) -> str:
 
 
 def normalize_short_field(value: Any) -> str:
-    return normalize_text(str(value), fold_diacritics=True) if value is not None else ""
+    if value is None:
+        return ""
+    text = re.sub(r"[\u2010-\u2015]", "-", str(value))
+    return normalize_text(text, fold_diacritics=True)
 
 
 def title_tokens(title: str) -> set[str]:
@@ -390,6 +428,185 @@ def conflicting_signals(matched: Mapping[str, Optional[float]]) -> list[str]:
     ]
 
 
+def calibrated_conflicting_signals(
+    left: NormalizedBibliographyEntry,
+    right: NormalizedBibliographyEntry,
+    matched: Mapping[str, Optional[float]],
+) -> list[str]:
+    conflicts = conflicting_signals(matched)
+    if "volume" in conflicts:
+        conflicts.append("different_volume")
+    if "issue" in conflicts:
+        conflicts.append("different_issue")
+    if "page" in conflicts:
+        conflicts.append("different_page")
+    if is_different_main_title(matched):
+        conflicts.append("different_title")
+    if is_different_contributors(matched):
+        conflicts.append("different_contributors")
+    if is_series_part_sibling(left, right):
+        conflicts.append("series_part")
+    if is_different_entry_title(left, right, matched):
+        conflicts.append("different_entry_title")
+    if is_different_webpage_title(left, right, matched):
+        conflicts.append("different_webpage_title")
+    if is_complete_incomplete_variant(left, right, matched):
+        conflicts.append("series_part")
+    if is_doi_data_issue(matched, conflicts):
+        conflicts.append("doi_data_issue")
+    return sorted(set(conflicts), key=conflicts.index)
+
+
+def is_different_main_title(matched: Mapping[str, Optional[float]]) -> bool:
+    title_score = matched.get("title")
+    return title_score is not None and title_score < 0.65
+
+
+def is_different_contributors(matched: Mapping[str, Optional[float]]) -> bool:
+    contributor_score = matched.get("contributors")
+    return contributor_score is not None and contributor_score < 0.4
+
+
+def is_different_entry_title(
+    left: NormalizedBibliographyEntry,
+    right: NormalizedBibliographyEntry,
+    matched: Mapping[str, Optional[float]],
+) -> bool:
+    if pair_type(left, right) != "entry-encyclopedia":
+        return False
+    title_score = matched.get("title")
+    return title_score is not None and title_score < 0.92
+
+
+def is_doi_data_issue(
+    matched: Mapping[str, Optional[float]], conflicts: Sequence[str]
+) -> bool:
+    if matched.get("doi") != 1.0:
+        return False
+    metadata_conflicts = {
+        "year",
+        "different_page",
+        "different_volume",
+        "different_issue",
+        "different_entry_title",
+        "different_title",
+        "different_contributors",
+        "different_webpage_title",
+        "series_part",
+    }
+    if metadata_conflicts.intersection(conflicts):
+        return True
+    title_score = matched.get("title")
+    if title_score is not None and title_score < 0.85:
+        return True
+    return False
+
+
+def is_series_part_sibling(
+    left: NormalizedBibliographyEntry, right: NormalizedBibliographyEntry
+) -> bool:
+    left_part = series_part(left.title)
+    right_part = series_part(right.title)
+    if left_part and right_part:
+        left_stem, left_number = left_part
+        right_stem, right_number = right_part
+        return (
+            left_number != right_number
+            and ratio(left_stem, right_stem) is not None
+            and (ratio(left_stem, right_stem) or 0.0) >= 0.9
+        )
+    if left_part and not right_part:
+        stem, _number = left_part
+        return _is_stem_match(stem, right.title)
+    if right_part and not left_part:
+        stem, _number = right_part
+        return _is_stem_match(stem, left.title)
+    return False
+
+
+def _is_stem_match(stem: str, title: str) -> bool:
+    stem_ratio = ratio(stem, title)
+    return stem_ratio is not None and stem_ratio >= 0.95
+
+
+def is_different_webpage_title(
+    left: NormalizedBibliographyEntry,
+    right: NormalizedBibliographyEntry,
+    matched: Mapping[str, Optional[float]],
+) -> bool:
+    if pair_type(left, right) != "webpage":
+        return False
+    title_score = matched.get("title")
+    if title_score is not None and title_score < 0.93:
+        return True
+    left_url = _extract_url(str(left.raw.get("title") or ""))
+    right_url = _extract_url(str(right.raw.get("title") or ""))
+    if left_url and right_url and left_url != right_url:
+        return True
+    return False
+
+
+_URL_PATTERN = re.compile(r"https?://\S+", re.IGNORECASE)
+
+
+def _extract_url(title: str) -> str:
+    match = _URL_PATTERN.search(title)
+    return match.group(0).rstrip(").") if match else ""
+
+
+def is_complete_incomplete_variant(
+    left: NormalizedBibliographyEntry,
+    right: NormalizedBibliographyEntry,
+    matched: Mapping[str, Optional[float]],
+) -> bool:
+    title_score = matched.get("title")
+    if title_score is not None and title_score < 0.97:
+        return False
+    complete_pattern = re.compile(r"\bcomplete\s+dates\b", re.IGNORECASE)
+    incomplete_pattern = re.compile(r"\bincomplete\s+dates\b", re.IGNORECASE)
+    has_complete = bool(
+        complete_pattern.search(left.title) or complete_pattern.search(right.title)
+    )
+    has_incomplete = bool(
+        incomplete_pattern.search(left.title) or incomplete_pattern.search(right.title)
+    )
+    return has_complete and has_incomplete
+
+
+def series_part(title: str) -> Optional[tuple[str, int]]:
+    patterns = (
+        r"^(.+)\b(?:part|volume|vol|band|teil|heft|tome)\s+([ivxlcdm]+|\d+|one|two|three|four|five|six|seven|eight|nine|ten|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth)\b.*$",
+        r"^(.+\b\w+)\s+([ivxlcdm]+|\d+)$",
+    )
+    for pattern in patterns:
+        if match := re.match(pattern, title):
+            stem = re.sub(r"\s+", " ", match[1]).strip()
+            number = parse_series_number(match[2])
+            if stem and number is not None and len(stem.split()) >= 2:
+                return stem, number
+    return None
+
+
+def parse_series_number(value: str) -> Optional[int]:
+    if value.casefold() in SERIES_NUMBER_WORDS:
+        return SERIES_NUMBER_WORDS[value.casefold()]
+    if value.isdigit():
+        return int(value)
+    roman_values = {"i": 1, "v": 5, "x": 10, "l": 50, "c": 100, "d": 500, "m": 1000}
+    total = 0
+    previous = 0
+    for character in reversed(value.casefold()):
+        current = roman_values.get(character)
+        if current is None:
+            return None
+        if current < previous:
+            total -= current
+        else:
+            total += current
+            previous = current
+    return total if total > 0 else None
+
+
 def usable_signal_weight(
     matched: Mapping[str, Optional[float]], weights: Mapping[str, float]
 ) -> float:
@@ -438,16 +655,47 @@ def pair_decision(
     score: float,
     evidence_completeness: float,
     previously_reviewed_not_duplicate: bool,
+    conflicts: Sequence[str],
+    matched: Mapping[str, Optional[float]],
 ) -> tuple[str, str]:
     if previously_reviewed_not_duplicate:
         return "not_duplicate", "ignore_previously_reviewed"
     if evidence_completeness < 0.35:
         return "insufficient_data", "manual_review_if_important"
+    if "different_entry_title" in conflicts:
+        return "not_duplicate", "allow_create"
+    if "different_webpage_title" in conflicts:
+        return "not_duplicate", "allow_create"
+    if "series_part" in conflicts:
+        if has_exact_identifier_match(matched):
+            return "possible_duplicate", "review_series_sibling"
+        return "not_duplicate", "allow_create"
+    if "doi_data_issue" in conflicts:
+        return "possible_duplicate", "review_identifier_conflict"
+    if "different_title" in conflicts and not has_exact_identifier_match(matched):
+        return "not_duplicate", "allow_create"
+    if has_conservative_conflict(conflicts) and score >= 0.76:
+        return "possible_duplicate", "review_conflicting_metadata"
     if score >= 0.92:
         return "likely_duplicate", "confirm_before_cleanup"
     if score >= 0.76:
         return "possible_duplicate", "review_before_create_or_cleanup"
     return "not_duplicate", "allow_create"
+
+
+def has_exact_identifier_match(matched: Mapping[str, Optional[float]]) -> bool:
+    return matched.get("doi") == 1.0 or matched.get("isbn") == 1.0
+
+
+def has_conservative_conflict(conflicts: Sequence[str]) -> bool:
+    conflict_set = set(conflicts)
+    return bool(
+        {
+            "different_page",
+            "different_volume",
+            "different_issue",
+        }.intersection(conflict_set)
+    )
 
 
 def score_pair(
@@ -457,7 +705,7 @@ def score_pair(
     previously_reviewed_not_duplicate: bool = False,
 ) -> PairScore:
     matched = matched_signals(left, right)
-    conflicts = conflicting_signals(matched)
+    conflicts = calibrated_conflicting_signals(left, right, matched)
     weights = type_weights(pair_type(left, right))
     evidence_completeness = signal_evidence_completeness(matched, weights)
     score = round(
@@ -467,7 +715,11 @@ def score_pair(
         4,
     )
     decision, recommendation = pair_decision(
-        score, evidence_completeness, previously_reviewed_not_duplicate
+        score,
+        evidence_completeness,
+        previously_reviewed_not_duplicate,
+        conflicts,
+        matched,
     )
     reason = build_reason(matched, conflicts, decision)
     return PairScore(
@@ -833,36 +1085,97 @@ def cluster_pairs(
         if pair.decision
         in {"likely_duplicate", "possible_duplicate", "insufficient_data"}
     ]
-    for pair in active_pairs:
+    link_pairs = [pair for pair in active_pairs if can_link_candidate_group(pair)]
+    for pair in link_pairs:
         union(pair.left_id, pair.right_id)
 
     groups: dict[str, list[str]] = defaultdict(list)
-    for pair in active_pairs:
+    for pair in link_pairs:
         groups[find(pair.left_id)].extend((pair.left_id, pair.right_id))
 
     candidate_groups = []
-    for index, member_ids in enumerate(groups.values(), start=1):
+    represented_pair_keys: set[tuple[str, str]] = set()
+    grouped_member_ids = list(groups.values())
+    for member_ids in grouped_member_ids:
         unique_member_ids = sorted(set(member_ids))
         group_pairs = [
             pair
-            for pair in active_pairs
+            for pair in link_pairs
             if pair.left_id in unique_member_ids and pair.right_id in unique_member_ids
         ]
-        canonical_id, reason = suggest_canonical(
-            [entries_by_id[id_] for id_ in unique_member_ids], usage_counts
+        represented_pair_keys.update(
+            pair_key(pair.left_id, pair.right_id) for pair in group_pairs
         )
         candidate_groups.append(
-            CandidateGroup(
-                f"BDG-{index:04}",
-                unique_member_ids,
-                group_pairs,
-                canonical_id,
-                reason,
-                dict(usage_counts),
-                entries_by_id,
+            build_candidate_group(
+                unique_member_ids, group_pairs, entries_by_id, usage_counts
             )
         )
-    return sorted(candidate_groups, key=lambda group: group.highest_score, reverse=True)
+
+    for pair in active_pairs:
+        key = pair_key(pair.left_id, pair.right_id)
+        if key in represented_pair_keys:
+            continue
+        candidate_groups.append(
+            build_candidate_group(
+                sorted([pair.left_id, pair.right_id]),
+                [pair],
+                entries_by_id,
+                usage_counts,
+            )
+        )
+
+    sorted_groups = sorted(
+        candidate_groups, key=lambda group: group.highest_score, reverse=True
+    )
+    for index, group in enumerate(sorted_groups, start=1):
+        group.group_id = f"BDG-{index:04}"
+    return sorted_groups
+
+
+def can_link_candidate_group(pair: PairScore) -> bool:
+    disqualifying_conflicts = {
+        "series_part",
+        "different_title",
+        "different_page",
+        "different_volume",
+        "different_issue",
+        "different_entry_title",
+        "different_webpage_title",
+        "doi_data_issue",
+    }
+    if set(pair.conflicting_signals).intersection(disqualifying_conflicts):
+        return False
+    title_score = pair.matched_signals.get("title") or 0.0
+    if title_score < 0.50:
+        return False
+    if pair.decision == "likely_duplicate":
+        return True
+    return (
+        pair.decision == "possible_duplicate"
+        and pair.score >= 0.76
+        and title_score >= 0.70
+    )
+
+
+def build_candidate_group(
+    member_ids: Sequence[str],
+    group_pairs: Sequence[PairScore],
+    entries_by_id: Mapping[str, NormalizedBibliographyEntry],
+    usage_counts: Mapping[str, UsageCounts],
+) -> CandidateGroup:
+    canonical_id, reason = suggest_canonical(
+        [entries_by_id[id_] for id_ in member_ids], usage_counts
+    )
+    return CandidateGroup(
+        "",
+        list(member_ids),
+        list(group_pairs),
+        canonical_id,
+        reason,
+        dict(usage_counts),
+        entries_by_id,
+    )
 
 
 def suggest_canonical(

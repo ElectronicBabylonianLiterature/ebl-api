@@ -165,3 +165,25 @@ DUPLICATE_CANDIDATE_JSON_SCHEMA = {
     **CSL_JSON_SCHEMA,
     "required": ["type"],
 }
+
+DUPLICATE_OVERRIDE_JSON_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "bibliographyEntry": CSL_JSON_SCHEMA,
+        "override": {
+            "type": "object",
+            "properties": {
+                "reason": {"type": "string"},
+                "reviewedCandidateIds": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "minItems": 1,
+                },
+            },
+            "required": ["reason", "reviewedCandidateIds"],
+            "additionalProperties": False,
+        },
+    },
+    "required": ["bibliographyEntry", "override"],
+    "additionalProperties": False,
+}

@@ -16,6 +16,12 @@ from ebl.users.domain.user import User
 COLLECTION = "bibliography"
 DEFAULT_EXPORT_LIMIT = 50
 MAX_EXPORT_LIMIT = 100
+BLOCKING_DUPLICATE_DECISIONS = {"likely_duplicate", "possible_duplicate"}
+MIN_DUPLICATE_OVERRIDE_REASON_LENGTH = 10
+
+
+class DuplicateOverrideError(Exception):
+    pass
 
 
 class Bibliography:
@@ -82,6 +88,109 @@ class Bibliography:
             .find_candidates(entry, limit)
             .to_dict()
         )
+
+    def create_partner_entry(self, entry: dict, user: User) -> Optional[dict]:
+        if duplicate_result := self.find_blocking_duplicate_candidates(entry):
+            return duplicate_result
+        self.create(entry, user)
+        return None
+
+    def create_partner_entry_with_duplicate_override(
+        self, entry: dict, override: Mapping[str, Any], user: User
+    ) -> None:
+        duplicate_result = self.find_duplicate_candidates(entry)
+        if duplicate_result["decision"] not in BLOCKING_DUPLICATE_DECISIONS:
+            raise DuplicateOverrideError(
+                "No current duplicate candidates were found. "
+                "Use POST /api/v1/bibliography instead."
+            )
+        self._validate_duplicate_override(override, duplicate_result)
+        self.create(entry, user)
+
+    def update_partner_entry(self, id_: str, entry: dict, user: User) -> Optional[dict]:
+        updated_entry = {**entry, "id": id_}
+        if duplicate_result := self.find_blocking_duplicate_candidates(updated_entry):
+            return duplicate_result
+        self.update(updated_entry, user)
+        return None
+
+    def find_blocking_duplicate_candidates(self, entry: dict) -> Optional[dict]:
+        duplicate_result = self.find_duplicate_candidates(entry)
+        return (
+            duplicate_result
+            if duplicate_result["decision"] in BLOCKING_DUPLICATE_DECISIONS
+            else None
+        )
+
+    @staticmethod
+    def _validate_duplicate_override(
+        override: Mapping[str, Any], duplicate_result: Mapping[str, Any]
+    ) -> None:
+        reason = override.get("reason")
+        if not isinstance(reason, str) or not reason.strip():
+            raise DuplicateOverrideError("override.reason must be a non-empty string.")
+
+        if len("".join(reason.split())) < MIN_DUPLICATE_OVERRIDE_REASON_LENGTH:
+            raise DuplicateOverrideError(
+                "override.reason must contain at least 10 meaningful characters."
+            )
+
+        reviewed_candidate_ids = Bibliography._normalize_reviewed_candidate_ids(
+            override.get("reviewedCandidateIds")
+        )
+        current_candidate_ids = {
+            candidate["id"] for candidate in duplicate_result["candidates"]
+        }
+        blocking_candidate_ids = Bibliography._blocking_duplicate_candidate_ids(
+            duplicate_result
+        )
+        if any(
+            candidate_id not in current_candidate_ids
+            for candidate_id in reviewed_candidate_ids
+        ):
+            raise DuplicateOverrideError(
+                "override.reviewedCandidateIds must match the current duplicate "
+                "candidates returned by the server-side rerun."
+            )
+        if not set(reviewed_candidate_ids).intersection(blocking_candidate_ids):
+            raise DuplicateOverrideError(
+                "override.reviewedCandidateIds must include at least one current "
+                "blocking duplicate candidate."
+            )
+
+    @staticmethod
+    def _blocking_duplicate_candidate_ids(
+        duplicate_result: Mapping[str, Any],
+    ) -> set[str]:
+        return {
+            candidate["id"]
+            for candidate in duplicate_result["candidates"]
+            if candidate["decision"] in BLOCKING_DUPLICATE_DECISIONS
+        }
+
+    @staticmethod
+    def _normalize_reviewed_candidate_ids(candidate_ids: Any) -> Sequence[str]:
+        if not isinstance(candidate_ids, Sequence) or isinstance(
+            candidate_ids, (str, bytes)
+        ):
+            raise DuplicateOverrideError(
+                "override.reviewedCandidateIds must be a non-empty array of strings."
+            )
+
+        normalized_candidate_ids = []
+        for candidate_id in candidate_ids:
+            if not isinstance(candidate_id, str) or not candidate_id.strip():
+                raise DuplicateOverrideError(
+                    "override.reviewedCandidateIds must be a non-empty array of strings."
+                )
+            normalized_candidate_ids.append(candidate_id.strip())
+
+        deduplicated_candidate_ids = list(dict.fromkeys(normalized_candidate_ids))
+        if not deduplicated_candidate_ids:
+            raise DuplicateOverrideError(
+                "override.reviewedCandidateIds must be a non-empty array of strings."
+            )
+        return deduplicated_candidate_ids
 
     def export_page(
         self, cursor: Optional[str] = None, limit: int = DEFAULT_EXPORT_LIMIT

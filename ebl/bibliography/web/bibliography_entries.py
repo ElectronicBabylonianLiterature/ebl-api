@@ -8,9 +8,13 @@ from ebl.cache.application.cache import DAILY_TIMEOUT
 from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
     DUPLICATE_CANDIDATE_JSON_SCHEMA,
+    DUPLICATE_OVERRIDE_JSON_SCHEMA,
 )
 from ebl.users.web.require_scope import require_scope
-from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.bibliography import (
+    Bibliography,
+    DuplicateOverrideError,
+)
 
 
 class BibliographyResource:
@@ -90,6 +94,20 @@ class PartnerBibliographyResource:
         limit = min(req.get_param_as_int("limit") or 50, 100)
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
+    @falcon.before(require_scope, "write:bibliography")
+    @validate(CSL_JSON_SCHEMA)
+    def on_post(self, req: Request, resp: Response) -> None:
+        bibliography_entry = req.media
+        if duplicate_result := self._bibliography.create_partner_entry(
+            bibliography_entry, req.context.user
+        ):
+            resp.status = falcon.HTTP_CONFLICT
+            resp.media = duplicate_result
+            return
+        resp.status = falcon.HTTP_CREATED
+        resp.location = f"/api/v1/bibliography/{bibliography_entry['id']}"
+        resp.media = bibliography_entry
+
 
 class PartnerBibliographyEntryResource:
     def __init__(self, bibliography: Bibliography):
@@ -98,3 +116,38 @@ class PartnerBibliographyEntryResource:
     @falcon.before(require_scope, "export:bibliography")
     def on_get(self, _req: Request, resp: Response, id_or_citation_key: str) -> None:
         resp.media = self._bibliography.find_partner_entry(id_or_citation_key)
+
+    @falcon.before(require_scope, "write:bibliography")
+    @validate(CSL_JSON_SCHEMA)
+    def on_post(self, req: Request, resp: Response, id_or_citation_key: str) -> None:
+        if duplicate_result := self._bibliography.update_partner_entry(
+            id_or_citation_key, req.media, req.context.user
+        ):
+            resp.status = falcon.HTTP_CONFLICT
+            resp.media = duplicate_result
+            return
+        resp.status = falcon.HTTP_NO_CONTENT
+
+
+class PartnerBibliographyDuplicateOverrideResource:
+    def __init__(self, bibliography: Bibliography):
+        self._bibliography = bibliography
+
+    @falcon.before(require_scope, "write:bibliography")
+    @validate(DUPLICATE_OVERRIDE_JSON_SCHEMA)
+    def on_post(self, req: Request, resp: Response) -> None:
+        bibliography_entry = req.media["bibliographyEntry"]
+        override = req.media["override"]
+
+        try:
+            self._bibliography.create_partner_entry_with_duplicate_override(
+                bibliography_entry, override, req.context.user
+            )
+        except DuplicateOverrideError as error:
+            raise falcon.HTTPBadRequest(
+                title="Invalid duplicate override", description=str(error)
+            ) from error
+
+        resp.status = falcon.HTTP_CREATED
+        resp.location = f"/api/v1/bibliography/{bibliography_entry['id']}"
+        resp.media = bibliography_entry

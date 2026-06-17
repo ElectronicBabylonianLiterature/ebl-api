@@ -15,6 +15,9 @@ INVALID_ENTRIES = [
     lambda entry: {**entry, "title": 47},
     lambda entry: pydash.omit(entry, "type"),
 ]
+BLOCKING_DUPLICATE_CANDIDATE_ID = "Q30000000"
+NON_BLOCKING_DUPLICATE_CANDIDATE_ID = "Q30000002"
+STALE_DUPLICATE_CANDIDATE_ID = "Q39999999"
 
 
 @pytest.fixture
@@ -48,6 +51,70 @@ def client_with_scope(context, scope: str):
                 ),
             )
         )
+    )
+
+
+def duplicate_override_payload(bibliography_entry, reviewed_candidate_ids, reason=None):
+    return {
+        "bibliographyEntry": bibliography_entry,
+        "override": {
+            "reason": (
+                reason
+                or "Reviewed returned duplicate candidates and confirmed this is "
+                "a distinct bibliography record."
+            ),
+            "reviewedCandidateIds": reviewed_candidate_ids,
+        },
+    }
+
+
+def duplicate_override_candidate(id_, decision):
+    return {
+        "id": id_,
+        "citationKey": None,
+        "score": 0.95 if decision == "likely_duplicate" else 0.70,
+        "decision": decision,
+        "matchedFields": {},
+        "conflictingFields": [],
+        "evidenceCompleteness": 1.0,
+        "recommendation": "block_or_request_override",
+        "reason": "Test duplicate detection result.",
+    }
+
+
+def mixed_duplicate_override_result():
+    return {
+        "decision": "likely_duplicate",
+        "highestScore": 0.95,
+        "evidenceCompleteness": 1.0,
+        "candidates": [
+            duplicate_override_candidate(
+                BLOCKING_DUPLICATE_CANDIDATE_ID, "likely_duplicate"
+            ),
+            duplicate_override_candidate(
+                NON_BLOCKING_DUPLICATE_CANDIDATE_ID, "no_duplicate"
+            ),
+        ],
+    }
+
+
+def blocking_duplicate_override_result():
+    return {
+        "decision": "likely_duplicate",
+        "highestScore": 0.95,
+        "evidenceCompleteness": 1.0,
+        "candidates": [
+            duplicate_override_candidate(
+                BLOCKING_DUPLICATE_CANDIDATE_ID, "likely_duplicate"
+            )
+        ],
+    }
+
+
+def patch_duplicate_override_result(monkeypatch, duplicate_result):
+    monkeypatch.setattr(
+        "ebl.bibliography.application.bibliography.Bibliography.find_duplicate_candidates",
+        lambda self, entry, limit=10: duplicate_result,
     )
 
 
@@ -198,6 +265,39 @@ def test_duplicate_candidates_allows_missing_id(client, saved_entry):
     assert result.json["decision"] == "likely_duplicate"
 
 
+def test_duplicate_candidates_series_sibling_is_not_likely(
+    client, bibliography, user, database
+):
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        type="book",
+        title="Babylonian Provincial Officials Part One",
+        author=[{"given": "Mark", "family": "Smith"}],
+        issued={"date-parts": [[2010]]},
+        DOI="",
+        publisher="Eisenbrauns",
+        **{"collection-title": "Babylonian Provincial Officials"},
+    )
+    proposed_entry = {
+        **existing_entry,
+        "id": "Q30000001",
+        "title": "Babylonian Provincial Officials Part Two",
+    }
+    bibliography.create(existing_entry, user)
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps(proposed_entry),
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["decision"] == "no_duplicate"
+    assert result.json["candidates"][0]["decision"] == "no_duplicate"
+    assert "series_part" in result.json["candidates"][0]["conflictingFields"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
 def test_duplicate_candidates_invalid(client):
     result = client.simulate_post(
         "/api/v1/bibliography/duplicate-candidates",
@@ -276,3 +376,550 @@ def test_partner_bibliography_export_requires_export_scope(guest_client):
     result = guest_client.simulate_get("/api/v1/bibliography")
 
     assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_create(client):
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert (
+        result.headers["Location"] == f"/api/v1/bibliography/{bibliography_entry['id']}"
+    )
+    assert result.json == bibliography_entry
+
+    get_result = client.simulate_get(f"/api/v1/bibliography/{bibliography_entry['id']}")
+
+    assert get_result.json["bibliographyEntry"] == bibliography_entry
+
+
+def test_partner_bibliography_create_requires_write_scope(guest_client):
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    result = guest_client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_create_rejects_export_only_scope(context):
+    client = client_with_scope(context, "export:bibliography")
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_create_invalid(client):
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps({"title": "Missing type"})
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_partner_bibliography_create_duplicate_conflict_does_not_mutate(
+    client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(duplicate_entry)
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert result.json["decision"] == "likely_duplicate"
+    assert result.json["candidates"][0]["id"] == saved_entry["id"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_creates_likely_duplicate(
+    client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                duplicate_entry, [saved_entry["id"], saved_entry["id"]]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
+    assert result.json == duplicate_entry
+    assert database["bibliography"].count_documents({}) == before_count + 1
+
+    get_result = client.simulate_get("/api/v1/bibliography/Q30000001")
+
+    assert get_result.json["bibliographyEntry"] == duplicate_entry
+
+
+def test_partner_bibliography_duplicate_override_creates_possible_duplicate(
+    client, bibliography, user, database
+):
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        type="article-journal",
+        title="The Synergistic Activity of Thyroid Transcription Factor 1",
+        author=[{"given": "Stefania", "family": "Miccadei"}],
+        issued={"date-parts": [[1999, 1, 1]]},
+        DOI="10.1210/MEND.16.4.0808",
+        **{"container-title": "Molecular Endocrinology"},
+        volume="2",
+        issue="4",
+        page="837-846",
+    )
+    proposed_entry = {**existing_entry, "id": "Q30000001"}
+    proposed_entry["issued"] = {"date-parts": [[2002, 1, 1]]}
+    bibliography.create(existing_entry, user)
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(proposed_entry, [existing_entry["id"]])
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
+    assert result.json == proposed_entry
+    assert database["bibliography"].count_documents({}) == before_count + 1
+
+
+def test_partner_bibliography_duplicate_override_missing_override_does_not_mutate(
+    client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps({"bibliographyEntry": duplicate_entry}),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_whitespace_reason_does_not_mutate(
+    client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(duplicate_entry, [saved_entry["id"]], "   ")
+        ),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "override.reason" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_short_reason_does_not_mutate(
+    client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                duplicate_entry, [saved_entry["id"]], "too short"
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "10 meaningful characters" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        lambda entry, candidate_id: {
+            "bibliographyEntry": entry,
+            "override": {"reason": "Reviewed returned duplicate candidates carefully."},
+        },
+        lambda entry, candidate_id: duplicate_override_payload(entry, []),
+    ],
+)
+def test_partner_bibliography_duplicate_override_requires_reviewed_candidate_ids(
+    payload, client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(payload(duplicate_entry, saved_entry["id"])),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_rejects_stale_candidate_ids(
+    client, database, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(duplicate_override_payload(duplicate_entry, ["Q39999999"])),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "must match the current duplicate candidates" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_rejects_only_non_blocking_candidate_id(
+    monkeypatch, client, database
+):
+    patch_duplicate_override_result(monkeypatch, mixed_duplicate_override_result())
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [NON_BLOCKING_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "current blocking duplicate candidate" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_accepts_blocking_candidate_id(
+    monkeypatch, client, database
+):
+    patch_duplicate_override_result(monkeypatch, mixed_duplicate_override_result())
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [BLOCKING_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
+    assert result.json == bibliography_entry
+    assert database["bibliography"].count_documents({}) == before_count + 1
+
+
+def test_partner_bibliography_duplicate_override_accepts_blocking_with_non_blocking_id(
+    monkeypatch, client, database
+):
+    patch_duplicate_override_result(monkeypatch, mixed_duplicate_override_result())
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry,
+                [
+                    BLOCKING_DUPLICATE_CANDIDATE_ID,
+                    NON_BLOCKING_DUPLICATE_CANDIDATE_ID,
+                ],
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
+    assert result.json == bibliography_entry
+    assert database["bibliography"].count_documents({}) == before_count + 1
+
+
+def test_partner_bibliography_duplicate_override_rejects_stale_candidate_after_rerun(
+    monkeypatch, client, database
+):
+    patch_duplicate_override_result(monkeypatch, blocking_duplicate_override_result())
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [STALE_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "must match the current duplicate candidates" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_reruns_duplicate_detection(
+    client, bibliography, user, database
+):
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        DOI="10.1210/MEND.16.4.0808",
+        title="The Synergistic Activity of Thyroid Transcription Factor 1",
+        author=[{"given": "Stefania", "family": "Miccadei"}],
+        issued={"date-parts": [[2002, 1, 1]]},
+        **{"container-title": "Molecular Endocrinology"},
+        volume="2",
+        issue="4",
+        page="837-846",
+    )
+    proposed_entry = {**existing_entry, "id": "Q30000001"}
+    bibliography.create(existing_entry, user)
+
+    preflight = client.simulate_post(
+        "/api/v1/bibliography/duplicate-candidates",
+        body=json.dumps(proposed_entry),
+    )
+
+    assert preflight.status == falcon.HTTP_OK
+    assert preflight.json["candidates"][0]["id"] == existing_entry["id"]
+
+    bibliography.update(
+        {
+            **existing_entry,
+            "type": "book",
+            "title": "Administrative Documents from Nippur",
+            "author": [{"given": "Mary", "family": "Jones"}],
+            "issued": {"date-parts": [[1971, 1, 1]]},
+            "DOI": "",
+            "ISBN": "9781575060727",
+            "page": "1-50",
+        },
+        user,
+    )
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(proposed_entry, [existing_entry["id"]])
+        ),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "Use POST /api/v1/bibliography instead." in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_unique_entry_uses_normal_create(
+    client, database
+):
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(duplicate_override_payload(bibliography_entry, ["Q39999999"])),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "Use POST /api/v1/bibliography instead." in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_invalid_csl_does_not_mutate(
+    client, database
+):
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            {
+                "bibliographyEntry": {"id": "Q30000001", "title": "Missing type"},
+                "override": {
+                    "reason": (
+                        "Reviewed returned duplicate candidates and confirmed this "
+                        "is a distinct bibliography record."
+                    ),
+                    "reviewedCandidateIds": ["Q30000000"],
+                },
+            }
+        ),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_requires_write_scope(
+    guest_client, saved_entry
+):
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+
+    result = guest_client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(duplicate_entry, [saved_entry["id"]])
+        ),
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_duplicate_override_rejects_duplicate_check_only_scope(
+    context, saved_entry
+):
+    client = client_with_scope(context, "check:bibliography_duplicates")
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(duplicate_entry, [saved_entry["id"]])
+        ),
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_duplicate_override_rejects_export_only_scope(
+    context, saved_entry
+):
+    client = client_with_scope(context, "export:bibliography")
+    duplicate_entry = {**saved_entry, "id": "Q30000001"}
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(duplicate_entry, [saved_entry["id"]])
+        ),
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_create_series_sibling_does_not_conflict(
+    client, bibliography, user
+):
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        type="book",
+        title="Babylonian Provincial Officials Part One",
+        author=[{"given": "Mark", "family": "Smith"}],
+        issued={"date-parts": [[2010]]},
+        DOI="",
+        publisher="Eisenbrauns",
+        **{"collection-title": "Babylonian Provincial Officials"},
+    )
+    sibling_entry = {
+        **existing_entry,
+        "id": "Q30000001",
+        "title": "Babylonian Provincial Officials Part Two",
+    }
+    bibliography.create(existing_entry, user)
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(sibling_entry)
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert bibliography.find(existing_entry["id"]) == existing_entry
+    assert bibliography.find(sibling_entry["id"]) == sibling_entry
+
+
+def test_partner_bibliography_update(client, saved_entry):
+    updated_entry = {**saved_entry, "title": "New Partner Title"}
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{saved_entry['id']}", body=json.dumps(updated_entry)
+    )
+
+    assert result.status == falcon.HTTP_NO_CONTENT
+
+    get_result = client.simulate_get(f"/api/v1/bibliography/{saved_entry['id']}")
+
+    assert get_result.json["bibliographyEntry"] == updated_entry
+
+
+def test_partner_bibliography_update_requires_write_scope(guest_client, saved_entry):
+    updated_entry = {**saved_entry, "title": "New Partner Title"}
+    result = guest_client.simulate_post(
+        f"/api/v1/bibliography/{saved_entry['id']}", body=json.dumps(updated_entry)
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_update_rejects_export_only_scope(context, saved_entry):
+    client = client_with_scope(context, "export:bibliography")
+    updated_entry = {**saved_entry, "title": "New Partner Title"}
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{saved_entry['id']}", body=json.dumps(updated_entry)
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
+def test_partner_bibliography_update_not_found(client):
+    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    result = client.simulate_post(
+        "/api/v1/bibliography/Q30000001", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_partner_bibliography_update_invalid(client, saved_entry):
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{saved_entry['id']}",
+        body=json.dumps(pydash.omit(saved_entry, "type")),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_partner_bibliography_update_duplicate_conflict_does_not_mutate(
+    client, bibliography, user
+):
+    existing_entry = BibliographyEntryFactory.build(id="Q30000001", DOI="10.1000/one")
+    target_entry = BibliographyEntryFactory.build(id="Q30000002", DOI="10.1000/two")
+    bibliography.create(existing_entry, user)
+    bibliography.create(target_entry, user)
+    duplicate_update = {**target_entry, "DOI": existing_entry["DOI"]}
+
+    result = client.simulate_post(
+        f"/api/v1/bibliography/{target_entry['id']}",
+        body=json.dumps(duplicate_update),
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert result.json["decision"] == "likely_duplicate"
+    assert result.json["candidates"][0]["id"] == existing_entry["id"]
+    assert bibliography.find(target_entry["id"]) == target_entry
+
+
+def test_partner_bibliography_delete_not_supported(client, saved_entry):
+    result = client.simulate_delete(f"/api/v1/bibliography/{saved_entry['id']}")
+
+    assert result.status == falcon.HTTP_METHOD_NOT_ALLOWED
