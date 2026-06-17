@@ -39,6 +39,15 @@ def score_entries(
     )
 
 
+def score_entries_with_shared_overrides(
+    shared_overrides, left_overrides, right_overrides
+):
+    return score_entries(
+        {**shared_overrides, **left_overrides},
+        {**shared_overrides, **right_overrides},
+    )
+
+
 def test_normalize_doi() -> None:
     assert normalize_doi(" DOI: https://doi.org/10.123/ABC ") == "10.123/abc"
     assert normalize_doi("http://dx.doi.org/10.1000/X") == "10.1000/x"
@@ -167,20 +176,18 @@ def test_book_series_part_siblings_are_not_likely_duplicates() -> None:
 
 
 def test_book_series_spelled_part_siblings_are_not_duplicates() -> None:
-    score = score_entries(
+    score = score_entries_with_shared_overrides(
         {
-            "title": "Babylonian Provincial Officials Part One",
             "author": [{"family": "Smith", "given": "Mark"}],
             "issued": {"date-parts": [[2010]]},
             "publisher": "Eisenbrauns",
             "collection-title": "Babylonian Provincial Officials",
         },
         {
+            "title": "Babylonian Provincial Officials Part One",
+        },
+        {
             "title": "Babylonian Provincial Officials Part Two",
-            "author": [{"family": "Smith", "given": "Mark"}],
-            "issued": {"date-parts": [[2010]]},
-            "publisher": "Eisenbrauns",
-            "collection-title": "Babylonian Provincial Officials",
         },
     )
     assert score.decision == "not_duplicate"
@@ -278,20 +285,18 @@ def test_article_siblings_with_different_titles_and_pages_are_not_likely() -> No
 
 
 def test_same_series_different_books_are_not_likely_duplicates() -> None:
-    score = score_entries(
+    score = score_entries_with_shared_overrides(
         {
-            "title": "Administrative Documents from Ur",
             "author": [{"family": "Jones", "given": "Mary"}],
             "issued": {"date-parts": [[1971]]},
             "publisher": "University Museum",
             "collection-title": "Babylonian Publications Series",
         },
         {
+            "title": "Administrative Documents from Ur",
+        },
+        {
             "title": "Sumerian Literary Catalogues",
-            "author": [{"family": "Jones", "given": "Mary"}],
-            "issued": {"date-parts": [[1971]]},
-            "publisher": "University Museum",
-            "collection-title": "Babylonian Publications Series",
         },
     )
     assert score.decision == "not_duplicate"
