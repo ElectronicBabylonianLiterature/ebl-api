@@ -658,29 +658,37 @@ def pair_decision(
     conflicts: Sequence[str],
     matched: Mapping[str, Optional[float]],
 ) -> tuple[str, str]:
+    exact_identifier_match = has_exact_identifier_match(matched)
+    decision = "not_duplicate"
+    recommendation = "allow_create"
+
     if previously_reviewed_not_duplicate:
-        return "not_duplicate", "ignore_previously_reviewed"
-    if evidence_completeness < 0.35:
-        return "insufficient_data", "manual_review_if_important"
-    if "different_entry_title" in conflicts:
-        return "not_duplicate", "allow_create"
-    if "different_webpage_title" in conflicts:
-        return "not_duplicate", "allow_create"
-    if "series_part" in conflicts:
-        if has_exact_identifier_match(matched):
-            return "possible_duplicate", "review_series_sibling"
-        return "not_duplicate", "allow_create"
-    if "doi_data_issue" in conflicts:
-        return "possible_duplicate", "review_identifier_conflict"
-    if "different_title" in conflicts and not has_exact_identifier_match(matched):
-        return "not_duplicate", "allow_create"
-    if has_conservative_conflict(conflicts) and score >= 0.76:
-        return "possible_duplicate", "review_conflicting_metadata"
-    if score >= 0.92:
-        return "likely_duplicate", "confirm_before_cleanup"
-    if score >= 0.76:
-        return "possible_duplicate", "review_before_create_or_cleanup"
-    return "not_duplicate", "allow_create"
+        recommendation = "ignore_previously_reviewed"
+    elif evidence_completeness < 0.35:
+        decision = "insufficient_data"
+        recommendation = "manual_review_if_important"
+    elif "different_entry_title" in conflicts or "different_webpage_title" in conflicts:
+        recommendation = "allow_create"
+    elif "series_part" in conflicts:
+        if exact_identifier_match:
+            decision = "possible_duplicate"
+            recommendation = "review_series_sibling"
+    elif "doi_data_issue" in conflicts:
+        decision = "possible_duplicate"
+        recommendation = "review_identifier_conflict"
+    elif "different_title" in conflicts and not exact_identifier_match:
+        recommendation = "allow_create"
+    elif has_conservative_conflict(conflicts) and score >= 0.76:
+        decision = "possible_duplicate"
+        recommendation = "review_conflicting_metadata"
+    elif score >= 0.92:
+        decision = "likely_duplicate"
+        recommendation = "confirm_before_cleanup"
+    elif score >= 0.76:
+        decision = "possible_duplicate"
+        recommendation = "review_before_create_or_cleanup"
+
+    return decision, recommendation
 
 
 def has_exact_identifier_match(matched: Mapping[str, Optional[float]]) -> bool:

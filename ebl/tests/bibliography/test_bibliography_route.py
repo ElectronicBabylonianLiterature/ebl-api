@@ -118,6 +118,22 @@ def patch_duplicate_override_result(monkeypatch, duplicate_result):
     )
 
 
+def assert_duplicate_override_bad_request(
+    client, database, payload, *, description_substring=None
+):
+    before_count = database["bibliography"].count_documents({})
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(payload),
+    )
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    if description_substring is not None:
+        assert description_substring in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+    return result
+
+
 def test_get_entry(client, saved_entry):
     id_ = saved_entry["id"]
     result = client.simulate_get(f"/bibliography/{id_}")
@@ -500,53 +516,35 @@ def test_partner_bibliography_duplicate_override_missing_override_does_not_mutat
     client, database, saved_entry
 ):
     duplicate_entry = {**saved_entry, "id": "Q30000001"}
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps({"bibliographyEntry": duplicate_entry}),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        {"bibliographyEntry": duplicate_entry},
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_whitespace_reason_does_not_mutate(
     client, database, saved_entry
 ):
     duplicate_entry = {**saved_entry, "id": "Q30000001"}
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(
-            duplicate_override_payload(duplicate_entry, [saved_entry["id"]], "   ")
-        ),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        duplicate_override_payload(duplicate_entry, [saved_entry["id"]], "   "),
+        description_substring="override.reason",
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert "override.reason" in result.json["description"]
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_short_reason_does_not_mutate(
     client, database, saved_entry
 ):
     duplicate_entry = {**saved_entry, "id": "Q30000001"}
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(
-            duplicate_override_payload(
-                duplicate_entry, [saved_entry["id"]], "too short"
-            )
-        ),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        duplicate_override_payload(duplicate_entry, [saved_entry["id"]], "too short"),
+        description_substring="10 meaningful characters",
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert "10 meaningful characters" in result.json["description"]
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 @pytest.mark.parametrize(
@@ -563,31 +561,23 @@ def test_partner_bibliography_duplicate_override_requires_reviewed_candidate_ids
     payload, client, database, saved_entry
 ):
     duplicate_entry = {**saved_entry, "id": "Q30000001"}
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(payload(duplicate_entry, saved_entry["id"])),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        payload(duplicate_entry, saved_entry["id"]),
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_rejects_stale_candidate_ids(
     client, database, saved_entry
 ):
     duplicate_entry = {**saved_entry, "id": "Q30000001"}
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(duplicate_override_payload(duplicate_entry, ["Q39999999"])),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        duplicate_override_payload(duplicate_entry, ["Q39999999"]),
+        description_substring="must match the current duplicate candidates",
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert "must match the current duplicate candidates" in result.json["description"]
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_rejects_only_non_blocking_candidate_id(
@@ -595,20 +585,14 @@ def test_partner_bibliography_duplicate_override_rejects_only_non_blocking_candi
 ):
     patch_duplicate_override_result(monkeypatch, mixed_duplicate_override_result())
     bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(
-            duplicate_override_payload(
-                bibliography_entry, [NON_BLOCKING_DUPLICATE_CANDIDATE_ID]
-            )
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        duplicate_override_payload(
+            bibliography_entry, [NON_BLOCKING_DUPLICATE_CANDIDATE_ID]
         ),
+        description_substring="current blocking duplicate candidate",
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert "current blocking duplicate candidate" in result.json["description"]
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_accepts_blocking_candidate_id(
@@ -664,20 +648,12 @@ def test_partner_bibliography_duplicate_override_rejects_stale_candidate_after_r
 ):
     patch_duplicate_override_result(monkeypatch, blocking_duplicate_override_result())
     bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(
-            duplicate_override_payload(
-                bibliography_entry, [STALE_DUPLICATE_CANDIDATE_ID]
-            )
-        ),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        duplicate_override_payload(bibliography_entry, [STALE_DUPLICATE_CANDIDATE_ID]),
+        description_substring="must match the current duplicate candidates",
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert "must match the current duplicate candidates" in result.json["description"]
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_reruns_duplicate_detection(
@@ -751,26 +727,20 @@ def test_partner_bibliography_duplicate_override_unique_entry_uses_normal_create
 def test_partner_bibliography_duplicate_override_invalid_csl_does_not_mutate(
     client, database
 ):
-    before_count = database["bibliography"].count_documents({})
-
-    result = client.simulate_post(
-        "/api/v1/bibliography/duplicate-override",
-        body=json.dumps(
-            {
-                "bibliographyEntry": {"id": "Q30000001", "title": "Missing type"},
-                "override": {
-                    "reason": (
-                        "Reviewed returned duplicate candidates and confirmed this "
-                        "is a distinct bibliography record."
-                    ),
-                    "reviewedCandidateIds": ["Q30000000"],
-                },
-            }
-        ),
+    assert_duplicate_override_bad_request(
+        client,
+        database,
+        {
+            "bibliographyEntry": {"id": "Q30000001", "title": "Missing type"},
+            "override": {
+                "reason": (
+                    "Reviewed returned duplicate candidates and confirmed this is "
+                    "a distinct bibliography record."
+                ),
+                "reviewedCandidateIds": ["Q30000000"],
+            },
+        },
     )
-
-    assert result.status == falcon.HTTP_BAD_REQUEST
-    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_requires_write_scope(

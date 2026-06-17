@@ -1,3 +1,5 @@
+import pytest
+
 from ebl.bibliography.application.duplicate_audit import (
     UsageCounts,
     cluster_pairs,
@@ -25,6 +27,16 @@ def entry(id_, **overrides):
     }
     data.update(overrides)
     return data
+
+
+def score_entries(
+    left_overrides, right_overrides, *, previously_reviewed_not_duplicate: bool = False
+):
+    return score_pair(
+        normalize_entry(entry("A", **left_overrides)),
+        normalize_entry(entry("B", **right_overrides)),
+        previously_reviewed_not_duplicate=previously_reviewed_not_duplicate,
+    )
 
 
 def test_normalize_doi() -> None:
@@ -155,75 +167,66 @@ def test_book_series_part_siblings_are_not_likely_duplicates() -> None:
 
 
 def test_book_series_spelled_part_siblings_are_not_duplicates() -> None:
-    left = normalize_entry(
-        entry(
-            "A",
-            title="Babylonian Provincial Officials Part One",
-            author=[{"family": "Smith", "given": "Mark"}],
-            issued={"date-parts": [[2010]]},
-            publisher="Eisenbrauns",
-            **{"collection-title": "Babylonian Provincial Officials"},
-        )
+    score = score_entries(
+        {
+            "title": "Babylonian Provincial Officials Part One",
+            "author": [{"family": "Smith", "given": "Mark"}],
+            "issued": {"date-parts": [[2010]]},
+            "publisher": "Eisenbrauns",
+            "collection-title": "Babylonian Provincial Officials",
+        },
+        {
+            "title": "Babylonian Provincial Officials Part Two",
+            "author": [{"family": "Smith", "given": "Mark"}],
+            "issued": {"date-parts": [[2010]]},
+            "publisher": "Eisenbrauns",
+            "collection-title": "Babylonian Provincial Officials",
+        },
     )
-    right = normalize_entry(
-        entry(
-            "B",
-            title="Babylonian Provincial Officials Part Two",
-            author=[{"family": "Smith", "given": "Mark"}],
-            issued={"date-parts": [[2010]]},
-            publisher="Eisenbrauns",
-            **{"collection-title": "Babylonian Provincial Officials"},
-        )
-    )
-    score = score_pair(left, right)
     assert score.decision == "not_duplicate"
     assert "series_part" in score.conflicting_signals
 
 
-def test_book_series_volume_siblings_are_not_likely_duplicates() -> None:
-    left = normalize_entry(entry("A", title="Royal Archives Volume I", volume="1"))
-    right = normalize_entry(entry("B", title="Royal Archives Volume II", volume="2"))
-    score = score_pair(left, right)
-    assert score.decision != "likely_duplicate"
-    assert "series_part" in score.conflicting_signals
-
-
-def test_book_series_teil_siblings_are_not_likely_duplicates() -> None:
-    left = normalize_entry(entry("A", title="Urkunden aus Lagasch Teil 1"))
-    right = normalize_entry(entry("B", title="Urkunden aus Lagasch Teil 2"))
-    score = score_pair(left, right)
-    assert score.decision != "likely_duplicate"
-    assert "series_part" in score.conflicting_signals
-
-
-def test_book_series_band_heft_siblings_are_not_likely_duplicates() -> None:
-    left = normalize_entry(entry("A", title="Archiv fur Orientforschung Band I Heft 1"))
-    right = normalize_entry(
-        entry("B", title="Archiv fur Orientforschung Band I Heft 2")
-    )
-    score = score_pair(left, right)
+@pytest.mark.parametrize(
+    ("left_overrides", "right_overrides"),
+    [
+        (
+            {"title": "Royal Archives Volume I", "volume": "1"},
+            {"title": "Royal Archives Volume II", "volume": "2"},
+        ),
+        (
+            {"title": "Urkunden aus Lagasch Teil 1"},
+            {"title": "Urkunden aus Lagasch Teil 2"},
+        ),
+        (
+            {"title": "Archiv fur Orientforschung Band I Heft 1"},
+            {"title": "Archiv fur Orientforschung Band I Heft 2"},
+        ),
+    ],
+)
+def test_book_series_siblings_are_not_likely_duplicates(
+    left_overrides, right_overrides
+) -> None:
+    score = score_entries(left_overrides, right_overrides)
     assert score.decision != "likely_duplicate"
     assert "series_part" in score.conflicting_signals
 
 
 def test_encyclopedia_entries_need_high_title_similarity() -> None:
-    left = normalize_entry(
-        entry(
-            "A",
-            type="entry-encyclopedia",
-            title="Adad",
-            **{"container-title": "Reallexikon der Assyriologie", "volume": "1"},
-        )
+    score = score_entries(
+        {
+            "type": "entry-encyclopedia",
+            "title": "Adad",
+            "container-title": "Reallexikon der Assyriologie",
+            "volume": "1",
+        },
+        {
+            "type": "entry-encyclopedia",
+            "title": "Ea",
+            "container-title": "Reallexikon der Assyriologie",
+            "volume": "1",
+        },
     )
-    right = normalize_entry(
-        entry(
-            "B",
-            type="entry-encyclopedia",
-            title="Ea",
-            **{"container-title": "Reallexikon der Assyriologie", "volume": "1"},
-        )
-    )
-    score = score_pair(left, right)
     assert score.decision == "not_duplicate"
     assert "different_entry_title" in score.conflicting_signals
 
@@ -254,51 +257,43 @@ def test_same_encyclopedia_lemma_remains_likely_duplicate() -> None:
 
 
 def test_article_siblings_with_different_titles_and_pages_are_not_likely() -> None:
-    left = normalize_entry(
-        entry(
-            "A",
-            type="article-journal",
-            title="First Note on Uruk",
-            page="1-10",
-            **{"container-title": "NABU", "volume": "12"},
-        )
+    score = score_entries(
+        {
+            "type": "article-journal",
+            "title": "First Note on Uruk",
+            "page": "1-10",
+            "container-title": "NABU",
+            "volume": "12",
+        },
+        {
+            "type": "article-journal",
+            "title": "Second Note on Sippar",
+            "page": "11-20",
+            "container-title": "NABU",
+            "volume": "12",
+        },
     )
-    right = normalize_entry(
-        entry(
-            "B",
-            type="article-journal",
-            title="Second Note on Sippar",
-            page="11-20",
-            **{"container-title": "NABU", "volume": "12"},
-        )
-    )
-    score = score_pair(left, right)
     assert score.decision != "likely_duplicate"
     assert "different_page" in score.conflicting_signals
 
 
 def test_same_series_different_books_are_not_likely_duplicates() -> None:
-    left = normalize_entry(
-        entry(
-            "A",
-            title="Administrative Documents from Ur",
-            author=[{"family": "Jones", "given": "Mary"}],
-            issued={"date-parts": [[1971]]},
-            publisher="University Museum",
-            **{"collection-title": "Babylonian Publications Series"},
-        )
+    score = score_entries(
+        {
+            "title": "Administrative Documents from Ur",
+            "author": [{"family": "Jones", "given": "Mary"}],
+            "issued": {"date-parts": [[1971]]},
+            "publisher": "University Museum",
+            "collection-title": "Babylonian Publications Series",
+        },
+        {
+            "title": "Sumerian Literary Catalogues",
+            "author": [{"family": "Jones", "given": "Mary"}],
+            "issued": {"date-parts": [[1971]]},
+            "publisher": "University Museum",
+            "collection-title": "Babylonian Publications Series",
+        },
     )
-    right = normalize_entry(
-        entry(
-            "B",
-            title="Sumerian Literary Catalogues",
-            author=[{"family": "Jones", "given": "Mary"}],
-            issued={"date-parts": [[1971]]},
-            publisher="University Museum",
-            **{"collection-title": "Babylonian Publications Series"},
-        )
-    )
-    score = score_pair(left, right)
     assert score.decision == "not_duplicate"
     assert "different_title" in score.conflicting_signals
 
@@ -358,25 +353,20 @@ def test_chapter_collection_siblings_with_different_titles_and_pages_are_not_lik
 
 
 def test_issn_only_is_supporting_not_hard_duplicate() -> None:
-    left = normalize_entry(
-        entry(
-            "A",
-            type="article-journal",
-            title="First Article",
-            issued={"date-parts": [[2001]]},
-            ISSN="1234-5678",
-        )
+    score = score_entries(
+        {
+            "type": "article-journal",
+            "title": "First Article",
+            "issued": {"date-parts": [[2001]]},
+            "ISSN": "1234-5678",
+        },
+        {
+            "type": "article-journal",
+            "title": "Different Article",
+            "issued": {"date-parts": [[2010]]},
+            "ISSN": "12345678",
+        },
     )
-    right = normalize_entry(
-        entry(
-            "B",
-            type="article-journal",
-            title="Different Article",
-            issued={"date-parts": [[2010]]},
-            ISSN="12345678",
-        )
-    )
-    score = score_pair(left, right)
     assert score.decision != "likely_duplicate"
     assert score.score < 0.76
     assert score.matched_signals["issn"] == 1.0

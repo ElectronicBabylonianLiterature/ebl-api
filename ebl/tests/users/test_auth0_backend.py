@@ -1,16 +1,19 @@
 import datetime
 from typing import Any, Dict, Optional, Tuple
+from unittest.mock import Mock, patch
 
 import falcon
 from falcon import testing
 from falcon.testing.client import _ResultBase
 from falcon_auth import FalconAuthMiddleware
 import jwt
+import pytest
 from Cryptodome.PublicKey import RSA
 
-from unittest.mock import Mock, patch
-
 from ebl.users.infrastructure.auth0 import Auth0Backend
+
+TEST_AUDIENCE = "test-audience"
+TEST_ISSUER = "https://issuer/"
 
 
 class OkResource:
@@ -66,6 +69,15 @@ def create_client(auth_backend: Auth0Backend) -> testing.TestClient:
     return testing.TestClient(api)
 
 
+def create_auth_backend(public_key: bytes, set_user=None) -> Auth0Backend:
+    return Auth0Backend(
+        public_key,
+        TEST_AUDIENCE,
+        TEST_ISSUER,
+        set_user or (lambda _id: None),
+    )
+
+
 def simulate_get(auth_backend: Auth0Backend, token: Optional[str]) -> _ResultBase:
     client = create_client(auth_backend)
     headers = {}
@@ -86,10 +98,8 @@ def create_profile_capturing_client(
 
 def test_auth_backend_valid_token() -> None:
     private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
-    token = create_token(private_key, "test-audience", "https://issuer/")
+    auth_backend = create_auth_backend(public_key)
+    token = create_token(private_key, TEST_AUDIENCE, TEST_ISSUER)
 
     result = simulate_get(auth_backend, token)
 
@@ -97,11 +107,8 @@ def test_auth_backend_valid_token() -> None:
 
 
 def test_auth_backend_missing_authorization() -> None:
-    private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
-    _ = private_key
+    _private_key, public_key = create_key_pair()
+    auth_backend = create_auth_backend(public_key)
 
     result = simulate_get(auth_backend, None)
 
@@ -110,56 +117,32 @@ def test_auth_backend_missing_authorization() -> None:
 
 def test_auth_backend_malformed_token() -> None:
     _private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
+    auth_backend = create_auth_backend(public_key)
 
     result = simulate_get(auth_backend, "not-a-token")
 
     assert result.status == falcon.HTTP_UNAUTHORIZED
 
 
-def test_auth_backend_missing_audience() -> None:
+@pytest.mark.parametrize(
+    ("overrides", "expires_in_seconds"),
+    [
+        ({"aud": None}, 300),
+        ({"iss": "https://other/"}, 300),
+        (None, -10),
+    ],
+)
+def test_auth_backend_rejects_invalid_tokens(
+    overrides: Optional[Dict[str, Any]], expires_in_seconds: int
+) -> None:
     private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
+    auth_backend = create_auth_backend(public_key)
     token = create_token(
         private_key,
-        "test-audience",
-        "https://issuer/",
-        overrides={"aud": None},
-    )
-
-    result = simulate_get(auth_backend, token)
-
-    assert result.status == falcon.HTTP_UNAUTHORIZED
-
-
-def test_auth_backend_invalid_issuer() -> None:
-    private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
-    token = create_token(
-        private_key,
-        "test-audience",
-        "https://issuer/",
-        overrides={"iss": "https://other/"},
-    )
-
-    result = simulate_get(auth_backend, token)
-
-    assert result.status == falcon.HTTP_UNAUTHORIZED
-
-
-def test_auth_backend_expired_token() -> None:
-    private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
-    token = create_token(
-        private_key, "test-audience", "https://issuer/", expires_in_seconds=-10
+        TEST_AUDIENCE,
+        TEST_ISSUER,
+        overrides=overrides,
+        expires_in_seconds=expires_in_seconds,
     )
 
     result = simulate_get(auth_backend, token)
@@ -169,13 +152,11 @@ def test_auth_backend_expired_token() -> None:
 
 def test_auth_backend_m2m_token() -> None:
     private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
+    auth_backend = create_auth_backend(public_key)
     token = create_token(
         private_key,
-        "test-audience",
-        "https://issuer/",
+        TEST_AUDIENCE,
+        TEST_ISSUER,
         overrides={
             "gty": "client-credentials",
             "scope": "write:bibliography read:bibliography",
@@ -190,14 +171,12 @@ def test_auth_backend_m2m_token() -> None:
 def test_auth_backend_m2m_token_profile() -> None:
     private_key, public_key = create_key_pair()
     set_user = Mock()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", set_user
-    )
+    auth_backend = create_auth_backend(public_key, set_user)
     sub = "m2m-client-id"
     token = create_token(
         private_key,
-        "test-audience",
-        "https://issuer/",
+        TEST_AUDIENCE,
+        TEST_ISSUER,
         overrides={
             "sub": sub,
             "gty": "client-credentials",
@@ -219,11 +198,9 @@ def test_auth_backend_m2m_token_profile() -> None:
 
 def test_auth_backend_non_m2m_profile_calls_userinfo() -> None:
     private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
+    auth_backend = create_auth_backend(public_key)
     mock_profile = {"name": "john"}
-    token = create_token(private_key, "test-audience", "https://issuer/")
+    token = create_token(private_key, TEST_AUDIENCE, TEST_ISSUER)
     client, resource = create_profile_capturing_client(auth_backend)
 
     with patch("ebl.users.infrastructure.auth0.requests.get") as mock_get:
@@ -243,13 +220,11 @@ def test_auth_backend_non_m2m_profile_calls_userinfo() -> None:
 
 def test_auth_backend_missing_sub_is_unauthorized() -> None:
     private_key, public_key = create_key_pair()
-    auth_backend = Auth0Backend(
-        public_key, "test-audience", "https://issuer/", lambda _id: None
-    )
+    auth_backend = create_auth_backend(public_key)
     token = create_token(
         private_key,
-        "test-audience",
-        "https://issuer/",
+        TEST_AUDIENCE,
+        TEST_ISSUER,
         overrides={"sub": None},
     )
 
