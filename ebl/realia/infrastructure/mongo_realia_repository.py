@@ -5,7 +5,11 @@ from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
-from ebl.bibliography.domain.reference import BibliographyId, Reference
+from ebl.bibliography.domain.reference import (
+    BibliographyId,
+    Reference,
+    ReferenceType,
+)
 from ebl.common.query.query_collation import (
     CollatedFieldQuery,
     strip_realia_query_chars,
@@ -16,14 +20,22 @@ from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.domain.realia_entry import (
     AfoRegisterEntry,
     RealiaEntry,
-    RealiaType,
     ReallexikonEntry,
 )
-from ebl.schemas import NameEnumField
 
 REALIA_COLLECTION = "realia"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
 MAX_SEARCH_RESULTS = 15
+
+
+class ReallexikonReferenceField(fields.Field):
+    def _serialize(self, value, attr_name, obj, **kwargs):
+        return None if value is None else ApiReferenceSchema().dump(value)
+
+    def _deserialize(self, value, attr_name, data, **kwargs):
+        if isinstance(value, str):
+            return Reference(BibliographyId(value), ReferenceType.DISCUSSION)
+        return ApiReferenceSchema().load(value)
 
 
 class AfoRegisterEntrySchema(Schema):
@@ -47,7 +59,7 @@ class ReallexikonEntrySchema(Schema):
 
     id = fields.String(load_default="")
     title = fields.String(load_default="")
-    reference = fields.Nested(ApiReferenceSchema, allow_none=True, load_default=None)
+    reference = ReallexikonReferenceField(allow_none=True, load_default=None)
     content = fields.String(load_default="")
 
     @post_load
@@ -63,7 +75,7 @@ class RealiaEntrySchema(Schema):
     related_terms = fields.List(
         fields.String(), data_key="relatedTerms", load_default=list
     )
-    type = fields.List(NameEnumField(RealiaType), load_default=list)
+    type = fields.List(fields.String(), load_default=list)
     afo_register = fields.List(
         fields.Nested(AfoRegisterEntrySchema), data_key="afoRegister", load_default=list
     )

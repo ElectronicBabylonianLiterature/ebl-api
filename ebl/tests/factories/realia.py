@@ -1,13 +1,13 @@
 import factory
-import factory.fuzzy
 
 from ebl.realia.domain.realia_entry import (
     AfoRegisterEntry,
     RealiaEntry,
-    RealiaType,
     ReallexikonEntry,
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
+
+REALIA_TYPES = ("Personal names", "Geographical names", "Divine names")
 
 
 class AfoRegisterEntryFactory(factory.Factory):
@@ -39,16 +39,15 @@ class RealiaEntryFactory(factory.Factory):
     related_terms = factory.LazyAttribute(
         lambda _: tuple(f"term-{i}" for i in range(2))
     )
-    type = factory.LazyAttribute(
-        lambda _: (factory.fuzzy.FuzzyChoice(RealiaType).fuzz(),)
-    )
+    type = factory.LazyAttribute(lambda _: (REALIA_TYPES[0], REALIA_TYPES[1]))
     afo_register = factory.LazyAttribute(
         lambda _: tuple(AfoRegisterEntryFactory.build() for _ in range(2))
     )
     references = factory.LazyAttribute(
         lambda _: tuple(ReferenceFactory(with_document=True) for _ in range(2))
     )
-    wikidata_id = factory.LazyAttribute(lambda _: tuple(f"Q{n}" for n in range(1, 3)))
+    wikidata_id = factory.LazyAttribute(
+        lambda _: tuple(f"Q{n}" for n in range(1, 3)))
     reallexikon = factory.LazyAttribute(
         lambda _: tuple(ReallexikonEntryFactory.build() for _ in range(2))
     )

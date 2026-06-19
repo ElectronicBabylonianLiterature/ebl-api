@@ -3,7 +3,6 @@ import pytest
 from ebl.realia.domain.realia_entry import (
     AfoRegisterEntry,
     RealiaEntry,
-    RealiaType,
     ReallexikonEntry,
 )
 from ebl.realia.infrastructure.mongo_realia_repository import (
@@ -34,7 +33,7 @@ def test_realia_entry_creation(realia_entry: RealiaEntry) -> None:
     assert realia_entry.id is not None
     assert isinstance(realia_entry.related_terms, tuple)
     assert isinstance(realia_entry.type, tuple)
-    assert all(isinstance(t, RealiaType) for t in realia_entry.type)
+    assert all(isinstance(t, str) for t in realia_entry.type)
     assert isinstance(realia_entry.afo_register, tuple)
     assert all(isinstance(e, AfoRegisterEntry) for e in realia_entry.afo_register)
     assert isinstance(realia_entry.references, tuple)
@@ -78,7 +77,7 @@ def test_realia_entry_schema_dump(realia_entry: RealiaEntry) -> None:
     dumped = RealiaEntrySchema().dump(realia_entry)
     assert dumped["_id"] == realia_entry.id
     assert dumped["relatedTerms"] == list(realia_entry.related_terms)
-    assert dumped["type"] == [t.name for t in realia_entry.type]
+    assert dumped["type"] == list(realia_entry.type)
     assert dumped["wikidataId"] == list(realia_entry.wikidata_id)
     assert len(dumped["afoRegister"]) == len(realia_entry.afo_register)
     assert len(dumped["reallexikon"]) == len(realia_entry.reallexikon)
@@ -88,7 +87,7 @@ def test_realia_entry_schema_load_round_trip() -> None:
     data = {
         "_id": "Bronze",
         "relatedTerms": ["Kupfer", "Metall"],
-        "type": ["OBJECT_NAME"],
+        "type": ["Personal names"],
         "afoRegister": [],
         "references": [],
         "wikidataId": ["Q34095"],
@@ -97,5 +96,24 @@ def test_realia_entry_schema_load_round_trip() -> None:
     entry = RealiaEntrySchema().load(data)
     assert entry.id == "Bronze"
     assert entry.related_terms == ("Kupfer", "Metall")
-    assert entry.type == (RealiaType.OBJECT_NAME,)
+    assert entry.type == ("Personal names",)
     assert entry.wikidata_id == ("Q34095",)
+
+
+def test_realia_entry_schema_load_stored_shape() -> None:
+    data = {
+        "_id": "Aakalla",
+        "relatedTerms": ["A-a-kal-la"],
+        "type": ["Personal names"],
+        "afoRegister": [],
+        "references": [],
+        "wikidataId": [],
+        "reallexikon": [
+            {"id": "4", "title": "Aakalla", "reference": "rla_1_2b", "content": ""}
+        ],
+    }
+    entry = RealiaEntrySchema().load(data)
+    assert entry.type == ("Personal names",)
+    reference = entry.reallexikon[0].reference
+    assert reference is not None
+    assert reference.id == "rla_1_2b"
