@@ -46,8 +46,7 @@ class RealiaEntryFactory(factory.Factory):
     references = factory.LazyAttribute(
         lambda _: tuple(ReferenceFactory(with_document=True) for _ in range(2))
     )
-    wikidata_id = factory.LazyAttribute(
-        lambda _: tuple(f"Q{n}" for n in range(1, 3)))
+    wikidata_id = factory.LazyAttribute(lambda _: tuple(f"Q{n}" for n in range(1, 3)))
     reallexikon = factory.LazyAttribute(
         lambda _: tuple(ReallexikonEntryFactory.build() for _ in range(2))
     )

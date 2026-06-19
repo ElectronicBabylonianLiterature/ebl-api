@@ -116,3 +116,36 @@ def test_search_entry_with_reallexikon_no_reference(
 
     assert len(results) == 1
     assert results[0].reallexikon[0].reference is None
+
+
+def _insert_minimal(realia_repository: MongoRealiaRepository, identifier: str) -> None:
+    entry = RealiaEntryFactory.build(
+        id=identifier, related_terms=(), references=(), reallexikon=()
+    )
+    realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
+
+
+def test_search_ranks_exact_id_first(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    for identifier in ["Amêl-Marduk", "Marduk A. I.", "Marduk"]:
+        _insert_minimal(realia_repository, identifier)
+
+    results = realia_repository.search("Marduk")
+
+    assert [result.id for result in results] == [
+        "Marduk",
+        "Marduk A. I.",
+        "Amêl-Marduk",
+    ]
+
+
+def test_search_has_no_result_limit(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    for index in range(20):
+        _insert_minimal(realia_repository, f"Lion {index:02d}")
+
+    results = realia_repository.search("Lion")
+
+    assert len(results) == 20

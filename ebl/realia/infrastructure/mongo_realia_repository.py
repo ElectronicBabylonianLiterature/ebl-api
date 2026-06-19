@@ -22,10 +22,10 @@ from ebl.realia.domain.realia_entry import (
     RealiaEntry,
     ReallexikonEntry,
 )
+from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanker
 
 REALIA_COLLECTION = "realia"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
-MAX_SEARCH_RESULTS = 15
 
 
 class ReallexikonReferenceField(fields.Field):
@@ -114,12 +114,12 @@ class MongoRealiaRepository(RealiaRepository):
         stripped = strip_realia_query_chars(query).strip()
         if not stripped:
             return []
-        cursor = (
-            self._realia_collection.find_many(self._build_search_query(stripped))
-            .sort("_id")
-            .limit(MAX_SEARCH_RESULTS)
+        ranker = RealiaRelevanceRanker(stripped)
+        documents = sorted(
+            self._realia_collection.find_many(self._build_search_query(stripped)),
+            key=ranker.key,
         )
-        entries = RealiaEntrySchema(many=True).load(list(cursor))
+        entries = RealiaEntrySchema(many=True).load(documents)
         self._inject_bibliography(entries)
         return entries
 
