@@ -28,23 +28,43 @@ def test_book_series_part_siblings_are_not_likely_duplicates() -> None:
     assert "series_part" in score.conflicting_signals
 
 
-def test_book_series_spelled_part_siblings_are_not_duplicates() -> None:
+@pytest.mark.parametrize(
+    ("shared_overrides", "left_title", "right_title", "conflict"),
+    [
+        (
+            {
+                "author": [{"family": "Smith", "given": "Mark"}],
+                "issued": {"date-parts": [[2010]]},
+                "publisher": "Eisenbrauns",
+                "collection-title": "Babylonian Provincial Officials",
+            },
+            "Babylonian Provincial Officials Part One",
+            "Babylonian Provincial Officials Part Two",
+            "series_part",
+        ),
+        (
+            {
+                "author": [{"family": "Jones", "given": "Mary"}],
+                "issued": {"date-parts": [[1971]]},
+                "publisher": "University Museum",
+                "collection-title": "Babylonian Publications Series",
+            },
+            "Administrative Documents from Ur",
+            "Sumerian Literary Catalogues",
+            "different_title",
+        ),
+    ],
+)
+def test_title_only_book_variants_are_not_duplicates(
+    shared_overrides, left_title, right_title, conflict
+) -> None:
     score = score_entries_with_shared_overrides(
-        {
-            "author": [{"family": "Smith", "given": "Mark"}],
-            "issued": {"date-parts": [[2010]]},
-            "publisher": "Eisenbrauns",
-            "collection-title": "Babylonian Provincial Officials",
-        },
-        {
-            "title": "Babylonian Provincial Officials Part One",
-        },
-        {
-            "title": "Babylonian Provincial Officials Part Two",
-        },
+        shared_overrides,
+        {"title": left_title},
+        {"title": right_title},
     )
     assert score.decision == "not_duplicate"
-    assert "series_part" in score.conflicting_signals
+    assert conflict in score.conflicting_signals
 
 
 @pytest.mark.parametrize(
@@ -114,25 +134,6 @@ def test_same_encyclopedia_lemma_remains_likely_duplicate() -> None:
     )
     score = score_pair(left, right)
     assert score.decision == "likely_duplicate"
-
-
-def test_same_series_different_books_are_not_likely_duplicates() -> None:
-    score = score_entries_with_shared_overrides(
-        {
-            "author": [{"family": "Jones", "given": "Mary"}],
-            "issued": {"date-parts": [[1971]]},
-            "publisher": "University Museum",
-            "collection-title": "Babylonian Publications Series",
-        },
-        {
-            "title": "Administrative Documents from Ur",
-        },
-        {
-            "title": "Sumerian Literary Catalogues",
-        },
-    )
-    assert score.decision == "not_duplicate"
-    assert "different_title" in score.conflicting_signals
 
 
 def test_encyclopedia_distinct_lemmas_are_not_likely_duplicate() -> None:

@@ -3,7 +3,7 @@ import re
 import pydash
 import pytest
 
-from ebl.bibliography.infrastructure.bibliography import (
+from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
     doi_query,
     duplicate_candidate_queries,
     identifier_pattern,

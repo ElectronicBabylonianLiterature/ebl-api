@@ -3,9 +3,7 @@ from typing import Any, Dict, Optional, Sequence
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.duplicate_audit import PROJECTION
 from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
-    doi_query as doi_query,
     duplicate_candidate_queries,
-    identifier_pattern as identifier_pattern,
     year_range,
 )
 from ebl.bibliography.application.serialization import (
