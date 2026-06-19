@@ -1,0 +1,372 @@
+openapi: 3.0.3
+info:
+  title: eBL Partner Bibliography API
+  version: 1.0.0
+paths:
+  /api/v1/bibliography:
+    get:
+      summary: Export bibliography entries
+      description: Read-only partner export endpoint with cursor pagination. Requires `export:bibliography`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: cursor
+          schema:
+            type: string
+          description: Continue after the previous response's `nextCursor`.
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        "200":
+          description: A page of bibliography entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibliographyExportPage"
+        "403":
+          description: Missing `export:bibliography` scope.
+    post:
+      summary: Create a bibliography entry
+      description: Minimal partner create wrapper around existing bibliography create behavior. Requires `write:bibliography`. Duplicate detection runs before create; likely and possible duplicates return `409 Conflict`. Idempotency, external partner mapping persistence, and citationKey assignment are not implemented yet.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibliographyEntry"
+      responses:
+        "201":
+          description: Bibliography entry created.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Location of the created partner bibliography resource.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibliographyEntry"
+        "400":
+          description: Invalid bibliography entry.
+        "403":
+          description: Missing `write:bibliography` scope.
+        "409":
+          description: Duplicate candidate found; review before creating.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DuplicateCandidateResponse"
+  /api/v1/bibliography/{idOrCitationKey}:
+    get:
+      summary: Get one bibliography entry
+      description: Read-only partner endpoint. Currently resolves by eBL bibliography `id`; citation-key lookup is reserved until stored citation keys exist. Requires `export:bibliography`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: idOrCitationKey
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: One bibliography entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerBibliographyEntry"
+        "403":
+          description: Missing `export:bibliography` scope.
+        "404":
+          description: Bibliography entry not found.
+    post:
+      summary: Update a bibliography entry
+      description: Minimal partner update wrapper around existing bibliography update behavior. Requires `write:bibliography`. The path value is treated as an eBL bibliography `id`; citationKey lookup is not active until citation keys are stored. Duplicate detection runs before update while excluding the record itself. Idempotency and external partner mapping persistence are not implemented yet.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: idOrCitationKey
+          required: true
+          schema:
+            type: string
+          description: eBL bibliography id for update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibliographyEntry"
+      responses:
+        "204":
+          description: Bibliography entry updated.
+        "400":
+          description: Invalid bibliography entry.
+        "403":
+          description: Missing `write:bibliography` scope.
+        "404":
+          description: Bibliography entry not found.
+        "409":
+          description: Duplicate candidate found; review before updating.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DuplicateCandidateResponse"
+  /api/v1/bibliography/duplicate-candidates:
+    post:
+      summary: Check a proposed bibliography entry for likely duplicates
+      description: Read-only duplicate detection for partner bibliography synchronization. Requires `check:bibliography_duplicates`.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 25
+            default: 10
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BibliographyEntryCandidate"
+      responses:
+        "200":
+          description: Ranked duplicate candidates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DuplicateCandidateResponse"
+        "400":
+          description: Invalid bibliography entry candidate.
+        "403":
+          description: Missing `check:bibliography_duplicates` scope.
+  /api/v1/bibliography/duplicate-override:
+    post:
+      summary: Create a bibliography entry after reviewing duplicate candidates
+      description: Create a bibliography entry with an explicit duplicate override using the existing `write:bibliography` scope. The server reruns duplicate detection for `bibliographyEntry` and only creates when the current decision is `possible_duplicate` or `likely_duplicate`, the override payload is valid, and `reviewedCandidateIds` includes at least one currently returned blocking duplicate candidate. Non-blocking candidates do not satisfy the override requirement. Normal create/update still return `409 Conflict` for blocking duplicates unless this separate override endpoint is used. If no current duplicate candidates are found, use `POST /api/v1/bibliography` instead. No new Auth0 scope is required.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DuplicateOverrideRequest"
+      responses:
+        "201":
+          description: Bibliography entry created.
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Location of the created partner bibliography resource.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BibliographyEntry"
+        "400":
+          description: Invalid bibliography entry, invalid override payload, stale reviewed candidate IDs, reviewed IDs without a current blocking duplicate candidate, or no current duplicate candidates. The client should use normal `POST /api/v1/bibliography` when no current duplicates remain.
+        "403":
+          description: Missing `write:bibliography` scope.
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    BibliographyEntry:
+      type: object
+      required:
+        - id
+        - type
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        DOI:
+          type: string
+        ISBN:
+          type: string
+        ISSN:
+          type: string
+        issued:
+          type: object
+        author:
+          type: array
+          items:
+            type: object
+        editor:
+          type: array
+          items:
+            type: object
+    BibliographyEntryCandidate:
+      type: object
+      required:
+        - type
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        title:
+          type: string
+        DOI:
+          type: string
+        ISBN:
+          type: string
+        ISSN:
+          type: string
+        issued:
+          type: object
+        author:
+          type: array
+          items:
+            type: object
+        editor:
+          type: array
+          items:
+            type: object
+    DuplicateOverrideRequest:
+      type: object
+      required:
+        - bibliographyEntry
+        - override
+      properties:
+        bibliographyEntry:
+          $ref: "#/components/schemas/BibliographyEntry"
+        override:
+          $ref: "#/components/schemas/DuplicateOverridePayload"
+    DuplicateOverridePayload:
+      type: object
+      required:
+        - reason
+        - reviewedCandidateIds
+      properties:
+        reason:
+          type: string
+          description: Required human review note. Must be non-empty after trimming and contain at least 10 meaningful characters.
+        reviewedCandidateIds:
+          type: array
+          minItems: 1
+          description: Candidate ids reviewed by the partner user. The ids must be current candidates returned by the server-side rerun and must include at least one currently blocking duplicate candidate (`likely_duplicate` or `possible_duplicate`).
+          items:
+            type: string
+    DuplicateCandidateResponse:
+      type: object
+      required:
+        - decision
+        - highestScore
+        - evidenceCompleteness
+        - candidates
+      properties:
+        decision:
+          type: string
+          enum:
+            - no_duplicate
+            - possible_duplicate
+            - likely_duplicate
+            - insufficient_data
+        highestScore:
+          type: number
+          format: float
+        evidenceCompleteness:
+          type: number
+          format: float
+        candidates:
+          type: array
+          items:
+            $ref: "#/components/schemas/DuplicateCandidate"
+    BibliographyExportPage:
+      type: object
+      required:
+        - items
+        - nextCursor
+        - limit
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PartnerBibliographyEntry"
+        nextCursor:
+          type: string
+          nullable: true
+        limit:
+          type: integer
+    PartnerBibliographyEntry:
+      type: object
+      required:
+        - id
+        - citationKey
+        - bibliographyEntry
+      properties:
+        id:
+          type: string
+        citationKey:
+          type: string
+          nullable: true
+        bibliographyEntry:
+          $ref: "#/components/schemas/BibliographyEntryCandidate"
+    DuplicateCandidate:
+      type: object
+      required:
+        - id
+        - score
+        - decision
+        - matchedFields
+        - conflictingFields
+        - evidenceCompleteness
+        - recommendation
+        - reason
+      properties:
+        id:
+          type: string
+        citationKey:
+          type: string
+          nullable: true
+        score:
+          type: number
+          format: float
+        decision:
+          type: string
+          enum:
+            - no_duplicate
+            - possible_duplicate
+            - likely_duplicate
+            - insufficient_data
+        matchedFields:
+          type: object
+          additionalProperties:
+            type: number
+            nullable: true
+        conflictingFields:
+          type: array
+          items:
+            type: string
+        evidenceCompleteness:
+          type: number
+          format: float
+        recommendation:
+          type: string
+          enum:
+            - allow_create
+            - confirm_before_create
+            - block_or_request_override
+        reason:
+          type: string

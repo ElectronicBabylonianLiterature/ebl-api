@@ -29,7 +29,10 @@ def test_find_annotations_by_sign(
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
     )
-    annotation = AnnotationFactory.build_batch(2)
+    annotation = [
+        AnnotationFactory.build(cropped_sign__image_id="image-id-1"),
+        AnnotationFactory.build(cropped_sign__image_id="image-id-2"),
+    ]
     annotations = AnnotationsWithScriptFactory.build(annotations=annotation)
 
     fragment = FragmentFactory.build(number=annotations.fragment_number)
