@@ -1,12 +1,12 @@
-import re
 from typing import Any, Dict, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
-from ebl.bibliography.application.duplicate_audit import (
-    PROJECTION,
-    extract_year,
-    normalize_doi,
-    normalize_identifier,
+from ebl.bibliography.application.duplicate_audit import PROJECTION
+from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
+    doi_query as doi_query,
+    duplicate_candidate_queries,
+    identifier_pattern as identifier_pattern,
+    year_range,
 )
 from ebl.bibliography.application.serialization import (
     create_mongo_entry,
@@ -83,42 +83,10 @@ class MongoBibliographyRepository(BibliographyRepository):
     def query_by_author_year_and_title(
         self, author: Optional[str], year: Optional[int], title: Optional[str]
     ) -> Sequence[dict]:
-        match: Dict[str, Any] = {}
-
-        def pad_trailing_zeroes(year: int) -> int:
-            padded_year = str(year).ljust(4, "0")
-            return int(padded_year)
-
-        if author:
-            match["author.0.family"] = author
-        if year:
-            match["issued.date-parts.0.0"] = {
-                "$gte": pad_trailing_zeroes(year),
-                "$lt": pad_trailing_zeroes(year + 1),
-            }
-        if title:
-            match["$expr"] = {"$eq": [{"$substrCP": ["$title", 0, len(title)]}, title]}
-        return [
-            create_object_entry(data)
-            for data in self._collection.aggregate(
-                [
-                    {"$match": match},
-                    {
-                        "$addFields": {
-                            "primaryYear": {
-                                "$arrayElemAt": [
-                                    {"$arrayElemAt": ["$issued.date-parts", 0]},
-                                    0,
-                                ]
-                            }
-                        }
-                    },
-                    {"$sort": {"author.0.family": 1, "primaryYear": 1, "title": 1}},
-                    {"$project": {"primaryYear": 0}},
-                ],
-                collation={"locale": "en", "strength": 1, "normalization": True},
-            )
-        ]
+        return self._query(
+            author_year_title_match(author, year, title),
+            trailing_sort_field="title",
+        )
 
     def query_by_container_title_and_collection_number(
         self, container_title_short: Optional[str], collection_number: Optional[str]
@@ -128,7 +96,7 @@ class MongoBibliographyRepository(BibliographyRepository):
             match["container-title-short"] = container_title_short
         if collection_number:
             match["collection-number"] = collection_number
-        return self._query(match)
+        return self._query(match, trailing_sort_field="collection-title")
 
     def query_by_title_short_and_volume(
         self, title_short: Optional[str], volume: Optional[str]
@@ -138,7 +106,7 @@ class MongoBibliographyRepository(BibliographyRepository):
             match["title-short"] = title_short
         if volume:
             match["volume"] = volume
-        return self._query(match)
+        return self._query(match, trailing_sort_field="collection-title")
 
     def query_duplicate_candidates(self, entry: Any, limit: int) -> Sequence[Any]:
         candidates: dict[str, dict] = {}
@@ -155,31 +123,11 @@ class MongoBibliographyRepository(BibliographyRepository):
         data = self._collection.find_many(query).sort("_id", 1).limit(limit)
         return [create_object_entry(item) for item in data]
 
-    def _query(self, match: Dict[str, Any]) -> Sequence[dict]:
+    def _query(self, match: Dict[str, Any], trailing_sort_field: str) -> Sequence[dict]:
         return [
             create_object_entry(data)
             for data in self._collection.aggregate(
-                [
-                    {"$match": match},
-                    {
-                        "$addFields": {
-                            "primaryYear": {
-                                "$arrayElemAt": [
-                                    {"$arrayElemAt": ["$issued.date-parts", 0]},
-                                    0,
-                                ]
-                            }
-                        }
-                    },
-                    {
-                        "$sort": {
-                            "author.0.family": 1,
-                            "primaryYear": 1,
-                            "collection-title": 1,
-                        }
-                    },
-                    {"$project": {"primaryYear": 0}},
-                ],
+                bibliography_query_pipeline(match, trailing_sort_field),
                 collation={"locale": "en", "strength": 1, "normalization": True},
             )
         ]
@@ -188,143 +136,40 @@ class MongoBibliographyRepository(BibliographyRepository):
         return self._collection.get_all_values("_id")
 
 
-def duplicate_candidate_queries(entry: dict) -> Sequence[dict]:
-    queries = []
-    queries.extend(duplicate_strong_identifier_queries(entry))
-    if author_year_query := contributor_year_query(entry):
-        queries.append(author_year_query)
-    if title_year_query := year_title_query(entry):
-        queries.append(title_year_query)
-    if container_query := container_title_year_query(entry):
-        queries.append(container_query)
-    if series_query := series_query_from_entry(entry):
-        queries.append(series_query)
-    queries.extend(duplicate_supporting_identifier_queries(entry))
-    return queries
+def author_year_title_match(
+    author: Optional[str], year: Optional[int], title: Optional[str]
+) -> Dict[str, Any]:
+    match: Dict[str, Any] = {}
+    if author:
+        match["author.0.family"] = author
+    if year:
+        match["issued.date-parts.0.0"] = year_range(year)
+    if title:
+        match["$expr"] = {"$eq": [{"$substrCP": ["$title", 0, len(title)]}, title]}
+    return match
 
 
-def duplicate_strong_identifier_queries(entry: dict) -> Sequence[dict]:
-    queries = []
-    if doi_values := doi_variants(entry.get("DOI")):
-        queries.append(doi_query(doi_values))
-    if isbn_values := identifier_variants(entry.get("ISBN")):
-        queries.append(identifier_query("ISBN", isbn_values))
-    return queries
-
-
-def duplicate_supporting_identifier_queries(entry: dict) -> Sequence[dict]:
-    if issn_values := identifier_variants(entry.get("ISSN")):
-        return [identifier_query("ISSN", issn_values)]
-    return []
-
-
-def doi_variants(value: Any) -> Sequence[str]:
-    normalized = normalize_doi(value)
-    if not normalized:
-        return []
-    return sorted(
+def bibliography_query_pipeline(
+    match: Dict[str, Any], trailing_sort_field: str
+) -> list[dict]:
+    return [
+        {"$match": match},
+        {"$addFields": {"primaryYear": primary_year_expression()}},
         {
-            str(value).strip(),
-            normalized,
-            f"doi:{normalized}",
-            f"doi: {normalized}",
-            f"https://doi.org/{normalized}",
-            f"http://doi.org/{normalized}",
-            f"https://dx.doi.org/{normalized}",
-            f"http://dx.doi.org/{normalized}",
-        }
-    )
-
-
-def identifier_variants(value: Any) -> Sequence[str]:
-    normalized = normalize_identifier(value)
-    if not normalized:
-        return []
-    return sorted({str(value).strip(), normalized})
-
-
-def doi_query(values: Sequence[str]) -> dict:
-    clauses: list[dict[str, Any]] = [{"DOI": {"$in": list(values)}}]
-    clauses.extend(
-        {"DOI": {"$regex": f"^{re.escape(value)}$", "$options": "i"}}
-        for value in values
-    )
-    return {"$or": clauses}
-
-
-def identifier_query(field_name: str, values: Sequence[str]) -> dict:
-    normalized_values = {
-        normalized for value in values if (normalized := normalize_identifier(value))
-    }
-    patterns = [identifier_pattern(value) for value in sorted(normalized_values)]
-    clauses: list[dict[str, Any]] = [{field_name: {"$in": list(values)}}]
-    clauses.extend({field_name: {"$regex": pattern}} for pattern in patterns)
-    return {"$or": clauses}
-
-
-def identifier_pattern(value: str) -> str:
-    separator = r"[^0-9A-Za-z]*"
-    characters = [
-        "[Xx]" if character == "X" else re.escape(character) for character in value
+            "$sort": {
+                "author.0.family": 1,
+                "primaryYear": 1,
+                trailing_sort_field: 1,
+            }
+        },
+        {"$project": {"primaryYear": 0}},
     ]
-    return f"^{separator}{separator.join(characters)}{separator}$"
 
 
-def contributor_year_query(entry: dict) -> Optional[dict]:
-    family = first_contributor_family(entry)
-    year = extract_year(entry)
-    if family and year is not None:
-        return {
-            "$or": [{"author.0.family": family}, {"editor.0.family": family}],
-            "issued.date-parts.0.0": year_range(year),
-        }
-    return None
-
-
-def year_title_query(entry: dict) -> Optional[dict]:
-    year = extract_year(entry)
-    title = entry.get("title")
-    if isinstance(title, str) and title and year is not None:
-        return {"title": title, "issued.date-parts.0.0": year_range(year)}
-    return None
-
-
-def container_title_year_query(entry: dict) -> Optional[dict]:
-    year = extract_year(entry)
-    container_title = entry.get("container-title")
-    if isinstance(container_title, str) and container_title and year is not None:
-        query: dict[str, Any] = {
-            "container-title": container_title,
-            "issued.date-parts.0.0": year_range(year),
-        }
-        if entry.get("page"):
-            query["page"] = entry["page"]
-        return query
-    return None
-
-
-def series_query_from_entry(entry: dict) -> Optional[dict]:
-    if entry.get("container-title-short") and entry.get("collection-number"):
-        return {
-            "container-title-short": entry["container-title-short"],
-            "collection-number": entry["collection-number"],
-        }
-    if entry.get("title-short") and entry.get("volume"):
-        return {"title-short": entry["title-short"], "volume": entry["volume"]}
-    return None
-
-
-def first_contributor_family(entry: dict) -> Optional[str]:
-    people = entry.get("author") or entry.get("editor") or []
-    if people and isinstance(people[0], dict):
-        family = people[0].get("family")
-        return family if isinstance(family, str) and family else None
-    return None
-
-
-def year_range(year: int) -> dict[str, int]:
-    return {"$gte": pad_trailing_zeroes(year), "$lt": pad_trailing_zeroes(year + 1)}
-
-
-def pad_trailing_zeroes(year: int) -> int:
-    return int(str(year).ljust(4, "0"))
+def primary_year_expression() -> dict:
+    return {
+        "$arrayElemAt": [
+            {"$arrayElemAt": ["$issued.date-parts", 0]},
+            0,
+        ]
+    }

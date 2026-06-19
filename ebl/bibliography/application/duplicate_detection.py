@@ -46,14 +46,27 @@ class BibliographyDuplicateDetector:
     ) -> DuplicateDetectionResult:
         result_limit = max(1, min(limit, MAX_CANDIDATE_LIMIT))
         proposed = normalize_entry(proposed_entry)
-        candidates = [
+        candidates = self._normalized_candidates(proposed_entry)
+        reportable = select_reportable(
+            self._score_candidates(proposed, candidates), result_limit
+        )
+        return self._build_result(proposed_entry, reportable, candidates)
+
+    def _normalized_candidates(
+        self, proposed_entry: Mapping[str, Any]
+    ) -> Sequence[Any]:
+        return [
             normalize_entry(candidate)
             for candidate in self._repository.query_duplicate_candidates(
                 proposed_entry, self._candidate_pool_limit
             )
         ]
-        entries_by_id = {candidate.id: candidate for candidate in candidates}
-        scored = sorted(
+
+    @staticmethod
+    def _score_candidates(
+        proposed: Any, candidates: Sequence[Any]
+    ) -> Sequence[PairScore]:
+        return sorted(
             (
                 score_pair(proposed, candidate)
                 for candidate in candidates
@@ -62,11 +75,14 @@ class BibliographyDuplicateDetector:
             key=lambda pair: pair.score,
             reverse=True,
         )
-        reportable = [
-            pair
-            for pair in scored
-            if pair.decision != "not_duplicate" or pair.score >= 0.70
-        ][:result_limit]
+
+    @staticmethod
+    def _build_result(
+        proposed_entry: Mapping[str, Any],
+        reportable: Sequence[PairScore],
+        candidates: Sequence[Any],
+    ) -> DuplicateDetectionResult:
+        entries_by_id = {candidate.id: candidate for candidate in candidates}
         return DuplicateDetectionResult(
             decision=overall_decision(reportable),
             highest_score=reportable[0].score if reportable else 0.0,
@@ -78,6 +94,14 @@ class BibliographyDuplicateDetector:
                 for pair in reportable
             ],
         )
+
+
+def select_reportable(scored: Sequence[PairScore], limit: int) -> Sequence[PairScore]:
+    return [
+        pair
+        for pair in scored
+        if pair.decision != "not_duplicate" or pair.score >= 0.70
+    ][:limit]
 
 
 def overall_decision(pairs: Sequence[PairScore]) -> str:
