@@ -26,7 +26,7 @@ def test_realia_entry_defaults() -> None:
     assert entry.afo_register == ()
     assert entry.references == ()
     assert entry.wikidata_id == ()
-    assert entry.reallexikon == ()
+    assert entry.reallexikon is None
 
 
 def test_realia_entry_creation(realia_entry: RealiaEntry) -> None:
@@ -38,8 +38,7 @@ def test_realia_entry_creation(realia_entry: RealiaEntry) -> None:
     assert all(isinstance(e, AfoRegisterEntry) for e in realia_entry.afo_register)
     assert isinstance(realia_entry.references, tuple)
     assert isinstance(realia_entry.wikidata_id, tuple)
-    assert isinstance(realia_entry.reallexikon, tuple)
-    assert all(isinstance(r, ReallexikonEntry) for r in realia_entry.reallexikon)
+    assert isinstance(realia_entry.reallexikon, ReallexikonEntry)
 
 
 def test_afo_register_entry_schema_round_trip() -> None:
@@ -80,7 +79,8 @@ def test_realia_entry_schema_dump(realia_entry: RealiaEntry) -> None:
     assert dumped["type"] == list(realia_entry.type)
     assert dumped["wikidataId"] == list(realia_entry.wikidata_id)
     assert len(dumped["afoRegister"]) == len(realia_entry.afo_register)
-    assert len(dumped["reallexikon"]) == len(realia_entry.reallexikon)
+    assert realia_entry.reallexikon is not None
+    assert dumped["reallexikon"]["id"] == realia_entry.reallexikon.id
 
 
 def test_realia_entry_schema_load_round_trip() -> None:
@@ -114,6 +114,6 @@ def test_realia_entry_schema_load_stored_shape() -> None:
     }
     entry = RealiaEntrySchema().load(data)
     assert entry.type == ("Personal names",)
-    reference = entry.reallexikon[0].reference
+    reference = entry.reallexikon.reference
     assert reference is not None
     assert reference.id == "rla_1_2b"

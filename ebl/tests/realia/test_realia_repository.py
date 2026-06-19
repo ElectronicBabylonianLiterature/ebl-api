@@ -20,9 +20,9 @@ def _create_entry_with_bibliography(
     for ref in entry.references:
         if ref.document:
             bibliography_repository.create(ref.document)
-    for rlex in entry.reallexikon:
-        if rlex.reference is not None and rlex.reference.document:
-            bibliography_repository.create(rlex.reference.document)
+    rlex = entry.reallexikon
+    if rlex is not None and rlex.reference is not None and rlex.reference.document:
+        bibliography_repository.create(rlex.reference.document)
 
 
 def test_find_existing_entry(
@@ -39,10 +39,9 @@ def test_find_existing_entry(
     assert result.type == entry.type
     assert result.wikidata_id == entry.wikidata_id
     assert any(ref.document is not None for ref in result.references)
-    assert any(
-        rlex.reference is not None and rlex.reference.document is not None
-        for rlex in result.reallexikon
-    )
+    assert result.reallexikon is not None
+    assert result.reallexikon.reference is not None
+    assert result.reallexikon.reference.document is not None
 
 
 def test_find_not_found(realia_repository: RealiaRepository) -> None:
@@ -108,19 +107,20 @@ def test_search_entry_with_reallexikon_no_reference(
     bibliography_repository: BibliographyRepository,
 ) -> None:
     entry = RealiaEntryFactory.build(
-        reallexikon=(ReallexikonEntryFactory.build(reference=None),)
+        reallexikon=ReallexikonEntryFactory.build(reference=None)
     )
     _create_entry_with_bibliography(realia_repository, bibliography_repository, entry)
 
     results = realia_repository.search(entry.id)
 
     assert len(results) == 1
-    assert results[0].reallexikon[0].reference is None
+    assert results[0].reallexikon is not None
+    assert results[0].reallexikon.reference is None
 
 
 def _insert_minimal(realia_repository: MongoRealiaRepository, identifier: str) -> None:
     entry = RealiaEntryFactory.build(
-        id=identifier, related_terms=(), references=(), reallexikon=()
+        id=identifier, related_terms=(), references=(), reallexikon=None
     )
     realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
 

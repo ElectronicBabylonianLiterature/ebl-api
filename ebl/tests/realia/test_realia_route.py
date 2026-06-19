@@ -17,9 +17,9 @@ def _seed_entry(
     for ref in entry.references:
         if ref.document:
             bibliography_repository.create(ref.document)
-    for rlex in entry.reallexikon:
-        if rlex.reference is not None and rlex.reference.document:
-            bibliography_repository.create(rlex.reference.document)
+    rlex = entry.reallexikon
+    if rlex is not None and rlex.reference is not None and rlex.reference.document:
+        bibliography_repository.create(rlex.reference.document)
     return entry
 
 
