@@ -1,8 +1,5 @@
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.common.query.util import flatten_field, drop_duplicates, ngrams
-from ebl.fragmentarium.infrastructure.queries import (
-    fragment_summary_projection_lightweight,
-)
 from typing import List, Dict
 
 
@@ -51,8 +48,9 @@ class LemmaMatcher:
         return [
             {
                 "$project": {
-                    **fragment_summary_projection_lightweight(),
+                    "museumNumber": 1,
                     "_sortKey": 1,
+                    "_scriptSortKey": "$script.sortKey",
                     self.flat_path: f"${self.unique_lemma_path}",
                 }
             },
@@ -72,15 +70,7 @@ class LemmaMatcher:
                     "matchingLines": {"$push": "$lineIndex"},
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "accession": {"$first": "$accession"},
-                    "archaeology": {"$first": "$archaeology"},
-                    "date": {"$first": "$date"},
-                    "description": {"$first": "$description"},
-                    "dossiers": {"$first": "$dossiers"},
-                    "genres": {"$first": "$genres"},
-                    "projects": {"$first": "$projects"},
-                    "references": {"$first": "$references"},
-                    "script": {"$first": "$script"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
@@ -127,17 +117,9 @@ class LemmaMatcher:
                 "$project": {
                     "ngram": ngrams(f"${self.flat_path}", n=len(self.pattern)),
                     "lineIndex": True,
-                    "accession": True,
-                    "archaeology": True,
-                    "date": True,
-                    "description": True,
-                    "dossiers": True,
-                    "genres": True,
                     "museumNumber": True,
-                    "projects": True,
-                    "references": True,
-                    "script": True,
                     "_sortKey": True,
+                    "_scriptSortKey": True,
                 }
             },
             {"$addFields": {"ngram": {"$setUnion": ["$ngram", []]}}},

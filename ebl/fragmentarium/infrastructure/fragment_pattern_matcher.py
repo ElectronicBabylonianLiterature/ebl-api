@@ -1,7 +1,6 @@
 from typing import List, Dict, Sequence, Optional
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import (
-    fragment_photo_filename_expression,
     match_user_scopes,
     number_is,
 )
@@ -15,6 +14,10 @@ from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
+
+EXACT_COUNT = "exact"
+NO_COUNT = "none"
+PAGE_COUNT = "page"
 
 
 class PatternMatcher:
@@ -44,108 +47,61 @@ class PatternMatcher:
         )
 
     def _limit_result(self):
-        return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
+        return (
+            [{"$limit": self._limit_value()}]
+            if "limit" in self._query
+            else []
+        )
+
+    def _limit_value(self):
+        limit = self._query["limit"]
+        return limit + 1 if self._count_mode() == PAGE_COUNT else limit
+
+    def _count_mode(self):
+        return self._query.get("count", EXACT_COUNT)
+
+    def _count_is_exact(self):
+        return self._count_mode() == EXACT_COUNT
+
+    def _skip_result(self):
+        return [{"$skip": self._query["offset"]}] if self._query.get("offset") else []
 
     def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
         return [{"$sort": sort_fields}] if sort_fields else []
 
-    def _items_pipeline(self) -> List[Dict]:
+    def _summary_items_pipeline(self) -> List[Dict]:
         return [
+            *self._skip_result(),
             *self._limit_result(),
             {
-                "$addFields": {
-                    "filename": fragment_photo_filename_expression(),
-                }
-            },
-            {
-                "$lookup": {
-                    "from": "photos.files",
-                    "localField": "filename",
-                    "foreignField": "filename",
-                    "as": "photoFiles",
-                }
-            },
-            {
-                "$addFields": {
-                    "hasPhoto": {"$gt": [{"$size": "$photoFiles"}, 0]},
-                }
-            },
-            {
-                "$lookup": {
-                    "from": "fragments",
-                    "let": {"fid": "$_id"},
-                    "pipeline": [
-                        {"$match": {"$expr": {"$eq": ["$_id", "$$fid"]}}},
-                        {
-                            "$project": {
-                                "textLines": "$text.lines",
-                                "textParserVersion": "$text.parser_version",
-                            }
-                        },
-                    ],
-                    "as": "_textData",
-                }
-            },
-            {
-                "$addFields": {
-                    "textLines": {
-                        "$ifNull": [
-                            {"$arrayElemAt": ["$_textData.textLines", 0]},
-                            [],
-                        ]
-                    },
-                    "textParserVersion": {
-                        "$ifNull": [
-                            {
-                                "$arrayElemAt": [
-                                    "$_textData.textParserVersion",
-                                    0,
-                                ]
-                            },
-                            None,
-                        ]
-                    },
-                }
-            },
-            {
-                "$addFields": {
-                    "matchingLinePreview": {
-                        "lines": {
-                            "$map": {
-                                "input": {"$ifNull": ["$matchingLines", []]},
-                                "as": "lineIndex",
-                                "in": {
-                                    "$arrayElemAt": [
-                                        "$textLines",
-                                        "$$lineIndex",
-                                    ]
-                                },
-                            }
-                        },
-                        "parser_version": "$textParserVersion",
-                    }
-                }
-            },
-            {
                 "$project": {
-                    "_id": False,
-                    "accession": True,
-                    "archaeology": True,
-                    "date": True,
-                    "description": True,
-                    "dossiers": True,
-                    "genres": True,
-                    "hasPhoto": True,
+                    "_id": True,
                     "matchCount": True,
                     "matchingLines": True,
-                    "matchingLinePreview": True,
                     "museumNumber": True,
-                    "projects": True,
-                    "references": True,
-                    "script": True,
                 }
             },
         ]
+
+    def _lean_items_pipeline(self) -> List[Dict]:
+        return [
+            *self._skip_result(),
+            {
+                "$project": {
+                    "_id": False,
+                    "museumNumber": True,
+                    "matchingLines": True,
+                    "matchCount": True,
+                }
+            },
+        ]
+
+    def _items_pipeline(self) -> List[Dict]:
+        return (
+            self._summary_items_pipeline()
+            if "limit" in self._query
+            else self._lean_items_pipeline()
+        )
 
     def _filter_by_script(self) -> Dict:
         parameters = {
@@ -238,20 +194,10 @@ class PatternMatcher:
                 "$project": {
                     "_id": True,
                     "museumNumber": True,
-                    "accession": True,
-                    "archaeology": {
-                        "excavationNumber": "$archaeology.excavationNumber",
-                        "site": "$archaeology.site",
-                    },
-                    "date": True,
-                    "description": True,
-                    "dossiers": True,
-                    "genres": True,
                     "matchingLines": {"$literal": []},
                     "matchCount": {"$literal": 0},
-                    "script": True,
-                    "projects": True,
-                    "references": True,
+                    "_sortKey": True,
+                    "_scriptSortKey": "$script.sortKey",
                 }
             },
         ]
@@ -281,15 +227,7 @@ class PatternMatcher:
                     "matchingLines": {"$push": "$matchingLines"},
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "accession": {"$first": "$accession"},
-                    "archaeology": {"$first": "$archaeology"},
-                    "date": {"$first": "$date"},
-                    "description": {"$first": "$description"},
-                    "dossiers": {"$first": "$dossiers"},
-                    "genres": {"$first": "$genres"},
-                    "projects": {"$first": "$projects"},
-                    "references": {"$first": "$references"},
-                    "script": {"$first": "$script"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                 },
             },
             {
@@ -334,31 +272,55 @@ class PatternMatcher:
             isinstance(self._sign_matcher, SignMatcher),
         )
 
+        facet = {
+            "items": [
+                *self._sort_by({"_scriptSortKey": 1, "_sortKey": 1}),
+                *self._items_pipeline(),
+            ],
+        }
+        if self._count_is_exact():
+            facet["count"] = self._count_pipeline()
+
         return [
             *self._prefilter(),
             *dispatcher[key](),
-            {
-                "$facet": {
-                    "items": [
-                        *self._sort_by({"script.sortKey": 1, "_sortKey": 1}),
-                        *self._items_pipeline(),
-                    ],
-                    "count": self._count_pipeline(),
-                }
-            },
-            {
-                "$project": {
-                    "_id": False,
-                    "items": True,
-                    "matchCountTotal": {
-                        "$ifNull": [
-                            {"$arrayElemAt": ["$count.matchCountTotal", 0]},
-                            0,
-                        ]
-                    },
-                }
-            },
+            {"$facet": facet},
+            {"$project": self._result_projection()},
         ]
 
     def build_pipeline(self) -> List[Dict]:
         return self._get_pipeline_components()
+
+    def _result_projection(self):
+        return {
+            "_id": False,
+            "items": self._items_projection(),
+            "matchCountTotal": self._match_count_total_projection(),
+            "isMatchCountTotalExact": {"$literal": self._count_is_exact()},
+            "hasNextPage": self._has_next_page_projection(),
+            "_showCountMetadata": {"$literal": True},
+        }
+
+    def _items_projection(self):
+        if self._count_mode() == PAGE_COUNT and "limit" in self._query:
+            return {"$slice": ["$items", self._query["limit"]]}
+        return True
+
+    def _match_count_total_projection(self):
+        if self._count_is_exact():
+            return {
+                "$ifNull": [
+                    {"$arrayElemAt": ["$count.matchCountTotal", 0]},
+                    0,
+                ]
+            }
+        return {"$literal": None}
+
+    def _has_next_page_projection(self):
+        if self._count_mode() == PAGE_COUNT:
+            return (
+                {"$gt": [{"$size": "$items"}, self._query["limit"]]}
+                if "limit" in self._query
+                else {"$literal": False}
+            )
+        return {"$literal": None}

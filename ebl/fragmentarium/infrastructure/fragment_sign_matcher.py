@@ -1,8 +1,5 @@
 from typing import List, Dict
 from ebl.common.query.util import flatten_field, ngrams
-from ebl.fragmentarium.infrastructure.queries import (
-    fragment_summary_projection_lightweight,
-)
 
 
 class SignMatcher:
@@ -38,6 +35,10 @@ class SignMatcher:
             },
         ]
 
+    def _prefilter_signs(self) -> List[Dict]:
+        predicates = [{"signs": {"$regex": pattern}} for pattern in self.pattern]
+        return [{"$match": {"$and": predicates}}] if predicates else []
+
     def _expand_line_ranges(self) -> Dict:
         return {
             "$map": {
@@ -61,8 +62,9 @@ class SignMatcher:
         return [
             {
                 "$project": {
-                    **fragment_summary_projection_lightweight(),
+                    "museumNumber": True,
                     "_sortKey": True,
+                    "_scriptSortKey": "$script.sortKey",
                     "lineTypes": "$text.lines.type",
                     "signs": True,
                 }
@@ -74,15 +76,7 @@ class SignMatcher:
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "accession": {"$first": "$accession"},
-                    "archaeology": {"$first": "$archaeology"},
-                    "date": {"$first": "$date"},
-                    "description": {"$first": "$description"},
-                    "dossiers": {"$first": "$dossiers"},
-                    "genres": {"$first": "$genres"},
-                    "projects": {"$first": "$projects"},
-                    "references": {"$first": "$references"},
-                    "script": {"$first": "$script"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                     "textLineIndices": {"$push": "$lineIndex"},
                     "signLines": {"$first": {"$split": ["$signs", "\n"]}},
                 }
@@ -91,6 +85,7 @@ class SignMatcher:
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         return [
+            *self._prefilter_signs(),
             *self._map_signs_to_textlines(),
             *(
                 self._match_multiline()
@@ -102,15 +97,7 @@ class SignMatcher:
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "accession": {"$first": "$accession"},
-                    "archaeology": {"$first": "$archaeology"},
-                    "date": {"$first": "$date"},
-                    "description": {"$first": "$description"},
-                    "dossiers": {"$first": "$dossiers"},
-                    "genres": {"$first": "$genres"},
-                    "projects": {"$first": "$projects"},
-                    "references": {"$first": "$references"},
-                    "script": {"$first": "$script"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                     "matchingLines": {
                         "$push": (
                             self._expand_line_ranges()

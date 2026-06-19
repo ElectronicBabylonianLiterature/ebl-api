@@ -14,11 +14,10 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQueryArchaeology,
     FragmentQueryResult,
     FragmentQuerySummary,
+    empty_matching_line_preview,
 )
 from ebl.schemas import ResearchProjectField, ValueEnumField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.application.text_schema import TextSchema
-from ebl.transliteration.domain.text import Text
 
 
 DEFAULT_THUMBNAIL_RESOLUTION = "small"
@@ -85,6 +84,34 @@ class FragmentQueryArchaeologySchema(Schema):
         return data or None
 
 
+class FragmentQueryPreviewTokenSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    value = fields.String(required=True)
+    cleanValue = fields.String(allow_none=True)
+    uniqueLemma = fields.List(fields.String())
+    type = fields.String()
+
+
+class FragmentQueryPreviewLineSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    number = fields.String(required=True)
+    prefix = fields.String(required=True)
+    text = fields.String(required=True)
+    tokens = fields.Nested(FragmentQueryPreviewTokenSchema, many=True, required=True)
+
+
+class FragmentQueryMatchingLinePreviewSchema(Schema):
+    class Meta:
+        unknown = EXCLUDE
+
+    lines = fields.Nested(FragmentQueryPreviewLineSchema, many=True, required=True)
+    parser_version = fields.String(required=True)
+
+
 class FragmentQuerySummarySchema(Schema):
     class Meta:
         unknown = EXCLUDE
@@ -114,7 +141,7 @@ class FragmentQuerySummarySchema(Schema):
         fields.Integer(), required=True, data_key="matchingLines"
     )
     matching_line_preview = fields.Nested(
-        TextSchema,
+        FragmentQueryMatchingLinePreviewSchema,
         allow_none=True,
         load_default=None,
         dump_default=None,
@@ -138,7 +165,7 @@ class FragmentQuerySummarySchema(Schema):
         data["projects"] = tuple(data["projects"])
         data["dossiers"] = tuple(data["dossiers"])
         if data.get("matching_line_preview") is None:
-            data["matching_line_preview"] = Text()
+            data["matching_line_preview"] = empty_matching_line_preview()
         return FragmentQuerySummary(**data)
 
     @post_dump(pass_many=True)
@@ -153,7 +180,26 @@ class FragmentQueryResultSchema(Schema):
         unknown = EXCLUDE
 
     items = fields.Nested(FragmentQuerySummarySchema, many=True, required=True)
-    match_count_total = fields.Integer(required=True, data_key="matchCountTotal")
+    match_count_total = fields.Integer(
+        required=True, data_key="matchCountTotal", allow_none=True
+    )
+    is_match_count_total_exact = fields.Boolean(
+        data_key="isMatchCountTotalExact", load_default=True, dump_default=True
+    )
+    has_next_page = fields.Boolean(
+        data_key="hasNextPage", load_default=None, dump_default=None, allow_none=True
+    )
+    show_count_metadata = fields.Boolean(
+        data_key="_showCountMetadata", load_default=False, dump_default=False
+    )
+
+    @post_dump
+    def filter_count_metadata(self, data, **kwargs):
+        show_count_metadata = data.pop("_showCountMetadata", False)
+        if not show_count_metadata:
+            data.pop("isMatchCountTotalExact", None)
+            data.pop("hasNextPage", None)
+        return data
 
     @post_load
     def make_query_result(self, data, **kwargs) -> FragmentQueryResult:

@@ -24,7 +24,6 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
 )
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-from ebl.transliteration.application.text_schema import TextSchema
 
 
 def build_summary() -> FragmentQuerySummary:
@@ -104,18 +103,17 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         ],
         "dossiers": DossierReferenceSchema().dump(summary.dossiers, many=True),
         "matchingLines": [0, 2],
-        "matchingLinePreview": TextSchema().dump(summary.matching_line_preview),
+        "matchingLinePreview": summary.matching_line_preview,
         "matchCount": 2,
         "hasPhoto": True,
         "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
     }
-    assert dumped["matchingLinePreview"]["numberOfLines"] == 2
     assert dumped["matchingLinePreview"]["lines"][0]["prefix"] == (
-        summary.matching_line_preview.lines[0].line_number.atf
+        summary.matching_line_preview["lines"][0]["prefix"]
     )
-    assert dumped["matchingLinePreview"]["lines"][1]["prefix"] == (
-        summary.matching_line_preview.lines[1].line_number.atf
-    )
+    assert dumped["matchingLinePreview"]["lines"][0]["text"]
+    assert dumped["matchingLinePreview"]["lines"][0]["tokens"][0]["value"]
+    assert "parts" not in dumped["matchingLinePreview"]["lines"][0]["tokens"][0]
     assert "text" not in dumped
     assert "record" not in dumped
     assert "atf" not in dumped

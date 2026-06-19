@@ -102,7 +102,7 @@ class FragmentRepository(ABC):
     @abstractmethod
     def query(
         self, query: dict, user_scopes: Sequence[Scope] = ()
-    ) -> FragmentQueryResult:
+    ) -> Union[QueryResult, FragmentQueryResult]:
         raise NotImplementedError
 
     @abstractmethod

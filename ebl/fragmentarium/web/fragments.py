@@ -12,6 +12,8 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_pages,
     parse_genre,
+    parse_non_negative_integer_field,
+    parse_count,
 )
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import DataError, NotFoundError
@@ -111,12 +113,18 @@ class FragmentsQueryResource:
             parse_lemmas,
             parse_pages,
             parse_genre,
+            parse_count,
             parse_integer_field("limit"),
+            parse_non_negative_integer_field("offset"),
+        )
+        query = parse(req.params)
+        schema = (
+            FragmentQueryResultSchema() if "limit" in query else QueryResultSchema()
         )
 
-        resp.media = FragmentQueryResultSchema().dump(
+        resp.media = schema.dump(
             self._repository.query(
-                parse(req.params),
+                query,
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
         )
