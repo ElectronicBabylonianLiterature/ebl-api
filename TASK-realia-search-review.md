@@ -10,12 +10,18 @@ stored data (the source of truth), and tests/factory updated accordingly.
 
 ## Findings
 
-| # | Finding | Severity | Status |
-|---|---------|----------|--------|
-| 1 | `type` stored as free-text category strings; `NameEnumField(RealiaType)` raised "Invalid value." | High (endpoint 500) | Fixed |
-| 2 | `reallexikon[].reference` stored as a bibliography-id string; `fields.Nested` raised "Invalid input type." | High (endpoint 500) | Fixed |
-| 3 | Pre-existing `mypy` errors in `ebl/common/domain/scopes.py` | Low (pre-existing, unrelated) | Not addressed — needs decision |
-| 4 | Real docs carry data dropped on load: `lemma`, `realiaId`, `crossReferences`, `afoCrossReferences`, `afoRegister[].id` | Info | Out of scope |
+1. **`type` stored as free-text category strings**;
+   `NameEnumField(RealiaType)` raised "Invalid value."
+   Severity: High (endpoint 500). Status: fixed.
+2. **`reallexikon[].reference` stored as a bibliography-id string**;
+   `fields.Nested` raised "Invalid input type."
+   Severity: High (endpoint 500). Status: fixed.
+3. **Pre-existing `mypy` errors in `ebl/common/domain/scopes.py`.**
+   Severity: Low (pre-existing, unrelated).
+   Status: not addressed — needs decision.
+4. **Real docs carry data dropped on load**: `lemma`, `realiaId`,
+   `crossReferences`, `afoCrossReferences`, `afoRegister[].id`.
+   Severity: Info. Status: out of scope.
 
 ## Severity
 

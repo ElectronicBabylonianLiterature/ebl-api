@@ -31,7 +31,10 @@ generating code, answering questions, or reviewing changes.
 - Functions should be small and focused on a single task.
 - Refactor long and complex code automatically.
 - Do not add comments to the code unless explicitly requested.
-- HARD GATE: no `*.py` file may exceed 250 total lines. If a change pushes a file past this limit, refactor by extracting modules or splitting test files before completing the task. This is non-negotiable and applies to both source and test files.
+- HARD GATE: no `*.py` file may exceed 250 total lines. If a change pushes a
+  file past this limit, refactor by extracting modules or splitting test files
+  before completing the task. This is non-negotiable and applies to both source
+  and test files.
 
 ## Commands and Tooling
 
@@ -44,9 +47,12 @@ Run all of the following in order and confirm each passes before committing:
 
 1. `task format` — auto-format code (must exit 0 with no unstaged changes left)
 2. `task test` — full test suite (must pass with 0 failures)
-3. `poetry run pytest <changed modules> --cov=<changed modules> --cov-report=term-missing` — 100% coverage on all changed files
-4. `poetry run flake8 <changed modules> --max-line-length=120` — zero lint errors
-5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type errors (pre-existing errors are not acceptable; fix them)
+3. `poetry run pytest <changed modules> --cov=<changed modules>
+   --cov-report=term-missing` — 100% coverage on all changed files
+4. `poetry run flake8 <changed modules> --max-line-length=120` — zero lint
+   errors
+5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
+   errors (pre-existing errors are not acceptable; fix them)
 
 Never commit if any gate fails or was skipped.
 
