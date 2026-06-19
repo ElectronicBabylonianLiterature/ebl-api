@@ -1,3 +1,5 @@
+from typing import Dict
+
 from ebl.realia.infrastructure.realia_search_ranking import (
     NO_MATCH_RANK,
     RealiaRelevanceRanker,
@@ -6,6 +8,10 @@ from ebl.realia.infrastructure.realia_search_ranking import (
 
 def _document(identifier: str, related_terms=()) -> dict:
     return {"_id": identifier, "relatedTerms": list(related_terms)}
+
+
+def _doc(**fields: object) -> Dict[str, object]:
+    return dict(fields)
 
 
 def test_ranks_exact_id_first() -> None:
@@ -56,3 +62,37 @@ def test_collation_is_diacritic_insensitive() -> None:
 def test_no_match_returns_fallback_rank() -> None:
     ranker = RealiaRelevanceRanker("Marduk")
     assert ranker.key(_document("Enlil", related_terms=("Ellil",)))[0] == NO_MATCH_RANK
+
+
+def test_richer_entry_wins_within_same_match_tier() -> None:
+    ranker = RealiaRelevanceRanker("Marduk")
+    sparse = _doc(_id="Marduk-A")
+    rich = _doc(
+        _id="Marduk-B",
+        type=["Divine names"],
+        references=[{"id": "x"}, {"id": "y"}],
+        reallexikon=[{"id": "1"}],
+    )
+    documents = [sparse, rich]
+    documents.sort(key=ranker.key)
+    assert [document["_id"] for document in documents] == ["Marduk-B", "Marduk-A"]
+
+
+def test_richness_does_not_override_match_tier() -> None:
+    ranker = RealiaRelevanceRanker("Marduk")
+    exact_sparse = _doc(_id="Marduk")
+    substring_rich = _doc(
+        _id="Amêl-Marduk",
+        type=["Personal names"],
+        references=[{"id": "x"}, {"id": "y"}, {"id": "z"}],
+    )
+    documents = [substring_rich, exact_sparse]
+    documents.sort(key=ranker.key)
+    assert [document["_id"] for document in documents] == ["Marduk", "Amêl-Marduk"]
+
+
+def test_reallexikon_counts_as_single_data_point() -> None:
+    ranker = RealiaRelevanceRanker("Marduk")
+    as_array = ranker.key(_doc(_id="Marduk-A", reallexikon=[{"id": "1"}]))
+    as_object = ranker.key(_doc(_id="Marduk-B", reallexikon={"id": "1"}))
+    assert as_array[1] == as_object[1] == -1

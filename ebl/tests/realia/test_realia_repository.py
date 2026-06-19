@@ -149,3 +149,32 @@ def test_search_has_no_result_limit(
     results = realia_repository.search("Lion")
 
     assert len(results) == 20
+
+
+def test_search_ranks_richer_entry_first_within_tier(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    sparse = RealiaEntryFactory.build(
+        id="Lion A",
+        related_terms=(),
+        type=(),
+        afo_register=(),
+        references=(),
+        wikidata_id=(),
+        reallexikon=None,
+    )
+    rich = RealiaEntryFactory.build(
+        id="Lion Z",
+        related_terms=("Löwe", "Ur-mah"),
+        type=("Fauna",),
+        afo_register=(),
+        references=(),
+        wikidata_id=("Q140",),
+        reallexikon=None,
+    )
+    for entry in (sparse, rich):
+        realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
+
+    results = realia_repository.search("Lion")
+
+    assert [result.id for result in results] == ["Lion Z", "Lion A"]

@@ -9,6 +9,14 @@ SUBSTRING_RANK = 2
 TERM_RANK_OFFSET = 3
 NO_MATCH_RANK = 6
 
+RICHNESS_LIST_FIELDS = (
+    "relatedTerms",
+    "type",
+    "afoRegister",
+    "references",
+    "wikidataId",
+)
+
 
 class _FieldMatcher:
     def __init__(self, pattern: str) -> None:
@@ -35,9 +43,24 @@ class RealiaRelevanceRanker:
             CollatedFieldQuery(query, "relatedTerms", "realia").value
         )
 
-    def key(self, document: Mapping[str, object]) -> Tuple[int, str, str]:
+    def key(self, document: Mapping[str, object]) -> Tuple[int, int, str, str]:
         identifier = cast(str, document["_id"])
-        return (self._rank(identifier, document), identifier.casefold(), identifier)
+        return (
+            self._rank(identifier, document),
+            -self._data_richness(document),
+            identifier.casefold(),
+            identifier,
+        )
+
+    def _data_richness(self, document: Mapping[str, object]) -> int:
+        total = 0
+        for field in RICHNESS_LIST_FIELDS:
+            value = document.get(field)
+            if isinstance(value, list):
+                total += len(value)
+        if document.get("reallexikon"):
+            total += 1
+        return total
 
     def _rank(self, identifier: str, document: Mapping[str, object]) -> int:
         id_rank = self._id_matcher.rank(identifier)
