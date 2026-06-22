@@ -3,14 +3,12 @@ from typing import Sequence, Iterator
 import re
 
 import pydash
-from lark.exceptions import ParseError, UnexpectedInput, VisitError
+from lark.exceptions import ParseError
 from lark.lark import Lark, Tree
 
 from ebl.transliteration.domain import atf
-from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
 from ebl.transliteration.domain.greek_tokens import GreekWord
-from ebl.transliteration.domain.labels import DuplicateStatusError
 from ebl.transliteration.domain.line import EmptyLine, Line
 from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.markup import MarkupPart, ParagraphPart
@@ -28,11 +26,13 @@ from ebl.transliteration.domain.transliteration_error import (
     ErrorAnnotation,
 )
 from ebl.transliteration.domain.word_tokens import Word
-from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
+    PARSE_ERRORS,
+    create_transliteration_error_data,
+)
 from ebl.transliteration.domain.line_transformer import LineTransformer
 from ebl.transliteration.domain.label_transformer import LabelTransformer
 from ebl.transliteration.domain.labels import Label
-from functools import singledispatch
 
 ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
 ATF_COMMON_PATH = "lark_parser/ebl_atf_common.lark"
@@ -48,14 +48,38 @@ LINE_PARSER_STARTS = [
     "ebl_atf_text_line__erasure",
 ]
 
-WORD_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="any_word")
-NOTE_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="note_line")
-MARKUP_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="markup")
-PARALLEL_LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="parallel_line")
-TRANSLATION_LINE_PARSER = Lark.open(
-    ATF_GRAMMAR_PATH, **kwargs_lark, start="translation_line"
-)
-PARATEXT_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start="paratext")
+ATF_GRAMMAR_STARTS = [
+    *LINE_PARSER_STARTS,
+    "any_word",
+    "note_line",
+    "markup",
+    "parallel_line",
+    "translation_line",
+    "paratext",
+    "labels",
+    "ebl_atf_text_line__break",
+]
+
+
+class _StartParser:
+    def __init__(self, parser: Lark, start: str) -> None:
+        self._parser = parser
+        self._start = start
+
+    def parse(self, text, **kwargs):
+        kwargs.setdefault("start", self._start)
+        return self._parser.parse(text, **kwargs)
+
+
+LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start=ATF_GRAMMAR_STARTS)
+WORD_PARSER = _StartParser(LINE_PARSER, "any_word")
+NOTE_LINE_PARSER = _StartParser(LINE_PARSER, "note_line")
+MARKUP_PARSER = _StartParser(LINE_PARSER, "markup")
+PARALLEL_LINE_PARSER = _StartParser(LINE_PARSER, "parallel_line")
+TRANSLATION_LINE_PARSER = _StartParser(LINE_PARSER, "translation_line")
+PARATEXT_PARSER = _StartParser(LINE_PARSER, "paratext")
+LABEL_PARSER = _StartParser(LINE_PARSER, "labels")
+
 CHAPTER_PARSER = Lark.open(
     "lark_parser/ebl_atf_chapter.lark",
     **kwargs_lark,
@@ -66,15 +90,7 @@ MANUSCRIPT_PARSER = Lark.open(
     **kwargs_lark,
     start=["manuscript_line", "siglum"],
 )
-LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start=LINE_PARSER_STARTS)
 LINE_NUMBER_PARSER = Lark.open(ATF_COMMON_PATH, **kwargs_lark, start="line_number")
-
-LABEL_PARSER = Lark.open(
-    "lark_parser/ebl_atf.lark",
-    maybe_placeholders=True,
-    rel_to=__file__,
-    start="labels",
-)
 
 
 def parse_word(atf: str) -> Word:
@@ -217,38 +233,3 @@ def parse_atf_lark(atf_: str) -> Text:
         )
     else:
         return text
-
-
-@singledispatch
-def create_transliteration_error_data(
-    error: Exception, line: str, line_number: int
-) -> ErrorAnnotation:
-    raise error
-
-
-@create_transliteration_error_data.register
-def _(error: UnexpectedInput, line: str, line_number: int) -> ErrorAnnotation:
-    description = "Invalid line: "
-    context = error.get_context(line, 6).split("\n", 1)
-    return ErrorAnnotation(
-        description + context[0] + "\n" + len(description) * " " + context[1],
-        line_number + 1,
-    )
-
-
-@create_transliteration_error_data.register
-def _(error: ParseError, line: str, line_number: int) -> ErrorAnnotation:
-    return ErrorAnnotation(f"Invalid line: {error}", line_number + 1)
-
-
-@create_transliteration_error_data.register
-def _(error: EnclosureError, line: str, line_number: int) -> ErrorAnnotation:
-    return ErrorAnnotation("Invalid brackets.", line_number + 1)
-
-
-@create_transliteration_error_data.register
-def _(error: VisitError, line: str, line_number: int) -> ErrorAnnotation:
-    if isinstance(error.orig_exc, DuplicateStatusError):
-        return ErrorAnnotation("Duplicate Status", line_number + 1)
-    else:
-        raise error
