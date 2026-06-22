@@ -48,17 +48,19 @@ LINE_PARSER_STARTS = [
     "ebl_atf_text_line__erasure",
 ]
 
-ATF_GRAMMAR_STARTS = [
-    *LINE_PARSER_STARTS,
-    "any_word",
-    "note_line",
-    "markup",
-    "parallel_line",
-    "translation_line",
-    "paratext",
-    "labels",
-    "ebl_atf_text_line__break",
-]
+ATF_GRAMMAR_STARTS = pydash.uniq(
+    [
+        *LINE_PARSER_STARTS,
+        "any_word",
+        "note_line",
+        "markup",
+        "parallel_line",
+        "translation_line",
+        "paratext",
+        "labels",
+        "ebl_atf_text_line__break",
+    ]
+)
 
 
 class _StartParser:
@@ -66,9 +68,16 @@ class _StartParser:
         self._parser = parser
         self._start = start
 
-    def parse(self, text, **kwargs):
+    def parse(self, text: str, **kwargs: object) -> Tree:
         kwargs.setdefault("start", self._start)
         return self._parser.parse(text, **kwargs)
+
+    def __getattr__(self, name: str) -> object:
+        try:
+            parser = self.__dict__["_parser"]
+        except KeyError:
+            raise AttributeError(name)
+        return getattr(parser, name)
 
 
 LINE_PARSER = Lark.open(ATF_GRAMMAR_PATH, **kwargs_lark, start=ATF_GRAMMAR_STARTS)
