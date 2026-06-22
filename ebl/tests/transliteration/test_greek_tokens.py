@@ -47,7 +47,7 @@ def test_greek_letter() -> None:
             ),
             "αβ",
             Language.SUMERIAN,
-            False,
+            True,
             True,
         ),
     ],

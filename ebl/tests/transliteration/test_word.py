@@ -29,8 +29,8 @@ from ebl.transliteration.domain.word_tokens import AbstractWord, ErasureState, W
 
 LEMMATIZABLE_TEST_WORDS: List[Tuple[Word, bool]] = [
     (Word.of([Reading.of_name("un")]), True),
-    (Word.of([Reading.of_name("un")], language=Language.SUMERIAN), False),
-    (Word.of([Reading.of_name("un")], language=Language.EMESAL), False),
+    (Word.of([Reading.of_name("un")], language=Language.SUMERIAN), True),
+    (Word.of([Reading.of_name("un")], language=Language.EMESAL), True),
     (Word.of([Reading.of_name("un"), Joiner.hyphen(), UnclearSign.of()]), False),
     (Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("un")]), False),
     (Word.of([Variant.of(Reading.of_name("un"), Reading.of_name("ia"))]), False),
@@ -204,7 +204,6 @@ def test_set_unique_lemma_empty() -> None:
     "word",
     [
         Word.of([Reading.of_name("mu")]),
-        Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
         Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]),
         Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),
@@ -261,12 +260,20 @@ def test_set_alignment() -> None:
         (
             Word.of(unique_lemma=(WordId("nu I"),), parts=[Reading.of_name("bu")]),
             Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-            Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word.of(
+                language=Language.SUMERIAN,
+                parts=[Reading.of_name("bu")],
+                unique_lemma=(WordId("nu I"),),
+            ),
         ),
         (
             Word.of(alignment=1, parts=[Reading.of_name("bu")]),
             Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
-            Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
+            Word.of(
+                language=Language.SUMERIAN,
+                parts=[Reading.of_name("bu")],
+                alignment=1,
+            ),
         ),
         (
             Word.of(
