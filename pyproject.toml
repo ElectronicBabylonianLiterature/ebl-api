@@ -53,7 +53,7 @@ flake8 = "*"
 pyhamcrest = "*"
 flake8-bugbear = "*"
 httpretty = "*"
-pyre-check = "0.9.10"
+pyre-check = {version = "0.9.10", markers = "platform_python_implementation != 'PyPy'"}
 black = "*"
 pymongo-inmemory = "*"
 pytest-xdist = "*"
