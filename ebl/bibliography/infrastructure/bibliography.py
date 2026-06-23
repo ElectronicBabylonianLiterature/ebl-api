@@ -1,5 +1,8 @@
 from typing import Any, Dict, Optional, Sequence
 
+import pymongo
+
+from ebl.bibliography.application.partner_identity import normalize_partner_id
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.duplicate_audit import PROJECTION
 from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
@@ -10,6 +13,7 @@ from ebl.bibliography.application.serialization import (
     create_mongo_entry,
     create_object_entry,
 )
+from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography"
@@ -62,6 +66,17 @@ class MongoBibliographyRepository(BibliographyRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
 
+    def create_indexes(self) -> None:
+        self._collection.create_index(
+            [("citationKey", pymongo.ASCENDING)], unique=False
+        )
+        self._collection.create_index(
+            [("aliases.value", pymongo.ASCENDING)], unique=False
+        )
+        self._collection.create_index(
+            [("aliases.normalizedValue", pymongo.ASCENDING)], unique=False
+        )
+
     def create(self, entry) -> str:
         mongo_entry = create_mongo_entry(entry)
         return self._collection.insert_one(mongo_entry)
@@ -69,6 +84,27 @@ class MongoBibliographyRepository(BibliographyRepository):
     def query_by_id(self, id_: str) -> dict:
         data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
+
+    def query_by_citation_key(self, citation_key: str) -> dict:
+        data = self._collection.find_one({"citationKey": citation_key})
+        return create_object_entry(data)
+
+    def query_by_alias(self, alias: str) -> dict:
+        normalized_alias = normalize_partner_id(alias)
+        query = {"aliases.value": alias}
+        if normalized_alias:
+            query = {
+                "$or": [
+                    {"aliases.value": alias},
+                    {"aliases.normalizedValue": normalized_alias},
+                ]
+            }
+        data = list(self._collection.find_many(query))
+        if not data:
+            raise NotFoundError(f"bibliography alias {alias} not found.")
+        if len({item["_id"] for item in data}) > 1:
+            raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
+        return create_object_entry(data[0])
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})

@@ -1,3 +1,4 @@
+import re
 import json
 
 import falcon
@@ -50,6 +51,134 @@ def test_partner_bibliography_entry_by_id(client, saved_entry):
     assert result.json["bibliographyEntry"] == saved_entry
 
 
+def test_partner_bibliography_entry_by_citation_key(client, bibliography, user):
+    bibliography_entry = BibliographyEntryFactory.build(citationKey="miccadei2002")
+    bibliography.create(bibliography_entry, user)
+
+    result = client.simulate_get(
+        f"/api/v1/bibliography/{bibliography_entry['citationKey']}"
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == bibliography_entry["id"]
+    assert result.json["citationKey"] == bibliography_entry["citationKey"]
+    assert result.json["bibliographyEntry"] == bibliography_entry
+
+
+def test_partner_bibliography_entry_by_alias(client, bibliography, user):
+    alias = "legacy-id"
+    bibliography_entry = BibliographyEntryFactory.build(
+        aliases=[{"value": alias, "normalizedValue": alias}]
+    )
+    bibliography.create(bibliography_entry, user)
+
+    result = client.simulate_get(f"/api/v1/bibliography/{alias}")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == bibliography_entry["id"]
+    assert result.json["bibliographyEntry"] == bibliography_entry
+
+
+def test_partner_bibliography_resolve_by_canonical_id(client, saved_entry):
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": saved_entry["id"]},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == saved_entry["id"]
+    assert result.json["bibliographyEntry"] == saved_entry
+
+
+def test_partner_bibliography_resolve_by_citation_key(client, bibliography, user):
+    bibliography_entry = BibliographyEntryFactory.build(citationKey="miccadei2002")
+    bibliography.create(bibliography_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": bibliography_entry["citationKey"]},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == bibliography_entry["id"]
+    assert result.json["citationKey"] == bibliography_entry["citationKey"]
+    assert result.json["bibliographyEntry"] == bibliography_entry
+
+
+def test_partner_bibliography_resolve_by_raw_slash_alias(client, bibliography, user):
+    alias = "Leipzig/ABC 123"
+    bibliography_entry = BibliographyEntryFactory.build(
+        aliases=[{"value": alias, "normalizedValue": "leipzig-abc-123"}]
+    )
+    bibliography.create(bibliography_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": alias},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == bibliography_entry["id"]
+    assert result.json["bibliographyEntry"] == bibliography_entry
+
+
+def test_partner_bibliography_resolve_by_special_character_alias(
+    client, bibliography, user
+):
+    alias = "D’Agostino"
+    bibliography_entry = BibliographyEntryFactory.build(
+        aliases=[{"value": alias, "normalizedValue": "d-agostino"}]
+    )
+    bibliography.create(bibliography_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": alias},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == bibliography_entry["id"]
+    assert result.json["bibliographyEntry"] == bibliography_entry
+
+
+def test_partner_bibliography_resolve_missing_identifier(client):
+    result = client.simulate_get("/api/v1/bibliography/resolve")
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
+    assert "identifier" in result.json["description"]
+
+
+def test_partner_bibliography_resolve_not_found(client):
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": "not-found"},
+    )
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_partner_bibliography_resolve_ambiguous_alias_returns_conflict(
+    client, bibliography, user
+):
+    alias = "legacy"
+    first_entry = BibliographyEntryFactory.build(
+        id="Q30000001", aliases=[{"value": alias, "normalizedValue": alias}]
+    )
+    second_entry = BibliographyEntryFactory.build(
+        id="Q30000002", aliases=[{"value": alias, "normalizedValue": alias}]
+    )
+    bibliography.create(first_entry, user)
+    bibliography.create(second_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": alias},
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert "ambiguous" in result.json["description"]
+
+
 def test_partner_bibliography_entry_not_found(client):
     result = client.simulate_get("/api/v1/bibliography/not-found")
 
@@ -62,21 +191,118 @@ def test_partner_bibliography_export_requires_export_scope(guest_client):
     assert result.status == falcon.HTTP_FORBIDDEN
 
 
+def test_partner_bibliography_resolve_requires_export_scope(context):
+    client = client_with_scope(context, "write:bibliography")
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": "Q30000000"},
+    )
+
+    assert result.status == falcon.HTTP_FORBIDDEN
+
+
 def test_partner_bibliography_create(client):
-    bibliography_entry = BibliographyEntryFactory.build(id="Q30000001")
+    bibliography_entry = {
+        key: value
+        for key, value in BibliographyEntryFactory.build().items()
+        if key != "id"
+    }
     result = client.simulate_post(
         "/api/v1/bibliography", body=json.dumps(bibliography_entry)
     )
 
     assert result.status == falcon.HTTP_CREATED
-    assert (
-        result.headers["Location"] == f"/api/v1/bibliography/{bibliography_entry['id']}"
+    assert re.fullmatch(r"Q\d{8}", result.json["id"])
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
+    assert result.json["citationKey"] == "miccadei2002Synergistic"
+
+    get_result = client.simulate_get(f"/api/v1/bibliography/{result.json['id']}")
+
+    assert get_result.json["id"] == result.json["id"]
+    assert get_result.json["citationKey"] == "miccadei2002Synergistic"
+    assert get_result.json["bibliographyEntry"] == result.json
+
+
+def test_partner_bibliography_create_with_submitted_id_stores_alias(client):
+    submitted_id = "partner-legacy-123"
+    bibliography_entry = BibliographyEntryFactory.build(id=submitted_id)
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
     )
-    assert result.json == bibliography_entry
 
-    get_result = client.simulate_get(f"/api/v1/bibliography/{bibliography_entry['id']}")
+    assert result.status == falcon.HTTP_CREATED
+    assert result.json["id"] != submitted_id
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
+    assert result.json["citationKey"] == "miccadei2002Synergistic"
+    assert result.json["aliases"] == [
+        {
+            "value": submitted_id,
+            "normalizedValue": submitted_id,
+            "type": "partner_id",
+            "source": "partner_request",
+            "status": "redirect",
+        }
+    ]
 
-    assert get_result.json["bibliographyEntry"] == bibliography_entry
+    canonical_result = client.simulate_get(f"/api/v1/bibliography/{result.json['id']}")
+    alias_result = client.simulate_get(f"/api/v1/bibliography/{submitted_id}")
+
+    assert canonical_result.json["bibliographyEntry"] == result.json
+    assert alias_result.json["id"] == result.json["id"]
+    assert alias_result.json["bibliographyEntry"] == result.json
+
+
+def test_partner_bibliography_create_citation_key_collision_suffixes(
+    client, bibliography, user
+):
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        citationKey="miccadei2002Synergistic",
+    )
+    bibliography.create(existing_entry, user)
+    submitted_id = "partner-collision-123"
+    bibliography_entry = BibliographyEntryFactory.build(
+        id=submitted_id,
+        type="book",
+        DOI="10.1000/collision",
+        PMID="99999999",
+        title="Synergistic Tablets from Babylon",
+        publisher="Test Press",
+        volume="12",
+        issue="1",
+        page="1-20",
+    )
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.json["id"] != submitted_id
+    assert result.json["citationKey"] == "miccadei2002Synergistic-2"
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
+    assert result.json["aliases"][0]["value"] == submitted_id
+    assert bibliography.find(existing_entry["id"]) == existing_entry
+
+
+def test_partner_bibliography_create_preserves_special_character_aliases(client):
+    submitted_id = "Von_Soden:Alte/Orient"
+    bibliography_entry = BibliographyEntryFactory.build(id=submitted_id)
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.json["aliases"][0]["value"] == submitted_id
+    assert result.json["aliases"][0]["normalizedValue"] == "von-soden-alte-orient"
+
+    alias_result = client.simulate_get("/api/v1/bibliography/Von Soden Alte Orient")
+
+    assert alias_result.status == falcon.HTTP_OK
+    assert alias_result.json["id"] == result.json["id"]
 
 
 def test_partner_bibliography_create_requires_write_scope(guest_client):
@@ -104,6 +330,19 @@ def test_partner_bibliography_create_invalid(client):
     )
 
     assert result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_partner_bibliography_create_rejects_unsafe_partner_id(client, database):
+    bibliography_entry = BibliographyEntryFactory.build(id="bad\u0000id")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "control characters" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_create_duplicate_conflict_does_not_mutate(
@@ -139,6 +378,36 @@ def test_partner_bibliography_create_insufficient_data_conflict_does_not_mutate(
     assert database["bibliography"].count_documents({}) == before_count
 
 
+def test_partner_bibliography_create_alias_collision_returns_conflict(
+    client, bibliography, user, database
+):
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        aliases=[
+            {
+                "value": "Leipzig/ABC 123",
+                "normalizedValue": "leipzig-abc-123",
+            }
+        ],
+    )
+    bibliography.create(existing_entry, user)
+    before_count = database["bibliography"].count_documents({})
+    bibliography_entry = BibliographyEntryFactory.build(
+        id="Leipzig ABC 123",
+        DOI="10.1000/two",
+        title="A Different Title",
+        issued={"date-parts": [[2005, 1, 1]]},
+    )
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert "already in use" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
 def test_partner_bibliography_create_series_sibling_does_not_conflict(
     client, bibliography, user
 ):
@@ -165,4 +434,4 @@ def test_partner_bibliography_create_series_sibling_does_not_conflict(
 
     assert result.status == falcon.HTTP_CREATED
     assert bibliography.find(existing_entry["id"]) == existing_entry
-    assert bibliography.find(sibling_entry["id"]) == sibling_entry
+    assert bibliography.find(result.json["id"]) == result.json

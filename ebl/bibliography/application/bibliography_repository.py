@@ -4,11 +4,23 @@ from typing import Any, Optional, Sequence
 
 class BibliographyRepository(ABC):
     @abstractmethod
+    def create_indexes(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     def create(self, entry: Any) -> str:
         raise NotImplementedError
 
     @abstractmethod
     def query_by_id(self, id_: str) -> Any:
+        raise NotImplementedError
+
+    @abstractmethod
+    def query_by_citation_key(self, citation_key: str) -> Any:
+        raise NotImplementedError
+
+    @abstractmethod
+    def query_by_alias(self, alias: str) -> Any:
         raise NotImplementedError
 
     @abstractmethod

@@ -8,7 +8,8 @@ from ebl.cache.application.cache import DAILY_TIMEOUT
 from ebl.bibliography.domain.bibliography_entry import (
     CSL_JSON_SCHEMA,
     DUPLICATE_CANDIDATE_JSON_SCHEMA,
-    DUPLICATE_OVERRIDE_JSON_SCHEMA,
+    PARTNER_CSL_JSON_SCHEMA,
+    PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA,
 )
 from ebl.users.web.require_scope import require_scope
 from ebl.bibliography.application.bibliography import (
@@ -95,7 +96,7 @@ class PartnerBibliographyResource:
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
+    @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response) -> None:
         bibliography_entry = req.media
         if duplicate_result := self._bibliography.create_partner_entry(
@@ -129,12 +130,27 @@ class PartnerBibliographyEntryResource:
         resp.status = falcon.HTTP_NO_CONTENT
 
 
+class PartnerBibliographyResolveResource:
+    def __init__(self, bibliography: Bibliography):
+        self._bibliography = bibliography
+
+    @falcon.before(require_scope, "export:bibliography")
+    def on_get(self, req: Request, resp: Response) -> None:
+        identifier = req.get_param("identifier")
+        if identifier is None:
+            raise falcon.HTTPBadRequest(
+                title="Missing identifier",
+                description="Query parameter 'identifier' is required.",
+            )
+        resp.media = self._bibliography.find_partner_entry(identifier)
+
+
 class PartnerBibliographyDuplicateOverrideResource:
     def __init__(self, bibliography: Bibliography):
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(DUPLICATE_OVERRIDE_JSON_SCHEMA)
+    @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response) -> None:
         bibliography_entry = req.media["bibliographyEntry"]
         override = req.media["override"]

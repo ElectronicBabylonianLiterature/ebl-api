@@ -76,6 +76,70 @@ def test_find(bibliography, bibliography_repository, when):
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
 
 
+def test_find_by_citation_key(bibliography, bibliography_repository, when):
+    bibliography_entry = BibliographyEntryFactory.build(citationKey="miccadei2002")
+    (
+        when(bibliography_repository)
+        .query_by_id(bibliography_entry["citationKey"])
+        .thenRaise(NotFoundError)
+    )
+    (
+        when(bibliography_repository)
+        .query_by_citation_key(bibliography_entry["citationKey"])
+        .thenReturn(bibliography_entry)
+    )
+
+    assert bibliography.find(bibliography_entry["citationKey"]) == bibliography_entry
+
+
+def test_find_by_alias(bibliography, bibliography_repository, when):
+    alias = "legacy-id"
+    bibliography_entry = BibliographyEntryFactory.build(
+        aliases=[{"value": alias, "normalizedValue": alias}]
+    )
+    (when(bibliography_repository).query_by_id(alias).thenRaise(NotFoundError))
+    (
+        when(bibliography_repository)
+        .query_by_citation_key(alias)
+        .thenRaise(NotFoundError)
+    )
+    (when(bibliography_repository).query_by_alias(alias).thenReturn(bibliography_entry))
+
+    assert bibliography.find(alias) == bibliography_entry
+
+
+def test_find_canonical_id_takes_precedence_over_alias(
+    bibliography, bibliography_repository, when
+):
+    shared_lookup = "Q30000000"
+    bibliography_entry = BibliographyEntryFactory.build(id=shared_lookup)
+    (
+        when(bibliography_repository)
+        .query_by_id(shared_lookup)
+        .thenReturn(bibliography_entry)
+    )
+
+    assert bibliography.find(shared_lookup) == bibliography_entry
+    verify(bibliography_repository, times=0).query_by_citation_key(shared_lookup)
+    verify(bibliography_repository, times=0).query_by_alias(shared_lookup)
+
+
+def test_find_citation_key_takes_precedence_over_alias(
+    bibliography, bibliography_repository, when
+):
+    shared_lookup = "miccadei2002"
+    bibliography_entry = BibliographyEntryFactory.build(citationKey=shared_lookup)
+    (when(bibliography_repository).query_by_id(shared_lookup).thenRaise(NotFoundError))
+    (
+        when(bibliography_repository)
+        .query_by_citation_key(shared_lookup)
+        .thenReturn(bibliography_entry)
+    )
+
+    assert bibliography.find(shared_lookup) == bibliography_entry
+    verify(bibliography_repository, times=0).query_by_alias(shared_lookup)
+
+
 def test_create(
     bibliography,
     bibliography_repository,
@@ -122,6 +186,12 @@ def test_create_duplicate(
     (when(bibliography_repository).create(bibliography_entry).thenRaise(DuplicateError))
     with pytest.raises(DuplicateError):
         bibliography.create(bibliography_entry, user)
+    verify(changelog, times=0).create(
+        COLLECTION,
+        user.profile,
+        {"_id": bibliography_entry["id"]},
+        create_mongo_bibliography_entry(),
+    )
 
 
 def test_entry_not_found(bibliography, bibliography_repository, when):

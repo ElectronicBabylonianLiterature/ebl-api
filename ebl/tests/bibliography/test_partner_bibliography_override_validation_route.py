@@ -4,12 +4,14 @@ import falcon
 import pytest
 
 from ebl.tests.bibliography.bibliography_route_test_helpers import (
+    INSUFFICIENT_DATA_DUPLICATE_CANDIDATE_ID,
     NON_BLOCKING_DUPLICATE_CANDIDATE_ID,
     STALE_DUPLICATE_CANDIDATE_ID,
     assert_duplicate_override_bad_request,
     blocking_duplicate_override_result,
     client_with_scope,
     duplicate_override_payload,
+    insufficient_data_duplicate_result,
     mixed_duplicate_override_result,
     patch_duplicate_override_result,
 )
@@ -145,6 +147,63 @@ def test_partner_bibliography_duplicate_override_invalid_csl_does_not_mutate(
             },
         },
     )
+
+
+def test_partner_bibliography_duplicate_override_rejects_unsafe_partner_id(
+    monkeypatch, client, database
+):
+    patch_duplicate_override_result(monkeypatch, insufficient_data_duplicate_result())
+    bibliography_entry = BibliographyEntryFactory.build(id="bad\u0000id")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [INSUFFICIENT_DATA_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "control characters" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_partner_bibliography_duplicate_override_alias_collision_does_not_mutate(
+    monkeypatch, client, bibliography, user, database
+):
+    patch_duplicate_override_result(monkeypatch, insufficient_data_duplicate_result())
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        aliases=[
+            {
+                "value": "Leipzig/ABC 123",
+                "normalizedValue": "leipzig-abc-123",
+            }
+        ],
+    )
+    bibliography.create(existing_entry, user)
+    before_count = database["bibliography"].count_documents({})
+    bibliography_entry = BibliographyEntryFactory.build(
+        id="Leipzig ABC 123",
+        DOI="10.1000/two",
+        title="A Different Title",
+        issued={"date-parts": [[2005, 1, 1]]},
+    )
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [INSUFFICIENT_DATA_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert "already in use" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
 
 
 def test_partner_bibliography_duplicate_override_requires_write_scope(

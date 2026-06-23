@@ -1,6 +1,7 @@
 import json
 
 import falcon
+import pydash
 
 from ebl.tests.bibliography.bibliography_route_test_helpers import (
     BLOCKING_DUPLICATE_CANDIDATE_ID,
@@ -30,13 +31,24 @@ def test_partner_bibliography_duplicate_override_creates_likely_duplicate(
     )
 
     assert result.status == falcon.HTTP_CREATED
-    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
-    assert result.json == duplicate_entry
+    assert result.json["id"] != duplicate_entry["id"]
+    assert result.json["citationKey"] == "miccadei2002Synergistic"
+    assert result.json["aliases"] == [
+        {
+            "value": duplicate_entry["id"],
+            "normalizedValue": duplicate_entry["id"].casefold(),
+            "type": "partner_id",
+            "source": "partner_request",
+            "status": "redirect",
+        }
+    ]
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
     assert database["bibliography"].count_documents({}) == before_count + 1
 
-    get_result = client.simulate_get("/api/v1/bibliography/Q30000001")
+    get_result = client.simulate_get(f"/api/v1/bibliography/{duplicate_entry['id']}")
 
-    assert get_result.json["bibliographyEntry"] == duplicate_entry
+    assert get_result.json["id"] == result.json["id"]
+    assert get_result.json["bibliographyEntry"] == result.json
 
 
 def test_partner_bibliography_duplicate_override_creates_possible_duplicate(
@@ -67,8 +79,80 @@ def test_partner_bibliography_duplicate_override_creates_possible_duplicate(
     )
 
     assert result.status == falcon.HTTP_CREATED
-    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
-    assert result.json == proposed_entry
+    assert result.json["id"] != proposed_entry["id"]
+    assert result.json["citationKey"] == "miccadei2002Synergistic"
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
+    assert database["bibliography"].count_documents({}) == before_count + 1
+
+
+def test_partner_bibliography_duplicate_override_citation_key_collision_suffixes(
+    monkeypatch, client, bibliography, user, database
+):
+    patch_duplicate_override_result(monkeypatch, insufficient_data_duplicate_result())
+    existing_entry = BibliographyEntryFactory.build(
+        id="Q30000000",
+        citationKey="miccadei2002Synergistic",
+    )
+    bibliography.create(existing_entry, user)
+    bibliography_entry = BibliographyEntryFactory.build(
+        id="partner-override-123",
+        type="book",
+        DOI="10.1000/override-collision",
+        PMID="99999998",
+        title="Synergistic Tablets from Babylon",
+        publisher="Test Press",
+        volume="12",
+        issue="1",
+        page="1-20",
+    )
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [INSUFFICIENT_DATA_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.json["id"] != bibliography_entry["id"]
+    assert result.json["citationKey"] == "miccadei2002Synergistic-2"
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
+    assert result.json["aliases"] == [
+        {
+            "value": "partner-override-123",
+            "normalizedValue": "partner-override-123",
+            "type": "partner_id",
+            "source": "partner_request",
+            "status": "redirect",
+        }
+    ]
+    assert database["bibliography"].count_documents({}) == before_count + 1
+    assert bibliography.find(existing_entry["id"]) == existing_entry
+
+
+def test_partner_bibliography_duplicate_override_without_id_generates_canonical_id(
+    monkeypatch, client, database
+):
+    patch_duplicate_override_result(monkeypatch, insufficient_data_duplicate_result())
+    bibliography_entry = pydash.omit(BibliographyEntryFactory.build(), "id")
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography/duplicate-override",
+        body=json.dumps(
+            duplicate_override_payload(
+                bibliography_entry, [INSUFFICIENT_DATA_DUPLICATE_CANDIDATE_ID]
+            )
+        ),
+    )
+
+    assert result.status == falcon.HTTP_CREATED
+    assert result.json["id"].startswith("Q")
+    assert result.json["citationKey"] == "miccadei2002Synergistic"
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
     assert database["bibliography"].count_documents({}) == before_count + 1
 
 
@@ -89,8 +173,8 @@ def test_partner_bibliography_duplicate_override_accepts_blocking_candidate_id(
     )
 
     assert result.status == falcon.HTTP_CREATED
-    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
-    assert result.json == bibliography_entry
+    assert result.json["id"] != bibliography_entry["id"]
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
     assert database["bibliography"].count_documents({}) == before_count + 1
 
 
@@ -115,8 +199,8 @@ def test_partner_bibliography_duplicate_override_accepts_blocking_with_non_block
     )
 
     assert result.status == falcon.HTTP_CREATED
-    assert result.headers["Location"] == "/api/v1/bibliography/Q30000001"
-    assert result.json == bibliography_entry
+    assert result.json["id"] != bibliography_entry["id"]
+    assert result.headers["Location"] == f"/api/v1/bibliography/{result.json['id']}"
     assert database["bibliography"].count_documents({}) == before_count + 1
 
 
@@ -137,7 +221,8 @@ def test_partner_bibliography_duplicate_override_creates_insufficient_data(
     )
 
     assert result.status == falcon.HTTP_CREATED
-    assert result.json == bibliography_entry
+    assert result.json["id"] != bibliography_entry["id"]
+    assert result.json["citationKey"] == "miccadei2002Synergistic"
     assert database["bibliography"].count_documents({}) == before_count + 1
 
 
