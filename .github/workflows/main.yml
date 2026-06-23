@@ -57,7 +57,7 @@ jobs:
         id: install
         run: |
           pip install --upgrade pip
-          pip install poetry
+          pip install "poetry==2.4.1"
           poetry install --no-root --with dev
 
       - name: Lint
@@ -69,7 +69,7 @@ jobs:
         run: poetry run ruff format --check ebl
 
       - name: Type Check
-        if: success() || steps.install.outcome == 'success'
+        if: ${{ !startsWith(matrix.python-version, 'pypy') && (success() || steps.install.outcome == 'success') }}
         run: poetry run pyre check
 
       - name: Download Test Resources

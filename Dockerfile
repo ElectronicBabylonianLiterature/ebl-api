@@ -3,7 +3,7 @@ FROM pypy:3.11
 RUN pip install --upgrade pip
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN pip install poetry
+RUN pip install "poetry==2.4.1"
 
 EXPOSE 8000
 
@@ -19,4 +19,3 @@ COPY ./docs ./docs
 RUN chmod -R a-wx ./docs
 
 CMD ["poetry", "run", "waitress-serve", "--port=8000", "--connection-limit=500", "--call", "ebl.app:get_app"]
-
