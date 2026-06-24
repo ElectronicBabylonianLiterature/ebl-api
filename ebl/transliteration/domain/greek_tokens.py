@@ -49,7 +49,7 @@ class GreekWord(AbstractWord):
 
     @property
     def alignable(self) -> bool:
-        return self.lemmatizable or self.language == Language.SUMERIAN
+        return self.lemmatizable
 
     @property
     def value(self) -> str:

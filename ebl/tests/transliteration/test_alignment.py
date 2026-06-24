@@ -30,6 +30,16 @@ def test_apply_sumerian_word() -> None:
     assert alignment.apply(word) == expected
 
 
+def test_apply_emesal_word() -> None:
+    word = Word.of(language=Language.EMESAL, parts=[Reading.of_name("bu")])
+    alignment = AlignmentToken("bu", 0)
+    expected = Word.of(
+        language=Language.EMESAL, parts=[Reading.of_name("bu")], alignment=0
+    )
+
+    assert alignment.apply(word) == expected
+
+
 @pytest.mark.parametrize(
     "word",
     [
