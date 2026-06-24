@@ -14,7 +14,7 @@ class SignRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def find_many(self, query, *args, **kwargs) -> Sign:
+    def find_many(self, query, *args, **kwargs) -> Sequence[Sign]:
         raise NotImplementedError
 
     @abstractmethod
