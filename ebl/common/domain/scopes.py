@@ -78,6 +78,8 @@ class Scope(ScopeItem):
     READ_VAM_FOLIOS = ("read:VAM-folios", OPEN)
     READ_WGL_FOLIOS = ("read:WGL-folios", OPEN)
     READ_BIBLIOGRAPHY = ("read:bibliography", OPEN)
+    CHECK_BIBLIOGRAPHY_DUPLICATES = ("check:bibliography_duplicates", RESTRICTED)
+    EXPORT_BIBLIOGRAPHY = ("export:bibliography", RESTRICTED)
     ANNOTATE_FRAGMENTS = ("annotate:fragments", RESTRICTED)
     CREATE_TEXTS = ("create:texts", RESTRICTED)
     LEMMATIZE_FRAGMENTS = ("lemmatize:fragments", RESTRICTED)

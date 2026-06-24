@@ -450,6 +450,8 @@ def user() -> User:
                     "read:URUKLBU-fragments",
                     "read:WGL-folios",
                     "read:bibliography",
+                    "check:bibliography_duplicates",
+                    "export:bibliography",
                     "write:bibliography",
                     "read:texts",
                     "write:texts",

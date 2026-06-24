@@ -1,8 +1,16 @@
 import re
-from typing import Optional, Sequence
+from typing import Any, Mapping, Optional, Sequence
 
 from pydash import uniq_with
 
+from ebl.bibliography.application.duplicate_detection import (
+    BibliographyDuplicateDetector,
+)
+from ebl.bibliography.application.duplicate_override import (
+    BLOCKING_DUPLICATE_DECISIONS,
+    DuplicateOverrideError,
+    validate_duplicate_override,
+)
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
@@ -11,6 +19,8 @@ from ebl.errors import DataError, NotFoundError
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
+DEFAULT_EXPORT_LIMIT = 50
+MAX_EXPORT_LIMIT = 100
 
 
 class Bibliography:
@@ -70,6 +80,61 @@ class Bibliography:
 
     def list_all_bibliography(self) -> Sequence[str]:
         return self._repository.list_all_bibliography()
+
+    def find_duplicate_candidates(self, entry: dict, limit: int = 10) -> dict:
+        return (
+            BibliographyDuplicateDetector(self._repository)
+            .find_candidates(entry, limit)
+            .to_dict()
+        )
+
+    def create_partner_entry(self, entry: dict, user: User) -> Optional[dict]:
+        if duplicate_result := self.find_blocking_duplicate_candidates(entry):
+            return duplicate_result
+        self.create(entry, user)
+        return None
+
+    def create_partner_entry_with_duplicate_override(
+        self, entry: dict, override: Mapping[str, Any], user: User
+    ) -> None:
+        duplicate_result = self.find_duplicate_candidates(entry)
+        if duplicate_result["decision"] not in BLOCKING_DUPLICATE_DECISIONS:
+            raise DuplicateOverrideError(
+                "No current duplicate candidates were found. "
+                "Use POST /api/v1/bibliography instead."
+            )
+        validate_duplicate_override(override, duplicate_result)
+        self.create(entry, user)
+
+    def update_partner_entry(self, id_: str, entry: dict, user: User) -> Optional[dict]:
+        updated_entry = {**entry, "id": id_}
+        if duplicate_result := self.find_blocking_duplicate_candidates(updated_entry):
+            return duplicate_result
+        self.update(updated_entry, user)
+        return None
+
+    def find_blocking_duplicate_candidates(self, entry: dict) -> Optional[dict]:
+        duplicate_result = self.find_duplicate_candidates(entry)
+        return (
+            duplicate_result
+            if duplicate_result["decision"] in BLOCKING_DUPLICATE_DECISIONS
+            else None
+        )
+
+    def export_page(
+        self, cursor: Optional[str] = None, limit: int = DEFAULT_EXPORT_LIMIT
+    ) -> dict:
+        result_limit = max(1, min(limit, MAX_EXPORT_LIMIT))
+        entries = list(self._repository.query_page(cursor, result_limit + 1))
+        items = entries[:result_limit]
+        return {
+            "items": [partner_bibliography_entry(entry) for entry in items],
+            "nextCursor": items[-1]["id"] if len(entries) > result_limit else None,
+            "limit": result_limit,
+        }
+
+    def find_partner_entry(self, id_: str) -> dict:
+        return partner_bibliography_entry(self.find(id_))
 
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
@@ -135,3 +200,11 @@ class Bibliography:
             raise DataError(
                 f"Unknown bibliography entries: {', '.join(invalid_references)}."
             )
+
+
+def partner_bibliography_entry(entry: Mapping[str, Any]) -> dict:
+    return {
+        "id": entry["id"],
+        "citationKey": entry.get("citationKey"),
+        "bibliographyEntry": dict(entry),
+    }

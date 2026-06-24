@@ -7,10 +7,13 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
 
 class CroppedSignImagesRepository(ABC):
     @abstractmethod
-    def query_by_id(self, image_id: str) -> CroppedSignImage: ...
+    def query_by_id(self, image_id: str) -> CroppedSignImage:
+        raise NotImplementedError
 
     @abstractmethod
-    def create_many(self, cropped_sign_images: Sequence[CroppedSignImage]) -> None: ...
+    def create_many(self, cropped_sign_images: Sequence[CroppedSignImage]) -> None:
+        raise NotImplementedError
 
     @abstractmethod
-    def delete_by_fragment_number(self, fragment_number: MuseumNumber) -> None: ...
+    def delete_by_fragment_number(self, fragment_number: MuseumNumber) -> None:
+        raise NotImplementedError

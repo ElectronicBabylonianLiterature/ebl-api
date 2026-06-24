@@ -41,6 +41,7 @@ class MongoCollection:
                 had_auto_reconnect = True
                 if attempt == 1:
                     raise
+        raise AssertionError("insert_one should return or raise")
 
     def find_one_by_id(self, id_):
         return self.find_one({"_id": id_})
@@ -93,6 +94,7 @@ class MongoCollection:
             if result.matched_count == 0:
                 raise self.__not_found_error(query)
             return result
+        raise AssertionError("update_one should return or raise")
 
     def update_many(self, query, update, **kwargs):
         return self.__get_collection().update_many(query, update, **kwargs)

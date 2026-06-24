@@ -16,11 +16,13 @@ L = TypeVar("L", bound="Line")
 class Line(ABC):
     @property
     @abstractmethod
-    def atf(self) -> Atf: ...
+    def atf(self) -> Atf:
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def lemmatization(self) -> Sequence[LemmatizationToken]: ...
+    def lemmatization(self) -> Sequence[LemmatizationToken]:
+        raise NotImplementedError
 
     @property
     def key(self) -> str:

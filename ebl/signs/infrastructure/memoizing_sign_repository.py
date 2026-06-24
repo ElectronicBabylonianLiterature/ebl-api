@@ -28,8 +28,8 @@ class MemoizingSignRepository(SignRepository):
     def find(self, name: SignName) -> Sign:
         return self._find(name)
 
-    def find_many(self, query, *args, **kwargs) -> Sign:
-        return self._find_many(self, query, *args, **kwargs)
+    def find_many(self, query, *args, **kwargs) -> Sequence[Sign]:
+        return self._find_many(query, *args, **kwargs)
 
     def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
         return self._search_by_lists_name(name, number)

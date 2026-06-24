@@ -8,18 +8,21 @@ import attr
 class AbstractLineNumber(ABC):
     @property
     @abstractmethod
-    def label(self) -> str: ...
+    def label(self) -> str:
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def is_beginning_of_side(self) -> bool: ...
+    def is_beginning_of_side(self) -> bool:
+        raise NotImplementedError
 
     @property
     def atf(self) -> str:
         return f"{self.label}."
 
     @abstractmethod
-    def is_matching_number(self, number: int) -> bool: ...
+    def is_matching_number(self, number: int) -> bool:
+        raise NotImplementedError
 
 
 @attr.s(auto_attribs=True, frozen=True)
