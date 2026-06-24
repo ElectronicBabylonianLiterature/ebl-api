@@ -7,8 +7,13 @@ from ebl.realia.infrastructure.mongo_realia_repository import (
     MongoRealiaRepository,
     RealiaEntrySchema,
 )
+from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.tests.factories.realia import RealiaEntryFactory, ReallexikonEntryFactory
 from ebl.errors import NotFoundError
+
+
+def _insert_stored(realia_repository: MongoRealiaRepository, document: dict) -> None:
+    realia_repository._realia_collection.insert_one(document)
 
 
 def _create_entry_with_bibliography(
@@ -116,6 +121,70 @@ def test_search_entry_with_reallexikon_no_reference(
 
     assert len(results) == 1
     assert results[0].reallexikon[0].reference is None
+
+
+def _stored_reallexikon_entry(
+    identifier: str, bibliography_id: str, pages: str
+) -> dict:
+    return {
+        "id": identifier,
+        "title": f"Aššur {identifier}",
+        "reference": {"id": bibliography_id, "pages": pages},
+    }
+
+
+def test_find_injects_lean_reallexikon_reference(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+) -> None:
+    bibliography_repository.create(BibliographyEntryFactory.build(id="rla_1_170e"))
+    _insert_stored(
+        realia_repository,
+        {
+            "_id": "Aššur",
+            "reallexikon": [_stored_reallexikon_entry("A", "rla_1_170e", "170–195")],
+        },
+    )
+
+    reference = realia_repository.find("Aššur").reallexikon[0].reference
+
+    assert reference is not None
+    assert reference.id == "rla_1_170e"
+    assert reference.pages == "170–195"
+    assert reference.document is not None
+    assert reference.document["id"] == "rla_1_170e"
+
+
+def test_find_injects_all_reallexikon_entries(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+) -> None:
+    for bibliography_id in ("rla_1_170e", "rla_1_195"):
+        bibliography_repository.create(
+            BibliographyEntryFactory.build(id=bibliography_id)
+        )
+    _insert_stored(
+        realia_repository,
+        {
+            "_id": "Aššur",
+            "reallexikon": [
+                _stored_reallexikon_entry("A", "rla_1_170e", "170–195"),
+                _stored_reallexikon_entry("B", "rla_1_195", "195–198"),
+                {"id": "C", "title": "Aššur C", "reference": None},
+            ],
+        },
+    )
+
+    reallexikon = realia_repository.find("Aššur").reallexikon
+
+    injected = [rlex.reference for rlex in reallexikon[:2]]
+    documents = [
+        reference.document["id"]
+        for reference in injected
+        if reference is not None and reference.document is not None
+    ]
+    assert documents == ["rla_1_170e", "rla_1_195"]
+    assert reallexikon[2].reference is None
 
 
 def _insert_minimal(realia_repository: MongoRealiaRepository, identifier: str) -> None:

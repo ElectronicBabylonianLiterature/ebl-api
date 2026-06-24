@@ -7,20 +7,17 @@
     {
       "id": "Schwein.A",
       "title": "Schwein A. In Mesopotamien \u00b7 Pig A. In Mesopotamia",
-      "reference": null,
-      "content": ""
+      "reference": { "id": "De Zorzi 2016", "pages": "1\u201310" }
     },
     {
       "id": "Schwein.B",
       "title": "Schwein B. Bei den Hethitern \u00b7 Pig B. In Hittite tradition",
-      "reference": null,
-      "content": ""
+      "reference": { "id": "De Zorzi 2016", "pages": "11\u201320" }
     },
     {
       "id": "Schwein.C",
       "title": "Schwein C. Arch\u00e4ozoologisch \u00b7 Pig C. Archaezoological",
-      "reference": null,
-      "content": ""
+      "reference": null
     }
   ],
   "afoRegister": [

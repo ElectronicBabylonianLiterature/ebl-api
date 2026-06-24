@@ -28,7 +28,6 @@ class ReallexikonEntryFactory(factory.Factory):
     id = factory.Sequence(lambda n: f"RlA-{n}")
     title = factory.Faker("sentence")
     reference = factory.SubFactory(ReferenceFactory, with_document=True)
-    content = factory.Faker("paragraph")
 
 
 class RealiaEntryFactory(factory.Factory):

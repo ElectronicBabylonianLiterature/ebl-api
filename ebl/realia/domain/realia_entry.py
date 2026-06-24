@@ -18,7 +18,6 @@ class ReallexikonEntry:
     id: str = ""
     title: str = ""
     reference: Optional[Reference] = None
-    content: str = ""
 
 
 @attr.s(frozen=True, auto_attribs=True)

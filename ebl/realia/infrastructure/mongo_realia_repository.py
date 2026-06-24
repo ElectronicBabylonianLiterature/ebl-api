@@ -1,5 +1,5 @@
 import attr
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Tuple
 
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
@@ -34,8 +34,17 @@ class ReallexikonReferenceField(fields.Field):
 
     def _deserialize(self, value, attr_name, data, **kwargs):
         if isinstance(value, str):
-            return Reference(BibliographyId(value), ReferenceType.DISCUSSION)
-        return ApiReferenceSchema().load(value)
+            return self._from_id(value, "")
+        if isinstance(value, dict):
+            return self._from_id(value.get("id", ""), value.get("pages", ""))
+        return None
+
+    def _from_id(self, bibliography_id: str, pages: str) -> Optional[Reference]:
+        if not bibliography_id:
+            return None
+        return Reference(
+            BibliographyId(bibliography_id), ReferenceType.DISCUSSION, pages=pages
+        )
 
 
 class AfoRegisterEntrySchema(Schema):
@@ -60,7 +69,6 @@ class ReallexikonEntrySchema(Schema):
     id = fields.String(load_default="")
     title = fields.String(load_default="")
     reference = ReallexikonReferenceField(allow_none=True, load_default=None)
-    content = fields.String(load_default="")
 
     @post_load
     def make_entry(self, data, **kwargs) -> ReallexikonEntry:
