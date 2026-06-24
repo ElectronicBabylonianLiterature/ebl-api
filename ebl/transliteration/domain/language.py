@@ -11,7 +11,7 @@ class Language(Enum):
 
     @property
     def lemmatizable(self) -> bool:
-        return self.name in ["UNKNOWN", "AKKADIAN"]
+        return self in {Language.UNKNOWN, DEFAULT_LANGUAGE}
 
     @classmethod
     def of_atf(cls, code: str) -> "Language":

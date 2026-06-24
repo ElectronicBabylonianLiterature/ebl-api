@@ -7,11 +7,13 @@ from ebl.common.domain.scopes import Scope
 class User(ABC):
     @property
     @abstractmethod
-    def profile(self) -> dict: ...
+    def profile(self) -> dict:
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def ebl_name(self) -> str: ...
+    def ebl_name(self) -> str:
+        raise NotImplementedError
 
     def has_scope(self, scope: Scope) -> bool:
         return scope.is_open

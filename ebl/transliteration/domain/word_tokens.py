@@ -30,11 +30,13 @@ class AbstractWord(Token):
 
     @property
     @abstractmethod
-    def language(self) -> Language: ...
+    def language(self) -> Language:
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def normalized(self) -> bool: ...
+    def normalized(self) -> bool:
+        raise NotImplementedError
 
     @property
     def parts(self) -> Sequence[Token]:

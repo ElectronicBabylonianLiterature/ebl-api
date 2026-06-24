@@ -117,11 +117,13 @@ class Token(ABC):
 
     @property
     @abstractmethod
-    def value(self) -> str: ...
+    def value(self) -> str:
+        raise NotImplementedError
 
     @property
     @abstractmethod
-    def parts(self) -> Sequence["Token"]: ...
+    def parts(self) -> Sequence["Token"]:
+        raise NotImplementedError
 
     @property
     def clean_value(self) -> str:

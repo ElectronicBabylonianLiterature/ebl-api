@@ -13,6 +13,15 @@ def test_find_memoization(sign_repository, signs, when):
     assert first is second
 
 
+def test_find_many(sign_repository, signs):
+    sign = signs[0]
+
+    memoizing_sign_repository = MemoizingSignRepository(sign_repository)
+    memoizing_sign_repository.create(sign)
+
+    assert memoizing_sign_repository.find_many({}) == [sign]
+
+
 def test_search_memoization(sign_repository, signs):
     sign = signs[0]
     value = sign.values[0].value

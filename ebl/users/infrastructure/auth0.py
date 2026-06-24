@@ -56,7 +56,7 @@ class Auth0User(User):
                 try:
                     scopes.append(Scope.from_string(scope))
                 except ValueError:
-                    pass
+                    continue
 
         return scopes
 

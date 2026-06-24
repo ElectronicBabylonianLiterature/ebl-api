@@ -14,7 +14,8 @@ from ebl.transliteration.domain.markup import convert_part_sequence, MarkupPart
 class AtLine(Line):
     @property
     @abstractmethod
-    def display_value(self) -> str: ...
+    def display_value(self) -> str:
+        raise NotImplementedError
 
     @property
     def atf(self) -> Atf:

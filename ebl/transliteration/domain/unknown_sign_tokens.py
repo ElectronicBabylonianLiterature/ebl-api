@@ -28,7 +28,8 @@ class UnknownSign(Token):
 
     @property
     @abstractmethod
-    def _sign(self) -> str: ...
+    def _sign(self) -> str:
+        raise NotImplementedError
 
     @property
     def string_flags(self) -> Sequence[str]:
