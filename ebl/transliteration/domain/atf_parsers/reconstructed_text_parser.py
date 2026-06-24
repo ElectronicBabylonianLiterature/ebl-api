@@ -1,22 +1,13 @@
 from typing import Sequence
 
 from lark.exceptions import ParseError, UnexpectedInput
-from lark.lark import Lark
 
+from ebl.transliteration.domain.atf_parsers.lark_parser import LINE_PARSER
 from ebl.transliteration.domain.normalized_akkadian import AkkadianWord, Break
 from ebl.transliteration.domain.text_line_transformer import TextLineTransformer
 from ebl.transliteration.domain.tokens import Token
 
-RECONSTRUCTED_LINE_PARSER = Lark.open(
-    "lark_parser/ebl_atf.lark",
-    maybe_placeholders=True,
-    rel_to=__file__,
-    start=[
-        "ebl_atf_text_line__text",
-        "ebl_atf_text_line__akkadian_word",
-        "ebl_atf_text_line__break",
-    ],
-)
+RECONSTRUCTED_LINE_PARSER = LINE_PARSER
 
 
 def parse_reconstructed_word(word: str) -> AkkadianWord:

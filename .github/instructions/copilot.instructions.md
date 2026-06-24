@@ -31,7 +31,10 @@ generating code, answering questions, or reviewing changes.
 - Functions should be small and focused on a single task.
 - Refactor long and complex code automatically.
 - Do not add comments to the code unless explicitly requested.
-- HARD GATE: no `*.py` file may exceed 250 total lines. If a change pushes a file past this limit, refactor by extracting modules or splitting test files before completing the task. This is non-negotiable and applies to both source and test files.
+- HARD GATE: no `*.py` file may exceed 250 total lines. If a change pushes a
+  file past this limit, refactor by extracting modules or splitting test files
+  before completing the task. This is non-negotiable and applies to both
+  source and test files.
 
 ## Commands and Tooling
 
@@ -44,6 +47,12 @@ generating code, answering questions, or reviewing changes.
 - When writing tests, ensure they are isolated and do not depend on
   external state (pytest conventions).
 - Ensure that coverage is 100% after changes in affected code.
+- HARD GATE: pre-existing coverage gaps must be filled, not preserved. Any
+  line you add, modify, move, or relocate must end at 100% coverage, even if
+  it was uncovered before you touched it. "It was already uncovered on the
+  base branch" is not an acceptable justification for leaving a touched line
+  uncovered — add the missing tests as part of the change. This is
+  non-negotiable.
 - Never remove, disable, skip, or comment out existing tests without
   explicit user confirmation.
 - Only propose removing a test when the underlying code path was removed
