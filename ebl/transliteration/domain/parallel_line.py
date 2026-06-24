@@ -36,7 +36,8 @@ class ParallelLine(Line):
 
     @property
     @abstractmethod
-    def display_value(self) -> str: ...
+    def display_value(self) -> str:
+        raise NotImplementedError
 
     @property
     def atf(self) -> Atf:

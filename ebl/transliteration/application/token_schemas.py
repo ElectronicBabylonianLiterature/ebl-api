@@ -100,7 +100,8 @@ class EnclosureSchema(BaseTokenSchema):
 
     @abstractmethod
     @post_load
-    def make_token(self, data, **kwargs) -> Token: ...
+    def make_token(self, data, **kwargs) -> Token:
+        raise NotImplementedError
 
 
 class DocumentOrientedGlossSchema(EnclosureSchema):
@@ -292,12 +293,12 @@ class InWordNewlineSchema(BaseTokenSchema):
 class NamedSignSchema(BaseTokenSchema):
     name = fields.String(required=True)
     name_parts = fields.List(
-        fields.Nested(lambda: OneOfTokenSchema()), required=True, data_key="nameParts"
+        fields.Nested("OneOfTokenSchema"), required=True, data_key="nameParts"
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)
     flags = fields.List(ValueEnumField(Flag), required=True)
-    sign = fields.Nested(lambda: OneOfTokenSchema(), allow_none=True)
+    sign = fields.Nested("OneOfTokenSchema", allow_none=True)
 
 
 class ReadingSchema(NamedSignSchema):
@@ -317,7 +318,7 @@ class ReadingSchema(NamedSignSchema):
 
 
 class LogogramSchema(NamedSignSchema):
-    surrogate = fields.List(fields.Nested(lambda: OneOfTokenSchema()), load_default=())
+    surrogate = fields.List(fields.Nested("OneOfTokenSchema"), load_default=())
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -352,16 +353,14 @@ class NumberSchema(NamedSignSchema):
 
 
 class BaseWordSchema(BaseTokenSchema):
-    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+    parts = fields.List(fields.Nested("OneOfTokenSchema"), required=True)
     language = NameEnumField(Language, required=True)
     normalized = fields.Boolean(required=True)
     lemmatizable = fields.Boolean(required=True)
     alignable = fields.Boolean()
     unique_lemma = fields.List(fields.String(), data_key="uniqueLemma", required=True)
     alignment = fields.Integer(allow_none=True, load_default=None)
-    variant = fields.Nested(
-        lambda: OneOfWordSchema(), allow_none=True, load_default=None
-    )
+    variant = fields.Nested("OneOfWordSchema", allow_none=True, load_default=None)
     has_variant_alignment = fields.Boolean(
         load_default=False, data_key="hasVariantAlignment"
     )
@@ -420,7 +419,7 @@ class LoneDeterminativeSchema(BaseWordSchema):
 
 
 class VariantSchema(BaseTokenSchema):
-    tokens = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+    tokens = fields.List(fields.Nested("OneOfTokenSchema"), required=True)
 
     @post_load
     def make_token(self, data, **kwargs):
@@ -458,11 +457,12 @@ class CompoundGraphemeSchema(BaseTokenSchema):
 
 
 class GlossSchema(BaseTokenSchema):
-    parts = fields.List(fields.Nested(lambda: OneOfTokenSchema()), required=True)
+    parts = fields.List(fields.Nested("OneOfTokenSchema"), required=True)
 
     @abstractmethod
     @post_load
-    def make_token(self, data, **kwargs) -> Gloss: ...
+    def make_token(self, data, **kwargs) -> Gloss:
+        raise NotImplementedError
 
 
 class DeterminativeSchema(GlossSchema):

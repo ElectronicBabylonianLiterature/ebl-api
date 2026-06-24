@@ -7,16 +7,20 @@ from ebl.dictionary.domain.word import WordId
 
 class WordRepository(ABC):
     @abstractmethod
-    def create(self, word) -> WordId: ...
+    def create(self, word) -> WordId:
+        raise NotImplementedError
 
     @abstractmethod
-    def create_proper_noun(self, lemma: str, pos_tags: list[str]) -> WordId: ...
+    def create_proper_noun(self, lemma: str, pos_tags: list[str]) -> WordId:
+        raise NotImplementedError
 
     @abstractmethod
-    def query_by_id(self, id_: WordId): ...
+    def query_by_id(self, id_: WordId):
+        raise NotImplementedError
 
     @abstractmethod
-    def query_by_ids(self, ids: Sequence[str]) -> Sequence: ...
+    def query_by_ids(self, ids: Sequence[str]) -> Sequence:
+        raise NotImplementedError
 
     @abstractmethod
     def query_by_lemma_meaning_root_vowels(
@@ -26,13 +30,17 @@ class WordRepository(ABC):
         root: Optional[CollatedFieldQuery],
         vowel_class: Optional[list[tuple[str, ...]]],
         origin: Optional[list[str]] = None,
-    ) -> Sequence: ...
+    ) -> Sequence:
+        raise NotImplementedError
 
     @abstractmethod
-    def query_by_lemma_prefix(self, query: str) -> Sequence: ...
+    def query_by_lemma_prefix(self, query: str) -> Sequence:
+        raise NotImplementedError
 
     @abstractmethod
-    def list_all_words(self) -> Sequence: ...
+    def list_all_words(self) -> Sequence:
+        raise NotImplementedError
 
     @abstractmethod
-    def update(self, word) -> None: ...
+    def update(self, word) -> None:
+        raise NotImplementedError

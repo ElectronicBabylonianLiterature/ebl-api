@@ -18,13 +18,17 @@ class AnnotationsRepository(ABC):
         include_unclustered: bool = False,
         cluster_id: Optional[str] = None,
         script_filter: Optional[str] = None,
-    ) -> Sequence[Annotations]: ...
+    ) -> Sequence[Annotations]:
+        raise NotImplementedError
 
     @abstractmethod
-    def query_by_museum_number(self, number: MuseumNumber) -> Annotations: ...
+    def query_by_museum_number(self, number: MuseumNumber) -> Annotations:
+        raise NotImplementedError
 
     @abstractmethod
-    def retrieve_all_non_empty(self) -> List[Annotations]: ...
+    def retrieve_all_non_empty(self) -> List[Annotations]:
+        raise NotImplementedError
 
     @abstractmethod
-    def create_or_update(self, annotations: Annotations) -> None: ...
+    def create_or_update(self, annotations: Annotations) -> None:
+        raise NotImplementedError
