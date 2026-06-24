@@ -30,9 +30,7 @@ class SignRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def search_composite_signs(
-        self, reading: str, sub_index: int
-    ) -> Sequence[Sign]:
+    def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         raise NotImplementedError
 
     @abstractmethod
