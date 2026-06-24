@@ -29,4 +29,4 @@ class RealiaEntry:
     afo_register: Sequence[AfoRegisterEntry] = ()
     references: Sequence[Reference] = ()
     wikidata_id: Sequence[str] = ()
-    reallexikon: Optional[ReallexikonEntry] = None
+    reallexikon: Sequence[ReallexikonEntry] = ()

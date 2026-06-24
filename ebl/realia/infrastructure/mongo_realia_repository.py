@@ -1,5 +1,5 @@
 import attr
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Sequence, Tuple
 
 from marshmallow import Schema, fields, post_load, EXCLUDE
 from pymongo.database import Database
@@ -67,18 +67,6 @@ class ReallexikonEntrySchema(Schema):
         return ReallexikonEntry(**data)
 
 
-class ReallexikonField(fields.Field):
-    def _serialize(self, value, attr_name, obj, **kwargs):
-        return None if value is None else ReallexikonEntrySchema().dump(value)
-
-    def _deserialize(self, value, attr_name, data, **kwargs):
-        if isinstance(value, list):
-            value = value[0] if value else None
-        if value is None:
-            return None
-        return ReallexikonEntrySchema().load(value)
-
-
 class RealiaEntrySchema(Schema):
     class Meta:
         unknown = EXCLUDE
@@ -93,7 +81,7 @@ class RealiaEntrySchema(Schema):
     )
     references = fields.Nested(ApiReferenceSchema, many=True, load_default=list)
     wikidata_id = fields.List(fields.String(), data_key="wikidataId", load_default=list)
-    reallexikon = ReallexikonField(allow_none=True, load_default=None)
+    reallexikon = fields.List(fields.Nested(ReallexikonEntrySchema), load_default=list)
 
     @post_load
     def make_entry(self, data, **kwargs) -> RealiaEntry:
@@ -102,6 +90,7 @@ class RealiaEntrySchema(Schema):
         data["afo_register"] = tuple(data["afo_register"])
         data["references"] = tuple(data["references"])
         data["wikidata_id"] = tuple(data["wikidata_id"])
+        data["reallexikon"] = tuple(data["reallexikon"])
         return RealiaEntry(**data)
 
 
@@ -155,9 +144,9 @@ class MongoRealiaRepository(RealiaRepository):
         for entry in entries:
             for ref in entry.references:
                 ids.add(ref.id)
-            rlex = entry.reallexikon
-            if rlex is not None and rlex.reference is not None:
-                ids.add(rlex.reference.id)
+            for rlex in entry.reallexikon:
+                if rlex.reference is not None:
+                    ids.add(rlex.reference.id)
         return list(ids)
 
     def _fetch_bibliography_entries(
@@ -194,17 +183,21 @@ class MongoRealiaRepository(RealiaRepository):
         return tuple(ApiReferenceSchema(unknown=EXCLUDE, many=True).load(injected))
 
     def _inject_reallexikon(
-        self,
-        reallexikon: Optional[ReallexikonEntry],
-        bibliography: Dict[str, dict],
-    ) -> Optional[ReallexikonEntry]:
-        if reallexikon is None or reallexikon.reference is None:
-            return reallexikon
-        injected = {
-            **ApiReferenceSchema().dump(reallexikon.reference),
-            "document": bibliography.get(reallexikon.reference.id, {}),
-        }
-        return attr.evolve(
-            reallexikon,
-            reference=ApiReferenceSchema(unknown=EXCLUDE).load(injected),
-        )
+        self, reallexikon: Sequence[ReallexikonEntry], bibliography: Dict[str, dict]
+    ) -> Tuple[ReallexikonEntry, ...]:
+        result = []
+        for rlex in reallexikon:
+            if rlex.reference is not None:
+                injected = {
+                    **ApiReferenceSchema().dump(rlex.reference),
+                    "document": bibliography.get(rlex.reference.id, {}),
+                }
+                result.append(
+                    attr.evolve(
+                        rlex,
+                        reference=ApiReferenceSchema(unknown=EXCLUDE).load(injected),
+                    )
+                )
+            else:
+                result.append(rlex)
+        return tuple(result)

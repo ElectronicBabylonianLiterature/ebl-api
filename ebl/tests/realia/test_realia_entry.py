@@ -26,7 +26,7 @@ def test_realia_entry_defaults() -> None:
     assert entry.afo_register == ()
     assert entry.references == ()
     assert entry.wikidata_id == ()
-    assert entry.reallexikon is None
+    assert entry.reallexikon == ()
 
 
 def test_realia_entry_creation(realia_entry: RealiaEntry) -> None:
@@ -38,7 +38,8 @@ def test_realia_entry_creation(realia_entry: RealiaEntry) -> None:
     assert all(isinstance(e, AfoRegisterEntry) for e in realia_entry.afo_register)
     assert isinstance(realia_entry.references, tuple)
     assert isinstance(realia_entry.wikidata_id, tuple)
-    assert isinstance(realia_entry.reallexikon, ReallexikonEntry)
+    assert isinstance(realia_entry.reallexikon, tuple)
+    assert all(isinstance(r, ReallexikonEntry) for r in realia_entry.reallexikon)
 
 
 def test_afo_register_entry_schema_round_trip() -> None:
@@ -79,9 +80,7 @@ def test_realia_entry_schema_dump(realia_entry: RealiaEntry) -> None:
     assert dumped["type"] == list(realia_entry.type)
     assert dumped["wikidataId"] == list(realia_entry.wikidata_id)
     assert len(dumped["afoRegister"]) == len(realia_entry.afo_register)
-    reallexikon = realia_entry.reallexikon
-    assert reallexikon is not None
-    assert dumped["reallexikon"]["id"] == reallexikon.id
+    assert len(dumped["reallexikon"]) == len(realia_entry.reallexikon)
 
 
 def test_realia_entry_schema_load_round_trip() -> None:
@@ -115,6 +114,24 @@ def test_realia_entry_schema_load_stored_shape() -> None:
     }
     entry = RealiaEntrySchema().load(data)
     assert entry.type == ("Personal names",)
-    reference = entry.reallexikon.reference
+    reference = entry.reallexikon[0].reference
     assert reference is not None
     assert reference.id == "rla_1_2b"
+
+
+def test_realia_entry_schema_load_multiple_reallexikon() -> None:
+    data = {
+        "_id": "Aššur",
+        "relatedTerms": [],
+        "type": [],
+        "afoRegister": [],
+        "references": [],
+        "wikidataId": [],
+        "reallexikon": [
+            {"id": "1069", "title": "Aššur A. Stadt", "reference": "", "content": ""},
+            {"id": "1070", "title": "Aššur B. Land", "reference": "", "content": ""},
+            {"id": "1071", "title": "Aššur C. Gott", "reference": "", "content": ""},
+        ],
+    }
+    entry = RealiaEntrySchema().load(data)
+    assert tuple(rlex.id for rlex in entry.reallexikon) == ("1069", "1070", "1071")
