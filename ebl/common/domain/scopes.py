@@ -15,14 +15,16 @@ class ScopeItem(Enum):
 
     @classmethod
     def from_string(cls, scope_string: str):
-        prefix, name, suffix = cls._parse_scope_string(scope_string)
+        parsed_prefix, parsed_name, parsed_suffix = cls._parse_scope_string(
+            scope_string
+        )
         try:
             return next(
                 enum
                 for enum in cls
-                if enum.prefix == prefix
-                and enum.scope_name == name
-                and suffix in [enum.suffix, ""]
+                if enum.prefix == parsed_prefix
+                and enum.scope_name == parsed_name
+                and parsed_suffix in [enum.suffix, ""]
             )
         except StopIteration:
             raise ValueError(f"Unknown scope: {scope_string}")
@@ -39,8 +41,8 @@ class ScopeItem(Enum):
         return not self.is_open
 
     def __str__(self):
-        suffix = f"-{self.suffix}" if self.suffix else ""
-        return f"{self.prefix}:{self.scope_name}{suffix}"
+        suffix_string = f"-{self.suffix}" if self.suffix else ""
+        return f"{self.prefix}:{self.scope_name}{suffix_string}"
 
 
 class Scope(ScopeItem):

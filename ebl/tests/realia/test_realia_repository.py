@@ -114,8 +114,9 @@ def test_search_entry_with_reallexikon_no_reference(
     results = realia_repository.search(entry.id)
 
     assert len(results) == 1
-    assert results[0].reallexikon is not None
-    assert results[0].reallexikon.reference is None
+    reallexikon = results[0].reallexikon
+    assert reallexikon is not None
+    assert reallexikon.reference is None
 
 
 def _insert_minimal(realia_repository: MongoRealiaRepository, identifier: str) -> None:

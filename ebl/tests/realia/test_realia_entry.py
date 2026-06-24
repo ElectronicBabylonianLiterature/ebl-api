@@ -79,8 +79,9 @@ def test_realia_entry_schema_dump(realia_entry: RealiaEntry) -> None:
     assert dumped["type"] == list(realia_entry.type)
     assert dumped["wikidataId"] == list(realia_entry.wikidata_id)
     assert len(dumped["afoRegister"]) == len(realia_entry.afo_register)
-    assert realia_entry.reallexikon is not None
-    assert dumped["reallexikon"]["id"] == realia_entry.reallexikon.id
+    reallexikon = realia_entry.reallexikon
+    assert reallexikon is not None
+    assert dumped["reallexikon"]["id"] == reallexikon.id
 
 
 def test_realia_entry_schema_load_round_trip() -> None:
