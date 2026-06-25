@@ -1,3 +1,6 @@
+import runpy
+
+import pymongo
 from mockito import mock, when
 
 import ebl.dictionary.migrate_named_entity_tags as module
@@ -129,3 +132,19 @@ def test_main_dry_run(monkeypatch, database):
     module.main()
 
     assert database[COLLECTION].find_one({"_id": "Adad I"})["pos"] == ["DN"]
+
+
+def test_module_runs_as_script(monkeypatch, database):
+    database[COLLECTION].insert_one({"_id": "Nabu I", "pos": ["DN"]})
+    monkeypatch.setenv("MONGODB_URI", "mongodb://uri")
+    monkeypatch.setenv("MONGODB_DB", "ebl")
+    monkeypatch.setattr(module.sys, "argv", ["migrate"])
+    client = mock()
+    when(client).get_database("ebl").thenReturn(database)
+    monkeypatch.setattr(pymongo, "MongoClient", lambda _uri: client)
+
+    runpy.run_path(module.__file__, run_name="__main__")
+
+    document = database[COLLECTION].find_one({"_id": "Nabu I"})
+    assert document["pos"] == []
+    assert document["namedEntityTags"] == ["DN"]

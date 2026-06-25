@@ -45,6 +45,16 @@
   which mirrors all 10 existing runnable scripts/migrations in this repo
   (none cover that guard or use pragmas).
 
+### Review follow-up (2026-06-25)
+
+- Reviewed PR #731; exported `TASK-named-entity-tags-review.md`.
+- F1 (empty `namedEntityTags` allowed): confirmed by author — no change.
+- F3 (migration `__main__` guard coverage): added
+  `test_module_runs_as_script` using `runpy.run_path(run_name="__main__")` with
+  `pymongo.MongoClient` patched to a mongomock database. All touched modules now
+  at 100% statement coverage (322/322). No pragma used.
+- Not pushed; remote left as-is per user instruction.
+
 ### Out-of-scope note for maintainers
 
 - `ebl/tests/conftest.py` (732 lines) already exceeds the 250-line gate
