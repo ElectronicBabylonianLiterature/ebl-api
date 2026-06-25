@@ -27,9 +27,7 @@ def lightweight_token_of(token) -> Dict[str, Any]:
     data = {
         "value": token.value,
         "cleanValue": getattr(token, "clean_value", None),
-        "uniqueLemma": [
-            str(lemma) for lemma in getattr(token, "unique_lemma", ())
-        ],
+        "uniqueLemma": [str(lemma) for lemma in getattr(token, "unique_lemma", ())],
         "type": token.__class__.__name__,
     }
     return {
@@ -103,7 +101,9 @@ class FragmentQuerySummary:
         )
 
 
-def matching_line_preview_of(text: Text, matching_lines: Sequence[int]) -> Dict[str, Any]:
+def matching_line_preview_of(
+    text: Text, matching_lines: Sequence[int]
+) -> Dict[str, Any]:
     return {
         "lines": [
             lightweight_line_preview_of(text.lines[index]) for index in matching_lines

@@ -47,11 +47,7 @@ class PatternMatcher:
         )
 
     def _limit_result(self):
-        return (
-            [{"$limit": self._limit_value()}]
-            if "limit" in self._query
-            else []
-        )
+        return [{"$limit": self._limit_value()}] if "limit" in self._query else []
 
     def _limit_value(self):
         limit = self._query["limit"]

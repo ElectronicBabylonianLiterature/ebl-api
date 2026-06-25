@@ -716,9 +716,7 @@ def test_query_fragmentarium_transliteration_limit_summary_preserves_order(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_tranliteration_query_lines(
-                "KU", sign_repository
-            ),
+            "transliteration": create_tranliteration_query_lines("KU", sign_repository),
             "limit": 2,
             "offset": 1,
         }
@@ -749,9 +747,7 @@ def test_query_fragmentarium_transliteration_limit_count_none(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_tranliteration_query_lines(
-                "KU", sign_repository
-            ),
+            "transliteration": create_tranliteration_query_lines("KU", sign_repository),
             "limit": 2,
             "count": "none",
         }
@@ -781,18 +777,14 @@ def test_query_fragmentarium_transliteration_limit_count_page(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_tranliteration_query_lines(
-                "KU", sign_repository
-            ),
+            "transliteration": create_tranliteration_query_lines("KU", sign_repository),
             "limit": 2,
             "count": "page",
         }
     )
     last_page_result = fragment_repository.query(
         {
-            "transliteration": create_tranliteration_query_lines(
-                "KU", sign_repository
-            ),
+            "transliteration": create_tranliteration_query_lines("KU", sign_repository),
             "limit": 2,
             "offset": 2,
             "count": "page",
@@ -840,9 +832,7 @@ def test_query_fragmentarium_limit_summary_hydrates_only_phase_one_ids(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_tranliteration_query_lines(
-                "KU", sign_repository
-            ),
+            "transliteration": create_tranliteration_query_lines("KU", sign_repository),
             "limit": 10,
         },
         user_scopes=(),

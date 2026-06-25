@@ -15,7 +15,9 @@ def _facet(pipeline):
 
 
 def _result_projection(pipeline):
-    return next(stage["$project"] for stage in reversed(pipeline) if "$project" in stage)
+    return next(
+        stage["$project"] for stage in reversed(pipeline) if "$project" in stage
+    )
 
 
 def _contains_key(value, key):
@@ -59,7 +61,7 @@ def test_fragment_query_summary_phase_one_has_no_lookup_or_hydration():
                 "matchingLines": True,
                 "museumNumber": True,
             }
-        }
+        },
     ]
     assert not any("$lookup" in stage for stage in items)
     assert not _contains_key(items, "$expr")

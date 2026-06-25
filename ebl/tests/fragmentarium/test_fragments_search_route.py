@@ -800,9 +800,7 @@ def test_search_script_period(client, fragmentarium, params, expected):
     for fragment in fragments:
         fragmentarium.create(fragment)
 
-    expected_json = query_result_of(
-        [query_item_of(fragments[i]) for i in expected], 0
-    )
+    expected_json = query_result_of([query_item_of(fragments[i]) for i in expected], 0)
 
     result = client.simulate_get("/fragments/query", params=params)
 

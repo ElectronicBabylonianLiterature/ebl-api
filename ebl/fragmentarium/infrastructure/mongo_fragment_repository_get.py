@@ -287,11 +287,9 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         lines = text.get("lines") or []
         return {
             "lines": [
-                compact_preview_line(lines[line_index])
-                for line_index in matching_lines
+                compact_preview_line(lines[line_index]) for line_index in matching_lines
             ],
-            "parser_version": text.get("parser_version")
-            or DEFAULT_ATF_PARSER_VERSION,
+            "parser_version": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
         }
 
     def _hydrate_fragment_query_item(
@@ -344,9 +342,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
                     for item in items
                 ],
                 "matchCountTotal": data.get("matchCountTotal", 0),
-                "isMatchCountTotalExact": data.get(
-                    "isMatchCountTotalExact", True
-                ),
+                "isMatchCountTotalExact": data.get("isMatchCountTotalExact", True),
                 "hasNextPage": data.get("hasNextPage"),
                 "_showCountMetadata": data.get("_showCountMetadata", False),
             }

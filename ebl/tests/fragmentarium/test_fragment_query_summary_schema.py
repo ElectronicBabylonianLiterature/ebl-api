@@ -108,8 +108,9 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         "hasPhoto": True,
         "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
     }
-    assert dumped["matchingLinePreview"]["lines"][0]["prefix"] == (
-        summary.matching_line_preview["lines"][0]["prefix"]
+    assert (
+        dumped["matchingLinePreview"]["lines"][0]["prefix"]
+        == (summary.matching_line_preview["lines"][0]["prefix"])
     )
     assert dumped["matchingLinePreview"]["lines"][0]["text"]
     assert dumped["matchingLinePreview"]["lines"][0]["tokens"][0]["value"]
