@@ -6,6 +6,29 @@ from ebl.common.domain.stage import Stage
 from ebl.transliteration.domain.text_id import TextId
 
 
+def _query_result_equality_values(result):
+    return (
+        tuple(result.items),
+        result.match_count_total,
+        result.is_match_count_total_exact,
+        result.has_next_page,
+    )
+
+
+def compare_query_results(left, right):
+    try:
+        right_values = (
+            tuple(right.items),
+            right.match_count_total,
+            getattr(right, "is_match_count_total_exact", True),
+            getattr(right, "has_next_page", None),
+        )
+    except AttributeError:
+        return NotImplemented
+
+    return _query_result_equality_values(left) == right_values
+
+
 class LemmaQueryType(Enum):
     AND = "and"
     OR = "or"
@@ -33,28 +56,7 @@ class QueryResult:
         return QueryResult([], 0)
 
     def __eq__(self, other):
-        if isinstance(other, QueryResult):
-            return (
-                tuple(self.items) == tuple(other.items)
-                and self.match_count_total == other.match_count_total
-                and self.is_match_count_total_exact
-                == other.is_match_count_total_exact
-                and self.has_next_page == other.has_next_page
-            )
-
-        try:
-            other_items = other.items
-            other_match_count_total = other.match_count_total
-        except AttributeError:
-            return NotImplemented
-
-        return (
-            tuple(self.items) == tuple(other_items)
-            and self.match_count_total == other_match_count_total
-            and self.is_match_count_total_exact
-            == getattr(other, "is_match_count_total_exact", True)
-            and self.has_next_page == getattr(other, "has_next_page", None)
-        )
+        return compare_query_results(self, other)
 
 
 @attr.s(auto_attribs=True, frozen=True)

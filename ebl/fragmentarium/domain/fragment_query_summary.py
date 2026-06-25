@@ -5,6 +5,7 @@ import attr
 from ebl.bibliography.domain.reference import Reference
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.project import ResearchProject
+from ebl.common.query.query_result import compare_query_results
 from ebl.fragmentarium.domain.date import Date
 from ebl.fragmentarium.domain.fragment import DossierReference, Genre, Script
 from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
@@ -124,25 +125,4 @@ class FragmentQueryResult:
         return FragmentQueryResult([], 0)
 
     def __eq__(self, other):
-        if isinstance(other, FragmentQueryResult):
-            return (
-                tuple(self.items) == tuple(other.items)
-                and self.match_count_total == other.match_count_total
-                and self.is_match_count_total_exact
-                == other.is_match_count_total_exact
-                and self.has_next_page == other.has_next_page
-            )
-
-        try:
-            other_items = other.items
-            other_match_count_total = other.match_count_total
-        except AttributeError:
-            return NotImplemented
-
-        return (
-            tuple(self.items) == tuple(other_items)
-            and self.match_count_total == other_match_count_total
-            and self.is_match_count_total_exact
-            == getattr(other, "is_match_count_total_exact", True)
-            and self.has_next_page == getattr(other, "has_next_page", None)
-        )
+        return compare_query_results(self, other)

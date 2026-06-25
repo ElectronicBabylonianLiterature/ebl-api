@@ -145,3 +145,15 @@ def test_fragment_query_result_schema_roundtrip_and_compatibility():
     )
     assert result == old_result
     assert old_result == result
+
+
+def test_fragment_query_result_compatibility_respects_count_metadata():
+    summary = build_summary()
+    item = QueryItem(summary.museum_number, summary.matching_lines, summary.match_count)
+    result = FragmentQueryResult((summary,), None, False, True)
+    matching_query_result = QueryResult([item], None, False, True)
+    mismatched_query_result = QueryResult([item], None, False, False)
+
+    assert result == matching_query_result
+    assert matching_query_result == result
+    assert result != mismatched_query_result
