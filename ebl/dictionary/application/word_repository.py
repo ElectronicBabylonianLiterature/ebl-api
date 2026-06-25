@@ -11,7 +11,7 @@ class WordRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def create_proper_noun(self, lemma: str, pos_tags: list[str]) -> WordId:
+    def create_proper_noun(self, lemma: str, named_entity_tags: list[str]) -> WordId:
         raise NotImplementedError
 
     @abstractmethod

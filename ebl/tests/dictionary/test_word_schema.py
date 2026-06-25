@@ -10,6 +10,29 @@ def test_serialization_and_deserialization(word):
     assert loaded == word
 
 
+def test_named_entity_tags_round_trip(word):
+    word_with_tags = {**word, "namedEntityTags": ["DN", "GN"]}
+    schema = WordSchema()
+    data = schema.dump(word_with_tags)
+    assert data["namedEntityTags"] == ["DN", "GN"]
+    loaded = schema.load(data)
+    assert loaded["namedEntityTags"] == ["DN", "GN"]
+
+
+def test_named_entity_tags_default_to_empty_list_on_load(word):
+    payload = {key: value for key, value in word.items() if key != "namedEntityTags"}
+    schema = WordSchema()
+    loaded = schema.load(payload)
+    assert loaded["namedEntityTags"] == []
+
+
+def test_named_entity_tags_default_to_empty_list_on_dump(word):
+    document = {key: value for key, value in word.items() if key != "namedEntityTags"}
+    schema = WordSchema()
+    data = schema.dump(document)
+    assert data["namedEntityTags"] == []
+
+
 def test_origin_array_serialization(word):
     word_with_array_origin = {**word, "origin": ["CDA", "EBL"]}
     schema = WordSchema()

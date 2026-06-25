@@ -42,6 +42,7 @@ class ProperNounCreationResource:
 
         lemma = word.get("lemma")
         pos = word.get("pos")
+        named_entity_tags = word.get("namedEntityTags")
         word_id = word.get("_id")
 
         return (
@@ -50,6 +51,8 @@ class ProperNounCreationResource:
             and all(isinstance(lemma_item, str) for lemma_item in lemma)
             and isinstance(pos, list)
             and all(isinstance(pos_item, str) for pos_item in pos)
+            and isinstance(named_entity_tags, list)
+            and all(isinstance(tag, str) for tag in named_entity_tags)
         )
 
     @falcon.before(require_scope, "create:proper_nouns")
@@ -57,8 +60,8 @@ class ProperNounCreationResource:
     def on_post(self, req, resp):
         request_data = ProperNounCreationRequestSchema().load(req.media)
         lemma = request_data["lemma"]
-        pos_tags = request_data["pos"]
-        word_id = self._dictionary.create_proper_noun(lemma, pos_tags)
+        named_entity_tags = request_data["namedEntityTags"]
+        word_id = self._dictionary.create_proper_noun(lemma, named_entity_tags)
         if not isinstance(word_id, str) or not word_id:
             raise falcon.HTTPInternalServerError(
                 description="Proper noun creation failed to return a valid word id."

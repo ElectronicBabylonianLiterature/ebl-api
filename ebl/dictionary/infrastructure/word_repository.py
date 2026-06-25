@@ -133,12 +133,13 @@ class MongoWordRepository(WordRepository):
     def create(self, document):
         return self._collection.insert_one(document)
 
-    def create_proper_noun(self, lemma: str, pos_tags: list[str]) -> WordId:
+    def create_proper_noun(self, lemma: str, named_entity_tags: list[str]) -> WordId:
         word = {
             "_id": f"{lemma} I",
             "lemma": [lemma],
             "homonym": "I",
-            "pos": pos_tags,
+            "pos": [],
+            "namedEntityTags": named_entity_tags,
             "attested": True,
             "meaning": "",
             "legacyLemma": lemma,
