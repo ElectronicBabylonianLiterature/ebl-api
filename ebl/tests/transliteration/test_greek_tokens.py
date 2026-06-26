@@ -47,7 +47,16 @@ def test_greek_letter() -> None:
             ),
             "αβ",
             Language.SUMERIAN,
-            False,
+            True,
+            True,
+        ),
+        (
+            GreekWord.of(
+                (GreekLetter.of("α"), GreekLetter.of("β")), language=Language.EMESAL
+            ),
+            "αβ",
+            Language.EMESAL,
+            True,
             True,
         ),
     ],
