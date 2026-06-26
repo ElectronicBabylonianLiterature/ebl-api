@@ -5,29 +5,11 @@ from typing import Iterable
 
 from pymongo import MongoClient, UpdateOne
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 COLLECTION = "words"
 NAMED_ENTITY_CODES = frozenset(
-    {
-        "AN",
-        "CN",
-        "DN",
-        "EN",
-        "FN",
-        "GN",
-        "LN",
-        "MN",
-        "ON",
-        "PN",
-        "QN",
-        "RN",
-        "SN",
-        "TN",
-        "WN",
-        "YN",
-    }
+    "AN CN DN EN FN GN LN MN ON PN QN RN SN TN WN YN".split()
 )
 
 
@@ -111,6 +93,7 @@ def run_migration(collection, dry_run: bool = False) -> dict:
 
 
 def main() -> dict:
+    logging.basicConfig(level=logging.INFO)
     dry_run = "--dry-run" in sys.argv
     database = get_database()
     return run_migration(database[COLLECTION], dry_run=dry_run)
