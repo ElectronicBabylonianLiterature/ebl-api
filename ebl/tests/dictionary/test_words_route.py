@@ -138,6 +138,7 @@ def test_search_word_with_word_having_multiple_origins(client, dictionary):
         "source": "multi",
         "roots": [],
         "pos": [],
+        "namedEntityTags": [],
         "guideWord": "multi",
         "arabicGuideWord": "multi",
         "oraccWords": [],

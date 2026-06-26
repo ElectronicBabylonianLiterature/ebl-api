@@ -8,8 +8,8 @@ from ebl.transliteration.domain.language import DEFAULT_LANGUAGE, Language
     [
         (Language.UNKNOWN, True),
         (Language.AKKADIAN, True),
-        (Language.EMESAL, False),
-        (Language.SUMERIAN, False),
+        (Language.EMESAL, True),
+        (Language.SUMERIAN, True),
         (Language.HITTITE, False),
     ],
 )

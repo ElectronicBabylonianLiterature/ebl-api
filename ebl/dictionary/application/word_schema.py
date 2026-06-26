@@ -95,6 +95,7 @@ class WordSchema(Schema):
     source = fields.String()
     roots = fields.List(fields.String())
     pos = fields.List(fields.String(), required=True)
+    namedEntityTags = fields.List(fields.String(), load_default=list, dump_default=list)
     guideWord = fields.String(validate=Length(1), required=True)
     arabicGuideWord = fields.String(required=True)
     oraccWords = fields.Nested(OraccWordSchema, required=True, many=True)
@@ -129,4 +130,4 @@ class WordSchema(Schema):
 
 class ProperNounCreationRequestSchema(Schema):
     lemma = fields.String(required=True, validate=Length(min=1))
-    pos = fields.List(fields.String(), load_default=[])
+    namedEntityTags = fields.List(fields.String(), load_default=[])
