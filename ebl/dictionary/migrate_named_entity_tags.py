@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 COLLECTION = "words"
 NAMED_ENTITY_CODES = frozenset(
-    "AN CN DN EN FN GN LN MN ON PN QN RN SN TN WN YN".split()
+    "AN CN DN EN FN GN KN LN MN ON PN QN RN SN TN WN YN".split()
 )
 
 

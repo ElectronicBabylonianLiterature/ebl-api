@@ -22,6 +22,20 @@ def test_split_pos_separates_named_entities_from_grammatical():
     assert named == ["DN", "GN"]
 
 
+def test_king_name_code_is_a_named_entity():
+    assert "KN" in module.NAMED_ENTITY_CODES
+
+
+def test_run_migration_moves_king_name_code(database):
+    _insert(database, {"_id": "Samsu-iluna I", "pos": ["KN"]})
+
+    module.run_migration(database[COLLECTION])
+
+    document = database[COLLECTION].find_one({"_id": "Samsu-iluna I"})
+    assert document["pos"] == []
+    assert document["namedEntityTags"] == ["KN"]
+
+
 def test_run_migration_moves_named_entity_codes(database):
     _insert(database, {"_id": "Marduk I", "pos": ["N", "DN"]})
 
