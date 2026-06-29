@@ -14,8 +14,8 @@ class CrossReference:
 class AfoCrossReference:
     id: str
     lemma: str
-    afo_volume: str = ""
-    page: str = ""
+    afo_volume: str
+    page: str
 
 
 @attr.s(frozen=True, auto_attribs=True)

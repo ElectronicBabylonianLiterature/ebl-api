@@ -62,6 +62,16 @@ def test_search_no_match_returns_empty(
     assert results == []
 
 
+def test_search_treats_regex_metacharacters_literally(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    insert_minimal(realia_repository, "Lion")
+
+    assert realia_repository.search(".*") == []
+    assert realia_repository.search("Li.n") == []
+    assert realia_repository.search("(a+)+") == []
+
+
 def test_search_entry_with_reallexikon_no_reference(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,

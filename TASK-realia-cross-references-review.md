@@ -76,3 +76,60 @@ Merge. Gates verified: `black` clean, `ruff` clean,
 full suite 3752 passed / 0 failed, 100% coverage on all changed source
 modules. Before merging the PR, remove the `TASK-realia-cross-references-*.md`
 tracking files and the dev-only seed script/data if no longer needed.
+
+## Whole-PR Review (branch `add-realia` vs `master`)
+
+Scope: the entire new Realia module (domain, schemas, repository, web,
+search ranking, tests, factories) plus shared edits to `app.py`, `context.py`,
+`tests/conftest.py`, `common/domain/scopes.py`, and
+`common/query/query_collation.py`, and the dev-only seed script/data.
+
+Two independent review passes (domain/schema/repo and web/ranking/tests) were
+run in addition to a manual review of the shared files. Findings, triaged:
+
+### Acted on
+
+- **AfoCrossReference contract was self-contradictory** — domain defaulted
+  `afo_volume`/`page` to `""` while the schema marked them `required=True`.
+  Made the domain fields required to match the schema and the data contract
+  (AfO cross-references always carry `afoVolume`+`page`). Fixed.
+- **No test proved the search regex is injection-safe.** The realia search
+  turns the query into a Mongo `$regex`; `CollatedFieldQuery` escapes it via
+  `re.escape`, so metacharacters are literal. Added
+  `test_search_treats_regex_metacharacters_literally` (`.*`, `Li.n`, `(a+)+`
+  all return no matches). No ReDoS/injection path.
+
+### Accepted / documented (no code change)
+
+- **`realiaId` has no uniqueness guarantee.** `find_by_realia_id` uses
+  `find_one`, so duplicate `realiaId`s would resolve non-deterministically.
+  `realiaId` is a stable unique key produced by data-prep; the repository
+  creates no indexes today (mirrors the collection's current state, where
+  older docs lack `realiaId`). Recommendation: add a **sparse/partial unique
+  index** on `realiaId` once it is backfilled on every document — deferred to
+  avoid an index-build migration in this PR. Severity: Med.
+- **Reallexikon reference load is intentionally lean.**
+  `ReallexikonReferenceField._deserialize` rebuilds a `Reference` as
+  `DISCUSSION` from `{id, pages}`, dropping `type`/`notes`/`linesCited`. This
+  is the documented lean-reference contract from the prior reallexikon task,
+  not a regression. Severity: Info.
+- **Response uses `_id`** (via `data_key="_id"`) rather than `id`. Intentional;
+  the frontend keys on the lemma `_id`. Severity: Info.
+- **`_inject_references` round-trips through `ApiReferenceSchema`** instead of
+  `Reference.set_document`. Pre-existing; works because all references are
+  pre-validated. Optional simplification. Severity: Low.
+- **Dangling bibliography reference** injects `document={}`; the schema's
+  `data["document"] and create_object_entry(...)` short-circuits on the empty
+  dict, so there is no crash. Verified. Severity: none.
+- **Shared edits are clean.** `scopes.py` only renames locals (avoids
+  shadowing the `prefix`/`suffix` properties) and adds `test_scopes.py`;
+  `query_collation.py` additively introduces the `realia` data type, strip
+  helper, and field config; `app.py`/`context.py`/`conftest.py` wire the
+  repository exactly like the other collections. No behavior change to
+  unrelated collections. (Pre-existing `Unexepcted scope format` typo in
+  `scopes.py` is matched by the new test; not introduced here.)
+
+### Verdict
+
+Merge after the two fixes above. Strongly consider the sparse-unique index on
+`realiaId` as an immediate follow-up given the frontend will navigate by it.
