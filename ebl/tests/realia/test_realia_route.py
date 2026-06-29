@@ -1,25 +1,19 @@
 import falcon
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
-from ebl.realia.infrastructure.mongo_realia_repository import (
-    MongoRealiaRepository,
-    RealiaEntrySchema,
-)
+from ebl.realia.domain.realia_entry import RealiaEntry
+from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.tests.factories.realia import RealiaEntryFactory
+from ebl.tests.realia.realia_repository_helpers import create_entry_with_bibliography
 
 
 def _seed_entry(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,
-):
-    entry = RealiaEntryFactory.build()
-    realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
-    for ref in entry.references:
-        if ref.document:
-            bibliography_repository.create(ref.document)
-    for rlex in entry.reallexikon:
-        if rlex.reference is not None and rlex.reference.document:
-            bibliography_repository.create(rlex.reference.document)
+    **kwargs,
+) -> RealiaEntry:
+    entry = RealiaEntryFactory.build(**kwargs)
+    create_entry_with_bibliography(realia_repository, bibliography_repository, entry)
     return entry
 
 
@@ -38,6 +32,66 @@ def test_get_realia_by_id(
 
 def test_get_realia_not_found(client) -> None:
     result = client.simulate_get("/realia/nonexistent")
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_get_realia_surfaces_cross_references(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    entry = _seed_entry(realia_repository, bibliography_repository)
+
+    result = client.simulate_get(f"/realia/{entry.id}")
+
+    assert result.status == falcon.HTTP_OK
+    body = result.json
+    assert body["realiaId"] == entry.realia_id
+    assert body["crossReferences"] == [
+        {"id": cross.id, "lemma": cross.lemma} for cross in entry.cross_references
+    ]
+    assert body["afoCrossReferences"] == [
+        {
+            "id": cross.id,
+            "lemma": cross.lemma,
+            "afoVolume": cross.afo_volume,
+            "page": cross.page,
+        }
+        for cross in entry.afo_cross_references
+    ]
+    assert body["afoRegister"][0]["crossReferences"] == [
+        {
+            "id": cross.id,
+            "lemma": cross.lemma,
+            "afoVolume": cross.afo_volume,
+            "page": cross.page,
+        }
+        for cross in entry.afo_register[0].cross_references
+    ]
+
+
+def test_get_realia_by_realia_id(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    _seed_entry(
+        realia_repository,
+        bibliography_repository,
+        id="Elam (Geschichte)",
+        realia_id="realia_003277",
+    )
+
+    result = client.simulate_get("/realia/by-id/realia_003277")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["_id"] == "Elam (Geschichte)"
+    assert result.json["realiaId"] == "realia_003277"
+
+
+def test_get_realia_by_realia_id_not_found(client) -> None:
+    result = client.simulate_get("/realia/by-id/realia_999999")
 
     assert result.status == falcon.HTTP_NOT_FOUND
 

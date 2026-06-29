@@ -1,13 +1,33 @@
 import factory
 
 from ebl.realia.domain.realia_entry import (
+    AfoCrossReference,
     AfoRegisterEntry,
+    CrossReference,
     RealiaEntry,
     ReallexikonEntry,
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 
 REALIA_TYPES = ("Personal names", "Geographical names", "Divine names")
+
+
+class CrossReferenceFactory(factory.Factory):
+    class Meta:
+        model = CrossReference
+
+    id = factory.Sequence(lambda n: f"realia_{n:06d}")
+    lemma = factory.Sequence(lambda n: f"lemma-{n}")
+
+
+class AfoCrossReferenceFactory(factory.Factory):
+    class Meta:
+        model = AfoCrossReference
+
+    id = factory.Sequence(lambda n: f"realia_{n:06d}")
+    lemma = factory.Sequence(lambda n: f"lemma-{n}")
+    afo_volume = factory.Sequence(lambda n: f"AfO {n}")
+    page = factory.Sequence(lambda n: str(n))
 
 
 class AfoRegisterEntryFactory(factory.Factory):
@@ -19,6 +39,11 @@ class AfoRegisterEntryFactory(factory.Factory):
     afo = factory.Sequence(lambda n: f"AfO {n}")
     reference = factory.Sequence(lambda n: f"p. {n}")
     cross_reference = factory.Faker("word")
+    afo_volume = factory.Sequence(lambda n: f"AfO {n}")
+    page = factory.Sequence(lambda n: str(n))
+    cross_references = factory.LazyAttribute(
+        lambda _: (AfoCrossReferenceFactory.build(),)
+    )
 
 
 class ReallexikonEntryFactory(factory.Factory):
@@ -35,6 +60,7 @@ class RealiaEntryFactory(factory.Factory):
         model = RealiaEntry
 
     id = factory.Sequence(lambda n: f"Realia {n}")
+    realia_id = factory.Sequence(lambda n: f"realia_{n:06d}")
     related_terms = factory.LazyAttribute(
         lambda _: tuple(f"term-{i}" for i in range(2))
     )
@@ -48,4 +74,8 @@ class RealiaEntryFactory(factory.Factory):
     wikidata_id = factory.LazyAttribute(lambda _: tuple(f"Q{n}" for n in range(1, 3)))
     reallexikon = factory.LazyAttribute(
         lambda _: tuple(ReallexikonEntryFactory.build() for _ in range(2))
+    )
+    cross_references = factory.LazyAttribute(lambda _: (CrossReferenceFactory.build(),))
+    afo_cross_references = factory.LazyAttribute(
+        lambda _: (AfoCrossReferenceFactory.build(),)
     )

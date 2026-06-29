@@ -1,7 +1,7 @@
 from falcon import Request, Response
 
 from ebl.realia.application.realia_repository import RealiaRepository
-from ebl.realia.infrastructure.mongo_realia_repository import RealiaEntrySchema
+from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 
 
 class RealiaResource:
@@ -10,6 +10,15 @@ class RealiaResource:
 
     def on_get(self, _req: Request, resp: Response, realia_id: str) -> None:
         entry = self._realia_repository.find(realia_id)
+        resp.media = RealiaEntrySchema().dump(entry)
+
+
+class RealiaByIdResource:
+    def __init__(self, realia_repository: RealiaRepository) -> None:
+        self._realia_repository = realia_repository
+
+    def on_get(self, _req: Request, resp: Response, realia_id: str) -> None:
+        entry = self._realia_repository.find_by_realia_id(realia_id)
         resp.media = RealiaEntrySchema().dump(entry)
 
 

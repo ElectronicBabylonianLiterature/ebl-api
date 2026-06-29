@@ -6,7 +6,7 @@ from ebl.realia.domain.realia_entry import (
     RealiaEntry,
     ReallexikonEntry,
 )
-from ebl.realia.infrastructure.mongo_realia_repository import (
+from ebl.realia.infrastructure.realia_schemas import (
     AfoRegisterEntrySchema,
     RealiaEntrySchema,
     ReallexikonEntrySchema,
@@ -22,12 +22,22 @@ def realia_entry() -> RealiaEntry:
 def test_realia_entry_defaults() -> None:
     entry = RealiaEntry(id="Lion")
     assert entry.id == "Lion"
+    assert entry.realia_id == ""
     assert entry.related_terms == ()
     assert entry.type == ()
     assert entry.afo_register == ()
     assert entry.references == ()
     assert entry.wikidata_id == ()
     assert entry.reallexikon == ()
+    assert entry.cross_references == ()
+    assert entry.afo_cross_references == ()
+
+
+def test_afo_register_entry_defaults() -> None:
+    entry = AfoRegisterEntry()
+    assert entry.afo_volume == ""
+    assert entry.page == ""
+    assert entry.cross_references == ()
 
 
 def test_realia_entry_creation(realia_entry: RealiaEntry) -> None:
@@ -58,6 +68,9 @@ def test_afo_register_entry_schema_round_trip() -> None:
         "AfO": "AfO 50",
         "reference": "p. 42",
         "crossReference": "see gold",
+        "afoVolume": "",
+        "page": "",
+        "crossReferences": [],
     }
     loaded = AfoRegisterEntrySchema().load(dumped)
     assert loaded == entry

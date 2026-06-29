@@ -10,5 +10,9 @@ class RealiaRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    def find_by_realia_id(self, realia_id: str) -> RealiaEntry:
+        raise NotImplementedError()
+
+    @abstractmethod
     def search(self, query: str) -> Sequence[RealiaEntry]:
         raise NotImplementedError()

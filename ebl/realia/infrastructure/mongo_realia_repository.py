@@ -1,15 +1,11 @@
 import attr
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Sequence, Tuple
 
-from marshmallow import Schema, fields, post_load, EXCLUDE
+from marshmallow import EXCLUDE
 from pymongo.database import Database
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
-from ebl.bibliography.domain.reference import (
-    BibliographyId,
-    Reference,
-    ReferenceType,
-)
+from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.common.query.query_collation import (
     CollatedFieldQuery,
     strip_realia_query_chars,
@@ -17,89 +13,12 @@ from ebl.common.query.query_collation import (
 from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.realia.application.realia_repository import RealiaRepository
-from ebl.realia.domain.realia_entry import (
-    AfoRegisterEntry,
-    RealiaEntry,
-    ReallexikonEntry,
-)
+from ebl.realia.domain.realia_entry import RealiaEntry, ReallexikonEntry
+from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanker
 
 REALIA_COLLECTION = "realia"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
-
-
-class ReallexikonReferenceField(fields.Field):
-    def _serialize(self, value, attr_name, obj, **kwargs):
-        return None if value is None else ApiReferenceSchema().dump(value)
-
-    def _deserialize(self, value, attr_name, data, **kwargs):
-        if isinstance(value, str):
-            return self._from_id(value, "")
-        if isinstance(value, dict):
-            return self._from_id(value.get("id", ""), value.get("pages", ""))
-        return None
-
-    def _from_id(self, bibliography_id: str, pages: str) -> Optional[Reference]:
-        if not bibliography_id:
-            return None
-        return Reference(
-            BibliographyId(bibliography_id), ReferenceType.DISCUSSION, pages=pages
-        )
-
-
-class AfoRegisterEntrySchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    main_word = fields.String(data_key="mainWord", load_default="")
-    note = fields.String(load_default="")
-    afo = fields.String(data_key="AfO", load_default="")
-    reference = fields.String(load_default="")
-    cross_reference = fields.String(data_key="crossReference", load_default="")
-
-    @post_load
-    def make_entry(self, data, **kwargs) -> AfoRegisterEntry:
-        return AfoRegisterEntry(**data)
-
-
-class ReallexikonEntrySchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    id = fields.String(load_default="")
-    title = fields.String(load_default="")
-    reference = ReallexikonReferenceField(allow_none=True, load_default=None)
-
-    @post_load
-    def make_entry(self, data, **kwargs) -> ReallexikonEntry:
-        return ReallexikonEntry(**data)
-
-
-class RealiaEntrySchema(Schema):
-    class Meta:
-        unknown = EXCLUDE
-
-    id = fields.String(required=True, data_key="_id")
-    related_terms = fields.List(
-        fields.String(), data_key="relatedTerms", load_default=list
-    )
-    type = fields.List(fields.String(), load_default=list)
-    afo_register = fields.List(
-        fields.Nested(AfoRegisterEntrySchema), data_key="afoRegister", load_default=list
-    )
-    references = fields.Nested(ApiReferenceSchema, many=True, load_default=list)
-    wikidata_id = fields.List(fields.String(), data_key="wikidataId", load_default=list)
-    reallexikon = fields.List(fields.Nested(ReallexikonEntrySchema), load_default=list)
-
-    @post_load
-    def make_entry(self, data, **kwargs) -> RealiaEntry:
-        data["related_terms"] = tuple(data["related_terms"])
-        data["type"] = tuple(data["type"])
-        data["afo_register"] = tuple(data["afo_register"])
-        data["references"] = tuple(data["references"])
-        data["wikidata_id"] = tuple(data["wikidata_id"])
-        data["reallexikon"] = tuple(data["reallexikon"])
-        return RealiaEntry(**data)
 
 
 class MongoRealiaRepository(RealiaRepository):
@@ -114,6 +33,16 @@ class MongoRealiaRepository(RealiaRepository):
             document = self._realia_collection.find_one_by_id(realia_id)
         except NotFoundError:
             raise NotFoundError(f"Realia entry '{realia_id}' not found.")
+        return self._load_entry(document)
+
+    def find_by_realia_id(self, realia_id: str) -> RealiaEntry:
+        try:
+            document = self._realia_collection.find_one({"realiaId": realia_id})
+        except NotFoundError:
+            raise NotFoundError(f"Realia entry with realiaId '{realia_id}' not found.")
+        return self._load_entry(document)
+
+    def _load_entry(self, document: dict) -> RealiaEntry:
         entries = [RealiaEntrySchema().load(document)]
         self._inject_bibliography(entries)
         return entries[0]
