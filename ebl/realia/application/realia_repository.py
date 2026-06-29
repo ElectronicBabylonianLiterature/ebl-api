@@ -10,7 +10,7 @@ class RealiaRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def find(self, realia_id: str) -> RealiaEntry:
+    def find(self, id_: str) -> RealiaEntry:
         raise NotImplementedError()
 
     @abstractmethod

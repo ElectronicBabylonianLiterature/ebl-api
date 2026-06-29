@@ -34,11 +34,11 @@ class MongoRealiaRepository(RealiaRepository):
             partialFilterExpression={"realiaId": {"$gt": ""}},
         )
 
-    def find(self, realia_id: str) -> RealiaEntry:
+    def find(self, id_: str) -> RealiaEntry:
         try:
-            document = self._realia_collection.find_one_by_id(realia_id)
+            document = self._realia_collection.find_one_by_id(id_)
         except NotFoundError:
-            raise NotFoundError(f"Realia entry '{realia_id}' not found.")
+            raise NotFoundError(f"Realia entry '{id_}' not found.")
         return self._load_entry(document)
 
     def find_by_realia_id(self, realia_id: str) -> RealiaEntry:
