@@ -96,6 +96,19 @@ def test_get_realia_by_realia_id_not_found(client) -> None:
     assert result.status == falcon.HTTP_NOT_FOUND
 
 
+def test_lemma_named_by_id_is_not_shadowed(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    _seed_entry(realia_repository, bibliography_repository, id="by-id")
+
+    result = client.simulate_get("/realia/by-id")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["_id"] == "by-id"
+
+
 def test_search_realia(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,

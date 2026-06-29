@@ -10,7 +10,48 @@ from ebl.tests.realia.realia_repository_helpers import (
     insert_stored,
     stored_reallexikon_entry,
 )
-from ebl.errors import NotFoundError
+from ebl.errors import DuplicateError, NotFoundError
+
+
+def test_create_indexes_declares_partial_unique_realia_id(
+    database,
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    realia_repository.create_indexes()
+
+    indexes = database["realia"].index_information().values()
+    realia_id_index = next(
+        index for index in indexes if index["key"] == [("realiaId", 1)]
+    )
+    assert realia_id_index["unique"] is True
+    assert realia_id_index["partialFilterExpression"] == {"realiaId": {"$gt": ""}}
+
+
+def test_create_indexes_rejects_duplicate_realia_id(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    realia_repository.create_indexes()
+    realia_repository._realia_collection.insert_one(
+        {"_id": "Elam", "realiaId": "realia_003277"}
+    )
+
+    with pytest.raises(DuplicateError):
+        realia_repository._realia_collection.insert_one(
+            {"_id": "Anšan", "realiaId": "realia_003277"}
+        )
+
+
+def test_create_indexes_allows_blank_and_missing_realia_id(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    realia_repository.create_indexes()
+
+    realia_repository._realia_collection.insert_one({"_id": "A", "realiaId": ""})
+    realia_repository._realia_collection.insert_one({"_id": "B", "realiaId": ""})
+    realia_repository._realia_collection.insert_one({"_id": "C"})
+    realia_repository._realia_collection.insert_one({"_id": "D"})
+
+    assert realia_repository._realia_collection.count_documents({}) == 4
 
 
 def test_find_existing_entry(

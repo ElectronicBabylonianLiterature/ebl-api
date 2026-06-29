@@ -9,6 +9,7 @@ from ebl.realia.web.realia import (
 
 
 def create_realia_routes(api: falcon.App, context: Context) -> None:
+    context.realia_repository.create_indexes()
     realia_resource = RealiaResource(context.realia_repository)
     realia_by_id_resource = RealiaByIdResource(context.realia_repository)
     realia_search_resource = RealiaSearchResource(context.realia_repository)

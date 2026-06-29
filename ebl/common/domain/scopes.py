@@ -34,7 +34,7 @@ class ScopeItem(Enum):
         if match := re.match("([^:]+):([^-]+)(?:-(.+))?", scope_string):
             return match[1], match[2], match[3] or ""
         else:
-            raise ValueError(f"Unexepcted scope format: {scope_string!r}")
+            raise ValueError(f"Unexpected scope format: {scope_string!r}")
 
     @property
     def is_restricted(self) -> bool:

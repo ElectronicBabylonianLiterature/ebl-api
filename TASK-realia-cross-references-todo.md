@@ -27,6 +27,18 @@
 - [x] Full test suite green (3752 passed).
 - [x] Author review file `TASK-realia-cross-references-review.md`.
 
+## Review findings (whole-PR review)
+
+- [x] `realiaId` uniqueness — added a partial unique index, bootstrap call,
+  abstract method, and tests.
+- [x] Simplify bibliography injection via `Reference.set_document`.
+- [x] Guard `_rank` against non-list `relatedTerms`.
+- [x] Fix the `Unexepcted` scope-format typo and its test.
+- [x] Prove search regex is injection-safe (test).
+- [x] Tests: duplicate/blank `realiaId`, lemma named `by-id`, whitespace
+  query, diacritic tiebreak, multi-element reallexikon richness.
+- [x] Document lean reallexikon reference and `_id` response key as by-design.
+
 ## Before merge
 
 - [ ] Remove `TASK-realia-cross-references-*.md` tracking files.

@@ -96,3 +96,24 @@ def test_reallexikon_counts_as_single_data_point() -> None:
     as_array = ranker.key(_doc(_id="Marduk-A", reallexikon=[{"id": "1"}]))
     as_object = ranker.key(_doc(_id="Marduk-B", reallexikon={"id": "1"}))
     assert as_array[1] == as_object[1] == -1
+
+
+def test_reallexikon_list_length_does_not_inflate_richness() -> None:
+    ranker = RealiaRelevanceRanker("Marduk")
+    single = ranker.key(_doc(_id="Marduk-A", reallexikon=[{"id": "1"}]))
+    many = ranker.key(
+        _doc(_id="Marduk-B", reallexikon=[{"id": "1"}, {"id": "2"}, {"id": "3"}])
+    )
+    assert single[1] == many[1] == -1
+
+
+def test_diacritic_tiebreak_is_deterministic() -> None:
+    ranker = RealiaRelevanceRanker("Marduk")
+    documents = [_document("Mardūk"), _document("Marduk")]
+    documents.sort(key=ranker.key)
+    assert [document["_id"] for document in documents] == ["Marduk", "Mardūk"]
+
+
+def test_non_list_related_terms_treated_as_empty() -> None:
+    ranker = RealiaRelevanceRanker("Marduk")
+    assert ranker.key(_doc(_id="Enlil", relatedTerms="Marduk"))[0] == NO_MATCH_RANK

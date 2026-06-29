@@ -31,3 +31,23 @@
   / 1 xfailed; 100% coverage on all changed source modules.
 - Wrote `TASK-realia-cross-references-review.md` with Summary, Findings,
   Severity, Reproduction Steps, Recommendation.
+- Whole-PR review (branch vs master): ran two independent review passes plus a
+  manual read of the shared files. Applied the AfoCrossReference required-field
+  fix and added a regex-injection search test.
+- Follow-up pass — addressed every remaining review finding:
+  - Added `MongoRealiaRepository.create_indexes()` with a partial unique index
+    on `realiaId` (`partialFilterExpression={"realiaId": {"$gt": ""}}`), the
+    abstract method, and the bootstrap call. Tests cover declaration,
+    duplicate rejection, and blank/missing tolerance.
+  - Simplified bibliography injection to use `Reference.set_document` + a
+    shared `_document_for` helper (drops the `ApiReferenceSchema` round-trip).
+  - Guarded `_rank` against non-list `relatedTerms`.
+  - Fixed the `Unexepcted` typo in `scopes.py` and its test.
+  - Added tests: lemma named `by-id` not shadowed, whitespace-only query,
+    diacritic tiebreak, multi-element reallexikon richness, non-list terms.
+  - Documented the lean reallexikon reference and the `_id` response key as
+    deliberate design decisions.
+- Gates re-run: `black`/`ruff`/`flake8 --max-line-length=120` clean, `mypy`
+  (changed files) + `pyre` clean, full suite 3761 passed / 0 failed, 100%
+  coverage on every changed source module, all files < 250 lines,
+  `markdownlint` clean.

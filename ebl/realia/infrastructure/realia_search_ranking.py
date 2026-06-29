@@ -66,7 +66,12 @@ class RealiaRelevanceRanker:
         id_rank = self._id_matcher.rank(identifier)
         if id_rank is not None:
             return id_rank
-        related_terms = cast(Sequence[str], document.get("relatedTerms", []))
+        raw_related_terms = document.get("relatedTerms", [])
+        related_terms = (
+            cast(Sequence[str], raw_related_terms)
+            if isinstance(raw_related_terms, list)
+            else []
+        )
         term_ranks = [
             rank
             for rank in (self._term_matcher.rank(term) for term in related_terms)

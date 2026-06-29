@@ -62,6 +62,12 @@ def test_search_no_match_returns_empty(
     assert results == []
 
 
+def test_search_whitespace_only_query_returns_empty(
+    realia_repository: RealiaRepository,
+) -> None:
+    assert realia_repository.search("   ") == []
+
+
 def test_search_treats_regex_metacharacters_literally(
     realia_repository: MongoRealiaRepository,
 ) -> None:

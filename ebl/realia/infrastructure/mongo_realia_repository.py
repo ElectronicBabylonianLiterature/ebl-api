@@ -1,10 +1,9 @@
 import attr
 from typing import Dict, List, Sequence, Tuple
 
-from marshmallow import EXCLUDE
 from pymongo.database import Database
 
-from ebl.bibliography.application.reference_schema import ApiReferenceSchema
+from ebl.bibliography.application.serialization import create_object_entry
 from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.common.query.query_collation import (
     CollatedFieldQuery,
@@ -26,6 +25,13 @@ class MongoRealiaRepository(RealiaRepository):
         self._realia_collection = MongoCollection(database, REALIA_COLLECTION)
         self._bibliography_collection = MongoCollection(
             database, BIBLIOGRAPHY_COLLECTION
+        )
+
+    def create_indexes(self) -> None:
+        self._realia_collection.create_index(
+            "realiaId",
+            unique=True,
+            partialFilterExpression={"realiaId": {"$gt": ""}},
         )
 
     def find(self, realia_id: str) -> RealiaEntry:
@@ -110,31 +116,33 @@ class MongoRealiaRepository(RealiaRepository):
             reallexikon=self._inject_reallexikon(entry.reallexikon, bibliography),
         )
 
+    def _document_for(
+        self, reference_id: BibliographyId, bibliography: Dict[str, dict]
+    ) -> dict:
+        document = bibliography.get(reference_id)
+        return create_object_entry(document) if document else {}
+
     def _inject_references(
         self, references: Sequence[Reference], bibliography: Dict[str, dict]
     ) -> Tuple[Reference, ...]:
-        injected = [
-            {**ApiReferenceSchema().dump(ref), "document": bibliography.get(ref.id, {})}
-            for ref in references
-        ]
-        return tuple(ApiReferenceSchema(unknown=EXCLUDE, many=True).load(injected))
+        return tuple(
+            reference.set_document(self._document_for(reference.id, bibliography))
+            for reference in references
+        )
 
     def _inject_reallexikon(
         self, reallexikon: Sequence[ReallexikonEntry], bibliography: Dict[str, dict]
     ) -> Tuple[ReallexikonEntry, ...]:
-        result = []
-        for rlex in reallexikon:
-            if rlex.reference is not None:
-                injected = {
-                    **ApiReferenceSchema().dump(rlex.reference),
-                    "document": bibliography.get(rlex.reference.id, {}),
-                }
-                result.append(
-                    attr.evolve(
-                        rlex,
-                        reference=ApiReferenceSchema(unknown=EXCLUDE).load(injected),
-                    )
+        return tuple(
+            (
+                rlex
+                if rlex.reference is None
+                else attr.evolve(
+                    rlex,
+                    reference=rlex.reference.set_document(
+                        self._document_for(rlex.reference.id, bibliography)
+                    ),
                 )
-            else:
-                result.append(rlex)
-        return tuple(result)
+            )
+            for rlex in reallexikon
+        )

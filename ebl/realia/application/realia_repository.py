@@ -6,6 +6,10 @@ from ebl.realia.domain.realia_entry import RealiaEntry
 
 class RealiaRepository(ABC):
     @abstractmethod
+    def create_indexes(self) -> None:
+        raise NotImplementedError()
+
+    @abstractmethod
     def find(self, realia_id: str) -> RealiaEntry:
         raise NotImplementedError()
 

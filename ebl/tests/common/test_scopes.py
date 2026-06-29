@@ -17,7 +17,7 @@ def test_from_string_unknown_scope_raises() -> None:
 
 
 def test_from_string_malformed_raises() -> None:
-    with pytest.raises(ValueError, match="Unexepcted scope format"):
+    with pytest.raises(ValueError, match="Unexpected scope format"):
         Scope.from_string("noformat")
 
 
