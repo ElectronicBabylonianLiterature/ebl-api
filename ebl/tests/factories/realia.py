@@ -27,7 +27,7 @@ class AfoCrossReferenceFactory(factory.Factory):
     id = factory.Sequence(lambda n: f"realia_{n:06d}")
     lemma = factory.Sequence(lambda n: f"lemma-{n}")
     afo_volume = factory.Sequence(lambda n: f"AfO {n}")
-    page = factory.Sequence(lambda n: str(n))
+    page = factory.Sequence(str)
 
 
 class AfoRegisterEntryFactory(factory.Factory):
@@ -40,7 +40,7 @@ class AfoRegisterEntryFactory(factory.Factory):
     reference = factory.Sequence(lambda n: f"p. {n}")
     cross_reference = factory.Faker("word")
     afo_volume = factory.Sequence(lambda n: f"AfO {n}")
-    page = factory.Sequence(lambda n: str(n))
+    page = factory.Sequence(str)
     cross_references = factory.LazyAttribute(
         lambda _: (AfoCrossReferenceFactory.build(),)
     )

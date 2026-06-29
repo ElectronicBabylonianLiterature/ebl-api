@@ -144,3 +144,41 @@ run in addition to a manual review of the shared files. Findings, triaged:
 
 Merge. All review findings are now either fixed or documented as deliberate
 design decisions; no open items remain.
+
+## PR #715 GitHub review feedback (fetched and triaged)
+
+Per the Review Guidelines hard gate, all existing GitHub feedback on PR #715
+was fetched (`gh api .../pulls/715/reviews` and `.../comments`). No human
+reviews yet; three bots commented. Disposition:
+
+- **Sourcery — `RealiaResource.on_get` re-raises `NotFoundError`.** Stale: the
+  web resource no longer catches/re-raises; the message is standardized in the
+  repository (`find` / `find_by_realia_id`), which is exactly what Sourcery
+  suggested. No change.
+- **Sourcery (bug_risk) — `find_many(...).limit(MAX_SEARCH_RESULTS)` without a
+  sort.** Stale: there is no result limit anymore, and `search` sorts the full
+  match set deterministically via `RealiaRelevanceRanker.key`. Locked in by
+  `test_search_has_no_result_limit` and `test_search_ranks_exact_id_first`.
+  No change.
+- **Sourcery — `strip_realia_query_chars` strips plain apostrophes.**
+  Intentional: `REALIA_STRIP_CHARS` strips curly quotes, the half-ring `ʾ`, and
+  `'` together — glottal-stop normalization for Assyriological transliteration.
+  Covered by `test_search_strips_special_chars`. No change.
+- **Sourcery — `_inject_bibliography` duplicates a dump/load/evolve pattern.**
+  The within-module round-trip was already replaced with `set_document` +
+  `_document_for`. A cross-repository shared utility is a broader refactor out
+  of this PR's scope. Acknowledged, no change.
+- **Sourcery (tests) — assert bibliography injection is reflected; add a
+  missing-`query` route test.** Both already exist:
+  `test_find_existing_entry` / `test_find_injects_lean_reallexikon_reference`
+  assert `reference.document`, and `test_search_realia_missing_query` covers an
+  omitted `query`. No change.
+- **CodeQL — unnecessary lambda (`tests/factories/realia.py:30,43`).** Fixed:
+  `factory.Sequence(lambda n: str(n))` → `factory.Sequence(str)`. Realia tests
+  still green (60 passed).
+- **qlty — `conftest.py` `context` fixture has 23 parameters.** Pre-existing
+  shared fixture; the Realia change added one repository argument consistent
+  with every other collection. Refactoring the central fixture is out of scope.
+  Acknowledged, no change.
+
+Net code change from this triage: the CodeQL lambda fix only.
