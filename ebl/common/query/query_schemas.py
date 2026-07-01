@@ -59,6 +59,7 @@ class AfORegisterToFragmentQueryItemSchema(Schema):
 
 class QueryResultSchema(Schema):
     match_count_total = fields.Integer(data_key="matchCountTotal", required=True)
+    total_count = fields.Integer(data_key="totalCount", required=False)
     items = fields.Nested(QueryItemSchema, many=True, required=True)
 
     @post_load

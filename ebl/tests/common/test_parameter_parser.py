@@ -2,6 +2,7 @@ import pytest
 import re
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
+    parse_non_negative_integer_field,
     parse_pages,
     parse_lemmas,
     parse_lines,
@@ -36,6 +37,27 @@ def test_parse_integer_field_invalid():
         DataError, match="invalid_field must be integer, got 'not an int' instead"
     ):
         parse({"invalid_field": "not an int"})
+
+
+def test_parse_non_negative_integer_field():
+    parse = parse_non_negative_integer_field("offset")
+
+    assert parse({}) == {}
+    assert parse({"offset": "0"}) == {"offset": 0}
+    assert parse({"offset": "42"}) == {"offset": 42}
+
+
+def test_parse_non_negative_integer_field_invalid():
+    parse = parse_non_negative_integer_field("offset")
+
+    with pytest.raises(
+        DataError, match="offset must be integer, got 'not an int' instead"
+    ):
+        parse({"offset": "not an int"})
+    with pytest.raises(
+        DataError, match="offset must be non-negative, got '-1' instead"
+    ):
+        parse({"offset": "-1"})
 
 
 def test_parse_pages():

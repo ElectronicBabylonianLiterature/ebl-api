@@ -7,6 +7,7 @@ from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
+    parse_non_negative_integer_field,
     parse_lines,
     parse_transliteration,
     parse_lemmas,
@@ -111,9 +112,12 @@ class FragmentsQueryResource:
             parse_integer_field("limit"),
         )
 
+        parameters = {
+            key: value for key, value in req.params.items() if key != "paginationIndex"
+        }
         resp.media = QueryResultSchema().dump(
             self._repository.query(
-                parse(req.params),
+                parse_non_negative_integer_field("offset")(parse(parameters)),
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
         )
@@ -169,7 +173,9 @@ def make_latest_additions_resource(repository: FragmentRepository, cache: Cache)
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: Request, resp: Response):
             resp.text = json.dumps(
-                QueryResultSchema().dump(self._repository.query_latest())
+                QueryResultSchema(exclude=("total_count",)).dump(
+                    self._repository.query_latest()
+                )
             )
 
     return LatestAdditionsResource(repository)

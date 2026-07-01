@@ -147,6 +147,7 @@ def test_create_indexes(database, fragment_repository):
 
     assert [("text.lines.content.uniqueLemma", 1)] in fragment_index_keys
     assert [("dossiers.dossierId", 1)] in fragment_index_keys
+    assert [("genres.category", 1)] in fragment_index_keys
     assert [
         ("archaeology.excavationNumber.prefix", 1),
         ("archaeology.excavationNumber.number", 1),
@@ -565,6 +566,20 @@ def test_query_fragmentarium_number(database, fragment_repository):
 
 def test_query_fragmentarium_not_found(fragment_repository):
     assert (fragment_repository.query({"number": "K.1"})) == QueryResult.create_empty()
+
+
+def test_query_aggregation_allows_disk_use(fragment_repository, monkeypatch):
+    aggregate_options = {}
+
+    def aggregate(_pipeline, **kwargs):
+        aggregate_options.update(kwargs)
+        return iter([])
+
+    monkeypatch.setattr(fragment_repository._fragments, "aggregate", aggregate)
+
+    fragment_repository.query({"number": "K.1"})
+
+    assert aggregate_options["allowDiskUse"] is True
 
 
 def test_query_fragmentarium_reference_id(database, fragment_repository):
@@ -1106,9 +1121,41 @@ def test_query_genres(fragment_repository, query, expected):
             for i in expected
         ],
         0,
+        len(expected),
     )
 
     assert fragment_repository.query({"genre": query}) == expected_result
+
+
+@pytest.mark.parametrize(
+    "query,expected",
+    [
+        ({"limit": 2}, [0, 1]),
+        ({"offset": 0, "limit": 2}, [0, 1]),
+        ({"offset": 2, "limit": 2}, [2, 3]),
+    ],
+)
+def test_query_genres_with_pagination(fragment_repository, query, expected):
+    genre = Genre(
+        ["CANONICAL", "Technical", "Astronomy", "Astronomical Diaries"],
+        False,
+    )
+    fragments = [
+        FragmentFactory.build(
+            genres=(genre,), number=MuseumNumber.of(f"X.{i}"), script=Script()
+        )
+        for i in range(5)
+    ]
+    for index, fragment in enumerate(fragments):
+        fragment_repository.create(fragment, sort_key=index)
+
+    result = fragment_repository.query({"genre": list(genre.category), **query})
+
+    assert result == QueryResult(
+        [QueryItem(fragments[index].number, (), 0) for index in expected],
+        0,
+        5,
+    )
 
 
 @pytest.mark.parametrize(
