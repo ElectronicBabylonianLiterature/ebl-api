@@ -109,6 +109,46 @@ def test_lemma_named_by_id_is_not_shadowed(
     assert result.json["_id"] == "by-id"
 
 
+def test_get_realia_with_slash_in_id(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    _seed_entry(realia_repository, bibliography_repository, id="Ninurta/Ninĝirsu")
+
+    result = client.simulate_get("/realia/Ninurta/Ninĝirsu")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["_id"] == "Ninurta/Ninĝirsu"
+
+
+def test_get_realia_with_slash_in_id_not_found(client) -> None:
+    result = client.simulate_get("/realia/missing/nested")
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_realia_lemma_sink_rejects_non_get(client) -> None:
+    result = client.simulate_post("/realia/Ninurta/Ninĝirsu")
+
+    assert result.status == falcon.HTTP_METHOD_NOT_ALLOWED
+    assert "GET" in result.headers["Allow"]
+
+
+def test_realia_lemma_sink_allows_cors_preflight(client) -> None:
+    result = client.simulate_options(
+        "/realia/Ninurta/Ninĝirsu",
+        headers={
+            "Origin": "https://www.ebl.lmu.de",
+            "Access-Control-Request-Method": "GET",
+        },
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert "GET" in result.headers["Access-Control-Allow-Methods"]
+    assert result.headers["Access-Control-Allow-Origin"] == "*"
+
+
 def test_search_realia(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,
