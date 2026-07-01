@@ -30,6 +30,21 @@ def test_get_realia_by_id(
     assert result.json["_id"] == entry.id
 
 
+def test_get_realia_surfaces_wikidata_id(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    entry = _seed_entry(
+        realia_repository, bibliography_repository, wikidata_id=("Q221574",)
+    )
+
+    result = client.simulate_get(f"/realia/{entry.id}")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["wikidataId"] == ["Q221574"]
+
+
 def test_get_realia_not_found(client) -> None:
     result = client.simulate_get("/realia/nonexistent")
 
