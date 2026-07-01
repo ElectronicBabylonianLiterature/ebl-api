@@ -2,11 +2,11 @@ import json
 import falcon
 from falcon import Request, Response
 from falcon_caching import Cache
-from pydash import flow
 from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
+    parse_non_negative_integer_field,
     parse_lines,
     parse_transliteration,
     parse_lemmas,
@@ -103,19 +103,38 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
-        parse = flow(
+        parsers = (
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
             parse_genre,
             parse_integer_field("limit"),
+            parse_non_negative_integer_field("offset"),
         )
 
-        resp.media = QueryResultSchema().dump(
-            self._repository.query(
-                parse(req.params),
-                req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
+        def parse(parameters: dict) -> dict:
+            for parser in parsers:
+                parameters = parser(parameters)
+            return parameters
+
+        user_scopes = req.context.user.get_scopes(prefix="read:", suffix="-fragments")
+
+        parameters = {
+            key: value for key, value in req.params.items() if key != "paginationIndex"
+        }
+        search_parameters = {
+            key: value
+            for key, value in parameters.items()
+            if key not in {"lemmaOperator", "limit", "offset"}
+        }
+        if not search_parameters:
+            resp.media = QueryResultSchema().dump(
+                self._repository.query({}, user_scopes)
             )
+            return
+
+        resp.media = QueryResultSchema().dump(
+            self._repository.query(parse(parameters), user_scopes)
         )
 
 
@@ -169,7 +188,9 @@ def make_latest_additions_resource(repository: FragmentRepository, cache: Cache)
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: Request, resp: Response):
             resp.text = json.dumps(
-                QueryResultSchema().dump(self._repository.query_latest())
+                QueryResultSchema(exclude=("total_count",)).dump(
+                    self._repository.query_latest()
+                )
             )
 
     return LatestAdditionsResource(repository)

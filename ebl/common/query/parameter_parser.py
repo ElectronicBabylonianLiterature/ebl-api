@@ -23,6 +23,20 @@ def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
     return parse_integer
 
 
+def parse_non_negative_integer_field(field: str) -> Callable[[Dict], Dict]:
+    parse_integer = parse_integer_field(field)
+
+    def parse_non_negative_integer(parameters: Dict) -> Dict:
+        parsed_parameters = parse_integer(parameters)
+        if field in parsed_parameters and parsed_parameters[field] < 0:
+            raise DataError(
+                f"{field} must be non-negative, got {parameters[field]!r} instead"
+            )
+        return parsed_parameters
+
+    return parse_non_negative_integer
+
+
 def parse_lines(lines: Sequence[str]) -> Sequence[int]:
     try:
         return [int(line) for line in lines]

@@ -39,8 +39,11 @@ class PatternMatcher:
             else EmptyMatcher()
         )
 
-    def _limit_result(self):
-        return [{"$limit": self._query["limit"]}] if "limit" in self._query else []
+    def _paginate_result(self) -> List[Dict]:
+        return [
+            *([{"$skip": self._query["offset"]}] if "offset" in self._query else []),
+            *([{"$limit": self._query["limit"]}] if "limit" in self._query else []),
+        ]
 
     def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
         return [{"$sort": sort_fields}] if sort_fields else []
@@ -49,17 +52,48 @@ class PatternMatcher:
         self, sort_fields: Optional[Dict] = None
     ) -> List[Dict]:
         return [
-            *self._sort_by(sort_fields),
-            *self._limit_result(),
-            {"$project": {"_id": False, "script": False, "_sortKey": False}},
             {
-                "$group": {
-                    "_id": None,
-                    "items": {"$push": "$$ROOT"},
-                    "matchCountTotal": {"$sum": "$matchCount"},
+                "$facet": {
+                    "items": [
+                        *self._sort_by(sort_fields),
+                        *self._paginate_result(),
+                        {
+                            "$project": {
+                                "_id": False,
+                                "script": False,
+                                "_sortKey": False,
+                            }
+                        },
+                    ],
+                    "metadata": [
+                        {
+                            "$group": {
+                                "_id": None,
+                                "totalCount": {"$sum": 1},
+                                "matchCountTotal": {"$sum": "$matchCount"},
+                            }
+                        }
+                    ],
                 }
             },
-            {"$project": {"_id": False}},
+            {
+                "$project": {
+                    "_id": False,
+                    "items": True,
+                    "matchCountTotal": {
+                        "$ifNull": [
+                            {"$arrayElemAt": ["$metadata.matchCountTotal", 0]},
+                            0,
+                        ]
+                    },
+                    "totalCount": {
+                        "$ifNull": [
+                            {"$arrayElemAt": ["$metadata.totalCount", 0]},
+                            0,
+                        ]
+                    },
+                }
+            },
         ]
 
     def _filter_by_script(self) -> Dict:
@@ -156,6 +190,7 @@ class PatternMatcher:
                     "matchingLines": [],
                     "matchCount": {"$literal": 0},
                     "script": True,
+                    "_sortKey": True,
                 }
             },
         ]

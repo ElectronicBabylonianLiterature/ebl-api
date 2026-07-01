@@ -24,6 +24,9 @@ class QueryItem:
 class QueryResult:
     items: Sequence[QueryItem]
     match_count_total: int
+    total_count: int = attr.ib(
+        default=attr.Factory(lambda self: len(self.items), takes_self=True)
+    )
 
     @staticmethod
     def create_empty() -> "QueryResult":
