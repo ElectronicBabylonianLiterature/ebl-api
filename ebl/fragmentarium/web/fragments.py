@@ -111,14 +111,26 @@ class FragmentsQueryResource:
             parse_genre,
             parse_integer_field("limit"),
         )
+        user_scopes = req.context.user.get_scopes(prefix="read:", suffix="-fragments")
 
         parameters = {
             key: value for key, value in req.params.items() if key != "paginationIndex"
         }
+        search_parameters = {
+            key: value
+            for key, value in parameters.items()
+            if key not in {"lemmaOperator", "limit", "offset"}
+        }
+        if not search_parameters:
+            resp.media = QueryResultSchema().dump(
+                self._repository.query({}, user_scopes)
+            )
+            return
+
         resp.media = QueryResultSchema().dump(
             self._repository.query(
                 parse_non_negative_integer_field("offset")(parse(parameters)),
-                req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
+                user_scopes,
             )
         )
 

@@ -76,9 +76,7 @@ def test_name_normalization_handles_diacritics_modifiers_case_and_whitespace():
 
 
 def test_exact_unique_match_is_eligible_for_dry_run_proposal():
-    records = (
-        ProvenanceRecord(id="ADAB", long_name="Adab", abbreviation="Ada"),
-    )
+    records = (ProvenanceRecord(id="ADAB", long_name="Adab", abbreviation="Ada"),)
     placemarks = parse_kml_bytes(_kml(_point("Adab", "44.4,32.5,0"))).placemarks
 
     plan = build_import_plan(records, placemarks)
@@ -89,9 +87,7 @@ def test_exact_unique_match_is_eligible_for_dry_run_proposal():
 
 
 def test_normalized_match_is_reported_but_not_auto_proposed():
-    records = (
-        ProvenanceRecord(id="AKKO", long_name="'Akk\u00f4", abbreviation="Ako"),
-    )
+    records = (ProvenanceRecord(id="AKKO", long_name="'Akk\u00f4", abbreviation="Ako"),)
     placemarks = parse_kml_bytes(_kml(_point("Akko", "44.4,32.5,0"))).placemarks
 
     plan = build_import_plan(records, placemarks)
@@ -180,9 +176,7 @@ def test_dry_run_allowlist_filters_proposed_updates_without_writes(tmp_path):
     collection = RecordingCollection(
         [
             ProvenanceRecord(id="ADAB", long_name="Adab", abbreviation="Ada"),
-            ProvenanceRecord(
-                id="KISURRA", long_name="Kisurra", abbreviation="Kis"
-            ),
+            ProvenanceRecord(id="KISURRA", long_name="Kisurra", abbreviation="Kis"),
         ]
     )
 
@@ -201,9 +195,7 @@ def test_field_allowlist_approves_normalized_match_in_dry_run(tmp_path):
         [ProvenanceRecord(id="AKKO", long_name="'Akkô", abbreviation="Ako")]
     )
 
-    report = run_import(
-        collection, kmz, allowlist={"AKKO": {"coordinates"}}
-    )
+    report = run_import(collection, kmz, allowlist={"AKKO": {"coordinates"}})
 
     assert collection.update_calls == []
     assert report["matchSummary"]["proposedPointCoordinateUpdates"] == 1
@@ -261,7 +253,9 @@ def test_apply_field_allowlist_uses_safety_filter_for_normalized_match(tmp_path)
     ]
 
 
-def test_apply_updates_only_exact_unique_missing_coordinates_with_safety_filter(tmp_path):
+def test_apply_updates_only_exact_unique_missing_coordinates_with_safety_filter(
+    tmp_path,
+):
     kmz = _kmz(tmp_path, _kml(_point("Adab", "44.4,32.5,0")))
     collection = RecordingCollection(
         [ProvenanceRecord(id="ADAB", long_name="Adab", abbreviation="Ada")]
@@ -289,9 +283,7 @@ def test_apply_updates_only_exact_unique_missing_coordinates_with_safety_filter(
 
 
 def test_multi_field_safety_filter_requires_every_target_field_missing():
-    assert build_no_overwrite_filter(
-        "ADAB", ("coordinates", "polygonCoordinates")
-    ) == {
+    assert build_no_overwrite_filter("ADAB", ("coordinates", "polygonCoordinates")) == {
         "_id": "ADAB",
         "$and": [
             {

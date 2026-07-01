@@ -707,6 +707,55 @@ def test_query_fragmentarium_sorting(fragment_repository, sign_repository, signs
     )
 
 
+def test_query_fragmentarium_transliteration_pagination_preserves_match_count_total(
+    fragment_repository, sign_repository, signs
+):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{i}"), script=Script()
+        )
+        for i in range(3)
+    ]
+    for index, fragment in enumerate(fragments):
+        fragment_repository.create(fragment, sort_key=index)
+
+    first_page = fragment_repository.query(
+        {
+            "transliteration": create_tranliteration_query_lines(
+                "ma-tu₂", sign_repository
+            ),
+            "limit": 2,
+        }
+    )
+    second_page = fragment_repository.query(
+        {
+            "transliteration": create_tranliteration_query_lines(
+                "ma-tu₂", sign_repository
+            ),
+            "limit": 2,
+            "offset": 2,
+        }
+    )
+
+    assert first_page == QueryResultSchema().load(
+        {
+            "items": [query_item_of(fragment, [3]) for fragment in fragments[:2]],
+            "matchCountTotal": 3,
+            "totalCount": 3,
+        }
+    )
+    assert second_page == QueryResultSchema().load(
+        {
+            "items": [query_item_of(fragments[2], [3])],
+            "matchCountTotal": 3,
+            "totalCount": 3,
+        }
+    )
+
+
 def test_query_fragmentarium_transliteration_and_number(
     fragment_repository, sign_repository, signs
 ):

@@ -1,4 +1,5 @@
 """Test that bibliography routes handle special (non-ASCII) characters in IDs."""
+
 import json
 import urllib.parse
 

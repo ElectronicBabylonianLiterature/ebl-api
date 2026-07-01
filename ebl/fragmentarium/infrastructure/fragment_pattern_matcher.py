@@ -65,14 +65,27 @@ class PatternMatcher:
                             }
                         },
                     ],
-                    "metadata": [{"$count": "totalCount"}],
+                    "metadata": [
+                        {
+                            "$group": {
+                                "_id": None,
+                                "totalCount": {"$sum": 1},
+                                "matchCountTotal": {"$sum": "$matchCount"},
+                            }
+                        }
+                    ],
                 }
             },
             {
                 "$project": {
                     "_id": False,
                     "items": True,
-                    "matchCountTotal": {"$sum": "$items.matchCount"},
+                    "matchCountTotal": {
+                        "$ifNull": [
+                            {"$arrayElemAt": ["$metadata.matchCountTotal", 0]},
+                            0,
+                        ]
+                    },
                     "totalCount": {
                         "$ifNull": [
                             {"$arrayElemAt": ["$metadata.totalCount", 0]},

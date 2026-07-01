@@ -7,9 +7,24 @@ def test_pagination_stages_are_applied_in_order():
     ).build_pipeline()
 
     pagination_facet = next(stage["$facet"] for stage in pipeline if "$facet" in stage)
+    summary_projection = pipeline[-1]["$project"]
 
     assert pagination_facet["items"][1:3] == [{"$skip": 10}, {"$limit": 5}]
-    assert pagination_facet["metadata"] == [{"$count": "totalCount"}]
+    assert pagination_facet["metadata"] == [
+        {
+            "$group": {
+                "_id": None,
+                "totalCount": {"$sum": 1},
+                "matchCountTotal": {"$sum": "$matchCount"},
+            }
+        }
+    ]
+    assert summary_projection["matchCountTotal"] == {
+        "$ifNull": [{"$arrayElemAt": ["$metadata.matchCountTotal", 0]}, 0]
+    }
+    assert summary_projection["totalCount"] == {
+        "$ifNull": [{"$arrayElemAt": ["$metadata.totalCount", 0]}, 0]
+    }
 
 
 def test_pipeline_without_pagination_keeps_all_items():

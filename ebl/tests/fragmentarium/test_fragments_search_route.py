@@ -102,7 +102,16 @@ def test_query_fragmentarium_number_not_found(client):
     assert result.json == {"items": [], "matchCountTotal": 0, "totalCount": 0}
 
 
-@pytest.mark.parametrize("params", [{}, {"paginationIndex": 999}])
+@pytest.mark.parametrize(
+    "params",
+    [
+        {},
+        {"paginationIndex": 999},
+        {"offset": 0},
+        {"paginationIndex": 5, "offset": 0},
+        {"limit": 50},
+    ],
+)
 def test_query_fragmentarium_without_search_filters_is_empty(client, params):
     result = client.simulate_get("/fragments/query", params=params)
 
@@ -295,6 +304,46 @@ def test_query_fragmentarium_genre_pagination(client, fragmentarium):
         "items": [query_item_of(fragment) for fragment in fragments[2:4]],
         "matchCountTotal": 0,
         "totalCount": 5,
+    }
+
+
+def test_query_fragmentarium_transliteration_pagination_preserves_match_count_total(
+    client, fragmentarium, sign_repository, signs
+):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{i}"), script=Script()
+        )
+        for i in range(3)
+    ]
+    for index, fragment in enumerate(fragments):
+        fragmentarium.create(fragment, sort_key=index)
+
+    first_page = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": 2},
+    )
+    second_page = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": 2, "offset": 2},
+    )
+
+    assert first_page.status == falcon.HTTP_OK
+    assert first_page.json == {
+        "items": [
+            query_item_of(fragment, matching_lines=[3]) for fragment in fragments[:2]
+        ],
+        "matchCountTotal": 3,
+        "totalCount": 3,
+    }
+    assert second_page.status == falcon.HTTP_OK
+    assert second_page.json == {
+        "items": [query_item_of(fragments[2], matching_lines=[3])],
+        "matchCountTotal": 3,
+        "totalCount": 3,
     }
 
 
