@@ -1,3 +1,6 @@
+from typing import Any, cast
+
+
 NAME_SCHEMA = {
     "type": "object",
     "properties": {
@@ -32,6 +35,20 @@ DATE_SCHEMA = {
         "literal": {"type": "string"},
         "raw": {"type": "string"},
     },
+    "additionalProperties": False,
+}
+
+
+BIBLIOGRAPHY_ALIAS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "value": {"type": "string"},
+        "normalizedValue": {"type": "string"},
+        "type": {"type": "string"},
+        "source": {"type": "string"},
+        "status": {"type": "string"},
+    },
+    "required": ["value"],
     "additionalProperties": False,
 }
 
@@ -80,6 +97,8 @@ CSL_JSON_SCHEMA = {
             ],
         },
         "id": {"type": "string", "pattern": r"^[^/]+$"},
+        "citationKey": {"type": "string"},
+        "aliases": {"type": "array", "items": BIBLIOGRAPHY_ALIAS_SCHEMA},
         "categories": {"type": "array", "items": {"type": "string"}},
         "language": {"type": "string"},
         "journalAbbreviation": {"type": "string"},
@@ -161,6 +180,15 @@ CSL_JSON_SCHEMA = {
     "additionalProperties": False,
 }
 
+PARTNER_CSL_JSON_SCHEMA = {
+    **CSL_JSON_SCHEMA,
+    "properties": {
+        **cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]),
+        "id": {"type": "string"},
+    },
+    "required": ["type"],
+}
+
 DUPLICATE_CANDIDATE_JSON_SCHEMA = {
     **CSL_JSON_SCHEMA,
     "required": ["type"],
@@ -186,4 +214,12 @@ DUPLICATE_OVERRIDE_JSON_SCHEMA = {
     },
     "required": ["bibliographyEntry", "override"],
     "additionalProperties": False,
+}
+
+PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA = {
+    **DUPLICATE_OVERRIDE_JSON_SCHEMA,
+    "properties": {
+        **cast(dict[str, Any], DUPLICATE_OVERRIDE_JSON_SCHEMA["properties"]),
+        "bibliographyEntry": PARTNER_CSL_JSON_SCHEMA,
+    },
 }

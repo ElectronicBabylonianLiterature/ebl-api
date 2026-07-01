@@ -7,10 +7,19 @@ class FakeBibliographyRepository(BibliographyRepository):
     def __init__(self, candidates: Sequence[dict[str, Any]]):
         self._candidates = candidates
 
+    def create_indexes(self) -> None:
+        raise NotImplementedError
+
     def create(self, entry: Any) -> str:
         raise NotImplementedError
 
     def query_by_id(self, id_: str) -> Any:
+        raise NotImplementedError
+
+    def query_by_citation_key(self, citation_key: str) -> Any:
+        raise NotImplementedError
+
+    def query_by_alias(self, alias: str) -> Any:
         raise NotImplementedError
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
