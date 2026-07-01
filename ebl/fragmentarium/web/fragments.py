@@ -2,7 +2,6 @@ import json
 import falcon
 from falcon import Request, Response
 from falcon_caching import Cache
-from pydash import flow
 from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
@@ -104,13 +103,20 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
-        parse = flow(
+        parsers = (
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
             parse_genre,
             parse_integer_field("limit"),
+            parse_non_negative_integer_field("offset"),
         )
+
+        def parse(parameters: dict) -> dict:
+            for parser in parsers:
+                parameters = parser(parameters)
+            return parameters
+
         user_scopes = req.context.user.get_scopes(prefix="read:", suffix="-fragments")
 
         parameters = {
@@ -128,10 +134,7 @@ class FragmentsQueryResource:
             return
 
         resp.media = QueryResultSchema().dump(
-            self._repository.query(
-                parse_non_negative_integer_field("offset")(parse(parameters)),
-                user_scopes,
-            )
+            self._repository.query(parse(parameters), user_scopes)
         )
 
 

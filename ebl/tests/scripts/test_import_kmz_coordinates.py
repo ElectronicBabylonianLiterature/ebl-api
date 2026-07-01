@@ -235,22 +235,7 @@ def test_apply_field_allowlist_uses_safety_filter_for_normalized_match(tmp_path)
     )
 
     assert report["apply"]["databaseWritesPerformed"] == 1
-    assert collection.update_calls == [
-        (
-            {
-                "_id": "AKKO",
-                "$or": [
-                    {"coordinates": {"$exists": False}},
-                    {"coordinates": None},
-                ],
-            },
-            {
-                "$set": {
-                    "coordinates": {"latitude": 32.5, "longitude": 44.4},
-                }
-            },
-        )
-    ]
+    assert collection.update_calls == [_expected_coordinate_update_call("AKKO")]
 
 
 def test_apply_updates_only_exact_unique_missing_coordinates_with_safety_filter(
@@ -264,22 +249,26 @@ def test_apply_updates_only_exact_unique_missing_coordinates_with_safety_filter(
     report = run_import(collection, kmz, apply_requested=True)
 
     assert report["apply"]["databaseWritesPerformed"] == 1
-    assert collection.update_calls == [
-        (
-            {
-                "_id": "ADAB",
-                "$or": [
-                    {"coordinates": {"$exists": False}},
-                    {"coordinates": None},
-                ],
-            },
-            {
-                "$set": {
-                    "coordinates": {"latitude": 32.5, "longitude": 44.4},
-                }
-            },
-        )
-    ]
+    assert collection.update_calls == [_expected_coordinate_update_call("ADAB")]
+
+
+def test_apply_does_not_overwrite_existing_coordinates_with_safety_filter(tmp_path):
+    kmz = _kmz(tmp_path, _kml(_point("Akko", "35.1,32.9,0")))
+    collection = RecordingCollection(
+        [
+            ProvenanceRecord(
+                id="AKKO",
+                long_name="Akko",
+                abbreviation="Akk",
+                coordinates=GeoCoordinate(latitude=32.9, longitude=35.1),
+            )
+        ]
+    )
+
+    report = run_import(collection, kmz, apply_requested=True)
+
+    assert report["apply"]["databaseWritesPerformed"] == 0
+    assert collection.update_calls == []
 
 
 def test_multi_field_safety_filter_requires_every_target_field_missing():
@@ -357,3 +346,17 @@ def _kmz(tmp_path, kml: bytes):
     with ZipFile(path, "w") as archive:
         archive.writestr("doc.kml", kml)
     return path
+
+
+def _expected_coordinate_update_call(
+    provenance_id: str,
+    coordinate: dict[str, float] | None = None,
+):
+    return (
+        build_no_overwrite_filter(provenance_id, ("coordinates",)),
+        {
+            "$set": {
+                "coordinates": coordinate or {"latitude": 32.5, "longitude": 44.4},
+            }
+        },
+    )
