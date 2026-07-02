@@ -126,7 +126,6 @@ def test_fragment_query_count_facet_stays_lightweight():
         },
         "isMatchCountTotalExact": {"$literal": True},
         "hasNextPage": {"$literal": None},
-        "_showCountMetadata": {"$literal": True},
     }
 
 
@@ -142,7 +141,6 @@ def test_fragment_query_count_none_omits_exact_count_facet():
         "matchCountTotal": {"$literal": None},
         "isMatchCountTotalExact": {"$literal": False},
         "hasNextPage": {"$literal": None},
-        "_showCountMetadata": {"$literal": True},
     }
 
 
@@ -161,5 +159,20 @@ def test_fragment_query_count_page_fetches_sentinel_and_slices_items():
         "matchCountTotal": {"$literal": None},
         "isMatchCountTotalExact": {"$literal": False},
         "hasNextPage": {"$gt": [{"$size": "$items"}, 10]},
-        "_showCountMetadata": {"$literal": True},
+    }
+
+
+def test_fragment_query_count_page_without_limit_has_no_next_page():
+    pipeline = PatternMatcher(
+        {"transliteration": ["kur₂"], "count": "page"}, None
+    ).build_pipeline()
+
+    assert "count" not in _facet(pipeline)
+    assert not any("$limit" in stage for stage in _items_facet(pipeline))
+    assert _result_projection(pipeline) == {
+        "_id": False,
+        "items": True,
+        "matchCountTotal": {"$literal": None},
+        "isMatchCountTotalExact": {"$literal": False},
+        "hasNextPage": {"$literal": False},
     }

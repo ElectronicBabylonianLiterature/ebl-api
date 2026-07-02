@@ -6,6 +6,8 @@ from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryArchaeologySchema,
+    FragmentQueryMatchingLinePreviewSchema,
     FragmentQueryResultSchema,
     FragmentQuerySummarySchema,
 )
@@ -129,6 +131,31 @@ def test_fragment_query_summary_schema_roundtrip():
     )
 
 
+def test_fragment_query_summary_compares_with_compatible_query_item():
+    summary = build_summary()
+    item = QueryItem(summary.museum_number, summary.matching_lines, summary.match_count)
+
+    assert summary == item
+    assert summary.__eq__(object()) is NotImplemented
+
+
+def test_fragment_query_archaeology_schema_loads_non_dict_site():
+    archaeology = FragmentQueryArchaeologySchema().load({"site": "Nineveh"})
+
+    assert archaeology.site == "Nineveh"
+
+
+def test_matching_line_preview_skips_out_of_range_lines():
+    fragment = TransliteratedFragmentFactory.build()
+    line_count = len(fragment.text.lines)
+
+    preview = matching_line_preview_of(fragment.text, (0, line_count))
+    empty_preview = matching_line_preview_of(fragment.text, (line_count,))
+
+    assert len(preview["lines"]) == 1
+    assert FragmentQueryMatchingLinePreviewSchema().load(empty_preview)["lines"] == []
+
+
 def test_fragment_query_result_schema_roundtrip_and_compatibility():
     summary = build_summary()
     result = FragmentQueryResult((summary,), 7)
@@ -146,6 +173,13 @@ def test_fragment_query_result_schema_roundtrip_and_compatibility():
     )
     assert result == old_result
     assert old_result == result
+
+    assert FragmentQueryResultSchema(include_count_metadata=True).dump(result) == {
+        "items": [FragmentQuerySummarySchema().dump(summary)],
+        "matchCountTotal": 7,
+        "isMatchCountTotalExact": True,
+        "hasNextPage": None,
+    }
 
 
 def test_fragment_query_result_compatibility_respects_count_metadata():

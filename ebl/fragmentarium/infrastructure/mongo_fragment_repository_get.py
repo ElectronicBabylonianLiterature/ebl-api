@@ -37,7 +37,6 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended imp
 )
 from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 
-
 RETRIEVE_ALL_LIMIT = 1000
 FRAGMENT_QUERY_SUMMARY_PROJECTION = {
     "_id": True,
@@ -64,15 +63,6 @@ def load_museum_number(data: dict) -> MuseumNumber:
 def load_query_result(cursor: Iterator) -> QueryResult:
     data = next(cursor, None)
     return QueryResultSchema().load(data) if data else QueryResult.create_empty()
-
-
-def load_fragment_query_result(cursor: Iterator) -> FragmentQueryResult:
-    data = next(cursor, None)
-    return (
-        FragmentQueryResultSchema().load(data)
-        if data
-        else FragmentQueryResult.create_empty()
-    )
 
 
 def fragment_photo_filename(museum_number: Union[dict, MuseumNumber]) -> str:
@@ -287,7 +277,9 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         lines = text.get("lines") or []
         return {
             "lines": [
-                compact_preview_line(lines[line_index]) for line_index in matching_lines
+                compact_preview_line(lines[line_index])
+                for line_index in matching_lines
+                if 0 <= line_index < len(lines)
             ],
             "parser_version": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
         }
@@ -309,8 +301,11 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
         return {
             "museumNumber": museum_number,
             "accession": fragment.get("accession"),
-            "description": fragment["description"],
-            "script": fragment["script"],
+            "description": fragment.get("description", ""),
+            "script": fragment.get(
+                "script",
+                {"period": "", "periodModifier": "None", "uncertain": False},
+            ),
             "date": fragment.get("date"),
             "genres": fragment.get("genres", []),
             "archaeology": fragment.get("archaeology"),
@@ -344,7 +339,6 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
                 "matchCountTotal": data.get("matchCountTotal", 0),
                 "isMatchCountTotalExact": data.get("isMatchCountTotalExact", True),
                 "hasNextPage": data.get("hasNextPage"),
-                "_showCountMetadata": data.get("_showCountMetadata", False),
             }
         )
 

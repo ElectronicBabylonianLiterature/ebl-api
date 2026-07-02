@@ -870,6 +870,40 @@ def test_query_fragmentarium_limit_summary_missing_hydration_fails_clearly(
         )
 
 
+def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
+    fragment_repository,
+):
+    museum_number = {"prefix": "K", "number": "1", "suffix": ""}
+    result = FragmentQueryResultSchema().load(
+        {
+            "items": [
+                fragment_repository._hydrate_fragment_query_item(
+                    {
+                        "_id": "K.1",
+                        "museumNumber": museum_number,
+                        "matchingLines": [0, 1],
+                    },
+                    {
+                        "K.1": {
+                            "museumNumber": museum_number,
+                            "text": {
+                                "lines": [{"prefix": "1.", "content": []}],
+                            },
+                        }
+                    },
+                    (),
+                )
+            ],
+            "matchCountTotal": 0,
+        }
+    )
+    summary = result.items[0]
+
+    assert summary.description == ""
+    assert summary.script == Script()
+    assert len(summary.matching_line_preview["lines"]) == 1
+
+
 def test_query_fragmentarium_number_limit_summary_parser_version_fallback(
     database, fragment_repository
 ):

@@ -124,7 +124,9 @@ class FragmentsQueryResource:
             parse_non_negative_integer_field("offset"),
         )
         schema = (
-            FragmentQueryResultSchema() if "limit" in query else QueryResultSchema()
+            FragmentQueryResultSchema(include_count_metadata=True)
+            if "limit" in query
+            else QueryResultSchema(include_count_metadata=True)
         )
 
         resp.media = schema.dump(

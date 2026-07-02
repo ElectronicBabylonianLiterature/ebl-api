@@ -197,6 +197,13 @@ def test_query_fragmentarium_number_not_found(client):
     assert result.json == query_result_of([], 0)
 
 
+def test_query_fragmentarium_empty_query_includes_count_metadata(client):
+    result = client.simulate_get("/fragments/query")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == query_result_of([], 0)
+
+
 def test_query_fragmentarium_references(client, fragmentarium, bibliography, user):
     bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
     bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")

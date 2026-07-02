@@ -58,6 +58,10 @@ class AfORegisterToFragmentQueryItemSchema(Schema):
 
 
 class QueryResultSchema(Schema):
+    def __init__(self, *args, include_count_metadata=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._include_count_metadata = include_count_metadata
+
     match_count_total = fields.Integer(
         data_key="matchCountTotal", required=True, allow_none=True
     )
@@ -67,15 +71,11 @@ class QueryResultSchema(Schema):
     has_next_page = fields.Boolean(
         data_key="hasNextPage", load_default=None, dump_default=None, allow_none=True
     )
-    show_count_metadata = fields.Boolean(
-        data_key="_showCountMetadata", load_default=False, dump_default=False
-    )
     items = fields.Nested(QueryItemSchema, many=True, required=True)
 
     @post_dump
     def filter_count_metadata(self, data, **kwargs):
-        show_count_metadata = data.pop("_showCountMetadata", False)
-        if not show_count_metadata:
+        if not self._include_count_metadata:
             data.pop("isMatchCountTotalExact", None)
             data.pop("hasNextPage", None)
         return data

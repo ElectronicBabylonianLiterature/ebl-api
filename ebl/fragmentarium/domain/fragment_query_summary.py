@@ -106,7 +106,9 @@ def matching_line_preview_of(
 ) -> Dict[str, Any]:
     return {
         "lines": [
-            lightweight_line_preview_of(text.lines[index]) for index in matching_lines
+            lightweight_line_preview_of(text.lines[index])
+            for index in matching_lines
+            if 0 <= index < len(text.lines)
         ],
         "parser_version": text.parser_version or DEFAULT_ATF_PARSER_VERSION,
     }
@@ -118,7 +120,6 @@ class FragmentQueryResult:
     match_count_total: Optional[int]
     is_match_count_total_exact: bool = True
     has_next_page: Optional[bool] = None
-    show_count_metadata: bool = False
 
     @staticmethod
     def create_empty() -> "FragmentQueryResult":

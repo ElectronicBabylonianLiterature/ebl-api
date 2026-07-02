@@ -49,7 +49,6 @@ class QueryResult:
     match_count_total: Optional[int]
     is_match_count_total_exact: bool = True
     has_next_page: Optional[bool] = None
-    show_count_metadata: bool = False
 
     @staticmethod
     def create_empty() -> "QueryResult":
@@ -81,7 +80,6 @@ class CorpusQueryResult:
     match_count_total: Optional[int]
     is_match_count_total_exact: bool = True
     has_next_page: Optional[bool] = None
-    show_count_metadata: bool = False
 
     @staticmethod
     def create_empty() -> "CorpusQueryResult":

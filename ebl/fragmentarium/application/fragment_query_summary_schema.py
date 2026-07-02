@@ -4,6 +4,7 @@ import pydash
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.fragmentarium.application.fragment_fields_schemas import (
     DossierReferenceSchema,
 )
@@ -18,7 +19,6 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
 )
 from ebl.schemas import ResearchProjectField, ValueEnumField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-
 
 DEFAULT_THUMBNAIL_RESOLUTION = "small"
 
@@ -175,31 +175,11 @@ class FragmentQuerySummarySchema(Schema):
         return pydash.omit_by(data, pydash.is_none)
 
 
-class FragmentQueryResultSchema(Schema):
+class FragmentQueryResultSchema(QueryResultSchema):
     class Meta:
         unknown = EXCLUDE
 
     items = fields.Nested(FragmentQuerySummarySchema, many=True, required=True)
-    match_count_total = fields.Integer(
-        required=True, data_key="matchCountTotal", allow_none=True
-    )
-    is_match_count_total_exact = fields.Boolean(
-        data_key="isMatchCountTotalExact", load_default=True, dump_default=True
-    )
-    has_next_page = fields.Boolean(
-        data_key="hasNextPage", load_default=None, dump_default=None, allow_none=True
-    )
-    show_count_metadata = fields.Boolean(
-        data_key="_showCountMetadata", load_default=False, dump_default=False
-    )
-
-    @post_dump
-    def filter_count_metadata(self, data, **kwargs):
-        show_count_metadata = data.pop("_showCountMetadata", False)
-        if not show_count_metadata:
-            data.pop("isMatchCountTotalExact", None)
-            data.pop("hasNextPage", None)
-        return data
 
     @post_load
     def make_query_result(self, data, **kwargs) -> FragmentQueryResult:

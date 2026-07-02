@@ -10,14 +10,16 @@ from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
+from ebl.fragmentarium.infrastructure.fragment_query_result_projection import (
+    count_is_exact,
+    count_pipeline,
+    items_pipeline,
+    result_projection,
+)
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 from pydash.arrays import compact
-
-EXACT_COUNT = "exact"
-NO_COUNT = "none"
-PAGE_COUNT = "page"
 
 
 class PatternMatcher:
@@ -46,58 +48,8 @@ class PatternMatcher:
             else EmptyMatcher()
         )
 
-    def _limit_result(self):
-        return [{"$limit": self._limit_value()}] if "limit" in self._query else []
-
-    def _limit_value(self):
-        limit = self._query["limit"]
-        return limit + 1 if self._count_mode() == PAGE_COUNT else limit
-
-    def _count_mode(self):
-        return self._query.get("count", EXACT_COUNT)
-
-    def _count_is_exact(self):
-        return self._count_mode() == EXACT_COUNT
-
-    def _skip_result(self):
-        return [{"$skip": self._query["offset"]}] if self._query.get("offset") else []
-
     def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
         return [{"$sort": sort_fields}] if sort_fields else []
-
-    def _summary_items_pipeline(self) -> List[Dict]:
-        return [
-            *self._skip_result(),
-            *self._limit_result(),
-            {
-                "$project": {
-                    "_id": True,
-                    "matchCount": True,
-                    "matchingLines": True,
-                    "museumNumber": True,
-                }
-            },
-        ]
-
-    def _lean_items_pipeline(self) -> List[Dict]:
-        return [
-            *self._skip_result(),
-            {
-                "$project": {
-                    "_id": False,
-                    "museumNumber": True,
-                    "matchingLines": True,
-                    "matchCount": True,
-                }
-            },
-        ]
-
-    def _items_pipeline(self) -> List[Dict]:
-        return (
-            self._summary_items_pipeline()
-            if "limit" in self._query
-            else self._lean_items_pipeline()
-        )
 
     def _filter_by_script(self) -> Dict:
         parameters = {
@@ -245,17 +197,6 @@ class PatternMatcher:
             {"$match": {"matchCount": {"$gt": 0}}},
         ]
 
-    def _count_pipeline(self) -> List[Dict]:
-        return [
-            {
-                "$group": {
-                    "_id": None,
-                    "matchCountTotal": {"$sum": {"$ifNull": ["$matchCount", 0]}},
-                }
-            },
-            {"$project": {"_id": False, "matchCountTotal": True}},
-        ]
-
     def _get_pipeline_components(self) -> List[Dict]:
         dispatcher = {
             (True, True): self._merge_pipelines,
@@ -271,52 +212,18 @@ class PatternMatcher:
         facet = {
             "items": [
                 *self._sort_by({"_scriptSortKey": 1, "_sortKey": 1}),
-                *self._items_pipeline(),
+                *items_pipeline(self._query),
             ],
         }
-        if self._count_is_exact():
-            facet["count"] = self._count_pipeline()
+        if count_is_exact(self._query):
+            facet["count"] = count_pipeline()
 
         return [
             *self._prefilter(),
             *dispatcher[key](),
             {"$facet": facet},
-            {"$project": self._result_projection()},
+            {"$project": result_projection(self._query)},
         ]
 
     def build_pipeline(self) -> List[Dict]:
         return self._get_pipeline_components()
-
-    def _result_projection(self):
-        return {
-            "_id": False,
-            "items": self._items_projection(),
-            "matchCountTotal": self._match_count_total_projection(),
-            "isMatchCountTotalExact": {"$literal": self._count_is_exact()},
-            "hasNextPage": self._has_next_page_projection(),
-            "_showCountMetadata": {"$literal": True},
-        }
-
-    def _items_projection(self):
-        if self._count_mode() == PAGE_COUNT and "limit" in self._query:
-            return {"$slice": ["$items", self._query["limit"]]}
-        return True
-
-    def _match_count_total_projection(self):
-        if self._count_is_exact():
-            return {
-                "$ifNull": [
-                    {"$arrayElemAt": ["$count.matchCountTotal", 0]},
-                    0,
-                ]
-            }
-        return {"$literal": None}
-
-    def _has_next_page_projection(self):
-        if self._count_mode() == PAGE_COUNT:
-            return (
-                {"$gt": [{"$size": "$items"}, self._query["limit"]]}
-                if "limit" in self._query
-                else {"$literal": False}
-            )
-        return {"$literal": None}
