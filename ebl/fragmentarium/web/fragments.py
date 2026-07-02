@@ -2,7 +2,6 @@ import json
 import falcon
 from falcon import Request, Response
 from falcon_caching import Cache
-from pydash import flow
 from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
@@ -12,12 +11,17 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_pages,
     parse_genre,
+    parse_non_negative_integer_field,
+    parse_count,
 )
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import DataError, NotFoundError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryResultSchema,
+)
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import (
     create_response_dto,
@@ -31,6 +35,12 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from ebl.users.web.require_scope import require_fragment_read_scope
+
+
+def _parse_fragment_query(parameters, *parsers):
+    for parser in parsers:
+        parameters = parser(parameters)
+    return parameters
 
 
 class FragmentsRetrieveAllResource:
@@ -103,17 +113,25 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
-        parse = flow(
+        query = _parse_fragment_query(
+            req.params,
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
             parse_genre,
+            parse_count,
             parse_integer_field("limit"),
+            parse_non_negative_integer_field("offset"),
+        )
+        schema = (
+            FragmentQueryResultSchema(include_count_metadata=True)
+            if "limit" in query
+            else QueryResultSchema(include_count_metadata=True)
         )
 
-        resp.media = QueryResultSchema().dump(
+        resp.media = schema.dump(
             self._repository.query(
-                parse(req.params),
+                query,
                 req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
         )

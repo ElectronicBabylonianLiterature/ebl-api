@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence, Iterator, Union
+from typing import Any, Dict, Iterator, List, Optional, Sequence, Union
 
 from marshmallow import EXCLUDE
 from pymongo.collation import Collation
@@ -10,7 +10,11 @@ from ebl.common.query.query_schemas import (
     AfORegisterToFragmentQueryResultSchema,
 )
 from ebl.errors import NotFoundError
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryResultSchema,
+)
 from ebl.fragmentarium.domain.archaeology import ExcavationNumber
+from ebl.fragmentarium.domain.fragment_query_summary import FragmentQueryResult
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
@@ -31,9 +35,25 @@ from ebl.bibliography.infrastructure.bibliography import join_reference_document
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended import (
     MongoFragmentRepositoryGetExtended,
 )
-
+from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 
 RETRIEVE_ALL_LIMIT = 1000
+FRAGMENT_QUERY_SUMMARY_PROJECTION = {
+    "_id": True,
+    "accession": True,
+    "archaeology.excavationNumber": True,
+    "archaeology.site": True,
+    "date": True,
+    "description": True,
+    "dossiers": True,
+    "genres": True,
+    "museumNumber": True,
+    "projects": True,
+    "references": True,
+    "script": True,
+    "text.lines": True,
+    "text.parser_version": True,
+}
 
 
 def load_museum_number(data: dict) -> MuseumNumber:
@@ -43,6 +63,40 @@ def load_museum_number(data: dict) -> MuseumNumber:
 def load_query_result(cursor: Iterator) -> QueryResult:
     data = next(cursor, None)
     return QueryResultSchema().load(data) if data else QueryResult.create_empty()
+
+
+def fragment_photo_filename(museum_number: Union[dict, MuseumNumber]) -> str:
+    if isinstance(museum_number, MuseumNumber):
+        return f"{museum_number}.jpg"
+
+    suffix = museum_number.get("suffix") or ""
+    suffix_part = f".{suffix}" if suffix else ""
+    return f"{museum_number.get('prefix', '')}.{museum_number.get('number', '')}{suffix_part}.jpg"
+
+
+def compact_preview_token(token: dict) -> dict:
+    data = {
+        "value": token.get("value"),
+        "cleanValue": token.get("cleanValue"),
+        "uniqueLemma": token.get("uniqueLemma"),
+        "type": token.get("type"),
+    }
+    return {
+        key: value
+        for key, value in data.items()
+        if value is not None and (key != "uniqueLemma" or value)
+    }
+
+
+def compact_preview_line(line: dict) -> dict:
+    content = line.get("content") or []
+    prefix = line.get("prefix") or ""
+    return {
+        "number": prefix,
+        "prefix": prefix,
+        "text": " ".join(token.get("value", "") for token in content),
+        "tokens": [compact_preview_token(token) for token in content],
+    }
 
 
 def chapter_lemma_pipeline(clean_values: List[str]) -> List[dict]:
@@ -191,6 +245,103 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             else []
         )
 
+    def _find_fragment_query_summary_data(
+        self, fragment_ids: Sequence[Any]
+    ) -> Dict[Any, dict]:
+        return {
+            fragment["_id"]: fragment
+            for fragment in self._fragments.find_many(
+                {"_id": {"$in": list(fragment_ids)}},
+                projection=FRAGMENT_QUERY_SUMMARY_PROJECTION,
+            )
+        }
+
+    def _find_fragment_query_photo_filenames(
+        self, items: Sequence[dict]
+    ) -> Sequence[str]:
+        filenames = [
+            fragment_photo_filename(item["museumNumber"])
+            for item in items
+            if item.get("museumNumber")
+        ]
+        return [
+            photo["filename"]
+            for photo in self._photo_files.find_many(
+                {"filename": {"$in": filenames}},
+                projection={"filename": True},
+            )
+        ]
+
+    def _matching_line_preview(self, fragment: dict, matching_lines: Sequence[int]):
+        text = fragment.get("text") or {}
+        lines = text.get("lines") or []
+        return {
+            "lines": [
+                compact_preview_line(lines[line_index])
+                for line_index in matching_lines
+                if 0 <= line_index < len(lines)
+            ],
+            "parser_version": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
+        }
+
+    def _hydrate_fragment_query_item(
+        self,
+        item: dict,
+        fragments_by_id: Dict[Any, dict],
+        photo_filenames: Sequence[str],
+    ) -> dict:
+        fragment = fragments_by_id.get(item["_id"])
+        if fragment is None:
+            raise NotFoundError(
+                f"Fragment summary data for {item.get('museumNumber')} not found."
+            )
+
+        matching_lines = item.get("matchingLines") or []
+        museum_number = fragment.get("museumNumber", item.get("museumNumber"))
+        return {
+            "museumNumber": museum_number,
+            "accession": fragment.get("accession"),
+            "description": fragment.get("description", ""),
+            "script": fragment.get(
+                "script",
+                {"period": "", "periodModifier": "None", "uncertain": False},
+            ),
+            "date": fragment.get("date"),
+            "genres": fragment.get("genres", []),
+            "archaeology": fragment.get("archaeology"),
+            "references": fragment.get("references", []),
+            "projects": fragment.get("projects", []),
+            "dossiers": fragment.get("dossiers", []),
+            "matchingLines": matching_lines,
+            "matchingLinePreview": self._matching_line_preview(
+                fragment, matching_lines
+            ),
+            "matchCount": item.get("matchCount", 0),
+            "hasPhoto": fragment_photo_filename(museum_number) in photo_filenames,
+        }
+
+    def _load_fragment_query_result(self, data: Optional[dict]) -> FragmentQueryResult:
+        if not data:
+            return FragmentQueryResult.create_empty()
+
+        items = data.get("items", [])
+        fragment_ids = [item["_id"] for item in items]
+        fragments_by_id = self._find_fragment_query_summary_data(fragment_ids)
+        photo_filenames = self._find_fragment_query_photo_filenames(items)
+        return FragmentQueryResultSchema().load(
+            {
+                "items": [
+                    self._hydrate_fragment_query_item(
+                        item, fragments_by_id, photo_filenames
+                    )
+                    for item in items
+                ],
+                "matchCountTotal": data.get("matchCountTotal", 0),
+                "isMatchCountTotalExact": data.get("isMatchCountTotalExact", True),
+                "hasNextPage": data.get("hasNextPage"),
+            }
+        )
+
     def query_by_museum_number(
         self,
         number: Union[MuseumNumber, ExcavationNumber],
@@ -271,7 +422,9 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
 
         return FragmentPagerInfo(prev, next_)
 
-    def query(self, query: dict, user_scopes: Sequence[Scope] = ()) -> QueryResult:
+    def query(
+        self, query: dict, user_scopes: Sequence[Scope] = ()
+    ) -> Union[QueryResult, FragmentQueryResult]:
         cursor = (
             self._fragments.aggregate(
                 PatternMatcher(
@@ -284,7 +437,11 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
             if set(query) - {"lemmaOperator"}
             else iter([])
         )
-        return load_query_result(cursor)
+        return (
+            self._load_fragment_query_result(next(cursor, None))
+            if "limit" in query
+            else load_query_result(cursor)
+        )
 
     def query_latest(self) -> QueryResult:
         return load_query_result(

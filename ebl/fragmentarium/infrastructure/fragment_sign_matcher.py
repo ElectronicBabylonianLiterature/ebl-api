@@ -35,6 +35,10 @@ class SignMatcher:
             },
         ]
 
+    def _prefilter_signs(self) -> List[Dict]:
+        predicates = [{"signs": {"$regex": pattern}} for pattern in self.pattern]
+        return [{"$match": {"$and": predicates}}] if predicates else []
+
     def _expand_line_ranges(self) -> Dict:
         return {
             "$map": {
@@ -50,7 +54,7 @@ class SignMatcher:
                     ]
                 },
                 "as": "index",
-                "in": {"$arrayElemAt": ["$textLines", "$$index"]},
+                "in": {"$arrayElemAt": ["$textLineIndices", "$$index"]},
             }
         }
 
@@ -60,7 +64,7 @@ class SignMatcher:
                 "$project": {
                     "museumNumber": True,
                     "_sortKey": True,
-                    "script": True,
+                    "_scriptSortKey": "$script.sortKey",
                     "lineTypes": "$text.lines.type",
                     "signs": True,
                 }
@@ -72,8 +76,8 @@ class SignMatcher:
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "script": {"$first": "$script"},
-                    "textLines": {"$push": "$lineIndex"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
+                    "textLineIndices": {"$push": "$lineIndex"},
                     "signLines": {"$first": {"$split": ["$signs", "\n"]}},
                 }
             },
@@ -81,6 +85,7 @@ class SignMatcher:
 
     def build_pipeline(self, count_matches_per_item=True) -> List[Dict]:
         return [
+            *self._prefilter_signs(),
             *self._map_signs_to_textlines(),
             *(
                 self._match_multiline()
@@ -92,12 +97,17 @@ class SignMatcher:
                     "_id": "$_id",
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "script": {"$first": "$script"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                     "matchingLines": {
                         "$push": (
                             self._expand_line_ranges()
                             if self._is_multiline
-                            else {"$arrayElemAt": ["$textLines", "$signLineIndex"]}
+                            else {
+                                "$arrayElemAt": [
+                                    "$textLineIndices",
+                                    "$signLineIndex",
+                                ]
+                            }
                         )
                     },
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
