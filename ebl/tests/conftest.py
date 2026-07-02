@@ -616,6 +616,7 @@ def word():
         "source": "**part1 part2** source",
         "roots": ["wb'", "'b'", "plš"],
         "pos": ["V"],
+        "namedEntityTags": [],
         "guideWord": "meaning",
         "arabicGuideWord": "meaning",
         "oraccWords": [{"lemma": "oracc lemma", "guideWord": "oracc meaning"}],

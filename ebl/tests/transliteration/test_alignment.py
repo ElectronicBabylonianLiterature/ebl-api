@@ -20,11 +20,30 @@ def test_apply() -> None:
     assert alignment.apply(word) == expected
 
 
+def test_apply_sumerian_word() -> None:
+    word = Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")])
+    alignment = AlignmentToken("bu", 0)
+    expected = Word.of(
+        language=Language.SUMERIAN, parts=[Reading.of_name("bu")], alignment=0
+    )
+
+    assert alignment.apply(word) == expected
+
+
+def test_apply_emesal_word() -> None:
+    word = Word.of(language=Language.EMESAL, parts=[Reading.of_name("bu")])
+    alignment = AlignmentToken("bu", 0)
+    expected = Word.of(
+        language=Language.EMESAL, parts=[Reading.of_name("bu")], alignment=0
+    )
+
+    assert alignment.apply(word) == expected
+
+
 @pytest.mark.parametrize(
     "word",
     [
         Word.of([Reading.of_name("mu")]),
-        Word.of(language=Language.SUMERIAN, parts=[Reading.of_name("bu")]),
         Word.of([Reading.of_name("bu"), Joiner.hyphen(), UnclearSign.of()]),
         Word.of([UnidentifiedSign.of(), Joiner.hyphen(), Reading.of_name("bu")]),
         Word.of([Variant.of(Reading.of_name("bu"), Reading.of_name("nu"))]),

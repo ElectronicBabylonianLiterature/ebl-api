@@ -95,6 +95,17 @@ Never commit if any gate fails or was skipped.
 
 ## Review Guidelines
 
+- HARD GATE: before finalizing any PR review, fetch and incorporate all
+  existing GitHub feedback on the PR — submitted reviews, inline (diff)
+  review comments, and issue/conversation comments — including from bots
+  (e.g. Sourcery, qlty, Codex). Also fetch feedback for any PR whose branch
+  has been merged into the one under review. Use the GitHub CLI, e.g.:
+  `gh api repos/<owner>/<repo>/pulls/<n>/reviews`,
+  `gh api repos/<owner>/<repo>/pulls/<n>/comments`, and
+  `gh api repos/<owner>/<repo>/issues/<n>/comments`. Every unresolved finding
+  must be explicitly addressed or acknowledged with a rationale in the review
+  file. A review that ignores existing PR feedback is incomplete and must not
+  be finalized. This is non-negotiable.
 - Keep review comments short, specific, and actionable.
 - Prioritize correctness, regressions, security, and test coverage in
   every review.
