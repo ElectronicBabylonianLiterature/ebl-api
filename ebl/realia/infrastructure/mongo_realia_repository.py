@@ -66,6 +66,9 @@ class MongoRealiaRepository(RealiaRepository):
         self._inject_bibliography(entries)
         return entries
 
+    def list_all_realia(self) -> Sequence[str]:
+        return sorted(self._realia_collection.get_all_values("_id"))
+
     def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
         options = "i" if cfq.use_collations else ""
         return {"$regex": cfq.value, "$options": options}

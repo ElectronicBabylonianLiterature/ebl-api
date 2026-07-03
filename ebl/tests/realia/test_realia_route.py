@@ -196,3 +196,25 @@ def test_search_realia_missing_query(client) -> None:
 
     assert result.status == falcon.HTTP_OK
     assert result.json == []
+
+
+def test_list_all_realia(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    identifiers = ["Anu", "Enlil, Ellil", "Pig"]
+    for identifier in identifiers:
+        _seed_entry(realia_repository, bibliography_repository, id=identifier)
+
+    result = client.simulate_get("/realia/all")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == identifiers
+
+
+def test_list_all_realia_is_not_shadowed_by_id(client) -> None:
+    result = client.simulate_get("/realia/all")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == []

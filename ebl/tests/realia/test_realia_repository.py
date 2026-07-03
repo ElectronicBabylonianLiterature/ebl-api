@@ -7,6 +7,7 @@ from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.tests.factories.realia import RealiaEntryFactory
 from ebl.tests.realia.realia_repository_helpers import (
     create_entry_with_bibliography,
+    insert_minimal,
     insert_stored,
     stored_reallexikon_entry,
 )
@@ -95,6 +96,17 @@ def test_find_by_realia_id(
 def test_find_by_realia_id_not_found(realia_repository: RealiaRepository) -> None:
     with pytest.raises(NotFoundError):
         realia_repository.find_by_realia_id("realia_999999")
+
+
+def test_list_all_realia(realia_repository: MongoRealiaRepository) -> None:
+    for identifier in ("Pig", "Anu", "Enlil, Ellil"):
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_all_realia() == ["Anu", "Enlil, Ellil", "Pig"]
+
+
+def test_list_all_realia_empty(realia_repository: RealiaRepository) -> None:
+    assert realia_repository.list_all_realia() == []
 
 
 def test_find_injects_lean_reallexikon_reference(
