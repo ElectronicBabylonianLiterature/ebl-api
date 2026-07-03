@@ -1,4 +1,5 @@
 from ebl.bibliography.infrastructure.bibliography import (
+    ACTIVE_BIBLIOGRAPHY_FILTER,
     MongoBibliographyRepository,
     author_year_title_match,
     bibliography_query_pipeline,
@@ -19,7 +20,7 @@ def test_author_year_title_match_and_pipeline() -> None:
 
     assert match["author.0.family"] == "George"
     assert match["issued.date-parts.0.0"] == {"$gte": 2003, "$lt": 2004}
-    assert pipeline[0] == {"$match": match}
+    assert pipeline[0] == {"$match": {**match, **ACTIVE_BIBLIOGRAPHY_FILTER}}
     assert pipeline[2]["$sort"]["title"] == 1
 
 

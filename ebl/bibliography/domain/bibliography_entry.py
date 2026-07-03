@@ -99,6 +99,8 @@ CSL_JSON_SCHEMA = {
         "id": {"type": "string", "pattern": r"^[^/]+$"},
         "citationKey": {"type": "string"},
         "aliases": {"type": "array", "items": BIBLIOGRAPHY_ALIAS_SCHEMA},
+        "deprecated": {"type": "boolean"},
+        "redirectTo": {"type": ["string", "null"]},
         "categories": {"type": "array", "items": {"type": "string"}},
         "language": {"type": "string"},
         "journalAbbreviation": {"type": "string"},
@@ -177,6 +179,18 @@ CSL_JSON_SCHEMA = {
         "year-suffix": {"type": "string"},
     },
     "required": ["type", "id"],
+    "allOf": [
+        {
+            "if": {
+                "properties": {"deprecated": {"const": True}},
+                "required": ["deprecated"],
+            },
+            "then": {
+                "properties": {"redirectTo": {"type": "string", "minLength": 1}},
+                "required": ["redirectTo"],
+            },
+        }
+    ],
     "additionalProperties": False,
 }
 

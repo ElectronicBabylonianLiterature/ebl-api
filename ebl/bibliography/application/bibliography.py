@@ -27,6 +27,7 @@ COLLECTION = "bibliography"
 DEFAULT_EXPORT_LIMIT = 50
 MAX_EXPORT_LIMIT = 100
 PARTNER_CREATE_RETRY_LIMIT = 5
+MAX_REDIRECT_DEPTH = 5
 
 
 class Bibliography:
@@ -48,13 +49,50 @@ class Bibliography:
             self._repository.query_by_alias,
         ):
             try:
-                return query(id_)
+                result = query(id_)
             except NotFoundError:
-                pass
+                continue
+            return self._follow_redirect(result)
         raise NotFoundError(f"bibliography {id_} not found.")
 
     def find_many(self, ids: Sequence[str]):
-        return self._repository.query_by_ids(ids)
+        return [
+            self._follow_redirect(entry) for entry in self._repository.query_by_ids(ids)
+        ]
+
+    def _follow_redirect(self, entry: dict) -> dict:
+        current = entry
+        visited_ids: set[str] = set()
+        redirects_followed = 0
+
+        while current.get("deprecated", False):
+            current_id = current.get("id")
+            redirect_to = current.get("redirectTo")
+            if not isinstance(redirect_to, str) or not redirect_to:
+                raise NotFoundError(
+                    f"Deprecated bibliography {current_id} has no redirect target."
+                )
+            if current_id in visited_ids or redirect_to in visited_ids:
+                raise DuplicateError(
+                    f"Bibliography redirect loop detected at {current_id}."
+                )
+            if redirects_followed >= MAX_REDIRECT_DEPTH:
+                raise DuplicateError(
+                    f"Bibliography redirect from {entry.get('id')} exceeds "
+                    f"the maximum depth of {MAX_REDIRECT_DEPTH}."
+                )
+
+            if isinstance(current_id, str):
+                visited_ids.add(current_id)
+            try:
+                current = self._repository.query_by_id(redirect_to)
+            except NotFoundError as error:
+                raise NotFoundError(
+                    f"Bibliography redirect target {redirect_to} not found."
+                ) from error
+            redirects_followed += 1
+
+        return current
 
     def update(self, entry, user: User):
         old_entry = self._repository.query_by_id(entry["id"])
@@ -89,10 +127,11 @@ class Bibliography:
                 title_short_volume_query["title_short"],
                 title_short_volume_query["volume"],
             )
-        return uniq_with(
+        results = uniq_with(
             [*author_query_result, *container_query_result, *title_short_volume_result],
             lambda a, b: a == b,
         )
+        return [entry for entry in results if not entry.get("deprecated", False)]
 
     def list_all_bibliography(self) -> Sequence[str]:
         return self._repository.list_all_bibliography()

@@ -35,6 +35,29 @@ def test_partner_bibliography_export_page(client, saved_entries):
     ]
 
 
+def test_partner_bibliography_export_excludes_deprecated_records(
+    client, bibliography, user
+):
+    canonical_entry = BibliographyEntryFactory.build(id="Q30000000")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="Q30000001", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    active_entry = BibliographyEntryFactory.build(id="Q30000002")
+    for entry in (canonical_entry, deprecated_entry, active_entry):
+        bibliography.create(entry, user)
+
+    first_page = client.simulate_get("/api/v1/bibliography", params={"limit": 1})
+    second_page = client.simulate_get(
+        "/api/v1/bibliography",
+        params={"limit": 1, "cursor": first_page.json["nextCursor"]},
+    )
+
+    assert [item["id"] for item in first_page.json["items"]] == [canonical_entry["id"]]
+    assert first_page.json["nextCursor"] == canonical_entry["id"]
+    assert [item["id"] for item in second_page.json["items"]] == [active_entry["id"]]
+    assert second_page.json["nextCursor"] is None
+
+
 def test_partner_bibliography_export_caps_limit(client, saved_entries):
     result = client.simulate_get("/api/v1/bibliography", params={"limit": 999})
 
@@ -49,6 +72,23 @@ def test_partner_bibliography_entry_by_id(client, saved_entry):
     assert result.json["id"] == saved_entry["id"]
     assert result.json["citationKey"] is None
     assert result.json["bibliographyEntry"] == saved_entry
+
+
+def test_partner_bibliography_entry_by_deprecated_id_redirects(
+    client, bibliography, user
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(f"/api/v1/bibliography/{deprecated_entry['id']}")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == canonical_entry["id"]
+    assert result.json["bibliographyEntry"] == canonical_entry
 
 
 def test_partner_bibliography_entry_by_citation_key(client, bibliography, user):
@@ -88,6 +128,56 @@ def test_partner_bibliography_resolve_by_canonical_id(client, saved_entry):
     assert result.status == falcon.HTTP_OK
     assert result.json["id"] == saved_entry["id"]
     assert result.json["bibliographyEntry"] == saved_entry
+
+
+def test_partner_bibliography_resolve_by_deprecated_id_redirects(
+    client, bibliography, user
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": deprecated_entry["id"]},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == canonical_entry["id"]
+    assert result.json["bibliographyEntry"] == canonical_entry
+
+
+def test_partner_bibliography_resolve_by_normalized_duplicate_alias(
+    client, bibliography, user
+):
+    canonical_entry = BibliographyEntryFactory.build(
+        id="CANONICAL_ID",
+        aliases=[
+            {
+                "value": "DUPLICATE_ID",
+                "normalizedValue": "duplicate-id",
+                "type": "reviewed_duplicate_id",
+                "source": "possible_dedupes.xlsx",
+                "status": "redirect",
+            }
+        ],
+    )
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve", params={"identifier": "duplicate id"}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["id"] == canonical_entry["id"]
+    assert result.json["bibliographyEntry"] == canonical_entry
 
 
 def test_partner_bibliography_resolve_by_citation_key(client, bibliography, user):
@@ -155,6 +245,43 @@ def test_partner_bibliography_resolve_not_found(client):
     )
 
     assert result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_partner_bibliography_resolve_missing_redirect_target_returns_not_found(
+    client, bibliography, user
+):
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo="MISSING_ID"
+    )
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve",
+        params={"identifier": deprecated_entry["id"]},
+    )
+
+    assert result.status == falcon.HTTP_NOT_FOUND
+    assert "redirect target MISSING_ID not found" in result.json["description"]
+
+
+def test_partner_bibliography_resolve_redirect_loop_returns_conflict(
+    client, bibliography, user
+):
+    first_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_A", deprecated=True, redirectTo="DUPLICATE_B"
+    )
+    second_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_B", deprecated=True, redirectTo="DUPLICATE_A"
+    )
+    bibliography.create(first_entry, user)
+    bibliography.create(second_entry, user)
+
+    result = client.simulate_get(
+        "/api/v1/bibliography/resolve", params={"identifier": first_entry["id"]}
+    )
+
+    assert result.status == falcon.HTTP_CONFLICT
+    assert "redirect loop" in result.json["description"]
 
 
 def test_partner_bibliography_resolve_ambiguous_alias_returns_conflict(

@@ -66,6 +66,25 @@ def test_search_author_title_year(bibliography, bibliography_repository, when):
     assert [bibliography_entry] == bibliography.search(query)
 
 
+def test_search_excludes_deprecated_entries(
+    bibliography, bibliography_repository, when
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo="CANONICAL_ID"
+    )
+    author = canonical_entry["author"][0]["family"]
+    year = canonical_entry["issued"]["date-parts"][0][0]
+    title = canonical_entry["title"]
+    (
+        when(bibliography_repository)
+        .query_by_author_year_and_title(author, year, title)
+        .thenReturn([deprecated_entry, canonical_entry])
+    )
+
+    assert bibliography.search(f"{author} {year} {title}") == [canonical_entry]
+
+
 def test_find(bibliography, bibliography_repository, when):
     bibliography_entry = BibliographyEntryFactory.build()
     (
@@ -74,6 +93,82 @@ def test_find(bibliography, bibliography_repository, when):
         .thenReturn(bibliography_entry)
     )
     assert bibliography.find(bibliography_entry["id"]) == bibliography_entry
+
+
+def test_find_redirects_deprecated_id(bibliography, bibliography_repository, when):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo="CANONICAL_ID"
+    )
+    (
+        when(bibliography_repository)
+        .query_by_id(deprecated_entry["id"])
+        .thenReturn(deprecated_entry)
+    )
+    (
+        when(bibliography_repository)
+        .query_by_id(canonical_entry["id"])
+        .thenReturn(canonical_entry)
+    )
+
+    assert bibliography.find(deprecated_entry["id"]) == canonical_entry
+
+
+def test_find_redirects_deprecated_citation_key(
+    bibliography, bibliography_repository, when
+):
+    citation_key = "duplicateCitationKey"
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID",
+        citationKey=citation_key,
+        deprecated=True,
+        redirectTo=canonical_entry["id"],
+    )
+    when(bibliography_repository).query_by_id(citation_key).thenRaise(NotFoundError)
+    (
+        when(bibliography_repository)
+        .query_by_citation_key(citation_key)
+        .thenReturn(deprecated_entry)
+    )
+    (
+        when(bibliography_repository)
+        .query_by_id(canonical_entry["id"])
+        .thenReturn(canonical_entry)
+    )
+
+    assert bibliography.find(citation_key) == canonical_entry
+
+
+def test_find_rejects_missing_redirect_target(
+    bibliography, bibliography_repository, when
+):
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo="MISSING_ID"
+    )
+    (
+        when(bibliography_repository)
+        .query_by_id(deprecated_entry["id"])
+        .thenReturn(deprecated_entry)
+    )
+    when(bibliography_repository).query_by_id("MISSING_ID").thenRaise(NotFoundError)
+
+    with pytest.raises(NotFoundError, match="redirect target MISSING_ID not found"):
+        bibliography.find(deprecated_entry["id"])
+
+
+def test_find_rejects_redirect_loop(bibliography, bibliography_repository, when):
+    first_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_A", deprecated=True, redirectTo="DUPLICATE_B"
+    )
+    second_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_B", deprecated=True, redirectTo="DUPLICATE_A"
+    )
+    when(bibliography_repository).query_by_id("DUPLICATE_A").thenReturn(first_entry)
+    when(bibliography_repository).query_by_id("DUPLICATE_B").thenReturn(second_entry)
+
+    with pytest.raises(DuplicateError, match="redirect loop"):
+        bibliography.find(first_entry["id"])
 
 
 def test_find_by_citation_key(bibliography, bibliography_repository, when):

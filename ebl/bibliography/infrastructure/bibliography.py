@@ -18,9 +18,13 @@ from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography"
 DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS = 5000
+ACTIVE_BIBLIOGRAPHY_FILTER = {"deprecated": {"$ne": True}}
 
 
 def join_reference_documents() -> Sequence[dict]:
+    # This direct _id join intentionally does not follow deprecated bibliography
+    # redirects. References with old duplicate IDs can still receive deprecated
+    # documents until references are rewritten or this aggregation is redirect-aware.
     return [
         {"$unwind": {"path": "$references", "preserveNullAndEmptyArrays": True}},
         {
@@ -146,14 +150,16 @@ class MongoBibliographyRepository(BibliographyRepository):
         candidates: dict[str, dict] = {}
         for query in duplicate_candidate_queries(entry):
             cursor = self._collection.find_many(
-                query, projection=PROJECTION
+                {"$and": [query, ACTIVE_BIBLIOGRAPHY_FILTER]}, projection=PROJECTION
             ).max_time_ms(DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS)
             for data in cursor.limit(limit):
                 candidates[data["_id"]] = create_object_entry(data)
         return list(candidates.values())[:limit]
 
     def query_page(self, after: Optional[str], limit: int) -> Sequence[Any]:
-        query = {"_id": {"$gt": after}} if after else {}
+        query: Dict[str, Any] = dict(ACTIVE_BIBLIOGRAPHY_FILTER)
+        if after:
+            query["_id"] = {"$gt": after}
         data = self._collection.find_many(query).sort("_id", 1).limit(limit)
         return [create_object_entry(item) for item in data]
 
@@ -167,7 +173,7 @@ class MongoBibliographyRepository(BibliographyRepository):
         ]
 
     def list_all_bibliography(self) -> Sequence[str]:
-        return self._collection.get_all_values("_id")
+        return self._collection.get_all_values("_id", ACTIVE_BIBLIOGRAPHY_FILTER)
 
 
 def author_year_title_match(
@@ -187,7 +193,7 @@ def bibliography_query_pipeline(
     match: Dict[str, Any], trailing_sort_field: str
 ) -> list[dict]:
     return [
-        {"$match": match},
+        {"$match": {**match, **ACTIVE_BIBLIOGRAPHY_FILTER}},
         {"$addFields": {"primaryYear": primary_year_expression()}},
         {
             "$sort": {

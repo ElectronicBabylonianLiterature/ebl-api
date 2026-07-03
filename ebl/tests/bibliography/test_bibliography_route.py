@@ -19,6 +19,20 @@ def test_get_entry(client, saved_entry):
     assert result.status == falcon.HTTP_OK
 
 
+def test_get_deprecated_entry_redirects_to_canonical(client, bibliography, user):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(f"/bibliography/{deprecated_entry['id']}")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == canonical_entry
+
+
 def test_get_entry_not_found(client):
     result = client.simulate_get("/bibliography/not found")
 
@@ -57,6 +71,14 @@ def test_create_entry_invalid(transform, client):
     put_result = client.simulate_post("/bibliography", body=body)
 
     assert put_result.status == falcon.HTTP_BAD_REQUEST
+
+
+def test_create_deprecated_entry_requires_redirect_target(client):
+    bibliography_entry = BibliographyEntryFactory.build(deprecated=True)
+
+    result = client.simulate_post("/bibliography", json=bibliography_entry)
+
+    assert result.status == falcon.HTTP_BAD_REQUEST
 
 
 def test_update_entry(client, saved_entry):
@@ -121,12 +143,42 @@ def test_list_all_bibliography(client, saved_entry):
     assert result.status == falcon.HTTP_OK
 
 
+def test_list_all_bibliography_excludes_deprecated(client, bibliography, user):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get("/bibliography/all")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [canonical_entry["id"]]
+
+
 def test_list_bibliography(client, saved_entries):
     ids = [entry["id"] for entry in saved_entries]
     result = client.simulate_get(f"/bibliography/list?ids={','.join(ids)}")
 
     assert result.json == saved_entries
     assert result.status == falcon.HTTP_OK
+
+
+def test_list_bibliography_resolves_deprecated_ids(client, bibliography, user):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(
+        "/bibliography/list", params={"ids": deprecated_entry["id"]}
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [canonical_entry]
 
 
 def test_duplicate_candidates(client, database, saved_entry):
