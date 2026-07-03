@@ -114,6 +114,26 @@ def test_find_redirects_deprecated_id(bibliography, bibliography_repository, whe
     assert bibliography.find(deprecated_entry["id"]) == canonical_entry
 
 
+def test_find_many_deduplicates_redirected_canonical_entries(
+    bibliography, bibliography_repository, when
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    ids = [deprecated_entry["id"], canonical_entry["id"]]
+    when(bibliography_repository).query_by_ids(ids).thenReturn(
+        [deprecated_entry, canonical_entry]
+    )
+    (
+        when(bibliography_repository)
+        .query_by_id(canonical_entry["id"])
+        .thenReturn(canonical_entry)
+    )
+
+    assert bibliography.find_many(ids) == [canonical_entry]
+
+
 def test_find_redirects_deprecated_citation_key(
     bibliography, bibliography_repository, when
 ):

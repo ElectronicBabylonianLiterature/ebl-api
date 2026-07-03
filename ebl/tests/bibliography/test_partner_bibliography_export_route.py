@@ -2,6 +2,7 @@ import re
 import json
 
 import falcon
+import pytest
 
 from ebl.tests.bibliography.bibliography_route_test_helpers import (
     client_with_scope,
@@ -469,6 +470,22 @@ def test_partner_bibliography_create_rejects_unsafe_partner_id(client, database)
 
     assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
     assert "control characters" in result.json["description"]
+    assert database["bibliography"].count_documents({}) == before_count
+
+
+@pytest.mark.parametrize("partner_id", ["", "   "])
+def test_partner_bibliography_create_rejects_empty_partner_id(
+    partner_id, client, database
+):
+    bibliography_entry = BibliographyEntryFactory.build(id=partner_id)
+    before_count = database["bibliography"].count_documents({})
+
+    result = client.simulate_post(
+        "/api/v1/bibliography", body=json.dumps(bibliography_entry)
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+    assert "must be a non-empty string" in result.json["description"]
     assert database["bibliography"].count_documents({}) == before_count
 
 

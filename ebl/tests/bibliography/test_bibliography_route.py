@@ -181,6 +181,25 @@ def test_list_bibliography_resolves_deprecated_ids(client, bibliography, user):
     assert result.json == [canonical_entry]
 
 
+def test_list_bibliography_deduplicates_redirected_canonical_entries(
+    client, bibliography, user
+):
+    canonical_entry = BibliographyEntryFactory.build(id="CANONICAL_ID")
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True, redirectTo=canonical_entry["id"]
+    )
+    bibliography.create(canonical_entry, user)
+    bibliography.create(deprecated_entry, user)
+
+    result = client.simulate_get(
+        "/bibliography/list",
+        params={"ids": f"{deprecated_entry['id']},{canonical_entry['id']}"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == [canonical_entry]
+
+
 def test_duplicate_candidates(client, database, saved_entry):
     proposed_entry = {**saved_entry, "id": "Q30000001"}
     before_count = database["bibliography"].count_documents({})

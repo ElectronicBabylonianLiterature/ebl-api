@@ -56,9 +56,15 @@ class Bibliography:
         raise NotFoundError(f"bibliography {id_} not found.")
 
     def find_many(self, ids: Sequence[str]):
-        return [
-            self._follow_redirect(entry) for entry in self._repository.query_by_ids(ids)
-        ]
+        resolved_entries: list[dict] = []
+        seen_ids: set[str] = set()
+        for entry in self._repository.query_by_ids(ids):
+            resolved_entry = self._follow_redirect(entry)
+            resolved_id = resolved_entry["id"]
+            if resolved_id not in seen_ids:
+                resolved_entries.append(resolved_entry)
+                seen_ids.add(resolved_id)
+        return resolved_entries
 
     def _follow_redirect(self, entry: dict) -> dict:
         current = entry
