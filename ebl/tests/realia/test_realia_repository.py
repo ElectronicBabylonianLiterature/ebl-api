@@ -109,6 +109,16 @@ def test_list_all_realia_empty(realia_repository: RealiaRepository) -> None:
     assert realia_repository.list_all_realia() == []
 
 
+def test_list_all_realia_returns_every_id_without_limit(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    identifiers = [f"Realia {index:02d}" for index in range(25)]
+    for identifier in identifiers:
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_all_realia() == sorted(identifiers)
+
+
 def test_find_injects_lean_reallexikon_reference(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,

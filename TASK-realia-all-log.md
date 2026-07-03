@@ -47,3 +47,10 @@ navigation key equal to the lemma), not `realiaId`. Mirror the
 - File-size gate — all touched files < 250 lines.
 - `task test` — full suite (see terminal).
 
+## Review round
+
+- Fetched all PR #715 feedback (Sourcery, qlty, CodeQL, human reviewer) per
+  the review HARD GATE; no open PR on this branch, so nothing in progress.
+- Added `test_list_all_realia_shadows_entry_named_all` (route) and
+  `test_list_all_realia_returns_every_id_without_limit` (repository) to lock
+  the two by-design findings. Full review in `TASK-realia-all-review.md`.

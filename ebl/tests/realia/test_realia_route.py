@@ -218,3 +218,17 @@ def test_list_all_realia_is_not_shadowed_by_id(client) -> None:
 
     assert result.status == falcon.HTTP_OK
     assert result.json == []
+
+
+def test_list_all_realia_shadows_entry_named_all(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    for identifier in ("all", "Pig"):
+        _seed_entry(realia_repository, bibliography_repository, id=identifier)
+
+    result = client.simulate_get("/realia/all")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == ["Pig", "all"]
