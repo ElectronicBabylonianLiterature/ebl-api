@@ -100,7 +100,7 @@ def test_find_by_normalized_alias(
 
 
 @pytest.mark.parametrize(
-    "alias, lookup, normalized_value",
+    "alias_case",
     [
         ("Leipzig/ABC 123", "Leipzig ABC 123", "leipzig-abc-123"),
         ("Von_Soden:Alte/Orient", "Von Soden Alte Orient", "von-soden-alte-orient"),
@@ -111,13 +111,12 @@ def test_find_by_normalized_alias(
     ],
 )
 def test_find_by_special_character_alias(
-    alias,
-    lookup,
-    normalized_value,
+    alias_case,
     database,
     bibliography_repository,
     create_mongo_bibliography_entry,
 ):
+    alias, lookup, normalized_value = alias_case
     bibliography_entry = BibliographyEntryFactory.build(
         aliases=[{"value": alias, "normalizedValue": normalized_value}]
     )

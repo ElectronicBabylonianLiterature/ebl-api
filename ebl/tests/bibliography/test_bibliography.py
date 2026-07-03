@@ -1,7 +1,7 @@
 import pytest
 from mockito import verify
 
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, Defect, DuplicateError, NotFoundError
 from ebl.tests.factories.bibliography import ReferenceFactory, BibliographyEntryFactory
 
 COLLECTION = "bibliography"
@@ -264,6 +264,7 @@ def test_create(
     create_mongo_bibliography_entry,
 ):
     bibliography_entry = BibliographyEntryFactory.build()
+    created_id = bibliography_entry["id"]
     (
         when(changelog)
         .create(
@@ -274,9 +275,23 @@ def test_create(
         )
         .thenReturn()
     )
-    (when(bibliography_repository).create(bibliography_entry).thenReturn())
+    (when(bibliography_repository).create(bibliography_entry).thenReturn(created_id))
 
-    bibliography.create(bibliography_entry, user)
+    assert bibliography.create(bibliography_entry, user) == created_id
+
+
+def test_create_rejects_mismatched_repository_id(
+    bibliography, bibliography_repository, user, when
+):
+    bibliography_entry = BibliographyEntryFactory.build()
+    (
+        when(bibliography_repository)
+        .create(bibliography_entry)
+        .thenReturn("DIFFERENT_ID")
+    )
+
+    with pytest.raises(Defect, match="does not match"):
+        bibliography.create(bibliography_entry, user)
 
 
 def test_create_duplicate(

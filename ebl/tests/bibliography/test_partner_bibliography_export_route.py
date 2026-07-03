@@ -196,29 +196,20 @@ def test_partner_bibliography_resolve_by_citation_key(client, bibliography, user
     assert result.json["bibliographyEntry"] == bibliography_entry
 
 
-def test_partner_bibliography_resolve_by_raw_slash_alias(client, bibliography, user):
-    alias = "Leipzig/ABC 123"
+@pytest.mark.parametrize(
+    "alias_case",
+    [
+        pytest.param(
+            ("Leipzig/ABC 123", "leipzig-abc-123"),
+            id="raw-slash",
+        ),
+        pytest.param(("D’Agostino", "d-agostino"), id="special-character"),
+    ],
+)
+def test_partner_bibliography_resolve_by_alias(alias_case, client, bibliography, user):
+    alias, normalized_value = alias_case
     bibliography_entry = BibliographyEntryFactory.build(
-        aliases=[{"value": alias, "normalizedValue": "leipzig-abc-123"}]
-    )
-    bibliography.create(bibliography_entry, user)
-
-    result = client.simulate_get(
-        "/api/v1/bibliography/resolve",
-        params={"identifier": alias},
-    )
-
-    assert result.status == falcon.HTTP_OK
-    assert result.json["id"] == bibliography_entry["id"]
-    assert result.json["bibliographyEntry"] == bibliography_entry
-
-
-def test_partner_bibliography_resolve_by_special_character_alias(
-    client, bibliography, user
-):
-    alias = "D’Agostino"
-    bibliography_entry = BibliographyEntryFactory.build(
-        aliases=[{"value": alias, "normalizedValue": "d-agostino"}]
+        aliases=[{"value": alias, "normalizedValue": normalized_value}]
     )
     bibliography.create(bibliography_entry, user)
 

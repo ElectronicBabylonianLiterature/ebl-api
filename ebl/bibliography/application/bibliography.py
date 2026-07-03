@@ -20,7 +20,7 @@ from ebl.bibliography.application.bibliography_repository import BibliographyRep
 from ebl.bibliography.application.serialization import create_mongo_entry
 from ebl.bibliography.domain.reference import Reference
 from ebl.changelog import Changelog
-from ebl.errors import DataError, DuplicateError, NotFoundError
+from ebl.errors import DataError, Defect, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
@@ -37,6 +37,10 @@ class Bibliography:
 
     def create(self, entry, user: User) -> str:
         created_id = self._repository.create(entry)
+        if created_id != entry["id"]:
+            raise Defect(
+                f"Created bibliography id {created_id} does not match {entry['id']}."
+            )
         self._changelog.create(
             COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry)
         )
