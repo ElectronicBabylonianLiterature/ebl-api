@@ -99,8 +99,25 @@ class MongoRealiaRepository(RealiaRepository):
             "$size": {
                 "$filter": {
                     "input": {"$ifNull": ["$reallexikon", []]},
-                    "cond": {"$ne": ["$$this.reference", None]},
+                    "cond": self._is_resolvable_reference("$$this.reference"),
                 }
+            }
+        }
+
+    def _is_resolvable_reference(self, reference: str) -> dict:
+        return {
+            "$switch": {
+                "branches": [
+                    {
+                        "case": {"$eq": [{"$type": reference}, "string"]},
+                        "then": {"$ne": [reference, ""]},
+                    },
+                    {
+                        "case": {"$eq": [{"$type": reference}, "object"]},
+                        "then": {"$ne": [{"$ifNull": [f"{reference}.id", ""]}, ""]},
+                    },
+                ],
+                "default": False,
             }
         }
 

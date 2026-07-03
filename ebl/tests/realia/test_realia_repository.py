@@ -125,9 +125,17 @@ def test_list_all_realia_excludes_redirect_stubs(
     canonical = {"id": "Canonical", "lemma": "Canonical"}
     stubs: dict[str, dict] = {
         "Empty stub": {"crossReferences": [canonical]},
-        "Reallexikon stub": {
+        "Reallexikon null reference": {
             "crossReferences": [canonical],
             "reallexikon": [{"id": "r", "reference": None}],
+        },
+        "Reallexikon reference without id": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "r", "reference": {"pages": "5"}}],
+        },
+        "Reallexikon empty string reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "r", "reference": ""}],
         },
     }
     listable: dict[str, dict] = {
@@ -153,6 +161,10 @@ def test_list_all_realia_excludes_redirect_stubs(
         "Has reallexikon reference": {
             "crossReferences": [canonical],
             "reallexikon": [{"id": "a", "reference": {"id": "bib_1"}}],
+        },
+        "Has reallexikon string reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "a", "reference": "bib_1"}],
         },
         "Two cross references": {
             "crossReferences": [canonical, {"id": "o", "lemma": "o"}],
