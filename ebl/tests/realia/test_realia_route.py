@@ -232,3 +232,16 @@ def test_list_all_realia_shadows_entry_named_all(
 
     assert result.status == falcon.HTTP_OK
     assert result.json == ["Pig", "all"]
+
+
+def test_list_all_realia_returns_ids_verbatim(
+    realia_repository: MongoRealiaRepository,
+    bibliography_repository: BibliographyRepository,
+    client,
+) -> None:
+    _seed_entry(realia_repository, bibliography_repository, id="(Heiliger) Hügel")
+
+    result = client.simulate_get("/realia/all")
+
+    assert result.status == falcon.HTTP_OK
+    assert "(Heiliger) Hügel" in result.json

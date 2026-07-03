@@ -119,6 +119,55 @@ def test_list_all_realia_returns_every_id_without_limit(
     assert realia_repository.list_all_realia() == sorted(identifiers)
 
 
+def test_list_all_realia_excludes_redirect_stubs(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    canonical = {"id": "Canonical", "lemma": "Canonical"}
+    stubs: dict[str, dict] = {
+        "Empty stub": {"crossReferences": [canonical]},
+        "Reallexikon stub": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "r", "reference": None}],
+        },
+    }
+    listable: dict[str, dict] = {
+        "Has afoRegister": {
+            "crossReferences": [canonical],
+            "afoRegister": [{"mainWord": "x"}],
+        },
+        "Has references": {
+            "crossReferences": [canonical],
+            "references": [{"id": "bib_1"}],
+        },
+        "Has afoCrossReferences": {
+            "crossReferences": [canonical],
+            "afoCrossReferences": [{"id": "a", "lemma": "b"}],
+        },
+        "Has two reallexikon": {
+            "crossReferences": [canonical],
+            "reallexikon": [
+                {"id": "a", "reference": None},
+                {"id": "b", "reference": None},
+            ],
+        },
+        "Has reallexikon reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "a", "reference": {"id": "bib_1"}}],
+        },
+        "Two cross references": {
+            "crossReferences": [canonical, {"id": "o", "lemma": "o"}],
+        },
+        "No cross references": {},
+    }
+    for identifier, document in {**stubs, **listable}.items():
+        insert_stored(realia_repository, {"_id": identifier, **document})
+
+    result = realia_repository.list_all_realia()
+
+    assert set(result) == set(listable)
+    assert not set(stubs) & set(result)
+
+
 def test_find_injects_lean_reallexikon_reference(
     realia_repository: MongoRealiaRepository,
     bibliography_repository: BibliographyRepository,

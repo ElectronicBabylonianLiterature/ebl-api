@@ -67,7 +67,42 @@ class MongoRealiaRepository(RealiaRepository):
         return entries
 
     def list_all_realia(self) -> Sequence[str]:
-        return sorted(self._realia_collection.get_all_values("_id"))
+        documents = self._realia_collection.find_many(
+            {"$expr": self._listable_expression()}, projection={"_id": True}
+        )
+        return sorted(document["_id"] for document in documents)
+
+    def _listable_expression(self) -> dict:
+        return {
+            "$or": [
+                self._has_own_content_expression(),
+                {"$ne": [self._array_size("crossReferences"), 1]},
+            ]
+        }
+
+    def _has_own_content_expression(self) -> dict:
+        return {
+            "$or": [
+                {"$gt": [self._array_size("afoRegister"), 0]},
+                {"$gt": [self._array_size("references"), 0]},
+                {"$gt": [self._array_size("afoCrossReferences"), 0]},
+                {"$gt": [self._array_size("reallexikon"), 1]},
+                {"$gt": [self._reallexikon_reference_count(), 0]},
+            ]
+        }
+
+    def _array_size(self, field: str) -> dict:
+        return {"$size": {"$ifNull": [f"${field}", []]}}
+
+    def _reallexikon_reference_count(self) -> dict:
+        return {
+            "$size": {
+                "$filter": {
+                    "input": {"$ifNull": ["$reallexikon", []]},
+                    "cond": {"$ne": ["$$this.reference", None]},
+                }
+            }
+        }
 
     def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
         options = "i" if cfq.use_collations else ""
