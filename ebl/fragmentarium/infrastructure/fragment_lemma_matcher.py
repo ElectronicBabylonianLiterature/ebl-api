@@ -50,8 +50,8 @@ class LemmaMatcher:
                 "$project": {
                     "museumNumber": 1,
                     "_sortKey": 1,
+                    "_scriptSortKey": "$script.sortKey",
                     self.flat_path: f"${self.unique_lemma_path}",
-                    "script": 1,
                 }
             },
             {
@@ -70,7 +70,7 @@ class LemmaMatcher:
                     "matchingLines": {"$push": "$lineIndex"},
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
-                    "script": {"$first": "$script"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                     **({"matchCount": {"$sum": 1}} if count_matches_per_item else {}),
                 }
             },
@@ -119,7 +119,7 @@ class LemmaMatcher:
                     "lineIndex": True,
                     "museumNumber": True,
                     "_sortKey": True,
-                    "script": True,
+                    "_scriptSortKey": True,
                 }
             },
             {"$addFields": {"ngram": {"$setUnion": ["$ngram", []]}}},

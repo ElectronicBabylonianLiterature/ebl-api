@@ -37,7 +37,6 @@ from ebl.fragmentarium.infrastructure.mongo_fragment_repository_get_extended imp
 )
 from ebl.transliteration.domain.atf import DEFAULT_ATF_PARSER_VERSION
 
-
 RETRIEVE_ALL_LIMIT = 1000
 FRAGMENT_QUERY_SUMMARY_PROJECTION = {
     "_id": True,

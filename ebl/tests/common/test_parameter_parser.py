@@ -48,7 +48,6 @@ def test_parse_non_negative_integer_field():
 
 def test_parse_non_negative_integer_field_negative():
     parse = parse_non_negative_integer_field("offset")
-
     with pytest.raises(DataError, match="offset must be non-negative"):
         parse({"offset": "-1"})
 

@@ -40,8 +40,14 @@ from ebl.tests.factories.fragment import (
     LemmatizedFragmentFactory,
 )
 from ebl.tests.factories.record import RecordEntryFactory, RecordFactory
+from ebl.transliteration.domain.line_number import LineNumber
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.sign import Sign, Value
+from ebl.transliteration.domain.sign_tokens import Reading
+from ebl.transliteration.domain.text import Text
+from ebl.transliteration.domain.text_line import TextLine
+from ebl.transliteration.domain.word_tokens import Word
 from ebl.fragmentarium.domain.genres import genres
 from ebl.common.domain.scopes import Scope
 from ebl.tests.factories.provenance import build_provenance_records
@@ -271,6 +277,316 @@ def test_query_fragmentarium_transliteration(
     assert "atf" not in result.json["items"][0]
 
 
+def test_query_fragmentarium_transliteration_limit_preserves_total_count(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(5)
+    ]
+
+    for fragment in transliterated_fragments:
+        fragmentarium.create(fragment)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "2"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json["items"]) == 2
+    assert result.json["matchCountTotal"] == 5
+    assert result.json["isMatchCountTotalExact"] is True
+    assert result.json["hasNextPage"] is None
+
+
+def test_query_fragmentarium_transliteration_count_exact(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(3)
+    ]
+
+    for fragment in transliterated_fragments:
+        fragmentarium.create(fragment)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "2", "count": "exact"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["matchCountTotal"] == 3
+    assert result.json["isMatchCountTotalExact"] is True
+    assert result.json["hasNextPage"] is None
+
+
+def test_query_fragmentarium_transliteration_count_none(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(3)
+    ]
+
+    for fragment in transliterated_fragments:
+        fragmentarium.create(fragment)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "2", "count": "none"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json["items"]) == 2
+    assert result.json["matchCountTotal"] is None
+    assert result.json["isMatchCountTotalExact"] is False
+    assert result.json["hasNextPage"] is None
+
+
+def test_query_fragmentarium_transliteration_count_page(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(3)
+    ]
+
+    for index, fragment in enumerate(transliterated_fragments):
+        fragmentarium.create(fragment, sort_key=index)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "2", "count": "page"},
+    )
+    last_page_result = client.simulate_get(
+        "/fragments/query",
+        params={
+            "transliteration": "ma-tu₂",
+            "limit": "2",
+            "offset": "2",
+            "count": "page",
+        },
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == query_result_of(
+        [
+            query_summary_of(fragment, matching_lines=[3])
+            for fragment in transliterated_fragments[:2]
+        ],
+        None,
+        False,
+        True,
+    )
+    assert last_page_result.status == falcon.HTTP_OK
+    assert last_page_result.json == query_result_of(
+        [query_summary_of(transliterated_fragments[2], matching_lines=[3])],
+        None,
+        False,
+        False,
+    )
+
+
+def test_query_fragmentarium_transliteration_limit_with_offset(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(4)
+    ]
+
+    for index, fragment in enumerate(transliterated_fragments):
+        fragmentarium.create(fragment, sort_key=index)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "2", "offset": "1"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == query_result_of(
+        [
+            query_summary_of(fragment, matching_lines=[3])
+            for fragment in transliterated_fragments[1:3]
+        ],
+        4,
+    )
+    assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
+
+
+def test_query_fragmentarium_transliteration_offset_without_limit_returns_lean_items(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(4)
+    ]
+
+    for index, fragment in enumerate(transliterated_fragments):
+        fragmentarium.create(fragment, sort_key=index)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "offset": "2"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == query_result_of(
+        [
+            query_item_of(fragment, matching_lines=[3])
+            for fragment in transliterated_fragments[2:]
+        ],
+        4,
+    )
+
+
+def test_query_fragmentarium_transliteration_offset_zero_is_accepted(
+    client, fragmentarium, sign_repository, signs
+):
+    fragment = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.0"),
+        script=Script(Period.LATE_BABYLONIAN),
+    )
+    fragmentarium.create(fragment)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂", "limit": "1", "offset": "0"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == query_result_of(
+        [query_summary_of(fragment, matching_lines=[3])], 1
+    )
+
+
+@pytest.mark.parametrize("offset", ["invalid", "-1"])
+def test_query_fragmentarium_offset_invalid(client, offset):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "offset": offset},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+@pytest.mark.parametrize("count", ["false", "0", "random", "approx"])
+def test_query_fragmentarium_count_invalid(client, count):
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"number": "K.1", "count": count},
+    )
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_query_fragmentarium_transliteration_without_limit_returns_all_lean_items(
+    client, fragmentarium, sign_repository, signs
+):
+    transliterated_fragments = [
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
+        for index in range(101)
+    ]
+
+    for fragment in transliterated_fragments:
+        fragmentarium.create(fragment)
+
+    for sign in signs:
+        sign_repository.create(sign)
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "ma-tu₂"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json["items"]) == 101
+    assert result.json["matchCountTotal"] == 101
+    assert "matchingLinePreview" not in result.json["items"][0]
+
+
+def test_query_fragmentarium_kur2_transliteration_returns_summary(
+    client, fragmentarium, sign_repository
+):
+    fragment = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.4936"),
+        signs="KUR₂",
+        text=Text(
+            (
+                TextLine.of_iterable(
+                    LineNumber(1), (Word.of([Reading.of_name("kur", 2)]),)
+                ),
+            )
+        ),
+    )
+    fragmentarium.create(fragment)
+    sign_repository.create(Sign("KUR₂", values=(Value("kur", 2),)))
+
+    result = client.simulate_get(
+        "/fragments/query",
+        params={"transliteration": "kur₂", "limit": "1"},
+    )
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json == query_result_of(
+        [query_summary_of(fragment, matching_lines=[0])], 1
+    )
+    assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
+    assert "description" in result.json["items"][0]
+    assert "script" in result.json["items"][0]
+    assert "hasPhoto" in result.json["items"][0]
+    preview_line = result.json["items"][0]["matchingLinePreview"]["lines"][0]
+    assert preview_line["text"] == "kur₂"
+    assert preview_line["tokens"][0]["value"] == "kur₂"
+    assert preview_line["tokens"][0]["cleanValue"] == "kur₂"
+    assert preview_line["tokens"][0]["type"] == "Word"
+    assert "parts" not in preview_line["tokens"][0]
+
+
 @pytest.mark.parametrize(
     "lemma_operator,lemmas,expected_lines",
     [
@@ -345,79 +661,6 @@ def test_query_fragmentarium_combined_query(
 
     assert result.json == query_result_of(
         [query_item_of(fragment, matching_lines=[1, 3])], 2
-    )
-
-
-def test_query_fragmentarium_genre_pagination(client, fragmentarium):
-    genre = Genre(
-        ["CANONICAL", "Technical", "Astronomy", "Astronomical Diaries"],
-        False,
-    )
-    fragments = [
-        FragmentFactory.build(
-            genres=(genre,), number=MuseumNumber.of(f"X.{i}"), script=Script()
-        )
-        for i in range(5)
-    ]
-    for index, fragment in enumerate(fragments):
-        fragmentarium.create(fragment, sort_key=index)
-
-    base_params = {"genre": ":".join(genre.category), "limit": 2}
-    first_page = client.simulate_get("/fragments/query", params=base_params)
-    explicit_first_page = client.simulate_get(
-        "/fragments/query", params={**base_params, "offset": 0}
-    )
-    second_page = client.simulate_get(
-        "/fragments/query", params={**base_params, "offset": 2}
-    )
-
-    expected_first_page = query_result_of(
-        [query_summary_of(fragment) for fragment in fragments[:2]],
-        0,
-    )
-    assert first_page.status == falcon.HTTP_OK
-    assert first_page.json == expected_first_page
-    assert explicit_first_page.json == expected_first_page
-    assert second_page.status == falcon.HTTP_OK
-    assert second_page.json == query_result_of(
-        [query_summary_of(fragment) for fragment in fragments[2:4]],
-        0,
-    )
-
-
-def test_query_fragmentarium_transliteration_pagination_preserves_match_count_total(
-    client, fragmentarium, sign_repository, signs
-):
-    for sign in signs:
-        sign_repository.create(sign)
-
-    fragments = [
-        TransliteratedFragmentFactory.build(
-            number=MuseumNumber.of(f"X.{i}"), script=Script()
-        )
-        for i in range(3)
-    ]
-    for index, fragment in enumerate(fragments):
-        fragmentarium.create(fragment, sort_key=index)
-
-    first_page = client.simulate_get(
-        "/fragments/query",
-        params={"transliteration": "ma-tu₂", "limit": 2},
-    )
-    second_page = client.simulate_get(
-        "/fragments/query",
-        params={"transliteration": "ma-tu₂", "limit": 2, "offset": 2},
-    )
-
-    assert first_page.status == falcon.HTTP_OK
-    assert first_page.json == query_result_of(
-        [query_summary_of(fragment, matching_lines=[3]) for fragment in fragments[:2]],
-        3,
-    )
-    assert second_page.status == falcon.HTTP_OK
-    assert second_page.json == query_result_of(
-        [query_summary_of(fragments[2], matching_lines=[3])],
-        3,
     )
 
 
@@ -500,25 +743,6 @@ def test_query_fragmentarium_count_page_without_limit_uses_no_filter_items(
         False,
         False,
     )
-
-
-@pytest.mark.parametrize("offset", ["not-an-integer", "-1"])
-def test_query_fragmentarium_rejects_invalid_offset(client, offset):
-    result = client.simulate_get(
-        "/fragments/query", params={"number": "K.1", "offset": offset}
-    )
-
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-
-@pytest.mark.parametrize("count", ["false", "0", "random", "approx"])
-def test_query_fragmentarium_count_invalid(client, count):
-    result = client.simulate_get(
-        "/fragments/query",
-        params={"number": "K.1", "count": count},
-    )
-
-    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
 
 
 def test_query_signs_invalid(client, fragmentarium, sign_repository, signs):

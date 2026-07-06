@@ -421,6 +421,8 @@ genres = (
     ("CANONICAL", "School Tablet"),
     ("CANONICAL", "School Tablet", "Model contract"),
     ("CANONICAL", "School Tablet", "Model letter"),
+    ("CANONICAL", "School Tablet", "Type 1"),
+    ("CANONICAL", "School Tablet", "Type 2"),
     ("CANONICAL", "Technical"),
     ("CANONICAL", "Technical", "Astronomy"),
     ("CANONICAL", "Technical", "Astronomy", "I.NAM.GIŠ.HUR.AN.KI.A"),
