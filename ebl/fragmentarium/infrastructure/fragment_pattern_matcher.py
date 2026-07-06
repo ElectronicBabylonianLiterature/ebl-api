@@ -1,12 +1,21 @@
 from typing import List, Dict, Sequence, Optional
 from ebl.common.domain.scopes import Scope
-from ebl.fragmentarium.infrastructure.queries import number_is, match_user_scopes
+from ebl.fragmentarium.infrastructure.queries import (
+    match_user_scopes,
+    number_is,
+)
 from ebl.fragmentarium.infrastructure.fragment_lemma_matcher import (
     LemmaMatcher,
     EmptyMatcher,
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.fragmentarium.infrastructure.fragment_sign_matcher import SignMatcher
+from ebl.fragmentarium.infrastructure.fragment_query_result_projection import (
+    count_is_exact,
+    count_pipeline,
+    items_pipeline,
+    result_projection,
+)
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
@@ -39,62 +48,8 @@ class PatternMatcher:
             else EmptyMatcher()
         )
 
-    def _paginate_result(self) -> List[Dict]:
-        return [
-            *([{"$skip": self._query["offset"]}] if "offset" in self._query else []),
-            *([{"$limit": self._query["limit"]}] if "limit" in self._query else []),
-        ]
-
     def _sort_by(self, sort_fields: Optional[Dict] = None) -> List[Dict]:
         return [{"$sort": sort_fields}] if sort_fields else []
-
-    def _wrap_query_items_with_total(
-        self, sort_fields: Optional[Dict] = None
-    ) -> List[Dict]:
-        return [
-            {
-                "$facet": {
-                    "items": [
-                        *self._sort_by(sort_fields),
-                        *self._paginate_result(),
-                        {
-                            "$project": {
-                                "_id": False,
-                                "script": False,
-                                "_sortKey": False,
-                            }
-                        },
-                    ],
-                    "metadata": [
-                        {
-                            "$group": {
-                                "_id": None,
-                                "totalCount": {"$sum": 1},
-                                "matchCountTotal": {"$sum": "$matchCount"},
-                            }
-                        }
-                    ],
-                }
-            },
-            {
-                "$project": {
-                    "_id": False,
-                    "items": True,
-                    "matchCountTotal": {
-                        "$ifNull": [
-                            {"$arrayElemAt": ["$metadata.matchCountTotal", 0]},
-                            0,
-                        ]
-                    },
-                    "totalCount": {
-                        "$ifNull": [
-                            {"$arrayElemAt": ["$metadata.totalCount", 0]},
-                            0,
-                        ]
-                    },
-                }
-            },
-        ]
 
     def _filter_by_script(self) -> Dict:
         parameters = {
@@ -187,10 +142,10 @@ class PatternMatcher:
                 "$project": {
                     "_id": True,
                     "museumNumber": True,
-                    "matchingLines": [],
+                    "matchingLines": {"$literal": []},
                     "matchCount": {"$literal": 0},
-                    "script": True,
                     "_sortKey": True,
+                    "_scriptSortKey": "$script.sortKey",
                 }
             },
         ]
@@ -220,6 +175,7 @@ class PatternMatcher:
                     "matchingLines": {"$push": "$matchingLines"},
                     "museumNumber": {"$first": "$museumNumber"},
                     "_sortKey": {"$first": "$_sortKey"},
+                    "_scriptSortKey": {"$first": "$_scriptSortKey"},
                 },
             },
             {
@@ -253,12 +209,20 @@ class PatternMatcher:
             isinstance(self._sign_matcher, SignMatcher),
         )
 
+        facet = {
+            "items": [
+                *self._sort_by({"_scriptSortKey": 1, "_sortKey": 1}),
+                *items_pipeline(self._query),
+            ],
+        }
+        if count_is_exact(self._query):
+            facet["count"] = count_pipeline()
+
         return [
             *self._prefilter(),
             *dispatcher[key](),
-            *self._wrap_query_items_with_total(
-                sort_fields={"script.sortKey": 1, "_sortKey": 1}
-            ),
+            {"$facet": facet},
+            {"$project": result_projection(self._query)},
         ]
 
     def build_pipeline(self) -> List[Dict]:

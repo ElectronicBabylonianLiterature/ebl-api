@@ -6,18 +6,22 @@ from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
-    parse_non_negative_integer_field,
     parse_lines,
     parse_transliteration,
     parse_lemmas,
     parse_pages,
     parse_genre,
+    parse_non_negative_integer_field,
+    parse_count,
 )
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.errors import DataError, NotFoundError
 from ebl.files.application.file_repository import FileRepository
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryResultSchema,
+)
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.web.dtos import (
     create_response_dto,
@@ -31,6 +35,12 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 from ebl.users.web.require_scope import require_fragment_read_scope
+
+
+def _parse_fragment_query(parameters, *parsers):
+    for parser in parsers:
+        parameters = parser(parameters)
+    return parameters
 
 
 class FragmentsRetrieveAllResource:
@@ -103,38 +113,30 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
-        parsers = (
+        parameters = {
+            key: value for key, value in req.params.items() if key != "paginationIndex"
+        }
+        query = _parse_fragment_query(
+            parameters,
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,
             parse_genre,
+            parse_count,
             parse_integer_field("limit"),
             parse_non_negative_integer_field("offset"),
         )
+        schema = (
+            FragmentQueryResultSchema(include_count_metadata=True)
+            if "limit" in query
+            else QueryResultSchema(include_count_metadata=True)
+        )
 
-        def parse(parameters: dict) -> dict:
-            for parser in parsers:
-                parameters = parser(parameters)
-            return parameters
-
-        user_scopes = req.context.user.get_scopes(prefix="read:", suffix="-fragments")
-
-        parameters = {
-            key: value for key, value in req.params.items() if key != "paginationIndex"
-        }
-        search_parameters = {
-            key: value
-            for key, value in parameters.items()
-            if key not in {"lemmaOperator", "limit", "offset"}
-        }
-        if not search_parameters:
-            resp.media = QueryResultSchema().dump(
-                self._repository.query({}, user_scopes)
+        resp.media = schema.dump(
+            self._repository.query(
+                query,
+                req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
             )
-            return
-
-        resp.media = QueryResultSchema().dump(
-            self._repository.query(parse(parameters), user_scopes)
         )
 
 
@@ -188,9 +190,7 @@ def make_latest_additions_resource(repository: FragmentRepository, cache: Cache)
         @cache.cached(timeout=DEFAULT_TIMEOUT)
         def on_get(self, req: Request, resp: Response):
             resp.text = json.dumps(
-                QueryResultSchema(exclude=("total_count",)).dump(
-                    self._repository.query_latest()
-                )
+                QueryResultSchema().dump(self._repository.query_latest())
             )
 
     return LatestAdditionsResource(repository)

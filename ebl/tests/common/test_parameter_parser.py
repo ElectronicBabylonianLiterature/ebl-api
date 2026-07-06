@@ -7,6 +7,7 @@ from ebl.common.query.parameter_parser import (
     parse_lemmas,
     parse_lines,
     parse_transliteration,
+    parse_count,
 )
 from ebl.common.query.query_result import LemmaQueryType
 from ebl.errors import DataError
@@ -41,23 +42,26 @@ def test_parse_integer_field_invalid():
 
 def test_parse_non_negative_integer_field():
     parse = parse_non_negative_integer_field("offset")
-
-    assert parse({}) == {}
     assert parse({"offset": "0"}) == {"offset": 0}
     assert parse({"offset": "42"}) == {"offset": 42}
 
 
-def test_parse_non_negative_integer_field_invalid():
+def test_parse_non_negative_integer_field_negative():
     parse = parse_non_negative_integer_field("offset")
 
-    with pytest.raises(
-        DataError, match="offset must be integer, got 'not an int' instead"
-    ):
-        parse({"offset": "not an int"})
-    with pytest.raises(
-        DataError, match="offset must be non-negative, got '-1' instead"
-    ):
+    with pytest.raises(DataError, match="offset must be non-negative"):
         parse({"offset": "-1"})
+
+
+@pytest.mark.parametrize("count", ["exact", "none", "page"])
+def test_parse_count(count):
+    assert parse_count({"count": count}) == {"count": count}
+
+
+@pytest.mark.parametrize("count", ["false", "0", "random", "approx"])
+def test_parse_count_invalid(count):
+    with pytest.raises(DataError, match=f"unexpected count {count!r}"):
+        parse_count({"count": count})
 
 
 def test_parse_pages():

@@ -13,6 +13,9 @@ from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.dictionary.domain.word import WordId
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
+from ebl.fragmentarium.application.fragment_query_summary_schema import (
+    FragmentQueryResultSchema,
+)
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import LATEST_TRANSLITERATION_LINE_LIMIT
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository import (
@@ -56,7 +59,10 @@ from ebl.transliteration.domain.transliteration_query import TransliterationQuer
 from ebl.transliteration.domain.word_tokens import Word
 from ebl.transliteration.application.signs_visitor import SignsVisitor
 from ebl.common.query.query_schemas import QueryResultSchema
-from ebl.tests.fragmentarium.test_fragments_search_route import query_item_of
+from ebl.tests.fragmentarium.test_fragments_search_route import (
+    query_item_of,
+    query_summary_of,
+)
 from ebl.transliteration.application.sign_repository import SignRepository
 
 
@@ -740,18 +746,16 @@ def test_query_fragmentarium_transliteration_pagination_preserves_match_count_to
         }
     )
 
-    assert first_page == QueryResultSchema().load(
+    assert first_page == FragmentQueryResultSchema().load(
         {
-            "items": [query_item_of(fragment, [3]) for fragment in fragments[:2]],
+            "items": [query_summary_of(fragment, [3]) for fragment in fragments[:2]],
             "matchCountTotal": 3,
-            "totalCount": 3,
         }
     )
-    assert second_page == QueryResultSchema().load(
+    assert second_page == FragmentQueryResultSchema().load(
         {
-            "items": [query_item_of(fragments[2], [3])],
+            "items": [query_summary_of(fragments[2], [3])],
             "matchCountTotal": 3,
-            "totalCount": 3,
         }
     )
 
@@ -1170,7 +1174,6 @@ def test_query_genres(fragment_repository, query, expected):
             for i in expected
         ],
         0,
-        len(expected),
     )
 
     assert fragment_repository.query({"genre": query}) == expected_result
@@ -1200,10 +1203,11 @@ def test_query_genres_with_pagination(fragment_repository, query, expected):
 
     result = fragment_repository.query({"genre": list(genre.category), **query})
 
-    assert result == QueryResult(
-        [QueryItem(fragments[index].number, (), 0) for index in expected],
-        0,
-        5,
+    assert result == FragmentQueryResultSchema().load(
+        {
+            "items": [query_summary_of(fragments[index]) for index in expected],
+            "matchCountTotal": 0,
+        }
     )
 
 

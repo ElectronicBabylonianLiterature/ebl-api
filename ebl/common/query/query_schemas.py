@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, post_load, validate
+from marshmallow import Schema, fields, post_dump, post_load, validate
 from ebl.common.query.query_result import (
     CorpusQueryItem,
     CorpusQueryResult,
@@ -58,9 +58,27 @@ class AfORegisterToFragmentQueryItemSchema(Schema):
 
 
 class QueryResultSchema(Schema):
-    match_count_total = fields.Integer(data_key="matchCountTotal", required=True)
-    total_count = fields.Integer(data_key="totalCount", required=False)
+    def __init__(self, *args, include_count_metadata=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._include_count_metadata = include_count_metadata
+
+    match_count_total = fields.Integer(
+        data_key="matchCountTotal", required=True, allow_none=True
+    )
+    is_match_count_total_exact = fields.Boolean(
+        data_key="isMatchCountTotalExact", load_default=True, dump_default=True
+    )
+    has_next_page = fields.Boolean(
+        data_key="hasNextPage", load_default=None, dump_default=None, allow_none=True
+    )
     items = fields.Nested(QueryItemSchema, many=True, required=True)
+
+    @post_dump
+    def filter_count_metadata(self, data, **kwargs):
+        if not self._include_count_metadata:
+            data.pop("isMatchCountTotalExact", None)
+            data.pop("hasNextPage", None)
+        return data
 
     @post_load
     def make_query_result(self, data, **kwargs) -> QueryResult:

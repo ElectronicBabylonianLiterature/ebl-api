@@ -5,6 +5,8 @@ from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
 
+COUNT_MODES = ("exact", "none", "page")
+
 
 def parse_integer_field(field: str) -> Callable[[Dict], Dict]:
     def parse_integer(parameters: Dict) -> Dict:
@@ -27,12 +29,10 @@ def parse_non_negative_integer_field(field: str) -> Callable[[Dict], Dict]:
     parse_integer = parse_integer_field(field)
 
     def parse_non_negative_integer(parameters: Dict) -> Dict:
-        parsed_parameters = parse_integer(parameters)
-        if field in parsed_parameters and parsed_parameters[field] < 0:
-            raise DataError(
-                f"{field} must be non-negative, got {parameters[field]!r} instead"
-            )
-        return parsed_parameters
+        parameters = parse_integer(parameters)
+        if parameters.get(field, 0) < 0:
+            raise DataError(f"{field} must be non-negative")
+        return parameters
 
     return parse_non_negative_integer
 
@@ -106,3 +106,13 @@ def parse_genre(parameters: Dict) -> Dict:
     genre = parameters.get("genre", "").split(":")
 
     return {**parameters, "genre": genre} if any(genre) else parameters
+
+
+def parse_count(parameters: Dict) -> Dict:
+    if "count" not in parameters:
+        return parameters
+
+    count = parameters["count"]
+    if count not in COUNT_MODES:
+        raise DataError(f"unexpected count {count!r}")
+    return parameters
