@@ -109,7 +109,7 @@ class FragmentQueryMatchingLinePreviewSchema(Schema):
         unknown = EXCLUDE
 
     lines = fields.Nested(FragmentQueryPreviewLineSchema, many=True, required=True)
-    parser_version = fields.String(required=True)
+    parser_version = fields.String(required=True, data_key="parserVersion")
 
 
 class FragmentQuerySummarySchema(Schema):

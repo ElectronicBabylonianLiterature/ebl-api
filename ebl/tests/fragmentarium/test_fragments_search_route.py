@@ -182,7 +182,7 @@ def test_query_fragmentarium_number_summary_only(client, fragmentarium):
         [query_summary_of(fragment, has_photo=True)], 0
     )
     assert result.json["items"][0]["matchingLinePreview"]["lines"] == []
-    assert result.json["items"][0]["matchingLinePreview"]["parser_version"] is not None
+    assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
     assert "text" not in result.json["items"][0]
     assert "record" not in result.json["items"][0]
     assert "atf" not in result.json["items"][0]
@@ -263,6 +263,8 @@ def test_query_fragmentarium_transliteration(
         3,
     )
     assert "matchingLinePreview" not in result.json["items"][0]
+    assert "hasPhoto" not in result.json["items"][0]
+    assert "thumbnailPath" not in result.json["items"][0]
     assert "text" not in result.json["items"][0]
     assert "record" not in result.json["items"][0]
     assert "atf" not in result.json["items"][0]
@@ -434,7 +436,7 @@ def test_query_fragmentarium_transliteration_limit_with_offset(
         ],
         4,
     )
-    assert result.json["items"][0]["matchingLinePreview"]["parser_version"] is not None
+    assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
 
 
 def test_query_fragmentarium_transliteration_offset_without_limit_returns_lean_items(
@@ -566,7 +568,7 @@ def test_query_fragmentarium_kur2_transliteration_returns_summary(
     assert result.json == query_result_of(
         [query_summary_of(fragment, matching_lines=[0])], 1
     )
-    assert result.json["items"][0]["matchingLinePreview"]["parser_version"] is not None
+    assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
     assert "description" in result.json["items"][0]
     assert "script" in result.json["items"][0]
     assert "hasPhoto" in result.json["items"][0]

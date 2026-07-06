@@ -281,7 +281,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
                 for line_index in matching_lines
                 if 0 <= line_index < len(lines)
             ],
-            "parser_version": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
+            "parserVersion": text.get("parser_version") or DEFAULT_ATF_PARSER_VERSION,
         }
 
     def _hydrate_fragment_query_item(

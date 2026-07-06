@@ -916,7 +916,7 @@ def test_query_fragmentarium_number_limit_summary_parser_version_fallback(
     result = fragment_repository.query({"number": str(fragment.number), "limit": 1})
     dumped = FragmentQueryResultSchema().dump(result)
 
-    assert dumped["items"][0]["matchingLinePreview"]["parser_version"] is not None
+    assert dumped["items"][0]["matchingLinePreview"]["parserVersion"] is not None
 
 
 def test_query_fragmentarium_number_limit_summary_uses_bulk_photo_lookup(

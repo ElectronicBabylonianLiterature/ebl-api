@@ -105,7 +105,9 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         ],
         "dossiers": DossierReferenceSchema().dump(summary.dossiers, many=True),
         "matchingLines": [0, 2],
-        "matchingLinePreview": summary.matching_line_preview,
+        "matchingLinePreview": FragmentQueryMatchingLinePreviewSchema().dump(
+            summary.matching_line_preview
+        ),
         "matchCount": 2,
         "hasPhoto": True,
         "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
@@ -116,6 +118,8 @@ def test_fragment_query_summary_schema_dump_exact_shape():
     )
     assert dumped["matchingLinePreview"]["lines"][0]["text"]
     assert dumped["matchingLinePreview"]["lines"][0]["tokens"][0]["value"]
+    assert dumped["matchingLinePreview"]["parserVersion"]
+    assert "parser_version" not in dumped["matchingLinePreview"]
     assert "parts" not in dumped["matchingLinePreview"]["lines"][0]["tokens"][0]
     assert "text" not in dumped
     assert "record" not in dumped
@@ -153,7 +157,12 @@ def test_matching_line_preview_skips_out_of_range_lines():
     empty_preview = matching_line_preview_of(fragment.text, (line_count,))
 
     assert len(preview["lines"]) == 1
-    assert FragmentQueryMatchingLinePreviewSchema().load(empty_preview)["lines"] == []
+    assert (
+        FragmentQueryMatchingLinePreviewSchema().load(
+            FragmentQueryMatchingLinePreviewSchema().dump(empty_preview)
+        )["lines"]
+        == []
+    )
 
 
 def test_fragment_query_result_schema_roundtrip_and_compatibility():
