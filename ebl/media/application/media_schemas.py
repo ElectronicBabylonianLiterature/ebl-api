@@ -3,7 +3,12 @@ from typing import Mapping, Optional, Sequence
 import attr
 from marshmallow import Schema, fields, post_dump
 
-from ebl.media.domain import Media, MediaAssociation, MediaRepresentation, MediaType
+from ebl.media.domain import (
+    Media,
+    MediaRepresentation,
+    MediaType,
+    ThumbnailSize,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.schemas import NameEnumField
 
@@ -166,7 +171,7 @@ def _small_thumbnail_for(
                 _url_for_thumbnail(fragment_id, media, size), representation
             )
             for size, representation in media.representations.thumbnails
-            if size.value == "small"
+            if size is ThumbnailSize.SMALL
         ),
         None,
     )

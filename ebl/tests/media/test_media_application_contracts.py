@@ -1,6 +1,8 @@
+from typing import Sequence
+
 import attr
 
-from ebl.media.application import MediaRepository
+from ebl.media.application import MediaRepository, MediaService
 from ebl.media.domain import (
     Media,
     MediaAssociation,
@@ -64,6 +66,20 @@ class InMemoryMediaRepository(MediaRepository):
     def replace(self, media):
         self._media[media.id] = media
         return media.id
+
+
+class InMemoryMediaService(MediaService):
+    def __init__(self, repository: MediaRepository):
+        self._repository = repository
+
+    def list_fragment_media(self, fragment_id):
+        return self._repository.find_by_fragment(fragment_id)
+
+    def find_media_by_fragments(self, fragment_ids: Sequence[MuseumNumber]):
+        return self._repository.find_by_fragments(fragment_ids)
+
+    def get_fragment_media(self, fragment_id, media_id):
+        return self._repository.find_in_fragment(media_id, fragment_id)
 
 
 def representation() -> MediaRepresentation:
@@ -149,3 +165,22 @@ def test_repository_contract_replaces_metadata_without_changing_identity() -> No
 
     assert repository.replace(replacement) == PHOTO_ID
     assert repository.find_by_id(PHOTO_ID) == replacement
+
+
+def test_service_contract_batch_reads_fragment_media_without_building_summaries() -> None:
+    photo = media(
+        PHOTO_ID,
+        MediaType.PHOTO,
+        (
+            MediaAssociation("K.1", 0, True),
+            MediaAssociation("Sm.2", 0, True),
+        ),
+    )
+    service = InMemoryMediaService(InMemoryMediaRepository((photo,)))
+
+    assert service.find_media_by_fragments(
+        (MuseumNumber.of("K.1"), MuseumNumber.of("Sm.2"))
+    ) == {
+        MuseumNumber.of("K.1"): (photo,),
+        MuseumNumber.of("Sm.2"): (photo,),
+    }
