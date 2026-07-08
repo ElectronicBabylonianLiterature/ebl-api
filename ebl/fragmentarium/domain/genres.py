@@ -435,6 +435,7 @@ genres = (
     ("CANONICAL", "Technical", "Astronomy", "Goal Year Texts"),
     ("CANONICAL", "Technical", "Astronomy", "Goal Year Procedure Texts"),
     ("CANONICAL", "Technical", "Astronomy", "GU-Text"),
+    ("CANONICAL", "Technical", "Astronomy", "Lunar Six Tablets"),
     ("CANONICAL", "Technical", "Astronomy", "MUL.APIN"),
     ("CANONICAL", "Technical", "Astronomy", "Time keeping texts"),
     ("CANONICAL", "Technical", "Astronomy", "Mathematical Astronomy"),
