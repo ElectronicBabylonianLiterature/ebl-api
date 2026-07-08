@@ -168,7 +168,8 @@ Application contracts may define these responsibilities:
 - `MediaRepository`: persistence-agnostic metadata reads and future writes.
 - `MediaRepresentationStore`: future binary representation retrieval and storage
   boundaries without GridFS types in the domain.
-- `MediaService`: fragment-context orchestration and summary building.
+- `MediaService`: fragment-context orchestration and batch media reads for
+  future summary construction.
 - `MediaImporter`: future administrative importer coordination.
 - `MediaBackfill`: future non-destructive legacy backfill reporting.
 
@@ -280,11 +281,15 @@ Future fragment query integration must use this strategy:
 ```text
 fragment query
 -> collect all museum numbers on the page
--> one indexed media query using $in
+-> one indexed media query using MediaService.find_media_by_fragments and $in
 -> narrow projection
 -> group in application code
 -> attach media summaries
 ```
+
+The batch media result remains raw domain media. Future fragment-query
+integration constructs summaries from that batch result in application code
+rather than coupling repository or service access to web DTOs.
 
 Future implementations must not introduce:
 

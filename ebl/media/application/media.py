@@ -135,7 +135,7 @@ class MediaService(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def summarize_fragments(
+    def find_media_by_fragments(
         self, fragment_ids: Sequence[MuseumNumber]
     ) -> Mapping[MuseumNumber, Sequence[Media]]:
         raise NotImplementedError

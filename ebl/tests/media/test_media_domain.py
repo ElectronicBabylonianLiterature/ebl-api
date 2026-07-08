@@ -97,6 +97,11 @@ def test_duplicate_associations_are_invalid() -> None:
         )
 
 
+def test_empty_associations_are_invalid() -> None:
+    with pytest.raises(ValueError, match="at least one item"):
+        media(associations=())
+
+
 def test_negative_sort_order_is_invalid() -> None:
     with pytest.raises(ValueError, match="sort_order"):
         MediaAssociation("K.1", -1)
@@ -150,6 +155,17 @@ def test_missing_original_checksum_is_invalid() -> None:
         MediaRepresentations(MediaRepresentation("image/jpeg", 4000, 3000, 5242880))
 
 
+def test_duplicate_thumbnail_sizes_are_invalid() -> None:
+    with pytest.raises(ValueError, match="duplicate thumbnail sizes"):
+        MediaRepresentations(
+            original(),
+            (
+                (ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 240, 180, 15360)),
+                (ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 480, 360, 61440)),
+            ),
+        )
+
+
 def test_optional_legacy_metadata_can_be_empty() -> None:
     result = media()
 
@@ -167,6 +183,15 @@ def test_import_source_metadata_can_be_recorded_without_defining_identity() -> N
 
     assert result.id == MediaId(MEDIA_ID)
     assert result.import_source == import_source
+
+
+def test_is_associated_with_returns_false_for_unrelated_fragment() -> None:
+    assert media().is_associated_with("Sm.2") is False
+
+
+def test_association_for_raises_for_unrelated_fragment() -> None:
+    with pytest.raises(ValueError, match="not associated with fragment"):
+        media().association_for("Sm.2")
 
 
 def test_associations_are_ordered_deterministically() -> None:
