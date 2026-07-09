@@ -1,7 +1,9 @@
+from ebl.common.domain.period import Period
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import query_summary_of
 from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
@@ -18,7 +20,10 @@ def test_query_fragmentarium_transliteration_limit_summary_preserves_order(
         sign_repository.create(sign)
 
     fragments = [
-        TransliteratedFragmentFactory.build(number=MuseumNumber.of(f"X.{index}"))
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
         for index in range(4)
     ]
     for index, fragment in enumerate(fragments):
@@ -52,7 +57,10 @@ def test_query_fragmentarium_transliteration_limit_count_none(
         sign_repository.create(sign)
 
     fragments = [
-        TransliteratedFragmentFactory.build(number=MuseumNumber.of(f"X.{index}"))
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
         for index in range(3)
     ]
     fragment_repository.create_many(fragments)
@@ -80,7 +88,10 @@ def test_query_fragmentarium_transliteration_limit_count_page(
         sign_repository.create(sign)
 
     fragments = [
-        TransliteratedFragmentFactory.build(number=MuseumNumber.of(f"X.{index}"))
+        TransliteratedFragmentFactory.build(
+            number=MuseumNumber.of(f"X.{index}"),
+            script=Script(Period.LATE_BABYLONIAN),
+        )
         for index in range(3)
     ]
     for index, fragment in enumerate(fragments):
