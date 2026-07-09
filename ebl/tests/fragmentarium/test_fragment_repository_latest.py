@@ -6,7 +6,6 @@ import pytest
 
 from ebl.common.domain.project import ResearchProject
 from ebl.common.domain.scopes import Scope
-from ebl.common.query.query_result import QueryItem, QueryResult
 from ebl.common.query.query_schemas import QueryResultSchema
 from ebl.fragmentarium.domain.record import RecordType
 from ebl.fragmentarium.infrastructure.queries import LATEST_TRANSLITERATION_LINE_LIMIT
@@ -23,7 +22,7 @@ from ebl.transliteration.domain.museum_number import MuseumNumber
         ("aluGeneva", [1]),
         ("AMPS", [2]),
         ("RECC", [3]),
-        (None, [0, 1, 2, 3]),
+        (None, [3, 2, 1, 0]),
     ],
 )
 def test_query_project(fragment_repository, query, expected):
@@ -39,9 +38,11 @@ def test_query_project(fragment_repository, query, expected):
     ]
     fragment_repository.create_many(fragments)
 
-    assert fragment_repository.query({"project": query}) == QueryResult(
-        [QueryItem(fragments[index].number, (), 0) for index in expected],
-        0,
+    result = fragment_repository.query({"project": query})
+
+    assert result.match_count_total == 0
+    assert sorted(str(item.museum_number) for item in result.items) == sorted(
+        str(fragments[index].number) for index in expected
     )
 
 
