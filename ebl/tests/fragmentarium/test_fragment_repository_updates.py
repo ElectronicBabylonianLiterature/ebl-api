@@ -3,7 +3,13 @@ import pytest
 from ebl.common.domain.period import Period
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, Introduction, Notes, Script
+from ebl.fragmentarium.domain.fragment import (
+    Fragment,
+    Genre,
+    Introduction,
+    Notes,
+    Script,
+)
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.tests.factories.fragment import (
     DateFactory,
@@ -31,7 +37,9 @@ def test_update_transliteration_with_record(fragment_repository, user):
 
     fragment_repository.update_field("transliteration", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_update_transliteration_not_found(fragment_repository):
@@ -49,7 +57,9 @@ def test_update_genres(fragment_repository):
     )
     fragment_repository.update_field("genres", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_scopes(fragment_repository):
@@ -58,7 +68,9 @@ def test_update_scopes(fragment_repository):
     updated_fragment = fragment.set_scopes([Scope.READ_CAIC_FRAGMENTS])
     fragment_repository.update_field("authorized_scopes", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_date(fragment_repository):
@@ -67,7 +79,9 @@ def test_update_date(fragment_repository):
     updated_fragment = fragment.set_date(DateFactory.build())
     fragment_repository.update_field("date", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_dates_in_text(fragment_repository):
@@ -76,7 +90,9 @@ def test_update_dates_in_text(fragment_repository):
     updated_fragment = fragment.set_dates_in_text([DateFactory.build()])
     fragment_repository.update_field("dates_in_text", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_lemmatization(fragment_repository):
@@ -84,7 +100,9 @@ def test_update_lemmatization(fragment_repository):
     fragment_repository.create(transliterated_fragment)
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
     tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
-    updated_fragment = transliterated_fragment.update_lemmatization(Lemmatization(tokens))
+    updated_fragment = transliterated_fragment.update_lemmatization(
+        Lemmatization(tokens)
+    )
 
     fragment_repository.update_field("lemmatization", updated_fragment)
 
@@ -100,7 +118,9 @@ def test_update_introduction(fragment_repository: FragmentRepository):
     updated_fragment = fragment.set_introduction("Introduction")
     fragment_repository.update_field("introduction", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_notes(fragment_repository: FragmentRepository):
@@ -109,7 +129,9 @@ def test_update_notes(fragment_repository: FragmentRepository):
     updated_fragment = fragment.set_notes("Notes")
     fragment_repository.update_field("notes", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_script(fragment_repository: FragmentRepository):
@@ -118,7 +140,9 @@ def test_update_script(fragment_repository: FragmentRepository):
     updated_fragment = fragment.set_script(Script(Period.MIDDLE_ELAMITE))
     fragment_repository.update_field("script", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_update_lemmatization_not_found(fragment_repository):

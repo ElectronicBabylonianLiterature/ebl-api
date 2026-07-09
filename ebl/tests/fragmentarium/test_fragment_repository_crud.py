@@ -1,4 +1,3 @@
-from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import QueryItem, QueryResult
 import pytest
 
@@ -12,7 +11,6 @@ from ebl.tests.factories.fragment import (
     FragmentFactory,
     JoinFactory,
     LemmatizedFragmentFactory,
-    TransliteratedFragmentFactory,
 )
 from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
     COLLECTION,

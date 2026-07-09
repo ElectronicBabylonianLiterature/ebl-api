@@ -3,7 +3,7 @@ from typing import Tuple
 import attr
 import pytest
 
-from ebl.common.domain.period import Period, PeriodModifier
+from ebl.common.domain.period import Period
 from ebl.common.domain.scopes import Scope
 from ebl.common.query.query_result import LemmaQueryType, QueryItem, QueryResult
 from ebl.dictionary.domain.word import WordId
@@ -63,7 +63,9 @@ def test_update_references(fragment_repository):
 
     fragment_repository.update_field("references", updated_fragment)
 
-    assert fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
 
 
 def test_update_update_references(fragment_repository):
@@ -135,12 +137,16 @@ def test_query_lemmas(
                 TextLine.of_iterable(
                     LineNumber(2, True),
                     (
-                        Word.of([Reading.of_name("uk")], unique_lemma=(WordId("uk I"),)),
+                        Word.of(
+                            [Reading.of_name("uk")], unique_lemma=(WordId("uk I"),)
+                        ),
                         Word.of(
                             [Reading.of_name("kur")],
                             unique_lemma=(WordId("kur II"),),
                         ),
-                        Word.of([Reading.of_name("ap")], unique_lemma=(WordId("ap III"),)),
+                        Word.of(
+                            [Reading.of_name("ap")], unique_lemma=(WordId("ap III"),)
+                        ),
                     ),
                 )
             ],
@@ -182,7 +188,10 @@ def test_query_by_sort_key(
     for index, number in enumerate(museum_numbers):
         fragment_repository.create(FragmentFactory.build(number=number), sort_key=index)
 
-    assert fragment_repository.query_by_sort_key(sort_key) == museum_numbers[expected_number]
+    assert (
+        fragment_repository.query_by_sort_key(sort_key)
+        == museum_numbers[expected_number]
+    )
 
 
 def test_query_by_sort_key_no_index(fragment_repository):

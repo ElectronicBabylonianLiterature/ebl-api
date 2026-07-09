@@ -1,14 +1,9 @@
-import pytest
-
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
-from ebl.tests.fragmentarium.fragment_query_test_helpers import (
-    query_item_of,
-    query_summary_of,
-)
+from ebl.tests.fragmentarium.fragment_query_test_helpers import query_summary_of
 from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
     COLLECTION,
     create_transliteration_query_lines,
@@ -31,7 +26,9 @@ def test_query_fragmentarium_transliteration_limit_summary_preserves_order(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_transliteration_query_lines("KU", sign_repository),
+            "transliteration": create_transliteration_query_lines(
+                "KU", sign_repository
+            ),
             "limit": 2,
             "offset": 1,
         }
@@ -62,7 +59,9 @@ def test_query_fragmentarium_transliteration_limit_count_none(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_transliteration_query_lines("KU", sign_repository),
+            "transliteration": create_transliteration_query_lines(
+                "KU", sign_repository
+            ),
             "limit": 2,
             "count": "none",
         }
@@ -89,14 +88,18 @@ def test_query_fragmentarium_transliteration_limit_count_page(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_transliteration_query_lines("KU", sign_repository),
+            "transliteration": create_transliteration_query_lines(
+                "KU", sign_repository
+            ),
             "limit": 2,
             "count": "page",
         }
     )
     last_page_result = fragment_repository.query(
         {
-            "transliteration": create_transliteration_query_lines("KU", sign_repository),
+            "transliteration": create_transliteration_query_lines(
+                "KU", sign_repository
+            ),
             "limit": 2,
             "offset": 2,
             "count": "page",
@@ -123,7 +126,9 @@ def test_query_fragmentarium_limit_summary_hydrates_only_phase_one_ids(
     for sign in signs:
         sign_repository.create(sign)
 
-    visible_fragment = TransliteratedFragmentFactory.build(number=MuseumNumber.of("X.1"))
+    visible_fragment = TransliteratedFragmentFactory.build(
+        number=MuseumNumber.of("X.1")
+    )
     hidden_fragment = TransliteratedFragmentFactory.build(
         number=MuseumNumber.of("X.2"),
         authorized_scopes=[Scope.READ_ITALIANNINEVEH_FRAGMENTS],
@@ -142,7 +147,9 @@ def test_query_fragmentarium_limit_summary_hydrates_only_phase_one_ids(
 
     result = fragment_repository.query(
         {
-            "transliteration": create_transliteration_query_lines("KU", sign_repository),
+            "transliteration": create_transliteration_query_lines(
+                "KU", sign_repository
+            ),
             "limit": 10,
         },
         user_scopes=(),

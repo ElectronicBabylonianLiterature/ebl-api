@@ -29,7 +29,9 @@ def test_search_with_scopes(client, guest_client, fragmentarium):
     )
     fragmentarium.create(fragment)
 
-    result = client.simulate_get("/fragments/query", params={"number": str(fragment.number)})
+    result = client.simulate_get(
+        "/fragments/query", params={"number": str(fragment.number)}
+    )
     guest_result = guest_client.simulate_get(
         "/fragments/query", params={"number": str(fragment.number)}
     )
@@ -117,7 +119,11 @@ def test_search_project(client, fragmentarium, project):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_item_of(fragment) for fragment in fragments if project in fragment.projects],
+        [
+            query_item_of(fragment)
+            for fragment in fragments
+            if project in fragment.projects
+        ],
         0,
     )
 
@@ -138,7 +144,11 @@ def test_search_museum(client, fragmentarium, museum):
 
     assert result.status == falcon.HTTP_OK
     assert result.json == query_result_of(
-        [query_item_of(fragment) for fragment in fragments if fragment.museum == museum],
+        [
+            query_item_of(fragment)
+            for fragment in fragments
+            if fragment.museum == museum
+        ],
         0,
     )
 
@@ -188,7 +198,9 @@ def test_search_site(client, fragmentarium, site, attribute):
 def test_search_parent_site_returns_no_results(
     client, fragmentarium, parent_site, attribute
 ):
-    fragmentarium.create(FragmentFactory.build(archaeology__site=get_provenance_record("UR")))
+    fragmentarium.create(
+        FragmentFactory.build(archaeology__site=get_provenance_record("UR"))
+    )
 
     result = client.simulate_get(
         "/fragments/query",

@@ -3,7 +3,7 @@ import pytest
 
 from ebl.common.domain.period import Period
 from ebl.fragmentarium.domain.fragment import Script
-from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_query_test_helpers import (
     query_item_of,
     query_result_of,

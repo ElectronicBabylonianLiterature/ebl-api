@@ -1,5 +1,3 @@
-from datetime import date, timedelta
-
 import falcon
 import pytest
 
@@ -45,7 +43,9 @@ def test_query_fragmentarium_number_summary_only(client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_summary_of(fragment, has_photo=True)], 0)
+    assert result.json == query_result_of(
+        [query_summary_of(fragment, has_photo=True)], 0
+    )
     assert result.json["items"][0]["matchingLinePreview"]["lines"] == []
     assert result.json["items"][0]["matchingLinePreview"]["parserVersion"] is not None
     assert "text" not in result.json["items"][0]
@@ -88,7 +88,10 @@ def test_query_fragmentarium_references(client, fragmentarium, bibliography, use
 
     result = client.simulate_get(
         "/fragments/query",
-        params={"bibId": fragment.references[0].id, "pages": fragment.references[0].pages},
+        params={
+            "bibId": fragment.references[0].id,
+            "pages": fragment.references[0].pages,
+        },
     )
 
     assert result.status == falcon.HTTP_OK

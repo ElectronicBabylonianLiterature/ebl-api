@@ -34,9 +34,7 @@ def test_query_project(fragment_repository, query, expected):
         ResearchProject.RECC,
     ]
     fragments = [
-        FragmentFactory.build(
-            number=MuseumNumber.of(f"X.{index}"), projects=[project]
-        )
+        FragmentFactory.build(number=MuseumNumber.of(f"X.{index}"), projects=[project])
         for index, project in enumerate(projects)
     ]
     fragment_repository.create_many(fragments)
@@ -113,4 +111,6 @@ def test_fetch_fragment_signs(fragment_repository):
     ]
     sort_by_id = partial(sorted, key=lambda fragment: fragment["_id"])
 
-    assert sort_by_id(fragment_repository.fetch_fragment_signs()) == sort_by_id(expected)
+    assert sort_by_id(fragment_repository.fetch_fragment_signs()) == sort_by_id(
+        expected
+    )

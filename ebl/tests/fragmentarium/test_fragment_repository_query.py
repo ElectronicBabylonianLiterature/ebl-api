@@ -12,18 +12,15 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
 )
 from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
-from ebl.tests.fragmentarium.fragment_query_test_helpers import (
-    query_item_of,
-    query_summary_of,
-)
+from ebl.tests.fragmentarium.fragment_query_test_helpers import query_item_of
 from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
     COLLECTION,
     SCHEMA,
     create_transliteration_query_lines,
 )
-from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.fragment import Script
 from ebl.common.domain.period import Period
+from ebl.fragmentarium.domain.fragment import Script
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_query_fragmentarium_number(database, fragment_repository):
@@ -32,7 +29,9 @@ def test_query_fragmentarium_number(database, fragment_repository):
         [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
 
-    assert fragment_repository.query({"number": str(fragment.number)}) == QueryResultSchema().load(
+    assert fragment_repository.query(
+        {"number": str(fragment.number)}
+    ) == QueryResultSchema().load(
         {
             "items": [query_item_of(fragment)],
             "matchCountTotal": 0,
@@ -62,7 +61,9 @@ def test_query_fragmentarium_reference_id(database, fragment_repository):
     fragment = FragmentFactory.build(references=(ReferenceFactory.build(),))
     database[COLLECTION].insert_one(SCHEMA.dump(fragment))
 
-    assert fragment_repository.query({"bibId": fragment.references[0].id}) == QueryResultSchema().load(
+    assert fragment_repository.query(
+        {"bibId": fragment.references[0].id}
+    ) == QueryResultSchema().load(
         {
             "items": [query_item_of(fragment)],
             "matchCountTotal": 0,
@@ -218,7 +219,11 @@ def test_query_fragmentarium_limit_summary_hydration_uses_safe_defaults(
                     },
                     {
                         "K.1": {
-                            "museumNumber": {"prefix": "K", "number": "1", "suffix": ""},
+                            "museumNumber": {
+                                "prefix": "K",
+                                "number": "1",
+                                "suffix": "",
+                            },
                             "text": {"lines": [{"prefix": "1.", "content": []}]},
                         }
                     },

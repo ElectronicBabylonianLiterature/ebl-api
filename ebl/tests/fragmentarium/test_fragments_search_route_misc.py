@@ -1,8 +1,8 @@
-from ebl.common.domain.period import Period
 import attr
 import falcon
 import pytest
 
+from ebl.common.domain.period import Period
 from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.fragment import Genre, Script
 from ebl.tests.factories.bibliography import BibliographyEntryFactory, ReferenceFactory
@@ -20,13 +20,35 @@ from ebl.tests.fragmentarium.fragment_query_test_helpers import (
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
+@pytest.fixture
+def fragment_with_bibliography(fragmentarium, bibliography, user):
+    bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
+    bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
+    bibliography.create(bib_entry_1, user)
+    bibliography.create(bib_entry_2, user)
+    fragment = LemmatizedFragmentFactory.build(
+        references=(
+            ReferenceFactory.build(id="RN.0", pages="254"),
+            ReferenceFactory.build(id="RN.1"),
+        )
+    )
+    fragmentarium.create(fragment)
+
+    return fragment
+
+
+@pytest.fixture
+def registered_sign_repository(sign_repository, signs):
+    for sign in signs:
+        sign_repository.create(sign)
+
+    return sign_repository
+
+
 def test_query_fragmentarium_transliteration_without_limit_returns_all_lean_items(
     client, fragmentarium, sign_repository, signs
 ):
-    fragments = [
-        TransliteratedFragmentFactory.build()
-        for _ in range(101)
-    ]
+    fragments = [TransliteratedFragmentFactory.build() for _ in range(101)]
     for fragment in fragments:
         fragmentarium.create(fragment)
     for sign in signs:
@@ -57,21 +79,9 @@ def test_query_fragmentarium_lemmas_not_found(client, fragmentarium):
 
 
 def test_query_fragmentarium_combined_query(
-    client, fragmentarium, sign_repository, signs, bibliography, user
+    client, fragment_with_bibliography, registered_sign_repository
 ):
-    bib_entry_1 = BibliographyEntryFactory.build(id="RN.0", pages="254")
-    bib_entry_2 = BibliographyEntryFactory.build(id="RN.1")
-    bibliography.create(bib_entry_1, user)
-    bibliography.create(bib_entry_2, user)
-    fragment = LemmatizedFragmentFactory.build(
-        references=(
-            ReferenceFactory.build(id="RN.0", pages="254"),
-            ReferenceFactory.build(id="RN.1"),
-        )
-    )
-    fragmentarium.create(fragment)
-    for sign in signs:
-        sign_repository.create(sign)
+    fragment = fragment_with_bibliography
 
     result = client.simulate_get(
         "/fragments/query",
@@ -104,7 +114,9 @@ def test_query_fragmentarium_ignores_pagination_index(client, fragmentarium):
     )
 
     assert result.status == falcon.HTTP_OK
-    assert result.json == query_result_of([query_item_of(fragment) for fragment in fragments], 0)
+    assert result.json == query_result_of(
+        [query_item_of(fragment) for fragment in fragments], 0
+    )
 
 
 def test_query_signs_invalid(client, fragmentarium, sign_repository, signs):
