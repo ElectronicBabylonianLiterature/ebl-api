@@ -16,7 +16,6 @@ from ebl.media.domain import (
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-
 PHOTO_ID = "550e8400-e29b-41d4-a716-446655440000"
 COPY_ID = "550e8400-e29b-41d4-a716-446655440001"
 
@@ -27,6 +26,10 @@ def original(mime_type="image/jpeg") -> MediaRepresentation:
     )
 
 
+def display(mime_type="image/jpeg") -> MediaRepresentation:
+    return MediaRepresentation(mime_type, 2560, 1920, 1179648)
+
+
 def thumbnail(mime_type="image/jpeg") -> MediaRepresentation:
     return MediaRepresentation(mime_type, 240, 180, 15360)
 
@@ -34,21 +37,31 @@ def thumbnail(mime_type="image/jpeg") -> MediaRepresentation:
 def media(
     media_id=PHOTO_ID,
     media_type=MediaType.PHOTO,
-    associations=(MediaAssociation("K.1", 0, True),),
-    references=(MediaReference("bibliography-id"),),
+    associations=None,
+    references=None,
     caption="Obverse",
     attribution="The British Museum",
+    media_representations=None,
 ) -> Media:
     return Media(
         id=media_id,
         type=media_type,
         original_filename="BM-12345-obverse.jpg",
-        representations=MediaRepresentations(
+        representations=media_representations
+        or MediaRepresentations(
             original(),
             ((ThumbnailSize.SMALL, thumbnail()),),
         ),
-        associations=associations,
-        references=references,
+        associations=(
+            associations
+            if associations is not None
+            else (MediaAssociation("K.1", 0, True),)
+        ),
+        references=(
+            references
+            if references is not None
+            else (MediaReference("bibliography-id"),)
+        ),
         caption=caption,
         attribution=attribution,
     )
@@ -92,6 +105,28 @@ def test_fragment_media_response_serializes_fragment_context() -> None:
     }
 
 
+def test_fragment_media_response_serializes_display_representation() -> None:
+    fragment_id = MuseumNumber.of("K.1")
+    item = media(
+        media_representations=MediaRepresentations(
+            original(),
+            ((ThumbnailSize.SMALL, thumbnail()),),
+            display=display("image/webp"),
+        )
+    )
+
+    [result] = FragmentMediaResponseDtoSchema().dump(
+        FragmentMediaResponseDto.of(fragment_id, (item,))
+    )["media"]
+
+    assert result["representations"]["display"] == {
+        "url": f"/fragments/K.1/media/{PHOTO_ID}/display",
+        "mimeType": "image/webp",
+        "width": 2560,
+        "height": 1920,
+    }
+
+
 def test_fragment_media_response_omits_optional_empty_fields() -> None:
     fragment_id = MuseumNumber.of("K.1")
     item = media(references=(), caption=None, attribution=None)
@@ -103,6 +138,7 @@ def test_fragment_media_response_omits_optional_empty_fields() -> None:
     assert "caption" not in result
     assert "attribution" not in result
     assert "references" not in result
+    assert "display" not in result["representations"]
 
 
 def test_fragment_media_response_excludes_internal_fields() -> None:
@@ -117,6 +153,26 @@ def test_fragment_media_response_excludes_internal_fields() -> None:
     assert "fileSize" not in result["representations"]["original"]
     assert "importSource" not in result
     assert "projects" not in result
+
+
+def test_fragment_media_response_supports_svg_original_with_raster_display() -> None:
+    fragment_id = MuseumNumber.of("K.1")
+    item = media(
+        media_id=COPY_ID,
+        media_type=MediaType.COPY,
+        media_representations=MediaRepresentations(
+            original("image/svg+xml"),
+            ((ThumbnailSize.SMALL, thumbnail()),),
+            display=display(),
+        ),
+    )
+
+    [result] = FragmentMediaResponseDtoSchema().dump(
+        FragmentMediaResponseDto.of(fragment_id, (item,))
+    )["media"]
+
+    assert result["representations"]["original"]["mimeType"] == "image/svg+xml"
+    assert result["representations"]["display"]["mimeType"] == "image/jpeg"
 
 
 def test_media_summary_serializes_primary_photo_and_legacy_fields() -> None:

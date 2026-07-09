@@ -1,3 +1,4 @@
+import attr
 import pytest
 
 from ebl.common.domain.project import ResearchProject
@@ -14,7 +15,6 @@ from ebl.media.domain import (
     ThumbnailSize,
 )
 
-
 MEDIA_ID = "550e8400-e29b-41d4-a716-446655440000"
 SHA256_VALUE = "a" * 64
 
@@ -27,20 +27,32 @@ def original(mime_type: str = "image/jpeg") -> MediaRepresentation:
     return MediaRepresentation(mime_type, 4000, 3000, 5242880, checksum())
 
 
+def display(mime_type: str = "image/jpeg") -> MediaRepresentation:
+    return MediaRepresentation(mime_type, 2560, 1920, 1179648)
+
+
 def thumbnails():
-    return (
-        (ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 240, 180, 15360)),
+    return ((ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 240, 180, 15360)),)
+
+
+def representations(
+    mime_type: str = "image/jpeg", display_mime_type: str | None = None
+) -> MediaRepresentations:
+    return MediaRepresentations(
+        original(mime_type),
+        thumbnails(),
+        display=(
+            display(mime_type=display_mime_type or "image/jpeg")
+            if display_mime_type is not None
+            else None
+        ),
     )
-
-
-def representations(mime_type: str = "image/jpeg") -> MediaRepresentations:
-    return MediaRepresentations(original(mime_type), thumbnails())
 
 
 def media(
     media_type: MediaType = MediaType.PHOTO,
-    media_representations: MediaRepresentations = representations(),
-    associations=(MediaAssociation("K.1", 0, True),),
+    media_representations: MediaRepresentations | None = None,
+    associations=None,
     projects=(),
     references=(),
     import_source=None,
@@ -49,8 +61,12 @@ def media(
         id=MEDIA_ID,
         type=media_type,
         original_filename="BM-12345-obverse.jpg",
-        representations=media_representations,
-        associations=associations,
+        representations=media_representations or representations(),
+        associations=(
+            associations
+            if associations is not None
+            else (MediaAssociation("K.1", 0, True),)
+        ),
         projects=projects,
         references=references,
         caption=None,
@@ -60,7 +76,9 @@ def media(
 
 
 def test_valid_photo() -> None:
-    result = media(projects=(ResearchProject.CAIC,), references=(MediaReference("bib-id"),))
+    result = media(
+        projects=(ResearchProject.CAIC,), references=(MediaReference("bib-id"),)
+    )
 
     assert result.id == MediaId(MEDIA_ID)
     assert result.type is MediaType.PHOTO
@@ -74,17 +92,36 @@ def test_valid_raster_copy() -> None:
 
     assert result.type is MediaType.COPY
     assert result.representations.original.mime_type == "image/jpeg"
+    assert result.representations.display is None
+
+
+def test_valid_photo_with_display_representation() -> None:
+    result = media(
+        media_representations=representations(display_mime_type="image/jpeg")
+    )
+
+    assert result.representations.display == display()
+
+
+def test_valid_photo_with_display_and_thumbnails() -> None:
+    result = media(
+        media_representations=representations(display_mime_type="image/webp")
+    )
+
+    assert result.representations.display == display("image/webp")
+    assert result.representations.thumbnails == thumbnails()
 
 
 def test_valid_svg_copy_metadata() -> None:
-    result = media(MediaType.COPY, representations("image/svg+xml"))
+    result = media(MediaType.COPY, representations("image/svg+xml", "image/jpeg"))
 
     assert result.representations.original.mime_type == "image/svg+xml"
+    assert result.representations.display == display()
 
 
 def test_svg_photo_is_invalid() -> None:
     with pytest.raises(ValueError, match="SVG originals"):
-        media(MediaType.PHOTO, representations("image/svg+xml"))
+        media(MediaType.PHOTO, representations("image/svg+xml", "image/jpeg"))
 
 
 def test_duplicate_associations_are_invalid() -> None:
@@ -160,8 +197,14 @@ def test_duplicate_thumbnail_sizes_are_invalid() -> None:
         MediaRepresentations(
             original(),
             (
-                (ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 240, 180, 15360)),
-                (ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 480, 360, 61440)),
+                (
+                    ThumbnailSize.SMALL,
+                    MediaRepresentation("image/jpeg", 240, 180, 15360),
+                ),
+                (
+                    ThumbnailSize.SMALL,
+                    MediaRepresentation("image/jpeg", 480, 360, 61440),
+                ),
             ),
         )
 
@@ -174,6 +217,11 @@ def test_optional_legacy_metadata_can_be_empty() -> None:
     assert result.caption is None
     assert result.attribution is None
     assert result.import_source is None
+
+
+def test_media_representations_are_immutable() -> None:
+    with pytest.raises(attr.exceptions.FrozenInstanceError):
+        representations(display_mime_type="image/jpeg").display = display("image/webp")
 
 
 def test_import_source_metadata_can_be_recorded_without_defining_identity() -> None:

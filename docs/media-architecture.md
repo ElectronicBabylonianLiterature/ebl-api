@@ -24,7 +24,7 @@ implementation so later PRs can be reviewed against stable contracts.
 - Support `PHOTO` and `COPY` media types.
 - Treat SVG hand-copies as `COPY` media whose original MIME type is
   `image/svg+xml`.
-- Support raster originals and thumbnails.
+- Support original, optional display, and thumbnail representations.
 - Support multiple media items per fragment.
 - Support one media item associated with multiple fragments.
 - Keep ordering and primary selection on each fragment association.
@@ -65,8 +65,8 @@ The pure domain layer owns only persistence-independent concepts:
 - `MediaChecksum`: SHA-256 checksum metadata.
 - `MediaRepresentation`: MIME type, width, height, file size, and optional
   checksum.
-- `MediaRepresentations`: required original representation plus optional
-  thumbnails.
+- `MediaRepresentations`: required original representation, optional display
+  representation, and optional thumbnails.
 - `ThumbnailSize`: `small`, `medium`, and `large`.
 - `Media`: aggregate containing identity, type, filename metadata, optional
   projects, associations, references, caption, attribution, and import source.
@@ -83,8 +83,8 @@ application context, or environment configuration.
 A later PR will introduce a dedicated MongoDB media collection containing
 canonical media metadata. GridFS remains the binary store. The collection will be
 the source of truth for identity, fragment associations, media type, original
-and derived representations, projects, references, captions, attribution, and
-import provenance.
+display, and thumbnail representations, projects, references, captions,
+attribution, and import provenance.
 
 Proposed document shape, for documentation only:
 
@@ -119,6 +119,13 @@ Proposed document shape, for documentation only:
       "width": 4000,
       "height": 3000,
       "fileSize": 5242880
+    },
+    "display": {
+      "gridFsFileId": "...",
+      "mimeType": "image/jpeg",
+      "width": 2560,
+      "height": 1920,
+      "fileSize": 1179648
     },
     "thumbnails": {
       "small": {
@@ -182,6 +189,7 @@ Future fragment-scoped routes:
 ```text
 GET /fragments/{number}/media
 GET /fragments/{number}/media/{mediaId}/file
+GET /fragments/{number}/media/{mediaId}/display
 GET /fragments/{number}/media/{mediaId}/thumbnail/{size}
 ```
 
@@ -253,6 +261,12 @@ Rules:
           "mimeType": "image/jpeg",
           "width": 4000,
           "height": 3000
+        },
+        "display": {
+          "url": "/fragments/K.1/media/550e8400-e29b-41d4-a716-446655440000/display",
+          "mimeType": "image/jpeg",
+          "width": 2560,
+          "height": 1920
         },
         "thumbnails": {
           "small": {
@@ -328,12 +342,18 @@ Future SVG behavior is mandatory:
 - `foreignObject` is removed or rejected.
 - Dangerous processing instructions and entity declarations are rejected.
 - A safe XML parser is required.
+- Raster display previews are generated when conversion succeeds.
 - Raster preview thumbnails are generated.
 - The initial frontend displays raster previews.
 - Original SVG is download-only.
 - The frontend never injects raw SVG markup.
 - MIME type is determined server-side.
 - Filename extension alone is never trusted.
+
+For inline viewing, future clients should prefer `display` when present. If a
+display representation is absent and the original is a browser-compatible
+raster, the original may still be used inline. SVG originals remain
+download-only and require raster display or thumbnail previews for inline use.
 
 The sanitizer and its dependencies are not introduced in this architecture PR.
 

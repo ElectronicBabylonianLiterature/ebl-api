@@ -2,7 +2,11 @@ from typing import Sequence
 
 import attr
 
-from ebl.media.application import MediaRepository, MediaService
+from ebl.media.application import (
+    MediaRepository,
+    MediaRepresentationStore,
+    MediaService,
+)
 from ebl.media.domain import (
     Media,
     MediaAssociation,
@@ -13,7 +17,6 @@ from ebl.media.domain import (
     MediaType,
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
-
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 COPY_ID = MediaId("550e8400-e29b-41d4-a716-446655440001")
@@ -80,6 +83,29 @@ class InMemoryMediaService(MediaService):
 
     def get_fragment_media(self, fragment_id, media_id):
         return self._repository.find_in_fragment(media_id, fragment_id)
+
+
+class InMemoryRepresentationStore(MediaRepresentationStore):
+    def read_original(self, media):
+        raise NotImplementedError
+
+    def read_display(self, media):
+        raise NotImplementedError
+
+    def read_thumbnail(self, media, thumbnail_size):
+        raise NotImplementedError
+
+    def write_original(self, request):
+        raise NotImplementedError
+
+    def write_display(self, request):
+        raise NotImplementedError
+
+    def write_thumbnail(self, request):
+        raise NotImplementedError
+
+    def delete_representations(self, media_id):
+        raise NotImplementedError
 
 
 def representation() -> MediaRepresentation:
@@ -167,7 +193,9 @@ def test_repository_contract_replaces_metadata_without_changing_identity() -> No
     assert repository.find_by_id(PHOTO_ID) == replacement
 
 
-def test_service_contract_batch_reads_fragment_media_without_building_summaries() -> None:
+def test_service_contract_batch_reads_fragment_media_without_building_summaries() -> (
+    None
+):
     photo = media(
         PHOTO_ID,
         MediaType.PHOTO,
@@ -184,3 +212,13 @@ def test_service_contract_batch_reads_fragment_media_without_building_summaries(
         MuseumNumber.of("K.1"): (photo,),
         MuseumNumber.of("Sm.2"): (photo,),
     }
+
+
+def test_representation_store_contract_includes_display_without_repository_expansion() -> (
+    None
+):
+    store = InMemoryRepresentationStore()
+
+    assert hasattr(store, "read_display")
+    assert hasattr(store, "write_display")
+    assert not hasattr(MediaRepository, "find_display")

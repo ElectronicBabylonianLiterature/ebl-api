@@ -17,6 +17,10 @@ def _url_for_original(fragment_id: MuseumNumber, media: Media) -> str:
     return f"/fragments/{fragment_id}/media/{media.id}/file"
 
 
+def _url_for_display(fragment_id: MuseumNumber, media: Media) -> str:
+    return f"/fragments/{fragment_id}/media/{media.id}/display"
+
+
 def _url_for_thumbnail(fragment_id: MuseumNumber, media: Media, size) -> str:
     return f"/fragments/{fragment_id}/media/{media.id}/thumbnail/{size.value}"
 
@@ -46,7 +50,8 @@ class MediaReferenceDto:
 @attr.s(auto_attribs=True, frozen=True)
 class MediaRepresentationsDto:
     original: MediaRepresentationDto
-    thumbnails: Mapping[str, MediaRepresentationDto]
+    display: Optional[MediaRepresentationDto] = None
+    thumbnails: Mapping[str, MediaRepresentationDto] = attr.ib(factory=dict)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -77,6 +82,14 @@ class FragmentMediaItemDto:
                 original=MediaRepresentationDto.of(
                     _url_for_original(fragment_id, media),
                     media.representations.original,
+                ),
+                display=(
+                    MediaRepresentationDto.of(
+                        _url_for_display(fragment_id, media),
+                        media.representations.display,
+                    )
+                    if media.representations.display is not None
+                    else None
                 ),
                 thumbnails={
                     size.value: MediaRepresentationDto.of(
@@ -198,8 +211,9 @@ class MediaReferenceDtoSchema(Schema):
     id = fields.String(required=True)
 
 
-class MediaRepresentationsDtoSchema(Schema):
+class MediaRepresentationsDtoSchema(OmitEmptyMixin, Schema):
     original = fields.Nested(MediaRepresentationDtoSchema, required=True)
+    display = fields.Nested(MediaRepresentationDtoSchema)
     thumbnails = fields.Dict(
         keys=fields.String(),
         values=fields.Nested(MediaRepresentationDtoSchema),
