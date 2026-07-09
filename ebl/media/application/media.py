@@ -111,6 +111,10 @@ class MediaRepresentationStore(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def read_display(self, media: Media) -> RepresentationHandle:
+        raise NotImplementedError
+
+    @abstractmethod
     def read_thumbnail(
         self, media: Media, thumbnail_size: ThumbnailSize
     ) -> RepresentationHandle:
@@ -118,6 +122,10 @@ class MediaRepresentationStore(ABC):
 
     @abstractmethod
     def write_original(self, request: RepresentationWriteRequest) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def write_display(self, request: RepresentationWriteRequest) -> None:
         raise NotImplementedError
 
     @abstractmethod

@@ -8,7 +8,6 @@ import attr
 from ebl.common.domain.project import ResearchProject
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
-
 SHA256 = "sha256"
 SVG_MIME_TYPE = "image/svg+xml"
 
@@ -136,6 +135,7 @@ class MediaRepresentations:
     thumbnails: Sequence[tuple[ThumbnailSize, MediaRepresentation]] = attr.ib(
         factory=tuple, converter=_tuple_of
     )
+    display: Optional[MediaRepresentation] = attr.ib(default=None, kw_only=True)
 
     def __attrs_post_init__(self) -> None:
         if self.original is None:

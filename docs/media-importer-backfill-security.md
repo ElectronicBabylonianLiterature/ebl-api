@@ -29,6 +29,7 @@ Expected modes:
 - Resolve fragment aliases to canonical museum numbers before creating
   associations.
 - Upload the original representation.
+- Generate and upload a display-sized raster representation where appropriate.
 - Generate and upload raster thumbnails.
 - Insert the media document last.
 - Preserve stable media identity during replacement.
@@ -45,6 +46,7 @@ Expected modes:
 validate
 -> calculate checksum
 -> upload original
+-> generate and upload display where appropriate
 -> generate and upload thumbnails
 -> insert media document last
 ```
@@ -53,6 +55,13 @@ The media document is inserted last so a document never points at missing binary
 representations during normal failures. If a normal failure happens after one or
 more files were written, the future implementation must delete the files created
 for that failed attempt.
+
+Display generation is optional when no appropriate display representation can be
+created. Raster photographs should normally receive a display representation.
+Raster copies should normally receive a display representation. SVG copies
+should receive a raster display preview when conversion succeeds, and an SVG
+original must never itself become the display representation. The original must
+remain available even when display generation fails.
 
 A hard crash can still leave orphaned representation files. That case is handled
 by a future orphan audit, not by introducing `PENDING`, `READY`, or `FAILED`
@@ -86,6 +95,7 @@ modifying existing fragments or legacy files.
 - Parse current filename conventions.
 - Resolve aliases to canonical museum numbers.
 - Pair originals and thumbnails.
+- Generate display representations from originals where appropriate.
 - Use original GridFS source identity for idempotency.
 - Support dry-run.
 - Support bounded batches.
@@ -112,6 +122,13 @@ The source identity lets the backfill distinguish already migrated files from
 new candidates. A future import-source identity index may become unique for
 migrated legacy source records, but no index is added until the query exists.
 
+For legacy photos, the existing GridFS image becomes the original
+representation. A display representation may be generated from that original
+without replacing it. Thumbnails remain distinct derived representations.
+Rerunning the backfill must not create duplicate display representations. A
+later rerun may repair a missing display representation without replacing an
+existing original.
+
 ### Required reports
 
 The backfill must report:
@@ -120,6 +137,7 @@ The backfill must report:
 - unknown fragments;
 - orphaned originals;
 - orphaned thumbnails;
+- records missing display representations;
 - missing thumbnails;
 - multiple originals per fragment;
 - duplicate checksums;
@@ -159,6 +177,7 @@ Future binary routes remain fragment-scoped:
 
 ```text
 GET /fragments/{number}/media/{mediaId}/file
+GET /fragments/{number}/media/{mediaId}/display
 GET /fragments/{number}/media/{mediaId}/thumbnail/{size}
 ```
 
@@ -206,6 +225,7 @@ SVG is not a third media type.
 - `foreignObject` is removed or rejected.
 - Dangerous processing instructions and entity declarations are rejected.
 - A safe XML parser is required.
+- Raster display previews are generated when conversion succeeds.
 - Raster preview thumbnails are generated.
 - The initial frontend displays raster previews.
 - Original SVG is download-only.
