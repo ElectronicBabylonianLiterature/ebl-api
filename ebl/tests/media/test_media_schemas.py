@@ -1,3 +1,5 @@
+import attr
+
 from ebl.media.application.media_schemas import (
     FragmentMediaResponseDto,
     FragmentMediaResponseDtoSchema,
@@ -20,6 +22,13 @@ PHOTO_ID = "550e8400-e29b-41d4-a716-446655440000"
 COPY_ID = "550e8400-e29b-41d4-a716-446655440001"
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class MediaMetadata:
+    references: tuple[MediaReference, ...] = (MediaReference("bibliography-id"),)
+    caption: str | None = "Obverse"
+    attribution: str | None = "The British Museum"
+
+
 def original(mime_type="image/jpeg") -> MediaRepresentation:
     return MediaRepresentation(
         mime_type, 4000, 3000, 5242880, MediaChecksum(value="a" * 64)
@@ -38,14 +47,16 @@ def medium_thumbnail(mime_type="image/jpeg") -> MediaRepresentation:
     return MediaRepresentation(mime_type, 480, 360, 61440)
 
 
+def large_thumbnail(mime_type="image/jpeg") -> MediaRepresentation:
+    return MediaRepresentation(mime_type, 960, 720, 245760)
+
+
 def media(
     media_id=PHOTO_ID,
     media_type=MediaType.PHOTO,
     associations=None,
-    references=None,
-    caption="Obverse",
-    attribution="The British Museum",
     media_representations=None,
+    metadata: MediaMetadata = MediaMetadata(),
 ) -> Media:
     return Media(
         id=media_id,
@@ -61,13 +72,9 @@ def media(
             if associations is not None
             else (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
         ),
-        references=(
-            references
-            if references is not None
-            else (MediaReference("bibliography-id"),)
-        ),
-        caption=caption,
-        attribution=attribution,
+        references=metadata.references,
+        caption=metadata.caption,
+        attribution=metadata.attribution,
     )
 
 
@@ -133,7 +140,7 @@ def test_fragment_media_response_serializes_display_representation() -> None:
 
 def test_fragment_media_response_omits_optional_empty_fields() -> None:
     fragment_id = MuseumNumber.of("K.1")
-    item = media(references=(), caption=None, attribution=None)
+    item = media(metadata=MediaMetadata(references=(), caption=None, attribution=None))
 
     [result] = FragmentMediaResponseDtoSchema().dump(
         FragmentMediaResponseDto.of(fragment_id, (item,))
@@ -157,6 +164,47 @@ def test_fragment_media_response_excludes_internal_fields() -> None:
     assert "fileSize" not in result["representations"]["original"]
     assert "importSource" not in result
     assert "projects" not in result
+
+
+def test_fragment_media_response_serializes_multiple_thumbnail_sizes() -> None:
+    fragment_id = MuseumNumber.of("K.1")
+    item = media(
+        media_representations=MediaRepresentations(
+            original(),
+            (
+                (ThumbnailSize.SMALL, thumbnail()),
+                (ThumbnailSize.MEDIUM, medium_thumbnail()),
+                (ThumbnailSize.LARGE, large_thumbnail()),
+            ),
+        ),
+        metadata=MediaMetadata(references=(), caption=None, attribution=None),
+    )
+
+    [result] = FragmentMediaResponseDtoSchema().dump(
+        FragmentMediaResponseDto.of(fragment_id, (item,))
+    )["media"]
+
+    thumbnails = result["representations"]["thumbnails"]
+
+    assert set(thumbnails) == {"small", "medium", "large"}
+    assert thumbnails["small"] == {
+        "url": f"/fragments/K.1/media/{PHOTO_ID}/thumbnail/small",
+        "mimeType": "image/jpeg",
+        "width": 240,
+        "height": 180,
+    }
+    assert thumbnails["medium"] == {
+        "url": f"/fragments/K.1/media/{PHOTO_ID}/thumbnail/medium",
+        "mimeType": "image/jpeg",
+        "width": 480,
+        "height": 360,
+    }
+    assert thumbnails["large"] == {
+        "url": f"/fragments/K.1/media/{PHOTO_ID}/thumbnail/large",
+        "mimeType": "image/jpeg",
+        "width": 960,
+        "height": 720,
+    }
 
 
 def test_fragment_media_response_supports_svg_original_with_raster_display() -> None:

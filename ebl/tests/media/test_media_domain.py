@@ -21,6 +21,13 @@ MEDIA_ID = "550e8400-e29b-41d4-a716-446655440000"
 SHA256_VALUE = "a" * 64
 
 
+@attr.s(auto_attribs=True, frozen=True)
+class MediaMetadata:
+    projects: tuple[ResearchProject, ...] = ()
+    references: tuple[MediaReference, ...] = ()
+    import_source: MediaImportSource | None = None
+
+
 def checksum() -> MediaChecksum:
     return MediaChecksum(value=SHA256_VALUE)
 
@@ -55,9 +62,7 @@ def media(
     media_type: MediaType = MediaType.PHOTO,
     media_representations: MediaRepresentations | None = None,
     associations=None,
-    projects=(),
-    references=(),
-    import_source=None,
+    metadata: MediaMetadata = MediaMetadata(),
 ) -> Media:
     return Media(
         id=MediaId(MEDIA_ID),
@@ -69,17 +74,20 @@ def media(
             if associations is not None
             else (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
         ),
-        projects=projects,
-        references=references,
+        projects=metadata.projects,
+        references=metadata.references,
         caption=None,
         attribution=None,
-        import_source=import_source,
+        import_source=metadata.import_source,
     )
 
 
 def test_valid_photo() -> None:
     result = media(
-        projects=(ResearchProject.CAIC,), references=(MediaReference("bib-id"),)
+        metadata=MediaMetadata(
+            projects=(ResearchProject.CAIC,),
+            references=(MediaReference("bib-id"),),
+        )
     )
 
     assert result.id == MediaId(MEDIA_ID)
@@ -229,7 +237,7 @@ def test_media_representations_are_immutable() -> None:
 def test_import_source_metadata_can_be_recorded_without_defining_identity() -> None:
     import_source = MediaImportSource("legacy-gridfs", "photos", "legacy-gridfs-id")
 
-    result = media(import_source=import_source)
+    result = media(metadata=MediaMetadata(import_source=import_source))
 
     assert result.id == MediaId(MEDIA_ID)
     assert result.import_source == import_source
