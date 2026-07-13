@@ -1,6 +1,6 @@
 from enum import Enum
 from itertools import groupby
-from typing import Dict, Any, List, Optional, Sequence, Tuple
+from typing import List, Optional, Sequence, Tuple
 import attr
 import pydash
 from ebl.fragmentarium.domain.museum import Museum
@@ -11,23 +11,31 @@ from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.matches.create_line_to_vec import create_line_to_vec
 from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.fragmentarium.domain.folios import Folios
-from ebl.fragmentarium.domain.genres import genres
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.fragmentarium.domain.named_entity import EntityAnnotationSpan, NamedEntity
+from ebl.fragmentarium.domain.named_entity import AnnotationEntity, AnnotationSpan
+from ebl.fragmentarium.domain.fragment_metadata import (
+    Acquisition,
+    DossierReference,
+    Genre,
+    Introduction,
+    Measure,
+    NotLowestJoinError,
+    Notes,
+    Script,
+    UncuratedReference,
+    parse_markup_with_paragraphs,
+    to_entity_tuple,
+)
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.lemmatization.domain.lemmatization import Lemmatization
-from ebl.transliteration.domain.markup import MarkupPart
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 from ebl.transliteration.domain.word_tokens import AbstractWord
 from ebl.users.domain.user import User
-from marshmallow import ValidationError
-from ebl.transliteration.domain.atf_parsers.lark_parser import PARSE_ERRORS
-from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
 from ebl.fragmentarium.domain.date import Date
 from ebl.fragmentarium.domain.colophon import Colophon
 from ebl.fragmentarium.domain.fragment_external_numbers import (
@@ -35,92 +43,22 @@ from ebl.fragmentarium.domain.fragment_external_numbers import (
     ExternalNumbers,
 )
 
-
-def parse_markup_with_paragraphs(text: str) -> Sequence[MarkupPart]:
-    try:
-        return parse_markup_paragraphs(text) if text else ()
-    except PARSE_ERRORS as error:
-        raise ValidationError(f"Invalid markup: {text}. {error}") from error
-
-
-class NotLowestJoinError(ValueError):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class UncuratedReference:
-    document: str
-    pages: Sequence[int] = ()
-    search_term: Optional[str] = None
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Measure:
-    value: Optional[float] = None
-    note: Optional[str] = None
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Acquisition:
-    description: str = ""
-    supplier: str = ""
-    date: int = 0
-
-    @staticmethod
-    def of(source: Dict[str, Any]) -> "Acquisition":
-        return Acquisition(
-            description=source.get("description", ""),
-            supplier=source.get("supplier", ""),
-            date=source.get("date", 0),
-        )
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Genre:
-    category: Sequence[str] = attr.ib()
-    uncertain: bool = False
-
-    @category.validator
-    def _check_is_genres_valid(self, _, category: Sequence[str]) -> None:
-        category = tuple(category)
-        if category not in genres:
-            raise ValueError(f"'{category}' is not a valid genre")
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class MarkupText:
-    text: str = ""
-    parts: Sequence[MarkupPart] = ()
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Introduction(MarkupText):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Notes(MarkupText):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class Script:
-    period: Period = attr.ib(default=Period.NONE)
-    period_modifier: PeriodModifier = attr.ib(default=PeriodModifier.NONE)
-    uncertain: bool = False
-
-    def __str__(self) -> str:
-        return self.abbreviation
-
-    @property
-    def abbreviation(self) -> str:
-        return self.period.value[1]
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class DossierReference:
-    dossierId: str
-    isUncertain: bool = False
+__all__ = [
+    "Acquisition",
+    "DossierReference",
+    "Fragment",
+    "Genre",
+    "Introduction",
+    "Measure",
+    "NotLowestJoinError",
+    "Notes",
+    "Period",
+    "PeriodModifier",
+    "Script",
+    "UncuratedReference",
+    "parse_markup_with_paragraphs",
+    "to_entity_tuple",
+]
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -159,7 +97,9 @@ class Fragment(FragmentExternalNumbers):
     colophon: Optional[Colophon] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
     dossiers: Sequence[str] = []
-    named_entities: Sequence[NamedEntity] = attr.ib(default=(), converter=tuple)
+    named_entities: Sequence[AnnotationEntity] = attr.ib(
+        default=(), converter=to_entity_tuple
+    )
 
     @property
     def is_lowest_join(self) -> bool:
@@ -255,7 +195,7 @@ class Fragment(FragmentExternalNumbers):
         ]
         return Text(lines=tuple(pydash.flatten(match)))
 
-    def set_named_entities(self, annotations: List[EntityAnnotationSpan]) -> "Fragment":
+    def set_named_entities(self, annotations: List[AnnotationSpan]) -> "Fragment":
         return attr.evolve(
             self,
             named_entities=tuple(entity.to_named_entity() for entity in annotations),

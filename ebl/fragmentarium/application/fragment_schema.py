@@ -1,5 +1,5 @@
 import pydash
-from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
+from ebl.fragmentarium.application.named_entity_schema import AnnotationEntitySchema
 from ebl.schemas import NameEnumField
 from marshmallow import Schema, fields, post_dump, post_load
 from ebl.fragmentarium.domain.museum import Museum
@@ -107,7 +107,7 @@ class FragmentSchema(Schema):
         DossierReferenceSchema, many=True, dump_default=[], load_default=[]
     )
     named_entities = fields.Nested(
-        NamedEntitySchema,
+        AnnotationEntitySchema,
         many=True,
         dump_default=(),
         load_default=(),
