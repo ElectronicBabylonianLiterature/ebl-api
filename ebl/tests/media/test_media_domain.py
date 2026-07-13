@@ -28,6 +28,9 @@ class MediaMetadata:
     import_source: MediaImportSource | None = None
 
 
+DEFAULT_MEDIA_METADATA = MediaMetadata()
+
+
 def checksum() -> MediaChecksum:
     return MediaChecksum(value=SHA256_VALUE)
 
@@ -62,7 +65,7 @@ def media(
     media_type: MediaType = MediaType.PHOTO,
     media_representations: MediaRepresentations | None = None,
     associations=None,
-    metadata: MediaMetadata = MediaMetadata(),
+    metadata: MediaMetadata = DEFAULT_MEDIA_METADATA,
 ) -> Media:
     return Media(
         id=MediaId(MEDIA_ID),
