@@ -29,6 +29,9 @@ class MediaMetadata:
     attribution: str | None = "The British Museum"
 
 
+DEFAULT_MEDIA_METADATA = MediaMetadata()
+
+
 def original(mime_type="image/jpeg") -> MediaRepresentation:
     return MediaRepresentation(
         mime_type, 4000, 3000, 5242880, MediaChecksum(value="a" * 64)
@@ -56,7 +59,7 @@ def media(
     media_type=MediaType.PHOTO,
     associations=None,
     media_representations=None,
-    metadata: MediaMetadata = MediaMetadata(),
+    metadata: MediaMetadata = DEFAULT_MEDIA_METADATA,
 ) -> Media:
     return Media(
         id=media_id,
