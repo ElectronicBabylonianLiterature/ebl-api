@@ -1,5 +1,6 @@
 import attr
 import pytest
+from typing import cast
 
 from ebl.common.domain.project import ResearchProject
 from ebl.media.domain import (
@@ -14,6 +15,7 @@ from ebl.media.domain import (
     MediaType,
     ThumbnailSize,
 )
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 MEDIA_ID = "550e8400-e29b-41d4-a716-446655440000"
 SHA256_VALUE = "a" * 64
@@ -58,14 +60,14 @@ def media(
     import_source=None,
 ) -> Media:
     return Media(
-        id=MEDIA_ID,
+        id=MediaId(MEDIA_ID),
         type=media_type,
         original_filename="BM-12345-obverse.jpg",
         representations=media_representations or representations(),
         associations=(
             associations
             if associations is not None
-            else (MediaAssociation("K.1", 0, True),)
+            else (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
         ),
         projects=projects,
         references=references,
@@ -128,8 +130,8 @@ def test_duplicate_associations_are_invalid() -> None:
     with pytest.raises(ValueError, match="duplicate fragment associations"):
         media(
             associations=(
-                MediaAssociation("K.1", 0, True),
-                MediaAssociation("K.1", 1, False),
+                MediaAssociation(MuseumNumber.of("K.1"), 0, True),
+                MediaAssociation(MuseumNumber.of("K.1"), 1, False),
             )
         )
 
@@ -141,12 +143,12 @@ def test_empty_associations_are_invalid() -> None:
 
 def test_negative_sort_order_is_invalid() -> None:
     with pytest.raises(ValueError, match="sort_order"):
-        MediaAssociation("K.1", -1)
+        MediaAssociation(MuseumNumber.of("K.1"), -1)
 
 
 def test_invalid_fragment_id_is_invalid() -> None:
     with pytest.raises(ValueError, match="valid museum number"):
-        MediaAssociation("K-1", 0)
+        MediaAssociation(cast(MuseumNumber, "K-1"), 0)
 
 
 def test_invalid_uuid_is_invalid() -> None:
@@ -184,7 +186,7 @@ def test_invalid_representation_dimensions_or_file_size_are_invalid(
 
 def test_missing_original_representation_is_invalid() -> None:
     with pytest.raises(ValueError, match="original representation"):
-        MediaRepresentations(None)
+        MediaRepresentations(cast(MediaRepresentation, None))
 
 
 def test_missing_original_checksum_is_invalid() -> None:
@@ -245,9 +247,9 @@ def test_association_for_raises_for_unrelated_fragment() -> None:
 def test_associations_are_ordered_deterministically() -> None:
     result = media(
         associations=(
-            MediaAssociation("Sm.2", 1, False),
-            MediaAssociation("K.2", 0, False),
-            MediaAssociation("K.1", 0, True),
+            MediaAssociation(MuseumNumber.of("Sm.2"), 1, False),
+            MediaAssociation(MuseumNumber.of("K.2"), 0, False),
+            MediaAssociation(MuseumNumber.of("K.1"), 0, True),
         )
     )
 

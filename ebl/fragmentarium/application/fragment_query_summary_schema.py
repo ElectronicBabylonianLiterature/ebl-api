@@ -17,10 +17,10 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQuerySummary,
     empty_matching_line_preview,
 )
+from ebl.media.application.media_urls import fragment_thumbnail_url
+from ebl.media.domain import ThumbnailSize
 from ebl.schemas import ResearchProjectField, ValueEnumField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
-
-DEFAULT_THUMBNAIL_RESOLUTION = "small"
 
 
 def deserialize_script_period(value):
@@ -150,8 +150,8 @@ class FragmentQuerySummarySchema(Schema):
     match_count = fields.Integer(required=True, data_key="matchCount")
     has_photo = fields.Boolean(required=True, data_key="hasPhoto")
     thumbnail_path = fields.Function(
-        lambda summary: (
-            f"/fragments/{summary.museum_number}/thumbnail/{DEFAULT_THUMBNAIL_RESOLUTION}"
+        lambda summary: fragment_thumbnail_url(
+            summary.museum_number, ThumbnailSize.SMALL
         ),
         dump_only=True,
         data_key="thumbnailPath",

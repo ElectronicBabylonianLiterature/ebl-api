@@ -9,20 +9,14 @@ from ebl.media.domain import (
     MediaType,
     ThumbnailSize,
 )
-from ebl.transliteration.domain.museum_number import MuseumNumber
+from ebl.media.application.media_urls import (
+    fragment_media_display_url,
+    fragment_media_original_url,
+    fragment_media_thumbnail_url,
+    fragment_thumbnail_url,
+)
 from ebl.schemas import NameEnumField
-
-
-def _url_for_original(fragment_id: MuseumNumber, media: Media) -> str:
-    return f"/fragments/{fragment_id}/media/{media.id}/file"
-
-
-def _url_for_display(fragment_id: MuseumNumber, media: Media) -> str:
-    return f"/fragments/{fragment_id}/media/{media.id}/display"
-
-
-def _url_for_thumbnail(fragment_id: MuseumNumber, media: Media, size) -> str:
-    return f"/fragments/{fragment_id}/media/{media.id}/thumbnail/{size.value}"
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -68,6 +62,7 @@ class FragmentMediaItemDto:
     @classmethod
     def of(cls, fragment_id: MuseumNumber, media: Media):
         association = media.association_for(fragment_id)
+        display_representation = media.representations.display
         return cls(
             id=str(media.id),
             type=media.type,
@@ -80,20 +75,20 @@ class FragmentMediaItemDto:
             ),
             representations=MediaRepresentationsDto(
                 original=MediaRepresentationDto.of(
-                    _url_for_original(fragment_id, media),
+                    fragment_media_original_url(fragment_id, media.id),
                     media.representations.original,
                 ),
                 display=(
                     MediaRepresentationDto.of(
-                        _url_for_display(fragment_id, media),
-                        media.representations.display,
+                        fragment_media_display_url(fragment_id, media.id),
+                        display_representation,
                     )
-                    if media.representations.display is not None
+                    if display_representation is not None
                     else None
                 ),
                 thumbnails={
                     size.value: MediaRepresentationDto.of(
-                        _url_for_thumbnail(fragment_id, media, size),
+                        fragment_media_thumbnail_url(fragment_id, media.id, size),
                         representation,
                     )
                     for size, representation in media.representations.thumbnails
@@ -136,9 +131,17 @@ class FragmentMediaSummaryDto:
         ordered_media = tuple(
             sorted(media, key=lambda item: item.association_for(fragment_id).sort_order)
         )
+        has_photo = any(item.type is MediaType.PHOTO for item in ordered_media)
         primary = _primary_media_for(fragment_id, ordered_media)
         primary_thumbnail = (
             _small_thumbnail_for(fragment_id, primary) if primary is not None else None
+        )
+        primary_photo_thumbnail_path = (
+            fragment_thumbnail_url(fragment_id, ThumbnailSize.SMALL)
+            if primary is not None
+            and primary.type is MediaType.PHOTO
+            and primary_thumbnail is not None
+            else None
         )
         return cls(
             media_summary=MediaSummaryDto(
@@ -154,12 +157,8 @@ class FragmentMediaSummaryDto:
                     else None
                 ),
             ),
-            has_photo=any(item.type is MediaType.PHOTO for item in ordered_media),
-            thumbnail_path=(
-                f"/fragments/{fragment_id}/thumbnail/small"
-                if any(item.type is MediaType.PHOTO for item in ordered_media)
-                else None
-            ),
+            has_photo=has_photo,
+            thumbnail_path=primary_photo_thumbnail_path,
         )
 
 
@@ -181,7 +180,8 @@ def _small_thumbnail_for(
     return next(
         (
             MediaRepresentationDto.of(
-                _url_for_thumbnail(fragment_id, media, size), representation
+                fragment_media_thumbnail_url(fragment_id, media.id, size),
+                representation,
             )
             for size, representation in media.representations.thumbnails
             if size is ThumbnailSize.SMALL
@@ -191,12 +191,15 @@ def _small_thumbnail_for(
 
 
 class OmitEmptyMixin:
+    preserve_empty_collections = frozenset()
+
     @post_dump
     def omit_empty(self, data, **kwargs):
         return {
             key: value
             for key, value in data.items()
-            if value is not None and value != [] and value != {}
+            if key in self.preserve_empty_collections
+            or (value is not None and value != [] and value != {})
         }
 
 
@@ -243,6 +246,8 @@ class MediaSummaryPrimaryDtoSchema(OmitEmptyMixin, Schema):
 
 
 class MediaSummaryDtoSchema(OmitEmptyMixin, Schema):
+    preserve_empty_collections = frozenset({"types"})
+
     count = fields.Integer(required=True)
     types = fields.List(NameEnumField(MediaType), required=True)
     primary = fields.Nested(MediaSummaryPrimaryDtoSchema)

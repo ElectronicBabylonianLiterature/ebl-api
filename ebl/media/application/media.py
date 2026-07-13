@@ -23,6 +23,7 @@ class ImportMode(Enum):
 class RepresentationHandle:
     media_id: MediaId
     representation: MediaRepresentation
+    content: BinaryIO
     content_type: str
     length: int
 
