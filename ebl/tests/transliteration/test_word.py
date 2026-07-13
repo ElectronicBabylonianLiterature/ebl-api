@@ -118,6 +118,7 @@ def test_word(language, unique_lemma) -> None:
         "hasVariantAlignment": word.has_variant_alignment,
         "hasOmittedAlignment": word.has_omitted_alignment,
         "namedEntities": NamedEntitySchema().dump(word.named_entities, many=True),
+        "realia": list(word.realia),
     }
 
     assert_token_serialization(word, serialized)

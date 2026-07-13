@@ -2,6 +2,8 @@ from itertools import count, zip_longest
 from collections import defaultdict
 from typing import (
     Callable,
+    DefaultDict,
+    Dict,
     Iterable,
     List,
     Mapping,
@@ -14,7 +16,11 @@ from typing import (
 
 import attr
 
-from ebl.fragmentarium.domain.named_entity import AnnotationSpan
+from ebl.fragmentarium.domain.named_entity import (
+    AnnotationSpan,
+    EntityAnnotationSpan,
+    RealiaAnnotationSpan,
+)
 from ebl.fragmentarium.domain.token_annotation import LineIndex, TextLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
 from ebl.merger import Merger
@@ -34,6 +40,14 @@ from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 __all__ = ["LineLabel", "Text", "TextLine", "TranslationLine", "set_id"]
+
+
+def _map_spans_by_token(spans: Sequence[AnnotationSpan]) -> Dict[str, List[str]]:
+    token_map: DefaultDict[str, List[str]] = defaultdict(list)
+    for span in spans:
+        for token_id in span.span:
+            token_map[token_id].append(span.id)
+    return token_map
 
 
 def set_id(token: Token, count: Iterator[int]) -> Token:
@@ -176,17 +190,19 @@ class Text:
     ) -> "Text":
         return Text(tuple(lines), parser_version)
 
-    def set_named_entities(self, annotations: List[AnnotationSpan]) -> "Text":
-        token_entity_map = defaultdict(list)
-        for annotation in annotations:
-            for token_id in annotation.span:
-                token_entity_map[token_id].append(annotation.id)
+    def set_named_entities(
+        self,
+        entity_spans: Sequence[EntityAnnotationSpan],
+        realia_spans: Sequence[RealiaAnnotationSpan],
+    ) -> "Text":
+        token_entity_map = _map_spans_by_token(entity_spans)
+        token_realia_map = _map_spans_by_token(realia_spans)
 
         return attr.evolve(
             self,
             lines=tuple(
                 (
-                    line.set_named_entities(token_entity_map)
+                    line.set_named_entities(token_entity_map, token_realia_map)
                     if isinstance(line, TextLine)
                     else line
                 )

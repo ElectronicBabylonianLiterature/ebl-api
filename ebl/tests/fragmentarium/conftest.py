@@ -3,7 +3,6 @@ from typing import List
 import pytest
 
 from ebl.fragmentarium.domain.named_entity import (
-    AnnotationSpan,
     EntityAnnotationSpan,
     NamedEntityType,
     RealiaAnnotationSpan,
@@ -39,17 +38,14 @@ def realia_annotation_spans() -> List[RealiaAnnotationSpan]:
 
 
 @pytest.fixture
-def overlapping_annotation_spans() -> List[AnnotationSpan]:
+def overlapping_annotation_spans() -> List[EntityAnnotationSpan]:
     return [
         EntityAnnotationSpan(
             "Entity-1", NamedEntityType.PERSONAL_NAME, ["Word-2", "Word-3"]
-        ),
-        RealiaAnnotationSpan("Realia-1", KNOWN_REALIA_ID, ["Word-2", "Word-3"]),
+        )
     ]
 
 
 @pytest.fixture
-def mixed_annotation_spans(
-    named_entity_spans, realia_annotation_spans
-) -> List[AnnotationSpan]:
-    return [*named_entity_spans, *realia_annotation_spans]
+def overlapping_realia_spans() -> List[RealiaAnnotationSpan]:
+    return [RealiaAnnotationSpan("Realia-1", KNOWN_REALIA_ID, ["Word-2", "Word-3"])]

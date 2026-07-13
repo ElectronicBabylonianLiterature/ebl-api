@@ -14,9 +14,11 @@ from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
 from ebl.fragmentarium.domain.named_entity import (
-    AnnotationEntity,
-    AnnotationSpan,
-    deduplicate_annotation_spans,
+    EntityAnnotationSpan,
+    NamedEntity,
+    RealiaAnnotationSpan,
+    RealiaEntity,
+    deduplicate_spans,
 )
 from ebl.fragmentarium.domain.fragment_metadata import (
     Acquisition,
@@ -29,7 +31,8 @@ from ebl.fragmentarium.domain.fragment_metadata import (
     Script,
     UncuratedReference,
     parse_markup_with_paragraphs,
-    to_entity_tuple,
+    to_named_entity_tuple,
+    to_realia_tuple,
 )
 from ebl.fragmentarium.domain.record import Record
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
@@ -61,7 +64,8 @@ __all__ = [
     "Script",
     "UncuratedReference",
     "parse_markup_with_paragraphs",
-    "to_entity_tuple",
+    "to_named_entity_tuple",
+    "to_realia_tuple",
 ]
 
 
@@ -101,9 +105,10 @@ class Fragment(FragmentExternalNumbers):
     colophon: Optional[Colophon] = None
     external_numbers: ExternalNumbers = ExternalNumbers()
     dossiers: Sequence[str] = []
-    named_entities: Sequence[AnnotationEntity] = attr.ib(
-        default=(), converter=to_entity_tuple
+    named_entities: Sequence[NamedEntity] = attr.ib(
+        default=(), converter=to_named_entity_tuple
     )
+    realia: Sequence[RealiaEntity] = attr.ib(default=(), converter=to_realia_tuple)
 
     @property
     def is_lowest_join(self) -> bool:
@@ -199,14 +204,18 @@ class Fragment(FragmentExternalNumbers):
         ]
         return Text(lines=tuple(pydash.flatten(match)))
 
-    def set_named_entities(self, annotations: List[AnnotationSpan]) -> "Fragment":
-        unique_annotations = deduplicate_annotation_spans(annotations)
+    def set_named_entities(
+        self,
+        entity_spans: Sequence[EntityAnnotationSpan],
+        realia_spans: Sequence[RealiaAnnotationSpan] = (),
+    ) -> "Fragment":
+        unique_entities = deduplicate_spans(entity_spans)
+        unique_realia = deduplicate_spans(realia_spans)
         return attr.evolve(
             self,
-            named_entities=tuple(
-                entity.to_named_entity() for entity in unique_annotations
-            ),
-            text=self.text.set_named_entities(unique_annotations),
+            named_entities=tuple(span.to_named_entity() for span in unique_entities),
+            realia=tuple(span.to_realia_entity() for span in unique_realia),
+            text=self.text.set_named_entities(unique_entities, unique_realia),
         )
 
     @property

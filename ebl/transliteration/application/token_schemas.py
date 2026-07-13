@@ -1,9 +1,9 @@
 from abc import abstractmethod
-from typing import Mapping, Type
+from typing import Mapping, Type, Union
 
 import pydash
 from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load, validate
-from marshmallow_oneofschema import OneOfSchema
+from marshmallow_oneofschema.one_of_schema import OneOfSchema
 
 from ebl.schemas import NameEnumField, ValueEnumField
 from ebl.transliteration.domain import atf
@@ -374,6 +374,12 @@ class BaseWordSchema(BaseTokenSchema):
         dump_default=(),
         load_default=(),
     )
+    realia = fields.List(
+        fields.String(),
+        data_key="realia",
+        dump_default=(),
+        load_default=(),
+    )
 
 
 class WordSchema(BaseWordSchema):
@@ -390,6 +396,7 @@ class WordSchema(BaseWordSchema):
             data["has_omitted_alignment"],
             data.get("id_"),
             tuple(data.get("named_entities", [])),
+            tuple(data.get("realia", [])),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -411,6 +418,7 @@ class LoneDeterminativeSchema(BaseWordSchema):
             data["has_omitted_alignment"],
             data.get("id_"),
             tuple(data.get("named_entities", [])),
+            tuple(data.get("realia", [])),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
     @post_dump
@@ -516,6 +524,7 @@ class AkkadianWordSchema(BaseWordSchema):
             data["has_omitted_alignment"],
             data.get("id_"),
             tuple(data.get("named_entities", [])),
+            tuple(data.get("realia", [])),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
@@ -567,6 +576,7 @@ class GreekWordSchema(BaseWordSchema):
             data["has_omitted_alignment"],
             data.get("id_"),
             tuple(data.get("named_entities", [])),
+            tuple(data.get("realia", [])),
         ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
@@ -580,12 +590,12 @@ WORD_SCHEMAS: Mapping[str, Type[BaseWordSchema]] = {
 
 class OneOfWordSchema(OneOfSchema):
     type_field = "type"
-    type_schemas: Mapping[str, Type[BaseWordSchema]] = WORD_SCHEMAS
+    type_schemas: Mapping[str, Union[Type[Schema], Schema]] = WORD_SCHEMAS
 
 
 class OneOfTokenSchema(OneOfSchema):
     type_field = "type"
-    type_schemas: Mapping[str, Type[BaseTokenSchema]] = {
+    type_schemas: Mapping[str, Union[Type[Schema], Schema]] = {
         **WORD_SCHEMAS,
         "Token": ValueTokenSchema,
         "ValueToken": ValueTokenSchema,

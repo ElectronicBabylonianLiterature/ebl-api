@@ -1,26 +1,31 @@
 from collections import Counter
-from typing import List, Sequence, cast
-from falcon import Request, Response, before
-from marshmallow import ValidationError
+from typing import Dict, List, Sequence, Type, cast
 
+from falcon import Request, Response, before
+from marshmallow import Schema, ValidationError
 
 from ebl.errors import DataError, NotFoundError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.named_entity_schema import (
-    AnnotationEntitySchema,
-    AnnotationSpanSchema,
+    EntityAnnotationSpanSchema,
+    NamedEntitySchema,
+    RealiaAnnotationSpanSchema,
+    RealiaEntitySchema,
 )
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.named_entity import (
     AnnotationSpan,
+    EntityAnnotationSpan,
     RealiaAnnotationSpan,
-    deduplicate_annotation_spans,
+    deduplicate_spans,
 )
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
-from ebl.marshmallowschema import validate
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.users.web.require_scope import require_scope
+
+NAMED_ENTITIES_KEY = "namedEntities"
+REALIA_KEY = "realia"
 
 
 class NamedEntityResource:
@@ -34,26 +39,29 @@ class NamedEntityResource:
         self._updater = updater
         self._realia_repository = realia_repository
 
-    def _create_annotation_spans(self, fragment: Fragment) -> List[dict]:
-        annotation_spans = {
-            entity.id: {**cast(dict, AnnotationEntitySchema().dump(entity)), "span": []}
-            for entity in fragment.named_entities
-        }
+    def _create_spans(
+        self, entities: Sequence, entity_schema: Type[Schema], word_ids: Dict[str, list]
+    ) -> List[dict]:
+        return [
+            {
+                **cast(dict, entity_schema().dump(entity)),
+                "span": word_ids.get(entity.id, []),
+            }
+            for entity in entities
+        ]
+
+    def _word_ids_by_annotation(self, fragment: Fragment) -> Dict[str, list]:
+        word_ids: Dict[str, list] = {}
         for word in fragment.words:
-            for entity_id in word.named_entities:
-                annotation_spans[entity_id]["span"].append(word.id_)
+            for entity_id in [*word.named_entities, *word.realia]:
+                word_ids.setdefault(entity_id, []).append(word.id_)
+        return word_ids
 
-        return list(annotation_spans.values())
-
-    def _parse_annotations(self, data) -> List[AnnotationSpan]:
+    def _load(self, data, schema: Type[Schema], key: str) -> List:
         try:
-            return cast(
-                List[AnnotationSpan], AnnotationSpanSchema().load(data, many=True)
-            )
+            return cast(List, schema().load(data.get(key, []), many=True))
         except ValidationError as error:
-            raise DataError(
-                f"Invalid named entity annotations: {error.messages}"
-            ) from error
+            raise DataError(f"Invalid '{key}': {error.messages}") from error
 
     def _validate_unique_ids(self, annotations: Sequence[AnnotationSpan]) -> None:
         counts = Counter(annotation.id for annotation in annotations)
@@ -64,37 +72,39 @@ class NamedEntityResource:
                 "Each annotation must have a unique id."
             )
 
-    def _validate_realia_ids(self, annotations: Sequence[AnnotationSpan]) -> None:
-        realia_ids = {
-            annotation.realia_id
-            for annotation in annotations
-            if isinstance(annotation, RealiaAnnotationSpan)
-        }
-        for realia_id in sorted(realia_ids):
+    def _validate_realia_ids(self, spans: Sequence[RealiaAnnotationSpan]) -> None:
+        for realia_id in sorted({span.realia_id for span in spans}):
             try:
                 self._realia_repository.find_by_realia_id(realia_id)
             except NotFoundError as error:
                 raise DataError(f"Unknown realiaId '{realia_id}'.") from error
 
-    @validate(None, AnnotationSpanSchema(many=True))
     def on_get(self, req: Request, resp: Response, number: str):
         fragment, _ = self._finder.find(parse_museum_number(number))
-        resp.media = (
-            self._create_annotation_spans(fragment) if fragment.named_entities else []
-        )
+        word_ids = self._word_ids_by_annotation(fragment)
+        resp.media = {
+            NAMED_ENTITIES_KEY: self._create_spans(
+                fragment.named_entities, NamedEntitySchema, word_ids
+            ),
+            REALIA_KEY: self._create_spans(
+                fragment.realia, RealiaEntitySchema, word_ids
+            ),
+        }
 
     @before(require_scope, "transliterate:fragments")
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         user = req.context["user"]
-        annotations = deduplicate_annotation_spans(
-            self._parse_annotations(req.media["annotations"])
+        entity_spans: List[EntityAnnotationSpan] = deduplicate_spans(
+            self._load(req.media, EntityAnnotationSpanSchema, NAMED_ENTITIES_KEY)
         )
-        self._validate_unique_ids(annotations)
-        self._validate_realia_ids(annotations)
+        realia_spans: List[RealiaAnnotationSpan] = deduplicate_spans(
+            self._load(req.media, RealiaAnnotationSpanSchema, REALIA_KEY)
+        )
+
+        self._validate_unique_ids([*entity_spans, *realia_spans])
+        self._validate_realia_ids(realia_spans)
 
         updated_fragment, has_photo = self._updater.update_named_entities(
-            parse_museum_number(number),
-            annotations,
-            user,
+            parse_museum_number(number), entity_spans, realia_spans, user
         )
         resp.media = create_response_dto(updated_fragment, user, has_photo)

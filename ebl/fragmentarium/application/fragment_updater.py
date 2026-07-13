@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Sequence, Tuple, Optional, cast
+from typing import Sequence, Tuple, Optional, cast
 
 from ebl.bibliography.application.bibliography import Bibliography
 from ebl.bibliography.domain.reference import Reference
@@ -9,7 +9,10 @@ from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.fragmentarium.domain.fragment import Fragment, Genre, Script
-from ebl.fragmentarium.domain.named_entity import AnnotationSpan
+from ebl.fragmentarium.domain.named_entity import (
+    EntityAnnotationSpan,
+    RealiaAnnotationSpan,
+)
 from ebl.fragmentarium.domain.token_annotation import TextLemmaAnnotation
 from ebl.transliteration.application.parallel_line_injector import ParallelLineInjector
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -194,10 +197,14 @@ class FragmentUpdater:
         )
 
     def update_named_entities(
-        self, number: MuseumNumber, annotations: List[AnnotationSpan], user: User
+        self,
+        number: MuseumNumber,
+        entity_spans: Sequence[EntityAnnotationSpan],
+        realia_spans: Sequence[RealiaAnnotationSpan],
+        user: User,
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
-        updated_fragment = fragment.set_named_entities(annotations)
+        updated_fragment = fragment.set_named_entities(entity_spans, realia_spans)
 
         self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("named_entities", updated_fragment)

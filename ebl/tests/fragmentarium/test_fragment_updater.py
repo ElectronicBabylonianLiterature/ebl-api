@@ -1,4 +1,7 @@
+from typing import cast
+
 from ebl.common.domain.scopes import Scope
+from ebl.dictionary.domain.word import WordId
 from freezegun import freeze_time
 import pytest
 
@@ -61,8 +64,8 @@ def test_update_edition(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(transliterated_fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(transliterated_fragment))},
     ).thenReturn()
     (
         when(fragment_repository)
@@ -134,8 +137,8 @@ def test_update_genres(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(updated_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field("genres", updated_fragment).thenReturn()
 
@@ -176,8 +179,8 @@ def test_update_date(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(updated_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field("date", updated_fragment).thenReturn()
 
@@ -199,8 +202,8 @@ def test_update_dates_in_text(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(updated_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field(
         "dates_in_text", updated_fragment
@@ -217,7 +220,7 @@ def test_update_lemmatization(
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
-    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, (WordId("aklu I"),))
     lemmatization = Lemmatization(tokens)
     lemmatized_fragment = transliterated_fragment.update_lemmatization(lemmatization)
     (
@@ -231,8 +234,8 @@ def test_update_lemmatization(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(transliterated_fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(lemmatized_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field(
         "lemmatization", lemmatized_fragment
@@ -279,8 +282,8 @@ def test_update_references(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(updated_fragment))},
     ).thenReturn()
 
     result = fragment_updater.update_references(number, references, user)
@@ -312,8 +315,8 @@ def test_update_introduction(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(updated_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field(
         "introduction", updated_fragment
@@ -334,8 +337,8 @@ def test_update_notes(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(updated_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field("notes", updated_fragment).thenReturn()
 
@@ -364,8 +367,8 @@ def test_update_lemma_annotation(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(transliterated_fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(lemmatized_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field(
         "lemmatization", lemmatized_fragment
@@ -401,12 +404,14 @@ def test_update_named_entities(
     when(changelog).create(
         "fragments",
         user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(annotated_fragment)},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(transliterated_fragment))},
+        {"_id": str(number), **cast(dict, SCHEMA.dump(annotated_fragment))},
     ).thenReturn()
     when(fragment_repository).update_field(
         "named_entities", annotated_fragment
     ).thenReturn()
 
-    result = fragment_updater.update_named_entities(number, named_entity_spans, user)
+    result = fragment_updater.update_named_entities(
+        number, named_entity_spans, [], user
+    )
     assert result == (injected_fragment, False)

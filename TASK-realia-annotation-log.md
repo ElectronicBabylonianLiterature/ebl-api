@@ -238,3 +238,48 @@ annotations sharing an id would silently collapse into one and fuse their spans
 The dedupe runs **before** the id check, so an *exact* duplicate that repeats the
 same id is still dropped silently, as specified, and only genuinely conflicting
 ids reach the check.
+
+## Separating the two annotation kinds
+
+The named-entity data structure intermixed the two kinds. `word.named_entities`
+was one flat id list holding tag ids *and* realia ids
+(`["Entity-1", "Entity-2", "Realia-1"]`), and `fragment.named_entities` was one
+heterogeneous list of `NamedEntity | RealiaEntity`. The kind of an id could only
+be discovered by joining back and probing for `type` vs `realiaId`.
+
+That was the original spec's explicit instruction ("write realia ids into the
+*same* `word.named_entities` list; do not add a parallel field on `Word`"). The
+user has overridden it: many tags and many realia are fine, but the two **kinds**
+must never share a list.
+
+The two kinds are now separate everywhere:
+
+| Level | Tags | Realia |
+| --- | --- | --- |
+| Wire (POST + GET) | `namedEntities` | `realia` |
+| `Fragment` | `named_entities` | `realia` |
+| `Word` | `named_entities` | `realia` |
+
+Consequences:
+
+- The polymorphic `OneOfSchema` dispatch is **deleted**. Each list is
+  homogeneous, so no discriminator is needed. Mixing is now rejected by the
+  schema itself: `realiaId` inside `namedEntities` is simply an unknown field
+  under `unknown=RAISE`, and so is `type` inside `realia`.
+- `id` uniqueness is still checked across **both** lists together, since the two
+  id spaces share `word` lookups.
+- Duplicate dropping is per kind: same `type` + same span, or same `realiaId` +
+  same span.
+
+No migration: existing documents hold only entity annotations, so their
+`namedEntities` already contains tag ids exclusively. `realia` is additive and
+defaults to `[]` on both `Fragment` and `Word`, so old documents load unchanged.
+
+Blast radius beyond the API: adding `realia` to `AbstractWord` touched the three
+token classes (`word_tokens`, `greek_tokens`, `normalized_akkadian`) and the four
+token-schema construction sites.
+
+## Frontend
+
+The change is breaking for the client. `TASK-realia-annotation-frontend-prompt.md`
+holds the prompt to hand to `ebl-frontend` (branch `add-realia-annotation`).

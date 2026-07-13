@@ -1,4 +1,4 @@
-from typing import FrozenSet, List, Sequence, Set, Tuple, Union
+from typing import FrozenSet, List, Sequence, Set, Tuple, TypeVar, Union
 import attr
 from ebl.common.domain.named_enum import NamedEnum
 
@@ -19,8 +19,6 @@ class NamedEntityType(NamedEnum):
 
 
 REALIA_ID_PATTERN = r"^realia_\d+$"
-ENTITY_KIND = "entity"
-REALIA_KIND = "realia"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -47,33 +45,34 @@ class RealiaEntity:
 class RealiaAnnotationSpan(RealiaEntity):
     span: List[str]
 
-    def to_named_entity(self) -> RealiaEntity:
+    def to_realia_entity(self) -> RealiaEntity:
         return RealiaEntity(id=self.id, realia_id=self.realia_id)
 
 
 AnnotationEntity = Union[NamedEntity, RealiaEntity]
 AnnotationSpan = Union[EntityAnnotationSpan, RealiaAnnotationSpan]
+AnnotationKey = Tuple[str, FrozenSet[str]]
 
-AnnotationKey = Tuple[str, str, FrozenSet[str]]
-
-
-def annotation_key(annotation: AnnotationSpan) -> AnnotationKey:
-    span = frozenset(annotation.span)
-    if isinstance(annotation, RealiaAnnotationSpan):
-        return (REALIA_KIND, annotation.realia_id, span)
-    return (ENTITY_KIND, annotation.type.long_name, span)
+SpanT = TypeVar("SpanT", EntityAnnotationSpan, RealiaAnnotationSpan)
 
 
-def deduplicate_annotation_spans(
-    annotations: Sequence[AnnotationSpan],
-) -> List[AnnotationSpan]:
+def annotation_key(span: AnnotationSpan) -> AnnotationKey:
+    value = (
+        span.realia_id
+        if isinstance(span, RealiaAnnotationSpan)
+        else span.type.long_name
+    )
+    return (value, frozenset(span.span))
+
+
+def deduplicate_spans(spans: Sequence[SpanT]) -> List[SpanT]:
     seen: Set[AnnotationKey] = set()
-    unique: List[AnnotationSpan] = []
+    unique: List[SpanT] = []
 
-    for annotation in annotations:
-        key = annotation_key(annotation)
+    for span in spans:
+        key = annotation_key(span)
         if key not in seen:
             seen.add(key)
-            unique.append(annotation)
+            unique.append(span)
 
     return unique

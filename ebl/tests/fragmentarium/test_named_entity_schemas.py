@@ -1,14 +1,12 @@
+import pytest
+from marshmallow import ValidationError
+
 from ebl.fragmentarium.application.named_entity_schema import (
-    AnnotationEntitySchema,
-    AnnotationSpanSchema,
     EntityAnnotationSpanSchema,
     NamedEntitySchema,
     RealiaAnnotationSpanSchema,
     RealiaEntitySchema,
 )
-import pytest
-from marshmallow import ValidationError
-
 from ebl.fragmentarium.domain.named_entity import (
     EntityAnnotationSpan,
     NamedEntity,
@@ -95,87 +93,48 @@ def test_realia_annotation_span_schema():
     assert RealiaAnnotationSpanSchema().dump(span) == serialized
 
 
-ENTITY_SPAN = EntityAnnotationSpan(
-    "Entity-1", NamedEntityType.PERSONAL_NAME, ["Word-1", "Word-2"]
+@pytest.mark.parametrize(
+    "serialized",
+    [
+        pytest.param(
+            {"id": "X", "realiaId": "realia_1", "span": ["Word-1"]},
+            id="realia_id_on_entity_schema",
+        ),
+        pytest.param({"id": "X", "span": ["Word-1"]}, id="missing_type"),
+        pytest.param(
+            {"id": "X", "type": "PERSONAL_NAME", "span": ["Word-1"], "tier": 1},
+            id="unknown_key",
+        ),
+    ],
 )
-SERIALIZED_ENTITY_SPAN = {
-    "id": "Entity-1",
-    "type": "PERSONAL_NAME",
-    "span": ["Word-1", "Word-2"],
-}
-REALIA_SPAN = RealiaAnnotationSpan("Realia-1", "realia_000846", ["Word-1", "Word-2"])
-SERIALIZED_REALIA_SPAN = {
-    "id": "Realia-1",
-    "realiaId": "realia_000846",
-    "span": ["Word-1", "Word-2"],
-}
-
-
-def test_annotation_span_schema_round_trip():
-    serialized = [SERIALIZED_ENTITY_SPAN, SERIALIZED_REALIA_SPAN]
-    spans = [ENTITY_SPAN, REALIA_SPAN]
-
-    assert AnnotationSpanSchema().load(serialized, many=True) == spans
-    assert AnnotationSpanSchema().dump(spans, many=True) == serialized
-
-
-def test_annotation_entity_schema_round_trip():
-    serialized = [
-        {"id": "Entity-1", "type": "PERSONAL_NAME"},
-        {"id": "Realia-1", "realiaId": "realia_000846"},
-    ]
-    entities = [
-        NamedEntity("Entity-1", NamedEntityType.PERSONAL_NAME),
-        RealiaEntity("Realia-1", "realia_000846"),
-    ]
-
-    assert AnnotationEntitySchema().load(serialized, many=True) == entities
-    assert AnnotationEntitySchema().dump(entities, many=True) == serialized
-
-
-def test_annotation_span_schema_validate():
-    assert AnnotationSpanSchema(many=True).validate([SERIALIZED_REALIA_SPAN]) == {}
+def test_entity_span_schema_rejects(serialized):
+    with pytest.raises(ValidationError):
+        EntityAnnotationSpanSchema().load(serialized)
 
 
 @pytest.mark.parametrize(
     "serialized",
     [
         pytest.param(
-            {**SERIALIZED_ENTITY_SPAN, "realiaId": "realia_000846"},
-            id="type_and_realia",
+            {"id": "X", "type": "PERSONAL_NAME", "span": ["Word-1"]},
+            id="type_on_realia_schema",
         ),
-        pytest.param({"id": "X", "span": ["Word-1"]}, id="neither_type_nor_realia"),
-        pytest.param({**SERIALIZED_REALIA_SPAN, "realiaId": "Apkallu"}, id="lemma_id"),
-        pytest.param({**SERIALIZED_REALIA_SPAN, "realiaId": "realia_"}, id="no_digits"),
+        pytest.param({"id": "X", "span": ["Word-1"]}, id="missing_realia_id"),
         pytest.param(
-            {**SERIALIZED_REALIA_SPAN, "realiaId": "realia_abc"}, id="non_numeric"
+            {"id": "X", "realiaId": "Apkallu", "span": ["Word-1"]}, id="lemma_id"
         ),
         pytest.param(
-            {**SERIALIZED_REALIA_SPAN, "realiaId": "Assyrien (Geschichte)"},
-            id="lemma_id_with_spaces",
+            {"id": "X", "realiaId": "realia_", "span": ["Word-1"]}, id="no_digits"
         ),
-        pytest.param({**SERIALIZED_REALIA_SPAN, "tier": 1}, id="unknown_key_on_realia"),
         pytest.param(
-            {**SERIALIZED_ENTITY_SPAN, "name": "x"}, id="unknown_key_on_entity"
+            {"id": "X", "realiaId": "realia_abc", "span": ["Word-1"]}, id="non_numeric"
+        ),
+        pytest.param(
+            {"id": "X", "realiaId": "realia_1", "span": ["Word-1"], "name": "x"},
+            id="unknown_key",
         ),
     ],
 )
-def test_annotation_span_schema_rejects(serialized):
+def test_realia_span_schema_rejects(serialized):
     with pytest.raises(ValidationError):
-        AnnotationSpanSchema().load([serialized], many=True)
-
-
-@pytest.mark.parametrize(
-    "serialized",
-    [
-        pytest.param(
-            {"id": "X", "type": "PERSONAL_NAME", "realiaId": "realia_1"},
-            id="type_and_realia",
-        ),
-        pytest.param({"id": "X"}, id="neither_type_nor_realia"),
-        pytest.param({"id": "X", "realiaId": "realia_"}, id="malformed_realia_id"),
-    ],
-)
-def test_annotation_entity_schema_rejects(serialized):
-    with pytest.raises(ValidationError):
-        AnnotationEntitySchema().load([serialized], many=True)
+        RealiaAnnotationSpanSchema().load(serialized)

@@ -1,5 +1,10 @@
+from typing import cast
+
 import attr
-from ebl.fragmentarium.application.named_entity_schema import NamedEntitySchema
+from ebl.fragmentarium.application.named_entity_schema import (
+    NamedEntitySchema,
+    RealiaEntitySchema,
+)
 import pydash
 import pytest
 from ebl.common.application.schemas import AccessionSchema
@@ -54,7 +59,9 @@ def expected_dto(lemmatized_fragment, has_photo):
             "cdliImages": lemmatized_fragment.cdli_images,
             "acquisition": AcquisitionSchema().dump(lemmatized_fragment.acquisition),
             "description": lemmatized_fragment.description,
-            "joins": JoinsSchema().dump(lemmatized_fragment.joins)["fragments"],
+            "joins": cast(dict, JoinsSchema().dump(lemmatized_fragment.joins))[
+                "fragments"
+            ],
             "length": attr.asdict(
                 lemmatized_fragment.length, filter=lambda _, value: value is not None
             ),
@@ -135,6 +142,7 @@ def expected_dto(lemmatized_fragment, has_photo):
             "namedEntities": NamedEntitySchema().dump(
                 lemmatized_fragment.named_entities, many=True
             ),
+            "realia": RealiaEntitySchema().dump(lemmatized_fragment.realia, many=True),
         },
         pydash.is_none,
     )
