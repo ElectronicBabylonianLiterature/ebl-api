@@ -53,6 +53,24 @@ Run all of the following in order and confirm each passes before committing:
    errors
 5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
    errors (pre-existing errors are not acceptable; fix them)
+6. `npx pyright <changed files>` — zero Pylance/Pyright errors. Pylance uses
+   the Pyright engine, and `pyrightconfig.json` at the repo root pins the
+   interpreter (`.venv`) and `typeCheckingMode`, so the CLI reproduces exactly
+   what the IDE reports. Pass no flags — the config supplies them. Run it
+   against every file the change touches. All errors must be addressed,
+   including ones that pre-existed in a touched file; "it was already broken"
+   is not an acceptable justification. Prefer real fixes (typed converter and
+   validator functions instead of the `attr.ib` decorator form, `typing.cast`
+   for values marshmallow types as `Any`, mapping-style access such as
+   `req.context["user"]` for Falcon's dynamic `Context`) over suppression
+   comments. This is non-negotiable.
+
+   Never "fix" a Pyright error by loosening `pyrightconfig.json`. If the IDE
+   reports `Unknown`/`partially unknown` types en masse (e.g. `list[Unknown]`),
+   the interpreter is not resolving — check that VS Code's selected interpreter
+   is `.venv`, not the system Python. Do not raise `typeCheckingMode` to
+   `strict`: `marshmallow`, `attrs`, `pydash` and `factory_boy` ship no type
+   information, so strict reports ~24k `Unknown` cascades across the codebase.
 
 Never commit if any gate fails or was skipped.
 

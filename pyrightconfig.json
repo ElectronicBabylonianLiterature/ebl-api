@@ -1,0 +1,9 @@
+{
+  "include": ["ebl"],
+  "exclude": ["**/__pycache__", ".venv", "**/node_modules"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "standard",
+  "reportMissingTypeStubs": false
+}
