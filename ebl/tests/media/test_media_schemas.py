@@ -34,6 +34,10 @@ def thumbnail(mime_type="image/jpeg") -> MediaRepresentation:
     return MediaRepresentation(mime_type, 240, 180, 15360)
 
 
+def medium_thumbnail(mime_type="image/jpeg") -> MediaRepresentation:
+    return MediaRepresentation(mime_type, 480, 360, 61440)
+
+
 def media(
     media_id=PHOTO_ID,
     media_type=MediaType.PHOTO,
@@ -55,7 +59,7 @@ def media(
         associations=(
             associations
             if associations is not None
-            else (MediaAssociation("K.1", 0, True),)
+            else (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
         ),
         references=(
             references
@@ -180,12 +184,12 @@ def test_media_summary_serializes_primary_photo_and_legacy_fields() -> None:
     copy = media(
         media_id=COPY_ID,
         media_type=MediaType.COPY,
-        associations=(MediaAssociation("K.1", 0, True),),
+        associations=(MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
     )
     photo = media(
         media_id=PHOTO_ID,
         media_type=MediaType.PHOTO,
-        associations=(MediaAssociation("K.1", 1, True),),
+        associations=(MediaAssociation(MuseumNumber.of("K.1"), 1, True),),
     )
 
     result = FragmentMediaSummaryDtoSchema().dump(
@@ -217,7 +221,7 @@ def test_media_summary_for_copy_only_fragment_has_no_legacy_photo_flag() -> None
     copy = media(
         media_id=COPY_ID,
         media_type=MediaType.COPY,
-        associations=(MediaAssociation("K.1", 0, True),),
+        associations=(MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
     )
 
     result = FragmentMediaSummaryDtoSchema().dump(
@@ -231,7 +235,7 @@ def test_media_summary_for_copy_only_fragment_has_no_legacy_photo_flag() -> None
 
 def test_media_summary_without_primary_omits_primary() -> None:
     fragment_id = MuseumNumber.of("K.1")
-    photo = media(associations=(MediaAssociation("K.1", 0, False),))
+    photo = media(associations=(MediaAssociation(MuseumNumber.of("K.1"), 0, False),))
 
     result = FragmentMediaSummaryDtoSchema().dump(
         FragmentMediaSummaryDto.of(fragment_id, (photo,))
@@ -241,3 +245,58 @@ def test_media_summary_without_primary_omits_primary() -> None:
         "count": 1,
         "types": ["PHOTO"],
     }
+
+
+def test_media_summary_without_media_keeps_empty_types() -> None:
+    fragment_id = MuseumNumber.of("K.1")
+
+    result = FragmentMediaSummaryDtoSchema().dump(
+        FragmentMediaSummaryDto.of(fragment_id, ())
+    )
+
+    assert result == {
+        "mediaSummary": {
+            "count": 0,
+            "types": [],
+        },
+        "hasPhoto": False,
+    }
+
+
+def test_media_summary_without_small_primary_thumbnail_omits_legacy_thumbnail() -> None:
+    fragment_id = MuseumNumber.of("K.1")
+    photo = media(
+        media_representations=MediaRepresentations(
+            original(),
+            ((ThumbnailSize.MEDIUM, medium_thumbnail()),),
+        )
+    )
+
+    result = FragmentMediaSummaryDtoSchema().dump(
+        FragmentMediaSummaryDto.of(fragment_id, (photo,))
+    )
+
+    assert result["hasPhoto"] is True
+    assert result["mediaSummary"]["primary"]["type"] == "PHOTO"
+    assert "thumbnail" not in result["mediaSummary"]["primary"]
+    assert "thumbnailPath" not in result
+
+
+def test_media_summary_omits_legacy_thumbnail_when_primary_is_not_photo() -> None:
+    fragment_id = MuseumNumber.of("K.1")
+    copy = media(
+        media_id=COPY_ID,
+        media_type=MediaType.COPY,
+        associations=(MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
+    )
+    photo = media(
+        associations=(MediaAssociation(MuseumNumber.of("K.1"), 1, False),),
+    )
+
+    result = FragmentMediaSummaryDtoSchema().dump(
+        FragmentMediaSummaryDto.of(fragment_id, (copy, photo))
+    )
+
+    assert result["hasPhoto"] is True
+    assert result["mediaSummary"]["primary"]["type"] == "COPY"
+    assert "thumbnailPath" not in result

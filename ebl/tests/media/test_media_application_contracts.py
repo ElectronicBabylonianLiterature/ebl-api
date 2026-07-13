@@ -1,9 +1,11 @@
+from io import BytesIO
 from typing import Sequence
 
 import attr
 
 from ebl.media.application import (
     MediaRepository,
+    RepresentationHandle,
     MediaRepresentationStore,
     MediaService,
 )
@@ -134,14 +136,14 @@ def test_repository_contract_reads_media_by_fragment_in_fragment_order() -> None
         PHOTO_ID,
         MediaType.PHOTO,
         (
-            MediaAssociation("K.1", 1, False),
-            MediaAssociation("Sm.2", 0, True),
+            MediaAssociation(MuseumNumber.of("K.1"), 1, False),
+            MediaAssociation(MuseumNumber.of("Sm.2"), 0, True),
         ),
     )
     copy = media(
         COPY_ID,
         MediaType.COPY,
-        (MediaAssociation("K.1", 0, True),),
+        (MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
     )
     repository = InMemoryMediaRepository((photo, copy))
 
@@ -154,8 +156,8 @@ def test_repository_contract_batch_reads_fragment_media() -> None:
         PHOTO_ID,
         MediaType.PHOTO,
         (
-            MediaAssociation("K.1", 0, True),
-            MediaAssociation("Sm.2", 0, True),
+            MediaAssociation(MuseumNumber.of("K.1"), 0, True),
+            MediaAssociation(MuseumNumber.of("Sm.2"), 0, True),
         ),
     )
     repository = InMemoryMediaRepository((photo,))
@@ -169,7 +171,11 @@ def test_repository_contract_batch_reads_fragment_media() -> None:
 
 
 def test_repository_contract_reads_one_media_item_in_fragment_context() -> None:
-    photo = media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation("K.1", 0, True),))
+    photo = media(
+        PHOTO_ID,
+        MediaType.PHOTO,
+        (MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
+    )
     repository = InMemoryMediaRepository((photo,))
 
     assert repository.find_in_fragment(PHOTO_ID, MuseumNumber.of("K.1")) == photo
@@ -177,15 +183,25 @@ def test_repository_contract_reads_one_media_item_in_fragment_context() -> None:
 
 
 def test_repository_contract_finds_primary_photo_only() -> None:
-    copy = media(COPY_ID, MediaType.COPY, (MediaAssociation("K.1", 0, True),))
-    photo = media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation("K.1", 1, True),))
+    copy = media(
+        COPY_ID, MediaType.COPY, (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
+    )
+    photo = media(
+        PHOTO_ID,
+        MediaType.PHOTO,
+        (MediaAssociation(MuseumNumber.of("K.1"), 1, True),),
+    )
     repository = InMemoryMediaRepository((copy, photo))
 
     assert repository.find_primary_photo(MuseumNumber.of("K.1")) == photo
 
 
 def test_repository_contract_replaces_metadata_without_changing_identity() -> None:
-    photo = media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation("K.1", 0, True),))
+    photo = media(
+        PHOTO_ID,
+        MediaType.PHOTO,
+        (MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
+    )
     replacement = attr.evolve(photo, caption="Replacement audit note")
     repository = InMemoryMediaRepository((photo,))
 
@@ -200,8 +216,8 @@ def test_service_contract_batch_reads_fragment_media_without_building_summaries(
         PHOTO_ID,
         MediaType.PHOTO,
         (
-            MediaAssociation("K.1", 0, True),
-            MediaAssociation("Sm.2", 0, True),
+            MediaAssociation(MuseumNumber.of("K.1"), 0, True),
+            MediaAssociation(MuseumNumber.of("Sm.2"), 0, True),
         ),
     )
     service = InMemoryMediaService(InMemoryMediaRepository((photo,)))
@@ -222,3 +238,17 @@ def test_representation_store_contract_includes_display_without_repository_expan
     assert hasattr(store, "read_display")
     assert hasattr(store, "write_display")
     assert not hasattr(MediaRepository, "find_display")
+
+
+def test_representation_handle_contract_includes_readable_content() -> None:
+    content = BytesIO(b"media-bytes")
+
+    handle = RepresentationHandle(
+        media_id=PHOTO_ID,
+        representation=representation(),
+        content=content,
+        content_type="image/jpeg",
+        length=len(b"media-bytes"),
+    )
+
+    assert handle.content.read() == b"media-bytes"
