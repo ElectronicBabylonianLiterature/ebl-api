@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import FrozenSet, List, Sequence, Set, Tuple, Union
 import attr
 from ebl.common.domain.named_enum import NamedEnum
 
@@ -19,6 +19,8 @@ class NamedEntityType(NamedEnum):
 
 
 REALIA_ID_PATTERN = r"^realia_\d+$"
+ENTITY_KIND = "entity"
+REALIA_KIND = "realia"
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -51,3 +53,27 @@ class RealiaAnnotationSpan(RealiaEntity):
 
 AnnotationEntity = Union[NamedEntity, RealiaEntity]
 AnnotationSpan = Union[EntityAnnotationSpan, RealiaAnnotationSpan]
+
+AnnotationKey = Tuple[str, str, FrozenSet[str]]
+
+
+def annotation_key(annotation: AnnotationSpan) -> AnnotationKey:
+    span = frozenset(annotation.span)
+    if isinstance(annotation, RealiaAnnotationSpan):
+        return (REALIA_KIND, annotation.realia_id, span)
+    return (ENTITY_KIND, annotation.type.long_name, span)
+
+
+def deduplicate_annotation_spans(
+    annotations: Sequence[AnnotationSpan],
+) -> List[AnnotationSpan]:
+    seen: Set[AnnotationKey] = set()
+    unique: List[AnnotationSpan] = []
+
+    for annotation in annotations:
+        key = annotation_key(annotation)
+        if key not in seen:
+            seen.add(key)
+            unique.append(annotation)
+
+    return unique

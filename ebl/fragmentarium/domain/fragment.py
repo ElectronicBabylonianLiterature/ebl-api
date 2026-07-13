@@ -13,7 +13,11 @@ from ebl.fragmentarium.domain.archaeology import Archaeology
 from ebl.fragmentarium.domain.folios import Folios
 from ebl.fragmentarium.domain.joins import Joins
 from ebl.fragmentarium.domain.line_to_vec_encoding import LineToVecEncodings
-from ebl.fragmentarium.domain.named_entity import AnnotationEntity, AnnotationSpan
+from ebl.fragmentarium.domain.named_entity import (
+    AnnotationEntity,
+    AnnotationSpan,
+    deduplicate_annotation_spans,
+)
 from ebl.fragmentarium.domain.fragment_metadata import (
     Acquisition,
     DossierReference,
@@ -196,10 +200,13 @@ class Fragment(FragmentExternalNumbers):
         return Text(lines=tuple(pydash.flatten(match)))
 
     def set_named_entities(self, annotations: List[AnnotationSpan]) -> "Fragment":
+        unique_annotations = deduplicate_annotation_spans(annotations)
         return attr.evolve(
             self,
-            named_entities=tuple(entity.to_named_entity() for entity in annotations),
-            text=self.text.set_named_entities(annotations),
+            named_entities=tuple(
+                entity.to_named_entity() for entity in unique_annotations
+            ),
+            text=self.text.set_named_entities(unique_annotations),
         )
 
     @property

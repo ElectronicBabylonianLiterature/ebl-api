@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import List, Sequence, cast
 from falcon import Request, Response, before
 from marshmallow import ValidationError
@@ -11,7 +12,11 @@ from ebl.fragmentarium.application.named_entity_schema import (
     AnnotationSpanSchema,
 )
 from ebl.fragmentarium.domain.fragment import Fragment
-from ebl.fragmentarium.domain.named_entity import AnnotationSpan, RealiaAnnotationSpan
+from ebl.fragmentarium.domain.named_entity import (
+    AnnotationSpan,
+    RealiaAnnotationSpan,
+    deduplicate_annotation_spans,
+)
 from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
 from ebl.marshmallowschema import validate
 from ebl.realia.application.realia_repository import RealiaRepository
@@ -50,6 +55,15 @@ class NamedEntityResource:
                 f"Invalid named entity annotations: {error.messages}"
             ) from error
 
+    def _validate_unique_ids(self, annotations: Sequence[AnnotationSpan]) -> None:
+        counts = Counter(annotation.id for annotation in annotations)
+        duplicates = sorted(id_ for id_, count in counts.items() if count > 1)
+        if duplicates:
+            raise DataError(
+                f"Conflicting annotation ids: {', '.join(duplicates)}. "
+                "Each annotation must have a unique id."
+            )
+
     def _validate_realia_ids(self, annotations: Sequence[AnnotationSpan]) -> None:
         realia_ids = {
             annotation.realia_id
@@ -72,7 +86,10 @@ class NamedEntityResource:
     @before(require_scope, "transliterate:fragments")
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         user = req.context["user"]
-        annotations = self._parse_annotations(req.media["annotations"])
+        annotations = deduplicate_annotation_spans(
+            self._parse_annotations(req.media["annotations"])
+        )
+        self._validate_unique_ids(annotations)
         self._validate_realia_ids(annotations)
 
         updated_fragment, has_photo = self._updater.update_named_entities(

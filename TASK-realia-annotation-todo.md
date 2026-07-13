@@ -57,6 +57,16 @@ Add realia annotation support to the named-entities API.
 - [x] Pre-existing Pyright errors in touched files fixed at root cause
 - [x] Pylance gate added to `.github/instructions/copilot.instructions.md`
 
+## Uniqueness
+
+- [x] Duplicate = same tag on the same span, or same realiaId on the same span
+- [x] Duplicates silently dropped, first occurrence kept (200)
+- [x] Same tag / same realia on a *different* span is kept
+- [x] Tag + realia on one span is kept (the feature)
+- [x] Span order does not defeat deduplication (compared as a set)
+- [x] `Fragment.set_named_entities` dedupes, so no duplicate can enter state
+- [x] Conflicting ids (same id, different annotation) rejected with 422
+
 ## Gates
 
 - [x] `task format`

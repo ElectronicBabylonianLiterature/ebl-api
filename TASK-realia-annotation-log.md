@@ -207,3 +207,34 @@ added or grown by this change is under 250 lines.
 ## Before merge
 
 Remove `TASK-realia-annotation-todo.md` and `TASK-realia-annotation-log.md`.
+
+## Uniqueness of tags and realia
+
+A duplicate is the **same value on the same span**: the same tag type on a token
+range, or the same `realiaId` on a token range. Duplicates are silently dropped,
+keeping the first occurrence, and the request returns 200.
+
+Deliberately still allowed, because they are meaningful annotations:
+
+- the same realia at a *different* token range (a tablet can mention one object
+  in two places), and likewise the same tag at a different range;
+- two *different* tags on one range;
+- a tag and a realia on one range — that is the point of the feature.
+
+`annotation_key` builds `(kind, value, frozenset(span))`, so span **order**
+cannot defeat deduplication: `["Word-2", "Word-3"]` and `["Word-3", "Word-2"]`
+are the same range.
+
+Deduplication lives in `Fragment.set_named_entities`, not only in the web layer,
+so no duplicate can enter fragment state through any caller.
+
+### Conflicting ids are rejected (422), not dropped
+
+`_create_annotation_spans` keys a dict by `entity.id`. Two *different*
+annotations sharing an id would silently collapse into one and fuse their spans
+— data corruption, not a duplicate. `_validate_unique_ids` therefore raises
+`DataError` (422) and writes nothing.
+
+The dedupe runs **before** the id check, so an *exact* duplicate that repeats the
+same id is still dropped silently, as specified, and only genuinely conflicting
+ids reach the check.
