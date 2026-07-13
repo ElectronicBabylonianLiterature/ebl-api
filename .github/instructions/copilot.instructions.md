@@ -22,6 +22,73 @@ generating code, answering questions, or reviewing changes.
 - Do not introduce backend aliases for alternate client field names unless
   explicitly requested as a backward-compatibility requirement.
 
+## HARD GATE: Different Data Types Never Intermix in One Array
+
+**Two different types of data must never share one array.** They are held in
+structurally separate arrays — a separate field per type — at every level:
+domain object, Mongo document, and request/response body.
+
+The type of a value must be knowable from **which array it is in**, never by
+inspecting the value itself.
+
+This is non-negotiable. It applies to new models and to any model you touch.
+
+### The rules
+
+- **One array, one data type.** A list, tuple, array field, or id list holds
+  exactly one type. `Sequence[Foo | Bar]` is a defect, not a design.
+- **Two types of id never share an id list.** This is the most common form of the
+  mistake, because ids are all strings and so a mixed list still "type-checks".
+  `["Entity-1", "Realia-1"]` is two data types in one array.
+- **Never discriminate by probing.** If code must ask "does this object have
+  `type`, or does it have `realiaId`?" to learn which type it is, the data is
+  modelled wrong. Fix the model; do not write a smarter probe.
+- **An optional field present for one type and absent for another means you have
+  two types in one array.** Split the array.
+- **Separate structurally, not just logically.** Two arrays (`named_entities`,
+  `realia`), not one array plus a discriminator. Do not separate at one level and
+  merge at another — if the domain has two fields, the wire has two keys.
+
+### Worked example (the realia annotation defect)
+
+```python
+# WRONG — two types of id in one array; two types of object in one array
+word.named_entities   = ["Entity-1", "Entity-2", "Realia-1"]
+fragment.named_entities: Sequence[NamedEntity | RealiaEntity]
+# a reader must join back and probe for `type` vs `realiaId` to know what it has
+
+# RIGHT — structurally separate, one type per array
+word.named_entities   = ["Entity-1", "Entity-2"]   # tag ids only
+word.realia           = ["Realia-1"]               # realia ids only
+fragment.named_entities: Sequence[NamedEntity]
+fragment.realia:         Sequence[RealiaEntity]
+```
+
+Once each array holds one type, mixing becomes an unknown-field error for free
+under `unknown=RAISE` — no discriminator, no bespoke validator, no polymorphic
+dispatch. **Reaching for a `OneOfSchema` to tell two types apart inside one array
+is the signal to split the array instead.** A payload that puts one type's field
+on the other is a `422`, never a silent coercion.
+
+### Separation is structural, not relational
+
+Separating the arrays must not sever real relationships between the data:
+
+- Two types may still describe the **same** thing. A named-entity tag and a
+  realia may legitimately annotate the same token range — that is the feature.
+  Separate arrays, overlapping references.
+- **Splitting the arrays does not split a shared id space.** When two separated
+  types are resolved through the same lookup, invariants over that namespace —
+  uniqueness, existence, referential integrity — must still be enforced across
+  the **union** of both arrays.
+
+### Why
+
+A mixed array pushes the type question onto every reader, forever. Each consumer
+re-derives the type, each one can get it wrong, and the type checker cannot help
+any of them. Separate arrays answer the question once, in the shape of the data,
+and turn a class of runtime bug into a type error.
+
 ## Coding Standards
 
 - Follow the existing coding style and conventions used in the project.
@@ -146,6 +213,12 @@ ask you to — see the hard gate above.
 - Keep review comments short, specific, and actionable.
 - Prioritize correctness, regressions, security, and test coverage in
   every review.
+- Check every data-shape change against the data hard gate above. Flag any array
+  holding more than one data type — id lists especially, since mixed ids are all
+  strings and still "type-check" — any type discriminated by probing for an
+  optional field, and any shape split in the domain but merged on the wire (or
+  the reverse). Confirm that invariants over a shared id space are still enforced
+  across the union of the separated arrays.
 - Verify changed behavior locally by running the modified backend service
   and related tests before finalizing review conclusions.
 - Export every detailed review to a `.md` file using the same
