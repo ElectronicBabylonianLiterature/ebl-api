@@ -98,28 +98,28 @@ def test_find_by_realia_id_not_found(realia_repository: RealiaRepository) -> Non
         realia_repository.find_by_realia_id("realia_999999")
 
 
-def test_list_all_realia(realia_repository: MongoRealiaRepository) -> None:
+def test_list_non_redirect_ids_sorted(realia_repository: MongoRealiaRepository) -> None:
     for identifier in ("Pig", "Anu", "Enlil, Ellil"):
         insert_minimal(realia_repository, identifier)
 
-    assert realia_repository.list_all_realia() == ["Anu", "Enlil, Ellil", "Pig"]
+    assert realia_repository.list_non_redirect_ids() == ["Anu", "Enlil, Ellil", "Pig"]
 
 
-def test_list_all_realia_empty(realia_repository: RealiaRepository) -> None:
-    assert realia_repository.list_all_realia() == []
+def test_list_non_redirect_ids_empty(realia_repository: RealiaRepository) -> None:
+    assert realia_repository.list_non_redirect_ids() == []
 
 
-def test_list_all_realia_returns_every_id_without_limit(
+def test_list_non_redirect_ids_returns_every_id_without_limit(
     realia_repository: MongoRealiaRepository,
 ) -> None:
     identifiers = [f"Realia {index:02d}" for index in range(25)]
     for identifier in identifiers:
         insert_minimal(realia_repository, identifier)
 
-    assert realia_repository.list_all_realia() == sorted(identifiers)
+    assert realia_repository.list_non_redirect_ids() == sorted(identifiers)
 
 
-def test_list_all_realia_excludes_redirect_stubs(
+def test_list_non_redirect_ids_excludes_redirect_stubs(
     realia_repository: MongoRealiaRepository,
 ) -> None:
     canonical = {"id": "Canonical", "lemma": "Canonical"}
@@ -174,7 +174,7 @@ def test_list_all_realia_excludes_redirect_stubs(
     for identifier, document in {**stubs, **listable}.items():
         insert_stored(realia_repository, {"_id": identifier, **document})
 
-    result = realia_repository.list_all_realia()
+    result = realia_repository.list_non_redirect_ids()
 
     assert set(result) == set(listable)
     assert not set(stubs) & set(result)

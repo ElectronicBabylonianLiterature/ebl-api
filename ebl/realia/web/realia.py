@@ -53,4 +53,4 @@ class RealiaListResource:
         self._realia_repository = realia_repository
 
     def on_get(self, _req: Request, resp: Response) -> None:
-        resp.media = self._realia_repository.list_all_realia()
+        resp.media = self._realia_repository.list_non_redirect_ids()

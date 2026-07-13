@@ -22,5 +22,5 @@ class RealiaRepository(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def list_all_realia(self) -> Sequence[str]:
+    def list_non_redirect_ids(self) -> Sequence[str]:
         raise NotImplementedError()
