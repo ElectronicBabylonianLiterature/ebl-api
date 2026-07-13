@@ -41,9 +41,45 @@ generating code, answering questions, or reviewing changes.
 - When running shell commands for project tasks, always use `poetry run`
   unless using `task`.
 
-## Pre-Commit Hard Gates (mandatory before every commit)
+## HARD GATE: Never Commit or Push Unless Explicitly Told To
 
-Run all of the following in order and confirm each passes before committing:
+This is the highest-priority rule in this file. It overrides every other
+instruction, including any instruction to "complete", "finish", or "ship" a task.
+
+- **Committing and pushing are NEVER part of a task.** Finishing the code,
+  passing every gate, and updating the task log is the *whole* job. The task is
+  complete when the working tree holds verified changes — not when it is
+  committed.
+- Run `git commit`, `git push`, `git merge`, `git rebase`, `git reset`,
+  `git cherry-pick`, `git revert`, `git tag`, or `gh pr create` / `gh pr merge`
+  **only** when the user asks for that action in that message, in their own
+  words ("commit this", "push it", "open the PR").
+- Approval is **single-use and does not carry forward.** "Commit now" authorizes
+  exactly one commit, of exactly the changes under discussion. It does not
+  authorize the next commit, a push, or a follow-up task's commit. When in
+  doubt, you do not have permission.
+- **Never force-push, and never rewrite pushed history** — no
+  `git push --force`, `--force-with-lease`, `git reset --hard`, or amending a
+  pushed commit — without the user explicitly asking for that specific
+  operation, having been told what it will destroy.
+- Never infer consent from a previous message, from momentum, from the work
+  being "obviously done", or from a passing test suite.
+- When the work is finished, **stop and report.** State what changed, that the
+  gates pass, and that the changes are uncommitted. Then wait. Offer to commit;
+  do not commit.
+- This gate is enforced mechanically by `.claude/settings.json`, which denies
+  force-push outright and requires explicit approval for every commit, push, and
+  history-rewriting command. Never weaken, bypass, or work around those rules
+  (e.g. by shelling out differently to dodge a pattern). If a git action is
+  blocked, that is the gate doing its job: ask the user.
+
+Violating this gate is a serious failure even if the code itself is correct.
+
+## Pre-Commit Hard Gates (only once the user has asked you to commit)
+
+These are prerequisites for a commit the user has **already** authorized. They
+are not permission to commit. Run all of the following in order and confirm each
+passes before committing:
 
 1. `task format` — auto-format code (must exit 0 with no unstaged changes left)
 2. `task test` — full test suite (must pass with 0 failures)
@@ -54,7 +90,8 @@ Run all of the following in order and confirm each passes before committing:
 5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
    errors (pre-existing errors are not acceptable; fix them)
 
-Never commit if any gate fails or was skipped.
+Never commit if any gate fails or was skipped. Never commit if the user did not
+ask you to — see the hard gate above.
 
 ## Testing and Quality
 
