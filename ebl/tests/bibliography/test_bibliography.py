@@ -379,7 +379,7 @@ def test_validate_references(
 ):
     reference = ReferenceFactory.build(with_document=True)
 
-    (when(bibliography).find(reference.id).thenReturn(reference))
+    (when(bibliography).find(reference.id).thenReturn(reference.document))
     bibliography.validate_references([reference])
 
 
@@ -390,7 +390,7 @@ def test_validate_references_invalid(
     first_invalid = ReferenceFactory.build(with_document=True)
     second_invalid = ReferenceFactory.build(with_document=True)
     bibliography.create(valid_reference.document, user)
-    (when(bibliography).find(valid_reference.id).thenReturn(valid_reference))
+    (when(bibliography).find(valid_reference.id).thenReturn(valid_reference.document))
     (when(bibliography).find(first_invalid.id).thenRaise(NotFoundError))
     (when(bibliography).find(second_invalid.id).thenRaise(NotFoundError))
 

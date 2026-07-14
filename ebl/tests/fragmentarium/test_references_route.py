@@ -1,8 +1,10 @@
 import json
 
+import attr
 import falcon
 import pytest
 
+from ebl.bibliography.domain.reference import BibliographyId
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
@@ -27,6 +29,43 @@ def test_update_references(
 
     expected_json = create_response_dto(
         fragment.set_references((reference,)).set_text(
+            parallel_line_injector.inject_transliteration(fragment.text)
+        ),
+        user,
+        fragment.number == MuseumNumber("K", "1"),
+    )
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.json == expected_json
+
+    get_result = client.simulate_get(f"/fragments/{fragment.number}")
+    assert get_result.json == expected_json
+
+
+def test_update_references_canonicalizes_bibliography_alias(
+    client, fragmentarium, bibliography, parallel_line_injector, user
+):
+    fragment = FragmentFactory.build()
+    fragmentarium.create(fragment)
+    bibliography_entry = {
+        **ReferenceFactory.build(with_document=True).document,
+        "id": "Q30000001",
+        "aliases": [{"value": "OLD_ALIAS", "normalizedValue": "old-alias"}],
+    }
+    bibliography.create(bibliography_entry, ANY_USER)
+    submitted_reference = ReferenceFactory.build(id="OLD_ALIAS")
+    body = json.dumps({"references": [ReferenceSchema().dump(submitted_reference)]})
+    url = f"/fragments/{fragment.number}/references"
+
+    post_result = client.simulate_post(url, body=body)
+
+    canonical_reference = attr.evolve(
+        submitted_reference,
+        id=BibliographyId(bibliography_entry["id"]),
+        document=bibliography_entry,
+    )
+    expected_json = create_response_dto(
+        fragment.set_references((canonical_reference,)).set_text(
             parallel_line_injector.inject_transliteration(fragment.text)
         ),
         user,

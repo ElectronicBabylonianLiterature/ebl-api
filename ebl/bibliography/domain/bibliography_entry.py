@@ -1,6 +1,5 @@
 from typing import Any, cast
 
-
 NAME_SCHEMA = {
     "type": "object",
     "properties": {
@@ -51,6 +50,10 @@ BIBLIOGRAPHY_ALIAS_SCHEMA = {
     "required": ["value"],
     "additionalProperties": False,
 }
+
+SERVER_OWNED_BIBLIOGRAPHY_FIELDS = frozenset(
+    {"aliases", "citationKey", "deprecated", "redirectTo"}
+)
 
 
 CSL_JSON_SCHEMA = {
@@ -195,10 +198,11 @@ CSL_JSON_SCHEMA = {
 }
 
 PARTNER_CSL_JSON_SCHEMA = {
-    **CSL_JSON_SCHEMA,
+    **{key: value for key, value in CSL_JSON_SCHEMA.items() if key != "allOf"},
     "properties": {
-        **cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]),
-        "id": {"type": "string"},
+        key: {"type": "string"} if key == "id" else value
+        for key, value in cast(dict[str, Any], CSL_JSON_SCHEMA["properties"]).items()
+        if key not in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
     },
     "required": ["type"],
 }

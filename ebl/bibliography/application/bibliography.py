@@ -1,32 +1,21 @@
 import re
 from typing import Any, Mapping, Optional, Sequence
 
+import attr
 from pydash import uniq_with
 
-from ebl.bibliography.application.partner_identity import (
-    create_partner_alias,
-    generate_partner_citation_key,
-    select_canonical_bibliography_id,
-)
 from ebl.bibliography.application.duplicate_detection import (
     BibliographyDuplicateDetector,
 )
-from ebl.bibliography.application.duplicate_override import (
-    BLOCKING_DUPLICATE_DECISIONS,
-    DuplicateOverrideError,
-    validate_duplicate_override,
-)
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.partner_bibliography import PartnerBibliography
 from ebl.bibliography.application.serialization import create_mongo_entry
-from ebl.bibliography.domain.reference import Reference
+from ebl.bibliography.domain.reference import BibliographyId, Reference
 from ebl.changelog import Changelog
 from ebl.errors import DataError, Defect, DuplicateError, NotFoundError
 from ebl.users.domain.user import User
 
 COLLECTION = "bibliography"
-DEFAULT_EXPORT_LIMIT = 50
-MAX_EXPORT_LIMIT = 100
-PARTNER_CREATE_RETRY_LIMIT = 5
 MAX_REDIRECT_DEPTH = 5
 
 
@@ -34,6 +23,7 @@ class Bibliography:
     def __init__(self, repository: BibliographyRepository, changelog: Changelog):
         self._repository = repository
         self._changelog = changelog
+        self._partner = PartnerBibliography(self, repository)
 
     def create(self, entry, user: User) -> str:
         created_id = self._repository.create(entry)
@@ -154,129 +144,23 @@ class Bibliography:
         )
 
     def create_partner_entry(self, entry: dict, user: User) -> Optional[dict]:
-        prepared_entry = self._prepare_partner_entry(entry)
-        if duplicate_result := self.find_blocking_duplicate_candidates(prepared_entry):
-            return duplicate_result
-        self._create_prepared_partner_entry(entry, prepared_entry, user)
-        return None
+        return self._partner.create_entry(entry, user)
 
     def create_partner_entry_with_duplicate_override(
         self, entry: dict, override: Mapping[str, Any], user: User
     ) -> None:
-        prepared_entry = self._prepare_partner_entry(entry)
-        duplicate_result = self.find_duplicate_candidates(prepared_entry)
-        if duplicate_result["decision"] not in BLOCKING_DUPLICATE_DECISIONS:
-            raise DuplicateOverrideError(
-                "No current duplicate candidates were found. "
-                "Use POST /api/v1/bibliography instead."
-            )
-        validate_duplicate_override(override, duplicate_result)
-        self._create_prepared_partner_entry(entry, prepared_entry, user)
+        self._partner.create_entry_with_duplicate_override(entry, override, user)
 
     def update_partner_entry(self, id_: str, entry: dict, user: User) -> Optional[dict]:
-        updated_entry = {**entry, "id": id_}
-        if duplicate_result := self.find_blocking_duplicate_candidates(updated_entry):
-            return duplicate_result
-        self.update(updated_entry, user)
-        return None
-
-    def find_blocking_duplicate_candidates(self, entry: dict) -> Optional[dict]:
-        duplicate_result = self.find_duplicate_candidates(entry)
-        return (
-            duplicate_result
-            if duplicate_result["decision"] in BLOCKING_DUPLICATE_DECISIONS
-            else None
-        )
+        return self._partner.update_entry(id_, entry, user)
 
     def export_page(
-        self, cursor: Optional[str] = None, limit: int = DEFAULT_EXPORT_LIMIT
+        self, cursor: Optional[str] = None, limit: int = 50
     ) -> dict:
-        result_limit = max(1, min(limit, MAX_EXPORT_LIMIT))
-        entries = list(self._repository.query_page(cursor, result_limit + 1))
-        items = entries[:result_limit]
-        return {
-            "items": [partner_bibliography_entry(entry) for entry in items],
-            "nextCursor": items[-1]["id"] if len(entries) > result_limit else None,
-            "limit": result_limit,
-        }
+        return self._partner.export_page(cursor, limit)
 
     def find_partner_entry(self, id_: str) -> dict:
-        return partner_bibliography_entry(self.find(id_))
-
-    def _prepare_partner_entry(self, entry: Mapping[str, Any]) -> dict:
-        submitted_partner_id = entry.get("id")
-        reserved_values = (
-            [submitted_partner_id] if isinstance(submitted_partner_id, str) else []
-        )
-        prepared_entry = {
-            key: value for key, value in entry.items() if key != "citationKey"
-        }
-        prepared_entry["id"] = select_canonical_bibliography_id(
-            self._repository.list_all_bibliography(),
-            self._lookup_value_exists,
-            reserved_values,
-        )
-        if isinstance(submitted_partner_id, str):
-            self._ensure_lookup_value_available(submitted_partner_id)
-            prepared_entry["aliases"] = self._merge_alias(
-                entry.get("aliases"),
-                create_partner_alias(submitted_partner_id),
-            )
-        elif "aliases" in entry:
-            prepared_entry["aliases"] = list(entry["aliases"])
-
-        citation_key = generate_partner_citation_key(
-            prepared_entry, self._lookup_value_exists
-        )
-        if citation_key is not None:
-            prepared_entry["citationKey"] = citation_key
-        return prepared_entry
-
-    def _create_prepared_partner_entry(
-        self, original_entry: dict, prepared_entry: dict, user: User
-    ) -> None:
-        pending_entry = dict(prepared_entry)
-        reserved_values = (
-            [original_entry["id"]] if isinstance(original_entry.get("id"), str) else []
-        )
-        for _ in range(PARTNER_CREATE_RETRY_LIMIT):
-            try:
-                self.create(pending_entry, user)
-            except DuplicateError:
-                pending_entry["id"] = select_canonical_bibliography_id(
-                    self._repository.list_all_bibliography(),
-                    self._lookup_value_exists,
-                    reserved_values,
-                )
-                continue
-
-            original_entry.clear()
-            original_entry.update(pending_entry)
-            return
-
-        raise DuplicateError("Unable to generate a unique bibliography id.")
-
-    def _lookup_value_exists(self, value: str) -> bool:
-        try:
-            self.find(value)
-        except NotFoundError:
-            return False
-        except DuplicateError:
-            return True
-        return True
-
-    def _ensure_lookup_value_available(self, value: str) -> None:
-        if self._lookup_value_exists(value):
-            raise DuplicateError(f"Partner bibliography id {value} is already in use.")
-
-    @staticmethod
-    def _merge_alias(aliases: Any, alias: dict[str, str]) -> list[dict]:
-        existing_aliases = [
-            existing_alias
-            for existing_alias in aliases or ()
-            if existing_alias.get("value") != alias["value"]
-        ]
-        return [*existing_aliases, alias]
+        return self._partner.find_entry(id_)
 
     @staticmethod
     def _parse_author_year_and_title(query: str) -> dict:
@@ -328,25 +212,27 @@ class Bibliography:
         return self._repository.query_by_title_short_and_volume(title_short, volume)
 
     def validate_references(self, references: Sequence[Reference]):
-        def is_invalid(reference):
-            try:
-                self.find(reference.id)
-                return False
-            except NotFoundError:
-                return True
+        self.canonicalize_references(references)
 
-        invalid_references = [
-            reference.id for reference in references if is_invalid(reference)
-        ]
+    def canonicalize_references(
+        self, references: Sequence[Reference]
+    ) -> tuple[Reference, ...]:
+        canonical_references: list[Reference] = []
+        invalid_references: list[str] = []
+
+        for reference in references:
+            try:
+                entry = self.find(reference.id)
+            except NotFoundError:
+                invalid_references.append(reference.id)
+            else:
+                canonical_references.append(
+                    attr.evolve(reference, id=BibliographyId(entry["id"]))
+                )
+
         if invalid_references:
             raise DataError(
                 f"Unknown bibliography entries: {', '.join(invalid_references)}."
             )
 
-
-def partner_bibliography_entry(entry: Mapping[str, Any]) -> dict:
-    return {
-        "id": entry["id"],
-        "citationKey": entry.get("citationKey"),
-        "bibliographyEntry": dict(entry),
-    }
+        return tuple(canonical_references)

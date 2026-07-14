@@ -10,12 +10,36 @@ from ebl.bibliography.domain.bibliography_entry import (
     DUPLICATE_CANDIDATE_JSON_SCHEMA,
     PARTNER_CSL_JSON_SCHEMA,
     PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA,
+    SERVER_OWNED_BIBLIOGRAPHY_FIELDS,
 )
+from ebl.errors import DataError
 from ebl.users.web.require_scope import require_scope
-from ebl.bibliography.application.bibliography import (
-    Bibliography,
-    DuplicateOverrideError,
-)
+from ebl.bibliography.application.bibliography import Bibliography
+from ebl.bibliography.application.duplicate_override import DuplicateOverrideError
+
+
+def reject_server_owned_partner_fields(req, _resp, _resource, _params) -> None:
+    media = req.media
+    if not isinstance(media, dict):
+        return
+
+    candidate_entries = [media]
+    if isinstance(media.get("bibliographyEntry"), dict):
+        candidate_entries = [media["bibliographyEntry"]]
+
+    forbidden_fields = sorted(
+        {
+            field
+            for entry in candidate_entries
+            for field in SERVER_OWNED_BIBLIOGRAPHY_FIELDS
+            if field in entry
+        }
+    )
+    if forbidden_fields:
+        raise DataError(
+            "Partner bibliography payload may not include server-owned fields: "
+            f"{', '.join(forbidden_fields)}."
+        )
 
 
 class BibliographyResource:
@@ -96,6 +120,7 @@ class PartnerBibliographyResource:
         resp.media = self._bibliography.export_page(req.get_param("cursor"), limit)
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response) -> None:
         bibliography_entry = req.media
@@ -119,7 +144,8 @@ class PartnerBibliographyEntryResource:
         resp.media = self._bibliography.find_partner_entry(id_or_citation_key)
 
     @falcon.before(require_scope, "write:bibliography")
-    @validate(CSL_JSON_SCHEMA)
+    @falcon.before(reject_server_owned_partner_fields)
+    @validate(PARTNER_CSL_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response, id_or_citation_key: str) -> None:
         if duplicate_result := self._bibliography.update_partner_entry(
             id_or_citation_key, req.media, req.context.user
@@ -150,6 +176,7 @@ class PartnerBibliographyDuplicateOverrideResource:
         self._bibliography = bibliography
 
     @falcon.before(require_scope, "write:bibliography")
+    @falcon.before(reject_server_owned_partner_fields)
     @validate(PARTNER_DUPLICATE_OVERRIDE_JSON_SCHEMA)
     def on_post(self, req: Request, resp: Response) -> None:
         bibliography_entry = req.media["bibliographyEntry"]
