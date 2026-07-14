@@ -192,7 +192,7 @@ class Museum(Enum):
     )
     NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DK", "https://en.natmus.dk/")
     MUSEO_NAZIONALE_D_ARTE_ORIENTALE = (
-        'Museo Nazionale d’Arte Orientale “Giuseppe Tucci”',
+        "Museo Nazionale d’Arte Orientale “Giuseppe Tucci”",
         "Rome",
         "IT",
         "https://www.museodellecivilta.it/arte-orientale/",
