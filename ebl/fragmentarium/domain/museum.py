@@ -191,8 +191,8 @@ class Museum(Enum):
         "https://muze.gov.tr/muze-detay?SectionId=AMM01&DistId=AMM",
     )
     NATIONALMUSEET = ("Nationalmuseet", "Copenhagen", "DK", "https://en.natmus.dk/")
-    NATIONAL_MUSEUM_OF_ORIENTAL_ART = (
-        'Museo Nazionale d\'Arte Orientale "Giuseppe Tucci"',
+    MUSEO_NAZIONALE_D_ARTE_ORIENTALE = (
+        'Museo Nazionale d’Arte Orientale “Giuseppe Tucci”',
         "Rome",
         "IT",
         "https://www.museodellecivilta.it/arte-orientale/",
