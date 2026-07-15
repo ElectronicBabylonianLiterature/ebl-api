@@ -4,7 +4,7 @@ from typing import Dict, List, Sequence, Type, cast
 from falcon import Request, Response, before
 from marshmallow import Schema, ValidationError
 
-from ebl.errors import DataError, NotFoundError
+from ebl.errors import DataError
 from ebl.fragmentarium.application.fragment_finder import FragmentFinder
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.named_entity_schema import (
@@ -73,11 +73,16 @@ class NamedEntityResource:
             )
 
     def _validate_realia_ids(self, spans: Sequence[RealiaAnnotationSpan]) -> None:
-        for realia_id in sorted({span.realia_id for span in spans}):
-            try:
-                self._realia_repository.find_by_realia_id(realia_id)
-            except NotFoundError as error:
-                raise DataError(f"Unknown realiaId '{realia_id}'.") from error
+        requested = {span.realia_id for span in spans}
+        if not requested:
+            return
+        found = {
+            entry.realia_id
+            for entry in self._realia_repository.find_by_realia_ids(sorted(requested))
+        }
+        missing = sorted(requested - found)
+        if missing:
+            raise DataError(f"Unknown realiaId: {', '.join(missing)}.")
 
     def on_get(self, req: Request, resp: Response, number: str):
         fragment, _ = self._finder.find(parse_museum_number(number))

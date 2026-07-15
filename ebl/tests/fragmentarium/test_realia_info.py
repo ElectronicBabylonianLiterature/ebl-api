@@ -81,4 +81,4 @@ def test_resolve_empty_without_realia():
     repository = FakeRealiaRepository([])
 
     assert resolve_realia_info(fragment_with_realia(), repository) == []
-    assert repository.calls == [[]]
+    assert repository.calls == []

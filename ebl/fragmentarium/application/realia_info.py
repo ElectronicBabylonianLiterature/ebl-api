@@ -22,6 +22,8 @@ def resolve_realia_info(
     fragment: Fragment, realia_repository: RealiaRepository
 ) -> List[RealiaInfo]:
     realia_ids = sorted({entity.realia_id for entity in fragment.realia})
+    if not realia_ids:
+        return []
     entries = realia_repository.find_by_realia_ids(realia_ids)
     return [
         RealiaInfo(realia_id=entry.realia_id, lemma=entry.id, type=entry.type)
