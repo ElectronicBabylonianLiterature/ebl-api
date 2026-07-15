@@ -23,11 +23,13 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.application.realia_info import resolve_realia_info
 from ebl.fragmentarium.web.dtos import (
     create_response_dto,
     parse_excavation_number,
     parse_museum_number,
 )
+from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.schemas import ScopeField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
@@ -83,8 +85,9 @@ class FragmentsRetrieveAllResource:
 
 
 class FragmentsResource:
-    def __init__(self, finder: FragmentFinder):
+    def __init__(self, finder: FragmentFinder, realia_repository: RealiaRepository):
         self._finder = finder
+        self._realia_repository = realia_repository
 
     @falcon.before(require_fragment_read_scope)
     def on_get(self, req: Request, resp: Response, number: str):
@@ -100,7 +103,12 @@ class FragmentsResource:
                 lines=lines,
                 exclude_lines=exclude_lines,
             )
-        resp.media = create_response_dto(fragment, req.context.user, has_photo)
+        resp.media = create_response_dto(
+            fragment,
+            req.context.user,
+            has_photo,
+            resolve_realia_info(fragment, self._realia_repository),
+        )
 
 
 class FragmentsQueryResource:

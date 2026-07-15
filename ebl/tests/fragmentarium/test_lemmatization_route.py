@@ -46,7 +46,7 @@ def test_update_lemmatization(client, fragmentarium, user, database):
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{transliterated_fragment.number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
     assert database["changelog"].find_one(
         {

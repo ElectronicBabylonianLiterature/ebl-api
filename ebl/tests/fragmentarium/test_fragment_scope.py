@@ -54,4 +54,16 @@ def test_update_scopes(client, fragmentarium, user, parameters):
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
+
+
+def test_update_scopes_invalid_scope(client, fragmentarium):
+    fragment = FragmentFactory.build()
+    fragment_number = fragmentarium.create(fragment)
+
+    post_result = client.simulate_post(
+        f"/fragments/{fragment_number}/scopes",
+        body=json.dumps({"authorized_scopes": ["not-a-scope"]}),
+    )
+
+    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

@@ -17,7 +17,12 @@ from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.record import RecordType
-from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.fragmentarium.domain.archaeology import ExcavationNumber
+from ebl.fragmentarium.web.dtos import (
+    create_response_dto,
+    parse_excavation_number,
+    parse_museum_number,
+)
 from ebl.tests.factories.fragment import (
     JoinFactory,
     LemmatizedFragmentFactory,
@@ -180,3 +185,13 @@ def test_parse_museum_number():
 def test_parse_invalid_museum_number():
     with pytest.raises(DataError):
         parse_museum_number("invalid")
+
+
+def test_parse_excavation_number():
+    number = ExcavationNumber("A", "B", "C")
+    assert parse_excavation_number(str(number)) == number
+
+
+def test_parse_invalid_excavation_number():
+    with pytest.raises(DataError):
+        parse_excavation_number("invalid")

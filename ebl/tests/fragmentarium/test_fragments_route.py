@@ -51,9 +51,11 @@ def test_get(
         expected_fragment,
         user,
         transliterated_fragment.number == MuseumNumber("K", "1"),
+        realia_info=[],
     )
 
     assert result.json == expected
+    assert result.json["realiaInfo"] == []
     assert result.status == falcon.HTTP_OK
 
 
@@ -128,3 +130,45 @@ def test_get_all_fragment_ocred_signs(client, fragmentarium):
     assert len(result.json) == 1
     assert "ocredSigns" in result.json[0]
     assert result.json[0]["ocredSigns"] == "ABZ10 X"
+
+
+def test_get_all_fragment_signs(client, fragmentarium):
+    fragment = TransliteratedFragmentFactory.build()
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get("/fragments/all-signs")
+
+    assert result.status == falcon.HTTP_OK
+    assert len(result.json) == 1
+
+
+def test_retrieve_all_serializes_fragment(client, fragmentarium):
+    fragment = TransliteratedFragmentFactory.build(authorized_scopes=None)
+    fragmentarium.create(fragment)
+
+    result = client.simulate_get("/fragments/retrieve-all?skip=0")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["totalCount"] == 1
+    [serialized] = result.json["fragments"]
+    assert "atf" in serialized
+    assert "hasPhoto" in serialized
+    assert "text" not in serialized
+
+
+def test_retrieve_all_skip_not_numeric(client):
+    result = client.simulate_get("/fragments/retrieve-all?skip=abc")
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_retrieve_all_skip_negative(client):
+    result = client.simulate_get("/fragments/retrieve-all?skip=-1")
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_retrieve_all_skip_greater_than_total(client):
+    result = client.simulate_get("/fragments/retrieve-all?skip=99")
+
+    assert result.status == falcon.HTTP_UNPROCESSABLE_ENTITY

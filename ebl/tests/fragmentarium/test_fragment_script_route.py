@@ -58,7 +58,7 @@ def test_update_script(client, fragmentarium, user, currentScript, updatedScript
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
 
 def test_update_invalid_script(client, fragmentarium, user, database):

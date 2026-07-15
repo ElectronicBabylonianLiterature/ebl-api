@@ -37,7 +37,7 @@ def test_update_references(
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
 
 def test_update_references_not_found(client):

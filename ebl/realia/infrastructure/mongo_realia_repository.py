@@ -48,6 +48,13 @@ class MongoRealiaRepository(RealiaRepository):
             raise NotFoundError(f"Realia entry with realiaId '{realia_id}' not found.")
         return self._load_entry(document)
 
+    def find_by_realia_ids(self, realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
+        documents = self._realia_collection.find_many(
+            {"realiaId": {"$in": list(realia_ids)}},
+            projection={"realiaId": True, "type": True},
+        )
+        return RealiaEntrySchema(many=True).load(list(documents))
+
     def _load_entry(self, document: dict) -> RealiaEntry:
         entries = [RealiaEntrySchema().load(document)]
         self._inject_bibliography(entries)

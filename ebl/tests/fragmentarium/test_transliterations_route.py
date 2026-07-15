@@ -108,7 +108,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
     assert find_changelog_entry(
         database,
@@ -170,7 +170,7 @@ def test_update_transliteration_merge_lemmatization(
     updated_fragment = client.simulate_get(
         f"/fragments/{lemmatized_fragment.number}"
     ).json
-    assert updated_fragment == expected_json
+    assert updated_fragment == {**expected_json, "realiaInfo": []}
 
 
 def test_update_transliteration_invalid_atf(client, fragmentarium):
@@ -267,7 +267,7 @@ def test_update_notes(client, fragmentarium, user, database, old_notes, new_note
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
     assert find_changelog_entry(
         database,
@@ -312,7 +312,7 @@ def test_update_introduction(
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
     assert find_changelog_entry(
         database,
@@ -379,7 +379,7 @@ def test_update_multiple_fields(
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
     assert find_changelog_entry(
         database,

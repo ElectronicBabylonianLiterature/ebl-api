@@ -4,6 +4,7 @@ from ebl.bibliography.application.bibliography_repository import BibliographyRep
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.infrastructure.mongo_realia_repository import MongoRealiaRepository
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
+from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.tests.factories.realia import RealiaEntryFactory
 from ebl.tests.realia.realia_repository_helpers import (
     create_entry_with_bibliography,
@@ -11,6 +12,19 @@ from ebl.tests.realia.realia_repository_helpers import (
     stored_reallexikon_entry,
 )
 from ebl.errors import DuplicateError, NotFoundError
+
+
+def insert_minimal_entry(
+    realia_repository: MongoRealiaRepository, realia_id: str, lemma: str
+) -> None:
+    entry = RealiaEntryFactory.build(
+        id=lemma,
+        realia_id=realia_id,
+        related_terms=(),
+        references=(),
+        reallexikon=(),
+    )
+    realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
 
 
 def test_create_indexes_declares_partial_unique_realia_id(
@@ -95,6 +109,35 @@ def test_find_by_realia_id(
 def test_find_by_realia_id_not_found(realia_repository: RealiaRepository) -> None:
     with pytest.raises(NotFoundError):
         realia_repository.find_by_realia_id("realia_999999")
+
+
+def test_find_by_realia_ids_returns_distinct_entries(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    insert_minimal_entry(realia_repository, "realia_000001", "Alpha")
+    insert_minimal_entry(realia_repository, "realia_000002", "Beta")
+
+    results = realia_repository.find_by_realia_ids(["realia_000001", "realia_000002"])
+
+    assert {result.realia_id for result in results} == {
+        "realia_000001",
+        "realia_000002",
+    }
+    assert {result.id for result in results} == {"Alpha", "Beta"}
+
+
+def test_find_by_realia_ids_omits_missing(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    insert_minimal_entry(realia_repository, "realia_000001", "Alpha")
+
+    results = realia_repository.find_by_realia_ids(["realia_000001", "realia_999999"])
+
+    assert [result.realia_id for result in results] == ["realia_000001"]
+
+
+def test_find_by_realia_ids_empty(realia_repository: MongoRealiaRepository) -> None:
+    assert list(realia_repository.find_by_realia_ids([])) == []
 
 
 def test_find_injects_lean_reallexikon_reference(

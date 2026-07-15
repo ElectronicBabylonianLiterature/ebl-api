@@ -57,7 +57,7 @@ def test_update_date(client, fragmentarium, user, current_date, updated_date):
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
 
 def test_update_invalid_dates_in_text(client, fragmentarium, user, database):
