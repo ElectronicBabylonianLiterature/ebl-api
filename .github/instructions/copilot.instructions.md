@@ -4,8 +4,33 @@ applyTo: '**'
 
 # Copilot Instructions
 
-Provide project context and coding guidelines that AI should follow when
-generating code, answering questions, or reviewing changes.
+Project context and coding rules to follow when generating code, answering
+questions, or reviewing changes.
+
+## HARD GATE: Every Instruction In This File Is A Hard Gate
+
+**Nothing in this file is advisory. Nothing may ever be skipped.** Every
+section below carries the same binding force as the sections whose headings
+say `HARD GATE` explicitly — those headings mark emphasis, not a higher tier.
+There is no such thing as a minor point here.
+
+- **Read "should", "avoid", "prefer" and "by default" as "must".** No point is
+  a suggestion, a nice-to-have, or something to apply when convenient.
+- **A checklist is exhaustive, never illustrative.** Running the named items is
+  not evidence the list is complete — check this file for gates the list omits.
+  Do not infer that one check passing means another would.
+- **Skipping is failure, and so is deferring.** "I'll do it if asked", "it
+  seemed like churn", "the work is obviously done" and "it was already like
+  that" are not reasons. If a point genuinely cannot be satisfied, stop and say
+  so before acting — never proceed and mention it afterwards.
+- **A correction is a standing rule, not a one-off.** When corrected for
+  skipping a point, the fix applies to every later task in the session and
+  beyond, not just the task in hand.
+- **Comply first, argue second.** Follow the instruction as written; raise
+  disagreement separately. Never reinterpret a point so it no longer binds.
+
+Before reporting any task complete, re-read this file and confirm every
+section was honoured. State which gates ran and their results.
 
 ## Scope and Project Context
 
@@ -149,16 +174,45 @@ are not permission to commit. Run all of the following in order and confirm each
 passes before committing:
 
 1. `task format` — auto-format code (must exit 0 with no unstaged changes left)
-2. `task test` — full test suite (must pass with 0 failures)
-3. `poetry run pytest <changed modules> --cov=<changed modules>
+2. `task lint` — ruff (must exit 0)
+3. `task type` — **pyre; this is the gate CI enforces. Zero errors.**
+4. `task type-pyright` — pyright on changed files. Zero errors.
+5. `task test` — full test suite (must pass with 0 failures)
+6. `poetry run pytest <changed modules> --cov=<changed modules>
    --cov-report=term-missing` — 100% coverage on all changed files
-4. `poetry run flake8 <changed modules> --max-line-length=120` — zero lint
+7. `poetry run flake8 <changed modules> --max-line-length=120` — zero lint
    errors
-5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
-   errors (pre-existing errors are not acceptable; fix them)
+8. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
+   errors in the changed files (a pre-existing error in a file you touched is
+   not acceptable; fix it)
 
 Never commit if any gate fails or was skipped. Never commit if the user did not
 ask you to — see the hard gate above.
+
+### HARD GATE: All Three Type Checkers Must Pass
+
+The repo runs **three** type checkers and they do not agree. Passing one says
+nothing about the others. All three are blocking:
+
+- `task type` (**pyre**) — the checker CI runs. A pyre error fails the build.
+- `task type-pyright` (**pyright**) — the checker behind Pylance / the IDE.
+- `poetry run mypy` — as scoped in gate 8 above.
+
+Never treat a green mypy or pyright as evidence that pyre passes. Pyre ships its
+own typeshed and rejects constructs the others accept — `zip(..., strict=True)`
+(a Python 3.10 parameter) is one real example that reached CI. **Run `task type`
+before every commit, and never infer its result from another checker.**
+
+When two checkers give contradictory demands, **the code is wrong, not the
+checkers.** Restructure until all three pass. Do not satisfy one by breaking
+another, and do not silence either with a config change, an ignore comment, or a
+suppression — see the rule against disabling lint rules. Worked example: ruff
+`B905` requires `zip(..., strict=)` while pyre rejects `strict`; the resolution
+was to remove the parallel-array `zip` entirely in favour of a keyed lookup,
+which satisfied every checker and produced a better design.
+
+`task test-all` runs format, lint, type, type-pyright, test and lint-md together
+and is the cheapest way to confirm every gate at once.
 
 ## Testing and Quality
 
@@ -166,6 +220,15 @@ ask you to — see the hard gate above.
 - When writing tests, ensure they are isolated and do not depend on
   external state (pytest conventions).
 - Ensure that coverage is 100% after changes in affected code.
+- HARD GATE: verify changed behaviour by **running the modified backend
+  service** and exercising the affected route, not by tests alone, whenever the
+  change has a runtime surface. A passing suite is not evidence the running
+  service behaves correctly.
+- HARD GATE: **re-verify after every rewrite.** Evidence gathered before a
+  change does not cover what replaced it. If the implementation is reworked
+  after a verification run, that run is void — do it again against the code
+  that will actually ship, and confirm the process you are testing is running
+  the current tree.
 - HARD GATE: pre-existing coverage gaps must be filled, not preserved. Any
   line you add, modify, move, or relocate must end at 100% coverage, even if
   it was uncovered before you touched it. "It was already uncovered on the
@@ -185,7 +248,10 @@ ask you to — see the hard gate above.
   sections, `mypy.ini`, `ruff.toml`, etc.) without an explicit user
   request. Fix real content issues instead of disabling rules.
 
-## Task Tracking and Cleanup
+## HARD GATE: Task Tracking and Cleanup
+
+**Create the TODO and the log BEFORE starting work — not at the end, not when
+reminded.** They are the first artefacts of a task, not a write-up of it.
 
 - For every task, create a mandatory detailed TODO list in a `.md` file.
 - For every task, create and maintain a detailed work log in a `.md`
@@ -193,7 +259,16 @@ ask you to — see the hard gate above.
 - Use a consistent naming convention for these files:
   `TASK-<id>-todo.md` and `TASK-<id>-log.md`.
 - Keep both the task TODO list and task log constantly updated while
-  working.
+  working. "Constantly" means as each step completes, not in one pass at the
+  end.
+- **Every task means every task.** A fix, a review, a one-line change, a
+  follow-up to the task just finished — each is a task and each needs both
+  files. Small, obvious, or urgent is not an exemption. Being mid-session or
+  continuing earlier work does not carry the previous task's files forward.
+- The log records what was actually done, including **every error made and
+  how it was recovered**, not a sanitised account.
+- Removing these files at a user's request settles that PR only. The **next**
+  task starts by creating them again.
 - Before a PR is merged, check for these task TODO/log `.md` files and
   remind to remove them.
 

@@ -27,7 +27,8 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.application.realia_info import (
     RealiaInfoSchema,
-    resolve_realia_info_for_documents,
+    document_realia_info,
+    resolve_realia_info_map,
 )
 from ebl.fragmentarium.web.dtos import (
     FragmentDtoFactory,
@@ -83,19 +84,17 @@ class FragmentsRetrieveAllResource:
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
-        realia_info = resolve_realia_info_for_documents(
-            fragments, self._realia_repository
-        )
+        info_by_realia_id = resolve_realia_info_map(fragments, self._realia_repository)
         fragments_ = []
         # to improve performance we don't serialize the complete Fragment in fragment_repository
         # because we would have to deserialize it again here to return it to client
-        for fragment, fragment_realia_info in zip(fragments, realia_info, strict=True):
+        for fragment in fragments:
             fragment["atf"] = cast(Text, TextSchema().load(fragment["text"])).atf
             dict.pop(fragment, "text")
             number = MuseumNumberSchema().load(fragment["museumNumber"])
             fragment["hasPhoto"] = self._photos.query_if_file_exists(f"{number}.jpg")
             fragment["realiaInfo"] = RealiaInfoSchema(many=True).dump(
-                fragment_realia_info
+                document_realia_info(fragment, info_by_realia_id)
             )
             fragments_.append(fragment)
         resp.media = {"totalCount": total_count, "fragments": fragments_}

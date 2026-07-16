@@ -40,28 +40,29 @@ def _document_realia_ids(document: dict) -> List[str]:
     return sorted({realia["realiaId"] for realia in document.get("realia", [])})
 
 
-def resolve_realia_info_for_documents(
+def resolve_realia_info_map(
     documents: Sequence[dict], realia_repository: RealiaRepository
-) -> List[List[RealiaInfo]]:
-    realia_ids_per_document = [_document_realia_ids(document) for document in documents]
+) -> Dict[str, RealiaInfo]:
     all_realia_ids = sorted(
         {
             realia_id
-            for realia_ids in realia_ids_per_document
-            for realia_id in realia_ids
+            for document in documents
+            for realia_id in _document_realia_ids(document)
         }
     )
     if not all_realia_ids:
-        return [[] for _ in documents]
-    info_by_realia_id: Dict[str, RealiaInfo] = {
+        return {}
+    return {
         entry.realia_id: _to_realia_info(entry)
         for entry in realia_repository.find_by_realia_ids(all_realia_ids)
     }
+
+
+def document_realia_info(
+    document: dict, info_by_realia_id: Dict[str, RealiaInfo]
+) -> List[RealiaInfo]:
     return [
-        [
-            info_by_realia_id[realia_id]
-            for realia_id in realia_ids
-            if realia_id in info_by_realia_id
-        ]
-        for realia_ids in realia_ids_per_document
+        info_by_realia_id[realia_id]
+        for realia_id in _document_realia_ids(document)
+        if realia_id in info_by_realia_id
     ]
