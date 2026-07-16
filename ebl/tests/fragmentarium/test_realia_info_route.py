@@ -1,32 +1,15 @@
 import falcon
 
 from ebl.fragmentarium.domain.named_entity import RealiaAnnotationSpan
-from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
-from ebl.tests.factories.realia import RealiaEntryFactory
+from ebl.tests.fragmentarium.realia_helpers import (
+    create_realia_fragment,
+    store_realia,
+)
 
 APKALLU_ID = "realia_000846"
 LAMASSU_ID = "realia_000847"
 DANGLING_ID = "realia_999999"
-
-
-def store_realia(realia_repository, realia_id, lemma, type_):
-    entry = RealiaEntryFactory.build(
-        id=lemma,
-        realia_id=realia_id,
-        type=type_,
-        related_terms=(),
-        references=(),
-        reallexikon=(),
-    )
-    realia_repository._realia_collection.insert_one(RealiaEntrySchema().dump(entry))
-
-
-def create_realia_fragment(fragmentarium, realia_spans):
-    fragment = TransliteratedFragmentFactory.build().set_token_ids()
-    fragment = fragment.set_named_entities([], realia_spans)
-    fragmentarium.create(fragment)
-    return fragment
 
 
 def test_realia_info_per_distinct_id_from_single_batch(

@@ -25,11 +25,16 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.application.realia_info import (
+    RealiaInfoSchema,
+    resolve_realia_info_for_documents,
+)
 from ebl.fragmentarium.web.dtos import (
     FragmentDtoFactory,
     parse_excavation_number,
     parse_museum_number,
 )
+from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.schemas import ScopeField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
@@ -49,10 +54,14 @@ def _parse_fragment_query(parameters, *parsers):
 
 class FragmentsRetrieveAllResource:
     def __init__(
-        self, repository: FragmentRepository, photos_repository: FileRepository
+        self,
+        repository: FragmentRepository,
+        photos_repository: FileRepository,
+        realia_repository: RealiaRepository,
     ):
         self._repo = repository
         self._photos = photos_repository
+        self._realia_repository = realia_repository
 
     def _parse_skip(self, skip: str, total_count: int) -> int:
         try:
@@ -74,14 +83,20 @@ class FragmentsRetrieveAllResource:
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
+        realia_info = resolve_realia_info_for_documents(
+            fragments, self._realia_repository
+        )
         fragments_ = []
         # to improve performance we don't serialize the complete Fragment in fragment_repository
         # because we would have to deserialize it again here to return it to client
-        for fragment in fragments:
+        for fragment, fragment_realia_info in zip(fragments, realia_info, strict=True):
             fragment["atf"] = cast(Text, TextSchema().load(fragment["text"])).atf
             dict.pop(fragment, "text")
             number = MuseumNumberSchema().load(fragment["museumNumber"])
             fragment["hasPhoto"] = self._photos.query_if_file_exists(f"{number}.jpg")
+            fragment["realiaInfo"] = RealiaInfoSchema(many=True).dump(
+                fragment_realia_info
+            )
             fragments_.append(fragment)
         resp.media = {"totalCount": total_count, "fragments": fragments_}
 

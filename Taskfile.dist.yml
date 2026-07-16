@@ -50,11 +50,13 @@ tasks:
       code is gated on pyright too.
     cmds:
       - |
-        FILES=$(git diff --name-only --diff-filter=ACMR origin/master...HEAD -- '*.py')
+        BASE=origin/master
+        git rev-parse --verify --quiet "$BASE" >/dev/null 2>&1 || BASE=master
+        FILES=$(git diff --name-only --diff-filter=ACMR "$BASE...HEAD" -- '*.py')
         if [ -z "$FILES" ]; then
           echo "No changed Python files."
         else
-          npx --yes pyright@1.1.411 $FILES
+          printf '%s\n' "$FILES" | xargs npx --yes pyright@1.1.411
         fi
 
   format:

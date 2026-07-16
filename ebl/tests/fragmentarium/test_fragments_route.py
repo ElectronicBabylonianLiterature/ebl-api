@@ -3,10 +3,19 @@ import attr
 import falcon
 from ebl.common.domain.scopes import Scope
 
+from ebl.fragmentarium.domain.named_entity import RealiaAnnotationSpan
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.fragmentarium.realia_helpers import (
+    create_realia_fragment,
+    store_realia,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from urllib.parse import urlencode
+
+APKALLU_ID = "realia_000846"
+LAMASSU_ID = "realia_000847"
+DANGLING_ID = "realia_999999"
 
 
 @pytest.mark.parametrize(
@@ -36,14 +45,13 @@ def test_get(
 
     start, end = lines_slice
     text_lines = transliterated_fragment.text.lines
+    end_index = end or len(text_lines)
 
     expected_fragment = attr.evolve(
         transliterated_fragment,
         text=attr.evolve(
             transliterated_fragment.text,
-            lines=parallel_line_injector.inject(
-                text_lines[start : end or len(text_lines)]
-            )
+            lines=parallel_line_injector.inject(text_lines[start:end_index])
             or text_lines,
         ),
     )
@@ -154,6 +162,63 @@ def test_retrieve_all_serializes_fragment(client, fragmentarium):
     assert "atf" in serialized
     assert "hasPhoto" in serialized
     assert "text" not in serialized
+    assert serialized["realiaInfo"] == []
+
+
+def test_retrieve_all_resolves_realia_info(
+    client, fragmentarium, realia_repository, monkeypatch
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    store_realia(realia_repository, LAMASSU_ID, "Lamassu", ["Object names"])
+    create_realia_fragment(
+        fragmentarium,
+        [RealiaAnnotationSpan("Realia-1", APKALLU_ID, ["Word-2", "Word-3"])],
+        authorized_scopes=None,
+    )
+    create_realia_fragment(
+        fragmentarium,
+        [RealiaAnnotationSpan("Realia-1", LAMASSU_ID, ["Word-7"])],
+        authorized_scopes=None,
+    )
+    calls = []
+    original = realia_repository.find_by_realia_ids
+    monkeypatch.setattr(
+        realia_repository,
+        "find_by_realia_ids",
+        lambda realia_ids: calls.append(list(realia_ids)) or original(realia_ids),
+    )
+
+    result = client.simulate_get("/fragments/retrieve-all?skip=0")
+
+    assert result.status == falcon.HTTP_OK
+    realia_info = [fragment["realiaInfo"] for fragment in result.json["fragments"]]
+    assert sorted(realia_info, key=lambda info: info[0]["realiaId"]) == [
+        [{"realiaId": APKALLU_ID, "lemma": "Apkallu", "type": ["Divine names"]}],
+        [{"realiaId": LAMASSU_ID, "lemma": "Lamassu", "type": ["Object names"]}],
+    ]
+    assert calls == [[APKALLU_ID, LAMASSU_ID]]
+
+
+def test_retrieve_all_skips_dangling_realia_id(
+    client, fragmentarium, realia_repository
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    create_realia_fragment(
+        fragmentarium,
+        [
+            RealiaAnnotationSpan("Realia-1", APKALLU_ID, ["Word-2"]),
+            RealiaAnnotationSpan("Realia-2", DANGLING_ID, ["Word-7"]),
+        ],
+        authorized_scopes=None,
+    )
+
+    result = client.simulate_get("/fragments/retrieve-all?skip=0")
+
+    assert result.status == falcon.HTTP_OK
+    [serialized] = result.json["fragments"]
+    assert serialized["realiaInfo"] == [
+        {"realiaId": APKALLU_ID, "lemma": "Apkallu", "type": ["Divine names"]}
+    ]
 
 
 def test_retrieve_all_skip_not_numeric(client):

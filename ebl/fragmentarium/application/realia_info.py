@@ -1,10 +1,11 @@
-from typing import List
+from typing import Dict, List, Sequence
 
 from marshmallow import Schema, fields, post_load
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.realia_info import RealiaInfo
 from ebl.realia.application.realia_repository import RealiaRepository
+from ebl.realia.domain.realia_entry import RealiaEntry
 
 
 class RealiaInfoSchema(Schema):
@@ -18,6 +19,10 @@ class RealiaInfoSchema(Schema):
         return RealiaInfo(**data)
 
 
+def _to_realia_info(entry: RealiaEntry) -> RealiaInfo:
+    return RealiaInfo(realia_id=entry.realia_id, lemma=entry.id, type=entry.type)
+
+
 def resolve_realia_info(
     fragment: Fragment, realia_repository: RealiaRepository
 ) -> List[RealiaInfo]:
@@ -26,6 +31,37 @@ def resolve_realia_info(
         return []
     entries = realia_repository.find_by_realia_ids(realia_ids)
     return [
-        RealiaInfo(realia_id=entry.realia_id, lemma=entry.id, type=entry.type)
+        _to_realia_info(entry)
         for entry in sorted(entries, key=lambda entry: entry.realia_id)
+    ]
+
+
+def _document_realia_ids(document: dict) -> List[str]:
+    return sorted({realia["realiaId"] for realia in document.get("realia", [])})
+
+
+def resolve_realia_info_for_documents(
+    documents: Sequence[dict], realia_repository: RealiaRepository
+) -> List[List[RealiaInfo]]:
+    realia_ids_per_document = [_document_realia_ids(document) for document in documents]
+    all_realia_ids = sorted(
+        {
+            realia_id
+            for realia_ids in realia_ids_per_document
+            for realia_id in realia_ids
+        }
+    )
+    if not all_realia_ids:
+        return [[] for _ in documents]
+    info_by_realia_id: Dict[str, RealiaInfo] = {
+        entry.realia_id: _to_realia_info(entry)
+        for entry in realia_repository.find_by_realia_ids(all_realia_ids)
+    }
+    return [
+        [
+            info_by_realia_id[realia_id]
+            for realia_id in realia_ids
+            if realia_id in info_by_realia_id
+        ]
+        for realia_ids in realia_ids_per_document
     ]

@@ -47,15 +47,11 @@ class EditionResource:
     def _create_transliteration(
         self, transliteration: Optional[str]
     ) -> Optional[TransliterationUpdate]:
-        try:
-            return (
-                None
-                if transliteration is None
-                else self._transliteration_factory.create(Atf(transliteration))
-            )
-
-        except ValueError as error:
-            raise DataError(error) from error
+        return (
+            None
+            if transliteration is None
+            else self._transliteration_factory.create(Atf(transliteration))
+        )
 
     @falcon.before(require_scope, "transliterate:fragments")
     @validate(EDITION_DTO_SCHEMA)
