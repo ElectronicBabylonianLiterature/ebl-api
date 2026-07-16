@@ -31,13 +31,14 @@ def test_update_references(
         ),
         user,
         fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
-    assert get_result.json == {**expected_json, "realiaInfo": []}
+    assert get_result.json == expected_json
 
 
 def test_update_references_not_found(client):

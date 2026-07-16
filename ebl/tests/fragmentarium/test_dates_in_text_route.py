@@ -51,6 +51,7 @@ def test_update_date(client, fragmentarium, user, current_date, updated_date):
         fragment.set_dates_in_text([updated_date] if updated_date else []),
         user,
         fragment.number == "K.1",
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK

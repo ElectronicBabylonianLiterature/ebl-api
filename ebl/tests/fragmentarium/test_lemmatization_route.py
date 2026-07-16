@@ -1,8 +1,10 @@
 import json
+from typing import cast
 
 import falcon
 import pytest
 
+from ebl.dictionary.domain.word import WordId
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.fragmentarium.web.lemmatizations import LemmatizationSchema
@@ -30,7 +32,7 @@ def test_update_lemmatization(client, fragmentarium, user, database):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
-    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, (WordId("aklu I"),))
     lemmatization = Lemmatization(tokens)
     body = LemmatizationSchema().dumps(lemmatization)
     url = f"/fragments/{transliterated_fragment.number}/lemmatization"
@@ -40,6 +42,7 @@ def test_update_lemmatization(client, fragmentarium, user, database):
         transliterated_fragment.update_lemmatization(lemmatization),
         user,
         transliterated_fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK
@@ -100,7 +103,9 @@ def test_update_lemmatization_invalid_entity(client, fragmentarium, body):
 def test_update_lemmatization_atf_change(client, fragmentarium):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragmentarium.create(transliterated_fragment)
-    dto = LemmatizationSchema().dump(transliterated_fragment.text.lemmatization)
+    dto = cast(
+        dict, LemmatizationSchema().dump(transliterated_fragment.text.lemmatization)
+    )
     dto["lemmatization"][0][0]["value"] = "ana"
     url = f"/fragments/{transliterated_fragment.number}/lemmatization"
     post_result = client.simulate_post(url, body=json.dumps(dto))

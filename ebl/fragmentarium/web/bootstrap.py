@@ -30,6 +30,7 @@ from ebl.fragmentarium.web.fragments import (
     make_all_fragment_signs_resource,
     make_all_fragment_ocred_signs_resource,
 )
+from ebl.fragmentarium.web.dtos import FragmentDtoFactory
 from ebl.fragmentarium.web.genres import GenresResource
 from ebl.fragmentarium.web.lemma_annotation import (
     LemmaAnnotationResource,
@@ -87,15 +88,16 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         )
     )
     statistics = make_statistics_resource(context.cache, fragmentarium)
-    fragments = FragmentsResource(finder, context.realia_repository)
+    dto_factory = FragmentDtoFactory(context.realia_repository)
+    fragments = FragmentsResource(finder, dto_factory)
 
     fragments_retrieve_all = FragmentsRetrieveAllResource(
         context.fragment_repository, context.photo_repository
     )
-    fragment_genre = FragmentGenreResource(updater)
-    fragment_script = FragmentScriptResource(updater)
-    fragment_date = FragmentDateResource(updater)
-    fragment_dates_in_text = FragmentDatesInTextResource(updater)
+    fragment_genre = FragmentGenreResource(updater, dto_factory)
+    fragment_script = FragmentScriptResource(updater, dto_factory)
+    fragment_date = FragmentDateResource(updater, dto_factory)
+    fragment_dates_in_text = FragmentDatesInTextResource(updater, dto_factory)
 
     fragment_matcher = FragmentMatcherResource(
         FragmentMatcher(context.fragment_repository)
@@ -117,18 +119,20 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
     )
     genres = GenresResource()
     periods = PeriodsResource()
-    lemmatization = LemmatizationResource(updater)
-    lemma_annotation = LemmaAnnotationResource(updater)
+    lemmatization = LemmatizationResource(updater, dto_factory)
+    lemma_annotation = LemmaAnnotationResource(updater, dto_factory)
     lemma_autofill = AutofillLemmasResource(
         context.fragment_repository, context.word_repository
     )
-    references = ReferencesResource(updater)
-    edition = EditionResource(updater, context.get_transliteration_update_factory())
-    scopes = FragmentAuthorizedScopesResource(
-        context.fragment_repository, finder, updater
+    references = ReferencesResource(updater, dto_factory)
+    edition = EditionResource(
+        updater, context.get_transliteration_update_factory(), dto_factory
     )
-    archaeology = ArchaeologyResource(updater, provenance_service)
-    colophon = ColophonResource(updater)
+    scopes = FragmentAuthorizedScopesResource(
+        context.fragment_repository, finder, updater, dto_factory
+    )
+    archaeology = ArchaeologyResource(updater, provenance_service, dto_factory)
+    colophon = ColophonResource(updater, dto_factory)
     annotations = AnnotationResource(annotations_service)
     fragment_pager = make_fragment_pager_resource(finder, context.cache)
     folio_pager = FolioPagerResource(finder)
@@ -145,7 +149,9 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
         context.fragment_repository, context.cache
     )
     colophon_names = ColophonNamesResource(context.fragment_repository)
-    named_entities = NamedEntityResource(finder, updater, context.realia_repository)
+    named_entities = NamedEntityResource(
+        finder, updater, context.realia_repository, dto_factory
+    )
 
     routes = [
         ("/fragments", fragment_search),

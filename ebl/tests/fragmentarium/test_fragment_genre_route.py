@@ -38,7 +38,7 @@ def test_update_genres(client, fragmentarium, user, database, parameters):
     )
     expected_json = {
         **create_response_dto(
-            fragment.set_genres(updates["genres"]), user, fragment.number == "K.1"
+            fragment.set_genres(updates["genres"]), user, fragment.number == "K.1", []
         )
     }
 

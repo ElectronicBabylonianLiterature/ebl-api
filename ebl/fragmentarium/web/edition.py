@@ -11,13 +11,14 @@ from ebl.fragmentarium.application.transliteration_update_factory import (
 )
 from ebl.fragmentarium.domain.fragment import NotLowestJoinError
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
-from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.fragmentarium.web.dtos import FragmentDtoFactory, parse_museum_number
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.transliteration_error import (
     DuplicateLabelError,
     ExtentLabelError,
     TransliterationError,
 )
+from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_scope
 
 
@@ -37,9 +38,11 @@ class EditionResource:
         self,
         updater: FragmentUpdater,
         transliteration_factory: TransliterationUpdateFactory,
+        dto_factory: FragmentDtoFactory,
     ):
         self._updater = updater
         self._transliteration_factory = transliteration_factory
+        self._dto_factory = dto_factory
 
     def _create_transliteration(
         self, transliteration: Optional[str]
@@ -58,7 +61,7 @@ class EditionResource:
     @validate(EDITION_DTO_SCHEMA)
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:
-            user = req.context.user
+            user: User = req.context["user"]
 
             updated_fragment, has_photo = self._updater.update_edition(
                 parse_museum_number(number),
@@ -67,7 +70,7 @@ class EditionResource:
                 req.media.get("notes"),
                 self._create_transliteration(req.media.get("transliteration")),
             )
-            resp.media = create_response_dto(updated_fragment, user, has_photo)
+            resp.media = self._dto_factory.create(updated_fragment, user, has_photo)
 
         except (
             DuplicateLabelError,

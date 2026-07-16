@@ -1,34 +1,52 @@
 from types import SimpleNamespace
+from typing import List, Sequence, cast
 
 from ebl.fragmentarium.application.realia_info import (
     RealiaInfoSchema,
     resolve_realia_info,
 )
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.named_entity import RealiaEntity
 from ebl.fragmentarium.domain.realia_info import RealiaInfo
+from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.domain.realia_entry import RealiaEntry
 
 
-class FakeRealiaRepository:
-    def __init__(self, entries):
+class FakeRealiaRepository(RealiaRepository):
+    def __init__(self, entries: Sequence[RealiaEntry]) -> None:
         self._entries = {entry.realia_id: entry for entry in entries}
-        self.calls = []
+        self.calls: List[List[str]] = []
 
-    def find_by_realia_ids(self, realia_ids):
+    def create_indexes(self) -> None:
+        raise NotImplementedError()
+
+    def find(self, id_: str) -> RealiaEntry:
+        raise NotImplementedError()
+
+    def find_by_realia_id(self, realia_id: str) -> RealiaEntry:
+        raise NotImplementedError()
+
+    def search(self, query: str) -> Sequence[RealiaEntry]:
+        raise NotImplementedError()
+
+    def find_by_realia_ids(self, realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
         self.calls.append(list(realia_ids))
         return [self._entries[id_] for id_ in realia_ids if id_ in self._entries]
 
 
-def make_entry(realia_id, lemma, type_):
+def make_entry(realia_id: str, lemma: str, type_: Sequence[str]) -> RealiaEntry:
     return RealiaEntry(id=lemma, realia_id=realia_id, type=type_)
 
 
-def fragment_with_realia(*realia_ids):
-    return SimpleNamespace(
-        realia=[
-            RealiaEntity(id=f"Realia-{index}", realia_id=realia_id)
-            for index, realia_id in enumerate(realia_ids)
-        ]
+def fragment_with_realia(*realia_ids: str) -> Fragment:
+    return cast(
+        Fragment,
+        SimpleNamespace(
+            realia=[
+                RealiaEntity(id=f"Realia-{index}", realia_id=realia_id)
+                for index, realia_id in enumerate(realia_ids)
+            ]
+        ),
     )
 
 

@@ -25,10 +25,14 @@
 			]
 		}
 	},
-	"forwardPorts": [8000],
+	"forwardPorts": [8000, 8001],
 	"portsAttributes": {
 		"8000": {
-			"label": "API",
+			"label": "API (Docker)",
+			"onAutoForward": "ignore"
+		},
+		"8001": {
+			"label": "API (task start)",
 			"onAutoForward": "ignore"
 		}
 	},

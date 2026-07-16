@@ -46,7 +46,7 @@ def test_update_date(client, fragmentarium, user, currentDate, updatedDate):
         body=json.dumps(update) if updatedDate else "{}",
     )
     expected_json = create_response_dto(
-        fragment.set_date(updatedDate), user, fragment.number == "K.1"
+        fragment.set_date(updatedDate), user, fragment.number == "K.1", []
     )
 
     assert post_result.status == falcon.HTTP_OK

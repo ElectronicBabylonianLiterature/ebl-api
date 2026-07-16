@@ -118,13 +118,54 @@ def test_write_neither_requires_nor_stores_realia_info(
         "realia": [{"id": "Realia-1", "realiaId": APKALLU_ID, "span": ["Word-2"]}],
         "realiaInfo": [{"realiaId": APKALLU_ID, "lemma": "WRONG", "type": ["Wrong"]}],
     }
+    resolved = [{"realiaId": APKALLU_ID, "lemma": "Apkallu", "type": ["Divine names"]}]
 
     post_result = client.simulate_post(url, json=payload)
 
     assert post_result.status == falcon.HTTP_OK
-    assert "realiaInfo" not in post_result.json
+    assert post_result.json["realiaInfo"] == resolved
 
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
-    assert get_result.json["realiaInfo"] == [
-        {"realiaId": APKALLU_ID, "lemma": "Apkallu", "type": ["Divine names"]}
+    assert get_result.json["realiaInfo"] == resolved
+
+
+def test_write_response_realia_info_matches_get(
+    client, fragmentarium, realia_repository
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    store_realia(realia_repository, LAMASSU_ID, "Lamassu", ["Object names"])
+    fragment = TransliteratedFragmentFactory.build().set_token_ids()
+    fragmentarium.create(fragment)
+    url = f"/fragments/{fragment.number}/named-entities"
+    payload = {
+        "namedEntities": [],
+        "realia": [
+            {"id": "Realia-1", "realiaId": LAMASSU_ID, "span": ["Word-2"]},
+            {"id": "Realia-2", "realiaId": APKALLU_ID, "span": ["Word-7"]},
+        ],
+    }
+
+    post_result = client.simulate_post(url, json=payload)
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.json["realiaInfo"] == [
+        {"realiaId": APKALLU_ID, "lemma": "Apkallu", "type": ["Divine names"]},
+        {"realiaId": LAMASSU_ID, "lemma": "Lamassu", "type": ["Object names"]},
     ]
+
+    get_result = client.simulate_get(f"/fragments/{fragment.number}")
+    assert post_result.json["realiaInfo"] == get_result.json["realiaInfo"]
+
+
+def test_write_response_realia_info_empty_without_realia(
+    client, fragmentarium, realia_repository
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    fragment = TransliteratedFragmentFactory.build().set_token_ids()
+    fragmentarium.create(fragment)
+    url = f"/fragments/{fragment.number}/named-entities"
+
+    post_result = client.simulate_post(url, json={"namedEntities": [], "realia": []})
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.json["realiaInfo"] == []

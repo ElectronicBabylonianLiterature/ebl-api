@@ -20,7 +20,7 @@ from ebl.fragmentarium.domain.named_entity import (
     RealiaAnnotationSpan,
     deduplicate_spans,
 )
-from ebl.fragmentarium.web.dtos import create_response_dto, parse_museum_number
+from ebl.fragmentarium.web.dtos import FragmentDtoFactory, parse_museum_number
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.users.web.require_scope import require_scope
 
@@ -34,10 +34,12 @@ class NamedEntityResource:
         finder: FragmentFinder,
         updater: FragmentUpdater,
         realia_repository: RealiaRepository,
+        dto_factory: FragmentDtoFactory,
     ):
         self._finder = finder
         self._updater = updater
         self._realia_repository = realia_repository
+        self._dto_factory = dto_factory
 
     def _create_spans(
         self, entities: Sequence, entity_schema: Type[Schema], word_ids: Dict[str, list]
@@ -112,4 +114,4 @@ class NamedEntityResource:
         updated_fragment, has_photo = self._updater.update_named_entities(
             parse_museum_number(number), entity_spans, realia_spans, user
         )
-        resp.media = create_response_dto(updated_fragment, user, has_photo)
+        resp.media = self._dto_factory.create(updated_fragment, user, has_photo)

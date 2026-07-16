@@ -51,7 +51,7 @@ def test_update_script(client, fragmentarium, user, currentScript, updatedScript
         body=json.dumps(update),
     )
     expected_json = create_response_dto(
-        fragment.set_script(updatedScript), user, fragment.number == "K.1"
+        fragment.set_script(updatedScript), user, fragment.number == "K.1", []
     )
 
     assert post_result.status == falcon.HTTP_OK

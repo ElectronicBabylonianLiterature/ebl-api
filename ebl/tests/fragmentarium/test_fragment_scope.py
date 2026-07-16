@@ -48,6 +48,7 @@ def test_update_scopes(client, fragmentarium, user, parameters):
             fragment.set_scopes(updates["authorized_scopes"]),
             user,
             fragment.number == "K.1",
+            [],
         )
     }
     assert post_result.status == falcon.HTTP_OK

@@ -67,6 +67,7 @@ def test_update_entity_annotations(
         fragment.set_named_entities(named_entity_spans),
         user,
         fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
 

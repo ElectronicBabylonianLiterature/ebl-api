@@ -1,8 +1,11 @@
 import json
 import time
+from typing import Optional, cast
+
 import attr
 
 import falcon
+from falcon.testing import Result
 import pytest
 from freezegun import freeze_time
 from pymongo.errors import PyMongoError
@@ -52,10 +55,10 @@ INTRO_FIXTURE = [
 ]
 
 
-def simulate_post_with_retry(client, url, body):
-    result = None
+def simulate_post_with_retry(client, url, body) -> Result:
+    result: Optional[Result] = None
     for attempt in range(3):
-        result = client.simulate_post(url, body=body)
+        result = cast(Result, client.simulate_post(url, body=body))
         if result.status != falcon.HTTP_INTERNAL_SERVER_ERROR:
             return result
 
@@ -69,6 +72,7 @@ def simulate_post_with_retry(client, url, body):
             return result
         time.sleep(0.1)
 
+    assert result is not None
     return result
 
 
@@ -100,6 +104,7 @@ def test_update_transliteration(client, fragmentarium, user, database):
             ),
             user,
             fragment.number == MuseumNumber("K", "1"),
+            [],
         ),
         "signs": "",
     }
@@ -156,6 +161,7 @@ def test_update_transliteration_merge_lemmatization(
         expected_fragment,
         user,
         lemmatized_fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
     post_result = simulate_post_with_retry(
@@ -260,6 +266,7 @@ def test_update_notes(client, fragmentarium, user, database, old_notes, new_note
             fragment.set_notes(new_notes.text),
             user,
             fragment.number == "K.1",
+            [],
         )
     }
 
@@ -306,6 +313,7 @@ def test_update_introduction(
         fragment.set_introduction(new_introduction.text),
         user,
         fragment.number == "K.1",
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK
@@ -373,6 +381,7 @@ def test_update_multiple_fields(
         ),
         user,
         fragment.number == "K.1",
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK

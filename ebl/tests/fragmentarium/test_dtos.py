@@ -148,13 +148,14 @@ def expected_dto(lemmatized_fragment, has_photo):
                 lemmatized_fragment.named_entities, many=True
             ),
             "realia": RealiaEntitySchema().dump(lemmatized_fragment.realia, many=True),
+            "realiaInfo": [],
         },
         pydash.is_none,
     )
 
 
 def test_create_response_dto(user, lemmatized_fragment, expected_dto, has_photo):
-    assert create_response_dto(lemmatized_fragment, user, has_photo) == expected_dto
+    assert create_response_dto(lemmatized_fragment, user, has_photo, []) == expected_dto
 
 
 def test_create_fragment_info_dto():
