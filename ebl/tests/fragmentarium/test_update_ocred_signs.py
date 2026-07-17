@@ -3,7 +3,7 @@ import json
 import tempfile
 import os
 import argparse
-from mockito import when, verify
+from mockito import verify
 import ebl.fragmentarium.update_ocred_signs as update_ocred_signs
 
 
@@ -233,7 +233,7 @@ def test_update_from_json_file_with_errors(database, sample_fragments):
     assert fragment_bm_12345["ocredSigns"] == ""
 
 
-def test_main(database):
+def test_main(database, when):
     collection = database["fragments"]
 
     when(update_ocred_signs).get_database().thenReturn(database)

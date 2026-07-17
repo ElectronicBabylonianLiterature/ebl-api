@@ -1,4 +1,4 @@
-from mockito import mock, when
+from mockito import mock
 
 import ebl.fragmentarium.migrate_cropped_images as module
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
@@ -13,7 +13,7 @@ def test_create_annotations_service():
     assert result.__class__.__name__ == "AnnotationsService"
 
 
-def test_show_statistics():
+def test_show_statistics(when):
     context = mock()
     database = mock()
     annotations_collection = mock()
@@ -33,7 +33,7 @@ def test_show_statistics():
     assert cropped_count == 50
 
 
-def test_regenerate_images():
+def test_regenerate_images(when):
     context = mock()
     database = mock()
     annotations_collection = mock()
@@ -56,7 +56,7 @@ def test_regenerate_images():
     module.regenerate_images(context)
 
 
-def test_migrate_cropped_images():
+def test_migrate_cropped_images(when):
     context = mock()
 
     when(module).create_context().thenReturn(context)
@@ -66,19 +66,19 @@ def test_migrate_cropped_images():
     module.migrate_cropped_images()
 
 
-def test_main():
+def test_main(when):
     when(module).migrate_cropped_images().thenReturn(None)
 
     module.main()
 
 
-def test_main_keyboard_interrupt():
+def test_main_keyboard_interrupt(when):
     when(module).migrate_cropped_images().thenRaise(KeyboardInterrupt)
 
     module.main()
 
 
-def test_main_exception():
+def test_main_exception(when):
     when(module).migrate_cropped_images().thenRaise(Exception("test error"))
 
     module.main()

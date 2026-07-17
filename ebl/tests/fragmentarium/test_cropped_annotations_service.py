@@ -1,4 +1,4 @@
-from mockito import mock, verify, when
+from mockito import mock, verify
 
 from ebl.fragmentarium.domain.annotation import PcaClustering
 from ebl.fragmentarium.application.cropped_annotations_service import (
@@ -22,6 +22,7 @@ from ebl.fragmentarium.domain.date import DateSchema
 
 def test_find_annotations_by_sign(
     fragment_repository: MongoFragmentRepository,
+    when,
 ):
     annotations_repository = mock()
     cropped_sign_images_repository = mock()
@@ -86,6 +87,7 @@ def test_find_annotations_by_sign(
 
 def test_find_annotations_by_sign_includes_pca_clustering(
     fragment_repository: MongoFragmentRepository,
+    when,
 ):
     annotations_repository = mock()
     cropped_sign_images_repository = mock()
@@ -127,6 +129,7 @@ def test_find_annotations_by_sign_includes_pca_clustering(
 
 def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
     fragment_repository: MongoFragmentRepository,
+    when,
 ):
     annotations_repository = mock()
     cropped_sign_images_repository = mock()
@@ -159,6 +162,7 @@ def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
 
 def test_find_annotations_by_sign_passes_centroids_only_filter(
     fragment_repository: MongoFragmentRepository,
+    when,
 ):
     annotations_repository = mock()
     cropped_sign_images_repository = mock()
@@ -181,6 +185,7 @@ def test_find_annotations_by_sign_passes_centroids_only_filter(
 
 def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     fragment_repository: MongoFragmentRepository,
+    when,
 ):
     annotations_repository = mock()
     cropped_sign_images_repository = mock()
@@ -205,7 +210,7 @@ def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     )
 
 
-def test_find_annotations_by_sign_deduplicates_fetch_date_and_image_lookups():
+def test_find_annotations_by_sign_deduplicates_fetch_date_and_image_lookups(when):
     annotations_repository = mock()
     cropped_sign_images_repository = mock()
     fragment_repository = mock()

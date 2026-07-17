@@ -1,7 +1,7 @@
 import runpy
 
 import pymongo
-from mockito import mock, when
+from mockito import mock
 
 import ebl.dictionary.migrate_named_entity_tags as module
 
@@ -102,7 +102,7 @@ def test_dry_run_reports_backfill_for_documents_without_named_codes(database):
     assert stats["documents_backfilled"] == 1
 
 
-def test_get_database(monkeypatch):
+def test_get_database(monkeypatch, when):
     client = mock()
     expected_database = mock()
     monkeypatch.setenv("MONGODB_URI", "mongodb://uri")
@@ -113,7 +113,7 @@ def test_get_database(monkeypatch):
     assert module.get_database() == expected_database
 
 
-def test_main_runs_migration(monkeypatch, database):
+def test_main_runs_migration(monkeypatch, database, when):
     database[COLLECTION].insert_one({"_id": "Sin I", "pos": ["DN"]})
     monkeypatch.setattr(module.sys, "argv", ["migrate"])
     when(module).get_database().thenReturn(database)
@@ -124,7 +124,7 @@ def test_main_runs_migration(monkeypatch, database):
     assert database[COLLECTION].find_one({"_id": "Sin I"})["pos"] == []
 
 
-def test_main_dry_run(monkeypatch, database):
+def test_main_dry_run(monkeypatch, database, when):
     database[COLLECTION].insert_one({"_id": "Adad I", "pos": ["DN"]})
     monkeypatch.setattr(module.sys, "argv", ["migrate", "--dry-run"])
     when(module).get_database().thenReturn(database)
@@ -134,7 +134,7 @@ def test_main_dry_run(monkeypatch, database):
     assert database[COLLECTION].find_one({"_id": "Adad I"})["pos"] == ["DN"]
 
 
-def test_module_runs_as_script(monkeypatch, database):
+def test_module_runs_as_script(monkeypatch, database, when):
     database[COLLECTION].insert_one({"_id": "Nabu I", "pos": ["DN"]})
     monkeypatch.setenv("MONGODB_URI", "mongodb://uri")
     monkeypatch.setenv("MONGODB_DB", "ebl")

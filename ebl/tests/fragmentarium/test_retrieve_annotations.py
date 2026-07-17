@@ -1,5 +1,5 @@
 from PIL import Image
-from mockito import mock, verify, when
+from mockito import mock, verify
 
 from ebl.fragmentarium import retrieve_annotations
 from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
@@ -67,7 +67,7 @@ def test_argument_parsing_only_one_argument():
         assert "Either specify both argument options or none at all" in str(e)
 
 
-def test_argument_parsing_defaults():
+def test_argument_parsing_defaults(when):
     mock_context = mock()
     mock_context.annotations_repository = mock()
     mock_context.photo_repository = mock()
@@ -93,7 +93,7 @@ def test_argument_parsing_defaults():
     verify(retrieve_annotations, times=3).create_directory(...)
 
 
-def test_context_fallback_to_mongo(monkeypatch):
+def test_context_fallback_to_mongo(monkeypatch, when):
     import pymongo
     import ebl.fragmentarium.infrastructure.mongo_annotations_repository as mongo_anno_module
     import ebl.files.infrastructure.grid_fs_file_repository as gridfs_module
