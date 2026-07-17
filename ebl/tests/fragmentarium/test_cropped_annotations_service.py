@@ -1,5 +1,14 @@
+from typing import cast
+
 from mockito import mock, verify
 
+from ebl.fragmentarium.application.annotations_repository import (
+    AnnotationsRepository,
+)
+from ebl.fragmentarium.application.cropped_sign_images_repository import (
+    CroppedSignImagesRepository,
+)
+from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.annotation import PcaClustering
 from ebl.fragmentarium.application.cropped_annotations_service import (
     CroppedAnnotationService,
@@ -24,8 +33,8 @@ def test_find_annotations_by_sign(
     fragment_repository: MongoFragmentRepository,
     when,
 ):
-    annotations_repository = mock()
-    cropped_sign_images_repository = mock()
+    annotations_repository = cast(AnnotationsRepository, mock())
+    cropped_sign_images_repository = cast(CroppedSignImagesRepository, mock())
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -89,8 +98,8 @@ def test_find_annotations_by_sign_includes_pca_clustering(
     fragment_repository: MongoFragmentRepository,
     when,
 ):
-    annotations_repository = mock()
-    cropped_sign_images_repository = mock()
+    annotations_repository = cast(AnnotationsRepository, mock())
+    cropped_sign_images_repository = cast(CroppedSignImagesRepository, mock())
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -131,8 +140,8 @@ def test_find_annotations_by_sign_omits_pca_clustering_when_missing(
     fragment_repository: MongoFragmentRepository,
     when,
 ):
-    annotations_repository = mock()
-    cropped_sign_images_repository = mock()
+    annotations_repository = cast(AnnotationsRepository, mock())
+    cropped_sign_images_repository = cast(CroppedSignImagesRepository, mock())
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -164,8 +173,8 @@ def test_find_annotations_by_sign_passes_centroids_only_filter(
     fragment_repository: MongoFragmentRepository,
     when,
 ):
-    annotations_repository = mock()
-    cropped_sign_images_repository = mock()
+    annotations_repository = cast(AnnotationsRepository, mock())
+    cropped_sign_images_repository = cast(CroppedSignImagesRepository, mock())
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -187,8 +196,8 @@ def test_find_annotations_by_sign_passes_cluster_and_script_filters(
     fragment_repository: MongoFragmentRepository,
     when,
 ):
-    annotations_repository = mock()
-    cropped_sign_images_repository = mock()
+    annotations_repository = cast(AnnotationsRepository, mock())
+    cropped_sign_images_repository = cast(CroppedSignImagesRepository, mock())
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository
@@ -211,9 +220,9 @@ def test_find_annotations_by_sign_passes_cluster_and_script_filters(
 
 
 def test_find_annotations_by_sign_deduplicates_fetch_date_and_image_lookups(when):
-    annotations_repository = mock()
-    cropped_sign_images_repository = mock()
-    fragment_repository = mock()
+    annotations_repository = cast(AnnotationsRepository, mock())
+    cropped_sign_images_repository = cast(CroppedSignImagesRepository, mock())
+    fragment_repository = cast(FragmentRepository, mock())
 
     service = CroppedAnnotationService(
         annotations_repository, cropped_sign_images_repository, fragment_repository

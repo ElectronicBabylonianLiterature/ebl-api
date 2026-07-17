@@ -126,6 +126,85 @@ latent leaks of the same class, fixed preventively, not because they failed.
 - No service run: this change touches only test isolation and has no runtime
   surface.
 
-## 8. State
+## 8. Phase 2 — the commit exposed a failing pyright gate
 
-Nothing committed. Throwaway worktrees removed.
+Committed the fix as `8e70bfff`, then `task test-all` failed:
+`task type-pyright` reported **21 errors**.
+
+Cause: `type-pyright` diffs `origin/master...HEAD`, so it only sees
+**committed** files. Before the commit these five test files were uncommitted
+and invisible to it; committing pulled them into the gate. This is the exact
+flaw recorded when the gate was hardened — it cannot see working-tree changes.
+
+The 21 errors are **pre-existing**: running pyright over master's own copies
+of the same five files reports the identical 21. My edits introduced none of
+them; the files had simply never been checked, because nothing had put them in
+a diff against master before.
+
+Asked the user rather than silently narrowing scope, since the choice was
+between reverting the preventive hardening (keeping the PR tight) and
+repairing 21 pre-existing errors in unrelated test files. **User chose to fix
+all 21.**
+
+Breakdown:
+
+- `test_cropped_annotations_service.py` — 13: `mock()` returns `Dummy`, passed
+  to typed `CroppedAnnotationService.__init__` params.
+- `test_migrate_cropped_images.py` — 5: `Dummy` passed as `Context`, plus
+  attribute assignment on `Dummy`.
+- `test_retrieve_annotations.py` — 2: attribute assignment on `Dummy`.
+- `test_update_ocred_signs.py` — 1: **a genuine test bug**, not a mock-typing
+  artefact.
+
+### The genuine bug
+
+`test_update_single_fragment_error` passes
+`invalid_number_format = ["INVALID.NUMBER.FORMAT"]` — a **list** — to
+`update_single_fragment(collection, number_str: str, ocred_signs: str)`.
+
+The test passes today only because `parse_museum_number` chokes on a *list*,
+which `except Exception` swallows and returns False. It does **not** test what
+its name claims. Worse, the obvious "type fix" of dropping the brackets would
+be wrong: `MuseumNumber.of("INVALID.NUMBER.FORMAT")` **parses successfully**
+(prefix `INVALID`, number `NUMBER`, suffix `FORMAT`), so the test would then
+pass for an entirely different reason. Checked directly: `'INVALID'` and `''`
+raise `ValueError`, `'INVALID.NUMBER.FORMAT'` does not.
+
+### Repairs
+
+- `test_cropped_annotations_service.py` (13): cast `mock()` to
+  `AnnotationsRepository`, `CroppedSignImagesRepository` and
+  `FragmentRepository` at the assignment, so each test reads once.
+- `test_migrate_cropped_images.py` (5): cast to `Context`; replaced attribute
+  assignment onto `Dummy` with mockito's `mock({...})` config, which is both
+  type-correct and the idiom already used elsewhere in the suite.
+- `test_retrieve_annotations.py` (2): same `mock({...})` treatment.
+- `test_update_ocred_signs.py` (1): the genuine bug. `["INVALID.NUMBER.FORMAT"]`
+  → `"INVALID"`. Chosen deliberately: `"INVALID"` raises `ValueError` from
+  `MuseumNumber.of`, which `update_single_fragment`'s `except Exception`
+  catches and turns into `False`, so the test now fails for the reason its
+  name claims. `"INVALID.NUMBER.FORMAT"` would **not** have worked — it parses
+  cleanly — and would have made the test vacuous.
+
+Nothing was suppressed: no ignore comments, no config changes. Casts state the
+intent that mockito's untyped `mock()` cannot express, matching the approach
+already taken in `f36ed7d9`.
+
+## 10. Verification after phase 2
+
+- pyright on all five files: **0 errors** (was 21).
+- `task test-all`: exit 0 — format clean, ruff clean, pyre "No type errors
+  found", pyright 0, 3923 passed, lint-md 0 errors.
+- The five test files plus `test_app_bootstrap`: 44 passed.
+- `test_migrate_cropped_images.py`: 9 passed after the mock restructure.
+
+Note on the gate's mechanics, since it caused confusion: `type-pyright` uses
+the `origin/master...HEAD` diff to **select file paths**, then runs pyright
+against the **working tree** copies of those files. So committing a file is
+what puts it in scope, but the content checked is whatever is on disk.
+
+## 11. State
+
+`8e70bfff` committed, not yet pushed. Throwaway worktrees removed. Task docs
+retained while work continues, per the user's instruction not to delete them
+yet.

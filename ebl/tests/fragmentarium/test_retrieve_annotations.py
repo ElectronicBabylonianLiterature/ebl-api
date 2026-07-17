@@ -68,9 +68,7 @@ def test_argument_parsing_only_one_argument():
 
 
 def test_argument_parsing_defaults(when):
-    mock_context = mock()
-    mock_context.annotations_repository = mock()
-    mock_context.photo_repository = mock()
+    mock_context = mock({"annotations_repository": mock(), "photo_repository": mock()})
     when(mock_context.annotations_repository).retrieve_all_non_empty().thenReturn([])
     when(retrieve_annotations).create_context().thenReturn(mock_context)
 

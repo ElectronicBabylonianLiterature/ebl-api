@@ -138,7 +138,7 @@ def test_update_single_fragment_without_match(database, sample_fragments):
 
 def test_update_single_fragment_error(database, sample_fragments):
     collection = database["fragments"]
-    invalid_number_format = ["INVALID.NUMBER.FORMAT"]
+    invalid_number_format = "INVALID"
     ocred_signs = "ABZ100 \nABZ101"
 
     result = update_ocred_signs.update_single_fragment(

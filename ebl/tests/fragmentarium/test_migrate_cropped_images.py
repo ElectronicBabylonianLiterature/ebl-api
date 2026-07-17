@@ -1,12 +1,15 @@
+from typing import cast
+
 from mockito import mock
 
 import ebl.fragmentarium.migrate_cropped_images as module
+from ebl.context import Context
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_create_annotations_service():
-    context = mock()
+    context = cast(Context, mock())
 
     result = module.create_annotations_service(context)
 
@@ -14,7 +17,7 @@ def test_create_annotations_service():
 
 
 def test_show_statistics(when):
-    context = mock()
+    context = cast(Context, mock())
     database = mock()
     annotations_collection = mock()
     cropped_images_collection = mock()
@@ -34,20 +37,18 @@ def test_show_statistics(when):
 
 
 def test_regenerate_images(when):
-    context = mock()
     database = mock()
     annotations_collection = mock()
     annotation_doc = {"fragmentNumber": "K.123"}
-    annotations_result = mock()
     annotations_repository = mock()
 
     when(database).__getitem__("annotations").thenReturn(annotations_collection)
     when(annotations_collection).find({}).thenReturn([annotation_doc])
-    annotations_result.annotations = []
+    annotations_result = mock({"annotations": []})
     when(annotations_repository).query_by_museum_number(
         MuseumNumber.of("K.123")
     ).thenReturn(annotations_result)
-    context.annotations_repository = annotations_repository
+    context = cast(Context, mock({"annotations_repository": annotations_repository}))
 
     annotations_service = mock()
     when(module).get_database().thenReturn(database)
