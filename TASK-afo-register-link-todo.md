@@ -45,8 +45,25 @@ Repair `POST /afo-register/texts-numbers` so joined AfO references whose
 - [x] `traditionalReferences` stays an array of joined reference strings —
       one data type per array. No mixed array introduced; contract unchanged.
 
+## Post-commit incident and recovery (see log §14-17)
+
+- [x] Committed on request (`f175b882`)
+- [x] ERROR: branch push also fast-forwarded `origin/master` to the commit
+- [x] Force-restore of master rejected by branch protection (`GH006`)
+- [x] Reverted master → `5967652a`; tree == pristine `01424220` (verified)
+- [x] Rebuilt feature branch diverging from master (`e43777ba`); master
+      verified untouched after push
+- [x] Opened PR #741
+- [x] Installed local guardrails (git pre-push hook + Claude PreToolUse guard)
+- [x] Corrected this log/TODO after failing to keep them updated during recovery
+
 ## Left to the user
 
+- **Enable the server-side master ruleset** (the only real guarantee). I am
+  blocked by a scope-limited token (`403`); a human with admin must run the
+  provided `gh api` payload or set it via the GitHub UI.
 - Post-deploy check that <https://www.ebl.lmu.de/library/MNAO.11676> renders
   its AfO Register entries (requires a deploy).
 - Remove this file and `TASK-afo-register-link-log.md` before the PR merges.
+- The log/TODO corrections are uncommitted; commit to the branch only on
+  explicit request.
