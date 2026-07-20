@@ -7,6 +7,7 @@ from ebl.tests.factories.bibliography import BibliographyEntryFactory
 from ebl.tests.factories.realia import RealiaEntryFactory
 from ebl.tests.realia.realia_repository_helpers import (
     create_entry_with_bibliography,
+    insert_minimal,
     insert_stored,
     stored_reallexikon_entry,
 )
@@ -95,6 +96,88 @@ def test_find_by_realia_id(
 def test_find_by_realia_id_not_found(realia_repository: RealiaRepository) -> None:
     with pytest.raises(NotFoundError):
         realia_repository.find_by_realia_id("realia_999999")
+
+
+def test_list_non_redirect_ids_sorted(realia_repository: MongoRealiaRepository) -> None:
+    for identifier in ("Pig", "Anu", "Enlil, Ellil"):
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_non_redirect_ids() == ["Anu", "Enlil, Ellil", "Pig"]
+
+
+def test_list_non_redirect_ids_empty(realia_repository: RealiaRepository) -> None:
+    assert realia_repository.list_non_redirect_ids() == []
+
+
+def test_list_non_redirect_ids_returns_every_id_without_limit(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    identifiers = [f"Realia {index:02d}" for index in range(25)]
+    for identifier in identifiers:
+        insert_minimal(realia_repository, identifier)
+
+    assert realia_repository.list_non_redirect_ids() == sorted(identifiers)
+
+
+def test_list_non_redirect_ids_excludes_redirect_stubs(
+    realia_repository: MongoRealiaRepository,
+) -> None:
+    canonical = {"id": "Canonical", "lemma": "Canonical"}
+    stubs: dict[str, dict] = {
+        "Empty stub": {"crossReferences": [canonical]},
+        "Reallexikon null reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "r", "reference": None}],
+        },
+        "Reallexikon reference without id": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "r", "reference": {"pages": "5"}}],
+        },
+        "Reallexikon empty string reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "r", "reference": ""}],
+        },
+    }
+    listable: dict[str, dict] = {
+        "Has afoRegister": {
+            "crossReferences": [canonical],
+            "afoRegister": [{"mainWord": "x"}],
+        },
+        "Has references": {
+            "crossReferences": [canonical],
+            "references": [{"id": "bib_1"}],
+        },
+        "Has afoCrossReferences": {
+            "crossReferences": [canonical],
+            "afoCrossReferences": [{"id": "a", "lemma": "b"}],
+        },
+        "Has two reallexikon": {
+            "crossReferences": [canonical],
+            "reallexikon": [
+                {"id": "a", "reference": None},
+                {"id": "b", "reference": None},
+            ],
+        },
+        "Has reallexikon reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "a", "reference": {"id": "bib_1"}}],
+        },
+        "Has reallexikon string reference": {
+            "crossReferences": [canonical],
+            "reallexikon": [{"id": "a", "reference": "bib_1"}],
+        },
+        "Two cross references": {
+            "crossReferences": [canonical, {"id": "o", "lemma": "o"}],
+        },
+        "No cross references": {},
+    }
+    for identifier, document in {**stubs, **listable}.items():
+        insert_stored(realia_repository, {"_id": identifier, **document})
+
+    result = realia_repository.list_non_redirect_ids()
+
+    assert set(result) == set(listable)
+    assert not set(stubs) & set(result)
 
 
 def test_find_injects_lean_reallexikon_reference(

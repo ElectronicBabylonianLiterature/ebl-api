@@ -46,3 +46,11 @@ class RealiaSearchResource:
         query = req.get_param("query", default="")
         entries = self._realia_repository.search(query)
         resp.media = RealiaEntrySchema(many=True).dump(entries)
+
+
+class RealiaListResource:
+    def __init__(self, realia_repository: RealiaRepository) -> None:
+        self._realia_repository = realia_repository
+
+    def on_get(self, _req: Request, resp: Response) -> None:
+        resp.media = self._realia_repository.list_non_redirect_ids()

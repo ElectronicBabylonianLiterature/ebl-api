@@ -19,6 +19,9 @@ from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanke
 REALIA_COLLECTION = "realia"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
 
+REDIRECT_CROSS_REFERENCE_COUNT = 1
+PLACEHOLDER_REALLEXIKON_COUNT = 1
+
 
 class MongoRealiaRepository(RealiaRepository):
     def __init__(self, database: Database) -> None:
@@ -65,6 +68,72 @@ class MongoRealiaRepository(RealiaRepository):
         entries = RealiaEntrySchema(many=True).load(documents)
         self._inject_bibliography(entries)
         return entries
+
+    def list_non_redirect_ids(self) -> Sequence[str]:
+        documents = self._realia_collection.find_many(
+            {"$expr": {"$not": [self._is_redirect_stub_expression()]}},
+            projection={"_id": True},
+        )
+        return sorted(document["_id"] for document in documents)
+
+    def _is_redirect_stub_expression(self) -> dict:
+        return {
+            "$and": [
+                {
+                    "$eq": [
+                        self._array_size("crossReferences"),
+                        REDIRECT_CROSS_REFERENCE_COUNT,
+                    ]
+                },
+                {"$not": [self._has_own_content_expression()]},
+            ]
+        }
+
+    def _has_own_content_expression(self) -> dict:
+        return {
+            "$or": [
+                {"$gt": [self._array_size("afoRegister"), 0]},
+                {"$gt": [self._array_size("references"), 0]},
+                {"$gt": [self._array_size("afoCrossReferences"), 0]},
+                {
+                    "$gt": [
+                        self._array_size("reallexikon"),
+                        PLACEHOLDER_REALLEXIKON_COUNT,
+                    ]
+                },
+                {"$gt": [self._resolvable_reallexikon_count(), 0]},
+            ]
+        }
+
+    def _array_size(self, field: str) -> dict:
+        return {"$size": {"$ifNull": [f"${field}", []]}}
+
+    def _resolvable_reallexikon_count(self) -> dict:
+        return {
+            "$size": {
+                "$filter": {
+                    "input": {"$ifNull": ["$reallexikon", []]},
+                    "cond": self._is_resolvable_reference("$$this.reference"),
+                }
+            }
+        }
+
+    def _is_resolvable_reference(self, reference: str) -> dict:
+        return {
+            "$switch": {
+                "branches": [
+                    {
+                        "case": {"$eq": [{"$type": reference}, "string"]},
+                        "then": {"$ne": [reference, ""]},
+                    },
+                    {
+                        "case": {"$eq": [{"$type": reference}, "object"]},
+                        "then": {"$ne": [{"$ifNull": [f"{reference}.id", ""]}, ""]},
+                    },
+                ],
+                "default": False,
+            }
+        }
 
     def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
         options = "i" if cfq.use_collations else ""
