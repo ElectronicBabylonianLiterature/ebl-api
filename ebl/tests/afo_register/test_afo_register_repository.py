@@ -45,6 +45,18 @@ def test_find_by_all_record_parameters(afo_register_repository: AfoRegisterRepos
     ) == [afo_register_record]
 
 
+def test_find_by_quoted_text_number_matches_exactly(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_record = AfoRegisterRecordFactory.build(text_number="Nr. 5")
+    afo_register_repository.create(afo_register_record)
+    afo_register_repository.create(AfoRegisterRecordFactory.build(text_number="Nr. 50"))
+
+    assert afo_register_repository.search({"textNumber": '"Nr. 5"'}) == [
+        afo_register_record
+    ]
+
+
 def test_search_by_texts_and_numbers(afo_register_repository: AfoRegisterRepository):
     record1 = AfoRegisterRecordFactory.build(text="Text1", text_number="1")
     record2 = AfoRegisterRecordFactory.build(text="Text2", text_number="2")
@@ -71,6 +83,77 @@ def test_search_by_texts_and_numbers_with_spaces(
     )
 
     assert results == [record]
+
+
+def test_search_by_texts_and_numbers_with_space_in_text_number(
+    afo_register_repository: AfoRegisterRepository,
+):
+    record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
+    afo_register_repository.create(record)
+
+    assert afo_register_repository.search_by_texts_and_numbers(["OrNS 59, 17"]) == [
+        record
+    ]
+
+
+def test_search_by_texts_and_numbers_with_spaces_in_both_fields(
+    afo_register_repository: AfoRegisterRepository,
+):
+    record = AfoRegisterRecordFactory.build(text="*Bīt mēseri*", text_number="59, 17")
+    afo_register_repository.create(record)
+
+    assert afo_register_repository.search_by_texts_and_numbers(
+        ["*Bīt mēseri* 59, 17"]
+    ) == [record]
+
+
+def test_search_by_texts_and_numbers_ignores_partial_matches(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_repository.create(
+        AfoRegisterRecordFactory.build(text="A B", text_number="C")
+    )
+
+    assert afo_register_repository.search_by_texts_and_numbers(["A B C D"]) == []
+
+
+def test_search_by_texts_and_numbers_batches_spaced_and_unspaced(
+    afo_register_repository: AfoRegisterRepository,
+):
+    spaced_record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
+    unspaced_record = AfoRegisterRecordFactory.build(
+        text="AfO", text_number="17,257ff."
+    )
+    unmatched_record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 26")
+    afo_register_repository.create(spaced_record)
+    afo_register_repository.create(unspaced_record)
+    afo_register_repository.create(unmatched_record)
+
+    results = afo_register_repository.search_by_texts_and_numbers(
+        ["OrNS 59, 17", "AfO 17,257ff."]
+    )
+
+    assert len(results) == 2
+    assert spaced_record in results
+    assert unspaced_record in results
+
+
+def test_search_by_texts_and_numbers_without_queries(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_repository.create(AfoRegisterRecordFactory.build())
+
+    assert afo_register_repository.search_by_texts_and_numbers([]) == []
+
+
+def test_search_by_texts_and_numbers_without_splittable_query(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_repository.create(
+        AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
+    )
+
+    assert afo_register_repository.search_by_texts_and_numbers(["OrNS"]) == []
 
 
 def test_create_indexes(database, afo_register_repository: AfoRegisterRepository):
