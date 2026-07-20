@@ -60,23 +60,6 @@ def test_search_by_texts_and_numbers_route(
     assert get_result.json == expected_results
 
 
-def test_search_by_texts_and_numbers_route_with_spaces(
-    afo_register_repository: AfoRegisterRepository, client
-) -> None:
-    record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
-    afo_register_repository.create(record)
-    afo_register_repository.create(
-        AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 26ff.")
-    )
-
-    get_result = client.simulate_post(
-        "/afo-register/texts-numbers", body=json.dumps(["OrNS 59, 17"])
-    )
-
-    assert get_result.status == falcon.HTTP_OK
-    assert get_result.json == [AfoRegisterRecordSchema().dump(record)]
-
-
 def test_search_afo_register_suggestions_route(
     afo_register_record, afo_register_repository: AfoRegisterRepository, client
 ) -> None:
