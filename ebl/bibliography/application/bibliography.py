@@ -154,9 +154,7 @@ class Bibliography:
     def update_partner_entry(self, id_: str, entry: dict, user: User) -> Optional[dict]:
         return self._partner.update_entry(id_, entry, user)
 
-    def export_page(
-        self, cursor: Optional[str] = None, limit: int = 50
-    ) -> dict:
+    def export_page(self, cursor: Optional[str] = None, limit: int = 50) -> dict:
         return self._partner.export_page(cursor, limit)
 
     def find_partner_entry(self, id_: str) -> dict:

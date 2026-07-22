@@ -29,17 +29,17 @@ PARTNER_METADATA_FIELDS = frozenset(CSL_JSON_SCHEMA["properties"]) - (
 
 
 class BibliographyCore(Protocol):
-    def create(self, entry, user: User) -> str:
-        ...
+    def create(self, entry: dict, user: User) -> str:
+        raise NotImplementedError
 
-    def update(self, entry, user: User):
-        ...
+    def update(self, entry: dict, user: User) -> None:
+        raise NotImplementedError
 
-    def find(self, id_: str):
-        ...
+    def find(self, id_: str) -> dict:
+        raise NotImplementedError
 
     def find_duplicate_candidates(self, entry: dict, limit: int = 10) -> dict:
-        ...
+        raise NotImplementedError
 
 
 class PartnerBibliography:
@@ -51,9 +51,7 @@ class PartnerBibliography:
 
     def create_entry(self, entry: dict, user: User) -> Optional[dict]:
         prepared_entry = self._prepare_entry(entry)
-        if duplicate_result := self._find_blocking_duplicate_candidates(
-            prepared_entry
-        ):
+        if duplicate_result := self._find_blocking_duplicate_candidates(prepared_entry):
             return duplicate_result
         self._create_prepared_entry(entry, prepared_entry, user)
         return None
