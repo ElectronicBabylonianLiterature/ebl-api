@@ -8,12 +8,14 @@ from ebl.bibliography.web.bibliography_entries import (
     BibliographyList,
     PartnerBibliographyDuplicateOverrideResource,
     PartnerBibliographyEntryResource,
+    PartnerBibliographyResolveResource,
     PartnerBibliographyResource,
 )
 from ebl.context import Context
 
 
 def create_bibliography_routes(api: falcon.App, context: Context):
+    context.bibliography_repository.create_indexes()
     bibliography = context.get_bibliography()
     bibliography_resource = BibliographyResource(bibliography)
     bibliography_entries = BibliographyEntriesResource(bibliography)
@@ -25,6 +27,7 @@ def create_bibliography_routes(api: falcon.App, context: Context):
         PartnerBibliographyDuplicateOverrideResource(bibliography)
     )
     partner_bibliography_entry = PartnerBibliographyEntryResource(bibliography)
+    partner_bibliography_resolve = PartnerBibliographyResolveResource(bibliography)
 
     api.add_route("/bibliography", bibliography_resource)
     api.add_route("/bibliography/all", bibliography_all)
@@ -36,6 +39,7 @@ def create_bibliography_routes(api: falcon.App, context: Context):
         "/api/v1/bibliography/duplicate-override",
         partner_bibliography_duplicate_override,
     )
+    api.add_route("/api/v1/bibliography/resolve", partner_bibliography_resolve)
     api.add_route(
         "/api/v1/bibliography/{id_or_citation_key}", partner_bibliography_entry
     )

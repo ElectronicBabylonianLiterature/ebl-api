@@ -89,14 +89,17 @@ def test_create_context_bootstraps_cache_indexes(
     assert calls["cache"] == 1
 
 
-def test_create_app_bootstraps_annotations_and_afo_indexes(
+def test_create_app_bootstraps_bibliography_annotations_and_afo_indexes(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     key = RSA.generate(2048)
     configure_environment(monkeypatch, key.publickey().export_key())
     monkeypatch.setattr(ebl.app, "MongoClient", InMemoryMongoClient)
 
-    calls = {"annotations": 0, "afo": 0}
+    calls = {"bibliography": 0, "annotations": 0, "afo": 0}
+
+    def bibliography_create_indexes(_self):
+        calls["bibliography"] += 1
 
     def annotations_create_indexes(_self):
         calls["annotations"] += 1
@@ -104,6 +107,11 @@ def test_create_app_bootstraps_annotations_and_afo_indexes(
     def afo_create_indexes(_self):
         calls["afo"] += 1
 
+    monkeypatch.setattr(
+        ebl.app.MongoBibliographyRepository,
+        "create_indexes",
+        bibliography_create_indexes,
+    )
     monkeypatch.setattr(
         ebl.app.MongoAnnotationsRepository,
         "create_indexes",
@@ -118,5 +126,6 @@ def test_create_app_bootstraps_annotations_and_afo_indexes(
     context = ebl.app.create_context()
     ebl.app.create_app(context)
 
+    assert calls["bibliography"] == 1
     assert calls["annotations"] == 1
     assert calls["afo"] == 1

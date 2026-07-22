@@ -19,7 +19,6 @@ from ebl.tests.factories.fragment import (
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
-
 SCHEMA = FragmentSchema()
 FROZEN_TIME = "2018-09-07 15:41:24.032"
 
@@ -271,7 +270,7 @@ def test_update_references(
     injected_fragment = updated_fragment.set_text(
         parallel_line_injector.inject_transliteration(updated_fragment.text)
     )
-    when(bibliography).find(reference.id).thenReturn(reference)
+    when(bibliography).canonicalize_references(references).thenReturn(references)
     when(fragment_repository).query_by_museum_number(number).thenReturn(
         fragment
     ).thenReturn(updated_fragment)
@@ -293,9 +292,9 @@ def test_update_references_invalid(
     fragment = FragmentFactory.build()
     number = fragment.number
     reference = ReferenceFactory.build()
-    when(bibliography).find(reference.id).thenRaise(NotFoundError)
-    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
     references = (reference,)
+    when(bibliography).canonicalize_references(references).thenRaise(DataError)
+    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
 
     with pytest.raises(DataError):
         fragment_updater.update_references(number, references, user)
