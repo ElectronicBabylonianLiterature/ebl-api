@@ -26,6 +26,8 @@ from ebl.fragmentarium.web.fragments import (
     FragmentsResource,
     FragmentsListResource,
     FragmentsRetrieveAllResource,
+)
+from ebl.fragmentarium.web.fragment_signs_resources import (
     make_latest_additions_resource,
     make_all_fragment_signs_resource,
     make_all_fragment_ocred_signs_resource,

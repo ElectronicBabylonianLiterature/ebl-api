@@ -1,90 +1,21 @@
 import json
-import time
-from typing import Optional, cast
 
 import attr
 
 import falcon
-from falcon.testing import Result
 import pytest
 from freezegun import freeze_time
-from pymongo.errors import PyMongoError
 
 from ebl.transliteration.domain.museum_number import MuseumNumber
-from ebl.fragmentarium.domain.fragment import Notes, Introduction, Fragment
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory, LemmatizedFragmentFactory
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 from ebl.fragmentarium.domain.joins import Join
-from ebl.transliteration.domain.markup import StringPart, EmphasisPart
-
-
-NOTES_FIXTURE = [
-    [Notes(), Notes("Some notes", (StringPart("Some notes"),))],
-    [Notes(), Notes()],
-    [Notes("Different notes"), Notes()],
-    [
-        Notes("Different notes"),
-        Notes(
-            "Different notes @i{with emphasis}",
-            (StringPart("Different notes "), EmphasisPart("with emphasis")),
-        ),
-    ],
-]
-
-INTRO_FIXTURE = [
-    [
-        Introduction(),
-        Introduction(
-            "A new introduction",
-            (StringPart("A new introduction"),),
-        ),
-    ],
-    [
-        Introduction(
-            "An old introduction",
-            (StringPart("An old introduction"),),
-        ),
-        Introduction(),
-    ],
-    [
-        Introduction(),
-        Introduction(),
-    ],
-]
-
-
-def simulate_post_with_retry(client, url, body) -> Result:
-    result: Optional[Result] = None
-    for attempt in range(3):
-        result = cast(Result, client.simulate_post(url, body=body))
-        if result.status != falcon.HTTP_INTERNAL_SERVER_ERROR:
-            return result
-
-        payload = ""
-        try:
-            payload = str(result.json)
-        except Exception:
-            payload = result.text or ""
-
-        if "operation cancelled" not in payload.lower() or attempt == 2:
-            return result
-        time.sleep(0.1)
-
-    assert result is not None
-    return result
-
-
-def find_changelog_entry(database, query):
-    for attempt in range(3):
-        try:
-            return database["changelog"].find_one(query)
-        except PyMongoError as error:
-            if "operation cancelled" not in str(error).lower() or attempt == 2:
-                raise
-            time.sleep(0.1)
-    return None
+from ebl.tests.fragmentarium.transliterations_route_test_helpers import (
+    simulate_post_with_retry,
+    find_changelog_entry,
+)
 
 
 @freeze_time("2018-09-07 15:41:24.032")
@@ -249,152 +180,3 @@ def test_update_transliteration_invalid_entity(client, fragmentarium, body):
     post_result = client.simulate_post(url, body=body)
 
     assert post_result.status == falcon.HTTP_BAD_REQUEST
-
-
-@pytest.mark.parametrize("old_notes,new_notes", NOTES_FIXTURE)
-def test_update_notes(client, fragmentarium, user, database, old_notes, new_notes):
-    fragment: Fragment = FragmentFactory.build(notes=old_notes)
-    fragment_number = fragmentarium.create(fragment)
-    update = {"notes": new_notes.text}
-    post_result = simulate_post_with_retry(
-        client,
-        f"/fragments/{fragment_number}/edition",
-        json.dumps(update),
-    )
-    expected_json = {
-        **create_response_dto(
-            fragment.set_notes(new_notes.text),
-            user,
-            fragment.number == "K.1",
-            [],
-        )
-    }
-
-    assert post_result.status == falcon.HTTP_OK
-    assert post_result.json == expected_json
-
-    get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == {**expected_json, "realiaInfo": []}
-
-    assert find_changelog_entry(
-        database,
-        {
-            "resource_id": fragment_number,
-            "resource_type": "fragments",
-            "user_profile.name": user.profile["name"],
-        },
-    )
-
-
-def test_update_invalid_notes(client, fragmentarium, user, database):
-    fragment: Fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    update = {"notes": "@i{syntax error"}
-    post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/edition", body=json.dumps(update)
-    )
-
-    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-
-@pytest.mark.parametrize("old_introduction,new_introduction", INTRO_FIXTURE)
-def test_update_introduction(
-    client, fragmentarium, user, database, old_introduction, new_introduction
-):
-    fragment: Fragment = FragmentFactory.build(introduction=old_introduction)
-    fragment_number = fragmentarium.create(fragment)
-    update = {"introduction": new_introduction.text}
-    post_result = simulate_post_with_retry(
-        client,
-        f"/fragments/{fragment_number}/edition",
-        json.dumps(update),
-    )
-    expected_json = create_response_dto(
-        fragment.set_introduction(new_introduction.text),
-        user,
-        fragment.number == "K.1",
-        [],
-    )
-
-    assert post_result.status == falcon.HTTP_OK
-    assert post_result.json == expected_json
-
-    get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == {**expected_json, "realiaInfo": []}
-
-    assert find_changelog_entry(
-        database,
-        {
-            "resource_id": fragment_number,
-            "resource_type": "fragments",
-            "user_profile.name": user.profile["name"],
-        },
-    )
-
-
-def test_update_invalid_introduction(client, fragmentarium, user, database):
-    fragment: Fragment = FragmentFactory.build()
-    fragment_number = fragmentarium.create(fragment)
-    update = {"introduction": "@i{syntax error"}
-    post_result = client.simulate_post(
-        f"/fragments/{fragment_number}/edition", body=json.dumps(update)
-    )
-
-    assert post_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
-
-
-@pytest.mark.parametrize("old_introduction,new_introduction", INTRO_FIXTURE)
-@pytest.mark.parametrize("old_notes,new_notes", NOTES_FIXTURE)
-@pytest.mark.parametrize("new_transliteration", ["", "$ (the transliteration)"])
-@freeze_time("2018-09-07 15:41:24.032")
-def test_update_multiple_fields(
-    client,
-    fragmentarium,
-    user,
-    database,
-    old_introduction,
-    new_introduction,
-    old_notes,
-    new_notes,
-    new_transliteration,
-):
-    fragment: Fragment = FragmentFactory.build(
-        introduction=old_introduction, notes=old_notes
-    )
-    fragment_number = fragmentarium.create(fragment)
-    updates = {
-        "introduction": new_introduction.text,
-        "notes": new_notes.text,
-        "transliteration": new_transliteration,
-    }
-    post_result = simulate_post_with_retry(
-        client,
-        f"/fragments/{fragment_number}/edition",
-        json.dumps(updates),
-    )
-    expected_json = create_response_dto(
-        fragment.set_introduction(new_introduction.text)
-        .set_notes(new_notes.text)
-        .update_transliteration(
-            TransliterationUpdate(parse_atf_lark(updates["transliteration"])),
-            user,
-        ),
-        user,
-        fragment.number == "K.1",
-        [],
-    )
-
-    assert post_result.status == falcon.HTTP_OK
-    assert post_result.json == expected_json
-
-    get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == {**expected_json, "realiaInfo": []}
-
-    assert find_changelog_entry(
-        database,
-        {
-            "resource_id": fragment_number,
-            "resource_type": "fragments",
-            "user_profile.name": user.profile["name"],
-        },
-    )
