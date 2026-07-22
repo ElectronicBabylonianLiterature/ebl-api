@@ -1,9 +1,12 @@
 from types import SimpleNamespace
 from typing import List, Sequence, cast
 
+from pymongo.errors import PyMongoError
+
 from ebl.fragmentarium.application.realia_info import (
     RealiaInfoSchema,
     resolve_realia_info,
+    resolve_realia_info_map,
 )
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.named_entity import RealiaEntity
@@ -100,3 +103,21 @@ def test_resolve_empty_without_realia():
 
     assert resolve_realia_info(fragment_with_realia(), repository) == []
     assert repository.calls == []
+
+
+class FailingRealiaRepository(FakeRealiaRepository):
+    def find_by_realia_ids(self, realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
+        raise PyMongoError("realia store unavailable")
+
+
+def test_resolve_degrades_to_empty_on_infrastructure_failure():
+    repository = FailingRealiaRepository([])
+
+    assert resolve_realia_info(fragment_with_realia("realia_000001"), repository) == []
+
+
+def test_resolve_map_degrades_to_empty_on_infrastructure_failure():
+    repository = FailingRealiaRepository([])
+    documents = [{"realia": [{"realiaId": "realia_000001"}]}]
+
+    assert resolve_realia_info_map(documents, repository) == {}

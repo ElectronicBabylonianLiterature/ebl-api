@@ -1,4 +1,5 @@
 import falcon
+from pymongo.errors import PyMongoError
 
 from ebl.fragmentarium.domain.named_entity import RealiaAnnotationSpan
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
@@ -152,3 +153,79 @@ def test_write_response_realia_info_empty_without_realia(
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json["realiaInfo"] == []
+
+
+def _raise_realia_infrastructure_failure(realia_ids):
+    raise PyMongoError("realia store unavailable")
+
+
+def test_get_degrades_realia_info_on_infrastructure_failure(
+    client, fragmentarium, realia_repository, monkeypatch
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    fragment = create_realia_fragment(
+        fragmentarium, [RealiaAnnotationSpan("Realia-1", APKALLU_ID, ["Word-2"])]
+    )
+    monkeypatch.setattr(
+        realia_repository, "find_by_realia_ids", _raise_realia_infrastructure_failure
+    )
+
+    result = client.simulate_get(f"/fragments/{fragment.number}")
+
+    assert result.status == falcon.HTTP_OK
+    assert result.json["realiaInfo"] == []
+
+
+def test_retrieve_all_degrades_realia_info_on_infrastructure_failure(
+    client, fragmentarium, realia_repository, monkeypatch
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    create_realia_fragment(
+        fragmentarium,
+        [RealiaAnnotationSpan("Realia-1", APKALLU_ID, ["Word-2"])],
+        authorized_scopes=None,
+    )
+    monkeypatch.setattr(
+        realia_repository, "find_by_realia_ids", _raise_realia_infrastructure_failure
+    )
+
+    result = client.simulate_get("/fragments/retrieve-all?skip=0")
+
+    assert result.status == falcon.HTTP_OK
+    assert [fragment["realiaInfo"] for fragment in result.json["fragments"]] == [[]]
+
+
+def test_write_commits_and_degrades_realia_info_on_infrastructure_failure(
+    client, fragmentarium, realia_repository, monkeypatch
+):
+    store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
+    fragment = TransliteratedFragmentFactory.build().set_token_ids()
+    fragmentarium.create(fragment)
+    url = f"/fragments/{fragment.number}/named-entities"
+    payload = {
+        "namedEntities": [],
+        "realia": [{"id": "Realia-1", "realiaId": APKALLU_ID, "span": ["Word-2"]}],
+    }
+    original = realia_repository.find_by_realia_ids
+    call_count = {"value": 0}
+
+    def fail_only_after_write(realia_ids):
+        call_count["value"] += 1
+        if call_count["value"] == 1:
+            return original(realia_ids)
+        raise PyMongoError("realia store unavailable")
+
+    monkeypatch.setattr(realia_repository, "find_by_realia_ids", fail_only_after_write)
+
+    post_result = client.simulate_post(url, json=payload)
+
+    assert post_result.status == falcon.HTTP_OK
+    assert post_result.json["realiaInfo"] == []
+
+    monkeypatch.setattr(realia_repository, "find_by_realia_ids", original)
+    get_result = client.simulate_get(f"/fragments/{fragment.number}")
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.json["realiaInfo"] == [
+        {"realiaId": APKALLU_ID, "lemma": "Apkallu", "type": ["Divine names"]}
+    ]

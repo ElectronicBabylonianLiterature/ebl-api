@@ -1,6 +1,7 @@
 from typing import Dict, List, Sequence
 
 from marshmallow import Schema, fields, post_load
+from pymongo.errors import PyMongoError
 
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.realia_info import RealiaInfo
@@ -23,13 +24,22 @@ def _to_realia_info(entry: RealiaEntry) -> RealiaInfo:
     return RealiaInfo(realia_id=entry.realia_id, lemma=entry.id, type=entry.type)
 
 
+def _find_by_realia_ids(
+    realia_repository: RealiaRepository, realia_ids: Sequence[str]
+) -> Sequence[RealiaEntry]:
+    try:
+        return realia_repository.find_by_realia_ids(realia_ids)
+    except PyMongoError:
+        return []
+
+
 def resolve_realia_info(
     fragment: Fragment, realia_repository: RealiaRepository
 ) -> List[RealiaInfo]:
     realia_ids = sorted({entity.realia_id for entity in fragment.realia})
     if not realia_ids:
         return []
-    entries = realia_repository.find_by_realia_ids(realia_ids)
+    entries = _find_by_realia_ids(realia_repository, realia_ids)
     return [
         _to_realia_info(entry)
         for entry in sorted(entries, key=lambda entry: entry.realia_id)
@@ -54,7 +64,7 @@ def resolve_realia_info_map(
         return {}
     return {
         entry.realia_id: _to_realia_info(entry)
-        for entry in realia_repository.find_by_realia_ids(all_realia_ids)
+        for entry in _find_by_realia_ids(realia_repository, all_realia_ids)
     }
 
 
