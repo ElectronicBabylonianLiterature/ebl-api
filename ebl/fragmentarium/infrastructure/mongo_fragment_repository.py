@@ -39,6 +39,7 @@ class MongoFragmentRepository(
         )
         self._fragments.create_index([("text.lines.type", pymongo.ASCENDING)])
         self._fragments.create_index([("dossiers.dossierId", pymongo.ASCENDING)])
+        self._fragments.create_index([("genres.category", pymongo.ASCENDING)])
         self._fragments.create_index(
             [
                 ("archaeology.excavationNumber.prefix", pymongo.ASCENDING),

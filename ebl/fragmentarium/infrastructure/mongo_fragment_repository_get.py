@@ -433,6 +433,7 @@ class MongoFragmentRepositoryGetBase(MongoFragmentRepositoryBase):
                 collation=Collation(
                     locale="en", numericOrdering=True, alternate="shifted"
                 ),
+                allowDiskUse=True,
             )
             if set(query) - {"lemmaOperator"}
             else iter([])

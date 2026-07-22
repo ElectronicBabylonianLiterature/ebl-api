@@ -133,8 +133,11 @@ class FragmentsQueryResource:
         self._transliteration_query_factory = transliteration_query_factory
 
     def on_get(self, req: Request, resp: Response):
+        parameters = {
+            key: value for key, value in req.params.items() if key != "paginationIndex"
+        }
         query = _parse_fragment_query(
-            req.params,
+            parameters,
             parse_transliteration(self._transliteration_query_factory),
             parse_lemmas,
             parse_pages,

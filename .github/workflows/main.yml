@@ -57,8 +57,15 @@ jobs:
         id: install
         run: |
           pip install --upgrade pip
-          pip install "poetry==2.4.1"
-          poetry install --no-root --with dev
+          pip install --retries 10 --timeout 100 "poetry==2.4.1"
+          # Retry the full install when PyPI truncates a download mid-stream.
+          for attempt in 1 2 3; do
+            poetry install --no-root --with dev && break
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+            sleep $((attempt * 5))
+          done
 
       - name: Lint
         if: success() || steps.install.outcome == 'success'
