@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, post_load, EXCLUDE
-from typing import Dict, List, Optional, Tuple, cast, Sequence
+from typing import Dict, List, Optional, Set, Tuple, cast, Sequence
 from pymongo.database import Database
 import pymongo
 from natsort import natsorted
@@ -99,11 +99,14 @@ class MongoAfoRegisterRepository(AfoRegisterRepository):
     def _build_candidate_query(
         self, query_list: Sequence[str]
     ) -> Optional[Dict[str, List[Dict[str, str]]]]:
-        candidates = [
-            {"text": text, "textNumber": text_number}
-            for query in query_list
-            for text, text_number in candidate_splits(query)
-        ]
+        seen: Set[Tuple[str, str]] = set()
+        candidates: List[Dict[str, str]] = []
+        for query in query_list:
+            for text, text_number in candidate_splits(query):
+                if (text, text_number) in seen:
+                    continue
+                seen.add((text, text_number))
+                candidates.append({"text": text, "textNumber": text_number})
         return {"$or": candidates} if candidates else None
 
     def search_by_texts_and_numbers(

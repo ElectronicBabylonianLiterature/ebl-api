@@ -1,6 +1,7 @@
 import falcon
 import pytest
 import json
+from mockito import when
 
 from ebl.afo_register.domain.afo_register_record import AfoRegisterRecord
 from ebl.tests.factories.afo_register import (
@@ -14,6 +15,12 @@ from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
     AfoRegisterRecordSchema,
     AfoRegisterRecordSuggestionSchema,
 )
+from ebl.afo_register.web.afo_register_records import (
+    validate_texts_and_numbers_query,
+    MAX_TEXTS_AND_NUMBERS_QUERIES,
+    MAX_QUERY_LENGTH,
+)
+from ebl.errors import DataError
 
 
 @pytest.fixture
@@ -75,6 +82,63 @@ def test_search_by_texts_and_numbers_route_with_spaces(
 
     assert get_result.status == falcon.HTTP_OK
     assert get_result.json == [AfoRegisterRecordSchema().dump(record)]
+
+
+def test_validate_texts_and_numbers_query_passes_valid_body():
+    assert validate_texts_and_numbers_query(["OrNS 59, 17"]) == ["OrNS 59, 17"]
+
+
+def test_validate_texts_and_numbers_query_rejects_non_list():
+    with pytest.raises(DataError):
+        validate_texts_and_numbers_query({"not": "a list"})
+
+
+def test_validate_texts_and_numbers_query_rejects_too_many_queries():
+    with pytest.raises(DataError):
+        validate_texts_and_numbers_query(["x"] * (MAX_TEXTS_AND_NUMBERS_QUERIES + 1))
+
+
+def test_validate_texts_and_numbers_query_rejects_non_string_element():
+    with pytest.raises(DataError):
+        validate_texts_and_numbers_query(["ok", 5])
+
+
+def test_validate_texts_and_numbers_query_rejects_too_long_query():
+    with pytest.raises(DataError):
+        validate_texts_and_numbers_query(["x" * (MAX_QUERY_LENGTH + 1)])
+
+
+def test_search_by_texts_and_numbers_route_rejects_oversized_body(client) -> None:
+    get_result = client.simulate_post(
+        "/afo-register/texts-numbers",
+        body=json.dumps(["x"] * (MAX_TEXTS_AND_NUMBERS_QUERIES + 1)),
+    )
+
+    assert get_result.status == falcon.HTTP_UNPROCESSABLE_ENTITY
+
+
+def test_search_afo_register_route_not_found_on_value_error(
+    afo_register_repository: AfoRegisterRepository, client
+) -> None:
+    when(afo_register_repository).search({"text": "x"}).thenRaise(ValueError())
+
+    get_result = client.simulate_get("/afo-register", params={"text": "x"})
+
+    assert get_result.status == falcon.HTTP_NOT_FOUND
+
+
+def test_search_by_texts_and_numbers_route_not_found_on_value_error(
+    afo_register_repository: AfoRegisterRepository, client
+) -> None:
+    when(afo_register_repository).search_by_texts_and_numbers(["A B"]).thenRaise(
+        ValueError()
+    )
+
+    get_result = client.simulate_post(
+        "/afo-register/texts-numbers", body=json.dumps(["A B"])
+    )
+
+    assert get_result.status == falcon.HTTP_NOT_FOUND
 
 
 def test_search_afo_register_suggestions_route(

@@ -3,6 +3,9 @@ from ebl.tests.factories.afo_register import (
     AfoRegisterRecordSuggestionFactory,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
+from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MongoAfoRegisterRepository,
+)
 from natsort import natsorted
 
 
@@ -154,6 +157,29 @@ def test_search_by_texts_and_numbers_without_splittable_query(
     )
 
     assert afo_register_repository.search_by_texts_and_numbers(["OrNS"]) == []
+
+
+def test_search_by_texts_and_numbers_returns_all_ambiguous_matches(
+    afo_register_repository: AfoRegisterRepository,
+):
+    first_record = AfoRegisterRecordFactory.build(text="A", text_number="B C")
+    second_record = AfoRegisterRecordFactory.build(text="A B", text_number="C")
+    afo_register_repository.create(first_record)
+    afo_register_repository.create(second_record)
+
+    results = afo_register_repository.search_by_texts_and_numbers(["A B C"])
+
+    assert len(results) == 2
+    assert first_record in results
+    assert second_record in results
+
+
+def test_build_candidate_query_deduplicates_candidates(
+    afo_register_repository: MongoAfoRegisterRepository,
+):
+    assert afo_register_repository._build_candidate_query(["A B", "A B"]) == {
+        "$or": [{"text": "A", "textNumber": "B"}]
+    }
 
 
 def test_create_indexes(database, afo_register_repository: AfoRegisterRepository):
