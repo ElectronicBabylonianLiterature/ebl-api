@@ -19,7 +19,7 @@ Expected modes:
 --replace
 ```
 
-### Responsibilities
+### Importer responsibilities
 
 - Validate MIME type from server-side inspection, not filename extension.
 - Validate image dimensions and decoded pixel count before storage.
@@ -88,7 +88,7 @@ or import mistakes.
 The backfill will create media metadata for legacy GridFS files without
 modifying existing fragments or legacy files.
 
-### Responsibilities
+### Backfill responsibilities
 
 - Iterate GridFS metadata using cursors.
 - Avoid loading all files into memory.

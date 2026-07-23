@@ -1,5 +1,7 @@
 from typing import Sequence
 
+import attr
+
 from ebl.common.domain.project import ResearchProject
 from ebl.media.domain import (
     Media,
@@ -19,6 +21,20 @@ DEFAULT_MEDIA_ID = "550e8400-e29b-41d4-a716-446655440000"
 DEFAULT_COPY_MEDIA_ID = "550e8400-e29b-41d4-a716-446655440001"
 SECOND_PHOTO_MEDIA_ID = "550e8400-e29b-41d4-a716-446655440002"
 SHA256_VALUE = "a" * 64
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class MediaFactoryOptions:
+    media_id_: str | MediaId = DEFAULT_MEDIA_ID
+    media_type: MediaType = MediaType.PHOTO
+    original_filename: str = "BM-12345-obverse.jpg"
+    media_representations: MediaRepresentations | None = None
+    associations: Sequence[MediaAssociation] | None = None
+    projects: Sequence[ResearchProject] = ()
+    references: Sequence[MediaReference] = ()
+    caption: str | None = None
+    attribution: str | None = None
+    import_source: MediaImportSource | None = None
 
 
 def media_id(value: str = DEFAULT_MEDIA_ID) -> MediaId:
@@ -104,43 +120,41 @@ def media_import_source(
     return MediaImportSource(system, bucket, file_id)
 
 
-def media(
-    *,
-    media_id_: str | MediaId = DEFAULT_MEDIA_ID,
-    media_type: MediaType = MediaType.PHOTO,
-    original_filename: str = "BM-12345-obverse.jpg",
-    media_representations: MediaRepresentations | None = None,
-    associations: Sequence[MediaAssociation] | None = None,
-    projects: Sequence[ResearchProject] = (),
-    references: Sequence[MediaReference] = (),
-    caption: str | None = None,
-    attribution: str | None = None,
-    import_source: MediaImportSource | None = None,
-) -> Media:
-    normalized_media_id = (
-        media_id_ if isinstance(media_id_, MediaId) else MediaId(media_id_)
-    )
+def _media_id_of(value: str | MediaId) -> MediaId:
+    return value if isinstance(value, MediaId) else MediaId(value)
+
+
+def media(options: MediaFactoryOptions | None = None) -> Media:
+    options = options or MediaFactoryOptions()
     return Media(
-        id=normalized_media_id,
-        type=media_type,
-        original_filename=original_filename,
-        representations=media_representations or representations(),
-        associations=associations if associations is not None else (association(),),
-        projects=tuple(projects),
-        references=tuple(references),
-        caption=caption,
-        attribution=attribution,
-        import_source=import_source,
+        id=_media_id_of(options.media_id_),
+        type=options.media_type,
+        original_filename=options.original_filename,
+        representations=options.media_representations or representations(),
+        associations=(
+            options.associations
+            if options.associations is not None
+            else (association(),)
+        ),
+        projects=tuple(options.projects),
+        references=tuple(options.references),
+        caption=options.caption,
+        attribution=options.attribution,
+        import_source=options.import_source,
     )
 
 
 def photo_media(**kwargs) -> Media:
-    return media(media_type=MediaType.PHOTO, **kwargs)
+    return media(attr.evolve(MediaFactoryOptions(media_type=MediaType.PHOTO), **kwargs))
 
 
 def copy_media(**kwargs) -> Media:
     return media(
-        media_id_=kwargs.pop("media_id_", DEFAULT_COPY_MEDIA_ID),
-        media_type=MediaType.COPY,
-        **kwargs,
+        attr.evolve(
+            MediaFactoryOptions(media_type=MediaType.COPY),
+            **{
+                "media_id_": kwargs.pop("media_id_", DEFAULT_COPY_MEDIA_ID),
+                **kwargs,
+            },
+        )
     )
