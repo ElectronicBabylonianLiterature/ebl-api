@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push --delete*)",
+      "Bash(git branch -D*)",
+      "Bash(git reset --hard*)"
+    ],
+    "ask": [
+      "Bash(git commit*)",
+      "Bash(git push*)",
+      "Bash(git reset*)",
+      "Bash(git rebase*)",
+      "Bash(git cherry-pick*)",
+      "Bash(git revert*)",
+      "Bash(git merge*)",
+      "Bash(git tag*)",
+      "Bash(git checkout -b*)",
+      "Bash(git switch -c*)",
+      "Bash(gh pr create*)",
+      "Bash(gh pr merge*)",
+      "Bash(gh pr close*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.command' | grep -qE '\\bgit[[:space:]]+(commit|push|merge|rebase|reset|cherry-pick|revert|tag)\\b|\\bgh[[:space:]]+pr[[:space:]]+(create|merge|close)\\b' && echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"Project hard gate: commits, pushes, PRs and history rewrites require explicit user approval. Do not proceed unless the user asked for this specific action.\"}}' || true",
+            "statusMessage": "Checking commit/push gate"
+          }
+        ]
+      }
+    ]
+  }
+}

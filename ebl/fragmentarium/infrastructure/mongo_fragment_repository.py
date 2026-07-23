@@ -109,8 +109,8 @@ class MongoFragmentRepository(
             "authorized_scopes": [
                 "authorized_scopes",
             ],
-            "ocredSigns": ("ocredSigns"),
-            "named_entities": ("text", "named_entities"),
+            "ocredSigns": ("ocred_signs",),
+            "named_entities": ("text", "named_entities", "realia"),
         }
 
         if field not in fields_to_update:

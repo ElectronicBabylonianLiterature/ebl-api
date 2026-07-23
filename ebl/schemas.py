@@ -28,7 +28,7 @@ class EnumField(fields.Field, ABC):
     def _deserialize(self, value, attr, data, **kwargs) -> Any:
         try:
             return self._deserialize_enum(value)
-        except (KeyError, ValueError) as error:
+        except (KeyError, TypeError, ValueError) as error:
             raise self.make_error("invalid_value") from error
 
     @abstractmethod

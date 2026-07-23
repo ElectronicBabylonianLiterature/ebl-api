@@ -55,6 +55,7 @@ def test_lone_determinative(language):
         "namedEntities": NamedEntitySchema().dump(
             lone_determinative.named_entities, many=True
         ),
+        "realia": list(lone_determinative.realia),
     }
     assert_token_serialization(lone_determinative, serialized)
 

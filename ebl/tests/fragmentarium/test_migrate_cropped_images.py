@@ -1,20 +1,23 @@
-from mockito import mock, when
+from typing import cast
+
+from mockito import mock
 
 import ebl.fragmentarium.migrate_cropped_images as module
+from ebl.context import Context
 from ebl.fragmentarium.application.cropped_sign_image import CroppedSignImage, Base64
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_create_annotations_service():
-    context = mock()
+    context = cast(Context, mock())
 
     result = module.create_annotations_service(context)
 
     assert result.__class__.__name__ == "AnnotationsService"
 
 
-def test_show_statistics():
-    context = mock()
+def test_show_statistics(when):
+    context = cast(Context, mock())
     database = mock()
     annotations_collection = mock()
     cropped_images_collection = mock()
@@ -33,21 +36,19 @@ def test_show_statistics():
     assert cropped_count == 50
 
 
-def test_regenerate_images():
-    context = mock()
+def test_regenerate_images(when):
     database = mock()
     annotations_collection = mock()
     annotation_doc = {"fragmentNumber": "K.123"}
-    annotations_result = mock()
     annotations_repository = mock()
 
     when(database).__getitem__("annotations").thenReturn(annotations_collection)
     when(annotations_collection).find({}).thenReturn([annotation_doc])
-    annotations_result.annotations = []
+    annotations_result = mock({"annotations": []})
     when(annotations_repository).query_by_museum_number(
         MuseumNumber.of("K.123")
     ).thenReturn(annotations_result)
-    context.annotations_repository = annotations_repository
+    context = cast(Context, mock({"annotations_repository": annotations_repository}))
 
     annotations_service = mock()
     when(module).get_database().thenReturn(database)
@@ -56,7 +57,7 @@ def test_regenerate_images():
     module.regenerate_images(context)
 
 
-def test_migrate_cropped_images():
+def test_migrate_cropped_images(when):
     context = mock()
 
     when(module).create_context().thenReturn(context)
@@ -66,19 +67,19 @@ def test_migrate_cropped_images():
     module.migrate_cropped_images()
 
 
-def test_main():
+def test_main(when):
     when(module).migrate_cropped_images().thenReturn(None)
 
     module.main()
 
 
-def test_main_keyboard_interrupt():
+def test_main_keyboard_interrupt(when):
     when(module).migrate_cropped_images().thenRaise(KeyboardInterrupt)
 
     module.main()
 
 
-def test_main_exception():
+def test_main_exception(when):
     when(module).migrate_cropped_images().thenRaise(Exception("test error"))
 
     module.main()

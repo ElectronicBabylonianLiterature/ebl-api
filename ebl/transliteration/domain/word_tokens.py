@@ -27,6 +27,7 @@ class AbstractWord(Token):
     has_variant_alignment: bool = False
     has_omitted_alignment: bool = False
     named_entities: Sequence[str] = ()
+    realia: Sequence[str] = ()
 
     @property
     @abstractmethod
@@ -149,6 +150,7 @@ class Word(AbstractWord):
         has_omitted_alignment: bool = False,
         id_: Optional[str] = None,
         named_entities: Sequence[str] = (),
+        realia: Sequence[str] = (),
     ) -> W:
         return cls(
             frozenset(),
@@ -161,6 +163,7 @@ class Word(AbstractWord):
             has_variant_alignment,
             has_omitted_alignment,
             named_entities,
+            realia,
             language,
         )
 

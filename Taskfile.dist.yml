@@ -15,6 +15,7 @@ tasks:
       - task: format
       - task: lint
       - task: type
+      - task: type-pyright
       - task: test
       - task: lint-md
 
@@ -41,6 +42,22 @@ tasks:
   type:
     cmds:
       - poetry run pyre check
+
+  type-pyright:
+    desc: >-
+      Run pyright (the checker behind Pylance) on Python files changed vs
+      master. Pyre and mypy do not catch what the IDE reports, so changed
+      code is gated on pyright too.
+    cmds:
+      - |
+        BASE=origin/master
+        git rev-parse --verify --quiet "$BASE" >/dev/null 2>&1 || BASE=master
+        FILES=$(git diff --name-only --diff-filter=ACMR "$BASE...HEAD" -- '*.py')
+        if [ -z "$FILES" ]; then
+          echo "No changed Python files."
+        else
+          printf '%s\n' "$FILES" | xargs npx --yes pyright@1.1.411
+        fi
 
   format:
     cmds:

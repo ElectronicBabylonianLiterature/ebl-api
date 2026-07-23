@@ -1,6 +1,6 @@
 import json
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, cast
 
 import attr
 
@@ -68,9 +68,12 @@ def test_update_archaeology(
     seeded_provenance_service = update_archaeology_dependencies.provenance_service
     fragment: Fragment = FragmentFactory.build(archaeology=old_archaeology)
     fragment_number = fragmentarium.create(fragment)
-    data = ArchaeologySchema(
-        context={"provenance_service": seeded_provenance_service}
-    ).dump(new_archaeology)
+    data = cast(
+        dict,
+        ArchaeologySchema(
+            context={"provenance_service": seeded_provenance_service}
+        ).dump(new_archaeology),
+    )
 
     if number := new_archaeology.excavation_number:
         data["excavationNumber"] = str(number)
@@ -84,6 +87,7 @@ def test_update_archaeology(
             fragment.set_archaeology(new_archaeology),
             user,
             fragment.number == "K.1",
+            [],
         )
     }
 
@@ -91,7 +95,7 @@ def test_update_archaeology(
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
 
 def test_invalid_excavation_number_update(client, fragmentarium, user):

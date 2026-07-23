@@ -2,6 +2,8 @@ from itertools import zip_longest
 from typing import (
     Callable,
     Iterable,
+    List,
+    Mapping,
     Optional,
     Sequence,
     Type,
@@ -13,7 +15,7 @@ from typing import (
 import attr
 import pydash
 
-from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation
+from ebl.fragmentarium.domain.token_annotation import LineLemmaAnnotation, TokenIndex
 from ebl.lemmatization.domain.lemmatization import (
     LemmatizationError,
     LemmatizationToken,
@@ -57,6 +59,12 @@ def merge_tokens(old: Sequence[Token], new: Sequence[Token]) -> Sequence[Token]:
 
 
 AlignmentMap = Sequence[Optional[int]]
+
+
+def annotation_ids(
+    token_map: Mapping[str, List[str]], token_id: Optional[str]
+) -> List[str]:
+    return token_map.get(token_id, []) if token_id else []
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -109,8 +117,8 @@ class TextLine(Line):
     ) -> "TextLine":
         content = tuple(
             (
-                attr.evolve(token, unique_lemma=line_annotation[index])
-                if index in line_annotation
+                attr.evolve(token, unique_lemma=line_annotation[TokenIndex(index)])
+                if TokenIndex(index) in line_annotation
                 else token
             )
             for index, token in enumerate(self.content)
@@ -153,10 +161,18 @@ class TextLine(Line):
         for token in self.content:
             token.accept(visitor)
 
-    def set_named_entities(self, token_entity_map: dict) -> "TextLine":
+    def set_named_entities(
+        self,
+        token_entity_map: Mapping[str, List[str]],
+        token_realia_map: Mapping[str, List[str]],
+    ) -> "TextLine":
         updated_content = tuple(
             (
-                attr.evolve(token, named_entities=token_entity_map.get(token.id_, []))
+                attr.evolve(
+                    token,
+                    named_entities=annotation_ids(token_entity_map, token.id_),
+                    realia=annotation_ids(token_realia_map, token.id_),
+                )
                 if isinstance(token, AbstractWord)
                 else token
             )

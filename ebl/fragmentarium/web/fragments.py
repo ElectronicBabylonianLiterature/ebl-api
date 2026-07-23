@@ -1,8 +1,7 @@
-import json
+from typing import List, cast
+
 import falcon
 from falcon import Request, Response
-from falcon_caching import Cache
-from ebl.cache.application.cache import DEFAULT_TIMEOUT
 
 from ebl.common.query.parameter_parser import (
     parse_integer_field,
@@ -23,17 +22,25 @@ from ebl.fragmentarium.application.fragment_query_summary_schema import (
     FragmentQueryResultSchema,
 )
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
+from ebl.fragmentarium.application.realia_info import (
+    RealiaInfoSchema,
+    document_realia_info,
+    resolve_realia_info_map,
+)
 from ebl.fragmentarium.web.dtos import (
-    create_response_dto,
+    FragmentDtoFactory,
     parse_excavation_number,
     parse_museum_number,
 )
-from ebl.schemas import ScopeField
+from ebl.realia.application.realia_repository import RealiaRepository
+from ebl.common.domain.scopes import Scope
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.transliteration_query_factory import (
     TransliterationQueryFactory,
 )
+from ebl.transliteration.domain.text import Text
+from ebl.users.domain.user import User
 from ebl.users.web.require_scope import require_fragment_read_scope
 
 
@@ -45,10 +52,14 @@ def _parse_fragment_query(parameters, *parsers):
 
 class FragmentsRetrieveAllResource:
     def __init__(
-        self, repository: FragmentRepository, photos_repository: FileRepository
+        self,
+        repository: FragmentRepository,
+        photos_repository: FileRepository,
+        realia_repository: RealiaRepository,
     ):
         self._repo = repository
         self._photos = photos_repository
+        self._realia_repository = realia_repository
 
     def _parse_skip(self, skip: str, total_count: int) -> int:
         try:
@@ -70,26 +81,31 @@ class FragmentsRetrieveAllResource:
             total_count,
         )
         fragments = self._repo.retrieve_transliterated_fragments(skip)
+        info_by_realia_id = resolve_realia_info_map(fragments, self._realia_repository)
         fragments_ = []
         # to improve performance we don't serialize the complete Fragment in fragment_repository
         # because we would have to deserialize it again here to return it to client
         for fragment in fragments:
-            fragment["atf"] = TextSchema().load(fragment["text"]).atf
+            fragment["atf"] = cast(Text, TextSchema().load(fragment["text"])).atf
             dict.pop(fragment, "text")
             number = MuseumNumberSchema().load(fragment["museumNumber"])
             fragment["hasPhoto"] = self._photos.query_if_file_exists(f"{number}.jpg")
+            fragment["realiaInfo"] = RealiaInfoSchema(many=True).dump(
+                document_realia_info(fragment, info_by_realia_id)
+            )
             fragments_.append(fragment)
         resp.media = {"totalCount": total_count, "fragments": fragments_}
 
 
 class FragmentsResource:
-    def __init__(self, finder: FragmentFinder):
+    def __init__(self, finder: FragmentFinder, dto_factory: FragmentDtoFactory):
         self._finder = finder
+        self._dto_factory = dto_factory
 
     @falcon.before(require_fragment_read_scope)
     def on_get(self, req: Request, resp: Response, number: str):
-        lines = parse_lines(req.get_param_as_list("lines", default=[]))
-        exclude_lines = req.get_param_as_bool("excludeLines", default=False)
+        lines = parse_lines(cast(List[str], req.get_param_as_list("lines", default=[])))
+        exclude_lines = cast(bool, req.get_param_as_bool("excludeLines", default=False))
         try:
             fragment, has_photo = self._finder.find(
                 parse_museum_number(number), lines=lines, exclude_lines=exclude_lines
@@ -100,7 +116,8 @@ class FragmentsResource:
                 lines=lines,
                 exclude_lines=exclude_lines,
             )
-        resp.media = create_response_dto(fragment, req.context.user, has_photo)
+        user: User = req.context["user"]
+        resp.media = self._dto_factory.create(fragment, user, has_photo)
 
 
 class FragmentsQueryResource:
@@ -135,7 +152,9 @@ class FragmentsQueryResource:
         resp.media = schema.dump(
             self._repository.query(
                 query,
-                req.context.user.get_scopes(prefix="read:", suffix="-fragments"),
+                cast(User, req.context["user"]).get_scopes(
+                    prefix="read:", suffix="-fragments"
+                ),
             )
         )
 
@@ -146,24 +165,23 @@ class FragmentAuthorizedScopesResource:
         repository: FragmentRepository,
         finder: FragmentFinder,
         updater: FragmentUpdater,
+        dto_factory: FragmentDtoFactory,
     ):
         self._repository = repository
         self._finder = finder
         self._updater = updater
+        self._dto_factory = dto_factory
 
     @falcon.before(require_fragment_read_scope)
     def on_post(self, req: Request, resp: Response, number: str) -> None:
         try:
-            user = req.context.user
+            user: User = req.context["user"]
             updated_fragment, has_photo = self._updater.update_scopes(
                 parse_museum_number(number),
-                [
-                    ScopeField()._deserialize_enum(scope)
-                    for scope in req.media["authorized_scopes"]
-                ],
+                [Scope.from_string(scope) for scope in req.media["authorized_scopes"]],
             )
             resp.status = falcon.HTTP_200
-            resp.media = create_response_dto(updated_fragment, user, has_photo)
+            resp.media = self._dto_factory.create(updated_fragment, user, has_photo)
         except ValueError as error:
             raise DataError(error)
 
@@ -177,52 +195,3 @@ class FragmentsListResource:
 
     def on_get(self, req: Request, resp: Response):
         resp.media = self._repository.list_all_fragments()
-
-
-def make_latest_additions_resource(repository: FragmentRepository, cache: Cache):
-    class LatestAdditionsResource:
-        def __init__(
-            self,
-            repository: FragmentRepository,
-        ):
-            self._repository = repository
-
-        @cache.cached(timeout=DEFAULT_TIMEOUT)
-        def on_get(self, req: Request, resp: Response):
-            resp.text = json.dumps(
-                QueryResultSchema().dump(self._repository.query_latest())
-            )
-
-    return LatestAdditionsResource(repository)
-
-
-def make_all_fragment_signs_resource(repository: FragmentRepository, cache: Cache):
-    class AllFragmentSignsResource:
-        def __init__(
-            self,
-            repository: FragmentRepository,
-        ):
-            self._repository = repository
-
-        @cache.cached(timeout=DEFAULT_TIMEOUT)
-        def on_get(self, req: Request, resp: Response):
-            resp.text = json.dumps(self._repository.fetch_fragment_signs())
-
-    return AllFragmentSignsResource(repository)
-
-
-def make_all_fragment_ocred_signs_resource(
-    repository: FragmentRepository, cache: Cache
-):
-    class AllFragmentOcredSignsResource:
-        def __init__(
-            self,
-            repository: FragmentRepository,
-        ):
-            self._repository = repository
-
-        @cache.cached(timeout=DEFAULT_TIMEOUT)
-        def on_get(self, req: Request, resp: Response):
-            resp.text = json.dumps(self._repository.fetch_fragment_ocred_signs())
-
-    return AllFragmentOcredSignsResource(repository)

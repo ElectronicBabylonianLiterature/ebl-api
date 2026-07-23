@@ -68,7 +68,7 @@ class ArchaeologyFactory(factory.Factory):
     class Meta:
         model = Archaeology
 
-    excavation_number = factory.Sequence(lambda n: ExcavationNumber("X", str(n)))
+    excavation_number = factory.Sequence(lambda n: ExcavationNumber("EX", str(n)))
     site = factory.fuzzy.FuzzyChoice(DEFAULT_NON_STANDARD_PROVENANCES)
     regular_excavation = factory.Faker("boolean")
     excavation_date = factory.SubFactory(DateRangeFactory)
