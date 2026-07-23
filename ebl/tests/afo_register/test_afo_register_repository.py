@@ -3,6 +3,9 @@ from ebl.tests.factories.afo_register import (
     AfoRegisterRecordSuggestionFactory,
 )
 from ebl.afo_register.application.afo_register_repository import AfoRegisterRepository
+from ebl.afo_register.infrastructure.mongo_afo_register_repository import (
+    MongoAfoRegisterRepository,
+)
 from natsort import natsorted
 
 
@@ -45,6 +48,18 @@ def test_find_by_all_record_parameters(afo_register_repository: AfoRegisterRepos
     ) == [afo_register_record]
 
 
+def test_find_by_quoted_text_number_matches_exactly(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_record = AfoRegisterRecordFactory.build(text_number="Nr. 5")
+    afo_register_repository.create(afo_register_record)
+    afo_register_repository.create(AfoRegisterRecordFactory.build(text_number="Nr. 50"))
+
+    assert afo_register_repository.search({"textNumber": '"Nr. 5"'}) == [
+        afo_register_record
+    ]
+
+
 def test_search_by_texts_and_numbers(afo_register_repository: AfoRegisterRepository):
     record1 = AfoRegisterRecordFactory.build(text="Text1", text_number="1")
     record2 = AfoRegisterRecordFactory.build(text="Text2", text_number="2")
@@ -71,6 +86,100 @@ def test_search_by_texts_and_numbers_with_spaces(
     )
 
     assert results == [record]
+
+
+def test_search_by_texts_and_numbers_with_space_in_text_number(
+    afo_register_repository: AfoRegisterRepository,
+):
+    record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
+    afo_register_repository.create(record)
+
+    assert afo_register_repository.search_by_texts_and_numbers(["OrNS 59, 17"]) == [
+        record
+    ]
+
+
+def test_search_by_texts_and_numbers_with_spaces_in_both_fields(
+    afo_register_repository: AfoRegisterRepository,
+):
+    record = AfoRegisterRecordFactory.build(text="*Bīt mēseri*", text_number="59, 17")
+    afo_register_repository.create(record)
+
+    assert afo_register_repository.search_by_texts_and_numbers(
+        ["*Bīt mēseri* 59, 17"]
+    ) == [record]
+
+
+def test_search_by_texts_and_numbers_ignores_partial_matches(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_repository.create(
+        AfoRegisterRecordFactory.build(text="A B", text_number="C")
+    )
+
+    assert afo_register_repository.search_by_texts_and_numbers(["A B C D"]) == []
+
+
+def test_search_by_texts_and_numbers_batches_spaced_and_unspaced(
+    afo_register_repository: AfoRegisterRepository,
+):
+    spaced_record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
+    unspaced_record = AfoRegisterRecordFactory.build(
+        text="AfO", text_number="17,257ff."
+    )
+    unmatched_record = AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 26")
+    afo_register_repository.create(spaced_record)
+    afo_register_repository.create(unspaced_record)
+    afo_register_repository.create(unmatched_record)
+
+    results = afo_register_repository.search_by_texts_and_numbers(
+        ["OrNS 59, 17", "AfO 17,257ff."]
+    )
+
+    assert len(results) == 2
+    assert spaced_record in results
+    assert unspaced_record in results
+
+
+def test_search_by_texts_and_numbers_without_queries(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_repository.create(AfoRegisterRecordFactory.build())
+
+    assert afo_register_repository.search_by_texts_and_numbers([]) == []
+
+
+def test_search_by_texts_and_numbers_without_splittable_query(
+    afo_register_repository: AfoRegisterRepository,
+):
+    afo_register_repository.create(
+        AfoRegisterRecordFactory.build(text="OrNS", text_number="59, 17")
+    )
+
+    assert afo_register_repository.search_by_texts_and_numbers(["OrNS"]) == []
+
+
+def test_search_by_texts_and_numbers_returns_all_ambiguous_matches(
+    afo_register_repository: AfoRegisterRepository,
+):
+    first_record = AfoRegisterRecordFactory.build(text="A", text_number="B C")
+    second_record = AfoRegisterRecordFactory.build(text="A B", text_number="C")
+    afo_register_repository.create(first_record)
+    afo_register_repository.create(second_record)
+
+    results = afo_register_repository.search_by_texts_and_numbers(["A B C"])
+
+    assert len(results) == 2
+    assert first_record in results
+    assert second_record in results
+
+
+def test_build_candidate_query_deduplicates_candidates(
+    afo_register_repository: MongoAfoRegisterRepository,
+):
+    assert afo_register_repository._build_candidate_query(["A B", "A B"]) == {
+        "$or": [{"text": "A", "textNumber": "B"}]
+    }
 
 
 def test_create_indexes(database, afo_register_repository: AfoRegisterRepository):
