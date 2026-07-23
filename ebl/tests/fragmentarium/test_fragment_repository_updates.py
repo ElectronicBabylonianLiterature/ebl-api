@@ -1,6 +1,7 @@
 import pytest
 
 from ebl.common.domain.period import Period
+from ebl.dictionary.domain.word import WordId
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.application.fragment_repository import FragmentRepository
 from ebl.fragmentarium.domain.fragment import (
@@ -99,7 +100,7 @@ def test_update_lemmatization(fragment_repository):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     fragment_repository.create(transliterated_fragment)
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
-    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, (WordId("aklu I"),))
     updated_fragment = transliterated_fragment.update_lemmatization(
         Lemmatization(tokens)
     )

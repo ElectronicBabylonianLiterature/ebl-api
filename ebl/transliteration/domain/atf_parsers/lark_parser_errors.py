@@ -5,13 +5,23 @@ from lark.exceptions import ParseError, UnexpectedInput, VisitError
 
 from ebl.transliteration.domain.enclosure_error import EnclosureError
 from ebl.transliteration.domain.labels import DuplicateStatusError
-from ebl.transliteration.domain.transliteration_error import ErrorAnnotation
+from ebl.transliteration.domain.transliteration_error import (
+    ErrorAnnotation,
+    ExtentLabelError,
+    TransliterationError,
+)
 
 PARSE_ERRORS: Tuple[Type[Exception], ...] = (
     UnexpectedInput,
     ParseError,
     VisitError,
     EnclosureError,
+)
+
+LINE_PARSE_ERRORS: Tuple[Type[Exception], ...] = (
+    *PARSE_ERRORS,
+    TransliterationError,
+    ExtentLabelError,
 )
 
 

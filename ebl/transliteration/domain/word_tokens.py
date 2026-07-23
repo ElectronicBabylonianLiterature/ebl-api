@@ -102,7 +102,7 @@ class AbstractWord(Token):
 
     def merge(self, token: T) -> T:  # sourcery skip
         if isinstance(token, AbstractWord):
-            return self._merge_word(token)
+            return cast(T, self._merge_word(token))
         else:
             return token
 
