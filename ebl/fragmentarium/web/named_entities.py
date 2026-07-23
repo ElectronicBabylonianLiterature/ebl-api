@@ -1,5 +1,6 @@
 from collections import Counter
-from typing import Dict, List, Sequence, Type, cast
+from itertools import chain
+from typing import Dict, List, Mapping, Sequence, Type, cast
 
 from falcon import Request, Response, before
 from marshmallow import Schema, ValidationError
@@ -15,8 +16,8 @@ from ebl.fragmentarium.application.named_entity_schema import (
 )
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.named_entity import (
-    AnnotationSpan,
     EntityAnnotationSpan,
+    EntityT,
     RealiaAnnotationSpan,
     deduplicate_spans,
 )
@@ -26,6 +27,8 @@ from ebl.users.web.require_scope import require_scope
 
 NAMED_ENTITIES_KEY = "namedEntities"
 REALIA_KEY = "realia"
+
+AnnotationPayload = Mapping[str, Sequence[Mapping[str, object]]]
 
 
 class NamedEntityResource:
@@ -42,7 +45,10 @@ class NamedEntityResource:
         self._dto_factory = dto_factory
 
     def _create_spans(
-        self, entities: Sequence, entity_schema: Type[Schema], word_ids: Dict[str, list]
+        self,
+        entities: Sequence[EntityT],
+        entity_schema: Type[Schema],
+        word_ids: Mapping[str, List[str]],
     ) -> List[dict]:
         return [
             {
@@ -52,21 +58,33 @@ class NamedEntityResource:
             for entity in entities
         ]
 
-    def _word_ids_by_annotation(self, fragment: Fragment) -> Dict[str, list]:
-        word_ids: Dict[str, list] = {}
+    def _word_ids_by_annotation(self, fragment: Fragment) -> Dict[str, List[str]]:
+        word_ids: Dict[str, List[str]] = {}
         for word in fragment.words:
-            for entity_id in [*word.named_entities, *word.realia]:
-                word_ids.setdefault(entity_id, []).append(word.id_)
+            word_id = word.id_
+            if word_id is None:
+                continue
+            for entity_id in chain(word.named_entities, word.realia):
+                word_ids.setdefault(entity_id, []).append(word_id)
         return word_ids
 
-    def _load(self, data, schema: Type[Schema], key: str) -> List:
+    def _load(self, data: AnnotationPayload, schema: Type[Schema], key: str) -> List:
         try:
             return cast(List, schema().load(data.get(key, []), many=True))
         except ValidationError as error:
             raise DataError(f"Invalid '{key}': {error.messages}") from error
 
-    def _validate_unique_ids(self, annotations: Sequence[AnnotationSpan]) -> None:
-        counts = Counter(annotation.id for annotation in annotations)
+    def _validate_unique_ids(
+        self,
+        entity_spans: Sequence[EntityAnnotationSpan],
+        realia_spans: Sequence[RealiaAnnotationSpan],
+    ) -> None:
+        counts = Counter(
+            chain(
+                (span.id for span in entity_spans),
+                (span.id for span in realia_spans),
+            )
+        )
         duplicates = sorted(id_ for id_, count in counts.items() if count > 1)
         if duplicates:
             raise DataError(
@@ -108,7 +126,7 @@ class NamedEntityResource:
             self._load(req.media, RealiaAnnotationSpanSchema, REALIA_KEY)
         )
 
-        self._validate_unique_ids([*entity_spans, *realia_spans])
+        self._validate_unique_ids(entity_spans, realia_spans)
         self._validate_realia_ids(realia_spans)
 
         updated_fragment, has_photo = self._updater.update_named_entities(

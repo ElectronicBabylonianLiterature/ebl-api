@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields, post_load, validate
 
+from ebl.schemas import NameEnumField
 from ebl.fragmentarium.domain.named_entity import (
     REALIA_ID_PATTERN,
     EntityAnnotationSpan,
@@ -14,11 +15,7 @@ REALIA_ID_KEY = "realiaId"
 
 class AbstractNamedEntitySchema(Schema):
     id = fields.String(required=True)
-    type = fields.Function(
-        lambda entity: entity.type.long_name,
-        lambda value: NamedEntityType.from_name(value),
-        required=True,
-    )
+    type = NameEnumField(NamedEntityType, required=True)
 
 
 class AbstractRealiaEntitySchema(Schema):

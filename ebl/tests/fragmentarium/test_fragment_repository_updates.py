@@ -204,3 +204,11 @@ def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_transliterated_fragments() == 0
     assert fragment_repository.count_lines() == 0
     assert fragment_repository.count_total_fragments() == 0
+
+
+def test_update_field_rejects_unknown_field(fragment_repository):
+    fragment = FragmentFactory.build()
+    fragment_repository.create(fragment)
+
+    with pytest.raises(ValueError, match="Unexpected update field"):
+        fragment_repository.update_field("unknown_field", fragment)

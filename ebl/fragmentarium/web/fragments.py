@@ -33,7 +33,7 @@ from ebl.fragmentarium.web.dtos import (
     parse_museum_number,
 )
 from ebl.realia.application.realia_repository import RealiaRepository
-from ebl.schemas import ScopeField
+from ebl.common.domain.scopes import Scope
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.transliteration.application.text_schema import TextSchema
 from ebl.transliteration.application.transliteration_query_factory import (
@@ -178,10 +178,7 @@ class FragmentAuthorizedScopesResource:
             user: User = req.context["user"]
             updated_fragment, has_photo = self._updater.update_scopes(
                 parse_museum_number(number),
-                [
-                    ScopeField()._deserialize_enum(scope)
-                    for scope in req.media["authorized_scopes"]
-                ],
+                [Scope.from_string(scope) for scope in req.media["authorized_scopes"]],
             )
             resp.status = falcon.HTTP_200
             resp.media = self._dto_factory.create(updated_fragment, user, has_photo)

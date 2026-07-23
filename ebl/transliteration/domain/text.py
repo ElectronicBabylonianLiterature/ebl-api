@@ -17,9 +17,9 @@ from typing import (
 import attr
 
 from ebl.fragmentarium.domain.named_entity import (
-    AnnotationSpan,
     EntityAnnotationSpan,
     RealiaAnnotationSpan,
+    SpanT,
 )
 from ebl.fragmentarium.domain.token_annotation import LineIndex, TextLemmaAnnotation
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationError
@@ -42,7 +42,7 @@ from ebl.transliteration.domain.word_tokens import AbstractWord
 __all__ = ["LineLabel", "Text", "TextLine", "TranslationLine", "set_id"]
 
 
-def _map_spans_by_token(spans: Sequence[AnnotationSpan]) -> Dict[str, List[str]]:
+def _map_spans_by_token(spans: Sequence[SpanT]) -> Dict[str, List[str]]:
     token_map: DefaultDict[str, List[str]] = defaultdict(list)
     for span in spans:
         for token_id in span.span:

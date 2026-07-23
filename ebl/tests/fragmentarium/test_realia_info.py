@@ -1,3 +1,4 @@
+import logging
 from types import SimpleNamespace
 from typing import List, Sequence, cast
 
@@ -121,3 +122,13 @@ def test_resolve_map_degrades_to_empty_on_infrastructure_failure():
     documents = [{"realia": [{"realiaId": "realia_000001"}]}]
 
     assert resolve_realia_info_map(documents, repository) == {}
+
+
+def test_infrastructure_failure_is_logged(caplog):
+    repository = FailingRealiaRepository([])
+
+    with caplog.at_level(logging.WARNING):
+        resolve_realia_info(fragment_with_realia("realia_000001"), repository)
+
+    assert "Realia lookup failed for 1 id(s)" in caplog.text
+    assert "realia store unavailable" in caplog.text

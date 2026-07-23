@@ -1,4 +1,3 @@
-from enum import Enum
 from itertools import groupby
 from typing import List, Optional, Sequence, Tuple
 import attr
@@ -172,7 +171,7 @@ class Fragment(FragmentExternalNumbers):
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":
         return attr.evolve(self, genres=tuple(genres_new))
 
-    def set_scopes(self, scopes_new: Sequence[Enum]) -> "Fragment":
+    def set_scopes(self, scopes_new: Sequence[Scope]) -> "Fragment":
         return attr.evolve(self, authorized_scopes=list(scopes_new))
 
     def set_date(self, date_new: Optional[Date]) -> "Fragment":
@@ -199,7 +198,7 @@ class Fragment(FragmentExternalNumbers):
         line_numbers = query.match(self.signs)
 
         match = [
-            (self.text.text_lines[numbers[0] : numbers[1] + 1])
+            self.text.text_lines[slice(numbers[0], numbers[1] + 1)]
             for numbers, _ in groupby(line_numbers)
         ]
         return Text(lines=tuple(pydash.flatten(match)))

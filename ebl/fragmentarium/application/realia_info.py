@@ -1,3 +1,4 @@
+import logging
 from typing import Dict, List, Sequence
 
 from marshmallow import Schema, fields, post_load
@@ -7,6 +8,8 @@ from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.realia_info import RealiaInfo
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.domain.realia_entry import RealiaEntry
+
+logger = logging.getLogger(__name__)
 
 
 class RealiaInfoSchema(Schema):
@@ -30,6 +33,12 @@ def _find_by_realia_ids(
     try:
         return realia_repository.find_by_realia_ids(realia_ids)
     except PyMongoError:
+        logger.warning(
+            "Realia lookup failed for %d id(s); "
+            "returning fragments without realiaInfo.",
+            len(realia_ids),
+            exc_info=True,
+        )
         return []
 
 

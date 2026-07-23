@@ -1,3 +1,5 @@
+from typing import ClassVar, Type
+
 import pydash
 from marshmallow import fields, post_dump, post_load, validate
 
@@ -47,10 +49,12 @@ class BaseWordSchema(BaseTokenSchema):
     )
 
 
-class WordSchema(BaseWordSchema):
+class AbstractWordSchema(BaseWordSchema):
+    word_class: ClassVar[Type[Word]]
+
     @post_load
     def make_token(self, data, **kwargs):
-        return Word.of(
+        return self.word_class.of(
             data["parts"],
             data["language"],
             tuple(data["unique_lemma"]),
@@ -69,26 +73,12 @@ class WordSchema(BaseWordSchema):
         return pydash.omit_by(data, lambda value: value is None)
 
 
-class LoneDeterminativeSchema(BaseWordSchema):
-    @post_load
-    def make_token(self, data, **kwargs):
-        return LoneDeterminative.of(
-            data["parts"],
-            data["language"],
-            tuple(data["unique_lemma"]),
-            data["erasure"],
-            data["alignment"],
-            data["variant"],
-            data["has_variant_alignment"],
-            data["has_omitted_alignment"],
-            data.get("id_"),
-            tuple(data.get("named_entities", [])),
-            tuple(data.get("realia", [])),
-        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+class WordSchema(AbstractWordSchema):
+    word_class = Word
 
-    @post_dump
-    def dump_token(self, data, **kwargs):
-        return pydash.omit_by(data, lambda value: value is None)
+
+class LoneDeterminativeSchema(AbstractWordSchema):
+    word_class = LoneDeterminative
 
 
 class AkkadianWordSchema(BaseWordSchema):

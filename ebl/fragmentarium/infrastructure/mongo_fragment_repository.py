@@ -109,7 +109,7 @@ class MongoFragmentRepository(
             "authorized_scopes": [
                 "authorized_scopes",
             ],
-            "ocredSigns": ("ocredSigns"),
+            "ocredSigns": ("ocred_signs",),
             "named_entities": ("text", "named_entities", "realia"),
         }
 

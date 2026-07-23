@@ -1,4 +1,4 @@
-from typing import FrozenSet, List, Sequence, Set, Tuple, TypeVar, Union
+from typing import FrozenSet, List, Sequence, Set, Tuple, TypeVar
 import attr
 from ebl.common.domain.named_enum import NamedEnum
 
@@ -31,6 +31,10 @@ class NamedEntity:
 class EntityAnnotationSpan(NamedEntity):
     span: List[str]
 
+    @property
+    def key_value(self) -> str:
+        return self.type.long_name
+
     def to_named_entity(self) -> NamedEntity:
         return NamedEntity(id=self.id, type=self.type)
 
@@ -45,24 +49,22 @@ class RealiaEntity:
 class RealiaAnnotationSpan(RealiaEntity):
     span: List[str]
 
+    @property
+    def key_value(self) -> str:
+        return self.realia_id
+
     def to_realia_entity(self) -> RealiaEntity:
         return RealiaEntity(id=self.id, realia_id=self.realia_id)
 
 
-AnnotationEntity = Union[NamedEntity, RealiaEntity]
-AnnotationSpan = Union[EntityAnnotationSpan, RealiaAnnotationSpan]
 AnnotationKey = Tuple[str, FrozenSet[str]]
 
+EntityT = TypeVar("EntityT", NamedEntity, RealiaEntity)
 SpanT = TypeVar("SpanT", EntityAnnotationSpan, RealiaAnnotationSpan)
 
 
-def annotation_key(span: AnnotationSpan) -> AnnotationKey:
-    value = (
-        span.realia_id
-        if isinstance(span, RealiaAnnotationSpan)
-        else span.type.long_name
-    )
-    return (value, frozenset(span.span))
+def annotation_key(span: SpanT) -> AnnotationKey:
+    return (span.key_value, frozenset(span.span))
 
 
 def deduplicate_spans(spans: Sequence[SpanT]) -> List[SpanT]:

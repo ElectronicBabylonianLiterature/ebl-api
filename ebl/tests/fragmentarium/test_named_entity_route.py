@@ -143,3 +143,13 @@ def test_delete_realia_keeps_entities(
         "namedEntities": serialized_entities,
         "realia": [],
     }
+
+
+def test_fetch_annotations_of_fragment_without_token_ids(client, fragmentarium):
+    fragment = TransliteratedFragmentFactory.build()
+    fragmentarium.create(fragment)
+
+    get_result = client.simulate_get(create_url(fragment))
+
+    assert get_result.status == falcon.HTTP_OK
+    assert get_result.json == {"namedEntities": [], "realia": []}

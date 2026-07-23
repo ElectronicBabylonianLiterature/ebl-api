@@ -44,6 +44,14 @@ def post(client, url, payload):
             {"realia": [{**REALIA_SPAN, "realiaId": "realia_abc"}]}, id="non_numeric"
         ),
         pytest.param(
+            {"namedEntities": [{**ENTITY_SPAN, "type": "PersonalName"}]},
+            id="unknown_entity_type",
+        ),
+        pytest.param(
+            {"namedEntities": [{**ENTITY_SPAN, "type": ["PERSONAL_NAME"]}]},
+            id="unhashable_entity_type",
+        ),
+        pytest.param(
             {"namedEntities": [{**ENTITY_SPAN, "tier": 1}]}, id="unknown_key_on_entity"
         ),
         pytest.param(
