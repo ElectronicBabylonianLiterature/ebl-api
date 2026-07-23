@@ -83,7 +83,12 @@ def association(
     sort_order: int = 0,
     is_primary: bool = True,
 ) -> MediaAssociation:
-    return MediaAssociation(fragment_id, sort_order, is_primary)
+    normalized_fragment_id = (
+        fragment_id
+        if isinstance(fragment_id, MuseumNumber)
+        else MuseumNumber.of(fragment_id)
+    )
+    return MediaAssociation(normalized_fragment_id, sort_order, is_primary)
 
 
 def media_reference(reference_id: str = "bibliography-id") -> MediaReference:
@@ -112,8 +117,11 @@ def media(
     attribution: str | None = None,
     import_source: MediaImportSource | None = None,
 ) -> Media:
+    normalized_media_id = (
+        media_id_ if isinstance(media_id_, MediaId) else MediaId(media_id_)
+    )
     return Media(
-        id=media_id_,
+        id=normalized_media_id,
         type=media_type,
         original_filename=original_filename,
         representations=media_representations or representations(),
