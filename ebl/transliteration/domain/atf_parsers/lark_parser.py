@@ -1,10 +1,11 @@
 from itertools import dropwhile
-from typing import Sequence, Iterator
+from typing import List, Optional, Sequence, Iterator, cast
 import re
 
 import pydash
 from lark.exceptions import ParseError
-from lark.lark import Lark, Tree
+from lark.lark import Lark
+from lark.tree import Tree
 
 from ebl.transliteration.domain import atf
 from ebl.transliteration.domain.enclosure_visitor import EnclosureValidator
@@ -34,8 +35,8 @@ from ebl.transliteration.domain.line_transformer import LineTransformer
 from ebl.transliteration.domain.label_transformer import LabelTransformer
 from ebl.transliteration.domain.labels import Label
 
-ATF_GRAMMAR_PATH = "lark_parser/ebl_atf.lark"
-ATF_COMMON_PATH = "lark_parser/ebl_atf_common.lark"
+ATF_GRAMMAR_PATH = "atf_grammar/ebl_atf.lark"
+ATF_COMMON_PATH = "atf_grammar/ebl_atf_common.lark"
 kwargs_lark = {"maybe_placeholders": True, "rel_to": __file__}
 LINE_PARSER_STARTS = [
     "start",
@@ -68,9 +69,8 @@ class _StartParser:
         self._parser = parser
         self._start = start
 
-    def parse(self, text: str, **kwargs: object) -> Tree:
-        kwargs.setdefault("start", self._start)
-        return self._parser.parse(text, **kwargs)
+    def parse(self, text: str, start: Optional[str] = None) -> Tree:
+        return self._parser.parse(text, start=start or self._start)
 
     def __getattr__(self, name: str) -> object:
         try:
@@ -90,12 +90,12 @@ PARATEXT_PARSER = _StartParser(LINE_PARSER, "paratext")
 LABEL_PARSER = _StartParser(LINE_PARSER, "labels")
 
 CHAPTER_PARSER = Lark.open(
-    "lark_parser/ebl_atf_chapter.lark",
+    "atf_grammar/ebl_atf_chapter.lark",
     **kwargs_lark,
     start=["chapter", "chapter_line", "line_variant", "reconstruction"],
 )
 MANUSCRIPT_PARSER = Lark.open(
-    "lark_parser/ebl_atf_manuscript_line.lark",
+    "atf_grammar/ebl_atf_manuscript_line.lark",
     **kwargs_lark,
     start=["manuscript_line", "siglum"],
 )
@@ -133,7 +133,7 @@ def parse_erasure(atf: str) -> Sequence[EblToken]:
 
 
 def parse_line(atf: str) -> Line:
-    tree = LINE_PARSER.parse(atf, start="start").children[0]
+    tree = cast(Tree, LINE_PARSER.parse(atf, start="start").children[0])
     return LineTransformer().transform(tree)
 
 
@@ -153,7 +153,7 @@ def split_paragraphs(atf: str) -> Iterator[str]:
 
 
 def parse_markup_paragraphs(atf: str) -> Sequence[MarkupPart]:
-    parts = []
+    parts: List[MarkupPart] = []
     for paragraph in split_paragraphs(atf):
         if parts:
             parts.append(ParagraphPart())
@@ -221,12 +221,15 @@ def parse_atf_lark(atf_: str) -> Text:
         if any(errors):
             raise TransliterationError(errors)
 
-    lines = atf_.split("\n")
-    lines = list(dropwhile(lambda line: line == "", reversed(lines)))
-    lines.reverse()
-    lines = [parse_line_(line, number) for number, line in enumerate(lines)]
-    check_errors(lines)
-    lines = tuple(pair[0] for pair in lines)
+    trailing_stripped = list(
+        dropwhile(lambda line: line == "", reversed(atf_.split("\n")))
+    )
+    trailing_stripped.reverse()
+    parsed_pairs = [
+        parse_line_(line, number) for number, line in enumerate(trailing_stripped)
+    ]
+    check_errors(parsed_pairs)
+    lines = tuple(line for line, _ in parsed_pairs if line is not None)
 
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 

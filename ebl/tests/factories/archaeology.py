@@ -10,73 +10,83 @@ from ebl.tests.factories.collections import TupleFactory
 from ebl.tests.factories.provenance import DEFAULT_NON_STANDARD_PROVENANCES
 
 import factory.fuzzy
+from factory.base import Factory
+from factory.declarations import (
+    List,
+    Maybe,
+    SelfAttribute,
+    Sequence,
+    SubFactory,
+    Trait,
+)
+from factory.faker import Faker
 
 FINDSPOT_COUNT = 3
 
 
-class PartialDateFactory(factory.Factory):
+class PartialDateFactory(Factory):
     class Meta:
         model = PartialDate
 
     year = factory.fuzzy.FuzzyInteger(1900, 2020)
     month = factory.fuzzy.FuzzyChoice([*range(1, 13), None])
-    day = factory.Maybe(
+    day = Maybe(
         "month",
         yes_declaration=factory.fuzzy.FuzzyChoice([*range(1, 29), None]),
         no_declaration=None,
     )
-    notes = factory.Faker("sentence")
+    notes = Faker("sentence")
 
 
-class DateRangeFactory(factory.Factory):
+class DateRangeFactory(Factory):
     class Meta:
         model = DateRange
 
-    start = factory.SubFactory(PartialDateFactory)
-    end = factory.SubFactory(PartialDateFactory)
-    notes = factory.Faker("sentence")
+    start = SubFactory(PartialDateFactory)
+    end = SubFactory(PartialDateFactory)
+    notes = Faker("sentence")
 
 
-class ExcavationPlanFactory(factory.Factory):
+class ExcavationPlanFactory(Factory):
     class Meta:
         model = ExcavationPlan
 
     svg = "<svg></svg>"
-    references = factory.List([factory.SubFactory(ReferenceFactory)], TupleFactory)
+    references = List([SubFactory(ReferenceFactory)], TupleFactory)
 
 
-class FindspotFactory(factory.Factory):
+class FindspotFactory(Factory):
     class Meta:
         model = Findspot
 
-    id_ = factory.Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
+    id_ = Sequence(lambda n: (n % FINDSPOT_COUNT) + 1)
     site = factory.fuzzy.FuzzyChoice(DEFAULT_NON_STANDARD_PROVENANCES)
-    sector = factory.Faker("word")
-    area = factory.Faker("word")
-    building = factory.Faker("word")
+    sector = Faker("word")
+    area = Faker("word")
+    building = Faker("word")
     building_type = factory.fuzzy.FuzzyChoice(set(BuildingType))
-    lavel_layer_phase = factory.Faker("word")
-    date_range = factory.SubFactory(DateRangeFactory)
-    plans = factory.List([factory.SubFactory(ExcavationPlanFactory)], TupleFactory)
-    room = factory.Faker("word")
-    context = factory.Faker("word")
-    primary_context = factory.Faker("boolean")
-    notes = factory.Faker("sentence")
+    lavel_layer_phase = Faker("word")
+    date_range = SubFactory(DateRangeFactory)
+    plans = List([SubFactory(ExcavationPlanFactory)], TupleFactory)
+    room = Faker("word")
+    context = Faker("word")
+    primary_context = Faker("boolean")
+    notes = Faker("sentence")
 
 
-class ArchaeologyFactory(factory.Factory):
+class ArchaeologyFactory(Factory):
     class Meta:
         model = Archaeology
 
-    excavation_number = factory.Sequence(lambda n: ExcavationNumber("X", str(n)))
+    excavation_number = Sequence(lambda n: ExcavationNumber("X", str(n)))
     site = factory.fuzzy.FuzzyChoice(DEFAULT_NON_STANDARD_PROVENANCES)
-    regular_excavation = factory.Faker("boolean")
-    excavation_date = factory.SubFactory(DateRangeFactory)
+    regular_excavation = Faker("boolean")
+    excavation_date = SubFactory(DateRangeFactory)
 
-    is_findspot_uncertain = factory.Faker("boolean")
+    is_findspot_uncertain = Faker("boolean")
 
     class Params:
-        with_findspot = factory.Trait(
-            findspot=factory.SubFactory(FindspotFactory),
-            findspot_id=factory.SelfAttribute("findspot.id_"),
+        with_findspot = Trait(
+            findspot=SubFactory(FindspotFactory),
+            findspot_id=SelfAttribute("findspot.id_"),
         )
