@@ -12,12 +12,11 @@ from ebl.media.application import (
 from ebl.media.domain import (
     Media,
     MediaAssociation,
-    MediaChecksum,
     MediaId,
-    MediaRepresentation,
     MediaRepresentations,
     MediaType,
 )
+from ebl.tests.media.factories import original_representation
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
@@ -110,12 +109,6 @@ class InMemoryRepresentationStore(MediaRepresentationStore):
         raise NotImplementedError
 
 
-def representation() -> MediaRepresentation:
-    return MediaRepresentation(
-        "image/jpeg", 4000, 3000, 5242880, MediaChecksum(value="a" * 64)
-    )
-
-
 def media(
     media_id: MediaId,
     media_type: MediaType,
@@ -126,7 +119,7 @@ def media(
         id=media_id,
         type=media_type,
         original_filename=filename,
-        representations=MediaRepresentations(representation()),
+        representations=MediaRepresentations(original_representation()),
         associations=associations,
     )
 
@@ -245,7 +238,7 @@ def test_representation_handle_contract_includes_readable_content() -> None:
 
     handle = RepresentationHandle(
         media_id=PHOTO_ID,
-        representation=representation(),
+        representation=original_representation(),
         content=content,
         content_type="image/jpeg",
         length=len(b"media-bytes"),

@@ -1,107 +1,50 @@
+from typing import cast
+from uuid import UUID
+
 import attr
 import pytest
-from typing import cast
 
 from ebl.common.domain.project import ResearchProject
 from ebl.media.domain import (
-    Media,
     MediaAssociation,
     MediaChecksum,
     MediaId,
-    MediaImportSource,
-    MediaReference,
     MediaRepresentation,
     MediaRepresentations,
     MediaType,
     ThumbnailSize,
 )
+from ebl.tests.media.factories import (
+    DEFAULT_MEDIA_ID,
+    SHA256_VALUE,
+    association,
+    copy_media,
+    display_representation,
+    media_import_source,
+    media_reference,
+    original_representation,
+    photo_media,
+    representations,
+    thumbnail_representation,
+)
 from ebl.transliteration.domain.museum_number import MuseumNumber
-
-MEDIA_ID = "550e8400-e29b-41d4-a716-446655440000"
-SHA256_VALUE = "a" * 64
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class MediaMetadata:
-    projects: tuple[ResearchProject, ...] = ()
-    references: tuple[MediaReference, ...] = ()
-    import_source: MediaImportSource | None = None
-
-
-DEFAULT_MEDIA_METADATA = MediaMetadata()
-
-
-def checksum() -> MediaChecksum:
-    return MediaChecksum(value=SHA256_VALUE)
-
-
-def original(mime_type: str = "image/jpeg") -> MediaRepresentation:
-    return MediaRepresentation(mime_type, 4000, 3000, 5242880, checksum())
-
-
-def display(mime_type: str = "image/jpeg") -> MediaRepresentation:
-    return MediaRepresentation(mime_type, 2560, 1920, 1179648)
-
-
-def thumbnails():
-    return ((ThumbnailSize.SMALL, MediaRepresentation("image/jpeg", 240, 180, 15360)),)
-
-
-def representations(
-    mime_type: str = "image/jpeg", display_mime_type: str | None = None
-) -> MediaRepresentations:
-    return MediaRepresentations(
-        original(mime_type),
-        thumbnails(),
-        display=(
-            display(mime_type=display_mime_type or "image/jpeg")
-            if display_mime_type is not None
-            else None
-        ),
-    )
-
-
-def media(
-    media_type: MediaType = MediaType.PHOTO,
-    media_representations: MediaRepresentations | None = None,
-    associations=None,
-    metadata: MediaMetadata = DEFAULT_MEDIA_METADATA,
-) -> Media:
-    return Media(
-        id=MediaId(MEDIA_ID),
-        type=media_type,
-        original_filename="BM-12345-obverse.jpg",
-        representations=media_representations or representations(),
-        associations=(
-            associations
-            if associations is not None
-            else (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
-        ),
-        projects=metadata.projects,
-        references=metadata.references,
-        caption=None,
-        attribution=None,
-        import_source=metadata.import_source,
-    )
 
 
 def test_valid_photo() -> None:
-    result = media(
-        metadata=MediaMetadata(
-            projects=(ResearchProject.CAIC,),
-            references=(MediaReference("bib-id"),),
-        )
+    result = photo_media(
+        projects=(ResearchProject.CAIC,),
+        references=(media_reference("bib-id"),),
     )
 
-    assert result.id == MediaId(MEDIA_ID)
+    assert result.id == MediaId(DEFAULT_MEDIA_ID)
     assert result.type is MediaType.PHOTO
     assert result.projects == (ResearchProject.CAIC,)
-    assert result.references == (MediaReference("bib-id"),)
+    assert result.references == (media_reference("bib-id"),)
     assert result.association_for("K.1").is_primary is True
 
 
 def test_valid_raster_copy() -> None:
-    result = media(MediaType.COPY)
+    result = copy_media()
 
     assert result.type is MediaType.COPY
     assert result.representations.original.mime_type == "image/jpeg"
@@ -109,37 +52,47 @@ def test_valid_raster_copy() -> None:
 
 
 def test_valid_photo_with_display_representation() -> None:
-    result = media(
+    result = photo_media(
         media_representations=representations(display_mime_type="image/jpeg")
     )
 
-    assert result.representations.display == display()
+    assert result.representations.display == display_representation()
 
 
 def test_valid_photo_with_display_and_thumbnails() -> None:
-    result = media(
+    result = photo_media(
         media_representations=representations(display_mime_type="image/webp")
     )
 
-    assert result.representations.display == display("image/webp")
-    assert result.representations.thumbnails == thumbnails()
+    assert result.representations.display == display_representation("image/webp")
+    assert result.representations.thumbnails == (
+        (ThumbnailSize.SMALL, thumbnail_representation()),
+    )
 
 
 def test_valid_svg_copy_metadata() -> None:
-    result = media(MediaType.COPY, representations("image/svg+xml", "image/jpeg"))
+    result = copy_media(
+        media_representations=representations(
+            original_mime_type="image/svg+xml", display_mime_type="image/jpeg"
+        )
+    )
 
     assert result.representations.original.mime_type == "image/svg+xml"
-    assert result.representations.display == display()
+    assert result.representations.display == display_representation()
 
 
 def test_svg_photo_is_invalid() -> None:
     with pytest.raises(ValueError, match="SVG originals"):
-        media(MediaType.PHOTO, representations("image/svg+xml", "image/jpeg"))
+        photo_media(
+            media_representations=representations(
+                original_mime_type="image/svg+xml", display_mime_type="image/jpeg"
+            )
+        )
 
 
 def test_duplicate_associations_are_invalid() -> None:
     with pytest.raises(ValueError, match="duplicate fragment associations"):
-        media(
+        photo_media(
             associations=(
                 MediaAssociation(MuseumNumber.of("K.1"), 0, True),
                 MediaAssociation(MuseumNumber.of("K.1"), 1, False),
@@ -149,7 +102,7 @@ def test_duplicate_associations_are_invalid() -> None:
 
 def test_empty_associations_are_invalid() -> None:
     with pytest.raises(ValueError, match="at least one item"):
-        media(associations=())
+        photo_media(associations=())
 
 
 def test_negative_sort_order_is_invalid() -> None:
@@ -165,6 +118,20 @@ def test_invalid_fragment_id_is_invalid() -> None:
 def test_invalid_uuid_is_invalid() -> None:
     with pytest.raises(ValueError, match="valid UUID"):
         MediaId("not-a-uuid")
+
+
+def test_empty_media_id_is_invalid() -> None:
+    with pytest.raises(ValueError, match="cannot be empty"):
+        MediaId("")
+
+
+def test_media_id_create_returns_unique_uuid() -> None:
+    first = MediaId.create()
+    second = MediaId.create()
+
+    assert UUID(str(first))
+    assert UUID(str(second))
+    assert first != second
 
 
 @pytest.mark.parametrize(
@@ -208,7 +175,7 @@ def test_missing_original_checksum_is_invalid() -> None:
 def test_duplicate_thumbnail_sizes_are_invalid() -> None:
     with pytest.raises(ValueError, match="duplicate thumbnail sizes"):
         MediaRepresentations(
-            original(),
+            original_representation(),
             (
                 (
                     ThumbnailSize.SMALL,
@@ -223,7 +190,7 @@ def test_duplicate_thumbnail_sizes_are_invalid() -> None:
 
 
 def test_optional_legacy_metadata_can_be_empty() -> None:
-    result = media()
+    result = photo_media()
 
     assert result.projects == ()
     assert result.references == ()
@@ -233,34 +200,40 @@ def test_optional_legacy_metadata_can_be_empty() -> None:
 
 
 def test_media_representations_are_immutable() -> None:
+    field = "display"
+
     with pytest.raises(attr.exceptions.FrozenInstanceError):
-        representations(display_mime_type="image/jpeg").display = display("image/webp")
+        setattr(
+            representations(display_mime_type="image/jpeg"),
+            field,
+            display_representation("image/webp"),
+        )
 
 
 def test_import_source_metadata_can_be_recorded_without_defining_identity() -> None:
-    import_source = MediaImportSource("legacy-gridfs", "photos", "legacy-gridfs-id")
+    import_source = media_import_source()
 
-    result = media(metadata=MediaMetadata(import_source=import_source))
+    result = photo_media(import_source=import_source)
 
-    assert result.id == MediaId(MEDIA_ID)
+    assert result.id == MediaId(DEFAULT_MEDIA_ID)
     assert result.import_source == import_source
 
 
 def test_is_associated_with_returns_false_for_unrelated_fragment() -> None:
-    assert media().is_associated_with("Sm.2") is False
+    assert photo_media().is_associated_with("Sm.2") is False
 
 
 def test_association_for_raises_for_unrelated_fragment() -> None:
     with pytest.raises(ValueError, match="not associated with fragment"):
-        media().association_for("Sm.2")
+        photo_media().association_for("Sm.2")
 
 
 def test_associations_are_ordered_deterministically() -> None:
-    result = media(
+    result = photo_media(
         associations=(
-            MediaAssociation(MuseumNumber.of("Sm.2"), 1, False),
-            MediaAssociation(MuseumNumber.of("K.2"), 0, False),
-            MediaAssociation(MuseumNumber.of("K.1"), 0, True),
+            association(fragment_id="Sm.2", sort_order=1, is_primary=False),
+            association(fragment_id="K.2", sort_order=0, is_primary=False),
+            association(fragment_id="K.1", sort_order=0, is_primary=True),
         )
     )
 
