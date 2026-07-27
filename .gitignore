@@ -140,7 +140,6 @@ core.*
 
 # Claude Code
 .claude/
-!.claude/settings.json
 
 # qlty
 .qlty/
