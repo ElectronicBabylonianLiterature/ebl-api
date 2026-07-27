@@ -14,26 +14,22 @@ from ebl.tests.factories.fragment import (
 )
 from ebl.tests.fragmentarium.fragment_updater_test_helpers import (
     FROZEN_TIME,
-    expect_changelog,
+    UpdaterContext,
 )
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
 
-@freeze_time(FROZEN_TIME)
 @pytest.mark.parametrize(
     "number,ignore_lowest_join",
     [(MuseumNumber.of("X.1"), False), (MuseumNumber.of("X.3"), True)],
 )
+@freeze_time(FROZEN_TIME)
 def test_update_edition(
     number,
     ignore_lowest_join,
     fragment_updater,
-    user,
-    fragment_repository,
-    changelog,
-    parallel_line_injector,
-    when,
+    updater_context: UpdaterContext,
 ):
     transliterated_fragment = TransliteratedFragmentFactory.build(
         number=number,
@@ -44,28 +40,18 @@ def test_update_edition(
     atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(parse_atf_lark(atf), "X X\nX")
     transliterated_fragment = transliterated_fragment.update_transliteration(
-        transliteration, user
+        transliteration, updater_context.user
     )
-    injected_fragment = transliterated_fragment.set_text(
-        parallel_line_injector.inject_transliteration(transliterated_fragment.text)
+    injected_fragment = updater_context.inject(transliterated_fragment)
+    updater_context.expect_query(number, transliterated_fragment)
+    updater_context.expect_changelog(
+        number, transliterated_fragment, transliterated_fragment
     )
-    (
-        when(fragment_repository)
-        .query_by_museum_number(number)
-        .thenReturn(transliterated_fragment)
-    )
-    expect_changelog(
-        when, changelog, user, number, transliterated_fragment, transliterated_fragment
-    )
-    (
-        when(fragment_repository)
-        .update_field("transliteration", transliterated_fragment)
-        .thenReturn()
-    )
+    updater_context.expect_update_field("transliteration", transliterated_fragment)
 
     result = fragment_updater.update_edition(
         number,
-        user,
+        updater_context.user,
         transliteration=transliteration,
         ignore_lowest_join=ignore_lowest_join,
     )
@@ -125,23 +111,19 @@ def test_update_metadata_field(
     field,
     value,
     fragment_updater,
-    user,
-    fragment_repository,
-    parallel_line_injector,
-    changelog,
-    when,
+    updater_context: UpdaterContext,
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
     updated_fragment = getattr(fragment, f"set_{field}")(value)
-    injected_fragment = updated_fragment.set_text(
-        parallel_line_injector.inject_transliteration(updated_fragment.text)
-    )
-    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
-    expect_changelog(when, changelog, user, number, fragment, updated_fragment)
-    when(fragment_repository).update_field(field, updated_fragment).thenReturn()
+    injected_fragment = updater_context.inject(updated_fragment)
+    updater_context.expect_query(number, fragment)
+    updater_context.expect_changelog(number, fragment, updated_fragment)
+    updater_context.expect_update_field(field, updated_fragment)
 
-    result = getattr(fragment_updater, f"update_{field}")(number, value, user)
+    result = getattr(fragment_updater, f"update_{field}")(
+        number, value, updater_context.user
+    )
     assert result == (injected_fragment, False)
 
 

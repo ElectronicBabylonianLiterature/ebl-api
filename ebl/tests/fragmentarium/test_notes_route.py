@@ -6,46 +6,31 @@ import pytest
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.web.dtos import create_response_dto
 from ebl.tests.factories.fragment import FragmentFactory
-from ebl.tests.fragmentarium.transliterations_route_test_helpers import (
-    NOTES_FIXTURE,
-    simulate_post_with_retry,
-    find_changelog_entry,
-)
+from ebl.tests.fragmentarium.route_test_context import RouteContext
+from ebl.tests.fragmentarium.transliterations_route_test_helpers import NOTES_FIXTURE
 
 
-@pytest.mark.parametrize("old_notes,new_notes", NOTES_FIXTURE)
-def test_update_notes(client, fragmentarium, user, database, old_notes, new_notes):
+@pytest.mark.parametrize("notes", NOTES_FIXTURE)
+def test_update_notes(route_context: RouteContext, notes):
+    old_notes, new_notes = notes
     fragment: Fragment = FragmentFactory.build(notes=old_notes)
-    fragment_number = fragmentarium.create(fragment)
-    update = {"notes": new_notes.text}
-    post_result = simulate_post_with_retry(
-        client,
-        f"/fragments/{fragment_number}/edition",
-        json.dumps(update),
+    fragment_number = route_context.create(fragment)
+
+    post_result = route_context.post_edition(fragment_number, {"notes": new_notes.text})
+    expected_json = create_response_dto(
+        fragment.set_notes(new_notes.text),
+        route_context.user,
+        fragment.number == "K.1",
+        [],
     )
-    expected_json = {
-        **create_response_dto(
-            fragment.set_notes(new_notes.text),
-            user,
-            fragment.number == "K.1",
-            [],
-        )
-    }
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected_json
 
-    get_result = client.simulate_get(f"/fragments/{fragment_number}")
+    get_result = route_context.get_fragment(fragment_number)
     assert get_result.json == {**expected_json, "realiaInfo": []}
 
-    assert find_changelog_entry(
-        database,
-        {
-            "resource_id": fragment_number,
-            "resource_type": "fragments",
-            "user_profile.name": user.profile["name"],
-        },
-    )
+    assert route_context.has_changelog_entry(fragment_number)
 
 
 def test_update_invalid_notes(client, fragmentarium, user, database):

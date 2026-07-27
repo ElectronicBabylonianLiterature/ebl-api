@@ -9,10 +9,26 @@ from ebl.fragmentarium.domain.named_entity import (
 )
 from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.tests.factories.realia import RealiaEntryFactory
+from ebl.tests.fragmentarium.fragment_updater_test_helpers import UpdaterContext
+from ebl.tests.fragmentarium.route_test_context import RouteContext
 
 KNOWN_REALIA_ID = "realia_000846"
 OTHER_REALIA_ID = "realia_000847"
 UNKNOWN_REALIA_ID = "realia_999999"
+
+
+@pytest.fixture
+def updater_context(
+    user, fragment_repository, parallel_line_injector, changelog, when
+) -> UpdaterContext:
+    return UpdaterContext(
+        user, fragment_repository, parallel_line_injector, changelog, when
+    )
+
+
+@pytest.fixture
+def route_context(client, fragmentarium, user, database) -> RouteContext:
+    return RouteContext(client, fragmentarium, user, database)
 
 
 @pytest.fixture
