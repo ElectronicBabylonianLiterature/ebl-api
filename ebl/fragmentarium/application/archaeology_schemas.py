@@ -7,6 +7,7 @@ from ebl.fragmentarium.domain.archaeology import (
     Archaeology,
     ExcavationNumber,
 )
+from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
 from ebl.fragmentarium.domain.findspot import (
     BuildingType,
     ExcavationPlan,
@@ -14,7 +15,7 @@ from ebl.fragmentarium.domain.findspot import (
 )
 from ebl.common.application.schemas import deserialize_provenance_record
 from ebl.schemas import NameEnumField
-from marshmallow import Schema, fields, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_dump, post_load
 
 
 class ExcavationNumberSchema(AbstractMuseumNumberSchema):
@@ -42,6 +43,9 @@ class ProvenanceSiteMixin:
 
 
 class FindspotSchema(ProvenanceSiteMixin, Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     id_ = fields.Integer(required=True, data_key="_id")
     site = fields.Method("serialize_site", "deserialize_site", allow_none=True)
     sector = fields.String()
@@ -55,6 +59,9 @@ class FindspotSchema(ProvenanceSiteMixin, Schema):
     plans = fields.Nested(ExcavationPlanSchema, many=True, load_default=())
     room = fields.String()
     context = fields.String()
+    map_location = fields.Nested(
+        MapLocationSchema, allow_none=True, load_default=None, data_key="mapLocation"
+    )
     primary_context = fields.Boolean(
         data_key="primaryContext",
         allow_none=True,
@@ -66,8 +73,17 @@ class FindspotSchema(ProvenanceSiteMixin, Schema):
         data["plans"] = tuple(data["plans"])
         return Findspot(**data)
 
+    @post_dump
+    def omit_missing_map_location(self, data, **kwargs):
+        if data.get("mapLocation") is None:
+            data.pop("mapLocation", None)
+        return data
+
 
 class ArchaeologySchema(ProvenanceSiteMixin, Schema):
+    class Meta:
+        unknown = EXCLUDE
+
     excavation_number = fields.Nested(
         ExcavationNumberSchema, data_key="excavationNumber", allow_none=True
     )

@@ -62,6 +62,7 @@ def test_create_indexes(database, fragment_repository):
         ("archaeology.excavationNumber.number", 1),
         ("archaeology.excavationNumber.suffix", 1),
     ] in fragment_index_keys
+    assert [("archaeology.findspotId", 1)] in fragment_index_keys
     assert [
         ("fragments.museumNumber.prefix", 1),
         ("fragments.museumNumber.number", 1),

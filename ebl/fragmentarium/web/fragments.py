@@ -123,6 +123,7 @@ class FragmentsQueryResource:
             parse_pages,
             parse_genre,
             parse_count,
+            parse_non_negative_integer_field("findspotId"),
             parse_integer_field("limit"),
             parse_non_negative_integer_field("offset"),
         )

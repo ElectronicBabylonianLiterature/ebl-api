@@ -1,12 +1,13 @@
 import attr
-from typing import Optional, Sequence
+from typing import Optional, Sequence, TypeAlias
 from enum import Enum, auto
 from ebl.bibliography.domain.reference import Reference
 from ebl.fragmentarium.domain.date_range import DateRange
+from ebl.fragmentarium.domain.map_location import MapLocation
 from ebl.provenance.domain.provenance_model import ProvenanceRecord
 
 
-ExcavationSite = ProvenanceRecord
+ExcavationSite: TypeAlias = ProvenanceRecord
 
 
 class BuildingType(Enum):
@@ -37,5 +38,6 @@ class Findspot:
     plans: Sequence[ExcavationPlan] = ()
     room: str = ""
     context: str = ""
+    map_location: Optional[MapLocation] = None
     primary_context: Optional[bool] = None
     notes: str = ""

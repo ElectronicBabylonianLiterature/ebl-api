@@ -23,6 +23,7 @@ from ebl.fragmentarium.infrastructure.queries import (
 )
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.common.query.query_collation import CollatedFieldQuery
+from ebl.fragmentarium.infrastructure.queries import match_user_scopes
 
 
 def has_none_values(dictionary: dict) -> bool:
@@ -185,7 +186,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             raise NotFoundError(f"Fragment {number} not found.") from error
 
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
-        fragment = next(
+        fragment: dict = next(
             self._fragments.find_many(
                 query_number_is(number), projection={"authorizedScopes": True}
             ),
@@ -194,6 +195,31 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         return [
             Scope.from_string(value) for value in fragment.get("authorizedScopes", [])
         ]
+
+    def count_fragments_by_findspot_ids(
+        self,
+        findspot_ids: Sequence[int],
+        user_scopes: Sequence[Scope] = (),
+    ) -> dict:
+        if not findspot_ids:
+            return {}
+        cursor = self._fragments.aggregate(
+            [
+                {
+                    "$match": {
+                        "archaeology.findspotId": {"$in": list(findspot_ids)},
+                        **match_user_scopes(user_scopes),
+                    }
+                },
+                {
+                    "$group": {
+                        "_id": "$archaeology.findspotId",
+                        "count": {"$sum": 1},
+                    }
+                },
+            ]
+        )
+        return {item["_id"]: item["count"] for item in cursor}
 
     def fetch_names(self, name_query: str) -> List[str]:
         if len(name_query) < 3:

@@ -1,4 +1,4 @@
-from typing import List, Dict, Sequence, Optional
+from typing import Callable, Dict, List, Optional, Sequence
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import (
     match_user_scopes,
@@ -117,6 +117,13 @@ class PatternMatcher:
             else {}
         )
 
+    def _filter_by_findspot_id(self) -> Dict:
+        return (
+            {"archaeology.findspotId": findspot_id}
+            if (findspot_id := self._query.get("findspotId")) is not None
+            else {}
+        )
+
     def _prefilter(self) -> List[Dict]:
         constraints = {
             "$and": compact(
@@ -129,6 +136,7 @@ class PatternMatcher:
                     self._filter_by_script(),
                     self._filter_by_reference(),
                     self._filter_by_dossier(),
+                    self._filter_by_findspot_id(),
                     match_user_scopes(self._scopes),
                 ]
             ),
@@ -198,7 +206,7 @@ class PatternMatcher:
         ]
 
     def _get_pipeline_components(self) -> List[Dict]:
-        dispatcher = {
+        dispatcher: dict[tuple[bool, bool], Callable[[], List[Dict]]] = {
             (True, True): self._merge_pipelines,
             (True, False): self._lemma_matcher.build_pipeline,
             (False, True): self._sign_matcher.build_pipeline,

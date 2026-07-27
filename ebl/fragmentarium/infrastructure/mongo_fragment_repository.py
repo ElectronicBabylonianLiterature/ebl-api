@@ -47,6 +47,10 @@ class MongoFragmentRepository(
                 ("archaeology.excavationNumber.suffix", pymongo.ASCENDING),
             ]
         )
+        self._fragments.create_index(
+            [("archaeology.findspotId", pymongo.ASCENDING)],
+            name="archaeology.findspotId_1",
+        )
         self._fragments.create_index([("record.type", pymongo.ASCENDING)])
         self._fragments.create_index(
             [
