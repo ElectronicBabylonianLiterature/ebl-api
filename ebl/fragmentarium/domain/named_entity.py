@@ -1,4 +1,4 @@
-from typing import FrozenSet, List, Sequence, Set, Tuple, TypeVar
+from typing import AbstractSet, FrozenSet, List, Sequence, Set, Tuple, TypeVar
 import attr
 from ebl.common.domain.named_enum import NamedEnum
 
@@ -65,6 +65,12 @@ SpanT = TypeVar("SpanT", EntityAnnotationSpan, RealiaAnnotationSpan)
 
 def annotation_key(span: SpanT) -> AnnotationKey:
     return (span.key_value, frozenset(span.span))
+
+
+def retain_referenced(
+    entities: Sequence[EntityT], referenced_ids: AbstractSet[str]
+) -> Tuple[EntityT, ...]:
+    return tuple(entity for entity in entities if entity.id in referenced_ids)
 
 
 def deduplicate_spans(spans: Sequence[SpanT]) -> List[SpanT]:

@@ -1,4 +1,4 @@
-from typing import ClassVar, Type
+from typing import Callable, Dict, Sequence
 
 import pydash
 from marshmallow import fields, post_dump, post_load, validate
@@ -13,10 +13,36 @@ from ebl.transliteration.domain.normalized_akkadian import (
     Caesura,
     MetricalFootSeparator,
 )
+from ebl.transliteration.domain.tokens import Token
 from ebl.transliteration.domain.word_tokens import (
+    AbstractWord,
     LoneDeterminative,
     Word,
 )
+
+
+def shared_word_arguments(data: dict) -> Dict[str, object]:
+    return {
+        "unique_lemma": tuple(data["unique_lemma"]),
+        "alignment": data["alignment"],
+        "variant": data["variant"],
+        "has_variant_alignment": data["has_variant_alignment"],
+        "has_omitted_alignment": data["has_omitted_alignment"],
+        "id_": data.get("id_"),
+        "named_entities": tuple(data.get("named_entities", [])),
+        "realia": tuple(data.get("realia", [])),
+    }
+
+
+def load_word(
+    factory: Callable[..., AbstractWord],
+    parts: Sequence[Token],
+    data: dict,
+    **arguments: object,
+) -> AbstractWord:
+    return factory(
+        parts, **arguments, **shared_word_arguments(data)
+    ).set_enclosure_type(frozenset(data["enclosure_type"]))
 
 
 class BaseWordSchema(BaseTokenSchema):
@@ -50,35 +76,33 @@ class BaseWordSchema(BaseTokenSchema):
 
 
 class AbstractWordSchema(BaseWordSchema):
-    word_class: ClassVar[Type[Word]]
-
-    @post_load
-    def make_token(self, data, **kwargs):
-        return self.word_class.of(
-            data["parts"],
-            data["language"],
-            tuple(data["unique_lemma"]),
-            data["erasure"],
-            data["alignment"],
-            data["variant"],
-            data["has_variant_alignment"],
-            data["has_omitted_alignment"],
-            data.get("id_"),
-            tuple(data.get("named_entities", [])),
-            tuple(data.get("realia", [])),
-        ).set_enclosure_type(frozenset(data["enclosure_type"]))
-
     @post_dump
     def dump_token(self, data, **kwargs):
         return pydash.omit_by(data, lambda value: value is None)
 
 
 class WordSchema(AbstractWordSchema):
-    word_class = Word
+    @post_load
+    def make_token(self, data, **kwargs):
+        return load_word(
+            Word.of,
+            data["parts"],
+            data,
+            language=data["language"],
+            erasure=data["erasure"],
+        )
 
 
 class LoneDeterminativeSchema(AbstractWordSchema):
-    word_class = LoneDeterminative
+    @post_load
+    def make_token(self, data, **kwargs):
+        return load_word(
+            LoneDeterminative.of,
+            data["parts"],
+            data,
+            language=data["language"],
+            erasure=data["erasure"],
+        )
 
 
 class AkkadianWordSchema(BaseWordSchema):
@@ -86,18 +110,12 @@ class AkkadianWordSchema(BaseWordSchema):
 
     @post_load
     def make_token(self, data, **kwargs):
-        return AkkadianWord.of(
+        return load_word(
+            AkkadianWord.of,
             tuple(data["parts"]),
-            tuple(data["modifiers"]),
-            tuple(data["unique_lemma"]),
-            data["alignment"],
-            data["variant"],
-            data["has_variant_alignment"],
-            data["has_omitted_alignment"],
-            data.get("id_"),
-            tuple(data.get("named_entities", [])),
-            tuple(data.get("realia", [])),
-        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+            data,
+            modifier=tuple(data["modifiers"]),
+        )
 
 
 class BreakSchema(BaseTokenSchema):
@@ -137,16 +155,10 @@ class GreekLetterSchema(BaseTokenSchema):
 class GreekWordSchema(BaseWordSchema):
     @post_load
     def make_token(self, data, **kwargs):
-        return GreekWord.of(
+        return load_word(
+            GreekWord.of,
             tuple(data["parts"]),
-            data["language"],
-            tuple(data["unique_lemma"]),
-            data["alignment"],
-            data["variant"],
-            data["erasure"],
-            data["has_variant_alignment"],
-            data["has_omitted_alignment"],
-            data.get("id_"),
-            tuple(data.get("named_entities", [])),
-            tuple(data.get("realia", [])),
-        ).set_enclosure_type(frozenset(data["enclosure_type"]))
+            data,
+            language=data["language"],
+            erasure=data["erasure"],
+        )

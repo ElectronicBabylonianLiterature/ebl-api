@@ -6,10 +6,8 @@ from marshmallow import ValidationError
 from ebl.common.domain.period import Period, PeriodModifier
 from ebl.fragmentarium.domain.named_entity import NamedEntity, RealiaEntity
 from ebl.fragmentarium.domain.genres import genres
-from ebl.transliteration.domain.atf_parsers.lark_parser import (
-    PARSE_ERRORS,
-    parse_markup_paragraphs,
-)
+from ebl.transliteration.domain.atf_parsers.lark_parser import parse_markup_paragraphs
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import PARSE_ERRORS
 from ebl.transliteration.domain.markup import MarkupPart
 
 

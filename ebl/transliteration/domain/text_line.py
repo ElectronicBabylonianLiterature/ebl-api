@@ -8,7 +8,6 @@ from typing import (
     Sequence,
     Type,
     TypeVar,
-    Union,
     cast,
 )
 
@@ -31,7 +30,7 @@ from ebl.transliteration.domain.line_number import AbstractLineNumber
 from ebl.transliteration.domain.tokens import Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import AbstractWord, Word
 
-L = TypeVar("L", "TextLine", "Line")
+L = TypeVar("L", bound=Line)
 T = TypeVar("T")
 
 
@@ -117,7 +116,10 @@ class TextLine(Line):
     ) -> "TextLine":
         content = tuple(
             (
-                attr.evolve(token, unique_lemma=line_annotation[TokenIndex(index)])
+                attr.evolve(
+                    cast(AbstractWord, token),
+                    unique_lemma=line_annotation[TokenIndex(index)],
+                )
                 if TokenIndex(index) in line_annotation
                 else token
             )
@@ -141,14 +143,17 @@ class TextLine(Line):
             self, content=update_tokens(self.content, updates, updater, error_class)
         )
 
-    def merge(self, other: L) -> Union["TextLine", L]:
+    def merge(self, other: L) -> L:
         if not isinstance(other, TextLine):
             return other
 
         other_text_line = cast(TextLine, other)
-        return TextLine.of_iterable(
-            other_text_line.line_number,
-            merge_tokens(self.content, other_text_line.content),
+        return cast(
+            L,
+            TextLine.of_iterable(
+                other_text_line.line_number,
+                merge_tokens(self.content, other_text_line.content),
+            ),
         )
 
     def update_alignments(self, alignment_map: AlignmentMap) -> "TextLine":

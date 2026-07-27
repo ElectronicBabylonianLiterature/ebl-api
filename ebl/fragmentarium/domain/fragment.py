@@ -18,6 +18,7 @@ from ebl.fragmentarium.domain.named_entity import (
     RealiaAnnotationSpan,
     RealiaEntity,
     deduplicate_spans,
+    retain_referenced,
 )
 from ebl.fragmentarium.domain.fragment_metadata import (
     Acquisition,
@@ -156,9 +157,7 @@ class Fragment(FragmentExternalNumbers):
         self, transliteration: TransliterationUpdate, user: User
     ) -> "Fragment":
         record = self.record.add_entry(self.text.atf, transliteration.text.atf, user)
-        text = self.text.merge(transliteration.text)
-
-        text = text.set_token_ids()
+        text = self.text.merge(transliteration.text).set_token_ids()
 
         return attr.evolve(
             self,
@@ -166,6 +165,16 @@ class Fragment(FragmentExternalNumbers):
             signs=transliteration.signs,
             record=record,
             line_to_vec=create_line_to_vec(text.lines),
+        ).drop_orphaned_annotations()
+
+    def drop_orphaned_annotations(self) -> "Fragment":
+        words = self.words
+        entity_ids = {id_ for word in words for id_ in word.named_entities}
+        realia_ids = {id_ for word in words for id_ in word.realia}
+        return attr.evolve(
+            self,
+            named_entities=retain_referenced(self.named_entities, entity_ids),
+            realia=retain_referenced(self.realia, realia_ids),
         )
 
     def set_genres(self, genres_new: Sequence[Genre]) -> "Fragment":

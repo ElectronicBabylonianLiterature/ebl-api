@@ -102,6 +102,8 @@ class MongoFragmentRepository(
                 "signs",
                 "record",
                 "line_to_vec",
+                "named_entities",
+                "realia",
             ),
             "date": ("date",),
             "dates_in_text": ("dates_in_text",),
