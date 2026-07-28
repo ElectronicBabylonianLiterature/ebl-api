@@ -1,5 +1,6 @@
 from falcon import HTTP_OK, HTTPMethodNotAllowed, Request, Response
 
+from ebl.cache.application.cache import DEFAULT_TIMEOUT, cache_control
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 
@@ -43,7 +44,7 @@ class RealiaSearchResource:
         self._realia_repository = realia_repository
 
     def on_get(self, req: Request, resp: Response) -> None:
-        query = req.get_param("query", default="")
+        query = req.get_param("query", default="") or ""
         entries = self._realia_repository.search(query)
         resp.media = RealiaEntrySchema(many=True).dump(entries)
 
@@ -52,5 +53,6 @@ class RealiaListResource:
     def __init__(self, realia_repository: RealiaRepository) -> None:
         self._realia_repository = realia_repository
 
+    @cache_control(["public", f"max-age={DEFAULT_TIMEOUT}"])
     def on_get(self, _req: Request, resp: Response) -> None:
         resp.media = self._realia_repository.list_non_redirect_ids()

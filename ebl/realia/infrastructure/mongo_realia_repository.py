@@ -1,5 +1,5 @@
 import attr
-from typing import Dict, List, Sequence, Tuple
+from typing import Dict, List, Sequence, Tuple, cast
 
 from pymongo.database import Database
 
@@ -13,14 +13,13 @@ from ebl.errors import NotFoundError
 from ebl.mongo_collection import MongoCollection
 from ebl.realia.application.realia_repository import RealiaRepository
 from ebl.realia.domain.realia_entry import RealiaEntry, ReallexikonEntry
+from ebl.realia.infrastructure.realia_id_sorting import sort_realia_ids
 from ebl.realia.infrastructure.realia_schemas import RealiaEntrySchema
 from ebl.realia.infrastructure.realia_search_ranking import RealiaRelevanceRanker
+from ebl.realia.infrastructure.realia_stub_filter import non_redirect_stub_query
 
 REALIA_COLLECTION = "realia"
 BIBLIOGRAPHY_COLLECTION = "bibliography"
-
-REDIRECT_CROSS_REFERENCE_COUNT = 1
-PLACEHOLDER_REALLEXIKON_COUNT = 1
 
 
 class MongoRealiaRepository(RealiaRepository):
@@ -52,7 +51,7 @@ class MongoRealiaRepository(RealiaRepository):
         return self._load_entry(document)
 
     def _load_entry(self, document: dict) -> RealiaEntry:
-        entries = [RealiaEntrySchema().load(document)]
+        entries = [cast(RealiaEntry, RealiaEntrySchema().load(document))]
         self._inject_bibliography(entries)
         return entries[0]
 
@@ -65,75 +64,16 @@ class MongoRealiaRepository(RealiaRepository):
             self._realia_collection.find_many(self._build_search_query(stripped)),
             key=ranker.key,
         )
-        entries = RealiaEntrySchema(many=True).load(documents)
+        entries = cast(List[RealiaEntry], RealiaEntrySchema(many=True).load(documents))
         self._inject_bibliography(entries)
         return entries
 
     def list_non_redirect_ids(self) -> Sequence[str]:
         documents = self._realia_collection.find_many(
-            {"$expr": {"$not": [self._is_redirect_stub_expression()]}},
+            non_redirect_stub_query(),
             projection={"_id": True},
         )
-        return sorted(document["_id"] for document in documents)
-
-    def _is_redirect_stub_expression(self) -> dict:
-        return {
-            "$and": [
-                {
-                    "$eq": [
-                        self._array_size("crossReferences"),
-                        REDIRECT_CROSS_REFERENCE_COUNT,
-                    ]
-                },
-                {"$not": [self._has_own_content_expression()]},
-            ]
-        }
-
-    def _has_own_content_expression(self) -> dict:
-        return {
-            "$or": [
-                {"$gt": [self._array_size("afoRegister"), 0]},
-                {"$gt": [self._array_size("references"), 0]},
-                {"$gt": [self._array_size("afoCrossReferences"), 0]},
-                {
-                    "$gt": [
-                        self._array_size("reallexikon"),
-                        PLACEHOLDER_REALLEXIKON_COUNT,
-                    ]
-                },
-                {"$gt": [self._resolvable_reallexikon_count(), 0]},
-            ]
-        }
-
-    def _array_size(self, field: str) -> dict:
-        return {"$size": {"$ifNull": [f"${field}", []]}}
-
-    def _resolvable_reallexikon_count(self) -> dict:
-        return {
-            "$size": {
-                "$filter": {
-                    "input": {"$ifNull": ["$reallexikon", []]},
-                    "cond": self._is_resolvable_reference("$$this.reference"),
-                }
-            }
-        }
-
-    def _is_resolvable_reference(self, reference: str) -> dict:
-        return {
-            "$switch": {
-                "branches": [
-                    {
-                        "case": {"$eq": [{"$type": reference}, "string"]},
-                        "then": {"$ne": [reference, ""]},
-                    },
-                    {
-                        "case": {"$eq": [{"$type": reference}, "object"]},
-                        "then": {"$ne": [{"$ifNull": [f"{reference}.id", ""]}, ""]},
-                    },
-                ],
-                "default": False,
-            }
-        }
+        return sort_realia_ids(document["_id"] for document in documents)
 
     def _make_regex_condition(self, cfq: CollatedFieldQuery) -> dict:
         options = "i" if cfq.use_collations else ""
