@@ -42,6 +42,9 @@ class ImportSummary:
     scanned: int
     valid: int
     invalid: int
+    unknown_findspots: int
+    wrong_site: int
+    unknown_polygons: int
     existing: int
     new: int
     changed: int
@@ -50,6 +53,10 @@ class ImportSummary:
     dry_run: bool
     rollback: bool
     issues: tuple[ImportIssue, ...]
+    database_classification: str = "local"
+    total_findspots: int | None = None
+    assur_findspots: int | None = None
+    unresolved_assur_findspots: int | None = None
 
 
 class MapLocationImportRecordSchema(Schema):

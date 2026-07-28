@@ -163,7 +163,7 @@ def test_run_import_invalid_rows_prevent_writes(
 
     monkeypatch.setattr(
         importer,
-        "_write_operations",
+        "write_operations",
         wrapped,
     )
 

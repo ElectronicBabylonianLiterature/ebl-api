@@ -1,3 +1,5 @@
+import unicodedata
+
 import pytest
 
 from ebl.fragmentarium.application.assur_map_sources import (
@@ -15,6 +17,12 @@ def test_load_assur_sources_counts():
     assert len(polygons) == 134
     assert len({polygon.name for polygon in polygons}) == 134
     assert len({polygon.polygon_id for polygon in polygons}) == 134
+    assert polygons[0].name == "bB6I"
+    assert all(
+        unicodedata.category(character) != "Cc"
+        for polygon in polygons
+        for character in polygon.name
+    )
 
 
 def test_normalize_assur_area_label_matches_source_rule():

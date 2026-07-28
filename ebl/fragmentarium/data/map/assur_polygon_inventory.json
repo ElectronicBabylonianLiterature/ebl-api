@@ -1,1072 +1,1072 @@
 [
   {
-    "polygonId": "assur-100he8i-484562f8f1ab",
-    "name": "100hE8I",
-    "areaName": "hE8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "484562f8f1ab"
-  },
-  {
-    "polygonId": "assur-101i3-e1127cc93dfe",
-    "name": "101i3",
-    "areaName": "i3",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "e1127cc93dfe"
-  },
-  {
-    "polygonId": "assur-102ia3iv-4b3b8fad7570",
-    "name": "102iA3IV",
-    "areaName": "iA3IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "4b3b8fad7570"
-  },
-  {
-    "polygonId": "assur-103ia4i-954858445363",
-    "name": "103iA4I",
-    "areaName": "iA4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "954858445363"
-  },
-  {
-    "polygonId": "assur-104ia4ii-43241c493419",
-    "name": "104iA4II",
-    "areaName": "iA4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "43241c493419"
-  },
-  {
-    "polygonId": "assur-105ia4iv-4ea6406187c8",
-    "name": "105iA4IV",
-    "areaName": "iA4IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "4ea6406187c8"
-  },
-  {
-    "polygonId": "assur-106ia4v-b128914b08d6",
-    "name": "106iA4V",
-    "areaName": "iA4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "b128914b08d6"
-  },
-  {
-    "polygonId": "assur-107ia8i-bcc63bb63b4d",
-    "name": "107iA8I",
-    "areaName": "iA8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "bcc63bb63b4d"
-  },
-  {
-    "polygonId": "assur-108ib3ii-6aa9d256700b",
-    "name": "108iB3II",
-    "areaName": "iB3II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6aa9d256700b"
-  },
-  {
-    "polygonId": "assur-109ib3iii-5f955c916bd6",
-    "name": "109iB3III",
-    "areaName": "iB3III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5f955c916bd6"
-  },
-  {
-    "polygonId": "assur-10c6-6f4ff2e5c4aa",
-    "name": "10c6",
-    "areaName": "c6",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6f4ff2e5c4aa"
-  },
-  {
-    "polygonId": "assur-110ib3iv-9c0254833076",
-    "name": "110iB3IV",
-    "areaName": "iB3IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "9c0254833076"
-  },
-  {
-    "polygonId": "assur-111ib4i-5d5a2ab832b9",
-    "name": "111iB4I",
-    "areaName": "iB4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5d5a2ab832b9"
-  },
-  {
-    "polygonId": "assur-112ib4ii-69c767eaaa9b",
-    "name": "112iB4II",
-    "areaName": "iB4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "69c767eaaa9b"
-  },
-  {
-    "polygonId": "assur-113ib4iii-6d81d4c48c28",
-    "name": "113iB4III",
-    "areaName": "iB4III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6d81d4c48c28"
-  },
-  {
-    "polygonId": "assur-114ib4iv-0a4e3a9fea3c",
-    "name": "114iB4IV",
-    "areaName": "iB4IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "0a4e3a9fea3c"
-  },
-  {
-    "polygonId": "assur-115ib4v-a6b663a19751",
-    "name": "115iB4V",
-    "areaName": "iB4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a6b663a19751"
-  },
-  {
-    "polygonId": "assur-116ib6iii-a8f3256907f1",
-    "name": "116iB6III",
-    "areaName": "iB6III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a8f3256907f1"
-  },
-  {
-    "polygonId": "assur-117ib7i-a1259d123f1e",
-    "name": "117iB7I",
-    "areaName": "iB7I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a1259d123f1e"
-  },
-  {
-    "polygonId": "assur-118ic3ii-ee0365a27ee5",
-    "name": "118iC3II",
-    "areaName": "iC3II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "ee0365a27ee5"
-  },
-  {
-    "polygonId": "assur-119ic4i-b81d7278c59c",
-    "name": "119iC4I",
-    "areaName": "iC4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "b81d7278c59c"
-  },
-  {
-    "polygonId": "assur-11cc9i-1047f1e15a68",
-    "name": "11cC9I",
-    "areaName": "cC9I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "1047f1e15a68"
-  },
-  {
-    "polygonId": "assur-120ic4ii-df9fe989b4ff",
-    "name": "120iC4II",
-    "areaName": "iC4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "df9fe989b4ff"
-  },
-  {
-    "polygonId": "assur-121ic4iii-12e470b76085",
-    "name": "121iC4III",
-    "areaName": "iC4III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "12e470b76085"
-  },
-  {
-    "polygonId": "assur-122ic4iv-6b755722331e",
-    "name": "122iC4IV",
-    "areaName": "iC4IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6b755722331e"
-  },
-  {
-    "polygonId": "assur-123ic4v-c0a218a92708",
-    "name": "123iC4V",
-    "areaName": "iC4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "c0a218a92708"
-  },
-  {
-    "polygonId": "assur-124la9ii-081650a81622",
-    "name": "124lA9II",
-    "areaName": "lA9II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "081650a81622"
-  },
-  {
-    "polygonId": "assur-125ic5i-6332648aea16",
-    "name": "125iC5I",
-    "areaName": "iC5I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6332648aea16"
-  },
-  {
-    "polygonId": "assur-126ic6iii-5cb3680f11f1",
-    "name": "126iC6III",
-    "areaName": "iC6III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5cb3680f11f1"
-  },
-  {
-    "polygonId": "assur-127id3iv-26ecdd95a8d8",
-    "name": "127iD3IV",
-    "areaName": "iD3IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "26ecdd95a8d8"
-  },
-  {
-    "polygonId": "assur-128id3v-5388a6fdd9f3",
-    "name": "128iD3V",
-    "areaName": "iD3V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5388a6fdd9f3"
-  },
-  {
-    "polygonId": "assur-129id4iv-b2da9fe54e6d",
-    "name": "129iD4IV",
-    "areaName": "iD4IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "b2da9fe54e6d"
-  },
-  {
-    "polygonId": "assur-12cd6i-af66f2996084",
-    "name": "12cD6I",
-    "areaName": "cD6I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "af66f2996084"
-  },
-  {
-    "polygonId": "assur-130id4v-becfbc958fce",
-    "name": "130iD4V",
-    "areaName": "iD4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "becfbc958fce"
-  },
-  {
-    "polygonId": "assur-131id5i-b45c39108b04",
-    "name": "131iD5I",
-    "areaName": "iD5I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "b45c39108b04"
-  },
-  {
-    "polygonId": "assur-132id8i-9cf249acf23a",
-    "name": "132iD8I",
-    "areaName": "iD8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "9cf249acf23a"
-  },
-  {
-    "polygonId": "assur-133l8-d16dd7b3c388",
-    "name": "133l8",
-    "areaName": "l8",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d16dd7b3c388"
-  },
-  {
-    "polygonId": "assur-134l9-d809790a6828",
-    "name": "134l9",
-    "areaName": "l9",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d809790a6828"
-  },
-  {
-    "polygonId": "assur-13cd9i-18c98d0c1647",
-    "name": "13cD9I",
-    "areaName": "cD9I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "18c98d0c1647"
-  },
-  {
-    "polygonId": "assur-14cd9ii-70cce66085df",
-    "name": "14cD9II",
-    "areaName": "cD9II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "70cce66085df"
-  },
-  {
-    "polygonId": "assur-15ce6iii-35f1792f2c59",
-    "name": "15cE6III",
-    "areaName": "cE6III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "35f1792f2c59"
-  },
-  {
-    "polygonId": "assur-16ce6iv-01ed729cc729",
-    "name": "16cE6IV",
-    "areaName": "cE6IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "01ed729cc729"
-  },
-  {
-    "polygonId": "assur-17da5iii-d9f48276e9ab",
-    "name": "17dA5III",
-    "areaName": "dA5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d9f48276e9ab"
-  },
-  {
-    "polygonId": "assur-18da5iv-6a62aeabdf81",
-    "name": "18dA5IV",
-    "areaName": "dA5IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6a62aeabdf81"
-  },
-  {
-    "polygonId": "assur-19da6ii-a4ab08f22278",
-    "name": "19dA6II",
-    "areaName": "dA6II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a4ab08f22278"
-  },
-  {
-    "polygonId": "assur-20da6iv-016b9bbe05f4",
-    "name": "20dA6IV",
-    "areaName": "dA6IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "016b9bbe05f4"
-  },
-  {
-    "polygonId": "assur-21da8i-e2f748bf874e",
-    "name": "21dA8I",
-    "areaName": "dA8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "e2f748bf874e"
-  },
-  {
-    "polygonId": "assur-22da9iii-6b5ce207f9c1",
-    "name": "22dA9III",
-    "areaName": "dA9III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6b5ce207f9c1"
-  },
-  {
-    "polygonId": "assur-23db5iv-d31b8edb8af6",
-    "name": "23dB5IV",
-    "areaName": "dB5IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d31b8edb8af6"
-  },
-  {
-    "polygonId": "assur-24dc9v-3f293e1fa0bd",
-    "name": "24dC9V",
-    "areaName": "dC9V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "3f293e1fa0bd"
-  },
-  {
-    "polygonId": "assur-25dd6ii-2d4f68a5e8c3",
-    "name": "25dD6II",
-    "areaName": "dD6II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "2d4f68a5e8c3"
-  },
-  {
-    "polygonId": "assur-26dd9iv-08e487e4fda3",
-    "name": "26dD9IV",
-    "areaName": "dD9IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "08e487e4fda3"
-  },
-  {
-    "polygonId": "assur-27de5iv-ab130cd33b86",
-    "name": "27dE5IV",
-    "areaName": "dE5IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "ab130cd33b86"
-  },
-  {
-    "polygonId": "assur-28de5v-bde9abf49c29",
-    "name": "28dE5V",
-    "areaName": "dE5V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "bde9abf49c29"
-  },
-  {
-    "polygonId": "assur-29de7iv-b4930efd61c1",
-    "name": "29dE7IV",
-    "areaName": "dE7IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "b4930efd61c1"
-  },
-  {
-    "polygonId": "assur-2bc5ii-3d76dc1e02af",
-    "name": "2bC5II",
-    "areaName": "bC5II",
+    "polygonId": "assur-bb6i-3d76dc1e02af",
+    "name": "bB6I",
+    "areaName": "bB6I",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "3d76dc1e02af"
   },
   {
-    "polygonId": "assur-30de9v-fb89af1923be",
-    "name": "30dE9V",
-    "areaName": "dE9V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "fb89af1923be"
-  },
-  {
-    "polygonId": "assur-31ea5v-d6499ffb6a89",
-    "name": "31eA5V",
-    "areaName": "eA5V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d6499ffb6a89"
-  },
-  {
-    "polygonId": "assur-32ea6i-d293ab969788",
-    "name": "32eA6I",
-    "areaName": "eA6I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d293ab969788"
-  },
-  {
-    "polygonId": "assur-33ea6ii-a66d4d602381",
-    "name": "33eA6II",
-    "areaName": "eA6II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a66d4d602381"
-  },
-  {
-    "polygonId": "assur-34ea7ii-2f294f57d786",
-    "name": "34eA7II",
-    "areaName": "eA7II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "2f294f57d786"
-  },
-  {
-    "polygonId": "assur-35ea9i-c01b12def1aa",
-    "name": "35eA9I",
-    "areaName": "eA9I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "c01b12def1aa"
-  },
-  {
-    "polygonId": "assur-36eb5iii-5e10d62f21ea",
-    "name": "36eB5III",
-    "areaName": "eB5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5e10d62f21ea"
-  },
-  {
-    "polygonId": "assur-37eb5v-36f55ad7d8f3",
-    "name": "37eB5V",
-    "areaName": "eB5V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "36f55ad7d8f3"
-  },
-  {
-    "polygonId": "assur-38eb6i-71efa0213895",
-    "name": "38eB6I",
-    "areaName": "eB6I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "71efa0213895"
-  },
-  {
-    "polygonId": "assur-39eb7ii-a69f84fae394",
-    "name": "39eB7II",
-    "areaName": "eB7II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a69f84fae394"
-  },
-  {
-    "polygonId": "assur-3bc5iii-310134341079",
-    "name": "3bC5III",
-    "areaName": "bC5III",
+    "polygonId": "assur-bc5ii-310134341079",
+    "name": "bC5II",
+    "areaName": "bC5II",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "310134341079"
   },
   {
-    "polygonId": "assur-40ec9i-f72a9729f147",
-    "name": "40eC9I",
-    "areaName": "eC9I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f72a9729f147"
-  },
-  {
-    "polygonId": "assur-41ed10i-e68eedba1579",
-    "name": "41eD10I",
-    "areaName": "eD10I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "e68eedba1579"
-  },
-  {
-    "polygonId": "assur-42ed6v-6a03df7cfbfc",
-    "name": "42eD6V",
-    "areaName": "eD6V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6a03df7cfbfc"
-  },
-  {
-    "polygonId": "assur-43ea7iii-8e7d7e44b6f4",
-    "name": "43eA7III",
-    "areaName": "eA7III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "8e7d7e44b6f4"
-  },
-  {
-    "polygonId": "assur-44ed5iii-122e56db4bf8",
-    "name": "44eD5III",
-    "areaName": "eD5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "122e56db4bf8"
-  },
-  {
-    "polygonId": "assur-45ee5ii-57cae57f5031",
-    "name": "45eE5II",
-    "areaName": "eE5II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "57cae57f5031"
-  },
-  {
-    "polygonId": "assur-46ee5iii-ab93b4168d31",
-    "name": "46eE5III",
-    "areaName": "eE5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "ab93b4168d31"
-  },
-  {
-    "polygonId": "assur-47ee5iv-43ee169f4603",
-    "name": "47eE5IV",
-    "areaName": "eE5IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "43ee169f4603"
-  },
-  {
-    "polygonId": "assur-48ee5v-898e94441cbf",
-    "name": "48eE5V",
-    "areaName": "eE5V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "898e94441cbf"
-  },
-  {
-    "polygonId": "assur-49ee6v-302a510c01d2",
-    "name": "49eE6V",
-    "areaName": "eE6V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "302a510c01d2"
-  },
-  {
-    "polygonId": "assur-4bd5i-9496f1c01d5b",
-    "name": "4bD5I",
-    "areaName": "bD5I",
+    "polygonId": "assur-bc5iii-9496f1c01d5b",
+    "name": "bC5III",
+    "areaName": "bC5III",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "9496f1c01d5b"
   },
   {
-    "polygonId": "assur-50ee6v-7i-64ea5b739a46",
-    "name": "50eE6V/7I",
-    "areaName": "eE6V/7I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "64ea5b739a46"
-  },
-  {
-    "polygonId": "assur-51ee7i-9d2184703a67",
-    "name": "51eE7I",
-    "areaName": "eE7I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "9d2184703a67"
-  },
-  {
-    "polygonId": "assur-52fa6v-a5f5979278de",
-    "name": "52fA6V",
-    "areaName": "fA6V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a5f5979278de"
-  },
-  {
-    "polygonId": "assur-53fe9v-6bff491dc11f",
-    "name": "53fE9V",
-    "areaName": "fE9V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6bff491dc11f"
-  },
-  {
-    "polygonId": "assur-54fb5ii-c87b4cbab63d",
-    "name": "54fB5II",
-    "areaName": "fB5II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "c87b4cbab63d"
-  },
-  {
-    "polygonId": "assur-55fc5iii-c2ef37047215",
-    "name": "55fC5III",
-    "areaName": "fC5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "c2ef37047215"
-  },
-  {
-    "polygonId": "assur-56fc8i-6eb6aba7b1e1",
-    "name": "56fC8I",
-    "areaName": "fC8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6eb6aba7b1e1"
-  },
-  {
-    "polygonId": "assur-57fd8i-713e9a4a2d5d",
-    "name": "57fD8I",
-    "areaName": "fD8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "713e9a4a2d5d"
-  },
-  {
-    "polygonId": "assur-58fe5iii-3e9fb1eb128a",
-    "name": "58fE5III",
-    "areaName": "fE5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "3e9fb1eb128a"
-  },
-  {
-    "polygonId": "assur-59fe10i-554d058cd5c7",
-    "name": "59fE10I",
-    "areaName": "fE10I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "554d058cd5c7"
-  },
-  {
-    "polygonId": "assur-5bd8ii-1106b4b8fc7c",
-    "name": "5bD8II",
-    "areaName": "bD8II",
+    "polygonId": "assur-bd5i-1106b4b8fc7c",
+    "name": "bD5I",
+    "areaName": "bD5I",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "1106b4b8fc7c"
   },
   {
-    "polygonId": "assur-60fe5ii-3c7ed857e189",
-    "name": "60fE5II",
-    "areaName": "fE5II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "3c7ed857e189"
-  },
-  {
-    "polygonId": "assur-61g4-51de8f60bedc",
-    "name": "61g4",
-    "areaName": "g4",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "51de8f60bedc"
-  },
-  {
-    "polygonId": "assur-62ga10i-35f877be9450",
-    "name": "62gA10I",
-    "areaName": "gA10I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "35f877be9450"
-  },
-  {
-    "polygonId": "assur-63ga4i-a13746659919",
-    "name": "63gA4I",
-    "areaName": "gA4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "a13746659919"
-  },
-  {
-    "polygonId": "assur-64ga4ii-1423b39dd202",
-    "name": "64gA4II",
-    "areaName": "gA4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "1423b39dd202"
-  },
-  {
-    "polygonId": "assur-65ga4v-40b5cc297561",
-    "name": "65gA4V",
-    "areaName": "gA4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "40b5cc297561"
-  },
-  {
-    "polygonId": "assur-66ga5ii-f6ca1aebcd97",
-    "name": "66gA5II",
-    "areaName": "gA5II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f6ca1aebcd97"
-  },
-  {
-    "polygonId": "assur-67ga5iii-3088de6caaf3",
-    "name": "67gA5III",
-    "areaName": "gA5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "3088de6caaf3"
-  },
-  {
-    "polygonId": "assur-68gb3v-21acb7b27aa6",
-    "name": "68gB3V",
-    "areaName": "gB3V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "21acb7b27aa6"
-  },
-  {
-    "polygonId": "assur-69gb4ii-cbe161c398e8",
-    "name": "69gB4II",
-    "areaName": "gB4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "cbe161c398e8"
-  },
-  {
-    "polygonId": "assur-6be4v-66e6a0a429d8",
-    "name": "6bE4V",
-    "areaName": "bE4V",
+    "polygonId": "assur-bd8ii-66e6a0a429d8",
+    "name": "bD8II",
+    "areaName": "bD8II",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "66e6a0a429d8"
   },
   {
-    "polygonId": "assur-70gb5i-4e46b9b143ad",
-    "name": "70gB5I",
-    "areaName": "gB5I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "4e46b9b143ad"
-  },
-  {
-    "polygonId": "assur-71gb5ii-61fb399ff411",
-    "name": "71gB5II",
-    "areaName": "gB5II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "61fb399ff411"
-  },
-  {
-    "polygonId": "assur-72gb9i-6ad615e8405b",
-    "name": "72gB9I",
-    "areaName": "gB9I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "6ad615e8405b"
-  },
-  {
-    "polygonId": "assur-73gc4i-f02183f4767e",
-    "name": "73gC4I",
-    "areaName": "gC4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f02183f4767e"
-  },
-  {
-    "polygonId": "assur-74gc4v-d54b77ef4c6e",
-    "name": "74gC4V",
-    "areaName": "gC4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d54b77ef4c6e"
-  },
-  {
-    "polygonId": "assur-75gc5i-1985c493b282",
-    "name": "75gC5I",
-    "areaName": "gC5I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "1985c493b282"
-  },
-  {
-    "polygonId": "assur-76gc5v-9d7eec32dfdd",
-    "name": "76gC5V",
-    "areaName": "gC5V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "9d7eec32dfdd"
-  },
-  {
-    "polygonId": "assur-77gd4ii-10d1c2f64360",
-    "name": "77gD4II",
-    "areaName": "gD4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "10d1c2f64360"
-  },
-  {
-    "polygonId": "assur-78gd5ii-9be07638fbff",
-    "name": "78gD5II",
-    "areaName": "gD5II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "9be07638fbff"
-  },
-  {
-    "polygonId": "assur-79gd10i-2798b87e53dc",
-    "name": "79gD10I",
-    "areaName": "gD10I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "2798b87e53dc"
-  },
-  {
-    "polygonId": "assur-7be5i-797c28d39cb5",
-    "name": "7bE5I",
-    "areaName": "bE5I",
+    "polygonId": "assur-be4v-797c28d39cb5",
+    "name": "bE4V",
+    "areaName": "bE4V",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "797c28d39cb5"
   },
   {
-    "polygonId": "assur-80ge9i-fecfb9950eb0",
-    "name": "80gE9I",
-    "areaName": "gE9I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "fecfb9950eb0"
-  },
-  {
-    "polygonId": "assur-81h4-f06fc5d649e6",
-    "name": "81h4",
-    "areaName": "h4",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f06fc5d649e6"
-  },
-  {
-    "polygonId": "assur-82ha3v-d61258ca24f6",
-    "name": "82hA3V",
-    "areaName": "hA3V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "d61258ca24f6"
-  },
-  {
-    "polygonId": "assur-83hb4ii-5e86c360cff0",
-    "name": "83hB4II",
-    "areaName": "hB4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5e86c360cff0"
-  },
-  {
-    "polygonId": "assur-84hb4v-984bc19a4843",
-    "name": "84hB4V",
-    "areaName": "hB4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "984bc19a4843"
-  },
-  {
-    "polygonId": "assur-85hb5iii-dda5f259287d",
-    "name": "85hB5III",
-    "areaName": "hB5III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "dda5f259287d"
-  },
-  {
-    "polygonId": "assur-86hc10iv-f3a81030678e",
-    "name": "86hC10IV",
-    "areaName": "hC10IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f3a81030678e"
-  },
-  {
-    "polygonId": "assur-87hc3v-e9ba6785720f",
-    "name": "87hC3V",
-    "areaName": "hC3V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "e9ba6785720f"
-  },
-  {
-    "polygonId": "assur-88hc4i-e656693e7ee1",
-    "name": "88hC4I",
-    "areaName": "hC4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "e656693e7ee1"
-  },
-  {
-    "polygonId": "assur-89hc4iv-88e7d0f8b8c5",
-    "name": "89hC4IV",
-    "areaName": "hC4IV",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "88e7d0f8b8c5"
-  },
-  {
-    "polygonId": "assur-8be7i-f5ecbd35972a",
-    "name": "8bE7I",
-    "areaName": "bE7I",
+    "polygonId": "assur-be5i-f5ecbd35972a",
+    "name": "bE5I",
+    "areaName": "bE5I",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "f5ecbd35972a"
   },
   {
-    "polygonId": "assur-90hc4v-f2f64d75d970",
-    "name": "90hC4V",
-    "areaName": "hC4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f2f64d75d970"
-  },
-  {
-    "polygonId": "assur-91hc8i-478fa3bdc4c8",
-    "name": "91hC8I",
-    "areaName": "hC8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "478fa3bdc4c8"
-  },
-  {
-    "polygonId": "assur-92hd3v-7c55133a9d29",
-    "name": "92hD3V",
-    "areaName": "hD3V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "7c55133a9d29"
-  },
-  {
-    "polygonId": "assur-93hd4i-eb5d4942ef7a",
-    "name": "93hD4I",
-    "areaName": "hD4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "eb5d4942ef7a"
-  },
-  {
-    "polygonId": "assur-94hd4ii-0ed0e29b0f09",
-    "name": "94hD4II",
-    "areaName": "hD4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "0ed0e29b0f09"
-  },
-  {
-    "polygonId": "assur-95he4i-04d1913af44c",
-    "name": "95hE4I",
-    "areaName": "hE4I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "04d1913af44c"
-  },
-  {
-    "polygonId": "assur-96hd4v-5f535f7de6ba",
-    "name": "96hD4V",
-    "areaName": "hD4V",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "5f535f7de6ba"
-  },
-  {
-    "polygonId": "assur-97hd8i-96ead1e90c88",
-    "name": "97hD8I",
-    "areaName": "hD8I",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "96ead1e90c88"
-  },
-  {
-    "polygonId": "assur-98he4ii-030d5af2f188",
-    "name": "98hE4II",
-    "areaName": "hE4II",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "030d5af2f188"
-  },
-  {
-    "polygonId": "assur-99he4iii-f0314ef9a16b",
-    "name": "99hE4III",
-    "areaName": "hE4III",
-    "siteId": "ASSUR",
-    "siteName": "Aššur",
-    "geometryChecksum": "f0314ef9a16b"
-  },
-  {
-    "polygonId": "assur-9be8i-38ce66f15dcd",
-    "name": "9bE8I",
-    "areaName": "bE8I",
+    "polygonId": "assur-be7i-38ce66f15dcd",
+    "name": "bE7I",
+    "areaName": "bE7I",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "38ce66f15dcd"
   },
   {
-    "polygonId": "assur-u001a-a1ccc873746b",
-    "name": "\u001a",
-    "areaName": "\u001a",
+    "polygonId": "assur-be8i-6f4ff2e5c4aa",
+    "name": "bE8I",
+    "areaName": "bE8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6f4ff2e5c4aa"
+  },
+  {
+    "polygonId": "assur-c6-1047f1e15a68",
+    "name": "c6",
+    "areaName": "c6",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "1047f1e15a68"
+  },
+  {
+    "polygonId": "assur-cc9i-af66f2996084",
+    "name": "cC9I",
+    "areaName": "cC9I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "af66f2996084"
+  },
+  {
+    "polygonId": "assur-cd6i-18c98d0c1647",
+    "name": "cD6I",
+    "areaName": "cD6I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "18c98d0c1647"
+  },
+  {
+    "polygonId": "assur-cd9i-70cce66085df",
+    "name": "cD9I",
+    "areaName": "cD9I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "70cce66085df"
+  },
+  {
+    "polygonId": "assur-cd9ii-35f1792f2c59",
+    "name": "cD9II",
+    "areaName": "cD9II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "35f1792f2c59"
+  },
+  {
+    "polygonId": "assur-ce6iii-01ed729cc729",
+    "name": "cE6III",
+    "areaName": "cE6III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "01ed729cc729"
+  },
+  {
+    "polygonId": "assur-ce6iv-d9f48276e9ab",
+    "name": "cE6IV",
+    "areaName": "cE6IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d9f48276e9ab"
+  },
+  {
+    "polygonId": "assur-da5iii-6a62aeabdf81",
+    "name": "dA5III",
+    "areaName": "dA5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6a62aeabdf81"
+  },
+  {
+    "polygonId": "assur-da5iv-a4ab08f22278",
+    "name": "dA5IV",
+    "areaName": "dA5IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a4ab08f22278"
+  },
+  {
+    "polygonId": "assur-da6ii-016b9bbe05f4",
+    "name": "dA6II",
+    "areaName": "dA6II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "016b9bbe05f4"
+  },
+  {
+    "polygonId": "assur-da6iv-e2f748bf874e",
+    "name": "dA6IV",
+    "areaName": "dA6IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "e2f748bf874e"
+  },
+  {
+    "polygonId": "assur-da8i-6b5ce207f9c1",
+    "name": "dA8I",
+    "areaName": "dA8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6b5ce207f9c1"
+  },
+  {
+    "polygonId": "assur-da9iii-d31b8edb8af6",
+    "name": "dA9III",
+    "areaName": "dA9III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d31b8edb8af6"
+  },
+  {
+    "polygonId": "assur-db5iv-3f293e1fa0bd",
+    "name": "dB5IV",
+    "areaName": "dB5IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "3f293e1fa0bd"
+  },
+  {
+    "polygonId": "assur-dc9v-2d4f68a5e8c3",
+    "name": "dC9V",
+    "areaName": "dC9V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "2d4f68a5e8c3"
+  },
+  {
+    "polygonId": "assur-dd6ii-08e487e4fda3",
+    "name": "dD6II",
+    "areaName": "dD6II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "08e487e4fda3"
+  },
+  {
+    "polygonId": "assur-dd9iv-ab130cd33b86",
+    "name": "dD9IV",
+    "areaName": "dD9IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "ab130cd33b86"
+  },
+  {
+    "polygonId": "assur-de5iv-bde9abf49c29",
+    "name": "dE5IV",
+    "areaName": "dE5IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "bde9abf49c29"
+  },
+  {
+    "polygonId": "assur-de5v-b4930efd61c1",
+    "name": "dE5V",
+    "areaName": "dE5V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "b4930efd61c1"
+  },
+  {
+    "polygonId": "assur-de7iv-fb89af1923be",
+    "name": "dE7IV",
+    "areaName": "dE7IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "fb89af1923be"
+  },
+  {
+    "polygonId": "assur-de9v-d6499ffb6a89",
+    "name": "dE9V",
+    "areaName": "dE9V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d6499ffb6a89"
+  },
+  {
+    "polygonId": "assur-ea5v-d293ab969788",
+    "name": "eA5V",
+    "areaName": "eA5V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d293ab969788"
+  },
+  {
+    "polygonId": "assur-ea6i-a66d4d602381",
+    "name": "eA6I",
+    "areaName": "eA6I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a66d4d602381"
+  },
+  {
+    "polygonId": "assur-ea6ii-2f294f57d786",
+    "name": "eA6II",
+    "areaName": "eA6II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "2f294f57d786"
+  },
+  {
+    "polygonId": "assur-ea7ii-8e7d7e44b6f4",
+    "name": "eA7II",
+    "areaName": "eA7II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "8e7d7e44b6f4"
+  },
+  {
+    "polygonId": "assur-ea7iii-c01b12def1aa",
+    "name": "eA7III",
+    "areaName": "eA7III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "c01b12def1aa"
+  },
+  {
+    "polygonId": "assur-ea9i-5e10d62f21ea",
+    "name": "eA9I",
+    "areaName": "eA9I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5e10d62f21ea"
+  },
+  {
+    "polygonId": "assur-eb5iii-36f55ad7d8f3",
+    "name": "eB5III",
+    "areaName": "eB5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "36f55ad7d8f3"
+  },
+  {
+    "polygonId": "assur-eb5v-71efa0213895",
+    "name": "eB5V",
+    "areaName": "eB5V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "71efa0213895"
+  },
+  {
+    "polygonId": "assur-eb6i-a69f84fae394",
+    "name": "eB6I",
+    "areaName": "eB6I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a69f84fae394"
+  },
+  {
+    "polygonId": "assur-eb7ii-f72a9729f147",
+    "name": "eB7II",
+    "areaName": "eB7II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f72a9729f147"
+  },
+  {
+    "polygonId": "assur-ec9i-e68eedba1579",
+    "name": "eC9I",
+    "areaName": "eC9I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "e68eedba1579"
+  },
+  {
+    "polygonId": "assur-ed10i-122e56db4bf8",
+    "name": "eD10I",
+    "areaName": "eD10I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "122e56db4bf8"
+  },
+  {
+    "polygonId": "assur-ed5iii-6a03df7cfbfc",
+    "name": "eD5III",
+    "areaName": "eD5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6a03df7cfbfc"
+  },
+  {
+    "polygonId": "assur-ed6v-57cae57f5031",
+    "name": "eD6V",
+    "areaName": "eD6V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "57cae57f5031"
+  },
+  {
+    "polygonId": "assur-ee5ii-ab93b4168d31",
+    "name": "eE5II",
+    "areaName": "eE5II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "ab93b4168d31"
+  },
+  {
+    "polygonId": "assur-ee5iii-43ee169f4603",
+    "name": "eE5III",
+    "areaName": "eE5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "43ee169f4603"
+  },
+  {
+    "polygonId": "assur-ee5iv-898e94441cbf",
+    "name": "eE5IV",
+    "areaName": "eE5IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "898e94441cbf"
+  },
+  {
+    "polygonId": "assur-ee5v-302a510c01d2",
+    "name": "eE5V",
+    "areaName": "eE5V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "302a510c01d2"
+  },
+  {
+    "polygonId": "assur-ee6v-64ea5b739a46",
+    "name": "eE6V",
+    "areaName": "eE6V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "64ea5b739a46"
+  },
+  {
+    "polygonId": "assur-ee6v-7i-9d2184703a67",
+    "name": "eE6V/7I",
+    "areaName": "eE6V/7I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "9d2184703a67"
+  },
+  {
+    "polygonId": "assur-ee7i-a5f5979278de",
+    "name": "eE7I",
+    "areaName": "eE7I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a5f5979278de"
+  },
+  {
+    "polygonId": "assur-fa6v-c87b4cbab63d",
+    "name": "fA6V",
+    "areaName": "fA6V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "c87b4cbab63d"
+  },
+  {
+    "polygonId": "assur-fb5ii-c2ef37047215",
+    "name": "fB5II",
+    "areaName": "fB5II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "c2ef37047215"
+  },
+  {
+    "polygonId": "assur-fc5iii-6eb6aba7b1e1",
+    "name": "fC5III",
+    "areaName": "fC5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6eb6aba7b1e1"
+  },
+  {
+    "polygonId": "assur-fc8i-713e9a4a2d5d",
+    "name": "fC8I",
+    "areaName": "fC8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "713e9a4a2d5d"
+  },
+  {
+    "polygonId": "assur-fd8i-554d058cd5c7",
+    "name": "fD8I",
+    "areaName": "fD8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "554d058cd5c7"
+  },
+  {
+    "polygonId": "assur-fe10i-3c7ed857e189",
+    "name": "fE10I",
+    "areaName": "fE10I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "3c7ed857e189"
+  },
+  {
+    "polygonId": "assur-fe5ii-3e9fb1eb128a",
+    "name": "fE5II",
+    "areaName": "fE5II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "3e9fb1eb128a"
+  },
+  {
+    "polygonId": "assur-fe5iii-6bff491dc11f",
+    "name": "fE5III",
+    "areaName": "fE5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6bff491dc11f"
+  },
+  {
+    "polygonId": "assur-fe9v-51de8f60bedc",
+    "name": "fE9V",
+    "areaName": "fE9V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "51de8f60bedc"
+  },
+  {
+    "polygonId": "assur-g4-35f877be9450",
+    "name": "g4",
+    "areaName": "g4",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "35f877be9450"
+  },
+  {
+    "polygonId": "assur-ga10i-a13746659919",
+    "name": "gA10I",
+    "areaName": "gA10I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a13746659919"
+  },
+  {
+    "polygonId": "assur-ga4i-1423b39dd202",
+    "name": "gA4I",
+    "areaName": "gA4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "1423b39dd202"
+  },
+  {
+    "polygonId": "assur-ga4ii-40b5cc297561",
+    "name": "gA4II",
+    "areaName": "gA4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "40b5cc297561"
+  },
+  {
+    "polygonId": "assur-ga4v-f6ca1aebcd97",
+    "name": "gA4V",
+    "areaName": "gA4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f6ca1aebcd97"
+  },
+  {
+    "polygonId": "assur-ga5ii-3088de6caaf3",
+    "name": "gA5II",
+    "areaName": "gA5II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "3088de6caaf3"
+  },
+  {
+    "polygonId": "assur-ga5iii-21acb7b27aa6",
+    "name": "gA5III",
+    "areaName": "gA5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "21acb7b27aa6"
+  },
+  {
+    "polygonId": "assur-gb3v-cbe161c398e8",
+    "name": "gB3V",
+    "areaName": "gB3V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "cbe161c398e8"
+  },
+  {
+    "polygonId": "assur-gb4ii-4e46b9b143ad",
+    "name": "gB4II",
+    "areaName": "gB4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "4e46b9b143ad"
+  },
+  {
+    "polygonId": "assur-gb5i-61fb399ff411",
+    "name": "gB5I",
+    "areaName": "gB5I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "61fb399ff411"
+  },
+  {
+    "polygonId": "assur-gb5ii-6ad615e8405b",
+    "name": "gB5II",
+    "areaName": "gB5II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6ad615e8405b"
+  },
+  {
+    "polygonId": "assur-gb9i-f02183f4767e",
+    "name": "gB9I",
+    "areaName": "gB9I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f02183f4767e"
+  },
+  {
+    "polygonId": "assur-gc4i-d54b77ef4c6e",
+    "name": "gC4I",
+    "areaName": "gC4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d54b77ef4c6e"
+  },
+  {
+    "polygonId": "assur-gc4v-1985c493b282",
+    "name": "gC4V",
+    "areaName": "gC4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "1985c493b282"
+  },
+  {
+    "polygonId": "assur-gc5i-9d7eec32dfdd",
+    "name": "gC5I",
+    "areaName": "gC5I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "9d7eec32dfdd"
+  },
+  {
+    "polygonId": "assur-gc5v-2798b87e53dc",
+    "name": "gC5V",
+    "areaName": "gC5V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "2798b87e53dc"
+  },
+  {
+    "polygonId": "assur-gd10i-10d1c2f64360",
+    "name": "gD10I",
+    "areaName": "gD10I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "10d1c2f64360"
+  },
+  {
+    "polygonId": "assur-gd4ii-9be07638fbff",
+    "name": "gD4II",
+    "areaName": "gD4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "9be07638fbff"
+  },
+  {
+    "polygonId": "assur-gd5ii-fecfb9950eb0",
+    "name": "gD5II",
+    "areaName": "gD5II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "fecfb9950eb0"
+  },
+  {
+    "polygonId": "assur-ge9i-f06fc5d649e6",
+    "name": "gE9I",
+    "areaName": "gE9I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f06fc5d649e6"
+  },
+  {
+    "polygonId": "assur-h4-d61258ca24f6",
+    "name": "h4",
+    "areaName": "h4",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d61258ca24f6"
+  },
+  {
+    "polygonId": "assur-ha3v-5e86c360cff0",
+    "name": "hA3V",
+    "areaName": "hA3V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5e86c360cff0"
+  },
+  {
+    "polygonId": "assur-hb4ii-984bc19a4843",
+    "name": "hB4II",
+    "areaName": "hB4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "984bc19a4843"
+  },
+  {
+    "polygonId": "assur-hb4v-dda5f259287d",
+    "name": "hB4V",
+    "areaName": "hB4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "dda5f259287d"
+  },
+  {
+    "polygonId": "assur-hb5iii-f3a81030678e",
+    "name": "hB5III",
+    "areaName": "hB5III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f3a81030678e"
+  },
+  {
+    "polygonId": "assur-hc10iv-e9ba6785720f",
+    "name": "hC10IV",
+    "areaName": "hC10IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "e9ba6785720f"
+  },
+  {
+    "polygonId": "assur-hc3v-e656693e7ee1",
+    "name": "hC3V",
+    "areaName": "hC3V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "e656693e7ee1"
+  },
+  {
+    "polygonId": "assur-hc4i-88e7d0f8b8c5",
+    "name": "hC4I",
+    "areaName": "hC4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "88e7d0f8b8c5"
+  },
+  {
+    "polygonId": "assur-hc4iv-f2f64d75d970",
+    "name": "hC4IV",
+    "areaName": "hC4IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f2f64d75d970"
+  },
+  {
+    "polygonId": "assur-hc4v-478fa3bdc4c8",
+    "name": "hC4V",
+    "areaName": "hC4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "478fa3bdc4c8"
+  },
+  {
+    "polygonId": "assur-hc8i-7c55133a9d29",
+    "name": "hC8I",
+    "areaName": "hC8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "7c55133a9d29"
+  },
+  {
+    "polygonId": "assur-hd3v-eb5d4942ef7a",
+    "name": "hD3V",
+    "areaName": "hD3V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "eb5d4942ef7a"
+  },
+  {
+    "polygonId": "assur-hd4i-0ed0e29b0f09",
+    "name": "hD4I",
+    "areaName": "hD4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "0ed0e29b0f09"
+  },
+  {
+    "polygonId": "assur-hd4ii-5f535f7de6ba",
+    "name": "hD4II",
+    "areaName": "hD4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5f535f7de6ba"
+  },
+  {
+    "polygonId": "assur-hd4v-96ead1e90c88",
+    "name": "hD4V",
+    "areaName": "hD4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "96ead1e90c88"
+  },
+  {
+    "polygonId": "assur-hd8i-04d1913af44c",
+    "name": "hD8I",
+    "areaName": "hD8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "04d1913af44c"
+  },
+  {
+    "polygonId": "assur-he4i-030d5af2f188",
+    "name": "hE4I",
+    "areaName": "hE4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "030d5af2f188"
+  },
+  {
+    "polygonId": "assur-he4ii-f0314ef9a16b",
+    "name": "hE4II",
+    "areaName": "hE4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "f0314ef9a16b"
+  },
+  {
+    "polygonId": "assur-he4iii-484562f8f1ab",
+    "name": "hE4III",
+    "areaName": "hE4III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "484562f8f1ab"
+  },
+  {
+    "polygonId": "assur-he8i-e1127cc93dfe",
+    "name": "hE8I",
+    "areaName": "hE8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "e1127cc93dfe"
+  },
+  {
+    "polygonId": "assur-i3-4b3b8fad7570",
+    "name": "i3",
+    "areaName": "i3",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "4b3b8fad7570"
+  },
+  {
+    "polygonId": "assur-ia3iv-954858445363",
+    "name": "iA3IV",
+    "areaName": "iA3IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "954858445363"
+  },
+  {
+    "polygonId": "assur-ia4i-43241c493419",
+    "name": "iA4I",
+    "areaName": "iA4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "43241c493419"
+  },
+  {
+    "polygonId": "assur-ia4ii-4ea6406187c8",
+    "name": "iA4II",
+    "areaName": "iA4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "4ea6406187c8"
+  },
+  {
+    "polygonId": "assur-ia4iv-b128914b08d6",
+    "name": "iA4IV",
+    "areaName": "iA4IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "b128914b08d6"
+  },
+  {
+    "polygonId": "assur-ia4v-bcc63bb63b4d",
+    "name": "iA4V",
+    "areaName": "iA4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "bcc63bb63b4d"
+  },
+  {
+    "polygonId": "assur-ia8i-6aa9d256700b",
+    "name": "iA8I",
+    "areaName": "iA8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6aa9d256700b"
+  },
+  {
+    "polygonId": "assur-ib3ii-5f955c916bd6",
+    "name": "iB3II",
+    "areaName": "iB3II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5f955c916bd6"
+  },
+  {
+    "polygonId": "assur-ib3iii-9c0254833076",
+    "name": "iB3III",
+    "areaName": "iB3III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "9c0254833076"
+  },
+  {
+    "polygonId": "assur-ib3iv-5d5a2ab832b9",
+    "name": "iB3IV",
+    "areaName": "iB3IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5d5a2ab832b9"
+  },
+  {
+    "polygonId": "assur-ib4i-69c767eaaa9b",
+    "name": "iB4I",
+    "areaName": "iB4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "69c767eaaa9b"
+  },
+  {
+    "polygonId": "assur-ib4ii-6d81d4c48c28",
+    "name": "iB4II",
+    "areaName": "iB4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6d81d4c48c28"
+  },
+  {
+    "polygonId": "assur-ib4iii-0a4e3a9fea3c",
+    "name": "iB4III",
+    "areaName": "iB4III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "0a4e3a9fea3c"
+  },
+  {
+    "polygonId": "assur-ib4iv-a6b663a19751",
+    "name": "iB4IV",
+    "areaName": "iB4IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a6b663a19751"
+  },
+  {
+    "polygonId": "assur-ib4v-a8f3256907f1",
+    "name": "iB4V",
+    "areaName": "iB4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a8f3256907f1"
+  },
+  {
+    "polygonId": "assur-ib6iii-a1259d123f1e",
+    "name": "iB6III",
+    "areaName": "iB6III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "a1259d123f1e"
+  },
+  {
+    "polygonId": "assur-ib7i-ee0365a27ee5",
+    "name": "iB7I",
+    "areaName": "iB7I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "ee0365a27ee5"
+  },
+  {
+    "polygonId": "assur-ic3ii-b81d7278c59c",
+    "name": "iC3II",
+    "areaName": "iC3II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "b81d7278c59c"
+  },
+  {
+    "polygonId": "assur-ic4i-df9fe989b4ff",
+    "name": "iC4I",
+    "areaName": "iC4I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "df9fe989b4ff"
+  },
+  {
+    "polygonId": "assur-ic4ii-12e470b76085",
+    "name": "iC4II",
+    "areaName": "iC4II",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "12e470b76085"
+  },
+  {
+    "polygonId": "assur-ic4iii-6b755722331e",
+    "name": "iC4III",
+    "areaName": "iC4III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6b755722331e"
+  },
+  {
+    "polygonId": "assur-ic4iv-c0a218a92708",
+    "name": "iC4IV",
+    "areaName": "iC4IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "c0a218a92708"
+  },
+  {
+    "polygonId": "assur-ic4v-6332648aea16",
+    "name": "iC4V",
+    "areaName": "iC4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "6332648aea16"
+  },
+  {
+    "polygonId": "assur-ic5i-5cb3680f11f1",
+    "name": "iC5I",
+    "areaName": "iC5I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5cb3680f11f1"
+  },
+  {
+    "polygonId": "assur-ic6iii-26ecdd95a8d8",
+    "name": "iC6III",
+    "areaName": "iC6III",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "26ecdd95a8d8"
+  },
+  {
+    "polygonId": "assur-id3iv-5388a6fdd9f3",
+    "name": "iD3IV",
+    "areaName": "iD3IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "5388a6fdd9f3"
+  },
+  {
+    "polygonId": "assur-id3v-b2da9fe54e6d",
+    "name": "iD3V",
+    "areaName": "iD3V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "b2da9fe54e6d"
+  },
+  {
+    "polygonId": "assur-id4iv-becfbc958fce",
+    "name": "iD4IV",
+    "areaName": "iD4IV",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "becfbc958fce"
+  },
+  {
+    "polygonId": "assur-id4v-b45c39108b04",
+    "name": "iD4V",
+    "areaName": "iD4V",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "b45c39108b04"
+  },
+  {
+    "polygonId": "assur-id5i-9cf249acf23a",
+    "name": "iD5I",
+    "areaName": "iD5I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "9cf249acf23a"
+  },
+  {
+    "polygonId": "assur-id8i-d16dd7b3c388",
+    "name": "iD8I",
+    "areaName": "iD8I",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d16dd7b3c388"
+  },
+  {
+    "polygonId": "assur-l8-d809790a6828",
+    "name": "l8",
+    "areaName": "l8",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "d809790a6828"
+  },
+  {
+    "polygonId": "assur-l9-081650a81622",
+    "name": "l9",
+    "areaName": "l9",
+    "siteId": "ASSUR",
+    "siteName": "Aššur",
+    "geometryChecksum": "081650a81622"
+  },
+  {
+    "polygonId": "assur-la9ii-a1ccc873746b",
+    "name": "lA9II",
+    "areaName": "lA9II",
     "siteId": "ASSUR",
     "siteName": "Aššur",
     "geometryChecksum": "a1ccc873746b"

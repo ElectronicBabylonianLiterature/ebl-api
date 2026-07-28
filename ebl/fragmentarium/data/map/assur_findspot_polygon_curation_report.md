@@ -1,8 +1,8 @@
 # Aššur Map Curation Report
 
 - Generated from immutable ODS and shapefile sources.
-- Verified mappings: 304
-- Unresolved rows: 42
+- Verified mappings: 317
+- Unresolved rows: 29
 - Source conflicts: 0
 - Invalid source rows: 0
 
@@ -20,6 +20,5 @@ Unresolved area labels:
 
 - `<blank>`: 7
 - `Wohnquartier`: 16
-- `bB6I`: 13
 - `i3? town area`: 1
 - `town area`: 5

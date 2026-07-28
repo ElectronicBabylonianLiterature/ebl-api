@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Sequence
 
 from marshmallow import ValidationError
-from pymongo import UpdateOne
 
 from ebl.fragmentarium.application.findspot_map_location_importer_models import (
     ASSUR_SITE_ID,
@@ -16,7 +15,14 @@ from ebl.fragmentarium.application.findspot_map_location_importer_models import 
     MapLocationImportRecord,
     MapLocationImportRecordSchema,
 )
-from ebl.fragmentarium.application.map_location_schema import MapLocationSchema
+from ebl.fragmentarium.application.findspot_map_location_importer_plan import (
+    build_plan,
+    write_operations,
+)
+from ebl.fragmentarium.application.findspot_map_location_target import (
+    DEVELOPMENT_CLASSIFICATION,
+    fingerprint_database,
+)
 from ebl.fragmentarium.infrastructure.mongo_findspot_repository import (
     MongoFindspotRepository,
 )
@@ -79,26 +85,39 @@ def run_import(
     database,
     mappings_path: Path | str = DEFAULT_MAPPINGS_PATH,
     inventory_path: Path | str = DEFAULT_INVENTORY_PATH,
+    previous_mappings_path: Path | str | None = None,
+    previous_inventory_path: Path | str | None = None,
     dry_run: bool = True,
     rollback: bool = False,
 ) -> ImportSummary:
     polygon_ids = load_polygon_inventory(inventory_path)
     records, issues, scanned = load_import_records(mappings_path, polygon_ids)
+    previous_records = _load_previous_records(
+        previous_mappings_path, previous_inventory_path
+    )
     findspots = _load_findspots(database)
     valid_records, site_issues = _validate_findspots(records, findspots)
     issues = (*issues, *site_issues)
-    existing, new, changed, skipped, operations = _build_plan(
-        valid_records, findspots, rollback
+    plan_issues, existing, new, changed, skipped, operations = build_plan(
+        valid_records, findspots, rollback, previous_records
+    )
+    issues = (*issues, *plan_issues)
+    issue_counts = _count_issues(issues)
+    fingerprint = fingerprint_database(
+        database, valid_records, polygon_ids, previous_records
     )
 
     applied = 0
     if not dry_run and not issues and operations:
-        applied = _write_operations(database[FINDSPOTS_COLLECTION], operations)
+        applied = write_operations(database[FINDSPOTS_COLLECTION], operations)
 
     return ImportSummary(
         scanned=scanned,
         valid=len(valid_records),
         invalid=len(issues),
+        unknown_findspots=issue_counts["unknown_findspots"],
+        wrong_site=issue_counts["wrong_site"],
+        unknown_polygons=issue_counts["unknown_polygons"],
         existing=existing,
         new=new,
         changed=changed,
@@ -107,7 +126,43 @@ def run_import(
         dry_run=dry_run,
         rollback=rollback,
         issues=issues,
+        database_classification=DEVELOPMENT_CLASSIFICATION
+        if fingerprint.is_approved_development
+        else "local",
+        total_findspots=fingerprint.total_findspots,
+        assur_findspots=fingerprint.assur_findspots,
+        unresolved_assur_findspots=fingerprint.unresolved_assur_findspots,
     )
+
+
+def _load_previous_records(
+    previous_mappings_path: Path | str | None,
+    previous_inventory_path: Path | str | None,
+) -> tuple[MapLocationImportRecord, ...]:
+    if previous_mappings_path is None:
+        return ()
+    if previous_inventory_path is None:
+        raise ValueError("previous inventory is required with previous mappings")
+    previous_polygon_ids = load_polygon_inventory(previous_inventory_path)
+    records, issues, _ = load_import_records(
+        previous_mappings_path, previous_polygon_ids
+    )
+    if issues:
+        raise ValueError("previous mappings are invalid")
+    return records
+
+
+def _count_issues(issues: Sequence[ImportIssue]) -> dict[str, int]:
+    return {
+        "unknown_findspots": sum(
+            issue.reason == "findspot not found" for issue in issues
+        ),
+        "wrong_site": sum(issue.reason == "findspot is not Aššur" for issue in issues),
+        "unknown_polygons": sum(
+            issue.reason.startswith("polygonIds not found in inventory")
+            for issue in issues
+        ),
+    }
 
 
 def _load_findspots(database) -> dict[int, object]:
@@ -132,59 +187,6 @@ def _validate_findspots(
             continue
         valid_records.append(record)
     return tuple(valid_records), tuple(issues)
-
-
-def _build_plan(
-    records: Sequence[MapLocationImportRecord],
-    findspots: dict[int, object],
-    rollback: bool,
-) -> tuple[int, int, int, int, tuple[UpdateOne, ...]]:
-    existing = new = changed = skipped = 0
-    operations: list[UpdateOne] = []
-    dump_schema = MapLocationSchema()
-    for record in records:
-        current = getattr(findspots[record.findspot_id], "map_location", None)
-        desired = record.map_location
-        desired_doc = dump_schema.dump(desired)
-        if rollback:
-            if current is None:
-                existing += 1
-                continue
-            if current == desired:
-                changed += 1
-                operations.append(
-                    UpdateOne(
-                        {"_id": record.findspot_id, "mapLocation": desired_doc},
-                        {"$unset": {"mapLocation": ""}},
-                    )
-                )
-            else:
-                skipped += 1
-            continue
-        if current is None:
-            new += 1
-        elif current == desired:
-            existing += 1
-            continue
-        else:
-            changed += 1
-        operations.append(
-            UpdateOne(
-                {"_id": record.findspot_id}, {"$set": {"mapLocation": desired_doc}}
-            )
-        )
-    return existing, new, changed, skipped, tuple(operations)
-
-
-def _write_operations(collection, operations: Sequence[UpdateOne]) -> int:
-    try:
-        with collection.database.client.start_session() as session:
-            with session.start_transaction():
-                return collection.bulk_write(
-                    list(operations), ordered=True, session=session
-                ).modified_count
-    except Exception:
-        return collection.bulk_write(list(operations), ordered=True).modified_count
 
 
 def _load_json_array(path: Path | str) -> list[dict]:

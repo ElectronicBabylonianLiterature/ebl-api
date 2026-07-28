@@ -16,8 +16,9 @@ def test_build_assur_artifacts_counts_and_links():
     inventory_ids = {item["polygonId"] for item in artifacts["inventory"]}
 
     assert len(artifacts["inventory"]) == 134
-    assert len(artifacts["mappings"]) == 304
-    assert len(artifacts["curation"]) == 42
+    assert len(artifacts["mappings"]) == 317
+    assert len(artifacts["curation"]) == 29
+    assert len({item["polygonIds"][0] for item in artifacts["mappings"]}) == 133
     assert all(item["polygonIds"][0] in inventory_ids for item in artifacts["mappings"])
     assert all(
         record.status in {"verified-mapped", "needs-human-curation"}

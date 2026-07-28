@@ -114,6 +114,8 @@ def build_assur_polygon_id(
 def _build_polygon(
     name: str, rings: tuple[tuple[tuple[float, float], ...], ...]
 ) -> AssurPolygon:
+    if _contains_control_character(name):
+        raise ValueError(f"Aššur polygon name contains a control character: {name!r}")
     polygon_id, checksum = build_assur_polygon_id(name, rings)
     return AssurPolygon(
         name=name,
@@ -123,14 +125,15 @@ def _build_polygon(
     )
 
 
+def _contains_control_character(value: str) -> bool:
+    return any(unicodedata.category(character) == "Cc" for character in value)
+
+
 def _expand_ods_row(row: ET.Element) -> list[str]:
     values: list[str] = []
     for cell in row.findall("table:table-cell", _ODS_NAMESPACES):
-        repeat = int(
-            cell.attrib.get(
-                "{%s}number-columns-repeated" % _ODS_NAMESPACES["table"], "1"
-            )
-        )
+        repeat_key = "{%s}number-columns-repeated" % _ODS_NAMESPACES["table"]
+        repeat = int(cell.attrib.get(repeat_key, "1"))
         text = "".join(
             part for element in cell.iter() for part in [element.text] if part
         )
@@ -149,9 +152,10 @@ def _load_dbf_rows(path: Path, encoding: str) -> tuple[dict[str, str], ...]:
         record_length = struct.unpack("<H", header[10:12])[0]
         fields = []
         while True:
-            descriptor = file_.read(32)
-            if descriptor[0] == 0x0D:
+            marker = file_.read(1)
+            if marker == b"\x0d":
                 break
+            descriptor = marker + file_.read(31)
             name = descriptor[:11].split(b"\x00", 1)[0].decode("latin1")
             fields.append((name, descriptor[16]))
         rows = []
