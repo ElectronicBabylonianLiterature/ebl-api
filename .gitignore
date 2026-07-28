@@ -137,3 +137,11 @@ core.*
 
 # Added by ggshield
 .cache_ggshield
+
+# Claude Code
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Qlty
+.qlty/

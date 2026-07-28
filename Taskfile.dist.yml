@@ -15,6 +15,7 @@ tasks:
       - task: format
       - task: lint
       - task: type
+      - task: type-pyright
       - task: test
       - task: lint-md
 
@@ -41,6 +42,26 @@ tasks:
   type:
     cmds:
       - poetry run pyre check
+
+  type-pyright:
+    desc: >-
+      Pyright (the checker behind Pylance) on Python files changed against
+      the merge base with master. Pass explicit paths after -- to override.
+    cmds:
+      - |
+        files="{{.CLI_ARGS}}"
+        if [ -z "$files" ]; then
+          files=$( {
+            git diff --name-only --diff-filter=ACMR \
+              "$(git merge-base HEAD master)" -- '*.py'
+            git ls-files --others --exclude-standard -- '*.py'
+          } | sort -u )
+        fi
+        if [ -z "$files" ]; then
+          echo "No changed Python files to check."
+        else
+          npx --yes pyright@1.1.411 $files
+        fi
 
   format:
     cmds:
