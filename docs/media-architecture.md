@@ -203,6 +203,10 @@ Fragment-scoped routes reuse existing fragment authorization, avoid ambiguous
 media-only authorization, support media shared by several fragments, reduce IDOR
 risk, and keep legacy route delegation straightforward.
 
+Future media-route URL helpers percent-encode each dynamic path segment.
+Legacy `thumbnailPath` keeps the existing raw museum-number path for compatibility
+until that public contract is intentionally migrated.
+
 ## Future DTO contracts
 
 ### Query/list summary
