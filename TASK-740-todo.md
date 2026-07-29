@@ -1,0 +1,22 @@
+# TASK-740 TODO — Address Fabdulla1's latest review on PR #740
+
+- [x] Fetch PR #740 reviews, inline comments, and issue comments via `gh api`
+- [x] Identify Fabdulla1's latest review (`4806668300`, APPROVED, 2026-07-29)
+- [x] Enumerate the findings — one: strengthen the no-retry regression test
+- [x] Trace the request path to derive the expected counts (1 update, 2 lookups)
+- [x] Assert the update operation ran exactly once
+- [x] Assert the validation-plus-response lookup count is not exceeded
+- [x] Check the data hard gate (one array, one type) — no data shape touched
+- [x] Check the 250-line limit — `test_realia_info_route.py` = 244 lines
+- [x] `task format`
+- [x] `task lint`
+- [x] `task type` (pyre)
+- [x] `task type-pyright`
+- [x] `poetry run mypy <changed file> --ignore-missing-imports`
+- [x] `poetry run flake8 <changed file> --max-line-length=120`
+- [x] `task test` — 3946 passed, 0 failures
+- [x] Coverage — 100% on the related source modules
+- [x] `task lint-md`
+- [x] Run the service and exercise the affected route (runtime-surface gate)
+- [x] Re-read copilot instructions, confirm every gate, report uncommitted
+- [ ] Remove `TASK-740-todo.md` / `TASK-740-log.md` before the PR is merged

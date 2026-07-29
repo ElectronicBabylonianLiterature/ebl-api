@@ -1,7 +1,11 @@
+from typing import List, Sequence
+
 import falcon
 from pymongo.errors import PyMongoError
 
+from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.fragmentarium.domain.named_entity import RealiaAnnotationSpan
+from ebl.realia.domain.realia_entry import RealiaEntry
 from ebl.tests.factories.fragment import TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.realia_helpers import (
     create_realia_fragment,
@@ -196,7 +200,7 @@ def test_retrieve_all_degrades_realia_info_on_infrastructure_failure(
 
 
 def test_write_commits_and_degrades_realia_info_on_infrastructure_failure(
-    client, fragmentarium, realia_repository, monkeypatch
+    client, fragmentarium, fragment_repository, realia_repository, monkeypatch
 ):
     store_realia(realia_repository, APKALLU_ID, "Apkallu", ["Divine names"])
     fragment = TransliteratedFragmentFactory.build().set_token_ids()
@@ -207,20 +211,29 @@ def test_write_commits_and_degrades_realia_info_on_infrastructure_failure(
         "realia": [{"id": "Realia-1", "realiaId": APKALLU_ID, "span": ["Word-2"]}],
     }
     original = realia_repository.find_by_realia_ids
-    call_count = {"value": 0}
+    original_update_field = fragment_repository.update_field
+    lookups: List[List[str]] = []
+    updated_fields: List[str] = []
 
-    def fail_only_after_write(realia_ids):
-        call_count["value"] += 1
-        if call_count["value"] == 1:
+    def fail_only_after_write(realia_ids: Sequence[str]) -> Sequence[RealiaEntry]:
+        lookups.append(list(realia_ids))
+        if len(lookups) == 1:
             return original(realia_ids)
         raise PyMongoError("realia store unavailable")
 
+    def record_update_field(field: str, updated_fragment: Fragment) -> None:
+        updated_fields.append(field)
+        return original_update_field(field, updated_fragment)
+
     monkeypatch.setattr(realia_repository, "find_by_realia_ids", fail_only_after_write)
+    monkeypatch.setattr(fragment_repository, "update_field", record_update_field)
 
     post_result = client.simulate_post(url, json=payload)
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json["realiaInfo"] == []
+    assert updated_fields == ["named_entities"]
+    assert lookups == [[APKALLU_ID], [APKALLU_ID]]
 
     monkeypatch.setattr(realia_repository, "find_by_realia_ids", original)
     get_result = client.simulate_get(f"/fragments/{fragment.number}")
