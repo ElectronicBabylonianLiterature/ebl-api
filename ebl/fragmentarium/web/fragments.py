@@ -39,6 +39,10 @@ from ebl.users.web.require_scope import require_fragment_read_scope
 
 def _parse_fragment_query(parameters, *parsers):
     for parser in parsers:
+        if not callable(parser):
+            raise DataError(
+                f"Invalid query parser '{parser}': expected a callable parser function."
+            )
         parameters = parser(parameters)
     return parameters
 
