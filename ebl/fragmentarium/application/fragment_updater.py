@@ -144,9 +144,9 @@ class FragmentUpdater:
         self, number: MuseumNumber, references: Sequence[Reference], user: User
     ) -> Tuple[Fragment, bool]:
         fragment = self._repository.query_by_museum_number(number)
-        self._bibliography.validate_references(references)
+        canonical_references = self._bibliography.canonicalize_references(references)
 
-        updated_fragment = fragment.set_references(references)
+        updated_fragment = fragment.set_references(canonical_references)
 
         self._create_changelog(user, fragment, updated_fragment)
         self._repository.update_field("references", updated_fragment)
