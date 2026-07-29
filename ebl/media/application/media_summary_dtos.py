@@ -5,7 +5,7 @@ import attr
 from ebl.media.application.media_dtos import MediaRepresentationDto
 from ebl.media.application.media_urls import (
     fragment_media_thumbnail_url,
-    fragment_thumbnail_url,
+    legacy_fragment_thumbnail_url,
 )
 from ebl.media.domain import Media, MediaType, ThumbnailSize
 from ebl.transliteration.domain.museum_number import MuseumNumber
@@ -43,7 +43,7 @@ class FragmentMediaSummaryDto:
         )
         thumbnail_photo = _photo_with_small_thumbnail_for(fragment_id, ordered_media)
         thumbnail_path = (
-            fragment_thumbnail_url(fragment_id, ThumbnailSize.SMALL)
+            legacy_fragment_thumbnail_url(fragment_id, ThumbnailSize.SMALL)
             if thumbnail_photo is not None
             else None
         )

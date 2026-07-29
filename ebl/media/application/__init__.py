@@ -4,6 +4,7 @@ from ebl.media.application.media import (
     ImportMode,
     ImportReport,
     ImportRequest,
+    DisplayRepresentationWriteRequest,
     MediaBackfill,
     MediaImporter,
     MediaReader,
@@ -11,8 +12,9 @@ from ebl.media.application.media import (
     MediaRepresentationStore,
     MediaService,
     MediaWriter,
+    OriginalRepresentationWriteRequest,
     RepresentationHandle,
-    RepresentationWriteRequest,
+    ThumbnailRepresentationWriteRequest,
 )
 
 __all__ = [
@@ -21,6 +23,7 @@ __all__ = [
     "ImportMode",
     "ImportReport",
     "ImportRequest",
+    "DisplayRepresentationWriteRequest",
     "MediaBackfill",
     "MediaImporter",
     "MediaReader",
@@ -28,6 +31,7 @@ __all__ = [
     "MediaRepresentationStore",
     "MediaService",
     "MediaWriter",
+    "OriginalRepresentationWriteRequest",
     "RepresentationHandle",
-    "RepresentationWriteRequest",
+    "ThumbnailRepresentationWriteRequest",
 ]

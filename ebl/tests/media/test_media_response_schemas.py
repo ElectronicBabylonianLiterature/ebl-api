@@ -6,6 +6,7 @@ from ebl.media.domain import MediaRepresentations, MediaType, ThumbnailSize
 from ebl.tests.media.factories import (
     DEFAULT_COPY_MEDIA_ID,
     DEFAULT_MEDIA_ID,
+    association,
     copy_media,
     display_representation,
     large_thumbnail_representation,
@@ -83,6 +84,22 @@ def test_fragment_media_response_serializes_display_representation() -> None:
         "width": 2560,
         "height": 1920,
     }
+
+
+def test_fragment_media_response_encodes_future_media_urls() -> None:
+    fragment_id = MuseumNumber("A/B", "1")
+    item = photo_media(associations=(association(fragment_id=fragment_id),))
+
+    [result] = FragmentMediaResponseDtoSchema().dump(
+        FragmentMediaResponseDto.of(fragment_id, (item,))
+    )["media"]
+
+    assert result["representations"]["original"]["url"] == (
+        f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/file"
+    )
+    assert result["representations"]["thumbnails"]["small"]["url"] == (
+        f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/thumbnail/small"
+    )
 
 
 def test_fragment_media_response_omits_optional_empty_fields() -> None:

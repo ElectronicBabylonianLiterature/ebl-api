@@ -1,3 +1,5 @@
+import attr
+
 from ebl.bibliography.application.reference_schema import ReferenceSchema
 from ebl.common.application.schemas import AccessionSchema
 from ebl.common.domain.project import ResearchProject
@@ -26,6 +28,7 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
 )
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
+from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def build_summary() -> FragmentQuerySummary:
@@ -112,9 +115,8 @@ def test_fragment_query_summary_schema_dump_exact_shape():
         "hasPhoto": True,
         "thumbnailPath": f"/fragments/{summary.museum_number}/thumbnail/small",
     }
-    assert (
-        dumped["matchingLinePreview"]["lines"][0]["prefix"]
-        == (summary.matching_line_preview["lines"][0]["prefix"])
+    assert dumped["matchingLinePreview"]["lines"][0]["prefix"] == (
+        summary.matching_line_preview["lines"][0]["prefix"]
     )
     assert dumped["matchingLinePreview"]["lines"][0]["text"]
     assert dumped["matchingLinePreview"]["lines"][0]["tokens"][0]["value"]
@@ -133,6 +135,14 @@ def test_fragment_query_summary_schema_roundtrip():
         FragmentQuerySummarySchema().load(FragmentQuerySummarySchema().dump(summary))
         == summary
     )
+
+
+def test_fragment_query_summary_preserves_legacy_raw_thumbnail_path():
+    summary = attr.evolve(build_summary(), museum_number=MuseumNumber("A/B", "1"))
+
+    dumped = FragmentQuerySummarySchema().dump(summary)
+
+    assert dumped["thumbnailPath"] == "/fragments/A/B.1/thumbnail/small"
 
 
 def test_fragment_query_summary_compares_with_compatible_query_item():

@@ -29,11 +29,27 @@ class RepresentationHandle:
 
 
 @attr.s(auto_attribs=True, frozen=True)
-class RepresentationWriteRequest:
+class _RepresentationWriteRequest:
     media_id: MediaId
     content: BinaryIO
     representation: MediaRepresentation
-    thumbnail_size: Optional[ThumbnailSize] = None
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class OriginalRepresentationWriteRequest(_RepresentationWriteRequest):
+    pass
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class DisplayRepresentationWriteRequest(_RepresentationWriteRequest):
+    pass
+
+
+@attr.s(auto_attribs=True, frozen=True)
+class ThumbnailRepresentationWriteRequest(_RepresentationWriteRequest):
+    thumbnail_size: ThumbnailSize = attr.ib(
+        validator=attr.validators.instance_of(ThumbnailSize)
+    )
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -122,15 +138,15 @@ class MediaRepresentationStore(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def write_original(self, request: RepresentationWriteRequest) -> None:
+    def write_original(self, request: OriginalRepresentationWriteRequest) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def write_display(self, request: RepresentationWriteRequest) -> None:
+    def write_display(self, request: DisplayRepresentationWriteRequest) -> None:
         raise NotImplementedError
 
     @abstractmethod
-    def write_thumbnail(self, request: RepresentationWriteRequest) -> None:
+    def write_thumbnail(self, request: ThumbnailRepresentationWriteRequest) -> None:
         raise NotImplementedError
 
     @abstractmethod

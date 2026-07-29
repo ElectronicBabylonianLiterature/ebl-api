@@ -17,7 +17,7 @@ from ebl.fragmentarium.domain.fragment_query_summary import (
     FragmentQuerySummary,
     empty_matching_line_preview,
 )
-from ebl.media.application.media_urls import fragment_thumbnail_url
+from ebl.media.application.media_urls import legacy_fragment_thumbnail_url
 from ebl.media.domain import ThumbnailSize
 from ebl.schemas import ResearchProjectField, ValueEnumField
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
@@ -150,7 +150,7 @@ class FragmentQuerySummarySchema(Schema):
     match_count = fields.Integer(required=True, data_key="matchCount")
     has_photo = fields.Boolean(required=True, data_key="hasPhoto")
     thumbnail_path = fields.Function(
-        lambda summary: fragment_thumbnail_url(
+        lambda summary: legacy_fragment_thumbnail_url(
             summary.museum_number, ThumbnailSize.SMALL
         ),
         dump_only=True,
