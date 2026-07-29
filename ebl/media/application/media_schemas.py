@@ -3,16 +3,16 @@ from typing import FrozenSet
 from marshmallow import Schema, fields, post_dump
 
 from ebl.media.application.media_dtos import (
-    FragmentMediaItemDto,
-    FragmentMediaResponseDto,
-    MediaReferenceDto,
-    MediaRepresentationDto,
-    MediaRepresentationsDto,
+    FragmentMediaItemDto as FragmentMediaItemDto,
+    FragmentMediaResponseDto as FragmentMediaResponseDto,
+    MediaReferenceDto as MediaReferenceDto,
+    MediaRepresentationDto as MediaRepresentationDto,
+    MediaRepresentationsDto as MediaRepresentationsDto,
 )
 from ebl.media.application.media_summary_dtos import (
-    FragmentMediaSummaryDto,
-    MediaSummaryDto,
-    MediaSummaryPrimaryDto,
+    FragmentMediaSummaryDto as FragmentMediaSummaryDto,
+    MediaSummaryDto as MediaSummaryDto,
+    MediaSummaryPrimaryDto as MediaSummaryPrimaryDto,
 )
 from ebl.media.domain import MediaType
 from ebl.schemas import NameEnumField
@@ -89,21 +89,6 @@ class FragmentMediaSummaryDtoSchema(OmitEmptyMixin, Schema):
     thumbnail_path = fields.String(data_key="thumbnailPath")
 
 
-__all__ = [
-    "FragmentMediaItemDto",
-    "FragmentMediaItemDtoSchema",
-    "FragmentMediaResponseDto",
-    "FragmentMediaResponseDtoSchema",
-    "FragmentMediaSummaryDto",
-    "FragmentMediaSummaryDtoSchema",
-    "MediaReferenceDto",
-    "MediaReferenceDtoSchema",
-    "MediaRepresentationDto",
-    "MediaRepresentationDtoSchema",
-    "MediaRepresentationsDto",
-    "MediaRepresentationsDtoSchema",
-    "MediaSummaryDto",
-    "MediaSummaryDtoSchema",
-    "MediaSummaryPrimaryDto",
-    "MediaSummaryPrimaryDtoSchema",
-]
+__all__ = tuple(
+    name for name in globals() if name.endswith("Dto") or name.endswith("DtoSchema")
+)

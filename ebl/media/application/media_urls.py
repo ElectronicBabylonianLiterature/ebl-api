@@ -10,8 +10,7 @@ def _path_segment(value) -> str:
 
 def fragment_media_original_url(fragment_id: MuseumNumber, media_id: MediaId) -> str:
     return (
-        f"/fragments/{_path_segment(fragment_id)}/media/"
-        f"{_path_segment(media_id)}/file"
+        f"/fragments/{_path_segment(fragment_id)}/media/{_path_segment(media_id)}/file"
     )
 
 
