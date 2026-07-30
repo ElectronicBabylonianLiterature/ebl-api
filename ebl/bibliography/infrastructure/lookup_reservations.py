@@ -1,4 +1,5 @@
 from contextlib import suppress
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Callable, Sequence
 
@@ -15,6 +16,13 @@ from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography_lookup_reservations"
+
+
+@dataclass(frozen=True)
+class LookupReservationClaim:
+    operation: LookupReservationOperation
+    value: str
+    now: datetime
 
 
 class MongoLookupReservations:
@@ -45,8 +53,9 @@ class MongoLookupReservations:
     ) -> None:
         claimed: list[str] = []
         for value in dict.fromkeys(values):
+            claim = LookupReservationClaim(operation, value, now)
             try:
-                self._insert_pending(operation, value, now, owns_value)
+                self._insert_pending(claim, owns_value)
             except LookupValueReservationError:
                 self._release_values(operation.owner, claimed)
                 raise
@@ -122,24 +131,22 @@ class MongoLookupReservations:
 
     def _insert_pending(
         self,
-        operation: LookupReservationOperation,
-        value: str,
-        now: datetime,
+        claim: LookupReservationClaim,
         owns_value: Callable[[str, str], bool],
     ) -> None:
         try:
-            self._collection.insert_one(self._pending_document(operation, value))
+            self._collection.insert_one(self._pending_document(claim))
         except DuplicateError as error:
-            self._handle_existing_reservation(operation, value, now, owns_value, error)
+            self._handle_existing_reservation(claim, owns_value, error)
 
     def _handle_existing_reservation(
         self,
-        operation: LookupReservationOperation,
-        value: str,
-        now: datetime,
+        claim: LookupReservationClaim,
         owns_value: Callable[[str, str], bool],
         error: DuplicateError,
     ) -> None:
+        operation = claim.operation
+        value = claim.value
         reservation = self._collection.find_one_by_id(value)
         if (
             reservation.get("owner") == operation.owner
@@ -152,27 +159,26 @@ class MongoLookupReservations:
             and owns_value(operation.entry_id, value)
         ):
             return
-        self._reconcile_reservation(reservation, now, owns_value)
+        self._reconcile_reservation(reservation, claim.now, owns_value)
         reservation = self._collection.find_one_by_id(value)
         if reservation.get("state") == LookupReservationState.ABANDONED.value:
             self._collection.replace_one(
-                self._pending_document(operation, value),
+                self._pending_document(claim),
                 {"_id": value, "state": LookupReservationState.ABANDONED.value},
+                upsert=True,
             )
             return
         raise LookupValueReservationError(value) from error
 
-    def _pending_document(
-        self, operation: LookupReservationOperation, value: str
-    ) -> dict:
+    def _pending_document(self, claim: LookupReservationClaim) -> dict:
         return {
-            "_id": value,
-            "value": value,
-            "entryId": operation.entry_id,
-            "owner": operation.owner,
+            "_id": claim.value,
+            "value": claim.value,
+            "entryId": claim.operation.entry_id,
+            "owner": claim.operation.owner,
             "state": LookupReservationState.PENDING.value,
-            "createdAt": datetime.utcnow(),
-            "expiresAt": operation.expires_at,
+            "createdAt": claim.now,
+            "expiresAt": claim.operation.expires_at,
         }
 
     def _reconcile_reservation(

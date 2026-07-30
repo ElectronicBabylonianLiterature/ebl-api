@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from typing import Any, Mapping, Optional, Protocol, Sequence, cast
 
 import jsonschema
@@ -33,15 +34,19 @@ PARTNER_METADATA_FIELDS = frozenset(
 
 
 class BibliographyCore(Protocol):
+    @abstractmethod
     def create(self, entry: dict, user: User) -> str:
         raise NotImplementedError
 
+    @abstractmethod
     def update(self, entry: dict, user: User) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     def find(self, id_: str) -> dict:
         raise NotImplementedError
 
+    @abstractmethod
     def find_duplicate_candidates(self, entry: dict, limit: int = 10) -> dict:
         raise NotImplementedError
 

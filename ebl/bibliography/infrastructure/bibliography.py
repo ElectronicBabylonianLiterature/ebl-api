@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Sequence
 
 import pymongo
@@ -41,7 +41,7 @@ class MongoBibliographyRepository(BibliographyRepository):
     def claim_lookup_values(
         self, operation: LookupReservationOperation, values: Sequence[str]
     ) -> None:
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         self.reconcile_lookup_reservations(now)
         self._lookup_reservations.claim(
             operation, values, now, self._entry_owns_lookup_value
@@ -62,7 +62,7 @@ class MongoBibliographyRepository(BibliographyRepository):
 
     def lookup_value_is_reserved(self, value: str) -> bool:
         return self._lookup_reservations.is_active(
-            value, datetime.utcnow(), self._entry_owns_lookup_value
+            value, datetime.now(timezone.utc), self._entry_owns_lookup_value
         )
 
     def reconcile_lookup_reservations(self, now: datetime, limit: int = 100) -> int:

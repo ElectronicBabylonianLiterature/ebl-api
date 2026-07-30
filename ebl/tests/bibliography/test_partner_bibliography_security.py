@@ -1,15 +1,19 @@
 import json
+from types import SimpleNamespace
 
 import falcon
 import pytest
 
+from ebl.bibliography.web.bibliography_entries import (
+    reject_server_owned_partner_fields,
+)
+from ebl.errors import DataError
 from ebl.tests.bibliography.bibliography_route_test_helpers import (
     INSUFFICIENT_DATA_DUPLICATE_CANDIDATE_ID,
     duplicate_override_payload,
     insufficient_data_duplicate_result,
     patch_duplicate_override_result,
 )
-from ebl.errors import DataError
 from ebl.tests.factories.bibliography import BibliographyEntryFactory
 
 SERVER_OWNED_FIELDS = ("aliases", "deprecated", "redirectTo", "citationKey")
@@ -76,3 +80,9 @@ def test_create_partner_entry_rejects_server_owned_fields_when_schema_is_bypasse
         bibliography.create_partner_entry(entry, user)
 
     assert database["bibliography"].count_documents({}) == before_count
+
+
+def test_reject_server_owned_partner_fields_ignores_non_dict_media():
+    req = SimpleNamespace(media="not an object")
+
+    reject_server_owned_partner_fields(req, None, None, None)

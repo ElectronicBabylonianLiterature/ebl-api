@@ -175,6 +175,29 @@ def test_expired_abandoned_reservation_can_be_reclaimed(
     assert reservation["state"] == LookupReservationState.PENDING.value
 
 
+def test_reclaim_survives_abandoned_reservation_ttl_delete(
+    monkeypatch, database, bibliography_repository
+):
+    bibliography_repository.claim_lookup_values(
+        LookupReservationOperation("owner", "Q30000000", NOW), ["legacy-id"]
+    )
+    bibliography_repository.reconcile_lookup_reservations(LATER)
+    collection = bibliography_repository._lookup_reservations._collection
+    original_replace_one = collection.replace_one
+
+    def replace_after_ttl_delete(document, filter_=None, upsert=False):
+        database[COLLECTION].delete_one(filter_)
+        return original_replace_one(document, filter_, upsert)
+
+    monkeypatch.setattr(collection, "replace_one", replace_after_ttl_delete)
+
+    bibliography_repository.claim_lookup_values(operation("other"), ["legacy-id"])
+
+    reservation = database[COLLECTION].find_one({"_id": "legacy-id"})
+    assert reservation["owner"] == "other"
+    assert reservation["state"] == LookupReservationState.PENDING.value
+
+
 def test_retire_lookup_values_abandons_only_matching_committed_claim(
     database, bibliography_repository
 ):

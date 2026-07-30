@@ -4,6 +4,7 @@ from ebl.bibliography.application.partner_identity import (
     MAX_CITATION_KEY_SUFFIX,
     create_partner_alias,
     generate_partner_citation_key,
+    select_canonical_bibliography_id,
 )
 from ebl.errors import DataError, DuplicateError
 
@@ -42,3 +43,16 @@ def test_generate_partner_citation_key_raises_duplicate_when_candidates_exhauste
     assert len(checked_values) == MAX_CITATION_KEY_SUFFIX
     assert checked_values[0] == base_key
     assert checked_values[-1] == f"{base_key}-{MAX_CITATION_KEY_SUFFIX}"
+
+
+def test_select_canonical_bibliography_id_raises_when_candidates_are_exhausted(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        "ebl.bibliography.application.partner_identity."
+        "canonical_bibliography_id_candidates",
+        lambda _existing_ids: iter(()),
+    )
+
+    with pytest.raises(RuntimeError, match="Unable to generate bibliography id"):
+        select_canonical_bibliography_id([], lambda _value: False)

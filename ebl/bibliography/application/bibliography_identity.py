@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Callable
 
 from ebl.bibliography.application.bibliography_repository import (
@@ -28,7 +28,8 @@ def create_with_identity_claims(
     entry: dict[str, Any],
     user: User,
 ) -> str:
-    operation = new_lookup_reservation_operation(entry["id"], datetime.utcnow())
+    now = datetime.now(timezone.utc)
+    operation = new_lookup_reservation_operation(entry["id"], now)
     created = False
     try:
         repository.claim_lookup_values(operation, bibliography_lookup_values(entry))
@@ -39,7 +40,7 @@ def create_with_identity_claims(
             raise Defect(
                 f"Created bibliography id {created_id} does not match {entry['id']}."
             )
-        repository.commit_lookup_values(operation, datetime.utcnow())
+        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
         changelog.create(
             COLLECTION, user.profile, {"_id": entry["id"]}, create_mongo_entry(entry)
         )
@@ -62,16 +63,17 @@ def update_with_identity_claims(
     new_values = identity_values(entry)
     values_to_claim = sorted(new_values - old_values)
     values_to_retire = sorted(old_values - new_values)
-    operation = new_lookup_reservation_operation(entry["id"], datetime.utcnow())
+    now = datetime.now(timezone.utc)
+    operation = new_lookup_reservation_operation(entry["id"], now)
     updated = False
     try:
         repository.claim_lookup_values(operation, values_to_claim)
         ensure_lookup_values_available(find, entry, entry["id"])
         repository.update(entry)
         updated = True
-        repository.commit_lookup_values(operation, datetime.utcnow())
+        repository.commit_lookup_values(operation, datetime.now(timezone.utc))
         repository.retire_lookup_values(
-            entry["id"], values_to_retire, datetime.utcnow()
+            entry["id"], values_to_retire, datetime.now(timezone.utc)
         )
         changelog.create(
             COLLECTION,

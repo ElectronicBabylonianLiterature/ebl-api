@@ -5,6 +5,7 @@ from ebl.bibliography.application.bibliography_identity import (
     update_with_identity_claims,
 )
 from ebl.bibliography.application.bibliography_repository import LookupValueInUseError
+from ebl.bibliography.application.lookup_identity import bibliography_lookup_values
 from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
 from ebl.errors import NotFoundError
 
@@ -58,6 +59,15 @@ def test_create_releases_claims_when_post_claim_lookup_finds_existing_entry(user
         )
 
     assert repository.released_owners == [repository.operation.owner]
+
+
+def test_lookup_values_skip_non_mapping_aliases():
+    entry = {
+        "id": "Q30000000",
+        "aliases": ["legacy-id", {"value": "alias-id", "normalizedValue": "alias-id"}],
+    }
+
+    assert bibliography_lookup_values(entry) == ["Q30000000", "alias-id", "alias-id"]
 
 
 class UpdateRepositorySpy:

@@ -55,6 +55,17 @@ def test_find_many_deduplicates_redirected_canonical_entries(
     assert bibliography.find_many(ids) == [canonical_entry]
 
 
+def test_find_many_resolves_canonical_ids_only(
+    bibliography, bibliography_repository, when
+):
+    alias = "legacy-id"
+    ids = [alias]
+    when(bibliography_repository).query_by_ids(ids).thenReturn([])
+
+    assert bibliography.find_many(ids) == []
+    verify(bibliography_repository, times=0).query_by_alias(alias)
+
+
 def test_find_redirects_deprecated_citation_key(
     bibliography, bibliography_repository, when
 ):
@@ -95,6 +106,25 @@ def test_find_rejects_missing_redirect_target(
     when(bibliography_repository).query_by_id("MISSING_ID").thenRaise(NotFoundError)
 
     with pytest.raises(NotFoundError, match="redirect target MISSING_ID not found"):
+        bibliography.find(deprecated_entry["id"])
+
+
+@pytest.mark.parametrize("redirect_to", [None, ""])
+def test_find_rejects_deprecated_entry_without_redirect_target(
+    redirect_to, bibliography, bibliography_repository, when
+):
+    deprecated_entry = BibliographyEntryFactory.build(
+        id="DUPLICATE_ID", deprecated=True
+    )
+    if redirect_to is not None:
+        deprecated_entry["redirectTo"] = redirect_to
+    (
+        when(bibliography_repository)
+        .query_by_id(deprecated_entry["id"])
+        .thenReturn(deprecated_entry)
+    )
+
+    with pytest.raises(NotFoundError, match="has no redirect target"):
         bibliography.find(deprecated_entry["id"])
 
 

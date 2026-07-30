@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import falcon
 
@@ -18,7 +18,9 @@ from ebl.context import Context
 
 def create_bibliography_routes(api: falcon.App, context: Context):
     context.bibliography_repository.create_indexes()
-    context.bibliography_repository.reconcile_lookup_reservations(datetime.utcnow())
+    context.bibliography_repository.reconcile_lookup_reservations(
+        datetime.now(timezone.utc)
+    )
     bibliography = context.get_bibliography()
     bibliography_resource = BibliographyResource(bibliography)
     bibliography_entries = BibliographyEntriesResource(bibliography)
