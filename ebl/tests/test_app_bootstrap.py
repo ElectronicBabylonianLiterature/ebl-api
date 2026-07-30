@@ -63,7 +63,7 @@ def test_create_context_helpers(monkeypatch: pytest.MonkeyPatch) -> None:
     )
 
     with pytest.raises(FrozenInstanceError):
-        setattr(context, "ebl_ai_client", EblAiClient("http://localhost:8001"))
+        context.ebl_ai_client = EblAiClient("http://localhost:8001")
 
 
 def test_create_context_bootstraps_cache_indexes(
