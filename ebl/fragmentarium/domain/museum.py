@@ -93,6 +93,12 @@ class Museum(Enum):
         "US",
         "https://harvardartmuseums.org/",
     )
+    HARVEY_CUSHING_WHITNEY_MEDICAL_LIBRARY = (
+        "Harvey Cushing/John Hay Whitney Medical Library, Yale University",
+        "New Haven",
+        "US",
+        "https://library.medicine.yale.edu/",
+    )
     HATAY_ARCHAEOLOGY_MUSEUM = (
         "Hatay Archaeology Museum",
         "Antakya",
