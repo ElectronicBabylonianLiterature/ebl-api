@@ -1,6 +1,6 @@
 from contextlib import suppress
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Callable, Sequence
 
 import pymongo
@@ -16,6 +16,14 @@ from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography_lookup_reservations"
+
+
+def _to_utc_datetime(value: datetime) -> datetime:
+    return (
+        value.replace(tzinfo=timezone.utc)
+        if value.tzinfo is None
+        else value.astimezone(timezone.utc)
+    )
 
 
 @dataclass(frozen=True)
@@ -188,19 +196,20 @@ class MongoLookupReservations:
         entry_id = reservation["entryId"]
         state = LookupReservationState(reservation["state"])
         expires_at = reservation.get("expiresAt")
+        comparison_now = _to_utc_datetime(now)
         if (
             state == LookupReservationState.PENDING
             and isinstance(expires_at, datetime)
-            and expires_at <= now
+            and _to_utc_datetime(expires_at) <= comparison_now
         ):
             if owns_value(entry_id, value):
-                self._commit_value(value, now)
+                self._commit_value(value, comparison_now)
             else:
-                self._abandon_value(value, now, entry_id, state)
+                self._abandon_value(value, comparison_now, entry_id, state)
         elif state == LookupReservationState.COMMITTED and not owns_value(
             entry_id, value
         ):
-            self._abandon_value(value, now, entry_id, state)
+            self._abandon_value(value, comparison_now, entry_id, state)
 
     def _release_values(self, owner: str, values: Sequence[str]) -> None:
         for value in values:

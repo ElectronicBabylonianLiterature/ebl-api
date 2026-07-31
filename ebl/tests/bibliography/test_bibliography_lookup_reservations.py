@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -11,8 +11,12 @@ from ebl.bibliography.application.lookup_reservation import (
 )
 
 COLLECTION = "bibliography_lookup_reservations"
-NOW = datetime(2099, 1, 1)
+NOW = datetime(2099, 1, 1, tzinfo=timezone.utc)
 LATER = NOW + timedelta(minutes=10)
+
+
+def mongo_datetime(value: datetime) -> datetime:
+    return value.replace(tzinfo=None)
 
 
 def operation(owner: str, entry_id: str = "Q30000000") -> LookupReservationOperation:
@@ -31,7 +35,7 @@ def test_claim_lookup_values_creates_pending_reservation(
         "owner": "owner",
         "state": LookupReservationState.PENDING.value,
         "createdAt": database[COLLECTION].find_one({"_id": "legacy-id"})["createdAt"],
-        "expiresAt": LATER,
+        "expiresAt": mongo_datetime(LATER),
     }
 
 
@@ -78,7 +82,7 @@ def test_commit_lookup_values(database, bibliography_repository):
 
     reservation = database[COLLECTION].find_one({"_id": "legacy-id"})
     assert reservation["state"] == LookupReservationState.COMMITTED.value
-    assert reservation["committedAt"] == NOW
+    assert reservation["committedAt"] == mongo_datetime(NOW)
     assert "expiresAt" not in reservation
 
 
@@ -103,7 +107,7 @@ def test_reconcile_abandons_expired_pending_reservation(
 
     reservation = database[COLLECTION].find_one({"_id": "legacy-id"})
     assert reservation["state"] == LookupReservationState.ABANDONED.value
-    assert reservation["deleteAt"] == LATER
+    assert reservation["deleteAt"] == mongo_datetime(LATER)
 
 
 def test_reconcile_retains_unexpired_pending_reservation(
@@ -134,6 +138,73 @@ def test_reconcile_commits_expired_pending_reservation_with_entry(
     assert "expiresAt" not in reservation
 
 
+def test_reconcile_abandons_duplicate_citation_key_reservation_and_keeps_unique_one(
+    database, bibliography_repository, create_mongo_bibliography_entry
+):
+    bibliography_repository.claim_lookup_values(
+        LookupReservationOperation("owner-a", "Q30000000", NOW), ["shared-key"]
+    )
+    bibliography_repository.claim_lookup_values(
+        LookupReservationOperation("owner-b", "Q30000002", NOW), ["unique-key"]
+    )
+    database["bibliography"].insert_many(
+        [
+            create_mongo_bibliography_entry(
+                {"id": "Q30000000", "type": "book", "citationKey": "shared-key"}
+            ),
+            create_mongo_bibliography_entry(
+                {"id": "Q30000001", "type": "book", "citationKey": "shared-key"}
+            ),
+            create_mongo_bibliography_entry(
+                {"id": "Q30000002", "type": "book", "citationKey": "unique-key"}
+            ),
+        ]
+    )
+
+    assert bibliography_repository.reconcile_lookup_reservations(LATER) == 2
+
+    assert (
+        database[COLLECTION].find_one({"_id": "shared-key"})["state"]
+        == LookupReservationState.ABANDONED.value
+    )
+    assert (
+        database[COLLECTION].find_one({"_id": "unique-key"})["state"]
+        == LookupReservationState.COMMITTED.value
+    )
+
+
+def test_lookup_value_is_reserved_fails_closed_for_duplicate_alias(
+    database, bibliography_repository, create_mongo_bibliography_entry
+):
+    current_operation = operation("owner", entry_id="Q30000000")
+    bibliography_repository.claim_lookup_values(current_operation, ["legacy-id"])
+    bibliography_repository.commit_lookup_values(current_operation, NOW)
+    database["bibliography"].insert_many(
+        [
+            create_mongo_bibliography_entry(
+                {
+                    "id": "Q30000000",
+                    "type": "book",
+                    "aliases": [{"value": "legacy-id", "normalizedValue": "legacy-id"}],
+                }
+            ),
+            create_mongo_bibliography_entry(
+                {
+                    "id": "Q30000001",
+                    "type": "book",
+                    "aliases": [{"value": "legacy-id", "normalizedValue": "legacy-id"}],
+                }
+            ),
+        ]
+    )
+
+    assert bibliography_repository.lookup_value_is_reserved("legacy-id") is False
+    assert (
+        database[COLLECTION].find_one({"_id": "legacy-id"})["state"]
+        == LookupReservationState.ABANDONED.value
+    )
+
+
 def test_reconcile_retires_stale_committed_reservation(
     database, bibliography_repository
 ):
@@ -145,7 +216,7 @@ def test_reconcile_retires_stale_committed_reservation(
 
     reservation = database[COLLECTION].find_one({"_id": "legacy-id"})
     assert reservation["state"] == LookupReservationState.ABANDONED.value
-    assert reservation["deleteAt"] == LATER
+    assert reservation["deleteAt"] == mongo_datetime(LATER)
 
 
 def test_lookup_value_is_reserved_repairs_stale_committed_reservation(
