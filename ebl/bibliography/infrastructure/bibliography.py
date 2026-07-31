@@ -171,15 +171,21 @@ class MongoBibliographyRepository(BibliographyRepository):
         return self._collection.get_all_values("_id", ACTIVE_BIBLIOGRAPHY_FILTER)
 
     def _entry_owns_lookup_value(self, entry_id: str, value: str) -> bool:
+        if entry_id == value and self._collection.exists({"_id": entry_id}):
+            return True
+
         normalized_value = normalize_partner_id(value)
-        lookup_fields = [
-            {"_id": value},
-            {"citationKey": value},
-            {ALIASES_VALUE_FIELD: value},
-        ]
+        lookup_query: Dict[str, Any] = {
+            "$or": [
+                {"citationKey": value},
+                {ALIASES_VALUE_FIELD: value},
+            ]
+        }
         if normalized_value:
-            lookup_fields.append({"aliases.normalizedValue": normalized_value})
-        return self._collection.exists({"_id": entry_id, "$or": lookup_fields})
+            lookup_query["$or"].append({"aliases.normalizedValue": normalized_value})
+
+        matching_ids = self._collection.get_all_values("_id", lookup_query)
+        return matching_ids == [entry_id]
 
 
 def author_year_title_match(
