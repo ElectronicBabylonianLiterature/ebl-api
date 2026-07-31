@@ -11,7 +11,7 @@ from ebl.bibliography.application.duplicate_audit import (
 
 
 def duplicate_candidate_queries(entry: dict) -> Sequence[dict]:
-    queries = []
+    queries: list[dict] = []
     queries.extend(duplicate_strong_identifier_queries(entry))
     if author_year_query := contributor_year_query(entry):
         queries.append(author_year_query)
