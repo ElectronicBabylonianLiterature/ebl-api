@@ -1,5 +1,5 @@
 from PIL import Image
-from mockito import mock, verify, when
+from mockito import mock, verify
 
 from ebl.fragmentarium import retrieve_annotations
 from ebl.fragmentarium.retrieve_annotations import create_annotations, BoundingBox
@@ -67,10 +67,8 @@ def test_argument_parsing_only_one_argument():
         assert "Either specify both argument options or none at all" in str(e)
 
 
-def test_argument_parsing_defaults():
-    mock_context = mock()
-    mock_context.annotations_repository = mock()
-    mock_context.photo_repository = mock()
+def test_argument_parsing_defaults(when):
+    mock_context = mock({"annotations_repository": mock(), "photo_repository": mock()})
     when(mock_context.annotations_repository).retrieve_all_non_empty().thenReturn([])
     when(retrieve_annotations).create_context().thenReturn(mock_context)
 
@@ -93,7 +91,7 @@ def test_argument_parsing_defaults():
     verify(retrieve_annotations, times=3).create_directory(...)
 
 
-def test_context_fallback_to_mongo(monkeypatch):
+def test_context_fallback_to_mongo(monkeypatch, when):
     import pymongo
     import ebl.fragmentarium.infrastructure.mongo_annotations_repository as mongo_anno_module
     import ebl.files.infrastructure.grid_fs_file_repository as gridfs_module
@@ -103,7 +101,6 @@ def test_context_fallback_to_mongo(monkeypatch):
 
     when(retrieve_annotations).create_context().thenRaise(KeyError("DB failed"))
 
-    # Mock MongoDB components
     mock_client = mock()
     mock_db = mock()
     mock_annotations_repo = mock()
@@ -112,7 +109,6 @@ def test_context_fallback_to_mongo(monkeypatch):
     when(mock_client).get_database("test_db").thenReturn(mock_db)
     when(mock_annotations_repo).retrieve_all_non_empty().thenReturn([])
 
-    # Mock the class constructors at module level
     when(pymongo).MongoClient("mongodb://test:27017").thenReturn(mock_client)
     when(mongo_anno_module).MongoAnnotationsRepository(mock_db).thenReturn(
         mock_annotations_repo
@@ -124,9 +120,7 @@ def test_context_fallback_to_mongo(monkeypatch):
     when(retrieve_annotations).create_annotations(...).thenReturn(None)
     when(retrieve_annotations).write_fragment_numbers(...).thenReturn(None)
 
-    # Should not raise, should use fallback
     retrieve_annotations.main([])
-    # verify
     verify(pymongo).MongoClient("mongodb://test:27017")
     verify(mongo_anno_module).MongoAnnotationsRepository(mock_db)
     verify(gridfs_module).GridFsFileRepository(mock_db, "photos")
