@@ -53,8 +53,21 @@ Run all of the following in order and confirm each passes before committing:
    errors
 5. `poetry run mypy <changed modules> --ignore-missing-imports` — zero type
    errors (pre-existing errors are not acceptable; fix them)
+6. `task type` — pyre, the type checker CI enforces; zero errors
+7. `task type-pyright` — pyright (the checker behind Pylance) on the changed
+   files; zero errors (pre-existing errors are not acceptable; fix them)
 
 Never commit if any gate fails or was skipped.
+
+This project runs three type checkers and they disagree. Passing one proves
+nothing about the others, so run all three every time. Never infer one
+checker's result from another, and never silence a disagreement with config,
+an ignore comment, or a suppression — when two checkers contradict each
+other, restructure the code until all three pass.
+
+Do not assume a gate is covered because an aggregate task or a prior session
+appeared to run it. Confirm the task exists in `Taskfile.dist.yml` and read
+its output before claiming it passed.
 
 ## Testing and Quality
 

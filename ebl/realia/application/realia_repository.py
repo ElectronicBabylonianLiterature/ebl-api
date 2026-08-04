@@ -20,3 +20,7 @@ class RealiaRepository(ABC):
     @abstractmethod
     def search(self, query: str) -> Sequence[RealiaEntry]:
         raise NotImplementedError()
+
+    @abstractmethod
+    def list_non_redirect_ids(self) -> Sequence[str]:
+        raise NotImplementedError()
