@@ -167,7 +167,7 @@ def count_present(entries: Sequence[NormalizedBibliographyEntry], field: str) ->
 
 
 def score_distribution(pairs: Sequence[PairScore]) -> dict[str, int]:
-    score_buckets = Counter()
+    score_buckets: Counter[str] = Counter()
     for pair in pairs:
         bucket_start = int(pair.score * 10) / 10
         score_buckets[f"{bucket_start:.1f}-{bucket_start + 0.1:.1f}"] += 1

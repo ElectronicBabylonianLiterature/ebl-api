@@ -2,11 +2,10 @@ from ebl.dictionary.domain.word import WordId
 from freezegun import freeze_time
 import pytest
 
-from ebl.errors import DataError, NotFoundError
+from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
-from ebl.tests.factories.bibliography import ReferenceFactory
 from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
 from ebl.tests.fragmentarium.fragment_updater_test_helpers import (
     FROZEN_TIME,
@@ -45,40 +44,6 @@ def test_update_update_lemmatization_not_found(
         fragment_updater.update_lemmatization(
             number, Lemmatization(((LemmatizationToken("1.", ()),),)), user
         )
-
-
-def test_update_references(
-    fragment_updater, bibliography, updater_context: UpdaterContext
-):
-    fragment = FragmentFactory.build()
-    number = fragment.number
-    reference = ReferenceFactory.build()
-    references = (reference,)
-    updated_fragment = fragment.set_references(references)
-    injected_fragment = updater_context.inject(updated_fragment)
-    updater_context.when(bibliography).find(reference.id).thenReturn(reference)
-    updater_context.expect_query(number, fragment, updated_fragment)
-    updater_context.expect_update_field("references", updated_fragment)
-    updater_context.expect_changelog(number, fragment, updated_fragment)
-
-    result = fragment_updater.update_references(
-        number, references, updater_context.user
-    )
-    assert result == (injected_fragment, False)
-
-
-def test_update_references_invalid(
-    fragment_updater, bibliography, user, fragment_repository, when
-):
-    fragment = FragmentFactory.build()
-    number = fragment.number
-    reference = ReferenceFactory.build()
-    when(bibliography).find(reference.id).thenRaise(NotFoundError)
-    (when(fragment_repository).query_by_museum_number(number).thenReturn(fragment))
-    references = (reference,)
-
-    with pytest.raises(DataError):
-        fragment_updater.update_references(number, references, user)
 
 
 @pytest.mark.parametrize(

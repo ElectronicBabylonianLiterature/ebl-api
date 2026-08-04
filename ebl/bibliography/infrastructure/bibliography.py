@@ -1,66 +1,74 @@
+from datetime import datetime, timezone
 from typing import Any, Dict, Optional, Sequence
+
+import pymongo
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
 from ebl.bibliography.application.duplicate_audit import PROJECTION
-from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
-    duplicate_candidate_queries,
-    year_range,
-)
+from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
+from ebl.bibliography.application.partner_identity import normalize_partner_id
 from ebl.bibliography.application.serialization import (
     create_mongo_entry,
     create_object_entry,
 )
+from ebl.bibliography.infrastructure.duplicate_candidate_queries import (
+    duplicate_candidate_queries,
+    year_range,
+)
+from ebl.bibliography.infrastructure.lookup_reservations import MongoLookupReservations
+from ebl.bibliography.infrastructure.reference_documents import join_reference_documents
+from ebl.errors import DuplicateError, NotFoundError
 from ebl.mongo_collection import MongoCollection
 
 COLLECTION = "bibliography"
 DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS = 5000
-
-
-def join_reference_documents() -> Sequence[dict]:
-    return [
-        {"$unwind": {"path": "$references", "preserveNullAndEmptyArrays": True}},
-        {
-            "$lookup": {
-                "from": "bibliography",
-                "localField": "references.id",
-                "foreignField": "_id",
-                "as": "references.document",
-            }
-        },
-        {
-            "$set": {
-                "references.document": {"$arrayElemAt": ["$references.document", 0]}
-            }
-        },
-        {
-            "$group": {
-                "_id": "$_id",
-                "references": {"$push": "$references"},
-                "root": {"$first": "$$ROOT"},
-            }
-        },
-        {
-            "$replaceRoot": {
-                "newRoot": {"$mergeObjects": ["$root", {"references": "$references"}]}
-            }
-        },
-        {
-            "$set": {
-                "references": {
-                    "$filter": {
-                        "input": "$references",
-                        "as": "reference",
-                        "cond": {"$ne": ["$$reference", {}]},
-                    }
-                }
-            }
-        },
-    ]
+ACTIVE_BIBLIOGRAPHY_FILTER = {"deprecated": {"$ne": True}}
+ALIASES_VALUE_FIELD = "aliases.value"
+__all__ = ["MongoBibliographyRepository", "join_reference_documents"]
 
 
 class MongoBibliographyRepository(BibliographyRepository):
     def __init__(self, database):
         self._collection = MongoCollection(database, COLLECTION)
+        self._lookup_reservations = MongoLookupReservations(database)
+
+    def create_indexes(self) -> None:
+        self._collection.create_index([("citationKey", pymongo.ASCENDING)])
+        self._collection.create_index([(ALIASES_VALUE_FIELD, pymongo.ASCENDING)])
+        self._collection.create_index([("aliases.normalizedValue", pymongo.ASCENDING)])
+        self._lookup_reservations.create_indexes()
+
+    def claim_lookup_values(
+        self, operation: LookupReservationOperation, values: Sequence[str]
+    ) -> None:
+        now = datetime.now(timezone.utc)
+        self.reconcile_lookup_reservations(now)
+        self._lookup_reservations.claim(
+            operation, values, now, self._entry_owns_lookup_value
+        )
+
+    def commit_lookup_values(
+        self, operation: LookupReservationOperation, now: datetime
+    ) -> None:
+        self._lookup_reservations.commit(operation, now)
+
+    def release_pending_lookup_values(self, owner: str) -> None:
+        self._lookup_reservations.release_pending(owner)
+
+    def retire_lookup_values(
+        self, entry_id: str, values: Sequence[str], now: datetime
+    ) -> None:
+        self._lookup_reservations.retire(entry_id, values, now)
+
+    def lookup_value_is_reserved(self, value: str) -> bool:
+        return self._lookup_reservations.is_active(
+            value, datetime.now(timezone.utc), self._entry_owns_lookup_value
+        )
+
+    def reconcile_lookup_reservations(self, now: datetime, limit: int = 100) -> int:
+        return self._lookup_reservations.reconcile(
+            now, self._entry_owns_lookup_value, limit
+        )
 
     def create(self, entry) -> str:
         mongo_entry = create_mongo_entry(entry)
@@ -69,6 +77,33 @@ class MongoBibliographyRepository(BibliographyRepository):
     def query_by_id(self, id_: str) -> dict:
         data = self._collection.find_one_by_id(id_)
         return create_object_entry(data)
+
+    def query_by_citation_key(self, citation_key: str) -> dict:
+        data = list(self._collection.find_many({"citationKey": citation_key}).limit(2))
+        if not data:
+            raise NotFoundError(f"bibliography citation key {citation_key} not found.")
+        if len(data) > 1:
+            raise DuplicateError(
+                f"bibliography citation key {citation_key} is ambiguous."
+            )
+        return create_object_entry(data[0])
+
+    def query_by_alias(self, alias: str) -> dict:
+        normalized_alias = normalize_partner_id(alias)
+        query: Dict[str, Any] = {ALIASES_VALUE_FIELD: alias}
+        if normalized_alias:
+            query = {
+                "$or": [
+                    {ALIASES_VALUE_FIELD: alias},
+                    {"aliases.normalizedValue": normalized_alias},
+                ]
+            }
+        data = list(self._collection.find_many(query))
+        if not data:
+            raise NotFoundError(f"bibliography alias {alias} not found.")
+        if len({item["_id"] for item in data}) > 1:
+            raise DuplicateError(f"bibliography alias {alias} is ambiguous.")
+        return create_object_entry(data[0])
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[dict]:
         data = self._collection.find_many({"_id": {"$in": ids}})
@@ -110,14 +145,16 @@ class MongoBibliographyRepository(BibliographyRepository):
         candidates: dict[str, dict] = {}
         for query in duplicate_candidate_queries(entry):
             cursor = self._collection.find_many(
-                query, projection=PROJECTION
+                {"$and": [query, ACTIVE_BIBLIOGRAPHY_FILTER]}, projection=PROJECTION
             ).max_time_ms(DUPLICATE_CANDIDATE_QUERY_MAX_TIME_MS)
             for data in cursor.limit(limit):
                 candidates[data["_id"]] = create_object_entry(data)
         return list(candidates.values())[:limit]
 
     def query_page(self, after: Optional[str], limit: int) -> Sequence[Any]:
-        query = {"_id": {"$gt": after}} if after else {}
+        query: Dict[str, Any] = dict(ACTIVE_BIBLIOGRAPHY_FILTER)
+        if after:
+            query["_id"] = {"$gt": after}
         data = self._collection.find_many(query).sort("_id", 1).limit(limit)
         return [create_object_entry(item) for item in data]
 
@@ -131,7 +168,24 @@ class MongoBibliographyRepository(BibliographyRepository):
         ]
 
     def list_all_bibliography(self) -> Sequence[str]:
-        return self._collection.get_all_values("_id")
+        return self._collection.get_all_values("_id", ACTIVE_BIBLIOGRAPHY_FILTER)
+
+    def _entry_owns_lookup_value(self, entry_id: str, value: str) -> bool:
+        if entry_id == value and self._collection.exists({"_id": entry_id}):
+            return True
+
+        normalized_value = normalize_partner_id(value)
+        lookup_query: Dict[str, Any] = {
+            "$or": [
+                {"citationKey": value},
+                {ALIASES_VALUE_FIELD: value},
+            ]
+        }
+        if normalized_value:
+            lookup_query["$or"].append({"aliases.normalizedValue": normalized_value})
+
+        matching_ids = self._collection.get_all_values("_id", lookup_query)
+        return matching_ids == [entry_id]
 
 
 def author_year_title_match(
@@ -151,7 +205,7 @@ def bibliography_query_pipeline(
     match: Dict[str, Any], trailing_sort_field: str
 ) -> list[dict]:
     return [
-        {"$match": match},
+        {"$match": {**match, **ACTIVE_BIBLIOGRAPHY_FILTER}},
         {"$addFields": {"primaryYear": primary_year_expression()}},
         {
             "$sort": {
@@ -165,9 +219,4 @@ def bibliography_query_pipeline(
 
 
 def primary_year_expression() -> dict:
-    return {
-        "$arrayElemAt": [
-            {"$arrayElemAt": ["$issued.date-parts", 0]},
-            0,
-        ]
-    }
+    return {"$arrayElemAt": [{"$arrayElemAt": ["$issued.date-parts", 0]}, 0]}
