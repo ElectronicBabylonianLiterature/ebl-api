@@ -89,5 +89,6 @@ def test_greek_word(
         "hasOmittedAlignment": word.has_omitted_alignment,
         "id": word.id_,
         "namedEntities": NamedEntitySchema().dump(word.named_entities, many=True),
+        "realia": list(word.realia),
     }
     assert_token_serialization(word, serialized)

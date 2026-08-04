@@ -1,71 +1,35 @@
-from dataclasses import dataclass
-
+from ebl.dictionary.domain.word import WordId
 from freezegun import freeze_time
 import pytest
 
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
 from ebl.fragmentarium.domain.fragment import Fragment
 from ebl.lemmatization.domain.lemmatization import Lemmatization, LemmatizationToken
-from ebl.tests.factories.fragment import TransliteratedFragmentFactory
-from ebl.users.domain.user import User
-
-SCHEMA = FragmentSchema()
-FROZEN_TIME = "2018-09-07 15:41:24.032"
-
-
-@dataclass(frozen=True)
-class FragmentAnnotationContext:
-    fragment_updater: FragmentUpdater
-    user: User
-    fragment_repository: object
-    parallel_line_injector: object
-    changelog: object
-    when: object
-
-
-@pytest.fixture
-def fragment_annotation_context(request: pytest.FixtureRequest):
-    return FragmentAnnotationContext(
-        request.getfixturevalue("fragment_updater"),
-        request.getfixturevalue("user"),
-        request.getfixturevalue("fragment_repository"),
-        request.getfixturevalue("parallel_line_injector"),
-        request.getfixturevalue("changelog"),
-        request.getfixturevalue("when"),
-    )
+from ebl.tests.factories.fragment import FragmentFactory, TransliteratedFragmentFactory
+from ebl.tests.fragmentarium.fragment_updater_test_helpers import (
+    FROZEN_TIME,
+    UpdaterContext,
+)
 
 
 @freeze_time(FROZEN_TIME)
-def test_update_lemmatization(fragment_annotation_context):
-    context = fragment_annotation_context
+def test_update_lemmatization(fragment_updater, updater_context: UpdaterContext):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
     tokens = [list(line) for line in transliterated_fragment.text.lemmatization.tokens]
-    tokens[1][3] = LemmatizationToken(tokens[1][3].value, ("aklu I",))
+    tokens[1][3] = LemmatizationToken(tokens[1][3].value, (WordId("aklu I"),))
     lemmatization = Lemmatization(tokens)
     lemmatized_fragment = transliterated_fragment.update_lemmatization(lemmatization)
-    (
-        context.when(context.fragment_repository)
-        .query_by_museum_number(number)
-        .thenReturn(transliterated_fragment)
+    updater_context.expect_query(number, transliterated_fragment)
+    injected_fragment = updater_context.inject(lemmatized_fragment)
+    updater_context.expect_changelog(
+        number, transliterated_fragment, lemmatized_fragment
     )
-    injected_fragment = lemmatized_fragment.set_text(
-        context.parallel_line_injector.inject_transliteration(lemmatized_fragment.text)
-    )
-    context.when(context.changelog).create(
-        "fragments",
-        context.user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
-    ).thenReturn()
-    context.when(context.fragment_repository).update_field(
-        "lemmatization", lemmatized_fragment
-    ).thenReturn()
+    updater_context.expect_update_field("lemmatization", lemmatized_fragment)
 
-    result = context.fragment_updater.update_lemmatization(
-        number, lemmatization, context.user
+    result = fragment_updater.update_lemmatization(
+        number, lemmatization, updater_context.user
     )
     assert result == (injected_fragment, False)
 
@@ -82,66 +46,67 @@ def test_update_update_lemmatization_not_found(
         )
 
 
+@pytest.mark.parametrize(
+    "field,value",
+    [("introduction", "Test introduction"), ("notes", "Test notes")],
+)
+def test_update_edition_metadata_field(
+    field,
+    value,
+    fragment_updater: FragmentUpdater,
+    updater_context: UpdaterContext,
+):
+    fragment: Fragment = FragmentFactory.build()
+    number = fragment.number
+    updated_fragment = getattr(fragment, f"set_{field}")(value)
+    updater_context.expect_query(number, fragment)
+    updater_context.expect_changelog(number, fragment, updated_fragment)
+    updater_context.expect_update_field(field, updated_fragment)
+
+    result = fragment_updater.update_edition(
+        number, updater_context.user, **{field: value}
+    )
+    assert result == (updated_fragment, False)
+
+
 @freeze_time(FROZEN_TIME)
-def test_update_lemma_annotation(fragment_annotation_context):
-    context = fragment_annotation_context
+def test_update_lemma_annotation(fragment_updater, updater_context: UpdaterContext):
     transliterated_fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
 
     annotation = {1: {3: ["aklu I"]}}
     lemmatized_fragment = transliterated_fragment.update_lemma_annotation(annotation)
 
-    (
-        context.when(context.fragment_repository)
-        .query_by_museum_number(number)
-        .thenReturn(transliterated_fragment)
+    updater_context.expect_query(number, transliterated_fragment)
+    injected_fragment = updater_context.inject(lemmatized_fragment)
+    updater_context.expect_changelog(
+        number, transliterated_fragment, lemmatized_fragment
     )
-    injected_fragment = lemmatized_fragment.set_text(
-        context.parallel_line_injector.inject_transliteration(lemmatized_fragment.text)
-    )
-    context.when(context.changelog).create(
-        "fragments",
-        context.user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(lemmatized_fragment)},
-    ).thenReturn()
-    context.when(context.fragment_repository).update_field(
-        "lemmatization", lemmatized_fragment
-    ).thenReturn()
+    updater_context.expect_update_field("lemmatization", lemmatized_fragment)
 
-    result = context.fragment_updater.update_lemma_annotation(
-        number, annotation, context.user
+    result = fragment_updater.update_lemma_annotation(
+        number, annotation, updater_context.user
     )
     assert result == (injected_fragment, False)
 
 
 @freeze_time(FROZEN_TIME)
-def test_update_named_entities(fragment_annotation_context, named_entity_spans):
-    context = fragment_annotation_context
+def test_update_named_entities(
+    fragment_updater, named_entity_spans, updater_context: UpdaterContext
+):
     transliterated_fragment: Fragment = TransliteratedFragmentFactory.build()
     number = transliterated_fragment.number
 
     annotated_fragment = transliterated_fragment.set_named_entities(named_entity_spans)
 
-    (
-        context.when(context.fragment_repository)
-        .query_by_museum_number(number)
-        .thenReturn(transliterated_fragment)
+    updater_context.expect_query(number, transliterated_fragment)
+    injected_fragment = updater_context.inject(annotated_fragment)
+    updater_context.expect_changelog(
+        number, transliterated_fragment, annotated_fragment
     )
-    injected_fragment = annotated_fragment.set_text(
-        context.parallel_line_injector.inject_transliteration(annotated_fragment.text)
-    )
-    context.when(context.changelog).create(
-        "fragments",
-        context.user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(annotated_fragment)},
-    ).thenReturn()
-    context.when(context.fragment_repository).update_field(
-        "named_entities", annotated_fragment
-    ).thenReturn()
+    updater_context.expect_update_field("named_entities", annotated_fragment)
 
-    result = context.fragment_updater.update_named_entities(
-        number, named_entity_spans, context.user
+    result = fragment_updater.update_named_entities(
+        number, named_entity_spans, [], updater_context.user
     )
     assert result == (injected_fragment, False)

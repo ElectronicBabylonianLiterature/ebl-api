@@ -33,6 +33,7 @@ def test_update_references(
         ),
         user,
         fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK
@@ -70,6 +71,7 @@ def test_update_references_canonicalizes_bibliography_alias(
         ),
         user,
         fragment.number == MuseumNumber("K", "1"),
+        [],
     )
 
     assert post_result.status == falcon.HTTP_OK

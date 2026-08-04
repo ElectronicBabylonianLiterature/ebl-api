@@ -3,9 +3,7 @@ from freezegun import freeze_time
 import pytest
 
 from ebl.errors import NotFoundError
-from ebl.fragmentarium.application.fragment_schema import FragmentSchema
-from ebl.fragmentarium.application.fragment_updater import FragmentUpdater
-from ebl.fragmentarium.domain.fragment import Fragment, Genre, NotLowestJoinError
+from ebl.fragmentarium.domain.fragment import Genre, NotLowestJoinError
 from ebl.fragmentarium.domain.joins import Join, Joins
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.fragmentarium.domain.transliteration_update import TransliterationUpdate
@@ -14,27 +12,24 @@ from ebl.tests.factories.fragment import (
     TransliteratedFragmentFactory,
     DateFactory,
 )
+from ebl.tests.fragmentarium.fragment_updater_test_helpers import (
+    FROZEN_TIME,
+    UpdaterContext,
+)
 from ebl.transliteration.domain.atf import Atf
 from ebl.transliteration.domain.atf_parsers.lark_parser import parse_atf_lark
 
-SCHEMA = FragmentSchema()
-FROZEN_TIME = "2018-09-07 15:41:24.032"
 
-
-@freeze_time(FROZEN_TIME)
 @pytest.mark.parametrize(
     "number,ignore_lowest_join",
     [(MuseumNumber.of("X.1"), False), (MuseumNumber.of("X.3"), True)],
 )
+@freeze_time(FROZEN_TIME)
 def test_update_edition(
     number,
     ignore_lowest_join,
     fragment_updater,
-    user,
-    fragment_repository,
-    changelog,
-    parallel_line_injector,
-    when,
+    updater_context: UpdaterContext,
 ):
     transliterated_fragment = TransliteratedFragmentFactory.build(
         number=number,
@@ -45,31 +40,18 @@ def test_update_edition(
     atf = Atf("1. x x\n2. x")
     transliteration = TransliterationUpdate(parse_atf_lark(atf), "X X\nX")
     transliterated_fragment = transliterated_fragment.update_transliteration(
-        transliteration, user
+        transliteration, updater_context.user
     )
-    injected_fragment = transliterated_fragment.set_text(
-        parallel_line_injector.inject_transliteration(transliterated_fragment.text)
+    injected_fragment = updater_context.inject(transliterated_fragment)
+    updater_context.expect_query(number, transliterated_fragment)
+    updater_context.expect_changelog(
+        number, transliterated_fragment, transliterated_fragment
     )
-    (
-        when(fragment_repository)
-        .query_by_museum_number(number)
-        .thenReturn(transliterated_fragment)
-    )
-    when(changelog).create(
-        "fragments",
-        user.profile,
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-        {"_id": str(number), **SCHEMA.dump(transliterated_fragment)},
-    ).thenReturn()
-    (
-        when(fragment_repository)
-        .update_field("transliteration", transliterated_fragment)
-        .thenReturn()
-    )
+    updater_context.expect_update_field("transliteration", transliterated_fragment)
 
     result = fragment_updater.update_edition(
         number,
-        user,
+        updater_context.user,
         transliteration=transliteration,
         ignore_lowest_join=ignore_lowest_join,
     )
@@ -117,26 +99,31 @@ def test_update_update_transliteration_not_lowest_join(
         )
 
 
-def test_update_genres(
-    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("genres", (Genre(["ARCHIVAL", "Administrative"], False),)),
+        ("date", DateFactory.build()),
+        ("dates_in_text", [DateFactory.build()]),
+    ],
+)
+def test_update_metadata_field(
+    field,
+    value,
+    fragment_updater,
+    updater_context: UpdaterContext,
 ):
     fragment = FragmentFactory.build()
     number = fragment.number
-    genres = (Genre(["ARCHIVAL", "Administrative"], False),)
-    updated_fragment = fragment.set_genres(genres)
-    injected_fragment = updated_fragment.set_text(
-        parallel_line_injector.inject_transliteration(updated_fragment.text)
-    )
-    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
-    when(changelog).create(
-        "fragments",
-        user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
-    ).thenReturn()
-    when(fragment_repository).update_field("genres", updated_fragment).thenReturn()
+    updated_fragment = getattr(fragment, f"set_{field}")(value)
+    injected_fragment = updater_context.inject(updated_fragment)
+    updater_context.expect_query(number, fragment)
+    updater_context.expect_changelog(number, fragment, updated_fragment)
+    updater_context.expect_update_field(field, updated_fragment)
 
-    result = fragment_updater.update_genres(number, genres, user)
+    result = getattr(fragment_updater, f"update_{field}")(
+        number, value, updater_context.user
+    )
     assert result == (injected_fragment, False)
 
 
@@ -157,93 +144,3 @@ def test_update_scopes(
     result = fragment_updater.update_scopes(number, scopes)
 
     assert result == (injected_fragment, False)
-
-
-def test_update_date(
-    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
-):
-    fragment = FragmentFactory.build()
-    number = fragment.number
-    date = DateFactory.build()
-    updated_fragment = fragment.set_date(date)
-    injected_fragment = updated_fragment.set_text(
-        parallel_line_injector.inject_transliteration(updated_fragment.text)
-    )
-    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
-    when(changelog).create(
-        "fragments",
-        user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
-    ).thenReturn()
-    when(fragment_repository).update_field("date", updated_fragment).thenReturn()
-
-    result = fragment_updater.update_date(number, date, user)
-    assert result == (injected_fragment, False)
-
-
-def test_update_dates_in_text(
-    fragment_updater, user, fragment_repository, parallel_line_injector, changelog, when
-):
-    fragment = FragmentFactory.build()
-    number = fragment.number
-    dates_in_text = [DateFactory.build()]
-    updated_fragment = fragment.set_dates_in_text(dates_in_text)
-    injected_fragment = updated_fragment.set_text(
-        parallel_line_injector.inject_transliteration(updated_fragment.text)
-    )
-    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
-    when(changelog).create(
-        "fragments",
-        user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
-    ).thenReturn()
-    when(fragment_repository).update_field(
-        "dates_in_text", updated_fragment
-    ).thenReturn()
-
-    result = fragment_updater.update_dates_in_text(number, dates_in_text, user)
-    assert result == (injected_fragment, False)
-
-
-def test_update_introduction(
-    fragment_updater: FragmentUpdater, user, fragment_repository, changelog, when
-):
-    fragment: Fragment = FragmentFactory.build()
-    number = fragment.number
-    introduction = "Test introduction"
-    updated_fragment = fragment.set_introduction(introduction)
-    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
-    when(changelog).create(
-        "fragments",
-        user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
-    ).thenReturn()
-    when(fragment_repository).update_field(
-        "introduction", updated_fragment
-    ).thenReturn()
-
-    result = fragment_updater.update_edition(number, user, introduction=introduction)
-    assert result == (updated_fragment, False)
-
-
-def test_update_notes(
-    fragment_updater: FragmentUpdater, user, fragment_repository, changelog, when
-):
-    fragment: Fragment = FragmentFactory.build()
-    number = fragment.number
-    notes = "Test notes"
-    updated_fragment = fragment.set_notes(notes)
-    when(fragment_repository).query_by_museum_number(number).thenReturn(fragment)
-    when(changelog).create(
-        "fragments",
-        user.profile,
-        {"_id": str(number), **SCHEMA.dump(fragment)},
-        {"_id": str(number), **SCHEMA.dump(updated_fragment)},
-    ).thenReturn()
-    when(fragment_repository).update_field("notes", updated_fragment).thenReturn()
-
-    result = fragment_updater.update_edition(number, user, notes=notes)
-    assert result == (updated_fragment, False)
