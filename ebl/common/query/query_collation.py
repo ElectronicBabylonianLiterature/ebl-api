@@ -68,7 +68,10 @@ WILDCARD_AND_COLLATION_MATCHERS: Dict[str, Dict[str, str]] = {
     "collation SS": {"wildcard": r"[ss|ß]", "regex": r"[ss|ß]"},
     "collation T": {"wildcard": r"[t|ṭ|τ]", "regex": r"[t|ṭ|τ]"},
     "collation D": {"wildcard": r"[d|ᵈ]", "regex": r"[d|ᵈ]"},
-    "collation H": {"wildcard": r"[h|ḫ|ḥ|ʕ|ʾ|ʿ]", "regex": r"[h|ḫ|ḥ|ʕ|ʾ|ʿ]"},
+    "collation H": {
+        "wildcard": r"[h|ḫ|ḥ|H|Ḫ|Ḥ|ʕ|ʾ|ʿ]",
+        "regex": r"[h|ḫ|ḥ|H|Ḫ|Ḥ|ʕ|ʾ|ʿ]",
+    },
     "collation C": {"wildcard": r"[c|č|ç|ć]", "regex": r"[c|č|ç|ć]"},
     "collation G": {"wildcard": r"[g|ĝ|ğ]", "regex": r"[g|ĝ|ğ]"},
     "collation K": {"wildcard": r"[k|κ]", "regex": r"[k|κ]"},
