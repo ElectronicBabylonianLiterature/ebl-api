@@ -1,3 +1,4 @@
+import attr
 import pytest
 
 from ebl.common.domain.period import Period
@@ -146,6 +147,18 @@ def test_update_script(fragment_repository: FragmentRepository):
     )
 
 
+def test_update_ocred_signs(fragment_repository: FragmentRepository):
+    fragment: Fragment = FragmentFactory.build(ocred_signs="")
+    fragment_repository.create(fragment)
+    updated_fragment = attr.evolve(fragment, ocred_signs="ABZ001 ABZ002")
+
+    fragment_repository.update_field("ocredSigns", updated_fragment)
+
+    assert (
+        fragment_repository.query_by_museum_number(fragment.number) == updated_fragment
+    )
+
+
 def test_update_update_lemmatization_not_found(fragment_repository):
     with pytest.raises(NotFoundError):
         fragment_repository.update_field(
@@ -205,3 +218,11 @@ def test_statistics_no_fragments(fragment_repository):
     assert fragment_repository.count_transliterated_fragments() == 0
     assert fragment_repository.count_lines() == 0
     assert fragment_repository.count_total_fragments() == 0
+
+
+def test_update_field_rejects_unknown_field(fragment_repository):
+    fragment = FragmentFactory.build()
+    fragment_repository.create(fragment)
+
+    with pytest.raises(ValueError, match="Unexpected update field"):
+        fragment_repository.update_field("unknown_field", fragment)

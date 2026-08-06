@@ -1,16 +1,51 @@
+from datetime import datetime
 from typing import Any, Optional, Sequence
 
 from ebl.bibliography.application.bibliography_repository import BibliographyRepository
+from ebl.bibliography.application.lookup_reservation import LookupReservationOperation
 
 
 class FakeBibliographyRepository(BibliographyRepository):
     def __init__(self, candidates: Sequence[dict[str, Any]]):
         self._candidates = candidates
 
+    def create_indexes(self) -> None:
+        raise NotImplementedError
+
+    def claim_lookup_values(
+        self, operation: LookupReservationOperation, values: Sequence[str]
+    ) -> None:
+        raise NotImplementedError
+
+    def commit_lookup_values(
+        self, operation: LookupReservationOperation, now: datetime
+    ) -> None:
+        raise NotImplementedError
+
+    def release_pending_lookup_values(self, owner: str) -> None:
+        raise NotImplementedError
+
+    def retire_lookup_values(
+        self, entry_id: str, values: Sequence[str], now: datetime
+    ) -> None:
+        raise NotImplementedError
+
+    def lookup_value_is_reserved(self, value: str) -> bool:
+        raise NotImplementedError
+
+    def reconcile_lookup_reservations(self, now: datetime, limit: int = 100) -> int:
+        raise NotImplementedError
+
     def create(self, entry: Any) -> str:
         raise NotImplementedError
 
     def query_by_id(self, id_: str) -> Any:
+        raise NotImplementedError
+
+    def query_by_citation_key(self, citation_key: str) -> Any:
+        raise NotImplementedError
+
+    def query_by_alias(self, alias: str) -> Any:
         raise NotImplementedError
 
     def query_by_ids(self, ids: Sequence[str]) -> Sequence[Any]:
