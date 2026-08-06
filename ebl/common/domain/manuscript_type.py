@@ -13,7 +13,7 @@ class ManuscriptType(NamedEnum):
     MULTICOLUMN = ("Multi-column tablet", "MultCol")
     COLLECTIVE = ("Collective tablet", "Coll")
     STUDENT_TEACHER = ("Student-teacher tablet", "StuTea")
-    SCHOOL_LENTIL = ("School lentis", "SchLen")
+    SCHOOL_LENTIL = ("School lentils", "SchLen")
     PRISM = ("Prisms", "Prism")
     UNCERTAIN = ("Uncertain", "Unc")
     NONE = ("None", "")
