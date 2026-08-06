@@ -1,5 +1,5 @@
 import difflib
-from typing import Callable, Sequence
+from typing import Callable, Optional, Sequence
 
 import pydash
 
@@ -20,7 +20,7 @@ class Mapper:
         )
         self._alignment = 0
         self._removals = 0
-        self._result = []
+        self._result: list[Optional[int]] = []
 
     def map_(self) -> AlignmentMap:
         self._alignment = 0

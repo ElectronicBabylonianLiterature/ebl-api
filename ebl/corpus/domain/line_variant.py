@@ -20,11 +20,13 @@ from ebl.corpus.domain.manuscript import Manuscript
 from ebl.transliteration.domain.atf import Atf
 
 
+def prepare_reconstruction(tokens: Sequence[Token]) -> Sequence[Token]:
+    return set_language(set_enclosure_type(tokens))
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class LineVariant:
-    reconstruction: Sequence[Token] = attr.ib(
-        converter=pydash.flow(set_enclosure_type, set_language)
-    )
+    reconstruction: Sequence[Token] = attr.ib(converter=prepare_reconstruction)
     note: Optional[NoteLine] = None
     manuscripts: Sequence[ManuscriptLine] = ()
     parallel_lines: Sequence[ParallelLine] = ()

@@ -106,7 +106,7 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
     def query_by_lemma(
         self, lemma: str, genre: Optional[Genre] = None
     ) -> Sequence[DictionaryLine]:
-        lemma_query = {
+        lemma_query: Dict = {
             "$or": [
                 {"lines.variants.reconstruction.uniqueLemma": lemma},
                 {"lines.variants.manuscripts.line.content.uniqueLemma": lemma},

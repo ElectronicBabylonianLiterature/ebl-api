@@ -143,7 +143,7 @@ class TransliterationQueryText(TransliterationQuery):
     def _create_signs(self, transliteration: str) -> Sequence[str]:
         if not transliteration:
             return []
-        self.visitor._standardizations = []
+        self.visitor.reset()
         self._parse(transliteration).accept(self.visitor)
         return self.visitor.result
 

@@ -6,6 +6,7 @@ import attr
 
 from ebl.bibliography.domain.reference import BibliographyId, Reference, ReferenceType
 from ebl.transliteration.domain.atf_visitor import convert_to_atf
+from ebl.transliteration.domain.converters import convert_token_sequence
 from ebl.transliteration.domain.enclosure_visitor import set_enclosure_type
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.language_visitor import set_language
@@ -100,7 +101,7 @@ class BoldPart(MarkupTokenPart):
 @attr.s(frozen=True, auto_attribs=True)
 class LanguagePart(MarkupPart):
     language: Language = attr.ib()
-    tokens: Sequence[Token] = attr.ib(converter=tuple)
+    tokens: Sequence[Token] = attr.ib(converter=convert_token_sequence)
 
     @property
     def code(self) -> str:

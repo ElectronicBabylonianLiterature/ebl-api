@@ -185,7 +185,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
             raise NotFoundError(f"Fragment {number} not found.") from error
 
     def fetch_scopes(self, number: MuseumNumber) -> List[Scope]:
-        fragment = next(
+        fragment: dict = next(
             self._fragments.find_many(
                 query_number_is(number), projection={"authorizedScopes": True}
             ),
