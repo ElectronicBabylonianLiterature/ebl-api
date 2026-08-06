@@ -1,4 +1,4 @@
-from typing import List, Dict, Sequence, Optional
+from typing import Callable, List, Dict, Sequence, Optional, Tuple
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import (
     match_user_scopes,
@@ -198,7 +198,7 @@ class PatternMatcher:
         ]
 
     def _get_pipeline_components(self) -> List[Dict]:
-        dispatcher = {
+        dispatcher: Dict[Tuple[bool, bool], Callable[..., List[Dict]]] = {
             (True, True): self._merge_pipelines,
             (True, False): self._lemma_matcher.build_pipeline,
             (False, True): self._sign_matcher.build_pipeline,

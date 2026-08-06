@@ -12,7 +12,7 @@ class ChapterQueryColophonLines:
     def get_matching_lines(
         self, manuscripts: Sequence[Manuscript]
     ) -> Mapping[int, Sequence[TextLine]]:
-        matching_colophon_lines = {}
+        matching_colophon_lines: dict[int, Sequence[TextLine]] = {}
         for manuscript in manuscripts:
             if str(manuscript.id) in self.colophon_lines_in_query:
                 matching_colophon_lines = {

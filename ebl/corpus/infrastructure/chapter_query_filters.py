@@ -59,8 +59,8 @@ def get_all_line_manuscript_indexes(chapter: Mapping) -> List:
 def find_chapter_query_lines(
     manuscript_matches: List, chapter_lines: List
 ) -> Tuple[List, Dict[str, List[int]]]:
-    text_lines = []
-    colophon_lines = {}
+    text_lines: List = []
+    colophon_lines: Dict[str, List[int]] = {}
     for manuscript_id, matches, lines_idxs_in_manuscript in manuscript_matches:
         for match in matches:
             text_lines, colophon_lines = find_lines_in_range(

@@ -133,7 +133,7 @@ class SignTransformer(Transformer):
         return re.split(r"\.(?!(?:[^\(\)]*\)))", "".join(_children))
 
     def _flatten_grapheme_elements(self, children: Sequence) -> Sequence:
-        _children = []
+        _children: list = []
         for part in children:
             if isinstance(part, Tree):
                 _children += self._flatten_grapheme_elements(part.children)

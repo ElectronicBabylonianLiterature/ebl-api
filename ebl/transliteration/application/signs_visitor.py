@@ -74,6 +74,9 @@ class SignsVisitor(TokenVisitor):
         init=False, factory=list
     )
 
+    def reset(self) -> None:
+        self._standardizations = []
+
     @property
     def result(self) -> Sequence[Union[int, str]]:
         return self.result_unicode if self._to_unicode else self.result_string

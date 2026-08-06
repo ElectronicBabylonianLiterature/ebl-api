@@ -1,5 +1,5 @@
 import copy
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List
 
 import falcon
 import pydash
@@ -32,9 +32,7 @@ class Auth0User(User):
         profile = self.profile
         return profile.get("https://ebabylon.org/eblName", profile["name"])
 
-    def get_scopes(
-        self, prefix: Optional[str] = "", suffix: Optional[str] = ""
-    ) -> List[Scope]:
+    def get_scopes(self, prefix: str = "", suffix: str = "") -> List[Scope]:
         scopes = []
         access_token_scope = self._access_token.get("scope")
         access_token_permissions = self._access_token.get("permissions")

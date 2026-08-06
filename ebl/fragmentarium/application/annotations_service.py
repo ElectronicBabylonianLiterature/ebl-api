@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Sequence, Tuple
+from typing import Callable, Dict, Sequence, Tuple
 
 import attr
 from PIL import Image
@@ -139,7 +139,7 @@ class AnnotationsService:
         current: LineLabel = LineLabel(None, None, None, None, None)
         labels: Sequence[Tuple[LineLabel, Line]] = []
 
-        handlers = {
+        handlers: Dict[type, Callable] = {
             TextLine: lambda line: (
                 current,
                 [*labels, (current.set_line_number(line.line_number), line)],
