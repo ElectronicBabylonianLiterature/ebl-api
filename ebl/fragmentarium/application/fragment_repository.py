@@ -126,6 +126,9 @@ class FragmentRepository(ABC):
         self,
         findspot_ids: Sequence[int],
         user_scopes: Sequence[Scope],
+        script_period: Optional[str] = None,
+        script_period_modifier: Optional[str] = None,
+        genre: Optional[Sequence[str]] = None,
     ) -> dict:
         raise NotImplementedError
 

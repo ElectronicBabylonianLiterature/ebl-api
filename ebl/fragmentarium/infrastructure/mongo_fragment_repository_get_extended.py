@@ -20,6 +20,8 @@ from ebl.fragmentarium.infrastructure.queries import (
     aggregate_needs_revision,
     aggregate_path_of_the_pioneers,
     aggregate_random,
+    filter_by_genre,
+    filter_by_script,
 )
 from ebl.transliteration.infrastructure.queries import query_number_is
 from ebl.common.query.query_collation import CollatedFieldQuery
@@ -200,6 +202,9 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
         self,
         findspot_ids: Sequence[int],
         user_scopes: Sequence[Scope] = (),
+        script_period: Optional[str] = None,
+        script_period_modifier: Optional[str] = None,
+        genre: Optional[Sequence[str]] = None,
     ) -> dict:
         if not findspot_ids:
             return {}
@@ -209,6 +214,8 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
                     "$match": {
                         "archaeology.findspotId": {"$in": list(findspot_ids)},
                         **match_user_scopes(user_scopes),
+                        **filter_by_script(script_period, script_period_modifier),
+                        **filter_by_genre(genre),
                     }
                 },
                 {

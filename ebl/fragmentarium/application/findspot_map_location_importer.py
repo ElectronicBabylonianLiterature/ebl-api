@@ -97,11 +97,11 @@ def run_import(
     )
     findspots = _load_findspots(database)
     valid_records, site_issues = _validate_findspots(records, findspots)
-    issues = (*issues, *site_issues)
+    issues = issues + site_issues
     plan_issues, existing, new, changed, skipped, operations = build_plan(
         valid_records, findspots, rollback, previous_records
     )
-    issues = (*issues, *plan_issues)
+    issues = issues + plan_issues
     issue_counts = _count_issues(issues)
     fingerprint = fingerprint_database(
         database, valid_records, polygon_ids, previous_records

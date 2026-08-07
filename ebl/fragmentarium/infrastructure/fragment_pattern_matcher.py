@@ -1,6 +1,8 @@
 from typing import Callable, Dict, List, Optional, Sequence
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.infrastructure.queries import (
+    filter_by_genre,
+    filter_by_script,
     match_user_scopes,
     number_is,
 )
@@ -52,21 +54,12 @@ class PatternMatcher:
         return [{"$sort": sort_fields}] if sort_fields else []
 
     def _filter_by_script(self) -> Dict:
-        parameters = {
-            "scriptPeriod": "script.period",
-            "scriptPeriodModifier": "script.periodModifier",
-        }
-
-        return {
-            path: self._query.get(parameter)
-            for parameter, path in parameters.items()
-            if self._query.get(parameter)
-        }
+        return filter_by_script(
+            self._query.get("scriptPeriod"), self._query.get("scriptPeriodModifier")
+        )
 
     def _filter_by_genre(self) -> Dict:
-        if genre := self._query.get("genre"):
-            return {"genres.category": {"$all": genre}}
-        return {}
+        return filter_by_genre(self._query.get("genre"))
 
     def _filter_by_museum(self) -> Dict:
         return {"museum": museum} if (museum := self._query.get("museum")) else {}
@@ -118,11 +111,14 @@ class PatternMatcher:
         )
 
     def _filter_by_findspot_id(self) -> Dict:
-        return (
-            {"archaeology.findspotId": findspot_id}
-            if (findspot_id := self._query.get("findspotId")) is not None
-            else {}
-        )
+        ids = set(self._query.get("findspotIds", ()))
+        if (findspot_id := self._query.get("findspotId")) is not None:
+            ids.add(findspot_id)
+        if not ids:
+            return {}
+        if len(ids) == 1:
+            return {"archaeology.findspotId": next(iter(ids))}
+        return {"archaeology.findspotId": {"$in": sorted(ids)}}
 
     def _prefilter(self) -> List[Dict]:
         constraints = {

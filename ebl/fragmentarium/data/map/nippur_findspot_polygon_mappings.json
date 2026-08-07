@@ -1,0 +1,202 @@
+[
+  {
+    "findspotId": 625,
+    "polygonIds": [
+      "nippur-inanna-temple-65aa508e7862"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 641,
+    "polygonIds": [
+      "nippur-inanna-temple-65aa508e7862"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 901,
+    "polygonIds": [
+      "nippur-ta-a711959786ac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 945,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2530,
+    "polygonIds": [
+      "nippur-sa-6ece7116d8ca"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2531,
+    "polygonIds": [
+      "nippur-sb-04889d9160fd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2532,
+    "polygonIds": [
+      "nippur-sd-e3fd3f91b54b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2533,
+    "polygonIds": [
+      "nippur-se-d45d3339f015"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2537,
+    "polygonIds": [
+      "nippur-sk-412bf7d0598b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2538,
+    "polygonIds": [
+      "nippur-ta-a711959786ac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2544,
+    "polygonIds": [
+      "nippur-ta-a711959786ac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2548,
+    "polygonIds": [
+      "nippur-ta-a711959786ac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2564,
+    "polygonIds": [
+      "nippur-ta-a711959786ac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2652,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2680,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2729,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2746,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 2815,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 3148,
+    "polygonIds": [
+      "nippur-tb-beb0e6157cac"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4379,
+    "polygonIds": [
+      "nippur-wf-bab099415d47"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Nippur Tafeln.ods",
+    "sourceRevision": "2026-08-05"
+  }
+]

@@ -1,0 +1,1312 @@
+[
+  {
+    "findspotId": 1,
+    "polygonIds": [
+      "uruk-ue-xviii-1-4c5b1b215704"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 44,
+    "polygonIds": [
+      "uruk-ue-xviii-1-4c5b1b215704"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 57,
+    "polygonIds": [
+      "uruk-ub-xviii-4-1462df44fd82"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 60,
+    "polygonIds": [
+      "uruk-va-xviii-1-cd71a9c255f0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 70,
+    "polygonIds": [
+      "uruk-ue-xiii-1-078e015ee26e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 79,
+    "polygonIds": [
+      "uruk-ue-xviii-2-0dcddf1aedc1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 536,
+    "polygonIds": [
+      "uruk-pe-xiv-5-905a067ab399"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 538,
+    "polygonIds": [
+      "uruk-eb-xiv-4-d58a24dd9283"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 541,
+    "polygonIds": [
+      "uruk-nd-xvi-4-5-ne-xvi-3-5-ca3ee571ba37"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 542,
+    "polygonIds": [
+      "uruk-pa-xvi-2-29df82537bea"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 543,
+    "polygonIds": [
+      "uruk-la-xii-5-519b74458172"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 544,
+    "polygonIds": [
+      "uruk-nd-xvi-5-67f28c6d8386"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 546,
+    "polygonIds": [
+      "uruk-ob-xv-3-fed96c8009d5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 550,
+    "polygonIds": [
+      "uruk-qe-xvi-fcbd869640e4"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 551,
+    "polygonIds": [
+      "uruk-eb-xiv-2-28590548f8cd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 553,
+    "polygonIds": [
+      "uruk-nd-xxiii-08a9658955dd"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 554,
+    "polygonIds": [
+      "uruk-oe-pa-xvii-2-5e18c19f28b3"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 557,
+    "polygonIds": [
+      "uruk-dd-xiv-3-96468f51be24"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 563,
+    "polygonIds": [
+      "uruk-dc-xiv-3-3e0172c0f4cf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 565,
+    "polygonIds": [
+      "uruk-dc-xiv-2-55d0546c4ba6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 566,
+    "polygonIds": [
+      "uruk-dd-xiv-5-295337b2e084"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 570,
+    "polygonIds": [
+      "uruk-de-ea-xiv-5-01c349b5750a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 573,
+    "polygonIds": [
+      "uruk-de-xiv-4-0bbe71843c6a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 576,
+    "polygonIds": [
+      "uruk-dc-xiv-3-4-71ab766d574d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 580,
+    "polygonIds": [
+      "uruk-dc-dd-xiv-4-588adbf87fbf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 581,
+    "polygonIds": [
+      "uruk-dc-xiv-4-e9c4da1dde69"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 583,
+    "polygonIds": [
+      "uruk-dc-xiv-3-3e0172c0f4cf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 584,
+    "polygonIds": [
+      "uruk-dc-xiv-3-dc-dd-xiv-4-dc-xiv-4-96b0d911d35a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 588,
+    "polygonIds": [
+      "uruk-eb-xiv-5-7c22622cdac5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 589,
+    "polygonIds": [
+      "uruk-ea-xiv-3-cb70afa2c743"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 599,
+    "polygonIds": [
+      "uruk-ob-xv-3-4-bda2a339a08f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 605,
+    "polygonIds": [
+      "uruk-ob-xv-3-fed96c8009d5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 612,
+    "polygonIds": [
+      "uruk-oc-xv-3-e19ff366ca01"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 617,
+    "polygonIds": [
+      "uruk-ob-xv-4-474aba67559e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 621,
+    "polygonIds": [
+      "uruk-oa-xv-4-160370d21780"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 622,
+    "polygonIds": [
+      "uruk-p-vi-2-9c93fe08d428"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 623,
+    "polygonIds": [
+      "uruk-p-vi-3-64aab6e28bb0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 770,
+    "polygonIds": [
+      "uruk-oc-xv-4-cd0d8cef3fd6"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 771,
+    "polygonIds": [
+      "uruk-oc-xv-5-4f23fd9bf390"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 781,
+    "polygonIds": [
+      "uruk-ea-xiv-4-be764dbd1c25"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 783,
+    "polygonIds": [
+      "uruk-nd-xvi-4-a4b021b14ec9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 848,
+    "polygonIds": [
+      "uruk-od-xvi-4-cf6b0bf88f6a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 849,
+    "polygonIds": [
+      "uruk-oc-xvi-2-ea6501bc40ff"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 854,
+    "polygonIds": [
+      "uruk-pd-xvi-3-8039a6c7a36d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 856,
+    "polygonIds": [
+      "uruk-pe-xvi-3-d51f3faf8317"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 857,
+    "polygonIds": [
+      "uruk-od-xv-3-ae7e57889a94"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 858,
+    "polygonIds": [
+      "uruk-lc-xviii-2-0299cf3cb598"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 860,
+    "polygonIds": [
+      "uruk-qb-xiv-5-273e242d6e85"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 862,
+    "polygonIds": [
+      "uruk-le-xvi-3-fe4b29a4ebd9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 867,
+    "polygonIds": [
+      "uruk-de-xiv-2-ef549de94432"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 869,
+    "polygonIds": [
+      "uruk-ea-xiv-2-963d084b6f8a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 870,
+    "polygonIds": [
+      "uruk-ea-xiv-2-963d084b6f8a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 873,
+    "polygonIds": [
+      "uruk-de-xiv-3-5f53b922e1d9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 875,
+    "polygonIds": [
+      "uruk-nc-xvi-5-11e38b545bf1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 885,
+    "polygonIds": [
+      "uruk-od-xvi-3-31be46638725"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 893,
+    "polygonIds": [
+      "uruk-nd-xvi-5-nd-xvii-1-edbd1b4ccba9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 894,
+    "polygonIds": [
+      "uruk-ke-xvii-3-b6f8f1c42661"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1321,
+    "polygonIds": [
+      "uruk-vb-xviii-1-a74b371d3046"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1323,
+    "polygonIds": [
+      "uruk-u-xviii-db19732fc9b8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1359,
+    "polygonIds": [
+      "uruk-ue-xvii-15caa5eafad9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1400,
+    "polygonIds": [
+      "uruk-qd-xiv-5-69adbd0523a1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1401,
+    "polygonIds": [
+      "uruk-ud-viii-4-f58919603873"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1402,
+    "polygonIds": [
+      "uruk-r-vii-5617a49eda9f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1403,
+    "polygonIds": [
+      "uruk-t-xiii-e221d36943ae"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1415,
+    "polygonIds": [
+      "uruk-me-xvi-2-32618c3988d2"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1416,
+    "polygonIds": [
+      "uruk-na-xvi-2-8a81de97f1d1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1417,
+    "polygonIds": [
+      "uruk-nb-xvi-3-ca07287e1823"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1418,
+    "polygonIds": [
+      "uruk-nc-xvi-1-880479319b5a"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1419,
+    "polygonIds": [
+      "uruk-nd-xvi-3-d021bb6cc772"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1421,
+    "polygonIds": [
+      "uruk-nd-xvi-2-e7da9c978a2f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1423,
+    "polygonIds": [
+      "uruk-ne-xvi-3-c5cd10df748d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1424,
+    "polygonIds": [
+      "uruk-vc-xviii-1-a945e4e95572"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1447,
+    "polygonIds": [
+      "uruk-oc-xvi-3-40820197ef28"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1449,
+    "polygonIds": [
+      "uruk-pd-xvi-2-4b6930c1b4d2"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1450,
+    "polygonIds": [
+      "uruk-pc-xvii-4-33631c22f614"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1451,
+    "polygonIds": [
+      "uruk-pa-xvi-4-fd6edba91776"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 1452,
+    "polygonIds": [
+      "uruk-od-xiv-5-af4ef5493a6f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4054,
+    "polygonIds": [
+      "uruk-od-xvii-1-2-aed22799f78c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4055,
+    "polygonIds": [
+      "uruk-ob-xvi-1-b3e8c8c62285"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4056,
+    "polygonIds": [
+      "uruk-de-xv-1-6195f32670ec"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4058,
+    "polygonIds": [
+      "uruk-ne-xvii-2-aaf74eb07a91"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4059,
+    "polygonIds": [
+      "uruk-qc-xiv-5-8a6ccd51e7b1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4060,
+    "polygonIds": [
+      "uruk-oe-xiv-5ff3a686aa89"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4061,
+    "polygonIds": [
+      "uruk-oe-xiv-5-f382bfe7ff5e"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4064,
+    "polygonIds": [
+      "uruk-qa-xiv-6f6ae63ba51f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4066,
+    "polygonIds": [
+      "uruk-oe-xiv-4-176e96014ae7"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4076,
+    "polygonIds": [
+      "uruk-oa-xv-3-7487a18c70f0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4117,
+    "polygonIds": [
+      "uruk-ob-xv-5-008019e206a5"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4119,
+    "polygonIds": [
+      "uruk-ne-xv-5-b5a30c0b34d2"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4127,
+    "polygonIds": [
+      "uruk-oa-xv-5-61d0761b8811"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4138,
+    "polygonIds": [
+      "uruk-pe-qa-xvi-4-48070b227e1f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4142,
+    "polygonIds": [
+      "uruk-nc-xvi-2-5d16d42d18a1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4144,
+    "polygonIds": [
+      "uruk-nb-xvi-4-3fbddc14bd87"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4148,
+    "polygonIds": [
+      "uruk-id-xvii-4-7adc5bda94aa"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4149,
+    "polygonIds": [
+      "uruk-oa-xvi-1-79443e65b875"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4150,
+    "polygonIds": [
+      "uruk-ka-xvii-2-b0fda232cdfb"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4151,
+    "polygonIds": [
+      "uruk-ue-xv-4-825271b82bba"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4154,
+    "polygonIds": [
+      "uruk-ka-xvii-5-506b0cc93542"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4165,
+    "polygonIds": [
+      "uruk-jd-xvii-4-e09b07984db1"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4179,
+    "polygonIds": [
+      "uruk-qd-xv-1-21f0c69b8f51"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4180,
+    "polygonIds": [
+      "uruk-qb-xiv-4-2e4e4b542a2f"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4183,
+    "polygonIds": [
+      "uruk-qb-xiv-3-8cb00d437a39"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4185,
+    "polygonIds": [
+      "uruk-qc-xv-1-8c702d19d4a4"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4186,
+    "polygonIds": [
+      "uruk-qb-xv-1-b71e56f4d817"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4198,
+    "polygonIds": [
+      "uruk-qa-xiv-5-89cb18799fb7"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4199,
+    "polygonIds": [
+      "uruk-qa-xiv-4-17d7847f2d32"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4200,
+    "polygonIds": [
+      "uruk-qb-xiv-fefa311b2dd0"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4212,
+    "polygonIds": [
+      "uruk-qe-xv-1-23ef4cfecfaa"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4218,
+    "polygonIds": [
+      "uruk-qe-xiv-4-30dc55e5e17c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4221,
+    "polygonIds": [
+      "uruk-pe-xiv-4-8e6d4ec70cbc"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4235,
+    "polygonIds": [
+      "uruk-qe-xiv-5-aa8c448957df"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4253,
+    "polygonIds": [
+      "uruk-ob-xvi-4-36c901802c49"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4254,
+    "polygonIds": [
+      "uruk-nb-xvi-5-11522bed4dbb"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4255,
+    "polygonIds": [
+      "uruk-nc-xvii-1-795d72a1f50c"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4306,
+    "polygonIds": [
+      "uruk-ob-xvi-3-14069e9c7fa9"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4310,
+    "polygonIds": [
+      "uruk-u-xvi-c4f6c9d7c7d8"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4314,
+    "polygonIds": [
+      "uruk-nd-xvi-5-67f28c6d8386"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4338,
+    "polygonIds": [
+      "uruk-pb-xvi-3-10a06e0b0c30"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4339,
+    "polygonIds": [
+      "uruk-qd-xv-4-8c54e0a9b28d"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4340,
+    "polygonIds": [
+      "uruk-qd-xvi-381aea732737"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4342,
+    "polygonIds": [
+      "uruk-pb-xvi-1-b2c6f28a7847"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4345,
+    "polygonIds": [
+      "uruk-oa-ob-xv-3-894c7b9b3cc7"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4358,
+    "polygonIds": [
+      "uruk-md-xv-4-e9b352b06212"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4361,
+    "polygonIds": [
+      "uruk-nb-xvi-3-4-83c4d8f8fe36"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4362,
+    "polygonIds": [
+      "uruk-nc-nd-xvi-2-6af3e26c9f5b"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4364,
+    "polygonIds": [
+      "uruk-na-xvi-3-14c7a34a7120"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4366,
+    "polygonIds": [
+      "uruk-ld-xv-1-85f80912b886"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4368,
+    "polygonIds": [
+      "uruk-qd-xxv-5-8429747712cf"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4370,
+    "polygonIds": [
+      "uruk-qd-xxv-1-033bb35d4000"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4371,
+    "polygonIds": [
+      "uruk-qa-xxv-3-fa21f4d30356"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  },
+  {
+    "findspotId": 4372,
+    "polygonIds": [
+      "uruk-k-xvii-9db31a991297"
+    ],
+    "locationPrecision": "excavation-area",
+    "matchMethod": "verified-source",
+    "source": "Uruk Tafeln aktualisiert 24-07-25.ods",
+    "sourceRevision": "2026-08-05"
+  }
+]

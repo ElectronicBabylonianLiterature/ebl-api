@@ -1,0 +1,102 @@
+[
+  {
+    "findspotId": 348,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "Russell2017Assyrian@437",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 777,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "C 50",
+    "sector": "",
+    "map": "?",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 817,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "?",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 819,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "?",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 1365,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "RN2323@201",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 1378,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "RN2323@232",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 1411,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "?",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 1434,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "",
+    "sector": "",
+    "map": "Russell2017Assyrian@437",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4329,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "Upper fill of trench (d. 13) outside north-west corner of Governor's Palace",
+    "sector": "",
+    "map": "Russell2017Assyrian@437",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  },
+  {
+    "findspotId": 4374,
+    "siteId": "KALHU",
+    "siteName": "Kalḫu",
+    "area": "ZT4",
+    "sector": "",
+    "map": "?",
+    "status": "needs-human-curation",
+    "requiredDecision": "Assign a polygon ID or confirm the row is unmapped."
+  }
+]

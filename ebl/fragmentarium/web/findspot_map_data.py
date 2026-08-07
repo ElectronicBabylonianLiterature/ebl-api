@@ -1,5 +1,6 @@
 from falcon import Request, Response
 
+from ebl.common.query.parameter_parser import parse_genre
 from ebl.errors import DataError
 from ebl.fragmentarium.application.findspot_map_data_schema import (
     FindspotMapDataSchema,
@@ -30,11 +31,15 @@ class FindspotMapDataResource:
 
     def on_get(self, req: Request, resp: Response) -> None:
         site_id = self._parse_site(req.get_param("site"))
+        genre = parse_genre(dict(req.params)).get("genre")
         data = self._service.find_map_data(
             site_id=site_id,
             user_scopes=req.context.user.get_scopes(
                 prefix="read:", suffix="-fragments"
             ),
+            script_period=req.get_param("scriptPeriod"),
+            script_period_modifier=req.get_param("scriptPeriodModifier"),
+            genre=genre,
         )
         schema = FindspotMapDataSchema(many=True)
         resp.media = {"findspots": schema.dump(data)}

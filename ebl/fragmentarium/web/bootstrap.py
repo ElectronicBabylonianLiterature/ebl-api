@@ -145,6 +145,7 @@ def create_fragmentarium_routes(api: falcon.App, context: Context):
             context.findspot_repository,
             context.fragment_repository,
             provenance_service,
+            context.map_artifact_repository,
         ),
         provenance_service,
     )

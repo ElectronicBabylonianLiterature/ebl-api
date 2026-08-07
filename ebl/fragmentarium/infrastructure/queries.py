@@ -1,4 +1,4 @@
-from typing import List, Sequence, Dict
+from typing import List, Optional, Sequence, Dict
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.scopes import Scope
 from ebl.fragmentarium.domain.archaeology import ExcavationNumber
@@ -56,6 +56,20 @@ def number_is(number: str) -> dict:
 
 def sample_size_one() -> dict:
     return {"$sample": {"size": 1}}
+
+
+def filter_by_script(
+    script_period: Optional[str] = None, script_period_modifier: Optional[str] = None
+) -> dict:
+    parameters = {
+        "script.period": script_period,
+        "script.periodModifier": script_period_modifier,
+    }
+    return {path: value for path, value in parameters.items() if value}
+
+
+def filter_by_genre(genre: Optional[Sequence[str]] = None) -> dict:
+    return {"genres.category": {"$all": genre}} if genre else {}
 
 
 def match_user_scopes(user_scopes: Sequence[Scope] = ()) -> dict:
