@@ -1,8 +1,11 @@
 from enum import Enum
 import re
+from typing import Type, TypeVar
 
 OPEN = True
 RESTRICTED = False
+
+S = TypeVar("S", bound="ScopeItem")
 
 
 class ScopeItem(Enum):
@@ -14,7 +17,7 @@ class ScopeItem(Enum):
         self.is_open = is_open
 
     @classmethod
-    def from_string(cls, scope_string: str):
+    def from_string(cls: Type[S], scope_string: str) -> S:
         parsed_prefix, parsed_name, parsed_suffix = cls._parse_scope_string(
             scope_string
         )

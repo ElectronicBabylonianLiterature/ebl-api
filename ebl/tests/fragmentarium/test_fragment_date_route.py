@@ -46,14 +46,14 @@ def test_update_date(client, fragmentarium, user, currentDate, updatedDate):
         body=json.dumps(update) if updatedDate else "{}",
     )
     expected_json = create_response_dto(
-        fragment.set_date(updatedDate), user, fragment.number == "K.1"
+        fragment.set_date(updatedDate), user, fragment.number == "K.1", []
     )
 
     assert post_result.status == falcon.HTTP_OK
     assert post_result.json == expected_json
 
     get_result = client.simulate_get(f"/fragments/{fragment_number}")
-    assert get_result.json == expected_json
+    assert get_result.json == {**expected_json, "realiaInfo": []}
 
 
 def test_update_invalid_date(client, fragmentarium, user, database):

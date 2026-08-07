@@ -12,15 +12,15 @@ from ebl.transliteration.domain.tokens import ErasureState, Token, TokenVisitor
 from ebl.transliteration.domain.word_tokens import AbstractWord
 
 
+def _validate_modifiers(_instance, _attribute, value) -> None:
+    allowed_modifiers = set(Flag) - {Flag.COLLATION}
+    if not set(value).issubset(allowed_modifiers):
+        raise ValueError(f"Invalid modifiers: {value}")
+
+
 @attr.s(auto_attribs=True, frozen=True, str=False)
 class AkkadianWord(AbstractWord):
-    modifiers: Sequence[Flag] = attr.ib(default=())
-
-    @modifiers.validator
-    def _validate_modifiers(self, _, value):
-        allowed_modifiers = set(Flag) - {Flag.COLLATION}
-        if not set(value).issubset(allowed_modifiers):
-            raise ValueError(f"Invalid modifiers: {value}")
+    modifiers: Sequence[Flag] = attr.ib(default=(), validator=_validate_modifiers)
 
     @property
     def language(self) -> Language:
@@ -56,6 +56,7 @@ class AkkadianWord(AbstractWord):
         has_omitted_alignment: bool = False,
         id_: Optional[str] = None,
         named_entities: Sequence[str] = (),
+        realia: Sequence[str] = (),
     ) -> "AkkadianWord":
         return AkkadianWord(
             frozenset(),
@@ -68,6 +69,7 @@ class AkkadianWord(AbstractWord):
             has_variant_alignment,
             has_omitted_alignment,
             named_entities,
+            realia,
             modifier,
         )
 
