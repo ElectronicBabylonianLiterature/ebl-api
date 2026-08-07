@@ -87,9 +87,7 @@ def test_parse_siglum_period_uncertain_type_uncertain_adjacent(
         f"{provenance.abbreviation}{Period.UNCERTAIN.abbreviation}"
         f"{ManuscriptType.UNCERTAIN.abbreviation}{disambiquator}",
         seeded_provenance_service,
-    ) == Siglum(
-        provenance, Period.UNCERTAIN, ManuscriptType.UNCERTAIN, disambiquator
-    )
+    ) == Siglum(provenance, Period.UNCERTAIN, ManuscriptType.UNCERTAIN, disambiquator)
 
 
 @pytest.mark.parametrize("provenance", [URUK, UR, PERIPHERY])
