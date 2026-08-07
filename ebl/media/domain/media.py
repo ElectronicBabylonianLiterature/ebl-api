@@ -59,8 +59,14 @@ def _validate_associations(
 
 
 def _validate_svg_copy(media: "Media", _, value: "MediaRepresentations") -> None:
-    if value.original.mime_type == SVG_MIME_TYPE and media.type is not MediaType.COPY:
-        raise ValueError("SVG originals are only valid for COPY media.")
+    if media.type is MediaType.COPY:
+        return
+
+    if any(
+        representation.mime_type == SVG_MIME_TYPE
+        for representation in value.all_representations
+    ):
+        raise ValueError("SVG representations are only valid for COPY media.")
 
 
 class MediaType(Enum):
@@ -103,7 +109,7 @@ class MediaAssociation:
 
 @attr.s(auto_attribs=True, frozen=True)
 class MediaReference:
-    id: str = attr.ib(validator=_not_empty)
+    bibliography_id: str = attr.ib(validator=_not_empty)
 
 
 @attr.s(auto_attribs=True, frozen=True)
@@ -146,6 +152,14 @@ class MediaRepresentations:
         sizes = [size for size, _ in self.thumbnails]
         if len(sizes) != len(set(sizes)):
             raise ValueError("Media cannot contain duplicate thumbnail sizes.")
+
+    @property
+    def all_representations(self) -> Sequence[MediaRepresentation]:
+        representations = [self.original]
+        if self.display is not None:
+            representations.append(self.display)
+        representations.extend(representation for _, representation in self.thumbnails)
+        return tuple(representations)
 
 
 @attr.s(auto_attribs=True, frozen=True)

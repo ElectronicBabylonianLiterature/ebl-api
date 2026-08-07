@@ -1,3 +1,5 @@
+from typing import Any, Dict, List, cast
+
 from ebl.media.application.media_schemas import (
     FragmentMediaResponseDto,
     FragmentMediaResponseDtoSchema,
@@ -20,6 +22,19 @@ from ebl.tests.media.factories import (
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
+def dump_response(fragment_id, media) -> Dict[str, Any]:
+    return cast(
+        Dict[str, Any],
+        FragmentMediaResponseDtoSchema().dump(
+            FragmentMediaResponseDto.of(fragment_id, media)
+        ),
+    )
+
+
+def dump_media(fragment_id, media) -> List[Dict[str, Any]]:
+    return cast(List[Dict[str, Any]], dump_response(fragment_id, media)["media"])
+
+
 def test_fragment_media_response_serializes_fragment_context() -> None:
     fragment_id = MuseumNumber.of("K.1")
     item = photo_media(
@@ -28,9 +43,7 @@ def test_fragment_media_response_serializes_fragment_context() -> None:
         attribution="The British Museum",
     )
 
-    result = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (item,))
-    )
+    result = dump_response(fragment_id, (item,))
 
     assert result == {
         "media": [
@@ -74,9 +87,7 @@ def test_fragment_media_response_serializes_display_representation() -> None:
         )
     )
 
-    [result] = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (item,))
-    )["media"]
+    [result] = dump_media(fragment_id, (item,))
 
     assert result["representations"]["display"] == {
         "url": f"/fragments/K.1/media/{DEFAULT_MEDIA_ID}/display",
@@ -90,9 +101,7 @@ def test_fragment_media_response_encodes_future_media_urls() -> None:
     fragment_id = MuseumNumber("A/B", "1")
     item = photo_media(associations=(association(fragment_id=fragment_id),))
 
-    [result] = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (item,))
-    )["media"]
+    [result] = dump_media(fragment_id, (item,))
 
     assert result["representations"]["original"]["url"] == (
         f"/fragments/A%2FB.1/media/{DEFAULT_MEDIA_ID}/file"
@@ -105,9 +114,7 @@ def test_fragment_media_response_encodes_future_media_urls() -> None:
 def test_fragment_media_response_omits_optional_empty_fields() -> None:
     fragment_id = MuseumNumber.of("K.1")
 
-    [result] = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (photo_media(),))
-    )["media"]
+    [result] = dump_media(fragment_id, (photo_media(),))
 
     assert "caption" not in result
     assert "attribution" not in result
@@ -118,9 +125,7 @@ def test_fragment_media_response_omits_optional_empty_fields() -> None:
 def test_fragment_media_response_excludes_internal_fields() -> None:
     fragment_id = MuseumNumber.of("K.1")
 
-    [result] = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (photo_media(),))
-    )["media"]
+    [result] = dump_media(fragment_id, (photo_media(),))
 
     assert "originalFilename" not in result
     assert "checksum" not in result["representations"]["original"]
@@ -141,9 +146,7 @@ def test_fragment_media_response_serializes_multiple_thumbnail_sizes() -> None:
         )
     )
 
-    [result] = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (item,))
-    )["media"]
+    [result] = dump_media(fragment_id, (item,))
 
     thumbnails = result["representations"]["thumbnails"]
 
@@ -178,9 +181,7 @@ def test_fragment_media_response_supports_svg_original_with_raster_display() -> 
         ),
     )
 
-    [result] = FragmentMediaResponseDtoSchema().dump(
-        FragmentMediaResponseDto.of(fragment_id, (item,))
-    )["media"]
+    [result] = dump_media(fragment_id, (item,))
 
     assert result["id"] == DEFAULT_COPY_MEDIA_ID
     assert result["type"] == MediaType.COPY.name

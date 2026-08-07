@@ -1,85 +1,18 @@
 from abc import ABC, abstractmethod
-from enum import Enum
-from typing import BinaryIO, Mapping, Optional, Sequence
+from typing import Mapping, Optional, Sequence
 
-import attr
-
-from ebl.media.domain import (
-    Media,
-    MediaId,
-    MediaRepresentation,
-    ThumbnailSize,
+from ebl.media.application.media_requests import (
+    BackfillReport,
+    BackfillRequest,
+    DisplayRepresentationWriteRequest,
+    ImportReport,
+    ImportRequest,
+    OriginalRepresentationWriteRequest,
+    RepresentationHandle,
+    ThumbnailRepresentationWriteRequest,
 )
+from ebl.media.domain import Media, MediaId, ThumbnailSize
 from ebl.transliteration.domain.museum_number import MuseumNumber
-
-
-class ImportMode(Enum):
-    DRY_RUN = "dry-run"
-    SKIP_EXISTING = "skip-existing"
-    REPLACE = "replace"
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class RepresentationHandle:
-    media_id: MediaId
-    representation: MediaRepresentation
-    content: BinaryIO
-    content_type: str
-    length: int
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class _RepresentationWriteRequest:
-    media_id: MediaId
-    content: BinaryIO
-    representation: MediaRepresentation
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class OriginalRepresentationWriteRequest(_RepresentationWriteRequest):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class DisplayRepresentationWriteRequest(_RepresentationWriteRequest):
-    pass
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class ThumbnailRepresentationWriteRequest(_RepresentationWriteRequest):
-    thumbnail_size: ThumbnailSize = attr.ib(
-        validator=attr.validators.instance_of(ThumbnailSize)
-    )
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class ImportRequest:
-    mode: ImportMode
-    source_name: str
-    fragment_ids: Sequence[MuseumNumber] = ()
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class ImportReport:
-    created: int = 0
-    skipped: int = 0
-    replaced: int = 0
-    errors: Sequence[str] = ()
-    warnings: Sequence[str] = ()
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class BackfillRequest:
-    dry_run: bool = True
-    batch_size: Optional[int] = None
-    resume_after: Optional[str] = None
-
-
-@attr.s(auto_attribs=True, frozen=True)
-class BackfillReport:
-    scanned: int = 0
-    candidates: int = 0
-    reports: Mapping[str, Sequence[str]] = attr.Factory(dict)
 
 
 class MediaReader(ABC):
@@ -104,22 +37,30 @@ class MediaReader(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def find_primary_media(self, fragment_id: MuseumNumber) -> Optional[Media]:
+        raise NotImplementedError
+
+    @abstractmethod
     def find_primary_photo(self, fragment_id: MuseumNumber) -> Optional[Media]:
         raise NotImplementedError
 
 
 class MediaWriter(ABC):
     @abstractmethod
-    def save(self, media: Media) -> MediaId:
+    def create(self, media: Media) -> MediaId:
         raise NotImplementedError
 
     @abstractmethod
     def replace(self, media: Media) -> MediaId:
         raise NotImplementedError
 
+    @abstractmethod
+    def delete(self, media_id: MediaId) -> None:
+        raise NotImplementedError
+
 
 class MediaRepository(MediaReader, MediaWriter, ABC):
-    """Persistence-agnostic contract for future media metadata storage."""
+    pass
 
 
 class MediaRepresentationStore(ABC):
@@ -169,6 +110,16 @@ class MediaService(ABC):
     def get_fragment_media(
         self, fragment_id: MuseumNumber, media_id: MediaId
     ) -> Optional[Media]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def set_primary_media(
+        self, fragment_id: MuseumNumber, media_id: MediaId
+    ) -> Sequence[Media]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_media(self, media_id: MediaId) -> None:
         raise NotImplementedError
 
 

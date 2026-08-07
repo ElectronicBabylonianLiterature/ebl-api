@@ -3,16 +3,16 @@ from typing import FrozenSet
 from marshmallow import Schema, fields, post_dump
 
 from ebl.media.application.media_dtos import (
-    FragmentMediaItemDto as FragmentMediaItemDto,
-    FragmentMediaResponseDto as FragmentMediaResponseDto,
-    MediaReferenceDto as MediaReferenceDto,
-    MediaRepresentationDto as MediaRepresentationDto,
-    MediaRepresentationsDto as MediaRepresentationsDto,
+    FragmentMediaItemDto,
+    FragmentMediaResponseDto,
+    MediaReferenceDto,
+    MediaRepresentationDto,
+    MediaRepresentationsDto,
 )
 from ebl.media.application.media_summary_dtos import (
-    FragmentMediaSummaryDto as FragmentMediaSummaryDto,
-    MediaSummaryDto as MediaSummaryDto,
-    MediaSummaryPrimaryDto as MediaSummaryPrimaryDto,
+    FragmentMediaSummaryDto,
+    MediaSummaryDto,
+    MediaSummaryPrimaryDto,
 )
 from ebl.media.domain import MediaType
 from ebl.schemas import NameEnumField
@@ -86,9 +86,25 @@ class FragmentMediaSummaryDtoSchema(OmitEmptyMixin, Schema):
         MediaSummaryDtoSchema, required=True, data_key="mediaSummary"
     )
     has_photo = fields.Boolean(required=True, data_key="hasPhoto")
-    thumbnail_path = fields.String(data_key="thumbnailPath")
+    thumbnail_path = fields.String(required=True, data_key="thumbnailPath")
 
 
-__all__ = tuple(
-    name for name in globals() if name.endswith("Dto") or name.endswith("DtoSchema")
-)
+__all__ = [
+    "FragmentMediaItemDto",
+    "FragmentMediaItemDtoSchema",
+    "FragmentMediaResponseDto",
+    "FragmentMediaResponseDtoSchema",
+    "FragmentMediaSummaryDto",
+    "FragmentMediaSummaryDtoSchema",
+    "MediaReferenceDto",
+    "MediaReferenceDtoSchema",
+    "MediaRepresentationDto",
+    "MediaRepresentationDtoSchema",
+    "MediaRepresentationsDto",
+    "MediaRepresentationsDtoSchema",
+    "MediaSummaryDto",
+    "MediaSummaryDtoSchema",
+    "MediaSummaryPrimaryDto",
+    "MediaSummaryPrimaryDtoSchema",
+    "OmitEmptyMixin",
+]

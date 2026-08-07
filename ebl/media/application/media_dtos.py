@@ -63,7 +63,8 @@ class FragmentMediaItemDto:
             caption=media.caption,
             attribution=media.attribution,
             references=tuple(
-                MediaReferenceDto(reference.id) for reference in media.references
+                MediaReferenceDto(reference.bibliography_id)
+                for reference in media.references
             ),
             representations=MediaRepresentationsDto(
                 original=MediaRepresentationDto.of(

@@ -82,7 +82,7 @@ def test_valid_svg_copy_metadata() -> None:
 
 
 def test_svg_photo_is_invalid() -> None:
-    with pytest.raises(ValueError, match="SVG originals"):
+    with pytest.raises(ValueError, match="SVG representations"):
         photo_media(
             media_representations=representations(
                 original_mime_type="image/svg+xml", display_mime_type="image/jpeg"

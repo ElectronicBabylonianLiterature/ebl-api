@@ -19,17 +19,15 @@ from ebl.tests.fragmentarium.fragment_repository_test_helpers import (
     create_transliteration_query_lines,
 )
 from ebl.common.domain.period import Period
-from ebl.fragmentarium.domain.archaeology import ExcavationNumber
 from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 
 def test_query_fragmentarium_number(database, fragment_repository):
     fragment = FragmentFactory.build()
-    other = FragmentFactory.build(
-        archaeology__excavation_number=ExcavationNumber("Y", "0")
+    database[COLLECTION].insert_many(
+        [SCHEMA.dump(fragment), SCHEMA.dump(FragmentFactory.build())]
     )
-    database[COLLECTION].insert_many([SCHEMA.dump(fragment), SCHEMA.dump(other)])
 
     assert fragment_repository.query(
         {"number": str(fragment.number)}

@@ -144,6 +144,21 @@ def media(options: MediaFactoryOptions | None = None) -> Media:
     )
 
 
+def contract_media(
+    media_id_: MediaId,
+    media_type: MediaType,
+    associations: Sequence[MediaAssociation],
+    original_filename: str = "BM-12345-obverse.jpg",
+) -> Media:
+    return Media(
+        id=media_id_,
+        type=media_type,
+        original_filename=original_filename,
+        representations=MediaRepresentations(original_representation()),
+        associations=associations,
+    )
+
+
 def photo_media(**kwargs) -> Media:
     return media(attr.evolve(MediaFactoryOptions(media_type=MediaType.PHOTO), **kwargs))
 

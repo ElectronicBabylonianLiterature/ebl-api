@@ -1,9 +1,12 @@
+from typing import Any, Dict, cast
+
 from ebl.media.application.media_schemas import (
     FragmentMediaSummaryDto,
     FragmentMediaSummaryDtoSchema,
 )
 from ebl.media.domain import ThumbnailSize
 from ebl.tests.media.factories import (
+    DEFAULT_COPY_MEDIA_ID,
     DEFAULT_MEDIA_ID,
     SECOND_PHOTO_MEDIA_ID,
     association,
@@ -14,17 +17,24 @@ from ebl.tests.media.factories import (
 )
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
+FRAGMENT_ID = MuseumNumber.of("K.1")
+LEGACY_THUMBNAIL_PATH = "/fragments/K.1/thumbnail/small"
+
+
+def dump(media) -> Dict[str, Any]:
+    return cast(
+        Dict[str, Any],
+        FragmentMediaSummaryDtoSchema().dump(
+            FragmentMediaSummaryDto.of(FRAGMENT_ID, media)
+        ),
+    )
+
 
 def test_media_summary_serializes_primary_photo_and_legacy_fields() -> None:
-    fragment_id = MuseumNumber.of("K.1")
     copy = copy_media(associations=(association(sort_order=0, is_primary=True),))
     photo = photo_media(associations=(association(sort_order=1, is_primary=True),))
 
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, (copy, photo))
-    )
-
-    assert result == {
+    assert dump((copy, photo)) == {
         "mediaSummary": {
             "count": 2,
             "types": ["COPY", "PHOTO"],
@@ -40,107 +50,98 @@ def test_media_summary_serializes_primary_photo_and_legacy_fields() -> None:
             },
         },
         "hasPhoto": True,
-        "thumbnailPath": "/fragments/K.1/thumbnail/small",
+        "thumbnailPath": LEGACY_THUMBNAIL_PATH,
     }
 
 
 def test_media_summary_for_copy_only_fragment_has_no_legacy_photo_flag() -> None:
-    fragment_id = MuseumNumber.of("K.1")
     copy = copy_media(associations=(association(sort_order=0, is_primary=True),))
 
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, (copy,))
-    )
+    result = dump((copy,))
 
     assert result["hasPhoto"] is False
-    assert "thumbnailPath" not in result
-    assert result["mediaSummary"]["primary"]["type"] == "COPY"
+    assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
+    assert result["mediaSummary"]["primary"] == {
+        "id": DEFAULT_COPY_MEDIA_ID,
+        "type": "COPY",
+        "thumbnail": {
+            "url": f"/fragments/K.1/media/{DEFAULT_COPY_MEDIA_ID}/thumbnail/small",
+            "mimeType": "image/jpeg",
+            "width": 240,
+            "height": 180,
+        },
+    }
 
 
 def test_media_summary_without_primary_keeps_legacy_thumbnail_path() -> None:
-    fragment_id = MuseumNumber.of("K.1")
     photo = photo_media(associations=(association(sort_order=0, is_primary=False),))
 
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, (photo,))
-    )
+    result = dump((photo,))
 
-    assert result["mediaSummary"] == {
-        "count": 1,
-        "types": ["PHOTO"],
-    }
+    assert result["mediaSummary"] == {"count": 1, "types": ["PHOTO"]}
     assert result["hasPhoto"] is True
-    assert result["thumbnailPath"] == "/fragments/K.1/thumbnail/small"
+    assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
 
 
-def test_media_summary_without_media_keeps_empty_types() -> None:
-    fragment_id = MuseumNumber.of("K.1")
-
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, ())
-    )
-
-    assert result == {
-        "mediaSummary": {
-            "count": 0,
-            "types": [],
-        },
+def test_media_summary_without_media_still_emits_legacy_fields() -> None:
+    assert dump(()) == {
+        "mediaSummary": {"count": 0, "types": []},
         "hasPhoto": False,
+        "thumbnailPath": LEGACY_THUMBNAIL_PATH,
     }
 
 
-def test_media_summary_without_small_photo_thumbnail_omits_thumbnail_path() -> None:
-    fragment_id = MuseumNumber.of("K.1")
+def test_media_summary_without_small_photo_thumbnail_omits_primary_thumbnail() -> None:
     photo = photo_media(
         media_representations=representations(
             thumbnails=((ThumbnailSize.MEDIUM, medium_thumbnail_representation()),)
         )
     )
 
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, (photo,))
-    )
+    result = dump((photo,))
 
     assert result["hasPhoto"] is True
-    assert result["mediaSummary"]["primary"]["type"] == "PHOTO"
-    assert "thumbnail" not in result["mediaSummary"]["primary"]
-    assert "thumbnailPath" not in result
+    assert result["mediaSummary"]["primary"] == {
+        "id": DEFAULT_MEDIA_ID,
+        "type": "PHOTO",
+    }
+    assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
 
 
-def test_media_summary_uses_non_primary_photo_for_legacy_thumbnail_path() -> None:
-    fragment_id = MuseumNumber.of("K.1")
+def test_media_summary_never_promotes_medium_thumbnail_to_small() -> None:
+    photo = photo_media(
+        media_representations=representations(
+            thumbnails=((ThumbnailSize.MEDIUM, medium_thumbnail_representation()),)
+        )
+    )
+
+    primary = dump((photo,))["mediaSummary"]["primary"]
+
+    assert "thumbnail" not in primary
+
+
+def test_media_summary_legacy_thumbnail_path_ignores_primary_selection() -> None:
     copy = copy_media(associations=(association(sort_order=0, is_primary=True),))
     photo = photo_media(associations=(association(sort_order=1, is_primary=False),))
 
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, (copy, photo))
-    )
+    result = dump((copy, photo))
 
     assert result["hasPhoto"] is True
     assert result["mediaSummary"]["primary"]["type"] == "COPY"
-    assert result["thumbnailPath"] == "/fragments/K.1/thumbnail/small"
+    assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH
 
 
-def test_media_summary_uses_first_photo_with_small_thumbnail() -> None:
-    fragment_id = MuseumNumber.of("K.1")
-    photo_without_small = photo_media(
-        associations=(association(sort_order=0, is_primary=False),),
-        media_representations=representations(
-            thumbnails=((ThumbnailSize.MEDIUM, medium_thumbnail_representation()),)
-        ),
-    )
-    photo_with_small = photo_media(
+def test_media_summary_selects_first_primary_photo_by_sort_order() -> None:
+    later_photo = photo_media(
         media_id_=SECOND_PHOTO_MEDIA_ID,
-        associations=(association(sort_order=1, is_primary=False),),
+        associations=(association(sort_order=5, is_primary=True),),
+    )
+    earlier_photo = photo_media(
+        associations=(association(sort_order=1, is_primary=True),)
     )
 
-    result = FragmentMediaSummaryDtoSchema().dump(
-        FragmentMediaSummaryDto.of(fragment_id, (photo_with_small, photo_without_small))
-    )
+    result = dump((later_photo, earlier_photo))
 
-    assert result["mediaSummary"] == {
-        "count": 2,
-        "types": ["PHOTO"],
-    }
-    assert result["hasPhoto"] is True
-    assert result["thumbnailPath"] == "/fragments/K.1/thumbnail/small"
+    assert result["mediaSummary"]["count"] == 2
+    assert result["mediaSummary"]["primary"]["id"] == DEFAULT_MEDIA_ID
+    assert result["thumbnailPath"] == LEGACY_THUMBNAIL_PATH

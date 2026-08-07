@@ -1,200 +1,95 @@
 from io import BytesIO
-from typing import Sequence
 
 import attr
+import pytest
 
 from ebl.media.application import (
+    MediaAlreadyExistsError,
+    MediaNotFoundError,
     MediaRepository,
     RepresentationHandle,
-    MediaRepresentationStore,
-    MediaService,
 )
-from ebl.media.domain import (
-    Media,
-    MediaAssociation,
-    MediaId,
-    MediaRepresentations,
-    MediaType,
-)
-from ebl.tests.media.factories import original_representation
+from ebl.media.domain import MediaAssociation, MediaId, MediaType
+from ebl.tests.media.factories import contract_media, original_representation
+from ebl.tests.media.in_memory_media import InMemoryMediaRepository
 from ebl.transliteration.domain.museum_number import MuseumNumber
 
 PHOTO_ID = MediaId("550e8400-e29b-41d4-a716-446655440000")
 COPY_ID = MediaId("550e8400-e29b-41d4-a716-446655440001")
-
-
-class InMemoryMediaRepository(MediaRepository):
-    def __init__(self, media=()):
-        self._media = {item.id: item for item in media}
-
-    def find_by_id(self, media_id):
-        return self._media.get(media_id)
-
-    def find_by_fragment(self, fragment_id):
-        return tuple(
-            sorted(
-                (
-                    item
-                    for item in self._media.values()
-                    if item.is_associated_with(fragment_id)
-                ),
-                key=lambda item: item.association_for(fragment_id).sort_order,
-            )
-        )
-
-    def find_by_fragments(self, fragment_ids):
-        return {
-            fragment_id: self.find_by_fragment(fragment_id)
-            for fragment_id in fragment_ids
-        }
-
-    def find_in_fragment(self, media_id, fragment_id):
-        media = self.find_by_id(media_id)
-        return media if media and media.is_associated_with(fragment_id) else None
-
-    def find_primary_photo(self, fragment_id):
-        return next(
-            (
-                item
-                for item in self.find_by_fragment(fragment_id)
-                if item.type is MediaType.PHOTO
-                and item.association_for(fragment_id).is_primary
-            ),
-            None,
-        )
-
-    def save(self, media):
-        self._media[media.id] = media
-        return media.id
-
-    def replace(self, media):
-        self._media[media.id] = media
-        return media.id
-
-
-class InMemoryMediaService(MediaService):
-    def __init__(self, repository: MediaRepository):
-        self._repository = repository
-
-    def list_fragment_media(self, fragment_id):
-        return self._repository.find_by_fragment(fragment_id)
-
-    def find_media_by_fragments(self, fragment_ids: Sequence[MuseumNumber]):
-        return self._repository.find_by_fragments(fragment_ids)
-
-    def get_fragment_media(self, fragment_id, media_id):
-        return self._repository.find_in_fragment(media_id, fragment_id)
-
-
-class InMemoryRepresentationStore(MediaRepresentationStore):
-    def read_original(self, media):
-        raise NotImplementedError
-
-    def read_display(self, media):
-        raise NotImplementedError
-
-    def read_thumbnail(self, media, thumbnail_size):
-        raise NotImplementedError
-
-    def write_original(self, request):
-        raise NotImplementedError
-
-    def write_display(self, request):
-        raise NotImplementedError
-
-    def write_thumbnail(self, request):
-        raise NotImplementedError
-
-    def delete_representations(self, media_id):
-        raise NotImplementedError
-
-
-def media(
-    media_id: MediaId,
-    media_type: MediaType,
-    associations,
-    filename="BM-12345-obverse.jpg",
-) -> Media:
-    return Media(
-        id=media_id,
-        type=media_type,
-        original_filename=filename,
-        representations=MediaRepresentations(original_representation()),
-        associations=associations,
-    )
+MISSING_ID = MediaId("550e8400-e29b-41d4-a716-4466554400ff")
+K1 = MuseumNumber.of("K.1")
+SM2 = MuseumNumber.of("Sm.2")
 
 
 def test_repository_contract_reads_media_by_fragment_in_fragment_order() -> None:
-    photo = media(
+    photo = contract_media(
         PHOTO_ID,
         MediaType.PHOTO,
-        (
-            MediaAssociation(MuseumNumber.of("K.1"), 1, False),
-            MediaAssociation(MuseumNumber.of("Sm.2"), 0, True),
-        ),
+        (MediaAssociation(K1, 1, False), MediaAssociation(SM2, 0, True)),
     )
-    copy = media(
-        COPY_ID,
-        MediaType.COPY,
-        (MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
-    )
+    copy = contract_media(COPY_ID, MediaType.COPY, (MediaAssociation(K1, 0, True),))
     repository = InMemoryMediaRepository((photo, copy))
 
-    assert repository.find_by_fragment(MuseumNumber.of("K.1")) == (copy, photo)
-    assert repository.find_by_fragment(MuseumNumber.of("Sm.2")) == (photo,)
+    assert repository.find_by_fragment(K1) == (copy, photo)
+    assert repository.find_by_fragment(SM2) == (photo,)
 
 
-def test_repository_contract_batch_reads_fragment_media() -> None:
-    photo = media(
+def test_repository_contract_returns_empty_sequence_for_unknown_fragment() -> None:
+    repository = InMemoryMediaRepository()
+
+    assert repository.find_by_fragment(K1) == ()
+
+
+def test_repository_contract_batch_keys_every_requested_fragment() -> None:
+    photo = contract_media(
         PHOTO_ID,
         MediaType.PHOTO,
-        (
-            MediaAssociation(MuseumNumber.of("K.1"), 0, True),
-            MediaAssociation(MuseumNumber.of("Sm.2"), 0, True),
-        ),
+        (MediaAssociation(K1, 0, True), MediaAssociation(SM2, 0, True)),
     )
     repository = InMemoryMediaRepository((photo,))
+    missing = MuseumNumber.of("BM.99")
 
-    assert repository.find_by_fragments(
-        (MuseumNumber.of("K.1"), MuseumNumber.of("Sm.2"))
-    ) == {
-        MuseumNumber.of("K.1"): (photo,),
-        MuseumNumber.of("Sm.2"): (photo,),
+    assert repository.find_by_fragments((K1, SM2, missing)) == {
+        K1: (photo,),
+        SM2: (photo,),
+        missing: (),
     }
 
 
-def test_repository_contract_reads_one_media_item_in_fragment_context() -> None:
-    photo = media(
-        PHOTO_ID,
-        MediaType.PHOTO,
-        (MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
-    )
+def test_repository_contract_batch_collapses_duplicate_fragment_ids() -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
     repository = InMemoryMediaRepository((photo,))
 
-    assert repository.find_in_fragment(PHOTO_ID, MuseumNumber.of("K.1")) == photo
-    assert repository.find_in_fragment(PHOTO_ID, MuseumNumber.of("Sm.2")) is None
+    assert repository.find_by_fragments((K1, K1)) == {K1: (photo,)}
 
 
-def test_repository_contract_finds_primary_photo_only() -> None:
-    copy = media(
-        COPY_ID, MediaType.COPY, (MediaAssociation(MuseumNumber.of("K.1"), 0, True),)
-    )
-    photo = media(
-        PHOTO_ID,
-        MediaType.PHOTO,
-        (MediaAssociation(MuseumNumber.of("K.1"), 1, True),),
-    )
-    repository = InMemoryMediaRepository((copy, photo))
+def test_repository_contract_reads_one_media_item_in_fragment_context() -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    repository = InMemoryMediaRepository((photo,))
 
-    assert repository.find_primary_photo(MuseumNumber.of("K.1")) == photo
+    assert repository.find_in_fragment(PHOTO_ID, K1) == photo
+    assert repository.find_in_fragment(PHOTO_ID, SM2) is None
+    assert repository.find_in_fragment(MISSING_ID, K1) is None
+
+
+def test_repository_contract_creates_new_media() -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    repository = InMemoryMediaRepository()
+
+    assert repository.create(photo) == PHOTO_ID
+    assert repository.find_by_id(PHOTO_ID) == photo
+
+
+def test_repository_contract_rejects_creating_an_existing_media_id() -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    repository = InMemoryMediaRepository((photo,))
+
+    with pytest.raises(MediaAlreadyExistsError):
+        repository.create(attr.evolve(photo, caption="Duplicate"))
 
 
 def test_repository_contract_replaces_metadata_without_changing_identity() -> None:
-    photo = media(
-        PHOTO_ID,
-        MediaType.PHOTO,
-        (MediaAssociation(MuseumNumber.of("K.1"), 0, True),),
-    )
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
     replacement = attr.evolve(photo, caption="Replacement audit note")
     repository = InMemoryMediaRepository((photo,))
 
@@ -202,44 +97,45 @@ def test_repository_contract_replaces_metadata_without_changing_identity() -> No
     assert repository.find_by_id(PHOTO_ID) == replacement
 
 
-def test_service_contract_batch_reads_fragment_media_without_building_summaries() -> (
-    None
-):
-    photo = media(
-        PHOTO_ID,
-        MediaType.PHOTO,
-        (
-            MediaAssociation(MuseumNumber.of("K.1"), 0, True),
-            MediaAssociation(MuseumNumber.of("Sm.2"), 0, True),
-        ),
-    )
-    service = InMemoryMediaService(InMemoryMediaRepository((photo,)))
+def test_repository_contract_rejects_replacing_unknown_media() -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    repository = InMemoryMediaRepository()
 
-    assert service.find_media_by_fragments(
-        (MuseumNumber.of("K.1"), MuseumNumber.of("Sm.2"))
-    ) == {
-        MuseumNumber.of("K.1"): (photo,),
-        MuseumNumber.of("Sm.2"): (photo,),
-    }
+    with pytest.raises(MediaNotFoundError):
+        repository.replace(photo)
 
 
-def test_representation_store_contract_includes_display_without_repository_expansion() -> (
-    None
-):
-    store = InMemoryRepresentationStore()
+def test_repository_contract_deletes_metadata_idempotently() -> None:
+    photo = contract_media(PHOTO_ID, MediaType.PHOTO, (MediaAssociation(K1, 0, True),))
+    repository = InMemoryMediaRepository((photo,))
 
-    assert hasattr(store, "read_display")
-    assert hasattr(store, "write_display")
+    repository.delete(PHOTO_ID)
+    repository.delete(PHOTO_ID)
+
+    assert repository.find_by_id(PHOTO_ID) is None
+    assert repository.find_by_fragment(K1) == ()
+
+
+def test_media_errors_identify_the_media_they_describe() -> None:
+    not_found = MediaNotFoundError(PHOTO_ID)
+    already_exists = MediaAlreadyExistsError(PHOTO_ID)
+
+    assert not_found.media_id == PHOTO_ID
+    assert str(not_found) == f"Media {PHOTO_ID} not found."
+    assert already_exists.media_id == PHOTO_ID
+    assert str(already_exists) == f"Media {PHOTO_ID} already exists."
+
+
+def test_repository_contract_does_not_expose_representation_reads() -> None:
+    assert not hasattr(MediaRepository, "read_original")
     assert not hasattr(MediaRepository, "find_display")
 
 
 def test_representation_handle_contract_includes_readable_content() -> None:
-    content = BytesIO(b"media-bytes")
-
     handle = RepresentationHandle(
         media_id=PHOTO_ID,
         representation=original_representation(),
-        content=content,
+        content=BytesIO(b"media-bytes"),
         content_type="image/jpeg",
         length=len(b"media-bytes"),
     )

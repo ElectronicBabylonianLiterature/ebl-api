@@ -3,6 +3,11 @@ from typing import Optional, Sequence
 import attr
 
 from ebl.media.application.media_dtos import MediaRepresentationDto
+from ebl.media.application.media_selection import (
+    fragment_media_in_order,
+    has_photo,
+    primary_media_for,
+)
 from ebl.media.application.media_urls import (
     fragment_media_thumbnail_url,
     legacy_fragment_thumbnail_url,
@@ -17,6 +22,14 @@ class MediaSummaryPrimaryDto:
     type: MediaType
     thumbnail: Optional[MediaRepresentationDto] = None
 
+    @classmethod
+    def of(cls, fragment_id: MuseumNumber, media: Media) -> "MediaSummaryPrimaryDto":
+        return cls(
+            id=str(media.id),
+            type=media.type,
+            thumbnail=_small_thumbnail_for(fragment_id, media),
+        )
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class MediaSummaryDto:
@@ -24,76 +37,38 @@ class MediaSummaryDto:
     types: Sequence[MediaType]
     primary: Optional[MediaSummaryPrimaryDto] = None
 
+    @classmethod
+    def of(cls, fragment_id: MuseumNumber, media: Sequence[Media]) -> "MediaSummaryDto":
+        ordered_media = fragment_media_in_order(fragment_id, media)
+        primary = primary_media_for(fragment_id, ordered_media)
+        return cls(
+            count=len(ordered_media),
+            types=tuple(dict.fromkeys(item.type for item in ordered_media)),
+            primary=(
+                MediaSummaryPrimaryDto.of(fragment_id, primary)
+                if primary is not None
+                else None
+            ),
+        )
+
 
 @attr.s(auto_attribs=True, frozen=True)
 class FragmentMediaSummaryDto:
     media_summary: MediaSummaryDto
     has_photo: bool
-    thumbnail_path: Optional[str] = None
+    thumbnail_path: str
 
     @classmethod
-    def of(cls, fragment_id: MuseumNumber, media: Sequence[Media]):
-        ordered_media = tuple(
-            sorted(media, key=lambda item: _sort_key(fragment_id, item))
-        )
-        has_photo = any(item.type is MediaType.PHOTO for item in ordered_media)
-        primary = _primary_media_for(fragment_id, ordered_media)
-        primary_thumbnail = (
-            _small_thumbnail_for(fragment_id, primary) if primary is not None else None
-        )
-        thumbnail_photo = _photo_with_small_thumbnail_for(fragment_id, ordered_media)
-        thumbnail_path = (
-            legacy_fragment_thumbnail_url(fragment_id, ThumbnailSize.SMALL)
-            if thumbnail_photo is not None
-            else None
-        )
+    def of(
+        cls, fragment_id: MuseumNumber, media: Sequence[Media]
+    ) -> "FragmentMediaSummaryDto":
         return cls(
-            media_summary=MediaSummaryDto(
-                count=len(ordered_media),
-                types=tuple(dict.fromkeys(item.type for item in ordered_media)),
-                primary=(
-                    MediaSummaryPrimaryDto(
-                        id=str(primary.id),
-                        type=primary.type,
-                        thumbnail=primary_thumbnail,
-                    )
-                    if primary is not None
-                    else None
-                ),
+            media_summary=MediaSummaryDto.of(fragment_id, media),
+            has_photo=has_photo(fragment_id, media),
+            thumbnail_path=legacy_fragment_thumbnail_url(
+                fragment_id, ThumbnailSize.SMALL
             ),
-            has_photo=has_photo,
-            thumbnail_path=thumbnail_path,
         )
-
-
-def _primary_media_for(
-    fragment_id: MuseumNumber, media: Sequence[Media]
-) -> Optional[Media]:
-    primary_items = [
-        item for item in media if item.association_for(fragment_id).is_primary
-    ]
-    return next(
-        (item for item in primary_items if item.type is MediaType.PHOTO),
-        primary_items[0] if primary_items else None,
-    )
-
-
-def _sort_key(fragment_id: MuseumNumber, media: Media) -> tuple[int, str]:
-    return media.association_for(fragment_id).sort_order, str(media.id)
-
-
-def _photo_with_small_thumbnail_for(
-    fragment_id: MuseumNumber, media: Sequence[Media]
-) -> Optional[Media]:
-    return next(
-        (
-            item
-            for item in media
-            if item.type is MediaType.PHOTO
-            and _small_thumbnail_for(fragment_id, item) is not None
-        ),
-        None,
-    )
 
 
 def _small_thumbnail_for(
