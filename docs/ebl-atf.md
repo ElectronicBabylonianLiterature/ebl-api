@@ -725,7 +725,14 @@ type = 'Sch'
      | 'Quo'
      | 'Var'
      | 'Ex'
-     | 'Par';
+     | 'Par'
+     | 'Amu'
+     | 'MultCol'
+     | 'Coll'
+     | 'StuTea'
+     | 'SchLen'
+     | 'Prism'
+     | 'Unc';
 ```
 
 ## Validation
