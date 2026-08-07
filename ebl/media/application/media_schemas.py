@@ -2,18 +2,6 @@ from typing import FrozenSet
 
 from marshmallow import Schema, fields, post_dump
 
-from ebl.media.application.media_dtos import (
-    FragmentMediaItemDto,
-    FragmentMediaResponseDto,
-    MediaReferenceDto,
-    MediaRepresentationDto,
-    MediaRepresentationsDto,
-)
-from ebl.media.application.media_summary_dtos import (
-    FragmentMediaSummaryDto,
-    MediaSummaryDto,
-    MediaSummaryPrimaryDto,
-)
 from ebl.media.domain import MediaType
 from ebl.schemas import NameEnumField
 
@@ -87,24 +75,3 @@ class FragmentMediaSummaryDtoSchema(OmitEmptyMixin, Schema):
     )
     has_photo = fields.Boolean(required=True, data_key="hasPhoto")
     thumbnail_path = fields.String(required=True, data_key="thumbnailPath")
-
-
-__all__ = [
-    "FragmentMediaItemDto",
-    "FragmentMediaItemDtoSchema",
-    "FragmentMediaResponseDto",
-    "FragmentMediaResponseDtoSchema",
-    "FragmentMediaSummaryDto",
-    "FragmentMediaSummaryDtoSchema",
-    "MediaReferenceDto",
-    "MediaReferenceDtoSchema",
-    "MediaRepresentationDto",
-    "MediaRepresentationDtoSchema",
-    "MediaRepresentationsDto",
-    "MediaRepresentationsDtoSchema",
-    "MediaSummaryDto",
-    "MediaSummaryDtoSchema",
-    "MediaSummaryPrimaryDto",
-    "MediaSummaryPrimaryDtoSchema",
-    "OmitEmptyMixin",
-]

@@ -3,8 +3,8 @@ from typing import Any, Dict, cast
 import pytest
 from marshmallow import Schema, fields
 
+from ebl.media.application.media_dtos import FragmentMediaItemDto
 from ebl.media.application.media_schemas import (
-    FragmentMediaItemDto,
     FragmentMediaItemDtoSchema,
     OmitEmptyMixin,
 )

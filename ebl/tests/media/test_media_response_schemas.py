@@ -1,9 +1,7 @@
 from typing import Any, Dict, List, cast
 
-from ebl.media.application.media_schemas import (
-    FragmentMediaResponseDto,
-    FragmentMediaResponseDtoSchema,
-)
+from ebl.media.application.media_dtos import FragmentMediaResponseDto
+from ebl.media.application.media_schemas import FragmentMediaResponseDtoSchema
 from ebl.media.domain import MediaRepresentations, MediaType, ThumbnailSize
 from ebl.tests.media.factories import (
     DEFAULT_COPY_MEDIA_ID,

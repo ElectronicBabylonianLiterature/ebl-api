@@ -1,9 +1,7 @@
 from typing import Any, Dict, cast
 
-from ebl.media.application.media_schemas import (
-    FragmentMediaSummaryDto,
-    FragmentMediaSummaryDtoSchema,
-)
+from ebl.media.application.media_schemas import FragmentMediaSummaryDtoSchema
+from ebl.media.application.media_summary_dtos import FragmentMediaSummaryDto
 from ebl.media.domain import ThumbnailSize
 from ebl.tests.media.factories import (
     DEFAULT_COPY_MEDIA_ID,
