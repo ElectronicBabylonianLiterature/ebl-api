@@ -1,5 +1,5 @@
 from marshmallow import EXCLUDE
-from typing import Sequence
+from typing import List, cast
 from pymongo.database import Database
 from ebl.provenance.application.provenance_service import ProvenanceService
 from ebl.mongo_collection import MongoCollection
@@ -24,5 +24,7 @@ class MongoFragmentRepositoryBase(FragmentRepository):
             context={"provenance_service": self._provenance_service}, **kwargs
         )
 
-    def _map_fragments(self, cursor) -> Sequence[Fragment]:
-        return self._schema(unknown=EXCLUDE, many=True).load(cursor)
+    def _map_fragments(self, cursor) -> List[Fragment]:
+        return cast(
+            List[Fragment], self._schema(unknown=EXCLUDE, many=True).load(cursor)
+        )

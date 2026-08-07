@@ -1,3 +1,5 @@
+from typing import Any, Dict, cast
+
 from marshmallow import Schema, ValidationError, fields, post_load
 
 from ebl.bibliography.application.reference_schema import ApiReferenceSchema
@@ -99,15 +101,17 @@ def _serialize_atf(manuscript_line: ManuscriptLine) -> str:
     ).strip()
 
 
+def _serialize_atf_tokens(manuscript_line) -> Any:
+    dumped = cast(Dict[str, Any], OneOfLineSchema().dump(manuscript_line.line))
+    return dumped["content"]
+
+
 class ApiManuscriptLineSchema(Schema):
     manuscript_id = manuscript_id()
     labels = labels()
     number = fields.Function(_serialize_number, lambda value: value, required=True)
     atf = fields.Function(_serialize_atf, lambda value: value, required=True)
-    atfTokens = fields.Function(
-        lambda manuscript_line: OneOfLineSchema().dump(manuscript_line.line)["content"],
-        lambda value: value,
-    )
+    atfTokens = fields.Function(_serialize_atf_tokens, lambda value: value)
     omitted_words = fields.List(
         fields.Integer(), required=True, data_key="omittedWords"
     )

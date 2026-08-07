@@ -133,20 +133,20 @@ class LanguagePart(MarkupPart):
         return LanguagePart(language, tokens_with_language)
 
 
+def _validate_reference(_instance, _attribute, value: Reference) -> None:
+    is_type_invalid = value.type != ReferenceType.DISCUSSION
+    is_notes_invalid = value.notes != ""
+    is_lines_invalid = len(value.lines_cited) != 0
+
+    if is_type_invalid or is_notes_invalid or is_lines_invalid:
+        raise ValueError(
+            "The reference must be a DISCUSSION without notes or lines cited."
+        )
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class BibliographyPart(MarkupPart):
-    reference: Reference = attr.ib()
-
-    @reference.validator
-    def validate_reference(self, _attribute, value: Reference) -> None:
-        is_type_invalid = value.type != ReferenceType.DISCUSSION
-        is_notes_invalid = value.notes != ""
-        is_lines_invalid = len(value.lines_cited) != 0
-
-        if is_type_invalid or is_notes_invalid or is_lines_invalid:
-            raise ValueError(
-                "The reference must be a DISCUSSION without notes or lines cited."
-            )
+    reference: Reference = attr.ib(validator=_validate_reference)
 
     @property
     def value(self) -> str:

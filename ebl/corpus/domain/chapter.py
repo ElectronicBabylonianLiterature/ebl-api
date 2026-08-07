@@ -1,6 +1,7 @@
 from enum import Enum, unique
 from functools import singledispatchmethod
 from typing import Iterator, Mapping, Optional, Sequence, Tuple, TypeVar, Union, Set
+from typing import cast
 
 import attr
 import pydash
@@ -211,7 +212,7 @@ class Chapter:
     def _get_extant_lines(
         self, manuscript_id: int
     ) -> Mapping[ManuscriptLineLabel, ExtantLine]:
-        return pydash.group_by(
+        grouped = pydash.group_by(
             (
                 ExtantLine.of(line, manuscript_id)
                 for line in self.lines
@@ -220,6 +221,7 @@ class Chapter:
             ),
             lambda extant_line: extant_line.label,
         )
+        return cast(Mapping[ManuscriptLineLabel, ExtantLine], grouped)
 
     def _get_manuscript_text_lines(
         self, manuscript: Manuscript

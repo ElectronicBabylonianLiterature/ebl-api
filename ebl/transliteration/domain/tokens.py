@@ -6,10 +6,28 @@ import ebl.transliteration.domain.atf as atf
 from ebl.transliteration.domain.language import Language
 from ebl.transliteration.domain.token_base import (
     ErasureState,
+    SignsCollectingVisitor,
     Token,
     TokenVisitor,
     ValueToken,
 )
+
+__all__ = [
+    "Column",
+    "CommentaryProtocol",
+    "ErasureState",
+    "Joiner",
+    "LanguageShift",
+    "LineBreak",
+    "SignsCollectingVisitor",
+    "Tabulation",
+    "Token",
+    "TokenVisitor",
+    "UnknownNumberOfSigns",
+    "WordOmitted",
+    "ValueToken",
+    "Variant",
+]
 
 
 @attr.s(frozen=True)
@@ -87,18 +105,18 @@ class CommentaryProtocol(ValueToken):
         visitor.visit_commentary_protocol(self)
 
 
+def _validate_column_number(_instance, _attribute, value: Optional[int]) -> None:
+    if value is not None and value < 0:
+        raise ValueError("number must not be negative")
+
+
 @attr.s(frozen=True, auto_attribs=True)
 class Column(Token):
-    number: Optional[int] = attr.ib(default=None)
+    number: Optional[int] = attr.ib(default=None, validator=_validate_column_number)
 
     @staticmethod
     def of(number: Optional[int] = None) -> "Column":
         return Column(frozenset(), ErasureState.NONE, number)
-
-    @number.validator
-    def _check_number(self, _, value) -> None:
-        if value is not None and value < 0:
-            raise ValueError("number must not be negative")
 
     @property
     def value(self) -> str:

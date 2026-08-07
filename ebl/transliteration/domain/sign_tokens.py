@@ -9,6 +9,7 @@ from ebl.transliteration.domain.sign import SignName
 from ebl.transliteration.domain.sign_token_base import (
     AbstractSign,
     NamedSign,
+    NamePart,
     NameParts,
 )
 from ebl.transliteration.domain.tokens import (
@@ -25,6 +26,7 @@ __all__ = [
     "Grapheme",
     "Logogram",
     "NamedSign",
+    "NamePart",
     "NameParts",
     "Number",
     "Reading",

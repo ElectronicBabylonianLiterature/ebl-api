@@ -1,10 +1,9 @@
-from typing import Tuple, List, Dict, Mapping
-from pymongo.collection import Collection
+from typing import Any, Dict, Iterable, List, Mapping, Tuple
 from ebl.transliteration.domain.transliteration_query import TransliterationQuery
 
 
 def filter_query_by_transliteration(
-    query: TransliterationQuery, cursor: Collection
+    query: TransliterationQuery, cursor: Iterable[Dict[str, Any]]
 ) -> List:
     _cursor = []
     for chapter in cursor:

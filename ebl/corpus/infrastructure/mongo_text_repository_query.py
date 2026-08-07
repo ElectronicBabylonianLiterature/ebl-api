@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple, Sequence, Dict
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
 from pymongo.collation import Collation
 
 from ebl.common.query.query_result import CorpusQueryResult
@@ -82,13 +82,15 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             ],
             allowDiskUse=True,
         )
-        return ChapterSchema(
-            context={"provenance_service": self._provenance_service}
-        ).load(
-            filter_query_by_transliteration(query, cursor), many=True
-        ), self._chapters.count_documents(mongo_query)
+        chapters = cast(
+            Sequence[Chapter],
+            ChapterSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(filter_query_by_transliteration(query, cursor), many=True),
+        )
+        return chapters, self._chapters.count_documents(mongo_query)
 
-    def _limit_by_genre(self, cursor: Sequence[Dict]) -> List[Dict]:
+    def _limit_by_genre(self, cursor: Iterable[Dict]) -> List[Dict]:
         LIMIT = 10
         limited_lines = []
         genre_counts = {genre.value: 0 for genre in Genre}
@@ -146,11 +148,11 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             ]
         )
 
-        return DictionaryLineSchema(
-            context={"provenance_service": self._provenance_service}
-        ).load(
-            self._limit_by_genre(lemma_lines),
-            many=True,
+        return cast(
+            Sequence[DictionaryLine],
+            DictionaryLineSchema(
+                context={"provenance_service": self._provenance_service}
+            ).load(self._limit_by_genre(lemma_lines), many=True),
         )
 
     def query(self, query: dict) -> CorpusQueryResult:
@@ -170,18 +172,22 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
             data = None
 
         return (
-            CorpusQueryResultSchema().load(data)
+            cast(CorpusQueryResult, CorpusQueryResultSchema().load(data))
             if data
             else CorpusQueryResult.create_empty()
         )
 
     def query_manuscripts_by_chapter(self, id_: ChapterId) -> List[Manuscript]:
         try:
-            return self._manuscript_schema().load(
+            chapter = cast(
+                Dict[str, Any],
                 self._chapters.find_one(
                     chapter_id_query(id_), projection={"manuscripts": True}
-                )["manuscripts"],
-                many=True,
+                ),
+            )
+            return cast(
+                List[Manuscript],
+                self._manuscript_schema().load(chapter["manuscripts"], many=True),
             )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error
@@ -190,18 +196,21 @@ class MongoTextRepositoryQuery(MongoTextRepositoryQueryFragment):
         self, id_: ChapterId
     ) -> List[Manuscript]:
         try:
-            return self._manuscript_schema().load(
-                self._chapters.aggregate(
-                    [
-                        {"$match": chapter_id_query(id_)},
-                        {"$project": {"manuscripts": True}},
-                        {"$unwind": "$manuscripts"},
-                        {"$replaceRoot": {"newRoot": "$manuscripts"}},
-                        *join_joins(),
-                        *is_in_fragmentarium("museumNumber", "isInFragmentarium"),
-                    ]
+            return cast(
+                List[Manuscript],
+                self._manuscript_schema().load(
+                    self._chapters.aggregate(
+                        [
+                            {"$match": chapter_id_query(id_)},
+                            {"$project": {"manuscripts": True}},
+                            {"$unwind": "$manuscripts"},
+                            {"$replaceRoot": {"newRoot": "$manuscripts"}},
+                            *join_joins(),
+                            *is_in_fragmentarium("museumNumber", "isInFragmentarium"),
+                        ]
+                    ),
+                    many=True,
                 ),
-                many=True,
             )
         except NotFoundError as error:
             raise chapter_not_found(id_) from error

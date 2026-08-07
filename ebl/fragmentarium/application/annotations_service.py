@@ -1,5 +1,5 @@
 from io import BytesIO
-from typing import Callable, Dict, Sequence, Tuple
+from typing import Any, Callable, Dict, Sequence, Tuple, cast
 
 import attr
 from PIL import Image
@@ -124,11 +124,13 @@ class AnnotationsService:
             cropped_sign_images
         )
 
+        old_record = cast(Dict[str, Any], schema.dump(old_annotations))
+        new_record = cast(Dict[str, Any], schema.dump(annotations_with_image_ids))
         self._changelog.create(
             "annotations",
             user.profile,
-            {"_id": _id, **schema.dump(old_annotations)},
-            {"_id": _id, **schema.dump(annotations_with_image_ids)},
+            {"_id": _id, **old_record},
+            {"_id": _id, **new_record},
         )
         return annotations_with_image_ids
 

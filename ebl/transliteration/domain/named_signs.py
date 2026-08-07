@@ -4,7 +4,7 @@ import attr
 
 from ebl.transliteration.domain import atf as atf
 from ebl.transliteration.domain.converters import convert_token_sequence
-from ebl.transliteration.domain.sign_token_base import NamedSign, NameParts
+from ebl.transliteration.domain.sign_token_base import NamedSign, convert_name_parts
 from ebl.transliteration.domain.tokens import (
     ErasureState,
     Token,
@@ -17,14 +17,20 @@ from ebl.transliteration.domain.tokens import (
 class Reading(NamedSign):
     @staticmethod
     def of(
-        name: NameParts,
+        name: Sequence[Token],
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
     ) -> "Reading":
         return Reading(
-            frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index, sign
+            frozenset(),
+            ErasureState.NONE,
+            modifiers,
+            flags,
+            convert_name_parts(name),
+            sub_index,
+            sign,
         )
 
     @staticmethod
@@ -60,7 +66,7 @@ class Logogram(NamedSign):
 
     @staticmethod
     def of(
-        name: NameParts,
+        name: Sequence[Token],
         sub_index: Optional[int] = 1,
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
@@ -72,7 +78,7 @@ class Logogram(NamedSign):
             ErasureState.NONE,
             modifiers,
             flags,
-            name,
+            convert_name_parts(name),
             sub_index,
             sign,
             surrogate,
@@ -99,14 +105,20 @@ class Number(NamedSign):
 
     @staticmethod
     def of(
-        name: NameParts,
+        name: Sequence[Token],
         modifiers: Sequence[str] = (),
         flags: Sequence[atf.Flag] = (),
         sign: Optional[Token] = None,
         sub_index: int = 1,
     ) -> "Number":
         return Number(
-            frozenset(), ErasureState.NONE, modifiers, flags, name, sub_index, sign
+            frozenset(),
+            ErasureState.NONE,
+            modifiers,
+            flags,
+            convert_name_parts(name),
+            sub_index,
+            sign,
         )
 
     @staticmethod

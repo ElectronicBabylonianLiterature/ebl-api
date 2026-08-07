@@ -24,10 +24,22 @@ from ebl.transliteration.domain.tokens import (
 )
 
 
+def _dump_name_parts(named_sign) -> list:
+    from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+
+    return OneOfTokenSchema().dump(list(named_sign.name_tokens), many=True)
+
+
+def _load_name_parts(value) -> list:
+    from ebl.transliteration.application.token_schemas import OneOfTokenSchema
+
+    return OneOfTokenSchema().load(value, many=True)
+
+
 class NamedSignSchema(BaseTokenSchema):
     name = fields.String(required=True)
-    name_parts = fields.List(
-        fields.Nested("OneOfTokenSchema"), required=True, data_key="nameParts"
+    name_parts = fields.Function(
+        _dump_name_parts, _load_name_parts, required=True, data_key="nameParts"
     )
     sub_index = fields.Integer(data_key="subIndex", allow_none=True)
     modifiers = fields.List(fields.String(), required=True)

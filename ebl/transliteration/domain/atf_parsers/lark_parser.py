@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import List, Optional, Sequence, Iterator, cast
+from typing import List, Optional, Sequence, Iterator, Tuple, cast
 import re
 
 import pydash
@@ -216,10 +216,11 @@ def parse_atf_lark(atf_: str) -> Text:
         except PARSE_ERRORS as ex:
             return (None, create_transliteration_error_data(ex, line, line_number))
 
-    def check_errors(pairs):
-        errors = [error for line, error in pairs if error is not None]
-        if any(errors):
+    def check_errors(pairs) -> Tuple[Line, ...]:
+        errors = [error for _, error in pairs if error is not None]
+        if errors:
             raise TransliterationError(errors)
+        return tuple(cast(Line, line) for line, _ in pairs)
 
     trailing_stripped = list(
         dropwhile(lambda line: line == "", reversed(atf_.split("\n")))
@@ -228,8 +229,7 @@ def parse_atf_lark(atf_: str) -> Text:
     parsed_pairs = [
         parse_line_(line, number) for number, line in enumerate(trailing_stripped)
     ]
-    check_errors(parsed_pairs)
-    lines = tuple(line for line, _ in parsed_pairs if line is not None)
+    lines = check_errors(parsed_pairs)
 
     text = Text(lines, f"{atf.ATF_PARSER_VERSION}")
 

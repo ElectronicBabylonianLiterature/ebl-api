@@ -92,12 +92,14 @@ class TokenVisitor(ABC):  # noqa: B024
     def visit_caesura(self, caesura) -> None:
         self.visit(caesura)
 
-    @property
-    def result(self) -> Sequence:
-        return []
 
-    def reset(self) -> None:
-        return None
+class SignsCollectingVisitor(TokenVisitor, ABC):
+    @abstractmethod
+    def reset(self) -> None: ...
+
+    @property
+    @abstractmethod
+    def result_string(self) -> Sequence[str]: ...
 
 
 class ErasureState(Enum):

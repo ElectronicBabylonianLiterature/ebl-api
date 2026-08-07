@@ -9,11 +9,35 @@ from ebl.app import create_context
 from ebl.fragmentarium.domain.annotation import (
     AnnotationValueType,
 )
+from ebl.fragmentarium.domain.annotation import BoundingBox
 from ebl.fragmentarium.retrieve_annotations_helpers import (
     create_annotations,
     create_directory,
+    filter_annotation,
+    filter_empty_annotation,
+    match,
+    parse_annotations,
+    prepare_annotations,
+    sign_to_sign_ground_truth,
+    write_annotations,
     write_fragment_numbers,
 )
+
+__all__ = [
+    "AnnotationValueType",
+    "BoundingBox",
+    "create_annotations",
+    "create_directory",
+    "filter_annotation",
+    "filter_empty_annotation",
+    "main",
+    "match",
+    "parse_annotations",
+    "prepare_annotations",
+    "sign_to_sign_ground_truth",
+    "write_annotations",
+    "write_fragment_numbers",
+]
 
 
 def main(argv=None):
@@ -122,14 +146,15 @@ def main(argv=None):
         ]
     print(f"Following Annotation Types are filtered: {TO_FILTER}")
 
+    output_annotations = str(args.output_annotations)
     create_annotations(
         annotation_collection,
-        args.output_annotations,
+        output_annotations,
         args.output_imgs,
         photo_repository,
         to_filter=TO_FILTER,
     )
-    annotations_parent = Path(args.output_annotations).parent
+    annotations_parent = Path(output_annotations).parent
     annotations_file = annotations_parent / f"Annotations_{date.today()}.txt"
     write_fragment_numbers(
         annotation_collection,

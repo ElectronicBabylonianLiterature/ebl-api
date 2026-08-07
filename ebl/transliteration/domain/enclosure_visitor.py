@@ -69,7 +69,7 @@ class EnclosureValidator(TokenVisitor):
             part.accept(self)
 
     def visit_named_sign(self, named_sign: NamedSign) -> None:
-        for part in named_sign.name_parts:
+        for part in named_sign.name_tokens:
             part.accept(self)
 
     def visit_akkadian_word(self, word: AkkadianWord) -> None:

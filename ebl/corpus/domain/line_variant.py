@@ -24,17 +24,19 @@ def prepare_reconstruction(tokens: Sequence[Token]) -> Sequence[Token]:
     return set_language(set_enclosure_type(tokens))
 
 
+def _validate_reconstruction(_instance, _attribute, value: Sequence[Token]) -> None:
+    validate(value)
+
+
 @attr.s(auto_attribs=True, frozen=True)
 class LineVariant:
-    reconstruction: Sequence[Token] = attr.ib(converter=prepare_reconstruction)
+    reconstruction: Sequence[Token] = attr.ib(
+        converter=prepare_reconstruction, validator=_validate_reconstruction
+    )
     note: Optional[NoteLine] = None
     manuscripts: Sequence[ManuscriptLine] = ()
     parallel_lines: Sequence[ParallelLine] = ()
     intertext: Sequence[MarkupPart] = ()
-
-    @reconstruction.validator
-    def validate_reconstruction(self, _, value):
-        validate(value)
 
     @property
     def reconstruction_atf(self) -> Atf:

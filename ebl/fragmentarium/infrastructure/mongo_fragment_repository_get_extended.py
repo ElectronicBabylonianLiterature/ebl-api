@@ -1,4 +1,4 @@
-from typing import List, Optional, Sequence
+from typing import List, Optional, Sequence, cast
 
 import pymongo
 from marshmallow import EXCLUDE
@@ -6,10 +6,13 @@ from marshmallow import EXCLUDE
 from ebl.common.domain.scopes import Scope
 from ebl.errors import NotFoundError
 from ebl.fragmentarium.application.fragment_info_schema import FragmentInfoSchema
+from ebl.fragmentarium.domain.fragment import Fragment
+from ebl.fragmentarium.domain.fragment_info import FragmentInfo
 from ebl.fragmentarium.infrastructure.mongo_fragment_repository_base import (
     MongoFragmentRepositoryBase,
 )
 from ebl.fragmentarium.application.fragment_fields_schemas import ScriptSchema
+from ebl.fragmentarium.domain.fragment import Script
 from ebl.transliteration.domain.museum_number import MuseumNumber
 from ebl.transliteration.application.museum_number_schema import MuseumNumberSchema
 from ebl.fragmentarium.domain.date import Date, DateSchema
@@ -59,14 +62,18 @@ def _get_colophon_names_query(name_regex: str) -> Sequence[dict]:
 
 
 class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
-    def query_random_by_transliterated(self, user_scopes: Sequence[Scope] = ()):
+    def query_random_by_transliterated(
+        self, user_scopes: Sequence[Scope] = ()
+    ) -> List[Fragment]:
         cursor = self._fragments.aggregate(
             [*aggregate_random(user_scopes), {"$project": {"joins": False}}]
         )
 
         return self._map_fragments(cursor)
 
-    def query_path_of_the_pioneers(self, user_scopes: Sequence[Scope] = ()):
+    def query_path_of_the_pioneers(
+        self, user_scopes: Sequence[Scope] = ()
+    ) -> List[Fragment]:
         cursor = self._fragments.aggregate(
             [
                 *aggregate_path_of_the_pioneers(user_scopes),
@@ -76,21 +83,24 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
 
         return self._map_fragments(cursor)
 
-    def query_transliterated_numbers(self):
+    def query_transliterated_numbers(self) -> List[MuseumNumber]:
         cursor = self._fragments.find_many(
             HAS_TRANSLITERATION, projection=["museumNumber"]
         ).sort("_id", pymongo.ASCENDING)
 
-        return MuseumNumberSchema(many=True).load(
-            fragment["museumNumber"] for fragment in cursor
+        return cast(
+            List[MuseumNumber],
+            MuseumNumberSchema(many=True).load(
+                fragment["museumNumber"] for fragment in cursor
+            ),
         )
 
     def query_transliterated_line_to_vec(self) -> List[LineToVecEntry]:
         cursor = self._fragments.find_many(HAS_TRANSLITERATION, {"text": False})
         return [
             LineToVecEntry(
-                MuseumNumberSchema().load(fragment["museumNumber"]),
-                ScriptSchema().load(fragment["script"]),
+                cast(MuseumNumber, MuseumNumberSchema().load(fragment["museumNumber"])),
+                cast(Script, ScriptSchema().load(fragment["script"])),
                 tuple(
                     LineToVecEncoding.from_list(line_to_vec)
                     for line_to_vec in fragment["lineToVec"]
@@ -101,12 +111,12 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
 
     def query_by_transliterated_not_revised_by_other(
         self, user_scopes: Sequence[Scope] = ()
-    ):
+    ) -> List[FragmentInfo]:
         cursor = self._fragments.aggregate(
             [*aggregate_needs_revision(user_scopes), {"$project": {"joins": False}}],
             allowDiskUse=True,
         )
-        return FragmentInfoSchema(many=True).load(cursor)
+        return cast(List[FragmentInfo], FragmentInfoSchema(many=True).load(cursor))
 
     def query_next_and_previous_folio(self, folio_name, folio_number, number):
         sort_ascending = {"$sort": {"key": 1}}
@@ -179,7 +189,7 @@ class MongoFragmentRepositoryGetExtended(MongoFragmentRepositoryBase):
                 },
                 projection={"date": True},
             ).get("date"):
-                return DateSchema(unknown=EXCLUDE).load(date)
+                return cast(Date, DateSchema(unknown=EXCLUDE).load(date))
             return None
         except StopIteration as error:
             raise NotFoundError(f"Fragment {number} not found.") from error

@@ -1,6 +1,11 @@
-from typing import Sequence
-import factory.fuzzy
 import random
+from typing import Sequence as TypingSequence
+
+import factory.fuzzy
+from factory.declarations import Iterator, List, Sequence, SubFactory
+from factory.faker import Faker
+from factory.helpers import make_factory
+
 from ebl.common.domain.accession import Accession
 from ebl.common.domain.project import ResearchProject
 from ebl.common.domain.scopes import Scope
@@ -55,93 +60,107 @@ __all__ = [
     "create_date_king",
 ]
 
+GENRE_CHOICES = [
+    (
+        Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),
+        Genre(["CANONICAL", "Catalogues"], False),
+    ),
+    (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
+]
+DEFAULT_PROJECTS = (
+    ResearchProject.CAIC,
+    ResearchProject.ALU_GENEVA,
+    ResearchProject.AMPS,
+    ResearchProject.RECC,
+)
+DEFAULT_AUTHORIZED_SCOPES: list[Scope] = []
 
-class FragmentFactory(factory.Factory):
-    class Meta:
-        model = Fragment
 
-    number = factory.Sequence(lambda n: MuseumNumber("X", str(n)))
-    accession = factory.Sequence(lambda n: Accession("A", str(n)))
-    museum = factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN])
-    collection = factory.Faker("word")
-    publication = factory.Faker("sentence")
-    acquisition = factory.SubFactory(AcquisitionFactory)
-    description = factory.Faker("text")
-    legacy_script = factory.Iterator(["NA", "NB"])
-    script = factory.SubFactory(ScriptFactory)
-    date = factory.SubFactory(DateFactory)
-    dates_in_text = factory.List(
-        [factory.SubFactory(DateFactory) for _ in range(random.randint(0, 4))]
-    )
-    folios = Folios((Folio("WGL", "1"), Folio("ARG", "1")))
-    genres = factory.Iterator(
+FragmentFactory = make_factory(
+    Fragment,
+    number=Sequence(lambda n: MuseumNumber("X", str(n))),
+    accession=Sequence(lambda n: Accession("A", str(n))),
+    museum=factory.fuzzy.FuzzyChoice([m for m in Museum if m != Museum.UNKNOWN]),
+    collection=Faker("word"),
+    publication=Faker("sentence"),
+    acquisition=SubFactory(AcquisitionFactory),
+    description=Faker("text"),
+    legacy_script=Iterator(["NA", "NB"]),
+    script=SubFactory(ScriptFactory),
+    date=SubFactory(DateFactory),
+    dates_in_text=List([SubFactory(DateFactory) for _ in range(random.randint(0, 4))]),
+    folios=Folios((Folio("WGL", "1"), Folio("ARG", "1"))),
+    genres=Iterator(GENRE_CHOICES),
+    authorized_scopes=DEFAULT_AUTHORIZED_SCOPES,
+    introduction=Introduction("text", (StringPart("text"),)),
+    notes=Notes("notes", (StringPart("notes"),)),
+    external_numbers=SubFactory(ExternalNumbersFactory),
+    projects=DEFAULT_PROJECTS,
+    archaeology=SubFactory(ArchaeologyFactory),
+    colophon=SubFactory(ColophonFactory),
+    ocred_signs="ABZ10 X",
+    dossiers=List(
         [
-            (
-                Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),
-                Genre(["CANONICAL", "Catalogues"], False),
-            ),
-            (Genre(["ARCHIVAL", "Administrative", "Lists", "One Entry"], False),),
-        ]
-    )
-    authorized_scopes: list[Scope] = []
-    introduction = Introduction("text", (StringPart("text"),))
-    notes = Notes("notes", (StringPart("notes"),))
-    external_numbers = factory.SubFactory(ExternalNumbersFactory)
-    projects = (
-        ResearchProject.CAIC,
-        ResearchProject.ALU_GENEVA,
-        ResearchProject.AMPS,
-        ResearchProject.RECC,
-    )
-    archaeology = factory.SubFactory(ArchaeologyFactory)
-    colophon = factory.SubFactory(ColophonFactory)
-    ocred_signs = "ABZ10 X"
-    dossiers = factory.List(
-        [
-            factory.SubFactory(FragmentDossierReferenceFactory)
+            SubFactory(FragmentDossierReferenceFactory)
             for _ in range(random.randint(0, 4))
         ]
-    )
-    named_entities = ()
+    ),
+    named_entities=(),
+)
 
 
-class InterestingFragmentFactory(FragmentFactory):
-    collection = "Kuyunjik"  # pyre-ignore[15]
-    publication = ""  # pyre-ignore[15]
-    joins: Sequence[str] = ()
-    text = Text()
-    uncurated_references = (
+INTERESTING_JOINS: TypingSequence[str] = ()
+TRANSLITERATED_SIGNS = (
+    "X BA KU ABZ075 ABZ207a\\u002F207b\\u0020X ABZ377n1/KU ABZ377n1 ABZ411\n"
+    "MI DIŠ UD ŠU\n"
+    "KI DU ABZ411 BA MA TI\n"
+    "X MU TA MA UD\n"
+    "ŠU/|BI×IS|"
+)
+TRANSLITERATED_LINE_TO_VEC = (
+    (
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.TEXT_LINE,
+        LineToVecEncoding.SINGLE_RULING,
+    ),
+)
+
+
+InterestingFragmentFactory = make_factory(
+    Fragment,
+    FACTORY_CLASS=FragmentFactory,
+    collection="Kuyunjik",
+    publication="",
+    joins=INTERESTING_JOINS,
+    text=Text(),
+    uncurated_references=(
         UncuratedReference("7(0)"),
         UncuratedReference("CAD 51", (34, 56)),
         UncuratedReference("7(1)"),
-    )
-    references = ()
-    notes = Notes()
+    ),
+    references=(),
+    notes=Notes(),
+)
+InterestingFragmentFactory.__name__ = "InterestingFragmentFactory"
 
+TransliteratedFragmentFactory = make_factory(
+    Fragment,
+    FACTORY_CLASS=FragmentFactory,
+    text=TRANSLITERATED_FRAGMENT_TEXT,
+    signs=TRANSLITERATED_SIGNS,
+    ocred_signs="ABZ10 X",
+    folios=Folios((Folio("WGL", "3"), Folio("ARG", "3"))),
+    record=Record((RecordEntry("test", RecordType.TRANSLITERATION),)),
+    line_to_vec=TRANSLITERATED_LINE_TO_VEC,
+)
+TransliteratedFragmentFactory.__name__ = "TransliteratedFragmentFactory"
 
-class TransliteratedFragmentFactory(FragmentFactory):
-    text = TRANSLITERATED_FRAGMENT_TEXT
-    signs = (
-        "X BA KU ABZ075 ABZ207a\\u002F207b\\u0020X ABZ377n1/KU ABZ377n1 ABZ411\n"
-        "MI DIŠ UD ŠU\n"
-        "KI DU ABZ411 BA MA TI\n"
-        "X MU TA MA UD\n"
-        "ŠU/|BI×IS|"
-    )
-    ocred_signs = "ABZ10 X"
-    folios = Folios((Folio("WGL", "3"), Folio("ARG", "3")))
-    record = Record((RecordEntry("test", RecordType.TRANSLITERATION),))
-    line_to_vec = (
-        (
-            LineToVecEncoding.TEXT_LINE,
-            LineToVecEncoding.TEXT_LINE,
-            LineToVecEncoding.TEXT_LINE,
-            LineToVecEncoding.TEXT_LINE,
-            LineToVecEncoding.TEXT_LINE,
-            LineToVecEncoding.SINGLE_RULING,
-        ),
-    )
-
-
-class LemmatizedFragmentFactory(TransliteratedFragmentFactory):
-    text = LEMMATIZED_FRAGMENT_TEXT
+LemmatizedFragmentFactory = make_factory(
+    Fragment,
+    FACTORY_CLASS=TransliteratedFragmentFactory,
+    text=LEMMATIZED_FRAGMENT_TEXT,
+)
+LemmatizedFragmentFactory.__name__ = "LemmatizedFragmentFactory"

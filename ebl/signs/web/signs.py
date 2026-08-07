@@ -1,8 +1,12 @@
 import base64
 import attr
 from cairosvg import svg2png
+from ebl.errors import DataError
 from ebl.signs.infrastructure.mongo_sign_repository import SignDtoSchema
 from ebl.transliteration.application.sign_repository import SignRepository
+from ebl.transliteration.domain.atf_parsers.lark_parser_errors import (
+    LINE_PARSE_ERRORS,
+)
 
 
 class SignsResource:
@@ -50,4 +54,7 @@ class TransliterationResource:
         self.sign_repository = signs
 
     def on_get(self, req, resp, line):
-        resp.media = self.sign_repository.get_unicode_from_atf(line)
+        try:
+            resp.media = self.sign_repository.get_unicode_from_atf(line)
+        except LINE_PARSE_ERRORS as error:
+            raise DataError(f'Invalid transliteration: "{line}"') from error

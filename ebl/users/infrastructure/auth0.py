@@ -83,14 +83,10 @@ class Auth0Backend(JWTAuthBackend):
             raise falcon.HTTPUnauthorized()
         self._set_user(sub)
         is_m2m = access_token.get("gty") == "client-credentials"
-        if is_m2m:
+        issuer = str(self.issuer)
+        auth = req.auth
 
-            def profile_factory():
-                return {"name": sub}
-
-        else:
-
-            def profile_factory():
-                return fetch_user_profile(self.issuer, req.auth)
+        def profile_factory() -> dict:
+            return {"name": sub} if is_m2m else fetch_user_profile(issuer, auth)
 
         return Auth0User(access_token, profile_factory)

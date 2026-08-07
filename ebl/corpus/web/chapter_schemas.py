@@ -37,6 +37,16 @@ from ebl.corpus.web.chapter_manuscript_schemas import (
 __all__ = [
     "ApiChapterSchema",
     "ApiLineSchema",
+    "ApiLineVariantSchema",
+    "ApiManuscriptLineSchema",
+    "ApiManuscriptSchema",
+    "ApiOldSiglumSchema",
+    "MuseumNumberString",
+]
+
+__all__ = [
+    "ApiChapterSchema",
+    "ApiLineSchema",
     "ApiManuscriptLineSchema",
     "ApiManuscriptSchema",
     "ApiOldSiglumSchema",

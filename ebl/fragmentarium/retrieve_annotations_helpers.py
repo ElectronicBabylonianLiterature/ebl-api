@@ -86,20 +86,7 @@ def parse_annotations(annotation_data: AnnotationData) -> str:
 
 
 def sign_to_sign_ground_truth(annotation_data: AnnotationData) -> str:
-    sign_ground_truth = match(annotation_data)
-    if (
-        sign_ground_truth == ""
-        or sign_ground_truth == "?"
-        or sign_ground_truth.islower()
-    ):
-        raise ValueError(
-            f"AnnotationData with id: '{annotation_data.id}', "
-            f"value: '{annotation_data.value}' ",
-            f"sign: '{annotation_data.sign_name}' and "
-            f"type: '{annotation_data.type.value}' "
-            f"results in empty ground truth label",
-        )
-    return sign_ground_truth
+    return match(annotation_data)
 
 
 def prepare_annotations(
@@ -120,11 +107,6 @@ def prepare_annotations(
         for annotation in annotations_with_signs
     ]
 
-    if len(signs) != len(bounding_boxes):
-        raise ValueError(
-            f"Number of Bounding Boxes doesn't match number of "
-            f"Signs on Annotation: {annotation.fragment_number}"
-        )
     return bounding_boxes, signs
 
 
