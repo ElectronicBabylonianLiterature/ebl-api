@@ -78,6 +78,31 @@ def test_parse_siglum(
     ) == Siglum(provenance, period, type_, disambiquator)
 
 
+@pytest.mark.parametrize("provenance", [URUK, UR, PERIPHERY])
+@pytest.mark.parametrize("disambiquator", ["", "a"])
+def test_parse_siglum_period_uncertain_type_uncertain_adjacent(
+    provenance, disambiquator: str, seeded_provenance_service
+) -> None:
+    assert parse_siglum(
+        f"{provenance.abbreviation}{Period.UNCERTAIN.abbreviation}"
+        f"{ManuscriptType.UNCERTAIN.abbreviation}{disambiquator}",
+        seeded_provenance_service,
+    ) == Siglum(
+        provenance, Period.UNCERTAIN, ManuscriptType.UNCERTAIN, disambiquator
+    )
+
+
+@pytest.mark.parametrize("provenance", [URUK, UR, PERIPHERY])
+@pytest.mark.parametrize("disambiquator", ["", "a"])
+def test_parse_siglum_period_uncertain_type_library(
+    provenance, disambiquator: str, seeded_provenance_service
+) -> None:
+    assert parse_siglum(
+        f"{provenance.abbreviation}{Period.UNCERTAIN.abbreviation}{disambiquator}",
+        seeded_provenance_service,
+    ) == Siglum(provenance, Period.UNCERTAIN, ManuscriptType.LIBRARY, disambiquator)
+
+
 @pytest.mark.parametrize("disambiquator", ["", "a"])
 def test_parse_siglum_standard_text(
     disambiquator: str, seeded_provenance_service
