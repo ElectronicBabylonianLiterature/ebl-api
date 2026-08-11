@@ -1,6 +1,6 @@
 """Museum entries with names starting with A-L."""
 
-MuseumEntry = tuple[str, str, str, str]
+from ebl.fragmentarium.domain.museum_entry import MuseumEntry
 
 ABBEY_MUSEUM: MuseumEntry = (
     "Abbey Museum",

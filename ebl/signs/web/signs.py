@@ -1,4 +1,6 @@
 import base64
+from typing import cast
+
 import attr
 from cairosvg import svg2png
 from ebl.errors import DataError
@@ -19,11 +21,14 @@ class SignsResource:
         for fossey in sign.fossey:
             svg = fossey.sign
             if svg != "":
-                binary = svg2png(
-                    bytestring=svg,
-                    output_height=100,
-                    parent_width=200,
-                    parent_height=200,
+                binary = cast(
+                    bytes,
+                    svg2png(
+                        bytestring=svg,
+                        output_height=100,
+                        parent_width=200,
+                        parent_height=200,
+                    ),
                 )
                 b64 = base64.b64encode(binary).decode("utf-8")
                 fosseysBase64.append(attr.evolve(fossey, sign=b64))

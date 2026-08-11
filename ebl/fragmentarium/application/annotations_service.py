@@ -34,6 +34,9 @@ from ebl.users.domain.user import User
 
 Image.MAX_IMAGE_PIXELS = None  # pyre-ignore[9]
 
+LineLabels = Sequence[Tuple[LineLabel, Line]]
+LineLabelHandler = Callable[..., Tuple[LineLabel, LineLabels]]
+
 
 @attr.attrs(auto_attribs=True, frozen=True)
 class AnnotationsService:
@@ -60,7 +63,7 @@ class AnnotationsService:
         self,
         annotations: Annotations,
         image: Image.Image,
-        labels: Sequence[Tuple[LineLabel, Line]],
+        labels: LineLabels,
     ) -> Tuple[Annotations, Sequence[CroppedSignImage]]:
         cropped_sign_images = []
         updated_cropped_annotations = []
@@ -120,9 +123,8 @@ class AnnotationsService:
 
         self._annotations_repository.create_or_update(annotations_with_image_ids)
 
-        len(cropped_sign_images) and self._cropped_sign_images_repository.create_many(
-            cropped_sign_images
-        )
+        if cropped_sign_images:
+            self._cropped_sign_images_repository.create_many(cropped_sign_images)
 
         old_record = cast(Dict[str, Any], schema.dump(old_annotations))
         new_record = cast(Dict[str, Any], schema.dump(annotations_with_image_ids))
@@ -134,14 +136,16 @@ class AnnotationsService:
         )
         return annotations_with_image_ids
 
-    def get_labels(self, lines) -> Sequence[Tuple[LineLabel, Line]]:
+    def get_labels(self, lines: Sequence[Line]) -> LineLabels:
         # Matches same structure in Frontend Count (
         # Similar to fragment.text.labels but count EmptyLine and igore NoteLine)
-        # https://github.com/ElectronicBabylonianLiterature/ebl-frontend/blob/master/src/fragmentarium/ui/image-annotation/annotation-tool/mapTokensToAnnotationTokens.ts
+        # https://github.com/ElectronicBabylonianLiterature/ebl-frontend
+        # /blob/master/src/fragmentarium/ui/image-annotation
+        # /annotation-tool/mapTokensToAnnotationTokens.ts
         current: LineLabel = LineLabel(None, None, None, None, None)
-        labels: Sequence[Tuple[LineLabel, Line]] = []
+        labels: LineLabels = []
 
-        handlers: Dict[type, Callable] = {
+        handlers: Dict[type, LineLabelHandler] = {
             TextLine: lambda line: (
                 current,
                 [*labels, (current.set_line_number(line.line_number), line)],

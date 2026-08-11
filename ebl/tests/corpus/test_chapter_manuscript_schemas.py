@@ -1,3 +1,5 @@
+from typing import Any, Dict, cast
+
 import pytest
 from marshmallow import Schema, ValidationError
 
@@ -14,13 +16,13 @@ class _MuseumNumberSchema(Schema):
 
 
 def test_museum_number_string_deserializes_a_valid_number() -> None:
-    loaded = _MuseumNumberSchema().load({"museum_number": "X.1"})
+    loaded = cast(Dict[str, Any], _MuseumNumberSchema().load({"museum_number": "X.1"}))
 
     assert loaded["museum_number"] == MuseumNumber.of("X.1")
 
 
 def test_museum_number_string_deserializes_an_empty_string_to_none() -> None:
-    loaded = _MuseumNumberSchema().load({"museum_number": ""})
+    loaded = cast(Dict[str, Any], _MuseumNumberSchema().load({"museum_number": ""}))
 
     assert loaded["museum_number"] is None
 

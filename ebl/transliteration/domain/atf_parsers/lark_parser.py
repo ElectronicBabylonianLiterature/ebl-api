@@ -1,5 +1,5 @@
 from itertools import dropwhile
-from typing import List, Optional, Sequence, Iterator, Tuple, cast
+from typing import List, Sequence, Iterator, Tuple, cast
 import re
 
 import pydash
@@ -69,8 +69,8 @@ class _StartParser:
         self._parser = parser
         self._start = start
 
-    def parse(self, text: str, start: Optional[str] = None) -> Tree:
-        return self._parser.parse(text, start=start or self._start)
+    def parse(self, text: str) -> Tree:
+        return self._parser.parse(text, start=self._start)
 
     def __getattr__(self, name: str) -> object:
         try:

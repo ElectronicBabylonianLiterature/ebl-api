@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, cast, Sequence, Dict
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, cast
 
 from marshmallow import EXCLUDE
 from pymongo.database import Database
@@ -26,9 +26,13 @@ class MongoSignRepository(SignRepository):
     def create(self, sign: Sign) -> str:
         return self._collection.insert_one(SignSchema().dump(sign))
 
+    def _load_signs(self, documents: Iterable[Mapping[str, Any]]) -> Sequence[Sign]:
+        return cast(
+            Sequence[Sign], SignSchema().load(documents, unknown=EXCLUDE, many=True)
+        )
+
     def find_many(self, query, *args, **kwargs) -> Sequence[Sign]:
-        data = self._collection.find_many(query, *args, **kwargs)
-        return cast(Sequence[Sign], SignSchema(unknown=EXCLUDE).load(data, many=True))
+        return self._load_signs(self._collection.find_many(query, *args, **kwargs))
 
     def find(self, name: SignName) -> Sign:
         data = self._collection.find_one_by_id(name)
@@ -120,19 +124,19 @@ class MongoSignRepository(SignRepository):
         cursor = self._collection.aggregate(
             [{"$match": {"_id": {"$regex": re.escape(query), "$options": "i"}}}]
         )
-        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+        return self._load_signs(cursor)
 
     def search_all(self, reading: str, sub_index: int) -> Sequence[Sign]:
         cursor = self._collection.find_many(
             {"values": {"$elemMatch": {"value": reading, "subIndex": sub_index}}}
         )
-        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+        return self._load_signs(cursor)
 
     def search_by_lists_name(self, name: str, number: str) -> Sequence[Sign]:
         cursor = self._collection.find_many(
             {"lists": {"$elemMatch": {"name": name, "number": number}}}
         )
-        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+        return self._load_signs(cursor)
 
     def search_include_homophones(self, reading: str) -> Sequence[Sign]:
         cursor = self._collection.aggregate(
@@ -174,7 +178,7 @@ class MongoSignRepository(SignRepository):
                 {"$sort": {"subIndexCopy": 1}},
             ]
         )
-        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+        return self._load_signs(cursor)
 
     def search_composite_signs(self, reading: str, sub_index: int) -> Sequence[Sign]:
         cursor = self._collection.aggregate(
@@ -220,13 +224,13 @@ class MongoSignRepository(SignRepository):
                 {"$replaceRoot": {"newRoot": "$joined"}},
             ]
         )
-        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+        return self._load_signs(cursor)
 
     def search_by_lemma(self, word_id: str) -> Sequence[Sign]:
         cursor = self._collection.find_many(
             {"logograms": {"$elemMatch": {"wordId": word_id}}}
         )
-        return SignSchema().load(cursor, unknown=EXCLUDE, many=True)
+        return self._load_signs(cursor)
 
     def list_all_signs(self) -> Sequence[str]:
         return self._collection.get_all_values("_id")

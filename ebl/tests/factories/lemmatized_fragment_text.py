@@ -14,6 +14,7 @@ from ebl.transliteration.domain.at_line import (
     SealAtLine,
     SurfaceAtLine,
 )
+from ebl.tests.factories.first_text_line import FIRST_TEXT_LINE
 from ebl.transliteration.domain.atf import Flag
 from ebl.transliteration.domain.dollar_line import (
     ImageDollarLine,
@@ -40,76 +41,25 @@ from ebl.transliteration.domain.parallel_line import (
 )
 from ebl.transliteration.domain.sign_tokens import (
     CompoundGrapheme,
-    Divider,
     Logogram,
-    Number,
     Reading,
 )
 from ebl.transliteration.domain.text import Text
 from ebl.transliteration.domain.text_line import TextLine
 from ebl.transliteration.domain.tokens import (
-    Column,
-    CommentaryProtocol,
     Joiner,
     LanguageShift,
-    WordOmitted,
-    Tabulation,
     UnknownNumberOfSigns,
     ValueToken,
     Variant,
 )
-from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign, UnidentifiedSign
+from ebl.transliteration.domain.unknown_sign_tokens import UnclearSign
 from ebl.transliteration.domain.word_tokens import InWordNewline, Word
 
 
 LEMMATIZED_FRAGMENT_TEXT = Text(
     (
-        TextLine.of_iterable(
-            LineNumber(1, True),
-            (
-                Word.of([UnidentifiedSign.of()]),
-                Word.of(
-                    [
-                        Logogram.of_name(
-                            "BA",
-                            surrogate=[
-                                Reading.of_name("ku"),
-                                Joiner.hyphen(),
-                                Reading.of_name("u", 4),
-                            ],
-                        )
-                    ]
-                ),
-                Column.of(),
-                WordOmitted.of(),
-                Tabulation.of(),
-                Word.of(
-                    [
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        Joiner.hyphen(),
-                        Reading.of_name("ku"),
-                        BrokenAway.close(),
-                        Joiner.hyphen(),
-                        Reading.of_name("nu"),
-                        Joiner.hyphen(),
-                        Reading.of_name("ši"),
-                    ]
-                ),
-                Variant.of(Divider.of(":"), Reading.of_name("ku")),
-                Word.of(
-                    [
-                        BrokenAway.open(),
-                        UnknownNumberOfSigns.of(),
-                        BrokenAway.close(),
-                    ]
-                ),
-                Column.of(2),
-                Divider.of(":", ("@v",), (Flag.DAMAGE,)),
-                CommentaryProtocol.of("!qt"),
-                Word.of([Number.of_name("10", flags=[Flag.DAMAGE])]),
-            ),
-        ),
+        FIRST_TEXT_LINE,
         TextLine.of_iterable(
             LineNumber(2, True),
             (

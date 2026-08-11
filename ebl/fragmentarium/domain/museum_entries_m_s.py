@@ -1,6 +1,9 @@
 """Museum entries with names starting with M-S."""
 
-MuseumEntry = tuple[str, str, str, str]
+from ebl.fragmentarium.domain.museum_entry import (
+    MuseumEntry,
+    MuseumEntryWithoutUrl,
+)
 
 MARDIN_MUZESI: MuseumEntry = (
     "Mardin Müzesi",
@@ -98,35 +101,30 @@ PONTIFICAL_BIBLICAL_INSTITUTE: MuseumEntry = (
     "IT",
     "http://www.biblico.it/",
 )
-PRIVATE_COLLECTION_CHICAGO: MuseumEntry = (
+PRIVATE_COLLECTION_CHICAGO: MuseumEntryWithoutUrl = (
     "Private collection in Chicago",
     "Chicago",
     "US",
-    "",
 )
-PRIVATE_COLLECTION_OF_J_CARRE: MuseumEntry = (
+PRIVATE_COLLECTION_OF_J_CARRE: MuseumEntryWithoutUrl = (
     "Private collection of J. Carré",
     "Brussels",
     "BE",
-    "",
 )
-PRIVATE_COLLECTION_OF_M_FOEKEN: MuseumEntry = (
+PRIVATE_COLLECTION_OF_M_FOEKEN: MuseumEntryWithoutUrl = (
     "Private collection of M. Foeken",
     "Leiden",
     "NL",
-    "",
 )
-PRIVATE_COLLECTION_OF_W_LAMPLOUGH: MuseumEntry = (
+PRIVATE_COLLECTION_OF_W_LAMPLOUGH: MuseumEntryWithoutUrl = (
     "Private collection of W. Lamplough",
     "",
     "GB",
-    "",
 )
-PRIVATE_COLLECTION_OF_Z_YILDIZ: MuseumEntry = (
+PRIVATE_COLLECTION_OF_Z_YILDIZ: MuseumEntryWithoutUrl = (
     "Private collection of Zeynel Yıldız",
     "Elazığ",
     "TR",
-    "",
 )
 ROSICRUCIAN_EGYPTIAN_MUSEUM: MuseumEntry = (
     "Rosicrucian Egyptian Museum",
